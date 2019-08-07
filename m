@@ -2,109 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1767D8567E
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 01:32:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A294C85694
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 01:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730117AbfHGXcn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 19:32:43 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:36802 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729624AbfHGXcn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 19:32:43 -0400
-Received: by mail-wr1-f66.google.com with SMTP id n4so93087349wrs.3;
-        Wed, 07 Aug 2019 16:32:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=d9pVbIpLJvYHpW51yLVzRoQLiv107x9ELi8HQ3TSd7g=;
-        b=nIrYsSA3nPN1wHjF5rjTY4bWCaUPRftz1QKySm1Ov2giKzvoKNJ+OY8RqOEGX6m1y3
-         M8gnhSm+hO/g5l6KBBvUzCENROH09mk8YDGCcuFDViTP8FSysKLVdj7EymmHbmUAkCIH
-         fk4Qm1eM33fFaHywCfXlYO7RhA4McjuVM8wOZFD1pFY8mEzGtIiLW97KjvgSz1iE4cqb
-         EQYEtQjbch2N8MvmRrlWVI3KDbcOqEYoPQLHEjEGFWj7YfMrYd27F+KBvn01KzpElFNc
-         e+w62LitUTP8quCKbnlUzWRN9iGhPZs4Qz7Kw/R7ZIjNLE7NCOA2fc8eDWJyoytPiB4W
-         cI9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=d9pVbIpLJvYHpW51yLVzRoQLiv107x9ELi8HQ3TSd7g=;
-        b=KmJqdWGigPwncPnDX+eulGOt1YhItJsqtZntryOCheQO8fVEBg/7svdCPLN+8+wJBf
-         9mnsRG/HMZkzsRdHa3n0V1ipo+PZEa9bAW8x5eQ3ZvyWLGNknJX8tUjICtoUwlCZhW1u
-         pIIDhoxY4uvmWFLEsOhBle7LrvpBQ4xpTcHtItCsekpkJktq2MXP9u8IporrAchV9ixw
-         G0yEPylOe6eRqfK9xAfcTjJPG4hmRcWKazvfLyx0ac8u04cfHPnrRYjv/+CTfO8GMuLR
-         5BlrxMET9Uu2MzH13J5la/oE9dBVzG1eU0uDRHEz/zep4a8s3+uy8/tnt8ZESfz0CbFA
-         Jvsw==
-X-Gm-Message-State: APjAAAUxgojWWRFM/5KOZO51LR+U9lz7yNHd0FgbbW1SA4KNFzOUJyRz
-        7y31rUAQeJ9IhCn/EP4we/XbkSg7eK+lHoNONeEDrJQ7GjfrPA==
-X-Google-Smtp-Source: APXvYqxtF8Xvm+tm4IZuVjVZGBCJtz7+06a5/1hAvnnEAxC6bsAXdJ7lSoaNNZISpWZcktt+oPMXhYhpd+tpojMOPr8=
-X-Received: by 2002:adf:f088:: with SMTP id n8mr13044701wro.58.1565220760576;
- Wed, 07 Aug 2019 16:32:40 -0700 (PDT)
+        id S1729960AbfHGXnw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 19:43:52 -0400
+Received: from ozlabs.org ([203.11.71.1]:57483 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729938AbfHGXnv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 7 Aug 2019 19:43:51 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 463p4332k4z9sBF;
+        Thu,  8 Aug 2019 09:43:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565221428;
+        bh=fC+YrVE80lGHm7lLc8+8ngb793VTNWMnqyS/SeDTVbU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FcIrx/gz0cat8Yb9Zx8qdV93uOdWckHo7xB3ttlDw0PuKxmdz0v78QrfWZrAlsvX4
+         vCaEFyxt/55uGpbVKvf+so3H/Xy7jgD0Nw77JnVHIMTXHrSMggq2shtWINp/vvA+wX
+         WoIag9uDLeEvV3cuhe/UpW+mHkASi3cfrY+aujJ2wemDCgIA+wmp40BuNtPy9y0j9/
+         N7QjBor3Lgx7I0W6gxch66rqmvubPmgowTdIpVaMTV+OHpqxmcXSHeQbMhpigUmczU
+         O8w2JuwLmcNwTcDvuzzs2uUUI3h7RJ5oywt2c/P9YjJIEv33CfvC9c7B1SVsLQ+qC8
+         jhKG7jCtRFniQ==
+Date:   Thu, 8 Aug 2019 09:43:46 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Peter Collingbourne <pcc@google.com>
+Cc:     Will Deacon <will@kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: linux-next: build failure after merge of the arm64 tree
+Message-ID: <20190808094346.31383383@canb.auug.org.au>
+In-Reply-To: <CAMn1gO65tjqHgWsX_gTB9eaerFRevWtWd6dkkEoHnjo+BG1m=w@mail.gmail.com>
+References: <20190807095022.0314e2fc@canb.auug.org.au>
+        <CAMn1gO6P_VfDRjGZb67ZS4Kh0wjTEQi0cbOkmibTokHQOgP7qw@mail.gmail.com>
+        <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
+        <CAK7LNASr8mbGDbWikr2P8Pc_6WEpMyXuK-xkgypYOzkWw_6LUw@mail.gmail.com>
+        <20190807152506.m2mzzjtb7kzjoiia@willie-the-truck>
+        <CAMn1gO65tjqHgWsX_gTB9eaerFRevWtWd6dkkEoHnjo+BG1m=w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20190807144948.28265-1-maier@linux.ibm.com> <20190807144948.28265-2-maier@linux.ibm.com>
-In-Reply-To: <20190807144948.28265-2-maier@linux.ibm.com>
-From:   Ming Lei <tom.leiming@gmail.com>
-Date:   Thu, 8 Aug 2019 07:32:29 +0800
-Message-ID: <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts
- without request batching
-To:     Steffen Maier <maier@linux.ibm.com>
-Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        "open list:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/9lQVMobWy0t4liKMDgvg46H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 7, 2019 at 10:55 PM Steffen Maier <maier@linux.ibm.com> wrote:
->
-> This was missing from scsi_mq_ops_no_commit of linux-next commit
-> 8930a6c20791 ("scsi: core: add support for request batching")
-> from Martin's scsi/5.4/scsi-queue or James' scsi/misc.
->
-> See also linux-next commit b7e9e1fb7a92 ("scsi: implement .cleanup_rq
-> callback") from block/for-next.
->
-> Signed-off-by: Steffen Maier <maier@linux.ibm.com>
-> Fixes: 8930a6c20791 ("scsi: core: add support for request batching")
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Ming Lei <ming.lei@redhat.com>
-> ---
->  drivers/scsi/scsi_lib.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index ae03d3e2600f..90c257622bb0 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -1834,6 +1834,7 @@ static const struct blk_mq_ops scsi_mq_ops_no_commit = {
->         .init_request   = scsi_mq_init_request,
->         .exit_request   = scsi_mq_exit_request,
->         .initialize_rq_fn = scsi_initialize_rq,
-> +       .cleanup_rq     = scsi_cleanup_rq,
->         .busy           = scsi_mq_lld_busy,
->         .map_queues     = scsi_map_queues,
->  };
+--Sig_/9lQVMobWy0t4liKMDgvg46H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This one is a cross-tree thing, either scsi/5.4/scsi-queue needs to
-pull for-5.4/block, or
-do it after both land linus tree.
+Hi all,
 
-Thanks,
-Ming Lei
+On Wed, 7 Aug 2019 09:33:07 -0700 Peter Collingbourne <pcc@google.com> wrot=
+e:
+>
+> On Wed, Aug 7, 2019 at 8:25 AM Will Deacon <will@kernel.org> wrote:
+> >
+> > From 71c67a31f09fa8fdd1495dffd96a5f0d4cef2ede Mon Sep 17 00:00:00 2001
+> > From: Will Deacon <will@kernel.org>
+> > Date: Wed, 7 Aug 2019 12:48:33 +0100
+> > Subject: [PATCH] init/Kconfig: Fix infinite Kconfig recursion on PPC
+> >
+> > Commit 5cf896fb6be3 ("arm64: Add support for relocating the kernel with
+> > RELR relocations") introduced CONFIG_TOOLS_SUPPORT_RELR, which checks
+> > for RELR support in the toolchain as part of the kernel configuration.
+> > During this procedure, "$(NM)" is invoked to see if it supports the new
+> > relocation format, however PowerPC conditionally overrides this variable
+> > in the architecture Makefile in order to pass '--synthetic' when
+> > targetting PPC64.
+> >
+> > This conditional override causes Kconfig to recurse forever, since
+> > CONFIG_TOOLS_SUPPORT_RELR cannot be determined without $(NM) being
+> > defined, but that in turn depends on CONFIG_PPC64:
+> >
+> >   $ make ARCH=3Dpowerpc CROSS_COMPILE=3Dpowerpc-linux-gnu-
+> >   scripts/kconfig/conf  --syncconfig Kconfig
+> >   scripts/kconfig/conf  --syncconfig Kconfig
+> >   scripts/kconfig/conf  --syncconfig Kconfig
+> >   [...]
+> >
+> > In this particular case, it looks like PowerPC may be able to pass
+> > '--synthetic' unconditionally to nm or even drop it altogether. While
+> > that is being resolved, let's just bodge the RELR check by picking up
+> > $(NM) directly from the environment in whatever state it happens to be
+> > in.
+> >
+> > Cc: Peter Collingbourne <pcc@google.com>
+> > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Suggested-by: Masahiro Yamada <yamada.masahiro@socionext.com>
+> > Signed-off-by: Will Deacon <will@kernel.org> =20
+>=20
+> Tested-by: Peter Collingbourne <pcc@google.com>
+> Reviewed-by: Peter Collingbourne <pcc@google.com>
+
+Thanks for sorting this out (even temporarily).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9lQVMobWy0t4liKMDgvg46H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1LYjIACgkQAVBC80lX
+0Gzz3gf/Wp1AhmC+3zAKM0beflxpNKPD52qW2+H0XYOX5Wuc1iQr5PvmADauS0GP
+5t6xa43yhBcvMm7LS20vcRMFiHlq12NkVg4JnvsTpA9nw6PNwWsfYQ8v/HShjZyA
+Mk30XF0nk3xjZ5V2PX6tYWEAjp2mQDpInEEZXc3Fv6ChcWoumADt93pJBqrKMTve
+8o1fXNeTfpRWf/G/fLOmtZNmiOtUXk77SUMggOGI+cwp4fHoyM2FT1IWcZJhO4P+
+jEbX1v9i4ovZs/hh0J+/Wr2YTvYAoJ/1nmCwmRWqp/Qp9NqDQd99KR3sJ95vHDgo
+kgH8e4m9hZFN6CJ4c11hQpIKCjkufQ==
+=ohhp
+-----END PGP SIGNATURE-----
+
+--Sig_/9lQVMobWy0t4liKMDgvg46H--

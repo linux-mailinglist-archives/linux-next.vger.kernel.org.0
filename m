@@ -2,110 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6181185678
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 01:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1767D8567E
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 01:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388270AbfHGXbz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 19:31:55 -0400
-Received: from ozlabs.org ([203.11.71.1]:36993 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387849AbfHGXbz (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 7 Aug 2019 19:31:55 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 463npJ4gNcz9sBF;
-        Thu,  8 Aug 2019 09:31:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565220712;
-        bh=D4954wWJFIxeNOAVCijZOojKttQJdCVp6dAMHpHJBYk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Q+skvyy73bh+ueDzhcKMjKlRSYzXaCCxgrX6NDyy5Tzh9ghKs7cR3BymxbZCU5U6T
-         yAMsqZM92mMcarCtTU1k89qMQpoK40pguulgJmeyJN4prVl6NwY3ubv0Cald+An2yO
-         4R52Xqly490gOUTSYM0wH7inL7stWfH6VQ3WDNHsOdfJrnDpzeAjpCbfm7x3YCPIN7
-         rFZP0eQG5x4okmcQ7Gd/YtJzRINkvvm9BmEVQDjLNbYAnsClM0fUeiXbdoDoHkdGGe
-         4vtm+CcY+nfElk+5OXXcjhqMY1ZeoMe9t+XYBn/Gq9DJAl3cuT7fFSesAu5dEjKyNc
-         qajJef3XjxUdg==
-Date:   Thu, 8 Aug 2019 09:31:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rikard Falkeborn <rikard.falkeborn@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20190808093134.1a5df132@canb.auug.org.au>
-In-Reply-To: <20190807112917.GA4624@rikard>
-References: <20190807180041.07f06dc0@canb.auug.org.au>
-        <20190807112917.GA4624@rikard>
+        id S1730117AbfHGXcn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 19:32:43 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36802 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729624AbfHGXcn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 19:32:43 -0400
+Received: by mail-wr1-f66.google.com with SMTP id n4so93087349wrs.3;
+        Wed, 07 Aug 2019 16:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=d9pVbIpLJvYHpW51yLVzRoQLiv107x9ELi8HQ3TSd7g=;
+        b=nIrYsSA3nPN1wHjF5rjTY4bWCaUPRftz1QKySm1Ov2giKzvoKNJ+OY8RqOEGX6m1y3
+         M8gnhSm+hO/g5l6KBBvUzCENROH09mk8YDGCcuFDViTP8FSysKLVdj7EymmHbmUAkCIH
+         fk4Qm1eM33fFaHywCfXlYO7RhA4McjuVM8wOZFD1pFY8mEzGtIiLW97KjvgSz1iE4cqb
+         EQYEtQjbch2N8MvmRrlWVI3KDbcOqEYoPQLHEjEGFWj7YfMrYd27F+KBvn01KzpElFNc
+         e+w62LitUTP8quCKbnlUzWRN9iGhPZs4Qz7Kw/R7ZIjNLE7NCOA2fc8eDWJyoytPiB4W
+         cI9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=d9pVbIpLJvYHpW51yLVzRoQLiv107x9ELi8HQ3TSd7g=;
+        b=KmJqdWGigPwncPnDX+eulGOt1YhItJsqtZntryOCheQO8fVEBg/7svdCPLN+8+wJBf
+         9mnsRG/HMZkzsRdHa3n0V1ipo+PZEa9bAW8x5eQ3ZvyWLGNknJX8tUjICtoUwlCZhW1u
+         pIIDhoxY4uvmWFLEsOhBle7LrvpBQ4xpTcHtItCsekpkJktq2MXP9u8IporrAchV9ixw
+         G0yEPylOe6eRqfK9xAfcTjJPG4hmRcWKazvfLyx0ac8u04cfHPnrRYjv/+CTfO8GMuLR
+         5BlrxMET9Uu2MzH13J5la/oE9dBVzG1eU0uDRHEz/zep4a8s3+uy8/tnt8ZESfz0CbFA
+         Jvsw==
+X-Gm-Message-State: APjAAAUxgojWWRFM/5KOZO51LR+U9lz7yNHd0FgbbW1SA4KNFzOUJyRz
+        7y31rUAQeJ9IhCn/EP4we/XbkSg7eK+lHoNONeEDrJQ7GjfrPA==
+X-Google-Smtp-Source: APXvYqxtF8Xvm+tm4IZuVjVZGBCJtz7+06a5/1hAvnnEAxC6bsAXdJ7lSoaNNZISpWZcktt+oPMXhYhpd+tpojMOPr8=
+X-Received: by 2002:adf:f088:: with SMTP id n8mr13044701wro.58.1565220760576;
+ Wed, 07 Aug 2019 16:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/S1/XyKHC=Oh8eUWuEWK2PHJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20190807144948.28265-1-maier@linux.ibm.com> <20190807144948.28265-2-maier@linux.ibm.com>
+In-Reply-To: <20190807144948.28265-2-maier@linux.ibm.com>
+From:   Ming Lei <tom.leiming@gmail.com>
+Date:   Thu, 8 Aug 2019 07:32:29 +0800
+Message-ID: <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts
+ without request batching
+To:     Steffen Maier <maier@linux.ibm.com>
+Cc:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        "open list:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/S1/XyKHC=Oh8eUWuEWK2PHJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Rikard,
-
-On Wed, 7 Aug 2019 13:29:17 +0200 Rikard Falkeborn <rikard.falkeborn@gmail.=
-com> wrote:
+On Wed, Aug 7, 2019 at 10:55 PM Steffen Maier <maier@linux.ibm.com> wrote:
 >
-> Hi Stephen, Andrew
->=20
-> On Wed, Aug 07, 2019 at 06:00:41PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the akpm-current tree, today's linux-next build (x86_64
-> > allmodconfig) failed like this:
-> >=20
-> > In file included from include/linux/bits.h:22,
-> >                  from arch/x86/include/asm/msr-index.h:5,
-> >                  from arch/x86/boot/cpucheck.c:28:
-> > include/linux/build_bug.h:49: warning: "BUILD_BUG_ON" redefined
-> >  #define BUILD_BUG_ON(condition) \
-> > =20
-> > In file included from arch/x86/boot/cpucheck.c:22:
-> > arch/x86/boot/boot.h:31: note: this is the location of the previous def=
-inition
-> >  #define BUILD_BUG_ON(condition) ((void)sizeof(char[1 - 2*!!(condition)=
-]))
-> >=20
-> > Caused by commit
-> >=20
-> >   d72f2a993607 ("linux/bits.h: add compile time sanity check of GENMASK=
- inputs")
-> >=20
-> > --=20
-> > Cheers,
-> > Stephen Rothwell =20
->=20
-> Please drop this patch, it has additional issues that needs to be fixed
-> in another revision.
+> This was missing from scsi_mq_ops_no_commit of linux-next commit
+> 8930a6c20791 ("scsi: core: add support for request batching")
+> from Martin's scsi/5.4/scsi-queue or James' scsi/misc.
+>
+> See also linux-next commit b7e9e1fb7a92 ("scsi: implement .cleanup_rq
+> callback") from block/for-next.
+>
+> Signed-off-by: Steffen Maier <maier@linux.ibm.com>
+> Fixes: 8930a6c20791 ("scsi: core: add support for request batching")
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Ming Lei <ming.lei@redhat.com>
+> ---
+>  drivers/scsi/scsi_lib.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index ae03d3e2600f..90c257622bb0 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -1834,6 +1834,7 @@ static const struct blk_mq_ops scsi_mq_ops_no_commit = {
+>         .init_request   = scsi_mq_init_request,
+>         .exit_request   = scsi_mq_exit_request,
+>         .initialize_rq_fn = scsi_initialize_rq,
+> +       .cleanup_rq     = scsi_cleanup_rq,
+>         .busy           = scsi_mq_lld_busy,
+>         .map_queues     = scsi_map_queues,
+>  };
 
-I have removed it from linux-next for today.
---=20
-Cheers,
-Stephen Rothwell
+This one is a cross-tree thing, either scsi/5.4/scsi-queue needs to
+pull for-5.4/block, or
+do it after both land linus tree.
 
---Sig_/S1/XyKHC=Oh8eUWuEWK2PHJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1LX1YACgkQAVBC80lX
-0Gz1vQf/Vr+jSE3tZ3mO3nFRIABShN33fdZ8ctsctp2uCkjyX5JZmgQ04MRZZKCM
-V2XABQmTugkVJ5B2RK4Mgc4QYvsHDUUSO7f1sjA2c97uU7GxxbkmoNP+ZXGKe5YT
-DuH/I8pOmF4J0TAUURAhXgODc9j5fZ9qYFFt3u8l+6dXnlo5TxsEO9uaV4E36z2b
-v94ChOSTlHLLB6J5SxNAmSv5zFuMhBeQ5d23zub//ynN5Dp8hVUOxfi4Gww8YSPO
-lrjvvun84fRGi86j/NA1gYlGjX9FohRWJ3vVYtNQKOBtvm0oVB6R2nmH9IFFPRm8
-uTdWuigz1JdKRtTwKX0lnsB+TUfvRA==
-=An6g
------END PGP SIGNATURE-----
-
---Sig_/S1/XyKHC=Oh8eUWuEWK2PHJ--
+Thanks,
+Ming Lei

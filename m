@@ -2,124 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A5A84AFD
-	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2019 13:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507C184C2B
+	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2019 14:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728592AbfHGLqU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 07:46:20 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50028 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728235AbfHGLqU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 7 Aug 2019 07:46:20 -0400
-Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4A27B21BF6;
-        Wed,  7 Aug 2019 11:46:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565178378;
-        bh=71XmBvCa/h7frFTi6KSxetoEQBU7S+V7meKhHdKgYvs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ed+R3e9wNoY92TmQ657ha+wnFgD1UIo2ZLDBrvrUZOP6WjiF7MKkOEFOa+j3B1xWq
-         L4KcAXcpqZmPDFTab7KcC55liscX7STUJYodVKILYbbyzrwM6Ff+lzpdzbgrqsi+/Z
-         5l7CCbWoctc3XKBh2Xu3jZtN0Onj8WGrM/RjYElI=
-Date:   Wed, 7 Aug 2019 12:46:14 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        benh@kernel.crashing.org, paulus@samba.org, mpe@ellerman.id.au
-Subject: Re: linux-next: build failure after merge of the arm64 tree
-Message-ID: <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
-References: <20190807095022.0314e2fc@canb.auug.org.au>
- <CAMn1gO6P_VfDRjGZb67ZS4Kh0wjTEQi0cbOkmibTokHQOgP7qw@mail.gmail.com>
+        id S2387870AbfHGM7k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 08:59:40 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:38874 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387799AbfHGM7k (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 08:59:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=wO5NtNRERzh7xvd86GGhasPsQj248MwA/stZlw0W4Os=; b=vJN9o7BxNRkQwIDbfeMY0hbqy
+        vVzB4U/6FhTa42TmrzQQY139F64O//tfg+2zHj6zXrjvVKB4yErcho/floCwzxvcwJyOiql1+VUwj
+        IED1CT1OVj4jbuBuEd45j3dEckaHzKTiDsn77LDNEtLdsXfLXApvu+dkZRiua6nkcj7gE=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hvLXN-0007bN-UR; Wed, 07 Aug 2019 12:59:30 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id C26F62742B9E; Wed,  7 Aug 2019 13:59:28 +0100 (BST)
+Date:   Wed, 7 Aug 2019 13:59:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Koenig, Christian" <Christian.Koenig@amd.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        "Zhou1, Tao" <Tao.Zhou1@amd.com>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Zhang, Hawking" <Hawking.Zhang@amd.com>,
+        "Li, Dennis" <Dennis.Li@amd.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "kernel-build-reports@lists.linaro.org" 
+        <kernel-build-reports@lists.linaro.org>
+Subject: Re: [PATCH] drm/amdgpu: replace readq/writeq with atomic64 operations
+Message-ID: <20190807125928.GC4048@sirena.co.uk>
+References: <20190807025640.682-1-tao.zhou1@amd.com>
+ <20190807070834.GA24792@infradead.org>
+ <daff9fc7-ead8-40e0-9a16-cb3b90b01722@amd.com>
+ <20190807104104.GA18773@infradead.org>
+ <18cd9fa5-2d87-2f41-b5fa-927b9790287d@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xo44VMWPx7vlQ2+2"
 Content-Disposition: inline
-In-Reply-To: <CAMn1gO6P_VfDRjGZb67ZS4Kh0wjTEQi0cbOkmibTokHQOgP7qw@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
+In-Reply-To: <18cd9fa5-2d87-2f41-b5fa-927b9790287d@amd.com>
+X-Cookie: Dammit Jim, I'm an actor, not a doctor.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Peter,
 
-On Tue, Aug 06, 2019 at 07:34:36PM -0700, Peter Collingbourne wrote:
-> On Tue, Aug 6, 2019 at 4:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > After merging the arm64 tree, today's linux-next build (powerpc
-> > ppc64_defconfig) was just spinning in make - it executing some scripts,
-> > but it was hard to catch just what.
-> >
-> > Apparently caused by commit
-> >
-> >   5cf896fb6be3 ("arm64: Add support for relocating the kernel with RELR relocations")
-> >
-> > I have not idea why, but reverting the above commit allows to build
-> > to finish.
-> 
-> Okay, I can reproduce with:
+--xo44VMWPx7vlQ2+2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Likewise.
+On Wed, Aug 07, 2019 at 10:55:01AM +0000, Koenig, Christian wrote:
+> Am 07.08.19 um 12:41 schrieb Christoph Hellwig:
 
-> That leads me to ask what is special about $(NM) + powerpc? It turns
-> out to be this fragment of arch/powerpc/Makefile:
-> 
-> ifdef CONFIG_PPC64
-> new_nm := $(shell if $(NM) --help 2>&1 | grep -- '--synthetic' >
-> /dev/null; then echo y; else echo n; fi)
-> 
-> ifeq ($(new_nm),y)
-> NM              := $(NM) --synthetic
-> endif
-> endif
-> 
-> We're setting NM to something else based on a config option, which I
-> presume sets up some sort of circular dependency that confuses
-> Kconfig. Removing this fragment of the makefile (or appending
-> --synthetic unconditionally) also makes the problem go away.
+> > writeq/readq are provided whenever the CPU actually supports 64-bit
+> > atomic loads and stores.
 
-Yes, I think you're right. The lack of something like KBUILD_NMFLAGS means
-that architectures are forced to override NM entirely if they want to pass
-any specific options. Making that conditional on a Kconfig option appears
-to send the entire thing recursive.
+> Is there a config option which we can make the driver depend on?
 
-> So I guess we have a couple of possible quick fixes (assuming that the
-> Kconfig issue can't be solved somehow): either stop passing --synthetic on
-> powerpc and lose a couple of symbols in 64-bit kernels, or start passing
-> it unconditionally on powerpc (it doesn't seem to make a difference to the
-> nm output on a ppc64_defconfig kernel with CONFIG_PPC64=n). I'm cc'ing the
-> powerpc maintainers for their opinion on what to do. While this is being
-> resolved we should probably back out my patch from -next.
+64BIT should do the trick.
 
-Although Alpha, Itanic and PowerPC all override NM, only PowerPC does it
-conditionally so I agree with you that passing '--synthetic' unconditionally
-would resolve the problem and is certainly my preferred approach if mpe is
-ok with it.
+--xo44VMWPx7vlQ2+2
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In the meantime, it seems a shame to revert your patch, so I'll bodge it
-as below and we can revert the bodge if PowerPC manages to remove the
-conditional NM override. Sound ok to you?
+-----BEGIN PGP SIGNATURE-----
 
-Cheers,
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1Kyy8ACgkQJNaLcl1U
+h9CSUAf/bUrGApOJ4TloFKZSBONMJdqKqen4pcxRQYHBdRMyb9jNWyeJTqP+Wj0g
+aQ7WrZb9af6U1NxFXjpCokpLd5UjEslDiLT2PCo2BR2TMgxFqLE9QTw+HdMNMoPX
+lxWI6uQYnj6xQu3tmPJ870gFcKKjFkCE7Q2NH1FNjSRxg9ApAAb333sFf2viaBEo
+1YgDTlRCGBxejDRhW0fR8GwJUU/CSF77zV2HFGJtBGhhBfeZ72mp8gmfOtX0AUaj
+cPWaZOHrOhZN89rRC65g1NagTRK6kB5Sr+rhBcQj/b2R5Rmynj414ZjO0l2ENmlq
+MfX/UcsY6twsldvz7Sng1BUk9WsUxg==
+=TBn7
+-----END PGP SIGNATURE-----
 
-Will
-
---->8
-
-diff --git a/init/Kconfig b/init/Kconfig
-index d96127ebc44e..a38027a06b79 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -31,7 +31,7 @@ config CC_HAS_ASM_GOTO
- 	def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
- 
- config TOOLS_SUPPORT_RELR
--	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
-+	def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(CROSS_COMPILE)nm" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
- 
- config CC_HAS_WARN_MAYBE_UNINITIALIZED
- 	def_bool $(cc-option,-Wmaybe-uninitialized)
+--xo44VMWPx7vlQ2+2--

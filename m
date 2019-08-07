@@ -2,191 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5925184EFD
-	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2019 16:44:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D312684F1B
+	for <lists+linux-next@lfdr.de>; Wed,  7 Aug 2019 16:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729722AbfHGOnu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 10:43:50 -0400
-Received: from conssluserg-01.nifty.com ([210.131.2.80]:16422 "EHLO
-        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729602AbfHGOnu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 10:43:50 -0400
-Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id x77Ehc96019415;
-        Wed, 7 Aug 2019 23:43:39 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x77Ehc96019415
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1565189019;
-        bh=/JMuf66dpHQpVrx+iK6cRZpErJQAF9lLb6RxvsazUgA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=YwsL5UZmFZC3ZmQtxhLoNnylQFyn8FmOcasacZpCoJxrJPW/dAY/qNEpAo3AC5nXy
-         d0f0zX0roDfvicCJEg1FqEvitmYDY5K/hFcqB2nIXU0WcuZcB7z7zX4FJp8s/ZEc1x
-         LiX8mnDpLKAa+dWUtfImodjktINSElddVCt6m0KPHnbUyJ9h3N3YvMhLTr3kDKt1zr
-         itK3Dk6sdrK+IDZZ7MuKGQcyq6qT/S4mztdqHoRbM6zQWhflMzSRQO/N5nhg2RofU1
-         3EbCi2qq2R6TJE1zK6mFanzUbh1E/WFZshZuYKVrBLq9yoQsglwRKd1zx1N1uq4Ljn
-         pJrK+g21IhmBw==
-X-Nifty-SrcIP: [209.85.222.47]
-Received: by mail-ua1-f47.google.com with SMTP id v18so35105981uad.12;
-        Wed, 07 Aug 2019 07:43:39 -0700 (PDT)
-X-Gm-Message-State: APjAAAVLzFm0yggh/EdGUHPLPEK+Ttlz8iHdQEom8b2vPvQUhh4hHgL1
-        5I4pm8W2uZBDOJ0V1czm7nj2UQhjuxab1r30jpg=
-X-Google-Smtp-Source: APXvYqxDqotVqYCy/FwyuhXBsoxhmVR3P/BOmsY+Y15m7Zcsx9D2cLdaYutFF/3Y6PkkMQQkVkMWbWP/8P9Wkt8hYc0=
-X-Received: by 2002:a9f:2265:: with SMTP id 92mr6134889uad.121.1565189018195;
- Wed, 07 Aug 2019 07:43:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190807095022.0314e2fc@canb.auug.org.au> <CAMn1gO6P_VfDRjGZb67ZS4Kh0wjTEQi0cbOkmibTokHQOgP7qw@mail.gmail.com>
- <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
-In-Reply-To: <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
-From:   Masahiro Yamada <yamada.masahiro@socionext.com>
-Date:   Wed, 7 Aug 2019 23:43:02 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASr8mbGDbWikr2P8Pc_6WEpMyXuK-xkgypYOzkWw_6LUw@mail.gmail.com>
-Message-ID: <CAK7LNASr8mbGDbWikr2P8Pc_6WEpMyXuK-xkgypYOzkWw_6LUw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the arm64 tree
-To:     Will Deacon <will@kernel.org>
-Cc:     Peter Collingbourne <pcc@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Content-Type: text/plain; charset="UTF-8"
+        id S1729938AbfHGOuM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 10:50:12 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:59730 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729887AbfHGOuM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 10:50:12 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x77EkpDM014482
+        for <linux-next@vger.kernel.org>; Wed, 7 Aug 2019 10:50:11 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2u7xrvpf5t-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Wed, 07 Aug 2019 10:50:10 -0400
+Received: from localhost
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <maier@linux.ibm.com>;
+        Wed, 7 Aug 2019 15:50:08 +0100
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 7 Aug 2019 15:50:03 +0100
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x77EnhnL29163932
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 7 Aug 2019 14:49:43 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3F3FB11C073;
+        Wed,  7 Aug 2019 14:50:01 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AE6B511C064;
+        Wed,  7 Aug 2019 14:50:00 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  7 Aug 2019 14:50:00 +0000 (GMT)
+From:   Steffen Maier <maier@linux.ibm.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>
+Cc:     linux-next@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-block@vger.kernel.org, dm-devel@redhat.com,
+        linux-s390@vger.kernel.org, Benjamin Block <bblock@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Steffen Maier <maier@linux.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>
+Subject: [PATCH 0/2] scsi: core: regression fixes for request batching
+Date:   Wed,  7 Aug 2019 16:49:46 +0200
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 19080714-0028-0000-0000-0000038C9A2B
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19080714-0029-0000-0000-0000244CFF51
+Message-Id: <20190807144948.28265-1-maier@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-07_03:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=817 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908070158
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi.
+Hi James, Martin, Paolo, Ming,
 
-On Wed, Aug 7, 2019 at 8:46 PM Will Deacon <will@kernel.org> wrote:
->
-> Hi Peter,
->
-> On Tue, Aug 06, 2019 at 07:34:36PM -0700, Peter Collingbourne wrote:
-> > On Tue, Aug 6, 2019 at 4:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > After merging the arm64 tree, today's linux-next build (powerpc
-> > > ppc64_defconfig) was just spinning in make - it executing some scripts,
-> > > but it was hard to catch just what.
-> > >
-> > > Apparently caused by commit
-> > >
-> > >   5cf896fb6be3 ("arm64: Add support for relocating the kernel with RELR relocations")
-> > >
-> > > I have not idea why, but reverting the above commit allows to build
-> > > to finish.
-> >
-> > Okay, I can reproduce with:
->
-> Likewise.
->
-> > That leads me to ask what is special about $(NM) + powerpc? It turns
-> > out to be this fragment of arch/powerpc/Makefile:
-> >
-> > ifdef CONFIG_PPC64
-> > new_nm := $(shell if $(NM) --help 2>&1 | grep -- '--synthetic' >
-> > /dev/null; then echo y; else echo n; fi)
-> >
-> > ifeq ($(new_nm),y)
-> > NM              := $(NM) --synthetic
-> > endif
-> > endif
-> >
-> > We're setting NM to something else based on a config option, which I
-> > presume sets up some sort of circular dependency that confuses
-> > Kconfig. Removing this fragment of the makefile (or appending
-> > --synthetic unconditionally) also makes the problem go away.
+multipathing with linux-next is broken since 20190723 in our CI.
+The patches fix a memleak and a severe dh/multipath functional regression.
+It would be nice if we could get them to 5.4/scsi-queue and also next.
 
-Exactly. This makes a circular dependency.
-Kconfig determines the environment variable 'NM' has been changed,
-and re-runs.
+I would have preferred if such a new feature had used its own
+new copy scsi_mq_ops_batching instead of changing the use case and
+semantics of the existing scsi_mq_ops, because this would likely
+cause less regressions for all the other users not using the new feature.
 
+Steffen Maier (2):
+  scsi: core: fix missing .cleanup_rq for SCSI hosts without request
+    batching
+  scsi: core: fix dh and multipathing for SCSI hosts without request
+    batching
 
-
-> Yes, I think you're right. The lack of something like KBUILD_NMFLAGS means
-> that architectures are forced to override NM entirely if they want to pass
-> any specific options. Making that conditional on a Kconfig option appears
-> to send the entire thing recursive.
-
-Adding KBUILD_NMFLAGS is probably the right thing to do.
-(Is there somebody who wants to volunteer for this?)
-
-But, for this particular case, I vote for
-the entire removal of --synthetic.
-
-This dates back to 2004, and the commit message
-did not clearly explain why it was needed.
-
-The PowerPC maintainers should re-evaluate
-whether or not this flag is necessary.
-
-ppc32 is working without --synthetic,
-so probably ppc64 would be ...
-
-
-
->
-> > So I guess we have a couple of possible quick fixes (assuming that the
-> > Kconfig issue can't be solved somehow): either stop passing --synthetic on
-> > powerpc and lose a couple of symbols in 64-bit kernels, or start passing
-> > it unconditionally on powerpc (it doesn't seem to make a difference to the
-> > nm output on a ppc64_defconfig kernel with CONFIG_PPC64=n). I'm cc'ing the
-> > powerpc maintainers for their opinion on what to do. While this is being
-> > resolved we should probably back out my patch from -next.
->
-> Although Alpha, Itanic and PowerPC all override NM, only PowerPC does it
-> conditionally so I agree with you that passing '--synthetic' unconditionally
-> would resolve the problem and is certainly my preferred approach if mpe is
-> ok with it.
->
-> In the meantime, it seems a shame to revert your patch, so I'll bodge it
-> as below and we can revert the bodge if PowerPC manages to remove the
-> conditional NM override. Sound ok to you?
->
-> Cheers,
->
-> Will
->
-> --->8
->
-> diff --git a/init/Kconfig b/init/Kconfig
-> index d96127ebc44e..a38027a06b79 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -31,7 +31,7 @@ config CC_HAS_ASM_GOTO
->         def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
->
->  config TOOLS_SUPPORT_RELR
-> -       def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(NM)" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
-> +       def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "NM=$(CROSS_COMPILE)nm" "OBJCOPY=$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
->
->  config CC_HAS_WARN_MAYBE_UNINITIALIZED
->         def_bool $(cc-option,-Wmaybe-uninitialized)
-
-Maybe,
-
-def_bool $(success,env "CC=$(CC)" "LD=$(LD)" "OBJCOPY=$(OBJCOPY)"
-$(srctree)/scripts/tools-support-relr.sh)
-
-will work.
-
-
-Or more simply
-
-def_bool $(success,$(srctree)/scripts/tools-support-relr.sh)
-
-
-
-CC, LD, OBJCOPY, NM are environment variables,
-so I think tools-support-relr.sh can directly use them.
-
-
-However, this bypasses the detection of environment variable changes.
-If a user passes NM= from the command line, Kconfig will no longer
-notice the change of NM.
-
-
+ drivers/scsi/scsi_lib.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 -- 
-Best Regards
-Masahiro Yamada
+2.17.1
+

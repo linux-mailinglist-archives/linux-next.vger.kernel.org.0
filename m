@@ -2,104 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 853FB85811
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 04:22:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DD078584F
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 04:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727950AbfHHCWG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 22:22:06 -0400
-Received: from userp2130.oracle.com ([156.151.31.86]:36892 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727946AbfHHCWG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 22:22:06 -0400
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x782IO1G084078;
-        Thu, 8 Aug 2019 02:21:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2018-07-02;
- bh=ACq7S8nv7dzK0UkdAc/DjZFBJLQC3vr+kzfxusPxV1A=;
- b=JByW4jwGa6f+Xwbst5KPM8rIDbegbBj7AhOUjZK4MebDLGwMcDdoPU3xUW3WCFpNGH2r
- B0LC7542OLvCigeDvVClu5FxFhy/QF57BLn9iR3GojxMB9S2zYA8SwO+Ptyz09NYB39i
- mw+Yy/rH6noS2QnTkh/9cpow8SjRCZ3NIAUkDYqFLxlD3BPj5R3wWP2TPpy8uo9Cv6m9
- S2tAVATA29SQFJm/Ji7uy5ZmpWC7G2O+Ba6ji0Aa1TUM6mNku82RpnFbQqQtivLPvFRw
- k1TB+o1dXqjECG57jOTNE3EI+Rw97jV/P264JDlW50FvSwt+rDzEk7vnQssXTnXA/DJq NA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2130.oracle.com with ESMTP id 2u51pu7rvp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Aug 2019 02:21:07 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x782HTul031517;
-        Thu, 8 Aug 2019 02:19:06 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2u763jjs5v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 08 Aug 2019 02:19:06 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x782J3Qu015908;
-        Thu, 8 Aug 2019 02:19:03 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 07 Aug 2019 19:19:02 -0700
-To:     Ming Lei <tom.leiming@gmail.com>
-Cc:     Steffen Maier <maier@linux.ibm.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        "open list\:DEVICE-MAPPER \(LVM\)" <dm-devel@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        Benjamin Block <bblock@linux.ibm.com>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>
-Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts without request batching
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20190807144948.28265-1-maier@linux.ibm.com>
-        <20190807144948.28265-2-maier@linux.ibm.com>
-        <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
-Date:   Wed, 07 Aug 2019 22:18:59 -0400
-In-Reply-To: <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
-        (Ming Lei's message of "Thu, 8 Aug 2019 07:32:29 +0800")
-Message-ID: <yq136iccsbw.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1727994AbfHHCxb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 22:53:31 -0400
+Received: from ozlabs.org ([203.11.71.1]:35857 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727978AbfHHCxb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 7 Aug 2019 22:53:31 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 463tGw3FLXz9s7T;
+        Thu,  8 Aug 2019 12:53:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565232808;
+        bh=/PuKtT7hVEGOuEdR+eb2Zo3CrrUaO63bl10cgsb8BH4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h2J8ojQiYVX+SIFRiezM7ePsVtjVQwzWzFA0f9xnHmsBVnu6Fsaz2F2RMt4X+z++0
+         C84YjQH/VGCZXtzn0W6H7l+JDtcKvsASqlS63+WBijsGT/Z4v6op/oIfRAAD/WbX5+
+         kF2VMypPt4quEdbIJ7DJu4SDt8tUIBRhKTu/JhnGUagOJMezxE9rD6jt1/ichXiG1m
+         mU275Hk37Hjy19kgIUugnWW8Ze3Q4csh6zHOVlmJY8opVj6ZGMbA5+3BhVdj86jAhn
+         1rOzaMHqhE3LF1GQ1Vr5mqLvSbKDG3HZi9DRY62yJmiawXDEa+akB9XNDxI26JwxzN
+         7X25Qy+eMoyWQ==
+Date:   Thu, 8 Aug 2019 12:53:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrii Nakryiko <andriin@fb.com>
+Subject: linux-next: manual merge of the bpf-next tree with Linus' tree
+Message-ID: <20190808125326.614065d6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9342 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1906280000 definitions=main-1908080022
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9342 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
- definitions=main-1908080022
+Content-Type: multipart/signed; boundary="Sig_/t965bQleaCIqT2n30_GaWGl";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/t965bQleaCIqT2n30_GaWGl
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ming,
+Hi all,
 
->> +       .cleanup_rq     = scsi_cleanup_rq,
->>         .busy           = scsi_mq_lld_busy,
->>         .map_queues     = scsi_map_queues,
->>  };
->
-> This one is a cross-tree thing, either scsi/5.4/scsi-queue needs to
-> pull for-5.4/block, or do it after both land linus tree.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-I'll set up an amalgamated for-next branch tomorrow.
+  tools/lib/bpf/libbpf.c
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+between commit:
+
+  1d4126c4e119 ("libbpf: sanitize VAR to conservative 1-byte INT")
+
+from Linus' tree and commit:
+
+  b03bc6853c0e ("libbpf: convert libbpf code to use new btf helpers")
+
+from the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/lib/bpf/libbpf.c
+index 2b57d7ea7836,3abf2dd1b3b5..000000000000
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@@ -1370,22 -1374,16 +1372,21 @@@ static void bpf_object__sanitize_btf(st
+ =20
+  	for (i =3D 1; i <=3D btf__get_nr_types(btf); i++) {
+  		t =3D (struct btf_type *)btf__type_by_id(btf, i);
+- 		kind =3D BTF_INFO_KIND(t->info);
+ =20
+- 		if (!has_datasec && kind =3D=3D BTF_KIND_VAR) {
++ 		if (!has_datasec && btf_is_var(t)) {
+  			/* replace VAR with INT */
+  			t->info =3D BTF_INFO_ENC(BTF_KIND_INT, 0, 0);
+ -			t->size =3D sizeof(int);
+ -			*(int *)(t + 1) =3D BTF_INT_ENC(0, 0, 32);
+ +			/*
+ +			 * using size =3D 1 is the safest choice, 4 will be too
+ +			 * big and cause kernel BTF validation failure if
+ +			 * original variable took less than 4 bytes
+ +			 */
+ +			t->size =3D 1;
+- 			*(int *)(t+1) =3D BTF_INT_ENC(0, 0, 8);
+- 		} else if (!has_datasec && kind =3D=3D BTF_KIND_DATASEC) {
+++			*(int *)(t + 1) =3D BTF_INT_ENC(0, 0, 8);
++ 		} else if (!has_datasec && btf_is_datasec(t)) {
+  			/* replace DATASEC with STRUCT */
+- 			struct btf_var_secinfo *v =3D (void *)(t + 1);
+- 			struct btf_member *m =3D (void *)(t + 1);
++ 			const struct btf_var_secinfo *v =3D btf_var_secinfos(t);
++ 			struct btf_member *m =3D btf_members(t);
+  			struct btf_type *vt;
+  			char *name;
+ =20
+
+--Sig_/t965bQleaCIqT2n30_GaWGl
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1LjqYACgkQAVBC80lX
+0GyyZQf9HpGsTBYYj/EbUlYjBJQiYNKf3nilJ36/aZKDUa9R6wBu3tHu6p24zRRh
+cSvwL8hit9tcUZOI1t4OyVh64mlW8GRxE5kKu0722dxRnSMQx7Td3LTA6inrlCCV
+CnJRlEoCHpP7vITbo+0cwVhJt+OR4k4/GEAf/mZVqZAwoXMsUZkC6LY30aKWDJfc
+3TzURLuzemJSJvZAsNOXDHevUM++t+01n1iq+3Y6bf9grOyQc9NI732GKTTxOPEE
+FpNhnSp8H24r2yBiuIgJqHSNAwZy/03TUtiijE8xomQZoIWOUn10BL4d2tnP/kpn
+kU6k1xWsopkhAi54Z0ebJcEEjpDLWA==
+=cXek
+-----END PGP SIGNATURE-----
+
+--Sig_/t965bQleaCIqT2n30_GaWGl--

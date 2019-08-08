@@ -2,107 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 332B686AA0
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 21:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A55EB86C96
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 23:43:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390113AbfHHTdb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Aug 2019 15:33:31 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:55202 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732758AbfHHTdb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Aug 2019 15:33:31 -0400
-Received: by mail-wm1-f66.google.com with SMTP id p74so3459622wme.4
-        for <linux-next@vger.kernel.org>; Thu, 08 Aug 2019 12:33:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=FfnRvT8bsCxQfTxapev0xWL1W1r30LXrZim/pxgudsU=;
-        b=USK90tVIdJIFVBJZ2H17am399y7k1Utv/BXtZddGo6yJp74+M9f3x25FyBl6tkxpfW
-         e+sW8fcQJgN7rhBFguwmJIMhyHfhN1hPlJkPZYC7AcWot2O1OHkTM9iA1E9qD0QilqQ7
-         x3PGckwRyI5rLi38dtaInQBPQkjHvF0waQlm3qU4aEteDUtDYTWxa31/sHuT7dHloPkv
-         SW5T0EHQxbWDDg+61m+b3qpEE9Y9r8oa4EagA22Z3tC08EKTkRti/nO+UdTtDnEC9Emv
-         49SRgpEG23SWIJo+o4oIoqDSOXh4sjt9Izdrt90p4v5CplNKgQQK3CDFIIm1BOVVUYa3
-         K+DQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=FfnRvT8bsCxQfTxapev0xWL1W1r30LXrZim/pxgudsU=;
-        b=hY0LUHdsBeJJjN4zZ7W3U5nSP2gP7b90JC0+KWw18TJphtzTCVJeWAt7Wo0dfyyjyK
-         NZXURKDEkhi5tHjHsD4w6xXEtNrRQPbttawV42KHRo18LNm5nffebbHarHcvaNJjYW7M
-         HcnvPeOFwraatVWgmjpKhizunDLZkeVXrAmS70Ix7Kb/xBxv1aCAAKREhkWkbpj9KG22
-         k0FkRe9Oh7g8TZ3fjha9y/a+wn+SQ4cJmtOR1ekmALZ2Dao8ZyUcA+QTRxC0un6iXFwY
-         jBTEYNIjHibOSwCaMZtJb+RXKvjjBTrT+F3Jr5/LoSzYrpfrPPgywxOfUxrtub81xhCk
-         EK2w==
-X-Gm-Message-State: APjAAAXBpdFYSvOqkUT27I0SCRRhTpdynzrFoJce0fJ24dw/+kP/cmhH
-        YSNzpCpUByghSw0+UG4TAZENNEgO/ietdVImRno=
-X-Google-Smtp-Source: APXvYqxYYZWziRgtaG892+kpeNCC9wfJ7Nk7VgPAAR6JgQ9Jg9J6r/T2K7IQ+WDKu0ncIr3q5D9lqT2jiaNIWF2wJGk=
-X-Received: by 2002:a7b:c751:: with SMTP id w17mr6501804wmk.127.1565292809753;
- Thu, 08 Aug 2019 12:33:29 -0700 (PDT)
+        id S2390169AbfHHVnf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Aug 2019 17:43:35 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42625 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733295AbfHHVnf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 8 Aug 2019 17:43:35 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 464MLs0kWsz9sND;
+        Fri,  9 Aug 2019 07:43:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565300613;
+        bh=PS8G/7lQMLzePnLYO1WZHyun9IUCnij9C8HUKhUzTJs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R6CdS5AfYd3rKRx93uuRu4LogFSLZrx2d6IVCsl21yixw42taNTqNdAenDsJu4ehm
+         PyZ9L2AwGHP39aoisFV2VGhSVLAtqkDtg5hEJ7pXduAzGd2tFa2XHW40X5pkifQchv
+         OcZFceO38BNVHvoOQPEwnNoq8x4LIbpF4ztTwNKcH7dp3TEjKsqS88hIeNksBIt/8J
+         ggurRIE20dUOwDAg1f36FtxJDfNImIHtaga/Oce+zut94hH+7mOzfW/IP50up393y3
+         4TOPCm/VKglGsi6r6MjToy9VxQAAnvKq57WARjubgRElxyQ4MomBQN4FuWiPSzE3kx
+         PT6PTQnKT3WRQ==
+Date:   Fri, 9 Aug 2019 07:43:25 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the sound-asoc tree
+Message-ID: <20190809074325.65a72962@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20190807025640.682-1-tao.zhou1@amd.com> <20190808192535.GA18697@roeck-us.net>
-In-Reply-To: <20190808192535.GA18697@roeck-us.net>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 8 Aug 2019 15:33:17 -0400
-Message-ID: <CADnq5_ONGvL0yMybsXCyYJO6zKRAi4aEPo8LwEwQjSP3aVbdJQ@mail.gmail.com>
-Subject: Re: drm/amdgpu: replace readq/writeq with atomic64 operations
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Tao Zhou <tao.zhou1@amd.com>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        kernel-build-reports@lists.linaro.org,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Dennis Li <dennis.li@amd.com>,
-        Hawking Zhang <hawking.zhang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/RbJmcSp+m0Ab=t+LgdKH+Mm";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 8, 2019 at 3:31 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On Wed, Aug 07, 2019 at 10:56:40AM +0800, Tao Zhou wrote:
-> > readq/writeq are not supported on all architectures
-> >
-> > Signed-off-by: Tao Zhou <tao.zhou1@amd.com>
-> > Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
->
-> Regarding the claim that this would work for 32-bit x86 builds:
+--Sig_/RbJmcSp+m0Ab=t+LgdKH+Mm
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I wasn't talking about readq/writeq, I was talking about the atomic64
-interfaces.
+Hi all,
 
-Alex
+Commit
 
->
-> make ARCH=3Di386 allmodconfig
-> make ARCH=3Di386 drivers/gpu/drm/amd/amdgpu/amdgpu_device.o
->
-> results in:
->
->   ...
->   CC [M]  drivers/gpu/drm/amd/amdgpu/amdgpu_device.o
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function =E2=80=98amdgpu_m=
-m_rreg64=E2=80=99:
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:279:9: error: implicit declara=
-tion of function =E2=80=98readq=E2=80=99;
->
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c: In function =E2=80=98amdgpu_m=
-m_wreg64=E2=80=99:
-> drivers/gpu/drm/amd/amdgpu/amdgpu_device.c:298:3: error: implicit declara=
-tion of function =E2=80=98writeq=E2=80=99
->
-> This is with next-20190808.
->
-> Guenter
-> _______________________________________________
-> amd-gfx mailing list
-> amd-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
+  c42d8cbee4c7 ("Merge branches from Takashi to ease Skylake development.")
+
+is missing a Signed-off-by from its author and committer.
+
+Despite what the commit message says, this is not a merge commit.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RbJmcSp+m0Ab=t+LgdKH+Mm
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Ml30ACgkQAVBC80lX
+0GwG2gf/Wd8smArT/Nj7a7JXIQ34odcrcuOSDQK3qTS6ugD5F1OyT+IKJGVIP/eU
+4NIDy/cO0DLdnZv8XP98UXcPC1b+5/I8KrisQ8n36nJ9Tw4pvbbK1VFQBFLRbeAy
+d6ZpVvlxCcvmvLy/kOyM4+WJmd9D4GAU1L3idHYl7Zb06wG2BLMkqavrWKvrWuzY
+n08N9bT7E7dGFWb26jBn5jgVAk/2DXR1A186bsRdcwCjO6BtsESnzQ4LHGsJcUQ6
+q+NSlss/KAZqfxC32FjlfUVQAXmoq821hFcJGoTGz0wdmA1vmfbTq2+BgIhSsTwo
+eH80vpw82mk+CaIFHuQuBFKijnvM1Q==
+=CMfa
+-----END PGP SIGNATURE-----
+
+--Sig_/RbJmcSp+m0Ab=t+LgdKH+Mm--

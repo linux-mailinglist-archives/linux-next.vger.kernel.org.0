@@ -2,126 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 06175857D1
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 03:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 853FB85811
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 04:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730433AbfHHBwu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 7 Aug 2019 21:52:50 -0400
-Received: from ozlabs.org ([203.11.71.1]:40221 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730038AbfHHBwu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 7 Aug 2019 21:52:50 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 463rwt5rjlz9s3Z;
-        Thu,  8 Aug 2019 11:52:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565229166;
-        bh=2Yy/cS6AEuURYiuCIqDYhqO1IpoktaM9SX64Ys7iwJI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aOuzZgSPYdx3pdpMPRaweLOi2GCuqOw4FXoedOlSnPUEpfov48c9TH7nTzgRFCPFi
-         TS/kJqDte9HbABn9cdZNO8l5nP+fJ1gGyBgT76fb4eu5Rkd5PVMz7XRVry5n6RW1Pj
-         UkxcnQ7EDBd29zkL5moA1fcfVQOT+oHJlRj++OB/TReu7YicGRpVLz2TnXsPovBIiD
-         SGXH7Hq1ZbLds4WIwWnYUiC0BlgEQRM0xPkmi/YkRSUKt3RsADZi4DXDlUQz/HieZ/
-         CLaITeOZAvjvjTntzLDLQ9gy41HOheMG0xKXGeYVJiGj0MK0PJDgwBnBEUUPgTLfFp
-         ISnwmWJ/25Xlw==
-Date:   Thu, 8 Aug 2019 11:52:45 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chuhong Yuan <hslester96@gmail.com>
-Subject: Re: linux-next: build failure after merge of the crypto tree
-Message-ID: <20190808115245.0c88c300@canb.auug.org.au>
-In-Reply-To: <20190805145736.2d39f95b@canb.auug.org.au>
-References: <20190805145736.2d39f95b@canb.auug.org.au>
+        id S1727950AbfHHCWG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 7 Aug 2019 22:22:06 -0400
+Received: from userp2130.oracle.com ([156.151.31.86]:36892 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727946AbfHHCWG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 7 Aug 2019 22:22:06 -0400
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x782IO1G084078;
+        Thu, 8 Aug 2019 02:21:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2018-07-02;
+ bh=ACq7S8nv7dzK0UkdAc/DjZFBJLQC3vr+kzfxusPxV1A=;
+ b=JByW4jwGa6f+Xwbst5KPM8rIDbegbBj7AhOUjZK4MebDLGwMcDdoPU3xUW3WCFpNGH2r
+ B0LC7542OLvCigeDvVClu5FxFhy/QF57BLn9iR3GojxMB9S2zYA8SwO+Ptyz09NYB39i
+ mw+Yy/rH6noS2QnTkh/9cpow8SjRCZ3NIAUkDYqFLxlD3BPj5R3wWP2TPpy8uo9Cv6m9
+ S2tAVATA29SQFJm/Ji7uy5ZmpWC7G2O+Ba6ji0Aa1TUM6mNku82RpnFbQqQtivLPvFRw
+ k1TB+o1dXqjECG57jOTNE3EI+Rw97jV/P264JDlW50FvSwt+rDzEk7vnQssXTnXA/DJq NA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2u51pu7rvp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Aug 2019 02:21:07 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x782HTul031517;
+        Thu, 8 Aug 2019 02:19:06 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2u763jjs5v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 08 Aug 2019 02:19:06 +0000
+Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x782J3Qu015908;
+        Thu, 8 Aug 2019 02:19:03 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 07 Aug 2019 19:19:02 -0700
+To:     Ming Lei <tom.leiming@gmail.com>
+Cc:     Steffen Maier <maier@linux.ibm.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ming Lei <ming.lei@redhat.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux SCSI List <linux-scsi@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        "open list\:DEVICE-MAPPER \(LVM\)" <dm-devel@redhat.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Benjamin Block <bblock@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
+        "Ewan D . Milne" <emilne@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Mike Snitzer <snitzer@redhat.com>
+Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts without request batching
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20190807144948.28265-1-maier@linux.ibm.com>
+        <20190807144948.28265-2-maier@linux.ibm.com>
+        <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
+Date:   Wed, 07 Aug 2019 22:18:59 -0400
+In-Reply-To: <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
+        (Ming Lei's message of "Thu, 8 Aug 2019 07:32:29 +0800")
+Message-ID: <yq136iccsbw.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Cdn2bCWDZ7kVZqfm9YvqfR+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9342 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908080022
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9342 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908080022
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Cdn2bCWDZ7kVZqfm9YvqfR+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Ming,
 
-On Mon, 5 Aug 2019 14:57:36 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+>> +       .cleanup_rq     = scsi_cleanup_rq,
+>>         .busy           = scsi_mq_lld_busy,
+>>         .map_queues     = scsi_map_queues,
+>>  };
 >
-> Hi all,
->=20
-> After merging the crypto tree, today's linux-next build (sparc64
-> defconfig) failed like this:
->=20
-> drivers/char/hw_random/n2-drv.c: In function 'n2rng_probe':
-> drivers/char/hw_random/n2-drv.c:771:29: error: 'pdev' undeclared (first u=
-se in this function); did you mean 'cdev'?
->   err =3D devm_hwrng_register(&pdev->dev, &np->hwrng);
->                              ^~~~
->                              cdev
-> drivers/char/hw_random/n2-drv.c:771:29: note: each undeclared identifier =
-is reported only once for each function it appears in
->=20
-> Caused by commit
->=20
->   3e75241be808 ("hwrng: drivers - Use device-managed registration API")
->=20
-> I applied the following patch for today:
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 5 Aug 2019 14:49:59 +1000
-> Subject: [PATCH] hwrng: fix typo in n2-drv.c
->=20
-> Fixes: 3e75241be808 ("hwrng: drivers - Use device-managed registration AP=
-I")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/char/hw_random/n2-drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/char/hw_random/n2-drv.c b/drivers/char/hw_random/n2-=
-drv.c
-> index 2d256b3470db..73e408146420 100644
-> --- a/drivers/char/hw_random/n2-drv.c
-> +++ b/drivers/char/hw_random/n2-drv.c
-> @@ -768,7 +768,7 @@ static int n2rng_probe(struct platform_device *op)
->  	np->hwrng.data_read =3D n2rng_data_read;
->  	np->hwrng.priv =3D (unsigned long) np;
-> =20
-> -	err =3D devm_hwrng_register(&pdev->dev, &np->hwrng);
-> +	err =3D devm_hwrng_register(&op->dev, &np->hwrng);
->  	if (err)
->  		goto out_hvapi_unregister;
-> =20
-> --=20
-> 2.20.1
+> This one is a cross-tree thing, either scsi/5.4/scsi-queue needs to
+> pull for-5.4/block, or do it after both land linus tree.
 
-I am still applying that patch ...
+I'll set up an amalgamated for-next branch tomorrow.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Cdn2bCWDZ7kVZqfm9YvqfR+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1LgG0ACgkQAVBC80lX
-0Gy5Vwf9FbyB0CanhhAKbljUp3638ElADCsp3vzNhhA19zlow8SLSEUDu6DCZhxx
-SSKovam2VtyMS+xe0fYCZDdHJySUySmwtJHQYahnOJ4qC0W/kP2R3/FTPyRJQLvV
-ux586Y8HfIXT5LMkjYwKIDc4/zz00f0pWTJqvf0bibvNEcqFmX8uuhFfFsQfyVSF
-kQ1d62oMq1K1IOco7h3VdbXtbFMxJ14Isx4/6J7QZuADwBfJ99M8LW9f93cVRqmN
-TXtTbZxAAFXq6txuOhHrWQyiupVdw4J58mvXMsXMaE21aPW4s6ybdldRoevBERP5
-NUrAcHBw9U6TgMsF7Mlw9z8fYSXZkQ==
-=seSx
------END PGP SIGNATURE-----
-
---Sig_/Cdn2bCWDZ7kVZqfm9YvqfR+--
+-- 
+Martin K. Petersen	Oracle Linux Engineering

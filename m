@@ -2,96 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53CFB86CC7
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 23:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D1A86CF6
+	for <lists+linux-next@lfdr.de>; Fri,  9 Aug 2019 00:12:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403994AbfHHVzy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Aug 2019 17:55:54 -0400
-Received: from ozlabs.org ([203.11.71.1]:59565 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732427AbfHHVzy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 8 Aug 2019 17:55:54 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 464Md14DG8z9sNF;
-        Fri,  9 Aug 2019 07:55:49 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565301351;
-        bh=0Ou22NT90/zxAm29hlbGDucgM9byIb1KYwf2gwqPCLw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eELnzwxYuaaQaTqFFXzXFsHOcF4yd5L0ETzTOCSV5uw6wapbBnXBpT9YkIk1Xdia1
-         Qnbfln+lgG7Rocsye2iU0v20LdeZLuyFiNYKwepW5m4/KuD447TQjCkmZog2hKPN4G
-         CvSQt3Wt45E30EILN2A3pSbncGTfXomR5eNpvvDeNsvJBxS/V6UO6uDZOED/evk9uQ
-         a29st3+I1BUXcX6K45gWI7NzZGa9gtoIGWr7EHYC+uRNFIst2wCZ3th2uq6vrB/jz8
-         kQZl4AUGntZV1zGbUW7MW+vYWqm1ADazJSV5CPScrfmYoHdhnr71q90WUlcUy63vYh
-         IO2RV/K0ehTVg==
-Date:   Fri, 9 Aug 2019 07:55:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Joseph Greathouse <Joseph.Greathouse@amd.com>
-Subject: linux-next: manual merge of the amdgpu-fixes tree with the
- drm-fixes tree
-Message-ID: <20190809075547.679c0713@canb.auug.org.au>
+        id S2390340AbfHHWMP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Aug 2019 18:12:15 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54840 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390169AbfHHWMP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 8 Aug 2019 18:12:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=pARZA3ohxUG2TFTyA7TlH8jLh4Oscb64NF12pQDdV/g=; b=K6nxPDmuEi5RmSoqdhxi1li7A
+        y+lyQoxKx/iF/bl7WnAxbFkdpgRwepj7hji24AgLO2CLa1NNWSpOldj727IK3VY9cuvTvNXd+ZH/4
+        4gXLlvHkW9+Tjig3Tx1ht3qR9KVtmgcjVb8xU5wD3tn6Vvwrjhi71/iC4xAecEozGEHoU=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hvqdn-0004Cj-LW; Thu, 08 Aug 2019 22:12:11 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 673842742BDD; Thu,  8 Aug 2019 23:12:10 +0100 (BST)
+Date:   Thu, 8 Aug 2019 23:12:10 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the sound-asoc
+ tree
+Message-ID: <20190808221210.GO3795@sirena.co.uk>
+References: <20190809074325.65a72962@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0GEow4Lfw6PR50E2okImpXH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="E+IgQzR66AIOcbjA"
+Content-Disposition: inline
+In-Reply-To: <20190809074325.65a72962@canb.auug.org.au>
+X-Cookie: I think we're in trouble.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0GEow4Lfw6PR50E2okImpXH
-Content-Type: text/plain; charset=US-ASCII
+
+--E+IgQzR66AIOcbjA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Fri, Aug 09, 2019 at 07:43:25AM +1000, Stephen Rothwell wrote:
 
-Today's linux-next merge of the amdgpu-fixes tree got conflicts in:
+> Commit
 
-  drivers/gpu/drm/amd/amdkfd/kfd_chardev.c
-  include/uapi/linux/kfd_ioctl.h
+>   c42d8cbee4c7 ("Merge branches from Takashi to ease Skylake development.=
+")
 
-between commit:
+> is missing a Signed-off-by from its author and committer.
 
-  4b3e30ed3ec7 ("Revert "drm/amdkfd: New IOCTL to allocate queue GWS"")
+> Despite what the commit message says, this is not a merge commit.
 
-from the drm-fixes tree and commit:
+Ugh, that's a git bug - there was a conflict resolution and rather when
+I resolved it it seems to have completely thrown away the fact that
+there was a merge. =20
 
-  7e51b56cd5b8 ("drm/amdkfd: Remove GPU ID in GWS queue creation")
-
-from the amdgpu-fixes tree.
-
-I fixed it up (I just used the former) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0GEow4Lfw6PR50E2okImpXH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--E+IgQzR66AIOcbjA
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1MmmMACgkQAVBC80lX
-0Gzm9Af/Tr4iPShzhGwvhE1Hflvd2O4Ad6Ivv7wYBf4kULwSx+n4LZAjYazP+526
-B4NZ5y/8z1GPhE4ZbmcaLyi7PLCNOA8XmD2u3bd7jlGlwyGfTFzrIsihPEjPsofV
-m///ZAZN6IrGfbekcr8+5divRQH4fHFLCR9vrIJn3KTMfSO7d4keqIpyFgdto/Z/
-29o4oDO4LAMMULeMJfPZSLiI58piSW6euxKLIy9nqyADh5GSuyPcjvJcTKWv/9Na
-Ct2VcrN1QAKKpJU62RSNG2ZgupY7yUoIbvD6I87g4GM6XZYfXXfvBFqjRu8eJrAL
-TpwpFSFdxhgkCaNQFffHs/sTV7cPdA==
-=c4nH
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1MnjkACgkQJNaLcl1U
+h9AAlgf+Ix8ug5eNSrx1p4/j6TcNb5tTbq5IBAT+XRO0oGUuLtBuT4iusOWFz+4D
+iNVl4NI+mg4u8ASC9emv3C4ql2Eeg0T18zJ9BKRvtLzbtVh69w9crzkV7NlTwmcw
+KA6UD0o9GAh34aJYSyr6RqXE3k70wPIdJKF9XzyfSA6wRewP6LEHJ9enK8BeTvMX
+ljntdAYwd9wj2zypPbyKrKOa7mZDFYNURNCTo+leZGyH6djpvrgIFtp+b+5F2y6n
+3nK7geW0KP+otBz1JJ539u+W1noGhbtQsRMPJUUda36EugvLtGQQeThRvEBf446Z
+EqXPnbv00ZzNZdwPxQdLKSwAPXbbag==
+=piES
 -----END PGP SIGNATURE-----
 
---Sig_/0GEow4Lfw6PR50E2okImpXH--
+--E+IgQzR66AIOcbjA--

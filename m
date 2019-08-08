@@ -2,29 +2,29 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F23F085A15
-	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 07:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76A785A37
+	for <lists+linux-next@lfdr.de>; Thu,  8 Aug 2019 08:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730694AbfHHFxY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 8 Aug 2019 01:53:24 -0400
-Received: from mga01.intel.com ([192.55.52.88]:64153 "EHLO mga01.intel.com"
+        id S1728090AbfHHGDa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 8 Aug 2019 02:03:30 -0400
+Received: from mga04.intel.com ([192.55.52.120]:59393 "EHLO mga04.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725933AbfHHFxX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 8 Aug 2019 01:53:23 -0400
+        id S1726106AbfHHGDa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 8 Aug 2019 02:03:30 -0400
 X-Amp-Result: UNKNOWN
 X-Amp-Original-Verdict: FILE UNKNOWN
 X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 22:53:21 -0700
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 07 Aug 2019 23:03:29 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.64,360,1559545200"; 
-   d="gz'50?scan'50,208,50";a="186244130"
+   d="gz'50?scan'50,208,50";a="193082697"
 Received: from lkp-server01.sh.intel.com (HELO lkp-server01) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 07 Aug 2019 22:53:17 -0700
+  by fmsmga001.fm.intel.com with ESMTP; 07 Aug 2019 23:03:26 -0700
 Received: from kbuild by lkp-server01 with local (Exim 4.89)
         (envelope-from <lkp@intel.com>)
-        id 1hvbMT-00095N-CG; Thu, 08 Aug 2019 13:53:17 +0800
-Date:   Thu, 8 Aug 2019 13:52:17 +0800
+        id 1hvbWH-0005JK-Fl; Thu, 08 Aug 2019 14:03:25 +0800
+Date:   Thu, 8 Aug 2019 14:02:59 +0800
 From:   kbuild test robot <lkp@intel.com>
 To:     Steffen Maier <maier@linux.ibm.com>
 Cc:     kbuild-all@01.org, "James E . J . Bottomley" <jejb@linux.ibm.com>,
@@ -42,14 +42,14 @@ Cc:     kbuild-all@01.org, "James E . J . Bottomley" <jejb@linux.ibm.com>,
         "Ewan D . Milne" <emilne@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
         Mike Snitzer <snitzer@redhat.com>
-Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts
+Subject: Re: [PATCH 2/2] scsi: core: fix dh and multipathing for SCSI hosts
  without request batching
-Message-ID: <201908081311.9B4DcDbr%lkp@intel.com>
-References: <20190807144948.28265-2-maier@linux.ibm.com>
+Message-ID: <201908081445.oJLHRUt7%lkp@intel.com>
+References: <20190807144948.28265-3-maier@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="b5jczeldiva3u2q7"
+Content-Type: multipart/mixed; boundary="2fo2aexgoo67bv6u"
 Content-Disposition: inline
-In-Reply-To: <20190807144948.28265-2-maier@linux.ibm.com>
+In-Reply-To: <20190807144948.28265-3-maier@linux.ibm.com>
 X-Patchwork-Hint: ignore
 User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-next-owner@vger.kernel.org
@@ -58,7 +58,7 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---b5jczeldiva3u2q7
+--2fo2aexgoo67bv6u
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
@@ -84,16 +84,22 @@ Reported-by: kbuild test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/scsi/scsi_lib.c:1824:3: error: 'const struct blk_mq_ops' has no member named 'cleanup_rq'; did you mean 'queue_rq'?
+   drivers/scsi/scsi_lib.c:1824:3: error: 'const struct blk_mq_ops' has no member named 'cleanup_rq'; did you mean 'queue_rq'?
      .cleanup_rq = scsi_cleanup_rq,
       ^~~~~~~~~~
       queue_rq
->> drivers/scsi/scsi_lib.c:1824:16: error: 'scsi_cleanup_rq' undeclared here (not in a function); did you mean 'scsi_queue_rq'?
+   drivers/scsi/scsi_lib.c:1824:16: error: 'scsi_cleanup_rq' undeclared here (not in a function); did you mean 'scsi_queue_rq'?
      .cleanup_rq = scsi_cleanup_rq,
                    ^~~~~~~~~~~~~~~
                    scsi_queue_rq
+   drivers/scsi/scsi_lib.c: In function 'scsi_device_from_queue':
+>> drivers/scsi/scsi_lib.c:1881:20: error: 'scsi_mq_ops_no_commit' undeclared (first use in this function); did you mean 'scsi_mq_ops'?
+     if (q->mq_ops == &scsi_mq_ops_no_commit ||
+                       ^~~~~~~~~~~~~~~~~~~~~
+                       scsi_mq_ops
+   drivers/scsi/scsi_lib.c:1881:20: note: each undeclared identifier is reported only once for each function it appears in
 
-vim +1824 drivers/scsi/scsi_lib.c
+vim +1881 drivers/scsi/scsi_lib.c
 
   1811	
   1812	static const struct blk_mq_ops scsi_mq_ops = {
@@ -113,17 +119,79 @@ vim +1824 drivers/scsi/scsi_lib.c
   1826		.map_queues	= scsi_map_queues,
   1827	};
   1828	
+  1829	struct request_queue *scsi_mq_alloc_queue(struct scsi_device *sdev)
+  1830	{
+  1831		sdev->request_queue = blk_mq_init_queue(&sdev->host->tag_set);
+  1832		if (IS_ERR(sdev->request_queue))
+  1833			return NULL;
+  1834	
+  1835		sdev->request_queue->queuedata = sdev;
+  1836		__scsi_init_queue(sdev->host, sdev->request_queue);
+  1837		blk_queue_flag_set(QUEUE_FLAG_SCSI_PASSTHROUGH, sdev->request_queue);
+  1838		return sdev->request_queue;
+  1839	}
+  1840	
+  1841	int scsi_mq_setup_tags(struct Scsi_Host *shost)
+  1842	{
+  1843		unsigned int cmd_size, sgl_size;
+  1844	
+  1845		sgl_size = scsi_mq_inline_sgl_size(shost);
+  1846		cmd_size = sizeof(struct scsi_cmnd) + shost->hostt->cmd_size + sgl_size;
+  1847		if (scsi_host_get_prot(shost))
+  1848			cmd_size += sizeof(struct scsi_data_buffer) +
+  1849				sizeof(struct scatterlist) * SCSI_INLINE_PROT_SG_CNT;
+  1850	
+  1851		memset(&shost->tag_set, 0, sizeof(shost->tag_set));
+  1852		shost->tag_set.ops = &scsi_mq_ops;
+  1853		shost->tag_set.nr_hw_queues = shost->nr_hw_queues ? : 1;
+  1854		shost->tag_set.queue_depth = shost->can_queue;
+  1855		shost->tag_set.cmd_size = cmd_size;
+  1856		shost->tag_set.numa_node = NUMA_NO_NODE;
+  1857		shost->tag_set.flags = BLK_MQ_F_SHOULD_MERGE;
+  1858		shost->tag_set.flags |=
+  1859			BLK_ALLOC_POLICY_TO_MQ_FLAG(shost->hostt->tag_alloc_policy);
+  1860		shost->tag_set.driver_data = shost;
+  1861	
+  1862		return blk_mq_alloc_tag_set(&shost->tag_set);
+  1863	}
+  1864	
+  1865	void scsi_mq_destroy_tags(struct Scsi_Host *shost)
+  1866	{
+  1867		blk_mq_free_tag_set(&shost->tag_set);
+  1868	}
+  1869	
+  1870	/**
+  1871	 * scsi_device_from_queue - return sdev associated with a request_queue
+  1872	 * @q: The request queue to return the sdev from
+  1873	 *
+  1874	 * Return the sdev associated with a request queue or NULL if the
+  1875	 * request_queue does not reference a SCSI device.
+  1876	 */
+  1877	struct scsi_device *scsi_device_from_queue(struct request_queue *q)
+  1878	{
+  1879		struct scsi_device *sdev = NULL;
+  1880	
+> 1881		if (q->mq_ops == &scsi_mq_ops_no_commit ||
+  1882		    q->mq_ops == &scsi_mq_ops)
+  1883			sdev = q->queuedata;
+  1884		if (!sdev || !get_device(&sdev->sdev_gendev))
+  1885			sdev = NULL;
+  1886	
+  1887		return sdev;
+  1888	}
+  1889	EXPORT_SYMBOL_GPL(scsi_device_from_queue);
+  1890	
 
 ---
 0-DAY kernel test infrastructure                Open Source Technology Center
 https://lists.01.org/pipermail/kbuild-all                   Intel Corporation
 
---b5jczeldiva3u2q7
+--2fo2aexgoo67bv6u
 Content-Type: application/gzip
 Content-Disposition: attachment; filename=".config.gz"
 Content-Transfer-Encoding: base64
 
-H4sICGS2S10AAy5jb25maWcAnFxfc9u2sn/vp+CkM3faOSc9tmQ79r3jBxAEJVQkQQOgJPuF
+H4sICOu5S10AAy5jb25maWcAnFxfc9u2sn/vp+CkM3faOSc9tmQ79r3jBxAEJVQkQQOgJPuF
 o8hKqqkjeSS5bb79WYD/AAqgMzfTJiZ2CSwWi93fLkD//NPPAXo77b+tTtv16uXle/B1s9sc
 VqfNc/Bl+7L5vyBiQcZkQCIqfwPmZLt7++c/h+1x/Vdw/dv4t4uPh/U4mG0Ou81LgPe7L9uv
 b/D6dr/76eef4L+fofHbK/R0+N9Av3Vz9fFF9fHx63od/DLB+Nfg029Xv10AL2ZZTCclxiUV
@@ -464,4 +532,4 @@ mNprjmDbKVNPtRkfWLFp+mdXgxAcuEcngDQ5XVaJ48l+n0B4Zt/d4+YLJgpFV9Su0fFrbmTk
 OCKb5tMneU/LLfzo9t3XMZgSTkChJDLYjxHg+QIS5FCXGktQ5iVAhDiOnZj/UDuQxnEcy+cn
 7gKRuepJxxntiDVBsx1VJfRrnBut0HJq2tpiztTEd7H7aZgzA7Y1JZShwQtKna2fbTEBAA==
 
---b5jczeldiva3u2q7--
+--2fo2aexgoo67bv6u--

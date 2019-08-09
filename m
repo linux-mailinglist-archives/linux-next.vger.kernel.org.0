@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A4AAB87932
-	for <lists+linux-next@lfdr.de>; Fri,  9 Aug 2019 14:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42D4F8796E
+	for <lists+linux-next@lfdr.de>; Fri,  9 Aug 2019 14:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbfHIMBa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 9 Aug 2019 08:01:30 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:56002 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726157AbfHIMBa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Aug 2019 08:01:30 -0400
-Received: by mail-wm1-f51.google.com with SMTP id f72so5433248wmf.5
-        for <linux-next@vger.kernel.org>; Fri, 09 Aug 2019 05:01:21 -0700 (PDT)
+        id S2406218AbfHIMLE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 9 Aug 2019 08:11:04 -0400
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:35566 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406048AbfHIMLE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 9 Aug 2019 08:11:04 -0400
+Received: by mail-wm1-f41.google.com with SMTP id l2so5428718wmg.0
+        for <linux-next@vger.kernel.org>; Fri, 09 Aug 2019 05:10:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=YhCpcj7t20JrLLnrqlXJoptHOTq6fMPaR1uD4FyE0es=;
-        b=gMYfOcJCrzZ45WJAP+PzW2vuUM2kvCGaHYHqBYdKBtGYI3+LH+gETxCYA5Dg+fcNqY
-         Uk7PCQd+Hhs04g/3Zp603nPBMW0sTDSS357tvY2AxY9yJ/ZOjZqXp88X1hv8yyDtyPRv
-         ac9nvdMgXzNJAeya8hyB7bvuscBb8T709kS6+oL+EncecVbBM7UypOLxcLnXurj+uVRA
-         5q7vUPlkkuXgaR6Ffx8eduHAbjblTskBsW/AEN+N5SskcyLGz83JRaYE52XmiU8+6Z5I
-         wnsKKRyTGtVIiSMu+GRdp+CrhwSdrqAgJ8Cr9NWiYilDZUWjWyIwRvyngd6xsS2mMPgK
-         zPNQ==
+        bh=vN1dquhJWS3OaDbnaQ1jTMhsFV9/RTTSTLp0Z5F6gd0=;
+        b=0wfE4ewf0mSegu2GtcgnO1/v5995+x2gKxUrDWNhhJvJ+JrVjvTjqiCuQ8ZYeL78UY
+         CH+ozwCGdmIFzcNYxyD9UHpsTH2f0vF5C7fikCtyAX1G60L1uQ3Mxvd16Hmcy/arbAE4
+         p2ial8SKKko3yGKrxcrXVaQLAydVi5C0qEqeKGurpX4Ynx43E8hWPjiEtMgzSakfr25U
+         U7lbjTQbYrg2HnLEayjdJB4BV9DOLT0w5qJLrTMNeQ2jTPTZtfJOTdPgy/Uxz2sYH80W
+         KbDPkzNO9ZrCD7aU5fZ84CONiLRsVViZn9rG2Z7knlugMtAiqQIxXS/VCZupjzmWvFYs
+         vs5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=YhCpcj7t20JrLLnrqlXJoptHOTq6fMPaR1uD4FyE0es=;
-        b=AqxSkG7ucOVz1+jdq40ZKdvof4FRLB0DZsnPCGOWhOLLlcSTEOcMzJNeIfwuvYeTqv
-         qc2pz1b3hYi+Du7yuoubNMKCIli8cFVEOD3It9amPIt/VPk2cuEtb3VQmo7fItOW0U8/
-         W2mXrKAp7YaSg/ajcVSet08dUYEMOK/GSFbngVLUdl3YwjeUGm/qUD53wgOi/EkWjbEq
-         D5skXO6utVvorIXgPqJFWabaX5cwRieEzGH9Coqir/hNJ85KYEn8nTXdnllkGPBNq/MI
-         uTXGiYZCd8MQFp7L5rtzQWpmOZbV4CR1b1+5HH2+rZlnS2EVcSPkYyNlW6r1FY5uI42i
-         PyKg==
-X-Gm-Message-State: APjAAAVYAzOWZoPjkvpI7KW+QQrDdh3/12cpqNhZqAxbib3Xc6xzELs0
-        cMGMmCgKc2j7u5s0a2o+ABcmFsB7LScGMA==
-X-Google-Smtp-Source: APXvYqwpjdvIIExBL8ZCDxU2GFWx3xxLSbYCTh0eIG4lkC+vRYkwcs5W2gLj+UDzcSFt/gCqM3H5fw==
-X-Received: by 2002:a1c:f70c:: with SMTP id v12mr10568902wmh.42.1565352078571;
-        Fri, 09 Aug 2019 05:01:18 -0700 (PDT)
+        bh=vN1dquhJWS3OaDbnaQ1jTMhsFV9/RTTSTLp0Z5F6gd0=;
+        b=XkEJTUAhV+3T184aWVJy1M4af1vQnyfDh5u/7T1ZvwHf+P2VgQ6wQ3Rj5qB5g0OTDZ
+         rbwVNAlvyn1KrjJaPhg/Sc9upwvcbVcc21aLTb4o3wGi09uI59ZWbozE+eMHJRn3Gk9L
+         XLKpxk5mALbUluZTVupmDiMiZA+fwXwOy1omvfPZJ0Ya9EfoQna+rvf4a3MuuXtUv/P/
+         6lzn805VUcbED7DOUObdhwT6Zlg59NWX88QdWbRFX6Z1IgYdi+iMtBLZ9swVkKnYNDNJ
+         TRns3QaBjoG7p4/SkJxNsev3OCvayu8yLWCcrir8AX5xlNa5fkiowDIg03nWWwk+T5Vw
+         alPw==
+X-Gm-Message-State: APjAAAWifHa9DDnRQKpbQnYn1dgT9SkXBRy8HreQc/QTgVK+qeY0YpF7
+        PvW32ghu9aUqrK91SXbs+Olamw9sbazfFQ==
+X-Google-Smtp-Source: APXvYqwO8sV7Kdo5Lr8OvXbJZZPVB5SrX/mAsAx/VGARp28h2u6GPsVEj6Faj70QhaNyVqyyuHnWMA==
+X-Received: by 2002:a7b:cd8e:: with SMTP id y14mr10618727wmj.155.1565352650865;
+        Fri, 09 Aug 2019 05:10:50 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id t14sm4698588wrv.12.2019.08.09.05.01.16
+        by smtp.gmail.com with ESMTPSA id u5sm1930664wmc.17.2019.08.09.05.10.49
         for <linux-next@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 09 Aug 2019 05:01:17 -0700 (PDT)
-Message-ID: <5d4d608d.1c69fb81.7658b.7b82@mx.google.com>
-Date:   Fri, 09 Aug 2019 05:01:17 -0700 (PDT)
+        Fri, 09 Aug 2019 05:10:49 -0700 (PDT)
+Message-ID: <5d4d62c9.1c69fb81.e2d84.9e93@mx.google.com>
+Date:   Fri, 09 Aug 2019 05:10:49 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20190809
-X-Kernelci-Branch: master
+X-Kernelci-Kernel: v5.3-rc3-519-ge06aa63031a1
+X-Kernelci-Branch: pending-fixes
 X-Kernelci-Report-Type: build
-Subject: next/master build: 230 builds: 5 failed, 225 passed, 9 errors,
- 1058 warnings (next-20190809)
+Subject: next/pending-fixes build: 222 builds: 3 failed, 219 passed, 6 errors,
+ 1593 warnings (v5.3-rc3-519-ge06aa63031a1)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,29 +63,25 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 230 builds: 5 failed, 225 passed, 9 errors, 1058 warning=
-s (next-20190809)
+next/pending-fixes build: 222 builds: 3 failed, 219 passed, 6 errors, 1593 =
+warnings (v5.3-rc3-519-ge06aa63031a1)
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190809/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-rc3-519-ge06aa63031a1/
 
 Tree: next
-Branch: master
-Git Describe: next-20190809
-Git Commit: 87b983f55b8ccaa0aa185e0e7672c1fa007cbf7f
+Branch: pending-fixes
+Git Describe: v5.3-rc3-519-ge06aa63031a1
+Git Commit: e06aa63031a1f7db7d97336476e9eb87c1650351
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
 arm:
-    allmodconfig: (gcc-8) FAIL
     axm55xx_defconfig: (gcc-8) FAIL
     keystone_defconfig: (gcc-8) FAIL
     multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy: (gcc-8) FAIL
-
-mips:
-    cavium_octeon_defconfig: (gcc-8) FAIL
 
 Errors and Warnings Detected:
 
@@ -97,7 +93,7 @@ arc:
     haps_hs_smp_defconfig (gcc-8): 3 warnings
     hsdk_defconfig (gcc-8): 3 warnings
     nsim_hs_defconfig (gcc-8): 3 warnings
-    nsim_hs_defconfig (gcc-8): 11 warnings
+    nsim_hs_defconfig (gcc-8): 3 warnings
     nsim_hs_smp_defconfig (gcc-8): 3 warnings
     nsimosci_hs_defconfig (gcc-8): 3 warnings
     nsimosci_hs_smp_defconfig (gcc-8): 3 warnings
@@ -106,52 +102,145 @@ arc:
     vdk_hs38_smp_defconfig (gcc-8): 2 warnings
 
 arm64:
-    allmodconfig (gcc-8): 139 warnings
-    allmodconfig (clang-8): 51 warnings
-    defconfig (gcc-8): 134 warnings
-    defconfig (gcc-8): 134 warnings
-    defconfig (gcc-8): 134 warnings
-    defconfig (gcc-8): 134 warnings
+    allmodconfig (gcc-8): 143 warnings
+    defconfig (gcc-8): 137 warnings
+    defconfig (gcc-8): 137 warnings
+    defconfig (gcc-8): 137 warnings
+    defconfig (gcc-8): 137 warnings
 
 arm:
-    allmodconfig (gcc-8): 1 error, 1 warning
-    assabet_defconfig (gcc-8): 2 warnings
-    at91_dt_defconfig (gcc-8): 1 warning
-    axm55xx_defconfig (gcc-8): 2 errors, 8 warnings
-    badge4_defconfig (gcc-8): 2 warnings
-    cerfcube_defconfig (gcc-8): 2 warnings
-    collie_defconfig (gcc-8): 2 warnings
-    footbridge_defconfig (gcc-8): 1 warning
-    h3600_defconfig (gcc-8): 2 warnings
-    keystone_defconfig (gcc-8): 2 errors
-    lpc32xx_defconfig (gcc-8): 1 warning
-    mini2440_defconfig (gcc-8): 2 warnings
-    multi_v5_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 4 warnings
-    multi_v7_defconfig (gcc-8): 4 warnings
-    multi_v7_defconfig (gcc-8): 2 errors
-    multi_v7_defconfig (gcc-8): 4 warnings
-    multi_v7_defconfig (gcc-8): 12 warnings
-    neponset_defconfig (gcc-8): 2 warnings
-    omap2plus_defconfig (gcc-8): 1 warning
-    pleb_defconfig (gcc-8): 2 warnings
-    rpc_defconfig (gcc-8): 2 warnings
-    sama5_defconfig (gcc-8): 1 warning
-    shannon_defconfig (gcc-8): 2 warnings
-    shmobile_defconfig (gcc-8): 2 warnings
-    simpad_defconfig (gcc-8): 2 warnings
-    sunxi_defconfig (gcc-8): 2 warnings
-    tct_hammer_defconfig (gcc-8): 2 warnings
+    acs5k_defconfig (gcc-8): 3 warnings
+    acs5k_tiny_defconfig (gcc-8): 3 warnings
+    allnoconfig (gcc-8): 1 warning
+    am200epdkit_defconfig (gcc-8): 3 warnings
+    aspeed_g4_defconfig (gcc-8): 3 warnings
+    aspeed_g5_defconfig (gcc-8): 8 warnings
+    assabet_defconfig (gcc-8): 4 warnings
+    at91_dt_defconfig (gcc-8): 7 warnings
+    axm55xx_defconfig (gcc-8): 2 errors, 14 warnings
+    badge4_defconfig (gcc-8): 4 warnings
+    bcm2835_defconfig (gcc-8): 8 warnings
+    cerfcube_defconfig (gcc-8): 4 warnings
+    clps711x_defconfig (gcc-8): 3 warnings
+    cm_x2xx_defconfig (gcc-8): 3 warnings
+    cm_x300_defconfig (gcc-8): 3 warnings
+    cns3420vb_defconfig (gcc-8): 3 warnings
+    colibri_pxa270_defconfig (gcc-8): 3 warnings
+    colibri_pxa300_defconfig (gcc-8): 3 warnings
+    collie_defconfig (gcc-8): 4 warnings
+    corgi_defconfig (gcc-8): 3 warnings
+    davinci_all_defconfig (gcc-8): 3 warnings
+    dove_defconfig (gcc-8): 3 warnings
+    ebsa110_defconfig (gcc-8): 1 warning
+    efm32_defconfig (gcc-8): 1 warning
+    em_x270_defconfig (gcc-8): 3 warnings
+    ep93xx_defconfig (gcc-8): 4 warnings
+    eseries_pxa_defconfig (gcc-8): 2 warnings
+    exynos_defconfig (gcc-8): 9 warnings
+    ezx_defconfig (gcc-8): 3 warnings
+    footbridge_defconfig (gcc-8): 4 warnings
+    gemini_defconfig (gcc-8): 2 warnings
+    h3600_defconfig (gcc-8): 4 warnings
+    h5000_defconfig (gcc-8): 3 warnings
+    hackkit_defconfig (gcc-8): 2 warnings
+    hisi_defconfig (gcc-8): 3 warnings
+    imote2_defconfig (gcc-8): 3 warnings
+    imx_v4_v5_defconfig (gcc-8): 4 warnings
+    imx_v6_v7_defconfig (gcc-8): 8 warnings
+    integrator_defconfig (gcc-8): 3 warnings
+    iop13xx_defconfig (gcc-8): 3 warnings
+    iop32x_defconfig (gcc-8): 3 warnings
+    iop33x_defconfig (gcc-8): 3 warnings
+    ixp4xx_defconfig (gcc-8): 2 warnings
+    jornada720_defconfig (gcc-8): 2 warnings
+    keystone_defconfig (gcc-8): 2 errors, 6 warnings
+    ks8695_defconfig (gcc-8): 3 warnings
+    lart_defconfig (gcc-8): 2 warnings
+    lpc18xx_defconfig (gcc-8): 1 warning
+    lpc32xx_defconfig (gcc-8): 4 warnings
+    lpd270_defconfig (gcc-8): 3 warnings
+    lubbock_defconfig (gcc-8): 3 warnings
+    magician_defconfig (gcc-8): 3 warnings
+    mainstone_defconfig (gcc-8): 3 warnings
+    milbeaut_m10v_defconfig (gcc-8): 8 warnings
+    mini2440_defconfig (gcc-8): 5 warnings
+    mmp2_defconfig (gcc-8): 3 warnings
+    moxart_defconfig (gcc-8): 2 warnings
+    mps2_defconfig (gcc-8): 1 warning
+    multi_v4t_defconfig (gcc-8): 3 warnings
+    multi_v5_defconfig (gcc-8): 7 warnings
+    multi_v7_defconfig (gcc-8): 37 warnings
+    multi_v7_defconfig (gcc-8): 37 warnings
+    multi_v7_defconfig (gcc-8): 2 errors, 6 warnings
+    multi_v7_defconfig (gcc-8): 37 warnings
+    multi_v7_defconfig (gcc-8): 37 warnings
+    mv78xx0_defconfig (gcc-8): 3 warnings
+    mvebu_v5_defconfig (gcc-8): 3 warnings
+    mvebu_v7_defconfig (gcc-8): 8 warnings
+    mxs_defconfig (gcc-8): 3 warnings
+    neponset_defconfig (gcc-8): 4 warnings
+    netwinder_defconfig (gcc-8): 3 warnings
+    nhk8815_defconfig (gcc-8): 3 warnings
+    nuc910_defconfig (gcc-8): 3 warnings
+    nuc950_defconfig (gcc-8): 3 warnings
+    nuc960_defconfig (gcc-8): 3 warnings
+    omap1_defconfig (gcc-8): 13 warnings
+    omap2plus_defconfig (gcc-8): 17 warnings
+    orion5x_defconfig (gcc-8): 3 warnings
+    oxnas_v6_defconfig (gcc-8): 8 warnings
+    palmz72_defconfig (gcc-8): 3 warnings
+    pcm027_defconfig (gcc-8): 3 warnings
+    pleb_defconfig (gcc-8): 4 warnings
+    prima2_defconfig (gcc-8): 3 warnings
+    pxa168_defconfig (gcc-8): 3 warnings
+    pxa255-idp_defconfig (gcc-8): 3 warnings
+    pxa3xx_defconfig (gcc-8): 3 warnings
+    pxa910_defconfig (gcc-8): 3 warnings
+    pxa_defconfig (gcc-8): 6 warnings
+    qcom_defconfig (gcc-8): 10 warnings
+    realview_defconfig (gcc-8): 8 warnings
+    rpc_defconfig (gcc-8): 10 warnings
+    s3c2410_defconfig (gcc-8): 3 warnings
+    s3c6400_defconfig (gcc-8): 4 warnings
+    s5pv210_defconfig (gcc-8): 4 warnings
+    sama5_defconfig (gcc-8): 7 warnings
+    shannon_defconfig (gcc-8): 4 warnings
+    shmobile_defconfig (gcc-8): 10 warnings
+    simpad_defconfig (gcc-8): 4 warnings
+    socfpga_defconfig (gcc-8): 8 warnings
+    spear13xx_defconfig (gcc-8): 3 warnings
+    spear3xx_defconfig (gcc-8): 3 warnings
+    spear6xx_defconfig (gcc-8): 3 warnings
+    spitz_defconfig (gcc-8): 3 warnings
+    stm32_defconfig (gcc-8): 1 warning
+    sunxi_defconfig (gcc-8): 10 warnings
+    tango4_defconfig (gcc-8): 3 warnings
+    tct_hammer_defconfig (gcc-8): 5 warnings
+    tegra_defconfig (gcc-8): 9 warnings
+    tinyconfig (gcc-8): 1 warning
+    trizeps4_defconfig (gcc-8): 3 warnings
+    u300_defconfig (gcc-8): 3 warnings
+    u8500_defconfig (gcc-8): 22 warnings
+    versatile_defconfig (gcc-8): 3 warnings
+    vexpress_defconfig (gcc-8): 8 warnings
+    vf610m4_defconfig (gcc-8): 1 warning
+    viper_defconfig (gcc-8): 3 warnings
+    vt8500_v6_v7_defconfig (gcc-8): 3 warnings
+    xcep_defconfig (gcc-8): 3 warnings
+    zeus_defconfig (gcc-8): 3 warnings
+    zx_defconfig (gcc-8): 8 warnings
 
 i386:
-    i386_defconfig (gcc-8): 1 warning
-    i386_defconfig (gcc-8): 9 warnings
+    allnoconfig (gcc-8): 1 warning
+    i386_defconfig (gcc-8): 3 warnings
+    i386_defconfig (gcc-8): 3 warnings
+    tinyconfig (gcc-8): 1 warning
 
 mips:
     32r2el_defconfig (gcc-8): 3 warnings
-    32r2el_defconfig (gcc-8): 11 warnings
+    32r2el_defconfig (gcc-8): 3 warnings
     allnoconfig (gcc-8): 1 warning
-    ar7_defconfig (gcc-8): 2 warnings
+    ar7_defconfig (gcc-8): 3 warnings
     ath25_defconfig (gcc-8): 2 warnings
     ath79_defconfig (gcc-8): 2 warnings
     bcm47xx_defconfig (gcc-8): 2 warnings
@@ -160,10 +249,10 @@ mips:
     bmips_be_defconfig (gcc-8): 1 warning
     bmips_stb_defconfig (gcc-8): 1 warning
     capcella_defconfig (gcc-8): 2 warnings
-    cavium_octeon_defconfig (gcc-8): 2 errors, 5 warnings
+    cavium_octeon_defconfig (gcc-8): 7 warnings
     ci20_defconfig (gcc-8): 2 warnings
     cobalt_defconfig (gcc-8): 2 warnings
-    db1xxx_defconfig (gcc-8): 2 warnings
+    db1xxx_defconfig (gcc-8): 4 warnings
     decstation_64_defconfig (gcc-8): 6 warnings
     decstation_defconfig (gcc-8): 2 warnings
     decstation_r4k_defconfig (gcc-8): 2 warnings
@@ -171,9 +260,9 @@ mips:
     fuloong2e_defconfig (gcc-8): 6 warnings
     gcw0_defconfig (gcc-8): 1 warning
     gpr_defconfig (gcc-8): 3 warnings
-    ip22_defconfig (gcc-8): 2 warnings
+    ip22_defconfig (gcc-8): 3 warnings
     ip27_defconfig (gcc-8): 7 warnings
-    ip28_defconfig (gcc-8): 6 warnings
+    ip28_defconfig (gcc-8): 7 warnings
     ip32_defconfig (gcc-8): 7 warnings
     jazz_defconfig (gcc-8): 2 warnings
     jmr3927_defconfig (gcc-8): 1 warning
@@ -197,12 +286,12 @@ mips:
     msp71xx_defconfig (gcc-8): 2 warnings
     mtx1_defconfig (gcc-8): 3 warnings
     nlm_xlp_defconfig (gcc-8): 7 warnings
-    nlm_xlr_defconfig (gcc-8): 11 warnings
+    nlm_xlr_defconfig (gcc-8): 3 warnings
     omega2p_defconfig (gcc-8): 1 warning
     pic32mzda_defconfig (gcc-8): 2 warnings
     pistachio_defconfig (gcc-8): 2 warnings
     pnx8335_stb225_defconfig (gcc-8): 2 warnings
-    qi_lb60_defconfig (gcc-8): 3 warnings
+    qi_lb60_defconfig (gcc-8): 4 warnings
     rb532_defconfig (gcc-8): 3 warnings
     rbtx49xx_defconfig (gcc-8): 2 warnings
     rm200_defconfig (gcc-8): 3 warnings
@@ -220,7 +309,7 @@ riscv:
     rv32_defconfig (gcc-8): 6 warnings
 
 x86_64:
-    allmodconfig (gcc-8): 3 warnings
+    allmodconfig (gcc-8): 1 warning
     tinyconfig (gcc-8): 1 warning
     x86_64_defconfig (gcc-8): 1 warning
     x86_64_defconfig (gcc-8): 1 warning
@@ -231,23 +320,29 @@ Errors summary:
 omic_pool_init2'
     3    arch/arm/mm/dma-mapping.c:2425:19: error: redefinition of 'atomic_=
 pool_init'
-    1    drivers/pinctrl/aspeed/pinctrl-aspeed-g6.c:2325:9: error: initiali=
-zation of 'int (*)(struct aspeed_pinmux_data *, const struct aspeed_sig_exp=
-r *, _Bool)' from incompatible pointer type 'int (*)(const struct aspeed_pi=
-nmux_data *, const struct aspeed_sig_expr *, _Bool)' [-Werror=3Dincompatibl=
-e-pointer-types]
-    1    arch/mips/include/asm/octeon/cvmx-ipd.h:331:36: error: 'CVMX_PIP_S=
-FT_RST' undeclared (first use in this function); did you mean 'CVMX_CIU_SOF=
-T_RST'?
-    1    arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: error: storage siz=
-e of 'pip_sft_rst' isn't known
 
 Warnings summary:
 
-    315  arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may=
+    315  arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may=
  fall through [-Wimplicit-fallthrough=3D]
-    193  <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+    196  <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
+    120  arch/arm/kernel/signal.c:598:12: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    109  arch/arm/mm/alignment.c:753:15: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    89   arch/arm/mm/alignment.c:688:6: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
+    24   include/linux/compiler.h:78:22: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    24   arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    24   arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    24   arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    24   arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
     20   arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
     20   arch/arm64/kvm/hyp/debug-sr.c:33:18: warning: this statement may f=
@@ -278,41 +373,63 @@ all through [-Wimplicit-fallthrough=3D]
 all through [-Wimplicit-fallthrough=3D]
     20   arch/arm64/kvm/hyp/debug-sr.c:20:19: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    16   1 warning generated.
     12   include/linux/compiler.h:328:5: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    10   drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement =
+    10   drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this sta=
+tement may fall through [-Wimplicit-fallthrough=3D]
+    10   drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this sta=
+tement may fall through [-Wimplicit-fallthrough=3D]
+    10   drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement =
 may fall through [-Wimplicit-fallthrough=3D]
     9    printk(KERN_WARNING "SA1100 flash: unknown base address "
     9    include/linux/printk.h:309:2: warning: this statement may fall thr=
 ough [-Wimplicit-fallthrough=3D]
+    9    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement=
+ may fall through [-Wimplicit-fallthrough=3D]
     9    drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    7    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may f=
+all through [-Wimplicit-fallthrough=3D]
+    7    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    7    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    7    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may =
 fall through [-Wimplicit-fallthrough=3D]
     6    drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this stat=
 ement may fall through [-Wimplicit-fallthrough=3D]
     6    drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this stat=
 ement may fall through [-Wimplicit-fallthrough=3D]
-    6    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statem=
+    6    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statem=
 ent may fall through [-Wimplicit-fallthrough=3D]
-    5    include/linux/kern_levels.h:5:18: warning: format '%lu' expects ar=
-gument of type 'long unsigned int', but argument 8 has type 'unsigned int' =
-[-Wformat=3D]
-    5    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    5    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects arg=
-ument of type 'long unsigned int', but argument 5 has type 'unsigned int' [=
--Wformat=3D]
-    5    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    5    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to inte=
-ger of different size [-Wpointer-to-int-cast]
-    5    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    5    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to inte=
-ger of different size [-Wpointer-to-int-cast]
-    5    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects arg=
-ument of type 'long unsigned int', but argument 5 has type 'unsigned int' [=
--Wformat=3D]
+    6    drivers/dma/imx-dma.c:542:6: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    6    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    6    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    6    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    5    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    5    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    5    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    5    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
     5    drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fa=
 ll through [-Wimplicit-fallthrough=3D]
     5    arch/arm64/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:396:3=
@@ -333,110 +450,120 @@ ll through [-Wimplicit-fallthrough=3D]
 4: warning: this statement may fall through [-Wimplicit-fallthrough=3D]
     5    arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may=
  fall through [-Wimplicit-fallthrough=3D]
-    4    2 warnings generated.
-    3    net/rxrpc/rxkad.c:269:9: warning: 'err' may be used uninitialized =
-in this function [-Wmaybe-uninitialized]
+    5    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    4    drivers/gpu/drm/sti/sti_hdmi.c:855:13: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    4    drivers/gpu/drm/sti/sti_hdmi.c:853:13: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    4    drivers/gpu/drm/sti/sti_hdmi.c:851:13: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    4    arch/x86/kernel/ptrace.c:202:6: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
     3    drivers/usb/gadget/udc/atmel_usba_udc.c:329:13: warning: this stat=
 ement may fall through [-Wimplicit-fallthrough=3D]
-    3    drivers/lightnvm/pblk-read.c:421:18: warning: unused variable 'geo=
-' [-Wunused-variable]
+    3    arch/arm/include/asm/io.h:92:22: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    2    drivers/watchdog/wdt977.c:400:3: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
     2    drivers/watchdog/jz4740_wdt.c:165:6: warning: unused variable 'ret=
 ' [-Wunused-variable]
     2    drivers/usb/gadget/udc/s3c2410_udc.c:418:7: warning: this statemen=
 t may fall through [-Wimplicit-fallthrough=3D]
     2    drivers/usb/gadget/udc/s3c2410_udc.c:314:7: warning: this statemen=
 t may fall through [-Wimplicit-fallthrough=3D]
-    2    arch/x86/kernel/apic/probe_32.c:146:7: warning: this statement may=
+    2    drivers/scsi/wd33c93.c:1856:11: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    2    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
+.altinstr_replacement+0x3c: redundant UACCESS disable
+    2    arch/x86/kernel/cpu/mtrr/cyrix.c:99:6: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    2    arch/x86/kernel/apic/probe_32.c:183:7: warning: this statement may=
  fall through [-Wimplicit-fallthrough=3D]
     2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
 -Wcpp]
     2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
 d [-Wcpp]
-    1    {standard input}:134: Warning: macro instruction expanded into mul=
+    1    {standard input}:131: Warning: macro instruction expanded into mul=
 tiple instructions
-    1    net/rxrpc/rxkad.c:251:6: warning: variable 'err' is used uninitial=
-ized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    1    net/rxrpc/rxkad.c:228:9: note: initialize the variable 'err' to si=
-lence this warning
-    1    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is =
-uninitialized when used within its own initialization [-Wuninitialized]
-    1    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitia=
-lized when used within its own initialization [-Wuninitialized]
-    1    mm/shmem.c:2734:35: warning: variable 'shmem_falloc_waitq' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    1    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    1    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized wh=
-en used within its own initialization [-Wuninitialized]
-    1    fs/ocfs2/dlm/dlmdomain.c:2038:14: warning: variable 'ret' is used =
-uninitialized whenever 'for' loop exits because its condition is false [-Ws=
-ometimes-uninitialized]
-    1    fs/ocfs2/dlm/dlmdomain.c:1952:9: note: initialize the variable 're=
-t' to silence this warning
-    1    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when =
-used within its own initialization [-Wuninitialized]
-    1    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when=
- used within its own initialization [-Wuninitialized]
-    1    fs/namei.c:3136:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1    fs/namei.c:1646:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized =
-when used within its own initialization [-Wuninitialized]
-    1    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized w=
-hen used within its own initialization [-Wuninitialized]
-    1    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized=
- when used within its own initialization [-Wuninitialized]
+    1    sound/soc/ti/rx51.c:57:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    1    include/linux/device.h:1499:2: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
     1    drivers/watchdog/wdt285.c:170:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
+    1    drivers/watchdog/ar7_wdt.c:237:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:449:23: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1549:6: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1547:3: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1545:3: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1543:3: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1540:6: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1538:3: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/omap/omapfb_main.c:1535:3: warning: this state=
+ment may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/video/fbdev/jz4740_fb.c:300:8: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
     1    drivers/video/fbdev/acornfb.c:860:9: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
+    1    drivers/usb/host/ohci-tmio.c:103:7: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
+    1    drivers/usb/host/ohci-tmio.c:101:7: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
     1    drivers/usb/gadget/udc/lpc32xx_udc.c:2231:3: warning: this stateme=
 nt may fall through [-Wimplicit-fallthrough=3D]
-    1    drivers/scsi/lpfc/lpfc_sli.c:11850:34: warning: variable 'done_q' =
-is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/lpfc/lpfc_scsi.c:4559:34: warning: variable 'waitq' i=
-s uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1    drivers/net/usb/lan78xx.c:2662:34: warning: variable 'unlink_wakeu=
-p' is uninitialized when used within its own initialization [-Wuninitialize=
-d]
+    1    drivers/scsi/arm/fas216.c:913:6: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    1    drivers/scsi/arm/fas216.c:605:20: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/scsi/arm/fas216.c:1959:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/scsi/arm/fas216.c:1573:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/scsi/arm/fas216.c:1424:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/scsi/arm/fas216.c:1413:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/pcmcia/db1xxx_ss.c:269:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    1    drivers/pcmcia/db1xxx_ss.c:257:3: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
     1    drivers/mtd/nand/raw/au1550nd.c:443:57: warning: pointer type mism=
 atch in conditional expression
-    1    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake'=
- is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake'=
- is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is unin=
-itialized when used within its own initialization [-Wuninitialized]
+    1    drivers/hsi/clients/ssi_protocol.c:466:7: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/hsi/clients/ssi_protocol.c:291:6: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
     1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
-.altinstr_replacement+0x36: redundant UACCESS disable
-    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
-.altinstr_replacement+0x34: redundant UACCESS disable
-    1    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: =
-.altinstr_replacement+0x1c: redundant UACCESS disable
-    1    drivers/firmware/arm_scmi/perf.c:320:24: warning: variable 'db' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/firmware/arm_scmi/perf.c:317:24: warning: variable 'db' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/firmware/arm_scmi/perf.c:315:24: warning: variable 'db' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/firmware/arm_scmi/perf.c:313:24: warning: variable 'db' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is =
-uninitialized when used within its own initialization [-Wuninitialized]
+.altinstr_replacement+0x22: redundant UACCESS disable
+    1    drivers/gpu/drm/arm/malidp_hw.c:387:8: warning: this statement may=
+ fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/gpu/drm/arm/malidp_hw.c:1311:4: warning: this statement ma=
+y fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/crypto/ux500/cryp/cryp.c:324:16: warning: this statement m=
+ay fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/crypto/ux500/cryp/cryp.c:320:16: warning: this statement m=
+ay fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/crypto/ux500/cryp/cryp.c:316:16: warning: this statement m=
+ay fall through [-Wimplicit-fallthrough=3D]
+    1    drivers/cpufreq/ti-cpufreq.c:79:20: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
     1    drivers/ata/pata_rb532_cf.c:161:24: warning: unused variable 'info=
 ' [-Wunused-variable]
-    1    cc1: some warnings being treated as errors
     1    arch/mips/include/asm/octeon/cvmx-sli-defs.h:47:6: warning: this s=
 tatement may fall through [-Wimplicit-fallthrough=3D]
-    1    arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: warning: unused va=
-riable 'pip_sft_rst' [-Wunused-variable]
     1    arch/arm/mach-rpc/riscpc.c:48:13: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
+    1    arch/arm/mach-ep93xx/crunch.c:46:3: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
     1    arch/arm/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:396:3: =
 warning: this statement may fall through [-Wimplicit-fallthrough=3D]
     1    arch/arm/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:394:3: =
@@ -453,7 +580,6 @@ warning: this statement may fall through [-Wimplicit-fallthrough=3D]
  warning: this statement may fall through [-Wimplicit-fallthrough=3D]
     1    arch/arm/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:351:24:=
  warning: this statement may fall through [-Wimplicit-fallthrough=3D]
-    1    4 warnings generated.
     1    .config:1175:warning: override: UNWINDER_GUESS changes choice state
 
 =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
@@ -475,61 +601,52 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 11 warni=
-ngs, 0 section mismatches
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
-t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
-rmat=3D]
-    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
-acs5k_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+acs5k_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-acs5k_tiny_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+acs5k_tiny_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
 ection mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 1 warning, 0 section mis=
-matches
-
-Errors:
-    drivers/pinctrl/aspeed/pinctrl-aspeed-g6.c:2325:9: error: initializatio=
-n of 'int (*)(struct aspeed_pinmux_data *, const struct aspeed_sig_expr *, =
-_Bool)' from incompatible pointer type 'int (*)(const struct aspeed_pinmux_=
-data *, const struct aspeed_sig_expr *, _Bool)' [-Werror=3Dincompatible-poi=
-nter-types]
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
 
 Warnings:
-    cc1: some warnings being treated as errors
+    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: .alti=
+nstr_replacement+0x22: redundant UACCESS disable
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 139 warnings, 0 secti=
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 143 warnings, 0 secti=
 on mismatches
 
 Warnings:
@@ -669,250 +786,156 @@ hrough [-Wimplicit-fallthrough=3D]
 hrough [-Wimplicit-fallthrough=3D]
     arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fall th=
 rough [-Wimplicit-fallthrough=3D]
-    net/rxrpc/rxkad.c:269:9: warning: 'err' may be used uninitialized in th=
-is function [-Wmaybe-uninitialized]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/arm/malidp_hw.c:387:8: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/arm/malidp_hw.c:1311:4: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
-    drivers/lightnvm/pblk-read.c:421:18: warning: unused variable 'geo' [-W=
-unused-variable]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: .alti=
-nstr_replacement+0x1c: redundant UACCESS disable
-    net/rxrpc/rxkad.c:269:9: warning: 'err' may be used uninitialized in th=
-is function [-Wmaybe-uninitialized]
-    drivers/lightnvm/pblk-read.c:421:18: warning: unused variable 'geo' [-W=
-unused-variable]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 51 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    mm/shmem.c:2734:35: warning: variable 'shmem_falloc_waitq' is uninitial=
-ized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized when us=
-ed within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitialized w=
-hen used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/namei.c:1646:34: warning: variable 'wq' is uninitialized when used w=
-ithin its own initialization [-Wuninitialized]
-    fs/namei.c:3136:34: warning: variable 'wq' is uninitialized when used w=
-ithin its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/firmware/arm_scmi/perf.c:320:24: warning: variable 'db' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    drivers/firmware/arm_scmi/perf.c:317:24: warning: variable 'db' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    drivers/firmware/arm_scmi/perf.c:315:24: warning: variable 'db' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    drivers/firmware/arm_scmi/perf.c:313:24: warning: variable 'db' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    4 warnings generated.
-    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized when=
- used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized when =
-used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when used =
-within its own initialization [-Wuninitialized]
-    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when used=
- within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    fs/ocfs2/dlm/dlmdomain.c:2038:14: warning: variable 'ret' is used unini=
-tialized whenever 'for' loop exits because its condition is false [-Wsometi=
-mes-uninitialized]
-    fs/ocfs2/dlm/dlmdomain.c:1952:9: note: initialize the variable 'ret' to=
- silence this warning
-    1 warning generated.
-    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitialized=
- when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    net/rxrpc/rxkad.c:251:6: warning: variable 'err' is used uninitialized =
-whenever 'if' condition is true [-Wsometimes-uninitialized]
-    net/rxrpc/rxkad.c:228:9: note: initialize the variable 'err' to silence=
- this warning
-    1 warning generated.
-    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is uninitial=
-ized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/lightnvm/pblk-read.c:421:18: warning: unused variable 'geo' [-W=
-unused-variable]
-    1 warning generated.
-    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake' is u=
-ninitialized when used within its own initialization [-Wuninitialized]
-    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake' is u=
-ninitialized when used within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/scsi/lpfc/lpfc_sli.c:11850:34: warning: variable 'done_q' is un=
-initialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/scsi/lpfc/lpfc_scsi.c:4559:34: warning: variable 'waitq' is uni=
-nitialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/net/usb/lan78xx.c:2662:34: warning: variable 'unlink_wakeup' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
 
 ---------------------------------------------------------------------------=
 -----
@@ -929,8 +952,12 @@ mismatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -947,8 +974,12 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    arch/x86/kernel/ptrace.c:202:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -957,49 +988,96 @@ allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 =
 section mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    drivers/watchdog/ar7_wdt.c:237:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
-aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
 ion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sect=
+ion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/atmel_usba_udc.c:329:13: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
 
@@ -1023,8 +1101,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-axm55xx_defconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 8 warnings, 0 sect=
-ion mismatches
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 14 warnings, 0 sec=
+tion mismatches
 
 Errors:
     arch/arm/mm/dma-mapping.c:2425:19: error: redefinition of 'atomic_pool_=
@@ -1049,6 +1127,18 @@ ng: this statement may fall through [-Wimplicit-fallthrough=3D]
 ng: this statement may fall through [-Wimplicit-fallthrough=3D]
     arch/arm/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:396:3: warni=
 ng: this statement may fall through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1074,18 +1164,40 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
 on mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1144,15 +1256,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 FAIL, 2 errors, 5 warnings,=
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings,=
  0 section mismatches
-
-Errors:
-    arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: error: storage size of =
-'pip_sft_rst' isn't known
-    arch/mips/include/asm/octeon/cvmx-ipd.h:331:36: error: 'CVMX_PIP_SFT_RS=
-T' undeclared (first use in this function); did you mean 'CVMX_CIU_SOFT_RST=
-'?
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -1160,15 +1265,20 @@ Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     arch/mips/include/asm/octeon/cvmx-sli-defs.h:47:6: warning: this statem=
 ent may fall through [-Wimplicit-fallthrough=3D]
-    arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: warning: unused variabl=
-e 'pip_sft_rst' [-Wunused-variable]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
 -----
-cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
 tion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
@@ -1185,23 +1295,55 @@ unused-variable]
 
 ---------------------------------------------------------------------------=
 -----
-clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
----------------------------------------------------------------------------=
------
-cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1214,43 +1356,83 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings,=
  0 section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings,=
  0 section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
 on mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
 
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
+Warnings:
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
 ion mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     drivers/mtd/nand/raw/au1550nd.c:443:57: warning: pointer type mismatch =
 in conditional expression
+    drivers/pcmcia/db1xxx_ss.c:257:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    drivers/pcmcia/db1xxx_ss.c:269:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1290,12 +1472,7 @@ smatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 134 warnings, 0 section =
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 137 warnings, 0 section =
 mismatches
 
 Warnings:
@@ -1435,143 +1612,149 @@ hrough [-Wimplicit-fallthrough=3D]
 hrough [-Wimplicit-fallthrough=3D]
     arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fall th=
 rough [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 134 warnings, 0 section mismatches
+, 137 warnings, 0 section mismatches
 
 Warnings:
     arch/arm64/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:351:24: wa=
@@ -1710,148 +1893,149 @@ hrough [-Wimplicit-fallthrough=3D]
 hrough [-Wimplicit-fallthrough=3D]
     arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fall th=
 rough [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, clang-8) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
 defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 134 warnings, 0 section mismatches
+, 137 warnings, 0 section mismatches
 
 Warnings:
     arch/arm64/kvm/hyp/../../../../virt/kvm/arm/hyp/vgic-v3-sr.c:351:24: wa=
@@ -1990,143 +2174,144 @@ hrough [-Wimplicit-fallthrough=3D]
 hrough [-Wimplicit-fallthrough=3D]
     arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fall th=
 rough [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, clang-8) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -2135,7 +2320,7 @@ section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 134 warnings, =
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 137 warnings, =
 0 section mismatches
 
 Warnings:
@@ -2275,148 +2460,157 @@ hrough [-Wimplicit-fallthrough=3D]
 hrough [-Wimplicit-fallthrough=3D]
     arch/arm64/kvm/hyp/debug-sr.c:34:18: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     arch/arm64/include/asm/kvm_hyp.h:31:3: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    arch/arm64/include/asm/sysreg.h:808:2: warning: this statement may fall=
+    arch/arm64/include/asm/sysreg.h:837:2: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
     drivers/iommu/arm-smmu-v3.c:1189:7: warning: this statement may fall th=
 rough [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2429,46 +2623,112 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/mach-ep93xx/crunch.c:46:3: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 9 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section =
+mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
     drivers/watchdog/wdt285.c:170:3: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    drivers/watchdog/wdt977.c:400:3: warning: this statement may fall throu=
 gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
@@ -2494,8 +2754,14 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2510,23 +2776,41 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
 n mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2552,8 +2836,16 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2568,83 +2860,142 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
+n mismatches
 
 Warnings:
-    arch/x86/kernel/apic/probe_32.c:146:7: warning: this statement may fall=
+    arch/x86/kernel/apic/probe_32.c:183:7: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
+    arch/x86/kernel/cpu/mtrr/cyrix.c:99:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/x86/kernel/ptrace.c:202:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 9 warnings=
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings=
 , 0 section mismatches
 
 Warnings:
-    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
-t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
-rmat=3D]
-    arch/x86/kernel/apic/probe_32.c:146:7: warning: this statement may fall=
+    arch/x86/kernel/apic/probe_32.c:183:7: warning: this statement may fall=
  through [-Wimplicit-fallthrough=3D]
-    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
+    arch/x86/kernel/cpu/mtrr/cyrix.c:99:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/x86/kernel/ptrace.c:202:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
 
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
 ection mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-iop13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+iop13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
 
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-iop33x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+iop33x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    drivers/scsi/wd33c93.c:1856:11: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
@@ -2664,13 +3015,15 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 sectio=
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sectio=
 n mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    drivers/scsi/wd33c93.c:1856:11: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -2692,8 +3045,14 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2714,12 +3073,18 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
 ection mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-keystone_defconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 0 warnings, 0 sec=
+keystone_defconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 6 warnings, 0 sec=
 tion mismatches
 
 Errors:
@@ -2728,15 +3093,43 @@ init'
     include/linux/init.h:196:20: error: redefinition of '__initcall_atomic_=
 pool_init2'
 
----------------------------------------------------------------------------=
------
-ks8695_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ks8695_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2792,37 +3185,79 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/lpc32xx_udc.c:2231:3: warning: this statement ma=
 y fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
 
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2858,7 +3293,7 @@ s, 0 section mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    {standard input}:134: Warning: macro instruction expanded into multiple=
+    {standard input}:131: Warning: macro instruction expanded into multiple=
  instructions
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
@@ -2920,15 +3355,39 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, =
 0 section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 5 warnings, 0 sec=
 tion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/s3c2410_udc.c:314:7: warning: this statement may=
  fall through [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/s3c2410_udc.c:418:7: warning: this statement may=
@@ -2949,13 +3408,27 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2968,8 +3441,12 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2993,52 +3470,204 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sec=
+tion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/atmel_usba_udc.c:329:13: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
-tion mismatches
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 37 warnings, 0 se=
+ction mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:851:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:853:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:855:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
- errors, 4 warnings, 0 section mismatches
+ errors, 37 warnings, 0 section mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/gpu/drm/sti/sti_hdmi.c:851:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:853:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:855:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
 multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
-=94 FAIL, 2 errors, 0 warnings, 0 section mismatches
+=94 FAIL, 2 errors, 6 warnings, 0 section mismatches
 
 Errors:
     arch/arm/mm/dma-mapping.c:2425:19: error: redefinition of 'atomic_pool_=
@@ -3046,94 +3675,283 @@ init'
     include/linux/init.h:196:20: error: redefinition of '__initcall_atomic_=
 pool_init2'
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 =
-warnings, 0 section mismatches
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 37=
+ warnings, 0 section mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:851:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:853:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:855:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 12 warn=
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 37 warn=
 ings, 0 section mismatches
 
 Warnings:
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/dma/imx-dma.c:542:6: warning: this statement may fall through [=
+-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/pinctrl-rockchip.c:2783:3: warning: this statement may =
+fall through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
-    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
-t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
-rmat=3D]
-    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    drivers/gpu/drm/sti/sti_hdmi.c:851:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:853:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sti/sti_hdmi.c:855:13: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
 
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section =
+mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/watchdog/wdt977.c:400:3: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3152,30 +3970,11 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 11 warnings, 0 se=
-ction mismatches
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+tion mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
-t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
-rmat=3D]
-    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
     include/linux/printk.h:309:2: warning: this statement may fall through =
 [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -3193,33 +3992,14 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 11 warni=
-ngs, 0 section mismatches
+nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnin=
+gs, 0 section mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     include/linux/compiler.h:328:5: warning: this statement may fall throug=
 h [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
-t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
-rmat=3D]
-    fs/btrfs/tree-checker.c:1003:47: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1051:8: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1057:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1065:9: warning: cast from pointer to integer o=
-f different size [-Wpointer-to-int-cast]
-    fs/btrfs/tree-checker.c:1083:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
-    fs/btrfs/tree-checker.c:1200:50: warning: format '%lu' expects argument=
- of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wfor=
-mat=3D]
-    fs/btrfs/tree-checker.c:1216:10: warning: cast to pointer from integer =
-of different size [-Wint-to-pointer-cast]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3256,32 +4036,116 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-nuc910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+nuc910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
-
----------------------------------------------------------------------------=
------
-nuc950_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-nuc960_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
 
 Warnings:
-    net/rxrpc/rxkad.c:269:9: warning: 'err' may be used uninitialized in th=
-is function [-Wmaybe-uninitialized]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+nuc950_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+nuc960_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 13 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:449:23: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1535:3: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1538:3: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1540:6: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1543:3: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1545:3: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1547:3: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+    drivers/video/fbdev/omap/omapfb_main.c:1549:6: warning: this statement =
+may fall through [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:384:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:394:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/plat-omap/dma.c:473:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/cpufreq/ti-cpufreq.c:79:20: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:303:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/omap-usb-host.c:345:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/hsi/clients/ssi_protocol.c:291:6: warning: this statement may f=
+all through [-Wimplicit-fallthrough=3D]
+    drivers/hsi/clients/ssi_protocol.c:466:7: warning: this statement may f=
+all through [-Wimplicit-fallthrough=3D]
+    sound/soc/ti/rx51.c:57:6: warning: this statement may fall through [-Wi=
+mplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3293,23 +4157,65 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sec=
 tion mismatches
 
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3331,10 +4237,14 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
  mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
@@ -3350,48 +4260,126 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
 ection mismatches
 
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section =
 mismatches
 
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    include/linux/device.h:1499:2: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    drivers/usb/host/ohci-tmio.c:101:7: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
+    drivers/usb/host/ohci-tmio.c:103:7: warning: this statement may fall th=
+rough [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 10 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:815:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+    drivers/pinctrl/qcom/pinctrl-spmi-gpio.c:820:20: warning: this statemen=
+t may fall through [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
 tion mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     drivers/watchdog/jz4740_wdt.c:165:6: warning: unused variable 'ret' [-W=
 unused-variable]
+    drivers/video/fbdev/jz4740_fb.c:300:8: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
@@ -3416,8 +4404,26 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sec=
 tion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3432,11 +4438,27 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
-mismatches
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 10 warnings, 0 section=
+ mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
     arch/arm/mach-rpc/riscpc.c:48:13: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:913:6: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:1959:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:1413:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:1424:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:1573:6: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    drivers/scsi/arm/fas216.c:605:20: warning: this statement may fall thro=
 ugh [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/acornfb.c:860:9: warning: this statement may fall t=
 hrough [-Wimplicit-fallthrough=3D]
@@ -3467,25 +4489,65 @@ cpp]
 
 ---------------------------------------------------------------------------=
 -----
-s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/sdhci-s3c.c:613:19: warning: this statement may fall t=
+hrough [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2415:30: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2422:28: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
+    drivers/mmc/host/atmel-mci.c:2426:40: warning: this statement may fall =
+through [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/atmel_usba_udc.c:329:13: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
 
@@ -3502,20 +4564,40 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sect=
 ion mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 10 warnings, 0 se=
+ction mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:2086:22: warning: this statement=
  may fall through [-Wimplicit-fallthrough=3D]
     drivers/video/fbdev/sh_mobile_lcdcfb.c:1596:22: warning: this statement=
@@ -3523,59 +4605,141 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 secti=
 on mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/mtd/maps/sa1100-flash.c:82:3: warning: this statement may fall =
 through [-Wimplicit-fallthrough=3D]
     printk(KERN_WARNING "SA1100 flash: unknown base address "
 
 ---------------------------------------------------------------------------=
 -----
-socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sect=
 ion mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
 
 Warnings:
-    drivers/gpu/drm/sun4i/sun4i_tcon.c:318:7: warning: this statement may f=
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 10 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/gpu/drm/sun4i/sun4i_tcon.c:316:7: warning: this statement may f=
 all through [-Wimplicit-fallthrough=3D]
-    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:993:6: warning: this statement m=
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:992:6: warning: this statement m=
 ay fall through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
 on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3608,10 +4772,16 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 5 warnings, 0 s=
 ection mismatches
 
 Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/s3c2410_udc.c:314:7: warning: this statement may=
  fall through [-Wimplicit-fallthrough=3D]
     drivers/usb/gadget/udc/s3c2410_udc.c:418:7: warning: this statement may=
@@ -3619,8 +4789,42 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 9 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mach-tegra/reset.c:72:3: warning: this statement may fall thro=
+ugh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    arch/x86/kernel/ptrace.c:202:6: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -3632,23 +4836,12 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
+atches
 
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3660,8 +4853,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -3673,18 +4866,80 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
 
----------------------------------------------------------------------------=
------
-u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 22 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    drivers/crypto/ux500/cryp/cryp.c:316:16: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
+    drivers/crypto/ux500/cryp/cryp.c:320:16: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
+    drivers/crypto/ux500/cryp/cryp.c:324:16: warning: this statement may fa=
+ll through [-Wimplicit-fallthrough=3D]
+    arch/arm/include/asm/io.h:92:22: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/include/asm/io.h:92:22: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/include/asm/io.h:92:22: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1592:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/mfd/db8500-prcmu.c:1594:7: warning: this statement may fall thr=
+ough [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:424:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:440:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:459:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:332:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:352:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
+    drivers/usb/phy/phy-ab8500-usb.c:370:9: warning: this statement may fal=
+l through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3708,23 +4963,61 @@ h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 se=
 ction mismatches
 
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+
 ---------------------------------------------------------------------------=
 -----
-vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 sec=
 tion mismatches
 
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
+Warnings:
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3736,8 +5029,16 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0=
  section mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3755,7 +5056,7 @@ tion mismatches
 
 Warnings:
     drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: .alti=
-nstr_replacement+0x34: redundant UACCESS disable
+nstr_replacement+0x3c: redundant UACCESS disable
 
 ---------------------------------------------------------------------------=
 -----
@@ -3764,12 +5065,20 @@ ing, 0 section mismatches
 
 Warnings:
     drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: .alti=
-nstr_replacement+0x36: redundant UACCESS disable
+nstr_replacement+0x3c: redundant UACCESS disable
 
 ---------------------------------------------------------------------------=
 -----
-xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -3782,13 +5091,39 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
  mismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
 
 ---------------------------------------------------------------------------=
 -----
-zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 section m=
 ismatches
+
+Warnings:
+    arch/arm/kernel/signal.c:598:12: warning: this statement may fall throu=
+gh [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:688:6: warning: this statement may fall through=
+ [-Wimplicit-fallthrough=3D]
+    arch/arm/mm/alignment.c:753:15: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:609:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:613:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:544:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
+    include/linux/compiler.h:78:22: warning: this statement may fall throug=
+h [-Wimplicit-fallthrough=3D]
+    arch/arm/kernel/hw_breakpoint.c:910:6: warning: this statement may fall=
+ through [-Wimplicit-fallthrough=3D]
 
 ---
 For more info write to <info@kernelci.org>

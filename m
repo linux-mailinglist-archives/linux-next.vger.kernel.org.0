@@ -2,105 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B899489463
-	for <lists+linux-next@lfdr.de>; Sun, 11 Aug 2019 23:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B5689469
+	for <lists+linux-next@lfdr.de>; Sun, 11 Aug 2019 23:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725847AbfHKV1P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Aug 2019 17:27:15 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:48631 "EHLO ozlabs.org"
+        id S1726155AbfHKVd4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Aug 2019 17:33:56 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55801 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726011AbfHKV1P (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Aug 2019 17:27:15 -0400
+        id S1725730AbfHKVd4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Aug 2019 17:33:56 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466Brc3ctcz9sML;
-        Mon, 12 Aug 2019 07:27:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 466C0J744zz9sML;
+        Mon, 12 Aug 2019 07:33:52 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565558832;
-        bh=lemg1XZKoY/pD1ybQMwC+6Du3MCkFzha4FmfuaD/GUg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sqBxk/kZNe2wpuIoLf3MW/bewetlG4FJlGudpYYvjnftLt2Bp0iYHwoZil4N5VP2z
-         4LnyAp8oLHh3MxnW0BmpPNiLhXnTKIexqw1l1pZI5rgGLPsgG/D6hN0q5ljXY18DQ5
-         cI7JRXRcTAu+T/3xZDPiFD17iz8A3zLWbL7/kSzuTv5g7zzlsVrFaRIPWQWaYBIIEZ
-         q2VJgeF6pWtv9JrICw1Njf7JKtcM3c9l37p3h3UiduNypikFD6H1/3yxeCLLHYAHiF
-         TjVyuNpfQNtvkCmvquvWg5/fSRKPbSFfY9oXfmBUuQ1nSgYGROWUfyH68SPfYbgRPN
-         EFafp5E2ap1mw==
-Date:   Mon, 12 Aug 2019 07:26:59 +1000
+        s=201702; t=1565559233;
+        bh=qDrZU5sSbQGOlFIcYJ6w9TAc48JEnDDbLsWuOjRZ5oQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kG3NVqcuvrS6sMVay6kxR5quR0lRYdQr60VBMl3h19mS2hfLZ94kc/8OIrTNO+8TV
+         jg1IxFzi5R+AMimbpfVJipsD7E2JzR4R757WbX+PZNYST+Kb5lVTtbmBJSsKbWUdVL
+         o6481F8j/+ZKLEVEF0SOc/9s2aZkrPVNOxuBvN+mTDxZMvxsVI4QMWl8rM1ksUSMB6
+         KtuESPiULdb1hJOG1n8aGtvV/H55IsPPtCRgIuAne5v1cLQWPsBUheNUIav2XelZ2t
+         jI7WuWjErriaCuOgZlJKCb3Cior50u4YLwZGJinpGTsMExENdTyplxRqvmy35iMXvM
+         kUgspfXorYE/Q==
+Date:   Mon, 12 Aug 2019 07:33:51 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <gregkh@linuxfoundation.org>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Add SPDX kernel tree to linux-next
-Message-ID: <20190812072659.606b2107@canb.auug.org.au>
-In-Reply-To: <20190810115533.GA6302@kroah.com>
-References: <20190810115533.GA6302@kroah.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Roman Mashak <mrv@mojatatu.com>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20190812073351.154098f4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/joDWPergj0mqSvlW2B4zo=E";
+Content-Type: multipart/signed; boundary="Sig_/DOBQBN+sU2Kca5ftC+YLIjr";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/joDWPergj0mqSvlW2B4zo=E
+--Sig_/DOBQBN+sU2Kca5ftC+YLIjr
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+Hi all,
 
-On Sat, 10 Aug 2019 13:55:33 +0200 Greg KH <gregkh@linuxfoundation.org> wro=
-te:
->=20
-> I realized that I've been sending patches to Linus from my "SPDX" kernel
-> tree for a few releases now, and it's not included in linux-next, which
-> is not good.
->=20
-> So, could you please add the kernel tree / branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx.git spdx-linus
->=20
-> to linux-next?
+In commit
 
-Added from today.  One question: is this meant to be a -next tree or a
--fixes tree?
+  e1fea322fc6d ("net sched: update skbedit action for batched events operat=
+ions")
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Fixes tag
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  Fixes: ca9b0e27e ("pkt_action: add new action skbedit")
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This Can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/joDWPergj0mqSvlW2B4zo=E
+--Sig_/DOBQBN+sU2Kca5ftC+YLIjr
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1QiCMACgkQAVBC80lX
-0Gwlzgf7BHK49PKtF9cbwzB+OTFwcYVI5QBhlxcgG7jPdrI+YRBJXPnszm6VcdwA
-TZ3qgjkJl8SDAy88LsefAtMqRgZi52rIiJ6SB9YXfPlPzu/3tre47Umb+zLfTCoj
-+HMN6zHnKskaPB0jxyEv3Lm/m8CWT4pzdXlQnWMrguvp+6PVbczZMsvJqMg9WEWr
-X8a8df9QIlhDPIHOFgJ7BiNSMT1/L3/uN2Wu2szqMLix5PoRoAI+OSA8mBRcWWUI
-RPE9fa8SGwloMIoU8CsRFAmy9DAT+F+wArb11iyjyfuPavqhglGJywPzCQS4O5/1
-v+PjPeos8+qfC6AxI23IjvFJtBxEaw==
-=7LyJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Qib8ACgkQAVBC80lX
+0Gy+2ggAg+1fyqDHfbeqStSP2FT+H9daFwPA/HhSxg9gObNM9jNV6NKTO/Z9Iz8s
+OMqIVmo8PqmnbTqoA4j7iEdK691DMlW6372F2jniE228YzUVmX5kei1BQxbw5xCc
++LYPerthCVEQsjEfaZU5no4aVjsTVlyAF8ujSNueMMJ00f96+ZJ6vSRWGX965W9D
+JwEoJVITtdhGSJXNIbReQlXHD8F2aWkb4ZVL7Sn+YTyDr8Raqaf6FPDwbbno7Zo+
+Qg3OsXCoZfDbsoKCK6zuftIPMt+PSu16GgyMeOPw7f4e7WWDPtyi7c2rW60gbuoJ
+du9Q1QaFbW/NmatiOAaaa/ppBU3YVQ==
+=MRXg
 -----END PGP SIGNATURE-----
 
---Sig_/joDWPergj0mqSvlW2B4zo=E--
+--Sig_/DOBQBN+sU2Kca5ftC+YLIjr--

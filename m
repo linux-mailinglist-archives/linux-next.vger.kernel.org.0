@@ -2,79 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C8A8948F
-	for <lists+linux-next@lfdr.de>; Sun, 11 Aug 2019 23:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14E63894B8
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 00:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726179AbfHKVqI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Aug 2019 17:46:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:51539 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725730AbfHKVqI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Aug 2019 17:46:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466CGP5VLgz9sML;
-        Mon, 12 Aug 2019 07:46:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565559966;
-        bh=h33Af8Gyr1M6UHVFMb5MGLkdnaeIKnAgggjQ6mL/RoQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TdO3pkJwAYsMHWIwTMMXQzylopoR/Njq4NfVdcOoMd77OpzhQeB7eYUXP8VXPuWnh
-         qBbZgrshVp1z90AR8s6zULsFsGNU41zSbEz+MVuV+cmrOvuIHrfF/gYqo//t2lRvdF
-         IOH6logH9Fzj4CJwdsVkvT0PxZ2zocTosP6V0vAI8vdwzykwZ2TBug8V6pSTkMDBlm
-         ypmWbWF8q5c75gACopbNcIwboNjqXz7SHdu06U40MWQXaG+sgAnPjJt/3zQi6wf31A
-         bfLOoSYZ92FRtWW9+VO7IWD7hGkfSUpZD1FWfAysavzBxavEsAla2ucxaFC7eCf7mv
-         joDxT4WszLa6A==
-Date:   Mon, 12 Aug 2019 07:46:04 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Morris <jmorris@namei.org>
+        id S1726014AbfHKWyv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Aug 2019 18:54:51 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:39442 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725730AbfHKWyv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 11 Aug 2019 18:54:51 -0400
+Received: by mail-pl1-f196.google.com with SMTP id z3so327921pln.6;
+        Sun, 11 Aug 2019 15:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m/+fFLa98aDF+/ECXAf+aOcDlbTv22LUhO4jnBy4r4M=;
+        b=hyW1s/uKm7N3bo52oGeKHPxhYEav9Ky28Dg7WCiRCbYwHza4Mbcs5wxxs8zOeoI0Po
+         AeKz/yhCfeb1XQ/yhb6uiOnLMRdcEBteTnykfxXYhPwfnO3o25Eza1UPnuEh4FsAAOF4
+         G1qZp37wqXMjy/lBvfwK4wePsH1TcVEaKN0cvnkWWuv+woDS8Qx7BSWGiMEVu5oeRT5q
+         w4FowDPv5OC2SV6nRwRaZMoLC2CLTcNi+YGp1cC2fCTnTYQAU6zWQhONGF07ZGLo841a
+         6BPxII/48yDsNwoNRyaM0m+2nSQ7sFHmyz9IDwa5gnEBcxQcsAZm2Aa/4FS+rG5n2C5b
+         99uQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=m/+fFLa98aDF+/ECXAf+aOcDlbTv22LUhO4jnBy4r4M=;
+        b=C5S7csLHwI2nb8hgRHP+LHciUSgE84ijzdk3FtgbM+fEYbS7/3acEqMBG4kA193qHs
+         AL46lkRy3UUewy8KEczJ0kAHzPgchPySkRXwTUlqdyR2dzOO57VtfFyKh28JCI7Opv8c
+         /m2K9fJSZCR8xLv6RdB4xd9lQoTDKH5kqcyLf2+u3xH4+3xz624Oj2lxQ7z2aLfH/PS1
+         msAN8B7GQLhyiAXalI8lPMJVfCu7Cl5bcV1wSJWAQKcoHuDGGmnRSPKk0QG8LpR8M4Vk
+         gCz5NXeJwWD+vy2zh273WG0iIZ43jPrfISLwKqg++M2NUoCxwDO34n8Qo/qrkxerCW9N
+         X41A==
+X-Gm-Message-State: APjAAAW/fkg6EFP6tF+6oaKu5o4iic8Uyt/LGuWiCmpxSyVLp5VeRlta
+        3waNhFm3jC3ETbExsRo19nw=
+X-Google-Smtp-Source: APXvYqwTa2GjNMRd9B6X7ITs2R3GTlPqQ0xjsG261sGVx3hOukjspZB/5/ZC6bE1SYxFnsFLlKF9eg==
+X-Received: by 2002:a17:902:b413:: with SMTP id x19mr27859667plr.121.1565564090196;
+        Sun, 11 Aug 2019 15:54:50 -0700 (PDT)
+Received: from blueforge.nvidia.com (searspoint.nvidia.com. [216.228.112.21])
+        by smtp.gmail.com with ESMTPSA id y128sm127850339pgy.41.2019.08.11.15.54.49
+        (version=TLS1_3 cipher=AEAD-AES256-GCM-SHA384 bits=256/256);
+        Sun, 11 Aug 2019 15:54:49 -0700 (PDT)
+From:   john.hubbard@gmail.com
+X-Google-Original-From: jhubbard@nvidia.com
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>
-Subject: linux-next: Signed-off-by missing for commit in the security tree
-Message-ID: <20190812074604.12beae14@canb.auug.org.au>
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 0/1] checkpatch: revert broken NOTIFIER_HEAD check
+Date:   Sun, 11 Aug 2019 15:54:42 -0700
+Message-Id: <20190811225443.31161-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.22.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ssk=Hri6tlh96YbUjO/mBx7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ssk=Hri6tlh96YbUjO/mBx7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: John Hubbard <jhubbard@nvidia.com>
 
-Hi all,
+Hi,
 
-Commit
+This happens on today's linux-next.
 
-  022e43b4645a ("bpf: Restrict bpf when kernel lockdown is in confidentiali=
-ty mode")
+If the commit message of the original patch were just a bit clearer,
+I might have been able to attempt a fix, instead of a revert, but so far,
+both the Perl and the English are beyond me. And we can't leave
+checkpatch broken.
 
-is missing a Signed-off-by from its author.
+I'll be glad to test out actual fixes, if you like. But here's a crude
+revert to kick off the discussion anyway. :)
 
---=20
-Cheers,
-Stephen Rothwell
+John Hubbard (1):
+  checkpatch: revert broken NOTIFIER_HEAD check
 
---Sig_/Ssk=Hri6tlh96YbUjO/mBx7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ scripts/checkpatch.pl | 1 -
+ 1 file changed, 1 deletion(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.22.0
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1QjJwACgkQAVBC80lX
-0GxIfwf/YxVo/RYGi++V6JajkGBXEHVYkgJtXAWXhSVAXKGVryPAjob7yX8pYb/M
-uho9ySB9C4LTcxI2AKbH6r35bzRS8ScnsrdYgUkALhUPXI+nThknU7s9C1Qz0vOo
-ya23U0vxlhKw9vG9t1Jg8Aynilxl7Kh1ZonZrm7Nt7ScJq6j6h175k2XEs7IBGj3
-e08jwuSVWd7cNwHq4pieqMWMi5oCcu6JoRjPN4Egx1cdysFV5nOqOksX2Qw6dpb3
-sIAPvLRjtJ64Qxft3ax+vBW0ssTAqN5WBDEuBJuIHTHEl2qJ4Meha9KeH5X74Uwv
-SiBVsK856pHju0q4bEi6koF8btavCA==
-=NBTX
------END PGP SIGNATURE-----
-
---Sig_/Ssk=Hri6tlh96YbUjO/mBx7--

@@ -2,103 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B28688952C
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 03:30:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF0389533
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 03:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726164AbfHLBal (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Aug 2019 21:30:41 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60529 "EHLO ozlabs.org"
+        id S1726236AbfHLBky (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Aug 2019 21:40:54 -0400
+Received: from ozlabs.org ([203.11.71.1]:51147 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726144AbfHLBal (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Aug 2019 21:30:41 -0400
+        id S1726144AbfHLBky (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Aug 2019 21:40:54 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466JFT1j9Mz9sP7;
-        Mon, 12 Aug 2019 11:30:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 466JTG5rsxz9sP7;
+        Mon, 12 Aug 2019 11:40:50 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565573438;
-        bh=ycnuaxxCviDjlprrcU6bj2KTDUtMKAFm4aMQpCZeFKc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=n0LhE3HdHO9KD6Ba7lOWaMe0hWIqzzi8cNhFNVw4m6+yo1TevrC7+qVhX4M7+imYy
-         UaNWXNPdFyhrLmhfiDxeLEKbiwA8bL8VyhCL1yAed+KCGAOAkb6ibCVqo5vD/+dzWV
-         TWD0tujyQA/SNI1+nfV6WYgOAcxMOynNxbZk5d3KALPNHR0cNTfppVrqQ6BVJseOf+
-         wE3M12lAvoY5PvK6i6qxXFTfkNICG2zudyuPBHiLVBpBWwWYNj9iZlOkploPpFP0kK
-         vGCDpDRSzNgKist/qVi3x2ahJuCU9GMP6154HTbCcm5xxgITqEupZ1lPWUERoqE+Ku
-         KSgYZPcs4TyVw==
-Date:   Mon, 12 Aug 2019 11:30:36 +1000
+        s=201702; t=1565574052;
+        bh=EevmDzavchTrzirQeVBqWWlarYRf4O1/6PgoQ3YXLJI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bZxJx1x+W8Ve74HK9shaqfHm4BD8N5C3n9MCBpztql0azxOLLPJgie6Z6pm2ElxSG
+         Vnb9ndcl7mT9P1pgpc6d72vdehuyUmk94+FTwwfrqQkUCl+MHUVaWgIvNl6GI73uFp
+         vHsO3I3v1il+cgJ+av5HfFQBhLftgEYMuL7LdxusEGfopoRDjrIz4fproOJexY6vFi
+         8nQ/JSDRCiDrwjNb76HO3kSqOA16ucW43Bh3HWURbTSFI+Y6OBG6n2JxS2cAiQ7i80
+         l+rAM16qkCFHJ6te83SMTRxShj0fkZnpoEP1TB7D0kEymjEQ0VS5OunD3ByKHOx6Eq
+         wRbI5EvdA+RvA==
+Date:   Mon, 12 Aug 2019 11:40:50 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     john.hubbard@gmail.com
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>,
-        Gilad Ben-Yossef <gilad@benyossef.com>,
-        Ofir Drang <ofir.drang@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH 1/1] checkpatch: revert broken NOTIFIER_HEAD check
-Message-ID: <20190812113036.7a5dd650@canb.auug.org.au>
-In-Reply-To: <20190811225443.31161-2-jhubbard@nvidia.com>
-References: <20190811225443.31161-1-jhubbard@nvidia.com>
-        <20190811225443.31161-2-jhubbard@nvidia.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Paul Burton <paul.burton@mips.com>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>
+Subject: linux-next: manual merge of the jc_docs tree with the mips tree
+Message-ID: <20190812114050.0c94ad6e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WuFc+e.ptM4HNUcVgI3bsBc";
+Content-Type: multipart/signed; boundary="Sig_/y1V_0SkurqAx66nxcd=h5mg";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WuFc+e.ptM4HNUcVgI3bsBc
+--Sig_/y1V_0SkurqAx66nxcd=h5mg
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi John,
+Hi all,
 
-On Sun, 11 Aug 2019 15:54:43 -0700 john.hubbard@gmail.com wrote:
->
-> From: John Hubbard <jhubbard@nvidia.com>
->=20
-> commit 1a47005dd5aa ("checkpatch: add *_NOTIFIER_HEAD as var
-> definition") causes the following warning when run on some
-> patches:
->=20
-> Unescaped left brace in regex is passed through in regex;
-> marked by < --HERE in m/(?:
-> ...
->    [238 lines of appalling perl output, mercifully not included]
-> ...
-> )/ at ./scripts/checkpatch.pl line 3889.
->=20
-> This is broken, so revert it until a better solution is found.
->=20
-> Fixes: 1a47005dd5aa ("checkpatch: add *_NOTIFIER_HEAD as var
-> definition")
+Today's linux-next merge of the jc_docs tree got a conflict in:
 
-Thanks for the report.
+  Documentation/mips/index.rst
 
-I have removed that patch from linux-next today.
+between commit:
+
+  97689a1a3fda ("doc: Add doc for the Ingenic TCU hardware")
+
+from the mips tree and commit:
+
+  80b1505893b6 ("docs: mips: add to the documentation body as ReST")
+
+from the jc_docs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/WuFc+e.ptM4HNUcVgI3bsBc
+diff --cc Documentation/mips/index.rst
+index 321b4794f3b8,fd9023c8a89f..000000000000
+--- a/Documentation/mips/index.rst
++++ b/Documentation/mips/index.rst
+@@@ -1,11 -1,17 +1,19 @@@
+  .. SPDX-License-Identifier: GPL-2.0
+ =20
+ -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ -MIPS architecture
+ -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+ +MIPS-specific Documentation
+ +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+ =20
+  .. toctree::
+-    :maxdepth: 1
++    :maxdepth: 2
+ +   :numbered:
+ =20
++    au1xxx_ide
+ +   ingenic-tcu
++=20
++ .. only::  subproject and html
++=20
++    Indices
++    =3D=3D=3D=3D=3D=3D=3D
++=20
++    * :ref:`genindex`
+
+--Sig_/y1V_0SkurqAx66nxcd=h5mg
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1QwTwACgkQAVBC80lX
-0Gzc/QgApOFkdaFpPZwPnhNs2noiONSVhCVI7cv+EqtUSnTr2FiuYJXNi5QKZ4fI
-ggllREfOxuA9Aew2lcFPS4LALiiJLhwWdblhwfROKUBixQtr3JdS9+qBP4cP0Evk
-LdKQVY7xo+Ib+R8/ylw0L97PWvIZEhgWngKdtooZYS5m0sN5C0XgvNXHIg0YK6yH
-4s4Hgsu+uO1w/tNVFKUxpWiQuHuqDoVTxpIS/y1XghrvSk7szk93ohIC0xYZslc6
-jW7bFjCMQI78UcfUcOg/9r8mSfXsDttTnCrxx0nyn1XQg+R/si8JEcYuwkkiCymb
-ZkKAhXodanmRJuuKIeOTTEzuRct3Mw==
-=7B0q
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Qw6IACgkQAVBC80lX
+0Gx5jwgAi46GBYf0Z1/MlTfftNHnG0/XPH/v4Vpn/lfdPMD9fNo0Bu80IPCtjiTQ
+laNFJ40gclPFcXCG0LMUBGGUS75d16zl2zsvXGudb1NcxCVD8Jd57f6wxI3aRakY
+McxiAH0hALdKuMA+yZ8fg12hpr++WErlMicUcONGZtioZslWk3benDpgHdPKzzl4
+KJ1tTRB2+skN2UTWgCJZltnsFL1TaHJXQFDlMOYVijbn+gvdLswD3aA9gypMhLGy
+VH/R2LEC0P3iyRn42dr+2fuSra2xO+PgQ03VcmyVYezr12JvXKX4j5szvyBKeqZE
+7qllctkkViH7pjQEVmqbmlcFwQ30SA==
+=f4xG
 -----END PGP SIGNATURE-----
 
---Sig_/WuFc+e.ptM4HNUcVgI3bsBc--
+--Sig_/y1V_0SkurqAx66nxcd=h5mg--

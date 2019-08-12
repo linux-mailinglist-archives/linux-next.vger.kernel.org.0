@@ -2,142 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1228955B
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 04:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 045C8895BB
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 05:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbfHLCVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 11 Aug 2019 22:21:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44233 "EHLO ozlabs.org"
+        id S1726484AbfHLDV3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 11 Aug 2019 23:21:29 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55657 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726200AbfHLCVM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 11 Aug 2019 22:21:12 -0400
+        id S1726358AbfHLDV2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 11 Aug 2019 23:21:28 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466KMm0Lmdz9sP7;
-        Mon, 12 Aug 2019 12:21:07 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 466LjH69nZz9sNF;
+        Mon, 12 Aug 2019 13:21:23 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565576468;
-        bh=HdId0j789qpKf14+gTDT90r9ZUNm34/y6nkMbLvLDic=;
+        s=201702; t=1565580084;
+        bh=VE6hHYFEFEkKzkHzw/++zYvbgNMOO5CoC34mA1gSgTc=;
         h=Date:From:To:Cc:Subject:From;
-        b=QNcfiPHDLgsuXv+vEoXbiT9BcqJPx0xzdL248GxHRlEaqR9/vubWhsPz53ZiPMGPK
-         drh+igYPYu3T9f8k+QrpFpR7pRsShaUswdgWnrG4mStQcs2VbaN8m5lexnnHJcXeTL
-         iIHcP8fKXLVAR0DA1NKZ8ocoYi6/FhPdLPSe37n7s1jgxieZtdQ0GMrp4Qy5l2qD0O
-         ydw6iZ6agY00yUzEe8XURUa0Tk/uLvDEG1+PwmywdVAmZ5JP1/FAfD0lVVEkpYtq3P
-         m/STZymVWv/eOdjazpPma0pgcm1zGVw1dAnku+GO3JH1ez2EU5vHx7xKTR/h0ei2jl
-         irCsFTqHEOMBA==
-Date:   Mon, 12 Aug 2019 12:21:06 +1000
+        b=ZAhhPwdq2HJ2yGJiTIe+DmwFmQQfsvPDP/qS75fDKFw3/qSoG5KNES4cMiOLf+yd3
+         LQeIontON34/UZTuBVG4y+VaikTVtzzw6lJymEDxKk59+v9sOYBGdn/4eWpQJstX3T
+         TsydNZmR0jI2VcuviHhHDvRR4y3+wge6avS+uT38wUG5rOPQdsIH3qLOXbF851t77M
+         7IwqiNhLR40kqsmtDrnLc+muu4NVobhdqwoZ3zGwp5GitL0V7OYyGElZkSR4++mU+5
+         x+5EE7XtyPVkyO6b5RMb+kPRyM1uH9kj3jh9IrvjMtBcQisgvlCGMVdXJ7rfC2Ax6W
+         VYc/+qV37kjww==
+Date:   Mon, 12 Aug 2019 13:21:21 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Huy Nguyen <huyn@mellanox.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Saeed Mahameed <saeedm@mellanox.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20190812122106.628debfd@canb.auug.org.au>
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Shiju Jose <shiju.jose@huawei.com>,
+        Kenneth Lee <liguozhu@hisilicon.com>,
+        Hao Fang <fanghao11@huawei.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        John Garry <john.garry@huawei.com>
+Subject: linux-next: build failure after merge of the crypto tree
+Message-ID: <20190812132122.22ea1bb5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wKh8sn3YkOTaPQ=4/ySqEeQ";
+Content-Type: multipart/signed; boundary="Sig_/IZnzAHBtUJNT9g/KJliSAhQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wKh8sn3YkOTaPQ=4/ySqEeQ
+--Sig_/IZnzAHBtUJNT9g/KJliSAhQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+After merging the crypto tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
+drivers/crypto/hisilicon/qm.c: Assembler messages:
+drivers/crypto/hisilicon/qm.c:334: Error: no such instruction: `ldp %rdx,%r=
+cx,%bl'
+drivers/crypto/hisilicon/qm.c:335: Error: no such instruction: `stp %rdx,%r=
+cx,%al'
+drivers/crypto/hisilicon/qm.c:336: Error: number of operands mismatch for `=
+ds'
 
-between commit:
+Caused by commit
 
-  93b3586e070b ("net/mlx5: Support inner header match criteria for non deca=
-p flow action")
+  62c455ca853e ("crypto: hisilicon - add HiSilicon ZIP accelerator support")
 
-from the net tree and commit:
+I also got the following warnings:
 
-  226f2ca3075a ("net/mlx5e: Change flow flags type to unsigned long")
+WARNING: unmet direct dependencies detected for CRYPTO_DEV_HISI_QM
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64 && PCI [=3Dy] =
+&& PCI_MSI [=3Dy]
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
 
-from the net-next tree.
+WARNING: unmet direct dependencies detected for CRYPTO_HISI_SGL
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+WARNING: unmet direct dependencies detected for CRYPTO_DEV_HISI_QM
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64 && PCI [=3Dy] =
+&& PCI_MSI [=3Dy]
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
+
+WARNING: unmet direct dependencies detected for CRYPTO_HISI_SGL
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
+
+WARNING: unmet direct dependencies detected for CRYPTO_DEV_HISI_QM
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64 && PCI [=3Dy] =
+&& PCI_MSI [=3Dy]
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
+
+WARNING: unmet direct dependencies detected for CRYPTO_HISI_SGL
+  Depends on [n]: CRYPTO [=3Dy] && CRYPTO_HW [=3Dy] && ARM64
+  Selected by [m]:
+  - CRYPTO_DEV_HISI_ZIP [=3Dm] && CRYPTO [=3Dy] && CRYPTO_HW [=3Dy]
+drivers/crypto/hisilicon/sgl.c: In function 'hisi_acc_sg_buf_map_to_hw_sgl':
+drivers/crypto/hisilicon/sgl.c:181:14: warning: 'curr_sgl_dma' may be used =
+uninitialized in this function [-Wmaybe-uninitialized]
+  *hw_sgl_dma =3D curr_sgl_dma;
+  ~~~~~~~~~~~~^~~~~~~~~~~~~~
+
+This latter from commit
+
+  dfed0098ab91 ("crypto: hisilicon - add hardware SGL support")
+
+I have disabled CRYPTO_DEV_HISI_ZIP for now.  You should not select
+CONFIG options that have dependencies (without also depending on the
+same things and being very careful).
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-index deeb65da99f3,5be3da621499..000000000000
---- a/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/en_tc.c
-@@@ -1839,18 -2057,15 +2061,20 @@@ static int parse_cls_flower(struct mlx5
-  	struct mlx5_core_dev *dev =3D priv->mdev;
-  	struct mlx5_eswitch *esw =3D dev->priv.eswitch;
-  	struct mlx5e_rep_priv *rpriv =3D priv->ppriv;
- -	u8 match_level, tunnel_match_level =3D MLX5_MATCH_NONE;
-  	struct mlx5_eswitch_rep *rep;
-+ 	bool is_eswitch_flow;
-  	int err;
- =20
- -	err =3D __parse_cls_flower(priv, spec, f, filter_dev, &match_level, &tun=
-nel_match_level);
- +	inner_match_level =3D MLX5_MATCH_NONE;
- +	outer_match_level =3D MLX5_MATCH_NONE;
- +
- +	err =3D __parse_cls_flower(priv, spec, f, filter_dev, &inner_match_level,
- +				 &outer_match_level);
- +	non_tunnel_match_level =3D (inner_match_level =3D=3D MLX5_MATCH_NONE) ?
- +				 outer_match_level : inner_match_level;
- =20
-- 	if (!err && (flow->flags & MLX5E_TC_FLOW_ESWITCH)) {
-+ 	is_eswitch_flow =3D mlx5e_is_eswitch_flow(flow);
-+ 	if (!err && is_eswitch_flow) {
-  		rep =3D rpriv->rep;
-  		if (rep->vport !=3D MLX5_VPORT_UPLINK &&
-  		    (esw->offloads.inline_mode !=3D MLX5_INLINE_MODE_NONE &&
-@@@ -1864,11 -2079,11 +2088,11 @@@
-  		}
-  	}
- =20
-- 	if (flow->flags & MLX5E_TC_FLOW_ESWITCH) {
-+ 	if (is_eswitch_flow) {
- -		flow->esw_attr->match_level =3D match_level;
- -		flow->esw_attr->tunnel_match_level =3D tunnel_match_level;
- +		flow->esw_attr->inner_match_level =3D inner_match_level;
- +		flow->esw_attr->outer_match_level =3D outer_match_level;
-  	} else {
- -		flow->nic_attr->match_level =3D match_level;
- +		flow->nic_attr->match_level =3D non_tunnel_match_level;
-  	}
- =20
-  	return err;
-
---Sig_/wKh8sn3YkOTaPQ=4/ySqEeQ
+--Sig_/IZnzAHBtUJNT9g/KJliSAhQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1QzRIACgkQAVBC80lX
-0Gy70wgAmOYZD+4qminOIVh1+j+LLcV84fr9pUaDAjSYS11cjsKZN0bsPzI7fX1l
-KLqpS/z1gK4NhWCrECrNj1UviuC5dktksvxv9YKuhy2vJhLqpcWmiNeI6u5+ACx+
-vtz4A2nBPNYvEXkuRl4JwJz6vvN23XDh+siBqcsVuyQ4lGdouFnc2CjmKNaKb9tn
-NcSdA6ar3Czbf+ZeSz04j5P2IsjlEnteVuPVWuDRQhH6BEEBk4BBFUxee+iLkqRX
-TgsYyICMnHnbtV2PYgHD213JjoP0AcNko+6fx8gaaom1SBQOuprppyZGLx+RaZS2
-YLpc8ie93AqMR9HGH+E7izxdgTra3Q==
-=7dPM
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Q2zIACgkQAVBC80lX
+0GxkVgf+Or94Jq7IrJ+eQoYm2XPoBpCj7fpHFsxdJh/fcVCYtk7ce03/iSeoja10
+KfbipxX2LrVn5Zt5cLA1Rj1VA1tOnFHAp2Yc9389bFlGruepm+xfaOCQHcXI52w5
+yy8eFYeKFVuyxH6KUU7TNE1aoJ4qgXbSEVQMWB/UxApt7A0imtKVbhvQO5xEWcLN
+IDfk5h7N/tZGbWje5DrpT5ucz3/How16HmS+QQO8uzbw3jZeDKt5CnkvcIBb3s9i
+e8I3zPLn77eDzG0dee6VVUyb47dw8eMf7XgJDzzO6XRGVXAqhFwVBDIi/GCnptLa
+SkcoeBY3qZJuMnI8WmxyFFqyfRktlg==
+=ObT8
 -----END PGP SIGNATURE-----
 
---Sig_/wKh8sn3YkOTaPQ=4/ySqEeQ--
+--Sig_/IZnzAHBtUJNT9g/KJliSAhQ--

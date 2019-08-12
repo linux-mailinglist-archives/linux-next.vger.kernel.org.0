@@ -2,124 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1CD88A4B3
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 19:34:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B7BC8A564
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 20:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726479AbfHLReU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Aug 2019 13:34:20 -0400
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:37459 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbfHLReU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Aug 2019 13:34:20 -0400
-Received: by mail-pf1-f193.google.com with SMTP id 129so3119802pfa.4
-        for <linux-next@vger.kernel.org>; Mon, 12 Aug 2019 10:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=aYWUhLUhFWFaj2IBlyeqpyuiKYe3byR6cuy6O3+sAu0=;
-        b=fD5g47S8va3cncoYwUYSfFVsmYgZaWoR2hcX0eKKr+lM5nS0EMz/ThVSf72l3/xsfD
-         h4IlLKwvYcz9v/Oaar90eFTbIZObIY1NtQQTMtlIOPsoS+d/Hr8jTEWOrWaBCOZy1F7X
-         W4A6Isn4U+hPtfj0YcYUWhMCB7VYTpU36Nevk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=aYWUhLUhFWFaj2IBlyeqpyuiKYe3byR6cuy6O3+sAu0=;
-        b=VUxz+IUEh1LlDxkBV0FccpfRCnNFXWdzWtA8q5fpigIK422R3hBbavnwBDDBJ/eQcS
-         c/nKVh1F5STwilvkUQT5UWEKvOcsVbLmN1z1jFX96BWPr4bYcyqgmul5LKIajor3nSfH
-         K+2mQ795IHQfFJEF340RqxpgC4uxtPAsp/T4dzy9uoluslIsiFhcaxzxYhVSo7w257tF
-         LgL36pSRrLsmtKq271xw+xeNaQUdwG2gZl8cb4h5Ym9+uuhB0DbZctEa1ZTPcz8ET7WY
-         wxgmocDcGrjr8UuCZ6QsFrU/z5Vp0aLht7BsuYcva4ao/VNWF5U4kL7Ffw9LxK4C2rgs
-         eZ+Q==
-X-Gm-Message-State: APjAAAUuxn3dT4HEhXiJrltYHou5voFqXSCvrikmUggkMhT3IQRK/jDP
-        EO8il4HGd26OZwkqbWZHi+zozw==
-X-Google-Smtp-Source: APXvYqy7nuO9ZhZSKKRKRLzTnBsZpSlU4CtfOGJO2cEtb5hebTjlSiZu4egZRrDRFERHPfcTBeSvxw==
-X-Received: by 2002:a63:3c5:: with SMTP id 188mr30385877pgd.394.1565631259650;
-        Mon, 12 Aug 2019 10:34:19 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g11sm117389053pgu.11.2019.08.12.10.34.19
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Mon, 12 Aug 2019 10:34:19 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 10:34:17 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     James Morris <jmorris@namei.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Casey Schaufler <casey@schaufler-ca.com>
-Subject: Re: linux-next: build failure after merge of the security tree
-Message-ID: <201908121033.BFBE9516AC@keescook>
-References: <20190812145823.63d77573@canb.auug.org.au>
+        id S1726812AbfHLSIs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Aug 2019 14:08:48 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:34354 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726185AbfHLSIs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Aug 2019 14:08:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=jMh85WQgxIdcz7yd1BWSn2ujSLN3yCFWRbvzn04j/60=; b=tGt0eNbG4+SkPkLXOUgPm4pKy
+        WVySWGw3MzdYRSARCh6IKpb09zogVVtk3jSkDv2lQ9tQi95flP7s+UlKxq6JyowqW9pG8QO3hpW2K
+        HtOe67xFnI/GoiriCY0pHL1UQyccdnNry3AgcOJcT2hPCt9mXOI22GwO+GDARxuAAuu58=;
+Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1hxEFs-0002Ty-I9; Mon, 12 Aug 2019 17:37:12 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 9E08E2740CBD; Mon, 12 Aug 2019 18:37:11 +0100 (BST)
+Date:   Mon, 12 Aug 2019 18:37:11 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     kernel-build-reports@lists.linaro.org, linux-next@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: Re: next/master boot: 254 boots: 11 failed, 227 passed with 16
+ offline (v5.3-rc4-5755-g8e72ac275c63)
+Message-ID: <20190812173711.GN4592@sirena.co.uk>
+References: <5d519859.1c69fb81.531c0.088a@mx.google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6yHiY5vv/BiPjcMt"
 Content-Disposition: inline
-In-Reply-To: <20190812145823.63d77573@canb.auug.org.au>
+In-Reply-To: <5d519859.1c69fb81.531c0.088a@mx.google.com>
+X-Cookie: Decaffeinated coffee?  Just Say No.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 02:58:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the security tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like below.
-> 
-> Caused by commit
-> 
->   45d29f9e9b8b ("security: Support early LSMs")
-> 
-> I have added the following fix for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 12 Aug 2019 14:54:20 +1000
-> Subject: [PATCH] early_security_init() needs a stub got !CONFIG_SECURITY
-> 
-> An arm multi_v7_defconfig fails like this:
-> 
-> init/main.c: In function 'start_kernel':
-> init/main.c:596:2: error: implicit declaration of function 'early_security_init'; did you mean 'security_init'? [-Werror=implicit-function-declaration]
->   early_security_init();
->   ^~~~~~~~~~~~~~~~~~~
->   security_init
-> 
-> Fixes: 45d29f9e9b8b ("security: Support early LSMs")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Acked-by: Kees Cook <keescook@chromium.org>
+--6yHiY5vv/BiPjcMt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--Kees
+On Mon, Aug 12, 2019 at 09:48:25AM -0700, kernelci.org bot wrote:
 
-> ---
->  include/linux/security.h | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/include/linux/security.h b/include/linux/security.h
-> index 807dc0d24982..23e1c3f17d48 100644
-> --- a/include/linux/security.h
-> +++ b/include/linux/security.h
-> @@ -473,6 +473,11 @@ static inline int security_init(void)
->  	return 0;
->  }
->  
-> +static inline int early_security_init(void)
-> +{
-> +	return 0;
-> +}
-> +
->  static inline int security_binder_set_context_mgr(struct task_struct *mgr)
->  {
->  	return 0;
-> -- 
-> 2.20.1
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Today's -next fails to boot on qcs404-evb-4k:
 
+> arm64:
+>     defconfig:
+>         gcc-8:
 
+The boot appears to suddenly drop into a bootloader near the end of
+boot:
 
--- 
-Kees Cook
+05:14:44.500307  [    1.886858] Key type dns_resolver registered
+05:14:44.500345  [    1.892544] registered taskstats version 1
+05:14:44.500382  [    1.895502] Loading compiled-in X.509 certificates
+05:14:44.515903  [    1.916067] hctosys: unable to open rtc device (rtc0)
+05:14:51.562124 =20
+05:14:51.562251  Format: Log Type - Time(microsec) - Message - Optional Info
+05:14:51.562306  Log Type: B - Since Boot(Power On Reset),  D - Delta,  S -=
+ Statistic
+05:14:51.562383  S - QC_IMAGE_VERSION_STRING=3DBOOT.XF.0.1-00080-QCS405LZB-2
+05:14:51.562427  S - IMAGE_VARIANT_STRING=3DQcs405LA
+
+--6yHiY5vv/BiPjcMt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1Ro8YACgkQJNaLcl1U
+h9DSZQf/bKwhCQ1C3b2g6D9QdwqB6vbUt9Wg0E/+9Th2rg+WR98nT9yHXhzYLpPP
+8KF1isnSnh1bQMivHodQzHRjgKqexOsG7WNI79x1XQbsqURFcIwNm2UFIJq5gkXF
+9Y1YedRKyy+pUT17WRNRpZk1lV9r+LTND8IObYOzRU9rZxCpA5wXSGVz3imh+VL5
+eXcublPQWwRUSccn479DylpZQSzCnSUtHVCwDN/ti09FXIa401d/Zpije+9NqJjb
++kycjvuSQK0hfdI4U2WlNivIlqqVakvx6ihtvRQaIbhXgkboIjfeLRv6Au5+olWx
+2vEU0ix+a1mUYvvMiLtJFwkbSALDyw==
+=FI7D
+-----END PGP SIGNATURE-----
+
+--6yHiY5vv/BiPjcMt--

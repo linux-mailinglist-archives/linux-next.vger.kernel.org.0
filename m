@@ -2,88 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C1BB18968E
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 07:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00C1896E8
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 07:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726486AbfHLFES (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Aug 2019 01:04:18 -0400
-Received: from ozlabs.org ([203.11.71.1]:38077 "EHLO ozlabs.org"
+        id S1725843AbfHLFhc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Aug 2019 01:37:32 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43193 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725838AbfHLFER (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Aug 2019 01:04:17 -0400
+        id S1725822AbfHLFhc (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Aug 2019 01:37:32 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466Nzz1S96z9s7T;
-        Mon, 12 Aug 2019 15:04:15 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 466PkL2HbHz9sML;
+        Mon, 12 Aug 2019 15:37:30 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565586255;
-        bh=g/gbGEpSSp1XxK5TdhN7/rcpdB+IgEK54oF96I8REFQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jCRYlgztb1rZ9bFIK3tzgC07pQrjZgsa6Mzj4jjYpifcfa9DLeuyKyUF7xG8UTOHC
-         tU28agsLjKsPVQ3S3K/j6gn/pw9phygEALSPz2UcCtE6/E4GkQI3h1giAyHIbkgWpw
-         8wENmeD+ikiV42ya28lmtUkWEKw/JpNMKjk09VE1pu2R7N3s/ofAmCk/m8Q9RZc7ps
-         Z0XHhnNCd+JEJ9Mxkf+H2SrLQ13eRcVH7xHhLjrIX1xuBuZgRr44TxxyPghIvbFIFz
-         FovkM+/r1HGWICtQV6zCShj/E0Qq+PlKm0hZmC2B5Pi0lHtnH9m4BLjSGrw2/iNTGl
-         N1+KbAbzem2sQ==
-Date:   Mon, 12 Aug 2019 15:04:14 +1000
+        s=201702; t=1565588250;
+        bh=56nDGULStuFYy08/Qv3AeFa1sDuUWtlfW/0UiSMMy8o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iDOVokDeNo0AH4e9iH8xqe/pW7fMaLnvrqZUzP7Z/hKIAwBDDejVez5iZhGwdQpxC
+         PBJ0jwbtmmWUckrToyCNrmMLN8f/7/7OY+co6d+Ytjb2WFZBbKg3UVJel+izPE7Spm
+         VtpkEHFrlilCP/ZvH2WnRS7Ivtg3D+cXJQfzrTogYNSnOGM0YKOI2eB2CRjBFD8+DD
+         GuydUwiXyxLh8rPzvXCNLICwSuQ2J4KqHTxgiIaK2NqzyhAVDJvkuwHFQ7fuHS3o4W
+         c+GEbib0cpiPBPoqyr+T3yPpz3AusclfgDJoKLXKFl6KR2b6WrKQIhl27utWqu/Sjy
+         deOkAjjd1mzQA==
+Date:   Mon, 12 Aug 2019 15:37:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Morris <jmorris@namei.org>
+To:     Greg KH <gregkh@linuxfoundation.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Dave Young <dyoung@redhat.com>
-Subject: linux-next: build warning after merge of the security tree
-Message-ID: <20190812150414.7af55bd1@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Add SPDX kernel tree to linux-next
+Message-ID: <20190812153729.104d4451@canb.auug.org.au>
+In-Reply-To: <20190812045731.GA5834@kroah.com>
+References: <20190810115533.GA6302@kroah.com>
+        <20190812072659.606b2107@canb.auug.org.au>
+        <20190812045731.GA5834@kroah.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5t=RJwaVDPInjBbOmT5vIcc";
+Content-Type: multipart/signed; boundary="Sig_/ommFjSvsNb6tQoHDzqUgSg4";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5t=RJwaVDPInjBbOmT5vIcc
+--Sig_/ommFjSvsNb6tQoHDzqUgSg4
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Greg,
 
-After merging the security tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
+On Mon, 12 Aug 2019 06:57:31 +0200 Greg KH <gregkh@linuxfoundation.org> wro=
+te:
+>
+> On Mon, Aug 12, 2019 at 07:26:59AM +1000, Stephen Rothwell wrote:
+> > Added from today.  One question: is this meant to be a -next tree or a
+> > -fixes tree? =20
+>=20
+> A "-fixes" tree, it should be sent to Linus for the latest release.
 
-kernel/kexec_file.c: In function 'kimage_file_prepare_segments':
-kernel/kexec_file.c:189:14: warning: unused variable 'reason' [-Wunused-var=
-iable]
-  const char *reason;
-              ^~~~~~
-
-Introduced by commit
-
-  47b888368923 ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXE=
-C_SIG_FORCE")
+OK, I will move it up among the other -fixes trees from tomorrow.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5t=RJwaVDPInjBbOmT5vIcc
+--Sig_/ommFjSvsNb6tQoHDzqUgSg4
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Q804ACgkQAVBC80lX
-0GwC9gf/YVI3GGZxhwXMKDmajNP56to046Dtudrw6EGXT2m53vGXzANNQe3B5y67
-OueUf442ZqhDMilJcgqR2wC9x5QQQlxneCpi5V2f2tu/6VBSOvW3uw2huqbn2pwr
-OAxdEWJz1Z9tascVZ/ErEN+PSEzaR225Ncyfthv3Rb9BL+CNmgo9WydLhpdYYhS6
-DlXa671lZg5+5rZj4OEMiWvEBvRtK2ZSomK6zAbsJomVDNBX8ATQiDuMUziKifWs
-OhGGjS01y8v1k2DMCpFs0pHznNyJTcUMF1VObETx8aBYe9axkh/ZZDgSdCL3Munb
-h+K4hMM3O8cKqB8uD43TGpeusxLJBw==
-=0Ma2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Q+xkACgkQAVBC80lX
+0Gyxtwf+OAsBnc6Y5oR6vFj8oy18hPes+Qg5erpdRM1Ww4hqrX+EOU9A1srq+pvf
+67RtvfON6lZ1HydJcAvsItZtEb9IchuUw3Lykz6wiG5AAASglHMzIsYVuITpxSDs
+SPVWG7GZnNly8BwzomB4nW1Yvb3KSZWI3VCTGJ9LX/JkdIGLj1iddfEekyxxXz8M
+1dytbdoknz//gXvjPbr9dI/4lM5Jr8p1ttnqeOOmpDIQOn5c+S+erA0XHPV3/P8M
+Ej7EmAP57tlEoG9l+XZD/PA78W3Cp3LYBMFPt/dH1ljYmIA72zG9Z/XH9ndNxl3c
++3BUZE8Ofix7FZo+EMXvUYzrNPM+cw==
+=fh3x
 -----END PGP SIGNATURE-----
 
---Sig_/5t=RJwaVDPInjBbOmT5vIcc--
+--Sig_/ommFjSvsNb6tQoHDzqUgSg4--

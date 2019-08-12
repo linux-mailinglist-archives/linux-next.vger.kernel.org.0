@@ -2,65 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 37F2589685
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 06:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2789889687
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 06:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbfHLE5g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Aug 2019 00:57:36 -0400
-Received: from mail.kernel.org ([198.145.29.99]:40722 "EHLO mail.kernel.org"
+        id S1725838AbfHLE61 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Aug 2019 00:58:27 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56737 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725822AbfHLE5g (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Aug 2019 00:57:36 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725822AbfHLE61 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 12 Aug 2019 00:58:27 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id D326620842;
-        Mon, 12 Aug 2019 04:57:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565585855;
-        bh=KG4ZmdjX9K6T7CBGRwekyId1/FvEn4buIVypXsfvxdE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=n50q2x3WqPNsP3y+eR2IEK1COQjwzMeY8yNE/vtjj+nHM1icxAslvBs7ZGZX7pa3p
-         yXFgkk/WgFrgD+DnRJxj1C4EayNHeR5PB06HV/OnfEKDhqUZOnCmlqZwAPn5uHK6e4
-         v8CelaQMMZQkr3z35NMIn0zNuEJeH0+k+vw3eTNo=
-Date:   Mon, 12 Aug 2019 06:57:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 466NsD2bwGz9s7T;
+        Mon, 12 Aug 2019 14:58:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565585904;
+        bh=+XUql2QwatmOkcfblCGCbEXZU/3qsSW3+eNwYoAniSI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LbWJbdBDQ2eR3uXBKO8VGz0jd4039nyNGtt5f9z/n7T+bljBhg1f9YmQ6/tGUkwUG
+         rE547yfCUBlAiLagDpDxMXOLPwgCQthrJy6Tt2mX4sW8uBKaCvji587VnVUktCfrQh
+         2h9EvxAwZiMog2rglt+/KOkGMFbkHIvjRMQHcDLPHgh2zQGTpXtDl8pnkNt25mELTK
+         r4wMBxLWoKonPuUrYqacz8mBKcfy6xRf/UMZRvByn2bkrk+zOxvhVjOAEIi4uJVkYO
+         p/fTg12IZQGAeSh+9QNn6XV1rRrlITHDJRGw7c07G1uXswjG1ufgSJjn54vMzKNt7e
+         34a4fpN5gzE4Q==
+Date:   Mon, 12 Aug 2019 14:58:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     James Morris <jmorris@namei.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Add SPDX kernel tree to linux-next
-Message-ID: <20190812045731.GA5834@kroah.com>
-References: <20190810115533.GA6302@kroah.com>
- <20190812072659.606b2107@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Garrett <mjg59@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: linux-next: build failure after merge of the security tree
+Message-ID: <20190812145823.63d77573@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190812072659.606b2107@canb.auug.org.au>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Type: multipart/signed; boundary="Sig_/RfU=Qk4LgOsU_kXaWADIOuT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 07:26:59AM +1000, Stephen Rothwell wrote:
-> Hi Greg,
-> 
-> On Sat, 10 Aug 2019 13:55:33 +0200 Greg KH <gregkh@linuxfoundation.org> wrote:
-> > 
-> > I realized that I've been sending patches to Linus from my "SPDX" kernel
-> > tree for a few releases now, and it's not included in linux-next, which
-> > is not good.
-> > 
-> > So, could you please add the kernel tree / branch at:
-> > 	git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx.git spdx-linus
-> > 
-> > to linux-next?
-> 
-> Added from today.  One question: is this meant to be a -next tree or a
-> -fixes tree?
+--Sig_/RfU=Qk4LgOsU_kXaWADIOuT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-A "-fixes" tree, it should be sent to Linus for the latest release.
+Hi all,
 
-thanks,
+After merging the security tree, today's linux-next build (arm
+multi_v7_defconfig) failed like below.
 
-greg k-h
+Caused by commit
+
+  45d29f9e9b8b ("security: Support early LSMs")
+
+I have added the following fix for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 12 Aug 2019 14:54:20 +1000
+Subject: [PATCH] early_security_init() needs a stub got !CONFIG_SECURITY
+
+An arm multi_v7_defconfig fails like this:
+
+init/main.c: In function 'start_kernel':
+init/main.c:596:2: error: implicit declaration of function 'early_security_=
+init'; did you mean 'security_init'? [-Werror=3Dimplicit-function-declarati=
+on]
+  early_security_init();
+  ^~~~~~~~~~~~~~~~~~~
+  security_init
+
+Fixes: 45d29f9e9b8b ("security: Support early LSMs")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/security.h | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/include/linux/security.h b/include/linux/security.h
+index 807dc0d24982..23e1c3f17d48 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -473,6 +473,11 @@ static inline int security_init(void)
+ 	return 0;
+ }
+=20
++static inline int early_security_init(void)
++{
++	return 0;
++}
++
+ static inline int security_binder_set_context_mgr(struct task_struct *mgr)
+ {
+ 	return 0;
+--=20
+2.20.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RfU=Qk4LgOsU_kXaWADIOuT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Q8e8ACgkQAVBC80lX
+0GzJ2Qf/VH0iQwwUX51/De5pNclfDGsUUFjGpIVppHxLw115/QW6A3n4aKsvEZem
+rIfj6nNJbbFk5NWa/LnmoU9+iL/U3EAqS8dTRQ6gtsMKnzvFy4vxlhI7pDSvXOQ5
+nXSMzJVPkzETaO4D5jfM6U8/ipJ/7OwJyeY8pz6Dpuvn3PEMRaXxorYnMu3vkTbX
+FyeENRKmUj2Uij+N++SqVAP2TOQt8iUMP+SsamiIiCKynHjhLvyxDsLzpE3N/A4X
+eQ8L+YfERAc7iLPKHZH8tVAut91+6AcgbTqQNij8n90ydnWdXdszHajfOMqxFgrG
+9W3dDz0Sfv3CcmI2VfKQMopgXU7Gsg==
+=IHKh
+-----END PGP SIGNATURE-----
+
+--Sig_/RfU=Qk4LgOsU_kXaWADIOuT--

@@ -2,136 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D528A326
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 18:19:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98BC58A329
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 18:20:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfHLQTj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Aug 2019 12:19:39 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:26182 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725887AbfHLQTg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Aug 2019 12:19:36 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7CGHO97109706
-        for <linux-next@vger.kernel.org>; Mon, 12 Aug 2019 12:19:35 -0400
-Received: from e11.ny.us.ibm.com (e11.ny.us.ibm.com [129.33.205.201])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ub8s6g2gr-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Mon, 12 Aug 2019 12:19:34 -0400
-Received: from localhost
-        by e11.ny.us.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-next@vger.kernel.org> from <paulmck@linux.vnet.ibm.com>;
-        Mon, 12 Aug 2019 17:19:34 +0100
-Received: from b01cxnp23034.gho.pok.ibm.com (9.57.198.29)
-        by e11.ny.us.ibm.com (146.89.104.198) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Mon, 12 Aug 2019 17:19:31 +0100
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7CGJUou52953408
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 12 Aug 2019 16:19:30 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8263BB2067;
-        Mon, 12 Aug 2019 16:19:30 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 66259B2064;
-        Mon, 12 Aug 2019 16:19:30 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Mon, 12 Aug 2019 16:19:30 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id 319BE16C0F68; Mon, 12 Aug 2019 09:19:34 -0700 (PDT)
-Date:   Mon, 12 Aug 2019 09:19:34 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Reply-To: paulmck@linux.ibm.com
-References: <20190812161236.21defb17@canb.auug.org.au>
+        id S1726457AbfHLQUm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Aug 2019 12:20:42 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:32871 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725887AbfHLQUm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Aug 2019 12:20:42 -0400
+Received: by mail-wm1-f67.google.com with SMTP id p77so349885wme.0
+        for <linux-next@vger.kernel.org>; Mon, 12 Aug 2019 09:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=qePOOqmSlNr9SwjAZX5nR5vrLqwWA4e7gaiExDYB5Uw=;
+        b=NSy7x9k7d8nvh+XFWjUMQbtG0gBf/LGFQOqnODW9OJlU7I6bl4iqgA30pBSre5bcFU
+         Od516OLCki/xz/d/iohMXusTErp5TDvUF8D0erUr9aSoB7Ej9N/18HaDeLEIHL0R2oIG
+         r8MOUGfzTwpq/QgOAA4CuqcUWRKFsMNP0zvmFchsPlzVNMCBtGBFN5D0dRsnuYDiPXzi
+         RM0nfoBiiU2w+Q8x46GbE0mSng5yDsRBvYCCBSv8mKEA8MOq59TqtUXFrn8zRQDI1Aa5
+         CfdWseYCVefcFj+MyG/TVGy9v7eGrdmwODSnIaBZtDfxgKJ4QVl0Jg9SgC505S//AkKB
+         SKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=qePOOqmSlNr9SwjAZX5nR5vrLqwWA4e7gaiExDYB5Uw=;
+        b=EtLxbCFwEge/ubPAD28kV+o65/day3zgo9u+REnEV6kA6t8BL1FbKGhurHqRL917RE
+         W41Oo0AqcfM2HEpJc+OKrOoPKX8O6S2mKmuGRaSfExa9daXUmb3nT5dvL6X2aE7RVJBA
+         AruNwMpFZHL2R/YLcAHEhik5v3TTQ16tlIWK/wQGzqPjKanIfPF6yVOOczozKPERCNho
+         Y/ZCYKDREuVKLqKd4QnZpaMMU/TGQSO+dBuDUm4qzKbz+wQ69M8DvNtnu5/F1ZewTidT
+         gJTCbMGIBMnBfgU5cFSdsPbPuMn+6ALTq6TP1YxPUZWDoX/4iOTvDMFM9QT1nJnPOxLG
+         +IVQ==
+X-Gm-Message-State: APjAAAVCGwvjw0NppUBawk1wIS4UXkYRhe9iUV5pVT86ssS6iNhQlPmD
+        Ykq9DkZLpDUqit305E3x6yRY1zM+yJw=
+X-Google-Smtp-Source: APXvYqzZdYEZboqybcPmNtscFiIwmJPvzhPvKiggpy7F7sdcAffXQEcByXdQr08csWNr8ROsDk9kyQ==
+X-Received: by 2002:a7b:c415:: with SMTP id k21mr62403wmi.135.1565626840745;
+        Mon, 12 Aug 2019 09:20:40 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id u186sm48116wmu.26.2019.08.12.09.20.39
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 12 Aug 2019 09:20:40 -0700 (PDT)
+Message-ID: <5d5191d8.1c69fb81.81db8.0403@mx.google.com>
+Date:   Mon, 12 Aug 2019 09:20:40 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190812161236.21defb17@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-x-cbid: 19081216-2213-0000-0000-000003BB0EFE
-X-IBM-SpamModules-Scores: 
-X-IBM-SpamModules-Versions: BY=3.00011585; HX=3.00000242; KW=3.00000007;
- PH=3.00000004; SC=3.00000287; SDB=6.01245807; UDB=6.00657379; IPR=6.01027309;
- MB=3.00028147; MTD=3.00000008; XFM=3.00000015; UTC=2019-08-12 16:19:32
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 19081216-2214-0000-0000-00005F9E3441
-Message-Id: <20190812161934.GJ28441@linux.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-12_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908120182
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-rc4-148-g65a07a9f5dd2
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 211 boots: 4 failed,
+ 196 passed with 11 offline (v5.3-rc4-148-g65a07a9f5dd2)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 12, 2019 at 04:12:36PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> arch/x86/xen/smp_pv.c: In function 'xen_pv_play_dead':
-> arch/x86/xen/smp_pv.c:439:2: error: implicit declaration of function 'tick_nohz_idle_stop_tick_protected'; did you mean 'tick_nohz_idle_stop_tick'? [-Werror=implicit-function-declaration]
->   tick_nohz_idle_stop_tick_protected();
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   tick_nohz_idle_stop_tick
-> 
-> Caused by commit
-> 
->   a96f9dca9820 ("idle: Prevent late-arriving interrupts from disrupting offline")
+next/pending-fixes boot: 211 boots: 4 failed, 196 passed with 11 offline (v=
+5.3-rc4-148-g65a07a9f5dd2)
 
-Peter, I reverted the portion of this commit that removes the
-tick_nohz_idle_stop_tick_protected() function.  Please let me know if
-you instead convince the Xen people to stop using it.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-rc4-148-g65a07a9f5dd2/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-rc4-148-g65a07a9f5dd2/
 
-> Also:
-> 
-> In file included from <command-line>:
-> include/linux/rcu_segcblist.h:69:2: error: unknown type name 'atomic_long_t'
->   atomic_long_t len;
->   ^~~~~~~~~~~~~
-> include/linux/rcu_segcblist.h:74:2: error: unknown type name 'u8'
->   u8 enabled;
->   ^~
-> include/linux/rcu_segcblist.h:75:2: error: unknown type name 'u8'
->   u8 offloaded;
->   ^~
-> 
-> Caused by commits:
-> 
->   e084617762b7 ("rcu/nocb: Use separate flag to indicate disabled ->cblist")
->   5e114ba3d7a5 ("rcu/nocb: Use separate flag to indicate offloaded ->cblist")
->   9f3ca0945104 ("rcu/nocb: Atomic ->len field in rcu_segcblist structure")
-> 
-> We prefer our include files to be standalone now if at all possible.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-rc4-148-g65a07a9f5dd2
+Git Commit: 65a07a9f5dd2daf903d979dd2e7b24d0e212ad1f
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 85 unique boards, 27 SoC families, 21 builds out of 222
 
-Huh.  "It has been building fine for me."  I added
+Boot Failures Detected:
 
-	#include <uapi/asm-generic/types.h>
-	#include <asm-generic/atomic-long.h>
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
 
-to include/linux/rcu_segcblist.h, which hopefully fixes it at your end.
-I will push this after testing and rearrangement at this end.
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
 
-							Thanx, Paul
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxbb-nanopi-k2: 1 failed lab
+            meson-gxm-khadas-vim2: 1 failed lab
 
-> I have used the rcu tree from next-20190809 for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Offline Platforms:
 
+arm64:
 
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-gxbb-odroidc2: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

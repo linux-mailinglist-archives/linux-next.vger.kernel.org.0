@@ -2,82 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99E118979D
-	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 09:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D556489993
+	for <lists+linux-next@lfdr.de>; Mon, 12 Aug 2019 11:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726452AbfHLHOQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 12 Aug 2019 03:14:16 -0400
-Received: from ozlabs.org ([203.11.71.1]:49781 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725819AbfHLHOQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 12 Aug 2019 03:14:16 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 466Rsx4Nbvz9s7T;
-        Mon, 12 Aug 2019 17:14:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565594053;
-        bh=3Mq0WAunHGyNQWfkysN1G3I3mXAvo40t6Z+4Ao4y5mk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OXrdo30EiwfhuhFS1QM802vAQU3Ni8t4pGovz9KFB7qfq0COBierlUKrvMqpbFJJ2
-         rJLmab0iOqelTT8lTBY8+B0HIUrhafDPSQK6kRvU9gI/eAF+QOlU2JTaYpqq6IaDK+
-         NTsEM+Hw9/diIpr+D98srWfhVG8U4mc97tEICL+LFRcjSV8d/EjpN/N0NqsAhYGuqg
-         4jVplpD6GfbcyOPeNgjill0casP/ezOB9Sm0NGV8IqZuMLqKt38j5LAOK/Hx/n6e+r
-         8QRR8UxVA+LY7A0FNua/dOmeLEPgpPGPBnumxBf34TxFmiQNWo2troakswDGpblH5l
-         /PEwQGpZJE16A==
-Date:   Mon, 12 Aug 2019 17:14:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: linux-next: build warning after merge of the slave-dma tree
-Message-ID: <20190812171411.31ec6ae3@canb.auug.org.au>
+        id S1727154AbfHLJO0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 12 Aug 2019 05:14:26 -0400
+Received: from mail-qt1-f194.google.com ([209.85.160.194]:46211 "EHLO
+        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727140AbfHLJOZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 12 Aug 2019 05:14:25 -0400
+Received: by mail-qt1-f194.google.com with SMTP id j15so8517086qtl.13;
+        Mon, 12 Aug 2019 02:14:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4+QmBXKd4KiupJ4fDt80NErMgwwgr7EoZ3yCYi1lzc4=;
+        b=QNDtVIrto0/8rdLE2mD0Tvfvur8CZunJa0DN/tflpzfZssXH+jMfD7s5Kvzg/KaVAS
+         2vHpoi49nPlYD5xslAsE+EQ2Zwnaoq3iMKSIRTlznA4CwmFVStaAd95kz9kqAKdH4ZhG
+         OAVhqrLNx/TemVcEtmcdvanSJY203XCgnViooaj3T/bFbb/fwyhJGxvfEf1u7N8YlkmV
+         v5YmpH5eYNT4khkTKLcHaf5HnnHmV5YkoVwoOlNS+XZzkkNXqewtmIe+3fiZhHHA3ytD
+         LaznqNSC9V+Ggpo8oeolqpoiWAO4G27BlOxbgmjX8WqnIU9mp6XHnmcFyEkaF3VUZKMj
+         +g3Q==
+X-Gm-Message-State: APjAAAUY0NmS54wogZO8JMjT47fw/GQOOSwEapb3OYd5KugblhabwqNO
+        MBpO/ZySclsoVJM6hHrb+Eet1T4Nise0W+ly90E=
+X-Google-Smtp-Source: APXvYqxo0LVujo776H9ip+YOmiuWCuWHH5PhAK7mGqEizCOd7M9TnAGpH7cMD/PULwUpm4ilmxGp5E/S1SSYR+gfTQU=
+X-Received: by 2002:aed:3363:: with SMTP id u90mr29147026qtd.7.1565601264709;
+ Mon, 12 Aug 2019 02:14:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BVWyJg0=0F7RxTfY3dyOzMZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20190812171411.31ec6ae3@canb.auug.org.au>
+In-Reply-To: <20190812171411.31ec6ae3@canb.auug.org.au>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 12 Aug 2019 11:14:08 +0200
+Message-ID: <CAK8P3a0eOyD2iTFeLC1J95WMAwyzBJJ0S5nOb+Z_y9nUy=8=qg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the slave-dma tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BVWyJg0=0F7RxTfY3dyOzMZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Aug 12, 2019 at 9:14 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the slave-dma tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>
+> WARNING: "omap_dma_filter_fn" [vmlinux] is a static EXPORT_SYMBOL_GPL
+> WARNING: "edma_filter_fn" [vmlinux] is a static EXPORT_SYMBOL
+>
+> Introduced by commits
+>
+>   9c71b9eb3cb2 ("dmaengine: omap-dma: make omap_dma_filter_fn private")
+>   d2bfe7b5d182 ("dmaengine: edma: make edma_filter_fn private")
 
-Hi all,
+The warning is valid, I will send a fix.
 
-After merging the slave-dma tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+I have never seen this message though, I guess the build system just introduced
+a check for this? I don't see where this would come from in next-20190809
+(only checking with grep, not actually trying to build right now).
 
-WARNING: "omap_dma_filter_fn" [vmlinux] is a static EXPORT_SYMBOL_GPL
-WARNING: "edma_filter_fn" [vmlinux] is a static EXPORT_SYMBOL
-
-Introduced by commits
-
-  9c71b9eb3cb2 ("dmaengine: omap-dma: make omap_dma_filter_fn private")
-  d2bfe7b5d182 ("dmaengine: edma: make edma_filter_fn private")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/BVWyJg0=0F7RxTfY3dyOzMZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1REcMACgkQAVBC80lX
-0GxeGgf/R6Kwq6hoUOzRJXT14YjO1c5JSk/bFmn9OK0v3sXRZEWhVFIyxjp3OEJ0
-Mk6EN45Blw1yHfEfegwnsqjKNcr/RjoimjPSAVRaxq3EavbLvgeV5psmk9JPUriv
-fFozEHavt1PLj/uqsTGP6STTpGlwv+Af2pC6ChZ80iPzqQstBvRFxwTTm37CLpjv
-77UjMDbA48rtoVHjWk03fHlOTNWdLgbmVNh2+zZ6FYLfA6PeulhJxtJnZtlprxsB
-4JrGXgSosTKJ8z2ivpQA9i6U9Z6B1jT3+wIz6KXWSb2qelRF/nhS5IbsDKx8sE/6
-C5JfVs7Dafdg/BfrL738Pu2Q1JqS7A==
-=1uFL
------END PGP SIGNATURE-----
-
---Sig_/BVWyJg0=0F7RxTfY3dyOzMZ--
+      Arnd

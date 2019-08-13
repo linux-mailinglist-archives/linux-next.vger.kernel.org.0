@@ -2,99 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2FA8B8AD
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 14:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2998B8CC
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 14:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727763AbfHMMhu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 08:37:50 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33828 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727837AbfHMMhu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 08:37:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=RiXljA9XAq8TTsQG2DLrqW1IlG7GF+sm/4jjgcBTQUg=; b=SgOV+FcH2HQ6bmrz3OemS87uh
-        x5NFTLaH/f7s+GPBkMd6OGlNlLU0oSS2zAPaYjkQSw0YjNxipSaYNJPg73ut6XkXr551QfWHIw4vq
-        KHAh87UQ/Tr3C7r89sIFFqH1OuFSwyNiqe4ihP6f/LJ5ljGN68sDR2Gov5TOf0qw7kTcA=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1hxW3Z-000854-EG; Tue, 13 Aug 2019 12:37:41 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 7A4992742B44; Tue, 13 Aug 2019 13:37:40 +0100 (BST)
-Date:   Tue, 13 Aug 2019 13:37:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Christoph Hellwig <hch@lst.de>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     kernel-build-reports@lists.linaro.org, linux-next@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: next/pending-fixes build: 222 builds: 3 failed, 219 passed, 3
- errors, 425 warnings (v5.3-rc4-185-g260510fdbaa7)
-Message-ID: <20190813123740.GD5093@sirena.co.uk>
-References: <5d52a9c3.1c69fb81.69154.3085@mx.google.com>
+        id S1728136AbfHMMmF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 13 Aug 2019 08:42:05 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:37018 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728063AbfHMMmF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Aug 2019 08:42:05 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7DCZWcr162150
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 08:42:03 -0400
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ubvr9a5ds-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 08:42:03 -0400
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <gor@linux.ibm.com>;
+        Tue, 13 Aug 2019 13:42:01 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 13 Aug 2019 13:41:58 +0100
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7DCfv4D25821276
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 12:41:57 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 82AF3A4054;
+        Tue, 13 Aug 2019 12:41:57 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3B71CA405F;
+        Tue, 13 Aug 2019 12:41:57 +0000 (GMT)
+Received: from localhost (unknown [9.152.212.112])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 13 Aug 2019 12:41:57 +0000 (GMT)
+Date:   Tue, 13 Aug 2019 14:41:55 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        James Morris <jmorris@namei.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Aug 13
+References: <20190813191924.7c5310dd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q9KOos5vDmpwPx9o"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <5d52a9c3.1c69fb81.69154.3085@mx.google.com>
-X-Cookie: Poverty begins at home.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20190813191924.7c5310dd@canb.auug.org.au>
+X-TM-AS-GCONF: 00
+x-cbid: 19081312-0012-0000-0000-0000033E2AE6
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19081312-0013-0000-0000-000021783A46
+Message-Id: <your-ad-here.call-01565700115-ext-9407@work.hours>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-13_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908130133
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Aug 13, 2019 at 07:19:24PM +1000, Stephen Rothwell wrote:
+> Merging security/next-testing (a4848e06f9af Merge branch 'next-lockdown' into next-testing)
+> CONFLICT (content): Merge conflict in kernel/trace/trace_kprobe.c
+> CONFLICT (content): Merge conflict in fs/tracefs/inode.c
+> Applying: early_security_init() needs a stub got !CONFIG_SECURITY
 
---q9KOos5vDmpwPx9o
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi all,
 
-On Tue, Aug 13, 2019 at 05:14:59AM -0700, kernelci.org bot wrote:
+next-lockdown causes panic on s390 when doing:
+cat /sys/kernel/debug/tracing/events/syscalls/sys_enter_read/id
 
-For the past few days -next has been failing to build configurations
-with LPAE enabled:
+[ 3972.384027] Unable to handle kernel pointer dereference in virtual kernel address space
+[ 3972.384031] Failing address: 0000000000000000 TEID: 0000000000000887
+[ 3972.384032] Fault in home space mode while using kernel ASCE.
+[ 3972.384033] AS:00000000744cc007 R3:00000001fffd0007 S:00000001fffd6000 P:000000000000013d 
+[ 3972.384051] Oops: 0004 ilc:1 [#1] SMP 
+[ 3972.384053] Modules linked in: binfmt_misc(E) dm_crypt(E) lcs(E) ctcm(E) fsm(E) algif_skcipher(E) af_alg(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sctp(E) quota_v2(E) quota_tree(E) ntfs(E) vfat(E) fat(E) overlay(E) loop(E) dm_service_time(E) kvm(E) xt_CHECKSUM(E) xt_MASQUERADE(E) xt_tcpudp(E) ip6t_rpfilter(E) ip6t_REJECT(E) nf_reject_ipv6(E) ipt_REJECT(E) nf_reject_ipv4(E) xt_conntrack(E) ip6table_nat(E) ip6table_mangle(E) ip6table_raw(E) tun(E) ip6table_security(E) bridge(E) iptable_nat(E) nf_nat(E) stp(E) llc(E) iptable_mangle(E) iptable_raw(E) iptable_security(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip_set(E) nfnetlink(E) ip6table_filter(E) ip6_tables(E) iptable_filter(E) ip_tables(E) x_tables(E) sunrpc(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) s390_trng(E) ghash_s390(E) prng(E) aes_s390(E) des_s390(E) des_generic(E) sha512_s390(E) sha1_s390(E) vfio_ccw(E) vfio_mdev(E) mdev(E) vfio_iommu_type1(E) vfio(E) eadm_sch(E) sch_fq_codel(E)
+[ 3972.384076]  sha256_s390(E) sha_common(E) pkey(E) zcrypt(E) rng_core(E) autofs4(E) [last unloaded: dummy_del_mod]
+[ 3972.384084] CPU: 17 PID: 45118 Comm: psvc-ioctl-bpf1 Tainted: G           OE     5.3.0-20190813.rc4.git0.8e72ac275c63.301.fc30.s390x+next #1
+[ 3972.384086] Hardware name: IBM 3906 M04 704 (LPAR)
+[ 3972.384087] Krnl PSW : 0704c00180000000 0000000000000000 (0x0)
+[ 3972.384090]            R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:0 PM:0 RI:0 EA:3
+[ 3972.384103] Krnl GPRS: 000003e004c0fb90 0000000000000000 00000001f912abf0 0000000197b36800
+[ 3972.384104]            0000000197b36810 0000000000000001 0000000100000000 0000000197b36810
+[ 3972.384105]            00000000736ae3a0 0000000100000000 00000001f912abf0 0000000197b36800
+[ 3972.384106]            000000013aff0000 0000000073c625a8 00000000734a1486 000003e004c0fbc8
+[ 3972.384110] Krnl Code:>0000000000000000: 0000                illegal 
+                          0000000000000002: 0000                illegal 
+                          0000000000000004: 0000                illegal 
+                          0000000000000006: 0000                illegal 
+                          0000000000000008: 0000                illegal 
+                          000000000000000a: 0000                illegal 
+                          000000000000000c: 0000                illegal 
+                          000000000000000e: 0000                illegal 
+[ 3972.384116] Call Trace:
+[ 3972.384122] ([<00000000734a1486>] do_dentry_open+0x206/0x3c0)
+[ 3972.384125]  [<00000000734b8c1e>] do_last+0x16e/0x918 
+[ 3972.384126]  [<00000000734b944e>] path_openat+0x86/0x2b8 
+[ 3972.384128]  [<00000000734baa64>] do_filp_open+0x7c/0xf8 
+[ 3972.384129]  [<00000000734a3484>] do_sys_open+0x18c/0x258 
+[ 3972.384134]  [<0000000073c457cc>] system_call+0xd8/0x2c8 
+[ 3972.384135] Last Breaking-Event-Address:
+[ 3972.384139]  [<00000000736ae3fa>] default_open_file+0x5a/0x78
+[ 3972.384141] Kernel panic - not syncing: Fatal exception: panic_on_oops
 
-> arm:
->     axm55xx_defconfig: (gcc-8) FAIL
->     keystone_defconfig: (gcc-8) FAIL
->     multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy: (gcc-8) FAIL
+Which correspond to:
+fs/tracefs/inode.c:46
+static int default_open_file(struct inode *inode, struct file *filp)
+ 45         real_fops = dentry->d_fsdata;
+ 46         return real_fops->open(inode, filp);
 
-due to errors related to dma_atomic_pool_init()
+Commit which introduces the problem:
+commit 757ff7244358406dd16a7f5f623ca40ed27c603c
+Author:     Matthew Garrett <matthewgarrett@google.com>
+AuthorDate: Wed Aug 7 17:07:19 2019 -0700
+Commit:     James Morris <jmorris@namei.org>
+CommitDate: Fri Aug 9 22:23:58 2019 -0700
 
-> Errors summary:
->=20
->     1    dma-mapping.c:(.init.text+0x18): undefined reference to `dma_ato=
-mic_pool_init'
->     1    /home/buildslave/workspace/workspace/kernel-build@8/linux/build/=
-=2E./arch/arm/mm/dma-mapping.c:2427: undefined reference to `dma_atomic_poo=
-l_init'
->     1    /home/buildslave/workspace/workspace/kernel-build@6/linux/build/=
-=2E./arch/arm/mm/dma-mapping.c:2427: undefined reference to `dma_atomic_poo=
-l_init'
+    tracefs: Restrict tracefs when the kernel is locked down
+    
+    Tracefs may release more information about the kernel than desirable, so
+    restrict it when the kernel is locked down in confidentiality mode by
+    preventing open().
+    
+    Signed-off-by: Matthew Garrett <mjg59@google.com>
+    Reviewed-by: Steven Rostedt (VMware) <rostedt@goodmis.org>
+    Signed-off-by: James Morris <jmorris@namei.org>
+---
+ fs/tracefs/inode.c           | 40 +++++++++++++++++++++++++++++++++++++++-
+ include/linux/security.h     |  1 +
+ security/lockdown/lockdown.c |  1 +
+ 3 files changed, 41 insertions(+), 1 deletion(-)
 
-caused by 896089d598c1d46 (arm: initialize the dma-remap atomic pool for
-LPAE configs).  Nothing ensures that DMA_DIRECT_REMAP is selected in
-such configurations so that function is not built.
+Using default s390 config, where
+# CONFIG_SECURITY_LOCKDOWN_LSM is not set
 
---q9KOos5vDmpwPx9o
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+⣿⣿⣿⣿⢋⡀⣀⠹⣿⣿⣿⣿
+⣿⣿⣿⣿⠠⣶⡦⠀⣿⣿⣿⣿
+⣿⣿⣿⠏⣴⣮⣴⣧⠈⢿⣿⣿
+⣿⣿⡏⢰⣿⠖⣠⣿⡆⠈⣿⣿
+⣿⢛⣵⣄⠙⣶⣶⡟⣅⣠⠹⣿
+⣿⣜⣛⠻⢎⣉⣉⣀⠿⣫⣵⣿
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1SrxMACgkQJNaLcl1U
-h9CgOAf9HAUG9OGu+CgpIfqe7R2Pz/+/DbIg+5nSRQcOI4yoiS6ThMplRU173zb0
-RM3DQHGcD3VqnDx8/sl0/iNz4a/V2Xdvwz8NfCYxVq3fytsOl+29i49XX4Eoezjx
-oxA1zx8mhQrsjIpLSquneKvCcRgoCClWy3NOcZt3GVGjJXndQvbpGCTlsQXUTxKw
-xMtjEzYjG8D10zEnjwNmQaY/4oq00LTJLgxo1kN05GV+2oNg4dLDdnVM7aiQyI05
-PBbItn2wW3drNbhF2oIJI1IPrAZEEOgtOT9YMYiFFjWJ2pD1qEeWLkcHhLYql9FX
-2ypUm+BdY4CTKRUMT7JiSIRkqxYKfw==
-=R+E4
------END PGP SIGNATURE-----
-
---q9KOos5vDmpwPx9o--

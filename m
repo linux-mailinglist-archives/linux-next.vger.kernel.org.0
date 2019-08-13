@@ -2,126 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D78F8BB00
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C4D8BB62
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729346AbfHMOBV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 10:01:21 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52987 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727561AbfHMOBV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 10:01:21 -0400
-Received: by mail-wm1-f68.google.com with SMTP id o4so1497362wmh.2;
-        Tue, 13 Aug 2019 07:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ky/0G1r/E47b3qMLySEW2K0XYi/tp5CsA6kbQT1Docg=;
-        b=XQe6qEESNVu+84o4mpV5IxOP2tMWBF13A5AN5TPmm/op1NRmPd4aktWCNwQXabIi7B
-         fXY+jgumHgPnZREKODcMeVrB7KU04CuH1SH55gsE02AQWXpSvKBdSXw2iIyyjmMQdfPe
-         H4MTrbDzEDVQBgTjLd4kQHxld74QGElq76UZGX5/yhOS9Aw8Q91vfgb5k7gXTVmIywQP
-         Y8lzROWvFROz6fJ7Pamrqvb8IgOuoKIpZbxZXQ0PgcYYBN+tmEtVaNODLQxdfSQHbKvZ
-         gkNgfQxY9LPnXuU8sR/p2BfmQxvgQ91A8gCzkdKQIkA0IzIknY/wB1rWOkzZmLUIEban
-         xYeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ky/0G1r/E47b3qMLySEW2K0XYi/tp5CsA6kbQT1Docg=;
-        b=aFxwRgRkmihJ7tgZv+Ymf8C1ah2Lu1Dsn2yyUhHYbQAb+Z1RohTrXdSiS0pC83J0fM
-         R1OJDDsToP+aX6rqod1BRDJuvZE8khkEUROGSQl0+6PzqVDj81NoReQFohf4T+cr14qY
-         oT6lUGT5MbSPFQ6Q0SLxn5TYhKysw3Uytb/CaO7CuygjaUtIr+nkVxNMNBig293tg+Ze
-         VmBTXp1bTIvPc811+ck3hvjQP/YBVr4rnT1xQQsg3TBV/+lQ03l2EFFaM2dFRfGfiLjU
-         AZmbKoRGl8fzH2Jt+xQjbLvRr8Dg7SjRfkgBQF8PC0mePlONKzM9zgwIXIMUedSa2CYD
-         qimQ==
-X-Gm-Message-State: APjAAAUQbtDSLmNLpRkZfprEwi3YOHNQdPn43T7r27oz4HqTPN7nDw2N
-        ckwzYJ6ruz8U+yAdK+Kx/+nE9zYg9lwVx/i0frMdGw==
-X-Google-Smtp-Source: APXvYqw0zbnDhh4DoH9t3jQVCRnpoZ6VJUK22NeN6UMrTRQB4NrXBEh1FXH9qFACsgkt1dFtqQfiMO8ZNbOh03Mn11E=
-X-Received: by 2002:a1c:1d42:: with SMTP id d63mr3197633wmd.34.1565704878839;
- Tue, 13 Aug 2019 07:01:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190813181038.2c6aafb9@canb.auug.org.au> <MN2PR12MB3309141545B644DCA7F144B7ECD20@MN2PR12MB3309.namprd12.prod.outlook.com>
-In-Reply-To: <MN2PR12MB3309141545B644DCA7F144B7ECD20@MN2PR12MB3309.namprd12.prod.outlook.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 13 Aug 2019 10:01:07 -0400
-Message-ID: <CADnq5_MA-9pT=cZJYCZ62VXjwNtxaCLH2kb5ig5TLFKx4wsmjA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     "Huang, Ray" <Ray.Huang@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1729151AbfHMOXM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Aug 2019 10:23:12 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25540 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729513AbfHMOXM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Aug 2019 10:23:12 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7DEJ7cq111818;
+        Tue, 13 Aug 2019 10:23:00 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ubxub09te-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Aug 2019 10:23:00 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7DEJjkL016478;
+        Tue, 13 Aug 2019 14:22:59 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma03dal.us.ibm.com with ESMTP id 2u9nj6x95n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Aug 2019 14:22:59 +0000
+Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7DEMwoa46530858
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 14:22:58 GMT
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B1968B2065;
+        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
+Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 95178B205F;
+        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
+Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
+        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
+Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
+        id 6743E16C1293; Tue, 13 Aug 2019 07:22:59 -0700 (PDT)
+Date:   Tue, 13 Aug 2019 07:22:59 -0700
+From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
+To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Liu, Aaron" <Aaron.Liu@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Subject: Re: linux-next: manual merge of the driver-core tree with the rcu
+ tree
+Message-ID: <20190813142259.GZ28441@linux.ibm.com>
+Reply-To: paulmck@linux.ibm.com
+References: <20190813155048.59dd9bdf@canb.auug.org.au>
+ <0d7ff624-dce3-3961-b9a6-7de8eba2bdee@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0d7ff624-dce3-3961-b9a6-7de8eba2bdee@intel.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-13_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908130152
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 4:21 AM Huang, Ray <Ray.Huang@amd.com> wrote:
->
-> > -----Original Message-----
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Sent: Tuesday, August 13, 2019 4:11 PM
-> > To: Alex Deucher <alexdeucher@gmail.com>
-> > Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel
-> > Mailing List <linux-kernel@vger.kernel.org>; Liu, Aaron
-> > <Aaron.Liu@amd.com>; Huang, Ray <Ray.Huang@amd.com>
-> > Subject: linux-next: build failure after merge of the amdgpu tree
+On Tue, Aug 13, 2019 at 10:50:05AM +0200, Rafael J. Wysocki wrote:
+> On 8/13/2019 7:50 AM, Stephen Rothwell wrote:
+> >Hi all,
 > >
-> > Hi all,
+> >Today's linux-next merge of the driver-core tree got a conflict in:
 > >
-> > After merging the amdgpu tree, today's linux-next build (powerpc
-> > allyesconfig) failed like this:
+> >   drivers/base/power/runtime.c
 > >
-> > drivers/gpu/drm/amd/amdgpu/psp_v12_0.c:39:17: error: expected
-> > declaration specifiers or '...' before string constant
-> > MODULE_FIRMWARE("amdgpu/renoir_asd.bin");
-> >                  ^~~~~~~~~~~~~~~~~~~~~~~
+> >between commit:
 > >
-> > Caused by commit
+> >   4a3a5474b4c1 ("driver/core: Convert to use built-in RCU list checking")
 > >
-> >   6a7a0bdbfa0c ("drm/amdgpu: add psp_v12_0 for renoir (v2)")
+> >from the rcu tree and commit:
 > >
-> > I have applied the following patch for today:
+> >   515db266a9da ("driver core: Remove device link creation limitation")
 > >
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 13 Aug 2019 18:03:16 +1000
-> > Subject: [PATCH] drm/amdgpu: MODULE_FIRMWARE requires
-> > linux/module.h
+> >from the driver-core tree.
 > >
-> > Fixes: 6a7a0bdbfa0c ("drm/amdgpu: add psp_v12_0 for renoir (v2)")
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->
-> Thanks!
->
-> Reviewed-by: Huang Rui <ray.huang@amd.com>
->
+> >I fixed it up (see below) and can carry the fix as necessary. This
+> >is now fixed as far as linux-next is concerned, but any non trivial
+> >conflicts should be mentioned to your upstream maintainer when your tree
+> >is submitted for merging.  You may also want to consider cooperating
+> >with the maintainer of the conflicting tree to minimise any particularly
+> >complex conflicts.
+> >
+> The fix looks good to me, thanks!
 
-Applied.  thanks!
+Same here, and thank you!
 
-Alex
-
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/psp_v12_0.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-> > b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-> > index f37b8af4b986..b474dfb79375 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/psp_v12_0.c
-> > @@ -21,6 +21,7 @@
-> >   */
-> >
-> >  #include <linux/firmware.h>
-> > +#include <linux/module.h>
-> >  #include "amdgpu.h"
-> >  #include "amdgpu_psp.h"
-> >  #include "amdgpu_ucode.h"
-> > --
-> > 2.20.1
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
+							Thanx, Paul

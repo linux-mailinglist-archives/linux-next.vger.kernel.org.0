@@ -2,105 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 114D48BD2F
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 17:31:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62E9B8BD7C
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 17:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbfHMPbZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 11:31:25 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:57784 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728738AbfHMPbZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Aug 2019 11:31:25 -0400
-Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7DFCVG5064510;
-        Tue, 13 Aug 2019 11:31:15 -0400
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2ubx5p5h7n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Aug 2019 11:31:15 -0400
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7DFULnj023572;
-        Tue, 13 Aug 2019 15:31:13 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma02dal.us.ibm.com with ESMTP id 2u9nj63gkb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Aug 2019 15:31:13 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7DFVDxu54133090
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 15:31:13 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 026FDB2064;
-        Tue, 13 Aug 2019 15:31:13 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DA024B205F;
-        Tue, 13 Aug 2019 15:31:12 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Aug 2019 15:31:12 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id BF70E16C0E5D; Tue, 13 Aug 2019 08:31:13 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 08:31:13 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <20190813153113.GD28441@linux.ibm.com>
-Reply-To: paulmck@linux.ibm.com
-References: <20190813175732.2c97d412@canb.auug.org.au>
+        id S1727491AbfHMPpA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Aug 2019 11:45:00 -0400
+Received: from mail-wm1-f44.google.com ([209.85.128.44]:34935 "EHLO
+        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727284AbfHMPpA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 11:45:00 -0400
+Received: by mail-wm1-f44.google.com with SMTP id l2so1877750wmg.0
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 08:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=KSkuU3Gm/7RblM7hFSgP4MS9b99YCcT0Hw1BKb2bOyw=;
+        b=Fc0mJt3/HwT9RXEA7ktnJsrfpGYiHQyaJ2PkH3Q4goHlBlHTH5+IFSw+ivVOraacnZ
+         lHogycMOodxYXDa9hCTQGRcyw6U96zocXBwBx1cXYSHOdIr74Sen9mlb2+BuubUu/dqV
+         aas9dYWaKVac4GqIZQKhmhVxrwmXQFyCjdh06yO8XBwWNfe/ha8wnQo8CExI97I3WF7I
+         schXvyVgpZPD55V27D53r0EphofCS/1y0p04hO544pd5Ul951hv+BEVJjj6pfDoF2RUi
+         IL1qKB1vNw+Pvadm4JEDoyi1URbjVLIEhBYPbiA3vWMLF4mL6dLjNBSwRfkZGTr9+VX5
+         VzbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=KSkuU3Gm/7RblM7hFSgP4MS9b99YCcT0Hw1BKb2bOyw=;
+        b=me6Lq0MpzAEid9sR2PQL7FdbxGa/9i3QnXr7kBiLzieQ4CpDN7gnQsPy50u+0AxwPZ
+         8HBxV31WktSyElFIeDtvK6DFc1N9J457edzsqfI0/BOBQK9wXGu5LLJ5urKnBZ3XggAu
+         kE9wOuhYK2/h+cutt6CkMHi2SbOPQjVdXrZ9X5QM8N+/1giDyoxCAFk51AkKr3xLI838
+         tJ01L4WpzOkfXCoQtMsibmoi5f/tVQwTi19+F2CvA8DAXDFzpcfJoM37MJKpI5oURKhi
+         Hf+QSLqOlC59iog5EX6vGG4j/XNO1XFadTI87QYdBfmiKcEVF8d8ZZF64LKdPWRoe7pp
+         T+OA==
+X-Gm-Message-State: APjAAAV2uPNm2y+n0rU94LQKu/yfJ6tBKVAEoDduW68pWSDXhiVHy/tk
+        L8lD/rQ5UNSoycMH7PmyM4qidaupeHGQTw==
+X-Google-Smtp-Source: APXvYqx/EPom2Mj8KO+Mc6jl9e6qwF5EeqPAtjm1MumwQiS5X2HmyI51gBWV7Wfji1WEiyYWVXIHDA==
+X-Received: by 2002:a7b:cb89:: with SMTP id m9mr4043379wmi.154.1565711098378;
+        Tue, 13 Aug 2019 08:44:58 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id o11sm1661561wmh.46.2019.08.13.08.44.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 13 Aug 2019 08:44:57 -0700 (PDT)
+Message-ID: <5d52daf9.1c69fb81.9a3a1.8cdc@mx.google.com>
+Date:   Tue, 13 Aug 2019 08:44:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190813175732.2c97d412@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-13_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908130158
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-rc4-185-g260510fdbaa7
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 229 boots: 6 failed,
+ 207 passed with 16 offline (v5.3-rc4-185-g260510fdbaa7)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 05:57:32PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (powerpc allnoconfig)
-> failed like this:
-> 
-> drivers/base/core.c: In function 'device_links_read_lock_held':
-> drivers/base/core.c:106:9: error: implicit declaration of function 'lock_is_held'; did you mean 'lockref_get'? [-Werror=implicit-function-declaration]
->   return lock_is_held(&device_links_lock);
->          ^~~~~~~~~~~~
->          lockref_get
-> 
-> Caused by commit
-> 
->   4a3a5474b4c1 ("driver/core: Convert to use built-in RCU list checking")
-> 
-> lock_is_held() us only available if CONFIG_LOCKDEP is set.
+next/pending-fixes boot: 229 boots: 6 failed, 207 passed with 16 offline (v=
+5.3-rc4-185-g260510fdbaa7)
 
-Joel, one approach would be to make lock_is_held() variant of
-device_links_read_lock_held() be a macro rather than a function.
-Another would be to use #ifdef so as to invoke lock_is_held() only when
-lockdep is enabled.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-rc4-185-g260510fdbaa7/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-rc4-185-g260510fdbaa7/
 
-Or do you have a better approach?
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-rc4-185-g260510fdbaa7
+Git Commit: 260510fdbaa735cc23ae7fd8c2cf6be8982a5e94
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 88 unique boards, 27 SoC families, 21 builds out of 222
 
-							Thanx, Paul
+Boot Failures Detected:
 
-> I have reverted that commit for today.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            meson-gxbb-nanopi-k2: 1 failed lab
 
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxm-khadas-vim2: 1 failed lab
 
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            sun7i-a20-cubietruck: 1 failed lab
+
+    sunxi_defconfig:
+        gcc-8:
+            sun7i-a20-cubietruck: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            sun7i-a20-cubietruck: 1 failed lab
+
+Offline Platforms:
+
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

@@ -2,64 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E41838BF98
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 19:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1EBF8BFAF
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 19:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726251AbfHMR1A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 13:27:00 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:46160 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726195AbfHMR07 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 13:26:59 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w3so14397177pgt.13
-        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 10:26:59 -0700 (PDT)
+        id S1726477AbfHMRfd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Aug 2019 13:35:33 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:39568 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726323AbfHMRfd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 13:35:33 -0400
+Received: by mail-pg1-f196.google.com with SMTP id u17so51609624pgi.6
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 10:35:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20150623.gappssmtp.com; s=20150623;
         h=from:to:cc:subject:in-reply-to:references:date:message-id
          :mime-version;
-        bh=+dEEz2DPMg5NRkLHjMzIkO8s6nJqDPDJQGPheHmMdr8=;
-        b=kOd3/31cW/3Hcupyj3kEvbLs90dUy6tmI/PaM3d8UXwIhtgtxvzoGB7Z5/bKK6ODe5
-         TJKgYx7Q0FbrPQWOJg+FeLPeo5OUPr9bPzlrRPy6xejniOO9mQN2cN/Sc3hsmkaKmux5
-         ldgRRhLnflOpsHyCvgrNqD6tAVGGJwPV+StaW0cHE2XUHCwfg6hBdjT+0Mg5geWVoY+G
-         D1THVUo08yYVH92fQRjqx4xKgOFh+XkcYDpz3XB5GhkEAYU4fojaezbs+HbBO/T+mcuN
-         C130zPb1aga3kzo4wvCJs8OpXMaHbYCmTQyoEs2tQRLOMlbLolOMz1CRXp6hy4wraFty
-         x7Xw==
+        bh=WbGX54T+GLj+zPkzCEpReOe90S/IUb6BeDK7HimtLmU=;
+        b=nDafrdQYDbFKoWpGKZDib1byU7s2nmVRNs05fk7K/lgw1aXNG484GhW1PnA9+b4zTx
+         uRd9lZNZDyXkp8lHKhxnrGm7Z9s98DPKhzQ1O9/uhMk6aIDRtPwpv3VJvrhBWeZ3yzrH
+         h2lF+cDxogFlmL0aKaaOMkXzW46MRgfDUm22luM2emggZsUyxZlOek9hDLUOXv1SdmCn
+         tExEmFKBpR2XDfnZ2Fj+H+lnIXfZ0jDE5JRPl5+ePHJBTZxruvspIr3PVxdyx5M93Y5G
+         JF3miRoVc3sVxh8NF8McW9QMMDg3PxqWrBm2aSNvSqPFDcC55d20M6wIEpJP/f3sBT15
+         comw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
          :message-id:mime-version;
-        bh=+dEEz2DPMg5NRkLHjMzIkO8s6nJqDPDJQGPheHmMdr8=;
-        b=qk0GhbDfwvG+cf8WrxUX9Ecy5W/z8frEo/zMsetEeW7e1J189JyGzN7CV2IlqhaO73
-         JKgzr8F7eoAPHZqk4E7/+toExtQRQnTrBzkUl05hvBVFf0DNpuk9PUX/T1mvDZw3xN5A
-         Hqa+wEF0y/k8uMwgIZ5lFRImhbDewSg98nT9ATKiwpaoBSAh+uKjyNAnH8z/EjaE1ywR
-         XXv5yEw8562o50lwbPiCbcbH6aEFZ2moe3BCq03fu267rKlidbTpHuhjgbfBoWfK+ZFb
-         0Y1qi/PbJRbWvyQZy/xAZ0/a2SAJsspvCdfAcP8iKGxCuPe2UkU0lgm70FpQw/tt//LO
-         pkJg==
-X-Gm-Message-State: APjAAAXXpTdYyNzJB3tFjX8q80Nc0cSGlXAI3BKJlSGrxIN6STg/yM0O
-        U+iueNwOeWK9vxxacwXDnahOAw==
-X-Google-Smtp-Source: APXvYqxUs8WoMH+cvgCWvT0LeVRPkQ3vVM9aC3GV0KMJZmv0+f5n4lnRPLM5gIQ36LPzfDOH9XHD4g==
-X-Received: by 2002:a62:198d:: with SMTP id 135mr41718269pfz.169.1565717218947;
-        Tue, 13 Aug 2019 10:26:58 -0700 (PDT)
+        bh=WbGX54T+GLj+zPkzCEpReOe90S/IUb6BeDK7HimtLmU=;
+        b=AGxFO1hNi1pYPGzBNwxhZv/7U/fHmPV3IYhKwqkgwE70d7sPY6C0gUWeo2XuR7GeDU
+         UPq6VsbpAwUDsVlt0VMApfE5zRFyQ4xGwkq0bHvR12cLKcr2YJB7ItFP0HW0NyeC4h4h
+         fYbEYH7DY5WjuQ/nZwZyAcWS9GW+1xAEeSVWvAT/O3PSaroZ8ocHp+uDzV8oLhlPFAkh
+         3hJNiHefVFZD0e4cwpFvTpPGUgGgiNMFcg+uPlJlNeO/jLs50dpzdkZ7lTYav5Zp8e+4
+         i0xWIeQEzBMpey4rTrAS2dc71H9N9Z+/UCxLZOoJ+kkt44iMi3PAUOjzA7CkJkqnO7Tq
+         a3+g==
+X-Gm-Message-State: APjAAAVT7QMSnY/2OF1uuquMW2RzjvvYOF14jl3O0V3Fy4tHzYSBpBSS
+        zBOKFnxRbZfrxdtcg2mDzYprYNH0L1w=
+X-Google-Smtp-Source: APXvYqwjp1eJbOfxWiQsD6T/UtM1bSp6EzzjibV4p+1ELJtzHOanjJvdb42B1HkqKUwkNQQf5sx5nQ==
+X-Received: by 2002:a65:6850:: with SMTP id q16mr36352863pgt.423.1565717732280;
+        Tue, 13 Aug 2019 10:35:32 -0700 (PDT)
 Received: from localhost ([2601:602:9200:a1a5:35:cf9b:bad:702c])
-        by smtp.gmail.com with ESMTPSA id a12sm2090093pje.3.2019.08.13.10.26.57
+        by smtp.gmail.com with ESMTPSA id h11sm23241982pgv.5.2019.08.13.10.35.31
         (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 13 Aug 2019 10:26:58 -0700 (PDT)
+        Tue, 13 Aug 2019 10:35:31 -0700 (PDT)
 From:   Kevin Hilman <khilman@baylibre.com>
 To:     Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>
 Cc:     kernel-build-reports@lists.linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
-        linux-rockchip@vger.kernel.org
-Subject: Re: next/master boot: 285 boots: 16 failed, 264 passed with 3 offline, 1 untried/unknown, 1 conflict (next-20190718)
+        linux-rockchip@lists.infradead.org
+Subject: CPUfreq fail on rk3399-firefly (was: next/master boot: 285 boots: 16 failed, 264 passed with 3 offline, 1 untried/unknown, 1 conflict (next-20190718))
 In-Reply-To: <20190718162005.GF5761@sirena.org.uk>
 References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com> <20190718162005.GF5761@sirena.org.uk>
-Date:   Tue, 13 Aug 2019 10:26:57 -0700
-Message-ID: <7hv9v1yo0u.fsf@baylibre.com>
+Date:   Tue, 13 Aug 2019 10:35:31 -0700
+Message-ID: <7hmugdynmk.fsf@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
+
+[ resent with correct addr for linux-rockchip list ]
 
 Mark Brown <broonie@kernel.org> writes:
 

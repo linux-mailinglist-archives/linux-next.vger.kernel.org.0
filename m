@@ -2,62 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D01BE8BC38
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11C5B8BC3C
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729559AbfHMO4w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 10:56:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54560 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729539AbfHMO4v (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Aug 2019 10:56:51 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DEFA5205F4;
-        Tue, 13 Aug 2019 14:56:49 +0000 (UTC)
-Date:   Tue, 13 Aug 2019 10:56:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Vasily Gorbik <gor@linux.ibm.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1729591AbfHMO5o convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 13 Aug 2019 10:57:44 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:18972 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729404AbfHMO5o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Aug 2019 10:57:44 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7DErQsk042824
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 10:57:43 -0400
+Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2uby4091k8-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Tue, 13 Aug 2019 10:57:42 -0400
+Received: from localhost
+        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <gor@linux.ibm.com>;
+        Tue, 13 Aug 2019 15:57:41 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 13 Aug 2019 15:57:38 +0100
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7DEvbID60686372
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 13 Aug 2019 14:57:37 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B5699A405D;
+        Tue, 13 Aug 2019 14:57:37 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 777C8A4053;
+        Tue, 13 Aug 2019 14:57:37 +0000 (GMT)
+Received: from localhost (unknown [9.152.212.112])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Tue, 13 Aug 2019 14:57:37 +0000 (GMT)
+Date:   Tue, 13 Aug 2019 16:57:36 +0200
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Matthew Garrett <matthewgarrett@google.com>,
         James Morris <jmorris@namei.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: Tree for Aug 13
-Message-ID: <20190813105645.4ffba70c@gandalf.local.home>
-In-Reply-To: <your-ad-here.call-01565700115-ext-9407@work.hours>
 References: <20190813191924.7c5310dd@canb.auug.org.au>
-        <your-ad-here.call-01565700115-ext-9407@work.hours>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+ <your-ad-here.call-01565700115-ext-9407@work.hours>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <your-ad-here.call-01565700115-ext-9407@work.hours>
+X-TM-AS-GCONF: 00
+x-cbid: 19081314-0016-0000-0000-0000029E32C3
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19081314-0017-0000-0000-000032FE47CD
+Message-Id: <your-ad-here.call-01565708256-ext-1951@work.hours>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-13_05:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=1 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908130157
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-This looks related to what Marek posted.
-
-  https://lore.kernel.org/linux-security-module/3028ed35-3b6d-459f-f3c8-103c5636fe95@samsung.com/
-
-Care to apply the change he suggested to see if it fixes the issue for
-you. If it does, Marek, can you make an official patch?
-
--- Steve
-
-
-On Tue, 13 Aug 2019 14:41:55 +0200
-Vasily Gorbik <gor@linux.ibm.com> wrote:
-
+On Tue, Aug 13, 2019 at 02:41:55PM +0200, Vasily Gorbik wrote:
 > On Tue, Aug 13, 2019 at 07:19:24PM +1000, Stephen Rothwell wrote:
 > > Merging security/next-testing (a4848e06f9af Merge branch 'next-lockdown' into next-testing)
 > > CONFLICT (content): Merge conflict in kernel/trace/trace_kprobe.c
 > > CONFLICT (content): Merge conflict in fs/tracefs/inode.c
-> > Applying: early_security_init() needs a stub got !CONFIG_SECURITY  
+> > Applying: early_security_init() needs a stub got !CONFIG_SECURITY
 > 
 > Hi all,
 > 
@@ -69,8 +90,7 @@ Vasily Gorbik <gor@linux.ibm.com> wrote:
 > [ 3972.384032] Fault in home space mode while using kernel ASCE.
 > [ 3972.384033] AS:00000000744cc007 R3:00000001fffd0007 S:00000001fffd6000 P:000000000000013d 
 > [ 3972.384051] Oops: 0004 ilc:1 [#1] SMP 
-> [ 3972.384053] Modules linked in: binfmt_misc(E) dm_crypt(E) lcs(E) ctcm(E) fsm(E) algif_skcipher(E) af_alg(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sctp(E) quota_v2(E) quota_tree(E) ntfs(E) vfat(E) fat(E) overlay(E) loop(E) dm_service_time(E) kvm(E) xt_CHECKSUM(E) xt_MASQUERADE(E) xt_tcpudp(E) ip6t_rpfilter(E) ip6t_REJECT(E) nf_reject_ipv6(E) ipt_REJECT(E) nf_reject_ipv4(E) xt_conntrack(E) ip6table_nat(E) ip6table_mangle(E) ip6table_raw(E) tun(E) ip6table_security(E) bridge(E) iptable_nat(E) nf_nat(E) stp(E) llc(E) iptable_mangle(E) iptable_raw(E) iptable_security(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip_set(E) nfnetlink(E) ip6table_filter(E) ip6_tables(E) iptable_filter(E) ip_tables(E) x_tables(E) sunrpc(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) s390_trng(E) ghash_s390(E) prng(E) aes_s390(E) des_s390(E) des_generic(E) sha512_s390(E) sha1_s390(E) vfio_ccw(E) vfio_mdev(E) mdev(E) vfio_iommu_type1(E) vfio(E) eadm_sch(E) sch_f
- q_codel(E)
+> [ 3972.384053] Modules linked in: binfmt_misc(E) dm_crypt(E) lcs(E) ctcm(E) fsm(E) algif_skcipher(E) af_alg(E) nfsv3(E) nfs_acl(E) nfs(E) lockd(E) grace(E) sctp(E) quota_v2(E) quota_tree(E) ntfs(E) vfat(E) fat(E) overlay(E) loop(E) dm_service_time(E) kvm(E) xt_CHECKSUM(E) xt_MASQUERADE(E) xt_tcpudp(E) ip6t_rpfilter(E) ip6t_REJECT(E) nf_reject_ipv6(E) ipt_REJECT(E) nf_reject_ipv4(E) xt_conntrack(E) ip6table_nat(E) ip6table_mangle(E) ip6table_raw(E) tun(E) ip6table_security(E) bridge(E) iptable_nat(E) nf_nat(E) stp(E) llc(E) iptable_mangle(E) iptable_raw(E) iptable_security(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) ip_set(E) nfnetlink(E) ip6table_filter(E) ip6_tables(E) iptable_filter(E) ip_tables(E) x_tables(E) sunrpc(E) dm_multipath(E) dm_mod(E) scsi_dh_rdac(E) scsi_dh_emc(E) scsi_dh_alua(E) s390_trng(E) ghash_s390(E) prng(E) aes_s390(E) des_s390(E) des_generic(E) sha512_s390(E) sha1_s390(E) vfio_ccw(E) vfio_mdev(E) mdev(E) vfio_iommu_type1(E) vfio(E) eadm_sch(E) sch_fq_codel(E)
 > [ 3972.384076]  sha256_s390(E) sha_common(E) pkey(E) zcrypt(E) rng_core(E) autofs4(E) [last unloaded: dummy_del_mod]
 > [ 3972.384084] CPU: 17 PID: 45118 Comm: psvc-ioctl-bpf1 Tainted: G           OE     5.3.0-20190813.rc4.git0.8e72ac275c63.301.fc30.s390x+next #1
 > [ 3972.384086] Hardware name: IBM 3906 M04 704 (LPAR)
@@ -129,5 +149,15 @@ Vasily Gorbik <gor@linux.ibm.com> wrote:
 > 
 > Using default s390 config, where
 > # CONFIG_SECURITY_LOCKDOWN_LSM is not set
-> 
+
+Hm, this actually looks like a general problem. Please, consider the
+following patch, if it makes sense. It fixes the problem for me.
+
+-- 
+⣿⣿⣿⣿⢋⡀⣀⠹⣿⣿⣿⣿
+⣿⣿⣿⣿⠠⣶⡦⠀⣿⣿⣿⣿
+⣿⣿⣿⠏⣴⣮⣴⣧⠈⢿⣿⣿
+⣿⣿⡏⢰⣿⠖⣠⣿⡆⠈⣿⣿
+⣿⢛⣵⣄⠙⣶⣶⡟⣅⣠⠹⣿
+⣿⣜⣛⠻⢎⣉⣉⣀⠿⣫⣵⣿
 

@@ -2,103 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0C4D8BB62
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:23:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C3D8BB84
+	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 16:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729151AbfHMOXM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 10:23:12 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25540 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1729513AbfHMOXM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Aug 2019 10:23:12 -0400
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7DEJ7cq111818;
-        Tue, 13 Aug 2019 10:23:00 -0400
-Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ubxub09te-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Aug 2019 10:23:00 -0400
-Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
-        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7DEJjkL016478;
-        Tue, 13 Aug 2019 14:22:59 GMT
-Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
-        by ppma03dal.us.ibm.com with ESMTP id 2u9nj6x95n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 13 Aug 2019 14:22:59 +0000
-Received: from b01ledav003.gho.pok.ibm.com (b01ledav003.gho.pok.ibm.com [9.57.199.108])
-        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7DEMwoa46530858
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 13 Aug 2019 14:22:58 GMT
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B1968B2065;
-        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
-Received: from b01ledav003.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 95178B205F;
-        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
-Received: from paulmck-ThinkPad-W541 (unknown [9.70.82.154])
-        by b01ledav003.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 13 Aug 2019 14:22:58 +0000 (GMT)
-Received: by paulmck-ThinkPad-W541 (Postfix, from userid 1000)
-        id 6743E16C1293; Tue, 13 Aug 2019 07:22:59 -0700 (PDT)
-Date:   Tue, 13 Aug 2019 07:22:59 -0700
-From:   "Paul E. McKenney" <paulmck@linux.ibm.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729590AbfHMO2p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Aug 2019 10:28:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:43087 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729496AbfHMO2m (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 13 Aug 2019 10:28:42 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 467FSk6gMhz9sN1;
+        Wed, 14 Aug 2019 00:28:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565706520;
+        bh=ACE+9ye8XX94fLyYzZSFwCW0VwuWvHwCQooSP/F/dgA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QuEotmz3ddb1SAqTbT/1noT8q4953fVbA6IR3DZF9nlzqSon4Opid/AVKjcLuFrGt
+         W3LeFDjcH1DyNW7chYSCr4ZD9qSUzdaBJ0tgS169qtmZy2IPkbunv5eqwVC1/Z9P5c
+         nIlhKcM7YFPKitGRZ0ujJ+JDhl3HPMs6oAPE4bsj97bp2+6dVQID2AGFIB3VraP8G1
+         kFvi1PgipJRC3kOt/+bGxgOBh4lk7VUNZda8Do7EhdV3LzJMKONdkdLnUypvXryn0i
+         qt7CJZAlDcb3W0/yf4DBbIUmCCj5LCiCUIrmp8lrmiJ+nBOmoF/+YLOuaUrpQDb6ob
+         j6TxFnSTPHu+g==
+Date:   Wed, 14 Aug 2019 00:28:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: Re: linux-next: manual merge of the driver-core tree with the rcu
- tree
-Message-ID: <20190813142259.GZ28441@linux.ibm.com>
-Reply-To: paulmck@linux.ibm.com
-References: <20190813155048.59dd9bdf@canb.auug.org.au>
- <0d7ff624-dce3-3961-b9a6-7de8eba2bdee@intel.com>
+        Fabrice Gasnier <fabrice.gasnier@st.com>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Subject: linux-next: Fixes tags need some work in the arm-soc tree
+Message-ID: <20190814002836.4b6aa14b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d7ff624-dce3-3961-b9a6-7de8eba2bdee@intel.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-13_05:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908130152
+Content-Type: multipart/signed; boundary="Sig_/kz85xgv1foK0yj0LRJkbu.m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 13, 2019 at 10:50:05AM +0200, Rafael J. Wysocki wrote:
-> On 8/13/2019 7:50 AM, Stephen Rothwell wrote:
-> >Hi all,
-> >
-> >Today's linux-next merge of the driver-core tree got a conflict in:
-> >
-> >   drivers/base/power/runtime.c
-> >
-> >between commit:
-> >
-> >   4a3a5474b4c1 ("driver/core: Convert to use built-in RCU list checking")
-> >
-> >from the rcu tree and commit:
-> >
-> >   515db266a9da ("driver core: Remove device link creation limitation")
-> >
-> >from the driver-core tree.
-> >
-> >I fixed it up (see below) and can carry the fix as necessary. This
-> >is now fixed as far as linux-next is concerned, but any non trivial
-> >conflicts should be mentioned to your upstream maintainer when your tree
-> >is submitted for merging.  You may also want to consider cooperating
-> >with the maintainer of the conflicting tree to minimise any particularly
-> >complex conflicts.
-> >
-> The fix looks good to me, thanks!
+--Sig_/kz85xgv1foK0yj0LRJkbu.m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Same here, and thank you!
+Hi all,
 
-							Thanx, Paul
+In commit
+
+  4f0f89dd9060 ("ARM: dts: stm32: add pwm cells to stm32f746")
+
+Fixes tag
+
+  Fixes: 9bd7b77af8e4 ("ARM: dts: stm32: add Timers driver for stm32f746
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+In commit
+
+  289459737869 ("ARM: dts: stm32: add pwm cells to stm32f429")
+
+Fixes tag
+
+  Fixes: c0e14fc712d9 ("ARM: dts: stm32: add Timers driver for stm32f429
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+In commit
+
+  493e84c5dc4d ("ARM: dts: stm32: add missing vdda-supply to adc on stm32h7=
+43i-eval")
+
+Fixes tag
+
+  Fixes: 090992a9ca54 ("ARM: dts: stm32: enable ADC on stm32h743i-eval
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+In commit
+
+  1425d00aff01 ("ARM: dts: stm32: add missing vdda-supply to adc on stm3242=
+9i-eval")
+
+Fixes tag
+
+  Fixes: 7465d81191a1 ("ARM: dts: stm32: enable ADC on stm32f429i-eval
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+In commit
+
+  bb06b54721fb ("ARM: dts: stm32: remove fixed regulator unit address on st=
+m32429i-eval")
+
+Fixes tag
+
+  Fixes: 7465d81191a1 ("ARM: dts: stm32: enable ADC on stm32f429i-eval
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.  Also, please
+keep them with the rest of the other tags.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/kz85xgv1foK0yj0LRJkbu.m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1SyRQACgkQAVBC80lX
+0GzZDwf+IsrJGu+m4VjHCnQut8LJ5UjoXaH00xOp7YoLUwH3HrpZUoK3LioqIoXO
+yZqQHgRSdjSZCvb3CfAzMKHks9CjbMHPzd6YMzMg06c2oRHvzk8Yhhjg4Pe+s8uG
+q1J/L9QC4w9dchq44h0bjgXMe5EQcvgeCvLk9INrbX3Tj1lgYHq3wGHaytMba8vI
+6Y90Mhy+0F5RnzRM5+NU8PizWeigM0P1qUpMbvPc41YNknE/uD+qrFYqYad/XJxn
+NQhRiLJFJLewtIOvNMdzwrjAFEmANR+yi34Ut+UrOZC60cNhW1jw/oc3qcMnY/kL
+/BHY681uQ2Vnn1R3PcnRdKwu1snuWA==
+=fN5O
+-----END PGP SIGNATURE-----
+
+--Sig_/kz85xgv1foK0yj0LRJkbu.m--

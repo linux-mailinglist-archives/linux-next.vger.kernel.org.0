@@ -2,91 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8C08C3EE
-	for <lists+linux-next@lfdr.de>; Tue, 13 Aug 2019 23:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3A68C443
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 00:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727099AbfHMVrv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 13 Aug 2019 17:47:51 -0400
-Received: from ozlabs.org ([203.11.71.1]:42753 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726565AbfHMVrv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 13 Aug 2019 17:47:51 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 467RCR1CFYz9sN1;
-        Wed, 14 Aug 2019 07:47:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565732868;
-        bh=QNIv9/6eYXhe8lrjk0V6PjDA+j0hqVyK+NifzMBwZ9g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=X0vPxBRBVx4GZvtdeNIBS5TwRzUE9VdY8PakxLLs9DQTof5g2UE0Yawy1UgZOW/+1
-         co6oKswBUEvNqNhRe+vv02dphHV9rzKOVZQVL8rig0SjxVNnkONihrvd7Ezi9JJxdu
-         KvnQvc3jSzA703grE1UvbcoBHeAYDRVT+DIXd2N31GrcGggT6rrLvaumz3k8JosDY7
-         I+L6DuJRnlkuX1VjUFuvQCR97PkzlA2fYjz6C7heDoboivM5WNRhqSUU0/Q9gxQtRc
-         wlrURbPLykVPUkNDHQd6q41Ky62hdqUNRkW/hgiQZdKo0ebvpe4IEdim9x3pG/+MdD
-         z3CRHMUNqkyWA==
-Date:   Wed, 14 Aug 2019 07:47:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
+        id S1727116AbfHMWbN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 13 Aug 2019 18:31:13 -0400
+Received: from utopia.booyaka.com ([74.50.51.50]:36754 "EHLO
+        utopia.booyaka.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727038AbfHMWbN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 13 Aug 2019 18:31:13 -0400
+Received: (qmail 3952 invoked by uid 1019); 13 Aug 2019 22:24:30 -0000
+Received: from localhost (sendmail-bs@127.0.0.1)
+  by localhost with SMTP; 13 Aug 2019 22:24:30 -0000
+Date:   Tue, 13 Aug 2019 22:24:30 +0000 (UTC)
+From:   Paul Walmsley <paul@pwsan.com>
+To:     Will Deacon <will@kernel.org>
+cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Subject: Re: linux-next: Fixes tags need some work in the arm-soc tree
-Message-ID: <20190814074730.402ec3ec@canb.auug.org.au>
-In-Reply-To: <CAK8P3a2q1mShg-EQhiAFUOAET8UEMHfLJV-+HoLTaSQY+M7yBQ@mail.gmail.com>
-References: <20190814002836.4b6aa14b@canb.auug.org.au>
-        <CAK8P3a2q1mShg-EQhiAFUOAET8UEMHfLJV-+HoLTaSQY+M7yBQ@mail.gmail.com>
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Atish Patra <atish.patra@wdc.com>
+Subject: Re: linux-next: manual merge of the risc-v tree with the arm64
+ tree
+In-Reply-To: <20190813082422.lecgqtknnn5g4dyj@willie-the-truck>
+Message-ID: <alpine.DEB.2.21.999.1908132220450.13287@utopia.booyaka.com>
+References: <20190813093447.747a5853@canb.auug.org.au> <20190813082422.lecgqtknnn5g4dyj@willie-the-truck>
+User-Agent: Alpine 2.21.999 (DEB 260 2018-02-26)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1D3ZSLx=5BUi2IVapoKt=A=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1D3ZSLx=5BUi2IVapoKt=A=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi folks,
 
-Hi Arnd,
+On Tue, 13 Aug 2019, Will Deacon wrote:
 
-On Tue, 13 Aug 2019 21:35:58 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, Aug 13, 2019 at 4:28 PM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->=20
-> >
-> > Please do not split Fixes tags over more than one line.  Also, please
-> > keep them with the rest of the other tags. =20
->=20
-> Thanks for the report. How bad is this? Should I undo the merge and
-> wait for an updated pull request?
+> On Tue, Aug 13, 2019 at 09:34:47AM +1000, Stephen Rothwell wrote:
+> > Today's linux-next merge of the risc-v tree got a conflict in:
+> > 
+> >   arch/arm64/kernel/topology.c
+> > 
+> > between commit:
+> > 
+> >   98dc19902a0b ("arm64: topology: Use PPTT to determine if PE is a thread")
+> > 
+> > from the arm64 tree and commit:
+> > 
+> >   60c1b220d8bc ("cpu-topology: Move cpu topology code to common code.")
+> > 
+> > from the risc-v tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> 
+> Thanks, Stephen.
+> 
+> Paul, Palmer -- If it's not too late, then it would probably be best to
+> stick this commit (60c1b220d8bc) and any dependencies on their own stable
+> branch so that we can both pull it into our respective trees and I can
+> resolve this conflict in the arm64 tree, which I'll send early during the
+> merge window.
+> 
+> Looking at your tree, I guess I could just pull in
+> common/for-v5.4-rc1/cpu-topology if you promise never to rebase it. Failing
+> that, you could fork a new branch from 60c1b220d8bc and I could just pull
+> that part instead.
 
-Its probably ok to leave as long as lessons are learnt :-)
+How about if we treat common/for-v5.4-rc1/cpu-topology as a stable branch?  
+I wasn't planning to rebase it.  Then both of us can just merge it into 
+our for-next branches for the merge window?  (It looks like I will need to 
+rebuild the riscv for-next branch on top of v5.3-rc5, for unrelated 
+reasons.)
 
---=20
-Cheers,
-Stephen Rothwell
+Sound reasonable?
 
---Sig_/1D3ZSLx=5BUi2IVapoKt=A=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1TL/IACgkQAVBC80lX
-0GwzZwf/ZHu3Y/RLybUWFbYGivFgC09NytPbhm8+y9llOajMYD7Al1Pasg+kI1Mo
-yhH9K1vQRjXybFR7l2M9F/ikcraK8C12qj1TmAMTJ6fFleMlXn6fEKhNqw1O8VMz
-KcM8IY1Z23Lom8fMBhjjyGz9Wkv7r1b3mZugCUoZhsIeXKCYfcOW00RVm13RU/MP
-3/uEKFHqWTSHMncKKkMPIgKCHckdiNQhS/mzck3P8aSapCBviOWg1NqJ2o18xg17
-E8oglbj5WZVXZW8R6Uvf4Vo2ntaDjCVSX523je0ymMJvDju98pTURVZft20NlPPw
-Vdnj8KVJ0QuSlWptoEGzS2Lt2K/rwA==
-=0beZ
------END PGP SIGNATURE-----
-
---Sig_/1D3ZSLx=5BUi2IVapoKt=A=--
+- Paul

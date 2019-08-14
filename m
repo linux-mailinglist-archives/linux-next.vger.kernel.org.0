@@ -2,144 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C992B8DFB7
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 23:20:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFDE8E0AB
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 00:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727929AbfHNVUz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Aug 2019 17:20:55 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:46228 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729546AbfHNVUz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Aug 2019 17:20:55 -0400
-Received: by mail-wr1-f68.google.com with SMTP id z1so392742wru.13
-        for <linux-next@vger.kernel.org>; Wed, 14 Aug 2019 14:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=F4UU8SfedkpcMGABbw3DgzdGVWExQCMPWQ1LbYC7DaU=;
-        b=B3xFaH8RF/bme9RsRwYd9X7394xcSzrvSuBQXBLcy1nvxbnm1I/StitaaotzbGw4lr
-         dKiIScHRtQhNoqV25vWkytRCL2wNWlf4baWBoZMvEq/K2MBZRklfYIbvXJDaKLf0bjlI
-         BBWvG1AfclcUQfxFL0z8fBW1Ya0NR6Ajk5jb5nmqdB9b1KfLFcwnSHn5/yG5cnp+8WPJ
-         CWGM3TnrbdKI27p13jP63IGeHKziKEE1t4MeLFOqdPqr2yo6xneiIFkz6dJ13Xbgdt/v
-         wU7TMljPQ3n8rxamIHhbiw39koyJUmUwmmZbOa2DhrZAmQ8t12NvvvTNQ56E07QG1W2I
-         4imQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=F4UU8SfedkpcMGABbw3DgzdGVWExQCMPWQ1LbYC7DaU=;
-        b=YR/iZsGcofHRniImR6oVHzTsk+F9l9NS1V05Qo82kWJMwAbniqSZh7FauxT2YIuEtQ
-         gKSrhwk64EVTlbZWr4H49giv1jGK5rfMVlNW6P9bTSrfxSdUZCiaDBscjYkel0arbIaT
-         9AAxSGiZwlaJmlTYp3yD2TNlR4gvpBgM9FcqQO3QV7KGEbeaF3nz3bIdIDLT6cawBl80
-         eNd4CXPDy/mLl18vuqyRe6X7O0o56M5CEBZibuD0NVYqckkJLaaP1WD+2FzTbIQlfCvs
-         oJGDA0+lPNEHR7pTk/74vBALJdCpoUtnRAra7pecPg/tHlQP8Ts4mY+dztKWCacbsHgM
-         VFZg==
-X-Gm-Message-State: APjAAAUlyBqsYJNLu8fNOFWzEKGV6EuwX6+ts0psVL065rpl3gkcV9lY
-        1C6Z6EUqzmQTzCk5pYEspBDJJ4fegw927Q==
-X-Google-Smtp-Source: APXvYqzIQe6L/bpC4YhgpRL5hs5swaJ89aIk1ibJLFSHl71r9ZtIW4p3FyJ3CbLehhGxQPggGZFVBw==
-X-Received: by 2002:adf:ef05:: with SMTP id e5mr1681998wro.158.1565817653369;
-        Wed, 14 Aug 2019 14:20:53 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id q124sm651777wma.33.2019.08.14.14.20.52
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 14 Aug 2019 14:20:52 -0700 (PDT)
-Message-ID: <5d547b34.1c69fb81.4ee9b.35cf@mx.google.com>
-Date:   Wed, 14 Aug 2019 14:20:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728693AbfHNW20 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Aug 2019 18:28:26 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32840 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728425AbfHNW20 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 14 Aug 2019 18:28:26 -0400
+Received: from gmail.com (unknown [104.132.1.77])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 667EF2064A;
+        Wed, 14 Aug 2019 22:28:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565821705;
+        bh=Fp8KCIMcKiB0kj7H4Ozz1VWH7BDbgk3wHcO/XUFfrcY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MmdznKI1SQKspJ/KQjNbSCbZkqOzcT/EJYmuXbZjN0RCXQvLaQ9dgQhQs0QfVZcN4
+         ogkfPSnvclQPmpuv75lKzZ46xpoW8RZY3NTnEDJhEVCnm58WVko59v55CeI58u5wOt
+         gaFj3f9FIBptAHYcnvU8SDBGNe18KnR+l1c6ARqU=
+Date:   Wed, 14 Aug 2019 15:28:23 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
+        keyrings@vger.kernel.org
+Subject: Merge resolution for fscrypt and keyrings trees
+Message-ID: <20190814222822.GA101319@gmail.com>
+Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
+        keyrings@vger.kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190814
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 298 boots: 13 failed, 266 passed with 16 offline,
- 3 untried/unknown (next-20190814)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 298 boots: 13 failed, 266 passed with 16 offline, 3 untri=
-ed/unknown (next-20190814)
+Hi Stephen, the fscrypt patches I've just pushed out conflict with the keys ACLs
+patch in keys-next.  To resolve the conflict for tomorrow's linux-next:
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190814/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190814/
+1. Discard change to deleted file keyinfo.c
+2. In keyinfo_v1.c, add NULL argument to request_key() [this was change (1)]
+3. In keyring.c, translate key permissions to ACLs
 
-Tree: next
-Branch: master
-Git Describe: next-20190814
-Git Commit: 17da61ae48ec0c2a3e57bc840cb85494222e77b7
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 91 unique boards, 27 SoC families, 22 builds out of 224
+'git diff fscrypt/master -- fs/crypto/' on the merge commit should show:
 
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            meson-gxbb-nanopi-k2: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        clang-8:
-            meson-gxm-khadas-vim2: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-khadas-vim2: 1 failed lab
-
-arm:
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2837-rpi-3-b: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    imx_v6_v7_defconfig:
-        gcc-8
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
+index c34fa7c61b43b0..8a7519b120153b 100644
+--- a/fs/crypto/keyring.c
++++ b/fs/crypto/keyring.c
+@@ -127,6 +127,38 @@ static struct key_type key_type_fscrypt_user = {
+ 	.describe		= fscrypt_user_key_describe,
+ };
+ 
++static struct key_acl fscrypt_keyring_acl = {
++	.usage = REFCOUNT_INIT(1),
++	.nr_ace	= 2,
++	.aces = {
++		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
++				  KEY_ACE_JOIN),
++		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
++			      KEY_ACE_READ | KEY_ACE_VIEW),
++	}
++};
++
++static struct key_acl fscrypt_key_acl = {
++	.usage = REFCOUNT_INIT(1),
++	.nr_ace	= 2,
++	.aces = {
++		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
++				  KEY_ACE_JOIN),
++		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
++			      KEY_ACE_VIEW),
++	}
++};
++
++static struct key_acl fscrypt_user_key_acl = {
++	.usage = REFCOUNT_INIT(1),
++	.nr_ace	= 2,
++	.aces = {
++		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
++				  KEY_ACE_JOIN),
++		KEY_OWNER_ACE(KEY_ACE_VIEW),
++	}
++};
++
+ /* Search ->s_master_keys or ->mk_users */
+ static struct key *search_fscrypt_keyring(struct key *keyring,
+ 					  struct key_type *type,
+@@ -203,8 +235,7 @@ static int allocate_filesystem_keyring(struct super_block *sb)
+ 
+ 	format_fs_keyring_description(description, sb);
+ 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+-				current_cred(), KEY_POS_SEARCH |
+-				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
++				current_cred(), &fscrypt_keyring_acl,
+ 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
+ 	if (IS_ERR(keyring))
+ 		return PTR_ERR(keyring);
+@@ -247,8 +278,7 @@ static int allocate_master_key_users_keyring(struct fscrypt_master_key *mk)
+ 	format_mk_users_keyring_description(description,
+ 					    mk->mk_spec.u.identifier);
+ 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
+-				current_cred(), KEY_POS_SEARCH |
+-				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
++				current_cred(), &fscrypt_keyring_acl,
+ 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
+ 	if (IS_ERR(keyring))
+ 		return PTR_ERR(keyring);
+@@ -285,7 +315,7 @@ static int add_master_key_user(struct fscrypt_master_key *mk)
+ 	format_mk_user_description(description, mk->mk_spec.u.identifier);
+ 	mk_user = key_alloc(&key_type_fscrypt_user, description,
+ 			    current_fsuid(), current_gid(), current_cred(),
+-			    KEY_POS_SEARCH | KEY_USR_VIEW, 0, NULL);
++			    &fscrypt_user_key_acl, 0, NULL);
+ 	if (IS_ERR(mk_user))
+ 		return PTR_ERR(mk_user);
+ 
+@@ -357,8 +387,7 @@ static int add_new_master_key(struct fscrypt_master_key_secret *secret,
+ 	format_mk_description(description, mk_spec);
+ 	key = key_alloc(&key_type_fscrypt, description,
+ 			GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
+-			KEY_POS_SEARCH | KEY_USR_SEARCH | KEY_USR_VIEW,
+-			KEY_ALLOC_NOT_IN_QUOTA, NULL);
++			&fscrypt_key_acl, KEY_ALLOC_NOT_IN_QUOTA, NULL);
+ 	if (IS_ERR(key)) {
+ 		err = PTR_ERR(key);
+ 		goto out_free_mk;
+diff --git a/fs/crypto/keysetup_v1.c b/fs/crypto/keysetup_v1.c
+index ad1a36c370c3fb..0727251be865b7 100644
+--- a/fs/crypto/keysetup_v1.c
++++ b/fs/crypto/keysetup_v1.c
+@@ -104,7 +104,7 @@ find_and_lock_process_key(const char *prefix,
+ 	if (!description)
+ 		return ERR_PTR(-ENOMEM);
+ 
+-	key = request_key(&key_type_logon, description, NULL);
++	key = request_key(&key_type_logon, description, NULL, NULL);
+ 	kfree(description);
+ 	if (IS_ERR(key))
+ 		return key;

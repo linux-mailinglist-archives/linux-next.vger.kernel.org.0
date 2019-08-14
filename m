@@ -2,96 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6AD8CCFC
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 09:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A668CD1B
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 09:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727717AbfHNHf0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Aug 2019 03:35:26 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42821 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727017AbfHNHf0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:35:26 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 467hFP5gLBz9sNx;
-        Wed, 14 Aug 2019 17:35:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565768123;
-        bh=AbhlP0YN/t21Gh6VHypds9xO7GALcd9PcpzEvbJBWLY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mKr4y7ubBT1RSL5MteT4KE5I6wGGlkimt2wrdzWZjTnXHZuelmhaAF0qg51WQBf0F
-         Ay/pHUiASdiZ4kfV206QP/fdJyucfmeYoLpFQy8MS8UkNTCq4aDGQee3nSIq+ZxP3W
-         8tZ8BkhBCcVif7e7iNc+nsc6CU15aPjtRNd3VxXtt1gEHA+GNySe+xhr2oePwAzHL2
-         MdrDb72Kpm6aCGotb5ij4O3lox8vek29gLNS5CQGeaUmjpLLOanllfsNjoZ4pi8/T0
-         a8k+YvwSF1wC/lBLI8J52j4v6WhCHTbtFGeonHn9kP6Pe0hKjvPOnEUPBkYhCgtcTv
-         Y+BN8QtTRJTyw==
-Date:   Wed, 14 Aug 2019 17:35:02 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        James Morris <jmorris@namei.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Aug 13
-Message-ID: <20190814173502.26849651@canb.auug.org.au>
-In-Reply-To: <c17d1844-7e13-aba5-0fc9-98c4b247c147@samsung.com>
-References: <20190813191924.7c5310dd@canb.auug.org.au>
-        <your-ad-here.call-01565700115-ext-9407@work.hours>
-        <CGME20190813145654epcas2p2981ea6b19b84470dc37825469cba91de@epcas2p2.samsung.com>
-        <20190813105645.4ffba70c@gandalf.local.home>
-        <c17d1844-7e13-aba5-0fc9-98c4b247c147@samsung.com>
+        id S1726465AbfHNHnE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Aug 2019 03:43:04 -0400
+Received: from out3-smtp.messagingengine.com ([66.111.4.27]:50459 "EHLO
+        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726365AbfHNHnE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 14 Aug 2019 03:43:04 -0400
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id D73A221B2A;
+        Wed, 14 Aug 2019 03:43:02 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 14 Aug 2019 03:43:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=yogH4/hVyl6iDCyO+eqkZ4m14+M
+        nUmKS6c0kluBeFkI=; b=c5WQb60FqOuuuYS0FtSkZndmeJV19/KgCq2gfBPagT5
+        xcdqHM9bjZGgTz9UFNvRbevA0dTrLmusRptXG7Kzz/6QiRXbABvlRUqD/r0QfXR7
+        dt4bbfaFsHiMacs38cei9EZ9UNj89sX0K2n/wBgFJEunkhhZGJeqZuG9P9XFzz2d
+        ETv+VzKn30QWDLwHyEokNvC8GhAFs6mOOdUF4JuxJTTuO+GwYEbEr4lcdYs1qIrM
+        q64YRBFdmNg/MHihmGxVZKLr+bAYU2Y3F14hZUk+JRrwJfr10ZnT2P4fpHvXjVFZ
+        58vX11pHn6E4GpsKVDhTV/qNbv9MxZ2oXFlvaZx1FjQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=yogH4/
+        hVyl6iDCyO+eqkZ4m14+MnUmKS6c0kluBeFkI=; b=HTnL4xcIUngEP3+D+jIAr5
+        GsqQtGxUpfalaZLIS9Vd3B5OhKBNxDa9ZqJZwfD4YfybOOar5XtjB2PQKYmd5WXD
+        Lpov0W6qkbN8bIAyw6bLyTYDmoARjwq5BCiM4qM4H/5zMC2ypBTL+ZwxZ6ccWXU5
+        U/KgiGFZaG+e1Fhj3TfPq6W6cp8R9B2F7380q/D5R+2/iRqcQXor7App2IrK0YTs
+        4khZfv9OOtIvdGVfP2CPx9ZZI3KIDfHDGyZLWgXMPZbIqJiwu03owEVtmrr5SFwR
+        4NTFZGmcMwnVcrvqloBC9E5hQSEwIphibRQRwGgLDrLK9dYEllEsozfxj/Zo3grg
+        ==
+X-ME-Sender: <xms:hbtTXbA9rjQpI12rNLEHMMa3cJO0HIN3bssyWkCeUgSFYO_wp68Zww>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvjedguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
+    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
+    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
+    ucevlhhushhtvghrufhiiigvpedt
+X-ME-Proxy: <xmx:hbtTXSzltRNzgRoIBLRTQlYHBOEBMN5auEVMTZjk3atZe6MFNs8vOg>
+    <xmx:hbtTXb7Wh4rPeuGTUBbj79Yxfw889oB1I4ErTvBtz1_Us1ygBAdrUg>
+    <xmx:hbtTXbu0JZEB-hwXgWZ78rq-43vW_sCSof4NJDnKqHYAgvfvowU7gA>
+    <xmx:hrtTXfRZMnv8zSwgj2XNmypKvZDAh4-EcCfq0bNN4fZqHsbVuSdrqw>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 7A38980059;
+        Wed, 14 Aug 2019 03:43:01 -0400 (EDT)
+Date:   Wed, 14 Aug 2019 09:42:59 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Martyn Welch <martyn.welch@collabora.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: linux-next: build warning after merge of the staging tree
+Message-ID: <20190814074259.GA3495@kroah.com>
+References: <20190814160835.4aabb60a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hKv=nLl41CRqYFReUFUYyDM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190814160835.4aabb60a@canb.auug.org.au>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hKv=nLl41CRqYFReUFUYyDM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Aug 14, 2019 at 04:08:35PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the staging tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+> 
+> drivers/iio/light/noa1305.c: In function 'noa1305_scale':
+> drivers/iio/light/noa1305.c:87:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
+>    *val2 = 77 * 4;
+>    ~~~~~~^~~~~~~~
+> drivers/iio/light/noa1305.c:88:2: note: here
+>   case NOA1305_INTEGR_TIME_200MS:
+>   ^~~~
+> 
+> Introduced by commit
+> 
+>   741172d18e8a ("iio: light: noa1305: Add support for NOA1305")
 
-Hi all,
+Fix for this is already in my testing tree, forgot to push it to my
+-next branch, but have done so now, thanks!
 
-On Wed, 14 Aug 2019 08:14:18 +0200 Marek Szyprowski <m.szyprowski@samsung.c=
-om> wrote:
->
-> On 2019-08-13 16:56, Steven Rostedt wrote:
-> > This looks related to what Marek posted.
-> >
-> >    https://lore.kernel.org/linux-security-module/3028ed35-3b6d-459f-f3c=
-8-103c5636fe95@samsung.com/
-> >
-> > Care to apply the change he suggested to see if it fixes the issue for
-> > you. If it does, Marek, can you make an official patch? =20
->=20
-> Sure: https://lkml.org/lkml/2019/8/14/75
-
-I have applied that to linux-next today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/hKv=nLl41CRqYFReUFUYyDM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1TuaYACgkQAVBC80lX
-0GzxBwf/XZyO2R13ZCKJdXnXCGQnkbohwC1M6LrhuSQ6nGt1zyBClZ85ToZy/t2B
-2pn2uPEgAiJv6QtMhEt2Tza6Ch1PYhWsRqut19JfZZLzy1qpY2KEY4AiDH5Ywvur
-Y4l9iJcOnE80XifjzoXrO8tnBZnWZly0xxb7p1ERtIcatE2lNUCA9y/jUHI32sm3
-rdQjZ4PY5ex5QL2jCxjWC9ZNPbEmy+KqAvsdxkiKppTzEya4SSxIz8MS9pU3ZVtC
-QoSRYcSd9HGZxwwmWW1EUiRREXTAxFBo8y/ra/O0YYhjgoPmX1oDSkd2lIQD7lRv
-P6Tc0rNUgBbyQj8kKLR043OmE+qdHg==
-=Lk/j
------END PGP SIGNATURE-----
-
---Sig_/hKv=nLl41CRqYFReUFUYyDM--
+greg k-h

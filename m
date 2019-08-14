@@ -2,95 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A668CD1B
-	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 09:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4D78CEE7
+	for <lists+linux-next@lfdr.de>; Wed, 14 Aug 2019 11:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726465AbfHNHnE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Aug 2019 03:43:04 -0400
-Received: from out3-smtp.messagingengine.com ([66.111.4.27]:50459 "EHLO
-        out3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726365AbfHNHnE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 14 Aug 2019 03:43:04 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D73A221B2A;
-        Wed, 14 Aug 2019 03:43:02 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Wed, 14 Aug 2019 03:43:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=yogH4/hVyl6iDCyO+eqkZ4m14+M
-        nUmKS6c0kluBeFkI=; b=c5WQb60FqOuuuYS0FtSkZndmeJV19/KgCq2gfBPagT5
-        xcdqHM9bjZGgTz9UFNvRbevA0dTrLmusRptXG7Kzz/6QiRXbABvlRUqD/r0QfXR7
-        dt4bbfaFsHiMacs38cei9EZ9UNj89sX0K2n/wBgFJEunkhhZGJeqZuG9P9XFzz2d
-        ETv+VzKn30QWDLwHyEokNvC8GhAFs6mOOdUF4JuxJTTuO+GwYEbEr4lcdYs1qIrM
-        q64YRBFdmNg/MHihmGxVZKLr+bAYU2Y3F14hZUk+JRrwJfr10ZnT2P4fpHvXjVFZ
-        58vX11pHn6E4GpsKVDhTV/qNbv9MxZ2oXFlvaZx1FjQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=yogH4/
-        hVyl6iDCyO+eqkZ4m14+MnUmKS6c0kluBeFkI=; b=HTnL4xcIUngEP3+D+jIAr5
-        GsqQtGxUpfalaZLIS9Vd3B5OhKBNxDa9ZqJZwfD4YfybOOar5XtjB2PQKYmd5WXD
-        Lpov0W6qkbN8bIAyw6bLyTYDmoARjwq5BCiM4qM4H/5zMC2ypBTL+ZwxZ6ccWXU5
-        U/KgiGFZaG+e1Fhj3TfPq6W6cp8R9B2F7380q/D5R+2/iRqcQXor7App2IrK0YTs
-        4khZfv9OOtIvdGVfP2CPx9ZZI3KIDfHDGyZLWgXMPZbIqJiwu03owEVtmrr5SFwR
-        4NTFZGmcMwnVcrvqloBC9E5hQSEwIphibRQRwGgLDrLK9dYEllEsozfxj/Zo3grg
-        ==
-X-ME-Sender: <xms:hbtTXbA9rjQpI12rNLEHMMa3cJO0HIN3bssyWkCeUgSFYO_wp68Zww>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduvddruddvjedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujggfsehttdertddtredvnecuhfhrohhmpefirhgv
-    ghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrd
-    dutdejnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhen
-    ucevlhhushhtvghrufhiiigvpedt
-X-ME-Proxy: <xmx:hbtTXSzltRNzgRoIBLRTQlYHBOEBMN5auEVMTZjk3atZe6MFNs8vOg>
-    <xmx:hbtTXb7Wh4rPeuGTUBbj79Yxfw889oB1I4ErTvBtz1_Us1ygBAdrUg>
-    <xmx:hbtTXbu0JZEB-hwXgWZ78rq-43vW_sCSof4NJDnKqHYAgvfvowU7gA>
-    <xmx:hrtTXfRZMnv8zSwgj2XNmypKvZDAh4-EcCfq0bNN4fZqHsbVuSdrqw>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 7A38980059;
-        Wed, 14 Aug 2019 03:43:01 -0400 (EDT)
-Date:   Wed, 14 Aug 2019 09:42:59 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725996AbfHNJA4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Aug 2019 05:00:56 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43604 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725955AbfHNJA4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 14 Aug 2019 05:00:56 -0400
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 7C2D4205F4;
+        Wed, 14 Aug 2019 09:00:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1565773255;
+        bh=fv/ZdU246p/5qy812w3lXY0nGq8ygs2Wu6GV4nOHlOA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kIx/eLPGVFxMcw7npmnquDzvRi55iR7TqmtRsPDLZ0K5D3Y7f6OzDI5B2LIp0Yn1T
+         RE2++kH938do7pDBu/P5eFkucJogf8EAeIeJ57FhmsfZ+xw//Z9AbXSuR8hbYxVSfj
+         XLL5/0Q9uUQLXEiiPSJWA1KaE26t+O2RoYSB8Y+Y=
+Date:   Wed, 14 Aug 2019 10:00:51 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Paul Walmsley <paul@pwsan.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Martyn Welch <martyn.welch@collabora.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: linux-next: build warning after merge of the staging tree
-Message-ID: <20190814074259.GA3495@kroah.com>
-References: <20190814160835.4aabb60a@canb.auug.org.au>
+        Jeremy Linton <jeremy.linton@arm.com>,
+        Atish Patra <atish.patra@wdc.com>
+Subject: Re: linux-next: manual merge of the risc-v tree with the arm64 tree
+Message-ID: <20190814090051.2qzhglnz4452avdc@willie-the-truck>
+References: <20190813093447.747a5853@canb.auug.org.au>
+ <20190813082422.lecgqtknnn5g4dyj@willie-the-truck>
+ <alpine.DEB.2.21.999.1908132220450.13287@utopia.booyaka.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190814160835.4aabb60a@canb.auug.org.au>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+In-Reply-To: <alpine.DEB.2.21.999.1908132220450.13287@utopia.booyaka.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 14, 2019 at 04:08:35PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Tue, Aug 13, 2019 at 10:24:30PM +0000, Paul Walmsley wrote:
+> On Tue, 13 Aug 2019, Will Deacon wrote:
+> > On Tue, Aug 13, 2019 at 09:34:47AM +1000, Stephen Rothwell wrote:
+> > > Today's linux-next merge of the risc-v tree got a conflict in:
+> > > 
+> > >   arch/arm64/kernel/topology.c
+> > > 
+> > > between commit:
+> > > 
+> > >   98dc19902a0b ("arm64: topology: Use PPTT to determine if PE is a thread")
+> > > 
+> > > from the arm64 tree and commit:
+> > > 
+> > >   60c1b220d8bc ("cpu-topology: Move cpu topology code to common code.")
+> > > 
+> > > from the risc-v tree.
+> > > 
+> > > I fixed it up (see below) and can carry the fix as necessary. This
+> > > is now fixed as far as linux-next is concerned, but any non trivial
+> > > conflicts should be mentioned to your upstream maintainer when your tree
+> > > is submitted for merging.  You may also want to consider cooperating
+> > > with the maintainer of the conflicting tree to minimise any particularly
+> > > complex conflicts.
+> > 
+> > Thanks, Stephen.
+> > 
+> > Paul, Palmer -- If it's not too late, then it would probably be best to
+> > stick this commit (60c1b220d8bc) and any dependencies on their own stable
+> > branch so that we can both pull it into our respective trees and I can
+> > resolve this conflict in the arm64 tree, which I'll send early during the
+> > merge window.
+> > 
+> > Looking at your tree, I guess I could just pull in
+> > common/for-v5.4-rc1/cpu-topology if you promise never to rebase it. Failing
+> > that, you could fork a new branch from 60c1b220d8bc and I could just pull
+> > that part instead.
 > 
-> After merging the staging tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
+> How about if we treat common/for-v5.4-rc1/cpu-topology as a stable branch?  
+> I wasn't planning to rebase it.  Then both of us can just merge it into 
+> our for-next branches for the merge window?  (It looks like I will need to 
+> rebuild the riscv for-next branch on top of v5.3-rc5, for unrelated 
+> reasons.)
 > 
-> drivers/iio/light/noa1305.c: In function 'noa1305_scale':
-> drivers/iio/light/noa1305.c:87:9: warning: this statement may fall through [-Wimplicit-fallthrough=]
->    *val2 = 77 * 4;
->    ~~~~~~^~~~~~~~
-> drivers/iio/light/noa1305.c:88:2: note: here
->   case NOA1305_INTEGR_TIME_200MS:
->   ^~~~
-> 
-> Introduced by commit
-> 
->   741172d18e8a ("iio: light: noa1305: Add support for NOA1305")
+> Sound reasonable?
 
-Fix for this is already in my testing tree, forgot to push it to my
--next branch, but have done so now, thanks!
+Cheers, Paul. Sounds good to me.
 
-greg k-h
+Will

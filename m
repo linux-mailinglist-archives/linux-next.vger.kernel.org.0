@@ -2,86 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B718F6B8
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 23:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745688F6C7
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 00:06:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730835AbfHOV7f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Aug 2019 17:59:35 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40411 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730803AbfHOV7f (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Aug 2019 17:59:35 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468gN50KjBz9sDB;
-        Fri, 16 Aug 2019 07:59:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565906373;
-        bh=NtF2YzBo9RjOgFQ2zd1MjWfpTOCNey98xfJF2oL6EkI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IGpfR8HzPYwcj4fLkIvhE4XR5h2QzHoXtuszYCEVoJ6p5AP3GMUJBFa8Y2FFSHo4A
-         29gt/yjmhUFb9ovZ6eeq9StRhKP3DmxYUkLYe+qIh89c5stO7PF9iS3nr8/LtKv1Y7
-         rfYFM1w1xEYfni0gC+Hv4tAlqz9JV36j8niCq/pesdbt9DauChGnzCFumnq8NXVWn9
-         4XBkU+LJE7rL6iUZCZ4+gNjUavmQZ82b8iekCOyRcmKhEzWOz3n51ihxm+kFG1wM74
-         uD7wqO7+PsPZepZX/ZUT5VcRVSn9GEEdJXLAiHvejcfL12WubRDXkr8o+0dMWc3gaC
-         3Vv2cTeAeG2WQ==
-Date:   Fri, 16 Aug 2019 07:59:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+        id S1732025AbfHOWGV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 18:06:21 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:49750 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731599AbfHOWGV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Aug 2019 18:06:21 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7FM3VCk094140;
+        Thu, 15 Aug 2019 22:06:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2019-08-05;
+ bh=grnXFtqO9q0UoP/PmJExNPh9Y4n2KrY3SsAsTHF9hdY=;
+ b=e1BFTcjW9s3nrydozJKI6md2XYVyun65H0oO0jDGJrvyNC7dJG93jcOF5lsXaq03r+x2
+ hMR0Hs/dseuIkeC6dvOXAZLQTZniyywRZlONE5XdCevEvxomHiQd+Zby3ZNlEurH+WRc
+ vfV2R7UspJsT4pqLRUi/apDu0buDq0AvDg9t4P3q5RcqHxqQ+i9GWs2hzQkL9k/Dkxyp
+ j9jAcLon9xmdLwn9WFOq+UUQXvExqtJ/k67SJEQn/vmj7RgxP+1tKyeH+XX2doR6JYsd
+ XFAsTVuypgtYfqWh5eOkaSwgW3edCaXHOKhoOJhltU6UCWxU4//8S1Fv07J7RDnH0GVB UQ== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by userp2120.oracle.com with ESMTP id 2u9pjqw851-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Aug 2019 22:06:11 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x7FM3WSk195485;
+        Thu, 15 Aug 2019 22:06:10 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by aserp3030.oracle.com with ESMTP id 2ucs88drwa-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 15 Aug 2019 22:06:10 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x7FM68TO019521;
+        Thu, 15 Aug 2019 22:06:08 GMT
+Received: from [10.211.55.26] (/10.211.55.26)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 15 Aug 2019 15:06:08 -0700
+Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, Chris Mason <clm@fb.com>,
+        andy@groveronline.com
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
-Message-ID: <20190816075931.40c5e46b@canb.auug.org.au>
+        Andy Grover <andy.grover@oracle.com>,
+        Chris Mason <chris.mason@oracle.com>
+References: <20190816075312.64959223@canb.auug.org.au>
+From:   Gerd Rausch <gerd.rausch@oracle.com>
+Message-ID: <8fd20efa-8e3d-eca2-8adf-897428a2f9ad@oracle.com>
+Date:   Thu, 15 Aug 2019 15:06:03 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jebT.h9=UF=o+NY0GL5HnhJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20190816075312.64959223@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9350 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1906280000 definitions=main-1908150207
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9350 signatures=668684
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1906280000
+ definitions=main-1908150208
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jebT.h9=UF=o+NY0GL5HnhJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi,
 
-Hi all,
+Just added the e-mail addresses I found using a simple "google search",
+in order to reach out to the original authors of these commits:
+Chris Mason and Andy Grover.
 
-In commit
+I'm hoping they still remember their work from 7-8 years ago.
 
-  bed7f1469f08 ("ASoC: cs4349: Use PM ops 'cs4349_runtime_pm'")
+Thanks,
 
-Fixes tag
+  Gerd
 
-  Fixes: e40da86 ("ASoC: cs4349: Add support for Cirrus Logic CS4349")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jebT.h9=UF=o+NY0GL5HnhJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1V1cMACgkQAVBC80lX
-0GzETAf8CYhDyFDeviVL/OTcdNbsjho1QeEZImqnjeCXCaGiGJCYq/jlO9VkAJhQ
-wzsy8Za0GKSxp6+Z1CB2Y6UEx3XlRnQ8PujfSI0rzMRETo8OZ+kImQsr8p3AD8gG
-ySPlQ+g7WZ2XyfXo5vFgQukT+YnS3cCrYe+QU+LAarBf2GZqloLP5C/QjjdZf38B
-psAUvJbJrRrFEbs1Kcn6+3FEhqsMFAX/kvZgcoyYmy0YbQ+nyAfGdl9OrcK8XLea
-MFR3iQK0DUklQj7i+VPt2puhi8SM6vh7Ujp5rfukYOtbOdxyKHzE5vmk5WQbUm5R
-SpE9qNFy5MK6FwMcMxFcxMA/F0uOsg==
-=dRHi
------END PGP SIGNATURE-----
-
---Sig_/jebT.h9=UF=o+NY0GL5HnhJ--
+On 15/08/2019 14.53, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commits
+> 
+>   11740ef44829 ("rds: check for excessive looping in rds_send_xmit")
+>   65dedd7fe1f2 ("RDS: limit the number of times we loop in rds_send_xmit")
+> 
+> are missing a Signed-off-by from their authors.
+> 

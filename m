@@ -2,94 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4388E904
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 12:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4313F8ED01
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 15:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728500AbfHOK3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Aug 2019 06:29:39 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33847 "EHLO ozlabs.org"
+        id S1732331AbfHONhW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 09:37:22 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:50286 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725977AbfHOK3j (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Aug 2019 06:29:39 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1732255AbfHONhW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Aug 2019 09:37:22 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468N405y8Yz9sN1;
-        Thu, 15 Aug 2019 20:29:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565864977;
-        bh=3A3hYpt/qBcAAQpmoH6zo0en2T61HontwzLWaXjB1j8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cQQ0B5V7QKoAHCzIJKwCqp2o5g/7WoHybh/guSDVqwlNlDgXayzeDYzpbu1kg0W+N
-         ln4EpR1DbwxtkO9qjFwH+J6N86/XYCFinwww6DSogepS30WA7FY5IQDlS+2DE/rfEV
-         HRcuNe5IqQC65IlDN5qh9kVIA3YnhQEV3ZNLKbWG1y9G/lM7p7hK9KbpErjugHOMj9
-         PImSpeOaY/nwJzAVVaHMoKDnPIchpyKD0Wvoc2g+T+e3bwNbF8Ck85LZCs89VyRWBc
-         7HaN4uGdJs4cTTDGehE9PC1hFFrXQ1O/nDvu+pUF3eqGvE0yd+pn4C1SZR61HVpnFp
-         uQ7xNAAh4VZEg==
-Date:   Thu, 15 Aug 2019 20:29:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Martin Wilck <mwilck@suse.com>
-Subject: linux-next: Fixes tag needs some work in the scsi-mkp tree
-Message-ID: <20190815202934.1fb36c38@canb.auug.org.au>
+        by mx1.redhat.com (Postfix) with ESMTPS id 5507F307D90D;
+        Thu, 15 Aug 2019 13:37:22 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-120-255.rdu2.redhat.com [10.10.120.255])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1B21F1C6;
+        Thu, 15 Aug 2019 13:37:20 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20190814222822.GA101319@gmail.com>
+References: <20190814222822.GA101319@gmail.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     dhowells@redhat.com, Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
+        keyrings@vger.kernel.org
+Subject: Re: Merge resolution for fscrypt and keyrings trees
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3m=+M9rcvWTHUOqUP+gvXHE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <12088.1565876240.1@warthog.procyon.org.uk>
+Date:   Thu, 15 Aug 2019 14:37:20 +0100
+Message-ID: <12089.1565876240@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.48]); Thu, 15 Aug 2019 13:37:22 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3m=+M9rcvWTHUOqUP+gvXHE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Eric Biggers <ebiggers@kernel.org> wrote:
 
-Hi all,
+> +static struct key_acl fscrypt_keyring_acl = {
+> +	.usage = REFCOUNT_INIT(1),
+> +	.nr_ace	= 2,
+> +	.aces = {
+> +		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
+> +				  KEY_ACE_JOIN),
+> +		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
+> +			      KEY_ACE_READ | KEY_ACE_VIEW),
+> +	}
+> +};
 
-In commit
+Does you really want JOIN permission for these keyrings?  Are you permitting
+them to be used with KEYCTL_JOIN_SESSION_KEYRING?  Do you also want INVAL for
+the keyring rather than just the keys it contains?  Would CLEAR be more
+appropriate?
 
-  cff1191553d9 ("scsi: qla2xxx: cleanup trace buffer initialization")
+> +static struct key_acl fscrypt_key_acl = {
+> +	.usage = REFCOUNT_INIT(1),
+> +	.nr_ace	= 2,
+> +	.aces = {
+> +		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
+> +				  KEY_ACE_JOIN),
+> +		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
+> +			      KEY_ACE_VIEW),
+> +	}
+> +};
 
-Fixes tag
+JOIN permission is useless here.  This is only used for keys of type
+key_type_fscrypt that I can see - and those aren't keyrings and so aren't
+joinable.
 
-  Fixes: ad0a0b01f088 ("scsi: qla2xxx: Fix Firmware dump size for Extended
+> +static struct key_acl fscrypt_user_key_acl = {
 
-has these problem(s):
+Ditto.
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please don't split Fixes tags over more than one line.
-
-Fixes tag
-
-  Fixes: (a28d9e4ef997 "scsi: qla2xxx: Add support for multiple fwdump
-
-has these problem(s):
-
-  - No SHA1 recognised
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3m=+M9rcvWTHUOqUP+gvXHE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1VNA4ACgkQAVBC80lX
-0Gx3Gwf/Z4fGcttI1SECLXV2bXZI1iynp5wi4+YTkY2Z4FAHwmYVDEXfbSUSJ1tZ
-I2lZpm6JXSj4pQXTgxonOzljKhjLZBWMiz3bSQkJvIuaUXq1/Jo/ElNBzbEv3kpM
-ntegWMI0w1NvlFm3S4+i4xSF9IkqScMBLbLc7IVm54e3hnhhLldRwhd3q5bsRM6l
-T4jMaIsIWDFxQxKpGIvx+wCKGaVZyGR7o4MbSWbQTfme2vR0GDp0cAFqUHYpCfiF
-eidBE8q1PqU/B2DMFiqjbWwTY0kNU0Ba89ibWCX/bCZMCAezTTSAtgiyAu7E8spk
-c/g9LM6bS2RMV5yQDvx5vRt7jTOYZw==
-=V7pz
------END PGP SIGNATURE-----
-
---Sig_/3m=+M9rcvWTHUOqUP+gvXHE--
+David

@@ -2,185 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 454908F066
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 18:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38F548F67B
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 23:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730043AbfHOQZA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Aug 2019 12:25:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57506 "EHLO mail.kernel.org"
+        id S1730517AbfHOVel (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 17:34:41 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53679 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729274AbfHOQZA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Aug 2019 12:25:00 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1730367AbfHOVel (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Aug 2019 17:34:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C05592054F;
-        Thu, 15 Aug 2019 16:24:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565886299;
-        bh=I188dpbNjLGmndlSD4bRDfP376qevXDAa/AtoYvaUBI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fDXrqwN1OExqg6onXLE93rGVXEo0iXvtZb9GPjYzrbemKjODbuCKJCgFmCbjRkA2x
-         i6CNb5OsThuiWBuHXwfvbGiey9I/47CkLj9ou4Or5Oi6bkG/ThIUuzHeNmGV6w9Ye4
-         wwqwrG/WyrbuRys4Y6GpYFspGmb/JBluf+OGc89Y=
-Date:   Thu, 15 Aug 2019 09:24:58 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
-        keyrings@vger.kernel.org
-Subject: Re: Merge resolution for fscrypt and keyrings trees
-Message-ID: <20190815162456.GA121345@gmail.com>
-Mail-Followup-To: David Howells <dhowells@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
-        keyrings@vger.kernel.org
-References: <20190814222822.GA101319@gmail.com>
- <12089.1565876240@warthog.procyon.org.uk>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 468fqL0LPTz9s3Z;
+        Fri, 16 Aug 2019 07:34:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565904879;
+        bh=0Mqy+lQwy2HXkaxa9xR8et7m/UPnYK4/lhOEuabYuzE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mHSbGFlEP16sPIlNXVRDHy8q4DOOmBAFloIaJ2JjsFOqonDoFVZ6UxeoVsI7K+rPv
+         yhgjmQlK6E/Lb/VMT0K1x4iA+C4x8xWux0KLsqIq1dn4DJkY6yj9GW91VrVFqzRAiR
+         26YERvt2qQbxZ7s5Vj55fTk6Tt+tqw0NsiNGQ0Re7788tnyFAGKhLS7iPK1iIuk6Mk
+         Lt/fOfm+4XJWOY0IoXXx+Y2r3LFWFeB+v788miUv/XKlfso1+uE7nAduYhhnV6NRXU
+         yNH85K5E48xzSAtJLpukZYL4L1InCRGub0L4Q3FjVXSrozjJvtJRrlP/R/j8V28Z2j
+         gUIM4bbinczyw==
+Date:   Fri, 16 Aug 2019 07:34:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        YueHaibing <yuehaibing@huawei.com>
+Subject: linux-next: Fixes tag needs some work in the sound-asoc tree
+Message-ID: <20190816073430.1e22cc27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12089.1565876240@warthog.procyon.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/y/ZpR9SY8+PkOn+1AgASdNg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi David,
+--Sig_/y/ZpR9SY8+PkOn+1AgASdNg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 15, 2019 at 02:37:20PM +0100, David Howells wrote:
-> Eric Biggers <ebiggers@kernel.org> wrote:
-> 
-> > +static struct key_acl fscrypt_keyring_acl = {
-> > +	.usage = REFCOUNT_INIT(1),
-> > +	.nr_ace	= 2,
-> > +	.aces = {
-> > +		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-> > +				  KEY_ACE_JOIN),
-> > +		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
-> > +			      KEY_ACE_READ | KEY_ACE_VIEW),
-> > +	}
-> > +};
-> 
-> Does you really want JOIN permission for these keyrings?  Are you permitting
-> them to be used with KEYCTL_JOIN_SESSION_KEYRING?  Do you also want INVAL for
-> the keyring rather than just the keys it contains?  Would CLEAR be more
-> appropriate?
+Hi all,
 
-I don't actually want any of JOIN, INVAL, or CLEAR on any of these keys or
-keyrings.  But it's not really appropriate to make semantic changes in a merge
-resolution; remember that pre-merge, SEARCH implied INVAL and JOIN.  Instead
-I'll remove the unneeded permissions in a separate patch later.
+In commit
 
-> 
-> > +static struct key_acl fscrypt_key_acl = {
-> > +	.usage = REFCOUNT_INIT(1),
-> > +	.nr_ace	= 2,
-> > +	.aces = {
-> > +		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-> > +				  KEY_ACE_JOIN),
-> > +		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
-> > +			      KEY_ACE_VIEW),
-> > +	}
-> > +};
-> 
-> JOIN permission is useless here.  This is only used for keys of type
-> key_type_fscrypt that I can see - and those aren't keyrings and so aren't
-> joinable.
-> 
+  9b4275c415ac ("ASoC: cs4349: Use PM ops 'cs4349_runtime_pm'")
 
-Okay, let's remove JOIN from the non-keyrings now then.  So now it's:
+Fixes tag
 
-diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
-index c34fa7c61b43b0..fb4f6a44ffcd09 100644
---- a/fs/crypto/keyring.c
-+++ b/fs/crypto/keyring.c
-@@ -127,6 +127,35 @@ static struct key_type key_type_fscrypt_user = {
- 	.describe		= fscrypt_user_key_describe,
- };
- 
-+static struct key_acl fscrypt_keyring_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-+				  KEY_ACE_JOIN),
-+		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
-+			      KEY_ACE_READ | KEY_ACE_VIEW),
-+	}
-+};
-+
-+static struct key_acl fscrypt_key_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL),
-+		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_VIEW),
-+	}
-+};
-+
-+static struct key_acl fscrypt_user_key_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL),
-+		KEY_OWNER_ACE(KEY_ACE_VIEW),
-+	}
-+};
-+
- /* Search ->s_master_keys or ->mk_users */
- static struct key *search_fscrypt_keyring(struct key *keyring,
- 					  struct key_type *type,
-@@ -203,8 +232,7 @@ static int allocate_filesystem_keyring(struct super_block *sb)
- 
- 	format_fs_keyring_description(description, sb);
- 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
--				current_cred(), KEY_POS_SEARCH |
--				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
-+				current_cred(), &fscrypt_keyring_acl,
- 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
- 	if (IS_ERR(keyring))
- 		return PTR_ERR(keyring);
-@@ -247,8 +275,7 @@ static int allocate_master_key_users_keyring(struct fscrypt_master_key *mk)
- 	format_mk_users_keyring_description(description,
- 					    mk->mk_spec.u.identifier);
- 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
--				current_cred(), KEY_POS_SEARCH |
--				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
-+				current_cred(), &fscrypt_keyring_acl,
- 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
- 	if (IS_ERR(keyring))
- 		return PTR_ERR(keyring);
-@@ -285,7 +312,7 @@ static int add_master_key_user(struct fscrypt_master_key *mk)
- 	format_mk_user_description(description, mk->mk_spec.u.identifier);
- 	mk_user = key_alloc(&key_type_fscrypt_user, description,
- 			    current_fsuid(), current_gid(), current_cred(),
--			    KEY_POS_SEARCH | KEY_USR_VIEW, 0, NULL);
-+			    &fscrypt_user_key_acl, 0, NULL);
- 	if (IS_ERR(mk_user))
- 		return PTR_ERR(mk_user);
- 
-@@ -357,8 +384,7 @@ static int add_new_master_key(struct fscrypt_master_key_secret *secret,
- 	format_mk_description(description, mk_spec);
- 	key = key_alloc(&key_type_fscrypt, description,
- 			GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
--			KEY_POS_SEARCH | KEY_USR_SEARCH | KEY_USR_VIEW,
--			KEY_ALLOC_NOT_IN_QUOTA, NULL);
-+			&fscrypt_key_acl, KEY_ALLOC_NOT_IN_QUOTA, NULL);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto out_free_mk;
-diff --git a/fs/crypto/keysetup_v1.c b/fs/crypto/keysetup_v1.c
-index ad1a36c370c3fb..0727251be865b7 100644
---- a/fs/crypto/keysetup_v1.c
-+++ b/fs/crypto/keysetup_v1.c
-@@ -104,7 +104,7 @@ find_and_lock_process_key(const char *prefix,
- 	if (!description)
- 		return ERR_PTR(-ENOMEM);
- 
--	key = request_key(&key_type_logon, description, NULL);
-+	key = request_key(&key_type_logon, description, NULL, NULL);
- 	kfree(description);
- 	if (IS_ERR(key))
- 		return key;
+  Fixes: e40da86 ("ASoC: cs4349: Add support for Cirrus Logic CS4349")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/y/ZpR9SY8+PkOn+1AgASdNg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Vz+YACgkQAVBC80lX
+0GzJtgf/ag3xOt766JE2unSieAcKi+JsgycMK43W1ES2KI/tZK3tHRfThhb86Iv6
+COfVi+FabbKxBBYG5BtEwvoYr9F4Pt4P55x16BstOGdrsf3h/YsCsFMVni0QEqBi
+mrIwS2Vv5roSWpA6mrKxdN2y31lWiRoxrTDOis+9bCkQRcIu7OtInvxuaY+8c6A8
+MXJ7aYwZUvIDbOBnoJlSbF/CyeDeiGp+ZuoLPcXbkkV+2IVpeEtxn8Skxq8lr6gI
+kk+UjXt3iiE7R65vFqyQ2b7/0VHcng7IngiSqaray3BtSkPkWC8Xle8m4J0/6Vdm
+MNH+iRFHwCedsHOh8kUGvW1YBT7NwQ==
+=uxel
+-----END PGP SIGNATURE-----
+
+--Sig_/y/ZpR9SY8+PkOn+1AgASdNg--

@@ -2,103 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6571B8E340
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 05:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2347E8E8D3
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 12:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727659AbfHODmV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Aug 2019 23:42:21 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:34345 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727217AbfHODmV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Aug 2019 23:42:21 -0400
-Received: by mail-pl1-f193.google.com with SMTP id i2so588814plt.1;
-        Wed, 14 Aug 2019 20:42:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=JANJxBWQQ/lmx3e6gQBBNY3HZrSKplwd+VTRdmaTTlA=;
-        b=m8pmtReVir4X9hTmwI/DVm70xLq/sckFKZ0fxqepBQyDnehARfhvK3FzAhvKWKTR3M
-         MiWzaYrEunYOfWRD2nLbGfOk5R54jXdfUdd0uPbb80XK+kLgMtH694whbUBtWqtnK+JL
-         yzJCaUKHpRNkBlAlwGPZy5zDpHaatVsZHRfcBDl2IzuoC/qFj80ARE4n/VKkBZ/p/CTx
-         9uNnJjME1Gy8hmI6iBjkYFSZO0Rr+NAwnurbTb2uctc3k5NbUHYKJr5PZ5C0bXdWG15z
-         HgMc96l56wn5cTFPSznZMKiFq7k7VD/lbsLfr1dl81RhgsHeV+NxFXCuwbX7uASNPwYE
-         y4dg==
-X-Gm-Message-State: APjAAAXBR/ew7ZjQCV1DBtQBBcprSWh7+82tZFaw1ZsZ/0bKjL7B/l+z
-        2jXnxD0jr4fwcgLUcdMwCcXQHJxqN0A=
-X-Google-Smtp-Source: APXvYqx81wrPhXH/lYFj4J2/x/boo2UlT8ODFpdBydweGYIHtn18VNQq90jQEYeDTlyS2mxJb39Ung==
-X-Received: by 2002:a17:902:8302:: with SMTP id bd2mr2539863plb.9.1565840539761;
-        Wed, 14 Aug 2019 20:42:19 -0700 (PDT)
-Received: from asus.site ([2601:647:4000:7f38:138a:21ca:d24:734b])
-        by smtp.gmail.com with ESMTPSA id y188sm1376690pfy.57.2019.08.14.20.42.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Aug 2019 20:42:18 -0700 (PDT)
-Subject: Re: [5.3.0-rc4-next][bisected 882632][qla2xxx] WARNING: CPU: 10 PID:
- 425 at drivers/scsi/qla2xxx/qla_isr.c:2784 qla2x00_status_entry.isra
-To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        martin.petersen@oracle.com, hmadhani@marvell.com,
-        sachinp <sachinp@linux.vnet.ibm.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-References: <1565801523.6908.6.camel@abdul>
- <cafb1d40-a11e-c137-db06-4564e5f5caf5@acm.org>
- <1565803123.6908.10.camel@abdul>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <7fc59d4c-b3d5-5ec8-cb7c-51cb863f2a77@acm.org>
-Date:   Wed, 14 Aug 2019 20:42:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726008AbfHOKLJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 06:11:09 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:36983 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725875AbfHOKLJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Aug 2019 06:11:09 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 468Mfd0wT4z9sN1;
+        Thu, 15 Aug 2019 20:11:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565863866;
+        bh=FXkZV2wQC0ooyLnCRgInG5DeilSuwNCCOEw8zxf7GgE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dxGYEt8vCSvJvuIVQFzN3KoDrXh3gvsTWXAVsi1E4zSEAyToy9/kdXcXLxhfRpQCc
+         Ni/bTRzWzx9XqOiv3xqMneJL4X1157GYw3jcsW40TU5Doe5P9N1lwsqOBBtTg7aXIr
+         lcfUBIjujP2nrQCYSNaoAD1PsUadtMT1NkJI4+ZROlAS7OEAhi50OK8U3ExYzfx0wy
+         eHuDZCpxuiVOoTHTmU4R7+IHz5cEI12gySUkKqovlLKdTyxSI9PYEr64JYMtNZZkyc
+         5XK6W7VTdrSZK0sk+eGqc3GGw6qH05Ua8/QrfMFNK1eUaEmPlEemth8WqHbNJspnK4
+         B+Bp+RK1qYN0Q==
+Date:   Thu, 15 Aug 2019 20:10:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicholas Mc Guire <hofrat@osadl.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: linux-next: Fixes tag needs some work in the arm-soc tree
+Message-ID: <20190815201030.7e726870@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <1565803123.6908.10.camel@abdul>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/NoG8Uo78I3L8Gembp_iLP=x";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/14/19 10:18 AM, Abdul Haleem wrote:
-> On Wed, 2019-08-14 at 10:05 -0700, Bart Van Assche wrote:
->> On 8/14/19 9:52 AM, Abdul Haleem wrote:
->>> Greeting's
->>>
->>> Today's linux-next kernel (5.3.0-rc4-next-20190813)  booted with warning on my powerpc power 8 lpar
->>>
->>> The WARN_ON_ONCE() was introduced by commit 88263208 (scsi: qla2xxx: Complain if sp->done() is not...)
->>>
->>> boot logs:
->>>
->>> WARNING: CPU: 10 PID: 425 at drivers/scsi/qla2xxx/qla_isr.c:2784
->>
->> Hi Abdul,
->>
->> Thank you for having reported this. Is that the only warning reported on your setup by the qla2xxx
->> driver? If that warning is commented out, does the qla2xxx driver work as expected?
-> 
-> boot warning did not show up when the commit is reverted.
-> 
-> should I comment out only the WARN_ON_ONCE() which is causing the issue,
-> and not the other one ?
+--Sig_/NoG8Uo78I3L8Gembp_iLP=x
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes please. Commit 88263208 introduced five kernel warnings but I think 
-only one of these should be removed again, e.g. as follows:
+Hi all,
 
-diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
-index cd39ac18c5fd..d81b5ecce24b 100644
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -2780,8 +2780,6 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct 
-rsp_que *rsp, void *pkt)
+In commit
 
-  	if (rsp->status_srb == NULL)
-  		sp->done(sp, res);
--	else
--		WARN_ON_ONCE(true);
-  }
+  dbc3c6295195 ("ARM: ux500: add missing of_node_put()")
 
-  /**
+Fixes tag
+
+  Fixes: commit 18a992787896 ("ARM: ux500: move soc_id driver to drivers/so=
+c")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/NoG8Uo78I3L8Gembp_iLP=x
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1VL5YACgkQAVBC80lX
+0GxZSQgAnFlqIQmlXx2RIttBQD+FbFSeImwmT8SSc/DWZdoo6kvZjXu+6Dzzz7UN
+e1hlfEtDhDYEkG4fWYYrtFw7zueWk5qXBrG6qrfxnAPUBD2UgmLdnpupSsupMjoh
+ssq1z4c9882EzFYW0HKZgUq6PtrgU/zDYzAvB1m6nyPGH/EtXWRjGAgzJwngXFSI
+KYpraA+MwxikxpjBypBdLnAqYnYB+zJKvYjxBAf9qomARYPm7wmJILKyfYre1S82
+HMTnsR0czqf9m/nYnn0RJhG56ob3EjfWfZtMFKgeO0HvwcRh9QSCsYBSV2RpevPe
+7fMDpyQcEmQvi1kT4raGhPvLtyX/+Q==
+=USk1
+-----END PGP SIGNATURE-----
+
+--Sig_/NoG8Uo78I3L8Gembp_iLP=x--

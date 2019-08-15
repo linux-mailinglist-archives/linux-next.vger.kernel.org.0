@@ -2,147 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFDE8E0AB
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 00:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6571B8E340
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 05:42:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728693AbfHNW20 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 14 Aug 2019 18:28:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:32840 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728425AbfHNW20 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 14 Aug 2019 18:28:26 -0400
-Received: from gmail.com (unknown [104.132.1.77])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 667EF2064A;
-        Wed, 14 Aug 2019 22:28:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1565821705;
-        bh=Fp8KCIMcKiB0kj7H4Ozz1VWH7BDbgk3wHcO/XUFfrcY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MmdznKI1SQKspJ/KQjNbSCbZkqOzcT/EJYmuXbZjN0RCXQvLaQ9dgQhQs0QfVZcN4
-         ogkfPSnvclQPmpuv75lKzZ46xpoW8RZY3NTnEDJhEVCnm58WVko59v55CeI58u5wOt
-         gaFj3f9FIBptAHYcnvU8SDBGNe18KnR+l1c6ARqU=
-Date:   Wed, 14 Aug 2019 15:28:23 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
-        keyrings@vger.kernel.org
-Subject: Merge resolution for fscrypt and keyrings trees
-Message-ID: <20190814222822.GA101319@gmail.com>
-Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-fscrypt@vger.kernel.org, linux-next@vger.kernel.org,
-        keyrings@vger.kernel.org
+        id S1727659AbfHODmV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 14 Aug 2019 23:42:21 -0400
+Received: from mail-pl1-f193.google.com ([209.85.214.193]:34345 "EHLO
+        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727217AbfHODmV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 14 Aug 2019 23:42:21 -0400
+Received: by mail-pl1-f193.google.com with SMTP id i2so588814plt.1;
+        Wed, 14 Aug 2019 20:42:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=JANJxBWQQ/lmx3e6gQBBNY3HZrSKplwd+VTRdmaTTlA=;
+        b=m8pmtReVir4X9hTmwI/DVm70xLq/sckFKZ0fxqepBQyDnehARfhvK3FzAhvKWKTR3M
+         MiWzaYrEunYOfWRD2nLbGfOk5R54jXdfUdd0uPbb80XK+kLgMtH694whbUBtWqtnK+JL
+         yzJCaUKHpRNkBlAlwGPZy5zDpHaatVsZHRfcBDl2IzuoC/qFj80ARE4n/VKkBZ/p/CTx
+         9uNnJjME1Gy8hmI6iBjkYFSZO0Rr+NAwnurbTb2uctc3k5NbUHYKJr5PZ5C0bXdWG15z
+         HgMc96l56wn5cTFPSznZMKiFq7k7VD/lbsLfr1dl81RhgsHeV+NxFXCuwbX7uASNPwYE
+         y4dg==
+X-Gm-Message-State: APjAAAXBR/ew7ZjQCV1DBtQBBcprSWh7+82tZFaw1ZsZ/0bKjL7B/l+z
+        2jXnxD0jr4fwcgLUcdMwCcXQHJxqN0A=
+X-Google-Smtp-Source: APXvYqx81wrPhXH/lYFj4J2/x/boo2UlT8ODFpdBydweGYIHtn18VNQq90jQEYeDTlyS2mxJb39Ung==
+X-Received: by 2002:a17:902:8302:: with SMTP id bd2mr2539863plb.9.1565840539761;
+        Wed, 14 Aug 2019 20:42:19 -0700 (PDT)
+Received: from asus.site ([2601:647:4000:7f38:138a:21ca:d24:734b])
+        by smtp.gmail.com with ESMTPSA id y188sm1376690pfy.57.2019.08.14.20.42.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Aug 2019 20:42:18 -0700 (PDT)
+Subject: Re: [5.3.0-rc4-next][bisected 882632][qla2xxx] WARNING: CPU: 10 PID:
+ 425 at drivers/scsi/qla2xxx/qla_isr.c:2784 qla2x00_status_entry.isra
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        martin.petersen@oracle.com, hmadhani@marvell.com,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <1565801523.6908.6.camel@abdul>
+ <cafb1d40-a11e-c137-db06-4564e5f5caf5@acm.org>
+ <1565803123.6908.10.camel@abdul>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <7fc59d4c-b3d5-5ec8-cb7c-51cb863f2a77@acm.org>
+Date:   Wed, 14 Aug 2019 20:42:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <1565803123.6908.10.camel@abdul>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen, the fscrypt patches I've just pushed out conflict with the keys ACLs
-patch in keys-next.  To resolve the conflict for tomorrow's linux-next:
+On 8/14/19 10:18 AM, Abdul Haleem wrote:
+> On Wed, 2019-08-14 at 10:05 -0700, Bart Van Assche wrote:
+>> On 8/14/19 9:52 AM, Abdul Haleem wrote:
+>>> Greeting's
+>>>
+>>> Today's linux-next kernel (5.3.0-rc4-next-20190813)  booted with warning on my powerpc power 8 lpar
+>>>
+>>> The WARN_ON_ONCE() was introduced by commit 88263208 (scsi: qla2xxx: Complain if sp->done() is not...)
+>>>
+>>> boot logs:
+>>>
+>>> WARNING: CPU: 10 PID: 425 at drivers/scsi/qla2xxx/qla_isr.c:2784
+>>
+>> Hi Abdul,
+>>
+>> Thank you for having reported this. Is that the only warning reported on your setup by the qla2xxx
+>> driver? If that warning is commented out, does the qla2xxx driver work as expected?
+> 
+> boot warning did not show up when the commit is reverted.
+> 
+> should I comment out only the WARN_ON_ONCE() which is causing the issue,
+> and not the other one ?
 
-1. Discard change to deleted file keyinfo.c
-2. In keyinfo_v1.c, add NULL argument to request_key() [this was change (1)]
-3. In keyring.c, translate key permissions to ACLs
+Yes please. Commit 88263208 introduced five kernel warnings but I think 
+only one of these should be removed again, e.g. as follows:
 
-'git diff fscrypt/master -- fs/crypto/' on the merge commit should show:
+diff --git a/drivers/scsi/qla2xxx/qla_isr.c b/drivers/scsi/qla2xxx/qla_isr.c
+index cd39ac18c5fd..d81b5ecce24b 100644
+--- a/drivers/scsi/qla2xxx/qla_isr.c
++++ b/drivers/scsi/qla2xxx/qla_isr.c
+@@ -2780,8 +2780,6 @@ qla2x00_status_entry(scsi_qla_host_t *vha, struct 
+rsp_que *rsp, void *pkt)
 
-diff --git a/fs/crypto/keyring.c b/fs/crypto/keyring.c
-index c34fa7c61b43b0..8a7519b120153b 100644
---- a/fs/crypto/keyring.c
-+++ b/fs/crypto/keyring.c
-@@ -127,6 +127,38 @@ static struct key_type key_type_fscrypt_user = {
- 	.describe		= fscrypt_user_key_describe,
- };
- 
-+static struct key_acl fscrypt_keyring_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-+				  KEY_ACE_JOIN),
-+		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
-+			      KEY_ACE_READ | KEY_ACE_VIEW),
-+	}
-+};
-+
-+static struct key_acl fscrypt_key_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-+				  KEY_ACE_JOIN),
-+		KEY_OWNER_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL | KEY_ACE_JOIN |
-+			      KEY_ACE_VIEW),
-+	}
-+};
-+
-+static struct key_acl fscrypt_user_key_acl = {
-+	.usage = REFCOUNT_INIT(1),
-+	.nr_ace	= 2,
-+	.aces = {
-+		KEY_POSSESSOR_ACE(KEY_ACE_SEARCH | KEY_ACE_INVAL |
-+				  KEY_ACE_JOIN),
-+		KEY_OWNER_ACE(KEY_ACE_VIEW),
-+	}
-+};
-+
- /* Search ->s_master_keys or ->mk_users */
- static struct key *search_fscrypt_keyring(struct key *keyring,
- 					  struct key_type *type,
-@@ -203,8 +235,7 @@ static int allocate_filesystem_keyring(struct super_block *sb)
- 
- 	format_fs_keyring_description(description, sb);
- 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
--				current_cred(), KEY_POS_SEARCH |
--				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
-+				current_cred(), &fscrypt_keyring_acl,
- 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
- 	if (IS_ERR(keyring))
- 		return PTR_ERR(keyring);
-@@ -247,8 +278,7 @@ static int allocate_master_key_users_keyring(struct fscrypt_master_key *mk)
- 	format_mk_users_keyring_description(description,
- 					    mk->mk_spec.u.identifier);
- 	keyring = keyring_alloc(description, GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
--				current_cred(), KEY_POS_SEARCH |
--				  KEY_USR_SEARCH | KEY_USR_READ | KEY_USR_VIEW,
-+				current_cred(), &fscrypt_keyring_acl,
- 				KEY_ALLOC_NOT_IN_QUOTA, NULL, NULL);
- 	if (IS_ERR(keyring))
- 		return PTR_ERR(keyring);
-@@ -285,7 +315,7 @@ static int add_master_key_user(struct fscrypt_master_key *mk)
- 	format_mk_user_description(description, mk->mk_spec.u.identifier);
- 	mk_user = key_alloc(&key_type_fscrypt_user, description,
- 			    current_fsuid(), current_gid(), current_cred(),
--			    KEY_POS_SEARCH | KEY_USR_VIEW, 0, NULL);
-+			    &fscrypt_user_key_acl, 0, NULL);
- 	if (IS_ERR(mk_user))
- 		return PTR_ERR(mk_user);
- 
-@@ -357,8 +387,7 @@ static int add_new_master_key(struct fscrypt_master_key_secret *secret,
- 	format_mk_description(description, mk_spec);
- 	key = key_alloc(&key_type_fscrypt, description,
- 			GLOBAL_ROOT_UID, GLOBAL_ROOT_GID, current_cred(),
--			KEY_POS_SEARCH | KEY_USR_SEARCH | KEY_USR_VIEW,
--			KEY_ALLOC_NOT_IN_QUOTA, NULL);
-+			&fscrypt_key_acl, KEY_ALLOC_NOT_IN_QUOTA, NULL);
- 	if (IS_ERR(key)) {
- 		err = PTR_ERR(key);
- 		goto out_free_mk;
-diff --git a/fs/crypto/keysetup_v1.c b/fs/crypto/keysetup_v1.c
-index ad1a36c370c3fb..0727251be865b7 100644
---- a/fs/crypto/keysetup_v1.c
-+++ b/fs/crypto/keysetup_v1.c
-@@ -104,7 +104,7 @@ find_and_lock_process_key(const char *prefix,
- 	if (!description)
- 		return ERR_PTR(-ENOMEM);
- 
--	key = request_key(&key_type_logon, description, NULL);
-+	key = request_key(&key_type_logon, description, NULL, NULL);
- 	kfree(description);
- 	if (IS_ERR(key))
- 		return key;
+  	if (rsp->status_srb == NULL)
+  		sp->done(sp, res);
+-	else
+-		WARN_ON_ONCE(true);
+  }
+
+  /**

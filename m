@@ -2,50 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2347E8E8D3
-	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 12:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4388E904
+	for <lists+linux-next@lfdr.de>; Thu, 15 Aug 2019 12:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726008AbfHOKLJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Aug 2019 06:11:09 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:36983 "EHLO ozlabs.org"
+        id S1728500AbfHOK3j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 06:29:39 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33847 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725875AbfHOKLJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Aug 2019 06:11:09 -0400
+        id S1725977AbfHOK3j (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 15 Aug 2019 06:29:39 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468Mfd0wT4z9sN1;
-        Thu, 15 Aug 2019 20:11:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 468N405y8Yz9sN1;
+        Thu, 15 Aug 2019 20:29:36 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565863866;
-        bh=FXkZV2wQC0ooyLnCRgInG5DeilSuwNCCOEw8zxf7GgE=;
+        s=201702; t=1565864977;
+        bh=3A3hYpt/qBcAAQpmoH6zo0en2T61HontwzLWaXjB1j8=;
         h=Date:From:To:Cc:Subject:From;
-        b=dxGYEt8vCSvJvuIVQFzN3KoDrXh3gvsTWXAVsi1E4zSEAyToy9/kdXcXLxhfRpQCc
-         Ni/bTRzWzx9XqOiv3xqMneJL4X1157GYw3jcsW40TU5Doe5P9N1lwsqOBBtTg7aXIr
-         lcfUBIjujP2nrQCYSNaoAD1PsUadtMT1NkJI4+ZROlAS7OEAhi50OK8U3ExYzfx0wy
-         eHuDZCpxuiVOoTHTmU4R7+IHz5cEI12gySUkKqovlLKdTyxSI9PYEr64JYMtNZZkyc
-         5XK6W7VTdrSZK0sk+eGqc3GGw6qH05Ua8/QrfMFNK1eUaEmPlEemth8WqHbNJspnK4
-         B+Bp+RK1qYN0Q==
-Date:   Thu, 15 Aug 2019 20:10:30 +1000
+        b=cQQ0B5V7QKoAHCzIJKwCqp2o5g/7WoHybh/guSDVqwlNlDgXayzeDYzpbu1kg0W+N
+         ln4EpR1DbwxtkO9qjFwH+J6N86/XYCFinwww6DSogepS30WA7FY5IQDlS+2DE/rfEV
+         HRcuNe5IqQC65IlDN5qh9kVIA3YnhQEV3ZNLKbWG1y9G/lM7p7hK9KbpErjugHOMj9
+         PImSpeOaY/nwJzAVVaHMoKDnPIchpyKD0Wvoc2g+T+e3bwNbF8Ck85LZCs89VyRWBc
+         7HaN4uGdJs4cTTDGehE9PC1hFFrXQ1O/nDvu+pUF3eqGvE0yd+pn4C1SZR61HVpnFp
+         uQ7xNAAh4VZEg==
+Date:   Thu, 15 Aug 2019 20:29:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicholas Mc Guire <hofrat@osadl.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: linux-next: Fixes tag needs some work in the arm-soc tree
-Message-ID: <20190815201030.7e726870@canb.auug.org.au>
+        Martin Wilck <mwilck@suse.com>
+Subject: linux-next: Fixes tag needs some work in the scsi-mkp tree
+Message-ID: <20190815202934.1fb36c38@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NoG8Uo78I3L8Gembp_iLP=x";
+Content-Type: multipart/signed; boundary="Sig_/3m=+M9rcvWTHUOqUP+gvXHE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NoG8Uo78I3L8Gembp_iLP=x
+--Sig_/3m=+M9rcvWTHUOqUP+gvXHE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -53,35 +51,45 @@ Hi all,
 
 In commit
 
-  dbc3c6295195 ("ARM: ux500: add missing of_node_put()")
+  cff1191553d9 ("scsi: qla2xxx: cleanup trace buffer initialization")
 
 Fixes tag
 
-  Fixes: commit 18a992787896 ("ARM: ux500: move soc_id driver to drivers/so=
-c")
+  Fixes: ad0a0b01f088 ("scsi: qla2xxx: Fix Firmware dump size for Extended
 
 has these problem(s):
 
-  - leading word 'commit' unexpected
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please don't split Fixes tags over more than one line.
+
+Fixes tag
+
+  Fixes: (a28d9e4ef997 "scsi: qla2xxx: Add support for multiple fwdump
+
+has these problem(s):
+
+  - No SHA1 recognised
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/NoG8Uo78I3L8Gembp_iLP=x
+--Sig_/3m=+M9rcvWTHUOqUP+gvXHE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1VL5YACgkQAVBC80lX
-0GxZSQgAnFlqIQmlXx2RIttBQD+FbFSeImwmT8SSc/DWZdoo6kvZjXu+6Dzzz7UN
-e1hlfEtDhDYEkG4fWYYrtFw7zueWk5qXBrG6qrfxnAPUBD2UgmLdnpupSsupMjoh
-ssq1z4c9882EzFYW0HKZgUq6PtrgU/zDYzAvB1m6nyPGH/EtXWRjGAgzJwngXFSI
-KYpraA+MwxikxpjBypBdLnAqYnYB+zJKvYjxBAf9qomARYPm7wmJILKyfYre1S82
-HMTnsR0czqf9m/nYnn0RJhG56ob3EjfWfZtMFKgeO0HvwcRh9QSCsYBSV2RpevPe
-7fMDpyQcEmQvi1kT4raGhPvLtyX/+Q==
-=USk1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1VNA4ACgkQAVBC80lX
+0Gx3Gwf/Z4fGcttI1SECLXV2bXZI1iynp5wi4+YTkY2Z4FAHwmYVDEXfbSUSJ1tZ
+I2lZpm6JXSj4pQXTgxonOzljKhjLZBWMiz3bSQkJvIuaUXq1/Jo/ElNBzbEv3kpM
+ntegWMI0w1NvlFm3S4+i4xSF9IkqScMBLbLc7IVm54e3hnhhLldRwhd3q5bsRM6l
+T4jMaIsIWDFxQxKpGIvx+wCKGaVZyGR7o4MbSWbQTfme2vR0GDp0cAFqUHYpCfiF
+eidBE8q1PqU/B2DMFiqjbWwTY0kNU0Ba89ibWCX/bCZMCAezTTSAtgiyAu7E8spk
+c/g9LM6bS2RMV5yQDvx5vRt7jTOYZw==
+=V7pz
 -----END PGP SIGNATURE-----
 
---Sig_/NoG8Uo78I3L8Gembp_iLP=x--
+--Sig_/3m=+M9rcvWTHUOqUP+gvXHE--

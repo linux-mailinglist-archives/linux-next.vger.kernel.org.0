@@ -2,154 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C768C8FB91
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 08:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0140D8FED3
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 11:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbfHPG4L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Aug 2019 02:56:11 -0400
-Received: from ozlabs.org ([203.11.71.1]:44101 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725829AbfHPG4L (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Aug 2019 02:56:11 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726882AbfHPJXm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Aug 2019 05:23:42 -0400
+Received: from pigeon.groveronline.com ([198.145.19.6]:34440 "EHLO
+        pigeon.buunabet.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726864AbfHPJXl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Aug 2019 05:23:41 -0400
+X-Greylist: delayed 492 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 05:23:41 EDT
+Received: by pigeon.buunabet.com (Postfix, from userid 501)
+        id 4569160818; Fri, 16 Aug 2019 02:15:28 -0700 (PDT)
+X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on pigeon.buunabet.com
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.5 tests=ALL_TRUSTED
+        autolearn=unavailable version=3.3.1
+Received: from [10.241.119.227] (unknown [217.116.215.226])
+        (using TLSv1.2 with cipher AES128-SHA (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468vHD3nsWz9s00;
-        Fri, 16 Aug 2019 16:56:07 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565938568;
-        bh=s8Ek3AUUEpdUyReBiFQ2Grbuguu8Y1jMvSOVW3HYLtk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CgBiAHpzBmonPmS+uuQDb4AtaUBOSSTRi3W/zkgYRYgGriNDVWS5CMo9EP3syYCnL
-         hm4ashXsE4z+G/D++ERyJt+j6kLr1xZP3M/wSd74mu0npJyDbPV7O0F277gYPkgE3e
-         xDR7uId8CWJYu+OtofgP8nIC9GyloA10j8joFxnikp9VkORZfxQ3kQyYT76UDmetzS
-         SqvBk5N4Ys1sYZmVgxedMEhXm6tGW5S0bfo51m0e2g/Ef1TaoWTa2ccy/wsuF89coD
-         K5Z0efwguemYhn49xIge/mG3EljgXkGfsOWfRhl8FvRl79fW+IT2++cnejCsL9+RBx
-         TbvRLVQitdWwA==
-Date:   Fri, 16 Aug 2019 16:56:07 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>
+        by pigeon.buunabet.com (Postfix) with ESMTPSA id 91A1860662;
+        Fri, 16 Aug 2019 02:15:25 -0700 (PDT)
+Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
+ tree
+To:     Gerd Rausch <gerd.rausch@oracle.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>, Chris Mason <clm@fb.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Brian Masney <masneyb@onstation.org>
-Subject: linux-next: manual merge of the gpio-brgl tree with the gpio tree
-Message-ID: <20190816165607.3b896463@canb.auug.org.au>
+        Andy Grover <andy.grover@oracle.com>,
+        Chris Mason <chris.mason@oracle.com>
+References: <20190816075312.64959223@canb.auug.org.au>
+ <8fd20efa-8e3d-eca2-8adf-897428a2f9ad@oracle.com>
+From:   Andy Grover <andy@groveronline.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=andy@groveronline.com; keydata=
+ mQENBFz6mPMBCAClDMGqYBeCSE0Q+rU7v0JibtGh+nSZoNTSdXOHUkk3rN7rmJwdjlWsL0aT
+ 2BGsSYBQjuqlculeJAQq6GG8dj7gjkDX8zVvjNPVqZxNd0bRh9DFE5AZrz3TiTIUwNauKWE9
+ XvVCMn/ZfzEJhehLa7SUs5vgZ6NHaScq4KZByfNsmiu/n+mPRhJOjgIN7fql5u+ElnNHxOP3
+ Z9vsoQc5pS9YAMKtEvyWgljm4fbZMs6VBDUGJGaLRmALF5VrJ5AJKzbZWZmaXYNqoxdtakT5
+ PhJuXkqdnrijZw8TJCglQ/z2wiq2HCU2pzq6/l+19yV0m9iegEuPgtAuwqkh4ecsPAbbABEB
+ AAG0IUFuZHkgR3JvdmVyIDxhZ3JvdmVyQG1vemlsbGEuY29tPokBVAQTAQgAPhYhBKVh7hV4
+ 1gY7lZbAkBVqKb2tr6NBBQJc+pjzAhsDBQkDwmcABQsJCAcCBhUKCQgLAgQWAgMBAh4BAheA
+ AAoJEBVqKb2tr6NB7uwH/RIEtXUCpRGCbVO5LyXmlzTCue9djrb8YrvOOyeVzUxA5kIskguB
+ 5DH7X7RuVa1PlsfsG2F40/5/bPS/fjYIUOGxTQdyiXGeVPotDvg4vaC/3zV16gs8YxOgzKgb
+ P7QhFLHkZoITe6gOv4R0QH1qvRkbg9cyyPr5FoIPaLoXDnw4DWxaNBUSsN+fPRI87yUjPO1v
+ kL+OWBOnBsHxNGaHjd/s9WsIUp8RbLbfMEI+xlM8lM+r5ccECkMS/l9NFX+mCMUlRXqTkd49
+ mWYJWY5zNnLyqbAZcaRGCrFlX/gjDn8p+pXQEdvtbbqy3KMofxrmf73ECSStM0WnOEgWtSFG
+ ycW5AQ0EXPqY8wEIAMY7xc/W7mIt2nyAe9K/5RiuyGaDItuaEbFzfRmxFvISJm3s5LiyyrGA
+ 82o0HQWqoMjPyLd+pGSSxHL5aWCUsj5vt/rV0FCPvC8W3a0bWxHa+sbb0VeAHna18Ozav1Cx
+ RFLW437tqaD8yF5yh1c0aGolCqv2LjMHetm+UmFoQVbSfcJoxpXepJFVDwvrqqlL+5BoQM15
+ MzCwux/D8RCgNlTXTnlfm6bRvlD5ttgDoyzN7qYwm+RjA9Izhyps39fKzdk8xkgeu/A55C94
+ KcPuSs4U9ti7WeU+CubDaLB3bxp7KCyjWpX3oS2CxHFnQsBAbzGx8UeH3dXbdni1AjE71wkA
+ EQEAAYkBPAQYAQgAJhYhBKVh7hV41gY7lZbAkBVqKb2tr6NBBQJc+pjzAhsMBQkDwmcAAAoJ
+ EBVqKb2tr6NBP2MH/0g/e3idsu/ajGzRx6CaRd/ZNxG0/p0aYT4iQWUEt0KZVyHKf17OQK2z
+ u3QSGjSR2V1H419U0m5V3HSMQmy5XrGi3ks4f01Cgq2HiYizhwVwqNVfZERY+WavEIr35w/L
+ eJqEI2Cm4PySxbOOuFig6R7GAknL76iKQBlMH8uX7yV9p0JnrI6tn0lm2n4UjW76CJ3Fk6gD
+ wqoDYDQXfIxYtyMD6QUfiSDZ+8KZoCMDYQQsEcDBz0hRI2mHwL1jHkGNMcVOhBZPtUHinFTc
+ EiQKDXQKkBvschbpbcfJI5g82v6Bl5M995ob7wsXy8VN5+usot+bKqQHGYMsBMbqJf+Ci1I=
+Message-ID: <e85146f3-93a0-b23f-6a6e-11e42815946d@groveronline.com>
+Date:   Fri, 16 Aug 2019 11:15:22 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4sIVZc0bbTg/uHBfndk_bz.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <8fd20efa-8e3d-eca2-8adf-897428a2f9ad@oracle.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4sIVZc0bbTg/uHBfndk_bz.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 8/16/19 3:06 PM, Gerd Rausch wrote:
+> Hi,
+> 
+> Just added the e-mail addresses I found using a simple "google search",
+> in order to reach out to the original authors of these commits:
+> Chris Mason and Andy Grover.
+> 
+> I'm hoping they still remember their work from 7-8 years ago.
 
-Hi all,
+Yes looks like what I was working on. What did you need from me? It's
+too late to amend the commitlogs...
 
-Today's linux-next merge of the gpio-brgl tree got a conflict in:
+-- Andy
 
-  include/linux/gpio/driver.h
-
-between commit:
-
-  fdd61a013a24 ("gpio: Add support for hierarchical IRQ domains")
-
-from the gpio tree and commit:
-
-  9091373ab7ea ("gpio: remove less important #ifdef around declarations")
-
-from the gpio-brgl tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/gpio/driver.h
-index 0e6d3b0c0211,f28f534f451a..000000000000
---- a/include/linux/gpio/driver.h
-+++ b/include/linux/gpio/driver.h
-@@@ -20,12 -20,6 +20,8 @@@ struct module
-  enum gpiod_flags;
-  enum gpio_lookup_flags;
- =20
-- #ifdef CONFIG_GPIOLIB
--=20
-- #ifdef CONFIG_GPIOLIB_IRQCHIP
--=20
- +struct gpio_chip;
- +
-  /**
-   * struct gpio_irq_chip - GPIO interrupt controller
-   */
-@@@ -530,38 -443,6 +523,36 @@@ struct bgpio_pdata=20
-  	int ngpio;
-  };
- =20
- +#ifdef CONFIG_IRQ_DOMAIN_HIERARCHY
- +
- +void gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *chip,
- +					     struct irq_fwspec *fwspec,
- +					     unsigned int parent_hwirq,
- +					     unsigned int parent_type);
- +void gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *chip,
- +					      struct irq_fwspec *fwspec,
- +					      unsigned int parent_hwirq,
- +					      unsigned int parent_type);
- +
- +#else
- +
- +static void gpiochip_populate_parent_fwspec_twocell(struct gpio_chip *chi=
-p,
- +						    struct irq_fwspec *fwspec,
- +						    unsigned int parent_hwirq,
- +						    unsigned int parent_type)
- +{
- +}
- +
- +static void gpiochip_populate_parent_fwspec_fourcell(struct gpio_chip *ch=
-ip,
- +						     struct irq_fwspec *fwspec,
- +						     unsigned int parent_hwirq,
- +						     unsigned int parent_type)
- +{
- +}
- +
- +#endif /* CONFIG_IRQ_DOMAIN_HIERARCHY */
- +
- +
-- #if IS_ENABLED(CONFIG_GPIO_GENERIC)
--=20
-  int bgpio_init(struct gpio_chip *gc, struct device *dev,
-  	       unsigned long sz, void __iomem *dat, void __iomem *set,
-  	       void __iomem *clr, void __iomem *dirout, void __iomem *dirin,
-
---Sig_/4sIVZc0bbTg/uHBfndk_bz.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1WU4cACgkQAVBC80lX
-0GxhVwf+Nf3MjQSZE/zHRBzEFSdsEJyZdjWqDJduEwnnCazu2+rToykDlRJBO4nT
-ib0/tuciaikjtbqz4ka6xY8bGzuyanZwwW1L90jko/9wWChi9Q85n79Mpei3bjoA
-bR15BbedikgVGBsgMaEYMBaEw/D4eTT9mFxwSgmMO8fztL39Ownlh60wJkOd5Ljp
-WejV8gQT241uCBCHWx/d/1xGVMvK94rt1v/QjC1QB8HzuSNd2h5DGkeHXRcqrvnV
-p6Ntt3fB+oChg2F5d4nAnEPfxVawiNVKW4xd2eOjUC+l56e2uiSfWLGKEkKwBDtJ
-QfDXvUBAvQTb3RbgLzXmVoaORHYd+A==
-=mDIy
------END PGP SIGNATURE-----
-
---Sig_/4sIVZc0bbTg/uHBfndk_bz.--
+> 
+> Thanks,
+> 
+>   Gerd
+> 
+> On 15/08/2019 14.53, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Commits
+>>
+>>   11740ef44829 ("rds: check for excessive looping in rds_send_xmit")
+>>   65dedd7fe1f2 ("RDS: limit the number of times we loop in rds_send_xmit")
+>>
+>> are missing a Signed-off-by from their authors.
+>>

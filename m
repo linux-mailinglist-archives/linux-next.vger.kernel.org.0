@@ -2,83 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E76988F7F3
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 02:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C0B8F89F
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 03:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725983AbfHPAVm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 15 Aug 2019 20:21:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:47641 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725937AbfHPAVm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 15 Aug 2019 20:21:42 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468kX34YPBz9sML;
-        Fri, 16 Aug 2019 10:21:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1565914899;
-        bh=4DOm0G0Mg88K0ab888PcmA2NrhNxtmRtln8z+EWFgkQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oPlNFAIEohOsfIhNkVID91PTUNGEGElNKy2WjokDrMJZKG/DL4hGmxLZiQsIyjAmV
-         LVxCbRlDOxkgvTGoOaalsDiN+Y+sRTczQA48lHNwzC+O9wrG6SVL5VG1bU+0I48bbb
-         RCXpX2ElAJvWHWlVFHF/dmFnOkF4I2XO4+/ak3cPuWj41Px4ctVhf/oXj301jNOW4F
-         GXyXDX+EShQwJ/HGQN8IFiCUF+n2B7Ia2I6CvtWJMNDftOkeK5pZDyOQTx2NpoYH8I
-         elY/15RdKwEe9WRpuZbnTZW+qCnLfh18w+D89dtTxRiRhrY1724XenVXL/lE/b/NEF
-         rTIGYjNsuKiVA==
-Date:   Fri, 16 Aug 2019 10:21:39 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
+        id S1726317AbfHPBwd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 15 Aug 2019 21:52:33 -0400
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:55476 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726245AbfHPBwd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 15 Aug 2019 21:52:33 -0400
+Received: by mail-wm1-f45.google.com with SMTP id f72so2783184wmf.5;
+        Thu, 15 Aug 2019 18:52:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sdyaLFPxqbMGDypJodmJ89AtUfSMcXrORONL+MFpXP4=;
+        b=WUDMjTzGVSCS4RpCU7aCyz6iBdsOU8pEHKTQo81jKlr+uoIWQWuy+39EY4u9oId1UR
+         X3Gjri5xAJH+CVc0oMcrebZ1cjPu2VSird79Ji9jHmdD+s+aYu5ymuIIM13GxatFsIJV
+         NbQwV0stmL38kYHJuAr8b80XRrYGDfP0csxRuKypT/xrfWtQdpD6xn67tvSkDS8ijnaS
+         /FYMcgBwyMWscS11DHmSVnBLuW0iT/rnGlZ9YTX4EeFZC7cgyXVanEdbdfjO5Czv/stu
+         cTKIOAD0u1Sb5zgORv+mHFPORmQMTEJ7bDM+o/Na7sQq8Pv0T+lduk+/1XWPz6ZUeNdS
+         qzFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sdyaLFPxqbMGDypJodmJ89AtUfSMcXrORONL+MFpXP4=;
+        b=D8Ne8zTAaZRVnMU83vmiBDEnjLQ90t2qIgFhiBY4UCo1k9ky8KN60H5ztzUW3qmmtD
+         cRzK78HxI/bJPPnpznBT9Imfit2/Hi1rusUxkojP9jI2Z+hLmdE5uOJJmjTeOzMPsfMx
+         xQFN6wkSIScExc2on7QJpw50LjLxYYm4PaCzZS+Ll1cBxQ58JE0Kfkzw1j1biu06gIFY
+         W7NuGycaX0XvRd0IdvwsNAnWCb14WWyMfrKBUggjZZHmoVJgKki5WG8E63NvpdNrGYbz
+         8Q8XQS3hCfaUqs36JLbtlylkee4vxDFHy+JZnKobFtDcD2vvrOIJDuM9XhqBpxnlK6sA
+         DuWg==
+X-Gm-Message-State: APjAAAUkrchzqhrDL6+HT7LnFPa6JGRDR5jgKWIMfhD+3CjAzWU6Q/MS
+        EMcRToQPrU3NAsmNPQiTh8LJRWn+2d7IaE0hg/BU3g==
+X-Google-Smtp-Source: APXvYqw8CbmRsUZ+6G8rZhodvJrYsaPZsQVehRgVSidu3w0pDYxXyLyQ3AxssvNexselD79WSW3d0bpxs9zpsErSeCY=
+X-Received: by 2002:a1c:c1cd:: with SMTP id r196mr5022264wmf.127.1565920351317;
+ Thu, 15 Aug 2019 18:52:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190813181038.2c6aafb9@canb.auug.org.au> <MN2PR12MB3309141545B644DCA7F144B7ECD20@MN2PR12MB3309.namprd12.prod.outlook.com>
+ <CADnq5_MA-9pT=cZJYCZ62VXjwNtxaCLH2kb5ig5TLFKx4wsmjA@mail.gmail.com> <20190816102139.701937c8@canb.auug.org.au>
+In-Reply-To: <20190816102139.701937c8@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Thu, 15 Aug 2019 21:52:19 -0400
+Message-ID: <CADnq5_PnhEHdpBKJEBr+kWoOtku1DMd=PYFzK1cJKFce8J7NPw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     "Huang, Ray" <Ray.Huang@amd.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "Liu, Aaron" <Aaron.Liu@amd.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20190816102139.701937c8@canb.auug.org.au>
-In-Reply-To: <CADnq5_MA-9pT=cZJYCZ62VXjwNtxaCLH2kb5ig5TLFKx4wsmjA@mail.gmail.com>
-References: <20190813181038.2c6aafb9@canb.auug.org.au>
-        <MN2PR12MB3309141545B644DCA7F144B7ECD20@MN2PR12MB3309.namprd12.prod.outlook.com>
-        <CADnq5_MA-9pT=cZJYCZ62VXjwNtxaCLH2kb5ig5TLFKx4wsmjA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lfCnzTdB41fd8X.H6v_em7l";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lfCnzTdB41fd8X.H6v_em7l
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Yes, sorry, just pushed out now.
 
-Hi Alex,
+Alex
 
-On Tue, 13 Aug 2019 10:01:07 -0400 Alex Deucher <alexdeucher@gmail.com> wro=
-te:
+On Thu, Aug 15, 2019 at 8:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Applied.  thanks!
-
-But not pushed out?
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lfCnzTdB41fd8X.H6v_em7l
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1V9xMACgkQAVBC80lX
-0Gw7hwf/Szf71hIJ6rp6OUK8ECFdstHR+6VUwtiC05uWRvOuDsI7tGr3577OIJ30
-7N0ftgFXnKWQgYEJRVqbsSBZrqSxgN/eJsxCwOXoeDZtio5+KWjJgtJZ1E7ZyeRf
-TzqqgIg/UbniWM/i8w5AiP4rVbMdYb9wP8xoQEvpbTIotZdNf3SrPD1WNmrzKv/K
-nhcdj1ALbkQbDPFt6nssiaT62Kb8JXElGj7GCVKAnjJVn3mDikPNSYQiTJITO1j9
-T1z4/RgGG//TTe5PzoFe7nJNoRf+OB49JOIUi+jTtg3qCjQZiE2ihOOySdUkalZI
-eJklmeoCcqJJXeRcQaC98/WmCY2llg==
-=V8z8
------END PGP SIGNATURE-----
-
---Sig_/lfCnzTdB41fd8X.H6v_em7l--
+> Hi Alex,
+>
+> On Tue, 13 Aug 2019 10:01:07 -0400 Alex Deucher <alexdeucher@gmail.com> wrote:
+> >
+> > Applied.  thanks!
+>
+> But not pushed out?
+>
+> --
+> Cheers,
+> Stephen Rothwell

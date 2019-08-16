@@ -2,52 +2,34 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBDC78FA51
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 07:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A02F8FA92
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 08:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726565AbfHPFVm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Aug 2019 01:21:42 -0400
-Received: from mail-qt1-f194.google.com ([209.85.160.194]:45903 "EHLO
-        mail-qt1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726478AbfHPFVm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Aug 2019 01:21:42 -0400
-Received: by mail-qt1-f194.google.com with SMTP id k13so4884244qtm.12;
-        Thu, 15 Aug 2019 22:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6BgRH7uWgXm0ykwcCnyCSO3U7xukvqKpk3J2XCkWVPo=;
-        b=TqCn+Vkkso2vIKA/Shpkxj3r2rinRLtPiM1y7AW9KLiB1sPE4I+AwCdOnM2AoAfZTp
-         SwP+xpsHXaR/HtcFDh55UVZmht5iefN3MQGGvHp/w8gOrnxWNzepaGwLL1QJtmGqS23r
-         bO2AjU3miELbzKNGUitK3HZEAnN3iS9QqFt3zOMtBrBEFOvlNmUCgaxIFmRd7SSh9IbT
-         /pETUBEfROC3jLYMFin8jWxRJihPWPMQgzqStakOXs1j5XkpZsWBAKMhIBdIWHQCYIyb
-         nzA3I36Weo/XwkWvsQdTeBdIn1qQxFWAKvFH9WoFCOLg+udV9zTFXrASqTaCvbMfx8B0
-         oJXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6BgRH7uWgXm0ykwcCnyCSO3U7xukvqKpk3J2XCkWVPo=;
-        b=F0W+nMTFhjlNArxMxGQ1YEZix/tzXFsLx7Jx09Py63CyeCbgJBl0nheQtDeXzPBXAr
-         /+A+sfcYbtmND2PAR3wLiTFU0PUzkI4NCBCxP7suukCserbmXI71SJsdxOzGt9QJVSG7
-         dToevYJFjso1kM+k36L8YLfGgf/PKbbxhT/2CxfoWYKIulvPtCHbP6JTpKNSJvosmTjr
-         npJ/UkdR9+xhNfaU47TG4S7d4Ls/2xLT5JwSG6vaqeOFkiMQ8RQHap4jZhGf+jTNG0Uj
-         5PYLCl7H4XIPWcNsVCn7QbJBnZVh6YmiklkLTqLeljEqPjsft+YYw8jGfyRIT1zPnWZM
-         cVxg==
-X-Gm-Message-State: APjAAAVbOf3ZuiCDpFldeeBVBZPQF4A7Ed6qVy6cOTkAl4Li3nYTM2gz
-        XA13qU3AH4FXLTqMcGQWfMp4hdS1jsl/hp4DKMQ=
-X-Google-Smtp-Source: APXvYqzA3IkpdcaIkjY3gb084X+01cYyzaz0onoPodRabUEacOs6jo8MtaiF9GOgYUpLwwiTjiPzkGFHp44X6ufK3es=
-X-Received: by 2002:a0c:e6cc:: with SMTP id l12mr674955qvn.60.1565932900638;
- Thu, 15 Aug 2019 22:21:40 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190816124143.2640218a@canb.auug.org.au>
-In-Reply-To: <20190816124143.2640218a@canb.auug.org.au>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 15 Aug 2019 22:21:29 -0700
-Message-ID: <CAEf4BzY9dDZF-DBDmuQQz0Rcx3DNGvQn_GLr0Uar1PAbAf2iig@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726371AbfHPGBd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Aug 2019 02:01:33 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53829 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725897AbfHPGBd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 16 Aug 2019 02:01:33 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 468t4860Hnz9sDB;
+        Fri, 16 Aug 2019 16:01:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565935290;
+        bh=OeeJGI9inIBhfS6RIGTOT5XHhVqxRQStz6U4WyUU+CQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LBscnaUyCTTZQR0o+uCECbbzsbwM6Rq6hqOZenZNLBGamJIemk81CsXRzg8lSrJ5R
+         ODrRV89t8GbaEonxGDdFnEUrGFnvm7IeWnPWLnjNu3nJVHI0jfuSDrTJsle8a9Uujq
+         +1EXW/B7AhNfmbnI9x6ZfsKaHGVbA6ggXtZMCha4RXsKiIYzRjEJKjy4LC0AXiDCQz
+         JT3cBz8m0lHSxlKQw0kT6Dj3qCYpLBlJgobj5wu/0//gNxSsaVaREJat3Mzp1jkm2T
+         WAjBxY2TdVN0LgH7TpCV59WvegY2hi1H+34ywT0v7LHCRePYuc+7fPwuwxlJPBrZWI
+         zaKtrj3immeaQ==
+Date:   Fri, 16 Aug 2019 16:01:28 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc:     David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>,
         Masahiro Yamada <yamada.masahiro@socionext.com>,
@@ -56,113 +38,60 @@ Cc:     David Miller <davem@davemloft.net>,
         Kees Cook <keescook@chromium.org>,
         Andrii Nakryiko <andriin@fb.com>,
         Daniel Borkmann <daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: manual merge of the net-next tree with the kbuild
+ tree
+Message-ID: <20190816160128.36e5cc4e@canb.auug.org.au>
+In-Reply-To: <CAEf4BzY9dDZF-DBDmuQQz0Rcx3DNGvQn_GLr0Uar1PAbAf2iig@mail.gmail.com>
+References: <20190816124143.2640218a@canb.auug.org.au>
+        <CAEf4BzY9dDZF-DBDmuQQz0Rcx3DNGvQn_GLr0Uar1PAbAf2iig@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/fF964hQqfEz/QhjhVQDvId8";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 15, 2019 at 7:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the net-next tree got a conflict in:
->
->   scripts/link-vmlinux.sh
->
-> between commit:
->
->   e167191e4a8a ("kbuild: Parameterize kallsyms generation and correct reporting")
->
-> from the kbuild tree and commits:
->
->   341dfcf8d78e ("btf: expose BTF info through sysfs")
->   7fd785685e22 ("btf: rename /sys/kernel/btf/kernel into /sys/kernel/btf/vmlinux")
->
-> from the net-next tree.
->
-> I fixed it up (I think - see below) and can carry the fix as necessary.
+--Sig_/fF964hQqfEz/QhjhVQDvId8
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, Stephen! Looks good except one minor issue below.
+Hi Andrii,
 
-> This is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On Thu, 15 Aug 2019 22:21:29 -0700 Andrii Nakryiko <andrii.nakryiko@gmail.c=
+om> wrote:
 >
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc scripts/link-vmlinux.sh
-> index 2438a9faf3f1,c31193340108..000000000000
-> --- a/scripts/link-vmlinux.sh
-> +++ b/scripts/link-vmlinux.sh
-> @@@ -56,11 -56,10 +56,11 @@@ modpost_link(
->   }
->
->   # Link of vmlinux
-> - # ${1} - optional extra .o files
-> - # ${2} - output file
-> + # ${1} - output file
-> + # ${@:2} - optional extra .o files
->   vmlinux_link()
->   {
->  +      info LD ${2}
+> Thanks, Stephen! Looks good except one minor issue below.
 
-This needs to be ${1}.
+Thanks for checking.
 
->         local lds="${objtree}/${KBUILD_LDS}"
->         local objects
->
-> @@@ -139,18 -149,6 +150,18 @@@ kallsyms(
->         ${CC} ${aflags} -c -o ${2} ${afile}
->   }
->
->  +# Perform one step in kallsyms generation, including temporary linking of
->  +# vmlinux.
->  +kallsyms_step()
->  +{
->  +      kallsymso_prev=${kallsymso}
->  +      kallsymso=.tmp_kallsyms${1}.o
->  +      kallsyms_vmlinux=.tmp_vmlinux${1}
->  +
-> -       vmlinux_link "${kallsymso_prev}" ${kallsyms_vmlinux}
-> ++      vmlinux_link ${kallsyms_vmlinux} "${kallsymso_prev}" ${btf_vmlinux_bin_o}
->  +      kallsyms ${kallsyms_vmlinux} ${kallsymso}
->  +}
->  +
->   # Create map file with all symbols from ${1}
->   # See mksymap for additional details
->   mksysmap()
-> @@@ -228,8 -227,14 +240,15 @@@ ${MAKE} -f "${srctree}/scripts/Makefile
->   info MODINFO modules.builtin.modinfo
->   ${OBJCOPY} -j .modinfo -O binary vmlinux.o modules.builtin.modinfo
->
-> + btf_vmlinux_bin_o=""
-> + if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-> +       if gen_btf .tmp_vmlinux.btf .btf.vmlinux.bin.o ; then
-> +               btf_vmlinux_bin_o=.btf.vmlinux.bin.o
-> +       fi
-> + fi
-> +
->   kallsymso=""
->  +kallsymso_prev=""
->   kallsyms_vmlinux=""
->   if [ -n "${CONFIG_KALLSYMS}" ]; then
->
-> @@@ -268,11 -285,8 +287,7 @@@
->         fi
->   fi
->
-> - vmlinux_link "${kallsymso}" vmlinux
-> -
-> - if [ -n "${CONFIG_DEBUG_INFO_BTF}" ]; then
-> -       gen_btf vmlinux
-> - fi
->  -info LD vmlinux
-> + vmlinux_link vmlinux "${kallsymso}" "${btf_vmlinux_bin_o}"
->
->   if [ -n "${CONFIG_BUILDTIME_EXTABLE_SORT}" ]; then
->         info SORTEX vmlinux
+> >   vmlinux_link()
+> >   {
+> >  +      info LD ${2} =20
+>=20
+> This needs to be ${1}.
+
+At least its only an information message and doesn't affect the build.
+I will fix my resolution for Monday.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/fF964hQqfEz/QhjhVQDvId8
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1WRrgACgkQAVBC80lX
+0GylkQf8C8W6JHqojMWEN7wUR3oywhqPY24LCDP4wu0FBftaMAAecEsy2baw9zZp
+WhgOW4wgZ6n/tUmFYTA7n/vDQW1d3UMQX9O+WSgMHESin+GaktO+UOhQf3i+d8Vd
+F0pOgwjJGUpapl28oCg664agT+ps/K5aguj8RnyDMdOtYsCbNdf3VLv4PZOgVL3D
+4Br5nDEUE0tD4h9JZ283A8Lb6/ZGn0H5KRyQdgs5yQfnpUuHCNp2wTxxVIC9ZChz
+WQjmkH83/JAJFVY/tT1xDMzSsfAC+wdk7TyT0QfXd0/ClLwC0mZMVHRs0V6Wz0af
+HHN2cgbPu7Ol5x7ls59j0P3BvsM64Q==
+=+cb+
+-----END PGP SIGNATURE-----
+
+--Sig_/fF964hQqfEz/QhjhVQDvId8--

@@ -2,105 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0140D8FED3
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 11:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65AF8FF5B
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 11:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbfHPJXm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Aug 2019 05:23:42 -0400
-Received: from pigeon.groveronline.com ([198.145.19.6]:34440 "EHLO
-        pigeon.buunabet.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726864AbfHPJXl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Aug 2019 05:23:41 -0400
-X-Greylist: delayed 492 seconds by postgrey-1.27 at vger.kernel.org; Fri, 16 Aug 2019 05:23:41 EDT
-Received: by pigeon.buunabet.com (Postfix, from userid 501)
-        id 4569160818; Fri, 16 Aug 2019 02:15:28 -0700 (PDT)
-X-Spam-Checker-Version: SpamAssassin 3.3.1 (2010-03-16) on pigeon.buunabet.com
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.5 tests=ALL_TRUSTED
-        autolearn=unavailable version=3.3.1
-Received: from [10.241.119.227] (unknown [217.116.215.226])
-        (using TLSv1.2 with cipher AES128-SHA (128/128 bits))
-        (No client certificate requested)
-        by pigeon.buunabet.com (Postfix) with ESMTPSA id 91A1860662;
-        Fri, 16 Aug 2019 02:15:25 -0700 (PDT)
-Subject: Re: linux-next: Signed-off-by missing for commits in the net-next
- tree
-To:     Gerd Rausch <gerd.rausch@oracle.com>,
+        id S1726845AbfHPJrW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Aug 2019 05:47:22 -0400
+Received: from perceval.ideasonboard.com ([213.167.242.64]:36764 "EHLO
+        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726839AbfHPJrV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Aug 2019 05:47:21 -0400
+Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B87612AF;
+        Fri, 16 Aug 2019 11:47:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1565948839;
+        bh=bUdICGGdTZmBFibu3xdD2aPAGHUfElKiRrQso0XsRTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mlqItdkhQU8LiVblfmgAjFuo001m9rrZNL9N/mwDi6KnDfDs5J+AFvViaMnQOEgu6
+         fIWoCwBnwpjT/0ZTGKwhpIpR7XgDtC4ImWtCEg+pqjg2EhqXnNi8GkKPEJe5/m7WT0
+         AIaGeexf6EL/gMzYLJjCil7Ke3mu4B87oJCuhImw=
+Date:   Fri, 16 Aug 2019 12:47:15 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Sam Ravnborg <sam@ravnborg.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>, Chris Mason <clm@fb.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Grover <andy.grover@oracle.com>,
-        Chris Mason <chris.mason@oracle.com>
-References: <20190816075312.64959223@canb.auug.org.au>
- <8fd20efa-8e3d-eca2-8adf-897428a2f9ad@oracle.com>
-From:   Andy Grover <andy@groveronline.com>
-Openpgp: preference=signencrypt
-Autocrypt: addr=andy@groveronline.com; keydata=
- mQENBFz6mPMBCAClDMGqYBeCSE0Q+rU7v0JibtGh+nSZoNTSdXOHUkk3rN7rmJwdjlWsL0aT
- 2BGsSYBQjuqlculeJAQq6GG8dj7gjkDX8zVvjNPVqZxNd0bRh9DFE5AZrz3TiTIUwNauKWE9
- XvVCMn/ZfzEJhehLa7SUs5vgZ6NHaScq4KZByfNsmiu/n+mPRhJOjgIN7fql5u+ElnNHxOP3
- Z9vsoQc5pS9YAMKtEvyWgljm4fbZMs6VBDUGJGaLRmALF5VrJ5AJKzbZWZmaXYNqoxdtakT5
- PhJuXkqdnrijZw8TJCglQ/z2wiq2HCU2pzq6/l+19yV0m9iegEuPgtAuwqkh4ecsPAbbABEB
- AAG0IUFuZHkgR3JvdmVyIDxhZ3JvdmVyQG1vemlsbGEuY29tPokBVAQTAQgAPhYhBKVh7hV4
- 1gY7lZbAkBVqKb2tr6NBBQJc+pjzAhsDBQkDwmcABQsJCAcCBhUKCQgLAgQWAgMBAh4BAheA
- AAoJEBVqKb2tr6NB7uwH/RIEtXUCpRGCbVO5LyXmlzTCue9djrb8YrvOOyeVzUxA5kIskguB
- 5DH7X7RuVa1PlsfsG2F40/5/bPS/fjYIUOGxTQdyiXGeVPotDvg4vaC/3zV16gs8YxOgzKgb
- P7QhFLHkZoITe6gOv4R0QH1qvRkbg9cyyPr5FoIPaLoXDnw4DWxaNBUSsN+fPRI87yUjPO1v
- kL+OWBOnBsHxNGaHjd/s9WsIUp8RbLbfMEI+xlM8lM+r5ccECkMS/l9NFX+mCMUlRXqTkd49
- mWYJWY5zNnLyqbAZcaRGCrFlX/gjDn8p+pXQEdvtbbqy3KMofxrmf73ECSStM0WnOEgWtSFG
- ycW5AQ0EXPqY8wEIAMY7xc/W7mIt2nyAe9K/5RiuyGaDItuaEbFzfRmxFvISJm3s5LiyyrGA
- 82o0HQWqoMjPyLd+pGSSxHL5aWCUsj5vt/rV0FCPvC8W3a0bWxHa+sbb0VeAHna18Ozav1Cx
- RFLW437tqaD8yF5yh1c0aGolCqv2LjMHetm+UmFoQVbSfcJoxpXepJFVDwvrqqlL+5BoQM15
- MzCwux/D8RCgNlTXTnlfm6bRvlD5ttgDoyzN7qYwm+RjA9Izhyps39fKzdk8xkgeu/A55C94
- KcPuSs4U9ti7WeU+CubDaLB3bxp7KCyjWpX3oS2CxHFnQsBAbzGx8UeH3dXbdni1AjE71wkA
- EQEAAYkBPAQYAQgAJhYhBKVh7hV41gY7lZbAkBVqKb2tr6NBBQJc+pjzAhsMBQkDwmcAAAoJ
- EBVqKb2tr6NBP2MH/0g/e3idsu/ajGzRx6CaRd/ZNxG0/p0aYT4iQWUEt0KZVyHKf17OQK2z
- u3QSGjSR2V1H419U0m5V3HSMQmy5XrGi3ks4f01Cgq2HiYizhwVwqNVfZERY+WavEIr35w/L
- eJqEI2Cm4PySxbOOuFig6R7GAknL76iKQBlMH8uX7yV9p0JnrI6tn0lm2n4UjW76CJ3Fk6gD
- wqoDYDQXfIxYtyMD6QUfiSDZ+8KZoCMDYQQsEcDBz0hRI2mHwL1jHkGNMcVOhBZPtUHinFTc
- EiQKDXQKkBvschbpbcfJI5g82v6Bl5M995ob7wsXy8VN5+usot+bKqQHGYMsBMbqJf+Ci1I=
-Message-ID: <e85146f3-93a0-b23f-6a6e-11e42815946d@groveronline.com>
-Date:   Fri, 16 Aug 2019 11:15:22 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the drm-misc tree
+Message-ID: <20190816094715.GB5020@pendragon.ideasonboard.com>
+References: <20190816133132.6b37d7fa@canb.auug.org.au>
+ <20190816044846.GA27781@ravnborg.org>
+ <CAKMK7uFy2vtOpSNrJyPDp0mvPTEvTD3zw7_gTuWe6gRqj18FFg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <8fd20efa-8e3d-eca2-8adf-897428a2f9ad@oracle.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKMK7uFy2vtOpSNrJyPDp0mvPTEvTD3zw7_gTuWe6gRqj18FFg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/16/19 3:06 PM, Gerd Rausch wrote:
-> Hi,
-> 
-> Just added the e-mail addresses I found using a simple "google search",
-> in order to reach out to the original authors of these commits:
-> Chris Mason and Andy Grover.
-> 
-> I'm hoping they still remember their work from 7-8 years ago.
+Hello,
 
-Yes looks like what I was working on. What did you need from me? It's
-too late to amend the commitlogs...
+On Fri, Aug 16, 2019 at 08:23:54AM +0200, Daniel Vetter wrote:
+> On Fri, Aug 16, 2019 at 6:48 AM Sam Ravnborg <sam@ravnborg.org> wrote:
+> > > Hi all,
+> > >
+> > > After merging the drm-misc tree, today's linux-next build (x86_64
+> > > allmodconfig) produced this warning:
+> > >
+> > > warning: same module names found:
+> > >   drivers/video/fbdev/omap2/omapfb/displays/panel-nec-nl8048hl11.ko
+> > >   drivers/gpu/drm/panel/panel-nec-nl8048hl11.ko
+> > > warning: same module names found:
+> > >   drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.ko
+> > >   drivers/gpu/drm/panel/panel-sharp-ls037v7dw01.ko
+> > > warning: same module names found:
+> > >   drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.ko
+> > >   drivers/gpu/drm/panel/panel-sony-acx565akm.ko
+> > > warning: same module names found:
+> > >   drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.ko
+> > >   drivers/gpu/drm/panel/panel-tpo-td028ttec1.ko
+> > > warning: same module names found:
+> > >   drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.ko
+> > >   drivers/gpu/drm/panel/panel-tpo-td043mtea1.ko
+> > >
+> > > Introduced by commits
+> > >
+> > >   df439abe6501 ("drm/panel: Add driver for the NEC NL8048HL11 panel")
+> > >   c9cf4c2a3bd3 ("drm/panel: Add driver for the Sharp LS037V7DW01 panel")
+> > >   1c8fc3f0c5d2 ("drm/panel: Add driver for the Sony ACX565AKM panel")
+> > >   415b8dd08711 ("drm/panel: Add driver for the Toppoly TD028TTEC1 panel")
+> > >   dc2e1e5b2799 ("drm/panel: Add driver for the Toppoly TD043MTEA1 panel")
+> >
+> > Ups, had not seen this one coming.
+> > We are in the process of removing the drivers in drivers/video/fbdev/omap2/omapfb/
+> > and decided to introduce the new drivers early to get them out of a
+> > longer patch series.
 
--- Andy
+Oops :-(
 
+The new drivers were initially part of a patch series that removed the
+duplicated drivers. The new drivers then got fast-tracked, and I didn't
+notice this issue.
+
+> Should we have a config dependency to not allow the old fbdev omap
+> when the drm omap driver is enabled? I think that would take care of
+> all this.
 > 
-> Thanks,
+> Or too annoying for development?
 > 
->   Gerd
-> 
-> On 15/08/2019 14.53, Stephen Rothwell wrote:
->> Hi all,
->>
->> Commits
->>
->>   11740ef44829 ("rds: check for excessive looping in rds_send_xmit")
->>   65dedd7fe1f2 ("RDS: limit the number of times we loop in rds_send_xmit")
->>
->> are missing a Signed-off-by from their authors.
->>
+> Also note that fbdev is in drm-misc now, so we should be able to fix
+> this all without cross-tree conflicts.
+
+Note that drivers/video/fbdev/omap2/omapfb/ will stay, it's
+drivers/gpu/drm/omapdrm/displays/ that is being removed. FB_OMAP2
+already depends on DRM_OMAP = n, I propose doing something similar at
+the level of the individual display drivers.
+
+-- 
+Regards,
+
+Laurent Pinchart

@@ -2,111 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6039014E
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 14:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FBD901CA
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 14:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbfHPMYS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Aug 2019 08:24:18 -0400
-Received: from perceval.ideasonboard.com ([213.167.242.64]:38462 "EHLO
-        perceval.ideasonboard.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727007AbfHPMYS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 16 Aug 2019 08:24:18 -0400
-Received: from pendragon.ideasonboard.com (dfj612yhrgyx302h3jwwy-3.rev.dnainternet.fi [IPv6:2001:14ba:21f5:5b00:ce28:277f:58d7:3ca4])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5AE142AF;
-        Fri, 16 Aug 2019 14:24:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1565958255;
-        bh=Xvsx+Qa2ZOQg4OjurY0P2Q8XnZceB+vL/gqEMZuluQI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NkbxcG36hw0krUs5uFpSKH+UI86xtGWx65rlhdgnABM+nCetNG9shKvQ/aL5H1Nwd
-         BNd0gNUFcLwQQpiyPh2gxFhTsgU72SsW1sXqGj2nf6OeQryHfllS2GMWrqcSZk+DeF
-         R/TqDRz1zxwY0FxfVdgKS67Ogv92j+mF0Fnh+Q7A=
-Date:   Fri, 16 Aug 2019 15:24:11 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        id S1727217AbfHPMjW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Aug 2019 08:39:22 -0400
+Received: from ozlabs.org ([203.11.71.1]:37755 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727182AbfHPMjW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 16 Aug 2019 08:39:22 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4692v90yfSz9sDQ;
+        Fri, 16 Aug 2019 22:39:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565959159;
+        bh=BViRoTUOAfG+pYpx8zNplnOf0mFkjZ2oGDklRG/VWIg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aW9RsszNHcmOQIoQlpVO3Q0a2krBJN0PJaQQQfGQKg9xmkAq5ppFud5qbPiV7GO0p
+         ObixDABG2hCmyVK/c4OrF5WSAFtjHm1aKIu0CZgfWVf0Q8WXrDa3e1Obmx3VngM8Tr
+         13srGruUtxDdL4vFWGjxnnbUndCcCB534qwSybQy8Qwl+xHEYTQVZyllS7992p83Ia
+         w5M2BXZNTQI+YMGvbcFxHPhsRTGFQVu8nXauRNo9SHV+yQG0rUuqu/oSmcb1rIGEoh
+         gOZeAxlaO0ZHlJYuwVI+a+PCOAoiJoZhcU/oOYQOYCr0fshidtxvjMCG8s29vYP7O9
+         /P3cwxeswgQ+g==
+Date:   Fri, 16 Aug 2019 22:39:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the drm-misc tree
-Message-ID: <20190816122411.GE5020@pendragon.ideasonboard.com>
-References: <20190816133132.6b37d7fa@canb.auug.org.au>
- <20190816044846.GA27781@ravnborg.org>
- <CAKMK7uFy2vtOpSNrJyPDp0mvPTEvTD3zw7_gTuWe6gRqj18FFg@mail.gmail.com>
- <20190816094715.GB5020@pendragon.ideasonboard.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrii Nakryiko <andriin@fb.com>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: Re: linux-next: manual merge of the net-next tree with the kbuild
+ tree
+Message-ID: <20190816223914.1cc64295@canb.auug.org.au>
+In-Reply-To: <20190816160128.36e5cc4e@canb.auug.org.au>
+References: <20190816124143.2640218a@canb.auug.org.au>
+        <CAEf4BzY9dDZF-DBDmuQQz0Rcx3DNGvQn_GLr0Uar1PAbAf2iig@mail.gmail.com>
+        <20190816160128.36e5cc4e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20190816094715.GB5020@pendragon.ideasonboard.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/spNxyuS=dKTRE=B2ygqtFmd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 16, 2019 at 12:47:15PM +0300, Laurent Pinchart wrote:
-> On Fri, Aug 16, 2019 at 08:23:54AM +0200, Daniel Vetter wrote:
-> > On Fri, Aug 16, 2019 at 6:48 AM Sam Ravnborg <sam@ravnborg.org> wrote:
-> > > > Hi all,
-> > > >
-> > > > After merging the drm-misc tree, today's linux-next build (x86_64
-> > > > allmodconfig) produced this warning:
-> > > >
-> > > > warning: same module names found:
-> > > >   drivers/video/fbdev/omap2/omapfb/displays/panel-nec-nl8048hl11.ko
-> > > >   drivers/gpu/drm/panel/panel-nec-nl8048hl11.ko
-> > > > warning: same module names found:
-> > > >   drivers/video/fbdev/omap2/omapfb/displays/panel-sharp-ls037v7dw01.ko
-> > > >   drivers/gpu/drm/panel/panel-sharp-ls037v7dw01.ko
-> > > > warning: same module names found:
-> > > >   drivers/video/fbdev/omap2/omapfb/displays/panel-sony-acx565akm.ko
-> > > >   drivers/gpu/drm/panel/panel-sony-acx565akm.ko
-> > > > warning: same module names found:
-> > > >   drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td028ttec1.ko
-> > > >   drivers/gpu/drm/panel/panel-tpo-td028ttec1.ko
-> > > > warning: same module names found:
-> > > >   drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.ko
-> > > >   drivers/gpu/drm/panel/panel-tpo-td043mtea1.ko
-> > > >
-> > > > Introduced by commits
-> > > >
-> > > >   df439abe6501 ("drm/panel: Add driver for the NEC NL8048HL11 panel")
-> > > >   c9cf4c2a3bd3 ("drm/panel: Add driver for the Sharp LS037V7DW01 panel")
-> > > >   1c8fc3f0c5d2 ("drm/panel: Add driver for the Sony ACX565AKM panel")
-> > > >   415b8dd08711 ("drm/panel: Add driver for the Toppoly TD028TTEC1 panel")
-> > > >   dc2e1e5b2799 ("drm/panel: Add driver for the Toppoly TD043MTEA1 panel")
-> > >
-> > > Ups, had not seen this one coming.
-> > > We are in the process of removing the drivers in drivers/video/fbdev/omap2/omapfb/
-> > > and decided to introduce the new drivers early to get them out of a
-> > > longer patch series.
-> 
-> Oops :-(
-> 
-> The new drivers were initially part of a patch series that removed the
-> duplicated drivers. The new drivers then got fast-tracked, and I didn't
-> notice this issue.
-> 
-> > Should we have a config dependency to not allow the old fbdev omap
-> > when the drm omap driver is enabled? I think that would take care of
-> > all this.
-> > 
-> > Or too annoying for development?
-> > 
-> > Also note that fbdev is in drm-misc now, so we should be able to fix
-> > this all without cross-tree conflicts.
-> 
-> Note that drivers/video/fbdev/omap2/omapfb/ will stay, it's
-> drivers/gpu/drm/omapdrm/displays/ that is being removed. FB_OMAP2
-> already depends on DRM_OMAP = n, I propose doing something similar at
-> the level of the individual display drivers.
+--Sig_/spNxyuS=dKTRE=B2ygqtFmd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I've just posted "[PATCH 0/2] Fix module name clash with omapdrm and DRM
-panel modules" that should solve this issue.
+Hi all,
 
--- 
-Regards,
+On Fri, 16 Aug 2019 16:01:28 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Thu, 15 Aug 2019 22:21:29 -0700 Andrii Nakryiko <andrii.nakryiko@gmail=
+.com> wrote:
+> >
+> > Thanks, Stephen! Looks good except one minor issue below. =20
+>=20
+> Thanks for checking.
+>=20
+> > >   vmlinux_link()
+> > >   {
+> > >  +      info LD ${2}   =20
+> >=20
+> > This needs to be ${1}. =20
+>=20
+> At least its only an information message and doesn't affect the build.
+> I will fix my resolution for Monday.
 
-Laurent Pinchart
+I also fixed it up in today's linux-next (just so people aren't
+suprised and report it :-)).
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/spNxyuS=dKTRE=B2ygqtFmd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1Wo/IACgkQAVBC80lX
+0Gyz4Af/ewkkUYxT3pvXClY2luiHNEx7ic7jT2jK8sY6lPKBYWVFi6DDOBe5np3u
+bWiiA3RaZBDnCts7mw/mfS2NJTRrza51FnjQeVIPHucqlUt8L5sjDorBSwS6Rgyh
+TXTXXQVer6Fldf9dm+5WoVgUDys3DUIrKtSMsQ+iKWQRykiaaHWgKDz8is250Z+v
+FX7eQ27AwYnl/eTsTAOf65gIDekjDauaJnbljKBl1jIOxC/5VEmU0YFXrKCP4nnU
+cHNsvPruzO+d1+0sTapb2MiEGpndV3m4HlvaB705hJaLmI3E0Jtu/d+3zX3rQDkr
+VYZ7Ug24gl+wJClrOC1c0WzpdIv0vg==
+=E/fG
+-----END PGP SIGNATURE-----
+
+--Sig_/spNxyuS=dKTRE=B2ygqtFmd--

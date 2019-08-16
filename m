@@ -2,124 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF18FA0E
-	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 06:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680B28FA2C
+	for <lists+linux-next@lfdr.de>; Fri, 16 Aug 2019 07:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726139AbfHPEws (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 16 Aug 2019 00:52:48 -0400
-Received: from ozlabs.org ([203.11.71.1]:53333 "EHLO ozlabs.org"
+        id S1726240AbfHPFEJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 16 Aug 2019 01:04:09 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44811 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726088AbfHPEws (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 16 Aug 2019 00:52:48 -0400
+        id S1725945AbfHPFEJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 16 Aug 2019 01:04:09 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 468rXr4hJ2z9sND;
-        Fri, 16 Aug 2019 14:52:43 +1000 (AEST)
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Will Deacon <will@kernel.org>, Peter Collingbourne <pcc@google.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 468rnw5xpxz9sML;
+        Fri, 16 Aug 2019 15:04:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1565931845;
+        bh=MXM/4uOM20H8e4JxMgcLzQFXldiFxvHuQl0pDQr/Xb4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qsVi4xybtNijf1nCtqRlkiWbD8ot4cFQ/8srUnqgSdDclM7ezlmWS+5DB2f3nVhnm
+         ds7pBlhyay5peRSegxHlys1MYUztq67NwRQmdMlumxbSV2GZ3FUVMR6H10LyR1qnUj
+         +om6i7+4mypLwVnLQnU6V3Ul/tVDeLIbsLFWl7FeJ5J/6XsK+OW4y8orCw95VDFbCX
+         mqNGVJ8/epjgpI27nlg7Glj9JRwsdrcRtyQ33Cjbgxw8XLi3QqYm7JZ7PSTzLkiW76
+         m+IOB1vQm1lXymEP+juMWQh4pR4jzTpZ/EL6EZUJYI4zh4FPGfWyIjEZcHoJznXXSj
+         UDH0roM9mtamA==
+Date:   Fri, 16 Aug 2019 15:04:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>,
+        Alasdair G Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        benh@kernel.crashing.org, paulus@samba.org
-Subject: Re: linux-next: build failure after merge of the arm64 tree
-In-Reply-To: <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
-References: <20190807095022.0314e2fc@canb.auug.org.au> <CAMn1gO6P_VfDRjGZb67ZS4Kh0wjTEQi0cbOkmibTokHQOgP7qw@mail.gmail.com> <20190807114614.ubzlkulk7aidws3p@willie-the-truck>
-Date:   Fri, 16 Aug 2019 14:52:40 +1000
-Message-ID: <87ftm17luv.fsf@concordia.ellerman.id.au>
+        Jaskaran Khurana <jaskarankhurana@linux.microsoft.com>
+Subject: linux-next: build failure after merge of the keys tree
+Message-ID: <20190816150404.73560822@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/H7A=./=jat.58dnJpDMRiP5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Will Deacon <will@kernel.org> writes:
-> On Tue, Aug 06, 2019 at 07:34:36PM -0700, Peter Collingbourne wrote:
->> On Tue, Aug 6, 2019 at 4:50 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> > After merging the arm64 tree, today's linux-next build (powerpc
->> > ppc64_defconfig) was just spinning in make - it executing some scripts,
->> > but it was hard to catch just what.
->> >
->> > Apparently caused by commit
->> >
->> >   5cf896fb6be3 ("arm64: Add support for relocating the kernel with RELR relocations")
->> >
->> > I have not idea why, but reverting the above commit allows to build
->> > to finish.
->> 
->> Okay, I can reproduce with:
->
-> Likewise.
->
->> That leads me to ask what is special about $(NM) + powerpc? It turns
->> out to be this fragment of arch/powerpc/Makefile:
->> 
->> ifdef CONFIG_PPC64
->> new_nm := $(shell if $(NM) --help 2>&1 | grep -- '--synthetic' >
->> /dev/null; then echo y; else echo n; fi)
->> 
->> ifeq ($(new_nm),y)
->> NM              := $(NM) --synthetic
->> endif
->> endif
->> 
->> We're setting NM to something else based on a config option, which I
->> presume sets up some sort of circular dependency that confuses
->> Kconfig. Removing this fragment of the makefile (or appending
->> --synthetic unconditionally) also makes the problem go away.
->
-> Yes, I think you're right. The lack of something like KBUILD_NMFLAGS means
-> that architectures are forced to override NM entirely if they want to pass
-> any specific options. Making that conditional on a Kconfig option appears
-> to send the entire thing recursive.
->
->> So I guess we have a couple of possible quick fixes (assuming that the
->> Kconfig issue can't be solved somehow): either stop passing --synthetic on
->> powerpc and lose a couple of symbols in 64-bit kernels, or start passing
->> it unconditionally on powerpc (it doesn't seem to make a difference to the
->> nm output on a ppc64_defconfig kernel with CONFIG_PPC64=n). I'm cc'ing the
->> powerpc maintainers for their opinion on what to do. While this is being
->> resolved we should probably back out my patch from -next.
->
-> Although Alpha, Itanic and PowerPC all override NM, only PowerPC does it
-> conditionally so I agree with you that passing '--synthetic' unconditionally
-> would resolve the problem and is certainly my preferred approach if mpe is
-> ok with it.
+--Sig_/H7A=./=jat.58dnJpDMRiP5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'd rather we keep passing --synthetic, otherwise there's the potential
-that symbols go missing that were previously visible.
+Hi all,
 
-I think we can keep the new_nm check, but drop the dependency on
-CONFIG_PPC64, and that will fix it. Worst case is we start passing
---synthetic on ppc32, but that's probably not a problem.
+After merging the keys tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-This seems to fix it for me, and 32-bit builds fine.
+drivers/md/dm-verity-verify-sig.c: In function 'verity_verify_get_sig_from_=
+key':
+drivers/md/dm-verity-verify-sig.c:38:8: error: too few arguments to functio=
+n 'request_key'
+  key =3D request_key(&key_type_user,
+        ^~~~~~~~~~~
+In file included from include/keys/user-type.h:11,
+                 from drivers/md/dm-verity-verify-sig.c:10:
+include/linux/key.h:318:27: note: declared here
+ static inline struct key *request_key(struct key_type *type,
+                           ^~~~~~~~~~~
 
-Do you want me to send a proper patch for this, or do you want to squash
-it into the original series?
+Caused by commit
 
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index c345b79414a9..403f7e193833 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -39,13 +39,11 @@ endif
- uname := $(shell uname -m)
- KBUILD_DEFCONFIG := $(if $(filter ppc%,$(uname)),$(uname),ppc64)_defconfig
- 
--ifdef CONFIG_PPC64
- new_nm := $(shell if $(NM) --help 2>&1 | grep -- '--synthetic' > /dev/null; then echo y; else echo n; fi)
- 
- ifeq ($(new_nm),y)
- NM             := $(NM) --synthetic
- endif
--endif
- 
- # BITS is used as extension for files which are available in a 32 bit
- # and a 64 bit version to simplify shared Makefiles.
+  f802f2b3a991 ("keys: Replace uid/gid/perm permissions checking with an AC=
+L")
 
+interacting with commit
 
-cheers
+  644332ceab35 ("dm verity: add root hash pkcs#7 signature verification")
+
+from the device-mapper tree.
+
+I applied the following merge resolution patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 16 Aug 2019 15:00:15 +1000
+Subject: [PATCH] dm verity: merge fix for "keys: Replace uid/gid/perm
+ permissions checking with an ACL"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/md/dm-verity-verify-sig.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verif=
+y-sig.c
+index 614e43db93aa..2ca162d43fe6 100644
+--- a/drivers/md/dm-verity-verify-sig.c
++++ b/drivers/md/dm-verity-verify-sig.c
+@@ -36,7 +36,7 @@ static int verity_verify_get_sig_from_key(const char *key=
+_desc,
+ 	int ret =3D 0;
+=20
+ 	key =3D request_key(&key_type_user,
+-			key_desc, NULL);
++			key_desc, NULL, NULL);
+ 	if (IS_ERR(key))
+ 		return PTR_ERR(key);
+=20
+--=20
+2.20.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/H7A=./=jat.58dnJpDMRiP5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1WOUQACgkQAVBC80lX
+0GyEmgf/TZf4BNKQvrXM/ZloWCoi1HTdisNbzOVt3cjxOMRtpvabuYWt2LwK1K5A
+QeiShnRJmc7bLVMmts3JMvfpL89ept592pDoGbKLKPRAELBF2XI3slPAzbNx1Yl0
+ifMooYdGYsixqFXuxMqAlhrp9IcryeJ6CBI+K/1YGQP0wckeC6ulBFBEUnhM8DEQ
+bguRTtfgyGbwAjI/CsOPt/DgQKyaumwNpTbelCTAzwLjmiFer+QczYWkMT4qO01o
+0TDpUOWwSatD16tKowSy13qm+xr6N3WBdgHylea0ITuc1GM4d/crXEKNGStNysaq
+cvoBy7JlYIldJ9FCaUmqVsSOu+heHA==
+=Rjnu
+-----END PGP SIGNATURE-----
+
+--Sig_/H7A=./=jat.58dnJpDMRiP5--

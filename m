@@ -2,86 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85B1E9508A
-	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2019 00:12:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135FE951A3
+	for <lists+linux-next@lfdr.de>; Tue, 20 Aug 2019 01:26:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728600AbfHSWLy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 19 Aug 2019 18:11:54 -0400
-Received: from outils.crapouillou.net ([89.234.176.41]:45104 "EHLO
-        crapouillou.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728568AbfHSWLy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 19 Aug 2019 18:11:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1566252710; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kqWLyowqzjwfdo+DC8TzM6xUlZuVKDTABcsocNtg1mM=;
-        b=PDYqxTCZs/HBJzujcq/hKKF+Pl1vYHBLRog2cKX60BG6jYHL8xQh/cZrnk0ZtK3K697mQk
-        L7zfsKW/tFF4Y5JPBV8TY2iNKRMfV5R2BNSYx9ZUrGdFNvgY4pTuX31mXUz+oPbgjp/Unt
-        NkcW1Xe6IIh1ZLlgdbNooXBGRZRjChE=
-Date:   Tue, 20 Aug 2019 00:11:35 +0200
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: linux-next: Tree for Aug 19 (irqchip: irq-ingenic-tcu.c)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Paul Burton <paul.burton@mips.com>, linux-mips@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Message-Id: <1566252695.2037.0@crapouillou.net>
-In-Reply-To: <ebcc8c55-3e77-bd3e-fa39-fed48d129250@infradead.org>
-References: <20190819191832.03f1a579@canb.auug.org.au>
-        <ebcc8c55-3e77-bd3e-fa39-fed48d129250@infradead.org>
+        id S1728580AbfHSXZN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 19 Aug 2019 19:25:13 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53375 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728469AbfHSXZN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 19 Aug 2019 19:25:13 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46C9515zkbz9s4Y;
+        Tue, 20 Aug 2019 09:25:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566257110;
+        bh=2Pj2jJiylfrbuLd4zpWI6NoNJ2SLOCH8y4D4yzyDP3k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IzEbJi90pYjw2vtblMHENm1cT4y3ae+y9hEpObKiTVS34tzl1C0BDXd27FHF4LWiZ
+         UiMKrqcCD1s9WO93eEbbMGhXjZRmsyh63v81sGwrng24mizO2rtyILs5YY3pRp+ndU
+         +X3+LmqQzLNzYV/9KpzRlq8FIRzH+lePNRfy2GJm4GM5qU2gEc2WnuCQcXU3Q6Dy3A
+         /mM3PceTvqNDioL7mkZ1PZXfKo6tFbtxbdq27aH47bfWza1lPOlyd9VPFvTzHHcPmY
+         TfMAWsRFS+5gzkYQn/LyNwFJKszSbColwa6x2xcjiVPYP9g9xzpT8HoxDnCJG0b6k2
+         /hwD92Y7EhvUg==
+Date:   Tue, 20 Aug 2019 09:24:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joe Perches <joe@perches.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: rfc: treewide scripted patch mechanism? (was: Re: [PATCH]
+ Makefile: Convert -Wimplicit-fallthrough=3 to just -Wimplicit-fallthrough
+ for clang)QUILT
+Message-ID: <20190820092451.791c85e5@canb.auug.org.au>
+In-Reply-To: <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
+References: <c0005a09c89c20093ac699c97e7420331ec46b01.camel@perches.com>
+        <9c7a79b4d21aea52464d00c8fa4e4b92638560b6.camel@perches.com>
+        <CAHk-=wiL7jqYNfYrNikgBw3byY+Zn37-8D8yR=WUu0x=_2BpZA@mail.gmail.com>
+        <6a5f470c1375289908c37632572c4aa60d6486fa.camel@perches.com>
+        <4398924f28a58fca296d101dae11e7accce80656.camel@perches.com>
+        <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/6d1c0JM9/Va=lL_uvs+h.TO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Randy,
+--Sig_/6d1c0JM9/Va=lL_uvs+h.TO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The fix was merged a couple of hours ago in mips-next.
+Hi Joe,
 
-Cheers
--Paul
+Sorry for the slow response.
 
+On Fri, 16 Aug 2019 12:58:27 -0700 Joe Perches <joe@perches.com> wrote:
+>
+> On Sat, 2019-08-10 at 13:33 -0700, Joe Perches wrote:
+> > On Sat, 2019-08-10 at 13:18 -0700, Joe Perches wrote: =20
+> []
+> > > There are classes of patches generated by scripts that have
+> > > no real mechanism to be applied today.
+> > >=20
+> > > For instance: global coccinelle scripted changes to use stracpy
+> > > https://lore.kernel.org/lkml/alpine.DEB.2.21.1907251747560.2494@hadri=
+en/
+> > >=20
+> > > and trivial scripted changes to MAINTAINERS
+> > > https://lore.kernel.org/lkml/6482e6546dc328ec47b07dba9a78a9573ebb3e56=
+.camel@perches.com/
+> > >=20
+> > > that are basically impossible to be applied by anyone but you.
+> > >=20
+> > > Otherwise there are hundreds of little micro patches most of
+> > > which would not otherwise be applied.
+> > >=20
+> > > There should be some process available to get these treewide
+> > > or difficult to keep up-to-date and apply patches handled.
+> > >=20
+> > > I believe these sorts of scripted patches should ideally
+> > > be handled immediately before an RC1 so other trees can be=20
+> > > synchronized in the simplest way possible. =20
+> >=20
+> > Hey Stephen
+> >=20
+> > Question for you about a possible -next process change.
+> >=20
+> > Would it be reasonable to have some mechanism to script
+> > treewide patches to generate and apply after Andrew Morton's
+> > mmotm patches are applied to -next?
 
+I don't see why not (its all just software, right? :-)).  I would have
+to refresh my understanding of how Andrew constructs his mmot{s,m} quilt
+series, but I should be able to sort that out.  The only other issue is
+the time it takes to apply these changes and test them.  The total time
+it takes to construct linux-next each day increases towards the opening
+of the merge window (we are currently at -rc5 and I am already taking
+about 12 hours each day).
 
-Le mar. 20 ao=FBt 2019 =E0 0:06, Randy Dunlap <rdunlap@infradead.org> a=20
-=E9crit :
-> On 8/19/19 2:18 AM, Stephen Rothwell wrote:
->>  Hi all,
->>=20
->>  Changes since 20190816:
->>=20
->=20
-> on i386:
->=20
-> ld: drivers/irqchip/irq-ingenic-tcu.o: in function=20
-> `ingenic_tcu_intc_cascade':
-> irq-ingenic-tcu.c:(.text+0xb1): undefined reference to=20
-> `irq_get_domain_generic_chip'
-> ld: drivers/irqchip/irq-ingenic-tcu.o: in function=20
-> `ingenic_tcu_irq_init':
-> irq-ingenic-tcu.c:(.init.text+0x91): undefined reference to=20
-> `irq_generic_chip_ops'
-> ld: irq-ingenic-tcu.c:(.init.text+0xd2): undefined reference to=20
-> `__irq_alloc_domain_generic_chips'
-> ld: irq-ingenic-tcu.c:(.init.text+0xfb): undefined reference to=20
-> `irq_get_domain_generic_chip'
->=20
->=20
-> Full randconfig file is attached.Jason Cooper <jason@lakedaemon.net>
->=20
->=20
-> --
-> ~Randy
+> > This could allow treewide scripted patches to have
+> > compilation and test coverage before possibly being
+> > applied to Linus' tree.
 
-=
+Always a good thing :-)
 
+So, do we have a pending example, or can you give my some idea of what
+they would look like?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6d1c0JM9/Va=lL_uvs+h.TO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1bL8MACgkQAVBC80lX
+0GzJ6Qf+Ioda512r7v+ci6QP5Le/DVEAd4qcYSCE3ikVUruvXUyYdEps3FTuo/9y
+50D9wjZjRTTLtjiCBdxLlymA4HyQj/NMBvshKn6g+fPBxH2yAc0IUHwz8UX2gAo4
+DP7HtiYKvPB4pBG/yI+ppdwtWyzzVAKT6qXc6bu4+baCXt2h/I5xhJndFYp+QoFN
+SQagyZ8AbKDBC7fENxxZe6ysgBqYM+1JFcoBP7/hgP5vI+6FF/ofFReT5LgPKzRX
+YWSB7NIeeEFoxGraRUYGLeJZQz1uo3ur3jpU5qGOhVasLgkc8y2ZhIJrvlzjKoxZ
+VhBBvqbUHNKF6gyI9Li+gwFmYsMQGQ==
+=14Og
+-----END PGP SIGNATURE-----
+
+--Sig_/6d1c0JM9/Va=lL_uvs+h.TO--

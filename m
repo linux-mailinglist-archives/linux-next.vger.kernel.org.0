@@ -2,163 +2,194 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 721A9983DE
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 21:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7B0098823
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 01:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727976AbfHUS7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 14:59:36 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:35416 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727316AbfHUS7g (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Aug 2019 14:59:36 -0400
-Received: by mail-pf1-f195.google.com with SMTP id d85so2034874pfd.2
-        for <linux-next@vger.kernel.org>; Wed, 21 Aug 2019 11:59:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=mK1H0BvZsgTtsN1s5a6lp4IM3J/uRRiK2PoPe1e2FBo=;
-        b=QgfpK50JA0eIc4O+SUBfw4lElixOn+KQxHu2zfLfPhj1We5aBoVJjf+8aaw4BE4d1W
-         +M3acVRkCaqLRcIEUW2Rr6upzYiZxPEG0bVknYlce2/PENpcsrEJhAbNOFSB4yNdHBTN
-         BmS7j86s5IqAIeqDC+qAbiYArBLkywVcJUdq83mzbQcACZWrTpf5d5pzOFDqXhOTDbZj
-         pXTrohVPu7jw/EXdjP6FhIEEO6J+4mqp+MXL9W0TBaMFPkV4sOha6DygB5FUFRrrL8MH
-         DN16kfcAfTjim7UKGaoaLogOVKmTnyO2C4ksm/EhLR7bzYIqJoB0/Y+eNyguZXbnN98o
-         +4Jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=mK1H0BvZsgTtsN1s5a6lp4IM3J/uRRiK2PoPe1e2FBo=;
-        b=lglo4qbzpwkEOF5rTrbmt5+GLwXY+x84+A7JDkfgZ9TYG8DVO0K7M6J2Zs4BzUu7GP
-         vjC8oFf9jhrZMiSa2WVx5kWLLb7363g2Qok0IeWSI5lJ1I05pqY2+MeAlb4Sxz44ERbK
-         3W9LU/4da1KuvE6QwsdXrwseWPFMGnohu0C3XGqJ9rCRUihZYip3CVkeu6lM0s8y0L92
-         bM3JXBuoK/m+aoyWHK23zRieIPH3dTY3JFErKpu7nWUZX2AuN2V7P4iFDJJJi8f8LUbb
-         RFYxKh5qWvoA1y1O5EUYKH3IZRXf4DGREJ96enWdApKCSdRRmR3DMhX4bVI2ugxFvQ+s
-         925w==
-X-Gm-Message-State: APjAAAWavyUe+lZtobL+DUIGyVals3BRPyrp4vxGTkfKL3M82heslIhp
-        Azcco11dRV+fJE0DOj5Paf987g==
-X-Google-Smtp-Source: APXvYqzmd1DBEeem+J6VymgZcgptitZGRrRZZYDED2sT/w52SP7MXWbGr5otGq7GgjxXnnaMfcHksA==
-X-Received: by 2002:a17:90b:f12:: with SMTP id br18mr1368456pjb.127.1566413974806;
-        Wed, 21 Aug 2019 11:59:34 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id a10sm34416479pfl.159.2019.08.21.11.59.33
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Wed, 21 Aug 2019 11:59:34 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Mark Brown <broonie@kernel.org>,
-        kernel-build-reports@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: CPUfreq fail on rk3399-firefly (was: next/master boot: 285 boots: 16 failed, 264 passed with 3 offline, 1 untried/unknown, 1 conflict (next-20190718))
-In-Reply-To: <2314814.WbdfqDVNqK@phil>
-References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com> <20190718162005.GF5761@sirena.org.uk> <7hmugdynmk.fsf@baylibre.com> <2314814.WbdfqDVNqK@phil>
-Date:   Wed, 21 Aug 2019 11:59:33 -0700
-Message-ID: <7hv9uq9wfe.fsf@baylibre.com>
+        id S1728619AbfHUXum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 19:50:42 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55431 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728304AbfHUXum (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 19:50:42 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46DPYS5Jxfz9sBp;
+        Thu, 22 Aug 2019 09:50:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566431439;
+        bh=0IxaCMguw7mIywx2R9a7SL80AVSgxKu3pkkK/b5qwxA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=TUqqHRU+J1iZV3fNWXZP07Qzg9lMnPwa62+T+ObBT5uAb/2acuR9ml16pzMp1KFc6
+         ZdsINKxsyvaf07NQwSStTjJBplOSxIczMLVZWW6K8cvu5v94s9p2XjYzedccXfvOoS
+         At55wLFM0JL+nQCrQ7pnNcDe0nz+2WkYHv40gDRQYlRTvU4Cq0Rt6yjkvqQLAy0EFH
+         kWy4F9U0sX9wKMDyt3Wghs7fJ4y5lq32ptvzHm7Nb5TU2zUEj536spgMsmeOhhsE8d
+         Fwuq4hRr9jG7EUJb+XcbEEHjbmhuVW1xnzrDi7kAr4bbzhyXcBUMzxgUIRwn8C7oX8
+         qwFZll2fRN+4g==
+Date:   Thu, 22 Aug 2019 09:50:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: Re: linux-next: manual merge of the drm-misc tree with the drm and
+ drm-intel trees
+Message-ID: <20190822095029.0fd063d4@canb.auug.org.au>
+In-Reply-To: <20190814125433.20147fb7@canb.auug.org.au>
+References: <20190814125433.20147fb7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/pqDYB7qH+83yIm0QxI/PxPA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Heiko,
+--Sig_/pqDYB7qH+83yIm0QxI/PxPA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Heiko Stuebner <heiko@sntech.de> writes:
+Hi all,
 
-> Am Dienstag, 13. August 2019, 19:35:31 CEST schrieb Kevin Hilman:
->> [ resent with correct addr for linux-rockchip list ]
->> 
->> Mark Brown <broonie@kernel.org> writes:
->> 
->> > On Thu, Jul 18, 2019 at 04:28:08AM -0700, kernelci.org bot wrote:
->> >
->> > Today's -next started failing to boot defconfig on rk3399-firefly:
->> >
->> >> arm64:
->> >
->> >>     defconfig:
->> >>         gcc-8:
->> >>             rk3399-firefly: 1 failed lab
->> >
->> > It hits a BUG() trying to set up cpufreq:
->> >
->> > [   87.381606] cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 200000 KHz
->> > [   87.393244] cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 408000 KHz
->> > [   87.469777] cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 12000 KHz
->> > [   87.488595] cpu cpu4: _generic_set_opp_clk_only: failed to set clock rate: -22
->> > [   87.491881] cpufreq: __target_index: Failed to change cpu frequency: -22
->> > [   87.495335] ------------[ cut here ]------------
->> > [   87.496821] kernel BUG at drivers/cpufreq/cpufreq.c:1438!
->> > [   87.498462] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->> >
->> > I'm struggling to see anything relevant in the diff from yesterday, the
->> > unlisted frequency warnings were there in the logs yesterday but no oops
->> > and I'm not seeing any changes in cpufreq, clk or anything relevant
->> > looking.
->> >
->> > Full bootlog and other info can be found here:
->> >
->> > 	https://kernelci.org/boot/id/5d302d8359b51498d049e983/
->> 
->> I confirm that disabling CPUfreq in the defconfig (CONFIG_CPU_FREQ=n)
->> makes the firefly board start working again.
->> 
->> Note that the default defconfig enables the "performance" CPUfreq
->> governor as the default governor, so during kernel boot, it will always
->> switch to the max frequency.
->> 
->> For fun, I set the default governor to "userspace" so the kernel
->> wouldn't make any OPP changes, and that leads to a slightly more
->> informative splat[1]
->> 
->> There is still an OPP change happening because the detected OPP is not
->> one that's listed in the table, so it tries to change to a listed OPP
->> and fails in the bowels of clk_set_rate()
+On Wed, 14 Aug 2019 12:54:33 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> Though I think that might only be a symptom as well.
-> Both the PLL setting code as well as the actual cpu-clock implementation
-> is unchanged since 2017 (and runs just fine on all boards in my farm).
->
-> One source for these issues is often the regulator supplying the cpu
-> going haywire - aka the voltage not matching the opp.
->
-> As in this error-case it's CPU4 being set, this would mean it might
-> be the big cluster supplied by the external syr825 (fan5355 clone)
-> that might act up. In the Firefly-rk3399 case this is even stranger.
->
-> There is a discrepancy between the "fcs,suspend-voltage-selector"
-> between different bootloader versions (how the selection-pin is set up),
-> so the kernel might actually write his requested voltage to the wrong
-> register (not the one for actual voltage, but the second set used for
-> the suspend voltage).
->
-> Did you by chance swap bootloaders at some point in recent past?
+> Today's linux-next merge of the drm-misc tree got a conflict in:
+>=20
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+>   drivers/gpu/drm/i915/i915_vma.c
+>   drivers/gpu/drm/i915/i915_gem_batch_pool.c
+>   drivers/gpu/drm/i915/gem/i915_gem_object.c
+>   drivers/gpu/drm/i915/gt/intel_engine_pool.c
+>=20
+> between commits:
+>=20
+>   a93615f900bd ("drm/i915: Throw away the active object retirement comple=
+xity")
+>   12c255b5dad1 ("drm/i915: Provide an i915_active.acquire callback")
+>   cd2a4eaf8c79 ("drm/i915: Report resv_obj allocation failure")
+>   b40d73784ffc ("drm/i915: Replace struct_mutex for batch pool serialisat=
+ion")
+>   ab2f7a5c18b5 ("drm/amdgpu: Implement VRAM wipe on release")
+>   0c159ffef628 ("drm/i915/gem: Defer obj->base.resv fini until RCU callba=
+ck")
+>=20
+> from the drm and drm-intel trees and commit:
+>=20
+>   52791eeec1d9 ("dma-buf: rename reservation_object to dma_resv")
+>=20
+> from the drm-misc tree.
+>=20
+> I fixed it up (see below and I added the following merge fix patch) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the
+> conflicting tree to minimise any particularly complex conflicts.
 
-No, haven't touched bootloader since I initially setup the board.
+So the parts of this that affected the drm tree are now fixed, but the
+conflicts between the drm-intel and drm-misc trees are now between the
+drm-intel and drm trees.
 
-> I'd assume [2] might actually be the same issue last year, though
-> the CI-logs are not available anymore it seems.
->
-> Could you try to set the vdd_cpu_b regulator to disabled, so that
-> cpufreq for this cluster defers and see what happens?
+The added patch becomes:
 
-Yes, this change[1] definitely makes things boot reliably again, so
-there's defintiely something a bit unstable with this regulator, at
-least on this firefly.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 14 Aug 2019 12:48:39 +1000
+Subject: [PATCH] drm: fix up fallout from "dma-buf: rename reservation_obje=
+ct to dma_resv"
 
-Kevin
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/gt/intel_engine_pool.c | 8 ++++----
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-[1]
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-index c706db0ee9ec..6b70bdcc3328 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
-@@ -454,6 +454,7 @@
- 
- 	vdd_cpu_b: regulator@40 {
- 		compatible = "silergy,syr827";
-+		status = "disabled";
- 		reg = <0x40>;
- 		fcs,suspend-voltage-selector = <0>;
- 		regulator-name = "vdd_cpu_b";
+diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pool.c b/drivers/gpu/drm/=
+i915/gt/intel_engine_pool.c
+index 03d90b49584a..4cd54c569911 100644
+--- a/drivers/gpu/drm/i915/gt/intel_engine_pool.c
++++ b/drivers/gpu/drm/i915/gt/intel_engine_pool.c
+@@ -43,12 +43,12 @@ static int pool_active(struct i915_active *ref)
+ {
+ 	struct intel_engine_pool_node *node =3D
+ 		container_of(ref, typeof(*node), active);
+-	struct reservation_object *resv =3D node->obj->base.resv;
++	struct dma_resv *resv =3D node->obj->base.resv;
+ 	int err;
+=20
+-	if (reservation_object_trylock(resv)) {
+-		reservation_object_add_excl_fence(resv, NULL);
+-		reservation_object_unlock(resv);
++	if (dma_resv_trylock(resv)) {
++		dma_resv_add_excl_fence(resv, NULL);
++		dma_resv_unlock(resv);
+ 	}
+=20
+ 	err =3D i915_gem_object_pin_pages(node->obj);
+
+I think the remaining merge resolution is:
+
+diff --cc drivers/gpu/drm/i915/i915_vma.c
+index 8be1bbef40e5,ebfd03d117cd..000000000000
+--- a/drivers/gpu/drm/i915/i915_vma.c
++++ b/drivers/gpu/drm/i915/i915_vma.c
+@@@ -911,21 -951,16 +911,21 @@@ int i915_vma_move_to_active(struct i915
+  		if (intel_fb_obj_invalidate(obj, ORIGIN_CS))
+  			__i915_active_request_set(&obj->frontbuffer_write, rq);
+ =20
+- 		reservation_object_add_excl_fence(vma->resv, &rq->fence);
+++		dma_resv_add_excl_fence(vma->resv, &rq->fence);
+ +		obj->write_domain =3D I915_GEM_DOMAIN_RENDER;
+  		obj->read_domains =3D 0;
+ +	} else {
+- 		err =3D reservation_object_reserve_shared(vma->resv, 1);
+++		err =3D dma_resv_reserve_shared(vma->resv, 1);
+ +		if (unlikely(err))
+ +			return err;
+ +
+- 		reservation_object_add_shared_fence(vma->resv, &rq->fence);
+++		dma_resv_add_shared_fence(vma->resv, &rq->fence);
+ +		obj->write_domain =3D 0;
+  	}
+  	obj->read_domains |=3D I915_GEM_GPU_DOMAINS;
+ +	obj->mm.dirty =3D true;
+ =20
+ -	if (flags & EXEC_OBJECT_NEEDS_FENCE)
+ -		__i915_active_request_set(&vma->last_fence, rq);
+ -
+ -	export_fence(vma, rq, flags);
+ +	GEM_BUG_ON(!i915_vma_is_active(vma));
+  	return 0;
+  }
+ =20
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/pqDYB7qH+83yIm0QxI/PxPA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1d2MUACgkQAVBC80lX
+0GzVkAf+NS5yNROpnuYKxJ9NZMqwpXSwX1Lp8xFoFus6j8tDOmh5EmqfTc1GYGPG
+KEM6K0fwt917csvjAqIVZyg54e1EzOpUbhwX6VZ8dQ+FJ7WbxL3B0M6AKlvxUQ5f
+WNWZzSvh5md42plUh795v0M2F4kBBIIL66HNR52Cd7J7HaEtIa+XXdbIn4FYbQk2
+be7Z+ZNMqwypHzCorlneJHU18K6TcnoOF+LsiDG23xTXXx3j0lONPWGttvoSwlSw
+jBnlQyiv04eowSaBGcS9ohBu+lsF+aWT6gdmAOhyEjPoTZwLhevQhX0r+OZBsWtT
+it8Kp5BE7186KJcgnrlk6q0BY3VQLg==
+=kiwf
+-----END PGP SIGNATURE-----
+
+--Sig_/pqDYB7qH+83yIm0QxI/PxPA--

@@ -2,135 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6299704E
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 05:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06A3970F2
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727120AbfHUD2C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 20 Aug 2019 23:28:02 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:42657 "EHLO ozlabs.org"
+        id S1727650AbfHUEQw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 00:16:52 -0400
+Received: from wtarreau.pck.nerim.net ([62.212.114.60]:28811 "EHLO 1wt.eu"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726329AbfHUD2B (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 20 Aug 2019 23:28:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46CtQk3R1Gz9s4Y;
-        Wed, 21 Aug 2019 13:27:58 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566358078;
-        bh=33J2ZYDpWb8pnhaCfRFBJpUbWUIkHSUveXcCUDYwWvU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=td6wTzQq9nhrxW5X+TT0fpv1mps/E3PzTHQRO3XtNMUK1r2eISGDa0LJd8sV63VYW
-         nFSVAwQheqgMSfjUnLS5lA6PhqvavjfVlXkRJf5uJ7yJ4CCKFxNx2bm+nmIOOaTfnW
-         HrcB7HNYopjBWPf+1LTsVtV3+RbSQp68qtbeOpc7SH4DhclmCcHpuHn9lFh/LeJoNj
-         73bw2jc2AXCKBV11pj0Vk+LYQiCmTQC19l24EHrfK0U4fvQ7nTkwk0dVf7QdGxGk9j
-         gJ9tMiygaa8IS2gaXW/IgxFDFY8pjCM4x6QBNcA3E7R9pS2w6XC96ZFJcupdLd3YdX
-         M8puAE9T8lS8g==
-Date:   Wed, 21 Aug 2019 13:27:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        James Morris <jmorris@namei.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Bohac <jbohac@suse.cz>,
-        David Howells <dhowells@redhat.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Thiago Jung Bauermann <bauerman@linux.ibm.com>
-Subject: linux-next: manual merge of the integrity tree with the security
- tree
-Message-ID: <20190821132757.4a12dada@canb.auug.org.au>
+        id S1727457AbfHUEQw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 00:16:52 -0400
+X-Greylist: delayed 899 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Aug 2019 00:16:51 EDT
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id x7L41OHU009738;
+        Wed, 21 Aug 2019 06:01:24 +0200
+Date:   Wed, 21 Aug 2019 06:01:24 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Joe Perches <joe@perches.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: rfc: treewide scripted patch mechanism? (was: Re: [PATCH]
+ Makefile: Convert -Wimplicit-fallthrough=3 to just -Wimplicit-fallthrough
+ for clang)QUILT
+Message-ID: <20190821040124.GA9608@1wt.eu>
+References: <9c7a79b4d21aea52464d00c8fa4e4b92638560b6.camel@perches.com>
+ <CAHk-=wiL7jqYNfYrNikgBw3byY+Zn37-8D8yR=WUu0x=_2BpZA@mail.gmail.com>
+ <6a5f470c1375289908c37632572c4aa60d6486fa.camel@perches.com>
+ <4398924f28a58fca296d101dae11e7accce80656.camel@perches.com>
+ <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
+ <20190820092451.791c85e5@canb.auug.org.au>
+ <14723fccc2c3362cc045df17fc8554f37c8a8529.camel@perches.com>
+ <CAHk-=wgqQKoAnhmhGE-2PBFt7oQs9LLAATKbYa573UO=DPBE0Q@mail.gmail.com>
+ <edd8efd53fadd07992f804cc595c6ae5fdb60e73.camel@perches.com>
+ <CAHk-=wg8vLmmwTGhXM51NpSWJW8RFEAKoXxG0Hu_Q9Uwbjj8kw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ld73mL_pKbcSjayK+pT8GbB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wg8vLmmwTGhXM51NpSWJW8RFEAKoXxG0Hu_Q9Uwbjj8kw@mail.gmail.com>
+User-Agent: Mutt/1.6.1 (2016-04-27)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ld73mL_pKbcSjayK+pT8GbB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 20, 2019 at 05:43:27PM -0700, Linus Torvalds wrote:
+> I would seriously suggest doing something like
+> 
+>    copy_string( dst, dstsize, src, srcsize, FLAGS );
+> 
+> where FLAGS migth be "pad" or whatever. Make it return the size of the
+> resulting string, because while it can be convenient to pass 'dst" on,
+> it's not useful.
 
-Hi all,
+I actually like this a lot. FLAGS could also indicate whether or not a
+zero before srcsize ends the copy or not, allowing to copy substrings
+of known length or known valid strings of unknown length by passing ~0
+in srcsize. And it could also indicate whether the returned value should
+indicate how much was copied or how much would have been needed for the
+copy to work (so that testing (result <= dstsize) indicates truncation).
 
-Today's linux-next merge of the integrity tree got a conflict in:
+> And then maybe just add the helper macro that turns an array into a
+> "pointer, size" combination, rather than yet another letter jumble.
 
-  arch/s390/kernel/machine_kexec_file.c
+I did exactly this in some of my projects including haproxy, I called
+the lib "ist" for "indirect string", and found it extremely convenient
+to use because many functions now return an ist or take an ist as an
+argument. Passing a structure of only two elements results in passing
+only two registers, and that's the same for the return value. Moreover,
+the compiler is smart enough to eliminate a *lot* of manipulations, and
+to replace pointer dereferences with direct register manipulations. I
+do have a lot of ist("foo") spread everywhere in the code, which makes
+a struct ist from the string and its length, and when you look at the
+code, the compiler used immediate values for both the string and its
+length. It's also extremely convenient for string comparisons and
+lookups because you start by checking the length and can eliminate
+lookups and dereferences, making keyword parsers very efficient. It
+also allows us to have an istcat() function doing like strncat() but
+with the output size always known so that there's no risk of appending
+past the end when the starting point doesn't match the beginning of a
+string.
 
-between commit:
+I must confess that I became quite addict to using this because it's
+so much convenient not to have to care about string length nor zero
+termination anymore, without the overhead of calling strlen() on
+resulting values!
 
-  99d5cadfde2b ("kexec_file: split KEXEC_VERIFY_SIG into KEXEC_SIG and KEXE=
-C_SIG_FORCE")
+For illustration of the simplicity the code is here :
+    http://git.haproxy.org/?p=haproxy.git;a=blob_plain;f=include/common/ist.h
 
-from the security tree and commit:
+And here are a few examples of usage:
+  - declaration in arrays:
+    http://git.haproxy.org/?p=haproxy.git;a=blob;f=contrib/prometheus-exporter/service-prometheus.c;h=9b9ef2ea8e2e8ee0cc63364500d39fc08009fb8d;hb=HEAD#l644
+  - appending to a string:
+    http://git.haproxy.org/?p=haproxy.git;a=blob;f=contrib/prometheus-exporter/service-prometheus.c;h=9b9ef2ea8e2e8ee0cc63364500d39fc08009fb8d;hb=HEAD#l1112
+  - passing as function arguments:
+    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/http_ana.c;h=b2069e3ead59e7bcde45ac76a1c6b0b6b5fb3882;hb=HEAD#l2468
+    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/http_ana.c;h=b2069e3ead59e7bcde45ac76a1c6b0b6b5fb3882;hb=HEAD#l2602
+  - checking for known values:
+    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/h2.c;h=c41da8e5ee116e75e4719709527511c299a3657c;hb=HEAD#l295
 
-  c8424e776b09 ("MODSIGN: Export module signature definitions")
+I'm personally totally convinced by this approach and am slowly improving
+this interface to progressively use it everywhere, and quite frankly I
+can only strongly recommend going into the same direction for ease of
+use, safety, and efficiency.
 
-from the integrity tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/s390/kernel/machine_kexec_file.c
-index c0f33ba49a9a,1ac9fbc6e01e..000000000000
---- a/arch/s390/kernel/machine_kexec_file.c
-+++ b/arch/s390/kernel/machine_kexec_file.c
-@@@ -22,29 -22,7 +22,7 @@@ const struct kexec_file_ops * const kex
-  	NULL,
-  };
- =20
- -#ifdef CONFIG_KEXEC_VERIFY_SIG
- +#ifdef CONFIG_KEXEC_SIG
-- /*
--  * Module signature information block.
--  *
--  * The constituents of the signature section are, in order:
--  *
--  *	- Signer's name
--  *	- Key identifier
--  *	- Signature data
--  *	- Information block
--  */
-- struct module_signature {
-- 	u8	algo;		/* Public-key crypto algorithm [0] */
-- 	u8	hash;		/* Digest algorithm [0] */
-- 	u8	id_type;	/* Key identifier type [PKEY_ID_PKCS7] */
-- 	u8	signer_len;	/* Length of signer's name [0] */
-- 	u8	key_id_len;	/* Length of key identifier [0] */
-- 	u8	__pad[3];
-- 	__be32	sig_len;	/* Length of signature data */
-- };
--=20
-- #define PKEY_ID_PKCS7 2
--=20
-  int s390_verify_sig(const char *kernel, unsigned long kernel_len)
-  {
-  	const unsigned long marker_len =3D sizeof(MODULE_SIG_STRING) - 1;
-
---Sig_/Ld73mL_pKbcSjayK+pT8GbB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1cuj0ACgkQAVBC80lX
-0GzOlggAgNYypzYn0+ZyFYKHGM8XZaRNKbqrH4picUjwrELX/2lB5WIPsbD4Ftjf
-JdXBy2qGX0Eky0Fm67XBis9lpcb5ltw4C5kGhVs8lo0RZeImqxt2ZfXHSmNx61zD
-kZWyk6qzzpijNAB6AHQmo37drqtp61SfpjLg5gnKCycyk6wh/vnDuvfBOtVlaUiS
-mY2nNl6n2TtLcHlSnBqvCdnCNvG+yS9NTW4fGaC0RNxEQd6bpmT57jv5irIJF9Sh
-Oh649H+DwTUxEHiDYxLP/nwaiadgga/vqe+grX5eNryzYgcDBWOxfPM4GcaWcZUL
-0brA440bTD8CZ48/kSDLysYoo0WGoQ==
-=SJXe
------END PGP SIGNATURE-----
-
---Sig_/Ld73mL_pKbcSjayK+pT8GbB--
+Willy

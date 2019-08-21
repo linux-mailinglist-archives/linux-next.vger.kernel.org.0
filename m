@@ -2,112 +2,337 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F06A3970F2
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D46970EF
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:16:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727650AbfHUEQw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 00:16:52 -0400
-Received: from wtarreau.pck.nerim.net ([62.212.114.60]:28811 "EHLO 1wt.eu"
+        id S1726906AbfHUEQr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 00:16:47 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56795 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727457AbfHUEQw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Aug 2019 00:16:52 -0400
-X-Greylist: delayed 899 seconds by postgrey-1.27 at vger.kernel.org; Wed, 21 Aug 2019 00:16:51 EDT
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id x7L41OHU009738;
-        Wed, 21 Aug 2019 06:01:24 +0200
-Date:   Wed, 21 Aug 2019 06:01:24 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Joe Perches <joe@perches.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux@googlegroups.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: rfc: treewide scripted patch mechanism? (was: Re: [PATCH]
- Makefile: Convert -Wimplicit-fallthrough=3 to just -Wimplicit-fallthrough
- for clang)QUILT
-Message-ID: <20190821040124.GA9608@1wt.eu>
-References: <9c7a79b4d21aea52464d00c8fa4e4b92638560b6.camel@perches.com>
- <CAHk-=wiL7jqYNfYrNikgBw3byY+Zn37-8D8yR=WUu0x=_2BpZA@mail.gmail.com>
- <6a5f470c1375289908c37632572c4aa60d6486fa.camel@perches.com>
- <4398924f28a58fca296d101dae11e7accce80656.camel@perches.com>
- <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
- <20190820092451.791c85e5@canb.auug.org.au>
- <14723fccc2c3362cc045df17fc8554f37c8a8529.camel@perches.com>
- <CAHk-=wgqQKoAnhmhGE-2PBFt7oQs9LLAATKbYa573UO=DPBE0Q@mail.gmail.com>
- <edd8efd53fadd07992f804cc595c6ae5fdb60e73.camel@perches.com>
- <CAHk-=wg8vLmmwTGhXM51NpSWJW8RFEAKoXxG0Hu_Q9Uwbjj8kw@mail.gmail.com>
+        id S1727457AbfHUEQr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 00:16:47 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46CvVx2lDPz9s3Z;
+        Wed, 21 Aug 2019 14:16:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566361003;
+        bh=YnvDxWQMkwXci5nApLHjLHJ7S09LLcbKy26yMzcEK9s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ifox4zovovh5uHxJhM5NmVCkWR388kOxuK6YxVCcqUvnL3JjsT1eI5lnIPNSiI7t2
+         TsERwtaFDJiUy1LqrN0Z980QMNYpuihVg3XKk0oYWsHRpFz0xabvXk5AlEtwfv8G/d
+         rDXFUvTncE0BM6PmS2slEKhA1jzIbx6tdvuP0GpT3chsg3m2b3mw4qt8xuNVCabIKA
+         zjULZFKkzZMhphQdJSCbkbdKJ4m9CEjzauqYzm31ghjJ0hRf/kzpvlKS9vIX0eKv7X
+         4/lZJLcx4l6uCb62NcPGegk3aqkjug6L+HVjqaMFS9aT8fGmam/o7AKuLBGpE4CUiB
+         OiQblBcUnAQtg==
+Date:   Wed, 21 Aug 2019 14:16:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>
+Subject: linux-next: manual merge of the iommu tree with the drm-misc tree
+Message-ID: <20190821141640.7967ddcc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg8vLmmwTGhXM51NpSWJW8RFEAKoXxG0Hu_Q9Uwbjj8kw@mail.gmail.com>
-User-Agent: Mutt/1.6.1 (2016-04-27)
+Content-Type: multipart/signed; boundary="Sig_/n04PXGM89qVzXJ9V2Le85iP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 20, 2019 at 05:43:27PM -0700, Linus Torvalds wrote:
-> I would seriously suggest doing something like
-> 
->    copy_string( dst, dstsize, src, srcsize, FLAGS );
-> 
-> where FLAGS migth be "pad" or whatever. Make it return the size of the
-> resulting string, because while it can be convenient to pass 'dst" on,
-> it's not useful.
+--Sig_/n04PXGM89qVzXJ9V2Le85iP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I actually like this a lot. FLAGS could also indicate whether or not a
-zero before srcsize ends the copy or not, allowing to copy substrings
-of known length or known valid strings of unknown length by passing ~0
-in srcsize. And it could also indicate whether the returned value should
-indicate how much was copied or how much would have been needed for the
-copy to work (so that testing (result <= dstsize) indicates truncation).
+Hi all,
 
-> And then maybe just add the helper macro that turns an array into a
-> "pointer, size" combination, rather than yet another letter jumble.
+Today's linux-next merge of the iommu tree got a conflict in:
 
-I did exactly this in some of my projects including haproxy, I called
-the lib "ist" for "indirect string", and found it extremely convenient
-to use because many functions now return an ist or take an ist as an
-argument. Passing a structure of only two elements results in passing
-only two registers, and that's the same for the return value. Moreover,
-the compiler is smart enough to eliminate a *lot* of manipulations, and
-to replace pointer dereferences with direct register manipulations. I
-do have a lot of ist("foo") spread everywhere in the code, which makes
-a struct ist from the string and its length, and when you look at the
-code, the compiler used immediate values for both the string and its
-length. It's also extremely convenient for string comparisons and
-lookups because you start by checking the length and can eliminate
-lookups and dereferences, making keyword parsers very efficient. It
-also allows us to have an istcat() function doing like strncat() but
-with the output size always known so that there's no risk of appending
-past the end when the starting point doesn't match the beginning of a
-string.
+  drivers/gpu/drm/panfrost/panfrost_mmu.c
 
-I must confess that I became quite addict to using this because it's
-so much convenient not to have to care about string length nor zero
-termination anymore, without the overhead of calling strlen() on
-resulting values!
+between commit:
 
-For illustration of the simplicity the code is here :
-    http://git.haproxy.org/?p=haproxy.git;a=blob_plain;f=include/common/ist.h
+  187d2929206e ("drm/panfrost: Add support for GPU heap allocations")
 
-And here are a few examples of usage:
-  - declaration in arrays:
-    http://git.haproxy.org/?p=haproxy.git;a=blob;f=contrib/prometheus-exporter/service-prometheus.c;h=9b9ef2ea8e2e8ee0cc63364500d39fc08009fb8d;hb=HEAD#l644
-  - appending to a string:
-    http://git.haproxy.org/?p=haproxy.git;a=blob;f=contrib/prometheus-exporter/service-prometheus.c;h=9b9ef2ea8e2e8ee0cc63364500d39fc08009fb8d;hb=HEAD#l1112
-  - passing as function arguments:
-    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/http_ana.c;h=b2069e3ead59e7bcde45ac76a1c6b0b6b5fb3882;hb=HEAD#l2468
-    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/http_ana.c;h=b2069e3ead59e7bcde45ac76a1c6b0b6b5fb3882;hb=HEAD#l2602
-  - checking for known values:
-    http://git.haproxy.org/?p=haproxy.git;a=blob;f=src/h2.c;h=c41da8e5ee116e75e4719709527511c299a3657c;hb=HEAD#l295
+from the drm-misc tree and commit:
 
-I'm personally totally convinced by this approach and am slowly improving
-this interface to progressively use it everywhere, and quite frankly I
-can only strongly recommend going into the same direction for ease of
-use, safety, and efficiency.
+  a2d3a382d6c6 ("iommu/io-pgtable: Pass struct iommu_iotlb_gather to ->unma=
+p()")
 
-Willy
+from the iommu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/panfrost/panfrost_mmu.c
+index 842bdd7cf6be,6e8145c36e93..000000000000
+--- a/drivers/gpu/drm/panfrost/panfrost_mmu.c
++++ b/drivers/gpu/drm/panfrost/panfrost_mmu.c
+@@@ -310,18 -222,18 +310,18 @@@ void panfrost_mmu_unmap(struct panfrost
+  		size_t unmapped_page;
+  		size_t pgsize =3D get_pgsize(iova, len - unmapped_len);
+ =20
+ -		unmapped_page =3D ops->unmap(ops, iova, pgsize, NULL);
+ -		if (!unmapped_page)
+ -			break;
+ -
+ -		iova +=3D unmapped_page;
+ -		unmapped_len +=3D unmapped_page;
+ +		if (ops->iova_to_phys(ops, iova)) {
+- 			unmapped_page =3D ops->unmap(ops, iova, pgsize);
+++			unmapped_page =3D ops->unmap(ops, iova, pgsize, NULL);
+ +			WARN_ON(unmapped_page !=3D pgsize);
+ +		}
+ +		iova +=3D pgsize;
+ +		unmapped_len +=3D pgsize;
+  	}
+ =20
+ -	mmu_hw_do_operation(pfdev, 0, bo->node.start << PAGE_SHIFT,
+ +	mmu_hw_do_operation(pfdev, bo->mmu, bo->node.start << PAGE_SHIFT,
+  			    bo->node.size << PAGE_SHIFT, AS_COMMAND_FLUSH_PT);
+ =20
+ -	mutex_unlock(&pfdev->mmu->lock);
+ +	mutex_unlock(&bo->mmu->lock);
+ =20
+  	pm_runtime_mark_last_busy(pfdev->dev);
+  	pm_runtime_put_autosuspend(pfdev->dev);
+@@@ -330,184 -242,35 +330,192 @@@
+ =20
+  static void mmu_tlb_inv_context_s1(void *cookie)
+  {
+ -	struct panfrost_device *pfdev =3D cookie;
+ +	struct panfrost_file_priv *priv =3D cookie;
+ =20
+ -	mmu_hw_do_operation(pfdev, 0, 0, ~0UL, AS_COMMAND_FLUSH_MEM);
+ +	mmu_hw_do_operation(priv->pfdev, &priv->mmu, 0, ~0UL, AS_COMMAND_FLUSH_M=
+EM);
+  }
+ =20
+- static void mmu_tlb_inv_range_nosync(unsigned long iova, size_t size,
+- 				     size_t granule, bool leaf, void *cookie)
+- {}
+-=20
+  static void mmu_tlb_sync_context(void *cookie)
+  {
+  	//struct panfrost_device *pfdev =3D cookie;
+  	// TODO: Wait 1000 GPU cycles for HW_ISSUE_6367/T60X
+  }
+ =20
+- static const struct iommu_gather_ops mmu_tlb_ops =3D {
++ static void mmu_tlb_flush_walk(unsigned long iova, size_t size, size_t gr=
+anule,
++ 			       void *cookie)
++ {
++ 	mmu_tlb_sync_context(cookie);
++ }
++=20
++ static void mmu_tlb_flush_leaf(unsigned long iova, size_t size, size_t gr=
+anule,
++ 			       void *cookie)
++ {
++ 	mmu_tlb_sync_context(cookie);
++ }
++=20
++ static const struct iommu_flush_ops mmu_tlb_ops =3D {
+  	.tlb_flush_all	=3D mmu_tlb_inv_context_s1,
+- 	.tlb_add_flush	=3D mmu_tlb_inv_range_nosync,
+- 	.tlb_sync	=3D mmu_tlb_sync_context,
++ 	.tlb_flush_walk =3D mmu_tlb_flush_walk,
++ 	.tlb_flush_leaf =3D mmu_tlb_flush_leaf,
+  };
+ =20
+ +int panfrost_mmu_pgtable_alloc(struct panfrost_file_priv *priv)
+ +{
+ +	struct panfrost_mmu *mmu =3D &priv->mmu;
+ +	struct panfrost_device *pfdev =3D priv->pfdev;
+ +
+ +	mutex_init(&mmu->lock);
+ +	INIT_LIST_HEAD(&mmu->list);
+ +	mmu->as =3D -1;
+ +
+ +	mmu->pgtbl_cfg =3D (struct io_pgtable_cfg) {
+ +		.pgsize_bitmap	=3D SZ_4K | SZ_2M,
+ +		.ias		=3D FIELD_GET(0xff, pfdev->features.mmu_features),
+ +		.oas		=3D FIELD_GET(0xff00, pfdev->features.mmu_features),
+ +		.tlb		=3D &mmu_tlb_ops,
+ +		.iommu_dev	=3D pfdev->dev,
+ +	};
+ +
+ +	mmu->pgtbl_ops =3D alloc_io_pgtable_ops(ARM_MALI_LPAE, &mmu->pgtbl_cfg,
+ +					      priv);
+ +	if (!mmu->pgtbl_ops)
+ +		return -EINVAL;
+ +
+ +	return 0;
+ +}
+ +
+ +void panfrost_mmu_pgtable_free(struct panfrost_file_priv *priv)
+ +{
+ +	struct panfrost_device *pfdev =3D priv->pfdev;
+ +	struct panfrost_mmu *mmu =3D &priv->mmu;
+ +
+ +	spin_lock(&pfdev->as_lock);
+ +	if (mmu->as >=3D 0) {
+ +		clear_bit(mmu->as, &pfdev->as_alloc_mask);
+ +		clear_bit(mmu->as, &pfdev->as_in_use_mask);
+ +		list_del(&mmu->list);
+ +	}
+ +	spin_unlock(&pfdev->as_lock);
+ +
+ +	free_io_pgtable_ops(mmu->pgtbl_ops);
+ +}
+ +
+ +static struct drm_mm_node *addr_to_drm_mm_node(struct panfrost_device *pf=
+dev, int as, u64 addr)
+ +{
+ +	struct drm_mm_node *node =3D NULL;
+ +	u64 offset =3D addr >> PAGE_SHIFT;
+ +	struct panfrost_mmu *mmu;
+ +
+ +	spin_lock(&pfdev->as_lock);
+ +	list_for_each_entry(mmu, &pfdev->as_lru_list, list) {
+ +		struct panfrost_file_priv *priv;
+ +		if (as !=3D mmu->as)
+ +			continue;
+ +
+ +		priv =3D container_of(mmu, struct panfrost_file_priv, mmu);
+ +		drm_mm_for_each_node(node, &priv->mm) {
+ +			if (offset >=3D node->start && offset < (node->start + node->size))
+ +				goto out;
+ +		}
+ +	}
+ +
+ +out:
+ +	spin_unlock(&pfdev->as_lock);
+ +	return node;
+ +}
+ +
+ +#define NUM_FAULT_PAGES (SZ_2M / PAGE_SIZE)
+ +
+ +int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as, u6=
+4 addr)
+ +{
+ +	int ret, i;
+ +	struct drm_mm_node *node;
+ +	struct panfrost_gem_object *bo;
+ +	struct address_space *mapping;
+ +	pgoff_t page_offset;
+ +	struct sg_table *sgt;
+ +	struct page **pages;
+ +
+ +	node =3D addr_to_drm_mm_node(pfdev, as, addr);
+ +	if (!node)
+ +		return -ENOENT;
+ +
+ +	bo =3D drm_mm_node_to_panfrost_bo(node);
+ +	if (!bo->is_heap) {
+ +		dev_WARN(pfdev->dev, "matching BO is not heap type (GPU VA =3D %llx)",
+ +			 node->start << PAGE_SHIFT);
+ +		return -EINVAL;
+ +	}
+ +	WARN_ON(bo->mmu->as !=3D as);
+ +
+ +	/* Assume 2MB alignment and size multiple */
+ +	addr &=3D ~((u64)SZ_2M - 1);
+ +	page_offset =3D addr >> PAGE_SHIFT;
+ +	page_offset -=3D node->start;
+ +
+ +	mutex_lock(&bo->base.pages_lock);
+ +
+ +	if (!bo->base.pages) {
+ +		bo->sgts =3D kvmalloc_array(bo->base.base.size / SZ_2M,
+ +				     sizeof(struct sg_table), GFP_KERNEL | __GFP_ZERO);
+ +		if (!bo->sgts) {
+ +			mutex_unlock(&bo->base.pages_lock);
+ +			return -ENOMEM;
+ +		}
+ +
+ +		pages =3D kvmalloc_array(bo->base.base.size >> PAGE_SHIFT,
+ +				       sizeof(struct page *), GFP_KERNEL | __GFP_ZERO);
+ +		if (!pages) {
+ +			kfree(bo->sgts);
+ +			bo->sgts =3D NULL;
+ +			mutex_unlock(&bo->base.pages_lock);
+ +			return -ENOMEM;
+ +		}
+ +		bo->base.pages =3D pages;
+ +		bo->base.pages_use_count =3D 1;
+ +	} else
+ +		pages =3D bo->base.pages;
+ +
+ +	mapping =3D bo->base.base.filp->f_mapping;
+ +	mapping_set_unevictable(mapping);
+ +
+ +	for (i =3D page_offset; i < page_offset + NUM_FAULT_PAGES; i++) {
+ +		pages[i] =3D shmem_read_mapping_page(mapping, i);
+ +		if (IS_ERR(pages[i])) {
+ +			mutex_unlock(&bo->base.pages_lock);
+ +			ret =3D PTR_ERR(pages[i]);
+ +			goto err_pages;
+ +		}
+ +	}
+ +
+ +	mutex_unlock(&bo->base.pages_lock);
+ +
+ +	sgt =3D &bo->sgts[page_offset / (SZ_2M / PAGE_SIZE)];
+ +	ret =3D sg_alloc_table_from_pages(sgt, pages + page_offset,
+ +					NUM_FAULT_PAGES, 0, SZ_2M, GFP_KERNEL);
+ +	if (ret)
+ +		goto err_pages;
+ +
+ +	if (!dma_map_sg(pfdev->dev, sgt->sgl, sgt->nents, DMA_BIDIRECTIONAL)) {
+ +		ret =3D -EINVAL;
+ +		goto err_map;
+ +	}
+ +
+ +	mmu_map_sg(pfdev, bo->mmu, addr, IOMMU_WRITE | IOMMU_READ | IOMMU_NOEXEC=
+, sgt);
+ +
+ +	bo->is_mapped =3D true;
+ +
+ +	dev_dbg(pfdev->dev, "mapped page fault @ AS%d %llx", as, addr);
+ +
+ +	return 0;
+ +
+ +err_map:
+ +	sg_free_table(sgt);
+ +err_pages:
+ +	drm_gem_shmem_put_pages(&bo->base);
+ +	return ret;
+ +}
+ +
+  static const char *access_type_name(struct panfrost_device *pfdev,
+  		u32 fault_status)
+  {
+
+--Sig_/n04PXGM89qVzXJ9V2Le85iP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1cxagACgkQAVBC80lX
+0GwzYAf9GAsEjo5vhQgiQ5uGI/MqmbRSqmr0KmHxGvZlQLSjgPq3c2F9IH8yZOtb
+azBGbf9FKUdiZphmkAtU56t11kezwbWUIOvdYDrOy2Q8zQOMSGorZNvEEk/cwTlv
+hMJDECSchTPU3Do1HDVqusNggj3aYtkEsZsHmZb3k1skSHucYKkSYsf036ZUQKVa
+sCRpkCyfRnTcouVgdDGHSaKldh8qtBrnLinhaW9lWX+W6Ezuc+fWhLujK4ym4tXA
+vKyyiQREDiW4T1dvILErGTmT7e6jWcdx46+JSS02twLTk87ak5OtNi0AvpcmVjJR
+6+N0zY9xTJUxJRMKGmfY6UH14M7nUQ==
+=Hc8m
+-----END PGP SIGNATURE-----
+
+--Sig_/n04PXGM89qVzXJ9V2Le85iP--

@@ -2,166 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 991E097F9A
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 18:03:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E36EE97FB7
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 18:10:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727975AbfHUQCm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 12:02:42 -0400
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:50468 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727956AbfHUQCm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Aug 2019 12:02:42 -0400
-Received: by mail-wm1-f47.google.com with SMTP id v15so2693061wml.0
-        for <linux-next@vger.kernel.org>; Wed, 21 Aug 2019 09:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=qZPhtztpD+6LVdHkxJL/pQd7tsVDORk01w9wW188mBM=;
-        b=X/pH/HxP8onNuP50tierEbjX6Wv4EC9O99ZT4N/E6owNFNL7bYx/QxDF++my0I+q7p
-         pvAp0lCX7Oriduc7xVwmy3x2X6tYFPaBI2zuTx5JaR9cKAic/MWjZkdGPTiJVFNiGdRI
-         urok9Oib1lS5oSPHQilLxW4xYaMBx3vaWLKBKntlplWJxNkoBffjlBIb3NCIL0D9W8+j
-         k+6sE5laEV4dyV5Fvzbb2ipL2pycRTaqroQRIYx04kXsm10w8la1E7fSCTU3SIqNfP1t
-         dWy7/3K9Bte5E1rhoNjE7iZfrpa8aidBOYBLnzlGSQFyk2GESPqNFEYmAxA3GvbmKNxi
-         FvkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=qZPhtztpD+6LVdHkxJL/pQd7tsVDORk01w9wW188mBM=;
-        b=NxEXDba2H5xoRWPfwyhn3ltJWoF+QgrSKgNm924tY0RFe5bKT0YIptR7I85ZXYOjJs
-         Yf32Mb96WnUn4mT2dEUZ6B0g0Xb8UWOr51Wj4256XF6nIUXdHQbp/GEnHw4cOzoIiLQX
-         FsnjhN+6ucukxnKAtwTi2imDKw7udE1mI1bW8xtejdmio21wY4AhOV4wUgNoOruVYm3A
-         gBjIoOq9hW5+cItXnexpD5Ay7lK9KXSeNqI4w/PakD7ZSNWoCOm+W7uvetiwzuet6/xQ
-         l4z70dOb4spnxHjurAQVD6+k842ILzEorM5lRVxi+90s4uqiDYAfKRfxRJAsci2pnVk7
-         x3/g==
-X-Gm-Message-State: APjAAAV9GNdstFs5iFS+jPR6cVupKa5vi1nJVxBYWXWnG9wRWf1bHCo/
-        ZB1ayBCFUdLNmFAeOXxezL78h9waYEgQQw==
-X-Google-Smtp-Source: APXvYqwLWwLiSCPTVcK+8MtoixbWx12xoZ38lYtsXzahaaNPz3C2FwcSDV0/j/HoaGqON+okKv3SFA==
-X-Received: by 2002:a1c:a6cd:: with SMTP id p196mr806494wme.111.1566403359873;
-        Wed, 21 Aug 2019 09:02:39 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id n14sm68911801wra.75.2019.08.21.09.02.39
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Aug 2019 09:02:39 -0700 (PDT)
-Message-ID: <5d5d6b1f.1c69fb81.a452d.1092@mx.google.com>
-Date:   Wed, 21 Aug 2019 09:02:39 -0700 (PDT)
+        id S1726903AbfHUQKr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 12:10:47 -0400
+Received: from mail-eopbgr30084.outbound.protection.outlook.com ([40.107.3.84]:50820
+        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727401AbfHUQKr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 12:10:47 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mx6LFLwYXk8KC00DVy2TRZpycQts7g5miEKY5AfKWUbeTUhFukTzC1HrNAssxO+DJf2jO0U2eIgqq2eptA0uMATlVswBK6KmfB42eiTv5Jg8oZ+RknsXkZacxa8Y/V40Ju79+e6jsogfwLO5o8ynFajsqlGjI01TbCsxYC65McC/SG2Ygm+HM7sSeGftjm9wDXIO/YJwiCYGMrDKaXrk6qOLTTlgx7Bj3z4mpxjVyXZqDgP+2gemcn10Ez+fnhGPkPO26CWCUO5m8nqBgxi16FqlceR7jlSFa9mmPIy94NpJf30e5WXtjS4rx8woWt9WDKmO5gr7C6CEm2T/OnChug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZVhCgWyFt9x9wO/2D/TbZgymY3EGFsVqPvUnluM5MCk=;
+ b=S+5Dfkgs4FDhpnNQmdfJuFoUBlpzu+Q1g1rEZiGS8pxIcrW2MKYxuYU7d3EdbV2OMSVtccRWL2CBKM1VRsprtvAteDFVj/kI28DNjLKhMfopQ5J6U7RWjC/xMWFkiOhGP62aWx0b/WCmOoOLq5QUHPHaNenLElLAhenyDEEdgjJuREWg9vjwBHvLY0aamDlP74tgJL2hqULygDd3fHPjBWCztCVCP/uphPwBI7MgQGWVH/e88mUdQlHJ+tRldrh2ih4jgXQzRlGT0T4J7hLSxrFVGZ6yQhOUx16N+El8IkpWMRaq+3qJ52clhpR7lO7wPnXXUx8z8aPB+stTSJRLNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZVhCgWyFt9x9wO/2D/TbZgymY3EGFsVqPvUnluM5MCk=;
+ b=ESlDq/qtCd+72AYt5FYvAsES6Va9p9XdWYUwIaL2clBbE4eN3+nUImsszOUnXmj1i7Np0bxIJDYr4KTFN/tXFet8rCu31ck97YkZ/fBeRAIobJhkfcd1LDSx7uK2cswiRS3s0I8fD1XiP0CNhGG1kMzDVM+FkRDguGkRWt0A2Ww=
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (10.171.182.144) by
+ VI1PR05MB4431.eurprd05.prod.outlook.com (52.133.13.26) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2178.16; Wed, 21 Aug 2019 16:10:03 +0000
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::1d6:9c67:ea2d:38a7]) by VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::1d6:9c67:ea2d:38a7%6]) with mapi id 15.20.2178.018; Wed, 21 Aug 2019
+ 16:10:03 +0000
+From:   Jason Gunthorpe <jgg@mellanox.com>
+To:     "Kuehling, Felix" <Felix.Kuehling@amd.com>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Aug 19 (amdgpu)
+Thread-Topic: linux-next: Tree for Aug 19 (amdgpu)
+Thread-Index: AQHVVvkFv70F6uhlHE+MpL/A8Ss0j6cD+d6AgAHD8wCAAAn+AA==
+Date:   Wed, 21 Aug 2019 16:10:02 +0000
+Message-ID: <20190821160958.GH8667@mellanox.com>
+References: <20190819191832.03f1a579@canb.auug.org.au>
+ <ba3cde82-6163-12e5-2e77-36834454113a@infradead.org>
+ <20190820114554.0e522651@canb.auug.org.au>
+ <20190820123637.GB29225@mellanox.com>
+ <b60eb195-7263-2ba0-e8d9-8412c0de66e0@amd.com>
+In-Reply-To: <b60eb195-7263-2ba0-e8d9-8412c0de66e0@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: YTOPR0101CA0052.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b00:14::29) To VI1PR05MB4141.eurprd05.prod.outlook.com
+ (2603:10a6:803:4d::16)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=jgg@mellanox.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [156.34.55.100]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 59923ef0-da37-4c6d-2035-08d726520626
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(5600148)(711020)(4605104)(1401327)(4618075)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(2017052603328)(7193020);SRVR:VI1PR05MB4431;
+x-ms-traffictypediagnostic: VI1PR05MB4431:
+x-ms-exchange-purlcount: 2
+x-microsoft-antispam-prvs: <VI1PR05MB443156649D139CBF6DB827C0CFAA0@VI1PR05MB4431.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:1332;
+x-forefront-prvs: 0136C1DDA4
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(396003)(376002)(346002)(189003)(199004)(53754006)(6486002)(2906002)(3846002)(316002)(6436002)(6116002)(81166006)(11346002)(6512007)(446003)(54906003)(99286004)(66946007)(64756008)(8936002)(6306002)(102836004)(229853002)(66446008)(71190400001)(81156014)(66556008)(186003)(8676002)(25786009)(26005)(476003)(486006)(66476007)(2616005)(6506007)(76176011)(66066001)(1076003)(5660300002)(478600001)(6916009)(71200400001)(53546011)(86362001)(36756003)(52116002)(4326008)(386003)(256004)(33656002)(966005)(14454004)(53936002)(5024004)(6246003)(7736002)(305945005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB4431;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: 6Rspc6oHDUos6xiDLmHePePgNRsAx7egBKU6mtx0skNG+qIy+HSf47EihiG7NCOd7UkrtB1zBK8jMk6hqu/Ai6sGs1HUH4vcXLJpUCq+fyuGq3/W/2TjDwiccDfFF0sICRaAydt8EUqnURY/vtfNoLYnACyXps66GP0Cr0SGGcvhpcYdrWGY07cNX6iGixbglpP6fF0TGu6C+pCFtdTx518LPsIuk39hLZnA/E0RAzsy8uLg24iu7hyDqpZONLnjMBoqdKTTraKyV7Rzw/dUsrodjmV+8xCZMa3Hgysdp1qM2r1Yll+LmENZ3OzNRXR3SMtzuWzELj9gCKGZMdllEF/iZomg3F1dP+rdtl2kDiluaRX7Op93RrULBc/VsqCNdenNmylwxRizuXH37DmKo+rCp32h0jivKtzmFPlgXmo=
+x-ms-exchange-transport-forked: True
 Content-Type: text/plain; charset="utf-8"
+Content-ID: <94ED38A7D7E3484C82F74F384D7CB5E5@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190821
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 235 boots: 6 failed,
- 201 passed with 28 offline (next-20190821)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59923ef0-da37-4c6d-2035-08d726520626
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Aug 2019 16:10:03.0079
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gg2YtrQLaonRW/BhJLsYHaRrbdwvnHsF3BMqBL35IHvkcCdmcTTxgfL2f3u7Yf/lRNTqbFJKkMm7HxF1KmuG/A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB4431
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 235 boots: 6 failed, 201 passed with 28 offline (next-201=
-90821)
-
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190821/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190821/
-
-Tree: next
-Branch: master
-Git Describe: next-20190821
-Git Commit: a34a6117538e0030fa8d3af8f23e591ec189a8fc
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 81 unique boards, 26 SoC families, 22 builds out of 221
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            rk3399-firefly: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        clang-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            meson-gxl-s905x-khadas-vim: 1 failed lab
-
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos4412-odroidx2: 1 failed lab
-
-Offline Platforms:
-
-mips:
-
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            juno-r2: 1 offline lab
-            meson-g12a-x96-max: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            juno-r2: 1 offline lab
-            meson-g12a-x96-max: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            juno-r2: 1 offline lab
-            meson-g12a-x96-max: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-arm:
-
-    bcm2835_defconfig:
-        gcc-8
-            bcm2835-rpi-b: 1 offline lab
-
-    sama5_defconfig:
-        gcc-8
-            at91-sama5d4_xplained: 1 offline lab
-            at91-sama5d4ek: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            alpine-db: 1 offline lab
-            at91-sama5d4_xplained: 1 offline lab
-            at91-sama5d4ek: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+T24gV2VkLCBBdWcgMjEsIDIwMTkgYXQgMDM6MzQ6MTJQTSArMDAwMCwgS3VlaGxpbmcsIEZlbGl4
+IHdyb3RlOg0KPiANCj4gT24gMjAxOS0wOC0yMCA4OjM2IGEubS4sIEphc29uIEd1bnRob3JwZSB3
+cm90ZToNCj4gPiBPbiBUdWUsIEF1ZyAyMCwgMjAxOSBhdCAxMTo0NTo1NEFNICsxMDAwLCBTdGVw
+aGVuIFJvdGh3ZWxsIHdyb3RlOg0KPiA+PiBIaSBhbGwsDQo+ID4+DQo+ID4+IE9uIE1vbiwgMTkg
+QXVnIDIwMTkgMTg6MzQ6NDEgLTA3MDAgUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5v
+cmc+IHdyb3RlOg0KPiA+Pj4gT24gOC8xOS8xOSAyOjE4IEFNLCBTdGVwaGVuIFJvdGh3ZWxsIHdy
+b3RlOg0KPiA+Pj4+IEhpIGFsbCwNCj4gPj4+Pg0KPiA+Pj4+IENoYW5nZXMgc2luY2UgMjAxOTA4
+MTY6DQo+ID4+Pj4gICAgDQo+ID4+PiBvbiB4ODZfNjQ6DQo+ID4+Pg0KPiA+Pj4gLi4vZHJpdmVy
+cy9ncHUvZHJtL2FtZC9hbWRncHUvYW1kZ3B1X2Rydi5jOiBJbiBmdW5jdGlvbiDigJhhbWRncHVf
+ZXhpdOKAmToNCj4gPj4+IC4uL2RyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYu
+YzoxNDcxOjI6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBvZiBmdW5jdGlvbiDigJhtbXVf
+bm90aWZpZXJfc3luY2hyb25pemXigJk7IGRpZCB5b3UgbWVhbiDigJhfX3N5bmNfc3luY2hyb25p
+emXigJk/IFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9uXQ0KPiA+Pj4gICAg
+bW11X25vdGlmaWVyX3N5bmNocm9uaXplKCk7DQo+ID4+PiAgICBefn5+fn5+fn5+fn5+fn5+fn5+
+fn5+fn4NCj4gPj4+ICAgIF9fc3luY19zeW5jaHJvbml6ZQ0KPiA+Pj4NCj4gPj4+DQo+ID4+PiBG
+dWxsIHJhbmRjb25maWcgZmlsZSBpcyBhdHRhY2hlZC4NCj4gPj4gQ2F1c2VkIGJ5IGNvbW1pdA0K
+PiA+Pg0KPiA+PiAgICA2ODMyYzlkYzgzNTggKCJobW06IHVzZSBtbXVfbm90aWZpZXJfZ2V0L3B1
+dCBmb3IgJ3N0cnVjdCBobW0nIikNCj4gPj4NCj4gPj4gZnJvbSB0aGUgaG1tIHRyZWUuDQo+ID4+
+DQo+ID4+IGRyaXZlcnMvZ3B1L2RybS9hbWQvYW1kZ3B1L2FtZGdwdV9kcnYuYyBuZWVkIHRvIGlu
+Y2x1ZGUgbGludXgvbW11X25vdGlmaWVyLmgNCj4gPiBBaCB5ZXMsIHRoYW5rcywgaXQgaXMgYmVj
+YXVzZSBvZiAhQ09ORklHX0hNTV9NSVJST1IgaW4gdGhpcw0KPiA+IHJhbmRjb25maWcuIEkndmUg
+Zml4ZWQgaXQgdXAuDQo+IA0KPiBUaGFua3MgSmFzb24uIEknbSB0cnlpbmcgdG8gZm9sbG93IHdo
+YXQncyBnb2luZyBvbiBoZXJlLCBidXQgSSBjYW4ndCANCj4gZmluZCB0aGUgY29tbWl0IGhhc2gg
+cXVvdGVkIGFib3ZlIGluIGFueSBvZiB0aGUgcHVibGljIHJlcG9zaXRvcmllcyBJJ20gDQo+IHRy
+YWNraW5nDQoNCkkgd2FzIGFibGUgdG8gc3F1YXNoIHRoZSBvbmUgbGluZSBmaXgsIHNvIHRoZSBj
+b21taXQgSUQgaXMgZ29uZSwgaXQgaXMNCm5vdzoNCg0KaHR0cHM6Ly9naXQua2VybmVsLm9yZy9w
+dWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvcmRtYS9yZG1hLmdpdC9jb21taXQvP2g9aG1tJmlkPWM3
+ZDhiNzgyNGZmOWRlODY2YTM1NmUxODkyZGJlOWYxOTFhYTVkMDYNCg0KRnJvbQ0KDQpodHRwczov
+L2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9yZG1hL3JkbWEuZ2l0L2xv
+Zy8/aD1obW0NCg0KSmFzb24NCg==

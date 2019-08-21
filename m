@@ -2,70 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D46970EF
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF8DA97138
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfHUEQr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 00:16:47 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56795 "EHLO ozlabs.org"
+        id S1725283AbfHUEmE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 00:42:04 -0400
+Received: from ozlabs.org ([203.11.71.1]:57315 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727457AbfHUEQr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Aug 2019 00:16:47 -0400
+        id S1725268AbfHUEmE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 00:42:04 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46CvVx2lDPz9s3Z;
-        Wed, 21 Aug 2019 14:16:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Cw495LSXz9s00;
+        Wed, 21 Aug 2019 14:42:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566361003;
-        bh=YnvDxWQMkwXci5nApLHjLHJ7S09LLcbKy26yMzcEK9s=;
+        s=201702; t=1566362521;
+        bh=c2ZA7UuGe1Jz51uUDHrUKKg420FVgPBPVw/Mn6rVOvw=;
         h=Date:From:To:Cc:Subject:From;
-        b=Ifox4zovovh5uHxJhM5NmVCkWR388kOxuK6YxVCcqUvnL3JjsT1eI5lnIPNSiI7t2
-         TsERwtaFDJiUy1LqrN0Z980QMNYpuihVg3XKk0oYWsHRpFz0xabvXk5AlEtwfv8G/d
-         rDXFUvTncE0BM6PmS2slEKhA1jzIbx6tdvuP0GpT3chsg3m2b3mw4qt8xuNVCabIKA
-         zjULZFKkzZMhphQdJSCbkbdKJ4m9CEjzauqYzm31ghjJ0hRf/kzpvlKS9vIX0eKv7X
-         4/lZJLcx4l6uCb62NcPGegk3aqkjug6L+HVjqaMFS9aT8fGmam/o7AKuLBGpE4CUiB
-         OiQblBcUnAQtg==
-Date:   Wed, 21 Aug 2019 14:16:40 +1000
+        b=kMmEHoPlFEUoGGyFj2UY2VjSsRSjyqiDy676CxJamLBacx5YYA/vE8EJxYxzdwp9/
+         nowWw05L8SjsHhRig4E0D7cys2u0TzqxHaRvcZlGY97qVMlC7zs9JP3OjscyQprey4
+         gbVnOs0xYSsZ8youpLY8O/GvOxAA43df89MNU04XVqTd3vw5J3J9TbKeX69xWVldTI
+         I0mrQTSKo33YdfvWe8stQFbvWhxLUlsU39ipo/vZA/etpzzlVbp4d+605roC5VCMIY
+         CuLN5jyRXib/C24f4kuu1isfF4l3ljOtN7WF5uOsoQ9g/fjcR5x2yBH1W/feOGzkZX
+         Ou94zzEFeHWtA==
+Date:   Wed, 21 Aug 2019 14:42:00 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Joerg Roedel <joro@8bytes.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+To:     Marc Zyngier <marc.zyngier@arm.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh@kernel.org>, Will Deacon <will@kernel.org>
-Subject: linux-next: manual merge of the iommu tree with the drm-misc tree
-Message-ID: <20190821141640.7967ddcc@canb.auug.org.au>
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: linux-next: manual merge of the irqchip tree with the pci tree
+Message-ID: <20190821144200.7192b3a4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/n04PXGM89qVzXJ9V2Le85iP";
+Content-Type: multipart/signed; boundary="Sig_/tdFKtA5bSqO30zf4t7_Rwin";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/n04PXGM89qVzXJ9V2Le85iP
+--Sig_/tdFKtA5bSqO30zf4t7_Rwin
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the iommu tree got a conflict in:
+Today's linux-next merge of the irqchip tree got a conflict in:
 
-  drivers/gpu/drm/panfrost/panfrost_mmu.c
+  drivers/pci/controller/pci-hyperv.c
 
 between commit:
 
-  187d2929206e ("drm/panfrost: Add support for GPU heap allocations")
+  44b1ece783ff ("PCI: hv: Detect and fix Hyper-V PCI domain number collisio=
+n")
 
-from the drm-misc tree and commit:
+from the pci tree and commit:
 
-  a2d3a382d6c6 ("iommu/io-pgtable: Pass struct iommu_iotlb_gather to ->unma=
-p()")
+  467a3bb97432 ("PCI: hv: Allocate a named fwnode instead of an address-bas=
+ed one")
 
-from the iommu tree.
+from the irqchip tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,261 +78,34 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/panfrost/panfrost_mmu.c
-index 842bdd7cf6be,6e8145c36e93..000000000000
---- a/drivers/gpu/drm/panfrost/panfrost_mmu.c
-+++ b/drivers/gpu/drm/panfrost/panfrost_mmu.c
-@@@ -310,18 -222,18 +310,18 @@@ void panfrost_mmu_unmap(struct panfrost
-  		size_t unmapped_page;
-  		size_t pgsize =3D get_pgsize(iova, len - unmapped_len);
- =20
- -		unmapped_page =3D ops->unmap(ops, iova, pgsize, NULL);
- -		if (!unmapped_page)
- -			break;
- -
- -		iova +=3D unmapped_page;
- -		unmapped_len +=3D unmapped_page;
- +		if (ops->iova_to_phys(ops, iova)) {
-- 			unmapped_page =3D ops->unmap(ops, iova, pgsize);
-++			unmapped_page =3D ops->unmap(ops, iova, pgsize, NULL);
- +			WARN_ON(unmapped_page !=3D pgsize);
- +		}
- +		iova +=3D pgsize;
- +		unmapped_len +=3D pgsize;
-  	}
- =20
- -	mmu_hw_do_operation(pfdev, 0, bo->node.start << PAGE_SHIFT,
- +	mmu_hw_do_operation(pfdev, bo->mmu, bo->node.start << PAGE_SHIFT,
-  			    bo->node.size << PAGE_SHIFT, AS_COMMAND_FLUSH_PT);
- =20
- -	mutex_unlock(&pfdev->mmu->lock);
- +	mutex_unlock(&bo->mmu->lock);
- =20
-  	pm_runtime_mark_last_busy(pfdev->dev);
-  	pm_runtime_put_autosuspend(pfdev->dev);
-@@@ -330,184 -242,35 +330,192 @@@
- =20
-  static void mmu_tlb_inv_context_s1(void *cookie)
+diff --cc drivers/pci/controller/pci-hyperv.c
+index 3a56de6b2ec2,97056f3dd317..000000000000
+--- a/drivers/pci/controller/pci-hyperv.c
++++ b/drivers/pci/controller/pci-hyperv.c
+@@@ -2563,7 -2521,7 +2563,8 @@@ static int hv_pci_probe(struct hv_devic
+  			const struct hv_vmbus_device_id *dev_id)
   {
- -	struct panfrost_device *pfdev =3D cookie;
- +	struct panfrost_file_priv *priv =3D cookie;
+  	struct hv_pcibus_device *hbus;
+ +	u16 dom_req, dom;
++ 	char *name;
+  	int ret;
  =20
- -	mmu_hw_do_operation(pfdev, 0, 0, ~0UL, AS_COMMAND_FLUSH_MEM);
- +	mmu_hw_do_operation(priv->pfdev, &priv->mmu, 0, ~0UL, AS_COMMAND_FLUSH_M=
-EM);
-  }
- =20
-- static void mmu_tlb_inv_range_nosync(unsigned long iova, size_t size,
-- 				     size_t granule, bool leaf, void *cookie)
-- {}
--=20
-  static void mmu_tlb_sync_context(void *cookie)
-  {
-  	//struct panfrost_device *pfdev =3D cookie;
-  	// TODO: Wait 1000 GPU cycles for HW_ISSUE_6367/T60X
-  }
- =20
-- static const struct iommu_gather_ops mmu_tlb_ops =3D {
-+ static void mmu_tlb_flush_walk(unsigned long iova, size_t size, size_t gr=
-anule,
-+ 			       void *cookie)
-+ {
-+ 	mmu_tlb_sync_context(cookie);
-+ }
-+=20
-+ static void mmu_tlb_flush_leaf(unsigned long iova, size_t size, size_t gr=
-anule,
-+ 			       void *cookie)
-+ {
-+ 	mmu_tlb_sync_context(cookie);
-+ }
-+=20
-+ static const struct iommu_flush_ops mmu_tlb_ops =3D {
-  	.tlb_flush_all	=3D mmu_tlb_inv_context_s1,
-- 	.tlb_add_flush	=3D mmu_tlb_inv_range_nosync,
-- 	.tlb_sync	=3D mmu_tlb_sync_context,
-+ 	.tlb_flush_walk =3D mmu_tlb_flush_walk,
-+ 	.tlb_flush_leaf =3D mmu_tlb_flush_leaf,
-  };
- =20
- +int panfrost_mmu_pgtable_alloc(struct panfrost_file_priv *priv)
- +{
- +	struct panfrost_mmu *mmu =3D &priv->mmu;
- +	struct panfrost_device *pfdev =3D priv->pfdev;
- +
- +	mutex_init(&mmu->lock);
- +	INIT_LIST_HEAD(&mmu->list);
- +	mmu->as =3D -1;
- +
- +	mmu->pgtbl_cfg =3D (struct io_pgtable_cfg) {
- +		.pgsize_bitmap	=3D SZ_4K | SZ_2M,
- +		.ias		=3D FIELD_GET(0xff, pfdev->features.mmu_features),
- +		.oas		=3D FIELD_GET(0xff00, pfdev->features.mmu_features),
- +		.tlb		=3D &mmu_tlb_ops,
- +		.iommu_dev	=3D pfdev->dev,
- +	};
- +
- +	mmu->pgtbl_ops =3D alloc_io_pgtable_ops(ARM_MALI_LPAE, &mmu->pgtbl_cfg,
- +					      priv);
- +	if (!mmu->pgtbl_ops)
- +		return -EINVAL;
- +
- +	return 0;
- +}
- +
- +void panfrost_mmu_pgtable_free(struct panfrost_file_priv *priv)
- +{
- +	struct panfrost_device *pfdev =3D priv->pfdev;
- +	struct panfrost_mmu *mmu =3D &priv->mmu;
- +
- +	spin_lock(&pfdev->as_lock);
- +	if (mmu->as >=3D 0) {
- +		clear_bit(mmu->as, &pfdev->as_alloc_mask);
- +		clear_bit(mmu->as, &pfdev->as_in_use_mask);
- +		list_del(&mmu->list);
- +	}
- +	spin_unlock(&pfdev->as_lock);
- +
- +	free_io_pgtable_ops(mmu->pgtbl_ops);
- +}
- +
- +static struct drm_mm_node *addr_to_drm_mm_node(struct panfrost_device *pf=
-dev, int as, u64 addr)
- +{
- +	struct drm_mm_node *node =3D NULL;
- +	u64 offset =3D addr >> PAGE_SHIFT;
- +	struct panfrost_mmu *mmu;
- +
- +	spin_lock(&pfdev->as_lock);
- +	list_for_each_entry(mmu, &pfdev->as_lru_list, list) {
- +		struct panfrost_file_priv *priv;
- +		if (as !=3D mmu->as)
- +			continue;
- +
- +		priv =3D container_of(mmu, struct panfrost_file_priv, mmu);
- +		drm_mm_for_each_node(node, &priv->mm) {
- +			if (offset >=3D node->start && offset < (node->start + node->size))
- +				goto out;
- +		}
- +	}
- +
- +out:
- +	spin_unlock(&pfdev->as_lock);
- +	return node;
- +}
- +
- +#define NUM_FAULT_PAGES (SZ_2M / PAGE_SIZE)
- +
- +int panfrost_mmu_map_fault_addr(struct panfrost_device *pfdev, int as, u6=
-4 addr)
- +{
- +	int ret, i;
- +	struct drm_mm_node *node;
- +	struct panfrost_gem_object *bo;
- +	struct address_space *mapping;
- +	pgoff_t page_offset;
- +	struct sg_table *sgt;
- +	struct page **pages;
- +
- +	node =3D addr_to_drm_mm_node(pfdev, as, addr);
- +	if (!node)
- +		return -ENOENT;
- +
- +	bo =3D drm_mm_node_to_panfrost_bo(node);
- +	if (!bo->is_heap) {
- +		dev_WARN(pfdev->dev, "matching BO is not heap type (GPU VA =3D %llx)",
- +			 node->start << PAGE_SHIFT);
- +		return -EINVAL;
- +	}
- +	WARN_ON(bo->mmu->as !=3D as);
- +
- +	/* Assume 2MB alignment and size multiple */
- +	addr &=3D ~((u64)SZ_2M - 1);
- +	page_offset =3D addr >> PAGE_SHIFT;
- +	page_offset -=3D node->start;
- +
- +	mutex_lock(&bo->base.pages_lock);
- +
- +	if (!bo->base.pages) {
- +		bo->sgts =3D kvmalloc_array(bo->base.base.size / SZ_2M,
- +				     sizeof(struct sg_table), GFP_KERNEL | __GFP_ZERO);
- +		if (!bo->sgts) {
- +			mutex_unlock(&bo->base.pages_lock);
- +			return -ENOMEM;
- +		}
- +
- +		pages =3D kvmalloc_array(bo->base.base.size >> PAGE_SHIFT,
- +				       sizeof(struct page *), GFP_KERNEL | __GFP_ZERO);
- +		if (!pages) {
- +			kfree(bo->sgts);
- +			bo->sgts =3D NULL;
- +			mutex_unlock(&bo->base.pages_lock);
- +			return -ENOMEM;
- +		}
- +		bo->base.pages =3D pages;
- +		bo->base.pages_use_count =3D 1;
- +	} else
- +		pages =3D bo->base.pages;
- +
- +	mapping =3D bo->base.base.filp->f_mapping;
- +	mapping_set_unevictable(mapping);
- +
- +	for (i =3D page_offset; i < page_offset + NUM_FAULT_PAGES; i++) {
- +		pages[i] =3D shmem_read_mapping_page(mapping, i);
- +		if (IS_ERR(pages[i])) {
- +			mutex_unlock(&bo->base.pages_lock);
- +			ret =3D PTR_ERR(pages[i]);
- +			goto err_pages;
- +		}
- +	}
- +
- +	mutex_unlock(&bo->base.pages_lock);
- +
- +	sgt =3D &bo->sgts[page_offset / (SZ_2M / PAGE_SIZE)];
- +	ret =3D sg_alloc_table_from_pages(sgt, pages + page_offset,
- +					NUM_FAULT_PAGES, 0, SZ_2M, GFP_KERNEL);
- +	if (ret)
- +		goto err_pages;
- +
- +	if (!dma_map_sg(pfdev->dev, sgt->sgl, sgt->nents, DMA_BIDIRECTIONAL)) {
- +		ret =3D -EINVAL;
- +		goto err_map;
- +	}
- +
- +	mmu_map_sg(pfdev, bo->mmu, addr, IOMMU_WRITE | IOMMU_READ | IOMMU_NOEXEC=
-, sgt);
- +
- +	bo->is_mapped =3D true;
- +
- +	dev_dbg(pfdev->dev, "mapped page fault @ AS%d %llx", as, addr);
- +
- +	return 0;
- +
- +err_map:
- +	sg_free_table(sgt);
- +err_pages:
- +	drm_gem_shmem_put_pages(&bo->base);
- +	return ret;
- +}
- +
-  static const char *access_type_name(struct panfrost_device *pfdev,
-  		u32 fault_status)
-  {
+  	/*
 
---Sig_/n04PXGM89qVzXJ9V2Le85iP
+--Sig_/tdFKtA5bSqO30zf4t7_Rwin
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1cxagACgkQAVBC80lX
-0GwzYAf9GAsEjo5vhQgiQ5uGI/MqmbRSqmr0KmHxGvZlQLSjgPq3c2F9IH8yZOtb
-azBGbf9FKUdiZphmkAtU56t11kezwbWUIOvdYDrOy2Q8zQOMSGorZNvEEk/cwTlv
-hMJDECSchTPU3Do1HDVqusNggj3aYtkEsZsHmZb3k1skSHucYKkSYsf036ZUQKVa
-sCRpkCyfRnTcouVgdDGHSaKldh8qtBrnLinhaW9lWX+W6Ezuc+fWhLujK4ym4tXA
-vKyyiQREDiW4T1dvILErGTmT7e6jWcdx46+JSS02twLTk87ak5OtNi0AvpcmVjJR
-6+N0zY9xTJUxJRMKGmfY6UH14M7nUQ==
-=Hc8m
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1cy5gACgkQAVBC80lX
+0GxEjwf7B9JeDD7sR40T5sEE+XzFOOy6xkyorNU2attK2PW7bZ2QG5OKbns+ip8p
+rad1CrQFzUjeBzusakWsavi4FOidQrS7ETFhVuJKeGCWZ3PrlMLouWCcDemsrq+A
+pyvlx11HCr5UGYs/i5XQWgqTo1mq6FeaAOiJqwHitTUZ4iNQhp5Bgk+cATpocPj9
+kbthcNIN8brsnT7OSVJ11Gfz3yNbqLLVG0EHpo5OihF+4Om5MpPVe9dAloygng49
+sQsYuxA0qPi9VrQF86tqnX19mtBMte6QN8iDkGDscdNDwAXF+JTZgulhRWUqMn3H
+5rE5SY+4NLoTsU8g9rF1BjAHFpvVOQ==
+=F8xl
 -----END PGP SIGNATURE-----
 
---Sig_/n04PXGM89qVzXJ9V2Le85iP--
+--Sig_/tdFKtA5bSqO30zf4t7_Rwin--

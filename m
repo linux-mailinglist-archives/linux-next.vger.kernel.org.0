@@ -2,132 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6107697EBF
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 17:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C63097F86
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 17:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728872AbfHUPeP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 11:34:15 -0400
-Received: from mail-eopbgr820085.outbound.protection.outlook.com ([40.107.82.85]:16096
-        "EHLO NAM01-SN1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726885AbfHUPeP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Aug 2019 11:34:15 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H2SFVj0iNPBrnhbDH0L17RxeUPtFXGKHiU9cml9oCTac5j2oWAV3pGSbtgivVnFyyEaPH+I6d8rs/cr71glyOmwBy5D7UE4bijKEgVS5LontGtV+vAHLCJmg1kCD1a7eO1eQ5GUzABbmr60H8tMT6GQambR4UOPZzVpUsTQntoztc9VmMoq4qQrFuG+7nyMaeWrtn+0Y+JL9F3AJEmrm9/YdXNrAbn1oadf1RB5H+V2ccbUxtrIfSJqaP90+jlL17jiBQBMLBfaFqs/FeAw8OHwLNnmmrHyXBb6PJOOFq3oAjeJ02kALa/FeFl7ZLVQg/zvpz4vAceyAXB6lSycjgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mli6jvBjbs/d2XkF6HGpkw/0hIMaNoWefem435ahKt0=;
- b=UUpnnXisL06+gAR4pnmpSq59ixIbxLjZgmI9piVq59lRMHc7g1jwpnznBl1E73IptszJBH5jGLWiLmrsiUq6eCB3N+5rt0aF8TjBOheL3xQlzA/5hWzFUzL7s+AIIW8Dto3nJufA7rra4DCE2hbgcjs7zKi3CkjjlVhgNGe4qbgnCiyM0xOEfK2boYpc7w//JVFEj+q+X0k/3B2T/+wSD/RzB8G761aaTrR6oczMMNVLjG4Jflp69EeGtNzRwvkxES0RjXIPTjf4+1KlvQkbKnWXRsNXx167gLrom9isZRj40dC630paxZpyCkJ88wle/NNMLrRofe5dpapxC1QwvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
+        id S1727553AbfHUP6j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 11:58:39 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:38021 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727791AbfHUP6j (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 21 Aug 2019 11:58:39 -0400
+Received: by mail-wm1-f68.google.com with SMTP id m125so2670804wmm.3
+        for <linux-next@vger.kernel.org>; Wed, 21 Aug 2019 08:58:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mli6jvBjbs/d2XkF6HGpkw/0hIMaNoWefem435ahKt0=;
- b=HZeQWZtHktEqbFYjPbtrbjw5zdQtENG0mdZtX1henMhs+vhcnsTwU3CUyGuAuBJp+7M4VAqTUvigzOYl/4hKTebCkJptLUBXbmcAYZV4e29wLmS4IVwwTYzIK3cHcNMjkwgBtDqQXl1WzyC7XyKAh5E44+Te/kklXcTw05Tycaw=
-Received: from DM6PR12MB3947.namprd12.prod.outlook.com (10.255.174.156) by
- DM6PR12MB3210.namprd12.prod.outlook.com (20.179.105.74) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.19; Wed, 21 Aug 2019 15:34:12 +0000
-Received: from DM6PR12MB3947.namprd12.prod.outlook.com
- ([fe80::1c82:54e7:589b:539c]) by DM6PR12MB3947.namprd12.prod.outlook.com
- ([fe80::1c82:54e7:589b:539c%5]) with mapi id 15.20.2178.018; Wed, 21 Aug 2019
- 15:34:12 +0000
-From:   "Kuehling, Felix" <Felix.Kuehling@amd.com>
-To:     Jason Gunthorpe <jgg@mellanox.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Aug 19 (amdgpu)
-Thread-Topic: linux-next: Tree for Aug 19 (amdgpu)
-Thread-Index: AQHVVvkHnhljkcO1/U2zanY7nY0Cr6cD+eWAgAHD6IA=
-Date:   Wed, 21 Aug 2019 15:34:12 +0000
-Message-ID: <b60eb195-7263-2ba0-e8d9-8412c0de66e0@amd.com>
-References: <20190819191832.03f1a579@canb.auug.org.au>
- <ba3cde82-6163-12e5-2e77-36834454113a@infradead.org>
- <20190820114554.0e522651@canb.auug.org.au>
- <20190820123637.GB29225@mellanox.com>
-In-Reply-To: <20190820123637.GB29225@mellanox.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [165.204.55.251]
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-x-clientproxiedby: YT1PR01CA0036.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01::49)
- To DM6PR12MB3947.namprd12.prod.outlook.com (2603:10b6:5:1cb::28)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Felix.Kuehling@amd.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 21d88906-7fbb-4ac3-3961-08d7264d040d
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600148)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DM6PR12MB3210;
-x-ms-traffictypediagnostic: DM6PR12MB3210:
-x-ms-exchange-purlcount: 4
-x-microsoft-antispam-prvs: <DM6PR12MB32100880905B708D16C1930292AA0@DM6PR12MB3210.namprd12.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1122;
-x-forefront-prvs: 0136C1DDA4
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(376002)(346002)(396003)(53754006)(189003)(199004)(256004)(486006)(2616005)(11346002)(8936002)(102836004)(7736002)(58126008)(316002)(26005)(305945005)(478600001)(110136005)(446003)(54906003)(386003)(6506007)(5024004)(36756003)(31686004)(53546011)(229853002)(52116002)(6436002)(8676002)(6486002)(186003)(6116002)(81156014)(4326008)(3846002)(86362001)(81166006)(6306002)(2906002)(71190400001)(65956001)(53936002)(99286004)(64756008)(66946007)(66556008)(25786009)(66446008)(66476007)(65806001)(5660300002)(476003)(71200400001)(14454004)(76176011)(31696002)(6246003)(66066001)(6512007)(966005);DIR:OUT;SFP:1101;SCL:1;SRVR:DM6PR12MB3210;H:DM6PR12MB3947.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: w0FBx5HiVrYdA0ptUAvB9pLzy4CiZl8VboF7DJewlHRdPVxhjcH6+K3uoJvgkKcsxzkaeqZYHJ2V9DycKfay1sY51+fNGH6W70fuaEcPeDRcS+9l+g4ztIozzMGfnkikMhrYAFXVMxseym6dbbiz4vmZymkF1cII827X0jzoJLotCCzQIkL1AdXvULfZa4TtYJkZ8OBsvobPEf6oewm/3ZIZNF1S7K/1dmBaLFquyI+eBzw5Fca4Ud8aiIwxcEQCx2hLgxENlEcx5SrXCaQ/EDOrIvkUcXlfb06/IEkQWiAyNpc4MAQYG68QkIs2sBNcmbWnxr9WtRWtkVUyGKlKRaaeWsPnO7ja6hQRxXEhlvHyXDbPRqlY0Ju9GVIdmwxGphJbr6ibPAnyiPA6tG5N1SStykOJ3e4im7qhoq532Rw=
-x-ms-exchange-transport-forked: True
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=//PZmhQxBIVjl7tmjKyC5NMgk0pgdddNTXjFO4PE13c=;
+        b=nAEKWfc8RdX+YU/ujBGL/oFGdtlqUV0JKFfu2wZW8rTSaD3HUW/gD0VCxQfdI9VECl
+         5q5OVJaP99XJx57cnZ7dI0j2feVJLJihLdGZ6d4GFmz8ZhLrcOPZUA4JVcDVmCdYJoVk
+         hh/eknaBtpKta8ajObbCrU4aazw5h0Jtw8OTSoIEL3Nqvpbw1aU1YzzXLMSdXvp7Ym2s
+         XI2446ljODswmMeZXpQJVlvLqxaMmBDFB3AMcvmyX5W1gfIjTLsYU04w4SAYdUej7plu
+         q+QzMMlTXEF53zfUgUeI/vfHui1BP4SFdz6LyPsWxbBDb3NfmbDHV7FODbu4qkWDrJsN
+         NX5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=//PZmhQxBIVjl7tmjKyC5NMgk0pgdddNTXjFO4PE13c=;
+        b=PunBlnlUguKrifuHd4rqeymevEOT8SzdbC8nXfUA7pvmxN5l0AabpxL9CY/jicUxl6
+         5SAenTjyr6xXEQqdN1qbbkupTJaH3PhBfzEsXJz1Yhm9f8OyN4TMf2J9GuQeO5FCpyx9
+         YQ9aTltnBqtGDJJlfJgIx5TiOCPS2VHxlXuco6w34Xo4vqWeCUkDNRUFdutyWw7uiTXT
+         lacWjRKtNgJQzniFFShV58P0fzmgh+O+K5HeX4XD4WVpHT+XioDlXf4WpmlbmT2jYY19
+         DmjjHPE25LufNyQinSCF0KtQ9hAbOMXG0w2brLMeL1h2bb4hKMUmDu17nW7LQVKZnhN1
+         sUOw==
+X-Gm-Message-State: APjAAAV3+L9gVo3wtjmzZlgjBuVlvblc/EiMWwTZRc2DU5mb1mT00cyq
+        JemxXomycxVLgKJ6c62Z+nwQkIAKvXeiUw==
+X-Google-Smtp-Source: APXvYqxA3CBEpPAu0AWCNcnXXkTgoNrjUtGcu5GEWsKqY/SW3AksM+6R7tzRHtlS/cEamjQUU3ZPLA==
+X-Received: by 2002:a05:600c:24cf:: with SMTP id 15mr856041wmu.76.1566403117435;
+        Wed, 21 Aug 2019 08:58:37 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id s64sm855637wmf.16.2019.08.21.08.58.35
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Aug 2019 08:58:36 -0700 (PDT)
+Message-ID: <5d5d6a2c.1c69fb81.e22c4.4255@mx.google.com>
+Date:   Wed, 21 Aug 2019 08:58:36 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
-Content-ID: <238BD86B5AD73E4A8AF2E505FC0AFC7D@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21d88906-7fbb-4ac3-3961-08d7264d040d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Aug 2019 15:34:12.1035
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ODZcz4Hws2xux1OG3YHfzkUdwDEi+9fVsMvECwKIb8i+GrdjLs1dzhErQt+VP9RHBhDfnyemmOsxR9FKfVGXBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3210
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-rc5-278-gbbbb139a1070
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 212 boots: 4 failed,
+ 181 passed with 27 offline (v5.3-rc5-278-gbbbb139a1070)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-DQpPbiAyMDE5LTA4LTIwIDg6MzYgYS5tLiwgSmFzb24gR3VudGhvcnBlIHdyb3RlOg0KPiBPbiBU
-dWUsIEF1ZyAyMCwgMjAxOSBhdCAxMTo0NTo1NEFNICsxMDAwLCBTdGVwaGVuIFJvdGh3ZWxsIHdy
-b3RlOg0KPj4gSGkgYWxsLA0KPj4NCj4+IE9uIE1vbiwgMTkgQXVnIDIwMTkgMTg6MzQ6NDEgLTA3
-MDAgUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+IHdyb3RlOg0KPj4+IE9uIDgv
-MTkvMTkgMjoxOCBBTSwgU3RlcGhlbiBSb3Rod2VsbCB3cm90ZToNCj4+Pj4gSGkgYWxsLA0KPj4+
-Pg0KPj4+PiBDaGFuZ2VzIHNpbmNlIDIwMTkwODE2Og0KPj4+PiAgICANCj4+PiBvbiB4ODZfNjQ6
-DQo+Pj4NCj4+PiAuLi9kcml2ZXJzL2dwdS9kcm0vYW1kL2FtZGdwdS9hbWRncHVfZHJ2LmM6IElu
-IGZ1bmN0aW9uIOKAmGFtZGdwdV9leGl04oCZOg0KPj4+IC4uL2RyaXZlcnMvZ3B1L2RybS9hbWQv
-YW1kZ3B1L2FtZGdwdV9kcnYuYzoxNDcxOjI6IGVycm9yOiBpbXBsaWNpdCBkZWNsYXJhdGlvbiBv
-ZiBmdW5jdGlvbiDigJhtbXVfbm90aWZpZXJfc3luY2hyb25pemXigJk7IGRpZCB5b3UgbWVhbiDi
-gJhfX3N5bmNfc3luY2hyb25pemXigJk/IFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xh
-cmF0aW9uXQ0KPj4+ICAgIG1tdV9ub3RpZmllcl9zeW5jaHJvbml6ZSgpOw0KPj4+ICAgIF5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+fg0KPj4+ICAgIF9fc3luY19zeW5jaHJvbml6ZQ0KPj4+DQo+Pj4N
-Cj4+PiBGdWxsIHJhbmRjb25maWcgZmlsZSBpcyBhdHRhY2hlZC4NCj4+IENhdXNlZCBieSBjb21t
-aXQNCj4+DQo+PiAgICA2ODMyYzlkYzgzNTggKCJobW06IHVzZSBtbXVfbm90aWZpZXJfZ2V0L3B1
-dCBmb3IgJ3N0cnVjdCBobW0nIikNCj4+DQo+PiBmcm9tIHRoZSBobW0gdHJlZS4NCj4+DQo+PiBk
-cml2ZXJzL2dwdS9kcm0vYW1kL2FtZGdwdS9hbWRncHVfZHJ2LmMgbmVlZCB0byBpbmNsdWRlIGxp
-bnV4L21tdV9ub3RpZmllci5oDQo+IEFoIHllcywgdGhhbmtzLCBpdCBpcyBiZWNhdXNlIG9mICFD
-T05GSUdfSE1NX01JUlJPUiBpbiB0aGlzDQo+IHJhbmRjb25maWcuIEkndmUgZml4ZWQgaXQgdXAu
-DQoNClRoYW5rcyBKYXNvbi4gSSdtIHRyeWluZyB0byBmb2xsb3cgd2hhdCdzIGdvaW5nIG9uIGhl
-cmUsIGJ1dCBJIGNhbid0IA0KZmluZCB0aGUgY29tbWl0IGhhc2ggcXVvdGVkIGFib3ZlIGluIGFu
-eSBvZiB0aGUgcHVibGljIHJlcG9zaXRvcmllcyBJJ20gDQp0cmFja2luZzoNCg0KaHR0cHM6Ly9n
-aXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvdG9ydmFsZHMvbGludXguZ2l0
-DQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9uZXh0L2xp
-bnV4LW5leHQuZ2l0DQpodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVs
-L2dpdC9yZG1hL3JkbWEuZ2l0DQpzc2g6Ly9naXQuZnJlZWRlc2t0b3Aub3JnL2dpdC9kcm0vZHJt
-DQpzc2g6Ly9wZW9wbGUuZnJlZWRlc2t0b3Aub3JnL35hZ2Q1Zi9saW51eA0Kc3NoOi8vcGVvcGxl
-LmZyZWVkZXNrdG9wLm9yZy9+Z2xpc3NlL2xpbnV4DQoNCldoZXJlIGlzIHRoaXMgd29yayBoYXBw
-ZW5pbmc/DQoNClRoYW5rcywNCiDCoCBGZWxpeA0KDQoNCg0KPg0KPiBSZWdhcmRzLA0KPiBKYXNv
-bg0KPg0KPiBfX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0K
-PiBhbWQtZ2Z4IG1haWxpbmcgbGlzdA0KPiBhbWQtZ2Z4QGxpc3RzLmZyZWVkZXNrdG9wLm9yZw0K
-PiBodHRwczovL2xpc3RzLmZyZWVkZXNrdG9wLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2FtZC1nZngN
-Cg==
+next/pending-fixes boot: 212 boots: 4 failed, 181 passed with 27 offline (v=
+5.3-rc5-278-gbbbb139a1070)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-rc5-278-gbbbb139a1070/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-rc5-278-gbbbb139a1070/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-rc5-278-gbbbb139a1070
+Git Commit: bbbb139a10709b5fb994eb10750549b71b002660
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 83 unique boards, 27 SoC families, 22 builds out of 222
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            rk3399-firefly: 1 failed lab
+
+arm:
+    oxnas_v6_defconfig:
+        gcc-8:
+            ox820-cloudengines-pogoplug-series-3: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            exynos4412-odroidx2: 1 failed lab
+
+Offline Platforms:
+
+mips:
+
+    pistachio_defconfig:
+        gcc-8
+            pistachio_marduk: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            juno-r2: 1 offline lab
+            meson-g12a-x96-max: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+            mt7622-rfb1: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            juno-r2: 1 offline lab
+            meson-g12a-x96-max: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+            mt7622-rfb1: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            juno-r2: 1 offline lab
+            meson-g12a-x96-max: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+arm:
+
+    bcm2835_defconfig:
+        gcc-8
+            bcm2835-rpi-b: 1 offline lab
+
+    sama5_defconfig:
+        gcc-8
+            at91-sama5d4_xplained: 1 offline lab
+            at91-sama5d4ek: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            alpine-db: 1 offline lab
+            at91-sama5d4_xplained: 1 offline lab
+            at91-sama5d4ek: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

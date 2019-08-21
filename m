@@ -2,70 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF8DA97138
-	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 06:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931E4971DF
+	for <lists+linux-next@lfdr.de>; Wed, 21 Aug 2019 08:04:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725283AbfHUEmE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 00:42:04 -0400
-Received: from ozlabs.org ([203.11.71.1]:57315 "EHLO ozlabs.org"
+        id S1727563AbfHUGDj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 02:03:39 -0400
+Received: from ozlabs.org ([203.11.71.1]:37677 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725268AbfHUEmE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Aug 2019 00:42:04 -0400
+        id S1725385AbfHUGDj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 02:03:39 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Cw495LSXz9s00;
-        Wed, 21 Aug 2019 14:42:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46CxtJ3Brsz9sBp;
+        Wed, 21 Aug 2019 16:03:36 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566362521;
-        bh=c2ZA7UuGe1Jz51uUDHrUKKg420FVgPBPVw/Mn6rVOvw=;
+        s=201702; t=1566367416;
+        bh=vs3GGswOy1exMDVbBRjU30NMiqokAxn6p2wGBo3Szhs=;
         h=Date:From:To:Cc:Subject:From;
-        b=kMmEHoPlFEUoGGyFj2UY2VjSsRSjyqiDy676CxJamLBacx5YYA/vE8EJxYxzdwp9/
-         nowWw05L8SjsHhRig4E0D7cys2u0TzqxHaRvcZlGY97qVMlC7zs9JP3OjscyQprey4
-         gbVnOs0xYSsZ8youpLY8O/GvOxAA43df89MNU04XVqTd3vw5J3J9TbKeX69xWVldTI
-         I0mrQTSKo33YdfvWe8stQFbvWhxLUlsU39ipo/vZA/etpzzlVbp4d+605roC5VCMIY
-         CuLN5jyRXib/C24f4kuu1isfF4l3ljOtN7WF5uOsoQ9g/fjcR5x2yBH1W/feOGzkZX
-         Ou94zzEFeHWtA==
-Date:   Wed, 21 Aug 2019 14:42:00 +1000
+        b=dOJK3cCsXGVlNwJ2lk6cW2EyN21PIU2lGJ5wLiQFdDxIocyDnxUDa1NyNhDsgKvEF
+         Lp96mSBjeqOgCseltyTwNP9mfaENRGFHLII/RHYwP42ODZ+fWA8nK0psXbAYimyMLk
+         Ivy6pGhDut/5CCNY6E2TShscwZ34fsTrEqvwTO33HwotQJj1eWtk+xIVEuzFLLtGNn
+         3Fint2Arog9my0pqxtwiW5u4hT473CvbGS59IYYIT61CPv4MSf5xBVHjAwSDWRJLnJ
+         vr7hYirT66s+dwEwnkUfpyJlm4rDE2tJHjOYkBubM7s0UJKm6M56Vd1gCNXjsxJe9n
+         L1OietA/N0Cug==
+Date:   Wed, 21 Aug 2019 16:03:35 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Marc Zyngier <marc.zyngier@arm.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <marc.zyngier@arm.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: linux-next: manual merge of the irqchip tree with the pci tree
-Message-ID: <20190821144200.7192b3a4@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the gpio tree with the irqchip tree
+Message-ID: <20190821160335.09071cb5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tdFKtA5bSqO30zf4t7_Rwin";
+Content-Type: multipart/signed; boundary="Sig_/e2eGRYLvbTGTDmbOt9cvHnS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tdFKtA5bSqO30zf4t7_Rwin
+--Sig_/e2eGRYLvbTGTDmbOt9cvHnS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the irqchip tree got a conflict in:
+Today's linux-next merge of the gpio tree got a conflict in:
 
-  drivers/pci/controller/pci-hyperv.c
+  drivers/gpio/gpio-ixp4xx.c
 
 between commit:
 
-  44b1ece783ff ("PCI: hv: Detect and fix Hyper-V PCI domain number collisio=
-n")
+  daa19fe5b082 ("gpio/ixp4xx: Register the base PA instead of its VA in fwn=
+ode")
 
-from the pci tree and commit:
+from the irqchip tree and commit:
 
-  467a3bb97432 ("PCI: hv: Allocate a named fwnode instead of an address-bas=
-ed one")
+  aa7d618ac65f ("gpio: ixp4xx: Convert to hierarchical GPIOLIB_IRQCHIP")
 
-from the irqchip tree.
+from the gpio tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,34 +75,62 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/pci/controller/pci-hyperv.c
-index 3a56de6b2ec2,97056f3dd317..000000000000
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@@ -2563,7 -2521,7 +2563,8 @@@ static int hv_pci_probe(struct hv_devic
-  			const struct hv_vmbus_device_id *dev_id)
-  {
-  	struct hv_pcibus_device *hbus;
- +	u16 dom_req, dom;
-+ 	char *name;
-  	int ret;
+diff --cc drivers/gpio/gpio-ixp4xx.c
+index cc72c9aca5a1,8bd23e80c61f..000000000000
+--- a/drivers/gpio/gpio-ixp4xx.c
++++ b/drivers/gpio/gpio-ixp4xx.c
+@@@ -326,6 -209,35 +209,35 @@@ static int ixp4xx_gpio_probe(struct pla
+  		return PTR_ERR(g->base);
+  	}
  =20
++ 	/*
++ 	 * When we convert to device tree we will simply look up the
++ 	 * parent irqdomain using irq_find_host(parent) as parent comes
++ 	 * from IRQCHIP_DECLARE(), then use of_node_to_fwnode() to get
++ 	 * the fwnode. For now we need this boardfile style code.
++ 	 */
++ 	if (np) {
++ 		struct device_node *irq_parent;
++=20
++ 		irq_parent =3D of_irq_find_parent(np);
++ 		if (!irq_parent) {
++ 			dev_err(dev, "no IRQ parent node\n");
++ 			return -ENODEV;
++ 		}
++ 		parent =3D irq_find_host(irq_parent);
++ 		if (!parent) {
++ 			dev_err(dev, "no IRQ parent domain\n");
++ 			return -ENODEV;
++ 		}
++ 		g->fwnode =3D of_node_to_fwnode(np);
++ 	} else {
++ 		parent =3D ixp4xx_get_irq_domain();
+ -		g->fwnode =3D irq_domain_alloc_fwnode(g->base);
+++		g->fwnode =3D irq_domain_alloc_fwnode(&res->start);
++ 		if (!g->fwnode) {
++ 			dev_err(dev, "no domain base\n");
++ 			return -ENODEV;
++ 		}
++ 	}
++=20
   	/*
+  	 * Make sure GPIO 14 and 15 are NOT used as clocks but GPIO on
+  	 * specific machines.
 
---Sig_/tdFKtA5bSqO30zf4t7_Rwin
+--Sig_/e2eGRYLvbTGTDmbOt9cvHnS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1cy5gACgkQAVBC80lX
-0GxEjwf7B9JeDD7sR40T5sEE+XzFOOy6xkyorNU2attK2PW7bZ2QG5OKbns+ip8p
-rad1CrQFzUjeBzusakWsavi4FOidQrS7ETFhVuJKeGCWZ3PrlMLouWCcDemsrq+A
-pyvlx11HCr5UGYs/i5XQWgqTo1mq6FeaAOiJqwHitTUZ4iNQhp5Bgk+cATpocPj9
-kbthcNIN8brsnT7OSVJ11Gfz3yNbqLLVG0EHpo5OihF+4Om5MpPVe9dAloygng49
-sQsYuxA0qPi9VrQF86tqnX19mtBMte6QN8iDkGDscdNDwAXF+JTZgulhRWUqMn3H
-5rE5SY+4NLoTsU8g9rF1BjAHFpvVOQ==
-=F8xl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1c3rcACgkQAVBC80lX
+0Gxougf8CEK/NBAi0KYvdY/mqGVadziAe/ub/+k3dD2UWogEImQf77DQOTdDplvz
+o8NV/3HKC47SgnCKug/SWl4PGW20sCykSpHVn5C79J5MJWrWCX+gqc28+L0Iyv/9
+ibYLfAkNpK7NT2lBWDNSlLk6OEG1Dq/FjC4X/TtiiFTz4oM1Y4hJd6E4t12vE4uH
+i3lu38saBh0tdWuqUeDW8Wg2cGHINdbW0t53FvxBcbKEYCiiGzpWtOdjTa3wsINI
+7nDnD5zXhLLS7IoNDMcrvNoJZHr09IrT8GfazFf6FhEls/wTGKxdDNuM3hWeerCb
+O8Y+8H00lFw2Vj7Easth85DzncbZLg==
+=tzNv
 -----END PGP SIGNATURE-----
 
---Sig_/tdFKtA5bSqO30zf4t7_Rwin--
+--Sig_/e2eGRYLvbTGTDmbOt9cvHnS--

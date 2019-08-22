@@ -2,194 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B0098823
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 01:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E897989BE
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 05:16:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728619AbfHUXum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 21 Aug 2019 19:50:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55431 "EHLO ozlabs.org"
+        id S1728286AbfHVDPM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 21 Aug 2019 23:15:12 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42465 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728304AbfHUXum (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 21 Aug 2019 19:50:42 -0400
+        id S1727923AbfHVDPM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 21 Aug 2019 23:15:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46DPYS5Jxfz9sBp;
-        Thu, 22 Aug 2019 09:50:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46DV5P2lZHz9s3Z;
+        Thu, 22 Aug 2019 13:15:04 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566431439;
-        bh=0IxaCMguw7mIywx2R9a7SL80AVSgxKu3pkkK/b5qwxA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TUqqHRU+J1iZV3fNWXZP07Qzg9lMnPwa62+T+ObBT5uAb/2acuR9ml16pzMp1KFc6
-         ZdsINKxsyvaf07NQwSStTjJBplOSxIczMLVZWW6K8cvu5v94s9p2XjYzedccXfvOoS
-         At55wLFM0JL+nQCrQ7pnNcDe0nz+2WkYHv40gDRQYlRTvU4Cq0Rt6yjkvqQLAy0EFH
-         kWy4F9U0sX9wKMDyt3Wghs7fJ4y5lq32ptvzHm7Nb5TU2zUEj536spgMsmeOhhsE8d
-         Fwuq4hRr9jG7EUJb+XcbEEHjbmhuVW1xnzrDi7kAr4bbzhyXcBUMzxgUIRwn8C7oX8
-         qwFZll2fRN+4g==
-Date:   Thu, 22 Aug 2019 09:50:29 +1000
+        s=201702; t=1566443708;
+        bh=FWaVWC9hKQVgW4ffnE0ESsDOTl/uHhq2zf25RGNfLHs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nm6q66TIHdKGwLXxL77K1mObonlc7ccgadLjX7SAKyUYqVITjiAsbmwiMYwj9YYBA
+         1Nsy/mH4R+WMiQoPA2bn7ER/gcGLH6tGNXQRo5TnUsCYw77tbruaSEwYecDwBD/5Eo
+         s58l8myWLRJmmxXKGvD21brRt4bRYiaY8UbI8Cen7FN1Vw1oNrv0yvC5K6565Uhc1F
+         ija/dYur8K30990eZfUz18RErxfh5rILIT3HhY9X1UXZPVim/1HiCc4dIN+8U4/bgx
+         AQbZ3nsg/cZhsc6iz0Bs6mNy2Zs2Bfw0qpHz4ys/B0/df9ZWiSfT2HReoE+G9kKUNA
+         FB9vtPBCiDLQg==
+Date:   Thu, 22 Aug 2019 13:15:04 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
         Jani Nikula <jani.nikula@linux.intel.com>,
         Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Dave Airlie <airlied@linux.ie>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: Re: linux-next: manual merge of the drm-misc tree with the drm and
- drm-intel trees
-Message-ID: <20190822095029.0fd063d4@canb.auug.org.au>
-In-Reply-To: <20190814125433.20147fb7@canb.auug.org.au>
-References: <20190814125433.20147fb7@canb.auug.org.au>
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: linux-next: manual merge of the drm-intel tree with the drm tree
+Message-ID: <20190822131504.13c1f47e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pqDYB7qH+83yIm0QxI/PxPA";
+Content-Type: multipart/signed; boundary="Sig_/OZdfbKRhgv_ngs8_CRFNLlE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pqDYB7qH+83yIm0QxI/PxPA
+--Sig_/OZdfbKRhgv_ngs8_CRFNLlE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Wed, 14 Aug 2019 12:54:33 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the drm-misc tree got a conflict in:
->=20
->   drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
->   drivers/gpu/drm/i915/i915_vma.c
->   drivers/gpu/drm/i915/i915_gem_batch_pool.c
->   drivers/gpu/drm/i915/gem/i915_gem_object.c
->   drivers/gpu/drm/i915/gt/intel_engine_pool.c
->=20
-> between commits:
->=20
->   a93615f900bd ("drm/i915: Throw away the active object retirement comple=
-xity")
->   12c255b5dad1 ("drm/i915: Provide an i915_active.acquire callback")
->   cd2a4eaf8c79 ("drm/i915: Report resv_obj allocation failure")
->   b40d73784ffc ("drm/i915: Replace struct_mutex for batch pool serialisat=
-ion")
->   ab2f7a5c18b5 ("drm/amdgpu: Implement VRAM wipe on release")
->   0c159ffef628 ("drm/i915/gem: Defer obj->base.resv fini until RCU callba=
-ck")
->=20
-> from the drm and drm-intel trees and commit:
->=20
->   52791eeec1d9 ("dma-buf: rename reservation_object to dma_resv")
->=20
-> from the drm-misc tree.
->=20
-> I fixed it up (see below and I added the following merge fix patch) and
-> can carry the fix as necessary. This is now fixed as far as linux-next
-> is concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the
-> conflicting tree to minimise any particularly complex conflicts.
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
-So the parts of this that affected the drm tree are now fixed, but the
-conflicts between the drm-intel and drm-misc trees are now between the
-drm-intel and drm trees.
+  drivers/gpu/drm/i915/i915_vma.c
 
-The added patch becomes:
+between commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 14 Aug 2019 12:48:39 +1000
-Subject: [PATCH] drm: fix up fallout from "dma-buf: rename reservation_obje=
-ct to dma_resv"
+  52791eeec1d9 ("dma-buf: rename reservation_object to dma_resv")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/gt/intel_engine_pool.c | 8 ++++----
- 3 files changed, 7 insertions(+), 7 deletions(-)
+from the drm tree and commit:
 
-diff --git a/drivers/gpu/drm/i915/gt/intel_engine_pool.c b/drivers/gpu/drm/=
-i915/gt/intel_engine_pool.c
-index 03d90b49584a..4cd54c569911 100644
---- a/drivers/gpu/drm/i915/gt/intel_engine_pool.c
-+++ b/drivers/gpu/drm/i915/gt/intel_engine_pool.c
-@@ -43,12 +43,12 @@ static int pool_active(struct i915_active *ref)
- {
- 	struct intel_engine_pool_node *node =3D
- 		container_of(ref, typeof(*node), active);
--	struct reservation_object *resv =3D node->obj->base.resv;
-+	struct dma_resv *resv =3D node->obj->base.resv;
- 	int err;
-=20
--	if (reservation_object_trylock(resv)) {
--		reservation_object_add_excl_fence(resv, NULL);
--		reservation_object_unlock(resv);
-+	if (dma_resv_trylock(resv)) {
-+		dma_resv_add_excl_fence(resv, NULL);
-+		dma_resv_unlock(resv);
- 	}
-=20
- 	err =3D i915_gem_object_pin_pages(node->obj);
+  cd2a4eaf8c79 ("drm/i915: Report resv_obj allocation failure")
 
-I think the remaining merge resolution is:
+from the drm-intel tree.
 
-diff --cc drivers/gpu/drm/i915/i915_vma.c
-index 8be1bbef40e5,ebfd03d117cd..000000000000
---- a/drivers/gpu/drm/i915/i915_vma.c
-+++ b/drivers/gpu/drm/i915/i915_vma.c
-@@@ -911,21 -951,16 +911,21 @@@ int i915_vma_move_to_active(struct i915
-  		if (intel_fb_obj_invalidate(obj, ORIGIN_CS))
-  			__i915_active_request_set(&obj->frontbuffer_write, rq);
- =20
-- 		reservation_object_add_excl_fence(vma->resv, &rq->fence);
-++		dma_resv_add_excl_fence(vma->resv, &rq->fence);
- +		obj->write_domain =3D I915_GEM_DOMAIN_RENDER;
-  		obj->read_domains =3D 0;
- +	} else {
-- 		err =3D reservation_object_reserve_shared(vma->resv, 1);
-++		err =3D dma_resv_reserve_shared(vma->resv, 1);
- +		if (unlikely(err))
- +			return err;
- +
-- 		reservation_object_add_shared_fence(vma->resv, &rq->fence);
-++		dma_resv_add_shared_fence(vma->resv, &rq->fence);
- +		obj->write_domain =3D 0;
-  	}
-  	obj->read_domains |=3D I915_GEM_GPU_DOMAINS;
- +	obj->mm.dirty =3D true;
- =20
- -	if (flags & EXEC_OBJECT_NEEDS_FENCE)
- -		__i915_active_request_set(&vma->last_fence, rq);
- -
- -	export_fence(vma, rq, flags);
- +	GEM_BUG_ON(!i915_vma_is_active(vma));
-  	return 0;
-  }
- =20
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/pqDYB7qH+83yIm0QxI/PxPA
+diff --cc drivers/gpu/drm/i915/i915_vma.c
+index 2645f4e850c2,252edef6c59e..000000000000
+--- a/drivers/gpu/drm/i915/i915_vma.c
++++ b/drivers/gpu/drm/i915/i915_vma.c
+@@@ -926,14 -906,22 +906,22 @@@ int i915_vma_move_to_active(struct i915
+  	if (unlikely(err))
+  		return err;
+ =20
+- 	obj->write_domain =3D 0;
+  	if (flags & EXEC_OBJECT_WRITE) {
+- 		obj->write_domain =3D I915_GEM_DOMAIN_RENDER;
+-=20
+- 		if (intel_fb_obj_invalidate(obj, ORIGIN_CS))
+- 			__i915_active_request_set(&obj->frontbuffer_write, rq);
++ 		if (intel_frontbuffer_invalidate(obj->frontbuffer, ORIGIN_CS))
++ 			i915_active_ref(&obj->frontbuffer->write,
++ 					rq->timeline,
++ 					rq);
+ =20
+ -		reservation_object_add_excl_fence(vma->resv, &rq->fence);
+++		dma_resv_add_excl_fence(vma->resv, &rq->fence);
++ 		obj->write_domain =3D I915_GEM_DOMAIN_RENDER;
+  		obj->read_domains =3D 0;
++ 	} else {
+ -		err =3D reservation_object_reserve_shared(vma->resv, 1);
+++		err =3D dma_resv_reserve_shared(vma->resv, 1);
++ 		if (unlikely(err))
++ 			return err;
++=20
+ -		reservation_object_add_shared_fence(vma->resv, &rq->fence);
+++		dma_resv_add_shared_fence(vma->resv, &rq->fence);
++ 		obj->write_domain =3D 0;
+  	}
+  	obj->read_domains |=3D I915_GEM_GPU_DOMAINS;
+  	obj->mm.dirty =3D true;
+
+--Sig_/OZdfbKRhgv_ngs8_CRFNLlE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1d2MUACgkQAVBC80lX
-0GzVkAf+NS5yNROpnuYKxJ9NZMqwpXSwX1Lp8xFoFus6j8tDOmh5EmqfTc1GYGPG
-KEM6K0fwt917csvjAqIVZyg54e1EzOpUbhwX6VZ8dQ+FJ7WbxL3B0M6AKlvxUQ5f
-WNWZzSvh5md42plUh795v0M2F4kBBIIL66HNR52Cd7J7HaEtIa+XXdbIn4FYbQk2
-be7Z+ZNMqwypHzCorlneJHU18K6TcnoOF+LsiDG23xTXXx3j0lONPWGttvoSwlSw
-jBnlQyiv04eowSaBGcS9ohBu+lsF+aWT6gdmAOhyEjPoTZwLhevQhX0r+OZBsWtT
-it8Kp5BE7186KJcgnrlk6q0BY3VQLg==
-=kiwf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1eCLgACgkQAVBC80lX
+0GxuUQf9G4hRvr4DgYRyVDh+YJeCJAh1S5g40itC+tJH2QeeeYFIY+SmWICsK2MJ
+3gV7RZmcvqNSNOWA/QebgIscbVKcXd53H07vNo4DO+tkd0Zq03JQ/d6NA0tWl2rE
+AM2UzcFwqTkTqiT9HZLyV65x2YWBfKxx/aPwDrJ7AdhKV3k1TG1qVWmO1WPfUoln
+I6y4igZIOLp+QHGaNYtQb2DsD3tal33Q2G33HfbgBl5qMgPgAnB3gmstBG5/8EMX
+4P1vj0JsZ/Z9PfO1q5lT9k/wex3iwwBF24ohTUqgHl6xcjZYxrKJ0Fvnl3+EpXpW
+aJZDeXq2iKMn1DPMx7F9SNCkif9FRg==
+=KOQn
 -----END PGP SIGNATURE-----
 
---Sig_/pqDYB7qH+83yIm0QxI/PxPA--
+--Sig_/OZdfbKRhgv_ngs8_CRFNLlE--

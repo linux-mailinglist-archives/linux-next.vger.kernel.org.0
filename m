@@ -2,108 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BFB99FD3
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 21:23:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CBD9A243
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 23:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730693AbfHVTXD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 15:23:03 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58486 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731683AbfHVTXC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 15:23:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
-        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
-        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
-        List-Archive; bh=Jthvcsal19IOXZ8heWx5wwt/W5rsQQFGdSuSyZmBYtQ=; b=t+y9YMa5Vq9z
-        X9CP6Ekoqy5sSeg4pR5RRrKUyJZMXfC3eUH0LwM2fPPXL8s+WIhb5NwSzV5a58LQmC31I+ivcVFkA
-        NvmW8/ZTsmc/+OhMQYUZVDR+nfGVRadoMrnsOMC1qnF4Fe9xkTdc0T6ECkksWJlJNCoV3DMaKFo99
-        74Ziw=;
-Received: from 92.40.26.78.threembb.co.uk ([92.40.26.78] helo=fitzroy.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.org.uk>)
-        id 1i0sfi-00080S-LY; Thu, 22 Aug 2019 19:22:58 +0000
-Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id CF419D02CB0; Thu, 22 Aug 2019 20:22:57 +0100 (BST)
-From:   Mark Brown <broonie@kernel.org>
-To:     Ashish Kumar <Ashish.Kumar@nxp.com>
-Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        mark.rutland@arm.com, robh+dt@kernel.org
-Subject: Applied "spi: fsl-qspi: Enhance binding to extend example for flash entry" to the spi tree
-In-Reply-To:  <1565691791-26167-3-git-send-email-Ashish.Kumar@nxp.com>
-X-Patchwork-Hint: ignore
-Message-Id: <20190822192257.CF419D02CB0@fitzroy.sirena.org.uk>
-Date:   Thu, 22 Aug 2019 20:22:57 +0100 (BST)
+        id S1732656AbfHVVge (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 17:36:34 -0400
+Received: from ozlabs.org ([203.11.71.1]:53367 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730759AbfHVVge (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Aug 2019 17:36:34 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46DyXG6wFFz9s3Z;
+        Fri, 23 Aug 2019 07:36:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566509791;
+        bh=hsjC5tg0AUO4VczoJ0W3z6ZBbs1wLKV5JQGRElboUTs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dMcZkQt5aw0Pl3RhOslmSQPXEna+iVKEMf9UIoV+FQnELhYRSQgMxpLXWXJ/tTFV8
+         bzIuLxdf7/YrRw/h0M3uOT4d2P7pUamvcgx1wTzvtlDODGhoosg2X2zHuA8zBQ9oo4
+         ssUOZKjzPkqHNufY9NGTwiRgzYcR40jVRwWh6vsjY5LgunlgQUT/mrw+3YCiVvMq0+
+         1PODUpkeTJTXJO93JA2fFnFzu5mCjy+L/B6ZjzCOd8ifQeSX3XurPvhnDUjA+7ZlTS
+         qxhcg0yRwA+ZJMvbA9Vzw3p3+ZcBFtuJCJm9WarcbgFAkrZFyKTG2SE7QzzS+n5ylN
+         j7IPiBGL1aTOA==
+Date:   Fri, 23 Aug 2019 07:36:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the sunxi tree
+Message-ID: <20190823073545.647ec7d1@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/aTGv3uv8tSXDXzl4uI2kL1T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The patch
+--Sig_/aTGv3uv8tSXDXzl4uI2kL1T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-   spi: fsl-qspi: Enhance binding to extend example for flash entry
+Hi all,
 
-has been applied to the spi tree at
+Commit
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+  c60e09f77c83 ("ARM: dts: sun8i: a83t: Enable HDMI output on Cubietruck Pl=
+us")
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.  
+is missing a Signed-off-by from its committer.
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+--=20
+Cheers,
+Stephen Rothwell
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+--Sig_/aTGv3uv8tSXDXzl4uI2kL1T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Mark
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1fCtYACgkQAVBC80lX
+0Gzdtgf/Rvr/o6VttShgxqR7ITjaIT9PuuPBDvrNx8VJgNAXf4UN4v0XzfAVxZpJ
+XpjAKzUpUuSZ4ZbPzihe9GxTt6SgDOH6Pu4XdQDFXE0lWA52fLs85tSUploy3bPH
+8PXGUfOwSHuChb6IW+UOwzQSuF6HEBcmbIVaooXUxqdpTFM/TJU33UxBbso7DIjW
+5Ib7w77LOCAqMOtyEXayJVyoBQ9+rWJuwFjugq2xylrxHlTQ7W62psoVKpBqRtOa
+E2zEZEQNHYUN5PAhvIGmTjSYfkkBJjUd03sdpmG1J07RE0onG7jCELoBmi86E3Eq
+r6sO0POK+e+BhvxrsniEjP04aJNYHw==
+=SSgb
+-----END PGP SIGNATURE-----
 
-From 303290e130bfd504a8230f49e545f6b91e120553 Mon Sep 17 00:00:00 2001
-From: Ashish Kumar <Ashish.Kumar@nxp.com>
-Date: Tue, 13 Aug 2019 15:53:11 +0530
-Subject: [PATCH] spi: fsl-qspi: Enhance binding to extend example for flash
- entry
-
-Add example for adding flash entry on various boards' dts
-using flash manufacture spansion/cypress.
-
-Signed-off-by: Ashish Kumar <Ashish.Kumar@nxp.com>
-Link: https://lore.kernel.org/r/1565691791-26167-3-git-send-email-Ashish.Kumar@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-index e8f1d627d288..1b23cfd7b39b 100644
---- a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-+++ b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
-@@ -34,7 +34,11 @@ qspi0: quadspi@40044000 {
- 	clock-names = "qspi_en", "qspi";
- 
- 	flash0: s25fl128s@0 {
--		....
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		compatible = "spansion,s25fl128s", "jedec,spi-nor";
-+		spi-max-frequency = <50000000>;
-+		reg = <0>;
- 	};
- };
- 
--- 
-2.20.1
-
+--Sig_/aTGv3uv8tSXDXzl4uI2kL1T--

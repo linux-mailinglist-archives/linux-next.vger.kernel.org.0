@@ -2,104 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A2CA99F91
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 21:12:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04E299FCF
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 21:23:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403895AbfHVTMU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 15:12:20 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40518 "EHLO
+        id S1731748AbfHVTXA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 15:23:00 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58394 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726142AbfHVTMU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 15:12:20 -0400
+        with ESMTP id S1730693AbfHVTXA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 15:23:00 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Date:Message-Id:In-Reply-To:
+        Subject:Cc:To:From:Sender:Reply-To:MIME-Version:Content-Type:
         Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=NZCJZbx63toKQeKOUzkuciD01o1c7jKzoOhoeTrTjFk=; b=q+csDCqmfhxxH7GM7HWjgxuWY
-        5gXEE5q4zf7t5ijiChoL4bNdFk0bTc1imKVmCGY8ONcTyS92ZuvVbca9Q2smEf3TukbfnWNnmg/a4
-        zOltZeEZyhoIq5xb5QEKQJ3v3RmrCxwApOxbhtgwmWx/NeDL7Wfr2RrhCgpeYJZ5T9Aqc=;
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+        List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+        List-Archive; bh=CR/FnPjPw9RxgXe6hqu+ANuYh3/MYIEKK4pmVfMFOyQ=; b=dRg3YZQAXNnG
+        LXHfomQPnHhELOYtSDYM3S1A1dOTPzeSGSVUVJK11qBePQ6m+rLkV9nArPja00obLmhNKrrZiaKVq
+        v68z7suBN9A00SfJbgHyhr9DXJNBhYTR70rAUefgX45kntxvi+qm6y7z6pUtKWC+S0mULFaN3Xo5S
+        b/ZIA=;
 Received: from 92.40.26.78.threembb.co.uk ([92.40.26.78] helo=fitzroy.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.org.uk>)
-        id 1i0sVK-0007xk-KH; Thu, 22 Aug 2019 19:12:15 +0000
+        id 1i0sff-00080M-Q8; Thu, 22 Aug 2019 19:22:55 +0000
 Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
-        id 5ACD7D02CB0; Thu, 22 Aug 2019 20:05:07 +0100 (BST)
-Date:   Thu, 22 Aug 2019 20:05:07 +0100
+        id EC64ED02CB0; Thu, 22 Aug 2019 20:22:54 +0100 (BST)
 From:   Mark Brown <broonie@kernel.org>
-To:     Ashish Kumar <ashish.kumar@nxp.com>
-Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>
-Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
- ls2080a compatibility string to bindings
-Message-ID: <20190822190507.GI23391@sirena.co.uk>
-References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
- <20190821110640.GC5128@sirena.co.uk>
- <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="n+lFg1Zro7sl44OB"
-Content-Disposition: inline
-In-Reply-To: <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
-X-Cookie: Don't SANFORIZE me!!
-User-Agent: Mutt/1.10.1 (2018-07-13)
+To:     Ashish Kumar <Ashish.Kumar@nxp.com>
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>, broonie@kernel.org,
+        devicetree@vger.kernel.org, Han Xu <han.xu@nxp.com>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        mark.rutland@arm.com, robh+dt@kernel.org
+Subject: Applied "spi: spi-fsl-qspi: Add ls2080a compatibility string to bindings" to the spi tree
+In-Reply-To:  <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+X-Patchwork-Hint: ignore
+Message-Id: <20190822192254.EC64ED02CB0@fitzroy.sirena.org.uk>
+Date:   Thu, 22 Aug 2019 20:22:54 +0100 (BST)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+The patch
 
---n+lFg1Zro7sl44OB
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+   spi: spi-fsl-qspi: Add ls2080a compatibility string to bindings
 
-On Wed, Aug 21, 2019 at 02:18:43PM +0000, Ashish Kumar wrote:
+has been applied to the spi tree at
 
-Please fix your mail client to word wrap within paragraphs at something
-substantially less than 80 columns.  Doing this makes your messages much
-easier to read and reply to.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
 
-> Snippet from driver spi-fsl-qspi.c
-> static const struct of_device_id fsl_qspi_dt_ids[] = {
->         { .compatible = "fsl,vf610-qspi", .data = &vybrid_data, },
->         { .compatible = "fsl,imx6sx-qspi", .data = &imx6sx_data, },
->         { .compatible = "fsl,imx7d-qspi", .data = &imx7d_data, },
->         { .compatible = "fsl,imx6ul-qspi", .data = &imx6ul_data, },
->         { .compatible = "fsl,ls1021a-qspi", .data = &ls1021a_data, },
->         { .compatible = "fsl,ls2080a-qspi", .data = &ls2080a_data, },
->         { /* sentinel */ }
-> };
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.  
 
-> I had previously sent dts patch based out of Shawn's tree with
-> dependency on these dt binding patch. To which Shawn had
-> replied to get dependency patch accepted first before sending
-> this dts change.
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Right, there appears to be an entry for patch 1 which was added
-without the binding doc being updated - patch 2 looks to not have
-the compatibles in the driver though?
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
---n+lFg1Zro7sl44OB
-Content-Type: application/pgp-signature; name="signature.asc"
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
------BEGIN PGP SIGNATURE-----
+Thanks,
+Mark
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1e52IACgkQJNaLcl1U
-h9CabAf/YnrmOa6aer/v5GZLa3V7LnDmLiT3+f/Pw1XPzt4G1mUV+xM1rjIPcPBy
-i2g6mH4lVLJYx/ERwlDb6jW+2GH+uG08pU8ekqm1lQqOhqGaWJGY+Q4zXRGNoWRd
-OlCbXUx/ZLWJ0RjrHkoSO43s5mOXkX1rtef65k/b6tAgW1PIM4GEzrRNnSwFXQ+R
-zxOhxAAesVweBvASCRd5tOll8I+9KFX9pHbByUwCxHbb1OqJHg5/sT1TCtCRr0fR
-K+7/bB4MjfjCF14StKLKszFUWhRNnyT73S13gX8NlPQPSRAUtOOyvuNPX/UtkNJj
-trVFOiTCRf5s01u6GQl2n+a1gOa/Ew==
-=Scpe
------END PGP SIGNATURE-----
+From be28f76b7e8ffaf04690e30fd17683d8afea1fd9 Mon Sep 17 00:00:00 2001
+From: Ashish Kumar <Ashish.Kumar@nxp.com>
+Date: Tue, 13 Aug 2019 15:53:09 +0530
+Subject: [PATCH] spi: spi-fsl-qspi: Add ls2080a compatibility string to
+ bindings
 
---n+lFg1Zro7sl44OB--
+There are 2 version of QSPI-IP, according to which controller registers sets
+can be big endian or little endian.There are some other minor changes like
+RX fifo depth etc.
+
+The big endian version uses driver compatible "fsl,ls1021a-qspi" and
+little endian version uses driver compatible "fsl,ls2080a-qspi"
+
+Signed-off-by: Kuldeep Singh <kuldeep.singh@nxp.com>
+Signed-off-by: Ashish Kumar <ashish.kumar@nxp.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
+Acked-by: Han Xu <han.xu@nxp.com>
+Link: https://lore.kernel.org/r/1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
+index 1b23cfd7b39b..69dc5d57b1ef 100644
+--- a/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
++++ b/Documentation/devicetree/bindings/spi/spi-fsl-qspi.txt
+@@ -3,9 +3,8 @@
+ Required properties:
+   - compatible : Should be "fsl,vf610-qspi", "fsl,imx6sx-qspi",
+ 		 "fsl,imx7d-qspi", "fsl,imx6ul-qspi",
+-		 "fsl,ls1021a-qspi"
++		 "fsl,ls1021a-qspi", "fsl,ls2080a-qspi"
+ 		 or
+-		 "fsl,ls2080a-qspi" followed by "fsl,ls1021a-qspi",
+ 		 "fsl,ls1043a-qspi" followed by "fsl,ls1021a-qspi"
+   - reg : the first contains the register location and length,
+           the second contains the memory mapping address and length
+-- 
+2.20.1
+

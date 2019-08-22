@@ -2,189 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FAE099911
-	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 18:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD6799F2B
+	for <lists+linux-next@lfdr.de>; Thu, 22 Aug 2019 20:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbfHVQYU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 12:24:20 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40715 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389867AbfHVQYU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 12:24:20 -0400
-Received: by mail-wm1-f66.google.com with SMTP id c5so6190775wmb.5
-        for <linux-next@vger.kernel.org>; Thu, 22 Aug 2019 09:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=fscHfU0Q/1yo8BsUxOGGsIZVI2xKxYXl4QUkj7Anplw=;
-        b=G58peksyjQXzgniH0GoNRaA99nbi6CDxSSNa2uH5zukwMYPJcq6HmVw309agvsUwua
-         Le0bqPqXEwnM4EdbzwItOQ2Y+8O5GjtOhQGI41JXMLqrnBqSkDow9E6ZHE5QCZul6s4n
-         SLJs+bPF0nSWzOM7lqn02H3hYMx+7GEaAUpBzBuS6KLsyHffDH6r1s36iz5RVeaKbUh5
-         o6yn868EsUvXUdYleDZZ/kWBr2lecyf1WL3JdiVDlsdjXd/47gL3lhFWXEDxLo/Eh51q
-         fBgvQzNydPO45hcxs87hw26aKmAJOerMHmVx2i/6nPUoCs79cZt9GNl/YLcKpH7Rlabp
-         bIGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=fscHfU0Q/1yo8BsUxOGGsIZVI2xKxYXl4QUkj7Anplw=;
-        b=Kg8V3qTFErtPE8JqEPCa7XvH4Y4dxU+9Ir5h3emyM2DrBfRcrdrcoGp7pHfUsKyzWh
-         J2Db7wRt5ZUKmEpGo9HYYhCl2HZN0MC6EdQYIjHhL4bgIoBrrsDXeK25BCG1WPclqjkt
-         dCv80m5NASd9mA5+hbJ6TzgLa/NKHSfkJqf7pVvs/p361/0fjmh+Ku30e92ZhkPHx9Aw
-         7RRnP5cnL8MYQ9CTV20gAEHAcl86WuhmpYYwdzD5qhUj1t8H50GBwZ5XwsMEiakHACA7
-         xLTSC7jPx1Q+ogU5TxlDXPZ318WC0rglRUKawKsdiGWm3odNIUGm2jZ0JGDRhEqiPIGp
-         N7zQ==
-X-Gm-Message-State: APjAAAWddsOlrF0zZitfbZ/mUkAovN2iO58FHoRq1wU4xeefdnAw+G/P
-        pGBOyYq9o9g/ZHPEUHzQe0ZRlJA06CGtyA==
-X-Google-Smtp-Source: APXvYqzhnbMw3vNeVzGGRk2ecFT7XVXtOBS3CL2SLrfCRdaUu3wd1tl7hRzwxlEgN9jMJd8r0CwUdw==
-X-Received: by 2002:a05:600c:21d3:: with SMTP id x19mr7273882wmj.45.1566491057957;
-        Thu, 22 Aug 2019 09:24:17 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id h23sm5001530wml.43.2019.08.22.09.24.16
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 22 Aug 2019 09:24:16 -0700 (PDT)
-Message-ID: <5d5ec1b0.1c69fb81.b88d6.58a5@mx.google.com>
-Date:   Thu, 22 Aug 2019 09:24:16 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2389049AbfHVSth (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 14:49:37 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:58810 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730918AbfHVSth (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 14:49:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=ZFdAsAhKZXbTwipyAaLFn+KZWfn8XNc9r15goIeXnEQ=; b=U1CQNO/Rb0Iyz0z+3cgPPSD5t
+        yhIw97sY5teyyLY4Jx428leYLZS5iPxcA7I/uM5iE/KFbA/y+8SCkf4tgj5SDwGOdvM7hYQPr665k
+        SUqd0tZqSi/DTAM9lJGUC4zZAT3Npzos+gkkK8AdXmfY8lSugZ0ocCSCWvOr319DJmvdc=;
+Received: from 92.40.26.78.threembb.co.uk ([92.40.26.78] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i0s9N-0007nF-HB; Thu, 22 Aug 2019 18:49:33 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 65A7ED02CB0; Thu, 22 Aug 2019 19:49:27 +0100 (BST)
+Date:   Thu, 22 Aug 2019 19:49:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ashish Kumar <ashish.kumar@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
+ ls2080a compatibility string to bindings
+Message-ID: <20190822184927.GH23391@sirena.co.uk>
+References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+ <20190821110640.GC5128@sirena.co.uk>
+ <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190822
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 286 boots: 9 failed, 256 passed with 14 offline,
- 3 untried/unknown, 4 conflicts (next-20190822)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YToU2i3Vx8H2dn7O"
+Content-Disposition: inline
+In-Reply-To: <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
+X-Cookie: Don't SANFORIZE me!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 286 boots: 9 failed, 256 passed with 14 offline, 3 untrie=
-d/unknown, 4 conflicts (next-20190822)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190822/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190822/
+--YToU2i3Vx8H2dn7O
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tree: next
-Branch: master
-Git Describe: next-20190822
-Git Commit: b5835edc8dd4317d3793cf3d45ac3740b52c3c02
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 91 unique boards, 27 SoC families, 22 builds out of 222
+On Thu, Aug 22, 2019 at 06:39:18AM +0000, Ashish Kumar wrote:
 
-Boot Regressions Detected:
+> > > Please use subject lines matching the style for the subsystem.  This
+> > > makes it easier for people to identify relevant patches.
+> Hi Mark,
 
-arm64:
+> After looking at some patch in Documentation/devicetree/bindings/spi/
+> I think I should update subject line to
+> dt-bindings: spi: Add ls2080-qspi compatible string for FSL QSPI driver
+> or=20
+> doc: qspi: Add ls2080-qspi compatible to DT bindings for FSL QSPI driver
 
-    defconfig:
-        clang-8:
-          sun50i-a64-bananapi-m64:
-              lab-clabbe: new failure (last pass: next-20190821)
-          sun50i-h6-orangepi-one-plus:
-              lab-clabbe: new failure (last pass: next-20190821)
+Drop the dt-bindings:.
 
-Boot Failures Detected:
+--YToU2i3Vx8H2dn7O
+Content-Type: application/pgp-signature; name="signature.asc"
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            rk3399-firefly: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1e47YACgkQJNaLcl1U
+h9A7uQf/dNBtSbaZ/Q4CmLrmJW1+t4b2gh+ryETbQz8vNiKnPlKBeQLF7W8KiJ+h
+DYG8qCiWwyHsIV4wo/hTUfViQJLPVnnabfoilcj46ZfB3SZrXk2i3h5dV1MZcHXx
+6CpWEUv56ti/1XoKXIfzcXYF9jcBjtD7gI87Ee8alit5X9a5FCl1s0HLXaivtgOa
+OqxL3SXPUt/KaKVY9/zGhN7bQ5pgH7xwWUQjJPKwY13/pbkBYyDzQAnxryap0KJ8
+vrUol7hPBtAmn3YZuuSXj+fRaWZ0F9snmRz1dglCedX4YMcwWOHH/v+Kn4sUg0sW
+k9a5KRX73AGlnwVjb9khqyuA163Byg==
+=Lzgd
+-----END PGP SIGNATURE-----
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        clang-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            meson-gxl-s905x-khadas-vim: 1 failed lab
-
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            exynos5250-snow: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos4412-odroidx2: 1 failed lab
-
-Offline Platforms:
-
-mips:
-
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-arm:
-    sama5_defconfig:
-        at91-sama5d4_xplained:
-            lab-baylibre: FAIL (gcc-8)
-            lab-baylibre-seattle: PASS (gcc-8)
-
-    multi_v7_defconfig:
-        sun7i-a20-cubieboard2:
-            lab-baylibre: FAIL (gcc-8)
-            lab-clabbe: PASS (gcc-8)
-
-    sunxi_defconfig:
-        sun7i-a20-cubieboard2:
-            lab-baylibre: FAIL (gcc-8)
-            lab-clabbe: PASS (gcc-8)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        sun7i-a20-cubieboard2:
-            lab-baylibre: FAIL (gcc-8)
-            lab-clabbe: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+--YToU2i3Vx8H2dn7O--

@@ -2,133 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4A99A5FD
-	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 05:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 129899A60F
+	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 05:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391215AbfHWDUK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 23:20:10 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33087 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2391211AbfHWDUK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 22 Aug 2019 23:20:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46F68j3yVYz9s7T;
-        Fri, 23 Aug 2019 13:20:05 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566530407;
-        bh=h/4saC/U531BHqjeM7yUCrFYXQzNfCVKnprjPF4WinQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TLy6mKfGKjPPZYhQsmBb61QoRXw3F0xnYJ1VgLVeDBqvJCS3Hf1LUhdvlARNyFwhi
-         dk5TH1YesFyx84ya+pBNMs6txYFV30qdCVb7JCno3On/ue4NeGrCXK7gqdjfxbwkxT
-         TR8Em+Iq3awfJBuDb+AWW7Yzbkm1EEw0yckIUDdw99NIN0ALru9/utvrQK8+q8opsr
-         6AKw0vW16EALhpfPjlB6GZONnUo9x66PND43P9RPmHWf4HMfEGD4/I+vdcD/GfqO6m
-         nrih8gz/jLJgTZGFcXNWm+rGF/LMBY5FsnP/tdPmIyktQpeAm0hn389jjOXYsCDWWN
-         R7aaOyWug4QGw==
-Date:   Fri, 23 Aug 2019 13:20:04 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        CK Hu <ck.hu@mediatek.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: linux-next: manual merge of the drm tree with the drm-fixes tree
-Message-ID: <20190823132004.578e99a0@canb.auug.org.au>
+        id S2391538AbfHWDZ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 23:25:58 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:33297 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732186AbfHWDZ4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 23:25:56 -0400
+Received: by mail-pl1-f194.google.com with SMTP id go14so4715411plb.0
+        for <linux-next@vger.kernel.org>; Thu, 22 Aug 2019 20:25:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vWwHro73B3onPJp0WcmyAb4TGNSwDTbqk+D2wf0X80A=;
+        b=ne/u+fPWajnUb/3FwKeDYUCR8AlvInk2kL4vUGdDlD7bePE9LoD7S1qAYiAK09k5EG
+         r13WJu3ls3teAKaq4j0HL59pMytYPp0oluiScA9H+IMFxQyx7d2FCmiaO6ZG3borpsyF
+         ycYOEoBKjo/xSgXRBJPuIQofX3uXpPT5r0cyQ2Xx7L42yl+8xBfTi4/n+KYlLBgzTDeN
+         PgbVGikNK4U93JfhuUZMyVmrr0Ymooil47K1pkI1Lb7RIW/frGwkb9B43mRK6xW0F2PR
+         foa4SWBXKc6ucR3ueRCqJ5cIW4o037K1sf4cxZsrtO1UAlbqy/SN1BVnSRqcg+pJM3vI
+         shDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vWwHro73B3onPJp0WcmyAb4TGNSwDTbqk+D2wf0X80A=;
+        b=uImQDQPTBAJWB/CC6F6SJBLqevN1v+HPw1m1WIfxGWMl7z/0uc71LG5NycxDurZ9LK
+         BM+LSCZvFKhN9Kx1asknus/XFiWuFwbOkAON8z3E+wJXR7vpLICaSMYDoeRAQPjK6HOy
+         alCS1ws/AxmwzgsGMw2HjycXqtnNJ9Q4cjYNjUMFi5oCFOcqfsIGrt8RkRNw6ABhP6jD
+         dRw9xCNuYFhxFtGegpgwWTX1PS9XQuElhX32n+lria+8PS0qHiZJxFaDfSX6HTmGwqIF
+         bfEzWfh9e+OE4a44vEFyeGcLYifN1qkns+jtolLQdrUoGTF8Xo9L+ZdQVPSoIYmQeVQi
+         zSVg==
+X-Gm-Message-State: APjAAAXc16NdUXE3cm+cMekdRp+KSV2fTdE0e3AwRlzryl1KaPkOsA82
+        c3g3I/lDXtwZQXW4r8rUsjeeqvu78vhEEGhMG7Y1yQ==
+X-Google-Smtp-Source: APXvYqyOcxLYA0uhJH+ZecTlV0RkEgb7QpKsFfgN5NY09q496mZkK8xBNs6iSe+8vwc5N1VY/XpO7+50T6oy7W4GMR4=
+X-Received: by 2002:a17:902:8484:: with SMTP id c4mr2233158plo.223.1566530754768;
+ Thu, 22 Aug 2019 20:25:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X2kcl2/LOpWwGE.fwJfoAWF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20190823130841.4fdbda61@canb.auug.org.au>
+In-Reply-To: <20190823130841.4fdbda61@canb.auug.org.au>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 22 Aug 2019 20:25:42 -0700
+Message-ID: <CAKwvOdngP5Afe+W2_WnKvEium-EXZ7Bra3o_7RzJh+C4rKpTpw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the crypto tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X2kcl2/LOpWwGE.fwJfoAWF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+LGTM, sorry for the mid air collision.  Thanks for resolving, Stephen!
 
-Hi all,
+On Thu, Aug 22, 2019 at 8:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the crypto tree got a conflict in:
+>
+>   arch/x86/purgatory/Makefile
+>
+> between commit:
+>
+>   4ce97317f41d ("x86/purgatory: Do not use __builtin_memcpy and __builtin_memset")
+>
+> from Linus' tree and commit:
+>
+>   ad767ee858b3 ("crypto: sha256 - Move lib/sha256.c to lib/crypto")
+>
+> from the crypto tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc arch/x86/purgatory/Makefile
+> index 8901a1f89cf5,ea86982aba27..000000000000
+> --- a/arch/x86/purgatory/Makefile
+> +++ b/arch/x86/purgatory/Makefile
+> @@@ -6,12 -6,11 +6,14 @@@ purgatory-y := purgatory.o stack.o setu
+>   targets += $(purgatory-y)
+>   PURGATORY_OBJS = $(addprefix $(obj)/,$(purgatory-y))
+>
+>  +$(obj)/string.o: $(srctree)/arch/x86/boot/compressed/string.c FORCE
+>  +      $(call if_changed_rule,cc_o_c)
+>  +
+> - $(obj)/sha256.o: $(srctree)/lib/sha256.c FORCE
+> + $(obj)/sha256.o: $(srctree)/lib/crypto/sha256.c FORCE
+>         $(call if_changed_rule,cc_o_c)
+>
+> + CFLAGS_sha256.o := -D__DISABLE_EXPORTS
+> +
+>   LDFLAGS_purgatory.ro := -e purgatory_start -r --no-undefined -nostdlib -z nodefaultlib
+>   targets += purgatory.ro
+>
 
-Today's linux-next merge of the drm tree got a conflict in:
 
-  drivers/gpu/drm/mediatek/mtk_drm_drv.c
-
-between commit:
-
-  4c6f3196e6ea ("drm/mediatek: use correct device to import PRIME buffers")
-
-from the drm-fixes tree and commit:
-
-  3baeeb21983a ("drm/mtk: Drop drm_gem_prime_export/import")
-
-from the drm tree.
-
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 7f5408cb2377,2ee809a6f3dc..000000000000
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@@ -351,21 -314,8 +345,20 @@@ static const struct file_operations mtk
-  	.compat_ioctl =3D drm_compat_ioctl,
-  };
- =20
- +/*
- + * We need to override this because the device used to import the memory =
-is
- + * not dev->dev, as drm_gem_prime_import() expects.
- + */
- +struct drm_gem_object *mtk_drm_gem_prime_import(struct drm_device *dev,
- +						struct dma_buf *dma_buf)
- +{
- +	struct mtk_drm_private *private =3D dev->dev_private;
- +
- +	return drm_gem_prime_import_dev(dev, dma_buf, private->dma_dev);
- +}
- +
-  static struct drm_driver mtk_drm_driver =3D {
-- 	.driver_features =3D DRIVER_MODESET | DRIVER_GEM | DRIVER_PRIME |
-- 			   DRIVER_ATOMIC,
-+ 	.driver_features =3D DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
- =20
-  	.gem_free_object_unlocked =3D mtk_drm_gem_free_object,
-  	.gem_vm_ops =3D &drm_gem_cma_vm_ops,
-@@@ -373,8 -323,6 +366,7 @@@
- =20
-  	.prime_handle_to_fd =3D drm_gem_prime_handle_to_fd,
-  	.prime_fd_to_handle =3D drm_gem_prime_fd_to_handle,
-- 	.gem_prime_export =3D drm_gem_prime_export,
- +	.gem_prime_import =3D mtk_drm_gem_prime_import,
-  	.gem_prime_get_sg_table =3D mtk_gem_prime_get_sg_table,
-  	.gem_prime_import_sg_table =3D mtk_gem_prime_import_sg_table,
-  	.gem_prime_mmap =3D mtk_drm_gem_mmap_buf,
-
---Sig_/X2kcl2/LOpWwGE.fwJfoAWF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1fW2QACgkQAVBC80lX
-0GwCPQgAilBWVPzBxZcJWB2bXRi3iz4BWC/GmgqEAOU75yaTwQqqHz335TAGT3aL
-4CWN7cVVYNBGV9CxE5rPdpelVGORo6+BlGevvskN6Uhr3j0WkHqL+ZeVc7Rx35Wy
-FU2H/nybicSZqNDg07XmfI6BSRJf+L190fqiogRvIXpFzzRB5/zWGLpWQga4Mg8v
-3hpk2mLYd42twe0pCLAcnGHxwsNnb7csUB7VGmt3EmsU32CfZEMuZxir45E3JMvq
-hwwHQAOZKWypD8C1oVcQuAhGz06NSILe4LVu1JVyziYNCKUabQgOA0R9ErxRUKbo
-jkQtvYuxsg/rAZG8oYujsEkpKLmCJA==
-=Rt4Z
------END PGP SIGNATURE-----
-
---Sig_/X2kcl2/LOpWwGE.fwJfoAWF--
+-- 
+Thanks,
+~Nick Desaulniers

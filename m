@@ -2,125 +2,186 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 271F29B2E5
-	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 17:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF789B4EA
+	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 18:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729018AbfHWPCr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Aug 2019 11:02:47 -0400
-Received: from mail-eopbgr30061.outbound.protection.outlook.com ([40.107.3.61]:54855
-        "EHLO EUR03-AM5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725934AbfHWPCq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 23 Aug 2019 11:02:46 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V9XUmTOPR3EaTzwOLKAtvOiWbF/SJL8qWxJx7ETLVWyQywVcUzDrRvujK3NQAXD19g6M53oH4agUK9IjzoLeWcOXNq77wzOVz0ARFcs0Afs0wupKFHtFyQwQ5NIl8z/LVcawqd1AFp02wlc1x33A1Y8YXnz3lT+r5NSQvcmxew4E8PhoLRmhfULNd888vCTG3Ktcp2APFxJBNosxlpNOOALepaGk1PAeAxgwB/S9FB/dQQHi8W/6dGPyfl486kg0pQP0f/ag/ixhVZnTqTAeaeczhGD5Vh1DSW0j4VKsCF7jssszJ46kOdZpFVB0syx957kbyqvz8eq49rBWvOtF9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p8uNQ6bb2P723hLVX8awGjeMi2LDnpkg+d9Wm+q/xgE=;
- b=YgufbavgCQRPoT6lJ23XstkdpuWXbW7NmhyxWYJ1S28V883OUhNVLXxvwCjJRf6B0kuIr7iWZqXeoiUxqwjlIg0dCeng3MS/oyjrIUGmvnAGslpB1D5yAPUUNSXZdAP3SoJL3NZhXkrYcG5ZSSZuVbF37/wwaopcaXVR84chQDA1STSbAakBASTjSVBdklMx/aOhdsiq84mA5XatOeB106q96/jOT9n0Ch4eDxrct7wjgpKrAwwoN0yTrfC87kfxbC3PdFPf569UrEygzzqyp5xvByWBX95LNqjnAwv83WmbTPtaR15wUZBUw4ny7q05aQl3PFMbXetygVRejr11ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p8uNQ6bb2P723hLVX8awGjeMi2LDnpkg+d9Wm+q/xgE=;
- b=dp6reOmtVsT0HU1L/I66jiaV1RBO7MVuOX4whHGZkPoZletBc7zdOlFc77Eo6cc3vaehhby5ppXD0aKsfXJzrBcDxvXBXS8X/jJ5Jf4fW4ndWAG7VIXU85iUQzZd4FqiZBtugyw4CU3wku97IaE/dvJ04gFj9MN2sH/bedwVlV8=
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (10.171.182.144) by
- VI1PR05MB5984.eurprd05.prod.outlook.com (20.178.127.30) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2178.18; Fri, 23 Aug 2019 15:02:43 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::1d6:9c67:ea2d:38a7]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::1d6:9c67:ea2d:38a7%6]) with mapi id 15.20.2178.020; Fri, 23 Aug 2019
- 15:02:43 +0000
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Doug Ledford <dledford@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Moni Shoua <monis@mellanox.com>,
-        Parav Pandit <parav@mellanox.com>,
-        Leon Romanovsky <leonro@mellanox.com>
-Subject: Re: linux-next: manual merge of the rdma tree with the rdma-fixes
- tree
-Thread-Topic: linux-next: manual merge of the rdma tree with the rdma-fixes
- tree
-Thread-Index: AQHVWVmgru+wGtDU/UuiDjFq8Gwzr6cI1OaA
-Date:   Fri, 23 Aug 2019 15:02:42 +0000
-Message-ID: <20190823150237.GL12847@mellanox.com>
-References: <20190823122227.4c2b9790@canb.auug.org.au>
-In-Reply-To: <20190823122227.4c2b9790@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: YQXPR0101CA0015.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c00:15::28) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:4d::16)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [156.34.55.100]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: acede8a8-3afb-4569-b231-08d727daf2e7
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR05MB5984;
-x-ms-traffictypediagnostic: VI1PR05MB5984:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR05MB59847CB489361AF849DC4438CFA40@VI1PR05MB5984.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0138CD935C
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(376002)(366004)(396003)(346002)(39860400002)(189003)(199004)(53754006)(102836004)(25786009)(2616005)(476003)(6246003)(81166006)(81156014)(8676002)(229853002)(8936002)(66066001)(6512007)(4326008)(66946007)(107886003)(86362001)(6436002)(66446008)(64756008)(66556008)(66476007)(305945005)(7736002)(6506007)(1076003)(5660300002)(36756003)(2906002)(53936002)(6116002)(3846002)(6486002)(14454004)(26005)(71200400001)(186003)(71190400001)(6916009)(478600001)(99286004)(52116002)(33656002)(76176011)(11346002)(54906003)(4744005)(446003)(256004)(486006)(386003)(316002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB5984;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: RSNeFWg+JttRvXwlF2S1TPW6bsTJoqZIc+hkOoYRmqTS612g7oel7+kKvYJntNiTZb8EDQGe1xOdmIb0fE+godAgbWLkjGpwIczZs2n/RScdhbFla6/ad/iH5oJVTRXl+DAwL3Vooev7xULfHeIawk+St9DPvTIsA/UpN9XFVPhpoIFLDDwlDTpVD3Ee0u0wPdkHkF94ivRo2HJrMMhqq5nkWdP/sv18JwfXmvks7cvRos+Sc9OBOtYFC1VJVmeVZSOkzOu1ezLG6qEB0VQi8UDN/x3k4sIHj/BINSgw6LS5mmy2F6+Zq34NaldTqyefrKM6GDBCzfARn6y9uE6ugz9bxODqNMBrGkCdREOb88yO3zhmH1PICDV/soj33uNfte482vWLqtB5NFaxFRUh/46PNHzynFy8sDcFayN9+5Y=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6134B4F54FCEA84DBEE94B7AAE3B4EF0@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        id S2390224AbfHWQwz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Aug 2019 12:52:55 -0400
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:42078 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729834AbfHWQwz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Aug 2019 12:52:55 -0400
+Received: by mail-pg1-f196.google.com with SMTP id p3so6064189pgb.9
+        for <linux-next@vger.kernel.org>; Fri, 23 Aug 2019 09:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=zIEqGVFm20QH2rrlURxbZuA/nBxUqeTlHMT3qLXaCW0=;
+        b=G0L5ZUBIAKo7O+9XeV/SKXTVkdkpHit4PiENfeChbIF26Z95QNr4aiXee75Pf4lKuz
+         tgZiIpA3XGNp0+SLSy6/FCpD/g+ij2Pf2RjaN64NCp4/hhpZIX1n2jm/xU/gzAp/bkwm
+         NXJuIbefPjqnsYnHBdVJQpJSd6z97hMeZPDlWy9kp/uRcFlMRqXdDgQhzwLIijJZAKIB
+         zSr7OTAAEuA4fGehoul/WRSJ80fl6pJ935Ych8RZitV4u3zXZXUBb+uGkzELsyCPo7SW
+         d68isfQuhmGzfiBZofcP7XarkFvxoOVdvtwsoBX4Vs+W3ZvHyyR05JmRx0x0Uo/U4ZqZ
+         TDag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
+         :message-id:mime-version:content-transfer-encoding;
+        bh=zIEqGVFm20QH2rrlURxbZuA/nBxUqeTlHMT3qLXaCW0=;
+        b=RN9OcG0PeBS/KnCAlh2ke8y7x5lQJDJ7z16G2Clff9tRbn1WY94+qyjp0z3e/ud6WU
+         UdM7d3S/fD9sJ/zp1kG2COa03PR52eDPDiPvtUxGFWc3U+WTR8N9zEQ5nCazIXJRPb/+
+         qfhjS31d2GmwuTqSvFulHSqrXVN6FUPd+kgZTNBKevMg6DRN6qZL58P+qkxZZEMthhug
+         1gTkmljS2O8w6mWL4Tg0tkUyCudnKEC+csL3Cd5Jency+wgaitzk03CxvMx0j4N6L/PR
+         nHwhbUmWWXEjWOpX+4aslT5Fj2/wDX2xHMYbK7/acwElm9Ldu/o9Inhf/dFDk8pZrb3O
+         N0jA==
+X-Gm-Message-State: APjAAAUf9mHrCDBh1rlELjJs/DYA5pXUPgFv4nOHpJ/SnM9a0wOH6Apf
+        o+LBAvS2PJlYp09c3d4FZJO0Zw==
+X-Google-Smtp-Source: APXvYqwUBOoIdTD1TRV8B52/BmDqa47JsmySRJ8hznDrFqykLcLfGM9wbDEcLGWYB8RrKF9R2CVB7w==
+X-Received: by 2002:a17:90b:8e:: with SMTP id bb14mr6088866pjb.35.1566579173540;
+        Fri, 23 Aug 2019 09:52:53 -0700 (PDT)
+Received: from localhost ([2601:602:9200:a1a5:89d4:68d1:fc04:721])
+        by smtp.gmail.com with ESMTPSA id h17sm4438026pfo.24.2019.08.23.09.52.52
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 23 Aug 2019 09:52:52 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Kever Yang <kever.yang@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     kernel-build-reports@lists.linaro.org,
+        linux-rockchip@lists.infradead.org, linux-next@vger.kernel.org,
+        =?utf-8?B?5byg5pm0?= <elaine.zhang@rock-chips.com>,
+        =?utf-8?B?6Zer5a2d?= =?utf-8?B?5Yab?= <andy.yan@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: CPUfreq fail on rk3399-firefly
+In-Reply-To: <c973d3fa-5f0d-c277-7c83-6227942a671a@rock-chips.com>
+References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com> <20190718162005.GF5761@sirena.org.uk> <7hmugdynmk.fsf@baylibre.com> <2314814.WbdfqDVNqK@phil> <7hv9uq9wfe.fsf@baylibre.com> <c973d3fa-5f0d-c277-7c83-6227942a671a@rock-chips.com>
+Date:   Fri, 23 Aug 2019 09:52:51 -0700
+Message-ID: <7hd0gvzuvw.fsf@baylibre.com>
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: acede8a8-3afb-4569-b231-08d727daf2e7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2019 15:02:42.9078
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LhiHGAL1KBTMbeXDhIh3rYXPTvuP+YTTfjzSaeSsF/sznaMd1UppKL1MbHCTgK1+TqQGsajJpfI6qqKZo2/Vew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB5984
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 12:22:27PM +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the rdma tree got a conflict in:
->=20
->   drivers/infiniband/hw/mlx5/mlx5_ib.h
->=20
-> between commit:
->=20
->   0e6613b41edd ("IB/mlx5: Consolidate use_umr checks into single function=
-")
->=20
-> from the rdma-fixes tree and commit:
->=20
->   3e1f000ff746 ("IB/mlx5: Support per device q counters in switchdev mode=
-")
->=20
-> from the rdma tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+Kever Yang <kever.yang@rock-chips.com> writes:
 
-Looks OK to me, thanks
+> Hi Kevin, Heiko,
+>
+> On 2019/8/22 =E4=B8=8A=E5=8D=882:59, Kevin Hilman wrote:
+>> Hi Heiko,
+>>
+>> Heiko Stuebner <heiko@sntech.de> writes:
+>>
+>>> Am Dienstag, 13. August 2019, 19:35:31 CEST schrieb Kevin Hilman:
+>>>> [ resent with correct addr for linux-rockchip list ]
+>>>>
+>>>> Mark Brown <broonie@kernel.org> writes:
+>>>>
+>>>>> On Thu, Jul 18, 2019 at 04:28:08AM -0700, kernelci.org bot wrote:
+>>>>>
+>>>>> Today's -next started failing to boot defconfig on rk3399-firefly:
+>>>>>
+>>>>>> arm64:
+>>>>>>      defconfig:
+>>>>>>          gcc-8:
+>>>>>>              rk3399-firefly: 1 failed lab
+>>>>> It hits a BUG() trying to set up cpufreq:
+>>>>>
+>>>>> [   87.381606] cpufreq: cpufreq_online: CPU0: Running at unlisted fre=
+q: 200000 KHz
+>>>>> [   87.393244] cpufreq: cpufreq_online: CPU0: Unlisted initial freque=
+ncy changed to: 408000 KHz
+>>>>> [   87.469777] cpufreq: cpufreq_online: CPU4: Running at unlisted fre=
+q: 12000 KHz
+>>>>> [   87.488595] cpu cpu4: _generic_set_opp_clk_only: failed to set clo=
+ck rate: -22
+>>>>> [   87.491881] cpufreq: __target_index: Failed to change cpu frequenc=
+y: -22
+>>>>> [   87.495335] ------------[ cut here ]------------
+>>>>> [   87.496821] kernel BUG at drivers/cpufreq/cpufreq.c:1438!
+>>>>> [   87.498462] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+>>>>>
+>>>>> I'm struggling to see anything relevant in the diff from yesterday, t=
+he
+>>>>> unlisted frequency warnings were there in the logs yesterday but no o=
+ops
+>>>>> and I'm not seeing any changes in cpufreq, clk or anything relevant
+>>>>> looking.
+>>>>>
+>>>>> Full bootlog and other info can be found here:
+>>>>>
+>>>>> 	https://kernelci.org/boot/id/5d302d8359b51498d049e983/
+>>>> I confirm that disabling CPUfreq in the defconfig (CONFIG_CPU_FREQ=3Dn)
+>>>> makes the firefly board start working again.
+>>>>
+>>>> Note that the default defconfig enables the "performance" CPUfreq
+>>>> governor as the default governor, so during kernel boot, it will always
+>>>> switch to the max frequency.
+>>>>
+>>>> For fun, I set the default governor to "userspace" so the kernel
+>>>> wouldn't make any OPP changes, and that leads to a slightly more
+>>>> informative splat[1]
+>>>>
+>>>> There is still an OPP change happening because the detected OPP is not
+>>>> one that's listed in the table, so it tries to change to a listed OPP
+>>>> and fails in the bowels of clk_set_rate()
+>>> Though I think that might only be a symptom as well.
+>>> Both the PLL setting code as well as the actual cpu-clock implementation
+>>> is unchanged since 2017 (and runs just fine on all boards in my farm).
+>>>
+>>> One source for these issues is often the regulator supplying the cpu
+>>> going haywire - aka the voltage not matching the opp.
+>>>
+>>> As in this error-case it's CPU4 being set, this would mean it might
+>>> be the big cluster supplied by the external syr825 (fan5355 clone)
+>>> that might act up. In the Firefly-rk3399 case this is even stranger.
+>>>
+>>> There is a discrepancy between the "fcs,suspend-voltage-selector"
+>>> between different bootloader versions (how the selection-pin is set up),
+>>> so the kernel might actually write his requested voltage to the wrong
+>>> register (not the one for actual voltage, but the second set used for
+>>> the suspend voltage).
+>>>
+>>> Did you by chance swap bootloaders at some point in recent past?
+>> No, haven't touched bootloader since I initially setup the board.
+>
+> The CPU voltage does not affect by bootloader for kernel should have its=
+=20
+> own opp-table,
+>
+> the bootloader may only affect the center/logic power supply.
+>
+>>
+>>> I'd assume [2] might actually be the same issue last year, though
+>>> the CI-logs are not available anymore it seems.
+>>>
+>>> Could you try to set the vdd_cpu_b regulator to disabled, so that
+>>> cpufreq for this cluster defers and see what happens?
+>> Yes, this change[1] definitely makes things boot reliably again, so
+>> there's defintiely something a bit unstable with this regulator, at
+>> least on this firefly.
+>
+> Is it possible to target which patch introduce this bug? This board=C2=A0=
+=20
+> should have work correctly for a long time with upstream source code.
 
-Jason
+Unfortunately, it seems to be a regular, but intermittent failure, so
+bisection is not producing anything reliable.
+
+You can see that both in mainline[1] and in linux-next[2] there are
+periodic failures, but it's hard to see any patterns.
+
+I'm starting to think that maybe the regulator on my particular board is
+just starting to fail, since disabling the regulator for that cluster
+prevents any voltage changes and makes things reliable again.
+
+If we don't find a solution to this, I'll probably just have to retire
+this board from my kernelCI lab (of course, I'd be happy to replace it
+if someone wants to donate another one.)  :)
+
+Kevin
+
+[1] https://kernelci.org/boot/rk3399-firefly/job/mainline/
+[2] https://kernelci.org/boot/rk3399-firefly/job/next/

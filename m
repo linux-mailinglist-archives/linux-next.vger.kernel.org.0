@@ -2,69 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2556E9A5D4
-	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 04:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D2C29A5E7
+	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 05:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403949AbfHWCzA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 22:55:00 -0400
-Received: from mail-ed1-f67.google.com ([209.85.208.67]:33317 "EHLO
-        mail-ed1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403948AbfHWCzA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 22:55:00 -0400
-Received: by mail-ed1-f67.google.com with SMTP id s15so11107504edx.0
-        for <linux-next@vger.kernel.org>; Thu, 22 Aug 2019 19:54:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=D7GDdjrq1NeZXj1CVJ58BWK5WaZspIPhaIUbOgarC3M=;
-        b=QbZJ68+01jVREbSLitCBk6yItVAVSMh5xY3L6uEKdCDnMSkHlVeWjONN33nuh/kLz5
-         SwV6fjMz0+AYjSin7VFT+TMlT3SUcnHBtfb2VEFKipuYM6xQRD7hgbWqJZDq0JWXg/bP
-         hfwUnXlhdMQ8H2jQpRLlJBABr5/Z0iB9Hh95vxA1v/TvsXdV1gTFK2d2wgyReYqHJIX6
-         jwC5D0ik+tYuEFpFox7YrXcTuPY85G3Qo2soT/VQP2E7Duub6UOIcQy+BlMx8gW316EF
-         JuFdTP/Jd2Wj09vhNnhZNfAW/NFNI8JanzVbMhozcnSWj6ya8/NxcWraozrktlDMZje2
-         XGGQ==
-X-Gm-Message-State: APjAAAUfHUOOV9IDUKc2gILbonpYpyUzjX9P9kUAd52XvQWVBhIQ1+rf
-        FnkC1UhqPweIXUs3eFT+qEhFBKHzugs=
-X-Google-Smtp-Source: APXvYqxRurTb3MLugoBGJASeLHEh19HESjtJ5dip1ETRmS+SEvZ3WYWbwTxN3Zb/ll0veFXMhRfCYg==
-X-Received: by 2002:a50:bb0b:: with SMTP id y11mr2005535ede.125.1566528898076;
-        Thu, 22 Aug 2019 19:54:58 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id o1sm190052eji.19.2019.08.22.19.54.57
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Aug 2019 19:54:57 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id 10so7457004wmp.3
-        for <linux-next@vger.kernel.org>; Thu, 22 Aug 2019 19:54:57 -0700 (PDT)
-X-Received: by 2002:a1c:eb0a:: with SMTP id j10mr2140226wmh.125.1566528897422;
- Thu, 22 Aug 2019 19:54:57 -0700 (PDT)
+        id S2389683AbfHWDIr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 23:08:47 -0400
+Received: from ozlabs.org ([203.11.71.1]:56123 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389290AbfHWDIr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 22 Aug 2019 23:08:47 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46F5vb6dQrz9s7T;
+        Fri, 23 Aug 2019 13:08:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566529724;
+        bh=Y4rV12y4MwnYpN7mGIgEqqv5HK0SPrggGd2iqOCrVoA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qnJ03ZvU26qzYJkcJYFaoXYxEA8vxKAutntLOldqizpk6kpdN9h1RakdMaX9olX7z
+         MXTf4lwr73ks4UFzERbTlHig3W8kblik2MzzVakT78Niy/eIVme+3LKtvyv5DcDuAP
+         xQ9dQ+nS35o3FSOlC2NNsMYGxvlXgwoAngFlReXuxcl9+etK/blKasLZLGO471n05J
+         yL3Iv6um507c51kBF9ikkZkaTmxp6E4FdzhicFsaCSJAiMn3QA6Ws3ZHcXV+Bluy1F
+         1PwvLAm8hdnCc7GF+4GddCw3ceYgX6SFBvc18ljYnkIjEe9/0FpoMu/Bk2WJ+o8No7
+         o8csPDam9RBPA==
+Date:   Fri, 23 Aug 2019 13:08:41 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: linux-next: manual merge of the crypto tree with Linus' tree
+Message-ID: <20190823130841.4fdbda61@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20190823073545.647ec7d1@canb.auug.org.au>
-In-Reply-To: <20190823073545.647ec7d1@canb.auug.org.au>
-From:   Chen-Yu Tsai <wens@csie.org>
-Date:   Fri, 23 Aug 2019 10:54:44 +0800
-X-Gmail-Original-Message-ID: <CAGb2v65oj=o_0O=BZMUcADycrunKuSpvSmA1=Ey2UZWPV7H=uQ@mail.gmail.com>
-Message-ID: <CAGb2v65oj=o_0O=BZMUcADycrunKuSpvSmA1=Ey2UZWPV7H=uQ@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the sunxi tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/=xcZ.RUWj2DDJGdJ2qm19.r";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 23, 2019 at 5:36 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   c60e09f77c83 ("ARM: dts: sun8i: a83t: Enable HDMI output on Cubietruck Plus")
->
-> is missing a Signed-off-by from its committer.
+--Sig_/=xcZ.RUWj2DDJGdJ2qm19.r
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Looks like Maxime rebased something and missed adding his SoB.
+Hi all,
 
-ChenYu
+Today's linux-next merge of the crypto tree got a conflict in:
+
+  arch/x86/purgatory/Makefile
+
+between commit:
+
+  4ce97317f41d ("x86/purgatory: Do not use __builtin_memcpy and __builtin_m=
+emset")
+
+from Linus' tree and commit:
+
+  ad767ee858b3 ("crypto: sha256 - Move lib/sha256.c to lib/crypto")
+
+from the crypto tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/x86/purgatory/Makefile
+index 8901a1f89cf5,ea86982aba27..000000000000
+--- a/arch/x86/purgatory/Makefile
++++ b/arch/x86/purgatory/Makefile
+@@@ -6,12 -6,11 +6,14 @@@ purgatory-y :=3D purgatory.o stack.o setu
+  targets +=3D $(purgatory-y)
+  PURGATORY_OBJS =3D $(addprefix $(obj)/,$(purgatory-y))
+ =20
+ +$(obj)/string.o: $(srctree)/arch/x86/boot/compressed/string.c FORCE
+ +	$(call if_changed_rule,cc_o_c)
+ +
+- $(obj)/sha256.o: $(srctree)/lib/sha256.c FORCE
++ $(obj)/sha256.o: $(srctree)/lib/crypto/sha256.c FORCE
+  	$(call if_changed_rule,cc_o_c)
+ =20
++ CFLAGS_sha256.o :=3D -D__DISABLE_EXPORTS
++=20
+  LDFLAGS_purgatory.ro :=3D -e purgatory_start -r --no-undefined -nostdlib =
+-z nodefaultlib
+  targets +=3D purgatory.ro
+ =20
+
+--Sig_/=xcZ.RUWj2DDJGdJ2qm19.r
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1fWLkACgkQAVBC80lX
+0GzRMgf/X7CRbOkevCxmPAir1DvqbNEOGARqOtal9Ky+ADu1LxKZbnCkUO9fqKWP
+lGGt84IxUT6Xd1alfY34+0p+EVw0eQI4DecRDFgyd00tK5Z2lYrKhcmSHoxVbKUG
+wOPEwuxOnC0bw0nIsb+pNmzJt+ts8C9pYDlOkWMwW4ok0HKvpAXJB9lYn/Xn16hK
+xtLA+AAtYOR6VOV8nrMNsW+1RCw22mZVAdajrIqV0MOyJCfrnc8BC+ZCPg0DXvri
+xUk4sGXIxr3iIPkK/HRwC1cpv+8c8alATo56xWlBwo3CzCIviO94OCVoKlxYi4+j
+I3mqvUxw6qlffEIbjbZdQX4GaIaaGg==
+=kX1i
+-----END PGP SIGNATURE-----
+
+--Sig_/=xcZ.RUWj2DDJGdJ2qm19.r--

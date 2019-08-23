@@ -2,92 +2,188 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D0B9A292
-	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 00:08:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A2B9A45A
+	for <lists+linux-next@lfdr.de>; Fri, 23 Aug 2019 02:40:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733026AbfHVWI3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 22 Aug 2019 18:08:29 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:39611 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393796AbfHVWI3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 18:08:29 -0400
-Received: by mail-wr1-f66.google.com with SMTP id t16so6807928wra.6;
-        Thu, 22 Aug 2019 15:08:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Dem7TnAwfqo5ysrzcm87CJHrNC80Qsa6DjP3QIVxJys=;
-        b=XHYHBGLM/FkMa0//M/KVwjYyU9A+TYQ3NW+3LUV+5gZ+XdfH0Z2f9eCk4aqFl9bYk6
-         FhN1tjqa0G0jTI8K6nPjNrRtQwk6mFruS6eWE0WoPfn9aegLsCdFXm28jknOTVsbo92x
-         5nsgqDvPF/rpQZacdqbJ6T9JGXrNAzKtk0O6UF5gnK/hgByqPDVCD0o/R3It9yI11EKW
-         7q6iZf14fHIia7Y/MvPvBZFgR65fAYyqBFmLdIwh0Ah0Y+pwMvccin+BnXrIj9Fu1UpT
-         g5GxyOzBJqUkD4X4ktqF7GKFi2tYlNZz/JA8z/6cID2vY8pLFt+WZr0yUxxC+swFE6eP
-         /JGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Dem7TnAwfqo5ysrzcm87CJHrNC80Qsa6DjP3QIVxJys=;
-        b=bsvj+WDafuI1jqeAm3ZSn3wtRq2NZEZ+jt6+KKSrgKpwvNM+toWZMLxT8SFlqA7Jxc
-         Zpax72B7Z0bPoVWBez6k25PCU1xfK2Fmb07R9I3jTUdWZrxR9aNbdGTuPEC+b/BqkAfY
-         2zqdidarZicWkzZTAkxL9bOkRM5jRRGWWNJ0uMnuWeWQHSAdVxEZUkfpiYA/hhalg9B1
-         x4EHhuljQbj0+rX7g0pGGvF10+iZtQhzfXXUkg2sKtmpMmaBW0O1xzR3jEyClFnLa3BX
-         ZmZYOrKsLKQWMS9JQoNDtGUvwozHHX0kgNsgw2+8YQL+SFbJBzBEd5R/5vNc6sIAYqvU
-         Euyw==
-X-Gm-Message-State: APjAAAXR28+Z5TcrnR9zd3T4N279TUmmOBs7XuD496rgjKoYIGl/U6Nf
-        LoRFaguUtgKHaNLq1KtG6FDP0y988v134PeTtH4TqMq1nmg=
-X-Google-Smtp-Source: APXvYqw8/Dhgei/EZmELsdhrZcdwh6G4cL775tii9Vb1sm5woLMXFQgtuZbGYeI2PCeAFrvuJMcKvMje/Qv9HYhbC9U=
-X-Received: by 2002:a5d:4ecb:: with SMTP id s11mr1027310wrv.323.1566511707385;
- Thu, 22 Aug 2019 15:08:27 -0700 (PDT)
+        id S1732115AbfHWAkF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 22 Aug 2019 20:40:05 -0400
+Received: from regular1.263xmail.com ([211.150.70.203]:35970 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732102AbfHWAkF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 22 Aug 2019 20:40:05 -0400
+X-Greylist: delayed 451 seconds by postgrey-1.27 at vger.kernel.org; Thu, 22 Aug 2019 20:40:02 EDT
+Received: from kever.yang?rock-chips.com (unknown [192.168.167.242])
+        by regular1.263xmail.com (Postfix) with ESMTP id 2A9103B7;
+        Fri, 23 Aug 2019 08:32:24 +0800 (CST)
+X-263anti-spam: KSV:0;BIG:0;
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-KSVirus-check: 0
+X-ADDR-CHECKED4: 1
+X-ABS-CHECKED: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from [172.16.12.9] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P30028T140715568903936S1566520342108067_;
+        Fri, 23 Aug 2019 08:32:23 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <f55e1e1282680506dd7004fdda20f569>
+X-RL-SENDER: kever.yang@rock-chips.com
+X-SENDER: yk@rock-chips.com
+X-LOGIN-NAME: kever.yang@rock-chips.com
+X-FST-TO: zhangqing@rock-chips.com
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+Subject: Re: CPUfreq fail on rk3399-firefly
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     linux-rockchip@lists.infradead.org,
+        Mark Brown <broonie@kernel.org>, linux-next@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        kernel-build-reports@lists.linaro.org,
+        =?UTF-8?B?6Zer5a2d5Yab?= <andy.yan@rock-chips.com>,
+        =?UTF-8?B?5byg5pm0?= <elaine.zhang@rock-chips.com>
+References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com>
+ <20190718162005.GF5761@sirena.org.uk> <7hmugdynmk.fsf@baylibre.com>
+ <2314814.WbdfqDVNqK@phil> <7hv9uq9wfe.fsf@baylibre.com>
+From:   Kever Yang <kever.yang@rock-chips.com>
+Message-ID: <c973d3fa-5f0d-c277-7c83-6227942a671a@rock-chips.com>
+Date:   Fri, 23 Aug 2019 08:32:22 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20190823080604.5164f8c4@canb.auug.org.au>
-In-Reply-To: <20190823080604.5164f8c4@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 22 Aug 2019 18:08:15 -0400
-Message-ID: <CADnq5_NNdsZ-UWuPQX=4o7c6Tq2mmo8de=fUGfR4gemhyNohMA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drm-fixes tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Wang <kevin1.wang@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <7hv9uq9wfe.fsf@baylibre.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Aug 22, 2019 at 6:06 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the drm-fixes tree, today's linux-next build (KCONFIG_NAME)
-> produced this warning:
->
-> drivers/gpu/drm/amd/amdgpu/../powerplay/smu_v11_0.c: In function 'smu_v11_0_setup_pptable':
-> drivers/gpu/drm/amd/amdgpu/../powerplay/smu_v11_0.c:368:40: warning: 'size' may be used uninitialized in this function [-Wmaybe-uninitialized]
->    smu->smu_table.power_play_table_size = size;
->    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~
->
-> Introduced by commit
->
->   00430144ff73 ("drm/amd/powerplay: fix variable type errors in smu_v11_0_setup_pptable")
->
-> Looks like a false positive.
+Hi Kevin, Heiko,
 
-Silenced here:
-https://patchwork.freedesktop.org/patch/325728/
+On 2019/8/22 上午2:59, Kevin Hilman wrote:
+> Hi Heiko,
+>
+> Heiko Stuebner <heiko@sntech.de> writes:
+>
+>> Am Dienstag, 13. August 2019, 19:35:31 CEST schrieb Kevin Hilman:
+>>> [ resent with correct addr for linux-rockchip list ]
+>>>
+>>> Mark Brown <broonie@kernel.org> writes:
+>>>
+>>>> On Thu, Jul 18, 2019 at 04:28:08AM -0700, kernelci.org bot wrote:
+>>>>
+>>>> Today's -next started failing to boot defconfig on rk3399-firefly:
+>>>>
+>>>>> arm64:
+>>>>>      defconfig:
+>>>>>          gcc-8:
+>>>>>              rk3399-firefly: 1 failed lab
+>>>> It hits a BUG() trying to set up cpufreq:
+>>>>
+>>>> [   87.381606] cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 200000 KHz
+>>>> [   87.393244] cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 408000 KHz
+>>>> [   87.469777] cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 12000 KHz
+>>>> [   87.488595] cpu cpu4: _generic_set_opp_clk_only: failed to set clock rate: -22
+>>>> [   87.491881] cpufreq: __target_index: Failed to change cpu frequency: -22
+>>>> [   87.495335] ------------[ cut here ]------------
+>>>> [   87.496821] kernel BUG at drivers/cpufreq/cpufreq.c:1438!
+>>>> [   87.498462] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+>>>>
+>>>> I'm struggling to see anything relevant in the diff from yesterday, the
+>>>> unlisted frequency warnings were there in the logs yesterday but no oops
+>>>> and I'm not seeing any changes in cpufreq, clk or anything relevant
+>>>> looking.
+>>>>
+>>>> Full bootlog and other info can be found here:
+>>>>
+>>>> 	https://kernelci.org/boot/id/5d302d8359b51498d049e983/
+>>> I confirm that disabling CPUfreq in the defconfig (CONFIG_CPU_FREQ=n)
+>>> makes the firefly board start working again.
+>>>
+>>> Note that the default defconfig enables the "performance" CPUfreq
+>>> governor as the default governor, so during kernel boot, it will always
+>>> switch to the max frequency.
+>>>
+>>> For fun, I set the default governor to "userspace" so the kernel
+>>> wouldn't make any OPP changes, and that leads to a slightly more
+>>> informative splat[1]
+>>>
+>>> There is still an OPP change happening because the detected OPP is not
+>>> one that's listed in the table, so it tries to change to a listed OPP
+>>> and fails in the bowels of clk_set_rate()
+>> Though I think that might only be a symptom as well.
+>> Both the PLL setting code as well as the actual cpu-clock implementation
+>> is unchanged since 2017 (and runs just fine on all boards in my farm).
+>>
+>> One source for these issues is often the regulator supplying the cpu
+>> going haywire - aka the voltage not matching the opp.
+>>
+>> As in this error-case it's CPU4 being set, this would mean it might
+>> be the big cluster supplied by the external syr825 (fan5355 clone)
+>> that might act up. In the Firefly-rk3399 case this is even stranger.
+>>
+>> There is a discrepancy between the "fcs,suspend-voltage-selector"
+>> between different bootloader versions (how the selection-pin is set up),
+>> so the kernel might actually write his requested voltage to the wrong
+>> register (not the one for actual voltage, but the second set used for
+>> the suspend voltage).
+>>
+>> Did you by chance swap bootloaders at some point in recent past?
+> No, haven't touched bootloader since I initially setup the board.
 
-Alex
+The CPU voltage does not affect by bootloader for kernel should have its 
+own opp-table,
+
+the bootloader may only affect the center/logic power supply.
 
 >
-> --
-> Cheers,
-> Stephen Rothwell
+>> I'd assume [2] might actually be the same issue last year, though
+>> the CI-logs are not available anymore it seems.
+>>
+>> Could you try to set the vdd_cpu_b regulator to disabled, so that
+>> cpufreq for this cluster defers and see what happens?
+> Yes, this change[1] definitely makes things boot reliably again, so
+> there's defintiely something a bit unstable with this regulator, at
+> least on this firefly.
+
+
+Is it possible to target which patch introduce this bug? This board  
+should have work correctly
+
+for a long time with upstream source code.
+
+
+Thanks,
+
+- Kever
+
+>
+> Kevin
+>
+> [1]
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
+> index c706db0ee9ec..6b70bdcc3328 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-firefly.dts
+> @@ -454,6 +454,7 @@
+>   
+>   	vdd_cpu_b: regulator@40 {
+>   		compatible = "silergy,syr827";
+> +		status = "disabled";
+>   		reg = <0x40>;
+>   		fcs,suspend-voltage-selector = <0>;
+>   		regulator-name = "vdd_cpu_b";
+>
 > _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+> Linux-rockchip mailing list
+> Linux-rockchip@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-rockchip
+>
+>
+>
+
+

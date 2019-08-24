@@ -2,163 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC7D9BA12
-	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 03:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8777B9BAE7
+	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 04:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726142AbfHXB27 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Aug 2019 21:28:59 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:55718 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726075AbfHXB27 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Aug 2019 21:28:59 -0400
-Received: by mail-wm1-f68.google.com with SMTP id f72so10387513wmf.5
-        for <linux-next@vger.kernel.org>; Fri, 23 Aug 2019 18:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=OmxigMTP5DeHRRgbfmmJxZ1EFk1sJujSUCNqpZEvivk=;
-        b=VBl6ago170ao2ciucsEd8P+lESvlZDuOqLJ+SBNc0cRa/p/pSShFyfCI538lNJR7tx
-         srMcrZ7ncaoBJcIYYKZSULNfo88Nv9o45LUXiZ1+vp5d7Vyiwv9nQiCJ2gWsdzgko7wI
-         aox5v1fkGCqx20MSPC7HZzyg5QNazDYm5L6G4L5JjwkN+c6NqmPqmsVq8d30gOP/d24a
-         kfc1SWLfnt/PsLwRqdhaaoxxhPGb9Euegwv7hkk0N2h+kN73lr95h8hD9IWCvEtEayrE
-         HtRKB08C2qbS5BQdibBUuT3pKj15gZ7DFRGL7X38ILsGIb244TfF8HmE9U3+n36eGy/W
-         1YDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=OmxigMTP5DeHRRgbfmmJxZ1EFk1sJujSUCNqpZEvivk=;
-        b=Qm6r5QGoHkXIqpevmRgUutIWbK37/PCBfRbnTvoLOUNc0lm/mkwKhUqek/NPiOrPoZ
-         1At28qRHgjDIm66B8FZGpoe0T8IFZR7cbvt3BDI7HB4jeNuJo1klpgReLhMpKToShHMx
-         BOkGS3nBw5DD7ZTtpFv8/B82vV0e20jMpfuXu0V6Bg/VajJh9b55UDrADwLHAlTfgmBr
-         ooPpFO2OTP4AtrjjG/Y2HWCTcdazqhtMuVwYk7isI1IrkpSL1pTsjnNhcgLgJOPRoAO2
-         a/IN4TjNosRj5CVgYTIJUJmKnBTjIhovnTtv42Ue48DsDs6OWNpbosIxdEgUGwI8gipY
-         oDLg==
-X-Gm-Message-State: APjAAAUm9axkETjUlZP4PEnrVFJeZABfFeB5DMSRlLAEmIuoCy41tSSt
-        hpkTjadPwsCYmU67JGto7ivAilQuilEJbQ==
-X-Google-Smtp-Source: APXvYqx/+YZgXspTrG+4dGFjD8KFniPwl6sQYj4zAARNqbjXosgK7IwUpEYsYPHGBUVUXDWMjNoutw==
-X-Received: by 2002:a1c:c188:: with SMTP id r130mr2702367wmf.73.1566610137729;
-        Fri, 23 Aug 2019 18:28:57 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id c15sm16013167wrb.80.2019.08.23.18.28.56
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Aug 2019 18:28:57 -0700 (PDT)
-Message-ID: <5d6092d9.1c69fb81.b7f85.6eec@mx.google.com>
-Date:   Fri, 23 Aug 2019 18:28:57 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1725886AbfHXCh5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Aug 2019 22:37:57 -0400
+Received: from hqemgate15.nvidia.com ([216.228.121.64]:2782 "EHLO
+        hqemgate15.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725807AbfHXCh5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Aug 2019 22:37:57 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate15.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d60a3050000>; Fri, 23 Aug 2019 19:37:57 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 23 Aug 2019 19:37:56 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 23 Aug 2019 19:37:56 -0700
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 24 Aug
+ 2019 02:37:56 +0000
+Subject: Re: linux-next: Tree for Aug 23
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20190823192658.49e6f68d@canb.auug.org.au>
+X-Nvconfidentiality: public
+From:   John Hubbard <jhubbard@nvidia.com>
+Message-ID: <47bf2ffc-a737-e4ba-8d37-96472f307094@nvidia.com>
+Date:   Fri, 23 Aug 2019 19:37:55 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-rc5-377-g88ec806247b2
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 237 boots: 3 failed,
- 218 passed with 13 offline, 3 untried/unknown (v5.3-rc5-377-g88ec806247b2)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20190823192658.49e6f68d@canb.auug.org.au>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1566614278; bh=UVzZgCMP0diU+WGz9ZHXGnIikzh+FMgpaDM8zKhy/Kc=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=bJhYAOthJWCyPO1IXEQMvvN9zFHn/klDQqK2bN+rmiV3K2z7/UDjMlYlB1WT1a0lk
+         t0CMBokMFlyKGVPOxC19joHKRrMUhZUfaqJLDYF9lk3e09w4LqwGCw+w0IC8q8aUTW
+         tarcwteeak/8cvorjRF0fIsTmw9ju46XeXxz12Xc4OQMeeM+dZl6lTOfuFsg04LvLE
+         hRRrWL+jED7imauGbfPzzSkhts7Ond4x5nlfQsQGSpdv6ESFN1cfo0bZblk7NQdXih
+         cruplpO4AJSiOiNeFMW5lTvz9Ba23t1kbWys9ALVx4keRMLaKN04FRFDl/1nfaGvkm
+         3SClxWeStLBKQ==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 237 boots: 3 failed, 218 passed with 13 offline, 3=
- untried/unknown (v5.3-rc5-377-g88ec806247b2)
+On 8/23/19 2:26 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20190822:
+> 
+> The thermal tree gained a conflict against the jc_docs tree.
+> 
+> The rdma tree gained a conflict against the rdma-fixes tree.
+> 
+> The net-next tree gained conflicts against the pci tree.
+> 
+> The crypto tree gained a conflict against Linus' tree.
+> 
+> The drm tree gained a conflict against the drm-fixes tree.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-rc5-377-g88ec806247b2/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-rc5-377-g88ec806247b2/
+Hi,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-rc5-377-g88ec806247b2
-Git Commit: 88ec806247b2458f6860caf7f212f85c8c7a7c5b
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 88 unique boards, 27 SoC families, 22 builds out of 222
+Even though I saw email proposing fixes for one (maybe both) of the 
+following warnings, I'm still seeing them in this linux-next:
 
-Boot Regressions Detected:
+WARNING: "ahci_em_messages" [drivers/ata/libahci] is a static EXPORT_SYMBOL_GPL
+WARNING: "ftrace_set_clr_event" [vmlinux] is a static EXPORT_SYMBOL_GPL
 
-arm:
+...and obviously these can be trivially fixed by:
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: v5.3-rc4-220-g1999f09bb=
-019)
+diff --git a/drivers/ata/libahci.c b/drivers/ata/libahci.c
+index e4c45d3cca79..bff369d9a1a7 100644
+--- a/drivers/ata/libahci.c
++++ b/drivers/ata/libahci.c
+@@ -175,7 +175,6 @@ struct ata_port_operations ahci_pmp_retry_srst_ops = {
+ EXPORT_SYMBOL_GPL(ahci_pmp_retry_srst_ops);
+ 
+ static bool ahci_em_messages __read_mostly = true;
+-EXPORT_SYMBOL_GPL(ahci_em_messages);
+ module_param(ahci_em_messages, bool, 0444);
+ /* add other LED protocol types when they become supported */
+ MODULE_PARM_DESC(ahci_em_messages,
+diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
+index c7506bc81b75..648930823b57 100644
+--- a/kernel/trace/trace_events.c
++++ b/kernel/trace/trace_events.c
+@@ -787,7 +787,7 @@ static int __ftrace_set_clr_event(struct trace_array *tr, const char *match,
+        return ret;
+ }
+ 
+-static int ftrace_set_clr_event(struct trace_array *tr, char *buf, int set)
++int ftrace_set_clr_event(struct trace_array *tr, char *buf, int set)
+ {
+        char *event = NULL, *sub = NULL, *match;
+        int ret;
 
-arm64:
 
-    defconfig:
-        gcc-8:
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.3-rc5-318-g5c8c607cc=
-e6d)
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.3-rc5-318-g5c8c607cc=
-e6d)
+...which I didn't create patches for, because I expect they are already
+in flight. But if those somehow got lost or skipped, then here's an early
+warning that these fixes still need to be applied.
 
-Boot Failures Detected:
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-Offline Platforms:
-
-mips:
-
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+thanks,
+-- 
+John Hubbard
+NVIDIA

@@ -2,162 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4F79BB6E
-	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 05:30:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FF79BB87
+	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 05:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726111AbfHXDaZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 23 Aug 2019 23:30:25 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:50776 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725930AbfHXDaZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 23 Aug 2019 23:30:25 -0400
-Received: by mail-wm1-f66.google.com with SMTP id v15so10516843wml.0
-        for <linux-next@vger.kernel.org>; Fri, 23 Aug 2019 20:30:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=VfcGy8yRqxJ+vW5QCY3rgHCR0yNueAwLbVjBXwdGyGM=;
-        b=AAREt9Ehp0acEyzxSCV9FpEkTtoES846Bu8Ba4EsOAlbVd3q3FILTBZNqMEL+8o3m5
-         8u63jJanfnA2a0oJWyMtQ4a2lkPDSe1Dvh5QIySH7jAyzhVPV+EqFg5S8pnKOupBl+0A
-         JCM6Ol5zQb1LyeKYXGGIw65cQepDqmTa3LMLJLKXBl1j1ppn0K5V5XJkcabfpVNNO3XZ
-         jE2jVWpphYm6SwgwJypeq7wBITYlsN2uco28DsPhSWRlPkT+WhFG+AD/1z9AF3ruTRPc
-         e11WzYaSspC4HvqKo89+0GlvOSB6W2OsLOaEHOu3O3/czEVAl+0yp+Nwl4Tdjg1yEHoA
-         xu7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=VfcGy8yRqxJ+vW5QCY3rgHCR0yNueAwLbVjBXwdGyGM=;
-        b=ZWRYRHGmpt2dgtxw85CTaUqOxihSP6hG/3FgxigRorcDsglaKDp7cO+jVgrhjeU9ZT
-         1heDemJ8dbcsZV6zvpVc29Dl3r5HyjczcoNbfPpX+djhl/FySd3XncbmztbI9+K3iHLQ
-         f7qnjCOGNy38dkanYYasjA7ZPk/slzDo1LSyYEodFL7sQ/vivW4z6MGRc0bIAd2/nZOg
-         fxeGOB3W943BektTW03Te2mpUFVrQbyP+YsNapcQ9attsM2yvk0f9EW01Oqs/dRc1FuE
-         8/6m/Q//1ss7HOcYWn1WuYor9eyu7mIkpHRV7uEfmKFLpsCzmJKuHhPqBy6EKDck6df7
-         Lh8g==
-X-Gm-Message-State: APjAAAXm9tz2rojrfcVWFx37d4x+kMY0SuLhEtgsqywqZTxv+dznxB9V
-        6HHEDVNCgCyHbTtfUrax88iltKd6JlU2BQ==
-X-Google-Smtp-Source: APXvYqwKPuDQs9zZrQ3tk+6ly3XbVnsL0UYxJ7ts5T3hXxRJTlEBYIpikS96/HMMjhUFIWot5093/A==
-X-Received: by 2002:a05:600c:254e:: with SMTP id e14mr9083979wma.150.1566617422862;
-        Fri, 23 Aug 2019 20:30:22 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 25sm3696841wmi.40.2019.08.23.20.30.22
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 23 Aug 2019 20:30:22 -0700 (PDT)
-Message-ID: <5d60af4e.1c69fb81.20d84.fba4@mx.google.com>
-Date:   Fri, 23 Aug 2019 20:30:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726500AbfHXDxM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 23 Aug 2019 23:53:12 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:32803 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725924AbfHXDxM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 23 Aug 2019 23:53:12 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46FkrN3RRnz9sDB;
+        Sat, 24 Aug 2019 13:53:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566618790;
+        bh=FEIZf4rOzlkEzQCJVORZlo0oASAXUKoy7ZB+pkJCCPo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tgdR+wySLNG+AtDiEEFSJLA8wCUXbeJ/JCqr32eucKkzg03bav2GEEeqaiypbcvWF
+         25O0I0sc5H2PAJd0GoJTP7eIT75+/FxXblHtLFW7+/hj6hntjyoSj9OGRanh8/2p8r
+         1XlbfxlBQkzUqWXhiiTUPIc4PcyeD3rNWZynjBnHF/BSTE8lbxBojEVFi5yfRmP+JL
+         A36TYIBpNoxQXOaIsYcwvSp5akhJgwKUuZjOYR3F2N0fp+ANydsPhp/vIlFTF7KRGz
+         pXsf7kXj6rO7a6n2pY5XdxOMbox35Xo3ksACSXSYsSHfsw0kgJ072Gs63O3X22814P
+         DwnBmuYxp2QiQ==
+Date:   Sat, 24 Aug 2019 13:53:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Courbot <acourbot@chromium.org>
+Cc:     linux-next@vger.kernel.org, CK Hu <ck.hu@mediatek.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: Re: next/master build: 218 builds: 4 failed, 214 passed, 10 errors,
+ 786 warnings (next-20190823)
+Message-ID: <20190824135300.23a5fcb4@canb.auug.org.au>
+In-Reply-To: <5d607e27.1c69fb81.eb9af.1e5c@mx.google.com>
+References: <5d607e27.1c69fb81.eb9af.1e5c@mx.google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190823
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 259 boots: 5 failed, 236 passed with 15 offline,
- 3 conflicts (next-20190823)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/ZGFilMq2=J+G.Tj1sllVQex";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 259 boots: 5 failed, 236 passed with 15 offline, 3 confli=
-cts (next-20190823)
+--Sig_/ZGFilMq2=J+G.Tj1sllVQex
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190823/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190823/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20190823
-Git Commit: 9733a7c62c66722bcfdb1a6fe4d35c497312d59a
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 88 unique boards, 27 SoC families, 22 builds out of 218
+On Fri, 23 Aug 2019 17:00:39 -0700 (PDT) "kernelci.org bot" <bot@kernelci.o=
+rg> wrote:
+>
+>     2    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: implicit de=
+claration of function 'dma_set_max_seg_size'; did you mean 'drm_rect_adjust=
+_size'? [-Werror=3Dimplicit-function-declaration]
+>     2    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: implicit d=
+eclaration of function 'DMA_BIT_MASK'; did you mean 'BIT_MASK'? [-Werror=3D=
+implicit-function-declaration]
+>     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: this functi=
+on declaration is not a prototype [-Werror,-Wstrict-prototypes]
+>     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: implicit de=
+claration of function 'dma_set_max_seg_size' [-Werror,-Wimplicit-function-d=
+eclaration]
+>     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: this funct=
+ion declaration is not a prototype [-Werror,-Wstrict-prototypes]
+>     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: implicit d=
+eclaration of function 'DMA_BIT_MASK' [-Werror,-Wimplicit-function-declarat=
+ion]
 
-Boot Failures Detected:
+Caused by commit
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxl-s905x-nexbox-a95x: 1 failed lab
-            rk3399-firefly: 1 failed lab
+  070955558e82 ("drm/mediatek: set DMA max segment size")
 
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
+(from the drm-fixes tree) which should have included linux/dma-mapping.h
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
+--=20
+Cheers,
+Stephen Rothwell
 
-Offline Platforms:
+--Sig_/ZGFilMq2=J+G.Tj1sllVQex
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-mips:
+-----BEGIN PGP SIGNATURE-----
 
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1gtJwACgkQAVBC80lX
+0Gzqqwf/b3WboB44becOBeXRfwMN/2ci/IvSzKiFvSDQRMryn+yIU+e/Ug8m1cWC
+So/4wb0BXEbPbxfU5CT6mtbM+U9dLdfExwx0+qZXTRMaxRNMjXk4CmByl/E8HcXZ
+IVRi8ZM4SscrGPK8A05REFAJ1E9eKialgX9HtR8ydAmefNEsx9jpv3KdXnWNKa2L
+3uLks1mxQYrcWg22a3hRMLz4KMAythq0vJydLy1576706cRMvTAeazQKaBhSVGRe
+Wwb4vXPNxKqwPKhF+SZ0ZFW7XJhpX7qP4NQ7AOKRaxAGgpTVE13VSeqlvCJV8nf5
+mFKJMCHjw/sDNVSjFQI2ao9D8jKyrA==
+=74YK
+-----END PGP SIGNATURE-----
 
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            sun50i-a64-pine64-plus: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-arm:
-    omap2plus_defconfig:
-        am57xx-beagle-x15:
-            lab-drue: PASS (gcc-8)
-            lab-linaro-lkft: FAIL (gcc-8)
-
-    multi_v7_defconfig:
-        am57xx-beagle-x15:
-            lab-drue: PASS (gcc-8)
-            lab-linaro-lkft: FAIL (gcc-8)
-
-    sama5_defconfig:
-        at91-sama5d4_xplained:
-            lab-baylibre: FAIL (gcc-8)
-            lab-baylibre-seattle: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+--Sig_/ZGFilMq2=J+G.Tj1sllVQex--

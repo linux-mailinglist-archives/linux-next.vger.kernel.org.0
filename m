@@ -2,95 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 386619BBE5
-	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 07:06:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 811079BC49
+	for <lists+linux-next@lfdr.de>; Sat, 24 Aug 2019 08:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725782AbfHXFGV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 24 Aug 2019 01:06:21 -0400
-Received: from mail-lj1-f172.google.com ([209.85.208.172]:42923 "EHLO
-        mail-lj1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfHXFGV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 24 Aug 2019 01:06:21 -0400
-Received: by mail-lj1-f172.google.com with SMTP id l14so10650648ljj.9
-        for <linux-next@vger.kernel.org>; Fri, 23 Aug 2019 22:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=b54ed8P+GOfbb9XCrH1tk9TTfO2Mo3ikOCutAZLr98I=;
-        b=KxTepgc0UP2zRQaxxNfC1vKUfrPn9sfTF5/1Lyx+xcNyD5INsLgRMhffR8SxBPqD/T
-         WkI4TF5y0JldI1PiHmK7wHAJaj+faas1ytTTrrnyC5SKDZuguGEpJPsQ+PH3A8wab4Dm
-         mGq5TGnru4EVLJRjea6qkCKY1ChtItoEPy2hpeLKyqZw7GOopmP+1Ap6/6DY962hC5t3
-         ACe3tA0hDVyiQooncb36Blv6dzFfHObbymrENDwtuq+HhK0rET1r5OAwIkzDanAhAccu
-         eryX16z5lTBey5TUgj9mgk+Zq1ciUkBQswF87mf4mRzAUaJYCgREmiaIs/fGuoARNMzq
-         cHJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=b54ed8P+GOfbb9XCrH1tk9TTfO2Mo3ikOCutAZLr98I=;
-        b=uBktARrG3zFJzrL04d8f8qfRgEqFUC0Qw5kQQUfR3l9Z8nUh/HrldOToWXDFauHQ0Y
-         8UGQEUPf/KMhpXygO7eGuKyuk27f7vsiXcSt5iz9cY9wN9FNjHkb/ZalxoYjBLcDdZrq
-         +RSHVvxaR60tXVz2aigkQ5Gq57uXQ3b8bjNAtz6X7qM+Hr9XefkoL3k3WlbLNq79Gb2D
-         8J+J/Q9l+IDAXfu95+2FwO7YKfhESXkx2MNTYqbyH7xlpWjSdLxVNPz1j9fx2JG2YlDq
-         wV3BNdyGxR+1rpmAMuBU5iFd72yzbjSI1HWH874n4v3yLdtOes3SL/us6Tqslj05XpYF
-         +3OQ==
-X-Gm-Message-State: APjAAAX/WPKREGJtoojl/Xq+jfGNbvX6gANaDGymf+Zu+QFIWclacguq
-        HxQZtLzxyrHKCwNacXMMkIfA63YaAQWp3eoXFOY=
-X-Google-Smtp-Source: APXvYqzE9ZELWFmem42Dlt+IaOJCFbhzPxO80m1Y/MB1CAh+9g2qYs2Iw0R6rqR9mI9vkf//LxTUvIBCYQHrW62ITy8=
-X-Received: by 2002:a2e:6342:: with SMTP id x63mr4844822ljb.95.1566623178548;
- Fri, 23 Aug 2019 22:06:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <5d607e27.1c69fb81.eb9af.1e5c@mx.google.com> <20190824135300.23a5fcb4@canb.auug.org.au>
-In-Reply-To: <20190824135300.23a5fcb4@canb.auug.org.au>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Sat, 24 Aug 2019 15:06:07 +1000
-Message-ID: <CAPM=9tzQ=3BNveNZ_misvZXAUZo+b6uxrQUbHePuaeYnizhHcw@mail.gmail.com>
-Subject: Re: next/master build: 218 builds: 4 failed, 214 passed, 10 errors,
- 786 warnings (next-20190823)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726387AbfHXGyp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 24 Aug 2019 02:54:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:58169 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726018AbfHXGyp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 24 Aug 2019 02:54:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Fpsr5DDwz9sBF;
+        Sat, 24 Aug 2019 16:54:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566629682;
+        bh=B0nkR7jt73tiwBbqhrmmJgZaJn/+3zHEzu7uMFO+fpI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N49sduS9tEsLXd9FX5mQlI092fd9kl/XTv0gFxzylyDZV+kFaoBW/4bIzp06/sIib
+         OuHKB9jU1PIkEIZIwaGQeI7k6PDYmAbc3ogTImsmMFGwQGL0yb24C5fkUV1EBLXovg
+         B2WjFoOWmGkNj18LFUzO22KEPIyl/rweEeZrlNEk/S2AeGjK/hqg5m6RgMF60e7vNf
+         4LGYbRckTD5oEerhc5At37Q90Cv5RV5x4sCq4ukwP25avxAOYM72rCM3AboCw84ZpP
+         ZF4cUq9EcfForVAuGx4XGFQDVFWM9VramPShUG2sSqqgEVl3so7lv/KaLbm0wGakIo
+         TFLIxNyA0FUEA==
+Date:   Sat, 24 Aug 2019 16:54:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@gmail.com>
 Cc:     Alexandre Courbot <acourbot@chromium.org>,
         Dave Airlie <airlied@linux.ie>,
         linux-next <linux-next@vger.kernel.org>,
         DRI <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: next/master build: 218 builds: 4 failed, 214 passed, 10 errors,
+ 786 warnings (next-20190823)
+Message-ID: <20190824165436.554381be@canb.auug.org.au>
+In-Reply-To: <CAPM=9tzQ=3BNveNZ_misvZXAUZo+b6uxrQUbHePuaeYnizhHcw@mail.gmail.com>
+References: <5d607e27.1c69fb81.eb9af.1e5c@mx.google.com>
+        <20190824135300.23a5fcb4@canb.auug.org.au>
+        <CAPM=9tzQ=3BNveNZ_misvZXAUZo+b6uxrQUbHePuaeYnizhHcw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/zr=8s6spYG95L+dKakOX=sL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 24 Aug 2019 at 13:53, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Fri, 23 Aug 2019 17:00:39 -0700 (PDT) "kernelci.org bot" <bot@kernelci.org> wrote:
-> >
-> >     2    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: implicit declaration of function 'dma_set_max_seg_size'; did you mean 'drm_rect_adjust_size'? [-Werror=implicit-function-declaration]
-> >     2    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: implicit declaration of function 'DMA_BIT_MASK'; did you mean 'BIT_MASK'? [-Werror=implicit-function-declaration]
-> >     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: this function declaration is not a prototype [-Werror,-Wstrict-prototypes]
-> >     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:8: error: implicit declaration of function 'dma_set_max_seg_size' [-Werror,-Wimplicit-function-declaration]
-> >     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: this function declaration is not a prototype [-Werror,-Wstrict-prototypes]
-> >     1    drivers/gpu/drm/mediatek/mtk_drm_drv.c:291:52: error: implicit declaration of function 'DMA_BIT_MASK' [-Werror,-Wimplicit-function-declaration]
->
-> Caused by commit
->
->   070955558e82 ("drm/mediatek: set DMA max segment size")
->
-> (from the drm-fixes tree) which should have included linux/dma-mapping.h
->
+--Sig_/zr=8s6spYG95L+dKakOX=sL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-must be some Kconfig cases, it builds here fine (in -fixes at least).
+Hi Dave,
 
-Maybe something in next whacked the include file.
+On Sat, 24 Aug 2019 15:06:07 +1000 Dave Airlie <airlied@gmail.com> wrote:
+>
+> I'll add the include anyways and send to Linus,
 
-I'll add the include anyways and send to Linus,
+Thanks.
 
-Dave.
+--=20
+Cheers,
+Stephen Rothwell
 
-> --
-> Cheers,
-> Stephen Rothwell
-> _______________________________________________
-> dri-devel mailing list
-> dri-devel@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/dri-devel
+--Sig_/zr=8s6spYG95L+dKakOX=sL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1g3ywACgkQAVBC80lX
+0GzzzQf9HKU8hqwhQiI78sSXtrotBHrLx+ltFLoCQ064IZ1mNdA9dvzm631A9Xsu
+JpKoIGnYzkKCbmpGT3R3K2FOZ0zkTtaZQ5St/GPjwJzJ0MUP9RNWIY3odFxZhD2G
+96/BI2tY5CqX9vL35bi8pm/a8aF/1VRGYj3Yu6c5SCqCIOq6+HsqxlG4z9S1sBmE
+66qz+Cstfk9uzuLqjoXosJsp+cO3Bwxt4hoKgPWggxX4vsFsy+viNvfQeNDMZhrT
+LplyeZ4rJHAvEc3OvEELpMDJEHXNcI9+pcGlP6qe7eauyaqKtrMMOqhOD6EN6mFR
+gjKZhDtSKmtzAdc1Xk+ttXy6C6gO2g==
+=yJEH
+-----END PGP SIGNATURE-----
+
+--Sig_/zr=8s6spYG95L+dKakOX=sL--

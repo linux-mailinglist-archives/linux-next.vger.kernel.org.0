@@ -2,87 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7B579C555
-	for <lists+linux-next@lfdr.de>; Sun, 25 Aug 2019 20:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031EE9C63B
+	for <lists+linux-next@lfdr.de>; Sun, 25 Aug 2019 23:19:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728787AbfHYSB2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 25 Aug 2019 14:01:28 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:41294 "EHLO mx1.redhat.com"
+        id S1729012AbfHYVT2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 25 Aug 2019 17:19:28 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43903 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728649AbfHYSB2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 25 Aug 2019 14:01:28 -0400
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1728944AbfHYVT2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 25 Aug 2019 17:19:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 5B43181F01
-        for <linux-next@vger.kernel.org>; Sun, 25 Aug 2019 18:01:28 +0000 (UTC)
-Received: by mail-ed1-f69.google.com with SMTP id z25so8169888edm.3
-        for <linux-next@vger.kernel.org>; Sun, 25 Aug 2019 11:01:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=VuPnmNJDurZKvFGRfxNmSSRX0Kf/p44Qiikbipwhkj8=;
-        b=oPASK/bLTJrgXKn822sLgj74bOVyOC8NGW73AyOyIMbz4N33PTsoxIjNh3CcBe5jQq
-         haiGYmL3zC3x+BtlxFAo9DuF0fRy42Qr+PbqHuy6lo+YLu1VODa1oVm94DyZnOhw85C6
-         1DAYInFENz4rUBluTXzLdj4DAqMt8Omgb2kkULPeRqa5v2kRxVXy53KhcR0Lu9ykbrx9
-         Vzheo3Jh97hwx0veIc37yApITtrZRp9uNqyLdpFiOAquwTrnw+wdSKL2vIDCcWoRC1d+
-         1OTbNJEecm/N2UVi4xwVPqF6AqafYc6QCXuQILu2NcnnBOv9jCI6LDMbceYpTwwKlojt
-         zviw==
-X-Gm-Message-State: APjAAAWYEpx9dL3hYTuQcckC4PGmbetA58DHtu8QVyqGugbialBy/CJw
-        2XbpOz10rrdw2hyPRKKg00emO3und20ObHDFAWblb2PNQd8+s7QFcNeuxWFCkvQYB8CY89fLNm7
-        R1AhyuaEvHo4AWEjYJ2GfLg==
-X-Received: by 2002:a17:907:217b:: with SMTP id rl27mr13385280ejb.154.1566756087144;
-        Sun, 25 Aug 2019 11:01:27 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwdanELqZCMBQliTrwXuwFFf3bENMI0wKgiY7G4ECMVkDTHUjx65hs/OfIYn/w8wQyzEXadrA==
-X-Received: by 2002:a17:907:217b:: with SMTP id rl27mr13385263ejb.154.1566756086903;
-        Sun, 25 Aug 2019 11:01:26 -0700 (PDT)
-Received: from shalem.localdomain (84-106-84-65.cable.dynamic.v4.ziggo.nl. [84.106.84.65])
-        by smtp.gmail.com with ESMTPSA id x12sm2375442eje.1.2019.08.25.11.01.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 25 Aug 2019 11:01:25 -0700 (PDT)
-Subject: Re: linux-next: build warning after merge of the crypto tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Gp181YlRz9sDB;
+        Mon, 26 Aug 2019 07:19:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566767964;
+        bh=qt4Itlsc6WLieV0IdMhZdJ3KT4pry9RhsobHoCuAOn8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jBo1RDXcsKidmj48UPKdGQB3qFkP8+uygBNZS/LdQsv0gxVlOG9mNucCXghw1m1aS
+         tFrWpMT5l9WSJurAhjr9eu9pdQKN6m4xOh61R0eyMWLbtEISkqhMuvLgnS9Quh96B9
+         ZoYHZiqxG4Byggs9slL0GjCJmX6SVeSos/F6aFMufRDPPMHOWrnz/+EicTJZYiZiMs
+         a0mikOyjYAOuDrU7ivRgvzOkSZVFrt1o/lcRPlqgHfd19Z8qj+H2/QwcG8E16bLe++
+         GlUuVT1o4HAC+GSNu3uhHGw7s+yqbFfpH3vpLLO8vdGqvt0C8q+IwpK67hYnkq0Wb0
+         5oj+XAg0EAEKA==
+Date:   Mon, 26 Aug 2019 07:19:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20190823131442.5a84a475@canb.auug.org.au>
-From:   Hans de Goede <hdegoede@redhat.com>
-Message-ID: <ce5be2de-5e6c-b571-fffe-99888f7cf3a5@redhat.com>
-Date:   Sun, 25 Aug 2019 20:01:24 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: linux-next: Fixes tag needs some work in the leds tree
+Message-ID: <20190826071917.44d44598@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20190823131442.5a84a475@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/Hf9sltObuOb.i43PMh5881o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+--Sig_/Hf9sltObuOb.i43PMh5881o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 23-08-19 05:14, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the crypto tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> WARNING: modpost: missing MODULE_LICENSE() in lib/crypto/libsha256.o
-> see include/linux/module.h for more information
-> 
-> Presumably introduced by commit
-> 
->    01d3aee86625 ("crypto: sha256 - Make lib/crypto/sha256.c suitable for generic use")
+Hi all,
 
-Yeah my bad, I did not think about this getting build as a module.
+In commit
 
-I will submit a followup patch fixing this.
+  3f5381c2ba60 ("leds: lm3532: Fixes for the driver for stability")
 
-Regards,
+Fixes tag
 
-Hans
+  Fixes: e37a7f8d77e1 ("leds: lm3532: Introduce the lm3532 LED driver")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+In commit
+
+  c4b8354e5341 ("leds: lm3532: Fix brightness control for i2c mode")
+
+Fixes tag
+
+  Fixes: e37a7f8d77e1 ("leds: lm3532: Introduce the lm3532 LED driver")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean
+
+Fixes: bc1b8492c764 ("leds: lm3532: Introduce the lm3532 LED driver")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Hf9sltObuOb.i43PMh5881o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1i+1UACgkQAVBC80lX
+0GzmWgf/TIBObmQGE2Sm5ObgGBUoWqyIojFgGS39XCPtc7aEks9Rhhm1CKjmdbqT
+KWn3XJQgEqDQ3b1FbUYHcUUWKRbuey/z8tMxOKKItHjkNh9AjcFtz7zJv5XoiDmc
+24u9V96R++aAAiLpxSKSRFjGFOMcy+z0w6GOTuog83qWhyK/ka8q0WV+DJiUnZpn
+0Elhd8Miqypy/MV/2W6H9fudz+dUBdiEgYECVEwm24cP9DFBqQteOQ9VUDLgJsQm
+y3aDP+BxlpEj95XDgIZJ8nVih0zPWYpub/shvUOjaXV/reG/fbaBa3XYQRXmkcgi
+BhNzOCxdn0SW4fH0Zy+qbBOUmhSk5g==
+=Infu
+-----END PGP SIGNATURE-----
+
+--Sig_/Hf9sltObuOb.i43PMh5881o--

@@ -2,79 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 565999CDE8
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 13:17:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCA49CE90
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 13:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730744AbfHZLQ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 07:16:58 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40584 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbfHZLQ4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Aug 2019 07:16:56 -0400
-Received: by mail-lf1-f65.google.com with SMTP id b17so11975656lff.7
-        for <linux-next@vger.kernel.org>; Mon, 26 Aug 2019 04:16:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BoFNGyhD/IpzgrNu/s4nyMOqx8vjiMZXotZwnxN0fmQ=;
-        b=zsw9Nmnuox1dtcDek+VxNObd5JtV9AetPOXXNqU5QQAGc/yFDb721tTak0xA/y8yjr
-         xanBopG8k/irYaRWOGZhFV2Czdtd8AClacur10EiFlexX0Ctwvd06HjML60yPoh7+f5m
-         vywc5WoZKgTSX9lnv9kmRrWjoi/0ro0ift3DHfj5xDcNXiIqmoIQr5Ybyd280tQ+ZOsc
-         kU8A44nndrz7I64UTBZVKNTb5R13C+0YjVX/KeMaUMevL0DpP7nv9DQokfIQLddQSRpn
-         wcQbb7W1H5gnosf0fdBGQezB8WjDmAv8bl+x6LPG1WO4iwmwMin1I+fLwqWicY38+x1w
-         6PMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BoFNGyhD/IpzgrNu/s4nyMOqx8vjiMZXotZwnxN0fmQ=;
-        b=E+Wmas3RKMokCU1KigfF8KphTEQNhBDc1GqA6ZhYrxE9Co+5Vdxujx7J24XYr1Gvwk
-         Nwzm8KZ5wqhzW7eyn7tI2yOmybly0N05NwpiW/aR+1a98yP0l/tVdSMVR/EIfCeTu2BU
-         QYIqe2LOLanDdc3nqOQ0RPJD7msgZHxWbXJ/Rpn/TuDGvv0QwRHfkD7iR2GxCwNtRqwl
-         eHEDaGetD7SJIAVBmVNj5rgTU+rpW5O5YUdBvVJTzDj6E5AdxoC95Oo2raYF59qM2zkE
-         nYFhMieGoIvvA0KRBxIdMpgNnNMu2ZkxOvtou6iguciKYDsevXmFUAu35XgaZnBp+oRl
-         gixg==
-X-Gm-Message-State: APjAAAWJmmTS1vTVXb+uIAiAQL6ftlcA8sgV1XVgqrVahYtAsBnBmkjE
-        xPH2+bmJQvN5Um1AwkwZu4edkvQ1xABW7af8ix3B8Dhq+UE=
-X-Google-Smtp-Source: APXvYqwq+n3IWbnz++AwYjY5hi9PwQS3DsryoTO85Roujdt6TlsqwVJGaCILrK7a/BuelN2HGE61Fz7GYYwHWJZ3XhQ=
-X-Received: by 2002:a19:ed11:: with SMTP id y17mr10463633lfy.141.1566818213972;
- Mon, 26 Aug 2019 04:16:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190826210252.20ca44ba@canb.auug.org.au>
-In-Reply-To: <20190826210252.20ca44ba@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 26 Aug 2019 13:16:42 +0200
-Message-ID: <CACRpkdbfe+az-Cgymd0Y+-m1MqvdSNb-H1XO0923cQ7RwEWanA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pinctrl tree with the gpio tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1730387AbfHZLuX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 07:50:23 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42159 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727182AbfHZLuX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Aug 2019 07:50:23 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46H9L347lPz9sBF;
+        Mon, 26 Aug 2019 21:50:19 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566820219;
+        bh=XUEOKU/hBQav3jF/6NZurRChk/w8HeLKvoeo2p6vqjo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VcVfNGOicxM42nSBlf1G7gBCMN2dZIoVqDFQY9Z6eBiKZ1+m1tRprpsN+rU2Gj+pa
+         xH4wqkUPEIg6u1dFUSwKxd4oV05/YEtmnaHAST5r0npBW/oWn2K98AWDPs7qzt7pKw
+         zytaXvZZ6x1qDkR3rg6pp6cfaaqsECFMF1MrbKPSyXxilJKSIyOQXvAGMgsoxmBQaK
+         WjGcBHZ9TL7fJ53uEFbqbkotrkxQ87VHMdxT1E7Dg0hUNYxQSGYJUX3paVduq0d90m
+         7r55kuWsrLiri0uWZF8AxfuWI5PijmWVPfxEuwhJVFIi1bGG39RRU9YEqHjIGnKYVE
+         jde7vkSidr0xQ==
+Date:   Mon, 26 Aug 2019 21:50:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     MyungJoo Ham <myungjoo.ham@samsung.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stefan Wahren <wahrenst@gmx.net>
-Content-Type: text/plain; charset="UTF-8"
+        Leonard Crestez <leonard.crestez@nxp.com>
+Subject: linux-next: build warning after merge of the devfreq tree
+Message-ID: <20190826215017.02ab0d34@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/VHMmzf1GG0=K07MZvmWTM7j";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Aug 26, 2019 at 1:03 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/VHMmzf1GG0=K07MZvmWTM7j
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Today's linux-next merge of the pinctrl tree got a conflict in:
->
->   drivers/pinctrl/bcm/pinctrl-bcm2835.c
->
-> between commit:
->
->   82357f82ec69 ("pinctrl: bcm2835: Pass irqchip when adding gpiochip")
->
-> from the gpio tree and commit:
->
->   e38a9a437fb9 ("pinctrl: bcm2835: Add support for BCM2711 pull-up functionality")
->
-> from the pinctrl tree.
+Hi all,
 
-Ah that's so unnecessary. I will take the patch out of the GPIO
-tree and put it into the pinctrl tree instead, thanks for noticing!
+After merging the devfreq tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Yours,
-Linus Walleij
+drivers/devfreq/governor_passive.c: In function 'devfreq_passive_event_hand=
+ler':
+drivers/devfreq/governor_passive.c:152:17: warning: unused variable 'dev' [=
+-Wunused-variable]
+  struct device *dev =3D devfreq->dev.parent;
+                 ^~~
+
+Introduced by commit
+
+  0ef7c7cce43f ("PM / devfreq: passive: Use non-devm notifiers")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VHMmzf1GG0=K07MZvmWTM7j
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1jx3kACgkQAVBC80lX
+0GwudQf/WsOaPAzNPEHyh515RqrfXNAnDGq7Zy1jj/RgpogEZ6BSTBylpb2TTMT1
+8TSxuWcgjApGqs18k4Takjau3UTGsw83rY7Ith8us/Dzoo5cZogxQZrPGtUXAXja
+a3xZqREJeWAjIglz/fHtZ0Z999oXw4WGwzOXqa4pd80LQlAj1HAW+gI8PSL00bmi
+eYH8Ukuogs6GnJSoX99LffuG+P9+JBJqBVU3fOfTL4CrS/Pa/4Dcyz07B+NslK1r
+z1t/KALgUnfTXjDFrb7cWOpw1Hysoc4+p4E5lSwygPCIc01q6U4oKcOgg6QzZaWi
+cMzOWYJwQd7KziDokSqKBiPRXKYqyA==
+=WSqm
+-----END PGP SIGNATURE-----
+
+--Sig_/VHMmzf1GG0=K07MZvmWTM7j--

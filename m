@@ -2,98 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F150A9CCBD
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4CE29CCC4
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:47:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730877AbfHZJod (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 05:44:33 -0400
-Received: from mx07-00178001.pphosted.com ([62.209.51.94]:31972 "EHLO
-        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726266AbfHZJod (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 05:44:33 -0400
-Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7Q9flPh019662;
-        Mon, 26 Aug 2019 11:44:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=STMicroelectronics;
- bh=VTmTOEmJtBhkUABaG/XSF9y7CY7sNsb6fCHiw63nQjM=;
- b=s7risFeSlR3qAFh9zk6ZVfvYjWJzNQfjHqNtgkWelXFWXeLacjP9j6QoUQPKzpUC7HE2
- FXbCdpkCNBG7VaFodiobUYUMlvq1tD242iFIxBuzUkucS+qiesrMfXOCCvpemIYPsiai
- NWSWOXJ7KwUverZ5yXaO9SFyi5KkJmQMbbbDXpitPqHUdsTLJKJKmYyZunigA+XoSPll
- 2jDpdPuDFW1ggPgsvVJRo/2dSumFHpT5dexbo4LKVP9DYJOjk1eSwUJmYB7Bq5nJHE0/
- zJYfz6ioajIH7AgiMBVf6gPG+TvcNQ6Pz0iAOqVsqbMcwhEVbvX/EjF122kMLrR+NjAo qg== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com with ESMTP id 2ujtq1314w-1
-        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
-        Mon, 26 Aug 2019 11:44:10 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA5A231;
-        Mon, 26 Aug 2019 09:44:08 +0000 (GMT)
-Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFB2D2D49C0;
-        Mon, 26 Aug 2019 11:44:08 +0200 (CEST)
-Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
- (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 26 Aug
- 2019 11:44:08 +0200
-Subject: Re: linux-next: Fixes tags need some work in the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>
-References: <20190814002836.4b6aa14b@canb.auug.org.au>
- <CAK8P3a2q1mShg-EQhiAFUOAET8UEMHfLJV-+HoLTaSQY+M7yBQ@mail.gmail.com>
- <20190814074730.402ec3ec@canb.auug.org.au>
-From:   Alexandre Torgue <alexandre.torgue@st.com>
-Message-ID: <f4e0e924-03ea-bf63-85a0-5718874ceb38@st.com>
-Date:   Mon, 26 Aug 2019 11:44:07 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1729926AbfHZJra (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 05:47:30 -0400
+Received: from mail-lj1-f178.google.com ([209.85.208.178]:42087 "EHLO
+        mail-lj1-f178.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726635AbfHZJr3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Aug 2019 05:47:29 -0400
+Received: by mail-lj1-f178.google.com with SMTP id l14so14442823ljj.9
+        for <linux-next@vger.kernel.org>; Mon, 26 Aug 2019 02:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=V4wnC1IESTIvccJjycijXVomS8LY+xe0wyWh2XpadOM=;
+        b=EJBPUqONNfST5dbaQN3WVBVLSK2FdlYkAB3W+e5L2SPL1yrC0uMz2eYkryWWZFfKJx
+         08KLHFLhiH6aUXuNCi2XiBqdXUESKNpaEAp3JOe9FJByq6vEQRNTugAAGzAXRQws+4RI
+         mU8/1T+qXoo6124lsJ2bXZtfB291e6OwieCYwon/dWML3a0lWiEH+DY4St+h21vjGzYl
+         ZgVzO+mgaFdBpLwsMuDmzhmf2fai/bBOMnH5b2PDVPExkoq2rajppnLJ4WBwoLlK27f0
+         dZGhouppmrP7Y8wZj6W1gBhXG34408H7o/gLZ9jfsS1pfU3ME6pXrT+//Fp6H25+xBbq
+         +n0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=V4wnC1IESTIvccJjycijXVomS8LY+xe0wyWh2XpadOM=;
+        b=Avckv/SN6rIoXgVwn7S2VK3Cft+BTDzhh3CAjVSzb8PAtMhaIbPfEhCnJLzyHKSbWj
+         mV4VgtXWaoFvCClPPt6xdv2ivXNDCIit5syn9jHm5M7buqMVqLHSE7DEGKEfUGUQS9WR
+         89+VYNxwjoQFAD19uYZeIpMsCcVBkLgBGiNa3niiQIOl48zoevexJclvQVSzf4+gVgzu
+         0uKR63TRldsBm+k1UtzCninby5u1JLd6WLauXWFoMRpzDcFYfJUSvYXbLm9xcqbHBUsl
+         40AlMMBAi4pO/+QqeiSo7aoZtT5DuGYHXufhggYJa+NMHRR18BRMCcVRcZy4mO3RIh/C
+         8dEA==
+X-Gm-Message-State: APjAAAWC88TTMRRupvUj2+77bqxpLpA7BFHJIBwXza1S70zgaG9LEvvs
+        xdKjBdtJ00gWR3W8TyJVDcLNk6mLb3xy97pW9dDq+g==
+X-Google-Smtp-Source: APXvYqymkztdlCAHqJp6WG1YtlxHoUjq6nFfsqaRgdYCw2b5Y7d3wdgrnYU4I272qiRDH+DdWgFa1C71lRg4iAGcgcw=
+X-Received: by 2002:a2e:f19:: with SMTP id 25mr9882288ljp.149.1566812847394;
+ Mon, 26 Aug 2019 02:47:27 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190814074730.402ec3ec@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.46]
-X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE2.st.com
- (10.75.127.8)
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-26_06:,,
- signatures=0
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 26 Aug 2019 15:17:16 +0530
+Message-ID: <CA+G9fYtN2tjHZtjtc8isdsD5hF76teeh2-pngUp+uj3WYdj7jA@mail.gmail.com>
+Subject: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed to run
+ cmd: useradd hsym
+To:     ltp@lists.linux.it,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        alexey.kodanev@oracle.com, the_hoang0709@yahoo.com
+Cc:     Jan Stancek <jstancek@redhat.com>, chrubis <chrubis@suse.cz>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi guys
+Do you see this LTP prot_hsymlinks failure on linux next 20190823 on
+x86_64 and i386 devices?
 
-On 8/13/19 11:47 PM, Stephen Rothwell wrote:
-> Hi Arnd,
-> 
-> On Tue, 13 Aug 2019 21:35:58 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
->>
->> On Tue, Aug 13, 2019 at 4:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->>>
->>> Please do not split Fixes tags over more than one line.  Also, please
->>> keep them with the rest of the other tags.
->>
->> Thanks for the report. How bad is this? Should I undo the merge and
->> wait for an updated pull request?
-> 
-> Its probably ok to leave as long as lessons are learnt :-)
-> 
+test output log,
+useradd: failure while writing changes to /etc/passwd
+useradd: /home/hsym was created, but could not be removed
+userdel: user 'hsym' does not exist
+prot_hsymlinks    1  TBROK  :  prot_hsymlinks.c:325: Failed to run
+cmd: useradd hsym
+prot_hsymlinks    2  TBROK  :  prot_hsymlinks.c:325: Remaining cases broken
+prot_hsymlinks    3  TBROK  :  prot_hsymlinks.c:325: Failed to run
+cmd: userdel -r hsym
+prot_hsymlinks    4  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks    5  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks    6  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks    7  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks    8  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks    9  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
+prot_hsymlinks   10  TBROK  :  tst_sig.c:234: unexpected signal
+SIGIOT/SIGABRT(6) received (pid = 8324).
 
-Sorry for my late answer.
+Full test log,
+https://qa-reports.linaro.org/lkft/linux-next-oe/build/next-20190823/testrun/886412/log
 
-Thanks Stephen for information. I'll take care next time before merging 
-patches with "fixes" tag.
+Linux version:
+Linux version 5.3.0-rc5-next-20190823 (oe-user@oe-host) (gcc version
+7.3.0 (GCC)) #1 SMP Fri Aug 23 09:35:54 UTC 2019
 
-Arnd, no need to update the PR ?
+steps to reproduce:
+   cd /opt/ltp
+   ./runltp -s prot_hsymlinks
 
-regards
+metadata:
+metadata:
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: 9733a7c62c66722bcfdb1a6fe4d35c497312d59a
+  git describe: next-20190823
+  make_kernelversion: 5.3.0-rc5
+  kernel-config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/591/config
+  build-location:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/intel-corei7-64/lkft/linux-next/591
+  toolchain: x86_64-linaro-linux 7.%
+  series: lkft
+  ltp-syscalls-tests__url: git://github.com/linux-test-project/ltp.git
+  ltp-syscalls-tests__version: '20190517'
 
-Alex
+Best regards
+Naresh Kamboju

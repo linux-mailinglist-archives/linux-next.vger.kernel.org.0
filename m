@@ -2,165 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D27E9CCBB
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F150A9CCBD
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbfHZJo3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 05:44:29 -0400
-Received: from szxga02-in.huawei.com ([45.249.212.188]:3976 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726266AbfHZJo3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 05:44:29 -0400
-Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.55])
-        by Forcepoint Email with ESMTP id EE8198DB41203FE97232;
-        Mon, 26 Aug 2019 17:44:25 +0800 (CST)
-Received: from dggeme762-chm.china.huawei.com (10.3.19.108) by
- DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 26 Aug 2019 17:44:25 +0800
-Received: from architecture4 (10.140.130.215) by
- dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Mon, 26 Aug 2019 17:44:25 +0800
-Date:   Mon, 26 Aug 2019 17:43:41 +0800
-From:   Gao Xiang <gaoxiang25@huawei.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@aol.com>, Chao Yu <yuchao0@huawei.com>
-Subject: Re: linux-next: build warning after merge of the staging tree
-Message-ID: <20190826094341.GC129185@architecture4>
-References: <20190826063024.GA1217@kroah.com>
- <20190826083733.GA129185@architecture4>
- <20190826085408.GB129185@architecture4>
+        id S1730877AbfHZJod (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 05:44:33 -0400
+Received: from mx07-00178001.pphosted.com ([62.209.51.94]:31972 "EHLO
+        mx07-00178001.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726266AbfHZJod (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Aug 2019 05:44:33 -0400
+Received: from pps.filterd (m0046668.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7Q9flPh019662;
+        Mon, 26 Aug 2019 11:44:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=st.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=STMicroelectronics;
+ bh=VTmTOEmJtBhkUABaG/XSF9y7CY7sNsb6fCHiw63nQjM=;
+ b=s7risFeSlR3qAFh9zk6ZVfvYjWJzNQfjHqNtgkWelXFWXeLacjP9j6QoUQPKzpUC7HE2
+ FXbCdpkCNBG7VaFodiobUYUMlvq1tD242iFIxBuzUkucS+qiesrMfXOCCvpemIYPsiai
+ NWSWOXJ7KwUverZ5yXaO9SFyi5KkJmQMbbbDXpitPqHUdsTLJKJKmYyZunigA+XoSPll
+ 2jDpdPuDFW1ggPgsvVJRo/2dSumFHpT5dexbo4LKVP9DYJOjk1eSwUJmYB7Bq5nJHE0/
+ zJYfz6ioajIH7AgiMBVf6gPG+TvcNQ6Pz0iAOqVsqbMcwhEVbvX/EjF122kMLrR+NjAo qg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com with ESMTP id 2ujtq1314w-1
+        (version=TLSv1 cipher=ECDHE-RSA-AES256-SHA bits=256 verify=NOT);
+        Mon, 26 Aug 2019 11:44:10 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id DA5A231;
+        Mon, 26 Aug 2019 09:44:08 +0000 (GMT)
+Received: from Webmail-eu.st.com (sfhdag3node2.st.com [10.75.127.8])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id BFB2D2D49C0;
+        Mon, 26 Aug 2019 11:44:08 +0200 (CEST)
+Received: from lmecxl0912.lme.st.com (10.75.127.46) by SFHDAG3NODE2.st.com
+ (10.75.127.8) with Microsoft SMTP Server (TLS) id 15.0.1347.2; Mon, 26 Aug
+ 2019 11:44:08 +0200
+Subject: Re: linux-next: Fixes tags need some work in the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>
+CC:     Olof Johansson <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Fabrice Gasnier <fabrice.gasnier@st.com>
+References: <20190814002836.4b6aa14b@canb.auug.org.au>
+ <CAK8P3a2q1mShg-EQhiAFUOAET8UEMHfLJV-+HoLTaSQY+M7yBQ@mail.gmail.com>
+ <20190814074730.402ec3ec@canb.auug.org.au>
+From:   Alexandre Torgue <alexandre.torgue@st.com>
+Message-ID: <f4e0e924-03ea-bf63-85a0-5718874ceb38@st.com>
+Date:   Mon, 26 Aug 2019 11:44:07 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190826085408.GB129185@architecture4>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.140.130.215]
-X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
- dggeme762-chm.china.huawei.com (10.3.19.108)
-X-CFilter-Loop: Reflected
+In-Reply-To: <20190814074730.402ec3ec@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG8NODE2.st.com (10.75.127.23) To SFHDAG3NODE2.st.com
+ (10.75.127.8)
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-26_06:,,
+ signatures=0
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi guys
 
-On Mon, Aug 26, 2019 at 04:54:08PM +0800, Gao Xiang wrote:
-> Hi Stephen,
+On 8/13/19 11:47 PM, Stephen Rothwell wrote:
+> Hi Arnd,
 > 
-> On Mon, Aug 26, 2019 at 04:38:01PM +0800, Gao Xiang wrote:
-> > Hi Greg,
-> > 
-> > On Mon, Aug 26, 2019 at 08:30:24AM +0200, Greg KH wrote:
-> > > On Mon, Aug 26, 2019 at 04:24:32PM +1000, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > > 
-> > > > After merging the staging tree, today's linux-next build (x86_64
-> > > > allmodconfig) produced this warning:
-> > > > 
-> > > > In file included from include/trace/events/erofs.h:8,
-> > > >                  from <command-line>:
-> > > > include/trace/events/erofs.h:28:37: warning: 'struct dentry' declared inside parameter list will not be visible outside of this definition or declaration
-> > > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
-> > > >                                      ^~~~~~
-> > > > include/linux/tracepoint.h:233:34: note: in definition of macro '__DECLARE_TRACE'
-> > > >   static inline void trace_##name(proto)    \
-> > > >                                   ^~~~~
-> > > > include/linux/tracepoint.h:396:24: note: in expansion of macro 'PARAMS'
-> > > >   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
-> > > >                         ^~~~~~
-> > > > include/linux/tracepoint.h:532:2: note: in expansion of macro 'DECLARE_TRACE'
-> > > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-> > > >   ^~~~~~~~~~~~~
-> > > > include/linux/tracepoint.h:532:22: note: in expansion of macro 'PARAMS'
-> > > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-> > > >                       ^~~~~~
-> > > > include/trace/events/erofs.h:26:1: note: in expansion of macro 'TRACE_EVENT'
-> > > >  TRACE_EVENT(erofs_lookup,
-> > > >  ^~~~~~~~~~~
-> > > > include/trace/events/erofs.h:28:2: note: in expansion of macro 'TP_PROTO'
-> > > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
-> > > >   ^~~~~~~~
-> > > > 
-> > > > and moany more like this ...
+> On Tue, 13 Aug 2019 21:35:58 +0200 Arnd Bergmann <arnd@arndb.de> wrote:
+>>
+>> On Tue, Aug 13, 2019 at 4:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>>>
+>>> Please do not split Fixes tags over more than one line.  Also, please
+>>> keep them with the rest of the other tags.
+>>
+>> Thanks for the report. How bad is this? Should I undo the merge and
+>> wait for an updated pull request?
 > 
-> Could you give me more log about this? I don't know how to reproduce that warning
-> since I can compile x86-64 kernel image with my configproperly on my PC...
-> I'm trying allmodconfig now...
-
-I have tested the latest staging-next tree with x86_64 allmodconfig with
-https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
-the following commands (on my x86-64 PC),
-
- $ make allmodconfig
- $ make -j12
-
-and it compiles successful as below:
-  LD [M]  sound/usb/hiface/snd-usb-hiface.ko
-  LD [M]  sound/usb/line6/snd-usb-line6.ko
-  LD [M]  sound/usb/line6/snd-usb-pod.ko
-  LD [M]  sound/usb/line6/snd-usb-podhd.ko
-  LD [M]  sound/usb/line6/snd-usb-toneport.ko
-  LD [M]  sound/usb/line6/snd-usb-variax.ko
-  LD [M]  sound/usb/misc/snd-ua101.ko
-  LD [M]  sound/usb/snd-usb-audio.ko
-  LD [M]  sound/usb/snd-usbmidi-lib.ko
-  LD [M]  sound/usb/usx2y/snd-usb-us122l.ko
-  LD [M]  sound/usb/usx2y/snd-usb-usx2y.ko
-  LD [M]  sound/x86/snd-hdmi-lpe-audio.ko
-  LD [M]  sound/xen/snd_xen_front.ko
-  LD [M]  virt/lib/irqbypass.ko
-g00380047@architecture4:~/oss/linux-staging$ 
-
-I'm also testing the latest linux-next tree with commit 47e4937a4a7c applied,
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-
-and the command is the same (on my x86-64 PC),
-
- $ make allmodconfig
- $ make -j12
-
-it seems all .o in fs/erofs have been generated properly, although the final
-result hasn't been generated. I will reply the final result later...
-
-Out of curiosity, are there some merge conflicts raised? Or could you give
-me some hints (code and .config) to reproduce that? since I don't find any
-potential issue in include/trace/events/erofs.h and fs/erofs/*... I have no
-idea what happened and how to do next... Thank you very much!
-
-Thanks,
-Gao Xiang
-
+> Its probably ok to leave as long as lessons are learnt :-)
 > 
-> Thanks,
-> Gao Xiang
-> 
-> > > > 
-> > > > Introduced by commit
-> > > > 
-> > > >   47e4937a4a7c ("erofs: move erofs out of staging")
-> > > > 
-> > > > (or, at least, exposed by it).  It needs, at least, a "struct dentry;"
-> > > > added to the file.
-> > > 
-> > > Odd, why has this never been seen before when the same files were in
-> > > drivers/staging/ and why 0-day isn't reporting this?
-> > 
-> > I Think it is weird since it is never failed in staging and kbuild-all 0-day ci
-> > (my tree and you tree)....
-> > 
-> > > 
-> > > Gao, can you send me a patch for this?
-> > 
-> > Got it, I will look into that...
-> > 
-> > Thanks,
-> > Gao Xiang
-> > 
-> > > 
-> > > thanks,
-> > > 
 
+Sorry for my late answer.
+
+Thanks Stephen for information. I'll take care next time before merging 
+patches with "fixes" tag.
+
+Arnd, no need to update the PR ?
+
+regards
+
+Alex

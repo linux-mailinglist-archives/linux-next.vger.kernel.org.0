@@ -2,123 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2429CC01
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 10:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F7679CC3C
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730446AbfHZI6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 04:58:52 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:46311 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729854AbfHZI6v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Aug 2019 04:58:51 -0400
-Received: by mail-oi1-f194.google.com with SMTP id t24so11504471oij.13;
-        Mon, 26 Aug 2019 01:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tnEOaWMh9o7a4lsL8t46ApShoBTiXhp9jJWi58Cb5Gc=;
-        b=gNTC26TCRuhPCnmLwV5ci68NVeucexpxmpB1zZ5+bnany2+xp/mtE3YzqxreRpNFxK
-         DdFU21+dZU3gMwdgfNjFzatQOh3il9bMnPF6ZGFXOKfBjL1DdOxA7SUnIFVcFIg28kNC
-         9FzCvHJdW+D6G25inX+wGKdhB6VHtn1O9LCIB06t9B5nymrYZIIgjflUgvzYLASNoo3S
-         RjKUqqWucD0lnA1490FxRzyERKwRG8R0YNe8cE/6zGZ8CdzZErgAtBWBQ4SS1YmRIL4b
-         OfqtA1leb5iWDXKj2g3BExtshV9AO4ObjXVurg05FiqeJsM8vcCkYBualjbq24tZVV3Q
-         PSoA==
-X-Gm-Message-State: APjAAAVDJsd/v1pjsT7NGK35NBnsDdKDQ7nj2NdUREG3SjUT8HhTPGXe
-        IeiVNelAiOktV4RQIehY7WXROxbKveTBNMGOY2A=
-X-Google-Smtp-Source: APXvYqxXAEmTrR0e9s0qceFFoDeOwnHS/Xoq0e/yv+MEHb3J0+ID75RlA2eDMhAg81C5BpolzjElQX/42D45ESS6+Fk=
-X-Received: by 2002:a54:478d:: with SMTP id o13mr11607090oic.54.1566809930697;
- Mon, 26 Aug 2019 01:58:50 -0700 (PDT)
+        id S1730664AbfHZJJS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 05:09:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25010 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1730398AbfHZJJS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Aug 2019 05:09:18 -0400
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7Q970i9010236;
+        Mon, 26 Aug 2019 05:09:11 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2umbsy1ney-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Aug 2019 05:09:11 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7Q95F2F025282;
+        Mon, 26 Aug 2019 09:09:10 GMT
+Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
+        by ppma04wdc.us.ibm.com with ESMTP id 2ujvv6bxrt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 26 Aug 2019 09:09:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7Q999lt43909422
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 26 Aug 2019 09:09:09 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4BFD378063;
+        Mon, 26 Aug 2019 09:09:09 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01A7878060;
+        Mon, 26 Aug 2019 09:09:08 +0000 (GMT)
+Received: from sofia.ibm.com (unknown [9.124.31.156])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 26 Aug 2019 09:09:08 +0000 (GMT)
+Received: by sofia.ibm.com (Postfix, from userid 1000)
+        id 7BDCE2E3C81; Mon, 26 Aug 2019 14:39:05 +0530 (IST)
+Date:   Mon, 26 Aug 2019 14:39:05 +0530
+From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
+To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
+Cc:     linuxppc-dev@ozlabs.org, linux-next@vger.kernel.org,
+        ego@linux.vnet.ibm.com
+Subject: Re: [powerpc]WARN : arch/powerpc/platforms/powernv/smp.c:160
+Message-ID: <20190826090905.GA1792@in.ibm.com>
+Reply-To: ego@linux.vnet.ibm.com
+References: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
 MIME-Version: 1.0
-References: <c0005a09c89c20093ac699c97e7420331ec46b01.camel@perches.com>
- <9c7a79b4d21aea52464d00c8fa4e4b92638560b6.camel@perches.com>
- <CAHk-=wiL7jqYNfYrNikgBw3byY+Zn37-8D8yR=WUu0x=_2BpZA@mail.gmail.com>
- <6a5f470c1375289908c37632572c4aa60d6486fa.camel@perches.com>
- <4398924f28a58fca296d101dae11e7accce80656.camel@perches.com>
- <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
- <20190820092451.791c85e5@canb.auug.org.au> <14723fccc2c3362cc045df17fc8554f37c8a8529.camel@perches.com>
- <CAHk-=wgqQKoAnhmhGE-2PBFt7oQs9LLAATKbYa573UO=DPBE0Q@mail.gmail.com>
- <9d12995c5e7e41fc5d8ba202f76a2cf854183245.camel@perches.com> <CAHk-=wi6bEnBy11HJBbgPsG3-ctE6Zyi2+3cnozjMAafSUBAaQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wi6bEnBy11HJBbgPsG3-ctE6Zyi2+3cnozjMAafSUBAaQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 26 Aug 2019 10:58:39 +0200
-Message-ID: <CAMuHMdVtCKVXNghfrs6RgtSDC08c0eyR-xD6d7mkZuSSPEFY-Q@mail.gmail.com>
-Subject: Re: rfc: treewide scripted patch mechanism? (was: Re: [PATCH]
- Makefile: Convert -Wimplicit-fallthrough=3 to just -Wimplicit-fallthrough for clang)QUILT
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Joe Perches <joe@perches.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Julia Lawall <julia.lawall@lip6.fr>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        clang-built-linux@googlegroups.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
+User-Agent: Mutt/1.5.23 (2014-03-12)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-26_06:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=955 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908260102
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Linus,
+Hello Sachin,
 
-On Wed, Aug 21, 2019 at 2:41 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
-> On Tue, Aug 20, 2019 at 4:37 PM Joe Perches <joe@perches.com> wrote:
-> > > So I'm putting my foot down on yet another broken string copy
-> > > interface from people who do not understand this fundamental issue.
-> >
-> > I think you are mistaken about the stracpy limits as
-> > the only limit is not the source size but the dest.
-> >
-> > Why should the source be size limited?
->
-> You just proved my point. You don't understand that sources can also
-> be limited, and the limit on a source can be *smaller* than the limit
-> of a destination.
->
-> Did we learn *NOTHING* from the complete and utter disaster that was strlcpy()?
->
-> Do you not understand why strlcpy() was unacceptably bad, and why the
-> people who converted strncpy() to it introduced real bugs?
->
-> The fact is, it's not just the destination that has a size limit. The
-> source often has one too.
->
-> And no, the source is not always guaranteed to be NUL-terminated, nor
-> is the source buffer guaranteed to be larger than the destination
-> buffer.
->
-> Now, if you *know* that the source is smaller than the destination
-> size, you can do:
->
->     len = strnlen(src, srclen);
->     memcpy(dst, len);
->     dst[len] = 0;
->
-> and that's not wrong, but that works only when
->
->  (a) you actually do the above
->
->  (b) you have no data races on src (or you at least only require that
-> 'dst' is NUL-terminated, not that 'len' is necessarily the correct
-> length of the result
->
->  (c) you actually know as the programmer that yes, the source is
-> definitely smaller than the destination.
->
-> and honestly, people don't get _any_ of that right.
 
-(d) you know the untouched trailing end of dst[] does not leak data.
+On Sat, Aug 24, 2019 at 09:34:41PM +0530, Sachin Sant wrote:
+> linux-next is currently broken on POWER8 non virtualized. Kernel
+> fails to reach login prompt with following kernel warning
+> repeatedly shown during boot.
+> 
+> The problem dates back atleast till next-20190816. 
+> 
+> [   40.285606] WARNING: CPU: 1 PID: 0 at arch/powerpc/platforms/powernv/smp.c:160 pnv_smp_cpu_kill_self+0x50/0x2d0
+> [   40.285609] Modules linked in: kvm_hv kvm sunrpc dm_mirror dm_region_hash dm_log dm_mod ses enclosure scsi_transport_sas sg ipmi_powernv ipmi_devintf powernv_rng uio_pdrv_genirq uio leds_powernv ipmi_msghandler powernv_op_panel ibmpowernv ip_tables ext4 mbcache jbd2 sd_mod ipr tg3 libata ptp pps_core
+> [   40.285643] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.3.0-rc5-next-20190823-autotest-autotest #1
+> [   40.285644] NIP:  c0000000000b5f40 LR: c000000000055498 CTR: c0000000000b5ef0
+> [   40.285646] REGS: c0000007f5527980 TRAP: 0700   Not tainted  (5.3.0-rc5-next-20190823-autotest-autotest)
+> [   40.285646] MSR:  9000000000029033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR: 24004028  XER: 00000000
+> [   40.285650] CFAR: c000000000055494 IRQMASK: 1 
+> [   40.285650] GPR00: c000000000055498 c0000007f5527c10 c00000000148b200 0000000000000000 
+> [   40.285650] GPR04: 0000000000000000 c0000007fa897d80 c0000007fa90c800 00000007f9980000 
+> [   40.285650] GPR08: 0000000000000000 0000000000000001 0000000000000000 c0000007fa90c800 
+> [   40.285650] GPR12: c0000000000b5ef0 c0000007ffffee00 0000000000000800 c000000ffffc11d0 
+> [   40.285650] GPR16: 0000000000000001 c000000001035280 0000000000000000 c0000000015303c0 
+> [   40.285650] GPR20: c000000000052d60 0000000000000001 c0000007f54cd800 c0000007f54cd880 
+> [   40.285650] GPR24: 0000000000080000 c0000007f54cd800 c0000000014bdf78 c0000000014c20d8 
+> [   40.285650] GPR28: 0000000000000002 c0000000014c2538 0000000000000001 c0000007f54cd800 
+> [   40.285662] NIP [c0000000000b5f40] pnv_smp_cpu_kill_self+0x50/0x2d0
+> [   40.285664] LR [c000000000055498] cpu_die+0x48/0x64
+> [   40.285665] Call Trace:
+> [   40.285667] [c0000007f5527c10] [c000000000f85f10] ppc64_tlb_batch+0x0/0x1220 (unreliable)
+> [   40.285669] [c0000007f5527df0] [c000000000055498] cpu_die+0x48/0x64
+> [   40.285672] [c0000007f5527e10] [c0000000000226a0] arch_cpu_idle_dead+0x20/0x40
+> [   40.285674] [c0000007f5527e30] [c00000000016bd2c] do_idle+0x37c/0x3f0
+> [   40.285676] [c0000007f5527ed0] [c00000000016bfac] cpu_startup_entry+0x3c/0x50
+> [   40.285678] [c0000007f5527f00] [c000000000055198] start_secondary+0x638/0x680
+> [   40.285680] [c0000007f5527f90] [c00000000000ac5c] start_secondary_prolog+0x10/0x14
+> [   40.285680] Instruction dump:
+> [   40.285681] fb61ffd8 fb81ffe0 fba1ffe8 fbc1fff0 fbe1fff8 f8010010 f821fe21 e90d1178 
+> [   40.285684] f9010198 39000000 892d0988 792907e0 <0b090000> 39200002 7d210164 39200003 
+> [   40.285687] ---[ end trace 72c90a064122d9e4 ]—
 
-Anything else we're missing?
+Could you please share the test-case that you were running and the
+command line parameter ?
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+> 
+> Relevant code snippet :
+> 156         /*
+> 157          * This hard disables local interurpts, ensuring we have no lazy
+> 158          * irqs pending.
+> 159          */
+> 160         WARN_ON(irqs_disabled());  <<===
+> 161         hard_irq_disable();
+> 162         WARN_ON(lazy_irq_pending());
+> 
+> Thanks
+> -Sachin
+> 

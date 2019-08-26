@@ -2,150 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2059D9C788
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 05:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D299C7EE
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 05:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727109AbfHZDMl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 25 Aug 2019 23:12:41 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51599 "EHLO ozlabs.org"
+        id S1729440AbfHZD3e convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Sun, 25 Aug 2019 23:29:34 -0400
+Received: from ozlabs.org ([203.11.71.1]:48525 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726215AbfHZDMl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 25 Aug 2019 23:12:41 -0400
+        id S1729419AbfHZD3e (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 25 Aug 2019 23:29:34 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Gxrj3ZCtz9sMr;
-        Mon, 26 Aug 2019 13:12:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566789157;
-        bh=25Ggdo2oL/qJme2XUXxIElP5B2EGLpxpgnHNn9sLCBg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LeCeM/tERM3irPiFcF9K7Y4kfW5rJicrZrtcX1jbFeZ89VWWveQ4V3BzbP0Gyi+Zk
-         aHCoMTjZmja+UvQBz6btHiw2SpXHYZLx0H1nurBkxqujybHmAMkgKlvQUnBQDfE4ls
-         BQOrDvoASSq1nC6F4reh6CQ+KYPM7bwIF6Ay6My71d5dGyQdQCcxfYS2q+o6Uaj4iq
-         ig3SnmczOFrOhp/kiBinw+ucu9KABdzRh/++cgqf+nbs/KFvH8fhRY4mQX5tMBsGGp
-         GZcvGwnr2Gt4KmcC6ATLnNHaxr0jUfQKJNGvKtwQMivUobsWRhlig8Bx5VN7TxsT+H
-         xYw+vFTrLktkQ==
-Date:   Mon, 26 Aug 2019 13:12:36 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20190826131236.441e6c9f@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46GyDC0Qd2z9sDB;
+        Mon, 26 Aug 2019 13:29:31 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Sachin Sant <sachinp@linux.vnet.ibm.com>, linuxppc-dev@ozlabs.org
+Cc:     ego@linux.vnet.ibm.com, linux-next@vger.kernel.org
+Subject: Re: [powerpc]WARN : arch/powerpc/platforms/powernv/smp.c:160
+In-Reply-To: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
+References: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
+Date:   Mon, 26 Aug 2019 13:29:30 +1000
+Message-ID: <87imqk4nad.fsf@concordia.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/nAw3zeIhKHJVF_u=Cr/HcbU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/nAw3zeIhKHJVF_u=Cr/HcbU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Sachin Sant <sachinp@linux.vnet.ibm.com> writes:
+> linux-next is currently broken on POWER8 non virtualized. Kernel
+> fails to reach login prompt with following kernel warning
+> repeatedly shown during boot.
 
-Hi all,
+I don't see it on my test systems.
 
-Today's linux-next merge of the drm tree got a conflict in:
+The backtrace makes it look like you're doing CPU hot_un_plug during
+boot, which seems a bit odd.
 
-  drivers/gpu/drm/mediatek/mtk_drm_drv.c
+Or possibly it's just that the cpu_is_offline() test in do_idle() is
+returning true due to some bug.
 
-between commit:
+> The problem dates back atleast till next-20190816. 
 
-  7837951a12fd ("drm/mediatek: include dma-mapping header")
+A bisect would be helpful obviously :)
 
-from Linus' tree and commit:
+> [   40.285606] WARNING: CPU: 1 PID: 0 at arch/powerpc/platforms/powernv/smp.c:160 pnv_smp_cpu_kill_self+0x50/0x2d0
+> [   40.285609] Modules linked in: kvm_hv kvm sunrpc dm_mirror dm_region_hash dm_log dm_mod ses enclosure scsi_transport_sas sg ipmi_powernv ipmi_devintf powernv_rng uio_pdrv_genirq uio leds_powernv ipmi_msghandler powernv_op_panel ibmpowernv ip_tables ext4 mbcache jbd2 sd_mod ipr tg3 libata ptp pps_core
+> [   40.285643] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.3.0-rc5-next-20190823-autotest-autotest #1
+> [   40.285644] NIP:  c0000000000b5f40 LR: c000000000055498 CTR: c0000000000b5ef0
+> [   40.285646] REGS: c0000007f5527980 TRAP: 0700   Not tainted  (5.3.0-rc5-next-20190823-autotest-autotest)
+> [   40.285646] MSR:  9000000000029033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR: 24004028  XER: 00000000
+> [   40.285650] CFAR: c000000000055494 IRQMASK: 1 
+> [   40.285650] GPR00: c000000000055498 c0000007f5527c10 c00000000148b200 0000000000000000 
+> [   40.285650] GPR04: 0000000000000000 c0000007fa897d80 c0000007fa90c800 00000007f9980000 
+> [   40.285650] GPR08: 0000000000000000 0000000000000001 0000000000000000 c0000007fa90c800 
+> [   40.285650] GPR12: c0000000000b5ef0 c0000007ffffee00 0000000000000800 c000000ffffc11d0 
+> [   40.285650] GPR16: 0000000000000001 c000000001035280 0000000000000000 c0000000015303c0 
+> [   40.285650] GPR20: c000000000052d60 0000000000000001 c0000007f54cd800 c0000007f54cd880 
+> [   40.285650] GPR24: 0000000000080000 c0000007f54cd800 c0000000014bdf78 c0000000014c20d8 
+> [   40.285650] GPR28: 0000000000000002 c0000000014c2538 0000000000000001 c0000007f54cd800 
+> [   40.285662] NIP [c0000000000b5f40] pnv_smp_cpu_kill_self+0x50/0x2d0
+> [   40.285664] LR [c000000000055498] cpu_die+0x48/0x64
+> [   40.285665] Call Trace:
+> [   40.285667] [c0000007f5527c10] [c000000000f85f10] ppc64_tlb_batch+0x0/0x1220 (unreliable)
+> [   40.285669] [c0000007f5527df0] [c000000000055498] cpu_die+0x48/0x64
+> [   40.285672] [c0000007f5527e10] [c0000000000226a0] arch_cpu_idle_dead+0x20/0x40
+> [   40.285674] [c0000007f5527e30] [c00000000016bd2c] do_idle+0x37c/0x3f0
+> [   40.285676] [c0000007f5527ed0] [c00000000016bfac] cpu_startup_entry+0x3c/0x50
+> [   40.285678] [c0000007f5527f00] [c000000000055198] start_secondary+0x638/0x680
+> [   40.285680] [c0000007f5527f90] [c00000000000ac5c] start_secondary_prolog+0x10/0x14
+> [   40.285680] Instruction dump:
+> [   40.285681] fb61ffd8 fb81ffe0 fba1ffe8 fbc1fff0 fbe1fff8 f8010010 f821fe21 e90d1178 
+> [   40.285684] f9010198 39000000 892d0988 792907e0 <0b090000> 39200002 7d210164 39200003 
+> [   40.285687] ---[ end trace 72c90a064122d9e4 ]—
 
-  9aef5867c86c ("drm/mediatek: drop use of drmP.h")
+That WARN shouldn't really kill the boot, do you see anything else?
 
-from the drm tree.
+> Relevant code snippet :
+> 156         /*
+> 157          * This hard disables local interurpts, ensuring we have no lazy
+> 158          * irqs pending.
+> 159          */
+> 160         WARN_ON(irqs_disabled());  <<===
+> 161         hard_irq_disable();
+> 162         WARN_ON(lazy_irq_pending());
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Even via the path shown above I think we should have IRQs enabled, but I
+guess not.
 
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 945bc20f1d33,2ee809a6f3dc..000000000000
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@@ -4,9 -4,16 +4,17 @@@
-   * Author: YT SHEN <yt.shen@mediatek.com>
-   */
- =20
-- #include <drm/drmP.h>
-+ #include <linux/component.h>
-+ #include <linux/iommu.h>
-+ #include <linux/module.h>
-+ #include <linux/of_address.h>
-+ #include <linux/of_platform.h>
-+ #include <linux/pm_runtime.h>
-++#include <linux/dma-mapping.h>
-+=20
-  #include <drm/drm_atomic.h>
-  #include <drm/drm_atomic_helper.h>
-+ #include <drm/drm_drv.h>
-  #include <drm/drm_fb_helper.h>
-  #include <drm/drm_gem.h>
-  #include <drm/drm_gem_cma_helper.h>
-@@@ -352,21 -314,8 +346,20 @@@ static const struct file_operations mtk
-  	.compat_ioctl =3D drm_compat_ioctl,
-  };
- =20
- +/*
- + * We need to override this because the device used to import the memory =
-is
- + * not dev->dev, as drm_gem_prime_import() expects.
- + */
- +struct drm_gem_object *mtk_drm_gem_prime_import(struct drm_device *dev,
- +						struct dma_buf *dma_buf)
- +{
- +	struct mtk_drm_private *private =3D dev->dev_private;
- +
- +	return drm_gem_prime_import_dev(dev, dma_buf, private->dma_dev);
- +}
- +
-  static struct drm_driver mtk_drm_driver =3D {
-- 	.driver_features =3D DRIVER_MODESET | DRIVER_GEM | DRIVER_PRIME |
-- 			   DRIVER_ATOMIC,
-+ 	.driver_features =3D DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
- =20
-  	.gem_free_object_unlocked =3D mtk_drm_gem_free_object,
-  	.gem_vm_ops =3D &drm_gem_cma_vm_ops,
-@@@ -374,8 -323,6 +367,7 @@@
- =20
-  	.prime_handle_to_fd =3D drm_gem_prime_handle_to_fd,
-  	.prime_fd_to_handle =3D drm_gem_prime_fd_to_handle,
-- 	.gem_prime_export =3D drm_gem_prime_export,
- +	.gem_prime_import =3D mtk_drm_gem_prime_import,
-  	.gem_prime_get_sg_table =3D mtk_gem_prime_get_sg_table,
-  	.gem_prime_import_sg_table =3D mtk_gem_prime_import_sg_table,
-  	.gem_prime_mmap =3D mtk_drm_gem_mmap_buf,
-
---Sig_/nAw3zeIhKHJVF_u=Cr/HcbU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1jTiQACgkQAVBC80lX
-0GzATwf/eK4cY9F9zBKCJgLsfYhSkiyzChMziYSK3kthp8weUk+HYn3bbSIhI8SM
-kDeVyTi2c7FoagXBWb/Q9LbDIywNbsAOek+zK65nJjBEYwsRAIA1wAxT+QZ2AeLf
-C8Z9UiHNtkup99sQHRMpSg7Z6wa9+KpW7ZcdqUmvyhGv06Xm9HbHqrUG/M4OGjA4
-u151jfaBAN+wUp8vradjtaZJgx2Iw8aLVMvF5bykiam+qtUHQGdeqURJ+yNJad9c
-+Mpvxnq0qSvc69Y02mzJxVfjuo7J4UCgt89jrJrt3cPDyHXp+y7sOnKKHNoGExL9
-K7W1IhwcmiSS2uk/6csxLhaQCh/YvA==
-=N329
------END PGP SIGNATURE-----
-
---Sig_/nAw3zeIhKHJVF_u=Cr/HcbU--
+cheers

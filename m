@@ -2,127 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F7679CC3C
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:09:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D27E9CCBB
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 11:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730664AbfHZJJS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 05:09:18 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:25010 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730398AbfHZJJS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 05:09:18 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7Q970i9010236;
-        Mon, 26 Aug 2019 05:09:11 -0400
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2umbsy1ney-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Aug 2019 05:09:11 -0400
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7Q95F2F025282;
-        Mon, 26 Aug 2019 09:09:10 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04wdc.us.ibm.com with ESMTP id 2ujvv6bxrt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 26 Aug 2019 09:09:10 +0000
-Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7Q999lt43909422
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 26 Aug 2019 09:09:09 GMT
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4BFD378063;
-        Mon, 26 Aug 2019 09:09:09 +0000 (GMT)
-Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 01A7878060;
-        Mon, 26 Aug 2019 09:09:08 +0000 (GMT)
-Received: from sofia.ibm.com (unknown [9.124.31.156])
-        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Mon, 26 Aug 2019 09:09:08 +0000 (GMT)
-Received: by sofia.ibm.com (Postfix, from userid 1000)
-        id 7BDCE2E3C81; Mon, 26 Aug 2019 14:39:05 +0530 (IST)
-Date:   Mon, 26 Aug 2019 14:39:05 +0530
-From:   Gautham R Shenoy <ego@linux.vnet.ibm.com>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
-Cc:     linuxppc-dev@ozlabs.org, linux-next@vger.kernel.org,
-        ego@linux.vnet.ibm.com
-Subject: Re: [powerpc]WARN : arch/powerpc/platforms/powernv/smp.c:160
-Message-ID: <20190826090905.GA1792@in.ibm.com>
-Reply-To: ego@linux.vnet.ibm.com
-References: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
+        id S1729625AbfHZJo3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 05:44:29 -0400
+Received: from szxga02-in.huawei.com ([45.249.212.188]:3976 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726266AbfHZJo3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Aug 2019 05:44:29 -0400
+Received: from DGGEMM404-HUB.china.huawei.com (unknown [172.30.72.55])
+        by Forcepoint Email with ESMTP id EE8198DB41203FE97232;
+        Mon, 26 Aug 2019 17:44:25 +0800 (CST)
+Received: from dggeme762-chm.china.huawei.com (10.3.19.108) by
+ DGGEMM404-HUB.china.huawei.com (10.3.20.212) with Microsoft SMTP Server (TLS)
+ id 14.3.439.0; Mon, 26 Aug 2019 17:44:25 +0800
+Received: from architecture4 (10.140.130.215) by
+ dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1591.10; Mon, 26 Aug 2019 17:44:25 +0800
+Date:   Mon, 26 Aug 2019 17:43:41 +0800
+From:   Gao Xiang <gaoxiang25@huawei.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@aol.com>, Chao Yu <yuchao0@huawei.com>
+Subject: Re: linux-next: build warning after merge of the staging tree
+Message-ID: <20190826094341.GC129185@architecture4>
+References: <20190826063024.GA1217@kroah.com>
+ <20190826083733.GA129185@architecture4>
+ <20190826085408.GB129185@architecture4>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-26_06:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=955 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1908260102
+In-Reply-To: <20190826085408.GB129185@architecture4>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.140.130.215]
+X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
+ dggeme762-chm.china.huawei.com (10.3.19.108)
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello Sachin,
+Hi Stephen,
 
+On Mon, Aug 26, 2019 at 04:54:08PM +0800, Gao Xiang wrote:
+> Hi Stephen,
+> 
+> On Mon, Aug 26, 2019 at 04:38:01PM +0800, Gao Xiang wrote:
+> > Hi Greg,
+> > 
+> > On Mon, Aug 26, 2019 at 08:30:24AM +0200, Greg KH wrote:
+> > > On Mon, Aug 26, 2019 at 04:24:32PM +1000, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > After merging the staging tree, today's linux-next build (x86_64
+> > > > allmodconfig) produced this warning:
+> > > > 
+> > > > In file included from include/trace/events/erofs.h:8,
+> > > >                  from <command-line>:
+> > > > include/trace/events/erofs.h:28:37: warning: 'struct dentry' declared inside parameter list will not be visible outside of this definition or declaration
+> > > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
+> > > >                                      ^~~~~~
+> > > > include/linux/tracepoint.h:233:34: note: in definition of macro '__DECLARE_TRACE'
+> > > >   static inline void trace_##name(proto)    \
+> > > >                                   ^~~~~
+> > > > include/linux/tracepoint.h:396:24: note: in expansion of macro 'PARAMS'
+> > > >   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
+> > > >                         ^~~~~~
+> > > > include/linux/tracepoint.h:532:2: note: in expansion of macro 'DECLARE_TRACE'
+> > > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+> > > >   ^~~~~~~~~~~~~
+> > > > include/linux/tracepoint.h:532:22: note: in expansion of macro 'PARAMS'
+> > > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+> > > >                       ^~~~~~
+> > > > include/trace/events/erofs.h:26:1: note: in expansion of macro 'TRACE_EVENT'
+> > > >  TRACE_EVENT(erofs_lookup,
+> > > >  ^~~~~~~~~~~
+> > > > include/trace/events/erofs.h:28:2: note: in expansion of macro 'TP_PROTO'
+> > > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
+> > > >   ^~~~~~~~
+> > > > 
+> > > > and moany more like this ...
+> 
+> Could you give me more log about this? I don't know how to reproduce that warning
+> since I can compile x86-64 kernel image with my configproperly on my PC...
+> I'm trying allmodconfig now...
 
-On Sat, Aug 24, 2019 at 09:34:41PM +0530, Sachin Sant wrote:
-> linux-next is currently broken on POWER8 non virtualized. Kernel
-> fails to reach login prompt with following kernel warning
-> repeatedly shown during boot.
-> 
-> The problem dates back atleast till next-20190816. 
-> 
-> [   40.285606] WARNING: CPU: 1 PID: 0 at arch/powerpc/platforms/powernv/smp.c:160 pnv_smp_cpu_kill_self+0x50/0x2d0
-> [   40.285609] Modules linked in: kvm_hv kvm sunrpc dm_mirror dm_region_hash dm_log dm_mod ses enclosure scsi_transport_sas sg ipmi_powernv ipmi_devintf powernv_rng uio_pdrv_genirq uio leds_powernv ipmi_msghandler powernv_op_panel ibmpowernv ip_tables ext4 mbcache jbd2 sd_mod ipr tg3 libata ptp pps_core
-> [   40.285643] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.3.0-rc5-next-20190823-autotest-autotest #1
-> [   40.285644] NIP:  c0000000000b5f40 LR: c000000000055498 CTR: c0000000000b5ef0
-> [   40.285646] REGS: c0000007f5527980 TRAP: 0700   Not tainted  (5.3.0-rc5-next-20190823-autotest-autotest)
-> [   40.285646] MSR:  9000000000029033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR: 24004028  XER: 00000000
-> [   40.285650] CFAR: c000000000055494 IRQMASK: 1 
-> [   40.285650] GPR00: c000000000055498 c0000007f5527c10 c00000000148b200 0000000000000000 
-> [   40.285650] GPR04: 0000000000000000 c0000007fa897d80 c0000007fa90c800 00000007f9980000 
-> [   40.285650] GPR08: 0000000000000000 0000000000000001 0000000000000000 c0000007fa90c800 
-> [   40.285650] GPR12: c0000000000b5ef0 c0000007ffffee00 0000000000000800 c000000ffffc11d0 
-> [   40.285650] GPR16: 0000000000000001 c000000001035280 0000000000000000 c0000000015303c0 
-> [   40.285650] GPR20: c000000000052d60 0000000000000001 c0000007f54cd800 c0000007f54cd880 
-> [   40.285650] GPR24: 0000000000080000 c0000007f54cd800 c0000000014bdf78 c0000000014c20d8 
-> [   40.285650] GPR28: 0000000000000002 c0000000014c2538 0000000000000001 c0000007f54cd800 
-> [   40.285662] NIP [c0000000000b5f40] pnv_smp_cpu_kill_self+0x50/0x2d0
-> [   40.285664] LR [c000000000055498] cpu_die+0x48/0x64
-> [   40.285665] Call Trace:
-> [   40.285667] [c0000007f5527c10] [c000000000f85f10] ppc64_tlb_batch+0x0/0x1220 (unreliable)
-> [   40.285669] [c0000007f5527df0] [c000000000055498] cpu_die+0x48/0x64
-> [   40.285672] [c0000007f5527e10] [c0000000000226a0] arch_cpu_idle_dead+0x20/0x40
-> [   40.285674] [c0000007f5527e30] [c00000000016bd2c] do_idle+0x37c/0x3f0
-> [   40.285676] [c0000007f5527ed0] [c00000000016bfac] cpu_startup_entry+0x3c/0x50
-> [   40.285678] [c0000007f5527f00] [c000000000055198] start_secondary+0x638/0x680
-> [   40.285680] [c0000007f5527f90] [c00000000000ac5c] start_secondary_prolog+0x10/0x14
-> [   40.285680] Instruction dump:
-> [   40.285681] fb61ffd8 fb81ffe0 fba1ffe8 fbc1fff0 fbe1fff8 f8010010 f821fe21 e90d1178 
-> [   40.285684] f9010198 39000000 892d0988 792907e0 <0b090000> 39200002 7d210164 39200003 
-> [   40.285687] ---[ end trace 72c90a064122d9e4 ]—
+I have tested the latest staging-next tree with x86_64 allmodconfig with
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git
+the following commands (on my x86-64 PC),
 
-Could you please share the test-case that you were running and the
-command line parameter ?
+ $ make allmodconfig
+ $ make -j12
 
+and it compiles successful as below:
+  LD [M]  sound/usb/hiface/snd-usb-hiface.ko
+  LD [M]  sound/usb/line6/snd-usb-line6.ko
+  LD [M]  sound/usb/line6/snd-usb-pod.ko
+  LD [M]  sound/usb/line6/snd-usb-podhd.ko
+  LD [M]  sound/usb/line6/snd-usb-toneport.ko
+  LD [M]  sound/usb/line6/snd-usb-variax.ko
+  LD [M]  sound/usb/misc/snd-ua101.ko
+  LD [M]  sound/usb/snd-usb-audio.ko
+  LD [M]  sound/usb/snd-usbmidi-lib.ko
+  LD [M]  sound/usb/usx2y/snd-usb-us122l.ko
+  LD [M]  sound/usb/usx2y/snd-usb-usx2y.ko
+  LD [M]  sound/x86/snd-hdmi-lpe-audio.ko
+  LD [M]  sound/xen/snd_xen_front.ko
+  LD [M]  virt/lib/irqbypass.ko
+g00380047@architecture4:~/oss/linux-staging$ 
+
+I'm also testing the latest linux-next tree with commit 47e4937a4a7c applied,
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+and the command is the same (on my x86-64 PC),
+
+ $ make allmodconfig
+ $ make -j12
+
+it seems all .o in fs/erofs have been generated properly, although the final
+result hasn't been generated. I will reply the final result later...
+
+Out of curiosity, are there some merge conflicts raised? Or could you give
+me some hints (code and .config) to reproduce that? since I don't find any
+potential issue in include/trace/events/erofs.h and fs/erofs/*... I have no
+idea what happened and how to do next... Thank you very much!
+
+Thanks,
+Gao Xiang
 
 > 
-> Relevant code snippet :
-> 156         /*
-> 157          * This hard disables local interurpts, ensuring we have no lazy
-> 158          * irqs pending.
-> 159          */
-> 160         WARN_ON(irqs_disabled());  <<===
-> 161         hard_irq_disable();
-> 162         WARN_ON(lazy_irq_pending());
+> Thanks,
+> Gao Xiang
 > 
-> Thanks
-> -Sachin
-> 
+> > > > 
+> > > > Introduced by commit
+> > > > 
+> > > >   47e4937a4a7c ("erofs: move erofs out of staging")
+> > > > 
+> > > > (or, at least, exposed by it).  It needs, at least, a "struct dentry;"
+> > > > added to the file.
+> > > 
+> > > Odd, why has this never been seen before when the same files were in
+> > > drivers/staging/ and why 0-day isn't reporting this?
+> > 
+> > I Think it is weird since it is never failed in staging and kbuild-all 0-day ci
+> > (my tree and you tree)....
+> > 
+> > > 
+> > > Gao, can you send me a patch for this?
+> > 
+> > Got it, I will look into that...
+> > 
+> > Thanks,
+> > Gao Xiang
+> > 
+> > > 
+> > > thanks,
+> > > 
+

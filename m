@@ -2,117 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC3A9CBE9
-	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 10:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2429CC01
+	for <lists+linux-next@lfdr.de>; Mon, 26 Aug 2019 10:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726955AbfHZIzA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 04:55:00 -0400
-Received: from szxga03-in.huawei.com ([45.249.212.189]:3099 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726189AbfHZIzA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 04:55:00 -0400
-Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.57])
-        by Forcepoint Email with ESMTP id AE4BCC525D72049DB0F0;
-        Mon, 26 Aug 2019 16:54:56 +0800 (CST)
-Received: from dggeme762-chm.china.huawei.com (10.3.19.108) by
- DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
- id 14.3.439.0; Mon, 26 Aug 2019 16:54:55 +0800
-Received: from architecture4 (10.140.130.215) by
- dggeme762-chm.china.huawei.com (10.3.19.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.1591.10; Mon, 26 Aug 2019 16:54:55 +0800
-Date:   Mon, 26 Aug 2019 16:54:08 +0800
-From:   Gao Xiang <gaoxiang25@huawei.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@aol.com>, Chao Yu <yuchao0@huawei.com>
-Subject: Re: linux-next: build warning after merge of the staging tree
-Message-ID: <20190826085408.GB129185@architecture4>
-References: <20190826063024.GA1217@kroah.com>
- <20190826083733.GA129185@architecture4>
+        id S1730446AbfHZI6w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 04:58:52 -0400
+Received: from mail-oi1-f194.google.com ([209.85.167.194]:46311 "EHLO
+        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729854AbfHZI6v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Aug 2019 04:58:51 -0400
+Received: by mail-oi1-f194.google.com with SMTP id t24so11504471oij.13;
+        Mon, 26 Aug 2019 01:58:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=tnEOaWMh9o7a4lsL8t46ApShoBTiXhp9jJWi58Cb5Gc=;
+        b=gNTC26TCRuhPCnmLwV5ci68NVeucexpxmpB1zZ5+bnany2+xp/mtE3YzqxreRpNFxK
+         DdFU21+dZU3gMwdgfNjFzatQOh3il9bMnPF6ZGFXOKfBjL1DdOxA7SUnIFVcFIg28kNC
+         9FzCvHJdW+D6G25inX+wGKdhB6VHtn1O9LCIB06t9B5nymrYZIIgjflUgvzYLASNoo3S
+         RjKUqqWucD0lnA1490FxRzyERKwRG8R0YNe8cE/6zGZ8CdzZErgAtBWBQ4SS1YmRIL4b
+         OfqtA1leb5iWDXKj2g3BExtshV9AO4ObjXVurg05FiqeJsM8vcCkYBualjbq24tZVV3Q
+         PSoA==
+X-Gm-Message-State: APjAAAVDJsd/v1pjsT7NGK35NBnsDdKDQ7nj2NdUREG3SjUT8HhTPGXe
+        IeiVNelAiOktV4RQIehY7WXROxbKveTBNMGOY2A=
+X-Google-Smtp-Source: APXvYqxXAEmTrR0e9s0qceFFoDeOwnHS/Xoq0e/yv+MEHb3J0+ID75RlA2eDMhAg81C5BpolzjElQX/42D45ESS6+Fk=
+X-Received: by 2002:a54:478d:: with SMTP id o13mr11607090oic.54.1566809930697;
+ Mon, 26 Aug 2019 01:58:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20190826083733.GA129185@architecture4>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Originating-IP: [10.140.130.215]
-X-ClientProxiedBy: dggeme706-chm.china.huawei.com (10.1.199.102) To
- dggeme762-chm.china.huawei.com (10.3.19.108)
-X-CFilter-Loop: Reflected
+References: <c0005a09c89c20093ac699c97e7420331ec46b01.camel@perches.com>
+ <9c7a79b4d21aea52464d00c8fa4e4b92638560b6.camel@perches.com>
+ <CAHk-=wiL7jqYNfYrNikgBw3byY+Zn37-8D8yR=WUu0x=_2BpZA@mail.gmail.com>
+ <6a5f470c1375289908c37632572c4aa60d6486fa.camel@perches.com>
+ <4398924f28a58fca296d101dae11e7accce80656.camel@perches.com>
+ <ad42da450ccafcb571cca9289dcf52840dbb53d3.camel@perches.com>
+ <20190820092451.791c85e5@canb.auug.org.au> <14723fccc2c3362cc045df17fc8554f37c8a8529.camel@perches.com>
+ <CAHk-=wgqQKoAnhmhGE-2PBFt7oQs9LLAATKbYa573UO=DPBE0Q@mail.gmail.com>
+ <9d12995c5e7e41fc5d8ba202f76a2cf854183245.camel@perches.com> <CAHk-=wi6bEnBy11HJBbgPsG3-ctE6Zyi2+3cnozjMAafSUBAaQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wi6bEnBy11HJBbgPsG3-ctE6Zyi2+3cnozjMAafSUBAaQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 26 Aug 2019 10:58:39 +0200
+Message-ID: <CAMuHMdVtCKVXNghfrs6RgtSDC08c0eyR-xD6d7mkZuSSPEFY-Q@mail.gmail.com>
+Subject: Re: rfc: treewide scripted patch mechanism? (was: Re: [PATCH]
+ Makefile: Convert -Wimplicit-fallthrough=3 to just -Wimplicit-fallthrough for clang)QUILT
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Joe Perches <joe@perches.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Julia Lawall <julia.lawall@lip6.fr>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux@googlegroups.com,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi Linus,
 
-On Mon, Aug 26, 2019 at 04:38:01PM +0800, Gao Xiang wrote:
-> Hi Greg,
-> 
-> On Mon, Aug 26, 2019 at 08:30:24AM +0200, Greg KH wrote:
-> > On Mon, Aug 26, 2019 at 04:24:32PM +1000, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > After merging the staging tree, today's linux-next build (x86_64
-> > > allmodconfig) produced this warning:
-> > > 
-> > > In file included from include/trace/events/erofs.h:8,
-> > >                  from <command-line>:
-> > > include/trace/events/erofs.h:28:37: warning: 'struct dentry' declared inside parameter list will not be visible outside of this definition or declaration
-> > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
-> > >                                      ^~~~~~
-> > > include/linux/tracepoint.h:233:34: note: in definition of macro '__DECLARE_TRACE'
-> > >   static inline void trace_##name(proto)    \
-> > >                                   ^~~~~
-> > > include/linux/tracepoint.h:396:24: note: in expansion of macro 'PARAMS'
-> > >   __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
-> > >                         ^~~~~~
-> > > include/linux/tracepoint.h:532:2: note: in expansion of macro 'DECLARE_TRACE'
-> > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-> > >   ^~~~~~~~~~~~~
-> > > include/linux/tracepoint.h:532:22: note: in expansion of macro 'PARAMS'
-> > >   DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
-> > >                       ^~~~~~
-> > > include/trace/events/erofs.h:26:1: note: in expansion of macro 'TRACE_EVENT'
-> > >  TRACE_EVENT(erofs_lookup,
-> > >  ^~~~~~~~~~~
-> > > include/trace/events/erofs.h:28:2: note: in expansion of macro 'TP_PROTO'
-> > >   TP_PROTO(struct inode *dir, struct dentry *dentry, unsigned int flags),
-> > >   ^~~~~~~~
-> > > 
-> > > and moany more like this ...
+On Wed, Aug 21, 2019 at 2:41 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+> On Tue, Aug 20, 2019 at 4:37 PM Joe Perches <joe@perches.com> wrote:
+> > > So I'm putting my foot down on yet another broken string copy
+> > > interface from people who do not understand this fundamental issue.
+> >
+> > I think you are mistaken about the stracpy limits as
+> > the only limit is not the source size but the dest.
+> >
+> > Why should the source be size limited?
+>
+> You just proved my point. You don't understand that sources can also
+> be limited, and the limit on a source can be *smaller* than the limit
+> of a destination.
+>
+> Did we learn *NOTHING* from the complete and utter disaster that was strlcpy()?
+>
+> Do you not understand why strlcpy() was unacceptably bad, and why the
+> people who converted strncpy() to it introduced real bugs?
+>
+> The fact is, it's not just the destination that has a size limit. The
+> source often has one too.
+>
+> And no, the source is not always guaranteed to be NUL-terminated, nor
+> is the source buffer guaranteed to be larger than the destination
+> buffer.
+>
+> Now, if you *know* that the source is smaller than the destination
+> size, you can do:
+>
+>     len = strnlen(src, srclen);
+>     memcpy(dst, len);
+>     dst[len] = 0;
+>
+> and that's not wrong, but that works only when
+>
+>  (a) you actually do the above
+>
+>  (b) you have no data races on src (or you at least only require that
+> 'dst' is NUL-terminated, not that 'len' is necessarily the correct
+> length of the result
+>
+>  (c) you actually know as the programmer that yes, the source is
+> definitely smaller than the destination.
+>
+> and honestly, people don't get _any_ of that right.
 
-Could you give me more log about this? I don't know how to reproduce that warning
-since I can compile x86-64 kernel image with my configproperly on my PC...
-I'm trying allmodconfig now...
+(d) you know the untouched trailing end of dst[] does not leak data.
 
-Thanks,
-Gao Xiang
+Anything else we're missing?
 
-> > > 
-> > > Introduced by commit
-> > > 
-> > >   47e4937a4a7c ("erofs: move erofs out of staging")
-> > > 
-> > > (or, at least, exposed by it).  It needs, at least, a "struct dentry;"
-> > > added to the file.
-> > 
-> > Odd, why has this never been seen before when the same files were in
-> > drivers/staging/ and why 0-day isn't reporting this?
-> 
-> I Think it is weird since it is never failed in staging and kbuild-all 0-day ci
-> (my tree and you tree)....
-> 
-> > 
-> > Gao, can you send me a patch for this?
-> 
-> Got it, I will look into that...
-> 
-> Thanks,
-> Gao Xiang
-> 
-> > 
-> > thanks,
-> > 
-> > greg k-h
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

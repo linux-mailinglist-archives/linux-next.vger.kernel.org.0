@@ -2,173 +2,609 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E349DADD
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 02:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025159DAE9
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 03:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728194AbfH0A7y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 20:59:54 -0400
-Received: from mail-eopbgr730116.outbound.protection.outlook.com ([40.107.73.116]:44135
-        "EHLO NAM05-DM3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726307AbfH0A7y (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 20:59:54 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g6qemutHvNUA+4v2OjdwFdWPgRwkIt+aEm3HmAE/Tp5/hZ+W+/CSH+I/Tw3P+MppLVmG9zA2bggGWycp3BKgVX7PrWEJNAr2Qq5bwPLb9QFOG3CIv2CDZ2ZEmoTa7nh56BifdozSwFuoW+axvyJX+sg2t4yXDq7ImLuPPbVNmJaBywontRbmQ/oabS/eEuppgL6vOnewvslaHSfUZ5meh3iaJEB3iUBiLCY1vo6567gLQdyK2isy2qWHWSGNHwRyrLtXRaGfhxCoNWz8ag3Tl5eiXKyd76VSNzSQslygnen3SMmJ8+YNf58IiNKIRJkixfUdLLy9e6jBhMtunoEa4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BEHW3BHNUROp0IXrZLS9iVBMrz2osmyxLmhRS//y3Eg=;
- b=nTBVbI41r/xsfcyI07JCT5zMt/v+PtGRX3dyErTc/AKQyJKoG7wcFofQrI7JzUAQwGSLTNP0h6wu9/1mFypf7ldmNMcjlg0j9UWd7JXCtk6q/vvpqgEgPj2SsRN3TO5Hdbrp2eG8MxPlaYFdrA2BvTSTov6c9VyICEtR/xXrqHmTH85kYRRRpAcnBGElH6n0Z/xazWoPY2tw0t1kfqF4skBURL+vb/K8wIExvP4Ha2QO6kxOl3JP0r+ckUWzQ21SgcGqXPLDguvB7bBz6TF70RktSZ4XDvYz4t9msoDw2Ad+YaMDhROhPAy0cYLjR2jUafMmYN1ySN0qoU812KYMzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hammerspace.com; dmarc=pass action=none
- header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BEHW3BHNUROp0IXrZLS9iVBMrz2osmyxLmhRS//y3Eg=;
- b=aGU6ew2Kds9XGdl2VeAgaLtJLjqCI14LArhE/XHQ1KU8Hp9cPQMQWXxRZxcRt/x+1lsM6UH08qF3dKZg42DYfqnga9U1AXPYER17BRZFT/nNaC9zWNl5c598FTSVmJjKLD/rZYfZMXIQKXqHrWcokA7528B5Co/aUsObrk3L5HM=
-Received: from DM5PR13MB1851.namprd13.prod.outlook.com (10.171.159.143) by
- DM5PR13MB1130.namprd13.prod.outlook.com (10.168.115.18) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.13; Tue, 27 Aug 2019 00:59:48 +0000
-Received: from DM5PR13MB1851.namprd13.prod.outlook.com
- ([fe80::5d60:e645:84a2:be75]) by DM5PR13MB1851.namprd13.prod.outlook.com
- ([fe80::5d60:e645:84a2:be75%7]) with mapi id 15.20.2220.013; Tue, 27 Aug 2019
- 00:59:48 +0000
-From:   Trond Myklebust <trondmy@hammerspace.com>
-To:     "jstancek@redhat.com" <jstancek@redhat.com>
-CC:     "naresh.kamboju@linaro.org" <naresh.kamboju@linaro.org>,
-        "the_hoang0709@yahoo.com" <the_hoang0709@yahoo.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "ltp@lists.linux.it" <ltp@lists.linux.it>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chrubis@suse.cz" <chrubis@suse.cz>,
-        "alexey.kodanev@oracle.com" <alexey.kodanev@oracle.com>
-Subject: Re: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed to
- run cmd: useradd hsym
-Thread-Topic: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed
- to run cmd: useradd hsym
-Thread-Index: YFeV1UC3LeIsRdovt5+kMdO7I/BycvuMo5UAj4lK/k3wd0xbAA==
-Date:   Tue, 27 Aug 2019 00:59:48 +0000
-Message-ID: <566e862d9bfaf88cdde6d66f0f59033fe6225a22.camel@hammerspace.com>
-References: <CA+G9fYtN2tjHZtjtc8isdsD5hF76teeh2-pngUp+uj3WYdj7jA@mail.gmail.com>
-         <20190826104127.GA14729@haruka>
-         <1264279239.8133737.1566817520787.JavaMail.zimbra@redhat.com>
-         <CA+G9fYsHpNKFHr=ZukVvj+uMJDyHj2Xwb9bCfzPQyYzMjZ0rCw@mail.gmail.com>
-         <203971593.8175020.1566830285708.JavaMail.zimbra@redhat.com>
-         <fcd20866bb836d45b1e384dd68080c671bcde938.camel@hammerspace.com>
-         <2039173876.8300255.1566861172742.JavaMail.zimbra@redhat.com>
-In-Reply-To: <2039173876.8300255.1566861172742.JavaMail.zimbra@redhat.com>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=trondmy@hammerspace.com; 
-x-originating-ip: [68.40.189.247]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2b5c719d-463b-4067-9e46-08d72a89dbcb
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(2017052603328)(7193020);SRVR:DM5PR13MB1130;
-x-ms-traffictypediagnostic: DM5PR13MB1130:
-x-ms-exchange-purlcount: 1
-x-microsoft-antispam-prvs: <DM5PR13MB1130550FCA23C94948AFAFA1B8A00@DM5PR13MB1130.namprd13.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:10000;
-x-forefront-prvs: 0142F22657
-x-forefront-antispam-report: SFV:NSPM;SFS:(10019020)(346002)(366004)(376002)(39840400004)(396003)(136003)(199004)(189003)(13464003)(4326008)(478600001)(6512007)(71200400001)(6506007)(8676002)(14444005)(256004)(102836004)(86362001)(6306002)(5640700003)(25786009)(966005)(6916009)(6116002)(2906002)(76116006)(1730700003)(81166006)(91956017)(64756008)(81156014)(66556008)(6246003)(66446008)(71190400001)(66946007)(229853002)(66476007)(6436002)(486006)(316002)(53546011)(2616005)(99286004)(36756003)(54906003)(2501003)(305945005)(476003)(11346002)(446003)(6486002)(2351001)(76176011)(186003)(118296001)(7736002)(26005)(14454004)(66066001)(5660300002)(53936002)(3846002)(8936002);DIR:OUT;SFP:1102;SCL:1;SRVR:DM5PR13MB1130;H:DM5PR13MB1851.namprd13.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: hammerspace.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: d97oSfCizUq2LoNn1xU+e/xzp8ZoHx+a98X6NyoaACWZOuLJpcbZKyONC2AHsGUq1ZriJ9ZOTivcsqZlqDMUVp5oMhzVKj9j3efuh3aHkEsD2aq8aWjPsGGriuJtCf+0iws1F81DBz0BHEMbk/a+K9cEFfYQyaYg6OdL7vj4LrJGWuwax5V1VZp6fARrDeciLm/zRApxPZNLnpTo/sVcfdaJ+r+hPBgqn2tFiJ/vgZi59HZPJEpgcwg06kvA1iR4qTU040K3HVHKc474N0Me/vK/kpXWPxDHKXtiDo+0acD3O7WHDqjAF6qHR4OI/bg6uCTYPq2Jnc9O3TOU9P2sUwljo3JkTlDpVM4Dgjnf+vCqIatEK/Fuz5z2EyZ+jNsyPY1F1EadSlIVXfNN9QV0uRUbX06nh/wB80mvldlKmeA=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <B19382394E78504CB4989A57CB12E973@namprd13.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        id S1727227AbfH0BGz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 21:06:55 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38109 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726487AbfH0BGy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 26 Aug 2019 21:06:54 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46HW143whWz9sBp;
+        Tue, 27 Aug 2019 11:06:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1566868008;
+        bh=cAssO5jkvfqXfchkVaPlMXhd9trABS8tAZIMbBWbOqg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YrHMhogoD/cw8h/rJ4A6xgy/UNeu0wJuL6J75MDLF15gKyEucxaP40aQkcOG9ZWz9
+         y5oS9rQqMa9moy+i9go15aE2w9bXv/A+oz+gwBtGcLxo18d9M6cM1DBT7X5l0ophXg
+         ckNoC1Q23uEkOwLMlNUm5JvzxpxvsWc2BaSPxAW3GP1TYW6Mvnxm9gmLvO3HDDZvaM
+         9bDJZ2baYKUOIUs2yI6N2h5YWLoLJyP+PsBpfk8ZcQcXNeyd8BqS+xC2oHjk9w5LYe
+         sUJzyWEndNwYpU6I6+E+IDvoJXHnnShUkKWhw1/I9IKeHe2zm7CPLcni4cngqKT13D
+         LUqizgEH+gGjA==
+Date:   Tue, 27 Aug 2019 11:06:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Al Viro <viro@ZenIV.linux.org.uk>, Sage Weil <sage@newdream.net>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        "Yan, Zheng" <zyan@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Subject: linux-next: manual merge of the vfs tree with the ceph tree
+Message-ID: <20190827110647.39f2ae80@canb.auug.org.au>
 MIME-Version: 1.0
-X-OriginatorOrg: hammerspace.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b5c719d-463b-4067-9e46-08d72a89dbcb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Aug 2019 00:59:48.0476
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: JaovbplLelN9zWWfdk9so+wR7wg7TN6RxM4KsqGVspWNyxNl6w7lXgE9yfxBC2PWVsWzO9wFNnE0OtcKtv2Kow==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR13MB1130
+Content-Type: multipart/signed; boundary="Sig_/Y4raT8zWPYKaFnjrI1cW_Wd";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-T24gTW9uLCAyMDE5LTA4LTI2IGF0IDE5OjEyIC0wNDAwLCBKYW4gU3RhbmNlayB3cm90ZToNCj4g
-LS0tLS0gT3JpZ2luYWwgTWVzc2FnZSAtLS0tLQ0KPiA+IE9uIE1vbiwgMjAxOS0wOC0yNiBhdCAx
-MDozOCAtMDQwMCwgSmFuIFN0YW5jZWsgd3JvdGU6DQo+ID4gPiAtLS0tLSBPcmlnaW5hbCBNZXNz
-YWdlIC0tLS0tDQo+ID4gPiA+IEhpIEphbiBhbmQgQ3lyaWwsDQo+ID4gPiA+IA0KPiA+ID4gPiBP
-biBNb24sIDI2IEF1ZyAyMDE5IGF0IDE2OjM1LCBKYW4gU3RhbmNlayA8anN0YW5jZWtAcmVkaGF0
-LmNvbT4NCj4gPiA+ID4gd3JvdGU6DQo+ID4gPiA+ID4gDQo+ID4gPiA+ID4gLS0tLS0gT3JpZ2lu
-YWwgTWVzc2FnZSAtLS0tLQ0KPiA+ID4gPiA+ID4gSGkhDQo+ID4gPiA+ID4gPiA+IERvIHlvdSBz
-ZWUgdGhpcyBMVFAgcHJvdF9oc3ltbGlua3MgZmFpbHVyZSBvbiBsaW51eCBuZXh0DQo+ID4gPiA+
-ID4gPiA+IDIwMTkwODIzIG9uDQo+ID4gPiA+ID4gPiA+IHg4Nl82NCBhbmQgaTM4NiBkZXZpY2Vz
-Pw0KPiA+ID4gPiA+ID4gPiANCj4gPiA+ID4gPiA+ID4gdGVzdCBvdXRwdXQgbG9nLA0KPiA+ID4g
-PiA+ID4gPiB1c2VyYWRkOiBmYWlsdXJlIHdoaWxlIHdyaXRpbmcgY2hhbmdlcyB0byAvZXRjL3Bh
-c3N3ZA0KPiA+ID4gPiA+ID4gPiB1c2VyYWRkOiAvaG9tZS9oc3ltIHdhcyBjcmVhdGVkLCBidXQg
-Y291bGQgbm90IGJlIHJlbW92ZWQNCj4gPiA+ID4gPiA+IA0KPiA+ID4gPiA+ID4gVGhpcyBsb29r
-cyBsaWtlIGFuIHVucmVsYXRlZCBwcm9ibGVtLCBmYWlsdXJlIHRvIHdyaXRlIHRvDQo+ID4gPiA+
-ID4gPiAvZXRjL3Bhc3N3ZA0KPiA+ID4gPiA+ID4gcHJvYmFibHkgbWVhbnMgdGhhdCBmaWxlc3lz
-dGVtIGlzIGZ1bGwgb3Igc29tZSBwcm9ibGVtDQo+ID4gPiA+ID4gPiBoYXBwZW5kDQo+ID4gPiA+
-ID4gPiBhbmQgaG93DQo+ID4gPiA+ID4gPiBpcyByZW1vdW50ZWQgUk8uDQo+ID4gPiA+ID4gDQo+
-ID4gPiA+ID4gSW4gTmFyZXNoJyBleGFtcGxlLCByb290IGlzIG9uIE5GUzoNCj4gPiA+ID4gPiAg
-IHJvb3Q9L2Rldi9uZnMgcncNCj4gPiA+ID4gPiAgDQo+ID4gPiA+ID4gbmZzcm9vdD0xMC42Ni4x
-Ni4xMjM6L3Zhci9saWIvbGF2YS9kaXNwYXRjaGVyL3RtcC84ODY0MTIvZXh0cg0KPiA+ID4gPiA+
-IGFjdC0NCj4gPiA+ID4gPiBuZnNyb290ZnMtdHl1ZXZveG0sdGNwLGhhcmQsaW50cg0KPiA+ID4g
-PiANCj4gPiA+ID4gUmlnaHQgIQ0KPiA+ID4gPiByb290IGlzIG1vdW50ZWQgb24gTkZTLg0KPiA+
-ID4gPiANCj4gPiA+ID4gPiAxMC42Ni4xNi4xMjM6L3Zhci9saWIvbGF2YS9kaXNwYXRjaGVyL3Rt
-cC84ODY0MTIvZXh0cmFjdC0NCj4gPiA+ID4gPiBuZnNyb290ZnMtdHl1ZXZveG0NCj4gPiA+ID4g
-PiBvbiAvIHR5cGUgbmZzDQo+ID4gPiA+ID4gKHJ3LHJlbGF0aW1lLHZlcnM9Mixyc2l6ZT00MDk2
-LHdzaXplPTQwOTYsbmFtbGVuPTI1NSxoYXJkLG5vbA0KPiA+ID4gPiA+IG9jaywNCj4gPiA+ID4g
-PiBwcm90bz10Y3AsdGltZW89NjAwLHJldHJhbnM9MixzZWM9c3lzLG1vdW50YWRkcj0xMC42Ni4x
-Ni4xMjMsDQo+ID4gPiA+ID4gbW91bg0KPiA+ID4gPiA+IHR2ZXJzPTEsbW91bnRwcm90bz10Y3As
-bG9jYWxfbG9jaz1hbGwsYWRkcj0xMC42Ni4xNi4xMjMpDQo+ID4gPiA+ID4gZGV2dG1wZnMgb24g
-L2RldiB0eXBlIGRldnRtcGZzDQo+ID4gPiA+ID4gKHJ3LHJlbGF0aW1lLHNpemU9Mzk3NzY0MGss
-bnJfaW5vZGVzPTk5NDQxMCxtb2RlPTc1NSkNCj4gPiA+ID4gPiANCj4gPiANCj4gPiBUaGUgb25s
-eSB0aGluZyBJIGNhbiB0aGluayBvZiB0aGF0IG1pZ2h0IGNhdXNlIGFuIEVJTyBvbiBORlN2Mg0K
-PiA+IHdvdWxkIGJlDQo+ID4gdGhpcyBwYXRjaA0KPiA+IGh0dHA6Ly9naXQubGludXgtbmZzLm9y
-Zy8/cD10cm9uZG15L2xpbnV4LW5mcy5naXQ7YT1jb21taXRkaWZmO2g9NjI3ZDQ4ZTU5N2VjNTk5
-M2M0YWJiM2I4MWRjNzVlNTU0YTA3YzdjMA0KPiA+IGFzc3VtaW5nIHRoYXQgYSBiaW5kLXJlbGF0
-ZWQgZXJyb3IgaXMgbGVha2luZyB0aHJvdWdoLg0KPiA+IA0KPiA+IEknZCBzdWdnZXN0IHNvbWV0
-aGluZyBsaWtlIHRoZSBmb2xsb3dpbmcgdG8gZml4IGl0IHVwOg0KPiANCj4gTm8gY2hhbmdlIHdp
-dGggdGhhdCBwYXRjaCwNCj4gYnV0IGZvbGxvd2luZyBvbmUgZml4ZXMgaXQgZm9yIG1lOg0KPiAN
-Cj4gZGlmZiAtLWdpdCBhL2ZzL25mcy9wYWdlbGlzdC5jIGIvZnMvbmZzL3BhZ2VsaXN0LmMNCj4g
-aW5kZXggMjBiMzcxN2NkN2NhLi41NmNlZmEwYWI4MDQgMTAwNjQ0DQo+IC0tLSBhL2ZzL25mcy9w
-YWdlbGlzdC5jDQo+ICsrKyBiL2ZzL25mcy9wYWdlbGlzdC5jDQo+IEBAIC01OTAsNyArNTkwLDcg
-QEAgc3RhdGljIHZvaWQgbmZzX3BnaW9fcnBjc2V0dXAoc3RydWN0DQo+IG5mc19wZ2lvX2hlYWRl
-ciAqaGRyLA0KPiAgICAgICAgIH0NCj4gIA0KPiAgICAgICAgIGhkci0+cmVzLmZhdHRyICAgPSAm
-aGRyLT5mYXR0cjsNCj4gLSAgICAgICBoZHItPnJlcy5jb3VudCAgID0gMDsNCj4gKyAgICAgICBo
-ZHItPnJlcy5jb3VudCAgID0gY291bnQ7DQo+ICAgICAgICAgaGRyLT5yZXMuZW9mICAgICA9IDA7
-DQo+ICAgICAgICAgaGRyLT5yZXMudmVyZiAgICA9ICZoZHItPnZlcmY7DQo+ICAgICAgICAgbmZz
-X2ZhdHRyX2luaXQoJmhkci0+ZmF0dHIpOw0KPiANCj4gd2hpY2ggaXMgZnVuY3Rpb25hbGx5IHJl
-dmVydCBvZiAiTkZTOiBGaXggaW5pdGlhbGlzYXRpb24gb2YgSS9PDQo+IHJlc3VsdCBzdHJ1Y3Qg
-aW4gbmZzX3BnaW9fcnBjc2V0dXAiLg0KPiANCj4gVGhpcyBodW5rIGNhdWdodCBteSBleWUsIGNv
-dWxkIHJlcy5lb2YgPT0gMCBleHBsYWluIHRob3NlIEkvTyBlcnJvcnM/DQoNCkludGVyZXN0aW5n
-IGh5cG90aGVzaXMuIEl0IGNvdWxkIGlmIHJlcy5jb3VudCBlbmRzIHVwIGJlaW5nIDAuIFNvIGRv
-ZXMNCnRoZSBmb2xsb3dpbmcgYWxzbyBmaXggdGhlIHByb2JsZW0/DQo4PC0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCkZyb20gYjViYzA4MTIzNTBlOTRmOGM5MzMxMTc0
-ZDIyZjI0NjkyNDExYWVmOSBNb24gU2VwIDE3IDAwOjAwOjAwIDIwMDENCkZyb206IFRyb25kIE15
-a2xlYnVzdCA8dHJvbmQubXlrbGVidXN0QGhhbW1lcnNwYWNlLmNvbT4NCkRhdGU6IE1vbiwgMjYg
-QXVnIDIwMTkgMjA6NDE6MTYgLTA0MDANClN1YmplY3Q6IFtQQVRDSF0gTkZTdjI6IEZpeCBlb2Yg
-aGFuZGxpbmcNCg0KSWYgd2UgcmVjZWl2ZWQgYSByZXBseSBmcm9tIHRoZSBzZXJ2ZXIgd2l0aCBh
-IHplcm8gbGVuZ3RoIHJlYWQgYW5kDQpubyBlcnJvciwgdGhlbiB0aGF0IGltcGxpZXMgd2UgYXJl
-IGF0IGVvZi4NCg0KU2lnbmVkLW9mZi1ieTogVHJvbmQgTXlrbGVidXN0IDx0cm9uZC5teWtsZWJ1
-c3RAaGFtbWVyc3BhY2UuY29tPg0KLS0tDQogZnMvbmZzL3Byb2MuYyB8IDMgKystDQogMSBmaWxl
-IGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KDQpkaWZmIC0tZ2l0IGEv
-ZnMvbmZzL3Byb2MuYyBiL2ZzL25mcy9wcm9jLmMNCmluZGV4IDU1NTJmYThiNmUxMi4uNTkxOTg3
-ODU0OWQyIDEwMDY0NA0KLS0tIGEvZnMvbmZzL3Byb2MuYw0KKysrIGIvZnMvbmZzL3Byb2MuYw0K
-QEAgLTU5NCw3ICs1OTQsOCBAQCBzdGF0aWMgaW50IG5mc19yZWFkX2RvbmUoc3RydWN0IHJwY190
-YXNrICp0YXNrLCBzdHJ1Y3QgbmZzX3BnaW9faGVhZGVyICpoZHIpDQogCQkvKiBFbXVsYXRlIHRo
-ZSBlb2YgZmxhZywgd2hpY2ggaXNuJ3Qgbm9ybWFsbHkgbmVlZGVkIGluIE5GU3YyDQogCQkgKiBh
-cyBpdCBpcyBndWFyYW50ZWVkIHRvIGFsd2F5cyByZXR1cm4gdGhlIGZpbGUgYXR0cmlidXRlcw0K
-IAkJICovDQotCQlpZiAoaGRyLT5hcmdzLm9mZnNldCArIGhkci0+cmVzLmNvdW50ID49IGhkci0+
-cmVzLmZhdHRyLT5zaXplKQ0KKwkJaWYgKGhkci0+cmVzLmNvdW50ID09IDAgJiYgaGRyLT5hcmdz
-LmNvdW50ID4gMCB8fA0KKwkJICAgIGhkci0+YXJncy5vZmZzZXQgKyBoZHItPnJlcy5jb3VudCA+
-PSBoZHItPnJlcy5mYXR0ci0+c2l6ZSkNCiAJCQloZHItPnJlcy5lb2YgPSAxOw0KIAl9DQogCXJl
-dHVybiAwOw0KLS0gDQoyLjIxLjANCg0KLS0gDQpUcm9uZCBNeWtsZWJ1c3QNCkxpbnV4IE5GUyBj
-bGllbnQgbWFpbnRhaW5lciwgSGFtbWVyc3BhY2UNCnRyb25kLm15a2xlYnVzdEBoYW1tZXJzcGFj
-ZS5jb20NCg0KDQo=
+--Sig_/Y4raT8zWPYKaFnjrI1cW_Wd
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the vfs tree got a conflict in:
+
+  fs/ceph/super.c
+
+between commit:
+
+  8e4133936f30 ("ceph: auto reconnect after blacklisted")
+
+from the ceph tree and commit:
+
+  108f95bfaa56 ("vfs: Convert ceph to use the new mount API")
+
+from the vfs tree.
+
+I fixed it up (see below, but clearly needs more ..) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/ceph/super.c
+index 03b63b1cd32c,04c67bd20956..000000000000
+--- a/fs/ceph/super.c
++++ b/fs/ceph/super.c
+@@@ -129,275 -129,278 +130,287 @@@ static int ceph_sync_fs(struct super_bl
+   * mount options
+   */
+  enum {
+- 	Opt_wsize,
+- 	Opt_rsize,
+- 	Opt_rasize,
+- 	Opt_caps_wanted_delay_min,
+- 	Opt_caps_wanted_delay_max,
++ 	Opt_acl,
++ 	Opt_asyncreaddir,
+  	Opt_caps_max,
+- 	Opt_readdir_max_entries,
+- 	Opt_readdir_max_bytes,
++ 	Opt_caps_wanted_delay_max,
++ 	Opt_caps_wanted_delay_min,
+  	Opt_congestion_kb,
+- 	Opt_last_int,
+- 	/* int args above */
+- 	Opt_snapdirname,
+- 	Opt_mds_namespace,
+- 	Opt_fscache_uniq,
+- 	Opt_recover_session,
+- 	Opt_last_string,
+- 	/* string args above */
+- 	Opt_dirstat,
+- 	Opt_nodirstat,
+- 	Opt_rbytes,
+- 	Opt_norbytes,
+- 	Opt_asyncreaddir,
+- 	Opt_noasyncreaddir,
++ 	Opt_copyfrom,
+  	Opt_dcache,
+- 	Opt_nodcache,
+- 	Opt_ino32,
+- 	Opt_noino32,
++ 	Opt_dirstat,
+  	Opt_fscache,
+- 	Opt_nofscache,
++ 	Opt_ino32,
++ 	Opt_mds_namespace,
+  	Opt_poolperm,
+- 	Opt_nopoolperm,
+- 	Opt_require_active_mds,
+- 	Opt_norequire_active_mds,
+- #ifdef CONFIG_CEPH_FS_POSIX_ACL
+- 	Opt_acl,
+- #endif
+- 	Opt_noacl,
+  	Opt_quotadf,
+- 	Opt_noquotadf,
+- 	Opt_copyfrom,
+- 	Opt_nocopyfrom,
++ 	Opt_rasize,
++ 	Opt_rbytes,
++ 	Opt_readdir_max_bytes,
++ 	Opt_readdir_max_entries,
+++	Opt_recover_session,
++ 	Opt_require_active_mds,
++ 	Opt_rsize,
++ 	Opt_snapdirname,
++ 	Opt_source,
++ 	Opt_wsize,
+  };
+ =20
+- static match_table_t fsopt_tokens =3D {
+- 	{Opt_wsize, "wsize=3D%d"},
+- 	{Opt_rsize, "rsize=3D%d"},
+- 	{Opt_rasize, "rasize=3D%d"},
+- 	{Opt_caps_wanted_delay_min, "caps_wanted_delay_min=3D%d"},
+- 	{Opt_caps_wanted_delay_max, "caps_wanted_delay_max=3D%d"},
+- 	{Opt_caps_max, "caps_max=3D%d"},
+- 	{Opt_readdir_max_entries, "readdir_max_entries=3D%d"},
+- 	{Opt_readdir_max_bytes, "readdir_max_bytes=3D%d"},
+- 	{Opt_congestion_kb, "write_congestion_kb=3D%d"},
+- 	/* int args above */
+- 	{Opt_snapdirname, "snapdirname=3D%s"},
+- 	{Opt_mds_namespace, "mds_namespace=3D%s"},
+- 	{Opt_recover_session, "recover_session=3D%s"},
+- 	{Opt_fscache_uniq, "fsc=3D%s"},
+- 	/* string args above */
+- 	{Opt_dirstat, "dirstat"},
+- 	{Opt_nodirstat, "nodirstat"},
+- 	{Opt_rbytes, "rbytes"},
+- 	{Opt_norbytes, "norbytes"},
+- 	{Opt_asyncreaddir, "asyncreaddir"},
+- 	{Opt_noasyncreaddir, "noasyncreaddir"},
+- 	{Opt_dcache, "dcache"},
+- 	{Opt_nodcache, "nodcache"},
+- 	{Opt_ino32, "ino32"},
+- 	{Opt_noino32, "noino32"},
+- 	{Opt_fscache, "fsc"},
+- 	{Opt_nofscache, "nofsc"},
+- 	{Opt_poolperm, "poolperm"},
+- 	{Opt_nopoolperm, "nopoolperm"},
+- 	{Opt_require_active_mds, "require_active_mds"},
+- 	{Opt_norequire_active_mds, "norequire_active_mds"},
+- #ifdef CONFIG_CEPH_FS_POSIX_ACL
+- 	{Opt_acl, "acl"},
+- #endif
+- 	{Opt_noacl, "noacl"},
+- 	{Opt_quotadf, "quotadf"},
+- 	{Opt_noquotadf, "noquotadf"},
+- 	{Opt_copyfrom, "copyfrom"},
+- 	{Opt_nocopyfrom, "nocopyfrom"},
+- 	{-1, NULL}
++ static const struct fs_parameter_spec ceph_param_specs[] =3D {
++ 	fsparam_flag_no ("acl",				Opt_acl),
++ 	fsparam_flag_no ("asyncreaddir",		Opt_asyncreaddir),
++ 	fsparam_u32	("caps_max",			Opt_caps_max),
++ 	fsparam_u32	("caps_wanted_delay_max",	Opt_caps_wanted_delay_max),
++ 	fsparam_u32	("caps_wanted_delay_min",	Opt_caps_wanted_delay_min),
++ 	fsparam_s32	("write_congestion_kb",		Opt_congestion_kb),
++ 	fsparam_flag_no ("copyfrom",			Opt_copyfrom),
++ 	fsparam_flag_no ("dcache",			Opt_dcache),
++ 	fsparam_flag_no ("dirstat",			Opt_dirstat),
++ 	__fsparam	(fs_param_is_string, "fsc",	Opt_fscache,
++ 			 fs_param_neg_with_no | fs_param_v_optional),
++ 	fsparam_flag_no ("ino32",			Opt_ino32),
++ 	fsparam_string	("mds_namespace",		Opt_mds_namespace),
++ 	fsparam_flag_no ("poolperm",			Opt_poolperm),
++ 	fsparam_flag_no ("quotadf",			Opt_quotadf),
++ 	fsparam_u32	("rasize",			Opt_rasize),
++ 	fsparam_flag_no ("rbytes",			Opt_rbytes),
++ 	fsparam_s32	("readdir_max_bytes",		Opt_readdir_max_bytes),
++ 	fsparam_s32	("readdir_max_entries",		Opt_readdir_max_entries),
+++	fsparam_string	("recover_session",		Opt_recover_session),
++ 	fsparam_flag_no ("require_active_mds",		Opt_require_active_mds),
++ 	fsparam_u32	("rsize",			Opt_rsize),
++ 	fsparam_string	("snapdirname",			Opt_snapdirname),
++ 	fsparam_string	("source",			Opt_source),
++ 	fsparam_u32	("wsize",			Opt_wsize),
++ 	{}
+  };
+ =20
+- static int parse_fsopt_token(char *c, void *private)
++ static const struct fs_parameter_description ceph_fs_parameters =3D {
++         .name           =3D "ceph",
++         .specs          =3D ceph_param_specs,
++ };
++=20
++ /*
++  * Parse the source parameter.  Distinguish the server list from the path.
++  * Internally we do not include the leading '/' in the path.
++  *
++  * The source will look like:
++  *     <server_spec>[,<server_spec>...]:[<path>]
++  * where
++  *     <server_spec> is <ip>[:<port>]
++  *     <path> is optional, but if present must begin with '/'
++  */
++ static int ceph_parse_source(struct fs_context *fc, struct fs_parameter *=
+param)
+  {
+- 	struct ceph_mount_options *fsopt =3D private;
+- 	substring_t argstr[MAX_OPT_ARGS];
+- 	int token, intval, ret;
+-=20
+- 	token =3D match_token((char *)c, fsopt_tokens, argstr);
+- 	if (token < 0)
+- 		return -EINVAL;
+-=20
+- 	if (token < Opt_last_int) {
+- 		ret =3D match_int(&argstr[0], &intval);
+- 		if (ret < 0) {
+- 			pr_err("bad option arg (not int) at '%s'\n", c);
+- 			return ret;
++ 	struct ceph_config_context *ctx =3D fc->fs_private;
++ 	struct ceph_mount_options *fsopt =3D ctx->mount_options;
++ 	char *dev_name =3D param->string, *dev_name_end;
++ 	int ret;
++=20
++ 	dout("parse_mount_options %p, dev_name '%s'\n", fsopt, dev_name);
++=20
++ 	if (fc->source)
++ 		return invalf(fc, "Multiple sources specified");
++ 	if (!dev_name || !*dev_name)
++ 		return invalf(fc, "Empty source");
++ 	if (dev_name[0] =3D=3D '/')
++ 		return invalf(fc, "Missing colon");
++=20
++ 	dev_name_end =3D strchr(dev_name + 1, '/');
++ 	if (dev_name_end) {
++ 		if (strlen(dev_name_end) > 1) {
++ 			kfree(fsopt->server_path);
++ 			fsopt->server_path =3D kstrdup(dev_name_end, GFP_KERNEL);
++ 			if (!fsopt->server_path)
++ 				return -ENOMEM;
+  		}
+- 		dout("got int token %d val %d\n", token, intval);
+- 	} else if (token > Opt_last_int && token < Opt_last_string) {
+- 		dout("got string token %d val %s\n", token,
+- 		     argstr[0].from);
+  	} else {
+- 		dout("got token %d\n", token);
++ 		dev_name_end =3D dev_name + strlen(dev_name);
+  	}
+ =20
+- 	switch (token) {
++ 	/* Trim off the path and the colon separator */
++ 	dev_name_end--;
++ 	if (*dev_name_end !=3D ':')
++ 		return invalf(fc, "device name is missing path (no : separator in %s)\n=
+",
++ 			      dev_name);
++ 	*dev_name_end =3D 0;
++=20
++ 	dout("device name '%s'\n", dev_name);
++ 	if (fsopt->server_path)
++ 		dout("server path '%s'\n", fsopt->server_path);
++=20
++ 	param->size =3D dev_name_end - dev_name;
++ 	ret =3D ceph_parse_server_specs(ctx->opt, fc,
++ 				      param->string, dev_name_end - dev_name);
++ 	if (ret =3D=3D 0) {
++ 		fc->source =3D param->string;
++ 		param->string =3D NULL;
++ 	}
++=20
++ 	return 0;
++ }
++=20
++ static int ceph_parse_param(struct fs_context *fc, struct fs_parameter *p=
+aram)
++ {
++ 	struct ceph_config_context *ctx =3D fc->fs_private;
++ 	struct ceph_mount_options *fsopt =3D ctx->mount_options;
++ 	struct fs_parse_result result;
++ 	int ret, opt;
++=20
++ 	ret =3D ceph_parse_option(ctx->opt, fc, param);
++ 	if (ret !=3D -ENOPARAM)
++ 		return ret;
++=20
++ 	opt =3D fs_parse(fc, &ceph_fs_parameters, param, &result);
++ 	if (opt < 0)
++ 		return opt;
++=20
++ 	switch (opt) {
++ 	case Opt_source:
++ 		return ceph_parse_source(fc, param);
+  	case Opt_snapdirname:
+  		kfree(fsopt->snapdir_name);
+- 		fsopt->snapdir_name =3D kstrndup(argstr[0].from,
+- 					       argstr[0].to-argstr[0].from,
+- 					       GFP_KERNEL);
+- 		if (!fsopt->snapdir_name)
+- 			return -ENOMEM;
++ 		fsopt->snapdir_name =3D param->string;
++ 		param->string =3D NULL;
+  		break;
+  	case Opt_mds_namespace:
+  		kfree(fsopt->mds_namespace);
+- 		fsopt->mds_namespace =3D kstrndup(argstr[0].from,
+- 						argstr[0].to-argstr[0].from,
+- 						GFP_KERNEL);
+- 		if (!fsopt->mds_namespace)
+- 			return -ENOMEM;
++ 		fsopt->mds_namespace =3D param->string;
++ 		param->string =3D NULL;
+  		break;
+ +	case Opt_recover_session:
+- 		if (!strncmp(argstr[0].from, "no",
+- 			     argstr[0].to - argstr[0].from)) {
+++		if (result.negated) {
+ +			fsopt->flags &=3D ~CEPH_MOUNT_OPT_CLEANRECOVER;
+- 		} else if (!strncmp(argstr[0].from, "clean",
+- 				    argstr[0].to - argstr[0].from)) {
+- 			fsopt->flags |=3D CEPH_MOUNT_OPT_CLEANRECOVER;
+ +		} else {
+- 			return -EINVAL;
+++			fsopt->flags |=3D CEPH_MOUNT_OPT_CLEANRECOVER;
+ +		}
+ +		break;
+- 	case Opt_fscache_uniq:
+- 		kfree(fsopt->fscache_uniq);
+- 		fsopt->fscache_uniq =3D kstrndup(argstr[0].from,
+- 					       argstr[0].to-argstr[0].from,
+- 					       GFP_KERNEL);
+- 		if (!fsopt->fscache_uniq)
+- 			return -ENOMEM;
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
+- 		break;
+- 		/* misc */
+  	case Opt_wsize:
+- 		if (intval < (int)PAGE_SIZE || intval > CEPH_MAX_WRITE_SIZE)
+- 			return -EINVAL;
+- 		fsopt->wsize =3D ALIGN(intval, PAGE_SIZE);
++ 		if (result.uint_32 < (int)PAGE_SIZE || result.uint_32 > CEPH_MAX_WRITE_=
+SIZE)
++ 			goto invalid_value;
++ 		fsopt->wsize =3D ALIGN(result.uint_32, PAGE_SIZE);
+  		break;
+  	case Opt_rsize:
+- 		if (intval < (int)PAGE_SIZE || intval > CEPH_MAX_READ_SIZE)
+- 			return -EINVAL;
+- 		fsopt->rsize =3D ALIGN(intval, PAGE_SIZE);
++ 		if (result.uint_32 < (int)PAGE_SIZE || result.uint_32 > CEPH_MAX_READ_S=
+IZE)
++ 			goto invalid_value;
++ 		fsopt->rsize =3D ALIGN(result.uint_32, PAGE_SIZE);
+  		break;
+  	case Opt_rasize:
+- 		if (intval < 0)
+- 			return -EINVAL;
+- 		fsopt->rasize =3D ALIGN(intval, PAGE_SIZE);
++ 		fsopt->rasize =3D ALIGN(result.uint_32, PAGE_SIZE);
+  		break;
+  	case Opt_caps_wanted_delay_min:
+- 		if (intval < 1)
+- 			return -EINVAL;
+- 		fsopt->caps_wanted_delay_min =3D intval;
++ 		if (result.uint_32 < 1)
++ 			goto invalid_value;
++ 		fsopt->caps_wanted_delay_min =3D result.uint_32;
+  		break;
+  	case Opt_caps_wanted_delay_max:
+- 		if (intval < 1)
+- 			return -EINVAL;
+- 		fsopt->caps_wanted_delay_max =3D intval;
++ 		if (result.uint_32 < 1)
++ 			goto invalid_value;
++ 		fsopt->caps_wanted_delay_max =3D result.uint_32;
+  		break;
+  	case Opt_caps_max:
+- 		if (intval < 0)
+- 			return -EINVAL;
+- 		fsopt->caps_max =3D intval;
++ 		fsopt->caps_max =3D result.uint_32;
+  		break;
+  	case Opt_readdir_max_entries:
+- 		if (intval < 1)
+- 			return -EINVAL;
+- 		fsopt->max_readdir =3D intval;
++ 		if (result.uint_32 < 1)
++ 			goto invalid_value;
++ 		fsopt->max_readdir =3D result.uint_32;
+  		break;
+  	case Opt_readdir_max_bytes:
+- 		if (intval < (int)PAGE_SIZE && intval !=3D 0)
+- 			return -EINVAL;
+- 		fsopt->max_readdir_bytes =3D intval;
++ 		if (result.uint_32 < (int)PAGE_SIZE && result.uint_32 !=3D 0)
++ 			goto invalid_value;
++ 		fsopt->max_readdir_bytes =3D result.uint_32;
+  		break;
+  	case Opt_congestion_kb:
+- 		if (intval < 1024) /* at least 1M */
+- 			return -EINVAL;
+- 		fsopt->congestion_kb =3D intval;
++ 		if (result.uint_32 < 1024) /* at least 1M */
++ 			goto invalid_value;
++ 		fsopt->congestion_kb =3D result.uint_32;
+  		break;
+  	case Opt_dirstat:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_DIRSTAT;
+- 		break;
+- 	case Opt_nodirstat:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_DIRSTAT;
++ 		if (!result.negated)
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_DIRSTAT;
++ 		else
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_DIRSTAT;
+  		break;
+  	case Opt_rbytes:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_RBYTES;
+- 		break;
+- 	case Opt_norbytes:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_RBYTES;
++ 		if (!result.negated)
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_RBYTES;
++ 		else
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_RBYTES;
+  		break;
+  	case Opt_asyncreaddir:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOASYNCREADDIR;
+- 		break;
+- 	case Opt_noasyncreaddir:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOASYNCREADDIR;
++ 		if (!result.negated)
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOASYNCREADDIR;
++ 		else
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOASYNCREADDIR;
+  		break;
+  	case Opt_dcache:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_DCACHE;
+- 		break;
+- 	case Opt_nodcache:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_DCACHE;
++ 		if (!result.negated)
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_DCACHE;
++ 		else
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_DCACHE;
+  		break;
+  	case Opt_ino32:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_INO32;
+- 		break;
+- 	case Opt_noino32:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_INO32;
++ 		if (!result.negated)
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_INO32;
++ 		else
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_INO32;
+  		break;
++=20
+  	case Opt_fscache:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
+- 		kfree(fsopt->fscache_uniq);
+- 		fsopt->fscache_uniq =3D NULL;
+- 		break;
+- 	case Opt_nofscache:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_FSCACHE;
+  		kfree(fsopt->fscache_uniq);
+  		fsopt->fscache_uniq =3D NULL;
++ 		if (result.negated) {
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_FSCACHE;
++ 		} else {
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
++ 			fsopt->fscache_uniq =3D param->string;
++ 			param->string =3D NULL;
++ 		}
+  		break;
++=20
+  	case Opt_poolperm:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOPOOLPERM;
+- 		break;
+- 	case Opt_nopoolperm:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOPOOLPERM;
++ 		if (!result.negated)
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOPOOLPERM;
++ 		else
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOPOOLPERM;
+  		break;
+  	case Opt_require_active_mds:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_MOUNTWAIT;
+- 		break;
+- 	case Opt_norequire_active_mds:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_MOUNTWAIT;
++ 		if (!result.negated)
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_MOUNTWAIT;
++ 		else
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_MOUNTWAIT;
+  		break;
+  	case Opt_quotadf:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOQUOTADF;
+- 		break;
+- 	case Opt_noquotadf:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOQUOTADF;
++ 		if (!result.negated)
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOQUOTADF;
++ 		else
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOQUOTADF;
+  		break;
+  	case Opt_copyfrom:
+- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOCOPYFROM;
+- 		break;
+- 	case Opt_nocopyfrom:
+- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOCOPYFROM;
++ 		if (!result.negated)
++ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOCOPYFROM;
++ 		else
++ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOCOPYFROM;
+  		break;
+- #ifdef CONFIG_CEPH_FS_POSIX_ACL
+  	case Opt_acl:
+- 		fsopt->sb_flags |=3D SB_POSIXACL;
+- 		break;
++ 		if (!result.negated) {
++ #ifdef CONFIG_CEPH_FS_POSIX_ACL
++ 			fc->sb_flags |=3D SB_POSIXACL;
++ #else
++ 			return invalf(fc, "POSIX ACL support is disabled");
+  #endif
+- 	case Opt_noacl:
+- 		fsopt->sb_flags &=3D ~SB_POSIXACL;
++ 		} else {
++ 			fc->sb_flags &=3D ~SB_POSIXACL;
++ 		}
+  		break;
+  	default:
+- 		BUG_ON(token);
++ 		BUG();
+  	}
+  	return 0;
++=20
++ invalid_value:
++ 	return invalf(fc, "ceph: Invalid value for %s", param->key);
+  }
+ =20
+  static void destroy_mount_options(struct ceph_mount_options *args)
+@@@ -996,17 -924,11 +925,11 @@@ static int ceph_set_super(struct super_
+  	s->s_d_op =3D &ceph_dentry_ops;
+  	s->s_export_op =3D &ceph_export_ops;
+ =20
+ -	s->s_time_gran =3D 1000;  /* 1000 ns =3D=3D 1 us */
+ +	s->s_time_gran =3D 1;
+ =20
+- 	ret =3D set_anon_super(s, NULL);  /* what is that second arg for? */
++ 	ret =3D set_anon_super_fc(s, fc);
+  	if (ret !=3D 0)
+- 		goto fail;
+-=20
+- 	return ret;
+-=20
+- fail:
+- 	s->s_fs_info =3D NULL;
+- 	fsc->sb =3D NULL;
++ 		fsc->sb =3D NULL;
+  	return ret;
+  }
+ =20
+
+--Sig_/Y4raT8zWPYKaFnjrI1cW_Wd
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1kgicACgkQAVBC80lX
+0GzHMAgAkuefjQct4SxZn9mA8DgxSj2xrziVZrIxhHsUBeAkbcTt58ZM9ceqjchT
+HF9r0khwK9zM7pPCghoAxd51n7wB07LTEHIf9oj6MSB+RAsYLv9LFMtqlgQSgP7l
+9AqTEecYIYBOVfpcyD4c2l/H7aN7AdVcvvBj+/+B9U8/EEQr9lXxlTl/9XdNDPth
+YmCgVsCPuw8IPZj1e46pwrKXxblSL6jmw0I4XZZA8NeGy/FcVIAVL5JETaX9c+GF
+K4Mq9IFi+RqcZF0urXUbJgwnw56AouMKibjpJ4ILCsrEPFbBQaXMBbqx7lOgy8uM
+UcKZ/kLxYyMjfGbcuPSvfw9wMtlb9g==
+=9uYL
+-----END PGP SIGNATURE-----
+
+--Sig_/Y4raT8zWPYKaFnjrI1cW_Wd--

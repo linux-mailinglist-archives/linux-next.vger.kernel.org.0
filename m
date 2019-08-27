@@ -2,254 +2,170 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFC79E514
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 11:59:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4619E59D
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 12:25:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726574AbfH0J7y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Aug 2019 05:59:54 -0400
-Received: from regular1.263xmail.com ([211.150.70.199]:37140 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725985AbfH0J7y (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 05:59:54 -0400
-Received: from kever.yang?rock-chips.com (unknown [192.168.167.227])
-        by regular1.263xmail.com (Postfix) with ESMTP id 658E1394;
-        Tue, 27 Aug 2019 17:59:44 +0800 (CST)
-X-263anti-spam: KSV:0;BIG:0;
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-KSVirus-check: 0
-X-ADDR-CHECKED4: 1
-X-ABS-CHECKED: 1
-X-SKE-CHECKED: 1
-X-ANTISPAM-LEVEL: 2
-Received: from [192.168.60.65] (unknown [103.29.142.67])
-        by smtp.263.net (postfix) whith ESMTP id P22011T139986332600064S1566899977823430_;
-        Tue, 27 Aug 2019 17:59:43 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <479e90231fda7d7f7efe8bfafc1c7fbb>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: linux-arm-kernel@lists.infradead.org
-X-SENDER-IP: 103.29.142.67
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-Subject: Re: CPUfreq fail on rk3399-firefly
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     Kevin Hilman <khilman@baylibre.com>,
-        kernel-build-reports@lists.linaro.org,
-        linux-rockchip@lists.infradead.org, linux-next@vger.kernel.org,
-        =?UTF-8?B?5byg5pm0?= <elaine.zhang@rock-chips.com>,
-        =?UTF-8?B?6Zer5a2d5Yab?= <andy.yan@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com>
- <7h4l23zwej.fsf@baylibre.com>
- <852dd7d4-520b-7eb0-f307-c3fa9c0ebf2a@rock-chips.com>
- <8953975.ee0vQab4qn@phil>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <8612fed9-53a9-c6bf-0d39-bb70589c2a44@rock-chips.com>
-Date:   Tue, 27 Aug 2019 17:59:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728749AbfH0KZh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Aug 2019 06:25:37 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:42914 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726392AbfH0KZh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 27 Aug 2019 06:25:37 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id F3EB987638;
+        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
+Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E86E35C1B2;
+        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
+Received: from zmail17.collab.prod.int.phx2.redhat.com (zmail17.collab.prod.int.phx2.redhat.com [10.5.83.19])
+        by colo-mx.corp.redhat.com (Postfix) with ESMTP id D53A52551B;
+        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
+Date:   Tue, 27 Aug 2019 06:25:36 -0400 (EDT)
+From:   Jan Stancek <jstancek@redhat.com>
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     naresh kamboju <naresh.kamboju@linaro.org>,
+        the hoang0709 <the_hoang0709@yahoo.com>,
+        linux-next@vger.kernel.org, ltp@lists.linux.it,
+        linux-kernel@vger.kernel.org, chrubis@suse.cz,
+        alexey kodanev <alexey.kodanev@oracle.com>
+Message-ID: <866876796.8349197.1566901536625.JavaMail.zimbra@redhat.com>
+In-Reply-To: <566e862d9bfaf88cdde6d66f0f59033fe6225a22.camel@hammerspace.com>
+References: <CA+G9fYtN2tjHZtjtc8isdsD5hF76teeh2-pngUp+uj3WYdj7jA@mail.gmail.com> <20190826104127.GA14729@haruka> <1264279239.8133737.1566817520787.JavaMail.zimbra@redhat.com> <CA+G9fYsHpNKFHr=ZukVvj+uMJDyHj2Xwb9bCfzPQyYzMjZ0rCw@mail.gmail.com> <203971593.8175020.1566830285708.JavaMail.zimbra@redhat.com> <fcd20866bb836d45b1e384dd68080c671bcde938.camel@hammerspace.com> <2039173876.8300255.1566861172742.JavaMail.zimbra@redhat.com> <566e862d9bfaf88cdde6d66f0f59033fe6225a22.camel@hammerspace.com>
+Subject: Re: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed
+ to run cmd: useradd hsym
 MIME-Version: 1.0
-In-Reply-To: <8953975.ee0vQab4qn@phil>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.40.204.166, 10.4.195.26]
+Thread-Topic: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed
+ to run cmd: useradd hsym
+Thread-Index: YFeV1UC3LeIsRdovt5+kMdO7I/BycvuMo5UAj4lK/k3wd0xbAPZWZFox
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Tue, 27 Aug 2019 10:25:37 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Heiko,
 
-On 2019/8/27 上午10:14, Heiko Stuebner wrote:
-> Hi Kever,
->
-> Am Dienstag, 27. August 2019, 03:54:26 CEST schrieb Kever Yang:
->> On 2019/8/27 上午1:09, Kevin Hilman wrote:
->>> Kever Yang <kever.yang@rock-chips.com> writes:
->>>>        I want to have a test with my board, I can get the Image and dtb
->>>> from the link for the job,
->>>>
->>>> but how can I get the randisk which is named initrd-SDbyy2.cpio.gz?
->>> The ramdisk images are here:
->>>
->>>     https://storage.kernelci.org/images/rootfs/buildroot/kci-2019.02/arm64/base/
->>>
->>> in the kernelCI logs the ramdisk is slightly modified because the kernel
->>> modules have been inserted into the cpio archive.
->>>
->>> However, for the purposes of this test, you can just test with the
->>> unmodified rootfs.cpio.gz above.
->>
->> I try with this ramdisk, and it hangs at fan53555 init, but not get into
->> cpufreq.
->>
->> Any suggestion?
-> My guess would be the fcs,suspend-voltage-selector maybe?
->
-> I.e. old uboots somehow set the voltage gpio strangely, so you'd need
-> 	fcs,suspend-voltage-selector = <0>
+----- Original Message -----
+> On Mon, 2019-08-26 at 19:12 -0400, Jan Stancek wrote:
+> > ----- Original Message -----
+> > > On Mon, 2019-08-26 at 10:38 -0400, Jan Stancek wrote:
+> > > > ----- Original Message -----
+> > > > > Hi Jan and Cyril,
+> > > > > 
+> > > > > On Mon, 26 Aug 2019 at 16:35, Jan Stancek <jstancek@redhat.com>
+> > > > > wrote:
+> > > > > > 
+> > > > > > ----- Original Message -----
+> > > > > > > Hi!
+> > > > > > > > Do you see this LTP prot_hsymlinks failure on linux next
+> > > > > > > > 20190823 on
+> > > > > > > > x86_64 and i386 devices?
+> > > > > > > > 
+> > > > > > > > test output log,
+> > > > > > > > useradd: failure while writing changes to /etc/passwd
+> > > > > > > > useradd: /home/hsym was created, but could not be removed
+> > > > > > > 
+> > > > > > > This looks like an unrelated problem, failure to write to
+> > > > > > > /etc/passwd
+> > > > > > > probably means that filesystem is full or some problem
+> > > > > > > happend
+> > > > > > > and how
+> > > > > > > is remounted RO.
+> > > > > > 
+> > > > > > In Naresh' example, root is on NFS:
+> > > > > >   root=/dev/nfs rw
+> > > > > >  
+> > > > > > nfsroot=10.66.16.123:/var/lib/lava/dispatcher/tmp/886412/extr
+> > > > > > act-
+> > > > > > nfsrootfs-tyuevoxm,tcp,hard,intr
+> > > > > 
+> > > > > Right !
+> > > > > root is mounted on NFS.
+> > > > > 
+> > > > > > 10.66.16.123:/var/lib/lava/dispatcher/tmp/886412/extract-
+> > > > > > nfsrootfs-tyuevoxm
+> > > > > > on / type nfs
+> > > > > > (rw,relatime,vers=2,rsize=4096,wsize=4096,namlen=255,hard,nol
+> > > > > > ock,
+> > > > > > proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.66.16.123,
+> > > > > > moun
+> > > > > > tvers=1,mountproto=tcp,local_lock=all,addr=10.66.16.123)
+> > > > > > devtmpfs on /dev type devtmpfs
+> > > > > > (rw,relatime,size=3977640k,nr_inodes=994410,mode=755)
+> > > > > > 
+> > > 
+> > > The only thing I can think of that might cause an EIO on NFSv2
+> > > would be
+> > > this patch
+> > > http://git.linux-nfs.org/?p=trondmy/linux-nfs.git;a=commitdiff;h=627d48e597ec5993c4abb3b81dc75e554a07c7c0
+> > > assuming that a bind-related error is leaking through.
+> > > 
+> > > I'd suggest something like the following to fix it up:
+> > 
+> > No change with that patch,
+> > but following one fixes it for me:
+> > 
+> > diff --git a/fs/nfs/pagelist.c b/fs/nfs/pagelist.c
+> > index 20b3717cd7ca..56cefa0ab804 100644
+> > --- a/fs/nfs/pagelist.c
+> > +++ b/fs/nfs/pagelist.c
+> > @@ -590,7 +590,7 @@ static void nfs_pgio_rpcsetup(struct
+> > nfs_pgio_header *hdr,
+> >         }
+> >  
+> >         hdr->res.fattr   = &hdr->fattr;
+> > -       hdr->res.count   = 0;
+> > +       hdr->res.count   = count;
+> >         hdr->res.eof     = 0;
+> >         hdr->res.verf    = &hdr->verf;
+> >         nfs_fattr_init(&hdr->fattr);
+> > 
+> > which is functionally revert of "NFS: Fix initialisation of I/O
+> > result struct in nfs_pgio_rpcsetup".
+> > 
+> > This hunk caught my eye, could res.eof == 0 explain those I/O errors?
+> 
+> Interesting hypothesis. It could if res.count ends up being 0. So does
+> the following also fix the problem?
 
+It didn't fix it.
 
-Both U-Boot and Kernel dts are still '<0>' for this property, and this 
-is correct setting for cpu_b;
+That theory is probably not correct for this case, since EIO I see appears
+to originate from write and nfs_writeback_result(). This function also
+produces message we saw in logs from Naresh.
 
-> while newer uboots I think do configure the gpio, needing a value of <1>;
+I can't find where/how is resp->count updated on WRITE reply in NFSv2.
+Issue also goes away with patch below, though I can't speak about its correctness:
 
+NFS version     Type    Test    Return code
+nfsvers=2       tcp     -b:base         0
+nfsvers=2       tcp     -g:general      0
+nfsvers=2       tcp     -s:special      0
+nfsvers=2       tcp     -l:lock         0
+Total time: 141
 
-There is no 'vsel-gpio' in both upstream U-Boot and kernel dts, while 
-there is a "vsel-gpios = <&gpio1 18 GPIO_ACTIVE_HIGH>;"
-
-in rockchip kernel 4.4 dts. so I think there is no gpio setting on 
-upstream code?
-
-And kernelci's test case, does not update the bootloader, only update 
-kernel.
-
-
-Thanks,
-
-- Kever
-
->
-> So try to swap that number in the dts perhaps for a start?
->
->
-> Heiko
->
->
->>    My boot log:
->>
->> https://paste.ubuntu.com/p/WYZKPWp7sk/
->>
->> Thanks,
->>
->> - Kever
->>
->>> Kevin
->>>
->>>
->>>> Thanks,
->>>>
->>>> - Kever
->>>>
->>>> On 2019/8/24 上午1:03, Kevin Hilman wrote:
->>>>> Kevin Hilman <khilman@baylibre.com> writes:
->>>>>
->>>>>> Kever Yang <kever.yang@rock-chips.com> writes:
->>>>>>
->>>>>>> Hi Kevin, Heiko,
->>>>>>>
->>>>>>> On 2019/8/22 上午2:59, Kevin Hilman wrote:
->>>>>>>> Hi Heiko,
->>>>>>>>
->>>>>>>> Heiko Stuebner <heiko@sntech.de> writes:
->>>>>>>>
->>>>>>>>> Am Dienstag, 13. August 2019, 19:35:31 CEST schrieb Kevin Hilman:
->>>>>>>>>> [ resent with correct addr for linux-rockchip list ]
->>>>>>>>>>
->>>>>>>>>> Mark Brown <broonie@kernel.org> writes:
->>>>>>>>>>
->>>>>>>>>>> On Thu, Jul 18, 2019 at 04:28:08AM -0700, kernelci.org bot wrote:
->>>>>>>>>>>
->>>>>>>>>>> Today's -next started failing to boot defconfig on rk3399-firefly:
->>>>>>>>>>>
->>>>>>>>>>>> arm64:
->>>>>>>>>>>>         defconfig:
->>>>>>>>>>>>             gcc-8:
->>>>>>>>>>>>                 rk3399-firefly: 1 failed lab
->>>>>>>>>>> It hits a BUG() trying to set up cpufreq:
->>>>>>>>>>>
->>>>>>>>>>> [   87.381606] cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 200000 KHz
->>>>>>>>>>> [   87.393244] cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 408000 KHz
->>>>>>>>>>> [   87.469777] cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 12000 KHz
->>>>>>>>>>> [   87.488595] cpu cpu4: _generic_set_opp_clk_only: failed to set clock rate: -22
->>>>>>>>>>> [   87.491881] cpufreq: __target_index: Failed to change cpu frequency: -22
->>>>>>>>>>> [   87.495335] ------------[ cut here ]------------
->>>>>>>>>>> [   87.496821] kernel BUG at drivers/cpufreq/cpufreq.c:1438!
->>>>>>>>>>> [   87.498462] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->>>>>>>>>>>
->>>>>>>>>>> I'm struggling to see anything relevant in the diff from yesterday, the
->>>>>>>>>>> unlisted frequency warnings were there in the logs yesterday but no oops
->>>>>>>>>>> and I'm not seeing any changes in cpufreq, clk or anything relevant
->>>>>>>>>>> looking.
->>>>>>>>>>>
->>>>>>>>>>> Full bootlog and other info can be found here:
->>>>>>>>>>>
->>>>>>>>>>> 	https://kernelci.org/boot/id/5d302d8359b51498d049e983/
->>>>>>>>>> I confirm that disabling CPUfreq in the defconfig (CONFIG_CPU_FREQ=n)
->>>>>>>>>> makes the firefly board start working again.
->>>>>>>>>>
->>>>>>>>>> Note that the default defconfig enables the "performance" CPUfreq
->>>>>>>>>> governor as the default governor, so during kernel boot, it will always
->>>>>>>>>> switch to the max frequency.
->>>>>>>>>>
->>>>>>>>>> For fun, I set the default governor to "userspace" so the kernel
->>>>>>>>>> wouldn't make any OPP changes, and that leads to a slightly more
->>>>>>>>>> informative splat[1]
->>>>>>>>>>
->>>>>>>>>> There is still an OPP change happening because the detected OPP is not
->>>>>>>>>> one that's listed in the table, so it tries to change to a listed OPP
->>>>>>>>>> and fails in the bowels of clk_set_rate()
->>>>>>>>> Though I think that might only be a symptom as well.
->>>>>>>>> Both the PLL setting code as well as the actual cpu-clock implementation
->>>>>>>>> is unchanged since 2017 (and runs just fine on all boards in my farm).
->>>>>>>>>
->>>>>>>>> One source for these issues is often the regulator supplying the cpu
->>>>>>>>> going haywire - aka the voltage not matching the opp.
->>>>>>>>>
->>>>>>>>> As in this error-case it's CPU4 being set, this would mean it might
->>>>>>>>> be the big cluster supplied by the external syr825 (fan5355 clone)
->>>>>>>>> that might act up. In the Firefly-rk3399 case this is even stranger.
->>>>>>>>>
->>>>>>>>> There is a discrepancy between the "fcs,suspend-voltage-selector"
->>>>>>>>> between different bootloader versions (how the selection-pin is set up),
->>>>>>>>> so the kernel might actually write his requested voltage to the wrong
->>>>>>>>> register (not the one for actual voltage, but the second set used for
->>>>>>>>> the suspend voltage).
->>>>>>>>>
->>>>>>>>> Did you by chance swap bootloaders at some point in recent past?
->>>>>>>> No, haven't touched bootloader since I initially setup the board.
->>>>>>> The CPU voltage does not affect by bootloader for kernel should have its
->>>>>>> own opp-table,
->>>>>>>
->>>>>>> the bootloader may only affect the center/logic power supply.
->>>>>>>
->>>>>>>>> I'd assume [2] might actually be the same issue last year, though
->>>>>>>>> the CI-logs are not available anymore it seems.
->>>>>>>>>
->>>>>>>>> Could you try to set the vdd_cpu_b regulator to disabled, so that
->>>>>>>>> cpufreq for this cluster defers and see what happens?
->>>>>>>> Yes, this change[1] definitely makes things boot reliably again, so
->>>>>>>> there's defintiely something a bit unstable with this regulator, at
->>>>>>>> least on this firefly.
->>>>>>> Is it possible to target which patch introduce this bug? This board
->>>>>>> should have work correctly for a long time with upstream source code.
->>>>>> Unfortunately, it seems to be a regular, but intermittent failure, so
->>>>>> bisection is not producing anything reliable.
->>>>>>
->>>>>> You can see that both in mainline[1] and in linux-next[2] there are
->>>>>> periodic failures, but it's hard to see any patterns.
->>>>> Even worse, I (re)tested mainline for versions that were previously
->>>>> passing (v5.2, v5.3-rc5) and they are also failing now.
->>>>>
->>>>> They work again if I disable that regulator as suggested by Heiko.
->>>>>
->>>>> So this is increasingly pointing to failing hardware.
->>>>>
->>>>> Kevin
->>>>>
->>>>>
->>>>>
->>>
->>
->>
->
->
->
->
->
-
-
+diff --git a/fs/nfs/nfs2xdr.c b/fs/nfs/nfs2xdr.c
+index cbc17a203248..4913c6da270b 100644
+--- a/fs/nfs/nfs2xdr.c
++++ b/fs/nfs/nfs2xdr.c
+@@ -897,6 +897,16 @@ static int nfs2_xdr_dec_writeres(struct rpc_rqst *req, struct xdr_stream *xdr,
+                                 void *data)
+ {
+        struct nfs_pgio_res *result = data;
++       struct rpc_task *rq_task  = req->rq_task;
++
++       if (rq_task) {
++               struct nfs_pgio_args *args = rq_task->tk_msg.rpc_argp;
++
++               if (args) {
++                       result->count = args->count;
++               }
++       }
+ 
+        /* All NFSv2 writes are "file sync" writes */
+        result->verf->committed = NFS_FILE_SYNC;

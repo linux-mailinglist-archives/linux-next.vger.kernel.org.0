@@ -2,97 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D229EF2D
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 17:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5319EF66
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 17:50:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbfH0Pl4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Aug 2019 11:41:56 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:44286 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726190AbfH0Plz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 11:41:55 -0400
-Received: by mail-wr1-f65.google.com with SMTP id p17so19289639wrf.11;
-        Tue, 27 Aug 2019 08:41:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=Bxn2QHPQaoLTHaLh1S1+V6Gu5XpRhaWezO35cut4r8Q=;
-        b=m0wMJypz/tc4k1Ou0Ldau4jp2J1H1jOI6WoNCDkVdCxF+Csdl+8WkWLs44l9DRZkMf
-         acBefESXpA/28xRsiFZaLkb3/N2Qi3agh+kqbWzy73VABGuQrT74ouU+JHsx66g6yzZG
-         LSZqOkiezFpiNNpAh/gIg291QBhVNaAVfiagkbNiPmgq7ZO3YbqkAEtU05bI1AmZ9Cr/
-         Aq/0YkrProxOmI9BPqvo8AKQhVWTOHYyTcyEyOe+YnLGYbgrMJdwhnPCGlsIB4oeP4kG
-         EJT0QMPMWeEzoeqDjFEAfp/MKtz6URt/q6+jUAcBxNkQ0huvjplA4cGEi9SZf5lBJKpC
-         pTQQ==
+        id S1728584AbfH0PuI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Aug 2019 11:50:08 -0400
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:42151 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726871AbfH0PuI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 11:50:08 -0400
+Received: by mail-ot1-f67.google.com with SMTP id j7so19113568ota.9;
+        Tue, 27 Aug 2019 08:50:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=Bxn2QHPQaoLTHaLh1S1+V6Gu5XpRhaWezO35cut4r8Q=;
-        b=T0FB7/c5kLkucDc14TAKd2Qc1Z9DMXq/bM3uQ4U5VWIsmzmfNWGHrPXkkAYODsYbYT
-         +21pgv+3owk++rPWnGwjCVoaJmH0R7jecS5qF0pY1dIj+pV3itIxu8WjWOPOkCgA8IAg
-         rbg793BVsCaAqT2JF/2ijRaNeP3NPJYl2EWupfxsQ6CxT2ayX2RAopih4fEfkqyG8h6G
-         pNMjBywYYrUpZLYL5msJrKAMEE2R3nVVtes3xJ8YRS2GlBua5tbUhPg8dx84ASdPQNLr
-         6Wgz6JPyxBf/nM3xmwQvHpOP0LQDzf4Hp3WR/4Z4m/oXgHjQTJPEVWV7knu+iCunKX37
-         1yQQ==
-X-Gm-Message-State: APjAAAWkRxmk2FFwl/YWqpqpP5B4kNmPCLvDqMBGOzhZa5kd/uyJwnec
-        V4QXR+Gnuqt0BQBa/L0P2m2nWLhypEm/0zsGU77tWQuoIPA=
-X-Google-Smtp-Source: APXvYqwKyiFqrPlh5yDoI88FFfW2D35INgtoq/jJAH8Hvv3vnTy27JdzrBLkWuV/hqW+iv91wYtkEr18W0/Cd+GtVG4=
-X-Received: by 2002:a5d:6ccd:: with SMTP id c13mr8239699wrc.4.1566920513497;
- Tue, 27 Aug 2019 08:41:53 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=qYug+8A/OHB6xQ/Ambyfj+28FmEVXD07tPk7WO6HC3Y=;
+        b=Kf5LxI3IoXvREjjgXrfbR5kPTGN9hKsTJRrQJAtT0j59m83wMzylY/PD500IHduPt/
+         gPVyu7hOSeZnjEm2ZIccMrP/YBrTM/b1zpSKy3BTmnMS9AkcL5eJ3gvSkjIzVWYJP3MW
+         J0HOuSkmBPAn98RPJ6oVt3dEbvPTkUPJzqPJPJvXLnF0PT70qHYLYRcKTt/6ICp34FoJ
+         qRJlQcuVwYYRGA+hc7sVTcldtBSHGv/whVMNdNEU8rJ1kowCiEMIrHhCLQq1RKBC4Asj
+         ng4tfuRhk1UkvreSFSArU45wgJLHL69VLgdEmMx0Jqv6yFASsSbvXmki8dRyJT6CgyZH
+         /kAw==
+X-Gm-Message-State: APjAAAUbgsbD2KSPnedMwgQiZ9qNeRTOm87KyS4UsvXfbagX7l7jqRH/
+        w8REN4SEZ06UnvUbGKoPrg==
+X-Google-Smtp-Source: APXvYqyQsr3HFBe8hthN1uJ3CQ2iXfwZPpOybLyrFsnNasFsgN+n7AhakqmuQnHfxjBkmOE1nELixg==
+X-Received: by 2002:a9d:7dc4:: with SMTP id k4mr20904237otn.171.1566921006959;
+        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
+Received: from localhost (24-155-109-49.dyn.grandenetworks.net. [24.155.109.49])
+        by smtp.gmail.com with ESMTPSA id a22sm5137067otr.3.2019.08.27.08.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2019 08:50:06 -0700 (PDT)
+Date:   Tue, 27 Aug 2019 10:50:05 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
+ ls2080a compatibility string to bindings
+Message-ID: <20190827155005.GA18581@bogus>
+References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+ <20190821110640.GC5128@sirena.co.uk>
+ <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <20190822184927.GH23391@sirena.co.uk>
 MIME-Version: 1.0
-References: <20190827190526.6f27e763@canb.auug.org.au> <3b5936f1-e471-846a-d133-0e17d290d2f3@infradead.org>
-In-Reply-To: <3b5936f1-e471-846a-d133-0e17d290d2f3@infradead.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 27 Aug 2019 11:41:41 -0400
-Message-ID: <CADnq5_NBnovQGuhsoEsw+S-LBDU-CbWXKm=mJ3Oy6PcgUeiOQw@mail.gmail.com>
-Subject: Re: linux-next: Tree for Aug 27 (amdgpu)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190822184927.GH23391@sirena.co.uk>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 11:31 AM Randy Dunlap <rdunlap@infradead.org> wrote=
-:
->
-> On 8/27/19 2:05 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20190826:
-> >
->
-> on i386:
->
-> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_hwseq.c: In funct=
-ion =E2=80=98dcn20_hw_sequencer_construct=E2=80=99:
-> ../drivers/gpu/drm/amd/amdgpu/../display/dc/dcn20/dcn20_hwseq.c:2127:28: =
-error: =E2=80=98dcn20_dsc_pg_control=E2=80=99 undeclared (first use in this=
- function); did you mean =E2=80=98dcn20_dpp_pg_control=E2=80=99?
->   dc->hwss.dsc_pg_control =3D dcn20_dsc_pg_control;
->                             ^~~~~~~~~~~~~~~~~~~~
->                             dcn20_dpp_pg_control
->
->
-> Full randconfig file is attached.
+On Thu, Aug 22, 2019 at 07:49:27PM +0100, Mark Brown wrote:
+> On Thu, Aug 22, 2019 at 06:39:18AM +0000, Ashish Kumar wrote:
+> 
+> > > > Please use subject lines matching the style for the subsystem.  This
+> > > > makes it easier for people to identify relevant patches.
+> > Hi Mark,
+> 
+> > After looking at some patch in Documentation/devicetree/bindings/spi/
+> > I think I should update subject line to
+> > dt-bindings: spi: Add ls2080-qspi compatible string for FSL QSPI driver
+> > or 
+> > doc: qspi: Add ls2080-qspi compatible to DT bindings for FSL QSPI driver
+> 
+> Drop the dt-bindings:.
 
-Fixed:
-https://cgit.freedesktop.org/~agd5f/linux/commit/?h=3Ddrm-next&id=3Dda26ded=
-3b2fff646d28559004195abe353bce49b
+If you do 'git log --oneline Documentation/devicetree/bindings/' you'll 
+notice that SPI and ASoC are the oddballs now. I don't really care
+except it does add to tribal knowledge needed regarding maintainers' 
+requirements.
 
-Alex
-
->
-> --
-> ~Randy
-> _______________________________________________
-> amd-gfx mailing list
-> amd-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
+Rob

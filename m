@@ -2,170 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DB4619E59D
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 12:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F039E6BF
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 13:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728749AbfH0KZh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Aug 2019 06:25:37 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:42914 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726392AbfH0KZh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 27 Aug 2019 06:25:37 -0400
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id F3EB987638;
-        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
-Received: from colo-mx.corp.redhat.com (colo-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E86E35C1B2;
-        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
-Received: from zmail17.collab.prod.int.phx2.redhat.com (zmail17.collab.prod.int.phx2.redhat.com [10.5.83.19])
-        by colo-mx.corp.redhat.com (Postfix) with ESMTP id D53A52551B;
-        Tue, 27 Aug 2019 10:25:36 +0000 (UTC)
-Date:   Tue, 27 Aug 2019 06:25:36 -0400 (EDT)
-From:   Jan Stancek <jstancek@redhat.com>
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     naresh kamboju <naresh.kamboju@linaro.org>,
-        the hoang0709 <the_hoang0709@yahoo.com>,
-        linux-next@vger.kernel.org, ltp@lists.linux.it,
-        linux-kernel@vger.kernel.org, chrubis@suse.cz,
-        alexey kodanev <alexey.kodanev@oracle.com>
-Message-ID: <866876796.8349197.1566901536625.JavaMail.zimbra@redhat.com>
-In-Reply-To: <566e862d9bfaf88cdde6d66f0f59033fe6225a22.camel@hammerspace.com>
-References: <CA+G9fYtN2tjHZtjtc8isdsD5hF76teeh2-pngUp+uj3WYdj7jA@mail.gmail.com> <20190826104127.GA14729@haruka> <1264279239.8133737.1566817520787.JavaMail.zimbra@redhat.com> <CA+G9fYsHpNKFHr=ZukVvj+uMJDyHj2Xwb9bCfzPQyYzMjZ0rCw@mail.gmail.com> <203971593.8175020.1566830285708.JavaMail.zimbra@redhat.com> <fcd20866bb836d45b1e384dd68080c671bcde938.camel@hammerspace.com> <2039173876.8300255.1566861172742.JavaMail.zimbra@redhat.com> <566e862d9bfaf88cdde6d66f0f59033fe6225a22.camel@hammerspace.com>
-Subject: Re: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed
- to run cmd: useradd hsym
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.40.204.166, 10.4.195.26]
-Thread-Topic: Linux-next-20190823: x86_64/i386: prot_hsymlinks.c:325: Failed
- to run cmd: useradd hsym
-Thread-Index: YFeV1UC3LeIsRdovt5+kMdO7I/BycvuMo5UAj4lK/k3wd0xbAPZWZFox
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Tue, 27 Aug 2019 10:25:37 +0000 (UTC)
+        id S1726380AbfH0L27 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 27 Aug 2019 07:28:59 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:3870 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725793AbfH0L27 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 27 Aug 2019 07:28:59 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7RBILl1108140
+        for <linux-next@vger.kernel.org>; Tue, 27 Aug 2019 07:28:58 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2un38uh5mh-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Tue, 27 Aug 2019 07:28:58 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <sachinp@linux.vnet.ibm.com>;
+        Tue, 27 Aug 2019 12:28:56 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 27 Aug 2019 12:28:53 +0100
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7RBSq0O53346356
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 27 Aug 2019 11:28:52 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 11646AE051;
+        Tue, 27 Aug 2019 11:28:52 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4917EAE04D;
+        Tue, 27 Aug 2019 11:28:51 +0000 (GMT)
+Received: from [9.199.196.173] (unknown [9.199.196.173])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 27 Aug 2019 11:28:51 +0000 (GMT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [powerpc]WARN : arch/powerpc/platforms/powernv/smp.c:160
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <B641A885-76DF-4976-81AE-73D41AD71BAF@linux.vnet.ibm.com>
+Date:   Tue, 27 Aug 2019 16:58:50 +0530
+Cc:     linuxppc-dev@ozlabs.org, linux-next@vger.kernel.org,
+        ego@linux.vnet.ibm.com
+Content-Transfer-Encoding: 8BIT
+References: <AB1A20B4-523B-491E-AB89-124AD2810C17@linux.vnet.ibm.com>
+ <87imqk4nad.fsf@concordia.ellerman.id.au>
+ <B641A885-76DF-4976-81AE-73D41AD71BAF@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-TM-AS-GCONF: 00
+x-cbid: 19082711-0020-0000-0000-0000036474C9
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19082711-0021-0000-0000-000021B9C14C
+Message-Id: <42157B13-A906-4F0F-90F8-CA88A5A829BE@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-27_02:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908270129
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
------ Original Message -----
-> On Mon, 2019-08-26 at 19:12 -0400, Jan Stancek wrote:
-> > ----- Original Message -----
-> > > On Mon, 2019-08-26 at 10:38 -0400, Jan Stancek wrote:
-> > > > ----- Original Message -----
-> > > > > Hi Jan and Cyril,
-> > > > > 
-> > > > > On Mon, 26 Aug 2019 at 16:35, Jan Stancek <jstancek@redhat.com>
-> > > > > wrote:
-> > > > > > 
-> > > > > > ----- Original Message -----
-> > > > > > > Hi!
-> > > > > > > > Do you see this LTP prot_hsymlinks failure on linux next
-> > > > > > > > 20190823 on
-> > > > > > > > x86_64 and i386 devices?
-> > > > > > > > 
-> > > > > > > > test output log,
-> > > > > > > > useradd: failure while writing changes to /etc/passwd
-> > > > > > > > useradd: /home/hsym was created, but could not be removed
-> > > > > > > 
-> > > > > > > This looks like an unrelated problem, failure to write to
-> > > > > > > /etc/passwd
-> > > > > > > probably means that filesystem is full or some problem
-> > > > > > > happend
-> > > > > > > and how
-> > > > > > > is remounted RO.
-> > > > > > 
-> > > > > > In Naresh' example, root is on NFS:
-> > > > > >   root=/dev/nfs rw
-> > > > > >  
-> > > > > > nfsroot=10.66.16.123:/var/lib/lava/dispatcher/tmp/886412/extr
-> > > > > > act-
-> > > > > > nfsrootfs-tyuevoxm,tcp,hard,intr
-> > > > > 
-> > > > > Right !
-> > > > > root is mounted on NFS.
-> > > > > 
-> > > > > > 10.66.16.123:/var/lib/lava/dispatcher/tmp/886412/extract-
-> > > > > > nfsrootfs-tyuevoxm
-> > > > > > on / type nfs
-> > > > > > (rw,relatime,vers=2,rsize=4096,wsize=4096,namlen=255,hard,nol
-> > > > > > ock,
-> > > > > > proto=tcp,timeo=600,retrans=2,sec=sys,mountaddr=10.66.16.123,
-> > > > > > moun
-> > > > > > tvers=1,mountproto=tcp,local_lock=all,addr=10.66.16.123)
-> > > > > > devtmpfs on /dev type devtmpfs
-> > > > > > (rw,relatime,size=3977640k,nr_inodes=994410,mode=755)
-> > > > > > 
-> > > 
-> > > The only thing I can think of that might cause an EIO on NFSv2
-> > > would be
-> > > this patch
-> > > http://git.linux-nfs.org/?p=trondmy/linux-nfs.git;a=commitdiff;h=627d48e597ec5993c4abb3b81dc75e554a07c7c0
-> > > assuming that a bind-related error is leaking through.
-> > > 
-> > > I'd suggest something like the following to fix it up:
-> > 
-> > No change with that patch,
-> > but following one fixes it for me:
-> > 
-> > diff --git a/fs/nfs/pagelist.c b/fs/nfs/pagelist.c
-> > index 20b3717cd7ca..56cefa0ab804 100644
-> > --- a/fs/nfs/pagelist.c
-> > +++ b/fs/nfs/pagelist.c
-> > @@ -590,7 +590,7 @@ static void nfs_pgio_rpcsetup(struct
-> > nfs_pgio_header *hdr,
-> >         }
-> >  
-> >         hdr->res.fattr   = &hdr->fattr;
-> > -       hdr->res.count   = 0;
-> > +       hdr->res.count   = count;
-> >         hdr->res.eof     = 0;
-> >         hdr->res.verf    = &hdr->verf;
-> >         nfs_fattr_init(&hdr->fattr);
-> > 
-> > which is functionally revert of "NFS: Fix initialisation of I/O
-> > result struct in nfs_pgio_rpcsetup".
-> > 
-> > This hunk caught my eye, could res.eof == 0 explain those I/O errors?
+
+> On 26-Aug-2019, at 3:42 PM, Sachin Sant <sachinp@linux.vnet.ibm.com> wrote:
 > 
-> Interesting hypothesis. It could if res.count ends up being 0. So does
-> the following also fix the problem?
+>> On 26-Aug-2019, at 8:59 AM, Michael Ellerman <mpe@ellerman.id.au> wrote:
+>> 
+>> Sachin Sant <sachinp@linux.vnet.ibm.com> writes:
+>>> linux-next is currently broken on POWER8 non virtualized. Kernel
+>>> fails to reach login prompt with following kernel warning
+>>> repeatedly shown during boot.
+>> 
+>> I don't see it on my test systems.
+>> 
+>> The backtrace makes it look like you're doing CPU hot_un_plug during
+>> boot, which seems a bit odd.
+>> 
+> There is no explicit hot un plug operation being done. This happens
+> during boot.
+> 
+> For some reason cpu’s are being off lined.  
 
-It didn't fix it.
+So this machine was configured as a KVM host. Hence the SMT=1
+configuration at boot. Removing QEMU/libvirt packages and unloading
+kvm module gets me to SMT 8 config.
 
-That theory is probably not correct for this case, since EIO I see appears
-to originate from write and nfs_writeback_result(). This function also
-produces message we saw in logs from Naresh.
+Disabling kvm also allows me to boot next kernels without the warning.
+The warning is only seen with kvm configured.
 
-I can't find where/how is resp->count updated on WRITE reply in NFSv2.
-Issue also goes away with patch below, though I can't speak about its correctness:
+Thanks
+-Sachin
 
-NFS version     Type    Test    Return code
-nfsvers=2       tcp     -b:base         0
-nfsvers=2       tcp     -g:general      0
-nfsvers=2       tcp     -s:special      0
-nfsvers=2       tcp     -l:lock         0
-Total time: 141
-
-diff --git a/fs/nfs/nfs2xdr.c b/fs/nfs/nfs2xdr.c
-index cbc17a203248..4913c6da270b 100644
---- a/fs/nfs/nfs2xdr.c
-+++ b/fs/nfs/nfs2xdr.c
-@@ -897,6 +897,16 @@ static int nfs2_xdr_dec_writeres(struct rpc_rqst *req, struct xdr_stream *xdr,
-                                 void *data)
- {
-        struct nfs_pgio_res *result = data;
-+       struct rpc_task *rq_task  = req->rq_task;
-+
-+       if (rq_task) {
-+               struct nfs_pgio_args *args = rq_task->tk_msg.rpc_argp;
-+
-+               if (args) {
-+                       result->count = args->count;
-+               }
-+       }
- 
-        /* All NFSv2 writes are "file sync" writes */
-        result->verf->committed = NFS_FILE_SYNC;

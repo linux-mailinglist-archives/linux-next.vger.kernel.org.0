@@ -2,609 +2,221 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 025159DAE9
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 03:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1567B9DB68
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 03:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727227AbfH0BGz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 26 Aug 2019 21:06:55 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38109 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726487AbfH0BGy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 26 Aug 2019 21:06:54 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46HW143whWz9sBp;
-        Tue, 27 Aug 2019 11:06:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1566868008;
-        bh=cAssO5jkvfqXfchkVaPlMXhd9trABS8tAZIMbBWbOqg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YrHMhogoD/cw8h/rJ4A6xgy/UNeu0wJuL6J75MDLF15gKyEucxaP40aQkcOG9ZWz9
-         y5oS9rQqMa9moy+i9go15aE2w9bXv/A+oz+gwBtGcLxo18d9M6cM1DBT7X5l0ophXg
-         ckNoC1Q23uEkOwLMlNUm5JvzxpxvsWc2BaSPxAW3GP1TYW6Mvnxm9gmLvO3HDDZvaM
-         9bDJZ2baYKUOIUs2yI6N2h5YWLoLJyP+PsBpfk8ZcQcXNeyd8BqS+xC2oHjk9w5LYe
-         sUJzyWEndNwYpU6I6+E+IDvoJXHnnShUkKWhw1/I9IKeHe2zm7CPLcni4cngqKT13D
-         LUqizgEH+gGjA==
-Date:   Tue, 27 Aug 2019 11:06:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>, Sage Weil <sage@newdream.net>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        "Yan, Zheng" <zyan@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
-Subject: linux-next: manual merge of the vfs tree with the ceph tree
-Message-ID: <20190827110647.39f2ae80@canb.auug.org.au>
+        id S1728025AbfH0Byu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 26 Aug 2019 21:54:50 -0400
+Received: from regular1.263xmail.com ([211.150.70.200]:52518 "EHLO
+        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728519AbfH0Byu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 26 Aug 2019 21:54:50 -0400
+Received: from kever.yang?rock-chips.com (unknown [192.168.167.156])
+        by regular1.263xmail.com (Postfix) with ESMTP id D310532F;
+        Tue, 27 Aug 2019 09:54:30 +0800 (CST)
+X-263anti-spam: KSV:0;BIG:0;
+X-MAIL-GRAY: 0
+X-MAIL-DELIVERY: 1
+X-KSVirus-check: 0
+X-ADDR-CHECKED4: 1
+X-ABS-CHECKED: 1
+X-SKE-CHECKED: 1
+X-ANTISPAM-LEVEL: 2
+Received: from [172.16.12.9] (unknown [58.22.7.114])
+        by smtp.263.net (postfix) whith ESMTP id P28225T139814766622464S1566870866860190_;
+        Tue, 27 Aug 2019 09:54:27 +0800 (CST)
+X-IP-DOMAINF: 1
+X-UNIQUE-TAG: <c6f7ffeeffe8903cd5c421165cfd4b49>
+X-RL-SENDER: kever.yang@rock-chips.com
+X-SENDER: yk@rock-chips.com
+X-LOGIN-NAME: kever.yang@rock-chips.com
+X-FST-TO: linux-arm-kernel@lists.infradead.org
+X-SENDER-IP: 58.22.7.114
+X-ATTACHMENT-NUM: 0
+X-DNS-TYPE: 0
+Subject: Re: CPUfreq fail on rk3399-firefly
+To:     Kevin Hilman <khilman@baylibre.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     kernel-build-reports@lists.linaro.org,
+        linux-rockchip@lists.infradead.org, linux-next@vger.kernel.org,
+        =?UTF-8?B?5byg5pm0?= <elaine.zhang@rock-chips.com>,
+        =?UTF-8?B?6Zer5a2d5Yab?= <andy.yan@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com>
+ <20190718162005.GF5761@sirena.org.uk> <7hmugdynmk.fsf@baylibre.com>
+ <2314814.WbdfqDVNqK@phil> <7hv9uq9wfe.fsf@baylibre.com>
+ <c973d3fa-5f0d-c277-7c83-6227942a671a@rock-chips.com>
+ <7hd0gvzuvw.fsf@baylibre.com> <7h8srjzuen.fsf@baylibre.com>
+ <db7af16f-d8cc-fbcb-726d-2aeba5563076@rock-chips.com>
+ <7h4l23zwej.fsf@baylibre.com>
+From:   Kever Yang <kever.yang@rock-chips.com>
+Message-ID: <852dd7d4-520b-7eb0-f307-c3fa9c0ebf2a@rock-chips.com>
+Date:   Tue, 27 Aug 2019 09:54:26 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Y4raT8zWPYKaFnjrI1cW_Wd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <7h4l23zwej.fsf@baylibre.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Y4raT8zWPYKaFnjrI1cW_Wd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On 2019/8/27 上午1:09, Kevin Hilman wrote:
+> Hi Kever,
+>
+> Kever Yang <kever.yang@rock-chips.com> writes:
+>
+>> Hi Kevin,
+>>
+>>       I want to have a test with my board, I can get the Image and dtb
+>> from the link for the job,
+>>
+>> but how can I get the randisk which is named initrd-SDbyy2.cpio.gz?
+> The ramdisk images are here:
+>
+>    https://storage.kernelci.org/images/rootfs/buildroot/kci-2019.02/arm64/base/
+>
+> in the kernelCI logs the ramdisk is slightly modified because the kernel
+> modules have been inserted into the cpio archive.
+>
+> However, for the purposes of this test, you can just test with the
+> unmodified rootfs.cpio.gz above.
 
-Today's linux-next merge of the vfs tree got a conflict in:
 
-  fs/ceph/super.c
+I try with this ramdisk, and it hangs at fan53555 init, but not get into 
+cpufreq.
 
-between commit:
+Any suggestion?
 
-  8e4133936f30 ("ceph: auto reconnect after blacklisted")
+  My boot log:
 
-from the ceph tree and commit:
+https://paste.ubuntu.com/p/WYZKPWp7sk/
 
-  108f95bfaa56 ("vfs: Convert ceph to use the new mount API")
+Thanks,
 
-from the vfs tree.
+- Kever
 
-I fixed it up (see below, but clearly needs more ..) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
+>
+> Kevin
+>
+>
+>> Thanks,
+>>
+>> - Kever
+>>
+>> On 2019/8/24 上午1:03, Kevin Hilman wrote:
+>>> Kevin Hilman <khilman@baylibre.com> writes:
+>>>
+>>>> Kever Yang <kever.yang@rock-chips.com> writes:
+>>>>
+>>>>> Hi Kevin, Heiko,
+>>>>>
+>>>>> On 2019/8/22 上午2:59, Kevin Hilman wrote:
+>>>>>> Hi Heiko,
+>>>>>>
+>>>>>> Heiko Stuebner <heiko@sntech.de> writes:
+>>>>>>
+>>>>>>> Am Dienstag, 13. August 2019, 19:35:31 CEST schrieb Kevin Hilman:
+>>>>>>>> [ resent with correct addr for linux-rockchip list ]
+>>>>>>>>
+>>>>>>>> Mark Brown <broonie@kernel.org> writes:
+>>>>>>>>
+>>>>>>>>> On Thu, Jul 18, 2019 at 04:28:08AM -0700, kernelci.org bot wrote:
+>>>>>>>>>
+>>>>>>>>> Today's -next started failing to boot defconfig on rk3399-firefly:
+>>>>>>>>>
+>>>>>>>>>> arm64:
+>>>>>>>>>>        defconfig:
+>>>>>>>>>>            gcc-8:
+>>>>>>>>>>                rk3399-firefly: 1 failed lab
+>>>>>>>>> It hits a BUG() trying to set up cpufreq:
+>>>>>>>>>
+>>>>>>>>> [   87.381606] cpufreq: cpufreq_online: CPU0: Running at unlisted freq: 200000 KHz
+>>>>>>>>> [   87.393244] cpufreq: cpufreq_online: CPU0: Unlisted initial frequency changed to: 408000 KHz
+>>>>>>>>> [   87.469777] cpufreq: cpufreq_online: CPU4: Running at unlisted freq: 12000 KHz
+>>>>>>>>> [   87.488595] cpu cpu4: _generic_set_opp_clk_only: failed to set clock rate: -22
+>>>>>>>>> [   87.491881] cpufreq: __target_index: Failed to change cpu frequency: -22
+>>>>>>>>> [   87.495335] ------------[ cut here ]------------
+>>>>>>>>> [   87.496821] kernel BUG at drivers/cpufreq/cpufreq.c:1438!
+>>>>>>>>> [   87.498462] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+>>>>>>>>>
+>>>>>>>>> I'm struggling to see anything relevant in the diff from yesterday, the
+>>>>>>>>> unlisted frequency warnings were there in the logs yesterday but no oops
+>>>>>>>>> and I'm not seeing any changes in cpufreq, clk or anything relevant
+>>>>>>>>> looking.
+>>>>>>>>>
+>>>>>>>>> Full bootlog and other info can be found here:
+>>>>>>>>>
+>>>>>>>>> 	https://kernelci.org/boot/id/5d302d8359b51498d049e983/
+>>>>>>>> I confirm that disabling CPUfreq in the defconfig (CONFIG_CPU_FREQ=n)
+>>>>>>>> makes the firefly board start working again.
+>>>>>>>>
+>>>>>>>> Note that the default defconfig enables the "performance" CPUfreq
+>>>>>>>> governor as the default governor, so during kernel boot, it will always
+>>>>>>>> switch to the max frequency.
+>>>>>>>>
+>>>>>>>> For fun, I set the default governor to "userspace" so the kernel
+>>>>>>>> wouldn't make any OPP changes, and that leads to a slightly more
+>>>>>>>> informative splat[1]
+>>>>>>>>
+>>>>>>>> There is still an OPP change happening because the detected OPP is not
+>>>>>>>> one that's listed in the table, so it tries to change to a listed OPP
+>>>>>>>> and fails in the bowels of clk_set_rate()
+>>>>>>> Though I think that might only be a symptom as well.
+>>>>>>> Both the PLL setting code as well as the actual cpu-clock implementation
+>>>>>>> is unchanged since 2017 (and runs just fine on all boards in my farm).
+>>>>>>>
+>>>>>>> One source for these issues is often the regulator supplying the cpu
+>>>>>>> going haywire - aka the voltage not matching the opp.
+>>>>>>>
+>>>>>>> As in this error-case it's CPU4 being set, this would mean it might
+>>>>>>> be the big cluster supplied by the external syr825 (fan5355 clone)
+>>>>>>> that might act up. In the Firefly-rk3399 case this is even stranger.
+>>>>>>>
+>>>>>>> There is a discrepancy between the "fcs,suspend-voltage-selector"
+>>>>>>> between different bootloader versions (how the selection-pin is set up),
+>>>>>>> so the kernel might actually write his requested voltage to the wrong
+>>>>>>> register (not the one for actual voltage, but the second set used for
+>>>>>>> the suspend voltage).
+>>>>>>>
+>>>>>>> Did you by chance swap bootloaders at some point in recent past?
+>>>>>> No, haven't touched bootloader since I initially setup the board.
+>>>>> The CPU voltage does not affect by bootloader for kernel should have its
+>>>>> own opp-table,
+>>>>>
+>>>>> the bootloader may only affect the center/logic power supply.
+>>>>>
+>>>>>>> I'd assume [2] might actually be the same issue last year, though
+>>>>>>> the CI-logs are not available anymore it seems.
+>>>>>>>
+>>>>>>> Could you try to set the vdd_cpu_b regulator to disabled, so that
+>>>>>>> cpufreq for this cluster defers and see what happens?
+>>>>>> Yes, this change[1] definitely makes things boot reliably again, so
+>>>>>> there's defintiely something a bit unstable with this regulator, at
+>>>>>> least on this firefly.
+>>>>> Is it possible to target which patch introduce this bug? This board
+>>>>> should have work correctly for a long time with upstream source code.
+>>>> Unfortunately, it seems to be a regular, but intermittent failure, so
+>>>> bisection is not producing anything reliable.
+>>>>
+>>>> You can see that both in mainline[1] and in linux-next[2] there are
+>>>> periodic failures, but it's hard to see any patterns.
+>>> Even worse, I (re)tested mainline for versions that were previously
+>>> passing (v5.2, v5.3-rc5) and they are also failing now.
+>>>
+>>> They work again if I disable that regulator as suggested by Heiko.
+>>>
+>>> So this is increasingly pointing to failing hardware.
+>>>
+>>> Kevin
+>>>
+>>>
+>>>
+>
+>
 
---=20
-Cheers,
-Stephen Rothwell
 
-diff --cc fs/ceph/super.c
-index 03b63b1cd32c,04c67bd20956..000000000000
---- a/fs/ceph/super.c
-+++ b/fs/ceph/super.c
-@@@ -129,275 -129,278 +130,287 @@@ static int ceph_sync_fs(struct super_bl
-   * mount options
-   */
-  enum {
-- 	Opt_wsize,
-- 	Opt_rsize,
-- 	Opt_rasize,
-- 	Opt_caps_wanted_delay_min,
-- 	Opt_caps_wanted_delay_max,
-+ 	Opt_acl,
-+ 	Opt_asyncreaddir,
-  	Opt_caps_max,
-- 	Opt_readdir_max_entries,
-- 	Opt_readdir_max_bytes,
-+ 	Opt_caps_wanted_delay_max,
-+ 	Opt_caps_wanted_delay_min,
-  	Opt_congestion_kb,
-- 	Opt_last_int,
-- 	/* int args above */
-- 	Opt_snapdirname,
-- 	Opt_mds_namespace,
-- 	Opt_fscache_uniq,
-- 	Opt_recover_session,
-- 	Opt_last_string,
-- 	/* string args above */
-- 	Opt_dirstat,
-- 	Opt_nodirstat,
-- 	Opt_rbytes,
-- 	Opt_norbytes,
-- 	Opt_asyncreaddir,
-- 	Opt_noasyncreaddir,
-+ 	Opt_copyfrom,
-  	Opt_dcache,
-- 	Opt_nodcache,
-- 	Opt_ino32,
-- 	Opt_noino32,
-+ 	Opt_dirstat,
-  	Opt_fscache,
-- 	Opt_nofscache,
-+ 	Opt_ino32,
-+ 	Opt_mds_namespace,
-  	Opt_poolperm,
-- 	Opt_nopoolperm,
-- 	Opt_require_active_mds,
-- 	Opt_norequire_active_mds,
-- #ifdef CONFIG_CEPH_FS_POSIX_ACL
-- 	Opt_acl,
-- #endif
-- 	Opt_noacl,
-  	Opt_quotadf,
-- 	Opt_noquotadf,
-- 	Opt_copyfrom,
-- 	Opt_nocopyfrom,
-+ 	Opt_rasize,
-+ 	Opt_rbytes,
-+ 	Opt_readdir_max_bytes,
-+ 	Opt_readdir_max_entries,
-++	Opt_recover_session,
-+ 	Opt_require_active_mds,
-+ 	Opt_rsize,
-+ 	Opt_snapdirname,
-+ 	Opt_source,
-+ 	Opt_wsize,
-  };
- =20
-- static match_table_t fsopt_tokens =3D {
-- 	{Opt_wsize, "wsize=3D%d"},
-- 	{Opt_rsize, "rsize=3D%d"},
-- 	{Opt_rasize, "rasize=3D%d"},
-- 	{Opt_caps_wanted_delay_min, "caps_wanted_delay_min=3D%d"},
-- 	{Opt_caps_wanted_delay_max, "caps_wanted_delay_max=3D%d"},
-- 	{Opt_caps_max, "caps_max=3D%d"},
-- 	{Opt_readdir_max_entries, "readdir_max_entries=3D%d"},
-- 	{Opt_readdir_max_bytes, "readdir_max_bytes=3D%d"},
-- 	{Opt_congestion_kb, "write_congestion_kb=3D%d"},
-- 	/* int args above */
-- 	{Opt_snapdirname, "snapdirname=3D%s"},
-- 	{Opt_mds_namespace, "mds_namespace=3D%s"},
-- 	{Opt_recover_session, "recover_session=3D%s"},
-- 	{Opt_fscache_uniq, "fsc=3D%s"},
-- 	/* string args above */
-- 	{Opt_dirstat, "dirstat"},
-- 	{Opt_nodirstat, "nodirstat"},
-- 	{Opt_rbytes, "rbytes"},
-- 	{Opt_norbytes, "norbytes"},
-- 	{Opt_asyncreaddir, "asyncreaddir"},
-- 	{Opt_noasyncreaddir, "noasyncreaddir"},
-- 	{Opt_dcache, "dcache"},
-- 	{Opt_nodcache, "nodcache"},
-- 	{Opt_ino32, "ino32"},
-- 	{Opt_noino32, "noino32"},
-- 	{Opt_fscache, "fsc"},
-- 	{Opt_nofscache, "nofsc"},
-- 	{Opt_poolperm, "poolperm"},
-- 	{Opt_nopoolperm, "nopoolperm"},
-- 	{Opt_require_active_mds, "require_active_mds"},
-- 	{Opt_norequire_active_mds, "norequire_active_mds"},
-- #ifdef CONFIG_CEPH_FS_POSIX_ACL
-- 	{Opt_acl, "acl"},
-- #endif
-- 	{Opt_noacl, "noacl"},
-- 	{Opt_quotadf, "quotadf"},
-- 	{Opt_noquotadf, "noquotadf"},
-- 	{Opt_copyfrom, "copyfrom"},
-- 	{Opt_nocopyfrom, "nocopyfrom"},
-- 	{-1, NULL}
-+ static const struct fs_parameter_spec ceph_param_specs[] =3D {
-+ 	fsparam_flag_no ("acl",				Opt_acl),
-+ 	fsparam_flag_no ("asyncreaddir",		Opt_asyncreaddir),
-+ 	fsparam_u32	("caps_max",			Opt_caps_max),
-+ 	fsparam_u32	("caps_wanted_delay_max",	Opt_caps_wanted_delay_max),
-+ 	fsparam_u32	("caps_wanted_delay_min",	Opt_caps_wanted_delay_min),
-+ 	fsparam_s32	("write_congestion_kb",		Opt_congestion_kb),
-+ 	fsparam_flag_no ("copyfrom",			Opt_copyfrom),
-+ 	fsparam_flag_no ("dcache",			Opt_dcache),
-+ 	fsparam_flag_no ("dirstat",			Opt_dirstat),
-+ 	__fsparam	(fs_param_is_string, "fsc",	Opt_fscache,
-+ 			 fs_param_neg_with_no | fs_param_v_optional),
-+ 	fsparam_flag_no ("ino32",			Opt_ino32),
-+ 	fsparam_string	("mds_namespace",		Opt_mds_namespace),
-+ 	fsparam_flag_no ("poolperm",			Opt_poolperm),
-+ 	fsparam_flag_no ("quotadf",			Opt_quotadf),
-+ 	fsparam_u32	("rasize",			Opt_rasize),
-+ 	fsparam_flag_no ("rbytes",			Opt_rbytes),
-+ 	fsparam_s32	("readdir_max_bytes",		Opt_readdir_max_bytes),
-+ 	fsparam_s32	("readdir_max_entries",		Opt_readdir_max_entries),
-++	fsparam_string	("recover_session",		Opt_recover_session),
-+ 	fsparam_flag_no ("require_active_mds",		Opt_require_active_mds),
-+ 	fsparam_u32	("rsize",			Opt_rsize),
-+ 	fsparam_string	("snapdirname",			Opt_snapdirname),
-+ 	fsparam_string	("source",			Opt_source),
-+ 	fsparam_u32	("wsize",			Opt_wsize),
-+ 	{}
-  };
- =20
-- static int parse_fsopt_token(char *c, void *private)
-+ static const struct fs_parameter_description ceph_fs_parameters =3D {
-+         .name           =3D "ceph",
-+         .specs          =3D ceph_param_specs,
-+ };
-+=20
-+ /*
-+  * Parse the source parameter.  Distinguish the server list from the path.
-+  * Internally we do not include the leading '/' in the path.
-+  *
-+  * The source will look like:
-+  *     <server_spec>[,<server_spec>...]:[<path>]
-+  * where
-+  *     <server_spec> is <ip>[:<port>]
-+  *     <path> is optional, but if present must begin with '/'
-+  */
-+ static int ceph_parse_source(struct fs_context *fc, struct fs_parameter *=
-param)
-  {
-- 	struct ceph_mount_options *fsopt =3D private;
-- 	substring_t argstr[MAX_OPT_ARGS];
-- 	int token, intval, ret;
--=20
-- 	token =3D match_token((char *)c, fsopt_tokens, argstr);
-- 	if (token < 0)
-- 		return -EINVAL;
--=20
-- 	if (token < Opt_last_int) {
-- 		ret =3D match_int(&argstr[0], &intval);
-- 		if (ret < 0) {
-- 			pr_err("bad option arg (not int) at '%s'\n", c);
-- 			return ret;
-+ 	struct ceph_config_context *ctx =3D fc->fs_private;
-+ 	struct ceph_mount_options *fsopt =3D ctx->mount_options;
-+ 	char *dev_name =3D param->string, *dev_name_end;
-+ 	int ret;
-+=20
-+ 	dout("parse_mount_options %p, dev_name '%s'\n", fsopt, dev_name);
-+=20
-+ 	if (fc->source)
-+ 		return invalf(fc, "Multiple sources specified");
-+ 	if (!dev_name || !*dev_name)
-+ 		return invalf(fc, "Empty source");
-+ 	if (dev_name[0] =3D=3D '/')
-+ 		return invalf(fc, "Missing colon");
-+=20
-+ 	dev_name_end =3D strchr(dev_name + 1, '/');
-+ 	if (dev_name_end) {
-+ 		if (strlen(dev_name_end) > 1) {
-+ 			kfree(fsopt->server_path);
-+ 			fsopt->server_path =3D kstrdup(dev_name_end, GFP_KERNEL);
-+ 			if (!fsopt->server_path)
-+ 				return -ENOMEM;
-  		}
-- 		dout("got int token %d val %d\n", token, intval);
-- 	} else if (token > Opt_last_int && token < Opt_last_string) {
-- 		dout("got string token %d val %s\n", token,
-- 		     argstr[0].from);
-  	} else {
-- 		dout("got token %d\n", token);
-+ 		dev_name_end =3D dev_name + strlen(dev_name);
-  	}
- =20
-- 	switch (token) {
-+ 	/* Trim off the path and the colon separator */
-+ 	dev_name_end--;
-+ 	if (*dev_name_end !=3D ':')
-+ 		return invalf(fc, "device name is missing path (no : separator in %s)\n=
-",
-+ 			      dev_name);
-+ 	*dev_name_end =3D 0;
-+=20
-+ 	dout("device name '%s'\n", dev_name);
-+ 	if (fsopt->server_path)
-+ 		dout("server path '%s'\n", fsopt->server_path);
-+=20
-+ 	param->size =3D dev_name_end - dev_name;
-+ 	ret =3D ceph_parse_server_specs(ctx->opt, fc,
-+ 				      param->string, dev_name_end - dev_name);
-+ 	if (ret =3D=3D 0) {
-+ 		fc->source =3D param->string;
-+ 		param->string =3D NULL;
-+ 	}
-+=20
-+ 	return 0;
-+ }
-+=20
-+ static int ceph_parse_param(struct fs_context *fc, struct fs_parameter *p=
-aram)
-+ {
-+ 	struct ceph_config_context *ctx =3D fc->fs_private;
-+ 	struct ceph_mount_options *fsopt =3D ctx->mount_options;
-+ 	struct fs_parse_result result;
-+ 	int ret, opt;
-+=20
-+ 	ret =3D ceph_parse_option(ctx->opt, fc, param);
-+ 	if (ret !=3D -ENOPARAM)
-+ 		return ret;
-+=20
-+ 	opt =3D fs_parse(fc, &ceph_fs_parameters, param, &result);
-+ 	if (opt < 0)
-+ 		return opt;
-+=20
-+ 	switch (opt) {
-+ 	case Opt_source:
-+ 		return ceph_parse_source(fc, param);
-  	case Opt_snapdirname:
-  		kfree(fsopt->snapdir_name);
-- 		fsopt->snapdir_name =3D kstrndup(argstr[0].from,
-- 					       argstr[0].to-argstr[0].from,
-- 					       GFP_KERNEL);
-- 		if (!fsopt->snapdir_name)
-- 			return -ENOMEM;
-+ 		fsopt->snapdir_name =3D param->string;
-+ 		param->string =3D NULL;
-  		break;
-  	case Opt_mds_namespace:
-  		kfree(fsopt->mds_namespace);
-- 		fsopt->mds_namespace =3D kstrndup(argstr[0].from,
-- 						argstr[0].to-argstr[0].from,
-- 						GFP_KERNEL);
-- 		if (!fsopt->mds_namespace)
-- 			return -ENOMEM;
-+ 		fsopt->mds_namespace =3D param->string;
-+ 		param->string =3D NULL;
-  		break;
- +	case Opt_recover_session:
-- 		if (!strncmp(argstr[0].from, "no",
-- 			     argstr[0].to - argstr[0].from)) {
-++		if (result.negated) {
- +			fsopt->flags &=3D ~CEPH_MOUNT_OPT_CLEANRECOVER;
-- 		} else if (!strncmp(argstr[0].from, "clean",
-- 				    argstr[0].to - argstr[0].from)) {
-- 			fsopt->flags |=3D CEPH_MOUNT_OPT_CLEANRECOVER;
- +		} else {
-- 			return -EINVAL;
-++			fsopt->flags |=3D CEPH_MOUNT_OPT_CLEANRECOVER;
- +		}
- +		break;
-- 	case Opt_fscache_uniq:
-- 		kfree(fsopt->fscache_uniq);
-- 		fsopt->fscache_uniq =3D kstrndup(argstr[0].from,
-- 					       argstr[0].to-argstr[0].from,
-- 					       GFP_KERNEL);
-- 		if (!fsopt->fscache_uniq)
-- 			return -ENOMEM;
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
-- 		break;
-- 		/* misc */
-  	case Opt_wsize:
-- 		if (intval < (int)PAGE_SIZE || intval > CEPH_MAX_WRITE_SIZE)
-- 			return -EINVAL;
-- 		fsopt->wsize =3D ALIGN(intval, PAGE_SIZE);
-+ 		if (result.uint_32 < (int)PAGE_SIZE || result.uint_32 > CEPH_MAX_WRITE_=
-SIZE)
-+ 			goto invalid_value;
-+ 		fsopt->wsize =3D ALIGN(result.uint_32, PAGE_SIZE);
-  		break;
-  	case Opt_rsize:
-- 		if (intval < (int)PAGE_SIZE || intval > CEPH_MAX_READ_SIZE)
-- 			return -EINVAL;
-- 		fsopt->rsize =3D ALIGN(intval, PAGE_SIZE);
-+ 		if (result.uint_32 < (int)PAGE_SIZE || result.uint_32 > CEPH_MAX_READ_S=
-IZE)
-+ 			goto invalid_value;
-+ 		fsopt->rsize =3D ALIGN(result.uint_32, PAGE_SIZE);
-  		break;
-  	case Opt_rasize:
-- 		if (intval < 0)
-- 			return -EINVAL;
-- 		fsopt->rasize =3D ALIGN(intval, PAGE_SIZE);
-+ 		fsopt->rasize =3D ALIGN(result.uint_32, PAGE_SIZE);
-  		break;
-  	case Opt_caps_wanted_delay_min:
-- 		if (intval < 1)
-- 			return -EINVAL;
-- 		fsopt->caps_wanted_delay_min =3D intval;
-+ 		if (result.uint_32 < 1)
-+ 			goto invalid_value;
-+ 		fsopt->caps_wanted_delay_min =3D result.uint_32;
-  		break;
-  	case Opt_caps_wanted_delay_max:
-- 		if (intval < 1)
-- 			return -EINVAL;
-- 		fsopt->caps_wanted_delay_max =3D intval;
-+ 		if (result.uint_32 < 1)
-+ 			goto invalid_value;
-+ 		fsopt->caps_wanted_delay_max =3D result.uint_32;
-  		break;
-  	case Opt_caps_max:
-- 		if (intval < 0)
-- 			return -EINVAL;
-- 		fsopt->caps_max =3D intval;
-+ 		fsopt->caps_max =3D result.uint_32;
-  		break;
-  	case Opt_readdir_max_entries:
-- 		if (intval < 1)
-- 			return -EINVAL;
-- 		fsopt->max_readdir =3D intval;
-+ 		if (result.uint_32 < 1)
-+ 			goto invalid_value;
-+ 		fsopt->max_readdir =3D result.uint_32;
-  		break;
-  	case Opt_readdir_max_bytes:
-- 		if (intval < (int)PAGE_SIZE && intval !=3D 0)
-- 			return -EINVAL;
-- 		fsopt->max_readdir_bytes =3D intval;
-+ 		if (result.uint_32 < (int)PAGE_SIZE && result.uint_32 !=3D 0)
-+ 			goto invalid_value;
-+ 		fsopt->max_readdir_bytes =3D result.uint_32;
-  		break;
-  	case Opt_congestion_kb:
-- 		if (intval < 1024) /* at least 1M */
-- 			return -EINVAL;
-- 		fsopt->congestion_kb =3D intval;
-+ 		if (result.uint_32 < 1024) /* at least 1M */
-+ 			goto invalid_value;
-+ 		fsopt->congestion_kb =3D result.uint_32;
-  		break;
-  	case Opt_dirstat:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_DIRSTAT;
-- 		break;
-- 	case Opt_nodirstat:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_DIRSTAT;
-+ 		if (!result.negated)
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_DIRSTAT;
-+ 		else
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_DIRSTAT;
-  		break;
-  	case Opt_rbytes:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_RBYTES;
-- 		break;
-- 	case Opt_norbytes:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_RBYTES;
-+ 		if (!result.negated)
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_RBYTES;
-+ 		else
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_RBYTES;
-  		break;
-  	case Opt_asyncreaddir:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOASYNCREADDIR;
-- 		break;
-- 	case Opt_noasyncreaddir:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOASYNCREADDIR;
-+ 		if (!result.negated)
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOASYNCREADDIR;
-+ 		else
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOASYNCREADDIR;
-  		break;
-  	case Opt_dcache:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_DCACHE;
-- 		break;
-- 	case Opt_nodcache:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_DCACHE;
-+ 		if (!result.negated)
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_DCACHE;
-+ 		else
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_DCACHE;
-  		break;
-  	case Opt_ino32:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_INO32;
-- 		break;
-- 	case Opt_noino32:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_INO32;
-+ 		if (!result.negated)
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_INO32;
-+ 		else
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_INO32;
-  		break;
-+=20
-  	case Opt_fscache:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
-- 		kfree(fsopt->fscache_uniq);
-- 		fsopt->fscache_uniq =3D NULL;
-- 		break;
-- 	case Opt_nofscache:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_FSCACHE;
-  		kfree(fsopt->fscache_uniq);
-  		fsopt->fscache_uniq =3D NULL;
-+ 		if (result.negated) {
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_FSCACHE;
-+ 		} else {
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_FSCACHE;
-+ 			fsopt->fscache_uniq =3D param->string;
-+ 			param->string =3D NULL;
-+ 		}
-  		break;
-+=20
-  	case Opt_poolperm:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOPOOLPERM;
-- 		break;
-- 	case Opt_nopoolperm:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOPOOLPERM;
-+ 		if (!result.negated)
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOPOOLPERM;
-+ 		else
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOPOOLPERM;
-  		break;
-  	case Opt_require_active_mds:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_MOUNTWAIT;
-- 		break;
-- 	case Opt_norequire_active_mds:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_MOUNTWAIT;
-+ 		if (!result.negated)
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_MOUNTWAIT;
-+ 		else
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_MOUNTWAIT;
-  		break;
-  	case Opt_quotadf:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOQUOTADF;
-- 		break;
-- 	case Opt_noquotadf:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOQUOTADF;
-+ 		if (!result.negated)
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOQUOTADF;
-+ 		else
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOQUOTADF;
-  		break;
-  	case Opt_copyfrom:
-- 		fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOCOPYFROM;
-- 		break;
-- 	case Opt_nocopyfrom:
-- 		fsopt->flags |=3D CEPH_MOUNT_OPT_NOCOPYFROM;
-+ 		if (!result.negated)
-+ 			fsopt->flags &=3D ~CEPH_MOUNT_OPT_NOCOPYFROM;
-+ 		else
-+ 			fsopt->flags |=3D CEPH_MOUNT_OPT_NOCOPYFROM;
-  		break;
-- #ifdef CONFIG_CEPH_FS_POSIX_ACL
-  	case Opt_acl:
-- 		fsopt->sb_flags |=3D SB_POSIXACL;
-- 		break;
-+ 		if (!result.negated) {
-+ #ifdef CONFIG_CEPH_FS_POSIX_ACL
-+ 			fc->sb_flags |=3D SB_POSIXACL;
-+ #else
-+ 			return invalf(fc, "POSIX ACL support is disabled");
-  #endif
-- 	case Opt_noacl:
-- 		fsopt->sb_flags &=3D ~SB_POSIXACL;
-+ 		} else {
-+ 			fc->sb_flags &=3D ~SB_POSIXACL;
-+ 		}
-  		break;
-  	default:
-- 		BUG_ON(token);
-+ 		BUG();
-  	}
-  	return 0;
-+=20
-+ invalid_value:
-+ 	return invalf(fc, "ceph: Invalid value for %s", param->key);
-  }
- =20
-  static void destroy_mount_options(struct ceph_mount_options *args)
-@@@ -996,17 -924,11 +925,11 @@@ static int ceph_set_super(struct super_
-  	s->s_d_op =3D &ceph_dentry_ops;
-  	s->s_export_op =3D &ceph_export_ops;
- =20
- -	s->s_time_gran =3D 1000;  /* 1000 ns =3D=3D 1 us */
- +	s->s_time_gran =3D 1;
- =20
-- 	ret =3D set_anon_super(s, NULL);  /* what is that second arg for? */
-+ 	ret =3D set_anon_super_fc(s, fc);
-  	if (ret !=3D 0)
-- 		goto fail;
--=20
-- 	return ret;
--=20
-- fail:
-- 	s->s_fs_info =3D NULL;
-- 	fsc->sb =3D NULL;
-+ 		fsc->sb =3D NULL;
-  	return ret;
-  }
- =20
-
---Sig_/Y4raT8zWPYKaFnjrI1cW_Wd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1kgicACgkQAVBC80lX
-0GzHMAgAkuefjQct4SxZn9mA8DgxSj2xrziVZrIxhHsUBeAkbcTt58ZM9ceqjchT
-HF9r0khwK9zM7pPCghoAxd51n7wB07LTEHIf9oj6MSB+RAsYLv9LFMtqlgQSgP7l
-9AqTEecYIYBOVfpcyD4c2l/H7aN7AdVcvvBj+/+B9U8/EEQr9lXxlTl/9XdNDPth
-YmCgVsCPuw8IPZj1e46pwrKXxblSL6jmw0I4XZZA8NeGy/FcVIAVL5JETaX9c+GF
-K4Mq9IFi+RqcZF0urXUbJgwnw56AouMKibjpJ4ILCsrEPFbBQaXMBbqx7lOgy8uM
-UcKZ/kLxYyMjfGbcuPSvfw9wMtlb9g==
-=9uYL
------END PGP SIGNATURE-----
-
---Sig_/Y4raT8zWPYKaFnjrI1cW_Wd--

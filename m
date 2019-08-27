@@ -2,89 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE9529EFD8
-	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 18:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F199F200
+	for <lists+linux-next@lfdr.de>; Tue, 27 Aug 2019 20:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729570AbfH0QMp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Aug 2019 12:12:45 -0400
-Received: from mail.kernel.org ([198.145.29.99]:57100 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726537AbfH0QMp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 27 Aug 2019 12:12:45 -0400
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net [24.9.64.241])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 792622186A;
-        Tue, 27 Aug 2019 16:12:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1566922364;
-        bh=TN7/7Rqdl/EiqP0v3ytPDvKZIVZ9HCC/Si2Qhz4gL4g=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=AbbbpIEaVTjhsHc15DkggjkUbn224g5fFiQubXXAJ1RzbtYDwBdpHL27PTIcDs1OF
-         pXRTnzD3wiBdPnGRkN75ATj9lybwBmeLagzLo7X4xLjuTOyXSBl7sUQKCNoOUy4mtG
-         eGoTR8rxcs7a+2d90SUCxez6ZjAxzJXQfgbuzAvQ=
-Subject: Re: linux-next: Tree for Aug 27 (kunit)
-To:     Brendan Higgins <brendanhiggins@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, shuah <shuah@kernel.org>
-References: <20190827190526.6f27e763@canb.auug.org.au>
- <c7229254-0d90-d90e-f3df-5b6d6fc0b51f@infradead.org>
- <CAFd5g452baXuwL1hDyX+U53_p6XGppTf5p1qMwRsGK-wjzJ8Lg@mail.gmail.com>
-From:   shuah <shuah@kernel.org>
-Message-ID: <0352fae9-564f-4a97-715a-fabe016259df@kernel.org>
-Date:   Tue, 27 Aug 2019 10:12:42 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1728371AbfH0SD0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Aug 2019 14:03:26 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52640 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727064AbfH0SDZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 14:03:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KbdXuUIb1PofA8gj3PpnmyfX3/C/zewyEqvqL3YUumE=; b=hzIztPaz4hj+uqKUNVeEA2H4S
+        LkVkxGz8+v+KyMZ8HRUurKWnprzMY74/tjUb0ckNVXo3z1yrfZ0YNLGCKedxNsAnyyB1alfNotzcU
+        HTZJz1n3eHvZVn0vV+GpFWj9N3a+3yCFFqIKeg2MC4+nOUPNYvcEk+Uf9EBgjLhFgl17A=;
+Received: from 92.41.142.151.threembb.co.uk ([92.41.142.151] helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1i2foP-0000rz-Ee; Tue, 27 Aug 2019 18:03:21 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id 1FBBBD02CE6; Tue, 27 Aug 2019 19:03:20 +0100 (BST)
+Date:   Tue, 27 Aug 2019 19:03:20 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Ashish Kumar <ashish.kumar@nxp.com>
+Cc:     "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Kuldeep Singh <kuldeep.singh@nxp.com>
+Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
+ ls2080a compatibility string to bindings
+Message-ID: <20190827180320.GE23391@sirena.co.uk>
+References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
+ <20190821110640.GC5128@sirena.co.uk>
+ <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
+ <20190822190507.GI23391@sirena.co.uk>
+ <DB7PR04MB4011C9785D8D9CDFE9BC62DD95A10@DB7PR04MB4011.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-In-Reply-To: <CAFd5g452baXuwL1hDyX+U53_p6XGppTf5p1qMwRsGK-wjzJ8Lg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="KC8n6y+EC4k2kdZR"
+Content-Disposition: inline
+In-Reply-To: <DB7PR04MB4011C9785D8D9CDFE9BC62DD95A10@DB7PR04MB4011.eurprd04.prod.outlook.com>
+X-Cookie: Don't SANFORIZE me!!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/27/19 10:09 AM, Brendan Higgins wrote:
-> On Tue, Aug 27, 2019 at 8:29 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->> On 8/27/19 2:05 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20190826:
->>>
->>
->> on i386:
->> # CONFIG_PRINTK is not set
->>
->>
->> ../kunit/test.c: In function ‘kunit_vprintk_emit’:
->> ../kunit/test.c:21:9: error: implicit declaration of function ‘vprintk_emit’; did you mean ‘vprintk’? [-Werror=implicit-function-declaration]
->>    return vprintk_emit(0, level, NULL, 0, fmt, args);
->>           ^~~~~~~~~~~~
->>           vprintk
-> 
 
-Thanks Randy for catching this.
+--KC8n6y+EC4k2kdZR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Ooops, it never occurred to me to test the situation where I wouldn't
-> be able to see test results :-)
-> 
-> It seems to me that the right thing to do here is to do what
-> dev_printk and friends do and to ifdef this out if CONFIG_PRINTK is
-> unavailable. Does that seem reasonable?
->  > Also, do you want me to resend my patches with the fix or do you want
-> me to send a new patch with this fix? (Sorry for the newbie question.)
-> 
+On Mon, Aug 26, 2019 at 06:19:53AM +0000, Ashish Kumar wrote:
 
-Brendan,
+> For Patch-2, I intended to use this in arm64/boot/dts/freescale/fsl-ls1088a.dtsi (please see below), since both ls1088 and ls2080 has same QSPI controller.
+> So I had introduced new compatible
+> +                "fsl,ls1012a-qspi" followed by "fsl,ls1021a-qspi"
+> +                "fsl,ls1088a-qspi" followed by "fsl,ls2080a-qspi"
 
-I would like to apply the fix on top of the series. I don't want to
-revert.
+Even if the compatible is supposed to be used in conjunction with
+other fallbacks it should still explicitly be there in case
+someone forgets or decides not to do that for some reason.
 
-thanks,
--- Shuah
+--KC8n6y+EC4k2kdZR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1lcGUACgkQJNaLcl1U
+h9AO3wf+JCKT+OSIxSc0gdf/Uy1kGqqqZk0sJcNYIa8GbyIxvlUIyXI7fn0HYhs7
+HeUX5hJxYc8xodd8CTzWXCdXFeXpV6weWYidbcvBDYLAQGEhnCQY7LoKFQdWBBse
+GNwuCT4SMuAUXHutf6GZaTPv8SIXGrNaZqawtlrOg4TFzUmL74MjlCQvpMn5j15g
+v9rmk4kF310PIxuIPFKHgU0gyJdJ7gcr7uYCfUJA1/EtEWHfVoOnyZ+IG0Di9rPC
+sPa6VYx6Wv376zRTNMPBJEt0Sn87KEPnz7A0afRbmNhs5OxuK1kXXIhib5u6MvGj
+neVEamNf4Dxb+u9KverWRMgfQFCSSw==
+=mBNE
+-----END PGP SIGNATURE-----
+
+--KC8n6y+EC4k2kdZR--

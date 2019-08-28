@@ -2,93 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 862FB9F7CA
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 03:28:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F74E9F812
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 04:00:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbfH1B17 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 27 Aug 2019 21:27:59 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59318 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726096AbfH1B17 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 21:27:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=SsIBUUgqWoBft4g1qjISTKId449C/sPPvMGvzOhucFA=; b=NL0QwD9+KL+vnxXxnHD22icys
-        mAORzuHaSIFUSHIhL3+yR6+3Kw+Qw6J/6PoYN0NLBELIl+FOSjq3AKOVb+iL+oSavoNWl9TEY6MtG
-        ER7D89Yy16NJQ0AGslo98M6jwxfxiSGSs7N2/iUCcAJuhq0XUj+Cql+pHW58ej07QMxahlx7gxTr3
-        bZgEBi9/26cO2G+efQVHUSRUCfF2WAZ3RT2cIoL7eQvyTkU+ay4lxFe38y0ds4WEwvDUppyReQeiK
-        2/B425Y0hB/FAL3qGJg25iXIW4jLLKzEd7qJOMUDbQ5Jbav0vEpQGjFjIXP+Tn6sROyOQ47FbLVNk
-        zNEYwo2fg==;
-Received: from [2601:1c0:6200:6e8::4f71]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i2mkf-00068z-5y; Wed, 28 Aug 2019 01:27:57 +0000
-Subject: Re: mmotm 2019-08-24-16-02 uploaded (intel_drv.h header check)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20190824230323.REILuVBbY%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <b08dbe92-8e10-aa3a-7f92-12b53ee5b368@infradead.org>
-Date:   Tue, 27 Aug 2019 18:27:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726256AbfH1CAD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 27 Aug 2019 22:00:03 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:46666 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726127AbfH1CAD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 27 Aug 2019 22:00:03 -0400
+Received: by mail-wr1-f66.google.com with SMTP id z1so703696wru.13
+        for <linux-next@vger.kernel.org>; Tue, 27 Aug 2019 19:00:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=9tJo6A76SShCfQ+RfP9NWtKPdk7CR1NrZVt+tphqnLg=;
+        b=pr/m/yebOvKU2ZO4Hnl90jL4AHpOe/CxAofoxgo1gpnbPENTTJd21BEFE4nNxmCqRq
+         5haw6kDFKKYrQxPaSk0sEQle1njR2AsWDQdwltjIY4KB5jbLxL2mEPPayTG+Sh9UTYsJ
+         IAhmSp3zekBbG+3mO21j+fqljzI9SqBkxJPUuftoF2Wgz1YmBd2PZlomNsaX378xARa5
+         FSsh6i2xDXfWXKeesPpiRKRi42kTi3qjnvyyQLZAKO9Sbyro9zv28VGeu3uMcFYn/1bV
+         7uBZKVfG8hJcjIKiYpgNvYdhIgroEyQx0p+s8CWZtdpvEYbg3lZ5tQUkGa0bGBcWpnJW
+         WyJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=9tJo6A76SShCfQ+RfP9NWtKPdk7CR1NrZVt+tphqnLg=;
+        b=ewcfHQyCWiyEm8TSC7Mxh2f1GD3CBnwaQxOw0ox3e4+VevW03OGqTgEA4ftft26xsj
+         javynC1XK8tBpt06PqyMqVwdUluIHk2cRMEqfuiTjhHQiRVgRObo/Cb6hA+RsJw7oaRB
+         PeNMbiFt8g7e0Yfdb6xwk1Wu+NVxuIFoK6Babm//J+mPQgFcBsKeo3PI6QgyrL7W5ygL
+         LqnvJpSAQvSG9fHlVGBcxsQk4gZYr5SVHsLYYT44pdZpAIjxrDbxURGW6nfDstwzN9Xm
+         fhiZKCm3N4srMVa0h/JhIrd60iG0ZGLwAJbHEasIoSz/XJR/eAALo7C6Egoa9FIaBWwB
+         T1Gg==
+X-Gm-Message-State: APjAAAVmwrVGHaaTEsImTe/PZk70KHD2IjN3iYe4nFz5J0maPxUL8k4t
+        HS78UFuAGj+f4Ol1Ykon3xc9UBUknDqVMw==
+X-Google-Smtp-Source: APXvYqz7nPrt/L64/9f/ek3pSxmzxr6os9XdP64nWpvc/TG1s912KlNqUbfawRFQhJeBAg1nyyuOHg==
+X-Received: by 2002:adf:cd11:: with SMTP id w17mr1154085wrm.297.1566957600626;
+        Tue, 27 Aug 2019 19:00:00 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id 91sm2251645wrp.3.2019.08.27.18.59.59
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 27 Aug 2019 19:00:00 -0700 (PDT)
+Message-ID: <5d65e020.1c69fb81.7e29f.b8b7@mx.google.com>
+Date:   Tue, 27 Aug 2019 19:00:00 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20190824230323.REILuVBbY%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20190827
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+Subject: next/master boot: 216 boots: 6 failed, 198 passed with 10 offline,
+ 2 untried/unknown (next-20190827)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/24/19 4:03 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2019-08-24-16-02 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
+next/master boot: 216 boots: 6 failed, 198 passed with 10 offline, 2 untrie=
+d/unknown (next-20190827)
 
-on x86_64 or i386:
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20190827/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20190827/
 
-  CC      drivers/gpu/drm/i915/intel_drv.h.s
-In file included from <command-line>:0:0:
-./../drivers/gpu/drm/i915/intel_drv.h:402:24: error: field ‘force_audio’ has incomplete type
-  enum hdmi_force_audio force_audio;
-                        ^~~~~~~~~~~
-./../drivers/gpu/drm/i915/intel_drv.h:1228:20: error: field ‘tc_type’ has incomplete type
-  enum tc_port_type tc_type;
-                    ^~~~~~~
+Tree: next
+Branch: master
+Git Describe: next-20190827
+Git Commit: ed2393ca091048fa9711f4e8ab17ce52856e6412
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 88 unique boards, 26 SoC families, 16 builds out of 216
 
+Boot Regressions Detected:
 
--- 
-~Randy
+arm:
+
+    multi_v7_defconfig:
+        gcc-8:
+          am335x-boneblack:
+              lab-drue: new failure (last pass: next-20190823)
+          bcm2836-rpi-2-b:
+              lab-collabora: new failure (last pass: next-20190823)
+
+    omap2plus_defconfig:
+        gcc-8:
+          am335x-boneblack:
+              lab-drue: new failure (last pass: next-20190823)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            meson-gxl-s905x-nexbox-a95x: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s905x-nexbox-a95x: 1 failed lab
+
+arm:
+    oxnas_v6_defconfig:
+        gcc-8:
+            ox820-cloudengines-pogoplug-series-3: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+Offline Platforms:
+
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

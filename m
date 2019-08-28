@@ -2,141 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B16AA0CFE
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 23:55:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C83A0D2F
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 00:06:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727733AbfH1Vzl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 17:55:41 -0400
-Received: from ozlabs.org ([203.11.71.1]:34413 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727103AbfH1Vzk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Aug 2019 17:55:40 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JfgY6xPMz9sN4;
-        Thu, 29 Aug 2019 07:55:37 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567029338;
-        bh=trV+YGvYxNvB9BN+5qQZbtfhppivJU4cFdm0cDK2+rI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jndXLe5FjeSEkRjdoULkyHRs40O6jzy/1gv+zySqhMHPo56/IUUWPduUfgmD267jV
-         dg23MSc5wU35nhNVI3NOVWeBu7Aw6lDa/FGx53rolllkjK79GWvEfdm6mBE/30ebCu
-         si2tOf5BIfM/aZO4wflvM/PoSyGPsxwUPjiDxxuqKZpr5NZCUTU79/8PYcGGSHbZiQ
-         H9+0iF9SZpmOsja+bCpUvMMcxilqyJnKm7F5BQhU5sFdEd5LfXwEIjtHOx/XDPSsWS
-         IoUJRgd7rvWhyZYjNWmA1oQ6tGEFshmgwWvwVJOm5+mfPrdKF542aD6tPV/19ED4ep
-         23BWBWx3zsz9Q==
-Date:   Thu, 29 Aug 2019 07:55:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chunyan Zhang <chunyan.zhang@unisoc.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Subject: linux-next: Fixes tags need some work in the mmc-fixes tree
-Message-ID: <20190829075530.6fb7341c@canb.auug.org.au>
+        id S1727308AbfH1WG0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 18:06:26 -0400
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:44466 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727251AbfH1WGZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Aug 2019 18:06:25 -0400
+Received: by mail-wr1-f48.google.com with SMTP id j11so1287393wrp.11
+        for <linux-next@vger.kernel.org>; Wed, 28 Aug 2019 15:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=E2a9bd4VmhM5QyeWx47X/B+dtLmgWnIzSdAKyPtaSV0=;
+        b=LpJe2ceC2sNJmo2f/0CJmJr8diT7WUdGei5bN/ydXWhylk/ZZEYDuZRIc3aW33wD2b
+         OLN5R87VyUPh6UuLrYXItaKMTFlpBWBt+TnZ4u8l+jQfF9SvJx+SRAX06yhQm7IsMFua
+         XlByU8m4p9K5dOuc1D/gY8JIP3kWvR+2eJokQejq+YFX0JtaX3l8LxuCK1zqFg3uV+yZ
+         ifVX3OJus681d6UINOxJl9glNwFuEltGY9yOb2yW+6LhaNBIJs+XNqXe9pJpnK8EHL8n
+         LJXMTXlrQ6pAmfWvmGehueK50vnCXP4DaOm1buNQGQ3YcWqfgQWNcJsimSoVFCF1x7/Z
+         rcug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=E2a9bd4VmhM5QyeWx47X/B+dtLmgWnIzSdAKyPtaSV0=;
+        b=giNhFNKu3ohkEYtrNNuLIROMR0p7o6rdxC5F8YN///w6E2znImkg+cmHMTltab3gQa
+         i0/lOK52FoGh+Wegsz1CI0fbv0L/lPdzvK6IznRJdae4tyzz354RaIWxQqq5EcOnzR4H
+         6GZIF6yrulGHwJXaDweToH0SacWB1uBUrGc9Z/DHFIQha4M97h1CKE929sjX3fZdzguq
+         gXUW8wBnfHygdFJZyD5Gsbj3DTdLe/SjdGGDREzOV98c6rd1zskArfBJLQL21fajOAs7
+         kyYdJFDXe81P9RKg6Wg+uHmamxJw8NRYCMMSZaOe39EeLf9P3CU1kO49o5Tl4nWkj6TQ
+         a7Jw==
+X-Gm-Message-State: APjAAAWeLwZShBDsKkSZaQlef+vwVlyqvNSHbBqw0sEZzs3kdDfGdk9f
+        bcq8+zvltE4Jjzw5geqmT+SFl12G3+nmVA==
+X-Google-Smtp-Source: APXvYqzjl12ttytDDZTPYzHoxqXGZ6T8VbJua2iNE0NpD5ENSg2KxH0rd1ocQvM8LndGTHmbIk999A==
+X-Received: by 2002:a5d:4446:: with SMTP id x6mr7191014wrr.11.1567029983616;
+        Wed, 28 Aug 2019 15:06:23 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id d69sm527663wmd.4.2019.08.28.15.06.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 28 Aug 2019 15:06:22 -0700 (PDT)
+Message-ID: <5d66fade.1c69fb81.b5fc3.2e14@mx.google.com>
+Date:   Wed, 28 Aug 2019 15:06:22 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LLJXSgfWPEA/X.PWOIp2sfa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20190828
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+Subject: next/master boot: 212 boots: 4 failed,
+ 196 passed with 12 offline (next-20190828)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LLJXSgfWPEA/X.PWOIp2sfa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 212 boots: 4 failed, 196 passed with 12 offline (next-201=
+90828)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20190828/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20190828/
 
-In commit
+Tree: next
+Branch: master
+Git Describe: next-20190828
+Git Commit: 5d18cb62218608a1388858880ad3ec76d6cb0d3b
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 88 unique boards, 27 SoC families, 17 builds out of 217
 
-  f93be8a7a366 ("mmc: sdhci-sprd: clear the UHS-I modes read from registers=
-")
+Boot Failures Detected:
 
-Fixes tag
+arm64:
+    defconfig:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
 
-  Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+arm:
+    oxnas_v6_defconfig:
+        gcc-8:
+            ox820-cloudengines-pogoplug-series-3: 1 failed lab
 
-has these problem(s):
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
+Offline Platforms:
 
-In commit
+mips:
 
-  218258427ce0 ("mms: sdhci-sprd: add SDHCI_QUIRK_BROKEN_CARD_DETECTION")
+    pistachio_defconfig:
+        gcc-8
+            pistachio_marduk: 1 offline lab
 
-Fixes tag
+arm64:
 
-  Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
 
-has these problem(s):
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
 
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
+arm:
 
-In commit
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
 
-  1236e62ef8de ("mmc: sdhci-sprd: add SDHCI_QUIRK2_PRESET_VALUE_BROKEN")
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
 
-Fixes tag
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
 
-  Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-In commit
-
-  8180519b1be0 ("mmc: sdhci-sprd: add get_ro hook function")
-
-Fixes tag
-
-  Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-In commit
-
-  b4e4296cc206 ("mmc: sdhci-sprd: fixed incorrect clock divider")
-
-Fixes tag
-
-  Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more tha one line - even if the line
-is more than 80 characters.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/LLJXSgfWPEA/X.PWOIp2sfa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1m+FIACgkQAVBC80lX
-0GyFQwgAgLkGu03CvO/syIVoC1fL7M2HVBIxP6yEF4I4GpW42kfTQ1NLT1weKlt7
-TPLWU2y/smCNKxzs5Z+phI4qO1z4eB1oN5zKSRLjzxwGYwIqHpgcphuPev5/XNoy
-0WZL7O6oMUxRjPGPcTnCF8Kl5Fr2R1IfIVmS0CY8cu6S3buITRNC3+jYNMWPiMQW
-sJGBneMrEQqQ43sK3cOWsIoNoEWxuCMidX00yZM/lthpWjpI90FExQDjPNOQ1jcK
-k+fzfA9qKTSo8N4AtVVDyVsfX0YSstfbQsSZH+kXEf54GfPQmobsY02+aN96i5OM
-D0vEQsO46VUVCT+y94ImOgjWQO0p1w==
-=JjJ1
------END PGP SIGNATURE-----
-
---Sig_/LLJXSgfWPEA/X.PWOIp2sfa--
+---
+For more info write to <info@kernelci.org>

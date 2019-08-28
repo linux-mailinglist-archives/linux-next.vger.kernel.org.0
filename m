@@ -2,135 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C83A0D2F
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 00:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8F32A0D36
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 00:06:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727308AbfH1WG0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 18:06:26 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:44466 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727251AbfH1WGZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Aug 2019 18:06:25 -0400
-Received: by mail-wr1-f48.google.com with SMTP id j11so1287393wrp.11
-        for <linux-next@vger.kernel.org>; Wed, 28 Aug 2019 15:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=E2a9bd4VmhM5QyeWx47X/B+dtLmgWnIzSdAKyPtaSV0=;
-        b=LpJe2ceC2sNJmo2f/0CJmJr8diT7WUdGei5bN/ydXWhylk/ZZEYDuZRIc3aW33wD2b
-         OLN5R87VyUPh6UuLrYXItaKMTFlpBWBt+TnZ4u8l+jQfF9SvJx+SRAX06yhQm7IsMFua
-         XlByU8m4p9K5dOuc1D/gY8JIP3kWvR+2eJokQejq+YFX0JtaX3l8LxuCK1zqFg3uV+yZ
-         ifVX3OJus681d6UINOxJl9glNwFuEltGY9yOb2yW+6LhaNBIJs+XNqXe9pJpnK8EHL8n
-         LJXMTXlrQ6pAmfWvmGehueK50vnCXP4DaOm1buNQGQ3YcWqfgQWNcJsimSoVFCF1x7/Z
-         rcug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=E2a9bd4VmhM5QyeWx47X/B+dtLmgWnIzSdAKyPtaSV0=;
-        b=giNhFNKu3ohkEYtrNNuLIROMR0p7o6rdxC5F8YN///w6E2znImkg+cmHMTltab3gQa
-         i0/lOK52FoGh+Wegsz1CI0fbv0L/lPdzvK6IznRJdae4tyzz354RaIWxQqq5EcOnzR4H
-         6GZIF6yrulGHwJXaDweToH0SacWB1uBUrGc9Z/DHFIQha4M97h1CKE929sjX3fZdzguq
-         gXUW8wBnfHygdFJZyD5Gsbj3DTdLe/SjdGGDREzOV98c6rd1zskArfBJLQL21fajOAs7
-         kyYdJFDXe81P9RKg6Wg+uHmamxJw8NRYCMMSZaOe39EeLf9P3CU1kO49o5Tl4nWkj6TQ
-         a7Jw==
-X-Gm-Message-State: APjAAAWeLwZShBDsKkSZaQlef+vwVlyqvNSHbBqw0sEZzs3kdDfGdk9f
-        bcq8+zvltE4Jjzw5geqmT+SFl12G3+nmVA==
-X-Google-Smtp-Source: APXvYqzjl12ttytDDZTPYzHoxqXGZ6T8VbJua2iNE0NpD5ENSg2KxH0rd1ocQvM8LndGTHmbIk999A==
-X-Received: by 2002:a5d:4446:: with SMTP id x6mr7191014wrr.11.1567029983616;
-        Wed, 28 Aug 2019 15:06:23 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id d69sm527663wmd.4.2019.08.28.15.06.22
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 28 Aug 2019 15:06:22 -0700 (PDT)
-Message-ID: <5d66fade.1c69fb81.b5fc3.2e14@mx.google.com>
-Date:   Wed, 28 Aug 2019 15:06:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1727447AbfH1WGj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 18:06:39 -0400
+Received: from ozlabs.org ([203.11.71.1]:57203 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727175AbfH1WGi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Aug 2019 18:06:38 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JfwC0X4qz9sMr;
+        Thu, 29 Aug 2019 08:06:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1567029997;
+        bh=PTTFXV1q8UF5UNG1JCDCm6SA8sLX3LbSw0/ECbtcDdM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=N+huXPqMqqG7I5uO7l9j2DWPXshWrM362tAujQft2NpuG5e9U5w54XYyrfMiwycka
+         yLR8aYvve/YIdguMvs4xDU/Qlar/6pLUs0T+VuQzbjd5M1TBuhqy3CWncdnaD5foVu
+         3K1eca3SE/dlEU4J2OVYRgbdcKUHJQZNpE0FxivyxcO1QeaBVQphOcHT3jdlp/efvq
+         LcPyi0ez7W2f3OjOfRdtIMsxna4zaAkmCxJ8IFUdSoyMhAixdTtZ46QfUaO08cnYyN
+         IrLUpxfEPhoCgYhapoRr5kG62RYNjEcqoW1nPDc14sgUoolhWrcPO+Vqo+KX+LFbGB
+         cGYqQGWABWiOQ==
+Date:   Thu, 29 Aug 2019 08:06:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bandan Das <bsd@redhat.com>
+Subject: linux-next: Fixes tag needs some work in the tip tree
+Message-ID: <20190829080633.07c7a422@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190828
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 212 boots: 4 failed,
- 196 passed with 12 offline (next-20190828)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/zoEpqVYIPki7=lLLI8vgyUT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 212 boots: 4 failed, 196 passed with 12 offline (next-201=
-90828)
+--Sig_/zoEpqVYIPki7=lLLI8vgyUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190828/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190828/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20190828
-Git Commit: 5d18cb62218608a1388858880ad3ec76d6cb0d3b
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 88 unique boards, 27 SoC families, 17 builds out of 217
+In commit
 
-Boot Failures Detected:
+  bae3a8d3308e ("x86/apic: Do not initialize LDR and DFR for bigsmp")
 
-arm64:
-    defconfig:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+Fixes tag
 
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
+  Fixes: db7b9e9f26b8 ("[PATCH] Clustered APIC setup for >8 CPU systems")
 
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
+has these problem(s):
 
-Offline Platforms:
+  - Target SHA1 does not exist
 
-mips:
+I could not quickly find an obvious match.
 
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
+--=20
+Cheers,
+Stephen Rothwell
 
-arm64:
+--Sig_/zoEpqVYIPki7=lLLI8vgyUT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
+-----BEGIN PGP SIGNATURE-----
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1m+ukACgkQAVBC80lX
+0GwVvQf/bzc1pRdnrmRabdGa59x9DXi8fGvhNmsXeh1P6/pzg9txVInrxMTeo3W+
+Gr36Qw7lJ3JqoztUM37lhcSeqmwRvXv2U4kcwOdOleXKkbf+BhGj/lAbZ91FWWVG
+iQ4lQ3QAOdV1JbjhLRd5S8X0XsHyQr5vz32dzJLm75/dS6TsyfeDvA+d5oszE1F5
+BxDepB+HuWEd0hbEM8kqmW7dAXLz1RKhdRNXvv3XcePXEAy4d75cI1bUDYtRBn1w
+jKf4sB253urLCTF0xgJiZ+d65EsPSX0HnCWaUPMxQ9QEihDMAU6HCw92xhSQSUnI
+d20F8FCqSN3nZ9DtdlT/gnh85MN49g==
+=y/zS
+-----END PGP SIGNATURE-----
 
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/zoEpqVYIPki7=lLLI8vgyUT--

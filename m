@@ -2,86 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAD7A0848
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 19:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8860A08CF
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 19:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726549AbfH1RT3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 13:19:29 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:25004 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726400AbfH1RT3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Aug 2019 13:19:29 -0400
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id BB35A807064;
-        Wed, 28 Aug 2019 17:19:28 +0000 (UTC)
-Received: from treble (ovpn-121-55.rdu2.redhat.com [10.10.121.55])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5FB1360BEC;
-        Wed, 28 Aug 2019 17:19:26 +0000 (UTC)
-Date:   Wed, 28 Aug 2019 12:19:23 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: mmotm 2019-08-27-20-39 uploaded (objtool: xen)
-Message-ID: <20190828171923.4sir3sxwsnc2pvjy@treble>
-References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
- <8b09d93a-bc42-bd8e-29ee-cd37765f4899@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <8b09d93a-bc42-bd8e-29ee-cd37765f4899@infradead.org>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.6.2 (mx1.redhat.com [10.5.110.67]); Wed, 28 Aug 2019 17:19:29 +0000 (UTC)
+        id S1726583AbfH1RnR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 13:43:17 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:32314 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726563AbfH1RnQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Aug 2019 13:43:16 -0400
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x7SHbmDR042508;
+        Wed, 28 Aug 2019 13:43:04 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2unuxk5ap3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Aug 2019 13:43:03 -0400
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.27/8.16.0.27) with SMTP id x7SHdaVT058445;
+        Wed, 28 Aug 2019 13:43:03 -0400
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2unuxk5anh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Aug 2019 13:43:03 -0400
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x7SHdUP2030957;
+        Wed, 28 Aug 2019 17:43:02 GMT
+Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
+        by ppma05wdc.us.ibm.com with ESMTP id 2ujvv7799e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 28 Aug 2019 17:43:02 +0000
+Received: from b01ledav004.gho.pok.ibm.com (b01ledav004.gho.pok.ibm.com [9.57.199.109])
+        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x7SHh1iW48103852
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 28 Aug 2019 17:43:01 GMT
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D9710112063;
+        Wed, 28 Aug 2019 17:43:01 +0000 (GMT)
+Received: from b01ledav004.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2DBF112062;
+        Wed, 28 Aug 2019 17:42:56 +0000 (GMT)
+Received: from [9.85.111.211] (unknown [9.85.111.211])
+        by b01ledav004.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 28 Aug 2019 17:42:56 +0000 (GMT)
+Message-ID: <1567014175.5082.6.camel@abdul>
+Subject: Re: [linux-next][BUG][driver/scsi/lpfc][c00f62e6] Kernel panics
+ when booting next kernel on my Power 9 box
+From:   Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+To:     James Smart <jsmart2021@gmail.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        dick.kennedy@broadcom.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        dougmill <dougmill@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>
+Date:   Wed, 28 Aug 2019 23:12:55 +0530
+In-Reply-To: <601365f6-c753-96f6-5d61-481f54d95440@gmail.com>
+References: <1566968536.23670.9.camel@abdul>
+         <601365f6-c753-96f6-5d61-481f54d95440@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-08-28_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1908280172
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 09:58:37AM -0700, Randy Dunlap wrote:
-> On 8/27/19 8:40 PM, akpm@linux-foundation.org wrote:
-> > The mm-of-the-moment snapshot 2019-08-27-20-39 has been uploaded to
+On Wed, 2019-08-28 at 08:22 -0700, James Smart wrote:
+> On 8/27/2019 10:02 PM, Abdul Haleem wrote:
+> > Greetings,
 > > 
-> >    http://www.ozlabs.org/~akpm/mmotm/
+> > linux-next kernel 5.3.0-rc1 failed to boot with kernel Oops on Power 9
+> > box
 > > 
-> > mmotm-readme.txt says
+> > I see a recent changes to lpfc code was from commit
+> > 10541f03 scsi: lpfc: Update lpfc version to 12.4.0.0
 > > 
-> > README for mm-of-the-moment:
+> > Recent boot logs:
 > > 
-> > http://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> > 
-> > You will need quilt to apply these patches to the latest Linus release (5.x
-> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > http://ozlabs.org/~akpm/mmotm/series
-> > 
-> > The file broken-out.tar.gz contains two datestamp files: .DATE and
-> > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> > followed by the base kernel version against which this patch series is to
-> > be applied.
+> > [..snip..]
 > 
+> see  https://www.spinics.net/lists/linux-scsi/msg133343.html
 > 
-> 
-> drivers/xen/gntdev.o: warning: objtool: gntdev_copy()+0x229: call to __ubsan_handle_out_of_bounds() with UACCESS enabled
+> It hasn't been tested yet, but appears to be the issue.
 
-Easy one :-)
+Ah, commit c00f62e6 (scsi: lpfc: Merge per-protocol...) is the bad one
+and Yes the patch fixes it, System booted fine with below code change
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 0c8e17f946cd..6a935ab93149 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -483,6 +483,7 @@ static const char *uaccess_safe_builtin[] = {
- 	"ubsan_type_mismatch_common",
- 	"__ubsan_handle_type_mismatch",
- 	"__ubsan_handle_type_mismatch_v1",
-+	"__ubsan_handle_out_of_bounds",
- 	/* misc */
- 	"csum_partial_copy_generic",
- 	"__memcpy_mcsafe",
+--- a/drivers/scsi/lpfc/lpfc_sli.c    2019-08-23 13:55:18.253546775 -0700
++++ b/drivers/scsi/lpfc_sli.c    2019-08-27 17:04:51.095330056 -0700
+@@ -5553,7 +5553,7 @@ lpfc_sli4_arm_cqeq_intr(struct lpfc_hba
+         for (qidx = 0; qidx < phba->cfg_hdw_queue; qidx++) {
+             qp = &sli4_hba->hdwq[qidx];
+             /* ARM the corresponding CQ */
+-            sli4_hba->sli4_write_cq_db(phba, qp[qidx].io_cq, 0,
++            sli4_hba->sli4_write_cq_db(phba, qp->io_cq, 0,
+                         LPFC_QUEUE_REARM);
+
+
+Tested-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+
+-- 
+Regard's
+
+Abdul Haleem
+IBM Linux Technology Centre
+
+
+

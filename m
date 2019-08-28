@@ -2,106 +2,183 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8651FA0943
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 20:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5B9A0978
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 20:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726592AbfH1SKC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 14:10:02 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com ([66.163.188.211]:37792
-        "EHLO sonic311-30.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726554AbfH1SKC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Aug 2019 14:10:02 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1567015801; bh=3pPQVTtaN3xFNYoQC6YM96DsP/BKVutNTYzvSw+F7lE=; h=To:Cc:From:Subject:Date:From:Subject; b=a4k82778dh7YpWimPH9Oi9QOtovKKATO8kxyNveG8Jcng5EIsakvfT8Hf3SwdQ/BIfdjxeBCUiRUeK1iz/F7bOvNcY/71C0jgVIOG7J4RJVPEZs0YTuCUpYEQ9t+g4J1OA7vEYyh7sA1o3NcuFWuqW5oO5KdLE7LpxUd5xOJ0nz2hMOf2viTEWWMrv6C9gkT/e/0/tzNMs5HVdzPebzVNQplv92ssafC5aZIhxvDL9gbWtUWkXPaB0qC5/jFxQIFxi9yYOyNtlekF2GKwqbos7WJwJN0yPQQhgc2LYCnHXYpXYGCmVGspFM4+BDzWpT7x5gfuoYBhToEgdLVXEHz3g==
-X-YMail-OSG: mSXIkWEVM1kdy6J8LJtMKA5oky.Wf7H0BbKIMVyyK9HxRyFFq94oqQTjj_jawnI
- b6VdCihlyBwqQmXBkxUh4bfoO6UJBoRSaO5NpH8JWwH_8OhjMZmpMLBdntj2tE8lLNAmRbqhIn5A
- DMZAj1GU21jLnMHAd40V_fNOHxSQI8qCzfC29pnEDrbi3t3SLGPiDPPf7w7Jp4QBCIVMCW4cmwvw
- DhCXE.DFTf4NBmyKsdnuEA52mCCBfMF6tgYWbkRylFwQNWwzRyoBBowlJhHbcS_.uB21TFi4yYnM
- bV1yiNLfljxzbbfKYmIjTGJoToNGXvMjrBM_hTj6z0aX7I.u9OT5UZxbAtRwhzuIOdCI1e4G4BLT
- DmrMVGBw5KVPsXaxhdzZkT_fZI_Nju74NTNZW3MzFx6LXxUmN6FvskgnPLfbbFY.UkuN2LV.b8Pl
- EdHsilWRjWlheeW3uFexiHsSEIvGmN5guiPwcuhAjWdR1D2Icb9wuE.etEMhDdbLqelW8Z4cGegt
- GUrJxkOcEHkUz7hxDBellFkqvfmLHWZj9OBIA_Ar3hDp0POcvNsPs4zB6349BkXJptE0ojcfsK3q
- NsVciwYcZhWWPk6GZMu2UM9NC_D1bQJO1jQwOCAwVzpO0dEI7c4svwCoMl_0395j6nM1ozEDChjg
- TIaLRjDD9ZoN298X9uY.kW3zQDxk3SbGAe2mRShl4ldy9Q4SboxXMwQINwmEUNWc.WEOBeEDCaKi
- 0KiJizzW.k7U0HJe.dZgbs1PDDj21UmiKTYG.pIob3zRc8SHSQVTqGORgowXb4xiKJ9Iz3pwqvO9
- 9l3CrxxRr0ttXh5Y2jDvNrQM6a9_yhfp_lInOTINhdXN_IpC0Z7MGK1tr5k6JhQaqbOWdxP.NUfh
- u1qrsHTujJYqmhyWBAqNpyPZ1P9U0jyVXO9QkG5dvHZb8r5xwWCln6fEhfuOKleyEqpUYI9BsEK7
- rC6Ns1.bG3v2Ar_baoFa3tynxhtcoT4C5nhLd9N74db7wfGEH9g4GGVMFg8dk49F55Azghf6LSLe
- w6laoAcw4WsqSy87y1uYFyRbJBs1MofUAX8COXrsZIXADn5C76JHgZIzW1bmLI4EeNOqnbejKbQO
- _n6Voqu39_K2SWRBT9NJzorkESfQdrGqfi7.BwGApsgIVyxMA9M37x_jAKJIfOZbHjWIALe0Mu.8
- Dj546Ap.zwDj3dixbDSS3cAAv_MHM9HT8hoZKv9TXAIUjiQRBxKYttKFrfMSLhNZzNqfOTC9c9GO
- Ar41DuDX8dKvpJOlSpqxiBW6.ytjwd9yIllq7gdz0sQH7Od6kSOzEqMsTJ7C4gyE7q3D6dG_jtM.
- srg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Wed, 28 Aug 2019 18:10:01 +0000
-Received: by smtp415.mail.ne1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID 8be2f1e377542bde2a4d249bff2b012b;
-          Wed, 28 Aug 2019 18:09:56 +0000 (UTC)
-To:     sfr@canb.auug.org.au
-Cc:     linux-next@vger.kernel.org, casey@schaufler-ca.com
-From:   Casey Schaufler <casey@schaufler-ca.com>
-Subject: Please include the Smack tree in linux-next
-Openpgp: preference=signencrypt
-Autocrypt: addr=casey@schaufler-ca.com; keydata=
- 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
- abzjfg==
-Message-ID: <5746b686-fd22-73b3-7de4-43282143396f@schaufler-ca.com>
-Date:   Wed, 28 Aug 2019 11:09:58 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+        id S1726839AbfH1Sap (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 14:30:45 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:35034 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726554AbfH1Sap (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Aug 2019 14:30:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=z/GTsMOG+FQ14Ym0CrHcgUMZHK5aHnNQzVskveU9sFI=; b=Li7H/9KkJmMz6GCqvX5y9EHsF
+        +rH6LaBMZx+HpuK0K0fVeaPwkqeEY1bHnK1uLkYcKLTbU5fvUYUQsZZVRc+w7EyOHGM+7Pm+aYDzj
+        lv8IwQQJ50WqfOtBlSURlzaBUdhASj25YJQ7zxbj80H3Y2I5+6G5Myhod459e8T1FtpYJEAYBUZ5U
+        GS0vt/SFZ6+KktBYOHTZq7pqeYCBVaA/GqnfcFnifKwk87MaB8bOhlJa1A8tXAUQLW7RlbDFLUIfX
+        Pg9C8cBK6CtV6Nh7SlVywqSv8sPTuM2gqLq2NRYZZgfTIe/QlRJpUQFOXuz/Yhbeyndl61cinK2yQ
+        ZQyStrNTA==;
+Received: from [2601:1c0:6200:6e8::4f71]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i32iN-0003wd-MP; Wed, 28 Aug 2019 18:30:39 +0000
+Subject: Re: mmotm 2019-08-27-20-39 uploaded (sound/hda/intel-nhlt.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        moderated for non-subscribers <alsa-devel@alsa-project.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <274054ef-8611-2661-9e67-4aabae5a7728@infradead.org>
+Date:   Wed, 28 Aug 2019 11:30:38 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
  Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
 Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Would it be possible to include the Smack project for-next branch
+On 8/27/19 8:40 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2019-08-27-20-39 has been uploaded to
+> 
+>    http://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
 
-	https://github.com/cschaufler/smack-next#for-next
+(from linux-next tree, but problem found/seen in mmotm)
 
-in linux-next?
+Sorry, I don't know who is responsible for this driver.
 
-Thank you.
+~~~~~~~~~~~~~~~~~~~~~~
+on i386:
 
+  CC      sound/hda/intel-nhlt.o
+../sound/hda/intel-nhlt.c:14:25: error: redefinition of ‘intel_nhlt_init’
+ struct nhlt_acpi_table *intel_nhlt_init(struct device *dev)
+                         ^~~~~~~~~~~~~~~
+In file included from ../sound/hda/intel-nhlt.c:5:0:
+../include/sound/intel-nhlt.h:134:39: note: previous definition of ‘intel_nhlt_init’ was here
+ static inline struct nhlt_acpi_table *intel_nhlt_init(struct device *dev)
+                                       ^~~~~~~~~~~~~~~
+../sound/hda/intel-nhlt.c: In function ‘intel_nhlt_init’:
+../sound/hda/intel-nhlt.c:39:14: error: dereferencing pointer to incomplete type ‘struct nhlt_resource_desc’
+  if (nhlt_ptr->length)
+              ^~
+../sound/hda/intel-nhlt.c:41:4: error: implicit declaration of function ‘memremap’; did you mean ‘ioremap’? [-Werror=implicit-function-declaration]
+    memremap(nhlt_ptr->min_addr, nhlt_ptr->length,
+    ^~~~~~~~
+    ioremap
+../sound/hda/intel-nhlt.c:42:6: error: ‘MEMREMAP_WB’ undeclared (first use in this function)
+      MEMREMAP_WB);
+      ^~~~~~~~~~~
+../sound/hda/intel-nhlt.c:42:6: note: each undeclared identifier is reported only once for each function it appears in
+../sound/hda/intel-nhlt.c:45:25: error: dereferencing pointer to incomplete type ‘struct nhlt_acpi_table’
+      (strncmp(nhlt_table->header.signature,
+                         ^~
+../sound/hda/intel-nhlt.c:48:3: error: implicit declaration of function ‘memunmap’; did you mean ‘vunmap’? [-Werror=implicit-function-declaration]
+   memunmap(nhlt_table);
+   ^~~~~~~~
+   vunmap
+../sound/hda/intel-nhlt.c: At top level:
+../sound/hda/intel-nhlt.c:56:6: error: redefinition of ‘intel_nhlt_free’
+ void intel_nhlt_free(struct nhlt_acpi_table *nhlt)
+      ^~~~~~~~~~~~~~~
+In file included from ../sound/hda/intel-nhlt.c:5:0:
+../include/sound/intel-nhlt.h:139:20: note: previous definition of ‘intel_nhlt_free’ was here
+ static inline void intel_nhlt_free(struct nhlt_acpi_table *addr)
+                    ^~~~~~~~~~~~~~~
+../sound/hda/intel-nhlt.c:62:5: error: redefinition of ‘intel_nhlt_get_dmic_geo’
+ int intel_nhlt_get_dmic_geo(struct device *dev, struct nhlt_acpi_table *nhlt)
+     ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from ../sound/hda/intel-nhlt.c:5:0:
+../include/sound/intel-nhlt.h:143:19: note: previous definition of ‘intel_nhlt_get_dmic_geo’ was here
+ static inline int intel_nhlt_get_dmic_geo(struct device *dev,
+                   ^~~~~~~~~~~~~~~~~~~~~~~
+../sound/hda/intel-nhlt.c: In function ‘intel_nhlt_get_dmic_geo’:
+../sound/hda/intel-nhlt.c:76:11: error: dereferencing pointer to incomplete type ‘struct nhlt_endpoint’
+   if (epnt->linktype == NHLT_LINK_DMIC) {
+           ^~
+../sound/hda/intel-nhlt.c:76:25: error: ‘NHLT_LINK_DMIC’ undeclared (first use in this function)
+   if (epnt->linktype == NHLT_LINK_DMIC) {
+                         ^~~~~~~~~~~~~~
+../sound/hda/intel-nhlt.c:79:15: error: dereferencing pointer to incomplete type ‘struct nhlt_dmic_array_config’
+    switch (cfg->array_type) {
+               ^~
+../sound/hda/intel-nhlt.c:80:9: error: ‘NHLT_MIC_ARRAY_2CH_SMALL’ undeclared (first use in this function)
+    case NHLT_MIC_ARRAY_2CH_SMALL:
+         ^~~~~~~~~~~~~~~~~~~~~~~~
+../sound/hda/intel-nhlt.c:81:9: error: ‘NHLT_MIC_ARRAY_2CH_BIG’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_2CH_SMALL’?
+    case NHLT_MIC_ARRAY_2CH_BIG:
+         ^~~~~~~~~~~~~~~~~~~~~~
+         NHLT_MIC_ARRAY_2CH_SMALL
+../sound/hda/intel-nhlt.c:82:16: error: ‘MIC_ARRAY_2CH’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_2CH_BIG’?
+     dmic_geo = MIC_ARRAY_2CH;
+                ^~~~~~~~~~~~~
+                NHLT_MIC_ARRAY_2CH_BIG
+../sound/hda/intel-nhlt.c:85:9: error: ‘NHLT_MIC_ARRAY_4CH_1ST_GEOM’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_2CH_BIG’?
+    case NHLT_MIC_ARRAY_4CH_1ST_GEOM:
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         NHLT_MIC_ARRAY_2CH_BIG
+../sound/hda/intel-nhlt.c:86:9: error: ‘NHLT_MIC_ARRAY_4CH_L_SHAPED’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_4CH_1ST_GEOM’?
+    case NHLT_MIC_ARRAY_4CH_L_SHAPED:
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         NHLT_MIC_ARRAY_4CH_1ST_GEOM
+  AR      sound/i2c/other/built-in.a
+../sound/hda/intel-nhlt.c:87:9: error: ‘NHLT_MIC_ARRAY_4CH_2ND_GEOM’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_4CH_1ST_GEOM’?
+    case NHLT_MIC_ARRAY_4CH_2ND_GEOM:
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+         NHLT_MIC_ARRAY_4CH_1ST_GEOM
+../sound/hda/intel-nhlt.c:88:16: error: ‘MIC_ARRAY_4CH’ undeclared (first use in this function); did you mean ‘MIC_ARRAY_2CH’?
+     dmic_geo = MIC_ARRAY_4CH;
+                ^~~~~~~~~~~~~
+                MIC_ARRAY_2CH
+  AR      sound/i2c/built-in.a
+  CC      drivers/bluetooth/btmtksdio.o
+../sound/hda/intel-nhlt.c:90:9: error: ‘NHLT_MIC_ARRAY_VENDOR_DEFINED’ undeclared (first use in this function); did you mean ‘NHLT_MIC_ARRAY_4CH_L_SHAPED’?
+    case NHLT_MIC_ARRAY_VENDOR_DEFINED:
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         NHLT_MIC_ARRAY_4CH_L_SHAPED
+../sound/hda/intel-nhlt.c:92:26: error: dereferencing pointer to incomplete type ‘struct nhlt_vendor_dmic_array_config’
+     dmic_geo = cfg_vendor->nb_mics;
+                          ^~
+../sound/hda/intel-nhlt.c: At top level:
+../sound/hda/intel-nhlt.c:106:16: error: expected declaration specifiers or ‘...’ before string constant
+ MODULE_LICENSE("GPL v2");
+                ^~~~~~~~
+../sound/hda/intel-nhlt.c:107:20: error: expected declaration specifiers or ‘...’ before string constant
+ MODULE_DESCRIPTION("Intel NHLT driver");
+                    ^~~~~~~~~~~~~~~~~~~
+cc1: some warnings being treated as errors
+make[3]: *** [../scripts/Makefile.build:266: sound/hda/intel-nhlt.o] Error 1
+
+
+
+-- 
+~Randy

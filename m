@@ -2,100 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BD4A0B03
-	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 22:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AD2DA0B08
+	for <lists+linux-next@lfdr.de>; Wed, 28 Aug 2019 22:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbfH1UBa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 16:01:30 -0400
-Received: from mail.kernel.org ([198.145.29.99]:41208 "EHLO mail.kernel.org"
+        id S1726735AbfH1UBj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 16:01:39 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:46064 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726315AbfH1UB3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Aug 2019 16:01:29 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726315AbfH1UBi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Aug 2019 16:01:38 -0400
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5613E22CF8;
-        Wed, 28 Aug 2019 20:01:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1567022488;
-        bh=MD4qcU/RNuQWBhQQ01cICuFkYluzMOqVUuTE6FPZ0IM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=iFfeQDhnrzVMUj4H9FCZIGJEVCdmUoJdFOJqH0nNIMzHq+sMuN7d0E/8e4AMSnVtC
-         7MVGmzqlFmzUS63rAQNUJjQdW0qwa87B1DdQhq1z0vsDdXRF4aSG1YgvLlybgwRoQb
-         8M19RIEIXpDElPoZ3O4OZ4pJwThIcMXQWQDipfuo=
-Received: by mail-qt1-f177.google.com with SMTP id g4so980662qtq.7;
-        Wed, 28 Aug 2019 13:01:28 -0700 (PDT)
-X-Gm-Message-State: APjAAAUp9VezRVwUfVlbLWU2fWju0bUz/wwgtg+3u4Fa489Jpdf4Lz/5
-        UBukcuG9fU7gdhlwQ3Gsf151owJyzj+NxHzN6A==
-X-Google-Smtp-Source: APXvYqzh6lclUqux/vGx4y8IrMqxuIi7axYVYygQGUBgHesfvCn92IkyHi3rsied4shlJPCDpAw75irc/7RIpvqF21A=
-X-Received: by 2002:ad4:4301:: with SMTP id c1mr4283774qvs.138.1567022487474;
- Wed, 28 Aug 2019 13:01:27 -0700 (PDT)
+        by mx1.redhat.com (Postfix) with ESMTPS id 9579F88313;
+        Wed, 28 Aug 2019 20:01:38 +0000 (UTC)
+Received: from treble (ovpn-121-55.rdu2.redhat.com [10.10.121.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E57925C1D6;
+        Wed, 28 Aug 2019 20:01:36 +0000 (UTC)
+Date:   Wed, 28 Aug 2019 15:01:34 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: mmotm 2019-08-27-20-39 uploaded (objtool: xen)
+Message-ID: <20190828200134.d3lwgyunlpxc6cbn@treble>
+References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
+ <8b09d93a-bc42-bd8e-29ee-cd37765f4899@infradead.org>
+ <20190828171923.4sir3sxwsnc2pvjy@treble>
+ <57d6ab2e-1bae-dca3-2544-4f6e6a936c3a@infradead.org>
 MIME-Version: 1.0
-References: <1565691791-26167-1-git-send-email-Ashish.Kumar@nxp.com>
- <20190821110640.GC5128@sirena.co.uk> <VI1PR04MB401528B4F92DAD98385EF53395AA0@VI1PR04MB4015.eurprd04.prod.outlook.com>
- <VI1PR04MB4015474B3086AE99354FE65395A50@VI1PR04MB4015.eurprd04.prod.outlook.com>
- <20190822184927.GH23391@sirena.co.uk> <20190827155005.GA18581@bogus> <20190827195606.GA28879@sirena.org.uk>
-In-Reply-To: <20190827195606.GA28879@sirena.org.uk>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 28 Aug 2019 15:01:15 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKnY1ucejpaSUYu_dGZ=uHMybsW4ryJAtEgimUXB+ozbg@mail.gmail.com>
-Message-ID: <CAL_JsqKnY1ucejpaSUYu_dGZ=uHMybsW4ryJAtEgimUXB+ozbg@mail.gmail.com>
-Subject: Re: [EXT] Re: [Patch v4 1/3] dt-bindings: spi: spi-fsl-qspi: Add
- ls2080a compatibility string to bindings
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Ashish Kumar <ashish.kumar@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Kuldeep Singh <kuldeep.singh@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <57d6ab2e-1bae-dca3-2544-4f6e6a936c3a@infradead.org>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.28]); Wed, 28 Aug 2019 20:01:38 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Aug 27, 2019 at 2:56 PM Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Aug 27, 2019 at 10:50:05AM -0500, Rob Herring wrote:
-> > On Thu, Aug 22, 2019 at 07:49:27PM +0100, Mark Brown wrote:
->
-> > > Drop the dt-bindings:.
->
-> > If you do 'git log --oneline Documentation/devicetree/bindings/' you'll
-> > notice that SPI and ASoC are the oddballs now. I don't really care
-> > except it does add to tribal knowledge needed regarding maintainers'
-> > requirements.
->
-> Well, you have been pushing people to change over to using
-> dt-bindings: so I guess you do care :(
+On Wed, Aug 28, 2019 at 10:56:25AM -0700, Randy Dunlap wrote:
+> >> drivers/xen/gntdev.o: warning: objtool: gntdev_copy()+0x229: call to __ubsan_handle_out_of_bounds() with UACCESS enabled
+> > 
+> > Easy one :-)
+> > 
+> > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> > index 0c8e17f946cd..6a935ab93149 100644
+> > --- a/tools/objtool/check.c
+> > +++ b/tools/objtool/check.c
+> > @@ -483,6 +483,7 @@ static const char *uaccess_safe_builtin[] = {
+> >  	"ubsan_type_mismatch_common",
+> >  	"__ubsan_handle_type_mismatch",
+> >  	"__ubsan_handle_type_mismatch_v1",
+> > +	"__ubsan_handle_out_of_bounds",
+> >  	/* misc */
+> >  	"csum_partial_copy_generic",
+> >  	"__memcpy_mcsafe",
+> > 
+> 
+> 
+> then I get this one:
+> 
+> lib/ubsan.o: warning: objtool: __ubsan_handle_out_of_bounds()+0x5d: call to ubsan_prologue() with UACCESS enabled
 
-Well, yes. In the absence of any sort of pattern, I have pushed for
-some consistency. And to get rid of subjects like this:
+And of course I jinxed it by calling it easy.
 
-Documentation/devicetree/bindings: Add the DT binding documentation for foo-bar
+Peter, how do you want to handle this?
 
-If subsystems are consistent with their own standard as you are, then
-as a maintainer I don't really care. My point was in regard to what
-submitters need to know and follow.
+Should we just disable UACCESS checking in lib/ubsan.c?
 
-> It really does cause me
-> to miss stuff, especially where people don't even include the
-> subsystem name in the header.  I get quite a lot of CCs for
-> things where I once reviewed a patch for a subsystem that made
-> use of some subsystem I do maintain or where one patch in a
-> series (perhaps even an already applied one) was relevant at some
-> point so I'm doing quite a bit of triage that's purely based on
-> the subject lines.
-
-I can't imagine filtering on subjects will ever be that reliable
-unless we add subject prefixes to MAINTAINERS and have checkpatch
-check commits against those. Filtering on the diffstat is the only
-thing that's kept things to a sane list for me (MAINTAINERS for DT
-used to tag of_* functions which just meant getting copied on *every*
-driver). This is done on the patchwork server side for me, but I
-imagine one could do it on the client side too.
-
-Rob
+-- 
+Josh

@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A881A2307
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 20:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77502A2740
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 21:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbfH2SLZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Aug 2019 14:11:25 -0400
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:53541 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727125AbfH2SLY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Aug 2019 14:11:24 -0400
-Received: by mail-wm1-f49.google.com with SMTP id 10so4668254wmp.3
-        for <linux-next@vger.kernel.org>; Thu, 29 Aug 2019 11:11:23 -0700 (PDT)
+        id S1727146AbfH2TZx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Aug 2019 15:25:53 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:37120 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726343AbfH2TZx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Aug 2019 15:25:53 -0400
+Received: by mail-wr1-f67.google.com with SMTP id z11so4595376wrt.4
+        for <linux-next@vger.kernel.org>; Thu, 29 Aug 2019 12:25:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=1uuGz634z7aLday1Fjqc4bZaYjGfQIA8QMX9pfrMg6s=;
-        b=SrLFJums1Sp0/UN87yraP1MlhAEQq33//vGMwETGyCMMeURwH40xdKef+tQMUqm6kW
-         dMRxPJqSYf+/dzry2ewF7gWdCAHhwbcNXCMZEunR7P3Des7XG/++B5fpXZ/S/C1BYRAv
-         GQs2xSvcfBPez38wCfsht80ebZ2w5wZF7ANBcwv9ELgJCUUy2DjyrgCqg9aNVvTRRXb/
-         flkamk4Xl8j/O82BtcohP+9U0Xc2Gzp6Ya8JPWEAPmpfVcWSuOXXsra5IZcegBmtb/xE
-         X88F0m0f/1QiAZtpq00Cm8OXC2ccHBrh/2IATTwPRmBtAs8FZofgFfx5PpqTj1Ukf+Uc
-         gi3Q==
+        bh=k7eSbPueeRYbhwmucbkqvw1kmWpZzltBlU7yQe/kJ24=;
+        b=LfIDpiwplLD4zzZdG1ZMEtRTCMqNWap4uqjLR/ZD2+JVuC8xE6qeGHpNyS65+Lolmz
+         PKK1bZgF5SyqR6RgPNwrYRkT7d48H5J+Z81xzGAuQYGlD/c2n7k3P7i7HVk0iKsA/8Js
+         L7h7igcZooY2bCc8M2bt/lQY92LhGDrfBXGGcoUZYunQIGge2PjZRvq0HlD3yF/HFRn7
+         ewwgyQi9lzD5XZaOuVrYBeX2c2+5MbTfJ6aN/I9X+8SG5iY8f6eSWneWOVOTovB35uvN
+         i4+3T8F9ZjtVNEbcFsH5NtOEcYrO/YhjTmD2mXK1rJgXiPXQvK/hnr26WO+hlk0ar4La
+         1bwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=1uuGz634z7aLday1Fjqc4bZaYjGfQIA8QMX9pfrMg6s=;
-        b=ZJj0S03RGeY2qfqXtn3l1kGi6NMD1eLsBLJF2IOpoXHVSLIMqxrxXVJULn6VFrHUK5
-         fzs5ZFATN3kKzhhRYi9+kLiCNbEoIaYa1oy+gwtlnKCDy30HqM1g2Xxn17Ar+in50zav
-         N0mwh6xK8MNB7KrEDqUwEQ61D526DCZivVwnWrl28hxKcIyX+SZ4PbTM4f5b2LDyikgk
-         ezDmaTVZIPdnbhp62EpOgtA8jNQYr7QsPoiRC8l0rUyjuLowwaay8inwwIUxKWlEiKqm
-         PGxX4vXUGra8taqv4PBcv8RKQs5bBg2mlf7XNStQ6HlSl2KzDC3+flFiomNdioAn5Hmi
-         wodg==
-X-Gm-Message-State: APjAAAWJ2H6kh0/RQTjBajDwgSanCZhklFaDdXo/w2Q35/5Dy/fD9eTS
-        M9suAqXkIxbKkeA5WzX+kb4PLxuKuh5ntw==
-X-Google-Smtp-Source: APXvYqwEGQNkiXmZ2rlnW5m80lz9jRz1uvrxQDgtE1Jlt8OjoGGrxIPXQGFqWxrJV+Bu4r0Zf8UniQ==
-X-Received: by 2002:a7b:cb03:: with SMTP id u3mr13523495wmj.58.1567102282919;
-        Thu, 29 Aug 2019 11:11:22 -0700 (PDT)
+        bh=k7eSbPueeRYbhwmucbkqvw1kmWpZzltBlU7yQe/kJ24=;
+        b=OfqGqopsvmd8RgQqiMkhJVjGU5VoSutmDPxiFd+95sVx9iSZxuj2Di4KHisb6EWxYV
+         LOgG5MDBZs+EAcR4yDjjyBNB/8N1A6436v9X2Izof8kTwOKEAdbvzmKIG7/HEGM2YWJs
+         LYEVh+cmGMlH1UO38DgBkkjOj59uiYbnMBORhv86Rn4RJqyPz62a58vbZ6EQXqxT4gj5
+         Un48fMM7vpzDrkfPVpZJ2J08pTul3+IkB5/BqtSuqUYmjqg1yLEbffUuq3RpFP1iiUjh
+         kjSeWMtINyCiSys/8G9G62xKRKWt3ROY7TQl7cw+ctOHtdryFtWHonlp+qNsmVQWVHPq
+         UnLw==
+X-Gm-Message-State: APjAAAW2AFCipodCMhtbNti2DrSKS8qail33+mti7RLuuwtRcDwFN3ho
+        IHRDVtFtqA9tBy2a0hNh8MIVkoDRAnoL2g==
+X-Google-Smtp-Source: APXvYqywhGlNrCIjdvwaAR6klURLcTUlr5verwwld/xRZ8l+8yjezkU+b7Bc6oAxVmaOUYHP3W69yQ==
+X-Received: by 2002:a5d:4083:: with SMTP id o3mr13973079wrp.150.1567106750686;
+        Thu, 29 Aug 2019 12:25:50 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id u186sm7025684wmu.26.2019.08.29.11.11.21
+        by smtp.gmail.com with ESMTPSA id k9sm5240881wrq.15.2019.08.29.12.25.49
         for <linux-next@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 29 Aug 2019 11:11:22 -0700 (PDT)
-Message-ID: <5d68154a.1c69fb81.51825.1dc3@mx.google.com>
-Date:   Thu, 29 Aug 2019 11:11:22 -0700 (PDT)
+        Thu, 29 Aug 2019 12:25:49 -0700 (PDT)
+Message-ID: <5d6826bd.1c69fb81.dada7.a075@mx.google.com>
+Date:   Thu, 29 Aug 2019 12:25:49 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-rc6-305-gae3f6f95df2d
+X-Kernelci-Kernel: next-20190829
 X-Kernelci-Tree: next
 X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 215 boots: 5 failed,
- 197 passed with 13 offline (v5.3-rc6-305-gae3f6f95df2d)
+X-Kernelci-Branch: master
+Subject: next/master boot: 209 boots: 6 failed, 190 passed with 11 offline,
+ 2 untried/unknown (next-20190829)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,36 +63,20 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 215 boots: 5 failed, 197 passed with 13 offline (v=
-5.3-rc6-305-gae3f6f95df2d)
+next/master boot: 209 boots: 6 failed, 190 passed with 11 offline, 2 untrie=
+d/unknown (next-20190829)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-rc6-305-gae3f6f95df2d/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-rc6-305-gae3f6f95df2d/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20190829/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20190829/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-rc6-305-gae3f6f95df2d
-Git Commit: ae3f6f95df2d9d2afb091c29ec647962e3218e8d
+Branch: master
+Git Describe: next-20190829
+Git Commit: 64c1a9f4736656edf16d41714bea5caab1234a2c
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 82 unique boards, 26 SoC families, 20 builds out of 222
-
-Boot Regressions Detected:
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-gxm-khadas-vim2:
-              lab-baylibre: failing since 1 day (last pass: v5.3-rc5-221-g5=
-995e3fbeb96 - first fail: v5.3-rc6-214-g30064e30ccb4)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxm-khadas-vim2:
-              lab-baylibre: failing since 1 day (last pass: v5.3-rc6-214-g3=
-0064e30ccb4 - first fail: v5.3-rc6-266-gebd24bbbf581)
+Tested: 85 unique boards, 27 SoC families, 17 builds out of 217
 
 Boot Failures Detected:
 
@@ -100,11 +84,8 @@ arm64:
     defconfig:
         gcc-8:
             apq8096-db820c: 1 failed lab
-            meson-gxm-khadas-vim2: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-khadas-vim2: 1 failed lab
+            rk3399-firefly: 1 failed lab
+            sun50i-h6-orangepi-one-plus: 1 failed lab
 
 arm:
     oxnas_v6_defconfig:
@@ -116,6 +97,12 @@ arm:
             at91-sama5d4_xplained: 1 failed lab
 
 Offline Platforms:
+
+mips:
+
+    pistachio_defconfig:
+        gcc-8
+            pistachio_marduk: 1 offline lab
 
 arm64:
 
@@ -129,11 +116,6 @@ arm64:
             apq8016-sbc: 1 offline lab
             meson-gxbb-odroidc2: 1 offline lab
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
 arm:
 
     multi_v7_defconfig:
@@ -141,7 +123,6 @@ arm:
             qcom-apq8064-cm-qs600: 1 offline lab
             qcom-apq8064-ifc6410: 1 offline lab
             sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
 
     qcom_defconfig:
         gcc-8

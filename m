@@ -2,100 +2,140 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCB6A0EE6
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 03:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10108A0EF2
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 03:35:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbfH2B32 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 21:29:28 -0400
-Received: from ozlabs.org ([203.11.71.1]:59819 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725993AbfH2B32 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 28 Aug 2019 21:29:28 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JlQG51kRz9sN4;
-        Thu, 29 Aug 2019 11:29:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567042166;
-        bh=tskMfJFI0O4IbFruMfr+cUXuPvwjE5vWKxjp7imadhM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QF1Waz4Vgz61lmDJ23xl8MdiJ7dmUfnZqYkXeKZvnLUQ8VGLw//X6OD2wcwjP6ASX
-         1AH2Qm15LCI/i0evPATYVu4LsT7tI1BG2BDOa0kpuvlIAKAITUgnxEcnAchtBbSQJj
-         +tjg3ZW/pM5bt1vZA50DU+G+Do9QxWYm7GYX3hmtBdLDYAMQvZETobzMgnsrXl4o8o
-         uWMoboA5OJzd4p1r6xOUcKHbvTBzFexWGGGpoU0KeyxcOoO7IGTdCp6lCCkLv3u03m
-         NjL6tsl44fbRyorsPho4A+HQYa8tsl2VYx37z3JalxMVMeStMEbaMKZuiorEUP050j
-         xBOc8CXO4j+iw==
-Date:   Thu, 29 Aug 2019 11:29:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     linux-next@vger.kernel.org
-Subject: Re: Please include the Smack tree in linux-next
-Message-ID: <20190829112925.1a3a3dd0@canb.auug.org.au>
-In-Reply-To: <5746b686-fd22-73b3-7de4-43282143396f@schaufler-ca.com>
-References: <5746b686-fd22-73b3-7de4-43282143396f@schaufler-ca.com>
+        id S1726330AbfH2BfI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 21:35:08 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:36603 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726319AbfH2BfI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Aug 2019 21:35:08 -0400
+Received: by mail-wr1-f67.google.com with SMTP id y19so1684102wrd.3;
+        Wed, 28 Aug 2019 18:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4NPHzGMHYMzghz4vKjLIpWBlZHhRzQQTSD/2+ZhOAgo=;
+        b=kPQ59wqqXRr0CkbdnV6M+GImGU0tRXa3NIERwuxH/oG/TjykEADyx9NArTdkfBMJnY
+         VreCFgHWkH03xi2DcMcInAkEBn6aNILJ3vPPEKp5+h+T35lJSLSFlmk9ZLdzrllvjbdf
+         WN6bQyEF87/Tus2z3cPZ+Z/YdN3L/zJdPcl3XPO5isQCTiBbkzL99Y5/pTLAnAhc5Vyw
+         /oHgaTZ7MCox8HIwWq02jDJKOPu6tiej0gCSKwKU4sDG7g5ITU3IVNjeW6odzzXOB28E
+         FYbzv3zKu7aS8ljaFwH/Iji7SNhkO9xT+77OCtAUhZnVBProcedSmN9mdlGGDEEQX3vl
+         NIXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4NPHzGMHYMzghz4vKjLIpWBlZHhRzQQTSD/2+ZhOAgo=;
+        b=Y2jlxlGl7L8nb8RInSWbdKgzAAgSZ9XQFQPfz5TDS/MOLr/uZL3euseW1zsQoNRCfo
+         ycBTznzToXPrqPzQGn54YAuCugeTX9x5pHBFItOoa1MdhTzzwa16QELlVOzwlCmz+SxM
+         IcaMLFxVkmeLmZNp8BF7ZucnDSAeGa1wY9nk70CRIwFUx+lwpRWdsJbOwBAXkKg8blrS
+         BfOCbN6yfb+dBQywKLqGeEDIXdSVDnbEmN2XH8AT9U85e13+5U4dV4vfENaFCsGnUqkb
+         10Yn7HtltwmJB0DfFJwmjxUb7+0DStHFSlX3wEhPbuIbU7bOaJlX2dutskJ4ThnpSJo6
+         yVTQ==
+X-Gm-Message-State: APjAAAUmbke619NaOpq0uxL7H05aOpBgFU94TbjFbgVunAS4OD1+wdfn
+        FHXs0Ve0fzhlyE9IuKGA/zd6mcqoJxy5jmbJljs=
+X-Google-Smtp-Source: APXvYqy1x5d0HaAGunnwgLR34YPhchUNwyWv5vgSZJs18Lzq9eEMkHulEXF12ksY9MfJcJYlNgY+HMEMxKNQliKecdc=
+X-Received: by 2002:a5d:6742:: with SMTP id l2mr7714375wrw.70.1567042505463;
+ Wed, 28 Aug 2019 18:35:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aKOitRyfRMUZ4AAvb+t0YRu";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20190829075530.6fb7341c@canb.auug.org.au>
+In-Reply-To: <20190829075530.6fb7341c@canb.auug.org.au>
+From:   Chunyan Zhang <zhang.lyra@gmail.com>
+Date:   Thu, 29 Aug 2019 09:34:29 +0800
+Message-ID: <CAAfSe-v3uxWn8P1iJypFD2BCX-75SAMpo=dVtO7jMdt6E41tsg@mail.gmail.com>
+Subject: Re: linux-next: Fixes tags need some work in the mmc-fixes tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chunyan Zhang <chunyan.zhang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/aKOitRyfRMUZ4AAvb+t0YRu
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Casey,
-
-On Wed, 28 Aug 2019 11:09:58 -0700 Casey Schaufler <casey@schaufler-ca.com>=
- wrote:
+On Thu, 29 Aug 2019 at 05:55, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> Would it be possible to include the Smack project for-next branch
->=20
-> 	https://github.com/cschaufler/smack-next#for-next
->=20
-> in linux-next?
+> Hi all,
+>
+> In commit
+>
+>   f93be8a7a366 ("mmc: sdhci-sprd: clear the UHS-I modes read from registers")
+>
+> Fixes tag
+>
+>   Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> In commit
+>
+>   218258427ce0 ("mms: sdhci-sprd: add SDHCI_QUIRK_BROKEN_CARD_DETECTION")
+>
+> Fixes tag
+>
+>   Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> In commit
+>
+>   1236e62ef8de ("mmc: sdhci-sprd: add SDHCI_QUIRK2_PRESET_VALUE_BROKEN")
+>
+> Fixes tag
+>
+>   Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> In commit
+>
+>   8180519b1be0 ("mmc: sdhci-sprd: add get_ro hook function")
+>
+> Fixes tag
+>
+>   Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> In commit
+>
+>   b4e4296cc206 ("mmc: sdhci-sprd: fixed incorrect clock divider")
+>
+> Fixes tag
+>
+>   Fixes: fb8bd90f83c4 ("mmc: sdhci-sprd: Add Spreadtrum's initial host
+>
+> has these problem(s):
+>
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+>
+> Please do not split Fixes tags over more tha one line - even if the line
+> is more than 80 characters.
 
-Added from today.
+I will send another patch-set.
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Thanks,
+Chunyan
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---Sig_/aKOitRyfRMUZ4AAvb+t0YRu
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1nKnUACgkQAVBC80lX
-0Gwvggf/Sz2Ee3C9ZdSx1z04yyLX1gmCK4z1dPZqf1kqYpHZETEDic973PKvnx+T
-KQ7sbm6DlemvLtEnHGFrodz2ze2q9CRrg/qVDOSnCoMYK2++XyDZ+yb1ES5CJR7I
-iy/pBAfxneNN3CiTB5bvFZ4eNz54SmiOQtQhmafQQJkJI7iZbjoVCpAZbHFXl1XB
-SPBD28f9z/2jMRAvUhC++Jadg5p8I8+i5d8HQloH2BXIV5nyusHQt3lpIcq8B6fa
-ow/FY6+jbu7wXlXw9uwBWflO5AclJ410gfO6sej9NcFkVO/rFJiz9LAUlBIELkgq
-3fT3MSrOhYXpq3LdGNRufKKi/MxUhw==
-=f4TH
------END PGP SIGNATURE-----
-
---Sig_/aKOitRyfRMUZ4AAvb+t0YRu--
+>
+> --
+> Cheers,
+> Stephen Rothwell

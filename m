@@ -2,120 +2,249 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD1DA20B2
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 18:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE44A22EA
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 19:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727417AbfH2QWb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Aug 2019 12:22:31 -0400
-Received: from mga05.intel.com ([192.55.52.43]:20169 "EHLO mga05.intel.com"
+        id S1727546AbfH2R7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Aug 2019 13:59:36 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:35050 "EHLO mx1.redhat.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727207AbfH2QWb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 29 Aug 2019 12:22:31 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 29 Aug 2019 09:22:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,444,1559545200"; 
-   d="scan'208";a="205787728"
-Received: from mbmcwil3-mobl.amr.corp.intel.com (HELO [10.252.203.249]) ([10.252.203.249])
-  by fmsmga004.fm.intel.com with ESMTP; 29 Aug 2019 09:22:29 -0700
-Subject: Re: [alsa-devel] mmotm 2019-08-27-20-39 uploaded
- (sound/hda/intel-nhlt.c)
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        moderated for non-subscribers <alsa-devel@alsa-project.org>
-References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
- <274054ef-8611-2661-9e67-4aabae5a7728@infradead.org>
- <5ac8a7a7-a9b4-89a5-e0a6-7c97ec1fabc6@linux.intel.com>
- <98ada795-4700-7fcc-6d14-fcc1ab25d509@infradead.org>
- <f0a62b08-cba9-d944-5792-8eac0ea39df1@linux.intel.com>
- <19edfb9a-f7b3-7a89-db5a-33289559aeef@linux.intel.com>
- <s5hzhjs102i.wl-tiwai@suse.de>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <c7c8fcde-40c7-8025-9fa7-e7e0daa8770c@linux.intel.com>
-Date:   Thu, 29 Aug 2019 11:22:29 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726810AbfH2R7f (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 29 Aug 2019 13:59:35 -0400
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id 913003086258;
+        Thu, 29 Aug 2019 17:59:34 +0000 (UTC)
+Received: from treble (ovpn-121-55.rdu2.redhat.com [10.10.121.55])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8D9CA600C1;
+        Thu, 29 Aug 2019 17:59:33 +0000 (UTC)
+Date:   Thu, 29 Aug 2019 12:59:31 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: linux-next: Tree for Aug 27 (objtool)
+Message-ID: <20190829175931.sru23aud33hrdqbj@treble>
+References: <20190827190526.6f27e763@canb.auug.org.au>
+ <6c42e32f-901d-be78-e69b-cb9ff8703932@infradead.org>
+ <20190827155911.ct2zzo2zhcrauf3z@treble>
+ <2e8b18a0-a09c-b67e-c99f-45066ab9d511@infradead.org>
+ <20190828155147.v6eowc7rr7upr7dr@treble>
+ <f354f4be-99c7-346f-c7c5-ac5ce8a72a16@infradead.org>
+ <20190828161331.kvikro257blxtzu5@treble>
+ <20190828163433.4ltoxmtuujkqspar@treble>
+ <20190829105356.1fd4859f49c142945146855f@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <s5hzhjs102i.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20190829105356.1fd4859f49c142945146855f@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.49]); Thu, 29 Aug 2019 17:59:34 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Aug 29, 2019 at 10:53:56AM +0900, Masami Hiramatsu wrote:
+> Hi Josh,
+> 
+> On Wed, 28 Aug 2019 11:34:33 -0500
+> Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> 
+> > On Wed, Aug 28, 2019 at 11:13:31AM -0500, Josh Poimboeuf wrote:
+> > > Turns out this patch does break something:
+> > > 
+> > >   arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
+> > > 
+> > > I'll need to figure out a better way to whitelist that
+> > > XEN_EMULATE_PREFIX fake instruction thing.  I'll probably just teach
+> > > the objtool decoder about it.
+> > 
+> > Hi Masami,
+> > 
+> > Is it possible for the kernel x86 decoder to recognize the
+> > XEN_EMULATE_PREFIX prefix?
+> > 
+> >         asm(XEN_EMULATE_PREFIX "cpuid"
+> >                 : "=a" (*ax),
+> >                   "=b" (*bx),
+> >                   "=c" (*cx),
+> >                   "=d" (*dx)
+> >                 : "0" (*ax), "2" (*cx));
+> > 
+> > is disassembled to:
+> > 
+> >       33:       0f 0b                   ud2
+> >       35:       78 65                   js     9c <xen_store_tr+0xc>
+> >       37:       6e                      outsb  %ds:(%rsi),(%dx)
+> >       38:       0f a2                   cpuid
+> > 
+> > which confuses objtool.  Presumably that would confuse other users of
+> > the decoder as well.
+> 
+> Good catch! It should be problematic, since x86 decoder sanity test is
+> based on objtool.
 
+I think you mean the decoder test is based on objdump, not objtool?
 
-On 8/29/19 10:08 AM, Takashi Iwai wrote:
-> On Thu, 29 Aug 2019 00:45:05 +0200,
-> Pierre-Louis Bossart wrote:
->>
->>
->>>>> I just checked with Mark Brown's for-next tree
->>>>> 8aceffa09b4b9867153bfe0ff6f40517240cee12
->>>>> and things are fine in i386 mode, see below.
->>>>>
->>>>> next-20190828 also works fine for me in i386 mode.
->>>>>
->>>>> if you can point me to a tree and configuration that don't work
->>>>> I'll look into this, I'd need more info to progress.
->>>>
->>>> Please try the attached randconfig file.
->>>>
->>>> Thanks for looking.
->>>
->>> Ack, I see some errors as well with this config. Likely a missing
->>> dependency somewhere, working on this now.
->>
->> My bad, I added a fallback with static inline functions in the .h file
->> when ACPI is not defined, but the .c file was still compiled.
->>
->> The diff below makes next-20190828 compile with Randy's config.
-> 
-> IMO, we need to fix the site that enables this config.  i.e.
-> the "select SND_INTEL_NHLT" must be always conditional, e.g.
-> 	select SND_INTEL_NHLT if ACPI
+Actually I wonder if X86_DECODER_SELFTEST is even still needed these
+days, since objtool is enabled on default configs.  Objtool already uses
+the decoder to disassemble every instruction in the kernel (except for a
+few whitelisted files).
 
-that would be nicer indeed, currently we don't have a consistent solution:
-sound/pci/hda/Kconfig:  select SND_INTEL_NHLT if ACPI
-sound/soc/intel/Kconfig:        select SND_INTEL_NHLT
-sound/soc/sof/intel/Kconfig:    select SND_INTEL_NHLT
+> But I don't want to change the test code itself,
+> because this problem is highly depending on Xen.
+> 
+> > That's a highly unlikely sequence of instructions, maybe the kernel
+> > decoder should recognize it as a single instruction.
+> 
+> OK, it is better to be done in decoder (only for CONFIG_XEN_PVHVM)
+> 
+> BTW, could you also share what test case would you using?
 
-I can't recall why things are different, will send a patch to align.
+Enable CONFIG_XEN_PV and CONFIG_STACK_VALIDATION, and remove the
+STACK_FRAME_NON_STANDARD(xen_cpuid) line from
+arch/x86/xen/enlighten_pv.c.  objtool will complain:
 
+  arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
 
-> 
->> It looks like the alsa-devel server is down btw?
-> 
-> Now it seems starting again.
-> 
-> 
-> thanks,
-> 
-> Takashi
-> 
->> diff --git a/sound/hda/Makefile b/sound/hda/Makefile
->> index 8560f6ef1b19..b3af071ce06b 100644
->> --- a/sound/hda/Makefile
->> +++ b/sound/hda/Makefile
->> @@ -14,5 +14,7 @@ obj-$(CONFIG_SND_HDA_CORE) += snd-hda-core.o
->>   #extended hda
->>   obj-$(CONFIG_SND_HDA_EXT_CORE) += ext/
->>
->> +ifdef CONFIG_ACPI
->>   snd-intel-nhlt-objs := intel-nhlt.o
->>   obj-$(CONFIG_SND_INTEL_NHLT) += snd-intel-nhlt.o
->> +endif
->>
->> _______________________________________________
->> Alsa-devel mailing list
->> Alsa-devel@alsa-project.org
->> https://mailman.alsa-project.org/mailman/listinfo/alsa-devel
->>
+Basing it on CONFIG_XEN_PVHVM may be problematic.  The decoder is
+duplicated in the tools directory so objtool can use it.  But the tools
+don't know about kernel configs.
+
+BTW, I'm not sure if you're aware of this, but both objtool and perf
+have identical copies of the decoder.  The makefiles warn if they get
+out of sync with the kernel version.
+
+We will always need at least one copy of the decoder in tools, because
+the tools subdir is supposed to be standalone from the rest of the
+kernel.  Still, I may look at combining the perf and objtool copies into
+a single shared copy.
+
+> And what about attached patch? (just compile checked with/without CONFIG_XEN_PVHVM)
+
+I copied the decoder to objtool, removed the CONFIG_XEN_PVHVM ifdef, and
+played a bit with the includes, and got it to compile with objtool, but
+it still fails:
+
+  $ make arch/x86/xen/enlighten_pv.o
+  arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
+
+Patch below:
+
+diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
+index 58f79ab32358..dbba9b2dc408 100644
+--- a/arch/x86/xen/enlighten_pv.c
++++ b/arch/x86/xen/enlighten_pv.c
+@@ -193,7 +193,6 @@ static void xen_cpuid(unsigned int *ax, unsigned int *bx,
+ 
+ 	*bx &= maskebx;
+ }
+-STACK_FRAME_NON_STANDARD(xen_cpuid); /* XEN_EMULATE_PREFIX */
+ 
+ static bool __init xen_check_mwait(void)
+ {
+diff --git a/tools/objtool/arch/x86/include/asm/xen/interface.h b/tools/objtool/arch/x86/include/asm/xen/interface.h
+new file mode 100644
+index 000000000000..c11286eac21c
+--- /dev/null
++++ b/tools/objtool/arch/x86/include/asm/xen/interface.h
+@@ -0,0 +1,38 @@
++/******************************************************************************
++ * arch-x86_32.h
++ *
++ * Guest OS interface to x86 Xen.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a copy
++ * of this software and associated documentation files (the "Software"), to
++ * deal in the Software without restriction, including without limitation the
++ * rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
++ * sell copies of the Software, and to permit persons to whom the Software is
++ * furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
++ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
++ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
++ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
++ * DEALINGS IN THE SOFTWARE.
++ *
++ * Copyright (c) 2004-2006, K A Fraser
++ */
++#ifndef _ASM_X86_XEN_INTERFACE_H
++#define _ASM_X86_XEN_INTERFACE_H
++
++#include <linux/stringify.h>
++/*
++ * Prefix forces emulation of some non-trapping instructions.
++ * Currently only CPUID.
++ */
++#define __XEN_EMULATE_PREFIX  0x0f,0x0b,0x78,0x65,0x6e
++#define __XEN_EMULATE_PREFIX_STR  __stringify(__XEN_EMULATE_PREFIX)
++#define XEN_EMULATE_PREFIX ".byte " __XEN_EMULATE_PREFIX_STR " ; "
++
++#endif /* _ASM_X86_XEN_INTERFACE_H */
+diff --git a/tools/objtool/arch/x86/lib/insn.c b/tools/objtool/arch/x86/lib/insn.c
+index 0b5862ba6a75..bc77f607932e 100644
+--- a/tools/objtool/arch/x86/lib/insn.c
++++ b/tools/objtool/arch/x86/lib/insn.c
+@@ -10,6 +10,8 @@
+ #else
+ #include <string.h>
+ #endif
++#include <linux/kernel.h>
++#include <asm/xen/interface.h>
+ #include <asm/inat.h>
+ #include <asm/insn.h>
+ 
+@@ -58,6 +60,30 @@ void insn_init(struct insn *insn, const void *kaddr, int buf_len, int x86_64)
+ 		insn->addr_bytes = 4;
+ }
+ 
++static const insn_byte_t xen_prefix[] = { XEN_EMULATE_PREFIX };
++
++static int insn_xen_prefix(struct insn *insn, insn_byte_t b)
++{
++	struct insn_field *prefixes = &insn->prefixes;
++	int i = 0;
++
++	while (i < ARRAY_SIZE(xen_prefix) && b == xen_prefix[i])
++		b = peek_nbyte_next(insn_byte_t, insn, ++i);
++
++	if (unlikely(i == ARRAY_SIZE(xen_prefix))) {
++		memcpy(prefixes->bytes, xen_prefix, 3);
++		prefixes->bytes[3] = xen_prefix[ARRAY_SIZE(xen_prefix) - 1];
++		prefixes->nbytes = ARRAY_SIZE(xen_prefix);
++		insn->next_byte += prefixes->nbytes;
++		prefixes->got = 1;
++
++		return 1;
++	}
++
++err_out:
++	return 0;
++}
++
+ /**
+  * insn_get_prefixes - scan x86 instruction prefix bytes
+  * @insn:	&struct insn containing instruction
+@@ -79,6 +105,10 @@ void insn_get_prefixes(struct insn *insn)
+ 	nb = 0;
+ 	lb = 0;
+ 	b = peek_next(insn_byte_t, insn);
++
++	if (insn_xen_prefix(insn, b))
++		return;
++
+ 	attr = inat_get_opcode_attribute(b);
+ 	while (inat_is_legacy_prefix(attr)) {
+ 		/* Skip if same prefix */

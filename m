@@ -2,117 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA97A12AE
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 09:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5876A12F4
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 09:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726330AbfH2HfT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Aug 2019 03:35:19 -0400
-Received: from ozlabs.org ([203.11.71.1]:43447 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725782AbfH2HfT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 29 Aug 2019 03:35:19 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JvXN2pz0z9s5b;
-        Thu, 29 Aug 2019 17:35:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567064117;
-        bh=KdsotWkFg4n2gS9G9PGlPGtclq9pcMPxLN0SZXkQiSs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=AuX5TguMTk4iBS2O9LqjdviE5vqZHtKIGbC92fKkEVL7ceCkWAhQBZzxLXp+o1rVi
-         iM+v9zJE6uAzSu2x6NV6Vq1d3HrilbWtLpbqLvWC3fVK+FeeStcZ/5u4h6zbjmHJLl
-         CX6gytefIF6qmUTIuS8GIld68WgG0Oq5W1A/uXi0JNMHrP2M5lsrsaaPGtTyV6KgDf
-         Tz48veyPA+ehpBaUstk/CM7YvY4o75GLwvHumr6HOIwFbT26kr+9rL50jj7PC+Z+8o
-         GbmLdfgfGrABfqhqxixb2OP9R7zzMfpBUJL/h2vQlJzS0Ka7DeyUyW2qWwoWcqlf3g
-         eZKHCjTJgfFbA==
-Date:   Thu, 29 Aug 2019 17:35:15 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727736AbfH2HrJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Aug 2019 03:47:09 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:55466 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727114AbfH2HrJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Aug 2019 03:47:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VfCL8t+OBcNr47iwQjcm8aKmg01bRT6fUprt393rbFE=; b=RKlYtgLnNcmEBlMNdfBERNNH17
+        XQZN1PTq0irN0Eed0aOQdq9CrQ05+BhXZinDz+zkVcEhU7ZQ1Bo04+JxcCOOw1hTCWW3mmDU2wDwj
+        sxUO1icRtv73irjHzKaU6lPr6RwKM2rG+iiHHouc0d9HHDh8ZhN/Y+ZYxEphHdXkdf8CcL4IgVtfc
+        HHLQnKxuwqjQaVuxU6pV03GRHYdZZCq1nIh7cy7gKdbf8pYLWyU/yf0pD4w3DersV1pCpP5doxMET
+        RZTPV6H+vkx5RdUwKL56cgDawzcnJjjOkP3D0qdZ9JrvtbC3B3JNM2oywn0IJcd2oP/m0HiS5lKW0
+        7pA2HWqg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
+        id 1i3F8q-0008HC-S5; Thu, 29 Aug 2019 07:46:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AAC5B30775B;
+        Thu, 29 Aug 2019 09:46:10 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id B48C420C743FC; Thu, 29 Aug 2019 09:46:44 +0200 (CEST)
+Date:   Thu, 29 Aug 2019 09:46:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: linux-next: build failure after merge of the driver-core tree
-Message-ID: <20190829173515.764a12c5@canb.auug.org.au>
+        Mac Chiang <mac.chiang@intel.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20190829074644.GL2369@hirez.programming.kicks-ass.net>
+References: <20190829162012.36ac9d7c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/9HgvQ_dAjZrM0qt/DJ+5yAz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20190829162012.36ac9d7c@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/9HgvQ_dAjZrM0qt/DJ+5yAz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Aug 29, 2019 at 04:20:12PM +1000, Stephen Rothwell wrote:
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 29 Aug 2019 16:08:49 +1000
+> Subject: [PATCH] ASoC: Intel: boards: merge fix for INTEL_FAM6_KABYLAKE_M=
+OBILE -> INTEL_FAM6_KABYLAKE_L change
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  sound/soc/intel/common/soc-intel-quirks.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/sound/soc/intel/common/soc-intel-quirks.h b/sound/soc/intel/=
+common/soc-intel-quirks.h
+> index e6357d306cb8..863a477d3405 100644
+> --- a/sound/soc/intel/common/soc-intel-quirks.h
+> +++ b/sound/soc/intel/common/soc-intel-quirks.h
+> @@ -36,7 +36,7 @@ SOC_INTEL_IS_CPU(byt, INTEL_FAM6_ATOM_SILVERMONT);
+>  SOC_INTEL_IS_CPU(cht, INTEL_FAM6_ATOM_AIRMONT);
+>  SOC_INTEL_IS_CPU(apl, INTEL_FAM6_ATOM_GOLDMONT);
+>  SOC_INTEL_IS_CPU(glk, INTEL_FAM6_ATOM_GOLDMONT_PLUS);
+> -SOC_INTEL_IS_CPU(cml, INTEL_FAM6_KABYLAKE_MOBILE);
+> +SOC_INTEL_IS_CPU(cml, INTEL_FAM6_KABYLAKE_L);
 
-Hi all,
-
-After merging the driver-core tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
-
-ERROR: "platform_get_irq_optional" [drivers/hwmon/pwm-fan.ko] undefined!
-
-Caused by commit
-
-  6e7e5c7fbc1c ("hwmon: pwm-fan: Use platform_get_irq_optional()")
-
-[ or maybe commit
-
-  8973ea47901c ("driver core: platform: Introduce platform_get_irq_optional=
-()")
-]
-
-I have added the following patch for today.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 29 Aug 2019 17:26:34 +1000
-Subject: [PATCH] driver core: platform: export platform_get_irq_optional
-
-Fixes: 6e7e5c7fbc1c ("hwmon: pwm-fan: Use platform_get_irq_optional()")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/base/platform.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/base/platform.c b/drivers/base/platform.c
-index 0dda6ade50fd..11c6e56ccc22 100644
---- a/drivers/base/platform.c
-+++ b/drivers/base/platform.c
-@@ -213,6 +213,7 @@ int platform_get_irq_optional(struct platform_device *d=
-ev, unsigned int num)
- {
- 	return __platform_get_irq(dev, num);
- }
-+EXPORT_SYMBOL_GPL(platform_get_irq_optional);
-=20
- /**
-  * platform_irq_count - Count the number of IRQs a platform device uses
---=20
-2.20.1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/9HgvQ_dAjZrM0qt/DJ+5yAz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1ngDMACgkQAVBC80lX
-0Gzkggf+IWGemgymyci+mGq4DEJ115o20nTX3YuDwVWmYfeebJOcTOpsDXm7C/gz
-putAL+2NDNI7TVkMnHi5vjZVI1i0epFAfbcpdSZ7NzZJ2wzO520GHXPPesWA+qmc
-m0XYIs9cC3K8EPZvoUSEL3sYZuklwSPLionZfHd3cktJHRle+1QHVAFDIboAyyAB
-F2qUgDzO6pdkpvcgitTna+RrxAF0WBjzg3xnrPkcx7Gwb3qqR/J+FxU8LRNYyZEm
-zJLif50O1UYqTnnNJLkbL9MkCdzgWftEBmsgsKsU4fuwQhY/qoNLLUGTzIE7taaO
-sfYAyTWsp1krgcGVbw0+5fo0lIcldA==
-=Msa2
------END PGP SIGNATURE-----
-
---Sig_/9HgvQ_dAjZrM0qt/DJ+5yAz--
+ARGHH... rebase again?

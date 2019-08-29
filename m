@@ -2,101 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C46CDA0F79
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 04:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85149A100E
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 05:51:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726319AbfH2C0k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 28 Aug 2019 22:26:40 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:53314 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbfH2C0j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 28 Aug 2019 22:26:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=cvhAYDXepFr1W9XWCommsvR9amxyOLa9CIfTaM40gzI=; b=dvr793nmEyuIwAJsP5Fl+MGYY
-        uvnb9faUYyG1neWulPIY9ZqRNcx7SjwX+FKIEfKqNBaq9RcsVdx+oknvaG6iuC9vm37zGhMyvQvSp
-        nJheZPzgfL7MJSOERDyF7B+MXxsLHKpsR2LFo2OMFICcizUrJHk3BSzURLc/JXfRSqhYSVDAbp0Dz
-        cz3cR7/pdDt9G7D/xrl5aDhIH/TOr7g14632wYtcz03Z7SVo120mKlQT+ZPrHNq6nrfB5BSpna5tq
-        iBgolawBjj8HZ+Oof7dNaGFrhrtQ92LUnI5Fms8FoSvTkrIZX17aaBVDTCZayHDWuIoXvsEx2ijEb
-        64O83mpTA==;
-Received: from [2601:1c0:6200:6e8::4f71]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i3A8u-0005Xu-47; Thu, 29 Aug 2019 02:26:32 +0000
-Subject: Re: mmotm 2019-08-27-20-39 uploaded (sound/hda/intel-nhlt.c)
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        moderated for non-subscribers <alsa-devel@alsa-project.org>
-References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
- <274054ef-8611-2661-9e67-4aabae5a7728@infradead.org>
- <5ac8a7a7-a9b4-89a5-e0a6-7c97ec1fabc6@linux.intel.com>
- <98ada795-4700-7fcc-6d14-fcc1ab25d509@infradead.org>
- <f0a62b08-cba9-d944-5792-8eac0ea39df1@linux.intel.com>
- <19edfb9a-f7b3-7a89-db5a-33289559aeef@linux.intel.com>
- <4725bbed-81e1-9724-b51c-47eba8e414d0@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <d26c671b-fa17-e065-85f3-d6d187c4fc15@infradead.org>
-Date:   Wed, 28 Aug 2019 19:26:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726369AbfH2Dvz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 28 Aug 2019 23:51:55 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37017 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbfH2Dvy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 28 Aug 2019 23:51:54 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46JpZb2VDyz9sBp;
+        Thu, 29 Aug 2019 13:51:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1567050711;
+        bh=ItfZEpr8AudVc2Ied8pd8iQSW4sPgc6Ag8MqymgcLIw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=U1F8iaX+PHzeE8GBn+MKgB2cPh+jidQBNRI9b8kuyAWyIxJVFCUcdz2EVcf7SQwlL
+         o+7JH91EIlZnWcXht2QublQ9veKKmLsKXSz5xh6q9QiTVAg9eOs8rCpi85ZjBv364t
+         doehR03PoBpbHHyIF/crOc1VZemRiGzCYStTC79jJOlUo3GN1OHjFjHwsKLv17dAk2
+         gPd2a8orA4sk06FfaH4cO1o32T97GGj7oSnX4kTvmhLdWZwTAYfLmmJRE1zSQ+2Fe5
+         qsnVrflw3PFT7t3JgN9NMzKaKZXgGZ8wDm3nTChYoArVmAEZyNvqI4E4BZRnJmBKqn
+         z9WZIssuuu/tw==
+Date:   Thu, 29 Aug 2019 13:51:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>
+Subject: linux-next: build warning after merge of the block tree
+Message-ID: <20190829135150.4f0e533a@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <4725bbed-81e1-9724-b51c-47eba8e414d0@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/97As8R_jcmeI=dho6YOw6EC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 8/28/19 3:59 PM, Randy Dunlap wrote:
-> On 8/28/19 3:45 PM, Pierre-Louis Bossart wrote:
->>
->>>>> I just checked with Mark Brown's for-next tree 8aceffa09b4b9867153bfe0ff6f40517240cee12
->>>>> and things are fine in i386 mode, see below.
->>>>>
->>>>> next-20190828 also works fine for me in i386 mode.
->>>>>
->>>>> if you can point me to a tree and configuration that don't work I'll look into this, I'd need more info to progress.
->>>>
->>>> Please try the attached randconfig file.
->>>>
->>>> Thanks for looking.
->>>
->>> Ack, I see some errors as well with this config. Likely a missing dependency somewhere, working on this now.
->>
->> My bad, I added a fallback with static inline functions in the .h file when ACPI is not defined, but the .c file was still compiled.
->>
->> The diff below makes next-20190828 compile with Randy's config.
->>
->> It looks like the alsa-devel server is down btw?
->>
->> diff --git a/sound/hda/Makefile b/sound/hda/Makefile
->> index 8560f6ef1b19..b3af071ce06b 100644
->> --- a/sound/hda/Makefile
->> +++ b/sound/hda/Makefile
->> @@ -14,5 +14,7 @@ obj-$(CONFIG_SND_HDA_CORE) += snd-hda-core.o
->>  #extended hda
->>  obj-$(CONFIG_SND_HDA_EXT_CORE) += ext/
->>
->> +ifdef CONFIG_ACPI
->>  snd-intel-nhlt-objs := intel-nhlt.o
->>  obj-$(CONFIG_SND_INTEL_NHLT) += snd-intel-nhlt.o
->> +endif
->>
-> 
-> works for me.  Thanks.
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> 
+--Sig_/97As8R_jcmeI=dho6YOw6EC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-although this Makefile change should not be needed
-and the dependencies should be handled correctly in Kconfig files.
+Hi all,
 
--- 
-~Randy
+After merging the block tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
+
+In file included from include/trace/events/iocost.h:8,
+                 from <command-line>:
+include/trace/events/iocost.h:12:57: warning: 'struct ioc_now' declared ins=
+ide parameter list will not be visible outside of this definition or declar=
+ation
+  TP_PROTO(struct ioc_gq *iocg, const char *path, struct ioc_now *now,
+                                                         ^~~~~~~
+include/linux/tracepoint.h:233:34: note: in definition of macro '__DECLARE_=
+TRACE'
+  static inline void trace_##name(proto)    \
+                                  ^~~~~
+include/linux/tracepoint.h:396:24: note: in expansion of macro 'PARAMS'
+  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
+                        ^~~~~~
+include/linux/tracepoint.h:532:2: note: in expansion of macro 'DECLARE_TRAC=
+E'
+  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+  ^~~~~~~~~~~~~
+include/linux/tracepoint.h:532:22: note: in expansion of macro 'PARAMS'
+  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+                      ^~~~~~
+include/trace/events/iocost.h:10:1: note: in expansion of macro 'TRACE_EVEN=
+T'
+ TRACE_EVENT(iocost_iocg_activate,
+ ^~~~~~~~~~~
+include/trace/events/iocost.h:12:2: note: in expansion of macro 'TP_PROTO'
+  TP_PROTO(struct ioc_gq *iocg, const char *path, struct ioc_now *now,
+  ^~~~~~~~
+include/trace/events/iocost.h:12:18: warning: 'struct ioc_gq' declared insi=
+de parameter list will not be visible outside of this definition or declara=
+tion
+  TP_PROTO(struct ioc_gq *iocg, const char *path, struct ioc_now *now,
+                  ^~~~~~
+include/linux/tracepoint.h:233:34: note: in definition of macro '__DECLARE_=
+TRACE'
+  static inline void trace_##name(proto)    \
+                                  ^~~~~
+include/linux/tracepoint.h:396:24: note: in expansion of macro 'PARAMS'
+  __DECLARE_TRACE(name, PARAMS(proto), PARAMS(args),  \
+                        ^~~~~~
+include/linux/tracepoint.h:532:2: note: in expansion of macro 'DECLARE_TRAC=
+E'
+  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+  ^~~~~~~~~~~~~
+include/linux/tracepoint.h:532:22: note: in expansion of macro 'PARAMS'
+  DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
+                      ^~~~~~
+include/trace/events/iocost.h:10:1: note: in expansion of macro 'TRACE_EVEN=
+T'
+ TRACE_EVENT(iocost_iocg_activate,
+ ^~~~~~~~~~~
+include/trace/events/iocost.h:12:2: note: in expansion of macro 'TP_PROTO'
+  TP_PROTO(struct ioc_gq *iocg, const char *path, struct ioc_now *now,
+  ^~~~~~~~
+
+(and many more)
+
+Introduced by commit
+
+  7caa47151ab2 ("blkcg: implement blk-iocost")
+
+To get these warnings you need to build with CONFIG_HEADER_TEST and
+CONFIG_KERNEL_HEADER_TEST (and maybe CONFIG_UAPI_HEADER_TEST).
+allmodconfig does that.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/97As8R_jcmeI=dho6YOw6EC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1nS9YACgkQAVBC80lX
+0GwK7gf/YM/7oFlFRJibwrxG2N7GlO2Qh7OkEHrb7moXSk8K/eNq68jtih5oNu8B
+a7X0DC2v60ayx3Pnw4GkCBuaMRypCmtE8Y2wWfNCe30ijyV/1NF+20FOt2RipSPA
+4Awyaqn/Hh9LdNQcKt8Xg3VEvpAnQqVdjGRhcxQ9NltGQWbjspFkjBy+bW5Okckc
+sy47QcnvxCAV2KfT6/X3kL7gXUkQa/GlgpDd0B+u4XEIZS/0RSgY/9GqxtXsRwKW
+pf7X1aAgz2sbwRp2SmfjRAjoUt0wIwxfwqSuASxIUbcNcQLEjA+uz+jaip9Lr44y
+ypYHYb8UKzgjMSC3Mz084zUT190SsQ==
+=xHPJ
+-----END PGP SIGNATURE-----
+
+--Sig_/97As8R_jcmeI=dho6YOw6EC--

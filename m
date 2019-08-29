@@ -2,133 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 164AFA1396
-	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 10:25:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC19A1399
+	for <lists+linux-next@lfdr.de>; Thu, 29 Aug 2019 10:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727103AbfH2IZF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Aug 2019 04:25:05 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:55640 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727097AbfH2IZE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 29 Aug 2019 04:25:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=120ASc5CfxclYJhY7EFAVAvAR3LTc4Yy6ktyuTmJDRA=; b=oOi8m8/nu7e3QiAQrmP0/hdhg
-        qbKyB38a2s30Iu7GWe0UIxIGH4U7r0uHXnKYW0Eax0SxJ/bmGrCnMkKrFb5JBERCAwh/jISr6mTM1
-        qVOt8NWWldXI62o8JDG2AJdqB5idOPbXzBehaZ3CNd33SGb50ATS644/j7XOHBQEoSg9r0c5vaeuW
-        p6Pi8NWiAnvErk+A4q2+XkDuAYFAV0UHw9gsg+8LOl9vdssXHY3wt6VNUKMCH/3whymlYwZVEEKwF
-        K7XYKtk+EO9x1RRk5iD6oMEhgaaw7R9OawBEBomXh4PeJd0RkMlrWGIcAEhy8E6m++zciB2hasuz8
-        4rRxJvEFw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i3Fjb-000087-TT; Thu, 29 Aug 2019 08:24:48 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BFD093070F4;
-        Thu, 29 Aug 2019 10:24:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3DB5F20C74402; Thu, 29 Aug 2019 10:24:45 +0200 (CEST)
-Date:   Thu, 29 Aug 2019 10:24:45 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: mmotm 2019-08-27-20-39 uploaded (objtool: xen)
-Message-ID: <20190829082445.GM2369@hirez.programming.kicks-ass.net>
-References: <20190828034012.sBvm81sYK%akpm@linux-foundation.org>
- <8b09d93a-bc42-bd8e-29ee-cd37765f4899@infradead.org>
- <20190828171923.4sir3sxwsnc2pvjy@treble>
- <57d6ab2e-1bae-dca3-2544-4f6e6a936c3a@infradead.org>
- <20190828200134.d3lwgyunlpxc6cbn@treble>
+        id S1725782AbfH2I0g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Aug 2019 04:26:36 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:58688 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725776AbfH2I0g (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 29 Aug 2019 04:26:36 -0400
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id B34C7C0546F2;
+        Thu, 29 Aug 2019 08:26:35 +0000 (UTC)
+Received: from gigantic.usersys.redhat.com (helium.bos.redhat.com [10.18.17.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6111D1001925;
+        Thu, 29 Aug 2019 08:26:34 +0000 (UTC)
+From:   Bandan Das <bsd@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the tip tree
+References: <20190829080633.07c7a422@canb.auug.org.au>
+Date:   Thu, 29 Aug 2019 04:26:33 -0400
+In-Reply-To: <20190829080633.07c7a422@canb.auug.org.au> (Stephen Rothwell's
+        message of "Thu, 29 Aug 2019 08:06:33 +1000")
+Message-ID: <jpgwoewnzra.fsf@linux.bootlegged.copy>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190828200134.d3lwgyunlpxc6cbn@treble>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.32]); Thu, 29 Aug 2019 08:26:36 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Aug 28, 2019 at 03:01:34PM -0500, Josh Poimboeuf wrote:
-> On Wed, Aug 28, 2019 at 10:56:25AM -0700, Randy Dunlap wrote:
-> > >> drivers/xen/gntdev.o: warning: objtool: gntdev_copy()+0x229: call to __ubsan_handle_out_of_bounds() with UACCESS enabled
-> > > 
-> > > Easy one :-)
-> > > 
-> > > diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> > > index 0c8e17f946cd..6a935ab93149 100644
-> > > --- a/tools/objtool/check.c
-> > > +++ b/tools/objtool/check.c
-> > > @@ -483,6 +483,7 @@ static const char *uaccess_safe_builtin[] = {
-> > >  	"ubsan_type_mismatch_common",
-> > >  	"__ubsan_handle_type_mismatch",
-> > >  	"__ubsan_handle_type_mismatch_v1",
-> > > +	"__ubsan_handle_out_of_bounds",
-> > >  	/* misc */
-> > >  	"csum_partial_copy_generic",
-> > >  	"__memcpy_mcsafe",
-> > > 
-> > 
-> > 
-> > then I get this one:
-> > 
-> > lib/ubsan.o: warning: objtool: __ubsan_handle_out_of_bounds()+0x5d: call to ubsan_prologue() with UACCESS enabled
-> 
-> And of course I jinxed it by calling it easy.
-> 
-> Peter, how do you want to handle this?
-> 
-> Should we just disable UACCESS checking in lib/ubsan.c?
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-No, that is actually unsafe and could break things (as would you patch
-above).
+> Hi all,
+>
+> In commit
+>
+>   bae3a8d3308e ("x86/apic: Do not initialize LDR and DFR for bigsmp")
+>
+> Fixes tag
+>
+>   Fixes: db7b9e9f26b8 ("[PATCH] Clustered APIC setup for >8 CPU systems")
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
 
-I'm thinking the below patch ought to cure things:
+I tried to dig this up and I believe that this is from pre-git.
+I went back as far as commit 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2
+Author: Linus Torvalds <torvalds@ppc970.osdl.org>
+Date:   Sat Apr 16 15:20:36 2005 -0700
 
----
-Subject: x86/uaccess: Don't leak the AC flags into __get_user() argument evalidation
+    Linux-2.6.12-rc2
+    
+    Initial git repository build. I'm not bothering with the full history,
+    even though we have it. We can create a separate "historical" git
+    archive of that later if we want to, and in the meantime it's about
+    3.2GB when imported into git - space that would just make the early
+    git days unnecessarily complicated, when we don't have a lot of good
+    infrastructure for it.
+    
+    Let it rip!
 
-Identical to __put_user(); the __get_user() argument evalution will too
-leak UBSAN crud into the __uaccess_begin() / __uaccess_end() region.
-While uncommon this was observed to happen for:
+which adds init_apic_ldr() in include/asm-i386/mach-bigsmp/mach_apic.h with
+the following:
 
-  drivers/xen/gntdev.c: if (__get_user(old_status, batch->status[i]))
++static inline void init_apic_ldr(void)
++{
++       unsigned long val;
++
++       apic_write_around(APIC_DFR, APIC_DFR_VALUE);
++       val = apic_read(APIC_LDR) & ~APIC_LDR_MASK;
++       val = calculate_ldr(val);
++       apic_write_around(APIC_LDR, val);
++}
+...
 
-where UBSAN added array bound checking.
 
-This complements commit:
+So, the bug seems to be present here as well...
 
-  6ae865615fc4 ("x86/uaccess: Dont leak the AC flag into __put_user() argument evaluation")
+Bandan
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: luto@kernel.org
----
- arch/x86/include/asm/uaccess.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
-index 9c4435307ff8..35c225ede0e4 100644
---- a/arch/x86/include/asm/uaccess.h
-+++ b/arch/x86/include/asm/uaccess.h
-@@ -444,8 +444,10 @@ __pu_label:							\
- ({									\
- 	int __gu_err;							\
- 	__inttype(*(ptr)) __gu_val;					\
-+	__typeof__(ptr) __gu_ptr = (ptr);				\
-+	__typeof__(size) __gu_size = (size);				\
- 	__uaccess_begin_nospec();					\
--	__get_user_size(__gu_val, (ptr), (size), __gu_err, -EFAULT);	\
-+	__get_user_size(__gu_val, __gu_ptr, __gu_size, __gu_err, -EFAULT);	\
- 	__uaccess_end();						\
- 	(x) = (__force __typeof__(*(ptr)))__gu_val;			\
- 	__builtin_expect(__gu_err, 0);					\
+> I could not quickly find an obvious match.

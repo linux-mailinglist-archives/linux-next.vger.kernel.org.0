@@ -2,246 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D361A3826
-	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 15:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83335A393B
+	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 16:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfH3Nzj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Aug 2019 09:55:39 -0400
-Received: from ozlabs.org ([203.11.71.1]:36015 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727170AbfH3Nzj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 30 Aug 2019 09:55:39 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Kgwl19HKz9s7T;
-        Fri, 30 Aug 2019 23:55:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567173335;
-        bh=VTAiaBz22TTXel1ha2s/bTgs6tmonm/LUfRyubXF/Dw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lKkrnMmiKFvu5EfyA27jHtGLH3nCTUI68MCausSw+qzoIdzYFdkbO8zqXPHx/SrVF
-         8mEtqxlwewsxy4vhrvYjOvetximHJCVBsXaZwRDWQKV7oA26W0vMtF8Kl36zB9gmhx
-         NwD5ZLiO/uJc7aIpr62KegpjkiVLmGudBP78zuZjg0H/LThbCqTkV8Ppz6KlyDI8Lg
-         uQjmzYKiIDiE2XKOlD4ocn9AyOTiBWHH07mHVwDARaEFEPkPEEwpFWHcumGWH/V9e6
-         Kp4Bx1AQrkN/yp3fkcLW19JMV3Alfr4NZmZbRKam3HRHLTVryK6Y3PeCa1TMEpd5sy
-         0n90MHgrhNxdw==
-Date:   Fri, 30 Aug 2019 23:55:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727603AbfH3O2v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Aug 2019 10:28:51 -0400
+Received: from mail-eopbgr00055.outbound.protection.outlook.com ([40.107.0.55]:65229
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727850AbfH3O2v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 30 Aug 2019 10:28:51 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MokEq6bvS9JYXbOggyA45HImt4TKMVMI31GmrhENBPz0LarefHdzdfO1vLo69xG4xN6zA3gVCf4jG/EsRl6u+nQIzIgri01Rlhz67efpyIGG41cOVEMbSax6E+fKxQz6CGRi7iP+e03CO4oR/ZHpqzs+fslgGbW+txKlsVSWLxwAs9UbsPy7Ro0akAteep+NQxESFI7r+ri+PS+nPN7d0iiBL0WFUfes/cubpEGaEfilRfzli3aj4m5XBgVVtcleB8O4zS/ZpaZUgxEhKPrdUWsCcVYADluNoifGUoxqAPquTnXjhfqMKJ3pcRwnr31XOnX3sO7z+dr6V8jl+b0TnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJTvFUTN3926L8ICcCta3rZkixpAG6B9Ow1+oAbyWH4=;
+ b=Tf5rFd3xJ+E6HTeDWxPmvvB3vFvCKQDEQSHIsROfpd4d638CXbkPJ+WAA2XzVDjJ911Y47NLDf7OLza5xL/h+E8dYeA2syhnRVGdgdpBri3GDuhgC9mx+pcyWSzrpBTIpLqwnwmKVRwifEJBwKfnZoOCzUZw3TaGATz9Fvz4v4/aFYIhCzY9cxoqM9L5ehb+2PGg4IZMSJ0zD3WS2hsQQX7ddHU0hQ2lmbFasHzsAu2ehCOphVhE4y7sMq9u6M9tMBen6pVEUXQuElqla21QnH1uK4eJp3kcHZuJXPKRu5JS1r/MHNfzm+Q+4TgsF933wpZ+Y6sGALr8RcytWnBoqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pJTvFUTN3926L8ICcCta3rZkixpAG6B9Ow1+oAbyWH4=;
+ b=UvLIj/ZF1M9qbU5xpjnP42m/5r63GedY5/CpP+SHEuVE27L9DaqVZ2hDqFNvZNINroR4pS/UXCKHVr90j9ZGCGeWGEnBsBJs92jsjGl++MhjI/iS4fejrPe6xhBRCNRpgR3RdyStaLikb4d/UA7uQXXZntkgHEyxU5lqJ6gPPvg=
+Received: from DB7PR05MB4138.eurprd05.prod.outlook.com (52.135.129.16) by
+ DB7PR05MB5161.eurprd05.prod.outlook.com (20.178.40.156) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2199.21; Fri, 30 Aug 2019 14:28:47 +0000
+Received: from DB7PR05MB4138.eurprd05.prod.outlook.com
+ ([fe80::8412:26d1:ef71:2869]) by DB7PR05MB4138.eurprd05.prod.outlook.com
+ ([fe80::8412:26d1:ef71:2869%7]) with mapi id 15.20.2199.021; Fri, 30 Aug 2019
+ 14:28:47 +0000
+From:   Jason Gunthorpe <jgg@mellanox.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Christoph Hellwig <hch@lst.de>,
         Minchan Kim <minchan@kernel.org>
-Subject: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20190830235530.67c23ad3@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+Thread-Topic: linux-next: build failure after merge of the akpm-current tree
+Thread-Index: AQHVXzqd+zDqw1hOT0eH/lp6ykmw4KcTv/wA
+Date:   Fri, 30 Aug 2019 14:28:47 +0000
+Message-ID: <20190830142841.GA20@mellanox.com>
+References: <20190830235530.67c23ad3@canb.auug.org.au>
+In-Reply-To: <20190830235530.67c23ad3@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: YTOPR0101CA0050.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b00:14::27) To DB7PR05MB4138.eurprd05.prod.outlook.com
+ (2603:10a6:5:23::16)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=jgg@mellanox.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [142.177.133.130]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7ec5bd5c-eaab-493e-239f-08d72d565e95
+x-ms-office365-filtering-ht: Tenant
+x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:DB7PR05MB5161;
+x-ms-traffictypediagnostic: DB7PR05MB5161:
+x-microsoft-antispam-prvs: <DB7PR05MB51611ADD067C24085A610D01CFBD0@DB7PR05MB5161.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:655;
+x-forefront-prvs: 0145758B1D
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(39860400002)(366004)(376002)(396003)(346002)(136003)(189003)(199004)(81156014)(229853002)(2906002)(186003)(256004)(1076003)(102836004)(316002)(33656002)(25786009)(5660300002)(81166006)(71200400001)(66066001)(305945005)(86362001)(52116002)(99286004)(76176011)(508600001)(8676002)(36756003)(8936002)(66556008)(71190400001)(66476007)(66446008)(4326008)(66946007)(64756008)(4744005)(6436002)(6916009)(54906003)(6506007)(3846002)(2616005)(6116002)(6512007)(7736002)(26005)(476003)(6246003)(446003)(6486002)(53936002)(486006)(14454004)(11346002)(386003)(79990200002);DIR:OUT;SFP:1101;SCL:1;SRVR:DB7PR05MB5161;H:DB7PR05MB4138.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam-message-info: +dMq6oC4OqzWdlYWGkinpUqdmyhBEW+OrYEPb6C42uLALV1InOvwu9YpTJiKWWMjsndwTtYMTvVMKi3vJn9ImwYvcaGwqhzDR2YqYgsvULd9ovdFvvjnWBi4ngMeDw1iTBj6okpydbXZiq4luS5+gg0dwK8nJkd4tch+tjenaKwnx59MzO2GPRbg9LjbgCqeNmr1QbnDCnXGIC/1Yb0DPlG8JxIh9QGK2JD9fRUVIu5hcBTilvV4gYycdInby5CIlRnqRCcAZnbxuhR98vojUQTsqFHt04nmYJJNo10r1+VrSuX/FEl1tz5IEeFBDVCrE+goNuerk6GIsGT23LM9n6JXjdiZN99Bi8d8LUxMTTtRiPaA8xrnI4JAsdSUPe0iE75gerw4C95q/ejCy1sp3VJSPvkiKq/6mA+OWC/yppfnR0O2GN2DwfXJ66kx0ltUIPdlIewNsrJdQLPbIF77BA==
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <0A1CAFE6F94FFB43ACE93AAE5E7CB69B@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_h0l=FaIWHvEqTs3K=mFyHZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7ec5bd5c-eaab-493e-239f-08d72d565e95
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2019 14:28:47.4733
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fL1bvtN9EV4L061uVXNZctbaD+8e8Sqf1Denwt7JQCN4xzKMXhmy6UaMSAsiS+hzRw3IXrutbrFQKplzZUq+Tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR05MB5161
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_h0l=FaIWHvEqTs3K=mFyHZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Aug 30, 2019 at 11:55:30PM +1000, Stephen Rothwell wrote:
 
-Hi all,
+> Caused by commit
+>=20
+>   1c8999b3963d ("mm: introduce MADV_COLD")
+> (and following commits)
+>=20
+> interacting with commit
+>=20
+>   923bfc561e75 ("pagewalk: separate function pointers from iterator data"=
+)
+>=20
+> from the hmm tree.
 
-After merging the akpm-current tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Yes, this is expected thanks
 
-mm/madvise.c: In function 'madvise_cold_page_range':
-mm/madvise.c:459:4: error: 'struct mm_walk' has no member named 'pmd_entry'
-  459 |   .pmd_entry =3D madvise_cold_or_pageout_pte_range,
-      |    ^~~~~~~~~
-mm/madvise.c:459:16: error: initialization of 'const struct mm_walk_ops *' =
-from incompatible pointer type 'int (*)(pmd_t *, long unsigned int,  long u=
-nsigned int,  struct mm_walk *)' {aka 'int (*)(unsigned int *, long unsigne=
-d int,  long unsigned int,  struct mm_walk *)'} [-Werror=3Dincompatible-poi=
-nter-types]
-  459 |   .pmd_entry =3D madvise_cold_or_pageout_pte_range,
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mm/madvise.c:459:16: note: (near initialization for 'cold_walk.ops')
-mm/madvise.c:465:18: warning: passing argument 1 of 'walk_page_range' makes=
- pointer from integer without a cast [-Wint-conversion]
-  465 |  walk_page_range(addr, end, &cold_walk);
-      |                  ^~~~
-      |                  |
-      |                  long unsigned int
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:60:39: note: expected 'struct mm_struct *' but arg=
-ument is of type 'long unsigned int'
-   60 | int walk_page_range(struct mm_struct *mm, unsigned long start,
-      |                     ~~~~~~~~~~~~~~~~~~^~
-mm/madvise.c:465:29: warning: passing argument 3 of 'walk_page_range' makes=
- integer from pointer without a cast [-Wint-conversion]
-  465 |  walk_page_range(addr, end, &cold_walk);
-      |                             ^~~~~~~~~~
-      |                             |
-      |                             struct mm_walk *
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:61:17: note: expected 'long unsigned int' but argu=
-ment is of type 'struct mm_walk *'
-   61 |   unsigned long end, const struct mm_walk_ops *ops,
-      |   ~~~~~~~~~~~~~~^~~
-mm/madvise.c:465:2: error: too few arguments to function 'walk_page_range'
-  465 |  walk_page_range(addr, end, &cold_walk);
-      |  ^~~~~~~~~~~~~~~
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:60:5: note: declared here
-   60 | int walk_page_range(struct mm_struct *mm, unsigned long start,
-      |     ^~~~~~~~~~~~~~~
-mm/madvise.c: In function 'madvise_pageout_page_range':
-mm/madvise.c:498:4: error: 'struct mm_walk' has no member named 'pmd_entry'
-  498 |   .pmd_entry =3D madvise_cold_or_pageout_pte_range,
-      |    ^~~~~~~~~
-mm/madvise.c:498:16: error: initialization of 'const struct mm_walk_ops *' =
-from incompatible pointer type 'int (*)(pmd_t *, long unsigned int,  long u=
-nsigned int,  struct mm_walk *)' {aka 'int (*)(unsigned int *, long unsigne=
-d int,  long unsigned int,  struct mm_walk *)'} [-Werror=3Dincompatible-poi=
-nter-types]
-  498 |   .pmd_entry =3D madvise_cold_or_pageout_pte_range,
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-mm/madvise.c:498:16: note: (near initialization for 'pageout_walk.ops')
-mm/madvise.c:504:18: warning: passing argument 1 of 'walk_page_range' makes=
- pointer from integer without a cast [-Wint-conversion]
-  504 |  walk_page_range(addr, end, &pageout_walk);
-      |                  ^~~~
-      |                  |
-      |                  long unsigned int
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:60:39: note: expected 'struct mm_struct *' but arg=
-ument is of type 'long unsigned int'
-   60 | int walk_page_range(struct mm_struct *mm, unsigned long start,
-      |                     ~~~~~~~~~~~~~~~~~~^~
-mm/madvise.c:504:29: warning: passing argument 3 of 'walk_page_range' makes=
- integer from pointer without a cast [-Wint-conversion]
-  504 |  walk_page_range(addr, end, &pageout_walk);
-      |                             ^~~~~~~~~~~~~
-      |                             |
-      |                             struct mm_walk *
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:61:17: note: expected 'long unsigned int' but argu=
-ment is of type 'struct mm_walk *'
-   61 |   unsigned long end, const struct mm_walk_ops *ops,
-      |   ~~~~~~~~~~~~~~^~~
-mm/madvise.c:504:2: error: too few arguments to function 'walk_page_range'
-  504 |  walk_page_range(addr, end, &pageout_walk);
-      |  ^~~~~~~~~~~~~~~
-In file included from mm/madvise.c:24:
-include/linux/pagewalk.h:60:5: note: declared here
-   60 | int walk_page_range(struct mm_struct *mm, unsigned long start,
-      |     ^~~~~~~~~~~~~~~
+> diff --git a/mm/madvise.c b/mm/madvise.c
+> index 7ec7c8f6d5ab..20598df8360a 100644
+> --- a/mm/madvise.c
+> +++ b/mm/madvise.c
+> @@ -446,6 +446,10 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *=
+pmd,
+>  	return 0;
+>  }
+> =20
+> +static const struct mm_walk_ops cold_walk_ops =3D {
+> +	.pmd_entry =3D madvise_cold_or_pageout_pte_range,
+> +};
+> +
 
-Caused by commit
+> +static const struct mm_walk_ops pageout_walk_ops =3D {
+> +	.pmd_entry =3D madvise_cold_or_pageout_pte_range,
+> +};
 
-  1c8999b3963d ("mm: introduce MADV_COLD")
-(and following commits)
+These two can be shared
 
-interacting with commit
+Looks OK otherwise
 
-  923bfc561e75 ("pagewalk: separate function pointers from iterator data")
-
-from the hmm tree.
-
-I have applied the following patch for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 30 Aug 2019 23:39:37 +1000
-Subject: [PATCH] mm: merge fix for "pagewalk: separate function pointers fr=
-om iterator data"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- mm/madvise.c | 24 ++++++++++--------------
- 1 file changed, 10 insertions(+), 14 deletions(-)
-
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 7ec7c8f6d5ab..20598df8360a 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -446,6 +446,10 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pm=
-d,
- 	return 0;
- }
-=20
-+static const struct mm_walk_ops cold_walk_ops =3D {
-+	.pmd_entry =3D madvise_cold_or_pageout_pte_range,
-+};
-+
- static void madvise_cold_page_range(struct mmu_gather *tlb,
- 			     struct vm_area_struct *vma,
- 			     unsigned long addr, unsigned long end)
-@@ -455,14 +459,8 @@ static void madvise_cold_page_range(struct mmu_gather =
-*tlb,
- 		.pageout =3D false,
- 	};
-=20
--	struct mm_walk cold_walk =3D {
--		.pmd_entry =3D madvise_cold_or_pageout_pte_range,
--		.mm =3D vma->vm_mm,
--		.private =3D &walk_private,
--	};
--
- 	tlb_start_vma(tlb, vma);
--	walk_page_range(addr, end, &cold_walk);
-+	walk_page_range(vma->vm_mm, addr, end, &cold_walk_ops, &walk_private);
- 	tlb_end_vma(tlb, vma);
- }
-=20
-@@ -485,6 +483,10 @@ static long madvise_cold(struct vm_area_struct *vma,
- 	return 0;
- }
-=20
-+static const struct mm_walk_ops pageout_walk_ops =3D {
-+	.pmd_entry =3D madvise_cold_or_pageout_pte_range,
-+};
-+
- static void madvise_pageout_page_range(struct mmu_gather *tlb,
- 			     struct vm_area_struct *vma,
- 			     unsigned long addr, unsigned long end)
-@@ -494,14 +496,8 @@ static void madvise_pageout_page_range(struct mmu_gath=
-er *tlb,
- 		.tlb =3D tlb,
- 	};
-=20
--	struct mm_walk pageout_walk =3D {
--		.pmd_entry =3D madvise_cold_or_pageout_pte_range,
--		.mm =3D vma->vm_mm,
--		.private =3D &walk_private,
--	};
--
- 	tlb_start_vma(tlb, vma);
--	walk_page_range(addr, end, &pageout_walk);
-+	walk_page_range(vma->vm_mm, addr, end, &pageout_walk_ops, &walk_private);
- 	tlb_end_vma(tlb, vma);
- }
-=20
---=20
-2.23.0.rc1
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/_h0l=FaIWHvEqTs3K=mFyHZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1pKtIACgkQAVBC80lX
-0GxvGgf+Itl70PzMNQJTI39dr4u8EAVCgIl4Xyvm9DDS25l0onw33TFaMnybqnaG
-B7pcm539jWVubOIGTuZq6SM9HO1lApYCBv8Y0UNu0hgAg2lHeDnFzJxBgL4o1dm2
-f95KFyqo2s25UcVmxG74FSH5thOsE/sCyYirJQ9ElCq/J037ogCeZO5oohrMGAbK
-cK2fGMnka++8fqbRs1ZOyVv3bAGOHJW4z2mqMxp2hGkN2648xIJnv3tqtBg/+ElJ
-Bz0pgtunmc0x6TUxmz33fUGT3kNaHG5by3pw0DIGVcJzxJDSX6iqZByTl/MAdIa+
-Pq22AwBSHaDLamHKm6Uv53mq3PUp3Q==
-=p1E9
------END PGP SIGNATURE-----
-
---Sig_/_h0l=FaIWHvEqTs3K=mFyHZ--
+Jason

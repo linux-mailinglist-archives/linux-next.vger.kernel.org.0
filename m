@@ -2,129 +2,175 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B44EFA2E12
-	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 06:19:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9389A2FBF
+	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 08:24:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725901AbfH3ETQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Aug 2019 00:19:16 -0400
-Received: from ozlabs.org ([203.11.71.1]:39567 "EHLO ozlabs.org"
+        id S1727959AbfH3GX6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Aug 2019 02:23:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:57268 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725854AbfH3ETQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 30 Aug 2019 00:19:16 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726144AbfH3GX4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 30 Aug 2019 02:23:56 -0400
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46KR7h2fpxz9sN6;
-        Fri, 30 Aug 2019 14:19:11 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567138752;
-        bh=Y28Rt2oHTcK3rAJXH2EwjpFaRwubHNhkaQ77jcR6V2M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TCO8AFFb3Js4ZpiaaRix1u3cV4IboctQreVNI5hQlP4K8/o+1ajakWCJVFdbHC8BF
-         yWx3qY/bNEi4OzgOdK19jy6SF4InWSXZQ1zYiBEV7XUfDicb3vGhCJSUogKmJXKzoe
-         uWVQg9YSKWFKPeAoz8dXGghpOVklfcvzLj5jIjk1q3NmYT6XmhmIP/ng+BHxIHTdT+
-         1rPTY+J3yYnPGH+C3LU1rW9gmLvIjaf8A0yH5fMpxYKrxNKG/fpoMOJzdzCnKz2Uci
-         Lxq6WHkc/wTTac8LEBaNVUqmFWdAzn3tmwlHxzJOw+ox7kONMHYUKvPcN/O2qVWWAX
-         Zlueh1hrGxhqQ==
-Date:   Fri, 30 Aug 2019 14:19:09 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 3217321721;
+        Fri, 30 Aug 2019 06:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1567146235;
+        bh=VouSvHWn/UeSvOBRtH3j7qOpgQGa4fijdPuKdzan2zc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BQM9J3mW81+oE3Z0EpA+xgWr51mmCFx+jJ28N+PwVlRRBAxyYc41qwKOsHIk6VzYQ
+         yvTG7IxUXinorwWkYfXGT8OgIC7/EsSGZSutcK2Bz7PzNgWnTLF+oAGoYGfEyLfhgi
+         zaNYeEja6KPjdOUDnVcMaSoXbHvSVdO5nHJkEj/s=
+Date:   Fri, 30 Aug 2019 15:23:51 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hayes Wang <hayeswang@realtek.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20190830141909.5f15665b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wwgfcYaOG4hTzMAi=gguok2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: linux-next: Tree for Aug 27 (objtool)
+Message-Id: <20190830152351.9311610b5cffb93110cbd6da@kernel.org>
+In-Reply-To: <20190829175931.sru23aud33hrdqbj@treble>
+References: <20190827190526.6f27e763@canb.auug.org.au>
+        <6c42e32f-901d-be78-e69b-cb9ff8703932@infradead.org>
+        <20190827155911.ct2zzo2zhcrauf3z@treble>
+        <2e8b18a0-a09c-b67e-c99f-45066ab9d511@infradead.org>
+        <20190828155147.v6eowc7rr7upr7dr@treble>
+        <f354f4be-99c7-346f-c7c5-ac5ce8a72a16@infradead.org>
+        <20190828161331.kvikro257blxtzu5@treble>
+        <20190828163433.4ltoxmtuujkqspar@treble>
+        <20190829105356.1fd4859f49c142945146855f@kernel.org>
+        <20190829175931.sru23aud33hrdqbj@treble>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wwgfcYaOG4hTzMAi=gguok2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Josh,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+On Thu, 29 Aug 2019 12:59:31 -0500
+Josh Poimboeuf <jpoimboe@redhat.com> wrote:
 
-  drivers/net/usb/r8152.c
+> On Thu, Aug 29, 2019 at 10:53:56AM +0900, Masami Hiramatsu wrote:
+> > Hi Josh,
+> > 
+> > On Wed, 28 Aug 2019 11:34:33 -0500
+> > Josh Poimboeuf <jpoimboe@redhat.com> wrote:
+> > 
+> > > On Wed, Aug 28, 2019 at 11:13:31AM -0500, Josh Poimboeuf wrote:
+> > > > Turns out this patch does break something:
+> > > > 
+> > > >   arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
+> > > > 
+> > > > I'll need to figure out a better way to whitelist that
+> > > > XEN_EMULATE_PREFIX fake instruction thing.  I'll probably just teach
+> > > > the objtool decoder about it.
+> > > 
+> > > Hi Masami,
+> > > 
+> > > Is it possible for the kernel x86 decoder to recognize the
+> > > XEN_EMULATE_PREFIX prefix?
+> > > 
+> > >         asm(XEN_EMULATE_PREFIX "cpuid"
+> > >                 : "=a" (*ax),
+> > >                   "=b" (*bx),
+> > >                   "=c" (*cx),
+> > >                   "=d" (*dx)
+> > >                 : "0" (*ax), "2" (*cx));
+> > > 
+> > > is disassembled to:
+> > > 
+> > >       33:       0f 0b                   ud2
+> > >       35:       78 65                   js     9c <xen_store_tr+0xc>
+> > >       37:       6e                      outsb  %ds:(%rsi),(%dx)
+> > >       38:       0f a2                   cpuid
+> > > 
+> > > which confuses objtool.  Presumably that would confuse other users of
+> > > the decoder as well.
+> > 
+> > Good catch! It should be problematic, since x86 decoder sanity test is
+> > based on objtool.
+> 
+> I think you mean the decoder test is based on objdump, not objtool?
 
-between commits:
+Yes, it was my mistake. It depends on objdump.
 
-  49d4b14113ca ("Revert "r8152: napi hangup fix after disconnect"")
-  973dc6cfc0e2 ("r8152: remove calling netif_napi_del")
+> Actually I wonder if X86_DECODER_SELFTEST is even still needed these
+> days, since objtool is enabled on default configs.  Objtool already uses
+> the decoder to disassemble every instruction in the kernel (except for a
+> few whitelisted files).
 
-from the net tree and commit:
+Sometimes it have found bugs, so I would like to keep it. That test runs
+build time and in-kernel decoder is somewhat critical. It is better to
+run a test before install it.
 
-  d2187f8e4454 ("r8152: divide the tx and rx bottom functions")
+> 
+> > But I don't want to change the test code itself,
+> > because this problem is highly depending on Xen.
+> > 
+> > > That's a highly unlikely sequence of instructions, maybe the kernel
+> > > decoder should recognize it as a single instruction.
+> > 
+> > OK, it is better to be done in decoder (only for CONFIG_XEN_PVHVM)
+> > 
+> > BTW, could you also share what test case would you using?
+> 
+> Enable CONFIG_XEN_PV and CONFIG_STACK_VALIDATION, and remove the
+> STACK_FRAME_NON_STANDARD(xen_cpuid) line from
+> arch/x86/xen/enlighten_pv.c.  objtool will complain:
+> 
+>   arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
 
-from the net-next tree.
+Ah, OK, so that is for objtool, not for in-kernel decoder (anyway both
+need the fix.)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+> Basing it on CONFIG_XEN_PVHVM may be problematic.  The decoder is
+> duplicated in the tools directory so objtool can use it.  But the tools
+> don't know about kernel configs.
 
---=20
-Cheers,
-Stephen Rothwell
+Yes, in that case you need enable it always.
 
-diff --cc drivers/net/usb/r8152.c
-index 04137ac373b0,c6fa0c17c13d..000000000000
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@@ -4021,7 -4214,9 +4214,8 @@@ static int rtl8152_close(struct net_dev
-  #ifdef CONFIG_PM_SLEEP
-  	unregister_pm_notifier(&tp->pm_notifier);
-  #endif
-+ 	tasklet_disable(&tp->tx_tl);
- -	if (!test_bit(RTL8152_UNPLUG, &tp->flags))
- -		napi_disable(&tp->napi);
- +	napi_disable(&tp->napi);
-  	clear_bit(WORK_ENABLE, &tp->flags);
-  	usb_kill_urb(tp->intr_urb);
-  	cancel_delayed_work_sync(&tp->schedule);
-@@@ -5352,6 -5604,8 +5603,7 @@@ static int rtl8152_probe(struct usb_int
-  	return 0;
- =20
-  out1:
- -	netif_napi_del(&tp->napi);
-+ 	tasklet_kill(&tp->tx_tl);
-  	usb_set_intfdata(intf, NULL);
-  out:
-  	free_netdev(netdev);
-@@@ -5366,7 -5620,9 +5618,8 @@@ static void rtl8152_disconnect(struct u
-  	if (tp) {
-  		rtl_set_unplug(tp);
- =20
- -		netif_napi_del(&tp->napi);
-  		unregister_netdev(tp->netdev);
-+ 		tasklet_kill(&tp->tx_tl);
-  		cancel_delayed_work_sync(&tp->hw_phy_work);
-  		tp->rtl_ops.unload(tp);
-  		free_netdev(tp->netdev);
+> BTW, I'm not sure if you're aware of this, but both objtool and perf
+> have identical copies of the decoder.  The makefiles warn if they get
+> out of sync with the kernel version.
+> 
+> We will always need at least one copy of the decoder in tools, because
+> the tools subdir is supposed to be standalone from the rest of the
+> kernel.  Still, I may look at combining the perf and objtool copies into
+> a single shared copy.
 
---Sig_/wwgfcYaOG4hTzMAi=gguok2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Yes, we need to fix both.
 
------BEGIN PGP SIGNATURE-----
+> 
+> > And what about attached patch? (just compile checked with/without CONFIG_XEN_PVHVM)
+> 
+> I copied the decoder to objtool, removed the CONFIG_XEN_PVHVM ifdef, and
+> played a bit with the includes, and got it to compile with objtool, but
+> it still fails:
+> 
+>   $ make arch/x86/xen/enlighten_pv.o
+>   arch/x86/xen/enlighten_pv.o: warning: objtool: xen_cpuid()+0x25: can't find jump dest instruction at .text+0x9c
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1oo70ACgkQAVBC80lX
-0GxS1wf+KE4PnrM0gqqjDBWhlcyXJPXnXkH95eZHgh675yq5rKVb8tNabUDa3RC4
-kb24uCR7pb5jyzmciS5HOlKNiOvYhxlCcfwuBuDpAaD+FQwIkFOj2fbP45/+dSl9
-M5vDzlXx9x7GBKgxumEBL8XuxMWk3EhVT5UcD/Kl9qTTYXrJbXSTz3/Dr5HODRFq
-mBzaerKJhS4UkD7fWEOyR6QzUKOGMKgG2Nqobcccd3Bh4j/8r86MXMvrK0N8zcJ1
-PW6zNA7vidxMU5A97v/arZgAF6L0KI1ERCusb/aZlkIfBT1cEf0TL7Cc55zovPnb
-nsCHbQ1rvOfuTecdRL1H+17lw+De4Q==
-=RD4p
------END PGP SIGNATURE-----
+[...]
+> @@ -58,6 +60,30 @@ void insn_init(struct insn *insn, const void *kaddr, int buf_len, int x86_64)
+>  		insn->addr_bytes = 4;
+>  }
+>  
+> +static const insn_byte_t xen_prefix[] = { XEN_EMULATE_PREFIX };
 
---Sig_/wwgfcYaOG4hTzMAi=gguok2--
+Oops, this must be __XEN_EMULATE_PREFIX. Mine is also have same bug.
+since insn_byte_t is char, that makes no error, but it should be
+initialized with __XEN_EMULATE_PREFIX, not XEN_EMULATE_PREFIX.
+
+Thank you,
+
+-- 
+Masami Hiramatsu <mhiramat@kernel.org>

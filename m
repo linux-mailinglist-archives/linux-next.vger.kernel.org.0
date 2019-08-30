@@ -2,133 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EA1A2B58
-	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 02:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C984A2B63
+	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 02:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727213AbfH3AQk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 29 Aug 2019 20:16:40 -0400
-Received: from ozlabs.org ([203.11.71.1]:51419 "EHLO ozlabs.org"
+        id S1727110AbfH3AZ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 29 Aug 2019 20:25:59 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48675 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727182AbfH3AQj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 29 Aug 2019 20:16:39 -0400
+        id S1726825AbfH3AZ7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 29 Aug 2019 20:25:59 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46KKlm2Mlzz9sN6;
-        Fri, 30 Aug 2019 10:16:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46KKyW3GnNz9sNC;
+        Fri, 30 Aug 2019 10:25:55 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567124196;
-        bh=g5NGWNARkNDvpAI12TjAprP6jJ76TkUM5e9Q9OcBPN0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PfpcOMF42mhnP8oLbq3PJBFpPaXjIX8gNfuNeVxRanYkG2F590OOBcAQosakCrWTm
-         7BGZfEohFundO2ea7ey6dLeMZzab1uK0jCww3joh+1izlmPP64QxcmjZOcsf0+7Lwv
-         1x1DQUsKj1VwrszEMgUqD2crMYGPoTnMlfOnuS9ilKbNdeFt+u/MakUR1LSAF7JJ+M
-         8IuQdigRCEpPPbZL1F4tWIWHtT+gDrptAlrflm9vo6p6fZWmgtMEmnkQ4HIKx1FmJT
-         WdiRYjrHPX+fWpc4UzUeYYyhotFe3cCnYetvb6BAey9gotxQjmGM0mafZYY8F9MI3s
-         xk7veVw4OuHog==
-Date:   Fri, 30 Aug 2019 10:16:34 +1000
+        s=201702; t=1567124756;
+        bh=vTWsfu1z/Zldg29nCHdodXHx5wD3TBHhT6EeGtP28ng=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VWX1ckyKQXcHmNP4JteBl6TE/gmuxrP5sqQPj0Vjx0kHFlpd6bjBrIREQoWvZyQDK
+         8lYSkDpUpFkz/UKdFCQk9jTOS7FT4qMpIPyMpWXVA26IATpca1q2/boOcZ6yEcPqca
+         3Pr4j7IWzat7tEiQ26Jr1TJMwCNVBJONka0Mvt+9K2dQ6VlSaIx2d78BtKoug/C7we
+         GzXtMHQRUBNNTd2a40E7O/2D360R8y5Q8ppaQjbKxI9dXl03BUDBQwP8Z/sEIqT+Wi
+         /sbRYdc5rAbtjf8tB0GZMeS6C0xrmQe9CZbIToU2aVs6wWyWdHGn2a3RJ/2C4/0ipQ
+         9fk6g+xlv3U+w==
+Date:   Fri, 30 Aug 2019 10:25:53 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guo Ren <ren_guo@c-sky.com>, Christoph Hellwig <hch@lst.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the csky tree with the dma-mapping tree
-Message-ID: <20190830101634.21dca185@canb.auug.org.au>
+Subject: Re: linux-next: build warning from Linus' tree
+Message-ID: <20190830102553.38fd43f2@canb.auug.org.au>
+In-Reply-To: <alpine.DEB.2.21.1908300028360.1938@nanos.tec.linutronix.de>
+References: <20190830082357.4650d243@canb.auug.org.au>
+        <alpine.DEB.2.21.1908300028360.1938@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PRcj0/Yawm.MCDGpYYaNiWW";
+Content-Type: multipart/signed; boundary="Sig_/53o8or2.LpQF327peWRQAaa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PRcj0/Yawm.MCDGpYYaNiWW
+--Sig_/53o8or2.LpQF327peWRQAaa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Thomas,
 
-Today's linux-next merge of the csky tree got a conflict in:
+On Fri, 30 Aug 2019 00:29:21 +0200 (CEST) Thomas Gleixner <tglx@linutronix.=
+de> wrote:
+>
+> On Fri, 30 Aug 2019, Stephen Rothwell wrote:
+>=20
+> Yes. We have a fix queued which should hit next tomorrow.
 
-  arch/csky/mm/dma-mapping.c
-
-between commit:
-
-  8e3a68fb55e0 ("dma-mapping: make dma_atomic_pool_init self-contained")
-
-from the dma-mapping tree and commit:
-
-  4af9027d3f40 ("csky/dma: Fixup cache_op failed when cross memory ZONEs")
-
-from the csky tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Excellent, thanks.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/csky/mm/dma-mapping.c
-index 602a60d47a94,106ef02a8f89..000000000000
---- a/arch/csky/mm/dma-mapping.c
-+++ b/arch/csky/mm/dma-mapping.c
-@@@ -14,33 -14,12 +14,6 @@@
-  #include <linux/version.h>
-  #include <asm/cache.h>
- =20
-- void arch_dma_prep_coherent(struct page *page, size_t size)
- -static int __init atomic_pool_init(void)
---{
-- 	if (PageHighMem(page)) {
-- 		unsigned int count =3D PAGE_ALIGN(size) >> PAGE_SHIFT;
--=20
-- 		do {
-- 			void *ptr =3D kmap_atomic(page);
-- 			size_t _size =3D (size < PAGE_SIZE) ? size : PAGE_SIZE;
--=20
-- 			memset(ptr, 0, _size);
-- 			dma_wbinv_range((unsigned long)ptr,
-- 					(unsigned long)ptr + _size);
--=20
-- 			kunmap_atomic(ptr);
--=20
-- 			page++;
-- 			size -=3D PAGE_SIZE;
-- 			count--;
-- 		} while (count);
-- 	} else {
-- 		void *ptr =3D page_address(page);
--=20
-- 		memset(ptr, 0, size);
-- 		dma_wbinv_range((unsigned long)ptr, (unsigned long)ptr + size);
-- 	}
- -	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
---}
- -postcore_initcall(atomic_pool_init);
---
-  static inline void cache_op(phys_addr_t paddr, size_t size,
-  			    void (*fn)(unsigned long start, unsigned long end))
-  {
-
---Sig_/PRcj0/Yawm.MCDGpYYaNiWW
+--Sig_/53o8or2.LpQF327peWRQAaa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1oauIACgkQAVBC80lX
-0GzVyQf+PEyj5yFHMX/BLhINUl3JIg44T0Ejk81hGmZx6HdebSWtSEdiA6TLY6Ht
-QebgZ9MM6+aw5FIJpx38MvvzruWnMTh0L0gpdpfNbpTIg7nYCnvflRTsxVoHUGah
-sjzAXfp9CqkvObhHfNnArRCP53yvW74MhO9xjGhppsD7mqe5nvmdBNOdeCvNrRW3
-iE5nBBIo2x1yhyki4RsT6JqqXq241koY9GCe+uTWgtliL4Mrrq2u2uoMLYTxLQ5W
-5oNGFltKafOUaAjpaqYg9l8gPV89EiUIglMce4/VPhRfIrUmjc5Uhh4kaQFk/kzJ
-JoIspUaXaVA7Wp9BHVHWhgXjnlytpw==
-=mpiq
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1obREACgkQAVBC80lX
+0GxVBgf9Eszs4ByVn6CUMr+KfbGwM9GZSjXLty5Y9Y089gZ+CJbxFbt5FY3QxZo4
+IIYPuhhj3OOecNnhF+zE0/IHO/GDE0zmo8bXe+dl+R5X68yeJYyQzaH1ObUJ79qV
+LqudJNie1ESyM7N3tuwPgY/q1q+QnPsZ8L6DrD62MB485bJbQvndN/O5Fxr6SREz
+ToQ+GA0soVx5HOZB2691GFiYnx2YJgUy94nasyV7cqjAd1kJJ/c/eHKJJSYVAHrb
+G+rM9MIJX1fctzZgiNcyObyQridE3U5cwKjCs4/BqwfM/BPesMBq332SPdSv5DTj
+J44mIWADk3VxC++e2/W479YNMPXEjw==
+=OPga
 -----END PGP SIGNATURE-----
 
---Sig_/PRcj0/Yawm.MCDGpYYaNiWW--
+--Sig_/53o8or2.LpQF327peWRQAaa--

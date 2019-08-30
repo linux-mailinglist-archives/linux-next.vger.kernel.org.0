@@ -2,79 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 11799A36CB
-	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 14:29:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BA88A36D0
+	for <lists+linux-next@lfdr.de>; Fri, 30 Aug 2019 14:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727729AbfH3M3d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Aug 2019 08:29:33 -0400
-Received: from mail-qk1-f194.google.com ([209.85.222.194]:46309 "EHLO
-        mail-qk1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726969AbfH3M3c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Aug 2019 08:29:32 -0400
-Received: by mail-qk1-f194.google.com with SMTP id p13so5884468qkg.13;
-        Fri, 30 Aug 2019 05:29:32 -0700 (PDT)
+        id S1727675AbfH3Ma5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Aug 2019 08:30:57 -0400
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:35381 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727386AbfH3Ma5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Aug 2019 08:30:57 -0400
+Received: by mail-wm1-f67.google.com with SMTP id l2so7276629wmg.0
+        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 05:30:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lK3SdEfdHzl9jiQrhuM9R9qwguoBC0l1FGo+Jyx6ye4=;
+        b=mGALJXQYufxSI9/NMXya55UCstbt+vyLc/JREg/ztiRBsbrhkFs+2GBIwHI+npCKmx
+         9nopyIVxmxq7feMOYn4uj7VpUvPipLTxMmuGfCgZXtlk2DdRiNLLdltVivFn6INeK+Ru
+         EWFP1NT5G4L9YOzyONXBummjWiPklvYAsFAGV93+0zjwiLGpQzC8uTIqvIeetVDT4bs0
+         iwmgG+uPaZUH4oI5NmSaiS42tL1QmZ0ahpUC4uJIPdg5P8NxWeTDMTElbqMfLRXAcpZ4
+         hTlslfMebOGZYUa3kLbXbACr65UU4EtwpZ/0gWZQHWR384uJ5hoOGOJx9JtpegrcqjMn
+         TRaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UIrlR9vtJ1E/DTegVRZZ9qCNH5Gta5MlLllJAAd5X9M=;
-        b=eGi/QaJW3ALjxRox5rpq1XN+XBSET/NXIQY7kzSfYF4jv38pHP9BdDvXVCW6cXcBKG
-         PSfKNc5FDFxREDJO/+3q1YulKPfEEPP3UlXGgv4UX8NOxpy2F1Uaz12y1ycGjQQ0KpEv
-         scWcLqDcw5sRf/kX5en+iwxiHobmXYGJYmSGEiu7UCF8k36aVblwKilzYk5959YmCbrE
-         uESvvVr3dmmp0cHFTUlHbNy/sKKtqUvaI8WKpTea7026uYMptXXtUiX0bbyS6FuWlO1E
-         7PtERZPFLgwMKpI98qGetrU2t6IzsFIHX0SZAPIBdjjEXB3ARQXjNNtxOiUTXYcSmyNx
-         t/TQ==
-X-Gm-Message-State: APjAAAUuXXH2TomwbLjVDmWn0f1MLHBA/z1Te8xgyPgEckjx9e+aPexh
-        3zeuhKAinTNYJyWpiMP9zPXEAkO9hsyzQwPK4eU=
-X-Google-Smtp-Source: APXvYqyJGIFhpE0otdDhC4Pc3eq2BVlXTjeHLMVZ0m7XbxfNxzW0+co1DqNfPTfujGLShw6DRiYHMZgkGOul+9nf/gU=
-X-Received: by 2002:a05:620a:b:: with SMTP id j11mr15321103qki.352.1567168171671;
- Fri, 30 Aug 2019 05:29:31 -0700 (PDT)
+        bh=lK3SdEfdHzl9jiQrhuM9R9qwguoBC0l1FGo+Jyx6ye4=;
+        b=a7WgFmJ2cl5PmxnlR2u4TGaWohcnp2yN0ZoQWZG2LD+ut58hVUTAvqEfdRjAfu3I/y
+         hLYB1MxVGY6pffqGwYLXuaDJSsR+yO4ck/ZjmymoKDHwejO0iF9PaihOQMZqI6UPIW+j
+         dQ12QKu8dSkOK3k1v6Ckcn+RAk/yWb2Q6Ij6wGKKMSRr5jRe8uEt5Q535mfknynX5roc
+         Cz7NUcJjyT+qBnKIBMFi6NP825sZPL9k6YLGO1C8XpXQt9PLprqGV5DRF/p144fz3Vba
+         JLenVLS9M5WeWMs1CrlvKLporGcYxUNnw79thZv7s8oHLEFeKrJjC4pAe+zWNxcTyQLV
+         orOg==
+X-Gm-Message-State: APjAAAW/18x39BQPgiDNNp2buMAwutjuHYS2cUhVO/PkZBD+xILZjNwv
+        5gerGBwG8HrfQ8Y3rNzNQ8x7qAgZ5JDJWKMp7egT
+X-Google-Smtp-Source: APXvYqxiSI/F1NevyNssi3lKq65ebc/V93G1PJODpIbGRxXGCx11RsYl1WKBYAF6TnctmYCzjRhkwGQ0+ZS3SlpMW7E=
+X-Received: by 2002:a1c:658a:: with SMTP id z132mr18335687wmb.98.1567168254754;
+ Fri, 30 Aug 2019 05:30:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20190830092738.7ea1abd0@canb.auug.org.au>
-In-Reply-To: <20190830092738.7ea1abd0@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 30 Aug 2019 14:29:15 +0200
-Message-ID: <CAK8P3a2zc-hp_oE1+Q+RTugxeVPPc3jyrdceQ4+8t4Zw_=vHUA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the arm-soc tree with the arm tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Olof Johansson <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+References: <20190830132311.7190ccc3@canb.auug.org.au>
+In-Reply-To: <20190830132311.7190ccc3@canb.auug.org.au>
+From:   Bjorn Helgaas <bhelgaas@google.com>
+Date:   Fri, 30 Aug 2019 07:30:42 -0500
+Message-ID: <CAErSpo618ewbJQHS3E3KWhTLe6T47u=Xjx9E-gYKMzjn=MmujA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pci tree
+To:     Vidya Sagar <vidyas@nvidia.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <natechancellor@gmail.com>
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Krzysztof Wilczynski <kw@linux.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 1:27 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+[+cc Krzysztof]
+
+On Thu, Aug 29, 2019 at 10:23 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> Today's linux-next merge of the arm-soc tree got a conflict in:
+> After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
 >
->   arch/arm/mach-iop13xx/pci.c
+> drivers/pci/controller/dwc/pcie-tegra194.c:24:10: fatal error: linux/pci-aspm.h: No such file or directory
+>    24 | #include <linux/pci-aspm.h>
+>       |          ^~~~~~~~~~~~~~~~~~
 >
-> between commit:
+> Caused by commit
 >
->   4af014984273 ("ARM: 8871/1: iop13xx: Simplify iop13xx_atu{e,x}_pci_status checks")
+>   81564976b1a9 ("PCI: tegra: Add Tegra194 PCIe support")
 >
-> from the arm tree and commit:
->
->   59d3ae9a5bf6 ("ARM: remove Intel iop33x and iop13xx support")
->
-> from the arm-soc tree.
->
-> I fixed it up (the latter removed the file, so I did that) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+> I have reverted that commit for todat.
 
-Yes, that's good. Russell, you could drop the patch from your tree if
-you like, or let Linus handle the trivial conflict.
+Thanks, Stephen.
 
-       Arnd
+I *could* fix this by removing that include in the merge, since the
+contents of linux/pci-aspm.h were moved into linux/pci.h by
+https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=7ce2e76a0420
+
+But as far as I can tell, pcie-tegra194.c doesn't actually require
+anything from linux/pci-aspm.h, so I'd rather amend the tegra194
+commit https://git.kernel.org/cgit/linux/kernel/git/lpieralisi/pci.git/commit/?id=81564976b1a9
+so it doesn't include pci-aspm.h in the first place.
+
+Bjorn

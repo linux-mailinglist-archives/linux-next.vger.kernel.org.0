@@ -2,103 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA9EA4168
-	for <lists+linux-next@lfdr.de>; Sat, 31 Aug 2019 02:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E03A420A
+	for <lists+linux-next@lfdr.de>; Sat, 31 Aug 2019 06:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728288AbfHaAnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Aug 2019 20:43:21 -0400
-Received: from outbound.smtp.vt.edu ([198.82.183.121]:42256 "EHLO
-        omr2.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728271AbfHaAnV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Aug 2019 20:43:21 -0400
-Received: from mr3.cc.vt.edu (mr3.cc.ipv6.vt.edu [IPv6:2607:b400:92:8500:0:7f:b804:6b0a])
-        by omr2.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x7V0hJEt019116
-        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 20:43:19 -0400
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
-        by mr3.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x7V0hEiR026889
-        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 20:43:19 -0400
-Received: by mail-qt1-f200.google.com with SMTP id e32so8923276qtc.7
-        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 17:43:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :mime-version:content-transfer-encoding:date:message-id;
-        bh=XFBHH54+3ZzAcvBGzpCHat8WRpPliDlxuP5sjSOAoEE=;
-        b=MLeeoiMdkBDaETF6p+T+m/VxKW07M8+srNW9DgdXijc+6dYuLVjaSqakmI+eJ0WWiN
-         0l70ykZStfXlJ5oT1yIjV/+ZSFLsvP94vwdk5EV9VzGJYvUmAo8JXbZ8QhzxTNbtB2xi
-         9HBWjyVINjADgCCnZ3z41r/pb5EklUsMatvtHCT76PH2EJG3dVDsIfwIVGwKFV5WZ21o
-         p6aEJZAqADq2kSeoz7DouiJwgRo2mbyjTfGRF0Gz+HpHEpFHAYH03wSwAHQofjZ9FOB1
-         ZuKhfTL1pU/LLoRX1wB7ipewEIztw5LJvgG50gDCMzM4JkFO1Qa0+yA2WrhNl3KizGHa
-         OP4w==
-X-Gm-Message-State: APjAAAVx68dBR0vY5TD//hn+1YZ7MDhsJWzbffIIXDiUhGo7wkVkpUYb
-        fSJL55ie0kUbhwT2ZMshRwk911tYiLsBV/bF9NyfhuP98X8S/j1sHRUbceDr7/dncnu2dcafUjP
-        7sxteiTTqK4rPQG8AqIVKWuYhPFqUcdXc
-X-Received: by 2002:ae9:e90a:: with SMTP id x10mr18129149qkf.392.1567212194525;
-        Fri, 30 Aug 2019 17:43:14 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqyEJKukI1TSTm7w80vUWRep4DXRbiZaP5lYn/CK/s4Vokrau1EEUkE6Nbuat3rFOod0XUEznw==
-X-Received: by 2002:ae9:e90a:: with SMTP id x10mr18129133qkf.392.1567212194286;
-        Fri, 30 Aug 2019 17:43:14 -0700 (PDT)
-Received: from turing-police ([2601:5c0:c001:4340::ba0])
-        by smtp.gmail.com with ESMTPSA id n187sm3734502qkc.98.2019.08.30.17.43.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2019 17:43:12 -0700 (PDT)
-From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
-X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
-X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725953AbfHaEVP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 31 Aug 2019 00:21:15 -0400
+Received: from hqemgate14.nvidia.com ([216.228.121.143]:3851 "EHLO
+        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725944AbfHaEVP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 31 Aug 2019 00:21:15 -0400
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5d69f5ba0000>; Fri, 30 Aug 2019 21:21:15 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Fri, 30 Aug 2019 21:21:14 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Fri, 30 Aug 2019 21:21:14 -0700
+Received: from [10.25.72.86] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Sat, 31 Aug
+ 2019 04:21:10 +0000
+Subject: Re: linux-next: build failure after merge of the pci tree
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: linux-next: Tree for Aug 30 (exfat)
-In-Reply-To: <8ef40504-ba29-5325-9cb6-0c800a7b03ce@infradead.org>
-References: <20190831003613.7540b2d7@canb.auug.org.au>
- <8ef40504-ba29-5325-9cb6-0c800a7b03ce@infradead.org>
-Mime-Version: 1.0
-Content-Type: multipart/signed; boundary="==_Exmh_1567212191_4251P";
-         micalg=pgp-sha1; protocol="application/pgp-signature"
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Krzysztof Wilczynski <kw@linux.com>
+References: <20190830132311.7190ccc3@canb.auug.org.au>
+ <CAErSpo618ewbJQHS3E3KWhTLe6T47u=Xjx9E-gYKMzjn=MmujA@mail.gmail.com>
+X-Nvconfidentiality: public
+From:   Vidya Sagar <vidyas@nvidia.com>
+Message-ID: <9ae74244-f1e1-de7f-6d03-b2cca012f6fc@nvidia.com>
+Date:   Sat, 31 Aug 2019 09:51:05 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAErSpo618ewbJQHS3E3KWhTLe6T47u=Xjx9E-gYKMzjn=MmujA@mail.gmail.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL105.nvidia.com (172.20.187.12) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-Date:   Fri, 30 Aug 2019 20:43:11 -0400
-Message-ID: <267483.1567212191@turing-police>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1567225275; bh=v1nWbEGKg2bagzwvzFTzbWWgbcaDsnbU7NOGZ26ZRm0=;
+        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=rMkOwl9KdKxTuY0EoQcyxmo/F5ZkGlBFzZzGPD52I0Pas74eDOkIfd/yNhI0IVHXm
+         tki3jTz+aygMviA6/G/XAQeezuTzDSW0j+u1XKpfo1ZcvfYN5FKOkLJIRZOtkdCBej
+         bdv3Rv51euBoBBjCfY8Hw0E0N4V18NtljTNZkbrZXHiGHyEY0sgYniFUOqautRhOwX
+         kG2hJdT/ka/8NyzumQqfBaBCcU8GXMW7sBob/MNTHZ0RTwvOHvDzSTxVS4BjV2vuZg
+         GBYkNuH0iYEBWwDzNfJKL56M8DXB4BWKa+6eeRBtzwqr9RVXb4GpbPmuoZ/jQc01BF
+         cPR1reB+okggg==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---==_Exmh_1567212191_4251P
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+On 8/30/2019 6:00 PM, Bjorn Helgaas wrote:
+> [+cc Krzysztof]
+> 
+> On Thu, Aug 29, 2019 at 10:23 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>
+>> Hi all,
+>>
+>> After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+>> failed like this:
+>>
+>> drivers/pci/controller/dwc/pcie-tegra194.c:24:10: fatal error: linux/pci-aspm.h: No such file or directory
+>>     24 | #include <linux/pci-aspm.h>
+>>        |          ^~~~~~~~~~~~~~~~~~
+>>
+>> Caused by commit
+>>
+>>    81564976b1a9 ("PCI: tegra: Add Tegra194 PCIe support")
+>>
+>> I have reverted that commit for todat.
+> 
+> Thanks, Stephen.
+> 
+> I *could* fix this by removing that include in the merge, since the
+> contents of linux/pci-aspm.h were moved into linux/pci.h by
+> https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=7ce2e76a0420
+> 
+> But as far as I can tell, pcie-tegra194.c doesn't actually require
+> anything from linux/pci-aspm.h, so I'd rather amend the tegra194
+> commit https://git.kernel.org/cgit/linux/kernel/git/lpieralisi/pci.git/commit/?id=81564976b1a9
+> so it doesn't include pci-aspm.h in the first place.
+Thanks Bjorn for the reply.
+Yes. This header file is not required for now and can be removed.
+Is there any action required from my side for this?
 
-On Fri, 30 Aug 2019 09:52:15 -0700, Randy Dunlap said:
+> 
+> Bjorn
+> 
 
-> on x86_64:
-> when CONFIG_VFAT_FS is not set/enabled:
->
-> ../drivers/staging/exfat/exfat_super.c:46:41: error: =91CONFIG_FAT_DEFA=
-ULT_IOCHARSET=92 undeclared here (not in a function); did you mean =91CON=
-FIG_EXFAT_DEFAULT_IOCHARSET=92?
-
-Thanks.  I'll fix this tonight....
-
---==_Exmh_1567212191_4251P
-Content-Type: application/pgp-signature
-
------BEGIN PGP SIGNATURE-----
-Comment: Exmh version 2.9.0 11/07/2018
-
-iQIVAwUBXWnCnwdmEQWDXROgAQIU5w/9FKqubpI3arBOt6EHREOF5sp2IfpJPOww
-UWzmjO1MWpYdcVzI8/1fx35oOpA3IMsfSrVuX4v5ctoM6s4P6ut1EKs7O5eTt+UB
-2mlhMGupqvpfClS7GMXNYeDaGJ4Br8N69W19+z0A7YHHJYFpHUYNfYwsPsi3tFrn
-LTOx486+FHopNDwRdx5cHpriY2AlHMuuu6R8cGzMCzyOV9BWkZecWR33BO2cv4qa
-TShEj/tnPqDa4rKePG94bmHExpsHh4l8sI0vPT2Mji4t7zVji0PcdpiEwaRcNCle
-IBUVYHdrrSYftj1m2ja1xeXmRXYofTOldoPIZ/6LOkFKalDhC0CN+zyOlDeXuGW2
-GgLWqmATH5+Fqsv/2IL0OYRN9zxrbzQYz/kZApYdj09VqzA5u0YyiZTFYxNGPWhp
-mOhCCrwOxo0FieehscjqIEA3sYu/OefMqfRWnPdU4+/7D3au2wpMS0sdB7PiBcoD
-ry54HxlrWiMCuGQR+jwRm20b4QJz4RPOoYYalID7R3/2jLYpn+zKytHenYMrFT7U
-iIyAe5OcTf45e8avSNy8VZk8qLU3HEPbsWKWBeW0kUa9pqQxmaXN8Ld3EVncz5Zl
-GOKQqNbZunHN9J8St6KYB2evsd3U1YlE7kz9cU9Ux96RIgEN7RWZBiPlhuhsWwOR
-CgEF3NPkIzM=
-=dqqB
------END PGP SIGNATURE-----
-
---==_Exmh_1567212191_4251P--

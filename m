@@ -2,147 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D808A412E
-	for <lists+linux-next@lfdr.de>; Sat, 31 Aug 2019 01:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA9EA4168
+	for <lists+linux-next@lfdr.de>; Sat, 31 Aug 2019 02:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728242AbfH3X5q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 30 Aug 2019 19:57:46 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37798 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728248AbfH3X5q (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Aug 2019 19:57:46 -0400
-Received: by mail-wm1-f67.google.com with SMTP id d16so9040759wme.2
-        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 16:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Zdhq7i+ceYcbpCu691TAfDVnyEvJSvautHI3YdX2wc8=;
-        b=Q3trCKzX7RHuvbGaTa7+tBSf7PkVpmChbRRRYh/7k8Qt/NxA6+71vQonAv6S+5Tg7+
-         NMHqJD4zwDr57oterCIbP2ETlHVTVePEAefornpBccISiRwNkejUu6qN/bNlDiBZyrod
-         KuKh2Z6u4hRwjFWXL8Min4FBnrTyhWtqgNLNQiNEne4rr1oDPzUmVskOztnIyG1tI1lO
-         o3j1M0Jh4K3JRnD7vzNhozRwWtttLKzMCbdRU9ftkJu4GREQdR+aIyPr0UZ+hBV/cxEJ
-         yuxhB38MRRqCCDpeQgrBWCvEM9WPNyCyHA/VzhqB0X1Z/HV9lFynUpsIVOoTKbT9qKdR
-         lMfw==
+        id S1728288AbfHaAnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 30 Aug 2019 20:43:21 -0400
+Received: from outbound.smtp.vt.edu ([198.82.183.121]:42256 "EHLO
+        omr2.cc.vt.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728271AbfHaAnV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 30 Aug 2019 20:43:21 -0400
+Received: from mr3.cc.vt.edu (mr3.cc.ipv6.vt.edu [IPv6:2607:b400:92:8500:0:7f:b804:6b0a])
+        by omr2.cc.vt.edu (8.14.4/8.14.4) with ESMTP id x7V0hJEt019116
+        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 20:43:19 -0400
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+        by mr3.cc.vt.edu (8.14.7/8.14.7) with ESMTP id x7V0hEiR026889
+        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 20:43:19 -0400
+Received: by mail-qt1-f200.google.com with SMTP id e32so8923276qtc.7
+        for <linux-next@vger.kernel.org>; Fri, 30 Aug 2019 17:43:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Zdhq7i+ceYcbpCu691TAfDVnyEvJSvautHI3YdX2wc8=;
-        b=CKkBVWQFCP+lzElciiK0WV7Cs9aKgchnVZwkVB6dbO4eLx3rxGzJMm5my/L9RrCZX4
-         l9p3+eRphgHkvh55aqs1VGmNkTcs+LKiU1Ryu370eEMcLEVTMiBAgS82/A1Z8uDSmRQy
-         CX6gvEMEF8xaGEo/GuBfYXTWJEn4Wb0P6NP9woSC0jPLGfXOgGayWPjElO4+WvMAuh+y
-         z0jFo2faokdlDPalsLO0iIyknT61v/Crh+QmEMHn95C4rTY83rTNaZseMkWvug+WMDUo
-         YGL+ouKHKfBf+oHEylRzeY7xoQCTPzmSaQDqG171xRGv3xKvVUFBzO1XeeB/P+N+ewga
-         56OA==
-X-Gm-Message-State: APjAAAXaLdjyIEurvLl0onHCGvN69veIBqb5TI9bPtHFuMl9z2HPQXAV
-        MHTdidegTOIc9QhXBZto8HEI+lNIQZhEPA==
-X-Google-Smtp-Source: APXvYqye2e588k5irXcuNJZ913K9Js/m0xx6Jlw48qqu7jr62Shma7QgTJx/7SmkCVucJ7i+A5aEpw==
-X-Received: by 2002:a7b:ce95:: with SMTP id q21mr20657936wmj.31.1567209464052;
-        Fri, 30 Aug 2019 16:57:44 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id h125sm15087407wmf.31.2019.08.30.16.57.42
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 30 Aug 2019 16:57:43 -0700 (PDT)
-Message-ID: <5d69b7f7.1c69fb81.659a3.66d4@mx.google.com>
-Date:   Fri, 30 Aug 2019 16:57:43 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190830
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 218 boots: 8 failed, 196 passed with 13 offline,
- 1 conflict (next-20190830)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :mime-version:content-transfer-encoding:date:message-id;
+        bh=XFBHH54+3ZzAcvBGzpCHat8WRpPliDlxuP5sjSOAoEE=;
+        b=MLeeoiMdkBDaETF6p+T+m/VxKW07M8+srNW9DgdXijc+6dYuLVjaSqakmI+eJ0WWiN
+         0l70ykZStfXlJ5oT1yIjV/+ZSFLsvP94vwdk5EV9VzGJYvUmAo8JXbZ8QhzxTNbtB2xi
+         9HBWjyVINjADgCCnZ3z41r/pb5EklUsMatvtHCT76PH2EJG3dVDsIfwIVGwKFV5WZ21o
+         p6aEJZAqADq2kSeoz7DouiJwgRo2mbyjTfGRF0Gz+HpHEpFHAYH03wSwAHQofjZ9FOB1
+         ZuKhfTL1pU/LLoRX1wB7ipewEIztw5LJvgG50gDCMzM4JkFO1Qa0+yA2WrhNl3KizGHa
+         OP4w==
+X-Gm-Message-State: APjAAAVx68dBR0vY5TD//hn+1YZ7MDhsJWzbffIIXDiUhGo7wkVkpUYb
+        fSJL55ie0kUbhwT2ZMshRwk911tYiLsBV/bF9NyfhuP98X8S/j1sHRUbceDr7/dncnu2dcafUjP
+        7sxteiTTqK4rPQG8AqIVKWuYhPFqUcdXc
+X-Received: by 2002:ae9:e90a:: with SMTP id x10mr18129149qkf.392.1567212194525;
+        Fri, 30 Aug 2019 17:43:14 -0700 (PDT)
+X-Google-Smtp-Source: APXvYqyEJKukI1TSTm7w80vUWRep4DXRbiZaP5lYn/CK/s4Vokrau1EEUkE6Nbuat3rFOod0XUEznw==
+X-Received: by 2002:ae9:e90a:: with SMTP id x10mr18129133qkf.392.1567212194286;
+        Fri, 30 Aug 2019 17:43:14 -0700 (PDT)
+Received: from turing-police ([2601:5c0:c001:4340::ba0])
+        by smtp.gmail.com with ESMTPSA id n187sm3734502qkc.98.2019.08.30.17.43.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Aug 2019 17:43:12 -0700 (PDT)
+From:   "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <valdis.kletnieks@vt.edu>
+X-Google-Original-From: "Valdis Kl=?utf-8?Q?=c4=93?=tnieks" <Valdis.Kletnieks@vt.edu>
+X-Mailer: exmh version 2.9.0 11/07/2018 with nmh-1.7+dev
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: linux-next: Tree for Aug 30 (exfat)
+In-Reply-To: <8ef40504-ba29-5325-9cb6-0c800a7b03ce@infradead.org>
+References: <20190831003613.7540b2d7@canb.auug.org.au>
+ <8ef40504-ba29-5325-9cb6-0c800a7b03ce@infradead.org>
+Mime-Version: 1.0
+Content-Type: multipart/signed; boundary="==_Exmh_1567212191_4251P";
+         micalg=pgp-sha1; protocol="application/pgp-signature"
+Content-Transfer-Encoding: 7bit
+Date:   Fri, 30 Aug 2019 20:43:11 -0400
+Message-ID: <267483.1567212191@turing-police>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 218 boots: 8 failed, 196 passed with 13 offline, 1 confli=
-ct (next-20190830)
+--==_Exmh_1567212191_4251P
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190830/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190830/
+On Fri, 30 Aug 2019 09:52:15 -0700, Randy Dunlap said:
 
-Tree: next
-Branch: master
-Git Describe: next-20190830
-Git Commit: 6d028043b55e54f48fbdf62ea8ce11a4ad830cac
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 93 unique boards, 28 SoC families, 19 builds out of 217
+> on x86_64:
+> when CONFIG_VFAT_FS is not set/enabled:
+>
+> ../drivers/staging/exfat/exfat_super.c:46:41: error: =91CONFIG_FAT_DEFA=
+ULT_IOCHARSET=92 undeclared here (not in a function); did you mean =91CON=
+FIG_EXFAT_DEFAULT_IOCHARSET=92?
 
-Boot Failures Detected:
+Thanks.  I'll fix this tonight....
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            mt7622-rfb1: 1 failed lab
+--==_Exmh_1567212191_4251P
+Content-Type: application/pgp-signature
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
+Comment: Exmh version 2.9.0 11/07/2018
 
-arm:
-    vexpress_defconfig:
-        gcc-8:
-            qemu_arm-virt-gicv3: 5 failed labs
+iQIVAwUBXWnCnwdmEQWDXROgAQIU5w/9FKqubpI3arBOt6EHREOF5sp2IfpJPOww
+UWzmjO1MWpYdcVzI8/1fx35oOpA3IMsfSrVuX4v5ctoM6s4P6ut1EKs7O5eTt+UB
+2mlhMGupqvpfClS7GMXNYeDaGJ4Br8N69W19+z0A7YHHJYFpHUYNfYwsPsi3tFrn
+LTOx486+FHopNDwRdx5cHpriY2AlHMuuu6R8cGzMCzyOV9BWkZecWR33BO2cv4qa
+TShEj/tnPqDa4rKePG94bmHExpsHh4l8sI0vPT2Mji4t7zVji0PcdpiEwaRcNCle
+IBUVYHdrrSYftj1m2ja1xeXmRXYofTOldoPIZ/6LOkFKalDhC0CN+zyOlDeXuGW2
+GgLWqmATH5+Fqsv/2IL0OYRN9zxrbzQYz/kZApYdj09VqzA5u0YyiZTFYxNGPWhp
+mOhCCrwOxo0FieehscjqIEA3sYu/OefMqfRWnPdU4+/7D3au2wpMS0sdB7PiBcoD
+ry54HxlrWiMCuGQR+jwRm20b4QJz4RPOoYYalID7R3/2jLYpn+zKytHenYMrFT7U
+iIyAe5OcTf45e8avSNy8VZk8qLU3HEPbsWKWBeW0kUa9pqQxmaXN8Ld3EVncz5Zl
+GOKQqNbZunHN9J8St6KYB2evsd3U1YlE7kz9cU9Ux96RIgEN7RWZBiPlhuhsWwOR
+CgEF3NPkIzM=
+=dqqB
+-----END PGP SIGNATURE-----
 
-Offline Platforms:
-
-mips:
-
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    tegra_defconfig:
-        tegra124-jetson-tk1:
-            lab-baylibre: FAIL (gcc-8)
-            lab-mhart: PASS (gcc-8)
-            lab-collabora: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+--==_Exmh_1567212191_4251P--

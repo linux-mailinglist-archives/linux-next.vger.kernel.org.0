@@ -2,258 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 22018A4FF0
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 09:31:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EE2A5018
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 09:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729527AbfIBHbI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Sep 2019 03:31:08 -0400
-Received: from ozlabs.org ([203.11.71.1]:50219 "EHLO ozlabs.org"
+        id S1729702AbfIBHmn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Sep 2019 03:42:43 -0400
+Received: from mail.heine.tech ([195.201.24.99]:59284 "EHLO mail.heine.tech"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729408AbfIBHbI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Sep 2019 03:31:08 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46MMFg5Tzsz9s7T;
-        Mon,  2 Sep 2019 17:31:03 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567409464;
-        bh=XELxu5FgecPOqvbsunN+p5nGwQ3YBc3AeD3egFnCS9g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bAJ3UbDbhkTno29Q0Ba888CbYXog/kbRlUFQINag1Jor1bwpBJaNieJPHJ9ZlHqjm
-         O6hnaBSfrGGiMwHQ6bAe+mXiIeJmUuJr/LmQnTlgu3s+FTExUdWW1bMcZIFCqErTpn
-         E+gLHEpxYHORmtKsvpP8ARBX2G/n2lBzaUTgBch0R7V52xB/rg/AXbhjWoTxFC8Q15
-         pxB/s/3HzSw7VZzUr6RqvullPK3JepMWNawFlhcgiEN9fFaUBDmVF9O2wsmK2Y9elL
-         +1ifkV2KISmN51dASokvGwkx+8qy048uovIvuIiopKhqI4Lduv15SDCpDAKn30qPGJ
-         mvdgR/RMkv+Eg==
-Date:   Mon, 2 Sep 2019 17:31:02 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@linux.intel.com>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20190902173102.53a44459@canb.auug.org.au>
+        id S1726540AbfIBHmn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Sep 2019 03:42:43 -0400
+X-Greylist: delayed 593 seconds by postgrey-1.27 at vger.kernel.org; Mon, 02 Sep 2019 03:42:42 EDT
+Received: from localhost (localhost [127.0.0.1]) (Authenticated sender: michael@nosthoff.rocks)
+        by mail.heine.tech (Postcow) with ESMTPA id 0C7951814BA;
+        Mon,  2 Sep 2019 09:32:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nosthoff.rocks;
+        s=dkim; t=1567409568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:  in-reply-to:in-reply-to;
+        bh=JX2/x2Fpnilt3YxCUMwW5hYCNP+HOh2fh/yrCcqpfvQ=;
+        b=J76ZiGdK8Y8frci+PP36sETn4Ys5AjkBijg1nzhyOTdG6TmXvQZduu0sdF+BzkCWj6NKTL
+        3vDsUbYcMOQzf20c+atRE0vudaSEg+GgfKFyP4gZWdmh4e42Sl5d5XqMRomOoMlon0lMci
+        xYBaboQ/h0/Lhk+Mj70Mh93gPlWeqnk=
+Content-Type: text/plain; charset="utf-8"
+In-Reply-To: <20190902071041.ukvc64tg5tjttk6w@earth.universe>
+From:   "Michael Nosthoff" <michael@nosthoff.rocks>
+Date:   Mon, 02 Sep 2019 09:32:47 +0200
+Cc:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+To:     "Sebastian Reichel" <sre@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/61CBMUCLyn0N/.EVCaxPnwA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Message-ID: <79b6-5d6cc580-3-35015040@57153312>
+Subject: =?utf-8?q?Re=3A?==?utf-8?q?_linux-next=3A?= Fixes tag needs some work in 
+ the battery tree
+User-Agent: SOGoMail 4.0.8
+Content-Transfer-Encoding: quoted-printable
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=nosthoff.rocks;
+        s=dkim; t=1567409568;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to; bh=JX2/x2Fpnilt3YxCUMwW5hYCNP+HOh2fh/yrCcqpfvQ=;
+        b=Z3HDkULOYVoIMvU9ddzW4tOX5r8fU2VGjP5iUEaAy3oD6pVKkWzOAERH+5erlX/84IKveH
+        vUzflOjvpzWAvMchDFjlZGIaIvZJbmdurvS4G+OlnBMyOC/AyFKBQ0UPIwLvC++NS9rPu+
+        dgz5hMMm3lIfktr2t9aw5/ZvjLN07Yw=
+ARC-Seal: i=1; s=dkim; d=nosthoff.rocks; t=1567409568; a=rsa-sha256;
+        cv=none;
+        b=VIBLveKhDw6arNCEsJeZylZEauLRE64oRt1XoM0Ch6zIaNIWMGBxcT5gX6tsSryxTDOyhT
+        BoCgieTBgKW8x7MBELA8m85jYytlmRRoMvGKs0Q2B2LTyjdmX1s/KP91sYon1Vj5Z68CWU
+        SGBj4udBNwFV2ufL8oV48vsbtHVePqI=
+ARC-Authentication-Results: i=1;
+        mail.heine.tech;
+        auth=pass smtp.mailfrom=michael@nosthoff.rocks
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/61CBMUCLyn0N/.EVCaxPnwA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Sebastian,
 
-Hi all,
+I think you missed that the second commit
 
-Today's linux-next merge of the tip tree got a conflict in:
+38fa8b9f75ea ("power: supply: sbs-battery: use correct flags field")
 
-  tools/power/x86/turbostat/turbostat.c
+also needs this fix.
 
-between commit:
 
-  cd188af5282d ("tools/power turbostat: Fix Haswell Core systems")
-  b62b3184576b ("tools/power turbostat: add Jacobsville support")
-  d93ea567fc4e ("tools/power turbostat: Add Ice Lake NNPI support")
+Regards,
+Michael
 
-from Linus' tree and commit:
+On Monday, September 02, 2019 09:10 CEST, Sebastian Reichel <sre@kernel=
+.org> wrote: 
+ 
+> Hi Stephen,
+> 
+> On Mon, Sep 02, 2019 at 09:31:31AM +1000, Stephen Rothwell wrote:
+> > In commit
+> > 
+> > b19aca4eb2d2 ("power: supply: sbs-battery: only return health when =
+battery present")
+> > 
+> > [...]
+> > 
+> > Please do not split Fixes tags over more than one line.
+> 
+> I have fixed this and rebased the branch, so the issue should be
+> gone tomororw. Thanks for the notice,
+> 
+> -- Sebastian
 
-  c66f78a6de4d ("x86/intel: Aggregate big core client naming")
-  af239c44e3f9 ("x86/intel: Aggregate big core mobile naming")
-  5e741407eab7 ("x86/intel: Aggregate big core graphics naming")
-  5ebb34edbefa ("x86/intel: Aggregate microserver naming")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/power/x86/turbostat/turbostat.c
-index b2a86438f074,6eef0cee6d75..000000000000
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@@ -3234,15 -3207,14 +3234,15 @@@ int probe_nhm_msrs(unsigned int family
-  		pkg_cstate_limits =3D snb_pkg_cstate_limits;
-  		has_misc_feature_control =3D 1;
-  		break;
-- 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL:	/* HSW */
-  	case INTEL_FAM6_HASWELL_X:	/* HSX */
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
-- 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
-- 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
-+ 	case INTEL_FAM6_BROADWELL:	/* BDW */
-+ 	case INTEL_FAM6_BROADWELL_G:	/* BDW */
-  	case INTEL_FAM6_BROADWELL_X:	/* BDX */
-- 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
-- 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
-+ 	case INTEL_FAM6_SKYLAKE_L:	/* SKL */
-+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
-  		pkg_cstate_limits =3D hsw_pkg_cstate_limits;
-  		has_misc_feature_control =3D 1;
-  		break;
-@@@ -3431,15 -3403,14 +3431,15 @@@ int has_config_tdp(unsigned int family
- =20
-  	switch (model) {
-  	case INTEL_FAM6_IVYBRIDGE:	/* IVB */
-- 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL:	/* HSW */
-  	case INTEL_FAM6_HASWELL_X:	/* HSX */
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
-- 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
-- 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
-+ 	case INTEL_FAM6_BROADWELL:	/* BDW */
-+ 	case INTEL_FAM6_BROADWELL_G:	/* BDW */
-  	case INTEL_FAM6_BROADWELL_X:	/* BDX */
-- 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
-- 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
-+ 	case INTEL_FAM6_SKYLAKE_L:	/* SKL */
-+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
-  	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
- =20
-  	case INTEL_FAM6_XEON_PHI_KNL:	/* Knights Landing */
-@@@ -3870,11 -3840,10 +3870,11 @@@ void rapl_probe_intel(unsigned int fami
-  	switch (model) {
-  	case INTEL_FAM6_SANDYBRIDGE:
-  	case INTEL_FAM6_IVYBRIDGE:
-- 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
-- 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
-- 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
-+ 	case INTEL_FAM6_HASWELL:	/* HSW */
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
-+ 	case INTEL_FAM6_BROADWELL:	/* BDW */
-+ 	case INTEL_FAM6_BROADWELL_G:	/* BDW */
-  		do_rapl =3D RAPL_PKG | RAPL_CORES | RAPL_CORE_POLICY | RAPL_GFX | RAPL_=
-PKG_POWER_INFO;
-  		if (rapl_joules) {
-  			BIC_PRESENT(BIC_Pkg_J);
-@@@ -4063,9 -4031,8 +4063,9 @@@ void perf_limit_reasons_probe(unsigned=20
-  		return;
- =20
-  	switch (model) {
-- 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL:	/* HSW */
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
-  		do_gfx_perf_limit_reasons =3D 1;
-  	case INTEL_FAM6_HASWELL_X:	/* HSX */
-  		do_core_perf_limit_reasons =3D 1;
-@@@ -4282,15 -4249,14 +4282,15 @@@ int has_snb_msrs(unsigned int family, u
-  	case INTEL_FAM6_SANDYBRIDGE_X:
-  	case INTEL_FAM6_IVYBRIDGE:	/* IVB */
-  	case INTEL_FAM6_IVYBRIDGE_X:	/* IVB Xeon */
-- 	case INTEL_FAM6_HASWELL_CORE:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL:	/* HSW */
-  	case INTEL_FAM6_HASWELL_X:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_HASWELL_GT3E:	/* HSW */
-- 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
-- 	case INTEL_FAM6_BROADWELL_GT3E:	/* BDW */
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_HASWELL_G:	/* HSW */
-+ 	case INTEL_FAM6_BROADWELL:	/* BDW */
-+ 	case INTEL_FAM6_BROADWELL_G:	/* BDW */
-  	case INTEL_FAM6_BROADWELL_X:	/* BDX */
-- 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
-- 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
-+ 	case INTEL_FAM6_SKYLAKE_L:	/* SKL */
-+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
-  	case INTEL_FAM6_SKYLAKE_X:	/* SKX */
-  	case INTEL_FAM6_ATOM_GOLDMONT:	/* BXT */
-  	case INTEL_FAM6_ATOM_GOLDMONT_PLUS:
-@@@ -4318,10 -4284,10 +4318,10 @@@ int has_c8910_msrs(unsigned int family
-  		return 0;
- =20
-  	switch (model) {
-- 	case INTEL_FAM6_HASWELL_ULT:	/* HSW */
-- 	case INTEL_FAM6_BROADWELL_CORE:	/* BDW */
-- 	case INTEL_FAM6_SKYLAKE_MOBILE:	/* SKL */
-- 	case INTEL_FAM6_CANNONLAKE_MOBILE:	/* CNL */
- -	case INTEL_FAM6_HASWELL:
-++	case INTEL_FAM6_HASWELL_L:	/* HSW */
-+ 	case INTEL_FAM6_BROADWELL:	/* BDW */
-+ 	case INTEL_FAM6_SKYLAKE_L:	/* SKL */
-+ 	case INTEL_FAM6_CANNONLAKE_L:	/* CNL */
-  	case INTEL_FAM6_ATOM_GOLDMONT:	/* BXT */
-  	case INTEL_FAM6_ATOM_GOLDMONT_PLUS:
-  		return 1;
-@@@ -4602,22 -4568,21 +4602,22 @@@ unsigned int intel_model_duplicates(uns
-  	case INTEL_FAM6_XEON_PHI_KNM:
-  		return INTEL_FAM6_XEON_PHI_KNL;
- =20
- -	case INTEL_FAM6_HASWELL_L:
- -		return INTEL_FAM6_HASWELL;
- -
-  	case INTEL_FAM6_BROADWELL_X:
-- 	case INTEL_FAM6_BROADWELL_XEON_D:	/* BDX-DE */
-+ 	case INTEL_FAM6_BROADWELL_D:	/* BDX-DE */
-  		return INTEL_FAM6_BROADWELL_X;
- =20
-- 	case INTEL_FAM6_SKYLAKE_MOBILE:
-- 	case INTEL_FAM6_SKYLAKE_DESKTOP:
-- 	case INTEL_FAM6_KABYLAKE_MOBILE:
-- 	case INTEL_FAM6_KABYLAKE_DESKTOP:
-- 		return INTEL_FAM6_SKYLAKE_MOBILE;
-+ 	case INTEL_FAM6_SKYLAKE_L:
-+ 	case INTEL_FAM6_SKYLAKE:
-+ 	case INTEL_FAM6_KABYLAKE_L:
-+ 	case INTEL_FAM6_KABYLAKE:
-+ 		return INTEL_FAM6_SKYLAKE_L;
- =20
-- 	case INTEL_FAM6_ICELAKE_MOBILE:
-+ 	case INTEL_FAM6_ICELAKE_L:
- +	case INTEL_FAM6_ICELAKE_NNPI:
-- 		return INTEL_FAM6_CANNONLAKE_MOBILE;
-+ 		return INTEL_FAM6_CANNONLAKE_L;
- +
-- 	case INTEL_FAM6_ATOM_TREMONT_X:
-- 		return INTEL_FAM6_ATOM_GOLDMONT_X;
-++	case INTEL_FAM6_ATOM_TREMONT_D:
-++		return INTEL_FAM6_ATOM_GOLDMONT_D;
-  	}
-  	return model;
-  }
-
---Sig_/61CBMUCLyn0N/.EVCaxPnwA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1sxTYACgkQAVBC80lX
-0GytAQf/Y7+erBVjhJBCkpMVrk+m51iVWIoeXC4ynPd86vwfE+M4Kk5AglxQo0tr
-uP7EhZLEotGUq/FvkQsRpA5t2gC7UKRUJ6sbEYtYvIQdwqxPR9PkiNyoWzu9FLUl
-FTLjp9csl3i39ljNXufd/NPoB4/g5XAEckitMGZ5VMXSZIv4H/SnLWumAr3Zp9S9
-8SB370abfjLyXQ/gX3t7Qo4DqiY7TiQYtLNgakrLwDnYopcCwuX+M/mdSK8V6SEN
-DZclW6gHrFYrw3uqRwahUHdKqsG/ajh3OxzZM0UbAWJA0nPcfLGeRQ58qMeXHJSX
-McFYyxf1uxI4ZyXSH3Xg4caejfL8ig==
-=IIa5
------END PGP SIGNATURE-----
-
---Sig_/61CBMUCLyn0N/.EVCaxPnwA--

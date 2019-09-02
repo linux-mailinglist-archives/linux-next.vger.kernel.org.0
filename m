@@ -2,81 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF09A5260
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 11:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFFFA5289
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 11:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730753AbfIBJAM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Sep 2019 05:00:12 -0400
-Received: from mail-io1-f43.google.com ([209.85.166.43]:45545 "EHLO
-        mail-io1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730445AbfIBJAM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Sep 2019 05:00:12 -0400
-Received: by mail-io1-f43.google.com with SMTP id f12so10231978iog.12
-        for <linux-next@vger.kernel.org>; Mon, 02 Sep 2019 02:00:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Fd3FeCU7/lkSs+4hKTB7nxoikEcFVQTD+3XfAy5XBzU=;
-        b=D+72l/NfpI56VPuqkndfTavFIl1l8xpVpWYNpMJq26fl5Rb9dZYzWjMFlz8/OBez41
-         uZ3SohOL2xCQd1IRtsnU3Z4kGkO4u63E32khQETJH7ZkTZ1VFRdPBGlFHLqXU3IPnku2
-         78mLg0FUgKTjRlWtQhJBluDOL1fI6hQCpB1vY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Fd3FeCU7/lkSs+4hKTB7nxoikEcFVQTD+3XfAy5XBzU=;
-        b=ZayxALDcqFxEt9nhhUDfd12jvmSt8H4mPG4bVhu3WfZEJKpFr9RGMCn14YOTHeH5D3
-         AtTbICkNRWSag8ZSUBr3RnadJLiXQdnVuqjqJx3fpmn/qBX2VB+0ZFkpdqTftwD+nSRp
-         TnwZ/55qrwbeAPEvRv3uIvNafVSy/GfbRTRhP0j59Jf0qqs49DE+u5xd99ous+GgocNl
-         JuzathUiXEK6eI+4Hl8Hw1UfZLx2wsuYHT7sHRZkBBMg6RB12Tem1LfesrO+3c9jf3du
-         EfZIkFgGU5/GcB3YX0m2SSxKZhI+voYhnIxyki4ZVLMbmKO5bmqHEw4qx5b6dp+HD6A2
-         UULw==
-X-Gm-Message-State: APjAAAW6LQgWulx6V7lRmUzkPkmMEIFh2m9VdLgnN87tgABlj4Ijg2PU
-        GY8gd1iwRAyRhuo5of5eITJ0gCQ2RezcwGomCyTupw==
-X-Google-Smtp-Source: APXvYqxjmqayGM06FSCz0PH9m53ZWSr3HdWaxZGzrO4SUE8d24XHfTaq3fBlJDHoJgoSTjZM4jPv1Tjb1qVJQjm0lwE=
-X-Received: by 2002:a02:cb9b:: with SMTP id u27mr3054872jap.26.1567414811516;
- Mon, 02 Sep 2019 02:00:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190830130119.446e7389@canb.auug.org.au>
-In-Reply-To: <20190830130119.446e7389@canb.auug.org.au>
-From:   Miklos Szeredi <miklos@szeredi.hu>
-Date:   Mon, 2 Sep 2019 11:00:00 +0200
-Message-ID: <CAJfpeguxmJvCV+PXr=wz5HXONKv4RDmZ1LpYNEqAtvw_smP5Ag@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the vfs tree with the fuse tree
-To:     Al Viro <viro@zeniv.linux.org.uk>
+        id S1729805AbfIBJIu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Sep 2019 05:08:50 -0400
+Received: from foss.arm.com ([217.140.110.172]:50774 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729804AbfIBJIu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Sep 2019 05:08:50 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED91028;
+        Mon,  2 Sep 2019 02:08:49 -0700 (PDT)
+Received: from arrakis.emea.arm.com (arrakis.cambridge.arm.com [10.1.196.78])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CD7C33F246;
+        Mon,  2 Sep 2019 02:08:48 -0700 (PDT)
+Date:   Mon, 2 Sep 2019 10:08:46 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Will Deacon <will@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Peter Collingbourne <pcc@google.com>
+Subject: Re: linux-next: manual merge of the powerpc tree with the arm64 tree
+Message-ID: <20190902090846.GA15118@arrakis.emea.arm.com>
+References: <20190902094711.2625ba31@canb.auug.org.au>
+ <87lfv7tqt0.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87lfv7tqt0.fsf@mpe.ellerman.id.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Aug 30, 2019 at 5:01 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the vfs tree got a conflict in:
->
->   fs/fuse/inode.c
->
-> between commit:
->
->   1458e5e9f99a ("fuse: extract fuse_fill_super_common()")
->
-> from the fuse tree and commit:
->
->   2ad9ab0f7429 ("vfs: Convert fuse to use the new mount API")
->   48ceb15f98c8 ("vfs: Move the subtype parameter into fuse")
+On Mon, Sep 02, 2019 at 11:44:43AM +1000, Michael Ellerman wrote:
+> Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> > Hi all,
+> >
+> > Today's linux-next merge of the powerpc tree got a conflict in:
+> >
+> >   arch/Kconfig
+> >
+> > between commit:
+> >
+> >   5cf896fb6be3 ("arm64: Add support for relocating the kernel with RELR relocations")
+> >
+> > from the arm64 tree and commit:
+> >
+> >   0c9c1d563975 ("x86, s390: Move ARCH_HAS_MEM_ENCRYPT definition to arch/Kconfig")
+> >
+> > from the powerpc tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> 
+> Thanks.
+> 
+> That conflict seems entirely trivial, but Catalin/Will if it bothers you
+> I have the conflicting commit in a topic branch based on rc2 which you
+> could merge to resolve it:
 
-And the latter is b0rked anyway.
+It's a trivial conflict, easy to resolve. I don't think it's worth
+trying to avoid it (Linus normally doesn't mind such conflicts).
 
-Al, please drop these patches from the VFS queue, I'll take (and fix)
-them through the fuse queue.
-
-Thanks,
-Miklos
+-- 
+Catalin

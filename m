@@ -2,120 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2177A5C5C
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 20:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354C5A5CAB
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 21:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726933AbfIBSo1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Sep 2019 14:44:27 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60040 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726805AbfIBSo1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Sep 2019 14:44:27 -0400
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CE3AC216C8;
-        Mon,  2 Sep 2019 18:44:25 +0000 (UTC)
-Date:   Mon, 2 Sep 2019 20:44:23 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Valdis Kletnieks <valdis.kletnieks@vt.edu>,
-        "devel@driverdev.osuosl.org" <devel@driverdev.osuosl.org>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Sep 2 (exfat)
-Message-ID: <20190902184423.GA5697@kroah.com>
-References: <20190902224310.208575dc@canb.auug.org.au>
- <cecc2af6-7ef6-29f6-569e-b591365e45ad@infradead.org>
- <20190902174631.GB31445@kroah.com>
- <13e2db80-0c89-0f36-6876-f9639f0d30ab@infradead.org>
- <f7f8f751e77578edb88c0d9888930de3f3b60670.camel@perches.com>
+        id S1727046AbfIBTWu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Sep 2019 15:22:50 -0400
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:38286 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726961AbfIBTWu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Sep 2019 15:22:50 -0400
+Received: by mail-wr1-f50.google.com with SMTP id l11so6185456wrx.5
+        for <linux-next@vger.kernel.org>; Mon, 02 Sep 2019 12:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=XDtsrwTj1cdnuZIRlVxOFppoBas4A8Di4U2MeLhT0QE=;
+        b=VmCULMy5yqgBZnPWPiappOh7toQbpLZF531jTwtjQYICh7lu4p8N8dkpVdmPEW/h6T
+         Q+3beUUMNAR0bIjBvJVVD4O3CTNGSoTNsEDR1l+NZ2qGSMG8v+aHemB3BzfSy2W6KgXN
+         3RvQrH8mVnG59QEqVAUQVFnifhFw2ZoBaUQBLo8d55EDnoGQHoUSr/2fAHC07b0I99b2
+         8cbPNisB15tv+lRKTtLhSDsqXZCRSqlRutuPGpLchdRoxCWLxIBJ2KNEMkE16YPiM92d
+         Q0pZ7NK2U4SR1GyoC63aiYYApQqUdt5ISknfzKms4QM0OVpSSuZHHBLmI6iZ5rQn4XX7
+         6fwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=XDtsrwTj1cdnuZIRlVxOFppoBas4A8Di4U2MeLhT0QE=;
+        b=tnec3ULEN/QZLWbrWckhb1Yh8wKVSRytyn23Za/wMuctEMN8lVKzsNW2gJhf02dwMH
+         2up7WGv7Tvi//bCl68eEoR/XwY7uCzAV6QtqhlV/YKJyleNk1ErvuSllaI8dbKJlZR9u
+         yS7ceUZyMW8E9H9HUQAucHo+3qxNpM3KZJHcX0P5LyNCXrB4s3iwyhlF2vZE5l5dbFZO
+         Xq31YEn5URHi9GQSVrA5IvHTdKuex5+INU//8/zQ/VG66EkCsjb4+wSNxJx/maEAxHIk
+         UeTmjWHJ4LqGEMTNgwmDIHQyphWbYTyUe6k0VlD/O/AiUp4V0NAEUHkdCU3c5QSpTiV9
+         8Cmg==
+X-Gm-Message-State: APjAAAWvK+uJoyahnca2K91VWWFtv5PDnY6PHO9GIrqvgQFf7xgiqqwQ
+        9Ofl0ShC3R0s2Mv7/05sZe9qIVIJrXV1VQ==
+X-Google-Smtp-Source: APXvYqzXLHSM87IeywYTLBWqKnUSvCFxAeA7e4v6eRRfHgAupD51Wz/TEsw6sUy8eytl3n8+l/mySg==
+X-Received: by 2002:adf:e784:: with SMTP id n4mr21943339wrm.144.1567452167685;
+        Mon, 02 Sep 2019 12:22:47 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id g201sm14463985wmg.34.2019.09.02.12.22.46
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 02 Sep 2019 12:22:47 -0700 (PDT)
+Message-ID: <5d6d6c07.1c69fb81.16f42.dbe8@mx.google.com>
+Date:   Mon, 02 Sep 2019 12:22:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f7f8f751e77578edb88c0d9888930de3f3b60670.camel@perches.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20190902
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+Subject: next/master boot: 210 boots: 10 failed, 186 passed with 13 offline,
+ 1 untried/unknown (next-20190902)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 11:11:45AM -0700, Joe Perches wrote:
-> On Mon, 2019-09-02 at 11:07 -0700, Randy Dunlap wrote:
-> > On 9/2/19 10:46 AM, Greg KH wrote:
-> > > On Mon, Sep 02, 2019 at 10:39:39AM -0700, Randy Dunlap wrote:
-> > > > On 9/2/19 5:43 AM, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > > 
-> > > > > News: I will only be doing 2 more releases before I leave for Kernel
-> > > > > Summit (there may be some reports on Thursday, but I doubt I will have
-> > > > > time to finish the full release) and then no more until Sept 30.
-> > > > > 
-> > > > > Changes since 20190830:
-> > > > > 
-> > > > 
-> > > > Hi,
-> > > > I am seeing lots of exfat build errors when CONFIG_BLOCK is not set/enabled.
-> > > > Maybe its Kconfig should also say
-> > > > 	depends on BLOCK
-> > > > ?
-> > > 
-> > > Here's what I committed to my tree:
-> > > 
-> > > 
-> > > From e2b880d3d1afaa5cad108c29be3e307b1917d195 Mon Sep 17 00:00:00 2001
-> > > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Date: Mon, 2 Sep 2019 19:45:06 +0200
-> > > Subject: staging: exfat: make exfat depend on BLOCK
-> > > 
-> > > This should fix a build error in some configurations when CONFIG_BLOCK
-> > > is not selected.  Also properly set the dependancy for no FAT support at
-> > > the same time.
-> > > 
-> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > Cc: Valdis Kletnieks <valdis.kletnieks@vt.edu>
-> > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > 
-> > That works. Thanks.
-> > Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> > 
-> > > ---
-> > >  drivers/staging/exfat/Kconfig | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/staging/exfat/Kconfig b/drivers/staging/exfat/Kconfig
-> > > index f52129c67f97..290dbfc7ace1 100644
-> > > --- a/drivers/staging/exfat/Kconfig
-> > > +++ b/drivers/staging/exfat/Kconfig
-> > > @@ -1,11 +1,13 @@
-> > >  config EXFAT_FS
-> > >  	tristate "exFAT fs support"
-> > > +	depends on BLOCK
-> > >  	select NLS
-> > >  	help
-> > >  	  This adds support for the exFAT file system.
-> > >  
-> > >  config EXFAT_DONT_MOUNT_VFAT
-> > >  	bool "Prohibit mounting of fat/vfat filesysems by exFAT"
-> > > +	depends on EXFAT_FS
-> > >  	default y
-> > >  	help
-> > >  	  By default, the exFAT driver will only mount exFAT filesystems, and refuse
-> 
-> I think this last one is backwards and should be
-> 
-> config EXFAT_ALLOW_MOUNT_VFAT
-> and
-> default n
+next/master boot: 210 boots: 10 failed, 186 passed with 13 offline, 1 untri=
+ed/unknown (next-20190902)
 
-This is just a "bandage" for now, it should be fixed properly by ripping
-out the code wherever possible and making this the default functionality
-anyway.  This just keeps the code from breaking existing working systems
-if users accidentally build this module.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20190902/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20190902/
 
-thanks,
+Tree: next
+Branch: master
+Git Describe: next-20190902
+Git Commit: b5f466091e130caaf0735976648f72bd5e09aa84
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 92 unique boards, 27 SoC families, 19 builds out of 218
 
-greg k-h
+Boot Regressions Detected:
+
+arm:
+
+    qcom_defconfig:
+        gcc-8:
+          qcom-msm8974-sony-xperia-castor:
+              lab-bjorn: new failure (last pass: next-20190830)
+
+    sunxi_defconfig:
+        gcc-8:
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: new failure (last pass: next-20190830)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+arm:
+    qcom_defconfig:
+        gcc-8:
+            qcom-msm8974-sony-xperia-castor: 1 failed lab
+
+    vexpress_defconfig:
+        gcc-8:
+            qemu_arm-virt-gicv3: 5 failed labs
+
+Offline Platforms:
+
+mips:
+
+    pistachio_defconfig:
+        gcc-8
+            pistachio_marduk: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

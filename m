@@ -2,113 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80051A546E
-	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 12:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A527BA551D
+	for <lists+linux-next@lfdr.de>; Mon,  2 Sep 2019 13:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730702AbfIBKvp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Sep 2019 06:51:45 -0400
-Received: from mail-eopbgr10073.outbound.protection.outlook.com ([40.107.1.73]:22149
-        "EHLO EUR02-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727951AbfIBKvp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Sep 2019 06:51:45 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WHM6sLOW4Tcqs6Hdgfjg9VhUi9tfkHbGBQ5SkwPzPlv6i192j66nou+u/NhTTfIxsgsapY6xYjk8mAXBtiEF+pRBgPW1ACYJ2+xkGZRIJEx5jUDOxO6wiT1yp2XEpp1uzBew0sYx2yNa7NlpuRqvDmc2GdSvU9ELHZFVo8exLKndJu1rHrhVYu+x69b7cdKFJZdUELaLqy4atdj8k3dOqadYNZGxcu09Mgd1H6FjGHjBHg8pAPFtCdonxcGq9LOslIulQHDohNWTN8xd3YVOYaXOlJyKizEnrE1G1QkumE+kIeS2Q+yJwJxWnRGblqNU9L6u3ITI8F2YREfeUW78SQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BcO5bkczUi3nMox/QUG0GSFvMsuShePDGA8isTcSOZI=;
- b=Q0rpiDGuxDnjW4mcJ/78CgFiT3cP7CItiUoLuDeARFOTCLDKwINu6zOLoNuvlunFSH6C45gRqjgl3cOiszuz24dBu1R97MV4gUCot7HTvVp81mJGQBQK36VjzY93Veelp2CxvpztI2qq8vuVZtNkdGIz2/fOEE7SmqcmYsAVmj+qdvi+mfyTtvz/gmzlEKScIQSdl4jnGoeJMrFJdsg+SxYfX/klhA6FM2gY6nhh+68nWgrxr+tfcJ64a9JBj/tvSBvfXSOx3ShDlteNhJA+Tgi2V4rmcl26LJZjyfxoTS5J+uuN9qb2g9K43mNGofLMEMcmkpCLLFCKG3rMshT3Kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BcO5bkczUi3nMox/QUG0GSFvMsuShePDGA8isTcSOZI=;
- b=Cp7zfrOXW2dY/m0ByoB0t/0ctfKrMRgZrOeZHM16Zw3j7/2hCzxyQntCUzix5wrAAcu77b+AlRG30isOU2PDdncbz1OnBBU5nixyEYecfmQ5C9rQnnGxnVxv/a1qs7z327yTt4VJKrRwpAZiHwbgU8/wS1dvi/eeocHQ86N+Eio=
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (10.171.182.144) by
- VI1PR05MB4895.eurprd05.prod.outlook.com (20.177.51.16) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2220.21; Mon, 2 Sep 2019 10:51:41 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::79a3:d971:d1f3:ab6f]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::79a3:d971:d1f3:ab6f%7]) with mapi id 15.20.2220.020; Mon, 2 Sep 2019
- 10:51:41 +0000
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1730745AbfIBLkR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Sep 2019 07:40:17 -0400
+Received: from ozlabs.org ([203.11.71.1]:41109 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726643AbfIBLkQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Sep 2019 07:40:16 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46MSn91xDnz9sDQ;
+        Mon,  2 Sep 2019 21:40:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1567424413;
+        bh=YtBEn8N30LNig4IjM3QSpseznRYqbL0O14mcZ15x0/k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i+i/DkaBxJ+/ummk7mmRsfrU3c9NMQt9egwJ/BygIxh0SfgsClGY+6CunnOiC+h8g
+         fNd5EHxk5z8WX/6vGKvPP54x7V/W+00P3HVeL/40SBIVp7YVvmawIfp6LnQ/ieOPYz
+         IZuw2UneUmNoVJnJCgh6hqX5ZTyVeP09nJh6OJiGKanwCwl1idAcBFqCkwpWWasIAZ
+         g+w7f6caXiKRxPXiUM7o7Hz0KjIPEhB9taoGDuG5W2CvAnGZA4+ATMdqXbTF1NPFQa
+         BpNe3yEWZhrNV27QTLCv+KKPAyWKqaGUtTUHUFbT06hgKXleOcO/BDSAAx2A2AaE62
+         NFfJGPo9J6X3w==
+Date:   Mon, 2 Sep 2019 21:40:11 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: build failure after merge of the hmm tree
-Thread-Topic: linux-next: build failure after merge of the hmm tree
-Thread-Index: AQHVYXw83banRLe5NEK49Gtd2c7XPacYNdIA
-Date:   Mon, 2 Sep 2019 10:51:41 +0000
-Message-ID: <20190902105137.GC20@mellanox.com>
-References: <20190902205017.3eca5b70@canb.auug.org.au>
-In-Reply-To: <20190902205017.3eca5b70@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM4P190CA0006.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:200:56::16) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:4d::16)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [193.47.165.251]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: cbe5a7e0-fee5-4a6f-7316-08d72f9388ea
-x-ms-office365-filtering-ht: Tenant
-x-microsoft-antispam: BCL:0;PCL:0;RULEID:(2390118)(7020095)(4652040)(8989299)(4534185)(4627221)(201703031133081)(201702281549075)(8990200)(5600166)(711020)(4605104)(1401327)(4618075)(2017052603328)(7193020);SRVR:VI1PR05MB4895;
-x-ms-traffictypediagnostic: VI1PR05MB4895:
-x-microsoft-antispam-prvs: <VI1PR05MB4895307E6076CECD490646E8CFBE0@VI1PR05MB4895.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:612;
-x-forefront-prvs: 01480965DA
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(136003)(346002)(376002)(39860400002)(396003)(366004)(53754006)(199004)(189003)(86362001)(186003)(4326008)(478600001)(8936002)(36756003)(7736002)(305945005)(71190400001)(71200400001)(256004)(6512007)(14454004)(6436002)(81166006)(81156014)(8676002)(53936002)(316002)(26005)(102836004)(33656002)(2906002)(6246003)(76176011)(54906003)(6506007)(386003)(66476007)(66556008)(64756008)(66446008)(6116002)(66946007)(3846002)(52116002)(11346002)(476003)(2616005)(486006)(25786009)(446003)(229853002)(6486002)(1076003)(6916009)(66066001)(99286004)(5660300002)(4744005);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB4895;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam-message-info: d3riot/RiNwjeaytGDyYmMnq0rdZH+ULEGZXo92/cafTiswQggMjE9/3TGNlKIhppxG4iq4bB9+27+IxWYorX5DbGwm+kqXekmJZGFNPLlLu/j/SqqCUmoH2GHZu8v3kDMAo7Q8vy7G+Wk8fo6ACRsjLuPWuej5PnJS8BkpM7F9ordJsbzyj7k9ZfEM6+GQf+DWledqKiz36XsaxFRbk5cWRl1L9NErYfi7CywPouA6qm7dSfLURdaOk8OXhMsFsXg0IlI1qWZ7CEnkPt/aAxAhd7Z9cANZDmzi+edkAXfg5qY5SUU2eG7zmBdOX0rx+GqnRmIgxTnOiTRI9YNima+3yudBI3Pk5Jdy6LQAQeXW/3eZeYwLQeVf5CMsCOVbvFp1qZCveXxtrDlmV/BjT7Ju1y/QO3FPjVW4LnZKgwCo=
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <44EA7FDA20E5394C9FEBE48B1A69F906@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Christoph Hellwig <hch@lst.de>, Michal Simek <monstr@monstr.eu>
+Subject: linux-next: build failure after merge of the powerpc tree
+Message-ID: <20190902214011.2a5400c9@canb.auug.org.au>
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbe5a7e0-fee5-4a6f-7316-08d72f9388ea
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2019 10:51:41.3131
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bBC02oG9qo+zuUZe40noSwKqUgDxFaBrMaIIB290Y3FZ0pSQYW4PvDo9sE1BQIxaF33P7LjzF7xCGVeAcNN5Fw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB4895
+Content-Type: multipart/signed; boundary="Sig_/x/Web=1e7njmi=+goy5cmBW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 02, 2019 at 08:50:17PM +1000, Stephen Rothwell wrote:
-> Hi all,
+--Sig_/x/Web=1e7njmi=+goy5cmBW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> ERROR: "nd_region_provider_data" [drivers/acpi/nfit/nfit.ko] undefined!
-> ERROR: "to_nd_blk_region" [drivers/acpi/nfit/nfit.ko] undefined!
-> ERROR: "nvdimm_region_notify" [drivers/acpi/nfit/nfit.ko] undefined!
-> ERROR: "nvdimm_blk_region_create" [drivers/acpi/nfit/nfit.ko] undefined!
->=20
-> Caused by commit
->=20
->   126470c8a58b ("libnvdimm: Enable unit test infrastructure compile check=
-s")
->=20
-> I have reverted that commit for today.
->=20
+Hi all,
 
-Looks like more kconfig trouble, can you send Dan your kconfig? I'll
-drop this patch again
+After merging the powerpc tree, today's linux-next build (powerpc
+ppc44x_defconfig) failed like this:
 
-Thanks,
-Jason
+arch/powerpc/mm/dma-noncoherent.c: In function 'atomic_pool_init':
+arch/powerpc/mm/dma-noncoherent.c:128:9: error: implicit declaration of fun=
+ction 'dma_atomic_pool_init'; did you mean 'atomic_pool_init'? [-Werror=3Di=
+mplicit-function-declaration]
+  128 |  return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERN=
+EL));
+      |         ^~~~~~~~~~~~~~~~~~~~
+      |         atomic_pool_init
+
+Caused by commit
+
+  f2902a2fb40c ("powerpc: use the generic dma coherent remap allocator")
+
+interacting with commit
+
+  8e3a68fb55e0 ("dma-mapping: make dma_atomic_pool_init self-contained")
+
+from the dma-mapping tree.
+
+I have applied the following patch for today (I did the microblaze
+update as well):
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 2 Sep 2019 21:23:11 +1000
+Subject: [PATCH] merge fixes for "dma-mapping: make dma_atomic_pool_init se=
+lf-contained"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/microblaze/mm/consistent.c   | 6 ------
+ arch/powerpc/mm/dma-noncoherent.c | 6 ------
+ 2 files changed, 12 deletions(-)
+
+diff --git a/arch/microblaze/mm/consistent.c b/arch/microblaze/mm/consisten=
+t.c
+index 0e0f733eb846..8c5f0c332d8b 100644
+--- a/arch/microblaze/mm/consistent.c
++++ b/arch/microblaze/mm/consistent.c
+@@ -56,10 +56,4 @@ void *cached_kernel_address(void *ptr)
+=20
+ 	return (void *)(addr & ~UNCACHED_SHADOW_MASK);
+ }
+-#else /* CONFIG_MMU */
+-static int __init atomic_pool_init(void)
+-{
+-	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+-}
+-postcore_initcall(atomic_pool_init);
+ #endif /* CONFIG_MMU */
+diff --git a/arch/powerpc/mm/dma-noncoherent.c b/arch/powerpc/mm/dma-noncoh=
+erent.c
+index 4272ca5e8159..2a82984356f8 100644
+--- a/arch/powerpc/mm/dma-noncoherent.c
++++ b/arch/powerpc/mm/dma-noncoherent.c
+@@ -122,9 +122,3 @@ void arch_dma_prep_coherent(struct page *page, size_t s=
+ize)
+=20
+ 	flush_dcache_range(kaddr, kaddr + size);
+ }
+-
+-static int __init atomic_pool_init(void)
+-{
+-	return dma_atomic_pool_init(GFP_KERNEL, pgprot_noncached(PAGE_KERNEL));
+-}
+-postcore_initcall(atomic_pool_init);
+--=20
+2.23.0.rc1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/x/Web=1e7njmi=+goy5cmBW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1s/5sACgkQAVBC80lX
+0Gz0zgf/W3JfSnlkCR8lJac0CEFjaarGLtBWuja8iV+5IdU3ryRxLwWk34wMByPt
+ZbOZsr1Y2bIeE7fjHLiUOFQ18uesK4EvrnVae9sFWD5KFRTDnuXxVwKIXAZmo+GS
+pZE2W/tW13cjbFu7MwWm7d4PCwZjhajMLCYLLm08gtKYE/LwlsGvwtixr3zPYG5p
+sgARuWLFGJ95x8wyJ3KhIy/5MQgljB/SpJ1Rbzq3b5JhH8Tj2RfWegVlB5qW7o+D
+TvoyGzeySQQ+ypGSpp9oqnYjDI1fShWQjgW106mCOHMI3xk0+/yfvBRTEa4b96Lh
+RgneIWhy93djrOsgDPytsy0nZNBJ9Q==
+=b7OS
+-----END PGP SIGNATURE-----
+
+--Sig_/x/Web=1e7njmi=+goy5cmBW--

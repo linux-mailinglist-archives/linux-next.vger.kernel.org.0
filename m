@@ -2,100 +2,240 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D81A6D74
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2019 18:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0020A716D
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2019 19:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729577AbfICQDo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Sep 2019 12:03:44 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:17506 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728571AbfICQDo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 12:03:44 -0400
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x83Fw3BH016754;
-        Tue, 3 Sep 2019 12:03:29 -0400
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2usryr6h97-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Sep 2019 12:03:29 -0400
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id x83G1OjL032076;
-        Tue, 3 Sep 2019 16:03:28 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 2uqgh6kfyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 03 Sep 2019 16:03:28 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x83G3Rwq46792968
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 3 Sep 2019 16:03:27 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 85F20BE062;
-        Tue,  3 Sep 2019 16:03:27 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id F0A3ABE053;
-        Tue,  3 Sep 2019 16:03:25 +0000 (GMT)
-Received: from morokweng.localdomain (unknown [9.85.133.34])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
-        Tue,  3 Sep 2019 16:03:25 +0000 (GMT)
-References: <20190902163951.6280e030@canb.auug.org.au> <20190902140347.GA23482@8bytes.org> <d2493e6b-08fa-9ea8-a0a4-076def54e91b@amd.com> <20190903152849.770ae819@canb.auug.org.au> <20190903132038.GE11530@8bytes.org>
-User-agent: mu4e 1.2.0; emacs 26.2
-From:   Thiago Jung Bauermann <bauerman@linux.ibm.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Lendacky\, Thomas" <Thomas.Lendacky@amd.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu: Don't use sme_active() in generic code
-In-reply-to: <20190903132038.GE11530@8bytes.org>
-Date:   Tue, 03 Sep 2019 13:03:21 -0300
-Message-ID: <87mufll646.fsf@morokweng.localdomain>
+        id S1729537AbfICRM1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Sep 2019 13:12:27 -0400
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:53404 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729644AbfICRM1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 13:12:27 -0400
+Received: by mail-wm1-f41.google.com with SMTP id q19so310488wmc.3
+        for <linux-next@vger.kernel.org>; Tue, 03 Sep 2019 10:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=piQjlYrnPetUeeoVyl4nkNBu1PId1Cufk8x1GfycER0=;
+        b=QdHb7q87RdoV44gGXaoqBvwrOaAjCvsWN5If8z9Q87sTTaW8GUpyuZnyB1aReufgS3
+         sqEObHLPJEi0rJ19eKBfG+5Py0uLXX75D2X5yUNh2fEbo3w4MadVZNp+8RcddLEfpsNq
+         Ppc489ynQYLVItecH0eYUIGc0PfYOBiV709+uBcrTGL1eL2Xeex5g0MGbVFW8zqTGXyy
+         7IGe7ExkzaF0rtMKfMKOdLwUI0V4AWLJr4u2hKUcp7mV4KhJCISpIHMsrbesIgZSwfKj
+         1kqK6ily+SrdozkwQ+fxuxC3wJpuz2KS+6qxPZeFTBZz+YzW+lDMgiWpFAnl+gifCkB1
+         8IBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=piQjlYrnPetUeeoVyl4nkNBu1PId1Cufk8x1GfycER0=;
+        b=pROawT3+8IjmjvFfSgYZTtTLim4LtA9VK7kWD4NOg8M9z01M9qhVGwMhZB6uI0VHn9
+         Pz3DQuuqfk11mNam5DMyFU1VT4/Wt6qCfZELtTpN7bNQ8uvtwJxZKZLcy7RtN07JkM4R
+         aF2rO3+AawpWJoDdC7ojrFA6PuizqVbTsOminPt8URHaWwmw7IigyAKS2+wIfPkYeu/I
+         qNWcP9RwMtxLHzs/il+mCwdkm5ut3srKAkipa5d6oTJX/wK8eAzyJEtIP7ysvhHF91nN
+         5AHmNjohV2PqsV9viGSuCCPn2z1fEzfNTJmB4n2TSyFa53SlVjf/3Giw6YKwokAQ0VZU
+         9KxA==
+X-Gm-Message-State: APjAAAX5Vk+ltX0KR9dgN/cHEB9y7LTwcXx5CyG7nfxBbwThW8SKadCr
+        fVk98lzStdubIbfOqCPU/racMA2TKlDnRQ==
+X-Google-Smtp-Source: APXvYqwCJXd6bqj6yBFM2BdVR1PyW/PPvBSodleZaRgBnUx3bjEOqCfAYffSFEfvQSBmPmHXwDq7rg==
+X-Received: by 2002:a7b:c8ca:: with SMTP id f10mr414852wml.36.1567530744039;
+        Tue, 03 Sep 2019 10:12:24 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id o22sm13918666wra.96.2019.09.03.10.12.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 03 Sep 2019 10:12:23 -0700 (PDT)
+Message-ID: <5d6e9ef7.1c69fb81.a5c0d.d925@mx.google.com>
+Date:   Tue, 03 Sep 2019 10:12:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-03_02:,,
- signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
- clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=957 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.0.1-1906280000 definitions=main-1909030164
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20190903
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+Subject: next/master boot: 220 boots: 11 failed, 140 passed with 58 offline,
+ 11 untried/unknown (next-20190903)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/master boot: 220 boots: 11 failed, 140 passed with 58 offline, 11 untr=
+ied/unknown (next-20190903)
 
-Joerg Roedel <joro@8bytes.org> writes:
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20190903/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20190903/
 
-> On Tue, Sep 03, 2019 at 03:28:49PM +1000, Stephen Rothwell wrote:
->> Hi all,
->> 
->> On Mon, 2 Sep 2019 14:26:40 +0000 "Lendacky, Thomas" <Thomas.Lendacky@amd.com> wrote:
->> > Maybe we should make this mem_encrypt_active(), since this will probably
->> > be needed if/when an IOMMU device is eventually added to a guest, and the
->> > referenced commit below doesn't remove that call.
->> 
->> I have done that for today:
->
-> Thanks Stephen and Tom. I queued the attached patch into the iommu tree
-> to fix the problem.
->
-> From 2896ba40d0becdb72b45f096cad70633abc014f6 Mon Sep 17 00:00:00 2001
-> From: Joerg Roedel <jroedel@suse.de>
-> Date: Tue, 3 Sep 2019 15:15:44 +0200
-> Subject: [PATCH] iommu: Don't use sme_active() in generic code
->
-> Switch to the generic function mem_encrypt_active() because
-> sme_active() is x86 specific and can't be called from
-> generic code on other platforms than x86.
->
-> Fixes: 2cc13bb4f59f ("iommu: Disable passthrough mode when SME is active")
-> Signed-off-by: Joerg Roedel <jroedel@suse.de>
+Tree: next
+Branch: master
+Git Describe: next-20190903
+Git Commit: 7dc4585e03786f84d6e9dc16caa3ba5b8b44d986
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 96 unique boards, 28 SoC families, 19 builds out of 218
 
-Thank you!
+Boot Regressions Detected:
 
--- 
-Thiago Jung Bauermann
-IBM Linux Technology Center
+arm:
+
+    davinci_all_defconfig:
+        gcc-8:
+          da850-evm:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+          dm365evm,legacy:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+
+    exynos_defconfig:
+        gcc-8:
+          exynos5250-arndale:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+          exynos5420-arndale-octa:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+          exynos5800-peach-pi:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+
+    sunxi_defconfig:
+        gcc-8:
+          sun4i-a10-cubieboard:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+          sun5i-r8-chip:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+          sun7i-a20-bananapi:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+
+    tegra_defconfig:
+        gcc-8:
+          tegra30-beaver:
+              lab-baylibre-seattle: new failure (last pass: next-20190902)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+
+arm:
+    vexpress_defconfig:
+        gcc-8:
+            qemu_arm-virt-gicv3: 5 failed labs
+
+Offline Platforms:
+
+mips:
+
+    pistachio_defconfig:
+        gcc-8
+            pistachio_marduk: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-axg-s400: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+            rk3399-firefly: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+            meson-axg-s400: 1 offline lab
+            meson-gxbb-odroidc2: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+            rk3399-firefly: 1 offline lab
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm:
+
+    mvebu_v7_defconfig:
+        gcc-8
+            armada-xp-openblocks-ax3-4: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun4i-a10-cubieboard: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_dual: 1 offline lab
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            vf610-colibri-eval-v3: 1 offline lab
+
+    omap2plus_defconfig:
+        gcc-8
+            omap3-beagle: 1 offline lab
+            omap4-panda: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            armada-xp-openblocks-ax3-4: 1 offline lab
+            bcm4708-smartrg-sr400ac: 1 offline lab
+            bcm72521-bcm97252sffe: 1 offline lab
+            bcm7445-bcm97445c: 1 offline lab
+            exynos5250-arndale: 1 offline lab
+            exynos5420-arndale-octa: 1 offline lab
+            exynos5800-peach-pi: 1 offline lab
+            imx6dl-wandboard_dual: 1 offline lab
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            meson8b-odroidc1: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            mt7629-rfb: 1 offline lab
+            omap3-beagle: 1 offline lab
+            omap4-panda: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            stih410-b2120: 1 offline lab
+            sun4i-a10-cubieboard: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+            tegra30-beaver: 1 offline lab
+            vf610-colibri-eval-v3: 1 offline lab
+            zynq-zc702: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            da850-evm: 1 offline lab
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    tegra_defconfig:
+        gcc-8
+            tegra30-beaver: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5250-arndale: 1 offline lab
+            exynos5420-arndale-octa: 1 offline lab
+            exynos5800-peach-pi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

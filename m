@@ -2,77 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 145E5A6691
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2019 12:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCFA3A6997
+	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2019 15:20:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728129AbfICKcx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Sep 2019 06:32:53 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:32957 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726946AbfICKcx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 06:32:53 -0400
-Received: by mail-wr1-f66.google.com with SMTP id u16so16908167wrr.0
-        for <linux-next@vger.kernel.org>; Tue, 03 Sep 2019 03:32:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ha7HjVApVIBrr3dxuJowVFNfwudTzAl93+qSCHVKi3o=;
-        b=ytLJ19VtqKQkrSduGoMwp10Fu27RtDH5pjVgQZOxbuE8vHTf+8T0E/MZ34oCV5Il45
-         ZP0Il/BGpffqJnrS002ccwaD3fxM3rfTt+QoGSmDciLQGp1aptcRUQMulGFXEzxMlBLF
-         ZRAtgAmBoARYA82XGzGJTFLHI/8jTrXRwTh7ddLGkHdjLz760zmweZotaqjH+IWwSCuN
-         Ht2tDqZmRsR2/RkAYpwqLU6nJAte1hJXXF72AYVu7e9/s0wy/cI00tIzpzo8y06z0zj3
-         WSWPvfnlZupKclk0Sx72sXdpJNzdGl+7SG2qfibSKGp/pG9nQbOmBGyVWo+nseFWpVn2
-         rdhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ha7HjVApVIBrr3dxuJowVFNfwudTzAl93+qSCHVKi3o=;
-        b=b/HzjrQ87j5lSY1X0J7oyXpjZdkGqc9AnetKv6IlOyixUHeA4719IGpKqxrrqiZEjS
-         pldzaNV12j8Fw+m5/FZoe+mGClrBjC9BHiOVMARv1Bi6KaO8Lqf/myc+ZVXDXLJBY8BU
-         4qbY+WrpC289JnKrmfNg/cGTyY4Z+pLwiNzaWoVgGVYUZDChjFoDkGFk3mEsZkRxWm9j
-         RbNJpBDjl7N0VwhDNI4ydc51Rp14XJcWxTsI9akn1HblnkHgtvsMZ2e+OaC4mf68MpJo
-         HrpTOSsOlETpd7EIIW0PxeIRGr6Pod4j5cU2sPjTlj8jRjKz+e7/0nnebXpa0/n2Q3Ea
-         7UKw==
-X-Gm-Message-State: APjAAAUlJ4J4BQXvBiz4xTXRVkH7uwk535/MLjspm85adMMhWUWwC9/c
-        07wbFGySsf6ISlPnPteMH66lrw==
-X-Google-Smtp-Source: APXvYqxF9Oxg1RATCNL9Oem2wg9vobFnyZUl0s1lWrf+uPQaBXKhD9qrGpGTgHjp1EpsQ3PWRbUa3g==
-X-Received: by 2002:adf:f486:: with SMTP id l6mr26819612wro.232.1567506770616;
-        Tue, 03 Sep 2019 03:32:50 -0700 (PDT)
-Received: from holly.lan (cpc141214-aztw34-2-0-cust773.18-1.cable.virginm.net. [86.9.19.6])
-        by smtp.gmail.com with ESMTPSA id t123sm19799566wma.40.2019.09.03.03.32.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2019 03:32:49 -0700 (PDT)
-Date:   Tue, 3 Sep 2019 11:32:48 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
+        id S1727667AbfICNUl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Sep 2019 09:20:41 -0400
+Received: from 8bytes.org ([81.169.241.247]:52978 "EHLO theia.8bytes.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727005AbfICNUl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 3 Sep 2019 09:20:41 -0400
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id B7FA5284; Tue,  3 Sep 2019 15:20:39 +0200 (CEST)
+Date:   Tue, 3 Sep 2019 15:20:38 +0200
+From:   Joerg Roedel <joro@8bytes.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+Cc:     "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        Thiago Jung Bauermann <bauerman@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commits in the kgdb-dt tree
-Message-ID: <20190903103248.dvmylw5ewcvc5wvq@holly.lan>
-References: <20190903071657.2caa0c46@canb.auug.org.au>
+Subject: [PATCH] iommu: Don't use sme_active() in generic code
+Message-ID: <20190903132038.GE11530@8bytes.org>
+References: <20190902163951.6280e030@canb.auug.org.au>
+ <20190902140347.GA23482@8bytes.org>
+ <d2493e6b-08fa-9ea8-a0a4-076def54e91b@amd.com>
+ <20190903152849.770ae819@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20190903071657.2caa0c46@canb.auug.org.au>
-User-Agent: NeoMutt/20180716
+In-Reply-To: <20190903152849.770ae819@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Sep 03, 2019 at 07:16:57AM +1000, Stephen Rothwell wrote:
+On Tue, Sep 03, 2019 at 03:28:49PM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> Commits
+> On Mon, 2 Sep 2019 14:26:40 +0000 "Lendacky, Thomas" <Thomas.Lendacky@amd.com> wrote:
+> > Maybe we should make this mem_encrypt_active(), since this will probably
+> > be needed if/when an IOMMU device is eventually added to a guest, and the
+> > referenced commit below doesn't remove that call.
 > 
->   f12dc871e3ec ("kgdb: fix comment regarding static function")
->   c60d67aad7b7 ("kdb: Replace strncmp with str_has_prefix")
-> 
-> are missing a Signed-off-by from their committer.
+> I have done that for today:
 
-Oops. Fixed!
+Thanks Stephen and Tom. I queued the attached patch into the iommu tree
+to fix the problem.
 
+From 2896ba40d0becdb72b45f096cad70633abc014f6 Mon Sep 17 00:00:00 2001
+From: Joerg Roedel <jroedel@suse.de>
+Date: Tue, 3 Sep 2019 15:15:44 +0200
+Subject: [PATCH] iommu: Don't use sme_active() in generic code
 
-Daniel.
+Switch to the generic function mem_encrypt_active() because
+sme_active() is x86 specific and can't be called from
+generic code on other platforms than x86.
+
+Fixes: 2cc13bb4f59f ("iommu: Disable passthrough mode when SME is active")
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+---
+ drivers/iommu/iommu.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+index 66cfacaa483d..d658c7c6a2ab 100644
+--- a/drivers/iommu/iommu.c
++++ b/drivers/iommu/iommu.c
+@@ -120,8 +120,8 @@ static int __init iommu_subsys_init(void)
+ 		else
+ 			iommu_set_default_translated(false);
+ 
+-		if (iommu_default_passthrough() && sme_active()) {
+-			pr_info("SME detected - Disabling default IOMMU Passthrough\n");
++		if (iommu_default_passthrough() && mem_encrypt_active()) {
++			pr_info("Memory encryption detected - Disabling default IOMMU Passthrough\n");
+ 			iommu_set_default_translated(false);
+ 		}
+ 	}
+-- 
+2.16.4
+

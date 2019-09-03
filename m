@@ -2,271 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31301A7174
-	for <lists+linux-next@lfdr.de>; Tue,  3 Sep 2019 19:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD992A7778
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 01:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729688AbfICROF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Sep 2019 13:14:05 -0400
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:42234 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727624AbfICROF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 13:14:05 -0400
-Received: by mail-wr1-f50.google.com with SMTP id b16so18310852wrq.9
-        for <linux-next@vger.kernel.org>; Tue, 03 Sep 2019 10:14:02 -0700 (PDT)
+        id S1727501AbfICXMF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Sep 2019 19:12:05 -0400
+Received: from mail-oi1-f193.google.com ([209.85.167.193]:33644 "EHLO
+        mail-oi1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726441AbfICXMF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 19:12:05 -0400
+Received: by mail-oi1-f193.google.com with SMTP id l2so14339190oil.0
+        for <linux-next@vger.kernel.org>; Tue, 03 Sep 2019 16:12:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9tChLDskjMShd3UfP1aK1CiKzMzYe5nIBo7kb63GdrE=;
-        b=MiX5GwwGZS63doFSgA5FcycNBVG1alb7OUvpdrahdPDMw0tjFoun0pS7dGedDAvtks
-         72r4p7JoDZDQEU4ZnYpmgqbkm2DLj0Z+a6E5NvMIH/7ZURznR88kLPN65PHBgQurtTz4
-         pr/Wzps8GIRC9LwIWYQdUqY22eKjcHcpa2bBYEYGDONX+yFiNX9v4nHTSJG9jaPpIG3A
-         4bnTkOssLnptA20n9sQxsXBAaz+mX2Tyu3TEw7h0mDqPABcV+nZLB5NeYg/a/xNhBWjo
-         Xz1nMLwft/IGx51/TGD7JkdAP101PHV6jtrGb2xMlRUTCj8jH/l//7HR+KmfG43q2LpB
-         RdzQ==
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mlQLaQvlkXWHfbC0WkbcIK1OnJ+9V9jk2J6qDB3o7A8=;
+        b=s6bPlWOvTnGCHmLDSYs6mvInP+peq6dPXre2Is4PBVi7Nzs550bzm0b9j5BomfQrPW
+         Gm7QeBnbt4KhYmd40QSjlxh/3Yot4knxhsgBD7GX+QZXm5SkmBI/QxgtA/3StiXJqn/Z
+         b7bUa1Ll0A5MgaLxwDbC8VE5rsrR+OMLC4l1uxGtNWNE100rq4dPLH0NiCIugaIM/HDh
+         ahlKEnaC8IKZOdfR8XJfOYMbMBMN0Iaaw7POT/idkQn/lVFfrlrpxEe0UyO3oIF+ozP4
+         I+LVpYIx8lyirkkCfC/VVFSPB1pM7pccFLuIA8k+03mctWaGAKt6NJ9kc66ibQHUv+wy
+         FJNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9tChLDskjMShd3UfP1aK1CiKzMzYe5nIBo7kb63GdrE=;
-        b=ck3mDRWSQRawm/xaDfI2RyXUC9Lz08+7ksO2xtcsQAnyXuCvAie0lR8S8thJUFOWuw
-         SDuyILURQHuCAzmFn0++BGTcdOOH6An8gEb6MmCoSY0ieknwqvpo6TY2lMHcv2KbiMH6
-         ptD0bPnbKaIFIfWiFPN2FW0/xNtfnOKksUxXlCcNmzC6R4vAKxhGoQCwypnXpXxGS7tS
-         1lQz+SXy0Hpq6aKGeKISj/DfZfMS537/S70xNiOinfjuE75avbh3h/td5oq0rQRY77tu
-         mz/8CLYk6xt+qMraGpkw/nfBPxME1R40IPLXCRTGnmqPzWIuFXEhCNzavLsXac35az9M
-         93Ww==
-X-Gm-Message-State: APjAAAU3Ap4NToyUL1CJavCnzdUwOvxYuhXQUoZuX+olRFyWr6yX+uFT
-        DYyG3jRnVZ8MMInXRQcyA3lpBTs33tVDLw==
-X-Google-Smtp-Source: APXvYqxaZod4XC7XB5tcXPZfgxD2AWx0mCdLRwnvdvlhQxoIzUc+lhxMqUsgpyk+o0OhgRbbdaYYgQ==
-X-Received: by 2002:adf:e8d2:: with SMTP id k18mr42897742wrn.229.1567530842049;
-        Tue, 03 Sep 2019 10:14:02 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id f186sm274761wmg.21.2019.09.03.10.14.01
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 03 Sep 2019 10:14:01 -0700 (PDT)
-Message-ID: <5d6e9f59.1c69fb81.deb65.1708@mx.google.com>
-Date:   Tue, 03 Sep 2019 10:14:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mlQLaQvlkXWHfbC0WkbcIK1OnJ+9V9jk2J6qDB3o7A8=;
+        b=WdNJeC2w+8gkIfAbdNr/p3tefa1QiBFTIL0PaLqpna9gEbA7nTRWwPsg0/CFzVkql7
+         dcio/nZ+QwPGdGwvuDPvrfbT9efn3Wnh4qPoi0B6N5wNqePs63kB7DKX7wH2rm6Xf6C/
+         NLJ02tFoRQLLHfMIM6WTyoEcTUUnrKlQ6rU7+1p38aMR9Q/oDjI36AAMoqZtZJJF3L5a
+         AcuCw6HxyudhM1cFH0+0gKvr283fKmXHgTbUfXlj1ajGInQTjhnkJUFAE45a26YjPjLH
+         29RNFdOI8OY9t9xCPc/m8p+tk5AsR/SvY15Lb+lSk+O/cDa74o3Mmmhybo5rHQ5gJDcD
+         tsTQ==
+X-Gm-Message-State: APjAAAWWQqt0tY05E78ILd2ON9B8hvzZgqoMM+jyg4H53aYXwVoaJq+w
+        nthszbnlCNPTi3SOwyKtAo8acUvVuwG6qsh1XAS61A==
+X-Google-Smtp-Source: APXvYqzgcfqwHuR2A7kHVuIHE2Hf+WJ29iTwINYJMmvczfd45lBtiPynxw4hZGlxr0txgFCGFQpVmXsbUbJURLpCn38=
+X-Received: by 2002:aca:b245:: with SMTP id b66mr1300871oif.70.1567552324232;
+ Tue, 03 Sep 2019 16:12:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-rc7-98-g65a07b01360a
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 291 boots: 7 failed,
- 218 passed with 63 offline, 2 untried/unknown,
- 1 conflict (v5.3-rc7-98-g65a07b01360a)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20190902205017.3eca5b70@canb.auug.org.au> <20190902105137.GC20@mellanox.com>
+ <20190903094511.2704484a@canb.auug.org.au> <CAPcyv4hyEK=jA=ATyzjKbJDeQfpOyRo4pxoFCTf1LHa-muC14w@mail.gmail.com>
+ <20190903154232.636d9b3d@canb.auug.org.au>
+In-Reply-To: <20190903154232.636d9b3d@canb.auug.org.au>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Tue, 3 Sep 2019 16:11:53 -0700
+Message-ID: <CAPcyv4hfcO+2UVURKTQCv9vAyDcG_imjv5_DO8qFycv-LY-xkA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the hmm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jason Gunthorpe <jgg@mellanox.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        kbuild test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 291 boots: 7 failed, 218 passed with 63 offline, 2=
- untried/unknown, 1 conflict (v5.3-rc7-98-g65a07b01360a)
+On Mon, Sep 2, 2019 at 10:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Dan,
+>
+> On Mon, 2 Sep 2019 22:31:00 -0700 Dan Williams <dan.j.williams@intel.com> wrote:
+> >
+> > On Mon, Sep 2, 2019 at 4:45 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > Hi Jason,
+> > >
+> > > On Mon, 2 Sep 2019 10:51:41 +0000 Jason Gunthorpe <jgg@mellanox.com> wrote:
+> > > >
+> > > > On Mon, Sep 02, 2019 at 08:50:17PM +1000, Stephen Rothwell wrote:
+> > > >
+> > > > > ERROR: "nd_region_provider_data" [drivers/acpi/nfit/nfit.ko] undefined!
+> > > > > ERROR: "to_nd_blk_region" [drivers/acpi/nfit/nfit.ko] undefined!
+> > > > > ERROR: "nvdimm_region_notify" [drivers/acpi/nfit/nfit.ko] undefined!
+> > > > > ERROR: "nvdimm_blk_region_create" [drivers/acpi/nfit/nfit.ko] undefined!
+> > > > >
+> > > > > Caused by commit
+> > > > >
+> > > > >   126470c8a58b ("libnvdimm: Enable unit test infrastructure compile checks")
+> > > > >
+> > > > > I have reverted that commit for today.
+> > > >
+> > > > Looks like more kconfig trouble, can you send Dan your kconfig? I'll
+> > > > drop this patch again
+> > > >
+> > >
+> > > Thanks.  It was just an x86_64 allmodconfig build.  I don't actually
+> > > have the .config file (it gets cleaned up, sorry).
+> >
+> > Strange. x86_64 allmodconfig is certainly a 0day build target. Could
+> > this be toolchain dependent?
+>
+> Possible, I guess.  I am cross compiling on a PowerPC LE host
+>
+> $ x86_64-linux-gnu-gcc --version
+> x86_64-linux-gnu-gcc (Debian 9.2.1-4) 9.2.1 20190821
+>
+> $ x86_64-linux-gnu-ld --version
+> GNU ld (GNU Binutils for Debian) 2.32.51.20190821
+>
+> It could also be an interaction with something else in linux-next.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-rc7-98-g65a07b01360a/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-rc7-98-g65a07b01360a/
+I was able to reproduce and it seems to be fixed with this change:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-rc7-98-g65a07b01360a
-Git Commit: 65a07b01360a6f831f92acdd1d1a8c7512b1500f
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 28 SoC families, 26 builds out of 222
+diff --git a/drivers/nvdimm/Makefile b/drivers/nvdimm/Makefile
+index 6557e126892f..29203f3d3069 100644
+--- a/drivers/nvdimm/Makefile
++++ b/drivers/nvdimm/Makefile
+@@ -32,4 +32,4 @@ libnvdimm-$(CONFIG_NVDIMM_KEYS) += security.o
 
-Boot Regressions Detected:
+ TOOLS := ../../tools
+ TEST_SRC := $(TOOLS)/testing/nvdimm/test
+-obj-$(CONFIG_NVDIMM_TEST_BUILD) := $(TEST_SRC)/iomap.o
++obj-$(CONFIG_NVDIMM_TEST_BUILD) += $(TEST_SRC)/iomap.o
 
-arm:
-
-    davinci_all_defconfig:
-        gcc-8:
-          da850-evm:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-          dm365evm,legacy:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5250-arndale:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-          exynos5420-arndale-octa:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-          exynos5800-peach-pi:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          armada-xp-openblocks-ax3-4:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-          sun5i-r8-chip:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-          sun7i-a20-bananapi:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-
-    tegra_defconfig:
-        gcc-8:
-          tegra30-beaver:
-              lab-baylibre-seattle: new failure (last pass: v5.3-rc6-459-gc=
-6e2add224b4)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxm-khadas-vim2: 1 failed lab
-
-arm:
-    vexpress_defconfig:
-        gcc-8:
-            qemu_arm-virt-gicv3: 5 failed labs
-
-Offline Platforms:
-
-mips:
-
-    pistachio_defconfig:
-        gcc-8
-            pistachio_marduk: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            meson-gxl-s905x-libretech-cc: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-            meson-gxm-nexbox-a1: 1 offline lab
-            rk3399-firefly: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            meson-gxl-s905x-libretech-cc: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-            meson-gxm-nexbox-a1: 1 offline lab
-            rk3399-firefly: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxbb-odroidc2: 1 offline lab
-            meson-gxl-s905x-libretech-cc: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-
-riscv:
-
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-
-    mvebu_v7_defconfig:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun4i-a10-cubieboard: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    imx_v6_v7_defconfig:
-        gcc-8
-            imx6dl-wandboard_dual: 1 offline lab
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-            vf610-colibri-eval-v3: 1 offline lab
-
-    omap2plus_defconfig:
-        gcc-8
-            omap3-beagle: 1 offline lab
-            omap4-panda: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-            bcm4708-smartrg-sr400ac: 1 offline lab
-            bcm72521-bcm97252sffe: 1 offline lab
-            bcm7445-bcm97445c: 1 offline lab
-            exynos5250-arndale: 1 offline lab
-            exynos5420-arndale-octa: 1 offline lab
-            exynos5800-peach-pi: 1 offline lab
-            imx6dl-wandboard_dual: 1 offline lab
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-            meson8b-odroidc1: 1 offline lab
-            mt7623n-bananapi-bpi-r2: 1 offline lab
-            omap3-beagle: 1 offline lab
-            omap4-panda: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            stih410-b2120: 1 offline lab
-            sun4i-a10-cubieboard: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-            tegra30-beaver: 1 offline lab
-            vf610-colibri-eval-v3: 1 offline lab
-            zynq-zc702: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    tegra_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5250-arndale: 1 offline lab
-            exynos5420-arndale-octa: 1 offline lab
-            exynos5800-peach-pi: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    multi_v7_defconfig:
-        am57xx-beagle-x15:
-            lab-drue: PASS (gcc-8)
-            lab-linaro-lkft: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+I'll send it through one more 0day run before asking Jason to try again.

@@ -2,32 +2,32 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B445FA82D4
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 14:51:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ED15A82D8
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 14:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726304AbfIDMcj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Sep 2019 08:32:39 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50621 "EHLO ozlabs.org"
+        id S1726589AbfIDMdT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Sep 2019 08:33:19 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44273 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729122AbfIDMcj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 4 Sep 2019 08:32:39 -0400
+        id S1729020AbfIDMdT (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 4 Sep 2019 08:33:19 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Njrg5JtLz9s7T;
-        Wed,  4 Sep 2019 22:32:35 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46NjsS1WsDz9s3Z;
+        Wed,  4 Sep 2019 22:33:16 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567600355;
-        bh=z59rieT2twxHYW1vw33xs0FLNllbi/grl/kkqJ/n1Ow=;
+        s=201702; t=1567600396;
+        bh=a/mNy3vFL2sGvNnyv4QB+peLbEbQk2/RU44v9YYnnYw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HHX1lljQFUPNilWtujGuh5ig/X05/Rb+Ry3xzSW3SeMTReYUZum9YhN7RCvDrRWab
-         Ah5oyeFUjqst6/EJ45NHwNxMYEpFXWNV7Y/DvUwVVsFHZx28wSiooPzP5DZNDhPE9K
-         4KLHFiDA/I4mSppTtoTJS9XP86NO6D+XyP7p6TmrD8wqzj/0wbEHk10XsrwQsnECWk
-         HF3tfXyXBhlOaMdlxWV9R65f+cGW6hIIepqAkkXqzeBUwHOgdbBMRvixVwU+ssMpVU
-         H0U0tBAedYAGnF/6GsPIct7uBaJt/CefQDXJV5E3ylhRnF+K3T73mddqscMAZ2E72D
-         sg6Ws1+hDUT7w==
-Date:   Wed, 4 Sep 2019 22:32:31 +1000
+        b=ctJf2UJZai/Q/BMgL6XG64zvmVlzWFPybkAQbPJj7zWSi+CFtJyV5Ws9E71uPNjE0
+         V+pwCmSejvbk/8ncAS2hpcjpO36PavmyB0CHsiRXgWJrZmjGLWRcl+K9cDwR97A+6p
+         EfeKgdZ2GMKtOlzQ+VGxpdmZtkpqQa/cfKoik8HyI3ML20nkqUnrhmOuhFkE2DfYcy
+         D2SJgCHeXgmfzOWtoxsBaQP2DlCFHP4/dONI6hLI+DO3bEVZsiAmzrYmK/+T2AO9wb
+         srBVpS7tscndl2G6dRCAnfPAlG24vXhOyNJjeN/c8U+5cr0mJzZxyDRkec2brcPAzj
+         /x5M6i41BKY5w==
+Date:   Wed, 4 Sep 2019 22:33:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
@@ -35,69 +35,68 @@ Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         PowerPC <linuxppc-dev@lists.ozlabs.org>
 Subject: Re: linux-next: build warnings after merge of the kbuild tree
-Message-ID: <20190904223231.6c7a2b7d@canb.auug.org.au>
-In-Reply-To: <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
+Message-ID: <20190904223312.553a7660@canb.auug.org.au>
+In-Reply-To: <CAK7LNAQ8VJz8fxecnEWmbFCpD0rgt4tjoipOX0g3oY0xU8xt5w@mail.gmail.com>
 References: <20190904101259.2687cea4@canb.auug.org.au>
         <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
+        <CAK7LNAQ8VJz8fxecnEWmbFCpD0rgt4tjoipOX0g3oY0xU8xt5w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/OiNx=.92uA4E8B59RKYNwYi";
+Content-Type: multipart/signed; boundary="Sig_/uDkxajeQp+GefRpMSunwwHd";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/OiNx=.92uA4E8B59RKYNwYi
+--Sig_/uDkxajeQp+GefRpMSunwwHd
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi Masahiro,
 
-On Wed, 4 Sep 2019 10:00:30 +0900 Masahiro Yamada <yamada.masahiro@socionex=
+On Wed, 4 Sep 2019 15:22:09 +0900 Masahiro Yamada <yamada.masahiro@socionex=
 t.com> wrote:
 >
-> Could you fix it up as follows?
-> I will squash it for tomorrow's linux-next.
+> For today's linux-next, please squash the following too.
+>=20
+> (This is my fault, since scripts/mkuboot.sh is a bash script)
 >=20
 >=20
-> --- a/arch/powerpc/Makefile.postlink
-> +++ b/arch/powerpc/Makefile.postlink
-> @@ -18,7 +18,7 @@ quiet_cmd_relocs_check =3D CHKREL  $@
->  ifdef CONFIG_PPC_BOOK3S_64
->        cmd_relocs_check =3D                                              =
- \
->         $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
-> "$(OBJDUMP)" "$@" ; \
-> -       $(CONFIG_SHELL)
-> $(srctree)/arch/powerpc/tools/unrel_branch_check.sh "$(OBJDUMP)" "$@"
-> +       $(BASH) $(srctree)/arch/powerpc/tools/unrel_branch_check.sh
-> "$(OBJDUMP)" "$@"
->  else
->        cmd_relocs_check =3D                                              =
- \
->         $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
-> "$(OBJDUMP)" "$@"
+> diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+> index 41c50f9461e5..2d72327417a9 100644
+> --- a/scripts/Makefile.lib
+> +++ b/scripts/Makefile.lib
+> @@ -374,7 +374,7 @@ UIMAGE_ENTRYADDR ?=3D $(UIMAGE_LOADADDR)
+>  UIMAGE_NAME ?=3D 'Linux-$(KERNELRELEASE)'
+>=20
+>  quiet_cmd_uimage =3D UIMAGE  $@
+> -      cmd_uimage =3D $(CONFIG_SHELL) $(MKIMAGE) -A $(UIMAGE_ARCH) -O lin=
+ux \
+> +      cmd_uimage =3D $(BASE) $(MKIMAGE) -A $(UIMAGE_ARCH) -O linux \
+>                         -C $(UIMAGE_COMPRESSION) $(UIMAGE_OPTS-y) \
+>                         -T $(UIMAGE_TYPE) \
+>                         -a $(UIMAGE_LOADADDR) -e $(UIMAGE_ENTRYADDR) \
 
-I added that in linux-next today.
+Umm, that seems to have already been done.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/OiNx=.92uA4E8B59RKYNwYi
+--Sig_/uDkxajeQp+GefRpMSunwwHd
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1vrt8ACgkQAVBC80lX
-0GyQkAgAhIAxiKO6ECuHeRCgYpvI9MPVyBYbqMn9PerEFN+So/MXA6M/piyhtJ5R
-ZIwKRjiX++ehRMru/pCIY3ZUR1UMD2cFpqfe7OoFN9Wx1kqmU11CoQM/qoLlV1Cy
-6dLg2NZqAqTABCnUstfVsGGEGomxC+L/TaEG8AQX3cX22pSbr0nNoqQuo5QutHOI
-bRFF+iSG99Dqxj/wQX+XqtZy+fMealQHsD+HNFxoAj/Xdb9iH9C8ouWcakH4tRqL
-k5kDQFgIOP24Xk8Ro36Bi6c43CMMKXXehYToqUNjID4nug7Ys73DsYQDNPHa+InW
-h+KslkjuICRMVoGepAybBwQ3NkePFQ==
-=mMRP
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1vrwgACgkQAVBC80lX
+0Gxn3wgAheU3D4MTpR5mBwg7WtQxEJ9dSVn+mwjS4jwsoXc2fOPWF1HlbNTFgCLx
+ANh5n+G0IMBTWfkjIqrrvRafd/9+obXEQIFrouVF8c1sGUgSZno7x+fPKXDrPcDM
+v7ruhgry00bPAHQpvvkDqEOXbpvjIPurfU5ElkwGQR1npb0099o4Ivf/xyfh268m
+wnFAf3BRnxVY7ioK4rcDgB5hqmZIsmpHb9hzIlH2IYVYDjMXnKJMYS0YtABGfRbN
+5Xf1YxeuGSIOiwaNKye8+Gx40f0qE2bIxExW7eklxvQPPuWoFUj7C3Ah5fRQ4Gfq
+BUgpdoSoFyUggJRQJJTk8wLSdFA4jg==
+=DYTL
 -----END PGP SIGNATURE-----
 
---Sig_/OiNx=.92uA4E8B59RKYNwYi--
+--Sig_/uDkxajeQp+GefRpMSunwwHd--

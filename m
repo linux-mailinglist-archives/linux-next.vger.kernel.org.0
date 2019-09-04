@@ -2,114 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B625FA8092
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 12:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B445FA82D4
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 14:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729650AbfIDKoe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Sep 2019 06:44:34 -0400
-Received: from ozlabs.org ([203.11.71.1]:58695 "EHLO ozlabs.org"
+        id S1726304AbfIDMcj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Sep 2019 08:32:39 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:50621 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729644AbfIDKoe (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 4 Sep 2019 06:44:34 -0400
+        id S1729122AbfIDMcj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 4 Sep 2019 08:32:39 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46NgRy2ffgz9sDQ;
-        Wed,  4 Sep 2019 20:44:30 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Njrg5JtLz9s7T;
+        Wed,  4 Sep 2019 22:32:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567593871;
-        bh=q51v6jMKfuMMsSNQkaFTfC+YDlmgKQBdULryscFJ038=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PZrcsQdvrc9rYmb5r9Bk1LoYEA8tbrMSzxY1x3Q9nasSr9ar1TiKhiVvD29wyBWGp
-         Z/49E+ypr6HdyobnOBw9FanboRg9CnYE3hiNL5eX31EA2fpbG7AncidoL44kwne9aT
-         J4JrFOt1fAjd1xRajN9WL4t8gkHkw5SLPG5vHV/kKmrqVsLyT127l8Y1FdyuUJFQcC
-         l1L/qX6Vkr9YyV4xsMYNGJ7DZq5h4UN4rVtNpyx51SE2rHCd3YGz6EthJLB2lCE3V0
-         Jm/06Y5dvhBqDpALoeE8J9KPvbJfelPKjjizntlV5En4HHz6KBXKUcxGkL0OA70eZs
-         Hv0foYU83L7qw==
-Date:   Wed, 4 Sep 2019 20:44:27 +1000
+        s=201702; t=1567600355;
+        bh=z59rieT2twxHYW1vw33xs0FLNllbi/grl/kkqJ/n1Ow=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HHX1lljQFUPNilWtujGuh5ig/X05/Rb+Ry3xzSW3SeMTReYUZum9YhN7RCvDrRWab
+         Ah5oyeFUjqst6/EJ45NHwNxMYEpFXWNV7Y/DvUwVVsFHZx28wSiooPzP5DZNDhPE9K
+         4KLHFiDA/I4mSppTtoTJS9XP86NO6D+XyP7p6TmrD8wqzj/0wbEHk10XsrwQsnECWk
+         HF3tfXyXBhlOaMdlxWV9R65f+cGW6hIIepqAkkXqzeBUwHOgdbBMRvixVwU+ssMpVU
+         H0U0tBAedYAGnF/6GsPIct7uBaJt/CefQDXJV5E3ylhRnF+K3T73mddqscMAZ2E72D
+         sg6Ws1+hDUT7w==
+Date:   Wed, 4 Sep 2019 22:32:31 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
+To:     Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>
-Subject: linux-next: manual merge of the slave-dma tree with the arm-soc
- tree
-Message-ID: <20190904204427.1e1a064f@canb.auug.org.au>
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: linux-next: build warnings after merge of the kbuild tree
+Message-ID: <20190904223231.6c7a2b7d@canb.auug.org.au>
+In-Reply-To: <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
+References: <20190904101259.2687cea4@canb.auug.org.au>
+        <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j1zaefufpuug0qMHWw8wW3c";
+Content-Type: multipart/signed; boundary="Sig_/OiNx=.92uA4E8B59RKYNwYi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/j1zaefufpuug0qMHWw8wW3c
+--Sig_/OiNx=.92uA4E8B59RKYNwYi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Masahiro,
 
-Today's linux-next merge of the slave-dma tree got a conflict in:
+On Wed, 4 Sep 2019 10:00:30 +0900 Masahiro Yamada <yamada.masahiro@socionex=
+t.com> wrote:
+>
+> Could you fix it up as follows?
+> I will squash it for tomorrow's linux-next.
+>=20
+>=20
+> --- a/arch/powerpc/Makefile.postlink
+> +++ b/arch/powerpc/Makefile.postlink
+> @@ -18,7 +18,7 @@ quiet_cmd_relocs_check =3D CHKREL  $@
+>  ifdef CONFIG_PPC_BOOK3S_64
+>        cmd_relocs_check =3D                                              =
+ \
+>         $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
+> "$(OBJDUMP)" "$@" ; \
+> -       $(CONFIG_SHELL)
+> $(srctree)/arch/powerpc/tools/unrel_branch_check.sh "$(OBJDUMP)" "$@"
+> +       $(BASH) $(srctree)/arch/powerpc/tools/unrel_branch_check.sh
+> "$(OBJDUMP)" "$@"
+>  else
+>        cmd_relocs_check =3D                                              =
+ \
+>         $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
+> "$(OBJDUMP)" "$@"
 
-  drivers/dma/iop-adma.c
-
-between commit:
-
-  00c9755524fb ("dmaengine: iop-adma: use correct printk format strings")
-
-from the arm-soc tree and commit:
-
-  d17d9ea95727 ("dmaengine: iop-adma.c: fix printk format warning")
-
-from the slave-dma tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I added that in linux-next today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/dma/iop-adma.c
-index 03f4a588cf7f,003b753e4604..000000000000
---- a/drivers/dma/iop-adma.c
-+++ b/drivers/dma/iop-adma.c
-@@@ -116,9 -116,9 +116,9 @@@ static void __iop_adma_slot_cleanup(str
-  	list_for_each_entry_safe(iter, _iter, &iop_chan->chain,
-  					chain_node) {
-  		pr_debug("\tcookie: %d slot: %d busy: %d "
-- 			"this_desc: %#x next_desc: %#llx ack: %d\n",
- -			"this_desc: %pad next_desc: %#x ack: %d\n",
-++			"this_desc: %pad next_desc: %#llx ack: %d\n",
-  			iter->async_tx.cookie, iter->idx, busy,
-- 			iter->async_tx.phys, (u64)iop_desc_get_next_desc(iter),
- -			&iter->async_tx.phys, iop_desc_get_next_desc(iter),
-++			&iter->async_tx.phys, (u64)iop_desc_get_next_desc(iter),
-  			async_tx_test_ack(&iter->async_tx));
-  		prefetch(_iter);
-  		prefetch(&_iter->async_tx);
-
---Sig_/j1zaefufpuug0qMHWw8wW3c
+--Sig_/OiNx=.92uA4E8B59RKYNwYi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1vlYsACgkQAVBC80lX
-0GyEsAf/Qnjvf6g+5SsGilNzTBLfT4HNlal2P85915JvP7smyeAL6gS6QYZMUm1h
-owyQdt/jEdTuxm1ICfrYoy/RgMr74rjpd9BpCpoXKOyc13o+pOhni819sL9B9kTP
-0uvJVqt3FXqYQHvGBhbikc1aRgG0Qzq1BnZBaju6GYTXDtc1zf2OlHwgHlgrkurx
-QjK13fMQBhLHVVHGUi2wMGDLCnc+4jDYYfV39FzXGtBOUT823/zMVKpsUe36l92q
-vgkmXWjSmmAR5+J6jioYvVK47sf2TJ7kAn/1BEutuBKCn/GdfDAyfmQz1cOS02pR
-v06nhsPXiUXb73XePYFYQFPDppbKFQ==
-=RjA1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1vrt8ACgkQAVBC80lX
+0GyQkAgAhIAxiKO6ECuHeRCgYpvI9MPVyBYbqMn9PerEFN+So/MXA6M/piyhtJ5R
+ZIwKRjiX++ehRMru/pCIY3ZUR1UMD2cFpqfe7OoFN9Wx1kqmU11CoQM/qoLlV1Cy
+6dLg2NZqAqTABCnUstfVsGGEGomxC+L/TaEG8AQX3cX22pSbr0nNoqQuo5QutHOI
+bRFF+iSG99Dqxj/wQX+XqtZy+fMealQHsD+HNFxoAj/Xdb9iH9C8ouWcakH4tRqL
+k5kDQFgIOP24Xk8Ro36Bi6c43CMMKXXehYToqUNjID4nug7Ys73DsYQDNPHa+InW
+h+KslkjuICRMVoGepAybBwQ3NkePFQ==
+=mMRP
 -----END PGP SIGNATURE-----
 
---Sig_/j1zaefufpuug0qMHWw8wW3c--
+--Sig_/OiNx=.92uA4E8B59RKYNwYi--

@@ -2,83 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E151EA77C5
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 02:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28871A77F9
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 03:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726090AbfIDANh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Sep 2019 20:13:37 -0400
-Received: from ozlabs.org ([203.11.71.1]:53439 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725882AbfIDANg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 3 Sep 2019 20:13:36 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46NPRx71w0z9sP3;
-        Wed,  4 Sep 2019 10:13:33 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1567556014;
-        bh=9sKqcVmNPYcGRbL8j5mK/risVZPS130A9GxQFjJc+2w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hMmtYMXzvtmigmoLB8fOijNYtv0w5+23EcHc04CBtf7WVe1yOFljK8/8JBMv0QYYK
-         sj3vgnkfMV07qCWR2S11v+HEgAcxQiXVr2h7CBqCSoon2uSCqelyjObd3OHkACDdbq
-         TQ4jsVE5GPT7/F6jlmtINjBcCW64T4xw64tqMJU1TM9tfUkRWLVMe6pDEom1/9R2fZ
-         xRnuZE1vNZQWMPFf6lIYE8QRrqUt4SHTw39cJZK/ye9bNwlse+27i6lpiUefqlZRCF
-         mqOmFYYFQRIK56R+XSEQqfLtnuJdEmzpE29jGxuYiEN9PJ8jd6qM12eYrSCoVOzryg
-         N4W6fPgtzWARQ==
-Date:   Wed, 4 Sep 2019 10:13:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>
+        id S1726090AbfIDBBQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Sep 2019 21:01:16 -0400
+Received: from conssluserg-01.nifty.com ([210.131.2.80]:65130 "EHLO
+        conssluserg-01.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726009AbfIDBBQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Sep 2019 21:01:16 -0400
+Received: from mail-vs1-f47.google.com (mail-vs1-f47.google.com [209.85.217.47]) (authenticated)
+        by conssluserg-01.nifty.com with ESMTP id x84117Yb015558;
+        Wed, 4 Sep 2019 10:01:07 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com x84117Yb015558
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1567558867;
+        bh=AjEufFzVyVLU2AdLo34FLZlaBTX1x5K/b/SnhbXJ+hk=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B4uvS7NLJB3xR6BpqAhfh7z1pYGyymVdo4RP50YZ2dkM7L8KD40tZBYM0NAClKxZ/
+         Y1pvINpM/ItKhXAMLAM0sMWmqlay/t3hhF+lb6tM2KGPbeGYJ7FdG+nsjjuCDJyoj4
+         mPukkD3zmHux2ARmjSVuGpcPVbN8B8lNTTQcPHWaAhJwnDbTAeQc6Fb1TmN2aWlQbb
+         v6SsKmNGe/KgbTOQMFFhjedraDaz/HIK7nPkquhC80snMn7CXlRueQg7NE7pm7OsTg
+         qIpfbFEskPu9eh5UETe+A/lCRNK6oElYjTZ7z7IKPAyTmbRV41V8pyFUmj6nmA+4mL
+         MVth8LJAUZ+ag==
+X-Nifty-SrcIP: [209.85.217.47]
+Received: by mail-vs1-f47.google.com with SMTP id r17so9790212vso.1;
+        Tue, 03 Sep 2019 18:01:07 -0700 (PDT)
+X-Gm-Message-State: APjAAAU3u1QGU9QzJWJ84kyIhTmj7mwRx/yOPqrnwklyCge70/TSKquQ
+        jpoVktImC/xbhaWnpnSdMp5V580tezuxFLHqiE0=
+X-Google-Smtp-Source: APXvYqyo1po5O9L9Nq5Ia7qmFmp/ATeXGAcAqwEBQcXBG/9eqEjgCQ08JqpAR6C0b8FHMTdDqWVRRmFm/GoJ9LBHUok=
+X-Received: by 2002:a67:e9cc:: with SMTP id q12mr11010457vso.181.1567558866354;
+ Tue, 03 Sep 2019 18:01:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190904101259.2687cea4@canb.auug.org.au>
+In-Reply-To: <20190904101259.2687cea4@canb.auug.org.au>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Wed, 4 Sep 2019 10:00:30 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
+Message-ID: <CAK7LNAT=qUi76cF776GcT=UYce5QBo+_24gLwXH7ra15=1xLvQ@mail.gmail.com>
+Subject: Re: linux-next: build warnings after merge of the kbuild tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Michael Ellerman <mpe@ellerman.id.au>,
         PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: linux-next: build warnings after merge of the kbuild tree
-Message-ID: <20190904101259.2687cea4@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ssBCJi3mTERdd=v=ROJKrJr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ssBCJi3mTERdd=v=ROJKrJr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Wed, Sep 4, 2019 at 9:13 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the kbuild tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced these warnings:
+>
+>
+> Presumably introduced by commit
+>
+>   1267f9d3047d ("kbuild: add $(BASH) to run scripts with bash-extension")
+>
+> and presumably arch/powerpc/tools/unrel_branch_check.sh (which has no
+> #! line) is a bash script.  Yeah, is uses '((' and '))'.
 
-After merging the kbuild tree, today's linux-next build (powerpc
-ppc64_defconfig) produced these warnings:
+Thanks for catching this.
 
 
-Presumably introduced by commit
+Could you fix it up as follows?
+I will squash it for tomorrow's linux-next.
 
-  1267f9d3047d ("kbuild: add $(BASH) to run scripts with bash-extension")
 
-and presumably arch/powerpc/tools/unrel_branch_check.sh (which has no
-#! line) is a bash script.  Yeah, is uses '((' and '))'.
+--- a/arch/powerpc/Makefile.postlink
++++ b/arch/powerpc/Makefile.postlink
+@@ -18,7 +18,7 @@ quiet_cmd_relocs_check = CHKREL  $@
+ ifdef CONFIG_PPC_BOOK3S_64
+       cmd_relocs_check =                                               \
+        $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
+"$(OBJDUMP)" "$@" ; \
+-       $(CONFIG_SHELL)
+$(srctree)/arch/powerpc/tools/unrel_branch_check.sh "$(OBJDUMP)" "$@"
++       $(BASH) $(srctree)/arch/powerpc/tools/unrel_branch_check.sh
+"$(OBJDUMP)" "$@"
+ else
+       cmd_relocs_check =                                               \
+        $(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh
+"$(OBJDUMP)" "$@"
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/ssBCJi3mTERdd=v=ROJKrJr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1vAaYACgkQAVBC80lX
-0GxOmAf+IJwgmJGltVlvpa0v/AYyBNUCM/OMskna4gAT92XarZeed2UfoxwB0g/l
-hXnIdav7xtwj/Enz2jsOiomWSzBEAY+D2idUi2T8VMD+VVWdV5xFXFyFKL7+c0/N
-lxyYAXB/oKmyhNTOPMNJk8ThSr+hBZEgDSHX//j0iJ39+wfmf098N+RbvdVCUqXc
-jirj7RLWRrWA4LcUjMMPQMky3gp+CI5olpcFdVyGNKS4j+nE3BTR/DzQCGLPO31Y
-2XlhVtnbDGD18/aGnc8n0qBm5wqVexi939dCcXJDGmO2l+Jyb7iUAvPFD4Tev2u+
-0HyFqdbbIU5lqfTTQGgwcKlbePY3CQ==
-=l4Bs
------END PGP SIGNATURE-----
 
---Sig_/ssBCJi3mTERdd=v=ROJKrJr--
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

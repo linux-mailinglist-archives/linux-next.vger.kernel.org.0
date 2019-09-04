@@ -2,68 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 556B0A943D
-	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 22:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB464A9517
+	for <lists+linux-next@lfdr.de>; Wed,  4 Sep 2019 23:25:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729471AbfIDU62 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Sep 2019 16:58:28 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:34844 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726495AbfIDU62 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Sep 2019 16:58:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=RySvkA4PqDSjeZsiLdGzYmedvJgqhRvVYcnWJF/ahYY=; b=QO7/P7gHmvX8Mwzs+sfP6cUwP
-        F6s3cPMwa8vVNxBwmN+xo48tUORqOS2p2CJ0UixJzBsPvGt35pc5CcP2zOtTX8SlLSnWLVcXJjDfJ
-        iusNjIpcM2eN7kWOD52ArqmyDzy5XKpXI+lD3QEbklIp0CdV9cXhtT2DXz5P0ufrzw+6XMKvv9YRG
-        j1UKNWosS8ePE6QFjG0BJ+RnOMYmJFNyuUtDn4MZU9tPKS/LbzPH7hjscmzBQte7ymS6pWjp2xfCD
-        Iig8s1yLMMYULue2Dq6l0I3I7m0i7zxYg7dCvlaMeK0k/cExT0GW6z42tE6JvnY1cnzNN1+CPYiHu
-        e3EfEi7vw==;
-Received: from [2601:1c0:6200:6e8::e2a8]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92 #3 (Red Hat Linux))
-        id 1i5cME-00010R-Up; Wed, 04 Sep 2019 20:58:27 +0000
-Subject: Re: linux-next: Tree for Sep 4 (amd/display/)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        amd-gfx@lists.freedesktop.org,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>
-References: <20190904233443.3f73c46b@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <6b70fdfd-1f18-1e55-2574-7be5997cfb2a@infradead.org>
-Date:   Wed, 4 Sep 2019 13:58:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1727900AbfIDVY4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Sep 2019 17:24:56 -0400
+Received: from ozlabs.org ([203.11.71.1]:60585 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729594AbfIDVYz (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 4 Sep 2019 17:24:55 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Nxfr6zCGz9s7T;
+        Thu,  5 Sep 2019 07:24:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1567632293;
+        bh=eNW/ajGWlMGT2zVfiq0xeHOgrXfvOpoxaZYav5xwi7s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GnOq1I+YiwGfEt5b+CaMtK1jV7cV1UguKjuIqk+43im1Ay4a0xZuowEbS/bAhBBPQ
+         IVwOHC4K8wnLEh+4zf0qvY+OY7dYtWiZ2pmuOMVxPcXCGkI3LGvEPb6DKRivA4UGq5
+         7WtfYn+WVtzFO7bJo65mAfZwPEp/851Z4tnyqHWVJDZdh/SR/OjhGdbKRJtq6R9Brv
+         Xep3bKi3wlGTK/upV1tL76sigogceX/ywgMTgenjCIo0us6o3WeXfezGyxARBeHRFn
+         xRJTODbKuKZRQ8mvlpmT9Xn+3tdT236U8P2c5HWWe0o+7rbQbxsjLCn4bheEOlO5fs
+         4TF1XwFGPgN5g==
+Date:   Thu, 5 Sep 2019 07:24:43 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: linux-next: Fixes tag needs some work in the arm-soc tree
+Message-ID: <20190905072443.3ad56568@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20190904233443.3f73c46b@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/p+6iuOX35cArZ+.jsRTBokb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/4/19 6:34 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> News: this will be the last linux-next I will release until Sept 30.
-> 
-> Changes since 20190903:
-> 
+--Sig_/p+6iuOX35cArZ+.jsRTBokb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on x86_64:
+Hi all,
 
-In file included from ../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/display_rq_dlg_calc_20v2.c:77:0:
-../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/../dml_inline_defs.h: In function ‘dml_min’:
-../drivers/gpu/drm/amd/amdgpu/../display/dc/dml/dcn20/../dml_inline_defs.h:34:1: error: SSE register return with SSE disabled
+In commit
 
+  ca33f735b119 ("arm64: dts: bitmain: Modify pin controller memory map")
 
--- 
-~Randy
+Fixes tag
+
+  Fixes: af2ff87de413 ("arm64: dts: bitmain: Add pinctrl support for BM1880=
+ SoC")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean
+
+Fixes: c1294fb5cb78 ("arm64: dts: bitmain: Add pinctrl support for BM1880 S=
+oC")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/p+6iuOX35cArZ+.jsRTBokb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl1wK5sACgkQAVBC80lX
+0GzdrggAg3vj2a2Ve+Vo8eCAp+w/f3bjePQJwGUdAXx2cgmb7och0Ai50pxh9ZyD
+eNR5ZWurqd/7OynZCAD/wjtuywU9I5XsEuJIKcR/NLCpMA6tYUsvG0MLdqKrDhsJ
+9mP/LI3tXmW/mMhFEtNmwa3aUhQYa/pCddND+Usj5XucunQymGb+Sfbbcsx4I2kX
+pKn9uyBt59wu1L0KLL3Ztmmxazb6cI9Gl5rxZCNBtlkIsV62OGTBMUkBQCEeBRM4
+Pi5KZn90HZECluYKw8unfrmF4jodLSO+Zi8nNJRJBEPLX9+iE4S6UgBQ5davaBSY
+Y6Z7tuQOvr+pjQ5Xemo9Id5ZKqU1pg==
+=pIkX
+-----END PGP SIGNATURE-----
+
+--Sig_/p+6iuOX35cArZ+.jsRTBokb--

@@ -2,93 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09B3CAD69D
-	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2019 12:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8C4AD6CE
+	for <lists+linux-next@lfdr.de>; Mon,  9 Sep 2019 12:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730207AbfIIKV5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Sep 2019 06:21:57 -0400
-Received: from ozlabs.org ([203.11.71.1]:44583 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727128AbfIIKV5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 9 Sep 2019 06:21:57 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46RkjV2x3Mz9s4Y;
-        Mon,  9 Sep 2019 20:21:50 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1568024515;
-        bh=fyZY9MX63OH0n6q0z5DZK7nEg/98r9px2uwAS1QIXsE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D7Fs1Mvyh3q7HoysKEaj3i1Mmt+6OADTYf3vTqhmBJ6L/LC5GJy/3h/Zjq7O/KnWX
-         vmD5qQYwiwJaAwaXnosX4joQeVlOM3cY/tzyINbkDlJby82pY5qCJ0w//EOSfk24j2
-         QHFmDDMvrft8PtIZU4FQVkwBHmgGzrpKiyJZE5LrSU5jRq9469FJHj3AodMCi544zr
-         FqESRpGNy567NB8OF29cENG8dqfn1jvor0H69YAC6ezWdPiDYNGTvd0rY+vJROQnE5
-         tSUn091oUa1EQBbtbywGY20MTgT7SKwu2vc8vLLqKCaDyWPnXINKJX3W5xZD1PSawZ
-         tTYhw3Cq2VHvA==
-Date:   Mon, 9 Sep 2019 20:21:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexander Kapshuk <alexander.kapshuk@gmail.com>
+        id S2403813AbfIIKZ1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Sep 2019 06:25:27 -0400
+Received: from mail-io1-f65.google.com ([209.85.166.65]:41196 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2403812AbfIIKZ1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Sep 2019 06:25:27 -0400
+Received: by mail-io1-f65.google.com with SMTP id r26so27317783ioh.8;
+        Mon, 09 Sep 2019 03:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Iih+uQUiA9izQUGr4jy/Sqv8n1Gdl/kNYnNhnb/eS84=;
+        b=blcu5F/m6M4e8lmPcljb3wQamY08n3LcD5Dz+Ie6fi0ZvtPexZLKYWO8dNDqhQyJZL
+         6IOgDT+Bxx+K2S5qdmPOUCkbR2Fif4zO0W1AoY7yZTmuQcsg576fe/MwS0uK0UoV79TP
+         nndu91jPG2ZIn5mVQ2pWMF0QUeFB2GIFibXC8PMJUHBcZZJwpUwb6bmkXrSIKdbxjOxw
+         9z0wbc1CIlHSn/CficejXP59A85PdGcS11C5ZLMZf7+pVuWCcIojfGFVMlI0tOP/Ge34
+         octtCcspkXOiWDLZvFT9Vw/AJxcEtwZpgkUNYCLRs4Ff0L06gUcrHuBwHiUzjI8YTpEl
+         xmBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Iih+uQUiA9izQUGr4jy/Sqv8n1Gdl/kNYnNhnb/eS84=;
+        b=MI8a4Y9tE/AW1IHpVzV5nKC58fNPrB7How8O2k10BbEoecAiVtG24Bfib/jVGVIVLW
+         dHrTH2CjvffaWmpXzVwf6/r4YMc+4H4cTm2ES3Rj0sjSJ7axTN51zgUWjY1qeby8f4SB
+         BDfZ/Kw9Ls0+AFfJ2wk3OOD7NDsUbuU99Zdo3j7+gWIoOJGdsk8cvBJ2W02qtgvP3/+K
+         G+IDcUg2kejHaB59RxB8Zr8M8X48X8+bf6wPPrNEHAYUUMSM9nTKGUPMr1l2qfTLIGVa
+         skH+7jYOUSQR8pCOoyqFpkCkd+Q4uD2xXhuT9E52ONQ1+qA8YNV/DnZijyTuAdYNibxZ
+         3AxQ==
+X-Gm-Message-State: APjAAAV2fYFOvuejE/sCzt/gd+SJBytlppBm3OzEMN0nPOdzvutsBMTO
+        XUpOORxwDg25gRK58JzILBIz85oxsvW689StcKOlDkyjJZE=
+X-Google-Smtp-Source: APXvYqwcEAG1JfqbQemeVAXvvAIlgTBhC6sqluMv7Q1nZgjEYLOd/AxmByYzgLyU3PLNhD2AQMMbQOen/2LF49mG7PI=
+X-Received: by 2002:a5e:8e0c:: with SMTP id a12mr19710141ion.22.1568024726318;
+ Mon, 09 Sep 2019 03:25:26 -0700 (PDT)
+MIME-Version: 1.0
+References: <20190907090534.GB1712@pc-sasha.localdomain> <CAKMK7uHYdXwruQxxBM12Q5MVeH9fjFpZvxZz06BSo7YrCQbM2w@mail.gmail.com>
+ <20190908141307.GA7115@pc-sasha.localdomain> <20190909201159.778590a0@canb.auug.org.au>
+ <20190909202128.0c420ddd@canb.auug.org.au>
+In-Reply-To: <20190909202128.0c420ddd@canb.auug.org.au>
+From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
+Date:   Mon, 9 Sep 2019 13:24:49 +0300
+Message-ID: <CAJ1xhMXKNRfOm1Xj3B_cgLByBfDP03P+DBEbRpWc+tU6kdxtBw@mail.gmail.com>
+Subject: Re: Kernel panic during drm/nouveau init 5.3.0-rc7-next-20190903
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Daniel Vetter <daniel@ffwll.ch>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Linux-Next <linux-next@vger.kernel.org>,
         maarten.lankhorst@linux.intel.com, mripard@kernel.org,
         sean@poorly.run, airlied@linux.ie
-Subject: Re: Kernel panic during drm/nouveau init 5.3.0-rc7-next-20190903
-Message-ID: <20190909202128.0c420ddd@canb.auug.org.au>
-In-Reply-To: <20190909201159.778590a0@canb.auug.org.au>
-References: <20190907090534.GB1712@pc-sasha.localdomain>
-        <CAKMK7uHYdXwruQxxBM12Q5MVeH9fjFpZvxZz06BSo7YrCQbM2w@mail.gmail.com>
-        <20190908141307.GA7115@pc-sasha.localdomain>
-        <20190909201159.778590a0@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/l+GqJrN4iAZNpgJN4bQkHoX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/l+GqJrN4iAZNpgJN4bQkHoX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Mon, 9 Sep 2019 20:11:59 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+On Mon, Sep 9, 2019 at 1:21 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> If you are bisecting linux-next, I will suggest bisecting between the
-> stable branch on linux-next (which is just Linus' tree when I started
-> that day) and the top of the first linux-next that fails.  (Assuming
-> that the stable branch is good).
+> Hi,
+>
+> On Mon, 9 Sep 2019 20:11:59 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > If you are bisecting linux-next, I will suggest bisecting between the
+> > stable branch on linux-next (which is just Linus' tree when I started
+> > that day) and the top of the first linux-next that fails.  (Assuming
+> > that the stable branch is good).
+>
+> Actually (since you won't be bisecting the latest linux-next), you
+> probably want to use
+>
+> git merge-base stable next-20190903
+>         (or whatever linux-next you are bisecting)
+>
+> as your first good commit (assuming it id good :-)).
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Actually (since you won't be bisecting the latest linux-next), you
-probably want to use
+Hi Stephen,
 
-git merge-base stable next-20190903
-	(or whatever linux-next you are bisecting)
-
-as your first good commit (assuming it id good :-)).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/l+GqJrN4iAZNpgJN4bQkHoX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl12J6gACgkQAVBC80lX
-0GzcJgf/TuR5t/iDv0PgFYFYxLltTSfnfqvQNfWn5bh6AylC/2B62cPp6jgBOg0D
-gW0JT9Fp4kSAjFGR6KW0IMSXiJoLJAHO2b2atR6ET29yeAWQG/iPkZz6b9IimqIL
-4g1YdcQZ3iLtVCOqkf0QD0NDLdCukIVhkTNuyjXgs+boATWRt/+ppnA0l+hQSnjK
-WWI/oCviGpIwYcVfNVfRhstXWYoXmdEULvJ4AK0AsmPPlLOqnpTTl0rUnANgyC7p
-cKk73j1s15YO7KQzHkXLtXWzHF2/lj7dY/0soS/D5720h4F5SYBh/PdN8sXPo7Al
-NOwmDjgqOkd+N5jNrDM7mXr2N9xQ+g==
-=B+WT
------END PGP SIGNATURE-----
-
---Sig_/l+GqJrN4iAZNpgJN4bQkHoX--
+Thanks very much for the tips.
+I'll go ahead and give those a try.

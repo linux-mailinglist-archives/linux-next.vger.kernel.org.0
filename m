@@ -2,48 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D76B9AEDED
-	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2019 16:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89561AEE2B
+	for <lists+linux-next@lfdr.de>; Tue, 10 Sep 2019 17:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732797AbfIJO55 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Sep 2019 10:57:57 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60729 "EHLO ozlabs.org"
+        id S1726535AbfIJPKx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Sep 2019 11:10:53 -0400
+Received: from ozlabs.org ([203.11.71.1]:41965 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731464AbfIJO55 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Sep 2019 10:57:57 -0400
+        id S1726060AbfIJPKx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Sep 2019 11:10:53 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46SSnW13P4z9s00;
-        Wed, 11 Sep 2019 00:57:50 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46ST4J1tPYz9s4Y;
+        Wed, 11 Sep 2019 01:10:39 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1568127474;
-        bh=CzzYK7LmIfqYSITSVn4Qe5K5GimeLxwYyKauahEi5lA=;
+        s=201702; t=1568128250;
+        bh=aoTIYRp7peYZiE+TXTLfLFyQ53Zbvaf6xr3h0aWndyc=;
         h=Date:From:To:Cc:Subject:From;
-        b=ctYf5MQ0+dZbSVyko67G6AZmdJLPmqXqgHfzwEAvZtTyT6weCdtQ88IULtjkymQRd
-         f/mA+75b0JuIFkMBfBYsWNKIKQ3OqsSYW8L3nH7GOTw/6jp/ORRWxaZ8C6malTgItM
-         kIJ1EopOpyNAgw0+Jf90zWMSrhIWrHUoDB7ARpJFQgkVOXeGyp9F0aqlaUwOi95n/1
-         2GBdGOpjhEXkZbOOBPVpPFlYXi3O1+PIi8e8rs4cqprpQBapAM91vP2mnS5h/DkGfk
-         306igNm/iTYm7FQe5D2SG+Z7V7HC0pDbiQ6F6G3TppawCEQvUcUUFIWaEZplASEV/F
-         93/I3opaNtQAA==
-Date:   Wed, 11 Sep 2019 00:57:49 +1000
+        b=TV22LbY9UPupLC3medhAwwRc5+Jeqlh6Bkzl82vwKfJWzYxG7dLL+V6+2KEsPQG7z
+         wcyzxuvIQ0yHrKDKCfbcRGrFJRV1EDl68pRwRMO5m2A/VkvTxYj//2CAKiB/0+B7Xd
+         42kslQ02mdZyg3wMNuWoyptnFgC0GFqvD4o3qD7wt9TT9u+gtxeatqosHNZ8/qbHVf
+         QPFLeISAp/3kQi/uFjzQgJ1p9f8lr7VNy1f80//qxONTWCz9U+Iv8iCiDkLNxZ2hod
+         If7YevIHscHFmaINlfZWAlLxLKQGrjqU77NQSOo1HjQxGut+s5LbF99gF0TEdt9uF4
+         bX4K2aqQNUJ8Q==
+Date:   Wed, 11 Sep 2019 01:10:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Arnd Bergmann <arnd@arndb.de>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jackie Liu <liuyun01@kylinos.cn>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20190911005749.74fff98e@canb.auug.org.au>
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: linux-next: Fixes tag needs some work in the y2038 tree
+Message-ID: <20190911011034.3bae9ee3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KaBVzwNGjJc.aoDM_sHElhC";
+Content-Type: multipart/signed; boundary="Sig_/S5C.=bsUr7rtZGW3yNn0cwS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KaBVzwNGjJc.aoDM_sHElhC
+--Sig_/S5C.=bsUr7rtZGW3yNn0cwS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,37 +51,43 @@ Hi all,
 
 In commit
 
-  8776f3fa15a5 ("io_uring: fix wrong sequence setting logic")
+  e83dd16c24d8 ("fix compat handling of FICLONERANGE, FIDEDUPERANGE and FS_=
+IOC_FIEMAP")
 
 Fixes tag
 
-  Fixes: de0617e4671 ("io_uring: add support for marking commands as draini=
-ng")
+  Fixes: d79bdd52d8be7 54dbc15172375 ceac204e1da94
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+So (presumably):
+
+Fixes: d79bdd52d8be ("vfs: wire up compat ioctl for CLONE/CLONE_RANGE")
+Fixes: 54dbc1517237 ("vfs: hoist the btrfs deduplication ioctl to the vfs")
+Fixes: ceac204e1da9 ("fs: make fiemap work from compat_ioctl")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/KaBVzwNGjJc.aoDM_sHElhC
+--Sig_/S5C.=bsUr7rtZGW3yNn0cwS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl13ue0ACgkQAVBC80lX
-0GzZewgAnkOJtHiIvPue6AKCMTOc73Wq1C8NUsC89FpDD0LTF4ND4h/tsEgPVzx2
-bX0iZtB7gVVbGL3tYbxdIkjWoLhbbnl+dekyFInBxTTZW7W0Jv2qMKk+FMniwhk8
-RAG983rcYyjb8F5RFAjMoCNO4RlaEwSDnt9Mt6XXoG+jBJDuXnWCR9fac4YuDgoN
-123a8txQm2LzEv+Q0HORuy9SPaZgxf9Rj4v7QIDoEwutxjI3Zk5eoSd3hWgdrVYa
-NFGf4nZcSxoR6HUXqL+/0S+I7/OFP8XayunzUiZL3uBEXtdMaqWDzyr+1fvxOEuU
-Hi49misjI4W1s6dbQKU7f/GoY4v9NA==
-=sk0+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl13vOoACgkQAVBC80lX
+0GzuDAf9F/1qwJOLmEv3UX6XFctYMUxrhL4/qZBy2zVZuTwmF2GD1SH0PnXAeLCZ
+I1sKqfjYjWxd4XP7fOSfr2YcsnrcVbpgnQdchv1Q1BH4EVISbY1gRIvNAFoQw7TR
+gSUV0cebZVwb6fFJImo42XWQ64RUeXa+rL5Nis/h2u3nXPl0J9YIwknBTtjOq+rj
+dMa+i8+AWUeTCLDS+d3EPNeyXjdCWKYqK6lJzgs8hOhYH662bRkZuO3aAlnWhaY4
+pxM/f1JFtQcISFs7n1qsO0Li7QOTXU3AbVegx/g63Xg/+ZpIWAlhitTUYH6Jr6eD
+mA2POPrnE0sF7vR0u/ADbZrjYtuQMg==
+=vWUy
 -----END PGP SIGNATURE-----
 
---Sig_/KaBVzwNGjJc.aoDM_sHElhC--
+--Sig_/S5C.=bsUr7rtZGW3yNn0cwS--

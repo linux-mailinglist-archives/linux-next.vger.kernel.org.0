@@ -2,76 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D337AAFAA7
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 12:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B45AFABA
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 12:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727093AbfIKKpL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Sep 2019 06:45:11 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:48451 "EHLO ozlabs.org"
+        id S1726724AbfIKKq1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Sep 2019 06:46:27 -0400
+Received: from verein.lst.de ([213.95.11.211]:38180 "EHLO verein.lst.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726696AbfIKKpK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Sep 2019 06:45:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Sz7Q5CS4z9s00;
-        Wed, 11 Sep 2019 20:45:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1568198708;
-        bh=RyBKerNtXPgq5u7GMyo0dMA2s5vk3hbVdoM1RJRMdCA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uxudcLaR4Ox5BPqTIMPatcPXldn6Iw62x5/u6om9YS/pHGnp8tYz5wwPvIySyE/9z
-         5fK/A/RA5X5a0Fk49euCNKsWhz+47fpcEQ9dgu7mf8sLfiKBJaneTgdKqq5DR4+Wz2
-         ieJZ/Sh5/JOw07rtkWA9ml+35hENwK+l6jH3DFcxJLp7OBLuJvR5Jb0pyrm8Toknqz
-         tBtOtcPnglMjpMS6GOTHGmciTH7HSCcHhHwwbq9G2ykpzSvsIWUL9RlJp7OCF1gWrf
-         y8A8xD8qF4BIyPn6bOWwS0IGHcUcyFABkz0HIRvVRdMJoOewuqeXBdHr9tIAPiYrdE
-         4h+j9yoRTkiBA==
-Date:   Wed, 11 Sep 2019 20:45:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726657AbfIKKq1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Sep 2019 06:46:27 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 86B3468B02; Wed, 11 Sep 2019 12:46:24 +0200 (CEST)
+Date:   Wed, 11 Sep 2019 12:46:24 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the configfs tree
-Message-ID: <20190911204500.69590946@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commit in the configfs
+ tree
+Message-ID: <20190911104624.GB28423@lst.de>
+References: <20190911204500.69590946@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3yh3ctdjPZwiClDF7jWp+DL";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190911204500.69590946@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3yh3ctdjPZwiClDF7jWp+DL
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Sep 11, 2019 at 08:45:00PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Commit
+> 
+>   c84493bbf7ae ("configfs: fix a deadlock in configfs_symlink()")
+> 
+> is missing a Signed-off-by from its committer.
 
-Hi all,
-
-Commit
-
-  c84493bbf7ae ("configfs: fix a deadlock in configfs_symlink()")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/3yh3ctdjPZwiClDF7jWp+DL
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl140CwACgkQAVBC80lX
-0GyX3Qf/R/95RMpdOFml0JH5YxhmHwEf5ZczEMBawVGQv2cdpN3t2XH3aNiJ1t7n
-e2/NuMUYtZqz/pzdFlRHnxAMGLzv0GwsAjnU6HfejoYbg3nxtPfRhdPHfwB/cFNX
-PxNccz8Q5zp3fmJOMRT+15b8Muh5enWnKZwAfgNH3TRdSnvZSwfStKRYkKkanR78
-PbQJL3oQ+KENFdpOUZxzdfjbqdyD9DpReTYs1IkKTRmC5Q7Pjo/yTKjpuuqrZoXL
-OQUUhs2AQagN5cQPLJW0TmK1W64hhCEyX6T3hmqjR1AGkyRvDe7PuZmMDSwnAGP5
-5iKLUxI9qMEOCutRUdPz+CebesGaIg==
-=kjKB
------END PGP SIGNATURE-----
-
---Sig_/3yh3ctdjPZwiClDF7jWp+DL--
+Fixed.

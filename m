@@ -2,86 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89200AFE3A
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 16:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B839EAFE9E
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 16:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726510AbfIKOBr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Sep 2019 10:01:47 -0400
-Received: from ozlabs.org ([203.11.71.1]:60989 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726058AbfIKOBq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Sep 2019 10:01:46 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46T3VF03T7z9s00;
-        Thu, 12 Sep 2019 00:01:39 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1568210503;
-        bh=fVMbp9nUjHjHrCSnRjagqE1opDXIVQcKULOOuwAY5Gw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Cmmp18lsxXrtg+WLT7Hjugy4dCUkN+MUEt1qp36XFEKILh1KsNC2QfPTlgRRa3JV0
-         fyKXzssxF2xKDPshchX5Q0EPkX0tZmp/5pWGd255yzDBsTW7Qa9Y270bb18mJMNXph
-         Kod0X0A4jVIxdRQl88pHpspVdqGpb4Vs9JqwSl5vStmwYkLtNrQsVKdOWGIcVyCS79
-         3dp/GYAFOqrbaI8vZ5z91G71OCT2DsEky+v4kZ+OEEaj5MHwAWlZM7sTX0bTezO/jD
-         PEPW/QfeTmNv9iCAQOnMkBUIOt087oxOCIAj4nTg6r4vEClG4+gDdeLh/9JAbD66rY
-         TjWobL0+3jjaw==
-Date:   Thu, 12 Sep 2019 00:01:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727093AbfIKOVU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Sep 2019 10:21:20 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:39338 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726341AbfIKOVU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Sep 2019 10:21:20 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8BEEEsR015982
+        for <linux-next@vger.kernel.org>; Wed, 11 Sep 2019 10:21:19 -0400
+Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2uy1y01rjf-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Wed, 11 Sep 2019 10:21:18 -0400
+Received: from localhost
+        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <rppt@linux.ibm.com>;
+        Wed, 11 Sep 2019 15:21:17 +0100
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
+        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 11 Sep 2019 15:21:14 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8BELD0W35062012
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 11 Sep 2019 14:21:13 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2C7A45206C;
+        Wed, 11 Sep 2019 14:21:13 +0000 (GMT)
+Received: from linux.ibm.com (unknown [9.148.207.74])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 85A0552054;
+        Wed, 11 Sep 2019 14:21:10 +0000 (GMT)
+Date:   Wed, 11 Sep 2019 15:21:07 +0100
+From:   Mike Rapoport <rppt@linux.ibm.com>
+To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ding Xiang <dingxiang@cmss.chinamobile.com>
-Subject: linux-next: Fixes tag needs some work in the overlayfs tree
-Message-ID: <20190912000118.1f100f62@canb.auug.org.au>
+        Mike Rapoport <mike.rapoport@gmail.com>,
+        Chester Lin <clin@suse.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm tree
+References: <20190911001459.6ccc76ee@canb.auug.org.au>
+ <20190910142128.GR13294@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/v4Tg2.DtvRlV4lcMmHHChS6";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20190910142128.GR13294@shell.armlinux.org.uk>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-TM-AS-GCONF: 00
+x-cbid: 19091114-4275-0000-0000-000003647F66
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19091114-4276-0000-0000-00003876D745
+Message-Id: <20190911142106.GA6429@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-11_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1906280000 definitions=main-1909110133
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/v4Tg2.DtvRlV4lcMmHHChS6
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Sep 10, 2019 at 03:21:28PM +0100, Russell King - ARM Linux admin wrote:
+> This is correctly signed off, but Mike didn't send the patch correctly.
+> It missed a From: line for the proper author, so the patch was committed
+> as if Mike had authored it, which he didn't.
 
-Hi all,
+Sorry about that, haven't used the patch system for couple of years now.
+Would you like me to resubmit the patch?
+ 
+> On Wed, Sep 11, 2019 at 12:14:59AM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Commit
+> > 
+> >   2505b9ba9c37 ("ARM: 8904/1: skip nomap memblocks while finding the lowmem/highmem boundary")
+> > 
+> > is missing a Signed-off-by from its author.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> 
+> 
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+> According to speedtest.net: 11.9Mbps down 500kbps up
 
-In commit
+-- 
+Sincerely yours,
+Mike.
 
-  f31e81889715 ("ovl: Fix dereferencing possible ERR_PTR()")
-
-Fixes tag
-
-  Fixes: 9b6faee0747 ("ovl: check ERR_PTR() return value from ovl_encode_fh=
-()")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/v4Tg2.DtvRlV4lcMmHHChS6
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl14/i4ACgkQAVBC80lX
-0Gw2aAgAnGgInmxdP9Nvb94U9XadS7+gWfTag4J8hJ8iTHijasZ+x0zzxmyB4s4g
-r7xP13iYgcdVfGKOGrh4zhiBf6TOJyKnj8Nb67oQSFvXAr+JYe6ZbLsD7BM9B2XV
-mUe8os1+fo97qN92xP8sAWTbpUIzr+tZaDPuwJa6j58AJpxwOYqN0et/0knX2XGt
-yTvGEJPHso1+a7AL0SP2bxaXixUtShuvB80P8NTbEVP0l5Y/gC0/Q+DgOZiP8oAT
-mJ2SDdkb3Rgj0Ft2Bnst4fNHp9zOO2S0J3QDCee97Q8/+VF41jyKUxtTqR8is+e/
-z5dfGImXz1eIodvHmmG5hayInaSrPQ==
-=cDDB
------END PGP SIGNATURE-----
-
---Sig_/v4Tg2.DtvRlV4lcMmHHChS6--

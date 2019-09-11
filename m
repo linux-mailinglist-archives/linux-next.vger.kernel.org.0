@@ -2,90 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 24989AF867
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 11:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D337AAFAA7
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 12:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727167AbfIKJCa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Sep 2019 05:02:30 -0400
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:33399 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbfIKJCa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Sep 2019 05:02:30 -0400
-Received: from pty.hi.pengutronix.de ([2001:67c:670:100:1d::c5])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1i7yW7-0005Rk-R0; Wed, 11 Sep 2019 11:02:23 +0200
-Received: from ore by pty.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ore@pengutronix.de>)
-        id 1i7yVz-0006vQ-1a; Wed, 11 Sep 2019 11:02:15 +0200
-Date:   Wed, 11 Sep 2019 11:02:15 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        The j1939 authors <linux-can@vger.kernel.org>,
-        Bastian Stender <bst@pengutronix.de>,
-        Elenita Hinds <ecathinds@gmail.com>,
-        Kurt Van Dijck <dev.kurt@vandijck-laurijssen.be>,
-        kbuild test robot <lkp@intel.com>,
-        Maxime Jayat <maxime.jayat@mobile-devices.fr>,
-        Robin van der Gracht <robin@protonic.nl>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: Re: linux-next: Signed-off-by missing for commit in the net-next tree
-Message-ID: <20190911090215.n776azhwewfbr6xf@pengutronix.de>
-References: <20190911004103.3480fa40@canb.auug.org.au>
+        id S1727093AbfIKKpL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Sep 2019 06:45:11 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48451 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726696AbfIKKpK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Sep 2019 06:45:10 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Sz7Q5CS4z9s00;
+        Wed, 11 Sep 2019 20:45:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1568198708;
+        bh=RyBKerNtXPgq5u7GMyo0dMA2s5vk3hbVdoM1RJRMdCA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uxudcLaR4Ox5BPqTIMPatcPXldn6Iw62x5/u6om9YS/pHGnp8tYz5wwPvIySyE/9z
+         5fK/A/RA5X5a0Fk49euCNKsWhz+47fpcEQ9dgu7mf8sLfiKBJaneTgdKqq5DR4+Wz2
+         ieJZ/Sh5/JOw07rtkWA9ml+35hENwK+l6jH3DFcxJLp7OBLuJvR5Jb0pyrm8Toknqz
+         tBtOtcPnglMjpMS6GOTHGmciTH7HSCcHhHwwbq9G2ykpzSvsIWUL9RlJp7OCF1gWrf
+         y8A8xD8qF4BIyPn6bOWwS0IGHcUcyFABkz0HIRvVRdMJoOewuqeXBdHr9tIAPiYrdE
+         4h+j9yoRTkiBA==
+Date:   Wed, 11 Sep 2019 20:45:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the configfs tree
+Message-ID: <20190911204500.69590946@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190911004103.3480fa40@canb.auug.org.au>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-IRC:  #ptxdist @freenode
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-X-Uptime: 10:56:05 up 116 days, 15:14, 66 users,  load average: 0.12, 0.07,
- 0.01
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c5
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+Content-Type: multipart/signed; boundary="Sig_/3yh3ctdjPZwiClDF7jWp+DL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/3yh3ctdjPZwiClDF7jWp+DL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11, 2019 at 12:41:03AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   9d71dd0c7009 ("can: add support of SAE J1939 protocol")
-> 
-> is missing a Signed-off-by from its author.
-> 
-> [Not sure if I should complain about this one ...]
+Hi all,
 
-Here is the original pull request message for this patch series:
-"The final patch is the collective effort of many entities (The j1939
-authors: Oliver Hartkopp, Bastian Stender, Elenita Hinds, kbuild test
-robot, Kurt Van Dijck, Maxime Jayat, Robin van der Gracht, Oleksij
-Rempel, Marc Kleine-Budde). It adds support of SAE J1939 protocol to the
-CAN networking stack."
-https://www.mail-archive.com/netdev@vger.kernel.org/msg313476.html
+Commit
 
-Since the patch can be hardly assigned to one author we deiced to use
-address of CAN mailing list.
+  c84493bbf7ae ("configfs: fix a deadlock in configfs_symlink()")
 
-Best regards,
-Oleksij Rempel
--- 
-Pengutronix e.K.                           |                             |
-Industrial Linux Solutions                 | http://www.pengutronix.de/  |
-Peiner Str. 6-8, 31137 Hildesheim, Germany | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/3yh3ctdjPZwiClDF7jWp+DL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl140CwACgkQAVBC80lX
+0GyX3Qf/R/95RMpdOFml0JH5YxhmHwEf5ZczEMBawVGQv2cdpN3t2XH3aNiJ1t7n
+e2/NuMUYtZqz/pzdFlRHnxAMGLzv0GwsAjnU6HfejoYbg3nxtPfRhdPHfwB/cFNX
+PxNccz8Q5zp3fmJOMRT+15b8Muh5enWnKZwAfgNH3TRdSnvZSwfStKRYkKkanR78
+PbQJL3oQ+KENFdpOUZxzdfjbqdyD9DpReTYs1IkKTRmC5Q7Pjo/yTKjpuuqrZoXL
+OQUUhs2AQagN5cQPLJW0TmK1W64hhCEyX6T3hmqjR1AGkyRvDe7PuZmMDSwnAGP5
+5iKLUxI9qMEOCutRUdPz+CebesGaIg==
+=kjKB
+-----END PGP SIGNATURE-----
+
+--Sig_/3yh3ctdjPZwiClDF7jWp+DL--

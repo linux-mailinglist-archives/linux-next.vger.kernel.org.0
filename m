@@ -2,81 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DDDFAF36B
-	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 01:39:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90DEAAF56C
+	for <lists+linux-next@lfdr.de>; Wed, 11 Sep 2019 07:24:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbfIJXjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Sep 2019 19:39:52 -0400
-Received: from hqemgate14.nvidia.com ([216.228.121.143]:4934 "EHLO
-        hqemgate14.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725957AbfIJXjw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Sep 2019 19:39:52 -0400
-Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqemgate14.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5d7834480000>; Tue, 10 Sep 2019 16:39:53 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate102.nvidia.com (PGP Universal service);
-  Tue, 10 Sep 2019 16:39:51 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate102.nvidia.com on Tue, 10 Sep 2019 16:39:51 -0700
-Received: from ngvpn01-172-168.dyn.scz.us.nvidia.com (172.20.13.39) by
- HQMAIL107.nvidia.com (172.20.187.13) with Microsoft SMTP Server (TLS) id
- 15.0.1473.3; Tue, 10 Sep 2019 23:39:49 +0000
-Subject: Re: [PATCH] gpio: fix build failure: gpiochip_[un]lock*()
- static/non-static
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     YueHaibing <yuehaibing@huawei.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20190907010534.23713-1-jhubbard@nvidia.com>
- <CACRpkdbmw-EOm5Os=BjoX1G+ZDxRGnJ3Zd3BWtDksnQ46aJ_JA@mail.gmail.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <c917f7f2-2f3b-f01e-8ea2-858eaf5f3e2d@nvidia.com>
-Date:   Wed, 11 Sep 2019 00:39:48 +0100
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:60.0)
- Gecko/20100101 Thunderbird/60.9.0
+        id S1725747AbfIKFYN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Sep 2019 01:24:13 -0400
+Received: from mga17.intel.com ([192.55.52.151]:50332 "EHLO mga17.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725379AbfIKFYM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Sep 2019 01:24:12 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Sep 2019 22:24:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.64,492,1559545200"; 
+   d="scan'208";a="178908590"
+Received: from mjtillin-mobl1.ger.corp.intel.com ([10.252.1.17])
+  by orsmga008.jf.intel.com with ESMTP; 10 Sep 2019 22:24:10 -0700
+Message-ID: <7783b8532d544ee38517b8c6a20dea97c3589618.camel@intel.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the net-next
+ tree
+From:   Luciano Coelho <luciano.coelho@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alex Malamud <alex.malamud@intel.com>
+Date:   Wed, 11 Sep 2019 08:24:09 +0300
+In-Reply-To: <20190911004229.74d2763a@canb.auug.org.au>
+References: <20190911004229.74d2763a@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.30.5-1.1 
 MIME-Version: 1.0
-In-Reply-To: <CACRpkdbmw-EOm5Os=BjoX1G+ZDxRGnJ3Zd3BWtDksnQ46aJ_JA@mail.gmail.com>
-X-Originating-IP: [172.20.13.39]
-X-ClientProxiedBy: HQMAIL107.nvidia.com (172.20.187.13) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1568158793; bh=Qy6VepiFpAZlMrNzDzcHtBi9QfYWbrDNF8q7ZPJDXvk=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=U+YTbJMsGjo52Kl1kpYBHxmh75vkb8qhsWJ16f8tDrh832uxffBKPi5Ntka/pAjmZ
-         Kpd6l13CODtxkA9wRTe3PTbSYTNQ2uK+T/pIuMk5GTthp7EkDPiTLSTXoCH89kKHSd
-         rb2xT0l7h81/+Rw03UKc4PfvzuFcqs5qveahnT68VRsrgUxc36pkyvcFN3k6/hNN4s
-         7muMJmhYSDv5Tx9g/g8o/s9/flBlMuxqjGmCjwKXr4UkpI15JiYng1eUCE74G9B7ro
-         MGer5IQH993ovdUiRKtqVc8Y6+9MFa782qoTsdp0Z98c3sDap4OOjfdco9ei+o1CWf
-         0+tXPJ7JteGDQ==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/8/19 12:16 AM, Linus Walleij wrote:
-> On Sat, Sep 7, 2019 at 2:05 AM John Hubbard <jhubbard@nvidia.com> wrote:
+On Wed, 2019-09-11 at 00:42 +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
->> While building with !CONFIG_GPIOLIB, I experienced a build failure,
->> because driver.h in that configuration supplies both a static and
->> a non-static version of these routines:
+> Commit
 > 
-> I think this is fixed in my latest version of the "devel" branch?
+>   aa43ae121675 ("iwlwifi: LTR updates")
 > 
+> is missing a Signed-off-by from its committer.
 
-OK, sounds good to me. Sorry for not spotting that a fix is in
-the pipeline. :)
+Oops, that was my fault.  What can we do about it? Is it enough if I
+give my s-o-b publicly here?
+
+I hereby sign off this change:
+
+Signed-off-by: Luca Coelho <luciano.coelho@intel.com>
 
 
-thanks,
--- 
-John Hubbard
-NVIDIA
+--
+Cheers,
+Luca.
+

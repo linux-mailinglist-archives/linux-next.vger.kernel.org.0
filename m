@@ -2,67 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF752B0B56
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 11:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47606B0E5C
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 13:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730175AbfILJ0a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Sep 2019 05:26:30 -0400
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:40211 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730558AbfILJ03 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Sep 2019 05:26:29 -0400
-Received: by mail-lf1-f65.google.com with SMTP id d17so883597lfa.7
-        for <linux-next@vger.kernel.org>; Thu, 12 Sep 2019 02:26:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Nf9tEQrY91aUt4IWPBnEd1O7PNd6a6XOY7RZBD/1LbQ=;
-        b=k5XF2mgKP8GYjwNfK/5U5szRWBPjZNDLYgASzMw5o3uofn/U8S0NJenUp6wFl4McNB
-         jLfpivXXX3rnuN5W9xZ9jLSzyogf5fWgrKHLJJmx+6Vgw3id0iknV+lD0Zd3psjrJa4N
-         T88g2SjCbXohaqrcwHB+7GaIVWPp68a5AYDx98Ey9h77jU2b4idFGKwt4lqRdc15/dLz
-         O410hzzzlDk/cGueXK+SZIr4FcKz1dQXCX1TL44uEM3V8UKif4MRzmGE/+v788Swu3Ly
-         cb86JnWISFvqt628n9DGDYkr3N9uLnqNqjLGyDen10U4Gnx4s7z1D7JwVvZxIIb2NsBL
-         DXkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Nf9tEQrY91aUt4IWPBnEd1O7PNd6a6XOY7RZBD/1LbQ=;
-        b=l6lWP2tlUoRLM59OAzVVOIDXxRtrbq4Rla2O+wiQ3Ninr/XTLl/cwnB/QafNFIXKm2
-         tXNjth3sArwyMh72l9lAVq80Uz5b36pfzdrv9LXaZIYf8DbD7PNjD7oBcuzw8H4XMwPp
-         nzeZsbEuG9dz+Qwg0GDQ8SZh+Q9t6QUAlGwNEJTB/KfgQ+BSKajNsjglGKACoaC+aT0c
-         CBEjOwhCo+480iH9+2vZggPN4DkYky8hwVFaDwtB3QafksmQV53kVjr77BmHTy2rEbkA
-         x2eGMi6mQoj/5m3VgO+U3sUGQ+PZBu390SOuLBeC7eqWJAh9+OjD6D0NZqIx5tC/NTfF
-         B0uA==
-X-Gm-Message-State: APjAAAWRrVTPueoW96M77GJ3kaohH5UiS2wlYeqO/Hssx9gQjt8wmvRp
-        vGvfItpef3VDrvd5h6mtJ3fq4ojBQvgdbvSYK/mYFWqLniYsNw==
-X-Google-Smtp-Source: APXvYqwFFq2fXxLxD1qvNzknrji54/UB+pi5FNhxEBi7CEgsrvRh/0Tsh9xZnMTvI1zRZ6w+mhNzwkXzCRxF7bX0h9U=
-X-Received: by 2002:a19:117:: with SMTP id 23mr27456270lfb.115.1568280386680;
- Thu, 12 Sep 2019 02:26:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190911204853.7e6aad26@canb.auug.org.au>
-In-Reply-To: <20190911204853.7e6aad26@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 12 Sep 2019 10:26:15 +0100
-Message-ID: <CACRpkdYBtX09nJhwLHSF5-MMpTO6gc3i_QtanWrS4DBgppvY2g@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the pinctrl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1731518AbfILL4q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Sep 2019 07:56:46 -0400
+Received: from ozlabs.org ([203.11.71.1]:49461 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731283AbfILL4q (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Sep 2019 07:56:46 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46TcgX5mw6z9s00;
+        Thu, 12 Sep 2019 21:56:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1568289404;
+        bh=/N+GHb6Q4DSPJrXliJOICdcpLmYvTsamZ3rmrW6spnM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rbhXD03TQsGooid4wLhTUDWO8BmwB61GgK6QV47Gleif8ZA1Ksd/zqo744wIPwn7T
+         qVfbJe9T7sttEx2975c6u00CGZzr2bCz+WNeBNvheQwQ7bwv0pM7jXkm3GsSbn2Sry
+         y9Ip/LV0UPI0Youx2TgIZpB6xC4pfOC1V8x0m5hAlS7usCFLaLlq9NrQgAKp8PXXIp
+         TnlJ9daSM/2Ueetj7N1dBm3cxPrT2pRU5epPXJaB1uwphRckKU7K0nOuIihxu53JS7
+         l2zBBaYD1qDT1k7zfJgGdm4p2+hXRkQGn4s5ZvgQgAhCIr7BZbFcGQn85pfn01aXlZ
+         q1yHvuZ35JU6A==
+Date:   Thu, 12 Sep 2019 21:55:58 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: linux-next: manual merge of the arm64 tree with the dma-mapping
+ tree
+Message-ID: <20190912215558.473206de@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Ga3xg0O0/4COl5KooqPVUmq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Sep 11, 2019 at 11:48 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/Ga3xg0O0/4COl5KooqPVUmq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
->   cc3abdb73df4 ("pinctrl: iproc: Add 'get_direction' support")
->
-> is missing a Signed-off-by from its committer.
+Hi all,
 
-Thanks, fixed it up!
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-Yours,
-Linus Walleij
+  arch/arm64/include/asm/dma-mapping.h
+
+between commit:
+
+  5489c8e0cf03 ("arm64: use asm-generic/dma-mapping.h")
+
+from the dma-mapping tree and commit:
+
+  b907b80d7ae7 ("arm64: remove pointless __KERNEL__ guards")
+
+from the arm64 tree.
+
+I fixed it up (I just removed the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ga3xg0O0/4COl5KooqPVUmq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl16Mk4ACgkQAVBC80lX
+0Gx5OQf5AWmAI7PcuY5qrjVrmxOGfiAYSFFQviVgTYqxbX8Yuu63JNeEmjP4YVwy
+pdCT2f531PKRdnfR9J2F0jselppcHQf4dhMaMGvd+MKa4eqdsDpDLVrlAheAm+d/
+1rxjDHfWtr2R2zryvkiaqezpFMBuwf5VmQG2vRFsFB1f41VxPOllIHX9/A6qEqVA
++Ql7V5EQNnATNlW8+yY1txHRWDTseylgHJAxy+Uq2cYM9r9H1md3/eiRgGphuECO
+YbezVvHJs+9+hpME3ICs5gx8Pfo8To0a4n5/GnXiNWI1iMOHXOC7USr9XJ81sdaP
+ODFwSLJuIipCg2tsTaW89pTH6WhIww==
+=zu/j
+-----END PGP SIGNATURE-----
+
+--Sig_/Ga3xg0O0/4COl5KooqPVUmq--

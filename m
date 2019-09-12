@@ -2,105 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C0D60B12CB
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 18:29:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B1CB14D6
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 21:40:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733218AbfILQ3r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Sep 2019 12:29:47 -0400
-Received: from mga01.intel.com ([192.55.52.88]:13461 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733217AbfILQ3r (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Sep 2019 12:29:47 -0400
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 12 Sep 2019 09:29:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.64,489,1559545200"; 
-   d="asc'?scan'208";a="386093417"
-Received: from jtkirshe-desk1.jf.intel.com ([134.134.177.96])
-  by fmsmga006.fm.intel.com with ESMTP; 12 Sep 2019 09:29:46 -0700
-Message-ID: <869eb0382ed7c639332a5db5e29eec143c37a809.camel@intel.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-From:   Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Reply-To: jeffrey.t.kirsher@intel.com
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ilya Maximets <i.maximets@samsung.com>
-Date:   Thu, 12 Sep 2019 09:29:46 -0700
-In-Reply-To: <20190913022535.65ac3420@canb.auug.org.au>
-References: <20190913022535.65ac3420@canb.auug.org.au>
-Organization: Intel
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-+R+RqxlQSR8iroAeA21A"
-User-Agent: Evolution 3.32.4 (3.32.4-1.fc30) 
+        id S1726139AbfILTk1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Sep 2019 15:40:27 -0400
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:35262 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726121AbfILTk1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Sep 2019 15:40:27 -0400
+Received: by mail-wr1-f44.google.com with SMTP id g7so29785497wrx.2
+        for <linux-next@vger.kernel.org>; Thu, 12 Sep 2019 12:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=1k6x2F2wI4IK87XZLsiOZoRWFJyXnAiIyjhxW4JycPc=;
+        b=FL+dRFFygGLrG3bHHnJdfExwYoj+u/kclt1xjTHRJKGIioJCZGyTyL6fWBHWILYG/q
+         YOiAtSvedLszplJQvM5qAe+E1CWGchWqFm4xmOlROEAYkCQ5xgX+vTtyXvb1tUMolqX4
+         TmjKBBWMHRu/NbCWGhhMNmb1WGaMrYxUwEy+gHV3izI06PFvbW4sxnggC1eEKIG/E3cx
+         H5Ww2RWnHCnXizuMX46PpKK+qEJClIkBC+0fviy4NGgm32G6iDSsqpLoo+qxvvzYASi3
+         TE7lUcSi9orGaZWRsydTG0oGtSkMYjIgTchcanPpe40wggcucmuOhBLlBWqWOxRFe/Qn
+         0Xow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=1k6x2F2wI4IK87XZLsiOZoRWFJyXnAiIyjhxW4JycPc=;
+        b=A6M1r8PLe/SAo/LjgUa3DPuOpcHNsF4EMZsuU474U5qBXy9NEcofokgMW3aq8w0kdR
+         R0XVFHyTdZp0Sou3ZGWEDs4WxANHrqHDfyFeXiBVOMiTBvYLalYQ6iFifETH7jgnRlXd
+         RePDZGYuCvF2KCLZ6rtYMnPTTSbmeZYFMBRmMTASm9e+l1qLj0QfpvzmeXh7upSZDiem
+         9Wto5hM/YYPJ8tLOPslBRl1XsuOnKYRukRG5/mkVc+N9D+YxfVAm+bIncXjTa7E+X9UP
+         84ayJaE+cHzSGQS7mvzccntGcRhTn8s3VKrc/jH7dR0F4w+HvB9wm+EF8pqEfz9FkhVP
+         wYYQ==
+X-Gm-Message-State: APjAAAXqcwlSUEMtRmqlKbF2T5W5v0+UPK1hjT3BV7mD5PmPt9PYHfO0
+        A3nw0LivX1emdOJicQIJe7tSHYCsBPM=
+X-Google-Smtp-Source: APXvYqxcXv8o/RTMIQj98geW53Rg8UOUpIVMAmBmMZ7p+ISV2w2xJ0fY63zVzdk7r7Tb90KKjK/vRg==
+X-Received: by 2002:a5d:40c4:: with SMTP id b4mr9027481wrq.214.1568317223795;
+        Thu, 12 Sep 2019 12:40:23 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id v6sm249923wma.24.2019.09.12.12.40.22
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 12 Sep 2019 12:40:23 -0700 (PDT)
+Message-ID: <5d7a9f27.1c69fb81.d28f6.196a@mx.google.com>
+Date:   Thu, 12 Sep 2019 12:40:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-rc8-192-g7931faaade95
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 318 boots: 11 failed,
+ 295 passed with 10 offline, 2 untried/unknown (v5.3-rc8-192-g7931faaade95)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 318 boots: 11 failed, 295 passed with 10 offline, =
+2 untried/unknown (v5.3-rc8-192-g7931faaade95)
 
---=-+R+RqxlQSR8iroAeA21A
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-rc8-192-g7931faaade95/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-rc8-192-g7931faaade95/
 
-On Fri, 2019-09-13 at 02:25 +1000, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the net-next tree got a conflict in:
->=20
->   drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
->=20
-> between commit:
->=20
->   5c129241e2de ("ixgbe: add support for AF_XDP need_wakeup feature")
->=20
-> from the net tree and commit:
->=20
->   bf280c0387eb ("ixgbe: fix double clean of Tx descriptors with xdp")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your
-> tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any
-> particularly
-> complex conflicts.
->=20
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-rc8-192-g7931faaade95
+Git Commit: 7931faaade95204384f3b02b2a39dcc431b278e7
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 90 unique boards, 28 SoC families, 26 builds out of 222
 
-Acked-by: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+Boot Failures Detected:
 
-On how you fixed up the conflict.
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxm-khadas-vim2: 1 failed lab
 
---=-+R+RqxlQSR8iroAeA21A
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-Content-Transfer-Encoding: 7bit
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxm-khadas-vim2: 1 failed lab
 
------BEGIN PGP SIGNATURE-----
+    defconfig+kselftest:
+        gcc-8:
+            qcom-qdf2400: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
+            rk3399-puma-haikou: 1 failed lab
 
-iQIzBAABCAAdFiEEiTyZWz+nnTrOJ1LZ5W/vlVpL7c4FAl16cnoACgkQ5W/vlVpL
-7c5x4A//XxfN9S4i0lwmc/GIFAWfPZ6SzCyKX5sf5/XIPMt2eBlIljiN6fKCf1m4
-T9dX+7NNUZT1OPIYFrGnB1Ahs1ARQlvVDSDybCk0oYGdIsglGGiDA2YhXfR/LRIT
-LJhdyo38VccRSeGjxixrzrKw5ut2RJ5NcRL5FGzuZ+i2BNVRIxjh2gW+cmGqT1gM
-nu3ph7Skn85072PW4vsgKs/SDPbZ9ouHvafRkq6TnDrmBMLKpMplSw2ov/HlYGvo
-OgtSg7pEcWeVjS2VXX18fDkoVopzS18fF6sR7i13MBi4A8o68y2d5yBTGuo9rgAd
-FEaZyN7So/Y39KmjMs1U3XAUDEIJ4of0BdpdxzC842SmUDV0jnA97TC8woZPltkd
-4hYOUTIbFz9/PEezna3aGCP8M5ZEdEtEtNGCILdR45A9jAONdQQDjPgRoXJz/UpU
-+sz5Hz45rMU4oN8qG2CHhu+CU+q1Y9gO7YQoEICaJs1IX4XUBJZs3gtMVXyS0IeY
-ybG/33YUVrYyJbvUMmPe9y3oqs2WGhwaWrJQrqe9tpy59GfMq0eKhQQN7LGVEJKb
-h1JLrcXn2Euxtd1hwqLlwxIYEf18dITaRU+MgJ6zz4Voc60XbZivEzS4HA1Ekjqy
-gApl3VivUUSckF45skrChKJNgiCeD+2j9Q77VAu1+UtsHecJGE0=
-=Z0mz
------END PGP SIGNATURE-----
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
---=-+R+RqxlQSR8iroAeA21A--
+Offline Platforms:
 
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

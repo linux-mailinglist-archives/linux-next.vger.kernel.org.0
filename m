@@ -2,51 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4882B12A4
-	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 18:19:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA758B12BA
+	for <lists+linux-next@lfdr.de>; Thu, 12 Sep 2019 18:25:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732250AbfILQTm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Sep 2019 12:19:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50069 "EHLO ozlabs.org"
+        id S1729940AbfILQZl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Sep 2019 12:25:41 -0400
+Received: from ozlabs.org ([203.11.71.1]:40705 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725972AbfILQTl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Sep 2019 12:19:41 -0400
+        id S1728558AbfILQZk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Sep 2019 12:25:40 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46TkVs6hnCz9s4Y;
-        Fri, 13 Sep 2019 02:19:32 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46Tkdp19g3z9s4Y;
+        Fri, 13 Sep 2019 02:25:33 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1568305178;
-        bh=/2FPKAkeV/GqFBXmtJHyD6OTSwjC5DdIye1DxxJG+bU=;
+        s=201702; t=1568305537;
+        bh=x7EVpTBrd+PPAAF9JFRVmnGBnTTrRhrlDywgHHXaI34=;
         h=Date:From:To:Cc:Subject:From;
-        b=dlAyYQmu6QIeoRsXsY2UiWSCjojsWozTt+7JZk9Qz5peGumGPklYw5WM8Ecujlegj
-         GHkdCoaNsKHR6bbWJlh/cN4OIR0wVNkfr+aMCkd8nlZlwASLViCy8Ub+NlmvgddqpG
-         JUs1qETiufPI9b30kMF/bbDy0z7dQBCHp14glZG6BsczknnOjOUkjYlRszMQRivjKC
-         5WvKv6Zi0Sr4yxB6I8MhYZTo+QfmvPMMFnR3c/sUyXX/WbANWfULBArjWvcW7q9aMC
-         DAUaW7WxcMe20QjjeOkHkVy/NRBqN+RRo0IM/JKxmvNv3J7Ffl7T2OCIyWBymNa4u6
-         P2qg5sM0mI4oA==
-Date:   Fri, 13 Sep 2019 02:19:34 +1000
+        b=PbGH0BY0NAMFxGPupNcDEm5tbm3pMVYFzYC1/hEP5mBqkaN0qt6v/P1hR5g4w1ZpO
+         BN/xP5R8h9YpnoGNwumuMSwE9EUS2FzQfJCS+CDefvcUnIZDsoC6pAHOHgfpOJb6gP
+         QKwmXuS5BDs4MksGudG8ns/z3/z45KlkI/m5fStSUjLrjOEM7SIkoeE08EWYnVt3HM
+         9GWL1A0fiwhwNLVCIiUaStzBx238jNinmmNwZEa4ZcMqkUwk0dipP9RdiZuatY3AtT
+         Mr9LqZLFmsD2dZwW/x+LPP/Pm68yyzDtObIeY13HnqqLAtRDY+P09uLQXGYax24+Gc
+         ycDPgM7UgVQqg==
+Date:   Fri, 13 Sep 2019 02:25:35 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@dell.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Alex Lu <alex_lu@realsil.com.cn>
+        Ilya Maximets <i.maximets@samsung.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
 Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20190913021934.42fc0fea@canb.auug.org.au>
+Message-ID: <20190913022535.65ac3420@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DHejPnzil1gYOiEe_UgS/SN";
+Content-Type: multipart/signed; boundary="Sig_/sbg=Xp7+qeyvMgODT6LsEMi";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DHejPnzil1gYOiEe_UgS/SN
+--Sig_/sbg=Xp7+qeyvMgODT6LsEMi
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -54,16 +53,15 @@ Hi all,
 
 Today's linux-next merge of the net-next tree got a conflict in:
 
-  drivers/bluetooth/btusb.c
+  drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
 
 between commit:
 
-  1ffdb51f28e8 ("Revert "Bluetooth: btusb: driver to enable the usb-wakeup =
-feature"")
+  5c129241e2de ("ixgbe: add support for AF_XDP need_wakeup feature")
 
 from the net tree and commit:
 
-  9e45524a0111 ("Bluetooth: btusb: Fix suspend issue for Realtek devices")
+  bf280c0387eb ("ixgbe: fix double clean of Tx descriptors with xdp")
 
 from the net-next tree.
 
@@ -78,57 +76,47 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/bluetooth/btusb.c
-index ba4149054304,ed455de598ea..000000000000
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@@ -1173,7 -1201,18 +1204,14 @@@ static int btusb_open(struct hci_dev *h
-  	}
+diff --cc drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+index a3b6d8c89127,ad802a8909e0..000000000000
+--- a/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
++++ b/drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
+@@@ -682,10 -697,19 +691,17 @@@ bool ixgbe_clean_xdp_tx_irq(struct ixgb
+  	if (xsk_frames)
+  		xsk_umem_complete_tx(umem, xsk_frames);
  =20
-  	data->intf->needs_remote_wakeup =3D 1;
- -	/* device specific wakeup source enabled and required for USB
- -	 * remote wakeup while host is suspended
- -	 */
- -	device_wakeup_enable(&data->udev->dev);
- =20
-+ 	/* Disable device remote wakeup when host is suspended
-+ 	 * For Realtek chips, global suspend without
-+ 	 * SET_FEATURE (DEVICE_REMOTE_WAKEUP) can save more power in device.
-+ 	 */
-+ 	if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags))
-+ 		device_wakeup_disable(&data->udev->dev);
++ 	if (xsk_umem_uses_need_wakeup(tx_ring->xsk_umem)) {
++ 		if (tx_ring->next_to_clean =3D=3D tx_ring->next_to_use)
++ 			xsk_set_tx_need_wakeup(tx_ring->xsk_umem);
++ 		else
++ 			xsk_clear_tx_need_wakeup(tx_ring->xsk_umem);
++ 	}
 +=20
-  	if (test_and_set_bit(BTUSB_INTR_RUNNING, &data->flags))
-  		goto done;
+ -	xmit_done =3D ixgbe_xmit_zc(tx_ring, q_vector->tx.work_limit);
+ -
+ -	return budget > 0 && xmit_done;
+ +	return ixgbe_xmit_zc(tx_ring, q_vector->tx.work_limit);
+  }
  =20
-@@@ -1237,6 -1276,12 +1275,11 @@@ static int btusb_close(struct hci_dev *
-  		goto failed;
- =20
-  	data->intf->needs_remote_wakeup =3D 0;
-+=20
-+ 	/* Enable remote wake up for auto-suspend */
-+ 	if (test_bit(BTUSB_WAKEUP_DISABLE, &data->flags))
-+ 		data->intf->needs_remote_wakeup =3D 1;
-+=20
- -	device_wakeup_disable(&data->udev->dev);
-  	usb_autopm_put_interface(data->intf);
- =20
-  failed:
+- int ixgbe_xsk_async_xmit(struct net_device *dev, u32 qid)
++ int ixgbe_xsk_wakeup(struct net_device *dev, u32 qid, u32 flags)
+  {
+  	struct ixgbe_adapter *adapter =3D netdev_priv(dev);
+  	struct ixgbe_ring *ring;
 
---Sig_/DHejPnzil1gYOiEe_UgS/SN
+--Sig_/sbg=Xp7+qeyvMgODT6LsEMi
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl16cBYACgkQAVBC80lX
-0Gwr6Qf/bnj3thivjfhtUCKcq2fFSjVC8yiV3r3cvRvfQdp78EXm2gDvhuDFjZn8
-0bdmo4QfuAmiITwGeV8TFGqADbKoyc3hzBJO5VKx71pUKENtpXss6LbBO3KzsnG3
-Xac2cninNVptOlR1HQ3VmRRITnQOKOejWw0omCaLJtqX8juJLw4+RzKRwWz+/1Kl
-vIHHxNZiHDGd7mK/UVP7j7JoekOqyV0hTkyeY6YgQP4Q8llnRxEHPTcTNMbvKgsf
-zUop+uROxGQJzu5zzBCvywIzcMIyCqyH6r5TE4jc3NGmK/dcbiTqHf6ms51Qmy4s
-NE1yNNnAAt9gdYIzbezZJzeQOTm0ug==
-=tcmK
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl16cX8ACgkQAVBC80lX
+0GwBhAf/evG/FHTCIzFZ1rTeK+jbbNeZsXpl5HZ0fj8MyXTbSzkoeA+EI7PjLNcC
+PskWO637GNeb4wCldExYvZRcFBLpaVRoYSkusSh3J54Yzy101/fGMYTDFW6t5WnC
+ywGLlwAaIwHt3qkEYm4nN0vNY0dBdc7EHFTUEKM02g2OfL3jeIClDojMato8zYxK
+OPm3BtA1IFd6WiTVA53mjjV9bmvo9ClZ6m+nOZRdRIkkSTiro1x1AZ/aL5tPOSBp
+zqPc6fHTAHhLknQmxSvlY4btadDH2QGcqOLKVqWsLkQV4k56DWqkgjsQsfo3Q6DX
+3oCNWcOo/gtBvqIkHG91Fw/h5D3QAQ==
+=krD2
 -----END PGP SIGNATURE-----
 
---Sig_/DHejPnzil1gYOiEe_UgS/SN--
+--Sig_/sbg=Xp7+qeyvMgODT6LsEMi--

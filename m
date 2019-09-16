@@ -2,46 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE5AB32E9
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 03:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A69A9B3302
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 03:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729040AbfIPBXA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Sep 2019 21:23:00 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:52790 "EHLO
+        id S1727595AbfIPBhg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Sep 2019 21:37:36 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:49120 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728872AbfIPBXA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Sep 2019 21:23:00 -0400
+        with ESMTP id S1727080AbfIPBhg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Sep 2019 21:37:36 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=+2NX8howexdlblQAhSP9/O3k5EI3/NQZYnxbZcI+KRA=; b=m0mxagbs/RC0Mj3LmrSfAKj/s
-        WXVzv0nmqlqn28vZ3EhfykxBTWX5WjCG4dCF/PlPsHFHEPU6J0hBQB6rdM4vTTr4HYaLV4mPatHfk
-        gPgOTdhOB4I53GmBTeyrVI+E3stKqkBF3yvmRW5J6UiCqgSUzARZobDUhVwnd/2wgrCdA=;
+         bh=BMfk88ico29ySmgOGny1z5/EkCwjKyHZo9oZsys7Pu8=; b=SjixzUGcST2fpzETcSni45n2n
+        eB6G/YEV/CfuWKigy9XdPCSmiqoDYZHmPvkrwPhj2fmCGiEke4kBkw9gYsuHel9qYXEZ2Uhi9K+/R
+        QvmIN6j5PsvY8JJIy1AfLKXYIBe454nIyQY42hRX/AraEjr07eLFZUXamrFvrf7awTCA0=;
 Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i9fjC-00027l-Gh; Mon, 16 Sep 2019 01:22:54 +0000
+        id 1i9fxI-00029H-Vs; Mon, 16 Sep 2019 01:37:29 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 558192741587; Mon, 16 Sep 2019 02:22:53 +0100 (BST)
-Date:   Mon, 16 Sep 2019 02:22:53 +0100
+        id 04F9E2741587; Mon, 16 Sep 2019 02:37:27 +0100 (BST)
+Date:   Mon, 16 Sep 2019 02:37:27 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
-        David Howells <dhowells@redhat.com>,
-        Christian Brauner <christian@brauner.io>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Hridya Valsaraju <hridya@google.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the char-misc tree with the vfs tree
-Message-ID: <20190916012252.GS4352@sirena.co.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux-kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: no release today
+Message-ID: <20190916013727.GT4352@sirena.co.uk>
+References: <20190905160237.2e972a89@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="YvpO9wCO44Ze8QQC"
+        protocol="application/pgp-signature"; boundary="xPLL5cPndR2UZ7Mw"
 Content-Disposition: inline
+In-Reply-To: <20190905160237.2e972a89@canb.auug.org.au>
 X-Cookie: Man and wife make one fool.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
@@ -50,45 +48,32 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---YvpO9wCO44Ze8QQC
+--xPLL5cPndR2UZ7Mw
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, Sep 05, 2019 at 04:02:37PM +1000, Stephen Rothwell wrote:
 
-Today's linux-next merge of the char-misc tree got a conflict in:
+> As I said yesterday, there will be no release today, or any day until
+> September 30.
 
-  drivers/android/binderfs.c
+I'm going to try to provide some builds for this week (16th-20th).
+There may also be a build for the 15th depending on how much rebuilding
+the rest of the trees is needed for the build I've got ongoing.
 
-between commit:
-
-  e7d8840d4b626 ("vfs: Convert binderfs to use the new mount API")
-
-=66rom the vfs tree and commit:
-
-  f00834518ed31 ("binder: add a mount option to show global stats")
-
-=66rom the char-misc tree.
-
-Since it's very late and it seems useful to try to get a -next out with
-the state prior to the merge window opening I've used commit
-ec13c78d7b45 from the previous -next build rather than fix this up
-sorry, I'll come back to it tomorrow.
-
---YvpO9wCO44Ze8QQC
+--xPLL5cPndR2UZ7Mw
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1+4+sACgkQJNaLcl1U
-h9DlKgf/aEhp80KPdPQ3byacESVuhc/yB4CJZpnFNEVataQ8UCrKspNsRvT48dZY
-PyLC/7PFocuteecFxfL3VgrOjaljcBHQl4wQkQCnrsGgx5VRl+kSXdY7I8UcAWNB
-TtZl0AAjUT9rP9bqj8gy6XkjRE/0qE3Q+WxP36QtUuSlqVMZtcm27I3KB8GboWQA
-+E7stmjwCoLuraybxPfhs8PvNAzSft+ggMoCFJ6JcTK151ayAPSRykNbLs3cTgAd
-ot/CzQCRPBMsW+pL3UtARX8HQAyGhYKDjpyKuIINTubINGdgl/n82zSPOl7udohz
-x7UnY0TBcKfwwImzuQTJ/XFfLUL0Lg==
-=6x7Z
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1+51cACgkQJNaLcl1U
+h9CaIQf/X+bWHuxJxTJi47cSPu575HrnQuH0o3HuDF3CxxqBR1QyOZUgSbtsnfjR
+d7NK1G4a901K3i9phvaoOlx/7fch6oUs5HMbmzC2PDfkRzwRRqv39OFBMYtVSM8G
+IV8XIoolLxP9VWY4nt9jOlvRCs8vayFAFMYO2+x9M50zPrd0yqk3Lxfaev0+sUJu
+bGb4qXFyH9G5od03OEd32Wng39qZ+puguum7+pK8LpmBlE782rKAKgHyZ4bafVEc
+Zm1EXDYEUuRd9mNTNJL/6zUUl69bZr/UQSJCtdajQbcI8Rk5yI1B51bq3hULho14
+SqxPNymeWbiMzVxRuxvri5yTNT9eHg==
+=ifm5
 -----END PGP SIGNATURE-----
 
---YvpO9wCO44Ze8QQC--
+--xPLL5cPndR2UZ7Mw--

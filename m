@@ -2,103 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 55700B33AB
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 05:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9F3B3444
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 07:05:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726168AbfIPDLO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Sep 2019 23:11:14 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:37296 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbfIPDLO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Sep 2019 23:11:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=HYG3EtKEz2X0M/ghZinqF0kMTjv/yxJlL5gBTbWxoFM=; b=hVXQ7Dey1pEC3LqnIE+r0xg86
-        Ww1Om1tVJfE2N7ckMlZrPTlVCMPAYjo/2sRKWmOJf6GHE03krLoTz4sm8iIQC9ZysJz3GwczX6EbQ
-        kuThVb8mrCw/oBXj1JCo8zLECjwrM9eK9ORgGtlXdfa4qqeuWHttuiobMAZ75NMrxkqvM=;
-Received: from ypsilon.sirena.org.uk ([2001:470:1f1d:6b5::7])
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1i9hQ0-0002Jg-Hx; Mon, 16 Sep 2019 03:11:12 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 79DD02741587; Mon, 16 Sep 2019 04:11:11 +0100 (BST)
-Date:   Mon, 16 Sep 2019 04:11:11 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Sep 15
-Message-ID: <20190916031111.GW4352@sirena.co.uk>
+        id S1727026AbfIPFF0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Sep 2019 01:05:26 -0400
+Received: from ozlabs.org ([203.11.71.1]:47969 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbfIPFF0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Sep 2019 01:05:26 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46WvM64z0cz9sPq;
+        Mon, 16 Sep 2019 15:05:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1568610323;
+        bh=EQabE8r3HeK1vfzgH3X6IqDqKY3HILHBl4Rvect7M5k=;
+        h=Date:In-Reply-To:References:Subject:To:CC:From:From;
+        b=RmtIBX/52R4Y2VvxMf6ODCE/t4ODm91Zo4Ex4VWcj1grGHaDcrfns84f9YBMqaRLP
+         RmWtzupGaJzZ8jPZZtr/aqJrXN6c5bbKLq1Kb+Xa8gOgEczGfyv6BPiO+/SZOujv9n
+         O6hhXwpyEtimyF4vxBrs4pMJ2q08ldNOZHjs7bLiI6vjPW9Stcc32ubyA15Rk+jQSl
+         Zs0ILdExqUArE90mohzUseXO7nkEjGtsAcfYNFJI6WdbbOCtBSknbrTOPNiaTUpyty
+         pZDogQmFpgUeS/PBTqtzpAlQayzDribLFxZXokNMONGgkwYSio07uQlQb0bzRoSgeI
+         Sa5CS9BCDnk4A==
+Date:   Mon, 16 Sep 2019 06:05:14 +0100
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20190916013727.GT4352@sirena.co.uk>
+References: <20190905160237.2e972a89@canb.auug.org.au> <20190916013727.GT4352@sirena.co.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="9+ohdFDUqiMJzwPo"
-Content-Disposition: inline
-X-Cookie: Man and wife make one fool.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: linux-next: no release today
+To:     Mark Brown <broonie@kernel.org>
+CC:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux-kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <D081BA7D-9074-441A-B6C3-A742B41FF111@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On 16 September 2019 2:37:27 am GMT+01:00, Mark Brown <broonie@kernel=2Eorg=
+> wrote:
+>On Thu, Sep 05, 2019 at 04:02:37PM +1000, Stephen Rothwell wrote:
+>
+>> As I said yesterday, there will be no release today, or any day until
+>> September 30=2E
+>
+>I'm going to try to provide some builds for this week (16th-20th)=2E
+>There may also be a build for the 15th depending on how much rebuilding
+>the rest of the trees is needed for the build I've got ongoing=2E
 
---9+ohdFDUqiMJzwPo
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Mark,
 
-Hi all,
+Thanks for this=2E  Don't stress too much, it should ease off a bit when L=
+inus
+starts merging trees=2E
 
-Non-merge commits (relative to Linus' tree): 11835
- 11503 files changed, 777542 insertions(+), 373473 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a defconfig for arm64, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf.
-
-Below is a summary of the state of the merge.
-
-I am currently merging 310 trees (counting Linus' and 77 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---9+ohdFDUqiMJzwPo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1+/U4ACgkQJNaLcl1U
-h9Bxwwf/U/5etl/NXCPcJBjw4ewoxfZ83s6ILDUw9Zf59WVDAQfPKJCkrsZVN+xk
-Vttn7Sc/eYIIqJ5Z3W97owxSF+Sf1+cDft3QR4TQICN2HrGH+jRnWb0H1kMDWRZK
-nKkjAsqxZTnpD1Oe92RoQ2D0oUn5Wfu0wS+NSo1hMVJuqDXykQqlmZObP176iKgG
-3+3TwOqfynJeLUdRQ3ctKRD3KepDzT0ptx3tsWf+0mWtHDw0RhWs+fMLUDgTh87l
-x6bywdpjBX7AS3qOyPbzdZ9qHbXzaf7uC1OJU07Z/Jm+C7xbW41E5fpBSlct8pv2
-9cjFtMag2W8d4Ds5tTk9AY+xwpcAHA==
-=c9il
------END PGP SIGNATURE-----
-
---9+ohdFDUqiMJzwPo--
+Cheers,
+Stephen Rothwell=20
+--=20
+Sent from my Android device with K-9 Mail=2E Please excuse my brevity=2E

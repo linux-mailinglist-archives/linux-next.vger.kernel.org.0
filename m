@@ -2,46 +2,42 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CA9B390B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 13:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36395B393D
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 13:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728134AbfIPLHW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Sep 2019 07:07:22 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:47032 "EHLO
+        id S1730434AbfIPLUu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Sep 2019 07:20:50 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41524 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726118AbfIPLHW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 07:07:22 -0400
+        with ESMTP id S1725971AbfIPLUu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 07:20:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=yYYWQnKUc4Oh1sJbJJ5oc8EXea2EwAdCJHCalwZgMXM=; b=Rx4y7DacawR++bXnaPL8FEPuK
-        lBjyJmNTwLs6sbLrsBISdTJ9ODtS8ubkVtO4LDaIYYUhZhXqVAtP9n3DCZtBZmubX1COSlX7vo/TD
-        QtlZbzTv9sLtxGP0dMN+Gli2BGGFt80t2JC4f5DMuKfbUWfQsAxDgdQaPBq5EcaCLnn+Q=;
+         bh=p1ICrPahcBuNP8vRgKnrWt7iiZAn6aGVp/xbImOxqWo=; b=T6k2Ig3p3uVnKQ0NLJWIXSCsd
+        gl9CBaAi5adWuQD07Ygu2PY65PNGRihRb6dGiB1TOTGlxDxx4p9xGT2Ongsa1HpjTLAleYbNA6EVt
+        QywQdFumjt7krEXduH7C5+0q18kSf4nxK0ZpsuqhI0WOBub6zbqzLqAZfLiFksGyaM2Wk=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1i9oqk-0003yU-At; Mon, 16 Sep 2019 11:07:18 +0000
+        id 1i9p3j-00040E-Eb; Mon, 16 Sep 2019 11:20:43 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 4AE202741A23; Mon, 16 Sep 2019 12:07:17 +0100 (BST)
-Date:   Mon, 16 Sep 2019 12:07:17 +0100
+        id 633112741A23; Mon, 16 Sep 2019 12:20:42 +0100 (BST)
+Date:   Mon, 16 Sep 2019 12:20:42 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux-kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: no release today
-Message-ID: <20190916110717.GY4352@sirena.co.uk>
-References: <20190905160237.2e972a89@canb.auug.org.au>
- <20190916013727.GT4352@sirena.co.uk>
- <D081BA7D-9074-441A-B6C3-A742B41FF111@canb.auug.org.au>
+To:     "Luck, Tony" <tony.luck@intel.com>, Christoph Hellwig <hch@lst.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the ia64 tree with the dma-mapping tree
+Message-ID: <20190916112042.GZ4352@sirena.co.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="DVXvgjZtTc9TWCEb"
+        protocol="application/pgp-signature"; boundary="GXk5ufetu984H6pr"
 Content-Disposition: inline
-In-Reply-To: <D081BA7D-9074-441A-B6C3-A742B41FF111@canb.auug.org.au>
 X-Cookie: Man and wife make one fool.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
@@ -50,43 +46,49 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---DVXvgjZtTc9TWCEb
+--GXk5ufetu984H6pr
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 16, 2019 at 06:05:14AM +0100, Stephen Rothwell wrote:
-> On 16 September 2019 2:37:27 am GMT+01:00, Mark Brown <broonie@kernel.org> wrote:
-> >On Thu, Sep 05, 2019 at 04:02:37PM +1000, Stephen Rothwell wrote:
+Hi all,
 
-> >> As I said yesterday, there will be no release today, or any day until
-> >> September 30.
+Today's linux-next merge of the ia64 tree got a conflict in:
 
-> >I'm going to try to provide some builds for this week (16th-20th).
-> >There may also be a build for the 15th depending on how much rebuilding
-> >the rest of the trees is needed for the build I've got ongoing.
+  arch/ia64/sn/pci/pci_dma.c
 
-> Thanks for this.  Don't stress too much, it should ease off a bit when Linus
-> starts merging trees.
+between commit:
 
-Yeah, I'm expecting it to be fine especially since moving jobs means I
-have a very much more shiny system to do the builds on than I used to.
-It was just the week's worth of conflicts to work through on the first
-build and the late start from environment setup slowing the first one
-down.
+  f9f3232a7d0ab73a3 ("dma-mapping: explicitly wire up ->mmap and ->get_sgta=
+ble")
 
---DVXvgjZtTc9TWCEb
+=66rom the dma-mapping tree and commit:
+
+  cf07cb1ff4ea008ab ("ia64: remove support for the SGI SN2 platform")
+
+=66rom the ia64 tree.
+
+I fixed it up by taking the delete from ia64 and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+
+--GXk5ufetu984H6pr
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1/bOQACgkQJNaLcl1U
-h9BuHQf+PNUkRql8F9cOE7MofvZMc0CliH0bfxdOgeZrlXa37xY/KPGnr0U13jeI
-aJ3WK8K71bfVLjgE6/5Y4o7cWPIc97EF1NzxSbdrFZlt9IfWhx0P7US9rd2KUjOM
-YEaxgLzX+BeDwPuA7sHRORD0Rs8yEzx8FH/ISUIfDTU2xVLfbIfaFgf9sFga+vlO
-GBIX0qCXaZECfWcB+zyeE8BawR0fJIPpuB8VklVc8wuTlL7bhrNnvcfOHhc1GoTI
-ZM/lrjTPFOXMZ7iExMLIlJW2wmRGeXV0HZS/jhgjufkvvLJyQsIwtGZfOQXLa/KQ
-a8dfJF3K1McMXCSMnC6lkPhyIFADnw==
-=IG74
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1/cAkACgkQJNaLcl1U
+h9Dncwf+IJZPs0eB0mMiitTSr1FTYFTPAZyyGrNtHLvR8xUWljF+8gpX25FQwEN5
+fvGY9v1M31kE8za7qMMwXusQ5fEB1y6++173/AIXsKB8VoC/IFun5gG6C5EilPyX
+CsWnHVVIBhOpgHiaHAUdVuTAOfClPnYBNJmrcdBrhD4Gpar+oQgQ0ZfteLSrxTtQ
+yKBO/B7RO1WaTP3cDGnZMs8CWuxQgMaNeV/gJ9nqHfx5qlAcOQjRXdy6rvEwF1pK
+Wug2ZkW6TFr3L4sAFy6rI1VPQS7mk8fq+liotd+IlNzCF0WSJ3EQdpX57dv6tZQn
+ABnNLG7N47gTaqAYXfthyxUB0t9MYw==
+=spHU
 -----END PGP SIGNATURE-----
 
---DVXvgjZtTc9TWCEb--
+--GXk5ufetu984H6pr--

@@ -2,148 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75193B3A3F
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 14:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C8BB3B21
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 15:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727783AbfIPMZG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Sep 2019 08:25:06 -0400
-Received: from mail-wr1-f47.google.com ([209.85.221.47]:43531 "EHLO
-        mail-wr1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732490AbfIPMZG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 08:25:06 -0400
-Received: by mail-wr1-f47.google.com with SMTP id q17so33968822wrx.10
-        for <linux-next@vger.kernel.org>; Mon, 16 Sep 2019 05:25:05 -0700 (PDT)
+        id S1733088AbfIPNRM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Sep 2019 09:17:12 -0400
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:46651 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733068AbfIPNRI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 09:17:08 -0400
+Received: by mail-lf1-f65.google.com with SMTP id t8so27388211lfc.13
+        for <linux-next@vger.kernel.org>; Mon, 16 Sep 2019 06:17:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ZnYqcQqukW7P117BA09p62ESxm8cMhxg1S+b8U1tyuM=;
-        b=RLEIPWf/5jiow8QSoL+y46mc8uVzV/txFCJpArplH0T3oUSWBI60a4rhzLcdF0B3m0
-         WcBh8yWqi+urrI1B+4c017bnGBrRim1UMwQ36fQVy32iLIGaddyi+LiKUGU99r/g/0vp
-         WgPgCqMiBpFpW6W4s+h7l8T2HbHxdRkzSUbNpoEA5zD2/SJCuMOcW8GMLK1YP/cIiIBT
-         JmOIFZQKFouc5NwbpiFwDxIU7Hjxnr5WPDLJTKX33rjq2gDzAwXucYcgHq3mJ7rpUHxU
-         vnhdwXKJ+Jj1tbwMWwxgcKkRy35bpeD6Vd6DNyJjzRwTIcknVE3Al65eRHWUXn781dH+
-         qNWg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WE01PYWdyxr4h6bZhIeuaYXDwfnO68aEYViDjXA5Z/w=;
+        b=Fo3C57H7kYgxpkxIGqG9Z33KQSPOoLI/a/kJBRMpKMzYg+JIHEcbAzDUieM675lUuN
+         fvT2C3YQFnxin6m3vTJl6mp7vc1f4ForS6QvNlJYSjMAB6lQV1N/6ofAIDBdA3as6qz1
+         9uTIPHryJv5STnfKsvNFreF2sAUR6LeugZ9Rb2vCTY1tslyWocN+dX9xWnTIEFGyeBtM
+         2enC9xMNPqtlEKOgJMEoxjqLdgtydotjMw/yaAk5J3pexIvTieuOKYE+1Wp3e5lstU+K
+         9aPChAjmsG59s6R3fkjboG1Q0wVSl0VRNx5XbpdnY/dLnhQIRj+buOsp5STZptZLxMVd
+         zFsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ZnYqcQqukW7P117BA09p62ESxm8cMhxg1S+b8U1tyuM=;
-        b=tLR2We/ZF9wPOZayqS6oRfzlBmtB+vVcBQmyP8RogVbfLdfF93wQjzLprCpNMjJLDg
-         rMGoh84JoMuCzFP88WQ+QCZrWLjksjHmo3bvpNPshqkuMZqIBSx3Bt46P9kedkDTDaeK
-         XsMeLAgvjTyPKJzA7zeujAhCp/lGjBMAeoOvrGenNER/LkxUEXMJ3Ow3ixFdSlGvXj09
-         iNVVbGikvEoNDJDdxhZhyMrWkUPtLNy2zaaPHp9CUp9kvQzFwj+tAYi2noqAkZT8EKKm
-         rjkxmnEM3QBBLFZJmWWorWhOf52FMKat59xWE5gBJp2y4mIIEKVjFJctJfn2RcATgQvt
-         LCog==
-X-Gm-Message-State: APjAAAU5tNc3221SSiKZhZp5+P0xmDoGy+qurl6vRIYygVa3LP5mrkJ8
-        BJsei9Gj3EdWUujHR4gnKImR2Ey4hsg=
-X-Google-Smtp-Source: APXvYqw59m7KCkc/3m9DbVYmCPn2gCfjf16qjaOVuu61NlM0aCmlK+F728aBV1F5cNOPLfcbV1X9VA==
-X-Received: by 2002:adf:f44e:: with SMTP id f14mr11421479wrp.290.1568636704704;
-        Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 33sm47458624wra.41.2019.09.16.05.25.03
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
-Message-ID: <5d7f7f20.1c69fb81.91aff.a927@mx.google.com>
-Date:   Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WE01PYWdyxr4h6bZhIeuaYXDwfnO68aEYViDjXA5Z/w=;
+        b=B3GVkUHhp3+7FMOy1EQlWO8Ju7qEOXBHq49fL/Uta72GaqKz81pXw3+vwsGRyFggIo
+         KtzcPA2pWgNR9/EzHchNFVUXgmHy6i/H+rGk+4pmWlgGmshw/JL0pVXb7/+mTN2AEWTS
+         /bsx41jtEN+tW19dM3dMqJi7aiFDtNi6FdlAFvmASZcUuIuPQ5VOkXlaqdvcqa0afkeK
+         MIguwmjntvlqSCrxmIYKPPxoy069goGUHehDrSt/arhWjCNy21NrxtFcs/FyaaPe191B
+         Nr5hs7OpMWInZIZOvByoNs7kpZoaDposITLnGLQJ9L8Ge1bzrtVV32PZLQACy2ubHiPp
+         1Leg==
+X-Gm-Message-State: APjAAAX1qdtQzRLXGNVwFbiPZOTKOQS5LTlfS5Qyw3eo2Mhw++yT5S3m
+        bE6ei1us8psUF03af6RkVhYrkz7HbY91CAN3h4Z0PQ==
+X-Google-Smtp-Source: APXvYqwWsdK1cBGRz7DTrqNlMqHivjewvyhfcb6uk0n1wBa/xvfX9UCWrPkb+jAASYCu+V8qjPSivpTdxciXQ5GrP/M=
+X-Received: by 2002:ac2:5464:: with SMTP id e4mr1086374lfn.102.1568639825697;
+ Mon, 16 Sep 2019 06:17:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-586-g78e9b0f1c69e
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 327 boots: 11 failed,
- 304 passed with 11 offline, 1 untried/unknown (v5.3-586-g78e9b0f1c69e)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20190916014535.GU4352@sirena.co.uk>
+In-Reply-To: <20190916014535.GU4352@sirena.co.uk>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Mon, 16 Sep 2019 15:16:54 +0200
+Message-ID: <CADYN=9JntrniMnmEMd9igVSovEQjLV9q006cCATLHWrtBhWWHQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the kselftest tree with the tpmdd tree
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        Petr Vorel <pvorel@suse.cz>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 327 boots: 11 failed, 304 passed with 11 offline, =
-1 untried/unknown (v5.3-586-g78e9b0f1c69e)
+On Mon, 16 Sep 2019 at 03:45, Mark Brown <broonie@kernel.org> wrote:
+>
+> Hi all,
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-586-g78e9b0f1c69e/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-586-g78e9b0f1c69e/
+Hi,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-586-g78e9b0f1c69e
-Git Commit: 78e9b0f1c69e1bb067e2f5495bcc9aae3e472034
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 92 unique boards, 28 SoC families, 26 builds out of 222
+>
+> Today's linux-next merge of the kselftest tree got a conflict in:
+>
+>   tools/testing/selftests/tpm2/Makefile
+>
+> between commit:
+>
+>   3fb2179b0f3553a ("selftests/tpm2: Add the missing TEST_FILES assignment")
+>
+> from the tpmdd tree and commit:
+>
+>   d04e26067d13f01 ("selftests: tpm2: install python files")
+>
+> from the kselftest tree.
 
-Boot Failures Detected:
+If I re-read the Documentation/dev-tools/kselftest.rst
+I think the patch from the kselftest tree should be dropped.
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            rk3399-firefly: 1 failed lab
+I saw that I didn't send an email to the tpm maintainers or the tpm
+list when I sent the
+patch, I'm sorry.
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
+Cheers,
+Anders
 
-    defconfig+kselftest:
-        gcc-8:
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
-
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --cc tools/testing/selftests/tpm2/Makefile
+> index bf401f725eef8,1a5db1eb8ed51..0000000000000
+> --- a/tools/testing/selftests/tpm2/Makefile
+> +++ b/tools/testing/selftests/tpm2/Makefile
+> @@@ -2,4 -2,4 +2,5 @@@
+>   include ../lib.mk
+>
+>   TEST_PROGS := test_smoke.sh test_space.sh
+>  +TEST_FILES := tpm2.py tpm2_tests.py
+> + TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py

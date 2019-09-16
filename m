@@ -2,93 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 36395B393D
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 13:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75193B3A3F
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 14:25:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730434AbfIPLUu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Sep 2019 07:20:50 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:41524 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725971AbfIPLUu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 07:20:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
-        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=p1ICrPahcBuNP8vRgKnrWt7iiZAn6aGVp/xbImOxqWo=; b=T6k2Ig3p3uVnKQ0NLJWIXSCsd
-        gl9CBaAi5adWuQD07Ygu2PY65PNGRihRb6dGiB1TOTGlxDxx4p9xGT2Ongsa1HpjTLAleYbNA6EVt
-        QywQdFumjt7krEXduH7C5+0q18kSf4nxK0ZpsuqhI0WOBub6zbqzLqAZfLiFksGyaM2Wk=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1i9p3j-00040E-Eb; Mon, 16 Sep 2019 11:20:43 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 633112741A23; Mon, 16 Sep 2019 12:20:42 +0100 (BST)
-Date:   Mon, 16 Sep 2019 12:20:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Luck, Tony" <tony.luck@intel.com>, Christoph Hellwig <hch@lst.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the ia64 tree with the dma-mapping tree
-Message-ID: <20190916112042.GZ4352@sirena.co.uk>
+        id S1727783AbfIPMZG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Sep 2019 08:25:06 -0400
+Received: from mail-wr1-f47.google.com ([209.85.221.47]:43531 "EHLO
+        mail-wr1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732490AbfIPMZG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 08:25:06 -0400
+Received: by mail-wr1-f47.google.com with SMTP id q17so33968822wrx.10
+        for <linux-next@vger.kernel.org>; Mon, 16 Sep 2019 05:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ZnYqcQqukW7P117BA09p62ESxm8cMhxg1S+b8U1tyuM=;
+        b=RLEIPWf/5jiow8QSoL+y46mc8uVzV/txFCJpArplH0T3oUSWBI60a4rhzLcdF0B3m0
+         WcBh8yWqi+urrI1B+4c017bnGBrRim1UMwQ36fQVy32iLIGaddyi+LiKUGU99r/g/0vp
+         WgPgCqMiBpFpW6W4s+h7l8T2HbHxdRkzSUbNpoEA5zD2/SJCuMOcW8GMLK1YP/cIiIBT
+         JmOIFZQKFouc5NwbpiFwDxIU7Hjxnr5WPDLJTKX33rjq2gDzAwXucYcgHq3mJ7rpUHxU
+         vnhdwXKJ+Jj1tbwMWwxgcKkRy35bpeD6Vd6DNyJjzRwTIcknVE3Al65eRHWUXn781dH+
+         qNWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ZnYqcQqukW7P117BA09p62ESxm8cMhxg1S+b8U1tyuM=;
+        b=tLR2We/ZF9wPOZayqS6oRfzlBmtB+vVcBQmyP8RogVbfLdfF93wQjzLprCpNMjJLDg
+         rMGoh84JoMuCzFP88WQ+QCZrWLjksjHmo3bvpNPshqkuMZqIBSx3Bt46P9kedkDTDaeK
+         XsMeLAgvjTyPKJzA7zeujAhCp/lGjBMAeoOvrGenNER/LkxUEXMJ3Ow3ixFdSlGvXj09
+         iNVVbGikvEoNDJDdxhZhyMrWkUPtLNy2zaaPHp9CUp9kvQzFwj+tAYi2noqAkZT8EKKm
+         rjkxmnEM3QBBLFZJmWWorWhOf52FMKat59xWE5gBJp2y4mIIEKVjFJctJfn2RcATgQvt
+         LCog==
+X-Gm-Message-State: APjAAAU5tNc3221SSiKZhZp5+P0xmDoGy+qurl6vRIYygVa3LP5mrkJ8
+        BJsei9Gj3EdWUujHR4gnKImR2Ey4hsg=
+X-Google-Smtp-Source: APXvYqw59m7KCkc/3m9DbVYmCPn2gCfjf16qjaOVuu61NlM0aCmlK+F728aBV1F5cNOPLfcbV1X9VA==
+X-Received: by 2002:adf:f44e:: with SMTP id f14mr11421479wrp.290.1568636704704;
+        Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id 33sm47458624wra.41.2019.09.16.05.25.03
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
+Message-ID: <5d7f7f20.1c69fb81.91aff.a927@mx.google.com>
+Date:   Mon, 16 Sep 2019 05:25:04 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="GXk5ufetu984H6pr"
-Content-Disposition: inline
-X-Cookie: Man and wife make one fool.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-586-g78e9b0f1c69e
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 327 boots: 11 failed,
+ 304 passed with 11 offline, 1 untried/unknown (v5.3-586-g78e9b0f1c69e)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 327 boots: 11 failed, 304 passed with 11 offline, =
+1 untried/unknown (v5.3-586-g78e9b0f1c69e)
 
---GXk5ufetu984H6pr
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-586-g78e9b0f1c69e/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-586-g78e9b0f1c69e/
 
-Hi all,
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-586-g78e9b0f1c69e
+Git Commit: 78e9b0f1c69e1bb067e2f5495bcc9aae3e472034
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 92 unique boards, 28 SoC families, 26 builds out of 222
 
-Today's linux-next merge of the ia64 tree got a conflict in:
+Boot Failures Detected:
 
-  arch/ia64/sn/pci/pci_dma.c
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            rk3399-firefly: 1 failed lab
 
-between commit:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
 
-  f9f3232a7d0ab73a3 ("dma-mapping: explicitly wire up ->mmap and ->get_sgta=
-ble")
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
 
-=66rom the dma-mapping tree and commit:
+    defconfig+kselftest:
+        gcc-8:
+            qcom-qdf2400: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
+            rk3399-puma-haikou: 1 failed lab
 
-  cf07cb1ff4ea008ab ("ia64: remove support for the SGI SN2 platform")
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
-=66rom the ia64 tree.
+Offline Platforms:
 
-I fixed it up by taking the delete from ia64 and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+arm64:
 
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
 
---GXk5ufetu984H6pr
-Content-Type: application/pgp-signature; name="signature.asc"
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1/cAkACgkQJNaLcl1U
-h9Dncwf+IJZPs0eB0mMiitTSr1FTYFTPAZyyGrNtHLvR8xUWljF+8gpX25FQwEN5
-fvGY9v1M31kE8za7qMMwXusQ5fEB1y6++173/AIXsKB8VoC/IFun5gG6C5EilPyX
-CsWnHVVIBhOpgHiaHAUdVuTAOfClPnYBNJmrcdBrhD4Gpar+oQgQ0ZfteLSrxTtQ
-yKBO/B7RO1WaTP3cDGnZMs8CWuxQgMaNeV/gJ9nqHfx5qlAcOQjRXdy6rvEwF1pK
-Wug2ZkW6TFr3L4sAFy6rI1VPQS7mk8fq+liotd+IlNzCF0WSJ3EQdpX57dv6tZQn
-ABnNLG7N47gTaqAYXfthyxUB0t9MYw==
-=spHU
------END PGP SIGNATURE-----
+arm:
 
---GXk5ufetu984H6pr--
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

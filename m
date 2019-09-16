@@ -2,165 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E81B36D8
-	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 11:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E82DB3871
+	for <lists+linux-next@lfdr.de>; Mon, 16 Sep 2019 12:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727226AbfIPJJh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Sep 2019 05:09:37 -0400
-Received: from mail-wr1-f43.google.com ([209.85.221.43]:35933 "EHLO
-        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727050AbfIPJJg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 05:09:36 -0400
-Received: by mail-wr1-f43.google.com with SMTP id y19so38005654wrd.3
-        for <linux-next@vger.kernel.org>; Mon, 16 Sep 2019 02:09:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=fPxW4A+HP8iVmR73iI7gAXkcAWArrV4Bi3EaE5sEHuw=;
-        b=EaigyW5fOzYdNhzyriW31nDsLTL3cUwn570PEsWb0KciGWfLWp1oWQH71n/WPhkeGU
-         kUFpvXzqnnvAsyTeMkKsFAQnY1AxG5OEYf59OcyZTVFcyjbFQdQ2Fih1F673xpKAJZGi
-         2DieU0QxUp6p+A9LlEXTMjmlDGFhWNXSJnTPOm5+IU3wInpiOEjkPnGWeX/VJaICLK+j
-         8mOByn/Gmltk0+EM9EMnuIfytNbervXA2KzZX2M8vg5o+TjwzEklUarLULqK7uvyzNx9
-         lkM3PApLQZUdyYjdr8YLJKo/XEaTI2VxuHMIpFRl1Vhk1o817fI5oL/WLP2gsEr22orc
-         yoJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=fPxW4A+HP8iVmR73iI7gAXkcAWArrV4Bi3EaE5sEHuw=;
-        b=pwCSGBuJVvZxtZx+Aqe7yETGILFY2WxU88+AfPt9ZRUKPVkGHC24ZJ09GgCsMNBMIN
-         dtq47JnYxb2bakQ0lcdVqTudUOdLK8v9OhHsSIhvMBDH0zS9uMaL2/uwJmAsowpIruv+
-         DvcHp4iq+7crYKuyWtm4sRiiL0tDeLqGYNLI2f5Qi8ZXObAY12Y84Ove06EWHMzsEmAn
-         CpP4SyYI+2NmeDClt/9nE459xd+MqbCobZORKEWrTAfyOrrbKweq7D464f9y+mMIGrah
-         UY8UgzeLs0Nm9kQLi2KrPnOYA1oebVA36aFeCQLYdl7HrHV9CPiz3Q8anPhPoB1iHXTC
-         ae6A==
-X-Gm-Message-State: APjAAAVwK+RshvUelcU4c4E1C7PZDQdWAwWuqUXPshmWpfcaI87QokFv
-        e9xXKw8O4OFqpBtC66F6Eo8Rd6vECI8=
-X-Google-Smtp-Source: APXvYqwDbwPLLNo48yGJbZZHjx/3cd+sEYE/mtDEm8kmhUSfWSFxxbVyXNcPiI+l7e/8x1hdWT/XHQ==
-X-Received: by 2002:a05:6000:1632:: with SMTP id v18mr29623096wrb.233.1568624970261;
-        Mon, 16 Sep 2019 02:09:30 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id t13sm73057510wra.70.2019.09.16.02.09.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 16 Sep 2019 02:09:29 -0700 (PDT)
-Message-ID: <5d7f5149.1c69fb81.90644.40f3@mx.google.com>
-Date:   Mon, 16 Sep 2019 02:09:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1730204AbfIPKmj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Sep 2019 06:42:39 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:33738 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726055AbfIPKmj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Sep 2019 06:42:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=JZBjiu6mXEF4xljF1dJvnzItrxLJQ/ptLLfiyKsUZDM=; b=mcTQ3/PmWWPgIhdxeGMFgAW+F
+        1fLJopUTSjAisftrUQn8kbLQVK2OpQSbkj3b1Vl0Xi1aQeTUQ5YogfHaYMV7gY19ZeLXOWCTL2fav
+        4q8glNwUzm/puuhRvzWb4RtjCxXnv6Tet9/LAt/vUoJzQHqeHTcUyJDrILuyyw0AEqYMo=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1i9oSn-0003vN-9s; Mon, 16 Sep 2019 10:42:33 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 2E02B2741A23; Mon, 16 Sep 2019 11:42:32 +0100 (BST)
+Date:   Mon, 16 Sep 2019 11:42:31 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the arm64 tree with the
+ compiler-attributes tree
+Message-ID: <20190916104231.GX4352@sirena.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190915
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 378 boots: 22 failed, 345 passed with 10 offline,
- 1 untried/unknown (next-20190915)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Y48FV0AvvvAm5Iyr"
+Content-Disposition: inline
+X-Cookie: Man and wife make one fool.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 378 boots: 22 failed, 345 passed with 10 offline, 1 untri=
-ed/unknown (next-20190915)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190915/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190915/
+--Y48FV0AvvvAm5Iyr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tree: next
-Branch: master
-Git Describe: next-20190915
-Git Commit: 2015a28f2cd57fc46ad14d1a763ca658d82ebc68
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 98 unique boards, 28 SoC families, 27 builds out of 218
+Hi all,
 
-Boot Failures Detected:
+Today's linux-next merge of the arm64 tree got a conflict in:
 
-arm64:
-    defconfig:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-            rk3399-firefly: 1 failed lab
+  init/Kconfig
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-            rk3399-firefly: 1 failed lab
+between commit:
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
+  eb111869301e15b7373 ("compiler-types.h: add asm_inline definition")
 
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
+=66rom the compiler-attributes tree and commit:
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
+  2d122942484c20b ("Revert "init/Kconfig: Fix infinite Kconfig recursion on=
+ PPC"")
 
-    multi_v7_defconfig:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
+=66rom the arm64 tree.
 
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
+diff --cc init/Kconfig
+index 257e428c90472,d96127ebc44e0..cebadd0cfa50e
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@@ -30,9 -30,9 +30,12 @@@ config CC_CAN_LIN
+  config CC_HAS_ASM_GOTO
+        def_bool $(success,$(srctree)/scripts/gcc-goto.sh $(CC))
+ =20
+ +config CC_HAS_ASM_INLINE
+ +      def_bool $(success,echo 'void foo(void) { asm inline (""); }' | $(C=
+C) -x c - -c -o /dev/null)
+ +
++ config TOOLS_SUPPORT_RELR
++       def_bool $(success,env "CC=3D$(CC)" "LD=3D$(LD)" "NM=3D$(NM)" "OBJC=
+OPY=3D$(OBJCOPY)" $(srctree)/scripts/tools-support-relr.sh)
++=20
+  config CC_HAS_WARN_MAYBE_UNINITIALIZED
+        def_bool $(cc-option,-Wmaybe-uninitialized)
+        help
 
-Offline Platforms:
+--Y48FV0AvvvAm5Iyr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-arm64:
+-----BEGIN PGP SIGNATURE-----
 
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl1/ZxcACgkQJNaLcl1U
+h9BiNgf7BUPhO+mDw5BCZm9EeRGqX2N+OfJwDTJ1+fa6mVSR7olKtg1n4raFn7Ex
+hbwCpqh0IL7tS9mvQOqo64zCUmhXDrMsiGe8Zk9iODnAETVdhGYM7vMC1YMLi5et
+KeNG/by+pMv56RXllDX/kXNvVAJptCUCWZAclLeHLWyb7bG2xpZfZy+3PIJlsWxU
+SvwNMegCobH50m5MSrDiYsoWq80mC8pKBOEqTuP1utmKDhLJR+aFu3P3BnnAu5wE
+EJieQaQ4C0TuNTcTSHVDicFQxYcTbmt8CDZcetNz27Get/pO13RYVYpnsGAKJJ60
+PBvRcHuMpwZChVP7TwRpgBfDBnECTA==
+=sijn
+-----END PGP SIGNATURE-----
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Y48FV0AvvvAm5Iyr--

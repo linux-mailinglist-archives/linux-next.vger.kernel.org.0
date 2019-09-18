@@ -2,188 +2,163 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B8DB5A2F
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 05:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2761DB5B93
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 08:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726894AbfIRDye (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Sep 2019 23:54:34 -0400
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:34046 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726138AbfIRDye (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Sep 2019 23:54:34 -0400
-Received: by mail-wr1-f51.google.com with SMTP id a11so5305927wrx.1
-        for <linux-next@vger.kernel.org>; Tue, 17 Sep 2019 20:54:31 -0700 (PDT)
+        id S1725836AbfIRGF7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Sep 2019 02:05:59 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:36323 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725820AbfIRGF6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 02:05:58 -0400
+Received: by mail-wm1-f68.google.com with SMTP id t3so974255wmj.1;
+        Tue, 17 Sep 2019 23:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Jc2LRG9LhfMS7Reqo+3JLKFBSRrFYDlQmwWtp4sUvHg=;
-        b=uIaT5UZod8gzkg4yecyHykKB/vKJWmwxWpV+o6XGwCv0PSNlc2NfMWnSBzXx1iRUsA
-         vLpGiDGDLfW3UYERH276J3e3lRIuTO5nG9231TNWWVPUuFR2LwaGZYmDBiTtAkanySaW
-         cSHBAyH011amI3b9g/ah9nzCwgFd4qw8Eb5vDxuWXs5UOzQuL76p8SK7FGhVEB+7hx1Z
-         CXdn/XZeryEvzdyp9Ov8zrcvqyrliclIRX9ggl4w2eYanG8vuagVzuzLtw9kXTB45cKm
-         xhs7fjjX8cs7klk8Rjcu8h5UM2LgF4+7U86WZB1KWoLqGr0I0Li25BlKMEn43cP+61wq
-         3GIA==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hwWWOoPr234HCjC7JY+UqHTvhCpgrr6k759zSE0l9Nc=;
+        b=fwApwtqAnoy0yRKfmvfNRI066AJX7KH1aYgokaRt8oJPm/5zK1YLT9tx01FeMbnATQ
+         EANegG65/X/b3tLMAXJyNTp3Lh48MDMga6bm6prICG99UJFQEdDws/o+tmLU6umNI5DL
+         OAEELI+yqkt4rODG8pPsj/27h27M90NRvIIEL6Pdb9jSMz1nYsGEcF+hxDnclk3caihA
+         fWjWXsPhxnlzBzpnITKSPcToHQvf+c2rXU7i/6EfYawIO/ZPMRiKoBkwm+peP5s9cZnK
+         S6iAKFc9EwUpyMzl7OGU9wF+DWZJvSv5C1LBPM70U7py7NnXEKZCm+jYhhVT1O/A8q1d
+         xzxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Jc2LRG9LhfMS7Reqo+3JLKFBSRrFYDlQmwWtp4sUvHg=;
-        b=dduddjNXZxvRwiqr+3nzH17siQsMtCUJvCMkVcoMsIqv3cJT39ARNyJ9UeJJSlU2HV
-         VSy+U2cAskXxDdnrIlN+F2EaFlY+7od8yNCXenvfZTDU8UG+d4gqt+YuQH3ZciLSJ9SX
-         7MSlIKoWGp+HLo3OiV4Mg2GwnZauqGvSv6GoeArS6d/cshWuGu3FwmjZ3iydPhEaurV7
-         968Qz3j+qdwWNXGoXrnJsfEctNXcWESdLFAMIznt7A8Faeud/QoeVXZMh/ZNKCRokmHS
-         sUbIsHoeD5vhu179uLCbpwThipMW/pm0MKJrYS7dVfrcrKCnefOe5+rMY2H4+wU8Z/ct
-         wAWw==
-X-Gm-Message-State: APjAAAUzVnZYNxC0zT56zmTzNBcDW5+fP1Ee7ahoUOP60o4yUoaNVjv0
-        jKliiy79mJ3+IW04/mJ+K3LlpDwv4L5rzw==
-X-Google-Smtp-Source: APXvYqzyOTCiGL0dGeDGlySOD5lWjJxboiglJ/d6Yz5hSaFHEZomvWx3n8z5AoKNUWhZW0TYxrJAfA==
-X-Received: by 2002:adf:dbce:: with SMTP id e14mr1299254wrj.56.1568778870633;
-        Tue, 17 Sep 2019 20:54:30 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id l1sm4877277wrb.1.2019.09.17.20.54.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 17 Sep 2019 20:54:29 -0700 (PDT)
-Message-ID: <5d81aa75.1c69fb81.bf544.6854@mx.google.com>
-Date:   Tue, 17 Sep 2019 20:54:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=hwWWOoPr234HCjC7JY+UqHTvhCpgrr6k759zSE0l9Nc=;
+        b=PxiKmTvVsNfpwAQpQqmaPPQjwt5cQ5BciB2Y2x1RykUEUm98OkkpfZnD2aeLHsrr9T
+         oBcvb4kSX18k+NUhdfMUqbnAKbRS96uRWh5FLqtU82RHZw1Kj7uQLbbq2rte/AFIsWT9
+         Baj0VzqpEV4Ht1IrFgtThFoZvtuy8skcRIgYJTK6xz2QEmD7Ic/cItWKq8Z8Ufa9Gqgi
+         JeJgC2F7zIP6462raYFc620PR3jXGW5rSyUkONhbu6Hg9uUE+NpUW0jMcmdBS4ZXX5x6
+         zxquoXyFvAZ0fMBopAf7e5UOcLwDTgBiwESmuFVIgweNehZh0dsSywe1o/uQMRe+XcAZ
+         18GQ==
+X-Gm-Message-State: APjAAAVEPCxAF0eRnvZWunbmNs+Pi5DLXKaTJ7s9mybiUv9lnbpGWNnV
+        5Z3OwfDlcDvKEzjMZwK999U=
+X-Google-Smtp-Source: APXvYqwU0+e2HElYuzpSfzcE+GkiQ+aYFob/UzJgKWM7kOsJQF5Hz7OdHkC3zNnl3auyupNu142lyQ==
+X-Received: by 2002:a7b:cb0e:: with SMTP id u14mr1349728wmj.115.1568786755902;
+        Tue, 17 Sep 2019 23:05:55 -0700 (PDT)
+Received: from gmail.com (2E8B0CD5.catv.pool.telekom.hu. [46.139.12.213])
+        by smtp.gmail.com with ESMTPSA id a13sm11311194wrf.73.2019.09.17.23.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Sep 2019 23:05:55 -0700 (PDT)
+Date:   Wed, 18 Sep 2019 08:05:53 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Patrick Bellasi <patrick.bellasi@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Sep 16 (kernel/sched/core.c)
+Message-ID: <20190918060553.GA21173@gmail.com>
+References: <20190916223850.GQ4352@sirena.co.uk>
+ <1898d3c9-1997-17ce-a022-a5e28c8dc115@infradead.org>
+ <20190917075242.GB49590@gmail.com>
+ <8736gv2gbv.fsf@arm.com>
+ <30eb4c83-a90d-21aa-3f9e-4da8e66769ef@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20190917
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 357 boots: 20 failed,
- 326 passed with 11 offline (next-20190917)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30eb4c83-a90d-21aa-3f9e-4da8e66769ef@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 357 boots: 20 failed, 326 passed with 11 offline (next-20=
-190917)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20190917/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20190917/
+* Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Tree: next
-Branch: master
-Git Describe: next-20190917
-Git Commit: a4b5b2e06e424454b690b31a9a965990b9eb60c1
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 93 unique boards, 28 SoC families, 27 builds out of 218
+> On 9/17/19 6:38 AM, Patrick Bellasi wrote:
+> > 
+> > On Tue, Sep 17, 2019 at 08:52:42 +0100, Ingo Molnar wrote...
+> > 
+> >> * Randy Dunlap <rdunlap@infradead.org> wrote:
+> >>
+> >>> On 9/16/19 3:38 PM, Mark Brown wrote:
+> >>>> Hi all,
+> >>>>
+> >>>> Changes since 20190915:
+> >>>>
+> >>>
+> >>> on x86_64:
+> >>>
+> >>> when CONFIG_CGROUPS is not set:
+> > 
+> > Hi Randy,
+> > thanks for the report.
+> > 
+> >>>   CC      kernel/sched/core.o
+> >>> ../kernel/sched/core.c: In function ‘uclamp_update_active_tasks’:
+> >>> ../kernel/sched/core.c:1081:23: error: storage size of ‘it’ isn’t known
+> >>>   struct css_task_iter it;
+> >>>                        ^~
+> >>>   CC      kernel/printk/printk_safe.o
+> >>> ../kernel/sched/core.c:1084:2: error: implicit declaration of function ‘css_task_iter_start’; did you mean ‘__sg_page_iter_start’? [-Werror=implicit-function-declaration]
+> >>>   css_task_iter_start(css, 0, &it);
+> >>>   ^~~~~~~~~~~~~~~~~~~
+> >>>   __sg_page_iter_start
+> >>> ../kernel/sched/core.c:1085:14: error: implicit declaration of function ‘css_task_iter_next’; did you mean ‘__sg_page_iter_next’? [-Werror=implicit-function-declaration]
+> >>>   while ((p = css_task_iter_next(&it))) {
+> >>>               ^~~~~~~~~~~~~~~~~~
+> >>>               __sg_page_iter_next
+> >>> ../kernel/sched/core.c:1091:2: error: implicit declaration of function ‘css_task_iter_end’; did you mean ‘get_task_cred’? [-Werror=implicit-function-declaration]
+> >>>   css_task_iter_end(&it);
+> >>>   ^~~~~~~~~~~~~~~~~
+> >>>   get_task_cred
+> >>> ../kernel/sched/core.c:1081:23: warning: unused variable ‘it’ [-Wunused-variable]
+> >>>   struct css_task_iter it;
+> >>>                        ^~
+> >>>
+> >>
+> >> I cannot reproduce this build failue: I took Linus's latest which has all 
+> >> the -next scheduler commits included (ad062195731b), and an x86-64 "make 
+> >> defconfig" and a disabling of CONFIG_CGROUPS still resuls in a kernel 
+> >> that builds fine.
+> > 
+> > Same here Ingo, I cannot reproduce on arm64 and !CONFIG_CGROUPS and
+> > testing on tip/sched/core.
+> > 
+> > However, if you like, the following patch can make that code a
+> > bit more "robust".
+> > 
+> > Best,
+> > Patrick
+> > 
+> > ---8<---
+> > From 7e17b7bb08dd8dfc57e01c2a7b6875439eb47cbe Mon Sep 17 00:00:00 2001
+> > From: Patrick Bellasi <patrick.bellasi@arm.com>
+> > Date: Tue, 17 Sep 2019 14:12:10 +0100
+> > Subject: [PATCH 1/1] sched/core: uclamp: Fix compile error on !CONFIG_CGROUPS
+> > 
+> > Randy reported a compiler error on x86_64 and !CONFIG_CGROUPS which is due
+> > to uclamp_update_active_tasks() using the undefined css_task_iter().
+> > 
+> > Since uclamp_update_active_tasks() is used only when cgroup support is
+> > enabled, fix that by properly guarding that function at compile time.
+> > 
+> > Signed-off-by: Patrick Bellasi <patrick.bellasi@arm.com>
+> > Link: https://lore.kernel.org/lkml/1898d3c9-1997-17ce-a022-a5e28c8dc115@infradead.org/
+> > Fixes: commit babbe170e05 ("sched/uclamp: Update CPU's refcount on TG's clamp changes")
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+> 
+> Thanks.
 
-Boot Regressions Detected:
+Build failures like this one shouldn't depend on the compiler version - 
+and it's still a mystery how and why this build bug triggered - we cannot 
+apply the fix without knowing the answer to those questions.
 
-arm:
+Can you reproduce the build bug with Linus's latest tree? If not, which 
+part of -next triggers the build failure?
 
-    davinci_all_defconfig:
-        gcc-8:
-          da850-evm:
-              lab-baylibre-seattle: new failure (last pass: next-20190916)
-          dm365evm,legacy:
-              lab-baylibre-seattle: new failure (last pass: next-20190916)
+Thanks,
 
-arm64:
-
-    defconfig:
-        clang-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: next-20190916)
-
-    defconfig+kselftest:
-        gcc-8:
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20190916)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
-
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
-            synquacer-acpi: 1 failed lab
-
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+	Ingo

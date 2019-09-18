@@ -2,150 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09278B67FE
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 18:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFDE7B68B4
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 19:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727485AbfIRQZd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Sep 2019 12:25:33 -0400
-Received: from mail-wr1-f49.google.com ([209.85.221.49]:32858 "EHLO
-        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726900AbfIRQZd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 12:25:33 -0400
-Received: by mail-wr1-f49.google.com with SMTP id b9so123692wrs.0
-        for <linux-next@vger.kernel.org>; Wed, 18 Sep 2019 09:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Z1tT8/2gKaI/sfsHJppMTluldW2aMJOSisF+MoAia6w=;
-        b=mC58EHPhcU4EbfSWrnUSO4fZoroYkg0Ofgxjg633Frv92XntoLFRXyFmLtTe2uGsBB
-         04JqNB9ZFVledTIgxHC1xznu/kX1xcNoyVzyA5dfTcxXpstjwculQ0GNPLpfU5EMa3yD
-         cHecCHvkFs8blq87TmaXvVF+VPDqPNFr8XK0MtJFTSlY1KKAMN1SQk2SAeGVUbMBXxx6
-         Y9DO0RRStC2JpP/eo8xwoEfe32kGJ4o0W89V+0ovEA0NpbwDqxW/UxI0+sy7Vfmz0bR5
-         HDE/8HBL244Ac10U22mhyGj7nxtfxQeca87JxdPdXjR1XAH84aqybp7mJgQfNKLHxuuU
-         SLSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Z1tT8/2gKaI/sfsHJppMTluldW2aMJOSisF+MoAia6w=;
-        b=RAUph+EPG2tX4PVPrFK5JvcUT5dP+B1Pq0OZ8ohIZDQekMI1VnlopPVlRJU9GU6DZx
-         VtaB7FZm04P+tFWwlYhM50gcNoZBO0WALqLbhSYOhBF/+amkYF0mYCOwZSdyG+kK37TT
-         XNk0Op9BLBS7Vq8OD8lJILEbEg5ULLC3NHc411LUukQFjQUEKVItFHcFyZZQOaMHq69A
-         x79ewN4BVT1tf6Un6WcI5vgWm7YkM8d2ygisvdF+qwdnHr+IUBEpeVzyGGyjyOpvIYwx
-         /vxMbe01aNRxjWIv3dkWkvSN0twNXLDzH5vG8dtl4T+XLt/Ib2naZ32PdaEVr7tqqJXW
-         1N3w==
-X-Gm-Message-State: APjAAAX+MgiEb+lRs2JwBljXt/Gh6kZhDx6fpAjT00g/2Pkx6vWtldUE
-        1/njNWid1RqxTvcSQU4LWn6Q6oDMpXcs6Q==
-X-Google-Smtp-Source: APXvYqxlNncGQolxraQBqyn3qjfqQzIG+Yf2Aa2gG3vY/nlrAov5nHByrjB3HyYIPYqcp8NWFqyrqw==
-X-Received: by 2002:a5d:4d87:: with SMTP id b7mr3754504wru.148.1568823930796;
-        Wed, 18 Sep 2019 09:25:30 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id s12sm10913277wra.82.2019.09.18.09.25.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 18 Sep 2019 09:25:30 -0700 (PDT)
-Message-ID: <5d825a7a.1c69fb81.8c2d9.30b6@mx.google.com>
-Date:   Wed, 18 Sep 2019 09:25:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1730640AbfIRRJ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Sep 2019 13:09:59 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:43762 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727243AbfIRRJ7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 13:09:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=H2TiSbCkuglf2I9jOUFe26893CVHAZYtLkhZApl8OdA=; b=pTEQ57emX3/HDj8yosPbbcfJy
+        DvKwdE/lJDmvM8seGg04Ejj5N3atlZjzti9xhkXAQgtO2h4lRmfF6mVsFa8jIjrPnmmoyHuV/H/ub
+        Nq2BpXqQxgCiT48mNofGVkHgBLExjRLSoI4+eKtYN/+sWYD8Zw64+DWjjKfPw9qCEg1xQ=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iAdSj-0006P6-Jy; Wed, 18 Sep 2019 17:09:53 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id E41692742927; Wed, 18 Sep 2019 18:09:52 +0100 (BST)
+Date:   Wed, 18 Sep 2019 18:09:52 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Greg KH <greg@kroah.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-i2c@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the driver-core tree
+Message-ID: <20190918170952.GT2596@sirena.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-4249-g733f21b14e9c
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 325 boots: 12 failed,
- 299 passed with 12 offline, 2 untried/unknown (v5.3-4249-g733f21b14e9c)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="++alDQ2ROsODg1x+"
+Content-Disposition: inline
+X-Cookie: The devil finds work for idle glands.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 325 boots: 12 failed, 299 passed with 12 offline, =
-2 untried/unknown (v5.3-4249-g733f21b14e9c)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-4249-g733f21b14e9c/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-4249-g733f21b14e9c/
+--++alDQ2ROsODg1x+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-4249-g733f21b14e9c
-Git Commit: 733f21b14e9c3cdd1f834e2c44061c114c41c390
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 93 unique boards, 28 SoC families, 27 builds out of 214
+Hi all,
 
-Boot Failures Detected:
+After merging the driver-core tree, today's linux-next build
+for arm64 allmodconfig failed like this:
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            mt7622-rfb1: 1 failed lab
-            rk3399-firefly: 1 failed lab
+/home/broonie/next/next/drivers/i2c/i2c-core-acpi.c: In function 'i2c_acpi_find_adapter_by_handle':
+/home/broonie/next/next/drivers/i2c/i2c-core-acpi.c:352:10: error: 'i2c_acpi_find_match_adapter' undeclared (first use in this function); did you mean 'i2c_acpi_find_bus_speed'?
+          i2c_acpi_find_match_adapter);
+          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+          i2c_acpi_find_bus_speed
+/home/broonie/next/next/drivers/i2c/i2c-core-acpi.c:352:10: note: each undeclared identifier is reported only once for each function it appears in
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
+Caused by commit
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
+  644bf600889554210 ("i2c: Revert incorrect conversion to use generic helper")
 
-    defconfig+kselftest:
-        gcc-8:
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
+In yesterday's -next that function existed but it appears to have been
+removed in Linus' tree as part of the merge:
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
+  4feaab05dc1eda3 ("Merge tag 'leds-for-5.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/j.anaszewski/linux-leds")
 
-Offline Platforms:
+by the commit
 
-arm64:
+  00500147cbd3fc5 ("drivers: Introduce device lookup variants by ACPI_COMPANION device")
 
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
+(ie, the commit that the failing commit was trying to revert.)  I
+suspect this is confusion caused by things going into Linus' tree in
+different orders.  I've fixed this up by re-adding the function.
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
+--++alDQ2ROsODg1x+
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
+-----BEGIN PGP SIGNATURE-----
 
-arm:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2CZN8ACgkQJNaLcl1U
+h9CK5wf+LSPVgpYCM6eyOPVq2Ck7uZKNd6iI6NX4ELVYJ0TUIsXqhASEQAhKxBqx
+aLnwiJOciQQT3G+N81Gv5BbAP3ip4coXMHIp+rL4HN89L6nRzh8s2sUSfxfoG62Y
+VAO/TxeyqCujNstzf/TcmkL6ahDoh6nByPoD9hfXlja5feNGUhkPoARpINCRk6bC
+tTtFRExjCemrIzMucLbaawpnb0RWUPUSVJaLN0YKhbHflzzrBYLTVorbfkG9hjOF
+KYg35WZIJmOEqThrybghmAJ8/e2WkuFFxNpPH4XfQMXS08WJ5Nt0SWrRDdkDBrCQ
+/KAGhmjhotCLL/TUTPfJ5erbmYLf3A==
+=V/kw
+-----END PGP SIGNATURE-----
 
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--++alDQ2ROsODg1x+--

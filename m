@@ -2,55 +2,43 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC549B66FE
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 17:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F2AB6725
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 17:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729463AbfIRPXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Sep 2019 11:23:33 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:38180 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725899AbfIRPXc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 11:23:32 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8IFEr1N150047;
-        Wed, 18 Sep 2019 15:22:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=QP/of89H1iKlQJSJwjQxXAmLxnPt3PCrIeV/m5qNqgE=;
- b=nXx8GMbC4L/o3mQfkXRyVvElpxXXkG2pJeE86ZX+eKYDfswZwENGjCYP0eMI3gHV/xwx
- rv7xiC3frDk0mN2dWtIzIcEsDSkLaWyw5VSi5ljx5BsY6k9tcG85ootU1svDbRWsRqzO
- d0XWre/wJR74pYg3YNM17FkIZC/9WvJlA/TcvISHbGxh35jZ/lovnUM62AyyEI4YdsPs
- sIdIdEOK6NfsVuxKyU9pR2EYhvOTQsfrc2bzDMXJpkhils/p6MmCa5F2/qK3qtbTY+Ii
- h3jo7tGb4IgexyBH0K/bdWtHSfzczGFWM1AKnAoNSWjMFrF/cut4wNCb9apfyNmy5RIn Rg== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by userp2120.oracle.com with ESMTP id 2v385dvnrc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Sep 2019 15:22:50 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x8IFDpWL161853;
-        Wed, 18 Sep 2019 15:22:50 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 2v37mmt1b2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Sep 2019 15:22:49 +0000
-Received: from abhmp0015.oracle.com (abhmp0015.oracle.com [141.146.116.21])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id x8IFMhWn002796;
-        Wed, 18 Sep 2019 15:22:43 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 18 Sep 2019 08:22:42 -0700
+        id S2387484AbfIRPcy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Sep 2019 11:32:54 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54890 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729640AbfIRPcy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 11:32:54 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6fG+7cFY8qKmNTeE0/oK7OzO5e+bx/UyTCd8HlUszGk=; b=ZzuVXWgde4+duuEB1OGFxwXyL
+        zT5zbMFJfP50QtwClsnUB+7Mvd48Bl4ixy1YiIPOVwLntpL1zltX+RHsgjOc6wv4dWoBgou8UMZZQ
+        ScL36uk7mVmpeTbMJjtwoaDJXR5hAOJ8M/NEUgx79e2ESUepbiZtd4qtYE9t6vTQWxB6E=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iAbwI-0005tn-Oo; Wed, 18 Sep 2019 15:32:18 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id B53AB2742927; Wed, 18 Sep 2019 16:32:17 +0100 (BST)
+Date:   Wed, 18 Sep 2019 16:32:17 +0100
+From:   Mark Brown <broonie@kernel.org>
 To:     Steffen Maier <maier@linux.ibm.com>
 Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         Ming Lei <tom.leiming@gmail.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
         Ming Lei <ming.lei@redhat.com>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Linux SCSI List <linux-scsi@vger.kernel.org>,
         linux-block <linux-block@vger.kernel.org>,
-        "open list\:DEVICE-MAPPER \(LVM\)" <dm-devel@redhat.com>,
+        "open list:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
         linux-s390 <linux-s390@vger.kernel.org>,
         Benjamin Block <bblock@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
@@ -60,54 +48,56 @@ Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
         "Ewan D . Milne" <emilne@redhat.com>,
         Christoph Hellwig <hch@lst.de>,
         Mike Snitzer <snitzer@redhat.com>
-Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts without request batching
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
+Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts
+ without request batching
+Message-ID: <20190918153217.GN2596@sirena.co.uk>
 References: <20190807144948.28265-1-maier@linux.ibm.com>
-        <20190807144948.28265-2-maier@linux.ibm.com>
-        <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
-        <yq136iccsbw.fsf@oracle.com>
-        <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com>
-Date:   Wed, 18 Sep 2019 11:22:39 -0400
-In-Reply-To: <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com> (Steffen
-        Maier's message of "Wed, 18 Sep 2019 17:09:50 +0200")
-Message-ID: <yq1lful8w8w.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+ <20190807144948.28265-2-maier@linux.ibm.com>
+ <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
+ <yq136iccsbw.fsf@oracle.com>
+ <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9384 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1909180151
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9384 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1909180151
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="0NB0lE7sNnW8+0qW"
+Content-Disposition: inline
+In-Reply-To: <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com>
+X-Cookie: The devil finds work for idle glands.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
-Steffen,
+--0NB0lE7sNnW8+0qW
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Martin, is it possible that you re-wrote your for-next and it now no
-> longer contains a merged 5.4/scsi-postmerge with those fixes?  At
-> least I cannot find the fix code in next-20190917 and it fails again
-> for me.
+On Wed, Sep 18, 2019 at 05:09:50PM +0200, Steffen Maier wrote:
+> On 8/8/19 4:18 AM, Martin K. Petersen wrote:
 
-Yes, looks like you're right. Not sure how I managed to mess that up. I
-must have inadvertently done a reset in the wrong worktree because my
-for-next branch maintenance script only does merges.
+> > I'll set up an amalgamated for-next branch tomorrow.
 
-In any case, since Linus has pulled the block tree dependencies, I'll
-rebase the postmerge branch on top of current linus/master and create a
-new for-next.
+> Martin, is it possible that you re-wrote your for-next and it now no longer
+> contains a merged 5.4/scsi-postmerge with those fixes?
+> At least I cannot find the fix code in next-20190917 and it fails again for me.
 
-Thanks for the heads-up!
+Well, there's no sign of a branch called postmerge in the SCSI history
+recently and I've not run into any SCSI-related conflicts so...
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+--0NB0lE7sNnW8+0qW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2CTgAACgkQJNaLcl1U
+h9DyCQgAhI9PE5cah3tJXlfm2IgfE6DGqrY+ZgkKfYQRbESZUGGvH0C8ZHzfdF9s
+ew1oLds2WQCiwXttdV/OQrmwkkHibCqk7ZruKQJpmIDN9CmRPnO1EHunK1UFVuli
+YGsRLI1Lp/gzfAzbaoA7BihFFKukgTxrZYcH9SfERbpf/raKMrEB9HUbyFDeBBKN
+btGkV2DjeLMwQxiwQLTNDZ8NQ9oUwkaX1kGOv3CilW2qDkueaghQnMpyw05kuddR
+4F5rE8+vA4jHJssZOqsoUJiNFzc9lloTdKeUDd4tR0qgY/thaG+RA2OVgh1XR1x1
+wYZjyEIwrB4FhNOMDMiIl6jcM6uoqw==
+=63JF
+-----END PGP SIGNATURE-----
+
+--0NB0lE7sNnW8+0qW--

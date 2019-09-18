@@ -2,102 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F2AB6725
-	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 17:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BF2B6734
+	for <lists+linux-next@lfdr.de>; Wed, 18 Sep 2019 17:35:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387484AbfIRPcy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Sep 2019 11:32:54 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:54890 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729640AbfIRPcy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Sep 2019 11:32:54 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=6fG+7cFY8qKmNTeE0/oK7OzO5e+bx/UyTCd8HlUszGk=; b=ZzuVXWgde4+duuEB1OGFxwXyL
-        zT5zbMFJfP50QtwClsnUB+7Mvd48Bl4ixy1YiIPOVwLntpL1zltX+RHsgjOc6wv4dWoBgou8UMZZQ
-        ScL36uk7mVmpeTbMJjtwoaDJXR5hAOJ8M/NEUgx79e2ESUepbiZtd4qtYE9t6vTQWxB6E=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iAbwI-0005tn-Oo; Wed, 18 Sep 2019 15:32:18 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id B53AB2742927; Wed, 18 Sep 2019 16:32:17 +0100 (BST)
-Date:   Wed, 18 Sep 2019 16:32:17 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Steffen Maier <maier@linux.ibm.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Ming Lei <tom.leiming@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
+        id S2387516AbfIRPfV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Sep 2019 11:35:21 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:9874 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726983AbfIRPfS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Sep 2019 11:35:18 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x8IFWH3B077652
+        for <linux-next@vger.kernel.org>; Wed, 18 Sep 2019 11:35:17 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2v3nry4atv-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Wed, 18 Sep 2019 11:35:16 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <maier@linux.ibm.com>;
+        Wed, 18 Sep 2019 16:35:14 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 18 Sep 2019 16:35:08 +0100
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x8IFZ7e259703518
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 18 Sep 2019 15:35:07 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EAD8E5205A;
+        Wed, 18 Sep 2019 15:35:06 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 458B352063;
+        Wed, 18 Sep 2019 15:35:06 +0000 (GMT)
+From:   Steffen Maier <maier@linux.ibm.com>
+To:     Arnd Bergmann <arnd@arndb.de>,
         "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Ming Lei <ming.lei@redhat.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Linux SCSI List <linux-scsi@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        "open list:DEVICE-MAPPER (LVM)" <dm-devel@redhat.com>,
-        linux-s390 <linux-s390@vger.kernel.org>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Doug Gilbert <dgilbert@interlog.com>
+Cc:     linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org,
         Benjamin Block <bblock@linux.ibm.com>,
         Heiko Carstens <heiko.carstens@de.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Hannes Reinecke <hare@suse.com>, Jens Axboe <axboe@kernel.dk>,
-        "Ewan D . Milne" <emilne@redhat.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Mike Snitzer <snitzer@redhat.com>
-Subject: Re: [PATCH 1/2] scsi: core: fix missing .cleanup_rq for SCSI hosts
- without request batching
-Message-ID: <20190918153217.GN2596@sirena.co.uk>
-References: <20190807144948.28265-1-maier@linux.ibm.com>
- <20190807144948.28265-2-maier@linux.ibm.com>
- <CACVXFVM0tFj8CmcHON04_KjxR=QErCbUx0abJgG2W9OBb7akZA@mail.gmail.com>
- <yq136iccsbw.fsf@oracle.com>
- <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0NB0lE7sNnW8+0qW"
-Content-Disposition: inline
-In-Reply-To: <bec80a65-9a8c-54a9-fe70-876fcbe3d592@linux.ibm.com>
-X-Cookie: The devil finds work for idle glands.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        Steffen Maier <maier@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Omar Sandoval <osandov@fb.com>, linux-block@vger.kernel.org,
+        linux-next@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        dm-devel@redhat.com
+Subject: [PATCH] compat_ioctl: fix reimplemented SG_IO handling causing -EINVAL from sg_io()
+Date:   Wed, 18 Sep 2019 17:34:45 +0200
+X-Mailer: git-send-email 2.17.1
+X-TM-AS-GCONF: 00
+x-cbid: 19091815-0020-0000-0000-0000036E9CA7
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19091815-0021-0000-0000-000021C4468C
+Message-Id: <20190918153445.1241-1-maier@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-09-18_08:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1909180152
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+scsi_cmd_ioctl() had hdr as on stack auto variable and called
+copy_{from,to}_user with the address operator &hdr and sizeof(hdr).
 
---0NB0lE7sNnW8+0qW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+After the refactoring, {get,put}_sg_io_hdr() takes a pointer &hdr.
+So the copy_{from,to}_user within the new helper functions should
+just take the given pointer argument hdr and sizeof(*hdr).
 
-On Wed, Sep 18, 2019 at 05:09:50PM +0200, Steffen Maier wrote:
-> On 8/8/19 4:18 AM, Martin K. Petersen wrote:
+I saw -EINVAL from sg_io() done by /usr/lib/udev/scsi_id which could
+in turn no longer whitelist SCSI disks for devicemapper multipath.
 
-> > I'll set up an amalgamated for-next branch tomorrow.
+Signed-off-by: Steffen Maier <maier@linux.ibm.com>
+Fixes: 4f45155c29fd ("compat_ioctl: reimplement SG_IO handling")
+---
 
-> Martin, is it possible that you re-wrote your for-next and it now no longer
-> contains a merged 5.4/scsi-postmerge with those fixes?
-> At least I cannot find the fix code in next-20190917 and it fails again for me.
+Arnd, I'm not sure about the sizeof(hdr32) change in the compat part in
+put_sg_io_hdr().
 
-Well, there's no sign of a branch called postmerge in the SCSI history
-recently and I've not run into any SCSI-related conflicts so...
+This is for next, probably via Arnd's y2038/y2038,
+and it fixes next-20190917 for me regarding SCSI generic.
 
---0NB0lE7sNnW8+0qW
-Content-Type: application/pgp-signature; name="signature.asc"
+ block/scsi_ioctl.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+diff --git a/block/scsi_ioctl.c b/block/scsi_ioctl.c
+index cbeb629ee917..650bade5ea5a 100644
+--- a/block/scsi_ioctl.c
++++ b/block/scsi_ioctl.c
+@@ -607,14 +607,14 @@ int put_sg_io_hdr(const struct sg_io_hdr *hdr, void __user *argp)
+ 			.info		 = hdr->info,
+ 		};
+ 
+-		if (copy_to_user(argp, &hdr32, sizeof(hdr)))
++		if (copy_to_user(argp, &hdr32, sizeof(hdr32)))
+ 			return -EFAULT;
+ 
+ 		return 0;
+ 	}
+ #endif
+ 
+-	if (copy_to_user(argp, &hdr, sizeof(hdr)))
++	if (copy_to_user(argp, hdr, sizeof(*hdr)))
+ 		return -EFAULT;
+ 
+ 	return 0;
+@@ -659,7 +659,7 @@ int get_sg_io_hdr(struct sg_io_hdr *hdr, const void __user *argp)
+ 	}
+ #endif
+ 
+-	if (copy_from_user(&hdr, argp, sizeof(hdr)))
++	if (copy_from_user(hdr, argp, sizeof(*hdr)))
+ 		return -EFAULT;
+ 
+ 	return 0;
+-- 
+2.17.1
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2CTgAACgkQJNaLcl1U
-h9DyCQgAhI9PE5cah3tJXlfm2IgfE6DGqrY+ZgkKfYQRbESZUGGvH0C8ZHzfdF9s
-ew1oLds2WQCiwXttdV/OQrmwkkHibCqk7ZruKQJpmIDN9CmRPnO1EHunK1UFVuli
-YGsRLI1Lp/gzfAzbaoA7BihFFKukgTxrZYcH9SfERbpf/raKMrEB9HUbyFDeBBKN
-btGkV2DjeLMwQxiwQLTNDZ8NQ9oUwkaX1kGOv3CilW2qDkueaghQnMpyw05kuddR
-4F5rE8+vA4jHJssZOqsoUJiNFzc9lloTdKeUDd4tR0qgY/thaG+RA2OVgh1XR1x1
-wYZjyEIwrB4FhNOMDMiIl6jcM6uoqw==
-=63JF
------END PGP SIGNATURE-----
-
---0NB0lE7sNnW8+0qW--

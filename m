@@ -2,103 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69365B7E23
-	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 17:27:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F75CB7EBD
+	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 18:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391234AbfISP1z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Sep 2019 11:27:55 -0400
-Received: from mail-ot1-f68.google.com ([209.85.210.68]:40092 "EHLO
-        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2391130AbfISP1w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 11:27:52 -0400
-Received: by mail-ot1-f68.google.com with SMTP id y39so3441084ota.7
-        for <linux-next@vger.kernel.org>; Thu, 19 Sep 2019 08:27:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intel-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=BQhJr69/vPd/U/psJVJ1y2BU+JZc/GqWvX4OAnagwrY=;
-        b=TU+WvyEN5IqmhO1QeCdr0zyP5aga8ovoC/U2eRs61E+zTYw6pidSqTlkToVYeiIHo6
-         vCcaYto8j9wnV9tJrRMQRX0nadMJFe7U6CZLGRjbdhBK35pUGFPhvnnu9BcvNG6vl1yA
-         wtSwB0eb62xfZVsN+sGz7OcIHWAUcDVZ8eQ0ZxSoKRT+1F202vpKjLle/8YGBqDDH793
-         uBqFTCNdFgu9r/ReamEEtBFyyRKuV9ACURztz002sq82ARVTbabM+KjTIkK7pfmcHezX
-         2DxqyGFnmk7tvKZz12hstb8UMYVmd4W5+0DAM8450Uy88YRbBd9mPpjxKKhT19A+kApK
-         /9sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=BQhJr69/vPd/U/psJVJ1y2BU+JZc/GqWvX4OAnagwrY=;
-        b=MUyp60ftHj2ZYduqa3CzNuO4LW55ZTiwHDwGmCD95f3tzv6dVligAZn2AZGSHX3Q6A
-         4hZjnWwzP81jPCGb5fcTjJyL/0xi7ruKilXz/1nwL99dE0hpvTa20Cv2MiYGr+odSuJj
-         /EFqMCsuLoZByXicAIOLrgEt4xmolqCYfvIZ8LBjGj+aOFYpeGbuKC+uSBiieMqqpDwd
-         zGAfofHvq84qceJryJ/yFeCB4PIDdhWKBqI4QqYvjHgbMuEFHMcQuNLG1E2tF4o8WOfw
-         Lvl0ok+M6gEi8DbEhJAF9rALjWMBufdvaknzgAazNU9BvqB0UdmOAZ56e5uMnlnMxKxB
-         jwxg==
-X-Gm-Message-State: APjAAAVu3fSZUClNxiPdhSqMLC26fY5nV/u78HDwQ6Hh57Vgng/zsToJ
-        JSA1m8Zt/tGjFYknR2wwP/AX+QrEUdAthzqt5wzSXQ==
-X-Google-Smtp-Source: APXvYqxSV6mNOx+JelZSXq1gKYybEh6/xyhCkyebC74L1X6VZAart17bTvoaHHN9s5S2diRF49ItUjuFyqqea11bCLs=
-X-Received: by 2002:a9d:6014:: with SMTP id h20mr7012748otj.207.1568906871267;
- Thu, 19 Sep 2019 08:27:51 -0700 (PDT)
+        id S2390345AbfISQGo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Sep 2019 12:06:44 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:42302 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388098AbfISQGo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 12:06:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=GOCQvL6i0fVL0FmIWtQyMjmyubdpwyxSGTHDlRvQXGA=; b=ANf9+cj9bFejOnKyvJZDCHIqd
+        AGihL6BbZMQR8CC6eWrph+zIcUEWSev176/r7tkMBxE3rW/KFIy7Yb66esryNDUNYO8CdtrcO0Vv4
+        Zi4DN70QWQSkOa7iBHEW6V4q1B+LCh9387clj437KnLxAWaoVseNciVBwZyKzzG+e7kQo=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iAyx8-0004Mq-0z; Thu, 19 Sep 2019 16:06:42 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 81AF12741D3A; Thu, 19 Sep 2019 17:06:41 +0100 (BST)
+Date:   Thu, 19 Sep 2019 17:06:41 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Sep 19
+Message-ID: <20190919160641.GR3642@sirena.co.uk>
 MIME-Version: 1.0
-References: <20190919150147.GO3642@sirena.co.uk>
-In-Reply-To: <20190919150147.GO3642@sirena.co.uk>
-From:   Dan Williams <dan.j.williams@intel.com>
-Date:   Thu, 19 Sep 2019 08:27:40 -0700
-Message-ID: <CAPcyv4hq2N2H-HszhEm-rT2YziTLSeU1A5ea19-bDvSXMZLjCw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the nvdimm tree with the
- libnvdimm-fixes tree
-To:     Mark Brown <broonie@kernel.org>
-Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Yi Zhang <yi.zhang@redhat.com>, Jeff Moyer <jmoyer@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="9DptZICXTlJ7FQ09"
+Content-Disposition: inline
+X-Cookie: I'll be Grateful when they're Dead.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 8:02 AM Mark Brown <broonie@kernel.org> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the nvdimm tree got a conflict in:
->
->   drivers/nvdimm/pfn_devs.c
->
-> between commit:
->
->   274b924088e935 ("libnvdimm/pfn: Fix namespace creation on misaligned addresses")
->
-> from the libnvdimm-fixes tree and commit:
->
->   edbb52c24441ab ("libnvdimm/pfn_dev: Add page size and struct page size to pfn superblock")
->
-> from the nvdimm tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> diff --cc drivers/nvdimm/pfn_devs.c
-> index cb98b8fe786e2,80c7992bc5389..0000000000000
-> --- a/drivers/nvdimm/pfn_devs.c
-> +++ b/drivers/nvdimm/pfn_devs.c
-> @@@ -724,9 -786,10 +788,11 @@@ static int nd_pfn_init(struct nd_pfn *n
->         memcpy(pfn_sb->uuid, nd_pfn->uuid, 16);
->         memcpy(pfn_sb->parent_uuid, nd_dev_to_uuid(&ndns->dev), 16);
->         pfn_sb->version_major = cpu_to_le16(1);
-> -       pfn_sb->version_minor = cpu_to_le16(3);
-> +       pfn_sb->version_minor = cpu_to_le16(4);
->  +      pfn_sb->end_trunc = cpu_to_le32(end_trunc);
->         pfn_sb->align = cpu_to_le32(nd_pfn->align);
-> +       pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
-> +       pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
->         checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
->         pfn_sb->checksum = cpu_to_le64(checksum);
 
-Yes, looks correct. Apologies for not highlighting this conflict in advance.
+--9DptZICXTlJ7FQ09
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+Hi all,
+
+Changes since 20190918:
+
+The btrfs-kave tree gained a conflict with Linus' tree which I wasn't
+comfortable resolving so I skipped the tre for today.
+
+The ext4 tree gained a conflict with Linus' tree which I fixed up.
+
+The nvdimm tree gained a conflict with the libnvdimm-fixes tree which I
+fixed up.
+
+The erofs-fixes tree was added.
+
+Non-merge commits (relative to Linus' tree): 5119
+ 4678 files changed, 388151 insertions(+), 105686 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf.
+
+Below is a summary of the state of the merge.
+
+I am currently merging 311 trees (counting Linus' and 77 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--9DptZICXTlJ7FQ09
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2Dp5AACgkQJNaLcl1U
+h9AyVQf+KDYCy2XvdPPARkmMF7W6ccQba30uCpl8jmQuJeDrrh8DJHnNeX/O6SrN
+19D/48pUSoQoLIRJIYN7W3a+3YowypiVwxkg4XWk/VlpNIy2qWDqUIplQ09DQsjq
+/b8s58VoKvRlVwZn4SRToQ2+kigjTf5YTlsJ/BohUgMJhdq4j5BuLG0RPQqMWpoX
+3O3KRw63kya2r2OPU2NmcKyAUqNwsmnb9yEO52S6eiZdj0Q+tpP4lgJBsHKvcfGv
+Xl0EN0Fzq2LZig98unj1X+YeQDNjMVQnE31358MS3KNMles/+OmAmo6JqZoMvul5
+ot6eIhZ8jyF4OGz1wuKd6WpFtC6Eag==
+=jSt5
+-----END PGP SIGNATURE-----
+
+--9DptZICXTlJ7FQ09--

@@ -2,52 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC806B7D36
-	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 16:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D93B7D74
+	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 17:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388934AbfISOuk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Sep 2019 10:50:40 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:55554 "EHLO
+        id S2389406AbfISPCA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Sep 2019 11:02:00 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:46370 "EHLO
         heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388736AbfISOuk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 10:50:40 -0400
+        with ESMTP id S2389586AbfISPB7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 11:01:59 -0400
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=i5pPM1UVZiw2ro3IsHlJxo7Ng7y6//q+LO3x8Z1chDQ=; b=KH/uzNdorkpdZdauBKjNzdsW0
-        v8T0QAXw9O1uyGEVBrBKM/lLDUrZJvrG3xNXO9MtsHXmeay/lYiMDiuK9raVee9GoQKYStPaw/HY0
-        bTIFwGnyici/MynZSGOG67U0aV14E3kBOIS2WsMgpdElSO6IJD0mCZxn+ze9tgL/hP9E8=;
+         bh=WBYOGgHTyUustwZaXfY4IyXe0lajHxD9KsjkOCE9Jb0=; b=PuizwbktyjHwVSSPcg8jCanmz
+        qNVS2YnmRJIRmNGB9/7CKV8FVpTkgp25DZsUHkdZKK/fRbl8rqD/MZnmCcACf1jcPGB2FaHkMR5Ta
+        KV17nyypfjIKKqvLA+YSvNEcpbhgS4VzP8CuILY94TeQxxlhb/Y6S5Odmn+QQvsdPKc9I=;
 Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
         by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <broonie@sirena.co.uk>)
-        id 1iAxlM-00045Z-Ng; Thu, 19 Sep 2019 14:50:28 +0000
+        id 1iAxwL-00049Y-SG; Thu, 19 Sep 2019 15:01:49 +0000
 Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id E907F2742939; Thu, 19 Sep 2019 15:50:27 +0100 (BST)
-Date:   Thu, 19 Sep 2019 15:50:27 +0100
+        id D45A82742939; Thu, 19 Sep 2019 16:01:47 +0100 (BST)
+Date:   Thu, 19 Sep 2019 16:01:47 +0100
 From:   Mark Brown <broonie@kernel.org>
-To:     Gao Xiang <hsiangkao@aol.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-erofs@lists.ozlabs.org, LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-next@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miao Xie <miaoxie@huawei.com>,
-        Gao Xiang <gaoxiang25@huawei.com>
-Subject: Re: erofs -next tree inclusion request
-Message-ID: <20190919145027.GN3642@sirena.co.uk>
-References: <20190919120110.GA48697@architecture4>
- <20190919121739.GG3642@sirena.co.uk>
- <20190919122328.GA82662@architecture4>
- <20190919143722.GA5363@hsiangkao-HP-ZHAN-66-Pro-G1>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Yi Zhang <yi.zhang@redhat.com>, Jeff Moyer <jmoyer@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the nvdimm tree with the libnvdimm-fixes
+ tree
+Message-ID: <20190919150147.GO3642@sirena.co.uk>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BFVE2HhgxTpCzM8t"
+        protocol="application/pgp-signature"; boundary="umrsQkkrw7viUWFs"
 Content-Disposition: inline
-In-Reply-To: <20190919143722.GA5363@hsiangkao-HP-ZHAN-66-Pro-G1>
 X-Cookie: I'll be Grateful when they're Dead.
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
@@ -56,52 +49,68 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
---BFVE2HhgxTpCzM8t
+--umrsQkkrw7viUWFs
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 19, 2019 at 10:37:22PM +0800, Gao Xiang wrote:
+Hi all,
 
-> The fixes only -fixes branch is
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git fixes
+Today's linux-next merge of the nvdimm tree got a conflict in:
 
-> Thanks for taking time on this stuff...
+  drivers/nvdimm/pfn_devs.c
 
-OK, thanks - I've added that for tomorrow and I'll try to remember to
-add it onto the end of today's build too.  Like I said before you might
-need to remind Stephen about the trees when he gets back on the 30th but
-hopefully he'll see these mails.
+between commit:
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.
+  274b924088e935 ("libnvdimm/pfn: Fix namespace creation on misaligned addr=
+esses")
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and
-     * destined for the current or next Linux merge window.
+=66rom the libnvdimm-fixes tree and commit:
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+  edbb52c24441ab ("libnvdimm/pfn_dev: Add page size and struct page size to=
+ pfn superblock")
 
---BFVE2HhgxTpCzM8t
+=66rom the nvdimm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+diff --cc drivers/nvdimm/pfn_devs.c
+index cb98b8fe786e2,80c7992bc5389..0000000000000
+--- a/drivers/nvdimm/pfn_devs.c
++++ b/drivers/nvdimm/pfn_devs.c
+@@@ -724,9 -786,10 +788,11 @@@ static int nd_pfn_init(struct nd_pfn *n
+  	memcpy(pfn_sb->uuid, nd_pfn->uuid, 16);
+  	memcpy(pfn_sb->parent_uuid, nd_dev_to_uuid(&ndns->dev), 16);
+  	pfn_sb->version_major =3D cpu_to_le16(1);
+- 	pfn_sb->version_minor =3D cpu_to_le16(3);
++ 	pfn_sb->version_minor =3D cpu_to_le16(4);
+ +	pfn_sb->end_trunc =3D cpu_to_le32(end_trunc);
+  	pfn_sb->align =3D cpu_to_le32(nd_pfn->align);
++ 	pfn_sb->page_struct_size =3D cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
++ 	pfn_sb->page_size =3D cpu_to_le32(PAGE_SIZE);
+  	checksum =3D nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
+  	pfn_sb->checksum =3D cpu_to_le64(checksum);
+ =20
+
+
+--umrsQkkrw7viUWFs
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2DlbMACgkQJNaLcl1U
-h9CtrAf/QZhYKXrySmeiRMDhvrDKON7tTT7HiDarVbXpM8AghCMJ68vbO1nCFXEP
-bDqHLECUOo24cPg2s/GD8JnLwRl8EGRLAfUer9tOm6xf0LI0bV1JOMIndpjuEe+z
-7gkKr2yc8fGrB0c6rMMbna/2RkjCEQv9UaHMQM/Pul1w/qzLtb2GQaK4JXuiEPrS
-kB6yDckRoZ+VdVLBb1UqiLjVvtCZDfZBTyJxPHhpKI7T7DjskMbpbsq6YMfGX8Th
-7L3a6XeYIwYCJ4HDXC7SNvqeP9M/srct6FPdT9/A6lus8ttTw6hDW7LbUslyIrY7
-X2++vlLneip8APqQRxByANt2h+vyaw==
-=dwhx
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2DmFoACgkQJNaLcl1U
+h9Aukgf/Vv9cDAm7ZbWkhFeK1RH9SwZoPutCDECnVpkwDmhGQTF5USRjTqfipjgD
+jWPbrFlfj2NywPLcr3m3Kbv68oh9nG4hiR9BlMXeUXphR21F1s42lFs43ytqqNHP
+jg2RxrZQUTDvjDGjzj2Tw15K0k13fKfab7fsP8tmLL7gD1J/1+ZqC2PcfDezrJ6N
+/apUiyOfVTG295FxK0cPT+R1XK+MlxZFA4ZlE3orPloYAXYn68Zfg2fTqnfYD/xh
+9e0l3vR5TgydO+RMP8hN/nYUqMTkCoFDrQcAa0dGMpWKku726UYQESFG22t4ptuW
+4Kdhu90lals2zJkZvBe0BbRnXWv8RA==
+=7hvk
 -----END PGP SIGNATURE-----
 
---BFVE2HhgxTpCzM8t--
+--umrsQkkrw7viUWFs--

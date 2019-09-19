@@ -2,102 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 257B3B7DD4
-	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 17:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69365B7E23
+	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 17:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389754AbfISPLa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Sep 2019 11:11:30 -0400
-Received: from sonic303-24.consmr.mail.gq1.yahoo.com ([98.137.64.205]:46014
-        "EHLO sonic303-24.consmr.mail.gq1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725887AbfISPLa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Sep 2019 11:11:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1568905889; bh=1O+vcGjb05gALj1QAad6oTp09F1ELiXLmBDLOinwAuQ=; h=Date:From:To:Cc:Subject:In-Reply-To:References:From:Subject; b=aydgU3m7Ou6Rcnz6J90S7pTQcDjThuA2WPQTJwSkPWoS2z//BLXddJq5s0FIIxfaIkDw9GsWzVsJ3mhoEjJB2KwyM86cnkdUnJF4FRvMq6zK5jHa9EY5UaLGN+U2930WKF4Nl77Z4gVcp1Y7Lo/ycnR7H0e7zH0FMcz5jW5WyktIZ5iEhJaw5J+XUYrij+21psX814JVrwyNcqszA+jUlvoKRD5Bou+E7jbCfmZiLdasSj5fZvOo0u7INbn/L8sddkOLaQU1uZKkySaQKN5iGLq/w7BUKwpPp/WWwFPfofKxfIbhZAZGwlikpN1ncrVg8L/ZnYAePT9Cpb3DXNEEkw==
-X-YMail-OSG: bWS3MbAVM1n2bVlxeCjg2TlJXEwEXoEGyq.F13_51W51aumfuTjEoZcd2ZUlYYp
- stFoP_2g5EeXEqZeYPvxKWq0fNMnCYZHDZ0fkrERKiVX36Vt1W.TKP4AJDypwy3m2KyC0OVOnJZL
- lNWHgRlUkG3GvIryChc7kpQmFEER56RW6RRxvUKy9Dw7i_m4K9W6LEnel6TXSkrGxFScevHaLPIb
- cIaD7u1cl4BQgucbUHhIxkljUrG8rKIQdNRSkm3sUPLMNWC82p1TGNyuLMGrxVImSzAH5HOAbqIr
- eb1nEvNXAmBlzuQe1gd_M9cMy0aU7Xp5xwllx7WdHOt7u4o.wqP.PsP2nBLOIHV7rHwqPZJutNsk
- GVgcFZvwY0QOVy.22QoRTHqitXF5IV4SBE0tdpg8FjikNo76Gss5NPN5QKMc1AR10t0YSLtAU4Lh
- eCIa7QVMsKdJINa6K8SHDOoTaZNHZEC84uzTgbnpcqIuXpzG0WFKU5NwKdWTX6mzC827UX5l86_G
- Y3I2V2AC1m3cczrnTg2Jk_78saePb3O4tROy2dpdi2eUJmGtpnQhMXfprvzIQoPCwvhPJAm0VSaR
- 7igRx3fUIVzar9zL8EXd24N88KP98alU2UYYoOcK1xpz5yeBTR9LV_JrBUH3kM06LUBPL7kKQ1FT
- _rsK62RKBhagfpGB_sNarttM01UB6cZXFSS0QGalITrL4p8HXXIOuGZkpJYMenvUcXcePXJz7k9m
- mRfmhsDdC37ejqg4NAF2sQLgjJDTnarPnJUUhGxHI1L95Cdg5Qs3FThDjIZP.3Zszf4bCgtdoSJ6
- 8oOXIGi2MIhHwYyH5clNw89yC1UkGi0NN4A4UYecGMZnKT2FL89uiNkWmGA30V4P8ipi5sZj1blV
- 11JrBME.JXClK.hTYUmyonRj8.7yedYE1ierTiuQ8as.QyIU0Ip6Awh8aKuSCyauYhItHz7mvI_Y
- q.uB7eY1deNgdTngRS14yIMl9dyfpHZ5KHdDmQ1KwlKbRv_uaMUFAdxJwNQWFcFzXKC525vzR4.U
- 37WeCqn04LlTvF8ZfyHyzhiDsBHO8dc81WzLIVGw22BC1FaAPSSQh05BNHurY3kmRAK9nOLKQL5d
- SfhFvCWyCuub334uX7tNlsPqXJTMdSOJ_pLJJqWJ0Hq4JM.C5.tqPAZ27YnwBAfyqaijr_go_Byl
- i6mQPFDvtpUFArRx3S35wK5NaIsf8t6MLYLRQ3MhchdystDZ8aOBTbGtGKDKGcDUXi.gvfpM0s8M
- tEHadBg0X207GBLRP6HyVhfM6PBxpuMBu4JH52Hv1ahnKngljmMqC8IpAcQ_mIvpB84TwN7WBt6_
- nMZ4OeTKJpgWVob0Qfs1fYuVo.vuXrf_J5.0rwtwzOg--
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.gq1.yahoo.com with HTTP; Thu, 19 Sep 2019 15:11:29 +0000
-Received: by smtp424.mail.gq1.yahoo.com (Oath Hermes SMTP Server) with ESMTPA ID d8617a679873d1c43053a5376a695e1e;
-          Thu, 19 Sep 2019 15:11:23 +0000 (UTC)
-Date:   Thu, 19 Sep 2019 23:11:16 +0800
-From:   Gao Xiang <hsiangkao@aol.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-erofs@lists.ozlabs.org, Miao Xie <miaoxie@huawei.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: erofs -next tree inclusion request
-Message-ID: <20190919150213.GA6138@hsiangkao-HP-ZHAN-66-Pro-G1>
+        id S2391234AbfISP1z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Sep 2019 11:27:55 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40092 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2391130AbfISP1w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 11:27:52 -0400
+Received: by mail-ot1-f68.google.com with SMTP id y39so3441084ota.7
+        for <linux-next@vger.kernel.org>; Thu, 19 Sep 2019 08:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=intel-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=BQhJr69/vPd/U/psJVJ1y2BU+JZc/GqWvX4OAnagwrY=;
+        b=TU+WvyEN5IqmhO1QeCdr0zyP5aga8ovoC/U2eRs61E+zTYw6pidSqTlkToVYeiIHo6
+         vCcaYto8j9wnV9tJrRMQRX0nadMJFe7U6CZLGRjbdhBK35pUGFPhvnnu9BcvNG6vl1yA
+         wtSwB0eb62xfZVsN+sGz7OcIHWAUcDVZ8eQ0ZxSoKRT+1F202vpKjLle/8YGBqDDH793
+         uBqFTCNdFgu9r/ReamEEtBFyyRKuV9ACURztz002sq82ARVTbabM+KjTIkK7pfmcHezX
+         2DxqyGFnmk7tvKZz12hstb8UMYVmd4W5+0DAM8450Uy88YRbBd9mPpjxKKhT19A+kApK
+         /9sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=BQhJr69/vPd/U/psJVJ1y2BU+JZc/GqWvX4OAnagwrY=;
+        b=MUyp60ftHj2ZYduqa3CzNuO4LW55ZTiwHDwGmCD95f3tzv6dVligAZn2AZGSHX3Q6A
+         4hZjnWwzP81jPCGb5fcTjJyL/0xi7ruKilXz/1nwL99dE0hpvTa20Cv2MiYGr+odSuJj
+         /EFqMCsuLoZByXicAIOLrgEt4xmolqCYfvIZ8LBjGj+aOFYpeGbuKC+uSBiieMqqpDwd
+         zGAfofHvq84qceJryJ/yFeCB4PIDdhWKBqI4QqYvjHgbMuEFHMcQuNLG1E2tF4o8WOfw
+         Lvl0ok+M6gEi8DbEhJAF9rALjWMBufdvaknzgAazNU9BvqB0UdmOAZ56e5uMnlnMxKxB
+         jwxg==
+X-Gm-Message-State: APjAAAVu3fSZUClNxiPdhSqMLC26fY5nV/u78HDwQ6Hh57Vgng/zsToJ
+        JSA1m8Zt/tGjFYknR2wwP/AX+QrEUdAthzqt5wzSXQ==
+X-Google-Smtp-Source: APXvYqxSV6mNOx+JelZSXq1gKYybEh6/xyhCkyebC74L1X6VZAart17bTvoaHHN9s5S2diRF49ItUjuFyqqea11bCLs=
+X-Received: by 2002:a9d:6014:: with SMTP id h20mr7012748otj.207.1568906871267;
+ Thu, 19 Sep 2019 08:27:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190919145027.GN3642@sirena.co.uk>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-References: <20190919150213.GA6138.ref@hsiangkao-HP-ZHAN-66-Pro-G1>
-X-Mailer: WebService/1.1.14303 hermes Apache-HttpAsyncClient/4.1.4 (Java/1.8.0_181)
+References: <20190919150147.GO3642@sirena.co.uk>
+In-Reply-To: <20190919150147.GO3642@sirena.co.uk>
+From:   Dan Williams <dan.j.williams@intel.com>
+Date:   Thu, 19 Sep 2019 08:27:40 -0700
+Message-ID: <CAPcyv4hq2N2H-HszhEm-rT2YziTLSeU1A5ea19-bDvSXMZLjCw@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the nvdimm tree with the
+ libnvdimm-fixes tree
+To:     Mark Brown <broonie@kernel.org>
+Cc:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Yi Zhang <yi.zhang@redhat.com>, Jeff Moyer <jmoyer@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Sep 19, 2019 at 03:50:27PM +0100, Mark Brown wrote:
-> On Thu, Sep 19, 2019 at 10:37:22PM +0800, Gao Xiang wrote:
-> 
-> > The fixes only -fixes branch is
-> > git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git fixes
-> 
-> > Thanks for taking time on this stuff...
-> 
-> OK, thanks - I've added that for tomorrow and I'll try to remember to
-> add it onto the end of today's build too.  Like I said before you might
-> need to remind Stephen about the trees when he gets back on the 30th but
-> hopefully he'll see these mails.
+On Thu, Sep 19, 2019 at 8:02 AM Mark Brown <broonie@kernel.org> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the nvdimm tree got a conflict in:
+>
+>   drivers/nvdimm/pfn_devs.c
+>
+> between commit:
+>
+>   274b924088e935 ("libnvdimm/pfn: Fix namespace creation on misaligned addresses")
+>
+> from the libnvdimm-fixes tree and commit:
+>
+>   edbb52c24441ab ("libnvdimm/pfn_dev: Add page size and struct page size to pfn superblock")
+>
+> from the nvdimm tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>
+> diff --cc drivers/nvdimm/pfn_devs.c
+> index cb98b8fe786e2,80c7992bc5389..0000000000000
+> --- a/drivers/nvdimm/pfn_devs.c
+> +++ b/drivers/nvdimm/pfn_devs.c
+> @@@ -724,9 -786,10 +788,11 @@@ static int nd_pfn_init(struct nd_pfn *n
+>         memcpy(pfn_sb->uuid, nd_pfn->uuid, 16);
+>         memcpy(pfn_sb->parent_uuid, nd_dev_to_uuid(&ndns->dev), 16);
+>         pfn_sb->version_major = cpu_to_le16(1);
+> -       pfn_sb->version_minor = cpu_to_le16(3);
+> +       pfn_sb->version_minor = cpu_to_le16(4);
+>  +      pfn_sb->end_trunc = cpu_to_le32(end_trunc);
+>         pfn_sb->align = cpu_to_le32(nd_pfn->align);
+> +       pfn_sb->page_struct_size = cpu_to_le16(MAX_STRUCT_PAGE_SIZE);
+> +       pfn_sb->page_size = cpu_to_le32(PAGE_SIZE);
+>         checksum = nd_sb_checksum((struct nd_gen_sb *) pfn_sb);
+>         pfn_sb->checksum = cpu_to_le64(checksum);
 
-Thanks, I will keep eyes on -next branch and remind him when it's really
-necessary.
-
-> 
-> Thanks for adding your subsystem tree as a participant of linux-next.  As
-> you may know, this is not a judgement of your code.  The purpose of
-> linux-next is for integration testing and to lower the impact of
-> conflicts between subsystems in the next merge window.
-> 
-> You will need to ensure that the patches/commits in your tree/series have
-> been:
->      * submitted under GPL v2 (or later) and include the Contributor's
->         Signed-off-by,
->      * posted to the relevant mailing list,
->      * reviewed by you (or another maintainer of your subsystem tree),
->      * successfully unit tested, and
->      * destined for the current or next Linux merge window.
-
-Yes, I understand these rules (by keeping up with several previous rounds)
-and thanks for your reminder again.
-
-> 
-> Basically, this should be just what you would send to Linus (or ask him
-> to fetch).  It is allowed to be rebased if you deem it necessary.
-
-I will give a try after these commits are all solid and pull request with
-my PGP key then... Thank you...
-
-Thanks,
-Gao Xiang
-
+Yes, looks correct. Apologies for not highlighting this conflict in advance.

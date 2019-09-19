@@ -2,152 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7841B786F
-	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 13:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65B86B7881
+	for <lists+linux-next@lfdr.de>; Thu, 19 Sep 2019 13:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389829AbfISLZ7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Sep 2019 07:25:59 -0400
-Received: from mail-wm1-f43.google.com ([209.85.128.43]:51908 "EHLO
-        mail-wm1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388045AbfISLZ7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 07:25:59 -0400
-Received: by mail-wm1-f43.google.com with SMTP id 7so4054925wme.1
-        for <linux-next@vger.kernel.org>; Thu, 19 Sep 2019 04:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oPvtOafvq76kiLVqfAmEseelG4Y2Ff2XEtEcadYdFVw=;
-        b=sUkcHgegQ6vAXIKQtwcJcnpNB7Vpf2mERtD+t6kGBFwXy/ekwL8wavMWeVECbZ+Bnm
-         RirzdAdCXDvvy/9qRA3I+Ku5yARidnvTAB59Ko2eNvHTUi8iZf7H1s0xhL4uzp6uWMBD
-         rNzsnxS/bxIJIB6KjIgHcwpfvVsN40bB+SmcBdWR8YlBsUU2CC8++x6GoXB3WaqCrHNR
-         KmY3sJx/sS7r1tcKdtSW+VRXoloZWX+STSzeRjpN2nc6Bwllk0gOZwI7nTKRTGwDvkzh
-         KtOtd8QvrYkHnJjcazUAlEMfTJxPwl5ITkNMYMmoczYPIBLUUsuD4oJszVx6cOm5q6rn
-         CPUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oPvtOafvq76kiLVqfAmEseelG4Y2Ff2XEtEcadYdFVw=;
-        b=Xz0pOUgTGl8h7modiVp0S7XtcrAqbJQ+shcEMNqfrWUPbYrA1Ys9kM/tSxBWLLnqYc
-         ueBpXVDAHJcs3+RZ1hM0X/FNqEpEAri9inTcddErIjIMDjrSXJ2UkQ/88E+3W/1feIfY
-         6aISRrFFGmOFJ6BdtKY7rNvVM5C3YMJF1D8vcQJdKOyLQ65fAYOYqWeOCLu5WsEHzXBW
-         Kn/G4WF/M60NHxsheXQZ0RvgHGZ8fhlptuLirdAjUyO3Foxcx7/RWthX3hWK/DjQ6rMO
-         lBem2KGAQ4Dc0X0W7BIC0Ld5M/dsTnvnIMaSD3IeXg1uEf37PtCu4gLB7wPi1dgG3KH4
-         VK2Q==
-X-Gm-Message-State: APjAAAWja+IMZaL+c9xpfeMQyGkWjQYhrP98S2jscY0V92+S53O+mm6c
-        owyINaWPaKTfUiKPR9I7NgGWrA87CixhtA==
-X-Google-Smtp-Source: APXvYqwzVzxBmXYi+hC2JGBTZiROsHEgg7yfx7yIk9A3eBT7KiXqjngb0JK807OYSuyGAQj13k7cwg==
-X-Received: by 2002:a7b:c451:: with SMTP id l17mr2161562wmi.61.1568892357235;
-        Thu, 19 Sep 2019 04:25:57 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id u68sm7913808wmu.12.2019.09.19.04.25.56
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 19 Sep 2019 04:25:56 -0700 (PDT)
-Message-ID: <5d8365c4.1c69fb81.96da1.332a@mx.google.com>
-Date:   Thu, 19 Sep 2019 04:25:56 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2389874AbfISLbJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Sep 2019 07:31:09 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:59188 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389849AbfISLbJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Sep 2019 07:31:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=WtXZHsJGvu4bWl1ePQybzvrW/OfxAqdqaHQn3V7Ss8U=; b=pJkaZmASbMIUAxrxZG2kscwAC
+        Yy+rCJ6GAxAL60xSAmmBGmxnzENXIpUtuDexzqb38IUcfwzoS5vjIX6eI3atYJfN7yrXSbY0lFXRN
+        q01ZwqJeYb08eDVREhWrqPwwuyhaeLOWvA0zBYQaMG411FAGHYY5z/JxqjRPZybjBjN90=;
+Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.co.uk>)
+        id 1iAueR-0002Is-7Z; Thu, 19 Sep 2019 11:31:07 +0000
+Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
+        id 448552742939; Thu, 19 Sep 2019 12:31:06 +0100 (BST)
+Date:   Thu, 19 Sep 2019 12:31:06 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the btrfs-kdave tree with Linus' tree
+Message-ID: <20190919113106.GC3642@sirena.co.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.3-7731-gcd0a293e6cef
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 325 boots: 14 failed,
- 299 passed with 12 offline (v5.3-7731-gcd0a293e6cef)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="hQiwHBbRI9kgIhsi"
+Content-Disposition: inline
+X-Cookie: I'll be Grateful when they're Dead.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 325 boots: 14 failed, 299 passed with 12 offline (=
-v5.3-7731-gcd0a293e6cef)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.3-7731-gcd0a293e6cef/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.3-7731-gcd0a293e6cef/
+--hQiwHBbRI9kgIhsi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.3-7731-gcd0a293e6cef
-Git Commit: cd0a293e6cef4a0111ed8d5c7f9350aa1c9096c1
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 93 unique boards, 28 SoC families, 27 builds out of 214
+Hi all,
 
-Boot Failures Detected:
+Today's linux-next merge of the btrfs-kdave tree got conflicts in:
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            mt7622-rfb1: 1 failed lab
-            rk3399-firefly: 1 failed lab
+  fs/btrfs/block-group.c
+  fs/btrfs/ctree.h
+  fs/btrfs/extent-tree.c
+  fs/btrfs/send.c
+  fs/btrfs/space-info.c
+  include/uapi/linux/btrfs_tree.h
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-            rk3399-firefly: 1 failed lab
+between a number of commits in Linus' tree and a number of commits in
+the btrfs-kdave tree.  I don't feel comfortable that I can resolve these
+safely and the btrfs-kdave tree hasn't changed since August with the
+last non-merge commit in June so I've dropped the tree for today.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
+--hQiwHBbRI9kgIhsi
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    defconfig+kselftest:
-        gcc-8:
-            meson-g12a-sei510: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2DZvkACgkQJNaLcl1U
+h9BuHgf8D4zhKRg3HIRAc0Az3qB+CGTRrROkYlLwVXKk24lMbV6I+cjI0gQhBQ5o
+4YEtdG+skW5LUHYqVH9UmRhjk7UVpaeURhqWXpMlpcEckdHkt4sPVkCW2bFJ7PHo
+uBKjYskRRBjaBiOmbV2+0dTpRlXp3LlZZR3jIKVp7Hh03pblYY8zcvgUM3+eaYXJ
+O+9J4A1GlVgeIqxEkzfeS/HrQwZOTkAY1HFb0YEn//TclR2NcxHHmuSjh3FQKFz1
+VWzv0GAqMIXgHBEYKMrZHrgFLumPO9Rn9HdJ090XUWMxy3vFK+fm+Ed7tZMzxdte
+CNIy+Ovqi42BQMgsHxHmEAbwDjCW3Q==
+=kYTH
+-----END PGP SIGNATURE-----
 
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--hQiwHBbRI9kgIhsi--

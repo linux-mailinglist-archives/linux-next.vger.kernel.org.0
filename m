@@ -2,141 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6D6BB6B1
-	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2019 16:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A76BBE6D
+	for <lists+linux-next@lfdr.de>; Tue, 24 Sep 2019 00:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439857AbfIWO2Y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Sep 2019 10:28:24 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:42678 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437634AbfIWO2X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 10:28:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=pfO0w2VZ1NL504GmbRCCM2xrQ+ksHz0wYBTzCBYK0Ec=; b=fjRlOStJKkZCqSjwxVhWIXfaq
-        ncf21egJn851tlhDPNJsd2Ajs3gOhR2yRDfM3PvVxg7ti3UaFif+5b5Tfu25i1lNlpAlAU/rAc/op
-        erhysCFHFpvQLieLXnIlqrjmrLHpG8SVbg2q8TA7hDXVSfglNpBsnuNVjzmCbGCTHKR+8q8oyKmcZ
-        pXIm4R954n/XKhFQixdHsd+4hGDN+9yxqZnEdnq5CQpm4y3fm5bwT2LhrgVlvceBzG/7k4hPbPyFr
-        xrAgxtldFO5ulVHs80iZPUfDK2KWPz33AqdkdoE9SqGX0KU0Yhg40UNARyMwD18vXBN3QatmfHHJx
-        1sBbCsG5A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iCPK4-0004A7-Bf; Mon, 23 Sep 2019 14:28:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7935E301A7A;
-        Mon, 23 Sep 2019 16:27:29 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 78B0820D80D44; Mon, 23 Sep 2019 16:28:14 +0200 (CEST)
-Date:   Mon, 23 Sep 2019 16:28:14 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
+        id S2390898AbfIWW00 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Sep 2019 18:26:26 -0400
+Received: from mail-ed1-f65.google.com ([209.85.208.65]:43891 "EHLO
+        mail-ed1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390460AbfIWW00 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 18:26:26 -0400
+Received: by mail-ed1-f65.google.com with SMTP id r9so14454153edl.10;
+        Mon, 23 Sep 2019 15:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:in-reply-to:references:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=rs2RJDT5CsHbbEtk6Tq8OPTXVr0+QPsaOdJbfaooK0s=;
+        b=aj0n9SYvFIYCRxpn20Jz+FRTJT0KI+N5uVRMrxxEpuhyjLbdEoS1G9UzMTavhqTMWL
+         1LCe2i8i2ERqrH2v8e+Br3FQO+eO6jERm2FkKcW6wPK0ChFI2+XTooznTacB4rvoJzbJ
+         EwL2dOAquvmqhdDCmqLqSIMqII9gJxgpCwt4zV/JvI+xFOKzoT9d2Gxer0x6aoxYbYFw
+         PfcImqKzbV6AYykpbw9rwmP+G5tfi1N5t8tyx5ueI1CdVQ14TsY2lS6yEO5k5j41/Gpy
+         JPpOQXcdiOsRx8HloPeT68q5AHuowfy7lgwJaRyrfeF0Jdy0vCjpTW0WM1crdjdZ7sIC
+         OJgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=rs2RJDT5CsHbbEtk6Tq8OPTXVr0+QPsaOdJbfaooK0s=;
+        b=aw6lr4twK+3f6JLmTaTooj4yuHni9sqDLpQG8/gSWRl4HKZOczF+a1bZUii3AzeT/V
+         /YCGKZjfwzMl2k95l8F0pHmHBGF+8gieyijkBTzL0T/CQiKwkADxlfW5IXPltSRjEgmY
+         CLuKNiqrFwpl7QsCRk5VYz6Ko6hx9558UrBO0zl84BMcKA0X+AXBgrIHk2Iiy5W5BWQL
+         3HW3HbyjaNC+ixog7ZOQHgqRd5acnX1w0q9iep5+zfFUnNecRJCD3ZlerCXmDKE1UGdl
+         EBO77it8APyuuaOETA9dR8prFmj+HzFZTA5YRtP0w+wdHav8SZo+U913ThVuHldoOO02
+         BDtA==
+X-Gm-Message-State: APjAAAXvfDBpxrr/zk0PlkhEVDAFwhhGReRvhDXsJst6wnPWU1sIBM6y
+        ioVZLiU1icVcXLNWihaTgwVoZai35T2MqATMYk8=
+X-Google-Smtp-Source: APXvYqySJ1IkREdlT+UI4UOVQVT+SfLT1tYPl30tjmrGFsNVQKX6YQUTs7Yc92vR0eMvX6JFzK296KU+kWVADdNeZTs=
+X-Received: by 2002:a50:918d:: with SMTP id g13mr2529336eda.64.1569277583256;
+ Mon, 23 Sep 2019 15:26:23 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:aa7:c354:0:0:0:0:0 with HTTP; Mon, 23 Sep 2019 15:26:22
+ -0700 (PDT)
+In-Reply-To: <20190807155738.GA9394@azazel.net>
+References: <20190807183606.372ca1a4@canb.auug.org.au> <f54391d9-6259-d08b-8b5f-c844093071d8@infradead.org>
+ <20190807155738.GA9394@azazel.net>
+From:   Ivan Kalvachev <ikalvachev@gmail.com>
+Date:   Tue, 24 Sep 2019 01:26:22 +0300
+Message-ID: <CABA=pqeES0C2+7GpAOYuCOqd5DrbZhjS1Tkrxn4kGxXQJkrAfg@mail.gmail.com>
+Subject: Re: linux-next: Tree for Aug 7 (net/bridge/netfilter/nf_conntrack_bridge.c)
+To:     Jeremy Sowden <jeremy@azazel.net>
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        chris@chris-wilson.co.uk
-Subject: Re: linux-next: Tree for Sep 18 (objtool)
-Message-ID: <20190923142814.GB2369@hirez.programming.kicks-ass.net>
-References: <20190918221053.GV2596@sirena.co.uk>
- <be0fb087-5fb4-a790-90dd-cc2af62419e7@infradead.org>
- <20190923092024.GI2349@hirez.programming.kicks-ass.net>
- <20190923124901.3ayejcis5ijrsvbx@treble>
- <20190923133352.GI2332@hirez.programming.kicks-ass.net>
- <20190923141657.p6kpqro3q4p4umwi@treble>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20190923141657.p6kpqro3q4p4umwi@treble>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        bridge@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 09:16:57AM -0500, Josh Poimboeuf wrote:
-> On Mon, Sep 23, 2019 at 03:33:52PM +0200, Peter Zijlstra wrote:
-> > On Mon, Sep 23, 2019 at 07:49:01AM -0500, Josh Poimboeuf wrote:
-> > > On Mon, Sep 23, 2019 at 11:20:24AM +0200, Peter Zijlstra wrote:
-> > > > On Wed, Sep 18, 2019 at 09:04:21PM -0700, Randy Dunlap wrote:
-> > > > > On 9/18/19 3:10 PM, Mark Brown wrote:
-> > > > > > Hi all,
-> > > > > > 
-> > > > > > Changes since 20190917:
-> > > > > > 
-> > > > > 
-> > > > > on x86_64:
-> > > > > 
-> > > > > drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: i915_gem_execbuffer2_ioctl()+0x2fb: call to gen8_canonical_addr() with UACCESS enabled
-> > > > 
-> > > > I'm thinking that comes from:
-> > > > 
-> > > > 				offset = gen8_canonical_addr(offset & ~UPDATE);
-> > > > 				if (unlikely(__put_user(offset, &urelocs[r-stack].presumed_offset))) {
-> > > > 
-> > > > however, per commit 6ae865615fc4 (and 2a418cf3f5f1) the compiler really
-> > > > should not be sticking gen8_canonical_addr() after __uaccess_begin().
-> > > > 
-> > > > /me puzzled...
-> > > 
-> > > I think you're looking at the wrong code.  It has user_access_begin/end
-> > > around it:
-> > > 
-> > > 		if (!user_access_begin(user_exec_list, count * sizeof(*user_exec_list)))
-> > > 			goto end;
-> > > 
-> > > 		for (i = 0; i < args->buffer_count; i++) {
-> > > 			if (!(exec2_list[i].offset & UPDATE))
-> > > 				continue;
-> > > 
-> > > 			exec2_list[i].offset =
-> > > 				gen8_canonical_addr(exec2_list[i].offset & PIN_OFFSET_MASK);
-> > > 			unsafe_put_user(exec2_list[i].offset,
-> > > 					&user_exec_list[i].offset,
-> > > 					end_user);
-> > > 		}
-> > > end_user:
-> > > 		user_access_end();
-> > > 
-> > 
-> > Oh, Duh... Yeah, so the alternative to your solution is to do 2 loops.
-> > Not sure which would be better.
-> 
-> I like your idea better, makes the fix more localized and shrinks the
-> uaccess window.  Something like so (not even compile tested):
+On 8/7/19, Jeremy Sowden <jeremy@azazel.net> wrote:
+> On 2019-08-07, at 08:29:44 -0700, Randy Dunlap wrote:
+>> On 8/7/19 1:36 AM, Stephen Rothwell wrote:
+>> > Hi all,
+>> >
+>> > Changes since 20190806:
+>>
+>> on i386:
+>> when CONFIG_NF_TABLES is not set/enabled:
+>>
+>>   CC      net/bridge/netfilter/nf_conntrack_bridge.o
+>> In file included from
+>> ../net/bridge/netfilter/nf_conntrack_bridge.c:21:0:
+>> ../include/net/netfilter/nf_tables.h: In function
+>> =E2=80=98nft_gencursor_next=E2=80=99:
+>> ../include/net/netfilter/nf_tables.h:1224:14: error: =E2=80=98const stru=
+ct
+>> net=E2=80=99 has no member named =E2=80=98nft=E2=80=99; did you mean =E2=
+=80=98nf=E2=80=99?
+>>   return net->nft.gencursor + 1 =3D=3D 1 ? 1 : 0;
+>>               ^~~
+>
+> I've just posted a series of fixes for netfilter header compilation
+> failures, and I think it includes the fix for that:
+>
+>
+> https://lore.kernel.org/netdev/20190807141705.4864-5-jeremy@azazel.net/T/=
+#u
 
-At which point we should probably also Cc Chris who caused all this
-with commit:
+Have these patches been committed?
 
-  2889caa92321 ("drm/i915: Eliminate lots of iterations over the execobjects array")
-
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> index b5f6937369ea..406af374f728 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_execbuffer.c
-> @@ -2847,6 +2847,11 @@ i915_gem_execbuffer2_ioctl(struct drm_device *dev, void *data,
->  			u64_to_user_ptr(args->buffers_ptr);
->  		unsigned int i;
->  
-> +		for (i = 0; i < args->buffer_count; i++) {
-> +			exec2_list[i].offset =
-> +				gen8_canonical_addr(exec2_list[i].offset & PIN_OFFSET_MASK);
-> +		}
-> +
->  		/* Copy the new buffer offsets back to the user's exec list. */
->  		/*
->  		 * Note: count * sizeof(*user_exec_list) does not overflow,
-> @@ -2862,8 +2867,6 @@ i915_gem_execbuffer2_ioctl(struct drm_device *dev, void *data,
->  			if (!(exec2_list[i].offset & UPDATE))
->  				continue;
->  
-> -			exec2_list[i].offset =
-> -				gen8_canonical_addr(exec2_list[i].offset & PIN_OFFSET_MASK);
->  			unsafe_put_user(exec2_list[i].offset,
->  					&user_exec_list[i].offset,
->  					end_user);
+I just hit the same bug in linux-5.3.1 release.

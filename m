@@ -2,77 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5939BB99B9
-	for <lists+linux-next@lfdr.de>; Sat, 21 Sep 2019 00:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34FD5BADE8
+	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2019 08:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2406164AbfITWf5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Sep 2019 18:35:57 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:35446 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2406093AbfITWf5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Sep 2019 18:35:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=NEWIc8p+eWJkSfR001CCsjTaw+6M+U0tYPGR2ne+fs8=; b=i4MeTf2PIAgQ6Z9wsFYf9fV5k
-        +ZW1Eu0jsyTawHiq6IKagwWIfayV6BexWAyl/56kFc1t1qGpRmvO/NWGPYI+wy8V5wrBGwX8ZhEDB
-        F90JzjdMWQGP2w4o1jwbI6RB6Ry/42DoF9nBx4u+pPibs7mGrO5AlAEhSSGoosfW4Vlv0uuVHKord
-        yUhJi5gTvkUWSLZpDzE9pAIlkXf03I0c1EcdbjNsc4cPe74vXd9hQihKUa9XAmrAOoc0bJGlC/Oz1
-        C1CwNIXakCfkp4wyTivAX/OEBsrPSIPX30BX7trMtIOGMDfdtXu/xu92R1ZLr9WtpW70kR4xQqmTb
-        hUw+uXNYg==;
-Received: from [2601:1c0:6280:3f0::9a1f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iBRVN-0006oZ-64; Fri, 20 Sep 2019 22:35:57 +0000
-Subject: Re: linux-next: Tree for Sep 20 (amdgpu-2)
-To:     Mark Brown <broonie@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20190920163637.GI3822@sirena.co.uk>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <797e0870-bab3-2716-119c-c06735354506@infradead.org>
-Date:   Fri, 20 Sep 2019 15:35:56 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S2404364AbfIWGiJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Sep 2019 02:38:09 -0400
+Received: from mx1.redhat.com ([209.132.183.28]:40938 "EHLO mx1.redhat.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387519AbfIWGiJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Sep 2019 02:38:09 -0400
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mx1.redhat.com (Postfix) with ESMTPS id CF375883CA;
+        Mon, 23 Sep 2019 06:38:08 +0000 (UTC)
+Received: from sirius.home.kraxel.org (ovpn-116-47.ams2.redhat.com [10.36.116.47])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1997B5D713;
+        Mon, 23 Sep 2019 06:38:05 +0000 (UTC)
+Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
+        id E120F9D6A; Mon, 23 Sep 2019 08:38:03 +0200 (CEST)
+Date:   Mon, 23 Sep 2019 08:38:03 +0200
+From:   Gerd Hoffmann <kraxel@redhat.com>
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Alexander Kapshuk <alexander.kapshuk@gmail.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sean Paul <sean@poorly.run>, Dave Airlie <airlied@linux.ie>
+Subject: Re: Kernel panic during drm/nouveau init 5.3.0-rc7-next-20190903
+Message-ID: <20190923063803.c7zpqwcqq5f2acq5@sirius.home.kraxel.org>
+References: <20190907090534.GB1712@pc-sasha.localdomain>
+ <20190920194450.GA3970@pc-sasha.localdomain>
+ <CAKMK7uECOW2YigBe7aeCDPYXoXJ8TVh65xvKBjJXXRt5Y7HngA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20190920163637.GI3822@sirena.co.uk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKMK7uECOW2YigBe7aeCDPYXoXJ8TVh65xvKBjJXXRt5Y7HngA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+X-Greylist: Sender IP whitelisted, not delayed by milter-greylist-4.5.16 (mx1.redhat.com [10.5.110.26]); Mon, 23 Sep 2019 06:38:09 +0000 (UTC)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/20/19 9:36 AM, Mark Brown wrote:
-> Hi all,
-> 
-> News: There will likely be no more -next builds until Stephen returns on
-> the 30th, I *may* do some next week but it's more likely that I won't
-> and it certainly won't be every day.
-> 
-> Changes since 20190919:
-> 
+> > 'Git bisect' has identified the following commits as being 'bad'.
+> >
+> > b96f3e7c8069b749a40ca3a33c97835d57dd45d2 is the first bad commit
+> > commit b96f3e7c8069b749a40ca3a33c97835d57dd45d2
+> > Author: Gerd Hoffmann <kraxel@redhat.com>
+> > Date:   Mon Aug 5 16:01:10 2019 +0200
+> >
+> >     drm/ttm: use gem vma_node
+> >
+> >     Drop vma_node from ttm_buffer_object, use the gem struct
+> >     (base.vma_node) instead.
+> >
+> >     Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
+> >     Reviewed-by: Christian König <christian.koenig@amd.com>
+> >     Link: http://patchwork.freedesktop.org/patch/msgid/20190805140119.7337-9-kraxel@redhat.com
 
-on x86_64:
+> > Today, I upgraded the kernel to 5.3.0-next-20190919, which booted fine
+> > with no Xorg regressions to report.
+> >
+> > Just wondering if the earlier kernels would not boot for me because of
+> > the changes introduced by the 'bad' commits being perhaps incomplete?
 
-(1) where is function get_wm_urgent() defined?  I cannot find it (i.e.,
-grep cannot find it).
+Yes, we had a regression in nouveau, fixed by this patch (in drm-misc-next):
 
-../drivers/gpu/drm/amd/amdgpu/../display/dc/dcn21/dcn21_resource.c: In function ‘calculate_wm_set_for_vlevel’:
-../drivers/gpu/drm/amd/amdgpu/../display/dc/dcn21/dcn21_resource.c:964:22: error: SSE register return with SSE disabled
-  wm_set->urgent_ns = get_wm_urgent(dml, pipes, pipe_cnt) * 1000;
-                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+commit 019cbd4a4feb3aa3a917d78e7110e3011bbff6d5
+Author: Thierry Reding <treding@nvidia.com>
+Date:   Wed Aug 14 11:00:48 2019 +0200
 
-(2) drivers/gpu/drm/amd/amdgpu/../display/dc/dcn21/dcn21_resource.c needs
-#include <linux/slab.h>
-for the kzalloc() and kfree() function calls.
+    drm/nouveau: Initialize GEM object before TTM object
+    
+    TTM assumes that drivers initialize the embedded GEM object before
+    calling the ttm_bo_init() function. This is not currently the case
+    in the Nouveau driver. Fix this by splitting up nouveau_bo_new()
+    into nouveau_bo_alloc() and nouveau_bo_init() so that the GEM can
+    be initialized before TTM BO initialization when necessary.
+    
+    Fixes: b96f3e7c8069 ("drm/ttm: use gem vma_node")
+    Acked-by: Gerd Hoffmann <kraxel@redhat.com>
+    Acked-by: Ben Skeggs <bskeggs@redhat.com>
+    Signed-off-by: Thierry Reding <treding@nvidia.com>
+    Link: https://patchwork.freedesktop.org/patch/msgid/20190814093524.GA31345@ulmo
 
+HTH,
+  Gerd
 
-Thanks.
--- 
-~Randy

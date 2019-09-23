@@ -2,120 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3411ABAE02
-	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2019 08:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D67BB143
+	for <lists+linux-next@lfdr.de>; Mon, 23 Sep 2019 11:20:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2393276AbfIWGvT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Sep 2019 02:51:19 -0400
-Received: from mail-io1-f66.google.com ([209.85.166.66]:47031 "EHLO
-        mail-io1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2393269AbfIWGvT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 02:51:19 -0400
-Received: by mail-io1-f66.google.com with SMTP id c6so17612472ioo.13;
-        Sun, 22 Sep 2019 23:51:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=evwzKkn5TJ8V/5p8U1GA5lnr2fQciYS7Ye2nzlu/Ar0=;
-        b=k42kXdpEzpJIgiprOwLFh1cwZ7Yys+0E1k4wofFz3IuJs4wWXaFe4JeJh15Ha/ekpH
-         WI/bj3taqJE1PD5I+geYoVLCxlLk0XuLG3m0y2kX/2PZhuGWV+4QvOT9zMMdTmCrQMMt
-         0pALJMqQn0OBD8xISo/RWq6z6LfVxJTncDdVWUN/U8FT/m4oLnmrtEK26QRpNFt/tMiF
-         7Xv4V2MntqeOtGO3BXBGCqqvG1CqwddbzwbOn4TTVK/IWcQbqqrNsOwKxBo4NzysbZrL
-         n9Lmr8aEt6jtGqL81UaeoUaelEXCXIKC8HkO1QnP6wt7RaC5MRkiyilWwufMzBj95MiH
-         qYdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=evwzKkn5TJ8V/5p8U1GA5lnr2fQciYS7Ye2nzlu/Ar0=;
-        b=jFHsdBDSdCMwh6FB3xexl1hFWaDGfLRULnIdEF5OObd3fT5rbxMZ3j9DooKE320gyH
-         qcj0dOM/IMM53wSy/pHil1PXfEbu73njTtQRiTZzakYfgq/HNICVeuQ5l5oBWXlc+ZXb
-         nMz0z/b/zeyXR4BupYR5gZLLNOYsZ/HPTmUWzEbDB9KBFd99lpJl9SefZnPv9aKwWdD2
-         JWa9zgPUkArcS3TJDVcFSQ7Dvi3SHDGcxJcRnDF1408ZOM+6yQzgsQkopBb0+PDqICS1
-         d1zWXRM2Hn9IaHQ6fIEcFQ+NQBfJAcJ+yrryarnLctqzWH3Rw4i9HdSuZyOtOATIjnWb
-         vevg==
-X-Gm-Message-State: APjAAAUrQln765J01aJtRGOjxUk2/5KbUvsQ/iSSJTR+jkeoL38JTfmk
-        OCnYwNwCHW5YlmV2FLgGihusWgDAM3YdBrgdYiA=
-X-Google-Smtp-Source: APXvYqwHJLJqkepkero16CeFnVT2p/BRJnGlNyIoVpnrwyU/cIXQnIS9UN2pJqBGUqfPEiA0WorKHiMZRRy9rEkEMlE=
-X-Received: by 2002:a5d:8b07:: with SMTP id k7mr27637147ion.20.1569221478478;
- Sun, 22 Sep 2019 23:51:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190907090534.GB1712@pc-sasha.localdomain> <20190920194450.GA3970@pc-sasha.localdomain>
- <CAKMK7uECOW2YigBe7aeCDPYXoXJ8TVh65xvKBjJXXRt5Y7HngA@mail.gmail.com> <20190923063803.c7zpqwcqq5f2acq5@sirius.home.kraxel.org>
-In-Reply-To: <20190923063803.c7zpqwcqq5f2acq5@sirius.home.kraxel.org>
-From:   Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date:   Mon, 23 Sep 2019 09:50:41 +0300
-Message-ID: <CAJ1xhMV2ikra9udRhhLLntLxZKO23jLkU=9AeP=denALhw8r_w@mail.gmail.com>
-Subject: Re: Kernel panic during drm/nouveau init 5.3.0-rc7-next-20190903
-To:     Gerd Hoffmann <kraxel@redhat.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-next <linux-next@vger.kernel.org>,
+        id S2406557AbfIWJU2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Sep 2019 05:20:28 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:41022 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2406312AbfIWJU2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 05:20:28 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=bfWPmEePIEEvI7FHVQIjqMBwg860wGrKuJkDM9HE0Ec=; b=QF+HKI8YgdFiP8TIOd7TWBlrr
+        2PSTzEcjY1GU9/PmuKbrej07rEROdfsmrzszZ23xSySqrRgQkXz9dDmvjLzmM7K2qKfxKANCl+XyS
+        /vf4KC7do1evnJHhDUiGUYNtPYCAbtVP0gQNvsjuAHO0odm1Ij+q/+54i0bHJsNq2pEQexLUacwt8
+        JV6cHsakHMi/Nx+18vvGhZiD7cnTfkKsK7D+asxFzlkW2QtTNeJvHjY6X4BGXgoAxuTuPIYO3b5kH
+        bbjsckiFzFFQbq6xc2eqc5WVhx4HFfFeaSnjevJbUnUj3TKS63/Mh8+DVnV4jZX93zpmFmLX9k/AE
+        PN3KyDMMw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iCKW9-0001nu-Gc; Mon, 23 Sep 2019 09:20:26 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 24DB4303DFD;
+        Mon, 23 Sep 2019 11:19:39 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 37C4E20C3E178; Mon, 23 Sep 2019 11:20:24 +0200 (CEST)
+Date:   Mon, 23 Sep 2019 11:20:24 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Sean Paul <sean@poorly.run>, Dave Airlie <airlied@linux.ie>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: linux-next: Tree for Sep 18 (objtool)
+Message-ID: <20190923092024.GI2349@hirez.programming.kicks-ass.net>
+References: <20190918221053.GV2596@sirena.co.uk>
+ <be0fb087-5fb4-a790-90dd-cc2af62419e7@infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be0fb087-5fb4-a790-90dd-cc2af62419e7@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Sep 23, 2019 at 9:38 AM Gerd Hoffmann <kraxel@redhat.com> wrote:
->
-> > > 'Git bisect' has identified the following commits as being 'bad'.
-> > >
-> > > b96f3e7c8069b749a40ca3a33c97835d57dd45d2 is the first bad commit
-> > > commit b96f3e7c8069b749a40ca3a33c97835d57dd45d2
-> > > Author: Gerd Hoffmann <kraxel@redhat.com>
-> > > Date:   Mon Aug 5 16:01:10 2019 +0200
-> > >
-> > >     drm/ttm: use gem vma_node
-> > >
-> > >     Drop vma_node from ttm_buffer_object, use the gem struct
-> > >     (base.vma_node) instead.
-> > >
-> > >     Signed-off-by: Gerd Hoffmann <kraxel@redhat.com>
-> > >     Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > >     Link: http://patchwork.freedesktop.org/patch/msgid/20190805140119=
-.7337-9-kraxel@redhat.com
->
-> > > Today, I upgraded the kernel to 5.3.0-next-20190919, which booted fin=
-e
-> > > with no Xorg regressions to report.
-> > >
-> > > Just wondering if the earlier kernels would not boot for me because o=
-f
-> > > the changes introduced by the 'bad' commits being perhaps incomplete?
->
-> Yes, we had a regression in nouveau, fixed by this patch (in drm-misc-nex=
-t):
->
-> commit 019cbd4a4feb3aa3a917d78e7110e3011bbff6d5
-> Author: Thierry Reding <treding@nvidia.com>
-> Date:   Wed Aug 14 11:00:48 2019 +0200
->
->     drm/nouveau: Initialize GEM object before TTM object
->
->     TTM assumes that drivers initialize the embedded GEM object before
->     calling the ttm_bo_init() function. This is not currently the case
->     in the Nouveau driver. Fix this by splitting up nouveau_bo_new()
->     into nouveau_bo_alloc() and nouveau_bo_init() so that the GEM can
->     be initialized before TTM BO initialization when necessary.
->
->     Fixes: b96f3e7c8069 ("drm/ttm: use gem vma_node")
->     Acked-by: Gerd Hoffmann <kraxel@redhat.com>
->     Acked-by: Ben Skeggs <bskeggs@redhat.com>
->     Signed-off-by: Thierry Reding <treding@nvidia.com>
->     Link: https://patchwork.freedesktop.org/patch/msgid/20190814093524.GA=
-31345@ulmo
->
-> HTH,
->   Gerd
->
+On Wed, Sep 18, 2019 at 09:04:21PM -0700, Randy Dunlap wrote:
+> On 9/18/19 3:10 PM, Mark Brown wrote:
+> > Hi all,
+> > 
+> > Changes since 20190917:
+> > 
+> 
+> on x86_64:
+> 
+> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: i915_gem_execbuffer2_ioctl()+0x2fb: call to gen8_canonical_addr() with UACCESS enabled
 
-Terrific.
-Thanks for the info.
+I'm thinking that comes from:
+
+				offset = gen8_canonical_addr(offset & ~UPDATE);
+				if (unlikely(__put_user(offset, &urelocs[r-stack].presumed_offset))) {
+
+however, per commit 6ae865615fc4 (and 2a418cf3f5f1) the compiler really
+should not be sticking gen8_canonical_addr() after __uaccess_begin().
+
+/me puzzled...

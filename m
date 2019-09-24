@@ -2,128 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 65CCCBBE9A
-	for <lists+linux-next@lfdr.de>; Tue, 24 Sep 2019 00:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C0BBBFDB
+	for <lists+linux-next@lfdr.de>; Tue, 24 Sep 2019 04:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2503310AbfIWWtB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Sep 2019 18:49:01 -0400
-Received: from kadath.azazel.net ([81.187.231.250]:50402 "EHLO
-        kadath.azazel.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2392789AbfIWWtB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 18:49:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=azazel.net;
-         s=20190108; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=wrFXuUS6cMlZgiHuswyjpCApzT5WSsSqxNzHgn6vPqE=; b=O5sUnSYOoCkjUIQwSjFmZhoUxs
-        XG+0wxpU92DnXZC4y+NyG4uPtdKBl9+2DaXnBEPTjzOOMPoh4ej3tiR71m37oP+oaVGnJCoIrkIJw
-        qfAXLj6/N9/70g/5EqNNFn5iKQGmjvu8X7L1VEZ7wsrGrVPhiDMZIgMJmbqkeKI1iqKIwQw7i286l
-        5WvMMQFE+wld2Kio6U2WP/z7jYicKRnZctVFVoQb1/ZQLFQGy+bC3Q8qXSPNpQmgaozxBNE0BQatD
-        vY1aLZVsF8E24sN2cZ3DhRHSi6LOdNewcr55iVEHL0NbfwDjLZrrAeD+D3MNgmLcRklArmaZRCuq/
-        35mT5haA==;
-Received: from celephais.dreamlands ([192.168.96.3] helo=azazel.net)
-        by kadath.azazel.net with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <jeremy@azazel.net>)
-        id 1iCX8Q-0008EQ-Jj; Mon, 23 Sep 2019 23:48:46 +0100
-Date:   Mon, 23 Sep 2019 23:48:45 +0100
-From:   Jeremy Sowden <jeremy@azazel.net>
-To:     Ivan Kalvachev <ikalvachev@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        bridge@lists.linux-foundation.org
-Subject: Re: linux-next: Tree for Aug 7
- (net/bridge/netfilter/nf_conntrack_bridge.c)
-Message-ID: <20190923224844.GA4859@azazel.net>
-References: <20190807183606.372ca1a4@canb.auug.org.au>
- <f54391d9-6259-d08b-8b5f-c844093071d8@infradead.org>
- <20190807155738.GA9394@azazel.net>
- <CABA=pqeES0C2+7GpAOYuCOqd5DrbZhjS1Tkrxn4kGxXQJkrAfg@mail.gmail.com>
+        id S2403911AbfIXCDP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Sep 2019 22:03:15 -0400
+Received: from mail-wr1-f52.google.com ([209.85.221.52]:39837 "EHLO
+        mail-wr1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2408472AbfIXCDL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Sep 2019 22:03:11 -0400
+Received: by mail-wr1-f52.google.com with SMTP id r3so65040wrj.6
+        for <linux-next@vger.kernel.org>; Mon, 23 Sep 2019 19:03:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ghDTPJbP6oLZsAtKUa+BKCKzEIbpv8sc/sYMfBTfWl8=;
+        b=ZpR2SlJ2UE77gt+I0lKuFCY/3OZani6wA8yH2En+oVej26aug2/6tiSdhIg3yFBStd
+         Bkqlo9Gei3opJ3ZFf+CJCscMh14rkysp7/qOPUZaIQpcMbEc/ah2DtkQ/Y2Luj0mRZuq
+         UqFldfQt5PS36o0GIqGNZoKColeARZJwnOokV5Wwd1/YqmxhgaWkyU6TYnOQlfqgiUKg
+         Ivb2gzNWnnveYs3wZ8YrJ2W4YkAR6637TIcTmcpazE1bYBH5+lauSdqFaNdl2jXCPR6N
+         bF/b9snnQr6olaSzSzzvyJuMJ+hijqba2mtqWH56sSpxCV/Bia0Y2m55QwCu90oefXUu
+         84dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ghDTPJbP6oLZsAtKUa+BKCKzEIbpv8sc/sYMfBTfWl8=;
+        b=qDoTz87skZH1/nbos4xVfSYjieSZxvC2r6RcjfnEZ9+ZjJ2oihVjEfyZvINqh2I0jw
+         nc/fsTfbl7qbHv2nNfkfw5sVePBpWprBTdYeq9lL0UJ1KsPhV/i43eOeAFTyOSjJ6TbV
+         rQfpBBpY7zAFNQ8ICw5GV1lrfGxWZ27BjfdlBWwxgxuZ5HiRUfqw8VcnO3fg9sKkgMtP
+         F4T9qlqOIanmevA6N5sJymeB+kykIJdCjBCyKIKciSb2wKEA77iEmdVEE86wepfFBVdB
+         9mbWl8AynTXOGc/sQncIywfmVNlGMJA3e3pgqD87/onpl0hU1PyvGid5feay+ghgPHQY
+         qzNA==
+X-Gm-Message-State: APjAAAVn5LGAbo9DyUFcVI6+1t5KHJl9icILCUTZ7ozC9lyysFUMIPkR
+        WuFnkK4/Ry5J777eHWEiEOh6LeNu0svmHA==
+X-Google-Smtp-Source: APXvYqztFfIJrZc/r0i5Kdj97IdG8yUECfZEiuQ/u7gMK6Sdvh7MgadLY9oI69HApRYe1Iec73oqMQ==
+X-Received: by 2002:a5d:4f0b:: with SMTP id c11mr226450wru.63.1569290589176;
+        Mon, 23 Sep 2019 19:03:09 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id c132sm192140wme.27.2019.09.23.19.03.08
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 23 Sep 2019 19:03:08 -0700 (PDT)
+Message-ID: <5d89795c.1c69fb81.c312c.0c57@mx.google.com>
+Date:   Mon, 23 Sep 2019 19:03:08 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0OAP2g/MAC+5xKAE"
-Content-Disposition: inline
-In-Reply-To: <CABA=pqeES0C2+7GpAOYuCOqd5DrbZhjS1Tkrxn4kGxXQJkrAfg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 192.168.96.3
-X-SA-Exim-Mail-From: jeremy@azazel.net
-X-SA-Exim-Scanned: No (on kadath.azazel.net); SAEximRunCond expanded to false
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.3-11900-g8bca7701fc34
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 307 boots: 14 failed,
+ 280 passed with 11 offline, 2 untried/unknown (v5.3-11900-g8bca7701fc34)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 307 boots: 14 failed, 280 passed with 11 offline, =
+2 untried/unknown (v5.3-11900-g8bca7701fc34)
 
---0OAP2g/MAC+5xKAE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.3-11900-g8bca7701fc34/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.3-11900-g8bca7701fc34/
 
-On 2019-09-24, at 01:26:22 +0300, Ivan Kalvachev wrote:
-> On 8/7/19, Jeremy Sowden <jeremy@azazel.net> wrote:
-> > On 2019-08-07, at 08:29:44 -0700, Randy Dunlap wrote:
-> > > On 8/7/19 1:36 AM, Stephen Rothwell wrote:
-> > > > Changes since 20190806:
-> > >
-> > > on i386:
-> > > when CONFIG_NF_TABLES is not set/enabled:
-> > >
-> > >   CC      net/bridge/netfilter/nf_conntrack_bridge.o
-> > > In file included from
-> > > ../net/bridge/netfilter/nf_conntrack_bridge.c:21:0:
-> > > ../include/net/netfilter/nf_tables.h: In function
-> > > =E2=80=98nft_gencursor_next=E2=80=99:
-> > > ../include/net/netfilter/nf_tables.h:1224:14: error: =E2=80=98const s=
-truct
-> > > net=E2=80=99 has no member named =E2=80=98nft=E2=80=99; did you mean =
-=E2=80=98nf=E2=80=99?
-> > >   return net->nft.gencursor + 1 =3D=3D 1 ? 1 : 0;
-> > >               ^~~
-> >
-> > I've just posted a series of fixes for netfilter header compilation
-> > failures, and I think it includes the fix for that:
-> >
-> >
-> > https://lore.kernel.org/netdev/20190807141705.4864-5-jeremy@azazel.net/=
-T/#u
->
-> Have these patches been committed?
->
-> I just hit the same bug in linux-5.3.1 release.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.3-11900-g8bca7701fc34
+Git Commit: 8bca7701fc34e3e5e6b5a3c037c3afe692c0cf4a
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 93 unique boards, 26 SoC families, 26 builds out of 214
 
-The series is now in the mainline (and will form part of 5.4-rc1).  Greg
-has queued the patch that fixes this build-failure for 5.3-stable:
+Boot Failures Detected:
 
-  https://lore.kernel.org/netfilter-devel/20190921112145.GA2408749@kroah.co=
-m/T/
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            qcom-qdf2400: 1 failed lab
+            rk3399-firefly: 1 failed lab
 
-so it should be in 5.3.2.
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+            rk3399-firefly: 1 failed lab
 
-J.
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-g12b-s922x-khadas-vim3: 1 failed lab
 
---0OAP2g/MAC+5xKAE
-Content-Type: application/pgp-signature; name="signature.asc"
+    defconfig+kselftest:
+        gcc-8:
+            qcom-qdf2400: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 1 failed lab
+            rk3399-puma-haikou: 1 failed lab
+            sun50i-h5-libretech-all-h3-cc: 1 failed lab
 
------BEGIN PGP SIGNATURE-----
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
-iQIzBAABCgAdFiEEZ8d+2N/NBLDbUxIF0Z7UzfnX9sMFAl2JS74ACgkQ0Z7UzfnX
-9sMHRw/9ESGD+EeoQAYZLrESg2qjYcXjS37LNkvDGXY8aSz9c6rR61M4zhA8+W/k
-IW1yBTQjLIO/3HwZa+PX4NLgiVnVjPk0p4u4KFKZc3iAPi79gG67i8Po3kJN9Ji9
-6+tDMJOa59gGS5rKLfp2rR+ioEIqY3/beCZI51/80Fim4X7MZ8jkvMZw5WsQTCWR
-yA/3crZxzEvw2hTOTFe6aCxVNsEyW1j4HQ6ayw9l3uvN9pp8TAhO7camEmGInRyf
-C6GZ1ch3twfszEBZIrM2H3Vtij0STReE0e5BhGKfAmVodOg5Ols1b89y841f8ZjI
-QMr+PJ3eNonprNpIT6/ektN+J8AcirEJDUbccdNhj4/MDx3rMVKdDOajlDmpP+Pr
-H8Of8YIBaOvXQ+lFsSVDaakYmz1HP0xnEitXX+lKI69VEfpNx3tEL2wlclOZAp3j
-nEWTSlSlIoL+/5S1j3qDwYxzCoDs/kqt2omRu/jiAS7JrJtpd1DN+JgbROVtvCC9
-3CDcTujfkPLooAc2XkJofRn8OT7jOScCpfDUeTPhUwiszjNnMy6zLwgMpfIOHjvc
-Zzgb7G7deOdHf7TsIjgVn77EjdH/w+T23D34yzSyxufl4DT8luNmWUOHPy++ci+u
-fZ6OKxv5D01YdE0ZG6zRCsbuV73757tf2Ls9jJaaT0Ww3g6A8Io=
-=kdTk
------END PGP SIGNATURE-----
+Offline Platforms:
 
---0OAP2g/MAC+5xKAE--
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

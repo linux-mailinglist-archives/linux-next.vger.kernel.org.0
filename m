@@ -2,220 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEB5CBE9F1
-	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2019 03:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3068FBEA8B
+	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2019 04:21:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729625AbfIZBLm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Sep 2019 21:11:42 -0400
-Received: from mail.kernel.org ([198.145.29.99]:51486 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729619AbfIZBLm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 25 Sep 2019 21:11:42 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id C4373222BF;
-        Thu, 26 Sep 2019 01:11:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1569460301;
-        bh=VfbUgy7HR441Vzwxtjp+G0PyKooJ4CSM0JV6dgtmCJI=;
-        h=Date:From:To:Subject:From;
-        b=KQSFEKefRqO+zHelNgPBwo9X8pSbB+8a2iLW8ymOJM6xbXihFCOTALAmeFRBAXPtx
-         /Vnlvu4nxak0vvsZRfVAzHHbPKs11zs5wwjQGpqrHTUrviChZsvKYTqHwb6fTt6QA1
-         gFSkjvKPnuIE+cFOE5upH7LYkNgmrJSuG4ozmv/I=
-Date:   Wed, 25 Sep 2019 18:11:40 -0700
-From:   akpm@linux-foundation.org
-To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject:  mmotm 2019-09-25-18-10 uploaded
-Message-ID: <20190926011140.kBbRLJHpJ%akpm@linux-foundation.org>
-User-Agent: s-nail v14.8.16
+        id S1731152AbfIZCVL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Sep 2019 22:21:11 -0400
+Received: from heliosphere.sirena.org.uk ([172.104.155.198]:40744 "EHLO
+        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725768AbfIZCVL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Sep 2019 22:21:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sirena.org.uk; s=20170815-heliosphere; h=Content-Type:MIME-Version:
+        Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=L320D0QhUAIT+YzEW6A7Pc2P9QvHYpiQbdmEOG6nO4s=; b=WLYauWvR0V0Y8A+TN2huRyhD2
+        kFnnaplieWTWm00iU0pV1xSUYXYqLjrY+4IDZJi4ixi9K6Bh9S6JM7JOWqwwxgiz9r2lzh55GzG0b
+        BS7Xk0dwSgS9ZwMgQpHUaT5xMRABitudtN4t+fFoyas7S4mNYK0xtRxadGQNYAY78hjmM=;
+Received: from [12.157.10.118] (helo=fitzroy.sirena.org.uk)
+        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <broonie@sirena.org.uk>)
+        id 1iDJP3-00014v-8H; Thu, 26 Sep 2019 02:21:09 +0000
+Received: by fitzroy.sirena.org.uk (Postfix, from userid 1000)
+        id A567BD01D66; Thu, 26 Sep 2019 03:21:07 +0100 (BST)
+Date:   Wed, 25 Sep 2019 19:21:07 -0700
+From:   Mark Brown <broonie@kernel.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Sep 25
+Message-ID: <20190926022107.GR2036@sirena.org.uk>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3sP1+uScbtwzRm4f"
+Content-Disposition: inline
+X-Cookie: Be careful!  UGLY strikes 9 out of 10!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The mm-of-the-moment snapshot 2019-09-25-18-10 has been uploaded to
 
-   http://www.ozlabs.org/~akpm/mmotm/
+--3sP1+uScbtwzRm4f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-mmotm-readme.txt says
+Hi all,
 
-README for mm-of-the-moment:
+News: Builds for this week won't appear every day, I will try to
+do some but no guarantees until Stephen returns on the 30th.
+pending-fixes will get more updates than full -next.
 
-http://www.ozlabs.org/~akpm/mmotm/
+Changes since 20190924:
 
-This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-more than once a week.
+The risc-v-fixes tree gained a conflict with Linus' tree which I
+fixed up.
 
-You will need quilt to apply these patches to the latest Linus release (5.x
-or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-http://ozlabs.org/~akpm/mmotm/series
+Non-merge commits (relative to Linus' tree): 1068
+ 1327 files changed, 30940 insertions(+), 14589 deletions(-)
 
-The file broken-out.tar.gz contains two datestamp files: .DATE and
-.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-followed by the base kernel version against which this patch series is to
-be applied.
+----------------------------------------------------------------------------
 
-This tree is partially included in linux-next.  To see which patches are
-included in linux-next, consult the `series' file.  Only the patches
-within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-linux-next.
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
 
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a defconfig for arm64, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf.
 
-A full copy of the full kernel tree with the linux-next and mmotm patches
-already applied is available through git within an hour of the mmotm
-release.  Individual mmotm releases are tagged.  The master branch always
-points to the latest release, so it's constantly rebasing.
+Below is a summary of the state of the merge.
 
-http://git.cmpxchg.org/cgit.cgi/linux-mmotm.git/
+I am currently merging 311 trees (counting Linus' and 77 trees of bug
+fix patches pending for the current merge release).
 
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
 
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
 
-The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-contains daily snapshots of the -mm tree.  It is updated more frequently
-than mmotm, and is untested.
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
 
-A git copy of this tree is available at
+--3sP1+uScbtwzRm4f
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	http://git.cmpxchg.org/cgit.cgi/linux-mmots.git/
+-----BEGIN PGP SIGNATURE-----
 
-and use of this tree is similar to
-http://git.cmpxchg.org/cgit.cgi/linux-mmotm.git/, described above.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl2MIJIACgkQJNaLcl1U
+h9Bgwwf/UP7wmDwmqrAxul4H+JE0LpqYxvJokIP9iA9FYZNwXMW0cgqeni0lF0QI
+8BUUEajTXDutrRU6Pr2bgMGHVx3acNHpd/hXqqxa4nw2kA+tkV+LEk2JganLqIdp
+H7Gdok9pNiz+W2yUSBEaEcAsmgio1hB1mAjvkBe5/nWkkTtyD7jgCAq/GE0GXZwE
+sJgrCAtWVIhf3ZzFJfcJltcFAwmy56dOmF5x7kWFcSUyxVhpMdPsZj91kh91foR6
+x01S3PEwJmegXqsg5HEjAj0pIyLTeb/ZKlkwGkC/j+mujOupa0xgGc6Sho4PAlpu
+0e8LPJQNffxkIktcPjdoFiCmXjangQ==
+=Ko4Z
+-----END PGP SIGNATURE-----
 
-
-This mmotm tree contains the following patches against 5.3:
-(patches marked "*" will be included in linux-next)
-
-  origin.patch
-* memcg-kmem-do-not-fail-__gfp_nofail-charges.patch
-* linux-coffh-add-include-guard.patch
-* include-proper-prototypes-for-kernel-elfcorec.patch
-* rbtree-sync-up-the-tools-copy-of-the-code-with-the-main-one.patch
-* augmented-rbtree-add-comments-for-rb_declare_callbacks-macro.patch
-* augmented-rbtree-add-new-rb_declare_callbacks_max-macro.patch
-* augmented-rbtree-rework-the-rb_declare_callbacks-macro-definition.patch
-* kernel-doc-core-api-include-stringh-into-core-api.patch
-* writeback-fix-wstringop-truncation-warnings.patch
-* strscpy-reject-buffer-sizes-larger-than-int_max.patch
-* lib-generic-radix-treec-make-2-functions-static-inline.patch
-* lib-extablec-add-missing-prototypes.patch
-* lib-hexdump-make-print_hex_dump_bytes-a-nop-on-debug-builds.patch
-* checkpatch-dont-interpret-stack-dumps-as-commit-ids.patch
-* checkpatch-improve-spdx-license-checking.patch
-* checkpatchpl-warn-on-invalid-commit-id.patch
-* checkpatch-exclude-sizeof-sub-expressions-from-macro_arg_reuse.patch
-* checkpatch-prefer-__section-over-__attribute__section.patch
-* checkpatch-allow-consecutive-close-braces.patch
-* checkpatch-remove-obsolete-period-from-ambiguous-sha1-query.patch
-* checkpatch-make-git-output-use-language=en_usutf8.patch
-* fs-reiserfs-remove-unnecessary-check-of-bh-in-remove_from_transaction.patch
-* fs-reiserfs-journalc-remove-set-but-not-used-variables.patch
-* fs-reiserfs-streec-remove-set-but-not-used-variables.patch
-* fs-reiserfs-lbalancec-remove-set-but-not-used-variables.patch
-* fs-reiserfs-objectidc-remove-set-but-not-used-variables.patch
-* fs-reiserfs-printsc-remove-set-but-not-used-variables.patch
-* fs-reiserfs-fix_nodec-remove-set-but-not-used-variables.patch
-* fs-reiserfs-do_balanc-remove-set-but-not-used-variables.patch
-* reiserfs-remove-set-but-not-used-variable-in-journalc.patch
-* reiserfs-remove-set-but-not-used-variable-in-do_balanc.patch
-* fat-delete-an-unnecessary-check-before-brelse.patch
-* fork-improve-error-message-for-corrupted-page-tables.patch
-* cpumask-nicer-for_each_cpumask_and-signature.patch
-* kexec-bail-out-upon-sigkill-when-allocating-memory.patch
-* kexec-restore-arch_kexec_kernel_image_probe-declaration.patch
-* uaccess-add-missing-__must_check-attributes.patch
-* compiler-enable-config_optimize_inlining-forcibly.patch
-* kgdb-dont-use-a-notifier-to-enter-kgdb-at-panic-call-directly.patch
-* scripts-gdb-handle-split-debug.patch
-* bug-refactor-away-warn_slowpath_fmt_taint.patch
-* bug-rename-__warn_printf_taint-to-__warn_printf.patch
-* bug-consolidate-warn_slowpath_fmt-usage.patch
-* bug-lift-cut-here-out-of-__warn.patch
-* bug-clean-up-helper-macros-to-remove-__warn_taint.patch
-* bug-consolidate-__warn_flags-usage.patch
-* bug-move-warn_on-cut-here-into-exception-handler.patch
-* ipc-mqueuec-delete-an-unnecessary-check-before-the-macro-call-dev_kfree_skb.patch
-* ipc-mqueue-improve-exception-handling-in-do_mq_notify.patch
-* ipc-sem-convert-to-use-built-in-rcu-list-checking.patch
-* lib-lzo-fix-alignment-bug-in-lzo-rle.patch
-* lib-untag-user-pointers-in-strn_user.patch
-* mm-untag-user-pointers-passed-to-memory-syscalls.patch
-* mm-untag-user-pointers-in-mm-gupc.patch
-* mm-untag-user-pointers-in-get_vaddr_frames.patch
-* fs-namespace-untag-user-pointers-in-copy_mount_options.patch
-* userfaultfd-untag-user-pointers.patch
-* drm-amdgpu-untag-user-pointers.patch
-* drm-radeon-untag-user-pointers-in-radeon_gem_userptr_ioctl.patch
-* media-v4l2-core-untag-user-pointers-in-videobuf_dma_contig_user_get.patch
-* tee-shm-untag-user-pointers-in-tee_shm_register.patch
-* vfio-type1-untag-user-pointers-in-vaddr_get_pfn.patch
-* mm-untag-user-pointers-in-mmap-munmap-mremap-brk.patch
-* mm-introduce-madv_cold.patch
-* mm-change-pageref_reclaim_clean-with-page_refreclaim.patch
-* mm-introduce-madv_pageout.patch
-* mm-factor-out-common-parts-between-madv_cold-and-madv_pageout.patch
-* hexagon-drop-empty-and-unused-free_initrd_mem.patch
-* checkpatch-check-for-nested-unlikely-calls.patch
-* xen-events-remove-unlikely-from-warn-condition.patch
-* fs-remove-unlikely-from-warn_on-condition.patch
-* wimax-i2400m-remove-unlikely-from-warn-condition.patch
-* xfs-remove-unlikely-from-warn_on-condition.patch
-* ib-hfi1-remove-unlikely-from-is_err-condition.patch
-* ntfs-remove-unlikely-from-is_err-conditions.patch
-* mm-treewide-clarify-pgtable_page_ctordtor-naming.patch
-* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
-* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
-* mm-memremap-drop-unused-section_size-and-section_mask.patch
-* writeback-fix-use-after-free-in-finish_writeback_work.patch
-* mm-fix-wmissing-prototypes-warnings.patch
-* memcg-only-record-foreign-writebacks-with-dirty-pages-when-memcg-is-not-disabled.patch
-* kernel-sysctlc-do-not-override-max_threads-provided-by-userspace.patch
-* ocfs2-clear-zero-in-unaligned-direct-io.patch
-* ocfs2-clear-zero-in-unaligned-direct-io-checkpatch-fixes.patch
-* fs-ocfs2-fix-possible-null-pointer-dereferences-in-ocfs2_xa_prepare_entry.patch
-* fs-ocfs2-fix-possible-null-pointer-dereferences-in-ocfs2_xa_prepare_entry-fix.patch
-* fs-ocfs2-fix-a-possible-null-pointer-dereference-in-ocfs2_write_end_nolock.patch
-* fs-ocfs2-fix-a-possible-null-pointer-dereference-in-ocfs2_info_scan_inode_alloc.patch
-* ramfs-support-o_tmpfile.patch
-  mm.patch
-* mm-slb-improve-memory-accounting.patch
-* mm-slb-guarantee-natural-alignment-for-kmallocpower-of-two.patch
-* mm-slb-guarantee-natural-alignment-for-kmallocpower-of-two-fix.patch
-* mm-vmscan-expose-cgroup_ino-for-memcg-reclaim-tracepoints.patch
-* mm-mmap-fix-the-adjusted-length-error.patch
-* mm-hotplug-reorder-memblock_-calls-in-try_remove_memory.patch
-* memory_hotplug-add-a-bounds-check-to-check_hotplug_memory_range.patch
-* mm-add-a-bounds-check-in-devm_memremap_pages.patch
-* mm-oom-avoid-printk-iteration-under-rcu.patch
-* mm-oom-avoid-printk-iteration-under-rcu-fix.patch
-* mm-proportional-memorylowmin-reclaim.patch
-* mm-make-memoryemin-the-baseline-for-utilisation-determination.patch
-* mm-make-memoryemin-the-baseline-for-utilisation-determination-fix.patch
-* mm-vmscan-remove-unused-lru_pages-argument.patch
-* info-task-hung-in-generic_file_write_iter.patch
-* info-task-hung-in-generic_file_write-fix.patch
-* kernel-hung_taskc-monitor-killed-tasks.patch
-* hung_task-allow-printing-warnings-every-check-interval.patch
-* lib-genallocc-export-symbol-addr_in_gen_pool.patch
-* lib-genallocc-rename-addr_in_gen_pool-to-gen_pool_has_addr.patch
-* lib-genallocc-rename-addr_in_gen_pool-to-gen_pool_has_addr-fix.patch
-* string-add-stracpy-and-stracpy_pad-mechanisms.patch
-* documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
-* lib-fix-possible-incorrect-result-from-rational-fractions-helper.patch
-* fat-add-nobarrier-to-workaround-the-strange-behavior-of-device.patch
-* aio-simplify-read_events.patch
-* ipc-consolidate-all-xxxctl_down-functions.patch
-  linux-next.patch
-  linux-next-git-rejects.patch
-  diff-sucks.patch
-* pinctrl-fix-pxa2xxc-build-warnings.patch
-* drivers-tty-serial-sh-scic-suppress-warning.patch
-* fix-read-buffer-overflow-in-delta-ipc.patch
-  make-sure-nobodys-leaking-resources.patch
-  releasing-resources-with-children.patch
-  mutex-subsystem-synchro-test-module.patch
-  kernel-forkc-export-kernel_thread-to-modules.patch
-  workaround-for-a-pci-restoring-bug.patch
+--3sP1+uScbtwzRm4f--

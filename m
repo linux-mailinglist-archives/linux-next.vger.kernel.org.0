@@ -2,86 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB894BF72B
-	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2019 18:53:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE18BF798
+	for <lists+linux-next@lfdr.de>; Thu, 26 Sep 2019 19:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727578AbfIZQxN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Sep 2019 12:53:13 -0400
-Received: from mail-io1-f68.google.com ([209.85.166.68]:45692 "EHLO
-        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726029AbfIZQxM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Sep 2019 12:53:12 -0400
-Received: by mail-io1-f68.google.com with SMTP id c25so8270830iot.12
-        for <linux-next@vger.kernel.org>; Thu, 26 Sep 2019 09:53:12 -0700 (PDT)
+        id S1727768AbfIZR3z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Sep 2019 13:29:55 -0400
+Received: from mail-lj1-f171.google.com ([209.85.208.171]:34075 "EHLO
+        mail-lj1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727502AbfIZR3z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Sep 2019 13:29:55 -0400
+Received: by mail-lj1-f171.google.com with SMTP id j19so3052657lja.1
+        for <linux-next@vger.kernel.org>; Thu, 26 Sep 2019 10:29:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=hwzvks7Gr7+1XIiiQ02qXQczeh5vdnmPy8eyhCL+g/8=;
-        b=DKamheupf+N5h7pRAv5J+KoC/x9xJFGGOnNh8kCJzcPS+TcWolfI2B+IMKIo4DX6Cx
-         lglDoNI6KtWVVq6JCAqsxa4na1ilcVNr7kAMuo0QcdI5myEECLtt1uUk6IPGnYivjCa9
-         SGixwU0HNdQczCZy7I4gz7c09v/DUmOMHAwTw=
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=VFcFYcWwpHL0Oho9HxeoU1oGj1fgSa1sn99Foc5xkas=;
+        b=f3LI0a1rOC9G6H//RKCxQuCNO3ym+yCzFJBKUs4LHy/3NHU5iJ4Gw/otd7ByI/DIzH
+         k9ZwUlZ9s1PRq6uVFrxC7fu7fkbk+lQJLzZ3uZ9Z1MnU5tqAVDQSPgTiyJ9L1PzTAAyI
+         I3qspHGkUpzhMw81L1rmuVpT54jIWdyIjVWNscdw2qlpD9fx11WJF35iRq5AP8Teeea3
+         5SZcG7GM+8OwxMd25K5Y57bbITdGWCdcbJW3NtHyhaz3hHdXOXJZBjNOxnIGh+QmFb+p
+         UU3U61d6bROnqbirNbH8XVwCZoKMoaSqAyQsiL00o5xdKWj38BhtCJTIO1CSRxRPfRnF
+         k4KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=hwzvks7Gr7+1XIiiQ02qXQczeh5vdnmPy8eyhCL+g/8=;
-        b=OdSmnuQGggHWL3ypNELdvuiv/AI9WT9+978q/8h4EXzpUvozNSXiwLW8Fr7vuHpjuU
-         MFyN9Zxbl7wYSiXGS16n92BWaV1y9bYjZQoBS86QgbFRb8TSG1yTi0+XKNe5d0lTwa57
-         GyGSrn9ebi7NtC9ZZhWBAGAiOi2jqhlbdVmCXf2wzuKM7bn/xXS3UOaz46cqrTXeRza2
-         2Rib3X3R1kHaqxGnoRAZqPVAh0WddrE1tp8KvWIqBWX+nAvkqPRFS3IPBXuknjbl17/W
-         JIjxebqmjaBWFHLj6UmsGGpGHLomiuTsolIE1N7KfHHYlAGH45dPM36xukbDpOtrMYg5
-         a6TA==
-X-Gm-Message-State: APjAAAXXsGAD4Kboq2OTDdbeLyzpuZjqdk6vxrMURqRL1v5WmlnQ4oxg
-        dz7FYDZQykU/1jxLZ2+3mGLxJw==
-X-Google-Smtp-Source: APXvYqwqW03hqJOrKC/b9yAVj7KWP3IlRpIHeD6tAEu4VYZrzLYcBU8tReLXOeQUFC0TQSgFF1OgyQ==
-X-Received: by 2002:a02:25ca:: with SMTP id g193mr4345524jag.105.1569516791942;
-        Thu, 26 Sep 2019 09:53:11 -0700 (PDT)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id h62sm1077266ild.78.2019.09.26.09.53.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 26 Sep 2019 09:53:11 -0700 (PDT)
-Subject: Re: Request to add linux-kselftest test branch
-To:     Mark Brown <broonie@kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     linux-next@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <8b9795d2-a384-dec8-076c-5b9d5c524eba@linuxfoundation.org>
- <20190926150538.GS2036@sirena.org.uk>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e5af1cd1-be83-cf9e-c6c7-a5258d1b49a9@linuxfoundation.org>
-Date:   Thu, 26 Sep 2019 10:53:10 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=VFcFYcWwpHL0Oho9HxeoU1oGj1fgSa1sn99Foc5xkas=;
+        b=ecfpQCDy1THE2oCTPcj4JOtC/zK7A4WmmL9z75gpyhWLyHHw472RzCOMEujeeJQTpv
+         E/xndAsJ4HTdqUARigmSkCOiIGDPTL7Zn2Yoh5nbdxhZ2I7uQ1iKmrj3UH+VdgfQPW6Q
+         x2+3/1mEqNFy6QI+8tI1NFHqI9gJ+sfsCRQPUaJvZpTXGGsTHRXE7masGP+wWqcF8Or4
+         xVrarHRKdFwHu2RcsPJXloVWxbXjHo3ErmluLEw8qW2c6d/Ugf8Z2K3J9AkLiy2qTPDW
+         Je5CO5ZnQrkP+DredrO5LhU18yFso/aTRsS5X01LXz5S4YczWQmLTz4UBOEPBdQgzu4N
+         gw3Q==
+X-Gm-Message-State: APjAAAVxjYPM18sB6apOnQQPoaKVFL3McTMu+n6TQCpCsUXGI1RgtLvO
+        GJXUUtC/IEH6MT/D2MitvS65PUmnz9W017XpCzT83A==
+X-Google-Smtp-Source: APXvYqxCfkoodIYkCFn1sFSEjjcZZiio6Uoe3BORK8KOACz9tWMOiafi0paC+PE4FqC1HNVbkYaiak/fzpb1FlSp/Q4=
+X-Received: by 2002:a2e:a178:: with SMTP id u24mr3351803ljl.149.1569518992751;
+ Thu, 26 Sep 2019 10:29:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20190926150538.GS2036@sirena.org.uk>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 26 Sep 2019 22:59:41 +0530
+Message-ID: <CA+G9fYu0hkS+NdwX38DNTygV1A7eebvjZvWvFUTfL=f3_4m=Dw@mail.gmail.com>
+Subject: perf build failed on linux -next on i386 build
+To:     Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, namhyung@kernel.org
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 9/26/19 9:05 AM, Mark Brown wrote:
-> On Wed, Sep 25, 2019 at 01:30:15PM -0600, Shuah Khan wrote:
-> 
->> Please add the following linux-kselftest test branch to linux-next.
-> 
->> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=test
-> 
->> please let me know if you have questions.
-> 
-> OK, I've added that now - I did actually merge it in by hand
-> yesterday too.  It looks like it's for kunit so I guess Brendan
-> should be in the CC list for any issues too?  Hopefully Stephen
-> will see these mails when he gets back but it's worth checking
-> and following up to make sure that he picks it up after he gets
-> back on the 30th.
+perf build failed on linux -next on i386 build
 
-Great. I forgot to include Brendan. Thanks for adding him.
+build error:
+perf-in.o: In function `libunwind__x86_reg_id':
+tools/perf/util/libunwind/../../arch/x86/util/unwind-libunwind.c:109:
+undefined reference to `pr_err'
+tools/perf/util/libunwind/../../arch/x86/util/unwind-libunwind.c:109:
+undefined reference to `pr_err'
 
-thanks,
--- Shuah
+- Naresh

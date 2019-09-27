@@ -2,62 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6E9C04C2
-	for <lists+linux-next@lfdr.de>; Fri, 27 Sep 2019 14:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74888C08CC
+	for <lists+linux-next@lfdr.de>; Fri, 27 Sep 2019 17:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726144AbfI0MAz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Sep 2019 08:00:55 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:52437 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725992AbfI0MAz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Sep 2019 08:00:55 -0400
-Received: by mail-wm1-f68.google.com with SMTP id r19so6288780wmh.2
-        for <linux-next@vger.kernel.org>; Fri, 27 Sep 2019 05:00:54 -0700 (PDT)
+        id S1727289AbfI0PnD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Sep 2019 11:43:03 -0400
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:33731 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727207AbfI0PnD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Sep 2019 11:43:03 -0400
+Received: by mail-qt1-f196.google.com with SMTP id r5so7873238qtd.0;
+        Fri, 27 Sep 2019 08:43:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=VmP4t6Nkr9v/B1z1zla8wNSvSBHiglNNEGF3yF1dQs4=;
-        b=HI6E8j2ZJ2AQOIzhMnVCzIBjEDhU4u4IGpPZK1gmx23mTI3nDmimYSe0oqEAERTOSB
-         VrZUstVXbxTtB3VMBYW/UK7b0xNZ7JVCvOuIeKuLMvWAOJkNgtSguHcbt8aLhmStsn98
-         SZJKtHGXlej0zi5y+fC4HOoHLMMUqLqxMdYn87c3P6cNe/RLpQcXWmFu2cGtds3UsMuN
-         6jZzfWT0TsToUuc/xe0yl6jfgxF5vbn9HlqEN6UL9P9fXVSAg5OkDJNFiWHUfoRf6m86
-         XLRkznG2qXy1+r2JKXzQoMrI02LHdZMWpYi/L4tsL9KpbLoXdXAvrC7V2MUQAOZsbAdf
-         eo4g==
+        h=from:date:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=wj8jU1iK4RSmx+X1oOclo1EaNDpdKAJxwobsrBcy5cI=;
+        b=D1nfq5N4SbJ7splLGR5xJ+5grwYQ7AM/tHiZvR1WI3Qd7JJ7hAONrI9lrtRXkkA2CN
+         yvWA8dEiKDFDybPcS9zYBFVHhZ6O4CF3XVWQOiRtNftZ+DhqBM6ayetfhQSPgbhnUaFl
+         OWllVG33BTCl8IVAhgDWS6qKE5m33yCJDauTXVM+709ES1mxIrNSsGbtwBoBEBaHNjSs
+         +nDD7eSKdVrNcT0SPSUcreQIbmrCl/W9dmrwTmvxl2Yi3sCt3BvRCmcO9Mg1KkvQXQn6
+         RWmgPNunoO0UOdwSBOKDUGk1069B3Py9c6uS/B2rjnEzRmXNIhs9vnSCRbUtH8OZ+oLt
+         FYaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=VmP4t6Nkr9v/B1z1zla8wNSvSBHiglNNEGF3yF1dQs4=;
-        b=ORRHuRX64GFwpAjOboGRXjgh8Q+f5X3TxzKKF8izuxGMUxCnmsvSQ+gzz5HKlJRuCq
-         pRNBPlSiCGL9fn5HlksbtLs7c07facZ33XGwGKpxpsg9oJWh6si4f5uv48/NAFXSTSi0
-         hnhK4mnEJkFVbgqFi5n5Ij6L2JI0JIS6b0TIeSrltag5Vz2890aSqtCQFMg3BYhI6KPA
-         W/63h3+BjTkfmRsYB429zdvg4lMTyxvroUOc1WVYjGTRe2yobMPBGgxeED/GPEoH4cPH
-         THnv7OT86rGPAFm4la1mS8/P2D4j/QTK/yc1Zt+/BQdD6hEP4YoHI2un8SYwBxrgIL25
-         6N/Q==
-X-Gm-Message-State: APjAAAWQjhNdu/HBTACJW5R2AqUSiU9HzgDXL7jG9xyTjabGkxc13zGN
-        55CjRZHkg3W2uBSmzlRAwLaQ67XmDwdaku5xM8g=
-X-Google-Smtp-Source: APXvYqzkXH2RcVTdXambsud7uZOvX0VdfNgxe1iiI/q6qkT6kwPrDkt3vtooYZsMYcZllrt7J03L11bzzd5Hd8dy1pg=
-X-Received: by 2002:a05:600c:2057:: with SMTP id p23mr6709586wmg.17.1569585653536;
- Fri, 27 Sep 2019 05:00:53 -0700 (PDT)
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wj8jU1iK4RSmx+X1oOclo1EaNDpdKAJxwobsrBcy5cI=;
+        b=NkyNHIu3sEJ0INxyfLYvm2vYAl56HFIfpArO+gBBMsfKkRG1MdN9wvEvdnP8nWKuWA
+         dumSPV70qHciu+lMWe84/D1QsDK+wiKXvKKTY6dPg3aCLej2lOoZ0Z6KibyOY++bVpSk
+         9BdUUWvjXWLwb9o+hdNwfoMR3ZAUQUQ2MCi2IE6gzbFAfNBmGg0jsdafD/E47AKSJvv9
+         APlqZ2soeijV5yE3124qNIdrIuA4F6Tnouq3VqDiBLPMdLgktMP4dYmCcfdPe0/R2k9T
+         Ff7XlTXR0K3bYC2ZrZJmoIVuX4B9dUHn+MsEkJdSg5CHrfcnmov3FDVfU0SaVx/EvxoF
+         3Zsg==
+X-Gm-Message-State: APjAAAULewu36CKhrpYuiqAcmS9cWoK7J+C79MTVgwykAfpkb1qgx75c
+        5N41rloTBpOV0tPnSVJM+VY=
+X-Google-Smtp-Source: APXvYqzMC0T6yfrqLjpGJqf8tTd90CuiY4ZBjX3WZ57r9sl5NDmnrbU7P1y+3b90GNS5/6D0kUagqA==
+X-Received: by 2002:ad4:544a:: with SMTP id h10mr8399008qvt.239.1569598982382;
+        Fri, 27 Sep 2019 08:43:02 -0700 (PDT)
+Received: from quaco.ghostprotocols.net ([179.97.35.50])
+        by smtp.gmail.com with ESMTPSA id b16sm3644080qtk.65.2019.09.27.08.43.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2019 08:43:01 -0700 (PDT)
+From:   Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+X-Google-Original-From: Arnaldo Carvalho de Melo <acme@kernel.org>
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 48AE840396; Fri, 27 Sep 2019 12:42:59 -0300 (-03)
+Date:   Fri, 27 Sep 2019 12:42:59 -0300
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com,
+        alexander.shishkin@linux.intel.com, jolsa@redhat.com,
+        namhyung@kernel.org, open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: perf build failed on linux -next on i386 build
+Message-ID: <20190927154259.GC20644@kernel.org>
+References: <CA+G9fYu0hkS+NdwX38DNTygV1A7eebvjZvWvFUTfL=f3_4m=Dw@mail.gmail.com>
+ <20190926173648.GA31477@kernel.org>
+ <CA+G9fYt4fzmiFCsZXP+OC1joB=w5nkgn_MR++Yu61yWDWrh1yg@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a5d:4e4e:0:0:0:0:0 with HTTP; Fri, 27 Sep 2019 05:00:53
- -0700 (PDT)
-Reply-To: edithbrown0257@gmail.com
-From:   Edith Brown <tinaevan26@gmail.com>
-Date:   Fri, 27 Sep 2019 13:00:53 +0100
-Message-ID: <CACU_YNOr22ujrhKVeUq-URYuRdr-_6HEoo3vn-m3mvT0pPJ1vA@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYt4fzmiFCsZXP+OC1joB=w5nkgn_MR++Yu61yWDWrh1yg@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Em Fri, Sep 27, 2019 at 02:05:32AM +0530, Naresh Kamboju escreveu:
+> On Thu, 26 Sep 2019 at 23:06, Arnaldo Carvalho de Melo
+> <arnaldo.melo@gmail.com> wrote:
+> >
+> > Em Thu, Sep 26, 2019 at 10:59:41PM +0530, Naresh Kamboju escreveu:
+> > > perf build failed on linux -next on i386 build
+> > >
+> > > build error:
+> > > perf-in.o: In function `libunwind__x86_reg_id':
+> > > tools/perf/util/libunwind/../../arch/x86/util/unwind-libunwind.c:109:
+> > > undefined reference to `pr_err'
+> > > tools/perf/util/libunwind/../../arch/x86/util/unwind-libunwind.c:109:
+> > > undefined reference to `pr_err'
+> >
+> > Can you try with the following patch?
+> 
+> Thanks for the patch.
+> After applying this below patch build completes.
+
+Thanks for the report and for testing it, appreciated,
+
+- Arnaldo
+ 
+> 
+> >
+> >
+> > diff --git a/tools/perf/arch/x86/util/unwind-libunwind.c b/tools/perf/arch/x86/util/unwind-libunwind.c
+> > index 05920e3edf7a..47357973b55b 100644
+> > --- a/tools/perf/arch/x86/util/unwind-libunwind.c
+> > +++ b/tools/perf/arch/x86/util/unwind-libunwind.c
+> > @@ -1,11 +1,11 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >
+> >  #include <errno.h>
+> > +#include "../../util/debug.h"
+> >  #ifndef REMOTE_UNWIND_LIBUNWIND
+> >  #include <libunwind.h>
+> >  #include "perf_regs.h"
+> >  #include "../../util/unwind.h"
+> > -#include "../../util/debug.h"
+> >  #endif
+> >
+> >  #ifdef HAVE_ARCH_X86_64_SUPPORT
+> 
+> - Naresh
+
 -- 
-Hello dear
-how are you?
-my name is Edith Brown
-i am a U.S military woman
-is my pleasure meeting you here
-best regards
+
+- Arnaldo

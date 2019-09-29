@@ -2,91 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6101C11D8
-	for <lists+linux-next@lfdr.de>; Sat, 28 Sep 2019 20:51:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 828BAC1989
+	for <lists+linux-next@lfdr.de>; Sun, 29 Sep 2019 23:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728576AbfI1Svo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 28 Sep 2019 14:51:44 -0400
-Received: from ozlabs.org ([203.11.71.1]:52365 "EHLO ozlabs.org"
+        id S1728809AbfI2VJg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Sep 2019 17:09:36 -0400
+Received: from ozlabs.org ([203.11.71.1]:59095 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725965AbfI1Svn (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 28 Sep 2019 14:51:43 -0400
+        id S1726390AbfI2VJg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 29 Sep 2019 17:09:36 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46gd702DDtz9sNk;
-        Sun, 29 Sep 2019 04:51:39 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hJ7d713Bz9sPJ;
+        Mon, 30 Sep 2019 07:09:33 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1569696700;
-        bh=/l9qEG9lYLSfQiy+M11YKY6NZHNniz4+SxKxCR50HzE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bE20e8NlVnuqELQM6Muq0SfXvsMLaLUKEdW7gAGL5oCU0Jp2nI4A5Viy1oN6k0zmz
-         +08N3MKTxaAI1776qPOrhS6VowSoOzq26jPwdNA+bBSKjU5UosZIVhy4TbxLQf88wL
-         V6mMuzFpiDigU84Qqgn4jRKrYWzZWrhklBteN00vOvCpWGg4vbujbnybYZJjbwG6iC
-         LRBJD3Yha8lWsSHWHwS2+lyyzfB8az98mg6/dUp5sXMf+i1lRyCr66Q7zSd+OZiNai
-         pLHJdsR5qCPPHf+FBUaWMFfE6MU9daTkU/gVzu2V1Re3oeFJlVKYqMzkTszRdSJgFg
-         6PYBwcnCbnvZg==
-Date:   Sun, 29 Sep 2019 04:51:32 +1000
+        s=201702; t=1569791374;
+        bh=tWRZCat4/UwzEcEmfVXIX8jvNO/PY9P9Fu2GO8vElTQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Kt5kkCBETAamvN5idSPVP6RG/gZoRDMJJ+81Z9Wp2sWVRL3EYPV1WG053aWnnIYNf
+         bibkZPKLMvYx6ga2DoK+5cEAmJlMOHURHPeQAmu9rnDi/vfFQS/gCTCm1Gw1okvlE5
+         xIXOGYfhO+7qtV+gtg5/UmJ9gpMs6siOwLIigYKDQCaa/5EAaru3FxsNSAleOKcbQU
+         8y9kWU8e8aBWpKZJR3/BkrM/yp9l5Sq1WPc5Iy32K7dE0yYxLRuPIgLnP1pOBL3KQX
+         /Of7Oemo6E5ADh4G6vdGeLAEAQkwmDI/BgtIuV/kKAwF4VlElRCBbVh6arhHiuEi2w
+         LjJw3Qnyuv7IA==
+Date:   Mon, 30 Sep 2019 07:09:28 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Kevin(Yudong) Yang" <yyd@google.com>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20190929045132.0bfafe1a@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Linux-kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: no release today
+Message-ID: <20190930070928.1f5f2487@canb.auug.org.au>
+In-Reply-To: <20190916013727.GT4352@sirena.co.uk>
+References: <20190905160237.2e972a89@canb.auug.org.au>
+        <20190916013727.GT4352@sirena.co.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UEN2NK7YulpHY.04HhXfKmn";
+Content-Type: multipart/signed; boundary="Sig_/m2U0PcRWVFkf9o_o9Ais1r_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UEN2NK7YulpHY.04HhXfKmn
+--Sig_/m2U0PcRWVFkf9o_o9Ais1r_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Mark,
 
-In commit
+On Mon, 16 Sep 2019 02:37:27 +0100 Mark Brown <broonie@kernel.org> wrote:
+>
+> On Thu, Sep 05, 2019 at 04:02:37PM +1000, Stephen Rothwell wrote:
+>=20
+> > As I said yesterday, there will be no release today, or any day until
+> > September 30. =20
+>=20
+> I'm going to try to provide some builds for this week (16th-20th).
+> There may also be a build for the 15th depending on how much rebuilding
+> the rest of the trees is needed for the build I've got ongoing.
 
-  6b3656a60f20 ("tcp_bbr: fix quantization code to not raise cwnd if not pr=
-obing bandwidth")
-
-Fixes tag
-
-  Fixes: 3c346b233c68 ("tcp_bbr: fix bw probing to raise in-flight data for=
- very small BDPs")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Did you mean
-
-Fixes: 383d470936c0 ("tcp_bbr: fix bw probing to raise in-flight data for v=
-ery small BDPs")
+I just want to say a big thank you for taking this on again.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UEN2NK7YulpHY.04HhXfKmn
+--Sig_/m2U0PcRWVFkf9o_o9Ais1r_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2Pq7QACgkQAVBC80lX
-0GxCoAgAoyfHAEebArs0G//Lmb33bVwzzOjFgXTIQl+7HfzvOkHCOdwrNQ7IM+qW
-UmS20ZxbB8HvNm17xst0OkNcvxt65mUndA7lPRhkh9FgnsygCIoTk0QGppm6Bmqi
-KpLhr53QmXWoVr+wlbdZ1D0B8RrJ1+86iqnn1uJd5ZkSNv+pUiPxX86vzgFzP2+4
-SSSvhF20CtgpMlee1YC5i1+MMgBeDyx01O1wKEeJMlxOL6mW0Z95LRqv8/b4I/mo
-yPeiWywcB918uPXjKhdmfkfwn8bJ/V3QpwqGMgZh4Gh9T+Jt8pXIpGGH9pyaZUZH
-ZBNZHvMO26aAnHnC46RjQSp441mUDQ==
-=maIg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2RHYgACgkQAVBC80lX
+0GwzGgf+OOBYfalIIufa3ZPLkqScuoNWtvYRckc/zB+S/Jc5766yF92cpjaJM7Cu
+i9EHU4nYv/U0dTlcf0QexnumpZ/pn2NiQtiCstHTmfnAcy1+Exmtz6TvOtEedQGV
+CQ+nFJKVkI+Q/gxnGFavjiSPDYzNDL4B5esy5yU9EjjkSpTVveLXJj2N3uUB0lZr
+0IElqxzHNVTGaAiVL2F/2dXkicE3fiitHdr590rERwpYXFeQwIVEXt5+yDbukBnc
+QL8rXSBDeO89MH3btOkiJU+fBjnKsMPnfaSn2O6UigoB7ts3IUNoxFelU2txL9nk
+R9jBPScl9LXtsURWyULXQHdUxv8vrw==
+=gM9o
 -----END PGP SIGNATURE-----
 
---Sig_/UEN2NK7YulpHY.04HhXfKmn--
+--Sig_/m2U0PcRWVFkf9o_o9Ais1r_--

@@ -2,104 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EECC4C2890
-	for <lists+linux-next@lfdr.de>; Mon, 30 Sep 2019 23:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276C2C28BA
+	for <lists+linux-next@lfdr.de>; Mon, 30 Sep 2019 23:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729740AbfI3VSM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Sep 2019 17:18:12 -0400
-Received: from ozlabs.org ([203.11.71.1]:44903 "EHLO ozlabs.org"
+        id S1731958AbfI3VWU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Sep 2019 17:22:20 -0400
+Received: from ozlabs.org ([203.11.71.1]:46017 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729190AbfI3VSM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Sep 2019 17:18:12 -0400
+        id S1730183AbfI3VWU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Sep 2019 17:22:20 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hwH55jwxz9sPd;
-        Tue,  1 Oct 2019 07:18:09 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hwMs3Vh2z9sNF;
+        Tue,  1 Oct 2019 07:22:17 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1569878289;
-        bh=1mEA4xwhRbxGuczCIfw2IuZyscWuWOg24jsY/OLdadw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=g6iRAOE+lyeZz2NOqoFdZoG0tG9carZG1Buy+oEWJJbAqUIJfff5EfC6S2Y9Mu7rz
-         KltVRrCZau4PKzUD5F/HUl0vTANQQ2a00V20mNdUB6q/LfEX5ioxaBXtdN4D3S7bjh
-         t4isjtf+eXCX3D6vc3zLf5bH6QYdmPhr9gGCxlqjltf1HuCRIMgOSboOT4071sM13W
-         9lzg3Hr1+GNPVkuynoTfm+ChrsdgRVmXdbK0jraw14Wfup4E/WlCqSp4yFUnHN4WVx
-         4vtOPUxRPhRIXc5XDOqExMtd+7Ng36gKP+PAcF3Uu86xAOokoEKQxIsGxf8IN6DNja
-         5LgFsXVOKFAtQ==
-Date:   Tue, 1 Oct 2019 07:18:09 +1000
+        s=201702; t=1569878537;
+        bh=+E6UBVAGUlRHpC9tpa+7aDAC5lzlHWAv40u3WQwxZ88=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hXQyVZe6c8fyLPHlXMFiLRlbr+zTWV7zFXeBFVS6mhpKATTkqf13WBFmft3iYN0yZ
+         oYTKnusjjZs07j53xsWs4KK+FsHwcOhG63CsjxbWYCb9nlJ6kmQ94NNPi/1ZIZaQKC
+         K120TgZWfSi8usCZPs2Ura2ohY4nPIgWBVbIk6cc9UMV6pEpnFLerQTk5LC565ZzEa
+         XQT9obprrZuGX/PQr/Tb/VnD/o8RPTa+CgLI+0HpxYBqQCZSwZeQ+zKxbjB2ETpmQQ
+         A8g2v4F/owcImaJ5A7Rj8mDpVDp3yBF96oFxvI3W0W7VNnvpjz1gQcaHvD9dwlOiey
+         1cOn3ZhDw+xIw==
+Date:   Tue, 1 Oct 2019 07:22:16 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Gao Xiang <gaoxiang25@huawei.com>
-Cc:     Mark Brown <broonie@kernel.org>, <linux-next@vger.kernel.org>,
-        <linux-erofs@lists.ozlabs.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Chao Yu" <yuchao0@huawei.com>, Miao Xie <miaoxie@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: erofs -next tree inclusion request
-Message-ID: <20191001071809.2d9aa557@canb.auug.org.au>
-In-Reply-To: <20190919120110.GA48697@architecture4>
-References: <20190919120110.GA48697@architecture4>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: bad update of the v4l-dvb-next tree
+Message-ID: <20191001072216.473e0eee@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Ow_/GIm5is3fmJ=3TGV+Omj";
+Content-Type: multipart/signed; boundary="Sig_/R5z//8fMhC0wRrxI5SXIcXa";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Ow_/GIm5is3fmJ=3TGV+Omj
+--Sig_/R5z//8fMhC0wRrxI5SXIcXa
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Gao,
+Hi all,
 
-On Thu, 19 Sep 2019 20:01:10 +0800 Gao Xiang <gaoxiang25@huawei.com> wrote:
->
-> Could you kindly help add the erofs -next tree to linux-next?
->=20
-> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
->=20
-> This can test all erofs patches with the latest linux-next tree
-> and make erofs better...
-
-Added from today.
-
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
-
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
-
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+The v4l-dvb-next tree appears to have been reset to point to a commit
+from early 2014 ...
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/Ow_/GIm5is3fmJ=3TGV+Omj
+--Sig_/R5z//8fMhC0wRrxI5SXIcXa
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ScREACgkQAVBC80lX
-0GzQrgf/RMOZptYLQcyn8LIj0INbJu3TYymh1/PaNtbIuVO9p8/VpKgUaCfLO2L7
-5yrmAgnlDNoUjPTXTAD1mazO6MO126vobx9sA96DdH225d57QhSz2QtEJnOU5D5C
-jgKEuyd8E11y5HnHeyoaKE9WcgzhQeHrlqDyOh0TeZR/NunyWB9YeiNYFJvKWK6E
-vmD+JutUuL7y494qIX6YHxh8F/d99Ag/zhep5cG93HGDW+/zwrr+8LfBYudoqfHa
-hENVtn84AZlDcBEECJeMx+Phk8CjFgm+dmtdnfBy78FfIp4wx+hbdj/qjapAWHRQ
-8KneSpCGqIfsFMbRzkK0dw36FTyJOg==
-=6uv6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ScggACgkQAVBC80lX
+0Gw0Dwf/dEn/ewhUH1mYIBk0gF3VnwC5/TxS74S8p1rhns7zSWdn/IWYVEPFNmtN
+/+9MM9FxScONK4GXI5brRdeJdO8IEQxW15CARBNCLNMz8erwJpBhbUqxDP/4/f0v
+5z1EGe+YklblzIPWIA4/zU4qstlnKOzEtyLAANWD7N5+gS1YJSO45Tdbm/zTN+mv
+f8PzMTMgkvRle8Pxk2VHuxflCwmeLQQ4uOHo8h3wI63S/U/2KtPgao24anI+g+Zt
+MJv1g+rsnjAftesigXW1w59SYvsql8LW52lfk56fjCmjnO5XSkDv4MTYToazn1mP
+V1k4LlGOdLsihNaXmQYVOTU0jDjI+Q==
+=XMNv
 -----END PGP SIGNATURE-----
 
---Sig_/Ow_/GIm5is3fmJ=3TGV+Omj--
+--Sig_/R5z//8fMhC0wRrxI5SXIcXa--

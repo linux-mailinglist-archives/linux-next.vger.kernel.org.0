@@ -2,90 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03489C2940
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 00:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EABC294C
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 00:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726784AbfI3WCD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Sep 2019 18:02:03 -0400
-Received: from ozlabs.org ([203.11.71.1]:60807 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726005AbfI3WCD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Sep 2019 18:02:03 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hxFh6fXpz9sNF;
-        Tue,  1 Oct 2019 08:02:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1569880921;
-        bh=ZuXAopI0JO8YV9UZ/DETcXwxpmkRYtyPjwg3ZFHrsxI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KurzC9EIMXgjjSocxwGxMMu6J3YiSf0sqr0UNqAuIIEFVp3o1kyIMJy580bps1/Eo
-         HuZoJeFP0v0nSJLqsd5ZNQ827qgCXjrnL7YQi/sZlcfBH5GJVXPbIxmhDMrwIIopVg
-         9zpUIU6pZQUpUeBD6InhjBm/7c3nOZ5pvKbI314B+dUkFeW1veKycaMmTly+6HJrFd
-         xuXvk1TZ08X15IknjT39X9bZQ/TmycGl4YQ+yXONmbCbRnoNB1A20oXs5gVq2bHZb+
-         8Uhr0tXupkz7saHad3LJPXtkusJ8+3za8Hd+CamVlHYG4Xf22WpEAjLH3ajL2T92bM
-         pNZu6QB5tgivg==
-Date:   Tue, 1 Oct 2019 08:02:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Brendan Higgins <brendanhiggins@google.com>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+        id S1732167AbfI3WJG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Sep 2019 18:09:06 -0400
+Received: from mail-io1-f44.google.com ([209.85.166.44]:35970 "EHLO
+        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727681AbfI3WJG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Sep 2019 18:09:06 -0400
+Received: by mail-io1-f44.google.com with SMTP id b136so42517075iof.3
+        for <linux-next@vger.kernel.org>; Mon, 30 Sep 2019 15:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+O5J9iyQ4FPLvgVZnTz34nK9Zjw2zEuyMYcZpQYqx7w=;
+        b=SdUIDg3fQPXaS9euuk67SQpLA5affyhbjPuhjrpLCFhsTYfMKjTQOCXhKkqmlWCciw
+         FJJqUu9OLq/nrRRbF076pgHq9d1LPzPAJylV4nKhtfjV+aR2rAgSfYqP4eMNf2wwXdAt
+         ARwRhXVIouXgbu0GSgMAHc7tYa6uDcyPtTJA4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+O5J9iyQ4FPLvgVZnTz34nK9Zjw2zEuyMYcZpQYqx7w=;
+        b=U6eG7RaiHeug5mrOZoKpUcNlPZTmY5yg7S9l/+Y/N13g5ufgcp5t0osZUGENMdF4F8
+         cXkZjXV2753txu7zxHOkAXtGchfMOH5lGxNDRhn8tSSEqvWdJy7SfRWWXfqSLlUq7SAF
+         2YlYWoaqR44zTA/0bm/145Ua6SPkgosPltf4fPbZLPbzSRhFAjxBF2Rrrzv4TNXYoMMw
+         FUgWPBPIIm2NHCY1ACbVQ+gtuFjl5Ka/FQVeOLNfeZNJtRAO/b7tWc9qGVwKWZf3tfAD
+         DgMPIs8CrH2n36RF6VDHfTAdSgrARymFGXe4Pq7oRcUHlSFJF//JBdvNlr8/EJRYD960
+         TJeA==
+X-Gm-Message-State: APjAAAUV/hCK5/1O5jETgmzv7bgBrjLXe95hZqE1ju2AaAivMDlvDc1+
+        pcNhKf5CfQJTSxvFBZsQkyFTn5JcU98=
+X-Google-Smtp-Source: APXvYqx1MNavetTF2NxxpTO2/Pn2mHezLXS78rfmbEoEikvOtAaxHVSiIfC+bGn9Xcr32QsyM9dtqQ==
+X-Received: by 2002:a92:91d0:: with SMTP id e77mr22590653ill.10.1569881345430;
+        Mon, 30 Sep 2019 15:09:05 -0700 (PDT)
+Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
+        by smtp.gmail.com with ESMTPSA id t26sm4718628ios.20.2019.09.30.15.09.04
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 30 Sep 2019 15:09:04 -0700 (PDT)
 Subject: Re: Request to add linux-kselftest test branch
-Message-ID: <20191001080200.0e9a5a31@canb.auug.org.au>
-In-Reply-To: <CAFd5g47Aq4kWeU2NU2ogSAcf-Z5XNEzk90Fjh8z_s2xv2Vs+Ng@mail.gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
 References: <8b9795d2-a384-dec8-076c-5b9d5c524eba@linuxfoundation.org>
-        <20190926150538.GS2036@sirena.org.uk>
-        <e5af1cd1-be83-cf9e-c6c7-a5258d1b49a9@linuxfoundation.org>
-        <CAFd5g44bbh8cd=kfwLR2eFf0FRuO0d5-Mszo7P0JRLbs7e8CQw@mail.gmail.com>
-        <20191001073913.256b5669@canb.auug.org.au>
-        <CAFd5g47Aq4kWeU2NU2ogSAcf-Z5XNEzk90Fjh8z_s2xv2Vs+Ng@mail.gmail.com>
+ <20190926150538.GS2036@sirena.org.uk>
+ <e5af1cd1-be83-cf9e-c6c7-a5258d1b49a9@linuxfoundation.org>
+ <CAFd5g44bbh8cd=kfwLR2eFf0FRuO0d5-Mszo7P0JRLbs7e8CQw@mail.gmail.com>
+ <20191001073913.256b5669@canb.auug.org.au>
+ <CAFd5g47Aq4kWeU2NU2ogSAcf-Z5XNEzk90Fjh8z_s2xv2Vs+Ng@mail.gmail.com>
+ <20191001080200.0e9a5a31@canb.auug.org.au>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <50d85bfc-3f8e-1695-b4d8-c4a5b59bd28d@linuxfoundation.org>
+Date:   Mon, 30 Sep 2019 16:09:04 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mW28Y2FhLXbXvT.R3oYV_i4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20191001080200.0e9a5a31@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mW28Y2FhLXbXvT.R3oYV_i4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 9/30/19 4:02 PM, Stephen Rothwell wrote:
+> Hi Brendan,
+> 
+> On Mon, 30 Sep 2019 14:47:34 -0700 Brendan Higgins <brendanhiggins@google.com> wrote:
+>>
+>> Linus had a minor complaint with the KUnit patches, so we had to fix
+>> them and pull them out into a separate branch. We didn't get enough
+>> coverage on the updated patches in time for rc1, so we are hoping we
+>> can get away with sending them in as part of rc2; if that doesn't work
+>> then it will be for the next merge window.
+> 
+> Ah, OK.  And I just noticed that the "next" branch is actually my
+> "kselfest" tree ...
+> 
 
-Hi Brendan,
+Also, I haven't merged into kselftest next yet. I havent' decided yet
+whether or not this will go into 5.4 or not.
 
-On Mon, 30 Sep 2019 14:47:34 -0700 Brendan Higgins <brendanhiggins@google.c=
-om> wrote:
->
-> Linus had a minor complaint with the KUnit patches, so we had to fix
-> them and pull them out into a separate branch. We didn't get enough
-> coverage on the updated patches in time for rc1, so we are hoping we
-> can get away with sending them in as part of rc2; if that doesn't work
-> then it will be for the next merge window.
-
-Ah, OK.  And I just noticed that the "next" branch is actually my
-"kselfest" tree ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/mW28Y2FhLXbXvT.R3oYV_i4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2Se1gACgkQAVBC80lX
-0Gxtwwf9EGiqiyhAc0RPYdFf2mcwUUD7OQAtD/8pjLrjfadw0Yszf2bfRK6Pp7VP
-SP6SMH3rPz2Cz9i9UzygIUS6pjB3Bg4iwcI1NAOflWnbcy+mHsfMdlztRuHIB1e7
-BkqyypQWCk3KO54CdFWAwnAulS/ntker70cV7wTj+xWGiqYJRL4jCV0hERIJOQ9x
-GwEmHcIVvAbvEOiEVlHnZxxtGNZZ+b9YBQtTDOa1AWzuMsVHNx5hg/WR9l/obIIC
-6OQkPdQroGs/THnXQbpclqJ0mPg5LDdXbo9wTb4ASss6bN+zLWQhpdMJmbWwOUm7
-hVW5uA/W3urOSghGEWfzJLKIurzBmA==
-=OSoa
------END PGP SIGNATURE-----
-
---Sig_/mW28Y2FhLXbXvT.R3oYV_i4--
+thanks,
+-- Shuah

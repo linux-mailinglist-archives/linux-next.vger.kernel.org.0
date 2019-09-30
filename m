@@ -2,89 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4A9C2877
-	for <lists+linux-next@lfdr.de>; Mon, 30 Sep 2019 23:16:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EECC4C2890
+	for <lists+linux-next@lfdr.de>; Mon, 30 Sep 2019 23:19:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729600AbfI3VQP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Sep 2019 17:16:15 -0400
-Received: from ozlabs.org ([203.11.71.1]:43317 "EHLO ozlabs.org"
+        id S1729740AbfI3VSM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Sep 2019 17:18:12 -0400
+Received: from ozlabs.org ([203.11.71.1]:44903 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731050AbfI3VQP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Sep 2019 17:16:15 -0400
+        id S1729190AbfI3VSM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Sep 2019 17:18:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hwDr1Bk1z9sNF;
-        Tue,  1 Oct 2019 07:16:12 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46hwH55jwxz9sPd;
+        Tue,  1 Oct 2019 07:18:09 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1569878172;
-        bh=ABi3XTYRlRRy2dg9HbrG9Jm3gXd9hiGGIVOBtE75DO8=;
+        s=201702; t=1569878289;
+        bh=1mEA4xwhRbxGuczCIfw2IuZyscWuWOg24jsY/OLdadw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XdI8MqdUpZu5VMnuImREiFb1niTwI+X8ObObiWReuj6IwfmblmO+cVyxUl8GQ2V4S
-         CziSLB0CYj8sej+0FGfOUpYiqHHbAfSOCSpumvzRPJz5al1f8GAFRI00RhPdR1pGPo
-         FRav3IDYfjdN4G0zcz9JlKSDVvGtr34iOY3EoyJbNn/MCRBRHR1ZflPDKWmeAWbrAG
-         YaPuSIKVKTiu8gZrS5eOptxEDbDNu7jj76evUJvqegqttMi2esT0xh8zeGDye3NdfU
-         rV7fJxwo7Ja6tCzAn/LY7ePedtQ2i70u4pl+ir2XsIwbmPQnEGEgmvh4l6Dm63VX8f
-         gwToUk3fmfPyw==
-Date:   Tue, 1 Oct 2019 07:16:02 +1000
+        b=g6iRAOE+lyeZz2NOqoFdZoG0tG9carZG1Buy+oEWJJbAqUIJfff5EfC6S2Y9Mu7rz
+         KltVRrCZau4PKzUD5F/HUl0vTANQQ2a00V20mNdUB6q/LfEX5ioxaBXtdN4D3S7bjh
+         t4isjtf+eXCX3D6vc3zLf5bH6QYdmPhr9gGCxlqjltf1HuCRIMgOSboOT4071sM13W
+         9lzg3Hr1+GNPVkuynoTfm+ChrsdgRVmXdbK0jraw14Wfup4E/WlCqSp4yFUnHN4WVx
+         4vtOPUxRPhRIXc5XDOqExMtd+7Ng36gKP+PAcF3Uu86xAOokoEKQxIsGxf8IN6DNja
+         5LgFsXVOKFAtQ==
+Date:   Tue, 1 Oct 2019 07:18:09 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Gao Xiang <hsiangkao@aol.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-erofs@lists.ozlabs.org,
+To:     Gao Xiang <gaoxiang25@huawei.com>
+Cc:     Mark Brown <broonie@kernel.org>, <linux-next@vger.kernel.org>,
+        <linux-erofs@lists.ozlabs.org>,
         LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-next@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Miao Xie <miaoxie@huawei.com>,
-        Gao Xiang <gaoxiang25@huawei.com>
+        "Chao Yu" <yuchao0@huawei.com>, Miao Xie <miaoxie@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Subject: Re: erofs -next tree inclusion request
-Message-ID: <20191001071602.5723e33d@canb.auug.org.au>
-In-Reply-To: <20190930132925.GA10677@hsiangkao-HP-ZHAN-66-Pro-G1>
+Message-ID: <20191001071809.2d9aa557@canb.auug.org.au>
+In-Reply-To: <20190919120110.GA48697@architecture4>
 References: <20190919120110.GA48697@architecture4>
-        <20190919121739.GG3642@sirena.co.uk>
-        <20190919122328.GA82662@architecture4>
-        <20190919143722.GA5363@hsiangkao-HP-ZHAN-66-Pro-G1>
-        <20190930231439.37295a14@canb.auug.org.au>
-        <20190930132925.GA10677@hsiangkao-HP-ZHAN-66-Pro-G1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8u8oJwVrtwQVPX8=Bt=VocG";
+Content-Type: multipart/signed; boundary="Sig_/Ow_/GIm5is3fmJ=3TGV+Omj";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8u8oJwVrtwQVPX8=Bt=VocG
+--Sig_/Ow_/GIm5is3fmJ=3TGV+Omj
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi Gao,
 
-On Mon, 30 Sep 2019 21:32:22 +0800 Gao Xiang <hsiangkao@aol.com> wrote:
+On Thu, 19 Sep 2019 20:01:10 +0800 Gao Xiang <gaoxiang25@huawei.com> wrote:
+>
+> Could you kindly help add the erofs -next tree to linux-next?
 >=20
-> I think xiang@kernel.org is preferred since it can always redirect
-> to my workable email address.
+> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs.git dev
+>=20
+> This can test all erofs patches with the latest linux-next tree
+> and make erofs better...
 
-OK, done.
+Added from today.
+
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
+
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
 
 --=20
 Cheers,
-Stephen Rothwell
+Stephen Rothwell=20
+sfr@canb.auug.org.au
 
---Sig_/8u8oJwVrtwQVPX8=Bt=VocG
+--Sig_/Ow_/GIm5is3fmJ=3TGV+Omj
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ScJIACgkQAVBC80lX
-0GzPQAf+MFU2QYjTEQ5TE9srpZ+8ctwTC7tAz42SidHNa3ODU5iFRT0fWQC7liis
-qL9ibdkp3aH0wEw60i4ZgyC5WLNhACh37chxD7y1OH2Tm6RQvHSjda00U5TRqziX
-T/9jAKratRrjqtICZg8JbUVzz66mq8u2UTxe4ic+Ys4G0FwVbkY41IuakBtzZYwa
-9GO9+HUAH0gGi3mU9B60KnCqENWG8zl6vOWaewxUBbDlrXFaGhdANfC0NKnwJva6
-ZwsKj8xPykSpMruDNqIk+8vffy3Q3oKuJzeDJA7wmfPzikq5B7TQExVwP8XpIRmG
-jm+Kj/RKfXSif9+TePfW1hw/1jw1vA==
-=mogZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ScREACgkQAVBC80lX
+0GzQrgf/RMOZptYLQcyn8LIj0INbJu3TYymh1/PaNtbIuVO9p8/VpKgUaCfLO2L7
+5yrmAgnlDNoUjPTXTAD1mazO6MO126vobx9sA96DdH225d57QhSz2QtEJnOU5D5C
+jgKEuyd8E11y5HnHeyoaKE9WcgzhQeHrlqDyOh0TeZR/NunyWB9YeiNYFJvKWK6E
+vmD+JutUuL7y494qIX6YHxh8F/d99Ag/zhep5cG93HGDW+/zwrr+8LfBYudoqfHa
+hENVtn84AZlDcBEECJeMx+Phk8CjFgm+dmtdnfBy78FfIp4wx+hbdj/qjapAWHRQ
+8KneSpCGqIfsFMbRzkK0dw36FTyJOg==
+=6uv6
 -----END PGP SIGNATURE-----
 
---Sig_/8u8oJwVrtwQVPX8=Bt=VocG--
+--Sig_/Ow_/GIm5is3fmJ=3TGV+Omj--

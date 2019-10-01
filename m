@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C67CFC2C20
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 05:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7159C2CAB
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 06:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727459AbfJADAe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Sep 2019 23:00:34 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:34342 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726806AbfJADAd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Sep 2019 23:00:33 -0400
-Received: by mail-wm1-f68.google.com with SMTP id y135so1387698wmc.1
-        for <linux-next@vger.kernel.org>; Mon, 30 Sep 2019 20:00:23 -0700 (PDT)
+        id S1725817AbfJAEcv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Oct 2019 00:32:51 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:34492 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725535AbfJAEcu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Oct 2019 00:32:50 -0400
+Received: by mail-wr1-f67.google.com with SMTP id a11so13673249wrx.1
+        for <linux-next@vger.kernel.org>; Mon, 30 Sep 2019 21:32:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=fwX+6ATcuCGDD/NATFNuStGjYYTRseOevYDqLPcAdtI=;
-        b=s78+p52raVGb+vtACrzm1S45HyUkqWwWQ6pm44Oa4IGd/6JZF2pVefWj4AKA1oBY8K
-         xFahWDmcZjVx1oBZYaSYzKrE3C+mP3W/MaAYnPRqkh0Z0M9pKCZ+mpmEs79Lw658nhmS
-         vtYjr/EMlKhO1peMH6X104cz4LW/WcbRYG4rPwYwfwG1/wOm7yD+mMJx8D27KSpKynEW
-         PC17J9TET1SowFT8HgxzdsXdGxB7ZZEb86eSUGUiGuGwAjLczNe7e7GgxFjU+4/ujzK9
-         AXnwJvansMjVvGniCUHA/r4Q+By43oJmVF3A/LCcxifLz9NZ4ZaGF9A3QJ8aNdTmSMV7
-         gk0w==
+        bh=bH1+XhGqFis4IpCHwg7rUu/TVJUC4lFxguJTNzeuThk=;
+        b=qJuWgX8/dhAyRp4p0QlCRdoSfr32cEqPxuRGFl9RxaJmDzXydETM51EfzbpJBPTCUz
+         iB8HrqFb/NcSAP3UTzsV+7WjBwBhk5d1mXUJpr07mlr+pEAoCrHYG8GAlTRdwsbs0OBd
+         SAeFtus8J5wKsWPLAz0OH9mBHScL40eferVZxY5msCwdwRMNEWF67uAdOOWWWJThYqPz
+         wU5JIso1aZN3DiXM2tng2bRAeoHRaPN2u//QNVK0u/+yNe27gbEA0RET50nA6HALGDDn
+         ZXM79eBPrHQxkG4p/hpBiga3NsX6Z/NedBL41sVPoyBrAvW+xm+JXBpUbFYXvD+Zdv2B
+         rEPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=fwX+6ATcuCGDD/NATFNuStGjYYTRseOevYDqLPcAdtI=;
-        b=jd+zSvVwfbUMzsvVnNGGZRAWzXpS/evLlV78gHKKS1hKmelJpw0wVZ8b6r0I1LsSnN
-         vvadFB+HR24ZKQ1Xeri/T7FFNjJfk4TTl92uev+KhujXJfU+cnDZLpGlcgKFuTuvp3hU
-         MhR50e+Na7YT/nqv6zRQxjk/5hU7OuZIvUHSIf9IQSZlY9ZrJgrkON6PMwN/GQ7cZ0Mj
-         oqt+BH8KEbQmR3aLiXXhQq1CZPQsWJUXomvvF+C5JwBQvjRgf/6w4+yGSFlc3cJsFtIM
-         lY1p7KohEqnMuoHVPFAHWo6DiE+mNDGOvc0bxYQb3pU1IwBCd09i4yBaLkm9v7F0RgAh
-         6eIw==
-X-Gm-Message-State: APjAAAUBaYe5JJ6fvJgk74b5cHlJLFZNkddFb1l+Hjb3+uzZXxRDn38J
-        HbqrRvEUChZVns+UqIF73reNa0rMWqwjEA==
-X-Google-Smtp-Source: APXvYqxNnX1E1cKau0+GYKuFPGNlu7odGyeAvcwq+tIvCi0gJjVDD2tLuzysB9pn275Q+Bj/txf4Mg==
-X-Received: by 2002:a1c:60c1:: with SMTP id u184mr1584392wmb.32.1569898821081;
-        Mon, 30 Sep 2019 20:00:21 -0700 (PDT)
+        bh=bH1+XhGqFis4IpCHwg7rUu/TVJUC4lFxguJTNzeuThk=;
+        b=GCdmmtf67SA4Ake5a5T3Ds9IpXA1n01HMlcCDRjUFvl4t13xwB8bNCOCZ5CGnPVf91
+         WnYJW0/OV6ZaFI0Jl/q9n1uF48mMg9NOUa9kFbCc2lUsZ86vA+Diz4IqAqZfl28aa6kw
+         EGDruTmRakRMR+UYo/QgasqPgq0fA6aJC437sVybyELSE7hFZA8dPY6iYA4LEVB0iMG/
+         uT6euscI/KJPhW9WtfWZXvOwSPWy6OV3B5SIurJKaZBCN9O1LrsGxEZ27lAzxvK804+H
+         9FYb4Mqabj9kZNt5aiJ41W1oUpMtcUKaEZosqojGZlDhNUrn/JNtxQwG+CbRxZB9aMxf
+         iFdQ==
+X-Gm-Message-State: APjAAAWQIdqapcJhCT6xJyOOxeHAqFR9x4PFRA5df2lPSDY3NRVbLIYS
+        G2pS8qCV/W4CZwppcWBKosI9BtklsJ3d/w==
+X-Google-Smtp-Source: APXvYqy8xOOS+bhqi7d6Uhru5SYwGre1aJekTglUEsaTTPbO8CpB8FKL5ePiirSuvrktnT5KDHAISA==
+X-Received: by 2002:adf:dc01:: with SMTP id t1mr15654332wri.222.1569904356659;
+        Mon, 30 Sep 2019 21:32:36 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id o22sm38302293wra.96.2019.09.30.20.00.19
+        by smtp.gmail.com with ESMTPSA id n1sm25472043wrg.67.2019.09.30.21.32.34
         for <linux-next@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 20:00:20 -0700 (PDT)
-Message-ID: <5d92c144.1c69fb81.fcb83.0185@mx.google.com>
-Date:   Mon, 30 Sep 2019 20:00:20 -0700 (PDT)
+        Mon, 30 Sep 2019 21:32:35 -0700 (PDT)
+Message-ID: <5d92d6e3.1c69fb81.2f655.5acd@mx.google.com>
+Date:   Mon, 30 Sep 2019 21:32:35 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.4-rc1-91-gae083b2a11c7
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: next-20191001
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 213 builds: 2 failed, 211 passed, 6 errors,
- 715 warnings (v5.4-rc1-91-gae083b2a11c7)
+Subject: next/master build: 218 builds: 6 failed, 212 passed, 10 errors,
+ 727 warnings (next-20191001)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,24 +63,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 213 builds: 2 failed, 211 passed, 6 errors, 715 w=
-arnings (v5.4-rc1-91-gae083b2a11c7)
+next/master build: 218 builds: 6 failed, 212 passed, 10 errors, 727 warning=
+s (next-20191001)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc1-91-gae083b2a11c7/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191001/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc1-91-gae083b2a11c7
-Git Commit: ae083b2a11c74328112ccfce4981a6b6e0a45f8c
+Branch: master
+Git Describe: next-20191001
+Git Commit: afb37288faaa88577b2b4d3b484bdcc85f311ea5
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
 Build Failures Detected:
 
+arm64:
+    allmodconfig: (clang-8) FAIL
+    allmodconfig: (gcc-8) FAIL
+
+arm:
+    allmodconfig: (gcc-8) FAIL
+
 mips:
     cavium_octeon_defconfig: (gcc-8) FAIL
     msp71xx_defconfig: (gcc-8) FAIL
+
+x86_64:
+    allmodconfig: (gcc-8) FAIL
 
 Errors and Warnings Detected:
 
@@ -101,13 +111,16 @@ arc:
     vdk_hs38_smp_defconfig (gcc-8): 1 warning
 
 arm64:
-    allmodconfig (gcc-8): 2 warnings
+    allmodconfig (clang-8): 1 error, 11 warnings
+    allmodconfig (gcc-8): 1 error
     defconfig (gcc-8): 2 warnings
+    defconfig (clang-8): 2 warnings
     defconfig (gcc-8): 2 warnings
     defconfig (gcc-8): 2 warnings
     defconfig (gcc-8): 29 warnings
 
 arm:
+    allmodconfig (gcc-8): 1 error
     am200epdkit_defconfig (gcc-8): 2 warnings
     assabet_defconfig (gcc-8): 1 warning
     at91_dt_defconfig (gcc-8): 2 warnings
@@ -220,7 +233,7 @@ mips:
     malta_defconfig (gcc-8): 2 warnings
     malta_kvm_defconfig (gcc-8): 2 warnings
     malta_kvm_guest_defconfig (gcc-8): 2 warnings
-    malta_qemu_32r6_defconfig (gcc-8): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-8): 3 warnings
     maltaaprp_defconfig (gcc-8): 2 warnings
     maltasmvp_defconfig (gcc-8): 2 warnings
     maltasmvp_eva_defconfig (gcc-8): 2 warnings
@@ -256,11 +269,15 @@ riscv:
     rv32_defconfig (gcc-8): 6 warnings
 
 x86_64:
+    allmodconfig (gcc-8): 1 error
     tinyconfig (gcc-8): 1 warning
     x86_64_defconfig (gcc-8): 27 warnings
 
 Errors summary:
 
+    3    collect2: error: ld returned 1 exit status
+    1    clang: error: linker command failed with exit code 1 (use -v to se=
+e invocation)
     1    arch/mips/pmcs-msp71xx/msp_prom.c:65:20: error: 'prom_mem_size' de=
 fined but not used [-Werror=3Dunused-variable]
     1    arch/mips/pmcs-msp71xx/msp_prom.c:64:34: error: 'MAX_PROM_MEM' und=
@@ -284,929 +301,953 @@ Warnings summary:
 BOL_GPL
     5    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_=
 period' defined but not used [-Wunused-function]
+    4    1 warning generated.
     3    arch/mips/fw/arc/memory.c:163:16: warning: unused variable 'addr' =
 [-Wunused-variable]
-    2    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
-@7/linux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/u=
-as.ko needs unknown symbol usb_stor_sense_invalidCDB
-    2    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
-@7/linux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/u=
-as.ko needs unknown symbol usb_stor_adjust_quirks
     2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
 -Wcpp]
     2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
 d [-Wcpp]
+    1    {standard input}:134: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    mm/shmem.c:2736:35: warning: variable 'shmem_falloc_waitq' is unin=
+itialized when used within its own initialization [-Wuninitialized]
+    1    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    1    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized wh=
+en used within its own initialization [-Wuninitialized]
+    1    fs/namei.c:3128:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1    fs/namei.c:1640:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
     1    drivers/mtd/nand/raw/au1550nd.c:443:57: warning: pointer type mism=
 atch in conditional expression
+    1    drivers/android/binderfs.c:657:41: warning: suggest braces around =
+initialization of subobject [-Wmissing-braces]
     1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
-@2/linux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/u=
-as.ko needs unknown symbol usb_stor_sense_invalidCDB
+@9/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
     1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
-@2/linux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/u=
-as.ko needs unknown symbol usb_stor_adjust_quirks
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_ctrl_transfer
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_clear_halt
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_bulk_transfer_sg
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol usb_stor_CB_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.k=
-o needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.=
-ko needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_ctrl_transfer
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_bulk_transfer_sg
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_bulk_srb
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_CB_transport
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol usb_stor_CB_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.=
-ko needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_control_msg
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek=
-.ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouc=
-h.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_Bulk_transport
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.k=
-o needs unknown symbol usb_stor_Bulk_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_ctrl_transfer
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol usb_stor_Bulk_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpsho=
-t.ko needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_transparent_scsi_command
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_ctrl_transfer
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.=
-ko needs unknown symbol usb_stor_Bulk_transport
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_control_msg
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom=
-.ko needs unknown symbol usb_stor_bulk_srb
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_bulk_transfer_sg
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_bulk_srb
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub62=
-50.ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol usb_stor_Bulk_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab=
-.ko needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_transparent_scsi_command
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_sense_invalidCDB
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress=
-.ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_suspend
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_set_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_reset_resume
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_probe2
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_probe1
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_pre_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_post_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_host_template_init
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_disconnect
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_ctrl_transfer
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_bulk_transfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_access_xfer_buf
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol usb_stor_Bulk_reset
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.=
-ko needs unknown symbol fill_inquiry_response
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko need=
-s unknown symbol usb_stor_sense_invalidCDB
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/b=
-uild/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko need=
-s unknown symbol usb_stor_adjust_quirks
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build/linux/bui=
-ld/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs =
-unknown symbol usb_stor_sense_invalidCDB
-    1    depmod: WARNING: /home/buildslave/workspace/kernel-build/linux/bui=
-ld/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs =
-unknown symbol usb_stor_adjust_quirks
+@9/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@8/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@8/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@7/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@7/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@6/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@6/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@3/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+@3/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers=
+/usb/storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_ctrl_transfer
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_clear_halt
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol usb_stor_CB_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-usbat.ko needs unknown symbol fill_inquiry_response
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr55.ko needs unknown symbol fill_inquiry_response
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_ctrl_transfer
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_srb
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_CB_transport
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol usb_stor_CB_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-sddr09.ko needs unknown symbol fill_inquiry_response
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_control_msg
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-realtek.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-onetouch.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_Bulk_transport
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-karma.ko needs unknown symbol usb_stor_Bulk_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_ctrl_transfer
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol usb_stor_Bulk_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-jumpshot.ko needs unknown symbol fill_inquiry_response
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_transparent_scsi_com=
+mand
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_ctrl_transfer
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-isd200.ko needs unknown symbol usb_stor_Bulk_transport
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_control_msg
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-freecom.ko needs unknown symbol usb_stor_bulk_srb
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_srb
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-eneub6250.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol usb_stor_Bulk_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-datafab.ko needs unknown symbol fill_inquiry_response
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_transparent_scsi_co=
+mmand
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_sense_invalidCDB
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-cypress.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_suspend
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_set_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_reset_resume
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_probe2
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_probe1
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_pre_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_post_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_host_template_init
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_disconnect
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_ctrl_transfer
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_access_xfer_buf
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol usb_stor_Bulk_reset
+    1    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build=
+/linux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/u=
+sb/storage/ums-alauda.ko needs unknown symbol fill_inquiry_response
     1    cc1: all warnings being treated as errors
     1    arch/mips/include/asm/octeon/cvmx-ipd.h:330:27: warning: unused va=
 riable 'pip_sft_rst' [-Wunused-variable]
-    1    .config:1169:warning: override: UNWINDER_GUESS changes choice state
-    1    ./.tmp.config.jRSa74dfTw:4895:warning: override: reassigning to sy=
+    1    2 warnings generated.
+    1    .config:1172:warning: override: UNWINDER_GUESS changes choice state
+    1    ./.tmp.config.zSa01rnH9t:3377:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.jRSa74dfTw:4879:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3361:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.jRSa74dfTw:4878:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3360:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.jRSa74dfTw:4874:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3356:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.jRSa74dfTw:4854:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3336:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.jRSa74dfTw:4848:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3330:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.jRSa74dfTw:4839:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3321:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.jRSa74dfTw:4837:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3319:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.jRSa74dfTw:4836:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3318:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.jRSa74dfTw:4835:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3317:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.jRSa74dfTw:4833:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3315:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.jRSa74dfTw:4832:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3314:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.jRSa74dfTw:4829:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3311:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.jRSa74dfTw:4822:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3304:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.jRSa74dfTw:4812:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3294:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.jRSa74dfTw:4801:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3283:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.jRSa74dfTw:4693:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3175:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.jRSa74dfTw:4689:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3171:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.jRSa74dfTw:4664:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3146:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.jRSa74dfTw:4643:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3125:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.jRSa74dfTw:4585:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3067:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.jRSa74dfTw:4584:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3066:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.jRSa74dfTw:4580:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3062:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.jRSa74dfTw:4579:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3061:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.jRSa74dfTw:4577:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3059:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.jRSa74dfTw:4576:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3058:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.jRSa74dfTw:4573:warning: override: reassigning to sy=
+    1    ./.tmp.config.zSa01rnH9t:3055:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.TrZVoa23PW:3983:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1749:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.TrZVoa23PW:3967:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1733:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.TrZVoa23PW:3966:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1732:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.TrZVoa23PW:3962:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1728:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.TrZVoa23PW:3942:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1708:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.TrZVoa23PW:3936:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1702:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.TrZVoa23PW:3927:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1693:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.TrZVoa23PW:3925:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1691:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.TrZVoa23PW:3924:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1690:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.TrZVoa23PW:3923:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1689:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.TrZVoa23PW:3921:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1687:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.TrZVoa23PW:3920:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1686:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.TrZVoa23PW:3917:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1683:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.TrZVoa23PW:3910:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1676:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.TrZVoa23PW:3900:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1666:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.TrZVoa23PW:3889:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1655:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.TrZVoa23PW:3781:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1547:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.TrZVoa23PW:3777:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1543:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.TrZVoa23PW:3752:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1518:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.TrZVoa23PW:3731:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1497:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.TrZVoa23PW:3673:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1439:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.TrZVoa23PW:3672:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1438:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.TrZVoa23PW:3668:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1434:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.TrZVoa23PW:3667:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1433:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.TrZVoa23PW:3665:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1431:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.TrZVoa23PW:3664:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1430:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.TrZVoa23PW:3661:warning: override: reassigning to sy=
+    1    ./.tmp.config.y2hlQsbQ9s:1427:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.RlGPPK5MOF:4834:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3986:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.RlGPPK5MOF:4818:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3970:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.RlGPPK5MOF:4817:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3969:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.RlGPPK5MOF:4813:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3965:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.RlGPPK5MOF:4793:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3945:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.RlGPPK5MOF:4787:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3939:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.RlGPPK5MOF:4778:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3930:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.RlGPPK5MOF:4776:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3928:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.RlGPPK5MOF:4775:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3927:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.RlGPPK5MOF:4774:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3926:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.RlGPPK5MOF:4772:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3924:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.RlGPPK5MOF:4771:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3923:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.RlGPPK5MOF:4768:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3920:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.RlGPPK5MOF:4761:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3913:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.RlGPPK5MOF:4751:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3903:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.RlGPPK5MOF:4740:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3892:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.RlGPPK5MOF:4632:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3784:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.RlGPPK5MOF:4628:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3780:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.RlGPPK5MOF:4603:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3755:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.RlGPPK5MOF:4582:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3734:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.RlGPPK5MOF:4524:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3676:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.RlGPPK5MOF:4523:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3675:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.RlGPPK5MOF:4519:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3671:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.RlGPPK5MOF:4518:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3670:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.RlGPPK5MOF:4516:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3668:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.RlGPPK5MOF:4515:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3667:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.RlGPPK5MOF:4512:warning: override: reassigning to sy=
+    1    ./.tmp.config.qLPFDpiv0p:3664:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.OWlEqN5CAk:1746:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4837:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OWlEqN5CAk:1730:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4821:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.OWlEqN5CAk:1729:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4820:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.OWlEqN5CAk:1725:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4816:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.OWlEqN5CAk:1705:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4796:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.OWlEqN5CAk:1699:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4790:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.OWlEqN5CAk:1690:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4781:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.OWlEqN5CAk:1688:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4779:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.OWlEqN5CAk:1687:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4778:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.OWlEqN5CAk:1686:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4777:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.OWlEqN5CAk:1684:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4775:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.OWlEqN5CAk:1683:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4774:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.OWlEqN5CAk:1680:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4771:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.OWlEqN5CAk:1673:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4764:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.OWlEqN5CAk:1663:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4754:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.OWlEqN5CAk:1652:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4743:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OWlEqN5CAk:1544:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4635:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.OWlEqN5CAk:1540:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4631:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OWlEqN5CAk:1515:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4606:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.OWlEqN5CAk:1494:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4585:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.OWlEqN5CAk:1436:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4527:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.OWlEqN5CAk:1435:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4526:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.OWlEqN5CAk:1431:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4522:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.OWlEqN5CAk:1430:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4521:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.OWlEqN5CAk:1428:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4519:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.OWlEqN5CAk:1427:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4518:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.OWlEqN5CAk:1424:warning: override: reassigning to sy=
+    1    ./.tmp.config.pDbPnt3mgq:4515:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.OBubl3xMpU:8490:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7937:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OBubl3xMpU:8474:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7921:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.OBubl3xMpU:8473:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7920:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.OBubl3xMpU:8469:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7916:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.OBubl3xMpU:8449:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7896:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.OBubl3xMpU:8443:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7890:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.OBubl3xMpU:8434:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7881:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.OBubl3xMpU:8432:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7879:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.OBubl3xMpU:8431:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7878:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.OBubl3xMpU:8430:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7877:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.OBubl3xMpU:8428:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7875:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.OBubl3xMpU:8427:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7874:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.OBubl3xMpU:8424:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7871:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.OBubl3xMpU:8417:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7864:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.OBubl3xMpU:8407:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7854:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.OBubl3xMpU:8396:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7843:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OBubl3xMpU:8288:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7735:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.OBubl3xMpU:8284:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7731:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.OBubl3xMpU:8259:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7706:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.OBubl3xMpU:8238:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7685:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.OBubl3xMpU:8180:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7627:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.OBubl3xMpU:8179:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7626:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.OBubl3xMpU:8175:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7622:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.OBubl3xMpU:8174:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7621:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.OBubl3xMpU:8172:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7619:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.OBubl3xMpU:8171:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7618:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.OBubl3xMpU:8168:warning: override: reassigning to sy=
+    1    ./.tmp.config.grivfVNX0i:7615:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.Ldp9CGxuPU:7934:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8493:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Ldp9CGxuPU:7918:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8477:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.Ldp9CGxuPU:7917:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8476:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.Ldp9CGxuPU:7913:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8472:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.Ldp9CGxuPU:7893:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8452:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.Ldp9CGxuPU:7887:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8446:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.Ldp9CGxuPU:7878:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8437:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.Ldp9CGxuPU:7876:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8435:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.Ldp9CGxuPU:7875:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8434:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.Ldp9CGxuPU:7874:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8433:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.Ldp9CGxuPU:7872:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8431:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.Ldp9CGxuPU:7871:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8430:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.Ldp9CGxuPU:7868:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8427:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.Ldp9CGxuPU:7861:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8420:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.Ldp9CGxuPU:7851:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8410:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.Ldp9CGxuPU:7840:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8399:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Ldp9CGxuPU:7732:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8291:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.Ldp9CGxuPU:7728:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8287:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Ldp9CGxuPU:7703:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8262:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.Ldp9CGxuPU:7682:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8241:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.Ldp9CGxuPU:7624:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8183:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.Ldp9CGxuPU:7623:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8182:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.Ldp9CGxuPU:7619:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8178:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.Ldp9CGxuPU:7618:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8177:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.Ldp9CGxuPU:7616:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8175:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.Ldp9CGxuPU:7615:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8174:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.Ldp9CGxuPU:7612:warning: override: reassigning to sy=
+    1    ./.tmp.config.UAwnMt64kB:8171:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.G5xfnhw0XX:3374:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4898:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.G5xfnhw0XX:3358:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4882:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.G5xfnhw0XX:3357:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4881:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.G5xfnhw0XX:3353:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4877:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.G5xfnhw0XX:3333:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4857:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.G5xfnhw0XX:3327:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4851:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.G5xfnhw0XX:3318:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4842:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.G5xfnhw0XX:3316:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4840:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.G5xfnhw0XX:3315:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4839:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.G5xfnhw0XX:3314:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4838:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.G5xfnhw0XX:3312:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4836:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.G5xfnhw0XX:3311:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4835:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.G5xfnhw0XX:3308:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4832:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.G5xfnhw0XX:3301:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4825:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.G5xfnhw0XX:3291:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4815:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.G5xfnhw0XX:3280:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4804:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.G5xfnhw0XX:3172:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4696:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.G5xfnhw0XX:3168:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4692:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.G5xfnhw0XX:3143:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4667:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.G5xfnhw0XX:3122:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4646:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.G5xfnhw0XX:3064:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4588:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.G5xfnhw0XX:3063:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4587:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.G5xfnhw0XX:3059:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4583:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.G5xfnhw0XX:3058:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4582:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.G5xfnhw0XX:3056:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4580:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.G5xfnhw0XX:3055:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4579:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.G5xfnhw0XX:3052:warning: override: reassigning to sy=
+    1    ./.tmp.config.CxEJYgraCY:4576:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
 
 Section mismatches summary:
@@ -1285,10 +1326,10 @@ k_free()
     1    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in refe=
 rence from the function free_memmap() to the function .meminit.text:membloc=
 k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x3520): Section mismatch in ref=
+    1    WARNING: vmlinux.o(.text.unlikely+0x365c): Section mismatch in ref=
 erence from the function pmax_setup_memory_region() to the function .init.t=
 ext:add_memory_region()
-    1    WARNING: vmlinux.o(.text.unlikely+0x31ac): Section mismatch in ref=
+    1    WARNING: vmlinux.o(.text.unlikely+0x32bc): Section mismatch in ref=
 erence from the function pmax_setup_memory_region() to the function .init.t=
 ext:add_memory_region()
     1    WARNING: vmlinux.o(.text.unlikely+0x1ebc): Section mismatch in ref=
@@ -1363,59 +1404,59 @@ Warnings:
 ngs, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.TrZVoa23PW:3661:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3664:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.TrZVoa23PW:3664:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3667:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.TrZVoa23PW:3665:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3668:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.TrZVoa23PW:3667:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3670:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.TrZVoa23PW:3668:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3671:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.TrZVoa23PW:3672:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3675:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.TrZVoa23PW:3673:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3676:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.TrZVoa23PW:3731:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3734:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.TrZVoa23PW:3752:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3755:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.TrZVoa23PW:3777:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3780:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.TrZVoa23PW:3781:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3784:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.TrZVoa23PW:3889:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3892:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.TrZVoa23PW:3900:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3903:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.TrZVoa23PW:3910:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3913:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.TrZVoa23PW:3917:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3920:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.TrZVoa23PW:3920:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3923:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.TrZVoa23PW:3921:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3924:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.TrZVoa23PW:3923:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3926:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.TrZVoa23PW:3924:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3927:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.TrZVoa23PW:3925:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3928:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.TrZVoa23PW:3927:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3930:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.TrZVoa23PW:3936:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3939:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.TrZVoa23PW:3942:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3945:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.TrZVoa23PW:3962:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3965:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.TrZVoa23PW:3966:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3969:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.TrZVoa23PW:3967:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3970:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.TrZVoa23PW:3983:warning: override: reassigning to symbol =
+    ./.tmp.config.qLPFDpiv0p:3986:warning: override: reassigning to symbol =
 USER_NS
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -1423,19 +1464,55 @@ USER_NS
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allmodconfig (arm64, clang-8) =E2=80=94 FAIL, 1 error, 11 warnings, 0 secti=
+on mismatches
 
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
+Errors:
+    clang: error: linker command failed with exit code 1 (use -v to see inv=
+ocation)
 
 Warnings:
-    WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
-PL
-    WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
-PL
+    mm/shmem.c:2736:35: warning: variable 'shmem_falloc_waitq' is uninitial=
+ized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized when us=
+ed within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitialized w=
+hen used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/namei.c:1640:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    fs/namei.c:3128:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/android/binderfs.c:657:41: warning: suggest braces around initi=
+alization of subobject [-Wmissing-braces]
+    1 warning generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section mi=
+smatches
+
+Errors:
+    collect2: error: ld returned 1 exit status
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    collect2: error: ld returned 1 exit status
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
+ mismatches
+
+Errors:
+    collect2: error: ld returned 1 exit status
 
 ---------------------------------------------------------------------------=
 -----
@@ -1447,13 +1524,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
+allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1470,13 +1547,18 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
+allnoconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
 allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1821,7 +1903,7 @@ Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x3520): Section mismatch in referenc=
+    WARNING: vmlinux.o(.text.unlikely+0x365c): Section mismatch in referenc=
 e from the function pmax_setup_memory_region() to the function .init.text:a=
 dd_memory_region()
 
@@ -1835,7 +1917,7 @@ Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x31ac): Section mismatch in referenc=
+    WARNING: vmlinux.o(.text.unlikely+0x32bc): Section mismatch in referenc=
 e from the function pmax_setup_memory_region() to the function .init.text:a=
 dd_memory_region()
 
@@ -1848,6 +1930,17 @@ smatches
 -----
 defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
 smatches
+
+Warnings:
+    WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
+PL
+    WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
+PL
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section =
+mismatches
 
 Warnings:
     WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
@@ -1883,59 +1976,59 @@ defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 27 warnings, 0=
  section mismatches
 
 Warnings:
-    ./.tmp.config.G5xfnhw0XX:3052:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3055:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.G5xfnhw0XX:3055:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3058:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.G5xfnhw0XX:3056:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3059:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.G5xfnhw0XX:3058:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3061:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.G5xfnhw0XX:3059:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3062:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.G5xfnhw0XX:3063:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3066:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.G5xfnhw0XX:3064:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3067:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.G5xfnhw0XX:3122:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3125:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.G5xfnhw0XX:3143:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3146:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.G5xfnhw0XX:3168:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3171:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.G5xfnhw0XX:3172:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3175:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.G5xfnhw0XX:3280:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3283:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.G5xfnhw0XX:3291:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3294:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.G5xfnhw0XX:3301:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3304:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.G5xfnhw0XX:3308:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3311:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.G5xfnhw0XX:3311:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3314:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.G5xfnhw0XX:3312:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3315:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.G5xfnhw0XX:3314:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3317:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.G5xfnhw0XX:3315:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3318:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.G5xfnhw0XX:3316:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3319:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.G5xfnhw0XX:3318:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3321:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.G5xfnhw0XX:3327:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3330:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.G5xfnhw0XX:3333:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3336:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.G5xfnhw0XX:3353:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3356:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.G5xfnhw0XX:3357:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3360:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.G5xfnhw0XX:3358:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3361:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.G5xfnhw0XX:3374:warning: override: reassigning to symbol =
+    ./.tmp.config.zSa01rnH9t:3377:warning: override: reassigning to symbol =
 USER_NS
 
 ---------------------------------------------------------------------------=
@@ -1944,59 +2037,59 @@ defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 29 warnings, 0=
  section mismatches
 
 Warnings:
-    ./.tmp.config.Ldp9CGxuPU:7612:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7615:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.Ldp9CGxuPU:7615:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7618:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.Ldp9CGxuPU:7616:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7619:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.Ldp9CGxuPU:7618:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7621:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.Ldp9CGxuPU:7619:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7622:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.Ldp9CGxuPU:7623:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7626:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.Ldp9CGxuPU:7624:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7627:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.Ldp9CGxuPU:7682:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7685:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.Ldp9CGxuPU:7703:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7706:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.Ldp9CGxuPU:7728:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7731:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.Ldp9CGxuPU:7732:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7735:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.Ldp9CGxuPU:7840:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7843:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.Ldp9CGxuPU:7851:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7854:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.Ldp9CGxuPU:7861:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7864:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.Ldp9CGxuPU:7868:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7871:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.Ldp9CGxuPU:7871:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7874:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.Ldp9CGxuPU:7872:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7875:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.Ldp9CGxuPU:7874:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7877:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.Ldp9CGxuPU:7875:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7878:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.Ldp9CGxuPU:7876:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7879:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.Ldp9CGxuPU:7878:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7881:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.Ldp9CGxuPU:7887:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7890:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.Ldp9CGxuPU:7893:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7896:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.Ldp9CGxuPU:7913:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7916:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.Ldp9CGxuPU:7917:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7920:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.Ldp9CGxuPU:7918:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7921:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.Ldp9CGxuPU:7934:warning: override: reassigning to symbol =
+    ./.tmp.config.grivfVNX0i:7937:warning: override: reassigning to symbol =
 USER_NS
     WARNING: "HYPERVISOR_platform_op" [vmlinux] is a static EXPORT_SYMBOL_G=
 PL
@@ -2071,516 +2164,516 @@ tion mismatches
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_Bulk_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_ctrl_transfer
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-alauda.ko ne=
-eds unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_transparent_scsi_command
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-cypress.ko n=
-eeds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_Bulk_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-datafab.ko n=
-eeds unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_bulk_srb
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_bulk_transfer_sg
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-eneub6250.ko=
- needs unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_bulk_srb
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_control_msg
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-freecom.ko n=
-eeds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_ctrl_transfer
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_transparent_scsi_command
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_Bulk_transport
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-isd200.ko ne=
-eds unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_Bulk_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_ctrl_transfer
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-jumpshot.ko =
-needs unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_Bulk_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_Bulk_transport
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-karma.ko nee=
-ds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-onetouch.ko =
-needs unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_control_msg
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-realtek.ko n=
-eeds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_bulk_srb
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_bulk_transfer_sg
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_CB_transport
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_CB_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_ctrl_transfer
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr09.ko ne=
-eds unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_bulk_transfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-sddr55.ko ne=
-eds unknown symbol usb_stor_set_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_bulk_transfer_sg
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_probe1
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_clear_halt
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_CB_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_suspend
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_ctrl_transfer
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_reset_resume
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_pre_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_host_template_init
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol fill_inquiry_response
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_probe2
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_disconnect
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_post_reset
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_access_xfer_buf
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/ums-usbat.ko nee=
-ds unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_Bulk_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_ctrl_transfer
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-alauda.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_transparent_scsi_command
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-cypress.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_Bulk_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-datafab.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_srb
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-eneub6250.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_bulk_srb
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_control_msg
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-freecom.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_ctrl_transfer
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_transparent_scsi_command
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_Bulk_transport
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-isd200.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_Bulk_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_ctrl_transfer
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-jumpshot.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_Bulk_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_Bulk_transport
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-karma.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-onetouch.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_control_msg
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-realtek.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_srb
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_CB_transport
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_CB_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_ctrl_transfer
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr09.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_bulk_transfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-sddr55.ko needs unknown symbol usb_stor_set_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_bulk_transfer_sg
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_probe1
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_clear_halt
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_CB_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_suspend
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_ctrl_transfer
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_reset_resume
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_pre_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_host_template_init
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol fill_inquiry_response
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_probe2
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_disconnect
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_post_reset
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_access_xfer_buf
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build/linu=
+x/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/st=
+orage/ums-usbat.ko needs unknown symbol usb_stor_set_xfer_buf
 
 ---------------------------------------------------------------------------=
 -----
@@ -2717,59 +2810,59 @@ i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 27 warning=
 s, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.RlGPPK5MOF:4512:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4515:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.RlGPPK5MOF:4515:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4518:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.RlGPPK5MOF:4516:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4519:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.RlGPPK5MOF:4518:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4521:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.RlGPPK5MOF:4519:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4522:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.RlGPPK5MOF:4523:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4526:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.RlGPPK5MOF:4524:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4527:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.RlGPPK5MOF:4582:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4585:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.RlGPPK5MOF:4603:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4606:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.RlGPPK5MOF:4628:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4631:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.RlGPPK5MOF:4632:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4635:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.RlGPPK5MOF:4740:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4743:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.RlGPPK5MOF:4751:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4754:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.RlGPPK5MOF:4761:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4764:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.RlGPPK5MOF:4768:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4771:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.RlGPPK5MOF:4771:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4774:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.RlGPPK5MOF:4772:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4775:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.RlGPPK5MOF:4774:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4777:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.RlGPPK5MOF:4775:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4778:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.RlGPPK5MOF:4776:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4779:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.RlGPPK5MOF:4778:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4781:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.RlGPPK5MOF:4787:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4790:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.RlGPPK5MOF:4793:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4796:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.RlGPPK5MOF:4813:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4816:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.RlGPPK5MOF:4817:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4820:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.RlGPPK5MOF:4818:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4821:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.RlGPPK5MOF:4834:warning: override: reassigning to symbol =
+    ./.tmp.config.pDbPnt3mgq:4837:warning: override: reassigning to symbol =
 USER_NS
 
 ---------------------------------------------------------------------------=
@@ -3105,11 +3198,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warning=
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warning=
 s, 0 section mismatches
 
 Warnings:
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    {standard input}:134: Warning: macro instruction expanded into multiple=
+ instructions
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
 
 ---------------------------------------------------------------------------=
@@ -3285,12 +3380,12 @@ tion mismatches
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_adjust_quirks
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@9/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@9/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
 ---------------------------------------------------------------------------=
 -----
@@ -3300,12 +3395,12 @@ multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_adjust_quirks
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@6/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@6/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
 ---------------------------------------------------------------------------=
 -----
@@ -3315,12 +3410,12 @@ multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs unk=
-nown symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/kernel-build@2/linux/build/=
-_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs unk=
-nown symbol usb_stor_adjust_quirks
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@3/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@3/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
 ---------------------------------------------------------------------------=
 -----
@@ -3330,12 +3425,12 @@ warnings, 0 section mismatches
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    depmod: WARNING: /home/buildslave/workspace/kernel-build/linux/build/_m=
-odules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs unkno=
-wn symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/kernel-build/linux/build/_m=
-odules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko needs unkno=
-wn symbol usb_stor_adjust_quirks
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@7/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
 ---------------------------------------------------------------------------=
 -----
@@ -3343,66 +3438,66 @@ multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 29 warn=
 ings, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.OBubl3xMpU:8168:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8171:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.OBubl3xMpU:8171:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8174:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.OBubl3xMpU:8172:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8175:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.OBubl3xMpU:8174:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8177:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.OBubl3xMpU:8175:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8178:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.OBubl3xMpU:8179:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8182:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.OBubl3xMpU:8180:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8183:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.OBubl3xMpU:8238:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8241:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.OBubl3xMpU:8259:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8262:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.OBubl3xMpU:8284:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8287:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.OBubl3xMpU:8288:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8291:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.OBubl3xMpU:8396:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8399:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.OBubl3xMpU:8407:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8410:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.OBubl3xMpU:8417:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8420:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.OBubl3xMpU:8424:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8427:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.OBubl3xMpU:8427:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8430:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.OBubl3xMpU:8428:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8431:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.OBubl3xMpU:8430:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8433:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.OBubl3xMpU:8431:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8434:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.OBubl3xMpU:8432:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8435:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.OBubl3xMpU:8434:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8437:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.OBubl3xMpU:8443:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8446:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.OBubl3xMpU:8449:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8452:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.OBubl3xMpU:8469:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8472:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.OBubl3xMpU:8473:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8476:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.OBubl3xMpU:8474:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8477:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.OBubl3xMpU:8490:warning: override: reassigning to symbol =
+    ./.tmp.config.UAwnMt64kB:8493:warning: override: reassigning to symbol =
 USER_NS
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@2/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_sense_invalidCDB
-    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@2/li=
-nux/build/_modules_/lib/modules/5.4.0-rc1/kernel/drivers/usb/storage/uas.ko=
- needs unknown symbol usb_stor_adjust_quirks
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@8/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_sense_invalidCDB
+    depmod: WARNING: /home/buildslave/workspace/workspace/kernel-build@8/li=
+nux/build/_modules_/lib/modules/5.4.0-rc1-next-20191001/kernel/drivers/usb/=
+storage/uas.ko needs unknown symbol usb_stor_adjust_quirks
 
 ---------------------------------------------------------------------------=
 -----
@@ -3515,59 +3610,59 @@ nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 29 warni=
 ngs, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.OWlEqN5CAk:1424:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1427:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.OWlEqN5CAk:1427:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1430:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.OWlEqN5CAk:1428:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1431:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.OWlEqN5CAk:1430:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1433:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.OWlEqN5CAk:1431:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1434:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.OWlEqN5CAk:1435:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1438:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.OWlEqN5CAk:1436:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1439:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.OWlEqN5CAk:1494:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1497:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.OWlEqN5CAk:1515:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1518:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.OWlEqN5CAk:1540:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1543:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.OWlEqN5CAk:1544:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1547:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.OWlEqN5CAk:1652:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1655:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.OWlEqN5CAk:1663:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1666:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.OWlEqN5CAk:1673:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1676:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.OWlEqN5CAk:1680:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1683:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.OWlEqN5CAk:1683:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1686:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.OWlEqN5CAk:1684:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1687:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.OWlEqN5CAk:1686:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1689:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.OWlEqN5CAk:1687:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1690:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.OWlEqN5CAk:1688:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1691:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.OWlEqN5CAk:1690:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1693:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.OWlEqN5CAk:1699:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1702:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.OWlEqN5CAk:1705:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1708:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.OWlEqN5CAk:1725:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1728:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.OWlEqN5CAk:1729:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1732:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.OWlEqN5CAk:1730:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1733:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.OWlEqN5CAk:1746:warning: override: reassigning to symbol =
+    ./.tmp.config.y2hlQsbQ9s:1749:warning: override: reassigning to symbol =
 USER_NS
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
@@ -3947,6 +4042,11 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
 sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
 n mismatches
 
@@ -4006,13 +4106,13 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
 
 ---------------------------------------------------------------------------=
 -----
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -4020,7 +4120,7 @@ tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
 ismatches
 
 Warnings:
-    .config:1169:warning: override: UNWINDER_GUESS changes choice state
+    .config:1172:warning: override: UNWINDER_GUESS changes choice state
 
 ---------------------------------------------------------------------------=
 -----
@@ -4156,59 +4256,59 @@ x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 27 war=
 nings, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.jRSa74dfTw:4573:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4576:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.jRSa74dfTw:4576:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4579:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.jRSa74dfTw:4577:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4580:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.jRSa74dfTw:4579:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4582:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.jRSa74dfTw:4580:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4583:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.jRSa74dfTw:4584:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4587:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.jRSa74dfTw:4585:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4588:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.jRSa74dfTw:4643:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4646:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.jRSa74dfTw:4664:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4667:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.jRSa74dfTw:4689:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4692:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.jRSa74dfTw:4693:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4696:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.jRSa74dfTw:4801:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4804:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.jRSa74dfTw:4812:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4815:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.jRSa74dfTw:4822:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4825:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.jRSa74dfTw:4829:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4832:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.jRSa74dfTw:4832:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4835:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.jRSa74dfTw:4833:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4836:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.jRSa74dfTw:4835:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4838:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.jRSa74dfTw:4836:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4839:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.jRSa74dfTw:4837:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4840:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.jRSa74dfTw:4839:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4842:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.jRSa74dfTw:4848:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4851:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.jRSa74dfTw:4854:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4857:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.jRSa74dfTw:4874:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4877:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.jRSa74dfTw:4878:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4881:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.jRSa74dfTw:4879:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4882:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.jRSa74dfTw:4895:warning: override: reassigning to symbol =
+    ./.tmp.config.CxEJYgraCY:4898:warning: override: reassigning to symbol =
 USER_NS
 
 ---------------------------------------------------------------------------=

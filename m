@@ -2,60 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B2ACEC2D81
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 08:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 917A5C2E84
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 10:01:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726157AbfJAGaI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Oct 2019 02:30:08 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:50878 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbfJAGaI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Oct 2019 02:30:08 -0400
-Received: by mail-wm1-f67.google.com with SMTP id 5so1880726wmg.0
-        for <linux-next@vger.kernel.org>; Mon, 30 Sep 2019 23:30:06 -0700 (PDT)
+        id S1727361AbfJAIBM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Oct 2019 04:01:12 -0400
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:52107 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726672AbfJAIBL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Oct 2019 04:01:11 -0400
+Received: by mail-wm1-f47.google.com with SMTP id 7so2173953wme.1
+        for <linux-next@vger.kernel.org>; Tue, 01 Oct 2019 01:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=altJetquCl7xTNrrZKGML906jounARgBBLrH7amsD/s=;
-        b=gmJ0GfdmPBkdJnRaknfIppNpNjsgIWYepntQvpHn6yUc+bXvHZpzgOzm1hkgSMZQEl
-         v/DqejhNcca9XCYLt/o14mjGhIb5vJL9dQrBaIfjuyTnKZy4HWB0SbNWsDqtLm+kzcSE
-         3i7kYRdLyLOMDRJoAMWnum0afnWF8+TRgDGltzPku40vBFTnx+QJuoAIp6MJXNScyReM
-         6/1bmgnFrZrsV75PBo61VB7GrGJT8HysWrX/YRhWQXeIP9GVoFegZ4WkOLvhGcvIqfLh
-         ctGt9XMHuxvpo5MvXbVH690jmrYgcXbhJFUX+hof+3oW5ohU+lTWM0MdUNIILSRorKrU
-         dsEg==
+        bh=WNxZN58Wkjxvgx+6hLHukkVTudwzeY5rurCI3Kc3ww4=;
+        b=VcStpchiUZ/LNJRuholInMPfNhuhUe/yKsn3A5BoJoeIBIEC3CTnSYbkAlbbTWJr0U
+         NafDdzwtN7x8hl3oQKLwdoLr4tBmrE+v9Px+stc7bD/PSOQR/4MdNr9csD0fachZN8LU
+         ZbvMvYvu0P3MOSadlpUlF/Ai39tRZ1l7gFjttagMRpKB+buWB5AOBHyw8k1zrRbV3jdl
+         VC3ABpW9IBdZZN/wr5wEkUcmOHxjPcTWgQNgkrdLgadP6Mw2i5cQY7oD0SkIijjVrZA7
+         b7mhLesXxBwS1N0DAqMyEK1MGAF/2P8JHmJ23Ga6+pdOf+WyASYDZ4e0ycFB4mpHAP1a
+         cmbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=altJetquCl7xTNrrZKGML906jounARgBBLrH7amsD/s=;
-        b=VFUbH/Q702qOWx1ZpGdUxVLtPo8nGRQZ6NUSq9z9O7gABjdYXEC7IgiGFshMWC3I7T
-         sjSTLHQvh6XDizc/gCWRjvpvUJgcvrj43ITc4d3odsRemsZUk42js7xNZoGsUZqAIVw3
-         +IK1GtlRf6aF5LACT3nm06AWL0PQ39eMktY4mhuhORzX04xubd+1TqOHPgtK0x7xXWe0
-         cKqC3+C2AzR9+D9qPxKQCmjiIkOVoQt4R1JCAS6fInabhzL06PNf54EgYhccS3O29Ho7
-         Y/7M2av1kbb+fRpqbX4vuBvWyeFzBsEVZ6iDjHd/kwOOt8fQ34IqNUYaVf7ItftzKe/y
-         9A1w==
-X-Gm-Message-State: APjAAAXav5kn5U23KPnfwYYDON0XK9rwO+F3UwRj2zQXevrP9ea4cEjU
-        wt6LDKU7HEMKq6Jvlo4kQiz5mcEVRqcMOw==
-X-Google-Smtp-Source: APXvYqyFeV1CDm0qm9jMw5YOmHWzfxgrgWJxEBe6nsJzDReN/tLBrBtf9TOXh4qdDJ8weaABhJlwBQ==
-X-Received: by 2002:a1c:9d0b:: with SMTP id g11mr2121634wme.22.1569911406030;
-        Mon, 30 Sep 2019 23:30:06 -0700 (PDT)
+        bh=WNxZN58Wkjxvgx+6hLHukkVTudwzeY5rurCI3Kc3ww4=;
+        b=DrRSqNZysUc+TwCQDh+84xFD9QSZUhKNBG4LDvWUuHNOPuMektL+YMnqo00OBlCDpd
+         9qFbfXEXbMSYtd/Ouxvqk3E0QE6usbToJnj0U2uKTHiClTR4SOF0FKQjVaoozJ29K37/
+         F0P7PNxS0N4jCzFxo57QrQhQAMQ5fQe7TJBoTCzX0ZQ7ECLi67CDhOUc/B6C9hwJyTPs
+         t7sxQ9igS9LMrJBHkoJXRD9OqndAcGi9h7XeFav06duz3Vb6xnQlUa3DG1Tk1uNck5Ak
+         /SlvnbIOypcG5JEE79QPWWVw1OknnkKuVjooBZCNn8q5mEiyvzfk+HrM+/VwnyWFDvAL
+         3NVw==
+X-Gm-Message-State: APjAAAWQw89qNrMgjiRwPSNpRHBNnEVnMstsmWFhFKsdCF+wsoV6KHAW
+        peF2Ct/MGcIh5DA/pN/xZvgbvqZGg18KWg==
+X-Google-Smtp-Source: APXvYqyTTHtP8p2ay6uNJe9hQhdO9trCkaxtAvT1nPty6vyqw0y7Dd3u46uj0qA/p6Y/ksNc+j2bGg==
+X-Received: by 2002:a05:600c:230d:: with SMTP id 13mr2646955wmo.114.1569916867666;
+        Tue, 01 Oct 2019 01:01:07 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id h6sm15434167wru.60.2019.09.30.23.30.04
+        by smtp.gmail.com with ESMTPSA id s12sm33845237wra.82.2019.10.01.01.01.06
         for <linux-next@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Sep 2019 23:30:05 -0700 (PDT)
-Message-ID: <5d92f26d.1c69fb81.26ba4.609d@mx.google.com>
-Date:   Mon, 30 Sep 2019 23:30:05 -0700 (PDT)
+        Tue, 01 Oct 2019 01:01:06 -0700 (PDT)
+Message-ID: <5d9307c2.1c69fb81.659f1.c2b8@mx.google.com>
+Date:   Tue, 01 Oct 2019 01:01:06 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc1-91-gae083b2a11c7
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: next-20191001
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 214 boots: 10 failed,
- 203 passed with 1 untried/unknown (v5.4-rc1-91-gae083b2a11c7)
+Subject: next/master boot: 250 boots: 12 failed, 238 passed (next-20191001)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,49 +62,30 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 214 boots: 10 failed, 203 passed with 1 untried/un=
-known (v5.4-rc1-91-gae083b2a11c7)
+next/master boot: 250 boots: 12 failed, 238 passed (next-20191001)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc1-91-gae083b2a11c7/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc1-91-gae083b2a11c7/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191001/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191001/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc1-91-gae083b2a11c7
-Git Commit: ae083b2a11c74328112ccfce4981a6b6e0a45f8c
+Branch: master
+Git Describe: next-20191001
+Git Commit: afb37288faaa88577b2b4d3b484bdcc85f311ea5
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 52 unique boards, 15 SoC families, 22 builds out of 213
+Tested: 55 unique boards, 17 SoC families, 22 builds out of 218
 
 Boot Regressions Detected:
 
-arm:
-
-    bcm2835_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 1 day (last pass: v5.3-12689-gd2=
-0eeb14322b - first fail: v5.3-13311-g8d0cc3a7f82f)
-          bcm2837-rpi-3-b:
-              lab-baylibre: failing since 1 day (last pass: v5.3-12689-gd20=
-eeb14322b - first fail: v5.3-13311-g8d0cc3a7f82f)
-
 arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: v5.3-13311-g8d0cc3a7f82f)
 
     defconfig+kselftest:
         gcc-8:
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: next-20190930)
           meson-gxl-s905x-khadas-vim:
-              lab-baylibre: new failure (last pass: v5.3-13311-g8d0cc3a7f82=
-f)
-          meson-gxm-khadas-vim2:
-              lab-baylibre: new failure (last pass: v5.3-13311-g8d0cc3a7f82=
-f)
+              lab-baylibre: new failure (last pass: next-20190930)
 
 Boot Failures Detected:
 
@@ -122,15 +102,16 @@ arm:
 
 arm64:
     defconfig:
-        gcc-8:
+        clang-8:
             apq8096-db820c: 1 failed lab
 
     defconfig+kselftest:
         gcc-8:
-            meson-gxm-khadas-vim2: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxl-s905x-khadas-vim: 1 failed lab
             qcom-qdf2400: 1 failed lab
             r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
             rk3399-puma-haikou: 1 failed lab
 
 ---

@@ -2,117 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 917A5C2E84
-	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 10:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C166C3765
+	for <lists+linux-next@lfdr.de>; Tue,  1 Oct 2019 16:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727361AbfJAIBM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 1 Oct 2019 04:01:12 -0400
-Received: from mail-wm1-f47.google.com ([209.85.128.47]:52107 "EHLO
-        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726672AbfJAIBL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 1 Oct 2019 04:01:11 -0400
-Received: by mail-wm1-f47.google.com with SMTP id 7so2173953wme.1
-        for <linux-next@vger.kernel.org>; Tue, 01 Oct 2019 01:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=WNxZN58Wkjxvgx+6hLHukkVTudwzeY5rurCI3Kc3ww4=;
-        b=VcStpchiUZ/LNJRuholInMPfNhuhUe/yKsn3A5BoJoeIBIEC3CTnSYbkAlbbTWJr0U
-         NafDdzwtN7x8hl3oQKLwdoLr4tBmrE+v9Px+stc7bD/PSOQR/4MdNr9csD0fachZN8LU
-         ZbvMvYvu0P3MOSadlpUlF/Ai39tRZ1l7gFjttagMRpKB+buWB5AOBHyw8k1zrRbV3jdl
-         VC3ABpW9IBdZZN/wr5wEkUcmOHxjPcTWgQNgkrdLgadP6Mw2i5cQY7oD0SkIijjVrZA7
-         b7mhLesXxBwS1N0DAqMyEK1MGAF/2P8JHmJ23Ga6+pdOf+WyASYDZ4e0ycFB4mpHAP1a
-         cmbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=WNxZN58Wkjxvgx+6hLHukkVTudwzeY5rurCI3Kc3ww4=;
-        b=DrRSqNZysUc+TwCQDh+84xFD9QSZUhKNBG4LDvWUuHNOPuMektL+YMnqo00OBlCDpd
-         9qFbfXEXbMSYtd/Ouxvqk3E0QE6usbToJnj0U2uKTHiClTR4SOF0FKQjVaoozJ29K37/
-         F0P7PNxS0N4jCzFxo57QrQhQAMQ5fQe7TJBoTCzX0ZQ7ECLi67CDhOUc/B6C9hwJyTPs
-         t7sxQ9igS9LMrJBHkoJXRD9OqndAcGi9h7XeFav06duz3Vb6xnQlUa3DG1Tk1uNck5Ak
-         /SlvnbIOypcG5JEE79QPWWVw1OknnkKuVjooBZCNn8q5mEiyvzfk+HrM+/VwnyWFDvAL
-         3NVw==
-X-Gm-Message-State: APjAAAWQw89qNrMgjiRwPSNpRHBNnEVnMstsmWFhFKsdCF+wsoV6KHAW
-        peF2Ct/MGcIh5DA/pN/xZvgbvqZGg18KWg==
-X-Google-Smtp-Source: APXvYqyTTHtP8p2ay6uNJe9hQhdO9trCkaxtAvT1nPty6vyqw0y7Dd3u46uj0qA/p6Y/ksNc+j2bGg==
-X-Received: by 2002:a05:600c:230d:: with SMTP id 13mr2646955wmo.114.1569916867666;
-        Tue, 01 Oct 2019 01:01:07 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id s12sm33845237wra.82.2019.10.01.01.01.06
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Oct 2019 01:01:06 -0700 (PDT)
-Message-ID: <5d9307c2.1c69fb81.659f1.c2b8@mx.google.com>
-Date:   Tue, 01 Oct 2019 01:01:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2388965AbfJAOaN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 1 Oct 2019 10:30:13 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:49775 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727132AbfJAOaN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 1 Oct 2019 10:30:13 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46jM9v03Vbz9sPJ;
+        Wed,  2 Oct 2019 00:30:10 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1569940211;
+        bh=NYx6qFxbqfP9Fg7Bx0/KHV2C1GIi1O2QrDm1z6ST+EM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lUzMjllLWSCSdOCU3f/8wV6TXmyYU+HlLRnBvlXVS4GEsSs7w3UV8GSVmsxJO/QKc
+         aqLSEUHqGJT0G9cDm3Bd5S6Nj9dR1U/ctLA0sp+XPVqaSNEPKdVEQ/+FG8e9c/0sdm
+         SRQs3V4RVprjuxFyZ3MIce9GFSaHCk+oZm7YQrkFNmiUCr54RDUWMtdVmcLKr7qeB0
+         +54+zBiI8i02U4Ijo90q6AXA58PgJ60E2l215FW949K2r8e9b5N3P8u4lGbUPrEsbn
+         zU1R/LCAv1SnyNlizTswdbO9hvYxdmY7Mkq1pg3dg443Ic3ioAjrnLFSydkPZNmu6K
+         wJgnCC2ruG/WQ==
+Date:   Wed, 2 Oct 2019 00:30:04 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: linux-next: Fixes tag needs some work in the pinctrl-intel-fixes
+ tree
+Message-ID: <20191002003004.16e51eec@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191001
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master boot: 250 boots: 12 failed, 238 passed (next-20191001)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/Ku3CvVoVqNIlxpqPmtYyrca";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 250 boots: 12 failed, 238 passed (next-20191001)
+--Sig_/Ku3CvVoVqNIlxpqPmtYyrca
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191001/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191001/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20191001
-Git Commit: afb37288faaa88577b2b4d3b484bdcc85f311ea5
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 55 unique boards, 17 SoC families, 22 builds out of 218
+In commit
 
-Boot Regressions Detected:
+  d21556b6ff04 ("pinctrl: intel: Allocate IRQ chip dynamic")
 
-arm64:
+Fixes tag
 
-    defconfig+kselftest:
-        gcc-8:
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20190930)
-          meson-gxl-s905x-khadas-vim:
-              lab-baylibre: new failure (last pass: next-20190930)
+  Fixes: ee1a6ca43dba ("Add Intel Broxton pin controller support")
 
-Boot Failures Detected:
+has these problem(s):
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
 
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
+--=20
+Cheers,
+Stephen Rothwell
 
-arm64:
-    defconfig:
-        clang-8:
-            apq8096-db820c: 1 failed lab
+--Sig_/Ku3CvVoVqNIlxpqPmtYyrca
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            meson-gxl-s905x-khadas-vim: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
----
-For more info write to <info@kernelci.org>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2TYuwACgkQAVBC80lX
+0Gy3swf+Jc3RppQoOyDB4+bcZz6tsNPXgVVd01uwssDZ/uRZpbFcwXsAGgDaRAxP
+cduKdnkgi6z1YdaBKIKMVT9hdWKV1Wj0yql21eKE/2kQjWqLNy55eBKupXwlC5iN
+5WvLEyeTKQDWaOMgsMPot1T1uWGfJdgNtGjQak/OVn01UJtRp/5x8HME5CmfOiA4
+oYSijjB0Pwz+rOG0WL7xqbNb4mLyerf+C+wtFtQiA1W3zKiZP5rf2ZFjt81fTq4S
+vHEOepkTDBkFaZK9aJyMiX5nQlNlaFz3RY0TeWmJwICJiRTR2f7W38enwNFy3IMB
+3TQd6DIxSYQcFNxO6rNKodrjOIUhJA==
+=Rro5
+-----END PGP SIGNATURE-----
+
+--Sig_/Ku3CvVoVqNIlxpqPmtYyrca--

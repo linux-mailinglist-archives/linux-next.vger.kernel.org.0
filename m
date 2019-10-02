@@ -2,68 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B687C9424
-	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2019 00:12:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FD2C9427
+	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2019 00:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726462AbfJBWMU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Oct 2019 18:12:20 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:57608 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726062AbfJBWMU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Oct 2019 18:12:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=73tVWQ3v84KxdNQPWmcNcSz97cSdJQxQxagmXQY35II=; b=W3nKOVLw3sKyL5/8swuVedHSw
-        bruP9N66fD2/Bi37YaPtgFypZXVBkXc27NdPZ5qgMOzpTYN9WKP6wgVyYaup/r9/kIEVyWKZFpVrb
-        7v37PCOfrit3YjDn5x1OljIrMhcYRsoCuzej5lOKrC7r/NfBI49x7KqAIFgXhSfsqoi+Pipvg3vTK
-        nql0ZPiEsdTGXPh7HRYVb3HAGwQ506Uw7q/h306+QrKeMItkB1AJ4vujtdxlJmg0dHVJGVH2mNk9j
-        HSMzzTdh4aacRJu5IYIdUfuNeww7lxMfuYvGAvJ5P3YwSbvoUaY5jRr1H4KBm/OVFW0zh9Wg36kPI
-        UvppIbuWQ==;
-Received: from [2601:1c0:6280:3f0::9a1f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
-        id 1iFmr6-0002RX-1t; Wed, 02 Oct 2019 22:12:20 +0000
-Subject: Re: linux-next: Signed-off-by missing for commit in the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+        id S1726828AbfJBWMd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Oct 2019 18:12:33 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60627 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726062AbfJBWMd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 2 Oct 2019 18:12:33 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46k9Nt55jRz9sP7;
+        Thu,  3 Oct 2019 08:12:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570054350;
+        bh=W1eDZ5VIsU8MXT4woar8/3j6QFLMNiRoiYNv26dvW9I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ef5BFGbeX1shKLf370eqOXO0uSafHUvjzHkNZNS3X1ARTAPkrUYHPjivP9NudXa9O
+         ErR6JynNeKdzuaEQH1/Y/8jnLHqePBtZxzeuC5lSd+sySuSila2Cm7qT7obLw3CEu0
+         BBOwHxqVnR9wFCgwLX9cBd+L/N56ELUatuxM+FGq6DzbHv8XCwbI4vPLQ55ew1ujNE
+         dScQOThlnIBi4YlN6gYhZn2VW1UcnME8umV6cDJhHRAuvrY5Z0XHnnD1Cmu/4bXG4S
+         eP3kecA3OnqYNrDbKwv8e7oPEuLKEeCdsPvU/e1j0Jf0qY1q58sZTV8HOA0Qd27omb
+         LM8Fo1dDyXWfg==
+Date:   Thu, 3 Oct 2019 08:12:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "rd.dunlab@gmail.com" <rd.dunlab@gmail.com>
-References: <20191003080633.0388a91d@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <5d671b8e-1a3e-3a32-1163-d15754ddb8b2@infradead.org>
-Date:   Wed, 2 Oct 2019 15:12:19 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the amdgpu tree
+Message-ID: <20191003081229.6b3b8a9a@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20191003080633.0388a91d@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/F.qlmoe+T9m+6zkzIKlnDyX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/2/19 3:06 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commits
-> 
->   0f04f8ea62ce ("Minor fixes to the CAIF Transport drivers Kconfig file")
->   21d549769e79 ("Isolate CAIF transport drivers into their own menu")
->   0903102f5785 ("Clean up the net/caif/Kconfig menu")
-> 
-> are missing a Signed-off-by from their authors.
-> 
-> I guess <rd.dunlab@gmail.com> and <rdunlap@infradead.org> may be the
-> same person?  Please be consistent.
+--Sig_/F.qlmoe+T9m+6zkzIKlnDyX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-  Yes.          Yes, will do that.
+Hi all,
 
--- 
-~Randy
+Commits
+
+  e2c6983e3533 ("drm/amd/display: Revert fixup DPP programming sequence")
+  79312258f95d ("drm/amd/display: Do not double-buffer DTO adjustments")
+
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/F.qlmoe+T9m+6zkzIKlnDyX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2VIM0ACgkQAVBC80lX
+0Gw+rAgAiqVzyPIRES5MO3ZywZGHVUW+zSsdgnSII12PezX1LVnq6KXDvYNoiSpt
+DxDMSUfDAPy2o0b7ih6YZ3LXfSex+YpU71PCPJKYm67pbyQOiKLVAG1ZXZXDijhH
+FPfP+F/mcuhE/Q9DhWXiDeieKX2JFPUc9XrE/Aiy4+utbD/qqw67jYnI2EOnyerg
+uGCNi6u6vf7iii491c/Xaobu64n/9rARALtVCexFVxmNTBsXpU17VK/eyCjt0XYp
+vP8j2nJKAqXMlT8xZ+CE4e7rEYfPrPnY25GJXCLMAjgfCUtYhkgiQ1/YYmMni7iw
+Qln7YBxjUzYZyMdlzZpM6dloyHnQ5w==
+=VOtR
+-----END PGP SIGNATURE-----
+
+--Sig_/F.qlmoe+T9m+6zkzIKlnDyX--

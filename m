@@ -2,115 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D33C4B75
-	for <lists+linux-next@lfdr.de>; Wed,  2 Oct 2019 12:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9FDC9406
+	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2019 00:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727833AbfJBKbQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Oct 2019 06:31:16 -0400
-Received: from mail-wm1-f51.google.com ([209.85.128.51]:35328 "EHLO
-        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726109AbfJBKbQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 2 Oct 2019 06:31:16 -0400
-Received: by mail-wm1-f51.google.com with SMTP id y21so6411749wmi.0
-        for <linux-next@vger.kernel.org>; Wed, 02 Oct 2019 03:31:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=oD3W05Jc4GNkBzlQvezKO4GozR6ImlTkkuhMli9qugg=;
-        b=hss94sny1b95hHC00zkj/SXevgtODBK398ZNgLcayU27nmYzY6eQ6Z0bQ8VMvej/tU
-         OBxEEjjhcKwY9PJpN3MLwhhZ9Zhy1ZIMwJN83o8Ip0dcmDUWg+XL4M2mJtt6qKZ7EbjN
-         scD5zniXybbRYP+QNkyMDo4KTmEk7bDBV1C2KqK+gdKfEmrdavw0pbsONLkqUFsMOCmf
-         jYoVx+nAeSX2BzLN250int5TUrZEkO5N8OBmJHCnEIuOHSEVgoctGGY+I7i9uNKHhfjg
-         W5hdyX/UEYmWaiO6DWQI63E8Nvi/NjmwHwE2zG4Ie4DRZwc+xPiZJp838SNpw5QEnZ+o
-         b46g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=oD3W05Jc4GNkBzlQvezKO4GozR6ImlTkkuhMli9qugg=;
-        b=OQ/+bRRRjHMdo8RvsXSCjrhZvNKI2nM7He/K+J+xqQ8JXq8clgghRN3VGQyQXPuatG
-         TcD3o7WVnWuwrecxyLv/hwZ/182LFN9rlqQUuxvSDhXjEkbkTK32fuWqEdgUCeJhag+/
-         D2GXQKZUDsQ5ISemHLITiuwTkbEm56hF3vv5YgUj6mNLzcnv9/1R+JSSwALsiq8GvvNV
-         iwgu+pjXFJKJ2AXaJ5I9yNNl1qoJPA4W8ohzrxJu1boqSR2IXu5UnxqCmy4AIw9iY3US
-         oDbKi49+SQU74IHWhRBhcc1QLQUvJdYKNAQmYPXkc41UpB9afiEViymXkL9J6FSbIvMf
-         97Kg==
-X-Gm-Message-State: APjAAAUXZNio9Ctt2HCXbfkTuC05SPGNA6aF9kdokX0lpZvHB7OCV20A
-        LalmnYdaMgpLLOdIFwH8cbc7cnMzRflmRQ==
-X-Google-Smtp-Source: APXvYqxnMZwAsfFbl/hX6SHqZpivdIaqJYJBJmhq4Nk7RQ6TVyg00VZPQSpcIdWa/kjDL8vuughGKg==
-X-Received: by 2002:a7b:c00e:: with SMTP id c14mr2203725wmb.158.1570012273724;
-        Wed, 02 Oct 2019 03:31:13 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id b7sm15921125wrj.28.2019.10.02.03.31.12
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 02 Oct 2019 03:31:12 -0700 (PDT)
-Message-ID: <5d947c70.1c69fb81.eb894.6f02@mx.google.com>
-Date:   Wed, 02 Oct 2019 03:31:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726655AbfJBWGu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Oct 2019 18:06:50 -0400
+Received: from ozlabs.org ([203.11.71.1]:56587 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725975AbfJBWGu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 2 Oct 2019 18:06:50 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46k9GH20Z3z9sN1;
+        Thu,  3 Oct 2019 08:06:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570054007;
+        bh=kmIljB+pBZIRZlpZcU0SXUaEhL8nILIPqTPaw0e4iUc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LMziiJS15qLS2gkWbuqMz1+tcgE1G9n0+8+KtVfpif7UhdFaIhhtRYjIcg6tD55+v
+         E6hVc3HZZUk/M1jGV3tIw3+eQC/ZCVHikMmvmC+nQ4ae2FfdZvbYwvhtUuHpJ4irSC
+         DqKzWfHhS4Rsr7hQqhErDCI3KbQEV3K33pogIJD9IxI27n6BLu7BY3ruKaPzNHeNQf
+         jmMDRm20Pm/zTi4GFsAw6lDJ8yVO2Nqjud94hqggeUO62yUaEKqFkm0Czk+aWxjB3r
+         15S6Hvf2yQck1LMTH2x/laFesEX4gyX3CdF8yubLWHbdcNndLRqCRzMFJudTx4+bDg
+         5aqQdJYsBAHww==
+Date:   Thu, 3 Oct 2019 08:06:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "rd.dunlab@gmail.com" <rd.dunlab@gmail.com>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: linux-next: Signed-off-by missing for commit in the net-next tree
+Message-ID: <20191003080633.0388a91d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191002
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master boot: 258 boots: 10 failed,
- 247 passed with 1 untried/unknown (next-20191002)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/4O8e4E9q2Ws8f1piWgRfnLZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 258 boots: 10 failed, 247 passed with 1 untried/unknown (=
-next-20191002)
+--Sig_/4O8e4E9q2Ws8f1piWgRfnLZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191002/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191002/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20191002
-Git Commit: a32db7e1172439240202b843642465618498170d
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 57 unique boards, 17 SoC families, 22 builds out of 218
+Commits
 
-Boot Regressions Detected:
+  0f04f8ea62ce ("Minor fixes to the CAIF Transport drivers Kconfig file")
+  21d549769e79 ("Isolate CAIF transport drivers into their own menu")
+  0903102f5785 ("Clean up the net/caif/Kconfig menu")
 
-arm:
+are missing a Signed-off-by from their authors.
 
-    sunxi_defconfig:
-        gcc-8:
-          sun8i-h2-plus-orangepi-r1:
-              lab-baylibre: new failure (last pass: next-20191001)
+I guess <rd.dunlab@gmail.com> and <rdunlap@infradead.org> may be the
+same person?  Please be consistent.
 
-Boot Failures Detected:
+--=20
+Cheers,
+Stephen Rothwell
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
+--Sig_/4O8e4E9q2Ws8f1piWgRfnLZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-arm64:
-    defconfig:
-        clang-8:
-            apq8096-db820c: 1 failed lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2VH2kACgkQAVBC80lX
+0Gwx8Af+Ku6icVCNVC4kfGB3RT56hXizTxgQqpjUJM+AiN17uxTQ5t14pwUam63T
+Kf1OrgVahvIw1gAAfw5YKZPoKkPFg6HHJDmENrfLC9vsyXQQQCaZXXDG/aEiJnZL
+XdXU3AsecKGftoW+HnGi5F7nIZYF1qJXhIpJGP8rjYJ5WaF6R0+oQqTLqZqA8ukx
+QVtQ0sJyRxXcN0ucvUv1+BLq3qc25PZ43ZZVDHMEHXHxlczneV+SgWSC8zOQw08m
+Irjm7KbeeQmHlfB2TecT9BXBnul/ZBbEafCu6JXtjPtWjs7H3a9RSYFQKZ29PnH3
+XQ82VfxU8FYAHM6axtpgmP1MCnXTXw==
+=Pn2d
+-----END PGP SIGNATURE-----
 
-    defconfig+kselftest:
-        gcc-8:
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/4O8e4E9q2Ws8f1piWgRfnLZ--

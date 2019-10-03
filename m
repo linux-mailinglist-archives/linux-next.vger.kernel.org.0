@@ -2,67 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C9A80C957D
-	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2019 02:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A43C95FE
+	for <lists+linux-next@lfdr.de>; Thu,  3 Oct 2019 02:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729489AbfJCATR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 2 Oct 2019 20:19:17 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:36143 "EHLO ozlabs.org"
+        id S1725789AbfJCApX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 2 Oct 2019 20:45:23 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43925 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729403AbfJCATR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 2 Oct 2019 20:19:17 -0400
+        id S1726411AbfJCApX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 2 Oct 2019 20:45:23 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46kDC61mRlz9sP7;
-        Thu,  3 Oct 2019 10:19:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46kDnC6RpSz9sDB;
+        Thu,  3 Oct 2019 10:45:19 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570061954;
-        bh=j0/8PDAz9u0mCIgmnUYn4sa6fAVrE3H3mjWMLrHDgmQ=;
+        s=201702; t=1570063520;
+        bh=jRTOajq986cWcmFtVUQ4PMeTlohkfc8VNsgeLWIw0Mo=;
         h=Date:From:To:Cc:Subject:From;
-        b=QVW9Ca6u4i8N5H17DSouB++CdBy03SF22BZhYF2Ze8/YZnYZ7jDmL/dz4Zy0+kbjy
-         dDaMvbhJAm33hZZ4MNXx69Va20HT/DpLTIKjtWEwUHkvv1sP0o1833XwlUYAjYxqCY
-         rQMjPTBb+eSxOm2xeAxnEAOl/0SeF+O16i+U8KJvZb7ti+MAxGvl/hTp+lzyJzMUee
-         R3ptB0AXRd/Bmr14ohZkoboWBPmlLl7qYKVWcrq6x6Y8VRi063ZWkIAxhwIWY8K/U0
-         WjkHEhKIfOF6C5d0a6tkBLJojvoAadlG2Hhn01VGMtCZhv8iXqWrp4ydVjffWSNa5k
-         U5JRiVTR+AxqA==
-Date:   Thu, 3 Oct 2019 10:19:01 +1000
+        b=A1BGquUd3xSLm3IiMz8LolMo7FD/MiRL0xtyLtQuwBDDwcFk2PWldUa05l8r70/kq
+         VDXpaSbI3Ow0mZmGFyNT44GEpOl4VyJ7+LNcNt4qctENweoZ4b2Tb/6w1M5lrLsIdI
+         p5MnVOva+TQ4y7hTKqgVtZ+N3jtjYL05d+XSGmNKzszd1o20EEOyaII8snFxeqD3RM
+         GV3K5vbUm1vSC56FygeILOJdrWt7SpPJewxUxQzgVMw/zJ8M7tXHONvuG1iSx5jD8T
+         ZNjSgQY/NkRNerwxbVxAqVS+9N040V8ZtY5X1YPYMr+aA7/iA7972vehDXCIaQ3r4L
+         hHTlZo6wq6ZnQ==
+Date:   Thu, 3 Oct 2019 10:45:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
+To:     David Howells <dhowells@redhat.com>,
+        James Hogan <jhogan@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Yong Zhao <Yong.Zhao@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20191003101901.67efa929@canb.auug.org.au>
+        Paul Burton <paul.burton@mips.com>
+Subject: linux-next: manual merge of the keys tree with the mips-fixes tree
+Message-ID: <20191003104519.4f607d28@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Z4xOnbbIMfNja5oGok1Aohh";
+Content-Type: multipart/signed; boundary="Sig_/QGTZrhqjkaq1aJ2OlBHvkpX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Z4xOnbbIMfNja5oGok1Aohh
+--Sig_/QGTZrhqjkaq1aJ2OlBHvkpX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+Today's linux-next merge of the keys tree got conflicts in:
 
-  drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+  arch/mips/kernel/syscalls/syscall_n32.tbl
+  arch/mips/kernel/syscalls/syscall_n64.tbl
+  arch/mips/kernel/syscalls/syscall_o32.tbl
 
 between commit:
 
-  471f39020569 ("drm/amdkfd: use mmu_notifier_put")
+  0671c5b84e9e ("MIPS: Wire up clone3 syscall")
 
-from Linus' tree and commit:
+from the mips-fixes tree and commit:
 
-  4b3cece1863c ("drm/amdkfd: Use hex print format for pasid")
+  e711c800fdba ("Add a general, global device notification watch list")
 
-from the amdgpu tree.
+from the keys tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -75,37 +77,54 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/amd/amdkfd/kfd_priv.h
-index c89326125d71,fc8b81208368..000000000000
---- a/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_priv.h
-@@@ -687,7 -688,10 +688,7 @@@ struct kfd_process=20
-  	/* We want to receive a notification when the mm_struct is destroyed */
-  	struct mmu_notifier mmu_notifier;
- =20
-- 	unsigned int pasid;
- -	/* Use for delayed freeing of kfd_process structure */
- -	struct rcu_head	rcu;
- -
-+ 	uint16_t pasid;
-  	unsigned int doorbell_index;
- =20
-  	/*
+diff --cc arch/mips/kernel/syscalls/syscall_n32.tbl
+index e7c5ab38e403,2ba5b649f0ab..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@@ -373,4 -373,5 +373,5 @@@
+  432	n32	fsmount				sys_fsmount
+  433	n32	fspick				sys_fspick
+  434	n32	pidfd_open			sys_pidfd_open
+ -# 435 reserved for clone3
+ +435	n32	clone3				__sys_clone3
++ 436	n32	watch_devices			sys_watch_devices
+diff --cc arch/mips/kernel/syscalls/syscall_n64.tbl
+index 13cd66581f3b,ff350988584d..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@@ -349,4 -349,5 +349,5 @@@
+  432	n64	fsmount				sys_fsmount
+  433	n64	fspick				sys_fspick
+  434	n64	pidfd_open			sys_pidfd_open
+ -# 435 reserved for clone3
+ +435	n64	clone3				__sys_clone3
++ 436	n64	watch_devices			sys_watch_devices
+diff --cc arch/mips/kernel/syscalls/syscall_o32.tbl
+index 353539ea4140,7b26bd39900e..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@@ -422,4 -422,5 +422,5 @@@
+  432	o32	fsmount				sys_fsmount
+  433	o32	fspick				sys_fspick
+  434	o32	pidfd_open			sys_pidfd_open
+ -# 435 reserved for clone3
+ +435	o32	clone3				__sys_clone3
++ 436	o32	watch_devices			sys_watch_devices
 
---Sig_/Z4xOnbbIMfNja5oGok1Aohh
+--Sig_/QGTZrhqjkaq1aJ2OlBHvkpX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2VPnUACgkQAVBC80lX
-0Gw1mwf/WjgCerrGOo0JXIahm9n+nUZ7Zwa8DHPNvuc3pK8XsGVADLei9vi7lyqy
-r4U0S1RwUr6QoNq0rsW23JrxmSIcQTr1Mmf4SNdKj0Bqag8eGs3WEHJ33JdYWN9v
-phmiCoMmd/kqwficHL6e8dA9IrH9LV2bCbb+3EkOuSYOCzpqCa1MlkDkNjT1mkQg
-hVeduENK6dKXNz671rUnTZKkbBhKoDd9t9Bq+oxcrYhkXLDq3s/Ijg/iEtOarBxR
-7Qr8I5tp8Bt4aysqbE4/4dl2iZL1BxT6zPbQ5FDU9U/IXd6n/6INbM6ncZLSpWwE
-utxDJAJvL14ZWyQdn63LRp/qQPaqwg==
-=ii+d
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2VRJ8ACgkQAVBC80lX
+0GyhSwf/dOODCbXBNkjOdgrDs+LHCM2xGgAGjJ/5kFLF5eNycPLJRngo7qfKPAHS
+PACA+3wy4Px52CKqFaG3ImoWCT9yRUh1NkxU5frD8SmDj4mIfXE69E3JTBOYbJFt
+ALahodmh24KrlfUMdT9aN6gbh0kSDNV9/fsZENdtwW7sO7mLSUfn7SAzn+zEVyOn
+SRZ8eIodjgTKvoO1saW4WWZfD5kty88G+Gc/8oetLhNqv1E19eboCrBPv1TkDBVh
+oOOyvE0JTTH/q0I4BeihecjtqncACNK+jRPU0bJ4LH05GaSUBNxTFQsKP4kOF0u1
+Awh2HXk56nmA5dMzlJW+9gq7b8HioQ==
+=a2qp
 -----END PGP SIGNATURE-----
 
---Sig_/Z4xOnbbIMfNja5oGok1Aohh--
+--Sig_/QGTZrhqjkaq1aJ2OlBHvkpX--

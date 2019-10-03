@@ -2,52 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 900C2CB1FF
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 00:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDEACB21E
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 01:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728446AbfJCWp4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Oct 2019 18:45:56 -0400
-Received: from gloria.sntech.de ([185.11.138.130]:56832 "EHLO gloria.sntech.de"
+        id S1730290AbfJCXFr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Oct 2019 19:05:47 -0400
+Received: from ozlabs.org ([203.11.71.1]:46835 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726780AbfJCWp4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 3 Oct 2019 18:45:56 -0400
-Received: from p57b7758c.dip0.t-ipconnect.de ([87.183.117.140] helo=phil.localnet)
-        by gloria.sntech.de with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <heiko@sntech.de>)
-        id 1iG9r7-0000ti-Nn; Fri, 04 Oct 2019 00:45:53 +0200
-From:   Heiko Stuebner <heiko@sntech.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1730258AbfJCXFr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 3 Oct 2019 19:05:47 -0400
+Received: by ozlabs.org (Postfix, from userid 1034)
+        id 46kpWr3kTYz9sPp; Fri,  4 Oct 2019 09:05:44 +1000 (AEST)
+X-powerpc-patch-notification: thanks
+X-powerpc-patch-commit: 8996ae8f05a1cc5559120aaec36183edb9c68c50
+In-Reply-To: <20190930101342.36c1afa0@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+From:   Michael Ellerman <patch-notifications@ellerman.id.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hugh Cole-Baker <sigmaris@gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the rockchip tree
-Date:   Fri, 04 Oct 2019 00:45:53 +0200
-Message-ID: <32713632.1bI0RUAnRe@phil>
-In-Reply-To: <20191004075645.715fb074@canb.auug.org.au>
-References: <20191004075645.715fb074@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: linux-next: build failure after merge of the powerpc tree
+Message-Id: <46kpWr3kTYz9sPp@ozlabs.org>
+Date:   Fri,  4 Oct 2019 09:05:44 +1000 (AEST)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-Am Donnerstag, 3. Oktober 2019, 23:56:45 CEST schrieb Stephen Rothwell:
-> In commit
+On Mon, 2019-09-30 at 00:13:42 UTC, Stephen Rothwell wrote:
+> Hi all,
 > 
->   b62ce630fddb ("arm64: dts: rockchip: fix Rockpro64 RK808 interrupt line")
+> After merging the powerpc tree, today's linux-next build (powerpc64
+> allnoconfig) failed like this:
 > 
-> Fixes tag
+> arch/powerpc/mm/book3s64/pgtable.c: In function 'flush_partition':
+> arch/powerpc/mm/book3s64/pgtable.c:216:3: error: implicit declaration of fu=
+> nction 'radix__flush_all_lpid_guest'; did you mean 'radix__flush_all_lpid'?=
+>  [-Werror=3Dimplicit-function-declaration]
+>   216 |   radix__flush_all_lpid_guest(lpid);
+>       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |   radix__flush_all_lpid
 > 
->   Fixes: e4f3fb4 ("arm64: dts: rockchip: add initial dts support for Rockpro64")
+> Caused by commit
+> 
+>   99161de3a283 ("powerpc/64s/radix: tidy up TLB flushing code")
+> 
+> radix__flush_all_lpid_guest() is only declared for CONFIG_PPC_RADIX_MMU
+> which is not set for this build.
+> 
+> I am not sure why this did not show up earlier (maybe a Kconfig
+> change?).
+> 
+> I added the following hack for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 30 Sep 2019 10:09:17 +1000
+> Subject: [PATCH] powerpc/64s/radix: fix for "tidy up TLB flushing code" and
+>  !CONFIG_PPC_RADIX_MMU
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-I fixed the git hash and updated the branch with it.
+Applied to powerpc fixes, thanks.
 
-Thanks for the catch
-Heiko
+https://git.kernel.org/powerpc/c/8996ae8f05a1cc5559120aaec36183edb9c68c50
 
-
+cheers

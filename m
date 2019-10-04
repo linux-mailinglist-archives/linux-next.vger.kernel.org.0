@@ -2,168 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26F4DCB3B3
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 06:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 457CCCB3EF
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 06:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729583AbfJDETs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Oct 2019 00:19:48 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:39967 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729226AbfJDETs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Oct 2019 00:19:48 -0400
-Received: by mail-wr1-f48.google.com with SMTP id l3so5285683wru.7
-        for <linux-next@vger.kernel.org>; Thu, 03 Oct 2019 21:19:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=S08NEo62gfCcaPU7MxwGw43LALxiWtJw26ZnCbVot8g=;
-        b=UBhKVSrlXkPmGjrrdO7IZnE0WlFyVz7MX5xjNGClqk2Y+M1+M3DkEsIj8g7Bn1QOE9
-         90tJVBg7gYkSdd8CJmq2n1Aivv/zJSl/WDSh2Bbu0+0jVrSCH7cRnC23ohSGqjyPV2Dx
-         zA9s+Jd4QgkvQO7yIoWqpCkUD39sU1qrI97ZMrsZryMR1JZCnB0xR8aYfoEjOQN5QpiP
-         Jv3nrOPY92Awrw22Yxu4JHy/yISyOtprV/k6hVpBFJ3E4JL7TiY6wr8tkOSRqh1aqbuv
-         1ySQ9+kWSC8NrryR1Ev/LMwYciILMVEr09eznOXkdhzu6FXiDzGmYCUWRLah4GIS3KcS
-         m1Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=S08NEo62gfCcaPU7MxwGw43LALxiWtJw26ZnCbVot8g=;
-        b=isFpNo+HF1Y0XKX36nes7k5Jfm/9JGCeYa3EeWFVPeZDzxZOswkjsiD/40DXSsGNoA
-         WsRX2etU9A0jegtPh7KuvKhQxQUECEK+VsVLJeftTcKMJR5I3jcarbYhRDNrPCy+7dil
-         zPLQfSlxXCnTJ4iJtkGwMXsOUDX2lLqATf0UCgjJWp42rkynEsVjz+lRdCVHUrgYDAcu
-         ZUxEzxrtaTPo2xKOPN+iO1igNoBOw7vUeJEZhXPuxOMvbm2iD3+Z1IK3FtBQES8l88Pi
-         Gj9jNMpCxP234q/0S0tbAjFbdgKrRBmjyL6yCSAX9+yALMRLYSPktbrWjj6OEJymJI6R
-         lzRQ==
-X-Gm-Message-State: APjAAAUH6/wsGj/acHmZkxbYEwdfEE4aee9/GAuSPiNESYBYgIuVipEq
-        4peef9QUleJRiiatdseQs3KV964ojdu1pQ==
-X-Google-Smtp-Source: APXvYqzJV25bzEdfqhVdTc6hXZkS9HUu7P12AwhPnR52P+5/+jXLR9P07+RPgzjuQ8k6RmZBuZkJ2g==
-X-Received: by 2002:a5d:470e:: with SMTP id y14mr9298441wrq.332.1570162785382;
-        Thu, 03 Oct 2019 21:19:45 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id b12sm4763500wrt.21.2019.10.03.21.19.44
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Oct 2019 21:19:44 -0700 (PDT)
-Message-ID: <5d96c860.1c69fb81.7ba56.5855@mx.google.com>
-Date:   Thu, 03 Oct 2019 21:19:44 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2387540AbfJDEhg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Oct 2019 00:37:36 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57257 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726569AbfJDEhg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 4 Oct 2019 00:37:36 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46kxth3cLFz9sPv;
+        Fri,  4 Oct 2019 14:37:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570163853;
+        bh=T33u6X8G9UN2xJqzu1eNRQMNTlnfYibIjsC3cpwy71Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HJM9FO+oAxmUkPjr/9HaoWWjEqXF4aW5D+iNk92YiPWI3TS2csUO5QXAWVm/uF55O
+         +M8/W2AM13I1PI7JbqxpVx0rAL9r4R9cpzOMjIIlan6M1GQbm0Yh74NkuzaZQg+WLm
+         FvipUMjJ4JpjQ5LW69bdhdxY6YK/RTHHtogXmmoYPbGtjyZfKjH5XIgXAi0jl3gJXo
+         zu+Dt9YNLSKbgQXCKfUhmp5hE1TXhCu5+J1gDBSpthoJDZhB8AmsVecdYMum3DeXZM
+         LdtJS3HuPzghrPxg/3uiNWLT279+9wqeflHgVF0ZBZDOTcm+ZVMW8CDlQ4fsXCy4Hk
+         GjNDuHy/zpaXA==
+Date:   Fri, 4 Oct 2019 14:37:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jinke Fan <fanjinke@hygon.cn>
+Subject: linux-next: build failure after merge of the rtc tree
+Message-ID: <20191004143731.30f97c7f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc1-261-g829a15f23627
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 285 boots: 13 failed,
- 258 passed with 12 offline, 2 conflicts (v5.4-rc1-261-g829a15f23627)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/3NQvkFj/O3vw87TecTU4EbN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 285 boots: 13 failed, 258 passed with 12 offline, =
-2 conflicts (v5.4-rc1-261-g829a15f23627)
+--Sig_/3NQvkFj/O3vw87TecTU4EbN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc1-261-g829a15f23627/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc1-261-g829a15f23627/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc1-261-g829a15f23627
-Git Commit: 829a15f23627ab3211304a590b7786e60576960b
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 27 SoC families, 25 builds out of 214
+After merging the rtc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Boot Failures Detected:
+drivers/rtc/rtc-mc146818-lib.c: In function 'mc146818_set_time':
+drivers/rtc/rtc-mc146818-lib.c:176:6: error: 'boot_cpu_data' undeclared (fi=
+rst use in this function); did you mean 'bootmem_data'?
+  176 |  if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD ||
+      |      ^~~~~~~~~~~~~
+      |      bootmem_data
+drivers/rtc/rtc-mc146818-lib.c:176:6: note: each undeclared identifier is r=
+eported only once for each function it appears in
+drivers/rtc/rtc-mc146818-lib.c:176:34: error: 'X86_VENDOR_AMD' undeclared (=
+first use in this function); did you mean 'X86_VENDOR_ANY'?
+  176 |  if (boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_AMD ||
+      |                                  ^~~~~~~~~~~~~~
+      |                                  X86_VENDOR_ANY
+drivers/rtc/rtc-mc146818-lib.c:177:34: error: 'X86_VENDOR_HYGON' undeclared=
+ (first use in this function); did you mean 'X86_VENDOR_ANY'?
+  177 |      boot_cpu_data.x86_vendor =3D=3D X86_VENDOR_HYGON)
+      |                                  ^~~~~~~~~~~~~~~~
+      |                                  X86_VENDOR_ANY
 
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
+Caused by commit
 
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2835-rpi-b: 1 failed lab
-            bcm2836-rpi-2-b: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
+  1e2c8aadedbe ("rtc: cmos: fix the AltCentury value on AMD/Hygon platform")
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
+This driver file is built for several different architecture, but
+the added code is X86 specific :-(
 
-    defconfig+kselftest:
-        gcc-8:
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
+I have reverted that commit for today.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
+--=20
+Cheers,
+Stephen Rothwell
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+--Sig_/3NQvkFj/O3vw87TecTU4EbN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Offline Platforms:
+-----BEGIN PGP SIGNATURE-----
 
-arm:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2WzIsACgkQAVBC80lX
+0Gzmwgf/Tufdr5G0dHnLnZ32RVEwQIvO1GHk9ektmXQtDI28UHTtXMdL6EK63LfJ
+UFtwYwenfxsmDqKU3wbljQxUjikstvEpiOJ4K9BDQm4BnYsFcyfNrduqph/RiP0T
+e98awjLeZzS7HO+hKkv7A16NRBHQMswdTqIWLlxwvgpgLezJMh76IviJ42OKb4a2
+DjHetLvIObkr0WZVrIK9yGW7sDhl8QHs/h9ehLxf/OdjDjKaDw4gft+cmYVlTfPd
+xPJ81CA8zGYq4VwnYLjKN1Lh2VOnDygqMPe6lH43fd79mpt5jFZvF8D1XeJPyGI1
+U6JsV1meKMw7DndvqWmPIFb5P2VnWQ==
+=Q27T
+-----END PGP SIGNATURE-----
 
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            mt7623n-bananapi-bpi-r2: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        exynos5422-odroidxu3:
-            lab-collabora: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
-    multi_v7_defconfig+kselftest:
-        exynos5422-odroidxu3:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+--Sig_/3NQvkFj/O3vw87TecTU4EbN--

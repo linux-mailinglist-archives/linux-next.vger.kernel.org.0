@@ -2,116 +2,151 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E2E1CB2DE
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 03:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D863FCB39D
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 05:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729359AbfJDBK3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 3 Oct 2019 21:10:29 -0400
-Received: from ozlabs.org ([203.11.71.1]:42791 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728345AbfJDBK3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 3 Oct 2019 21:10:29 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46ksHg47mrz9sPl;
-        Fri,  4 Oct 2019 11:10:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570151426;
-        bh=9xF7O4ugUmejFoawtgnL4B57TpXYia5KNWt+3CH/1g8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UaPcZXUZg71Ts9S4FUbZm6EyJxMlZFWwNe3cic0VtyosMGTo1wJD6LwY1O6luwA8w
-         Legev33i238czsZjmfXEGWX50N3+GhxRCzWy4dr/ObVWTRqv2ifZG1677nacnHBUAw
-         Y0MLNP4s8XaZgq/Fa6uY2pTJArOrjsMe5m65blpD8+kk59cWWigzCcLvusX/8yCl2D
-         YNJjJZ2PYsnGn7Hw398Qh9NNWD91H/VbS4lSlmc8JW8/ncs174zt6pgLrpMLSPW3Z7
-         gyeSoxY5HPykDuPiTrrtl4mY7/Aw48WAZDomvyZgcGIkunnniBBPw07yuzXqM9NILR
-         3GCNq8UR33DFA==
-Date:   Fri, 4 Oct 2019 11:10:22 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dariusz Marcinkiewicz <darekm@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Lyude Paul <lyude@redhat.com>
-Subject: linux-next: manual merge of the drm-misc tree with the admgpu tree
-Message-ID: <20191004111022.28bde6dc@canb.auug.org.au>
+        id S2387654AbfJDD6W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 3 Oct 2019 23:58:22 -0400
+Received: from mail-wm1-f48.google.com ([209.85.128.48]:39569 "EHLO
+        mail-wm1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387504AbfJDD6V (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 3 Oct 2019 23:58:21 -0400
+Received: by mail-wm1-f48.google.com with SMTP id v17so4283407wml.4
+        for <linux-next@vger.kernel.org>; Thu, 03 Oct 2019 20:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=TK7UCRaLqHDAkti6DcGirPqWLMok6oNjNsEIVkPUeCE=;
+        b=lF5Rdbo3W8I9RJ0wSvzKs8esk9dM5hUg7C33i6Xs5gagnZfcQ8m3u/buvwgCB7v2bi
+         EDAnGYzEkfWVYhWhPDE6+3+niR500oK+3zfxjkaMl1qphuWFftf7dx94aP0or6cPNnSG
+         sMhEnkSjtxSaPfQYwUolk0fl7bVfirjI4OpB+dMI8QGm8DrfW0DMs1fVr52UMWhRnOYF
+         uTsUuWBF0PF6BbP1yum6ZgPAW9uqY7jvtWpRk4ENybvfH9l5J1mqFbBwgJhhoowGYCZG
+         aoP26IqhF181EJQ71D8KqguQHcHLiYFc9M83wqygk2axGYJkLIrRCbm9AWbyPHX5bL3E
+         vQbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=TK7UCRaLqHDAkti6DcGirPqWLMok6oNjNsEIVkPUeCE=;
+        b=r+Zze1ORkcdGJuXmreH6Tvm7dc43ixK1VPWcBqfTxUq6pLYB15lopNDLzJrora8/Pa
+         mj1Q6RTcWECSIBaRgPFw2isdiEw9soaAy2vCZBiJH9twcMyN9Y/krmqE5jmpPfAZbSc7
+         LiPhYVoZ/8UBkhwaSZ6lYLFaqfkhnmETH1b8uvF/kBIzpe0kClbQf+iGrMwUn6nDBLtt
+         AM2GV9BUWZLRyLWqrLVC3X3mCAtepAEehRuRfNJcAKmXABOWTV9YClFnbdD3CuPSHnNz
+         DEPcF3MAJy/Y1aPXpS3103uGOEl+N3r+zew6n7ctpugrSKdacLWyNXNvnyyeHLM+yoKS
+         Cg0Q==
+X-Gm-Message-State: APjAAAXJXVWFGSdhdENWH+IqbM3EHVrPyXeof4vRK8EACKJrPlMfNDrC
+        /v5fblJef7yBmIogl4WjXBmkzB8lPNEzig==
+X-Google-Smtp-Source: APXvYqyu2sD0+QrJlVuNJI6hSxXJxWDK+yUO8aMN0ilX1QaypYz4pO4MWmsotlJUcZjuwv6HacLDjw==
+X-Received: by 2002:a1c:7dd1:: with SMTP id y200mr8743720wmc.59.1570161499684;
+        Thu, 03 Oct 2019 20:58:19 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id n1sm8404485wrg.67.2019.10.03.20.58.19
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Oct 2019 20:58:19 -0700 (PDT)
+Message-ID: <5d96c35b.1c69fb81.ecd34.8527@mx.google.com>
+Date:   Thu, 03 Oct 2019 20:58:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7L4.J4D3cO5/Rn4FGcSo6.9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191003
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master boot: 304 boots: 13 failed, 277 passed with 12 offline,
+ 2 untried/unknown (next-20191003)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7L4.J4D3cO5/Rn4FGcSo6.9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 304 boots: 13 failed, 277 passed with 12 offline, 2 untri=
+ed/unknown (next-20191003)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191003/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191003/
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+Tree: next
+Branch: master
+Git Describe: next-20191003
+Git Commit: 2521ffab5375209bd0df42b675fd84ad785647e9
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 91 unique boards, 27 SoC families, 25 builds out of 218
 
-  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+Boot Failures Detected:
 
-between commit:
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
-  2f232cf29e03 ("drm/amdgpu/dm/mst: Don't create MST topology managers for =
-eDP ports")
+    bcm2835_defconfig:
+        gcc-8:
+            bcm2835-rpi-b: 1 failed lab
+            bcm2836-rpi-2-b: 1 failed lab
+            bcm2837-rpi-3-b: 1 failed lab
 
-from the admgpu tree and commit:
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
 
-  ae85b0df124f ("drm_dp_cec: add connector info support.")
+    defconfig+kselftest:
+        gcc-8:
+            meson-gxm-khadas-vim2: 1 failed lab
+            qcom-qdf2400: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
+            rk3399-puma-haikou: 1 failed lab
 
-from the drm-misc tree.
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-g12b-s922x-khadas-vim3: 1 failed lab
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Offline Platforms:
 
---=20
-Cheers,
-Stephen Rothwell
+arm:
 
-diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index 3af2b429ff1b,5ec14efd4d8c..000000000000
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@@ -414,11 -416,7 +414,11 @@@ void amdgpu_dm_initialize_dp_connector(
- =20
-  	drm_dp_aux_register(&aconnector->dm_dp_aux.aux);
-  	drm_dp_cec_register_connector(&aconnector->dm_dp_aux.aux,
-- 				      aconnector->base.name, dm->adev->dev);
-+ 				      &aconnector->base);
- +
- +	if (aconnector->base.connector_type =3D=3D DRM_MODE_CONNECTOR_eDP)
- +		return;
- +
-  	aconnector->mst_mgr.cbs =3D &dm_mst_cbs;
-  	drm_dp_mst_topology_mgr_init(
-  		&aconnector->mst_mgr,
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
 
---Sig_/7L4.J4D3cO5/Rn4FGcSo6.9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
 
------BEGIN PGP SIGNATURE-----
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2Wm/4ACgkQAVBC80lX
-0GzFRwf/WBPiEvkFmJsMLMuNNIGQgrcVmlJ29OLPyMqVGih9Pn++RZOa2LMBzbck
-p7mk5w6cEU4nhpk7tIYfcwrDA1ymh9RtqANl60h+wjkEDCnCOBLyKWSYX3+9NsVZ
-5HfuYp2vTKlJ39rRfRlhmBUMvaVA+0dtdH7OKRDB6BT3/bhlRIZKVsWwWRcQI9mP
-irBzxPH/qMY2eER6FuGYRot6P9H3B8PWwyYFEh9gjHL9eZ/OD3g8zpMoTL62lMY7
-+ZzcNwrpmZf39EQtnmI3//LZM22USRC53JFFTPXgzcN96OdV/+dlfZON++AkaQvZ
-7XdAF9cBY4Vtj+jElHvMZczwACiA8Q==
-=PU8N
------END PGP SIGNATURE-----
+    multi_v7_defconfig:
+        gcc-8
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            qcom-apq8064-ifc6410: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
 
---Sig_/7L4.J4D3cO5/Rn4FGcSo6.9--
+arm64:
+
+    defconfig:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            apq8016-sbc: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

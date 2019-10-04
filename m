@@ -2,89 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC1CCBEA3
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 17:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0D8CBEE5
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 17:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389540AbfJDPJM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Oct 2019 11:09:12 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:50913 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389451AbfJDPJM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Oct 2019 11:09:12 -0400
-Received: by mail-wm1-f68.google.com with SMTP id 5so6225624wmg.0;
-        Fri, 04 Oct 2019 08:09:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mW3Y0VrUb6wZtyxebbfB9Jk1tCRtuYl5oPC9U9Ftd/E=;
-        b=nOY2keZsqmpuH1xbeDCnZt1MEiYieW9JrPr/H+MW3gfONPqSwgKkWjBnwCnD3bsItw
-         9LwJCibDag0hBLErXz3izWl1UlY10ST+Bv3Z8dNqH50N/iyy/oOD0z1oAW14MLvVy16l
-         +l/L6rcf8JaqteOYGyWtE+lBLK8gGhsawZ6x92i+ovKxPnjN8+HuXqatlY9c4yK6dJQw
-         WAT9cSo971e/xlqQf6HVBh1SzzYKRUSHqXRDsyK8fPyfVYfOvOXbomyOT5qTDLOyw4Tf
-         KCaNnW3eHnuQDRrzNUFxzNCnrpv4nwi6qG7PV2esRAG6hsNb5Bpm2wnYZ8sgbOoIbghv
-         Jllg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mW3Y0VrUb6wZtyxebbfB9Jk1tCRtuYl5oPC9U9Ftd/E=;
-        b=ji4s+5c1jCr4WLuGzHmZGsiPs87JWctV4tlBx6+BoPaw0s2ZAO878TVvCCMiAuSfRQ
-         Jlr2kHhJebE3xl12oFyj7VV3I2jkhMrllw89u1qE1DkP99FSQGdcKbP7FijN7bTPx7Sp
-         E2c8It03M+aD7CvrubTZTxENIaGVugDZpgV+dDJMydQ1xZMGg4Q9msTjaP+u9IgJVkzU
-         1CJbBe3g2wFB1OpPtdpz4o9iSW4CJfoRMBRTmzYD+ou/aoApTXsHU9x6J3aacJO427Os
-         uIS6Yt/gFoiMh81r9udPyo3R0z4Cd4RekA5+i28wlVx9MyBMXEuB17oD6uIagBAPnGRU
-         c0EA==
-X-Gm-Message-State: APjAAAWGOshkOJYp80YBnOip0C0TrOjVzP4toXXapuLJPk7KuMj5j7Nz
-        fZwEqblGVDAgdOg+3v0Ouri3BsyTm3pxG7CP8tZcSGHx
-X-Google-Smtp-Source: APXvYqxneG+7AABZBLJ88L0DfeVJhZB3AgCn8Tok8QL2HTCnFpF8wIJhlR87UC42+UfW2wxt1qlX1BJsx1dRmRKkM6I=
-X-Received: by 2002:a05:600c:2308:: with SMTP id 8mr11848180wmo.67.1570201750315;
- Fri, 04 Oct 2019 08:09:10 -0700 (PDT)
+        id S2389378AbfJDPRr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Oct 2019 11:17:47 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:57026 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388802AbfJDPRr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Oct 2019 11:17:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=bG+jGchCJisskgibLt1J7/dZrtMJBAxpqKMI+1hUuT4=; b=ioU7GGNNSV0DjkOzU2y1+zLUj
+        i+LHddUVLHVrT+9EiUvW20tGRjMrP7MJ4vIrOJQfAfUysMYg/ZAgundZKFxDtE9UAuJYRWi5mMWjo
+        edcPHh/0qwQF8d4KxqbN0sOe0L61Alv6RVyKiQfu0jaSSNZraK8g8fDQx0I1eG2HYnQxW3XSUPD6G
+        rWrvlKNY30QQpk0BHLQelBOPiJ1vEuDNyVOtNTo2dKlh8BMgGaJeL83GVo1MwdYjiT6hBG2fY19iU
+        ZgnaNAj5I0YQTv8ykpsGOnmq0yqp/J12Ie1ZCjZn6PFPPAiKkmlcvTyayIo2TObzMN31VQIhWx+Jj
+        4s8fQtlaQ==;
+Received: from [2601:1c0:6280:3f0::9ef4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.2 #3 (Red Hat Linux))
+        id 1iGPL0-0000o3-FN; Fri, 04 Oct 2019 15:17:46 +0000
+Subject: Re: linux-next: Tree for Oct 4 (net/rds/ib)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-rdma@vger.kernel.org, rds-devel@oss.oracle.com
+References: <20191004155929.3ac043b5@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <b9529d01-ad20-3235-c0af-b3dee17ca521@infradead.org>
+Date:   Fri, 4 Oct 2019 08:17:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20191004155929.3ac043b5@canb.auug.org.au> <06969836-ac7f-0d18-1866-159e48018d98@infradead.org>
-In-Reply-To: <06969836-ac7f-0d18-1866-159e48018d98@infradead.org>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 4 Oct 2019 11:08:57 -0400
-Message-ID: <CADnq5_P8Z4jC9ZiW4F=3w26=V_Ft+_qTvC5OesaYmM0nMbT_MA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Oct 4 (amdgpu)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20191004155929.3ac043b5@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Oct 4, 2019 at 11:08 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 10/3/19 10:59 PM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > Changes since 20191003:
-> >
->
-> on x86_64:
-> CONFIG_DRM_AMDGPU=y
-> # CONFIG_DRM_AMDGPU_SI is not set
-> # CONFIG_DRM_AMDGPU_CIK is not set
-> CONFIG_DRM_AMDGPU_USERPTR=y
-> CONFIG_DRM_AMDGPU_GART_DEBUGFS=y
->
-> ld: drivers/gpu/drm/amd/amdkfd/kfd_device.o:(.rodata+0xf60): undefined reference to `gfx_v7_kfd2kgd'
->
+On 10/3/19 10:59 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191003:
+> 
 
-Fixed:
-https://patchwork.freedesktop.org/patch/334412/
+on i386:
 
-Alex
+../net/rds/ib.c: In function ‘rds_ib_dev_free’:
+../net/rds/ib.c:111:3: error: implicit declaration of function ‘dma_pool_destroy’; did you mean ‘mempool_destroy’? [-Werror=implicit-function-declaration]
+   dma_pool_destroy(rds_ibdev->rid_hdrs_pool);
+   ^~~~~~~~~~~~~~~~
+   mempool_destroy
+../net/rds/ib.c: In function ‘rds_ib_add_one’:
+../net/rds/ib.c:187:29: error: implicit declaration of function ‘dma_pool_create’; did you mean ‘mempool_create’? [-Werror=implicit-function-declaration]
+  rds_ibdev->rid_hdrs_pool = dma_pool_create(device->name,
+                             ^~~~~~~~~~~~~~~
+                             mempool_create
+../net/rds/ib.c:187:27: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+  rds_ibdev->rid_hdrs_pool = dma_pool_create(device->name,
+                           ^
 
-> --
-> ~Randy
-> _______________________________________________
-> amd-gfx mailing list
-> amd-gfx@lists.freedesktop.org
-> https://lists.freedesktop.org/mailman/listinfo/amd-gfx
+
+
+-- 
+~Randy

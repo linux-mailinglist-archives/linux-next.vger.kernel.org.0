@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79E6ECB926
-	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 13:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC945CB93A
+	for <lists+linux-next@lfdr.de>; Fri,  4 Oct 2019 13:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730847AbfJDLdR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 4 Oct 2019 07:33:17 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40917 "EHLO
+        id S1729337AbfJDLfh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 4 Oct 2019 07:35:37 -0400
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:44015 "EHLO
         mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727254AbfJDLdR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Oct 2019 07:33:17 -0400
-Received: by mail-wr1-f67.google.com with SMTP id l3so6739601wru.7
-        for <linux-next@vger.kernel.org>; Fri, 04 Oct 2019 04:33:16 -0700 (PDT)
+        with ESMTP id S1727254AbfJDLfh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 4 Oct 2019 07:35:37 -0400
+Received: by mail-wr1-f67.google.com with SMTP id j18so5949330wrq.10
+        for <linux-next@vger.kernel.org>; Fri, 04 Oct 2019 04:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=9ZuxXSUYX9tgFwU9f7UVOm0mtvJfk7A1gDhPBDcgRSo=;
-        b=GXjPAHU8L9zN0b7x2F8UkE0Te9IW1OiG2BUtyuK4ZledyfPziBYOIeJ9KCwbEBfEnf
-         wkkoZh6KvpxJEGzrl64JYArpTkN0UPZ07nIc8ntam7s3GdHcQ+Hsbrcp6/R8puXAvSBW
-         rhtR1GwsqIR1ciFBFjAgVen2r3fX45EsmRmMp6aiF3MB81dyokuzJCn04rD5kDb3Wqq5
-         giXQKvFJDdQ2K+mTD5HZZsIYmZ3fK2/aPxaY40+CNslgnNLoxa67vomHZR1AmvxyuKC0
-         //UOVpKeEMff6wbxj9gWfCmXWg05DB+nrozpl7ZNXYkS1lWU4D05G6GaYwqX2vMRwLo3
-         97YQ==
+        bh=LMAoGajgWcICmeUWOhfA+JWLgm+5RwLX4Y7WYNcGht0=;
+        b=yDXUU3zytUMkPvc4bt8yaV9O7tzv8kNswaNKFtsGMNkn+FF8E9HPUVDQHiP5W2/E9g
+         fl58TSX8c3wsXJsTWqcU0Kqk6qlreuEPX9ru3+uipatPsor+iTHq/bmOXmtkSY0a4OTA
+         VsonLLeN2wDlQElej01PQ/WnBXQOQlgJnI/X8iXuJBnNtaUsMIjrpUTMh6QtQ37augLe
+         Iz230yxl6PW91Ql3ExYRuUZUtHKFVkMk0WwWwhuGLoLJrncG8tYp7KFTiO1RuidtN8Dg
+         RELeFTRpamOx7A5M3Ur5dNEQHvYy2K2EeI9uou0Te0dN/A9cjD5wN9u7nD64HcmxQGmu
+         J7DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=9ZuxXSUYX9tgFwU9f7UVOm0mtvJfk7A1gDhPBDcgRSo=;
-        b=iCpfQJaaBj6bSm9kpFFW49baozShKwS19Pu2AS7fljcoSu+U1xASmYGtSmmN1hOOvf
-         tRMi7J8TzHU5wKdfPK3xH8u2GmbGEBeJjppocTUuhWi+NjqGvFUiP3xS2d28ByZ7/7CA
-         59HrPn+eH+Fnm5bbYkwORcl/x6sql293h/1owP/VgUpuoDqJ7xwHUdC0qYt4zGTHPgT7
-         iJ1HDGN0PKDIxUIphbH/9QMBdAqOR4+j3xwKrvPkvjyxqlJ3c1BoXk2jl3Z5PrVo2+1L
-         occptRYsoOA3wjW+C8PzTeCRO5vXVJWjJd/hISigHdquhOvaVz/A06yA+0K5fWGgnhQo
-         OaiA==
-X-Gm-Message-State: APjAAAXY3j2mo8oKcpkGxeNreRsYbRGTo3BoE8y2ixHqfbU6kTbrm9oo
-        SjH7rneRAhbL55bsygKKggwUogI74r5NSQ==
-X-Google-Smtp-Source: APXvYqwUhm6YF2vEL79ahOE//f01iiZN2iLI3CC7tLr9PCgLRRtOI0EFU7IOzt64ycQ+KJ5yCArUGA==
-X-Received: by 2002:adf:fa05:: with SMTP id m5mr10807975wrr.70.1570188795285;
-        Fri, 04 Oct 2019 04:33:15 -0700 (PDT)
+        bh=LMAoGajgWcICmeUWOhfA+JWLgm+5RwLX4Y7WYNcGht0=;
+        b=sle7f8toIjUueAQg9pGReB9ifSt7IuK1ppguIhb/mm23I7SOT8CxKqHi8wt3pTzGm6
+         qp9Zi+nEm05uccg8l6TqsU6sKVkEEMKVKjUMXOdST6tTNY88AWJuyNUcXVBBzO7VIKbQ
+         kzGiRouvQ60fgl257CydLvxU2pBwiPob22+VvYYFzf5DxsHxoQkKUEWua8zy8N3TCzMg
+         SZOUJ/KtJVzNHpSWNU9UftHJV2CCiTAmLGeXJci7EKg4vzJGdB5hIt6fbq00MGl+mtdV
+         w5i6lQVxZC3k16HST71XU6YFIF4cRDte0SyCYfcz16DHgLDCUUN3/WaSdSp0R7onx+iC
+         woSQ==
+X-Gm-Message-State: APjAAAWLouuXaUcVt4r1LF/PNj5sZBJgG/A1emx0291BpGaq/JtdjVf/
+        uxdNmzxEbfqAauvIAdE65Vm3D7Xg0T+M9g==
+X-Google-Smtp-Source: APXvYqyNixpXvV1DHGLLQOCnhzruICNOtqG+PeWRR6ieq8CnVWtx/EY8IG6GNpTeHvY1U57BfajTyQ==
+X-Received: by 2002:a5d:5111:: with SMTP id s17mr10336318wrt.59.1570188934866;
+        Fri, 04 Oct 2019 04:35:34 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id w5sm6595268wrs.34.2019.10.04.04.33.14
+        by smtp.gmail.com with ESMTPSA id i5sm6039606wmd.21.2019.10.04.04.35.34
         for <linux-next@vger.kernel.org>
         (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 04 Oct 2019 04:33:14 -0700 (PDT)
-Message-ID: <5d972dfa.1c69fb81.1b5c1.08fa@mx.google.com>
-Date:   Fri, 04 Oct 2019 04:33:14 -0700 (PDT)
+        Fri, 04 Oct 2019 04:35:34 -0700 (PDT)
+Message-ID: <5d972e86.1c69fb81.174c7.c186@mx.google.com>
+Date:   Fri, 04 Oct 2019 04:35:34 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20191004
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.4-rc1-298-gb76690ad767a
 X-Kernelci-Report-Type: boot
-Subject: next/master boot: 303 boots: 11 failed, 268 passed with 23 offline,
- 1 untried/unknown (next-20191004)
+Subject: next/pending-fixes boot: 270 boots: 12 failed,
+ 234 passed with 23 offline, 1 untried/unknown (v5.4-rc1-298-gb76690ad767a)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,20 +63,20 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 303 boots: 11 failed, 268 passed with 23 offline, 1 untri=
-ed/unknown (next-20191004)
+next/pending-fixes boot: 270 boots: 12 failed, 234 passed with 23 offline, =
+1 untried/unknown (v5.4-rc1-298-gb76690ad767a)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191004/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191004/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc1-298-gb76690ad767a/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc1-298-gb76690ad767a/
 
 Tree: next
-Branch: master
-Git Describe: next-20191004
-Git Commit: 311ef88adfa3b69c40234bf3000d1269e718919a
+Branch: pending-fixes
+Git Describe: v5.4-rc1-298-gb76690ad767a
+Git Commit: b76690ad767aa45ce68a6c5dc102f26078f22cee
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 94 unique boards, 27 SoC families, 25 builds out of 218
+Tested: 89 unique boards, 27 SoC families, 25 builds out of 214
 
 Boot Failures Detected:
 
@@ -94,11 +94,8 @@ arm:
 arm64:
     defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
         gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
             rk3399-firefly: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
 
     defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
         gcc-8:
@@ -106,6 +103,7 @@ arm64:
 
     defconfig+kselftest:
         gcc-8:
+            meson-gxm-khadas-vim2: 1 failed lab
             qcom-qdf2400: 1 failed lab
             r8a7795-salvator-x: 1 failed lab
             r8a7796-m3ulcb: 1 failed lab

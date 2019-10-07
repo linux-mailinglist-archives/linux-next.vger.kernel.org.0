@@ -2,120 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADBB4CEF25
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 00:42:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DFA3CEF3C
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 00:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728983AbfJGWmb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Oct 2019 18:42:31 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40005 "EHLO ozlabs.org"
+        id S1729212AbfJGWso (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Oct 2019 18:48:44 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54385 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728654AbfJGWmb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 7 Oct 2019 18:42:31 -0400
+        id S1728980AbfJGWso (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 7 Oct 2019 18:48:44 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46nFq871TRz9sPT;
-        Tue,  8 Oct 2019 09:42:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46nFyK4Mn3z9sPT;
+        Tue,  8 Oct 2019 09:48:41 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570488149;
-        bh=t1+QL3NVj1xEg9Hc5TIAtTlFoQW7X/JWQPEMb3/QOac=;
+        s=201702; t=1570488521;
+        bh=G56IR+b8MH/UAZzvFbGgYEyxWfeZdIJW//Ixl1WWE28=;
         h=Date:From:To:Cc:Subject:From;
-        b=EyeN0p85cgnBuFiDJtN2P3nFz0eRTOBUCTi1HnCx9p/NtPUyQOthHQTP3leGw6LuD
-         kDaA8zDv3pbxozTW08qSw3J+EqSqCGBvfdm93x99raTVh/j0ey789r1Roqlb5RdDPq
-         YTs3UcYZxt+Vn000Rg76r0/Q9gELvs9c9ayN6aTs09J8ihVx4nXOMuqk0h0n+qq8Iu
-         eKycxtgUlk/LnUjcNc042QOlQ+WJ/Dhqa5mFk//RUKG8DD3yDiI3+pAjccAybyOV9D
-         0GhohJ0WobOuA5izBl4yiAaAedPi/FjR+ejkzNu1l1lvuvlc8CxClTihDHDl6L5R5k
-         lVX1dDv14iqpA==
-Date:   Tue, 8 Oct 2019 09:42:21 +1100
+        b=fU4gg2SccggVyIda0pgORMkhwr0EEU3EfzdpSIeV7h+SBZYvLID+Aoo/gqgnarUcC
+         yQKL/skgJvk8RJL308u2joWNI5yy5gsWzZEcjVNX/Z3Vyh9PP0QJPukFjPQQAZqD1u
+         puHEfo0aLM211NdJNGkVKCyzHHPzZhCHPQ0hssz5jtk375bN6SCjRdL2v3a1UQ7Bkn
+         TwmkeTooPV5G0SN5m2qdBYLe0Uq/7HlJ0muUztP0UJpwoNSY8ZuPyftPURW7DOV5hg
+         1hyqfCsPpyCxBYr/AR8p6CdtfFVwmoJzEfAxB+rwUWJR/3EC1xXmwdzLVrzL6R7r+9
+         eWwIJWsfTVyFA==
+Date:   Tue, 8 Oct 2019 09:48:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
         Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>
-Subject: linux-next: build warning after merge of the net-next tree
-Message-ID: <20191008094221.62d84587@canb.auug.org.au>
+        Yonghong Song <yhs@fb.com>,
+        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdlbnNlbg==?= <toke@redhat.com>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <20191008094840.1553ff38@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Xj_X7JA3EV9XdyAej7t7QRR";
+Content-Type: multipart/signed; boundary="Sig_/d1EoAl5ASZ.KkWZIMz60_KJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Xj_X7JA3EV9XdyAej7t7QRR
+--Sig_/d1EoAl5ASZ.KkWZIMz60_KJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
+  tools/lib/bpf/Makefile
 
-Introduced by commit
+between commit:
 
-  033b2c7f0f26 ("rxrpc: Add missing "new peer" trace")
+  1bd63524593b ("libbpf: handle symbol versioning properly for libbpf.a")
 
-interacting with commit
+from the bpf tree and commit:
 
-  55f6c98e3674 ("rxrpc: Fix trace-after-put looking at the put peer record")
+  a9eb048d5615 ("libbpf: Add cscope and tags targets to Makefile")
 
-from the net tree.
+from the bpf-next tree.
 
-I have applied the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 8 Oct 2019 09:37:50 +1100
-Subject: [PATCH] rxrpc: fix up for "rxrpc: Fix trace-after-put looking at t=
-he
- put peer record"
-
-interacting with commit
-
-  033b2c7f0f26 ("rxrpc: Add missing "new peer" trace")
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- net/rxrpc/peer_object.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/rxrpc/peer_object.c b/net/rxrpc/peer_object.c
-index a7f1a2cdd198..452163eadb98 100644
---- a/net/rxrpc/peer_object.c
-+++ b/net/rxrpc/peer_object.c
-@@ -231,7 +231,7 @@ struct rxrpc_peer *rxrpc_alloc_peer(struct rxrpc_local =
-*local, gfp_t gfp)
- 			peer->cong_cwnd =3D 3;
- 		else
- 			peer->cong_cwnd =3D 4;
--		trace_rxrpc_peer(peer, rxrpc_peer_new, 1, here);
-+		trace_rxrpc_peer(peer->debug_id, rxrpc_peer_new, 1, here);
- 	}
-=20
- 	_leave(" =3D %p", peer);
---=20
-2.23.0.rc1
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Xj_X7JA3EV9XdyAej7t7QRR
+diff --cc tools/lib/bpf/Makefile
+index 56ce6292071b,10b77644a17c..000000000000
+--- a/tools/lib/bpf/Makefile
++++ b/tools/lib/bpf/Makefile
+@@@ -143,7 -133,9 +143,9 @@@ LIB_TARGET	:=3D $(addprefix $(OUTPUT),$(L
+  LIB_FILE	:=3D $(addprefix $(OUTPUT),$(LIB_FILE))
+  PC_FILE		:=3D $(addprefix $(OUTPUT),$(PC_FILE))
+ =20
++ TAGS_PROG :=3D $(if $(shell which etags 2>/dev/null),etags,ctags)
++=20
+ -GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN) | \
+ +GLOBAL_SYM_COUNT =3D $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+  			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
+  			   awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$8}' | \
+  			   sort -u | wc -l)
+
+--Sig_/d1EoAl5ASZ.KkWZIMz60_KJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2bv00ACgkQAVBC80lX
-0Gw2zAf/W7h8UKvXttU794iCM0slur9fhK6ToIThd4CmP7wvbjIa3q9JO3NOi+VQ
-MU72DirzJ7mDVrOeJb+8NNagX48Njh+QYt20rHLEjBhNyvpvWweqaGoAXhwMIW5v
-H9osNyDGhwsbVabWa3h1Qnh+ZNJbyDbq3vPFNVFW/BiPvGeffqHKgaYYnWQCRenR
-FcLx8jS2133KzYpVwv7eWiXeMy6liLxjw7sIcvFWI7hrXMzBoUtmYIP1nwJsd0Xt
-Qslm+bsqppTl/fMTikJG/MGNu/bTLxhbj+qoCqGKnMdvh9k5JSNLy7k7JJsJyFyY
-eu/GylQPO5wfY4V4Hj21M7vxomX3zg==
-=83Rl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2bwMgACgkQAVBC80lX
+0Gwv0gf6A2u/cEX6FuZGcHkax6uZAJjxvSvgJXw+Bq54YH0lVG21PcK8H105l/9i
+KYD2rUNTyC6xmtx/7yS2FAdwFEvZ9/AfSj8GVGyTKk5zr5CqQiyWXT5R8YsJLWVk
+wjACQuGsXcsAb9ErsN6d7zflEJDnHuK3MuJ1mEV/LAMYvNFjLgEGgDiDdn4+S4YX
++x1crKkTXvPHggM8UFQ3sBd/VNdTOVjgbsMn9kc1fV/PUKN8FonnJxYEXTfhUs5b
+92rEZvqixOFmMeCqdoryUZuGv/Nuc0lHS8nPAbkR1bWw8X7Rt8O76Z4isibdwPaO
+GrSuLnBoqZMSPnuh7l/h2vueNhcv8g==
+=tCOe
 -----END PGP SIGNATURE-----
 
---Sig_/Xj_X7JA3EV9XdyAej7t7QRR--
+--Sig_/d1EoAl5ASZ.KkWZIMz60_KJ--

@@ -2,88 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A709BCF0FE
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 05:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A842CF166
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 05:44:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729682AbfJHDCr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 7 Oct 2019 23:02:47 -0400
-Received: from ozlabs.org ([203.11.71.1]:45321 "EHLO ozlabs.org"
+        id S1729880AbfJHDob (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 7 Oct 2019 23:44:31 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:55701 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729663AbfJHDCr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 7 Oct 2019 23:02:47 -0400
+        id S1729772AbfJHDob (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 7 Oct 2019 23:44:31 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46nMbR51x7z9sN1;
-        Tue,  8 Oct 2019 14:02:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46nNWc6p6vz9sN1;
+        Tue,  8 Oct 2019 14:44:28 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570503764;
-        bh=TA89V1ZUcbGvVPM1w5JTpCCSu8Dptq+X5tkuTji7MAQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=M3OfKuqP+/nzk0/gdXCeKTVGEWZoAr07dNOZuOMoF0hO9DW2xbQ3lmMS2kdwy5N0Y
-         v+7PzKUJhcq9JhLgFQ5ench+8A4rAID4FSsQW4hooREa3/rQuLPQ9XmJb2VTnWbOAp
-         HJfCA4n+dPjXsoUsJNqFVU5ElZml1p8m1i5SHn8T8l4f5lbgF6jfto/9erL4IuG1pN
-         HI//0E4YMym8KuaDwnpajcC5FVKxxRq2CbPuXb0bu8fcSV/ankDQalP+sFf+06Mj1w
-         KO5yWQzX8z+BP4EzGUeYB0WLdd5s+H/trBl4evu9Dw+ylHMOlhl4JaBj2lYzkx6khq
-         m3slzklUMFAbA==
-Date:   Tue, 8 Oct 2019 14:02:41 +1100
+        s=201702; t=1570506269;
+        bh=qVUvg5eUzi+xbVw93VditaCtDJH22M296dmyUJg5xss=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Jv62sIcz58cn78k296RK/Dn1UlPyBD6Oxi2PQ+ApclHWCd/PAHEcr3EIrUaX9txvY
+         QkHHk22k7KEIqKCYXqqzpr3BW9NnZW73dJIla8H1s247am/ERZeTlr7ffastTn5SAP
+         bYnf/hboovWRnhZTWP7rpZHVUqxb0uu8OP+mJrx78ldIO1OTGwJEm1zd1C3sCKY1gg
+         A30moEzMpwuBQ+95tel8ojzlXFSJ00o5wFi6x6fOaO2zA4imZG84PqwNLW7bMbtbKq
+         CMaPxG6EVOjK2yv9hAJp9kQg6KfqPNERxh8UjZ64P+OXZpYtJnPny7/i+qKUv2NUMH
+         N+ftxPHMw2NYg==
+Date:   Tue, 8 Oct 2019 14:44:28 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Sasha Levin <sashal@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20191008140241.312425ad@canb.auug.org.au>
-In-Reply-To: <20191008103045.2d4711e2@canb.auug.org.au>
-References: <20191008103045.2d4711e2@canb.auug.org.au>
+        Branden Bonaby <brandonbonaby94@gmail.com>,
+        Changbin Du <changbin.du@gmail.com>
+Subject: linux-next: manual merge of the akpm tree with the hyperv tree
+Message-ID: <20191008144428.49143860@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/E2upIq_7of1YSLf/gTkj6Q0";
+Content-Type: multipart/signed; boundary="Sig_/UOIwwKO65pwrsB6ikXZ4nzM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/E2upIq_7of1YSLf/gTkj6Q0
+--Sig_/UOIwwKO65pwrsB6ikXZ4nzM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 8 Oct 2019 10:30:45 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> Hi all,
->=20
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
+Today's linux-next merge of the akpm tree got a conflict in:
 
-Sorry, forgot to include the error messages. But they shuld be clear
-from the fix ...
+  lib/Kconfig.debug
+
+between commit:
+
+  54dc8d00a0be ("drivers: hv: vmbus: Introduce latency testing")
+
+from the hyperv tree and patch:
+
+  "kernel-hacking: create submenu for arch special debugging options"
+
+from the akpm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/E2upIq_7of1YSLf/gTkj6Q0
+diff --cc lib/Kconfig.debug
+index 905ce80e6ac4,9a6d7e4955a5..000000000000
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@@ -2156,13 -2156,10 +2156,17 @@@ config DEBUG_AID_FOR_SYZBO
+         help
+           This option is intended for testing by syzbot.
+ =20
++ menu "$(SRCARCH) Debugging"
++=20
+  source "arch/$(SRCARCH)/Kconfig.debug"
+ =20
++ endmenu
++=20
+ +config HYPERV_TESTING
+ +	bool "Microsoft Hyper-V driver testing"
+ +	default n
+ +	depends on HYPERV && DEBUG_FS
+ +	help
+ +	  Select this option to enable Hyper-V vmbus testing.
+ +
+  endmenu # Kernel hacking
+
+--Sig_/UOIwwKO65pwrsB6ikXZ4nzM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2b/FEACgkQAVBC80lX
-0Gw8qAf/ar15ubl55UdoUlIsjZG5t7s3FDqAmbxo9Ii+KKMLdUgotqeUQWCFJpVU
-kB0o2+foGRYWSa+sMlrcPhEkGNzfQLnPUkSqDASU4tsW8hmLtfs6YKJWFDUQ6ra3
-X9NHPT6c57vge7PuXzFsC7TyL2Dtd6bDtO/S3LKzK0wZ1SrfZpMddS9dSzda3Tl1
-PNUiY7S6BEJY7pMt7rz2/vi8b/0DS1RrekOCY+6wvmltZnqLFs/sLFdV6MZMkBYu
-WD0J1rvXd3NDC3OsEYO7k0HY7puueYK4u9n7KD88DcMQ2VOPsnM5bep2cEm6vadf
-ck1R/EKHyOvaYQOijS4b+A0g3x2YgA==
-=NlHb
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2cBhwACgkQAVBC80lX
+0Gw0nQf/Wtq8UKGSqCvqgIl4myoTYNWLxJNSuf8EQvioR5wo5GgNaA6MoKdNFaEC
+fLF/iDPZrZTAOCE02g5ErVaqBBNnEMDhNnp3AGpslXivm4ZkLApv8WJl6+j8tWgC
+8QXo3khnKsRZ3tWnDLBep9ngrXQtvo3wHYX4ibGGe/Owr8/voDR60aTbcAr1WOO5
+eoXO7DI0QzJ7VibUNX3NTVRKiyUlXQP3U08anVEhhWUslJojZyExhX3dDtOhuUsT
+Xf4d2HAr/33PoRqu3s/LfChI002rKLZwHuCrnwxbrs96aFOfsYHVoTbt8MZWNgOn
+5jUHPCULDTYOi1Rxa0coZ3Ektddv8g==
+=RXLL
 -----END PGP SIGNATURE-----
 
---Sig_/E2upIq_7of1YSLf/gTkj6Q0--
+--Sig_/UOIwwKO65pwrsB6ikXZ4nzM--

@@ -2,120 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08003CFB7E
-	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 15:42:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC878D023B
+	for <lists+linux-next@lfdr.de>; Tue,  8 Oct 2019 22:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726068AbfJHNmv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 8 Oct 2019 09:42:51 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:36515 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725935AbfJHNmv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 8 Oct 2019 09:42:51 -0400
-Received: by mail-wm1-f66.google.com with SMTP id m18so3209037wmc.1
-        for <linux-next@vger.kernel.org>; Tue, 08 Oct 2019 06:42:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=OyA231unJci4fd9DK5N6XJBMUVBQ/6Hd0HHh5OGX8n8=;
-        b=Db+OtXVY/oNLctxtmI1K08Bwzg/4fGJhHG5rI7s0B1+wAD21gH3hrDxmtbxMiZSeuC
-         rgTnoA37+ARitK5qVCswotqqAPnTPXQq//X4YXj8ZyczVXv27/vU+Wt1nbnpL/sWe6BW
-         xwJejfX2yfkCIc+cDj7yhMMkt+CmQs85gV1f40I+G9328uNiXD/DCIGVjYqSzJIOlDlJ
-         UrwfqSyMdx30e300Oj153KxeaU7Euf0I+7pWFMch3s1kMgJvrpLJggyQpUiiSCwYMsuS
-         D4IEyYHJ3J7nyxGp0YeKfj0RluLJn++AJopysOcEtQBzf1EOCVAZsfiQqbtocdlC2imF
-         HaEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=OyA231unJci4fd9DK5N6XJBMUVBQ/6Hd0HHh5OGX8n8=;
-        b=N4rZkQw030tNwt/xr1D60a8MtwT0x/yYvpu3Vw2jEgdDusHRv+hPdnYrFSOP/VGbKV
-         d+YkP8iLtVoctPeP+mRaBlSbl7UegTUCxPJ0S6yx7yHDvES9Tehjbo5OGe77Tw0bJWnT
-         fqFSugZ1fmyJdg1ZLetLH3ii4rGBpXs6KSswxQpmF+4CNuqJ/Us5+Cav+smggyrTdksN
-         08Ai8gui8TW+trQ58JYk/GALSPZEswYZi+alcukF//bQUt4R2HqWlkaYeW47MR2UEiDJ
-         PHMXmQtP3rLqhmyDevEN4Okh/kBhpp2HLrCIM8t8pbcKwqkOCbsv9DSUmyxi7nUA3kML
-         +lmg==
-X-Gm-Message-State: APjAAAVjH6lcarUPmNzcOTUteFi/tFzj9rza+cbcLHET+mT+Zk67SMPH
-        tnKXo5fINa3louGocg7HMx68uiumw/ezMQ==
-X-Google-Smtp-Source: APXvYqyYWcHkB3HvWqHxLu7jXtcL0D717NncO/yHoCd9nqMpRcMVm5EuCmFy4VQup1OyvtceNrfOMw==
-X-Received: by 2002:a1c:f718:: with SMTP id v24mr3677301wmh.82.1570542169144;
-        Tue, 08 Oct 2019 06:42:49 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id x16sm16463485wrl.32.2019.10.08.06.42.48
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 08 Oct 2019 06:42:48 -0700 (PDT)
-Message-ID: <5d9c9258.1c69fb81.e323f.924b@mx.google.com>
-Date:   Tue, 08 Oct 2019 06:42:48 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1730523AbfJHUiV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 8 Oct 2019 16:38:21 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:51145 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727835AbfJHUiV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 8 Oct 2019 16:38:21 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46nq1N2f5yz9sCJ;
+        Wed,  9 Oct 2019 07:38:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570567099;
+        bh=MrlA8glPOdIlnMDdmhWkEzsJ4Uw18kpN8kq97gWX804=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TADT4mDEYP9VeyEU5hHnVpHW7HEihrCrk1l56tt3aNebVfN34fBKiIbXXiV1GkA9m
+         F88LANLhMK+pbrEb/XjJ16yczM1/WYUiCgGGEZsSdgiRSUwuHoNQHASIR1zyNUvMlQ
+         bgYKURzxuQjvsM2SNwbnkRfQmoL3m55lT2pMPVda19KxzFXDYEntEIzXw9MhqUdQB0
+         MbvsdfVrAtDDgGCWFho3fpiQlR6HBxIWkmuAb9ss0X1Lo54Jpcsa0/ITbT/iHIb23X
+         GUeyT/aur28jO6UJ/YUPifV4mQIQGYoTvQRG6pZLtg9YX7MovRfniO0dM9Ahs0aqZK
+         0SqmnCB2QHQ3Q==
+Date:   Wed, 9 Oct 2019 07:38:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jason Cooper <jason@lakedaemon.net>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marek =?UTF-8?B?QmVow7pu?= <marek.behun@nic.cz>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: linux-next: Fixes tags need some work in the mvebu tree
+Message-ID: <20191009073803.633c02b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc2-299-gb6f03173ae19
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 193 boots: 9 failed,
- 182 passed with 2 untried/unknown (v5.4-rc2-299-gb6f03173ae19)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/83NC32yotp61XK8KAkelqst";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 193 boots: 9 failed, 182 passed with 2 untried/unk=
-nown (v5.4-rc2-299-gb6f03173ae19)
+--Sig_/83NC32yotp61XK8KAkelqst
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc2-299-gb6f03173ae19/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc2-299-gb6f03173ae19/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc2-299-gb6f03173ae19
-Git Commit: b6f03173ae19a33c2ead73ffc68f6d20de4d199a
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 55 unique boards, 18 SoC families, 24 builds out of 214
+In commit
 
-Boot Regressions Detected:
+  69eea31a26da ("arm64: dts: armada-3720-turris-mox: convert usb-phy to phy=
+-supply")
 
-arm64:
+Fixes tag
 
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: v5.4-rc1-298-gb76690ad767a)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.4-rc1-298-gb76690ad7=
-67a)
+  Fixes: eb6c2eb6c7fb ("usb: host: xhci-plat: Prevent an abnormally
 
-    defconfig+kselftest:
-        gcc-8:
-          sun50i-h5-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: v5.4-rc1-298-gb76690ad7=
-67a)
+has these problem(s):
 
-Boot Failures Detected:
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
-arm:
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2837-rpi-3-b: 1 failed lab
+Please do not split Fxes tags across more than one line.
 
-arm64:
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxm-khadas-vim2: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
-            sun50i-h5-libretech-all-h3-cc: 1 failed lab
+In commit
 
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
+  46cb29381635 ("arm64: dts: marvell: Add AP806-dual missing CPU clocks")
 
----
-For more info write to <info@kernelci.org>
+Fixes tag
+
+  Fixes: e043bbd61e01 ("arm64: dts: marvell: Add cpu clock node on Armada 7=
+K/8K")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean
+
+Fixes: c00bc38354cf ("arm64: dts: marvell: Add cpu clock node on Armada 7K/=
+8K")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/83NC32yotp61XK8KAkelqst
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2c86sACgkQAVBC80lX
+0Gx6ngf/c4xA1GN4BnVOwkZqXYTiKSh6eCut+R+VYVT/MNfPqNHgnQ66UGIaqYqY
+NSH5O3N5DUY7pBLVFaLzAxrSstrALc3+4JMPW9MRFp/g7uZzqRo0v7/JiybrM/EY
+GuoRe5iNq8sLE3PX42zrVdpp8qTi1ofP3M+kIx3/2Gs40qbVrsBRp2LxKMV8H7Kb
+xyBqdi0v8fL2IAOa1wQYyfLd8JD8vvs+IwL7gl3Gt4JPqS3ZWHZIhz4Lvsr/ErHe
+c2FxX4A0tAnky2hnyrud8j2FsJ2sKmflQywFaQYga7725JjT3imoci8xPU4XuBpx
+oKOum6awQogQG84dJGdpqHFHknvYVw==
+=bBKv
+-----END PGP SIGNATURE-----
+
+--Sig_/83NC32yotp61XK8KAkelqst--

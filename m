@@ -2,98 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E889D2B9E
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 15:45:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CA1FD2FB0
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 19:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733125AbfJJNow (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Oct 2019 09:44:52 -0400
-Received: from mail-ed1-f45.google.com ([209.85.208.45]:37825 "EHLO
-        mail-ed1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387460AbfJJNoi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Oct 2019 09:44:38 -0400
-Received: by mail-ed1-f45.google.com with SMTP id r4so5520680edy.4
-        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2019 06:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=sender:date:from:to:cc:subject:message-id:mail-followup-to
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=hoJ6TorxaA0ueOkAnVcY7UKvB59REF8/krI4QbdE3rY=;
-        b=AfuUb30BN2fwLHvc++JsHy0F39WOPWyY6n5BemTQw4OffXIs9XPV8OEKc91w7W4+g5
-         hrlPzv1yXu60ZCX+CWlLe8CNYfo2zJTFzNtQS/MD5/GwzPcnvFN3neUhaveUI3Q8qoVC
-         VH1RNyOOxQ0acee6EjhlHOvgQbsStXwga5L2c=
+        id S1726801AbfJJRgk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Oct 2019 13:36:40 -0400
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:41280 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726770AbfJJRgk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Oct 2019 13:36:40 -0400
+Received: by mail-pf1-f196.google.com with SMTP id q7so4335845pfh.8;
+        Thu, 10 Oct 2019 10:36:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=hoJ6TorxaA0ueOkAnVcY7UKvB59REF8/krI4QbdE3rY=;
-        b=R98P5QQr0z3xVVMUJCBjlip/GQHpDpnmLRw9HEFFN1AX01UQKwHDNWa41AtQvkpuA3
-         TsgklcbAURSammqgHxKF+P2I4j+UgkBC/N23o/DIfdHVK40yirRK3h4qFGljxdltwwWS
-         YCZrQ/Qvg/wqTDB6gXYf8jpTD/JKD+xM49k9f9OC4gVgrLxM/VLJOj4AXP5FSgDzAZzB
-         X7qhqBpq4i1WFUmDcyhPKJtORUA4Li0KFpT5JbJXKJplYbIJW7RCXMIw2ha6e5EKSxSG
-         fNrhevbBLQLgY+HQn3KLJhdCQmvgBJDJZb1jr4FNzFJwJw4y2WhhGeRgtqsCnCW2nFVi
-         VH/Q==
-X-Gm-Message-State: APjAAAXOSbPBlqtKqHeiFWMF2zdD2CFUL3fu2rDFENhGA6onX9dql2mo
-        oj2fb2DB83xqdx6x3RiRcs0jDA==
-X-Google-Smtp-Source: APXvYqzHiMfMRhzP+ce4ioVGwJmdp6neoxytw+JQPQJ8tg7kmLQo7v1y826ew96r7MuwZnWxO0ymAA==
-X-Received: by 2002:a17:906:a986:: with SMTP id jr6mr7585993ejb.158.1570715076498;
-        Thu, 10 Oct 2019 06:44:36 -0700 (PDT)
-Received: from phenom.ffwll.local (212-51-149-96.fiber7.init7.net. [212.51.149.96])
-        by smtp.gmail.com with ESMTPSA id r18sm974451edx.94.2019.10.10.06.44.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2019 06:44:35 -0700 (PDT)
-Date:   Thu, 10 Oct 2019 15:44:33 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20191010134433.GY16989@phenom.ffwll.local>
-Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Dave Airlie <airlied@linux.ie>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>, "H. Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>
-References: <20191010131448.482da2b2@canb.auug.org.au>
- <20191010080207.GA22099@gmail.com>
- <20191010222210.1365d50b@canb.auug.org.au>
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=AztIdm8ETHfYaIQY0y0NENQuQnv+NGef0JvaVEKw0VA=;
+        b=mtNy5ebUSRFEnD3V21ypvKXYnZn+CTCxyJzt71m+go1RBYZoGknXg+o5YnxWmmF2I/
+         4xG5AiPecTw/z8chA1p14YhFBlcOVi8lrnq60M0AuWuxjUSy+e7a0XgryYphA3RlVzkn
+         F+mtdpOy1nv0znVisiGkopPWs9U2/jSggnqjXBCX+9ePbLratJh6WmtNwyh6ls4tjnQG
+         V9r/7ui/I5b9ZwdImaB5FJFNTg+cL6iwwgzifOmqcKDQ4NmKFA6IuShXcuRxMQdUI4BZ
+         AFg12cBG8shgEHZ6KXpbUEfXfPcP7YQhvTZiSOOhZTcedRs5k7i4UJeK284nj9n9WnUA
+         5W1A==
+X-Gm-Message-State: APjAAAXGz/pPJBofEekiCLapOys3tsopQGJbGTxFnlWxlUFXh12YLytW
+        ZAogoeAQzongKVG+1LYPlO01R1Qr
+X-Google-Smtp-Source: APXvYqymdms+PgPjcLo7aDcPpc9E7No7XXX10oBOOSZW/Qht9KDC9Y7xMYsUR2hFJDIk7/Q7ryQGkQ==
+X-Received: by 2002:a17:90a:9a92:: with SMTP id e18mr12907030pjp.87.1570728998580;
+        Thu, 10 Oct 2019 10:36:38 -0700 (PDT)
+Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
+        by smtp.gmail.com with ESMTPSA id z23sm5584589pgu.16.2019.10.10.10.36.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Oct 2019 10:36:37 -0700 (PDT)
+Subject: Re: linux-next: Fixes tag needs some work in the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191008071620.5799d02a@canb.auug.org.au>
+From:   Bart Van Assche <bvanassche@acm.org>
+Message-ID: <9d421f2b-04f5-44dc-8a00-981b2ff09b5d@acm.org>
+Date:   Thu, 10 Oct 2019 10:36:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191010222210.1365d50b@canb.auug.org.au>
-X-Operating-System: Linux phenom 5.2.0-2-amd64 
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20191008071620.5799d02a@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 10, 2019 at 10:23:21PM +1100, Stephen Rothwell wrote:
-> Hi Ingo,
+On 10/7/19 1:16 PM, Stephen Rothwell wrote:
+> In commit
 > 
-> On Thu, 10 Oct 2019 10:02:07 +0200 Ingo Molnar <mingo@kernel.org> wrote:
-> >
-> > I suspect -next will have to carry this semantic merge conflict 
-> > resolution until the DRM tree is merged upstream.
+>    1d200e9d6f63 ("block: Fix writeback throttling W=1 compiler warnings")
 > 
-> Yep, its not a real problem, I get a few like this every cycle.
+> Fixes tag
+> 
+>    Fixes: e34cbd307477 ("blk-wbt: add general throttling mechanism"; v4.10).
+> 
+> has these problem(s):
+> 
+>    - Subject has leading but no trailing quotes
+>    - Subject does not match target commit subject
+>      Just use
+> 	git log -1 --format='Fixes: %h ("%s")'
 
-Yeah totally within expectations when I acked that cleanup patch. We'll
-probably have a few more lockdep annotation patches/changes that will
-conflict in drm.
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Hi Stephen,
+
+The above fixes tag follows the recommended format except that it is 
+followed by a kernel version number. Is there a recommended format for 
+embedding the kernel version number in a Fixes: tag? I think that 
+information is useful. I haven't found any recommendations for how to do 
+that in Documentation/process/submitting-patches.rst.
+
+Thanks,
+
+Bart.
+
+

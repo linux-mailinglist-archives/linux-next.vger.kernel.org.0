@@ -2,159 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A7BD287F
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 13:58:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1274D2884
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 13:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727320AbfJJL60 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Oct 2019 07:58:26 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:35685 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726869AbfJJL60 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Oct 2019 07:58:26 -0400
-Received: by mail-wr1-f67.google.com with SMTP id v8so7548923wrt.2
-        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2019 04:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=LUjFaxC0CrLfAs4pNGp1hHBxeM26CxsAhHdp/idZYG4=;
-        b=eZcfnnORLugazDLaac8ikg4AD9j5ycUBzV4qTEZc04LL6gqaNKfuYZuo3NiQUohVBZ
-         3FZGldYhemQayFxjTugTSZUrj7UlPTZLadMUp7BjXUQ/pLnm9qeL3CuXO7wFLttAil4p
-         RPqwi2xlAsIEf+C9RafYguRCnGuj6DPokE7Ln6TEyEXmXxQFpeyU5/MPOWXMMK3+v9gQ
-         yH5nhRq5LOQ30Ti2uem8G5jhxePP3Mb9u1NTeM9DB1hAAfJnR1OuGc7/FQK/19HtlZfO
-         84b6/BL2dYJZWyB9G9VAcI6TUF1F1bMoTYIysU85acVn4LxnBeE5Kl7dbbTmf728nOrp
-         Bl9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=LUjFaxC0CrLfAs4pNGp1hHBxeM26CxsAhHdp/idZYG4=;
-        b=Lnwqa5BA44CqYU6fGjByPSUF/fOqdwq/KRqXQL/aEr4zDgEQlI5Qp7vXftybooYu/a
-         pdoPwzJIs62A3tKrAKLgdMCrvC6hsUOt1bbFWlq0wHSXCnq3CH1yafbV2Sg2AxIm/q3k
-         MljhV9uYOGkMbESgNDQNsopcndqlue/D7yC9GzakFgAHo+OmKU1RmxGprOlqloSuLeSM
-         QouuE+56yz/DtJc9VjeW4WLlyRWx8W8nok3qjjFAx9NKQrNu6wmz/bh0+VdjN6ojb2Ow
-         3TK2cj2Lmz2WhXbAl0cC7i7a1B3XfLZbeYv8f4GgKIZottWIhbvhhwe8FAuZf1KAoahT
-         RwEA==
-X-Gm-Message-State: APjAAAXkQ+T3amCbrwGbHdPg/V302OFYq5Nu6O+AaYF4n4x21s3YDYjm
-        8tjfJLQXre+nqNfHJ3mLKRriD7g3ydGKoQ==
-X-Google-Smtp-Source: APXvYqyCrXvfNDmzD75QKzHB4QK+1IWrEK9tNfxPfi9jiVbvEhpkibj5uL8v8WoAajGvazSW7b6fvw==
-X-Received: by 2002:adf:fe42:: with SMTP id m2mr8074749wrs.321.1570708704159;
-        Thu, 10 Oct 2019 04:58:24 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id o9sm8943577wrh.46.2019.10.10.04.58.22
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 10 Oct 2019 04:58:22 -0700 (PDT)
-Message-ID: <5d9f1cde.1c69fb81.cd934.bb2f@mx.google.com>
-Date:   Thu, 10 Oct 2019 04:58:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1733044AbfJJL6z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Oct 2019 07:58:55 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54574 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726869AbfJJL6y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 10 Oct 2019 07:58:54 -0400
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.27/8.16.0.27) with SMTP id x9A9mWlX098348
+        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2019 07:58:53 -0400
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2vj2b3bvph-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Thu, 10 Oct 2019 07:58:52 -0400
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <psampat@linux.ibm.com>;
+        Thu, 10 Oct 2019 12:58:51 +0100
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 10 Oct 2019 12:58:48 +0100
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id x9ABwlak60293172
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 10 Oct 2019 11:58:47 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EA9BE42042;
+        Thu, 10 Oct 2019 11:58:46 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0143742049;
+        Thu, 10 Oct 2019 11:58:45 +0000 (GMT)
+Received: from pratiks-thinkpad.ibmuc.com (unknown [9.199.37.96])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 10 Oct 2019 11:58:44 +0000 (GMT)
+From:   Pratik Rajesh Sampat <psampat@linux.ibm.com>
+To:     linuxppc-dev@ozlabs.org, linux-next@vger.kernel.org,
+        mpe@ellerman.id.au, svaidy@linux.ibm.com, ego@linux.vnet.ibm.com,
+        premjha2@in.ibm.com, akshay.adiga@linux.vnet.ibm.com
+Subject: [PATCH v1 0/3] Integrate support for Self save, determine support and preference for self save or restore
+Date:   Thu, 10 Oct 2019 17:28:40 +0530
+X-Mailer: git-send-email 2.21.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191010
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 301 boots: 12 failed, 274 passed with 13 offline,
- 1 untried/unknown, 1 conflict (next-20191010)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 19101011-0020-0000-0000-00000377D896
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 19101011-0021-0000-0000-000021CDE4A8
+Message-Id: <20191010115843.22283-1-psampat@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:,, definitions=2019-10-10_04:,,
+ signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 phishscore=0 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=686 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.0.1-1908290000 definitions=main-1910100084
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 301 boots: 12 failed, 274 passed with 13 offline, 1 untri=
-ed/unknown, 1 conflict (next-20191010)
+Currently the stop-api supports a mechanism called as self-restore
+which allows us to restore the values of certain SPRs on wakeup from a
+deep-stop state to a desired value. To use this, the Kernel makes an
+OPAL call passing the PIR of the CPU, the SPR number and the value to
+which the SPR should be restored when that CPU wakes up from a deep
+stop state.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191010/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191010/
+Recently, a new feature, named self-save has been enabled in the
+stop-api, which is an alternative mechanism to do the same, except
+that self-save will save the current content of the SPR before
+entering a deep stop state and also restore the content back on
+waking up from a deep stop state.
 
-Tree: next
-Branch: master
-Git Describe: next-20191010
-Git Commit: 4a9e93dbc796654e6b141897452993da2e61799f
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 92 unique boards, 24 SoC families, 27 builds out of 218
+This patch series aims at introducing and leveraging the self-save feature in
+the kernel.
 
-Boot Failures Detected:
+Now, as the kernel has a choice to prefer one mode over the other and
+there can be registers in both the save/restore SPR list which are sent
+from the device tree, a new interface has been defined for the seamless
+handing of the modes for each SPR.
 
-arm:
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2835-rpi-b: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
+A list of preferred SPRs are maintained in the kernel which contains two
+properties:
+1. supported_mode: Helps in identifying if it strictly supports self
+                   save or restore or both.
+2. preferred_mode: Calls out what mode is preferred for each SPR. It
+                   could be strictly self save or restore, or it can also
+                   determine the preference of  mode over the other if both
+                   are present by encapsulating the other in bitmask from
+                   LSB to MSB.
+Below is a table to show the Scenario::Consequence when the self save and
+self restore modes are available or disabled in different combinations as
+perceived from the device tree.
 
-arm64:
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-            qcom-qdf2400: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
+SR = Self restore; SS = Self save
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
+.-----------------------------------.----------------------------------------.
+|             Scenario              |                Consequence             |
+:-----------------------------------+----------------------------------------:
+| Legacy Firmware. No SS or SR node | Self restore is called for all         |
+|                                   | supported SPRs                         |
+:-----------------------------------+----------------------------------------:
+| SR: !active SS: !active           | Deep stop states disabled              |
+:-----------------------------------+----------------------------------------:
+| SR: active SS: !active            | Self restore is called for all         |
+|                                   | supported SPRs                         |
+:-----------------------------------+----------------------------------------:
+| SR: active SS: active             | Goes through the preferences for each  |
+|                                   | SPR and executes of the modes          |
+|                                   | accordingly. Currently, Self restore is|
+|                                   | called for all the SPRs except PSSCR   |
+|                                   | which is self saved                    |
+:-----------------------------------+----------------------------------------:
+| SR: active(only HID0) SS: active  | Self save called for all supported     |
+|                                   | registers expect HID0 (as HID0 cannot  |
+|                                   | be self saved currently)               |
+:-----------------------------------+----------------------------------------:
+| SR: !active SS: active            | currently will disable deep states as  |
+|                                   | HID0 is needed to be self restored and |
+|                                   | cannot be self saved                   |
+'-----------------------------------'----------------------------------------'
 
-    defconfig:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            rk3399-firefly: 1 failed lab
+Pratik Rajesh Sampat (3):
+  powerpc/powernv: Interface to define support and preference for a SPR
+  powerpc/powernv: Introduce Self save support
+  powerpc/powernv: Parse device tree, population of SPR support
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+ arch/powerpc/include/asm/opal-api.h        |   3 +-
+ arch/powerpc/include/asm/opal.h            |   1 +
+ arch/powerpc/platforms/powernv/idle.c      | 404 ++++++++++++++++++---
+ arch/powerpc/platforms/powernv/opal-call.c |   1 +
+ 4 files changed, 357 insertions(+), 52 deletions(-)
 
-Offline Platforms:
+-- 
+2.21.0
 
-arm:
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            mt7623n-bananapi-bpi-r2: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    exynos_defconfig:
-        exynos5422-odroidxu3:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>

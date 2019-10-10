@@ -2,85 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA1FD2FB0
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 19:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E42AD3299
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 22:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726801AbfJJRgk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Oct 2019 13:36:40 -0400
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:41280 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbfJJRgk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Oct 2019 13:36:40 -0400
-Received: by mail-pf1-f196.google.com with SMTP id q7so4335845pfh.8;
-        Thu, 10 Oct 2019 10:36:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AztIdm8ETHfYaIQY0y0NENQuQnv+NGef0JvaVEKw0VA=;
-        b=mtNy5ebUSRFEnD3V21ypvKXYnZn+CTCxyJzt71m+go1RBYZoGknXg+o5YnxWmmF2I/
-         4xG5AiPecTw/z8chA1p14YhFBlcOVi8lrnq60M0AuWuxjUSy+e7a0XgryYphA3RlVzkn
-         F+mtdpOy1nv0znVisiGkopPWs9U2/jSggnqjXBCX+9ePbLratJh6WmtNwyh6ls4tjnQG
-         V9r/7ui/I5b9ZwdImaB5FJFNTg+cL6iwwgzifOmqcKDQ4NmKFA6IuShXcuRxMQdUI4BZ
-         AFg12cBG8shgEHZ6KXpbUEfXfPcP7YQhvTZiSOOhZTcedRs5k7i4UJeK284nj9n9WnUA
-         5W1A==
-X-Gm-Message-State: APjAAAXGz/pPJBofEekiCLapOys3tsopQGJbGTxFnlWxlUFXh12YLytW
-        ZAogoeAQzongKVG+1LYPlO01R1Qr
-X-Google-Smtp-Source: APXvYqymdms+PgPjcLo7aDcPpc9E7No7XXX10oBOOSZW/Qht9KDC9Y7xMYsUR2hFJDIk7/Q7ryQGkQ==
-X-Received: by 2002:a17:90a:9a92:: with SMTP id e18mr12907030pjp.87.1570728998580;
-        Thu, 10 Oct 2019 10:36:38 -0700 (PDT)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id z23sm5584589pgu.16.2019.10.10.10.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2019 10:36:37 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jens Axboe <axboe@kernel.dk>
+        id S1726885AbfJJUmr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Oct 2019 16:42:47 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54777 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726423AbfJJUmq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 10 Oct 2019 16:42:46 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46q31b2707z9s7T;
+        Fri, 11 Oct 2019 07:42:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570740163;
+        bh=qtc1L2zwADd9HeaO41rnLWdsx91qAZrQvTXFUpW/6xA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=J9fW37+bGgkr39aHkWqlrS4qo8fh52uQbHxsfeP9DGcq81a42ccQ6OXJpcLqQFmIP
+         PYuDOj6iVns8dg/3DzPi+BFtdFf4ZInirllYrhOgc9fxAhsU9OFpiyK+h73QvbwAhB
+         vV01OdfWM3ig1PHXsmtpqFb5Apr9sPBeoR+dhIJkQidWvuiOmVTV/HoecY9hmwiSyJ
+         4oS65i7ugI/Vxw9dZumHCTL876wTxcmYEH9XRWb1bAyGKJn71pbl2okD6dSQ3kbZls
+         8kr5+Tlhwz28E8/FAqPDYKVSKos0RDRDrOI9rNaZIkQKH7CpiWDxZ6eLHG5ERJITZm
+         FNsBYq2xIWfSg==
+Date:   Fri, 11 Oct 2019 07:42:42 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191008071620.5799d02a@canb.auug.org.au>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <9d421f2b-04f5-44dc-8a00-981b2ff09b5d@acm.org>
-Date:   Thu, 10 Oct 2019 10:36:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: linux-next: Fixes tag needs some work in the staging.current tree
+Message-ID: <20191011074242.3d78c336@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20191008071620.5799d02a@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/9Xgc_Yg8o_=SwmYIH8dZrkT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/7/19 1:16 PM, Stephen Rothwell wrote:
-> In commit
-> 
->    1d200e9d6f63 ("block: Fix writeback throttling W=1 compiler warnings")
-> 
-> Fixes tag
-> 
->    Fixes: e34cbd307477 ("blk-wbt: add general throttling mechanism"; v4.10).
-> 
-> has these problem(s):
-> 
->    - Subject has leading but no trailing quotes
->    - Subject does not match target commit subject
->      Just use
-> 	git log -1 --format='Fixes: %h ("%s")'
+--Sig_/9Xgc_Yg8o_=SwmYIH8dZrkT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-The above fixes tag follows the recommended format except that it is 
-followed by a kernel version number. Is there a recommended format for 
-embedding the kernel version number in a Fixes: tag? I think that 
-information is useful. I haven't found any recommendations for how to do 
-that in Documentation/process/submitting-patches.rst.
+In commit
 
-Thanks,
+  85ae3aeedecc ("iio: imu: st_lsm6dsx: forbid 0 sensor sensitivity")
 
-Bart.
+Fixes tag
 
+  Fixes: c8d4066c7246 ("iio: imu: st_lsm6dsx: remove invalid gain value for=
+ LSM9DS1")
 
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean
+
+Fixes: 0f7e17286b45 ("iio: imu: st_lsm6dsx: remove invalid gain value for L=
+SM9DS1")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/9Xgc_Yg8o_=SwmYIH8dZrkT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2fl8IACgkQAVBC80lX
+0GzPSgf/Y835Kb3HaLqwCX3Inv5fcce69drQlBXOZjvdEmsqgIvVDHtpSYbYnwHW
+I+/eT3Oe4IxvKA1hm+6Lib7p0vQJ446hnP7RVZxdfGg1UwVjSKFH9AEyQgsk9vEc
+laLz5/YzeIdbpUjm6yTv268bvc8+GivTZ6dI393+v3z8anRD1Qkm81Jox0m/I1oc
+AjzMIP/2L97nF/RK9fRoDSDoyKl1b2MwXGvQfTV11ICJLJrUfZoyCuSuVaJ0+muE
+vj8ZO2FvKdUi0xlCGVCAjfG9BRc8QAfg8JiVJDWDr8OKz9OUONEJEqeMwR8ZHWG6
+r/5/sM+HeUTlLJP9UqNJ84T9JRhwQA==
+=wB8a
+-----END PGP SIGNATURE-----
+
+--Sig_/9Xgc_Yg8o_=SwmYIH8dZrkT--

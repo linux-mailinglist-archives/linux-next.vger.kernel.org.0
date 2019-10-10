@@ -2,32 +2,32 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3BCCD1E14
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 03:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 352FED1E5C
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 04:21:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731155AbfJJBvN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Oct 2019 21:51:13 -0400
-Received: from ozlabs.org ([203.11.71.1]:55309 "EHLO ozlabs.org"
+        id S1726465AbfJJCVD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Oct 2019 22:21:03 -0400
+Received: from ozlabs.org ([203.11.71.1]:40293 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726465AbfJJBvN (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 9 Oct 2019 21:51:13 -0400
+        id S1732447AbfJJCOw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Oct 2019 22:14:52 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46pYvw4h3xz9sDQ;
-        Thu, 10 Oct 2019 12:51:07 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46pZRF0SZzz9sCJ;
+        Thu, 10 Oct 2019 13:14:49 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570672270;
-        bh=zX+1heiX5+wURfoQzJjphbOrjKq5PIeg3JiROszV/WI=;
+        s=201702; t=1570673689;
+        bh=US5I/EC1xPBjcQV9p/7vh2IOLopNQKaX8IfXhKo0P3A=;
         h=Date:From:To:Cc:Subject:From;
-        b=MiJmo8xL4YfK56PWgibSj+FYZEe7mjB6TrscvBqBcrGq+Qzwicdld4IWgBmvuea7R
-         x/RjIKfwIIgSU3gEac1dq0FFkaorXOmbetVQSjBmnuDHhHvwfsIpa09ce8JMTI/RjD
-         9P/xBkZ4n+u2xuo2DeqyZb1V1aFlhp3/HgIHzvleULRdqMz5SifqCHewZ3c1QfB0I8
-         Bn2/U6lEzThnX73kJS+TDsp6ZgHhUKwtceArlsBSlM6kRYcrybjr+0REr1uTtAj3/L
-         pID7VI3pMSY6WVQ+czgWaSmWqOGs3kN2liUj2BaUkLlD6aL/1osE38CFXrHk2o76GX
-         T2X/Q0ObVzHkg==
-Date:   Thu, 10 Oct 2019 12:51:06 +1100
+        b=JYqoesr60pub86cCjT+cgHuw7g24ZA8AxQ52D09Dto/OtUaukQ3MeAJYP1aR1/KIu
+         X4g0Bg5Gsxv6i9d1Aql2vHpW5OR52l3jvh8QAYxre5voqiIFbK86TcxJEFBKHrpFlF
+         eZ4vEZ3qhBgMohrR3+pEa9iIoOEHStDVtZxHVNlgsF+cBOnUKsqQ4Od4PyN5g+tXeV
+         FmJE0S0Jtz2jin/6KcQE1SSFMfdvIrkmllkH//VSCQNEHraM++Np8frKh0++tJ1VmK
+         DcPLzBFs0j2CBNurPZUYMrWowJYtRYHDvmp2e8AHrY/Qtr1aHS8e85HkOIHF6jU+kU
+         ncM4jn8GBUNwg==
+Date:   Thu, 10 Oct 2019 13:14:48 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         "H. Peter Anvin" <hpa@zytor.com>,
@@ -36,92 +36,146 @@ To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
         DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>, Chris Wilson <chris@chris-wilson.co.uk>
-Subject: linux-next: manual merge of the tip tree with the drm tree
-Message-ID: <20191010125106.4627d1b5@canb.auug.org.au>
+        Chris Wilson <chris@chris-wilson.co.uk>, Qian Cai <cai@lca.pw>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20191010131448.482da2b2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4i+.YcjNlq6PDs=9i46LRA=";
+Content-Type: multipart/signed; boundary="Sig_/tve78WH0Gamrq1gOajK=ZLX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4i+.YcjNlq6PDs=9i46LRA=
+--Sig_/tve78WH0Gamrq1gOajK=ZLX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
+drivers/gpu/drm/i915/gt/intel_gt_pm.c: In function 'intel_gt_resume':
+drivers/gpu/drm/i915/gt/intel_gt_pm.c:183:54: error: macro "mutex_release" =
+passed 3 arguments, but takes just 2
+  183 |    mutex_release(&ce->pin_mutex.dep_map, 0, _THIS_IP_);
+      |                                                      ^
+In file included from include/linux/spinlock_types.h:18,
+                 from include/linux/spinlock.h:83,
+                 from include/linux/mmzone.h:8,
+                 from include/linux/gfp.h:6,
+                 from include/linux/slab.h:15,
+                 from include/linux/io-mapping.h:10,
+                 from drivers/gpu/drm/i915/i915_drv.h:36,
+                 from drivers/gpu/drm/i915/gt/intel_gt_pm.c:7:
+include/linux/lockdep.h:605: note: macro "mutex_release" defined here
+  605 | #define mutex_release(l, i)   lock_release(l, i)
+      |=20
+drivers/gpu/drm/i915/gt/intel_lrc.c: In function '__context_pin_release':
+drivers/gpu/drm/i915/gt/intel_lrc.c:245:51: error: macro "mutex_release" pa=
+ssed 3 arguments, but takes just 2
+  245 |  mutex_release(&ce->pin_mutex.dep_map, 0, _RET_IP_);
+      |                                                   ^
+In file included from include/linux/hardirq.h:6,
+                 from include/linux/interrupt.h:11,
+                 from drivers/gpu/drm/i915/gt/intel_lrc.c:134:
+include/linux/lockdep.h:605: note: macro "mutex_release" defined here
+  605 | #define mutex_release(l, i)   lock_release(l, i)
+      |=20
 
-between commit:
-
-  2850748ef876 ("drm/i915: Pull i915_vma_pin under the vm->mutex")
-
-from the drm tree and commit:
+Caused by commit
 
   5facae4f3549 ("locking/lockdep: Remove unused @nested argument from lock_=
 release()")
 
-from the tip tree.
+interacting with commits
 
-I fixed it up (see below) and can carry the fix as necessary. This is
-now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your
-tree is submitted for merging. You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
+  dffa8feb3084 ("drm/i915/perf: Assert locking for i915_init_oa_perf_state(=
+)")
+  fcde8c7eea60 ("drm/i915/selftests: Exercise potential false lite-restore")
+  b1e3177bd1d8 ("drm/i915: Coordinate i915_active with its own mutex")
+
+from the drm tree.
+
+I added the following merge fix patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 10 Oct 2019 13:08:43 +1100
+Subject: [PATCH] drm/i915: update for mutex_release API change
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/i915/gt/intel_gt_pm.c | 2 +-
+ drivers/gpu/drm/i915/gt/intel_lrc.c   | 2 +-
+ drivers/gpu/drm/i915/i915_active.c    | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.c b/drivers/gpu/drm/i915/g=
+t/intel_gt_pm.c
+index b52e2ba3d092..d195e05a701f 100644
+--- a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
++++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
+@@ -180,7 +180,7 @@ int intel_gt_resume(struct intel_gt *gt)
+ 			GEM_BUG_ON(!intel_context_is_pinned(ce));
+ 			mutex_acquire(&ce->pin_mutex.dep_map, 0, 0, _THIS_IP_);
+ 			ce->ops->reset(ce);
+-			mutex_release(&ce->pin_mutex.dep_map, 0, _THIS_IP_);
++			mutex_release(&ce->pin_mutex.dep_map, _THIS_IP_);
+ 		}
+=20
+ 		engine->serial++; /* kernel context lost */
+diff --git a/drivers/gpu/drm/i915/gt/intel_lrc.c b/drivers/gpu/drm/i915/gt/=
+intel_lrc.c
+index a2155d6bcdd2..aa61b0101bf8 100644
+--- a/drivers/gpu/drm/i915/gt/intel_lrc.c
++++ b/drivers/gpu/drm/i915/gt/intel_lrc.c
+@@ -242,7 +242,7 @@ static void __context_pin_acquire(struct intel_context =
+*ce)
+=20
+ static void __context_pin_release(struct intel_context *ce)
+ {
+-	mutex_release(&ce->pin_mutex.dep_map, 0, _RET_IP_);
++	mutex_release(&ce->pin_mutex.dep_map, _RET_IP_);
+ }
+=20
+ static void mark_eio(struct i915_request *rq)
+diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915=
+_active.c
+index aa37c07004b9..a47387174434 100644
+--- a/drivers/gpu/drm/i915/i915_active.c
++++ b/drivers/gpu/drm/i915/i915_active.c
+@@ -385,7 +385,7 @@ void i915_active_set_exclusive(struct i915_active *ref,=
+ struct dma_fence *f)
+ 	mutex_acquire(&ref->mutex.dep_map, 0, 0, _THIS_IP_);
+ 	if (!__i915_active_fence_set(&ref->excl, f))
+ 		atomic_inc(&ref->count);
+-	mutex_release(&ref->mutex.dep_map, 0, _THIS_IP_);
++	mutex_release(&ref->mutex.dep_map, _THIS_IP_);
+ }
+=20
+ bool i915_active_acquire_if_busy(struct i915_active *ref)
+--=20
+2.23.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-index fd3ce6da8497,1a51b3598d63..000000000000
---- a/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shrinker.c
-@@@ -436,9 -497,22 +436,9 @@@ void i915_gem_shrinker_taints_mutex(str
- =20
-  	fs_reclaim_acquire(GFP_KERNEL);
- =20
- -	/*
- -	 * As we invariably rely on the struct_mutex within the shrinker,
- -	 * but have a complicated recursion dance, taint all the mutexes used
- -	 * within the shrinker with the struct_mutex. For completeness, we
- -	 * taint with all subclass of struct_mutex, even though we should
- -	 * only need tainting by I915_MM_NORMAL to catch possible ABBA
- -	 * deadlocks from using struct_mutex inside @mutex.
- -	 */
- -	mutex_acquire(&i915->drm.struct_mutex.dep_map,
- -		      I915_MM_SHRINKER, 0, _RET_IP_);
- -
-  	mutex_acquire(&mutex->dep_map, 0, 0, _RET_IP_);
-- 	mutex_release(&mutex->dep_map, 0, _RET_IP_);
-+ 	mutex_release(&mutex->dep_map, _RET_IP_);
- =20
- -	mutex_release(&i915->drm.struct_mutex.dep_map, _RET_IP_);
- -
-  	fs_reclaim_release(GFP_KERNEL);
- =20
-  	if (unlock)
-
---Sig_/4i+.YcjNlq6PDs=9i46LRA=
+--Sig_/tve78WH0Gamrq1gOajK=ZLX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ejooACgkQAVBC80lX
-0GwaXggAnnxyO+HFQGahgej37ABRMyZ4xijjtQwdYC7VEXWCn4X7/5+a27aXQuQe
-EtQb5An4ch2BgShLPEJvEK/6DtUENZaTfjR5Ag7ItL82e+X/+tkEUhZJM91BLIge
-Yma5nF/tgD/0B6mXa4Oxr+6VUzNW9SfnfWpgCcG/Sap25MtLEBSiMFkB47eJqmWy
-RkFmsdN5onSr4sjGoyTW1Qhb+td8GGSrCBzOpF5ze2Y5zsGlgrgTWgXhPgSp3orZ
-WXXTfKr0+CqfvWywm0OyBSOkW+jqxIRES/RlRnl89A25b2oLDjc9mbdP0Fhl0HDM
-CTt+X6gt8/ACsRgq2CyoqaR14qw+Lg==
-=IrTm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2elBgACgkQAVBC80lX
+0Gw2egf/Y4FgkdtrPAbnehtM6s8zKblYjS1EPTxKNIG06WFjRhtl1bJJBJ+/2ush
+fXn3h+p06DWXyvvQmohuHtuwljf13Ratu9ao118WXWwIObmkTTSo4Uh+W3QZOXCb
+kr/UB+6oZE7n5UtzHg4zi1KtKPL5e1XpHd7xfpF4UoWkllnf3IDCsdz81JZqINlj
+uKspqQ4YfZpfRO86a9JDS0thNztxiv+T9AZc9P/32mujz/I7NCCI219j+7S2qYv/
+HfNdWh9+DqNirqPjpFLza7VzonkwDiIxuyCBq2WUpgxPQtgcxQayOXU3Sw1y/wEB
+4XLB1K8QlUdvDB8OjLqtqTRIur9N3w==
+=FtTq
 -----END PGP SIGNATURE-----
 
---Sig_/4i+.YcjNlq6PDs=9i46LRA=--
+--Sig_/tve78WH0Gamrq1gOajK=ZLX--

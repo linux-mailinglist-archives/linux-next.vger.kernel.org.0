@@ -2,108 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A971D1BC0
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 00:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB80D1D5C
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 02:22:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731155AbfJIW3B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 9 Oct 2019 18:29:01 -0400
-Received: from ozlabs.org ([203.11.71.1]:35525 "EHLO ozlabs.org"
+        id S1731589AbfJJAW4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 9 Oct 2019 20:22:56 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43827 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731134AbfJIW3B (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 9 Oct 2019 18:29:01 -0400
+        id S1731553AbfJJAW4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 9 Oct 2019 20:22:56 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46pTQf5Hygz9sCJ;
-        Thu, 10 Oct 2019 09:28:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46pWy251BKz9s7T;
+        Thu, 10 Oct 2019 11:22:49 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1570660138;
-        bh=U7amNAqXaEFVDkVi/kudiYCikX+L8b1+UcbwxDjtYI0=;
+        s=201702; t=1570666973;
+        bh=7+fjtYqa172Ftzt3UBW5VOoZd1S9i31z/HZVdVxdAZ0=;
         h=Date:From:To:Cc:Subject:From;
-        b=SVVHfaabizcruACky9fX2ctnPRzZk4+fE8aQWOUl7ehdBhXBxJGZtTNndgpumz6M7
-         X2UyB++tQGTfLeqoXstFUO9gMsQJyF4wJTgZ1NR0su4EDXUjIGqudYJ9dKcgJYjbjL
-         f/Y4izcyu1MgsFmruGOIT1lH6rPRO3xuX14fGNdkUTqC4CyroJl9UVKuVhbRhdvyQ1
-         HJM8nFu3+/4E6PTQ0uMngQjA/7dy2/1MYUm1946RyN+j6JIX5BYQcgnTiY7zHXJkKW
-         RU2dEdOQS6XojLZr8ujNzpOGIqZL4NZPBVSoAyM3UESGzDIdy2NmzsIE1/Ai3lKy3T
-         mNEt73Phfti4A==
-Date:   Thu, 10 Oct 2019 09:28:43 +1100
+        b=EhPM9H9Cwzep0HCSliuIfx+P2uR+uy6coKqispWQSTVxbJW5kvWl81W0ZL5R19dT4
+         TLfMrbeITvv0MkitjTxaA/tb+y2u59dmaZ/eRaa3rdZ6ODWDrH9jq9Eu2WpXFYfPXO
+         Pet0clnSfsaiLvL0Calao53LlLEffJeLTny6B69ZbWb2rO6hTw7JEOJnHQYM092iFL
+         NggyZaab0LLrn/6Y0688JJBf3MlBMcHXz+uN1DcQCZ2Ii3+QoDhqGOGRRP6IOqezxy
+         U//FxX5Z+0N7hC219Z5py2S2/AoaGbxukj23BDrv1RiwKJFhb1ebdOAN59w/pb5xjQ
+         hECYVDcP6oLwQ==
+Date:   Thu, 10 Oct 2019 11:22:49 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+To:     Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Keerthy <j-keerthy@ti.com>, Olof Johansson <olof@lixom.net>
-Subject: linux-next: manual merge of the samsung-krzk tree with Linus' tree
-Message-ID: <20191010092843.3c38fa36@canb.auug.org.au>
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: linux-next: build failure after merge of the drm tree
+Message-ID: <20191010112249.720989aa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4rmbBEC=jXOMl7Wooy8K1.D";
+Content-Type: multipart/signed; boundary="Sig_/lIT/TpjrrNf6nF9Pwa/PMRX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4rmbBEC=jXOMl7Wooy8K1.D
+--Sig_/lIT/TpjrrNf6nF9Pwa/PMRX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the samsung-krzk tree got a conflict in:
+After merging the drm tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  arch/arm/configs/multi_v7_defconfig
+In file included from drivers/gpu/drm/i915/i915_vma.h:35,
+                 from drivers/gpu/drm/i915/gt/uc/intel_guc.h:17,
+                 from drivers/gpu/drm/i915/gt/uc/intel_uc.h:9,
+                 from drivers/gpu/drm/i915/gt/intel_gt_types.h:16,
+                 from drivers/gpu/drm/i915/i915_drv.h:81,
+                 from drivers/gpu/drm/i915/i915_getparam.c:7:
+drivers/gpu/drm/i915/gem/i915_gem_object.h:174:1: error: redefinition of 'i=
+915_gem_object_never_bind_ggtt'
+  174 | i915_gem_object_never_bind_ggtt(const struct drm_i915_gem_object *o=
+bj)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/i915/gem/i915_gem_object.h:168:1: note: previous definition=
+ of 'i915_gem_object_never_bind_ggtt' was here
+  168 | i915_gem_object_never_bind_ggtt(const struct drm_i915_gem_object *o=
+bj)
+      | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-between commit:
+Caused by the automatic merge of commit
 
-  a304c0a60252 ("arm64/ARM: configs: Change CONFIG_REMOTEPROC from m to y")
+  3a1fea6d2353 ("drm/i915/userptr: Never allow userptr into the mappable GG=
+TT")
 
-from Linus' tree and commit:
+from the drm-intel-fixes tree and commits
 
-  00265bee1002 ("ARM: multi_v7_defconfig: Enable options for boards with Ex=
-ynos SoC")
+  a4311745bba9 ("drm/i915/userptr: Never allow userptr into the mappable GG=
+TT")
+  3cbad5d77749 ("drm/i915/gem: Refactor tests on obj->ops->flags")
 
-from the samsung-krzk tree.
+from the drm tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up by removing the extra definition.  This sort of thing will
+keep happening as longs as bugs are fixed in your development trees
+and then cherry-picked back into your -fixes trees.  This practise also
+causes quite a few unnecessary conflicts that each have to be checked
+and merged by hand.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm/configs/multi_v7_defconfig
-index e4c8def9a0a5,9711c61bd76e..000000000000
---- a/arch/arm/configs/multi_v7_defconfig
-+++ b/arch/arm/configs/multi_v7_defconfig
-@@@ -933,7 -943,8 +943,8 @@@ CONFIG_BCM2835_MBOX=3D
-  CONFIG_ROCKCHIP_IOMMU=3Dy
-  CONFIG_TEGRA_IOMMU_GART=3Dy
-  CONFIG_TEGRA_IOMMU_SMMU=3Dy
-+ CONFIG_EXYNOS_IOMMU=3Dy
- -CONFIG_REMOTEPROC=3Dm
- +CONFIG_REMOTEPROC=3Dy
-  CONFIG_ST_REMOTEPROC=3Dm
-  CONFIG_RPMSG_VIRTIO=3Dm
-  CONFIG_ASPEED_LPC_CTRL=3Dm
-
---Sig_/4rmbBEC=jXOMl7Wooy8K1.D
+--Sig_/lIT/TpjrrNf6nF9Pwa/PMRX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2eXxsACgkQAVBC80lX
-0Gw4yAf9FelTMg2BDjMr7wGI0IqtNBbbBwGMYFJmfI6yNAh57I3fM9O2ZyaC2MbU
-PWORzrYopkbM0vASImocXAhwRBfjhFxS/EtG85QWCUF5tk2gS9NdAHkEwG8aI9pr
-DndOWt+zACCNz3MhOGl1K4yYrvsq/GjICnVZgqLI0mvFK82K8a5gvjktqA+sMfY5
-ylhlY+42Qm8YoQFRm8UZqKNfPKIU00DI1TcNVsGVw0nn7d31pLyRoDAxzg/2mTIl
-SfDHV8JpRugvukK7EUOm6YYPX+LIRv4ubEjK9ky2arbcgV9rEHKjlWikf5MWxd4Q
-LIpgfbbNIxuSSV1Q7c4CHbkkpY5hNg==
-=ypwT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2eedkACgkQAVBC80lX
+0GyOYgf/f4qvlGy3OVWVxHDAOJjjxnAAWRG3u5oxfmagSZsi3NjqV9aGPzQXJk0P
+YoPfZv35qqfSSTB3Ao9XTUbij2nI5/76mq7oPp/0/43MLyeun+/pPQlyZ4sPp7qi
+eddvMCPvRfF6PjH2R12zeopTsT6HtXp5Gfo2E+tLxGrxjWEKQbq8HZFsZEnN3sZx
+T88Nu7zJ4grx8043pf8ZqVAMTQmKkaNHtZC33ZPNKsiFSt2UzyNxiD8ukKnkm1st
+6iVAcfe3Mw/ZVWIQHt2z8KWMPrBzhZo7LXoJtD2bem1LlP0bLC9E4WmQWIjzvWcu
+IfMKQdFmfnpWffH5pe/C5OPucH10ng==
+=3MwN
 -----END PGP SIGNATURE-----
 
---Sig_/4rmbBEC=jXOMl7Wooy8K1.D--
+--Sig_/lIT/TpjrrNf6nF9Pwa/PMRX--

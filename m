@@ -2,84 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D089D268C
-	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 11:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB11D27E5
+	for <lists+linux-next@lfdr.de>; Thu, 10 Oct 2019 13:23:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727280AbfJJJkD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 10 Oct 2019 05:40:03 -0400
-Received: from regular1.263xmail.com ([211.150.70.199]:39326 "EHLO
-        regular1.263xmail.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726602AbfJJJkD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 10 Oct 2019 05:40:03 -0400
-X-Greylist: delayed 416 seconds by postgrey-1.27 at vger.kernel.org; Thu, 10 Oct 2019 05:40:02 EDT
-Received: from localhost (unknown [192.168.167.225])
-        by regular1.263xmail.com (Postfix) with ESMTP id C04F33FA;
-        Thu, 10 Oct 2019 17:32:57 +0800 (CST)
-X-MAIL-GRAY: 0
-X-MAIL-DELIVERY: 1
-X-ADDR-CHECKED4: 1
-X-ANTISPAM-LEVEL: 2
-X-SKE-CHECKED: 1
-X-ABS-CHECKED: 1
-Received: from [192.168.60.65] (unknown [103.29.142.67])
-        by smtp.263.net (postfix) whith ESMTP id P30352T139712782128896S1570699970516291_;
-        Thu, 10 Oct 2019 17:32:57 +0800 (CST)
-X-IP-DOMAINF: 1
-X-UNIQUE-TAG: <0bc8cce9b6576d0427695f1204c0bf3e>
-X-RL-SENDER: kever.yang@rock-chips.com
-X-SENDER: yk@rock-chips.com
-X-LOGIN-NAME: kever.yang@rock-chips.com
-X-FST-TO: linux-arm-kernel@lists.infradead.org
-X-SENDER-IP: 103.29.142.67
-X-ATTACHMENT-NUM: 0
-X-DNS-TYPE: 0
-Subject: Re: CPUfreq fail on rk3399-firefly
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     kernel-build-reports@lists.linaro.org,
-        linux-rockchip@lists.infradead.org, linux-next@vger.kernel.org,
-        =?UTF-8?B?5byg5pm0?= <elaine.zhang@rock-chips.com>,
-        =?UTF-8?B?6Zer5a2d5Yab?= <andy.yan@rock-chips.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <5d3057c8.1c69fb81.c6489.8ad2@mx.google.com>
- <20190718162005.GF5761@sirena.org.uk> <7hmugdynmk.fsf@baylibre.com>
- <2314814.WbdfqDVNqK@phil> <7hv9uq9wfe.fsf@baylibre.com>
- <c973d3fa-5f0d-c277-7c83-6227942a671a@rock-chips.com>
- <7hd0gvzuvw.fsf@baylibre.com> <7h8srjzuen.fsf@baylibre.com>
- <7hh84yisd3.fsf@baylibre.com>
-From:   Kever Yang <kever.yang@rock-chips.com>
-Message-ID: <3ed325e9-c958-c329-66b7-6eee8da06fde@rock-chips.com>
-Date:   Thu, 10 Oct 2019 17:32:48 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        id S1726513AbfJJLXi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 10 Oct 2019 07:23:38 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56819 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726201AbfJJLXh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 10 Oct 2019 07:23:37 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46ppcL5t44z9sPL;
+        Thu, 10 Oct 2019 22:23:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1570706615;
+        bh=SKvuq9XCZSxjTmAESVOMU/T/c3K6J/ZB921ZjzgPyK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gArhLL17y49ll02VycRXfx2H0amayp6lE4CpKDGv/uf94p+05FRR+ILB9oru1h2Ms
+         l4o83nNWJQJO81H9oaTIKzA/rXVrlNh8v+pmOn63t/hhqOzuiWNnfApBX2vg6HOB1+
+         Nca+/j/U9XmEf/f+e+CGncdo9MbPGVX5IVn37HQywUQaGfosqhJLwHbgq+wO6dd9Ly
+         pgqLv/cGngabnX/dCr+iCXEVV50YU+jfLs36QGMhB0l106wCCWYiUW86euMM9ar1Zu
+         2eUIRbuFMr/eb80KnXrhZKhk72I59fS8cmHFbLbu3rL859Jdt/Hjf51xt4AqCqfmAC
+         G//cs8IN7Ar+g==
+Date:   Thu, 10 Oct 2019 22:23:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chris Wilson <chris@chris-wilson.co.uk>, Qian Cai <cai@lca.pw>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20191010222210.1365d50b@canb.auug.org.au>
+In-Reply-To: <20191010080207.GA22099@gmail.com>
+References: <20191010131448.482da2b2@canb.auug.org.au>
+        <20191010080207.GA22099@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <7hh84yisd3.fsf@baylibre.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
+Content-Type: multipart/signed; boundary="Sig_/R2lbok_WC7n/wPBSA32mK._";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Kevin,
+--Sig_/R2lbok_WC7n/wPBSA32mK._
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-     I will send you a Firefly-rk3399 board to you.
+Hi Ingo,
 
-
-Thanks,
-
-- Kever
-
-On 2019/9/27 上午6:51, Kevin Hilman wrote:
-> This is now failing in the v5.2 stable tree.
+On Thu, 10 Oct 2019 10:02:07 +0200 Ingo Molnar <mingo@kernel.org> wrote:
 >
-> Any suggestions on what to do?  otherwise, I'll just need to disable
-> this board.
->
-> Or, if someone wants to donate a new rk3399-firefly for my lab, I'd be
-> glad to try replacing it.
->
-> Kevin
+> I suspect -next will have to carry this semantic merge conflict=20
+> resolution until the DRM tree is merged upstream.
 
+Yep, its not a real problem, I get a few like this every cycle.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/R2lbok_WC7n/wPBSA32mK._
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2fFKkACgkQAVBC80lX
+0Gxk2Qf+O7qxMGH0AbcdDkqDOFIScBIa9xy0yrxppIhsVr6Q9Pv9EzY0BsJ4Dabh
+diDN+NEj1/JMU22gVBUCHqoPjWcFHPGp83PZX8VEC2Sherq54a3ModGTkx7ydgTa
+TV4x3ZJoRNGrjbEqaGwwRav8HrNu4cg3EMi6schpiSfyAX3CgQGD42s/ciOKDSUS
+klcFr1/1ct579cXMmQS+CU0OKfGDmYKNSXFHGRe8o1IPXFFAT9HlRl4qp9RIq4PK
+A6l3b4nhwoeJlkQq/nnOmmgTsYCCxmMAl6qfLiC3zXd4P7e3dQj/kYs2PMlrO8or
+0MfJW72cLArYva06fCV/BrOyWNVIcQ==
+=pG6L
+-----END PGP SIGNATURE-----
+
+--Sig_/R2lbok_WC7n/wPBSA32mK._--

@@ -2,161 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CEEBD648B
-	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2019 16:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A050BD65D7
+	for <lists+linux-next@lfdr.de>; Mon, 14 Oct 2019 17:05:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730477AbfJNOCY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 14 Oct 2019 10:02:24 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:53404 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732012AbfJNOCY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Oct 2019 10:02:24 -0400
-Received: by mail-wm1-f67.google.com with SMTP id i16so17412453wmd.3
-        for <linux-next@vger.kernel.org>; Mon, 14 Oct 2019 07:02:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=eoDeg79mPExY4MRhSFMkjQwh5unGYEYDjETsSy2/oJA=;
-        b=e901rW6lMPSooR7UetwoynneGFNTnn6L7Cv3ux+yIab4YQ+Zh1GtVdyzXeLSxzvwQG
-         SwpremCO4maZcpTNGoGrarpKsHf7LSDKIchuHSMc/jWvE7U0ZPHTPAcUj3T8JacgHAIh
-         eIVNpvnJze68eOrBraxcGPlBkkvTGQMUWn+G7rd7WK0LRpHfulNXJRXdVfgWPBrGEGI1
-         YHFzcXpOpoqcOlx4I5c5Zdbl+YIasyoVZlASirnA6VuvFtygCewWGFz9l06lcnNqbVYF
-         MoZP5ZUZVGGcnTm1lSrDRjtL9po6KncEqe9thhAoKuGw4tsC+sjShFItWik8n40PBeXG
-         UOQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=eoDeg79mPExY4MRhSFMkjQwh5unGYEYDjETsSy2/oJA=;
-        b=TSV0PraWLbp3iaxG+e64Dcct8huOyIYkAPZS07IvZs9t0/VKTbDlgiHPsAWumb6Mnw
-         XwPVS86j4ScducLMbjZl36+D9+UZjuwzokB7+UY4RIQZbaDoJZYNo/4ZQRj2Exkxd+HX
-         OhKv5rDWlGaGFL+R+NKczelhIbxV76IMOYXsNfrXE+WuGww8N8h6u5gJ1TV/W4y8IXgi
-         8ZnBBh8M0HjmT5VMfweUHDFsjPyxIxQ9Pl+9xPCn1V4kHL1Sx9SqvQ9ooHyb1scML1S/
-         AMKGjUG/PyT6/mSqZki5KNrdW4T9Hak7svTD6Fg5FNZshqYJbaTb8CETWVaM9Jxk5uFh
-         hWCA==
-X-Gm-Message-State: APjAAAVTtbpKm1ZOLrmfCkRvj8R9qcJEie8Ui85CqLUQJCuBE0vAnCd5
-        E8BDh408v2jO20jBQltEjVZ49cv2c3c=
-X-Google-Smtp-Source: APXvYqzd6geVpjdPPK5q8xYPeTCyNCtmn0QnI5q73V5bYAtMXNbRG4qPwf9EEW347VUGLeHusubPvg==
-X-Received: by 2002:a05:600c:2212:: with SMTP id z18mr2009295wml.154.1571061742500;
-        Mon, 14 Oct 2019 07:02:22 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id i1sm20614690wmb.19.2019.10.14.07.02.21
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 14 Oct 2019 07:02:21 -0700 (PDT)
-Message-ID: <5da47fed.1c69fb81.9479.fa7e@mx.google.com>
-Date:   Mon, 14 Oct 2019 07:02:21 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1733252AbfJNPFU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 14 Oct 2019 11:05:20 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:50744 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733175AbfJNPFU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 14 Oct 2019 11:05:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=xxyuYMJ5N1tFd70vGArrNKSdsXlWoKRjvdjD10n1+ns=; b=lH5qm/6PXVohUN61RKa1g7VIX
+        nfJzXgYUgdAs78HXWOt2hutXvipXsDt+BiCxsgUpK8iruJvCwNAmD6np21Wm3dfXqnbAfZ8qltXHE
+        8qlkFsYV66Ja1ermCHUe/W4318Ub2JhUstX9u+C7+gk8o5/IetBupAOULaBTttubS1o8YgvAUjaqS
+        TlJdUQicFOg41rfnMeZDNzI7F9T7nCD1y5ycaRL7t/ZdV0y2ThNWnX3Oqpf3ldAbntvmYK/bOvCA9
+        sf4dCDIZpM09FVpJ77DXJwzgqp06wiVClyI8akHVi5nBHlcbj9LKxxGCmP5X1FsmeDFOeBHwmtTrF
+        jGovrYimQ==;
+Received: from [2601:1c0:6280:3f0::9ef4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iK1uQ-000873-Df; Mon, 14 Oct 2019 15:05:18 +0000
+Subject: Re: linux-next: Tree for Oct 14 (sound/soc/sof/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        moderated for non-subscribers <alsa-devel@alsa-project.org>
+References: <20191014174707.469f596f@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6e2a049a-c5ac-3294-0dd4-7a10b972586a@infradead.org>
+Date:   Mon, 14 Oct 2019 08:05:16 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191014
-Subject: next/master boot: 288 boots: 11 failed, 262 passed with 13 offline,
- 1 untried/unknown, 1 conflict (next-20191014)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20191014174707.469f596f@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 288 boots: 11 failed, 262 passed with 13 offline, 1 untri=
-ed/unknown, 1 conflict (next-20191014)
+On 10/13/19 11:47 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191011:
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191014/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191014/
+on i386:
 
-Tree: next
-Branch: master
-Git Describe: next-20191014
-Git Commit: 4eeb5abd245d849a4692325339a94566953363d6
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 94 unique boards, 26 SoC families, 28 builds out of 218
+ld: sound/soc/sof/control.o: in function `snd_sof_switch_put':
+control.c:(.text+0x49a): undefined reference to `ledtrig_audio_set'
+ld: control.c:(.text+0x4d1): undefined reference to `ledtrig_audio_set'
 
-Boot Failures Detected:
+when
+CONFIG_LEDS_TRIGGER_AUDIO=m
+CONFIG_SND_SOC_SOF=y
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+This code in <linux/leds.h> does not handle the config combo above:
 
-    defconfig:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+#if IS_ENABLED(CONFIG_LEDS_TRIGGER_AUDIO)
+enum led_brightness ledtrig_audio_get(enum led_audio type);
+void ledtrig_audio_set(enum led_audio type, enum led_brightness state);
+#else
+static inline enum led_brightness ledtrig_audio_get(enum led_audio type)
+{
+	return LED_OFF;
+}
+static inline void ledtrig_audio_set(enum led_audio type,
+				     enum led_brightness state)
+{
+}
+#endif
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-g12b-s922x-khadas-vim3: 1 failed lab
 
-    defconfig+kselftest:
-        gcc-8:
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            mt7623n-bananapi-bpi-r2: 1 failed lab
-
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-sm1-khadas-vim3l: 1 offline lab
-
-    defconfig:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-sm1-khadas-vim3l: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            apq8016-sbc: 1 offline lab
-            meson-sm1-khadas-vim3l: 1 offline lab
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            qcom-apq8064-ifc6410: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    exynos_defconfig:
-        exynos5422-odroidxu3:
-            lab-collabora: FAIL (gcc-8)
-            lab-baylibre: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+-- 
+~Randy

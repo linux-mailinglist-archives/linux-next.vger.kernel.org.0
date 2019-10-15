@@ -2,87 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ADF8D7517
-	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2019 13:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF92D7531
+	for <lists+linux-next@lfdr.de>; Tue, 15 Oct 2019 13:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728120AbfJOLeg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Oct 2019 07:34:36 -0400
-Received: from lelv0142.ext.ti.com ([198.47.23.249]:46076 "EHLO
-        lelv0142.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725769AbfJOLeg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Oct 2019 07:34:36 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id x9FBYRer088831;
-        Tue, 15 Oct 2019 06:34:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1571139267;
-        bh=0oWSdj+wKQfLPRVqyBwkOOe1Ornzu91NVpb9wTiFoJQ=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=LNFbRblO891zBwNhC4gnWUAmWfLCx0rmos/L8SfRKYHYbsdhaoFhO0SDzucwzX1TL
-         CuhPCSLrgQuQwzxH/G1N08VDOO/M2Z2uptVhTyWhgVOD4RCs+sA478sHf1yS+EXZ+3
-         P7GbwZwOaSnsY7UuL+fqNMqOZCC32KEIVVmo6y0M=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9FBYRHt096124;
-        Tue, 15 Oct 2019 06:34:27 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Tue, 15
- Oct 2019 06:34:27 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5 via
- Frontend Transport; Tue, 15 Oct 2019 06:34:21 -0500
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id x9FBYP1p050592;
-        Tue, 15 Oct 2019 06:34:26 -0500
-Subject: Re: linux-next: Fixes tag needs some work in the sound-asoc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191015223027.7a381186@canb.auug.org.au>
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-Message-ID: <915f0e00-490a-6826-8cf1-43924870f443@ti.com>
-Date:   Tue, 15 Oct 2019 14:35:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1728396AbfJOLiZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Oct 2019 07:38:25 -0400
+Received: from ozlabs.org ([203.11.71.1]:37227 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726927AbfJOLiZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Oct 2019 07:38:25 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46stjB27ZXz9sPF;
+        Tue, 15 Oct 2019 22:38:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1571139502;
+        bh=EsbTxF0X5XVWWt+kkCs2nGfRrfWNdAsgwxYcQxzup8U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AwanyibKqRkv1aDNm+Smtm7Q+KAQ60/WEgslXzNaeqBiAAcJocrjnYW+YliqWiBgf
+         Ky0Nvsdwc9vCdjdB2n8ShNb6nDpEKLpCWTrQuuu8r6hq8bug7+dcG/0PM8jhB92hrg
+         DYGkT7wIQCiALjO9aFH8lFk+NjYnjeDwGGahw+tSIb7qLk5XOg3JKTK2N51ybqmzhn
+         degejpZuHAnYilAuL9tOKX4nmgiFvMhFVNSkPq2/bnPhbFCCV7VfyjCrVsFgwJdrlk
+         hQ94BkRvBJy5llJRcnDwwSvu3wPTRybrCpJXSmbu8/6HPi9Xt38CmejEtG4DN+H1jE
+         CGQJhjXxPtxNQ==
+Date:   Tue, 15 Oct 2019 22:38:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Baluta <daniel.baluta@gmail.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Baluta <daniel.baluta@nxp.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20191015223821.6270d593@canb.auug.org.au>
+In-Reply-To: <CAEnQRZDONh-HcPnKPV_ieTNqVKJkxfNZ_7hd+KEut85tY=BMcQ@mail.gmail.com>
+References: <20191011110149.79d529c4@canb.auug.org.au>
+        <CAEnQRZDONh-HcPnKPV_ieTNqVKJkxfNZ_7hd+KEut85tY=BMcQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20191015223027.7a381186@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="Sig_/gM1XB78C/LadTM0S+elGifZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/gM1XB78C/LadTM0S+elGifZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 15/10/2019 14.30, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   a35716a95655 ("ASoC: pcm3168a: Fix serial mode dependent format support")
-> 
-> Fixes tag
-> 
->   Fixes: ("ASoC: pcm3168a: Use fixup instead of constraint for channels and formats")
-> 
-> has these problem(s):
-> 
->   - No SHA1 recognised
-> 
-> Did you mean
-> 
-> Fixes: cfc28ac124c4 ("ASoC: pcm3168a: Use fixup instead of constraint for channels and formats")
+Hi Daniel,
 
-Not again, I have left out the SHA1 to look it up in linux-next which I
-failed to do.
+On Tue, 15 Oct 2019 09:46:33 +0300 Daniel Baluta <daniel.baluta@gmail.com> =
+wrote:
+>
+> > I added the following fix for today (include/sound/sof/header.h
+> > probably should have something similar): =20
+>=20
+> Thanks for doing this! Is this patch in linux-next already? I couldn't fi=
+nd it.
 
-- Péter
+Its part of the commit that merges the cound-asoc tree i.e. not a
+separate commit, but sould be applied to the sound-asoc tree itself.
 
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki.
-Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+> For include/sound/sof/header.h Morimoto-san sent a patch to alsa-devel.
+
+Great, thanks.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gM1XB78C/LadTM0S+elGifZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2lr60ACgkQAVBC80lX
+0Gz4ugf+JWVVNxLl6zv0y1AC91zUjA4jHGgGzaCmKL9InnLjapNdUSFAY02RqLOV
+Yf2tmjT+7VhEwBFfRos1GCkAxdL+zrd29+NAZS0ZJJ8ssUEZIMO6m/pyBl/AIuSt
+E2tLjn8UyORZrr4epHDohZhy2MCaTcPfQOKzRO+37DoK82MvNOKn0Sbwn1q3C6K9
+7L0Sit4BLiAMOoOauMnHN9M/t6HMR33FJusqDOs13DQQPKOdA1DaUwxKCPVUzFOE
+X1W6u6KIejGpk8S93XkWBHWtvcu3+wrttyQ8J53uauZaCdXObTQCmYeobF+7MiTx
+zicRZiw/BLJIgJfdCv0i8kk6DlkzNg==
+=aujH
+-----END PGP SIGNATURE-----
+
+--Sig_/gM1XB78C/LadTM0S+elGifZ--

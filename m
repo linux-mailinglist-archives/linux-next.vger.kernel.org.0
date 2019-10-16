@@ -2,69 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAE4D84D9
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2019 02:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F59D8570
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2019 03:25:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728549AbfJPAdK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Oct 2019 20:33:10 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56047 "EHLO ozlabs.org"
+        id S1728281AbfJPBZp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Oct 2019 21:25:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:42763 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727579AbfJPAdK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Oct 2019 20:33:10 -0400
+        id S1726786AbfJPBZp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 15 Oct 2019 21:25:45 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46tCv62Tr6z9sPJ;
-        Wed, 16 Oct 2019 11:33:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46tF3p3CZ5z9sPT;
+        Wed, 16 Oct 2019 12:25:42 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571185987;
-        bh=o+al7iWYbnXmxtWzz1gJLe+9e4eHYLYnN3U22RGXjis=;
+        s=201702; t=1571189142;
+        bh=bTjtrEB3J5lTmvGUqm0ylcaGquTm3ZT+SXImEaf9J38=;
         h=Date:From:To:Cc:Subject:From;
-        b=kkLcwc7jwBmd3VO5w2NNaBh+3X+lUfNWby5CF2kUzmCHI/pdYrLg1B2lUqcq8/cFj
-         yce8XL4sp+SkGM0ByTBwLEPKgrIZNXCTH4l3ILlyVNSVgxct8R+tFWofcwBaCJLGrN
-         LgWThpehlH8ywdNxLklxo+5xtP7TnMO/fXa+aRWdjB6FmCMwC7Q18m1fTOWlzj6noY
-         /MGkt3eQ4bahgOvDJihbDzveQMrbpqiLf4EEtliuHrT7eg1HFtMz02+1zwV84Tusm8
-         htiBH7JBQWwGvVBk67uKC+La62zwPTixXrkcfysB3UHUCAtUURJPlN2HPhrxbGUXkt
-         p5bEKlloiXyeg==
-Date:   Wed, 16 Oct 2019 11:33:05 +1100
+        b=CmQSAX8aLqs6Qvp8TT/JwVzKE8EIz1fNVLG0mwijGw8rgxbpXdXq/xnBPmGJ29lqX
+         /+QLs8Yzb3ghZnGEFEoLyg85gDVeMzH8VObrYLEG4d9H2pE2L2TCZHFr3eqlXESeL7
+         AdsCwGTNiSoUyTvYR+HuyeqdDuADj7NDBXhDqmrcpXLktfPNgBNKw9LPMBpqfy3g7+
+         5GdkTKolSqF31q9ifH2q4aZJFSdSjw5x/NMIyY4iSLKsyJBXdic8hC4ye29Kp526tE
+         vOX9qIiWsloaxQWccjvLwDyhgKNkVbaaHTnuUU4vaBLdqCpJnBEWDXn6sJk94vvqCv
+         JAAMPDoOTAGIg==
+Date:   Wed, 16 Oct 2019 12:25:41 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
+To:     Rob Herring <robherring2@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Naveen M <naveen.m@intel.com>
-Subject: linux-next: manual merge of the sound-asoc tree with the sound tree
-Message-ID: <20191016113305.626f02e0@canb.auug.org.au>
+        Maxime Ripard <mripard@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alexandre Torgue <alexandre.torgue@st.com>
+Subject: linux-next: manual merge of the devicetree tree with Linus' tree
+Message-ID: <20191016122541.5ae0c637@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KvzDIWHhinY.ali5uHqVKNp";
+Content-Type: multipart/signed; boundary="Sig_/Mvn0upQUZuO8=vlaMu96w=v";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KvzDIWHhinY.ali5uHqVKNp
+--Sig_/Mvn0upQUZuO8=vlaMu96w=v
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the sound-asoc tree got a conflict in:
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-  sound/soc/intel/boards/Kconfig
+  Documentation/devicetree/bindings/usb/generic-ehci.yaml
 
 between commit:
 
-  82e8d723e9e6 ("sound: Fix Kconfig indentation")
+  3aa3c66aedef ("dt-bindings: usb: Bring back phy-names")
 
-from the sound tree and commit:
+from Linus' tree and commit:
 
-  47cbea216281 ("ASoC: Intel: eve: Enable mclk and ssp sclk early")
+  02ceb12c20f5 ("dt-bindings: usb: generic-ehci: Add "companion" entry")
 
-from the sound-asoc tree.
+from the devicetree tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -77,61 +76,43 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc sound/soc/intel/boards/Kconfig
-index 882ff36a7c9c,5e0e7dbd1300..000000000000
---- a/sound/soc/intel/boards/Kconfig
-+++ b/sound/soc/intel/boards/Kconfig
-@@@ -311,20 -311,21 +311,21 @@@ config SND_SOC_INTEL_KBL_RT5663_MAX9892
-  	  If unsure select "N".
+diff --cc Documentation/devicetree/bindings/usb/generic-ehci.yaml
+index 1ca64c85191a,ce8854bc8c84..000000000000
+--- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+@@@ -63,11 -63,12 +63,16 @@@ properties
+      description:
+        Set this flag to force EHCI reset after resume.
  =20
-  config SND_SOC_INTEL_KBL_RT5663_RT5514_MAX98927_MACH
- -        tristate "KBL with RT5663, RT5514 and MAX98927 in I2S Mode"
- +	tristate "KBL with RT5663, RT5514 and MAX98927 in I2S Mode"
-  	depends on I2C && ACPI
-  	depends on MFD_INTEL_LPSS || COMPILE_TEST
- -        depends on SPI
- -        select SND_SOC_RT5663
- -        select SND_SOC_RT5514
- -        select SND_SOC_RT5514_SPI
- -        select SND_SOC_MAX98927
- -        select SND_SOC_HDAC_HDMI
- +	depends on SPI
- +	select SND_SOC_RT5663
- +	select SND_SOC_RT5514
- +	select SND_SOC_RT5514_SPI
- +	select SND_SOC_MAX98927
- +	select SND_SOC_HDAC_HDMI
-+ 	select SND_SOC_INTEL_SKYLAKE_SSP_CLK
- -        help
- -          This adds support for ASoC Onboard Codec I2S machine driver. Th=
-is will
- -          create an alsa sound card for RT5663 + RT5514 + MAX98927.
- -          Say Y or m if you have such a device. This is a recommended opt=
-ion.
- -          If unsure select "N".
- +	help
- +	  This adds support for ASoC Onboard Codec I2S machine driver. This will
- +	  create an alsa sound card for RT5663 + RT5514 + MAX98927.
- +	  Say Y or m if you have such a device. This is a recommended option.
- +	  If unsure select "N".
++   companion:
++     $ref: /schemas/types.yaml#/definitions/phandle
++     description:
++      Phandle of a companion.
++=20
+ -  phys: true
+ +  phys:
+ +    description: PHY specifier for the USB PHY
+ +
+ +  phy-names:
+ +    const: usb
  =20
-  config SND_SOC_INTEL_KBL_DA7219_MAX98357A_MACH
-  	tristate "KBL with DA7219 and MAX98357A in I2S Mode"
+  required:
+    - compatible
 
---Sig_/KvzDIWHhinY.ali5uHqVKNp
+--Sig_/Mvn0upQUZuO8=vlaMu96w=v
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2mZUEACgkQAVBC80lX
-0Gydngf/QmRZelcDQZVpCgjG855yiudnWq9zzBTbIQRqTFHJ5LxzJcfB1RJS6pPr
-wL28tgXZGdB/6pQFgOCsVVd03A5Z0lVBWee9Szo+dnxOLXjdTsuSu1rW6Bk0UTuk
-WQ9D6stNb0fhnWmLF/pMRb8mbTsOt+25AWPyDQGx7H7B8V1aLjtvyn2aqC1MXw8G
-L2JFH4cx0AzEKav6dfeMy6LBxB9kAY9JsjIeOotB8sYTXcidZvSf/uCDxS/fk05L
-oRmZrTxim9PyN6DZFWv2Bunjb8HbwF+mnNPPh46EDp+kctI1N8bb5X7DLwDPiK+k
-zwCqKQ1EOPbeB/CDzTouH66qhXKHbg==
-=HjCk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2mcZUACgkQAVBC80lX
+0Gz7Gwf9EVUFgqE50YyTpreAlZthY8VifrcIq+p1YUciSOIcZIg+kSyTpIpzYI/v
+BIKQd407pWw3SgRdRGMV6enN2HFXz2D0NHyC0kqlaerb45x1zyVmeDklO7KgcIku
+R8RC3qUAlivj9GD5q7MBeKgu33jbCGWr06gr03FVVAxdABoPoFWMGeCXWLcaEVX8
+Hm856dhrIspEI4QudC0a2WZcWyks69Wm5Df/pztjLk7h0+zINhZxZGH23vhbW89d
+JpDlrKcjEJKPwmJpIYst+q+eAm55+NVWE4pHSNGF2h5jPc2NMQBtt86tly+SAHOu
+tR8xdeXOLBedTHZr0kiGxD+5IkZEew==
+=/1Sh
 -----END PGP SIGNATURE-----
 
---Sig_/KvzDIWHhinY.ali5uHqVKNp--
+--Sig_/Mvn0upQUZuO8=vlaMu96w=v--

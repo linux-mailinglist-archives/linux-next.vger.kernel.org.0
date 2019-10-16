@@ -2,117 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F59D8570
-	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2019 03:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B983D8715
+	for <lists+linux-next@lfdr.de>; Wed, 16 Oct 2019 06:00:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728281AbfJPBZp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 15 Oct 2019 21:25:45 -0400
-Received: from ozlabs.org ([203.11.71.1]:42763 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726786AbfJPBZp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 15 Oct 2019 21:25:45 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46tF3p3CZ5z9sPT;
-        Wed, 16 Oct 2019 12:25:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571189142;
-        bh=bTjtrEB3J5lTmvGUqm0ylcaGquTm3ZT+SXImEaf9J38=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CmQSAX8aLqs6Qvp8TT/JwVzKE8EIz1fNVLG0mwijGw8rgxbpXdXq/xnBPmGJ29lqX
-         /+QLs8Yzb3ghZnGEFEoLyg85gDVeMzH8VObrYLEG4d9H2pE2L2TCZHFr3eqlXESeL7
-         AdsCwGTNiSoUyTvYR+HuyeqdDuADj7NDBXhDqmrcpXLktfPNgBNKw9LPMBpqfy3g7+
-         5GdkTKolSqF31q9ifH2q4aZJFSdSjw5x/NMIyY4iSLKsyJBXdic8hC4ye29Kp526tE
-         vOX9qIiWsloaxQWccjvLwDyhgKNkVbaaHTnuUU4vaBLdqCpJnBEWDXn6sJk94vvqCv
-         JAAMPDoOTAGIg==
-Date:   Wed, 16 Oct 2019 12:25:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Subject: linux-next: manual merge of the devicetree tree with Linus' tree
-Message-ID: <20191016122541.5ae0c637@canb.auug.org.au>
+        id S1726227AbfJPD7v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 15 Oct 2019 23:59:51 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:52375 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727222AbfJPD7p (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 15 Oct 2019 23:59:45 -0400
+Received: by mail-wm1-f66.google.com with SMTP id r19so1193358wmh.2
+        for <linux-next@vger.kernel.org>; Tue, 15 Oct 2019 20:59:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Mc4pUu0opSwmQ1fDKrxrb+uwx9xL9AGOKiADytT27kI=;
+        b=vCx7mcSVwqEbnuQ6qmLJPZaFtUlgps/Tc3RNXmx0DHseuC3S5B4X4uvwfV/aq4xoqq
+         bwJQDzm/ExxzyI1cLC+Hh+wwmEYBuG3nkTYSqZ7BSVaYbPqa2Eg1miwsaUIzSbGYmSMr
+         p0n7SIVFfhb/AIqim1l0kiSRBtcXzXE0mT73CyNnyiiCBh4EtjYQDscJ8+A5KrB6TN+w
+         jtOb1DOMieze1McYLUDXtl8QRLtZubx0DIqCk0vo4eYH+sq8JIISxBQtO1vNHXbTU0We
+         UKYOApkwWB/PmzGWCXOaHMELzB8zfacxBT207ZxMmrYnBkBO028QB84CvEXoo9cqQmJu
+         7YJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Mc4pUu0opSwmQ1fDKrxrb+uwx9xL9AGOKiADytT27kI=;
+        b=pBcMedO1KBc+nmI8yhLCnXgchyVYicC5Tcl5s79+GPVtQHuLuChGhFtjKEvLjYJyWA
+         olhw9+3bor/CG6U5vebEhvyEV7smLNr8kx2q2RaqKEyEMRLme/H+PG70rIpdC4qVKS2O
+         /TFhaOdTDYQzpafZ/kt8RV97sN9TYTRhsAPRAvxvjmVzkixap0qFD125heMZQk+w6wAj
+         hSpXtSbwkKr6CMgqOiiNsEwWDiVQiZkVnlInvGcPlTb6uTNZXpE6+Q4AW76DMEsYQM7p
+         4DQbj9pKFUxfJ2SzLRTMYWGXGN29smlsfj6ADXHgUQByFaGZAX8YccnsBfxCpngEtVuk
+         un9g==
+X-Gm-Message-State: APjAAAXSMuSoHCOEJd2FrGfMIKYzOvTA1kqDcsetBAgy08UQFUtecGh3
+        CR1OrQNB/9SMlYuV3fgwqBHKJOiY79Vibg==
+X-Google-Smtp-Source: APXvYqztmTKqhKn21FlBCyQZc1iBSKBU3bkG0k75xBKv5Tfi7TFoJMOpysyFiMDO6UrhDfQd38Tzcw==
+X-Received: by 2002:a1c:6a0b:: with SMTP id f11mr1547575wmc.78.1571198381464;
+        Tue, 15 Oct 2019 20:59:41 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id t10sm999745wrw.23.2019.10.15.20.59.40
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 15 Oct 2019 20:59:40 -0700 (PDT)
+Message-ID: <5da695ac.1c69fb81.75441.48c7@mx.google.com>
+Date:   Tue, 15 Oct 2019 20:59:40 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Mvn0upQUZuO8=vlaMu96w=v";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-rc3-311-gce15fc3fc1ae
+Subject: next/pending-fixes boot: 281 boots: 9 failed,
+ 262 passed with 6 offline, 4 untried/unknown (v5.4-rc3-311-gce15fc3fc1ae)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Mvn0upQUZuO8=vlaMu96w=v
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 281 boots: 9 failed, 262 passed with 6 offline, 4 =
+untried/unknown (v5.4-rc3-311-gce15fc3fc1ae)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc3-311-gce15fc3fc1ae/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc3-311-gce15fc3fc1ae/
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc3-311-gce15fc3fc1ae
+Git Commit: ce15fc3fc1ae8839fd1406206584a9f0697cd36d
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 95 unique boards, 25 SoC families, 28 builds out of 215
 
-  Documentation/devicetree/bindings/usb/generic-ehci.yaml
+Boot Failures Detected:
 
-between commit:
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-g12b-s922x-khadas-vim3: 1 failed lab
 
-  3aa3c66aedef ("dt-bindings: usb: Bring back phy-names")
+    defconfig+kselftest:
+        gcc-8:
+            meson-gxm-khadas-vim2: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
+            rk3399-puma-haikou: 1 failed lab
+            sun50i-h5-libretech-all-h3-cc: 1 failed lab
 
-from Linus' tree and commit:
+arm:
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
 
-  02ceb12c20f5 ("dt-bindings: usb: generic-ehci: Add "companion" entry")
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
-from the devicetree tree.
+Offline Platforms:
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+arm:
 
---=20
-Cheers,
-Stephen Rothwell
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
-diff --cc Documentation/devicetree/bindings/usb/generic-ehci.yaml
-index 1ca64c85191a,ce8854bc8c84..000000000000
---- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-+++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
-@@@ -63,11 -63,12 +63,16 @@@ properties
-      description:
-        Set this flag to force EHCI reset after resume.
- =20
-+   companion:
-+     $ref: /schemas/types.yaml#/definitions/phandle
-+     description:
-+      Phandle of a companion.
-+=20
- -  phys: true
- +  phys:
- +    description: PHY specifier for the USB PHY
- +
- +  phy-names:
- +    const: usb
- =20
-  required:
-    - compatible
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
 
---Sig_/Mvn0upQUZuO8=vlaMu96w=v
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
 
------BEGIN PGP SIGNATURE-----
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2mcZUACgkQAVBC80lX
-0Gz7Gwf9EVUFgqE50YyTpreAlZthY8VifrcIq+p1YUciSOIcZIg+kSyTpIpzYI/v
-BIKQd407pWw3SgRdRGMV6enN2HFXz2D0NHyC0kqlaerb45x1zyVmeDklO7KgcIku
-R8RC3qUAlivj9GD5q7MBeKgu33jbCGWr06gr03FVVAxdABoPoFWMGeCXWLcaEVX8
-Hm856dhrIspEI4QudC0a2WZcWyks69Wm5Df/pztjLk7h0+zINhZxZGH23vhbW89d
-JpDlrKcjEJKPwmJpIYst+q+eAm55+NVWE4pHSNGF2h5jPc2NMQBtt86tly+SAHOu
-tR8xdeXOLBedTHZr0kiGxD+5IkZEew==
-=/1Sh
------END PGP SIGNATURE-----
-
---Sig_/Mvn0upQUZuO8=vlaMu96w=v--
+---
+For more info write to <info@kernelci.org>

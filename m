@@ -2,72 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC0CADB352
-	for <lists+linux-next@lfdr.de>; Thu, 17 Oct 2019 19:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FC1ADB864
+	for <lists+linux-next@lfdr.de>; Thu, 17 Oct 2019 22:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2409412AbfJQRc0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Oct 2019 13:32:26 -0400
-Received: from mga06.intel.com ([134.134.136.31]:48465 "EHLO mga06.intel.com"
+        id S1728177AbfJQUk5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Oct 2019 16:40:57 -0400
+Received: from ozlabs.org ([203.11.71.1]:38719 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728639AbfJQRcZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 17 Oct 2019 13:32:25 -0400
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Oct 2019 10:32:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.67,308,1566889200"; 
-   d="scan'208";a="279956391"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 17 Oct 2019 10:32:12 -0700
-Received: from mchancoc-mobl.amr.corp.intel.com (unknown [10.251.8.4])
-        by linux.intel.com (Postfix) with ESMTP id 194685802F0;
-        Thu, 17 Oct 2019 10:32:12 -0700 (PDT)
-Subject: Re: [alsa-devel] linux-next: Tree for Oct 17 (soundwire)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        moderated for non-subscribers <alsa-devel@alsa-project.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sanyog Kale <sanyog.r.kale@intel.com>
-References: <20191017152645.65892c78@canb.auug.org.au>
- <e8994e88-bdab-b3be-d62f-550ce9f2c76d@infradead.org>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Message-ID: <0f8fa7fb-dd1d-c26d-7756-a525aa46cf71@linux.intel.com>
-Date:   Thu, 17 Oct 2019 12:31:47 -0500
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0)
- Gecko/20100101 Thunderbird/60.9.0
+        id S1727269AbfJQUk5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 17 Oct 2019 16:40:57 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46vLfG0PxKz9sPF;
+        Fri, 18 Oct 2019 07:40:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1571344854;
+        bh=4+AbmEN1UloqaNfZIMJIHNWR7p3UyHqDI1dSFNz7uLM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bnWJBnskU7rMpLrijvGzGao3LWoHt/cSvkxC2Fske4/+Zr2Rh04X3IaOZuTLs/cTk
+         rX/ouQJtklekTQh4anIxsRG3RGYaw2K8gCX9um4q/e2oIVOFxCFSwqRPkOh6kC91ZU
+         GEsvPiPYHgcEFR2Zf+EeSpOjOqa8XbZanvc9XFCd0j4CXkpMXmjacoAbshrxTS+a8u
+         y6SAW6ktiFbVRi2/xxsIuqKgYmc3pM/UI5mDweYw4GEB29+UHNMlZl9+HgaoRpyRNK
+         pOVrvZBv8Uh+mmaalrT3xBdP2rXzS+GVbj+4Y9N1se+X2Ufken3h3YOxkffFL1FT9h
+         Cz8t5MmRKcfYQ==
+Date:   Fri, 18 Oct 2019 07:40:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>
+Subject: Re: Adding thermal group git tree
+Message-ID: <20191018074040.6e9a8ba5@canb.auug.org.au>
+In-Reply-To: <17dd6a545ebb23497647a14e8574effe1a0f674b.camel@intel.com>
+References: <540b4561-8920-f4fc-1b90-b013f20c8e25@linaro.org>
+        <20191015075154.4858a256@canb.auug.org.au>
+        <53defc08-9f67-ecdd-eb77-c0f34fecf05a@linaro.org>
+        <17dd6a545ebb23497647a14e8574effe1a0f674b.camel@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <e8994e88-bdab-b3be-d62f-550ce9f2c76d@infradead.org>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/1EQb0nw/b+0aQHirfW8BYaz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/17/19 10:22 AM, Randy Dunlap wrote:
-> On 10/16/19 9:26 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20191016:
->>
-> 
-> on x86_64:
-> 
-> # CONFIG_BLOCK is not set
-> 
->    CC [M]  drivers/soundwire/intel_init.o
-> In file included from ../drivers/soundwire/intel_init.c:12:0:
-> ../include/linux/iomap.h: In function ‘iomap_sector’:
-> ../include/linux/iomap.h:76:48: error: ‘SECTOR_SHIFT’ undeclared (first use in this function); did you mean ‘SECTIONS_SHIFT’?
->    return (iomap->addr + pos - iomap->offset) >> SECTOR_SHIFT;
->                                                  ^~~~~~~~~~~~
->                                                  SECTIONS_SHIFT
+--Sig_/1EQb0nw/b+0aQHirfW8BYaz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, looks like by fixing cross-compilation issues I added new ones.
-We can either add an explicit dependency on CONFIG_BLOCK or remove the 
-use of ioread32() and use readl() instead. I didn't write the initial 
-code and I have no idea what the intent behind using ioread32 was.
+Hi Zhang,
+
+On Thu, 17 Oct 2019 09:40:06 +0800 Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> Thanks for adding the branch, and yes, please CC Eduardo and me. Thanks
+> a lot!
+
+Done.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1EQb0nw/b+0aQHirfW8BYaz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2o0cgACgkQAVBC80lX
+0GyHngf/crAf5MmBwzLEVd0kikIldrY3iCY+QU5bgUviiJ8fhL1KW0xINSaVoxRP
+rvmzGrw9ltO7LhBZmP2shKxFDKgnp0W3cP1pxs+W9D5mz8N0DiD9KTV729uPuPYI
+HpMC5tzknBwBRwIflKqQuAxX/legN0EOKtA8slyTSoigozAVQrmeHdvmenLi87H1
+dlP3mokPQf0bOOGqKe/qZoNJhKrs9kKfowcuZ4VJLRKpjy+BKqC0KCR7o8uHZIJY
+jaZSqLDOYD8+k8rWr6crVScxNWjZwMVozNUhv/95kC4vQgfTEcknQbE7YU5i1oxV
+U8C/kgw/uXYdVBLmHvm8+dllio/s3g==
+=yQQ4
+-----END PGP SIGNATURE-----
+
+--Sig_/1EQb0nw/b+0aQHirfW8BYaz--

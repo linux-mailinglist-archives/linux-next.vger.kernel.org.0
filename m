@@ -2,89 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76579DBB1A
-	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2019 02:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F295DBB21
+	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2019 02:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390194AbfJRAva (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Oct 2019 20:51:30 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54757 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726259AbfJRAva (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 17 Oct 2019 20:51:30 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46vSCM3gQbz9sPT;
-        Fri, 18 Oct 2019 11:51:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571359887;
-        bh=tUYMD2Pe8Fnnz66nTL/typ69plhOSrBLfdbxtxfOOsg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=EtZ0XqX73cRJdpoBxz+MEuq5FML+oHDOYY40uLgHt503FrOmhFHacSEf+zYY7ReGe
-         WYpaJPgEYhv5JxnOwPf/xCdOYrqrIHAIVkJ5Im6cirNH1lz5XZ5+pW9TURmzgpcvfE
-         oKzbZTsVKR4JNrrrz+zCQI/jOVVTJC8RljXU6Ikx3K5mV35t8tJVlcHFgmRGAGyNOk
-         2SXu9sTxh+/+2+UTDlgBCDC3tgnas+bMKnznTUsZUJALNOAVlP2XODXkyjcnoglQjo
-         UiufreBNgU2MDM8FM4RT5dLR08er3T4Mc80hjgmrZ4T2vrXdw3a8/l8gEM1LLPFmzp
-         bbYgrCMWBSWOg==
-Date:   Fri, 18 Oct 2019 11:51:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+        id S2439187AbfJRA4p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 17 Oct 2019 20:56:45 -0400
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:38441 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726259AbfJRA4p (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Oct 2019 20:56:45 -0400
+Received: by mail-pl1-f195.google.com with SMTP id w8so1979019plq.5
+        for <linux-next@vger.kernel.org>; Thu, 17 Oct 2019 17:56:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=piordRZ1nU8k7NcSWkmMDNrtoXqPkolhwk8bUAWjXiM=;
+        b=BSDRVgdOVbMgXeh+wBCQNm2nwqNZsUaduoldjj3vYu1tLADexMs8j3VaxJVfmgst+e
+         sV8wMsOtkRhLkKnMpzwoXhCs4cRQwA0rVUc93yBpJTk7lhcFKcs5ZBahgS8R6KZbVC7p
+         FwvkiLECClqget1obmNExStAR5XqHOQBRifXbjGponSIy951t5Uvk7OrweyfXTKXyXiI
+         M9+mK2kWd4yIIfDjvKfvEW17xjLqAfKsFvJ9h5UCSAVxnm8nojzgLizlC9k/UdBVzOy+
+         Nj530dsX/dc0jfNbzSB7uO3pUPKbIuLbtmBV9q5JZzMAljIhLX/PRqrshhEhti42jpsH
+         l/Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=piordRZ1nU8k7NcSWkmMDNrtoXqPkolhwk8bUAWjXiM=;
+        b=ZmE5vF7el1pHcsUc8foCUEVdRdJrewHyuu2vKbUGtNJNdmyy2drMCkl5m7I9nqF7qg
+         xcG66q8gAvzzKwUbzO38SEK+xKqkEWNygTiLOqWmc+nLYLfJJXMC/Tcl4dkIdQsS58oo
+         slwSGsmjqY3xi6LIslnBIZqvSRN9ic8ttUWrUMT14JFzebjMzy5ydRp3D660jhQknfdP
+         i074FR7c1lxpxREog+X95T8K9x89iJAr+o+b3OUWBUcJqlsTpNUrenyhG7TgRYhpOWiE
+         SSSUEQLbMIqmkwrckhXNSOYyuLiE49wZRLptWcY1iaKDTs05NKieWcZezWWiz8wqAQUl
+         FIiw==
+X-Gm-Message-State: APjAAAWujlRBDJ7I3y3RFOu8qIIuUlynR/tqYYYNmxKVEvwwhgK5JblU
+        8+hHfC8BMZs49bJqw/+8cG4rjgSRLfJrJw==
+X-Google-Smtp-Source: APXvYqwn+1Qvz5kkzPB/24j6MgY8cwiKJazXYX9FwNrubcESYGgECbUV+NIUv1VED3o5/6kBL7zYEg==
+X-Received: by 2002:a17:902:bcc2:: with SMTP id o2mr7087913pls.281.1571360202876;
+        Thu, 17 Oct 2019 17:56:42 -0700 (PDT)
+Received: from [192.168.1.188] ([66.219.217.79])
+        by smtp.gmail.com with ESMTPSA id h14sm3884505pfo.15.2019.10.17.17.56.40
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 17 Oct 2019 17:56:41 -0700 (PDT)
+Subject: Re: linux-next: build warning after merge of the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the block tree
-Message-ID: <20191018115126.6263a3e3@canb.auug.org.au>
+References: <20191018115126.6263a3e3@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <5a9bf632-2466-bc73-45d3-104c4bb0245a@kernel.dk>
+Date:   Thu, 17 Oct 2019 18:56:39 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SZRpgpBR9nZJAKuVCtAxz1_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20191018115126.6263a3e3@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SZRpgpBR9nZJAKuVCtAxz1_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 10/17/19 6:51 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the block tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> fs/io_uring.c: In function 'io_accept':
+> fs/io_uring.c:1729:9: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>   1729 |  addr = (struct sockaddr __user *) READ_ONCE(sqe->addr);
+>        |         ^
+> fs/io_uring.c:1730:13: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>   1730 |  addr_len = (int __user *) READ_ONCE(sqe->addr2);
+>        |             ^
+> 
+> Introduced by commit
+> 
+>    d674c2b9335f ("io_uring: add support for IORING_OP_ACCEPT")
+> 
+> addr and addr2 are __u64 ...
 
-Hi all,
+I'll fix these warnings up, guessing it's 32-bit?
 
-After merging the block tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+-- 
+Jens Axboe
 
-fs/io_uring.c: In function 'io_accept':
-fs/io_uring.c:1729:9: warning: cast to pointer from integer of different si=
-ze [-Wint-to-pointer-cast]
- 1729 |  addr =3D (struct sockaddr __user *) READ_ONCE(sqe->addr);
-      |         ^
-fs/io_uring.c:1730:13: warning: cast to pointer from integer of different s=
-ize [-Wint-to-pointer-cast]
- 1730 |  addr_len =3D (int __user *) READ_ONCE(sqe->addr2);
-      |             ^
-
-Introduced by commit
-
-  d674c2b9335f ("io_uring: add support for IORING_OP_ACCEPT")
-
-addr and addr2 are __u64 ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/SZRpgpBR9nZJAKuVCtAxz1_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2pDI4ACgkQAVBC80lX
-0GyYXwf6AgELY7Ltq8m7YeOFl6cimB/dJiS/qyr3jMO2XCMyseEc8WS5APLLPA5n
-r9dNHFo9/ZJiJp8G43fDqODzOcyGgeNJo4Z/AXDHjY+BH0WJGXIaODlZGX/mpYQ9
-SsHDRGvS4WcEPKXQ505pR8rG2nzz4CjGGf3vF0O1uW/M6zmG6Yd5GAADRyf1vyBE
-xOGavwqE8g5tfwsmlnQuHL3pZFAp1JmiAKkKtoPQTNgVG+tPKAonl8XRk3vrwH57
-IVgKhL2Hm1RwNvKx/zxiSlr9x+awLLaJEVxjcz+AF6HR1/spLlMeD2/5Jiv+evrx
-zFL3ojO5ln1aC+FgOUpTbzNDSGEaBQ==
-=nwio
------END PGP SIGNATURE-----
-
---Sig_/SZRpgpBR9nZJAKuVCtAxz1_--

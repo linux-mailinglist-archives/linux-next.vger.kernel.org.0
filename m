@@ -2,95 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 903AFDBB25
-	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2019 02:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0185DBC05
+	for <lists+linux-next@lfdr.de>; Fri, 18 Oct 2019 06:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2439239AbfJRA7j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 17 Oct 2019 20:59:39 -0400
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:38036 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726259AbfJRA7i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 17 Oct 2019 20:59:38 -0400
-Received: by mail-pg1-f194.google.com with SMTP id w3so2347825pgt.5
-        for <linux-next@vger.kernel.org>; Thu, 17 Oct 2019 17:59:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=jyoE4KVkMv5Wgl4RjrS4sWj56ltH5kNIoDRtIAtTAIQ=;
-        b=NyID+tj/Aq4Ln2vNbwK6HI4ebzmtdQlfIjHFHZ1ct/uwHsOtHWBsYetkMuJJE+FyL5
-         iRcCB2TaBBLeRiuG+PabIeXZI/+y8H7GkfaSiUCwLGwTcF3snG2JH7qQ85r94YVYzADF
-         D/Ijj/oa7APSC/bKl6VkTi4TaZYtI9HGhz2BdPPJi0ezOnQPWmtRtfoRH8TpT1h3b8aB
-         qlfDjrTuucGQOcYq3E4WBm+26OPSc0ikw9zf0Sxg+D+7eQgxFCb1vQxYcdaVmQkyxxqB
-         vDuRlti2io7S1cz+z7fE3S/D0S9Vdb/wIdPlggxhpHN5ZXP4DSYc8Q0Fr6bbNREkuhTS
-         FI3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=jyoE4KVkMv5Wgl4RjrS4sWj56ltH5kNIoDRtIAtTAIQ=;
-        b=TkI5IBhh/UQIsPezy0I/U3o7MIQJdQWuDunKtpQ491XW4ccEQJqE/dn+riwaLNMWH2
-         KkZv1jCawdu6/c+Y9GLf4pBpKo5v81mx84rYRjyveTDZYaJY+oF0P7RIYtUuJX70eJwS
-         aR3WXrOLXqTo4BnIyW5lT4ezQ1B00Qbr85cIiB8HhC3Pt8ruRdG0pBZ2pujMUJiwy60R
-         XQBi6BsJY9DQn9EtrslrK2YMmWhIucLuOznxvdzSAPcIxAOYzeDldwoKqjYhSfsZj/Cr
-         Tgs9hQkMDrNT4YD0yIlIj5zdgDV0haSMNp+c7fL3qWbQ5z4BdjweSSAdpuRhQHNNF/tf
-         7NAg==
-X-Gm-Message-State: APjAAAV0AmsgL0ENQ3taEAubwnJ+5wHViNV5cwdTGHbwvFX4r+utmy/V
-        rEyLFYk7JP8YEwyh/Io/aMRQFkGo/N3kdQ==
-X-Google-Smtp-Source: APXvYqzgkj4XfSgBfXBRzo5q3sDWxYZIHC5aZ8pyT6z46BQiLRcrNu3Td6IirlRlUf/aFY4DfidGLA==
-X-Received: by 2002:a62:b616:: with SMTP id j22mr3257841pff.201.1571360378152;
-        Thu, 17 Oct 2019 17:59:38 -0700 (PDT)
-Received: from [192.168.1.188] ([66.219.217.79])
-        by smtp.gmail.com with ESMTPSA id z13sm4719956pfq.121.2019.10.17.17.59.36
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 17 Oct 2019 17:59:37 -0700 (PDT)
-Subject: Re: linux-next: build warning after merge of the block tree
-From:   Jens Axboe <axboe@kernel.dk>
+        id S1726072AbfJREyE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 18 Oct 2019 00:54:04 -0400
+Received: from mga05.intel.com ([192.55.52.43]:24459 "EHLO mga05.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725926AbfJREx3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 18 Oct 2019 00:53:29 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Oct 2019 19:31:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.67,310,1566889200"; 
+   d="scan'208";a="202568296"
+Received: from yihuaxu1-mobl.ccr.corp.intel.com ([10.249.174.21])
+  by FMSMGA003.fm.intel.com with ESMTP; 17 Oct 2019 19:31:01 -0700
+Message-ID: <076f3766e46a98e984c0a0196c0e6b2651701ef0.camel@intel.com>
+Subject: Re: Adding thermal group git tree
+From:   Zhang Rui <rui.zhang@intel.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191018115126.6263a3e3@canb.auug.org.au>
- <5a9bf632-2466-bc73-45d3-104c4bb0245a@kernel.dk>
-Message-ID: <4b23ff4f-9692-6bfb-c904-772b3c5e0907@kernel.dk>
-Date:   Thu, 17 Oct 2019 18:59:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <5a9bf632-2466-bc73-45d3-104c4bb0245a@kernel.dk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Eduardo Valentin <edubezval@gmail.com>
+Date:   Fri, 18 Oct 2019 10:31:01 +0800
+In-Reply-To: <20191018074040.6e9a8ba5@canb.auug.org.au>
+References: <540b4561-8920-f4fc-1b90-b013f20c8e25@linaro.org>
+         <20191015075154.4858a256@canb.auug.org.au>
+         <53defc08-9f67-ecdd-eb77-c0f34fecf05a@linaro.org>
+         <17dd6a545ebb23497647a14e8574effe1a0f674b.camel@intel.com>
+         <20191018074040.6e9a8ba5@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/17/19 6:56 PM, Jens Axboe wrote:
-> On 10/17/19 6:51 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> After merging the block tree, today's linux-next build (arm
->> multi_v7_defconfig) produced this warning:
->>
->> fs/io_uring.c: In function 'io_accept':
->> fs/io_uring.c:1729:9: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>    1729 |  addr = (struct sockaddr __user *) READ_ONCE(sqe->addr);
->>         |         ^
->> fs/io_uring.c:1730:13: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->>    1730 |  addr_len = (int __user *) READ_ONCE(sqe->addr2);
->>         |             ^
->>
->> Introduced by commit
->>
->>     d674c2b9335f ("io_uring: add support for IORING_OP_ACCEPT")
->>
->> addr and addr2 are __u64 ...
+On Fri, 2019-10-18 at 07:40 +1100, Stephen Rothwell wrote:
+> Hi Zhang,
 > 
-> I'll fix these warnings up, guessing it's 32-bit?
+> On Thu, 17 Oct 2019 09:40:06 +0800 Zhang Rui <rui.zhang@intel.com>
+> wrote:
+> > 
+> > Thanks for adding the branch, and yes, please CC Eduardo and me.
+> > Thanks
+> > a lot!
+> 
+> Done.
 
-Should be fixed up and pushed out now.
+Great, thanks for your help!
 
--- 
-Jens Axboe
+-rui
+> 
 

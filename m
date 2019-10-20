@@ -2,99 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBA7DD9DA
-	for <lists+linux-next@lfdr.de>; Sat, 19 Oct 2019 19:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1BCDDC2E
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2019 05:47:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726100AbfJSRsG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Oct 2019 13:48:06 -0400
-Received: from mail-io1-f67.google.com ([209.85.166.67]:35953 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbfJSRsG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 19 Oct 2019 13:48:06 -0400
-Received: by mail-io1-f67.google.com with SMTP id b136so11211863iof.3;
-        Sat, 19 Oct 2019 10:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=kz0/FsscmNPnfhryu7+x8j2fQp1ZICmOKUwPPB93gHo=;
-        b=i55waEalpeARsWe2kn6Q4q375oqabBYRyBGwWVACSm4Q3/7d3COTb9PVrApFE70Lp+
-         XFVlS6xBe1ftzUsawcKHJUK6CovX7wzlSRK6d0Hae2WJP0erLoyRXBFF48/wW8Wsleud
-         jnv0Kae/Eo5PViwh6122oxPtKk+qGziWxiVJM1zGvlCJ9Xf3ZjbMnnRxIH+gvSuUppsF
-         JuEBcyMi2JyWFyF0KKZH7A8UdkZ0fho+8rB4cnrEezN3+nfkOZM8/YSswpC/0QRXnSV1
-         y0jtw0BEFvtTVVc71wkAI6LyRd0HUsRlYHAzvcsrMwqx3UGnW74arc3IYPJ2In3jFfzh
-         OOBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=kz0/FsscmNPnfhryu7+x8j2fQp1ZICmOKUwPPB93gHo=;
-        b=i6xC1gRNVvwPgHeXR9camWgxK8eP5clm+jOWqZb1W5lbITJMlSSGujJeFHvtUfDIdN
-         WUPLp4v5kkfweCGTEfeeQ16afINbZeKuxOKwdFa4KY40yspKuEu/y3TvkZvm7sA3FZ0M
-         Bm3TC7lKVqLKpuXQqqT23PIa3DR25tpR2vrV5sFWYxXEJMjn3VOZHeaMiKSpnO5CVJRN
-         dXSLesiW30lxSJ8kloWVlUqCaMxOct28FEqI96gtfCbKegHjAKN2iEFE5g1elhbUfg8V
-         YR2gTdL5m8moiy+Ntbi4sv1YGaImm9MvHhNA/wvCm0hialHGsFEzU9LhV275w/o7CyUt
-         iHhw==
-X-Gm-Message-State: APjAAAUyemMY5/tKu1sNqvYmO5eYiUA+msez5ZHWz/EWZ7XEMueoYE+m
-        SSXdh5z8hwYPUB31PMdjmXt4sSxhp3V/Z+6TQoM=
-X-Google-Smtp-Source: APXvYqxo3Fr0kuSJMEqgKM6kl3CHK537pta2eV/yClGVePf9vOCnH87rNjy+8mu9SJc9u5hIR2Dwdu72XQGW0yLsUuo=
-X-Received: by 2002:a6b:ef0d:: with SMTP id k13mr3210056ioh.178.1571507283798;
- Sat, 19 Oct 2019 10:48:03 -0700 (PDT)
+        id S1726162AbfJTDrf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 19 Oct 2019 23:47:35 -0400
+Received: from ozlabs.org ([203.11.71.1]:43663 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726125AbfJTDrf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 19 Oct 2019 23:47:35 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46wm1c1sdTz9sP6;
+        Sun, 20 Oct 2019 14:47:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1571543253;
+        bh=o8+oIxUX6yzQsSu2d9m4mN9nvjplVa71+hajOmkXUAs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WGNmnQssL3GPAbwgq0KHD647FPMGkyxFF/ZyZs643sFuGmNewwlZdyBKK42CJXjkU
+         kiyAxxHsYu2YdZSxtS3nPWDbv1qWRkEfCc6NFluMpOFxXOHvniNfGRRZ+xZCCfcADW
+         uQwfBvQwrVzGJn/nz8hh4ECaD3XpGrA0dgmujvmyeypoxMDN4npEqe7dIM53xkoAOm
+         7q9+DX1hR/D1Sn8hdTs+bjeRlcGQs2bRMZ3rrFNnZnlWnJ6TKpd02YRQ3U4SscM43F
+         lhlphXLK9iUFXzV/rI3hIStpev81OzrLnwmQLK/4k0JABhPTmlyEX29oD6E0Soykam
+         BcWOesOrL5VbQ==
+Date:   Sun, 20 Oct 2019 14:47:31 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.cz>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: cleanup the btrfs trees
+Message-ID: <20191020144731.20bc0633@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20191019054039.vsWMD_v7t%akpm@linux-foundation.org>
-In-Reply-To: <20191019054039.vsWMD_v7t%akpm@linux-foundation.org>
-From:   Konstantin Khlebnikov <koct9i@gmail.com>
-Date:   Sat, 19 Oct 2019 20:47:52 +0300
-Message-ID: <CALYGNiNVJ6WZwDETrq4X4oaPBOx7wC89Gh8-ZOScY_Bf8H5Mdw@mail.gmail.com>
-Subject: Re: mmotm 2019-10-18-22-40 uploaded
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mm@kvack.org, linux-next@vger.kernel.org,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/51z2qpfJ/LKQciMQK.jHB_E";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Oct 19, 2019 at 8:40 AM <akpm@linux-foundation.org> wrote:
->
-> The mm-of-the-moment snapshot 2019-10-18-22-40 has been uploaded to
->
->    http://www.ozlabs.org/~akpm/mmotm/
->
-> mmotm-readme.txt says
->
-> README for mm-of-the-moment:
->
-> http://www.ozlabs.org/~akpm/mmotm/
->
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
->
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
->
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
->
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
->
->
-> A full copy of the full kernel tree with the linux-next and mmotm patches
-> already applied is available through git within an hour of the mmotm
-> release.  Individual mmotm releases are tagged.  The master branch always
-> points to the latest release, so it's constantly rebasing.
->
-> http://git.cmpxchg.org/cgit.cgi/linux-mmotm.git/
+--Sig_/51z2qpfJ/LKQciMQK.jHB_E
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I seems git mirror does not update anymore.
-Latest tag is v5.3-rc7-mmots-2019-09-03-21-33
+Hi all,
+
+The btrfs tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/mason/linux-btrfs.git#next)
+has not bee updated in more than a year, so I have removed it and then
+renamed the btrfs-kdave tree to btrfs.  I hope this is OK and if any
+other changes are needed, please let me know.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/51z2qpfJ/LKQciMQK.jHB_E
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2r2NMACgkQAVBC80lX
+0Gz0bAf/WanFsMIiVZ6LsXUxNoYIwVft/b1GOFjL+VF+HK7ayLg6yJ+S+TakksUM
+mYQ/6faaBDzt+AMGhKh2inHNc8dnzrM1oXwBi3L2U55C3uGQpPEgvcKNLzBYUpGA
+jqCF5K1b98Ok4cjajd8Eu4W6PQVvT1r3x9zgWutEtSfD16ULjh3Fq7QwEtVcYOvs
+FD2Gu8HhtAqMrzHRPYoVic0gHus8lv3jLvP3a6q5nRcd01ianNAMrNq8+hTnh+3g
+IDSB+XgkPV3ajsQN9pd2hKqZk/GP2em7r+KRYAvkG+hh/jD0dPcnU21wxXxB9Czz
+Bd/wQjEJBvALkcBoo7bNfpj7YTvztg==
+=LEVF
+-----END PGP SIGNATURE-----
+
+--Sig_/51z2qpfJ/LKQciMQK.jHB_E--

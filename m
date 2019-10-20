@@ -2,77 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1BCDDC2E
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2019 05:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E544DDC31
+	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2019 05:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbfJTDrf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 19 Oct 2019 23:47:35 -0400
-Received: from ozlabs.org ([203.11.71.1]:43663 "EHLO ozlabs.org"
+        id S1726214AbfJTDvj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 19 Oct 2019 23:51:39 -0400
+Received: from ozlabs.org ([203.11.71.1]:37723 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726125AbfJTDrf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 19 Oct 2019 23:47:35 -0400
+        id S1726125AbfJTDvj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 19 Oct 2019 23:51:39 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46wm1c1sdTz9sP6;
-        Sun, 20 Oct 2019 14:47:32 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46wm6J0Jtwz9sP6;
+        Sun, 20 Oct 2019 14:51:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571543253;
-        bh=o8+oIxUX6yzQsSu2d9m4mN9nvjplVa71+hajOmkXUAs=;
+        s=201702; t=1571543496;
+        bh=fKk+rtqo8ZyHj1tnt05IQasNFfo9H6yJtktFr2TMTJk=;
         h=Date:From:To:Cc:Subject:From;
-        b=WGNmnQssL3GPAbwgq0KHD647FPMGkyxFF/ZyZs643sFuGmNewwlZdyBKK42CJXjkU
-         kiyAxxHsYu2YdZSxtS3nPWDbv1qWRkEfCc6NFluMpOFxXOHvniNfGRRZ+xZCCfcADW
-         uQwfBvQwrVzGJn/nz8hh4ECaD3XpGrA0dgmujvmyeypoxMDN4npEqe7dIM53xkoAOm
-         7q9+DX1hR/D1Sn8hdTs+bjeRlcGQs2bRMZ3rrFNnZnlWnJ6TKpd02YRQ3U4SscM43F
-         lhlphXLK9iUFXzV/rI3hIStpev81OzrLnwmQLK/4k0JABhPTmlyEX29oD6E0Soykam
-         BcWOesOrL5VbQ==
-Date:   Sun, 20 Oct 2019 14:47:31 +1100
+        b=IfM62R4m12ojjJC8SynmCcyWgPMtuDnIBzqohv/fbozrjZlGspZG51vb7J0xSeLrv
+         4zZSq+tkL9kn4uVaA6WozxaLdqsz6ZyExyQIML8G0TdatjiuSTHBYyVv3mmh4DiA4i
+         tQCGKWIchNsuNyhGW/T2U1efzj1JU7t2L1Nib6EPGukYs//A1nXLASprF8W1RMmsG9
+         Xqa+PURNZVBt/8Zx7is7/36J8B6juGEQiV6ScEztTwmOlWgPMI1BvhD0X6NQ8q0sGs
+         BAshLatjuyRUTkW4rgVFVt1Tlw4BFwY6/Lit0w3BZwARU0i0KAd8kCC+jdMsMTCPNf
+         U+wWqE17/xsaA==
+Date:   Sun, 20 Oct 2019 14:51:34 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.cz>
+To:     Liviu Dudau <Liviu.Dudau@arm.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: cleanup the btrfs trees
-Message-ID: <20191020144731.20bc0633@canb.auug.org.au>
+Subject: linux-next: remove the hdlcd tree
+Message-ID: <20191020145134.168cec86@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/51z2qpfJ/LKQciMQK.jHB_E";
+Content-Type: multipart/signed; boundary="Sig_/Uq53qO+ykGPK2pzIwyNHns3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/51z2qpfJ/LKQciMQK.jHB_E
+--Sig_/Uq53qO+ykGPK2pzIwyNHns3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-The btrfs tree
-(git://git.kernel.org/pub/scm/linux/kernel/git/mason/linux-btrfs.git#next)
-has not bee updated in more than a year, so I have removed it and then
-renamed the btrfs-kdave tree to btrfs.  I hope this is OK and if any
-other changes are needed, please let me know.
+The hdlcd tree (git://linux-arm.org/linux-ld#for-upstream/hdlcd) has not
+been updated in more than a year, so I have removed it from linux-next.
+Plesee let me know if/when you want it reinstated.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/51z2qpfJ/LKQciMQK.jHB_E
+--Sig_/Uq53qO+ykGPK2pzIwyNHns3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2r2NMACgkQAVBC80lX
-0Gz0bAf/WanFsMIiVZ6LsXUxNoYIwVft/b1GOFjL+VF+HK7ayLg6yJ+S+TakksUM
-mYQ/6faaBDzt+AMGhKh2inHNc8dnzrM1oXwBi3L2U55C3uGQpPEgvcKNLzBYUpGA
-jqCF5K1b98Ok4cjajd8Eu4W6PQVvT1r3x9zgWutEtSfD16ULjh3Fq7QwEtVcYOvs
-FD2Gu8HhtAqMrzHRPYoVic0gHus8lv3jLvP3a6q5nRcd01ianNAMrNq8+hTnh+3g
-IDSB+XgkPV3ajsQN9pd2hKqZk/GP2em7r+KRYAvkG+hh/jD0dPcnU21wxXxB9Czz
-Bd/wQjEJBvALkcBoo7bNfpj7YTvztg==
-=LEVF
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2r2cYACgkQAVBC80lX
+0GzJnAf+L/2Y+w359ZUJtcu8v6WEE+GoVpeZNp2F3FHr7gOzsNa3ku8PBfarLdpI
+PQ7g7YYZV70zwxXtuTzBEsXvtYPx4iEHM+rhYXxS6Mpf07I64yCeofUclx0g1VCr
+cZ8Ef64pK7WOXBHivTDuHyg9gmDPpZeqrL44Y6h88yLJwEzcIMbfcdxsunRW4WEc
+OqMNDAN44IPbypjv8nZhJebXz4XK7qTmlNVj94TxqLr9/O/hSOeLbZx3W8CgnBTS
+/XambX+dYrzglY4QPqJmYIp9KJlaV0ZIGAncp8uy14ml6Caz5nEAqmmR7thKkqjx
+cIGzPMuEm7XOQVvM1ckUjZXJlQQBWQ==
+=CXPY
 -----END PGP SIGNATURE-----
 
---Sig_/51z2qpfJ/LKQciMQK.jHB_E--
+--Sig_/Uq53qO+ykGPK2pzIwyNHns3--

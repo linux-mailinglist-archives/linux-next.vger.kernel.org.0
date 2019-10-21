@@ -2,143 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C19F5DED4D
-	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 15:18:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC1BDED66
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 15:21:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727344AbfJUNS6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Oct 2019 09:18:58 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35757 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727322AbfJUNS6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 09:18:58 -0400
-Received: by mail-wm1-f66.google.com with SMTP id 14so6117722wmu.0
-        for <linux-next@vger.kernel.org>; Mon, 21 Oct 2019 06:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Ojrrbb6Do89CJhu5s/usx0uK8GXtt7/hkrDkwNN76z4=;
-        b=BMt6GZiJNoeijDnzpKMuaWCqBFEulW/SaXWWU8Srjk8AwI7ZoH59Q9ScaOwAjHkPSM
-         x+w9mLxKdpCMNeFpUE4EoQWm8qNyGJ7YUaNL3V9kaBLAMeZf8PM2aiecqYBUVv0sxVJK
-         kcwJsZlBkFpdZI0jgaraSsppU5uOt9GP8xTlXm/Y6rvoCpPwSMojJeoxDH60qdlLXJf3
-         loDFJQjSJZMppcYafsR6FYTKs/KAA7boieyZJ4TWFSSWeRJzg59uOBeN2STWdoi09kfz
-         jSo2dVFcd1wHKNdLqRDabayTZa60pDCNdm8qG1H7M+BDZkUXQACTMNReftFh0tbCWHry
-         +3Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Ojrrbb6Do89CJhu5s/usx0uK8GXtt7/hkrDkwNN76z4=;
-        b=RJS2/vAD4VMLRFPiRFE6N7mhFiZHYuFhUD4UVYjwCHcd5zswH7U6O3sbbsyBhJ4SCb
-         LnTpA9LgLfMkZWFfREIhE1vGC81slqOrURyYwrIQBjdxRfzH0aMg5CcenZrwUcY/fSSF
-         F2ToaNEcLyPcx7SDbqLIEt+QrZkw4+fbvggmtSMUtkdwfh44/YlOQj+B9FqyT+4V8vdQ
-         hwmcQ1EfHm9wr3+b2kjP2/CiFoPhKuj303diRzZ6nCQeIKH8GmT6H/7jYDaM+ZPBwZtj
-         XJiVviuhh2qXLVX30hDNAVYK6gbO526aVQ6YdGPqsjrNqLoiw4H9oAmy7wSBkFUs6RbH
-         Luqw==
-X-Gm-Message-State: APjAAAVTjbd8ZTu3Pi5TmlVUsycKiyOqccd682X13NosV0i7zsz5GUXG
-        3kdwQzphRsjtQGb/pclofdSR4JzeJUBVWA==
-X-Google-Smtp-Source: APXvYqyYT9xl5fAsOP81gR7nZYYoY4ScFJvxQk1ZmSMiVkbMjpfVY48n/6YiDNsrh1WzUNYIoijLGQ==
-X-Received: by 2002:a05:600c:3cb:: with SMTP id z11mr19697015wmd.138.1571663935829;
-        Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id k8sm29155860wrg.15.2019.10.21.06.18.55
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
-Message-ID: <5dadb03f.1c69fb81.2c590.bc6f@mx.google.com>
-Date:   Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728967AbfJUNVY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Oct 2019 09:21:24 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:60200 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728753AbfJUNVY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 09:21:24 -0400
+Received: from [213.220.153.21] (helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1iMXbA-00010Y-Lr; Mon, 21 Oct 2019 13:19:48 +0000
+Date:   Mon, 21 Oct 2019 15:19:48 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, linux@rasmusvillemoes.dk,
+        cyphar@cyphar.com, keescook@chromium.org
+Subject: Re: linux-next: Tree for Oct 18 (objtool)
+Message-ID: <20191021131947.yih3wqjbfroaj4dz@wittgenstein>
+References: <20191018180300.090dbcb9@canb.auug.org.au>
+ <40de4e26-450e-b932-3d73-e833c8aeaa2e@infradead.org>
+ <20191021123549.GC1817@hirez.programming.kicks-ass.net>
+ <20191021131149.GA19358@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191021
-Subject: next/master boot: 264 boots: 16 failed, 239 passed with 7 offline,
- 2 untried/unknown (next-20191021)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20191021131149.GA19358@hirez.programming.kicks-ass.net>
+User-Agent: NeoMutt/20180716
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 264 boots: 16 failed, 239 passed with 7 offline, 2 untrie=
-d/unknown (next-20191021)
+On Mon, Oct 21, 2019 at 03:11:49PM +0200, Peter Zijlstra wrote:
+> On Mon, Oct 21, 2019 at 02:35:49PM +0200, Peter Zijlstra wrote:
+> > On Fri, Oct 18, 2019 at 08:33:11AM -0700, Randy Dunlap wrote:
+> > > On 10/18/19 12:03 AM, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > Changes since 20191017:
+> > > > 
+> > > 
+> > > on x86_64:
+> > > lib/usercopy.o: warning: objtool: check_zeroed_user()+0x35f: call to __ubsan_handle_shift_out_of_bounds() with UACCESS enabled
+> > 
+> > Blergh... I suppose the below will fix that. I'm a bit conflicted on it
+> > though, the alternative is annotating more ubsan crud.
+> 
+> By popular request; here's that alternative. Completely untested :-)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191021/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191021/
+Am I not getting some mails? :)
+I prefer this one as it allows us to avoid working around this in
+usercopy.c. Should especially make if this potentially helps in other
+cases as well?
 
-Tree: next
-Branch: master
-Git Describe: next-20191021
-Git Commit: a6fcdcd94927a1b24dea6a9951ffa7c64545ecfb
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 87 unique boards, 24 SoC families, 28 builds out of 219
-
-Boot Failures Detected:
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
-
-    defconfig+kselftest:
-        gcc-8:
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
-
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-Offline Platforms:
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+> 
+> ---
+>  lib/ubsan.c           | 5 ++++-
+>  tools/objtool/check.c | 1 +
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 39d5952c4273..0dce3ff45b5b 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -359,9 +359,10 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
+>  	struct type_descriptor *lhs_type = data->lhs_type;
+>  	char rhs_str[VALUE_LENGTH];
+>  	char lhs_str[VALUE_LENGTH];
+> +	unsigned long flags = user_access_save();
+>  
+>  	if (suppress_report(&data->location))
+> -		return;
+> +		goto out;
+>  
+>  	ubsan_prologue(&data->location);
+>  
+> @@ -387,6 +388,8 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
+>  			lhs_type->type_name);
+>  
+>  	ubsan_epilogue();
+> +out:
+> +	user_access_restore(flags);
+>  }
+>  EXPORT_SYMBOL(__ubsan_handle_shift_out_of_bounds);
+>  
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 543c068096b1..4768d91c6d68 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -482,6 +482,7 @@ static const char *uaccess_safe_builtin[] = {
+>  	"ubsan_type_mismatch_common",
+>  	"__ubsan_handle_type_mismatch",
+>  	"__ubsan_handle_type_mismatch_v1",
+> +	"__ubsan_handle_shift_out_of_bounds",
+>  	/* misc */
+>  	"csum_partial_copy_generic",
+>  	"__memcpy_mcsafe",

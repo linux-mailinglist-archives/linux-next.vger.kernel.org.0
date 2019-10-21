@@ -2,113 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A5BDF1BD
-	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 17:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6B5DF239
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 17:59:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728223AbfJUPjp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Oct 2019 11:39:45 -0400
-Received: from mx1.redhat.com ([209.132.183.28]:57840 "EHLO mx1.redhat.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727140AbfJUPjp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 21 Oct 2019 11:39:45 -0400
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mx1.redhat.com (Postfix) with ESMTPS id 34B38C057E9F
-        for <linux-next@vger.kernel.org>; Mon, 21 Oct 2019 15:39:44 +0000 (UTC)
-Received: by mail-lj1-f200.google.com with SMTP id 205so2503881ljf.13
-        for <linux-next@vger.kernel.org>; Mon, 21 Oct 2019 08:39:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ucCEPxnyJ+ZOhtkur6cCKTnEqlAgQJbWKzro646IvWQ=;
-        b=bL0eC2IfnTVf8LlBWyXeAeVYHSf11xl4HETu54oj50v5C5nO055UKjIUUScf6eqkvK
-         ir8Mvl1KiPFrrSVGsGSbSYcfArawVQT58J7LZ8pK5wyhe9mw2DxevM3Q+uZVGu1r97E2
-         4vRj0EulBCeom3fV5FGFySELYMDlJ+6Gur+hmWZLBp0OG1tChZAThkxTj6nBr6geh0fQ
-         CLrj8qEfp5tlk4NDzO/lhycbJ15GygP6EplPWuiyTT0qRymDaEYihZi32089ddXB+y2r
-         e7tK4mhtMq0Kb/M0EQUo5nIUb0WIYXYPgTOF312GvkloQaQVTUhU75PAKLlv51+/IaFU
-         tCng==
-X-Gm-Message-State: APjAAAV4rjRNSZ8rNdR8xCvXvV+aT3DWRZwjXTH/DTmmcQz5m2K++pa3
-        FAEZOV0gVEkSPQCe5sdA8vVFtz/00MYmHNZJ2MYRjyXy0458tThaJ0zJXDAA7N4rAqMrFjMz1cf
-        NOh4X/tSNFbS7YZV2B18vYUuIqDtpBft6Qua9nw==
-X-Received: by 2002:a2e:6101:: with SMTP id v1mr15673661ljb.122.1571672382722;
-        Mon, 21 Oct 2019 08:39:42 -0700 (PDT)
-X-Google-Smtp-Source: APXvYqwtNVlGAWMdHADiBXWezm/WAxA43WBOxw7+xhohe6XvEzLwaZpxidx2NA6tmbyX7cR8GVLjag1xj0PhxL5NHhA=
-X-Received: by 2002:a2e:6101:: with SMTP id v1mr15673649ljb.122.1571672382491;
- Mon, 21 Oct 2019 08:39:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191021184128.601ff09d@canb.auug.org.au> <c4377d50c8a30ae292cd7886909238ce4fb56ee5.camel@redhat.com>
- <20191021151507.GD25164@mellanox.com>
-In-Reply-To: <20191021151507.GD25164@mellanox.com>
-From:   Matteo Croce <mcroce@redhat.com>
-Date:   Mon, 21 Oct 2019 17:39:06 +0200
-Message-ID: <CAGnkfhzCuCUBG++QRTZbsUyFr8orq059Be7AvyL+_V9Smz7J3g@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the rdma-fixes tree
-To:     Jason Gunthorpe <jgg@mellanox.com>, Joe Perches <joe@perches.com>
-Cc:     Doug Ledford <dledford@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1729839AbfJUP7U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Oct 2019 11:59:20 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52730 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729834AbfJUP7U (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 11:59:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=0d3OdHhsitZEf36EB7P9JTYv0iehqwkuJU2AOWE/RWY=; b=eBddPsKavOfPc2ro/R1LvA0fu
+        KQQ1doWWM83f5s4v39sPAnIBYHhrUjlEw7r0kmpH9NUo3mR7loUB6UYYlxqSDLiyAE2EHqwzAT3b8
+        Sloa+4jqayPhiivA00AMwLyO558Kc3PKe8JD/PY83vyt7YUuBnpP11oi+BJcyEnVN8tdAjOHNPwnj
+        ZN8wJ2AEI/0py49dRUz5ODNi4isc0NdCd6aVBIL/A7vH6YWx2h18PmBxr2Jlf6jBDoso8NSo1zY0C
+        wQy25nBQzDCgsp11GTy9YmmrOt+p8ZCjxhVnRlLNTAmuhrkGHg4UvSQPYr/ckJe/jT6K64sbPhxq0
+        VULIfKjiw==;
+Received: from [2601:1c0:6280:3f0::9ef4]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iMa5S-0001tE-Ca; Mon, 21 Oct 2019 15:59:14 +0000
+Subject: Re: linux-next: Tree for Oct 18 (objtool)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Potnuri Bharat Teja <bharat@chelsio.com>
-Content-Type: text/plain; charset="UTF-8"
+        Josh Poimboeuf <jpoimboe@redhat.com>, linux@rasmusvillemoes.dk,
+        cyphar@cyphar.com, keescook@chromium.org,
+        christian.brauner@ubuntu.com
+References: <20191018180300.090dbcb9@canb.auug.org.au>
+ <40de4e26-450e-b932-3d73-e833c8aeaa2e@infradead.org>
+ <20191021123549.GC1817@hirez.programming.kicks-ass.net>
+ <20191021131149.GA19358@hirez.programming.kicks-ass.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0700728a-009e-739d-6349-e67359c5074a@infradead.org>
+Date:   Mon, 21 Oct 2019 08:59:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191021131149.GA19358@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 5:15 PM Jason Gunthorpe <jgg@mellanox.com> wrote:
->
-> On Mon, Oct 21, 2019 at 10:50:33AM -0400, Doug Ledford wrote:
-> > On Mon, 2019-10-21 at 18:41 +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > In commit
-> > >
-> > >   612e0486ad08 ("iw_cxgb4: fix ECN check on the passive accept")
-> > >
-> > > Fixes tag
-> > >
-> > >   Fixes: 92e7ae7172 ("iw_cxgb4: Choose appropriate hw mtu index and
-> > > ISS for iWARP connections")
-> > >
-> > > has these problem(s):
-> > >
-> > >   - SHA1 should be at least 12 digits long
-> > >     Can be fixed by setting core.abbrev to 12 (or more) or (for git
-> > > v2.11
-> > >     or later) just making sure it is not set (or set to "auto").
-> >
-> > I'll leave it to Potnuri to fix his stuff.  As for the rdma tree, the 10
-> > digit hash is still unique as of today, so I won't rebase the official
-> > branch to fix this.  However, I'll see about adding a check for this in
-> > my workflow.  Thanks.
->
-> I thought I saw that checkpatch was checking this now?
->
-> commit a8dd86bf746256fbf68f82bc13356244c5ad8efa
-> Author: Matteo Croce <mcroce@redhat.com>
-> Date:   Wed Sep 25 16:46:38 2019 -0700
->
->     checkpatch.pl: warn on invalid commit id
->
-> Maybe that check should also check that enough hash is provided and
-> other details like the correct subject line?
->
-> I also use a check that builds the fixes line from the commit id and
-> requires it to be the same as the patch provided. This catches all
-> sorts of wrong fixes lines, and sometimes git even recommends 13 chars
-> :\
->
-> Jason
+On 10/21/19 6:11 AM, Peter Zijlstra wrote:
+> On Mon, Oct 21, 2019 at 02:35:49PM +0200, Peter Zijlstra wrote:
+>> On Fri, Oct 18, 2019 at 08:33:11AM -0700, Randy Dunlap wrote:
+>>> On 10/18/19 12:03 AM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20191017:
+>>>>
+>>>
+>>> on x86_64:
+>>> lib/usercopy.o: warning: objtool: check_zeroed_user()+0x35f: call to __ubsan_handle_shift_out_of_bounds() with UACCESS enabled
+>>
+>> Blergh... I suppose the below will fix that. I'm a bit conflicted on it
+>> though, the alternative is annotating more ubsan crud.
+> 
+> By popular request; here's that alternative. Completely untested :-)
 
-Hi,
+Both patch versions build-tested successfully.  Thanks.
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
 
-actually I just call git_commit_info() which checks for validness.
-I could also check that the hash is at least 12 digits, would be very easy.
 
-Joe?
+> ---
+>  lib/ubsan.c           | 5 ++++-
+>  tools/objtool/check.c | 1 +
+>  2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/lib/ubsan.c b/lib/ubsan.c
+> index 39d5952c4273..0dce3ff45b5b 100644
+> --- a/lib/ubsan.c
+> +++ b/lib/ubsan.c
+> @@ -359,9 +359,10 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
+>  	struct type_descriptor *lhs_type = data->lhs_type;
+>  	char rhs_str[VALUE_LENGTH];
+>  	char lhs_str[VALUE_LENGTH];
+> +	unsigned long flags = user_access_save();
+>  
+>  	if (suppress_report(&data->location))
+> -		return;
+> +		goto out;
+>  
+>  	ubsan_prologue(&data->location);
+>  
+> @@ -387,6 +388,8 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
+>  			lhs_type->type_name);
+>  
+>  	ubsan_epilogue();
+> +out:
+> +	user_access_restore(flags);
+>  }
+>  EXPORT_SYMBOL(__ubsan_handle_shift_out_of_bounds);
+>  
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 543c068096b1..4768d91c6d68 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -482,6 +482,7 @@ static const char *uaccess_safe_builtin[] = {
+>  	"ubsan_type_mismatch_common",
+>  	"__ubsan_handle_type_mismatch",
+>  	"__ubsan_handle_type_mismatch_v1",
+> +	"__ubsan_handle_shift_out_of_bounds",
+>  	/* misc */
+>  	"csum_partial_copy_generic",
+>  	"__memcpy_mcsafe",
+> 
+
 
 -- 
-Matteo Croce
-per aspera ad upstream
+~Randy

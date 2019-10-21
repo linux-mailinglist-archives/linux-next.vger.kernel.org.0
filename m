@@ -2,48 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EDBDF6F6
-	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 22:44:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C217DF6FD
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 22:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729388AbfJUUob (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Oct 2019 16:44:31 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38733 "EHLO ozlabs.org"
+        id S1730069AbfJUUsf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Oct 2019 16:48:35 -0400
+Received: from ozlabs.org ([203.11.71.1]:37709 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726672AbfJUUob (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 21 Oct 2019 16:44:31 -0400
+        id S1728914AbfJUUsf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 21 Oct 2019 16:48:35 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46xpXW6rdNz9s7T;
-        Tue, 22 Oct 2019 07:44:27 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46xpdD5d8Nz9sPT;
+        Tue, 22 Oct 2019 07:48:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571690668;
-        bh=qm1P8LTT4eYbr7BVmaZo/OSaknC3h1Ftk2rAkJEMlTg=;
+        s=201702; t=1571690912;
+        bh=gDF4wkv+s1LYEMnsm7mri2PWEZnHrKXE3Mvc13xEw+M=;
         h=Date:From:To:Cc:Subject:From;
-        b=YLCH7qZog4PnQGz/8JuCawOUVSd2c/GaT6xj+bO6Lk9oQdakQ7cosuuPEMYvocaJt
-         I6h4OdxltOF3sbAVuP+yTzlV0zzCmrAkrleplHwf6huJi1dtPdcrDjKNfIwdRXWN5w
-         2fGqrEqSCFmqwgtJOkRk0TktLKfmTdcpgA40SbI1nEDEjWNm6FjFhiC3zU/Un/f16V
-         Lv+dKHDY0G6dpba6FZSfhC27HGStDHyh3xldssezZvbx5kZQlai/ImiHZqh6BxVV1O
-         QschLpk/JqVXpTSzY5oLCvuL64d+oe7x5qjOQzL/C/Fs0B+waNa4evFJGSdA769ZeQ
-         OVK6kavS2pz6w==
-Date:   Tue, 22 Oct 2019 07:44:26 +1100
+        b=vBHbGbM2zmKQUHpHGS8T2EFXEUSa1TZ/+r/zygDt0weJUnH2julWSx5DHsuWphIgM
+         8gXm19ZHfS/EbLNauCW2xxa5Yqy6nW7uFN0sPLdRVTmodvXdZ7c+7NkpgwG7RywS4m
+         6u8eTWEHektE7wgRvWSYgTZDAhk24oDyfI3foPiFH9ntQBkW9vKQS7WXuuszIXeKdh
+         POr1yW5JQKeBh5JQftIGzJ6WNbOPHrUYltn19AZ1qpH8ybT1vglfXIElmnfMbkejKn
+         /bNHRTYcHtMz/UkuxbyAFi0G2TH1M1BTYiFuqrP6rsbxcrd/mMwx3xSsJNpD7QBhY0
+         Bc2hRuGK9E7ng==
+Date:   Tue, 22 Oct 2019 07:48:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>
+To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
+        Trond Myklebust <trondmy@gmail.com>,
+        NFS Mailing List <linux-nfs@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guillem Jover <guillem@hadrons.org>
-Subject: linux-next: Fixes tag needs some work in the vfs-fixes tree
-Message-ID: <20191022074426.2c0a2485@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
+Message-ID: <20191022074831.7224318f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L+cRic7rAwxHAquDYAWFSSz";
+Content-Type: multipart/signed; boundary="Sig_/68gQG_2V2_2sR/4huGbTA.T";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/L+cRic7rAwxHAquDYAWFSSz
+--Sig_/68gQG_2V2_2sR/4huGbTA.T
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,37 +52,38 @@ Hi all,
 
 In commit
 
-  de80166a573d ("aio: Fix io_pgetevents() struct __compat_aio_sigset layout=
-")
+  4609f9894ead ("SUNRPC: The TCP back channel mustn't disappear while reque=
+sts are outstanding")
 
 Fixes tag
 
-  Fixes: 7a074e96 ("aio: implement io_pgetevents")
+  Fixes: 2ea24497a1b3 ("SUNRPC: RPC callbacks may be split across several..=
+")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/L+cRic7rAwxHAquDYAWFSSz
+--Sig_/68gQG_2V2_2sR/4huGbTA.T
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2uGKoACgkQAVBC80lX
-0GzFDwf+I666QXxb/lRXidXT6rctJN1rV3ZBH8q8dVH1EhfKlkBSLsroQaCFQjyb
-FCOoD0BOAN9qfQJ4OZISTaleJ02Tkh25SxiZ7FhC9ZUIkx56rC1OVWl2w5oQxkd5
-QOfEI6hgCka/XTHBLfCTkeNZ1Dztj4CcQS/SxBHQj/4nstPcCZOscR2o74zWVKRK
-/u/SegXmjKwPcxF/zDaNa0WAycQ9OHits1JV7h9hX/r28KLol0OzZh3MHPUtuX9s
-hVuks31Hp1TD/kmwrCUpi0bBblTi17vw4crfaPX8gu1dGFS8N7lMaFsS9Fj5K43X
-TdiqVaJ/5nVSRR/PA48YXIPqkxhMYw==
-=AG7V
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2uGZ8ACgkQAVBC80lX
+0GxShwf9HZFLZL0ytbND2qlHxAXWEGH2mDgt6TU/q9XCIaQMqrENoyaerZhWgkXd
+vI3BqIsFB45N80yHcQW6XFyoOCY+fVimH0tso9nZfPHqC7ZuUS35wTG2ZZ1M3XaF
+UJ6w8mZop0nT5kx+A1VVEB8r2Sdl4WrTEmpPZGzapKZqtIets13Lg6jJqN6nmxK6
+fud3wS54fAoMPT9NBYuwZXDO5vhqHK80HTyTMHvDRImu3RpQU9mixmigiIl5mCzC
+Pejdih4VN0cssRLVN2vPgbix3MuqRo6C4uRAHe6Ez97dy+MrHO/H1mxaupeVLtWs
+O3KJrHHeETHXUm2//ednRroGQLMhvA==
+=Cjol
 -----END PGP SIGNATURE-----
 
---Sig_/L+cRic7rAwxHAquDYAWFSSz--
+--Sig_/68gQG_2V2_2sR/4huGbTA.T--

@@ -2,143 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 815CBDE362
-	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 06:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFCADE40A
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 07:51:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726888AbfJUEnT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Oct 2019 00:43:19 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:45943 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725827AbfJUEnS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 00:43:18 -0400
-Received: by mail-wr1-f65.google.com with SMTP id q13so7203176wrs.12
-        for <linux-next@vger.kernel.org>; Sun, 20 Oct 2019 21:43:16 -0700 (PDT)
+        id S1725972AbfJUFvr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Oct 2019 01:51:47 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:52058 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725970AbfJUFvr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 01:51:47 -0400
+Received: by mail-wm1-f66.google.com with SMTP id q70so4532153wme.1;
+        Sun, 20 Oct 2019 22:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ZKXJFcpZ//enAJq8VI14H5nwSM3fr2DtsdZZ+pMlmXw=;
-        b=a1FmXmp4/RLFN0pw8RdXwe1syUhHmAFn6pWZ+cYaE3xz9kJtTfZAbI0TBsZiylTvMI
-         GXpSGCg7dTuMDX9Rpmz2LVSGY96yvwgpC2DedEbtcZfbHmOUdz7QO7wymuuLk2NQk2W1
-         JNTOpCRJbrXn7W7BmGB+MTgyQbQZppahY5IGxRM47fyUIMWwPS9h0zVT0F4Ema72vMt/
-         JM1zeXdNoc/vKeSjGfNmtJz3Ok+/WIcfAOpFMVjY2UDLuoYJdQZm2MmXbLSVACb50KcJ
-         0NIi0PnFyRsdDHcYCD6BZFWzNs0qkI026l4cl6w9velc2aCQEyshwndc3dDiKkMfS2Uz
-         TlrQ==
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=L/UYn5CrH2at9ULvEJ5IrXOEOZvQjLR7/6mrJJUvTjU=;
+        b=H5NpNqC9WwvhLgSpX0Xzaozkt4SvoXDBt41OFlTnC6ovQWpFaPsj4WJnPexT087z50
+         tazNOvIhEvzcW7YlQQsVNQcSCA6kUbpsmX60jDErAT8QEvzxWKfMcsIJr1Z2ZJzLyLAR
+         Mk1i8s2RMd3WuNdgEFym8PDfkeG68pdTvSMfyG3eCn5wTOxsd72kX4f2FkCQsovDmAeS
+         dduhNH/OVMPEl2fO4yVUZLsHKO+HDX0+X4ieSD5SG8dL5JyWTh5T0LuFJgkdKBAs+2Rz
+         C2VAM+1FZZbsfGdKCiWfbn6slSrRLB8hIOq4nWQP94rZZBmnL28LCHMsZvN+uqUBOY0H
+         ZYPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ZKXJFcpZ//enAJq8VI14H5nwSM3fr2DtsdZZ+pMlmXw=;
-        b=jOu2M5ZZ1SvMocYke/eeDt4Yfvw9YtUcwzaU/srTWO+ELrzgKrpd6zO/Po2ouqZqxt
-         i3QK+MWhHnd7RZuVNcNZKk90MNGRHaNgBuDPtnTO+vcsXpN/LYK+9VdV/ZmbRV6G2qDn
-         548vZSKzN/X1ndDwfkzXMQjfd6I7/SL8ZJNR1H35G+xKdWRcOYdjOQfUOpxpXikc9qJz
-         FginTmqAV8Q8nGyPV68T/0jvlE4yRhaXuZN2SBdwlW+vxZplyGXmTmit9urKID7wdUYP
-         i9eR/nY3AQSiz4JeRh0QQX9+tu9Cs8Yrmm6u5idFGOygi/7D6ix+P5wyDKXzlRQdKTA0
-         taqw==
-X-Gm-Message-State: APjAAAVzEXAw6jeShL1FxthL8iXrKRnXfW4LveudDAJR4iszXuwxZGUt
-        rG1ox3A+9Pg7etPRS8BjJwJ/A/7fHno=
-X-Google-Smtp-Source: APXvYqxcxUiuLNLcJ/jSF7rrpWpndimuiqyMxEubYz3PvG6SMsp/sUbKAKzyVLL7PxZNGqHphChSzg==
-X-Received: by 2002:a05:6000:11c4:: with SMTP id i4mr17570300wrx.277.1571632995609;
-        Sun, 20 Oct 2019 21:43:15 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 36sm7149056wrj.42.2019.10.20.21.43.13
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 20 Oct 2019 21:43:14 -0700 (PDT)
-Message-ID: <5dad3762.1c69fb81.923a.fd84@mx.google.com>
-Date:   Sun, 20 Oct 2019 21:43:14 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to:user-agent;
+        bh=L/UYn5CrH2at9ULvEJ5IrXOEOZvQjLR7/6mrJJUvTjU=;
+        b=BY0M137Nn8V6I4i3cfbfPTR2JwMzHCig1vTO7jQVBa/RuFWbAWXcqGUnOrXfysZ9pL
+         QhFgqzXjEuMnxysvV3oXFfMZBxbbI8krvESxVzKj/ahPWmiSWZxL5lVzShEqPF+SH/rh
+         Cz8jkU7iiyN+mtufWnI9B91/ELqGnO2uV75G2yTKDrwGhz+47pFjl8kWwdlPnVXMak1e
+         Zk8fJm/8im20P4ho66IhL4bVVpGexEUhsQl6AMO6E+6z+wi24DZQBSPCGVp25SKgzSJT
+         JWN/ptkNe9qRWsra/la/qfc9D+xgbc3mNEyT4hOZFGzDhVbbs1kLX538Xz4evOqNIIQ9
+         zz6Q==
+X-Gm-Message-State: APjAAAUQj6u3yfyS28A8AV1iaMU4aH5SiDUBHpjWzaLED/A+Ttm96oot
+        VHbzE/wqF0sTUUQV/z/SFq0=
+X-Google-Smtp-Source: APXvYqwVgadVQtClL/SxEzlMFAMgO13scenS2Z5MePp084o9rJ3dRJs7X8FFZ/P8PP8wdMzDwQZlMA==
+X-Received: by 2002:a05:600c:22ce:: with SMTP id 14mr17055842wmg.71.1571637105185;
+        Sun, 20 Oct 2019 22:51:45 -0700 (PDT)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id 74sm23258113wrm.92.2019.10.20.22.51.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Oct 2019 22:51:44 -0700 (PDT)
+Date:   Mon, 21 Oct 2019 07:51:41 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20191021055141.GA2973@gmail.com>
+References: <20191021131342.404551d7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc4-193-gedd7b4ec4e71
-Subject: next/pending-fixes boot: 244 boots: 16 failed,
- 221 passed with 6 offline, 1 untried/unknown (v5.4-rc4-193-gedd7b4ec4e71)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191021131342.404551d7@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 244 boots: 16 failed, 221 passed with 6 offline, 1=
- untried/unknown (v5.4-rc4-193-gedd7b4ec4e71)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc4-193-gedd7b4ec4e71/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc4-193-gedd7b4ec4e71/
+* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc4-193-gedd7b4ec4e71
-Git Commit: edd7b4ec4e71bdca29b49d514b76d67199ff9fca
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 87 unique boards, 24 SoC families, 28 builds out of 215
+> Hi all,
+> 
+> After merging the tip tree, today's linux-next build (native perf)
+> failed like this:
+> 
+> make: execvp: ./check-headers.sh: Permission denied
+> 
+> Caused by commit
+> 
+>   05f2f277053d ("Merge branch 'x86/core'")
+> 
+> which somehow removed execute permissions from tools/perf/check-headers.sh
+> 
+> I added a commit to reenable execute permissions.
 
-Boot Failures Detected:
+Hm, that was a weird merge mishap - sorry about that, should go away in 
+the next -next iteration.
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-firefly: 1 failed lab
+Thanks,
 
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            rk3399-firefly: 1 failed lab
-
-    defconfig+kselftest:
-        gcc-8:
-            r8a7795-salvator-x: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
-
-arm:
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-Offline Platforms:
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+	Ingo

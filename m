@@ -2,76 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A023CDE085
-	for <lists+linux-next@lfdr.de>; Sun, 20 Oct 2019 22:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BF3ADE15B
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 02:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726125AbfJTUsG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 20 Oct 2019 16:48:06 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60449 "EHLO ozlabs.org"
+        id S1726645AbfJUAIH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 20 Oct 2019 20:08:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:60091 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725945AbfJTUsF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 20 Oct 2019 16:48:05 -0400
+        id S1726576AbfJUAIH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 20 Oct 2019 20:08:07 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46xBg73nSkz9sP6;
-        Mon, 21 Oct 2019 07:48:03 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46xH5w6D4Nz9sNx;
+        Mon, 21 Oct 2019 11:08:04 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571604483;
-        bh=s8XV+vnfYhlu8LE2McxxMrvzRJVfDt0FJGFhECkLs04=;
+        s=201702; t=1571616485;
+        bh=X9w5V/XTy4bCeUmkoajC65IM6vFKbBsy/YOD7h9VvnA=;
         h=Date:From:To:Cc:Subject:From;
-        b=fqSKegbnVBw5KFgVWCb21RN9hbe+bHzMvpbpcW7HqfFbtJOgjWdKgpNJnjlCWnX3C
-         k81NX0H5E3z88Wmy2wbuEx1QE79svFRT/MdC8GDHMjfOkPYyn5LIAiDRJiaOudPDGl
-         25g/iGoZaP8kILOvMbgDLJhOo+na4BthQbrAj0PoAvPp1sXvhpIOklXo1sADGzD1YG
-         F4UO0tEZ4wJQokZyvk1d77318EAktOJOCOMGl2wiFh2Vip/ommO0y7g82eL4rG3tiR
-         tr3TQ8q42bpefQoYU3PU71aDi3zuMbO3OLl67yK8ZR2gyiFiO6U8wPIJgm0VTjKsQm
-         T7t/PZCGJPPBg==
-Date:   Mon, 21 Oct 2019 07:48:02 +1100
+        b=BeMyn70HjTuQED2UU0IF+TeZAEmEE8infGIEHcwdKmVz1u1HCYrdA/dCVoa/dSADU
+         QA/xgnstFLEoUvv6W+mDuEwip4wU2TWJLg/VwvT9wcPr48d3kmTa1Yp7uy1l7UFEUT
+         b8poZEZiGqHlQetJ65+cnOy/0TTcVh2XwpmJxM0rT6EdPU7n+LWDOO99x2WpHRz/AC
+         50cmAYp0YIkDNtzNTVZn1RdBcEfr7qA5sdJMUd+l2Vm2yZn79Ou+lDoW47YYDYAAnK
+         5QL6eKtzTATDpKz861VWNwVmJNt+l36AsiUuoJ9sXuVbXm1Vz93Bmh7y5lY8ZDFOop
+         walcMpYzqnubw==
+Date:   Mon, 21 Oct 2019 11:07:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the coresight tree
-Message-ID: <20191021074802.3404e7e4@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jiri Pirko <jiri@mellanox.com>
+Subject: linux-next: manual merge of the net-next tree with Linus' tree
+Message-ID: <20191021110745.3c7563a4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mF7A4S=VEP82na/Kspps.yt";
+Content-Type: multipart/signed; boundary="Sig_/QMu1u_AWC0pXc5bHC_x_aNk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mF7A4S=VEP82na/Kspps.yt
+--Sig_/QMu1u_AWC0pXc5bHC_x_aNk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+Today's linux-next merge of the net-next tree got a conflict in:
 
-  38c2d9afa62b ("coresight: etm4x: Fix input validation for sysfs.")
+  include/net/net_namespace.h
 
-is missing a Signed-off-by from its committer.
+between commit:
+
+  2a06b8982f8f ("net: reorder 'struct net' fields to avoid false sharing")
+
+from Linus' tree and commit:
+
+  a30c7b429f2d ("net: introduce per-netns netdevice notifiers")
+
+from the net-next tree.
+
+I fixed it up (see below - but it clearly needs more thought) and can
+carry the fix as necessary. This is now fixed as far as linux-next is
+concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mF7A4S=VEP82na/Kspps.yt
+diff --cc include/net/net_namespace.h
+index 4c2cd9378699,5ac2bb16d4b3..000000000000
+--- a/include/net/net_namespace.h
++++ b/include/net/net_namespace.h
+@@@ -102,14 -94,14 +103,15 @@@ struct net=20
+ =20
+  	struct uevent_sock	*uevent_sock;		/* uevent socket */
+ =20
+ -	struct list_head 	dev_base_head;
+  	struct hlist_head 	*dev_name_head;
+  	struct hlist_head	*dev_index_head;
++ 	struct raw_notifier_head	netdev_chain;
+ +	/* Note that @hash_mix can be read millions times per second,
+ +	 * it is critical that it is on a read_mostly cache line.
+ +	 */
+ +	u32			hash_mix;
+ =20
+ -	unsigned int		dev_base_seq;	/* protected by rtnl_mutex */
+ -	int			ifindex;
+ -	unsigned int		dev_unreg_count;
+ +	struct net_device       *loopback_dev;          /* The loopback */
+ =20
+  	/* core fib_rules */
+  	struct list_head	rules_ops;
+
+--Sig_/QMu1u_AWC0pXc5bHC_x_aNk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2syAIACgkQAVBC80lX
-0GxKegf9HKJpkMbw11vH8CgEBz0ubvO96TMMUY8ESpgRmPA/99qNshnpu9DcXaeD
-1cd2YfjxeGB9J/VFEM5PzovtkppyS4KR3nvV1QiC28qFty2qTqR1YIX9e+FeaLnK
-o/dAUwI3rjQfpZJ8WRkZjz0Z4HS/c8WEPIAHU0+Liyco7zVsJbXTVyt5cQHvy7Ev
-ciX/hVrtR8gUDQlnrE14qpxqKtkGUOl9sRmBjTHRgjN36znEk+jmhlMnz/Q0V8NP
-7IchxaBrZ6cQLLRiGnQIi6C+s1i52Ol22/zD/dHwnwcBhNbimFgdBWlA4rEl6elP
-XEkolnMLFSp8fZyd4YEAq6b4iDQt+Q==
-=k9UN
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2s9tEACgkQAVBC80lX
+0GwZpwgAkoebksFVR77r9Wjmyx1QSfLT6xE+3K8mT+eQ70TVcHY4DzSFxuqNhp9C
+nwCyGorGYrcdi4toAQrE7pxExLdArXdma90EHa7HjRxyO6hJO+UUJKE6wTQVF9Hw
+pX85LM0jtoUJewpPdngcv+lY4T2Q75GqLyNHUeTcJCdosATgrCmvsiB9zKGUPJo8
+yZtXvQexcfDTKZmRclVAxBCCuhe78R+2Ptc0EwbBmnDisZFoXLUYT2A/ZyOjVoWR
+RK9803tVm0KVNCVHvpwTyTR4zRIi23GnzmH2oMkNoykdbGioT0gIC+5muEvlVy9+
+hhw2kK5a7Ml6ROqFRgJYhhvn25hCVQ==
+=fbdo
 -----END PGP SIGNATURE-----
 
---Sig_/mF7A4S=VEP82na/Kspps.yt--
+--Sig_/QMu1u_AWC0pXc5bHC_x_aNk--

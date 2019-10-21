@@ -2,116 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E200ADED25
-	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 15:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C19F5DED4D
+	for <lists+linux-next@lfdr.de>; Mon, 21 Oct 2019 15:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbfJUNMA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 21 Oct 2019 09:12:00 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:53290 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727256AbfJUNMA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 09:12:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jloJkGKa7vU+GU78XngxyOagGSBHzTSvvyehxGuzF5c=; b=XbW1uAJbpB7Sb+2QkV/fEj2KI
-        mwRsqffCphhzWGJAzmvRSmqNsSgHYdImobSU0mUktzxMjKgE9WOaGdTunQmagUIDvHU5B1sED51Il
-        fhvuQHQG42qqbRVMwG2PskDmbHzxtR4NYqAgIgyPoR9hGC5hENFNc1wC8papO6TLm0TiMFyvZPdbG
-        eyV+7SBXWwI9ABlwd+O8ccWdI+qjpQLSvKj64lDUgeVTqWcs1zXucrlWT5z76d5dgMromovv+sNU0
-        4nzYkSY1ADiksK8kJiPYk30BRWfqUC0vikL0foLTRbIMhmlDe/XSKrAqV3bsRWtbWgLtDiS4wSH+Q
-        5mYXBq0PQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iMXTU-0001v0-3e; Mon, 21 Oct 2019 13:11:52 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D78F9300EBF;
-        Mon, 21 Oct 2019 15:10:52 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EF4B220D9A729; Mon, 21 Oct 2019 15:11:49 +0200 (CEST)
-Date:   Mon, 21 Oct 2019 15:11:49 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, linux@rasmusvillemoes.dk,
-        cyphar@cyphar.com, keescook@chromium.org,
-        christian.brauner@ubuntu.com
-Subject: Re: linux-next: Tree for Oct 18 (objtool)
-Message-ID: <20191021131149.GA19358@hirez.programming.kicks-ass.net>
-References: <20191018180300.090dbcb9@canb.auug.org.au>
- <40de4e26-450e-b932-3d73-e833c8aeaa2e@infradead.org>
- <20191021123549.GC1817@hirez.programming.kicks-ass.net>
+        id S1727344AbfJUNS6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 21 Oct 2019 09:18:58 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:35757 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727322AbfJUNS6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 21 Oct 2019 09:18:58 -0400
+Received: by mail-wm1-f66.google.com with SMTP id 14so6117722wmu.0
+        for <linux-next@vger.kernel.org>; Mon, 21 Oct 2019 06:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Ojrrbb6Do89CJhu5s/usx0uK8GXtt7/hkrDkwNN76z4=;
+        b=BMt6GZiJNoeijDnzpKMuaWCqBFEulW/SaXWWU8Srjk8AwI7ZoH59Q9ScaOwAjHkPSM
+         x+w9mLxKdpCMNeFpUE4EoQWm8qNyGJ7YUaNL3V9kaBLAMeZf8PM2aiecqYBUVv0sxVJK
+         kcwJsZlBkFpdZI0jgaraSsppU5uOt9GP8xTlXm/Y6rvoCpPwSMojJeoxDH60qdlLXJf3
+         loDFJQjSJZMppcYafsR6FYTKs/KAA7boieyZJ4TWFSSWeRJzg59uOBeN2STWdoi09kfz
+         jSo2dVFcd1wHKNdLqRDabayTZa60pDCNdm8qG1H7M+BDZkUXQACTMNReftFh0tbCWHry
+         +3Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Ojrrbb6Do89CJhu5s/usx0uK8GXtt7/hkrDkwNN76z4=;
+        b=RJS2/vAD4VMLRFPiRFE6N7mhFiZHYuFhUD4UVYjwCHcd5zswH7U6O3sbbsyBhJ4SCb
+         LnTpA9LgLfMkZWFfREIhE1vGC81slqOrURyYwrIQBjdxRfzH0aMg5CcenZrwUcY/fSSF
+         F2ToaNEcLyPcx7SDbqLIEt+QrZkw4+fbvggmtSMUtkdwfh44/YlOQj+B9FqyT+4V8vdQ
+         hwmcQ1EfHm9wr3+b2kjP2/CiFoPhKuj303diRzZ6nCQeIKH8GmT6H/7jYDaM+ZPBwZtj
+         XJiVviuhh2qXLVX30hDNAVYK6gbO526aVQ6YdGPqsjrNqLoiw4H9oAmy7wSBkFUs6RbH
+         Luqw==
+X-Gm-Message-State: APjAAAVTjbd8ZTu3Pi5TmlVUsycKiyOqccd682X13NosV0i7zsz5GUXG
+        3kdwQzphRsjtQGb/pclofdSR4JzeJUBVWA==
+X-Google-Smtp-Source: APXvYqyYT9xl5fAsOP81gR7nZYYoY4ScFJvxQk1ZmSMiVkbMjpfVY48n/6YiDNsrh1WzUNYIoijLGQ==
+X-Received: by 2002:a05:600c:3cb:: with SMTP id z11mr19697015wmd.138.1571663935829;
+        Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id k8sm29155860wrg.15.2019.10.21.06.18.55
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
+Message-ID: <5dadb03f.1c69fb81.2c590.bc6f@mx.google.com>
+Date:   Mon, 21 Oct 2019 06:18:55 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021123549.GC1817@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191021
+Subject: next/master boot: 264 boots: 16 failed, 239 passed with 7 offline,
+ 2 untried/unknown (next-20191021)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 02:35:49PM +0200, Peter Zijlstra wrote:
-> On Fri, Oct 18, 2019 at 08:33:11AM -0700, Randy Dunlap wrote:
-> > On 10/18/19 12:03 AM, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > Changes since 20191017:
-> > > 
-> > 
-> > on x86_64:
-> > lib/usercopy.o: warning: objtool: check_zeroed_user()+0x35f: call to __ubsan_handle_shift_out_of_bounds() with UACCESS enabled
-> 
-> Blergh... I suppose the below will fix that. I'm a bit conflicted on it
-> though, the alternative is annotating more ubsan crud.
+next/master boot: 264 boots: 16 failed, 239 passed with 7 offline, 2 untrie=
+d/unknown (next-20191021)
 
-By popular request; here's that alternative. Completely untested :-)
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191021/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191021/
+
+Tree: next
+Branch: master
+Git Describe: next-20191021
+Git Commit: a6fcdcd94927a1b24dea6a9951ffa7c64545ecfb
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 87 unique boards, 24 SoC families, 28 builds out of 219
+
+Boot Failures Detected:
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
+
+    defconfig+kselftest:
+        gcc-8:
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 1 failed lab
+            rk3399-puma-haikou: 1 failed lab
+
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+
+    tegra_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
 
 ---
- lib/ubsan.c           | 5 ++++-
- tools/objtool/check.c | 1 +
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/lib/ubsan.c b/lib/ubsan.c
-index 39d5952c4273..0dce3ff45b5b 100644
---- a/lib/ubsan.c
-+++ b/lib/ubsan.c
-@@ -359,9 +359,10 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
- 	struct type_descriptor *lhs_type = data->lhs_type;
- 	char rhs_str[VALUE_LENGTH];
- 	char lhs_str[VALUE_LENGTH];
-+	unsigned long flags = user_access_save();
- 
- 	if (suppress_report(&data->location))
--		return;
-+		goto out;
- 
- 	ubsan_prologue(&data->location);
- 
-@@ -387,6 +388,8 @@ void __ubsan_handle_shift_out_of_bounds(struct shift_out_of_bounds_data *data,
- 			lhs_type->type_name);
- 
- 	ubsan_epilogue();
-+out:
-+	user_access_restore(flags);
- }
- EXPORT_SYMBOL(__ubsan_handle_shift_out_of_bounds);
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 543c068096b1..4768d91c6d68 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -482,6 +482,7 @@ static const char *uaccess_safe_builtin[] = {
- 	"ubsan_type_mismatch_common",
- 	"__ubsan_handle_type_mismatch",
- 	"__ubsan_handle_type_mismatch_v1",
-+	"__ubsan_handle_shift_out_of_bounds",
- 	/* misc */
- 	"csum_partial_copy_generic",
- 	"__memcpy_mcsafe",
+For more info write to <info@kernelci.org>

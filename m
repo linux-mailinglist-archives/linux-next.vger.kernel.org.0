@@ -2,86 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADC1CE02A2
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 13:18:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25475E02F6
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 13:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730681AbfJVLSi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Oct 2019 07:18:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:38529 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730515AbfJVLSi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 22 Oct 2019 07:18:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46y9x73VPSz9sPh;
-        Tue, 22 Oct 2019 22:18:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571743116;
-        bh=obHRO/VzwarZaX01qTrD12x+hd87XUXFgpKqb0arRQs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=OrYxeeP9OlTPtaF2Feq4rPnfvAr0PAwUB6ZMggAv0YfYNOCANMiL7ZCoTBXjRzOWe
-         tRJadFGuKSybus08MmaVmzQTm3Y90zmk7C9dNbH9xpfdyo/hPTe2enYc54EfKcwFsj
-         rPI811KX3m0ZJvkIpvWFNUJSkLA8/x+ZG5eBeRMxyUh1AUT5X5ds44HLxbmahGx3T2
-         YMuCt2pgE/o7o7n7rFftrG781rjuW4HKFXrKOysw5afm9F2UBVnR8QqGfoOMjnXPbm
-         JQDIGC/8Fc4IH3tSoVJLhOZ68O1FjWEvvxZwJbCJIc5flV3XFmHIxoH4EOikAeQXCv
-         RqTghabFUy6+A==
-Date:   Tue, 22 Oct 2019 22:18:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Amit Kucheria <amit.kucheria@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the thermal tree
-Message-ID: <20191022221406.298ccd6a@canb.auug.org.au>
-In-Reply-To: <CAP245DXChLoSUkj49FrYq4HVkcP2pS8=qamWDDUNOg7aygDwpA@mail.gmail.com>
-References: <20191022102334.67e5d3d1@canb.auug.org.au>
-        <CAP245DXChLoSUkj49FrYq4HVkcP2pS8=qamWDDUNOg7aygDwpA@mail.gmail.com>
+        id S2388692AbfJVLeS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Oct 2019 07:34:18 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:53586 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388689AbfJVLeS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Oct 2019 07:34:18 -0400
+Received: by mail-wm1-f66.google.com with SMTP id i13so1562415wmd.3
+        for <linux-next@vger.kernel.org>; Tue, 22 Oct 2019 04:34:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=IqvZAnPdIAaj2SKGWaDS3LqIsor0yVj+Ial5eXW8q20=;
+        b=VOsjkoxk1A6lGUI51FZrRd4FQuiWZVF9xcc+bZL8GpTySFITE2/M1+eXCMgOjnepKm
+         HiTKe+iaNXohB7UoGl6chF6cK5mZWWyjDbIlyD8Zz70wlcLKUuojHSN7T/W01DJYF7J9
+         FgnqWiu+qi7tkLlF1mnfTJ5AQZjCvE9toixkoIE5Q9KxW6hSOFczjWdo5Cwrp2dBF+7P
+         6UifAdZGyddzvf8TY4Ihdd+wkft/O3Uscz0khDCQgFKLb1sFeMzCgB9Veh1CVPZ1dumT
+         KVdBW3qare5KmTJ7yhel4MiAQJ5y1WGRpHUL1959N/wz38GXmz4f5StffOtgKvUqiCXd
+         1Drw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=IqvZAnPdIAaj2SKGWaDS3LqIsor0yVj+Ial5eXW8q20=;
+        b=UiXgxb7X31VTKYpIXGWIzya5RAoWB325KjcltvFX2XzecvG7QkJZcPyrCuylRv/29h
+         LwvyZbhZSJVLxwsRdLamlrYSURgEt3LnqOKtGc05AJt/vxkyEW2yJMIULs68Tk0KXSpm
+         yZ5tOeTG+nxjJasGzhCpxIjAppQQOiH+LOIi7jRPFWH+DS/2QPrlgkGfaRBec/XGZdON
+         9HiPuDNGaJ9njzouq9BHT3Pb886v18BdS0QdKwlvs2GX9G0p5cLO4cwcrtao6yAOPWzs
+         l7qQvvtKsS3jyBdE8TQjiKDDTTG46MYApbQp8W83O5zYOuN1nC9EXYWe+/+7+WvlLXEQ
+         IedA==
+X-Gm-Message-State: APjAAAV9jqTHnceYS3kUX/s9DGVuL/kTlPAmywB3/ZLlyRoFZ38yKt/Q
+        21HAAw2eudzGAIYzzNV9Y9GE7K1WHbEv9Q==
+X-Google-Smtp-Source: APXvYqwrDmcsTbQTs0C46Ote9gpfkCXS3rP/IghfIf/dQzgBDERud/R5ebPnIN8JMVv4CeGEpcNYKQ==
+X-Received: by 2002:a7b:c10f:: with SMTP id w15mr2562720wmi.171.1571744055573;
+        Tue, 22 Oct 2019 04:34:15 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id d2sm9848551wmd.2.2019.10.22.04.34.14
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Oct 2019 04:34:14 -0700 (PDT)
+Message-ID: <5daee936.1c69fb81.e8e17.a8a0@mx.google.com>
+Date:   Tue, 22 Oct 2019 04:34:14 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ditOg80WTfshu/cH67DoS_+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191022
+Subject: next/master boot: 128 boots: 8 failed,
+ 113 passed with 7 offline (next-20191022)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ditOg80WTfshu/cH67DoS_+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 128 boots: 8 failed, 113 passed with 7 offline (next-2019=
+1022)
 
-Hi Amit,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191022/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191022/
 
-On Tue, 22 Oct 2019 15:20:00 +0530 Amit Kucheria <amit.kucheria@linaro.org>=
- wrote:
->=20
-> What compiler version do you use? Any additional flags to make? I'm
-> not seeing this, even with W=3D1.
+Tree: next
+Branch: master
+Git Describe: next-20191022
+Git Commit: a722f75b2923b4fd44c17e7255e822ac48fe85f0
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 55 unique boards, 20 SoC families, 20 builds out of 219
 
-$ x86_64-linux-gnu-gcc --version
-x86_64-linux-gnu-gcc (Debian 9.2.1-8) 9.2.1 20190909
+Boot Failures Detected:
 
-No special flags to make.
---=20
-Cheers,
-Stephen Rothwell
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
 
---Sig_/ditOg80WTfshu/cH67DoS_+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    defconfig+kselftest:
+        gcc-8:
+            rk3399-puma-haikou: 1 failed lab
 
------BEGIN PGP SIGNATURE-----
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2u5YIACgkQAVBC80lX
-0GyvBQf7BLJpVTtVfLB81RiiBipeN3635ygkWaxZETWL8ULKYo2yqKXAv5qlQ3h8
-L4jhve0dIyVUZtnmCDiT2us15a01EkGK/KtMjLUR6p7ujY3H0fSf/5poSwcsKbnL
-yNgnP9ORyCahN5tY516deNXW95x81qXf37MyE34R/mBcTj6xR3qkMIb3uBFaPHTe
-N76zMIEdkLsWgHxYa8cx1Re8pJkCnMS2UQ7Rs7WCwtwc/NgUEsmd+XVLe+jN19UK
-aTC064E2cDZdF3RANzH1LY6iqXejeWKvKKXYa6MdM3tfLuSt4SjGH2TuPnxeAYnt
-UHal5a5yeUJ8skhatfSxl5Qt27E3Gg==
-=nOFJ
------END PGP SIGNATURE-----
+    multi_v7_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
 
---Sig_/ditOg80WTfshu/cH67DoS_+--
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+    tegra_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

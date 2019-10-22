@@ -2,140 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFE5E0ACA
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 19:39:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 061FAE0D17
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 22:10:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726702AbfJVRj3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Oct 2019 13:39:29 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:41415 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726569AbfJVRj3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 22 Oct 2019 13:39:29 -0400
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id D7AE922087;
-        Tue, 22 Oct 2019 13:39:27 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Tue, 22 Oct 2019 13:39:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm2; bh=baQW0mxKH2cZVXvaeNzt6ZclcCk
-        uKhAc2/nHWENB1x8=; b=o2eFswaWfbJMI+SwZ8Mn9QghA7XNSNx4z9xy4eBhXHU
-        AAP95MDPjmUZv71MK+5UmXe/KMjxXL+wUGiM0P7t/ptftHzF2VS2eKQ+h9tDqa3j
-        4BTbTlj7TQv0YG6i1WnOFz5f+A32jBuu78xgLcMnLwIcBxOkiif+LwwvifvCc9sA
-        3sMEVMcD1DyXezqoo3MJnqpfSpz6bXVWALXk/yK+ZXAuTxOVGirgZGBV443Fui1Y
-        vtGRDl2r5S6n0zz0sC6fdH7eEnwTkqoj2GzTVmnCzFDTvB0wwy/3b4/1ufIcETKv
-        woS1E0QOi/07WkyQWAAQxfkF2zBRFxS3dmwAaso2WTA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=baQW0m
-        xKH2cZVXvaeNzt6ZclcCkuKhAc2/nHWENB1x8=; b=C6DrrfhhAGd6Q6neDWk2xr
-        24D078Fa4KMpJZUD+sDWdBBwWDR3Y1KrExTt5UtawLi4EBt0WVXyyVWcI3ZKUbQk
-        7lSfhGIvs4FATvxDCKjwV7IjQNUt1OpoIe3ZxjovPKqale8rCW3Tkw8pdqZUtncG
-        NSQb4Iw77S9CoiEa3KBqjELEXf6o/xa1MekghYuAHYwyWHoCNJNq7SXoshDV+hWu
-        tOPDp382PLTj27CFftAYphjSZA3QO7M8PYGFmOi2RsHUZq42Jp313pvvn+7RRJNy
-        hhPJyqeSvEQWeSCIaIwZcKQnYchEmwl9yg1AhtoLa0E74+y9lQhhk2EDtqqM30Ww
-        ==
-X-ME-Sender: <xms:zj6vXYbK2Fq1Y5VVGxzE177dwwU-lvg0IgBk_VB6w2oDlnv2u-XjTg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrkeejgdduudehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvffukfhfgggtuggjfgesthdtredttdervdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeduieeirddujedvrdduke
-    eirdehieenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhm
-    necuvehluhhsthgvrhfuihiivgeptd
-X-ME-Proxy: <xmx:zj6vXYEYq6S225N6sYZvjimneWVIUil25gVcs2tnxz9WZijlwob--A>
-    <xmx:zj6vXfxwuRWmsZj4xzzgqG05_XPbzw9UIiKNBYZISsl1KQuMInjvFA>
-    <xmx:zj6vXfj2Qckgf5v_yq-s2TxKIOe0g23wXFHtG3YSeE4r5ZWMg4VQOg>
-    <xmx:zz6vXUp0m-MKtt5-PE1bZZenumIXirO2_UoW5RGXL6zzKElZaZopEQ>
-Received: from localhost (mobile-166-172-186-56.mycingular.net [166.172.186.56])
-        by mail.messagingengine.com (Postfix) with ESMTPA id D2CE180061;
-        Tue, 22 Oct 2019 13:39:25 -0400 (EDT)
-Date:   Tue, 22 Oct 2019 13:39:24 -0400
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>, David Howells <dhowells@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: Re: linux-next: manual merge of the char-misc tree with the keys tree
-Message-ID: <20191022173924.GG230934@kroah.com>
-References: <20191022133804.32ef6f86@canb.auug.org.au>
+        id S2388748AbfJVUKw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Oct 2019 16:10:52 -0400
+Received: from ozlabs.org ([203.11.71.1]:59979 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387645AbfJVUKw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Oct 2019 16:10:52 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46yPlF0kH1z9sP6;
+        Wed, 23 Oct 2019 07:10:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1571775049;
+        bh=9PRl8yVUpXPcfwRx4EOOwPnp3sP1faFOnEIpTD5ARm8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aw5J88gmOfdclDDPwGZiWI6yeX5z/J0EEczReCbL798ZCeSYF19yIwlHZFlMsxuL1
+         ytJ7P4JtV3Gbn439pmyOpThHebyGr2S2QJS8zOfMOjMNOHYngJJXQ0i8TkkBKXQdXe
+         j8VZbUy6iRbAylcsOAqlLNq3Tk2piU6BLwW25TqbZf4yYy3hNYOfPsH/gzFYn0vCdx
+         NZPgvAq9s1pN8Ahh9l/XEiUh2Di+nrbG3VXpCERT6MqSanCsq540U87607hpiXYFQe
+         CCa+r54rKBwn/LqYXsIGomsvLJioXoOF1zoegELM7q6B9WFQr5AUXhTRxFLLiezY6J
+         cXvhf6R6jW69Q==
+Date:   Wed, 23 Oct 2019 07:10:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the omap tree
+Message-ID: <20191023071046.3e6109d5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191022133804.32ef6f86@canb.auug.org.au>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Type: multipart/signed; boundary="Sig_/DsA48zTvy8mjIpLkK/c4I.W";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 01:38:04PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the char-misc tree got conflicts in:
-> 
->   samples/Kconfig
->   samples/Makefile
-> 
-> between commit:
-> 
->   0b9c31597d81 ("Add sample notification program")
-> 
-> from the keys tree and commit:
-> 
->   6859eba4f6fb ("samples: mei: use hostprogs kbuild constructs")
-> 
-> from the char-misc tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc samples/Kconfig
-> index d0761f29ccb0,b663d9d24114..000000000000
-> --- a/samples/Kconfig
-> +++ b/samples/Kconfig
-> @@@ -169,11 -169,11 +169,17 @@@ config SAMPLE_VF
->   	  as mount API and statx().  Note that this is restricted to the x86
->   	  arch whilst it accesses system calls that aren't yet in all arches.
->   
->  +config SAMPLE_WATCH_QUEUE
->  +	bool "Build example /dev/watch_queue notification consumer"
->  +	depends on HEADERS_INSTALL
->  +	help
->  +	  Build example userspace program to use the new mount_notify(),
->  +	  sb_notify() syscalls and the KEYCTL_WATCH_KEY keyctl() function.
->  +
-> + config SAMPLE_INTEL_MEI
-> + 	bool "Build example program working with intel mei driver"
-> + 	depends on INTEL_MEI
-> + 	help
-> + 	  Build a sample program to work with mei device.
-> + 
->  -
->   endif # SAMPLES
-> diff --cc samples/Makefile
-> index a61a39047d02,d6062ab25347..000000000000
-> --- a/samples/Makefile
-> +++ b/samples/Makefile
-> @@@ -20,4 -20,4 +20,5 @@@ obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= tr
->   obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
->   obj-y					+= vfio-mdev/
->   subdir-$(CONFIG_SAMPLE_VFS)		+= vfs
->  +subdir-$(CONFIG_SAMPLE_WATCH_QUEUE)	+= watch_queue
-> + obj-$(CONFIG_SAMPLE_INTEL_MEI)		+= mei/
+--Sig_/DsA48zTvy8mjIpLkK/c4I.W
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-Looks good to me, thanks!
+Commit
 
-greg k-h
+  40f3ee0ea7f1 ("ARM: OMAP2+: Drop legacy platform data for dra7 rng")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/DsA48zTvy8mjIpLkK/c4I.W
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2vYkYACgkQAVBC80lX
+0GzT1gf/X3G5hGsvOSXqS6c1YZVhtcjh8fB8sCXsBJWLVU/rjblcVBxLg0vGA5cT
+kZc/tGloxGYNsYB5uSvDqFL1Ie/t2tivIjXYPtdoTW78IVq50R7ZPR44CxDFeGmS
+eqfZYFoWPU3sAQg/9h1jKDjja2G+1PF6GSOJADJCJxzso0wSp5yW03/qOgYBePlz
+3ITUVDJ7EQ4MugLV5wphEf6jLi9kHYnx9IQBLU1qoe56zAdW2FD0BJfNo9tPjYJI
+zq9f0SRr1o7AhJqvsXikGSHC9kVVcludz+YAsUS+KpEdYuPGYRi0r2sU+/T4uK9p
+BvePyW7GkIZO+gIBDEI61zItH8HQtg==
+=EF0J
+-----END PGP SIGNATURE-----
+
+--Sig_/DsA48zTvy8mjIpLkK/c4I.W--

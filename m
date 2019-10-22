@@ -2,2598 +2,781 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B5CDFCBD
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 06:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83C2DFD13
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 07:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730837AbfJVE3i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Oct 2019 00:29:38 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:46656 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725907AbfJVE3h (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Oct 2019 00:29:37 -0400
-Received: by mail-wr1-f65.google.com with SMTP id n15so5501308wrw.13
-        for <linux-next@vger.kernel.org>; Mon, 21 Oct 2019 21:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=4EnCMd+k8mL0EVDZKBfHp9T3SiZDNySg1qCTSKTgYwY=;
-        b=NjPynfs38UupJ5V5X6Uixe+Cv20ijsIs5jKonRPeh21d6Nk4iqlgWeC3AbrHTL6IgH
-         VvADMwAL9PWCYukC3p8dgLIVO/ALKMNkR2MmUGKTbhh8TT717VFYTbQrBC8+5Tr5uZfj
-         nKYncvmEFRGbOxE6Xg0ElbFECujB6pSFwdSysmWQIdbbEaMFqtuQFz4QG3DNW6EmeLzi
-         PqFpUIOpx/IYaDaFtXUgwFn6q5xgwug0Mhhpuf/mkjhJP34hFi2ugYuc5Ty2CzRdW+NZ
-         zXbCxzFz5P1b/OzKp47/EzntkuhemWWSI/nwndM5Z7OYzFiFTm9Pp6wLNPEGzHztxOQ9
-         UvZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=4EnCMd+k8mL0EVDZKBfHp9T3SiZDNySg1qCTSKTgYwY=;
-        b=ZvbtsRnXK82UT2bO648c2/6jrkdrz/I3sCaz/S+x5ztsuS10iJ8NRujZaKin5iCznN
-         NzBEVfoNudu387qtnpBp61cfySIRSZeFRqDoqoUO3JThH8+7gOZRkNFv0C8r5IR4xVn+
-         rmP5UmQO8ujd6WFiwlz8Oim5ERWgJNwyPg5Wpnqjnuh+mNhX+bqAzZV7wpmzZ156jixf
-         jhFDDuDxOQXnLSXX3dlRUEGr2ckaYnE786VbhxTDQpXV66PnW2lYkPj10mfRhuX7Dipp
-         X8XukzmB2VwotF4/9GEAfCAVnewWll/dveGptPJ58GESEitOQmTpGOPczfUMjXS9cG9a
-         RPbg==
-X-Gm-Message-State: APjAAAWDkPgA1ApGoD3JVY5h4FCZWgIMMiiJTTifKPSZ1s+4zc9VbNWr
-        u8/LPuvAoj5zC5PvL9tlqt/1Eb+qGbCYwg==
-X-Google-Smtp-Source: APXvYqy8LXC8UxB6qhV6YpJD98KzxBCXuaWuH5ab/SkWAuSFHT9HkmMFs778ZmVSUmqU9zNnCfkoiA==
-X-Received: by 2002:a5d:4142:: with SMTP id c2mr1329846wrq.208.1571718566663;
-        Mon, 21 Oct 2019 21:29:26 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id q3sm17106276wru.33.2019.10.21.21.29.25
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 21 Oct 2019 21:29:26 -0700 (PDT)
-Message-ID: <5dae85a6.1c69fb81.d8e56.601d@mx.google.com>
-Date:   Mon, 21 Oct 2019 21:29:26 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1730619AbfJVFYX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Oct 2019 01:24:23 -0400
+Received: from ozlabs.org ([203.11.71.1]:39673 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725788AbfJVFYX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 22 Oct 2019 01:24:23 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46y24G6Wlkz9sPk;
+        Tue, 22 Oct 2019 16:24:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1571721855;
+        bh=R7u79oYM9/LjUYABvTBYLQ4zbNOJlVBh9jNAWBiY7+k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=lRslMj7TM63dTweEx2hpc8jK9X8voF0OtAP9ykH9y5MLN6wx72ubnictfYGAydbE2
+         i+Xl5XXszhmd70jWhSnp8cBs/XdiPukQ6Z0u5htgAtLj+hrA+k7HKhbinVxLnKFGfQ
+         q/RBSu3AeFmExKgAlPeqITQ4A0RYFjqak1w7vLrh0qQZpJbev9ilprQKG/imY0XmV3
+         6Z97kpIThwjYpNK05N3TKEPgQ6MxEEKcm5HvqL180RrCYmm+p5dIUcUy3UG/08LUdj
+         sx7Vd/G4chnZOrKJ1QRokeTwm+JPOKxQU92xOSDSydO5A9hluxWWDhwQa0egTog17S
+         oShh8OXcOc5mQ==
+Date:   Tue, 22 Oct 2019 16:24:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Tree for Oct 22
+Message-ID: <20191022162414.20423a79@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.4-rc4-262-gfd132c8ce23e
-Subject: next/pending-fixes build: 215 builds: 0 failed, 215 passed,
- 337 warnings (v5.4-rc4-262-gfd132c8ce23e)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/fhHHP=ZvB9Q9Tw1HRjvIkC/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 215 builds: 0 failed, 215 passed, 337 warnings (v=
-5.4-rc4-262-gfd132c8ce23e)
-
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc4-262-gfd132c8ce23e/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc4-262-gfd132c8ce23e
-Git Commit: fd132c8ce23e3ad02f83ee3c3c9fd19ac8acdbd1
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Warnings Detected:
-
-arc:
-    allnoconfig (gcc-8): 1 warning
-    axs103_defconfig (gcc-8): 2 warnings
-    axs103_smp_defconfig (gcc-8): 2 warnings
-    haps_hs_defconfig (gcc-8): 2 warnings
-    haps_hs_smp_defconfig (gcc-8): 2 warnings
-    hsdk_defconfig (gcc-8): 2 warnings
-    nsim_hs_defconfig (gcc-8): 2 warnings
-    nsim_hs_defconfig (gcc-8): 29 warnings
-    nsim_hs_smp_defconfig (gcc-8): 2 warnings
-    nsimosci_hs_defconfig (gcc-8): 2 warnings
-    nsimosci_hs_smp_defconfig (gcc-8): 2 warnings
-    tinyconfig (gcc-8): 1 warning
-    vdk_hs38_defconfig (gcc-8): 1 warning
-    vdk_hs38_smp_defconfig (gcc-8): 1 warning
-
-arm64:
-    allmodconfig (gcc-8): 2 warnings
-    defconfig (gcc-8): 2 warnings
-    defconfig (gcc-8): 2 warnings
-    defconfig (gcc-8): 2 warnings
-    defconfig (gcc-8): 29 warnings
-
-arm:
-    am200epdkit_defconfig (gcc-8): 1 warning
-    assabet_defconfig (gcc-8): 1 warning
-    at91_dt_defconfig (gcc-8): 1 warning
-    axm55xx_defconfig (gcc-8): 1 warning
-    cm_x2xx_defconfig (gcc-8): 1 warning
-    cm_x300_defconfig (gcc-8): 1 warning
-    cns3420vb_defconfig (gcc-8): 1 warning
-    colibri_pxa270_defconfig (gcc-8): 1 warning
-    colibri_pxa300_defconfig (gcc-8): 1 warning
-    collie_defconfig (gcc-8): 1 warning
-    davinci_all_defconfig (gcc-8): 1 warning
-    dove_defconfig (gcc-8): 1 warning
-    em_x270_defconfig (gcc-8): 1 warning
-    ep93xx_defconfig (gcc-8): 1 warning
-    eseries_pxa_defconfig (gcc-8): 2 warnings
-    exynos_defconfig (gcc-8): 1 warning
-    ezx_defconfig (gcc-8): 1 warning
-    h3600_defconfig (gcc-8): 1 warning
-    h5000_defconfig (gcc-8): 1 warning
-    imote2_defconfig (gcc-8): 1 warning
-    imx_v4_v5_defconfig (gcc-8): 1 warning
-    imx_v6_v7_defconfig (gcc-8): 1 warning
-    integrator_defconfig (gcc-8): 1 warning
-    ixp4xx_defconfig (gcc-8): 1 warning
-    keystone_defconfig (gcc-8): 1 warning
-    lpc32xx_defconfig (gcc-8): 1 warning
-    magician_defconfig (gcc-8): 2 warnings
-    milbeaut_m10v_defconfig (gcc-8): 1 warning
-    mini2440_defconfig (gcc-8): 1 warning
-    mmp2_defconfig (gcc-8): 1 warning
-    multi_v5_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 27 warnings
-    mv78xx0_defconfig (gcc-8): 1 warning
-    mvebu_v5_defconfig (gcc-8): 1 warning
-    mvebu_v7_defconfig (gcc-8): 1 warning
-    mxs_defconfig (gcc-8): 1 warning
-    neponset_defconfig (gcc-8): 1 warning
-    nhk8815_defconfig (gcc-8): 1 warning
-    omap1_defconfig (gcc-8): 1 warning
-    omap2plus_defconfig (gcc-8): 1 warning
-    orion5x_defconfig (gcc-8): 1 warning
-    oxnas_v6_defconfig (gcc-8): 1 warning
-    palmz72_defconfig (gcc-8): 1 warning
-    pcm027_defconfig (gcc-8): 1 warning
-    prima2_defconfig (gcc-8): 1 warning
-    pxa168_defconfig (gcc-8): 1 warning
-    pxa3xx_defconfig (gcc-8): 1 warning
-    pxa910_defconfig (gcc-8): 1 warning
-    qcom_defconfig (gcc-8): 1 warning
-    realview_defconfig (gcc-8): 1 warning
-    s3c2410_defconfig (gcc-8): 1 warning
-    s3c6400_defconfig (gcc-8): 2 warnings
-    s5pv210_defconfig (gcc-8): 1 warning
-    sama5_defconfig (gcc-8): 1 warning
-    shannon_defconfig (gcc-8): 1 warning
-    spear13xx_defconfig (gcc-8): 1 warning
-    sunxi_defconfig (gcc-8): 1 warning
-    tango4_defconfig (gcc-8): 1 warning
-    tegra_defconfig (gcc-8): 1 warning
-    trizeps4_defconfig (gcc-8): 1 warning
-    u300_defconfig (gcc-8): 1 warning
-    u8500_defconfig (gcc-8): 1 warning
-    versatile_defconfig (gcc-8): 1 warning
-    vexpress_defconfig (gcc-8): 1 warning
-    viper_defconfig (gcc-8): 1 warning
-    xcep_defconfig (gcc-8): 1 warning
-    zeus_defconfig (gcc-8): 2 warnings
-
-i386:
-    i386_defconfig (gcc-8): 27 warnings
-
-mips:
-    32r2el_defconfig (gcc-8): 27 warnings
-    bigsur_defconfig (gcc-8): 2 warnings
-    cavium_octeon_defconfig (gcc-8): 2 warnings
-    db1xxx_defconfig (gcc-8): 1 warning
-    decstation_64_defconfig (gcc-8): 2 warnings
-    fuloong2e_defconfig (gcc-8): 2 warnings
-    ip27_defconfig (gcc-8): 2 warnings
-    ip28_defconfig (gcc-8): 2 warnings
-    ip32_defconfig (gcc-8): 2 warnings
-    lemote2f_defconfig (gcc-8): 2 warnings
-    loongson3_defconfig (gcc-8): 2 warnings
-    mips_paravirt_defconfig (gcc-8): 2 warnings
-    nlm_xlp_defconfig (gcc-8): 2 warnings
-    sb1250_swarm_defconfig (gcc-8): 2 warnings
-
-riscv:
-    defconfig (gcc-8): 27 warnings
-    rv32_defconfig (gcc-8): 6 warnings
-
-x86_64:
-    allmodconfig (gcc-8): 2 warnings
-    tinyconfig (gcc-8): 1 warning
-    x86_64_defconfig (gcc-8): 2 warnings
-    x86_64_defconfig (gcc-8): 29 warnings
-    x86_64_defconfig (gcc-8): 2 warnings
-
-
-Warnings summary:
-
-    64   WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    42   include/linux/stddef.h:8:14: warning: initialization of 'unsigned =
-int' from 'void *' makes integer from pointer without a cast [-Wint-convers=
-ion]
-    26   <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    6    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunu=
-sed-variable]
-    5    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_=
-period' defined but not used [-Wunused-function]
-    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
--Wcpp]
-    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
-d [-Wcpp]
-    1    .config:1167:warning: override: UNWINDER_GUESS changes choice state
-    1    ./.tmp.config.wUI9GfiGHa:4832:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.wUI9GfiGHa:4816:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.wUI9GfiGHa:4815:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.wUI9GfiGHa:4811:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.wUI9GfiGHa:4791:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.wUI9GfiGHa:4785:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.wUI9GfiGHa:4776:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.wUI9GfiGHa:4774:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.wUI9GfiGHa:4773:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.wUI9GfiGHa:4772:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.wUI9GfiGHa:4770:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.wUI9GfiGHa:4769:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.wUI9GfiGHa:4766:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.wUI9GfiGHa:4759:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.wUI9GfiGHa:4749:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.wUI9GfiGHa:4738:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.wUI9GfiGHa:4630:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.wUI9GfiGHa:4626:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.wUI9GfiGHa:4601:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.wUI9GfiGHa:4580:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.wUI9GfiGHa:4522:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.wUI9GfiGHa:4521:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.wUI9GfiGHa:4517:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.wUI9GfiGHa:4516:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.wUI9GfiGHa:4514:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.wUI9GfiGHa:4513:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.wUI9GfiGHa:4510:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.dUoCSdyCDl:4893:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.dUoCSdyCDl:4877:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.dUoCSdyCDl:4876:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.dUoCSdyCDl:4872:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.dUoCSdyCDl:4852:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.dUoCSdyCDl:4846:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.dUoCSdyCDl:4837:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.dUoCSdyCDl:4835:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.dUoCSdyCDl:4834:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.dUoCSdyCDl:4833:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.dUoCSdyCDl:4831:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.dUoCSdyCDl:4830:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.dUoCSdyCDl:4827:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.dUoCSdyCDl:4820:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.dUoCSdyCDl:4810:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.dUoCSdyCDl:4799:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.dUoCSdyCDl:4691:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.dUoCSdyCDl:4687:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.dUoCSdyCDl:4662:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.dUoCSdyCDl:4641:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.dUoCSdyCDl:4583:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.dUoCSdyCDl:4582:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.dUoCSdyCDl:4578:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.dUoCSdyCDl:4577:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.dUoCSdyCDl:4575:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.dUoCSdyCDl:4574:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.dUoCSdyCDl:4571:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.SKhjtkMU04:3373:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.SKhjtkMU04:3357:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.SKhjtkMU04:3356:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.SKhjtkMU04:3352:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.SKhjtkMU04:3332:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.SKhjtkMU04:3326:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.SKhjtkMU04:3317:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.SKhjtkMU04:3315:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.SKhjtkMU04:3314:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.SKhjtkMU04:3313:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.SKhjtkMU04:3311:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.SKhjtkMU04:3310:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.SKhjtkMU04:3307:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.SKhjtkMU04:3300:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.SKhjtkMU04:3290:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.SKhjtkMU04:3279:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.SKhjtkMU04:3171:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.SKhjtkMU04:3167:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.SKhjtkMU04:3142:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.SKhjtkMU04:3121:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.SKhjtkMU04:3063:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.SKhjtkMU04:3062:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.SKhjtkMU04:3058:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.SKhjtkMU04:3057:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.SKhjtkMU04:3055:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.SKhjtkMU04:3054:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.SKhjtkMU04:3051:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.QTdFK3RNMg:3981:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.QTdFK3RNMg:3965:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.QTdFK3RNMg:3964:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.QTdFK3RNMg:3960:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.QTdFK3RNMg:3940:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.QTdFK3RNMg:3934:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.QTdFK3RNMg:3925:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.QTdFK3RNMg:3923:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.QTdFK3RNMg:3922:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.QTdFK3RNMg:3921:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.QTdFK3RNMg:3919:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.QTdFK3RNMg:3918:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.QTdFK3RNMg:3915:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.QTdFK3RNMg:3908:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.QTdFK3RNMg:3898:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.QTdFK3RNMg:3887:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.QTdFK3RNMg:3779:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.QTdFK3RNMg:3775:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.QTdFK3RNMg:3750:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.QTdFK3RNMg:3729:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.QTdFK3RNMg:3671:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.QTdFK3RNMg:3670:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.QTdFK3RNMg:3666:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.QTdFK3RNMg:3665:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.QTdFK3RNMg:3663:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.QTdFK3RNMg:3662:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.QTdFK3RNMg:3659:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.MakUkzIkKY:7932:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MakUkzIkKY:7916:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.MakUkzIkKY:7915:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.MakUkzIkKY:7911:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.MakUkzIkKY:7891:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.MakUkzIkKY:7885:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.MakUkzIkKY:7876:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.MakUkzIkKY:7874:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.MakUkzIkKY:7873:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.MakUkzIkKY:7872:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.MakUkzIkKY:7870:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.MakUkzIkKY:7869:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.MakUkzIkKY:7866:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.MakUkzIkKY:7859:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.MakUkzIkKY:7849:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.MakUkzIkKY:7838:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MakUkzIkKY:7730:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.MakUkzIkKY:7726:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MakUkzIkKY:7701:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.MakUkzIkKY:7680:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.MakUkzIkKY:7622:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.MakUkzIkKY:7621:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.MakUkzIkKY:7617:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.MakUkzIkKY:7616:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.MakUkzIkKY:7614:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.MakUkzIkKY:7613:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.MakUkzIkKY:7610:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.MSzd94LC7T:1746:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MSzd94LC7T:1730:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.MSzd94LC7T:1729:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.MSzd94LC7T:1725:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.MSzd94LC7T:1705:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.MSzd94LC7T:1699:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.MSzd94LC7T:1690:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.MSzd94LC7T:1688:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.MSzd94LC7T:1687:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.MSzd94LC7T:1686:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.MSzd94LC7T:1684:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.MSzd94LC7T:1683:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.MSzd94LC7T:1680:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.MSzd94LC7T:1673:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.MSzd94LC7T:1663:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.MSzd94LC7T:1652:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MSzd94LC7T:1544:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.MSzd94LC7T:1540:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.MSzd94LC7T:1515:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.MSzd94LC7T:1494:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.MSzd94LC7T:1436:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.MSzd94LC7T:1435:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.MSzd94LC7T:1431:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.MSzd94LC7T:1430:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.MSzd94LC7T:1428:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.MSzd94LC7T:1427:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.MSzd94LC7T:1424:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.FVCGUL8hsQ:8489:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.FVCGUL8hsQ:8473:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.FVCGUL8hsQ:8472:warning: override: reassigning to sy=
-mbol STAGING
-    1    ./.tmp.config.FVCGUL8hsQ:8468:warning: override: reassigning to sy=
-mbol SECURITYFS
-    1    ./.tmp.config.FVCGUL8hsQ:8448:warning: override: reassigning to sy=
-mbol IPV6_GRE
-    1    ./.tmp.config.FVCGUL8hsQ:8442:warning: override: reassigning to sy=
-mbol NET_CLS_FLOWER
-    1    ./.tmp.config.FVCGUL8hsQ:8433:warning: override: reassigning to sy=
-mbol IPV6
-    1    ./.tmp.config.FVCGUL8hsQ:8431:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.FVCGUL8hsQ:8430:warning: override: reassigning to sy=
-mbol NET_SCHED
-    1    ./.tmp.config.FVCGUL8hsQ:8429:warning: override: reassigning to sy=
-mbol NET_CLS_ACT
-    1    ./.tmp.config.FVCGUL8hsQ:8427:warning: override: reassigning to sy=
-mbol CGROUP_BPF
-    1    ./.tmp.config.FVCGUL8hsQ:8426:warning: override: reassigning to sy=
-mbol TEST_BPF
-    1    ./.tmp.config.FVCGUL8hsQ:8423:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-    1    ./.tmp.config.FVCGUL8hsQ:8416:warning: override: reassigning to sy=
-mbol ANDROID
-    1    ./.tmp.config.FVCGUL8hsQ:8406:warning: override: reassigning to sy=
-mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.FVCGUL8hsQ:8395:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.FVCGUL8hsQ:8287:warning: override: reassigning to sy=
-mbol NET_NS
-    1    ./.tmp.config.FVCGUL8hsQ:8283:warning: override: reassigning to sy=
-mbol USER_NS
-    1    ./.tmp.config.FVCGUL8hsQ:8258:warning: override: reassigning to sy=
-mbol NET_ACT_GACT
-    1    ./.tmp.config.FVCGUL8hsQ:8237:warning: override: reassigning to sy=
-mbol NET_SCH_INGRESS
-    1    ./.tmp.config.FVCGUL8hsQ:8179:warning: override: reassigning to sy=
-mbol VLAN_8021Q
-    1    ./.tmp.config.FVCGUL8hsQ:8178:warning: override: reassigning to sy=
-mbol BRIDGE
-    1    ./.tmp.config.FVCGUL8hsQ:8174:warning: override: reassigning to sy=
-mbol VETH
-    1    ./.tmp.config.FVCGUL8hsQ:8173:warning: override: reassigning to sy=
-mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.FVCGUL8hsQ:8171:warning: override: reassigning to sy=
-mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.FVCGUL8hsQ:8170:warning: override: reassigning to sy=
-mbol NET_VRF
-    1    ./.tmp.config.FVCGUL8hsQ:8167:warning: override: reassigning to sy=
-mbol BPF_SYSCALL
-
-Section mismatches summary:
-
-    5    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    3    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    3    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x7c8): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x3598): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-    1    WARNING: vmlinux.o(.text.unlikely+0x321c): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 27 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    ./.tmp.config.QTdFK3RNMg:3659:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.QTdFK3RNMg:3662:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.QTdFK3RNMg:3663:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.QTdFK3RNMg:3665:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.QTdFK3RNMg:3666:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.QTdFK3RNMg:3670:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.QTdFK3RNMg:3671:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.QTdFK3RNMg:3729:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.QTdFK3RNMg:3750:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.QTdFK3RNMg:3775:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.QTdFK3RNMg:3779:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.QTdFK3RNMg:3887:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.QTdFK3RNMg:3898:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.QTdFK3RNMg:3908:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.QTdFK3RNMg:3915:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.QTdFK3RNMg:3918:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.QTdFK3RNMg:3919:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.QTdFK3RNMg:3921:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.QTdFK3RNMg:3922:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.QTdFK3RNMg:3923:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.QTdFK3RNMg:3925:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.QTdFK3RNMg:3934:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.QTdFK3RNMg:3940:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.QTdFK3RNMg:3960:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.QTdFK3RNMg:3964:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.QTdFK3RNMg:3965:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.QTdFK3RNMg:3981:warning: override: reassigning to symbol =
-USER_NS
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings,=
- 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings,=
- 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x3598): Section mismatch in referenc=
-e from the function pmax_setup_memory_region() to the function .init.text:a=
-dd_memory_region()
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x321c): Section mismatch in referenc=
-e from the function pmax_setup_memory_region() to the function .init.text:a=
-dd_memory_region()
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
-smatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 2 warnings, 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 2 warnings, 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 27 warnings, 0=
- section mismatches
-
-Warnings:
-    ./.tmp.config.SKhjtkMU04:3051:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.SKhjtkMU04:3054:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.SKhjtkMU04:3055:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.SKhjtkMU04:3057:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.SKhjtkMU04:3058:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.SKhjtkMU04:3062:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.SKhjtkMU04:3063:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.SKhjtkMU04:3121:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.SKhjtkMU04:3142:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.SKhjtkMU04:3167:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.SKhjtkMU04:3171:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.SKhjtkMU04:3279:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.SKhjtkMU04:3290:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.SKhjtkMU04:3300:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.SKhjtkMU04:3307:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.SKhjtkMU04:3310:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.SKhjtkMU04:3311:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.SKhjtkMU04:3313:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.SKhjtkMU04:3314:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.SKhjtkMU04:3315:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.SKhjtkMU04:3317:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.SKhjtkMU04:3326:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.SKhjtkMU04:3332:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.SKhjtkMU04:3352:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.SKhjtkMU04:3356:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.SKhjtkMU04:3357:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.SKhjtkMU04:3373:warning: override: reassigning to symbol =
-USER_NS
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 29 warnings, 0=
- section mismatches
-
-Warnings:
-    ./.tmp.config.MakUkzIkKY:7610:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.MakUkzIkKY:7613:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.MakUkzIkKY:7614:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.MakUkzIkKY:7616:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.MakUkzIkKY:7617:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.MakUkzIkKY:7621:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.MakUkzIkKY:7622:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.MakUkzIkKY:7680:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.MakUkzIkKY:7701:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.MakUkzIkKY:7726:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.MakUkzIkKY:7730:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.MakUkzIkKY:7838:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.MakUkzIkKY:7849:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.MakUkzIkKY:7859:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.MakUkzIkKY:7866:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.MakUkzIkKY:7869:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.MakUkzIkKY:7870:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.MakUkzIkKY:7872:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.MakUkzIkKY:7873:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.MakUkzIkKY:7874:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.MakUkzIkKY:7876:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.MakUkzIkKY:7885:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.MakUkzIkKY:7891:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.MakUkzIkKY:7911:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.MakUkzIkKY:7915:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.MakUkzIkKY:7916:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.MakUkzIkKY:7932:warning: override: reassigning to symbol =
-USER_NS
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 27 warning=
-s, 0 section mismatches
-
-Warnings:
-    ./.tmp.config.wUI9GfiGHa:4510:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.wUI9GfiGHa:4513:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.wUI9GfiGHa:4514:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.wUI9GfiGHa:4516:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.wUI9GfiGHa:4517:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.wUI9GfiGHa:4521:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.wUI9GfiGHa:4522:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.wUI9GfiGHa:4580:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.wUI9GfiGHa:4601:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.wUI9GfiGHa:4626:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.wUI9GfiGHa:4630:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.wUI9GfiGHa:4738:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.wUI9GfiGHa:4749:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.wUI9GfiGHa:4759:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.wUI9GfiGHa:4766:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.wUI9GfiGHa:4769:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.wUI9GfiGHa:4770:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.wUI9GfiGHa:4772:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.wUI9GfiGHa:4773:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.wUI9GfiGHa:4774:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.wUI9GfiGHa:4776:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.wUI9GfiGHa:4785:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.wUI9GfiGHa:4791:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.wUI9GfiGHa:4811:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.wUI9GfiGHa:4815:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.wUI9GfiGHa:4816:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.wUI9GfiGHa:4832:warning: override: reassigning to symbol =
-USER_NS
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x7c8): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-lasat_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0=
- section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mips_paravirt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings,=
- 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-msp71xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
- errors, 1 warning, 0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
-=94 PASS, 0 errors, 1 warning, 0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 =
-warning, 0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 27 warn=
-ings, 0 section mismatches
-
-Warnings:
-    ./.tmp.config.FVCGUL8hsQ:8167:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.FVCGUL8hsQ:8170:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.FVCGUL8hsQ:8171:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.FVCGUL8hsQ:8173:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.FVCGUL8hsQ:8174:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.FVCGUL8hsQ:8178:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.FVCGUL8hsQ:8179:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.FVCGUL8hsQ:8237:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.FVCGUL8hsQ:8258:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.FVCGUL8hsQ:8283:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.FVCGUL8hsQ:8287:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.FVCGUL8hsQ:8395:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.FVCGUL8hsQ:8406:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.FVCGUL8hsQ:8416:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.FVCGUL8hsQ:8423:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.FVCGUL8hsQ:8426:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.FVCGUL8hsQ:8427:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.FVCGUL8hsQ:8429:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.FVCGUL8hsQ:8430:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.FVCGUL8hsQ:8431:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.FVCGUL8hsQ:8433:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.FVCGUL8hsQ:8442:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.FVCGUL8hsQ:8448:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.FVCGUL8hsQ:8468:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.FVCGUL8hsQ:8472:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.FVCGUL8hsQ:8473:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.FVCGUL8hsQ:8489:warning: override: reassigning to symbol =
-USER_NS
-
----------------------------------------------------------------------------=
------
-mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nsim_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 29 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    ./.tmp.config.MSzd94LC7T:1424:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.MSzd94LC7T:1427:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.MSzd94LC7T:1428:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.MSzd94LC7T:1430:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.MSzd94LC7T:1431:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.MSzd94LC7T:1435:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.MSzd94LC7T:1436:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.MSzd94LC7T:1494:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.MSzd94LC7T:1515:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.MSzd94LC7T:1540:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.MSzd94LC7T:1544:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.MSzd94LC7T:1652:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.MSzd94LC7T:1663:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.MSzd94LC7T:1673:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.MSzd94LC7T:1680:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.MSzd94LC7T:1683:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.MSzd94LC7T:1684:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.MSzd94LC7T:1686:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.MSzd94LC7T:1687:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.MSzd94LC7T:1688:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.MSzd94LC7T:1690:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.MSzd94LC7T:1699:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.MSzd94LC7T:1705:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.MSzd94LC7T:1725:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.MSzd94LC7T:1729:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.MSzd94LC7T:1730:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.MSzd94LC7T:1746:warning: override: reassigning to symbol =
-USER_NS
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-nsim_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings=
-, 0 section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
-cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
-cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, =
-0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    .config:1167:warning: override: UNWINDER_GUESS changes choice state
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
-atches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 29 war=
-nings, 0 section mismatches
-
-Warnings:
-    ./.tmp.config.dUoCSdyCDl:4571:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.dUoCSdyCDl:4574:warning: override: reassigning to symbol =
-NET_VRF
-    ./.tmp.config.dUoCSdyCDl:4575:warning: override: reassigning to symbol =
-NET_L3_MASTER_DEV
-    ./.tmp.config.dUoCSdyCDl:4577:warning: override: reassigning to symbol =
-IPV6_MULTIPLE_TABLES
-    ./.tmp.config.dUoCSdyCDl:4578:warning: override: reassigning to symbol =
-VETH
-    ./.tmp.config.dUoCSdyCDl:4582:warning: override: reassigning to symbol =
-BRIDGE
-    ./.tmp.config.dUoCSdyCDl:4583:warning: override: reassigning to symbol =
-VLAN_8021Q
-    ./.tmp.config.dUoCSdyCDl:4641:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.dUoCSdyCDl:4662:warning: override: reassigning to symbol =
-NET_ACT_GACT
-    ./.tmp.config.dUoCSdyCDl:4687:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.dUoCSdyCDl:4691:warning: override: reassigning to symbol =
-NET_NS
-    ./.tmp.config.dUoCSdyCDl:4799:warning: override: reassigning to symbol =
-USER_NS
-    ./.tmp.config.dUoCSdyCDl:4810:warning: override: reassigning to symbol =
-NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.dUoCSdyCDl:4820:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.dUoCSdyCDl:4827:warning: override: reassigning to symbol =
-BPF_SYSCALL
-    ./.tmp.config.dUoCSdyCDl:4830:warning: override: reassigning to symbol =
-TEST_BPF
-    ./.tmp.config.dUoCSdyCDl:4831:warning: override: reassigning to symbol =
-CGROUP_BPF
-    ./.tmp.config.dUoCSdyCDl:4833:warning: override: reassigning to symbol =
-NET_CLS_ACT
-    ./.tmp.config.dUoCSdyCDl:4834:warning: override: reassigning to symbol =
-NET_SCHED
-    ./.tmp.config.dUoCSdyCDl:4835:warning: override: reassigning to symbol =
-NET_SCH_INGRESS
-    ./.tmp.config.dUoCSdyCDl:4837:warning: override: reassigning to symbol =
-IPV6
-    ./.tmp.config.dUoCSdyCDl:4846:warning: override: reassigning to symbol =
-NET_CLS_FLOWER
-    ./.tmp.config.dUoCSdyCDl:4852:warning: override: reassigning to symbol =
-IPV6_GRE
-    ./.tmp.config.dUoCSdyCDl:4872:warning: override: reassigning to symbol =
-SECURITYFS
-    ./.tmp.config.dUoCSdyCDl:4876:warning: override: reassigning to symbol =
-STAGING
-    ./.tmp.config.dUoCSdyCDl:4877:warning: override: reassigning to symbol =
-ANDROID
-    ./.tmp.config.dUoCSdyCDl:4893:warning: override: reassigning to symbol =
-USER_NS
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 2 warn=
-ings, 0 section mismatches
-
-Warnings:
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-    include/linux/stddef.h:8:14: warning: initialization of 'unsigned int' =
-from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
-ariable]
-
----------------------------------------------------------------------------=
------
-zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----
-For more info write to <info@kernelci.org>
+--Sig_/fhHHP=ZvB9Q9Tw1HRjvIkC/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Changes since 20191021:
+
+The tip tree lost its build failure.
+
+The char-misc tree gained a conflict against the keys tree.
+
+Non-merge commits (relative to Linus' tree): 5034
+ 5044 files changed, 178274 insertions(+), 83401 deletions(-)
+
+----------------------------------------------------------------------------
+
+I have created today's linux-next tree at
+git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+are tracking the linux-next tree using git, you should not use "git pull"
+to do so as that will try to merge the new linux-next release with the
+old one.  You should use "git fetch" and checkout or reset to the new
+master.
+
+You can see which trees have been included by looking in the Next/Trees
+file in the source.  There are also quilt-import.log and merge.log
+files in the Next directory.  Between each merge, the tree was built
+with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+multi_v7_defconfig for arm and a native build of tools/perf. After
+the final fixups (if any), I do an x86_64 modules_install followed by
+builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+and sparc64 defconfig. And finally, a simple boot test of the powerpc
+pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+
+Below is a summary of the state of the merge.
+
+I am currently merging 310 trees (counting Linus' and 78 trees of bug
+fix patches pending for the current merge release).
+
+Stats about the size of the tree over time can be seen at
+http://neuling.org/linux-next-size.html .
+
+Status of my local build tests will be at
+http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+advice about cross compilers/configs that work, we are always open to add
+more builds.
+
+Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+Gortmaker for triage and bug fixes.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+$ git checkout master
+$ git reset --hard stable
+Merging origin/master (7d194c2100ad Linux 5.4-rc4)
+Merging fixes/master (54ecb8f7028c Linux 5.4-rc1)
+Merging kbuild-current/fixes (7d194c2100ad Linux 5.4-rc4)
+Merging arc-current/for-curr (41277ba7eb4e ARC: mm: tlb flush optim: elide =
+redundant uTLB invalidates for MMUv3)
+Merging arm-current/fixes (2ecb287998a4 ARM: 8926/1: v7m: remove register s=
+ave to stack before svc)
+Merging arm-soc-fixes/arm/fixes (6813a9ce1f99 Merge tag 'arm-soc/for-5.4/de=
+vicetree-fixes' of https://github.com/Broadcom/stblinux into arm/fixes)
+Merging arm64-fixes/for-next/fixes (777d062e5bee Merge branch 'errata/tx2-2=
+19' into for-next/fixes)
+Merging m68k-current/for-linus (0f1979b402df m68k: Remove ioremap_fullcache=
+())
+Merging powerpc-fixes/fixes (d10f60ae27d2 powerpc/32s: fix allow/prevent_us=
+er_access() when crossing segment boundaries.)
+Merging s390-fixes/fixes (062795fcdcb2 s390/uaccess: avoid (false positive)=
+ compiler warnings)
+Merging sparc/master (038029c03e21 sparc: remove unneeded uapi/asm/statfs.h)
+Merging fscrypt-current/for-stable (ae64f9bd1d36 Linux 4.15-rc2)
+Merging net/master (b30605319794 r8152: add device id for Lenovo ThinkPad U=
+SB-C Dock Gen 2)
+Merging bpf/master (05679ca6feeb xdp: Prevent overflow in devmap_hash cost =
+calculation for 32-bit builds)
+Merging ipsec/master (68ce6688a5ba net: sched: taprio: Fix potential intege=
+r overflow in taprio_set_picos_per_byte)
+Merging netfilter/master (503c9addef61 ptp: fix typo of "mechanism" in Kcon=
+fig help text)
+Merging ipvs/master (503c9addef61 ptp: fix typo of "mechanism" in Kconfig h=
+elp text)
+Merging wireless-drivers/master (d79749f7716d ath10k: fix latency issue for=
+ QCA988x)
+Merging mac80211/master (82ad862115c2 Merge branch 'smc-fixes')
+Merging rdma-fixes/for-rc (777a8b32bc0f IB/core: Use rdma_read_gid_l2_field=
+s to compare GID L2 fields)
+Merging sound-current/for-linus (c8d2dcb3e941 Merge tag 'asoc-fix-v5.4-rc4'=
+ of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-=
+linus)
+Merging sound-asoc-fixes/for-linus (e8485d88376c Merge branch 'asoc-5.4' in=
+to asoc-linus)
+Merging regmap-fixes/for-linus (da0c9ea146cb Linux 5.4-rc2)
+Merging regulator-fixes/for-linus (d730b0dd62b4 Merge branch 'regulator-5.4=
+' into regulator-linus)
+Merging spi-fixes/for-linus (fed8d8c7a6dc spi: atmel: fix handling of cs_ch=
+ange set on non-last xfer)
+Merging pci-current/for-linus (54ecb8f7028c Linux 5.4-rc1)
+Merging driver-core.current/driver-core-linus (82af5b660967 sysfs: Fixes __=
+BIN_ATTR_WO() macro)
+Merging tty.current/tty-linus (f50b6805dbb9 8250-men-mcb: fix error checkin=
+g when get_num_ports returns -ENODEV)
+Merging usb.current/usb-linus (9794476942d8 usb: cdns3: Error out if USB_DR=
+_MODE_UNKNOWN in cdns3_core_init_role())
+Merging usb-gadget-fixes/fixes (4a56a478a525 usb: gadget: mass_storage: Fix=
+ races between fsg_disable and fsg_set_alt)
+Merging usb-serial-fixes/usb-linus (bc25770f00d3 USB: serial: ti_usb_3410_5=
+052: clean up serial data access)
+Merging usb-chipidea-fixes/ci-for-usb-stable (16009db47c51 usb: chipidea: u=
+dc: workaround for endpoint conflict issue)
+Merging phy/fixes (68eeb39a53d5 phy: qcom-usb-hs: Fix extcon double registe=
+r after power cycle)
+Merging staging.current/staging-linus (153c5d8191c2 staging: wlan-ng: fix e=
+xit return when sme->key_idx >=3D NUM_WEPKEYS)
+Merging char-misc.current/char-misc-linus (45d02f79b539 binder: Don't modif=
+y VMA bounds in ->mmap handler)
+Merging soundwire-fixes/fixes (cf9249626f72 soundwire: intel: fix intel_reg=
+ister_dai PDI offsets and numbers)
+Merging thunderbolt-fixes/fixes (747125db6dcd thunderbolt: Drop unnecessary=
+ read when writing LC command in Ice Lake)
+Merging input-current/for-linus (b1a402e75a5f Input: st1232 - fix reporting=
+ multitouch coordinates)
+Merging crypto-current/master (f703964fc668 crypto: arm/aes-ce - add depend=
+ency on AES library)
+Merging ide/master (baf6722aa0cb ide: Use dev_get_drvdata where possible)
+Merging vfio-fixes/for-linus (95f89e090618 vfio/type1: Initialize resv_msi_=
+base)
+Merging kselftest-fixes/fixes (303e6218ecec selftests: Fix O=3D and KBUILD_=
+OUTPUT handling for relative paths)
+Merging modules-fixes/modules-linus (69923208431e symbol namespaces: revert=
+ to previous __ksymtab name scheme)
+Merging slave-dma-fixes/fixes (ec1ac309596a dmaengine: sprd: Fix the possib=
+le memory leak issue)
+Merging backlight-fixes/for-backlight-fixes (e93c9c99a629 Linux 5.1)
+Merging mtd-fixes/mtd/fixes (df8fed831cbc mtd: rawnand: au1550nd: Fix au_re=
+ad_buf16() prototype)
+Merging mfd-fixes/for-mfd-fixes (4d82fa67dd6b mfd: rk808: Make PM function =
+declaration static)
+Merging v4l-dvb-fixes/fixes (3e84a18a259e media: meson/ao-cec: move cec_not=
+ifier_cec_adap_register after hw setup)
+Merging reset-fixes/reset/fixes (a71dcd3757e2 reset: remove redundant null =
+check on pointer dev)
+Merging mips-fixes/mips-fixes (8a1bef4193e8 mips: vdso: Fix __arch_get_hw_c=
+ounter())
+Merging at91-fixes/at91-fixes (54ecb8f7028c Linux 5.4-rc1)
+Merging omap-fixes/fixes (6aed5a0e0f56 Merge branch 'watchdog-fix' into fix=
+es)
+Merging kvm-fixes/master (da0c9ea146cb Linux 5.4-rc2)
+Merging kvms390-fixes/master (53936b5bf35e KVM: s390: Do not leak kernel st=
+ack data in the KVM_S390_INTERRUPT ioctl)
+Merging hwmon-fixes/hwmon (6fc28b7e0aac hwmon: (nct7904) Fix the incorrect =
+value of vsen_mask & tcpu_mask & temp_mode in nct7904_data struct.)
+Merging nvdimm-fixes/libnvdimm-fixes (4c806b897d60 libnvdimm/region: Enable=
+ MAP_SYNC for volatile regions)
+Merging btrfs-fixes/next-fixes (9b2a091c6b3c Merge branch 'misc-5.4' into n=
+ext-fixes)
+Merging vfs-fixes/fixes (de80166a573d aio: Fix io_pgetevents() struct __com=
+pat_aio_sigset layout)
+Merging dma-mapping-fixes/for-linus (9c24eaf81cc4 iommu/vt-d: Return the co=
+rrect dma mask when we are bypassing the IOMMU)
+Merging i3c-fixes/master (6fbc7275c7a9 Linux 5.2-rc7)
+Merging drivers-x86-fixes/fixes (7d194c2100ad Linux 5.4-rc4)
+Merging samsung-krzk-fixes/fixes (54ecb8f7028c Linux 5.4-rc1)
+Merging pinctrl-samsung-fixes/pinctrl-fixes (5f9e832c1370 Linus 5.3-rc1)
+Merging devicetree-fixes/dt/linus (f437ade3296b dt-bindings: phy: lantiq: F=
+ix Property Name)
+Merging scsi-fixes/fixes (74e5e468b664 scsi: ufs-bsg: Wake the device befor=
+e sending raw upiu commands)
+Merging drm-fixes/drm-fixes (5c1e34b5159e Merge tag 'drm-misc-fixes-2019-10=
+-17' of git://anongit.freedesktop.org/drm/drm-misc into drm-fixes)
+Merging amdgpu-fixes/drm-fixes (c0e70e10b11b drm/amd/display: fix dcn21 Mak=
+efile for clang)
+Merging drm-intel-fixes/for-linux-next-fixes (0a544a2a728e drm/i915: Fixup =
+preempt-to-busy vs resubmission of a virtual request)
+Merging mmc-fixes/fixes (2bb9f7566ba7 mmc: mxs: fix flags passed to dmaengi=
+ne_prep_slave_sg)
+Merging rtc-fixes/rtc-fixes (5f9e832c1370 Linus 5.3-rc1)
+Merging gnss-fixes/gnss-linus (54ecb8f7028c Linux 5.4-rc1)
+Merging hyperv-fixes/hyperv-fixes (83b50f83a968 Drivers: hv: vmbus: Fix har=
+mless building warnings without CONFIG_PM_SLEEP)
+Merging soc-fsl-fixes/fix (5674a92ca4b7 soc/fsl/qe: Fix an error code in qe=
+_pin_request())
+Merging risc-v-fixes/fixes (2919fb6a05c6 riscv: for C functions called only=
+ from assembly, mark with __visible)
+Merging pidfd-fixes/fixes (28f9baed3d50 pidfd: avoid linux/wait.h and sys/w=
+ait.h name clashes)
+Merging fpga-fixes/fixes (dec43da46f63 fpga: altera-ps-spi: Fix getting of =
+optional confd gpio)
+Merging spdx/spdx-linus (02dc96ef6c25 Merge git://git.kernel.org/pub/scm/li=
+nux/kernel/git/netdev/net)
+Merging gpio-intel-fixes/fixes (7d194c2100ad Linux 5.4-rc4)
+Merging pinctrl-intel-fixes/fixes (63bdef6cd694 pinctrl: cherryview: Fix ir=
+q_valid_mask calculation)
+Merging erofs-fixes/fixes (da0c9ea146cb Linux 5.4-rc2)
+Merging drm-misc-fixes/for-linux-next-fixes (8ae501e295cc drm/komeda: Fix t=
+ypos in komeda_splitter_validate)
+Merging kspp-gustavo/for-next/kspp (da0c9ea146cb Linux 5.4-rc2)
+Merging kbuild/for-next (f99cf1320f6a modpost: do not set ->preloaded for s=
+ymbols from Module.symvers)
+Merging compiler-attributes/compiler-attributes (54ecb8f7028c Linux 5.4-rc1)
+Merging leaks/leaks-next (9e98c678c2d6 Linux 5.1-rc1)
+Merging dma-mapping/for-next (c7d9eccb3c1e mmc: renesas_sdhi_internal_dmac:=
+ Add MMC_CAP2_MERGE_CAPABLE)
+Merging asm-generic/master (9b87647c665d asm-generic: add unlikely to defau=
+lt BUG_ON(x))
+Merging arc/for-next (6fbc7275c7a9 Linux 5.2-rc7)
+Merging arm/for-next (5d90a6bc84c4 Merge branches 'fixes' and 'misc' into f=
+or-next)
+Merging arm64/for-next/core (485fadf618d9 Merge branches 'for-next/elf-hwca=
+p-docs', 'for-next/smccc-conduit-cleanup', 'for-next/zone-dma', 'for-next/r=
+elax-icc_pmr_el1-sync' and 'for-next/misc' into for-next/core)
+Merging arm-perf/for-next/perf (c8b0de762e0b perf/smmuv3: use devm_platform=
+_ioremap_resource() to simplify code)
+Merging arm-soc/for-next (061fbdeb65c1 Merge branch 'arm/fixes' into for-ne=
+xt)
+Merging amlogic/for-next (c4eab2ec3e60 Merge branch 'v5.5/dt64' into tmp/am=
+l-rebuild)
+Merging aspeed/for-next (d547dba956ed dts: ARM: aspeed: Migrate away from a=
+speed, g[45].* compatibles)
+Merging at91/at91-next (ba9b1009f561 Merge branches 'at91-drivers', 'at91-s=
+oc', 'at91-dt' and 'at91-defconfig' into at91-next)
+Merging bcm2835/for-next (f14234184671 Merge branch 'bcm2835-maintainers-ne=
+xt' into for-next)
+Merging imx-mxs/for-next (1b67d0ba75fc Merge branch 'imx/defconfig' into fo=
+r-next)
+Merging keystone/next (35096b5f4619 Merge branch 'for_5.5/driver-soc' into =
+next)
+Merging mediatek/for-next (4ae1ce88e9a0 Merge branch 'v5.3-next/soc' into f=
+or-next)
+Merging mvebu/for-next (3aa22be2d6b1 Merge branch 'mvebu/dt64' into mvebu/f=
+or-next)
+Merging omap/for-next (e4cda0eb9cf9 Merge branch 'omap-for-v5.5/dt' into fo=
+r-next)
+Merging qcom/for-next (5d15b432b91b Merge branches 'arm64-for-5.5', 'arm64-=
+defconfig-for-5.5', 'defconfig-for-5.5' 'drivers-for-5.5' and 'dts-for-5.5'=
+ into for-next)
+Merging realtek/for-next (dac6491ec7b9 Merge branch 'v5.5/arm64' into next)
+Merging renesas/next (117ae53b4376 Merge branch 'renesas-arm64-dt-for-v5.5'=
+ into renesas-next)
+Merging reset/reset/next (bdb369e1e98a reset: add support for the Meson-A1 =
+SoC Reset Controller)
+Merging rockchip/for-next (c188a2514213 Merge branch 'v5.5-armsoc/dts64' in=
+to for-next)
+Merging samsung-krzk/for-next (0228b0ee789c Merge branch 'next/defconfig' i=
+nto for-next)
+CONFLICT (content): Merge conflict in arch/arm/configs/multi_v7_defconfig
+Merging scmi/for-linux-next (7d194c2100ad Linux 5.4-rc4)
+Merging sunxi/sunxi/for-next (cbff93b859d0 Merge branch 'sunxi/dt-for-5.5' =
+into sunxi/for-next)
+Merging tegra/for-next (eff2c140050c Merge branch for-5.5/arm64/dt into for=
+-next)
+Merging clk/clk-next (c5fd5bc400d4 Merge branch 'clk-fixes' into clk-next)
+CONFLICT (content): Merge conflict in drivers/clk/imx/clk-imx8mn.c
+Merging clk-samsung/for-next (a188339ca5a3 Linux 5.2-rc1)
+Merging c6x/for-linux-next (8adcc59974b8 Merge branch 'work.misc' of git://=
+git.kernel.org/pub/scm/linux/kernel/git/viro/vfs)
+Merging csky/linux-next (044cf5e15357 csky: Initial stack protector support)
+Merging h8300/h8300-next (a5de8865cb3e h8300: move definition of __kernel_s=
+ize_t etc. to posix_types.h)
+Merging ia64/next (0d3d343560ba genirq: remove the is_affinity_mask_valid h=
+ook)
+Merging m68k/for-next (7cf78b6b12fd m68k: q40: Fix info-leak in rtc_ioctl)
+Merging m68knommu/for-next (0e6e793c1872 m68k/coldfire: Use CONFIG_PREEMPTI=
+ON)
+Merging microblaze/next (39014c45467f microblaze: entry: Remove unneeded ne=
+ed_resched() loop)
+Merging mips/mips-next (9dd422f69777 MIPS: Make builtin_cmdline const & var=
+iable length)
+Merging nds32/next (932296120543 nds32: add new emulations for floating poi=
+nt instruction)
+Merging nios2/for-next (91d99a724e9c nios2: force the string buffer NULL-te=
+rminated)
+Merging openrisc/for-next (f3b17320db25 openrisc: map as uncached in iorema=
+p)
+Merging parisc-hd/for-next (52b2d91752a8 parisc: Do not hardcode registers =
+in checksum functions)
+Merging powerpc/next (612ee81b9461 powerpc/papr_scm: Fix an off-by-one chec=
+k in papr_scm_meta_{get, set})
+Merging fsl/next (63d86876f324 Revert "powerpc/fsl_pci: simplify fsl_pci_dm=
+a_set_mask")
+Merging soc-fsl/next (eadf0b17b43d bus: fsl-mc: remove explicit device_link=
+_del)
+Merging risc-v/for-next (06aab885d13c RISC-V: Remove unsupported isa string=
+ info print)
+Merging sifive/for-next (467e050e9760 Merge branch 'i2c/for-current' of git=
+://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux)
+Merging s390/features (89d0180a60fc s390/Kconfig: add z13s and z14 ZR1 to T=
+UNE descriptions)
+Merging sh/sh-next (baf58858e8b6 sh: prefer __section from compiler_attribu=
+tes.h)
+CONFLICT (modify/delete): arch/sh/include/uapi/asm/types.h deleted in sh/sh=
+-next and modified in HEAD. Version HEAD of arch/sh/include/uapi/asm/types.=
+h left in tree.
+CONFLICT (modify/delete): arch/sh/include/uapi/asm/setup.h deleted in sh/sh=
+-next and modified in HEAD. Version HEAD of arch/sh/include/uapi/asm/setup.=
+h left in tree.
+$ git rm -f arch/sh/include/uapi/asm/setup.h arch/sh/include/uapi/asm/types=
+.h
+Merging sparc-next/master (b71acb0e3721 Merge branch 'linus' of git://git.k=
+ernel.org/pub/scm/linux/kernel/git/herbert/crypto-2.6)
+Merging uml/linux-next (73625ed66389 um: irq: Fix LAST_IRQ usage in init_IR=
+Q())
+Merging xtensa/xtensa-for-next (d3dfad7f5d98 Merge branch 'xtensa-5.4-fixes=
+' into xtensa-for-next)
+Merging fscrypt/master (065ab4c4701f docs: ioctl-number: document fscrypt i=
+octl numbers)
+Merging afs/afs-next (a0753c29004f afs: Support RCU pathwalk)
+Merging btrfs/for-next (d817e55254a9 Merge branch 'for-next-next-v5.4-20191=
+017' into for-next-20191017)
+Merging ceph/master (25e6be21230d rbd: cancel lock_dwork if the wait is int=
+errupted)
+Merging cifs/for-next (7e0b8a0fadfe cifs: Don't display RDMA transport on r=
+econnect)
+Merging configfs/for-next (e9c03af21cc7 configfs: calculate the symlink tar=
+get only once)
+Merging ecryptfs/next (b4a81b87a4cf ecryptfs: fix a memory leak bug in ecry=
+ptfs_init_messaging())
+Merging erofs/dev (6b42c3370e83 erofs: set iowait for sync decompression)
+Merging ext3/for_next (3c30ca1854eb Merge sparse fixes from Ben Dooks.)
+Merging ext4/dev (040823b5372b Merge tag 'unicode-next-v5.4' of https://git=
+.kernel.org/pub/scm/linux/kernel/git/krisman/unicode into dev)
+Merging f2fs/dev (b145b0eb2031 Merge tag 'for-linus' of git://git.kernel.or=
+g/pub/scm/virt/kvm/kvm)
+Merging fsverity/fsverity (95ae251fe828 f2fs: add fs-verity support)
+Merging fuse/for-next (a9bfd9dd3417 virtiofs: Retry request submission from=
+ worker context)
+Merging jfs/jfs-next (a5fdd713d256 jfs: fix bogus variable self-initializat=
+ion)
+Merging nfs/linux-next (4f5cafb5cb84 Linux 5.4-rc3)
+Merging nfs-anna/linux-next (e6687f43745b SUNRPC: Destroy the back channel =
+when we destroy the host transport)
+Merging nfsd/nfsd-next (5fcaf6982d11 sunrpc: fix crash when cache_head beco=
+me valid before update)
+Merging orangefs/for-next (e6b998ab62be orangefs: remove redundant assignme=
+nt to err)
+Merging overlayfs/overlayfs-next (5c2e9f346b81 ovl: filter of trusted xattr=
+ results in audit)
+Merging ubifs/linux-next (6a379f67454a jffs2: Fix memory leak in jffs2_scan=
+_eraseblock() error path)
+Merging v9fs/9p-next (aafee43b7286 9p/vfs_super.c: Remove unused parameter =
+data in v9fs_fill_super)
+Merging xfs/for-next (1e190f8e8098 xfs: improve the IOMAP_NOWAIT check for =
+COW inodes)
+Merging iomap/iomap-for-next (c039b9979272 iomap: use a srcmap for a read-m=
+odify-write I/O)
+Merging djw-vfs/vfs-for-next (7118dd2d41af splice: only read in as much inf=
+ormation as there is pipe buffer space)
+Merging file-locks/locks-next (b41dae061bbd Merge tag 'xfs-5.4-merge-7' of =
+git://git.kernel.org/pub/scm/fs/xfs/xfs-linux)
+Merging vfs/for-next (3e501af8dd7b Merge branches 'work.misc', 'work.mount3=
+', 'work.namei', 'work.dcache' and 'work.autofs' into for-next)
+Merging printk/for-next (4a6442ff627f Merge branch 'for-5.5-pr-warn' into f=
+or-next)
+Merging pci/next (444aedb8242c Merge branch 'remotes/lorenzo/pci/misc')
+Merging pstore/for-next/pstore (609488bc979f Linux 5.3-rc2)
+Merging hid/for-next (1b8e121a4d7e Merge branch 'for-5.4/upstream-fixes' in=
+to for-next)
+Merging i2c/i2c/for-next (5cf1d40fc564 Merge branch 'i2c/for-current' into =
+i2c/for-next)
+Merging i3c/i3c/next (f12b524ea386 i3c: master: use i3c_dev_get_master())
+Merging dmi/master (c11f2bc422b9 firmware: dmi: Fix unlikely out-of-bounds =
+read in save_mem_devices)
+Merging hwmon-staging/hwmon-next (ce94d84d98fb hwmon: (ina3221) Add summati=
+on feature support)
+Merging jc_docs/docs-next (85c2a0edcd5f docs: remove :c:func: from generici=
+rq.rst)
+CONFLICT (content): Merge conflict in Documentation/admin-guide/cgroup-v2.r=
+st
+Merging v4l-dvb/master (6ce1d376d33e media: docs-rst: Document m2m stateles=
+s video decoder interface)
+Merging v4l-dvb-next/master (167f4555184b Merge branch fixes_for_upstream i=
+nto to_next)
+Merging fbdev/fbdev-for-next (732146a3f1dc video: fbdev: imxfb: fix a typo =
+in imxfb_probe())
+Merging pm/linux-next (4228ff32d0f9 Merge branches 'acpi-utils', 'acpi-plat=
+form', 'acpi-doc' and 'acpi-video' into linux-next)
+CONFLICT (content): Merge conflict in lib/test_printf.c
+Merging cpufreq-arm/cpufreq/arm/linux-next (e318d2c8f32d cpufreq: vexpress-=
+spc: fix some coding style issues)
+Merging cpupower/cpupower (7e5705c635ec tools/power/cpupower: Fix initializ=
+er override in hsw_ext_cstates)
+Merging opp/opp/linux-next (0593074fc461 PM / OPP: Support adjusting OPP vo=
+ltages at runtime)
+Merging thermal/thermal/linux-next (e63721e1b4bd cpufreq: qcom-hw: Move dri=
+ver initialization earlier)
+Merging thermal-rzhang/next (54ecb8f7028c Linux 5.4-rc1)
+Merging thermal-soc/next (6c375eccded4 thermal: db8500: Rewrite to be a pur=
+e OF sensor)
+Merging ieee1394/for-next (812cd88749e0 firewire: mark expected switch fall=
+-throughs)
+Merging dlm/next (a48f9721e6db dlm: no need to check return value of debugf=
+s_create functions)
+Merging swiotlb/linux-next (4cdfb27ba80d xen/swiotlb: remember having calle=
+d xen_create_contiguous_region())
+Merging rdma/for-next (45b268543a8d RDMA/uapi: Fix and re-organize the usag=
+e of rdma_driver_id)
+Merging net-next/master (985fd98ab5cc net/sched: act_police: re-use tcf_tm_=
+dump())
+Merging bpf-next/master (46a4a97063a0 Merge branch 'bpf-libbpf-cleanups')
+Merging ipsec-next/master (fd1ac07f3f17 xfrm: ifdef setsockopt(UDP_ENCAP_ES=
+PINUDP/UDP_ENCAP_ESPINUDP_NON_IKE))
+Merging mlx5-next/mlx5-next (7d47433cf74f net/mlx5: Expose optimal performa=
+nce scatter entries capability)
+Merging netfilter-next/master (0a9b33850073 netfilter: nft_tproxy: Fix typo=
+ in IPv6 module description.)
+Merging nfc-next/master (1f008cfec5d5 NFC: fdp: Fix unused variable warning=
+s)
+CONFLICT (content): Merge conflict in drivers/nfc/st21nfca/se.c
+Merging ipvs-next/master (0a9b33850073 netfilter: nft_tproxy: Fix typo in I=
+Pv6 module description.)
+Merging wireless-drivers-next/master (89dca86d29b4 rtw88: mark rtw_fw_hdr _=
+_packed)
+Merging bluetooth/master (3347a80965b3 Bluetooth: hci_bcm: Fix RTS handling=
+ during startup)
+Merging mac80211-next/master (7dfd8ac32730 mac80211_hwsim: add support for =
+OCB)
+Merging gfs2/for-next (821087444e4d gfs2: make gfs2_fs_parameters static)
+Merging mtd/mtd/next (b34c095ca609 mtd: st_spi_fsm: remove unused field fro=
+m struct stfsm)
+Merging nand/nand/next (5121b4219972 dt-bindings: mtd: Add Cadence NAND con=
+troller driver)
+Merging spi-nor/spi-nor/next (7d194c2100ad Linux 5.4-rc4)
+Merging crypto/master (1510fd40471a crypto: inside-secure - Made locally us=
+ed safexcel_pci_remove() static)
+Merging drm/drm-next (7ed093602e0e Merge tag 'drm-misc-next-2019-10-09-2' o=
+f git://anongit.freedesktop.org/drm/drm-misc into drm-next)
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/selftests/i915_g=
+em.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_request.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_drv.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/intel_lrc.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gem/i915_gem_pm.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gem/i915_gem_mma=
+n.c
+Applying: cec: fix up for "cec: add cec_adapter to cec_notifier_cec_adap_un=
+register()"
+Applying: drm/i915/userptr: fix up bad automaic merge
+Merging amdgpu/drm-next (4fa38f3ebd2f drm/amdgpu/powerplay: use local renoi=
+r array sizes for clock fetching)
+CONFLICT (content): Merge conflict in include/uapi/linux/kfd_ioctl.h
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/powerplay/renoir_=
+ppt.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/powerplay/amd_pow=
+erplay.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/display/amdgpu_dm=
+/amdgpu_dm_mst_types.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdkfd/kfd_priv.h
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdkfd/kfd_charde=
+v.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/amdgpu_drv=
+.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/amdgpu/Makefile
+Merging drm-intel/for-linux-next (458863e08e13 drm/i915: Mark contents as d=
+irty on a write fault)
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/selftests/i915_g=
+em.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_request.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_drv.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gem/i915_gem_pm.c
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gem/i915_gem_mma=
+n.c
+Merging drm-tegra/drm/tegra/for-next (609b7d8c1885 gpu: host1x: Make host1x=
+_cdma_wait_pushbuffer_space() static)
+Merging drm-misc/for-linux-next (2b6f5883edcc drm/komeda: Dump SC_ENH_* reg=
+isters from scaler block)
+CONFLICT (content): Merge conflict in drivers/gpu/drm/panfrost/panfrost_job=
+.c
+Merging drm-msm/msm-next (8856c5064834 drm/msm/mdp5: make config variables =
+static)
+Merging mali-dp/for-upstream/mali-dp (f634c6a80287 dt/bindings: display: Ad=
+d optional property node define for Mali DP500)
+Merging imx-drm/imx-drm/next (4d24376370fb gpu: ipu-v3: image-convert: only=
+ sample into the next tile if necessary)
+Merging etnaviv/etnaviv/next (22567d017c2c dt-bindings: etnaviv: Add #cooli=
+ng-cells)
+Merging regmap/for-next (da0c9ea146cb Linux 5.4-rc2)
+Merging sound/for-next (46b4bff6572b PCI: Fix missing inline for pci_pr3_pr=
+esent())
+Merging sound-asoc/for-next (d62c9a0358d0 Merge branch 'asoc-5.5' into asoc=
+-next)
+CONFLICT (content): Merge conflict in sound/soc/samsung/Kconfig
+CONFLICT (content): Merge conflict in sound/soc/intel/boards/Kconfig
+Applying: ASOC: SOF: dai-imx.h needs linux/types.h
+Merging modules/modules-next (54ecb8f7028c Linux 5.4-rc1)
+Merging input/next (688f1dfb69b4 Input: keyboard - imx_sc: Add i.MX system =
+controller key support)
+Merging block/for-next (5c60226fe407 Merge branch 'for-5.5/io_uring' into f=
+or-next)
+Merging device-mapper/for-next (13bd677a472d dm cache: fix bugs when a GFP_=
+NOWAIT allocation fails)
+Merging mmc/next (d5a61d2a96b3 Merge branch 'fixes' into next)
+Merging md/for-next (e820d55cb99d md: fix raid10 hang issue caused by barri=
+er)
+Merging mfd/for-mfd-next (72303a6a9c80 mfd: twl: Endian fixups in i2c write=
+ and read wrappers)
+Merging backlight/for-backlight-next (c0b64faf0fe6 backlight: pwm_bl: Set s=
+cale type for brightness curves specified in the DT)
+Merging battery/for-next (e3da2ce04e12 power: supply: cpcap-charger: cpcap_=
+charger_voltage_to_regval() can be static)
+Merging regulator/for-next (4c96365fbfaf Merge branch 'regulator-5.5' into =
+regulator-next)
+Merging security/next-testing (45893a0abee6 kexec: Fix file verification on=
+ S390)
+Merging apparmor/apparmor-next (136db994852a apparmor: increase left match =
+history buffer size)
+Merging integrity/next-integrity (2a7f0e53daf2 ima: ima_api: Use struct_siz=
+e() in kzalloc())
+Merging keys/keys-next (48274e1e5d24 Merge branch 'notifications-core' into=
+ keys-next)
+Merging selinux/next (42345b68c2e3 selinux: default_range glblub implementa=
+tion)
+Merging smack/for-next (92604e825304 smack: use GFP_NOFS while holding inod=
+e_smack::smk_lock)
+Merging tomoyo/master (79c8ca578dbf Revert "printk: Monitor change of conso=
+le loglevel.")
+Merging tpmdd/next (e13cd21ffd50 tpm: Wrap the buffer from the caller to tp=
+m_buf in tpm_send())
+Merging watchdog/master (ca2fc5efffde watchdog: f71808e_wdt: Add F81803 sup=
+port)
+Merging iommu/next (313df38144c8 Merge branches 'iommu/fixes', 'arm/qcom', =
+'arm/renesas', 'arm/rockchip', 'arm/mediatek', 'arm/tegra', 'x86/amd', 'x86=
+/vt-d' and 'core' into next)
+Merging vfio/next (026948f01eac vfio/type1: remove hugepage checks in is_in=
+valid_reserved_pfn())
+Merging audit/next (245d73698ed7 audit: Report suspicious O_CREAT usage)
+Merging devicetree/for-next (e5367b4f6153 dt-bindings: gpu: samsung-rotator=
+: Fix indentation)
+CONFLICT (content): Merge conflict in Documentation/devicetree/bindings/usb=
+/generic-ehci.yaml
+Merging mailbox/mailbox-for-next (556a0964e28c mailbox: qcom-apcs: fix max_=
+register value)
+Merging spi/for-next (c673f2d99c3d Merge remote-tracking branch 'spi/topic/=
+ptp' into spi-next)
+Merging tip/auto-latest (ad444b595597 Merge branch 'core/objtool')
+CONFLICT (content): Merge conflict in samples/bpf/Makefile
+CONFLICT (content): Merge conflict in include/linux/security.h
+CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gem/i915_gem_shr=
+inker.c
+Applying: drm/i915: update for mutex_release API change
+Merging clockevents/timers/drivers/next (97c18a4b4c87 clocksource/drivers/r=
+enesas-ostm: Use unique device name instead of ostm)
+Merging edac/edac-for-next (e80634a75aba EDAC, skx: Retrieve and print retr=
+y_rd_err_log registers)
+Merging irqchip/irq/irqchip-next (bb0fed1c60cc irqchip/sifive-plic: Switch =
+to fasteoi flow)
+Merging ftrace/for-next (8ed4889eb831 selftests/ftrace: Fix same probe erro=
+r test)
+Merging rcu/rcu/next (049b405029c0 MAINTAINERS: Update from paulmck@linux.i=
+bm.com to paulmck@kernel.org)
+Merging kvm/linux-next (da0c9ea146cb Linux 5.4-rc2)
+Merging kvm-arm/next (2b82590ba231 Merge branch 'kvm-arm64/stolen-time' int=
+o kvmarm-master/next)
+Merging kvm-ppc/kvm-ppc-next (ff42df49e75f KVM: PPC: Book3S HV: Don't lose =
+pending doorbell request on migration on P9)
+Merging kvms390/next (c7b7de631246 KVM: s390: Do not yield when target is a=
+lready running)
+Merging xen-tip/linux-next (ee7f5225dc3c xen: Stop abusing DT of_dma_config=
+ure API)
+Merging percpu/for-next (825dbc6ff7a3 percpu: add __percpu to SHIFT_PERCPU_=
+PTR)
+Merging workqueues/for-next (30ae2fc0a75e workqueue: Minor follow-ups to th=
+e rescuer destruction change)
+Merging drivers-x86/for-next (1aa7177cdcb3 tools/power/x86/intel-speed-sele=
+ct: Implement base-freq commands on CascadeLake-N)
+Merging chrome-platform/for-next (fdf0fe2df3e3 platform/chrome: wilco_ec: A=
+dd Dell's USB PowerShare Policy control)
+Merging hsi/for-next (c1030cd45619 HSI: Remove dev_err() usage after platfo=
+rm_get_irq())
+Merging leds/for-next (448d6fcb7a52 leds: pca953x: Use of_device_get_match_=
+data())
+Merging ipmi/for-next (639fd6aa499a ipmi: bt-bmc: use devm_platform_ioremap=
+_resource() to simplify code)
+Merging driver-core/driver-core-next (a3caeb8ffe5d docs: driver-model: Add =
+documentation for sync_state)
+Merging usb/usb-next (abb0b3d96a1f usb: usbfs: Suppress problematic bind an=
+d unbind uevents.)
+Merging usb-gadget/next (18a93cd38be3 usb: gadget: net2280: Add workaround =
+for AB chip Errata 11)
+Merging usb-serial/usb-next (4f5cafb5cb84 Linux 5.4-rc3)
+Merging usb-chipidea-next/ci-for-usb-next (973ce009b308 usb: chipidea: imx:=
+ check data->usbmisc_data against NULL before access)
+Merging phy-next/next (54ecb8f7028c Linux 5.4-rc1)
+Merging tty/tty-next (9905f32aefbe serial: fsl_linflexuart: Be consistent w=
+ith the name)
+Merging char-misc/char-misc-next (6859eba4f6fb samples: mei: use hostprogs =
+kbuild constructs)
+CONFLICT (content): Merge conflict in samples/Makefile
+CONFLICT (content): Merge conflict in samples/Kconfig
+CONFLICT (content): Merge conflict in drivers/android/binder.c
+Merging extcon/extcon-next (6942635032cf extcon: sm5502: Reset registers du=
+ring initialization)
+Merging soundwire/next (1b53385e7938 soundwire: cadence_master: improve PDI=
+ allocation)
+Merging thunderbolt/next (b406357c572b thunderbolt: Add 'generation' attrib=
+ute for devices)
+Merging staging/staging-next (8193e6ad6916 staging: sm750fb: Fix lines over=
+ 80 characters)
+Merging mux/for-next (05fb8284a417 Merge branch 'i2c-mux/for-next' into for=
+-next)
+Merging icc/icc-next (a8dfe193a60c interconnect: Add locking in icc_set_tag=
+())
+Merging slave-dma/next (7fdf9b05c73b dmaengine: fsl-dpaa2-qdma: Add NXP dpa=
+a2 qDMA controller driver for Layerscape SoCs)
+Merging cgroup/for-next (1a99fcc035fb selftests: cgroup: Run test_core unde=
+r interfering stress)
+Merging scsi/for-next (253c0dec9496 Merge remote-tracking branch 'mkp-scsi/=
+5.4/scsi-postmerge' into for-next)
+Merging scsi-mkp/for-next (99a3a7459071 Merge branch '5.5/scsi-queue' into =
+5.5/scsi-next)
+Merging vhost/linux-next (32a1c795917b vhost: last descriptor must have NEX=
+T clear)
+Merging rpmsg/for-next (741dc0aa4122 Merge branches 'hwspinlock-next', 'rpm=
+sg-next' and 'rproc-next' into for-next)
+Merging gpio/for-next (7c547cb52849 Merge branch 'devel' into for-next)
+Merging gpio-brgl/gpio/for-next (228fc0104070 gpio: of: don't warn if ignor=
+ed GPIO flag matches the behavior)
+Merging gpio-intel/for-next (7d194c2100ad Linux 5.4-rc4)
+Merging pinctrl/for-next (659e175ff44d Merge branch 'devel' into for-next)
+Merging pinctrl-intel/for-next (7d194c2100ad Linux 5.4-rc4)
+Merging pinctrl-samsung/for-next (a322b3377f4b pinctrl: samsung: Fix device=
+ node refcount leaks in init code)
+Merging pwm/for-next (9e1b4999a169 pwm: stm32: Pass breakinput instead of i=
+ts values)
+Merging userns/for-next (318759b4737c signal/x86: Move tsk inside of CONFIG=
+_MEMORY_FAILURE in do_sigbus)
+Merging ktest/for-next (aecea57f84b0 ktest: Fix some typos in config-bisect=
+.pl)
+Merging random/dev (58be0106c530 random: fix soft lockup when trying to rea=
+d from an uninitialized blocking pool)
+Merging kselftest/next (54ecb8f7028c Linux 5.4-rc1)
+Merging y2038/y2038 (98ce1ca8b178 Merge tag 'compat-ioctl-5.5' of git://git=
+.kernel.org/pub/scm/linux/kernel/git/arnd/playground into y2038)
+Merging livepatching/for-next (1cfe141e1715 Merge branch 'for-5.4-core' int=
+o for-next)
+Merging coresight/next (a6de75a39059 coresight: etm4x: Add missing single-s=
+hot control API to sysfs)
+Merging rtc/rtc-next (6c69a9d2a8cc rtc: sirfsoc: remove .remove)
+Merging nvdimm/libnvdimm-for-next (4c806b897d60 libnvdimm/region: Enable MA=
+P_SYNC for volatile regions)
+Merging at24/at24/for-next (285be87c79e1 eeprom: at24: Improve confusing lo=
+g message)
+Merging ntb/ntb-next (54ecb8f7028c Linux 5.4-rc1)
+Merging kspp/for-next/kspp (6f88ed285e67 Merge branch 'fixes/usercopy/highm=
+em-fromlist' into for-next/kspp)
+Merging cisco/for-next (9e98c678c2d6 Linux 5.1-rc1)
+Merging gnss/gnss-next (54ecb8f7028c Linux 5.4-rc1)
+Merging fsi/next (799e064cc79e fsi: scom: Don't abort operations for minor =
+errors)
+Merging slimbus/for-next (54ecb8f7028c Linux 5.4-rc1)
+Merging nvmem/for-next (b76e01ccc287 nvmem: imx: scu: fix dependency in Kco=
+nfig)
+Merging xarray/xarray (91abab83839a XArray: Fix xas_next() with a single en=
+try at 0)
+Merging hyperv/hyperv-next (41928dfdf5bd Drivers: hv: balloon: Remove depen=
+dencies on guest page size)
+Merging auxdisplay/auxdisplay (54ecb8f7028c Linux 5.4-rc1)
+Merging kgdb/kgdb/for-next (2277b492582d kdb: Fix stack crawling on 'runnin=
+g' CPUs that aren't the master)
+Merging pidfd/for-next (1282387e9dca Merge branch 'pidfd' into for-next)
+Merging devfreq/for-next (d2f5fccd1ac9 PM / devfreq: Make log message more =
+explicit when devfreq device already exists)
+Merging hmm/hmm (54ecb8f7028c Linux 5.4-rc1)
+Merging fpga/for-next (fddc9fcbe69a fpga: dfl: fme: add power management su=
+pport)
+Merging kunit/test (d460623c5fa1 Documentation: kunit: Fix verification com=
+mand)
+Merging cel/cel-next (f12883d6d3f2 xprtrdma: Replace dprintk in xprt_rdma_s=
+et_port)
+Merging akpm-current/current (fffe1b24cc6a ipc/msg.c: consolidate all xxxct=
+l_down() functions)
+$ git checkout -b akpm remotes/origin/akpm/master
+Applying: drivers/block/null_blk_main.c: fix layout
+Applying: drivers/block/null_blk_main.c: fix uninitialized var warnings
+Applying: pinctrl: fix pxa2xx.c build warnings
+Applying: lib/list-test.c: add a test for the 'list' doubly linked list
+Applying: lib/list-test: add a test for the 'list' doubly linked list
+Applying: lib/genalloc.c: export symbol addr_in_gen_pool
+Applying: lib/genalloc.c: rename addr_in_gen_pool to gen_pool_has_addr
+Applying: Documentation: rename addr_in_gen_pool to gen_pool_has_addr
+Applying: kernel-hacking: group sysrq/kgdb/ubsan into 'Generic Kernel Debug=
+ging Instruments'
+Applying: kernel-hacking: create submenu for arch special debugging options
+Applying: kernel-hacking: group kernel data structures debugging together
+Applying: kernel-hacking: move kernel testing and coverage options to same =
+submenu
+Applying: kernel-hacking: move Oops into 'Lockups and Hangs'
+Applying: kernel-hacking: move SCHED_STACK_END_CHECK after DEBUG_STACK_USAGE
+Applying: kernel-hacking: create a submenu for scheduler debugging options
+Applying: kernel-hacking: move DEBUG_BUGVERBOSE to 'printk and dmesg option=
+s'
+Applying: kernel-hacking: move DEBUG_FS to 'Generic Kernel Debugging Instru=
+ments'
+Applying: bitops: introduce the for_each_set_clump8 macro
+Applying: linux/bitmap.h: fix potential sign-extension overflow
+Applying: bitops-introduce-the-for_each_set_clump8-macro-fix-fix
+Applying: linux/bitopts.h: Add for_each_set_clump8 documentation
+Applying: lib/test_bitmap.c: add for_each_set_clump8 test cases
+Applying: gpio: 104-dio-48e: utilize for_each_set_clump8 macro
+Applying: gpio: 104-idi-48: utilize for_each_set_clump8 macro
+Applying: gpio: gpio-mm: utilize for_each_set_clump8 macro
+Applying: gpio: ws16c48: utilize for_each_set_clump8 macro
+Applying: gpio: pci-idio-16: utilize for_each_set_clump8 macro
+Applying: gpio: pcie-idio-24: utilize for_each_set_clump8 macro
+Applying: gpio: uniphier: utilize for_each_set_clump8 macro
+Applying: gpio: 74x164: utilize the for_each_set_clump8 macro
+Applying: thermal: intel: intel_soc_dts_iosf: Utilize for_each_set_clump8 m=
+acro
+Applying: gpio: pisosr: utilize the for_each_set_clump8 macro
+Applying: gpio: max3191x: utilize the for_each_set_clump8 macro
+Applying: gpio: pca953x: utilize the for_each_set_clump8 macro
+Applying: drivers/tty/serial/sh-sci.c: suppress warning
+Applying: drivers/media/platform/sti/delta/delta-ipc.c: fix read buffer ove=
+rflow
+Merging akpm/master (c530918e8775 drivers/media/platform/sti/delta/delta-ip=
+c.c: fix read buffer overflow)
+
+--Sig_/fhHHP=ZvB9Q9Tw1HRjvIkC/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2ukn4ACgkQAVBC80lX
+0GyA4QgApSWAaYAvBcZuIRXxiUUDLXkuSUwzfiYVkDO8/T0S8bzc0/uT6bqWXhN6
+/zbH6EIJh/Ls0QDDHk1uGoIU3cpM+Zo41rKpozVsg3a4yLNlt4JmvpUkyjcInoBL
+9VYJa5kEfvv7pdy2edDW7jv7J3efvz3IaIWmFPRMq/5zyxY2xQU0G05FT/BjwlsI
+dy2YwOHaKfNOG/VWS+4Bl6zwUYsgF/SFtnHgq+C2fMLvjUqgN7kk4Mbl167TU2Ty
+yKIJ58jOehL89EY2bQ5R3LmwMmv78+Qdk6rS3WDnEisbhdiYb89Ow10KMHTLYy6l
+QlU2rPkdSbzQNaExycZNf4ehYGQzpw==
+=oQvO
+-----END PGP SIGNATURE-----
+
+--Sig_/fhHHP=ZvB9Q9Tw1HRjvIkC/--

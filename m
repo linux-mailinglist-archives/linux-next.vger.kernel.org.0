@@ -2,72 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 421D3DFE7F
-	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 09:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DFCDFED1
+	for <lists+linux-next@lfdr.de>; Tue, 22 Oct 2019 09:58:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729146AbfJVHko (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 22 Oct 2019 03:40:44 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:47396 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728768AbfJVHko (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Oct 2019 03:40:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=J3O3pMDF095s1EZO0TLM8EP21VVibuJrHnO1JV78+Rw=; b=lhgGwcj/uXuPE6gdMXIMU54pT
-        JQa9+NrIh9mC+NOw4pBYkNOJOpnym22dTO/7MXK8Cj3wZx/n47AFZsLdtm0i0nEFlB6/Gd/p2mVM8
-        c0o+rd1THrl8NAj5914NdavleVP9AMN5E6Z6bo68RiwcKgP2K3gQ9IXU3NsnhlWTUToG/At5ZK+GH
-        9+P3O17KagE4hIQqvWgnkU/8i/oLLeMcVsi/4SFub5pneZGdsB6ipfNXDGc78qHneztZUE2huGiwW
-        gTTjtAlP7Ade+mhM7kWTV5uph7AN/0RqoHNnOYGkiwRKIOtD2a2JpmPbBKj3f+0Mh5pJCNnsEeZeL
-        Se0KSkbgQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iMomS-0001DF-MD; Tue, 22 Oct 2019 07:40:36 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 13E78300EBF;
-        Tue, 22 Oct 2019 09:39:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2C72F20420897; Tue, 22 Oct 2019 09:40:34 +0200 (CEST)
-Date:   Tue, 22 Oct 2019 09:40:34 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christian Brauner <christian.brauner@ubuntu.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>, linux@rasmusvillemoes.dk,
-        cyphar@cyphar.com, keescook@chromium.org
-Subject: Re: linux-next: Tree for Oct 18 (objtool)
-Message-ID: <20191022074034.GK1817@hirez.programming.kicks-ass.net>
-References: <20191018180300.090dbcb9@canb.auug.org.au>
- <40de4e26-450e-b932-3d73-e833c8aeaa2e@infradead.org>
- <20191021123549.GC1817@hirez.programming.kicks-ass.net>
- <20191021131149.GA19358@hirez.programming.kicks-ass.net>
- <20191021131947.yih3wqjbfroaj4dz@wittgenstein>
- <20191021134759.GG1800@hirez.programming.kicks-ass.net>
- <20191021193652.lfccehm37dkkofp7@wittgenstein>
+        id S1731135AbfJVH5x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 22 Oct 2019 03:57:53 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:35815 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726978AbfJVH5x (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 22 Oct 2019 03:57:53 -0400
+Received: by mail-wm1-f68.google.com with SMTP id 14so8493043wmu.0
+        for <linux-next@vger.kernel.org>; Tue, 22 Oct 2019 00:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=uk6DljN34bMvdNioM3nHnKTb74wrYg32afKOLcp8k9g=;
+        b=QYfui4dRQXv3wG6zSvfu+1lBlvuVH7fZ15ES8/KcNDSGPtN/m1aEvS3sDEXulIOgqv
+         4iwk6zw5TM0dMtsFCSMoy1BgJOQwVpgEfPgOG3a9kbTb6LBvGlMIfDkavlWGh15SZ+lG
+         EkLw8wXZR481SJEDxSRZ/1KNSzVFQsLiW1Ai303jIqChMKZeuL3O4vpa1O8A9j6DzZYe
+         +jsMaBW+4mFNVvukd/+mAklOEuifRMusux2bcupAJluYexJU4VsItkZdtvZhWbw8sFLZ
+         ueuC7hdr2pOoTitMLW1ak36vDTbnLXa5dXU3yMVvlvVJaISWbUurBMRIl+85F1HHbTtL
+         aFmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=uk6DljN34bMvdNioM3nHnKTb74wrYg32afKOLcp8k9g=;
+        b=chBLPlChGjye6enWueUhe6qNNB144VkLModS4ZIAZ2lpEXqfBE8ovG/7lmW0evDR4b
+         0SwbyACUT+h+TNswPckHeUu0s9Bt4BPP2+5ayChkz8dOqK8NGJVVRjuJRPR07C+3j7Zv
+         BgonFIIYB1pOnr/nTc1Q4Othl7HVDRFu1ES/X5dQrWrz/NfE0p3jelz/dslzEN+W4FfK
+         dJG0LFNb8WaAuFM/fqugytO1JaijnVuqNeIhu6RxfbecLzHBStNsmWNfoyC1HiF+Dtf9
+         kZQzFhz8KWcQfJGQKfckqYpgXfnBYnSAbU2dkj+wVpM8yhX+BlckdghgQEtHefkZ+HRb
+         96Kw==
+X-Gm-Message-State: APjAAAU3H2291VV3sWk6N/ygw25mcrWxUmqLJNHs2sLdnPga8aLLbd7U
+        tfVvDhbTaAbRKBZT/v9C7L7eMhlezP/UGw==
+X-Google-Smtp-Source: APXvYqwfJ3xg+TtY/zaPfxxiQvWXsDMwr+NqcootoyZwflLj024DEVNxUu0se9empXG6nZvscZ58Ow==
+X-Received: by 2002:a05:600c:23cc:: with SMTP id p12mr1680934wmb.163.1571731071282;
+        Tue, 22 Oct 2019 00:57:51 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id n1sm20470943wrg.67.2019.10.22.00.57.50
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 22 Oct 2019 00:57:50 -0700 (PDT)
+Message-ID: <5daeb67e.1c69fb81.95db3.6c37@mx.google.com>
+Date:   Tue, 22 Oct 2019 00:57:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191021193652.lfccehm37dkkofp7@wittgenstein>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-rc4-262-gfd132c8ce23e
+Subject: next/pending-fixes boot: 133 boots: 11 failed,
+ 114 passed with 7 offline, 1 untried/unknown (v5.4-rc4-262-gfd132c8ce23e)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Oct 21, 2019 at 09:36:53PM +0200, Christian Brauner wrote:
-> Ok, so I take it you route that patch somehwere through tip?
-> I'm happy with the ubsan fix:
+next/pending-fixes boot: 133 boots: 11 failed, 114 passed with 7 offline, 1=
+ untried/unknown (v5.4-rc4-262-gfd132c8ce23e)
 
-Yeah, I'll go make a real patch with Changelog of it and stick it in
-tip.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc4-262-gfd132c8ce23e/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc4-262-gfd132c8ce23e/
 
-> Acked-by: Christian Brauner <christian.brauner@ubuntu.com>
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc4-262-gfd132c8ce23e
+Git Commit: fd132c8ce23e3ad02f83ee3c3c9fd19ac8acdbd1
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 58 unique boards, 21 SoC families, 20 builds out of 215
 
-Thanks!
+Boot Failures Detected:
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-firefly: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            rk3399-firefly: 1 failed lab
+
+    defconfig+kselftest:
+        gcc-8:
+            r8a7796-m3ulcb: 1 failed lab
+            rk3399-puma-haikou: 1 failed lab
+
+arm:
+    multi_v7_defconfig+kselftest:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            rk3288-rock2-square: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+    tegra_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            tegra124-jetson-tk1: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

@@ -2,57 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9ACE128A
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 08:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4C2E128C
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 08:57:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733296AbfJWG4F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Oct 2019 02:56:05 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:41312 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727885AbfJWG4F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Oct 2019 02:56:05 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=WgOs9pzdvdtNRCgzQWI6VcaIx+3VIwVkgD8z52aiT5g=; b=dNOT3gDUaGYOa6WU8rTLoR1cE
-        7yDkzHxc3jklpk9EyxqlN+oGw4L1VU0Z4CBtmDooh6tZpZkvuwPIT2+GGYMXQqkF/v49ofJvaRezD
-        Lc+C24kvDOFNncGA2U5VbiSmgtxBWSPTeYDC9dWd545cOxviTyf0GG2+Tr5UuRRP6tr2f6gQ9jkf+
-        n2F1nZTHpRJvXnllmn8JZ9SAghXN0o5MJFgfc4gZlX5YkNy4rERKBqKn2Ev74wQKEKLoOHbC36b7A
-        0qz4jXBHrITP99kbuAtPFiTibRhs43cCPLde7X7HVYXzAY6GqdbJjV8fH7ogiSJ82jI6PVzICivVG
-        jaCs9BLeA==;
-Received: from [2601:1c0:6280:3f0::9ef4]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iNAYt-00039t-J2; Wed, 23 Oct 2019 06:56:03 +0000
+        id S1727574AbfJWG5l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Oct 2019 02:57:41 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:46868 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725796AbfJWG5k (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Oct 2019 02:57:40 -0400
+Received: from DGGEMS410-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id 4F145F217A17E3EA47FD;
+        Wed, 23 Oct 2019 14:57:38 +0800 (CST)
+Received: from [127.0.0.1] (10.74.221.148) by DGGEMS410-HUB.china.huawei.com
+ (10.3.19.210) with Microsoft SMTP Server id 14.3.439.0; Wed, 23 Oct 2019
+ 14:57:37 +0800
 Subject: Re: linux-next: Tree for Oct 23
 To:     Geert Uytterhoeven <geert@linux-m68k.org>,
         Mark Salyzyn <salyzyn@android.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Andrew Morton <akpm@linux-foundation.org>
 References: <20191023155519.2d6765d4@canb.auug.org.au>
  <d1a57062-24cb-e9c4-e1db-07406b1cea9a@hisilicon.com>
  <CAMuHMdX1rhmvpWBHzvDYRNeYyotNp2ct1ysy4Jd0SjVUvGJd-Q@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <46ae49f0-dbf0-0f11-3eba-e81197efbed0@infradead.org>
-Date:   Tue, 22 Oct 2019 23:56:02 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Message-ID: <b2da5636-3907-2d34-af8a-5600729453d4@hisilicon.com>
+Date:   Wed, 23 Oct 2019 14:57:36 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.1.1
 MIME-Version: 1.0
 In-Reply-To: <CAMuHMdX1rhmvpWBHzvDYRNeYyotNp2ct1ysy4Jd0SjVUvGJd-Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.221.148]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/22/19 11:44 PM, Geert Uytterhoeven wrote:
+Hi Geert,
+
+On 2019/10/23 14:44, Geert Uytterhoeven wrote:
 > On Wed, Oct 23, 2019 at 8:17 AM Shaokun Zhang
 > <zhangshaokun@hisilicon.com> wrote:
 >> +Cc: Mark Salyzyn
@@ -84,8 +77,29 @@ On 10/22/19 11:44 PM, Geert Uytterhoeven wrote:
 > http://kisskb.ellerman.id.au/kisskb/head/f3c452cfc59c817950b150b51ec2b33409d7640b/
 > and doing some testing, it looks like this construct is supported by gcc-7
 > and gcc-8, but not by gcc-4.6.3 and gcc-5. Don't know about gcc-6.
+> 
 
-I guess that's a different problem than the misspelled PREFERED before the __attribute__.
+GCC version is 5.4.0
+zhangshaokun@ubuntu:~/linux-next$ gcc --version
+gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.10) 5.4.0 20160609
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
--- 
-~Randy
+Thanks,
+
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds
+> 
+> .
+> 
+

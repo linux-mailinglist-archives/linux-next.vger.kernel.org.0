@@ -2,166 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0FEEE11D7
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 07:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B62E11E6
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 08:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732144AbfJWFtV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Oct 2019 01:49:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44044 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731847AbfJWFtV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 23 Oct 2019 01:49:21 -0400
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id EC981214B2;
-        Wed, 23 Oct 2019 05:49:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1571809760;
-        bh=snDD2TGm/p3To1d+GTgma+dC7mp1sEZRotHc0mSrxgk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=jXp1j7nLsX2w5XE8QjSsMsPsl6XNtnpXMoeAsWx7LgtVt9dh19xs8SCMDNPbgwxPw
-         6VN5Z0HebFWqLdi6aej3/2KW2YqTHTNy4xg/jI9KXWPKB8I7d7f0qw7Zlc1qKC0QQ9
-         a4iUCnJ0h0ATuVIBaLQ15t9K3Wj/afO/hHwllWRU=
-Date:   Wed, 23 Oct 2019 14:49:16 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Masami Hiramatsu <mhiramat@redhat.com>
-Subject: Re: linux-next: Tree for Oct 14 (insn_decoder_test)
-Message-Id: <20191023144916.2cbd0ea16363b4cd4574f5ad@kernel.org>
-In-Reply-To: <2d83682b-6206-4992-63cc-342d61641c0a@infradead.org>
-References: <20191014174707.469f596f@canb.auug.org.au>
-        <2d83682b-6206-4992-63cc-342d61641c0a@infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        id S1725947AbfJWGFL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Oct 2019 02:05:11 -0400
+Received: from szxga05-in.huawei.com ([45.249.212.191]:4746 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725796AbfJWGFL (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 23 Oct 2019 02:05:11 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.58])
+        by Forcepoint Email with ESMTP id BDD0B32C85F897EA2BE4;
+        Wed, 23 Oct 2019 14:05:07 +0800 (CST)
+Received: from [127.0.0.1] (10.74.221.148) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Wed, 23 Oct 2019
+ 14:05:04 +0800
+Subject: Re: linux-next: Tree for Oct 23
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20191023155519.2d6765d4@canb.auug.org.au>
+CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Salyzyn <salyzyn@android.com>
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Message-ID: <d1a57062-24cb-e9c4-e1db-07406b1cea9a@hisilicon.com>
+Date:   Wed, 23 Oct 2019 14:05:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.1.1
+MIME-Version: 1.0
+In-Reply-To: <20191023155519.2d6765d4@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.74.221.148]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
++Cc: Mark Salyzyn
 
-On Mon, 14 Oct 2019 08:30:02 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
+There is a compiler failure on arm64 platform, as follow:
+zhangshaokun@ubuntu:~/linux-next$ make -j64
+  CALL    scripts/atomic/check-atomics.sh
+  CC      arch/arm64/kernel/asm-offsets.s
+In file included from ./include/linux/sysctl.h:30:0,
+                 from ./include/linux/umh.h:9,
+                 from ./include/linux/kmod.h:9,
+                 from ./include/linux/module.h:13,
+                 from ./include/linux/acpi.h:29,
+                 from ./include/acpi/apei.h:9,
+                 from ./include/acpi/ghes.h:5,
+                 from ./include/linux/arm_sdei.h:8,
+                 from arch/arm64/kernel/asm-offsets.c:10:
+./include/uapi/linux/sysctl.h:561:29: error: expected ‘,’ or ‘}’ before ‘__attribute__’
+  NET_IPV6_TEMP_PREFERED_LFT __attribute__((deprecated)) = /* NOTYPO */
+                             ^
+scripts/Makefile.build:99: recipe for target 'arch/arm64/kernel/asm-offsets.s' failed
+make[1]: *** [arch/arm64/kernel/asm-offsets.s] Error 1
+Makefile:1108: recipe for target 'prepare0' failed
+make: *** [prepare0] Error 2
 
-> On 10/13/19 11:47 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20191011:
-> > 
+It's the commit <79f0cf35dccb> ("treewide: cleanup: replace prefered with preferred").
+
+Thanks,
+Shaokun
+
+
+On 2019/10/23 12:55, Stephen Rothwell wrote:
+> Hi all,
 > 
-> on x86_64:
+> Changes since 20191022:
 > 
->   HOSTCC  arch/x86/tools/insn_decoder_test
->   HOSTCC  arch/x86/tools/insn_sanity
->   TEST    posttest
-> arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-> arch/x86/tools/insn_decoder_test: warning: ffffffff81000bf1:	f7 0b 00 01 08 00    	testl  $0x80100,(%rbx)
-> arch/x86/tools/insn_decoder_test: warning: objdump says 6 bytes, but insn_get_length() says 2
-> arch/x86/tools/insn_decoder_test: warning: Decoded and checked 11913894 instructions with 1 failures
->   TEST    posttest
-> arch/x86/tools/insn_sanity: Success: decoded and checked 1000000 random instructions with 0 errors (seed:0x871ce29c)
+> Non-merge commits (relative to Linus' tree): 5530
+>  5340 files changed, 192671 insertions(+), 90844 deletions(-)
+> 
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig. And finally, a simple boot test of the powerpc
+> pseries_le_defconfig kernel in qemu (with and without kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 310 trees (counting Linus' and 78 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
+> 
 
-Hmm, curious.
-
-x86-opcode-map.txt said,
-f7: Grp3_2 Ev (1A)
-
-and "0x0b" is 00001011b, Group encoding bits are 5,4,3 (reg field),
-so group index is 001.
-
-GrpTable: Grp3_2
-0: TEST Ev,Iz
-1:
-
-Hmm, "f7 0b" is not assigned to any instruction... (testl should be f7 03)
-
-I've checked Intel SDM May 2019 version(*), but the Opcode Map (Table A-6. Opecode
-Extensions for One- and Two-byte Opecodes by Group Number) showed the group index
-001 is still blank. I've also checked that Table B-13 (General Purpose Instruction
- Formats and Encodings for Non-64-Bit Modes (Note that this has no REX prefix)) but
-I couldn't find "f7 0b".
-
-At last, I found that on AMD64 Architecture Programmer's Manual Volume 3, Appendix A.2
-Table A-6. ModRM.reg Extensions for the Primary Opcode Map(**), which shows that both
-f7 + reg=000 and f7 + reg=001 are same. So only on AMD64, it is officially available
-instruction.
-
-(*) https://software.intel.com/sites/default/files/managed/a4/60/325383-sdm-vol-2abcd.pdf
-(**) https://www.amd.com/system/files/TechDocs/24594.pdf
-
-OK, so this should be fixed with below patch.
-
-------
-From b3f45b86df25be59fcf417730ab4c69c6310eaad Mon Sep 17 00:00:00 2001
-From: Masami Hiramatsu <mhiramat@kernel.org>
-Date: Wed, 23 Oct 2019 14:45:35 +0900
-Subject: [PATCH] x86/decoder: Add TEST opcode to Group3-2
-
-Add TEST opcode to Group3-2 reg=001b as same as Group3-1 does.
-
-Commit 12a78d43de76 ("x86/decoder: Add new TEST instruction pattern")
-added a TEST opcode assignment to f6 XX/001/XXX (Group 3-1), but not
-added f7 XX/001/XXX (Group 3-2). Actually these TEST opcode is not
-described in Intel SDM Vol2, but described in AMD64 Architecture
-Programmer's Manual Vol.3, Appendix A.2 Table A-6. ModRM.reg
-Extensions for the Primary Opcode Map.
-
-Without this fix, Randy found a warning by insn_decoder_test related
-to this issue as below.
-
-  HOSTCC  arch/x86/tools/insn_decoder_test
-  HOSTCC  arch/x86/tools/insn_sanity
-  TEST    posttest
-arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
-arch/x86/tools/insn_decoder_test: warning: ffffffff81000bf1:	f7 0b 00 01 08 00    	testl  $0x80100,(%rbx)
-arch/x86/tools/insn_decoder_test: warning: objdump says 6 bytes, but insn_get_length() says 2
-arch/x86/tools/insn_decoder_test: warning: Decoded and checked 11913894 instructions with 1 failures
-  TEST    posttest
-arch/x86/tools/insn_sanity: Success: decoded and checked 1000000 random instructions with 0 errors (seed:0x871ce29c)
-
-To fix this error, add TEST opcode according to AMD64 APM Vol.3.
-
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
----
- arch/x86/lib/x86-opcode-map.txt       | 2 +-
- tools/arch/x86/lib/x86-opcode-map.txt | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
-index e0b85930dd77..4635ce298d1d 100644
---- a/arch/x86/lib/x86-opcode-map.txt
-+++ b/arch/x86/lib/x86-opcode-map.txt
-@@ -907,7 +907,7 @@ EndTable
- 
- GrpTable: Grp3_2
- 0: TEST Ev,Iz
--1:
-+1: TEST Ev,Iz
- 2: NOT Ev
- 3: NEG Ev
- 4: MUL rAX,Ev
-diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
-index e0b85930dd77..4635ce298d1d 100644
---- a/tools/arch/x86/lib/x86-opcode-map.txt
-+++ b/tools/arch/x86/lib/x86-opcode-map.txt
-@@ -907,7 +907,7 @@ EndTable
- 
- GrpTable: Grp3_2
- 0: TEST Ev,Iz
--1:
-+1: TEST Ev,Iz
- 2: NOT Ev
- 3: NEG Ev
- 4: MUL rAX,Ev
--- 
-2.20.1
--- 
-Masami Hiramatsu <mhiramat@kernel.org>

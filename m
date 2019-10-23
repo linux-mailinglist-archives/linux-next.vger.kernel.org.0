@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95590E1BBE
-	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 15:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07485E1CDA
+	for <lists+linux-next@lfdr.de>; Wed, 23 Oct 2019 15:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387795AbfJWNFd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 23 Oct 2019 09:05:33 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:35819 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2405481AbfJWNFd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Oct 2019 09:05:33 -0400
-Received: by mail-wr1-f65.google.com with SMTP id l10so21600803wrb.2
-        for <linux-next@vger.kernel.org>; Wed, 23 Oct 2019 06:05:23 -0700 (PDT)
+        id S2390754AbfJWNiP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 23 Oct 2019 09:38:15 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51219 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732361AbfJWNiP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 23 Oct 2019 09:38:15 -0400
+Received: by mail-wm1-f68.google.com with SMTP id q70so14117393wme.1
+        for <linux-next@vger.kernel.org>; Wed, 23 Oct 2019 06:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=fKndqzQusMB6WAlE7PcS3DnEPMjPre1sbYfCucJNBT4=;
-        b=0A85287P7y5vdOfzi+MeJriSDxnm9xjeYWxt/EKISJxjua24EM6YODQSvaEq5LoegO
-         hKDJdMSPoQkt4hblTS4xMUFVOfez33BjfqG9OljNZj35wBpu4Ysn9wv5/kZ8fNz65qda
-         zI77X3kOqy4+ENXva/I6upufsi+f2ti03JCn9iJWPCK3npY+noYvYjIvwFHfwKLGeKl5
-         tx1TkBN4BB3rXz3XeBRInVDjGQGq62apXi/9pHlVAC9HTPVMP6Bd6DRprisExGPCpEap
-         lgWQK0S2eLAtI0bfhdGr9cA9GXuOMFgdYx5jNBvGg9BAid6MEHfUhgsgUvGrse8mQr5w
-         +fmQ==
+        bh=9FpvCUs16EcM0vg2lITdxUMQ/ioPNLsQs/Skze8DVyA=;
+        b=a+s8MDDemJwDJzxcF7vCehYiRDtBels6EsZClDFW5ajFVnJsCQ898IBF1d/MZh+X4r
+         XNAGp5V+UCNsudDKfdOGAVv+bSqK4FJj5HjjrL2e3osXdzxj8VHNOeIfM80DoyYgwrcD
+         8G2XiGYYmQMGXEY+DzQukbfT61yrDtDJbR75lvCDZ4iR2lLyG4BUJg3lkqpCtc+ZXBQE
+         /A1cqQBp6Sr2JKd9TgDl0jWfU5mEW++TW/PWMbOfpVMENtB/0ilvcc1CM9o6INxxea8V
+         cF+CFmaMx6Q9jAcadKMHMDNgKnTLaitsOxYCTQ7Vc8PMHzHcC2Z8IB2z2y/e8iZ9Qk0t
+         hKnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=fKndqzQusMB6WAlE7PcS3DnEPMjPre1sbYfCucJNBT4=;
-        b=BBElgz5KMYj+iGYHebS9HHM3kLY98bpxY6DM8tkrahlYn3CEPKWGtU7nmhiCjMg7yA
-         iJxAxDLFOQEAYrXcYQBhWSo5v6Gcomp5B7IUWUuKs7v7KNekvZ1FzLM45iV7PUnyyI5e
-         7vcghfeSnAHOi6hTYA5TZP6Fbd7AIqMeeotiKOYbYbfpKbJpw/KBOjp2jdBxmnkBE2Hj
-         voe8SzAjC7Zl9hVVLFEDXoJ7BmwHomlNMflaGQB2fc39uV+5Q1Us/dhBJAyFoqR7U+2Q
-         LuogNzoJXJsHlzM/8d0WztsmYsGfNx+MWLeTawP5NmSlMjwNqZuCemrmkco9bw6X5iaL
-         iriA==
-X-Gm-Message-State: APjAAAX6xmAoDnsbjulc/4pmwR7yuFbL9xZ5zTUMEV8hH0uIREEKSdMI
-        clhWUYZixjkU+gQ3ZxtgN7hD0J50GsLXkQ==
-X-Google-Smtp-Source: APXvYqxt0eknJW/QifpBOW1ObzIevHBDA5M+ARctBAN85Q0SDO/abfYCi+D0dHec4KU2/tjb6EuB5Q==
-X-Received: by 2002:a05:6000:108:: with SMTP id o8mr4879004wrx.369.1571835919801;
-        Wed, 23 Oct 2019 06:05:19 -0700 (PDT)
+        bh=9FpvCUs16EcM0vg2lITdxUMQ/ioPNLsQs/Skze8DVyA=;
+        b=d5LYxIhqyZkT+UGydXcFxP4AHYP31i1ETxKmSClpbiMR/1Z3eqN7eA0+an+lul85aI
+         6sR+2osQpg7TAxrISdmTcoAngo1adZ7arjWmVxx0TCixJfXsUcJl2JKW4PAov7DK9d0w
+         nxs8ISiSsyd3Tgia7sySL5s1nIjZaK/pfil5/zE80EMKTarEDzHWT/wLeU+kplx08d0U
+         9vNOkIuzZU1kRStOOULWd6Tb4FmJu6RkuGHKGjd+aWGd5HOCS4k7iFrXdpMq3niOKcoE
+         +PfnDROh+Y5EXZIdZr+/NS1odfgUDm1auOUbNcmshir9FXnZRZ85Y7iACtDzOTwbhv8G
+         Y67g==
+X-Gm-Message-State: APjAAAUWpil4LwG/PXrsade5wyvAWDTNeEsp7IWll+JCG0U6cK9WBsWL
+        FN5JS1vQlPxfHsUEJntGcY/gJMMF6G/VUA==
+X-Google-Smtp-Source: APXvYqx6x3GvLwbWa4Tt7Ejw6BnKblXOOdPlVOrLNLNTOQ2zPcxDD9eNG+mE8/j2wDhtNczy9nrXYw==
+X-Received: by 2002:a1c:a546:: with SMTP id o67mr8073278wme.57.1571837885758;
+        Wed, 23 Oct 2019 06:38:05 -0700 (PDT)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 26sm9227465wmf.20.2019.10.23.06.05.18
+        by smtp.gmail.com with ESMTPSA id v9sm7627703wro.51.2019.10.23.06.38.04
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Oct 2019 06:05:18 -0700 (PDT)
-Message-ID: <5db0500e.1c69fb81.fe03c.01c8@mx.google.com>
-Date:   Wed, 23 Oct 2019 06:05:18 -0700 (PDT)
+        Wed, 23 Oct 2019 06:38:04 -0700 (PDT)
+Message-ID: <5db057bc.1c69fb81.f62a1.93bf@mx.google.com>
+Date:   Wed, 23 Oct 2019 06:38:04 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v5.4-rc4-305-gb115640def2e
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: next-20191023
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 215 builds: 0 failed, 215 passed,
- 295 warnings (v5.4-rc4-305-gb115640def2e)
+Subject: next/master build: 219 builds: 3 failed, 216 passed, 22 errors,
+ 385 warnings (next-20191023)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,20 +63,29 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 215 builds: 0 failed, 215 passed, 295 warnings (v=
-5.4-rc4-305-gb115640def2e)
+next/master build: 219 builds: 3 failed, 216 passed, 22 errors, 385 warning=
+s (next-20191023)
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc4-305-gb115640def2e/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191023/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc4-305-gb115640def2e
-Git Commit: b115640def2ec107ca19d9c428eca28f03f6f3ab
+Branch: master
+Git Describe: next-20191023
+Git Commit: f3c452cfc59c817950b150b51ec2b33409d7640b
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
 Built: 7 unique architectures
 
-Warnings Detected:
+Build Failures Detected:
+
+arm64:
+    allmodconfig: (clang-8) FAIL
+    allmodconfig: (gcc-8) FAIL
+
+mips:
+    cavium_octeon_defconfig: (gcc-8) FAIL
+
+Errors and Warnings Detected:
 
 arc:
     allnoconfig (gcc-8): 1 warning
@@ -86,7 +95,7 @@ arc:
     haps_hs_smp_defconfig (gcc-8): 2 warnings
     hsdk_defconfig (gcc-8): 2 warnings
     nsim_hs_defconfig (gcc-8): 2 warnings
-    nsim_hs_defconfig (gcc-8): 29 warnings
+    nsim_hs_defconfig (gcc-8): 30 warnings
     nsim_hs_smp_defconfig (gcc-8): 2 warnings
     nsimosci_hs_defconfig (gcc-8): 2 warnings
     nsimosci_hs_smp_defconfig (gcc-8): 2 warnings
@@ -95,19 +104,21 @@ arc:
     vdk_hs38_smp_defconfig (gcc-8): 1 warning
 
 arm64:
+    allmodconfig (clang-8): 9 errors, 48 warnings
+    allmodconfig (gcc-8): 9 errors, 2 warnings
     defconfig (gcc-8): 27 warnings
 
 arm:
+    allmodconfig (gcc-8): 19 warnings
     am200epdkit_defconfig (gcc-8): 1 warning
-    assabet_defconfig (gcc-8): 1 warning
     at91_dt_defconfig (gcc-8): 1 warning
     axm55xx_defconfig (gcc-8): 1 warning
+    bcm2835_defconfig (gcc-8): 3 warnings
     cm_x2xx_defconfig (gcc-8): 1 warning
     cm_x300_defconfig (gcc-8): 1 warning
     cns3420vb_defconfig (gcc-8): 1 warning
     colibri_pxa270_defconfig (gcc-8): 1 warning
     colibri_pxa300_defconfig (gcc-8): 1 warning
-    collie_defconfig (gcc-8): 1 warning
     davinci_all_defconfig (gcc-8): 1 warning
     dove_defconfig (gcc-8): 1 warning
     em_x270_defconfig (gcc-8): 1 warning
@@ -115,7 +126,6 @@ arm:
     eseries_pxa_defconfig (gcc-8): 2 warnings
     exynos_defconfig (gcc-8): 1 warning
     ezx_defconfig (gcc-8): 1 warning
-    h3600_defconfig (gcc-8): 1 warning
     h5000_defconfig (gcc-8): 1 warning
     imote2_defconfig (gcc-8): 1 warning
     imx_v4_v5_defconfig (gcc-8): 1 warning
@@ -133,12 +143,11 @@ arm:
     multi_v7_defconfig (gcc-8): 1 warning
     multi_v7_defconfig (gcc-8): 1 warning
     multi_v7_defconfig (gcc-8): 1 warning
-    multi_v7_defconfig (gcc-8): 27 warnings
+    multi_v7_defconfig (gcc-8): 28 warnings
     mv78xx0_defconfig (gcc-8): 1 warning
     mvebu_v5_defconfig (gcc-8): 1 warning
     mvebu_v7_defconfig (gcc-8): 1 warning
     mxs_defconfig (gcc-8): 1 warning
-    neponset_defconfig (gcc-8): 1 warning
     nhk8815_defconfig (gcc-8): 1 warning
     omap1_defconfig (gcc-8): 1 warning
     omap2plus_defconfig (gcc-8): 1 warning
@@ -156,7 +165,6 @@ arm:
     s3c6400_defconfig (gcc-8): 2 warnings
     s5pv210_defconfig (gcc-8): 1 warning
     sama5_defconfig (gcc-8): 1 warning
-    shannon_defconfig (gcc-8): 1 warning
     spear13xx_defconfig (gcc-8): 1 warning
     sunxi_defconfig (gcc-8): 1 warning
     tango4_defconfig (gcc-8): 1 warning
@@ -171,412 +179,538 @@ arm:
     zeus_defconfig (gcc-8): 2 warnings
 
 i386:
-    i386_defconfig (gcc-8): 27 warnings
+    i386_defconfig (gcc-8): 28 warnings
 
 mips:
-    32r2el_defconfig (gcc-8): 27 warnings
+    32r2el_defconfig (gcc-8): 28 warnings
+    cavium_octeon_defconfig (gcc-8): 4 errors, 3 warnings
     db1xxx_defconfig (gcc-8): 1 warning
+    ip27_defconfig (gcc-8): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+    nlm_xlp_defconfig (gcc-8): 2 warnings
+    nlm_xlr_defconfig (gcc-8): 3 warnings
+    rbtx49xx_defconfig (gcc-8): 1 warning
 
 riscv:
-    defconfig (gcc-8): 27 warnings
-    rv32_defconfig (gcc-8): 6 warnings
+    defconfig (gcc-8): 2 warnings
+    defconfig (gcc-8): 29 warnings
+    rv32_defconfig (gcc-8): 8 warnings
 
 x86_64:
+    allmodconfig (gcc-8): 1 warning
     tinyconfig (gcc-8): 1 warning
     x86_64_defconfig (gcc-8): 27 warnings
 
+Errors summary:
+
+    2    ERROR: "dpdmai_set_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdm=
+a.ko] undefined!
+    2    ERROR: "dpdmai_reset" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] u=
+ndefined!
+    2    ERROR: "dpdmai_open" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] un=
+defined!
+    2    ERROR: "dpdmai_get_tx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdm=
+a.ko] undefined!
+    2    ERROR: "dpdmai_get_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdm=
+a.ko] undefined!
+    2    ERROR: "dpdmai_get_attributes" [drivers/dma/fsl-dpaa2-qdma/dpaa2-q=
+dma.ko] undefined!
+    2    ERROR: "dpdmai_enable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] =
+undefined!
+    2    ERROR: "dpdmai_disable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    2    ERROR: "dpdmai_close" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] u=
+ndefined!
+    1    drivers/staging/octeon/ethernet.c:516:29: error: type of formal pa=
+rameter 2 is incomplete
+    1    drivers/staging/octeon/ethernet.c:499:30: error: storage size of '=
+link_info' isn't known
+    1    drivers/staging/octeon/ethernet.c:463:30: error: storage size of '=
+link_info' isn't known
+    1    drivers/staging/octeon/ethernet.c:177:21: error: dereferencing poi=
+nter to incomplete type 'struct cvmx_wqe'
 
 Warnings summary:
 
     64   WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
     26   <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
 -Wcpp]
-    6    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunu=
+    16   1 warning generated.
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    6    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunu=
 sed-variable]
-    5    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_=
-period' defined but not used [-Wunused-function]
+    6    include/linux/kern_levels.h:5:18: warning: format '%lu' expects ar=
+gument of type 'long unsigned int', but argument 8 has type 'unsigned int' =
+[-Wformat=3D]
+    6    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e100=
+0e_s0ix_exit_flow' defined but not used [-Wunused-function]
+    6    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e100=
+0e_s0ix_entry_flow' defined but not used [-Wunused-function]
+    5    2 warnings generated.
+    4    sound/soc/codecs/rt5677-spi.c:114:30: warning: unused variable 'rt=
+d' [-Wunused-variable]
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    2    WARNING: modpost: missing MODULE_LICENSE() in drivers/dma/fsl-dpaa=
+2-qdma/dpdmai.o
     2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
 -Wcpp]
     2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
 d [-Wcpp]
-    1    .config:1167:warning: override: UNWINDER_GUESS changes choice state
-    1    ./.tmp.config.oueqogEDJf:3981:warning: override: reassigning to sy=
+    1    {standard input}:134: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    warning: same module names found:
+    1    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable 'rtd' [-=
+Wunused-variable]
+    1    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    1    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitia=
+lized when used within its own initialization [-Wuninitialized]
+    1    mm/shmem.c:2737:35: warning: variable 'shmem_falloc_waitq' is unin=
+itialized when used within its own initialization [-Wuninitialized]
+    1    kernel/debug/debug_core.c:470:18: warning: array subscript [0, 0] =
+is outside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
+    1    kernel/debug/debug_core.c:469:33: warning: array subscript [0, 0] =
+is outside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
+    1    kernel/debug/debug_core.c:452:17: warning: array subscript [0, 0] =
+is outside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
+    1    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    1    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized wh=
+en used within its own initialization [-Wuninitialized]
+    1    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when =
+used within its own initialization [-Wuninitialized]
+    1    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when=
+ used within its own initialization [-Wuninitialized]
+    1    fs/namei.c:3132:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1    fs/namei.c:1644:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized =
+when used within its own initialization [-Wuninitialized]
+    1    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized w=
+hen used within its own initialization [-Wuninitialized]
+    1    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized=
+ when used within its own initialization [-Wuninitialized]
+    1    drivers/staging/octeon/octeon-ethernet.h:94:12: warning: 'union cv=
+mx_helper_link_info' declared inside parameter list will not be visible out=
+side of this definition or declaration
+    1    drivers/staging/octeon/ethernet.c:499:30: warning: unused variable=
+ 'link_info' [-Wunused-variable]
+    1    drivers/staging/octeon/ethernet.c:463:30: warning: unused variable=
+ 'link_info' [-Wunused-variable]
+    1    drivers/scsi/lpfc/lpfc_sli.c:11855:34: warning: variable 'done_q' =
+is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/lpfc/lpfc_scsi.c:4722:34: warning: variable 'waitq' i=
+s uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1    drivers/net/usb/lan78xx.c:2662:34: warning: variable 'unlink_wakeu=
+p' is uninitialized when used within its own initialization [-Wuninitialize=
+d]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake'=
+ is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake'=
+ is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is unin=
+itialized when used within its own initialization [-Wuninitialized]
+    1    drivers/gpu/drm/amd/amdgpu/../powerplay/renoir_ppt.c:182:26: warni=
+ng: suggest braces around initialization of subobject [-Wmissing-braces]
+    1    drivers/dma/fsl-dpaa2-qdma/dpdmai.c:148:25: warning: variable 'cfg=
+' is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/dma/fsl-dpaa2-qdma/dpdmai.c:148:20: warning: variable 'cmd=
+' is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/android/binderfs.c:657:41: warning: suggest braces around =
+initialization of subobject [-Wmissing-braces]
+    1    /tmp/ccWqXYtW.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/ccWqXYtW.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1165:warning: override: UNWINDER_GUESS changes choice state
+    1    ./.tmp.config.xS81TWvZ7g:4889:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.oueqogEDJf:3965:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4872:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.oueqogEDJf:3964:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4871:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.oueqogEDJf:3960:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4867:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.oueqogEDJf:3940:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4847:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.oueqogEDJf:3934:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4841:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.oueqogEDJf:3925:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4832:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.oueqogEDJf:3923:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4830:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.oueqogEDJf:3922:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4829:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.oueqogEDJf:3921:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4828:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.oueqogEDJf:3919:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4826:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.oueqogEDJf:3918:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4825:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.oueqogEDJf:3915:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4822:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.oueqogEDJf:3908:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4815:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.oueqogEDJf:3898:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4805:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.oueqogEDJf:3887:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4794:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.oueqogEDJf:3779:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4686:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.oueqogEDJf:3775:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4682:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.oueqogEDJf:3750:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4657:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.oueqogEDJf:3729:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4636:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.oueqogEDJf:3671:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4578:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.oueqogEDJf:3670:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4577:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.oueqogEDJf:3666:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4573:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.oueqogEDJf:3665:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4572:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.oueqogEDJf:3663:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4570:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.oueqogEDJf:3662:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4569:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.oueqogEDJf:3659:warning: override: reassigning to sy=
+    1    ./.tmp.config.xS81TWvZ7g:4566:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.mwKoosqfLq:4893:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7968:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.mwKoosqfLq:4877:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7951:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.mwKoosqfLq:4876:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7950:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.mwKoosqfLq:4872:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7946:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.mwKoosqfLq:4852:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7926:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.mwKoosqfLq:4846:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7920:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.mwKoosqfLq:4837:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7911:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.mwKoosqfLq:4835:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7909:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.mwKoosqfLq:4834:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7908:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.mwKoosqfLq:4833:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7907:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.mwKoosqfLq:4831:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7905:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.mwKoosqfLq:4830:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7904:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.mwKoosqfLq:4827:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7901:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.mwKoosqfLq:4820:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7894:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.mwKoosqfLq:4810:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7884:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.mwKoosqfLq:4799:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7873:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.mwKoosqfLq:4691:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7765:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.mwKoosqfLq:4687:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7761:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.mwKoosqfLq:4662:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7736:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.mwKoosqfLq:4641:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7715:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.mwKoosqfLq:4583:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7657:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.mwKoosqfLq:4582:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7656:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.mwKoosqfLq:4578:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7652:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.mwKoosqfLq:4577:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7651:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.mwKoosqfLq:4575:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7649:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.mwKoosqfLq:4574:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7648:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.mwKoosqfLq:4571:warning: override: reassigning to sy=
+    1    ./.tmp.config.rRnaRmJqkB:7645:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.dKuWiRMIqD:8489:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8567:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.dKuWiRMIqD:8473:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8550:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.dKuWiRMIqD:8472:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8549:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.dKuWiRMIqD:8468:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8545:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.dKuWiRMIqD:8448:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8525:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.dKuWiRMIqD:8442:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8519:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.dKuWiRMIqD:8433:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8510:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.dKuWiRMIqD:8431:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8508:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.dKuWiRMIqD:8430:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8507:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.dKuWiRMIqD:8429:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8506:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.dKuWiRMIqD:8427:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8504:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.dKuWiRMIqD:8426:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8503:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.dKuWiRMIqD:8423:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8500:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.dKuWiRMIqD:8416:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8493:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.dKuWiRMIqD:8406:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8483:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.dKuWiRMIqD:8395:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8472:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.dKuWiRMIqD:8287:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8364:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.dKuWiRMIqD:8283:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8360:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.dKuWiRMIqD:8258:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8335:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.dKuWiRMIqD:8237:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8314:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.dKuWiRMIqD:8179:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8256:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.dKuWiRMIqD:8178:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8255:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.dKuWiRMIqD:8174:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8251:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.dKuWiRMIqD:8173:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8250:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.dKuWiRMIqD:8171:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8248:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.dKuWiRMIqD:8170:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8247:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.dKuWiRMIqD:8167:warning: override: reassigning to sy=
+    1    ./.tmp.config.Sh6OL8tr7w:8244:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.Yw8XROonll:1746:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1745:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Yw8XROonll:1730:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1728:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.Yw8XROonll:1729:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1727:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.Yw8XROonll:1725:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1723:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.Yw8XROonll:1705:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1703:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.Yw8XROonll:1699:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1697:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.Yw8XROonll:1690:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1688:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.Yw8XROonll:1688:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1686:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.Yw8XROonll:1687:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1685:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.Yw8XROonll:1686:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1684:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.Yw8XROonll:1684:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1682:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.Yw8XROonll:1683:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1681:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.Yw8XROonll:1680:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1678:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.Yw8XROonll:1673:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1671:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.Yw8XROonll:1663:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1661:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.Yw8XROonll:1652:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1650:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Yw8XROonll:1544:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1542:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.Yw8XROonll:1540:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1538:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.Yw8XROonll:1515:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1513:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.Yw8XROonll:1494:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1492:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.Yw8XROonll:1436:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1434:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.Yw8XROonll:1435:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1433:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.Yw8XROonll:1431:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1429:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.Yw8XROonll:1430:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1428:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.Yw8XROonll:1428:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1426:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.Yw8XROonll:1427:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1425:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.Yw8XROonll:1424:warning: override: reassigning to sy=
+    1    ./.tmp.config.F2JOsCoGYv:1422:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.K36bzkPikU:4832:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3979:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.K36bzkPikU:4816:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3962:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.K36bzkPikU:4815:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3961:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.K36bzkPikU:4811:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3957:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.K36bzkPikU:4791:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3937:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.K36bzkPikU:4785:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3931:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.K36bzkPikU:4776:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3922:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.K36bzkPikU:4774:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3920:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.K36bzkPikU:4773:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3919:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.K36bzkPikU:4772:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3918:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.K36bzkPikU:4770:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3916:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.K36bzkPikU:4769:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3915:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.K36bzkPikU:4766:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3912:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.K36bzkPikU:4759:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3905:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.K36bzkPikU:4749:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3895:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.K36bzkPikU:4738:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3884:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.K36bzkPikU:4630:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3776:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.K36bzkPikU:4626:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3772:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.K36bzkPikU:4601:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3747:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.K36bzkPikU:4580:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3726:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.K36bzkPikU:4522:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3668:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.K36bzkPikU:4521:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3667:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.K36bzkPikU:4517:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3663:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.K36bzkPikU:4516:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3662:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.K36bzkPikU:4514:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3660:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.K36bzkPikU:4513:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3659:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.K36bzkPikU:4510:warning: override: reassigning to sy=
+    1    ./.tmp.config.E7aIuocGWT:3656:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.DaWh8FywXm:7932:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4826:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.DaWh8FywXm:7916:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4809:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.DaWh8FywXm:7915:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4808:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.DaWh8FywXm:7911:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4804:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.DaWh8FywXm:7891:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4784:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.DaWh8FywXm:7885:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4778:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.DaWh8FywXm:7876:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4769:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.DaWh8FywXm:7874:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4767:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.DaWh8FywXm:7873:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4766:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.DaWh8FywXm:7872:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4765:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.DaWh8FywXm:7870:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4763:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.DaWh8FywXm:7869:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4762:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.DaWh8FywXm:7866:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4759:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.DaWh8FywXm:7859:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4752:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.DaWh8FywXm:7849:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4742:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.DaWh8FywXm:7838:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4731:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.DaWh8FywXm:7730:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4623:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.DaWh8FywXm:7726:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4619:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.DaWh8FywXm:7701:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4594:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.DaWh8FywXm:7680:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4573:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.DaWh8FywXm:7622:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4515:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.DaWh8FywXm:7621:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4514:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.DaWh8FywXm:7617:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4510:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.DaWh8FywXm:7616:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4509:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.DaWh8FywXm:7614:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4507:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.DaWh8FywXm:7613:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4506:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.DaWh8FywXm:7610:warning: override: reassigning to sy=
+    1    ./.tmp.config.DdFVv0mEMi:4503:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.18QCiJBQ4A:3373:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3365:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.18QCiJBQ4A:3357:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3348:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.18QCiJBQ4A:3356:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3347:warning: override: reassigning to sy=
 mbol STAGING
-    1    ./.tmp.config.18QCiJBQ4A:3352:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3343:warning: override: reassigning to sy=
 mbol SECURITYFS
-    1    ./.tmp.config.18QCiJBQ4A:3332:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3323:warning: override: reassigning to sy=
 mbol IPV6_GRE
-    1    ./.tmp.config.18QCiJBQ4A:3326:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3317:warning: override: reassigning to sy=
 mbol NET_CLS_FLOWER
-    1    ./.tmp.config.18QCiJBQ4A:3317:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3308:warning: override: reassigning to sy=
 mbol IPV6
-    1    ./.tmp.config.18QCiJBQ4A:3315:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3306:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.18QCiJBQ4A:3314:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3305:warning: override: reassigning to sy=
 mbol NET_SCHED
-    1    ./.tmp.config.18QCiJBQ4A:3313:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3304:warning: override: reassigning to sy=
 mbol NET_CLS_ACT
-    1    ./.tmp.config.18QCiJBQ4A:3311:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3302:warning: override: reassigning to sy=
 mbol CGROUP_BPF
-    1    ./.tmp.config.18QCiJBQ4A:3310:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3301:warning: override: reassigning to sy=
 mbol TEST_BPF
-    1    ./.tmp.config.18QCiJBQ4A:3307:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3298:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
-    1    ./.tmp.config.18QCiJBQ4A:3300:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3291:warning: override: reassigning to sy=
 mbol ANDROID
-    1    ./.tmp.config.18QCiJBQ4A:3290:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3281:warning: override: reassigning to sy=
 mbol NOTIFIER_ERROR_INJECTION
-    1    ./.tmp.config.18QCiJBQ4A:3279:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3270:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.18QCiJBQ4A:3171:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3162:warning: override: reassigning to sy=
 mbol NET_NS
-    1    ./.tmp.config.18QCiJBQ4A:3167:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3158:warning: override: reassigning to sy=
 mbol USER_NS
-    1    ./.tmp.config.18QCiJBQ4A:3142:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3133:warning: override: reassigning to sy=
 mbol NET_ACT_GACT
-    1    ./.tmp.config.18QCiJBQ4A:3121:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3112:warning: override: reassigning to sy=
 mbol NET_SCH_INGRESS
-    1    ./.tmp.config.18QCiJBQ4A:3063:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3054:warning: override: reassigning to sy=
 mbol VLAN_8021Q
-    1    ./.tmp.config.18QCiJBQ4A:3062:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3053:warning: override: reassigning to sy=
 mbol BRIDGE
-    1    ./.tmp.config.18QCiJBQ4A:3058:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3049:warning: override: reassigning to sy=
 mbol VETH
-    1    ./.tmp.config.18QCiJBQ4A:3057:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3048:warning: override: reassigning to sy=
 mbol IPV6_MULTIPLE_TABLES
-    1    ./.tmp.config.18QCiJBQ4A:3055:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3046:warning: override: reassigning to sy=
 mbol NET_L3_MASTER_DEV
-    1    ./.tmp.config.18QCiJBQ4A:3054:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3045:warning: override: reassigning to sy=
 mbol NET_VRF
-    1    ./.tmp.config.18QCiJBQ4A:3051:warning: override: reassigning to sy=
+    1    ./.tmp.config.0Dg98F3fQN:3042:warning: override: reassigning to sy=
 mbol BPF_SYSCALL
 
 Section mismatches summary:
@@ -599,10 +733,10 @@ k_free()
     1    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in refe=
 rence from the function free_memmap() to the function .meminit.text:membloc=
 k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x3598): Section mismatch in ref=
+    1    WARNING: vmlinux.o(.text.unlikely+0x3630): Section mismatch in ref=
 erence from the function pmax_setup_memory_region() to the function .init.t=
 ext:add_memory_region()
-    1    WARNING: vmlinux.o(.text.unlikely+0x321c): Section mismatch in ref=
+    1    WARNING: vmlinux.o(.text.unlikely+0x3320): Section mismatch in ref=
 erence from the function pmax_setup_memory_region() to the function .init.t=
 ext:add_memory_region()
 
@@ -620,74 +754,254 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 27 warni=
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 28 warni=
 ngs, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.oueqogEDJf:3659:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3656:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.oueqogEDJf:3662:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3659:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.oueqogEDJf:3663:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3660:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.oueqogEDJf:3665:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3662:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.oueqogEDJf:3666:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3663:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.oueqogEDJf:3670:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3667:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.oueqogEDJf:3671:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3668:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.oueqogEDJf:3729:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3726:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.oueqogEDJf:3750:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3747:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.oueqogEDJf:3775:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3772:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.oueqogEDJf:3779:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3776:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.oueqogEDJf:3887:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3884:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.oueqogEDJf:3898:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3895:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.oueqogEDJf:3908:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3905:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.oueqogEDJf:3915:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3912:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.oueqogEDJf:3918:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3915:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.oueqogEDJf:3919:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3916:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.oueqogEDJf:3921:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3918:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.oueqogEDJf:3922:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3919:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.oueqogEDJf:3923:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3920:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.oueqogEDJf:3925:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3922:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.oueqogEDJf:3934:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3931:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.oueqogEDJf:3940:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3937:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.oueqogEDJf:3960:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3957:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.oueqogEDJf:3964:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3961:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.oueqogEDJf:3965:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3962:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.oueqogEDJf:3981:warning: override: reassigning to symbol =
+    ./.tmp.config.E7aIuocGWT:3979:warning: override: reassigning to symbol =
 USER_NS
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 19 warnings, 0 section =
+mismatches
+
+Warnings:
+    /tmp/ccWqXYtW.s:18119: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/ccWqXYtW.s:18191: Warning: using r15 results in unpredictable beha=
+viour
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
+    sound/soc/codecs/rt5677-spi.c:114:30: warning: unused variable 'rtd' [-=
+Wunused-variable]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
+er of different size [-Wpointer-to-int-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    warning: same module names found:
 
 ---------------------------------------------------------------------------=
 -----
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+allmodconfig (arm64, clang-8) =E2=80=94 FAIL, 9 errors, 48 warnings, 0 sect=
+ion mismatches
+
+Errors:
+    ERROR: "dpdmai_reset" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefi=
+ned!
+    ERROR: "dpdmai_set_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_tx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_attributes" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.k=
+o] undefined!
+    ERROR: "dpdmai_open" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefin=
+ed!
+    ERROR: "dpdmai_disable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] unde=
+fined!
+    ERROR: "dpdmai_close" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefi=
+ned!
+    ERROR: "dpdmai_enable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undef=
+ined!
+
+Warnings:
+    mm/shmem.c:2737:35: warning: variable 'shmem_falloc_waitq' is uninitial=
+ized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized when us=
+ed within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitialized w=
+hen used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/namei.c:1644:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    fs/namei.c:3132:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/android/binderfs.c:657:41: warning: suggest braces around initi=
+alization of subobject [-Wmissing-braces]
+    1 warning generated.
+    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized when=
+ used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized when =
+used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when used =
+within its own initialization [-Wuninitialized]
+    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when used=
+ within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/dma/fsl-dpaa2-qdma/dpdmai.c:148:20: warning: variable 'cmd' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    drivers/dma/fsl-dpaa2-qdma/dpdmai.c:148:25: warning: variable 'cfg' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    sound/soc/codecs/rt5677-spi.c:114:30: warning: unused variable 'rtd' [-=
+Wunused-variable]
+    1 warning generated.
+    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is uninitial=
+ized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../powerplay/renoir_ppt.c:182:26: warning: s=
+uggest braces around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitialized=
+ when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake' is u=
+ninitialized when used within its own initialization [-Wuninitialized]
+    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake' is u=
+ninitialized when used within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/net/usb/lan78xx.c:2662:34: warning: variable 'unlink_wakeup' is=
+ uninitialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/scsi/lpfc/lpfc_sli.c:11855:34: warning: variable 'done_q' is un=
+initialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/scsi/lpfc/lpfc_scsi.c:4722:34: warning: variable 'waitq' is uni=
+nitialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    WARNING: modpost: missing MODULE_LICENSE() in drivers/dma/fsl-dpaa2-qdm=
+a/dpdmai.o
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 FAIL, 9 errors, 2 warnings, 0 section=
  mismatches
+
+Errors:
+    ERROR: "dpdmai_enable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undef=
+ined!
+    ERROR: "dpdmai_set_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_tx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_rx_queue" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko]=
+ undefined!
+    ERROR: "dpdmai_get_attributes" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.k=
+o] undefined!
+    ERROR: "dpdmai_open" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefin=
+ed!
+    ERROR: "dpdmai_close" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefi=
+ned!
+    ERROR: "dpdmai_disable" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] unde=
+fined!
+    ERROR: "dpdmai_reset" [drivers/dma/fsl-dpaa2-qdma/dpaa2-qdma.ko] undefi=
+ned!
+
+Warnings:
+    sound/soc/codecs/rt5677-spi.c:114:30: warning: unused variable 'rtd' [-=
+Wunused-variable]
+    WARNING: modpost: missing MODULE_LICENSE() in drivers/dma/fsl-dpaa2-qdm=
+a/dpdmai.o
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    sound/soc/codecs/rt5677-spi.c:114:30: warning: unused variable 'rtd' [-=
+Wunused-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -716,6 +1030,11 @@ mismatches
 -----
 allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -752,12 +1071,8 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 Section mismatches:
     WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
@@ -820,8 +1135,16 @@ e()
 
 ---------------------------------------------------------------------------=
 -----
-bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sect=
 ion mismatches
+
+Warnings:
+    kernel/debug/debug_core.c:452:17: warning: array subscript [0, 0] is ou=
+tside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
+    kernel/debug/debug_core.c:469:33: warning: array subscript [0, 0] is ou=
+tside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
+    kernel/debug/debug_core.c:470:18: warning: array subscript [0, 0] is ou=
+tside array bounds of 'struct debuggerinfo_struct[1]' [-Warray-bounds]
 
 ---------------------------------------------------------------------------=
 -----
@@ -855,8 +1178,27 @@ ction mismatches
 
 ---------------------------------------------------------------------------=
 -----
-cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 FAIL, 4 errors, 3 warnings,=
  0 section mismatches
+
+Errors:
+    drivers/staging/octeon/ethernet.c:177:21: error: dereferencing pointer =
+to incomplete type 'struct cvmx_wqe'
+    drivers/staging/octeon/ethernet.c:463:30: error: storage size of 'link_=
+info' isn't known
+    drivers/staging/octeon/ethernet.c:499:30: error: storage size of 'link_=
+info' isn't known
+    drivers/staging/octeon/ethernet.c:516:29: error: type of formal paramet=
+er 2 is incomplete
+
+Warnings:
+    drivers/staging/octeon/octeon-ethernet.h:94:12: warning: 'union cvmx_he=
+lper_link_info' declared inside parameter list will not be visible outside =
+of this definition or declaration
+    drivers/staging/octeon/ethernet.c:463:30: warning: unused variable 'lin=
+k_info' [-Wunused-variable]
+    drivers/staging/octeon/ethernet.c:499:30: warning: unused variable 'lin=
+k_info' [-Wunused-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -925,12 +1267,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
 
 Section mismatches:
     WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
@@ -956,7 +1294,7 @@ db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
 
 Warnings:
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=
@@ -970,7 +1308,7 @@ decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
 section mismatches
 
 Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x3598): Section mismatch in referenc=
+    WARNING: vmlinux.o(.text.unlikely+0x3630): Section mismatch in referenc=
 e from the function pmax_setup_memory_region() to the function .init.text:a=
 dd_memory_region()
 
@@ -980,19 +1318,30 @@ decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
 , 0 section mismatches
 
 Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x321c): Section mismatch in referenc=
+    WARNING: vmlinux.o(.text.unlikely+0x3320): Section mismatch in referenc=
 e from the function pmax_setup_memory_region() to the function .init.text:a=
 dd_memory_region()
 
 ---------------------------------------------------------------------------=
 -----
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
 smatches
+
+Warnings:
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
 defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
 smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
 
 ---------------------------------------------------------------------------=
 -----
@@ -1006,64 +1355,68 @@ defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
 
 ---------------------------------------------------------------------------=
 -----
-defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 27 warnings, 0=
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 29 warnings, 0=
  section mismatches
 
 Warnings:
-    ./.tmp.config.18QCiJBQ4A:3051:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3042:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.18QCiJBQ4A:3054:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3045:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.18QCiJBQ4A:3055:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3046:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.18QCiJBQ4A:3057:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3048:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.18QCiJBQ4A:3058:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3049:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.18QCiJBQ4A:3062:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3053:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.18QCiJBQ4A:3063:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3054:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.18QCiJBQ4A:3121:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3112:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.18QCiJBQ4A:3142:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3133:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.18QCiJBQ4A:3167:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3158:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.18QCiJBQ4A:3171:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3162:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.18QCiJBQ4A:3279:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3270:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.18QCiJBQ4A:3290:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3281:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.18QCiJBQ4A:3300:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3291:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.18QCiJBQ4A:3307:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3298:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.18QCiJBQ4A:3310:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3301:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.18QCiJBQ4A:3311:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3302:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.18QCiJBQ4A:3313:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3304:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.18QCiJBQ4A:3314:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3305:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.18QCiJBQ4A:3315:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3306:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.18QCiJBQ4A:3317:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3308:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.18QCiJBQ4A:3326:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3317:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.18QCiJBQ4A:3332:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3323:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.18QCiJBQ4A:3352:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3343:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.18QCiJBQ4A:3356:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3347:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.18QCiJBQ4A:3357:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3348:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.18QCiJBQ4A:3373:warning: override: reassigning to symbol =
+    ./.tmp.config.0Dg98F3fQN:3365:warning: override: reassigning to symbol =
 USER_NS
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1071,59 +1424,59 @@ defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 27 warnings, 0=
  section mismatches
 
 Warnings:
-    ./.tmp.config.DaWh8FywXm:7610:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7645:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.DaWh8FywXm:7613:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7648:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.DaWh8FywXm:7614:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7649:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.DaWh8FywXm:7616:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7651:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.DaWh8FywXm:7617:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7652:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.DaWh8FywXm:7621:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7656:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.DaWh8FywXm:7622:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7657:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.DaWh8FywXm:7680:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7715:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.DaWh8FywXm:7701:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7736:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.DaWh8FywXm:7726:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7761:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.DaWh8FywXm:7730:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7765:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.DaWh8FywXm:7838:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7873:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.DaWh8FywXm:7849:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7884:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.DaWh8FywXm:7859:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7894:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.DaWh8FywXm:7866:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7901:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.DaWh8FywXm:7869:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7904:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.DaWh8FywXm:7870:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7905:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.DaWh8FywXm:7872:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7907:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.DaWh8FywXm:7873:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7908:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.DaWh8FywXm:7874:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7909:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.DaWh8FywXm:7876:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7911:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.DaWh8FywXm:7885:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7920:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.DaWh8FywXm:7891:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7926:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.DaWh8FywXm:7911:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7946:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.DaWh8FywXm:7915:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7950:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.DaWh8FywXm:7916:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7951:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.DaWh8FywXm:7932:warning: override: reassigning to symbol =
+    ./.tmp.config.rRnaRmJqkB:7968:warning: override: reassigning to symbol =
 USER_NS
 
 ---------------------------------------------------------------------------=
@@ -1177,7 +1530,7 @@ section mismatches
 
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=
@@ -1223,12 +1576,8 @@ gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
 
 ---------------------------------------------------------------------------=
 -----
-h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
 
 Section mismatches:
     WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
@@ -1292,64 +1641,67 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 27 warning=
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 28 warning=
 s, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.K36bzkPikU:4510:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4503:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.K36bzkPikU:4513:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4506:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.K36bzkPikU:4514:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4507:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.K36bzkPikU:4516:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4509:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.K36bzkPikU:4517:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4510:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.K36bzkPikU:4521:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4514:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.K36bzkPikU:4522:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4515:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.K36bzkPikU:4580:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4573:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.K36bzkPikU:4601:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4594:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.K36bzkPikU:4626:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4619:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.K36bzkPikU:4630:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4623:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.K36bzkPikU:4738:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4731:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.K36bzkPikU:4749:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4742:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.K36bzkPikU:4759:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4752:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.K36bzkPikU:4766:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4759:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.K36bzkPikU:4769:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4762:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.K36bzkPikU:4770:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4763:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.K36bzkPikU:4772:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4765:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.K36bzkPikU:4773:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4766:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.K36bzkPikU:4774:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4767:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.K36bzkPikU:4776:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4769:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.K36bzkPikU:4785:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4778:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.K36bzkPikU:4791:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4784:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.K36bzkPikU:4811:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4804:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.K36bzkPikU:4815:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4808:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.K36bzkPikU:4816:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4809:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.K36bzkPikU:4832:warning: override: reassigning to symbol =
+    ./.tmp.config.DdFVv0mEMi:4826:warning: override: reassigning to symbol =
 USER_NS
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1395,8 +1747,14 @@ n mismatches
 
 ---------------------------------------------------------------------------=
 -----
-ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
 n mismatches
+
+Warnings:
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1509,7 +1867,7 @@ tion mismatches
 
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=
@@ -1534,8 +1892,12 @@ s, 0 section mismatches
 
 ---------------------------------------------------------------------------=
 -----
-malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    {standard input}:134: Warning: macro instruction expanded into multiple=
+ instructions
 
 ---------------------------------------------------------------------------=
 -----
@@ -1668,64 +2030,67 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 27 warn=
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 28 warn=
 ings, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.dKuWiRMIqD:8167:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8244:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.dKuWiRMIqD:8170:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8247:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.dKuWiRMIqD:8171:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8248:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.dKuWiRMIqD:8173:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8250:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.dKuWiRMIqD:8174:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8251:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.dKuWiRMIqD:8178:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8255:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.dKuWiRMIqD:8179:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8256:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.dKuWiRMIqD:8237:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8314:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.dKuWiRMIqD:8258:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8335:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.dKuWiRMIqD:8283:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8360:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.dKuWiRMIqD:8287:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8364:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.dKuWiRMIqD:8395:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8472:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.dKuWiRMIqD:8406:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8483:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.dKuWiRMIqD:8416:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8493:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.dKuWiRMIqD:8423:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8500:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.dKuWiRMIqD:8426:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8503:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.dKuWiRMIqD:8427:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8504:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.dKuWiRMIqD:8429:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8506:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.dKuWiRMIqD:8430:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8507:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.dKuWiRMIqD:8431:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8508:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.dKuWiRMIqD:8433:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8510:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.dKuWiRMIqD:8442:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8519:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.dKuWiRMIqD:8448:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8525:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.dKuWiRMIqD:8468:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8545:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.dKuWiRMIqD:8472:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8549:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.dKuWiRMIqD:8473:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8550:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.dKuWiRMIqD:8489:warning: override: reassigning to symbol =
+    ./.tmp.config.Sh6OL8tr7w:8567:warning: override: reassigning to symbol =
 USER_NS
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1761,12 +2126,8 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
 
 Section mismatches:
     WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
@@ -1788,13 +2149,28 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
 tion mismatches
+
+Warnings:
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 sec=
 tion mismatches
+
+Warnings:
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
 
 ---------------------------------------------------------------------------=
 -----
@@ -1807,66 +2183,69 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
-nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 29 warni=
+nsim_hs_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 30 warni=
 ngs, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.Yw8XROonll:1424:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1422:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.Yw8XROonll:1427:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1425:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.Yw8XROonll:1428:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1426:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.Yw8XROonll:1430:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1428:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.Yw8XROonll:1431:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1429:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.Yw8XROonll:1435:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1433:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.Yw8XROonll:1436:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1434:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.Yw8XROonll:1494:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1492:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.Yw8XROonll:1515:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1513:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.Yw8XROonll:1540:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1538:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.Yw8XROonll:1544:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1542:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.Yw8XROonll:1652:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1650:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.Yw8XROonll:1663:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1661:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.Yw8XROonll:1673:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1671:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.Yw8XROonll:1680:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1678:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.Yw8XROonll:1683:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1681:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.Yw8XROonll:1684:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1682:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.Yw8XROonll:1686:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1684:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.Yw8XROonll:1687:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1685:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.Yw8XROonll:1688:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1686:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.Yw8XROonll:1690:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1688:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.Yw8XROonll:1699:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1697:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.Yw8XROonll:1705:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1703:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.Yw8XROonll:1725:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1723:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.Yw8XROonll:1729:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1727:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.Yw8XROonll:1730:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1728:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.Yw8XROonll:1746:warning: override: reassigning to symbol =
+    ./.tmp.config.F2JOsCoGYv:1745:warning: override: reassigning to symbol =
 USER_NS
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    include/linux/kern_levels.h:5:18: warning: format '%lu' expects argumen=
+t of type 'long unsigned int', but argument 8 has type 'unsigned int' [-Wfo=
+rmat=3D]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2035,8 +2414,12 @@ on mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable 'rtd' [-Wunus=
+ed-variable]
 
 ---------------------------------------------------------------------------=
 -----
@@ -2068,7 +2451,7 @@ ion mismatches
 
 ---------------------------------------------------------------------------=
 -----
-rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 8 warnings, 0 secti=
 on mismatches
 
 Warnings:
@@ -2076,6 +2459,10 @@ Warnings:
     <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
     <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6405:13: warning: 'e1000e_s0=
+ix_exit_flow' defined but not used [-Wunused-function]
+    drivers/net/ethernet/intel/e1000e/netdev.c:6298:13: warning: 'e1000e_s0=
+ix_entry_flow' defined but not used [-Wunused-function]
     <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
     <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
 cpp]
@@ -2087,7 +2474,7 @@ s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
 on mismatches
 
 Warnings:
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=
@@ -2097,7 +2484,7 @@ ion mismatches
 
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=
@@ -2123,12 +2510,8 @@ sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
 
 ---------------------------------------------------------------------------=
 -----
-shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    drivers/video/fbdev/sa1100fb.c:975:21: warning: 'sa1100fb_min_dma_perio=
-d' defined but not used [-Wunused-function]
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
 
 Section mismatches:
     WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
@@ -2229,6 +2612,11 @@ Warnings:
 
 ---------------------------------------------------------------------------=
 -----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
 tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
 ismatches
 
@@ -2238,12 +2626,7 @@ tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
 ismatches
 
 Warnings:
-    .config:1167:warning: override: UNWINDER_GUESS changes choice state
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
+    .config:1165:warning: override: UNWINDER_GUESS changes choice state
 
 ---------------------------------------------------------------------------=
 -----
@@ -2363,59 +2746,59 @@ x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 27 war=
 nings, 0 section mismatches
 
 Warnings:
-    ./.tmp.config.mwKoosqfLq:4571:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4566:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.mwKoosqfLq:4574:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4569:warning: override: reassigning to symbol =
 NET_VRF
-    ./.tmp.config.mwKoosqfLq:4575:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4570:warning: override: reassigning to symbol =
 NET_L3_MASTER_DEV
-    ./.tmp.config.mwKoosqfLq:4577:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4572:warning: override: reassigning to symbol =
 IPV6_MULTIPLE_TABLES
-    ./.tmp.config.mwKoosqfLq:4578:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4573:warning: override: reassigning to symbol =
 VETH
-    ./.tmp.config.mwKoosqfLq:4582:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4577:warning: override: reassigning to symbol =
 BRIDGE
-    ./.tmp.config.mwKoosqfLq:4583:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4578:warning: override: reassigning to symbol =
 VLAN_8021Q
-    ./.tmp.config.mwKoosqfLq:4641:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4636:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.mwKoosqfLq:4662:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4657:warning: override: reassigning to symbol =
 NET_ACT_GACT
-    ./.tmp.config.mwKoosqfLq:4687:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4682:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.mwKoosqfLq:4691:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4686:warning: override: reassigning to symbol =
 NET_NS
-    ./.tmp.config.mwKoosqfLq:4799:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4794:warning: override: reassigning to symbol =
 USER_NS
-    ./.tmp.config.mwKoosqfLq:4810:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4805:warning: override: reassigning to symbol =
 NOTIFIER_ERROR_INJECTION
-    ./.tmp.config.mwKoosqfLq:4820:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4815:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.mwKoosqfLq:4827:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4822:warning: override: reassigning to symbol =
 BPF_SYSCALL
-    ./.tmp.config.mwKoosqfLq:4830:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4825:warning: override: reassigning to symbol =
 TEST_BPF
-    ./.tmp.config.mwKoosqfLq:4831:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4826:warning: override: reassigning to symbol =
 CGROUP_BPF
-    ./.tmp.config.mwKoosqfLq:4833:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4828:warning: override: reassigning to symbol =
 NET_CLS_ACT
-    ./.tmp.config.mwKoosqfLq:4834:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4829:warning: override: reassigning to symbol =
 NET_SCHED
-    ./.tmp.config.mwKoosqfLq:4835:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4830:warning: override: reassigning to symbol =
 NET_SCH_INGRESS
-    ./.tmp.config.mwKoosqfLq:4837:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4832:warning: override: reassigning to symbol =
 IPV6
-    ./.tmp.config.mwKoosqfLq:4846:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4841:warning: override: reassigning to symbol =
 NET_CLS_FLOWER
-    ./.tmp.config.mwKoosqfLq:4852:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4847:warning: override: reassigning to symbol =
 IPV6_GRE
-    ./.tmp.config.mwKoosqfLq:4872:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4867:warning: override: reassigning to symbol =
 SECURITYFS
-    ./.tmp.config.mwKoosqfLq:4876:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4871:warning: override: reassigning to symbol =
 STAGING
-    ./.tmp.config.mwKoosqfLq:4877:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4872:warning: override: reassigning to symbol =
 ANDROID
-    ./.tmp.config.mwKoosqfLq:4893:warning: override: reassigning to symbol =
+    ./.tmp.config.xS81TWvZ7g:4889:warning: override: reassigning to symbol =
 USER_NS
 
 ---------------------------------------------------------------------------=
@@ -2443,7 +2826,7 @@ zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
 
 Warnings:
     WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    sound/soc/soc-pcm.c:1149:8: warning: unused variable 'name' [-Wunused-v=
+    sound/soc/soc-pcm.c:1207:8: warning: unused variable 'name' [-Wunused-v=
 ariable]
 
 ---------------------------------------------------------------------------=

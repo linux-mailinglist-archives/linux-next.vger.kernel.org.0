@@ -2,116 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C723E414C
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 03:55:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A50CE41EF
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 05:07:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389568AbfJYBy7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 24 Oct 2019 21:54:59 -0400
-Received: from ozlabs.org ([203.11.71.1]:39295 "EHLO ozlabs.org"
+        id S2391635AbfJYDHk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 24 Oct 2019 23:07:40 -0400
+Received: from ozlabs.org ([203.11.71.1]:36373 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389488AbfJYBy4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 24 Oct 2019 21:54:56 -0400
+        id S2391622AbfJYDHk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 24 Oct 2019 23:07:40 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 46znHK2bcBz9sP3;
-        Fri, 25 Oct 2019 12:54:53 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 46zpvF444Yz9sPh;
+        Fri, 25 Oct 2019 14:07:37 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1571968493;
-        bh=7C+Sf4WcmsYMuwrmETgFQmmDGqQheurLBFa+StuqxPg=;
+        s=201702; t=1571972857;
+        bh=Wcc7GmXRkytzaoO7yz2JCTW9vMTn48DxT18BiwpgEUQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=rHSq/xldZ2Ia1Ech2xZeEfzwY2F8dj0M6TCPtPrHcuUHpRyPvxiqpGn0e/pS/wG34
-         IFKmqbfIXfio3vs/ry0EZ0NK/gUkZRs+FX2HDTXbn3oy4S1IJnby/MMo75lGAz9pUQ
-         dC3pZu+po47WyqPVvb+9GeF45EwpehhDBnIu5I9r0v8iMB+Jy8gtmK14tyhzU3sZ3Q
-         0yx40B71AAoHweOlQSGk4wTAflEyqVdxV4H19AJixQ5YSDMyUeOLs8BJcZ0FxcCgtH
-         jn/z+qKh+tCSjxgK3D9Zb7LfoqzC5PG0zaGBbBAlZFf8HeFddFeZXZaxse1/WHCgRR
-         NmgXBAMvezemw==
-Date:   Fri, 25 Oct 2019 12:54:36 +1100
+        b=A1wCE4HslN+dI9HIEBgyIr8spiNvFkTBKARKrejYkCf7jpUWO9qKP0nTMk3KeE6Iv
+         FqvQZ3JKaFFXeHpsHPaOlQLOKgmi09fothFhRA+7mJqGHnM3A0jAQ0oxhji3YIvL/u
+         9KJQeFEYee8odWfZRfasLGOd6I6oEw6VgfG+oCOI31vBCFrOlyMQlUp0nXYVl38uNW
+         77J8OETwmpTQK2szfe/mjxRnxjZbAV+55PwKP5A35ydLqrMrcmNVNajLOqkoFz0Lcw
+         ZjnHUj8RVTUmnxL46XmX+T2xZ+7g4HQWUTaQfdOvakw5mdVDnDY7dHEjFUg5VnbPZl
+         5s9BgyHk4Q8LA==
+Date:   Fri, 25 Oct 2019 14:07:36 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Mackerras <paulus@ozlabs.org>,
-        Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <marc.zyngier@arm.com>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        KVM <kvm@vger.kernel.org>
-Subject: linux-next: manual merge of the kvm-ppc tree with the kvm-arm tree
-Message-ID: <20191025125436.6c85dbfe@canb.auug.org.au>
+        James Smart <jsmart2021@gmail.com>
+Subject: linux-next: build failure after merge of the scsi-mkp tree
+Message-ID: <20191025140736.0c9e9d64@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lu9GUO+j=WtsnYS2MNTu8l1";
+Content-Type: multipart/signed; boundary="Sig_/f0ti=U1JDDubgaKxd22sHes";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lu9GUO+j=WtsnYS2MNTu8l1
+--Sig_/f0ti=U1JDDubgaKxd22sHes
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm-ppc tree got a conflict in:
+After merging the scsi-mkp tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  include/uapi/linux/kvm.h
+drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_release=
+':
+drivers/scsi/lpfc/lpfc_debugfs.c:2109:2: error: implicit declaration of fun=
+ction 'vfree'; did you mean 'kvfree'? [-Werror=3Dimplicit-function-declarat=
+ion]
+ 2109 |  vfree(debug->buffer);
+      |  ^~~~~
+      |  kvfree
+drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_open':
+drivers/scsi/lpfc/lpfc_debugfs.c:2150:18: error: implicit declaration of fu=
+nction 'vmalloc'; did you mean 'kvmalloc'? [-Werror=3Dimplicit-function-dec=
+laration]
+ 2150 |  debug->buffer =3D vmalloc(size);
+      |                  ^~~~~~~
+      |                  kvmalloc
+drivers/scsi/lpfc/lpfc_debugfs.c:2150:16: warning: assignment to 'char *' f=
+rom 'int' makes pointer from integer without a cast [-Wint-conversion]
+ 2150 |  debug->buffer =3D vmalloc(size);
+      |                ^
 
-between commits:
+Caused by commit
 
-  c726200dd106 ("KVM: arm/arm64: Allow reporting non-ISV data aborts to use=
-rspace")
-  da345174ceca ("KVM: arm/arm64: Allow user injection of external data abor=
-ts")
+  95bfc6d8ad86 ("scsi: lpfc: Make FW logging dynamically configurable")
 
-from the kvm-arm tree and commit:
-
-  1a9167a214f5 ("KVM: PPC: Report single stepping capability")
-
-from the kvm-ppc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the scsi-mkp tree from next-20191024 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/uapi/linux/kvm.h
-index fb47c0fad6a6,ce8cfcc51aec..000000000000
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@@ -1006,8 -1000,7 +1006,9 @@@ struct kvm_ppc_resize_hpt=20
-  #define KVM_CAP_PMU_EVENT_FILTER 173
-  #define KVM_CAP_ARM_IRQ_LINE_LAYOUT_2 174
-  #define KVM_CAP_HYPERV_DIRECT_TLBFLUSH 175
- -#define KVM_CAP_PPC_GUEST_DEBUG_SSTEP 176
- +#define KVM_CAP_ARM_NISV_TO_USER 176
- +#define KVM_CAP_ARM_INJECT_EXT_DABT 177
-++#define KVM_CAP_PPC_GUEST_DEBUG_SSTEP 178
- =20
-  #ifdef KVM_CAP_IRQ_ROUTING
- =20
-
---Sig_/lu9GUO+j=WtsnYS2MNTu8l1
+--Sig_/f0ti=U1JDDubgaKxd22sHes
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2yVdwACgkQAVBC80lX
-0GzfRQf/XFMevKgAPuDxOa1oqp6QHRCAz1NSh0thOKzWRSs0pGS0uDn9MTvNh0pb
-mJEUL4zXCCfa2SSyQ+EdAefRynEQII1PHBDJ61oJPL83DwOmT5GijyAO4QER+1qq
-iFWwXyJtaPlfzryKaBcRs+NN55/NG5QGgLpTN+ZucCOajUxQ3xmpPmrWntwnGyLI
-HDll15BjirDyFYH4O+r8DSt64D1h8veFzD69BY9ijTCojjsEKFB/OppVG3hl9vXa
-K8aWUbw5OIQXkkoM1km6djDqhfMUGcF9OE1lZTDjEfMygUW7fq23dX2cM7vABZwn
-JUxfgHtEuSP5vUt/8p6pxZht481ynA==
-=KYH1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl2yZvgACgkQAVBC80lX
+0Gydbwf/Vc3oPByi1E+pcxq7+hsLXzK8V0c8iX39Sx9aO4CjuiuAWH2oxTcN4YoN
+MNn1dZ86gNdFDdTxQ3OAZY+q/MA9TnCLGUmxuGrxvFDsumBK4+YqjlY0UgH89lR9
+E8aoHi3A/+HMtyANFgrh0c/REqURZdVuWnU4HN0a92pGcpzpuI/gy7Oqqq2pJeQX
+PcA3l62PJXiVbm4BYEtxTx6of27SiFbyaaV8TIvyOdLnWmZ/Mz88nyrnbYMr3Hpv
+VIc34kQJ0Eqh9JPcrqmyAofcPB/aPbKSUiSv3TibEywKsiNdQemutbLknSBz7nE0
+/ZnZbGCa15k7bepf6Qn3Sz5EYw+h5A==
+=mo8E
 -----END PGP SIGNATURE-----
 
---Sig_/lu9GUO+j=WtsnYS2MNTu8l1--
+--Sig_/f0ti=U1JDDubgaKxd22sHes--

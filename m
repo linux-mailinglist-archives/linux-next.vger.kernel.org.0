@@ -2,97 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B76E52F2
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 20:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51A2E53CE
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 20:32:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731266AbfJYSDQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Oct 2019 14:03:16 -0400
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:34818 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731263AbfJYSDP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Oct 2019 14:03:15 -0400
-Received: by mail-wr1-f66.google.com with SMTP id l10so3361724wrb.2;
-        Fri, 25 Oct 2019 11:03:14 -0700 (PDT)
+        id S1726297AbfJYSbJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Oct 2019 14:31:09 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:43752 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726217AbfJYSat (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Oct 2019 14:30:49 -0400
+Received: by mail-wr1-f65.google.com with SMTP id c2so3415511wrr.10;
+        Fri, 25 Oct 2019 11:30:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=sRSIHOYVf7qsnfaK43V65CarnMxSZE8djVm9tqub2po=;
-        b=UOxfDy9ZzHGAxhNjRVvaf0zjdR6eD0x87dUCgE/m3lOw8syrbLC0jl6VTQAuAd0ajR
-         sU6K5U6RmcCdPEwdWbOYTyN57Zr5igBt1h17+uNappPUeBSms0Cf7DBAVCJMIdpu3gDY
-         lTHkMThgdz+wvmS0YmRDl1dOfJFZNQOaRC6mXfFMvLnQPutF17vMJ8QEu67M6jhwO51Z
-         6Xz0oy05cwgQO06HJS925Jq4KcDAo8Gddpuj0W8qvf7DhP5tPrW8i+o/ODPoTorI6H7p
-         VNeyeRHmw8oLr+SQusaGAzd2JzOC/QzWKxcoo5tdRjEsY7K+/1XJCA5V3rNKhiGw4e/6
-         rWYw==
+        h=from:to:cc:subject:date:message-id;
+        bh=dDp13ywgSupw9EcMrvuhw6Gs8e5NpNu6s01gDT2RHJQ=;
+        b=ffgFRoEse6zd80IO5oL6sDbN87iVSBHyvjDvAfBWVg4OsaaV+/9mmmCeWtcKoUFGg+
+         TpZpPYnjdXrhkhaCsF2U8KGFZa0zn94FPNC//BQcn2KpHio7BGNr9p6ERLDUyCH/WfTR
+         mjv9vBMLsdFdGVctTIUJtQ2rhu4go0lkNNDH9T0dKvK2mL8IxKdsvzgax2gyYBiMwUgX
+         kgd9siwWAzDa3AfoqFUQzwVdxsU0cH+C97aCwM+I2Mqjpn7z7Tua83M7CgtGTTJbR11m
+         phBU26GjC1jU7oZH24YMT0W8kZVhr+HQ/8/aAGUoFE74gNpzKvV28/0RWSrchpmO6TqZ
+         c0Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=sRSIHOYVf7qsnfaK43V65CarnMxSZE8djVm9tqub2po=;
-        b=Xxa9Sds1WHaquAmfk/6OIhiboOSwKeARlMhVvvjN0XOowT5JOa3my73vcbrLKnTy28
-         5RtiV3Lw3kShClp0F3EYSXwHGQJeuCDt3/C79yzLHY1I99B53i89vD2sGzDM29FpVclw
-         N9KyKuHBKFQgj6drtHiFPt5Gkg7Oi/N1OYL/WP3ZbKw7mgYTW1e6UWYGCqAKnWrNGg//
-         0QlBFPsevrhT3pbU4QSBUVZNE/sEcmlUwXj26KV1AAsPZFGv+2NsQR3XAzNZWDuzyCoj
-         P4FgqwgSx85sZ6A/kOQV9QVZJ4fCjVNib89Fxxn/nOGJWrrINkaI2emn2Bde/Kcw+4qA
-         vYPA==
-X-Gm-Message-State: APjAAAXs23/qluFd/9WeSLkHEkLuAqaz0DJqzUlydKrun6B+7VbF3nx/
-        28KR4jtSgt2Vm+4i2QiWEk+9mn67
-X-Google-Smtp-Source: APXvYqwkRYq2HbhgxrRAmcfZOalDe3reg9s9NfmT4jljb9+TLvoLV1/HugYILjPVCiYVeX2qzzOhJQ==
-X-Received: by 2002:adf:ffc5:: with SMTP id x5mr1090391wrs.93.1572026593089;
-        Fri, 25 Oct 2019 11:03:13 -0700 (PDT)
-Received: from [10.69.45.46] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id z189sm4141012wmc.25.2019.10.25.11.03.10
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 25 Oct 2019 11:03:12 -0700 (PDT)
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191025140736.0c9e9d64@canb.auug.org.au>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=dDp13ywgSupw9EcMrvuhw6Gs8e5NpNu6s01gDT2RHJQ=;
+        b=qVe4VxEhgeP9GbNhosZrG9CQQE3xXSf3NO/2SDHWVNvfSznouv7U/3MCjQ1bakTV8p
+         M75/6Wqhu5DTxMYCUQ13bY2TG0FptoVAJV3lHst/IcG/dXk0e7OAldhA1VKwQ8DEr7S1
+         SwV5uu1lkvTKyfzTGCKzDI9Afow5ZtFceQ1HivHSc90mGiop7S/Azct3U+ZhGXwzyxKJ
+         s9+8CtD3lfb8nICzk0HpHmGUSPvAKJASVO8KxcwS3Q5/+hGDK5v4Ak2nmVBFqxtQdPle
+         UnvK2tVcqmX6klRV7unqgsCE9UlahREMGmpCg1yvj/4vx3n9t/7rgACAyR8iOkk7MsMC
+         8I1w==
+X-Gm-Message-State: APjAAAVMByA1YsFLXD2/EtdUU//bZS6sEGS7AlnwD9gVqy26U3TnPWqt
+        2AHzfdYPzeuIHvsGgRMAtgnfJKwi
+X-Google-Smtp-Source: APXvYqw7t4wrui6HEJVjcoEX7qLOZzwyF8ZiQvvhQZ5NIy4n4wvNH+tMBkFxnSCLtrxET45E0OKAoQ==
+X-Received: by 2002:adf:e903:: with SMTP id f3mr4503713wrm.121.1572027940280;
+        Fri, 25 Oct 2019 11:25:40 -0700 (PDT)
+Received: from pallmd1.broadcom.com ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id i1sm3274259wmb.19.2019.10.25.11.25.37
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Fri, 25 Oct 2019 11:25:39 -0700 (PDT)
 From:   James Smart <jsmart2021@gmail.com>
-Message-ID: <13203518-3fc5-bce9-3ed7-9487cd81a9f9@gmail.com>
-Date:   Fri, 25 Oct 2019 11:03:09 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191025140736.0c9e9d64@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+To:     linux-scsi@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        martin.petersen@oracle.com, sfr@canb.auug.org.au,
+        James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>
+Subject: [PATCH] lpfc: fix build error of lpfc_debugfs.c for vfree/vmalloc
+Date:   Fri, 25 Oct 2019 11:25:30 -0700
+Message-Id: <20191025182530.26653-1-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.13.7
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/24/2019 8:07 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the scsi-mkp tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
-> 
-> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_release':
-> drivers/scsi/lpfc/lpfc_debugfs.c:2109:2: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
->   2109 |  vfree(debug->buffer);
->        |  ^~~~~
->        |  kvfree
-> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_open':
-> drivers/scsi/lpfc/lpfc_debugfs.c:2150:18: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
->   2150 |  debug->buffer = vmalloc(size);
->        |                  ^~~~~~~
->        |                  kvmalloc
-> drivers/scsi/lpfc/lpfc_debugfs.c:2150:16: warning: assignment to 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   2150 |  debug->buffer = vmalloc(size);
->        |                ^
-> 
-> Caused by commit
-> 
->    95bfc6d8ad86 ("scsi: lpfc: Make FW logging dynamically configurable")
-> 
-> I have used the scsi-mkp tree from next-20191024 for today.
-> 
+lpfc_debufs.c was missing include of vmalloc.h when compiled on PPC.
 
-I will resolve this quickly...
+Add missing header.
 
--- james
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+---
+ drivers/scsi/lpfc/lpfc_debugfs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
+index ab124f7d50d6..6c8effcfc8ae 100644
+--- a/drivers/scsi/lpfc/lpfc_debugfs.c
++++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+@@ -31,6 +31,7 @@
+ #include <linux/pci.h>
+ #include <linux/spinlock.h>
+ #include <linux/ctype.h>
++#include <linux/vmalloc.h>
+ 
+ #include <scsi/scsi.h>
+ #include <scsi/scsi_device.h>
+-- 
+2.13.7
+

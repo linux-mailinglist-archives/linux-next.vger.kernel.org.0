@@ -2,83 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D51A2E53CE
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 20:32:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 674C0E55F0
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 23:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726297AbfJYSbJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Oct 2019 14:31:09 -0400
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:43752 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726217AbfJYSat (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Oct 2019 14:30:49 -0400
-Received: by mail-wr1-f65.google.com with SMTP id c2so3415511wrr.10;
-        Fri, 25 Oct 2019 11:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=dDp13ywgSupw9EcMrvuhw6Gs8e5NpNu6s01gDT2RHJQ=;
-        b=ffgFRoEse6zd80IO5oL6sDbN87iVSBHyvjDvAfBWVg4OsaaV+/9mmmCeWtcKoUFGg+
-         TpZpPYnjdXrhkhaCsF2U8KGFZa0zn94FPNC//BQcn2KpHio7BGNr9p6ERLDUyCH/WfTR
-         mjv9vBMLsdFdGVctTIUJtQ2rhu4go0lkNNDH9T0dKvK2mL8IxKdsvzgax2gyYBiMwUgX
-         kgd9siwWAzDa3AfoqFUQzwVdxsU0cH+C97aCwM+I2Mqjpn7z7Tua83M7CgtGTTJbR11m
-         phBU26GjC1jU7oZH24YMT0W8kZVhr+HQ/8/aAGUoFE74gNpzKvV28/0RWSrchpmO6TqZ
-         c0Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=dDp13ywgSupw9EcMrvuhw6Gs8e5NpNu6s01gDT2RHJQ=;
-        b=qVe4VxEhgeP9GbNhosZrG9CQQE3xXSf3NO/2SDHWVNvfSznouv7U/3MCjQ1bakTV8p
-         M75/6Wqhu5DTxMYCUQ13bY2TG0FptoVAJV3lHst/IcG/dXk0e7OAldhA1VKwQ8DEr7S1
-         SwV5uu1lkvTKyfzTGCKzDI9Afow5ZtFceQ1HivHSc90mGiop7S/Azct3U+ZhGXwzyxKJ
-         s9+8CtD3lfb8nICzk0HpHmGUSPvAKJASVO8KxcwS3Q5/+hGDK5v4Ak2nmVBFqxtQdPle
-         UnvK2tVcqmX6klRV7unqgsCE9UlahREMGmpCg1yvj/4vx3n9t/7rgACAyR8iOkk7MsMC
-         8I1w==
-X-Gm-Message-State: APjAAAVMByA1YsFLXD2/EtdUU//bZS6sEGS7AlnwD9gVqy26U3TnPWqt
-        2AHzfdYPzeuIHvsGgRMAtgnfJKwi
-X-Google-Smtp-Source: APXvYqw7t4wrui6HEJVjcoEX7qLOZzwyF8ZiQvvhQZ5NIy4n4wvNH+tMBkFxnSCLtrxET45E0OKAoQ==
-X-Received: by 2002:adf:e903:: with SMTP id f3mr4503713wrm.121.1572027940280;
-        Fri, 25 Oct 2019 11:25:40 -0700 (PDT)
-Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i1sm3274259wmb.19.2019.10.25.11.25.37
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Fri, 25 Oct 2019 11:25:39 -0700 (PDT)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
+        id S1725801AbfJYVds (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Oct 2019 17:33:48 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:45960 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726300AbfJYVdq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 25 Oct 2019 17:33:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1572039225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=V+bF0QtZ1XTU+DOJV+lanoshTKDpNiumcmQH+i3m6S0=;
+        b=hrasXp4G4AOZBEXJOlFz/Ztn/4YjTTfNGW83/juxhU1XVgiZ8DHg5HZIwXW6ZIPpsCphGb
+        dITZWAawb/KJlUiv/ftJMsrDnm0eI1eu5H5+6XB+JMemitb8bAEaaAYlmiez3dozVoFErI
+        6637Ti7/gK5khjJfDd0vUhqO7e7z2SI=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-258-WvtHTBd2Nn2Fgt22bTNHcw-1; Fri, 25 Oct 2019 17:33:41 -0400
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5B3A147B;
+        Fri, 25 Oct 2019 21:33:40 +0000 (UTC)
+Received: from emilne (unknown [10.18.25.205])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 55D9764020;
+        Fri, 25 Oct 2019 21:33:39 +0000 (UTC)
+Message-ID: <557baf9f96bf15982dea0ad063412834bfbdccaa.camel@redhat.com>
+Subject: Re: [PATCH] lpfc: fix build error of lpfc_debugfs.c for
+ vfree/vmalloc
+From:   "Ewan D. Milne" <emilne@redhat.com>
+To:     James Smart <jsmart2021@gmail.com>, linux-scsi@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
         martin.petersen@oracle.com, sfr@canb.auug.org.au,
-        James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: [PATCH] lpfc: fix build error of lpfc_debugfs.c for vfree/vmalloc
-Date:   Fri, 25 Oct 2019 11:25:30 -0700
-Message-Id: <20191025182530.26653-1-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
+Date:   Fri, 25 Oct 2019 17:33:38 -0400
+In-Reply-To: <20191025182530.26653-1-jsmart2021@gmail.com>
+References: <20191025182530.26653-1-jsmart2021@gmail.com>
+Mime-Version: 1.0
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
+X-MC-Unique: WvtHTBd2Nn2Fgt22bTNHcw-1
+X-Mimecast-Spam-Score: 0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-lpfc_debufs.c was missing include of vmalloc.h when compiled on PPC.
+On Fri, 2019-10-25 at 11:25 -0700, James Smart wrote:
+> lpfc_debufs.c was missing include of vmalloc.h when compiled on PPC.
+>=20
+> Add missing header.
+>=20
+> Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+> Signed-off-by: James Smart <jsmart2021@gmail.com>
+> ---
+>  drivers/scsi/lpfc/lpfc_debugfs.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_de=
+bugfs.c
+> index ab124f7d50d6..6c8effcfc8ae 100644
+> --- a/drivers/scsi/lpfc/lpfc_debugfs.c
+> +++ b/drivers/scsi/lpfc/lpfc_debugfs.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/pci.h>
+>  #include <linux/spinlock.h>
+>  #include <linux/ctype.h>
+> +#include <linux/vmalloc.h>
+> =20
+>  #include <scsi/scsi.h>
+>  #include <scsi/scsi_device.h>
 
-Add missing header.
-
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
----
- drivers/scsi/lpfc/lpfc_debugfs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/lpfc/lpfc_debugfs.c b/drivers/scsi/lpfc/lpfc_debugfs.c
-index ab124f7d50d6..6c8effcfc8ae 100644
---- a/drivers/scsi/lpfc/lpfc_debugfs.c
-+++ b/drivers/scsi/lpfc/lpfc_debugfs.c
-@@ -31,6 +31,7 @@
- #include <linux/pci.h>
- #include <linux/spinlock.h>
- #include <linux/ctype.h>
-+#include <linux/vmalloc.h>
- 
- #include <scsi/scsi.h>
- #include <scsi/scsi_device.h>
--- 
-2.13.7
+Reviewed-by: Ewan D. Milne <emilne@redhat.com>
 

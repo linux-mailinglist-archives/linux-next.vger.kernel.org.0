@@ -2,139 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E88E4FDB
-	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 17:11:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B76E52F2
+	for <lists+linux-next@lfdr.de>; Fri, 25 Oct 2019 20:03:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440572AbfJYPLj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 25 Oct 2019 11:11:39 -0400
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55088 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2440574AbfJYPLj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Oct 2019 11:11:39 -0400
-Received: by mail-wm1-f67.google.com with SMTP id g7so2525379wmk.4
-        for <linux-next@vger.kernel.org>; Fri, 25 Oct 2019 08:11:37 -0700 (PDT)
+        id S1731266AbfJYSDQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 25 Oct 2019 14:03:16 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34818 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731263AbfJYSDP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 25 Oct 2019 14:03:15 -0400
+Received: by mail-wr1-f66.google.com with SMTP id l10so3361724wrb.2;
+        Fri, 25 Oct 2019 11:03:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=7UqTSAx0tbYx7bxJcsFEyxozJoYabncJO3o0k62KB7A=;
-        b=DiuNRsMnDFowyxM5erCakBVqBiHyDczB7KIUdCy4tX+kULZAcuf7OS1Agjs5twL3mK
-         ikCRhTGNNAmnmgK+9XJBwHe9u9sDApQhrogrecZ11+CvBkL5ArX4OXly7XrHzLN58dBF
-         N3eLSDDV4+5AUw+9DCuGeJEVfmmd2yrqKjUHjuTPD/vnYvZx5KCKzWtFBG25Q0BUtFvp
-         vgV4fZ5c4iY9VbCEXjMEZqvPytT0WwYAeSaao+85cXBeYt1JRLvv6W/qGCoZZ/C6LrTN
-         UDCdYCh9ksiBdEIRWulOmez2Qfrlod9t4osFB3JnPLZDhi5rHnXolwGjfOcsoSJ0HK7q
-         sZMw==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=sRSIHOYVf7qsnfaK43V65CarnMxSZE8djVm9tqub2po=;
+        b=UOxfDy9ZzHGAxhNjRVvaf0zjdR6eD0x87dUCgE/m3lOw8syrbLC0jl6VTQAuAd0ajR
+         sU6K5U6RmcCdPEwdWbOYTyN57Zr5igBt1h17+uNappPUeBSms0Cf7DBAVCJMIdpu3gDY
+         lTHkMThgdz+wvmS0YmRDl1dOfJFZNQOaRC6mXfFMvLnQPutF17vMJ8QEu67M6jhwO51Z
+         6Xz0oy05cwgQO06HJS925Jq4KcDAo8Gddpuj0W8qvf7DhP5tPrW8i+o/ODPoTorI6H7p
+         VNeyeRHmw8oLr+SQusaGAzd2JzOC/QzWKxcoo5tdRjEsY7K+/1XJCA5V3rNKhiGw4e/6
+         rWYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=7UqTSAx0tbYx7bxJcsFEyxozJoYabncJO3o0k62KB7A=;
-        b=fYAmKnswGEggoWH+BKE8g+3EFl+54QREyBihXzYzAF2e9wgbRrbTIrU//JYjpdy9hs
-         mOGTKeF6JBwJNgEyfnLWfAkgYC7+gV4qRTvv26Rgw7gxb5QvE5IDFcIAw02DYnePW55Y
-         QlmXMXgRT8V7r7wgHR0Wq+/A7GkzL0BL7qWy4Y5F789JNPyHtXskm6J+29RlJZ1jXTYB
-         9DyKWvJGUamoIpSzVdX0YT3bRzpcJEsa0cv0YW7MSjrEZ8zt1dEyOR1iu65Soa1vCP8K
-         eRAoUtlL8Nt+tMrBUdGFft9miNtHOGCLpEedR0ev78DpKc4ZS2A96A/SPSCpsMTJwyEL
-         tk1A==
-X-Gm-Message-State: APjAAAWSA8oryjj0qIQ2ARNJNMTh1lqbzP1CrdKSB6edCDutV1zQKzdD
-        9sv7hQv89LrXs1bIjczjvF8s39k11Qdi7w==
-X-Google-Smtp-Source: APXvYqyNxhuvLjt+L6J1giR7mtpbXOaFMGF82hhtzlFblMv8NNrmKiBkVFNlRXiVQYq6LXXJAJOyJw==
-X-Received: by 2002:a1c:7c13:: with SMTP id x19mr3998638wmc.80.1572016296934;
-        Fri, 25 Oct 2019 08:11:36 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id n17sm2594950wrt.25.2019.10.25.08.11.35
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Oct 2019 08:11:35 -0700 (PDT)
-Message-ID: <5db310a7.1c69fb81.4ca85.cace@mx.google.com>
-Date:   Fri, 25 Oct 2019 08:11:35 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=sRSIHOYVf7qsnfaK43V65CarnMxSZE8djVm9tqub2po=;
+        b=Xxa9Sds1WHaquAmfk/6OIhiboOSwKeARlMhVvvjN0XOowT5JOa3my73vcbrLKnTy28
+         5RtiV3Lw3kShClp0F3EYSXwHGQJeuCDt3/C79yzLHY1I99B53i89vD2sGzDM29FpVclw
+         N9KyKuHBKFQgj6drtHiFPt5Gkg7Oi/N1OYL/WP3ZbKw7mgYTW1e6UWYGCqAKnWrNGg//
+         0QlBFPsevrhT3pbU4QSBUVZNE/sEcmlUwXj26KV1AAsPZFGv+2NsQR3XAzNZWDuzyCoj
+         P4FgqwgSx85sZ6A/kOQV9QVZJ4fCjVNib89Fxxn/nOGJWrrINkaI2emn2Bde/Kcw+4qA
+         vYPA==
+X-Gm-Message-State: APjAAAXs23/qluFd/9WeSLkHEkLuAqaz0DJqzUlydKrun6B+7VbF3nx/
+        28KR4jtSgt2Vm+4i2QiWEk+9mn67
+X-Google-Smtp-Source: APXvYqwkRYq2HbhgxrRAmcfZOalDe3reg9s9NfmT4jljb9+TLvoLV1/HugYILjPVCiYVeX2qzzOhJQ==
+X-Received: by 2002:adf:ffc5:: with SMTP id x5mr1090391wrs.93.1572026593089;
+        Fri, 25 Oct 2019 11:03:13 -0700 (PDT)
+Received: from [10.69.45.46] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id z189sm4141012wmc.25.2019.10.25.11.03.10
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 25 Oct 2019 11:03:12 -0700 (PDT)
+Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191025140736.0c9e9d64@canb.auug.org.au>
+From:   James Smart <jsmart2021@gmail.com>
+Message-ID: <13203518-3fc5-bce9-3ed7-9487cd81a9f9@gmail.com>
+Date:   Fri, 25 Oct 2019 11:03:09 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20191025
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 258 boots: 15 failed, 235 passed with 7 offline,
- 1 untried/unknown (next-20191025)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20191025140736.0c9e9d64@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 258 boots: 15 failed, 235 passed with 7 offline, 1 untrie=
-d/unknown (next-20191025)
+On 10/24/2019 8:07 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the scsi-mkp tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_release':
+> drivers/scsi/lpfc/lpfc_debugfs.c:2109:2: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
+>   2109 |  vfree(debug->buffer);
+>        |  ^~~~~
+>        |  kvfree
+> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_open':
+> drivers/scsi/lpfc/lpfc_debugfs.c:2150:18: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
+>   2150 |  debug->buffer = vmalloc(size);
+>        |                  ^~~~~~~
+>        |                  kvmalloc
+> drivers/scsi/lpfc/lpfc_debugfs.c:2150:16: warning: assignment to 'char *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>   2150 |  debug->buffer = vmalloc(size);
+>        |                ^
+> 
+> Caused by commit
+> 
+>    95bfc6d8ad86 ("scsi: lpfc: Make FW logging dynamically configurable")
+> 
+> I have used the scsi-mkp tree from next-20191024 for today.
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191025/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191025/
+I will resolve this quickly...
 
-Tree: next
-Branch: master
-Git Describe: next-20191025
-Git Commit: 139c2d13c258bacc545fc2a4091f7fb0a6fb08fd
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 84 unique boards, 25 SoC families, 28 builds out of 216
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    multi_v7_defconfig+kselftest:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            rk3288-rock2-square: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 2 failed labs
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-
-    defconfig+kselftest:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            r8a7796-m3ulcb: 2 failed labs
-            rk3399-puma-haikou: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+-- james

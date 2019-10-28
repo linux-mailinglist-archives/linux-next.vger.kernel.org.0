@@ -2,94 +2,136 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C305E6A69
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 02:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB1EE6A6E
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 02:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727581AbfJ1BLh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Oct 2019 21:11:37 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39171 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728574AbfJ1BLh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 27 Oct 2019 21:11:37 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 471c9z030gz9sPK;
-        Mon, 28 Oct 2019 12:11:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572225095;
-        bh=5Ds8Q7CwdrMTbH9IXggt+mmI5j9uKDnt49CBC/Yz0ac=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MM7/PoR8cF8t5iPgN5QkQc36BoC2GCYAu0R4TZ735lteuWaNTU8rqYfZKQ9Sm101V
-         DtDWX/XRAqaEY/rZzARWDLLCwQQqjRHjsM8vJX4FlAXA6qlmoenutcFR+P/C6GLbsI
-         xlgf9YwQaz9aSyOMFX1cej85Sxv17sQScpi8aVDYIqk3dmPobXymJ3i0Xu0D7dhgXa
-         C7bweNgoO1iH7H4yo2Sy2feqwTFo4MwNeqKMiiw42UXEO5/QkoIziCTSVQMMgIeEDD
-         UZQo2r/XX3o1Lmx7sjluxjRBiW4QNnLXWObAWpD4Tou3LGd3XUXGNetfnPSH3IlNTN
-         PDuwpCurDq9aQ==
-Date:   Mon, 28 Oct 2019 12:11:34 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kevin Wang <kevin1.wang@amd.com>, Evan Quan <evan.quan@amd.com>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20191028121134.63b6c3c0@canb.auug.org.au>
+        id S1729211AbfJ1BN7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 27 Oct 2019 21:13:59 -0400
+Received: from conssluserg-02.nifty.com ([210.131.2.81]:48472 "EHLO
+        conssluserg-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729206AbfJ1BN7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Oct 2019 21:13:59 -0400
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41]) (authenticated)
+        by conssluserg-02.nifty.com with ESMTP id x9S1DsWb032507;
+        Mon, 28 Oct 2019 10:13:54 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-02.nifty.com x9S1DsWb032507
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1572225235;
+        bh=EfLEmTvlm/lG3uBmRFOrAGC4amACh1c7WhoFmdPquZQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=T5Ij2Z7/wrylG14MkqDiGT7nxBMAAKVyzvPW+LdXqmIixiQdJf5AtAK4xOiis1x30
+         t3U0yKm4t2ZTM1jnZ8eLwFcn6qUXvWoNqEMpP4WE46hJiXghK5Lxq6mExrukMVHjSd
+         3qRit1Dm7VKvWoXpFubC2zX0IBvW5Jn3h5y6POK149Jt0WZ6uGZzRz2g6GMGAp1AZL
+         Pfs70r7/JLO0KMd8AuuxS1BKhRisKE6E0Jzzo+0p+X8cvqgk10FYAGGTKYKrMUpUze
+         8mWOYbFCTX7J0YU3itTe+0QDJ4OAOTByzUf8VBGqgLKYD4YDkT9T1lVzBID4fZ+WKX
+         cvqzXiEzcnHrA==
+X-Nifty-SrcIP: [209.85.217.41]
+Received: by mail-vs1-f41.google.com with SMTP id k1so2684639vsm.0;
+        Sun, 27 Oct 2019 18:13:54 -0700 (PDT)
+X-Gm-Message-State: APjAAAVRKHKKX2Dr9vdqIVzGimR5XPYHn0tkrkrWgOIz6xym4OhtCJaa
+        B10WAHVCajrmm7J6vTpt1XBUSXyRcI1kP9W61p0=
+X-Google-Smtp-Source: APXvYqyr0LevgJ+Ag2O+ArhDzyh7iTWrIUjn66Lsp9ynwMy1czakgrO35QtlQOeJbZe6f+RnnOZ8aym5cgT7C1jAfHg=
+X-Received: by 2002:a67:e290:: with SMTP id g16mr7786820vsf.54.1572225233664;
+ Sun, 27 Oct 2019 18:13:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GWYAgCEI=ktipbJFMteknT0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20191028115740.791bdeba@canb.auug.org.au>
+In-Reply-To: <20191028115740.791bdeba@canb.auug.org.au>
+From:   Masahiro Yamada <yamada.masahiro@socionext.com>
+Date:   Mon, 28 Oct 2019 10:13:17 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAS-k6JnYBqzFHXd5D2LrtF111ch-zqkkCaygTGfKaY5_A@mail.gmail.com>
+Message-ID: <CAK7LNAS-k6JnYBqzFHXd5D2LrtF111ch-zqkkCaygTGfKaY5_A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the amdgpu tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GWYAgCEI=ktipbJFMteknT0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 28, 2019 at 9:57 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Today's linux-next merge of the amdgpu tree got a conflict in:
+>
+>   drivers/gpu/drm/amd/display/dc/dcn20/Makefile
+>
+> between commit:
+>
+>   54b8ae66ae1a ("kbuild: change *FLAGS_<basetarget>.o to take the path relative to $(obj)")
+>
+> from Linus' tree and commits:
+>
+>   4f952528add3 ("drm/amdgpu: fix stack alignment ABI mismatch for Clang")
+>   971463bea55c ("drm/amdgpu: fix stack alignment ABI mismatch for GCC 7.1+")
+>   101d09f07966 ("drm/amdgpu: enable -msse2 for GCC 7.1+ users")
+>
+> from the amdgpu tree.
+>
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+I believe subsystems should queue up patches
+against -rc1 or a later tag.
 
-  drivers/gpu/drm/amd/powerplay/inc/amdgpu_smu.h
+Developing based on an older version
+causes unneeded conflicts like this.
 
-between commit:
 
-  155f85c0d568 ("drm/amd/powerplay: remove duplicate macro smu_get_uclk_dpm=
-_states in amdgpu_smu.h")
 
-from Linus' tree and commit:
 
-  18c1d3cee4c5 ("drm/amd/powerplay: split out those internal used swSMU API=
-s V2")
+> --
+> Cheers,
+> Stephen Rothwell
+>
+> diff --cc drivers/gpu/drm/amd/display/dc/dcn20/Makefile
+> index ddb8d5649e79,be3a614963c6..000000000000
+> --- a/drivers/gpu/drm/amd/display/dc/dcn20/Makefile
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn20/Makefile
+> @@@ -10,16 -10,21 +10,21 @@@ ifdef CONFIG_DRM_AMD_DC_DSC_SUPPOR
+>   DCN20 += dcn20_dsc.o
+>   endif
+>
+> - ifneq ($(call cc-option, -mpreferred-stack-boundary=4),)
+> -       cc_stack_align := -mpreferred-stack-boundary=4
+> - else ifneq ($(call cc-option, -mstack-alignment=16),)
+> -       cc_stack_align := -mstack-alignment=16
+> - endif
+>  -CFLAGS_dcn20_resource.o := -mhard-float -msse
+> ++CFLAGS_$(AMDDALPATH)/dc/dcn20/dcn20_resource.o := -mhard-float -msse
+>
+> - CFLAGS_$(AMDDALPATH)/dc/dcn20/dcn20_resource.o := -mhard-float -msse $(cc_stack_align)
+> + ifdef CONFIG_CC_IS_GCC
+> + ifeq ($(call cc-ifversion, -lt, 0701, y), y)
+> + IS_OLD_GCC = 1
+> + endif
+> + endif
+>
+> - ifdef CONFIG_CC_IS_CLANG
+> + ifdef IS_OLD_GCC
+> + # Stack alignment mismatch, proceed with caution.
+> + # GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
+> + # (8B stack alignment).
+>  -CFLAGS_dcn20_resource.o += -mpreferred-stack-boundary=4
+> ++CFLAGS_$(AMDDALPATH)/dc/dcn20/dcn20_resource.o += -mpreferred-stack-boundary=4
+> + else
+>  -CFLAGS_dcn20_resource.o += -msse2
+>  +CFLAGS_$(AMDDALPATH)/dc/dcn20/dcn20_resource.o += -msse2
+>   endif
+>
+>   AMD_DAL_DCN20 = $(addprefix $(AMDDALPATH)/dc/dcn20/,$(DCN20))
 
-from the amdgpu tree.
 
-I fixed it up (I just used the amdgpu tree version) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/GWYAgCEI=ktipbJFMteknT0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl22QEYACgkQAVBC80lX
-0GzvBgf/T2qJJzaB2aCW3QcDa1KxjhFm6Uj3hqXBjy0akfnJ0YG2udqAqd8vLYrs
-epTg9PEJaxGgIDZFZ2lS8zxhgHr9Lzbg+DPVaXaQx9COIyNQSMsw+EPuA90B0Q36
-avdwsL/5g7Bqvib0sHTV6ke4zKUGRQGhdIz/+uoCuwj6X6nstXC2Mu+xVccjtBVh
-Zi27tac6QZpN8HJrZOLq5pualLpU92uCkV4V0twEHltN6xGV9sx53hT4ujsYOZ9/
-Wu1CMCmCLX+wEt3WFIlvEM1MMf6UysmbHLoUKqzUJohbT2kEMJMj+ilT5nvagF/R
-3Ci6aQiis1mzn41Sm7MvjsKhZ+AczA==
-=PkON
------END PGP SIGNATURE-----
-
---Sig_/GWYAgCEI=ktipbJFMteknT0--
+-- 
+Best Regards
+Masahiro Yamada

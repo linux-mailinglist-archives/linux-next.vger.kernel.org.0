@@ -2,116 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 81FEBE7939
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 20:30:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68113E7949
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 20:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730824AbfJ1Tat (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 15:30:49 -0400
-Received: from mail-eopbgr130081.outbound.protection.outlook.com ([40.107.13.81]:19629
-        "EHLO EUR01-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1730396AbfJ1Tas (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 28 Oct 2019 15:30:48 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XPDpgsQkjcuSEduqW0OWhDvNjMrNckiMqyxPYoETTARux1sGxbnGn4XdJBLGR/BCdyekH+QwtdMLOQTZ8/Rizio/IPUy5rdBlUWQZ2VlLZve76cLPP3BjJ/twSQWvHI73G6yLNL2oJzZ1qI48vxcrUbsbqIHgiALBYV8tbfYhY5IP0kHFDzyZxv0EtGRLzO4NEMr/oDFMLEJ1SzbMVvZ90uShZvRxQNp+2rd8StT5MaWFPiUjcsx/c8vIEQirCKpy05s0zedAWsM++TpZ7PypAotbQM1fRYKW823Le/kwfNcLDlUzdm/zUG9hzrVLcjUpev72jWo9SXCkmytJcazwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2RSG1/6QAZ9vBkcI7EnrtsuWoCxps+c04ZZXBF/KA+s=;
- b=TZWOkDCIJ9k1r9nks0TG7DOKCntp6pNwt90oZIduUC1okPIzJ3OSlljFqE8w12oAIF/JjpYVnzu42iJM/GKeNPLL7eUk0i9YYerZ8d8MkCO9NUDmwKRvnYNvpFCEWvmMvJ5kjDk5Zmb5jhDtUEBvbo1OY4H3AY4Gb2EtA5pJtqjugiiBRATjoQ6JE5O46gH8wes2GDtCGP5UT24+Hz8QQiN0nvz4MQ1EP0xiJ5g/aSvN67YfHulkb3kSmMDf9PaOSj2ptt1mQQJWbiXQSnfDZm1+B/pLi+56DbDAQ8v9VJA5a/muc3VVHJtDW9r+fsf+/3KHwI0Dmd+ekMvVSi28KA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2RSG1/6QAZ9vBkcI7EnrtsuWoCxps+c04ZZXBF/KA+s=;
- b=qjFYqB3WhzW9dKXoOYtk+R3g5gMEs7PwjcikpO5sAxSJufIkZYl/+HDF1aEkHRes7TosK9Q7YqrM6TqXHEq5eYErPNySnHCaoYfFOmQk5ehhR7pegwM+AF9rfdMw91CyKimQOAFDVkq1F6b3/RFO2cBudw+M/JWsa3QohwnmXUM=
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (52.133.14.15) by
- VI1PR05MB5759.eurprd05.prod.outlook.com (20.178.122.21) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2387.24; Mon, 28 Oct 2019 19:30:41 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::b179:e8bf:22d4:bf8d]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::b179:e8bf:22d4:bf8d%5]) with mapi id 15.20.2387.027; Mon, 28 Oct 2019
- 19:30:41 +0000
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Doug Ledford <dledford@redhat.com>,
+        id S1731230AbfJ1Tfx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 15:35:53 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:44632 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731026AbfJ1Tfx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 15:35:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=NDY5AH4p+bLAbpsvUbEjoqi5MI8sSoQUy+3LKF6BLu8=; b=V94Ht2Ih0GepVbT+BKXO9h9/h
+        GnxOoQ+mNCXZRWzQGf8uxSCP4Tfg6iAVBSxn37xK/GuYJURNJh4MnrGbqEDTMKM7BPxDlD21xMeZJ
+        /hXHte4Kf6IvSkWdr8+OZ9ScZMCSmwMtBII+5u7DpzyHxX8sArfkzHld8AzNtoEJzcb15RZCfH2hZ
+        9Z3OiavEwYh/W/zIX0dy5xJhZpoTgJtkYsXLdFjWeu2Fmge4evV7cpwxlhGDP8Blrzi2rE7TFywJH
+        G3Gpvkv8HmzfnBNStwSKwh+oHq1y0OXUaQnB25zfpMuf1t17fGHh+OB2InJYszDBgElNxC828V+ET
+        7uOYuStTA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iPAnw-0005TA-VN; Mon, 28 Oct 2019 19:35:53 +0000
+Subject: Re: linux-next: Tree for Oct 28 (objtool)
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Erez Alfasi <ereza@mellanox.com>
-Subject: Re: linux-next: manual merge of the rdma tree with Linus' tree
-Thread-Topic: linux-next: manual merge of the rdma tree with Linus' tree
-Thread-Index: AQHVif4rvTaScq/oik+Qu9xpmvtv2adweFcA
-Date:   Mon, 28 Oct 2019 19:30:41 +0000
-Message-ID: <20191028193032.GA22766@mellanox.com>
-References: <20191024110115.7cc32b99@canb.auug.org.au>
-In-Reply-To: <20191024110115.7cc32b99@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: BN6PR11CA0012.namprd11.prod.outlook.com
- (2603:10b6:405:2::22) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:44::15)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-originating-ip: [142.162.113.180]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: 993ab9c2-64d8-4cd3-f50c-08d75bdd517c
-x-ms-traffictypediagnostic: VI1PR05MB5759:|VI1PR05MB5759:
-x-ms-exchange-transport-forked: True
-x-microsoft-antispam-prvs: <VI1PR05MB5759055AD3A65038C4D06D32CF660@VI1PR05MB5759.eurprd05.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:478;
-x-forefront-prvs: 0204F0BDE2
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(346002)(39860400002)(396003)(136003)(366004)(199004)(189003)(53754006)(186003)(71200400001)(256004)(14444005)(4744005)(66066001)(102836004)(71190400001)(11346002)(446003)(2616005)(99286004)(107886003)(6916009)(4326008)(2906002)(6506007)(6246003)(386003)(54906003)(3846002)(316002)(6116002)(478600001)(1076003)(486006)(25786009)(86362001)(33656002)(76176011)(66476007)(66446008)(66556008)(64756008)(52116002)(476003)(6436002)(36756003)(7736002)(6512007)(66946007)(6486002)(81156014)(14454004)(229853002)(8936002)(5660300002)(305945005)(26005)(81166006)(8676002);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB5759;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
-received-spf: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: T3Z0fyPEQ5ZTOH5LEMfXgDJhXibSLzju3TlA63Mdzdr9AOl6eUnXeLB+d5JKrIpPKVE7wE7KGqz+xOP8b1uOJhA42R/paoyK9CLvbmP5ItBmMAHtnTpXl7zn6AWln9P610XgmfrFqCPsnFhlub+w5WFeipOk02OgyWCwF4QAn9O6CX1/OHyjhr+Kb2ykd/5XPZYFFi8Y3Fvqwbr8VFG2Nxf7297adpwSvvjmLC5vA9QsM4YaoeLzGLKLlOGdrgYMdiGIaT2awlLLSmvyelz1mqz5R6DnkJU4GHIx94CLKG6IFsQxuCTyUNWoCGMgFqc3+7CWNbb2xAld1QYdUnOvKxTNDN9vFGzZyKqIgQglTzGIIFXR4z6azVcSyZ4aehjsT8CMFJc2lcpEcgRWx8tOflkq7THyCXIAGDPh3iRziZJ9FTsYZmM8BSk2KVmcFfit
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <B1419A389989994B87A7B697E5BA9ABD@eurprd05.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Peter Zijlstra <peterz@infradead.org>
+References: <20191028195154.4b6651dd@canb.auug.org.au>
+ <b7c7bb28-1810-88e5-1899-a90123d26627@infradead.org>
+ <20191028160215.ruzhvlwqaumw4krm@treble>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <cc9c0f83-ce06-19a3-eb07-5fe19e5ca2f2@infradead.org>
+Date:   Mon, 28 Oct 2019 12:35:52 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 993ab9c2-64d8-4cd3-f50c-08d75bdd517c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2019 19:30:41.2006
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OKwb11/TnK27hppS09CbcL1UB+0dEDYEzD1a8YxODmCZW4thCGdlyRzhS46FME3Mx8zvKGno5PEeOJ6KMh10+g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB5759
+In-Reply-To: <20191028160215.ruzhvlwqaumw4krm@treble>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Oct 24, 2019 at 11:01:15AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the rdma tree got a conflict in:
->=20
->   drivers/infiniband/hw/mlx5/odp.c
->=20
-> between commit:
->=20
->   9dc775e7f550 ("RDMA/odp: Lift umem_mutex out of ib_umem_odp_unmap_dma_p=
-ages()")
->=20
-> from Linus' tree and commit:
->=20
->   a3de94e3d61e ("IB/mlx5: Introduce ODP diagnostic counters")
->=20
-> from the rdma tree.
->=20
-> I fixed it up (see below - but maybe the mlx5_update_odp_stats()
-> also needs to move after the moved mutex_unlock()?)=20
+On 10/28/19 9:02 AM, Josh Poimboeuf wrote:
+> On Mon, Oct 28, 2019 at 08:31:28AM -0700, Randy Dunlap wrote:
+>> On 10/28/19 1:51 AM, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20191025:
+>>>
+>>
+>>
+>> on x86_64:
+>>
+>> kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction
+>>
+>> .o file is attached.
+> 
+> Silly GCC.  Does this fix it?
 
-nope, this resolution is right, thanks
+Yes, thanks.
 
-Jason
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+> diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
+> index 4b1c3b664f51..d58587391b96 100644
+> --- a/include/linux/sched/task.h
+> +++ b/include/linux/sched/task.h
+> @@ -83,7 +83,7 @@ static inline void exit_thread(struct task_struct *tsk)
+>  {
+>  }
+>  #endif
+> -extern void do_group_exit(int);
+> +extern void __noreturn do_group_exit(int);
+>  
+>  extern void exit_files(struct task_struct *);
+>  extern void exit_itimers(struct signal_struct *);
+> diff --git a/kernel/exit.c b/kernel/exit.c
+> index f2d20ab74422..bdc4122d904d 100644
+> --- a/kernel/exit.c
+> +++ b/kernel/exit.c
+> @@ -894,7 +894,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
+>   * Take down every thread in the group.  This is called by fatal signals
+>   * as well as by sys_exit_group (below).
+>   */
+> -void
+> +void __noreturn
+>  do_group_exit(int exit_code)
+>  {
+>  	struct signal_struct *sig = current->signal;
+> @@ -931,7 +931,6 @@ SYSCALL_DEFINE1(exit_group, int, error_code)
+>  {
+>  	do_group_exit((error_code & 0xff) << 8);
+>  	/* NOTREACHED */
+> -	return 0;
+>  }
+>  
+>  struct waitid_info {
+> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+> index 543c068096b1..97919469c787 100644
+> --- a/tools/objtool/check.c
+> +++ b/tools/objtool/check.c
+> @@ -135,6 +135,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
+>  		"__stack_chk_fail",
+>  		"panic",
+>  		"do_exit",
+> +		"do_group_exit",
+>  		"do_task_dead",
+>  		"__module_put_and_exit",
+>  		"complete_and_exit",
+> 
+
+
+-- 
+~Randy

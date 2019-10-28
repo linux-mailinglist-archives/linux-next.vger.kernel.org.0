@@ -2,55 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C74BE7CB4
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 00:06:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2056FE7CB5
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 00:06:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730547AbfJ1XGK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 19:06:10 -0400
-Received: from mail-pg1-f171.google.com ([209.85.215.171]:37593 "EHLO
-        mail-pg1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729074AbfJ1XGJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 19:06:09 -0400
-Received: by mail-pg1-f171.google.com with SMTP id p1so8050027pgi.4
-        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2019 16:06:08 -0700 (PDT)
+        id S1730834AbfJ1XGT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 19:06:19 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:43410 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729074AbfJ1XGT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 19:06:19 -0400
+Received: by mail-pg1-f180.google.com with SMTP id l24so8027385pgh.10
+        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2019 16:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=S96i213Dq2b7CfeK/9YmMVb8Y2pJ0GLDvWFbRl9IKqc=;
-        b=bBtHwgU+k9tZP7g1lbKJ+VdtyWXlF1DE+eDasMqS/KD4l7xXGX8+h5tcsqk9114VuV
-         H6vfhy0riJ+XzGkLYcycd/tu2HT85L8gC1B3Siyp3Fdp+TP3ZrCGnpWmBwVW+uaJS6zB
-         Juaao/y+yeeNwB0Eompao4O/0KNbAK3d3ylgY=
+        bh=ajJAXvJBiuW+rdGyiHFHaJ8YTJ6d0F0ADLeuDcD+Poc=;
+        b=PnlOMdYNGfQLPTHAl6mmFcOO5Xa1b6iiO4qpP636LMDwJ/OL4xW/RNBQc4BWFxaWhu
+         WtNMIpZ0pGcFLa8m0loQOjlfH+Z2G3SJjuy63JBRtDZhq1+QGdF6iq+mKIjik2DhS+z5
+         pVhR9wGTy+0ZEcHe9Kid+innYzo/dg/9SuWlw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=S96i213Dq2b7CfeK/9YmMVb8Y2pJ0GLDvWFbRl9IKqc=;
-        b=Zp/WYdLphZzN6FHXH3IDnEj5HMpO4ryOpmgtjLm5zqv6d20Zl1CWwqsVwwoN2NTOZA
-         rhLX2z2nvtQunC/TN2mdp6n+HSjHP3wVBNvxXQzLn4D2S7z8UEdlZQGzZm+ewQzNZ0D4
-         SkuReLypx8KjewkEW1KHZQpmreeog9IjDeGSCR3HR9JYCQWE+7EZORmyAjaLFyMiAaWS
-         x9Bcl+4x4H/zb728NTDMNSm0cvwuWeiQ1VrhgwpDntKAeFU/xxLtaU85zDssR/HDuK5H
-         3DPUTETn77lH/VxG1st80IQvrF9/DXjZvlnFipPwWbP2S05YH/2CJArEchNO/rdJ6xOW
-         v4aQ==
-X-Gm-Message-State: APjAAAXcS2ldCiVDvku3I/L1NdcflCgYUj5KEx2jDL9sNCkm/Et/Q6X8
-        0nUl3bwzcC4mY4zgpGPtK8NWgg==
-X-Google-Smtp-Source: APXvYqw2nEvEulKQbf3a/+QuBll7cTvDJZOquO0lXnBCflEd3K0FMnbDyRn2WQQIcpPTyV86v21Xmw==
-X-Received: by 2002:a63:1c03:: with SMTP id c3mr15419115pgc.198.1572303967658;
-        Mon, 28 Oct 2019 16:06:07 -0700 (PDT)
+        bh=ajJAXvJBiuW+rdGyiHFHaJ8YTJ6d0F0ADLeuDcD+Poc=;
+        b=Z1g2lz4KobPk2Ib3z19SV2cNifSWRdOtC1hqomhcwsJgY+gvtgX8x4wmLP3e0+gSpD
+         wpEzdsh7Dh/PxsHbdxs4fGmHRSGHR03w7ZSQ5TT1mcccAdavbjFFg4vhjnWDIwNDvzf0
+         q3CXqe4KPiwS+QiMWPbUTeXto3Fpwp2ByGgCmXsG395GzZRK9hXrOn+lB9bdE43qeAaH
+         gGNJvMm79xTtBO+bXO8taoaCgQvmaNYjJ7k0jksd4kE4qWLb0jEDYxppkpeS+HUAMiAk
+         spp3nGHYqMeOOjRlEkqyiyZhCgz+WLeug4vuwD4AU7Ad84vvydHzB/+xICxcM2tzMzW9
+         E7Qw==
+X-Gm-Message-State: APjAAAV+sOV1Y57AocdAdYtBPNHMQ56tJ0CS948Hhr1xapRVkMFcpfZW
+        O5Gw8lG2ILLCTWl9plAKUgg1wQ==
+X-Google-Smtp-Source: APXvYqzkBYSIQCmPWXHAMvZhJWsEGKCsxL15zBJByB/6utjZAac/Wyb5naW68QXXhkJ9pasdG31n2g==
+X-Received: by 2002:a63:e255:: with SMTP id y21mr23240465pgj.353.1572303977533;
+        Mon, 28 Oct 2019 16:06:17 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g11sm3815367pfo.86.2019.10.28.16.06.06
+        by smtp.gmail.com with ESMTPSA id i22sm12000681pfa.82.2019.10.28.16.06.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 16:06:06 -0700 (PDT)
+        Mon, 28 Oct 2019 16:06:16 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Mon, 28 Oct 2019 16:06:06 -0700
-To:     Tzu-En Huang <tehuang@realtek.com>
-Cc:     Yan-Hsuan Chuang <yhchuang@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Chris Chiu <chiu@endlessm.com>,
+Date:   Mon, 28 Oct 2019 16:06:15 -0700
+To:     Sasha Neftin <sasha.neftin@intel.com>
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: rtw_phy_pwrtrack_get_pwridx(): NO_EFFECT
-Message-ID: <201910281605.E73D72D2F2@keescook>
+Subject: Coverity: igc_hash_mc_addr(): Integer handling issues
+Message-ID: <201910281606.99B58CD542@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,41 +67,26 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by recent commits:
 
-c97ee3e0bea2 ("rtw88: add power tracking support")
+7f839684c5c4 ("igc: Add set_rx_mode support")
 
 Coverity reported the following:
 
-*** CID 1487362:    (NO_EFFECT)
-/drivers/net/wireless/realtek/rtw88/phy.c: 2074 in rtw_phy_pwrtrack_get_pwridx()
-2068
-2069     	if (delta >= RTW_PWR_TRK_TBL_SZ) {
-2070     		rtw_warn(rtwdev, "power track table overflow\n");
-2071     		return 0;
-2072     	}
-2073
-vvv     CID 1487362:    (NO_EFFECT)
-vvv     Comparing an array to null is not useful: "swing_table->p", since the test will always evaluate as true.
-2074     	if (!swing_table || !swing_table->n || !swing_table->p) {
-2075     		rtw_warn(rtwdev, "swing table not configured\n");
-2076     		return 0;
-2077     	}
-2078
-2079     	delta_swing_table_idx_pos = swing_table->p[tbl_path];
-/drivers/net/wireless/realtek/rtw88/phy.c: 2074 in rtw_phy_pwrtrack_get_pwridx()
-2068
-2069     	if (delta >= RTW_PWR_TRK_TBL_SZ) {
-2070     		rtw_warn(rtwdev, "power track table overflow\n");
-2071     		return 0;
-2072     	}
-2073
-vvv     CID 1487362:    (NO_EFFECT)
-vvv     Comparing an array to null is not useful: "swing_table->n", since the test will always evaluate as true.
-2074     	if (!swing_table || !swing_table->n || !swing_table->p) {
-2075     		rtw_warn(rtwdev, "swing table not configured\n");
-2076     		return 0;
-2077     	}
-2078
-2079     	delta_swing_table_idx_pos = swing_table->p[tbl_path];
+*** CID 1487361:  Integer handling issues  (BAD_SHIFT)
+/drivers/net/ethernet/intel/igc/igc_mac.c: 851 in igc_hash_mc_addr()
+845     		break;
+846     	case 3:
+847     		bit_shift += 4;
+848     		break;
+849     	}
+850
+vvv     CID 1487361:  Integer handling issues  (BAD_SHIFT)
+vvv     In expression "mc_addr[4] >> 8 - bit_shift", right shifting "mc_addr[4]" by more than 7 bits always yields zero.  The shift amount, "8 - bit_shift", is 8.
+851     	hash_value = hash_mask & (((mc_addr[4] >> (8 - bit_shift)) |
+852     				  (((u16)mc_addr[5]) << bit_shift)));
+853
+854     	return hash_value;
+855     }
+856
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -110,8 +94,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include:
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1487362 ("NO_EFFECT")
-Fixes: c97ee3e0bea2 ("rtw88: add power tracking support")
+Addresses-Coverity-ID: 1487361 ("Integer handling issues")
+Fixes: 7f839684c5c4 ("igc: Add set_rx_mode support")
 
 
 Thanks for your attention!

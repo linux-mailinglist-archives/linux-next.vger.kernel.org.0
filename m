@@ -2,100 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53824E7A06
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 21:23:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8054EE7A3B
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 21:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728559AbfJ1UXx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 16:23:53 -0400
-Received: from heliosphere.sirena.org.uk ([172.104.155.198]:53014 "EHLO
-        heliosphere.sirena.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727802AbfJ1UXw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 16:23:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sirena.org.uk; s=20170815-heliosphere; h=In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=hM5PVIIqqVq5fwywAG6+qMv33PfDYrlxmKHuPbTQ250=; b=BvxYLSFlN4uSU6TP6JH49MaHF
-        rhVAF/Inqm/8dPGMCCkVFs4bY78XCNPLxHgSlAJ38ziryR9uineNgBGFBFCMmrKP+bZkPcE4CBteh
-        clB4Jz1x70+eO5daDc9K2W0TrI/Tnclr0ZJIEhDMHS7sL57Vo1Mu/sJdoJYa7I1NtFUDM=;
-Received: from cpc102320-sgyl38-2-0-cust46.18-2.cable.virginm.net ([82.37.168.47] helo=ypsilon.sirena.org.uk)
-        by heliosphere.sirena.org.uk with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <broonie@sirena.co.uk>)
-        id 1iPBYJ-0000aD-FG; Mon, 28 Oct 2019 20:23:47 +0000
-Received: by ypsilon.sirena.org.uk (Postfix, from userid 1000)
-        id 75BFD27403EE; Mon, 28 Oct 2019 20:23:46 +0000 (GMT)
-Date:   Mon, 28 Oct 2019 20:23:46 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Will Deacon <will@kernel.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        kernel-build-reports@lists.linaro.org, linux-next@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: next/master boot: 257 boots: 8 failed, 237 passed with 8
- offline, 2 untried/unknown, 2 conflicts (next-20191028)
-Message-ID: <20191028202346.GJ5015@sirena.co.uk>
-References: <5db7032c.1c69fb81.888b0.b521@mx.google.com>
- <20191028174857.GG5015@sirena.co.uk>
- <20191028184019.GR571@minitux>
- <20191028191121.GH5015@sirena.co.uk>
- <20191028200219.GS571@minitux>
- <20191028201418.GA8317@willie-the-truck>
+        id S1726642AbfJ1Uir (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 16:38:47 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35423 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726623AbfJ1Uir (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 28 Oct 2019 16:38:47 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47264h3WG5z9sPK;
+        Tue, 29 Oct 2019 07:38:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1572295124;
+        bh=bhX/b5vcqgDcRRNVcj5hPsxjO1eq57hCDy60xvgn2pY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=miQuRTRXWeE0G4X0kgyS1DkAchIWlFnXJlnP+50ykImflVh8hbkh6Gj+BfmGQVgPK
+         S6yjJhTtnUUOa5eMATadGYBCJpCBlZHgHCbJmmE0xWGtihpFYpapVwI6MHOU3+S1gJ
+         JxVo7vhdlrZyERPuB/a7M2at8plEiIVA3bfb4dd1TyHbogDjDPNDuzjiRFxgB0jeEM
+         5elSqGUDocUhVsiTpXum1sfDiDMSb+FgpO4/sEdhROiEnDW512ymAXo5BIeyVmiORL
+         Yyu1ccR83TqPmpGVr1ERIsN0ol1eP1OnqJtcwiwtT8tDowvvKtTsQ6lqnYm7yRt3l7
+         BUkRM35ySnG6Q==
+Date:   Tue, 29 Oct 2019 07:38:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the imx-mxs tree
+Message-ID: <20191029073838.146df408@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="MzdA25v054BPvyZa"
-Content-Disposition: inline
-In-Reply-To: <20191028201418.GA8317@willie-the-truck>
-X-Cookie: The Moral Majority is neither.
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/GH1iIlt=N9/O2Z0GN.xGJ0Q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/GH1iIlt=N9/O2Z0GN.xGJ0Q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---MzdA25v054BPvyZa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
-On Mon, Oct 28, 2019 at 08:14:18PM +0000, Will Deacon wrote:
+Commit
 
-> Hmm. Is this a recent thing? Neither kpti nor the snapdragon 820 are
+  5a7fd0deda7a ("arm64: defconfig: Enable CONFIG_KEYBOARD_IMX_SC_KEY as mod=
+ule")
 
-It's in mainline, don't seem to have any results from Bjorn's lab for
-stable.
+is missing a Signed-off-by from its committer.
 
-> particular new. Might be worth checking that CONFIG_QCOM_FALKOR_ERRATUM_1003
-> is enabled and getting patched in at runtime -- we had hardware issues
-> during kpti development with this CPU.
+--=20
+Cheers,
+Stephen Rothwell
 
-It's enabled in defconfig:
-
-	https://storage.kernelci.org/next/master/next-20191028/arm64/defconfig/gcc-8/kernel.config
-
-but I can't see any sign that it's been announced in the boot log:
-
-	https://storage.kernelci.org/next/master/next-20191028/arm64/defconfig/gcc-8/lab-bjorn/boot-apq8096-db820c.html
-
-so that might be it.
-
---MzdA25v054BPvyZa
-Content-Type: application/pgp-signature; name="signature.asc"
+--Sig_/GH1iIlt=N9/O2Z0GN.xGJ0Q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl23TlEACgkQJNaLcl1U
-h9D4YQf/R7oiiKxoyTMcJZqf4+ByFkIfsceWfH/DEWTi6HliacqU29h9sdfiPbKR
-/0ugF+thK7yv3XsVF8Lg0Aq6zXjZal8cQvaB5oB1gPic5T+eSLMgeTYQ/UKWsNgm
-iGUcAtPlCcg0/qiR57niJ7mfsPRTWslow1a9D/f1Ud8APQ8JHCLipD1KsE/Ek8oQ
-SRFWsqkG0BZwZMPlKaQ5Yus+sdu70JJ3e5tS8H+btjgjIhywI2YpFsBcrhRsoHCk
-I5z6bOkVXnKI6p0z3SN+SCKLoONqvYcZHps9b5sGcWPPwmzIv2dY+/YSLlAdnFY3
-5D1Ls44JbkZ8lNO1snUDwI8TrFJXxw==
-=sP0T
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl23Uc4ACgkQAVBC80lX
+0GzMeggAlQbrJnAvWVDWvLg1kPZxeIkEtTBw13FytIgUYb3v57+35lx4lOdK7kG+
+heIBcT9n6MSrqOBGW2Z9vvE8hsFCeT05I33JUX428iY4qdKBfrZlMXdWD8AfTKKw
+REQK90s0Py4ztsxsFm0A0Zt1P1iP7VE4kivv7ipeAoQU7j11VM4IqIoILpgtjdfI
+dZbaRLDYwo83mKMPH/AgIACpdh10hhw13MAbynlA4952kQsa3rhPC0kFNqAeNnTy
+brXi2po6ah8x8P3w8kw7asXo90hFFLs+3FVQRYyJHMfXKlXu8RdyTkXFnoqg73ul
+Wn9551f3gV+O4uMbczD7541hVcFrLA==
+=+Ezz
 -----END PGP SIGNATURE-----
 
---MzdA25v054BPvyZa--
+--Sig_/GH1iIlt=N9/O2Z0GN.xGJ0Q--

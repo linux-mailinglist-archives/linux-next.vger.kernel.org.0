@@ -2,95 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F17E2E6B6F
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 04:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DB2E6BAF
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 05:09:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729576AbfJ1DZL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 27 Oct 2019 23:25:11 -0400
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:45525 "EHLO
-        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727119AbfJ1DZL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 27 Oct 2019 23:25:11 -0400
-Received: by mail-pg1-f193.google.com with SMTP id r1so5859995pgj.12
-        for <linux-next@vger.kernel.org>; Sun, 27 Oct 2019 20:25:09 -0700 (PDT)
+        id S1725951AbfJ1EJm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 00:09:42 -0400
+Received: from mail-eopbgr690060.outbound.protection.outlook.com ([40.107.69.60]:51407
+        "EHLO NAM04-CO1-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1725601AbfJ1EJl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 28 Oct 2019 00:09:41 -0400
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=S5z9zKAxjJLVzXI1RZOpOSxgJ4hGGTfSgqqR/mQeTNS3MY++0vq79Vc6uc5PXO5HOPfw+JoFeKpyi0xAtUlePGZz393f5ygj6ugQHFxgOepzrHV8LoigXLONLnznm1CtB+6hw6OrvrBnkyYn7EzajGRxWpUfUV/274z7V3HfQk/AQYi97keL2dHQTpURcUHt9lthy3VSiDRdcQ0ng9QL143yb97vkJeRUUJfeEiCdV2YhGI7rPei5ZUFRlZrfEBzPJgEjuGECVx5UoWH7IsHdV1AFeluOx8LtdHEXDa2hxycN53R5vNLpCFW8LoOtZQltuKjI0Iw/nxDU68WESjYyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v8t12eipuxyZ3LkCbGTU1Eun8XaF++waGFUk8tojceI=;
+ b=VZ2JjnemqDii2pESSh7UKz56wCcQmdK9tKavyP2NE/Tla6ZMkCouQnc4o8YjvWEN+v1lVWYHsWAy1oP/RwrxVNcsKpYGSOEBwt7v/lU5LX8bRX2s4PuFZ8wmF8h1kazbilR58uy5oCNINIWPizHyFG6QVff2IbCFeoLbOPHYpwMxNT7mHAauJUsiXtzo6UCmxfAZCRuWluJpA3dKGuMF+f43MtzUzlLcLEBD3MRuohTwP6VkGIE6amAupXeKzoU6GzynZyDXp6U2hulHOY4i2jMyivVvHtsAh5LppeRYWwWQF+1sSNF/Bxj9+wyQnpjrSgdthlidCpJZgIySV6cf/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=iuuv5uDzwQjuDzXqpsithGymUPeE73L3D0NeEzp8Q00=;
-        b=iqavAp5G7CGwQYt0MWbkcL6EzvmJ+n3PRBTotiKoMMZjLT6V4QFfwpTr+u+vwScKD3
-         KpVutZfM/P9dzi5rPohWCEOKxw/+MDYaZJ7evH+VuGZUyWFoNsa296gMKRSkhfQ51ZGR
-         AgGsF8JqqNnY1CZn3OIIShlpQOZY41kmWdA5swBm3Mj+mwOVYEQVxC8p/7fdnD+0nr0T
-         mVLJwZ+7g3Su4tEENVu3y3hcWGRx3/gSpmcsNFCFvVAmsLyoCH9a81g3aF+eE7vnrWtq
-         FxT9W1WvQNEjC9uz3Tbv0Fk2rMA0MrGR5tpvAZB8w2SxwRGWp9rKcpiB8i4j5m1nSO8j
-         6xvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=iuuv5uDzwQjuDzXqpsithGymUPeE73L3D0NeEzp8Q00=;
-        b=XLMNXY8ZoW9v43dk4dUIiLs3uXTNds5qzWajXiNKYYBvlKvtsi+W8M33EVctbc4WX5
-         nIsGS/sqKplsXah84Auh0hvMz9ECclYJHyr3izud7E9l4LyEiVd6kgY6ww0faj/L433G
-         SforXweYd8aL2WBZEK0ZsGnzgcbrpKrw3BVghBWxiujVLryJoStapg3kp2V+HoUHCRxC
-         UQ82JAjR3UEkJnnuWnNl0YyXUn+ypWOD81FHFqlbn/aJXWSI8wpeZs3GDmLNpLkveeBF
-         8zCZuIzzFbazh/NlW/qQcRLrJ1UXq+EYB+aO1Iq3Cvkp3/1msU+NcDhcTCVtm+TCo3PI
-         wVFg==
-X-Gm-Message-State: APjAAAVKy/FkiJ1cAK45NZsnlZxF3nvDgbyQNR4OgXRBbEoFDwjQ6H1X
-        Mt1fcrXq5LAdxvtBP/cGPOR9YXx+NgoYUg==
-X-Google-Smtp-Source: APXvYqzaXi4g/x7LVLX5SWooWOl0YI/9dw1mF1GZ4B5OOrCrUhnAkiY+AyLAxR53ILruyo2LWer3cQ==
-X-Received: by 2002:a17:90a:4804:: with SMTP id a4mr3869284pjh.102.1572233109088;
-        Sun, 27 Oct 2019 20:25:09 -0700 (PDT)
-Received: from [192.168.1.188] ([66.219.217.79])
-        by smtp.gmail.com with ESMTPSA id k124sm10106917pga.83.2019.10.27.20.25.06
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 27 Oct 2019 20:25:07 -0700 (PDT)
-Subject: Re: linux-next: build failure after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191028135945.5b2ed0fa@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <27de542b-aa30-78e4-40ad-4a024e42e643@kernel.dk>
-Date:   Sun, 27 Oct 2019 21:25:04 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
-MIME-Version: 1.0
-In-Reply-To: <20191028135945.5b2ed0fa@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
+ d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v8t12eipuxyZ3LkCbGTU1Eun8XaF++waGFUk8tojceI=;
+ b=UUPn656Y6V60KDVrfS92CokK6e5sOUmEOdfHyHG/7cYN9lvsQOkMpzG4Hj98sN3U/UGxhXlblQdtjy//d98ugt0/oYh+M3mFXHsIkciGYDJSu/UyCUvq8+pWtZ8pUDqwvNBiwzN0vKYVpCbpLEPpD9YAiuB3SPWsFJ9RMpcuVDk=
+Received: from MN2PR12MB3248.namprd12.prod.outlook.com (20.179.80.74) by
+ MN2PR12MB2958.namprd12.prod.outlook.com (20.179.80.157) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2387.22; Mon, 28 Oct 2019 04:09:39 +0000
+Received: from MN2PR12MB3248.namprd12.prod.outlook.com
+ ([fe80::dd77:dfe4:1913:9d7e]) by MN2PR12MB3248.namprd12.prod.outlook.com
+ ([fe80::dd77:dfe4:1913:9d7e%4]) with mapi id 15.20.2387.021; Mon, 28 Oct 2019
+ 04:09:39 +0000
+From:   "S, Shirish" <Shirish.S@amd.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>
+Subject: RE: linux-next: Fixes tag needs some work in the drm tree
+Thread-Topic: linux-next: Fixes tag needs some work in the drm tree
+Thread-Index: AQHVjQRo8bljOU3RmEOsY9WZLY63i6dvci5g
+Date:   Mon, 28 Oct 2019 04:09:39 +0000
+Message-ID: <MN2PR12MB3248EBEECD7ECBE3EB6EC380F2660@MN2PR12MB3248.namprd12.prod.outlook.com>
+References: <20191028072324.5b2b2d4b@canb.auug.org.au>
+In-Reply-To: <20191028072324.5b2b2d4b@canb.auug.org.au>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=Shirish.S@amd.com; 
+x-originating-ip: [2406:7400:73:69db:e57c:27a3:fbb8:ec7a]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 91ac4421-7fce-40b8-8e8a-08d75b5ca749
+x-ms-traffictypediagnostic: MN2PR12MB2958:
+x-ms-exchange-transport-forked: True
+x-microsoft-antispam-prvs: <MN2PR12MB2958F3F715C2A68BC65B31F0F2660@MN2PR12MB2958.namprd12.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:153;
+x-forefront-prvs: 0204F0BDE2
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(39860400002)(136003)(346002)(376002)(396003)(199004)(189003)(53754006)(13464003)(25786009)(4326008)(229853002)(54906003)(52536014)(110136005)(6246003)(6506007)(53546011)(14454004)(71200400001)(71190400001)(86362001)(6436002)(8936002)(316002)(74316002)(5660300002)(66556008)(186003)(8676002)(305945005)(55016002)(6116002)(81166006)(81156014)(7736002)(99286004)(256004)(4744005)(478600001)(7696005)(33656002)(76176011)(102836004)(66446008)(64756008)(476003)(66476007)(2906002)(11346002)(486006)(446003)(9686003)(76116006)(66946007)(46003);DIR:OUT;SFP:1101;SCL:1;SRVR:MN2PR12MB2958;H:MN2PR12MB3248.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: amd.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: AJ0Th7srV5dzSg4x+LvdYCoG33JIBqdReDHb7cQNq5Du3ZI2BkEun4rnta4Oj2049lfGlKVqsuQJbVeDZ9ack/ksg73QBsWDh+hOzBfSz5aA8BUkj0unI8lHMlwdZULhlxMsm4LqYmxooLuIyJhIpXoKftrTX9ZIQl4k9/1NotI8X+bb6acsP3Oy0aDLMqx/Pq46IslYRTOi9dQcFweaDasYsosPPbOopp5gViMMdyzxf/dpzklW0qmjnuVF/7XulAPJRjusRM+fOtj0A47D61At65YY0PnUrs4z6V662B750Ln9yGangf21OgLKt6H4ShFW4zTwicyp9TvepRkExaaDerm68lmPJggSL2PGHVC1zHweVYYLpOFQc70cW5rLPwCphaOa2XtVU9Ds0cxe1sWUaLTDCfgfmUD/07b0KnuCAnwUAAcM0aInX7oVIk40
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91ac4421-7fce-40b8-8e8a-08d75b5ca749
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2019 04:09:39.6749
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: J0IEGRZ3URLwqToHl1KRswsZlono5nJ2H4DydX/5eF2S7+JmUtWb89MwdW6TSZ/j4bUoyo0/mIz6fYtM+6ZEvw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB2958
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/27/19 8:59 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> fs/io_uring.c: In function '__io_sqe_files_unregister':
-> fs/io_uring.c:3010:12: error: invalid storage class for function 'io_sqe_files_unregister'
->   3010 | static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
->        |            ^~~~~~~~~~~~~~~~~~~~~~~
-> fs/io_uring.c:3010:1: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
->   3010 | static int io_sqe_files_unregister(struct io_ring_ctx *ctx)
->        | ^~~~~~
-> 
-> Caused by commit
-> 
->    ed9e02e4bad1 ("io_uring: support for larger fixed file sets")
-> 
-> I have used the block tree from next-20191025 for today.
+Yes, that's what it meant.
 
-Ah shoot, forgot to update for-next, I did fix this silly error
-yesterday. If you're up for it, pull for-next again in 2 min and I'll
-have it updated. If not, I guess it'll be there in the next one. Usually
-doesn't matter, only asking because syzbot keeps flagging the same issue
-that is also fixed.
 
--- 
-Jens Axboe
 
+Regards,
+Shirish S
+
+-----Original Message-----
+From: Stephen Rothwell <sfr@canb.auug.org.au>=20
+Sent: Monday, October 28, 2019 1:53 AM
+To: Dave Airlie <airlied@linux.ie>; DRI <dri-devel@lists.freedesktop.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel Mail=
+ing List <linux-kernel@vger.kernel.org>; S, Shirish <Shirish.S@amd.com>; De=
+ucher, Alexander <Alexander.Deucher@amd.com>
+Subject: linux-next: Fixes tag needs some work in the drm tree
+
+Hi all,
+
+In commit
+
+  8c9f69bc5cc4 ("drm/amdgpu: fix build error without CONFIG_HSA_AMD")
+
+Fixes tag
+
+  Fixes: 1abb680ad371 ("drm/amdgpu: disable gfxoff while use no H/W schedul=
+ing policy")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean:
+
+Fixes: aa978594cf7f ("drm/amdgpu: disable gfxoff while use no H/W schedulin=
+g policy")
+
+--=20
+Cheers,
+Stephen Rothwell

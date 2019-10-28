@@ -2,53 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 344AEE7CA7
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 00:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 005ADE7CAB
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 00:04:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730843AbfJ1XDa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 19:03:30 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:40922 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729692AbfJ1XDa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 19:03:30 -0400
-Received: by mail-pf1-f195.google.com with SMTP id r4so2351812pfl.7
-        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2019 16:03:30 -0700 (PDT)
+        id S1731026AbfJ1XEA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 19:04:00 -0400
+Received: from mail-pf1-f174.google.com ([209.85.210.174]:35530 "EHLO
+        mail-pf1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729692AbfJ1XD7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 19:03:59 -0400
+Received: by mail-pf1-f174.google.com with SMTP id d13so6970607pfq.2
+        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2019 16:03:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=YpnmTiQh5ea+cH+a1LGu7OZPtNNtiy1P8KPo2+zDiC0=;
-        b=X1L30OC29o3x6ZDDqbe0GFPVCP4HPECNFEVQ009jjddsseRfSfZXYu1lH8sFnyRsDr
-         7sa92o1W0dGqlpLGXU7LAT6ZY4UzsbGD/hkdkNE5+hQrv9s3Ha16jKykk4F5l+cUbVFY
-         ekr6NtDXvM/vcj9rgqhNTDhPQlel7/JgGFtmU=
+        bh=CFn3zfERHyr1Xod6LRkf4MMsZQz+EK3EOy3vPLT/n+w=;
+        b=WrclJfEo4mQNNNPzlh0rrhmkwHkgDCIgY/FhVAyg+pyRUodblUWi54PDDdhdBZI1bd
+         zRu2Jikme9u4NPyTxKnqGT0Dc/nZKuQb06SJtR8kl2xPImN5YoShyLf3bguF6QEmfMp5
+         KHJIq9iQfBLC6ryMy8BVn+y42HSkSrr6rJUgA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=YpnmTiQh5ea+cH+a1LGu7OZPtNNtiy1P8KPo2+zDiC0=;
-        b=uYxX90q24ceL1SlVKR7o3q9DFKDhMi2+CTPYAnyeMtyy5FzuYd+ivCLHtVVEPY+nAF
-         0TmK4JOvJH5vvotb+5FJGyK0YvCcdIyNs7u9m67DTRZ3VBnSp5BbSEfH8Gwcf5xesQij
-         iuju3z4HZXlmWJFkhhZSpHD6qBe3MVXG5tiXHOIuuS3ZlyWw24gRBxz292iMJbfbpeE2
-         81G53MBALKfpwKw5EmatU16CUjvwMXzA+VUtNYFXsweJIzslcVbiqh6X6FaTJ1SRAQ5T
-         slbA3Nu+4Gu2gv6dlrylSYBTJLZWLGJ+4q8bzii7MmLqJbb5xukvAr/YHV+ZrLHjrkRI
-         Y1TA==
-X-Gm-Message-State: APjAAAUV/82DeVzpa1EN/gClKSw2AIgG6mkPVvKL2qKk1to4Fac+nxT/
-        Z4P5Hf5oDAnRy+K3fbfwkG10PcpYs3c=
-X-Google-Smtp-Source: APXvYqzyV2vNXiq94/Kq4ZDYEQINs+PQxWczO2X5hQMg197JR55w5ZPeU4wHxZQmdL3eAA1if4vdEg==
-X-Received: by 2002:a17:90a:1782:: with SMTP id q2mr2228382pja.57.1572303810002;
-        Mon, 28 Oct 2019 16:03:30 -0700 (PDT)
+        bh=CFn3zfERHyr1Xod6LRkf4MMsZQz+EK3EOy3vPLT/n+w=;
+        b=MmQ5Gtw7cr0fpzxFAWrqLM1mgULLs+HBhSMPYDR2AUFXmnedBIIRYX0jyaDsc00Xpz
+         b7C7lG1gAWY2zz0OWMhgHrD/oTibxIPbIzcokXgfpaTYzLyDeH7E4LLHVYuQ8VDdMYPw
+         hbGLjW6GpViKPrHzk4P1iflQpEdo/VbgTZqoNy8zID4sVXygM0PKCDKgoC+99WZvAwlg
+         byEZmywowOjEKf0iX/TTs76x+u83ehFuhneKUj1dm43ExtDZOlZmlewTLtvcaF4SRxo2
+         UzRfyFpIjt7A1Q372VIFZdlNGXpnYpVeF6Gn4Og1ccR7dJ9hLiLeu5sK+7a3zBbk1RzH
+         IKAQ==
+X-Gm-Message-State: APjAAAVgnGo2/gsZa+cBUeG+vpSl3D71wp6ZF3d2WtJVLsA/yM4bJhMq
+        LdSoP+dIi7WiS9I7bkL10Y/1VQ==
+X-Google-Smtp-Source: APXvYqz359oao6vnDBSqWCJ/59wSpBT9EczL81niSHLC/ahizdM12fqBLFjvvqeGoW/yv5qkmhyU/Q==
+X-Received: by 2002:a17:90a:c244:: with SMTP id d4mr2186970pjx.117.1572303838706;
+        Mon, 28 Oct 2019 16:03:58 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z11sm11009942pfg.117.2019.10.28.16.03.28
+        by smtp.gmail.com with ESMTPSA id b3sm12845108pfd.125.2019.10.28.16.03.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Oct 2019 16:03:29 -0700 (PDT)
+        Mon, 28 Oct 2019 16:03:57 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Mon, 28 Oct 2019 16:03:28 -0700
-To:     Anshuman Gupta <anshuman.gupta@intel.com>
-Cc:     Imre Deak <imre.deak@intel.com>,
+Date:   Mon, 28 Oct 2019 16:03:57 -0700
+To:     AngeloGioacchino Del Regno <kholk11@gmail.com>
+Cc:     Amit Kucheria <amit.kucheria@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: intel_get_frame_time_us(): Integer handling issues
-Message-ID: <201910281603.B144A608@keescook>
+Subject: Coverity: calibrate_8976(): Memory - illegal accesses
+Message-ID: <201910281603.E90E9627A@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -66,26 +67,26 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by recent commits:
 
-1c4d821db919 ("drm/i915/tgl: Switch between dc3co and dc5 based on display idleness")
+95ededc17e4e ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
 
 Coverity reported the following:
 
-*** CID 1487370:  Integer handling issues  (DIVIDE_BY_ZERO)
-/drivers/gpu/drm/i915/display/intel_psr.c: 542 in intel_get_frame_time_us()
-536
-537     static u32 intel_get_frame_time_us(const struct intel_crtc_state *cstate)
-538     {
-539     	if (!cstate || !cstate->base.active)
-540     		return 0;
-541
-vvv     CID 1487370:  Integer handling issues  (DIVIDE_BY_ZERO)
-vvv     In expression "(1000000 + drm_mode_vrefresh(&cstate->base.adjusted_mode) - 1) / drm_mode_vrefresh(&cstate->base.adjusted_mode)", division by expression "drm_mode_vrefresh(&cstate->base.adjusted_mode)" which may be zero has undefined behavior.
-542     	return DIV_ROUND_UP(1000 * 1000,
-543     			    drm_mode_vrefresh(&cstate->base.adjusted_mode));
-544     }
-545
-546     static void psr2_program_idle_frames(struct drm_i915_private *dev_priv,
-547     				     u32 idle_frames)
+*** CID 1487355:  Memory - illegal accesses  (USE_AFTER_FREE)
+/drivers/thermal/qcom/tsens-v1.c: 245 in calibrate_8976()
+239     	int mode = 0, tmp = 0;
+240     	u32 *qfprom_cdata;
+241
+242     	qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+243     	if (IS_ERR(qfprom_cdata)) {
+244     		kfree(qfprom_cdata);
+vvv     CID 1487355:  Memory - illegal accesses  (USE_AFTER_FREE)
+vvv     Passing freed pointer "qfprom_cdata" as an argument to "PTR_ERR".
+245     		return PTR_ERR(qfprom_cdata);
+246     	}
+247
+248     	mode = (qfprom_cdata[4] & MSM8976_CAL_SEL_MASK);
+249     	dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+250
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -93,8 +94,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include:
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1487370 ("Integer handling issues")
-Fixes: 1c4d821db919 ("drm/i915/tgl: Switch between dc3co and dc5 based on display idleness")
+Addresses-Coverity-ID: 1487355 ("Memory - illegal accesses")
+Fixes: 95ededc17e4e ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
 
 
 Thanks for your attention!

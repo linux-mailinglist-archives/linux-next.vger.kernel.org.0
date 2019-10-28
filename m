@@ -2,97 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48048E7AAE
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 22:01:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58547E7C9B
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 00:01:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388709AbfJ1VBU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 17:01:20 -0400
-Received: from ozlabs.org ([203.11.71.1]:59531 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729449AbfJ1VBU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 28 Oct 2019 17:01:20 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4726Zj4rCHz9sPd;
-        Tue, 29 Oct 2019 08:01:17 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572296477;
-        bh=vI7mZ+DC2IUrUk3rLTrQd/wmba5TysXkf2AZ6nWrBpA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uFlM1uXLeWuuiwlydsS7YidEYoMA4PQEf9qkBxUfNzltxHmgeUsBnJdtoj2Q2xpF0
-         6Z2450x+JLkNEvQgOgOqhkOfIB2zSY5+zclyrl2EnM4hEskIBL+8KvuDs1nW6K8vjf
-         TgD3HQbNzagqqHcOIvSRNykYCKGVoZVL+eDEYtVguQL1yo7E0yszvfGpNARin7tK72
-         MUxTMqiycabIILD6R8k7yhI2KVK7QyqoVkhHrU32Suz8GPApl71tcwgVRIHePO3vZg
-         PkpMkZuqqiZMyx0PJeuFr0Q57aif+45lZc6QU2LYAHkP3zfnoJz0UmZSWMey/pfRhV
-         Pqnk1C62ZxDUg==
-Date:   Tue, 29 Oct 2019 08:01:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the rcu tree
-Message-ID: <20191029080116.1ba4849f@canb.auug.org.au>
-In-Reply-To: <20191029075041.7bf3f723@canb.auug.org.au>
-References: <20191029075041.7bf3f723@canb.auug.org.au>
+        id S1730567AbfJ1XBz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 19:01:55 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:45397 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730303AbfJ1XBz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 19:01:55 -0400
+Received: by mail-pg1-f173.google.com with SMTP id r1so8012199pgj.12
+        for <linux-next@vger.kernel.org>; Mon, 28 Oct 2019 16:01:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=14VV+61LPmAUa1GF+7bepeKeGh0DuFXSoL64UDvjHo4=;
+        b=J8fHzNwmsUeFR0sloacgd7qMx+gCgpFbUaezoXN01l401ZlZrSKhziOXyCmpZcaSjJ
+         Y48KiTUVpLar2ImiMFN7vTwpRbtUwyoqVqjpNZ9aJQM8Xq+L8oqKvM6GGlcMFouiOG9q
+         UFdxat/pG6pgmbq6TD5N95G2ktxuouke+dtqc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=14VV+61LPmAUa1GF+7bepeKeGh0DuFXSoL64UDvjHo4=;
+        b=pJYgEdoQksxNOblcEjJjLLmX1TO2Qo3Y05hK0hdSZA/qNDlFsRJZfm78agDIiYIY/d
+         E5meK18ilKGXXQh9C/xH9gQdPC2+46Axy2/7sA0DCOazi6LXNRD+ro5K7NdRcOBYNSDV
+         s8EKDB6ui+XvuVLZlq6ItcgrOjZCkgiKqrfFdsPhdPo/ZKa/OO7tHrpd1tURb2WbFYTm
+         Bmb/iicnN0a6K0YGu5JLwPnus2DnV6PAKEWiLdi0qO+3Bu26TqfhwWB1mdWPfn9wA0fh
+         wAVocFpVGRdzMBgczwrSQlQX5V5pCFBYYfnTb83Cju53V5DVGJV1J/WzL98YdWuRNZ/x
+         y/Yw==
+X-Gm-Message-State: APjAAAXLlQa6KYumSEf9K6of3nFxXHLvqCMk91WBTl4w3FJX1Ln6i6m9
+        za5arzBbuqK0zv6zoYl5wA7sAA==
+X-Google-Smtp-Source: APXvYqxe97ztmfZEpTk3zghSpnMkJIqZ66/inWemsMqiJsBRdp3nIEbI3/EnH9eoB/RI2KjqkyP3nA==
+X-Received: by 2002:a62:3387:: with SMTP id z129mr23568433pfz.41.1572303714153;
+        Mon, 28 Oct 2019 16:01:54 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id r4sm4101374pfl.61.2019.10.28.16.01.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Oct 2019 16:01:53 -0700 (PDT)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Mon, 28 Oct 2019 16:01:52 -0700
+To:     Vivien Didelot <vivien.didelot@gmail.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <jakub.kicinski@netronome.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Coverity: dsa_switch_probe(): Null pointer dereferences
+Message-ID: <201910281600.407E203F02@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2_3MiMKp.=Q08gpA/RR.sl5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2_3MiMKp.=Q08gpA/RR.sl5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-Hi all,
+This is an experimental automated report about issues detected by Coverity
+from a scan of next-20191025 as part of the linux-next weekly scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-[Resending with correct address syntax]
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by recent commits:
 
-On Tue, 29 Oct 2019 07:50:41 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> [Resent with Paul's new (working) address]
->=20
-> In commit
->=20
->   292d1bb21aba ("rcu: Several rcu_segcblist functions can be static")
->=20
-> Fixes tag
->=20
->   Fixes: ab2ef5c7b4d1 ("rcu/nocb: Atomic ->len field in rcu_segcblist str=
-ucture")
->=20
-> has these problem(s):
->=20
->   - Target SHA1 does not exist
->=20
-> Did you mean
->=20
-> Fixes: eda669a6a2c5 ("rcu/nocb: Atomic ->len field in rcu_segcblist struc=
-ture")
+7e99e3470172 ("net: dsa: remove dsa_switch_alloc helper")
 
---=20
-Cheers,
-Stephen Rothwell
+Coverity reported the following:
 
---Sig_/2_3MiMKp.=Q08gpA/RR.sl5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+*** CID 1487378:  Null pointer dereferences  (REVERSE_INULL)
+/net/dsa/dsa2.c: 849 in dsa_switch_probe()
+843     static int dsa_switch_probe(struct dsa_switch *ds)
+844     {
+845     	struct dsa_chip_data *pdata = ds->dev->platform_data;
+846     	struct device_node *np = ds->dev->of_node;
+847     	int err;
+848
+vvv     CID 1487378:  Null pointer dereferences  (REVERSE_INULL)
+vvv     Null-checking "ds->dev" suggests that it may be null, but it has already been dereferenced on all paths leading to the check.
+849     	if (!ds->dev)
+850     		return -ENODEV;
+851
+852     	if (!ds->num_ports)
+853     		return -EINVAL;
+854
 
------BEGIN PGP SIGNATURE-----
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl23VxwACgkQAVBC80lX
-0GykzQf/ef0FNsoIOZzbbVQqUrFGJsZmkHA2XdN56h6R0Nd02f/8jYrPVRN6Id26
-rIQtKlky62q3jrT9kuEJ9rNz2x0ue+sEQgMLXrYtn7Xr6sR0JEvY4VeDdRo0XWAh
-71LXl2P43vz0Cyrk5hPKRK3gKfyGnUWsZxLkeFQII5G43vRE4r18+AlnPLACxQ0q
-2Omndy+O9yVzTyPfTQY0sjdShH99E5MCSokMYFQEN5UmoVpKBf1xLVEB+R1hGrUz
-9Pdapb20c6XYbWG+7b1/R3x1HAzSG5vk8uikVyU8LhEx1wid60wVvjUSTSARrzuk
-052a1S1yNZFQkFG6bTBNWxskQqpKjg==
-=H+im
------END PGP SIGNATURE-----
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1487378 ("Null pointer dereferences")
+Fixes: 7e99e3470172 ("net: dsa: remove dsa_switch_alloc helper")
 
---Sig_/2_3MiMKp.=Q08gpA/RR.sl5--
+
+Thanks for your attention!
+
+-- 
+Coverity-bot

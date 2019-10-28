@@ -2,109 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23561E6C14
-	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 06:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 979F2E6C6C
+	for <lists+linux-next@lfdr.de>; Mon, 28 Oct 2019 07:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726025AbfJ1Ftf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 01:49:35 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51029 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725932AbfJ1Ftf (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 28 Oct 2019 01:49:35 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 471kLg1Qqcz9sPK;
-        Mon, 28 Oct 2019 16:49:31 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572241772;
-        bh=tstUNT1brLDFJRPvtcAeyQmxp+7U7USa0PXA8ftu9+4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NJD2B3O+sidrtCTnKWj5vvxBtI/NzOK621TAUp2H9PSWcJMCSVF8GwzFTHu//liP5
-         aezBR3iX8cuLtrf9B5Lck/SreohkiVK+x3Re7maIiLQ3TQpWHSOb3nr72+dpg/7O0e
-         TWTgwxjv8METpLpvJKnTWblefgzgA82vrA/lTFdRpI7aV8okLwheGpbnFJAuxwppil
-         D2uxa4NPKJYxnOTDJThlSHscQxV14xxZ0iRZkJhzJi0AP5dDnU7BZIV4NX9VW7WzNL
-         xrTQ0Nr4iOok7xJw+JQlMgpPij+j9ENawGQGR5U9I+UO1BlsU7+2x+TZT8rpXF0tw1
-         ze7wXaz1WTPyw==
-Date:   Mon, 28 Oct 2019 16:49:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Smart <jsmart2021@gmail.com>
-Subject: Re: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20191028164924.232e32e5@canb.auug.org.au>
-In-Reply-To: <20191025140736.0c9e9d64@canb.auug.org.au>
-References: <20191025140736.0c9e9d64@canb.auug.org.au>
+        id S1730469AbfJ1G2v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 02:28:51 -0400
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:34231 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730466AbfJ1G2v (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 02:28:51 -0400
+Received: by mail-wr1-f66.google.com with SMTP id t16so8551760wrr.1
+        for <linux-next@vger.kernel.org>; Sun, 27 Oct 2019 23:28:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=gAZWyUhdSAtUKZC2ASCnYLuasXGvLk5A6zGpk4PmBLg=;
+        b=o8IqJM6Xpcbw4TMndnxIzI6gEfU1R9X5Y3Ys/LC3knnoLJcgW8p/6gh0zsIULAguu8
+         a1yNk3l5vPbsN+gZHUbhpu6IRYRoLmvzMaknIsTs1Cg2yIAcTsxicLEA8Bm6AxprRbZ4
+         y90nD5z1BdNY2D4JldLvRpjTw5Vay7Q+ns3T879X2mS+FbyQpl43uJXMRF3uAfppkb3y
+         W/ENr95pduD6X0PtEL+ZaF8yC68SFRqoJZUSaqm6X1ovlnf/3SpqzZXFxlsP72pky0w4
+         4xAhfP4lLaoz5v1i+JwVoR8DBu0hySKFxAnqKhaOS19HLVTXsQOKM82wYGyCB7hCsnE/
+         nCzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=gAZWyUhdSAtUKZC2ASCnYLuasXGvLk5A6zGpk4PmBLg=;
+        b=BTe+5YFRhgQpBffC6E8eVXGeneAOv+bAKnYo+b7UddKrMCHqw6jxDgXElVA/797UI1
+         P/xUTmKCNumRy5X/jSczPuKqfR39P4P3c5QzxixMm3SNVjZIPZA4Foik159K1S/qnlpy
+         PksSdrJbOpY+fDPQ9JIOnbcjhO59cdX/AUM/QYxC1fpNkQfVh2ERABdLxgMlzfvVs7HP
+         TdPtP56Nkk4AS8orbYzGe///zlM0mHWUJAlowcAGCR1VcwqRff/Lj0+0Q5VGUhrDOl9K
+         xbIdYOVRlOR3BjgkmRlY8A0onhMdSxC8Xn8CwA9pw+HrADd4LhWf3s/MqPMFMXDgkP6+
+         Kd+Q==
+X-Gm-Message-State: APjAAAUiOvd1zmLzZzsW1V0jRdmosHMII9i9zd/V7f3tzFA8lpiqPgIy
+        GNfLY2G2XgwH5592+twG1AibJHBZtRM=
+X-Google-Smtp-Source: APXvYqxwbfp6MMLqHW1LlCc2dZGiTjzuqHAuNTM9qdYGEg5Ad7DkyuF2qsdwVrjJOnNS4rlTKk/1Ug==
+X-Received: by 2002:adf:93e1:: with SMTP id 88mr13251417wrp.198.1572244129311;
+        Sun, 27 Oct 2019 23:28:49 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id u187sm12156500wme.15.2019.10.27.23.28.48
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Oct 2019 23:28:48 -0700 (PDT)
+Message-ID: <5db68aa0.1c69fb81.be33b.ce3d@mx.google.com>
+Date:   Sun, 27 Oct 2019 23:28:48 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/G3U/WFfGWlEPv9ohSoD/NlH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.4-rc5-221-g3d437c59b0f4
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 254 boots: 1 failed,
+ 246 passed with 7 offline (v5.4-rc5-221-g3d437c59b0f4)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/G3U/WFfGWlEPv9ohSoD/NlH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 254 boots: 1 failed, 246 passed with 7 offline (v5=
+.4-rc5-221-g3d437c59b0f4)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc5-221-g3d437c59b0f4/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc5-221-g3d437c59b0f4/
 
-On Fri, 25 Oct 2019 14:07:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the scsi-mkp tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->=20
-> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_relea=
-se':
-> drivers/scsi/lpfc/lpfc_debugfs.c:2109:2: error: implicit declaration of f=
-unction 'vfree'; did you mean 'kvfree'? [-Werror=3Dimplicit-function-declar=
-ation]
->  2109 |  vfree(debug->buffer);
->       |  ^~~~~
->       |  kvfree
-> drivers/scsi/lpfc/lpfc_debugfs.c: In function 'lpfc_debugfs_ras_log_open':
-> drivers/scsi/lpfc/lpfc_debugfs.c:2150:18: error: implicit declaration of =
-function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=3Dimplicit-function-d=
-eclaration]
->  2150 |  debug->buffer =3D vmalloc(size);
->       |                  ^~~~~~~
->       |                  kvmalloc
-> drivers/scsi/lpfc/lpfc_debugfs.c:2150:16: warning: assignment to 'char *'=
- from 'int' makes pointer from integer without a cast [-Wint-conversion]
->  2150 |  debug->buffer =3D vmalloc(size);
->       |                ^
->=20
-> Caused by commit
->=20
->   95bfc6d8ad86 ("scsi: lpfc: Make FW logging dynamically configurable")
->=20
-> I have used the scsi-mkp tree from next-20191024 for today.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc5-221-g3d437c59b0f4
+Git Commit: 3d437c59b0f472a312cb68f8e5a5a8f654df6b6f
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 92 unique boards, 25 SoC families, 28 builds out of 215
 
-This build failure now appears in the scsi tree build.  I have applied the
-fix from James Smart for today.
+Boot Failure Detected:
 
---=20
-Cheers,
-Stephen Rothwell
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
 
---Sig_/G3U/WFfGWlEPv9ohSoD/NlH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Offline Platforms:
 
------BEGIN PGP SIGNATURE-----
+arm:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl22gWQACgkQAVBC80lX
-0Gzx5wf+OuWnhPVqdmOeG9S0LWw9rudHHt4o2sAFEopbPgwkn3i8vrP467Exz+Ho
-DdxerHWZUmUDGX7kFw5lAPoCycknLATak3G1ialcyp6A+6iKhFcUu+dhCmMzPxcB
-Nm/bcznEI9QdIVFRKajJ2ZU7pwrqh3cBdm6QeUbEivaj0EZyLHY4SYBE553LdmSy
-PHBcrpB3cAXYKrC2gWroHRLi5Y1oZaRVgTpPXob1c7BsJNY5ZAMyuTnsfZQI9zqq
-5Y23R5k/do2i75wBh9Imzb7jCmwtTn7QJrUTHoUjFBviy3bByavBpHc64XcibCCI
-0W1b2gHYa5an3Vvs52mwro/mbZ1auA==
-=dCSO
------END PGP SIGNATURE-----
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
---Sig_/G3U/WFfGWlEPv9ohSoD/NlH--
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

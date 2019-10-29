@@ -2,134 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF8C8E8AD2
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 15:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DFAAE8B90
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 16:14:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389092AbfJ2Oda (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Oct 2019 10:33:30 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38584 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388871AbfJ2Oda (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 10:33:30 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 22so2667678wms.3
-        for <linux-next@vger.kernel.org>; Tue, 29 Oct 2019 07:33:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8ELlLMv7jvNTJsOF3uzw0KRm7di3gvvVvPJfpAbDddg=;
-        b=bquuvZ0tR5THxita1rjmdqauQBvRW6HZwiRuBja7lqLzJh1dsEPM0FExIYMaRtmgaI
-         unURRkhbv8shosjVtbLTLa9uoCXMOk0XJBQysEVWRfH8XfMeGM7uWg3vOyMTdVzO5k9c
-         w5lpz1I3J2VYNOZgN/V1PP615ytdIeNSJuSxQ2TF423Q8kyek/pkOGBeB1TtOfoJWnDa
-         V1MyDzgMzr3hJCeQzojWXT6/OVk+ND1B1Vi3yFbjBUO7oEULsHTvi94JQxbXaZFFXlmb
-         Byw3/32Cbuji4Why32EUkIzDKfq9mum+ok4pX1z2lOY+5HGtqHuSB6x0ilSbZ2oU0MzR
-         imiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8ELlLMv7jvNTJsOF3uzw0KRm7di3gvvVvPJfpAbDddg=;
-        b=LqZp4BaRNvK/Xd9fx0TCd+q5gdWVYYfhWJUJC8Zt68o3QsfS0IvS/oPpA4LH2DOsK/
-         pCUL/s1l8VBNZrwjVdMOj472rnGUERWjHWgvCGVGX6rjyOdaZALY6kkYR/We5wizEI5B
-         YRDY4FdYVhNRAvnQBGOFCqHhkuBsipdhLyRazhffCRbkMReTmx8YXXC2UM6od2rbTVWP
-         aUrN4xaG333LW6DcUdWB+P+TFD4ANiY93eabWMr1qIycAPQrGhziYWwx+qywtLfynUKE
-         KrnP27rE/38Yb16tHPdFWTEASmeQozIFnCU+yStKbF9FpD9suYUx2u4/eFQ39qXofHFV
-         WAbg==
-X-Gm-Message-State: APjAAAVMNvJjCVnLPhHClUb1SxcYJTODFF9hV1DU2oQOlYcu8STZu9xI
-        iRQPdSpI4IEqSFzKwf+v+VF226dF557+hw==
-X-Google-Smtp-Source: APXvYqwy163hyqTOGZHYOBTFsOwqhJfsERcSDYMNFMWxziE0DrCChTLSGlY0RNofQT6uGT/puJfooQ==
-X-Received: by 2002:a1c:1a4b:: with SMTP id a72mr4422336wma.17.1572359608336;
-        Tue, 29 Oct 2019 07:33:28 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id s21sm20618324wrb.31.2019.10.29.07.33.27
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 07:33:27 -0700 (PDT)
-Message-ID: <5db84db7.1c69fb81.953ec.9a1e@mx.google.com>
-Date:   Tue, 29 Oct 2019 07:33:27 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S2389868AbfJ2POh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Oct 2019 11:14:37 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:51776 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389855AbfJ2POh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 11:14:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=7Rjr4pHXM+BVJrcbAfxpIG5e/IL2+7ZuJT+0KbtlpEo=; b=q7CVnA3+mlAz2NGa2MLY13437
+        9+5fWdJGJMEkEN+r9lez797+9scz+v2vv1ZqhSM2SpdN/yAYwMdV9Q35T23vVDkqbj70x1pmn8Y8z
+        xYwnGMr6OFSUuX50v5fVxNdYpDomTsqCkrb/yncWMoKvWEpqa1+p9JvB2KeweUpUb8g4f24CmDa/b
+        gz4owjOBpgE6Ti6X8OHNzuzCQG0wH7nDB5ehBSTxfkRccL8t/mrnuhhEGvenC5LBaw+BRbkatR/Hc
+        bzNoin8xljIMBiKPgLWILRiy+6yqK6urBofytN4ubCuuekFhS2eSEMMV3RE0CaVF6zf7U9W+HwD46
+        B7RPt43wA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iPTCe-0004mx-Mv; Tue, 29 Oct 2019 15:14:36 +0000
+Subject: Re: linux-next: Tree for Oct 29 (thermal/qcom/)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Amit Kucheria <amit.kucheria@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+References: <20191029180731.2153b90c@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <1970de9b-e8cc-423a-c4a0-37a6d0357c6e@infradead.org>
+Date:   Tue, 29 Oct 2019 08:14:35 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20191029
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 242 boots: 8 failed, 226 passed with 7 offline,
- 1 conflict (next-20191029)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20191029180731.2153b90c@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 242 boots: 8 failed, 226 passed with 7 offline, 1 conflic=
-t (next-20191029)
+On 10/29/19 12:07 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191028:
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191029/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191029/
+on i386:
 
-Tree: next
-Branch: master
-Git Describe: next-20191029
-Git Commit: c57cf3833c66cd86c9bdee7112fc992377143f74
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 26 SoC families, 24 builds out of 215
+ld: drivers/thermal/qcom/tsens-common.o: in function `tsens_mC_to_hw':
+tsens-common.c:(.text+0x17d): undefined reference to `__udivdi3'
 
-Boot Failures Detected:
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
+-- 
+~Randy
 
-    defconfig:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-            r8a7796-m3ulcb: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-
-Offline Platforms:
-
-riscv:
-
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    exynos_defconfig:
-        exynos5422-odroidxu3:
-            lab-collabora: FAIL (gcc-8)
-            lab-baylibre: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>

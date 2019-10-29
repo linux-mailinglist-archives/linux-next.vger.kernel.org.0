@@ -2,111 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A81E8C62
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 17:06:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10242E8C67
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 17:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390303AbfJ2QGB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Oct 2019 12:06:01 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:34172 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390282AbfJ2QGB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 12:06:01 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b128so9922004pfa.1
-        for <linux-next@vger.kernel.org>; Tue, 29 Oct 2019 09:06:01 -0700 (PDT)
+        id S2390308AbfJ2QIK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Oct 2019 12:08:10 -0400
+Received: from mail-qk1-f195.google.com ([209.85.222.195]:33737 "EHLO
+        mail-qk1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390283AbfJ2QIJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 12:08:09 -0400
+Received: by mail-qk1-f195.google.com with SMTP id 71so12798978qkl.0
+        for <linux-next@vger.kernel.org>; Tue, 29 Oct 2019 09:08:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=cGG06yt0bkkBP2tmdyO1XulQsFf34VxGUXM1xq1/epI=;
-        b=fSZg99AsHbBWWsobZmhgJDTCrwmxVUvEgHnCs3MIrKNxTbab1dfhA5i7GmC/FaBoVb
-         rkup91elyoaiirMt6/10sUqdyTTAB9LTS0++74qyNzkYOzBU7pJihMPhPij8cSr5hhXb
-         jxJ+uUTGbHbjp/VfBTRnbdVyLz/1/z0CnjEnA=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=DkiyYj3R1Y/RPSbNRY420lfIlKetblDpcGMlTBY1rT8=;
+        b=Rq9bc/MuxhGlRTd7mKHTwZ3ZDV8NVJCs0MsEw00TuOFNe5/aFyr3idgK9NUqTFJMn7
+         G6sGwfD/dOUANWI/gg5OODJWi401zsqqGHNZtjCHPcG0/K4kBF+1z1iAabzK/nqCJ2rj
+         k1UWXQvv/iPulGjh5qWXVRnOdXWA5vXtvfdJ/7TN8cSiQ+1BYMgy5Ka+T8S64upevFZP
+         bT0jPoyprshye9drRb7U7320p9bk4rhUQl69eUJOjDVZ3bsJ2mg3HWR8ZOO2z2GLDdIY
+         cTLvVeS4Z9gs0jRDtACpKfCAIqLzHsfRVYaRfB0/Nd1bvQUWx2ogC+JPjDTjQHGLNn1v
+         68Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=cGG06yt0bkkBP2tmdyO1XulQsFf34VxGUXM1xq1/epI=;
-        b=tSZ5jzzXkzM2WlQSsL2vkO/keBIOQNAG4HQR8Q2t6fnZFhzqosX6BOiivJK+cpcWTy
-         gjT7N+dDDMayDUC0U7QRMq5nZ0/A45283KDiX5h/RAu1mhX4B9lcmCnUgqMk9ANNEa8r
-         tX/ZB2QvQ19IFaLsnNMzFBms+c6eDMwTEgg9998P7CRRpG8gUD5gnKur+J38EkDvwhBs
-         4m0GAEEHtZXk0KH4T8w9ZTk8rnv00Fvc4ILFpzibOCid92g/8k7RUgu37IafPw12BTtB
-         APC5gsBesm+7nicIIgtJtMD+mMEH+YMdUqUGh7sgI9hm3ZaCIw3iz1fitpEyqT0krcdT
-         31mQ==
-X-Gm-Message-State: APjAAAXN1+CPpOTD86k4WyrYAwQFBznUUCCADzXdWSZ38i72P9mQG2ok
-        KBjWJ2Z/x2fw1xq5GXXHTgPe2A==
-X-Google-Smtp-Source: APXvYqzwr6SUmtBD7W7qqVi6rMkpfDREV2Dq9nb8thrfh/K0V8SaEVQj5zfuwcVKCIgs4t65QUuPHg==
-X-Received: by 2002:a17:90a:d588:: with SMTP id v8mr7540626pju.51.1572365160901;
-        Tue, 29 Oct 2019 09:06:00 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o7sm309700pjo.7.2019.10.29.09.05.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 09:05:59 -0700 (PDT)
-Date:   Tue, 29 Oct 2019 09:05:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Tudor.Ambarus@microchip.com
-Cc:     boris.brezillon@collabora.com, gustavo@embeddedor.com,
-        linux-next@vger.kernel.org
-Subject: Re: Coverity: spi_nor_erase_sector(): Null pointer dereferences
-Message-ID: <201910290905.EE39EBC6@keescook>
-References: <201910281605.9E90B64E86@keescook>
- <c1fae93d-ea1c-ace1-28d9-00ac558129c4@microchip.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=DkiyYj3R1Y/RPSbNRY420lfIlKetblDpcGMlTBY1rT8=;
+        b=s3QKJZK7g4fT1KhBqYDELqyuap4QnUqZoNm1QGJXxlRpLs0/coGgPSK7oNP4+1J5Ba
+         HBkyt9YKoiTS6/Z9AcL1uteowp2kG1uvBk1dCBA1wg4DYOvK6vUyjA3kQaXbzXCOkfst
+         ndTypgpnqy8eFhhaXgS1fJFswiwfg5ENFoGnSDYR5/Cu6DUxdnb7EMkVCQFaRR40NW9H
+         ySHGlAuGw1mmbD3UikRA0ojWw5FMxcAE15YztgZF5trkuOJuIU5XJG2ggc98EiZ5CuPz
+         XMNX4yPuTCrLd7UwOYoC4Si00hH9ch3uH9eh1qoQ8lMWaHaO3KciDQZFdKG+z42+HLdj
+         qU/A==
+X-Gm-Message-State: APjAAAVbe6q42KVYqygzfnpHOE4B4o17c5TncBJ6bN2fbX5v4JYZxcds
+        B1d1thBLkFdcuuQH+MeCt4uXu3C3bVfQk4ZafLQ8KQ==
+X-Google-Smtp-Source: APXvYqzEm35dfH7sna/gzwgftzz9cPUPG0ImyFeiMXHETohQzvYBN9sfuy4ud5PICff/WEoLsbiuft+sdHHSCTI177g=
+X-Received: by 2002:a37:9d44:: with SMTP id g65mr447070qke.302.1572365288819;
+ Tue, 29 Oct 2019 09:08:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c1fae93d-ea1c-ace1-28d9-00ac558129c4@microchip.com>
+References: <201910281603.E90E9627A@keescook> <0451f7e8-ff96-f411-ed26-1310999be3c5@embeddedor.com>
+ <CAGXu5jJ+BQEOPnhCtEFARBrMW=0z-+-xHEv1kv-JztG_dt2mwg@mail.gmail.com>
+In-Reply-To: <CAGXu5jJ+BQEOPnhCtEFARBrMW=0z-+-xHEv1kv-JztG_dt2mwg@mail.gmail.com>
+From:   Amit Kucheria <amit.kucheria@linaro.org>
+Date:   Tue, 29 Oct 2019 21:37:57 +0530
+Message-ID: <CAP245DWT+5xhqHY2w-WPH+-Q0Tujw57UaezqqrT3JRwSVq5iSQ@mail.gmail.com>
+Subject: Re: Coverity: calibrate_8976(): Memory - illegal accesses
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        Colin King <colin.king@canonical.com>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Linux-Next <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 29, 2019 at 05:59:04AM +0000, Tudor.Ambarus@microchip.com wrote:
-> Hi. Thanks for the report!
-> 
-> On 10/29/2019 01:05 AM, coverity-bot wrote:
-> > External E-Mail
-> > 
-> > 
-> > Hello!
-> > 
-> > This is an experimental automated report about issues detected by Coverity
-> > from a scan of next-20191025 as part of the linux-next weekly scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by recent commits:
-> > 
-> > 453977875364 ("mtd: spi-nor: Introduce 'struct spi_nor_controller_ops'")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1487363:  Null pointer dereferences  (FORWARD_NULL)
-> > /drivers/mtd/spi-nor/spi-nor.c: 967 in spi_nor_erase_sector()
-> > 961     	 */
-> > 962     	for (i = nor->addr_width - 1; i >= 0; i--) {
-> > 963     		nor->bouncebuf[i] = addr & 0xff;
-> > 964     		addr >>= 8;
-> > 965     	}
-> > 966
-> > vvv     CID 1487363:  Null pointer dereferences  (FORWARD_NULL)
-> > vvv     Dereferencing null pointer "nor->controller_ops".
-> > 967     	return nor->controller_ops->write_reg(nor, nor->erase_opcode,
-> > 968     					      nor->bouncebuf, nor->addr_width);
-> > 969     }
-> > 970
-> > 971     /**
-> > 972      * spi_nor_div_by_erase_size() - calculate remainder and update new dividend
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include:
-> 
-> It's a false positive, but the bug report helped us improve the code. I received
-> similar report with smatch, see the discussion here:
-> https://www.spinics.net/lists/linux-mtd/msg09701.html
+On Tue, Oct 29, 2019 at 9:30 PM Kees Cook <keescook@chromium.org> wrote:
+>
+> On Mon, Oct 28, 2019 at 5:08 PM Gustavo A. R. Silva
+> <gustavo@embeddedor.com> wrote:
+> >
+> > Hi,
+> >
+> > This one has been addressed already:
+> >
+> > https://lore.kernel.org/lkml/CAK7fi1a8CiX=HVqhZSmQJdcjF1X_kdHFDwJhEpYJUcdPTcbMQA@mail.gmail.com/
+> >
+>
+> Ah-ha, excellent. Colin, do you want me to CC you on these automatic
+> reports too?
+>
 
-Okay, great! The Coverity scan tends to be a little behind, so apologies
-for the duplicate report. :) Thanks for checking!
+Hi Kees,
 
--- 
-Kees Cook
+Is coverity being run just on linux-next or on mainline too? I've
+noticed it found at least one error that has existed for a long-time
+only when that code was moved around.
+
+Regards,
+Amit
+
+> > On 10/28/19 18:03, coverity-bot wrote:
+> > > Hello!
+> > >
+> > > This is an experimental automated report about issues detected by Coverity
+> > > from a scan of next-20191025 as part of the linux-next weekly scan project:
+> > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > >
+> > > You're getting this email because you were associated with the identified
+> > > lines of code (noted below) that were touched by recent commits:
+> > >
+> > > 95ededc17e4e ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
+> > >
+> > > Coverity reported the following:
+> > >
+> > > *** CID 1487355:  Memory - illegal accesses  (USE_AFTER_FREE)
+> > > /drivers/thermal/qcom/tsens-v1.c: 245 in calibrate_8976()
+> > > 239           int mode = 0, tmp = 0;
+> > > 240           u32 *qfprom_cdata;
+> > > 241
+> > > 242           qfprom_cdata = (u32 *)qfprom_read(priv->dev, "calib");
+> > > 243           if (IS_ERR(qfprom_cdata)) {
+> > > 244                   kfree(qfprom_cdata);
+> > > vvv     CID 1487355:  Memory - illegal accesses  (USE_AFTER_FREE)
+> > > vvv     Passing freed pointer "qfprom_cdata" as an argument to "PTR_ERR".
+> > > 245                   return PTR_ERR(qfprom_cdata);
+> > > 246           }
+> > > 247
+> > > 248           mode = (qfprom_cdata[4] & MSM8976_CAL_SEL_MASK);
+> > > 249           dev_dbg(priv->dev, "calibration mode is %d\n", mode);
+> > > 250
+> > >
+> > > If this is a false positive, please let us know so we can mark it as
+> > > such, or teach the Coverity rules to be smarter. If not, please make
+> > > sure fixes get into linux-next. :) For patches fixing this, please
+> > > include:
+> > >
+> > > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> > > Addresses-Coverity-ID: 1487355 ("Memory - illegal accesses")
+> > > Fixes: 95ededc17e4e ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
+> > >
+> > >
+> > > Thanks for your attention!
+> > >
+>
+>
+>
+> --
+> Kees Cook

@@ -2,94 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8A5E83D0
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 10:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0883AE8521
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 11:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729008AbfJ2JF2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Oct 2019 05:05:28 -0400
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:34979 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727082AbfJ2JF1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 05:05:27 -0400
-Received: by mail-oi1-f194.google.com with SMTP id n16so6040660oig.2;
-        Tue, 29 Oct 2019 02:05:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/e/OXl/eSB3S3s8RmU98HsH5ODaBeFtkQ+8P1wGA6WU=;
-        b=uFcYWpP2jsKfGccj9mkaRQdIj7iZYSxuqlx7YGmqN5cnVYeteZ5CfHujJwTjK/NFiq
-         btBarCLJZH61NlQx4GVLQcIivC743EpeLeuOSm8R3ewEXHZCEOiB2d7euG0VwRtb+XGe
-         bAQQ/6srVR8JkCXZ7MzjW0Pf++WVMfHSUhT944a8ZlnaX5aa62YT17KlIMW/4bzz8Fv6
-         1VER0gZGjMv6FA2+8QB8pTdB53vHGkY8+V9qGJPNPZRlYVhG+p0OEom5ZNrbucXMsJxJ
-         A3LQbV98x12okCHXm87jJjl0qjYsI+9fHxJo1zQJJj6gsIp3PqI6D4AHNus1L1+VKMcK
-         eBSA==
-X-Gm-Message-State: APjAAAUzMvNHgrnuwEjgCq4Dz+3X8/Y7PCMMQzpu1fUAOibu7YzEoaoP
-        Uh3WFvCqUjBMAXk9bgMJsMQXMAjqG37YFjcFtgo=
-X-Google-Smtp-Source: APXvYqx2l2QDxxl6Pp9UmXl3j5zgDTqm4st8pBarLtb61+fstLH97WqlTYGMWHYBEUNyjw/fr1XcKOIzzUAJbA3Q4U8=
-X-Received: by 2002:aca:fc92:: with SMTP id a140mr2914747oii.153.1572339926899;
- Tue, 29 Oct 2019 02:05:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <20191022102334.67e5d3d1@canb.auug.org.au>
-In-Reply-To: <20191022102334.67e5d3d1@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 29 Oct 2019 10:05:15 +0100
-Message-ID: <CAMuHMdUCx31k3VJt=nYSkFXcOQdRhH7FiY8_f5RX4w4zaksP-w@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the thermal tree
+        id S1727206AbfJ2KIq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 29 Oct 2019 06:08:46 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56568 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725867AbfJ2KIq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 29 Oct 2019 06:08:46 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2957E20830;
+        Tue, 29 Oct 2019 10:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572343725;
+        bh=ZANRd+WQW3JT8mVuvajQ37u5wGVAQvgdGCj3+V1EpA0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=uj0QeNso2Sj8RsEHDZh6RtZvohVQsmgYcJD7ng6ur1eqIxUFuK8nMMuWiRICpawc5
+         HXE0zf41GeAwhOSn/jOWu8GQRgj6Va9V8Xdzh+RfMe+DuDWmz3xaWTCkz58k76+R+G
+         gLWkco3GElfCPhEUI6Ds9x8F76mgBq215og8xGhU=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 032BD3521071; Tue, 29 Oct 2019 03:08:45 -0700 (PDT)
+Date:   Tue, 29 Oct 2019 03:08:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
+Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Amit Kucheria <amit.kucheria@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Ryan Attard <ryanattard@ryanattard.info>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: Re: linux-next: manual merge of the scsi tree with the rcu tree
+Message-ID: <20191029100844.GJ20975@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20191029150826.38c26ef8@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191029150826.38c26ef8@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Oct 22, 2019 at 1:25 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> After merging the thermal tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
->
-> In file included from drivers/thermal/qcom/tsens-common.c:13:
-> drivers/thermal/qcom/tsens-common.c: In function 'tsens_set_interrupt':
-> include/linux/regmap.h:87:2: warning: 'index' may be used uninitialized in this function [-Wmaybe-uninitialized]
->    87 |  regmap_field_update_bits_base(field, ~0, val, NULL, false, false)
->       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/thermal/qcom/tsens-common.c:183:6: note: 'index' was declared here
->   183 |  u32 index;
->       |      ^~~~~
-> In file included from drivers/thermal/qcom/tsens-common.c:13:
-> include/linux/regmap.h:87:2: warning: 'index_clear' may be used uninitialized in this function [-Wmaybe-uninitialized]
->    87 |  regmap_field_update_bits_base(field, ~0, val, NULL, false, false)
->       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/thermal/qcom/tsens-common.c:199:18: note: 'index_clear' was declared here
->   199 |  u32 index_mask, index_clear;
->       |                  ^~~~~~~~~~~
-> drivers/thermal/qcom/tsens-common.c:199:6: warning: 'index_mask' may be used uninitialized in this function [-Wmaybe-uninitialized]
->   199 |  u32 index_mask, index_clear;
->       |      ^~~~~~~~~~
->
-> Introduced by commit
->
->   fbfe1a042cfd ("drivers: thermal: tsens: Add interrupt support")
+On Tue, Oct 29, 2019 at 03:08:26PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the scsi tree got a conflict in:
+> 
+>   drivers/scsi/scsi_sysfs.c
+> 
+> between commit:
+> 
+>   81db81f82993 ("drivers/scsi: Replace rcu_swap_protected() with rcu_replace()")
+> 
+> from the rcu tree and commit:
+> 
+>   d188b0675b21 ("scsi: core: Add sysfs attributes for VPD pages 0h and 89h")
+> 
+> from the scsi tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-And kisskb reported the following link failure on m68k:
+Looks good to me, thank you very much!
 
-    ERROR: "__udivdi3" [drivers/thermal/qcom/qcom_tsens.ko] undefined!
+							Thanx, Paul
 
-Probably caused by a plain 64-bit division in the code.
-I expect this shows up on other 32-bit platforms, too.
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/scsi/scsi_sysfs.c
+> index cc51f4756077,0fa2ed343c7f..000000000000
+> --- a/drivers/scsi/scsi_sysfs.c
+> +++ b/drivers/scsi/scsi_sysfs.c
+> @@@ -466,12 -467,18 +467,18 @@@ static void scsi_device_dev_release_use
+>   	sdev->request_queue = NULL;
+>   
+>   	mutex_lock(&sdev->inquiry_mutex);
+>  -	rcu_swap_protected(sdev->vpd_pg0, vpd_pg0,
+>  -			   lockdep_is_held(&sdev->inquiry_mutex));
+>  -	rcu_swap_protected(sdev->vpd_pg80, vpd_pg80,
+>  -			   lockdep_is_held(&sdev->inquiry_mutex));
+>  -	rcu_swap_protected(sdev->vpd_pg83, vpd_pg83,
+>  -			   lockdep_is_held(&sdev->inquiry_mutex));
+>  -	rcu_swap_protected(sdev->vpd_pg89, vpd_pg89,
+>  -			   lockdep_is_held(&sdev->inquiry_mutex));
+> ++	vpd_pg0 = rcu_replace_pointer(sdev->vpd_pg0, vpd_pg0,
+> ++				      lockdep_is_held(&sdev->inquiry_mutex));
+>  +	vpd_pg80 = rcu_replace_pointer(sdev->vpd_pg80, vpd_pg80,
+>  +				       lockdep_is_held(&sdev->inquiry_mutex));
+>  +	vpd_pg83 = rcu_replace_pointer(sdev->vpd_pg83, vpd_pg83,
+>  +				       lockdep_is_held(&sdev->inquiry_mutex));
+> ++	vpd_pg89 = rcu_replace_pointer(sdev->vpd_pg89, vpd_pg89,
+> ++				       lockdep_is_held(&sdev->inquiry_mutex));
+>   	mutex_unlock(&sdev->inquiry_mutex);
+>   
+> + 	if (vpd_pg0)
+> + 		kfree_rcu(vpd_pg0, rcu);
+>   	if (vpd_pg83)
+>   		kfree_rcu(vpd_pg83, rcu);
+>   	if (vpd_pg80)
 
-Gr{oetje,eeting}s,
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

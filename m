@@ -2,83 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 70EA7E7E2E
-	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 02:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0132EE7E5D
+	for <lists+linux-next@lfdr.de>; Tue, 29 Oct 2019 03:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727379AbfJ2Bt0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 28 Oct 2019 21:49:26 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:46716 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727364AbfJ2Bt0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 28 Oct 2019 21:49:26 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9T1mn6S085568;
-        Tue, 29 Oct 2019 01:49:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=BwpL56zWq/DyfZTKkawyTy/VoYhLLKsZYiZWk9+XeG4=;
- b=Pbz4wDP9qK47sd+UlHmbfMR3sAcbeA0oh32YCSuQdVpKoX8XO48b0IfZs0nUosmVmthm
- JYN81VCbL2MDePWj4lYeyKOSbT61lsbCNoyNODldDV4n46xKAh+IXJa3PJ/8Deqk9JqC
- QYN6O4lm7AF3hDZE8r3sBg2ImjoUJYyGU5wKj0zhiP3noaNOeb8dKwVJXR0LieJ3dFw+
- nO/wm8J0ziZw4RhP6Md8jTwebZSS0j21+6+ht4HL6I7JnhAuB2WXNDj9RUsQ8gySDnpv
- V7f+cbsuRQTLA4Z/tA+cXadlID/Lzc8ggBcz/MZhS204cwCH/DgK/EQBv3E+r8+hdetT jw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by userp2120.oracle.com with ESMTP id 2vvumfag7b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Oct 2019 01:49:11 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9T1gq6A107620;
-        Tue, 29 Oct 2019 01:49:11 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3020.oracle.com with ESMTP id 2vw09gu3nn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 29 Oct 2019 01:49:10 +0000
-Received: from abhmp0010.oracle.com (abhmp0010.oracle.com [141.146.116.16])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9T1n6qI020391;
-        Tue, 29 Oct 2019 01:49:06 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 28 Oct 2019 18:49:06 -0700
-To:     James Smart <jsmart2021@gmail.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, martin.petersen@oracle.com,
-        sfr@canb.auug.org.au, Dick Kennedy <dick.kennedy@broadcom.com>
-Subject: Re: [PATCH] lpfc: fix build error of lpfc_debugfs.c for vfree/vmalloc
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191025182530.26653-1-jsmart2021@gmail.com>
-Date:   Mon, 28 Oct 2019 21:49:04 -0400
-In-Reply-To: <20191025182530.26653-1-jsmart2021@gmail.com> (James Smart's
-        message of "Fri, 25 Oct 2019 11:25:30 -0700")
-Message-ID: <yq1tv7s8gof.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1728242AbfJ2CDO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 28 Oct 2019 22:03:14 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:5205 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1728183AbfJ2CDO (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 28 Oct 2019 22:03:14 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id 24B7BA7CF6813C2C1330;
+        Tue, 29 Oct 2019 10:03:12 +0800 (CST)
+Received: from [127.0.0.1] (10.177.219.49) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.439.0; Tue, 29 Oct 2019
+ 10:03:06 +0800
+Subject: Re: Coverity: super_1_load(): Memory - illegal accesses
+To:     coverity-bot <keescook@chromium.org>
+CC:     Song Liu <songliubraving@fb.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        <linux-next@vger.kernel.org>
+References: <201910281602.99CA1D4@keescook>
+From:   Yufen Yu <yuyufen@huawei.com>
+Message-ID: <49376db7-82c0-7c88-fe11-4e91b7ed8ca4@huawei.com>
+Date:   Tue, 29 Oct 2019 10:03:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9424 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=722
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910290017
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9424 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=821 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910290018
+In-Reply-To: <201910281602.99CA1D4@keescook>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.177.219.49]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 
-James,
 
-> lpfc_debufs.c was missing include of vmalloc.h when compiled on PPC.
+On 2019/10/29 7:02, coverity-bot wrote:
+> Hello!
 >
-> Add missing header.
+> This is an experimental automated report about issues detected by Coverity
+> from a scan of next-20191025 as part of the linux-next weekly scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+>
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by recent commits:
+>
+> 6a5cb53aaa4e ("md: no longer compare spare disk superblock events in super_load")
+>
+> Coverity reported the following:
+>
+> *** CID 1487373:  Memory - illegal accesses  (NEGATIVE_RETURNS)
+> /drivers/md/md.c: 1684 in super_1_load()
+> 1678     	}
+> 1679
+> 1680     	if ((le32_to_cpu(sb->feature_map) & MD_FEATURE_RAID0_LAYOUT) &&
+> 1681     	    sb->level != 0)
+> 1682     		return -EINVAL;
+> 1683
+> vvv     CID 1487373:  Memory - illegal accesses  (NEGATIVE_RETURNS)
+> vvv     Using variable "rdev->desc_nr" as an index to array "sb->dev_roles".
+> 1684     	role = le16_to_cpu(sb->dev_roles[rdev->desc_nr]);
+> 1685
+> 1686     	if (!refdev) {
+> 1687     		/*
+> 1688     		 * Insist of good event counter while assembling, except for
+> 1689     		 * spares (which don't need an event count)
+>
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include:
+>
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1487373 ("Memory - illegal accesses")
+> Fixes: 6a5cb53aaa4e ("md: no longer compare spare disk superblock events in super_load")
+>
+>
+> Thanks for your attention!
+>
 
-Applied to 5.5/scsi-queue, thanks!
+Thanks a lot for report!
+I am sorry for forgetting to verify 'rdev->desc_nr' after moving it up.
+I will send a patch to fix this.
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Thanks,
+Yufen
+
+
+

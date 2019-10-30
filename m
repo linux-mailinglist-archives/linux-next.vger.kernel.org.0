@@ -2,139 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BF2E9D6D
-	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 15:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E6EDEA192
+	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 17:17:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726603AbfJ3O0L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Oct 2019 10:26:11 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:40219 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726137AbfJ3O0K (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Oct 2019 10:26:10 -0400
-Received: by mail-wm1-f66.google.com with SMTP id w9so2399831wmm.5
-        for <linux-next@vger.kernel.org>; Wed, 30 Oct 2019 07:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=/a8YTFRP5302T8zBw2B/scZMPa2GMb/4VlyetuFRKYc=;
-        b=Ip65drrrfQ+gZ/ek34By+0J3u4w4EG7hLbrON+Nk4Ut4DNQmK4IW6W+Dszc1byjlVz
-         UeSg/IlSaPr4jTj8HOrUjTmqZDgEwdHwy3KJyaIFVLvqu4PmlgJa+GFo7lCkkbiPM8hZ
-         8D21gCWCS3LwNFlLT2ncbMgKye5qTMidAr1gNjFSOJ9ESTsRQ9Yqen1KqyX8a+gn+Phg
-         z9uoNhvaCl0SDYwJ/+MLSxvJ/m77YeQydwGNKTgjlMuqaanbvzkw+S/7I4dhaVY0Ssgw
-         XmfMNnmS+OOJtSO+ftD1q8ZIFuKPxR3OaT3yGHYYEJCBQDjCcI8so0nazf3F+3XHdM43
-         Jpqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=/a8YTFRP5302T8zBw2B/scZMPa2GMb/4VlyetuFRKYc=;
-        b=MSQ4dXUm92HmMCZEOluZZ2mOf1CJVEeedi1LBtpOXv3nH9HZ+hSVoR9k2ufR3497MI
-         ynW62CVVNhaY4J9St48YuhNQfKVLJW5eS9sKXFgktpo2MoCeibbTSVm7NpXc7sGOlsVC
-         BCvNW4WJzCzrJUvhphIUBGff2z+6U1eyRPz2Qbg7czBakdjuD5QxlngB+6OPZavOvNGQ
-         2NdmDzQkXU/a/qKtZvtpED0IEC2cue9ZueR2bpl2cgtO0HdIRfdonL9LoqTTGlCwLl/q
-         n+8vM6vyXkioYf+/lZdG0e8a7digkuUEPqU5qFBRmGunmjIOi/BXRh1L/HSHb2Xyo1R/
-         BANg==
-X-Gm-Message-State: APjAAAX8cVGdzf3LCVm2BB1Q3o+pmDD6TrbGjrk5BSu7Pud0IiVvezp8
-        XfI6jpvNp8DYDVuj0Zu52VQOaKpopQvyIg==
-X-Google-Smtp-Source: APXvYqwAWJmyr1Gnu7Q3vNkFRhM0GN5ngC4+ZNP5CgakoB3PE3aKFhElWy/vZAHl64iI/c0MNft/Jw==
-X-Received: by 2002:a05:600c:259:: with SMTP id 25mr7405924wmj.135.1572445568370;
-        Wed, 30 Oct 2019 07:26:08 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id f13sm386746wrq.96.2019.10.30.07.26.07
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 07:26:07 -0700 (PDT)
-Message-ID: <5db99d7f.1c69fb81.cc1eb.214d@mx.google.com>
-Date:   Wed, 30 Oct 2019 07:26:07 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1727082AbfJ3QRd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Oct 2019 12:17:33 -0400
+Received: from mga07.intel.com ([134.134.136.100]:52283 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726800AbfJ3QRc (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 30 Oct 2019 12:17:32 -0400
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 30 Oct 2019 09:17:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,247,1569308400"; 
+   d="scan'208";a="400189110"
+Received: from sneftin-mobl1.ger.corp.intel.com (HELO [10.185.23.132]) ([10.185.23.132])
+  by fmsmga005.fm.intel.com with ESMTP; 30 Oct 2019 09:17:23 -0700
+Subject: Re: Coverity: igc_hash_mc_addr(): Integer handling issues
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Aaron Brown <aaron.f.brown@intel.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org,
+        "Neftin, Sasha" <sasha.neftin@intel.com>,
+        "Shalev, Avi" <avi.shalev@intel.com>
+References: <201910281606.99B58CD542@keescook>
+From:   "Neftin, Sasha" <sasha.neftin@intel.com>
+Message-ID: <8daf63dc-15bf-0487-28a3-6119b17e9c11@intel.com>
+Date:   Wed, 30 Oct 2019 18:17:22 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20191030
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 242 boots: 8 failed, 225 passed with 7 offline,
- 1 untried/unknown, 1 conflict (next-20191030)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <201910281606.99B58CD542@keescook>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 242 boots: 8 failed, 225 passed with 7 offline, 1 untried=
-/unknown, 1 conflict (next-20191030)
+On 10/29/2019 01:06, coverity-bot wrote:
+> Hello!
+> 
+> This is an experimental automated report about issues detected by Coverity
+> from a scan of next-20191025 as part of the linux-next weekly scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+> 
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by recent commits:
+> 
+> 7f839684c5c4 ("igc: Add set_rx_mode support")
+> 
+> Coverity reported the following:
+> 
+> *** CID 1487361:  Integer handling issues  (BAD_SHIFT)
+> /drivers/net/ethernet/intel/igc/igc_mac.c: 851 in igc_hash_mc_addr()
+> 845     		break;
+> 846     	case 3:
+> 847     		bit_shift += 4;
+> 848     		break;
+> 849     	}
+> 850
+> vvv     CID 1487361:  Integer handling issues  (BAD_SHIFT)
+> vvv     In expression "mc_addr[4] >> 8 - bit_shift", right shifting "mc_addr[4]" by more than 7 bits always yields zero.  The shift amount, "8 - bit_shift", is 8.
+> 851     	hash_value = hash_mask & (((mc_addr[4] >> (8 - bit_shift)) |
+> 852     				  (((u16)mc_addr[5]) << bit_shift)));
+> 853
+> 854     	return hash_value;
+> 855     }
+> 856
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include:
+We will provide a fix for multicast table array hashing.
+Thanks,
+Sasha
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1487361 ("Integer handling issues")
+> Fixes: 7f839684c5c4 ("igc: Add set_rx_mode support")
+> 
+> 
+> Thanks for your attention!
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191030/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191030/
-
-Tree: next
-Branch: master
-Git Describe: next-20191030
-Git Commit: fdbc6c104f956257ee41b8be7c846e6c2035291e
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 26 SoC families, 24 builds out of 216
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            sun8i-a33-olinuxino: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            hip07-d05: 1 failed lab
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-
-Offline Platforms:
-
-riscv:
-
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    exynos_defconfig:
-        exynos5422-odroidxu3:
-            lab-collabora: FAIL (gcc-8)
-            lab-baylibre: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>

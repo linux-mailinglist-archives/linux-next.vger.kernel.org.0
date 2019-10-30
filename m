@@ -2,131 +2,236 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9E8E95B4
-	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 05:21:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D50E95C3
+	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 05:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726156AbfJ3EVN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Oct 2019 00:21:13 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38413 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725855AbfJ3EVN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Oct 2019 00:21:13 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 22so585509wms.3
-        for <linux-next@vger.kernel.org>; Tue, 29 Oct 2019 21:21:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=R4EGzxg5qGTmvkyXwWa35Vt1TELU0sxREjc3WF7rj2Y=;
-        b=GVmq5Y3l/TqjeAYrmLGM2KJvxbK8qW4Ew+LPzg8oc4vWBPax9HDMwykKur0mycQT9h
-         mwnGrkQ7BmMxva4e+uF7yGtJSmMu3kI95/PfAVutDZNrffOd7nWq+xqmL+fkaDd7rXbP
-         QPfiAtSzFIHbUEYSDMdKDYoIoeS4KUd3uYXIBHK8UmQyjXwCScsjxrIXC1lwoVm2432O
-         Bi9QzgfVtKKxz+qrcDGUWGJFVAc59SrQEnj4YJYiobLrVOegqKVa/zQEiWEoVMVUfM/4
-         NMURejj+c23gWii69XlIEPf6IjcXBZ0Z0YFZoI8cVFiIG5EwNX26WyVnvXSXj48qOBNo
-         8sSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=R4EGzxg5qGTmvkyXwWa35Vt1TELU0sxREjc3WF7rj2Y=;
-        b=lfYbhI8VfJPRz5mMgtbmXO1Wsx6wJNB/GRLdcnFOyMOtO49xJ/9savGI8uRfb8MwyJ
-         /34OCqPxTTydK+g8f3031K9gHT/jJMYnRQHv+DtPM2YZmAYb/HLyDBt+KoAtIqedRpn+
-         bQ5+t8ykRys5UV753c0cMqKBcVcUEkpA7qEtDMVPEaNXTn2GGMyyisqeJeIq22gPyBJc
-         ooKHpModmbeMmezgsTmWNkWd0nCoFNdOVh+6pNqmdwGYaqGjRTXZWwIOIMDIBRKCfcGq
-         S8E8Dc4czEKH4zDRA5Q1VBcBjNicQS3AudEn6fIYpHV0Ntny+yhQO9qyqGJlMN01US/Y
-         068A==
-X-Gm-Message-State: APjAAAUXT4eCFXuk1rLeoYImsP523nnkg+Ztg1UsmQX87Uy7mLlyrF5P
-        8tL4wuy+P8KUap6afNW7sgsK290Rja+vXA==
-X-Google-Smtp-Source: APXvYqxt+3mjPsVK6QvEyQEsasY0rSOoQ80Anlb3E8QfgpBytaJh0r8LGDF7f29SwnLR8sxxSJGX0Q==
-X-Received: by 2002:a1c:7913:: with SMTP id l19mr7420471wme.26.1572409269436;
-        Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id d2sm5002178wmd.2.2019.10.29.21.21.08
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
-Message-ID: <5db90fb5.1c69fb81.bbea8.9b75@mx.google.com>
-Date:   Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726156AbfJ3EbZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Oct 2019 00:31:25 -0400
+Received: from ozlabs.org ([203.11.71.1]:32807 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725308AbfJ3EbY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 30 Oct 2019 00:31:24 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 472wWT3qj8z9sPK;
+        Wed, 30 Oct 2019 15:31:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1572409881;
+        bh=RJyD0Tjcr5oKzdh/d42tx+96CzKMvhsQ/4NUPLwRs7s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=U7WU9wdM0ucxrXsPFhL0m0mE6H2eitlAz8LyzD19RPmKtqzYJDmM/8dMPo0mzU82o
+         jbt5Hu3z8Lq9UqAjMiQpCHS50sk1Rho8P0iJ4u56ztReohhwRNpfR7Fx1QXa5j9J5N
+         wquA5wrp1OjDty3x72nNO4bUXlrBqoxlpPok6OPWvvbe+n4nF4xbEwcZo+9i7AebgC
+         Ombk2PvcKQ2U10dQBbWfkQnWEH+UKOCXYf0IroyUa1uYr4ju5+xwRjOuN2EHPECJGz
+         8+Hc/u8EXp/1qmgdqyuxHzyRqtTkUBZC8GiLQu3g1l3ZDyoUsooCAlSyEfiWbF0zuE
+         Fgq53XT+4SaAA==
+Date:   Wed, 30 Oct 2019 15:31:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: linux-next: manual merge of the y2038 tree with the xfs tree
+Message-ID: <20191030153046.01efae4a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.4-rc5-311-g2e788f1fd131
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 259 boots: 2 failed,
- 246 passed with 8 offline, 2 untried/unknown,
- 1 conflict (v5.4-rc5-311-g2e788f1fd131)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/qpNmKIRF5YMVei_XnY+.A6k";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 259 boots: 2 failed, 246 passed with 8 offline, 2 =
-untried/unknown, 1 conflict (v5.4-rc5-311-g2e788f1fd131)
+--Sig_/qpNmKIRF5YMVei_XnY+.A6k
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc5-311-g2e788f1fd131/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc5-311-g2e788f1fd131/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc5-311-g2e788f1fd131
-Git Commit: 2e788f1fd13187860120cd3bb215628e5a086f02
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 94 unique boards, 26 SoC families, 27 builds out of 215
+Today's linux-next merge of the y2038 tree got a conflict in:
 
-Boot Failures Detected:
+  fs/compat_ioctl.c
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
+between commit:
 
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
+  837a6e7f5cdb ("fs: add generic UNRESVSP and ZERO_RANGE ioctl handlers")
 
-Offline Platforms:
+from the xfs tree and commits:
+  011da44bc5b6 ("compat: move FS_IOC_RESVSP_32 handling to fs/ioctl.c")
+  37ecf8b20abd ("compat_sys_ioctl(): make parallel to do_vfs_ioctl()")
 
-riscv:
+from the y2038 tree.
 
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
+I fixed it up (see below and the added patch) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-arm:
+=46rom af387ea192196ffd141234e7e45bcfbc2be1a4fc Mon Sep 17 00:00:00 2001
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 30 Oct 2019 15:05:29 +1100
+Subject: [PATCH] fix up for "compat: move FS_IOC_RESVSP_32 handling to
+ fs/ioctl.c"
 
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    multi_v7_defconfig:
-        omap3-beagle-xm:
-            lab-baylibre-seattle: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ fs/ioctl.c             | 4 ++--
+ include/linux/falloc.h | 7 +++++--
+ 2 files changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/fs/ioctl.c b/fs/ioctl.c
+index 455ad38c8610..2f5e4e5b97e1 100644
+--- a/fs/ioctl.c
++++ b/fs/ioctl.c
+@@ -495,7 +495,7 @@ int ioctl_preallocate(struct file *filp, int mode, void=
+ __user *argp)
+ /* on ia32 l_start is on a 32-bit boundary */
+ #if defined CONFIG_COMPAT && defined(CONFIG_X86_64)
+ /* just account for different alignment */
+-int compat_ioctl_preallocate(struct file *file,
++int compat_ioctl_preallocate(struct file *file, int mode,
+ 				struct space_resv_32 __user *argp)
+ {
+ 	struct inode *inode =3D file_inode(file);
+@@ -517,7 +517,7 @@ int compat_ioctl_preallocate(struct file *file,
+ 		return -EINVAL;
+ 	}
+=20
+-	return vfs_fallocate(file, FALLOC_FL_KEEP_SIZE, sr.l_start, sr.l_len);
++	return vfs_fallocate(file, mode | FALLOC_FL_KEEP_SIZE, sr.l_start, sr.l_l=
+en);
+ }
+ #endif
+=20
+diff --git a/include/linux/falloc.h b/include/linux/falloc.h
+index 63c4f0d615bc..ab42b72424f0 100644
+--- a/include/linux/falloc.h
++++ b/include/linux/falloc.h
+@@ -45,10 +45,13 @@ struct space_resv_32 {
+ 	__s32		l_pad[4];	/* reserve area */
+ };
+=20
+-#define FS_IOC_RESVSP_32		_IOW ('X', 40, struct space_resv_32)
++#define FS_IOC_RESVSP_32	_IOW ('X', 40, struct space_resv_32)
++#define FS_IOC_UNRESVSP_32	_IOW ('X', 41, struct space_resv_32)
+ #define FS_IOC_RESVSP64_32	_IOW ('X', 42, struct space_resv_32)
++#define FS_IOC_UNRESVSP64_32	_IOW ('X', 43, struct space_resv_32)
++#define FS_IOC_ZERO_RANGE_32	_IOW ('X', 57, struct space_resv_32)
+=20
+-int compat_ioctl_preallocate(struct file *, struct space_resv_32 __user *);
++int compat_ioctl_preallocate(struct file *, int mode, struct space_resv_32=
+ __user *);
+=20
+ #endif
+=20
+--=20
+2.23.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/compat_ioctl.c
+index 62e530814cef,9ae90d728c0f..000000000000
+--- a/fs/compat_ioctl.c
++++ b/fs/compat_ioctl.c
+@@@ -1020,51 -165,38 +165,57 @@@ COMPAT_SYSCALL_DEFINE3(ioctl, unsigned=20
+  	case FIONBIO:
+  	case FIOASYNC:
+  	case FIOQSIZE:
+- 		break;
+-=20
+- #if defined(CONFIG_IA64) || defined(CONFIG_X86_64)
++ 	case FS_IOC_FIEMAP:
++ 	case FIGETBSZ:
++ 	case FICLONERANGE:
++ 	case FIDEDUPERANGE:
++ 		goto found_handler;
++ 	/*
++ 	 * The next group is the stuff handled inside file_ioctl().
++ 	 * For regular files these never reach ->ioctl(); for
++ 	 * devices, sockets, etc. they do and one (FIONREAD) is
++ 	 * even accepted in some cases.  In all those cases
++ 	 * argument has the same type, so we can handle these
++ 	 * here, shunting them towards do_vfs_ioctl().
++ 	 * ->compat_ioctl() will never see any of those.
++ 	 */
++ 	/* pointer argument, never actually handled by ->ioctl() */
++ 	case FIBMAP:
++ 		goto found_handler;
++ 	/* handled by some ->ioctl(); always a pointer to int */
++ 	case FIONREAD:
++ 		goto found_handler;
++ 	/* these two get messy on amd64 due to alignment differences */
++ #if defined(CONFIG_X86_64)
+  	case FS_IOC_RESVSP_32:
+  	case FS_IOC_RESVSP64_32:
+ -		error =3D compat_ioctl_preallocate(f.file, compat_ptr(arg));
+ +		error =3D compat_ioctl_preallocate(f.file, 0, compat_ptr(arg));
+ +		goto out_fput;
+ +	case FS_IOC_UNRESVSP_32:
+ +	case FS_IOC_UNRESVSP64_32:
+ +		error =3D compat_ioctl_preallocate(f.file, FALLOC_FL_PUNCH_HOLE,
+ +				compat_ptr(arg));
+ +		goto out_fput;
+ +	case FS_IOC_ZERO_RANGE_32:
+ +		error =3D compat_ioctl_preallocate(f.file, FALLOC_FL_ZERO_RANGE,
+ +				compat_ptr(arg));
+  		goto out_fput;
+  #else
+  	case FS_IOC_RESVSP:
+  	case FS_IOC_RESVSP64:
+ -		goto found_handler;
+ +		error =3D ioctl_preallocate(f.file, 0, compat_ptr(arg));
+ +		goto out_fput;
+ +	case FS_IOC_UNRESVSP:
+ +	case FS_IOC_UNRESVSP64:
+ +		error =3D ioctl_preallocate(f.file, FALLOC_FL_PUNCH_HOLE,
+ +				compat_ptr(arg));
+ +		goto out_fput;
+ +	case FS_IOC_ZERO_RANGE:
+ +		error =3D ioctl_preallocate(f.file, FALLOC_FL_ZERO_RANGE,
+ +				compat_ptr(arg));
+ +		goto out_fput;
+  #endif
+ =20
+- 	case FICLONE:
+- 	case FICLONERANGE:
+- 	case FIDEDUPERANGE:
+- 	case FS_IOC_FIEMAP:
+- 		goto do_ioctl;
+-=20
+- 	case FIBMAP:
+- 	case FIGETBSZ:
+- 	case FIONREAD:
+- 		if (S_ISREG(file_inode(f.file)->i_mode))
+- 			break;
+- 		/*FALL THROUGH*/
+-=20
+  	default:
+  		if (f.file->f_op->compat_ioctl) {
+  			error =3D f.file->f_op->compat_ioctl(f.file, cmd, arg);
+
+--Sig_/qpNmKIRF5YMVei_XnY+.A6k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl25Eg4ACgkQAVBC80lX
+0GyZewf/YR8Lp8H7pzS1iv53Wt2ri2Rc3UAT9FEb+w6jiR2Gg5Rq4VEQmiwzdV0j
+smdGdVoCVx5hjfEz6vwYTJI53ASzQcXxInPTg2OnJHpWTun/wUBZ3rgYEAWY5a0B
+Yf36rPrtLyR1+nrqE0lWy/zM+fumMtAyeTY9Box+K/zsfvkYPZVeZhX0VvHmtTcG
+TINTD5Y49BWrO+WnzQA7UongQJORVCdV9YVyVeW0tMStBtKzjveP6SEkqcbaYMif
+QLJowlH7DEfK/m/dUFd/JYxd8+U/n9QQlyZ2xAWYYgAPhCl3QfBfSQuhBJnavcJt
+6ucZ9+wyfKA6u9DlHjxiljopgGNv4g==
+=YVBN
+-----END PGP SIGNATURE-----
+
+--Sig_/qpNmKIRF5YMVei_XnY+.A6k--

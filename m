@@ -2,112 +2,139 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F7F9E9AAD
-	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 12:21:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50BF2E9D6D
+	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 15:26:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726088AbfJ3LV6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 30 Oct 2019 07:21:58 -0400
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:40307 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726102AbfJ3LV6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Oct 2019 07:21:58 -0400
-Received: by mail-lj1-f195.google.com with SMTP id u22so2216391lji.7
-        for <linux-next@vger.kernel.org>; Wed, 30 Oct 2019 04:21:55 -0700 (PDT)
+        id S1726603AbfJ3O0L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Oct 2019 10:26:11 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:40219 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726137AbfJ3O0K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Oct 2019 10:26:10 -0400
+Received: by mail-wm1-f66.google.com with SMTP id w9so2399831wmm.5
+        for <linux-next@vger.kernel.org>; Wed, 30 Oct 2019 07:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=v+5tgIc7NKlP13RxDmMGjXSk9aMJhynDI2P7YlJkgyI=;
-        b=ZXEXkY5Ndof4MYocfA3heTD+yLCHvo6iFCvacATfbb7eg1Xl/gb2Ro79f5dWdFcwdh
-         65ewjNgF/7eHsTYh2tPSP/Pym1ZrM1o1rTRCVgr5pju5dr/i04YK8L/ELHBW3T/2ekJe
-         lic5Qv3eInHuscY8Aqsss33lm/yUpge67W1lPVOcJnzE5wIyOGvT6SchCL9xiSrTPj3y
-         RZEL0yuSlqAGpabX9wckGx0HkEp9tchgT1FkptWaGESXz3dJ+M7rfa9IjAfOHaox6zxn
-         CNC88dDtFcFL2SvcgjxM3kQ4PKANYLUhjFxo2WnzsOaVpBB16xdPMkL4N81PLiNrKdSs
-         jclg==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=/a8YTFRP5302T8zBw2B/scZMPa2GMb/4VlyetuFRKYc=;
+        b=Ip65drrrfQ+gZ/ek34By+0J3u4w4EG7hLbrON+Nk4Ut4DNQmK4IW6W+Dszc1byjlVz
+         UeSg/IlSaPr4jTj8HOrUjTmqZDgEwdHwy3KJyaIFVLvqu4PmlgJa+GFo7lCkkbiPM8hZ
+         8D21gCWCS3LwNFlLT2ncbMgKye5qTMidAr1gNjFSOJ9ESTsRQ9Yqen1KqyX8a+gn+Phg
+         z9uoNhvaCl0SDYwJ/+MLSxvJ/m77YeQydwGNKTgjlMuqaanbvzkw+S/7I4dhaVY0Ssgw
+         XmfMNnmS+OOJtSO+ftD1q8ZIFuKPxR3OaT3yGHYYEJCBQDjCcI8so0nazf3F+3XHdM43
+         Jpqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=v+5tgIc7NKlP13RxDmMGjXSk9aMJhynDI2P7YlJkgyI=;
-        b=mR8Lxp0l6y7Q7clCsPKiRzxXpXaz2NF2RQu3RhwFGrhbXKerqcGnei5oHiIV7OiPq4
-         2Z2HPfvAAsWdn77/uTzBXD+WzOb0shqgW+DI1LtfbRKpafBc7J+qHNjgRe2qU75HAxcK
-         4JFi4kzyO4eKoQr+iTzspdDkp0K4PAj+d2Sb9yvyYOpUk8g/RyHx5dUbLqMFOdS8LMfw
-         03DjNqRSDa+t4qsNzftMGBREyN8pr5CIovVkiQj1ha6S5nwvUdVx1NCeQp/OyOLgLtw8
-         NRLA8pJDc6VsFvCvLQ6TVwS/i8FLwZMTyxwmbF/vvfZAGzNW5Def9Dj8SyZNd4itu5Hy
-         qrYQ==
-X-Gm-Message-State: APjAAAUQNYLY1qiqrFwJg31yFfx0B0H0T/IGbd8zDq3tKdiZcIv6Ro1/
-        zH8snretwH/n/KF5e4SVB3sjCyljR9qNoli2F5nI0w==
-X-Google-Smtp-Source: APXvYqzLsjUmiyMk7mQIqEBkWx+7s2G2Uv4V174MWYGp6z7L0D2DpWf/lUoJ75gf1nkkcauibk3th80Nh4wXgy74MtM=
-X-Received: by 2002:a2e:9249:: with SMTP id v9mr2047103ljg.184.1572434514459;
- Wed, 30 Oct 2019 04:21:54 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=/a8YTFRP5302T8zBw2B/scZMPa2GMb/4VlyetuFRKYc=;
+        b=MSQ4dXUm92HmMCZEOluZZ2mOf1CJVEeedi1LBtpOXv3nH9HZ+hSVoR9k2ufR3497MI
+         ynW62CVVNhaY4J9St48YuhNQfKVLJW5eS9sKXFgktpo2MoCeibbTSVm7NpXc7sGOlsVC
+         BCvNW4WJzCzrJUvhphIUBGff2z+6U1eyRPz2Qbg7czBakdjuD5QxlngB+6OPZavOvNGQ
+         2NdmDzQkXU/a/qKtZvtpED0IEC2cue9ZueR2bpl2cgtO0HdIRfdonL9LoqTTGlCwLl/q
+         n+8vM6vyXkioYf+/lZdG0e8a7digkuUEPqU5qFBRmGunmjIOi/BXRh1L/HSHb2Xyo1R/
+         BANg==
+X-Gm-Message-State: APjAAAX8cVGdzf3LCVm2BB1Q3o+pmDD6TrbGjrk5BSu7Pud0IiVvezp8
+        XfI6jpvNp8DYDVuj0Zu52VQOaKpopQvyIg==
+X-Google-Smtp-Source: APXvYqwAWJmyr1Gnu7Q3vNkFRhM0GN5ngC4+ZNP5CgakoB3PE3aKFhElWy/vZAHl64iI/c0MNft/Jw==
+X-Received: by 2002:a05:600c:259:: with SMTP id 25mr7405924wmj.135.1572445568370;
+        Wed, 30 Oct 2019 07:26:08 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id f13sm386746wrq.96.2019.10.30.07.26.07
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Oct 2019 07:26:07 -0700 (PDT)
+Message-ID: <5db99d7f.1c69fb81.cc1eb.214d@mx.google.com>
+Date:   Wed, 30 Oct 2019 07:26:07 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20191029180731.2153b90c@canb.auug.org.au> <CADYN=9+aqqHVP8tKFFCTKi_zzSt=PW5JVyU2sdaThgrHpYSjzQ@mail.gmail.com>
- <20191030105553.GH25745@shell.armlinux.org.uk>
-In-Reply-To: <20191030105553.GH25745@shell.armlinux.org.uk>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Wed, 30 Oct 2019 12:21:43 +0100
-Message-ID: <CADYN=9L4i7BWcdhOdG-AFQjuZBU=gv7UjcV6CaO2f0q_KJKhVg@mail.gmail.com>
-Subject: Re: linux-next: Tree for Oct 29
-To:     Russell King - ARM Linux admin <linux@armlinux.org.uk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-trace-devel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20191030
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 242 boots: 8 failed, 225 passed with 7 offline,
+ 1 untried/unknown, 1 conflict (next-20191030)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 30 Oct 2019 at 11:56, Russell King - ARM Linux admin
-<linux@armlinux.org.uk> wrote:
->
-> Please trim your replies; there's no need to force everyone to page
-> through 500 lines of Stephen's email to get to the content of your
-> message.
+next/master boot: 242 boots: 8 failed, 225 passed with 7 offline, 1 untried=
+/unknown, 1 conflict (next-20191030)
 
-Right, I'll keep that in mind next time.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191030/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191030/
 
->
-> On Wed, Oct 30, 2019 at 11:25:19AM +0100, Anders Roxell wrote:
-> > When I'm building an arm kernel with this .config [1], I can see this
-> > build error on next tag next-20191029 and next-20191030. Tag
-> > next-20191028 built fine.
-> >
-> >
-> > $ make ARCH=arm CROSS_COMPILE=arm-linux-gnueabi- -skj$(getconf
-> > _NPROCESSORS_ONLN) O=obj-arm-20191029 zImage
-> > arm-linux-gnueabi-ld: kernel/trace/trace_preemptirq.o: in function
-> > `trace_hardirqs_on':
-> > trace_preemptirq.c:(.text+0x2a0): undefined reference to `return_address'
-> > arm-linux-gnueabi-ld: trace_preemptirq.c:(.text+0x2dc): undefined
-> > reference to `return_address'
-> > arm-linux-gnueabi-ld: kernel/trace/trace_preemptirq.o: in function
-> > `trace_hardirqs_off':
-> > trace_preemptirq.c:(.text+0x468): undefined reference to `return_address'
-> > arm-linux-gnueabi-ld: trace_preemptirq.c:(.text+0x494): undefined
-> > reference to `return_address'
-> > arm-linux-gnueabi-ld: kernel/trace/trace_irqsoff.o: in function
-> > `start_critical_timings':
-> > trace_irqsoff.c:(.text+0x798): undefined reference to `return_address'
-> > arm-linux-gnueabi-ld:
-> > kernel/trace/trace_irqsoff.o:trace_irqsoff.c:(.text+0xed4): more
-> > undefined references to `return_address' follow
-> > make[1]: *** [/srv/src/kernel/next-testing/Makefile:1074: vmlinux] Error 1
-> > make[1]: Target 'zImage' not remade because of errors.
-> > make: *** [Makefile:179: sub-make] Error 2
-> > make: Target 'zImage' not remade because of errors.
->
-> Known problem with one of Ben Dooks patches, which was dropped very
-> quickly when Olof's builder spotted the issue...
+Tree: next
+Branch: master
+Git Describe: next-20191030
+Git Commit: fdbc6c104f956257ee41b8be7c846e6c2035291e
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 90 unique boards, 26 SoC families, 24 builds out of 216
 
-aha, I missed that.
+Boot Failures Detected:
 
-> though it looks like
-> I didn't push it out.
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            sun8i-a33-olinuxino: 1 failed lab
 
-OK.
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            hip07-d05: 1 failed lab
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
 
-Cheers,
-Anders
+    defconfig:
+        gcc-8:
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+
+Offline Platforms:
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    exynos_defconfig:
+        exynos5422-odroidxu3:
+            lab-collabora: FAIL (gcc-8)
+            lab-baylibre: PASS (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

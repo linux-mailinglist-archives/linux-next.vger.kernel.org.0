@@ -2,96 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BDA4E9485
-	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 02:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9E8E95B4
+	for <lists+linux-next@lfdr.de>; Wed, 30 Oct 2019 05:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbfJ3BTk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 29 Oct 2019 21:19:40 -0400
-Received: from userp2120.oracle.com ([156.151.31.85]:58362 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726094AbfJ3BTk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 29 Oct 2019 21:19:40 -0400
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U1IZLg084462;
-        Wed, 30 Oct 2019 01:19:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=c5+lFQYw9MqkRlmXjHFM6qZOVPk1WfwxH8Y/qSrcCyc=;
- b=rnXjenJABMJmVwKEJoBb5fjue59Igo47X0nBU7oEB5RbTqGCZQde5keCZMvgHfnTOxWc
- +Xs+rznnnSc4/9a/5ovMfkOvuPEfchC0qqYwgGffg28KyUZFKt0VsHpgpwr8E25RcUsK
- 7/MyTOdoAvhrQCbL+4SWWHyYpI47A6+0H9OXavzVT+CPV84R8xYJsMocYoB2vJK0Rieq
- uEH7oKsxKu8izj3dbPVrUkm8HJdHmsjnjrDSQ8SRUI6k7DTK3Bt+WB2pG0/vACPt7MVl
- F47AAtaSQpIAqCzsgUKTEKjjEmLJYdgD0UeGKYuAldKqoDJQWPdnUBaUL0LE4/BWw46P og== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2vxwhfgmpr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Oct 2019 01:19:21 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id x9U1IUgp054551;
-        Wed, 30 Oct 2019 01:19:20 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2vxwj8yss8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 30 Oct 2019 01:19:20 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id x9U1JEUM024685;
-        Wed, 30 Oct 2019 01:19:19 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 29 Oct 2019 18:19:14 -0700
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     James Bottomley <James.Bottomley@HansenPartnership.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ryan Attard <ryanattard@ryanattard.info>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: linux-next: manual merge of the scsi tree with the rcu tree
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191029150826.38c26ef8@canb.auug.org.au>
-Date:   Tue, 29 Oct 2019 21:19:12 -0400
-In-Reply-To: <20191029150826.38c26ef8@canb.auug.org.au> (Stephen Rothwell's
-        message of "Tue, 29 Oct 2019 15:08:26 +1100")
-Message-ID: <yq1pnif6ne7.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
+        id S1726156AbfJ3EVN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 30 Oct 2019 00:21:13 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38413 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725855AbfJ3EVN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 30 Oct 2019 00:21:13 -0400
+Received: by mail-wm1-f65.google.com with SMTP id 22so585509wms.3
+        for <linux-next@vger.kernel.org>; Tue, 29 Oct 2019 21:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=R4EGzxg5qGTmvkyXwWa35Vt1TELU0sxREjc3WF7rj2Y=;
+        b=GVmq5Y3l/TqjeAYrmLGM2KJvxbK8qW4Ew+LPzg8oc4vWBPax9HDMwykKur0mycQT9h
+         mwnGrkQ7BmMxva4e+uF7yGtJSmMu3kI95/PfAVutDZNrffOd7nWq+xqmL+fkaDd7rXbP
+         QPfiAtSzFIHbUEYSDMdKDYoIoeS4KUd3uYXIBHK8UmQyjXwCScsjxrIXC1lwoVm2432O
+         Bi9QzgfVtKKxz+qrcDGUWGJFVAc59SrQEnj4YJYiobLrVOegqKVa/zQEiWEoVMVUfM/4
+         NMURejj+c23gWii69XlIEPf6IjcXBZ0Z0YFZoI8cVFiIG5EwNX26WyVnvXSXj48qOBNo
+         8sSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=R4EGzxg5qGTmvkyXwWa35Vt1TELU0sxREjc3WF7rj2Y=;
+        b=lfYbhI8VfJPRz5mMgtbmXO1Wsx6wJNB/GRLdcnFOyMOtO49xJ/9savGI8uRfb8MwyJ
+         /34OCqPxTTydK+g8f3031K9gHT/jJMYnRQHv+DtPM2YZmAYb/HLyDBt+KoAtIqedRpn+
+         bQ5+t8ykRys5UV753c0cMqKBcVcUEkpA7qEtDMVPEaNXTn2GGMyyisqeJeIq22gPyBJc
+         ooKHpModmbeMmezgsTmWNkWd0nCoFNdOVh+6pNqmdwGYaqGjRTXZWwIOIMDIBRKCfcGq
+         S8E8Dc4czEKH4zDRA5Q1VBcBjNicQS3AudEn6fIYpHV0Ntny+yhQO9qyqGJlMN01US/Y
+         068A==
+X-Gm-Message-State: APjAAAUXT4eCFXuk1rLeoYImsP523nnkg+Ztg1UsmQX87Uy7mLlyrF5P
+        8tL4wuy+P8KUap6afNW7sgsK290Rja+vXA==
+X-Google-Smtp-Source: APXvYqxt+3mjPsVK6QvEyQEsasY0rSOoQ80Anlb3E8QfgpBytaJh0r8LGDF7f29SwnLR8sxxSJGX0Q==
+X-Received: by 2002:a1c:7913:: with SMTP id l19mr7420471wme.26.1572409269436;
+        Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id d2sm5002178wmd.2.2019.10.29.21.21.08
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
+Message-ID: <5db90fb5.1c69fb81.bbea8.9b75@mx.google.com>
+Date:   Tue, 29 Oct 2019 21:21:09 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1910300012
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9425 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1910300013
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.4-rc5-311-g2e788f1fd131
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 259 boots: 2 failed,
+ 246 passed with 8 offline, 2 untried/unknown,
+ 1 conflict (v5.4-rc5-311-g2e788f1fd131)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 259 boots: 2 failed, 246 passed with 8 offline, 2 =
+untried/unknown, 1 conflict (v5.4-rc5-311-g2e788f1fd131)
 
-Stephen,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc5-311-g2e788f1fd131/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc5-311-g2e788f1fd131/
 
-> Today's linux-next merge of the scsi tree got a conflict in:
->
->   drivers/scsi/scsi_sysfs.c
->
-> between commit:
->
->   81db81f82993 ("drivers/scsi: Replace rcu_swap_protected() with rcu_replace()")
->
-> from the rcu tree and commit:
->
->   d188b0675b21 ("scsi: core: Add sysfs attributes for VPD pages 0h and 89h")
->
-> from the scsi tree.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc5-311-g2e788f1fd131
+Git Commit: 2e788f1fd13187860120cd3bb215628e5a086f02
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 94 unique boards, 26 SoC families, 27 builds out of 215
 
-Yes, this was expected. Fix is fine, thanks!
+Boot Failures Detected:
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+
+Offline Platforms:
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    multi_v7_defconfig:
+        omap3-beagle-xm:
+            lab-baylibre-seattle: PASS (gcc-8)
+            lab-baylibre: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

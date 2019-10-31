@@ -2,121 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 79EFEEA9CE
-	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2019 05:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C46EAA70
+	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2019 06:43:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726059AbfJaECf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 31 Oct 2019 00:02:35 -0400
-Received: from mail-wr1-f48.google.com ([209.85.221.48]:42469 "EHLO
-        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725909AbfJaECf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 31 Oct 2019 00:02:35 -0400
-Received: by mail-wr1-f48.google.com with SMTP id a15so4645439wrf.9
-        for <linux-next@vger.kernel.org>; Wed, 30 Oct 2019 21:02:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=xg4XlgFLF6p/PphS0MI3YwafPGP66BhrOlxSnnJv0jA=;
-        b=mggrmmees7UQNm3w+/pWalBjzPpmYAYJdfqhh+la4QH++1OsOixXWrIZ0+B8FPoloP
-         R6BQTm6kQYJ79+awRtW9FRRqFhQbr8PiQC93+h/cUwUGwE88yMdIsMvqkwUatyUulOip
-         OJHN+X3jArUiqib2X7kMCzx60TlfN3Kbsruv9ZUMyEpC3eeH+Dra7VJ9y8ZDwPPX3j5+
-         TIpAbT42x7m2oME/EM1HIzGUKfT9QTEk2gLcNb7HtHk8ttW7sIjfxaWkKCDfd0UCnuLf
-         eqkF0hmg9BGYCxInXl3/e7MXmyjuBMCXN9jb/twc4nAuh73hIpJyFxOd7md3y9PGcjij
-         EHTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=xg4XlgFLF6p/PphS0MI3YwafPGP66BhrOlxSnnJv0jA=;
-        b=QHzIG7DvcUt2R06Kym9rn73vnBB0RCtg/gUjd2x8c14Z6lMUU9qdUos6DeWvPigVCY
-         DHAmoLJjcZ082/nJyOCxB+IqAkFqqem8/FBLgdDZcmAcgwRRpk2SSyEgg2VdjF9DKpoQ
-         fNCQMYaHPHm4/EHs+AzhPQyVHxBTLP8z1AyGFoTfw+UtUQGj4er9VJBWCZcEJSsMRqj6
-         yJ6JSJ0Z8MwtpNT7SVNCInpfJxdWoURAYJSLT9uqj1/iN3YJ9nofqKNGnKr8FpqSYiQk
-         WsB8/6b71WHs2NkpKKUQXkPWlCm4PWHBfj7cyEeddSaAlVZpYC2UVQtIuCkDOUiLqLR+
-         0xXg==
-X-Gm-Message-State: APjAAAU7fPAgFmuAibhWKFIG/O5QOmbYPLEyf54O3/9li0iNUJlvB/aJ
-        EofHo//bh1YIsFhyQeFfFisj6qRfmyVTZQ==
-X-Google-Smtp-Source: APXvYqxlkuxlp/FbwvNpo2u+hOwMXf1JRHcJZlekRovCJwnR06nHOSRheVpvt9sWw7fCUeVlOJzBQw==
-X-Received: by 2002:a5d:55c2:: with SMTP id i2mr3300944wrw.176.1572494552057;
-        Wed, 30 Oct 2019 21:02:32 -0700 (PDT)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id f204sm2046954wmf.32.2019.10.30.21.02.31
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 30 Oct 2019 21:02:31 -0700 (PDT)
-Message-ID: <5dba5cd7.1c69fb81.86def.b8b9@mx.google.com>
-Date:   Wed, 30 Oct 2019 21:02:31 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726400AbfJaFnl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 31 Oct 2019 01:43:41 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44701 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726321AbfJaFnl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 31 Oct 2019 01:43:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 473Z4S3hWXz9sCJ;
+        Thu, 31 Oct 2019 16:43:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1572500617;
+        bh=4tX0YNHPXUIIEYJsc1hzCYM22rQSJ6RboQ5s8rNjCWQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eupzgewXX5mD6Kz3omiK4fgj0wlKxSsYyv6eRESUT0qLKRp0PBLTMtmefm6uatUeB
+         jK0ul6HqYVPThRsF4QpWbBQFYzjjh9a8LDOy3vod6b2I/3IrlNMtrvDj6GR9JWDMZC
+         1OCLaVXo2n/hrtwm1PgvFNhS85a7c8vUUGi15UmHhNdC0Em94ThCYCQhWMNJe8qoOH
+         tdG4M/vFtVoNRkN0CfmM9Oira1Z0griK42TcRHk+NXtOI3/U2mRVhyfnXYjUpkVu66
+         Yb6KO815eaowDuKl0Sn6HCOYICOV+HevtEPA2zy3BxUz0Z7Loa17PYQxUQg+YzFoiI
+         GtuoZrL8DIAYA==
+Date:   Thu, 31 Oct 2019 16:43:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Julien Grall <julien.grall@arm.com>
+Subject: linux-next: manual merge of the akpm-current tree with the tip tree
+Message-ID: <20191031164323.67a3414e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.4-rc5-364-gd705bb4f2860
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 249 boots: 2 failed,
- 238 passed with 8 offline, 1 untried/unknown (v5.4-rc5-364-gd705bb4f2860)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/Lxfq+_MFYUV4qymGCEE4Skq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 249 boots: 2 failed, 238 passed with 8 offline, 1 =
-untried/unknown (v5.4-rc5-364-gd705bb4f2860)
+--Sig_/Lxfq+_MFYUV4qymGCEE4Skq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc5-364-gd705bb4f2860/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc5-364-gd705bb4f2860/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc5-364-gd705bb4f2860
-Git Commit: d705bb4f2860fa79facc63b694625c96bad63a22
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 92 unique boards, 26 SoC families, 27 builds out of 215
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-Boot Failures Detected:
+  lib/ubsan.c
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
+between commit:
 
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
+  9a50dcaf0416 ("ubsan, x86: Annotate and allow __ubsan_handle_shift_out_of=
+_bounds() in uaccess regions")
 
-Offline Platforms:
+from the tip tree and commit:
 
-riscv:
+  edbefc568464 ("lib/ubsan: don't serialize UBSAN report")
 
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
+from the akpm-current tree.
 
-arm:
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+--=20
+Cheers,
+Stephen Rothwell
 
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+diff --cc lib/ubsan.c
+index 0c4681118fcd,39d5952c4273..000000000000
+--- a/lib/ubsan.c
++++ b/lib/ubsan.c
+@@@ -374,12 -359,11 +359,12 @@@ void __ubsan_handle_shift_out_of_bounds
+  	struct type_descriptor *lhs_type =3D data->lhs_type;
+  	char rhs_str[VALUE_LENGTH];
+  	char lhs_str[VALUE_LENGTH];
+ +	unsigned long ua_flags =3D user_access_save();
+ =20
+  	if (suppress_report(&data->location))
+ -		return;
+ +		goto out;
+ =20
+- 	ubsan_prologue(&data->location, &flags);
++ 	ubsan_prologue(&data->location);
+ =20
+  	val_to_string(rhs_str, sizeof(rhs_str), rhs_type, rhs);
+  	val_to_string(lhs_str, sizeof(lhs_str), lhs_type, lhs);
+@@@ -402,9 -386,7 +387,9 @@@
+  			lhs_str, rhs_str,
+  			lhs_type->type_name);
+ =20
+- 	ubsan_epilogue(&flags);
++ 	ubsan_epilogue();
+ +out:
+ +	user_access_restore(ua_flags);
+  }
+  EXPORT_SYMBOL(__ubsan_handle_shift_out_of_bounds);
+ =20
 
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
+--Sig_/Lxfq+_MFYUV4qymGCEE4Skq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
+-----BEGIN PGP SIGNATURE-----
 
----
-For more info write to <info@kernelci.org>
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl26dHsACgkQAVBC80lX
+0GwMHAgAmfLeQgjWZxcFDyZUhIN6o0S5dxwaOfHfx5TDc4MjgODz5D+X+G6/Qs8y
+MP6h44zinuOtix1aHAYpWCvIW6B5gCeBfzsk6kMKzbgsUVL32jva50CDzGx1xZRU
+sKB34TqB1cPPo6bN6MBhw4KuIrn4e1v0zeFsxUPjsr0Nvh3lEzdW2GyKgVW/OgJF
+Gh7TaKYsXZ4h67s7Wp3nuQ8Jdel7E/TW+OIf3eQA6XhAsffcScTm65QanSexZwvY
+LpbveSDwJxlpynYdRFNKzAaHpHvW5rCxOdyOV1+aeFC8SPwfpCWAEtkfjJS9ejEf
+l1ao4kd6USkUHVj/c8HQg2IFo9YWdA==
+=846c
+-----END PGP SIGNATURE-----
+
+--Sig_/Lxfq+_MFYUV4qymGCEE4Skq--

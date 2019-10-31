@@ -2,70 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DAC0EB3D1
-	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2019 16:22:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12912EB4CD
+	for <lists+linux-next@lfdr.de>; Thu, 31 Oct 2019 17:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727705AbfJaPWc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 31 Oct 2019 11:22:32 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:48414 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727605AbfJaPWc (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 31 Oct 2019 11:22:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=sgrMvBbAcxzy+4KwQdMq66yggcI8NHasGmiIST40A5M=; b=pHzvRaMdEqIFmWP8StXMN7OmI
-        zOmpX6T+C1CCeXRvYooEkBsilXT4vwxlGygyrS/7mJ45389gEbcFnuKXNAgAv3bpaDYtVxv9Z7PL6
-        MZowD9oZvLIkuH5TjdP4p/UrnhcuPTKYvYULOk2bKYFcQgxridU2jI2DGl0fMbebXFpopHuM0wEVY
-        Bv0v693VGGqOpCJs/BKYoQJ3ImKDwTIPJvAl9p80hf64gtcW6DsPoJuS36o6UyzYiZqMhkqi+eFOX
-        beJQ9G4dx4/QifUd4szCkNUcUhJTHLwu7/pE1Xeov0mDx3KbRkE5e6Kfm/7C8t2cRS8Z8DOYuh6x/
-        HvP1ydz7w==;
-Received: from [2601:1c0:6280:3f0::4ba1]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iQCHP-0004Nz-2N; Thu, 31 Oct 2019 15:22:31 +0000
-Subject: Re: linux-next: Tree for Oct 31 (gpu/drm/drm_dp_mst_topology.c)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20191031175224.2e313bef@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <423f4936-d979-5ce9-7c75-ec7973f108d9@infradead.org>
-Date:   Thu, 31 Oct 2019 08:22:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1728519AbfJaQhe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 31 Oct 2019 12:37:34 -0400
+Received: from mx2.suse.de ([195.135.220.15]:58218 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727856AbfJaQhe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 31 Oct 2019 12:37:34 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id B6345B12F;
+        Thu, 31 Oct 2019 16:37:32 +0000 (UTC)
+Received: by quack2.suse.cz (Postfix, from userid 1000)
+        id 57FB91E482D; Thu, 31 Oct 2019 17:37:32 +0100 (CET)
+Date:   Thu, 31 Oct 2019 17:37:32 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jan Kara <jack@suse.cz>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeff Mahoney <jeffm@suse.com>
+Subject: Re: linux-next: Fixes tag needs some work in the ext3 tree
+Message-ID: <20191031163732.GA13321@quack2.suse.cz>
+References: <20191031072331.1830d07d@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20191031175224.2e313bef@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191031072331.1830d07d@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 10/30/19 11:52 PM, Stephen Rothwell wrote:
+On Thu 31-10-19 07:23:31, Stephen Rothwell wrote:
 > Hi all,
 > 
-> News: there will be no linux-next releases on Friday (Nov 1) or Monday
-> (Nov 4).
+> In commit
 > 
-> Changes since 20191030:
+>   08b866beeb61 ("reiserfs: fix extended attributes on the root directory")
 > 
+> Fixes tag
+> 
+>   Fixes: d0a5b995a30 ("vfs: Add IOP_XATTR inode operations flag")
+> 
+> has these problem(s):
+> 
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
 
+Thanks for the notice. I've fixed that up and added commit hook to auto-fix
+Fixes tags. So it should not happen in the future.
 
-on i386:
-
-ld: drivers/gpu/drm/drm_dp_mst_topology.o: in function `__dump_topology_ref_history':
-drm_dp_mst_topology.c:(.text+0xfeb): undefined reference to `__udivdi3'
-
-
-
+								Honza
 -- 
-~Randy
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

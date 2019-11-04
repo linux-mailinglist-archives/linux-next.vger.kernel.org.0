@@ -2,55 +2,54 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A5633EE63B
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2019 18:39:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69CA8EE641
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2019 18:39:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728392AbfKDRje (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Nov 2019 12:39:34 -0500
-Received: from mail-pl1-f175.google.com ([209.85.214.175]:35965 "EHLO
-        mail-pl1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728012AbfKDRje (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Nov 2019 12:39:34 -0500
-Received: by mail-pl1-f175.google.com with SMTP id g9so7894328plp.3
-        for <linux-next@vger.kernel.org>; Mon, 04 Nov 2019 09:39:33 -0800 (PST)
+        id S1728012AbfKDRjw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Nov 2019 12:39:52 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:40960 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729362AbfKDRjw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Nov 2019 12:39:52 -0500
+Received: by mail-pl1-f195.google.com with SMTP id d29so1536190plj.8
+        for <linux-next@vger.kernel.org>; Mon, 04 Nov 2019 09:39:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=6n8zf+MHa9O08qnd0Av4LNAxi7cxEiWU9T8g1MwkZgc=;
-        b=CbeyUtqiV0O5NCmsXsl2H4kIgSGwwigTmXyDeQozeNzG+w0jm+k81Qz5FQEWNMOB0n
-         L6uqLU/TnkkvPnVec+p0GBUCWcJl+kpVV3qrhx0YDduGhl6EqCWwkykePivsGNcOKaSu
-         f5zHGzBsYU7G3Ogw5HW++vmWxUvsXrUADfmhs=
+        bh=nnc02y2mVvcwsjK+5OxNf5NIm6spEyBcFyvczZg9OVw=;
+        b=nPfzuWMjB7pns9I/nii8PhcEk9Chdus75+1i6dQXzhkI76+o+ZW4rJnp/5BmwbrDfy
+         l4kET/hWk7Es/dSx3SNwwxbXqPwh6xn5cgTf+Pq/Mbt1sXYxZ0JW4yI4sz9/FhSn0LeG
+         CaPCodZAKvUj4nghS3iRg5WexnNFYvvpxwM1s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=6n8zf+MHa9O08qnd0Av4LNAxi7cxEiWU9T8g1MwkZgc=;
-        b=fHlAS6zaidaborjDZzm+hINNUiFDEFP/1Sr7c2HrG2Q32bdRRVs5HHuN5XJlb2yhic
-         o/6RmRRsAgw+pynCt0T53WV3PcTmsUEKQRCZjzACHFFnCVWoI4b8ZKykRO+XzFKodIUT
-         f4O/GNCL/UEr7vidHiCjN45VLWRxL0QprOWt9WxNYC9zlkWGK7CmoeU69BMSvjfHVMTU
-         ywbVVnSvAXTxaD/JVTNlagtx6LuG9rGBbTlLWs2oMKM6XRPhZrYLfaOAIjBumu403Eux
-         EAuYP5gsT+UZ9XIC1Gm/iHpYjcZjXjN+9ECNDv/6Yr0jd6Intkww6sTWcMBpmlheC3DV
-         22tg==
-X-Gm-Message-State: APjAAAUvy0WvDfdkKVIlPlSQdXL9Kr/IORd3JVgeA5TH1p0mgEnfiyws
-        hA4l9c9HEsWCgYyXQh8GaQtluQ==
-X-Google-Smtp-Source: APXvYqxdgEB3HXATejBeESOM723KlSNKAqSt9/NLr0ZAL3kow/5UrbufIHi1Aany5jz0ZQxzAGnImQ==
-X-Received: by 2002:a17:902:a584:: with SMTP id az4mr27871397plb.74.1572889173251;
-        Mon, 04 Nov 2019 09:39:33 -0800 (PST)
+        bh=nnc02y2mVvcwsjK+5OxNf5NIm6spEyBcFyvczZg9OVw=;
+        b=N/0cBPotFDfrpfz0Ds9E2qjMb9tk4qEXrqHBLw0T83CQGHboSggXiH2vscKivqkPua
+         +h4o6KKwaETf1zAJE6hVjLAHPKQw1R/Kq2htBVIh9vRLgOavJOhoDHwqsogCnKQo0m8C
+         zXXioMr+M1+jHcYmuGK15zLS5lWOv3xQMCWP1d2D5WXySJDaBY3q/4NNdHcx6BSnfBTa
+         ft2unGdjSrSj4eK5D5T6WIf+oY8ByyAT3ybvpGX+Oka8uIV9az2qhp/4VA04O/22Q6lq
+         SkMjyxsH4p0gQTe/MmEXOtGj7LxE1EHCTAteFCjab3UQ2R27PbAuESnB+Yjgd2xG3dgN
+         4XHA==
+X-Gm-Message-State: APjAAAV45UiLXMwp79kNe9Xw2Wg3UUiipS2KVzQ3LwvySNuERlC5xyOu
+        RWiu9QbjyPZ7krE3XmGLwAk/tg==
+X-Google-Smtp-Source: APXvYqzzA7uqS5Q941RA0PRajYrO8BjsWFPRrLWyT6UMrTuejTCAlKHiskLvNo4hYHu+gJmldvrccA==
+X-Received: by 2002:a17:902:d910:: with SMTP id c16mr24873667plz.102.1572889190978;
+        Mon, 04 Nov 2019 09:39:50 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id gi2sm16404503pjb.29.2019.11.04.09.39.32
+        by smtp.gmail.com with ESMTPSA id 184sm18065106pfu.58.2019.11.04.09.39.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2019 09:39:32 -0800 (PST)
+        Mon, 04 Nov 2019 09:39:50 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Mon, 4 Nov 2019 09:39:31 -0800
-To:     Roman Li <Roman.Li@amd.com>
-Cc:     Leo Li <sunpeng.li@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Nicholas Kazlauskas <Nicholas.Kazlauskas@amd.com>,
+Date:   Mon, 4 Nov 2019 09:39:49 -0800
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: dc_link_setup_psr(): Integer handling issues
-Message-ID: <201911040939.007EA1E6@keescook>
+Subject: Coverity: meson_allocate_chanlist(): Uninitialized variables
+Message-ID: <201911040939.3AB1A8CC2B@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,26 +67,26 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by recent commits:
 
-e0d08a40a63b ("drm/amd/display: Add debugfs entry for reading psr state")
+48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
 
 Coverity reported the following:
 
-*** CID 1487399:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
-/drivers/gpu/drm/amd/display/dc/core/dc_link.c: 2559 in dc_link_setup_psr()
-2553     	psr_context->phyType = PHY_TYPE_UNIPHY;
-2554     	/*PhyId is associated with the transmitter id*/
-2555     	psr_context->smuPhyId =
-2556     		transmitter_to_phy_id(link->link_enc->transmitter);
-2557
-2558     	psr_context->crtcTimingVerticalTotal = stream->timing.v_total;
-vvv     CID 1487399:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
-vvv     Potentially overflowing expression "stream->timing.pix_clk_100hz * 100U" with type "unsigned int" (32 bits, unsigned) is evaluated using 32-bit arithmetic, and then used in a context that expects an expression of type "u64" (64 bits, unsigned).
-2559     	psr_context->vsyncRateHz = div64_u64(div64_u64((stream->
-2560     					timing.pix_clk_100hz * 100),
-2561     					stream->timing.v_total),
-2562     					stream->timing.h_total);
-2563
-2564     	psr_context->psrSupportedDisplayConfig = true;
+*** CID 1487398:  Uninitialized variables  (UNINIT)
+/drivers/crypto/amlogic/amlogic-gxl-core.c: 184 in meson_allocate_chanlist()
+178     			goto error_engine;
+179     		}
+180     	}
+181     	return 0;
+182     error_engine:
+183     	meson_free_chanlist(mc, i);
+vvv     CID 1487398:  Uninitialized variables  (UNINIT)
+vvv     Using uninitialized value "err".
+184     	return err;
+185     }
+186
+187     static int meson_register_algs(struct meson_dev *mc)
+188     {
+189     	int err, i;
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -95,8 +94,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1487399 ("Integer handling issues")
-Fixes: e0d08a40a63b ("drm/amd/display: Add debugfs entry for reading psr state")
+Addresses-Coverity-ID: 1487398 ("Uninitialized variables")
+Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
 
 
 Thanks for your attention!

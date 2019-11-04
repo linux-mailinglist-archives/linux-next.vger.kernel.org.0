@@ -2,133 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F852ECF03
-	for <lists+linux-next@lfdr.de>; Sat,  2 Nov 2019 14:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD126EE612
+	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2019 18:35:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726896AbfKBNp5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 2 Nov 2019 09:45:57 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56522 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726437AbfKBNp5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 2 Nov 2019 09:45:57 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 393BF20862;
-        Sat,  2 Nov 2019 13:45:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1572702356;
-        bh=hcOz3DA5xjMU9j5XProL3u0GfNlbBE5x1vS4cV+kHb8=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=yofBJ2PLq58TcckStqdsMQHzfgkV64SLL6zf8c8twab9U3uQWIlQCNByU6IFB/4wB
-         VCV44Y9DHcvF4pgyIuHxZqTuxK5b3pFuPx3gbWfF1XZkfEdJ7+WxY/9K+LrwzTBEeJ
-         8Ux/YgfdqL1Cm1JzKEMeDr5CbGL8xrkuMevwEb5A=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 033F735200D6; Sat,  2 Nov 2019 06:45:56 -0700 (PDT)
-Date:   Sat, 2 Nov 2019 06:45:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Ryan Attard <ryanattard@ryanattard.info>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: Re: linux-next: manual merge of the scsi tree with the rcu tree
-Message-ID: <20191102134555.GP20975@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20191029150826.38c26ef8@canb.auug.org.au>
- <CAEXS_ixkUAPTz4=ta+=+YLrsnmrAcuG43bLNX11Dzffi4L-Upg@mail.gmail.com>
+        id S1728144AbfKDRfK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Nov 2019 12:35:10 -0500
+Received: from mail-pl1-f195.google.com ([209.85.214.195]:37543 "EHLO
+        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727998AbfKDRfJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 Nov 2019 12:35:09 -0500
+Received: by mail-pl1-f195.google.com with SMTP id p13so7889331pll.4
+        for <linux-next@vger.kernel.org>; Mon, 04 Nov 2019 09:35:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=+BgN6gPDcEUnNu9ZfKT1lliXh4QlYdC9ipz82LyN64U=;
+        b=Qk9rRgv/eJDgK+TbIys0dbqQxC4NMjIwfsp2+H8nNnckAQZPwCh37FZGPHR3Ph2IRc
+         aKbqCZD1SuUXcKDRmusXNnjypIow8ZF1TH8NdgomGTYhNuaPPmVmRSMhgKKkTHUf5Auu
+         uS/m9ELeQQGzK2O0B39AaS8rfzyd2ggsDXffQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=+BgN6gPDcEUnNu9ZfKT1lliXh4QlYdC9ipz82LyN64U=;
+        b=UITgIsp77IxyAz/vQYXeRlsdjgWZVC4Qrnn6yGlH36mVC6oln37nrwjNp6/vY9VYwW
+         w2FZ0l0eh5mlKvcY7CRLV0nUe7Ig0SByrHyixvNXzNav/cei02wvZlfMR6zFxPvPdAIs
+         PhNhmfPEIi8qaDVYBh6Va6Ex61JexTEoRRDb0F3KpV/kQ432/hzwPPDz3vKvMGJbVGzL
+         bE0o0vqAvD+ildTLfnZHI1OM5gJ6IBOl5n0GAqaSzQxuxFZ30Wf4boegp4167AD7PiiX
+         t1liWBawX7Ywq0l5pw1N/jgpncAcuZgBjHg+0ltfwuQYCiQdOi9buXDiUmRCydK44/1y
+         drHA==
+X-Gm-Message-State: APjAAAXTip5QqFtJxCmTtPSsP9nLMVvgwSKG+LY+s11R3ESQsKfJQJf1
+        oAUxXpehKaJ4NUEhEii/GlJuRQ==
+X-Google-Smtp-Source: APXvYqx45uxl+8WLI2cos5gB6+QIX4B59PkTB82+YWNb207dmsmjtBP5hurYuwqtnV5ejg4/rTWF+w==
+X-Received: by 2002:a17:902:ab8b:: with SMTP id f11mr9737648plr.16.1572888907591;
+        Mon, 04 Nov 2019 09:35:07 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m13sm14920739pga.70.2019.11.04.09.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2019 09:35:06 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Mon, 4 Nov 2019 09:35:05 -0800
+To:     Corentin Labbe <clabbe@baylibre.com>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Coverity: meson_cipher(): RESOURCE_LEAK
+Message-ID: <201911040935.DF55E91E@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXS_ixkUAPTz4=ta+=+YLrsnmrAcuG43bLNX11Dzffi4L-Upg@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 01, 2019 at 07:28:22PM -0500, Ryan Attard wrote:
-> I can't quite tell if it's just the diff, but it looks like the paired
-> kfree_rcu(vpd_pg89, rcu) from the original patch got lopped off. Is there
-> somewhere I can see the full resultant file?
+Hello!
 
-I see all four instances of kfree() in origin/master in -next:
+This is an experimental automated report about issues detected by Coverity
+from a scan of next-20191031 as part of the linux-next weekly scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by recent commits:
 
-But please do double-check.
+48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
 
-							Thanx, Paul
+Coverity reported the following:
 
-> Thanks,
-> Ryan
-> 
-> On Mon, Oct 28, 2019, 11:08 PM Stephen Rothwell <sfr@canb.auug.org.au>
-> wrote:
-> 
-> > Hi all,
-> >
-> > Today's linux-next merge of the scsi tree got a conflict in:
-> >
-> >   drivers/scsi/scsi_sysfs.c
-> >
-> > between commit:
-> >
-> >   81db81f82993 ("drivers/scsi: Replace rcu_swap_protected() with
-> > rcu_replace()")
-> >
-> > from the rcu tree and commit:
-> >
-> >   d188b0675b21 ("scsi: core: Add sysfs attributes for VPD pages 0h and
-> > 89h")
-> >
-> > from the scsi tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
-> >
-> > diff --cc drivers/scsi/scsi_sysfs.c
-> > index cc51f4756077,0fa2ed343c7f..000000000000
-> > --- a/drivers/scsi/scsi_sysfs.c
-> > +++ b/drivers/scsi/scsi_sysfs.c
-> > @@@ -466,12 -467,18 +467,18 @@@ static void scsi_device_dev_release_use
-> >         sdev->request_queue = NULL;
-> >
-> >         mutex_lock(&sdev->inquiry_mutex);
-> >  -      rcu_swap_protected(sdev->vpd_pg0, vpd_pg0,
-> >  -                         lockdep_is_held(&sdev->inquiry_mutex));
-> >  -      rcu_swap_protected(sdev->vpd_pg80, vpd_pg80,
-> >  -                         lockdep_is_held(&sdev->inquiry_mutex));
-> >  -      rcu_swap_protected(sdev->vpd_pg83, vpd_pg83,
-> >  -                         lockdep_is_held(&sdev->inquiry_mutex));
-> >  -      rcu_swap_protected(sdev->vpd_pg89, vpd_pg89,
-> >  -                         lockdep_is_held(&sdev->inquiry_mutex));
-> > ++      vpd_pg0 = rcu_replace_pointer(sdev->vpd_pg0, vpd_pg0,
-> > ++
-> > lockdep_is_held(&sdev->inquiry_mutex));
-> >  +      vpd_pg80 = rcu_replace_pointer(sdev->vpd_pg80, vpd_pg80,
-> >  +
-> >  lockdep_is_held(&sdev->inquiry_mutex));
-> >  +      vpd_pg83 = rcu_replace_pointer(sdev->vpd_pg83, vpd_pg83,
-> >  +
-> >  lockdep_is_held(&sdev->inquiry_mutex));
-> > ++      vpd_pg89 = rcu_replace_pointer(sdev->vpd_pg89, vpd_pg89,
-> > ++
-> >  lockdep_is_held(&sdev->inquiry_mutex));
-> >         mutex_unlock(&sdev->inquiry_mutex);
-> >
-> > +       if (vpd_pg0)
-> > +               kfree_rcu(vpd_pg0, rcu);
-> >         if (vpd_pg83)
-> >                 kfree_rcu(vpd_pg83, rcu);
-> >         if (vpd_pg80)
-> >
+*** CID 1487403:    (RESOURCE_LEAK)
+/drivers/crypto/amlogic/amlogic-gxl-cipher.c: 258 in meson_cipher()
+252     						 ivsize, 0);
+253     		}
+254     	}
+255     theend:
+256     	kzfree(bkeyiv);
+257
+vvv     CID 1487403:    (RESOURCE_LEAK)
+vvv     Variable "backup_iv" going out of scope leaks the storage it points to.
+258     	return err;
+259     }
+260
+261     static int meson_handle_cipher_request(struct crypto_engine *engine,
+262     				       void *areq)
+263     {
+/drivers/crypto/amlogic/amlogic-gxl-cipher.c: 156 in meson_cipher()
+150     		keyivlen = 32;
+151
+152     	phykeyiv = dma_map_single(mc->dev, bkeyiv, keyivlen,
+153     				  DMA_TO_DEVICE);
+154     	if (dma_mapping_error(mc->dev, phykeyiv)) {
+155     		dev_err(mc->dev, "Cannot DMA MAP KEY IV\n");
+vvv     CID 1487403:    (RESOURCE_LEAK)
+vvv     Variable "backup_iv" going out of scope leaks the storage it points to.
+156     		return -EFAULT;
+157     	}
+158
+159     	tloffset = 0;
+160     	eat = 0;
+161     	i = 0;
+
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
+
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1487403 ("RESOURCE_LEAK")
+Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
+
+
+Thanks for your attention!
+
+-- 
+Coverity-bot

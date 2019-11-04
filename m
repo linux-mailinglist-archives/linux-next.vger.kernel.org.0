@@ -2,70 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B24FEF0AC
-	for <lists+linux-next@lfdr.de>; Mon,  4 Nov 2019 23:39:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1BC0EF104
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 00:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729709AbfKDWj2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Nov 2019 17:39:28 -0500
-Received: from ozlabs.org ([203.11.71.1]:41755 "EHLO ozlabs.org"
+        id S1729843AbfKDXGB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Nov 2019 18:06:01 -0500
+Received: from ozlabs.org ([203.11.71.1]:56085 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729701AbfKDWj2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 4 Nov 2019 17:39:28 -0500
+        id S1729846AbfKDXGB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 4 Nov 2019 18:06:01 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 476SQk0J3jz9s4Y;
-        Tue,  5 Nov 2019 09:39:26 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 476T1K1t0mz9s7T;
+        Tue,  5 Nov 2019 10:05:56 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572907166;
-        bh=9oLJgy9YhD2/uxYf9HCCJm4CgrXLkCKAqUiXoi7Lzm0=;
+        s=201702; t=1572908757;
+        bh=bcQDFl1NxHyPUjlL1kPXVTHHa4/ZPezNRSdImfwYJEs=;
         h=Date:From:To:Cc:Subject:From;
-        b=qCZfwWIeGg949YF6o72C31LNMDkkKUwtcNqN0j08fNYuzB8MHGKlEqt81xEtP/0Cl
-         x348o6g69/g+bLLm/5aExm0eWwK9p6oLaALBeQEsorkv7ssimIaKRSjb2N42v/uGZa
-         CigtPL0tZeX5ujIFCApkB8YTTYqFgbqPwiSXkUSgqOQZl8/8T+6Wf6RK65Rd3/lx6x
-         qf9973MdWppY+BRsqHewyMHrlv2pLMkrD/35CTHpjrM/F/QBiejfVuWeRG1lS4d5R7
-         nIognTgoS2osyNNHgQnk+DnamR5ls4JtR/FfDrB6LpZ4paYbKztHJOnhyEqh/U7pBP
-         gNWdDRx/QIJ6g==
-Date:   Tue, 5 Nov 2019 09:39:20 +1100
+        b=qlakukKsPV49LVOcnVx7tWZEYKZcOwG/68sZJ0PzM5XdKit+bgB59MbSok+eSv29R
+         tj740q3SBiDqpayQWIMbYwk0oAifBG2IzkLHaNgtKOJZEOzMYEumHKUn+oUepycQGO
+         V9KOPIbhgBs2oD8qQKnDKperh11Unraex82SGF1UTfbhU5uOMcQbVPtRPDMxZ0ZhcA
+         KUvmAPS17CDYCvMfg544HD5nCptf9Izahy/7LsInByvYgV2fAdoBVm62XsynFeACeo
+         QAJgMGzpgd7HRGa3y5paDyhw9yMVj2cjhfSTpyGfUPQpvvevfFS+vwx7T++hj4HvfL
+         e6jZ8SNe6sRTw==
+Date:   Tue, 5 Nov 2019 10:05:56 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>, Olof Johansson <olof@lixom.net>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
+To:     Ralf Baechle <ralf@linux-mips.org>, James Hogan <jhogan@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Wei Xu <xuwei5@hisilicon.com>
-Subject: linux-next: manual merge of the qcom tree with the arm-soc tree
-Message-ID: <20191105093920.7869c1eb@canb.auug.org.au>
+        Thomas Bogendoerfer <tbogendoerfer@suse.de>,
+        Paul Burton <paulburton@kernel.org>
+Subject: linux-next: manual merge of the mips tree with the mips-fixes tree
+Message-ID: <20191105100556.52f266a2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/N.KP0oVduH6feDqNG=/N3Wb";
+Content-Type: multipart/signed; boundary="Sig_/gxbBgbskU/k6U81oiDJHtY=";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/N.KP0oVduH6feDqNG=/N3Wb
+--Sig_/gxbBgbskU/k6U81oiDJHtY=
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the qcom tree got a conflict in:
+Today's linux-next merge of the mips tree got a conflict in:
 
-  arch/arm64/configs/defconfig
+  arch/mips/sgi-ip27/ip27-init.c
 
 between commit:
 
-  af24cb20689d ("arm64: defconfig: Enable HiSilicon ZIP controller")
+  637346748245 ("MIPS: SGI-IP27: fix exception handler replication")
 
-from the arm-soc tree and commit:
+from the mips-fixes tree and commit:
 
-  ca1561a3d8e4 ("arm64: defconfig: Enable Qualcomm pseudo rng")
+  4bf841ebf17a ("MIPS: SGI-IP27: get rid of compact node ids")
 
-from the qcom tree.
+from the mips tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,45 +75,58 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm64/configs/defconfig
-index d3a289e12c92,0de751801c98..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -750,8 -749,8 +759,9 @@@ CONFIG_QCOM_SMEM=3D
-  CONFIG_QCOM_SMD_RPM=3Dy
-  CONFIG_QCOM_SMP2P=3Dy
-  CONFIG_QCOM_SMSM=3Dy
-+ CONFIG_QCOM_SOCINFO=3Dm
-  CONFIG_ARCH_R8A774A1=3Dy
- +CONFIG_ARCH_R8A774B1=3Dy
-  CONFIG_ARCH_R8A774C0=3Dy
-  CONFIG_ARCH_R8A7795=3Dy
-  CONFIG_ARCH_R8A7796=3Dy
-@@@ -861,7 -860,8 +873,9 @@@ CONFIG_NLS_ISO8859_1=3D
-  CONFIG_SECURITY=3Dy
-  CONFIG_CRYPTO_ECHAINIV=3Dy
-  CONFIG_CRYPTO_ANSI_CPRNG=3Dy
- +CONFIG_CRYPTO_DEV_HISI_ZIP=3Dm
-+ CONFIG_CRYPTO_USER_API_RNG=3Dm
-+ CONFIG_CRYPTO_DEV_QCOM_RNG=3Dm
-  CONFIG_DMA_CMA=3Dy
-  CONFIG_CMA_SIZE_MBYTES=3D32
-  CONFIG_PRINTK_TIME=3Dy
+diff --cc arch/mips/sgi-ip27/ip27-init.c
+index 79a52c472782,8fd3505e2b9c..000000000000
+--- a/arch/mips/sgi-ip27/ip27-init.c
++++ b/arch/mips/sgi-ip27/ip27-init.c
+@@@ -67,16 -62,25 +62,16 @@@ static void per_hub_init(nasid_t nasid
+  	REMOTE_HUB_S(nasid, IIO_ICTP, 0x800);
+  	REMOTE_HUB_S(nasid, IIO_ICTO, 0xff);
+ =20
+- 	hub_rtc_init(cnode);
++ 	hub_rtc_init(nasid);
+ =20
+ -#ifdef CONFIG_REPLICATE_EXHANDLERS
+ -	/*
+ -	 * If this is not a headless node initialization,
+ -	 * copy over the caliased exception handlers.
+ -	 */
+ -	if (get_nasid() =3D=3D nasid) {
+ -		extern char except_vec2_generic, except_vec3_generic;
+ -		extern void build_tlb_refill_handler(void);
+ -
+ -		memcpy((void *)(CKSEG0 + 0x100), &except_vec2_generic, 0x80);
+ -		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x80);
+ -		build_tlb_refill_handler();
+ -		memcpy((void *)(CKSEG0 + 0x100), (void *) CKSEG0, 0x80);
+ -		memcpy((void *)(CKSEG0 + 0x180), &except_vec3_generic, 0x100);
+ +	if (nasid) {
+ +		/* copy exception handlers from first node to current node */
+ +		memcpy((void *)NODE_OFFSET_TO_K0(nasid, 0),
+ +		       (void *)CKSEG0, 0x200);
+  		__flush_cache_all();
+ +		/* switch to node local exception handlers */
+ +		REMOTE_HUB_S(nasid, PI_CALIAS_SIZE, PI_CALIAS_SIZE_8K);
+  	}
+ -#endif
+  }
+ =20
+  void per_cpu_init(void)
 
---Sig_/N.KP0oVduH6feDqNG=/N3Wb
+--Sig_/gxbBgbskU/k6U81oiDJHtY=
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3AqJgACgkQAVBC80lX
-0GzN9gf/ZVgW42+vigalmlsEuJfUi4o5+3pp/xfkPhZCycQypHIZnNKwPQ/pZT5N
-Jf5jpxWHLXA+ScZSF53P1mJtFq9Xwty4wIC0qDgworyfy69F+PPBky3nSnkUVv6I
-CSdufLshzxmJd5TCMzagS1WXY96t3Qkwo9FRkMTzpaS1Y/K0wYF3hr7Rj2wYBhgy
-wneGoCMNp/DtgzkWrMuC+hJIJHyBfFh8x1zhkbvNdMn9eyqTHE1oPeXPDVcP7bBF
-CuxO+/26ppYpkzmIJamWJZkHo9P3KO9cCIgdGNF/0uNvSMxl9aBm53Yxw7iDOhed
-QJ4IrHVT1ATczepnbej766XETAwgMQ==
-=QRTI
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3ArtQACgkQAVBC80lX
+0Gx2MAgAk6gYWLfbpy/H85DV75vTBcXsNWzdv8V54Tw6NHlHLqMoqeYdzHfJ4VMg
+yLltzvVqLRdaGhpazgdHYyBNU7HeABCe7ggqRBtoZt25qnTmrB912fZBFDWT0Y9T
+Ev7fl70hKs2WFnwSXkebY9A0Qrx3lp23tuK+JX/hww5VCOCmpdsNmuLfOR9k7tqG
+gOgr+R2q6ubYCBOtduAAiLRqDNK/D6/DVwfn/DFGcy0W9OFwK7Gh7AJK0dV1dZgL
+1emPCbUYHzxgINbosQFEt5+JCvzcbDZ14bvZLbqro/5Udv+J+NcMUAOWInoS5rX+
+F/udKJ2cKeu6LaBlh7tG6567cJZ5Pg==
+=s7UN
 -----END PGP SIGNATURE-----
 
---Sig_/N.KP0oVduH6feDqNG=/N3Wb--
+--Sig_/gxbBgbskU/k6U81oiDJHtY=--

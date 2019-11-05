@@ -2,99 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AE9EF9D8
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 10:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDA4EEFACD
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 11:19:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730693AbfKEJpb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Nov 2019 04:45:31 -0500
-Received: from ozlabs.org ([203.11.71.1]:52069 "EHLO ozlabs.org"
+        id S2388266AbfKEKT0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Nov 2019 05:19:26 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37707 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730454AbfKEJpb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 5 Nov 2019 04:45:31 -0500
+        id S2388412AbfKEKT0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 5 Nov 2019 05:19:26 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 476lCD6H6Yz9sPF;
-        Tue,  5 Nov 2019 20:45:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 476lyM0YrXz9sNT;
+        Tue,  5 Nov 2019 21:19:23 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572947129;
-        bh=coQy+CT49Muq0nkg5uA0Sa9MIOkXOp12ouyavHVlxuk=;
+        s=201702; t=1572949163;
+        bh=covY6yTlcaI84s0A1lHYWzCPwHt9MFOpGYZb7sb8RcU=;
         h=Date:From:To:Cc:Subject:From;
-        b=SRPb1F/WwhzQV+MVOYa1aIKGQn946VXpRMuuqud3wPBCty5oIuFLcmgOAiswW52AL
-         0exRcNLdgV3quuKCFV03x5H4tfjm/e+9MN8HImWkFSgcIhuQeI8Kxr+8c9tiTW+TJp
-         bb52Yh5bOExYjtmQRRFt33y+g6EF619JPDF0DydAvavZyMViU8aOzTDVztT1U1keJt
-         vAIIJ8riUOmnoRFAWVUDnuLUU92NdWDVmni9JjU2t7l0u/7ybqZDyB1+ibdgOZj2lK
-         nnKSLRB2wlwNaQSXcJUM8v78aa7Axfflcd3X2Z+V8/ceQ7CRfRZ4FCiHuumL9HvRB5
-         YsSfOpskGO8XA==
-Date:   Tue, 5 Nov 2019 20:45:26 +1100
+        b=NrRCxb5G1qtko47PqU3QcVYBOD31+p8IjWlYaZ+1hBuzN1HggP4HiqEjhWdh3+nDM
+         /pana4wie8Bxwtwb/yQKnIdFaigjDCBBn9AIeKOx61YZhQTU3gle4rZqTXkToi9XkO
+         hlIoMG3lqNN0MlZOzmnckHcMyD8vAzgbdrEO9nZqVRkfmaSJdy6nIY8y0LAE9+mZUf
+         wmPnIUZNulNztyjMV9hxB/9JmjqELMcbhrbsbaLw1ZdGymIvmpzcQ5Vo2ihMRIrgZf
+         5S5qxwEmOr2Ls8h0Cu/H5H8Ihf/qS5xv9J48Vrn2maVK5qySPtn6cXMhBZ3M2g/Yes
+         0Gprkn4HAqhYQ==
+Date:   Tue, 5 Nov 2019 21:19:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Gow <davidgow@google.com>
-Subject: linux-next: manual merge of the akpm tree with the kunit tree
-Message-ID: <20191105204526.32f19975@canb.auug.org.au>
+        Mike Kravetz <mike.kravetz@oracle.com>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20191105211920.787df2ab@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2k2jiWYj7og9hHLfiaivHnC";
+Content-Type: multipart/signed; boundary="Sig_/WegBfhr=Ou2BD8zYrz7yZ/g";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2k2jiWYj7og9hHLfiaivHnC
+--Sig_/WegBfhr=Ou2BD8zYrz7yZ/g
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the akpm tree got conflicts in:
+After merging the akpm-current tree, today's linux-next build (powerpc64
+allnoconfig) failed like this:
 
-  MAINTAINERS
-  lib/Kconfig.debug
-  lib/Makefile
-  lib/list-test.c
+In file included from arch/powerpc/mm/mem.c:30:
+include/linux/hugetlb.h:233:19: error: redefinition of 'pmd_huge'
+  233 | static inline int pmd_huge(pmd_t pmd)
+      |                   ^~~~~~~~
+In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
+                 from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                 from arch/powerpc/include/asm/book3s/64/mmu.h:46,
+                 from arch/powerpc/include/asm/mmu.h:356,
+                 from arch/powerpc/include/asm/lppaca.h:47,
+                 from arch/powerpc/include/asm/paca.h:17,
+                 from arch/powerpc/include/asm/current.h:13,
+                 from include/linux/sched.h:12,
+                 from arch/powerpc/mm/mem.c:16:
+arch/powerpc/include/asm/book3s/64/pgtable-4k.h:74:19: note: previous defin=
+ition of 'pmd_huge' was here
+   74 | static inline int pmd_huge(pmd_t pmd) { return 0; }
+      |                   ^~~~~~~~
+In file included from arch/powerpc/mm/mem.c:30:
+include/linux/hugetlb.h:238:19: error: redefinition of 'pud_huge'
+  238 | static inline int pud_huge(pud_t pud)
+      |                   ^~~~~~~~
+In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
+                 from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                 from arch/powerpc/include/asm/book3s/64/mmu.h:46,
+                 from arch/powerpc/include/asm/mmu.h:356,
+                 from arch/powerpc/include/asm/lppaca.h:47,
+                 from arch/powerpc/include/asm/paca.h:17,
+                 from arch/powerpc/include/asm/current.h:13,
+                 from include/linux/sched.h:12,
+                 from arch/powerpc/mm/mem.c:16:
+arch/powerpc/include/asm/book3s/64/pgtable-4k.h:75:19: note: previous defin=
+ition of 'pud_huge' was here
+   75 | static inline int pud_huge(pud_t pud) { return 0; }
+      |                   ^~~~~~~~
 
-between commit:
+Caused by commit
 
-  ea2dd7c0875e ("lib/list-test: add a test for the 'list' doubly linked lis=
-t")
+  9823e12e021f ("hugetlbfs: convert macros to static inline, fix sparse war=
+ning")
 
-from the kunit tree and patch:
-
-  "lib/list-test.c: add a test for the 'list' doubly linked list"
-
-from the akpm tree.
-
-I fixed it up (I just assume that these are different versions of the
-same patch, so I just dropped the version in the akpm tree) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2k2jiWYj7og9hHLfiaivHnC
+--Sig_/WegBfhr=Ou2BD8zYrz7yZ/g
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3BRLYACgkQAVBC80lX
-0GzKbwf9HQ0tJsQLWe9zXp0aikL4/qSprJVDg92HtnpBRKlcVwhC3zDlPKlFZfjJ
-6fQndY/uPuu5eKGoLlP2h0N3x7FJWFU0+btnhhe0pn8BFdh0jrerYCMs500Uf/3Z
-5x1YimFTUq1pTNn5TQ1lK+JSiggW/dsFHz06SMNUwsz1ME6mQoBV7MLtyhzXkOAY
-70u/GxIB687AfZjzpbccD2QHY2QmwTTznLX+93UcXFvvkwkNkCsmE3wNKENTTqxf
-clSzfy6g61gN+jkZEccTFqG3jrdmYnmLlOfJPoJ6Ij0+G4F+ivbM5b5T/6UiGfeW
-LfFNWGwqPwb2syND/sa4SgR2dGrMKg==
-=OLNg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3BTKgACgkQAVBC80lX
+0GzDZgf+OAeTyvWBr3E5uwVfBBzQc3uGkzBLNZytc40mKNsRgJ9OdTsR4XhBL3Yr
+X+mCTvhBX2ba043vc5DAhZqT2kbIyLGNg8xISyNecrdQfySBSNBHeCgGXQWBZ1dI
+riOEY1irZMssNvuGN95c8KRApu8oloydjdgLqqRs7gDLeiMzAz46kxDizAfuBTF6
+Ql6ToSaRVxgtX25yEQAW6pjImVqh9Th3Nov5NPdhs1aUjrvcVGLlvKqTvOoY4yxW
+3XOoz9+IxOBdv9xPbNb5Syr3yAIfH07f+mYd8Fzu7it07Rlg5IOFyUkf0CBLW67c
+BNQ76UGLQkECtLiufRUVCKKsjgJWfA==
+=lFVA
 -----END PGP SIGNATURE-----
 
---Sig_/2k2jiWYj7og9hHLfiaivHnC--
+--Sig_/WegBfhr=Ou2BD8zYrz7yZ/g--

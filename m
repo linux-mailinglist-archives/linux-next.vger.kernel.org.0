@@ -2,132 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E04F03DB
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 18:12:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08BD0F04C2
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 19:11:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728734AbfKERMV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Nov 2019 12:12:21 -0500
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:39579 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728399AbfKERMU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Nov 2019 12:12:20 -0500
-Received: by mail-pf1-f194.google.com with SMTP id x28so12798166pfo.6
-        for <linux-next@vger.kernel.org>; Tue, 05 Nov 2019 09:12:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=+aBY/thMg34NWbir5O0tU6poYANFaLQynRGPj7hCMkU=;
-        b=Ju6VvhrSAq89eAvushZ9rax2OZHyxoAlVgKoioVaVUqvLfRYZJyIVKb0exX7RSC0PG
-         445xtUjrqLqDMcazlVz67e3GfavaeRypeLVF9IvInWi7CDcJLJx9ASoE0Vqlj45ewVe+
-         Do0qtoAf0Ip/FUuyJCDqf6B8TBRsl2KkgyHGk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=+aBY/thMg34NWbir5O0tU6poYANFaLQynRGPj7hCMkU=;
-        b=N9QL0sIuMeZRyel96BcjrmBPaMda/HlDqWG66K428uGsS/GBU2+d0x5rcUDJV9peq6
-         Hnqx1Ed+Peq/mzySlbV3j+NWWiajLD6nw5ad3Nj3POjKWccbFaSK0Fu/Z+aHUpQt0EUL
-         Bb3FHamg9e1fdpwbyBr22zEtZO9Cv9OWQ2MPHN/OoaXMeeXIUWVu3YdpL4aSj4dOWOhz
-         8r3N1KW+MkgdHAgildYM9Asj3Wf6Dq65b+QMrv2qBL1vw0iIy6cemcUyyiVn1O39EJ/X
-         NFX8mpPW/rbsnxL3sqGgliq2I8HJxDdoIt7oslLJ32RG++A1HDaaSpgZYkkGxYQFS+/V
-         WA3A==
-X-Gm-Message-State: APjAAAW2iGUlNUznBlWcFObQQF+PMiK/DNOKPK7W/POYG21Tcud8f8+b
-        5SpKVKO7a7YsQbZWrjwVqI0Ecs2J16E=
-X-Google-Smtp-Source: APXvYqxxCm0LN6nmXy3M5bY6vS0pLw+CVxxpdeCG4DTsaCsEiG7glFfXBXx1MbxJhNphAfCfPIgagA==
-X-Received: by 2002:a63:eb08:: with SMTP id t8mr38770365pgh.49.1572973940079;
-        Tue, 05 Nov 2019 09:12:20 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l93sm23375pjb.6.2019.11.05.09.12.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2019 09:12:19 -0800 (PST)
-Date:   Tue, 5 Nov 2019 09:12:18 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Ajay.Kathat@microchip.com
-Cc:     gregkh@linuxfoundation.org, gustavo@embeddedor.com,
-        linux-next@vger.kernel.org, Adham.Abozaeid@microchip.com
-Subject: Re: Coverity: wilc_parse_join_bss_param(): Memory - illegal accesses
-Message-ID: <201911050911.E5A34776F3@keescook>
-References: <201911040938.57CCE1B@keescook>
- <ce212f1d-e04d-6c95-ff18-2ddbed982bd9@microchip.com>
+        id S2390665AbfKESLn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Nov 2019 13:11:43 -0500
+Received: from mail.kernel.org ([198.145.29.99]:46920 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2390634AbfKESLm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 5 Nov 2019 13:11:42 -0500
+Received: from willie-the-truck (236.31.169.217.in-addr.arpa [217.169.31.236])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 1E74F21928;
+        Tue,  5 Nov 2019 18:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1572977502;
+        bh=XKt0cQyj1n3guOKO6hnFL8mI3gx00Jf2zG4WVGy3sh8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HSbmJsg02vIRX4zE9Raspy+CgIkXhHwZbrA3kjdVB1l/NyCGahK+Qn9MstW3Ef9A5
+         sXaGDhGdC3QaSILjkbxlk7jYzZOdnHfGWPhHUcQlQMCL3Bji5viD+gXm4XclqsWRTc
+         HRS7Qj/AKQqnVyTVyDdB/PVb20tw2oTwR9asdHck=
+Date:   Tue, 5 Nov 2019 18:11:38 +0000
+From:   Will Deacon <will@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Adam Zerella <adam.zerella@gmail.com>,
+        Joakim Zhang <qiangqing.zhang@nxp.com>
+Subject: Re: linux-next: manual merge of the jc_docs tree with the arm-perf
+ tree
+Message-ID: <20191105181137.GB32767@willie-the-truck>
+References: <20191105113726.2a6e3317@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ce212f1d-e04d-6c95-ff18-2ddbed982bd9@microchip.com>
+In-Reply-To: <20191105113726.2a6e3317@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 05, 2019 at 06:11:03AM +0000, Ajay.Kathat@microchip.com wrote:
+On Tue, Nov 05, 2019 at 11:37:26AM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
+> Today's linux-next merge of the jc_docs tree got a conflict in:
 > 
-> On 04-Nov-19 11:08 PM, coverity-bot wrote:
-> > External E-Mail
-> > 
-> > 
-> > Hello!
-> > 
-> > This is an experimental automated report about issues detected by Coverity
-> > from a scan of next-20191031 as part of the linux-next weekly scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by recent commits:
-> > 
-> > 4e0b0f42c9c7 ("staging: wilc1000: use struct to pack join parameters for FW")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1487400:  Memory - illegal accesses  (OVERRUN)
-> > /drivers/staging/wilc1000/wilc_hif.c: 496 in wilc_parse_join_bss_param()
-> > 490     	if (supp_rates_ie) {
-> > 491     		if (supp_rates_ie[1] > (WILC_MAX_RATES_SUPPORTED - rates_len))
-> > 492     			param->supp_rates[0] = WILC_MAX_RATES_SUPPORTED;
-> > 493     		else
-> > 494     			param->supp_rates[0] += supp_rates_ie[1];
-> > 495
-> > vvv     CID 1487400:  Memory - illegal accesses  (OVERRUN)
-> > vvv     Overrunning array of 13 bytes at byte offset 13 by dereferencing pointer "&param->supp_rates[rates_len + 1]". [Note: The source code implementation of the function has been overridden by a builtin model.]
-> > 496     		memcpy(&param->supp_rates[rates_len + 1], supp_rates_ie + 2,
-> > 497     		       (param->supp_rates[0] - rates_len));
+>   Documentation/admin-guide/perf/imx-ddr.rst
 > 
-> As I understand, Ideally this condition should never arise because the
-> maximum number of supported *basic rates* is up to 8 so the value of
-> ‘rate_len’ will always be less then WILC_MAX_RATES_SUPPPRTED (i.e 12).
-> Therefore '&param->supp_rates[rates_len+ 1]' will never try to access
-> the 13 bytes in the array.
-> But for the safer side, if need I can create a patch to block the
-> addition of extended supported rates in ‘param->supp_rates’ array if
-> ‘rates_len’ is 12 (i.e 'param->supp_rates' array is full after filing
-> the basic supported rates).
-
-I don't know the code myself, but generally speaking, it's best to
-validate any assumptions like this. I'd say add a patch for it, since it
-sounds pretty straight-forward to test.
-
--Kees
-
+> between commits:
 > 
-> > 498     	}
-> > 499
-> > 500     	ht_ie = cfg80211_find_ie(WLAN_EID_HT_CAPABILITY, ies->data, ies->len);
-> > 501     	if (ht_ie)
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include these lines (but double-check the "Fixes" first):
-> > 
-> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> > Addresses-Coverity-ID: 1487400 ("Memory - illegal accesses")
-> > Fixes: 4e0b0f42c9c7 ("staging: wilc1000: use struct to pack join parameters for FW")
-> > 
-> > 
-> > Thanks for your attention!
-> > 
+>   76d835fcd429 ("docs/perf: Add explanation for DDR_CAP_AXI_ID_FILTER_ENHANCED quirk")
+>   ed0207a33add ("docs/perf: Add AXI ID filter capabilities information")
+> 
+> from the arm-perf tree and commit:
+> 
+>   0522e130b00a ("docs: perf: Add imx-ddr to documentation index")
+> 
+> from the jc_docs tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
--- 
-Kees Cook
+Looks fine to me, thanks. Jon -- are you ok living with this conflict?
+
+Will

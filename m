@@ -2,81 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F21EF36A
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 03:28:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E63FEF3C0
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 03:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729526AbfKEC2d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 Nov 2019 21:28:33 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40409 "EHLO ozlabs.org"
+        id S1728064AbfKECy1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 Nov 2019 21:54:27 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56793 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729760AbfKEC2d (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 4 Nov 2019 21:28:33 -0500
+        id S1727861AbfKECy1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 4 Nov 2019 21:54:27 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 476YW24dTjz9sP6;
-        Tue,  5 Nov 2019 13:28:30 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 476Z4v1Hcyz9sP6;
+        Tue,  5 Nov 2019 13:54:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1572920910;
-        bh=YuJJBevMNH24b4uO51gTHuzv4G0CuabsCvDy05//4G0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gAJaJ2CUmC8oVMi3iZd4UuUGVzzkiiNQMPrsXzgInOcf5vTK6PCoH0M3jH0oB2DSZ
-         cqlwtiK2JwK/8mKn3tJTOi1xOuN7U22jmyyLsj0w/Thi/UCMKJtDthPtiaxGm9gI8n
-         WGYqldv2Od2Xru0tBYyx/1a/PgOTbkgBXMyAQt9gR5+ZMr6dlaNdTnRiOdol8qxz5N
-         /1sXBJVv7Cw4FS5iqDlGkjQgS4U6fMu7E5w3Wq/mjk59iWEzIHD0tt6U+Zx9syAHHQ
-         5o/l8EZE8PPpnel3QPNKyOyDbfH0wM0hmjnphJ4OKKM7zYxR1qSTf8t82Ys/tmxlSw
-         J3NTzMpXhGJVw==
-Date:   Tue, 5 Nov 2019 13:28:30 +1100
+        s=201702; t=1572922464;
+        bh=apINLqpoL1ArxoY3YZHvUGKkHEENAmWBBm7q4I02XPk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dG4gqwEbrYIzKUaSuOWEOec9y7I4BlEU8L9bPSJ8+u1QzLH8XRQev3z5oN1UY8Jfu
+         EefPqlNqvGcuCvrYdECsjCh10evJ2PPKX0E302e0RL0eQc3Bp7ZyKQmleEIZJFetel
+         4ZPM/JO0MilitNX7dsmO1IAalwJ1+Yqxw+0fEhoZgB1SZNWYhrlLVyhClhWriKRE/Y
+         aQoKWe28Colf2llGrByWG8ElZ46IwNdP1kf5nt42gdk/xOK9vU8hxFsW/vX4TbUL1Q
+         QQFJYvkkf1DFzyGhBOYMXPnZAK2JFD6LqpIo+ltyBm92anqYmUzc5qvyABKuSZB2Ih
+         JxK2ehx9UcQpw==
+Date:   Tue, 5 Nov 2019 13:54:22 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Doug Ledford <dledford@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the rdma tree with Linus' tree
-Message-ID: <20191105132830.398ef72f@canb.auug.org.au>
-In-Reply-To: <20191105022109.GL22766@mellanox.com>
-References: <20191105121704.72edfc76@canb.auug.org.au>
-        <20191105022109.GL22766@mellanox.com>
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: linux-next: build failure after merge of the drm tree
+Message-ID: <20191105135422.46ddc865@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+7MuN0yjWrb+Xp4mTNcejU6";
+Content-Type: multipart/signed; boundary="Sig_/hQb8xY0vB02FYJL95wqmqq2";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+7MuN0yjWrb+Xp4mTNcejU6
+--Sig_/hQb8xY0vB02FYJL95wqmqq2
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jason,
+Hi all,
 
-On Tue, 5 Nov 2019 02:21:13 +0000 Jason Gunthorpe <jgg@mellanox.com> wrote:
->
-> The rdma for-next tree is right as is, the xa_erase does not need to
-> be the irq varient here.
+After merging the drm tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-OK, thanks.  I will fix up my resolution for tomorrow.
+arch/powerpc/platforms/embedded6xx/Kconfig:2:error: recursive dependency de=
+tected!
+arch/powerpc/platforms/embedded6xx/Kconfig:2:   symbol EMBEDDED6xx depends =
+on BROKEN_ON_SMP
+init/Kconfig:79:        symbol BROKEN_ON_SMP depends on BROKEN
+init/Kconfig:76:        symbol BROKEN is selected by DRM_I915_DEBUG
+drivers/gpu/drm/i915/Kconfig.debug:20:  symbol DRM_I915_DEBUG depends on DR=
+M_I915
+drivers/gpu/drm/i915/Kconfig:2: symbol DRM_I915 depends on DRM
+drivers/gpu/drm/Kconfig:8:      symbol DRM depends on AGP
+drivers/char/agp/Kconfig:2:     symbol AGP depends on PCI
+drivers/pci/Kconfig:16: symbol PCI depends on HAVE_PCI
+drivers/pci/Kconfig:7:  symbol HAVE_PCI is selected by FORCE_PCI
+drivers/pci/Kconfig:11: symbol FORCE_PCI is selected by MVME5100
+arch/powerpc/platforms/embedded6xx/Kconfig:51:  symbol MVME5100 depends on =
+EMBEDDED6xx
+For a resolution refer to Documentation/kbuild/kconfig-language.rst
+subsection "Kconfig recursive dependency limitations"
+
+Caused by commit
+
+  d9d54a530a70 ("drm/i915: Put future HW and their uAPIs under STAGING & BR=
+OKEN")
+
+You really should not select BROKEN.  It is assumed to always be false
+so we can make actually broken code depend on it (and therefore not
+be built).
+
+I have used the drm tree from next-20191031 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+7MuN0yjWrb+Xp4mTNcejU6
+--Sig_/hQb8xY0vB02FYJL95wqmqq2
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3A3k4ACgkQAVBC80lX
-0GxCbAf9HXkvSzM6mNfwu8YhrZ+9IGEOrbb1MO+Mv2zZWJqc0GKDIb4rnxKrZ7AZ
-g3S2cElxSh8vyqvCH0Yv1XlryzF+3EH+m8g0DkhpmBSYPCLOdDuhARqGIb9YtU5z
-ExNFxdF5PDp0paSMTOkjJFBipNsvFSv1IC3XFuMbSB+tc5G4ZE1YBEUp44Lwvq4i
-RN0iNgcEI1Or1w5UhDPL7ZyIgz5qJUmOwmbD149xc9+2iuGWp/ICruqRAglp7AGG
-mEVB+nHpPvrhEqANuKED7xVrk8T/ZnCiBRjayys5EpXQzNaTlKmzEKo2MoMH12t5
-Vu+GvrusRHORlAZrFPXR/SdVGCWgIQ==
-=kQLu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3A5F4ACgkQAVBC80lX
+0GzuyAf+KXyUifG6em3g9mg+29qjxDCg0ln6ZOoslj73LdJMhIKwUTs+qVkNJW7w
+s4y+XIRwROwSLgGFKZKGCycb4XQJLNk/IaxI5NyPj5s+zQ2s+P8Q38rNy/i+hcnJ
+yqp/uW8iF7rW0IPm+yRWPDtYWMZ+h4SoQrPanTPRoq3N6o1OSqCNryZpFRRlFzQU
+mu/2mCTWCVlD9ukx8RdVeebFtwdOtOIOmR/WmTUm9nzncbNPJqxL/xE+lBdjC6O8
+M/UFMizFYOyBQXarGQjubPOhImzReqJiOHhBqgdQeoBy2knzST0IFundpmIKe1cG
+FHDwjXsTPmaG6EgQF+llaOT78sIC9Q==
+=imT/
 -----END PGP SIGNATURE-----
 
---Sig_/+7MuN0yjWrb+Xp4mTNcejU6--
+--Sig_/hQb8xY0vB02FYJL95wqmqq2--

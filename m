@@ -2,124 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C4FFCF0581
-	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 19:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5ADF05A9
+	for <lists+linux-next@lfdr.de>; Tue,  5 Nov 2019 20:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390457AbfKES5P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Nov 2019 13:57:15 -0500
-Received: from userp2120.oracle.com ([156.151.31.85]:45132 "EHLO
-        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390651AbfKES5P (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Nov 2019 13:57:15 -0500
-Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
-        by userp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5Ie0N5004984;
-        Tue, 5 Nov 2019 18:57:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=B6MKKzfbNgjx/kFsRlq8otjS+qYaBD7mQ/iKB+gBQeA=;
- b=bjbAQX6KZmJ8MdCiw4YdUoTZ3UFdpaej6XWrZWm2ae26k9xkS1inIXz4LOcZfDc4h2kJ
- elzMbMDTy20WLYHEO07GW2tk523SMvtjhoMgayYeeWmdzOXs+saFAtwt9Li3gWMx22C0
- Cdu5i9W9WozjafXptMUR3kGoz/H7dj6VXfHR7JydGqGY3trsLVW2nJ1l1hv7rhqPmWXu
- t0utcZUvEo3aRv2/cL03lyc0Wp1Q3rLkaK5ADsKg4Z9K1UX/a1bUfJtVRx6kZFeGaR/M
- 7dUuSZqZhGfeBRbFZgP+BH0XZNGGYocPUVHjF/uk0Cousjv9jC4Qk7fNechaveQAzGU6 pg== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by userp2120.oracle.com with ESMTP id 2w12er8hj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 18:57:03 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5IdLkn032481;
-        Tue, 5 Nov 2019 18:57:02 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by aserp3030.oracle.com with ESMTP id 2w35ppea0d-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 05 Nov 2019 18:57:02 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA5Iv06t026257;
-        Tue, 5 Nov 2019 18:57:00 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 05 Nov 2019 10:57:00 -0800
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20191105211920.787df2ab@canb.auug.org.au>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <dfffdd41-611c-e9c3-d059-6339c3bc0c47@oracle.com>
-Date:   Tue, 5 Nov 2019 10:56:59 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S2390895AbfKETIn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Nov 2019 14:08:43 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:40846 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390812AbfKETIn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Nov 2019 14:08:43 -0500
+Received: by mail-wm1-f66.google.com with SMTP id f3so514396wmc.5
+        for <linux-next@vger.kernel.org>; Tue, 05 Nov 2019 11:08:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=7plNekB+19pQRqlt3+by9rJWTk/3fLbD4ieDvUhKExA=;
+        b=OK+0zANMluwF5zsTf+y1XinEd0QNM8/JILDMuKr8dcDOmK9y0crr0vKtnuIMgqAYT1
+         4MeBf+iZW0CVEez/4hlsWMrMtTBC3oJFHJQf61aAHeS+2jo3cOOEUdeGR08pR93PLlJG
+         d7BtbHDcZ3bR2X/EMDlKonCVxMwlMAmPPaKZWVOYRQx82ZjmNu4B3qfKX6fW/fRV7cbA
+         YzZ6OYluu7ZEeaBRv9xaDpXk0jjLYRDN3clJ1dRuLztiFrhDjaxo0c2EMDuFvNiwtk+6
+         Fr1vbAr8uG6+IU8oKCw22Uhznt0B6sx6kfXNqBzVmAp3YFfI7vomv+BAOeo2MUtzYc7R
+         MleQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=7plNekB+19pQRqlt3+by9rJWTk/3fLbD4ieDvUhKExA=;
+        b=KoZiteRuGTV4HC6adI36PubcYV2vtc9BqT5H7RFfoPzKWfpTNosHMIBBTGdXki47B4
+         tHttQWjxkCSr816WRquW8oY9pYEhcTwjTJi08fFmjyW8jK6PLKG4B43Y+5X79iCFx9sP
+         bChQ/rEobqigvRw8C1WPaLp39G173xakHvlnHeekaL6zbOXD95JrL9AwanXisj+szGik
+         Ns01p46yf3v1h/RbYWz10yq/+Y6QRRSaHez2LS9glfcZP0Kt1X1Ll6h90mw6Ur/0+CHY
+         6DVmtk6R2/8VogcMYT9TAlIc1M7NaE58YAT2uDIsKKindcr2RE4rcS8AjtqVeo3Mr4JR
+         UYyw==
+X-Gm-Message-State: APjAAAV7ETBTY45WeBovrGJyJeNlml4Av3B0GJ4qE9LY55Guais6h+p+
+        +dYKCbT/HPGXpjnVUpii0kU1lA==
+X-Google-Smtp-Source: APXvYqxAzdsrAPSoB6/ZszGcQCk0vQGzLJCEZk8o/EnmD9dn327knL8s6uykYr8+kbbe0ueuFRvLLA==
+X-Received: by 2002:a1c:67d7:: with SMTP id b206mr492665wmc.68.1572980920002;
+        Tue, 05 Nov 2019 11:08:40 -0800 (PST)
+Received: from Red ([2a01:cb1d:147:7200:2e56:dcff:fed2:c6d6])
+        by smtp.googlemail.com with ESMTPSA id e27sm2293822wra.21.2019.11.05.11.08.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 11:08:39 -0800 (PST)
+Date:   Tue, 5 Nov 2019 20:08:37 +0100
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Neil Armstrong <narmstrong@baylibre.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Re: Coverity: meson_cipher(): Resource leaks
+Message-ID: <20191105190837.GB16603@Red>
+References: <201911040937.0C30944DE6@keescook>
 MIME-Version: 1.0
-In-Reply-To: <20191105211920.787df2ab@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911050155
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911050155
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201911040937.0C30944DE6@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/5/19 2:19 AM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, Nov 04, 2019 at 09:37:58AM -0800, coverity-bot wrote:
+> Hello!
 > 
-> After merging the akpm-current tree, today's linux-next build (powerpc64
-> allnoconfig) failed like this:
+> This is an experimental automated report about issues detected by Coverity
+> from a scan of next-20191031 as part of the linux-next weekly scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
 > 
-> In file included from arch/powerpc/mm/mem.c:30:
-> include/linux/hugetlb.h:233:19: error: redefinition of 'pmd_huge'
->   233 | static inline int pmd_huge(pmd_t pmd)
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
->                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
->                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
->                  from arch/powerpc/include/asm/mmu.h:356,
->                  from arch/powerpc/include/asm/lppaca.h:47,
->                  from arch/powerpc/include/asm/paca.h:17,
->                  from arch/powerpc/include/asm/current.h:13,
->                  from include/linux/sched.h:12,
->                  from arch/powerpc/mm/mem.c:16:
-> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:74:19: note: previous definition of 'pmd_huge' was here
->    74 | static inline int pmd_huge(pmd_t pmd) { return 0; }
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/mm/mem.c:30:
-> include/linux/hugetlb.h:238:19: error: redefinition of 'pud_huge'
->   238 | static inline int pud_huge(pud_t pud)
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
->                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
->                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
->                  from arch/powerpc/include/asm/mmu.h:356,
->                  from arch/powerpc/include/asm/lppaca.h:47,
->                  from arch/powerpc/include/asm/paca.h:17,
->                  from arch/powerpc/include/asm/current.h:13,
->                  from include/linux/sched.h:12,
->                  from arch/powerpc/mm/mem.c:16:
-> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:75:19: note: previous definition of 'pud_huge' was here
->    75 | static inline int pud_huge(pud_t pud) { return 0; }
->       |                   ^~~~~~~~
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by recent commits:
 > 
-> Caused by commit
+> 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
 > 
->   9823e12e021f ("hugetlbfs: convert macros to static inline, fix sparse warning")
+> Coverity reported the following:
 > 
-> I have reverted that commit for today.
+> *** CID 1487401:  Resource leaks  (RESOURCE_LEAK)
+> /drivers/crypto/amlogic/amlogic-gxl-cipher.c: 134 in meson_cipher()
+> 128     	keyivlen = op->keylen;
+> 129
+> 130     	ivsize = crypto_skcipher_ivsize(tfm);
+> 131     	if (areq->iv && ivsize > 0) {
+> 132     		if (ivsize > areq->cryptlen) {
+> 133     			dev_err(mc->dev, "invalid ivsize=%d vs len=%d\n", ivsize, areq->cryptlen);
+> vvv     CID 1487401:  Resource leaks  (RESOURCE_LEAK)
+> vvv     Variable "bkeyiv" going out of scope leaks the storage it points to.
+> 134     			return -EINVAL;
+> 135     		}
+> 136     		memcpy(bkeyiv + 32, areq->iv, ivsize);
+> 137     		keyivlen = 48;
+> 138     		if (rctx->op_dir == MESON_DECRYPT) {
+> 139     			backup_iv = kzalloc(ivsize, GFP_KERNEL);
+> 
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
+> 
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1487401 ("Resource leaks")
+> Fixes: 48fe583fe541 ("crypto: amlogic - Add crypto accelerator for amlogic GXL")
+> 
+> 
+> Thanks for your attention!
+> 
 
-Thanks Stephen,
+Thanks for the report, I will send the fix soon.
 
-I will fix up and send another version via Andrew's tree.
-
--- 
-Mike Kravetz
+Regards

@@ -2,195 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E64AF0AD4
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2019 01:02:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A00F0C3D
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2019 03:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbfKFACk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 Nov 2019 19:02:40 -0500
-Received: from userp2130.oracle.com ([156.151.31.86]:44690 "EHLO
-        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727252AbfKFACk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 Nov 2019 19:02:40 -0500
-Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
-        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5NwnEL097487;
-        Wed, 6 Nov 2019 00:02:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=corp-2019-08-05;
- bh=by6LNx6WNtJ7JPgSY3hY6+LsTSFnwmTyPzoIFjvPop8=;
- b=riESuNN78i/R6qArs5ZSON/196AA6nLZ/QS8Qpy47fXf3IDP3D7XZMULUiZ7UTr44Ryf
- +XTaLmrwXr/6I4BhpnRd7zlJghiTPdPBFKts1A3TtxfXXlYkcE+1D94hPLlitmbDnO02
- 7qwidmj2xJxYyfNiPorlmD1c3a3ksD7Tc7nq6HoYu8MNu7pmHGCBAoOKUm+gBFoVApG5
- AyHBdY9Y6Bqxn/JHJLHjzzMuhRwPjlKlkDTkpg2CeLa0arEq6teqPluubiIfYWJjSHs3
- SSZ8550skNb5JFisJU0H3k4M5gjnwwK5/a63T44WwHqfDR1vo38yXwiHBbLu4qHrYNoQ kw== 
-Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
-        by userp2130.oracle.com with ESMTP id 2w117u27ms-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Nov 2019 00:02:25 +0000
-Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
-        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA5Nwmh6129346;
-        Wed, 6 Nov 2019 00:00:24 GMT
-Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
-        by userp3030.oracle.com with ESMTP id 2w333w76gc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 06 Nov 2019 00:00:24 +0000
-Received: from abhmp0013.oracle.com (abhmp0013.oracle.com [141.146.116.19])
-        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA600MOt005551;
-        Wed, 6 Nov 2019 00:00:22 GMT
-Received: from [192.168.1.206] (/71.63.128.209)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 05 Nov 2019 16:00:22 -0800
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1730874AbfKFCxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 Nov 2019 21:53:46 -0500
+Received: from ozlabs.org ([203.11.71.1]:49815 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730870AbfKFCxq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 5 Nov 2019 21:53:46 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 477B1c4YhQz9sP6;
+        Wed,  6 Nov 2019 13:53:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573008824;
+        bh=kXnr4JybHuzbklbCxQwtQCFx0u0ttwyvhroyoGXLmiI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DBRT6IKu9kyQ1mGGPvb8oK/STCflETI+H6Ksx7KHNPhZQ6hhY2nTBudO+k5Hcj5k8
+         cFry9rC29D5pkRhpU9QvhTaX3+fOwyHuFVI3YchxHPt9Qh18r287jH4sRZCXJmRhA1
+         xXgKVx6QjqI7ejSDxDQmgjt3Z1wugyAHr/xzv7tSeXtL0Xo7+mGLfd3Mo21C15XYDj
+         7hw5x1/8uu59JujYai+8xoLXFg07aix+nZOpD+g5aQBtcgmu2m6jyFIEOmrEDSdH/t
+         TT0LaIk4gSpR9bJcwJiHKdbDX28NXEUk8HPbO+is6L2/Pg1SKJ3CcW5V3T2O7r3hOz
+         5nW7K3waDwMgA==
+Date:   Wed, 6 Nov 2019 13:53:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>
-References: <20191105211920.787df2ab@canb.auug.org.au>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-Message-ID: <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com>
-Date:   Tue, 5 Nov 2019 16:00:20 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Chris Wilson <chris@chris-wilson.co.uk>, Qian Cai <cai@lca.pw>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20191106135340.3fa45898@canb.auug.org.au>
+In-Reply-To: <20191010131448.482da2b2@canb.auug.org.au>
+References: <20191010131448.482da2b2@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20191105211920.787df2ab@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1908290000 definitions=main-1911050194
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9432 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1908290000
- definitions=main-1911050194
+Content-Type: multipart/signed; boundary="Sig_/VW6llrPudTqo2dW_VBOacYv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/5/19 2:19 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the akpm-current tree, today's linux-next build (powerpc64
-> allnoconfig) failed like this:
-> 
-> In file included from arch/powerpc/mm/mem.c:30:
-> include/linux/hugetlb.h:233:19: error: redefinition of 'pmd_huge'
->   233 | static inline int pmd_huge(pmd_t pmd)
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
->                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
->                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
->                  from arch/powerpc/include/asm/mmu.h:356,
->                  from arch/powerpc/include/asm/lppaca.h:47,
->                  from arch/powerpc/include/asm/paca.h:17,
->                  from arch/powerpc/include/asm/current.h:13,
->                  from include/linux/sched.h:12,
->                  from arch/powerpc/mm/mem.c:16:
-> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:74:19: note: previous definition of 'pmd_huge' was here
->    74 | static inline int pmd_huge(pmd_t pmd) { return 0; }
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/mm/mem.c:30:
-> include/linux/hugetlb.h:238:19: error: redefinition of 'pud_huge'
->   238 | static inline int pud_huge(pud_t pud)
->       |                   ^~~~~~~~
-> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
->                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
->                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
->                  from arch/powerpc/include/asm/mmu.h:356,
->                  from arch/powerpc/include/asm/lppaca.h:47,
->                  from arch/powerpc/include/asm/paca.h:17,
->                  from arch/powerpc/include/asm/current.h:13,
->                  from include/linux/sched.h:12,
->                  from arch/powerpc/mm/mem.c:16:
-> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:75:19: note: previous definition of 'pud_huge' was here
->    75 | static inline int pud_huge(pud_t pud) { return 0; }
->       |                   ^~~~~~~~
-> 
-> Caused by commit
-> 
->   9823e12e021f ("hugetlbfs: convert macros to static inline, fix sparse warning")
-> 
-> I have reverted that commit for today.
+--Sig_/VW6llrPudTqo2dW_VBOacYv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hello Michael,
+Hi all,
 
-When I started to look into this I noticed that you added commit aad71e3928be
-("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") some time back.
-It appears that all other architectures get the definition of pmd_huge and
-pud_huge from <linux/hugetlb.h> in the !CONFIG_HUGETLB_PAGE case.  Previously,
-this was not an issue as the #define pmd_huge/pud_huge did not conflict with
-the static inline in the powerpc header files.  The conflicts above happened
-when I converted the macros to also be static inlines.  Could you live with
-a patch like the following to remove the stubs from powerpc header files and
-fix your original build break by including  <linux/hugetlb.h>?  After the
-below patch is applied, the above commit will not cause the build errors seen
-in linux-next.
+On Thu, 10 Oct 2019 13:14:48 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> I added the following merge fix patch for today:
+>=20
 
-From 4b3ab017e639e4e583fff801e6d8e6727b7877e8 Mon Sep 17 00:00:00 2001
-From: Mike Kravetz <mike.kravetz@oracle.com>
-Date: Tue, 5 Nov 2019 15:12:15 -0800
-Subject: [PATCH] powerpc/mm: remove pmd_huge/pud_huge stubs and include
- hugetlb.h
+This patch is now just:
 
-This removes the power specific stubs created by commit aad71e3928be
-("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") used when
-!CONFIG_HUGETLB_PAGE.  Instead, it addresses the build break by
-getting the definitions from <linux/hugetlb.h>.
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 10 Oct 2019 13:08:43 +1100
+Subject: [PATCH] drm/i915: update for mutex_release API change
 
-Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- arch/powerpc/include/asm/book3s/64/pgtable-4k.h  | 3 ---
- arch/powerpc/include/asm/book3s/64/pgtable-64k.h | 3 ---
- arch/powerpc/mm/book3s64/radix_pgtable.c         | 1 +
- 3 files changed, 1 insertion(+), 6 deletions(-)
+ drivers/gpu/drm/i915/i915_active.c    | 2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
 
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable-4k.h b/arch/powerpc/include/asm/book3s/64/pgtable-4k.h
-index a069dfcac9a9..4e697bc2f4cd 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable-4k.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable-4k.h
-@@ -70,9 +70,6 @@ static inline int get_hugepd_cache_index(int index)
- 	/* should not reach */
+diff --git a/drivers/gpu/drm/i915/i915_active.c b/drivers/gpu/drm/i915/i915=
+_active.c
+index aa37c07004b9..a47387174434 100644
+--- a/drivers/gpu/drm/i915/i915_active.c
++++ b/drivers/gpu/drm/i915/i915_active.c
+@@ -385,7 +385,7 @@ void i915_active_set_exclusive(struct i915_active *ref,=
+ struct dma_fence *f)
+ 	mutex_acquire(&ref->mutex.dep_map, 0, 0, _THIS_IP_);
+ 	if (!__i915_active_fence_set(&ref->excl, f))
+ 		atomic_inc(&ref->count);
+-	mutex_release(&ref->mutex.dep_map, 0, _THIS_IP_);
++	mutex_release(&ref->mutex.dep_map, _THIS_IP_);
  }
- 
--#else /* !CONFIG_HUGETLB_PAGE */
--static inline int pmd_huge(pmd_t pmd) { return 0; }
--static inline int pud_huge(pud_t pud) { return 0; }
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- #endif /* __ASSEMBLY__ */
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable-64k.h b/arch/powerpc/include/asm/book3s/64/pgtable-64k.h
-index e3d4dd4ae2fa..34d1018896b3 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable-64k.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable-64k.h
-@@ -59,9 +59,6 @@ static inline int get_hugepd_cache_index(int index)
- 	BUG();
- }
- 
--#else /* !CONFIG_HUGETLB_PAGE */
--static inline int pmd_huge(pmd_t pmd) { return 0; }
--static inline int pud_huge(pud_t pud) { return 0; }
- #endif /* CONFIG_HUGETLB_PAGE */
- 
- static inline int remap_4k_pfn(struct vm_area_struct *vma, unsigned long addr,
-diff --git a/arch/powerpc/mm/book3s64/radix_pgtable.c b/arch/powerpc/mm/book3s64/radix_pgtable.c
-index 6ee17d09649c..974109bb85db 100644
---- a/arch/powerpc/mm/book3s64/radix_pgtable.c
-+++ b/arch/powerpc/mm/book3s64/radix_pgtable.c
-@@ -13,6 +13,7 @@
- #include <linux/memblock.h>
- #include <linux/of_fdt.h>
- #include <linux/mm.h>
-+#include <linux/hugetlb.h>
- #include <linux/string_helpers.h>
- #include <linux/stop_machine.h>
- 
--- 
+=20
+ bool i915_active_acquire_if_busy(struct i915_active *ref)
+--=20
 2.23.0
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/VW6llrPudTqo2dW_VBOacYv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3CNbQACgkQAVBC80lX
+0GxdjQf/S0M3ryc3d9GRdi7jkkq0TiF/zlwiiwtKRaVqw6Gi+j0f7blRZRKizSZr
+E9PfyIhmbl+PKyCs+LvhDxG7cDDh6zdqIzVKtjBMvlldty7Z73EKvwmX8LEjpGf9
+VkXcxqCGnhQxpAQaJpxzYq6x+Vx26Ubr6LJ5B4ilChMbfTTz2qkIQJ8ARw+LR7+p
+RfZYnGxGDMsPSeLy15AJhzUXwFDL/zaotzkWvAXCF/JMr0l9rTKeZNRUXPvxeF9J
+hgU3az9xjnfkXqsV7+IKUdm0R8zUnHhyGm4AcBGWqHz2xOnYUkNxQQudMTc8aXQv
+HVzUxnHBsNZ2B7LpfFWCAzXUgPo+Bg==
+=nrAt
+-----END PGP SIGNATURE-----
+
+--Sig_/VW6llrPudTqo2dW_VBOacYv--

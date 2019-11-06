@@ -2,91 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4BAF0FD3
-	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2019 08:06:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A845F1035
+	for <lists+linux-next@lfdr.de>; Wed,  6 Nov 2019 08:28:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731331AbfKFHFk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Nov 2019 02:05:40 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:43759 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731000AbfKFHFk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 6 Nov 2019 02:05:40 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 477HcF4cc5z9sPK;
-        Wed,  6 Nov 2019 18:05:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573023937;
-        bh=o/otlUBELOZEGjG9xH+HXFSIuypbqtHhsgOaySaQjsY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QQM2aYT7ZAgsUPro83AfML0dkQIBE4REyqMl5khj5NHiLCC0zSq1/gnKgs/MUyZio
-         Xq6IITQX3nUc9kyyojMbWpRfl9DyxIH44YORTqMpEC+gi2L2eQS2185n9KTf9XmsJo
-         lsUBn6CzpzS60o6b4MYrjEfQVSCiGKFdNQDGgslIB5pB2rjgGy7y0MKtlgPgoMaB8n
-         feE44jW39LX81Usey7PzmGg/CA7oea3tbSd0T0XHpsnKRVJgoMILR++INA90jLKhsc
-         VDtSKTz9cmTtEyvip2DkKJw7v6OvUQf936apWYnI1DV0Sfxfkm0X6vZJtZWnUXI5Hz
-         g+5dNd8XVywCA==
-Date:   Wed, 6 Nov 2019 18:05:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729979AbfKFH2h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Nov 2019 02:28:37 -0500
+Received: from mail-lj1-f195.google.com ([209.85.208.195]:43340 "EHLO
+        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729695AbfKFH2h (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Nov 2019 02:28:37 -0500
+Received: by mail-lj1-f195.google.com with SMTP id y23so13939699ljh.10;
+        Tue, 05 Nov 2019 23:28:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=tL7GGhFlW5adac2tYoxQS+JgkXCcxkJj9jtno9t3BBU=;
+        b=f2xpuM4bvsGPnXJ9o/Ja6C1QUuH8QyWDCU0F9wwcy819GFZu6Ms/cQLD5f+PD8Y6vm
+         92hMxXUNBoq+QPgS35WGy/49yDzEO74YWLKUauvrrmEdaidWzid6KjTsQCDfUtewh+qd
+         tkcgAUGMmmwvfL2wsA/rm5mjdnA3pNgRkzMXgc5+DRI24BbvrgEaVTwRlzui0DhWHKWf
+         D9Ne0LcxuAA/UEMAo1Y46KbBq/aKuL10z6NhMaFseuhoKaRG+XC5g2Tg74VmVoPRiU3E
+         EwSt+Ro4I2bcUWgazmeyHIJkMYeJIfpq+cPMNk21yhOFUNi1yRZjFcRWs1TEhukrcWUV
+         092A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=tL7GGhFlW5adac2tYoxQS+JgkXCcxkJj9jtno9t3BBU=;
+        b=mR4aiv0oNjO2CzYH4AWB4LBZipkVdtsmgIVtMNYekEz4RvreHKF383gB8r1KXBQ98Q
+         eIENu/LeN0wkpO4set2I656l4uhP9MrCc6NMALx7cESc+yrBZeXwUvXkBaYcNrk70gms
+         2TKwgRz3sDZIoLNpydKoKTf+C/j1tpC3dALVoxCdECq9TnrlpcxetFjYx6lFy0TVvd0W
+         olDb4rcHFBuqzwnq7Mw/sDBJTyeenOg9RjvSG23BsGDw/uGIeodfSeV42MAOWe5gMKYD
+         4pDw34Oy1PcaTWBiM3euzwuwQdhqwuO0hUDJvyPDvkW55vYdQA1je37km6RUYPBo3yVT
+         8t0w==
+X-Gm-Message-State: APjAAAWun2RvvsIaMkFcWD/D0KtOtFpw8Rho9IaQ4dSepeVewDSDwugH
+        z7quKUm2P3Bm8I81uqKtoQU=
+X-Google-Smtp-Source: APXvYqz+tpZFUNF/7rn+2RUfKd3T7lYwDMCYKra/BDGVwKOBvZr394OswIiHuhQNw9nekIFFYsYBCw==
+X-Received: by 2002:a2e:91c7:: with SMTP id u7mr678244ljg.249.1573025314830;
+        Tue, 05 Nov 2019 23:28:34 -0800 (PST)
+Received: from uranus.localdomain ([5.18.102.224])
+        by smtp.gmail.com with ESMTPSA id w21sm1148384ljg.91.2019.11.05.23.28.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2019 23:28:33 -0800 (PST)
+Received: by uranus.localdomain (Postfix, from userid 1000)
+        id 4BF074612CA; Wed,  6 Nov 2019 10:28:33 +0300 (MSK)
+Date:   Wed, 6 Nov 2019 10:28:33 +0300
+From:   Cyrill Gorcunov <gorcunov@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Kees Cook <keescook@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        yuqi jin <jinyuqi@huawei.com>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20191106180531.11419dca@canb.auug.org.au>
+        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+Subject: Re: linux-next: manual merge of the kspp tree with the tip tree
+Message-ID: <20191106072833.GC2560@uranus.lan>
+References: <20191106160331.016b2521@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//J8ctAOzAP6MM35GZCSjHxK";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191106160331.016b2521@canb.auug.org.au>
+User-Agent: Mutt/1.12.1 (2019-06-15)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//J8ctAOzAP6MM35GZCSjHxK
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Nov 06, 2019 at 04:03:31PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the kspp tree got a conflict in:
+> 
+>   arch/x86/kernel/fpu/xstate.c
+> 
+> between commit:
+> 
+>   446e693ca30b ("x86/fpu: Use XFEATURE_FP/SSE enum values instead of hardcoded numbers")
+> 
+> from the tip tree and commit:
+> 
+>   ec2f877856e0 ("treewide: Use sizeof_member() macro")
+> 
+> from the kspp tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
-
-After merging the akpm-current tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
-
-lib/cpumask.c: In function 'cpumask_local_spread':
-lib/cpumask.c:302:1: warning: the frame size of 5472 bytes is larger than 2=
-048 bytes [-Wframe-larger-than=3D]
-  302 | }
-      | ^
-
-Introduced by commit
-
-  3d591f2836cf ("lib: optimize cpumask_local_spread()")
-
-MAX_NUMNODES =3D=3D (1 << NODES_SHIFT) and NODES_SHIFT =3D=3D CONFIG_NODES_=
-SHIFT=3D=3D 10,
-so MAX_NUMNODES =3D=3D 1024 and there is an int array and a bool array of t=
-hat
-size declared here :-(
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_//J8ctAOzAP6MM35GZCSjHxK
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3CcLsACgkQAVBC80lX
-0GwlZQf/XYdYUqzvcxNBU8FnFfIYRUzQD7/nO9dsqE97dxk9nISd3uTdBYM5xQbK
-R8hEl/JnphnnTgzLC1gob2UVTH9zW4gRvLJSAOGpXApUjDIRqtjIMamKi0rQLK4C
-a59bgGwZeZZ+tO+/S8V0e5itT41QrlSMDkSrtUDL+VUWdDZIuVetUBeoL9+Nm52w
-O9NoXASdYNwE2JxPAHEs2dCZplYXYANd0XVPtUvxToOIrMHN+Z0DcvYRrvYRvX5e
-R4MauOCOjPy2wr6xV32WjLCXdXrwOeLRaX5NJYkAtedje1FmlouwyN0hSBiB5Jqg
-TTyMPtMv/tUyK4M1MwKMKhPWKvRKVg==
-=SLkP
------END PGP SIGNATURE-----
-
---Sig_//J8ctAOzAP6MM35GZCSjHxK--
+Since these macros are just the same the fix is fine. Thank you!

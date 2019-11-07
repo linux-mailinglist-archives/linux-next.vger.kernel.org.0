@@ -2,110 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 94FAEF27AD
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 07:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96595F2895
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 09:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726582AbfKGGfD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 01:35:03 -0500
-Received: from ozlabs.org ([203.11.71.1]:34557 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725763AbfKGGfD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 7 Nov 2019 01:35:03 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 477ttV3Hh4zB3tP;
-        Thu,  7 Nov 2019 17:34:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573108500;
-        bh=8QWFC8ATOW/EWg2Fx4XSxd/+I6wxAZCxEEB8iiH/Ywo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=l5EM9iXCztIvbZInfj1ruXyv6YaYOKS3Ef5x5s+/TphU4cBRKtqq+6aNQgGvgkGZR
-         7nfbzNySMTkA6jJftTOwd7SmXLtFsum33xOsHfu678QnYkL5hzuBaNx+qYZKqy+GG4
-         BnrmvPa6HCOqYavtI0Rpo5NEhMA7K/2RwHhOKpDqbysn0s7e5B0cxRRDcCVwpwD5Qj
-         wjnJUB930g+Z89iEqjr10awoXsZsRiV9eQgHCPCu1RsyXF7srI03RWgHBr9E7TMzVK
-         KWPIf4bYo0KxNlOFVMBCVXIg8uQOqmOEHCAvA0SG5soPbvZWU+i2HozMyKmcy7maTf
-         wPA0Su1RnUitw==
-Date:   Thu, 7 Nov 2019 17:34:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-next@vger.kernel.org, christophe.leroy@c-s.fr,
-        linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
-        x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
-        kasan-dev@googlegroups.com, Daniel Axtens <dja@axtens.net>
-Subject: Re: Please add powerpc topic/kasan-bitops branch to linux-next
-Message-ID: <20191107173451.6be74953@canb.auug.org.au>
-In-Reply-To: <87r22k5nrz.fsf@mpe.ellerman.id.au>
-References: <87r22k5nrz.fsf@mpe.ellerman.id.au>
+        id S1727077AbfKGIAj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 03:00:39 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:36021 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726734AbfKGIAi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 03:00:38 -0500
+Received: by mail-lj1-f194.google.com with SMTP id k15so1169498lja.3
+        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2019 00:00:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MhaY0ugk8kwsxq3FKugkspL2MYGqh9zusrvzrZWI37A=;
+        b=I14DfnkJr2s5xHB5Em9zNk3CnxEv+KsQd0RLv0S2M8Zbd+JBPrWQJLyDLI7UsFnUyU
+         jewSW9KGU/5Mj9rdaNo/E2CyOlWqdkGPzV0FKD8pzXnXD3OmuC/TsBCYNhSg17P6FrJ5
+         yO/9vByIOBxYr8lAEcOkeM/NE1hghWfDpsgq3uX5OL8n451FtpVVRIhZkjqCAZ7uX944
+         lPTNCMOLpkf4y0CWt1TIVJuYzQfJ5LVPfLv4/nI9ZLCt88eZu1rYn+LQ/rUHDWf9xG3A
+         PTkIKjTPMdR856l4uTDdUmyGArjXOYE5n9URj12P9bxKJYTmmXrwUZqQ+7tFtbtsxz5R
+         tAag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MhaY0ugk8kwsxq3FKugkspL2MYGqh9zusrvzrZWI37A=;
+        b=T9EFebYP9ZWAexRyyQCdHHZm6XfePkBp7gHouizSuwFWkqRNHasLi8yOY77Ma9t6Bq
+         q2Dth1Np15eQca9ATNdvcarxfm9VMgw84sKJPjSriGHKmA0sehuDFA5GIOm5mI0X3LiD
+         Dy37rqwGEIJU9LGsLZGVd/2GD3NJT9+339KYIuGEdwCgkyxjFjQZMQ4Fb4NaOEkheiau
+         V1c0iSb1hmZfZCSMRHAragMJcKGGhbeNuSrH9C2UF0c0lTk2LDNxPrlDpIgvVUkDXTH8
+         SpSgqW+aqvte3g45KAhFh+P0lVPPBuFZ01J8yQ005RUit1hv4LlX6H6wSRPdDam++0+B
+         dJ0Q==
+X-Gm-Message-State: APjAAAUKIYV6BzOEkrJlRMkJkHeow7OO5ivTpbJpX75jEFMLEn/e7+/G
+        Gq8nn7EMIsWjRFRvfeM1eruhoZdNvVyeV6EvjU/kPw==
+X-Google-Smtp-Source: APXvYqzRSNCULNUNJVqaJNgU2Aq5iaQhDKeZCxYwvKxqVktkZ0uhZzJPx1LEXl2tE4KbyibfhtzJ5OdCkeugYriABVE=
+X-Received: by 2002:a2e:5c46:: with SMTP id q67mr1273474ljb.42.1573113636714;
+ Thu, 07 Nov 2019 00:00:36 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QLj.mRHKb6JGbFGyiT8jLoU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <CA+G9fYvm_QEq+9e+dni1Y+bJswr9bU5=shJcC+wKjjOyiPsXXQ@mail.gmail.com>
+ <bfced8c8-c64f-982e-8797-d48b5ec65291@arm.com> <20191106161705.GA11849@sirena.co.uk>
+In-Reply-To: <20191106161705.GA11849@sirena.co.uk>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 7 Nov 2019 09:00:25 +0100
+Message-ID: <CACRpkdY5JObOobs7VW043QYGd_xufwnQDBJseKp+_QWv4kdzaQ@mail.gmail.com>
+Subject: Re: Linux-next-20191106 : arm64: Internal error: Oops: 96000007
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, John Stultz <john.stultz@linaro.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QLj.mRHKb6JGbFGyiT8jLoU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Michael,
-
-On Thu, 07 Nov 2019 15:11:12 +1100 Michael Ellerman <mpe@ellerman.id.au> wr=
-ote:
+On Wed, Nov 6, 2019 at 5:17 PM Mark Brown <broonie@kernel.org> wrote:
+> On Wed, Nov 06, 2019 at 04:07:52PM +0000, Robin Murphy wrote:
 >
-> Can you please add the topic/kasan-bitops tree of the powerpc repository
-> to linux-next.
->=20
-> powerpc         git     git://git.kernel.org/pub/scm/linux/kernel/git/pow=
-erpc/linux.git#topic/kasan-bitops
->=20
-> See:
->   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/log/?=
-h=3Dtopic/kasan-bitops
->=20
-> This will be a (hopefully) short lived branch to carry some cross
-> architecture KASAN related patches for v5.5.
+> > FWIW this smells like a builtin driver had its of_device_id table marked
+> > __init, leaving drv->of_match_table as a dangling pointer to freed memory by
+> > this point.
+>
+> Indeed, in fact I sent a fix for this to Linus Walleij yesterday having
+> seen the relevant build warning when testing -next.  Someone already
+> reported that it fixed the boot issues.  Hopefully Linus will pick it up
+> soon :/
 
-Added from today.
+Yeah picked it up and pushed out now. I wish I'd been quicker with
+it but the patch spot activity has been high. (Bad signal-to-noise
+ratio on the mailing lists.)
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+I wonder if it's worth to look at the static checkers like checkpatch
+to warn for this?
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+There is always a bit of delicate balance between just fixing some
+weird one-off problems and making sure they never happen again.
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
-
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
-
---Sig_/QLj.mRHKb6JGbFGyiT8jLoU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3DuwsACgkQAVBC80lX
-0Gx+nQf+Kb9/DdUAxGd+w9sWu1q0Z+Hiq9qD8vwzOM0/tFtNdMhWLOJRM0idUy9Q
-NHHN0yi54olE5bolHbOqmXXITBE+Dy7RyRUchaPSMkUgAAI8n+iteHy4/ZakmJr+
-6lYeGHjGzM9+9q5eYl6yD7hj6cAAyI4wBUu0fMYBcuWix/xOImWZAe/6iGRhgRLf
-UAzDGUbnyqpox0S0v10SJjbTkGXyuvaxzs27pGUBZbRODNPbZYEX7hpo5TnQxzBq
-ZMkJaRdxAKi0szigouKz9d75XPKNmc4zz5tY9gCShmBlE6bjJHzVF0ntNGrge78W
-mMgfvcvatGMcL/fbSn8nu3+vqMnFpg==
-=XNA5
------END PGP SIGNATURE-----
-
---Sig_/QLj.mRHKb6JGbFGyiT8jLoU--
+Yours,
+Linus Walleij

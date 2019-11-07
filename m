@@ -2,117 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC289F295A
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 09:41:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14719F2BC1
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 11:04:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733173AbfKGIlT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 03:41:19 -0500
-Received: from mail-wm1-f49.google.com ([209.85.128.49]:36026 "EHLO
-        mail-wm1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727519AbfKGIlS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 03:41:18 -0500
-Received: by mail-wm1-f49.google.com with SMTP id c22so1416282wmd.1
-        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2019 00:41:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=R/Y0R6Elbo/fHFysf8GWTnTuLl6CcLuKyCrzmCZOhaY=;
-        b=vX4PcbHrchHPNtiSDLUEnz+ygug9zUkVTLYyTQEjRzptNiDwad096vHBVDIRIjggak
-         Bea4oIDh2OMuDvAE6GeWvwY99LeJdn/HLz3oHZkv+pyh+Q39WzEJB9ZYUdzVxOp5ImPM
-         gGq1HT0j2BWeGJ8F+TbuZAcYxmai13Y527MiOlqazKqpagCvSNVk7hvQBgCTOiilLXhL
-         XIIzPyeybw5K0ZobCCkGpb1fRdpmjf9gQk7F9ilNMMeUvnmD7n2cB4xl6uARCI6Awl3Z
-         ArRIDHADXICXmIz1W8qQ8/D6NDTuJRiwiK8HRowKCL/fG3VjqMxVZgOAJwlHVENUw80t
-         IfTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=R/Y0R6Elbo/fHFysf8GWTnTuLl6CcLuKyCrzmCZOhaY=;
-        b=o9jp6987RyQmKMDEFtncEParrA79ZWPzNX7jqZAlxK7GV0rGu8FRrStFbB9ci0pLC8
-         vAF6wuIvdu+hFb6+HPWYlpYRX07A3Zg6mobSkbA4JoHAmKqtIhUovqZ9Y//lFIMvr4d5
-         3j+qpEEAK6weAu194sXb2dNLxG7RkRFsC4aNABbkspUBsPQqr2z2nH5NdYdbIyqvBwF1
-         MriRADXLvSM8yKs/INQZACvxImLsOieNOuBskn/FGLldi3cL821uBbaJvPkf6UX70EUi
-         PkOhvrvw4w8yzyxUmgrFGHh+LU/JXv9VXYbx/HFEzIg32pzni9JKdJ04HxIReI8yeltC
-         PoIw==
-X-Gm-Message-State: APjAAAUWfaWa7OlsaeV0tIlpEfI+934gsBzQgJjcC7TGOxxyxzh8cu+C
-        K2NrnZA05b527Ahgp8w1v0b/PnnI0wQVGA==
-X-Google-Smtp-Source: APXvYqyH8bJFEgwI/ftGsPBfeAWGKtKLggYUkcl/udPTAmOuzNbqsWjp+i9WBfjgTdh4do1Co4y3Cw==
-X-Received: by 2002:a1c:f415:: with SMTP id z21mr1716741wma.140.1573116076424;
-        Thu, 07 Nov 2019 00:41:16 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id a1sm1518516wrn.5.2019.11.07.00.41.14
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 00:41:15 -0800 (PST)
-Message-ID: <5dc3d8ab.1c69fb81.c0f2a.7652@mx.google.com>
-Date:   Thu, 07 Nov 2019 00:41:15 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727415AbfKGKEb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 05:04:31 -0500
+Received: from ozlabs.org ([203.11.71.1]:51761 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726866AbfKGKEb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 7 Nov 2019 05:04:31 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 477zXC5CN7z9sPT;
+        Thu,  7 Nov 2019 21:04:27 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573121067;
+        bh=1EBSfa9DppfkkXPCl8Nz5/lZJ2ZKDXtKClZzsnCBel0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=il9eyF3ZKHmO9krZnxN3u5zJKo6kJlh0tPUoxZQfbKhVBZVs2lcxAHJDkdsYwmEHH
+         4+R/raaobgfhnqqMbfF53Mnu5NQGEG7PSz/ecKRzXddbhbHwRPQWR7NUXE+DUb1PWo
+         ukI5LUcubPKi1NlnSW3mFVO3T3XIdERDiU6PSPs+1fFYWQqQ/Wx01FSK9uKomCZhBi
+         LbbPItvlluMj/nCy3uquWvDtX0iIex5+d8f4Q3yqLmJ8P9yFasC90AuJmAEapa25v6
+         wOqBKmpX3uVksdAvOcouybl6xLLKqGv7+lbypHoi8izQVG/W+IQEAOxs6LvM1CC9xJ
+         Am8R+xkMwegDA==
+Date:   Thu, 7 Nov 2019 21:04:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmytro Linkin <dmitrolin@mellanox.com>,
+        Saeed Mahameed <saeedm@mellanox.com>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20191107210424.230ae6f2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc6-234-gcca61a91295c
-Subject: next/pending-fixes boot: 230 boots: 3 failed,
- 219 passed with 7 offline, 1 untried/unknown (v5.4-rc6-234-gcca61a91295c)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/wn3yw3su=s=Kgsv5shmUZXx";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 230 boots: 3 failed, 219 passed with 7 offline, 1 =
-untried/unknown (v5.4-rc6-234-gcca61a91295c)
+--Sig_/wn3yw3su=s=Kgsv5shmUZXx
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc6-234-gcca61a91295c/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc6-234-gcca61a91295c/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc6-234-gcca61a91295c
-Git Commit: cca61a91295c5ca599a17d2b74ce79feca429a49
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 88 unique boards, 25 SoC families, 27 builds out of 215
+In commit
 
-Boot Failures Detected:
+  950d3af70ea8 ("net/mlx5e: Use correct enum to determine uplink port")
 
-arm:
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            rk3288-veyron-jaq: 1 failed lab
+Fixes tag
 
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            msm8998-mtp: 1 failed lab
+  Fixes: bb204dcf39fe ("net/mlx5e: Determine source port properly for vlan =
+push action")
 
-Offline Platforms:
+has these problem(s):
 
-arm:
+  - Target SHA1 does not exist
 
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+Did you mean
 
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+Fixes: d5dbcc4e87bc ("net/mlx5e: Determine source port properly for vlan pu=
+sh action")
 
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
+--=20
+Cheers,
+Stephen Rothwell
 
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
+--Sig_/wn3yw3su=s=Kgsv5shmUZXx
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
----
-For more info write to <info@kernelci.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3D7CgACgkQAVBC80lX
+0GxCWgf8CQe3cYbo1AJV/rHv3RwGIBgGRigkhRJGn1pyUgd55ChVHTfBYc3Yd9cX
+NHBdtJ6C90gkIfAclCRyLsBt0EdsTzeu5eKnDBOt5Au4ycV4YR7N9jwqkUypA5F6
+5vTc46RqsRRZznWyRTZVO08Y2qQBN9P4h5CmMLBkTh5LRxI/5qu3d/9GSqjIu4bV
+cEAiVhaOgopqUemcW4ltVWZn22xZlPv11C4ZAuVD2/Foz+fiHOsebr0uTkjwNvVE
+GU6FuuXl5DnjeF5SzU93YK/1kXaWsbQFLJNnneRxo4iHLHA9NuKZxg9x/OPQ7tyP
+c4seM8QKdJ8IRlHURepoQToKGhETtQ==
+=Hy1d
+-----END PGP SIGNATURE-----
+
+--Sig_/wn3yw3su=s=Kgsv5shmUZXx--

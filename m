@@ -2,83 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E8C5F237B
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 01:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A0BF2491
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 02:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727718AbfKGAqM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 Nov 2019 19:46:12 -0500
-Received: from ozlabs.org ([203.11.71.1]:53073 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732064AbfKGAqM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 6 Nov 2019 19:46:12 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 477l826FKPz9sP7;
-        Thu,  7 Nov 2019 11:46:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573087570;
-        bh=nkq5hFWwX1Aoq4w6IgOgECJ2w29yHF3XV8iPziMY2zM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FfgAeGQzeTqx8PGY+C0YnSce/jYm5sBC95kAs7JPFGRg7sZidQxdq91+FWQ9brtzZ
-         Be5ZlPGtZfY8/6wW0fhul2JqbbPhgvMMfUwHOd8LVnCDCrIscakIClbiioYMPF3C/t
-         4Rlyws60j8qpXGu3iXmamS0ORrd+xFtGBJIILHzkbHkybzERlVU4uUxHJPtcptXBwI
-         OoT3giQyul0+UgkKKH5mSJU0+wDtTAL+FWm9R1nb/sCAAE6+LUdekRNcCOGJrEhoyL
-         oABC3N+fHOJRruyV80r6kDPPEhc9lvOtiLDyPvTzsK/008TNejEr2jMqcENii9oeS9
-         ewyc5ZUm14T0Q==
-Date:   Thu, 7 Nov 2019 11:46:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20191107114608.43ed5708@canb.auug.org.au>
+        id S1727597AbfKGB45 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 Nov 2019 20:56:57 -0500
+Received: from aserp2120.oracle.com ([141.146.126.78]:43094 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727328AbfKGB45 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 6 Nov 2019 20:56:57 -0500
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA71s5YH187038;
+        Thu, 7 Nov 2019 01:56:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2019-08-05;
+ bh=hHR5/nxvketnU54a1k1e33bJv4PJgcmLZua+X2UwC5I=;
+ b=eF/HmLvludviEdI7FYGvN0fyZo+Y58fqWFjoOYN4lACrGMPNnLKKcvTlYmCgbmlS2+MU
+ fHFGW7QlbGrnA/m/v7g6mmk/V31asBxRb61FHsTZUzMNlPTvPVUrRQlH5jKZsvKJMG3z
+ wJDdBmR3FJTkVGkszvM72/aiRUaNFOZRtuw9L3fiCEVgLZv0m4ZF1BA0OI+mlxz+MwzN
+ MxWPrXo6QfyWFG+EqVlDB1OF/P54jZ7cKV7//fhikgUbzhSNeEKJVI2cHWm47GRh37c+
+ hKpI8TmivpqiIrytuWVayss+yZdUdkkgDOtr5gu2ADeT8WMxmAN7r8fSwlNGQrhu8/f5 uQ== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 2w41w0tsjq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 01:56:41 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xA71s3wG026240;
+        Thu, 7 Nov 2019 01:56:40 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by userp3030.oracle.com with ESMTP id 2w41w8g75p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 07 Nov 2019 01:56:40 +0000
+Received: from abhmp0022.oracle.com (abhmp0022.oracle.com [141.146.116.28])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id xA71ub1N025231;
+        Thu, 7 Nov 2019 01:56:37 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 06 Nov 2019 17:56:37 -0800
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
+        Jens Axboe <axboe@kernel.dk>
+Subject: Re: linux-next: manual merge of the scsi-fixes tree with Linus' tree
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20191106082239.5c4d139c@canb.auug.org.au>
+Date:   Wed, 06 Nov 2019 20:56:34 -0500
+In-Reply-To: <20191106082239.5c4d139c@canb.auug.org.au> (Stephen Rothwell's
+        message of "Wed, 6 Nov 2019 08:22:39 +1100")
+Message-ID: <yq1mud8zbxp.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ig=bSjCG9CkA2qjYOV.YwOS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9433 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=989
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1910280000 definitions=main-1911070018
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9433 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
+ definitions=main-1911070018
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ig=bSjCG9CkA2qjYOV.YwOS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Stephen,
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+[Looks like this mail didn't go out last night]
 
-ERROR: "dc_dsc_parse_dsc_dpcd" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undef=
-ined!
-ERROR: "dc_dsc_compute_config" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undef=
-ined!
+> 8437bb81853e claims to fix d81e9d494354, however the latter is not an
+> ancestor of the former ...
 
-I am not sure what caused this, but CONFIG_DRM_AMD_DC_DCN is not set
-for this build.
+Should be fixed now. d81e9d494354 was part of a series that went through
+Jens' tree post -rc1.
 
-I have used the amdgpu tree from next-20191106 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ig=bSjCG9CkA2qjYOV.YwOS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3DaVAACgkQAVBC80lX
-0GwREAgAisQ16G8CKcIge0FsaDkQSN8pL8i0AZ/LIt9kXstMhxfFMRqjr2Uc+wV0
-q/ThBcvRe2JDDALoguSXPHsyiIxo2c0KDRR9dyyv/qMeJcjf8RgUS/SoJrrOHmH7
-Cdv3Chbyo0tjEuUXZkbXrJi8fclzM2ehDOTpjnia/8j/e8erxOXfHy4Tdod8nNBu
-M97T+bKzw6d7RvH9qkeKTWqrgP2kT95Ic9LDIdcalaSFCHz3+MP0tIDmh2KkH62x
-6PIYr7IniwCmfGVNwcWleoehweYUGJNtDMYoxkrUyeaip2aG6RbMDb+ArdCHURnl
-B6IazqwdQ4j0BBkHe3ol8Ib5WFkJvw==
-=K6cQ
------END PGP SIGNATURE-----
-
---Sig_/ig=bSjCG9CkA2qjYOV.YwOS--
+-- 
+Martin K. Petersen	Oracle Linux Engineering

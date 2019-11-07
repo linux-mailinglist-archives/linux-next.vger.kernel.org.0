@@ -2,88 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B09F372F
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 19:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC659F3A1E
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 22:11:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbfKGS1d (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 13:27:33 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:41169 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725823AbfKGS1d (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 13:27:33 -0500
-Received: by mail-il1-f195.google.com with SMTP id z10so2702046ilo.8
-        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2019 10:27:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rd9MmtJg9I99NObgfoHTcrVObiv2Cbuzz8bmb7geaL4=;
-        b=RCkNMdzGc1LN3YG+0B6dyUeVDjoayLlIYaA/TR/KKf2ybkTWOvD1B8gHfC0cpiTlZ7
-         MC307bK9xpKSFf34KshZo12CllR1OL3R1cVihIZnHVOka2zKUJEKAtywg/Tj+6ARagJb
-         cUqp7bI9Ok/XhJAO4ns5ztqpjhDSn8xXgEzlkMwnil5nV1o8L41J8CP4Ej++81A0MhvQ
-         DQ6aYdVeFxzQEiCDPQ7/ezGCcF6BEM522HdH/gVCeHAFotAhln6YcX+BRgEJ1Ufd58D4
-         AatnXtd7UPS9/XPcPi4+EPVAPdLhmGxuuIlXZQnPLMXllDUQKyAEgB6JHWqW2jNmUPKG
-         Gy6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rd9MmtJg9I99NObgfoHTcrVObiv2Cbuzz8bmb7geaL4=;
-        b=aqGNLqUJmlKlGn+368K+Tz9StjHWrK+6KXmXEwkWI3vCQXipo+QCrtv7xNSfHTDjMJ
-         jt1mm108iHJ+BHEfaspCAzdM9MH5uh470FLJXLoDwDPWkZ0wCEdWcFBx1IdkYWpNeJZG
-         cyzpBHgPRY2nLDA4pnMvGIlpuAoJ3NEMGQW8/yXWohjr+262Dq5SNXpDQ+9WX5SyLAze
-         nFnOAMdddaCc2ptiwLB4dFvKSR2irwJ5mB3aR9cijBEZPMjc5gAQJfuO52x7czbcm2ma
-         OwxAYCZE8MHxLHs/B86nt2eLGtSRgpELKrg8P8kvxaWJ+3IctJNBZ4YYgM5orT7mwFvZ
-         E5tw==
-X-Gm-Message-State: APjAAAXNPK7xkPqlpc5Nhh27HLj6OWDom/1F10ProqjqS+048CFi1GH7
-        y0qCD5klkeHqGinb9boCSynGUm3V1QzeicCvRVw7Mw==
-X-Google-Smtp-Source: APXvYqx0c2ixEzl/1P2k8VNqVuu1KNzt7oNq9iie0yTRSLDbulT1QQzNkdoy2JYIN8yiPQWt9b0MdCPxqVncDCDKQ6E=
-X-Received: by 2002:a92:8c49:: with SMTP id o70mr6407569ild.72.1573151252255;
- Thu, 07 Nov 2019 10:27:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20191107094555.6296b943@canb.auug.org.au>
-In-Reply-To: <20191107094555.6296b943@canb.auug.org.au>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Thu, 7 Nov 2019 10:27:20 -0800
-Message-ID: <CAOesGMjVUCd9bN=pggS-ECjMR42b0SqXKewsp+NYFSVqRgSWrg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726281AbfKGVLZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 16:11:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:44457 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725893AbfKGVLZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 7 Nov 2019 16:11:25 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 478GKj2gtzz9sP4;
+        Fri,  8 Nov 2019 08:11:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573161082;
+        bh=DqoFjaTZQRDfZA2fZkgv0zwhVGYU6OelHQKxH+WDsiQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j95uG9wU4r0F0qIdKklgRuZ0B6qGF/B55YbuHVoQTbQVhM6QzysmUn5D0GQ2Vyj0A
+         p5iOZdSRdvcm/ze1BO3vaHrE15Fdva5I9yax0p4rMndTDfwhUGrF0dSyoYOnjb2tIh
+         8WbGxecXrETC43+0+srTkLEgWMm6k9l/8akctJAWpbqt1I+ausACanvbYm1oAAL2pV
+         NJvVv88PORWM9JWPYKO6JEanLkt04z6jyCYEEptDHETzF0uN55QfeqG+XppWhu2qbA
+         M1TpkCHqC7OsgKjEgaFP6lagvRGMerA/FGeksj4FzNtNBchMpwI0NH4VLMxQrh9yjF
+         r4wEgqNqeSiQw==
+Date:   Fri, 8 Nov 2019 08:11:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+Subject: linux-next: manual merge of the arm64 tree with the dma-mapping
+ tree
+Message-ID: <20191108081109.28867ba1@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/U6c804ldPHEs8oBD9=TaX3_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 6, 2019 at 2:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the pci tree got a conflict in:
->
->   arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
->
-> between commit:
->
->   68e36a429ef5 ("arm64: dts: ls1028a: Move thermal-zone out of SoC")
->
-> from the arm-soc tree and commit:
->
->   8d49ebe713ab ("arm64: dts: ls1028a: Add PCIe controller DT nodes")
+--Sig_/U6c804ldPHEs8oBD9=TaX3_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Bjorn, we ask that driver subsystem maintainers don't pick up DT
-changes since it causes conflicts like these.
+Hi all,
 
-Is it easy for you to drop this patch, or are we stuck with it?
-Ideally it should never have been sent to you in the first place. :(
+Today's linux-next merge of the arm64 tree got a conflict in:
 
+  include/linux/dma-direct.h
 
--Olof
+between commit:
+
+  b0817901ba21 ("dma-direct: check for overflows on 32 bit DMA addresses")
+
+from the dma-mapping tree and commit:
+
+  8b5369ea5809 ("dma/direct: turn ARCH_ZONE_DMA_BITS into a variable")
+
+from the arm64 tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/dma-direct.h
+index 6db863c3eb93,d03af3605460..000000000000
+--- a/include/linux/dma-direct.h
++++ b/include/linux/dma-direct.h
+@@@ -3,11 -3,10 +3,13 @@@
+  #define _LINUX_DMA_DIRECT_H 1
+ =20
+  #include <linux/dma-mapping.h>
+ +#include <linux/memblock.h> /* for min_low_pfn */
+  #include <linux/mem_encrypt.h>
+ =20
++ extern unsigned int zone_dma_bits;
++=20
+ +static inline dma_addr_t phys_to_dma(struct device *dev, phys_addr_t padd=
+r);
+ +
+  #ifdef CONFIG_ARCH_HAS_PHYS_TO_DMA
+  #include <asm/dma-direct.h>
+  #else
+
+--Sig_/U6c804ldPHEs8oBD9=TaX3_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3EiG0ACgkQAVBC80lX
+0Gzrmgf9F0EJ6X6GP7knhR0Pxq1/XXlIb8EvhDJTuAbTR9FeLBISLm1ptgXYE4+G
+11E+IgxnhLNvSuJjYKy8mjbC1zCZX3TXLc6LEbyLhC4119fIpvG1LrfM5+9ptkfA
+H+IxA0E9n5bFc3mFjDomuMF/AFKHxcDvfIOs6JNknbdwjRU90MyjuxG/5KMDgjyN
+KvKMImWZzR76erivz/QFt1bfn3COSW0S86bdHswcbcN9fbKvpETMJJX/qH3wTW19
+SQ+wjAzaxKPM6M+7uEXyaEW4vuXNF9YZYzVO1wKanhaoS/n/cs+/BTl3cIDZoijT
+XGk2tIxwIx07GKy1QELFay2wxGk8VA==
+=nJXk
+-----END PGP SIGNATURE-----
+
+--Sig_/U6c804ldPHEs8oBD9=TaX3_--

@@ -2,80 +2,186 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D85A2F33C7
-	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 16:51:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70538F35EA
+	for <lists+linux-next@lfdr.de>; Thu,  7 Nov 2019 18:41:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726853AbfKGPvO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 10:51:14 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:35486 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726231AbfKGPvN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 10:51:13 -0500
-Received: by mail-pl1-f194.google.com with SMTP id s10so1765958plp.2;
-        Thu, 07 Nov 2019 07:51:13 -0800 (PST)
+        id S1729970AbfKGRlf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 12:41:35 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50774 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727132AbfKGRlf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 12:41:35 -0500
+Received: by mail-wm1-f67.google.com with SMTP id l17so2625915wmh.0
+        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2019 09:41:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Fv5EtLRoqBXCoiKcVohigxv3QfIUinCFu1I62A4KjXQ=;
+        b=xABqfzwFmXycIj6Uh9iug9d4W9KbB/5YvwKzrEEhdSv0Ywa5sJhbFLcF4hoA7cM3ju
+         XSZlQemdhEzLBksLSGDtGC8r3UK8Ms1luYi5ZOVa+ob4fOHRHRks+mSpICq7/LoRu5iU
+         GY7RifGvAjeuj+QvaZ6wEnqTfqNd7+sH+B+lqBql5+mBe//M7dvHElFCgOuK4AP5jued
+         dheSHweg8bE+e/j1KQHYeGHbKqq9GQps1A3ilQnUQvAP6M9qFhH0+sO9NDCEqr+XgYkk
+         lCt6JG4QtEe33M8daq6UmcOphTcYK/f8jZz4hEqzM/I1ECMlIPd0UvChWyWxh0UoXroF
+         4yZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=wCIUACXkFSlcAMRHFvS4hf99aXjQQqm2k7x2iKzum6Y=;
-        b=sQsJJP1IpNS6KPaBICnwPb2IN3ZG61vtfzY0w6UDKF/WiwUE/XGzLBbfH3DFROvMnw
-         424RnT5G3CiuZbO6fAR8T6fgRGbKBqDEa8/VzzCO0Kw+5b8rmRdVYve45Hd3/n0Q6dQZ
-         eO08SahznF1xNTUTnD2gHGm/PK6aCrdkjfpHETofobqxEkHRgRkpYjpxQ3PxZeTCKJFD
-         6NdcFokToxCirxYSU9FMT+3Jjp8PWw8v8NXqtkaDlLltG18kBok+EVnMzS7Q6aeRNFNd
-         sT7yKFb22jLZyhQ0JrPGlO0DKq9I/TAEPyZdszW6bYonQu1ZprfIZFkmEpuiu4s5Gcr2
-         4pbA==
-X-Gm-Message-State: APjAAAVhmp3F1iyQ65V2fuGccWMUiQ2ua5k5TVZ1y7sjaXHqk6Rw1PkH
-        wBTwp/J4042pJHHO6M32Tlc=
-X-Google-Smtp-Source: APXvYqw/q4umZFByQNDGLZ8+bRj+n23NNSNuRPxtTrQot1bJ78guoSBCKLcXYKEPv5ffr4D/JPfVhg==
-X-Received: by 2002:a17:902:bf0c:: with SMTP id bi12mr4165243plb.98.1573141872848;
-        Thu, 07 Nov 2019 07:51:12 -0800 (PST)
-Received: from desktop-bart.svl.corp.google.com ([2620:15c:2cd:202:4308:52a3:24b6:2c60])
-        by smtp.gmail.com with ESMTPSA id t1sm3125408pgp.9.2019.11.07.07.51.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Nov 2019 07:51:12 -0800 (PST)
-Subject: Re: linux-next: build warning after merge of the scsi tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        James Bottomley <James.Bottomley@HansenPartnership.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        James Smart <jsmart2021@gmail.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>
-References: <20191107145523.1792cafb@canb.auug.org.au>
-From:   Bart Van Assche <bvanassche@acm.org>
-Message-ID: <3a7be3f6-7aea-3660-bf20-dd2563d479bf@acm.org>
-Date:   Thu, 7 Nov 2019 07:51:10 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Fv5EtLRoqBXCoiKcVohigxv3QfIUinCFu1I62A4KjXQ=;
+        b=YOfcIzS3N/52BGBfE+rRoU34sR1f+6USz8STbpu9k3Zz1PzxrjkAe14xJNzczNkNbp
+         2NEbEzGsfFyfGptLvAh39+XMkXTgJCKhzEorDTzerAzj6dYkz5omEgZVnFTSrgW2U9Pq
+         n+zMNQv69x5VOVQ+CLEsZmtaPnaABJ1CRaJ3I7E9Ux933UKV++ecMIvISjopeQz49Yu+
+         6KD2F/u2VRlPglEqXn19W0KeG3IsLXozsRTWY5kCFEVXnZbWvOqQPzD1+72UsKVq0piq
+         E0lL5NnQRa8L0PYvQ4zo3tsLMsIdzJFZv9OE2wTyPb8hFAC7dP+FYTKyTuLtWYc2TYq/
+         Eeyw==
+X-Gm-Message-State: APjAAAVmXJsSJzfhf55yPS/SB4XlnNXgT6Irs+sOkc2XNpNn+Q3i3DcS
+        iSdn0f+h5egLm972sF3NcVqNrsBWpGzMEg==
+X-Google-Smtp-Source: APXvYqzIKMqBF3boGwmmtWbXD403NG43Z5p0eyCFGyGlS6rfhrDaBXiJS4PtFIeGEnU531C4ScW3LQ==
+X-Received: by 2002:a1c:cc16:: with SMTP id h22mr4300805wmb.51.1573148491052;
+        Thu, 07 Nov 2019 09:41:31 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id t12sm2706932wrx.93.2019.11.07.09.41.30
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Nov 2019 09:41:30 -0800 (PST)
+Message-ID: <5dc4574a.1c69fb81.7fde.f733@mx.google.com>
+Date:   Thu, 07 Nov 2019 09:41:30 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20191107145523.1792cafb@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191107
+Subject: next/master boot: 228 boots: 58 failed, 161 passed with 8 offline,
+ 1 conflict (next-20191107)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/6/19 8:01 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the scsi tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
-> 
-> drivers/scsi/lpfc/lpfc_init.c: In function 'lpfc_cpumask_of_node_init':
-> drivers/scsi/lpfc/lpfc_init.c:6020:6: warning: the address of 'cpu_all_bits' will always evaluate as 'true' [-Waddress]
->   6020 |  if (!cpumask_of_node(numa_node))
->        |      ^
-> 
-> Introduced by commit
-> 
->    dcaa21367938 ("scsi: lpfc: Change default IRQ model on AMD architectures")
+next/master boot: 228 boots: 58 failed, 161 passed with 8 offline, 1 confli=
+ct (next-20191107)
 
-Thanks Stephen for this report. A candidate fix has been posted: 
-https://lore.kernel.org/linux-scsi/20191107052158.25788-6-bvanassche@acm.org/T/#u
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191107/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191107/
 
-Bart.
+Tree: next
+Branch: master
+Git Describe: next-20191107
+Git Commit: c68c5373c504078cc0e0edc7d5c88b47ca308144
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 86 unique boards, 24 SoC families, 26 builds out of 216
 
+Boot Failures Detected:
 
+arm:
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            tegra124-nyan-big: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8016-sbc: 1 failed lab
+            apq8096-db820c: 1 failed lab
+            meson-axg-s400: 1 failed lab
+            meson-g12a-x96-max: 1 failed lab
+            meson-g12b-odroid-n2: 1 failed lab
+            meson-g12b-s922x-khadas-vim3: 1 failed lab
+            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxl-s905x-khadas-vim: 1 failed lab
+            meson-gxl-s905x-libretech-cc: 3 failed labs
+            meson-gxm-khadas-vim2: 1 failed lab
+            meson-gxm-nexbox-a1: 1 failed lab
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+            msm8998-mtp: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            qcs404-evb-4k: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            rk3399-gru-kevin: 1 failed lab
+            sdm845-db845c: 1 failed lab
+            sdm845-mtp: 1 failed lab
+            sun50i-a64-bananapi-m64: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-axg-s400: 1 failed lab
+            meson-g12a-x96-max: 1 failed lab
+            meson-g12b-odroid-n2: 1 failed lab
+            meson-g12b-s922x-khadas-vim3: 1 failed lab
+            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxl-s905x-khadas-vim: 1 failed lab
+            meson-gxl-s905x-libretech-cc: 3 failed labs
+            meson-gxl-s905x-nexbox-a95x: 1 failed lab
+            meson-gxm-khadas-vim2: 1 failed lab
+            meson-gxm-nexbox-a1: 1 failed lab
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+            r8a7796-m3ulcb: 2 failed labs
+            rk3399-gru-kevin: 1 failed lab
+            sun50i-a64-bananapi-m64: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-axg-s400: 1 failed lab
+            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxl-s905x-khadas-vim: 1 failed lab
+            meson-gxl-s905x-libretech-cc: 3 failed labs
+            meson-gxl-s905x-nexbox-a95x: 1 failed lab
+            meson-gxm-khadas-vim2: 1 failed lab
+            meson-sm1-khadas-vim3l: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+            r8a7795-salvator-x: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm64:
+    defconfig:
+        r8a7796-m3ulcb:
+            lab-collabora: PASS (gcc-8)
+            lab-baylibre: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

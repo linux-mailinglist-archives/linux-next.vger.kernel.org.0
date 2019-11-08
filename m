@@ -2,126 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB01F3CC3
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 01:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6924CF3CCA
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 01:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbfKHAUv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 19:20:51 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:31130 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725930AbfKHAUu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 19:20:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573172449;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5gCaMc6tX9QOhF6O+c6COJocW0Fk5ySJnwtoUCLt61c=;
-        b=HpVmfJD/DQBRv/cvvDjvriBP+VXRY5WTbazk7tug5xze4QzsM8kReqpiBwmnTi9Zo6RNrS
-        5ujPrW/W+JFqcUeZWSd9lC3OgHwJXH4OtpjYm5/am+u+YnXM5e0s7t5Y7dczZJnjXBG5Hi
-        ipS3sbIx7yxsJ6S4aXnNXcMLaRd3oKk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-187-iBgSgiDTNUSAR9EJuJy-IQ-1; Thu, 07 Nov 2019 19:20:46 -0500
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726094AbfKHAVc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 19:21:32 -0500
+Received: from ozlabs.org ([203.11.71.1]:59651 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725928AbfKHAVb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 7 Nov 2019 19:21:31 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 61750800C61;
-        Fri,  8 Nov 2019 00:20:44 +0000 (UTC)
-Received: from colo-mx.corp.redhat.com (colo-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.20])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4E05F5C3FD;
-        Fri,  8 Nov 2019 00:20:44 +0000 (UTC)
-Received: from zmail17.collab.prod.int.phx2.redhat.com (zmail17.collab.prod.int.phx2.redhat.com [10.5.83.19])
-        by colo-mx.corp.redhat.com (Postfix) with ESMTP id BA74118095FF;
-        Fri,  8 Nov 2019 00:20:43 +0000 (UTC)
-Date:   Thu, 7 Nov 2019 19:20:43 -0500 (EST)
-From:   Jan Stancek <jstancek@redhat.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>, darrick.wong@oracle.com
-Cc:     LTP List <ltp@lists.linux.it>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, chrubis <chrubis@suse.cz>,
-        open list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org
-Message-ID: <852514139.11036267.1573172443439.JavaMail.zimbra@redhat.com>
-In-Reply-To: <CA+G9fYtmA5F174nTAtyshr03wkSqMS7+7NTDuJMd_DhJF6a4pw@mail.gmail.com>
-References: <CA+G9fYtmA5F174nTAtyshr03wkSqMS7+7NTDuJMd_DhJF6a4pw@mail.gmail.com>
-Subject: Re: LTP: diotest4.c:476: read to read-only space. returns 0:
- Success
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 478LY51kKtz9sPT;
+        Fri,  8 Nov 2019 11:21:29 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573172489;
+        bh=wJ134fVt/5GKrex9pkMrD0W2xjP3wa4gqJRMV0Aa7ZA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bMbOArz5LIdC7KPSlepL1XlnuxPJG+QBJpC9PtdNbKKT+YhBKRtBjzcQMJFLH8qiu
+         Y5rVqWibDDybFilfSKAg/amZP1PHWga+1wMecFJJB0uutmxp4KPLddRz3QYFz7vLF2
+         2i9j5NByEJ8yhm52zoMxJoyTa+k8jFNR+iY/sCSa3A0+7mjf76niDd28/4F8lgYMZi
+         AVdBs2MfSNcmKRx80RcWLXurO6J8OHgWp0+2IaY4Q47yxl286Fu5/pHbiuK+kv8l7F
+         BwCNPkwTG8l4cfOEX0KNfLQhGMqIBvArpKR+AVAOVw6By3b/C7VqF1vbaQo8NA6QTG
+         x6XTRE0l2U7TA==
+Date:   Fri, 8 Nov 2019 11:21:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Leo Li <sunpeng.li@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20191108112127.33c01bb5@canb.auug.org.au>
 MIME-Version: 1.0
-X-Originating-IP: [10.43.17.163, 10.4.195.16]
-Thread-Topic: diotest4.c:476: read to read-only space. returns 0: Success
-Thread-Index: XegtwwjoOKT9tnnmixJeWQ/ZMQQAiQ==
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
-X-MC-Unique: iBgSgiDTNUSAR9EJuJy-IQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/3llplXz27kiyECUYPLPt1e5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/3llplXz27kiyECUYPLPt1e5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
------ Original Message -----
-> LTP test case dio04 test failed on 32bit kernel running linux next
-> 20191107 kernel.
-> Linux version 5.4.0-rc6-next-20191107.
->=20
-> diotest4    1  TPASS  :  Negative Offset
-> diotest4    2  TPASS  :  removed
-> diotest4    3  TPASS  :  Odd count of read and write
-> diotest4    4  TPASS  :  Read beyond the file size
-> diotest4    5  TPASS  :  Invalid file descriptor
-> diotest4    6  TPASS  :  Out of range file descriptor
-> diotest4    7  TPASS  :  Closed file descriptor
-> diotest4    8  TPASS  :  removed
-> diotest4    9  TCONF  :  diotest4.c:345: Direct I/O on /dev/null is
-> not supported
-> diotest4   10  TPASS  :  read, write to a mmaped file
-> diotest4   11  TPASS  :  read, write to an unmapped file
-> diotest4   12  TPASS  :  read from file not open for reading
-> diotest4   13  TPASS  :  write to file not open for writing
-> diotest4   14  TPASS  :  read, write with non-aligned buffer
-> diotest4   15  TFAIL  :  diotest4.c:476: read to read-only space.
-> returns 0: Success
-> diotest4   16  TFAIL  :  diotest4.c:180: read, write buffer in read-only
-> space
-> diotest4   17  TFAIL  :  diotest4.c:114: read allows  nonexistant
-> space. returns 0: Success
-> diotest4   18  TFAIL  :  diotest4.c:129: write allows  nonexistant
-> space.returns -1: Invalid argument
-> diotest4   19  TFAIL  :  diotest4.c:180: read, write in non-existant spac=
-e
-> diotest4   20  TPASS  :  read, write for file with O_SYNC
-> diotest4    0  TINFO  :  2/15 test blocks failed
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Smaller reproducer for 32-bit system and ext4 is:
-  openat(AT_FDCWD, "testdata-4.5918", O_RDWR|O_DIRECT) =3D 4
-  mmap2(NULL, 4096, PROT_READ, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) =3D 0xb7f7=
-b000
-  read(4, 0xb7f7b000, 4096)              =3D 0 // expects -EFAULT
+drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:503:13: warning=
+: 'dm_dcn_crtc_high_irq' defined but not used [-Wunused-function]
+  503 | static void dm_dcn_crtc_high_irq(void *interrupt_params)
+      |             ^~~~~~~~~~~~~~~~~~~~
 
-Problem appears to be conversion in ternary operator at
-iomap_dio_bio_actor() return. Test passes for me with
-following tweak:
+Introduced by commit
 
-diff --git a/fs/iomap/direct-io.c b/fs/iomap/direct-io.c
-index 2f88d64c2a4d..8615b1f78389 100644
---- a/fs/iomap/direct-io.c
-+++ b/fs/iomap/direct-io.c
-@@ -318,7 +318,7 @@ iomap_dio_bio_actor(struct inode *inode, loff_t pos, lo=
-ff_t length,
-                if (pad)
-                        iomap_dio_zero(dio, iomap, pos, fs_block_size - pad=
-);
-        }
--       return copied ? copied : ret;
-+       return copied ? (loff_t) copied : ret;
- }
+  75856c84993d ("drm/amd/display: Send vblank and user events at vsartup fo=
+r DCN")
 
- static loff_t
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/3llplXz27kiyECUYPLPt1e5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3EtQcACgkQAVBC80lX
+0GyR0Qf+Pu0mbi8E3nBNcYrCaxPPlQdy6fPotX9X/Kk/cnK+ExqLPV+uwOC1bqme
+m6ui+9nRBgZfYaaz0bn7cRcE6K6XcxqKjMX3KbEbq8pj0ad1QB1+r20g/fvWD06H
+DQ6uEh1B/c+hS6OWHe41Q2FIdwjR8gMDejbLZXDjpXgLaJDQIXpw+OS+LymjIOWT
+u6H4kQm6t/i2++OJJDDWMGcsZDRjsolFdOAj0FMXPVYTQCDmXQemTnsWL3h5zrvB
+g6TVI2RGpsoXMKAHnwHacE3k5fEYq8NEnAb/qRLCln0GGefG/qhzYjNT7n8ojxhA
+EBxm9ypGizTXEJpoPPOV9DwJHtIyzQ==
+=cXti
+-----END PGP SIGNATURE-----
+
+--Sig_/3llplXz27kiyECUYPLPt1e5--

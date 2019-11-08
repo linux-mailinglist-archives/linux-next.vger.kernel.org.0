@@ -2,115 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0943F3E18
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 03:31:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D389F3E60
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 04:27:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726118AbfKHCbD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 7 Nov 2019 21:31:03 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]:34600 "EHLO
-        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725928AbfKHCbC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 7 Nov 2019 21:31:02 -0500
-Received: by mail-wr1-f44.google.com with SMTP id e6so5357318wrw.1
-        for <linux-next@vger.kernel.org>; Thu, 07 Nov 2019 18:31:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=d9hMWX1LMraLviOpuoheVptY2nyt/iYNZ4J9nN4QSxo=;
-        b=Gq/eznXaGbPhDivlglvIQEEm89Hi4rSs27ER8vHoZnTi4KTSCJS0YUiGfjWwsWIS6Q
-         YcU0dX81J3emoa+FSqHXtWNeEHnTUL/gkTqKMaU5f6rZWwGcY9JO1PK3Dso63yVUHWKa
-         5G7HvrpuAAKOqRoBsREx/6zxpYhNygfNtLB3MYviRHMoM6jU32Z1G1JV5h4qPQ7BcUmo
-         YtOzEiUn+VCXnKIEFWQpqOM6cAH6cnabcoCp83K0kC4mO6RyhAR87oGS6mFZlaUvYfE9
-         uwWka5H6R29m080TTMsdspwCeHoF74v7bg7j2GV4IpLPy+EZiqXax1r6RtWUFl7qkK/r
-         zdjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=d9hMWX1LMraLviOpuoheVptY2nyt/iYNZ4J9nN4QSxo=;
-        b=gPFghNUd+0p+bIVxHh2Ih7SNYSqZrVDB3I3+KHqvWlfGm7yRdCCdwOP1r4hjzJtLiT
-         iH+QVldFwUHmdz0JpgcuRwLqQxxZnnb8fV2zfgKnD3VkNwjq9/T+Zj1xzDzkhfE+M5b6
-         KOB0D7BzTmlqNTSmeyiLn0fp/M5CyF2vvnm0aREILktYCkCvpuVFZS0+aEtdvaIHaYDK
-         PRiU9avkn2tUlRpU7b94WKopT3JfeEQWZjRBxAL+6U9FFzjNUWF0J8mzvLMbKksHLZ1I
-         eNFZb3GvhoPNVCpo96pDRU4R0wrJ8rBao2M9F9kLM8eGGsmf+rLtpdKb1f54Wt/hzGrK
-         oTRA==
-X-Gm-Message-State: APjAAAXNPAHJYpCh44m6Yafsnc1Q1B9daxzpP5iiyZiofyLZcLvTpTIP
-        N22Jl/uN18JpUKD5EWW4++uL7EKDLDk=
-X-Google-Smtp-Source: APXvYqxDjLDrJGOXu8E5TP3KMGsba181E1NKn7bOwaCw0nKIAjnKngwDhrVqzm1HT2gkd+kN4aeseA==
-X-Received: by 2002:a5d:6585:: with SMTP id q5mr5689784wru.158.1573180260434;
-        Thu, 07 Nov 2019 18:31:00 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id s9sm3464885wmj.22.2019.11.07.18.30.59
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2019 18:30:59 -0800 (PST)
-Message-ID: <5dc4d363.1c69fb81.b057d.37a2@mx.google.com>
-Date:   Thu, 07 Nov 2019 18:30:59 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726219AbfKHD1G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 7 Nov 2019 22:27:06 -0500
+Received: from ozlabs.org ([203.11.71.1]:48115 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726094AbfKHD1G (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 7 Nov 2019 22:27:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 478QgC2dbPz9sP3;
+        Fri,  8 Nov 2019 14:27:03 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573183623;
+        bh=L8hdrEO/Huj0NNEdUGCwZ1N0P5lIySi3cYQ2RznsqxM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=sNGAbhpUt8NW9XFdADVLAZgshLKGV7a8WPjz4a59usGSRpAGW9HDxJQBT7B+ss/bw
+         R8zr+qM12QRAP/5Igbdc1DdtSMOFjnMsuffl+Nk7z9963LArwoATS5lHypUb1MHVEY
+         pdZzPdH8Ta4jDxr3y2wztyd/WIcW3MQW+dTID86CsHcjnKTUqXLE610kmOiR88ZpYp
+         zUBoUEqCX6lZD//CZ+sXeT9/8jZ2QHbMKSTFBOdYi+d95zkcUr0afy9kv1mL86AYvP
+         7pE8q85AKndBZV91PFI5y6ou6y8lB9XhKUTZ+NhzvVVABWeveVcp4B7BuakW5ZdeUp
+         PlRdMmERYKT1Q==
+Date:   Fri, 8 Nov 2019 14:27:02 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Drew Fustini <drew@pdp7.com>,
+        Kent Gibson <warthog618@gmail.com>
+Subject: linux-next: manual merge of the gpio-brgl tree with the gpio tree
+Message-ID: <20191108142702.2e5ddcbb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc6-315-g0afdb084c8ad
-Subject: next/pending-fixes boot: 229 boots: 2 failed,
- 220 passed with 7 offline (v5.4-rc6-315-g0afdb084c8ad)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/2rv=tye26ORUMSS_.+MQj/e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 229 boots: 2 failed, 220 passed with 7 offline (v5=
-.4-rc6-315-g0afdb084c8ad)
+--Sig_/2rv=tye26ORUMSS_.+MQj/e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc6-315-g0afdb084c8ad/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc6-315-g0afdb084c8ad/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc6-315-g0afdb084c8ad
-Git Commit: 0afdb084c8adc6dab97ae27ba0e4323ab88963e6
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 86 unique boards, 24 SoC families, 26 builds out of 215
+Today's linux-next merge of the gpio-brgl tree got conflicts in:
 
-Boot Failures Detected:
+  drivers/gpio/gpiolib.c
+  include/uapi/linux/gpio.h
 
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
+between commit:
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
+  8c550e94b883 ("gpio: expose pull-up/pull-down line flags to userspace")
 
-Offline Platforms:
+from the gpio tree and commit:
 
-arm:
+  6d8251b35add ("gpio: expose pull-up/pull-down line flags to userspace")
 
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+from the gpio-brgl tree.
 
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
+I fixed it up (I just used the latter versions) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
+--=20
+Cheers,
+Stephen Rothwell
 
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
+--Sig_/2rv=tye26ORUMSS_.+MQj/e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
----
-For more info write to <info@kernelci.org>
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3E4IYACgkQAVBC80lX
+0Gz6qwf/XcJlSZnD1nvsIWYKt3bYAcZPwJ5SHTpHxXCt3KRgGzhuFvrOFStz98fu
+VB34wGTf5cPxiha99/ZLbc/mj6LB6LGboQdcTiG2GjIRWRqnAp/jDZHx3mJFO3XO
+3Wi7DPbaDDHgfIkvoiQDZ2mcY1csL8/apWMiNSz0a9IaphBVuqV12+7A3bilMNFW
+i12lVS4TXnmEflw5k2tzx0NKK0UU5WoLWBoF2/6HKs5UjSb2+2WdwfkUG2Xo2LIo
+0sMgIu2KZxbOReZ8RluKAlCNlqPmE49AhYX7VEEO9o7/tLfh9+4IbnXr8WanSqg5
+XrExPGDPWDt2s0djCIXYn3RgvUYnHA==
+=TjAD
+-----END PGP SIGNATURE-----
+
+--Sig_/2rv=tye26ORUMSS_.+MQj/e--

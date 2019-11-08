@@ -2,114 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB31F5AE1
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 23:29:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27C5CF5B92
+	for <lists+linux-next@lfdr.de>; Sat,  9 Nov 2019 00:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730118AbfKHW3o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Nov 2019 17:29:44 -0500
-Received: from mail-io1-f67.google.com ([209.85.166.67]:34775 "EHLO
-        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727654AbfKHW3n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Nov 2019 17:29:43 -0500
-Received: by mail-io1-f67.google.com with SMTP id q83so8071919iod.1
-        for <linux-next@vger.kernel.org>; Fri, 08 Nov 2019 14:29:43 -0800 (PST)
+        id S1726640AbfKHXDC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Nov 2019 18:03:02 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:35966 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726227AbfKHXDC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Nov 2019 18:03:02 -0500
+Received: by mail-wr1-f68.google.com with SMTP id r10so8814792wrx.3;
+        Fri, 08 Nov 2019 15:03:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tG3CMleYdOoOJlDJUqZcQjcg5RUyLpG6Jn1aCKR4UeI=;
-        b=0QMe2DamNA24EOuI+UywMP9UlxhPIEd9A3ejSSwX5dRvxIuLh1eyekTxCIaEXQw45R
-         54KJMXm13tA1bXnQ5gJkP3Bc2AXpK5GqrZmTonZGLH7QjaBf30/ySbas7znjaZC8cE1G
-         dvINXztNO0uL0txG0mi6Bc5/ap9kcdnlTiqhlqswN/TjS2cBK4KeW5Nwx13lqVQuEvxX
-         oGKBNxbZ5TalYTw1lCFi09i1ffQkcnGX5b5VkolnEU5VWoGxPkE3Trg9U5Fmdt/c9FIa
-         zNy9okvAx34ttHfQFN4jU4TQ/XK6X0+WuB4rn384C8czKSZAdSDyG4KOBvp6caVBgMS9
-         LBzQ==
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=udaxrt3XnrWEC9M1Y9RVfizXLl29vH9+UyOxjM3wuzc=;
+        b=BJukUM87b/u/A3eKR2Lfv8KYlBkhbGzaaUHrPzcwFMUEdNodA+fWjoqNNlHBb41inA
+         R/P5O93U0XRtphBDVSQOql65HwtoPCx8LYW41QokMedAaclecUmmXAB/ETV1D9kbOBN6
+         iHYma5Nit0POQz/0VV9XP/NdVGVemlDQd3UZFbXeSqEtF7vByCYTJyoN02NwcuAq79sz
+         m9R8wVOUHVD0YtcYmemgZXQepiffKcfsNJNYHRyQtSGs/pBAesI1LwJcqtYupv6sBRSr
+         36RCIffAsB3SFI/2wsDOLHtjsrYoU7IhVv+6gc+MwBZ4cc50wMnYyXRSa/6GLKj0BAYL
+         38vA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tG3CMleYdOoOJlDJUqZcQjcg5RUyLpG6Jn1aCKR4UeI=;
-        b=IHDDVmZwUK3brrY1WzWFyOUK6v3i+dlX88soklqSaXKi6bBOkQt3e+4Ysa5ElacEKj
-         fSPgXQhb5of6NtnNY3TzPbayMheBx9ok//RPmozp/t2qWbszRW6nIOJToWEJIaQqrYlT
-         hxaT+0QiEgEWk5Sb3ggR468Q5fN/A/AM6wOiBed8Eupgn3aKjaPJchjtV5B8yxO/eGZn
-         ahTPT7xUDamzBKyTpHh8QP2AkZA8Dt8Rn9pL8qJ02EGQNrXo+q+gHpfffSQvSqnZFCFh
-         B/IDLgNld60UatH0fnqIhK9mja29igobJm7qe9iE3Bo8N2bxkAntEmYWpq7Sm2dHHTel
-         U3ow==
-X-Gm-Message-State: APjAAAUnC4uP9LZyPDMEpfAqwtyWfYsacUvQFFgJetNPVfTm/XpE9wus
-        XF727t3x1X25pOuNyQLniv9tTzPqr2PNZwQosLguOg==
-X-Google-Smtp-Source: APXvYqxR2Iojnfzgt1D2EKNQghVo4JbH2TyZSSa7HkkqJ9Q6NanRF7wM7yANUTTIbJh1g1uWd98XskwAsn4twL28rCk=
-X-Received: by 2002:a6b:6509:: with SMTP id z9mr12039319iob.123.1573252182905;
- Fri, 08 Nov 2019 14:29:42 -0800 (PST)
-MIME-Version: 1.0
-References: <CAOesGMjVUCd9bN=pggS-ECjMR42b0SqXKewsp+NYFSVqRgSWrg@mail.gmail.com>
- <20191107211801.GA107543@google.com> <20191108110736.GA10708@e121166-lin.cambridge.arm.com>
-In-Reply-To: <20191108110736.GA10708@e121166-lin.cambridge.arm.com>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Fri, 8 Nov 2019 14:29:31 -0800
-Message-ID: <CAOesGMhxs0A-YTXpS9Lqk_sn2=Q5jaCM2+mjEuvtwSX9Y49eMw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=udaxrt3XnrWEC9M1Y9RVfizXLl29vH9+UyOxjM3wuzc=;
+        b=l+TexfV9amPWKNM+13OMDyQg1jpsUuylLLKAlljAtyJOXTYbi92vS9YN3iYCmeZ4z0
+         FeCtiQfPw6dJ9Mgu8giyxJ6oYNxUg001noYXqU/XL8mrICy2FMhiNXKXqRRPy+/8WD0s
+         Nlj3rcLswb0lW0gBhbi4wMYPEwxmt9bdrx6CX2t6+03wjRUG+rYIAskBaGugGr0rtNlY
+         TtU0U2dBgYW+lka9MhlNqwCgbg6I78aOaNib1YMmH1YYqi6/qokxtFVNfhvafey7sVsb
+         mDBq9NI660LxbdBE6zOlNlyZ9KlQy+hc5V5yNL/DS1N6okmwh5HrhOOagdokgPdqvyU2
+         CEjw==
+X-Gm-Message-State: APjAAAUQpaqSPYwnTraPpAOgKa657K3rZfq2+BCeoGcgq7iZKbBZpgzl
+        O99PChnjwdF5qFYY6gM97PEs4ITs
+X-Google-Smtp-Source: APXvYqxiwZihi9yJa5OiKRp9+13b0HEM1W0hETCo+JyiFjFHFu1CHQu8lZRc/C2/0Ml7H5piFXRPow==
+X-Received: by 2002:adf:e74b:: with SMTP id c11mr11250549wrn.357.1573254180677;
+        Fri, 08 Nov 2019 15:03:00 -0800 (PST)
+Received: from [10.230.29.90] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id t133sm12339914wmb.1.2019.11.08.15.02.58
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 08 Nov 2019 15:03:00 -0800 (PST)
+Subject: Re: linux-next: build warning after merge of the scsi tree
+To:     Bart Van Assche <bvanassche@acm.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Xiaowei Bao <xiaowei.bao@nxp.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Shawn Guo <shawnguo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        James Smart <james.smart@broadcom.com>
+References: <20191107145523.1792cafb@canb.auug.org.au>
+ <3a7be3f6-7aea-3660-bf20-dd2563d479bf@acm.org>
+From:   James Smart <jsmart2021@gmail.com>
+Message-ID: <43644d42-3dfe-1c8c-fe6d-a017bc06087e@gmail.com>
+Date:   Fri, 8 Nov 2019 15:02:56 -0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
+MIME-Version: 1.0
+In-Reply-To: <3a7be3f6-7aea-3660-bf20-dd2563d479bf@acm.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 8, 2019 at 3:07 AM Lorenzo Pieralisi
-<lorenzo.pieralisi@arm.com> wrote:
->
-> On Thu, Nov 07, 2019 at 03:18:01PM -0600, Bjorn Helgaas wrote:
-> > On Thu, Nov 07, 2019 at 10:27:20AM -0800, Olof Johansson wrote:
-> > > On Wed, Nov 6, 2019 at 2:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > >
-> > > > Hi all,
-> > > >
-> > > > Today's linux-next merge of the pci tree got a conflict in:
-> > > >
-> > > >   arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
-> > > >
-> > > > between commit:
-> > > >
-> > > >   68e36a429ef5 ("arm64: dts: ls1028a: Move thermal-zone out of SoC")
-> > > >
-> > > > from the arm-soc tree and commit:
-> > > >
-> > > >   8d49ebe713ab ("arm64: dts: ls1028a: Add PCIe controller DT nodes")
-> > >
-> > > Bjorn, we ask that driver subsystem maintainers don't pick up DT
-> > > changes since it causes conflicts like these.
-> > >
-> > > Is it easy for you to drop this patch, or are we stuck with it?
-> > > Ideally it should never have been sent to you in the first place. :(
-> >
-> > Lorenzo, is it feasible for you to drop it from your pci/layerscape
-> > branch and repush it?  If so, I can redo the merge into my "next"
-> > branch.
->
-> Done. Should we ignore all dts updates from now onwards ?
+On 11/7/2019 7:51 AM, Bart Van Assche wrote:
+> On 11/6/19 8:01 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the scsi tree, today's linux-next build (powerpc
+>> ppc64_defconfig) produced this warning:
+>>
+>> drivers/scsi/lpfc/lpfc_init.c: In function 'lpfc_cpumask_of_node_init':
+>> drivers/scsi/lpfc/lpfc_init.c:6020:6: warning: the address of 
+>> 'cpu_all_bits' will always evaluate as 'true' [-Waddress]
+>>   6020 |  if (!cpumask_of_node(numa_node))
+>>        |      ^
+>>
+>> Introduced by commit
+>>
+>>    dcaa21367938 ("scsi: lpfc: Change default IRQ model on AMD 
+>> architectures")
+> 
+> Thanks Stephen for this report. A candidate fix has been posted: 
+> https://lore.kernel.org/linux-scsi/20191107052158.25788-6-bvanassche@acm.org/T/#u 
+> 
+> 
+> Bart.
+> 
+> 
 
-Thanks!
+See revised fix at:
+https://marc.info/?l=linux-scsi&m=157325403920775&w=2
 
-Indeed, dts updates should only go in through the platform maintainers
-(i.e. through soc tree), unless there are strong reasons to bring them
-in through driver trees.
-
-If there's a need for a dt-include to be shared between driver and
-dts, getting them on a stable branch that's merged through both trees
-is usually the best way. Reach out when that happens and we can
-coordinate.
-
-
-Regards,
-
--Olof
+-- james

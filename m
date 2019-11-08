@@ -2,97 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DE778F45C4
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 12:34:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26204F4B14
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 13:14:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729896AbfKHLeV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Nov 2019 06:34:21 -0500
-Received: from mail-me1aus01hn2088.outbound.protection.outlook.com ([52.103.198.88]:40576
-        "EHLO AUS01-ME1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726149AbfKHLeU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 8 Nov 2019 06:34:20 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gXXkV1UafCr35SC4ow6vYY5z6pOjBFvU5KcR+0K3cZ6rVMhXJl5ykHB+qOlqV6aDw/095hbJCaC93dLE3GKagKN8DhNUIpqoAgmsspqGZm1n7KvGz3MjWPC/QUYG4T9FXDCIU6pSwtRe2Gz1s37Vva3dE+h3PBWPLQaUwOlZTiYMrc0GbbxZLh1eV2NAYSKo98KzGn4YnEUDexPUQ8Q4pCG2l31/jNIbdnu6s2JPXPSanaHKhoicO3bBTLJTEeCk9IeqjakvC/iPiOtw9xr2ncmyzAQmVx5/T5HYS+QFXgnNm/g7un92xj9tvLGSf5CNjcBOLXG7X5x+aLDJzERjXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AdbfA+fykNlUA3FEBdra9pcf9T0w9b3HpEa8CayfVK4=;
- b=Na9APdUOMzMlNflDH5HuV+Y8hvmcUyAojFJKRCpHvp32Va7pQbJZModl1971unB4h7OtjYSrDlOxj+qj218XNP4QFhq8U7rGLEGaPlqTqyOznxUik0YUzilhtvWsm/lJnEBPUllUuJJTqdz/JJJPBNfq7fub6/vnyV1AM/zQFKkTXWszBcVKZEDL3Po/0Ttcd2xg/F6YtgKp44BccLqB7gcW/G8uUgbjlD3Z8zxNN3KuYPBfDXJVIlbmYS10Z7jTCYpKm4xgxUD+WBgp+ogBXopGu71KwO42vm3/AVUvaYFDbdWqpyCHzcFTs/R8i/quy5CSsVgfvACPvc736QeKaA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=student.uts.edu.au; dmarc=pass action=none
- header.from=student.uts.edu.au; dkim=pass header.d=student.uts.edu.au;
- arc=none
+        id S2392042AbfKHMNu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Nov 2019 07:13:50 -0500
+Received: from mail-wr1-f43.google.com ([209.85.221.43]:41249 "EHLO
+        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2392038AbfKHMNu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Nov 2019 07:13:50 -0500
+Received: by mail-wr1-f43.google.com with SMTP id p4so6793352wrm.8
+        for <linux-next@vger.kernel.org>; Fri, 08 Nov 2019 04:13:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=studentutsedu.onmicrosoft.com; s=selector2-studentutsedu-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AdbfA+fykNlUA3FEBdra9pcf9T0w9b3HpEa8CayfVK4=;
- b=TljULCyyn39mdcpB2DppTyc4bE3dSn8y66GuoQ930smKM2MY7LwxYxkWoleh0yco09JHjLlxdj/ZVeVtzJfbNmIUzoTWTLYAR38WOqgNL9ZTe12NslVDfCXzyd4FijwqUbATyVNG9Mj4XS4U3ZeDCD9+08oA0RVToilyWJTFax8=
-Received: from SY2PR01MB2314.ausprd01.prod.outlook.com (52.134.168.150) by
- SY2PR01MB3082.ausprd01.prod.outlook.com (52.134.170.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2430.20; Fri, 8 Nov 2019 11:34:16 +0000
-Received: from SY2PR01MB2314.ausprd01.prod.outlook.com
- ([fe80::91ca:a903:df56:79db]) by SY2PR01MB2314.ausprd01.prod.outlook.com
- ([fe80::91ca:a903:df56:79db%2]) with mapi id 15.20.2430.020; Fri, 8 Nov 2019
- 11:34:16 +0000
-From:   Elite Finance Group <12563363@student.uts.edu.au>
-To:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
-Subject: Wen es angeht!!!
-Thread-Topic: Wen es angeht!!!
-Thread-Index: AQHVlhPuHyk228MTIkakGyGdVBNQ7A==
-Date:   Fri, 8 Nov 2019 09:07:22 +0000
-Message-ID: <SY2PR01MB2314E54BBEB7A6B288B43D1DAA7B0@SY2PR01MB2314.ausprd01.prod.outlook.com>
-Reply-To: "therobinsons199@gmail.com" <therobinsons199@gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-clientproxiedby: AM0PR06CA0017.eurprd06.prod.outlook.com
- (2603:10a6:208:ab::30) To SY2PR01MB2314.ausprd01.prod.outlook.com
- (2603:10c6:1:21::22)
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=Emi.Chiba@student.uts.edu.au; 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-antivirus: Avast (VPS 191107-0, 11/07/2019), Outbound message
-x-antivirus-status: Clean
-x-originating-ip: [176.216.208.109]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 73bd2e39-090b-4ef6-4346-08d7642b1101
-x-ms-traffictypediagnostic: SY2PR01MB3082:
-x-microsoft-antispam-prvs: <SY2PR01MB3082E5BD46178E0B3BBABFDC817B0@SY2PR01MB3082.ausprd01.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:1051;
-x-forefront-prvs: 0215D7173F
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(376002)(136003)(366004)(396003)(39860400002)(346002)(189003)(199004)(386003)(6506007)(316002)(786003)(26005)(9686003)(102836004)(52536014)(81156014)(81166006)(66556008)(66476007)(66446008)(6436002)(8796002)(8936002)(66946007)(305945005)(7736002)(55016002)(5003540100004)(5660300002)(99286004)(66066001)(43066004)(5640700003)(66806009)(22416003)(2860700004)(186003)(64756008)(8676002)(88552002)(7116003)(52116002)(7696005)(74316002)(6666004)(476003)(71200400001)(71190400001)(14444005)(33656002)(6116002)(3846002)(2351001)(478600001)(4744005)(486006)(561924002)(14454004)(3480700005)(256004)(6916009)(66574012)(25786009)(2906002)(2501003)(81742002);DIR:OUT;SFP:1501;SCL:1;SRVR:SY2PR01MB3082;H:SY2PR01MB2314.ausprd01.prod.outlook.com;FPR:;SPF:None;LANG:de;PTR:InfoNoRecords;MX:1;A:0;
-received-spf: None (protection.outlook.com: student.uts.edu.au does not
- designate permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: l6eA/PlV4jg3h2HIka8C7yUKuOB6/h79phSPI57Cdwbyk2p625driD64JRV1J+uMJfpDXovEYUBazZNd10kv0dZHDblRFzswL+aEaN8ScO2yrYaOzeS5GvtJBp35M0hhaNq9Q+QYIqu2jJMIVX5aL0K9fS10TigEQ4IYObtzSyCHdHyxM6kFTec40E0R4lPhRprh4UzTKx1wkeOeM3CVlQfmdy+o5XkwSFghey0Kq0yQYVxgyh4tyNWV9RYR4Q7+vq27ooMRkqSKunqSj9cOTlsQ42mYgI6Y94ivGVEghupnIbKOhCtumYyYsOdd7VqHMuY87R5h+urncE6R3bksyp1lP4ozYyERx3HZesXGiqIXVJyoB9xRSTM6r4aB2ZgkZBwf+tuTyJpAvM62xxEDpCiMC+8+CpOqgaxJmyPGE/9o39PeW287m/C9BSIw5faR
-x-ms-exchange-transport-forked: True
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <A367972B1823D94B9565EF0F0EE98A1E@ausprd01.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=21u+tvQZUQFU5DSa5JgnY6E+z7Cft1tavvM9YNrQrhA=;
+        b=pNJ+IcJCgurm603S3T0ViHHAovO4IZlXGxU+VdeLhuSVfGMb0+my6MLkItXr+qAOSQ
+         Yh6Cyt2y1tHR+1M6dimeNH2Q+pePoNyqqLoz/EL6ls+VOHxLCRVGNEony4bBJc2CBIp7
+         09cSOrrj75BN+BSSrHKmSk88fvxwU56+CcRsOcVGxbGDx9GIlYqYlYJe0HQI5Nrx//JC
+         uvgbtKgCKlm+FISQcA7zyVWEmrTTDPf+aHy2rql2s/KZFyj8jMkx6JN16b9CQy+Tl1NZ
+         SbU9rQIOmriTOpuhSPJOgIppvcH+/yUgO8v2DPLK2g0/sjw5/cseqJDGiNLXC2plgo2m
+         g4qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=21u+tvQZUQFU5DSa5JgnY6E+z7Cft1tavvM9YNrQrhA=;
+        b=ZoU9YM2bDXpGGSA/UybxwTRSK67/2IpYqoybyNhVnXr2HHqH48xyUsA+zITL/TOexl
+         46vYmR4F2nrR+qAqdLEixhIFsH1OH3ieUbW3FdXyb0DoP1Vlg+dNhdUQAsm7mJ+8woOc
+         Wy0iZPjTvlZ/KDdSOBTyGKX9kjQ8N+QvJPyOymC1fkt51+PAqtBF609OdGbzsBLppI7f
+         6Hu7rb4fBcqr4CRRQjD9ckDQInNXAPqOcI8J43v24ZWswKqr0aXJc0gOu0IPp+AnLIwU
+         SWVxBx5eyt3jPtjTShX97kU5+pbFlOsZWVJSvDK1yyThgYWO3/gxrxPIzGUqkJH4RwKb
+         n2SQ==
+X-Gm-Message-State: APjAAAUTkpAvN8Ise2voqC+p8bw4/OX0WRyWefUF2+SvNzNJpTnJ4q6H
+        DwJh5C1zMU/FyAZq/Iu7TEdKg2+eVoc=
+X-Google-Smtp-Source: APXvYqxMcVzMTpyak6Od/rQ5+SWypvUsj5RSkDdRDiazhZStfHuzaSoaor+7GxYsrk0jCgkTKWABpg==
+X-Received: by 2002:adf:ec4b:: with SMTP id w11mr7841145wrn.243.1573215228206;
+        Fri, 08 Nov 2019 04:13:48 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id w4sm4887177wmk.29.2019.11.08.04.13.47
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Nov 2019 04:13:47 -0800 (PST)
+Message-ID: <5dc55bfb.1c69fb81.6b549.9c90@mx.google.com>
+Date:   Fri, 08 Nov 2019 04:13:47 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-OriginatorOrg: student.uts.edu.au
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73bd2e39-090b-4ef6-4346-08d7642b1101
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Nov 2019 09:07:22.9090
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: e8911c26-cf9f-4a9c-878e-527807be8791
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IWQ449HJo19ywIme4oLdjVhDobO5jh8fIRZic8qWmv3l5XZmVgj5IpA/ewU0G95HgZoREZ4OopnoFUiQR7qer/rdXKb4lLfK3Z732ncz2g8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY2PR01MB3082
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191108
+Subject: next/master boot: 226 boots: 2 failed,
+ 217 passed with 7 offline (next-20191108)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hallo (linux-next@vger.kernel.org),
-Sie haben eine wohlt=E4tige Spende in H=F6he von 1,2 Millionen US-Dollar (1=
-.200.000 US-Dollar) von der Robinson-Familie in Munford, Tennessee. Ihre E-=
-Mail ist als Sieger hervorgegangen, Best=E4tigen Sie, ob diese E-Mail noch =
-g=FCltig ist. Kontaktieren Sie mich dringend f=FCr Anspr=FCche.
+next/master boot: 226 boots: 2 failed, 217 passed with 7 offline (next-2019=
+1108)
 
-Mit freundlichen Gr=FC=DFen,
-Frau Lisa Robinson f=FCr die Robinson Familie.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191108/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191108/
+
+Tree: next
+Branch: master
+Git Describe: next-20191108
+Git Commit: 5591cf003452dc3cb5047dc774151ff36c8d9cf7
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 86 unique boards, 23 SoC families, 26 builds out of 216
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

@@ -2,110 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D72F506D
-	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 16:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E56A1F5862
+	for <lists+linux-next@lfdr.de>; Fri,  8 Nov 2019 21:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726121AbfKHP71 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 Nov 2019 10:59:27 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52171 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727573AbfKHP70 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Nov 2019 10:59:26 -0500
-Received: by mail-wm1-f66.google.com with SMTP id q70so6707216wme.1;
-        Fri, 08 Nov 2019 07:59:25 -0800 (PST)
+        id S2388642AbfKHUTI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 Nov 2019 15:19:08 -0500
+Received: from mail-il1-f193.google.com ([209.85.166.193]:36823 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727992AbfKHUS6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 Nov 2019 15:18:58 -0500
+Received: by mail-il1-f193.google.com with SMTP id s75so6255680ilc.3;
+        Fri, 08 Nov 2019 12:18:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Eu4oX7xYfa5MEOO1wKRiehoOBepBzuAtMWUC++GMKtE=;
-        b=O3EhIS0N4Mze/93XT+emgHlgTwiEdn9OmkMPFV2qdEc5qMhzCvrwLQPPJgS33bfyI1
-         IcipeV0LpTcRCXghFTvpyrjHpYWt8ifpiY1XJZaUhGkxoz8APXsGEnCeNzVt5JvRzZm9
-         P9L41Cwd+ChvKUppQJV7pCqMw9hyWjRiYUFhqS9og7Ex1qzkeS0AlpFTrfV/DZCCyc3h
-         pCqCt6vgCDSLQsOuhPTMUohx8By7pbJQ58YK86z6TstqwRKzjsWe/F3A8VPIdSPQAW4F
-         17Mjyj04SvXeusPbrkr7yy54QfEScGG2XWE2kkqa5TIVMPK8NTSysc13Fsx8eWW8myKV
-         nTLg==
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Buzlffd6qPZ251pCZD0B39C9+fvZzH1TSbcG09q8kOM=;
+        b=E2U5fy1GS15GNw8LWY0zWj+xg+cFRiv3arN9dfOCfPpp8SeACKDuwjQx35uGwKkxJq
+         rYXGLQh5316oaljNVZYrfIPN67Mdle/ZpOdqFDyVUD+ZVJc09VstOgZ0qwN4LtUAmybG
+         dCYvqagCutIWKJ3fFcbprCjA+Jcwex90SoMOHUCDpdeOBw8N/h8uusTl11YBUC0km6wY
+         YPmwAcCukRny/ZJfFYsw0QoUlAPkaGNh4szDNH7WAau7Dx1Tdbsj+j6a/fCRR0b1v6+Q
+         0Gdbkv2bDEa6YyDZ4mXsw/FpLCzcj8clZZNituJYCWxY0/GkLfk8eBoUFnrXckDQb4WN
+         5F8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Eu4oX7xYfa5MEOO1wKRiehoOBepBzuAtMWUC++GMKtE=;
-        b=YCceqBsTiuoKpeHP5+rtACMKySqiEEU7YbkTYWu5Go0TmJBulrgRul9Oa9boOA+aED
-         qY/bubEEjFDCOIH2VgFEW0zs/Prcx0AKN1k3uQtoD3GGZbeWD5PPiAAKu+aLBA0oMF6h
-         sPE/GIO83lkhtLk1uznGXTPf4DaG9hILwBgmou2CizLR+7H/MntJ7iLLrY7rZfnBZ7h5
-         dSEEn0zPPKG7DHzOpB+//m26i9UrJtNex0R+EE2E/FBYK9XudSRp1w3IqfCYXyZEeA/W
-         j82fMlY/eNoe64LPijXDC5TbwQnuraooxHL1BCcZpBHnT81t1SiRU4GQg6QI3zgAAM2D
-         /0Fg==
-X-Gm-Message-State: APjAAAXgMQSQKWX+49wACgwF66WQhmAIxLvsl2fuH290CqsxSC0D8cCh
-        qeBfvUUcyQ40yyQ5c+yQ549Gb3mGNKXb0xp494k=
-X-Google-Smtp-Source: APXvYqyEmUfcU1PW2fm96T31Va0NOmni7iNU//QiUgaoi1CjjVsFn1p8BeZm43843cv7FWTvU9yhl3zmTMCNsup0ZQ0=
-X-Received: by 2002:a1c:790b:: with SMTP id l11mr9302935wme.127.1573228764346;
- Fri, 08 Nov 2019 07:59:24 -0800 (PST)
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Buzlffd6qPZ251pCZD0B39C9+fvZzH1TSbcG09q8kOM=;
+        b=HM8pX1HsaFmgXYnijs8yD+TV5TK81vne5r5MLMPN0JqD3RdYcp4vfAE5jmU+WkOhGD
+         BI9VZt4Lgnqg30rfj0rEJDetTliG6x1xXHwB4bf2RYDzwCcekDOL+eWbc6JYNjPn5wvP
+         cb705HEXk5nkB/VB78UEvI96q7YHXxVKQDZyqt2kkQFr98uH2KXQcE/r26FBeba3DrMW
+         4wtvu9mYSYENKQt7Bhjw/YBFzfL90zfMzmJ0nDUAXJ/jQRCJyS+4xSUhpDL6sedES3rC
+         T5Ijy6+4b35Q0RlJJrQKPlrGqJsRBMY+0JgZsNLJ7JYyXceOSYhy3tOUyU8BekpK8ZH8
+         lZJg==
+X-Gm-Message-State: APjAAAUChOsrwJOOlRHmFkvWUFRUfgKq420R1oCLh1krp2Ydxx6+is9m
+        Ffc0Wmx0o7pPhxEOzAIPevWOlx5i47sLD/rwVv8=
+X-Google-Smtp-Source: APXvYqwl51D2sksVNbNWnw3MblkRidAPR3sW4psWmp9RV0h3tFjpgG3mZY7AvHGAjxlVmCjySEmRNAp3bsgKVmyRfSQ=
+X-Received: by 2002:a92:297:: with SMTP id 145mr14835935ilc.85.1573244336215;
+ Fri, 08 Nov 2019 12:18:56 -0800 (PST)
 MIME-Version: 1.0
-References: <20191108163110.32c19752@canb.auug.org.au>
-In-Reply-To: <20191108163110.32c19752@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 8 Nov 2019 10:59:12 -0500
-Message-ID: <CADnq5_M3dMPm3vr9xV1wK2bHJs123nG39z3sbxkBdWdonmVjPA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+References: <CAOesGMjVUCd9bN=pggS-ECjMR42b0SqXKewsp+NYFSVqRgSWrg@mail.gmail.com>
+ <20191107211801.GA107543@google.com> <20191108110736.GA10708@e121166-lin.cambridge.arm.com>
+In-Reply-To: <20191108110736.GA10708@e121166-lin.cambridge.arm.com>
+Reply-To: bjorn@helgaas.com
+From:   Bjorn Helgaas <bjorn.helgaas@gmail.com>
+Date:   Fri, 8 Nov 2019 14:18:45 -0600
+Message-ID: <CABhMZUV=757JyGEuMQsfbrpiHUhn8uDgiKTRvxQNFAmxfmX0TQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the pci tree with the arm-soc tree
+To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+        Xiaowei Bao <xiaowei.bao@nxp.com>,
+        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 8, 2019 at 12:31 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Fri, Nov 8, 2019 at 5:07 AM Lorenzo Pieralisi
+<lorenzo.pieralisi@arm.com> wrote:
 >
-> Hi all,
+> On Thu, Nov 07, 2019 at 03:18:01PM -0600, Bjorn Helgaas wrote:
+> > On Thu, Nov 07, 2019 at 10:27:20AM -0800, Olof Johansson wrote:
+> > > On Wed, Nov 6, 2019 at 2:46 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > >
+> > > > Hi all,
+> > > >
+> > > > Today's linux-next merge of the pci tree got a conflict in:
+> > > >
+> > > >   arch/arm64/boot/dts/freescale/fsl-ls1028a.dtsi
+> > > >
+> > > > between commit:
+> > > >
+> > > >   68e36a429ef5 ("arm64: dts: ls1028a: Move thermal-zone out of SoC")
+> > > >
+> > > > from the arm-soc tree and commit:
+> > > >
+> > > >   8d49ebe713ab ("arm64: dts: ls1028a: Add PCIe controller DT nodes")
+> > >
+> > > Bjorn, we ask that driver subsystem maintainers don't pick up DT
+> > > changes since it causes conflicts like these.
+> > >
+> > > Is it easy for you to drop this patch, or are we stuck with it?
+> > > Ideally it should never have been sent to you in the first place. :(
+> >
+> > Lorenzo, is it feasible for you to drop it from your pci/layerscape
+> > branch and repush it?  If so, I can redo the merge into my "next"
+> > branch.
 >
-> After merging the amdgpu tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->
-> In file included from <command-line>:
-> include/drm/gpu_scheduler.h:98:21: error: field 'entity_idle' has incomplete type
->    98 |  struct completion  entity_idle;
->       |                     ^~~~~~~~~~~
->
-> followed by lots of similar errors.
->
-> Caused by commit
->
->   83a7772ba223 ("drm/sched: Use completion to wait for sched->thread idle v2.")
->
-> I added the following patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 8 Nov 2019 16:21:32 +1100
-> Subject: [PATCH] drm/sched: struct completion requires linux/completion.h
->  inclusion
->
-> Fixes: 83a7772ba223 ("drm/sched: Use completion to wait for sched->thread idle v2.")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Done. ...
 
-Applied.  Thanks!
-
-Alex
-
-> ---
->  include/drm/gpu_scheduler.h | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/include/drm/gpu_scheduler.h b/include/drm/gpu_scheduler.h
-> index 6619d2ac6fa3..684692a8ed76 100644
-> --- a/include/drm/gpu_scheduler.h
-> +++ b/include/drm/gpu_scheduler.h
-> @@ -26,6 +26,7 @@
->
->  #include <drm/spsc_queue.h>
->  #include <linux/dma-fence.h>
-> +#include <linux/completion.h>
->
->  #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
->
-> --
-> Cheers,
-> Stephen Rothwell
+Thanks, I updated my "next" branch to incorporate this.

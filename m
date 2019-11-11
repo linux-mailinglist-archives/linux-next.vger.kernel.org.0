@@ -2,107 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AE2F7151
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 11:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD0F5F71CC
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 11:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726819AbfKKKEI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 05:04:08 -0500
-Received: from mx2.suse.de ([195.135.220.15]:58620 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726768AbfKKKEI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Nov 2019 05:04:08 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id 87B4FB166;
-        Mon, 11 Nov 2019 10:04:06 +0000 (UTC)
-Date:   Mon, 11 Nov 2019 11:04:06 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Max Filippov <jcmvbkbc@gmail.com>,
+        id S1726804AbfKKKYm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 05:24:42 -0500
+Received: from ozlabs.org ([203.11.71.1]:40197 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726768AbfKKKYl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Nov 2019 05:24:41 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47BRnf3TZDz9sPV;
+        Mon, 11 Nov 2019 21:24:38 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1573467878;
+        bh=k/xW7ZDPcv3/7SjHYmJJY6IalclKd1sGAGRnLtXIecw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bhNAzQJrclPVlWTt6hTGJJf0ngOZ5aAKiJ4pS0Ks1QYOCKkp3bCijwsKkYq+MnG3u
+         JPogPyIGXRX91Ao/L1wY6GRqUKfsTxT6iHNNTyFbauE3q2Wqf+qEs9t6ouXCthXwIG
+         56FuglLyylXLliWe9PlWQ+f1SOew5mFOGSR5KE8JrUxHBKBHVlzhcViIYy61f2aqeB
+         g4oqZYgD4Fm6Sp0qnHXV5MZv+yuiWbsdSPIhx3ICAPQSXvN5GiG4mwPVPeo5D3zsoc
+         pnYnVdZaZcsXIeHDVc74mMAAq4nIQvZxBzEpkoDmib005ZVmYkaigwBi4sbOMnq0Ft
+         nYo0aCM/0r7Sw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: linux-next: manual merge of the tip tree with the xtensa tree
-Message-ID: <20191111100406.GB1730@zn.tnic>
-References: <20191111143154.13b0a7ac@canb.auug.org.au>
+        "linux-mm\@kvack.org" <linux-mm@kvack.org>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+In-Reply-To: <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com>
+References: <20191105211920.787df2ab@canb.auug.org.au> <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com>
+Date:   Mon, 11 Nov 2019 21:24:31 +1100
+Message-ID: <871rue4so0.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191111143154.13b0a7ac@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 02:31:54PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   arch/xtensa/kernel/vmlinux.lds.S
-> 
-> between commit:
-> 
->   158b6b99ba7b ("xtensa: merge .fixup with .text")
-> 
-> from the xtensa tree and commits:
-> 
->   eaf937075c9a ("vmlinux.lds.h: Move NOTES into RO_DATA")
->   94174c9b71c6 ("xtensa: Move EXCEPTION_TABLE to RO_DATA segment")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc arch/xtensa/kernel/vmlinux.lds.S
-> index c64abc15d38f,0043d5858f14..000000000000
-> --- a/arch/xtensa/kernel/vmlinux.lds.S
-> +++ b/arch/xtensa/kernel/vmlinux.lds.S
-> @@@ -124,17 -126,16 +126,15 @@@ SECTION
->   
->     . = ALIGN(16);
->   
-> -   RODATA
-> +   RO_DATA(4096)
->   
-> -   EXCEPTION_TABLE(16)
-> -   NOTES
->  -  /*  Relocation table */
->  -
->  -  .fixup   : { *(.fixup) }
->  -
->     /* Data section */
->   
->  +#ifdef CONFIG_XIP_KERNEL
->  +  INIT_TEXT_SECTION(PAGE_SIZE)
->  +#else
->     _sdata = .;
-> -   RW_DATA_SECTION(XCHAL_ICACHE_LINESIZE, PAGE_SIZE, THREAD_SIZE)
-> +   RW_DATA(XCHAL_ICACHE_LINESIZE, PAGE_SIZE, THREAD_SIZE)
->     _edata = .;
->   
->     /* Initialization code and data: */
+Hi Mike,
 
-LGTM.
+Mike Kravetz <mike.kravetz@oracle.com> writes:
+> On 11/5/19 2:19 AM, Stephen Rothwell wrote:
+>> Hi all,
+>> 
+>> After merging the akpm-current tree, today's linux-next build (powerpc64
+>> allnoconfig) failed like this:
+>> 
+>> In file included from arch/powerpc/mm/mem.c:30:
+>> include/linux/hugetlb.h:233:19: error: redefinition of 'pmd_huge'
+>>   233 | static inline int pmd_huge(pmd_t pmd)
+>>       |                   ^~~~~~~~
+>> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
+>>                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+>>                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
+>>                  from arch/powerpc/include/asm/mmu.h:356,
+>>                  from arch/powerpc/include/asm/lppaca.h:47,
+>>                  from arch/powerpc/include/asm/paca.h:17,
+>>                  from arch/powerpc/include/asm/current.h:13,
+>>                  from include/linux/sched.h:12,
+>>                  from arch/powerpc/mm/mem.c:16:
+>> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:74:19: note: previous definition of 'pmd_huge' was here
+>>    74 | static inline int pmd_huge(pmd_t pmd) { return 0; }
+>>       |                   ^~~~~~~~
+...
+>
+> Hello Michael,
+>
+> When I started to look into this I noticed that you added commit aad71e3928be
+> ("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") some time back.
+> It appears that all other architectures get the definition of pmd_huge and
+> pud_huge from <linux/hugetlb.h> in the !CONFIG_HUGETLB_PAGE case.  Previously,
+> this was not an issue as the #define pmd_huge/pud_huge did not conflict with
+> the static inline in the powerpc header files.  The conflicts above happened
+> when I converted the macros to also be static inlines.  Could you live with
+> a patch like the following to remove the stubs from powerpc header files and
+> fix your original build break by including  <linux/hugetlb.h>?  After the
+> below patch is applied, the above commit will not cause the build errors seen
+> in linux-next.
 
-Thx.
+As long as the end result is the same, ie. we get an empty definition
+that always returns false then yeah that's fine by me.
 
--- 
-Regards/Gruss,
-    Boris.
+> From 4b3ab017e639e4e583fff801e6d8e6727b7877e8 Mon Sep 17 00:00:00 2001
+> From: Mike Kravetz <mike.kravetz@oracle.com>
+> Date: Tue, 5 Nov 2019 15:12:15 -0800
+> Subject: [PATCH] powerpc/mm: remove pmd_huge/pud_huge stubs and include
+>  hugetlb.h
+>
+> This removes the power specific stubs created by commit aad71e3928be
+> ("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") used when
+> !CONFIG_HUGETLB_PAGE.  Instead, it addresses the build break by
+> getting the definitions from <linux/hugetlb.h>.
+>
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  arch/powerpc/include/asm/book3s/64/pgtable-4k.h  | 3 ---
+>  arch/powerpc/include/asm/book3s/64/pgtable-64k.h | 3 ---
+>  arch/powerpc/mm/book3s64/radix_pgtable.c         | 1 +
+>  3 files changed, 1 insertion(+), 6 deletions(-)
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+The two pgtable headers are included eventually by our top-level
+pgtable.h, and that is included by over 100 files. So I worry this is
+going to break the build somewhere in some obscure configuration.
+
+I'll push it through some test builds and see what happens.
+
+cheers

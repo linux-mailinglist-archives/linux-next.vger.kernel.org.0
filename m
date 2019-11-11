@@ -2,97 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C68F6FC1
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 09:38:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AE2F7151
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 11:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726791AbfKKIi1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 03:38:27 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:46014 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726770AbfKKIi1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 03:38:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=hcAOVMZPSzZPhTPxN9VZMB0WgNghvQiZWyp0y9X3270=; b=OQc6TyHsOO3L0MFE2gFIEh/2u
-        TF2lL1nyj+yTZMLy5mmv5imhXqE+V+8CXMch6bDvBXSksYLErJMKs5UeQ299wYUd9B8nHIxHEVJto
-        oIAaICc3N5bh9KCeyuArOpH+2jkFiZs3my+rlzQoh446mRASerHynRsMEjNNr3jEEOmhUJm77cUgX
-        wk/FlQ4IjZqmfgKz4BAlXdBOaKD/Bw70ADeDWNlkwloksFnyzKrdKRUWu6hTiiyiq0/QgBnvofuRt
-        kUcVgQa3G0wvszDfsT+5HqIATdK3Fs68wZIq3NNrDx2qPcxNvMxtjzaP7pFw5NA9ZvA4lCmVMZHAN
-        a9vF33p3g==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iU5DD-0007mS-4J; Mon, 11 Nov 2019 08:38:15 +0000
-Date:   Mon, 11 Nov 2019 00:38:15 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Jan Stancek <jstancek@redhat.com>
-Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        LTP List <ltp@lists.linux.it>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, chrubis <chrubis@suse.cz>,
-        open list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: LTP: diotest4.c:476: read to read-only space. returns 0: Success
-Message-ID: <20191111083815.GA29540@infradead.org>
-References: <CA+G9fYtmA5F174nTAtyshr03wkSqMS7+7NTDuJMd_DhJF6a4pw@mail.gmail.com>
- <852514139.11036267.1573172443439.JavaMail.zimbra@redhat.com>
- <20191111012614.GC6235@magnolia>
- <1751469294.11431533.1573460380206.JavaMail.zimbra@redhat.com>
+        id S1726819AbfKKKEI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 05:04:08 -0500
+Received: from mx2.suse.de ([195.135.220.15]:58620 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726768AbfKKKEI (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Nov 2019 05:04:08 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id 87B4FB166;
+        Mon, 11 Nov 2019 10:04:06 +0000 (UTC)
+Date:   Mon, 11 Nov 2019 11:04:06 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: linux-next: manual merge of the tip tree with the xtensa tree
+Message-ID: <20191111100406.GB1730@zn.tnic>
+References: <20191111143154.13b0a7ac@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1751469294.11431533.1573460380206.JavaMail.zimbra@redhat.com>
-User-Agent: Mutt/1.12.1 (2019-06-15)
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191111143154.13b0a7ac@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 11, 2019 at 03:19:40AM -0500, Jan Stancek wrote:
-> > > loff_t length,
-> > >                 if (pad)
-> > >                         iomap_dio_zero(dio, iomap, pos, fs_block_size -
-> > >                         pad);
-> > >         }
-> > > -       return copied ? copied : ret;
-> > > +       return copied ? (loff_t) copied : ret;
-> > 
-> > I'm a little confused on this proposed fix -- why does casting size_t
-> > (aka unsigned long) to loff_t (long long) on a 32-bit system change the
-> > test outcome?
+On Mon, Nov 11, 2019 at 02:31:54PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Ternary operator has a return type and an attempt is made to convert
-> each of operands to the type of the other. So, in this case "ret"
-> appears to be converted to type of "copied" first. Both have size of
-> 4 bytes on 32-bit x86:
-
-Sounds like we should use a good old if here to avoid that whole problem
-spacE:
-
-	if (copied)
-		return copied;
-	return ret;
-
-> size_t copied = 0;
-> int ret = -14;
-> long long actor_ret = copied ? copied : ret;
+> Today's linux-next merge of the tip tree got a conflict in:
 > 
-> On x86_64: actor_ret == -14;
-> On x86   : actor_ret == 4294967282
+>   arch/xtensa/kernel/vmlinux.lds.S
 > 
-> > Does this same diotest4 failure happen with XFS?  I ask
-> > because XFS has been using iomap for directio for ages.
+> between commit:
 > 
-> Yes, it fails on XFS too.
+>   158b6b99ba7b ("xtensa: merge .fixup with .text")
+> 
+> from the xtensa tree and commits:
+> 
+>   eaf937075c9a ("vmlinux.lds.h: Move NOTES into RO_DATA")
+>   94174c9b71c6 ("xtensa: Move EXCEPTION_TABLE to RO_DATA segment")
+> 
+> from the tip tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc arch/xtensa/kernel/vmlinux.lds.S
+> index c64abc15d38f,0043d5858f14..000000000000
+> --- a/arch/xtensa/kernel/vmlinux.lds.S
+> +++ b/arch/xtensa/kernel/vmlinux.lds.S
+> @@@ -124,17 -126,16 +126,15 @@@ SECTION
+>   
+>     . = ALIGN(16);
+>   
+> -   RODATA
+> +   RO_DATA(4096)
+>   
+> -   EXCEPTION_TABLE(16)
+> -   NOTES
+>  -  /*  Relocation table */
+>  -
+>  -  .fixup   : { *(.fixup) }
+>  -
+>     /* Data section */
+>   
+>  +#ifdef CONFIG_XIP_KERNEL
+>  +  INIT_TEXT_SECTION(PAGE_SIZE)
+>  +#else
+>     _sdata = .;
+> -   RW_DATA_SECTION(XCHAL_ICACHE_LINESIZE, PAGE_SIZE, THREAD_SIZE)
+> +   RW_DATA(XCHAL_ICACHE_LINESIZE, PAGE_SIZE, THREAD_SIZE)
+>     _edata = .;
+>   
+>     /* Initialization code and data: */
 
-Is this a new test?  If not why was this never reported?  Sounds like
-we should add this test case to xfstests.
+LGTM.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

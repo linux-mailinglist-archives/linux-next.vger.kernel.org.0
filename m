@@ -2,91 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40413F7ABE
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 19:27:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 061F3F8332
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 00:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726960AbfKKS1N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 13:27:13 -0500
-Received: from mail-lj1-f169.google.com ([209.85.208.169]:46581 "EHLO
-        mail-lj1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726927AbfKKS1N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 13:27:13 -0500
-Received: by mail-lj1-f169.google.com with SMTP id e9so14843788ljp.13
-        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 10:27:10 -0800 (PST)
+        id S1726983AbfKKXEP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 18:04:15 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:55835 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727208AbfKKXEP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 18:04:15 -0500
+Received: by mail-wm1-f65.google.com with SMTP id b11so1048981wmb.5;
+        Mon, 11 Nov 2019 15:04:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MThzuPE5GHK9HkxVsoX5XDICTVaynruuXSaosaKjcs8=;
-        b=Fw0twQqHYcZerf7R7Z3mbmARQOIFlH3pXVj4Yjat2DM7woJjV+SUtLUFxaEmeBl+U5
-         szMKEvHO9eLWrC8gGlF9I60PdiM4n2eVfToqoV5409n1CtsBTL3vU6t0ClyXdYIp4Xvt
-         nWXLT0OSdbsl0Wx6bZ6d8xeGYVa8JX7gNAf+7micSQJLTdtOlEcyFzX48Yb1d5PPyBxL
-         DefhaGvaBR5etVxoKduL7AjUCl4udWuhNJWtuhe24rPNevBh9yKJxiS6oY/UpubbNHmA
-         SamzTvPY1gSEo+YFXpeKBxJxPZAYb3un85/OrkIjyB8A71lPT+Iigg7yWZpwMiCJ6xq1
-         VNXQ==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=8rD/1wuy7n//RffmcU6PR0GtzvL0v8j7pMJHvgBPQiU=;
+        b=QpatybUB4Nl7koDhYN1lFNLy8fZGHIIyK0uQwtbA94L5hhnhcWg+RzHVjwhDmFEUkU
+         WaCuFW900wyYrOWjzEME8LhZlKDahX1M4JrgnT8jgwFy/C/256jCnpKhIJBNGsa0EFPL
+         43DQxgXFSiLzkPerNmSIHnsPA/UuxOBAQ7DevVJ+R2hS82BDAP9qbEVKcSXNvdQwKVYs
+         H3NksnrEAkPFsHd9TneMXbmeCsBlGSi69jyK2kst50pkHveZTPR/Og0yDgGmwQQR9pHU
+         vUgZiPsirjeqCCD311l2kD/QaMjMBQdUwuxlsUVxAgMVnJTNQCeCfD4wZCqb/2fs6zMN
+         MpKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MThzuPE5GHK9HkxVsoX5XDICTVaynruuXSaosaKjcs8=;
-        b=YMhRwhNXUYQBvzTOYPXsQdBt35v6cRx1gD/hHAyJynNZTNTch+NALzTfwAeOX7pGQI
-         I0xN4+ZNHe5vBa9FC3IsciiW67EZAK/jaMM5C34RNrTDGZBk4WzjZ9/CCoA6YyVEUa7B
-         SnRocNY2Jj/iKKhMtjdjO22Fo5v1xGFLRGHRlgJBybMEdYhMONXE4mBSxtTw+NptVcfj
-         0ni4Vzis7PGaXaZKLVX+fvX+OSikktdxoGWi9x6pxS349mqCp4XLlB3PVADtQwwCxU5E
-         blGRrQTyBCGWQ71Pnv5NGMBGTuPeOq+dXyOfKVb/SUz9QwabR1P3pTz7NzyoPwKY5RL+
-         N+WA==
-X-Gm-Message-State: APjAAAVAD7bxcKoP4wYH4vV28J27AoZkJVDci+jIu9w7/z8WRb4WEP1Y
-        9m2/o3njI+YJlw2hD6jrPWwl9Fj3uj1cP7Hil58bZQ==
-X-Google-Smtp-Source: APXvYqyWMSR5OPToEop6rDei4ILQee/UuxXH+ZjV7ZXKAeitGVZS2Lw9zm51FtgZf6Xt1NfAsveDiRmS7Mfl3wUydIw=
-X-Received: by 2002:a2e:a410:: with SMTP id p16mr17228931ljn.46.1573496829912;
- Mon, 11 Nov 2019 10:27:09 -0800 (PST)
-MIME-Version: 1.0
-References: <CA+G9fYtmA5F174nTAtyshr03wkSqMS7+7NTDuJMd_DhJF6a4pw@mail.gmail.com>
- <852514139.11036267.1573172443439.JavaMail.zimbra@redhat.com>
- <20191111012614.GC6235@magnolia> <1751469294.11431533.1573460380206.JavaMail.zimbra@redhat.com>
- <20191111083815.GA29540@infradead.org> <1757087132.11450258.1573468734360.JavaMail.zimbra@redhat.com>
-In-Reply-To: <1757087132.11450258.1573468734360.JavaMail.zimbra@redhat.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 11 Nov 2019 23:56:58 +0530
-Message-ID: <CA+G9fYtuwT_vkQL-RfAMcmH_HBHUWQ5ZPHdwsGoNTALhwyiZgg@mail.gmail.com>
-Subject: Re: LTP: diotest4.c:476: read to read-only space. returns 0: Success
-To:     Jan Stancek <jstancek@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        LTP List <ltp@lists.linux.it>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, chrubis <chrubis@suse.cz>,
-        open list <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Mark Brown <broonie@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        lkft-triage@lists.linaro.org,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>
-Content-Type: text/plain; charset="UTF-8"
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=8rD/1wuy7n//RffmcU6PR0GtzvL0v8j7pMJHvgBPQiU=;
+        b=if6QoR37dbFCwQCDHrfmB78ajs6/3gjWYRPEIO7BIMczjC/8Q7KDH8k80tGioXg9V7
+         KLHhxxVhL3/wuiR4kWcWkGLmECySsp+xQJQzl4AeZ6LsQxOgEN8pqrep4H6TIS+I4Qe4
+         D52CFC+4B65cR42M7AbQZv1lfvql9ajo09chw0k7BsFFIqt3GOvM3auZtHRvMUD+jdRs
+         4Ejt2TSquFDKnlsSLCXjOJqtI/HOpCB/1J91Ud7HHxU+yegeFqJukAYtV8G00aZiK708
+         OCaCRVH4jw2Z3zOnBHUPdjkARWku9i1mtxSuvN7ZipTbbnNVMKPKaWaPqtHMgpQUPiXf
+         qRSw==
+X-Gm-Message-State: APjAAAXwqmJRxpqIevxNstGg3wZ1YZYl5Yb/unvvfADzJuZULaOZrY3q
+        6SLZGmAeL1ffNZZfDm0Lsz8gfR4S
+X-Google-Smtp-Source: APXvYqyTW5+jG63MkDXUPbTb19p8aINFv18zNS4+g7rESv4mxMK0vcq+u+mBXw2sLROK3ZwWTYF/Mg==
+X-Received: by 2002:a05:600c:299:: with SMTP id 25mr1247733wmk.50.1573513452879;
+        Mon, 11 Nov 2019 15:04:12 -0800 (PST)
+Received: from pallmd1.broadcom.com ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id m25sm655146wmi.46.2019.11.11.15.04.11
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 11 Nov 2019 15:04:12 -0800 (PST)
+From:   James Smart <jsmart2021@gmail.com>
+To:     linux-scsi@vger.kernel.org
+Cc:     James Smart <jsmart2021@gmail.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: [PATCH 1/6] lpfc: fix: Coverity: lpfc_get_scsi_buf_s3(): Null pointer dereferences
+Date:   Mon, 11 Nov 2019 15:03:56 -0800
+Message-Id: <20191111230401.12958-2-jsmart2021@gmail.com>
+X-Mailer: git-send-email 2.13.7
+In-Reply-To: <20191111230401.12958-1-jsmart2021@gmail.com>
+References: <20191111230401.12958-1-jsmart2021@gmail.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 11 Nov 2019 at 16:09, Jan Stancek <jstancek@redhat.com> wrote:
->
->
-> ----- Original Message -----
-> > Is this a new test?
->
-> No, it's not new.
->
-> > If not why was this never reported?  Sounds like
-> > we should add this test case to xfstests.
->
-> I'm guessing not that many users still run 32bit kernels.
-> Naresh' setup is using ext4, so I assume he noticed only
-> after recent changes in linux-next wrt. directio and ext4.
+Coverity reported the following:
 
-That's true.
-Started noticing recently from Linux next-20191107 kernel on i386 and arm32.
+*** CID 1487391:  Null pointer dereferences  (FORWARD_NULL)
+/drivers/scsi/lpfc/lpfc_scsi.c: 614 in lpfc_get_scsi_buf_s3()
+608     		spin_unlock(&phba->scsi_buf_list_put_lock);
+609     	}
+610     	spin_unlock_irqrestore(&phba->scsi_buf_list_get_lock, iflag);
+611
+612     	if (lpfc_ndlp_check_qdepth(phba, ndlp)) {
+613     		atomic_inc(&ndlp->cmd_pending);
+vvv     CID 1487391:  Null pointer dereferences  (FORWARD_NULL)
+vvv     Dereferencing null pointer "lpfc_cmd".
+614     		lpfc_cmd->flags |= LPFC_SBUF_BUMP_QDEPTH;
+615     	}
+616     	return  lpfc_cmd;
+617     }
+618     /**
+619      * lpfc_get_scsi_buf_s4 - Get a scsi buffer from io_buf_list of the HBA
 
-Steps to reproduce:
-./runltp -f dio -d /mounted-ext4-drive
+Fix by checking lpfc_cmd to be non-NULL as part of line 612
 
-- Naresh
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1487391 ("Null pointer dereferences")
+Fixes: 2a5b7d626ed2 ("scsi: lpfc: Limit tracking of tgt queue depth in fast path")
+
+Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+CC: "Martin K. Petersen" <martin.petersen@oracle.com>
+CC: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+CC: linux-next@vger.kernel.org
+---
+ drivers/scsi/lpfc/lpfc_scsi.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/lpfc/lpfc_scsi.c b/drivers/scsi/lpfc/lpfc_scsi.c
+index 959ef471d758..ba26df90a36a 100644
+--- a/drivers/scsi/lpfc/lpfc_scsi.c
++++ b/drivers/scsi/lpfc/lpfc_scsi.c
+@@ -611,7 +611,7 @@ lpfc_get_scsi_buf_s3(struct lpfc_hba *phba, struct lpfc_nodelist *ndlp,
+ 	}
+ 	spin_unlock_irqrestore(&phba->scsi_buf_list_get_lock, iflag);
+ 
+-	if (lpfc_ndlp_check_qdepth(phba, ndlp)) {
++	if (lpfc_ndlp_check_qdepth(phba, ndlp) && lpfc_cmd) {
+ 		atomic_inc(&ndlp->cmd_pending);
+ 		lpfc_cmd->flags |= LPFC_SBUF_BUMP_QDEPTH;
+ 	}
+-- 
+2.13.7
+

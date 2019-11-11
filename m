@@ -2,178 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3A6F6C6D
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 02:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F8AF6D48
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 04:27:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfKKBpE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 Nov 2019 20:45:04 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:41963 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726824AbfKKBpE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Nov 2019 20:45:04 -0500
-Received: by mail-pg1-f196.google.com with SMTP id h4so8379791pgv.8;
-        Sun, 10 Nov 2019 17:45:03 -0800 (PST)
+        id S1726843AbfKKD1e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 Nov 2019 22:27:34 -0500
+Received: from mail-wm1-f50.google.com ([209.85.128.50]:33797 "EHLO
+        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726742AbfKKD1d (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 Nov 2019 22:27:33 -0500
+Received: by mail-wm1-f50.google.com with SMTP id j18so2165757wmk.1
+        for <linux-next@vger.kernel.org>; Sun, 10 Nov 2019 19:27:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=80X0XSD0z9TSGmjUVgRibRN8mNevgQEBc1olihW2u6g=;
-        b=OuiFYHhbZ9Jlgoq/7aQ7D0VlRd9aa0SuAm/xmePlv1T/040HatzWfRj/hJcLZa3cWl
-         KnM2nXGTg6LmyIIGYQF9iRWBXC8f5Y+uaL9ac9d4kaA6dk8Sx9lQyJntnXIWifO/yr1z
-         0RT3gkcUNJO/RKdqlK0wRudZuTiAuCm2xuz3G9XYqecXQmi+IrzL3F/brfVbv6VlQx56
-         CTD+nRI7PIushCJ085u4FrzZDmofIReN95+TQJyODH4UJQTIFrxJN4FojhuDt/5VkvwA
-         RQe3t6wyBTfocf10L13HjL7lmRKy52BbCrjzCO9P+9dvLlFRmgZ3XcA22pOIc8cq6tCZ
-         ChLQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=rj/emwgwPd6cNvTJ3lndd7BVFdIoGzWoyUJHNXzcY0c=;
+        b=qK4G7+nTzBh9hsD6PSria2/BsVEUUviJ0oriH1KnHYf7l2xOBIPxb+vqukCQKznImd
+         MHHvCrmUxebc6fWZP4I2VJRVTgV3s/EePmyfeEQ4qd2RknFlZmXlKCQB5lEfFmEK24se
+         vbYZcT6is5TTDV14g3BKieQ2ni9dRWWkBuUbaosJPkLx9/N+NlumZJwNapK7pMxkMUfK
+         C+5UjiAiFiadatsfB9UJEjTcPsqjSgCbEno0vZXKfICuCGq/Hd1lMkLmJ2vMODNpI4wR
+         f3qtROqqExYJWlXu5aJAtCDBzK8qI7TknRj/TPVCnOzbUh0nmD1ev7PLR/4nrDgmkjpJ
+         YswA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=80X0XSD0z9TSGmjUVgRibRN8mNevgQEBc1olihW2u6g=;
-        b=HTMYy+4E3YIDhftuVcFsCkK+5VM5L/2eFBy9S1fqO/q+bT4y7um+YPEbBxnCKIZDQr
-         Q27Lk5B8SeHBBTJEjZ+f3Y40wbiAcRpS7CcpYiWwJsZaX7izVTVib0IW8V9TbRtVh2M/
-         cRoSuHoFg/D6xaGY9p8QrHq+msa90XYYkfra/4niLRukf6VtdYTDP4zU3hBa9O9qrVkU
-         r1RgT5+hXlHaDC2MxySFaK/rTu3xLAu8aXD1A6+svViV0Hqv7ABOBMeNAUW8F9h1OAlf
-         gWWDSoxobdqvLTNP68mr0yrp4z91ANWx3t87aGh5TPi6h9kifR0qJKlRd6BIM4OlR4SN
-         /ewg==
-X-Gm-Message-State: APjAAAWY0CjS9lnXdzK1HweQEzyd+DOAsCJNhlt0yno7+AwtLS966ng8
-        rYw7yHzwakrUwTOmzzzAxdM=
-X-Google-Smtp-Source: APXvYqzq3k1xgi5K27cvzCuxPJRBEviwJSeyWLqUc78Sumo9fyb0YLWuKtwUi8vNz/jJ3hJ8eT158A==
-X-Received: by 2002:a62:1953:: with SMTP id 80mr27049192pfz.72.1573436702889;
-        Sun, 10 Nov 2019 17:45:02 -0800 (PST)
-Received: from [192.168.86.235] (c-73-241-150-58.hsd1.ca.comcast.net. [73.241.150.58])
-        by smtp.gmail.com with ESMTPSA id y3sm11526006pgl.78.2019.11.10.17.45.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 10 Nov 2019 17:45:02 -0800 (PST)
-Subject: Re: linux-next: build warning after merge of the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-References: <20191111123922.540319a2@canb.auug.org.au>
-From:   Eric Dumazet <eric.dumazet@gmail.com>
-Message-ID: <e71126d6-6c15-297d-0138-4c76d6720186@gmail.com>
-Date:   Sun, 10 Nov 2019 17:45:00 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=rj/emwgwPd6cNvTJ3lndd7BVFdIoGzWoyUJHNXzcY0c=;
+        b=GuMuHx79W7wEZwp1fxqjA97+6vdGbtndQIif698b40ptfj5I7wf7JfQ+6HRdg03ZC7
+         XhRMmixhruhQfwSzbRHswmqss3xkytRs6g5sY74t+8CEksl21J9fb7AeA2Do4eL5W3D0
+         zoHT0csXtdKfq4TCQeZ8TEmqSuIxe3OWt4XgEdLa/TQABuXpIXvvQ70iULNdojRQgUj8
+         Ofi92234SqjmlBmF6pBQzCgFfjKVrvGkIKxdDOJLS7gfmIh3Cb1AOnAyY2XAFzFATChS
+         Y6Z5ZOSPbFQRymoikBqqu4Cpnb/Yn5/FPpdEs2to1WRZc3Gt9t0jFbBm1WJVRrDapXzf
+         aEEw==
+X-Gm-Message-State: APjAAAUP18L+0+rb6VaX9i+ecQGpHLug83ZuYpyCsYWKHOH6JO6CAKAM
+        jDtPhj+HGzQwff0rDJN5/02fGo/YVZU=
+X-Google-Smtp-Source: APXvYqy6PVeB7o2ZXNlGXdxrRTxnNZAH62G3kJOONFoRKHi1FbgLrac+r1dbqdH2pAY0FHOs8iO7lg==
+X-Received: by 2002:a1c:7d47:: with SMTP id y68mr18344141wmc.157.1573442851386;
+        Sun, 10 Nov 2019 19:27:31 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id a206sm16024493wmf.15.2019.11.10.19.27.30
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 10 Nov 2019 19:27:30 -0800 (PST)
+Message-ID: <5dc8d522.1c69fb81.fdd4c.ccc7@mx.google.com>
+Date:   Sun, 10 Nov 2019 19:27:30 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20191111123922.540319a2@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-rc6-438-ge03355daf891
+Subject: next/pending-fixes boot: 233 boots: 3 failed,
+ 221 passed with 8 offline, 1 untried/unknown (v5.4-rc6-438-ge03355daf891)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 233 boots: 3 failed, 221 passed with 8 offline, 1 =
+untried/unknown (v5.4-rc6-438-ge03355daf891)
 
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc6-438-ge03355daf891/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc6-438-ge03355daf891/
 
-On 11/10/19 5:39 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the net-next tree, today's linux-next build (powerpc
-> ppc64_defconfig) produced this warning:
-> 
-> In file included from ./arch/powerpc/include/generated/asm/local64.h:1,
->                  from include/linux/u64_stats_sync.h:72,
->                  from include/linux/cgroup-defs.h:20,
->                  from include/linux/cgroup.h:28,
->                  from include/linux/memcontrol.h:13,
->                  from include/linux/swap.h:9,
->                  from include/linux/suspend.h:5,
->                  from arch/powerpc/kernel/asm-offsets.c:23:
-> include/linux/u64_stats_sync.h: In function 'u64_stats_read':
-> include/asm-generic/local64.h:30:37: warning: passing argument 1 of 'local_read' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
->    30 | #define local64_read(l)  local_read(&(l)->a)
->       |                                     ^~~~~~~
-> include/linux/u64_stats_sync.h:80:9: note: in expansion of macro 'local64_read'
->    80 |  return local64_read(&p->v);
->       |         ^~~~~~~~~~~~
-> In file included from include/asm-generic/local64.h:22,
->                  from ./arch/powerpc/include/generated/asm/local64.h:1,
->                  from include/linux/u64_stats_sync.h:72,
->                  from include/linux/cgroup-defs.h:20,
->                  from include/linux/cgroup.h:28,
->                  from include/linux/memcontrol.h:13,
->                  from include/linux/swap.h:9,
->                  from include/linux/suspend.h:5,
->                  from arch/powerpc/kernel/asm-offsets.c:23:
-> arch/powerpc/include/asm/local.h:20:44: note: expected 'local_t *' {aka 'struct <anonymous> *'} but argument is of type 'const local_t *' {aka 'const struct <anonymous> *'}
->    20 | static __inline__ long local_read(local_t *l)
->       |                                   ~~~~~~~~~^
-> 
-> Introduced by commit
-> 
->   316580b69d0a ("u64_stats: provide u64_stats_t type")
-> 
-> Powerpc folks: is there some reason that local_read() cannot take a
-> const argument?
-> 
-> I have added this patch (which builds fine) for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 11 Nov 2019 12:32:24 +1100
-> Subject: [PATCH] powerpc: local_read() should take a const local_t argument
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/powerpc/include/asm/local.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
-> index fdd00939270b..bc4bd19b7fc2 100644
-> --- a/arch/powerpc/include/asm/local.h
-> +++ b/arch/powerpc/include/asm/local.h
-> @@ -17,7 +17,7 @@ typedef struct
->  
->  #define LOCAL_INIT(i)	{ (i) }
->  
-> -static __inline__ long local_read(local_t *l)
-> +static __inline__ long local_read(const local_t *l)
->  {
->  	return READ_ONCE(l->v);
->  }
-> 
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc6-438-ge03355daf891
+Git Commit: e03355daf89179e3552a44366713122e7803227c
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 87 unique boards, 24 SoC families, 26 builds out of 215
 
-I have sent this patch two days ago, I do not believe I had any answer from ppc maintainers.
+Boot Failures Detected:
 
-From 47c47befdcf31fb8498c9e630bb8e0dc3ef88079 Mon Sep 17 00:00:00 2001
-From: Eric Dumazet <edumazet@google.com>
-Date: Fri, 8 Nov 2019 06:04:35 -0800
-Subject: [PATCH] powerpc: add const qual to local_read() parameter
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            msm8998-mtp: 1 failed lab
 
-A patch in net-next triggered a compile error on powerpc.
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-This seems reasonable to relax powerpc local_read() requirements.
+Offline Platforms:
 
-Fixes: 316580b69d0a ("u64_stats: provide u64_stats_t type")
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Reported-by: kbuild test robot <lkp@intel.com>
-Cc:	Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Cc:	Paul Mackerras <paulus@samba.org>
-Cc:	Michael Ellerman <mpe@ellerman.id.au>
-Cc:	linuxppc-dev@lists.ozlabs.org
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
 ---
- arch/powerpc/include/asm/local.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/include/asm/local.h b/arch/powerpc/include/asm/local.h
-index fdd00939270bf08113b537a090d6a6e34a048361..bc4bd19b7fc235b80ec1132f44409b6fe1057975 100644
---- a/arch/powerpc/include/asm/local.h
-+++ b/arch/powerpc/include/asm/local.h
-@@ -17,7 +17,7 @@ typedef struct
- 
- #define LOCAL_INIT(i)	{ (i) }
- 
--static __inline__ long local_read(local_t *l)
-+static __inline__ long local_read(const local_t *l)
- {
- 	return READ_ONCE(l->v);
- }
--- 
-2.24.0.432.g9d3f5f5b63-goog
-
+For more info write to <info@kernelci.org>

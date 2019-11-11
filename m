@@ -2,116 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0F5F71CC
-	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 11:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7973AF71D0
+	for <lists+linux-next@lfdr.de>; Mon, 11 Nov 2019 11:24:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726804AbfKKKYm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 05:24:42 -0500
-Received: from ozlabs.org ([203.11.71.1]:40197 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726768AbfKKKYl (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Nov 2019 05:24:41 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47BRnf3TZDz9sPV;
-        Mon, 11 Nov 2019 21:24:38 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1573467878;
-        bh=k/xW7ZDPcv3/7SjHYmJJY6IalclKd1sGAGRnLtXIecw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bhNAzQJrclPVlWTt6hTGJJf0ngOZ5aAKiJ4pS0Ks1QYOCKkp3bCijwsKkYq+MnG3u
-         JPogPyIGXRX91Ao/L1wY6GRqUKfsTxT6iHNNTyFbauE3q2Wqf+qEs9t6ouXCthXwIG
-         56FuglLyylXLliWe9PlWQ+f1SOew5mFOGSR5KE8JrUxHBKBHVlzhcViIYy61f2aqeB
-         g4oqZYgD4Fm6Sp0qnHXV5MZv+yuiWbsdSPIhx3ICAPQSXvN5GiG4mwPVPeo5D3zsoc
-         pnYnVdZaZcsXIeHDVc74mMAAq4nIQvZxBzEpkoDmib005ZVmYkaigwBi4sbOMnq0Ft
-         nYo0aCM/0r7Sw==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726902AbfKKKYt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 05:24:49 -0500
+Received: from pandora.armlinux.org.uk ([78.32.30.218]:59446 "EHLO
+        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726768AbfKKKYt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 05:24:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=KkshqQCTszdoi49VntJOylBToP8vc+lvnQmxVqr0Mdk=; b=qHzGFNZowiTaHCrMC2MX4k+Wg
+        pEs9U2ks7/S/H0ug9+CYH+PsxYummgRjkI3+NSKKOVBxZOO2bzdBoeG5daFjdBrvl8lXeL+MdwFI3
+        8H8gEcAqAp+/mqR5d6RctcvMJLVQ4qGTYY7tbvrT534N4llMtAq7FWiG9ThU1ZY/yt7i2VC+VoDWp
+        XajjNXCkGNPEfmarOa6F6E8Fw5y8nJt60JuQUocjWSIpF4IrjfjtonqhMYEAjzyDlY+BzOu2+I8c/
+        hEPuMQc5AG7OGZYgFw7tl2A6Pq67wS2DtzWT3YF3cpUsc/oBRKHQrobzIkwMqg5WRK688uZrMwL91
+        nh9fdBDaQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38166)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1iU6sD-0004wv-Ct; Mon, 11 Nov 2019 10:24:41 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1iU6sA-0000Pq-76; Mon, 11 Nov 2019 10:24:38 +0000
+Date:   Mon, 11 Nov 2019 10:24:38 +0000
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-mm\@kvack.org" <linux-mm@kvack.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-In-Reply-To: <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com>
-References: <20191105211920.787df2ab@canb.auug.org.au> <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com>
-Date:   Mon, 11 Nov 2019 21:24:31 +1100
-Message-ID: <871rue4so0.fsf@mpe.ellerman.id.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+Message-ID: <20191111102438.GG25745@shell.armlinux.org.uk>
+References: <20191111121953.25f34810@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191111121953.25f34810@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Mike,
+Thanks Stephen, patch coming today.
 
-Mike Kravetz <mike.kravetz@oracle.com> writes:
-> On 11/5/19 2:19 AM, Stephen Rothwell wrote:
->> Hi all,
->> 
->> After merging the akpm-current tree, today's linux-next build (powerpc64
->> allnoconfig) failed like this:
->> 
->> In file included from arch/powerpc/mm/mem.c:30:
->> include/linux/hugetlb.h:233:19: error: redefinition of 'pmd_huge'
->>   233 | static inline int pmd_huge(pmd_t pmd)
->>       |                   ^~~~~~~~
->> In file included from arch/powerpc/include/asm/book3s/64/pgtable.h:301,
->>                  from arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
->>                  from arch/powerpc/include/asm/book3s/64/mmu.h:46,
->>                  from arch/powerpc/include/asm/mmu.h:356,
->>                  from arch/powerpc/include/asm/lppaca.h:47,
->>                  from arch/powerpc/include/asm/paca.h:17,
->>                  from arch/powerpc/include/asm/current.h:13,
->>                  from include/linux/sched.h:12,
->>                  from arch/powerpc/mm/mem.c:16:
->> arch/powerpc/include/asm/book3s/64/pgtable-4k.h:74:19: note: previous definition of 'pmd_huge' was here
->>    74 | static inline int pmd_huge(pmd_t pmd) { return 0; }
->>       |                   ^~~~~~~~
-...
->
-> Hello Michael,
->
-> When I started to look into this I noticed that you added commit aad71e3928be
-> ("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") some time back.
-> It appears that all other architectures get the definition of pmd_huge and
-> pud_huge from <linux/hugetlb.h> in the !CONFIG_HUGETLB_PAGE case.  Previously,
-> this was not an issue as the #define pmd_huge/pud_huge did not conflict with
-> the static inline in the powerpc header files.  The conflicts above happened
-> when I converted the macros to also be static inlines.  Could you live with
-> a patch like the following to remove the stubs from powerpc header files and
-> fix your original build break by including  <linux/hugetlb.h>?  After the
-> below patch is applied, the above commit will not cause the build errors seen
-> in linux-next.
+On Mon, Nov 11, 2019 at 12:19:53PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the net-next tree, today's linux-next build (arm
+> multi_v7_defconfig.) produced this warning:
+> 
+> In file included from net/core/ethtool.c:21:
+> include/linux/sfp.h:566:12: warning: 'sfp_bus_add_upstream' defined but not used [-Wunused-function]
+>   566 | static int sfp_bus_add_upstream(struct sfp_bus *bus, void *upstream,
+>       |            ^~~~~~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   727b3668b730 ("net: sfp: rework upstream interface")
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-As long as the end result is the same, ie. we get an empty definition
-that always returns false then yeah that's fine by me.
 
-> From 4b3ab017e639e4e583fff801e6d8e6727b7877e8 Mon Sep 17 00:00:00 2001
-> From: Mike Kravetz <mike.kravetz@oracle.com>
-> Date: Tue, 5 Nov 2019 15:12:15 -0800
-> Subject: [PATCH] powerpc/mm: remove pmd_huge/pud_huge stubs and include
->  hugetlb.h
->
-> This removes the power specific stubs created by commit aad71e3928be
-> ("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") used when
-> !CONFIG_HUGETLB_PAGE.  Instead, it addresses the build break by
-> getting the definitions from <linux/hugetlb.h>.
->
-> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
-> ---
->  arch/powerpc/include/asm/book3s/64/pgtable-4k.h  | 3 ---
->  arch/powerpc/include/asm/book3s/64/pgtable-64k.h | 3 ---
->  arch/powerpc/mm/book3s64/radix_pgtable.c         | 1 +
->  3 files changed, 1 insertion(+), 6 deletions(-)
 
-The two pgtable headers are included eventually by our top-level
-pgtable.h, and that is included by over 100 files. So I worry this is
-going to break the build somewhere in some obscure configuration.
-
-I'll push it through some test builds and see what happens.
-
-cheers
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
+According to speedtest.net: 11.9Mbps down 500kbps up

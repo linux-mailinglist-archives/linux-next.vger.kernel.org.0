@@ -2,115 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 245ABF8334
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 00:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 87C90F85C2
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 01:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727223AbfKKXER (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 18:04:17 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:50306 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727211AbfKKXEQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 18:04:16 -0500
-Received: by mail-wm1-f65.google.com with SMTP id l17so1087567wmh.0;
-        Mon, 11 Nov 2019 15:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=rsKOVlf4KCoyJA586IbpR/JcJ5NIZQ3tkRW+Ckd8PxQ=;
-        b=UQCRO6Ta7eDFZBBdfIOny/gN7XWKny2YV7kKfCpPKJlCKxnzKl2F+R6ZmJhmz3E4tA
-         l0hQRkpHoAYWPbws/BoiQl4A+tQcF22FgYkEZjq7RdDhsA2DEZ5S35Fiwup7b01Q2g4N
-         nhqsFhd/6zc3y5Bo8zUSQMcHKWUxSqeEzzA7ZJajvCit5igvB6tr/MFvMIYzytXw3yBK
-         mQXn6cqkELTFOf8XdJFHCkl5FWYC9OU71dMB+W3SIP0dYFbwYPDvNyH1hwhcPa7j2At2
-         HuV2XGpcP/JM3WDh+Plpyj8V2w+/uebyp9T8IHMsjrGGxwCOSCG+I15Lb+u3Gv5Ahhro
-         VtJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=rsKOVlf4KCoyJA586IbpR/JcJ5NIZQ3tkRW+Ckd8PxQ=;
-        b=LDt2/nX53QM4pMsXPq1nX/ET4L2DE9PqloHQeKOM9hHMx+ww6CR97aFn65krd1WL0x
-         7nuPoHfWqK/kO/sexA3U2KH+FkvsuEhaF34LJfVk4ZDlX2HWX4jkD9F9nzjODDoaY6fq
-         P4rj/RZbf+KfWvWbwD1b6L2xJT2ZGn2VcQKl3vivGrFMN8GFa8AgbfvbZ0H9QY2hhlXS
-         VQd6arfU2Velh1/fiSbo4Q13g5eGmyRmAheJwEYMiUNCDphy6y9YHzQSgRsbLQ4hodGi
-         wPNxA8wiZKPW/K2qCzC0FrQqvpl6wKxCtv7JHtyFss0ZPwXhZluuvjQXu4/AD+txcP20
-         Iedg==
-X-Gm-Message-State: APjAAAWiUycv2ExF8xKcpnWQbxG2qQPojsuN/V6Q5A0Gl5PenoFD6AMt
-        v6/UHxMxziSfQRvW9PrryY5QrE5z
-X-Google-Smtp-Source: APXvYqw0txKOwsDfeNGhu8WRY3CnnzSiDA5u/VUKrxjINs+4Xr0FHFQ1M/ZZJ8AWw0o+HieKFjD2gg==
-X-Received: by 2002:a1c:dd45:: with SMTP id u66mr1135791wmg.12.1573513454777;
-        Mon, 11 Nov 2019 15:04:14 -0800 (PST)
-Received: from pallmd1.broadcom.com ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id m25sm655146wmi.46.2019.11.11.15.04.13
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Mon, 11 Nov 2019 15:04:14 -0800 (PST)
-From:   James Smart <jsmart2021@gmail.com>
-To:     linux-scsi@vger.kernel.org
-Cc:     James Smart <jsmart2021@gmail.com>,
-        Dick Kennedy <dick.kennedy@broadcom.com>,
-        James Bottomley <James.Bottomley@SteelEye.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: [PATCH 2/6] lpfc: fix: Coverity: lpfc_cmpl_els_rsp(): Null pointer dereferences
-Date:   Mon, 11 Nov 2019 15:03:57 -0800
-Message-Id: <20191111230401.12958-3-jsmart2021@gmail.com>
-X-Mailer: git-send-email 2.13.7
-In-Reply-To: <20191111230401.12958-1-jsmart2021@gmail.com>
-References: <20191111230401.12958-1-jsmart2021@gmail.com>
+        id S1727362AbfKLA7r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 19:59:47 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34617 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727338AbfKLA7r (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Nov 2019 19:59:47 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47BqCN2b3dz9s7T;
+        Tue, 12 Nov 2019 11:59:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1573520384;
+        bh=keCg8e+U+Atffb3YaegfdPkbXQVajztNOGjGSeZJiyE=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=Qk0Uxk/gFaiyZ/AtoHKUxjlALFcXFappKOTYT43yi9KcB6Ao+O7RBWQzU+OlZ/mIz
+         PDTgA04ddEw4ua8xiuEDXSCoK0R1Pxde3n1A2+hlMZAIABJY7ScB0pfz99b5KSsaX6
+         EnQ4lBVyC72kVQ+/wN4SpE/lYLh1wEJkBVLQI2qZmPg81Yhb3CfYF+FsJJwwNo+R6F
+         FNQtYuVeoD8YFL+EtsFwvpp61h5Vvt+oBcbHdKMlKVmpNfbOR2UYF6Hb0fIqelRdRN
+         0T4P1L9GKDjUxzUbrbs1tMlPvnN4YkZUJDtXzdAhFvpKmTkSPlG4ge4kQD3BdZ8XNr
+         b3D4u3Iux5tyw==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-mm\@kvack.org" <linux-mm@kvack.org>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+In-Reply-To: <871rue4so0.fsf@mpe.ellerman.id.au>
+References: <20191105211920.787df2ab@canb.auug.org.au> <0892a018-152f-629d-3dd0-60ce79f2887b@oracle.com> <871rue4so0.fsf@mpe.ellerman.id.au>
+Date:   Tue, 12 Nov 2019 11:59:41 +1100
+Message-ID: <87v9rp3o5e.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Coverity reported the following:
+Michael Ellerman <mpe@ellerman.id.au> writes:
+>
+> Mike Kravetz <mike.kravetz@oracle.com> writes:
+>> On 11/5/19 2:19 AM, Stephen Rothwell wrote:
+...
+>> From 4b3ab017e639e4e583fff801e6d8e6727b7877e8 Mon Sep 17 00:00:00 2001
+>> From: Mike Kravetz <mike.kravetz@oracle.com>
+>> Date: Tue, 5 Nov 2019 15:12:15 -0800
+>> Subject: [PATCH] powerpc/mm: remove pmd_huge/pud_huge stubs and include
+>>  hugetlb.h
+>>
+>> This removes the power specific stubs created by commit aad71e3928be
+>> ("powerpc/mm: Fix build break with RADIX=y & HUGETLBFS=n") used when
+>> !CONFIG_HUGETLB_PAGE.  Instead, it addresses the build break by
+>> getting the definitions from <linux/hugetlb.h>.
+>>
+>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+>> ---
+>>  arch/powerpc/include/asm/book3s/64/pgtable-4k.h  | 3 ---
+>>  arch/powerpc/include/asm/book3s/64/pgtable-64k.h | 3 ---
+>>  arch/powerpc/mm/book3s64/radix_pgtable.c         | 1 +
+>>  3 files changed, 1 insertion(+), 6 deletions(-)
+>
+> The two pgtable headers are included eventually by our top-level
+> pgtable.h, and that is included by over 100 files. So I worry this is
+> going to break the build somewhere in some obscure configuration.
+>
+> I'll push it through some test builds and see what happens.
 
-*** CID 101747:  Null pointer dereferences  (FORWARD_NULL)
-/drivers/scsi/lpfc/lpfc_els.c: 4439 in lpfc_cmpl_els_rsp()
-4433     			kfree(mp);
-4434     		}
-4435     		mempool_free(mbox, phba->mbox_mem_pool);
-4436     	}
-4437     out:
-4438     	if (ndlp && NLP_CHK_NODE_ACT(ndlp)) {
-vvv     CID 101747:  Null pointer dereferences  (FORWARD_NULL)
-vvv     Dereferencing null pointer "shost".
-4439     		spin_lock_irq(shost->host_lock);
-4440     		ndlp->nlp_flag &= ~(NLP_ACC_REGLOGIN | NLP_RM_DFLT_RPI);
-4441     		spin_unlock_irq(shost->host_lock);
-4442
-4443     		/* If the node is not being used by another discovery thread,
-4444     		 * and we are sending a reject, we are done with it.
+Seems OK, it didn't introduce any new build failures.
 
-Fix by adding a check for non-null shost in line 4438.
-The scenario when shost is set to null is when ndlp is null.
-As such, the ndlp check present was sufficient. But better safe
-than sorry so add the shost check.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au>
 
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 101747 ("Null pointer dereferences")
-Fixes: 2e0fef85e098 ("[SCSI] lpfc: NPIV: split ports")
-
-Signed-off-by: Dick Kennedy <dick.kennedy@broadcom.com>
-Signed-off-by: James Smart <jsmart2021@gmail.com>
-CC: James Bottomley <James.Bottomley@SteelEye.com>
-CC: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-CC: linux-next@vger.kernel.org
----
- drivers/scsi/lpfc/lpfc_els.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 9a570c15b2a1..42a2bf38eaea 100644
---- a/drivers/scsi/lpfc/lpfc_els.c
-+++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4445,7 +4445,7 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
- 		mempool_free(mbox, phba->mbox_mem_pool);
- 	}
- out:
--	if (ndlp && NLP_CHK_NODE_ACT(ndlp)) {
-+	if (ndlp && NLP_CHK_NODE_ACT(ndlp) && shost) {
- 		spin_lock_irq(shost->host_lock);
- 		ndlp->nlp_flag &= ~(NLP_ACC_REGLOGIN | NLP_RM_DFLT_RPI);
- 		spin_unlock_irq(shost->host_lock);
--- 
-2.13.7
-
+cheers

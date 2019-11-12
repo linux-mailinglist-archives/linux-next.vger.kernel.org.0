@@ -2,55 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E221F8668
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 02:34:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8E81F866B
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 02:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726994AbfKLBeh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 20:34:37 -0500
-Received: from mail-pg1-f180.google.com ([209.85.215.180]:43305 "EHLO
-        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726970AbfKLBeh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 20:34:37 -0500
-Received: by mail-pg1-f180.google.com with SMTP id l24so10690395pgh.10
-        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 17:34:36 -0800 (PST)
+        id S1727159AbfKLBes (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 20:34:48 -0500
+Received: from mail-pg1-f170.google.com ([209.85.215.170]:34575 "EHLO
+        mail-pg1-f170.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726906AbfKLBes (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 20:34:48 -0500
+Received: by mail-pg1-f170.google.com with SMTP id z188so4780634pgb.1
+        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 17:34:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=A+WGquw9d287JbLFT+JQm6E0iccq0m1IdjnOWW9N8Vw=;
-        b=mqesZQx1uXt+YRrMWn7pczh30OJHh9Y9taWsYrNg/44KJn7Bn3c73eWbIBMbQjHQDy
-         j1hh+NJ0mgJidLz1L6xj2xShaMgdozVadwIkSlXF8nmTJ8J5AcdXNmqn4MTs0LWtupN/
-         Vhefd4aJThd/g52lQHEg3BmturPBoF3n/DiKw=
+        bh=VDzCgmuHctJyuOw4UeFsVtAKCX22wEQ5h00+fDGNzTA=;
+        b=oWWsUwpBctQWOZQO1EjFC2MfIYYDOwzx4rrAt8jlDppRdjAPK07EyfcTOmZSoM11Wi
+         PwwsPYAaGDj017PHNiI8hdZB8NsHaZBeHgApbu3ZFn6YUN08rRx5GJpGPrrpd3kRh5E/
+         ZaPrXw1k7Ovu0w2sozMhtNxS/rV0XKlSESI3U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=A+WGquw9d287JbLFT+JQm6E0iccq0m1IdjnOWW9N8Vw=;
-        b=AFqm03J3HhaTdhSmOU383gI0wymwKBog4/jf4yOmlzu44M+D3AeZod/Xkr1XhdlNLl
-         vFQ/sA3Ic2Rkztd2odffh6lqxCrEcIISV9w+A4Aynxxp+bVn9zg4MnTZ6BNvcrvXRmcT
-         Ui2X3BqkdjPpmRg6GEVzvJaCUQMny/Brpklh/OmaC5SvwYna557KUZH///QSyYNjIKxl
-         sp1+/3ku4qIeejJFVjFhWkGKwQ9WsRGlq8Jxsv9GwaYV/BtRth/8aUJjt3CMGFal6kJ0
-         huKsXNemwOmQ38exLN4nL6pNMZPArDuMTCCzl/7iEN8E+sPTgbPtuFvTy/PDY9ktJMCc
-         qgKw==
-X-Gm-Message-State: APjAAAU3B2HX1njnGlyhMRPEBRdPhGsKqumEqy2La5KdiNa77hKa4Qdm
-        B6cV1CLQJCBCcGS99gwhwuDBWQ==
-X-Google-Smtp-Source: APXvYqxX4WlEYif6EYoldzX5jXRpYVWglzFEpobS823wjQg8hNmLGGnFnE5+VXxXJYMVSULsCOVF7w==
-X-Received: by 2002:a63:da47:: with SMTP id l7mr5203369pgj.34.1573522476294;
-        Mon, 11 Nov 2019 17:34:36 -0800 (PST)
+        bh=VDzCgmuHctJyuOw4UeFsVtAKCX22wEQ5h00+fDGNzTA=;
+        b=FSSEoCjo4dEOk38InNYy6MdYZjGNDEIxP/+tdayYOFbNBPgTyItslHZaDaK0F3sQkO
+         3pAP8T8qHbWr/+HzVkxyGJ86IXgIQ8ISQzSn7zt/7bhuFkJ4RUvBp1iBlz/aLsUWkYzj
+         YwvF050tNMl24C62DbQeIKAbuLU9RuTFLrgvpkzFp8QZthoH3fGdduH7m25x7sNwBB2q
+         pX/C6RSoNg5tk6wpfZHgfVPqVvI+wV2/A2jrYhrjnDIRoDVh9do0q35gvkl57x5QLysz
+         rgqKw9J21il/B9aIrXSaLquzebXmORPyhJx/GZQMlTBMoti+HOoYC4zYTMaLCKjVMT+Z
+         rMjQ==
+X-Gm-Message-State: APjAAAVdEHNQNDDz+w8ZIQejFrbcmo4PSIENLR0ZJ7O9bE8Yi2w+muVn
+        H2sbSWLHxACI917XPYXelIG52xDk7fM=
+X-Google-Smtp-Source: APXvYqwH+o7vryomgub+pPZsTiioE5CHDLwnm+rtSfqTZSL6uI4c+HBJNGWk5jD/7MerqdRhJvnkmw==
+X-Received: by 2002:a63:712:: with SMTP id 18mr21740840pgh.384.1573522485957;
+        Mon, 11 Nov 2019 17:34:45 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k9sm17714036pfk.72.2019.11.11.17.34.35
+        by smtp.gmail.com with ESMTPSA id c16sm15179738pfo.34.2019.11.11.17.34.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 17:34:35 -0800 (PST)
+        Mon, 11 Nov 2019 17:34:45 -0800 (PST)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Mon, 11 Nov 2019 17:34:34 -0800
-To:     Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Hersen Wu <hersenxs.wu@amd.com>,
+Date:   Mon, 11 Nov 2019 17:34:44 -0800
+To:     Chao Yu <yuchao0@huawei.com>
+Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: submit_dmub_reg_wait(): Memory - corruptions
-Message-ID: <201911111734.0D8F299725@keescook>
+Subject: Coverity: add_ipu_page(): Memory - illegal accesses
+Message-ID: <201911111734.21CB897FD@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -68,26 +66,26 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by recent commits:
 
-c264644545d2 ("drm/amd/display: Add DMUB support to DC")
+0b20fcec8651 ("f2fs: cache global IPU bio")
 
 Coverity reported the following:
 
-*** CID 1487852:  Memory - corruptions  (OVERRUN)
-/drivers/gpu/drm/amd/display/dc/dc_helper.c: 95 in submit_dmub_reg_wait()
-89     	struct dmub_rb_cmd_reg_wait *cmd_buf = &offload->cmd_data.reg_wait;
-90     	bool gather = false;
-91
-92     	gather = ctx->dmub_srv->reg_helper_offload.gather_in_progress;
-93     	ctx->dmub_srv->reg_helper_offload.gather_in_progress = false;
-94
-vvv     CID 1487852:  Memory - corruptions  (OVERRUN)
-vvv     Overrunning struct type dmub_cmd_header of 4 bytes by passing it to a function which accesses it at byte offset 63.
-95     	dc_dmub_srv_cmd_queue(ctx->dmub_srv, &cmd_buf->header);
-96
-97     	memset(cmd_buf, 0, sizeof(*cmd_buf));
-98     	offload->reg_seq_count = 0;
-99
-100     	ctx->dmub_srv->reg_helper_offload.gather_in_progress = gather;
+*** CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
+/fs/f2fs/data.c: 604 in add_ipu_page()
+598     			break;
+599     		}
+600     		up_write(&io->bio_list_lock);
+601     	}
+602
+603     	if (ret) {
+vvv     CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
+vvv     Calling "bio_put" dereferences freed pointer "*bio".
+604     		bio_put(*bio);
+605     		*bio = NULL;
+606     	}
+607
+608     	return ret;
+609     }
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -95,8 +93,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1487852 ("Memory - corruptions")
-Fixes: c264644545d2 ("drm/amd/display: Add DMUB support to DC")
+Addresses-Coverity-ID: 1487851 ("Memory - illegal accesses")
+Fixes: 0b20fcec8651 ("f2fs: cache global IPU bio")
 
 
 Thanks for your attention!

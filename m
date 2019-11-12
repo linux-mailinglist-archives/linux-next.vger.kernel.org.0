@@ -2,130 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 544BBF9CD3
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 23:17:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F0BF9CDD
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 23:19:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbfKLWRg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 17:17:36 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:45390 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726896AbfKLWRg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 17:17:36 -0500
-Received: by mail-pf1-f193.google.com with SMTP id z4so63211pfn.12
-        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 14:17:35 -0800 (PST)
+        id S1726910AbfKLWS7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 17:18:59 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35760 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726896AbfKLWS7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 17:18:59 -0500
+Received: by mail-pg1-f196.google.com with SMTP id q22so12811178pgk.2
+        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 14:18:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=0T7KogKFofoC5Ts4V8FRe0Htuj53upBRUcsIvIUqWYM=;
-        b=jujXSgV3/XBHadilEIg62jlFswTi+VHxCfrIfh/BgLMH4se6r639bj/FMqDWk2RtGY
-         mOhMovtvLvb3/hBWnfQVuvYKNypV11lwdSPjq0E3UCvKfI8ayFB9zLLJhmnYPBVon9mw
-         kZ/dgW+rlpCsBTymcC4b015v7F+iIf56+b9eg=
+        bh=/a0svZ2uwty3hgfdO1xDgpuq9omBE5a6856xVKDrW54=;
+        b=bdD52eW4Hi9/pgJr9sXsFClyYZxaRghubd85S5FtmNAlrqCKq3rdKs2xuMc9Haeklx
+         hqBOFEoq30sSaBuLqIVkLJmDNMkcJWV/ObvVkNDrtzPCs/IIxBkDiop8I/qbvLQC05XR
+         iAensfdCSEezYMZGmbZ5cgsE80zs3AUTY/cCg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=0T7KogKFofoC5Ts4V8FRe0Htuj53upBRUcsIvIUqWYM=;
-        b=dJAAjcgjHO88/n4ekLoTl6tk0h6EcFjUCvEY8bjxHLkgdQ0RDgC3Uunu8wS+OD7vkm
-         h+KOgO97MSowAjvbJP71zx1Zhwunt6C0qR3xvj5ZBKzQBT174I5JQzD/OCa76+xSufXR
-         9heJNAxSG8aQkHTUnECE6uyAeOZTHD3a6nR4Y2aeo++st1YhzmKhsHm4JUnQEpiOjiJV
-         XML2JJoBgdPriGry5DU/fZqTJTopRqJMf5WzOAe+vNZFFGtqAYM87x80m6h7Emj69Icb
-         /grOh89RLnROCGj+jajtiWWBZGN3iAFMOxKmSA0Cg0T4s9lWN3vGncXEqWEChVpaEpZ7
-         wSsg==
-X-Gm-Message-State: APjAAAWb9/qYuZ+Mb5HdYeA8TrMOnetjzY2vjRJM29PRWo9zqc2zKTdZ
-        ELmnR8hYBRqKxMJZidJoeGvPDw==
-X-Google-Smtp-Source: APXvYqzNYCHx5TgnEBA97P0M9F+oD0F4ZHHN0hxGUC64DnukiE0M+oAGmUz4VNPJ6j7NQ+XeAI1yYA==
-X-Received: by 2002:aa7:83c2:: with SMTP id j2mr222831pfn.225.1573597055631;
-        Tue, 12 Nov 2019 14:17:35 -0800 (PST)
+        bh=/a0svZ2uwty3hgfdO1xDgpuq9omBE5a6856xVKDrW54=;
+        b=lPSkwv55QTHGVQIKkNq27rdYqptse7wvKUOVB3ypYvT3w2g3OnWJxhXiVLCfwvXv1v
+         vohAh57rPH02OUW2eE8forNKlUPDP5b2Y4cpIRtgaMBwzIladeQ1vit8tEFjuPDs/qFA
+         Ohabx8RMe3gGaMBEHNvBuSoUsvFG//K6bsQt7O/Q7JDxMMNRUwV/yvPr6D0siMRyChPo
+         Lg2ge80HvBATH6N3nYQRr3U+LZAmqip9zUmXovYjGHIi+tOOL28ruNxnmN3zi4ckzEaq
+         R9gUwZJwKTD5fnQUDtqvszN6u2p0FDU0hgVBgEVf/RcBAq+rsl4sF+8GewC30wMisgPY
+         eWug==
+X-Gm-Message-State: APjAAAXffi8PF4OvtnBHD+meq+rzlBw3Nc7Ece93c5OjilJGYrei/Ebt
+        V97XyrejUi3WREHWbxVBru0pTtsoYQQ=
+X-Google-Smtp-Source: APXvYqwnNSpk58XTtCnEkVhFPR0p+TxWL25LUSsipaSmCiHfD1P7Z142SN7xb2+1QiJn5pPbVfXuDw==
+X-Received: by 2002:a63:1065:: with SMTP id 37mr37424991pgq.31.1573597138648;
+        Tue, 12 Nov 2019 14:18:58 -0800 (PST)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g4sm14601912pfh.172.2019.11.12.14.17.34
+        by smtp.gmail.com with ESMTPSA id c3sm7323pgi.19.2019.11.12.14.18.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2019 14:17:34 -0800 (PST)
-Date:   Tue, 12 Nov 2019 14:17:33 -0800
+        Tue, 12 Nov 2019 14:18:57 -0800 (PST)
+Date:   Tue, 12 Nov 2019 14:18:56 -0800
 From:   Kees Cook <keescook@chromium.org>
-To:     Matthew Bobrowski <mbobrowski@mbobrowski.org>
-Cc:     Jan Kara <jack@suse.cz>, Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Re: Coverity: ext4_iomap_alloc(): Integer handling issues
-Message-ID: <201911121414.ECAA926@keescook>
-References: <201911111735.1F45BB0B4@keescook>
- <20191112072239.GB15488@bobrowski>
- <20191112110004.GF1241@quack2.suse.cz>
- <201911121256.647DA73508@keescook>
- <20191112212846.GA29863@bobrowski>
+Subject: Re: Coverity: shrink_node_memcgs(): Null pointer dereferences
+Message-ID: <201911121418.5C39BD9294@keescook>
+References: <201911111735.8DBFBDF0@keescook>
+ <20191112152123.GB168812@cmpxchg.org>
+ <201911121301.885CE00@keescook>
+ <20191112215652.GA181339@cmpxchg.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20191112212846.GA29863@bobrowski>
+In-Reply-To: <20191112215652.GA181339@cmpxchg.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 13, 2019 at 08:28:47AM +1100, Matthew Bobrowski wrote:
-> On Tue, Nov 12, 2019 at 12:56:45PM -0800, Kees Cook wrote:
-> > On Tue, Nov 12, 2019 at 12:00:04PM +0100, Jan Kara wrote:
-> > > On Tue 12-11-19 18:22:41, Matthew Bobrowski wrote:
-> > > > On Mon, Nov 11, 2019 at 05:35:44PM -0800, coverity-bot wrote:
-> > > > > This is an experimental automated report about issues detected by Coverity
-> > > > > from a scan of next-20191108 as part of the linux-next weekly scan project:
-> > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > > > > 
-> > > > > You're getting this email because you were associated with the identified
-> > > > > lines of code (noted below) that were touched by recent commits:
-> > > > > 
-> > > > > 378f32bab371 ("ext4: introduce direct I/O write using iomap infrastructure")
-> > > > > 
-> > > > > Coverity reported the following:
-> > > > > 
-> > > > > *** CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
-> > > > > /fs/ext4/inode.c: 3388 in ext4_iomap_alloc()
-> > > > > 3382     	/*
-> > > > > 3383     	 * We use i_size instead of i_disksize here because delalloc writeback
-> > > > > 3384     	 * can complete at any point during the I/O and subsequently push the
-> > > > > 3385     	 * i_disksize out to i_size. This could be beyond where direct I/O is
-> > > > > 3386     	 * happening and thus expose allocated blocks to direct I/O reads.
-> > > > > 3387     	 */
-> > > > > vvv     CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
-> > > > > vvv     Potentially overflowing expression "1 << blkbits" with type "int" (32 bits, signed) is evaluated using 32-bit arithmetic, and then used in a context that expects an expression of type "loff_t" (64 bits, signed).
-> > > > > 3388     	else if ((map->m_lblk * (1 << blkbits)) >= i_size_read(inode))
-> > > > > 3389     		m_flags = EXT4_GET_BLOCKS_CREATE;
-> > > > > 3390     	else if (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))
-> > > > > 3391     		m_flags = EXT4_GET_BLOCKS_IO_CREATE_EXT;
+On Tue, Nov 12, 2019 at 04:56:52PM -0500, Johannes Weiner wrote:
+> On Tue, Nov 12, 2019 at 01:04:03PM -0800, Kees Cook wrote:
+> > On Tue, Nov 12, 2019 at 10:21:23AM -0500, Johannes Weiner wrote:
+> > > On Mon, Nov 11, 2019 at 05:35:37PM -0800, coverity-bot wrote:
+> > > > Hello!
 > > > > 
-> > > > In the event of an overflow in this specific context, I don't think it
-> > > > would matter too much to be perfectly honest. If 'blkbits' were to
-> > > > actually ever push out the signed integer to a value that couldn't be
-> > > > represented by this data type, I would expect the resulting wrapping
-> > > > behaviour to _only_ affect how filesystem blocks are allocated. In
-> > > > that case, I/O workloads would behave alot differently, and at that
-> > > > point I would hope that our filesystem related testing infrastructure
-> > > > would pick this up before allowing anything to leak out into the
-> > > > wild...
+> > > > This is an experimental automated report about issues detected by Coverity
+> > > > from a scan of next-20191108 as part of the linux-next weekly scan project:
+> > > > https://scan.coverity.com/projects/linux-next-weekly-scan
 > > > > 
-> > > > Unless my trail of thought is wrong? Happy to be corrected here and
-> > > > educated on this.
+> > > > You're getting this email because you were associated with the identified
+> > > > lines of code (noted below) that were touched by recent commits:
+> > > > 
+> > > > c34aa3085f94 ("mm-vmscan-split-shrink_node-into-node-part-and-memcgs-part-fix")
+> > > > 
+> > > > Coverity reported the following:
+> > > > 
+> > > > *** CID 1487844:  Null pointer dereferences  (NULL_RETURNS)
+> > > > /mm/vmscan.c: 2695 in shrink_node_memcgs()
+> > > > 2689     	memcg = mem_cgroup_iter(target_memcg, NULL, NULL);
+> > > > 2690     	do {
+> > > > 2691     		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
+> > > > 2692     		unsigned long reclaimed;
+> > > > 2693     		unsigned long scanned;
+> > > > 2694
+> > > > vvv     CID 1487844:  Null pointer dereferences  (NULL_RETURNS)
+> > > > vvv     Dereferencing a pointer that might be "NULL" "memcg" when calling "mem_cgroup_protected".
+> > > > 2695     		switch (mem_cgroup_protected(target_memcg, memcg)) {
 > > > 
-> > > Fully agreed. blkbits is never expected to be larger than 16 in this code.
-> > > So this is false positive.
+> > > This appears to be a false alarm.
 > > 
-> > Thanks for looking into this!
+> > Okay, thanks!
+> > 
+> > > All the "culprit" patch did was rename the local variable
+> > > "target_memcg".
+> > > 
+> > > And while it's correct that memcg can be NULL (befor and after this
+> > > patch), it's the case only when mem_cgroup_disabled(), and
+> > > mem_cgroup_protected() checks for this case.
+> > 
+> > Right, that's certainly the design. I wonder if in the interests of
+> > defensively asserting requirements, it would be worth adding something
+> > like this to mem_cgroup_protected():
+> > 
+> > if (WARN_ON_ONCE(!memcg))
+> >     return MEMCG_PROT_NONE;
 > 
-> No problem!
->  
-> > Is it worth changing the type to u8 or something?
+> I'm having trouble enumerating the number of places where we would
+> crash in reclaim if memcg were zero while the mem controller is on.
 > 
-> 'blkbits' in this case is already of data type u8, so this would
-> effectively be a no-op. :)
+> And even if we annotated all of them and dreamed up more or less
+> sensical exit values for all of these places, we'd quickly panic due
+> to failing page reclaim.
+> 
+> There is no graceful exit strategy here. We may as well take the crash
+> right away, without having to clutter up the code.
 
-Hm, yeah. I guess Coverity doesn't see anything bounding it or i_blkbits
-to 16. Would add something like this make sense just to validate
-assumptions?
+Okay, cool. I was just thinking mem_cgroup_protected() would be central
+enough since it's already tested in tons of places.
 
-if (WARN_ON_ONCE(blkbits > 16))
-    return -ENOSPC;
+Thanks for looking at it!
 
 -- 
 Kees Cook

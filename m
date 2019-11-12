@@ -2,111 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 123F4F9B70
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 22:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64E1EF9B80
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 22:10:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726906AbfKLVEG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 16:04:06 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43520 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726376AbfKLVEG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 16:04:06 -0500
-Received: by mail-pg1-f194.google.com with SMTP id l24so12639532pgh.10
-        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 13:04:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MOlDpdH/Pg9WevSDU8icH81SRQw0v3HMIviMNaByetc=;
-        b=BO/KRDntxicD6HYAqt9wCy3jOUjRGsHxhxlqSAbqvleHC2k2Z5+hMj6EwHVenDjhE5
-         mHDhGXgblHgd0siA5XA3ihuhTHJFCAZc4JEWOEnZB1Hm/t2CFpCfgapmpckCm089wZ0j
-         d4Rj0+uqhAZxINts6LuG9rPj+xATmQ7kzfAPU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MOlDpdH/Pg9WevSDU8icH81SRQw0v3HMIviMNaByetc=;
-        b=T1ZToqQtf/DJPsJv4PP+wSJ8XD0orKwS+Tz2DWfay6UH9bRuNkUoJX39qQZbTEJxU8
-         VtGR7gKIbx2A2K2oQF/pZSFh/NPzi3ojbiqOL9xAQn32VV/ysJrR5nrKTU8NJ9aidAIS
-         rUpRBIim+hnb9XGoP/ZWoJOVGcKGYc3nzMul4hlLMeUW7Gw+nbegczBuiVLq0BFfKpIk
-         tXO+dMSX5VyWLVYmDgv6ox76HNyklhKMY/mffGf3oLBqNr+xHgRWYsYgwSyyaa0vBPW0
-         vm9LI+vIx49q9KrFXcpRgbAOO79HgruTtZeumxrGTqmOYlCIfVEDMTEkKRWexfDBLUEa
-         9VeA==
-X-Gm-Message-State: APjAAAWcYm7WNPDbU09OEg9auj7D6yobVhaAn5E9db7NvqDjJFRu9z/5
-        kwRf3+ExxsdQ5bVKmQHP351b7S/Wzhk=
-X-Google-Smtp-Source: APXvYqwA84Bvn54cRclHfOZqz37ZUCIbsHdfpkNwpkkU86Jt5kVLRc1BJr3jokb8RIORk8Le9wSwlw==
-X-Received: by 2002:a63:5c4a:: with SMTP id n10mr38532982pgm.120.1573592645334;
-        Tue, 12 Nov 2019 13:04:05 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id e8sm20292961pga.17.2019.11.12.13.04.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2019 13:04:04 -0800 (PST)
-Date:   Tue, 12 Nov 2019 13:04:03 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Re: Coverity: shrink_node_memcgs(): Null pointer dereferences
-Message-ID: <201911121301.885CE00@keescook>
-References: <201911111735.8DBFBDF0@keescook>
- <20191112152123.GB168812@cmpxchg.org>
+        id S1727181AbfKLVKk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 16:10:40 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57311 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726799AbfKLVKj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Nov 2019 16:10:39 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47CL4X6ftsz9s7T;
+        Wed, 13 Nov 2019 08:10:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573593037;
+        bh=GS3qIft1v7dYVvt1kiq+C6/4nrm1m0q9PPdYI84wFi8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=k5X3xjGMxMKDg+1yAcX7Y6Zli4ckQKkieEffzyvSW3DGatUsNrYeNUjfj3Mwz69xj
+         LDX2uUyfKddGhTaaeAEZMU52v6HnpYIShtHn5e8lN20Jjso09nKlArNhkijwv2+CT8
+         ti17ihnGga0aXFZEAZxLFpvnEst2WC8XFMLZ4PT/Xz4jAUUoBiyDtak1IVwwrSTe40
+         dWwiWa2OWH22ObNp2NDgBCf3/9Q4110PvnVkYkLKNwzQjxGjisGaxf2Yk9pUqO3fz+
+         l+deRTepsh+rDsGgkrbhLPwYcCfF/C7SpcUi0defbslzHWtsYWU4IBNX4QxwoUGS/N
+         V70zc/PlD+nIA==
+Date:   Wed, 13 Nov 2019 08:10:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the sound-asoc-fixes tree
+Message-ID: <20191113081035.7e7f9bc2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191112152123.GB168812@cmpxchg.org>
+Content-Type: multipart/signed; boundary="Sig_/1Pv_kvZtW/M.dP6g.9X5SA0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 10:21:23AM -0500, Johannes Weiner wrote:
-> On Mon, Nov 11, 2019 at 05:35:37PM -0800, coverity-bot wrote:
-> > Hello!
-> > 
-> > This is an experimental automated report about issues detected by Coverity
-> > from a scan of next-20191108 as part of the linux-next weekly scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by recent commits:
-> > 
-> > c34aa3085f94 ("mm-vmscan-split-shrink_node-into-node-part-and-memcgs-part-fix")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1487844:  Null pointer dereferences  (NULL_RETURNS)
-> > /mm/vmscan.c: 2695 in shrink_node_memcgs()
-> > 2689     	memcg = mem_cgroup_iter(target_memcg, NULL, NULL);
-> > 2690     	do {
-> > 2691     		struct lruvec *lruvec = mem_cgroup_lruvec(memcg, pgdat);
-> > 2692     		unsigned long reclaimed;
-> > 2693     		unsigned long scanned;
-> > 2694
-> > vvv     CID 1487844:  Null pointer dereferences  (NULL_RETURNS)
-> > vvv     Dereferencing a pointer that might be "NULL" "memcg" when calling "mem_cgroup_protected".
-> > 2695     		switch (mem_cgroup_protected(target_memcg, memcg)) {
-> 
-> This appears to be a false alarm.
+--Sig_/1Pv_kvZtW/M.dP6g.9X5SA0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, thanks!
+Hi all,
 
-> All the "culprit" patch did was rename the local variable
-> "target_memcg".
-> 
-> And while it's correct that memcg can be NULL (befor and after this
-> patch), it's the case only when mem_cgroup_disabled(), and
-> mem_cgroup_protected() checks for this case.
+After merging the sound-asoc-fixes tree, today's linux-next build
+(x86_64 allmodconfig) failed like this:
 
-Right, that's certainly the design. I wonder if in the interests of
-defensively asserting requirements, it would be worth adding something
-like this to mem_cgroup_protected():
+sound/soc/sof/sof-pci-dev.c:116:15: error: 'snd_soc_acpi_intel_cfl_machines=
+' undeclared here (not in a function); did you mean 'snd_soc_acpi_intel_cnl=
+_machines'?
+  116 |  .machines  =3D snd_soc_acpi_intel_cfl_machines,
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |               snd_soc_acpi_intel_cnl_machines
+sound/soc/sof/sof-pci-dev.c:136:15: error: 'snd_soc_acpi_intel_cml_machines=
+' undeclared here (not in a function); did you mean 'snd_soc_acpi_intel_cnl=
+_machines'?
+  136 |  .machines  =3D snd_soc_acpi_intel_cml_machines,
+      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |               snd_soc_acpi_intel_cnl_machines
 
-if (WARN_ON_ONCE(!memcg))
-    return MEMCG_PROT_NONE;
+Caused by commit
 
-?
+  1d3e9077307f ("ASoC: SOF: Intel: Fix CFL and CML FW nocodec binary names.=
+")
 
--- 
-Kees Cook
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1Pv_kvZtW/M.dP6g.9X5SA0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3LH8sACgkQAVBC80lX
+0Gzb1AgApXPXaypZpUqWTlaLe2ek17NfCtLdKqtNlTTNcraGpK+bWreP+11wn+bm
+bRuFtwbv1WfrL5i9+MGlVKGtLRfzaqIHjhqnLTe2k9YBIaBYlnJKh0+d/3zGrnI0
+6joBlvKt/wJM0Q8Axd92D4P3G2VC9LGjoUMCbuV3hceCZwwZVrHTnqg3odWH/gj9
+18zi1wwsQxSFgrSvJEDf/8XiZaj1pvjWmNL2EHr4FIjaHHIc17TaW3YhSE+9HWwv
+ozG4oZZB3YlHmBepnQryoq4T8kdj3YiE5Giid2ZhzrnxFriQhhQO4gzbVIVgiFmE
+HIQat4MbMdU1N5Y/RgKD92FLQweZwQ==
+=BbbO
+-----END PGP SIGNATURE-----
+
+--Sig_/1Pv_kvZtW/M.dP6g.9X5SA0--

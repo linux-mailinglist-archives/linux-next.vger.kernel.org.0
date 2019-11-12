@@ -2,122 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 09169F8833
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 06:47:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D41A0F899C
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 08:22:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725775AbfKLFrk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 00:47:40 -0500
-Received: from mail-wm1-f42.google.com ([209.85.128.42]:36240 "EHLO
-        mail-wm1-f42.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbfKLFrk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 00:47:40 -0500
-Received: by mail-wm1-f42.google.com with SMTP id c22so1580789wmd.1
-        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 21:47:38 -0800 (PST)
+        id S1725811AbfKLHWs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 02:22:48 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:43807 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727024AbfKLHWs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 02:22:48 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 3so12685713pfb.10
+        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 23:22:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5+d0RIokqCiYT7wr52J0bD7FBOdmI+eUb833cC+uduY=;
-        b=HkfYEWFVnrEsAiUqjHp6zcqKn8VCmImBUX/QVIbF07H4L7n9/eMz9wYxQEdI5acxdU
-         ZBBdxP0uLcAKOQbek1S80esFIaUNXyv5tYJe1rPtkTw8gfsRPvVArExQLcDumEfVd0z9
-         hbl+tLxSKwton9g3IUSe8lcWYjURdB9Ow6qFuKw/4N/XRG35zezBgbz+5tCJfKTKNH2p
-         knhvvDqepPcbjJTKKHQrrWm8SRv/QSr8NIEQcOk3PrXjBfX1IyHCtwSsMtP65YBk76mk
-         ZFIb86LY7qgGRy2ZyuG6Uq4cvtqTLhvd7xlAumzIopG1wpmSDbwLKg2A7e1dzrWuDQ2/
-         /yLQ==
+        d=mbobrowski-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=gO9YPHVQsoqeQasrpa3BV/v4PKMeL3hfYMR0BVuIRVc=;
+        b=zNqsREJ7mBL2FMwvWvTeyut46xH80rU9wY/8vrw9pypLnCeoV78ZpTiAeVC0t8ulzc
+         /rYC73dAhcSgWJRRVQcI6W2It8bGrsQVque/m4deqqcEPhNQxiqoupzT04R4iyeD+v+H
+         HGofsIW85EcxPSXG5tmZNchZJ0duVVZabOJqgd5RGXQ5BqI+FMWWxpJMwpULmGTWV8Lw
+         7KaaQj7GpHDZ6nbTw+J9rkHyhPeFBSntPPIE/G2cmYN/HfNER9ZwUe5CF2NLUUVOszVy
+         QloZD3Vpv8MUkyn3ZNG2Cu3MlSBkHYj6XtPuPlval0itqLMZMqoiE7uDwffyj/xDd9uU
+         Rp3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5+d0RIokqCiYT7wr52J0bD7FBOdmI+eUb833cC+uduY=;
-        b=HfAOQ8VsADJAZBiCpI0TpCX3v+tQwXKDgmfKzj2TJEz/bc2KLuW5X7uERfStZlbIm/
-         pEv0EAHB2EhFti7oJTMJ50EUXr+mhMB922G3Q1PFaO0PxW8qCQYR9ikn9YvWLuSyGMI2
-         Iw41IEGbiDTdviGDio0FJctHoCaVt4t3URd68bF9kT54HfjKpoxXDFZWMIrlVPHsXteM
-         c9XQHp1HbF2hZtS//+Dk7GCjr99AnVFvJKRmrexP2ruWRVMHIdKyTUOqEm4qCxI/YEdd
-         8SJDSSaKIBQ2yoj/kSBSorkJnFQS6JiY5lSd0JOkoBFZZfDiLyyTmCWz0ePOSnKr5rxT
-         c4gg==
-X-Gm-Message-State: APjAAAW5wcwHlEX1E91JSM8STJank8ZyJkqMSStfLt0aQxJr8l83cHwE
-        Qx2W+UyLB3twkGmsbJ9Kbze+KAezndV1oQ==
-X-Google-Smtp-Source: APXvYqyDwdzQqI1fJILZCiIkQq30HBFWIKGbj72pqwasv5oXFgJ8vf1EVTRXjLaSjCBVDPVFLaXKeA==
-X-Received: by 2002:a05:600c:2383:: with SMTP id m3mr2128413wma.166.1573537657663;
-        Mon, 11 Nov 2019 21:47:37 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 65sm37227994wrs.9.2019.11.11.21.47.36
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=gO9YPHVQsoqeQasrpa3BV/v4PKMeL3hfYMR0BVuIRVc=;
+        b=RAkXfidv7snbM0QDA86H2h9rnyKagZS5bwQhQS+j3A465xPsSabRHsYwvA8k+W3r1A
+         AX8oi/2aNzexKiPj6TMYV8LBOuYFSmFGqt6hiZjsZ1vXwIkIAxT7A2AYpj+EFQnfDpak
+         aF3Gku9ih0+Na70iHVB7iq6b5im9ku1nltmr6cMr4iOLbneQq2OS8rRq58Ydo0vjCB+j
+         b2l4n5fHu2KjymmxjK3zMmJkA0gM0CcHcx9rbzZlCKADhdx3qo+NlvXAJ8xwKXA+0X8y
+         EhcnQt8CfQCa6WgTc2h3znH1xwAsWZK3BG2rFd4i2P9g2I7UwkM/3iM6B1vZLTmw33TM
+         pt0w==
+X-Gm-Message-State: APjAAAVr8LtFqHzYD/LjnKCJEc5b3ZITO7jDgTS2SkkOV5MzhprQP1ZA
+        9ZbHd6k8eze5KtnawXNklHPW
+X-Google-Smtp-Source: APXvYqwxTn2M+olDT0ziF4H5UjjqZNlLBqhqd2RteYUi9wbMeXB78zX2LJy3HdoX3LrCRpV1QUGLdA==
+X-Received: by 2002:aa7:961d:: with SMTP id q29mr33573726pfg.89.1573543367360;
+        Mon, 11 Nov 2019 23:22:47 -0800 (PST)
+Received: from bobrowski ([110.232.114.101])
+        by smtp.gmail.com with ESMTPSA id l33sm16999718pgb.79.2019.11.11.23.22.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2019 21:47:37 -0800 (PST)
-Message-ID: <5dca4779.1c69fb81.7d9ae.b17d@mx.google.com>
-Date:   Mon, 11 Nov 2019 21:47:37 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 11 Nov 2019 23:22:46 -0800 (PST)
+Date:   Tue, 12 Nov 2019 18:22:41 +1100
+From:   Matthew Bobrowski <mbobrowski@mbobrowski.org>
+To:     coverity-bot <keescook@chromium.org>
+Cc:     Jan Kara <jack@suse.cz>, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Re: Coverity: ext4_iomap_alloc(): Integer handling issues
+Message-ID: <20191112072239.GB15488@bobrowski>
+References: <201911111735.1F45BB0B4@keescook>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc7-105-g01970a127dd4
-Subject: next/pending-fixes boot: 240 boots: 2 failed,
- 229 passed with 9 offline (v5.4-rc7-105-g01970a127dd4)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201911111735.1F45BB0B4@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 240 boots: 2 failed, 229 passed with 9 offline (v5=
-.4-rc7-105-g01970a127dd4)
+On Mon, Nov 11, 2019 at 05:35:44PM -0800, coverity-bot wrote:
+> This is an experimental automated report about issues detected by Coverity
+> from a scan of next-20191108 as part of the linux-next weekly scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+> 
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by recent commits:
+> 
+> 378f32bab371 ("ext4: introduce direct I/O write using iomap infrastructure")
+> 
+> Coverity reported the following:
+> 
+> *** CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
+> /fs/ext4/inode.c: 3388 in ext4_iomap_alloc()
+> 3382     	/*
+> 3383     	 * We use i_size instead of i_disksize here because delalloc writeback
+> 3384     	 * can complete at any point during the I/O and subsequently push the
+> 3385     	 * i_disksize out to i_size. This could be beyond where direct I/O is
+> 3386     	 * happening and thus expose allocated blocks to direct I/O reads.
+> 3387     	 */
+> vvv     CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
+> vvv     Potentially overflowing expression "1 << blkbits" with type "int" (32 bits, signed) is evaluated using 32-bit arithmetic, and then used in a context that expects an expression of type "loff_t" (64 bits, signed).
+> 3388     	else if ((map->m_lblk * (1 << blkbits)) >= i_size_read(inode))
+> 3389     		m_flags = EXT4_GET_BLOCKS_CREATE;
+> 3390     	else if (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))
+> 3391     		m_flags = EXT4_GET_BLOCKS_IO_CREATE_EXT;
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc7-105-g01970a127dd4/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc7-105-g01970a127dd4/
+In the event of an overflow in this specific context, I don't think it
+would matter too much to be perfectly honest. If 'blkbits' were to
+actually ever push out the signed integer to a value that couldn't be
+represented by this data type, I would expect the resulting wrapping
+behaviour to _only_ affect how filesystem blocks are allocated. In
+that case, I/O workloads would behave alot differently, and at that
+point I would hope that our filesystem related testing infrastructure
+would pick this up before allowing anything to leak out into the
+wild...
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc7-105-g01970a127dd4
-Git Commit: 01970a127dd4ed1f032404e66b40bc048585a4d7
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 88 unique boards, 24 SoC families, 26 builds out of 215
+Unless my trail of thought is wrong? Happy to be corrected here and
+educated on this.
 
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+/M

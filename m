@@ -2,77 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EDB3F86F9
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 03:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855B6F8700
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 03:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727063AbfKLClv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 21:41:51 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:60834 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726928AbfKLClv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 21:41:51 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAC2cxWm056567;
-        Tue, 12 Nov 2019 02:41:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2019-08-05;
- bh=yAG7acMsZQBRuoFmvUxTJV5rQ0fEVFZnQXbKjy8cNYE=;
- b=lcs63yK7dvGmCHzzY+ZszlhOZikgJ+g0JJ+Ft7mOY8z36c6dcwO4o1s+jfPVfAXN5IBj
- hMDXh6YPOd3QSK1UJhJYlgWz/zihqGdAx6G7OgR0DbGi0Sr5TEge7AHwvg12npwcqP2O
- KO4qmRMiXXmVuXs9q4WsbckeDXAzFb+vzbkDuKgtC3K3A1QKMjE/obCLXNkFp96JhcLx
- qC2kiCvYpInVWVBEgVmVovg4rdZEN7Bf+wZeeRrWtbMKdPeCCGXnNG0UMsl0tuZHGzvP
- OQycRtMg/c0SblRj3CUfwKZ0TAsbVhwE3Yfn4UJkTz47swQtqTeS7mrb1TQ0Wf4ZtMnS dw== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 2w5ndq1w2p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Nov 2019 02:41:33 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xAC2bxEC143093;
-        Tue, 12 Nov 2019 02:41:32 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by userp3020.oracle.com with ESMTP id 2w67kmwsay-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 12 Nov 2019 02:41:32 +0000
-Received: from abhmp0004.oracle.com (abhmp0004.oracle.com [141.146.116.10])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xAC2fVB1019173;
-        Tue, 12 Nov 2019 02:41:31 GMT
-Received: from localhost (/67.169.218.210)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Mon, 11 Nov 2019 18:41:31 -0800
-Date:   Mon, 11 Nov 2019 18:41:30 -0800
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
+        id S1726951AbfKLCsX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 21:48:23 -0500
+Received: from szxga06-in.huawei.com ([45.249.212.32]:40322 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726923AbfKLCsX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Nov 2019 21:48:23 -0500
+Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
+        by Forcepoint Email with ESMTP id DFD8F2CD03B5C34E1874;
+        Tue, 12 Nov 2019 10:48:21 +0800 (CST)
+Received: from [10.134.22.195] (10.134.22.195) by smtp.huawei.com
+ (10.3.19.201) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 12 Nov
+ 2019 10:48:19 +0800
+Subject: Re: Coverity: add_ipu_page(): Memory - illegal accesses
 To:     coverity-bot <keescook@chromium.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
+CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, xfs <linux-xfs@vger.kernel.org>
-Subject: Re: Coverity: xlog_write_iclog(): Memory - corruptions
-Message-ID: <20191112024130.GA6212@magnolia>
-References: <201911111734.4D8A1DB3DF@keescook>
+        <linux-next@vger.kernel.org>
+References: <201911111734.21CB897FD@keescook>
+From:   Chao Yu <yuchao0@huawei.com>
+Message-ID: <b5adecc4-68ed-09f4-8ed5-90a57f689259@huawei.com>
+Date:   Tue, 12 Nov 2019 10:48:19 +0800
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <201911111734.4D8A1DB3DF@keescook>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9438 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=853
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1910280000 definitions=main-1911120020
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9438 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1910280000
- definitions=main-1911120020
+In-Reply-To: <201911111734.21CB897FD@keescook>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.134.22.195]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[Might as well add the XFS list]
-
-On Mon, Nov 11, 2019 at 05:34:25PM -0800, coverity-bot wrote:
+On 2019/11/12 9:34, coverity-bot wrote:
 > Hello!
 > 
 > This is an experimental automated report about issues detected by Coverity
@@ -82,33 +50,79 @@ On Mon, Nov 11, 2019 at 05:34:25PM -0800, coverity-bot wrote:
 > You're getting this email because you were associated with the identified
 > lines of code (noted below) that were touched by recent commits:
 > 
-> 79b54d9bfcdc ("xfs: use bios directly to write log buffers")
+> 0b20fcec8651 ("f2fs: cache global IPU bio")
 > 
 > Coverity reported the following:
 > 
-> *** CID 1487853:  Memory - corruptions  (BAD_FREE)
-> /fs/xfs/xfs_log.c: 1819 in xlog_write_iclog()
-> 1813     		submit_bio(split);
-> 1814
-> 1815     		/* restart at logical offset zero for the remainder */
-> 1816     		iclog->ic_bio.bi_iter.bi_sector = log->l_logBBstart;
-> 1817     	}
-> 1818
-> vvv     CID 1487853:  Memory - corruptions  (BAD_FREE)
+> *** CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
+> /fs/f2fs/data.c: 604 in add_ipu_page()
+> 598     			break;
+> 599     		}
+> 600     		up_write(&io->bio_list_lock);
+> 601     	}
+> 602
+> 603     	if (ret) {
+> vvv     CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
+> vvv     Calling "bio_put" dereferences freed pointer "*bio".
+> 604     		bio_put(*bio);
+> 605     		*bio = NULL;
+> 606     	}
+> 607
+> 608     	return ret;
+> 609     }
 
-Isn't this a duplicate of 1451989 in the main kernel coverity scan?
-Which, AFAICT 145989 is a false positive since iclog->ic_bio does not
-itself become the target of a bio_chain.
+Thanks for the report.
 
---D
+I double check these related codes:
 
-> vvv     "submit_bio" frees address of "iclog->ic_bio".
-> 1819     	submit_bio(&iclog->ic_bio);
-> 1820     }
-> 1821
-> 1822     /*
-> 1823      * We need to bump cycle number for the part of the iclog that is
-> 1824      * written to the start of the log. Watch out for the header magic
+static int add_ipu_page(struct f2fs_sb_info *sbi, struct bio **bio,
+							struct page *page)
+{
+	enum temp_type temp;
+	bool found = false;
+	int ret = -EAGAIN;
+
+	for (temp = HOT; temp < NR_TEMP_TYPE && !found; temp++) {
+		struct f2fs_bio_info *io = sbi->write_io[DATA] + temp;
+		struct list_head *head = &io->bio_list;
+		struct bio_entry *be;
+
+		down_write(&io->bio_list_lock);
+		list_for_each_entry(be, head, list) {
+			if (be->bio != *bio)
+				continue;
+
+			found = true;
+
+			if (bio_add_page(*bio, page, PAGE_SIZE, 0) == PAGE_SIZE) {
+				ret = 0;
+				break;
+			}
+
+			/* bio is full */
+			del_bio_entry(be);
+			__submit_bio(sbi, *bio, DATA);
+			break;
+		}
+		up_write(&io->bio_list_lock);
+	}
+
+	if (ret) {
+
+If we get here, that means 1) found nothing due to someone has submitted bio for
+us, or 2) found target bio, however bio is full, we submitted the bio. For both
+conditions, previously, we grab one extra ref on bio, here, we just release the
+ref and reset *bio to NULL, then caller can allocate new bio.
+
+Let me know if I'm missing something.
+
+		bio_put(*bio);
+		*bio = NULL;
+	}
+
+	return ret;
+}
+
 > 
 > If this is a false positive, please let us know so we can mark it as
 > such, or teach the Coverity rules to be smarter. If not, please make
@@ -116,11 +130,9 @@ itself become the target of a bio_chain.
 > include these lines (but double-check the "Fixes" first):
 > 
 > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1487853 ("Memory - corruptions")
-> Fixes: 79b54d9bfcdc ("xfs: use bios directly to write log buffers")
+> Addresses-Coverity-ID: 1487851 ("Memory - illegal accesses")
+> Fixes: 0b20fcec8651 ("f2fs: cache global IPU bio")
 > 
 > 
 > Thanks for your attention!
 > 
-> -- 
-> Coverity-bot

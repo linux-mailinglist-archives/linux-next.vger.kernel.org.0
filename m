@@ -2,137 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 855B6F8700
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 03:48:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A73A6F8705
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 03:57:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726951AbfKLCsX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 21:48:23 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:40322 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726923AbfKLCsX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Nov 2019 21:48:23 -0500
-Received: from DGGEMS401-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id DFD8F2CD03B5C34E1874;
-        Tue, 12 Nov 2019 10:48:21 +0800 (CST)
-Received: from [10.134.22.195] (10.134.22.195) by smtp.huawei.com
- (10.3.19.201) with Microsoft SMTP Server (TLS) id 14.3.439.0; Tue, 12 Nov
- 2019 10:48:19 +0800
-Subject: Re: Coverity: add_ipu_page(): Memory - illegal accesses
-To:     coverity-bot <keescook@chromium.org>
-CC:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        <linux-next@vger.kernel.org>
-References: <201911111734.21CB897FD@keescook>
-From:   Chao Yu <yuchao0@huawei.com>
-Message-ID: <b5adecc4-68ed-09f4-8ed5-90a57f689259@huawei.com>
-Date:   Tue, 12 Nov 2019 10:48:19 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.9.1
+        id S1726957AbfKLC5s (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 21:57:48 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35791 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726932AbfKLC5s (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 11 Nov 2019 21:57:48 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47BsqY32qqz9sPJ;
+        Tue, 12 Nov 2019 13:57:45 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573527466;
+        bh=GiUIGs9K7/JCmbdQD5QCRprmABl3h2/wJKsaeUEccDk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=a5bftMQsShdhy2V+e8C959+3p/9k9dhB6pjA15+mCH5B23t+17hZjoOZuQU1SEuIv
+         8LlyxVk5gPNIOm2isSgPq8qexDseWY/KkonZ0zfZJ+v9BxDW83IvjtAbPoYavbYwrP
+         hm4IZygp8AhX/AdFZsEIkVM2KBfNBeWwBfFrCLN45cBFWbazjKXzWdr/2WN97li8RT
+         k66U757pldJYtehBBj7voIZrz119io28efBbV3c3pa8xBkLg0F1QEVB8hLTXRd5KB2
+         POl9JY8DdS9dCkoJUppMy7WgQ3QLqJtBSyOWnafai2ciey065ftY3BHla29PbNeAB3
+         rzQ5l3Di7Bzow==
+Date:   Tue, 12 Nov 2019 13:57:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: linux-next: manual merge of the devicetree tree with Linus' tree
+Message-ID: <20191112135744.75251303@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <201911111734.21CB897FD@keescook>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.134.22.195]
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; boundary="Sig_/SZbub5V7NxRSuzC5s6UPM+Y";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2019/11/12 9:34, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental automated report about issues detected by Coverity
-> from a scan of next-20191108 as part of the linux-next weekly scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by recent commits:
-> 
-> 0b20fcec8651 ("f2fs: cache global IPU bio")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
-> /fs/f2fs/data.c: 604 in add_ipu_page()
-> 598     			break;
-> 599     		}
-> 600     		up_write(&io->bio_list_lock);
-> 601     	}
-> 602
-> 603     	if (ret) {
-> vvv     CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
-> vvv     Calling "bio_put" dereferences freed pointer "*bio".
-> 604     		bio_put(*bio);
-> 605     		*bio = NULL;
-> 606     	}
-> 607
-> 608     	return ret;
-> 609     }
+--Sig_/SZbub5V7NxRSuzC5s6UPM+Y
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report.
+Hi all,
 
-I double check these related codes:
+Today's linux-next merge of the devicetree tree got a conflict in:
 
-static int add_ipu_page(struct f2fs_sb_info *sbi, struct bio **bio,
-							struct page *page)
-{
-	enum temp_type temp;
-	bool found = false;
-	int ret = -EAGAIN;
+  Documentation/devicetree/bindings/usb/amlogic,dwc3.txt
 
-	for (temp = HOT; temp < NR_TEMP_TYPE && !found; temp++) {
-		struct f2fs_bio_info *io = sbi->write_io[DATA] + temp;
-		struct list_head *head = &io->bio_list;
-		struct bio_entry *be;
+between commit:
 
-		down_write(&io->bio_list_lock);
-		list_for_each_entry(be, head, list) {
-			if (be->bio != *bio)
-				continue;
+  976392650a00 ("bindings: rename links to mason USB2/USB3 DT files")
 
-			found = true;
+from Linus' tree and commit:
 
-			if (bio_add_page(*bio, page, PAGE_SIZE, 0) == PAGE_SIZE) {
-				ret = 0;
-				break;
-			}
+  6aec97513a8c ("dt-bindings: usb: dwc3: Move Amlogic G12A DWC3 Glue Bindin=
+gs to YAML schemas")
 
-			/* bio is full */
-			del_bio_entry(be);
-			__submit_bio(sbi, *bio, DATA);
-			break;
-		}
-		up_write(&io->bio_list_lock);
-	}
+from the devicetree tree.
 
-	if (ret) {
+I fixed it up (the latter removed the lines updated by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
-If we get here, that means 1) found nothing due to someone has submitted bio for
-us, or 2) found target bio, however bio is full, we submitted the bio. For both
-conditions, previously, we grab one extra ref on bio, here, we just release the
-ref and reset *bio to NULL, then caller can allocate new bio.
+--=20
+Cheers,
+Stephen Rothwell
 
-Let me know if I'm missing something.
+--Sig_/SZbub5V7NxRSuzC5s6UPM+Y
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-		bio_put(*bio);
-		*bio = NULL;
-	}
+-----BEGIN PGP SIGNATURE-----
 
-	return ret;
-}
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3KH6gACgkQAVBC80lX
+0GwwZwf/X5Xb1IZKYgPDcRLnzzwcKGWjqq5IQAHTUMsgRisP9+7WfpwAJJvBipDJ
+h+w6rXvIYiyFZj22G0DG+4DBMuzFXVe5t/n47QwAW4d1a5RSj5dj2eecFYoYjudT
+h4PV0jKVdXPQPtGR9eF4SKGcT7LPPAs0s8VNi4EbPPrbyZF+5h9BLfMNcfl8P1Wm
+Guz9k2UcU5HY785kZGQccuUJs+Gb6/YAbCh0PPFHVVxFPXXJQqRsnmK+gN3XvDF+
+h5SKQekHvmhbHWAC1uCLKMSO454VhZBLjsV3dPfFM/GbU9DKQ4+ynMEyUK49gHv+
+1ZYAVEe872g/3xkc2zev0bNahjsxUg==
+=6Vr9
+-----END PGP SIGNATURE-----
 
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1487851 ("Memory - illegal accesses")
-> Fixes: 0b20fcec8651 ("f2fs: cache global IPU bio")
-> 
-> 
-> Thanks for your attention!
-> 
+--Sig_/SZbub5V7NxRSuzC5s6UPM+Y--

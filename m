@@ -2,94 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E1EF9B80
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 22:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC0BF9BA1
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 22:13:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727181AbfKLVKk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 16:10:40 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57311 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726799AbfKLVKj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 Nov 2019 16:10:39 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47CL4X6ftsz9s7T;
-        Wed, 13 Nov 2019 08:10:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573593037;
-        bh=GS3qIft1v7dYVvt1kiq+C6/4nrm1m0q9PPdYI84wFi8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=k5X3xjGMxMKDg+1yAcX7Y6Zli4ckQKkieEffzyvSW3DGatUsNrYeNUjfj3Mwz69xj
-         LDX2uUyfKddGhTaaeAEZMU52v6HnpYIShtHn5e8lN20Jjso09nKlArNhkijwv2+CT8
-         ti17ihnGga0aXFZEAZxLFpvnEst2WC8XFMLZ4PT/Xz4jAUUoBiyDtak1IVwwrSTe40
-         dWwiWa2OWH22ObNp2NDgBCf3/9Q4110PvnVkYkLKNwzQjxGjisGaxf2Yk9pUqO3fz+
-         l+deRTepsh+rDsGgkrbhLPwYcCfF/C7SpcUi0defbslzHWtsYWU4IBNX4QxwoUGS/N
-         V70zc/PlD+nIA==
-Date:   Wed, 13 Nov 2019 08:10:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the sound-asoc-fixes tree
-Message-ID: <20191113081035.7e7f9bc2@canb.auug.org.au>
+        id S1726978AbfKLVNK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 16:13:10 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:42875 "EHLO
+        mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726932AbfKLVNK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 16:13:10 -0500
+Received: by mail-pg1-f193.google.com with SMTP id q17so12650807pgt.9
+        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 13:13:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=sPAt5BR/SUzFPl5yvnwRm6FMeQY2XF7mr2Vkv7POVr8=;
+        b=bIqchA1KyxBObqgEPY8kSTPxgK4/IhQLda5EB8nmyDsssVnhufTHiLz5c+Jtpb/Y5O
+         vcVNJn8oKRVDUblMbYwPenSfqN+jgR3sPMqlIKypP/Sb+JmL7W7JUERGKEw9g+imDdxU
+         hfLoPjK0+lY2vB/TNIlyd5Hyo3icQFcdKCvsc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=sPAt5BR/SUzFPl5yvnwRm6FMeQY2XF7mr2Vkv7POVr8=;
+        b=iVSwd1TR6JcOcJdQNy7A9LRDM3rZWIXZcfdkDZzYFtL08dX8wR09Ce/cDotBaJFK+l
+         8NxOHG1dbPCjGppoO3p9fRR6pvcASt4e1wXWBA60crZEqZc+jzBKb3BJ6DNOS3Q+bYR8
+         ajJ13sf+tq4N+63Oy1LXb/Jbw8+fvStvH1qmKfqrkzna0MerNavjR2wBRpXIhZqtVP8G
+         Jt2cNFSaU/jzuByeTzitJikRyS0WpxoPKMA2/bgZCS3SjDFgRVpdsoZYZFL4zO96DFns
+         gusF2TtD41aquUsoQIuJYn13C8YbUFdk0LVzjQDNK8+PBSP79F3C4PRSvOSk5W0iUR8N
+         yPow==
+X-Gm-Message-State: APjAAAVElE8mTKL6cT/hzCJx6zZUXSxGdRBfXiAtBKjzTowPsDXLTaRC
+        7DSDlRBaLYG12l5VYeT9vsoEDA==
+X-Google-Smtp-Source: APXvYqxes/8GaF/ZooF2sLVqYpwGHQmihsnNOG3D/WOY+A2DV7xkcHsW6QPedFsOxvIxuDVNLdrEGA==
+X-Received: by 2002:a17:90a:970a:: with SMTP id x10mr231470pjo.39.1573593188698;
+        Tue, 12 Nov 2019 13:13:08 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q26sm19396529pff.143.2019.11.12.13.13.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 13:13:07 -0800 (PST)
+Date:   Tue, 12 Nov 2019 13:13:07 -0800
+From:   Kees Cook <keescook@chromium.org>
+To:     Marc Kleine-Budde <mkl@pengutronix.de>
+Cc:     Jeroen Hofstee <jhofstee@victronenergy.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org, linux-can <linux-can@vger.kernel.org>
+Subject: Re: Coverity: can_rx_offload_irq_offload_timestamp(): Resource leaks
+Message-ID: <201911121311.2B77400DA@keescook>
+References: <201911111735.C0D6AFBDB@keescook>
+ <8d96e404-10af-1af2-2351-aee71f76d819@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1Pv_kvZtW/M.dP6g.9X5SA0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d96e404-10af-1af2-2351-aee71f76d819@pengutronix.de>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1Pv_kvZtW/M.dP6g.9X5SA0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 12, 2019 at 09:09:13AM +0100, Marc Kleine-Budde wrote:
+> On 11/12/19 2:35 AM, coverity-bot wrote:
+> > Hello!
+> > 
+> > This is an experimental automated report about issues detected by Coverity
+> > from a scan of next-20191108 as part of the linux-next weekly scan project:
+> > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > 
+> > You're getting this email because you were associated with the identified
+> > lines of code (noted below) that were touched by recent commits:
+> > 
+> > c2a9f74c9d18 ("can: rx-offload: can_rx_offload_irq_offload_timestamp(): continue on error")
+> > 
+> > Coverity reported the following:
+> > 
+> > *** CID 1487846:  Resource leaks  (RESOURCE_LEAK)
+> > /drivers/net/can/rx-offload.c: 219 in can_rx_offload_irq_offload_timestamp()
+> > 213
+> > 214     		if (!(pending & BIT_ULL(i)))
+> > 215     			continue;
+> > 216
+> > 217     		skb = can_rx_offload_offload_one(offload, i);
+> > 218     		if (IS_ERR_OR_NULL(skb))
+> > vvv     CID 1487846:  Resource leaks  (RESOURCE_LEAK)
+> > vvv     Variable "skb" going out of scope leaks the storage it points to.
+> > 219     			continue;
+> > 220
+> > 221     		__skb_queue_add_sort(&skb_queue, skb, can_rx_offload_compare);
+> > 222     	}
+> > 223
+> > 224     	if (!skb_queue_empty(&skb_queue)) {
+> > 
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+> > 
+> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> > Addresses-Coverity-ID: 1487846 ("Resource leaks")
+> > Fixes: c2a9f74c9d18 ("can: rx-offload: can_rx_offload_irq_offload_timestamp(): continue on error")
+> 
+> This is a false positive:
+> 
+> >> 218     		if (IS_ERR_OR_NULL(skb))
+> >> 219     			continue;
+> 
+> since skb is either NULL or an error pointer not a pointer to a valid
+> skb object.
 
-Hi all,
+Wow, yes, that certainly is! :) I will see if can find a way to teach
+Coverity that the ERR span of "pointer" values do not count as
+"allocated".
 
-After merging the sound-asoc-fixes tree, today's linux-next build
-(x86_64 allmodconfig) failed like this:
+Thanks for taking a look at this!
 
-sound/soc/sof/sof-pci-dev.c:116:15: error: 'snd_soc_acpi_intel_cfl_machines=
-' undeclared here (not in a function); did you mean 'snd_soc_acpi_intel_cnl=
-_machines'?
-  116 |  .machines  =3D snd_soc_acpi_intel_cfl_machines,
-      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |               snd_soc_acpi_intel_cnl_machines
-sound/soc/sof/sof-pci-dev.c:136:15: error: 'snd_soc_acpi_intel_cml_machines=
-' undeclared here (not in a function); did you mean 'snd_soc_acpi_intel_cnl=
-_machines'?
-  136 |  .machines  =3D snd_soc_acpi_intel_cml_machines,
-      |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |               snd_soc_acpi_intel_cnl_machines
-
-Caused by commit
-
-  1d3e9077307f ("ASoC: SOF: Intel: Fix CFL and CML FW nocodec binary names.=
-")
-
-I have reverted that commit for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/1Pv_kvZtW/M.dP6g.9X5SA0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3LH8sACgkQAVBC80lX
-0Gzb1AgApXPXaypZpUqWTlaLe2ek17NfCtLdKqtNlTTNcraGpK+bWreP+11wn+bm
-bRuFtwbv1WfrL5i9+MGlVKGtLRfzaqIHjhqnLTe2k9YBIaBYlnJKh0+d/3zGrnI0
-6joBlvKt/wJM0Q8Axd92D4P3G2VC9LGjoUMCbuV3hceCZwwZVrHTnqg3odWH/gj9
-18zi1wwsQxSFgrSvJEDf/8XiZaj1pvjWmNL2EHr4FIjaHHIc17TaW3YhSE+9HWwv
-ozG4oZZB3YlHmBepnQryoq4T8kdj3YiE5Giid2ZhzrnxFriQhhQO4gzbVIVgiFmE
-HIQat4MbMdU1N5Y/RgKD92FLQweZwQ==
-=BbbO
------END PGP SIGNATURE-----
-
---Sig_/1Pv_kvZtW/M.dP6g.9X5SA0--
+-- 
+Kees Cook

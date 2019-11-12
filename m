@@ -2,169 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21185F9D72
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 23:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F4116F9E9C
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 00:55:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726932AbfKLWrd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 17:47:33 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:33057 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726906AbfKLWrd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 17:47:33 -0500
-Received: by mail-pf1-f195.google.com with SMTP id c184so153094pfb.0
-        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 14:47:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=XbboyRXrqS/uInMNO6cSc2agSiz0sb0z9DZcUkZuyAE=;
-        b=SCDGYQRZXwNS3OASAJ7w4pUyR2kfiMbVVwixM6Zcf9MYFQP6N7+5g7yu+sO6foCFA3
-         zWg2SVadHopqymiQ8bAXecLDSSkxkbNFCIFZxBH7zSE2SsThWf0LzEcpIfKtqyaJIVAN
-         KMjjOkwBZ5Ja4LvHQJb5L/13zUut/jwsdvpOk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=XbboyRXrqS/uInMNO6cSc2agSiz0sb0z9DZcUkZuyAE=;
-        b=t3eRLUZatwDuG/eU4ThoyO09Oq0AY4KgrZNXEDaQbJmt3n7po71Avg3fvFHbF2q16m
-         w1KVgzRSqDqKgFJ44Yf2a5e9pWuSB0cdLoV0N927rzBv8/Yl16wh3WGyFxFi6aIvQphY
-         elyPGC+eVQaZ3ZKhCaczXihlEBQxNDbpmpP/PrgMug7IQ+LHystaPfGhGrr9YtrZZLwN
-         Bnj0iYO024eE9vZiWyzznu3Sm828QIhbc4NV3vpO/cCbz/Or+/EwE8QC9nPwtjQrGIKM
-         IfDAj4Iq3/wlWqNi56V2x67LOdBJYh+YjwJaq30OBHSuJVZGCd1zR5gynXcjLeoI7Vsv
-         Vb4Q==
-X-Gm-Message-State: APjAAAWmXoX22ayM0qXkjo42R3A/OhV2Jw2DTdLp7BLnujU76BxTxDYR
-        TeCb9D5bbkKvYFisnPR9d30Wkg==
-X-Google-Smtp-Source: APXvYqwNxJznJNh7uj2FB/hP35ygN2mW9Q4bXQkVyBxijQhixSxjuoUyDlUHwAhkrZqUGD+VeOhN9w==
-X-Received: by 2002:a63:7448:: with SMTP id e8mr39236175pgn.268.1573598850938;
-        Tue, 12 Nov 2019 14:47:30 -0800 (PST)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u3sm155644pjn.0.2019.11.12.14.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2019 14:47:30 -0800 (PST)
-Date:   Tue, 12 Nov 2019 14:47:29 -0800
-From:   Kees Cook <keescook@chromium.org>
-To:     Chao Yu <yuchao0@huawei.com>
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Re: Coverity: add_ipu_page(): Memory - illegal accesses
-Message-ID: <201911121446.8469990D9@keescook>
-References: <201911111734.21CB897FD@keescook>
- <b5adecc4-68ed-09f4-8ed5-90a57f689259@huawei.com>
+        id S1726912AbfKLXzt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 18:55:49 -0500
+Received: from ozlabs.org ([203.11.71.1]:34825 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726910AbfKLXzt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Nov 2019 18:55:49 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47CPl63zYYz9sPc;
+        Wed, 13 Nov 2019 10:55:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573602946;
+        bh=9/oHQmWzkmZQ3Y2KBGMkjOb1W+95AIdAK19GVnSXqkY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NzayJEYIuIGxScvf8+F3XPHFGtTBYmnBK+Y2zSGWouuAh7e5JOzSnKxQ1WkEGsLtl
+         qo/Lq0oP2fMlmp5XZDxFkTUnxW61TksTEQat5VwFXa4JlJp7SkBpJrLsqqhB9fJ17V
+         5ChDk0j7B5IiWSsqQj6S8poUcLN1Svh1CANgDZqwku4wi8umAaP9q0zSg1i7fBcsqQ
+         x3bfX6t3cA1P3B1bR8GvL2fqEPDfmhQtJUQUxosidjpj+Zg8Bn9/CedWpRiBBlbGbK
+         TVLY/EmJF+RFMwEFnfLzW7wJmFcHrc6QciGojM28QBXfx7Ah8IxiT9jiSZrWLmUVvr
+         sO4OkwYgkoIMA==
+Date:   Wed, 13 Nov 2019 10:55:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aya Levin <ayal@mellanox.com>, Jiri Pirko <jiri@mellanox.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20191113105527.17d825da@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5adecc4-68ed-09f4-8ed5-90a57f689259@huawei.com>
+Content-Type: multipart/signed; boundary="Sig_/Kt0psQJsHnjo4Q6rmz3J/ke";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 10:48:19AM +0800, Chao Yu wrote:
-> On 2019/11/12 9:34, coverity-bot wrote:
-> > Hello!
-> > 
-> > This is an experimental automated report about issues detected by Coverity
-> > from a scan of next-20191108 as part of the linux-next weekly scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by recent commits:
-> > 
-> > 0b20fcec8651 ("f2fs: cache global IPU bio")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
-> > /fs/f2fs/data.c: 604 in add_ipu_page()
-> > 598     			break;
-> > 599     		}
-> > 600     		up_write(&io->bio_list_lock);
-> > 601     	}
-> > 602
-> > 603     	if (ret) {
-> > vvv     CID 1487851:  Memory - illegal accesses  (USE_AFTER_FREE)
-> > vvv     Calling "bio_put" dereferences freed pointer "*bio".
-> > 604     		bio_put(*bio);
-> > 605     		*bio = NULL;
-> > 606     	}
-> > 607
-> > 608     	return ret;
-> > 609     }
-> 
-> Thanks for the report.
-> 
-> I double check these related codes:
-> 
-> static int add_ipu_page(struct f2fs_sb_info *sbi, struct bio **bio,
-> 							struct page *page)
-> {
-> 	enum temp_type temp;
-> 	bool found = false;
-> 	int ret = -EAGAIN;
-> 
-> 	for (temp = HOT; temp < NR_TEMP_TYPE && !found; temp++) {
-> 		struct f2fs_bio_info *io = sbi->write_io[DATA] + temp;
-> 		struct list_head *head = &io->bio_list;
-> 		struct bio_entry *be;
-> 
-> 		down_write(&io->bio_list_lock);
-> 		list_for_each_entry(be, head, list) {
-> 			if (be->bio != *bio)
-> 				continue;
-> 
-> 			found = true;
-> 
-> 			if (bio_add_page(*bio, page, PAGE_SIZE, 0) == PAGE_SIZE) {
-> 				ret = 0;
-> 				break;
-> 			}
-> 
-> 			/* bio is full */
-> 			del_bio_entry(be);
-> 			__submit_bio(sbi, *bio, DATA);
-> 			break;
-> 		}
-> 		up_write(&io->bio_list_lock);
-> 	}
-> 
-> 	if (ret) {
-> 
-> If we get here, that means 1) found nothing due to someone has submitted bio for
-> us, or 2) found target bio, however bio is full, we submitted the bio. For both
-> conditions, previously, we grab one extra ref on bio, here, we just release the
-> ref and reset *bio to NULL, then caller can allocate new bio.
-> 
-> Let me know if I'm missing something.
+--Sig_/Kt0psQJsHnjo4Q6rmz3J/ke
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Okay, I've noted it as a false positive. I don't know this code at all,
-so I can't really comment on the lifetime expectations here. :)
+Hi all,
 
-Thanks for looking at it!
+Today's linux-next merge of the net-next tree got a conflict in:
 
--Kees
+  include/uapi/linux/devlink.h
 
-> 
-> 		bio_put(*bio);
-> 		*bio = NULL;
-> 	}
-> 
-> 	return ret;
-> }
-> 
-> > 
-> > If this is a false positive, please let us know so we can mark it as
-> > such, or teach the Coverity rules to be smarter. If not, please make
-> > sure fixes get into linux-next. :) For patches fixing this, please
-> > include these lines (but double-check the "Fixes" first):
-> > 
-> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> > Addresses-Coverity-ID: 1487851 ("Memory - illegal accesses")
-> > Fixes: 0b20fcec8651 ("f2fs: cache global IPU bio")
-> > 
-> > 
-> > Thanks for your attention!
-> > 
+between commit:
 
--- 
-Kees Cook
+  d279505b723c ("devlink: Add method for time-stamp on reporter's dump")
+
+from the net tree and commit:
+
+  070c63f20f6c ("net: devlink: allow to change namespaces during reload")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/uapi/linux/devlink.h
+index a8a2174db030,b558ea88b766..000000000000
+--- a/include/uapi/linux/devlink.h
++++ b/include/uapi/linux/devlink.h
+@@@ -421,7 -421,10 +421,12 @@@ enum devlink_attr=20
+ =20
+  	DEVLINK_ATTR_RELOAD_FAILED,			/* u8 0 or 1 */
+ =20
+ +	DEVLINK_ATTR_HEALTH_REPORTER_DUMP_TS_NS,	/* u64 */
+++
++ 	DEVLINK_ATTR_NETNS_FD,			/* u32 */
++ 	DEVLINK_ATTR_NETNS_PID,			/* u32 */
++ 	DEVLINK_ATTR_NETNS_ID,			/* u32 */
++=20
+  	/* add new attributes above here, update the policy in devlink.c */
+ =20
+  	__DEVLINK_ATTR_MAX,
+
+--Sig_/Kt0psQJsHnjo4Q6rmz3J/ke
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3LRnoACgkQAVBC80lX
+0GxPcgf/Vdy7NSKAT0Xz5/H2uJI7SvvjKDoQYXOcTo7iPy0PWe4xskRv4D1Ha7oI
+3YKdlhRGi6ENWE19SJ5vJyKMbQpUTotDsTooL+3sM2oH5Y10k3RhvhWClNYBmWjb
+JLID+hjqSrhYHtb5rKKBfU9EkoLgJnKur/2g6zIe/oDCdV6lsJn5+LukfNPjuda8
+pCCqXSAs/0Ysu9VTtJbpLVB8rySc30+EK/HdOw2Mk0u2TegNe3PNttPNDvqApvZ9
+wmQ3/q50LDAC0L8xBRcSCQRqL5y8Mm3UXYk2c2ydLxarEHFMkcvzGO8WExUtiXJF
+Vu9K8aV3HB1Jm3GGTjxoeXZivVRj2g==
+=mGw+
+-----END PGP SIGNATURE-----
+
+--Sig_/Kt0psQJsHnjo4Q6rmz3J/ke--

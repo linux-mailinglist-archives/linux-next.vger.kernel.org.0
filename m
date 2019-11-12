@@ -2,95 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 920B5F8608
-	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 02:26:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA9FF8667
+	for <lists+linux-next@lfdr.de>; Tue, 12 Nov 2019 02:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726965AbfKLB0L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 Nov 2019 20:26:11 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58487 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726924AbfKLB0K (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 Nov 2019 20:26:10 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Bqnp5hdDz9sP4;
-        Tue, 12 Nov 2019 12:26:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573521967;
-        bh=W3s43Z88oXu9pIzwh9tpxWxTIX0x+AKU7y4WkOJAJLU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PMNCkg1dPaIOFB2udaVC1OEaTsXRpJArXHX0cZ06bnoX1VtGSzJQOkByoFk/hqlOg
-         +7/S9uONnUGWp4ik3Nq+YVXwSO7zymBCMUXSS+YPOa1QJdYIcIPZM+/q2+OXgKBRwc
-         ft+9v923TbQYHD448mj7X/Ok378ffQbeVMbLj670hMXCgNme6hRRgj1cf7NXm/mlqj
-         kcC52k1KnPONY7qQ+S/HasGmXeSoiFbOz7P9c4lUGmKCw0Ky2V35QYsck9zie9KfQS
-         YwkiupwJYQtTuaK32mZ5JM3mCrMZ/vOSbhjnG5kvNM8fffcn7CWydAUR69VtYTMppt
-         ztByroEfEWBOQ==
-Date:   Tue, 12 Nov 2019 12:26:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.de>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: linux-next: manual merge of the sound-asoc tree with the sound tree
-Message-ID: <20191112122600.44c88517@canb.auug.org.au>
+        id S1727119AbfKLBe2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 Nov 2019 20:34:28 -0500
+Received: from mail-pg1-f179.google.com ([209.85.215.179]:41960 "EHLO
+        mail-pg1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726994AbfKLBe1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 Nov 2019 20:34:27 -0500
+Received: by mail-pg1-f179.google.com with SMTP id h4so10692302pgv.8
+        for <linux-next@vger.kernel.org>; Mon, 11 Nov 2019 17:34:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=NymeSOKX0BateqkObTKtYu871w0RJLqJw0/u/aH3H/Y=;
+        b=LOHY2w3GJQL7CcGbfaAulLcLLnJ8mDqbulZ2sVYJKXpkzCRuG++HBBSJ/ZI2kdeZ6T
+         1pqvhr4dCWtigNTJpvh7Y4EwFjDbrZWyz3PMNb45+ky5ZONI7bFc2G8DtsDs/HbmAoR+
+         HvG/8EsoWj8/S+kcFB1Psxa1Q65f3HcQZCLxg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=NymeSOKX0BateqkObTKtYu871w0RJLqJw0/u/aH3H/Y=;
+        b=nlYSGcyLkPfNtLEdPmUE8eKgMrQRtAFyY74kdOFrhTc2nLPW8rpBItC7BdQE1BBvPB
+         BROVqRfPQtdHU3wUETa4GV4TqvIK//Nhn9z/gvoqbnRM1vF8jggjIqgAbo9G3ikEkUxw
+         uWi0meEXjyWFHMtYkQmrtIsqbzu7/LpZtwV2K/pfSpNqCThLZEXnkSu1rVPIy49n1RSf
+         ym2+jL/DXGii7qK0GpDd19XOcRxet9bK5fBpW+kIQhuzZQZ9EHpgnn7mNb7+Ehm4JP/3
+         uAIXKFpzlrZn86tDRG5ce4sKPY3wl0TM+lFuJ4oESMnniSK3u8vvq/fdXEkojYpKvITr
+         DHWQ==
+X-Gm-Message-State: APjAAAV7/UCgU16/KgNi9eUB+dDSVA4rN6rejsWe7Vb15MevgUQokx4p
+        NQscQ3R8rdo62AC8VKkwkpf8HQ==
+X-Google-Smtp-Source: APXvYqxwGYKyT4mwOWE4QCZxKQrXwbTSJGLok5+fSTLT+2e+ioFjOhUorTu2zmOYI3SwXPdyG9lCqw==
+X-Received: by 2002:a63:5406:: with SMTP id i6mr29767349pgb.1.1573522467001;
+        Mon, 11 Nov 2019 17:34:27 -0800 (PST)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y36sm16029253pgk.66.2019.11.11.17.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2019 17:34:26 -0800 (PST)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Mon, 11 Nov 2019 17:34:25 -0800
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Coverity: xlog_write_iclog(): Memory - corruptions
+Message-ID: <201911111734.4D8A1DB3DF@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tbsT14jj.cYO1DXCXtXJWY+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tbsT14jj.cYO1DXCXtXJWY+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello!
 
-Hi all,
+This is an experimental automated report about issues detected by Coverity
+from a scan of next-20191108 as part of the linux-next weekly scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-Today's linux-next merge of the sound-asoc tree got a conflict in:
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by recent commits:
 
-  sound/soc/codecs/Kconfig
+79b54d9bfcdc ("xfs: use bios directly to write log buffers")
 
-between commit:
+Coverity reported the following:
 
-  82e8d723e9e6 ("sound: Fix Kconfig indentation")
+*** CID 1487853:  Memory - corruptions  (BAD_FREE)
+/fs/xfs/xfs_log.c: 1819 in xlog_write_iclog()
+1813     		submit_bio(split);
+1814
+1815     		/* restart at logical offset zero for the remainder */
+1816     		iclog->ic_bio.bi_iter.bi_sector = log->l_logBBstart;
+1817     	}
+1818
+vvv     CID 1487853:  Memory - corruptions  (BAD_FREE)
+vvv     "submit_bio" frees address of "iclog->ic_bio".
+1819     	submit_bio(&iclog->ic_bio);
+1820     }
+1821
+1822     /*
+1823      * We need to bump cycle number for the part of the iclog that is
+1824      * written to the start of the log. Watch out for the header magic
 
-from the sound tree and commit:
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
 
-  36da67630d31 ("ASoC: Add DA7213 audio codec as selectable option")
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1487853 ("Memory - corruptions")
+Fixes: 79b54d9bfcdc ("xfs: use bios directly to write log buffers")
 
-from the sound-asoc tree.
 
-I fixed it up (I just used the latter version which also fixed the
-indentation) and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+Thanks for your attention!
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/tbsT14jj.cYO1DXCXtXJWY+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3KCigACgkQAVBC80lX
-0GygNggAnqffmZmmQ79iQHL1v2XBl3A1VHEMikEKrQ/QDzTms1cGmqYjVaqj7RO8
-y+s1SYf5MOCDbIGJF2bp3TgA+RbWal6I/LpfNyXFPazCsNkOhwakwh9T/b+DNGZo
-vtBvZ/rit/iCqhXfVNceDk131FCbEPRsJc+rLfx2iB3R7JaLKM5dAfmxmUG6/djz
-PM9eFVd6fPmgQ2lDBciN6I8E+7ZkWFfLzhZt2Fhxwgaha24wyBoJqL9d58nE6r1A
-daMse50qNfLccFCl4n+hHqy9NrTs3Dvk5b4Jjue/mpQzSv4CHJAyRAxOkGsMHfp+
-hHqj0/YV6kAoReE3sanOdRTu2hhPJw==
-=r86P
------END PGP SIGNATURE-----
-
---Sig_/tbsT14jj.cYO1DXCXtXJWY+--
+-- 
+Coverity-bot

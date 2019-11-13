@@ -2,89 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BA1DFB0E1
-	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 13:54:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB9EFB334
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 16:08:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726195AbfKMMyg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Nov 2019 07:54:36 -0500
-Received: from mx2.suse.de ([195.135.220.15]:47034 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726105AbfKMMyg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 Nov 2019 07:54:36 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id B3F9BAF83;
-        Wed, 13 Nov 2019 12:54:34 +0000 (UTC)
-Received: by ds.suse.cz (Postfix, from userid 10065)
-        id 3F0FCDA7AF; Wed, 13 Nov 2019 13:54:38 +0100 (CET)
-Date:   Wed, 13 Nov 2019 13:54:38 +0100
-From:   David Sterba <dsterba@suse.cz>
-To:     Qu WenRuo <wqu@suse.com>
-Cc:     coverity-bot <keescook@chromium.org>,
-        David Sterba <DSterba@suse.com>,
-        Anand Jain <anand.jain@oracle.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
-Subject: Re: Coverity: read_one_block_group(): Concurrent data access
- violations
-Message-ID: <20191113125437.GZ3001@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <201911111736.E0A3E2DDDB@keescook>
- <8c607908-6c8e-efb0-0079-7fa74ec98bed@suse.com>
+        id S1727730AbfKMPIQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Nov 2019 10:08:16 -0500
+Received: from mail-wm1-f51.google.com ([209.85.128.51]:36135 "EHLO
+        mail-wm1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726957AbfKMPIQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Nov 2019 10:08:16 -0500
+Received: by mail-wm1-f51.google.com with SMTP id c22so2404580wmd.1
+        for <linux-next@vger.kernel.org>; Wed, 13 Nov 2019 07:08:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=K1LerRac+fLTqAvK67Bi+bZhGIZd15zO8EXYZ65aN20=;
+        b=VKx1Mtr9L+BqwKuBjcpaZSa+U/hl6LGHXqwr0koaNjNrG8aSwngGnB+m1zgsJr7h51
+         LvM6wKWrgD3cTDLTEeAzyfJmZxsMRARkB1RZv/nnuML2iXx25T4PgTGN/YXwz68YRoxO
+         Hjy3g7o/osbqH9ASxAh7qUN9Vnb2JJSIwUw1JoTEaTTysF8+VYZe7BTWo+smVnUM19xi
+         JAVX/wtz6l2BGWfXPvOe1IHzqxe4k1v9lZNsEbccw00Vbok1IDbUITO7dbQOk47nDy9L
+         5sbfi5XSs0b9zYI+Vuai0sLbxAjc2O4zqI4V7F40RwH7aMXz1WaZxBfZxb6WoPdrAQze
+         QeCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=K1LerRac+fLTqAvK67Bi+bZhGIZd15zO8EXYZ65aN20=;
+        b=tUFjjL9EDIDh+hZQu46cz4AH6tITquL8gTU251GpMLNMg6gLH23x7C9NZUMX5cOz6X
+         px21o2IbG4esYH5LzXBguoktJJ13ljD52AX5WYJuIerBIQlauWFZimVUAFmhXQDhz4LO
+         Jy8EUPU++Fadu8VV2sosuAtgpySGXVl7er4KzfCIdFkMBawyRqCU3X42LpxviwvdS52i
+         oK+FqXr9Z0cxghh/s5iVKZJguGN+3T7UMFoLc7k5YboH/wag80+0GcLcsNezr1wnbuLa
+         t12C17KfMAUK5dVXJ1Y4hHvHhO3qxkR+t5Yg8uT4x909hmdYSXSdYZALjp/HxphUJ9xZ
+         DGYw==
+X-Gm-Message-State: APjAAAVN66tMGLPkkl6vA+7D2GSZjmq0oV9BHAt3K7+75sTrk848DPwD
+        cKJhDcPRzuL509aNPNW8FpfQ8QATz9Yshw==
+X-Google-Smtp-Source: APXvYqyXQUCwxg+VdthXhtwwIdIe+LQSiFayGtb84DEm7vmqsPOuR7vE2MdUkJOv2GNPg9LikleC+g==
+X-Received: by 2002:a1c:96d5:: with SMTP id y204mr3115664wmd.63.1573657693759;
+        Wed, 13 Nov 2019 07:08:13 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id a16sm2731447wmd.11.2019.11.13.07.08.12
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 07:08:12 -0800 (PST)
+Message-ID: <5dcc1c5c.1c69fb81.e28e1.c8d2@mx.google.com>
+Date:   Wed, 13 Nov 2019 07:08:12 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c607908-6c8e-efb0-0079-7fa74ec98bed@suse.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191113
+Subject: next/master boot: 234 boots: 3 failed,
+ 224 passed with 7 offline (next-20191113)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Nov 12, 2019 at 02:05:40AM +0000, Qu WenRuo wrote:
-> On 2019/11/12 上午9:36, coverity-bot wrote:
-> > Hello!
-> > 
-> > This is an experimental automated report about issues detected by Coverity
-> > from a scan of next-20191108 as part of the linux-next weekly scan project:
-> > https://scan.coverity.com/projects/linux-next-weekly-scan
-> > 
-> > You're getting this email because you were associated with the identified
-> > lines of code (noted below) that were touched by recent commits:
-> > 
-> > 593669fa8fd7 ("btrfs: block-group: Refactor btrfs_read_block_groups()")
-> > 
-> > Coverity reported the following:
-> > 
-> > *** CID 1487834:  Concurrent data access violations  (MISSING_LOCK)
-> > /fs/btrfs/block-group.c: 1721 in read_one_block_group()
-> > 1715     		 *    truncate the old free space cache inode and
-> > 1716     		 *    setup a new one.
-> > 1717     		 * b) Setting 'dirty flag' makes sure that we flush
-> > 1718     		 *    the new space cache info onto disk.
-> > 1719     		 */
-> > 1720     		if (btrfs_test_opt(info, SPACE_CACHE))
-> > vvv     CID 1487834:  Concurrent data access violations  (MISSING_LOCK)
-> > vvv     Accessing "cache->disk_cache_state" without holding lock "btrfs_block_group_cache.lock". Elsewhere, "btrfs_block_group_cache.disk_cache_state" is accessed with "btrfs_block_group_cache.lock" held 12 out of 13 times (6 of these accesses strongly imply that it is necessary).
-> 
-> It's a false alert, as read_one_block_group() is running in mount
-> context, nobody else can access the fs yet.
-> 
-> Of course we can hold the lock as it's going to hit fast path and no
-> performance change at all, but I'm not sure what's the proper way to do
-> in btrfs.
-> 
-> David, any idea on this?
+next/master boot: 234 boots: 3 failed, 224 passed with 7 offline (next-2019=
+1113)
 
-We'd have to add some annotation for the static checkers that would let
-them know that the code section is running single threaded. It would be
-still desirable to catch concurrency issues in the rest of the code so
-eg. completely disabling checks for a certain structure would not be
-good.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191113/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191113/
 
-The mount or unmount functions are probably the best examples where the
-instrumentation would be useful and also not intrusive. In open_ctree it
-would be from the beginning of the function until the call to
-btrfs_init_workqueues.
+Tree: next
+Branch: master
+Git Describe: next-20191113
+Git Commit: 4e8f108c3af2d6922a64df9f3d3d488c74f6009d
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 89 unique boards, 24 SoC families, 27 builds out of 212
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

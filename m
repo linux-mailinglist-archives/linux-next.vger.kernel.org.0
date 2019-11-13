@@ -2,234 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 38094FA778
-	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 04:44:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EECFA910
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 05:39:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727615AbfKMDoI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 22:44:08 -0500
-Received: from mail-lf1-f67.google.com ([209.85.167.67]:42624 "EHLO
-        mail-lf1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727612AbfKMDoI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 22:44:08 -0500
-Received: by mail-lf1-f67.google.com with SMTP id z12so658812lfj.9
-        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 19:44:04 -0800 (PST)
+        id S1727187AbfKMEi7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 23:38:59 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:34169 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727001AbfKMEi7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 Nov 2019 23:38:59 -0500
+Received: by mail-pg1-f194.google.com with SMTP id z188so562877pgb.1
+        for <linux-next@vger.kernel.org>; Tue, 12 Nov 2019 20:38:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=tbQwdCNt2+K0qBp80YGJXk7+3FSIAJznttImcsRbhaM=;
-        b=gF4PGNSahshWVNPy+gsyCbKmWgM05kh75xgJ8KW0GSYkcNDIsAzoO1Fe8a0r9Dp4uL
-         nX2xnyYjE2Z3XqO94nG0pZSyKPe1/KEC+RRjo/VDRv4M5L5kfYOHgz8DJC6RJwBQtguO
-         ydlqQ1GfYN0lwuaIDx08oIz6avDPV5R9+0Nr8xXWy+FLGgZitZ+5Ij9ilJeU94WlWMYU
-         vwUMF1bWssDOHawRqdu0sKRENokeyleAaIMQ0uXJbl1uWSK5bc1ot0FNPuvD5drwc3KE
-         LsIPJZo6Otyrr/OARpLFlM0HfgxVfgFaIy4+sgOtUKJbEj/r11aqS8blJUzKY61DspwZ
-         gvIw==
+        d=mbobrowski-org.20150623.gappssmtp.com; s=20150623;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=WnBWTNr1wp6ZQih5z2eNrezznniAB/ILGBQAuiv5Byk=;
+        b=IcHIh4Il+5IRl8GRCU2WN0suwD2gIUQZMYSz/b0m+KcnQKEDZ51cn3lhGFaL51PDH2
+         vtsak900C1d9tBU/K2ngkmCEyQoSm0c+IU7CN4PRiypuptA/DjyIuEMOoTzVnQ3l33O1
+         tEIs7X94/hsEZZgx4UGLzqHO+mWzEAauPOsZYBCU5NeKj4TpwjKSnP7pZdzFrbVnXejX
+         qtHnzpvbhIzuNtI0Vn2ZA0hYS1VwXHlAOHFJgbXJI2shhjrkc5sdPjWTUX5gAT1wB94u
+         31rVHHy33kA7apjTmgD/gTdOLWNHtw+JUuunsKpQwtGMYGv4b7uS6rWpIDKwfzGwWdeu
+         UuVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=tbQwdCNt2+K0qBp80YGJXk7+3FSIAJznttImcsRbhaM=;
-        b=QaFj2SkHUyKyVKkQSZEyBD0gjLfhOBgEErsIg+f9yrkQfOQObvsf6oiidP4C/jvMuf
-         637Rdbxbdstd5vMGwJEej73jzQypTRO5SPc7ic5SBobz50UQ4aG6eGtwn3ocv3FP0HPK
-         N19x45W2yutk8+rVu4XiQ4FRA5iCW7T70LJ5QJGh4SaxqsBHqXNuWFieOFTz1wfOaLe4
-         s334anMa5EAqN+MknzcGq4N09BqNWZ7WdwmAOwZyx5/XN2aN3TkDtlRuAarWgxvaNtgM
-         61ZszGNPou28sALx6DcWIP0kxt0a4ln6XBRsNghwfFZCEyRexvSObFwAB2Gai6xdPErC
-         77Ig==
-X-Gm-Message-State: APjAAAU+oeQGcyATWXAF8OcmJqTv0/71PXrK5ag3Wra1ELkPr/rdpqQv
-        GDRlbd5UOnY8dNUHzrN5THgwOAj/KvwmTWLbwXm6XL9mrEw=
-X-Google-Smtp-Source: APXvYqy247I7wu7eXOMhw/f9+y79Ihba2+cVo+MpV24kf5gvFQn3owDJuFWhahOjx+EZtMb8B09kHou6grXykNlxrHo=
-X-Received: by 2002:a19:6503:: with SMTP id z3mr793838lfb.192.1573616643526;
- Tue, 12 Nov 2019 19:44:03 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=WnBWTNr1wp6ZQih5z2eNrezznniAB/ILGBQAuiv5Byk=;
+        b=lT5aauVF6Co0CnWKvUfFp+trQCYpG9xvbvr4hU/92Vl6dry/b76rwscsWuRG4vN/vV
+         qIS95/WSVbFzJ8Jqcq1N9lxKegLLWn05/rCOEV8zQufkeonKz+rktD0KVpZiDJnH6Cd8
+         tJv1dMSIvyoEC7kfcfWxso/e1igtqkqT7ZvJqzCzM9kvemcYwHHYxH7Td+lxjJvDPYZb
+         6UtvAuWF9d6ZCbDm+V6m7IwbbnxuyvQ9ihKW261iOC+FMolbgkKqSjZSpzdv7sFszh9y
+         xAlUk7FnDk5fb3Hi/jvo0PiVJW9rN4FkkppqWotnSISesM1TWA/gw+4RRB18GCJZRh6p
+         cJKw==
+X-Gm-Message-State: APjAAAXX0CMzfiGiLOl0GCTyUPdkyd/rrgj/HBKBnQJ3hLpqSjv278Jf
+        QH+RDOO9+oI3PB8MX+2Lw+eltU1AOQ==
+X-Google-Smtp-Source: APXvYqxw4zrclAnKcKrJIRxorwXkNtrL3nyMnApsZMYDhnHIuAfIX9mRzHI5FM39xggb9XR+ccNfhA==
+X-Received: by 2002:a63:dd58:: with SMTP id g24mr1408565pgj.376.1573619937599;
+        Tue, 12 Nov 2019 20:38:57 -0800 (PST)
+Received: from bobrowski ([110.232.114.101])
+        by smtp.gmail.com with ESMTPSA id b137sm626257pga.91.2019.11.12.20.38.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2019 20:38:56 -0800 (PST)
+Date:   Wed, 13 Nov 2019 15:38:51 +1100
+From:   Matthew Bobrowski <mbobrowski@mbobrowski.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jan Kara <jack@suse.cz>, Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Re: Coverity: ext4_iomap_alloc(): Integer handling issues
+Message-ID: <20191113043849.GD29863@bobrowski>
+References: <201911111735.1F45BB0B4@keescook>
+ <20191112072239.GB15488@bobrowski>
+ <20191112110004.GF1241@quack2.suse.cz>
+ <201911121256.647DA73508@keescook>
+ <20191112212846.GA29863@bobrowski>
+ <201911121414.ECAA926@keescook>
 MIME-Version: 1.0
-References: <CA+G9fYtJNyMOw4rkfHMv+XxwhVPbqdsCHoCkn4aL2TsofyCfvw@mail.gmail.com>
-In-Reply-To: <CA+G9fYtJNyMOw4rkfHMv+XxwhVPbqdsCHoCkn4aL2TsofyCfvw@mail.gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 13 Nov 2019 09:13:52 +0530
-Message-ID: <CA+G9fYvrwRuStve9mCdS=_Bmvhd2+34+=S=f-esQjg4niRm7jw@mail.gmail.com>
-Subject: Re: Linux next 5.4.0-rc7-next-20191112: rcu: INFO: rcu_sched
- self-detected stall on CPU
-To:     Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     acme@kernel.org, linux-perf-users@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, mhiramat@kernel.org,
-        Paul McKenney <paul.mckenney@us.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        lkft-triage@lists.linaro.org, x86@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <201911121414.ECAA926@keescook>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+CC x86@vger.kernel.org
+On Tue, Nov 12, 2019 at 02:17:33PM -0800, Kees Cook wrote:
+> On Wed, Nov 13, 2019 at 08:28:47AM +1100, Matthew Bobrowski wrote:
+> > On Tue, Nov 12, 2019 at 12:56:45PM -0800, Kees Cook wrote:
+> > > On Tue, Nov 12, 2019 at 12:00:04PM +0100, Jan Kara wrote:
+> > > > On Tue 12-11-19 18:22:41, Matthew Bobrowski wrote:
+> > > > > On Mon, Nov 11, 2019 at 05:35:44PM -0800, coverity-bot wrote:
+> > > > > > This is an experimental automated report about issues detected by Coverity
+> > > > > > from a scan of next-20191108 as part of the linux-next weekly scan project:
+> > > > > > https://scan.coverity.com/projects/linux-next-weekly-scan
+> > > > > > 
+> > > > > > You're getting this email because you were associated with the identified
+> > > > > > lines of code (noted below) that were touched by recent commits:
+> > > > > > 
+> > > > > > 378f32bab371 ("ext4: introduce direct I/O write using iomap infrastructure")
+> > > > > > 
+> > > > > > Coverity reported the following:
+> > > > > > 
+> > > > > > *** CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
+> > > > > > /fs/ext4/inode.c: 3388 in ext4_iomap_alloc()
+> > > > > > 3382     	/*
+> > > > > > 3383     	 * We use i_size instead of i_disksize here because delalloc writeback
+> > > > > > 3384     	 * can complete at any point during the I/O and subsequently push the
+> > > > > > 3385     	 * i_disksize out to i_size. This could be beyond where direct I/O is
+> > > > > > 3386     	 * happening and thus expose allocated blocks to direct I/O reads.
+> > > > > > 3387     	 */
+> > > > > > vvv     CID 1487841:  Integer handling issues  (OVERFLOW_BEFORE_WIDEN)
+> > > > > > vvv     Potentially overflowing expression "1 << blkbits" with type "int" (32 bits, signed) is evaluated using 32-bit arithmetic, and then used in a context that expects an expression of type "loff_t" (64 bits, signed).
+> > > > > > 3388     	else if ((map->m_lblk * (1 << blkbits)) >= i_size_read(inode))
+> > > > > > 3389     		m_flags = EXT4_GET_BLOCKS_CREATE;
+> > > > > > 3390     	else if (ext4_test_inode_flag(inode, EXT4_INODE_EXTENTS))
+> > > > > > 3391     		m_flags = EXT4_GET_BLOCKS_IO_CREATE_EXT;
+> > > > > 
+> > > > > In the event of an overflow in this specific context, I don't think it
+> > > > > would matter too much to be perfectly honest. If 'blkbits' were to
+> > > > > actually ever push out the signed integer to a value that couldn't be
+> > > > > represented by this data type, I would expect the resulting wrapping
+> > > > > behaviour to _only_ affect how filesystem blocks are allocated. In
+> > > > > that case, I/O workloads would behave alot differently, and at that
+> > > > > point I would hope that our filesystem related testing infrastructure
+> > > > > would pick this up before allowing anything to leak out into the
+> > > > > wild...
+> > > > > 
+> > > > > Unless my trail of thought is wrong? Happy to be corrected here and
+> > > > > educated on this.
+> > > > 
+> > > > Fully agreed. blkbits is never expected to be larger than 16 in this code.
+> > > > So this is false positive.
+> > > 
+> > > Thanks for looking into this!
+> > 
+> > No problem!
+> >  
+> > > Is it worth changing the type to u8 or something?
+> > 
+> > 'blkbits' in this case is already of data type u8, so this would
+> > effectively be a no-op. :)
+> 
+> Hm, yeah. I guess Coverity doesn't see anything bounding it or i_blkbits
+> to 16. Would add something like this make sense just to validate
+> assumptions?
+> 
+> if (WARN_ON_ONCE(blkbits > 16))
+>     return -ENOSPC;
 
-On Tue, 12 Nov 2019 at 22:38, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> INFO: rcu_sched self-detected stall on CPU detected on Linux next
-> 5.4.0-rc7-next-20191112 running on x86_64 device and continuously
-> popped up kernel
-> OTOH, arm64 juno device boot failed without generating any kernel boot log.
->
-> Steps to reproduce:
-> 1. boot x86_64 with Linux next 5.4.0-rc7-next-20191112
-> 2. Run "perf test -v"
->
-> x86_64 device:
-> Running perf test cases
-> perf test -v
-> ...
-> test child forked, pid 418
-> mmap size 528384B
-> [   74.040659] rcu: INFO: rcu_sched self-detected stall on CPU
-> [   74.046275] rcu: 0-....: (26000 ticks this GP)
-> idle=25a/1/0x4000000000000002 softirq=7882/7882 fqs=6495
-> [   74.055873] (t=26007 jiffies g=4793 q=1772)
-> [   74.060146] NMI backtrace for cpu 0
-> [   74.063631] CPU: 0 PID: 418 Comm: perf Not tainted 5.4.0-rc7-next-20191112 #1
-> [   74.070754] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> 2.0b 07/27/2017
-> [   74.078224] Call Trace:
-> [   74.080669]  <IRQ>
-> [   74.082682]  dump_stack+0x7a/0xa5
-> [   74.086000]  nmi_cpu_backtrace+0x94/0xa0
-> [   74.089917]  ? lapic_can_unplug_cpu+0xa0/0xa0
-> [   74.094270]  nmi_trigger_cpumask_backtrace+0x97/0xd0
-> [   74.099235]  arch_trigger_cpumask_backtrace+0x19/0x20
-> [   74.104288]  rcu_dump_cpu_stacks+0xaa/0xda
-> [   74.108385]  rcu_sched_clock_irq+0x602/0x890
-> [   74.112659]  ? raise_softirq+0x10e/0x150
-> [   74.116585]  update_process_times+0x28/0x50
-> [   74.120769]  tick_sched_handle+0x38/0x50
-> [   74.124686]  tick_sched_timer+0x3c/0x80
-> [   74.128517]  __hrtimer_run_queues+0x11c/0x450
-> [   74.132867]  ? tick_sched_do_timer+0x60/0x60
-> [   74.137133]  hrtimer_interrupt+0xe7/0x240
-> [   74.141146]  smp_apic_timer_interrupt+0x86/0x220
-> [   74.145763]  apic_timer_interrupt+0xf/0x20
-> [   74.149853]  </IRQ>
-> [   74.151951] RIP: 0010:irq_work_sync+0x51/0x60
-> [   74.156301] Code: 10 08 00 00 85 c0 75 22 80 3d 22 4d 97 01 00 75
-> 19 48 c7 c7 08 98 ba a2 c6 05 12 4d 97 01 01 e8 75 9f eb ff 0f 0b eb
-> 02 f3 90 <8b> 03 a8 02 75 f8 5b 5d c3 66 0f 1f 44 00 00 55 48 89 e5 41
-> 55 41
-> [   74.175038] RSP: 0018:ffffab53c0807dc0 EFLAGS: 00000202 ORIG_RAX:
-> ffffffffffffff13
-> [   74.182603] RAX: 0000000000000002 RBX: ffff93651688ac00 RCX: 0000000000000001
-> [   74.189727] RDX: 0000000000000000 RSI: ffff93651688aa98 RDI: ffff93651688ac00
-> [   74.196850] RBP: ffffab53c0807dc8 R08: 0000000000000000 R09: 0000000000000000
-> [   74.203975] R10: ffffab53c0807df8 R11: 0000000000000000 R12: ffff93651688aa38
-> [   74.211100] R13: ffffab53c0807b60 R14: ffff93651d17a3e0 R15: ffff93651688aab8
-> [   74.218237]  _free_event+0x16/0x2f0
-> [   74.221732]  put_event+0x15/0x20
-> [   74.224958]  perf_event_release_kernel+0x1f6/0x3e0
-> [   74.229751]  perf_release+0x10/0x20
-> [   74.233242]  __fput+0xd1/0x270
-> [   74.236303]  ____fput+0xe/0x10
-> [   74.239360]  task_work_run+0x90/0xc0
-> [   74.242933]  exit_to_usermode_loop+0xf0/0x100
-> [   74.247290]  do_syscall_64+0x18d/0x1d0
-> [   74.251044]  entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   74.256096] RIP: 0033:0x7f8ad5fe1641
-> [   74.259673] Code: f7 d8 64 89 02 48 c7 c0 ff ff ff ff c3 66 2e 0f
-> 1f 84 00 00 00 00 00 66 90 8b 05 aa cd 20 00 85 c0 75 16 b8 03 00 00
-> 00 0f 05 <48> 3d 00 f0 ff ff 77 3f c3 66 0f 1f 44 00 00 53 89 fb 48 83
-> ec 10
-> [   74.278409] RSP: 002b:00007fffb5490998 EFLAGS: 00000246 ORIG_RAX:
-> 0000000000000003
-> [   74.285967] RAX: 0000000000000000 RBX: 0000000000000000 RCX: 00007f8ad5fe1641
-> [   74.293090] RDX: 0000000000000000 RSI: 0000000000041000 RDI: 000000000000000b
-> [   74.300215] RBP: 00007fffb54909d0 R08: 00007f8ad6fec468 R09: 00007f8ad6fec470
-> [   74.307337] R10: 000000000000058d R11: 0000000000000246 R12: 00000000022a8fd0
-> [   74.314464] R13: 0000000000000000 R14: 00000000022a7e50 R15: 0000000000000003
-> [   78.449712] rcu: INFO: rcu_sched detected expedited stalls on
-> CPUs/tasks: { 0-... } 26496 jiffies s: 217 root: 0x1/.
-> [   78.460269] rcu: blocking rcu_node structures:
-> [   78.464803] Task dump for CPU 0:
-> [   78.468051] perf            R  running task    14144   418    413 0x90000088
-> [   78.475145] Call Trace:
-> [   78.477611]  ? retint_kernel+0x10/0x10
-> [   78.481418]  ? irq_work_sync+0x51/0x60
-> [   78.485217]  ? _free_event+0x16/0x2f0
-> [   78.488892]  ? put_event+0x15/0x20
-> [   78.492315]  ? perf_event_release_kernel+0x1f6/0x3e0
-> [   78.497300]  ? perf_release+0x10/0x20
-> [   78.501007]  ? __fput+0xd1/0x270
-> [   78.504260]  ? ____fput+0xe/0x10
-> [   78.507543]  ? task_work_run+0x90/0xc0
-> [   78.511348]  ? exit_to_usermode_loop+0xf0/0x100
-> [   78.515922]  ? do_syscall_64+0x18d/0x1d0
-> [   78.519866]  ? entry_SYSCALL_64_after_hwframe+0x49/0xbe
-> [   89.200374] ------------[ cut here ]------------
-> [   89.205050] NETDEV WATCHDOG: eth0 (igb): transmit queue 2 timed out
-> [   89.211363] WARNING: CPU: 1 PID: 0 at
-> /usr/src/kernel/net/sched/sch_generic.c:443 dev_watchdog+0x2b7/0x2f0
-> [   89.221013] Modules linked in: x86_pkg_temp_thermal fuse
-> [   89.226324] CPU: 1 PID: 0 Comm: swapper/1 Not tainted
-> 5.4.0-rc7-next-20191112 #1
-> [   89.233709] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> 2.0b 07/27/2017
-> [   89.241180] RIP: 0010:dev_watchdog+0x2b7/0x2f0
-> [   89.245625] Code: 08 5e e9 5c ff ff ff 4c 89 ef c6 05 d1 54 02 01
-> 01 e8 4d 5b fa ff 89 d9 48 89 c2 4c 89 ee 48 c7 c7 f8 66 cb a2 e8 a9
-> a5 56 ff <0f> 0b e9 3f ff ff ff e8 cd 58 5f ff 85 c0 75 c1 48 c7 c2 70
-> 58 b9
-> [   89.264369] RSP: 0018:ffffab53c003ce28 EFLAGS: 00010286
-> [   89.269587] RAX: 0000000000000000 RBX: 0000000000000002 RCX: 0000000000000000
-> [   89.276710] RDX: 0000000000000001 RSI: ffff93651fa96788 RDI: ffff93651fa96788
-> [   89.283834] RBP: ffffab53c003ce58 R08: 0000000000000000 R09: 0000000000000000
-> [   89.290957] R10: 0000000000000000 R11: 0000000000000000 R12: ffff93651b3fbb00
-> [   89.298081] R13: ffff93651ac40000 R14: ffff93651ac404b8 R15: 0000000000000008
-> [   89.305205] FS:  0000000000000000(0000) GS:ffff93651fa80000(0000)
-> knlGS:0000000000000000
-> [   89.313282] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   89.319020] CR2: 00005647ea459454 CR3: 000000020a210006 CR4: 00000000003606e0
-> [   89.326143] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> [   89.333266] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> [   89.340403] Call Trace:
-> [   89.342853]  <IRQ>
-> [   89.344867]  ? qdisc_destroy+0x170/0x170
-> [   89.348792]  call_timer_fn+0x9d/0x2b0
-> [   89.352459]  ? qdisc_destroy+0x170/0x170
-> [   89.356403]  run_timer_softirq+0x482/0x550
-> [   89.360499]  ? __do_softirq+0x9b/0x43a
-> [   89.364254]  __do_softirq+0xc7/0x43a
-> [   89.367830]  ? hrtimer_interrupt+0x11a/0x240
-> [   89.372097]  irq_exit+0xb8/0xc0
-> [   89.375239]  smp_apic_timer_interrupt+0xa7/0x220
-> [   89.379851]  apic_timer_interrupt+0xf/0x20
-> [   89.383948]  </IRQ>
-> [   89.386046] RIP: 0010:cpuidle_enter_state+0xc9/0x430
-> [   89.391005] Code: 00 00 31 ff e8 e8 0d 6c ff 80 7d d3 00 74 12 9c
-> 58 f6 c4 02 0f 85 37 03 00 00 31 ff e8 30 50 73 ff e8 0b ae 79 ff fb
-> 45 85 ed <0f> 88 cd 02 00 00 49 63 cd 4c 2b 7d c8 48 8d 14 cd 00 00 00
-> 00 48
-> [   89.409748] RSP: 0018:ffffab53c00a7e48 EFLAGS: 00000206 ORIG_RAX:
-> ffffffffffffff13
-> [   89.417305] RAX: ffff93651dea1780 RBX: ffff93651bcf2c00 RCX: 0000000000000000
-> [   89.424430] RDX: 0000000000000046 RSI: 0000000000000006 RDI: ffff93651dea1780
-> [   89.431562] RBP: ffffab53c00a7e88 R08: 0000000000000002 R09: 0000000000000000
-> [   89.438686] R10: 0000000000000000 R11: 0000000000000000 R12: ffffffffa2f09ac0
-> [   89.445809] R13: 0000000000000003 R14: ffffffffa2f09c28 R15: 00000014c4c17efb
-> [   89.452940]  ? cpuidle_enter_state+0xc5/0x430
-> [   89.457304]  cpuidle_enter+0x2e/0x40
-> [   89.460883]  call_cpuidle+0x23/0x40
-> [   89.464394]  do_idle+0x1f0/0x270
-> [   89.467625]  cpu_startup_entry+0x1d/0x20
-> [   89.471551]  start_secondary+0x162/0x1b0
-> [   89.475476]  secondary_startup_64+0xb6/0xc0
-> [   89.479665] irq event stamp: 3279897
-> [   89.483241] hardirqs last  enabled at (3279896):
-> [<ffffffffa156f858>] console_unlock+0x458/0x5c0
-> [   89.492018] hardirqs last disabled at (3279897):
-> [<ffffffffa1401e2b>] trace_hardirqs_off_thunk+0x1a/0x1c
-> [   89.501483] softirqs last  enabled at (3279872):
-> [<ffffffffa14fe0a1>] _local_bh_enable+0x21/0x40
-> [   89.510260] softirqs last disabled at (3279873):
-> [<ffffffffa14fec08>] irq_exit+0xb8/0xc0
-> [   89.518351] ---[ end trace 9005e5b88ce17ad7 ]---
->
-> full test log,
-> https://lkft.validation.linaro.org/scheduler/job/1006507#L1330
->
-> Best regards
-> Naresh Kamboju
+In the realm of filesystem code, we'd lean towards using a different
+error code if we went down the route of adding such a check i.e. -EIO
+rather than -ENOSPC, where -ENOSPC is typically used to signify that
+there's no space left on an underlying device.
+
+That said, I still don't think this would be necessary here though...
+
+/M

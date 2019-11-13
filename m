@@ -2,52 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B42AF9FF4
-	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 02:13:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6D0FA059
+	for <lists+linux-next@lfdr.de>; Wed, 13 Nov 2019 02:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726979AbfKMBN5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 Nov 2019 20:13:57 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55877 "EHLO ozlabs.org"
+        id S1727089AbfKMBim (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 Nov 2019 20:38:42 -0500
+Received: from ozlabs.org ([203.11.71.1]:47745 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727104AbfKMBN5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 Nov 2019 20:13:57 -0500
+        id S1727041AbfKMBil (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 Nov 2019 20:38:41 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47CRTG1wJQz9s7T;
-        Wed, 13 Nov 2019 12:13:54 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47CS1q5RFzz9s7T;
+        Wed, 13 Nov 2019 12:38:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573607635;
-        bh=g15OSr6tjmM8WcvHvyRJcU3qjqAKy7LsnWP62p1/2ec=;
+        s=201702; t=1573609119;
+        bh=SwByYoLFEyaFhQcPYB6VEXGbPTJYyU/NVRS6uduhnb4=;
         h=Date:From:To:Cc:Subject:From;
-        b=TPjuu9KEwIeDO+zaUMiErTaMyUTqkvrU8tWgyvZ6HUhV3w0H4ZFzbD7zDAcsTmaXW
-         puBRd7LOmkdn+y4V9GIimnDqsQf37It7u/2wG2owFmpuULsYMJgknkndMN9R55xmOH
-         s/ZwVoLEpmR1Kr1O5jV+EJLOdQLLiGZP5SfYdCm1g99/IYbULBLeO+PLNFixShk0+m
-         aKlxYgLYaoIDU1FWrVKcFO7LwjvICb5AKTxP6JVGLsZ6PprqASuKzbmKQD7W66QhKT
-         HrsfTRF2SSv+a+nZq/d/JNH2uFtqxfxbjQ/ZFwGx1s+52h0orAMeLD37lU1YVe8HiM
-         YLZs+BaxjJ7UQ==
-Date:   Wed, 13 Nov 2019 12:13:52 +1100
+        b=sCOHN334fwWpfr9TMDGipJgaqrutE3a+4jM5VH6z7EXMyn9iJ50gJQRPRwFVMgWf9
+         Vq2AIqvNRm5a03rM14FW+ApKojy2HPxW9oWcpbSmldpa2/DsYKEqREJiyFyA4HdftD
+         0ZVQXlmY1ckYJVXBcSU/4NVxMKWPSTz/s7xrVTsWuI5yGzbCNwIn7BpvwELokcX858
+         HW13SfHKXFFvOqW9qAa3D+IpfsEHO28RKuBifeHk+ID0KY7WrfM3aoeL/1AVeQeOPr
+         622Ag6NW5kfo/LbeuN12OSMOsPD1b+lH05NSgzR8V4XzcNx6ej+nJYFxuU8BifsEAY
+         NO/N89t+KWOMQ==
+Date:   Wed, 13 Nov 2019 12:38:38 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Dave Airlie <airlied@linux.ie>,
         DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uma Shankar <uma.shankar@intel.com>,
+        Imre Deak <imre.deak@intel.com>,
         Jon Bloomfield <jon.bloomfield@intel.com>,
-        Anshuman Gupta <anshuman.gupta@intel.com>,
-        Imre Deak <imre.deak@intel.com>
+        Andi Shyti <andi.shyti@intel.com>,
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Mika Kuoppala <mika.kuoppala@linux.intel.com>
 Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20191113121352.3b1e85bd@canb.auug.org.au>
+Message-ID: <20191113123838.79733d12@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_//WkbiqEZT/2qZv01sZ8IkdP";
+Content-Type: multipart/signed; boundary="Sig_/6rImgs7l5p3T26k6mTBrh+/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_//WkbiqEZT/2qZv01sZ8IkdP
+--Sig_/6rImgs7l5p3T26k6mTBrh+/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -55,61 +56,46 @@ Hi all,
 
 Today's linux-next merge of the drm tree got a conflict in:
 
-  drivers/gpu/drm/i915/i915_reg.h
+  drivers/gpu/drm/i915/i915_drv.h
+  drivers/gpu/drm/i915/intel_pm.c
+  drivers/gpu/drm/i915/intel_pm.h
 
 between commit:
 
-  1d85a299c4db ("drm/i915: Lower RM timeout to avoid DSI hard hangs")
+  7e34f4e4aad3 ("drm/i915/gen8+: Add RC6 CTX corruption WA")
 
-from Linus' tree and commit:
+from Linus' tree and commits:
 
-  41286861b4c9 ("drm/i915/tgl: Add DC3CO counter in i915_dmc_info")
+  c113236718e8 ("drm/i915: Extract GT render sleep (rc6) management")
+  3e7abf814193 ("drm/i915: Extract GT render power state management")
 
 from the drm tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (This was too messy, so I effectively reverted the former
+patch) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/i915_reg.h
-index f8ee9aba3955,53c280c4e741..000000000000
---- a/drivers/gpu/drm/i915/i915_reg.h
-+++ b/drivers/gpu/drm/i915/i915_reg.h
-@@@ -7217,10 -7351,8 +7357,12 @@@ enum=20
-  #define TGL_DMC_DEBUG_DC5_COUNT	_MMIO(0x101084)
-  #define TGL_DMC_DEBUG_DC6_COUNT	_MMIO(0x101088)
- =20
-+ #define DMC_DEBUG3		_MMIO(0x101090)
-+=20
- +/* Display Internal Timeout Register */
- +#define RM_TIMEOUT		_MMIO(0x42060)
- +#define  MMIO_TIMEOUT_US(us)	((us) << 0)
- +
-  /* interrupts */
-  #define DE_MASTER_IRQ_CONTROL   (1 << 31)
-  #define DE_SPRITEB_FLIP_DONE    (1 << 29)
-
---Sig_//WkbiqEZT/2qZv01sZ8IkdP
+--Sig_/6rImgs7l5p3T26k6mTBrh+/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3LWNEACgkQAVBC80lX
-0GzBsQf/SeCccVFD+GcevT0QOZ+vm/36MyNCG9lj8yBWcW6KlCaLwBpRSNDSg+kq
-4E36ofkUyXvUQb/Sun0TRQ+382a96ynjGv9EaUv4zBQ+ZfTBFi2ed9Vtjdk22UsD
-i01ek9OT3p9+6FeZn6Bzro6E9d6JE/5KQZcO4sb0F9NG0HmONwBdgTv8pfQPPrDS
-LvTbDpvOwYLVc8fqkaYgaAdup0EJUeROwgwp5tuYgDRvup4LZfLVPtv4pB0lvvU6
-YsRtA+bDe/ri7hq6gULxCNvN+tRBF9wjZE+Fs4L/tWvd4Fi0CICu+9zrLHnXgQ49
-tp55aJtzd0ELPjSF+US3MAhU5Ga+IQ==
-=edsz
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3LXp4ACgkQAVBC80lX
+0GzjeQf7BC4V/F2EG4zt7/3N+0BYwYkGe+Kugr0EZAjh3hnulTNBnqgKWwwPQanE
+DJ9fhhbB23y7o3SQwsmMTw7LKpsdgi9ZSgkP67LjT19YlwaUKnrchR7+wCLlbojy
+3bPqhwvJl1eqJ7uTqE5cve+VDAqjeFt22ALDt2j4E5y5wRqKEwB+5d0NFNhhdTVi
+K0iO1gVy9jOBKPwKafgduBqJ6FjXQi5MrDvMRz8ISFbvtf9PMK801ADRsoqrPCyR
+TatirABGL49YUSNwHa+hVnjtyRvtVrd8qz7admOGxJGh8Yc4ggsDfGwg7EApPi4e
+MFhqzN3PkJqdLeAEWpSCIuCGEtF4yg==
+=/F2F
 -----END PGP SIGNATURE-----
 
---Sig_//WkbiqEZT/2qZv01sZ8IkdP--
+--Sig_/6rImgs7l5p3T26k6mTBrh+/--

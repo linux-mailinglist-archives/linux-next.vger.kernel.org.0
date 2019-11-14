@@ -2,126 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35B7EFBFBE
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 06:34:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66349FC06B
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 08:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725914AbfKNFej (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Nov 2019 00:34:39 -0500
-Received: from ozlabs.org ([203.11.71.1]:33101 "EHLO ozlabs.org"
+        id S1725838AbfKNHAj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Nov 2019 02:00:39 -0500
+Received: from ozlabs.org ([203.11.71.1]:42553 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725903AbfKNFej (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 Nov 2019 00:34:39 -0500
+        id S1725601AbfKNHAi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Nov 2019 02:00:38 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47D9Cc3YlQz9sP6;
-        Thu, 14 Nov 2019 16:34:36 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47DC6q4xrdz9s7T;
+        Thu, 14 Nov 2019 18:00:35 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573709676;
-        bh=J7au3t/viCe8IXQ9tcxSPzFq5sAxnt6TXtlaa5JFCik=;
+        s=201702; t=1573714836;
+        bh=euj/0s9yXpcFqoYhD71j8Eq1U9uEbXtJxC0RlGaVYMc=;
         h=Date:From:To:Cc:Subject:From;
-        b=t8WSXqCsXHYgJJJHFNhd8gW8/S8oXTZ0XEXunwanJFdlUrspQOlwKnHxOBsHXjjlH
-         N6vyrkQ6CIYdsOCS8u3Rn/qJMYeueF5zCjAWDGhR9EZWrqF+HE2CjE0MzKXXugOBam
-         FI0HWN4VdruSsaslPrRiJ0Q1GT3U/C732NXUW/IE4ytl2CNixt8dsUmaBjUBbO81Al
-         btyYzt7Ir+GKwrUd7e/fsd4azJyvHxjAWbT8Vos3ttghFmfNquTwpl/UT2CryzyCEz
-         Y6PwdBWXs+4ru7bK2vaFltdHS/PtDLkBhtanE4QtgV7A7PYsI91Ym1FSayK12kdQo8
-         cIqIGIRw2e5PQ==
-Date:   Thu, 14 Nov 2019 16:34:35 +1100
+        b=Wp40cQwCzSQ/omfkQmgP4QnhTq3IlIENNc3QZJ9Z+6ELKQC+MsLMyDsuujd8GmIfK
+         35nq9zWBFCeCwL+g3XFB3ZvPSVd8PCN9+dPuxT2/PJyjzPNLLfsZaX9n2EMXYC+3C5
+         hFSqJXfb8jVOqhcvqJJouCUYaqrCgZeC2+unp9clzn4AnLK5LKIvU5rlD74lay+Rru
+         rbKK4e/3TA8VMmY0wd9EVfsj/aoDJg5A61gn3+AiDfT2XDlFzEEpPeXwtvzhbbdNbt
+         IkiCJVMiY6Amiil61V92+11+bX0x3ROrbpBrsj7UJWMnzR6Jf5e1/3eD6TEjY5C9YW
+         d/9Nce/AkapXw==
+Date:   Thu, 14 Nov 2019 18:00:21 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@mellanox.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the hmm tree
-Message-ID: <20191114163435.6273b6a1@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mohammad Nasirifar <far.nasiri.m@gmail.com>
+Subject: linux-next: manual merge of the akpm-current tree with the y2038
+ tree
+Message-ID: <20191114180021.1a41c73b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/akreFWQ1wi=Oo/XxHODsPFM";
+Content-Type: multipart/signed; boundary="Sig_/odvzAu7STO0W1ww9f_42E9f";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/akreFWQ1wi=Oo/XxHODsPFM
+--Sig_/odvzAu7STO0W1ww9f_42E9f
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the hmm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-drivers/infiniband/hw/hfi1/user_exp_rcv.c: In function 'set_rcvarray_entry':
-drivers/infiniband/hw/hfi1/user_exp_rcv.c:768:33: warning: passing argument=
- 2 of 'mmu_interval_notifier_insert' makes pointer from integer without a c=
-ast [-Wint-conversion]
-  768 |    &node->notifier, tbuf->vaddr + (pageidx * PAGE_SIZE),
-      |                     ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
-      |                                 |
-      |                                 long unsigned int
-In file included from include/rdma/ib_verbs.h:59,
-                 from include/rdma/ib_hdrs.h:53,
-                 from drivers/infiniband/hw/hfi1/hfi.h:68,
-                 from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
-                 from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
-include/linux/mmu_notifier.h:295:24: note: expected 'struct mm_struct *' bu=
-t argument is of type 'long unsigned int'
-  295 |      struct mm_struct *mm, unsigned long start,
-      |      ~~~~~~~~~~~~~~~~~~^~
-drivers/infiniband/hw/hfi1/user_exp_rcv.c:769:26: warning: passing argument=
- 4 of 'mmu_interval_notifier_insert' makes integer from pointer without a c=
-ast [-Wint-conversion]
-  769 |    npages * PAGE_SIZE, fd->mm);
-      |                        ~~^~~~
-      |                          |
-      |                          struct mm_struct *
-In file included from include/rdma/ib_verbs.h:59,
-                 from include/rdma/ib_hdrs.h:53,
-                 from drivers/infiniband/hw/hfi1/hfi.h:68,
-                 from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
-                 from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
-include/linux/mmu_notifier.h:296:20: note: expected 'long unsigned int' but=
- argument is of type 'struct mm_struct *'
-  296 |      unsigned long length,
-      |      ~~~~~~~~~~~~~~^~~~~~
-drivers/infiniband/hw/hfi1/user_exp_rcv.c:767:9: error: too few arguments t=
-o function 'mmu_interval_notifier_insert'
-  767 |   ret =3D mmu_interval_notifier_insert(
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In file included from include/rdma/ib_verbs.h:59,
-                 from include/rdma/ib_hdrs.h:53,
-                 from drivers/infiniband/hw/hfi1/hfi.h:68,
-                 from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
-                 from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
-include/linux/mmu_notifier.h:294:5: note: declared here
-  294 | int mmu_interval_notifier_insert(struct mmu_interval_notifier *mni,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  include/linux/syscalls.h
 
-Caused by commit
+between commit:
 
-  c90dad714405 ("RDMA/hfi1: Use mmu_interval_notifier_insert for user_exp_r=
-cv")
+  4ced3933226d ("y2038: syscalls: change remaining timeval to __kernel_old_=
+timeval")
 
-I have used the hmm tree from next-20191113 for today.
+from the y2038 tree and commit:
+
+  01606a699584 ("syscalls: fix references to filenames containing syscall d=
+efs")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/akreFWQ1wi=Oo/XxHODsPFM
+diff --cc include/linux/syscalls.h
+index f90f1c8705fc,1dbefa5e00e5..000000000000
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@@ -731,10 -731,10 +731,10 @@@ asmlinkage long sys_prctl(int option, u
+  			unsigned long arg4, unsigned long arg5);
+  asmlinkage long sys_getcpu(unsigned __user *cpu, unsigned __user *node, s=
+truct getcpu_cache __user *cache);
+ =20
+- /* kernel/time.c */
++ /* kernel/time/time.c */
+ -asmlinkage long sys_gettimeofday(struct timeval __user *tv,
+ +asmlinkage long sys_gettimeofday(struct __kernel_old_timeval __user *tv,
+  				struct timezone __user *tz);
+ -asmlinkage long sys_settimeofday(struct timeval __user *tv,
+ +asmlinkage long sys_settimeofday(struct __kernel_old_timeval __user *tv,
+  				struct timezone __user *tz);
+  asmlinkage long sys_adjtimex(struct __kernel_timex __user *txc_p);
+  asmlinkage long sys_adjtimex_time32(struct old_timex32 __user *txc_p);
+
+--Sig_/odvzAu7STO0W1ww9f_42E9f
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3M52sACgkQAVBC80lX
-0GyA6Qf+Nf6nekFQi3+09GBkJemfhxv0XCe3c2Wo57BvNqOrcYdAdg6n00z7XxrC
-Oj0c8PiM9hrUp923jshRkCULgD36NfTdlCj9u2quS6RqYkmFGNs3SgJCJz/Dbj3L
-IVk6J+y82pItAEVjFjyrZkv1tVnQtYtkVMKOwZTDHEhYIhkVVywoS5/HEBYb4SbN
-12kTLNXhxiVxlXnqmMYo+eLVrn+cpfwdBe/dkCOiQEnL16DXeScWOLjRoK97vi/y
-5Ra2Xm8eFhsuGd06kaECX/T5OQ3xJZ+oI87Z/zjhHgSiv6OTjB8dfQh9zAHspc+U
-GOga9IAr2ae+sERCs3EIexeqChGDCw==
-=OxuZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3M+4UACgkQAVBC80lX
+0Gz/2ggApPIv/8CUtjx2tFvfYNiKFGiaQa0IGThYq1JElMYSrtiAyOEVR6Yi8HHj
++CfRsavd4jRtWBCjkKNmVSCU7wy0ChCe4hk8I/4p48oq9luv+x0hbD0/rWbXxir9
+iDsQVnKlx5oSDm/WXq01DBQnLoKoArdMuqW6Vv7xFOIU4GrYxMutICoZq7oiXET1
+MQnDUe7/AU/SuYQy+sRO3Sq48l52e/4tOuda2yGwf3QyWXQZlQGyBhyuUaZ6MACf
+DApU8sfJJCbXaroNF2Ovl80Z/R4tLTjwM+jojGnA8OyoyHJ4OXTPeM2PwHtbwNjY
+et2bPwBNBNJFxqj79jy6aBMlZT1U6w==
+=jp/n
 -----END PGP SIGNATURE-----
 
---Sig_/akreFWQ1wi=Oo/XxHODsPFM--
+--Sig_/odvzAu7STO0W1ww9f_42E9f--

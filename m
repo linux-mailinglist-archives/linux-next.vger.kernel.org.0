@@ -2,134 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 28ACFFBDCB
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 03:21:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F3A4FBDFB
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 03:44:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfKNCVk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Nov 2019 21:21:40 -0500
-Received: from ozlabs.org ([203.11.71.1]:50351 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726098AbfKNCVk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 Nov 2019 21:21:40 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47D4wt0X4jz9sNT;
-        Thu, 14 Nov 2019 13:21:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573698096;
-        bh=shChhN5EF9KgXRXrKBtuHFrRtChjGLsebmVlDt06m7Q=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mVGXWZyInQ8ZghGJNyWcbcUdSEEWLCCQizt7pEjGbYO653gWawqyJ1FAbGvQCkS7L
-         JY1YndT+cXSwGCiqHeIVOqCAT8af23iPhs7if4uIFz1YLzqFzFFA37WacNN1JkfZDK
-         6+hjsHxa94WVia0ZqOEWQGJyxryGnEkNbAVkwrHmWpjzEmHDrMwL7xJGsaT57ovSf6
-         IpddjfzX7Yz1YnlY1c05Pz1xYnbXzRyNHnIuhSktJWxp91HHub7CWV8A7Htrqa0ORV
-         5KmZp8jlJIewQca4ME2k3QWka3PZXflLMYsDvKD+EJiP9i0GgoFYxvipwP4xNxYvl3
-         2wI5JjmfO7gUQ==
-Date:   Thu, 14 Nov 2019 13:21:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marian Mihailescu <mihailescu2m@gmail.com>
-Subject: linux-next: manual merge of the devicetree tree with the arm-soc
- tree
-Message-ID: <20191114132131.56089c64@canb.auug.org.au>
+        id S1726505AbfKNCop (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Nov 2019 21:44:45 -0500
+Received: from mail-wm1-f45.google.com ([209.85.128.45]:52279 "EHLO
+        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726393AbfKNCop (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Nov 2019 21:44:45 -0500
+Received: by mail-wm1-f45.google.com with SMTP id l1so4060561wme.2
+        for <linux-next@vger.kernel.org>; Wed, 13 Nov 2019 18:44:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=cVM2J8YhTDi945e51vNhb2fbCbyKffq/dOsPFuvKaOs=;
+        b=EpCbO0W6Gj0Ctp9THTIJd0JEepQS7204fHOsBTiN/UVYHSu5NL7wTcKCnO7xmv24HR
+         RZZc2k+xm7ZKEhKAYaa+UTSc38ZMX7/XpewNme4nww4/0h/399upf62WXcPYYr1iGD0v
+         KQKfJotBrIXqGY40Qsrf4vJ9iflRGOhJD6igUrOGdAYNKeLUB36AczAsOyyiUz29NRLZ
+         +8s6sRE8f42bdITvn1ykX26K26FIFnLCSDDBZoDwBRiqm2HEQUBLY380Dhl8aMhOKktV
+         vmAXieBBros3vcvZYq+eCa7IgmuElxoXLIBsIldgNDgCrpvrXXUGd6q001bmE5wWJQOY
+         gdvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=cVM2J8YhTDi945e51vNhb2fbCbyKffq/dOsPFuvKaOs=;
+        b=FlTY9mH8uZk15JxAY2i0XO4uv49PC9DpHh9GZFaHvieDj9l/T1V3/QrpF58ucRVRb+
+         8EFNotPHv3Txi2FCuuAKvVTZCL5hJXiD7pr/eJQ9s1vtr0WwwVOdT98T1cd8kLKSO9cz
+         +kT81rNk9VEnz2Dz6os8NBNae54Oh0qSX0qnRy5dkcN3N370ID4s/BgDGcu2rPLHEW67
+         VXfHAHgWYLXeUlZQG4DaK/kJ/J/EE3la8PM26a1RzfLwE3OAZ1RPBOTKe+lmh27ZcHAQ
+         WXLkMDN8IYslzrmaiZOOQjUiDQShKiJHrnalOIqlDHVtjQIFHkQRQKhN8g2g7rFIYYLP
+         1zqQ==
+X-Gm-Message-State: APjAAAUJ/Z04RKYeYw8AVnnrEKM5wyOd9WEg/SOUpSVBJA8nykRgaRS5
+        PdhvgntNrB+GniI+E32ICTIvdkV/BoO/tg==
+X-Google-Smtp-Source: APXvYqyTVE8QEPNVHegqpmeLVQwAt3jRWweyTAid7VMXkJc45lD8DRjykk4IFK84tW71U4UqFXxqzA==
+X-Received: by 2002:a1c:3c42:: with SMTP id j63mr6057347wma.90.1573699481637;
+        Wed, 13 Nov 2019 18:44:41 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id y15sm5091601wrh.94.2019.11.13.18.44.40
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Nov 2019 18:44:41 -0800 (PST)
+Message-ID: <5dccbf99.1c69fb81.530e.8760@mx.google.com>
+Date:   Wed, 13 Nov 2019 18:44:41 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/BB1LBtqI5ejPny06wVC/iyM";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-rc7-190-g1b2a36d66d87
+Subject: next/pending-fixes boot: 239 boots: 2 failed,
+ 225 passed with 11 offline, 1 untried/unknown (v5.4-rc7-190-g1b2a36d66d87)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/BB1LBtqI5ejPny06wVC/iyM
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 239 boots: 2 failed, 225 passed with 11 offline, 1=
+ untried/unknown (v5.4-rc7-190-g1b2a36d66d87)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-rc7-190-g1b2a36d66d87/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-rc7-190-g1b2a36d66d87/
 
-Today's linux-next merge of the devicetree tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-rc7-190-g1b2a36d66d87
+Git Commit: 1b2a36d66d873784d653575f687f604fb6c6bc96
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 90 unique boards, 25 SoC families, 27 builds out of 215
 
-  Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
+Boot Failures Detected:
 
-between commit:
+arm:
+    bcm2835_defconfig:
+        gcc-8:
+            bcm2837-rpi-3-b: 1 failed lab
 
-  577dd5de0990 ("arm64: dts: juno: add GPU subsystem")
+arm64:
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
 
-from the arm-soc tree and commit:
+Offline Platforms:
 
-  3afd6389f320 ("dt-bindings: gpu: mali-midgard: add samsung exynos 5420 co=
-mpatible")
+arm:
 
-from the devicetree tree.
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
---=20
-Cheers,
-Stephen Rothwell
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
 
-diff --cc Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-index 018f3ae4b43c,c9bdf1074305..000000000000
---- a/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-+++ b/Documentation/devicetree/bindings/gpu/arm,mali-midgard.yaml
-@@@ -21,11 -29,8 +29,12 @@@ properties
-        - items:
-            - enum:
-               - amlogic,meson-gxm-mali
-+              - realtek,rtd1295-mali
-            - const: arm,mali-t820
- +      - items:
- +          - enum:
- +             - arm,juno-mali
- +          - const: arm,mali-t624
-        - items:
-            - enum:
-               - rockchip,rk3288-mali
-@@@ -34,16 -40,8 +44,7 @@@
-            - enum:
-               - rockchip,rk3399-mali
-            - const: arm,mali-t860
--       - items:
--           - enum:
--              - samsung,exynos5250-mali
--           - const: arm,mali-t604
--       - items:
--           - enum:
--              - samsung,exynos5433-mali
--           - const: arm,mali-t760
- =20
--           # "arm,mali-t628"
- -          # "arm,mali-t624"
-            # "arm,mali-t830"
-            # "arm,mali-t880"
- =20
+arm64:
 
---Sig_/BB1LBtqI5ejPny06wVC/iyM
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            sun50i-a64-pine64-plus: 1 offline lab
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            sun50i-a64-pine64-plus: 1 offline lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3MuisACgkQAVBC80lX
-0GzqRgf/VJZvk856gDSfif6dvyn2qDIRlIUcPqIyFw/t3FyYMGyzMFBvdeY5kgYL
-7iLDz7NSrMYfKnjUDL/HxiSAcAKUxuFu0R5hDpwnJqWda7pvWsLS5dY8+e8cIiOG
-S0XhpMwZSksWHvIekdZPtVmEDh5DYoH3NWDAVhMehrVs93IV9fe3eqcAHyYSBeZ2
-+iLBXn/j0DKW9kmRouMvk7rIAscozbgMXjH6CjZ9WzVCXnYnL134vdQu0tr4XDm+
-CCQcy3JILuVhoBxvDhqWTy1njJsKV6+zkFa3mF2rlRbm0ByIID3xS5SnJPi5MRc2
-lbja4SfiZ8hsQKel+Ga4OXIlXCAgag==
-=w8qt
------END PGP SIGNATURE-----
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
 
---Sig_/BB1LBtqI5ejPny06wVC/iyM--
+---
+For more info write to <info@kernelci.org>

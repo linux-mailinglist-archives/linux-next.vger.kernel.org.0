@@ -2,80 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6E1FD08D
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 22:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16150FD0EA
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 23:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726977AbfKNVsX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Nov 2019 16:48:23 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:39087 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726613AbfKNVsW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Nov 2019 16:48:22 -0500
-Received: by mail-il1-f195.google.com with SMTP id a7so6752706ild.6;
-        Thu, 14 Nov 2019 13:48:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sexaIzCDI72jsVJxExi8lQFIs/U5W+efqtxY85Cg1hU=;
-        b=fMEmD0eYIcrNcE9Iw9yXKgo2gMjc4hItMu5SC0O6dq0Q39XwkU9FyFgD2+ugtqmnGP
-         T/wAMY4X02FhRK5lJAxGHr2FmQfPth66TJ54u1YVk+pLBGYeEEev//q7Cm2CSakQSHY3
-         LAIhWEy2J9CAO46IdBod5HpAfpHCUuLSaUDuZ5jNzqtkcB+s7lpbenmjaKHca2AAONhk
-         s+X9jdFL6ihTe9G41vSKpO6Op2XCwDYhMkbE7pB9qvS1NwXMEayV9WUWs/qgARRTPfO/
-         OtGtiWobRSNiC3IuwwsEi3JhG6UbDugE/tBycOyj41E1TU0RAZB2SAjam6GHqiZdo3o+
-         /ISQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sexaIzCDI72jsVJxExi8lQFIs/U5W+efqtxY85Cg1hU=;
-        b=WrvEN2LazxLj7TT/3xBYQfgkbUde+I4O1uKmjhkXApMxfPoLXWdqGhf9/u1Hzh159a
-         +UBNAuWjOkWSKuVA07r6pYKHbyZaEYRpEQk085xFpRPFUk7y3w3B6xnrODt8MF21ULyv
-         j49lu9AhjoZP8Wy0uVFlJCIkEnzUUTFxixAO/0p8FMmy2pUjk3+c7+pYiKh3Khz0qmod
-         voZni93DsGE6JdD0WIuFc1hKR8fx7zk7DSIkTr8YT6gUgrxHSuW6EMVKMyjnZPvPxBB4
-         7dqY82KYbxrUEnP1ePSNwasbw8JcHxrc+5cN6XXf4+UT8ko73ZJzevQKUnOV6Rp/wRX2
-         94cQ==
-X-Gm-Message-State: APjAAAXCL/PXhVcX7pGiJ5+QbYratQB8KkllRF7sTzG4bDLeeP9Q4CbW
-        H1YOeNisG0wrxswlA8j7RsPXcCJJ10GJguUmdomr00Gx
-X-Google-Smtp-Source: APXvYqyR7VGoqn2+u27JO5/8UIa+JGjRZmHMjN6LZ+93dsdoVRCpSDsbp0nqbKFjMxh1glOSgB6CbaVvPXM+iqi3zp4=
-X-Received: by 2002:a92:8b4e:: with SMTP id i75mr11891991ild.5.1573768101297;
- Thu, 14 Nov 2019 13:48:21 -0800 (PST)
+        id S1726910AbfKNW0Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Nov 2019 17:26:16 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34635 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726319AbfKNW0Q (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Nov 2019 17:26:16 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Dbfs50kQz9sP3;
+        Fri, 15 Nov 2019 09:26:12 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573770373;
+        bh=//hGcghSCk1TzHNx2Y7EgtJNt+te5RX+Faqm/KvJEDQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YJ1+vD9+T4Pc5wDnB6m8ajzJCfhFXO1PyhoUuk29kkdWEJXY+uKUCJfkbAEaBYPrm
+         Gkl+LK230iXFiwW4g8ic1TbOOhIPExUH4eJJLUclSR0xPluBuYTzZUN1KjYCD66cJ/
+         yYOi2UBV/YFvMaGvW3UL9E/PMIImDILSM7dKV2A1+6noma1smDhJ23sCzgBVIYVwxW
+         Ml7/MkL1RxkuKKMZbvOku3iNDARlG6eZm234hHbCUb1qwwLOoPxPZugmje9cjrjclb
+         z0wd/u9D97r9xVBdlyU6Yy/vQPuVFcM6HDCuG+KqOzKg+cm6KUe1zXk2LcaA4KlG3p
+         bAo9EZstsTSPg==
+Date:   Fri, 15 Nov 2019 09:26:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: linux-next: manual merge of the clk tree with the tegra tree
+Message-ID: <20191115092606.79a65342@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20191115071038.7ac29202@canb.auug.org.au>
-In-Reply-To: <20191115071038.7ac29202@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Thu, 14 Nov 2019 15:48:10 -0600
-Message-ID: <CAH2r5mtq0xX7PTSWFoi46hr+Xh6Z6NC2uuxDQp7Rn5bjki3Qeg@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/8oPxKgGc_L8yzeI3MT42CJA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fixed, repushed to cifs-2.6.git for-next
+--Sig_/8oPxKgGc_L8yzeI3MT42CJA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 14, 2019 at 2:10 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   6eb36a327ea3 ("smb3: add debug messages for closing unmatched open")
->
-> is missing a Signed-off-by from its committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+Today's linux-next merge of the clk tree got conflicts in:
 
+  include/linux/clk-provider.h
+  drivers/clk/tegra/clk-super.c
+  drivers/clk/tegra/clk-sdmmc-mux.c
+  drivers/clk/tegra/clk-periph.c
+  drivers/clk/clk.c
 
--- 
-Thanks,
+between commits:
 
-Steve
+  929490c73870 ("clk: tegra: periph: Add restore_context support")
+  02ee6fe5e67a ("clk: tegra: clk-super: Fix to enable PLLP branches to CPU")
+  175ea1f93c33 ("clk: tegra: clk-super: Add restore-context support")
+  837d3fa941cd ("clk: Add API to get index of the clock parent")
+
+from the tegra tree and commits:
+
+  68a14a5634da ("clk: tegra: clk-super: Fix to enable PLLP branches to CPU")
+  f8fd97521d63 ("clk: tegra: clk-super: Add restore-context support")
+  2b8cfd6b52cb ("clk: tegra: periph: Add restore_context support")
+  d9b86cc48283 ("clk: Add API to get index of the clock parent")
+
+from the clk tree.
+
+These are different version of the same patches (presumably).
+
+I fixed it up (I just used the versions from the clk tree (since even
+though the commits have the smae author dates, the clk tree versions were
+committed later) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8oPxKgGc_L8yzeI3MT42CJA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3N1H4ACgkQAVBC80lX
+0GwOnwgAiveimTEZf5CcBS7s8LnCo89p17p6xNn5RJW5X2/rUNZCaFy3jU0Hhzm4
+gS/OapmRuIr/jb5oD7e0+jZQnAXVplulGO+bLmxDVfcEfunMmB8AvIWm3qbW1gXD
+y+luhsTKAssnNswUQWS/wIPbzX4shuvssaJNwSWHHzEWO3jlHKHf3R0qz0WoAPi/
+ez4UCxbH9WpUMbgT3xH9XTqNMdvQpNi6IjMwZ8/wd1VA9Bd6rU/5BXd78ovJxvVr
+uL3WewTn+Hy87oeLZFS0t4BCbsBliFkXaxvGCRw8n6EUFiAh3DoWi1ywNDD6KVU3
+zI5BNpzeVRFj+q2xVj222zk+FfDvdA==
+=DQYi
+-----END PGP SIGNATURE-----
+
+--Sig_/8oPxKgGc_L8yzeI3MT42CJA--

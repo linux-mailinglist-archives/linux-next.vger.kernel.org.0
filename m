@@ -2,128 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F3A4FBDFB
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 03:44:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D1EDFBEA2
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 05:38:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726505AbfKNCop (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 Nov 2019 21:44:45 -0500
-Received: from mail-wm1-f45.google.com ([209.85.128.45]:52279 "EHLO
-        mail-wm1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726393AbfKNCop (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 Nov 2019 21:44:45 -0500
-Received: by mail-wm1-f45.google.com with SMTP id l1so4060561wme.2
-        for <linux-next@vger.kernel.org>; Wed, 13 Nov 2019 18:44:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=cVM2J8YhTDi945e51vNhb2fbCbyKffq/dOsPFuvKaOs=;
-        b=EpCbO0W6Gj0Ctp9THTIJd0JEepQS7204fHOsBTiN/UVYHSu5NL7wTcKCnO7xmv24HR
-         RZZc2k+xm7ZKEhKAYaa+UTSc38ZMX7/XpewNme4nww4/0h/399upf62WXcPYYr1iGD0v
-         KQKfJotBrIXqGY40Qsrf4vJ9iflRGOhJD6igUrOGdAYNKeLUB36AczAsOyyiUz29NRLZ
-         +8s6sRE8f42bdITvn1ykX26K26FIFnLCSDDBZoDwBRiqm2HEQUBLY380Dhl8aMhOKktV
-         vmAXieBBros3vcvZYq+eCa7IgmuElxoXLIBsIldgNDgCrpvrXXUGd6q001bmE5wWJQOY
-         gdvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=cVM2J8YhTDi945e51vNhb2fbCbyKffq/dOsPFuvKaOs=;
-        b=FlTY9mH8uZk15JxAY2i0XO4uv49PC9DpHh9GZFaHvieDj9l/T1V3/QrpF58ucRVRb+
-         8EFNotPHv3Txi2FCuuAKvVTZCL5hJXiD7pr/eJQ9s1vtr0WwwVOdT98T1cd8kLKSO9cz
-         +kT81rNk9VEnz2Dz6os8NBNae54Oh0qSX0qnRy5dkcN3N370ID4s/BgDGcu2rPLHEW67
-         VXfHAHgWYLXeUlZQG4DaK/kJ/J/EE3la8PM26a1RzfLwE3OAZ1RPBOTKe+lmh27ZcHAQ
-         WXLkMDN8IYslzrmaiZOOQjUiDQShKiJHrnalOIqlDHVtjQIFHkQRQKhN8g2g7rFIYYLP
-         1zqQ==
-X-Gm-Message-State: APjAAAUJ/Z04RKYeYw8AVnnrEKM5wyOd9WEg/SOUpSVBJA8nykRgaRS5
-        PdhvgntNrB+GniI+E32ICTIvdkV/BoO/tg==
-X-Google-Smtp-Source: APXvYqyTVE8QEPNVHegqpmeLVQwAt3jRWweyTAid7VMXkJc45lD8DRjykk4IFK84tW71U4UqFXxqzA==
-X-Received: by 2002:a1c:3c42:: with SMTP id j63mr6057347wma.90.1573699481637;
-        Wed, 13 Nov 2019 18:44:41 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id y15sm5091601wrh.94.2019.11.13.18.44.40
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Nov 2019 18:44:41 -0800 (PST)
-Message-ID: <5dccbf99.1c69fb81.530e.8760@mx.google.com>
-Date:   Wed, 13 Nov 2019 18:44:41 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726491AbfKNEiN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 Nov 2019 23:38:13 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45805 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726489AbfKNEiN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 Nov 2019 23:38:13 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47D7yW21Qbz9s7T;
+        Thu, 14 Nov 2019 15:38:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1573706291;
+        bh=P/mByLN+ETEbE7SL3y/9lgK4nCMiQUGm3IeNA1f59No=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TGcBdSMI5oIHykg4FuwaNn9fzgPtmUgLod0dsDYZnQ15h0Tz3Nx7ltrddEOWfIN4o
+         PKEjGveukKn7dd9jY/yuQCuWotcXnZVTnoDs8FBwIrLVRdrT36/8hV1d6yt+F1AhOU
+         x1aBjIh38PNNEyOxdybYlGF8vCCP8ZOetqKshW+/vtFnNDTSsbN7HY+e9vtLpCtNYb
+         tf+iYFsYKQSFBoE4o7eqSNhyNw2WbKId3lz+Do1fZcmTKlyaqjzE6SsETvTb1N9lM8
+         f1Ev63YjgiiYkZVlyfYbk8OLRQK20sKzmJPX7tmSoHoJqlW+gGBXx32KSDi/RUk8Uf
+         qSCWff+dj28LQ==
+Date:   Thu, 14 Nov 2019 15:38:10 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the y2038 tree
+Message-ID: <20191114153810.55d937af@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.4-rc7-190-g1b2a36d66d87
-Subject: next/pending-fixes boot: 239 boots: 2 failed,
- 225 passed with 11 offline, 1 untried/unknown (v5.4-rc7-190-g1b2a36d66d87)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/sa_0ylOl5Uo6eotfCQP0FM=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 239 boots: 2 failed, 225 passed with 11 offline, 1=
- untried/unknown (v5.4-rc7-190-g1b2a36d66d87)
+--Sig_/sa_0ylOl5Uo6eotfCQP0FM=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.4-rc7-190-g1b2a36d66d87/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.4-rc7-190-g1b2a36d66d87/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.4-rc7-190-g1b2a36d66d87
-Git Commit: 1b2a36d66d873784d653575f687f604fb6c6bc96
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 25 SoC families, 27 builds out of 215
+After merging the y2038 tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-Boot Failures Detected:
+arch/powerpc/kernel/time.c: In function 'update_vsyscall':
+arch/powerpc/kernel/time.c:960:33: error: 'struct timespec64' has no member=
+ named 'sec'
+  960 |  vdso_data->stamp_xtime_sec =3D xt.sec;
+      |                                 ^
+arch/powerpc/kernel/time.c:961:34: error: 'struct timespec64' has no member=
+ named 'nsec'
+  961 |  vdso_data->stamp_xtime_nsec =3D xt.nsec;
+      |                                  ^
 
-arm:
-    bcm2835_defconfig:
-        gcc-8:
-            bcm2837-rpi-3-b: 1 failed lab
+Caused by commit
 
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
+  009a81339beb ("y2038: vdso: powerpc: avoid timespec references")
 
-Offline Platforms:
+I have added the following patch for today.
 
-arm:
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 14 Nov 2019 15:28:13 +1100
+Subject: [PATCH] fix up for "y2038: vdso: powerpc: avoid timespec reference=
+s"
 
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-            sun50i-a64-pine64-plus: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-            sun50i-a64-pine64-plus: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ arch/powerpc/kernel/time.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
+index ee9ba3a48c76..2d13cea13954 100644
+--- a/arch/powerpc/kernel/time.c
++++ b/arch/powerpc/kernel/time.c
+@@ -957,8 +957,8 @@ void update_vsyscall(struct timekeeper *tk)
+ 	vdso_data->tb_to_xs =3D new_tb_to_xs;
+ 	vdso_data->wtom_clock_sec =3D tk->wall_to_monotonic.tv_sec;
+ 	vdso_data->wtom_clock_nsec =3D tk->wall_to_monotonic.tv_nsec;
+-	vdso_data->stamp_xtime_sec =3D xt.sec;
+-	vdso_data->stamp_xtime_nsec =3D xt.nsec;
++	vdso_data->stamp_xtime_sec =3D xt.tv_sec;
++	vdso_data->stamp_xtime_nsec =3D xt.tv_nsec;
+ 	vdso_data->stamp_sec_fraction =3D frac_sec;
+ 	smp_wmb();
+ 	++(vdso_data->tb_update_count);
+--=20
+2.23.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/sa_0ylOl5Uo6eotfCQP0FM=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3M2jIACgkQAVBC80lX
+0GzfOAf+PNWcEK0gdZ6HwcziPONofH/oVDlk664B5iRpnNOep3BD14wGWwnJxsIr
+qEFOb8jEOkaHHpnaBaU6yRKn2BTjAtfMKIKS/qLNjpXikovHny74obUzUvCUao8w
++6HeCvtvXzI28Sgg4iP3NgVfqhLzK+PRJqDBsb3hjHAeiB8z00wjKSkUoYvmMaom
+Y+OzsZv1azQLx9cLm79O5wmAcYYF9O6n+j8tSGGLgfa7Bw3K88MswVdZSHDWdsxx
+Q29hvZdwVGquzy5gV0gt5t3O/x+As+2o9Fck8tLgfkendlkWPUZZvOE4soUrkCA/
+HCE4yia9Trc58tUbaLQiPsN7akum3A==
+=bjkQ
+-----END PGP SIGNATURE-----
+
+--Sig_/sa_0ylOl5Uo6eotfCQP0FM=--

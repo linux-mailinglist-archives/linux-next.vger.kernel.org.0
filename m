@@ -2,107 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 153D6FC5EA
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 13:10:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B4B6FC6BC
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 13:58:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726115AbfKNMKa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Nov 2019 07:10:30 -0500
-Received: from mout.kundenserver.de ([217.72.192.74]:43553 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726106AbfKNMKa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Nov 2019 07:10:30 -0500
-Received: from mail-qk1-f169.google.com ([209.85.222.169]) by
- mrelayeu.kundenserver.de (mreue106 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1M7KG2-1iWLTk3ZqG-007jRg; Thu, 14 Nov 2019 13:10:29 +0100
-Received: by mail-qk1-f169.google.com with SMTP id 205so4750486qkk.1;
-        Thu, 14 Nov 2019 04:10:28 -0800 (PST)
-X-Gm-Message-State: APjAAAWzD3T/H4O6OAmEIVTVzS1KUglGojFWpePLt7wIvxHJB0gXvzF4
-        /ziJ6KBRpJVSVu54DkW2QdmsVbvoBkT4cX53Z6o=
-X-Google-Smtp-Source: APXvYqwH3ImYA6idvrUy4s0YnVGkfNSxydHJRkPK4OjgDVN/gCLA9akkaakLFb4EwY/uC0H7RI8F34p6AfRs3f0kaQA=
-X-Received: by 2002:a37:4f0a:: with SMTP id d10mr7182492qkb.286.1573733427609;
- Thu, 14 Nov 2019 04:10:27 -0800 (PST)
-MIME-Version: 1.0
-References: <20191114153810.55d937af@canb.auug.org.au>
-In-Reply-To: <20191114153810.55d937af@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Thu, 14 Nov 2019 13:10:10 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a19MuYrrk_TZq5Jz-4AH0U5NYX1=WZZHcdyD+G+Rz8n2A@mail.gmail.com>
-Message-ID: <CAK8P3a19MuYrrk_TZq5Jz-4AH0U5NYX1=WZZHcdyD+G+Rz8n2A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the y2038 tree
+        id S1726276AbfKNM6z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Nov 2019 07:58:55 -0500
+Received: from mail-eopbgr150078.outbound.protection.outlook.com ([40.107.15.78]:11397
+        "EHLO EUR01-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726139AbfKNM6z (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 Nov 2019 07:58:55 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HPw5PH/Jp8F2XUM+lJJGiN0rUbl6K7SP1TQCLEuRVSvkQlLbClMAXA7Jq3y/+AO+axtOcMZt7p1VgaifbTLk/hEMErHwv84Lpkm5dXdi9bGZqYrcKc5oMYN5w9GRQlBBlkuLl1MrFr2Kn6v9b7gVQ79g2/35FXBvHAOoaazVpufnRZzkcAeOeWs6Py8hJTPPuI8U3MUTLtKFFv9dbltBnVceGUHeK69MaSqAAlimekiHL2ddwmZkDi4chu5YVmGPfnQtes2KqxU2YzSYpLrqVUKT+97q8ZylQLA/RimBgPBhyobRL2QqwN4M3GpriIRixR31T6SOCyqmzXdSAa6F/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9zJ//esVPodjJaoeobhXq09SRlPzNkCJW8Danz3SzhE=;
+ b=BnNTKd3UzhPsQjbCZJhZTgZ1bVZwsIJJiywrU4SlE+95701H+vDZFEvzYz0cIo9ON0Q4k0K526dcBAYnjHXO9omhSoO0nMMQaIRgFQUQFPhHq57VxItuz+Pc78N+fXDtowGqUVU7z3IEiMHlQJcAon7x7y34+kcirb8VaS+J14Vf5Xu4Bq26T2CvNw9+H+ypSYy63ufhTFiIVAKdEa8b4OTUNLVr7Nztvo1SJi2pZenZZTjjakwTC7qaCa8tQSbw0JDiYGnlDIATLHq20fn0MFoRSwdNgbl1rtWY9YwZg25rYKbVCWZgG36xPn+WDD/XHIZSY1XzAKhUGztFANWMBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9zJ//esVPodjJaoeobhXq09SRlPzNkCJW8Danz3SzhE=;
+ b=Npmz04U+ceYmuwA2VmJZTbZ9vxNHQS2BbRMELsotRLMJjhQFHjXXc85rtRVuAvN6zY8GgvPB6APDxK8SNTOgWHWrU7oytOaBnnmqUX763I/+uCoelLBH72UoWVgjamDV+ZaRfVdZm8/8FdWPt8o05cB7MNw52I6NwLGm/amAUME=
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (52.133.14.15) by
+ VI1PR05MB5935.eurprd05.prod.outlook.com (20.178.126.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2451.23; Thu, 14 Nov 2019 12:58:48 +0000
+Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::b179:e8bf:22d4:bf8d]) by VI1PR05MB4141.eurprd05.prod.outlook.com
+ ([fe80::b179:e8bf:22d4:bf8d%5]) with mapi id 15.20.2430.028; Thu, 14 Nov 2019
+ 12:58:48 +0000
+From:   Jason Gunthorpe <jgg@mellanox.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:f6q/srZqJ+R4axATfWdpSRS5KTmcTI8IclwszzAvjY8sxX8zOfL
- mpvhiVkzqcJUL/oZs0wikoxEfKVFoQ5XXRH7z2K8+IxVc9BEgMYOtcoO3X1LbF1s1q/ioqZ
- Kv8dqNFoWgNK/Io7bv7EQPuWr6rhmdYC/raEqDvBGOPDgU/mQ83HeZCHuJrYAmF55UW8zkr
- hxxKF9Spy/L80iKxxyGXA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+UifpYRhZek=:7mMsloH2NHEb8vpwx+yugo
- FetTM4kmTHRGJtejuJO8+2G8My2eNHLlWrekJXMlQAdkr4o3hrWF6xyyS7ikvXJubNXPncmuf
- nEzYWjbe6qv73KZK9YFo295kvPumFx7X4v82IBv+yi60MaHIDWko+px7SEcWgsFa1EH1ZenQY
- o6UJxrfLusiz3jLkbeslY2KEqrT2APxKzjqjfPHw+Au37rOkBxhh0JdaaYVYnwNm+tygbz76c
- 1OZCqXlGrbSfWRhxlievgS1oCJ5Jgmv3jgx5+qXfSf8CKnPVqW+YxfU0qEec7LmcpXulKV3i4
- aOtqHz3LmMExVylJ51Oupq4BWTUywnYotvkPR6XIH0BuU3k9ZkxbBHZkAKA5cVXyaIwUKNTu1
- lq2oWgTce6F8ifig3dfXB1aYC2jPZErKc4THexOdCresBk3d+gQ+6w/rFDLgiHXcgc30j3GNf
- GHWN2PbsM+0jfxxE7wG1j2Enr9iONNOM7WPEsFAmParFwmYwyPqEyrtE7sETXqdkJfwZqxmE5
- gT7W3ov8mZ+fUM591Dr7/skkvRYsKOASgyCWeJs7excIvE5BJ/BP5Nlbkw53XRqSwYsGZ7oYo
- zgoP+GKnq7pUuV5UJ+IXmRZiNSbAN00aUt3gtcIad7gCgANVLwsxM6q+z+gTeuTL4kQti9nNX
- sDX0jcS0O6XXNweF1ryIY+NUs+m/ChFg5EzE7XaStKMqfClZoFftOHiatGSipDXHb+hBdW9ic
- Cdg1LewXkwA0/90/Gq38v/c0HwgcYAgtENoXjEOsmBQCByrki1nIcT0jyxppnuRtHxx9RT/q+
- iQGd9GaF+otKOyfDqBChrcGednPcmqk4HW1SubWW1Ixzp0wCU3Wayld+elI3T20fPsNV2rwSo
- CnponLfLY4FoSWsI0mKg==
+Subject: Re: linux-next: build failure after merge of the hmm tree
+Thread-Topic: linux-next: build failure after merge of the hmm tree
+Thread-Index: AQHVmq03k5u9m0Gc1Ei8rJpUBgOCyKeKoR+A
+Date:   Thu, 14 Nov 2019 12:58:47 +0000
+Message-ID: <20191114125841.GO21728@mellanox.com>
+References: <20191114163435.6273b6a1@canb.auug.org.au>
+In-Reply-To: <20191114163435.6273b6a1@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-clientproxiedby: MN2PR02CA0002.namprd02.prod.outlook.com
+ (2603:10b6:208:fc::15) To VI1PR05MB4141.eurprd05.prod.outlook.com
+ (2603:10a6:803:44::15)
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=jgg@mellanox.com; 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-originating-ip: [142.162.113.180]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: 22a1e1d4-6527-418f-e3ea-08d76902638f
+x-ms-traffictypediagnostic: VI1PR05MB5935:
+x-microsoft-antispam-prvs: <VI1PR05MB59350243302A28D95C9AF4C7CF710@VI1PR05MB5935.eurprd05.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:2043;
+x-forefront-prvs: 02213C82F8
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(396003)(39850400004)(376002)(136003)(346002)(53754006)(199004)(189003)(71190400001)(186003)(54906003)(26005)(81156014)(86362001)(81166006)(76176011)(5660300002)(8936002)(4326008)(316002)(2906002)(11346002)(66946007)(66556008)(66476007)(476003)(6246003)(99286004)(6116002)(3846002)(25786009)(486006)(6512007)(2616005)(8676002)(66446008)(52116002)(64756008)(6506007)(386003)(1076003)(102836004)(446003)(6436002)(6486002)(36756003)(66066001)(14444005)(229853002)(71200400001)(7736002)(256004)(305945005)(14454004)(33656002)(6916009)(478600001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB5935;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;MX:1;
+received-spf: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: vwUDj4aKlycvfPT/eCI1ifW80u1Rr0XVqr4gMSVJKNgv34bUavLOj0g3MAIIl9pWGb+w+oAJymnlIYhCp/vwjcr5zc2nBO21wTwC9M799Yx2WCuJQD72fXur+n4vBIJDASIhxpjV9ZM4avyo0zz9zcWU3osfkyvRTR9KXjKJn0BxQgDT3AKJBE4+FFdf1qWHj8YEkjgGoVtFEEal08RUFPrGNV8dcTmUlk+wGAqG/1cbZMvr0Rux7YUVcEjgJ1aey46MGS4twm3KtSfXBwdWBWkDa+xuGE+TnsWRSNyDAW6Gi4Q4jEFF4dE+3cZksIA5pnd4GIA6h73rsU1lq9pb6aZpL6E4P1tOEAWnn6UpFffB7hxuqAiZOWqUspS4jt/TTRxmJdpXPZydGi7DClwTic9PONdtdONXsrnesDWd+1ctJY7ffzhD4xQdQGLzPTAp
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <89C6F450F1FDD8449CF24158202D94C2@eurprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 22a1e1d4-6527-418f-e3ea-08d76902638f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2019 12:58:47.9938
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 6FTWUYSYWq7Rr+ywIrfIaM21N0BWeTKs2f/VnnBZ/fpzywn4aYPvjoev+419QCwzqvfUFqbO6EgEaDEaY66BVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB5935
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Nov 14, 2019 at 5:38 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
+On Thu, Nov 14, 2019 at 04:34:35PM +1100, Stephen Rothwell wrote:
 > Hi all,
->
-> After merging the y2038 tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> arch/powerpc/kernel/time.c: In function 'update_vsyscall':
-> arch/powerpc/kernel/time.c:960:33: error: 'struct timespec64' has no member named 'sec'
->   960 |  vdso_data->stamp_xtime_sec = xt.sec;
->       |                                 ^
-> arch/powerpc/kernel/time.c:961:34: error: 'struct timespec64' has no member named 'nsec'
->   961 |  vdso_data->stamp_xtime_nsec = xt.nsec;
->       |                                  ^
->
+>=20
+> After merging the hmm tree, today's linux-next build (x86_64 allmodconfig=
+)
+> failed like this:
+>=20
+> drivers/infiniband/hw/hfi1/user_exp_rcv.c: In function 'set_rcvarray_entr=
+y':
+> drivers/infiniband/hw/hfi1/user_exp_rcv.c:768:33: warning: passing argume=
+nt 2 of 'mmu_interval_notifier_insert' makes pointer from integer without a=
+ cast [-Wint-conversion]
+>   768 |    &node->notifier, tbuf->vaddr + (pageidx * PAGE_SIZE),
+>       |                     ~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+>       |                                 |
+>       |                                 long unsigned int
+> In file included from include/rdma/ib_verbs.h:59,
+>                  from include/rdma/ib_hdrs.h:53,
+>                  from drivers/infiniband/hw/hfi1/hfi.h:68,
+>                  from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
+>                  from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
+> include/linux/mmu_notifier.h:295:24: note: expected 'struct mm_struct *' =
+but argument is of type 'long unsigned int'
+>   295 |      struct mm_struct *mm, unsigned long start,
+>       |      ~~~~~~~~~~~~~~~~~~^~
+> drivers/infiniband/hw/hfi1/user_exp_rcv.c:769:26: warning: passing argume=
+nt 4 of 'mmu_interval_notifier_insert' makes integer from pointer without a=
+ cast [-Wint-conversion]
+>   769 |    npages * PAGE_SIZE, fd->mm);
+>       |                        ~~^~~~
+>       |                          |
+>       |                          struct mm_struct *
+> In file included from include/rdma/ib_verbs.h:59,
+>                  from include/rdma/ib_hdrs.h:53,
+>                  from drivers/infiniband/hw/hfi1/hfi.h:68,
+>                  from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
+>                  from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
+> include/linux/mmu_notifier.h:296:20: note: expected 'long unsigned int' b=
+ut argument is of type 'struct mm_struct *'
+>   296 |      unsigned long length,
+>       |      ~~~~~~~~~~~~~~^~~~~~
+> drivers/infiniband/hw/hfi1/user_exp_rcv.c:767:9: error: too few arguments=
+ to function 'mmu_interval_notifier_insert'
+>   767 |   ret =3D mmu_interval_notifier_insert(
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In file included from include/rdma/ib_verbs.h:59,
+>                  from include/rdma/ib_hdrs.h:53,
+>                  from drivers/infiniband/hw/hfi1/hfi.h:68,
+>                  from drivers/infiniband/hw/hfi1/mmu_rb.h:50,
+>                  from drivers/infiniband/hw/hfi1/user_exp_rcv.c:50:
+> include/linux/mmu_notifier.h:294:5: note: declared here
+>   294 | int mmu_interval_notifier_insert(struct mmu_interval_notifier *mn=
+i,
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>=20
 > Caused by commit
->
->   009a81339beb ("y2038: vdso: powerpc: avoid timespec references")
->
-> I have added the following patch for today.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 14 Nov 2019 15:28:13 +1100
-> Subject: [PATCH] fix up for "y2038: vdso: powerpc: avoid timespec references"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>=20
+>   c90dad714405 ("RDMA/hfi1: Use mmu_interval_notifier_insert for user_exp=
+_rcv")
+>=20
+> I have used the hmm tree from next-20191113 for today.
 
-Folded into my patch, thanks!
+Another case of 0-day missing stuff, it gave this branch an OK :(=20
 
-> diff --git a/arch/powerpc/kernel/time.c b/arch/powerpc/kernel/time.c
-> index ee9ba3a48c76..2d13cea13954 100644
-> --- a/arch/powerpc/kernel/time.c
-> +++ b/arch/powerpc/kernel/time.c
-> @@ -957,8 +957,8 @@ void update_vsyscall(struct timekeeper *tk)
->         vdso_data->tb_to_xs = new_tb_to_xs;
->         vdso_data->wtom_clock_sec = tk->wall_to_monotonic.tv_sec;
->         vdso_data->wtom_clock_nsec = tk->wall_to_monotonic.tv_nsec;
-> -       vdso_data->stamp_xtime_sec = xt.sec;
-> -       vdso_data->stamp_xtime_nsec = xt.nsec;
-> +       vdso_data->stamp_xtime_sec = xt.tv_sec;
-> +       vdso_data->stamp_xtime_nsec = xt.tv_nsec;
->         vdso_data->stamp_sec_fraction = frac_sec;
->         smp_wmb();
->         ++(vdso_data->tb_update_count);
+I'll fix it for tomorrow
 
-I was sure I had at least build-tested this, but looking at 'git reflog -p',
-I only see the same broken version that never worked, so I clearly did not.
-
-     Arnd
+Thanks,
+Jason

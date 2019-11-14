@@ -2,128 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17720FCAF7
-	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 17:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254A2FCC46
+	for <lists+linux-next@lfdr.de>; Thu, 14 Nov 2019 18:57:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbfKNQnY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 Nov 2019 11:43:24 -0500
-Received: from youngberry.canonical.com ([91.189.89.112]:43579 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726505AbfKNQnY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Nov 2019 11:43:24 -0500
-Received: from [213.220.153.21] (helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1iVIDI-0000oJ-8r; Thu, 14 Nov 2019 16:43:20 +0000
-Date:   Thu, 14 Nov 2019 17:43:19 +0100
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     linux-next@vger.kernel.org
-Subject: Re: linux-next: Tree for Nov 14
-Message-ID: <20191114164318.vbtp32qgkjy4qmv7@wittgenstein>
-References: <20111114144303.6ba32f099a9d10aed68fb872@canb.auug.org.au>
+        id S1727118AbfKNR5A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 Nov 2019 12:57:00 -0500
+Received: from mail-wm1-f54.google.com ([209.85.128.54]:51853 "EHLO
+        mail-wm1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726210AbfKNR5A (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 Nov 2019 12:57:00 -0500
+Received: by mail-wm1-f54.google.com with SMTP id q70so6617049wme.1
+        for <linux-next@vger.kernel.org>; Thu, 14 Nov 2019 09:56:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=yK3IG3FjcNAqW8rN4zyy08l/aRlvtoFDkVsbOEBe3hg=;
+        b=R0293y+ndhGuzGAOUhs4UqHwjiCwYbaWoYkASTEEVQYfKsr23Xo9TWBt7jGxXg+2v0
+         QK1FlN4yc3oK+Sb0NBRBsANS7m7m+eoQ3YvuL1AKKFS7vu1YiZZrEZQZNZBpmEYkCQba
+         6dr0mdORpR69TvMPYSnhltAIXGXtUO+eTbVo4Wg6BOXAVJ8h6BdHr3ZkEyyuvX/hRDuu
+         rnpkBd2iquRBcE//UvKI9/ASDFpmWCm9n3c/URE34dFDFERAq+BHnbPoMYW2SAg4V5ts
+         vdriZhfGQpowT0EbFGrjn8ZLo9djSr46twFR+IbAL7O6dOJqexCb84LIFpUKHx1HNUgN
+         F6kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=yK3IG3FjcNAqW8rN4zyy08l/aRlvtoFDkVsbOEBe3hg=;
+        b=OMbHkNpUtJhDi0vVMG3c28A64/qg2j+qjm1OnKhQaDpfDG4K5VAgFYnLRloZXHoE/H
+         gLQAzj3EcJ6XwXiN1gyGNFWRzItDYLLHF6QpzWYSA5pd0gZcVQWfTnsGqRnruUagNeRP
+         goCpgm4UBtHQmhq5eMMSgQ2L8KmwNfVj2VOEgCbTiyyh0UhJ0vWnyFmYbLpcweQwBVPl
+         3WdtM915wJt3Y3YB6awG6s+8/Cpfov2WjkIxz0+WI36+3il6SGMJjuvsRYcgPoZn4nT2
+         hATU9YGeK+O1jqa2FAN3TCv3uCWIvWABivnW9wVUcjN/MywlHs3r4op9UBAgeqz/Z3E3
+         62WQ==
+X-Gm-Message-State: APjAAAWGj/tsc9xOKZKFICvGzh+mRcIqrPmiIbWDS2b8Uzv4AYiV90LX
+        I+77IW0I831jrMw1NydOi9Vyyef42MFxrA==
+X-Google-Smtp-Source: APXvYqzvm/XgYCyoQ9L+YvHL7dPLAOfnNq0PmZL/VjhulW9G/8aTYvpsK5mQ6lB8I4xVlg4cxWUSeQ==
+X-Received: by 2002:a1c:3b44:: with SMTP id i65mr8772621wma.1.1573754217948;
+        Thu, 14 Nov 2019 09:56:57 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id a2sm4354499wrt.79.2019.11.14.09.56.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2019 09:56:57 -0800 (PST)
+Message-ID: <5dcd9569.1c69fb81.4b78e.5374@mx.google.com>
+Date:   Thu, 14 Nov 2019 09:56:57 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20111114144303.6ba32f099a9d10aed68fb872@canb.auug.org.au>
-User-Agent: NeoMutt/20180716
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191114
+Subject: next/master boot: 246 boots: 4 failed, 232 passed with 8 offline,
+ 2 untried/unknown (next-20191114)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 14, 2011 at 02:43:03PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> The patch is still absent from kernel.org.
-> 
-> Changes since 20111111:
-> 
-> The m68knommu gained a conflict against the m68k tree.
-> 
-> The wireless-next tree gained a conflict against the wireless tree.
-> 
-> The pm tree lost its build failure but gained two others for which I
-> reverted a commit and applied a patch.
-> 
-> I removed 3 patches from the akpm tree that have shown up elsewhere.
+next/master boot: 246 boots: 4 failed, 232 passed with 8 offline, 2 untried=
+/unknown (next-20191114)
 
-Hey Stephen,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191114/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191114/
 
-Just a heads up that tomorrow two new patches will show up in the
-pidfd's for-next branch that will introduce a minor merge conflict in
-linux/uapi/sched.h with what's in current mainline.
-The merge conflict can be resolved as shown below.
+Tree: next
+Branch: master
+Git Describe: next-20191114
+Git Commit: 8466d23e6e677cb58e237d1f35588497b8dd5c5c
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 93 unique boards, 25 SoC families, 28 builds out of 216
 
-	Christian
+Boot Failures Detected:
 
-diff --cc include/uapi/linux/sched.h
-index 25b4fa00bad1,2e649cfa07f4..000000000000
---- a/include/uapi/linux/sched.h
-+++ b/include/uapi/linux/sched.h
-@@@ -36,28 -39,38 +39,42 @@@
-  #ifndef __ASSEMBLY__
-  /**
-   * struct clone_args - arguments for the clone3 syscall
--  * @flags:       Flags for the new process as listed above.
--  *               All flags are valid except for CSIGNAL and
--  *               CLONE_DETACHED.
--  * @pidfd:       If CLONE_PIDFD is set, a pidfd will be
--  *               returned in this argument.
--  * @child_tid:   If CLONE_CHILD_SETTID is set, the TID of the
--  *               child process will be returned in the child's
--  *               memory.
--  * @parent_tid:  If CLONE_PARENT_SETTID is set, the TID of
--  *               the child process will be returned in the
--  *               parent's memory.
--  * @exit_signal: The exit_signal the parent process will be
--  *               sent when the child exits.
--  * @stack:       Specify the location of the stack for the
--  *               child process.
--  *               Note, @stack is expected to point to the
--  *               lowest address. The stack direction will be
--  *               determined by the kernel and set up
--  *               appropriately based on @stack_size.
--  * @stack_size:  The size of the stack for the child process.
--  * @tls:         If CLONE_SETTLS is set, the tls descriptor
--  *               is set to tls.
-+  * @flags:        Flags for the new process as listed above.
-+  *                All flags are valid except for CSIGNAL and
-+  *                CLONE_DETACHED.
-+  * @pidfd:        If CLONE_PIDFD is set, a pidfd will be
-+  *                returned in this argument.
-+  * @child_tid:    If CLONE_CHILD_SETTID is set, the TID of the
-+  *                child process will be returned in the child's
-+  *                memory.
-+  * @parent_tid:   If CLONE_PARENT_SETTID is set, the TID of
-+  *                the child process will be returned in the
-+  *                parent's memory.
-+  * @exit_signal:  The exit_signal the parent process will be
-+  *                sent when the child exits.
-+  * @stack:        Specify the location of the stack for the
-+  *                child process.
-++ *                Note, @stack is expected to point to the
-++ *                lowest address. The stack direction will be
-++ *                determined by the kernel and set up
-++ *                appropriately based on @stack_size.
-+  * @stack_size:   The size of the stack for the child process.
-+  * @tls:          If CLONE_SETTLS is set, the tls descriptor
-+  *                is set to tls.
-+  * @set_tid:      Pointer to an array of type *pid_t. The size
-+  *                of the array is defined using @set_tid_size.
-+  *                This array is used select PIDs/TIDs for newly
-+  *                created processes. The first element in this
-+  *                defines the PID in the most nested PID
-+  *                namespace. Each additional element in the array
-+  *                defines the PID in the parent PID namespace of
-+  *                the original PID namespace. If the array has
-+  *                less entries than the number of currently
-+  *                nested PID namespaces only the PIDs in the
-+  *                corresponding namespaces are set.
-+  * @set_tid_size: This defines the size of the array referenced
-+  *                in @set_tid. This cannot be larger than the
-+  *                kernel's limit of nested PID namespaces.
-   *
-   * The structure is versioned by size and thus extensible.
-   * New struct members must go at the end of the struct and
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-p241: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            sun50i-a64-pine64-plus: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            sun50i-a64-pine64-plus: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

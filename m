@@ -2,91 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31070FE2F6
-	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 17:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39F3FE56A
+	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 20:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727615AbfKOQij (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Nov 2019 11:38:39 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22387 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727531AbfKOQij (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Nov 2019 11:38:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1573835917;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6fENKbkRp6IkVJsqfQWI1tPw8ogr4wWzSPjFy8i7mms=;
-        b=ItJshpStFRX1cWzQp3Ayyvb1GjvrfKoyYPDDPnRpAsZu7L1ncHbS+Mbw2c2abDBHh3kS41
-        INIpjmpQh2kKnqfe+D+tcGKJLD4g9vUa9W7ddsbfYK3mpXYmAM959IIUkz5/bNuci5db4m
-        l/FTqXlTvSdGluI9GuTb9U4+9wcrKbg=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-281-hWEbCo_AMMG0C_3DEUsPiQ-1; Fri, 15 Nov 2019 11:38:34 -0500
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 622D1107ACFA;
-        Fri, 15 Nov 2019 16:38:33 +0000 (UTC)
-Received: from treble (ovpn-120-26.rdu2.redhat.com [10.10.120.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 98BED60FC1;
-        Fri, 15 Nov 2019 16:38:32 +0000 (UTC)
-Date:   Fri, 15 Nov 2019 10:38:30 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: linux-next: Tree for Nov 15 (objtool)
-Message-ID: <20191115163830.g262y75w3sh535fm@treble>
-References: <20191115190525.77efdf6c@canb.auug.org.au>
- <c49752fe-4b47-2329-2cb8-caad44803e3a@infradead.org>
+        id S1726323AbfKOTIT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Nov 2019 14:08:19 -0500
+Received: from mail-wr1-f46.google.com ([209.85.221.46]:45793 "EHLO
+        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726308AbfKOTIT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Nov 2019 14:08:19 -0500
+Received: by mail-wr1-f46.google.com with SMTP id z10so12088141wrs.12
+        for <linux-next@vger.kernel.org>; Fri, 15 Nov 2019 11:08:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ZlBdQ1Yo3hiMweUUt+kpU/FRbEVlO7qkQ8kBd5YmkUw=;
+        b=O/mjKtKFyMOtFo7AKSDBG70tj4n2xpJRyU5z5hrPO9Gm3/ZTaSA/8tyUo2V9dAuBw0
+         1AGJLL9BjI6AsI39JPeJi3o04vwIUSUCIo95toaH6mo5OQw670n4yaoU1JdzbAvlOm6J
+         fHU6tygtnLMgaTeBe/FlKEGB9jkJ8KTIX3xY+6F0jQHamqQZDMuvTHP7l1dweC/wk0mD
+         rbIhLYySozNCNJeFCPPta25hPiWoGLFjiAMfobpOYBrbEVUe4SVXm3oi7Vz/7rwlP99c
+         4VuRk0Xp71aZEpcpKZUatgeLB9s5J0xqxj+LL1vubKpa7uSEQ/VnT+dCJ7ENa5hEsAqz
+         9qJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ZlBdQ1Yo3hiMweUUt+kpU/FRbEVlO7qkQ8kBd5YmkUw=;
+        b=t4Uf86/K7gCfNwI3VvkE3I/y5TFSXD09nEW+G35sJ0ONZWPxshgE9menmrvP/p7MGC
+         NwVkm2DJWlm0kJzCP++JvPfHjR5/3974JqlCcU47ryqNDQ9jy7RYoIlUDW0Pfc3m0Rp1
+         P4imJ4faEPsYAlidY91/yX5COfPjL97txKKWYXgIQUkf3i+GHtxlKBTJpqaceZ7ALpXp
+         KyXSi+JCGgs+IkfRqlnFc3MPbGxI20rcHxcLxZX+24rQbTi92f3BF/5mlhQpuPhImlJu
+         Z8YjnaU/lOSovdEdMvYkdWkhnEZN0j1bO+9rPmLnBMxsY6/csYhsOSMhslh+UVHDg7vj
+         5C+w==
+X-Gm-Message-State: APjAAAVqHWxvJJrx4iXfVxa6YVbboRxviRdXF2s4GqTlSe5GTT9+PBgo
+        5xo/x4R+lojbPVQN3DkKErYlfRCBVgc=
+X-Google-Smtp-Source: APXvYqyAxXEpuuwBnkOn5ajqNvMzByugHaLshhAj47Yby8k48PQKgkVk+C5JSqyUBV/nfJTLWCPh+g==
+X-Received: by 2002:adf:fe89:: with SMTP id l9mr16090839wrr.368.1573844895823;
+        Fri, 15 Nov 2019 11:08:15 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id x7sm14914115wrg.63.2019.11.15.11.08.14
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2019 11:08:14 -0800 (PST)
+Message-ID: <5dcef79e.1c69fb81.22607.7bbc@mx.google.com>
+Date:   Fri, 15 Nov 2019 11:08:14 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <c49752fe-4b47-2329-2cb8-caad44803e3a@infradead.org>
-User-Agent: NeoMutt/20180716
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
-X-MC-Unique: hWEbCo_AMMG0C_3DEUsPiQ-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191115
+Subject: next/master boot: 177 boots: 6 failed, 171 passed (next-20191115)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 08:02:30AM -0800, Randy Dunlap wrote:
-> On 11/15/19 12:05 AM, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Changes since 20191114:
-> >=20
->=20
-> on x86_64:
->=20
-> already reported and Josh supplied a fix (yet unmerged),
-> but this is still around:
->=20
-> kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable=
- instruction
+next/master boot: 177 boots: 6 failed, 171 passed (next-20191115)
 
-My apologies, I have a growing backlog of objtool fixes which I hope to
-post next week.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191115/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191115/
 
->=20
-> new AFAIK:
->=20
-> drivers/gpu/drm/bridge/cdns-dsi.o: warning: objtool: cdns_dsi_bridge_enab=
-le()+0x3e0: unreachable instruction
->=20
-> obj file for latter one is attached.
+Tree: next
+Branch: master
+Git Describe: next-20191115
+Git Commit: 5a6fcbeabe3e20459ed8504690b2515dacc5246f
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 60 unique boards, 18 SoC families, 22 builds out of 216
 
-This seems fishy.  cdns_dsi_init_link() never returns, it always dies a
-with UD2.  I bet GCC decided that it always does a divide-by-zero, and
-so it forces a crash as a result.  Will try to dig deeper next week...
+Boot Regressions Detected:
 
---=20
-Josh
+i386:
 
+    i386_defconfig:
+        gcc-8:
+          qemu_i386:
+              lab-baylibre: new failure (last pass: next-20191114)
+              lab-collabora: new failure (last pass: next-20191114)
+
+    i386_defconfig+kselftest:
+        gcc-8:
+          qemu_i386:
+              lab-baylibre: new failure (last pass: next-20191114)
+              lab-collabora: new failure (last pass: next-20191114)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        clang-8:
+            msm8998-mtp: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+
+i386:
+    i386_defconfig+kselftest:
+        gcc-8:
+            qemu_i386: 2 failed labs
+
+    i386_defconfig:
+        gcc-8:
+            qemu_i386: 2 failed labs
+
+---
+For more info write to <info@kernelci.org>

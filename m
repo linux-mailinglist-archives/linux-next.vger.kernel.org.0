@@ -2,72 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DF640FD3DA
-	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 06:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F402CFD466
+	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 06:32:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725774AbfKOFDX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Nov 2019 00:03:23 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54151 "EHLO ozlabs.org"
+        id S1727145AbfKOFcG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Nov 2019 00:32:06 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33693 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725773AbfKOFDX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 15 Nov 2019 00:03:23 -0500
+        id S1725848AbfKOFcF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 15 Nov 2019 00:32:05 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47DmT34pVtz9sP3;
-        Fri, 15 Nov 2019 16:03:19 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Dn6B3gCbz9sP4;
+        Fri, 15 Nov 2019 16:32:02 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1573794200;
-        bh=OAFeKSF/yqSzlXgKP5uS38QWQaYi2GwZ+7FrnVq8BjU=;
+        s=201702; t=1573795922;
+        bh=EgmmEVk62/FPNnUYLxtc9tGZBgbgflsJT0JxSgS/3HQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=iZ8+aNotzcw9TY7qLrODyOb6zrReInMG0lEW+SoNA/r5Q1KTi1CM+bQBUPbVWTerv
-         y/hdcXHwB/qgAducPo2liy1espz6bAWOQspMJboGGi804qqrVGIszNKgkev+lypPpb
-         A1ge+12/a6wIQWrKwcydY9bUOfoQ+QP3goQExyywDuIyFdwgdunxSnQJjPKTvTWIMP
-         Cwm0OXLDVKuW+a94UcNVeG/gAf03w6YRv+0M30dWfbbK0hw0Skir5ukeT3IpAXhW94
-         ynlNQcjrB0OF6lj1x8P/FL9CepmJe+5bi0iiiGdkshW5orS1Yt6++Dx+NTSpHD6gIk
-         rIHiPHgc0lsDg==
-Date:   Fri, 15 Nov 2019 16:03:19 +1100
+        b=cIlPkzBzK6ybCrPgG4FhbdHuouA3kXufB+PzTklifJoCxXram8v6rVy3V31q3Di3q
+         uiC2va5pui0fkwyEk4BAtWGKx9VhG2Eb0Zbvg6iGJGb8G4jvQvvIWjlZu9+eiOdRVJ
+         FJxQfx/6JRTdzFOxhWmm5RAhCky7np85WwBuk+3hS6mMdhOi4bNeLZnnN2NWoGbueW
+         1svTb8rqFg7mSauE4HvH72f4HumPLc7obgWmgMhDqnfrbwK/eSdfKVN1OsRYZio39q
+         rEhmZZZKNdnCfrC5t85jNOKg0saELFONgNesjB7wbEWgtbCRq2xdiEYBfcl/fAiGrX
+         hZRcq6UoJpHVw==
+Date:   Fri, 15 Nov 2019 16:32:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Joe Lawrence <joe.lawrence@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>
+To:     Christian Brauner <christian@brauner.io>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the livepatching tree with the ftrace
- tree
-Message-ID: <20191115160319.2d84224d@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Adrian Reber <areber@redhat.com>
+Subject: linux-next: manual merge of the pidfd tree with Linus' tree
+Message-ID: <20191115163200.6526ccfa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/eccss_9xX3vHAyOCwFgNRNO";
+Content-Type: multipart/signed; boundary="Sig_/63otFFzaLmS9VxfxmMwYVh+";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/eccss_9xX3vHAyOCwFgNRNO
+--Sig_/63otFFzaLmS9VxfxmMwYVh+
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the livepatching tree got a conflict in:
+Thanks, Christian, for the heads up about this.
 
-  tools/testing/selftests/livepatch/Makefile
+Today's linux-next merge of the pidfd tree got a conflict in:
+
+  include/uapi/linux/sched.h
 
 between commit:
 
-  8c666d2ab576 ("selftests/livepatch: Test interaction with ftrace_enabled")
+  fa729c4df558 ("clone3: validate stack arguments")
 
-from the ftrace tree and commit:
+from Linus' tree and commit:
 
-  ecd25094c5f5 ("livepatch: Selftests of the API for tracking system state =
-changes")
+  fef0d8e4c7a1 ("fork: extend clone3() to support setting a PID")
 
-from the livepatching tree.
+from the pidfd tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -80,34 +76,90 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/livepatch/Makefile
-index 1886d9d94b88,1cf40a9e7185..000000000000
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@@ -5,6 -5,6 +5,7 @@@ TEST_PROGS :=3D=20
-  	test-livepatch.sh \
-  	test-callbacks.sh \
-  	test-shadow-vars.sh \
-- 	test-ftrace.sh
-++	test-ftrace.sh \
-+ 	test-state.sh
- =20
-  include ../lib.mk
+diff --cc include/uapi/linux/sched.h
+index 25b4fa00bad1,2e649cfa07f4..000000000000
+--- a/include/uapi/linux/sched.h
++++ b/include/uapi/linux/sched.h
+@@@ -36,28 -39,38 +39,42 @@@
+  #ifndef __ASSEMBLY__
+  /**
+   * struct clone_args - arguments for the clone3 syscall
+-  * @flags:       Flags for the new process as listed above.
+-  *               All flags are valid except for CSIGNAL and
+-  *               CLONE_DETACHED.
+-  * @pidfd:       If CLONE_PIDFD is set, a pidfd will be
+-  *               returned in this argument.
+-  * @child_tid:   If CLONE_CHILD_SETTID is set, the TID of the
+-  *               child process will be returned in the child's
+-  *               memory.
+-  * @parent_tid:  If CLONE_PARENT_SETTID is set, the TID of
+-  *               the child process will be returned in the
+-  *               parent's memory.
+-  * @exit_signal: The exit_signal the parent process will be
+-  *               sent when the child exits.
+-  * @stack:       Specify the location of the stack for the
+-  *               child process.
+-  *               Note, @stack is expected to point to the
+-  *               lowest address. The stack direction will be
+-  *               determined by the kernel and set up
+-  *               appropriately based on @stack_size.
+-  * @stack_size:  The size of the stack for the child process.
+-  * @tls:         If CLONE_SETTLS is set, the tls descriptor
+-  *               is set to tls.
++  * @flags:        Flags for the new process as listed above.
++  *                All flags are valid except for CSIGNAL and
++  *                CLONE_DETACHED.
++  * @pidfd:        If CLONE_PIDFD is set, a pidfd will be
++  *                returned in this argument.
++  * @child_tid:    If CLONE_CHILD_SETTID is set, the TID of the
++  *                child process will be returned in the child's
++  *                memory.
++  * @parent_tid:   If CLONE_PARENT_SETTID is set, the TID of
++  *                the child process will be returned in the
++  *                parent's memory.
++  * @exit_signal:  The exit_signal the parent process will be
++  *                sent when the child exits.
++  * @stack:        Specify the location of the stack for the
++  *                child process.
+++ *                Note, @stack is expected to point to the
+++ *                lowest address. The stack direction will be
+++ *                determined by the kernel and set up
+++ *                appropriately based on @stack_size.
++  * @stack_size:   The size of the stack for the child process.
++  * @tls:          If CLONE_SETTLS is set, the tls descriptor
++  *                is set to tls.
++  * @set_tid:      Pointer to an array of type *pid_t. The size
++  *                of the array is defined using @set_tid_size.
++  *                This array is used select PIDs/TIDs for newly
++  *                created processes. The first element in this
++  *                defines the PID in the most nested PID
++  *                namespace. Each additional element in the array
++  *                defines the PID in the parent PID namespace of
++  *                the original PID namespace. If the array has
++  *                less entries than the number of currently
++  *                nested PID namespaces only the PIDs in the
++  *                corresponding namespaces are set.
++  * @set_tid_size: This defines the size of the array referenced
++  *                in @set_tid. This cannot be larger than the
++  *                kernel's limit of nested PID namespaces.
+   *
+   * The structure is versioned by size and thus extensible.
+   * New struct members must go at the end of the struct and
 
---Sig_/eccss_9xX3vHAyOCwFgNRNO
+--Sig_/63otFFzaLmS9VxfxmMwYVh+
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3OMZcACgkQAVBC80lX
-0GyHmQf/cz1NtlRPqaLLVIA6avaiLzK767nq/yA9qj0HU6KxxIwyDT0geGObPIEM
-yin7xkG+q6p7Ivl5iIJurhwfrQ53uOlqj7eHYzUvzQlcnTKfMdhn2IfqBBcHxUC/
-N3mLd57Bv94xRe8v1SYwIiGwuue/TYOVEvidvJAG14BWHoRCt4RIUreQtXn6zx49
-YyQjtxXsBCFGuk7XPw0emsY6PBgfOUg1sepWAACgZwdSDRr6KydnZq4m7uQ+jKI4
-Ey0yOO4gFOU2lu4MpAXCokS8cbTkNlsCcCQc3kHS/BXyOqr7MLDzofuPmJIYCrwy
-ARMxyzP/NnivzaMVmwG2Hk3Iad1/mw==
-=lDdk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3OOFAACgkQAVBC80lX
+0GwJJQf/WtMyIw1DdBpnWQ7UStJWZtiNh7Atco5Y2+O0MV0bSc2DtUZOsvZFHyhS
+byaPj00joRIalmYVPTivIyzpZmo+vo1QfPmmz0RM4fif/pFTaRRKt6rEbXDtAD6B
+x2b+dmFbmhx9o5ts/8wgHzyJPZDL8/pnBWWAbf8DKe254LFKcDnbnSHetT7Pnr0x
+GBkcOYIeCb/cNKDWNlRRcyrE0wAoAP3YpK/hHlWSGyku7lgQ+WSROX7qng/rSIqF
+kIFRzwlPGWhTzIyPHhEr1Jc+VUhijE4UAKdk6ydewJxGhwAq3dkVgmybmqdSUl26
+2BzJJKxaz8gLDCT3hl6aa2/O23Stbg==
+=SrZM
 -----END PGP SIGNATURE-----
 
---Sig_/eccss_9xX3vHAyOCwFgNRNO--
+--Sig_/63otFFzaLmS9VxfxmMwYVh+--

@@ -2,3590 +2,404 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F506FE1A1
-	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 16:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E6CBFE22F
+	for <lists+linux-next@lfdr.de>; Fri, 15 Nov 2019 17:02:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727540AbfKOPi5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 Nov 2019 10:38:57 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:37698 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727504AbfKOPi4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Nov 2019 10:38:56 -0500
-Received: by mail-wr1-f65.google.com with SMTP id t1so11467472wrv.4
-        for <linux-next@vger.kernel.org>; Fri, 15 Nov 2019 07:38:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=pgcKeWDTcQ/BJm2PKHKcVn75/fYMymOblle9esCY+Qw=;
-        b=yUaznF7ilI90JVzTsHAIqjS8T9T1/y/QB9UcVkuhrD9LRHA2hzRcmL/aXBFGdJpeaM
-         mhpqCOnqJm3PLqUlBERnqfkF6f4gwd4W7KjB3Fc8yUx9s1isFq3HflX2ZRjtt5RiqPRy
-         iURuubemGMgvHh/+O5beO3EX5soQt/ODC4wP9re2x3xjYHOvxdNk/ME5T1esRnyxvpje
-         wt85nn3kkaEs4hZUdjenYciSbFZMyfQ7yAnagMZ39vBpHh0hqE0UZ5NAX64egkkQQfWE
-         KZsXAMhAwAyZ5G182oO+8qIPRgjW8Q7/YbO5K+WISzmglfBuyRCAOqQM0oqVz9Si1F1A
-         TCHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=pgcKeWDTcQ/BJm2PKHKcVn75/fYMymOblle9esCY+Qw=;
-        b=JNp9HGcqdWY7TtZQT+pk0IKD10XaZypM24tajFLPgppeSKvWHoZL6s9Ze2B2pBsm2w
-         VMEUOaaurjF1nzRh+2rFURqx27P5ymqSlW+iOITsD6ElIGgnpCZPJZbNvS7xanp3gt6W
-         2u/LsJI0m/PJN6HbMyQuWwI00TqA1ah+8aBDVdKTbNvEKhJGkfA1r4KD839wDVWJeF13
-         7wSug54pS7JRCcjDR/D07dE0UZmBZxYrAJZ+r6AfBs2z2BuvoPyIomUNZsR9DgFRQcAo
-         1XvUUZLMGX7yoLc07qg3nj0zOLkmf3wkdZmC/5B8PZkG3mZZ09YdORthhS0fuPe7D6AU
-         LQLg==
-X-Gm-Message-State: APjAAAWErPwC2WZXqv0ySNpahhgvlBAdzgZnQpZ6mmlaBlZWWa8uN7Vq
-        8CiK2/1kJg7fezNpmIdsIlu3iQfQoVp/UA==
-X-Google-Smtp-Source: APXvYqzykJOAPJQD37ihAK+xKZLFtUzG6ouaodALQMn/FAyyeN1rCjSe06MLgYmSKSKWujgd2dTS3A==
-X-Received: by 2002:adf:9d88:: with SMTP id p8mr16649795wre.286.1573832325758;
-        Fri, 15 Nov 2019 07:38:45 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id g4sm11016839wru.75.2019.11.15.07.38.42
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Nov 2019 07:38:43 -0800 (PST)
-Message-ID: <5dcec683.1c69fb81.322d4.5bf4@mx.google.com>
-Date:   Fri, 15 Nov 2019 07:38:43 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727504AbfKOQCe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 Nov 2019 11:02:34 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:42260 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727423AbfKOQCe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 15 Nov 2019 11:02:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Type:In-Reply-To:MIME-Version
+        :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=o/Kd7uOITc3rnHsKmEF+ZZoGPRwzoW8uSf9WdDdKUoY=; b=BL5MLpkw+SgVTsPAalBOPrNBL
+        /pWptgnU/td6qCjqxfJnIWtwq1G4Ewm8n6BQB18vPPexPvNeucRE1nxJdwyo2KyMTY8C7mkM15kqp
+        Qk880nlmIUD5P63OFRxFmkGWYrdyAnSurDX+fWzguIFOdumvipy2kiEwi0sSdDUzizO84ImeGvUvW
+        sL0WUBbTg6w2MnYXRaG6Dd6qjnwF7W83Czx2EXZFroqavKlIOtlVJS8DMyOw3cQp+nz6/vLuThjQ+
+        iUXNuiJCb83vqeEods00vwMJb8fGeckW7EL8DLoX+iQU1cXIHtgawOUpUCFy4Gu5lo5bcSg6PjRSY
+        5J1mjfzdQ==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iVe3L-0004wL-8z; Fri, 15 Nov 2019 16:02:31 +0000
+Subject: Re: linux-next: Tree for Nov 15 (objtool)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20191115190525.77efdf6c@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <c49752fe-4b47-2329-2cb8-caad44803e3a@infradead.org>
+Date:   Fri, 15 Nov 2019 08:02:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: next-20191115
-Subject: next/master build: 216 builds: 3 failed, 213 passed, 11 errors,
- 866 warnings (next-20191115)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20191115190525.77efdf6c@canb.auug.org.au>
+Content-Type: multipart/mixed;
+ boundary="------------448EDADED42ACF119772B2D7"
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 216 builds: 3 failed, 213 passed, 11 errors, 866 warning=
-s (next-20191115)
-
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191115/
-
-Tree: next
-Branch: master
-Git Describe: next-20191115
-Git Commit: 5a6fcbeabe3e20459ed8504690b2515dacc5246f
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm:
-    allmodconfig: (gcc-8) FAIL
-    pxa_defconfig: (gcc-8) FAIL
-
-mips:
-    cavium_octeon_defconfig: (gcc-8) FAIL
-
-Errors and Warnings Detected:
-
-arc:
-    allnoconfig (gcc-8): 1 warning
-    axs103_defconfig (gcc-8): 3 warnings
-    axs103_smp_defconfig (gcc-8): 3 warnings
-    haps_hs_defconfig (gcc-8): 2 warnings
-    haps_hs_smp_defconfig (gcc-8): 2 warnings
-    hsdk_defconfig (gcc-8): 3 warnings
-    nsimosci_hs_defconfig (gcc-8): 2 warnings
-    nsimosci_hs_smp_defconfig (gcc-8): 2 warnings
-    tinyconfig (gcc-8): 1 warning
-    vdk_hs38_defconfig (gcc-8): 2 warnings
-    vdk_hs38_smp_defconfig (gcc-8): 2 warnings
-
-arm64:
-    allmodconfig (clang-8): 64 warnings
-    allmodconfig (gcc-8): 4 warnings
-    allnoconfig (clang-8): 4 warnings
-    defconfig (clang-8): 4 warnings
-
-arm:
-    allmodconfig (gcc-8): 1 error, 20 warnings
-    am200epdkit_defconfig (gcc-8): 1 warning
-    aspeed_g4_defconfig (gcc-8): 19 warnings
-    aspeed_g5_defconfig (gcc-8): 19 warnings
-    at91_dt_defconfig (gcc-8): 2 warnings
-    axm55xx_defconfig (gcc-8): 2 warnings
-    badge4_defconfig (gcc-8): 1 warning
-    bcm2835_defconfig (gcc-8): 1 warning
-    cerfcube_defconfig (gcc-8): 1 warning
-    cm_x2xx_defconfig (gcc-8): 2 warnings
-    cm_x300_defconfig (gcc-8): 2 warnings
-    cns3420vb_defconfig (gcc-8): 1 warning
-    colibri_pxa270_defconfig (gcc-8): 1 warning
-    colibri_pxa300_defconfig (gcc-8): 2 warnings
-    davinci_all_defconfig (gcc-8): 2 warnings
-    dove_defconfig (gcc-8): 2 warnings
-    em_x270_defconfig (gcc-8): 2 warnings
-    ep93xx_defconfig (gcc-8): 2 warnings
-    eseries_pxa_defconfig (gcc-8): 2 warnings
-    exynos_defconfig (gcc-8): 18 warnings
-    ezx_defconfig (gcc-8): 14 warnings
-    h5000_defconfig (gcc-8): 1 warning
-    hisi_defconfig (gcc-8): 1 warning
-    imote2_defconfig (gcc-8): 14 warnings
-    imx_v4_v5_defconfig (gcc-8): 18 warnings
-    imx_v6_v7_defconfig (gcc-8): 14 warnings
-    integrator_defconfig (gcc-8): 1 warning
-    iop32x_defconfig (gcc-8): 1 warning
-    ixp4xx_defconfig (gcc-8): 2 warnings
-    keystone_defconfig (gcc-8): 18 warnings
-    lart_defconfig (gcc-8): 1 warning
-    lpc32xx_defconfig (gcc-8): 1 warning
-    magician_defconfig (gcc-8): 1 warning
-    milbeaut_m10v_defconfig (gcc-8): 17 warnings
-    mini2440_defconfig (gcc-8): 2 warnings
-    mmp2_defconfig (gcc-8): 2 warnings
-    moxart_defconfig (gcc-8): 13 warnings
-    multi_v5_defconfig (gcc-8): 2 warnings
-    multi_v7_defconfig (gcc-8): 17 warnings
-    multi_v7_defconfig (gcc-8): 17 warnings
-    multi_v7_defconfig (gcc-8): 17 warnings
-    multi_v7_defconfig (gcc-8): 17 warnings
-    multi_v7_defconfig (gcc-8): 2 warnings
-    mv78xx0_defconfig (gcc-8): 18 warnings
-    mvebu_v5_defconfig (gcc-8): 2 warnings
-    mvebu_v7_defconfig (gcc-8): 17 warnings
-    mxs_defconfig (gcc-8): 18 warnings
-    nhk8815_defconfig (gcc-8): 2 warnings
-    omap1_defconfig (gcc-8): 17 warnings
-    omap2plus_defconfig (gcc-8): 17 warnings
-    orion5x_defconfig (gcc-8): 2 warnings
-    oxnas_v6_defconfig (gcc-8): 17 warnings
-    palmz72_defconfig (gcc-8): 2 warnings
-    pcm027_defconfig (gcc-8): 2 warnings
-    pleb_defconfig (gcc-8): 1 warning
-    prima2_defconfig (gcc-8): 1 warning
-    pxa168_defconfig (gcc-8): 1 warning
-    pxa3xx_defconfig (gcc-8): 1 warning
-    pxa910_defconfig (gcc-8): 1 warning
-    pxa_defconfig (gcc-8): 1 error, 21 warnings
-    qcom_defconfig (gcc-8): 18 warnings
-    realview_defconfig (gcc-8): 1 warning
-    rpc_defconfig (gcc-8): 1 warning
-    s3c2410_defconfig (gcc-8): 1 warning
-    s3c6400_defconfig (gcc-8): 2 warnings
-    s5pv210_defconfig (gcc-8): 2 warnings
-    sama5_defconfig (gcc-8): 2 warnings
-    shmobile_defconfig (gcc-8): 15 warnings
-    simpad_defconfig (gcc-8): 1 warning
-    socfpga_defconfig (gcc-8): 19 warnings
-    spear13xx_defconfig (gcc-8): 2 warnings
-    spear3xx_defconfig (gcc-8): 1 warning
-    spear6xx_defconfig (gcc-8): 1 warning
-    spitz_defconfig (gcc-8): 1 warning
-    stm32_defconfig (gcc-8): 1 warning
-    sunxi_defconfig (gcc-8): 2 warnings
-    tango4_defconfig (gcc-8): 2 warnings
-    tegra_defconfig (gcc-8): 17 warnings
-    trizeps4_defconfig (gcc-8): 2 warnings
-    u300_defconfig (gcc-8): 1 warning
-    u8500_defconfig (gcc-8): 2 warnings
-    versatile_defconfig (gcc-8): 1 warning
-    vexpress_defconfig (gcc-8): 17 warnings
-    vf610m4_defconfig (gcc-8): 1 warning
-    viper_defconfig (gcc-8): 2 warnings
-    vt8500_v6_v7_defconfig (gcc-8): 1 warning
-    xcep_defconfig (gcc-8): 1 warning
-    zeus_defconfig (gcc-8): 2 warnings
-    zx_defconfig (gcc-8): 1 warning
-
-i386:
-    i386_defconfig (gcc-8): 16 warnings
-    i386_defconfig (gcc-8): 1 warning
-
-mips:
-    32r2el_defconfig (gcc-8): 1 warning
-    32r2el_defconfig (gcc-8): 2 warnings
-    bmips_be_defconfig (gcc-8): 1 warning
-    bmips_stb_defconfig (gcc-8): 1 warning
-    capcella_defconfig (gcc-8): 1 warning
-    cavium_octeon_defconfig (gcc-8): 9 errors, 8 warnings
-    ci20_defconfig (gcc-8): 1 warning
-    cobalt_defconfig (gcc-8): 1 warning
-    db1xxx_defconfig (gcc-8): 1 warning
-    decstation_64_defconfig (gcc-8): 1 warning
-    decstation_defconfig (gcc-8): 1 warning
-    decstation_r4k_defconfig (gcc-8): 1 warning
-    e55_defconfig (gcc-8): 1 warning
-    fuloong2e_defconfig (gcc-8): 16 warnings
-    gpr_defconfig (gcc-8): 15 warnings
-    ip27_defconfig (gcc-8): 1 warning
-    ip32_defconfig (gcc-8): 15 warnings
-    jazz_defconfig (gcc-8): 1 warning
-    lasat_defconfig (gcc-8): 1 warning
-    lemote2f_defconfig (gcc-8): 15 warnings
-    loongson1b_defconfig (gcc-8): 1 warning
-    loongson1c_defconfig (gcc-8): 1 warning
-    malta_kvm_defconfig (gcc-8): 16 warnings
-    malta_qemu_32r6_defconfig (gcc-8): 1 warning
-    markeins_defconfig (gcc-8): 1 warning
-    mips_paravirt_defconfig (gcc-8): 1 warning
-    mtx1_defconfig (gcc-8): 15 warnings
-    nlm_xlp_defconfig (gcc-8): 1 warning
-    nlm_xlr_defconfig (gcc-8): 1 warning
-    pic32mzda_defconfig (gcc-8): 1 warning
-    pistachio_defconfig (gcc-8): 19 warnings
-    qi_lb60_defconfig (gcc-8): 1 warning
-    rbtx49xx_defconfig (gcc-8): 1 warning
-    rm200_defconfig (gcc-8): 1 warning
-    tb0219_defconfig (gcc-8): 1 warning
-    tb0287_defconfig (gcc-8): 1 warning
-    workpad_defconfig (gcc-8): 1 warning
-
-riscv:
-    defconfig (gcc-8): 1 warning
-    defconfig (gcc-8): 1 warning
-    rv32_defconfig (gcc-8): 7 warnings
-
-x86_64:
-    allmodconfig (gcc-8): 4 warnings
-    tinyconfig (gcc-8): 1 warning
-    x86_64_defconfig (gcc-8): 16 warnings
-    x86_64_defconfig (gcc-8): 16 warnings
-
-Errors summary:
-
-    1    drivers/staging/octeon/ethernet.c:516:29: error: type of formal pa=
-rameter 2 is incomplete
-    1    drivers/staging/octeon/ethernet.c:499:30: error: storage size of '=
-link_info' isn't known
-    1    drivers/staging/octeon/ethernet.c:463:30: error: storage size of '=
-link_info' isn't known
-    1    drivers/staging/octeon/ethernet.c:177:21: error: dereferencing poi=
-nter to incomplete type 'struct cvmx_wqe'
-    1    drivers/staging/octeon/ethernet-mdio.c:84:30: error: storage size =
-of 'link_info' isn't known
-    1    drivers/staging/octeon/ethernet-mdio.c:68:34: error: parameter 2 (=
-'li') has incomplete type
-    1    drivers/staging/octeon/ethernet-mdio.c:127:30: error: type of form=
-al parameter 2 is incomplete
-    1    drivers/staging/octeon/ethernet-mdio.c:109:30: error: storage size=
- of 'link_info' isn't known
-    1    drivers/staging/octeon/ethernet-mdio.c:101:30: error: type of form=
-al parameter 2 is incomplete
-    1    arch/arm/mach-pxa/icontrol.c:92:23: error: 'mcp251x_info' undeclar=
-ed here (not in a function); did you mean 'mcp251x_board_info'?
-    1    ERROR: "__aeabi_uldivmod" [drivers/md/dm-integrity.ko] undefined!
-
-Warnings summary:
-
-    558  kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined b=
-ut not used [-Wunused-function]
-    105  fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-=
-variable]
-    64   WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    20   <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    16   1 warning generated.
-    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    6    2 warnings generated.
-    5    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argu=
-ment of type 'long unsigned int', but argument 5 has type 'unsigned int' [-=
-Wformat=3D]
-    5    3 warnings generated.
-    4    drivers/vhost/vhost.c:2574:1: warning: no return statement in func=
-tion returning non-void [-Wreturn-type]
-    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    3    mm/vmscan.c:2746:42: warning: implicit conversion from enumeration=
- type 'enum lru_list' to different enumeration type 'enum node_stat_item' [=
--Wenum-conversion]
-    3    mm/vmscan.c:2217:37: warning: implicit conversion from enumeration=
- type 'enum lru_list' to different enumeration type 'enum node_stat_item' [=
--Wenum-conversion]
-    3    mm/vmscan.c:2216:39: warning: implicit conversion from enumeration=
- type 'enum lru_list' to different enumeration type 'enum node_stat_item' [=
--Wenum-conversion]
-    2    security/integrity/platform_certs/load_uefi.c:17:19: warning: 'efi=
-_cert_sha256_guid' defined but not used [-Wunused-variable]
-    2    security/integrity/platform_certs/load_uefi.c:15:19: warning: 'efi=
-_cert_x509_sha256_guid' defined but not used [-Wunused-variable]
-    2    security/integrity/platform_certs/load_uefi.c:14:19: warning: 'efi=
-_cert_x509_guid' defined but not used [-Wunused-variable]
-    2    drivers/staging/octeon/octeon-ethernet.h:94:12: warning: 'union cv=
-mx_helper_link_info' declared inside parameter list will not be visible out=
-side of this definition or declaration
-    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
--Wcpp]
-    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
-d [-Wcpp]
-    1    {standard input}:134: Warning: macro instruction expanded into mul=
-tiple instructions
-    1    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable 'rtd' [-=
-Wunused-variable]
-    1    security/integrity/platform_certs/load_uefi.c:17:19: warning: unus=
-ed variable 'efi_cert_sha256_guid' [-Wunused-variable]
-    1    security/integrity/platform_certs/load_uefi.c:15:19: warning: unus=
-ed variable 'efi_cert_x509_sha256_guid' [-Wunused-variable]
-    1    security/integrity/platform_certs/load_uefi.c:14:19: warning: unus=
-ed variable 'efi_cert_x509_guid' [-Wunused-variable]
-    1    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is =
-uninitialized when used within its own initialization [-Wuninitialized]
-    1    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitia=
-lized when used within its own initialization [-Wuninitialized]
-    1    net/netfilter/nf_flow_table_offload.c:80:21: warning: unsigned con=
-version from 'int' to '__be16' {aka 'short unsigned int'} changes value fro=
-m '327680' to '0' [-Woverflow]
-    1    net/netfilter/nf_flow_table_offload.c:290:2: warning: variable 'of=
-fset' is used uninitialized whenever switch default is taken [-Wsometimes-u=
-ninitialized]
-    1    net/netfilter/nf_flow_table_offload.c:279:12: note: initialize the=
- variable 'offset' to silence this warning
-    1    net/netfilter/nf_flow_table_offload.c:264:2: warning: variable 'of=
-fset' is used uninitialized whenever switch default is taken [-Wsometimes-u=
-ninitialized]
-    1    net/netfilter/nf_flow_table_offload.c:253:12: note: initialize the=
- variable 'offset' to silence this warning
-    1    mm/shmem.c:2741:35: warning: variable 'shmem_falloc_waitq' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    1    include/linux/kern_levels.h:5:18: warning: format '%ld' expects ar=
-gument of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned =
-int'} [-Wformat=3D]
-    1    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    1    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized wh=
-en used within its own initialization [-Wuninitialized]
-    1    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when =
-used within its own initialization [-Wuninitialized]
-    1    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when=
- used within its own initialization [-Wuninitialized]
-    1    fs/namei.c:3132:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1    fs/namei.c:1644:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized =
-when used within its own initialization [-Wuninitialized]
-    1    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized w=
-hen used within its own initialization [-Wuninitialized]
-    1    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized=
- when used within its own initialization [-Wuninitialized]
-    1    drivers/vhost/vhost.c:2574:1: warning: control reaches end of non-=
-void function [-Wreturn-type]
-    1    drivers/staging/octeon/ethernet.c:499:30: warning: unused variable=
- 'link_info' [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet.c:463:30: warning: unused variable=
- 'link_info' [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet-mdio.c:84:30: warning: unused vari=
-able 'link_info' [-Wunused-variable]
-    1    drivers/staging/octeon/ethernet-mdio.c:68:12: warning: 'union cvmx=
-_helper_link_info' declared inside parameter list will not be visible outsi=
-de of this definition or declaration
-    1    drivers/staging/octeon/ethernet-mdio.c:109:30: warning: unused var=
-iable 'link_info' [-Wunused-variable]
-    1    drivers/scsi/lpfc/lpfc_sli.c:11909:34: warning: variable 'done_q' =
-is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/lpfc/lpfc_scsi.c:4726:34: warning: variable 'waitq' i=
-s uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1    drivers/net/usb/lan78xx.c:2665:34: warning: variable 'unlink_wakeu=
-p' is uninitialized when used within its own initialization [-Wuninitialize=
-d]
-    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
-integer of different size [-Wpointer-to-int-cast]
-    1    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake'=
- is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake'=
- is uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is unin=
-itialized when used within its own initialization [-Wuninitialized]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:303=
-:53: warning: suggest braces around initialization of subobject [-Wmissing-=
-braces]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:112=
-:62: warning: suggest braces around initialization of subobject [-Wmissing-=
-braces]
-    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:297:4=
-1: warning: suggest braces around initialization of subobject [-Wmissing-br=
-aces]
-    1    drivers/bus/fsl-mc/fsl-mc-bus.c:720:37: warning: suggest braces ar=
-ound initialization of subobject [-Wmissing-braces]
-    1    drivers/bus/fsl-mc/fsl-mc-bus.c:719:37: warning: suggest braces ar=
-ound initialization of subobject [-Wmissing-braces]
-    1    drivers/bus/fsl-mc/fsl-mc-bus.c:718:43: warning: suggest braces ar=
-ound initialization of subobject [-Wmissing-braces]
-    1    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is =
-uninitialized when used within its own initialization [-Wuninitialized]
-    1    drivers/android/binderfs.c:657:41: warning: suggest braces around =
-initialization of subobject [-Wmissing-braces]
-    1    /tmp/ccK3EySn.s:18191: Warning: using r15 results in unpredictable=
- behaviour
-    1    /tmp/ccK3EySn.s:18119: Warning: using r15 results in unpredictable=
- behaviour
-    1    .config:1171:warning: override: UNWINDER_GUESS changes choice state
-
-Section mismatches summary:
-
-    5    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    3    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    3    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x7c8): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in refe=
-rence from the function free_memmap() to the function .meminit.text:membloc=
-k_free()
-    1    WARNING: vmlinux.o(.text.unlikely+0x3980): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-    1    WARNING: vmlinux.o(.text.unlikely+0x363c): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnin=
-gs, 0 section mismatches
-
-Warnings:
-    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argument =
-of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wform=
-at=3D]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 64 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    drivers/android/binderfs.c:657:41: warning: suggest braces around initi=
-alization of subobject [-Wmissing-braces]
-    1 warning generated.
-    mm/shmem.c:2741:35: warning: variable 'shmem_falloc_waitq' is uninitial=
-ized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    mm/vmscan.c:2216:39: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2217:37: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2746:42: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    3 warnings generated.
-    security/integrity/platform_certs/load_uefi.c:14:19: warning: unused va=
-riable 'efi_cert_x509_guid' [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:15:19: warning: unused va=
-riable 'efi_cert_x509_sha256_guid' [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:17:19: warning: unused va=
-riable 'efi_cert_sha256_guid' [-Wunused-variable]
-    3 warnings generated.
-    drivers/bus/fsl-mc/fsl-mc-bus.c:718:43: warning: suggest braces around =
-initialization of subobject [-Wmissing-braces]
-    drivers/bus/fsl-mc/fsl-mc-bus.c:719:37: warning: suggest braces around =
-initialization of subobject [-Wmissing-braces]
-    drivers/bus/fsl-mc/fsl-mc-bus.c:720:37: warning: suggest braces around =
-initialization of subobject [-Wmissing-braces]
-    3 warnings generated.
-    fs/proc/base.c:1894:35: warning: variable 'wq' is uninitialized when us=
-ed within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitialized w=
-hen used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/namei.c:1644:34: warning: variable 'wq' is uninitialized when used w=
-ithin its own initialization [-Wuninitialized]
-    fs/namei.c:3132:34: warning: variable 'wq' is uninitialized when used w=
-ithin its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized when=
- used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is uninitial=
-ized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/cifs/readdir.c:83:34: warning: variable 'wq' is uninitialized when u=
-sed within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized when =
-used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitialized=
- when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is unini=
-tialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    fs/nfs/dir.c:448:34: warning: variable 'wq' is uninitialized when used =
-within its own initialization [-Wuninitialized]
-    fs/nfs/dir.c:1499:34: warning: variable 'wq' is uninitialized when used=
- within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake' is u=
-ninitialized when used within its own initialization [-Wuninitialized]
-    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake' is u=
-ninitialized when used within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    net/netfilter/nf_flow_table_offload.c:264:2: warning: variable 'offset'=
- is used uninitialized whenever switch default is taken [-Wsometimes-uninit=
-ialized]
-    net/netfilter/nf_flow_table_offload.c:253:12: note: initialize the vari=
-able 'offset' to silence this warning
-    net/netfilter/nf_flow_table_offload.c:290:2: warning: variable 'offset'=
- is used uninitialized whenever switch default is taken [-Wsometimes-uninit=
-ialized]
-    net/netfilter/nf_flow_table_offload.c:279:12: note: initialize the vari=
-able 'offset' to silence this warning
-    2 warnings generated.
-    drivers/net/usb/lan78xx.c:2665:34: warning: variable 'unlink_wakeup' is=
- uninitialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is uninitiali=
-zed when used within its own initialization [-Wuninitialized]
-    2 warnings generated.
-    drivers/scsi/lpfc/lpfc_sli.c:11909:34: warning: variable 'done_q' is un=
-initialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/scsi/lpfc/lpfc_scsi.c:4726:34: warning: variable 'waitq' is uni=
-nitialized when used within its own initialization [-Wuninitialized]
-    1 warning generated.
-    drivers/vhost/vhost.c:2574:1: warning: control reaches end of non-void =
-function [-Wreturn-type]
-    1 warning generated.
-    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:112:62: =
-warning: suggest braces around initialization of subobject [-Wmissing-brace=
-s]
-    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:303:53: =
-warning: suggest braces around initialization of subobject [-Wmissing-brace=
-s]
-    2 warnings generated.
-    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:297:41: wa=
-rning: suggest braces around initialization of subobject [-Wmissing-braces]
-    1 warning generated.
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    security/integrity/platform_certs/load_uefi.c:17:19: warning: 'efi_cert=
-_sha256_guid' defined but not used [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:15:19: warning: 'efi_cert=
-_x509_sha256_guid' defined but not used [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:14:19: warning: 'efi_cert=
-_x509_guid' defined but not used [-Wunused-variable]
-    drivers/vhost/vhost.c:2574:1: warning: no return statement in function =
-returning non-void [-Wreturn-type]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section=
- mismatches
-
-Warnings:
-    security/integrity/platform_certs/load_uefi.c:17:19: warning: 'efi_cert=
-_sha256_guid' defined but not used [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:15:19: warning: 'efi_cert=
-_x509_sha256_guid' defined but not used [-Wunused-variable]
-    security/integrity/platform_certs/load_uefi.c:14:19: warning: 'efi_cert=
-_x509_guid' defined but not used [-Wunused-variable]
-    drivers/vhost/vhost.c:2574:1: warning: no return statement in function =
-returning non-void [-Wreturn-type]
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 20 warnings, 0 section m=
-ismatches
-
-Errors:
-    ERROR: "__aeabi_uldivmod" [drivers/md/dm-integrity.ko] undefined!
-
-Warnings:
-    /tmp/ccK3EySn.s:18119: Warning: using r15 results in unpredictable beha=
-viour
-    /tmp/ccK3EySn.s:18191: Warning: using r15 results in unpredictable beha=
-viour
-    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argument =
-of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wform=
-at=3D]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
-er of different size [-Wpointer-to-int-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    net/netfilter/nf_flow_table_offload.c:80:21: warning: unsigned conversi=
-on from 'int' to '__be16' {aka 'short unsigned int'} changes value from '32=
-7680' to '0' [-Woverflow]
-    drivers/vhost/vhost.c:2574:1: warning: no return statement in function =
-returning non-void [-Wreturn-type]
-    include/linux/kern_levels.h:5:18: warning: format '%ld' expects argumen=
-t of type 'long int', but argument 5 has type 'size_t' {aka 'unsigned int'}=
- [-Wformat=3D]
-
----------------------------------------------------------------------------=
------
-allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    mm/vmscan.c:2216:39: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2217:37: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2746:42: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    3 warnings generated.
-
----------------------------------------------------------------------------=
------
-allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 19 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 19 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 FAIL, 9 errors, 8 warnings,=
- 0 section mismatches
-
-Errors:
-    drivers/staging/octeon/ethernet.c:177:21: error: dereferencing pointer =
-to incomplete type 'struct cvmx_wqe'
-    drivers/staging/octeon/ethernet.c:463:30: error: storage size of 'link_=
-info' isn't known
-    drivers/staging/octeon/ethernet.c:499:30: error: storage size of 'link_=
-info' isn't known
-    drivers/staging/octeon/ethernet.c:516:29: error: type of formal paramet=
-er 2 is incomplete
-    drivers/staging/octeon/ethernet-mdio.c:68:34: error: parameter 2 ('li')=
- has incomplete type
-    drivers/staging/octeon/ethernet-mdio.c:84:30: error: storage size of 'l=
-ink_info' isn't known
-    drivers/staging/octeon/ethernet-mdio.c:101:30: error: type of formal pa=
-rameter 2 is incomplete
-    drivers/staging/octeon/ethernet-mdio.c:109:30: error: storage size of '=
-link_info' isn't known
-    drivers/staging/octeon/ethernet-mdio.c:127:30: error: type of formal pa=
-rameter 2 is incomplete
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    drivers/staging/octeon/octeon-ethernet.h:94:12: warning: 'union cvmx_he=
-lper_link_info' declared inside parameter list will not be visible outside =
-of this definition or declaration
-    drivers/staging/octeon/ethernet.c:463:30: warning: unused variable 'lin=
-k_info' [-Wunused-variable]
-    drivers/staging/octeon/ethernet.c:499:30: warning: unused variable 'lin=
-k_info' [-Wunused-variable]
-    drivers/staging/octeon/octeon-ethernet.h:94:12: warning: 'union cvmx_he=
-lper_link_info' declared inside parameter list will not be visible outside =
-of this definition or declaration
-    drivers/staging/octeon/ethernet-mdio.c:68:12: warning: 'union cvmx_help=
-er_link_info' declared inside parameter list will not be visible outside of=
- this definition or declaration
-    drivers/staging/octeon/ethernet-mdio.c:84:30: warning: unused variable =
-'link_info' [-Wunused-variable]
-    drivers/staging/octeon/ethernet-mdio.c:109:30: warning: unused variable=
- 'link_info' [-Wunused-variable]
-
----------------------------------------------------------------------------=
------
-cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings,=
- 0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x3980): Section mismatch in referenc=
-e from the function pmax_setup_memory_region() to the function .init.text:a=
-dd_memory_region()
-
----------------------------------------------------------------------------=
------
-decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x363c): Section mismatch in referenc=
-e from the function pmax_setup_memory_region() to the function .init.text:a=
-dd_memory_region()
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
-matches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 section =
-mismatches
-
-Warnings:
-    mm/vmscan.c:2216:39: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2217:37: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    mm/vmscan.c:2746:42: warning: implicit conversion from enumeration type=
- 'enum lru_list' to different enumeration type 'enum node_stat_item' [-Wenu=
-m-conversion]
-    3 warnings generated.
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x710): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 14 warnings, 0 section=
- mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 =
-section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 15 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
- mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
- 0 section mismatches
-
-Warnings:
-    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argument =
-of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wform=
-at=3D]
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 14 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 14 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 15 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x7c8): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-lasat_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 15 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
-ection mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 =
-section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    drivers/vhost/vhost.c:2574:1: warning: no return statement in function =
-returning non-void [-Wreturn-type]
-
----------------------------------------------------------------------------=
------
-malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
-, 0 section mismatches
-
-Warnings:
-    {standard input}:134: Warning: macro instruction expanded into multiple=
- instructions
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings,=
- 0 section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mips_paravirt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
-0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 13 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-msp71xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 15 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
- errors, 17 warnings, 0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
-=94 PASS, 0 errors, 17 warnings, 0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17=
- warnings, 0 section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warni=
-ngs, 0 section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argument =
-of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wform=
-at=3D]
-
----------------------------------------------------------------------------=
------
-mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/btrfs/tree-checker.c:230:43: warning: format '%lu' expects argument =
-of type 'long unsigned int', but argument 5 has type 'unsigned int' [-Wform=
-at=3D]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
-section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings=
-, 0 section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 19 warnings, 0 =
-section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x840): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-pxa_defconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 21 warnings, 0 section =
-mismatches
-
-Errors:
-    arch/arm/mach-pxa/icontrol.c:92:23: error: 'mcp251x_info' undeclared he=
-re (not in a function); did you mean 'mcp251x_board_info'?
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 18 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable 'rtd' [-Wunus=
-ed-variable]
-
----------------------------------------------------------------------------=
------
-realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
-cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
-    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
-cpp]
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
-0 section mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x8c4): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 15 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
-Section mismatches:
-    WARNING: vmlinux.o(.text.unlikely+0x84c): Section mismatch in reference=
- from the function free_memmap() to the function .meminit.text:memblock_fre=
-e()
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 19 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
-matches
-
----------------------------------------------------------------------------=
------
-tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
-atches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    .config:1171:warning: override: UNWINDER_GUESS changes choice state
-
----------------------------------------------------------------------------=
------
-tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sec=
-tion mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0=
- section mismatches
-
-Warnings:
-    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
-tion mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 17 warnings, 0 se=
-ction mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
-on mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sectio=
-n mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
-section mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 16 war=
-nings, 0 section mismatches
-
-Warnings:
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-    kernel/trace/trace.h:804:13: warning: 'latency_fsnotify' defined but no=
-t used [-Wunused-function]
-
----------------------------------------------------------------------------=
------
-xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
-mismatches
-
-Warnings:
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
- mismatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-    WARNING: "return_address" [vmlinux] is a static EXPORT_SYMBOL_GPL
-
----------------------------------------------------------------------------=
------
-zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
-smatches
-
-Warnings:
-    fs/ext4/super.c:2068:23: warning: unused variable 'sbi' [-Wunused-varia=
-ble]
-
----
-For more info write to <info@kernelci.org>
+This is a multi-part message in MIME format.
+--------------448EDADED42ACF119772B2D7
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 7bit
+
+On 11/15/19 12:05 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191114:
+> 
+
+on x86_64:
+
+already reported and Josh supplied a fix (yet unmerged),
+but this is still around:
+
+kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction
+
+new AFAIK:
+
+drivers/gpu/drm/bridge/cdns-dsi.o: warning: objtool: cdns_dsi_bridge_enable()+0x3e0: unreachable instruction
+
+obj file for latter one is attached.
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+--------------448EDADED42ACF119772B2D7
+Content-Type: application/x-object;
+ name="cdns-dsi.o"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename="cdns-dsi.o"
+
+f0VMRgIBAQAAAAAAAAAAAAEAPgABAAAAAAAAAAAAAAAAAAAAAAAAACg9AAAAAAAAAAAAAEAA
+AAAAAEAAGAAUAOgAAAAASItHeEiLuGABAADoAAAAADHAww8fhAAAAAAA6AAAAABTSItfeEiL
+u2ABAADoAAAAAMaDcAEAAAAxwFvDZmYuDx+EAAAAAAAPH0AA6AAAAABTSIn7SIu/iAAAAOgA
+AAAASI17EL4BAAAA6AAAAAAxwFvDZg8fhAAAAAAA6AAAAABIi0fwi0AEJdH/+f9Ii1fwiUIE
+SItH8ItQDItH+I1IDUjHwP7///9I08Ah0EiLV/CJQgxIi3/QvgUAAADpAAAAAGYuDx+EAAAA
+AADoAAAAAFNIiftIg8cw6AAAAABIg7uAAAAAAHQMSIu7iAAAAOgAAAAAMcBbww8fQADoAAAA
+AEiLRiCLkHgBAAAxwIXSdQLzw0iLRiCLgDgBAAD30iHCSItGIImQOAEAAEiNvggBAADoAAAA
+ALgBAAAAw2ZmLg8fhAAAAAAADx9AAOgAAAAASIN/eAC48P///w+FygAAAPaGuAQAAAIPhb8A
+AABBVkFVSYn2QVRVU0iLB0iJ+4uWrAQAADH2SIu4+AMAAOgAAAAASIXASYnEdFxMiefoAAAA
+AEg9APD//0mJxXdavhAAAABIicfoAAAAAEiJxUyJ5+gAAAAASIH9APD//4nodx1IjXswTIlz
+eEiJq4gAAABMiauAAAAA6AAAAAAxwFtdQVxBXUFew0mLvgAEAADoAAAAAEmJxOuTSYu+AAQA
+AOgAAAAASIXASInFdaJMiefoAAAAALjq////68Pzw7j0/f//w2YPH4QAAAAAAOgAAAAAQVdB
+VkGJzkFVQVRJif1VU0mJ9EiLR3hIidOLqLAEAABIxwIAAAAASMdCCAAAAADHQhAAAAAASItH
+ePaAuAQAAASLgLQEAAB1QIP4A3YZhMkPhDECAACLVki56v///0GLRCRAMfbrVkWE9osMhQAA
+AAAPhSACAACLlogAAABBi4QkgAAAADH26zSD+AN2EoTJD4QhAgAAi1ZIuer////rE0WE9osM
+hQAAAAAPhO8BAACLVkhBi0QkRL4BAAAAKcIPr9GDwgfB6gONQvSD+gu6AAAAAA9GwkCE9olD
+CHQtRYT2D4QaAgAAQYtEJERBK0QkQA+vwYPAB8HoA41Q8oP4DbgAAAAAD0fCiUMERYT2icgP
+hK4BAABBD69EJDyDwAfB6AOJQwxBi0QkQEErRCQ8D6/Bvur///+DwAfB6AONUPqD+AW4AAAA
+AA9HwokDSYtFeIuAtAQAAIP4A3cHizSFAAAAAEFpfCRw6AMAAE2NvZAAAACJ6kyJ+Uhj/+gA
+AAAASYtFeItTCIPCDPaAuAQAAASLuLAEAAB0CYtDBIPADkgBwosDifmNcAaLQwxIAcZIAdYx
+0kiJ8Ej38UgB8Ugp0UiF0kgPRM5FhPYPhBUBAABBaUQkOOgDAABJY1QkSEiYSA+vwQ+v+jHS
+SPf3SIXSD4VAAQAASMHgAzHSSYmF6AAAAIsDiUsQKfC+EAAAAAHITIn5iQNJi714AQAA6AAA
+AACFwHVXi1MISYtNeIPCDPaBuAQAAAR0CYtLBIPBDkgBykWE9kmLtegAAAAPhMUAAABBi0wk
+QEErTCQ8SA+vzkgPr+lJY0wkOEhp0ugDAABID6/RSDnqD4e5AAAAW11BXEFdQV5BX8OLlogA
+AAC56v///+nm/f//i1ZI6b/9//+LlogAAABBi4QkhAAAAL4BAAAA6Qb+//+LlogAAAC56v//
+/+vhQQ+vRCR0g8AHwegDiUMMQYuEJIAAAABBK0QkdOlK/v//QWlEJHDoAwAASWOUJIgAAABI
+mEgPr8Hp4/7//0GLhCSEAAAAQSuEJIAAAADp2/3//0GLjCSAAAAAQStMJHRID6/OSA+v6Ulj
+TCRw6TP///+46v///+k9////ZmYuDx+EAAAAAACQ6AAAAACLRliLVlwpwoP6AX5rK0ZUg/gB
+fmNIi0dIi5C0BAAAuOr///+D+gN2Ng+vRjyJwrgDAAAAg+IfdT1Ig+wYSIPvMLkBAAAASI1U
+JAToW/z//4P4ARnASIPEGPfQg+D+w4sElQAAAAAPr0Y8icK4AwAAAIPiH3TD88O4BAAAAMNm
+Zi4PH4QAAAAAAGaQ6AAAAABIiwdIifpIi0ggi0BQg+AQhYFwAQAAdA1Ii3dYSIt/COkAAAAA
+uPT9///D6AAAAABBVUyNbxBBVFVTSYn8usANAAC+gAEAAEyJ7+gAAAAASIXAD4QMAgAAMdK+
+AAIAAEyJ50mJhCSIAAAASInF6AAAAABMie9IicboAAAAAEg9APD//0iJRSAPh5QAAAAxyTHS
+SMeFWAEAAAAAAABBuQEAAABBuAEAAABIx8YAAAAATInv6AAAAABIPQDw//9IiYVgAQAAd1sx
+9kjHhWgBAAAAAAAATInn6AAAAACFwInDeDdIx8YAAAAATInv6AAAAABIPQDw//9IiYV4AQAA
+dyJIi0Ugi4D8AQAAwegUPa0MAAB0Gbvq////idhbXUFcQV3DicOJ2FtdQVxBXcNIi0UgiwCJ
+wboBAAAAg+A/wekNSI29EAEAAImFBAEAAIPhB8eFCAEAAAAAAABIx8YAAAAAg8EC0+KJlQAB
+AABIx8IAAAAA6AAAAABIi1UgMcCJQgRIi1UgiUIMSItVIIlCCEmLlCQIBAAAx0UoAQAAAEjH
+RWgAAAAASIlVSEiLVSCJgjABAABIi1UgiYJIAQAASItVIImCNAEAAEiLVSCJgjgBAABIi1Ug
+iYI8AQAASItVIImCQAEAAEiLVSCJgkQBAABIi1UgiYKgAQAATYtMJGBNhcl0WlVFMcAxyYne
+SMfCAAAAAEyJ7+gAAAAAicOF21gPhfP+//9Mie/oAAAAAEyJbQBIx0UIAAAAAEiJ7+gAAAAA
+hcCJww+Ezf7//74BAAAATInv6AAAAADpu/7//02LTCQQ65+79P///+mq/v//ZmYuDx+EAAAA
+AABmkOgAAAAATItPeEGLsbAEAACD/gF2NYPuATHJMcBBuAEAAABMicJI0+KDwQEJ0DnOdfGJ
+woPKEEH2gbkEAAAED0TCSItXIIlCCA8LMcDr42aQ6AAAAABBV0FWTI1/0EFVQVS+BAAAAFVT
+SIn7SIPsGEiLf9DoAAAAAIXAD4hqAwAASItDCEiNVCQEMclMif9Ii0BQTIuoUAQAAEiLQ0hN
+jXUYRIugsAQAAEyJ9ujw+P//SItT8LjzBwAAiUIQSIu7SAEAAOgAAAAASIu7SAEAADHSvhAA
+AADoAAAAAEiLu0gBAABIjXNg6AAAAABIi7tIAQAA6AAAAABIi1PwuAEAAACJglABAAC48QMA
+AEiLU/CJQhDoAAAAAEiNqKCGAQBIi0Pwi0AkqAF1KOgAAAAASDnFD4zlAgAAvmQAAAC/GgAA
+AOgAAAAASItD8ItAJKgBdNhIi0NIuTAAAABIi1PwK4iwBAAASMfA/////0jT6CUAAO//DfED
+EACJQhCAu0ABAAAAD4SgAgAAi0QkDEiLU/DB4BALRCQIiYLAAAAAi0QkBEiLU/DB4BALRCQQ
+iYLEAAAAQYuNtAAAAEGLhbgAAABIi3PwicpBK5WoAAAAicf30EEDhbwAAAApz4n5g8EBweIM
+CcrB4AYJ0ImGtAAAAEiLU/BBi4WoAAAAiYK4AAAAi0QkFCtEJAhIi0vwjVDsiZHQAAAASItT
+SPaCuAQAAAR0EIPoGkiLU/DB4BCJgvgAAACLRCQUSItL8I1Q9omRzAAAAEiLU0hIi7K4BAAA
+QPbGBHUbg+gQSItT8MHgEImC+AAAAEiLQ0hIi7C4BAAAi0QkFDHSQY1EBP9B9/Qx0onBi0Qk
+CEGNRAT/Qff0KcH3xgACAAAPhF4BAACLs7gAAAAx0ki4AFDW3AEAAABI9/aLk5wAAABIi3Pw
+SInFidADg4wAAAAx0kj39cHgEQnIiYbcAAAATIn36AAAAABIY8i4AMqaO0iZSPf5MdKJwEj3
+9Ug9//8DAInBD4ZUAQAA0em4AQAAAOsOg8AB0emD+BAPhPMAAACB+f//AwB36onKSItz8MHi
+BAnQiUYUSItD8IlIGEiLQ0hIi5C4BAAA9sIBdEmLgLQEAACD+AEPhPcAAAAPgucAAACD+AIP
+hNQAAACD+AMPhYAAAAC4AA4AAInBgckAABgAg+IESItT8A9FwQ0AAKCAiYKwAAAASItD8ItA
+BEiLU0gl8f/9/4nBgckAAAIASIuSuAQAAPbGAg9EwYPiAXQPi3P4jRS1AAAAAIPKIgnQSItT
+8IlCBEiLQ/CLQAyLc/i6AQAAAI1ODUjT4gnQSItT8IlCDEiDxBhbXUFcQV1BXkFfw0GNRCQD
+mUH3/CnB6ZL+//+B+f//AwC6//8DAA9HyukC////SItD8ItAJOkp/f//TIn/6ND7///pU/3/
+/7gAXgAA6TD///+4AP4AAOkm////uACuAADpHP///zHA6cT+//9mDx9EAADoAAAAAEFXQVZB
+VUFUSYn0VVNIif2+BAAAAEiD7DBIiz/oAAAAAIXASGPYeC6AvXABAAAAdHhIjXwkEEyJ5ugA
+AAAASGPYhdtJid10IEiLfQC+BQAAAOgAAAAASIPEMEiJ2FtdQVxBXUFeQV/DSYN8JBAAD4T9
+AQAASYN8JCAASYtEJAhBicB0MkmLVCQYSMfD9P3//4XSQYnWdAWD+AJ/rDmFAAEAAHKk6dsB
+AABIie/o6vr//+l7////OYUAAQAASMfD9P3//3KDRTH2QQ+2fCQBQQ+2FCREiUQkCIn4weIO
+weAICcJEicDB4BAJwonQDQAAAAFB9kQkAgIPRdCJVCQEiVQkDOgAAAAAi1QkBESLRCQIidGD
+yQiEwA9F0UWF9g+EgQEAAIPKAbv/n///vgBgAABBvwgEAABIi00gi0EECfCJQQRIi0UgiZCE
+AAAARYXAfkIx/0xjz00DTCQQMcAx9o0UB0Q5wn0aQQ+2FAGNDMUAAAAASIPAAdPiCdZIg/gE
+dd5Ii0UgibCQAAAAg8cERDnHfMBIi0UgRIm4WAEAAEiLRSBEibg4AQAAMdLHhQgBAAAAAAAA
+SItFIImQgAAAAEiNvQgBAAC+ZAAAAIlUJAToAAAAAEiLRSCLiIgAAABIi0UgRIm4WAEAAEiL
+RSCLVCQEiZA4AQAASItVIItCBCHDiVoEQYXPSMfDkv///w+ENf7//0iDw2mB4SAEAAAPhSX+
+//9FhfZ+QkmLdCQgSItFIIu4oAAAAElj1THASAHWQY1UBQBEOfJ9GI0MxQAAAACJ+tPqiBQG
+SIPAAUiD+AR13kGDxQRFOfV8vjHb6df9//9Jg3wkIAB0I0mLVCQYRTHAQYnWOZUEAQAAD4M4
+/v//SMfD9P3//+ms/f//RTHA6SH+//9B9kQkAgF0GIPKBrv/v///vgBAAABBvzAAAADpcv7/
+/7v/////MfZBvwIAAADpYP7//wAAAAAAAQAAAAAAAAACAAAAKAAAAPz/////////EQAAAAAA
+AAACAAAAKQAAAPz/////////IQAAAAAAAAACAAAAKAAAAPz/////////MgAAAAAAAAACAAAA
+KgAAAPz/////////UQAAAAAAAAACAAAAKAAAAPz/////////YQAAAAAAAAACAAAAKwAAAPz/
+////////bwAAAAAAAAACAAAALAAAAPz/////////gQAAAAAAAAACAAAAKAAAAPz/////////
+0QAAAAAAAAACAAAAKAAAAPz/////////3gAAAAAAAAACAAAALgAAAPz/////////9AAAAAAA
+AAACAAAALwAAAPz/////////AQEAAAAAAAACAAAAKAAAAPz/////////NwEAAAAAAAACAAAA
+MAAAAPz/////////UQEAAAAAAAACAAAAKAAAAPz/////////kwEAAAAAAAACAAAAMQAAAPz/
+////////owEAAAAAAAACAAAAMgAAAPz/////////uwEAAAAAAAACAAAAMwAAAPz/////////
+xgEAAAAAAAACAAAANAAAAPz/////////7AEAAAAAAAACAAAANQAAAPz/////////AwIAAAAA
+AAACAAAANgAAAPz/////////FAIAAAAAAAACAAAANwAAAPz/////////JAIAAAAAAAACAAAA
+NAAAAPz/////////QQIAAAAAAAACAAAAKAAAAPz/////////sgIAAAAAAAALAAAAHgAAAAAA
+AAAAAAAA6wIAAAAAAAALAAAAHgAAAAAAAAAAAAAApAMAAAAAAAALAAAAHgAAAAAAAAAAAAAA
+wQMAAAAAAAACAAAAOAAAAPz/////////YgQAAAAAAAACAAAAOQAAAPz/////////kQUAAAAA
+AAACAAAAKAAAAPz/////////9wUAAAAAAAALAAAAHgAAAAAAAAAAAAAAIQYAAAAAAAACAAAA
+KAAAAPz/////////UQYAAAAAAAACAAAAKAAAAPz/////////cAYAAAAAAAACAAAAOwAAAPz/
+////////kwYAAAAAAAACAAAAPAAAAPz/////////ngYAAAAAAAACAAAAPQAAAPz/////////
+0AYAAAAAAAALAAAAEQAAAAAAAAAAAAAA2AYAAAAAAAACAAAAPgAAAPz//////////AYAAAAA
+AAACAAAAPwAAAPz/////////CQcAAAAAAAALAAAAEQAAAAoAAAAAAAAAEQcAAAAAAAACAAAA
+QAAAAPz/////////gQcAAAAAAAALAAAAEQAAAA8AAAAAAAAAkwcAAAAAAAALAAAABAAAAAAA
+AAAAAAAAmAcAAAAAAAACAAAAQQAAAPz/////////xgcAAAAAAAALAAAAHgAAAKACAAAAAAAA
+MwgAAAAAAAALAAAAAgAAAAABAAAAAAAAOwgAAAAAAAACAAAAQgAAAPz/////////TggAAAAA
+AAACAAAAQwAAAPz/////////WggAAAAAAAALAAAAHgAAAIACAAAAAAAAYggAAAAAAAACAAAA
+RAAAAPz/////////eQgAAAAAAAACAAAALAAAAPz/////////oQgAAAAAAAACAAAAKAAAAPz/
+////////8QgAAAAAAAACAAAAKAAAAPz/////////FAkAAAAAAAACAAAARQAAAPz/////////
+ZAkAAAAAAAACAAAARgAAAPz/////////dwkAAAAAAAACAAAARwAAAPz/////////hwkAAAAA
+AAACAAAASAAAAPz/////////kwkAAAAAAAACAAAASQAAAPz/////////swkAAAAAAAACAAAA
+SgAAAPz/////////ygkAAAAAAAACAAAASgAAAPz/////////4gkAAAAAAAACAAAASwAAAPz/
+////////eQsAAAAAAAACAAAATAAAAPz/////////AQ0AAAAAAAACAAAAKAAAAPz/////////
+Ig0AAAAAAAACAAAARQAAAPz/////////Pw0AAAAAAAACAAAATQAAAPz/////////Vw0AAAAA
+AAACAAAALQAAAPz/////////CA4AAAAAAAACAAAATgAAAPz/////////1Q4AAAAAAAACAAAA
+TwAAAPz/////////wgAAAAAAAAACAAAALQAAAPz/////////RgYAAAAAAAACAAAAOgAAAPz/
+////////AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAQAAAAIAAABQBgAAAAAAAAgAAAAAAAAAAQAAAAIAAABQAAAAAAAAACgAAAAAAAAA
+AQAAABEAAAAYAAAAAAAAAFAAAAAAAAAAAQAAAB4AAAAgAAAAAAAAAKAAAAAAAAAAAQAAAB4A
+AADAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAIAAAAAAAAAAAAAAAgAAAAAAAAA
+AQAAAAIAAAAgAAAAAAAAABAAAAAAAAAAAQAAAAIAAABQAAAAAAAAABgAAAAAAAAAAQAAAAIA
+AACAAAAAAAAAACAAAAAAAAAAAQAAAAIAAADQAAAAAAAAACgAAAAAAAAAAQAAAAIAAAAAAQAA
+AAAAADAAAAAAAAAAAQAAAAIAAABQAQAAAAAAADgAAAAAAAAAAQAAAAIAAABAAgAAAAAAAEAA
+AAAAAAAAAQAAAAIAAACQBQAAAAAAAEgAAAAAAAAAAQAAAAIAAAAgBgAAAAAAAFAAAAAAAAAA
+AQAAAAIAAABQBgAAAAAAAFgAAAAAAAAAAQAAAAIAAACgCAAAAAAAAGAAAAAAAAAAAQAAAAIA
+AADwCAAAAAAAAGgAAAAAAAAAAQAAAAIAAAAADQAAAAAAAHAAAAAAAAAAAQAAABkAAAAAAAAA
+AAAAAGRzaV9wX3JzdABkcGh5ACZ4LT53YWl0AGNkbnMtZHNpAOgAAAAASMfGAAAAAEjHxwAA
+AADpAAAAAAAAAAAAAAABAAAAAAAAAAIAAAAoAAAA/P////////8IAAAAAAAAAAsAAABQAAAA
+AAAAAAAAAAAPAAAAAAAAAAsAAAADAAAAAAAAAAAAAAAUAAAAAAAAAAIAAABRAAAA/P//////
+//9Ix8cAAAAA6QAAAAAAAAAAAwAAAAAAAAALAAAAAwAAAAAAAAAAAAAACAAAAAAAAAACAAAA
+UwAAAPz/////////GAAAABgAAAASAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Y2Rucyxkc2kAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQAQAAAAAAAAEAAAACAAAAIAAAAAAA
+AADYAQAAAAAAAAEAAAACAAAAAAAAAAAAAADgAQAAAAAAAAEAAAACAAAAIAAAAAAAAADoAQAA
+AAAAAAEAAAACAAAAAAAAAAAAAADwAQAAAAAAAAEAAAACAAAAIAAAAAAAAAD4AQAAAAAAAAEA
+AAACAAAAAAAAAAAAAABgAgAAAAAAAAEAAAACAAAAIAAAAAAAAABoAgAAAAAAAAEAAAACAAAA
+AAAAAAAAAACAAgAAAAAAAAEAAAACAAAAUAEAAAAAAACIAgAAAAAAAAEAAAACAAAA0AAAAAAA
+AACQAgAAAAAAAAEAAAACAAAAAA0AAAAAAACgAgAAAAAAAAEAAAACAAAAIAYAAAAAAACwAgAA
+AAAAAAEAAAACAAAAkAUAAAAAAADAAgAAAAAAAAEAAAACAAAAgAAAAAAAAADgAgAAAAAAAAEA
+AAACAAAA8AgAAAAAAABhbGlhcz1wbGF0Zm9ybTpjZG5zLWRzaQBsaWNlbnNlPUdQTABkZXNj
+cmlwdGlvbj1DYWRlbmNlIERTSSBkcml2ZXIAYXV0aG9yPUJvcmlzIEJyZXppbGxvbiA8Ym9y
+aXMuYnJlemlsbG9uQGJvb3RsaW4uY29tPgAAR0NDOiAoU1VTRSBMaW51eCkgNy40LjEgMjAx
+OTA5MDUgW2djYy03LWJyYW5jaCByZXZpc2lvbiAyNzU0MDddAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAABAAAABADx/wAAAAAAAAAAAAAAAAAAAAAAAAAAAwABAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAwADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAFAAAAAAAAAAAAAAAAAAAA
+AAAMAAAAAgABAAAAAAAAAAAAGAAAAAAAAAAAAAAAAwAGAAAAAAAAAAAAAAAAAAAAAAAcAAAA
+AgABACAAAAAAAAAAIQAAAAAAAAAtAAAAAgABAFAAAAAAAAAAJwAAAAAAAABBAAAAAgABAIAA
+AAAAAAAARgAAAAAAAABZAAAAAgABANAAAAAAAAAALAAAAAAAAABpAAAAAgABAAABAAAAAAAA
+QQAAAAAAAAB8AAAAAgABAFABAAAAAAAA5wAAAAAAAACMAAAAAgABAEACAAAAAAAARAMAAAAA
+AACgAAAAAQANAAAAAAAAAAAAEAAAAAAAAACqAAAAAgABAJAFAAAAAAAAgwAAAAAAAADFAAAA
+AgABACAGAAAAAAAAMAAAAAAAAAAAAAAAAwAIAAAAAAAAAAAAAAAAAAAAAADcAAAAAgABAFAG
+AAAAAAAAQwIAAAAAAADvAAAAAQAFAAAAAAAAAAAAEAAAAAAAAAD7AAAAAQANAKACAAAAAAAA
+aAAAAAAAAAARAQAAAQANAIACAAAAAAAAGAAAAAAAAAAeAQAAAgABAKAIAAAAAAAATgAAAAAA
+AAA4AQAAAgABAPAIAAAAAAAACgQAAAAAAABPAQAAAgABAAANAAAAAAAA2wIAAAAAAAAAAAAA
+AwAJAAAAAAAAAAAAAAAAAAAAAABhAQAAAgAJAAAAAAAAAAAAGAAAAAAAAAB/AQAAAQADAAAA
+AAAAAAAAyAAAAAAAAAAAAAAAAwALAAAAAAAAAAAAAAAAAAAAAACYAQAAAgALAAAAAAAAAAAA
+DAAAAAAAAAAAAAAAAwANAAAAAAAAAAAAAAAAAAAAAAAAAAAAAwAPAAAAAAAAAAAAAAAAAAAA
+AAC2AQAAAQAPAAAAAAAAAAAAGAAAAAAAAADKAQAAAQAPABgAAAAAAAAADAAAAAAAAADgAQAA
+AQAPACQAAAAAAAAAHwAAAAAAAAD6AQAAAQAPAEMAAAAAAAAANQAAAAAAAAAPAgAAAQANACAA
+AAAAAAAAkAEAAAAAAAAhAgAAAQANAMABAAAAAAAAuAAAAAAAAAAAAAAAAwARAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAwAQAAAAAAAAAAAAAAAAAAAAAAAxAgAAEAAAAAAAAAAAAAAAAAAAAAAA
+AAA8AgAAEAAAAAAAAAAAAAAAAAAAAAAAAABTAgAAEAAAAAAAAAAAAAAAAAAAAAAAAABoAgAA
+EAAAAAAAAAAAAAAAAAAAAAAAAACBAgAAEAAAAAAAAAAAAAAAAAAAAAAAAACWAgAAEAAAAAAA
+AAAAAAAAAAAAAAAAAACoAgAAEAAAAAAAAAAAAAAAAAAAAAAAAAC6AgAAEAAAAAAAAAAAAAAA
+AAAAAAAAAADSAgAAEAAAAAAAAAAAAAAAAAAAAAAAAADbAgAAEAAAAAAAAAAAAAAAAAAAAAAA
+AAD0AgAAEAAAAAAAAAAAAAAAAAAAAAAAAAAGAwAAEAAAAAAAAAAAAAAAAAAAAAAAAAAhAwAA
+EAAAAAAAAAAAAAAAAAAAAAAAAAAtAwAAEAAAAAAAAAAAAAAAAAAAAAAAAAA8AwAAEAAAAAAA
+AAAAAAAAAAAAAAAAAABIAwAAEAAAAAAAAAAAAAAAAAAAAAAAAABbAwAAEAAAAAAAAAAAAAAA
+AAAAAAAAAAB8AwAAEAAAAAAAAAAAAAAAAAAAAAAAAACJAwAAEAAAAAAAAAAAAAAAAAAAAAAA
+AACbAwAAEAAAAAAAAAAAAAAAAAAAAAAAAACoAwAAEAAAAAAAAAAAAAAAAAAAAAAAAAC+AwAA
+EAAAAAAAAAAAAAAAAAAAAAAAAADUAwAAEAAAAAAAAAAAAAAAAAAAAAAAAADtAwAAEAAAAAAA
+AAAAAAAAAAAAAAAAAAD+AwAAEAAAAAAAAAAAAAAAAAAAAAAAAAALBAAAEAAAAAAAAAAAAAAA
+AAAAAAAAAAAhBAAAEAAAAAAAAAAAAAAAAAAAAAAAAAA7BAAAEAAAAAAAAAAAAAAAAAAAAAAA
+AABNBAAAEAAAAAAAAAAAAAAAAAAAAAAAAABkBAAAEAAAAAAAAAAAAAAAAAAAAAAAAAB4BAAA
+EAAAAAAAAAAAAAAAAAAAAAAAAACBBAAAEAAAAAAAAAAAAAAAAAAAAAAAAACSBAAAEAAAAAAA
+AAAAAAAAAAAAAAAAAACgBAAAEAAAAAAAAAAAAAAAAAAAAAAAAACtBAAAEAAAAAAAAAAAAAAA
+AAAAAAAAAAC3BAAAEAAAAAAAAAAAAAAAAAAAAAAAAADEBAAAEAAAAAAAAAAAAAAAAAAAAAAA
+AADWBAAAEAAAAAAAAAAAAAAAAAAAAAAAAADtBAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAMBQAA
+EAAAAAAAAAAAAAAAAAAAAAAAAAAoBQAAEAAAAAAAAAAAAAAAAAAAAAAAAAA2BQAAEAAAAAAA
+AAAAAAAAAAAAAAAAAABRBQAAEgAJAAAAAAAAAAAAGAAAAAAAAABdBQAAEAAAAAAAAAAAAAAA
+AAAAAAAAAAB4BQAAEgALAAAAAAAAAAAADAAAAAAAAAAAY2Rucy1kc2kuYwBjZG5zX2RzaV9y
+ZXN1bWUAY2Ruc19kc2lfc3VzcGVuZABjZG5zX2RzaV9kcm1fcmVtb3ZlAGNkbnNfZHNpX2Jy
+aWRnZV9kaXNhYmxlAGNkbnNfZHNpX2RldGFjaABjZG5zX2RzaV9pbnRlcnJ1cHQAY2Ruc19k
+c2lfYXR0YWNoAGNkbnNfZHNpX2NoZWNrX2NvbmYAQ1NXVENILjQzAGNkbnNfZHNpX2JyaWRn
+ZV9tb2RlX3ZhbGlkAGNkbnNfZHNpX2JyaWRnZV9hdHRhY2gAY2Ruc19kc2lfZHJtX3Byb2Jl
+AF9fa2V5LjEwNjQ2AGNkbnNfZHNpX2JyaWRnZV9mdW5jcwBjZG5zX2RzaV9vcHMAY2Ruc19k
+c2lfaW5pdF9saW5rLnBhcnQuOQBjZG5zX2RzaV9icmlkZ2VfZW5hYmxlAGNkbnNfZHNpX3Ry
+YW5zZmVyAGNkbnNfZHNpX3BsYXRmb3JtX2RyaXZlcl9pbml0AGNkbnNfZHNpX3BsYXRmb3Jt
+X2RyaXZlcgBjZG5zX2RzaV9wbGF0Zm9ybV9kcml2ZXJfZXhpdABfX1VOSVFVRV9JRF9hbGlh
+czI3AF9fVU5JUVVFX0lEX2xpY2Vuc2UyNgBfX1VOSVFVRV9JRF9kZXNjcmlwdGlvbjI1AF9f
+VU5JUVVFX0lEX2F1dGhvcjI0AGNkbnNfZHNpX29mX21hdGNoAGNkbnNfZHNpX3BtX29wcwBf
+X2ZlbnRyeV9fAHJlc2V0X2NvbnRyb2xfZGVhc3NlcnQAcmVzZXRfY29udHJvbF9hc3NlcnQA
+bWlwaV9kc2lfaG9zdF91bnJlZ2lzdGVyAF9fcG1fcnVudGltZV9kaXNhYmxlAF9fcG1fcnVu
+dGltZV9pZGxlAGRybV9icmlkZ2VfcmVtb3ZlAGRybV9wYW5lbF9icmlkZ2VfcmVtb3ZlAGNv
+bXBsZXRlAG9mX2dyYXBoX2dldF9yZW1vdGVfbm9kZQBvZl9kcm1fZmluZF9wYW5lbABkcm1f
+cGFuZWxfYnJpZGdlX2FkZF90eXBlZABvZl9ub2RlX3B1dABkcm1fYnJpZGdlX2FkZABvZl9u
+b2RlX2dldABvZl9kcm1fZmluZF9icmlkZ2UAcGh5X21pcGlfZHBoeV9nZXRfZGVmYXVsdF9j
+b25maWcAcGh5X3ZhbGlkYXRlAGRybV9icmlkZ2VfYXR0YWNoAGRldm1fa21hbGxvYwBwbGF0
+Zm9ybV9nZXRfcmVzb3VyY2UAZGV2bV9pb3JlbWFwX3Jlc291cmNlAF9fZGV2bV9yZXNldF9j
+b250cm9sX2dldABwbGF0Zm9ybV9nZXRfaXJxAGRldm1fcGh5X2dldABfX2luaXRfd2FpdHF1
+ZXVlX2hlYWQAZGV2bV9yZXF1ZXN0X3RocmVhZGVkX2lycQBwbV9ydW50aW1lX2VuYWJsZQBt
+aXBpX2RzaV9ob3N0X3JlZ2lzdGVyAF9fcG1fcnVudGltZV9yZXN1bWUAcGh5X2luaXQAcGh5
+X3NldF9tb2RlX2V4dABwaHlfY29uZmlndXJlAHBoeV9wb3dlcl9vbgBrdGltZV9nZXQAdXNs
+ZWVwX3JhbmdlAGRybV9tb2RlX3ZyZWZyZXNoAG1pcGlfZHNpX2NyZWF0ZV9wYWNrZXQAbWlw
+aV9kc2lfcGFja2V0X2Zvcm1hdF9pc19sb25nAHdhaXRfZm9yX2NvbXBsZXRpb25fdGltZW91
+dABfX3RoaXNfbW9kdWxlAF9fcGxhdGZvcm1fZHJpdmVyX3JlZ2lzdGVyAGluaXRfbW9kdWxl
+AHBsYXRmb3JtX2RyaXZlcl91bnJlZ2lzdGVyAGNsZWFudXBfbW9kdWxlAAAuc3ltdGFiAC5z
+dHJ0YWIALnNoc3RydGFiAC5yZWxhLnRleHQALnJlbGEuZGF0YQAuYnNzAC5yZWxhX19tY291
+bnRfbG9jAC5yb2RhdGEuc3RyMS4xAC5yZWxhLmluaXQudGV4dAAucmVsYS5leGl0LnRleHQA
+LnJlbGEucm9kYXRhAC5tb2RpbmZvAC5jb21tZW50AC5ub3RlLkdOVS1zdGFjawAub3JjX3Vu
+d2luZF9pcAAucmVsYS5vcmNfdW53aW5kX2lwAC5vcmNfdW53aW5kAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAACAAAAAgAAAAAAAAAAAAAABAAAAAAAAAACAAAAAgAAABgAAAAAAAAA
+CAAAAAAAAAACAAAAAgAAACAAAAAAAAAADAAAAAAAAAACAAAAAgAAACYAAAAAAAAAEAAAAAAA
+AAACAAAAAgAAAEAAAAAAAAAAFAAAAAAAAAACAAAAAgAAAEEAAAAAAAAAGAAAAAAAAAACAAAA
+AgAAAFAAAAAAAAAAHAAAAAAAAAACAAAAAgAAAFYAAAAAAAAAIAAAAAAAAAACAAAAAgAAAHYA
+AAAAAAAAJAAAAAAAAAACAAAAAgAAAHcAAAAAAAAAKAAAAAAAAAACAAAAAgAAAIAAAAAAAAAA
+LAAAAAAAAAACAAAAAgAAAMYAAAAAAAAAMAAAAAAAAAACAAAAAgAAANAAAAAAAAAANAAAAAAA
+AAACAAAAAgAAANYAAAAAAAAAOAAAAAAAAAACAAAAAgAAAPsAAAAAAAAAPAAAAAAAAAACAAAA
+AgAAAPwAAAAAAAAAQAAAAAAAAAACAAAAAgAAAAABAAAAAAAARAAAAAAAAAACAAAAAgAAAEEB
+AAAAAAAASAAAAAAAAAACAAAAAgAAAFABAAAAAAAATAAAAAAAAAACAAAAAgAAAHQBAAAAAAAA
+UAAAAAAAAAACAAAAAgAAAHYBAAAAAAAAVAAAAAAAAAACAAAAAgAAAHsBAAAAAAAAWAAAAAAA
+AAACAAAAAgAAAHwBAAAAAAAAXAAAAAAAAAACAAAAAgAAAH0BAAAAAAAAYAAAAAAAAAACAAAA
+AgAAAPMBAAAAAAAAZAAAAAAAAAACAAAAAgAAAPQBAAAAAAAAaAAAAAAAAAACAAAAAgAAAPYB
+AAAAAAAAbAAAAAAAAAACAAAAAgAAAPgBAAAAAAAAcAAAAAAAAAACAAAAAgAAAPoBAAAAAAAA
+dAAAAAAAAAACAAAAAgAAAPsBAAAAAAAAeAAAAAAAAAACAAAAAgAAAC8CAAAAAAAAfAAAAAAA
+AAACAAAAAgAAADcCAAAAAAAAgAAAAAAAAAACAAAAAgAAAEACAAAAAAAAhAAAAAAAAAACAAAA
+AgAAAEcCAAAAAAAAiAAAAAAAAAACAAAAAgAAAEkCAAAAAAAAjAAAAAAAAAACAAAAAgAAAE4C
+AAAAAAAAkAAAAAAAAAACAAAAAgAAAFACAAAAAAAAlAAAAAAAAAACAAAAAgAAAFQCAAAAAAAA
+mAAAAAAAAAACAAAAAgAAAFUCAAAAAAAAnAAAAAAAAAACAAAAAgAAAMIEAAAAAAAAoAAAAAAA
+AAACAAAAAgAAAMMEAAAAAAAApAAAAAAAAAACAAAAAgAAAMUEAAAAAAAAqAAAAAAAAAACAAAA
+AgAAAMcEAAAAAAAArAAAAAAAAAACAAAAAgAAAMkEAAAAAAAAsAAAAAAAAAACAAAAAgAAAMsE
+AAAAAAAAtAAAAAAAAAACAAAAAgAAAMwEAAAAAAAAuAAAAAAAAAACAAAAAgAAAIQFAAAAAAAA
+vAAAAAAAAAACAAAAAgAAAJAFAAAAAAAAwAAAAAAAAAACAAAAAgAAANIFAAAAAAAAxAAAAAAA
+AAACAAAAAgAAAO4FAAAAAAAAyAAAAAAAAAACAAAAAgAAABMGAAAAAAAAzAAAAAAAAAACAAAA
+AgAAACAGAAAAAAAA0AAAAAAAAAACAAAAAgAAAFcGAAAAAAAA1AAAAAAAAAACAAAAAgAAAF0G
+AAAAAAAA2AAAAAAAAAACAAAAAgAAAF4GAAAAAAAA3AAAAAAAAAACAAAAAgAAAF8GAAAAAAAA
+4AAAAAAAAAACAAAAAgAAAEAHAAAAAAAA5AAAAAAAAAACAAAAAgAAAEEHAAAAAAAA6AAAAAAA
+AAACAAAAAgAAAEMHAAAAAAAA7AAAAAAAAAACAAAAAgAAAEUHAAAAAAAA8AAAAAAAAAACAAAA
+AgAAAEYHAAAAAAAA9AAAAAAAAAACAAAAAgAAAEsHAAAAAAAA+AAAAAAAAAACAAAAAgAAAEwH
+AAAAAAAA/AAAAAAAAAACAAAAAgAAAE4HAAAAAAAAAAEAAAAAAAACAAAAAgAAAFAHAAAAAAAA
+BAEAAAAAAAACAAAAAgAAAFEHAAAAAAAACAEAAAAAAAACAAAAAgAAACkIAAAAAAAADAEAAAAA
+AAACAAAAAgAAAEQIAAAAAAAAEAEAAAAAAAACAAAAAgAAAJMIAAAAAAAAFAEAAAAAAAACAAAA
+AgAAAKAIAAAAAAAAGAEAAAAAAAACAAAAAgAAAO4IAAAAAAAAHAEAAAAAAAACAAAAAgAAAPAI
+AAAAAAAAIAEAAAAAAAACAAAAAgAAAPcIAAAAAAAAJAEAAAAAAAACAAAAAgAAAPkIAAAAAAAA
+KAEAAAAAAAACAAAAAgAAAP8IAAAAAAAALAEAAAAAAAACAAAAAgAAAAEJAAAAAAAAMAEAAAAA
+AAACAAAAAgAAAAcJAAAAAAAANAEAAAAAAAACAAAAAgAAAAgJAAAAAAAAOAEAAAAAAAACAAAA
+AgAAAA8JAAAAAAAAPAEAAAAAAAACAAAAAgAAAI4MAAAAAAAAQAEAAAAAAAACAAAAAgAAAI8M
+AAAAAAAARAEAAAAAAAACAAAAAgAAAJAMAAAAAAAASAEAAAAAAAACAAAAAgAAAJIMAAAAAAAA
+TAEAAAAAAAACAAAAAgAAAJQMAAAAAAAAUAEAAAAAAAACAAAAAgAAAJYMAAAAAAAAVAEAAAAA
+AAACAAAAAgAAAJgMAAAAAAAAWAEAAAAAAAACAAAAAgAAAJkMAAAAAAAAXAEAAAAAAAACAAAA
+AgAAANAMAAAAAAAAYAEAAAAAAAACAAAAAgAAANUMAAAAAAAAZAEAAAAAAAACAAAAAgAAAPoM
+AAAAAAAAaAEAAAAAAAACAAAAAgAAAAANAAAAAAAAbAEAAAAAAAACAAAAAgAAAAcNAAAAAAAA
+cAEAAAAAAAACAAAAAgAAAAkNAAAAAAAAdAEAAAAAAAACAAAAAgAAAAsNAAAAAAAAeAEAAAAA
+AAACAAAAAgAAAA0NAAAAAAAAfAEAAAAAAAACAAAAAgAAABENAAAAAAAAgAEAAAAAAAACAAAA
+AgAAABINAAAAAAAAhAEAAAAAAAACAAAAAgAAAB4NAAAAAAAAiAEAAAAAAAACAAAAAgAAAF8N
+AAAAAAAAjAEAAAAAAAACAAAAAgAAAGMNAAAAAAAAkAEAAAAAAAACAAAAAgAAAGQNAAAAAAAA
+lAEAAAAAAAACAAAAAgAAAGYNAAAAAAAAmAEAAAAAAAACAAAAAgAAAGgNAAAAAAAAnAEAAAAA
+AAACAAAAAgAAAGoNAAAAAAAAoAEAAAAAAAACAAAAAgAAAGwNAAAAAAAApAEAAAAAAAACAAAA
+AgAAAG0NAAAAAAAAqAEAAAAAAAACAAAAAgAAALYNAAAAAAAArAEAAAAAAAACAAAAAgAAALsN
+AAAAAAAAsAEAAAAAAAACAAAAAgAAANsPAAAAAAAAtAEAAAAAAAACAAAAGQAAAAAAAAAAAAAA
+uAEAAAAAAAACAAAAGQAAABgAAAAAAAAAvAEAAAAAAAACAAAAHAAAAAAAAAAAAAAAwAEAAAAA
+AAACAAAAHAAAAAwAAAAAAAAACAAAAAUAAAAAAAAACAAAAAUAEAAAAAUACAAAAAUAAAAAAAAA
+CAAAAAUAEAAAAAUACAAAAAUAAAAAAAAACAAAAAUAAAAAAAAACAAAAAUAEAAAAAUACAAAAAUA
+AAAAAAAACAAAAAUAAAAAAAAACAAAAAUAEAAAAAUAGAAAAAUAIAAAAAUAKADY/xUAMADY/xUA
+KADY/xUAIAAAAAUAGAAAAAUAEAAAAAUACAAAAAUAMADY/xUACAAAAAUAAAAAAAAACAAAAAUA
+EAAAAAUAGAAAAAUAIAAAAAUAKAAAAAUAMADQ/xUAOADQ/xUAMADQ/xUAKAAAAAUAIAAAAAUA
+GAAAAAUAEAAAAAUACAAAAAUAOADQ/xUAAAAAAAAACAAAAAUAIAAAAAUACAAAAAUAAAAAAAAA
+CAAAAAUAEAAAAAUAGAAAAAUAIADg/xUAKADg/xUAIADg/xUAGAAAAAUAEAAAAAUACAAAAAUA
+KADg/xUAIADg/xUAGAAAAAUAEAAAAAUACAAAAAUAKADg/xUAMADg/xUAKADg/xUAAAAAAAAA
+CAAAAAUAAAAAAAAACAAAAAUAEAAAAAUAGAAAAAUAIAAAAAUAKAAAAAUAMADQ/xUAOADQ/xUA
+UADQ/xUAOADQ/xUAMADQ/xUAKAAAAAUAIAAAAAUAGAAAAAUAEAAAAAUACAAAAAUAUADQ/xUA
+AAAAAAAAUADQ/xUAAAAAAAAACAAAAAUAEAAAAAUAGAAAAAUAIAAAAAUAKAAAAAUAMADQ/xUA
+OADQ/xUAaADQ/xUAOADQ/xUAMADQ/xUAKAAAAAUAIAAAAAUAGAAAAAUAEAAAAAUACAAAAAUA
+aADQ/xUAAAAAAAAAaADQ/xUAAAAAAAAACAAAAAUAAAAAAAAACAAAAAUAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAIAAAAAEAAAAGAAAAAAAAAAAAAAAAAAAAQAAAAAAAAADbDwAAAAAAAAAAAAAAAAAA
+EAAAAAAAAAAAAAAAAAAAABsAAAAEAAAAQAAAAAAAAAAAAAAAAAAAACAQAAAAAAAAeAYAAAAA
+AAASAAAAAQAAAAgAAAAAAAAAGAAAAAAAAAArAAAAAQAAAAMAAAAAAAAAAAAAAAAAAACgFgAA
+AAAAAMgAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAJgAAAAQAAABAAAAAAAAAAAAA
+AAAAAAAAaBcAAAAAAAB4AAAAAAAAABIAAAADAAAACAAAAAAAAAAYAAAAAAAAADEAAAAIAAAA
+AwAAAAAAAAAAAAAAAAAAAOAXAAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAA
+AAA7AAAAAQAAAAIAAAAAAAAAAAAAAAAAAADgFwAAAAAAAHgAAAAAAAAAAAAAAAAAAAABAAAA
+AAAAAAAAAAAAAAAANgAAAAQAAABAAAAAAAAAAAAAAAAAAAAAWBgAAAAAAABoAQAAAAAAABIA
+AAAGAAAACAAAAAAAAAAYAAAAAAAAAEgAAAABAAAAMgAAAAAAAAAAAAAAAAAAAMAZAAAAAAAA
+IQAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAQAAAAAAAABcAAAAAQAAAAYAAAAAAAAAAAAAAAAA
+AADhGQAAAAAAABgAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAVwAAAAQAAABAAAAA
+AAAAAAAAAAAAAAAAABoAAAAAAABgAAAAAAAAABIAAAAJAAAACAAAAAAAAAAYAAAAAAAAAGwA
+AAABAAAABgAAAAAAAAAAAAAAAAAAAGAaAAAAAAAADAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAA
+AAAAAAAAAABnAAAABAAAAEAAAAAAAAAAAAAAAAAAAABwGgAAAAAAADAAAAAAAAAAEgAAAAsA
+AAAIAAAAAAAAABgAAAAAAAAAfAAAAAEAAAACAAAAAAAAAAAAAAAAAAAAoBoAAAAAAAAIAwAA
+AAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAHcAAAAEAAAAQAAAAAAAAAAAAAAAAAAAAKgd
+AAAAAAAAaAEAAAAAAAASAAAADQAAAAgAAAAAAAAAGAAAAAAAAACEAAAAAQAAAAIAAAAAAAAA
+AAAAAAAAAAAQHwAAAAAAAHgAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAjQAAAAEA
+AAAwAAAAAAAAAAAAAAAAAAAAiB8AAAAAAABBAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAABAAAA
+AAAAAJYAAAABAAAAAAAAAAAAAAAAAAAAAAAAAMkfAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEA
+AAAAAAAAAAAAAAAAAAABAAAAAgAAAAAAAAAAAAAAAAAAAAAAAADQHwAAAAAAAPgHAAAAAAAA
+EwAAACgAAAAIAAAAAAAAABgAAAAAAAAACQAAAAMAAAAAAAAAAAAAAAAAAAAAAAAAyCcAAAAA
+AACHBQAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAABEAAAADAAAAAAAAAAAAAAAAAAAA
+AAAAAE8tAAAAAAAA1QAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAACmAAAAAQAAAAIA
+AAAAAAAAAAAAAAAAAAAkLgAAAAAAAMQBAAAAAAAAAAAAAAAAAAABAAAAAAAAAAQAAAAAAAAA
+tQAAAAQAAABAAAAAAAAAAAAAAAAAAAAA6C8AAAAAAACYCgAAAAAAABIAAAAVAAAACAAAAAAA
+AAAYAAAAAAAAAMkAAAABAAAAAgAAAAAAAAAAAAAAAAAAAIA6AAAAAAAApgIAAAAAAAAAAAAA
+AAAAAAEAAAAAAAAABgAAAAAAAAA=
+--------------448EDADED42ACF119772B2D7--

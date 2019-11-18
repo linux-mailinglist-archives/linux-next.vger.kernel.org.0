@@ -2,82 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B3010093D
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 17:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80447100B5E
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 19:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbfKRQcg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Nov 2019 11:32:36 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:21433 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726314AbfKRQcg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Nov 2019 11:32:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1574094755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CON1qBDJa/YQvur/tHGGxfdyheVcZXsC9K2a2ZC3UXU=;
-        b=h+gRTOFLbWZtC5Mw66nCkNBiEMnZ+plL67p9YWuUkaRM57zSb3n74Vqlp1iq6AHhJm6CUB
-        GjmGZzQTTBjaAA2chZPdFaaW0g8Gh1i54FaRg27rnw0VIFWE9x+47j3SFlzLaz+U1tXQ69
-        hLN4bp/BAh2SLiUXvvnI+LF1F1u9n70=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-370-eAxzJkGxOsiYU3TcIlyDzw-1; Mon, 18 Nov 2019 11:32:33 -0500
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 70C9E1902C48;
-        Mon, 18 Nov 2019 16:32:32 +0000 (UTC)
-Received: from agk-dp.fab.redhat.com (agk-dp.fab.redhat.com [10.33.15.10])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 02830643E4;
-        Mon, 18 Nov 2019 16:32:20 +0000 (UTC)
-Received: from agk by agk-dp.fab.redhat.com with local (Exim 4.69)
-        (envelope-from <agk@redhat.com>)
-        id 1iWjwo-0006wm-FL; Mon, 18 Nov 2019 16:32:18 +0000
-Date:   Mon, 18 Nov 2019 16:32:18 +0000
-From:   Alasdair G Kergon <agk@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726453AbfKRSTT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Nov 2019 13:19:19 -0500
+Received: from mga02.intel.com ([134.134.136.20]:54651 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726317AbfKRSTS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 Nov 2019 13:19:18 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 10:19:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.68,321,1569308400"; 
+   d="scan'208";a="407480031"
+Received: from asimomai-mobl1.amr.corp.intel.com (HELO [10.251.156.191]) ([10.251.156.191])
+  by fmsmga006.fm.intel.com with ESMTP; 18 Nov 2019 10:19:17 -0800
+Subject: Re: linux-next: build failure after merge of the sound-asoc-fixes
+ tree
+To:     Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, dm-devel@redhat.com
-Subject: Re: linux-next: Tree for Nov 15 (drivers/md/dm-integrity)
-Message-ID: <20191118163218.GF1800@agk-dp.fab.redhat.com>
-Mail-Followup-To: Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@redhat.com>,
-        dm-devel@redhat.com
-References: <20191115190525.77efdf6c@canb.auug.org.au> <f368f431-b741-d04f-440b-3d8c3c035537@infradead.org> <d3a96436-0d9c-a13f-7524-33b203910367@infradead.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20191113081035.7e7f9bc2@canb.auug.org.au>
+ <20191115093410.4a7938f5@canb.auug.org.au>
+ <20191118155852.GG9761@sirena.org.uk>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <a0e6089b-b5a3-f9e3-fc2c-5b433553e154@linux.intel.com>
+Date:   Mon, 18 Nov 2019 10:47:01 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-In-Reply-To: <d3a96436-0d9c-a13f-7524-33b203910367@infradead.org>
-Organization: Red Hat UK Ltd. Registered in England and Wales, number
-        03798903. Registered Office: Peninsular House, 30-36 Monument
-        Street, 4th Floor, London, England, EC3R 8NB.
-User-Agent: Mutt/1.5.18 (2008-05-17)
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
-X-MC-Unique: eAxzJkGxOsiYU3TcIlyDzw-1
-X-Mimecast-Spam-Score: 0
-Content-Type: text/plain; charset=WINDOWS-1252
-Content-Transfer-Encoding: quoted-printable
-Content-Disposition: inline
+In-Reply-To: <20191118155852.GG9761@sirena.org.uk>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 08:19:53AM -0800, Randy Dunlap wrote:
-> BTW, dm-devel@redhat.com seems to be invalid or dead.
 
-Red Hat made a few changes to its mail configuration over the last
-week.
 
-If anyone reading this still has problems that might be related to
-this, please send me the relevant details privately (e.g. full headers
-of messages) and I'll try to engage the right people to help.
+On 11/18/19 9:58 AM, Mark Brown wrote:
+> On Fri, Nov 15, 2019 at 09:34:10AM +1100, Stephen Rothwell wrote:
+>> On Wed, 13 Nov 2019 08:10:35 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> 
+>>> Caused by commit
+> 
+>>>    1d3e9077307f ("ASoC: SOF: Intel: Fix CFL and CML FW nocodec binary names.")
+> 
+>>> I have reverted that commit for today.
+> 
+>> I am still reverting that commit.
+> 
+> I've reverted the commit, I was a bit disappointed that none of the
+> Intel people responded but I see you didn't CC Pierre who sent the
+> commit so he won't have seen your report - I missed that due to the CC
+> to Liam who was also in the chain.
 
-Alasdair
-
+Sorry about that, the use of 'Fix' in the commit message might have 
+misled Mark.
+If you CC: me and also CC: alsa-devel you should get an answer without 
+delay. I only noticed the issue this morning with kbuild reports.

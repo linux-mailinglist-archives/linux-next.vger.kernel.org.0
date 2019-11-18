@@ -2,81 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 199911005D0
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 13:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D405F1005E3
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 13:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726518AbfKRMpb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Nov 2019 07:45:31 -0500
-Received: from mga18.intel.com ([134.134.136.126]:20616 "EHLO mga18.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726506AbfKRMpb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 Nov 2019 07:45:31 -0500
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 04:45:30 -0800
-X-IronPort-AV: E=Sophos;i="5.68,320,1569308400"; 
-   d="scan'208";a="196116167"
-Received: from paasikivi.fi.intel.com ([10.237.72.42])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 18 Nov 2019 04:45:28 -0800
-Received: by paasikivi.fi.intel.com (Postfix, from userid 1000)
-        id 4127C20731; Mon, 18 Nov 2019 14:45:26 +0200 (EET)
-Date:   Mon, 18 Nov 2019 14:45:26 +0200
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Petr Mladek <pmladek@suse.com>,
+        id S1726595AbfKRMtx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Nov 2019 07:49:53 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42388 "EHLO mx1.suse.de"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726506AbfKRMtx (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 Nov 2019 07:49:53 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx1.suse.de (Postfix) with ESMTP id A049DAC6F;
+        Mon, 18 Nov 2019 12:49:51 +0000 (UTC)
+Date:   Mon, 18 Nov 2019 13:49:49 +0100
+From:   Borislav Petkov <bp@suse.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: linux-next: manual merge of the pm tree with the printk tree
-Message-ID: <20191118124526.GD5391@paasikivi.fi.intel.com>
-References: <20191115110500.2bad45b2@canb.auug.org.au>
- <2126744.rv85diC2z5@kreacher>
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Samuel Neves <sneves@dei.uc.pt>,
+        Ard Biesheuvel <ardb@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20191118124949.GA8028@zn.tnic>
+References: <20191118141110.7f971194@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <2126744.rv85diC2z5@kreacher>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20191118141110.7f971194@canb.auug.org.au>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Nov 15, 2019 at 11:46:53AM +0100, Rafael J. Wysocki wrote:
-> On Friday, November 15, 2019 1:05:00 AM CET Stephen Rothwell wrote:
-> > 
-> > --Sig_/8dHD0qGh0F9UnYxbYqUlngQ
-> > Content-Type: text/plain; charset=US-ASCII
-> > Content-Transfer-Encoding: quoted-printable
-> > 
-> > Hi all,
-> > 
-> > Today's linux-next merge of the pm tree got a conflict in:
-> > 
-> >   scripts/checkpatch.pl
-> > 
-> > between commit:
-> > 
-> >   1d28122131b2 ("checkpatch: don't warn about new vsprintf pointer extensio=
-> > n '%pe'")
-> > 
-> > from the printk tree and commit:
-> > 
-> >   3bd32d6a2ee6 ("lib/vsprintf: Add %pfw conversion specifier for printing f=
-> > wnode names")
-> > 
-> > from the pm tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary.
+On Mon, Nov 18, 2019 at 02:11:10PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Thanks, and it looks good to me.
-
-The change seems fine to me as well.
+> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> arch/x86/crypto/blake2s-core.S: Assembler messages:
+> arch/x86/crypto/blake2s-core.S:50: Error: invalid character '(' in mnemonic
+> arch/x86/crypto/blake2s-core.S:176: Error: invalid character '(' in mnemonic
+> arch/x86/crypto/blake2s-core.S:180: Error: invalid character '(' in mnemonic
+> arch/x86/crypto/blake2s-core.S:257: Error: invalid character '(' in mnemonic
+> 
+> Caused by commit
+> 
+>   ed0356eda153 ("crypto: blake2s - x86_64 SIMD implementation")
+> 
+> from the crypto tree interacting with commit
+> 
+>   6dcc5627f6ae ("x86/asm: Change all ENTRY+ENDPROC to SYM_FUNC_*")
+> 
+> from the tip tree.
+> 
+> I have applied the following merge fix patch.
 
 Thanks.
 
+I need to remember to point Linus to it when I send the pull request
+next week so that he's aware and can apply your patch when merging the
+crypto tree.
+
+Lemme CC him now too, as an FYI.
+
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 18 Nov 2019 14:00:40 +1100
+> Subject: [PATCH] fix up for "x86/asm: Change all ENTRY+ENDPROC to SYM_FUNC_*"
+
+<--- add a commit message blurb here pls.
+
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/x86/crypto/blake2s-core.S | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/x86/crypto/blake2s-core.S b/arch/x86/crypto/blake2s-core.S
+> index 8591938eee26..24910b766bdd 100644
+> --- a/arch/x86/crypto/blake2s-core.S
+> +++ b/arch/x86/crypto/blake2s-core.S
+> @@ -47,7 +47,7 @@ SIGMA2:
+>  
+>  .text
+>  #ifdef CONFIG_AS_SSSE3
+> -ENTRY(blake2s_compress_ssse3)
+> +SYM_FUNC_START(blake2s_compress_ssse3)
+>  	testq		%rdx,%rdx
+>  	je		.Lendofloop
+>  	movdqu		(%rdi),%xmm0
+> @@ -173,11 +173,11 @@ ENTRY(blake2s_compress_ssse3)
+>  	movdqu		%xmm14,0x20(%rdi)
+>  .Lendofloop:
+>  	ret
+> -ENDPROC(blake2s_compress_ssse3)
+> +SYM_FUNC_END(blake2s_compress_ssse3)
+>  #endif /* CONFIG_AS_SSSE3 */
+>  
+>  #ifdef CONFIG_AS_AVX512
+> -ENTRY(blake2s_compress_avx512)
+> +SYM_FUNC_START(blake2s_compress_avx512)
+>  	vmovdqu		(%rdi),%xmm0
+>  	vmovdqu		0x10(%rdi),%xmm1
+>  	vmovdqu		0x20(%rdi),%xmm4
+> @@ -254,5 +254,5 @@ ENTRY(blake2s_compress_avx512)
+>  	vmovdqu		%xmm4,0x20(%rdi)
+>  	vzeroupper
+>  	retq
+> -ENDPROC(blake2s_compress_avx512)
+> +SYM_FUNC_END(blake2s_compress_avx512)
+>  #endif /* CONFIG_AS_AVX512 */
+> -- 
+> 2.23.0
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
+
+
 -- 
-Sakari Ailus
+Regards/Gruss,
+    Boris.
+
+SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg

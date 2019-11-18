@@ -2,135 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D405F1005E3
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 13:49:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3661005E7
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 13:50:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbfKRMtx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 Nov 2019 07:49:53 -0500
-Received: from mx2.suse.de ([195.135.220.15]:42388 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726506AbfKRMtx (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 Nov 2019 07:49:53 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id A049DAC6F;
-        Mon, 18 Nov 2019 12:49:51 +0000 (UTC)
-Date:   Mon, 18 Nov 2019 13:49:49 +0100
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
+        id S1726646AbfKRMuv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 Nov 2019 07:50:51 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:33933 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726575AbfKRMuv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 Nov 2019 07:50:51 -0500
+Received: by mail-wr1-f66.google.com with SMTP id e6so19351554wrw.1;
+        Mon, 18 Nov 2019 04:50:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=hmA7HI+U8iTRtTsVLZIxvRAMHhpRdj8xZH+6A8vTZiA=;
+        b=VASIzC6iuSEmOUKog4jfbuqJPxmqH8l+6zqaS6cOUZr36m1Htbz7tELJ/pqQBM9aqY
+         PW270XSzbmP5ZYCV/PzVhcBzYOWBamcMvaZOy+gMqJrtu4jebp9Xioibg6jOZpcHUjVi
+         bhyp5Ig31mAr4/K96NOD2XuYOstdTDj0P7/iVrvKHR4rfzk8wD8JhG4/cvLKLVXoxe4/
+         /Ns6DRRxt3fbkrcVxJybPu/miris8X6YyA7qkf8zzUQbPjSNFvOmXJXk+MH5LikLQU+F
+         gByD9rmR8dD45lFqz/VcZY38LpTczUWRFU03190Fxcjr3L4esSj7GMU7Cm1nU84/GDXl
+         w+lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition
+         :content-transfer-encoding:in-reply-to:user-agent;
+        bh=hmA7HI+U8iTRtTsVLZIxvRAMHhpRdj8xZH+6A8vTZiA=;
+        b=dWLHr6u+XLTM/tshlV+SC0qf3SIn748zcgeC/HqbnT9yFjBKh/xfvasVKoDRqpEFKF
+         t+mSjpoA73Y9jrTMG809iKeIfwzx3LaXKW5PhVETfRQXH7ltOOuk0tMl9oLWAiggK3mm
+         ykscoohorU2M0hqBrbZ9JVrLNqBKRHuGGXR5nInJpZ4FcAxER0309NPt4PC7LRYHJr1F
+         rolkTv+mwGprcohpjssF1WlJR5gxAvDXbjtq/KnXEsVEz+tVahIETd07csg3hISUgeXY
+         883/h5Dng5qRf5jpDycjqwzA8U0yi4v/9DhnVZsLm4hVT0ssTk8eLDz+3pN8xMla8TVS
+         rUbA==
+X-Gm-Message-State: APjAAAWlVPLxeIu3aHxI7H0YyJQijUb11kCLaB6j4q5Vsa5sezLrqS4K
+        4kd/VqubX+uJ/v8YBgUJbhM=
+X-Google-Smtp-Source: APXvYqxrbf3RSMiN/ezXYlBHDSkKnOuodf2k8SxFdLRW76B6lPXgZNWEYJez2zSXmWaVdmYGb2udEA==
+X-Received: by 2002:a5d:5224:: with SMTP id i4mr14768219wra.303.1574081448767;
+        Mon, 18 Nov 2019 04:50:48 -0800 (PST)
+Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
+        by smtp.gmail.com with ESMTPSA id b15sm22488800wrx.77.2019.11.18.04.50.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2019 04:50:48 -0800 (PST)
+Date:   Mon, 18 Nov 2019 13:50:46 +0100
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, Tejun Heo <tj@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Samuel Neves <sneves@dei.uc.pt>,
-        Ard Biesheuvel <ardb@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20191118124949.GA8028@zn.tnic>
-References: <20191118141110.7f971194@canb.auug.org.au>
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: linux-next: manual merge of the workqueues tree with the tip tree
+Message-ID: <20191118125046.GB74767@gmail.com>
+References: <20191118150858.1a436a12@canb.auug.org.au>
+ <20191118090000.hpnibmk6xculuwii@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20191118141110.7f971194@canb.auug.org.au>
+In-Reply-To: <20191118090000.hpnibmk6xculuwii@linutronix.de>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 18, 2019 at 02:11:10PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> arch/x86/crypto/blake2s-core.S: Assembler messages:
-> arch/x86/crypto/blake2s-core.S:50: Error: invalid character '(' in mnemonic
-> arch/x86/crypto/blake2s-core.S:176: Error: invalid character '(' in mnemonic
-> arch/x86/crypto/blake2s-core.S:180: Error: invalid character '(' in mnemonic
-> arch/x86/crypto/blake2s-core.S:257: Error: invalid character '(' in mnemonic
-> 
-> Caused by commit
-> 
->   ed0356eda153 ("crypto: blake2s - x86_64 SIMD implementation")
-> 
-> from the crypto tree interacting with commit
-> 
->   6dcc5627f6ae ("x86/asm: Change all ENTRY+ENDPROC to SYM_FUNC_*")
-> 
-> from the tip tree.
-> 
-> I have applied the following merge fix patch.
 
-Thanks.
+* Sebastian Andrzej Siewior <bigeasy@linutronix.de> wrote:
 
-I need to remember to point Linus to it when I send the pull request
-next week so that he's aware and can apply your patch when merging the
-crypto tree.
-
-Lemme CC him now too, as an FYI.
-
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 18 Nov 2019 14:00:40 +1100
-> Subject: [PATCH] fix up for "x86/asm: Change all ENTRY+ENDPROC to SYM_FUNC_*"
-
-<--- add a commit message blurb here pls.
-
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/x86/crypto/blake2s-core.S | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> On 2019-11-18 15:08:58 [+1100], Stephen Rothwell wrote:
+> > Hi all,
+> Hi,
 > 
-> diff --git a/arch/x86/crypto/blake2s-core.S b/arch/x86/crypto/blake2s-core.S
-> index 8591938eee26..24910b766bdd 100644
-> --- a/arch/x86/crypto/blake2s-core.S
-> +++ b/arch/x86/crypto/blake2s-core.S
-> @@ -47,7 +47,7 @@ SIGMA2:
->  
->  .text
->  #ifdef CONFIG_AS_SSSE3
-> -ENTRY(blake2s_compress_ssse3)
-> +SYM_FUNC_START(blake2s_compress_ssse3)
->  	testq		%rdx,%rdx
->  	je		.Lendofloop
->  	movdqu		(%rdi),%xmm0
-> @@ -173,11 +173,11 @@ ENTRY(blake2s_compress_ssse3)
->  	movdqu		%xmm14,0x20(%rdi)
->  .Lendofloop:
->  	ret
-> -ENDPROC(blake2s_compress_ssse3)
-> +SYM_FUNC_END(blake2s_compress_ssse3)
->  #endif /* CONFIG_AS_SSSE3 */
->  
->  #ifdef CONFIG_AS_AVX512
-> -ENTRY(blake2s_compress_avx512)
-> +SYM_FUNC_START(blake2s_compress_avx512)
->  	vmovdqu		(%rdi),%xmm0
->  	vmovdqu		0x10(%rdi),%xmm1
->  	vmovdqu		0x20(%rdi),%xmm4
-> @@ -254,5 +254,5 @@ ENTRY(blake2s_compress_avx512)
->  	vmovdqu		%xmm4,0x20(%rdi)
->  	vzeroupper
->  	retq
-> -ENDPROC(blake2s_compress_avx512)
-> +SYM_FUNC_END(blake2s_compress_avx512)
->  #endif /* CONFIG_AS_AVX512 */
-> -- 
-> 2.23.0
+> > Today's linux-next merge of the workqueues tree got a conflict in:
+> > 
+> >   kernel/workqueue.c
+> > 
+> > between commit:
+> > 
+> >   5a6446626d7e ("workqueue: Convert for_each_wq to use built-in list check")
+> > 
+> > from the tip tree and commit:
+> > 
+> >   49e9d1a9faf2 ("workqueue: Add RCU annotation for pwq list walk")
+> > 
+> > from the workqueues tree.
 > 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> urgh. So the RCU warning is introduced in commit
+>    28875945ba98d ("rcu: Add support for consolidated-RCU reader checking")
+> 
+> which was merged in v5.4-rc1. I enabled it around -rc7 and saw a few
+> warnings including in the workqueue code. I asked about this and posted
+> later a patch which was applied by Tejun. Now I see that the tip tree
+> has a patch for this warning…
+> I would vote for the patch in -tip since it also removes the
+> assert_rcu_or_wq_mutex() macro.
+> It would be nice if this could be part of v5.4 since once the RCU
+> warning is enabled it will yell.
 
+So 5a6446626d7e is currently queued up for v5.5 as part of the RCU tree. 
 
+I can cherry pick 5a6446626d7e into tip:core/urgent if Paul and Tejun 
+agree.
 
--- 
-Regards/Gruss,
-    Boris.
+Thanks,
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+	Ingo

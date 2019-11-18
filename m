@@ -2,59 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D336FFC68
-	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 01:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4E4FFC94
+	for <lists+linux-next@lfdr.de>; Mon, 18 Nov 2019 01:53:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726336AbfKRARy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 Nov 2019 19:17:54 -0500
-Received: from ozlabs.org ([203.11.71.1]:57057 "EHLO ozlabs.org"
+        id S1726315AbfKRAxT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 17 Nov 2019 19:53:19 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34765 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726284AbfKRARx (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 17 Nov 2019 19:17:53 -0500
+        id S1726085AbfKRAxS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 17 Nov 2019 19:53:18 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47GV0D4LwYz9s4Y;
-        Mon, 18 Nov 2019 11:17:47 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47GVn73QnDz9sP3;
+        Mon, 18 Nov 2019 11:53:14 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574036270;
-        bh=er8aQvti1hb8NEWJoT8OPqKSmOaCUydcAzCHa+4TfB0=;
+        s=201702; t=1574038395;
+        bh=D2NmXcop4WalS9+nYTXJNC09L7hGx3Xm79BoPtWklA4=;
         h=Date:From:To:Cc:Subject:From;
-        b=Ofs0oW5RVGKlEy4kP4u7bfwchbS8T3x7a2ZK8nBhZUyR+W2u9RbOGNrLk8/VIGwH4
-         uiLxZZk2EwZ6Qz6SZpaZx/3UT6ckvmfhmOX0W5c3gUbZIrbygUqj5MU4iUQts6XS7I
-         4kDFMRfMHrA1leluadOoTnOy+KG3t7RxOlqM42CHUBPR3uDJELa4u6diEgKQ6j23Zi
-         XKj9G9nOcdsvOBsrH1jjXjeHAgTNUvzZXe9Znw4ZO+pP5HhgG6OPJHYrLPbaYzyAfd
-         /KCeAvxoakn+y80gk13iD8kvbDOHJ/HF/rvx9yzqBGH1AJU/2VyfO+JaeTVSzzEnfM
-         jFQyYsyZu9j+g==
-Date:   Mon, 18 Nov 2019 11:17:44 +1100
+        b=KbMy+E5msgqiCqePUJpOJVRq5aPX/RbR/8HAtFqaOa9JqP6V4wZSm29qm0Jki3+nQ
+         yxCvN8rhV4dEvpIT+yEhhI3AvgCI8tvdQbJ9KcCfFL87H3DseFxvUS8k9eeQoc0Sml
+         R5VlfF4cuFGZPRW/KGfrFTQdBhCcvZ36JiXMiEcMeD2vIo012iOh+jZDcTW/9GHefE
+         BO0b6g0CIVUfQ6Mx3v6mAWOXnO9uqrO7Rs/NVf7dWtYOcN0EMzjwjLjS7x5Pc4BEkY
+         9sIggDFNkqAALGCVNk8zSzr8S3eJwTdL7xvVvuLvxj1Qze2kye3sC/x37QtoN6tM9t
+         6lKcz+KLiwpgg==
+Date:   Mon, 18 Nov 2019 11:53:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
+To:     Jens Axboe <axboe@kernel.dk>,
         Masahiro Yamada <yamada.masahiro@socionext.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: linux-next: manual merge of the drm tree with the kbuild tree
-Message-ID: <20191118111744.2beeb816@canb.auug.org.au>
+        Dmitrii Dolgov <9erthalion6@gmail.com>
+Subject: linux-next: manual merge of the block tree with the kbuild tree
+Message-ID: <20191118115309.10b3b8de@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/USf9csr6sW8/Z5gDG3oHV/U";
+Content-Type: multipart/signed; boundary="Sig_/yMFWdo+E6/mUUCMIttLRrEe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/USf9csr6sW8/Z5gDG3oHV/U
+--Sig_/yMFWdo+E6/mUUCMIttLRrEe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm tree got a conflict in:
+Today's linux-next merge of the block tree got a conflict in:
 
-  drivers/gpu/drm/i915/Kconfig.debug
+  include/Kbuild
 
 between commit:
 
@@ -62,103 +60,35 @@ between commit:
 
 from the kbuild tree and commit:
 
-  d30213e533fa ("drm/i915: Fix Kconfig indentation")
+  c826bd7a743f ("io_uring: add set of tracing events")
 
-from the drm tree.
+from the block tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I fixed it up (I just removed the file) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/Kconfig.debug
-index 41c8e39a73ba,eea79125b3ea..000000000000
---- a/drivers/gpu/drm/i915/Kconfig.debug
-+++ b/drivers/gpu/drm/i915/Kconfig.debug
-@@@ -1,33 -1,34 +1,33 @@@
-  # SPDX-License-Identifier: GPL-2.0-only
-  config DRM_I915_WERROR
--         bool "Force GCC to throw an error instead of a warning when compi=
-ling"
--         # As this may inadvertently break the build, only allow the user
--         # to shoot oneself in the foot iff they aim really hard
--         depends on EXPERT
--         # We use the dependency on !COMPILE_TEST to not be enabled in
--         # allmodconfig or allyesconfig configurations
--         depends on !COMPILE_TEST
--         default n
--         help
--           Add -Werror to the build flags for (and only for) i915.ko.
--           Do not enable this unless you are writing code for the i915.ko =
-module.
--=20
--           Recommended for driver developers only.
--=20
--           If in doubt, say "N".
-+ 	bool "Force GCC to throw an error instead of a warning when compiling"
-+ 	# As this may inadvertently break the build, only allow the user
-+ 	# to shoot oneself in the foot iff they aim really hard
-+ 	depends on EXPERT
-+ 	# We use the dependency on !COMPILE_TEST to not be enabled in
-+ 	# allmodconfig or allyesconfig configurations
-+ 	depends on !COMPILE_TEST
- -	select HEADER_TEST
-+ 	default n
-+ 	help
-+ 	  Add -Werror to the build flags for (and only for) i915.ko.
-+ 	  Do not enable this unless you are writing code for the i915.ko module.
-+=20
-+ 	  Recommended for driver developers only.
-+=20
-+ 	  If in doubt, say "N".
- =20
-  config DRM_I915_DEBUG
--         bool "Enable additional driver debugging"
--         depends on DRM_I915
--         select DEBUG_FS
--         select PREEMPT_COUNT
--         select REFCOUNT_FULL
--         select I2C_CHARDEV
--         select STACKDEPOT
--         select DRM_DP_AUX_CHARDEV
--         select X86_MSR # used by igt/pm_rpm
--         select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
--         select DRM_DEBUG_MM if DRM=3Dy
-+ 	bool "Enable additional driver debugging"
-+ 	depends on DRM_I915
-+ 	select DEBUG_FS
-+ 	select PREEMPT_COUNT
-+ 	select REFCOUNT_FULL
-+ 	select I2C_CHARDEV
-+ 	select STACKDEPOT
-+ 	select DRM_DP_AUX_CHARDEV
-+ 	select X86_MSR # used by igt/pm_rpm
-+ 	select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
-+ 	select DRM_DEBUG_MM if DRM=3Dy
-  	select DRM_DEBUG_SELFTEST
-  	select DMABUF_SELFTESTS
-  	select SW_SYNC # signaling validation framework (igt/syncobj*)
-
---Sig_/USf9csr6sW8/Z5gDG3oHV/U
+--Sig_/yMFWdo+E6/mUUCMIttLRrEe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3R4ygACgkQAVBC80lX
-0GxOxAf9H6jZ6ZSXV0i9podvVHiAjJFeotvG2AUiBoYF6mS0hNJY6OcEYVbUrDeY
-Y0tw1VaB/pYzZW82K4lHA2NHoM8K6M75YvTI2Pxcn63mTZVQNTQUgy3mkxdx8qvP
-dJykv2KBy7UbtHc6hatqrExixGNQR5/t2TPN9qfp86pbS/qccbmhFQWVkMp7lQjL
-vVhnrBQ9msIq8NqDmxm5vpa+aO8fFad3fB7F/tcECRcRdW0x0wVq1CogiXzJdZwi
-z291AQxk/YwHdkbq7ZU1DsVTJ5zJv8ezXBYFvvSnJgzhGmkjc3A37ha52HGr96Y3
-u/rkrtO4NVWbSrh9+0mPhIYv8n1+9Q==
-=gNCg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3R63UACgkQAVBC80lX
+0GxOsgf/S/hCsamImU5eCaRECocmmYYwPF7i1a0HA8rjJ5Fn5dZq7qj7qufmmmVc
+TV7/M2v5ap8Ha7RyhP7eSlg5pFK6K3Of6hskTYMqCb36Yn6XnKAvCZs3DZScgoXd
+jc8sLwOeCY529Uw3iLncq4W+3E5LI8J6hDd62nAj/6laPB06HoWTJ1o88tgV/4zV
+VxEMK7W/xaEtyUteBCEfjdRPltDd1DPiCdM6pMzBY75PltW3zPo7hEUDw7H8gYK3
+SgYcv9wsul9+ajB+aVNUfHCv0aDck3z/in4bAIcj594mkAvYYd9yj41ATdTvP4XM
+Sw/00rOWzq0HDzFpytbnG85QuI2meg==
+=gAgV
 -----END PGP SIGNATURE-----
 
---Sig_/USf9csr6sW8/Z5gDG3oHV/U--
+--Sig_/yMFWdo+E6/mUUCMIttLRrEe--

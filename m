@@ -2,97 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA8B102DF4
-	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 22:08:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6855B102E20
+	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 22:17:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727148AbfKSVIF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Nov 2019 16:08:05 -0500
-Received: from ozlabs.org ([203.11.71.1]:35565 "EHLO ozlabs.org"
+        id S1727082AbfKSVR4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Nov 2019 16:17:56 -0500
+Received: from mail.kernel.org ([198.145.29.99]:43000 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726711AbfKSVIF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 19 Nov 2019 16:08:05 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726911AbfKSVRz (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 19 Nov 2019 16:17:55 -0500
+Received: from paulmck-ThinkPad-P72.home (unknown [199.201.64.135])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47HdhH66V3z9sPV;
-        Wed, 20 Nov 2019 08:07:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574197682;
-        bh=UFKuFkg1GaX5KZAenr7tXfFZ4CExJC6aoMjkZJhD+wg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oWvTSK62nbf5dxKRmbs1RdhvXADzsD8WWMcL06iJQSXq/7eSUS3O2wlUY2j2yIsvj
-         IFZfANOpsa+P3DjKV3wEV6/OU9gDQb6MQcgWMuYHouWtlv6Wk51g9s/rdo4uwWf5db
-         ixi4J9t11rbEnJpaX08E67kuuBdIjBA7q/ReTowIp4OGB3qzK9EqcLfgE1mSJfvYF8
-         fYrpFmMCx8DyVSPibGCZhwdJEstAjUtZleMABwiuWpLRLz9gQKEZ6+/0aRTEFE+5aa
-         LeHEi66BRpOBYsVRhJT6RkXqJpJOvADooIXJI8vlKIv7He0Jtstkb+aop7VQQDYMY4
-         OdjU4O29JEcMw==
-Date:   Wed, 20 Nov 2019 08:07:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id 02BCE2245F;
+        Tue, 19 Nov 2019 21:17:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1574198275;
+        bh=zBB0gG7s7w7EHPTR1+9i6C+WQkP2VFc4jg7B+kLpJ3Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=HCoLX8+85dKCSjN+i505BLTozj6SdkZSXyclgcvdWxxPHteoesHkdcEfsXeseVEDa
+         yc27cEKLvcbpHMRg7gKXWqTa9HR6+LORezFOI1KpZYl1G0qXGbe/YCYodWO/z74otI
+         MJ+yz0G39YU6SRXDvLkVW67eChZV9Wt8BAfQ64u8=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 90BA83520FA7; Tue, 19 Nov 2019 13:17:54 -0800 (PST)
+Date:   Tue, 19 Nov 2019 13:17:54 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Marco Elver <elver@google.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek =?UTF-8?B?QmVow7pu?= <marek.behun@nic.cz>
-Subject: linux-next: manual merge of the net tree with Linus' tree
-Message-ID: <20191120080758.2e6548f6@canb.auug.org.au>
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: [PATCH -next] kcsan, ubsan: Make KCSAN+UBSAN work together
+Message-ID: <20191119211754.GI2889@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20191119194658.39af50d0@canb.auug.org.au>
+ <e75be639-110a-c615-3ec7-a107318b7746@infradead.org>
+ <CANpmjNMpnY54kDdGwOPOD84UDf=Fzqtu62ifTds2vZn4t4YigQ@mail.gmail.com>
+ <fb7e25d8-aba4-3dcf-7761-cb7ecb3ebb71@infradead.org>
+ <20191119183407.GA68739@google.com>
+ <20191119185742.GB68739@google.com>
+ <3b8e1707-4e46-560d-a1ea-22e336655ba6@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XOr1DBCC1YjdLeUGUlNpk5o";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3b8e1707-4e46-560d-a1ea-22e336655ba6@infradead.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XOr1DBCC1YjdLeUGUlNpk5o
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Nov 19, 2019 at 01:07:43PM -0800, Randy Dunlap wrote:
+> On 11/19/19 10:57 AM, Marco Elver wrote:
+> > Context:
+> > http://lkml.kernel.org/r/fb7e25d8-aba4-3dcf-7761-cb7ecb3ebb71@infradead.org
+> > 
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > Signed-off-by: Marco Elver <elver@google.com>
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Hi all,
+Applied, thank you both!
 
-Today's linux-next merge of the net tree got a conflict in:
+							Thanx, Paul
 
-  drivers/net/phy/mdio_bus.c
-
-between commit:
-
-  fd8f64df9520 ("mdio_bus: Fix init if CONFIG_RESET_CONTROLLER=3Dn")
-
-from Linus' tree and commit:
-
-  075e238d12c2 ("mdio_bus: fix mdio_register_device when RESET_CONTROLLER i=
-s disabled")
-
-from the net tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XOr1DBCC1YjdLeUGUlNpk5o
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3UWa4ACgkQAVBC80lX
-0GwAWAf8DYnt3VNiZgKlHMns/v4Mz/TI0ODruHfOr+Ood2//utwWitiT3OvWPxZW
-Ef6a/LYzdncGPe+XAZSFbGU776RA05EkEr2U9PtTA14OppoFAXMv5rHRZ32Clxhy
-KV5B9vE8BWjkjvgiJl/UqkAOSt2MVPUL4j0UNB9PvT2H271EDSMxRgc6kGB+GXxG
-aadyloyFywlA/WWUbdnxCbUyODMR69oVven92t35Oh385hIpqCxGs13lUGI2mTHH
-29rVPLnNMdH1k0P5hOtkjm9VcLSkb2bb5niIvX0Gs+b6obrl+cBUGltltxF90Z6C
-Hqcb2I9wxapun3ttnGoV6vLLOBoxMw==
-=/w5D
------END PGP SIGNATURE-----
-
---Sig_/XOr1DBCC1YjdLeUGUlNpk5o--
+> Thanks.
+> 
+> > ---
+> >  kernel/kcsan/Makefile | 1 +
+> >  lib/Makefile          | 1 +
+> >  2 files changed, 2 insertions(+)
+> > 
+> > diff --git a/kernel/kcsan/Makefile b/kernel/kcsan/Makefile
+> > index dd15b62ec0b5..df6b7799e492 100644
+> > --- a/kernel/kcsan/Makefile
+> > +++ b/kernel/kcsan/Makefile
+> > @@ -1,6 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  KCSAN_SANITIZE := n
+> >  KCOV_INSTRUMENT := n
+> > +UBSAN_SANITIZE := n
+> >  
+> >  CFLAGS_REMOVE_core.o = $(CC_FLAGS_FTRACE)
+> >  
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 778ab704e3ad..9d5bda950f5f 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -279,6 +279,7 @@ obj-$(CONFIG_UBSAN) += ubsan.o
+> >  
+> >  UBSAN_SANITIZE_ubsan.o := n
+> >  KASAN_SANITIZE_ubsan.o := n
+> > +KCSAN_SANITIZE_ubsan.o := n
+> >  CFLAGS_ubsan.o := $(call cc-option, -fno-stack-protector) $(DISABLE_STACKLEAK_PLUGIN)
+> >  
+> >  obj-$(CONFIG_SBITMAP) += sbitmap.o
+> > 
+> 
+> 
+> -- 
+> ~Randy

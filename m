@@ -2,52 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 933AA10275A
-	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 15:51:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C246F1027BC
+	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 16:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727316AbfKSOvr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Nov 2019 09:51:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:33310 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726637AbfKSOvr (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 19 Nov 2019 09:51:47 -0500
-Received: from paulmck-ThinkPad-P72.home (199-192-87-166.static.wiline.com [199.192.87.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id DF5D721852;
-        Tue, 19 Nov 2019 14:51:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1574175106;
-        bh=JuzqTd3NVeckvX68vB9Lxu/bRIc4Olqag4QvHFImYVo=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=mHiheVcRly3VX80J1Cqm9k2B/42WIDiK9T3r8z7+tojpjvlOZ/q4mOIcxC1Lm1Tc3
-         GFsBmU13ZO+4VCcui703f02pFL74SVg52FVlOnBTIEjprMl4GyIcgl0j9xOsXa43OQ
-         LS7yf2ltwBIRLyyyfjqp3x+PZFYX3tF2nuwAOP8k=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 895D23520B06; Tue, 19 Nov 2019 06:51:46 -0800 (PST)
-Date:   Tue, 19 Nov 2019 06:51:46 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rjw@rjwysocki.net, lenb@kernel.org, linux-acpi@vger.kernel.org,
-        sfr@canb.auug.org.au
-Cc:     linux-next@vger.kernel.org
-Subject: next-20191118 rcutorture gets lots of "ACPI: Masking GPE 0x0"
-Message-ID: <20191119145146.GA25855@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
+        id S1726637AbfKSPLY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Nov 2019 10:11:24 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:58690 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726307AbfKSPLX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Nov 2019 10:11:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Tlv1z9IApTP7G1WMZKmi4nhZt6ESnPxSYnU0GkdrTBw=; b=tS+FH6uPjypW8JbonUzPq8uSs
+        kep4qHtNkWyJs37reZ7aCG1cj6DafB7WaCbvO/P3M7cfufIa6FcUAGuFdG/i6UsnNdIE3SVgtgJou
+        5wL8SLD/QGGvHfOCJwNdFAW1PB8KiL39AaGWyQjOVt3j3dzHG4UxFZFMojxMK+3SZ4VHIiOlam5Bg
+        Y8ncrqb7JDVGiQumireDmwYEdstSulIA3NyzKoZqmbrAKxyNv+P9pOtO0ov80/pIxKIa8nfhKhvW2
+        MSakneHqCn55Ud6Ho+CqkEpAHKQtsT++B0MrxvMFp2rkx/v5u4A2vTMQqQYYsI7BHlleYRdRfZviF
+        5Esj1lxSQ==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iX5A2-00030H-7p; Tue, 19 Nov 2019 15:11:22 +0000
+Subject: Re: linux-next: Tree for Nov 19 (kcsan)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev@googlegroups.com, Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>
+References: <20191119194658.39af50d0@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e75be639-110a-c615-3ec7-a107318b7746@infradead.org>
+Date:   Tue, 19 Nov 2019 07:11:21 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20191119194658.39af50d0@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
+On 11/19/19 12:46 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20191118:
+> 
 
-I had occasion to run rcutorture on next-20191118, and in a five-minute
-run got 1,810,735 instances of "ACPI: Masking GPE 0x0" printed to the
-console.  This run is under qemu on an ordinary x86 laptop.
+on x86_64:
 
-Is this a known issue?
+It seems that this function can already be known by the compiler as a
+builtin:
 
-							Thanx, Paul
+../kernel/kcsan/core.c:619:6: warning: conflicting types for built-in function ‘__tsan_func_exit’ [-Wbuiltin-declaration-mismatch]
+ void __tsan_func_exit(void)
+      ^~~~~~~~~~~~~~~~
+
+
+$ gcc --version
+gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,68 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A293F102833
-	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 16:38:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA3B102903
+	for <lists+linux-next@lfdr.de>; Tue, 19 Nov 2019 17:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727682AbfKSPiH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 Nov 2019 10:38:07 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:38290 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727505AbfKSPiG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Nov 2019 10:38:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=K+kVvT7tsBTbSnTMawe6RXRvGys013zzmPiihyV73Eg=; b=jw21mr9VbIGbwVBuUsJyltrrP
-        7qAhno3zr5CTueQza+Ko8A8Jp06MN6AZDHmgrkNhQULmZt0MAAcpX84sX4MDcFj37i23OzHgPvq+f
-        W+V5MgGFfbmAAxDEvoFUQVOegvmMaTRBJG5JvbIqgJIG4cs3FTQgeHVCk4RcX3C4VKhGL+CxLWxsN
-        16kC0ihEjNAzoPonY/vnI9q77oqsu78dVMkesg+qUttKHO9KhVZsB32z8yQIlI9phVy5+6AENU8tx
-        z0XJtzLCy+TxYHopDF/mIO51YTW3WBwmLtSxbhjUmfC+L+2dLEyWaOnHfj7hNT2AyDHPnkbZsROAm
-        EUWRIkOWg==;
-Received: from [2601:1c0:6280:3f0::5a22]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iX5Zs-0003nO-57; Tue, 19 Nov 2019 15:38:04 +0000
-Subject: Re: linux-next: Tree for Nov 19 (objtool)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20191119194658.39af50d0@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <a5d9048b-2393-7a81-626f-c7aee8cf5730@infradead.org>
-Date:   Tue, 19 Nov 2019 07:38:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        id S1728384AbfKSQM3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 Nov 2019 11:12:29 -0500
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:33008 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728062AbfKSQM3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 Nov 2019 11:12:29 -0500
+Received: by mail-ot1-f66.google.com with SMTP id u13so18362683ote.0
+        for <linux-next@vger.kernel.org>; Tue, 19 Nov 2019 08:12:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=93xPAx0kr8oA76/KRE4IYmxNgzvAosH5EkrlivRRC2U=;
+        b=ClXF5T0QxswAmDjTXcrbHV0f5l5bHz9bFxuqQNGTRVsW8inASFtA15n5Q0gITA42Of
+         WgZN0aHjFmC6TN6uc8Gib2Pd1f01ywaANFiRL7pkzhH3jBHjqPKLbp6v+zlMlV1Ec3XN
+         oRRrF7om7Wdk9uZtEojsxLcJ61ZUtzGYbriIOnJP4/9zx44D0YJ9RfxA+RjXf8MLdLDx
+         yqRapjPsXz/Q+H56teNhxpYtQHXNVs2YDiNfANeT3MsEeYYBfn6Ws5BdP15QGgT5R5aT
+         5ryXoz2JRGvyekdRsLNFqq7IaU0O0IUd7jjMqDgDzF9lxfNQvNOb1DzOyxZYm46JPxsZ
+         r0nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=93xPAx0kr8oA76/KRE4IYmxNgzvAosH5EkrlivRRC2U=;
+        b=GjJgfNf0sI1eoVoIkJLfCMlIjZRj7QFgXl9mUC6IJydE8ZjlZ4E8qEO9XiyfN4U9Ni
+         N4zzwCzrcgrNTEDQML7PmvoGsRxG4S7MYZnssiZvqWz1m+Th7HsuEksYJRDGVtEJKoUp
+         J7F1LmQ4YxAMU7SxT0qICr1FSTLg2EPFPSa26wPTx8F+vIlMcmgpaZ2OJ6Dg6nJsq9pI
+         TJ+bsPZVGzyM0mB0p9KqVhFv1+x+D7vc6scP7eKZnTK9tliuunf7GJpfiQmQtumv2AYY
+         sV12Y+dQvOH3qNWmAaeTaXiVAsb3/hsuSnLt9jUVxp++8IoB5qTX/47xs7jU+Eb6HPkh
+         qpNw==
+X-Gm-Message-State: APjAAAXfFZ1xhoHmlkT8azaEr8r7++R/rLpiS68ZR5D3bAdn1Vu90caB
+        6OSKY8PI1ZoF3J8zONmoD/P9P4FF1PWrbnWrEt78sQ==
+X-Google-Smtp-Source: APXvYqyNp6UfNZXhM0FdbL81rw15qBOyGaU0VI2pZSScFreylKhSOdolblkQZ/c92fphjqt26+PkucVplQLTOd86c1c=
+X-Received: by 2002:a9d:69cf:: with SMTP id v15mr4108901oto.251.1574179947889;
+ Tue, 19 Nov 2019 08:12:27 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20191119194658.39af50d0@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20191119194658.39af50d0@canb.auug.org.au> <e75be639-110a-c615-3ec7-a107318b7746@infradead.org>
+In-Reply-To: <e75be639-110a-c615-3ec7-a107318b7746@infradead.org>
+From:   Marco Elver <elver@google.com>
+Date:   Tue, 19 Nov 2019 17:12:16 +0100
+Message-ID: <CANpmjNMpnY54kDdGwOPOD84UDf=Fzqtu62ifTds2vZn4t4YigQ@mail.gmail.com>
+Subject: Re: linux-next: Tree for Nov 19 (kcsan)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/19/19 12:46 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20191118:
-> 
+On Tue, 19 Nov 2019 at 16:11, Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> On 11/19/19 12:46 AM, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > Changes since 20191118:
+> >
+>
+> on x86_64:
+>
+> It seems that this function can already be known by the compiler as a
+> builtin:
+>
+> ../kernel/kcsan/core.c:619:6: warning: conflicting types for built-in fun=
+ction =E2=80=98__tsan_func_exit=E2=80=99 [-Wbuiltin-declaration-mismatch]
+>  void __tsan_func_exit(void)
+>       ^~~~~~~~~~~~~~~~
+>
+>
+> $ gcc --version
+> gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
 
-on x86_64:
+Interesting. Could you share the .config? So far I haven't been able
+to reproduce.
 
-arch/x86/kernel/cpu/mce/core.o: warning: objtool: mce_timed_out()+0x23: unreachable instruction
-kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction  [known]
-kernel/cred.o: warning: objtool: prepare_creds()+0xf0: unreachable instruction
-samples/ftrace/ftrace-direct.o: warning: objtool: .text+0x0: unreachable instruction
-samples/ftrace/ftrace-direct-too.o: warning: objtool: .text+0x0: unreachable instruction
-samples/ftrace/ftrace-direct-modify.o: warning: objtool: .text+0x0: unreachable instruction
+I can get the warning if I manually add -fsanitize=3Dthread to flags for
+kcsan/core.c (but normally disabled via KCSAN_SANITIZE :=3D n). If
+possible could you also share the output of `make V=3D1` for
+kcsan/core.c?
 
+Thanks,
+-- Marco
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> --
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>

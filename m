@@ -2,133 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C89C810389E
-	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2019 12:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70FC2103D0B
+	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2019 15:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729130AbfKTLWn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Nov 2019 06:22:43 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:43111 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726689AbfKTLWm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Nov 2019 06:22:42 -0500
-Received: by mail-lj1-f196.google.com with SMTP id y23so27059420ljh.10
-        for <linux-next@vger.kernel.org>; Wed, 20 Nov 2019 03:22:41 -0800 (PST)
+        id S1731245AbfKTOOu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Nov 2019 09:14:50 -0500
+Received: from mail-yb1-f180.google.com ([209.85.219.180]:46580 "EHLO
+        mail-yb1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731161AbfKTOOr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Nov 2019 09:14:47 -0500
+Received: by mail-yb1-f180.google.com with SMTP id v15so10363258ybp.13
+        for <linux-next@vger.kernel.org>; Wed, 20 Nov 2019 06:14:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=UTkXgjkYRybCH/ZS4RWR8tpgnHj6/1Pw2cuT0ewUYO8=;
-        b=Xt22LJecb0aZixz44RtWTZ5wWdFSf2CFyf9ta6FjFahun+oKUHy7c6hGli6dUFoGKY
-         OhyZQwNIqUpZVWhdcHe8b8hhhlNM9KZN3/6tNwt7ktLmjqqh6pNxhNWhElx/jj+ZgS0b
-         zxzMXq7o/Wa5zT3yxyrdFi0ip1H6bNyE46sC00urjGlxwYV4lx/H/N/PG9zsp6Ayvf6d
-         BIGZL6bId0oK4nnJ6HUmqYOgWf3RvxqA4YoPOAMZ8OIdG+Tksv9fu57thSEI5ClsoZne
-         MrrN7tufYt5azx/hgZocTofRZp4pC1FMkfPWzYcXhCWAjlVAXD4/fAw1v/vsNb4IHU1I
-         hDxg==
+        bh=z2UDmGEazRzqVtYbIxqCFln3SsijfpyFXVxgcc1E0qU=;
+        b=D+L7D9D1RSu8VCBXuc5ZgSzBSEZQyB3qHGmvN2f/NYWFHzQjM+He4nX5410BItlAvR
+         n5xCLGLS+YOHuphnpo1Mq8MCVh1JF5dRAiMlQ8C7xXSITB6vuVIdion4Y/1MuJ46n1fc
+         rhKVFB48YSyNHB3Wkbh8UBeqoTzwZEZgZ8JvkAfc/LXRzmHEbk3BUxCqD9ATBuKcY+G1
+         0AAtcnXHMf7YiXDuCMbKUCNhfWFjsebL+L4eGzzhe1kF6/Pcs47h8BBxJDhSsuK1zpXX
+         Cxx47Op/tVUo7eMYJ6Ddu9Frws5T+yoKlbmxB5LjPKjTuWbzMtv42nQFNTYWyvHLa4pw
+         zVAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=UTkXgjkYRybCH/ZS4RWR8tpgnHj6/1Pw2cuT0ewUYO8=;
-        b=UF3oVwblBF63V49a7za7RE3W5jNSrNJGTI9IjPcr7Ha1XIYEZWgtA+AXUjNfSAPDUT
-         TQwYPBBWTFfeQMTwqzXS36uruLS3YzsjZ38Hl3BH47yKgYbId459sZrdm04EWvFm2q1x
-         DPMMShs5GZtcndqzBU2CgGuajCGBBvSn8Jq4lD8dqzjptaGNkwM1wOQT8qez96/huIBm
-         gIyxq8x45aof4ONg4FyFPiE9WFwv8xpprH751KN7A0tgm8VFbBFHpYrvhyLXKCnYNdXy
-         2pdEKVKJ6uWI3UNQgwbg1JbrNu6ISET+dxdmXOxMso6UTe41mkytu3jzXyQHq/+NN8Qv
-         /wEg==
-X-Gm-Message-State: APjAAAUgANCihrCJS0P56d3OskOrfJwIrjwjefCPcUqVZo2/yArsoL6G
-        mcuhwRqjQ6LZIAY9YwtynOjQYbdh3GkPAkdr146+j+bfedg=
-X-Google-Smtp-Source: APXvYqx8/Ld2bcP/DCH7muH6RTT5RJVfqWwIO9KUyYktuYJLrzxNJzvAwt0iX9ypsOo9I33kzcF59aYo5vjIrcGo7to=
-X-Received: by 2002:a2e:b0d3:: with SMTP id g19mr2176648ljl.135.1574248960061;
- Wed, 20 Nov 2019 03:22:40 -0800 (PST)
+        bh=z2UDmGEazRzqVtYbIxqCFln3SsijfpyFXVxgcc1E0qU=;
+        b=At+JE294twZMq93VIF3G7Oh3E+L8XKo22rpKwafqHVvr8NhTKKfmZh+bxXRI8JJp5v
+         731B5uja3SAcZ7t8I9ddXIw1GUOGZBoP4TW5xRNA99cAZntrdYWygEMAiAj/YEnofYRe
+         +XrVMS2WOmuUHEBrYi7JP/lbogCL+hOxot97xh1J871FOUXcV32IDFOMEqrWFqWY8syR
+         bH+bmM1uAYlzyxTy++27+2V+aRFmNCsoD0DeuqscvNztOQ7RdEsxov+qh9Z08kvDAm4J
+         qSVgIkL7NYi0mctAJizCrkzr69DfakcFpHujy4YTfoK9g2iswUb84Rm6P8lJG2sI5KC/
+         oqYQ==
+X-Gm-Message-State: APjAAAWiS5VTz3T5aEiKsiJ41JoZPGsIyGq51JNUZNvPx659yI3GX56l
+        HLfhwoEXkUb7lbMItza7EYKaBSy/
+X-Google-Smtp-Source: APXvYqzfeTkpQ77rfJhhYnWZ42wZaPeDzl5yBUJ/WH6esj7XjBYixhkrqcPpb1bx0WhmqUH/R5nD7Q==
+X-Received: by 2002:a25:c945:: with SMTP id z66mr1983102ybf.393.1574259284716;
+        Wed, 20 Nov 2019 06:14:44 -0800 (PST)
+Received: from mail-yw1-f52.google.com (mail-yw1-f52.google.com. [209.85.161.52])
+        by smtp.gmail.com with ESMTPSA id g6sm10966573ywk.14.2019.11.20.06.14.42
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 20 Nov 2019 06:14:43 -0800 (PST)
+Received: by mail-yw1-f52.google.com with SMTP id j190so8672738ywf.8
+        for <linux-next@vger.kernel.org>; Wed, 20 Nov 2019 06:14:42 -0800 (PST)
+X-Received: by 2002:a81:53d5:: with SMTP id h204mr1633399ywb.411.1574259281698;
+ Wed, 20 Nov 2019 06:14:41 -0800 (PST)
 MIME-Version: 1.0
-References: <20191120203434.2a0727b3@canb.auug.org.au>
-In-Reply-To: <20191120203434.2a0727b3@canb.auug.org.au>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 20 Nov 2019 16:52:28 +0530
-Message-ID: <CA+G9fYufQjPVsDATdyDn+xtxD1FrwnVGKJ+bpVAxvoropJ=7hg@mail.gmail.com>
-Subject: Re: linux-next: Tree for Nov 20
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-perf-users@vger.kernel.org,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
+References: <20191120205009.188c2394@canb.auug.org.au>
+In-Reply-To: <20191120205009.188c2394@canb.auug.org.au>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 20 Nov 2019 09:14:04 -0500
+X-Gmail-Original-Message-ID: <CA+FuTScVjG_jWH-O-57Q+gTcx0v+Qm5TR4WxsWrQUTEajS_wkQ@mail.gmail.com>
+Message-ID: <CA+FuTScVjG_jWH-O-57Q+gTcx0v+Qm5TR4WxsWrQUTEajS_wkQ@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the net tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Perf build failed on linux next for i386 and armv7.
-
-On Wed, 20 Nov 2019 at 15:04, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Nov 20, 2019 at 4:50 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
 > Hi all,
 >
-> Changes since 20191119:
+> n commit
 >
-> The net tree gained a conflict against Linus' tree.
+>   d4ffb02dee2f ("net/tls: enable sk_msg redirect to tls socket egress")
 >
-> Non-merge commits (relative to Linus' tree): 11697
->  10361 files changed, 506041 insertions(+), 224327 deletions(-)
+> Fixes tag
+>
+>   Fixes: f3de19af0f5b ("Revert \"net/tls: remove unused function tls_sw_sendpage_locked\"")
+>
+> has these problem(s):
+>
+>   - Subject does not match target commit subject
+>     Just use
+>         git log -1 --format='Fixes: %h ("%s")'
+>
+> Did you mean:
+>
+> Fixes: f3de19af0f5b ("net/tls: remove unused function tls_sw_sendpage_locked")
 
-i386 build failed log,
----------------------------
- In file included from libbpf.c:52:0:
- libbpf.c: In function 'bpf_program__collect_reloc':
- libbpf_internal.h:59:22: error: format '%lu' expects argument of type
- 'long unsigned int', but argument 3 has type 'Elf64_Addr {aka long
-long unsigned int}' [-Werror=format=]
-   libbpf_print(level, "libbpf: " fmt, ##__VA_ARGS__); \
-                       ^
- libbpf_internal.h:62:27: note: in expansion of macro '__pr'
-  #define pr_warn(fmt, ...) __pr(LIBBPF_WARN, fmt, ##__VA_ARGS__)
-                            ^~~~
- libbpf.c:1874:5: note: in expansion of macro 'pr_warn'
-      pr_warn("bad call relo offset: %lu\n", sym.st_value);
-      ^~~~~~~
- libbpf.c:1874:38: note: format string is defined here
-      pr_warn("bad call relo offset: %lu\n", sym.st_value);
-                                     ~~^
-                                     %llu
- Makefile:652: arch/x86/Makefile: No such file or directory
- cc1: all warnings being treated as errors
-
- find: unknown predicate `-m32/arch'
-
- Try 'find --help' for more information.
-   CC       perf/1.0-r9/perf-1.0/staticobjs/libbpf_probes.o
- i686-linaro-linux-gcc: warning: '-x c' after last input file has no effect
-   CC       perf/1.0-r9/perf-1.0/staticobjs/xsk.o
- i686-linaro-linux-gcc: error: unrecognized command line option
-'-m32/include/uapi/asm-generic/errno.h'
- i686-linaro-linux-gcc: fatal error: no input files
- compilation terminated.
-
-arm build log:
-------------------
- Makefile:652: arch/arm/Makefile: No such file or directory
- In file included from libbpf.c:52:0:
- libbpf.c: In function 'bpf_program__collect_reloc':
- libbpf_internal.h:59:22: error: format '%lu' expects argument of type
- 'long unsigned int', but argument 3 has type 'Elf64_Addr {aka long
-long unsigned int}' [-Werror=format=]
-   libbpf_print(level, "libbpf: " fmt, ##__VA_ARGS__); \
-                       ^
- libbpf_internal.h:62:27: note: in expansion of macro '__pr'
-  #define pr_warn(fmt, ...) __pr(LIBBPF_WARN, fmt, ##__VA_ARGS__)
-                            ^~~~
- libbpf.c:1874:5: note: in expansion of macro 'pr_warn'
-      pr_warn("bad call relo offset: %lu\n", sym.st_value);
-      ^~~~~~~
- libbpf.c:1874:38: note: format string is defined here
-      pr_warn("bad call relo offset: %lu\n", sym.st_value);
-                                     ~~^
-                                     %llu
-
-ref:
-https://ci.linaro.org/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=intel-core2-32,label=docker-lkft/650/consoleText
-https://ci.linaro.org/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=am57xx-evm,label=docker-lkft/650/consoleText
-
-- Naresh
+Indeed. I messed up the subject line, sorry. That is what it should
+have looked line.

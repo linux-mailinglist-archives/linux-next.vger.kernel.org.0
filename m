@@ -2,94 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C94BF104630
-	for <lists+linux-next@lfdr.de>; Wed, 20 Nov 2019 22:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242911047B2
+	for <lists+linux-next@lfdr.de>; Thu, 21 Nov 2019 01:48:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726759AbfKTVyc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 Nov 2019 16:54:32 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:35714 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726721AbfKTVyb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 Nov 2019 16:54:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=jA44cDlCYtFxTSE0zLSv7o10kem9ZSkmgN7lwhPboHE=; b=cfJhrH4+1dDqhuhuXQgOY0X9q
-        /P+s6xpxhX8Skj8CX0KgqC4mTqkcoOVOG8vZXBlwTOb9CHb/EoMG2TuuexfOE25yB1/5p953c2N1U
-        JcPjGb92UgJ/RXjCtHBtNlzBuU58+ctFBZ1u8T+pzEwfpa05lzqiyCiGoWzfhmwpSRbqu1wGiTzng
-        R7Xx4UpX5q8JA308lBpyR66MrZKZ0PjZANMpq3SzKHZ6oSJkR6xF1IBqHxBC4cCwtmWRHPFrHNZoM
-        SNxmmvk/KCeY3j+RiYuvDhJt2VI5ZZYURPOGl3cvp0Ypn8M68wyY5hOvrDom+tqUo8mOvisgrEUFL
-        ergq6QRhQ==;
-Received: from [2601:1c0:6280:3f0::5a22]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iXXvi-0003DB-TU; Wed, 20 Nov 2019 21:54:30 +0000
-Subject: Re: [Intel-gfx] linux-next: Tree for Nov 19 (i915)
-To:     Chris Wilson <chris@chris-wilson.co.uk>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     intel-gfx <intel-gfx@lists.freedesktop.org>,
+        id S1726380AbfKUAsV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 Nov 2019 19:48:21 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47009 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726293AbfKUAsV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 20 Nov 2019 19:48:21 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47JLX261zQz9sNx;
+        Thu, 21 Nov 2019 11:48:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1574297298;
+        bh=Eu663nPfTMySBSC5/BdH1LC8Obd3ZEPCoc8HFbZQc1Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GmQHdo3jK9KAw2y7kpzVIu+Slphb1oneVrNSHv7MT2nTJDTYTeCbM0cktLI8nHByv
+         4XgtgPfMJv62mbnsQ1Ag0toHomJ78ZO2WMwUlGPnikJATvRo04ybiFAURmfOjiL3LR
+         gt4XCYnwJpz0RUueL0pbEv+uXg+Mtp3wUyiv1RmwSNcE5g2cvA31myzaNERZ2Ylsrw
+         fIqDQNgx32ZvBh0vk1ASQoTdip/L1lbNfqQQMKHjFu3eWWjNmivgXx/RXiw5qyv2EH
+         IOHHRdY84OLgHcOU9gAgpi5LibUhu7pG7dqTUCKeE6KoS8BVDOrspfbPD6vqKOgMR5
+         98qBZD21vO/6Q==
+Date:   Thu, 21 Nov 2019 11:48:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-References: <20191119194658.39af50d0@canb.auug.org.au>
- <1d30acd4-9947-d228-967f-c4e76ebca832@infradead.org>
- <87k17uwmlv.fsf@intel.com>
- <157426899658.13839.6346197595846229766@skylake-alporthouse-com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <fd7a54c4-99b4-abb2-15d1-96324fdff111@infradead.org>
-Date:   Wed, 20 Nov 2019 13:54:29 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.1
+        Julian Wiedmann <jwi@linux.ibm.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20191121114817.4da07ad7@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <157426899658.13839.6346197595846229766@skylake-alporthouse-com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/oh3m/JgKtzHa+Mq3FQDd5L2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/20/19 8:56 AM, Chris Wilson wrote:
-> Quoting Jani Nikula (2019-11-20 16:15:08)
->> On Tue, 19 Nov 2019, Randy Dunlap <rdunlap@infradead.org> wrote:
->>> On 11/19/19 12:46 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20191118:
->>>
->>>
->>> on x86_64:
->>>
->>> ERROR: "pm_suspend_target_state" [drivers/gpu/drm/i915/i915.ko] undefined!
->>>
->>> # CONFIG_SUSPEND is not set
->>
->> a70a9e998e8e ("drm/i915: Defer rc6 shutdown to suspend_late")
-> 
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gt_pm.c b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-> index 060ee0f44c70..982040ecbd01 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gt_pm.c
-> @@ -275,7 +275,7 @@ void intel_gt_suspend_prepare(struct intel_gt *gt)
-> 
->  static suspend_state_t pm_suspend_target(void)
->  {
-> -#if IS_ENABLED(CONFIG_PM_SLEEP)
-> +#if IS_ENABLED(CONFIG_SUSPEND) && IS_ENABLED(CONFIG_PM_SLEEP)
-> 
-> Declared under PM_SLEEP.
-> Defined under SUSPEND.
-> -Chris
+--Sig_/oh3m/JgKtzHa+Mq3FQDd5L2
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Aside from being a slightly incomplete patch (missing 3 ending context lines),
-this works fine.  Thanks.
+Hi all,
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Today's linux-next merge of the net-next tree got a conflict in:
 
--- 
-~Randy
+  drivers/s390/net/qeth_l2_main.c
 
+between commit:
+
+  c8183f548902 ("s390/qeth: fix potential deadlock on workqueue flush")
+
+from the net tree and commit:
+
+  9897d583b015 ("s390/qeth: consolidate some duplicated HW cmd code")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/s390/net/qeth_l2_main.c
+index 4bccdce19b5a,ae69c981650d..000000000000
+--- a/drivers/s390/net/qeth_l2_main.c
++++ b/drivers/s390/net/qeth_l2_main.c
+@@@ -802,14 -779,6 +784,7 @@@ static int qeth_l2_set_online(struct cc
+  		goto out_remove;
+  	}
+ =20
+- 	if (qeth_is_diagass_supported(card, QETH_DIAGS_CMD_TRAP)) {
+- 		if (card->info.hwtrap &&
+- 		    qeth_hw_trap(card, QETH_DIAGS_TRAP_ARM))
+- 			card->info.hwtrap =3D 0;
+- 	} else
+- 		card->info.hwtrap =3D 0;
+-=20
+ +	mutex_lock(&card->sbp_lock);
+  	qeth_bridgeport_query_support(card);
+  	if (card->options.sbp.supported_funcs)
+  		dev_info(&card->gdev->dev,
+
+--Sig_/oh3m/JgKtzHa+Mq3FQDd5L2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3V3tEACgkQAVBC80lX
+0GwCXAf/aTWlvWU2Hfwv9UGOgT/7JXN9HDnUBSINFgcQXKrP2BdrBsyjM/+z7b49
+0e5i12Qjow4PPm7JPnCKmjKUOlQnL8GEqzu6ALZ5vMds5HA3/jYc16qj+Oouc6Jl
+okvEPEncgOmNKAB0KI8ojl8yVaeUvVPfLBcMbYaJLINpSsmEGU806nZD1gTQRrYi
+bZ4JhMLTmgIuOwGLae0MLLeYV8QxHv60EfC/lsltZcfew4hFpijUD6eSO/bTGG7q
+qK9Vmmwb58GfM+4qEJH/UkX3Jo3sIMIYCok06M86C0RbUKh3goKAc6rxv6YIL4gT
+Co8Au3WBEr+/DoRcq38gTsZxFCM7PQ==
+=a6kG
+-----END PGP SIGNATURE-----
+
+--Sig_/oh3m/JgKtzHa+Mq3FQDd5L2--

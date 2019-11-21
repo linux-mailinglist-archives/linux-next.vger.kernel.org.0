@@ -2,88 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B601104CA7
-	for <lists+linux-next@lfdr.de>; Thu, 21 Nov 2019 08:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7440A104E11
+	for <lists+linux-next@lfdr.de>; Thu, 21 Nov 2019 09:35:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726230AbfKUHeR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 Nov 2019 02:34:17 -0500
-Received: from ozlabs.org ([203.11.71.1]:40223 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726165AbfKUHeR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 21 Nov 2019 02:34:17 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47JWXP0Vqmz9sPT;
-        Thu, 21 Nov 2019 18:34:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574321654;
-        bh=pHBKt/pIY8/pjggPAOVBDfJjTlf2BbnB05Uov87WqvI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VxbBSn76Z6vf8xj15aFRw6osvug0l9Ufr0h6eQWilkoNexlE0bfOBa894L3JopsaZ
-         WaoBvWVQBbFyusX+FWnKIz6vmPl0JSy8Jjct6VDIwuPxvPdzCl8Q6um7IwQVWBK3o/
-         suWdyMgjX2Wdq/booEetrcnFLMkZXeha2IZb/k51uCWee5yHkxQbWn06aFfG9o1KEV
-         1aOEvj4xPmPMcOUsbbLzfoxxq+5lX16zdnfSHnQo/rRcnMsd5d2zT4hdGb0dS2D9rO
-         fIUtduC0aJ9LAdWKGNa8DsZMcXG5vU8G+MlxNuS+xSNgLzazn2RiU/Xu7jxvRo/EHm
-         o8wlB4vLlgD1w==
-Date:   Thu, 21 Nov 2019 18:34:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726165AbfKUIfk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 Nov 2019 03:35:40 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:53740 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726132AbfKUIfk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 Nov 2019 03:35:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=Pf9HiS6tkQID0Zrfp+JWOOfK8fSCKwS8E5N1FoKMFok=; b=ggQmS1WwNOr5lswFOkl8wAvMV
+        hLRy/t77717TKhEUigKvyKAQpDG5AXLyMFQA9Bb7lgtglU25McuSAqzRL7P2ZNk+6dr+h43rDXu/0
+        7/YuwPYzLlKU8R0s+bzgqCJZMO+FJA0yX9EYHwTcLz0sa+5Z99iqLt2ermLbf8TvB+Ut3mdbhSKDe
+        qJy3fnQbWCM6rMX1QRDN74QVrK3SeAwYOe9fEr25JrGPrIyaPs/ZrIlKBoZOyfAaV4MAFf6+JzqtM
+        VrYUzZA/hVhGdZLpUJPQBwHYZqM9DdkSkq8oRyH8NdgFBFRgdG3K0OfRwcVPrKTGXexeuLDhXAY6K
+        nI+cg3Xjw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iXhvx-0004Ou-JK; Thu, 21 Nov 2019 08:35:25 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6A683011FE;
+        Thu, 21 Nov 2019 09:34:12 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1E2DE2B28AC3B; Thu, 21 Nov 2019 09:35:23 +0100 (CET)
+Date:   Thu, 21 Nov 2019 09:35:23 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "J. Bruce Fields" <bfields@fieldses.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>
-Subject: linux-next: build warning after merge of the net-next tree
-Message-ID: <20191121183404.6e183d06@canb.auug.org.au>
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: Re: linux-next: manual merge of the tip tree with the nfsd tree
+Message-ID: <20191121083523.GL4097@hirez.programming.kicks-ass.net>
+References: <20191121142833.2c9ffd62@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gFd=x/UNjRv++bq.voC0wX8";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rQ2U398070+RC21q"
+Content-Disposition: inline
+In-Reply-To: <20191121142833.2c9ffd62@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gFd=x/UNjRv++bq.voC0wX8
-Content-Type: text/plain; charset=US-ASCII
+
+--rQ2U398070+RC21q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+On Thu, Nov 21, 2019 at 02:28:33PM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the tip tree got a conflict in:
+>=20
+>   include/trace/events/rpcrdma.h
+>=20
+> between commit:
+>=20
+>   832b2cb95543 ("svcrdma: Improve DMA mapping trace points")
+>=20
+> from the nfsd tree and commit:
+>=20
+>   60fdad00827c ("ftrace: Rework event_create_dir()")
+>=20
+> from the tip tree.
+>=20
+> I fixed it up (I just used the former) and can carry the fix as
 
-[Sorry, I should have reported this earlier]
+Yes, that looks right. All I did was remove that stray ';' anyway, which
+the nfs patch did too.
 
-After merging the net-next tree, today's linux-next build (powerpc
-allyesconfig) produced this warning:
-
-net/netfilter/nf_flow_table_offload.c: In function 'nf_flow_rule_match':
-net/netfilter/nf_flow_table_offload.c:80:21: warning: unsigned conversion f=
-rom 'int' to '__be16' {aka 'short unsigned int'} changes value from '327680=
-' to '0' [-Woverflow]
-   80 |   mask->tcp.flags =3D TCP_FLAG_RST | TCP_FLAG_FIN;
-      |                     ^~~~~~~~~~~~
-
-Introduced by commit
-
-  c29f74e0df7a ("netfilter: nf_flow_table: hardware offload support")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/gFd=x/UNjRv++bq.voC0wX8
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--rQ2U398070+RC21q
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3WPewACgkQAVBC80lX
-0GyIegf9FP8sPu8uRe2P5VhysaTMn+lMv4Wuj2nhSYtF4kyfYIktFH9/bYHEDCyM
-sas2ghltHdxd7433oEr9eZK2m8TwKzw1brMBOFl2TTvORKnK8xmKGMcXlOk0H0Vb
-z5pFF5V+yoefHZTQznF0uFil8QsSJwbrSAhAosYEWcC4O2L0OewE9DaRlJQCs7dA
-7amWOV1G5Sa9PnyZ4H3NRbp2foxXOGuNDKDPaWRgwagthu3xt5obfpgKgxGAW07P
-X+1f7rY67mJR/NGKr6/H4jTYzUXqd4GHmu+B7uUYgs0LCNjc6GuTo7o6Q8D8cKr+
-WJHmdG4PiC+jk4o8TezaC6ifqAIdYA==
-=faZe
+iQIzBAABCgAdFiEEv3OU3/byMaA0LqWJdkfhpEvA5LoFAl3WTEoACgkQdkfhpEvA
+5LoNAQ//ZqKoR6y13GCkjtB1W2OK6eyOIEmny2E2NIMDfHdqZyZBN2BIIFeZVId6
+rp5O5yMk828GbGbjoFMc1Y1EPNyIu7ekQkFuskaZJuozK5gIjePRd8SxZ3HnEmRX
+w3ZowXaiL3NrjpiJyMDSqPe9xu+JNNeqkakS50Z/FIyC0RHLctVjCM9u13vlMaiF
+1seJeJU2Xs8XOQ8WiCkT2ln4z8Pc2WWP5Wn4Yz23M4yhekU6DiXKcYIbvCOVLrmg
+JVqaO+ZGUJ9rb8lyj3+nGvB39HkSn9C6Vmw6vkJ6oVshfXrv70DK6oHdUz8qt3v7
+9X8QwmIYLq7DiGJCKx8058qCq/SxPQfuXHIWieIQNJ3gHP+0EQciXhyDgA3a1RX0
+5GvMXK28Ur9VWdroq0OIcbpfF/Khk+/71PHouoA4RqhAyNHoMKUo7yUH7WdGYxdc
+d9fkX3XBUdm0bbB1Cnx97+x0iPFRK7gQ+hUbygbPJx9UM0/BAFptKwHedhs2wRCb
+mWxnhDlwxsnTbtIuRDRep0PLah7L5U+yGWAkLA4++iDcUMKA+OjcI9psqW1YZiHF
+LpBfESeMF+KSti6v75DuBPtNkwRdoH+cVt7Rsws+ddgyoorlE8rNBKbYzq8RCdd5
+ay2/BViteY5tuDOljY4rlDA+nn2VCaGLqjFM5c8U9gEq4Ka5AnA=
+=DMx3
 -----END PGP SIGNATURE-----
 
---Sig_/gFd=x/UNjRv++bq.voC0wX8--
+--rQ2U398070+RC21q--

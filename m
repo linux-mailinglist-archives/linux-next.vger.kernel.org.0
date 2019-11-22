@@ -2,141 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C8210752D
-	for <lists+linux-next@lfdr.de>; Fri, 22 Nov 2019 16:48:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53916107A45
+	for <lists+linux-next@lfdr.de>; Fri, 22 Nov 2019 22:54:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727208AbfKVPsd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 Nov 2019 10:48:33 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41988 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727107AbfKVPsd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 Nov 2019 10:48:33 -0500
-Received: by mail-ot1-f65.google.com with SMTP id 66so413018otd.9
-        for <linux-next@vger.kernel.org>; Fri, 22 Nov 2019 07:48:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=VoLw4CussgMLLZxAWl96Nmphb4wWEeXh0ad0ursaGQc=;
-        b=GNOwZ31nRkkRtCObNuW1iTtfgqFs92bLcrWVBnJDrDrWXxmhu5jHB1W3qmVloZkxvv
-         I7lirUZJKHODNPKD8Lnhi1ZLbKVQi7hxFaJzn/8+1mFtnqWsCvgnOwcKT0a6fk0Mla7C
-         lx72owbQ9FRTQQcHSyruPmj48sUfj0BaZnq2eCQ8XSe/1cCVnNtF2jxyft38Pdxbwy+D
-         BsjLNJnCvMgH+MyHNHBALbAnxXC3D5Hk0RwttL4/6f2iEN6bso1fq9MkYaIS8VQwNkNR
-         HrqaQ3hAl2JuwpjiD912NpJ2AAxN7ZNLl0ehoc2hXpCxpqDZWuMounqR9hupqFGVoJC5
-         3kmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VoLw4CussgMLLZxAWl96Nmphb4wWEeXh0ad0ursaGQc=;
-        b=YQ2XQk9meMrWpgTjZbfBfTnlCAxdI68eOH0G39X70pQAHDeG2cAHW5vOrznwNgm46m
-         ddQEGOzmZgoPimrkzqKXAHjAIMiwVVHEy2eLilWga5TLta4tQkuo82KaCq3UHnI6Ee0Y
-         i5IwxTD4hpwr0Bx9+ioRGd7Krug7NNz7LFQjECwGeKG+juTAK1Khrm9rSyQYFHj8uoKu
-         nOgR7zEUpsURD2mb2ORV46Pu9+3EIoJQuPaCWo027dTHktt63wrPtcDC+9gVPzFBI/yf
-         kdsmS3Vh4a6RxQArCFPBur5PKzGqDkWPCCBSGcz7nPp7kkGlItU3waKmGssIg4+OymwI
-         I3wA==
-X-Gm-Message-State: APjAAAXi8s8mUAPbJNH3eBT0WIKCRBq5MkeKsp2vqgjHhNrV4LD5O+YN
-        j1g5MEsaxEQEba99uhs4MDRRtyg+VTLnyoRUAwZHmA==
-X-Google-Smtp-Source: APXvYqzm/YERgO6yBcRziIJSES+wmUAc8m20DC+ayxZKVrwIy53nf8oLq6Ni05wdArtcO9BBvTQUv0BZID2e1YEgGdE=
-X-Received: by 2002:a9d:82e:: with SMTP id 43mr11609145oty.23.1574437711101;
- Fri, 22 Nov 2019 07:48:31 -0800 (PST)
+        id S1726704AbfKVVyr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 Nov 2019 16:54:47 -0500
+Received: from mail-eopbgr00081.outbound.protection.outlook.com ([40.107.0.81]:55361
+        "EHLO EUR02-AM5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726655AbfKVVyr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 22 Nov 2019 16:54:47 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kSM1+M6IVKqtCqH1KPugKX4rt6XnJcQcXHDJZ7M6vGiY8BoIeJrNZmFv1sM1LOR90Z+2rSTdhF8ne4Wnvj7MXNzLmwPG2NQs8/AS/wuslpaYzVLFHDG8lQPHgrT1FU9Ua7pgkiEtHU+8XSg5/xD3diScSOOMPSHT8uctUQco7p/v9DgKYWxSLNSMm/jC0qFmOgj/nk1GHQhz7xU1yKWngbSX7Hz4dlPXzdJP7Hy108MS3VC3HPCW6L6Dx/IGc7avqgJ2SIF/vtmrNw034YFov8IFVkj0DGaYU+4n2oAPjT/8QbAX+fc8sR2aLK+DZHU3/M3IBRiLYyNvcvZJF4d0Sg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fSfs03lEKgtB8M5Iajo15HMRY1iKs7AEo4iGy+KQJKg=;
+ b=NtwIbkUq5LFH+Ku7myNJRa2x7O/WzxQMaKJRF30/bofA1WhBKAP36kZJT+eA5ujTCcQ/TdPoVIifiOHzGtIQTMSyZyG4zKnkDqkIdBgHvrcasGL1kMrXVQ4zRW4610c33pxPPPPCZhQC1zeEiQvHA/qTjoFP5A+cXME+yxB935namTHjSwST8AQK/EslsFmhEcDEJnvHGzPsjyL6s6TZRXpc8wkRocAr5xRvpIqY23RiY2wZd+1YA1vJbNR1mqwhVt+RIPmZlYX1Zc4GIDfeGlGRX3KhTAx+ocAq9HgLMMllu0eecNCoIW7N7vm6q0kc7VoEzrXyVGkq6l9uZOcE0Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fSfs03lEKgtB8M5Iajo15HMRY1iKs7AEo4iGy+KQJKg=;
+ b=Pa4nbS9ONbhaliVZ9n+Ze3iYvWyxg6ouNYkkve1pxJc6vD2USUOFsoOKrFOREB63NrjfpL4vUsIg2RIZ6ACWi9MPChSDuLds/Xv9mylBNg4rPfzvax8OUwdSmFMo5T8KV+fb291359FVUiZvw6GhUTcrYUbm0G3Rog4zgkVETuc=
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com (10.186.159.144) by
+ VI1PR04MB3149.eurprd04.prod.outlook.com (10.170.229.23) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2474.17; Fri, 22 Nov 2019 21:54:43 +0000
+Received: from VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3]) by VI1PR04MB7023.eurprd04.prod.outlook.com
+ ([fe80::dd0c:72dc:e462:16b3%5]) with mapi id 15.20.2474.021; Fri, 22 Nov 2019
+ 21:54:43 +0000
+From:   Leonard Crestez <leonard.crestez@nxp.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the devfreq tree
+Thread-Topic: linux-next: build failure after merge of the devfreq tree
+Thread-Index: AQHVoPGq+904rKXcc0OQkFJyXhrMMQ==
+Date:   Fri, 22 Nov 2019 21:54:43 +0000
+Message-ID: <VI1PR04MB7023AA4F1583DB3C279F90F5EE490@VI1PR04MB7023.eurprd04.prod.outlook.com>
+References: <20191122155941.4c8e3bd1@canb.auug.org.au>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: spf=none (sender IP is )
+ smtp.mailfrom=leonard.crestez@nxp.com; 
+x-originating-ip: [92.121.36.197]
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-ht: Tenant
+x-ms-office365-filtering-correlation-id: c8bde853-330a-479d-2e6c-08d76f96953f
+x-ms-traffictypediagnostic: VI1PR04MB3149:
+x-ms-exchange-purlcount: 1
+x-microsoft-antispam-prvs: <VI1PR04MB3149766F76B337129F5CDF80EE490@VI1PR04MB3149.eurprd04.prod.outlook.com>
+x-ms-oob-tlc-oobclassifiers: OLM:220;
+x-forefront-prvs: 02296943FF
+x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(53754006)(189003)(199004)(9686003)(91956017)(76116006)(66946007)(52536014)(33656002)(53546011)(66446008)(64756008)(66476007)(66556008)(5660300002)(74316002)(966005)(478600001)(6506007)(7736002)(110136005)(44832011)(7696005)(14454004)(316002)(25786009)(54906003)(81156014)(99286004)(8676002)(81166006)(305945005)(8936002)(76176011)(446003)(6306002)(6246003)(102836004)(6436002)(66066001)(55016002)(71190400001)(71200400001)(4326008)(3846002)(186003)(6116002)(4001150100001)(229853002)(26005)(86362001)(2906002)(4744005)(256004);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR04MB3149;H:VI1PR04MB7023.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+received-spf: None (protection.outlook.com: nxp.com does not designate
+ permitted sender hosts)
+x-ms-exchange-senderadcheck: 1
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: e220ooJJuAG7nHx2geRh/e4BQxWdGjg6GgV3fo0IL+lhtG3T9glUD718dc0bCkdEv4w3UfCNi+5SwySHzS1n/7u7zVX/Kk3MirVBLfEAVddV17C2Mc2B8Nrxb00oGjtQddRV45buS9+e0Yx2K101sXFgLeWfmZYEvTZfr3kuD11KZBu1FdneE8dsCexSxv97IRuR/okkmSIzNcmnB7q0GoswmAUdVeRdZfMCODbfRV12JQqfOFuzSFLwtC2P7PDsnHKaS6gtr7i/6hhYBUSx3f06CkKLn/13kddUKnaimidVDqXb+eSFvGupGo5dgHt0nFL/y8R1ulQFmMpsEZ2NYQKPm0txmb/shk1frtUkhcSXdr4cunZSk8ZyxMth6t1XHDzWUBJO+rdpKWi5ZE603hZit2wxcAogA7ug1w6W/GWr5+LYENpWDO4ha+BnnJeTyG91ChgQqy6ZrxSPEscU74rSNNmXD+mEjLQgBcwTOPo=
+x-ms-exchange-transport-forked: True
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20191120203434.2a0727b3@canb.auug.org.au> <58708908-84a0-0a81-a836-ad97e33dbb62@infradead.org>
- <CANpmjNOHTyTRCeo3oxEPTY__TCjAQ8nMvcqDSZ6Otfs7vVESSA@mail.gmail.com>
- <20191121183711.w2qnysscwnbxocc4@treble> <CANpmjNMzue4xatqy5hik1sBNohHUR_VYND6_2qWaK5Kwy1aiLQ@mail.gmail.com>
-In-Reply-To: <CANpmjNMzue4xatqy5hik1sBNohHUR_VYND6_2qWaK5Kwy1aiLQ@mail.gmail.com>
-From:   Marco Elver <elver@google.com>
-Date:   Fri, 22 Nov 2019 16:48:20 +0100
-Message-ID: <CANpmjNO4-ENQc_QgxrUqfXgm46DNngvDP6pMT3iv8toyRJtw0g@mail.gmail.com>
-Subject: Re: linux-next: Tree for Nov 20 (kcsan + objtool)
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8bde853-330a-479d-2e6c-08d76f96953f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Nov 2019 21:54:43.5659
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HM+DjL2Yl1lgtI0SNs3BTFjYkmPf8Mb2Z6gk4XJEkHhEJwqXhURNg6rzMkDgUhFwYouk67d4YSEK6CW8/zGz/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB3149
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 21 Nov 2019 at 19:43, Marco Elver <elver@google.com> wrote:
->
-> On Thu, 21 Nov 2019 at 19:37, Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> >
-> > On Wed, Nov 20, 2019 at 08:48:41PM +0100, Marco Elver wrote:
-> > > On Wed, 20 Nov 2019 at 17:18, Randy Dunlap <rdunlap@infradead.org> wrote:
-> > > >
-> > > > On 11/20/19 1:34 AM, Stephen Rothwell wrote:
-> > > > > Hi all,
-> > > > >
-> > > > > Changes since 20191119:
-> > > > >
-> > > >
-> > > > on x86_64:
-> > > >
-> > > > kernel/kcsan/core.o: warning: objtool: kcsan_found_watchpoint()+0xa: call to kcsan_is_enabled() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read1()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write1()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read2()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write2()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read4()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write4()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read8()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write8()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read16()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write16()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_read_range()+0x13: call to find_watchpoint() with UACCESS enabled
-> > > > kernel/kcsan/core.o: warning: objtool: __tsan_write_range()+0x10: call to find_watchpoint() with UACCESS enabled
-> > > >
-> > > > kernel/trace/trace_branch.o: warning: objtool: ftrace_likely_update()+0x361: call to __stack_chk_fail() with UACCESS enabled
-> > > >
-> > > >
-> > > > Full randconfig file is attached.
-> > >
-> > > Thanks.
-> > >
-> > > This is due to CONFIG_CC_OPTIMIZE_FOR_SIZE=y. It seems the compiler
-> > > decides to not even inline small static inline functions. I tried to
-> > > make this go away by adding __always_inline, but then we're also left
-> > > with atomic64_try_cmpxchg which never gets inlined.
-> > >
-> > > The optimized build simply inlines the small static inline functions.
-> > > We certainly do not want to add more functions to the objtool
-> > > whitelist, especially those that are private to KCSAN.
-> > >
-> > > We could fix it by either:
-> > >
-> > > 1. Adding __always_inline to every function used by the KCSAN runtime
-> > > outside user_access_save + also fix atomic64_try_cmpxchg
-> > > (atomic-instrumented.h).
-> > >
-> > > 2. Just not compile KCSAN with -Os, i.e. have the Makefile strip -Os
-> > > and replace it with -O2 for kcsan/core.c. #2 is the simpler option,
-> > > and would probably make KCSAN more effective even with -Os. Although
-> > > it might violate the assumption of whoever decided they want both
-> > > CC_OPTIMIZE_FOR_SIZE and KCSAN. It might also mean that future
-> > > compilers that have a new inlining algorithm will have the same
-> > > problem.
-> > >
-> > > What do people think is better?
-> >
-> > I haven't had a chance to look at this yet, and probably won't be able
-> > to do so until at least Monday...
-> >
-> > Adding PeterZ who's the objtool uaccess expert.
->
-> Thanks. I have a patch which does #1, since it's probably cleaner. I
-> will send it out soon.
->
-> If there is a better way to resolve this, any suggestions welcome.
-
-I have sent a patch which addresses the issue:
-http://lkml.kernel.org/r/20191122154221.247680-1-elver@google.com
-It is currently based on the locking/kcsan branch of the tip tree.
-
-Thanks,
--- Marco
+On 2019-11-22 6:59 AM, Stephen Rothwell wrote:=0A=
+> Hi all,=0A=
+> =0A=
+> After merging the devfreq tree, today's linux-next build (x86_64=0A=
+> allmodconfig) failed like this:=0A=
+> =0A=
+> ERROR: "__arm_smccc_smc" [drivers/devfreq/imx8m-ddrc.ko] undefined!=0A=
+> =0A=
+> Caused by commit=0A=
+> =0A=
+>    1fcfb874236e ("PM / devfreq: Add dynamic scaling for imx8m ddr control=
+ler")=0A=
+=0A=
+Sorry about this, it seems smccc calls fail under COMPILE_TEST. Fix is =0A=
+to add explicit dependency on HAVE_ARM_SMCCC=0A=
+=0A=
+Resent entire series: https://patchwork.kernel.org/cover/11258499/=0A=
+=0A=
+--=0A=
+Regards,=0A=
+Leonard=0A=

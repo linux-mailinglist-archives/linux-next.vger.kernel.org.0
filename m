@@ -2,80 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A43E71083C9
-	for <lists+linux-next@lfdr.de>; Sun, 24 Nov 2019 15:15:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F758108555
+	for <lists+linux-next@lfdr.de>; Sun, 24 Nov 2019 23:39:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726922AbfKXOPv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Sun, 24 Nov 2019 09:15:51 -0500
-Received: from customer-187-141-72-141-sta.uninet-ide.com.mx ([187.141.72.141]:40802
-        "EHLO correo.opb.gob.mx" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
-        with ESMTP id S1726779AbfKXOPv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Nov 2019 09:15:51 -0500
-X-Greylist: delayed 4888 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Nov 2019 09:15:49 EST
-Received: from localhost (localhost [127.0.0.1])
-        by correo.opb.gob.mx (Postfix) with ESMTP id E583C1A322D;
-        Sun, 24 Nov 2019 06:57:37 -0500 (EST)
-Received: from correo.opb.gob.mx ([127.0.0.1])
-        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id dNCeQ6LoFeWR; Sun, 24 Nov 2019 06:57:37 -0500 (EST)
-Received: from localhost (localhost [127.0.0.1])
-        by correo.opb.gob.mx (Postfix) with ESMTP id 1BCE41A3223;
-        Sun, 24 Nov 2019 06:57:35 -0500 (EST)
-X-Virus-Scanned: amavisd-new at opb.gob.mx
-Received: from correo.opb.gob.mx ([127.0.0.1])
-        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id odZvaJKm3JFG; Sun, 24 Nov 2019 06:57:34 -0500 (EST)
-Received: from correo.opb.gob.mx (correo.opb.gob.mx [172.16.254.57])
-        by correo.opb.gob.mx (Postfix) with ESMTP id 476171A3205;
-        Sun, 24 Nov 2019 06:57:30 -0500 (EST)
-Date:   Sun, 24 Nov 2019 05:57:30 -0600 (CST)
-From:   "Mr.WEHNER DAVID M." <jesus.valencia@opb.gob.mx>
-Reply-To: "Mr.WEHNER DAVID M." <info@zbukgroupltd.info>
-Message-ID: <1105698182.24559.1574596650210.JavaMail.zimbra@opb.gob.mx>
-In-Reply-To: <1063337394.24307.1574596445839.JavaMail.zimbra@opb.gob.mx>
-Subject: =?utf-8?Q?Pengar_=C3=B6verf=C3=B6rs?=
+        id S1726931AbfKXWjT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 24 Nov 2019 17:39:19 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41995 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726855AbfKXWjT (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 24 Nov 2019 17:39:19 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47LlTH2Vrhz9sPT;
+        Mon, 25 Nov 2019 09:39:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1574635156;
+        bh=4q1KyTDlb0ND4mkqK8ewLqPEYFfOu065MxrD5xwKFzo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=t63HcXb0b0Mer6zIkRhVWPC2By3UYL+T+Tj4eyhld18gQIEDHHo3HOJdhRSDC+PDw
+         PCXJ9QEwmUY/1391+tu/5Lvyga4E5//cv0G0I/aIBS/EWf+bbd7BRwqb3le/JvVS/N
+         jfwZzGDCQi61f3xJ73B23J2fcEQKsCuO5DCMIPYFdz4HZZA+zjLlpeYdUE1JapuoCc
+         gFhiA8pQRSf+PXYtUEx1XJUmh27DfSwFOnOwFU/kLZ0IYJmV0BPBtAzda15JZFgfwN
+         SNfJnrZZDAkf8otD9T7lpv1KZoYOuw3+rPT/2hK9sKr09RQfiEbJdkwvhlyhtpkyXP
+         qwCfTysJumUCQ==
+Date:   Mon, 25 Nov 2019 09:39:07 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christophe Leroy <christophe.leroy@c-s.fr>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: linux-next: manual merge of the pci tree with the powerpc tree
+Message-ID: <20191125093907.45e3421b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
-X-Originating-IP: [198.199.76.158]
-X-Mailer: Zimbra 8.0.7_GA_6021 (ZimbraWebClient - GC75 (Win)/8.0.7_GA_6021)
-Thread-Topic: Pengar =?utf-8?B?w7Z2ZXJmw7Zycw==?=
-Thread-Index: Wlue1ObLHW28G6QK4CR7qvueCy2AHA==
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: multipart/signed; boundary="Sig_/b+Onz14PBl20uhRM4dwdRuw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Office Of The Head
-Internationell överföring
-Operation Zenith Bank
-(UK) Ltd LONDON United
-Storbritannien och Irland
-Tel: +44 203 389 5674
-Fax: +44 704 307 1539
+--Sig_/b+Onz14PBl20uhRM4dwdRuw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hälsning,
+Hi all,
 
-Din e-postadress kom upp i ett slumpmässigt drag som genomfördes i Zenith Banks huvudkontor, International Transfer Operation i London, Storbritannien.
+Today's linux-next merge of the pci tree got a conflict in:
 
-Jag är Mr.WEHNER DAVID M.A personlig bokföring till avdöd Michael Blair som arbetade med Shell British Petroleum. Mr.Michael Blair, en välkänd filantropist, innan han dog, gjorde en testamente i ett advokatbyrå om att 12,5 miljoner US dollar (tolv miljoner femhundra tusen amerikanska dollar) bör doneras till någon lycklig individuell filantrop eller välgörenhetsorganisation utomlands.
+  arch/powerpc/include/asm/Kbuild
 
-Zenith Bank Abp är en överenskommelse med sena Michael Blair om att donera fonden till alla lyckliga individer i Amerika, Europa, Asien och Afrika i andra för att förbättra liv och företag
+between commit:
 
-Vi har gjort vårt slumpmässiga drag och din e-postadress valdes för att ta emot denna fond som mottagare av hans testament. Vänligen snälla tillbaka till mig
-så snart du har fått vårt e-postmeddelande för att aktivera överföringen
-Operationen riktar dig till vad du ska göra för att få denna fond lagligen.
+  265c3491c4bc ("powerpc: Add support for GENERIC_EARLY_IOREMAP")
 
-Du rekommenderas att ta med följande nedan:
+from the powerpc tree and commit:
 
-FULLSTÄNDIGA NAMN:
+  356f42aff121 ("asm-generic: Make msi.h a mandatory include/asm header")
 
-FULL KONTAKTADRESS:
+from the pci tree.
 
-TELEFON- OCH FAXNUMMER:
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Med vänliga hälsningar,
-Mr.WEHNER DAVID M.
-Chef, internationell överföringsoperation
-Zenith Bank (UK) Abp
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/powerpc/include/asm/Kbuild
+index 148bee20e7e2,17726f2e46de..000000000000
+--- a/arch/powerpc/include/asm/Kbuild
++++ b/arch/powerpc/include/asm/Kbuild
+@@@ -11,5 -10,3 +11,4 @@@ generic-y +=3D local64.
+  generic-y +=3D mcs_spinlock.h
+  generic-y +=3D preempt.h
+  generic-y +=3D vtime.h
+- generic-y +=3D msi.h
+ +generic-y +=3D early_ioremap.h
+
+--Sig_/b+Onz14PBl20uhRM4dwdRuw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3bBosACgkQAVBC80lX
+0GxSCQf9GqVqx1LQuv7pxaUpAfSHTgqiURU3NYL+s6pFWcZqlqSZZuwOgW3Dlte5
+Q5CwCC4z6FDugRWucbXvWo2dYTqBypijJugygqXYruHOHl3i40mgSyiTqIXkleWR
+mdBbA8EOYfLfI7f/DboasIxKk/qaN4TZfCjW+rT7bPwHha/kMr1vYR8pUHPLsvVX
+PNHDFavWlCT9UaPOo5CU4Q4H3gsGuag5m6owS42Ifp2gwQF3r25tgjtYDcxLPkh0
+IoiqmtXKYIvHclm1p7QIjwxqbLreiuL/wvJWJYOWUICu66s3a2jkyVVjCCtOX2D8
+8gHptQa/NAyg8RkEzB/F6yGCSJz/Qg==
+=Idfr
+-----END PGP SIGNATURE-----
+
+--Sig_/b+Onz14PBl20uhRM4dwdRuw--

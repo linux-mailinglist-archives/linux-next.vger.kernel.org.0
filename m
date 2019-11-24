@@ -2,90 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 773CC107E13
-	for <lists+linux-next@lfdr.de>; Sat, 23 Nov 2019 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43E71083C9
+	for <lists+linux-next@lfdr.de>; Sun, 24 Nov 2019 15:15:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726368AbfKWKiI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 Nov 2019 05:38:08 -0500
-Received: from ozlabs.org ([203.11.71.1]:55975 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726141AbfKWKiI (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 23 Nov 2019 05:38:08 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47KqWd5Kygz9sPT;
-        Sat, 23 Nov 2019 21:38:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574505486;
-        bh=bnvsHm6hocJvSDljZVTTi1VrUYj3ZLx2xrnHxYB//iU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RTDcw08GZrt4/VOx4JeIWSigwtu10emHykywUqqFr1kgiKAyFGDUjsBaau0oFBiUe
-         NsFEjJymozEF9bGBuTb8D5Sb9H1SLJ1SPu0sIFIoefL/oQ2nzBlDTF3X7W33mUVvfO
-         eOx2b8MntpYsvS0cV3D0wC2LGcdnD200rmVUAJuApHCdAqs00avCs/Vgw+iMThgFA+
-         eLctoPrXe5gwUyNco6VnITI9CUNMv2AEFCmSJ/Nni8KfdGU95IfHG9ckwG9AU5ocUc
-         A1/AN3/KseIk8eWFeZNsDKlfkWHRgiJWWhfC31TSznUb+w6Jef9VptmA2KzoXiCq5p
-         pI4n+Ktde4akw==
-Date:   Sat, 23 Nov 2019 21:37:54 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Subject: linux-next: Fixes tag needs some work in the devicetree tree
-Message-ID: <20191123213754.0e6a9872@canb.auug.org.au>
+        id S1726922AbfKXOPv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Sun, 24 Nov 2019 09:15:51 -0500
+Received: from customer-187-141-72-141-sta.uninet-ide.com.mx ([187.141.72.141]:40802
+        "EHLO correo.opb.gob.mx" rhost-flags-OK-FAIL-OK-OK) by vger.kernel.org
+        with ESMTP id S1726779AbfKXOPv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 24 Nov 2019 09:15:51 -0500
+X-Greylist: delayed 4888 seconds by postgrey-1.27 at vger.kernel.org; Sun, 24 Nov 2019 09:15:49 EST
+Received: from localhost (localhost [127.0.0.1])
+        by correo.opb.gob.mx (Postfix) with ESMTP id E583C1A322D;
+        Sun, 24 Nov 2019 06:57:37 -0500 (EST)
+Received: from correo.opb.gob.mx ([127.0.0.1])
+        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id dNCeQ6LoFeWR; Sun, 24 Nov 2019 06:57:37 -0500 (EST)
+Received: from localhost (localhost [127.0.0.1])
+        by correo.opb.gob.mx (Postfix) with ESMTP id 1BCE41A3223;
+        Sun, 24 Nov 2019 06:57:35 -0500 (EST)
+X-Virus-Scanned: amavisd-new at opb.gob.mx
+Received: from correo.opb.gob.mx ([127.0.0.1])
+        by localhost (correo.opb.gob.mx [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id odZvaJKm3JFG; Sun, 24 Nov 2019 06:57:34 -0500 (EST)
+Received: from correo.opb.gob.mx (correo.opb.gob.mx [172.16.254.57])
+        by correo.opb.gob.mx (Postfix) with ESMTP id 476171A3205;
+        Sun, 24 Nov 2019 06:57:30 -0500 (EST)
+Date:   Sun, 24 Nov 2019 05:57:30 -0600 (CST)
+From:   "Mr.WEHNER DAVID M." <jesus.valencia@opb.gob.mx>
+Reply-To: "Mr.WEHNER DAVID M." <info@zbukgroupltd.info>
+Message-ID: <1105698182.24559.1574596650210.JavaMail.zimbra@opb.gob.mx>
+In-Reply-To: <1063337394.24307.1574596445839.JavaMail.zimbra@opb.gob.mx>
+Subject: =?utf-8?Q?Pengar_=C3=B6verf=C3=B6rs?=
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lSS9=4FB1AdXg250S11Zeq3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [198.199.76.158]
+X-Mailer: Zimbra 8.0.7_GA_6021 (ZimbraWebClient - GC75 (Win)/8.0.7_GA_6021)
+Thread-Topic: Pengar =?utf-8?B?w7Z2ZXJmw7Zycw==?=
+Thread-Index: Wlue1ObLHW28G6QK4CR7qvueCy2AHA==
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lSS9=4FB1AdXg250S11Zeq3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Office Of The Head
+Internationell överföring
+Operation Zenith Bank
+(UK) Ltd LONDON United
+Storbritannien och Irland
+Tel: +44 203 389 5674
+Fax: +44 704 307 1539
 
-Hi all,
+Hälsning,
 
-In commit
+Din e-postadress kom upp i ett slumpmässigt drag som genomfördes i Zenith Banks huvudkontor, International Transfer Operation i London, Storbritannien.
 
-  a8b0edcdd852 ("dt-bindings: power: Rename back power_domain.txt bindings =
-to fix references")
+Jag är Mr.WEHNER DAVID M.A personlig bokföring till avdöd Michael Blair som arbetade med Shell British Petroleum. Mr.Michael Blair, en välkänd filantropist, innan han dog, gjorde en testamente i ett advokatbyrå om att 12,5 miljoner US dollar (tolv miljoner femhundra tusen amerikanska dollar) bör doneras till någon lycklig individuell filantrop eller välgörenhetsorganisation utomlands.
 
-Fixes tag
+Zenith Bank Abp är en överenskommelse med sena Michael Blair om att donera fonden till alla lyckliga individer i Amerika, Europa, Asien och Afrika i andra för att förbättra liv och företag
 
-  Fixes: ea312b90857d ("dt-bindings: power: Convert Generic Power Domain bi=
-ndings to json-schema")
+Vi har gjort vårt slumpmässiga drag och din e-postadress valdes för att ta emot denna fond som mottagare av hans testament. Vänligen snälla tillbaka till mig
+så snart du har fått vårt e-postmeddelande för att aktivera överföringen
+Operationen riktar dig till vad du ska göra för att få denna fond lagligen.
 
-has these problem(s):
+Du rekommenderas att ta med följande nedan:
 
-  - Target SHA1 does not exist
+FULLSTÄNDIGA NAMN:
 
-Did you mean
+FULL KONTAKTADRESS:
 
-Fixes: 5279a3d8bede ("dt-bindings: power: Convert Generic Power Domain bind=
-ings to json-schema")
+TELEFON- OCH FAXNUMMER:
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lSS9=4FB1AdXg250S11Zeq3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3ZDAIACgkQAVBC80lX
-0GwmcQf+PQqpIoBlBtGt6StzSZngBli7O1/CIyS/BghfDc2psSpTzuKuCRsOOo9g
-QrG4xEpytC3DSiyVabU2npvwryMp01grOyU+by1208es0AQ8/sogszXAv2uz5raX
-0yDfckHCaYUpZ4b1qnLpL4X6EM7RyeXWaxucG335O3e/ccXYCy0w2xKjuJL36Ddz
-fUz5g0UkkGdnromDQ4nddOD+VB4G7vzWvxEAwH7uRG1qW+bOg3wRpWWg+7JZ1jBE
-MZJfp9KkEH0eJPmL9NT7JoY2LbDNdITE9bS0f9uE9t/ZKKvqWEZDsuv+CRUrqVz0
-Zq7C375B3VY8ryHxh01rG26dbn+Y9g==
-=acCH
------END PGP SIGNATURE-----
-
---Sig_/lSS9=4FB1AdXg250S11Zeq3--
+Med vänliga hälsningar,
+Mr.WEHNER DAVID M.
+Chef, internationell överföringsoperation
+Zenith Bank (UK) Abp

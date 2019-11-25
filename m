@@ -2,98 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC36108BD0
-	for <lists+linux-next@lfdr.de>; Mon, 25 Nov 2019 11:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79A43108E0E
+	for <lists+linux-next@lfdr.de>; Mon, 25 Nov 2019 13:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727368AbfKYKfZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Nov 2019 05:35:25 -0500
-Received: from mga01.intel.com ([192.55.52.88]:25774 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727278AbfKYKfZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 25 Nov 2019 05:35:25 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 25 Nov 2019 02:35:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,241,1571727600"; 
-   d="scan'208";a="291347805"
-Received: from slehanex-mobl1.ger.corp.intel.com ([10.252.10.177])
-  by orsmga001.jf.intel.com with ESMTP; 25 Nov 2019 02:35:23 -0800
-Message-ID: <f7d56013bc4b9f52c48ceeb44f2b03b65370ce61.camel@intel.com>
-Subject: Re: Coverity: _iwl_dbgfs_fw_dbg_domain_write(): Insecure data
- handling
-From:   Luciano Coelho <luciano.coelho@intel.com>
-To:     coverity-bot <keescook@chromium.org>,
-        Shahar S Matityahu <shahar.s.matityahu@intel.com>
-Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Date:   Mon, 25 Nov 2019 12:35:22 +0200
-In-Reply-To: <201911040942.30D0EBA@keescook>
-References: <201911040942.30D0EBA@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.1-2+b1 
+        id S1725924AbfKYMgR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Nov 2019 07:36:17 -0500
+Received: from mail-wr1-f48.google.com ([209.85.221.48]:34265 "EHLO
+        mail-wr1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725823AbfKYMgR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Nov 2019 07:36:17 -0500
+Received: by mail-wr1-f48.google.com with SMTP id t2so17822982wrr.1
+        for <linux-next@vger.kernel.org>; Mon, 25 Nov 2019 04:36:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=B54ilVqXghS0foObyYvg55ElxLYfsMc6BV9uWtBj/qk=;
+        b=Xq6vIzQuGFDy01jQCRzjGdlBUlnKic3RSHHMdsYVxSvHTH8Khy6Y6CNmjRzkclg6BM
+         3j9CzxOCUe8V6kAwUz1DXTmkoMLIvg1tBNuDjVFWTmMdhcEYP2/6l7/TCTHI+vjAkpnG
+         YD6n6CZPHWeIoaY63DUrCbRcQX1LlLMXrfTS2cL+usyozB+pujTqn9/e7sAA4nWHGqFh
+         iPlnLWX3PdPR9HpoGMzNbItcx2OZb+Qtb4NngHfsoZ8uNtkKFM5mQ5QZJmuqDgqpr8fj
+         le5K4hkMcIht7lGjC3w3cj2ptKMwnOsQ2iqepT6vgvFYlGUVjPNsjH1/W6XYfBmYZu2j
+         dYzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=B54ilVqXghS0foObyYvg55ElxLYfsMc6BV9uWtBj/qk=;
+        b=cRPlEpP006/yJLK5vICBqbTg1YDoHWWpRNmF+rEECQaNGWnVRI4tzmygV8w7hoxxLy
+         0gOgiMt8pDIV3xfig2gWOoHYmkb9Ct9eScBXJ8T3DsxM1kxgVBJJd/RT68cxQRPMyOmf
+         dxGTtb+evYxKwwqDKAq/vjWT9/Dbe9i+aPJvjWXmHMvI5eRVhy9vwy/7WSWQzbImhexI
+         wIQlVSYHDxtT36OvlmbYMlovmW/ds6YRMRydPYL4Ug2pvmI0ZKSI4ACIRJpz0J4ob6m6
+         YG45x4lHhUnVRcQllcAl2SQV4JU8ddQJGTZRhWM/thLqQwgjw9jEdVOyJfAUooWbIT2U
+         WjSA==
+X-Gm-Message-State: APjAAAUfM9ynNhX0Lpb1qRqqNRyCksLDqRjsTNbO3wXm/0ca4mM8D2z6
+        nhHqCTnkiYgvrB5UM/Sr6vZT/2bcYimuEQ==
+X-Google-Smtp-Source: APXvYqwUOVIsuYF0pvSU4EDgnECXyP/KINDz20sW9Tm1LUq8+wgE/ZwGnX3WRYm17j1xpcucvPHvLw==
+X-Received: by 2002:a5d:670a:: with SMTP id o10mr32488888wru.312.1574685374758;
+        Mon, 25 Nov 2019 04:36:14 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id q5sm8189852wmc.27.2019.11.25.04.36.14
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Nov 2019 04:36:14 -0800 (PST)
+Message-ID: <5ddbcabe.1c69fb81.4f481.9280@mx.google.com>
+Date:   Mon, 25 Nov 2019 04:36:14 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20191125
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 261 boots: 5 failed, 247 passed with 6 offline,
+ 3 untried/unknown (next-20191125)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2019-11-04 at 09:42 -0800, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental automated report about issues detected by Coverity
-> from a scan of next-20191031 as part of the linux-next weekly scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by recent commits:
-> 
-> 068893b7a28f ("iwlwifi: dbg_ini: support domain changing via debugfs")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1487394:  Insecure data handling  (TAINTED_SCALAR)
-> /drivers/net/wireless/intel/iwlwifi/fw/debugfs.c: 355 in _iwl_dbgfs_fw_dbg_domain_write()
-> 349     					    size_t size, char *buf)
-> 350     {
-> 351     	return scnprintf(buf, size, "0x%08x\n",
-> 352     			 fwrt->trans->dbg.domains_bitmap);
-> 353     }
-> 354
-> vvv     CID 1487394:  Insecure data handling  (TAINTED_SCALAR)
-> vvv     Passing tainted variable "buf" to a tainted sink.
-> 355     FWRT_DEBUGFS_READ_WRITE_FILE_OPS(fw_dbg_domain, 20);
-> 356
-> 357     void iwl_fwrt_dbgfs_register(struct iwl_fw_runtime *fwrt,
-> 358     			    struct dentry *dbgfs_dir)
-> 359     {
-> 360     	INIT_DELAYED_WORK(&fwrt->timestamp.wk, iwl_fw_timestamp_marker_wk);
-> 361     	FWRT_DEBUGFS_ADD_FILE(timestamp_marker, dbgfs_dir, 0200);
-> 362     	FWRT_DEBUGFS_ADD_FILE(send_hcmd, dbgfs_dir, 0200);
-> 363     	FWRT_DEBUGFS_ADD_FILE(fw_dbg_domain, dbgfs_dir, 0600);
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1487394 ("Insecure data handling")
-> Fixes: 068893b7a28f ("iwlwifi: dbg_ini: support domain changing via debugfs")
-> 
-> 
-> Thanks for your attention!
+next/master boot: 261 boots: 5 failed, 247 passed with 6 offline, 3 untried=
+/unknown (next-20191125)
 
-We have removed the "write" part of this debugfs entry, so this is not
-applicable anymore.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191125/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191125/
 
-Thanks for reporting!
+Tree: next
+Branch: master
+Git Describe: next-20191125
+Git Commit: c165016bac2719e05794c216f9b6da730d68d1e3
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 97 unique boards, 26 SoC families, 28 builds out of 217
 
---
-Cheers,
-Luca.
+Boot Regressions Detected:
 
+arm64:
 
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          hip07-d05:
+              lab-collabora: new failure (last pass: next-20191122)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            rk3288-veyron-jaq: 1 failed lab
+
+    qcom_defconfig:
+        gcc-8:
+            qcom-apq8064-cm-qs600: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

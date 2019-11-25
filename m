@@ -2,82 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1CB1094DF
-	for <lists+linux-next@lfdr.de>; Mon, 25 Nov 2019 21:59:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0B41096F9
+	for <lists+linux-next@lfdr.de>; Tue, 26 Nov 2019 00:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbfKYU7v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 Nov 2019 15:59:51 -0500
-Received: from mout.kundenserver.de ([212.227.126.134]:53723 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfKYU7v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Nov 2019 15:59:51 -0500
-Received: from mail-qk1-f174.google.com ([209.85.222.174]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MRC7g-1iCCPJ2jye-00N6M9; Mon, 25 Nov 2019 21:59:49 +0100
-Received: by mail-qk1-f174.google.com with SMTP id m16so14121761qki.11;
-        Mon, 25 Nov 2019 12:59:49 -0800 (PST)
-X-Gm-Message-State: APjAAAXTabbiu5j6YUwuHWv9hL4NSR9fYkY88rWV5HWlgPMekbGFcsra
-        rO8Bsz+orVnczHt7NXRZNMEygLdLOdmjLi/D6hs=
-X-Google-Smtp-Source: APXvYqxmZOcefA2LlmFbC6aXXulIYnIOG4RBlr+X6STgUWPPjM6lGpUeZNAgwn5IesLBKeX9aT4LydQt3R04sYxTlko=
-X-Received: by 2002:a37:a757:: with SMTP id q84mr17995885qke.394.1574715588474;
- Mon, 25 Nov 2019 12:59:48 -0800 (PST)
+        id S1726029AbfKYXlI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 Nov 2019 18:41:08 -0500
+Received: from hqemgate16.nvidia.com ([216.228.121.65]:12903 "EHLO
+        hqemgate16.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725912AbfKYXlI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 Nov 2019 18:41:08 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqemgate16.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5ddc66950000>; Mon, 25 Nov 2019 15:41:09 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Mon, 25 Nov 2019 15:41:07 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Mon, 25 Nov 2019 15:41:07 -0800
+Received: from HQMAIL107.nvidia.com (172.20.187.13) by HQMAIL101.nvidia.com
+ (172.20.187.10) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Mon, 25 Nov
+ 2019 23:41:07 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Mon, 25 Nov 2019 23:41:06 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5ddc66920000>; Mon, 25 Nov 2019 15:41:06 -0800
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Andrii Nakryiko <andriin@fb.com>
+CC:     Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <songliubraving@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-mm@kvack.org>, LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH 0/1] bpf: fix a no-mmu build failure by providing a stub allocator
+Date:   Mon, 25 Nov 2019 15:41:02 -0800
+Message-ID: <20191125234103.1699950-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-References: <20191126073742.4422e60d@canb.auug.org.au>
-In-Reply-To: <20191126073742.4422e60d@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Mon, 25 Nov 2019 21:59:32 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a28LzrYyxbY7q1FzrwEZn_JQOpYTd9P3ZDJNOWh7jYnpw@mail.gmail.com>
-Message-ID: <CAK8P3a28LzrYyxbY7q1FzrwEZn_JQOpYTd9P3ZDJNOWh7jYnpw@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the y2038 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Zsda7Ttl4PIB2Y7ZEgQlHcCaCBaOSjLLm6OxhhwvRbqsSk/tKjq
- 1MAu6dFYwXUGewQnSxOzQX8C+G/CKQW4QuD5d/+v7tkbMAdBgKtkqCF7d1iyECqMfqTqUb1
- EASpws5KamLd10xyZt4WPibepgH8amr1Fyhabio+lVdK72u4nmHz2zfMalJnRY3GWOLn6eE
- CYgvxpV4rl9hh2UR47tWw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:s29ATZM6Ijg=:7Iv2omIUYWZW8JrbroGGoh
- LS8rN/YPu9PI8g6DpF62uuV3cH+aH7kRyuqe5AIUvyOSi0ePFT1NfSD9RQ/ldHdYJV8KU1xwE
- nB3GgDX3RPJQK5nVySMBTp2d1258OSf13YxEgJLGhV87nfB3/uAWgc6dt8+y3XKSY7iPwFmK7
- 8/JReG17ZLbLOeN5zOyPKt/GHsjOXqIOEFQXijx+tZESbXdr4f1/1kJE26MtEv+/QfqE6pumq
- mwX/rrkMA8/W5vOI0VWn/tnu3s0qEJ/VEFUFvbrAA/S11JDe4hBUOBxD1Cgs3GLmxkY3OKbO9
- 489hhwIr9Red8NTLZnnRCw7buAkoBV0+GepdyOrdvC9yM2e5ZJs77jwZG9SoLikvfN0IKQMLU
- 2ZjD4mSqbO68PSN/C0xOauKwpIVIJSRtsjtFrEPymRl+7beVReqJRjwXuetuo8piJ0zj58/RH
- xN0FP/GFEAnsS+d63WmGc5hzU8pfNNq0NXYO1oR2rKGsRZiLgg2chYrUgQYw2mT3sErrXixGt
- 7FNfM4k4tpFRQxKh/pCTb6lffzbiNq9jtad8mhqz+Xf1Ncl1uPlmpYjWym3dJmyYso7WseXct
- uwXn0BjtBQkd1N7jXGbesYgziP3xoVWALSX/UhcEP9ChM88vErlZHb/gJ2k6pVmDC3S5751so
- O8iJA7AosKz9CWT6o/6S5qrdS6NwTI9ESrV5C3t39xwpEq8S3Fp5ZPRv4W9Jr75aCrC/1GtOZ
- VRugbd8dUPVPFBgGeoz0FgEQ25nbPbSLmBgV3hnyyjLr3uu2j1/ETv3sEKtVgp68bM6htSpre
- nde+2mhOJKjY/x82r6W8Dxc6o3P+/4ilvhhB5Fh2ZPGLWqKlOfBpdIH+RWT8AQz9VnDFkOUL1
- Zjk+sekrDdIZ2yQcHymQ==
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1574725269; bh=+UikYwGL8PF/KNnxAPIPj9xjsgDE5Jat9ThGUVvv3jE=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=ayClCS5XxvUorhhDTYQ4QhBFhXsd7dXYeRTt2bTcsLG6cI8TYwG6vHL2QHNDcFXg5
+         CQvT2tWLejsMmf5QWEhBiP203s4Cv1kx+7yUhBIPz3wYUu/Bfgzlf6bi0OTek6lHJl
+         89HXGoftD8P88UnN8HrjILy9Fe8aLqmcpDcWYRob42uYBRtqlNjSiIPzzDxw88rNrX
+         XVaeY5eTNDZiJv0hpck5BgVJlUOHWezEs9iKH96x97uvn6KxidFAxJ5kDpNupoDG1t
+         f8rqgGDwfIUZuqEBBG1vVPGZ21OKhw+TLNfdZyneoXgaRC3tVGJh4fvvkL01p3EPQj
+         QnWUBfewNoKVg==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Nov 25, 2019 at 9:37 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> In commit
->
->   9dbda081bcd8 ("y2038: alarm: fix half-second cut-off")
->
-> Fixes tag
->
->   Fixes: 3f58eae704d7 ("y2038: itimer: change implementation to timespec64")
->
-> has these problem(s):
->
->   - Target SHA1 does not exist
->
-> Did you mean
->
-> Fixes: bd40a175769d ("y2038: itimer: change implementation to timespec64")
->
+Hi,
 
-Fixed, thanks for the report!
+I ran into this on today's linux-next: commit c165016bac27 ("Add
+linux-next specific files for 20191125"). The kbuild robot reported a
+build failure on my larger (unrelated) patchset, but there were actually
+two build failures, and this patch here fixes the second failure.
 
-       Arnd
+John Hubbard (1):
+  bpf: fix a no-mmu build failure by providing a stub allocator
+
+ kernel/bpf/syscall.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+--=20
+2.24.0
+

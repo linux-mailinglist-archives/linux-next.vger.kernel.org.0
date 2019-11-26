@@ -2,111 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A3710A573
-	for <lists+linux-next@lfdr.de>; Tue, 26 Nov 2019 21:30:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 563F310A57C
+	for <lists+linux-next@lfdr.de>; Tue, 26 Nov 2019 21:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726072AbfKZUaZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Nov 2019 15:30:25 -0500
-Received: from ozlabs.org ([203.11.71.1]:41871 "EHLO ozlabs.org"
+        id S1726192AbfKZUbP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Nov 2019 15:31:15 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44021 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726033AbfKZUaY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Nov 2019 15:30:24 -0500
+        id S1725970AbfKZUbP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Nov 2019 15:31:15 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47MwWc65Ggz9sRH;
-        Wed, 27 Nov 2019 07:30:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47MwXc3rcyz9sRH;
+        Wed, 27 Nov 2019 07:31:12 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574800222;
-        bh=afsoIn2XZqK4fz9PBhl5G8eJamsDD10MBu3yEOVkQg8=;
+        s=201702; t=1574800272;
+        bh=meWx5F/MJ+f6H+PdYStpmFZ+bThpRReoZfzBHDXeF7k=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TKzABNkdBIRhUZFn4xtDqf6vrgHyPebdBu5IUD+MvfkmYZMgZg7Cco0hnih0elLP9
-         VW+VreZXiZHRRREL+NGCLQFEcMgBViOXdzHFxLqr1ENpZ00Q/nBDo1L3dq3cMKInyY
-         OdSqThyXGmBSancMCwEAXGasHUSPUTg3I5cSh8KTf69L9Eqp76yTiKCpT6JFdpFJQK
-         klitAcJed/p9q59cu4SGI7Erf1Z1uA9Qc50F8r7TvYfblKspO8lMNh3NJQc0emggyA
-         cTMB4yhkdu+Ix7wVStamc5y37tcji7+OhLJuz+aYJSxnNhITQoiOGCKDQnvBnqXvhv
-         nyN6CY9NPTU/Q==
-Date:   Wed, 27 Nov 2019 07:30:19 +1100
+        b=qsnvYyyju+tOs1oH6kk906PO17pleZ+AAtYJfUhpEDDPgdNTfoKjnB33bEsIiffZX
+         O1KN/phI7ZvlRx2/k/fhXIOH2WmCmM/vUeX/PX9XxyZu5psDG8wz2a1OJcez2vA+IC
+         IYpQO0d4wFOZgo9CBuFinV/ADHwk3tLw4Sl4SJ+pVgXSU+NSB4WIsskz+CYIgtj53v
+         YEi64/ZcPp9PjikRvBx2l58gbHbB4ZLaK6bBGFwsBMXHvxoQGWxkmn7hcc8+8VZUT6
+         yF+FpEgjrGzmG1tS/UEw0SuiTj/zhbNOJb3PeqeG7ct/nasADTYfeRnJo7K1tKqFSD
+         b//FJuxnm9BnA==
+Date:   Wed, 27 Nov 2019 07:31:11 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>
-Cc:     Christoffer Dall <cdall@cs.columbia.edu>,
-        Marc Zyngier <marc.zyngier@arm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Jens Axboe <axboe@kernel.dk>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KVM <kvm@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the kvm-arm tree with the kbuild
- tree
-Message-ID: <20191127073019.41c44ae7@canb.auug.org.au>
-In-Reply-To: <20191125135811.4a3d71da@canb.auug.org.au>
-References: <20191118143842.2e7ad24d@canb.auug.org.au>
-        <20191125135811.4a3d71da@canb.auug.org.au>
+        Dmitrii Dolgov <9erthalion6@gmail.com>
+Subject: Re: linux-next: manual merge of the block tree with the kbuild tree
+Message-ID: <20191127073111.1e3e2c75@canb.auug.org.au>
+In-Reply-To: <20191118115309.10b3b8de@canb.auug.org.au>
+References: <20191118115309.10b3b8de@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mO/2s2aVXGsrv_8fZYouSu1";
+Content-Type: multipart/signed; boundary="Sig_/Xj12HpDBc7MooUms=JXl=_6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mO/2s2aVXGsrv_8fZYouSu1
+--Sig_/Xj12HpDBc7MooUms=JXl=_6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 25 Nov 2019 13:58:11 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 18 Nov 2019 11:53:09 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> On Mon, 18 Nov 2019 14:38:42 +1100 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Today's linux-next merge of the kvm-arm tree got a conflict in:
-> >=20
-> >   include/Kbuild
-> >=20
-> > between commit:
-> >=20
-> >   fcbb8461fd23 ("kbuild: remove header compile test")
-> >=20
-> > from the kbuild tree and commit:
-> >=20
-> >   55009c6ed2d2 ("KVM: arm/arm64: Factor out hypercall handling from PSC=
-I code")
-> >=20
-> > from the kvm-arm tree.
-> >=20
-> > I fixed it up (I just removed the file) and can carry the fix as necess=
-ary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts. =20
+> Today's linux-next merge of the block tree got a conflict in:
 >=20
-> This is now a conflict between the kvm tree and the kbuild tree.
+>   include/Kbuild
+>=20
+> between commit:
+>=20
+>   fcbb8461fd23 ("kbuild: remove header compile test")
+>=20
+> from the kbuild tree and commit:
+>=20
+>   c826bd7a743f ("io_uring: add set of tracing events")
+>=20
+> from the block tree.
+>=20
+> I fixed it up (I just removed the file) and can carry the fix as
+> necessary. This is now fixed as far as linux-next is concerned, but any
+> non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
 
-And now between the kbuild tree and Linus' tree.
+This is now a conflict between the kbuild tree and Linus' tree.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/mO/2s2aVXGsrv_8fZYouSu1
+--Sig_/Xj12HpDBc7MooUms=JXl=_6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3di1sACgkQAVBC80lX
-0GxKWgf/XqDJya979/i/Ee6kkS9stH/cuZLB0qgcdM0OJksaN6vsHD1mj6sv2qdx
-h0qVO1ycAOLoM1Z3JGcbwvbJloYHG/lwejHc1yazpwdq+59pxBfqM1wCW100x+pH
-BFUXLlChcdcwzLRe0aXSQeNMH2BMM/UMjGlZ0QtIg/7pGtJyKbpj8/JsvB2CD6a7
-ptVB0dyrIVeC3kGo4O0F7M+P1hd0CoA+6X/syMRhdFAOKGYcBsdkVdbE+EIDMdeZ
-3jrnJToTlIJVA6i0sGW3Px9mZfdHGfvK3M8ZPvTkixzp2YhliRa9JP7c4Cn7pywI
-5oYRSi/GfCtGEsN1HD/VX9i80F0muw==
-=MaQE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3di48ACgkQAVBC80lX
+0GwWpgf9FL1yyu35XpRbP1OAA/QirjXGsVQMrB67FcAkDmX8H0xvzK6BZVaRS1+W
+BEDzkUV8JpaN/F78WnFtgiKaXzOxGoNcmD2SB35/IIKUlzOBwHY8CQ9u3efFwl1o
+nrfwj++BWklgTe831gDm8MSSHgLEa6SYubyJUtsGnNJv9B+BTvdd1QiBC+lmAZ9b
+ARcZugM1ed2WQCdwrUEsxQwMwyKwT9I+fTrrwVFEPdE5tuLFKzxVZ6dYOh6M07fS
+PVZb/U7oGVPyEPAigQhiB1C6oTsT1XFHSS+7cWWlu0QU38/ZdeS6QUUWiACVxqvH
+yu+9ku9937i41I5KqXxKUWSOwRJ9+w==
+=A3ZM
 -----END PGP SIGNATURE-----
 
---Sig_/mO/2s2aVXGsrv_8fZYouSu1--
+--Sig_/Xj12HpDBc7MooUms=JXl=_6--

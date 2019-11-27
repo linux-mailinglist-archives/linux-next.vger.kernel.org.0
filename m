@@ -2,90 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C0B210AC8E
-	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 10:25:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8575D10ADBD
+	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 11:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbfK0JZM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Nov 2019 04:25:12 -0500
-Received: from mout.kundenserver.de ([212.227.126.187]:47349 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726130AbfK0JZM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Nov 2019 04:25:12 -0500
-Received: from mail-qv1-f54.google.com ([209.85.219.54]) by
- mrelayeu.kundenserver.de (mreue011 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MWixU-1iKUGs1WKe-00X25Y; Wed, 27 Nov 2019 10:25:10 +0100
-Received: by mail-qv1-f54.google.com with SMTP id d3so8562842qvs.11;
-        Wed, 27 Nov 2019 01:25:10 -0800 (PST)
-X-Gm-Message-State: APjAAAUgKq5FWCyA1C8yF9uuJ5z96wysgkeUuL5e/SoqGdJIG1VoW/uk
-        wC6Bg0ikmSLhLaLiEmvTJ+yjFpIS3gVwu7iK3f0=
-X-Google-Smtp-Source: APXvYqzs6+rOckuHAd+3aopwg1GeGgfWV2X9q12ELte4WZT5ZoownfduEHy1+6glfj3Mcw2cHjRqHovN97pt0V2+7oA=
-X-Received: by 2002:a05:6214:811:: with SMTP id df17mr3679940qvb.197.1574846709178;
- Wed, 27 Nov 2019 01:25:09 -0800 (PST)
+        id S1726204AbfK0KbS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Nov 2019 05:31:18 -0500
+Received: from mail-wr1-f50.google.com ([209.85.221.50]:39793 "EHLO
+        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726149AbfK0KbR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Nov 2019 05:31:17 -0500
+Received: by mail-wr1-f50.google.com with SMTP id y11so22914818wrt.6
+        for <linux-next@vger.kernel.org>; Wed, 27 Nov 2019 02:31:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=sRL3K6Vt3CBck09HFRDTEoF4k3XoHwDByCowcu1R+lc=;
+        b=b2/wfKylrKX2LWbvHEcTp1Kkl/GE9+8Dh1xrqOcg5uspFucUFOkUt47vytIlrMPZDF
+         ADyNxdSROAy+1LTGsJP5xjK7fuGotUIu1W/HuC3EWBNFXRIR1bcUD4EFweHpB8cpFMaR
+         JQySD0KRpr6pty2c0/Lqs3H60SXIk9G+m2WG8uQDASWdhkVxQYXFdV81nn+I+VM/iyUC
+         5U5no1B1plUtPFCqTLE5VITJ7gfwycuwGcT/YAOE5Us96mpAjaJARkwc1W3CzDJ5KZ2J
+         b7RX29aZgr5CFxi5zQZL/6QIk5/AbP8UGJnFwqvdHnyPCqTzGV5n6Bid83UZGIoa5fYN
+         Rc/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=sRL3K6Vt3CBck09HFRDTEoF4k3XoHwDByCowcu1R+lc=;
+        b=mktWbLfSRqNfUTFYaGd50x/md/9NyCpqih/UcF2drLQB2b0EflMiERbSVfR6fhwoTG
+         hx1jv/A5vQxYQOD170JKkFSCWUY+v1ZP716FskDydiyngigeu+Gp8Ir4NnRgZDl7a//N
+         lsmOaSXoH2pQIBMSkr5cbIYLKaQ2NwmDVbEc1ERyyHp71F+NhG0y9Br43ajJyb0PaDEr
+         ZaKG0EHObcnoB63lUuYlHjc3ta6G47e/KbpcuedbS2od0vLBfkYpqa1jNuCH/HqZdZBe
+         Tl3vaCC4unQ00iCu3Mn9wQZUKxhYziREVYQwF5uExIRkDEcz1Kx2ZXZ2GK39E6SOjhxR
+         6zBg==
+X-Gm-Message-State: APjAAAXvdshVKRmBYVOSiQGZGj9kwQhEHwtQqwFRYn9XVZnui1ESBnIp
+        pctF2r7uy6ctp53kgKsEiPAPUUxQ6TqblQ==
+X-Google-Smtp-Source: APXvYqzs2WtruGmLRKA9oFEsDI9ywCUaEPdzuQE1i8fxGLLEmSb4pTaXOKiU3MNNT3krFKr4cW7FoQ==
+X-Received: by 2002:adf:e301:: with SMTP id b1mr41192075wrj.280.1574850675190;
+        Wed, 27 Nov 2019 02:31:15 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id f12sm6266892wmf.28.2019.11.27.02.31.13
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 27 Nov 2019 02:31:14 -0800 (PST)
+Message-ID: <5dde5072.1c69fb81.6c70.efc5@mx.google.com>
+Date:   Wed, 27 Nov 2019 02:31:14 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20191127130139.0b16375c@canb.auug.org.au>
-In-Reply-To: <20191127130139.0b16375c@canb.auug.org.au>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Wed, 27 Nov 2019 10:24:52 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a3ZitDAXj+4UWYQM+Vv6FvO+q7DAx6ZhBZU58NPH6MvaQ@mail.gmail.com>
-Message-ID: <CAK8P3a3ZitDAXj+4UWYQM+Vv6FvO+q7DAx6ZhBZU58NPH6MvaQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the y2038 tree with the tip tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <dima@arista.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:WHbR4DI8Um5jgl17Wn1YLm4Xp7rPPGrftMB/Qo7sC3AY9rIg88c
- PouKIY4wxsYNbQob33G45NAq070NkFzRyORQr9+LvGp7NXaQdkbXFqU+XuoHwn6hcqwRMrA
- FWXauicOZXAi1ZosoKfqvVORqkrRSDZTySh2StywUiODm9aJHTwwPN3W8TaFrT7Bs+4jpnP
- aos9ZF54cqm92EtBaGb7w==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:haWH2gPHdQo=:roMz8QXqa5QqO6KZJVJ5Ia
- rz6wl1YcISIxI+PO0h4hzMarTi3s78ZJMhzsdwX9T55y/i8pqEgkvddFg1n5cBDQI56f4c61c
- TJOozFElDrgVQEm6M2Ci9aykzqM1VvyEmYK080vxjMWPN3Xqs5KVACbcerav5SSO/rksFZM8L
- IpKnThyz1S3c3kD+6YKuJOioF297idVRumL1wezVmCiOgYRPc8fRg/u7/6ob6PyO4obGrBc/c
- Bov/eqbesHqkAzNnQ1IJqv147GL7OFzAPUsz8fnbKUql965qiqWdRjlIwFjP7TPLk2SNqbUij
- ywOgUx5GeR6kvp+/FqealLVhKQ64wu5fa4eaqccH08ge5VUG9zhIWoNOTAu8HUwCi5sHwLSoC
- 7yAYU43iB8ni4GoR2T1ouoXuvARs4ve9eupIaSU70HwfalEKDFH6HpCDzxnI9ysC+1OsGaSeP
- Q2xJtlIPpY1OPijcwVIx/I21V5+XQoH57o6UE3uF42yozf6yf6hKqo+C7rjn0v//PlFmJlqNz
- jLYlc7N4N9HbKebDvdfIT8Eb+eiAAKlrJ25GxiH/499HBoyD6o0i7tEH/ikR5YUuJMseiW7H1
- eupRUnm3/DHiRFcF+YKs2MpB+SEu4NMb95EU+kWXJF72dXAkURSWANbRlgiQsYVraTS1FivPW
- NG41ohbpuUSW4mLwc0HXsuIkmUWOqR0gTyCwgItUk7krVgEl0wFf5bk5IHXuYgv/fEYjA4uaw
- vynTJS7a2CUgv7/Mr0XhN6iWOxWzkXHtDhOq6+XGrDMbAbqldvxp4EvF1yo/ocJld9i9zHe8C
- Dx08ArsGjRzvDYqsP6BKhSFNvr5kcpwi7vZsH6jGufl4aG0Vx7LsFT5o1v/+1HpYnxZ4SN9XA
- 61bB2w1NIt2lTrF6MRtQ==
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20191127
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 265 boots: 6 failed, 250 passed with 7 offline,
+ 1 untried/unknown, 1 conflict (next-20191127)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 3:01 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the y2038 tree got a conflict in:
->
->   kernel/time/time.c
->
-> between commit:
->
->   7b8474466ed9 ("time: Zero the upper 32-bits in __kernel_timespec on 32-bit")
->
-> from the tip tree and commit:
->
->   3ca47e958a64 ("y2038: remove CONFIG_64BIT_TIME")
->
-> from the y2038 tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+next/master boot: 265 boots: 6 failed, 250 passed with 7 offline, 1 untried=
+/unknown, 1 conflict (next-20191127)
 
-Looks good, thanks!
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191127/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191127/
 
-       Arnd
+Tree: next
+Branch: master
+Git Describe: next-20191127
+Git Commit: 1875ff320f14afe21731a6e4c7b46dd33e45dfaa
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 96 unique boards, 26 SoC families, 28 builds out of 217
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            rk3288-veyron-jaq: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            meson-gxl-s805x-p241: 1 failed lab
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    multi_v7_defconfig:
+        imx6q-sabrelite:
+            lab-collabora: FAIL (gcc-8)
+            lab-baylibre: PASS (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

@@ -2,112 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DB010A876
-	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 03:01:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C57510A8DA
+	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 03:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725940AbfK0CBq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Nov 2019 21:01:46 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56329 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725883AbfK0CBq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Nov 2019 21:01:46 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47N3sx5l1dz9sSc;
-        Wed, 27 Nov 2019 13:01:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574820103;
-        bh=cy9A3E8oTFi0nOn+OkeRW0ppPDDn/IuuVGvqFC6oZWI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=lR1n2OUMsIdhMdiQU0iQrJdGz4khJvlm7+5h+faaVwEb/nSjij8bgEvsthnGaFxmN
-         WY8TkTJi6wSbRgw2ILuNIS5xccwkcu6oYZfbfftjhv9XVOKcVtjckpaY5WDp8+QcIi
-         klyf5Cdd6ymfXmh7u3w5Mu7WNxQN5tm8nv8Hq/k8BH7NlaIhobP5u854F9OrHYGO9J
-         G6y9TCsA2d32++z+kmongGw0FgeVOwaVHCIavR8NmIxV8nFFm0cI35/I1Gpd8r5T5J
-         ObH/r1jnWMMDzHIAMcIMcvs8NI86lN/3HJ8jnxCiTwqqgPDPi/iMedHgGVhYMWSvkZ
-         Ng2C2TOz9mnvQ==
-Date:   Wed, 27 Nov 2019 13:01:39 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <dima@arista.com>
-Subject: linux-next: manual merge of the y2038 tree with the tip tree
-Message-ID: <20191127130139.0b16375c@canb.auug.org.au>
+        id S1727004AbfK0CrZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Nov 2019 21:47:25 -0500
+Received: from mail-wm1-f41.google.com ([209.85.128.41]:55939 "EHLO
+        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726304AbfK0CrY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 Nov 2019 21:47:24 -0500
+Received: by mail-wm1-f41.google.com with SMTP id a131so1103658wme.5
+        for <linux-next@vger.kernel.org>; Tue, 26 Nov 2019 18:47:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=/xtaanggXioxAOgn/aZChdCER3BLnwkivEmlEhDVnko=;
+        b=zixsgHvuw0Qs757f09SNu3GnzPUywTXBQHej1RGydAR6/IK2PM1Pjl389i90WxPlnY
+         AAaaW6OY0hP9+MUEb8DAqK4jDry2S2wyc2PxBbUEGvqRTp9i/hn8lm+z9Z5w0f9DV87r
+         mL7P4ys6wYQkhPsx8FEY3J1pFAsvulCVcA+pEXmlbMsIoWW8Vxntmr1D1Ic4HZB5TnHJ
+         jf5s+NyR0JmAh1Ob+uP5qYAc/YW4FH1UTX6GPm1gw6fJN+af5rEkOe/secY4ox9RWhE+
+         HLT7fnnfo4f9/uF+sX82KC94UI3pcKxoYM09nM0p9SrVT3eY6jwscyrPTT1VwszCS66L
+         kr6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=/xtaanggXioxAOgn/aZChdCER3BLnwkivEmlEhDVnko=;
+        b=RcxtdO9glB4kUhfodDHAwRc9c0GMLeQJ1FnuA0bxtLsLBV+jtcVQOdFRYWKXi/iDH+
+         J2dyWUN+gSZGZFaWWcs7HqVrQU3dDVKFrmkiHthpwskBhq9bbGnlhQQne43oh87bBdqw
+         cRMSmqWHpRGUKdVniRPOg6uUwPA+9oiv5zZsfhIZ3ba5Cm098CYnHPa/rchecpYY5QcF
+         RF0HVA1M0WQ9ovHafL7qA568LWeXN23M1zZr6nuV3pg9V4H7J+xIegEG3yJ1UKFT9pRr
+         Sy/8cp+hr3jK1PVXD1rbLHyvsx1H2sk1zA61ikqoFs05+EKOIeEq1NYFkx9tRuBmVme3
+         Tfrw==
+X-Gm-Message-State: APjAAAVRyo0gNwLcxObli6SrFv6v+o37Km7op+dE9tljUXWEuJpaKzRp
+        uniIw7tfQJSK28KkHsMwYFljIpoW+GqJgA==
+X-Google-Smtp-Source: APXvYqwhZKQKhBXYPtKl1ksNrOULT0eKTtg5xVQfy4JxNPF4BDi7BQylBZ9+rCtYXSaqxKm4BNENzg==
+X-Received: by 2002:a1c:dc44:: with SMTP id t65mr1839252wmg.169.1574822842372;
+        Tue, 26 Nov 2019 18:47:22 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id u69sm5558120wmu.39.2019.11.26.18.47.21
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Nov 2019 18:47:21 -0800 (PST)
+Message-ID: <5ddde3b9.1c69fb81.bf773.b37e@mx.google.com>
+Date:   Tue, 26 Nov 2019 18:47:21 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F+E.qrgZ3.i=Z3aqEuBAa0K";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.4-4416-gf0d11b9fd5c9
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 274 boots: 2 failed,
+ 265 passed with 7 offline (v5.4-4416-gf0d11b9fd5c9)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/F+E.qrgZ3.i=Z3aqEuBAa0K
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 274 boots: 2 failed, 265 passed with 7 offline (v5=
+.4-4416-gf0d11b9fd5c9)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-4416-gf0d11b9fd5c9/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-4416-gf0d11b9fd5c9/
 
-Today's linux-next merge of the y2038 tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-4416-gf0d11b9fd5c9
+Git Commit: f0d11b9fd5c9014d623f559c22c82a9353bc32cc
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 98 unique boards, 26 SoC families, 28 builds out of 216
 
-  kernel/time/time.c
+Boot Failures Detected:
 
-between commit:
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-  7b8474466ed9 ("time: Zero the upper 32-bits in __kernel_timespec on 32-bi=
-t")
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-from the tip tree and commit:
+Offline Platforms:
 
-  3ca47e958a64 ("y2038: remove CONFIG_64BIT_TIME")
+arm:
 
-from the y2038 tree.
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
 
---=20
-Cheers,
-Stephen Rothwell
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
 
-diff --cc kernel/time/time.c
-index 4d434dad6ebc,58e312e7380f..000000000000
---- a/kernel/time/time.c
-+++ b/kernel/time/time.c
-@@@ -884,8 -879,7 +882,7 @@@ int get_timespec64(struct timespec64 *t
-  	ts->tv_sec =3D kts.tv_sec;
- =20
-  	/* Zero out the padding for 32 bit systems or in compat mode */
-- 	if (IS_ENABLED(CONFIG_64BIT_TIME) && (!IS_ENABLED(CONFIG_64BIT) ||
-- 					      in_compat_syscall()))
- -	if (in_compat_syscall())
-++	if (!IS_ENABLED(CONFIG_64BIT) || in_compat_syscall())
-  		kts.tv_nsec &=3D 0xFFFFFFFFUL;
- =20
-  	ts->tv_nsec =3D kts.tv_nsec;
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
---Sig_/F+E.qrgZ3.i=Z3aqEuBAa0K
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3d2QMACgkQAVBC80lX
-0Gy+2wf9Hz9gIvHa5mX4rJBnTrWt2lj92Pr1lv5dsS6VZ77Z9N1BV6C3BGtuhKZn
-7tCrXbaQxc4akNVxZscif4jHudkGLway93r8FyIO9Lk1TPWLF+kPdx4YiICYVh3G
-X3jVP9J56S4NT41aKLyk+T4sUCTxSMoCaPStOa9yflitB+rkS6OO+tRaVD415aYF
-NqaHpmleXABWKNrdykhYzpE+jryMNw49mqeDTRqTNeYcGbt0m+nnHD5kOr7QUCbe
-2fiZVg7jjy6YVpN8mApTiWDtuqWT8dxi4Uk5bUqru2WO7j6ihGXDKJHa4F0/OJIv
-WcUdoaCsk2EgHSyDre8R1b/Zqr5a6Q==
-=ksJO
------END PGP SIGNATURE-----
-
---Sig_/F+E.qrgZ3.i=Z3aqEuBAa0K--
+---
+For more info write to <info@kernelci.org>

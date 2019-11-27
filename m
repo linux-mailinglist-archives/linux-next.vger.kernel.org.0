@@ -2,137 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8575D10ADBD
-	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 11:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCE610B2CC
+	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 16:56:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726204AbfK0KbS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Nov 2019 05:31:18 -0500
-Received: from mail-wr1-f50.google.com ([209.85.221.50]:39793 "EHLO
-        mail-wr1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726149AbfK0KbR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Nov 2019 05:31:17 -0500
-Received: by mail-wr1-f50.google.com with SMTP id y11so22914818wrt.6
-        for <linux-next@vger.kernel.org>; Wed, 27 Nov 2019 02:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=sRL3K6Vt3CBck09HFRDTEoF4k3XoHwDByCowcu1R+lc=;
-        b=b2/wfKylrKX2LWbvHEcTp1Kkl/GE9+8Dh1xrqOcg5uspFucUFOkUt47vytIlrMPZDF
-         ADyNxdSROAy+1LTGsJP5xjK7fuGotUIu1W/HuC3EWBNFXRIR1bcUD4EFweHpB8cpFMaR
-         JQySD0KRpr6pty2c0/Lqs3H60SXIk9G+m2WG8uQDASWdhkVxQYXFdV81nn+I+VM/iyUC
-         5U5no1B1plUtPFCqTLE5VITJ7gfwycuwGcT/YAOE5Us96mpAjaJARkwc1W3CzDJ5KZ2J
-         b7RX29aZgr5CFxi5zQZL/6QIk5/AbP8UGJnFwqvdHnyPCqTzGV5n6Bid83UZGIoa5fYN
-         Rc/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=sRL3K6Vt3CBck09HFRDTEoF4k3XoHwDByCowcu1R+lc=;
-        b=mktWbLfSRqNfUTFYaGd50x/md/9NyCpqih/UcF2drLQB2b0EflMiERbSVfR6fhwoTG
-         hx1jv/A5vQxYQOD170JKkFSCWUY+v1ZP716FskDydiyngigeu+Gp8Ir4NnRgZDl7a//N
-         lsmOaSXoH2pQIBMSkr5cbIYLKaQ2NwmDVbEc1ERyyHp71F+NhG0y9Br43ajJyb0PaDEr
-         ZaKG0EHObcnoB63lUuYlHjc3ta6G47e/KbpcuedbS2od0vLBfkYpqa1jNuCH/HqZdZBe
-         Tl3vaCC4unQ00iCu3Mn9wQZUKxhYziREVYQwF5uExIRkDEcz1Kx2ZXZ2GK39E6SOjhxR
-         6zBg==
-X-Gm-Message-State: APjAAAXvdshVKRmBYVOSiQGZGj9kwQhEHwtQqwFRYn9XVZnui1ESBnIp
-        pctF2r7uy6ctp53kgKsEiPAPUUxQ6TqblQ==
-X-Google-Smtp-Source: APXvYqzs2WtruGmLRKA9oFEsDI9ywCUaEPdzuQE1i8fxGLLEmSb4pTaXOKiU3MNNT3krFKr4cW7FoQ==
-X-Received: by 2002:adf:e301:: with SMTP id b1mr41192075wrj.280.1574850675190;
-        Wed, 27 Nov 2019 02:31:15 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id f12sm6266892wmf.28.2019.11.27.02.31.13
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2019 02:31:14 -0800 (PST)
-Message-ID: <5dde5072.1c69fb81.6c70.efc5@mx.google.com>
-Date:   Wed, 27 Nov 2019 02:31:14 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727016AbfK0P4C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Nov 2019 10:56:02 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:37252 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726514AbfK0P4C (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 Nov 2019 10:56:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=3iLIidMssZl9d6PrGezfyNaB0BMUcnGVIulOgI4kuAE=; b=PzOTKkC7unuoES0OGlMuf21uf
+        xroZeZ83LZ/s43XO2hmGm6VZOm3wxokxseSI+a/nkev26HRxbhxNCXqzuqzUrC2jgMAalU8W0brsQ
+        ZsryDSyHaq2yJ/Y4MsvRbQPGi6o45CAG89PTE257mW93scnxt2sKj8XxzhkT+uEl8nmub88ZFLZcG
+        Y3CrpvqOESne3xp1NItxbfhvzvtxXxcdggKZfUkda/ruNVvc/u2mPlRbzzEgaj+Rnex/OtuuENONY
+        UZDqdgOdx3Kc+OkWT2uz1/vbYU3ObLUnHcKMH9nNQQ9yAZyjh4EWgcZ8tRwb4KPCg9s9Wjcdx3jjH
+        L+dHlHPLA==;
+Received: from [2601:1c0:6280:3f0::5a22]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iZzfb-0000rZ-Tn; Wed, 27 Nov 2019 15:56:00 +0000
+Subject: Re: linux-next: Tree for Nov 27
+ (drivers/pci/controller/dwc/pcie-designware-host.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
+References: <20191127155717.400a60de@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <fc3586ef-a0a1-84b3-2e0e-b8ba5c41f229@infradead.org>
+Date:   Wed, 27 Nov 2019 07:55:57 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20191127
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 265 boots: 6 failed, 250 passed with 7 offline,
- 1 untried/unknown, 1 conflict (next-20191127)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20191127155717.400a60de@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 265 boots: 6 failed, 250 passed with 7 offline, 1 untried=
-/unknown, 1 conflict (next-20191127)
+On 11/26/19 8:57 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Please do not add any material for v5.6 to your linux-next included
+> trees until after v5.5-rc1 has been released.
+> 
+> Changes since 20191126:
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191127/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191127/
+on i386:
+# CONFIG_PCI_MSI is not set
 
-Tree: next
-Branch: master
-Git Describe: next-20191127
-Git Commit: 1875ff320f14afe21731a6e4c7b46dd33e45dfaa
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 96 unique boards, 26 SoC families, 28 builds out of 217
 
-Boot Failures Detected:
+WARNING: unmet direct dependencies detected for PCIE_DW_HOST
+  Depends on [n]: PCI [=y] && PCI_MSI_IRQ_DOMAIN [=n]
+  Selected by [y]:
+  - PCIE_INTEL_GW [=y] && PCI [=y] && OF [=y] && (X86 [=y] || COMPILE_TEST [=n])
 
-arm:
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            rk3288-veyron-jaq: 1 failed lab
+and related build errors:
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-gru-kevin: 1 failed lab
+../drivers/pci/controller/dwc/pcie-designware-host.c:72:15: error: variable ‘dw_pcie_msi_domain_info’ has initializer but incomplete type
+ static struct msi_domain_info dw_pcie_msi_domain_info = {
+               ^~~~~~~~~~~~~~~
+../drivers/pci/controller/dwc/pcie-designware-host.c:73:3: error: ‘struct msi_domain_info’ has no member named ‘flags’
+  .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+   ^~~~~
+../drivers/pci/controller/dwc/pcie-designware-host.c:73:12: error: ‘MSI_FLAG_USE_DEF_DOM_OPS’ undeclared here (not in a function); did you mean ‘SIMPLE_DEV_PM_OPS’?
+  .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+            ^~~~~~~~~~~~~~~~~~~~~~~~
+            SIMPLE_DEV_PM_OPS
+../drivers/pci/controller/dwc/pcie-designware-host.c:73:39: error: ‘MSI_FLAG_USE_DEF_CHIP_OPS’ undeclared here (not in a function); did you mean ‘MSI_FLAG_USE_DEF_DOM_OPS’?
+  .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+                                       ^~~~~~~~~~~~~~~~~~~~~~~~~
+                                       MSI_FLAG_USE_DEF_DOM_OPS
+../drivers/pci/controller/dwc/pcie-designware-host.c:74:6: error: ‘MSI_FLAG_PCI_MSIX’ undeclared here (not in a function); did you mean ‘SS_FLAG_BITS’?
+      MSI_FLAG_PCI_MSIX | MSI_FLAG_MULTI_PCI_MSI),
+      ^~~~~~~~~~~~~~~~~
+      SS_FLAG_BITS
+../drivers/pci/controller/dwc/pcie-designware-host.c:74:26: error: ‘MSI_FLAG_MULTI_PCI_MSI’ undeclared here (not in a function); did you mean ‘MSI_FLAG_PCI_MSIX’?
+      MSI_FLAG_PCI_MSIX | MSI_FLAG_MULTI_PCI_MSI),
+                          ^~~~~~~~~~~~~~~~~~~~~~
+                          MSI_FLAG_PCI_MSIX
+../drivers/pci/controller/dwc/pcie-designware-host.c:73:11: warning: excess elements in struct initializer
+  .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+           ^
+../drivers/pci/controller/dwc/pcie-designware-host.c:73:11: note: (near initialization for ‘dw_pcie_msi_domain_info’)
+../drivers/pci/controller/dwc/pcie-designware-host.c:75:3: error: ‘struct msi_domain_info’ has no member named ‘chip’
+  .chip = &dw_pcie_msi_irq_chip,
+   ^~~~
+../drivers/pci/controller/dwc/pcie-designware-host.c:75:10: warning: excess elements in struct initializer
+  .chip = &dw_pcie_msi_irq_chip,
+          ^
+../drivers/pci/controller/dwc/pcie-designware-host.c:75:10: note: (near initialization for ‘dw_pcie_msi_domain_info’)
+../drivers/pci/controller/dwc/pcie-designware-host.c: In function ‘dw_pcie_allocate_domains’:
+../drivers/pci/controller/dwc/pcie-designware-host.c:267:19: error: implicit declaration of function ‘pci_msi_create_irq_domain’; did you mean ‘pci_msi_get_device_domain’? [-Werror=implicit-function-declaration]
+  pp->msi_domain = pci_msi_create_irq_domain(fwnode,
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~
+                   pci_msi_get_device_domain
+../drivers/pci/controller/dwc/pcie-designware-host.c:267:17: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+  pp->msi_domain = pci_msi_create_irq_domain(fwnode,
+                 ^
+../drivers/pci/controller/dwc/pcie-designware-host.c: At top level:
+../drivers/pci/controller/dwc/pcie-designware-host.c:72:31: error: storage size of ‘dw_pcie_msi_domain_info’ isn’t known
+ static struct msi_domain_info dw_pcie_msi_domain_info = {
+                               ^~~~~~~~~~~~~~~~~~~~~~~
 
-    defconfig:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            rk3399-gru-kevin: 1 failed lab
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            mt7623n-bananapi-bpi-r2: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-arm:
-    multi_v7_defconfig:
-        imx6q-sabrelite:
-            lab-collabora: FAIL (gcc-8)
-            lab-baylibre: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

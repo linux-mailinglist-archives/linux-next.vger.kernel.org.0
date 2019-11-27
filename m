@@ -2,166 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AEBFA10A766
-	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 01:18:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB1E10A7A6
+	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 01:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbfK0ASu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 Nov 2019 19:18:50 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60697 "EHLO ozlabs.org"
+        id S1726947AbfK0AsY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 Nov 2019 19:48:24 -0500
+Received: from ozlabs.org ([203.11.71.1]:42611 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726701AbfK0ASu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 26 Nov 2019 19:18:50 -0500
+        id S1726876AbfK0AsY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 26 Nov 2019 19:48:24 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47N1b45VhLz9sSX;
-        Wed, 27 Nov 2019 11:18:40 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47N2FH6xq3z9sSd;
+        Wed, 27 Nov 2019 11:48:19 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1574813927;
-        bh=7/fA7nsrQLmigYdQo0vZuD7DCUXWCaRudMS2rL8v8SE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ozdDJ/Rww5xE6dTG8AOwTQ3VARtkjI7/+3Oefuvvli5FNYzJ7XGBCeYVdUwLXm7jd
-         4m+zkTHM6N8jX/9eK9C5RzXbk/PVhEjID+otAPm8gWD1flLRrTAtMtSR4x4V5g9onR
-         KnuHjU3mMsi9AVr7y955N2pmLyxIAjlJI9mZ/9e5Jl+wk80GA6SK6Pwmv9uUQs61Ri
-         /grJ5InUl+NJjwtZ4NUaQjFIBndYlPvweydmW/u5K91rolxXzvSS/02jWm9b6FVC98
-         v1Baa4Ggn18oXwAj8pc5N37ZQWW0fnWlDy5j/EZW3yccAexd3Z9Zmma2uSzUNI82mD
-         J7dwAZgdmeLLQ==
-Date:   Wed, 27 Nov 2019 11:18:35 +1100
+        s=201702; t=1574815701;
+        bh=BXusIggVC9k4+wds3dOgGJl8vuB5qxXlzp0EirQxxqk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ODN2sKlC//KFOfC5S8bkIITY4sCJN0g6THULbhD/qIq2wIkRp4WF1Rg0defQ9dLNd
+         L99Fwb55iyrASuQi5bMdIwf7AqszR6Dmnedw7ankMCELWhjhLJIu9fr3TmYR6P42NO
+         XFuUJSsIgR2XdL7kBsee1yYRBl0EA/SfQcb0N7RZejOvn6dfDuIlDvh5P9N90gf+SG
+         NfcsbvwnAL6HxRCGY0j9/xuo4107C4sn4xQ532mD12dELDrsYlbVHWt0c+cHGotcwa
+         8wwvxabZbe9Qn16kff4nSQiTIu4hKZXqXnqSawqIIjHew04g/upGVgeh24q/xTe9z/
+         vsXBSeCh8f9qg==
+Date:   Wed, 27 Nov 2019 11:48:17 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Jani Nikula <jani.nikula@intel.com>
-Subject: linux-next: manual merge of the tip tree with the drm tree
-Message-ID: <20191127111835.702b9720@canb.auug.org.au>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the livepatching tree with the
+ ftrace tree
+Message-ID: <20191127114817.71a3b7e9@canb.auug.org.au>
+In-Reply-To: <20191115160319.2d84224d@canb.auug.org.au>
+References: <20191115160319.2d84224d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/djGOEiVp03qtTAvYQL70yf6";
+Content-Type: multipart/signed; boundary="Sig_/VB+fl6/58ufvg.zbEUmWxMx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/djGOEiVp03qtTAvYQL70yf6
+--Sig_/VB+fl6/58ufvg.zbEUmWxMx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+On Fri, 15 Nov 2019 16:03:19 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Today's linux-next merge of the livepatching tree got a conflict in:
+>=20
+>   tools/testing/selftests/livepatch/Makefile
+>=20
+> between commit:
+>=20
+>   8c666d2ab576 ("selftests/livepatch: Test interaction with ftrace_enable=
+d")
+>=20
+> from the ftrace tree and commit:
+>=20
+>   ecd25094c5f5 ("livepatch: Selftests of the API for tracking system stat=
+e changes")
+>=20
+> from the livepatching tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc tools/testing/selftests/livepatch/Makefile
+> index 1886d9d94b88,1cf40a9e7185..000000000000
+> --- a/tools/testing/selftests/livepatch/Makefile
+> +++ b/tools/testing/selftests/livepatch/Makefile
+> @@@ -5,6 -5,6 +5,7 @@@ TEST_PROGS :=3D=20
+>   	test-livepatch.sh \
+>   	test-callbacks.sh \
+>   	test-shadow-vars.sh \
+> - 	test-ftrace.sh
+> ++	test-ftrace.sh \
+> + 	test-state.sh
+>  =20
+>   include ../lib.mk
 
-  drivers/gpu/drm/i915/Kconfig.debug
-
-between commit:
-
-  d30213e533fa ("drm/i915: Fix Kconfig indentation")
-
-from the drm tree and commit:
-
-  fb041bb7c0a9 ("locking/refcount: Consolidate implementations of refcount_=
-t")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+This is now a conflict between the ftrace tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/Kconfig.debug
-index 5571cc73a9ce,1400fce39c58..000000000000
---- a/drivers/gpu/drm/i915/Kconfig.debug
-+++ b/drivers/gpu/drm/i915/Kconfig.debug
-@@@ -1,33 -1,33 +1,32 @@@
-  # SPDX-License-Identifier: GPL-2.0-only
-  config DRM_I915_WERROR
- -        bool "Force GCC to throw an error instead of a warning when compi=
-ling"
- -        # As this may inadvertently break the build, only allow the user
- -        # to shoot oneself in the foot iff they aim really hard
- -        depends on EXPERT
- -        # We use the dependency on !COMPILE_TEST to not be enabled in
- -        # allmodconfig or allyesconfig configurations
- -        depends on !COMPILE_TEST
- -	select HEADER_TEST
- -        default n
- -        help
- -          Add -Werror to the build flags for (and only for) i915.ko.
- -          Do not enable this unless you are writing code for the i915.ko =
-module.
- -
- -          Recommended for driver developers only.
- -
- -          If in doubt, say "N".
- +	bool "Force GCC to throw an error instead of a warning when compiling"
- +	# As this may inadvertently break the build, only allow the user
- +	# to shoot oneself in the foot iff they aim really hard
- +	depends on EXPERT
- +	# We use the dependency on !COMPILE_TEST to not be enabled in
- +	# allmodconfig or allyesconfig configurations
- +	depends on !COMPILE_TEST
- +	default n
- +	help
- +	  Add -Werror to the build flags for (and only for) i915.ko.
- +	  Do not enable this unless you are writing code for the i915.ko module.
- +
- +	  Recommended for driver developers only.
- +
- +	  If in doubt, say "N".
- =20
-  config DRM_I915_DEBUG
- -        bool "Enable additional driver debugging"
- -        depends on DRM_I915
- -        select DEBUG_FS
- -        select PREEMPT_COUNT
- -        select I2C_CHARDEV
- -        select STACKDEPOT
- -        select DRM_DP_AUX_CHARDEV
- -        select X86_MSR # used by igt/pm_rpm
- -        select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
- -        select DRM_DEBUG_MM if DRM=3Dy
- +	bool "Enable additional driver debugging"
- +	depends on DRM_I915
- +	select DEBUG_FS
- +	select PREEMPT_COUNT
-- 	select REFCOUNT_FULL
- +	select I2C_CHARDEV
- +	select STACKDEPOT
- +	select DRM_DP_AUX_CHARDEV
- +	select X86_MSR # used by igt/pm_rpm
- +	select DRM_VGEM # used by igt/prime_vgem (dmabuf interop checks)
- +	select DRM_DEBUG_MM if DRM=3Dy
-  	select DRM_DEBUG_SELFTEST
-  	select DMABUF_SELFTESTS
-  	select SW_SYNC # signaling validation framework (igt/syncobj*)
-
---Sig_/djGOEiVp03qtTAvYQL70yf6
+--Sig_/VB+fl6/58ufvg.zbEUmWxMx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3dwNsACgkQAVBC80lX
-0GzKpAf/ZhQaIORg0QMkjiSexMkq8/uL+SqauTZr+6sShMRNZm2oknpQIDxxkccx
-zbhUYumhzdtZ3/cCDmi8f9kdOSIGtD1m3RhDvUhEyBS+uyDjFvEDlB+PH5cS0ae2
-cMkxh3RALp6pnA/+ZzfsT9xJewOz3PV4n2wJNYdOAq/F6Vjv4JqMid4PtwsMndFU
-ZwouOmygTURstjUvwbrhBGB1oarwls8LXFebEiwFld7wiC8tO3n+KZOAUWKGR6vW
-fUDC86k6BB5n/SPdoVw9CBFntVj2XmAarX8r5I+ZkqgSV4qLTrKcDLq2XP9duWB/
-d8j5ycea4Z7OOyXsH71MeVn8+ODbpA==
-=btYm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3dx9EACgkQAVBC80lX
+0GzS3gf/Qn5nYYnS5PNzWl9MLlFhgC5arYmG2GEzKIZ0lmKMD+k0Ctj7+gqFlTRU
+mY8IugFw0aX62zWAYIeiprBFkjNLESSuQvWavFYzG5T1+u43D+k6D7+5jH2jS28F
+ZtI/B8Qj0ACuW8We7+DRPfJl79l9gdr+5EHFgFLrcdfnlnb8PoA88Pl1Jel3Sp1M
+NRdo5vAOgurzLKCrGO+NWANna6SbmE05A7rmMwZmAAx53sWBuxASZyLRzY0RPIm+
+LFlljQKV2naRCDkKv3rdaKZKk5KkPWY1qEkywGhAWhuExgQu0A/iv/c39Z/Ecuy9
+9tqUipSUOgDibx0iT/tLJm0ShXWwaQ==
+=53FB
 -----END PGP SIGNATURE-----
 
---Sig_/djGOEiVp03qtTAvYQL70yf6--
+--Sig_/VB+fl6/58ufvg.zbEUmWxMx--

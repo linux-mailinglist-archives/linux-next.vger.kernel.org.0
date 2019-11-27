@@ -2,123 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2E310B32D
-	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 17:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C31DC10BD4A
+	for <lists+linux-next@lfdr.de>; Wed, 27 Nov 2019 22:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbfK0Q0U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 Nov 2019 11:26:20 -0500
-Received: from foss.arm.com ([217.140.110.172]:49798 "EHLO foss.arm.com"
+        id S1731270AbfK0V1t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 Nov 2019 16:27:49 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54787 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726514AbfK0Q0U (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 27 Nov 2019 11:26:20 -0500
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C90AC30E;
-        Wed, 27 Nov 2019 08:26:19 -0800 (PST)
-Received: from e121166-lin.cambridge.arm.com (e121166-lin.cambridge.arm.com [10.1.196.255])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 943073F68E;
-        Wed, 27 Nov 2019 08:26:18 -0800 (PST)
-Date:   Wed, 27 Nov 2019 16:26:14 +0000
-From:   Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-To:     Randy Dunlap <rdunlap@infradead.org>, eswara.kota@linux.intel.com,
-        bhelgaas@google.com
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-Subject: Re: linux-next: Tree for Nov 27
- (drivers/pci/controller/dwc/pcie-designware-host.c)
-Message-ID: <20191127162614.GA6423@e121166-lin.cambridge.arm.com>
-References: <20191127155717.400a60de@canb.auug.org.au>
- <fc3586ef-a0a1-84b3-2e0e-b8ba5c41f229@infradead.org>
+        id S1731378AbfK0U7G (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 27 Nov 2019 15:59:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47NY6F4Q1Xz9sSf;
+        Thu, 28 Nov 2019 07:59:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1574888342;
+        bh=nDXhCxVCeocAgjs+KzcbhyqbajM0hYI/r/7dm0R0rxI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=gP9kErX86mf7ar6BFDxp4FUj72lXh7tMD2rc242/1j9lPfXf5oBU1uJndnva5dDC6
+         wkP7UQhHYTaNLRWMLBMfgjvNdvwiiQ4gytTH2MRduRxO0ufrYN9h6T5mfCXl04hyAc
+         OBWH8wLJiTqwIsSWMhthMT+UgZ2b9RC3UjntfzxaShhpyH0LDmKzi+u/inQ972hcuH
+         2BWsOV9yKcEamm2QvmKWHTqzelcSFBExvoQ12Pg4U7u5fLvopBGKhDSLu9qICEtegP
+         q4dzdQXagz2SBiaAIFV28Pbt1DKTgP79WwU/u3BBsnGS3+NYneTyKfOcZ06PXBkggA
+         /f9dARoCJwhgg==
+Date:   Thu, 28 Nov 2019 07:59:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the origin tree
+Message-ID: <20191128075903.78c39170@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fc3586ef-a0a1-84b3-2e0e-b8ba5c41f229@infradead.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/qz8BamVi=IPBCHlwgP8EYVy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Nov 27, 2019 at 07:55:57AM -0800, Randy Dunlap wrote:
-> On 11/26/19 8:57 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Please do not add any material for v5.6 to your linux-next included
-> > trees until after v5.5-rc1 has been released.
-> > 
-> > Changes since 20191126:
-> > 
-> 
-> on i386:
-> # CONFIG_PCI_MSI is not set
-> 
-> 
-> WARNING: unmet direct dependencies detected for PCIE_DW_HOST
->   Depends on [n]: PCI [=y] && PCI_MSI_IRQ_DOMAIN [=n]
->   Selected by [y]:
->   - PCIE_INTEL_GW [=y] && PCI [=y] && OF [=y] && (X86 [=y] || COMPILE_TEST [=n])
-> 
-> and related build errors:
+--Sig_/qz8BamVi=IPBCHlwgP8EYVy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Dilip,
+Hi all,
 
-I will have to drop your series which unfortunately forces Bjorn to pull
-my pci/dwc branch again, I don't think there is time for fixing it,
-given release timing and Stephen's request above.
+After merging the origin tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Lorenzo
+WARNING: modpost: missing MODULE_LICENSE() in drivers/pinctrl/pinctrl-equil=
+ibrium.o
+see include/linux/module.h for more information
 
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:72:15: error: variable ‘dw_pcie_msi_domain_info’ has initializer but incomplete type
->  static struct msi_domain_info dw_pcie_msi_domain_info = {
->                ^~~~~~~~~~~~~~~
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:73:3: error: ‘struct msi_domain_info’ has no member named ‘flags’
->   .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
->    ^~~~~
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:73:12: error: ‘MSI_FLAG_USE_DEF_DOM_OPS’ undeclared here (not in a function); did you mean ‘SIMPLE_DEV_PM_OPS’?
->   .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
->             ^~~~~~~~~~~~~~~~~~~~~~~~
->             SIMPLE_DEV_PM_OPS
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:73:39: error: ‘MSI_FLAG_USE_DEF_CHIP_OPS’ undeclared here (not in a function); did you mean ‘MSI_FLAG_USE_DEF_DOM_OPS’?
->   .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
->                                        ^~~~~~~~~~~~~~~~~~~~~~~~~
->                                        MSI_FLAG_USE_DEF_DOM_OPS
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:74:6: error: ‘MSI_FLAG_PCI_MSIX’ undeclared here (not in a function); did you mean ‘SS_FLAG_BITS’?
->       MSI_FLAG_PCI_MSIX | MSI_FLAG_MULTI_PCI_MSI),
->       ^~~~~~~~~~~~~~~~~
->       SS_FLAG_BITS
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:74:26: error: ‘MSI_FLAG_MULTI_PCI_MSI’ undeclared here (not in a function); did you mean ‘MSI_FLAG_PCI_MSIX’?
->       MSI_FLAG_PCI_MSIX | MSI_FLAG_MULTI_PCI_MSI),
->                           ^~~~~~~~~~~~~~~~~~~~~~
->                           MSI_FLAG_PCI_MSIX
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:73:11: warning: excess elements in struct initializer
->   .flags = (MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
->            ^
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:73:11: note: (near initialization for ‘dw_pcie_msi_domain_info’)
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:75:3: error: ‘struct msi_domain_info’ has no member named ‘chip’
->   .chip = &dw_pcie_msi_irq_chip,
->    ^~~~
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:75:10: warning: excess elements in struct initializer
->   .chip = &dw_pcie_msi_irq_chip,
->           ^
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:75:10: note: (near initialization for ‘dw_pcie_msi_domain_info’)
-> ../drivers/pci/controller/dwc/pcie-designware-host.c: In function ‘dw_pcie_allocate_domains’:
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:267:19: error: implicit declaration of function ‘pci_msi_create_irq_domain’; did you mean ‘pci_msi_get_device_domain’? [-Werror=implicit-function-declaration]
->   pp->msi_domain = pci_msi_create_irq_domain(fwnode,
->                    ^~~~~~~~~~~~~~~~~~~~~~~~~
->                    pci_msi_get_device_domain
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:267:17: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
->   pp->msi_domain = pci_msi_create_irq_domain(fwnode,
->                  ^
-> ../drivers/pci/controller/dwc/pcie-designware-host.c: At top level:
-> ../drivers/pci/controller/dwc/pcie-designware-host.c:72:31: error: storage size of ‘dw_pcie_msi_domain_info’ isn’t known
->  static struct msi_domain_info dw_pcie_msi_domain_info = {
->                                ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
-> -- 
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Introduced by commit
+
+  1948d5c51dba ("pinctrl: Add pinmux & GPIO controller driver for a new SoC=
+")
+
+This commit was not in linux-next before being merged by Linus :-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qz8BamVi=IPBCHlwgP8EYVy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3e45cACgkQAVBC80lX
+0Gwv+wf/TSiJpfgmb+vB0/yn71eqSADoB/DU3ri0mn4N/ABgDvg41iRLOHJFs2+d
+yIyI1dnvC4wcTS/Ac6FxlD3Gw5HG3rlOx4flt8KTv/ilby6CwB6vIJ7n7kZzYY99
+xqNwEyWyy4mgneVJ6ZEi6yctgf3t8xkinPnfB6udPq19m63vJMUAoStf+gY+vR+u
+0MN9O1lujknAxMRHgIOD07vtHPdbVH0Wi9FU4xwRvIF//yKtFwoD/5f1KALrUuTJ
+Z9FCDbYWo0+2TReVSn8oDyoJzL5tDp2UHuj7FtmprBqcYtFct8dupEph3FsWQB+O
+WQttj21xs9HwB5Q8n98EAh1om7ESEA==
+=Tacb
+-----END PGP SIGNATURE-----
+
+--Sig_/qz8BamVi=IPBCHlwgP8EYVy--

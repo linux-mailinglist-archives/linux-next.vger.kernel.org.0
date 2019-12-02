@@ -2,57 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A95FB10EEBF
-	for <lists+linux-next@lfdr.de>; Mon,  2 Dec 2019 18:49:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58FB310F19D
+	for <lists+linux-next@lfdr.de>; Mon,  2 Dec 2019 21:39:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727708AbfLBRtQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Dec 2019 12:49:16 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38845 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727893AbfLBRtQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Dec 2019 12:49:16 -0500
-Received: by mail-lj1-f193.google.com with SMTP id k8so454696ljh.5
-        for <linux-next@vger.kernel.org>; Mon, 02 Dec 2019 09:49:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=Glvm1i4pX1eNSo4TL6cWb18mTkzxDpRrewncTB12afQ=;
-        b=Z9iVGFE43dHrE7i+LFjbxj13ymIWwK2eQj16gi1GKfI927IMOTmm1x0zn/h3FjWbTF
-         hUDZM9IR73dED6N0NDrL1xCORyrydKtgm58Q6dwd++b9XOGJPcjl6Y4KMue4qC4dWXsz
-         u7Pky9kY4TpI4m6ZATwJ9f048E6utLxg1f3Jg/9tfHixqYZdte5Ruq2fWaYjgL9Lz2Wz
-         pqE2wCVkcn1qOnLtmPdLMzBLjJxHX81t5DoaYRaOFR5eL2sXNA9NpXzFuQbTTaWOMxhe
-         xyfHSaY6zgR6ZkpKWsD7xVIrwO2Jb5AKPAlJMsjBGlVFKULTn9dz0UsprdB05lLA9LS2
-         s/Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=Glvm1i4pX1eNSo4TL6cWb18mTkzxDpRrewncTB12afQ=;
-        b=NvzKDKnNCFlBKJebZkmPtMa3p/uRsDDuhxX1Eeb1PE3WVWpqJM++yAklG0emic1u4D
-         yT3MiFDiXIUdkDWapzxU96HDjgvkPDsGR5ugcecP2P+XCArSSsq002Z9RQDw9IeXErAq
-         CbFcylJHZDmrdgxN+qVQWo63EGiDeirRWQbaZMp5aOx1lerfK8TPVdcJgw7rgxUtt2/N
-         RDv2qS4LKoGvkRFVAHhsH4eDfLxo4mlXsm2eZLWjrxLhPykvAkjiSMiXK2hrzhfsKtwa
-         zJpNTcdCHuXqV/mKqMgL/u7Vs4Mz2nqu59NbwWLrlQGK54XOFmsKK8z855aKlgbeQLXG
-         Lf6Q==
-X-Gm-Message-State: APjAAAVhWvm/VJW/gcaoCTE9TXvJpJ4TTp5rd/KuK91Sznr26ffZ5clo
-        gLRW4j3hm4ONT7wQWtmdwrsg7fFF7mxLJI8B3+U=
-X-Google-Smtp-Source: APXvYqzkCy3K/AK2wNHuBgMbUd4KsC8XzM/K/+XwrIuvZ7sbSz/dk8410CED9WvvHaOtg8uclteImnKNJ9pc2kbrTdE=
-X-Received: by 2002:a2e:898a:: with SMTP id c10mr46810508lji.177.1575308955428;
- Mon, 02 Dec 2019 09:49:15 -0800 (PST)
+        id S1725763AbfLBUjZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Dec 2019 15:39:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:33811 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726673AbfLBUiU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Dec 2019 15:38:20 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47RcQ11brKz9sPT;
+        Tue,  3 Dec 2019 07:38:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1575319097;
+        bh=rhHd8s7nCE+B2Ro3ajMN45mURwMRXeZNXtYAQBqpDeU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=E7f1kXLpC1QYvXGGbQn+3ZNf4HrB2+D7MO4ip9pLjq4LPGocBUaKTTKAxin8NqvbN
+         eVqhjkFASvI0fLbXxgzA31JsEtouk+fcjv8PjoKSzsdh/JT4re4rKi8bo/ZQpGu4XJ
+         z61sC20WpErK523pfahN4oGTo1czfqUbK67RnRksXNPAWwt0HW/s6H2Y2BJDuUJ9+n
+         ogDUMiwsIQKsKAvljliAIV5OxIgkYyCYuUetOUOu8iaw90241gg9ImmeDZzSQvmpKC
+         jksya8U45O6hiyHoB3L8bJI8x9v5teciWZUE6FGzSWFaj8euN2d82guotNXJX6qshJ
+         yvTs5jC83Bl3g==
+Date:   Tue, 3 Dec 2019 07:38:15 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Andy Adamson <andros@netapp.com>,
+        Olga Kornievskaia <olga.kornievskaia@gmail.com>
+Subject: linux-next: Signed-off-by missing for commit in the nfsd tree
+Message-ID: <20191203073815.78965ad1@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:ab3:7f56:0:0:0:0:0 with HTTP; Mon, 2 Dec 2019 09:49:14 -0800 (PST)
-Reply-To: monicawood2033@gmail.com
-From:   Monica Woods <chantalstark44@gmail.com>
-Date:   Mon, 2 Dec 2019 17:49:14 +0000
-Message-ID: <CAAXHpOiyZNM_nQapHd2pUqKKnaT0d9-Y6xfM00ZT0WquT3T0bA@mail.gmail.com>
-Subject: Witaj
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/qslm3ilGvqTnyko99/FU7FL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-odpisz mi prosz=C4=99
+--Sig_/qslm3ilGvqTnyko99/FU7FL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Commit
+
+  dd4320a29d65 ("NFSD generalize nfsd4_compound_state flag names")
+
+is missing a Signed-off-by from its author and committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qslm3ilGvqTnyko99/FU7FL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3ldjcACgkQAVBC80lX
+0GxXtAgAoruuKX7ZasWpH4XfafgKow1I+d+JH4MX9VBvyuaGBGFzAQBegZY6C1e3
+Yr05tOo11Kn54fBMBdGFJq7brJ94X34QD+yUoE9WfmbVfLjIzPrYvCggkW/2Onbp
+VWl2JmLpmXiZFUjC5EKKDphXRiheLyNCT4wSzYWr6F1ypgLDcLYVQmWDR207suLo
+aJR0OGFOoUMIEx7lQeWILJywdquXNFL27bJNNp3WRG39mXSOTthQtQyDBD8lxeZW
+9s1ojHFZ4QZhuOoVhp/yhx0vpd54Cs2yQDHLXLYzy8fxYP3AkLXmrx9OAwEO6F1f
+RQPg9Gm8OgWFBWDyDt7prl0Vb2b7FQ==
+=aIWY
+-----END PGP SIGNATURE-----
+
+--Sig_/qslm3ilGvqTnyko99/FU7FL--

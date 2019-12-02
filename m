@@ -2,133 +2,153 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A75E10E47C
-	for <lists+linux-next@lfdr.de>; Mon,  2 Dec 2019 03:17:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBAC10E48A
+	for <lists+linux-next@lfdr.de>; Mon,  2 Dec 2019 03:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727301AbfLBCR1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 1 Dec 2019 21:17:27 -0500
-Received: from ozlabs.org ([203.11.71.1]:49411 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727298AbfLBCR1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 1 Dec 2019 21:17:27 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47R7zl3m4Dz9sNx;
-        Mon,  2 Dec 2019 13:17:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1575253043;
-        bh=qKvhvP+vkLsoAjR2coBKEozTrArZX0E+Nu2Btcv/YK4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=POn47bQ0alQ/NT3waoK8mqMclFewVI4/Pq94D6H6cJynlQFQcK0v8boT0fRsGE9Pn
-         HjjrhP42l58gUZTxLav3rOxSDt1krhnvkOe5CVNdKdX9TSZlU1T6+cJO/K6HJz88CK
-         tvwFeqLD1NTGryqg11g/iIiRU6lce6IEQ2mNdyocpEujh23CMmFWLxrPt+rXvGkZDT
-         /C581KB12+YV304BMloRxp4fMFGoVLgioioJCDhoWJvNivBMO7e2Hs+t48QrJiNsvd
-         ViBWVTqvGbU/43yr9jslemGzp0AOTNbGB3NHWMTuu48JJN06DwPMDlGSzIcJvveKyN
-         varTjiCQiVBgw==
-Date:   Mon, 2 Dec 2019 13:17:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Hellstrom <thellstrom@vmware.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Steven Price <steven.price@arm.com>
-Subject: linux-next: manual merge of the akpm tree with Linus' tree
-Message-ID: <20191202131722.111c5996@canb.auug.org.au>
+        id S1727318AbfLBC0m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 1 Dec 2019 21:26:42 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:50376 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727308AbfLBC0m (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 1 Dec 2019 21:26:42 -0500
+Received: by mail-wm1-f67.google.com with SMTP id p9so124854wmg.0
+        for <linux-next@vger.kernel.org>; Sun, 01 Dec 2019 18:26:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Bg95Yqzh6wJUcbes82DW2kyFub+0fmm1lIJGa6bRlWI=;
+        b=dLdax7KBhTutYb0/UzUhOT/NmHrtXmgGEg/2uLX3Wt2OHwzNjjrYbQ0z00vd1cXNrd
+         Vb1/n9BicBU6sCHvN1oT9asrpsfykseaZSRNk6mMXZnkeyODY8yIuOe3QLOHYfj3CbRl
+         JQLXmjnKn2koCxiJXw5HlKlr+SDzK0M4fVQz+MyLbAGkRfTS3pG5mdRZJuPr1Qb3GvSv
+         uV4H2MC2bxsrNgMA+tPR/t05LgFeq6TwLqe1AFlNyfEvtoB8GGI5evVM7WqVaYUzC184
+         ytp/L+L3rqwcV5h41T36ht3o482AqKmN+i9s7egaYW12UJAMi0kHSgQF6QTAb6Z/jS9T
+         eUbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Bg95Yqzh6wJUcbes82DW2kyFub+0fmm1lIJGa6bRlWI=;
+        b=W+VeZnrIkMUwapdG04XKyjKq5fEBcWI0HFeNnKfgc/tPLywkt7U7mN4kmw1XbUcKAS
+         MrztEJz6gDIHPZdEUE1EEDDc+FATn/wORs9n2oXMs2I5fC8xC1+N48MvknswH5qDu+/H
+         MalwicHSAQd5ihkSCKL6oORvSpntt990Tgdyhd8YQeURwmbaGCbCyca7C3EYI01OryLr
+         AqiAGEVxgb3AiwD40tjHaY30me/SglKIG+b3n7mvzzuLDCy6hhXGFWDT9P/JymkDrkkK
+         g1S6waSMBdhVMmTpokf6VPllG+ZN+hK/9niaMrzl61ROQXTFBaDGyMLBNu5vrjF5PRRD
+         h75g==
+X-Gm-Message-State: APjAAAWGAp+g3yPuTxQF+ol+PujRniGwBPudCi9cydFzjEPEcTdzM4gH
+        yogm+gBbwy6iTFj3g91BhhRZd3cC1qE=
+X-Google-Smtp-Source: APXvYqzq0hcE7tHDihXBDs77SK8VGhBRz4YchNyL+s/aD/rahlxL+coYNy+Y3bfuLz3mbLivklMLaA==
+X-Received: by 2002:a1c:f415:: with SMTP id z21mr25781175wma.140.1575253599588;
+        Sun, 01 Dec 2019 18:26:39 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id s82sm22378922wms.28.2019.12.01.18.26.38
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Dec 2019 18:26:39 -0800 (PST)
+Message-ID: <5de4765f.1c69fb81.15a74.1f0f@mx.google.com>
+Date:   Sun, 01 Dec 2019 18:26:39 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/bDsZE/DIrxhWBESXPmTgHfB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.4-9508-gd3b3ce7a0e6f
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 276 boots: 3 failed,
+ 253 passed with 19 offline, 1 conflict (v5.4-9508-gd3b3ce7a0e6f)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/bDsZE/DIrxhWBESXPmTgHfB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 276 boots: 3 failed, 253 passed with 19 offline, 1=
+ conflict (v5.4-9508-gd3b3ce7a0e6f)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-9508-gd3b3ce7a0e6f/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-9508-gd3b3ce7a0e6f/
 
-Today's linux-next merge of the akpm tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-9508-gd3b3ce7a0e6f
+Git Commit: d3b3ce7a0e6febb262b2436f9a586946ecacbd11
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 99 unique boards, 27 SoC families, 28 builds out of 217
 
-  include/linux/pagewalk.h
+Boot Failures Detected:
 
-between commit:
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
+            msm8998-mtp: 1 failed lab
 
-  5b932abfc562 ("mm: pagewalk: add test_p?d callbacks")
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-from Linus' tree and patch:
+Offline Platforms:
 
-  "mm: pagewalk: add test_p?d callbacks"
+arm:
 
-from the akpm tree.
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
 
---=20
-Cheers,
-Stephen Rothwell
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
 
-diff --cc include/linux/pagewalk.h
-index 2c9725bdcf1f,fe61448c5900..000000000000
---- a/include/linux/pagewalk.h
-+++ b/include/linux/pagewalk.h
-@@@ -24,9 -24,11 +24,14 @@@ struct mm_walk
-   *			"do page table walk over the current vma", returning
-   *			a negative value means "abort current page table walk
-   *			right now" and returning 1 means "skip the current vma"
-+  * @test_pmd:		similar to test_walk(), but called for every pmd.
-+  * @test_pud:		similar to test_walk(), but called for every pud.
-+  * @test_p4d:		similar to test_walk(), but called for every p4d.
-+  *			Returning 0 means walk this part of the page tables,
-+  *			returning 1 means to skip this range.
- + * @pre_vma:            if set, called before starting walk on a non-null=
- vma.
- + * @post_vma:           if set, called after a walk on a non-null vma, pr=
-ovided
- + *                      that @pre_vma and the vma walk succeeded.
-   *
-   * p?d_entry callbacks are called even if those levels are folded on a
-   * particular architecture/configuration.
-@@@ -49,9 -51,12 +54,15 @@@ struct mm_walk_ops=20
-  			     struct mm_walk *walk);
-  	int (*test_walk)(unsigned long addr, unsigned long next,
-  			struct mm_walk *walk);
-+ 	int (*test_pmd)(unsigned long addr, unsigned long next,
-+ 			pmd_t *pmd_start, struct mm_walk *walk);
-+ 	int (*test_pud)(unsigned long addr, unsigned long next,
-+ 			pud_t *pud_start, struct mm_walk *walk);
-+ 	int (*test_p4d)(unsigned long addr, unsigned long next,
-+ 			p4d_t *p4d_start, struct mm_walk *walk);
- +	int (*pre_vma)(unsigned long start, unsigned long end,
- +		       struct mm_walk *walk);
- +	void (*post_vma)(struct mm_walk *walk);
-  };
- =20
-  /**
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            mt7629-rfb: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
 
---Sig_/bDsZE/DIrxhWBESXPmTgHfB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-g12b-s922x-khadas-vim3: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3kdDIACgkQAVBC80lX
-0Gy2Gwf/ac8IMoB/PyIMZ7QnBpxwv6FwUnwdUpX37vVCN65ULvsuwgfpzk3KXC/e
-UGWGGINA8/D9pa1LSxM9J1YmsYk8sHvuRnDw4w7rwEJtYQWEFO6/VILoyP99pFzY
-VuLmpuF/KXkl+uC41VPIQp7uufbNX79hq8ZCjDggQT6WykManMyH6PPl7NmHGzCD
-jaHl6zggPwnvz71xLhp5AXGTY3mU5CiOY2OQuwgQjv4GnuEXbbsYD4TtzRnLtHRv
-KITn1iOagxgBt8bnoJYztkj0bK1IiQ8SY1ZnvkJ8omsAvhuxfHAk7Wed1wKPXUf2
-qkAOX1h5wKx9H7hJQ1HAvS7v5/8asg==
-=6eiX
------END PGP SIGNATURE-----
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-g12b-s922x-khadas-vim3: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
 
---Sig_/bDsZE/DIrxhWBESXPmTgHfB--
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    multi_v7_defconfig:
+        imx6q-sabrelite:
+            lab-collabora: FAIL (gcc-8)
+            lab-baylibre: PASS (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

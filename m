@@ -2,94 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A79D710F4D1
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2019 03:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0261210F4EB
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2019 03:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbfLCCK3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Dec 2019 21:10:29 -0500
-Received: from ozlabs.org ([203.11.71.1]:41293 "EHLO ozlabs.org"
+        id S1726057AbfLCCXG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Dec 2019 21:23:06 -0500
+Received: from ozlabs.org ([203.11.71.1]:54115 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726086AbfLCCK3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Dec 2019 21:10:29 -0500
+        id S1725954AbfLCCXG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Dec 2019 21:23:06 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47RlnF26S7z9sNx;
-        Tue,  3 Dec 2019 13:10:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Rm3n2LsCz9sNx;
+        Tue,  3 Dec 2019 13:23:01 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1575339026;
-        bh=YgcDAJU+dAXcVcKor05ORh+eCp3gCcuIT41op239Ii8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JgDA7lsLGYWxnZ8IrZuXuUHj9aN6zGwNnE5fFNnpAD9FaXRu5OXHINwyBUBEcT7IY
-         fua3YObcn7+lyLyBWc4LJPgMLKtIN2AdoRiC8U/0lYg5ZepawrZGodg4WChgOWk8Pr
-         VASfdce3iZp26XHw76uHT2eRau8tTlkLrZl0k5c3/xRACYRjTBBlRet8e/u52cPWbi
-         LzeYrPu+dSCzLiSrTlgdxE5caap42BKJLH1z+ABly4jhOVuDe9g0cG6FXWl5+mz0ps
-         aQPzToGDhapivXh+wGFY5iVBGpF74p2NZsY1padEFunva6IkvuQviIu2/iEvaSzrjP
-         IHlg7akyozV+w==
-Date:   Tue, 3 Dec 2019 13:10:24 +1100
+        s=201702; t=1575339783;
+        bh=EL9ZyahnDGpSzzlhJ1wKUfVIQDAdvKJz012rP4TCPs0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q9D3yRsJL7riVhL8NHHJa2KtQWnAkF95p5pT6aNGmzgrs90EOg7VyCDP0Bu23v0/g
+         a/6gqy4VuNywJQ5sUPdmFRUDqVoormLWZoNSZE+esXLj7CsS/bEJB16HICU0m/zX+/
+         KpVi0pthEWNiTWwIE4xjwkX9nnkSeIHBdiCOLLJjuYovXN0KTkQapSMIoETSRtVdtI
+         zphvoNlcS5khjPSNDE1wVFdogx7Eb1R2nlQvTV/qdyRUfFhp53yggf0w6lG5QwvIdp
+         KvCRVQ1ok+PMtwiCMs/jOAL+C5APXlm2B3+1UJO28Bl6JpRTL44VEG5T032WqcM6ys
+         Rwb5s4vlWauGQ==
+Date:   Tue, 3 Dec 2019 13:23:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20191203131024.6e36ed88@canb.auug.org.au>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>
+Cc:     David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus <torvalds@linux-foundation.org>
+Subject: Re: linux-next: manual merge of the y2038 tree with the xfs tree
+Message-ID: <20191203132300.3186125c@canb.auug.org.au>
+In-Reply-To: <20191203002258.GE7339@magnolia>
+References: <20191030153046.01efae4a@canb.auug.org.au>
+        <20191203110039.2ec22a17@canb.auug.org.au>
+        <20191203002258.GE7339@magnolia>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Iw0oD_JRGIMABYG.cHlotR/";
+Content-Type: multipart/signed; boundary="Sig_/G5fteeX4WpkVraxOJWz9wJm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Iw0oD_JRGIMABYG.cHlotR/
+--Sig_/G5fteeX4WpkVraxOJWz9wJm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Darrick,
 
-Today's linux-next merge of the tip tree got a conflict in:
+On Mon, 2 Dec 2019 16:22:58 -0800 "Darrick J. Wong" <darrick.wong@oracle.co=
+m> wrote:
+>
+> On Tue, Dec 03, 2019 at 11:00:39AM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > This conflict is now between the xfs tree and Linus' tree (and the
+> > merge fix up patch below needs applying to that merge. =20
+>=20
+> There shouldn't be a conflict any more, since Linus just pulled the xfs
+> tree into master and resolved the conflict in the merge commit.
+> (Right?  Or am I missing something here post-turkeyweekend? 8))
 
-  arch/x86/mm/pat_interval.c
-
-between commit:
-
-  91298f1a302d ("x86/mm/pat: Fix off-by-one bugs in interval tree search")
-
-from Linus' tree and commits:
-
-  70bfed57a6de ("x86/mm/pat: Move the memtype related files to arch/x86/mm/=
-pat/")
-
-from the tip tree.
-
-I fixed it up (I just removed the file - there may be further updates
-required) and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be mentioned
-to your upstream maintainer when your tree is submitted for merging.
-You may also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
+Yeah, it should all be gone in tomorrow's linux-next.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Iw0oD_JRGIMABYG.cHlotR/
+--Sig_/G5fteeX4WpkVraxOJWz9wJm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3lxBAACgkQAVBC80lX
-0Gy66Qf/RmH+e2BtBBPMDAJDBa7wpxKvZ7tjFcrVOgLOco6herukWwpeac4lDoLy
-OkXiW3KN3wiDJcm8O8yGIy7R0o3EBSWPADh9fNhV9Q4kgEr6ZnJOyA7C+c3vM/uQ
-19f0Cl0fZTNPndVaQZwvMkJFxeP75f7UI+vP5RvxtIwRUDtKqHy9TS2E1oYjHBlW
-H6Vmw1gLR/MckawJWrA30b/EjLb8H2QE/yI6vOaxltRNOFD855qkutYj5ePAgPMp
-Sj2pFIiJVx37RCATrn2ew6VoG76cb1nvMcAkP84jjPNl1Ku/Ry29dXPIeiyu3kvH
-ZjtsAZHoQnG384JPS+H6THV0ZKA4Mw==
-=6FUs
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3lxwQACgkQAVBC80lX
+0Gz2Pgf/W+qtlGWltx8FwrLej5hHElz+9Qsxf9biRtTbhblZybgbQ4mICamyW0DR
+dhCUsa2GYCVwAZ/m+eMyFjvpu+Z86PA5sqNWY97ZV7hF9pnWYoxDRb4q/lJyXGLv
+z9QffiYs/l9J7CJNoT/KcCJvcLLz/DU79LB/nUQv4TK4+UOFpYKx+Deq8xK2G5WX
+w5romAXa2JCbGFfXy5Cysr2v2Tqpc4/9IbJ/qC83H2ZA2NK6ajG5pryydXBoTco2
+16rGnqQISq/+VZ8wr1G5OMxM8kueXJx9N566+OX4RqoEuIdsqa71pd7udRO1u78r
+j4VZj8d4hpWSwwJBLeQDh2pMC/5aAg==
+=074M
 -----END PGP SIGNATURE-----
 
---Sig_/Iw0oD_JRGIMABYG.cHlotR/--
+--Sig_/G5fteeX4WpkVraxOJWz9wJm--

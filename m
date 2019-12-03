@@ -2,82 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 679B310F82F
-	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2019 07:58:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E942A10F834
+	for <lists+linux-next@lfdr.de>; Tue,  3 Dec 2019 07:59:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727350AbfLCG6R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Dec 2019 01:58:17 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:43014 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727340AbfLCG6R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Dec 2019 01:58:17 -0500
-Received: by mail-wr1-f66.google.com with SMTP id n1so2184523wra.10;
-        Mon, 02 Dec 2019 22:58:15 -0800 (PST)
+        id S1727326AbfLCG7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Dec 2019 01:59:36 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38073 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727282AbfLCG7g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Dec 2019 01:59:36 -0500
+Received: by mail-wm1-f65.google.com with SMTP id p17so2155020wmi.3
+        for <linux-next@vger.kernel.org>; Mon, 02 Dec 2019 22:59:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=zF74IGfN8k4r/66rDN9iUDHqi54WQbWfKDWkqcaxjZw=;
-        b=PdZ4+lTwKLhTadzoIBTD+MAdEKy2PGkrU15xlBIIWitCyv1IYwxpgI4BNaX5WW7Iu3
-         R3Bb34YpH513Zgxv+Pui8YnZ3U9hlnFrabHfQnt7AIpOg8tckDYAj/ZkCtSfBaBl1WPb
-         7oz1xCuo7Pdu7Dj2p5wy1C8DlL8jyLZqL5DMI7IMnL/m8Mh5Ck0GzH6hxT936JN/n/IJ
-         bfjdCSEvrhxWoi4E6jxbST7u01T+YN2iOnlFEKF1a8wHiZBFESivfIBmlHENFJTKNnnx
-         UgEdRfPqV08ZBNTdglKXGa/RJOBfw7HR9Sp9JfBnug7GqN+6TwqB1J3IjTmSz2c+5Exx
-         Y6fQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=qS5WLTTMnCKFwjZcEWYIXh9QWpsJXc0V7Epo5is353E=;
+        b=sQce/xiKvpb81csyO5DgOYE2sscTIGdV3ZXXX5uPdY/fVxtn4lCEqar2+W2Yn8nVlS
+         ivXPrQxZqHLdWuHR6qcuRD9cgSNzTE2nFks8NSSLa5DwPZiu20nTNNwDq6MzZ5hcVR5C
+         vBp5xPcOwfAN/K+5WmSCSEwbfpQS1uy2EyeEbICMIMDXG+eT8lp/nqgZsDtouHhGs2Et
+         5M1wlsbqOtqNMXF/TNGd7SfUKwE/wsCIo1J4BM0hZg2Zi2lxLAKs5kDPxH67uKcJQqxh
+         ufnihVXckQ3jv9C8Lb2rMYg4wCNzA3OefV0SILNnOpqBZDEzAesQO/3/tMhXqd3TLpmG
+         47Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=zF74IGfN8k4r/66rDN9iUDHqi54WQbWfKDWkqcaxjZw=;
-        b=eC+HNcAR6Ewg0dW+axhxQ8zRnEBlFZCe0CxhTRYllDKJ1+BXvqNNbB6/csJu8qVPqc
-         a9DjyanZenFvabKLGhAmzObtxxRflss4AoYLxauem+9Jqfdd2VbVX+mG6TSu9ooj8EZ+
-         G29ie0Rfw7eHGvSjDEW11GyWtqqsIDp+tRgCxMq7C49SoYYGkVy2jHG4zhdDAdVH0Wgg
-         O45FMHA86oRsd4RdJ6N/iVDH0qmu9JMqZLNKV6PY0gMwmlwzxg/W9gsYoXSbh01chUUG
-         6GWFYAAQaEmdhMOpOKBbmBS20QwCgIOyHylGS+d39rcHnf+6EYcQfdWngSQ1+g5d1nZG
-         spyg==
-X-Gm-Message-State: APjAAAVVogUEDPljY9ZfWlQvVoMDb+B/CJy79TqERAXhCw2+ILmqOaTY
-        wFy54OB5OsS3ytgxz9y7cwU=
-X-Google-Smtp-Source: APXvYqzDUtSY4j2FaTqaOLrl5xV1xcEZrpY5GUGhDwiA72WNVMfQoHhvDxH5M8QSY5J/ezF6uJMc0Q==
-X-Received: by 2002:a5d:5284:: with SMTP id c4mr3141134wrv.376.1575356295012;
-        Mon, 02 Dec 2019 22:58:15 -0800 (PST)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id r15sm1915483wmh.21.2019.12.02.22.58.13
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=qS5WLTTMnCKFwjZcEWYIXh9QWpsJXc0V7Epo5is353E=;
+        b=caX9ZttKmT7LKtitrj5jmq6CbIhIVfd0DuA5pu8bN9++iRnIMPeGJZcPytJV73qnPM
+         V6bX7vbtPe024OQxRuXqmzyrwjK0doSbKxk06YJeHcJl5EXXNx5tz/dHNT1dNI+vPe2L
+         PrAAap1PhuE6/BHstdwLWJZg35GCcaCxP7Mg+0mxg3N2Jav01Zw+HyEF9pFLPjlP3zmA
+         Er//vzzL/2fwWEFpkJvY3xZwS5jencokoc8sD3erenJOUpcIFEg7L1IfFiKVxEqlD9Mp
+         6/PnPIVAGZ/Afkh41yptedwUM7bGvgdMgtF33hdqpQNJ9mzW9Z4WCKMhiw1gdN4YKIrL
+         I8xg==
+X-Gm-Message-State: APjAAAUshUzVUkP24mytlVB6Hrw8/xsCYiFNsKMhIW68AfTGi8voUnAE
+        u2dtS9nrkJcf9AOLcJfa4BnbjlKgPQajvw==
+X-Google-Smtp-Source: APXvYqyOrZpgZK/gwdxz/677aEc2SooFKSRR4ZWvvLyXv9+US8NiACj1IK5kHWTQYkXXisoLObDcOw==
+X-Received: by 2002:a7b:c632:: with SMTP id p18mr24063902wmk.175.1575356373712;
+        Mon, 02 Dec 2019 22:59:33 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id v8sm528498wrw.2.2019.12.02.22.59.32
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Dec 2019 22:58:14 -0800 (PST)
-Date:   Tue, 3 Dec 2019 07:58:12 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmitry Safonov <dima@arista.com>
-Subject: Re: linux-next: manual merge of the y2038 tree with the tip tree
-Message-ID: <20191203065812.GB115767@gmail.com>
-References: <20191127130139.0b16375c@canb.auug.org.au>
- <20191203140259.33291393@canb.auug.org.au>
+        Mon, 02 Dec 2019 22:59:32 -0800 (PST)
+Message-ID: <5de607d4.1c69fb81.d09fd.2e95@mx.google.com>
+Date:   Mon, 02 Dec 2019 22:59:32 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191203140259.33291393@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-10738-g642f47bd48d8
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 277 boots: 4 failed,
+ 263 passed with 6 offline, 3 untried/unknown,
+ 1 conflict (v5.4-10738-g642f47bd48d8)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/pending-fixes boot: 277 boots: 4 failed, 263 passed with 6 offline, 3 =
+untried/unknown, 1 conflict (v5.4-10738-g642f47bd48d8)
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-10738-g642f47bd48d8/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-10738-g642f47bd48d8/
 
-> Hi all,
-> 
-> This is now a conflict between the tip tree and Linus' tree.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-10738-g642f47bd48d8
+Git Commit: 642f47bd48d81aee3556985044904374e8726227
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 102 unique boards, 25 SoC families, 30 builds out of 217
 
-This too should be resolved in my latest update of the -next integration 
-branch tip:auto-latest.
+Boot Failures Detected:
 
-Thanks,
+arm:
+    bcm2835_defconfig:
+        gcc-8:
+            bcm2837-rpi-3-b: 1 failed lab
 
-	Ingo
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+x86_64:
+    x86_64_defconfig+kvm_guest:
+        gcc-8:
+            minnowboard-turbot-E3826: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    multi_v7_defconfig:
+        imx6q-sabrelite:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

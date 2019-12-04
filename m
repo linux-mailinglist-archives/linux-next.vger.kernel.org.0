@@ -2,79 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E4477112FED
-	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2019 17:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 727E3113735
+	for <lists+linux-next@lfdr.de>; Wed,  4 Dec 2019 22:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbfLDQZF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Dec 2019 11:25:05 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:57194 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728241AbfLDQZF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Dec 2019 11:25:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=79WN1t0LbZ5TQbPR9oZNKLb9p7e4pnnNvD8x14AleRQ=; b=OzgNVi7XFqg0NhhgPkOw69LQJ
-        XfifQMK/sqoBadzbTnQe4bu633VxkhfZt3+oN2AEipuRD1wuXGsinv8v6l4YMQpx7c3BC/m+rr5v8
-        W8LwBTbzSdsQ8jq5cNbAJFu3QvOYNw3BWLoETwJBEfE6VOYip1jSepdXejMeQr47/3oJtnyoOcIyT
-        JxgPFx9fpz/zWq1zNdjHTVKqoQz+4748ojforLm8jrejHD2sHO4p5pi9TsnnLawNbk/oUOWEPVfGq
-        CwnlCQSaBo9IyAY0NAlFioS25qcrBCeupEJ4L3bP70kv8jxdJlMa6j8DzB9cxOqe/4sq9+KuC6op3
-        dU6Iu0ugA==;
-Received: from [2601:1c0:6280:3f0::3deb]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1icXSZ-0000fR-AM; Wed, 04 Dec 2019 16:25:03 +0000
-Subject: Re: linux-next: Tree for Nov 15 (thermal:
- THERMAL_GOV_POWER_ALLOCATOR)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amit.kucheria@verdurent.com>
-References: <20191115190525.77efdf6c@canb.auug.org.au>
- <247cd41e-a07b-adf0-4ec2-6467f0257837@infradead.org>
-Message-ID: <9436e207-8a65-f01b-c348-32a8a00f03d4@infradead.org>
-Date:   Wed, 4 Dec 2019 08:25:01 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1728181AbfLDVow (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Dec 2019 16:44:52 -0500
+Received: from ozlabs.org ([203.11.71.1]:34703 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727982AbfLDVow (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 4 Dec 2019 16:44:52 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Ssns0sfHz9sPT;
+        Thu,  5 Dec 2019 08:44:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1575495889;
+        bh=uA8eVLm8OL/wsGD7lo1Mt9Zb2Yma2lJuOdQyi3QyBUI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ljabVyo91OMUruCfb/Qh0treE1vGHbbQwaaBZmjEyGrHRipdh5qR0usGsbU6cP3Zd
+         vLoND+sZkUOu1OBmQkflFi3clcLiZIJ41HjBKljfGXsJzrzNjJA59EYo1R0/GcnhYC
+         J2vEJPyMMvYfddCe6G7saUDG2Isb1JDNrQyMUpxN4TrmmrjoxwphhSCMRNkP9owneO
+         PQcQlPS2Zut30OL7LZRm6vQeModInKIMvCqBPNVulPsVlbq557AqdmjR+pYsNeJ8eH
+         XRPJU5xOqyJnmiWA8YQ265e+A3YEon+LLK/X7R6AQazjkg7BOP5J6xNH50kiISYag2
+         0XcTBYgJbZnBw==
+Date:   Thu, 5 Dec 2019 08:44:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sabrina Dubroca <sd@queasysnail.net>
+Subject: linux-next: build warning after merge of the net tree
+Message-ID: <20191205084440.1d2bb0fa@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <247cd41e-a07b-adf0-4ec2-6467f0257837@infradead.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/ycwelL/amL7DWg+TMsX/aXK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 11/15/19 3:44 PM, Randy Dunlap wrote:
-> On 11/15/19 12:05 AM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20191114:
->>
-> 
-> on i386:
-> 
-> WARNING: unmet direct dependencies detected for THERMAL_GOV_POWER_ALLOCATOR
->   Depends on [n]: THERMAL [=y] && ENERGY_MODEL [=n]
->   Selected by [y]:
->   - THERMAL_DEFAULT_GOV_POWER_ALLOCATOR [=y] && <choice>
-> 
-> 
-> THERMAL_GOV_POWER_ALLOCATOR is selected by THERMAL_DEFAULT_GOV_POWER_ALLOCATOR
-> even though ENERGY_MODEL is not set/enabled.
-> 
-> 
+--Sig_/ycwelL/amL7DWg+TMsX/aXK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This Kconfig warning is still happening in linux-next of 20191204.
+Hi all,
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+After merging the net tree, today's linux-next build (x86_64 allmodconfig)
+produced this warning:
+
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c: In function 'mlx5e_tc_=
+tun_create_header_ipv6':
+drivers/net/ethernet/mellanox/mlx5/core/en/tc_tun.c:332:20: warning: 'n' ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+  332 |  struct neighbour *n;
+      |                    ^
+
+Introduced by commit
+
+  6c8991f41546 ("net: ipv6_stub: use ip6_dst_lookup_flow instead of ip6_dst=
+_lookup")
+
+It looks like a false positive.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ycwelL/amL7DWg+TMsX/aXK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3oKMgACgkQAVBC80lX
+0Gwuagf/dwTzdNY0ZdBpgEh3JIFmhEXUn34yRJy3fVMo3YRWjzb3yUQduB+kSun1
+fu/cbdifMmQCmBFbmvVep3zyzo9oX1xeagP/syWSfLRUIPw9TE25MHiaOXS0+aIa
+bfuOS8WhDDHf9NFePAP9siyrH2YT5fZimLhU6TUeB3Cn4Fl/robGE6JPLtQtbzuR
+oLHRTdMgY13qM9bAZd8FeR3JXHXaGGWNs8iQpSKaZPEV7Le6rGxZGezmjo9DTINd
+Ix3XCIqkfb06D/HN3al8sAWjHKgeIqoIIxGuNVYFg8AbdaEYdtdWtcWZJlVJw+/S
+H0IYcKAGxUuLhV8THoE1t3rHlcg7Qw==
+=azJe
+-----END PGP SIGNATURE-----
+
+--Sig_/ycwelL/amL7DWg+TMsX/aXK--

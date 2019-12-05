@@ -2,74 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6B0113A29
-	for <lists+linux-next@lfdr.de>; Thu,  5 Dec 2019 04:01:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FFD113A2C
+	for <lists+linux-next@lfdr.de>; Thu,  5 Dec 2019 04:02:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728774AbfLEDBi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Dec 2019 22:01:38 -0500
-Received: from mga17.intel.com ([192.55.52.151]:38152 "EHLO mga17.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728321AbfLEDBi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 4 Dec 2019 22:01:38 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 04 Dec 2019 19:01:38 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,279,1571727600"; 
-   d="scan'208";a="223484568"
-Received: from sgsxdev001.isng.intel.com (HELO localhost) ([10.226.88.11])
-  by orsmga002.jf.intel.com with ESMTP; 04 Dec 2019 19:01:35 -0800
-From:   Rahul Tanwar <rahul.tanwar@linux.intel.com>
-To:     linus.walleij@linaro.org
-Cc:     rdunlap@infradead.org, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org,
-        Rahul Tanwar <rahul.tanwar@linux.intel.com>
-Subject: [PATCH 1/1] pinctrl: Modify Kconfig to fix linker error
-Date:   Thu,  5 Dec 2019 11:01:31 +0800
-Message-Id: <ba937f271d1a2173828a2325990d62cb36d61595.1575514110.git.rahul.tanwar@linux.intel.com>
-X-Mailer: git-send-email 2.11.0
-In-Reply-To: <cover.1575514110.git.rahul.tanwar@linux.intel.com>
-References: <cover.1575514110.git.rahul.tanwar@linux.intel.com>
-In-Reply-To: <cover.1575514110.git.rahul.tanwar@linux.intel.com>
-References: <cover.1575514110.git.rahul.tanwar@linux.intel.com>
+        id S1728393AbfLEDCw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Dec 2019 22:02:52 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54993 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728132AbfLEDCv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Dec 2019 22:02:51 -0500
+Received: by mail-wm1-f66.google.com with SMTP id b11so1940680wmj.4
+        for <linux-next@vger.kernel.org>; Wed, 04 Dec 2019 19:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=8/B/s6Gg3UpYI8dPQSyxY9PVtMBwlvKZhnvsDmZO4HE=;
+        b=XVZyiJCPiQO46foCrYmw4zNLhHeteJmhAFF+1+XyEfDWMPzqFT+lsBBlmMCI08UgZH
+         PTTfwn/mHdo8+5AqurcbmU0N7dhY+2v6Nnb+tHBbyaPGeXwLYKf86oF/blx9Bp6LDz3Z
+         JQ/nblF8FysUsD0102ntpM85aUQW8Eq+N6MRLqI0OKC14/svLsgIrMRW4YXBDWwEjrKD
+         ewKiU07V7AjEoKopKqsH5uBukty/Z/ti0Ww/ue1PXIO6+auBZZ2Q65i4MYPlm/35LH71
+         HC6hYsL8mo9KhzAkIBneptZfP82mj6ayJ28pK4gUpuf1M9IPPTw+ZJcPeQjaJcKystT1
+         4SkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=8/B/s6Gg3UpYI8dPQSyxY9PVtMBwlvKZhnvsDmZO4HE=;
+        b=nRqyVr8aq2ucm0KVE0QykVWzg0UltxF5G+NcjvRlYluY0pkmreTkZDMor3vhwhLrRE
+         pP/tHqBkMkwQ+NHDINV1goK4JQkDUGR3Oiu7MsvbYFDfSb7sJFY87PqUqlZfgQd3I+HY
+         vTtSRBo0l6lhA94w9RaUq/kQzaNI1PPF32dH7nAKYdRDgerY7GY7M16fQyq6aOvFfD6m
+         zG2HkkOKUiJc8UBKRmzP1FWYSWH12qExsLHCJlRS4fDW3zIvwT2JOCTTaKWpVfg8FIuJ
+         vLFHi1eI8zRVeDpnqTQdtSrJOrUkMdMQ4NjVL8zdBdwTeYZXydyozBpe3a4YnfVzaryO
+         3sqA==
+X-Gm-Message-State: APjAAAV4N1cVT7upeufHu959RWNVyuijVgcq+i/zxSklCi+bZAvIbuS2
+        AiTMqNYesXZkHF8m7QXwJcHm2ydAWNM=
+X-Google-Smtp-Source: APXvYqzMYIDsP93l7VvK0ZgkkrWHhDeFlk/S+C31yHcG+9XU7ttk7A0NKIVMCLxkD329/o3cfW+w0w==
+X-Received: by 2002:a7b:c004:: with SMTP id c4mr2616298wmb.45.1575514969319;
+        Wed, 04 Dec 2019 19:02:49 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id l4sm8471538wml.33.2019.12.04.19.02.48
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Dec 2019 19:02:48 -0800 (PST)
+Message-ID: <5de87358.1c69fb81.8d750.a98d@mx.google.com>
+Date:   Wed, 04 Dec 2019 19:02:48 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.4-11853-gdfc133a6fea9
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 281 boots: 5 failed,
+ 263 passed with 10 offline, 2 untried/unknown,
+ 1 conflict (v5.4-11853-gdfc133a6fea9)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix below linker error
+next/pending-fixes boot: 281 boots: 5 failed, 263 passed with 10 offline, 2=
+ untried/unknown, 1 conflict (v5.4-11853-gdfc133a6fea9)
 
-    ld: drivers/pinctrl/pinctrl-equilibrium.o: in function
-    `pinconf_generic_dt_node_to_map_all':
-    pinctrl-equilibrium.c:(.text+0xb): undefined reference
-    to `pinconf_generic_dt_node_to_map'
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.4-11853-gdfc133a6fea9/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.4-11853-gdfc133a6fea9/
 
-Caused by below commit
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.4-11853-gdfc133a6fea9
+Git Commit: dfc133a6fea9c3775b2c340f99672d6dcc6736f1
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 102 unique boards, 25 SoC families, 30 builds out of 217
 
-    1948d5c51dba ("pinctrl: Add pinmux & GPIO controller driver for a new SoC")
+Boot Failures Detected:
 
-by adding 'depends on OF' in Kconfig driver entry.
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            rk3288-veyron-jaq: 1 failed lab
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>>
-Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+arm64:
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+            rk3399-gru-kevin: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-sm1-khadas-vim3l: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-sm1-khadas-vim3l: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+arm:
+    multi_v7_defconfig:
+        imx6q-sabrelite:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
 ---
- drivers/pinctrl/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 3bfbf2ff6e2b..ba0cad4bd072 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -422,6 +422,7 @@ config PINCTRL_TB10X
- 
- config PINCTRL_EQUILIBRIUM
- 	tristate "Generic pinctrl and GPIO driver for Intel Lightning Mountain SoC"
-+	depends on OF
- 	select PINMUX
- 	select PINCONF
- 	select GPIOLIB
--- 
-2.11.0
-
+For more info write to <info@kernelci.org>

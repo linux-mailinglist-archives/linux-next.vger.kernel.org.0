@@ -2,93 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E86115084
-	for <lists+linux-next@lfdr.de>; Fri,  6 Dec 2019 13:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B456A1154F1
+	for <lists+linux-next@lfdr.de>; Fri,  6 Dec 2019 17:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726140AbfLFMnL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Dec 2019 07:43:11 -0500
-Received: from ozlabs.org ([203.11.71.1]:55923 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726124AbfLFMnL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 6 Dec 2019 07:43:11 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Tsgw2k62z9s4Y;
-        Fri,  6 Dec 2019 23:43:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1575636188;
-        bh=gQcLRyFjPBi06XcUxhtqw61VL68HJnWLK6+tiU9fGAU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AuYZH8BOw94vx748IvDjUhHp2u5v0G89QAsp3WauB2Uu6MfaLWB8c0HMgEsF1RVkE
-         3racdR3fgl6NcImUL873CI9lN7Y5/bWgr6MhdWqWROswuyLELsTB2PnxMW9CCrz2UR
-         DWZZ9V+n3ZVKYsqCGbnM84E2PZIV5E8PXFe5j2SSCRUht8UxHGlokouttw4ECK5xfy
-         qGWt/JxYOdPgbV/rVXEFIqqRkDtvu1RRqaGpqbrVy/c04keSdMo89Ov5JlYn3nqMuP
-         Wv/ohFORThPPNdQo9Maya/utu4KLLAswwXnjIz8NWJBF4nHhQt3Q6mVUwzJaPJBZFr
-         i3+Szite0Yl3Q==
-Date:   Fri, 6 Dec 2019 23:43:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 6
-Message-ID: <20191206234300.5071290a@canb.auug.org.au>
-In-Reply-To: <CAMuHMdVHXYhXtyMAR84L5kQTSU8Ds71AJftrEBqepiy_NV88kA@mail.gmail.com>
+        id S1726312AbfLFQRb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Dec 2019 11:17:31 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:47240 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726271AbfLFQRb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Dec 2019 11:17:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=FfwzEcorkXbM8vzjX38dJsbMyLfJpA+SOA2PraA0uq4=; b=FTpqPQZKYGxlRzIKQK0d4SO9E
+        g7zWp7NZxc3HPWc7mrdYAdoZQV+kQS22TETVLcgTEx/IdM3R+LfXeaMKa8ZBzxXHTqrT886NySwqE
+        TMYwey2Fg5hvpowobL+LcMxg3BQ6HaSA4GZ4McLl1Si+jp5YG7ilVtkNJwCvhEmKkJs+LlZwDmQaP
+        sdLcb6QNThw72RD7AiTRW5rlE7/c4x4cx2vTPvahUcFWe0uoX1WTD7chUTwNoyPyFA/wKPxUgkYCE
+        XQNYdUkQsC2X4sB5zrkYK7J6guJnzMPcGK3xN4+IV4SEMDciCTjG3wVcqVVHCd/SavTMz3W5qtsZG
+        yc7D9IeHA==;
+Received: from [2601:1c0:6280:3f0::3deb]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1idGIN-00013t-5Y; Fri, 06 Dec 2019 16:17:31 +0000
+Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs <linux-btrfs@vger.kernel.org>
 References: <20191206135406.563336e7@canb.auug.org.au>
-        <CAMuHMdVHXYhXtyMAR84L5kQTSU8Ds71AJftrEBqepiy_NV88kA@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
+Date:   Fri, 6 Dec 2019 08:17:30 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YcFlRH8OyiCFKwoT.ajJyX_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20191206135406.563336e7@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YcFlRH8OyiCFKwoT.ajJyX_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 12/5/19 6:54 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Please do not add any material for v5.6 to your linux-next included
+> trees until after v5.5-rc1 has been released.
+> 
+> Changes since 20191204:
+> 
 
-Hi Geert,
+on x86_64:
 
-On Fri, 6 Dec 2019 11:15:49 +0100 Geert Uytterhoeven <geert@linux-m68k.org>=
- wrote:
->
-> On Fri, Dec 6, 2019 at 3:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wr=
-ote:
-> > Changes since 20191204: =20
->=20
-> Hm, yesterday there was a next-20191205.
+fs/btrfs/ctree.o: warning: objtool: btrfs_search_slot()+0x2d4: unreachable instruction
+fs/btrfs/extent-tree.o: warning: objtool: btrfs_get_extent_inline_ref_type()+0x161: unreachable instruction
+fs/btrfs/disk-io.o: warning: objtool: btrfs_init_fs_root()+0x1d9: unreachable instruction
+fs/btrfs/transaction.o: warning: objtool: btrfs_trans_release_metadata()+0x96: unreachable instruction
+fs/btrfs/inode.o: warning: objtool: btrfs_retry_endio()+0x77: unreachable instruction
+fs/btrfs/file.o: warning: objtool: __btrfs_drop_extents()+0x4aa: unreachable instruction
+fs/btrfs/extent_map.o: warning: objtool: mergable_maps()+0x100: unreachable instruction
+fs/btrfs/xattr.o: warning: objtool: btrfs_setxattr()+0x86: unreachable instruction
+fs/btrfs/extent_io.o: warning: objtool: __process_pages_contig()+0x1af: unreachable instruction
+fs/btrfs/volumes.o: warning: objtool: find_live_mirror.isra.23()+0x49: unreachable instruction
+fs/btrfs/ioctl.o: warning: objtool: btrfs_clone()+0xcc9: unreachable instruction
+fs/btrfs/free-space-cache.o: warning: objtool: search_bitmap()+0xca: unreachable instruction
+fs/btrfs/tree-log.o: warning: objtool: btrfs_log_all_xattrs()+0x204: unreachable instruction
+fs/btrfs/compression.o: warning: objtool: end_compressed_bio_read()+0xb6: unreachable instruction
+fs/btrfs/delayed-ref.o: warning: objtool: insert_delayed_ref.isra.6()+0x23e: unreachable instruction
+fs/btrfs/relocation.o: warning: objtool: add_tree_block.isra.26()+0x26e: unreachable instruction
+fs/btrfs/scrub.o: warning: objtool: scrub_find_csum()+0x1eb: unreachable instruction
+fs/btrfs/send.o: warning: objtool: inconsistent_snapshot_error()+0x53: unreachable instruction
+fs/btrfs/dev-replace.o: warning: objtool: btrfs_dev_replace_by_ioctl()+0x70e: unreachable instruction
+fs/btrfs/raid56.o: warning: objtool: raid56_parity_recover()+0x262: unreachable instruction
+fs/btrfs/free-space-tree.o: warning: objtool: btrfs_search_prev_slot.constprop.6()+0x2b: unreachable instruction
+fs/btrfs/block-group.o: warning: objtool: btrfs_start_trans_remove_block_group()+0x6a: unreachable instruction
+fs/btrfs/ref-verify.o: warning: objtool: add_tree_block()+0x15e: unreachable instruction
+samples/ftrace/ftrace-direct.o: warning: objtool: .text+0x0: unreachable instruction
+samples/ftrace/ftrace-direct-too.o: warning: objtool: .text+0x0: unreachable instruction
+samples/ftrace/ftrace-direct-modify.o: warning: objtool: .text+0x0: unreachable instruction
+kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x21: unreachable instruction
+kernel/cred.o: warning: objtool: prepare_creds()+0x2c3: unreachable instruction
+net/core/skbuff.o: warning: objtool: skb_push()+0x6d: unreachable instruction
+drivers/gpu/drm/ttm/ttm_bo.o: warning: objtool: ttm_bo_del_from_lru()+0xed: unreachable instruction
 
-Yeah, the script that updates this depends on today's tag being created
-...
 
-> Looks like the next-20191206 tag didn't make it to kernel.org, but the
-> master branch was updated (so I'm happy :-)
+gcc (SUSE Linux) 7.4.1 20190905 [gcc-7-branch revision 275407]
 
-... and there was an error when the tag was supposed to be created that
-I failed to notice :-(
-
-I have added the tag and pushed it.  Thanks for noticing and letting me kno=
-w.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/YcFlRH8OyiCFKwoT.ajJyX_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3qTNQACgkQAVBC80lX
-0Gy3AAgAlq2gW7b59Notnsjlw5OvURhb0CdhpdPEICgDMGNbEirANeKukzbvnFYy
-bvoNPdAfbCa1akvGB8SzWPQIGUlu95XEVo9fT77nVuGKo3CzdIZPX/NHUk+Aa60C
-+HMl8IHL1sAItCjPfqaCP7wYTJmolCBL2xeeHFTq2mZudTtbwYLetdqPtwwOYQoy
-oDly8GU06A/2gVdzqEc4TQivQJ01qJcaabnVPprZWuH3fVwHHrG2xjfZyBl/nV5p
-TMdQcojxtPSJpbjM/94ej+n3qeW296TJWJ9uMPJxehNsgxgERoRL4xqqhgDd36xm
-IYFIhlOeEW1LU666ZXRT7ARj0PrPDQ==
-=cHel
------END PGP SIGNATURE-----
-
---Sig_/YcFlRH8OyiCFKwoT.ajJyX_--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

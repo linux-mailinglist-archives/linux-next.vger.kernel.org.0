@@ -2,74 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DFF114EAB
-	for <lists+linux-next@lfdr.de>; Fri,  6 Dec 2019 11:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1DD114EDE
+	for <lists+linux-next@lfdr.de>; Fri,  6 Dec 2019 11:16:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726084AbfLFKEA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Dec 2019 05:04:00 -0500
-Received: from mx2.suse.de ([195.135.220.15]:57718 "EHLO mx1.suse.de"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726070AbfLFKEA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 6 Dec 2019 05:04:00 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx1.suse.de (Postfix) with ESMTP id D75C0B203;
-        Fri,  6 Dec 2019 10:03:58 +0000 (UTC)
-Date:   Fri, 6 Dec 2019 11:03:57 +0100
-From:   Petr Mladek <pmladek@suse.com>
+        id S1726259AbfLFKQB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Dec 2019 05:16:01 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:35090 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726134AbfLFKQB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Dec 2019 05:16:01 -0500
+Received: by mail-ot1-f68.google.com with SMTP id o9so5374218ote.2;
+        Fri, 06 Dec 2019 02:16:00 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=2PBH/BhuqKwn/tjlVcw6ytYmE1z+/Fbb+PDjpB+mCNI=;
+        b=tH1RWrnYqcMf+bs+rmz5rwUGIXOD8+ZT1Ei52PI1dYKOJLMWDZbtqYmuXRTu6Peunc
+         7hjUu909uXq/fQAo1faItJUMAvlCTzGXW7tdLUCA4uaEgroot81+z4ySfDKUeOCX72ae
+         qSzIUNrfSnLKDOM6PshKAnZuyke/KVoUrZJdReSFQOMz8Mw0WnHb531s+QZmChZKNcQl
+         YGZDg8Zj5WkGhSbqP4e5fZ7IJlWfQODqkTdrWmZtHonoQsFkoz/3+i6d4uqia4LgsjbM
+         +xU2UQ8Yiu1vm54dUunoSPp5FQ71q2ua3QXbFAW+mmkn/7JCSgPY/viKnmIm8N4Yp8D+
+         xQCQ==
+X-Gm-Message-State: APjAAAU/ftVv4DPXw0dyThlM0qOFkAJuMbgxfVtELiS0jCblmsOA/6bR
+        jyRdLAZ1GtD0ENgMII5O1ZW7MkJLei4YlH/WBvLZ5gDt
+X-Google-Smtp-Source: APXvYqzHwmaqIjqtaEHazzlu43UL+2o+F7fc+uZinO82BCqywDsB3yLP6XHGJX0iGFA87S7LH6Rn2aYyWfwi4eD+LQ8=
+X-Received: by 2002:a9d:7984:: with SMTP id h4mr5379859otm.297.1575627360277;
+ Fri, 06 Dec 2019 02:16:00 -0800 (PST)
+MIME-Version: 1.0
+References: <20191206135406.563336e7@canb.auug.org.au>
+In-Reply-To: <20191206135406.563336e7@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Fri, 6 Dec 2019 11:15:49 +0100
+Message-ID: <CAMuHMdVHXYhXtyMAR84L5kQTSU8Ds71AJftrEBqepiy_NV88kA@mail.gmail.com>
+Subject: Re: linux-next: Tree for Dec 6
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: linux-next: build failure after merge of the printk tree
-Message-ID: <20191206100357.tgtdjcata6zrzc5l@pathway.suse.cz>
-References: <20191206092503.303d6a57@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191206092503.303d6a57@canb.auug.org.au>
-User-Agent: NeoMutt/20170912 (1.9.0)
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri 2019-12-06 09:25:03, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the printk tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> kernel/trace/trace.c: In function 'register_tracer':
-> kernel/trace/trace.c:1892:3: error: implicit declaration of function 'pr_warning'; did you mean 'pr_warn'? [-Werror=implicit-function-declaration]
->  1892 |   pr_warning("Can not register tracer %s due to lockdown\n",
->       |   ^~~~~~~~~~
->       |   pr_warn
-> 
-> Caused by commit
-> 
->   55130ba7f010 ("printk: Drop pr_warning definition")
-> 
-> interacting with commit
-> 
->   a356646a5685 ("tracing: Do not create directories if lockdown is in affect")
-> 
-> from Linus' tree.
-> 
-> I have applied the following merge fix patch for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Fri, 6 Dec 2019 09:21:57 +1100
-> Subject: [PATCH] fix up for "printk: Drop pr_warning definition"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Hi Stephen,
 
-I have pushed the patch into printk.git, for-5.5-pr_warning-removal.
-And updated the for-next branch.
+On Fri, Dec 6, 2019 at 3:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> Changes since 20191204:
 
-Thanks a lot for the fix and sorry for the incovenience.
+Hm, yesterday there was a next-20191205.
 
-Best Regards,
-Petr
+>
+> The printk tree gained a semantic conflict against Linus' tree.
+>
+> The vhost tree still had its build failures so I used the version from
+> next-20191203.
+>
+> Non-merge commits (relative to Linus' tree): 1311
+>  1429 files changed, 36236 insertions(+), 14987 deletions(-)
+>
+> ----------------------------------------------------------------------------
+>
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+
+Thanks!
+
+Looks like the next-20191206 tag didn't make it to kernel.org, but the
+master branch was updated (so I'm happy :-)
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

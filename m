@@ -2,174 +2,137 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B5392115D92
-	for <lists+linux-next@lfdr.de>; Sat,  7 Dec 2019 17:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4295115FDC
+	for <lists+linux-next@lfdr.de>; Sun,  8 Dec 2019 00:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726473AbfLGQlR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 7 Dec 2019 11:41:17 -0500
-Received: from correo.us.es ([193.147.175.20]:40894 "EHLO mail.us.es"
+        id S1726378AbfLGXpK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 7 Dec 2019 18:45:10 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48763 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726414AbfLGQlR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 7 Dec 2019 11:41:17 -0500
-Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
-        by mail.us.es (Postfix) with ESMTP id 884C5DA85E
-        for <linux-next@vger.kernel.org>; Sat,  7 Dec 2019 17:41:13 +0100 (CET)
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 7BA66DA70A
-        for <linux-next@vger.kernel.org>; Sat,  7 Dec 2019 17:41:13 +0100 (CET)
-Received: by antivirus1-rhel7.int (Postfix, from userid 99)
-        id 5C855DA70F; Sat,  7 Dec 2019 17:41:13 +0100 (CET)
-X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
-X-Spam-Level: 
-X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
-        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
-Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
-        by antivirus1-rhel7.int (Postfix) with ESMTP id 1264CDA705;
-        Sat,  7 Dec 2019 17:41:11 +0100 (CET)
-Received: from 192.168.1.97 (192.168.1.97)
- by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
- Sat, 07 Dec 2019 17:41:11 +0100 (CET)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
-Received: from us.es (sys.soleta.eu [212.170.55.40])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1725847AbfLGXpK (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 7 Dec 2019 18:45:10 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: 1984lsi)
-        by entrada.int (Postfix) with ESMTPSA id A16F04265A5A;
-        Sat,  7 Dec 2019 17:41:10 +0100 (CET)
-Date:   Sat, 7 Dec 2019 17:41:11 +0100
-X-SMTPAUTHUS: auth mail.us.es
-From:   Pablo Neira Ayuso <pablo@netfilter.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>,
-        Jiri Pirko <jiri@mellanox.com>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: nf_flow on big-endian (was: Re: linux-next: build warning after
- merge of the net-next tree)
-Message-ID: <20191207164111.fpnpoipaiadaxyde@salvia>
-References: <20191121183404.6e183d06@canb.auug.org.au>
- <CAMuHMdX8QyGkpPXfwS0EJhC6hR+gpYfvdpGWqdb=bSwJGmF7Ew@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47VmKH54Vzz9sPn;
+        Sun,  8 Dec 2019 10:45:07 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1575762307;
+        bh=9QoTIi5oN0qeJMYv2TmpsX7SXOD92vZOtvoCMKpDJhU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tvz2jTpEE9puJKwkcKG0fGWUbpnDrIw7IyUURf+ssnK7jGk4iadcmYBDCDaN91sXP
+         Fx8RWfO7kBGn286V0E+K+GzPnn0pGI3r3kccbCGHVOZoGNY1fh4wMzgyXePbjGACWr
+         gUhF2OWqdt7PwOU+M8h/AbpMHqMutAlawRi6/LLft2Nz1vfe7bQ5hnKgCLXWV4MN/H
+         T8DKt+3UGHx9tOF1K9e2iGLq/8hxSXQ88itP00B5v/lQBvxDMnxcU37J1tENERRk27
+         4dVPRQufzmLHIcwm0kZ/JDDfsjUQYkenuIWTfWzp3ZhdXulYb7sWVdTVa+8Fy8l/CS
+         G6oZDWo/5HvzA==
+Date:   Sun, 8 Dec 2019 10:45:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vhost tree
+Message-ID: <20191208104500.59e5c6a3@canb.auug.org.au>
+In-Reply-To: <20191204142404.56631d84@canb.auug.org.au>
+References: <20191204142404.56631d84@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="wbq7vzsidly2hz2h"
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdX8QyGkpPXfwS0EJhC6hR+gpYfvdpGWqdb=bSwJGmF7Ew@mail.gmail.com>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-Virus-Scanned: ClamAV using ClamSMTP
+Content-Type: multipart/signed; boundary="Sig_/f38ebYue0nYaUdH/QtzxL8X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/f38ebYue0nYaUdH/QtzxL8X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---wbq7vzsidly2hz2h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Michael,
 
-Hi Geert,
+On Wed, 4 Dec 2019 14:24:04 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>=20
+> After merging the vhost tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> drivers/net/ethernet/atheros/atlx/atl1.c:2889:21: error: initialization o=
+f 'void (*)(struct net_device *, unsigned int)' from incompatible pointer t=
+ype 'void (*)(struct net_device *)' [-Werror=3Dincompatible-pointer-types]
+>  2889 |  .ndo_tx_timeout  =3D atlx_tx_timeout,
+>       |                     ^~~~~~~~~~~~~~~
+> drivers/net/ethernet/atheros/atlx/atl1.c:2889:21: note: (near initializat=
+ion for 'atl1_netdev_ops.ndo_tx_timeout')
+>=20
+> Caused by commit
+>=20
+>   29fd1db09264 ("netdev: pass the stuck queue to the timeout handler")
+>=20
+> I applied the following patch:
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 4 Dec 2019 14:13:18 +1100
+> Subject: [PATCH] netdev: another fix for "netdev: pass the stuck queue to=
+ the
+>  timeout handler"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/net/ethernet/atheros/atlx/atlx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/net/ethernet/atheros/atlx/atlx.c b/drivers/net/ether=
+net/atheros/atlx/atlx.c
+> index 505a22c703f7..0941d07d0833 100644
+> --- a/drivers/net/ethernet/atheros/atlx/atlx.c
+> +++ b/drivers/net/ethernet/atheros/atlx/atlx.c
+> @@ -183,7 +183,7 @@ static void atlx_clear_phy_int(struct atlx_adapter *a=
+dapter)
+>   * atlx_tx_timeout - Respond to a Tx Hang
+>   * @netdev: network interface device structure
+>   */
+> -static void atlx_tx_timeout(struct net_device *netdev)
+> +static void atlx_tx_timeout(struct net_device *netdev, unsigned int txqu=
+eue)
+>  {
+>  	struct atlx_adapter *adapter =3D netdev_priv(netdev);
+>  	/* Do the reset outside of interrupt context */
+> --=20
+> 2.24.0
+>=20
+> Then I got another build failure:
+>=20
+> drivers/net/ethernet/natsemi/ns83820.c: In function 'ns83820_tx_watch':
+> drivers/net/ethernet/natsemi/ns83820.c:1606:3: error: too few arguments t=
+o function 'ns83820_tx_timeout'
+>  1606 |   ns83820_tx_timeout(ndev);
+>       |   ^~~~~~~~~~~~~~~~~~
+> drivers/net/ethernet/natsemi/ns83820.c:1552:13: note: declared here
+>  1552 | static void ns83820_tx_timeout(struct net_device *ndev, unsigned =
+int txqueue)
+>       |             ^~~~~~~~~~~~~~~~~~
+>=20
+> At this point, I just used the vhost tree from next-20191203 ...
 
-On Tue, Nov 26, 2019 at 12:06:03PM +0100, Geert Uytterhoeven wrote:
-> On Thu, Nov 21, 2019 at 8:36 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > After merging the net-next tree, today's linux-next build (powerpc
-> > allyesconfig) produced this warning:
-> >
-> > net/netfilter/nf_flow_table_offload.c: In function 'nf_flow_rule_match':
-> > net/netfilter/nf_flow_table_offload.c:80:21: warning: unsigned conversion from 'int' to '__be16' {aka 'short unsigned int'} changes value from '327680' to '0' [-Woverflow]
-> >    80 |   mask->tcp.flags = TCP_FLAG_RST | TCP_FLAG_FIN;
-> >       |                     ^~~~~~~~~~~~
-> >
-> > Introduced by commit
-> >
-> >   c29f74e0df7a ("netfilter: nf_flow_table: hardware offload support")
-> 
-> This is now upstream, and must be completely broken on big-endian
-> platforms.
-> 
-> The other user of the flags field looks buggy, too
-> (net/core/flow_dissector.c:__skb_flow_dissect_tcp()[*]):
-> 
->      key_tcp->flags = (*(__be16 *) &tcp_flag_word(th) & htons(0x0FFF));
-> 
-> Disclaimer: I'm not familiar with the code or protocol, so below are just
-> my gut feelings.
-> 
->      struct flow_dissector_key_tcp {
->             __be16 flags;
->     };
-> 
-> Does this have to be __be16, i.e. does it go over the wire?
-> If not, this should probably be __u16, and set using
-> "be32_to_cpu(flags) >> 16"?
-> If yes, "cpu_to_be16(be32_to_cpu(flags) >> 16)"?
-> (Ugh, needs convenience macros)
-> 
-> [*] ac4bb5de27010e41 ("net: flow_dissector: add support for dissection
-> of tcp flags")
+I am still getting these build failures ...
+--=20
+Cheers,
+Stephen Rothwell
 
-I'm attaching a tentative patch, please let me know this is fixing up
-this issue there.
+--Sig_/f38ebYue0nYaUdH/QtzxL8X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Thanks.
+-----BEGIN PGP SIGNATURE-----
 
---wbq7vzsidly2hz2h
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="x.patch"
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3sOXwACgkQAVBC80lX
+0Gwn2wgAmOuQyZTXpyU1mVtKEJjRyeKCdsxD1NJTFJEoJe3OIJ4IInF2l02h3q1s
+4lwbID7+6M2SCDH6S4fBF+shsWSXr/qGymEnmP59WrsssAg4djP+U+SYJB1kdYjf
+Jtpp8GsL5aZZJdV+FvauDNXtsmInMRejLMirlM/vh4T/5dGJ5fD7YPWJvfwR0Pb0
+RK9FjvlxGnjBN7A74fIFCGPWiDct6IvcDfSAcbmFTj5dHSyc9qxgQiFyW+skoxtx
+kDhU18LNUglEL3ogln8P8DEhKX+iNspnDFfMQBYcKgOaTCCz8ZWzlPAqXDOFEy77
+b2QgPiNzQomxmrez2Lp7O8+Ukv3PjQ==
+=MzD/
+-----END PGP SIGNATURE-----
 
-diff --git a/include/net/flow_dissector.h b/include/net/flow_dissector.h
-index b8c20e9f343e..30ad4e07ff52 100644
---- a/include/net/flow_dissector.h
-+++ b/include/net/flow_dissector.h
-@@ -189,10 +189,17 @@ struct flow_dissector_key_eth_addrs {
- 
- /**
-  * struct flow_dissector_key_tcp:
-- * @flags: flags
-+ * @flags: TCP flags (16-bit, including the initial Data offset field bits)
-+ * @word: Data offset + reserved bits + TCP flags + window
-  */
- struct flow_dissector_key_tcp {
--	__be16 flags;
-+	union {
-+		struct {
-+			__be16 flags;
-+			__be16 __pad;
-+		};
-+		__be32	flag_word;
-+	};
- };
- 
- /**
-diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
-index ca871657a4c4..83af4633f306 100644
---- a/net/core/flow_dissector.c
-+++ b/net/core/flow_dissector.c
-@@ -756,7 +756,7 @@ __skb_flow_dissect_tcp(const struct sk_buff *skb,
- 	key_tcp = skb_flow_dissector_target(flow_dissector,
- 					    FLOW_DISSECTOR_KEY_TCP,
- 					    target_container);
--	key_tcp->flags = (*(__be16 *) &tcp_flag_word(th) & htons(0x0FFF));
-+	key_tcp->flag_word = tcp_flag_word(th);
- }
- 
- static void
-diff --git a/net/netfilter/nf_flow_table_offload.c b/net/netfilter/nf_flow_table_offload.c
-index c94ebad78c5c..30205d57226d 100644
---- a/net/netfilter/nf_flow_table_offload.c
-+++ b/net/netfilter/nf_flow_table_offload.c
-@@ -87,8 +87,8 @@ static int nf_flow_rule_match(struct nf_flow_match *match,
- 
- 	switch (tuple->l4proto) {
- 	case IPPROTO_TCP:
--		key->tcp.flags = 0;
--		mask->tcp.flags = TCP_FLAG_RST | TCP_FLAG_FIN;
-+		key->tcp.flag_word = 0;
-+		mask->tcp.flag_word = TCP_FLAG_RST | TCP_FLAG_FIN;
- 		match->dissector.used_keys |= BIT(FLOW_DISSECTOR_KEY_TCP);
- 		break;
- 	case IPPROTO_UDP:
-
---wbq7vzsidly2hz2h--
+--Sig_/f38ebYue0nYaUdH/QtzxL8X--

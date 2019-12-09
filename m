@@ -2,171 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F5A71166F5
-	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2019 07:32:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7073116785
+	for <lists+linux-next@lfdr.de>; Mon,  9 Dec 2019 08:27:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727085AbfLIGcJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Dec 2019 01:32:09 -0500
-Received: from szxga06-in.huawei.com ([45.249.212.32]:55456 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726623AbfLIGcJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 9 Dec 2019 01:32:09 -0500
-Received: from DGGEMS414-HUB.china.huawei.com (unknown [172.30.72.59])
-        by Forcepoint Email with ESMTP id 14B709B79E07160C53B3;
-        Mon,  9 Dec 2019 14:32:06 +0800 (CST)
-Received: from [127.0.0.1] (10.74.221.148) by DGGEMS414-HUB.china.huawei.com
- (10.3.19.214) with Microsoft SMTP Server id 14.3.439.0; Mon, 9 Dec 2019
- 14:31:56 +0800
-Subject: Re: mmotm 2019-12-06-19-46 uploaded
-To:     Andrew Morton <akpm@linux-foundation.org>, <broonie@kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linux-next@vger.kernel.org>,
-        <mhocko@suse.cz>, <mm-commits@vger.kernel.org>,
-        <sfr@canb.auug.org.au>, jinyuqi <jinyuqi@huawei.com>
-References: <20191207034723.OPvz2A9wZ%akpm@linux-foundation.org>
-From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
-Message-ID: <c0691301-fa72-b9fe-5cb8-815275f84555@hisilicon.com>
-Date:   Mon, 9 Dec 2019 14:31:55 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.1.1
+        id S1726014AbfLIH1L (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Dec 2019 02:27:11 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:35837 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726270AbfLIH1K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Dec 2019 02:27:10 -0500
+Received: by mail-wm1-f68.google.com with SMTP id c20so12205318wmb.0
+        for <linux-next@vger.kernel.org>; Sun, 08 Dec 2019 23:27:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=sn/bcvRfjZF24wy9LHYn+HfhzsKBIYRZ7hiLEouRPEY=;
+        b=qqUBfIzuDQGYef4op63jjjuzbCwRGRrMLmOmHEiIcJgssGSXI0xg5qv+O4C8kwaWcY
+         ccZpP4yY+YqHzfGqGTxKNgmAOnj4Z+N+g+ADn7JfARbCnZjzEesMpHDvchlz2pzfAg1v
+         o3Ln+vSMeEmAfeaWHwM/sEYDiz7Qv7ku8hbfFI+GFPS5C1zvmyM1pLic1DSxLU8pC0uI
+         6VGXK23iSdvdFmtYCq97Kjre1W0CCIoFcLHNi99b8r2W/WzCavzoRccC7Yx7ZTaZmo8y
+         ZaSBebjYRAnflFjQMGz+2EBXLhh+wSsdXNfBPZjUCvagBarg2ln2QoAcrcIbzTxgmRZL
+         J/ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=sn/bcvRfjZF24wy9LHYn+HfhzsKBIYRZ7hiLEouRPEY=;
+        b=Xb/D/8BuaniA2j0+1+6sXZx78EpBzMsiTmlkL2KMW/DYxKC9ujs8DDPUy5k59rNaDJ
+         tTFWQiAD/u24UO5W6b1xN6zYKN0xQroGYHt3TgsWPX0yjVTfISVpnAZb0/EWdfp04/hx
+         PbWZ6075sns2oANU2Bfi5UAaVSHiJfJqPKBwsRuJtu4w7M9glR1zrcHgRgsK/iZ2AmOH
+         KBZ5qEBms2crJSqRU1rMGxNFrno/6OCbbubrNKhiXnfoBXsRZZKSnOdJPv0yBP0NK/WZ
+         CXdCin6E0iyz7NZe8xRYaeNqWZbxtrxiLPY3EfqbQiExtlCXHKMzNMsoIuhbn8gwzQFd
+         Lcww==
+X-Gm-Message-State: APjAAAUGKTo8wGvmlH7RxovgLuIEIe6m4wkMvILrqWItk2xClk0rPmVF
+        qLCGEeb/XgzJJ+8+B7nZr8KRYR6G52U=
+X-Google-Smtp-Source: APXvYqyoTryRKHvBW6A7oVq4ZU0obqKJq1Y14Ws5p5xUX1Jh6lTM58rRvpa3RDDdMC7fePypph+nCQ==
+X-Received: by 2002:a1c:dc82:: with SMTP id t124mr16928657wmg.122.1575876428498;
+        Sun, 08 Dec 2019 23:27:08 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id u189sm12749650wmg.40.2019.12.08.23.27.07
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Dec 2019 23:27:07 -0800 (PST)
+Message-ID: <5dedf74b.1c69fb81.8f244.6d09@mx.google.com>
+Date:   Sun, 08 Dec 2019 23:27:07 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20191207034723.OPvz2A9wZ%akpm@linux-foundation.org>
-Content-Type: text/plain; charset="windows-1252"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.74.221.148]
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191209
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 223 boots: 5 failed, 211 passed with 6 offline,
+ 1 untried/unknown (next-20191209)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Andrew,
+next/master boot: 223 boots: 5 failed, 211 passed with 6 offline, 1 untried=
+/unknown (next-20191209)
 
-About this patch,
-https://lore.kernel.org/lkml/1573091048-10595-1-git-send-email-zhangshaokun@hisilicon.com/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191209/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191209/
 
-It is not in linux-next or your trees now, has it been dropped?
+Tree: next
+Branch: master
+Git Describe: next-20191209
+Git Commit: 6cf8298daad041cd15dc514d8a4f93ca3636c84e
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 97 unique boards, 26 SoC families, 30 builds out of 214
 
-Thanks,
-Shaokun
+Boot Failures Detected:
 
-On 2019/12/7 11:47, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2019-12-06-19-46 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
-> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> followed by the base kernel version against which this patch series is to
-> be applied.
-> 
-> This tree is partially included in linux-next.  To see which patches are
-> included in linux-next, consult the `series' file.  Only the patches
-> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-> linux-next.
-> 
-> 
-> A full copy of the full kernel tree with the linux-next and mmotm patches
-> already applied is available through git within an hour of the mmotm
-> release.  Individual mmotm releases are tagged.  The master branch always
-> points to the latest release, so it's constantly rebasing.
-> 
-> 	https://github.com/hnaz/linux-mm
-> 
-> The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-> contains daily snapshots of the -mm tree.  It is updated more frequently
-> than mmotm, and is untested.
-> 
-> A git copy of this tree is also available at
-> 
-> 	https://github.com/hnaz/linux-mm
-> 
-> 
-> 
-> This mmotm tree contains the following patches against 5.4:
-> (patches marked "*" will be included in linux-next)
-> 
->   origin.patch
-> * hacking-group-sysrq-kgdb-ubsan-into-generic-kernel-debugging-instruments.patch
-> * hacking-create-submenu-for-arch-special-debugging-options.patch
-> * hacking-group-kernel-data-structures-debugging-together.patch
-> * hacking-move-kernel-testing-and-coverage-options-to-same-submenu.patch
-> * hacking-move-oops-into-lockups-and-hangs.patch
-> * hacking-move-sched_stack_end_check-after-debug_stack_usage.patch
-> * hacking-create-a-submenu-for-scheduler-debugging-options.patch
-> * hacking-move-debug_bugverbose-to-printk-and-dmesg-options.patch
-> * hacking-move-debug_fs-to-generic-kernel-debugging-instruments.patch
-> * lib-fix-kconfig-indentation.patch
-> * kasan-fix-crashes-on-access-to-memory-mapped-by-vm_map_ram.patch
-> * kasan-fix-crashes-on-access-to-memory-mapped-by-vm_map_ram-v2.patch
-> * mm-add-apply_to_existing_pages-helper.patch
-> * mm-add-apply_to_existing_pages-helper-fix.patch
-> * mm-add-apply_to_existing_pages-helper-fix-fix.patch
-> * kasan-use-apply_to_existing_pages-for-releasing-vmalloc-shadow.patch
-> * kasan-use-apply_to_existing_pages-for-releasing-vmalloc-shadow-fix.patch
-> * kasan-dont-assume-percpu-shadow-allocations-will-succeed.patch
-> * mm-vmscan-protect-shrinker-idr-replace-with-config_memcg.patch
-> * proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
-> * proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
-> * mm-zsmallocc-fix-the-migrated-zspage-statistics.patch
-> * mm-thp-tweak-reclaim-compaction-effort-of-local-only-and-all-node-allocations.patch
-> * x86-mm-split-vmalloc_sync_all.patch
-> * kcov-fix-struct-layout-for-kcov_remote_arg.patch
-> * memcg-account-security-cred-as-well-to-kmemcg.patch
-> * mm-move_pages-return-valid-node-id-in-status-if-the-page-is-already-on-the-target-node.patch
-> * ramfs-support-o_tmpfile.patch
->   mm.patch
-> * mm-avoid-slub-allocation-while-holding-list_lock.patch
-> * mm-vmscan-expose-cgroup_ino-for-memcg-reclaim-tracepoints.patch
-> * mm-pgmap-use-correct-alignment-when-looking-at-first-pfn-from-a-region.patch
-> * mm-mmap-fix-the-adjusted-length-error.patch
-> * mm-memmap_init-update-variable-name-in-memmap_init_zone.patch
-> * mm-memory_hotplug-shrink-zones-when-offlining-memory.patch
-> * mm-memory_hotplug-poison-memmap-in-remove_pfn_range_from_zone.patch
-> * mm-memory_hotplug-we-always-have-a-zone-in-find_smallestbiggest_section_pfn.patch
-> * mm-memory_hotplug-dont-check-for-all-holes-in-shrink_zone_span.patch
-> * mm-memory_hotplug-drop-local-variables-in-shrink_zone_span.patch
-> * mm-memory_hotplug-cleanup-__remove_pages.patch
-> * mm-oom-avoid-printk-iteration-under-rcu.patch
-> * mm-oom-avoid-printk-iteration-under-rcu-fix.patch
-> * info-task-hung-in-generic_file_write_iter.patch
-> * info-task-hung-in-generic_file_write-fix.patch
-> * kernel-hung_taskc-monitor-killed-tasks.patch
-> * string-add-stracpy-and-stracpy_pad-mechanisms.patch
-> * documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
-> * aio-simplify-read_events.patch
-> * smp_mb__beforeafter_atomic-update-documentation.patch
-> * ipc-mqueuec-remove-duplicated-code.patch
-> * ipc-mqueuec-update-document-memory-barriers.patch
-> * ipc-msgc-update-and-document-memory-barriers.patch
-> * ipc-semc-document-and-update-memory-barriers.patch
-> * ipc-consolidate-all-xxxctl_down-functions.patch
->   linux-next.patch
->   linux-next-git-rejects.patch
-> * drivers-block-null_blk_mainc-fix-layout.patch
-> * drivers-block-null_blk_mainc-fix-uninitialized-var-warnings.patch
-> * pinctrl-fix-pxa2xxc-build-warnings.patch
-> * drivers-tty-serial-sh-scic-suppress-warning.patch
-> * fix-read-buffer-overflow-in-delta-ipc.patch
->   make-sure-nobodys-leaking-resources.patch
->   releasing-resources-with-children.patch
->   mutex-subsystem-synchro-test-module.patch
->   kernel-forkc-export-kernel_thread-to-modules.patch
->   workaround-for-a-pci-restoring-bug.patch
-> 
-> .
-> 
+arm:
+    qcom_defconfig:
+        gcc-8:
+            qcom-apq8064-cm-qs600: 1 failed lab
 
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            tegra124-nyan-big: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            juno-r2: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            rk3399-gru-kevin: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

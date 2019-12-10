@@ -2,111 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B88118E40
-	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2019 17:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B1711906C
+	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2019 20:16:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727566AbfLJQz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Dec 2019 11:55:29 -0500
-Received: from UCOL19PA34.eemsg.mail.mil ([214.24.24.194]:63525 "EHLO
-        UCOL19PA34.eemsg.mail.mil" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727534AbfLJQz3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Dec 2019 11:55:29 -0500
-X-EEMSG-check-017: 59769345|UCOL19PA34_ESA_OUT01.csd.disa.mil
-X-IronPort-AV: E=Sophos;i="5.69,300,1571702400"; 
-   d="scan'208";a="59769345"
-Received: from emsm-gh1-uea11.ncsc.mil ([214.29.60.3])
-  by UCOL19PA34.eemsg.mail.mil with ESMTP/TLS/DHE-RSA-AES256-SHA256; 10 Dec 2019 16:55:28 +0000
+        id S1727667AbfLJTQI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Dec 2019 14:16:08 -0500
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38236 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727659AbfLJTQI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Dec 2019 14:16:08 -0500
+Received: by mail-lf1-f68.google.com with SMTP id r14so14653617lfm.5
+        for <linux-next@vger.kernel.org>; Tue, 10 Dec 2019 11:16:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tycho.nsa.gov; i=@tycho.nsa.gov; q=dns/txt;
-  s=tycho.nsa.gov; t=1575996928; x=1607532928;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5xuJZ2Ul4JC1PjxCa51g2iIegrYxnhPpNPYexIlAVwI=;
-  b=WttlvMjBx0WKIEwbGbe0dNsuLvfc5mDenXF137ehj8dQBLNrb45Me4Cj
-   i2qaNVdxiVfwOgk+B4MBQepyKjfQDnSX0b4c79DDLV83RwgABQRleEUXF
-   zywAP593sordJT8tQcZzLNvWGtei/BUupbn9xrYzT6vMCvXSBkwlYMXRa
-   bUXvpiKj9UWnd8hSvJRjTI9SKV+egXF+Mv3MTP4txsanOPQ721pPiMy40
-   +60VAZf5I7rlgK14zvPtU96ZiN4xage0MMvJ3IMtSaVkhNP+fDl83+8tJ
-   voDbJsm5IY1HiVv8KNTwUYvqG35Qqgf1R0gRfxdkatuAzdhYsT2S5dvDA
-   A==;
-X-IronPort-AV: E=Sophos;i="5.69,300,1571702400"; 
-   d="scan'208";a="36556496"
-IronPort-PHdr: =?us-ascii?q?9a23=3AEguPERTr2GpgUVVECOVLW1I149psv+yvbD5Q0Y?=
- =?us-ascii?q?Iujvd0So/mwa67ZBCCt8tkgFKBZ4jH8fUM07OQ7/m7HzVRut3Q6jgrS99lb1?=
- =?us-ascii?q?c9k8IYnggtUoauKHbQC7rUVRE8B9lIT1R//nu2YgB/Ecf6YEDO8DXptWZBUh?=
- =?us-ascii?q?rwOhBoKevrB4Xck9q41/yo+53Ufg5EmCexbal9IRmrowjdrNQajI9sJ6o+zh?=
- =?us-ascii?q?bFvGZDdvhLy29vOV+dhQv36N2q/J5k/SRQuvYh+NBFXK7nYak2TqFWASo/PW?=
- =?us-ascii?q?wt68LlqRfMTQ2U5nsBSWoWiQZHAxLE7B7hQJj8tDbxu/dn1ymbOc32Sq00WS?=
- =?us-ascii?q?in4qx2RhLklDsLOjgk+27ZkMxwiL9QrgynqRJx3oXYZJiZOfp6c6/Ye94RWG?=
- =?us-ascii?q?hPUdtLVyFZAo2ycZYBAeQCM+hfoIbzqEADoQe9CAS2GO/i0CNEimPw0KYn0+?=
- =?us-ascii?q?ohCwbG3Ak4EtwTrHTbss31NKcMXuCz0aLG0DDDYOlS2Tf59ofJcg0qrPaXXb?=
- =?us-ascii?q?1tasrc0lUvFgPZgVWQrozpJTWV1v8XvGSB4OpgUvyvhnchpgpsoTav3t8hhp?=
- =?us-ascii?q?TGi48a0FzJ9Th1zJwrKdC3VkJ3e8OoHZ1NvC+ALYR2WNktQ2RwtSY/zb0JpI?=
- =?us-ascii?q?C0cTARyJQi2x7fc/uHc5WU4h77VOaePzN4hHV9dbKjnRmy60mgyvDnVsWu0V?=
- =?us-ascii?q?ZKqCRFkt7Xtn8TyxPf8NSHS/th8Ueh3jaDzQbT5f1fIU8oj6bbLp8hwroomp?=
- =?us-ascii?q?oSt0TMADP2lV3rgKKZeUgo4Oil5/n9brn4qZKQKZV4hhzmPqQrgMO/AOA4Mg?=
- =?us-ascii?q?YUX2ic/OSxzKbj8lDiQLhRkv03krXWsJDdJcgBoK65GBVa3pws6xa4ETeqyM?=
- =?us-ascii?q?4YkmUfLFJZZBKHiJDkO1PUL/D9Cve/mU6skDZwx/3dOr3hA5PNLmXMkbv7eL?=
- =?us-ascii?q?Z96lJTyBA0zdBE4JJUBK0BLOjvVU/2sdzSFgU5PBCsw+b7FNV90ZsTWWaOAq?=
- =?us-ascii?q?+fLaPTvkaE5uQxLOiDeI8Yoyj9K/c76P70l3M5mkESfbOv3ZQJbHC0BPNmI1?=
- =?us-ascii?q?+WYXD0mNcODX8KvhYiTOztkFCCVT9TZ3CvX6Mz/z07E5ypApveRoC3gbyBwC?=
- =?us-ascii?q?e6EoRTZmBBF1+MDHPoeJufVvcSZyKdPNVhniYHVbe/UY8h0w+htAvgx7pgNO?=
- =?us-ascii?q?rU9TUStYj/29ht++3TiRYy+CRvD8uD12GNTmd0nn4HRjItwqB/rlJyyk2Z3a?=
- =?us-ascii?q?h7nfNYD9pT6O1NUgsgMp7c1eN6AcjoWg3dZteJVEqmQtK+DDEpVN0x3tsObl?=
- =?us-ascii?q?1lG9q4kxDD2zOmA7oSl7yMHpw77LjQ0GT2J8Z4mD760/w5hkQiatNGKGnjg6?=
- =?us-ascii?q?l47QWVDInMwGuDkKP/TrgRxC7A8i+4yGOKuExJGFprXb7tQWEUZkyQq8/woE?=
- =?us-ascii?q?zFUen9WvwcLgJdxJvaeeNxYdrzgAADGabu?=
-X-IPAS-Result: =?us-ascii?q?A2AxAABzze9d/wHyM5BlHAEBAQEBBwEBEQEEBAEBgWoHA?=
- =?us-ascii?q?QELAQGBcoFtIBIqjCZghmgBAQEBAQEGiyCPS4F7CQEBAQEBAQEBARscAQGEQ?=
- =?us-ascii?q?IIpNAkOAhABAQEEAQEBAQEFAwEBbIVDQgEMAYFrKYMzAUaBUYJjP4JTJbASi?=
- =?us-ascii?q?Q+BSIE2AYc+hHN5gQeBR4MbhBKBBIUhBJdClyKCOYI7kykMG5o3AS2qSDmBW?=
- =?us-ascii?q?CsIAhgIIQ+DJ1ARFJtKIwMwiDiEMoJBAQE?=
-Received: from tarius.tycho.ncsc.mil (HELO tarius.infosec.tycho.ncsc.mil) ([144.51.242.1])
-  by emsm-gh1-uea11.NCSC.MIL with ESMTP; 10 Dec 2019 16:55:27 +0000
-Received: from moss-pluto.infosec.tycho.ncsc.mil (moss-pluto [192.168.25.131])
-        by tarius.infosec.tycho.ncsc.mil (8.14.7/8.14.4) with ESMTP id xBAGtCxD051071;
-        Tue, 10 Dec 2019 11:55:13 -0500
-From:   Stephen Smalley <sds@tycho.nsa.gov>
-To:     paul@paul-moore.com
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-next@vger.kernel.org, jamorris@linux.microsoft.com,
-        Stephen Smalley <sds@tycho.nsa.gov>
-Subject: [PATCH] security: only build lsm_audit if CONFIG_SECURITY=y
-Date:   Tue, 10 Dec 2019 11:55:41 -0500
-Message-Id: <20191210165541.85245-1-sds@tycho.nsa.gov>
-X-Mailer: git-send-email 2.23.0
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=x7Ly+kFcY9v41W0Yea6eldt67FJ9rQnUT+trJTG6+Xc=;
+        b=LyKla2v+ft5Potq4hfBOyqRFw/cMaj4PcpgLni4B1h2XGMuwdiIcgEBJVer+fW8JTw
+         HlS9Jacjm4c9JF4zRDK4+Smjj6jl6XYyoADKrz7o6sFvE4rfNfxlYDIzouy+sBgM9O9k
+         AomjW/lGgjAyjzhIDXIFQe1+e8daEft3o9x3NSsj9c5Y3toSpTnLsYtRVTNEYI/7ExD/
+         j5sO1wp9msJ8fqjpbV+cWh2d5KIVmeGa/3ctA/4PuRHCDhch29FSvQXAaf2CCgYso7Gg
+         gFXKFXV1PnFLBLyKRg8Kruz6KTfNrQU6L8Vgwa0B9b4GQ/eUddi35/fqgcc2frFAp9q+
+         rhMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=x7Ly+kFcY9v41W0Yea6eldt67FJ9rQnUT+trJTG6+Xc=;
+        b=IqC6oH1Rsjye63vDL1JXswjnkr+mq4nl+TgSEcmSHpivYikrb4srXwwctDxKNMTWxP
+         AmmMWuNOVtOYotg1v6Mh+xPa32G9/Y1Cd01Vl1dE+FqQJZEZQv4JtyvIqyi3T/qdPQf4
+         xJ7cfR2vM1SNHf1Nr0nn4ggenIE/2w6oaCmkahqmAfRYnVszEO0Yhy6MQh2AEfNVF2/d
+         UsP/lb4pNU/pVtHeuktjvVIN9ULAkLa9x3QYpNxB15ZEFnPFDz46MGmKCVlAqKSP3uhG
+         mZxm6tbxyOyQIk+YVHYBgRySR1jhCNjsIltJv3yfH3rNQagKaQ1KptyWgCNlr7wM0wFP
+         wtmw==
+X-Gm-Message-State: APjAAAXaPR+4/YAY0XwZ+i4/3x8d4NcQ1MK+jjmN/z5PuQ4bAe/RlWJZ
+        HxK+Wheq53zIOusi59va2nyZPrNq5KwkTtyOrX5aLVZBPA==
+X-Google-Smtp-Source: APXvYqzeIvo9MtJbPbux8OasVwNKp66VtrSv68Mg4neHZLu1UIs3yW5CziyvWWX7G8TYK5FShvquGUXIbancx+AALC4=
+X-Received: by 2002:a19:f514:: with SMTP id j20mr18471703lfb.31.1576005365522;
+ Tue, 10 Dec 2019 11:16:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20191210165541.85245-1-sds@tycho.nsa.gov>
+In-Reply-To: <20191210165541.85245-1-sds@tycho.nsa.gov>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 10 Dec 2019 14:15:54 -0500
+Message-ID: <CAHC9VhRnqfuVUTDZA+8G-_OTqqN8M7XJhOpiO1m3t0XhY584Xw@mail.gmail.com>
+Subject: Re: [PATCH] security: only build lsm_audit if CONFIG_SECURITY=y
+To:     Stephen Smalley <sds@tycho.nsa.gov>
+Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-next@vger.kernel.org, jamorris@linux.microsoft.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The lsm_audit code is only required when CONFIG_SECURITY is enabled.
-It does not have a build dependency on CONFIG_AUDIT since audit.h
-provides trivial static inlines for audit_log*() when CONFIG_AUDIT
-is disabled.  Hence, the Makefile should only add lsm_audit to the
-obj lists based on CONFIG_SECURITY, not CONFIG_AUDIT.
+On Tue, Dec 10, 2019 at 11:55 AM Stephen Smalley <sds@tycho.nsa.gov> wrote:
+> The lsm_audit code is only required when CONFIG_SECURITY is enabled.
+> It does not have a build dependency on CONFIG_AUDIT since audit.h
+> provides trivial static inlines for audit_log*() when CONFIG_AUDIT
+> is disabled.  Hence, the Makefile should only add lsm_audit to the
+> obj lists based on CONFIG_SECURITY, not CONFIG_AUDIT.
+>
+> Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
+> Signed-off-by: Stephen Smalley <sds@tycho.nsa.gov>
+> ---
+>  security/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
-Signed-off-by: Stephen Smalley <sds@tycho.nsa.gov>
----
- security/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Merged into selinux/next in order to fix the linux-next build
+breakage.  James, if you would prefer a different fix, let us know.
 
-diff --git a/security/Makefile b/security/Makefile
-index be1dd9d2cb2f..746438499029 100644
---- a/security/Makefile
-+++ b/security/Makefile
-@@ -22,7 +22,7 @@ obj-$(CONFIG_SECURITY)			+= security.o
- obj-$(CONFIG_SECURITYFS)		+= inode.o
- obj-$(CONFIG_SECURITY_SELINUX)		+= selinux/
- obj-$(CONFIG_SECURITY_SMACK)		+= smack/
--obj-$(CONFIG_AUDIT)			+= lsm_audit.o
-+obj-$(CONFIG_SECURITY)			+= lsm_audit.o
- obj-$(CONFIG_SECURITY_TOMOYO)		+= tomoyo/
- obj-$(CONFIG_SECURITY_APPARMOR)		+= apparmor/
- obj-$(CONFIG_SECURITY_YAMA)		+= yama/
+> diff --git a/security/Makefile b/security/Makefile
+> index be1dd9d2cb2f..746438499029 100644
+> --- a/security/Makefile
+> +++ b/security/Makefile
+> @@ -22,7 +22,7 @@ obj-$(CONFIG_SECURITY)                        += security.o
+>  obj-$(CONFIG_SECURITYFS)               += inode.o
+>  obj-$(CONFIG_SECURITY_SELINUX)         += selinux/
+>  obj-$(CONFIG_SECURITY_SMACK)           += smack/
+> -obj-$(CONFIG_AUDIT)                    += lsm_audit.o
+> +obj-$(CONFIG_SECURITY)                 += lsm_audit.o
+>  obj-$(CONFIG_SECURITY_TOMOYO)          += tomoyo/
+>  obj-$(CONFIG_SECURITY_APPARMOR)                += apparmor/
+>  obj-$(CONFIG_SECURITY_YAMA)            += yama/
+> --
+> 2.23.0
+
 -- 
-2.23.0
-
+paul moore
+www.paul-moore.com

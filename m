@@ -2,92 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B1711906C
-	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2019 20:16:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA61A119CFF
+	for <lists+linux-next@lfdr.de>; Tue, 10 Dec 2019 23:35:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727667AbfLJTQI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Dec 2019 14:16:08 -0500
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:38236 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727659AbfLJTQI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Dec 2019 14:16:08 -0500
-Received: by mail-lf1-f68.google.com with SMTP id r14so14653617lfm.5
-        for <linux-next@vger.kernel.org>; Tue, 10 Dec 2019 11:16:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=x7Ly+kFcY9v41W0Yea6eldt67FJ9rQnUT+trJTG6+Xc=;
-        b=LyKla2v+ft5Potq4hfBOyqRFw/cMaj4PcpgLni4B1h2XGMuwdiIcgEBJVer+fW8JTw
-         HlS9Jacjm4c9JF4zRDK4+Smjj6jl6XYyoADKrz7o6sFvE4rfNfxlYDIzouy+sBgM9O9k
-         AomjW/lGgjAyjzhIDXIFQe1+e8daEft3o9x3NSsj9c5Y3toSpTnLsYtRVTNEYI/7ExD/
-         j5sO1wp9msJ8fqjpbV+cWh2d5KIVmeGa/3ctA/4PuRHCDhch29FSvQXAaf2CCgYso7Gg
-         gFXKFXV1PnFLBLyKRg8Kruz6KTfNrQU6L8Vgwa0B9b4GQ/eUddi35/fqgcc2frFAp9q+
-         rhMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=x7Ly+kFcY9v41W0Yea6eldt67FJ9rQnUT+trJTG6+Xc=;
-        b=IqC6oH1Rsjye63vDL1JXswjnkr+mq4nl+TgSEcmSHpivYikrb4srXwwctDxKNMTWxP
-         AmmMWuNOVtOYotg1v6Mh+xPa32G9/Y1Cd01Vl1dE+FqQJZEZQv4JtyvIqyi3T/qdPQf4
-         xJ7cfR2vM1SNHf1Nr0nn4ggenIE/2w6oaCmkahqmAfRYnVszEO0Yhy6MQh2AEfNVF2/d
-         UsP/lb4pNU/pVtHeuktjvVIN9ULAkLa9x3QYpNxB15ZEFnPFDz46MGmKCVlAqKSP3uhG
-         mZxm6tbxyOyQIk+YVHYBgRySR1jhCNjsIltJv3yfH3rNQagKaQ1KptyWgCNlr7wM0wFP
-         wtmw==
-X-Gm-Message-State: APjAAAXaPR+4/YAY0XwZ+i4/3x8d4NcQ1MK+jjmN/z5PuQ4bAe/RlWJZ
-        HxK+Wheq53zIOusi59va2nyZPrNq5KwkTtyOrX5aLVZBPA==
-X-Google-Smtp-Source: APXvYqzeIvo9MtJbPbux8OasVwNKp66VtrSv68Mg4neHZLu1UIs3yW5CziyvWWX7G8TYK5FShvquGUXIbancx+AALC4=
-X-Received: by 2002:a19:f514:: with SMTP id j20mr18471703lfb.31.1576005365522;
- Tue, 10 Dec 2019 11:16:05 -0800 (PST)
+        id S1727754AbfLJWfE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Dec 2019 17:35:04 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35805 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727427AbfLJWfD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Dec 2019 17:35:03 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47XZcx5kMkz9sS8;
+        Wed, 11 Dec 2019 09:34:57 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576017300;
+        bh=jMelgaoY2YVu2U1fG/AHlQ4glmuVPCJvHyn0RjP4iOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=q2RFFgseM6kD3z7fostLllZY/5UCm67D4hQss4rwT7awNS0TvHiOFE3j902qDWO3L
+         gOoEJ9anWy0fFyzVm37l3xkdzh2p5LBZ2HLmsxN9iz38lJslK97BSFUIknMNUlDuTB
+         gIxCNPulcTiL7Ro3PaevaJfGkMUy1UMZLGGLZop690Q+2ABuUW8wgf7FBIV13VpSLj
+         OIdJKYkAl0v6gXvKrjyWI9S4TYNW6TTx4WmGvGqMJp72743c/tNbYlGMW4aoYBklph
+         LG3qmF7hWHdeHr8jv5pSMAoDOW9K4h9HLhNGnAETws26bUY27mPQHvF2EsWgirDlNW
+         uEZJohI+/5L2Q==
+Date:   Wed, 11 Dec 2019 09:34:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Subject: Re: linux-next: Tree for Dec 10 (ethernet/8390/8390p.c)
+Message-ID: <20191211093449.0932cef4@canb.auug.org.au>
+In-Reply-To: <ce89aa80-558c-1ccb-afbe-0af6bc4f3e19@infradead.org>
+References: <20191210140225.1aa0c90e@canb.auug.org.au>
+        <ce89aa80-558c-1ccb-afbe-0af6bc4f3e19@infradead.org>
 MIME-Version: 1.0
-References: <20191210165541.85245-1-sds@tycho.nsa.gov>
-In-Reply-To: <20191210165541.85245-1-sds@tycho.nsa.gov>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 10 Dec 2019 14:15:54 -0500
-Message-ID: <CAHC9VhRnqfuVUTDZA+8G-_OTqqN8M7XJhOpiO1m3t0XhY584Xw@mail.gmail.com>
-Subject: Re: [PATCH] security: only build lsm_audit if CONFIG_SECURITY=y
-To:     Stephen Smalley <sds@tycho.nsa.gov>
-Cc:     selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-next@vger.kernel.org, jamorris@linux.microsoft.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/7LARfLRMNLloF/0HH__5J_H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 10, 2019 at 11:55 AM Stephen Smalley <sds@tycho.nsa.gov> wrote:
-> The lsm_audit code is only required when CONFIG_SECURITY is enabled.
-> It does not have a build dependency on CONFIG_AUDIT since audit.h
-> provides trivial static inlines for audit_log*() when CONFIG_AUDIT
-> is disabled.  Hence, the Makefile should only add lsm_audit to the
-> obj lists based on CONFIG_SECURITY, not CONFIG_AUDIT.
+--Sig_/7LARfLRMNLloF/0HH__5J_H
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+Hi Randy,
+
+On Mon, 9 Dec 2019 23:13:34 -0800 Randy Dunlap <rdunlap@infradead.org> wrot=
+e:
 >
-> Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
-> Signed-off-by: Stephen Smalley <sds@tycho.nsa.gov>
-> ---
->  security/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On 12/9/19 7:02 PM, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Changes since 20191209:
+> >  =20
+>=20
+> on i386:
+>=20
+> ../drivers/net/ethernet/8390/8390p.c:44:6: error: conflicting types for =
+=E2=80=98eip_tx_timeout=E2=80=99
+>  void eip_tx_timeout(struct net_device *dev, unsigned int txqueue)
+>       ^~~~~~~~~~~~~~
+> In file included from ../drivers/net/ethernet/8390/lib8390.c:75:0,
+>                  from ../drivers/net/ethernet/8390/8390p.c:12:
+> ../drivers/net/ethernet/8390/8390.h:53:6: note: previous declaration of =
+=E2=80=98eip_tx_timeout=E2=80=99 was here
+>  void eip_tx_timeout(struct net_device *dev);
+>       ^~~~~~~~~~~~~~
 
-Merged into selinux/next in order to fix the linux-next build
-breakage.  James, if you would prefer a different fix, let us know.
+Looks like this has been fixed for today (in the vhost tree).
+--=20
+Cheers,
+Stephen Rothwell
 
-> diff --git a/security/Makefile b/security/Makefile
-> index be1dd9d2cb2f..746438499029 100644
-> --- a/security/Makefile
-> +++ b/security/Makefile
-> @@ -22,7 +22,7 @@ obj-$(CONFIG_SECURITY)                        += security.o
->  obj-$(CONFIG_SECURITYFS)               += inode.o
->  obj-$(CONFIG_SECURITY_SELINUX)         += selinux/
->  obj-$(CONFIG_SECURITY_SMACK)           += smack/
-> -obj-$(CONFIG_AUDIT)                    += lsm_audit.o
-> +obj-$(CONFIG_SECURITY)                 += lsm_audit.o
->  obj-$(CONFIG_SECURITY_TOMOYO)          += tomoyo/
->  obj-$(CONFIG_SECURITY_APPARMOR)                += apparmor/
->  obj-$(CONFIG_SECURITY_YAMA)            += yama/
-> --
-> 2.23.0
+--Sig_/7LARfLRMNLloF/0HH__5J_H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-paul moore
-www.paul-moore.com
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3wHYkACgkQAVBC80lX
+0Gy1zQf/XBlLXFyjf2UIu0lqNQyKeWdtnjgqXuqcFOQtDqhdZ1u1ulVlNP6DQllI
+oS7FFzxgOUf/yj1rWFLc/MoXE9Gx7TxwiSwphiGgw1A1/2mpD3ARKhVnwUeConM/
+uJnBvgvWbpKnkuEdxl/HmAf31/R3eqrKwjOBvDb0eutvuFVr0dzkg8fadtu7zqRz
+gRBVxsmqtP7KNfHjBtTZu4AyarX57ry7bZ+zTal9zvML7kKCyYYRp0xtqkn30EWC
+jNkvGM9HDbKT7MSLoxctSTYvW4I+OQKfJSZQFPFPCIYEtnHw7SPtUGzq44O2Z+hs
+a90M1MwaouLwQLFDfghQRpHmWRwPgA==
+=9FkA
+-----END PGP SIGNATURE-----
+
+--Sig_/7LARfLRMNLloF/0HH__5J_H--

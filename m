@@ -2,82 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 531F8119F46
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 00:21:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A15A119F55
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 00:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbfLJXVD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Dec 2019 18:21:03 -0500
-Received: from mail-io1-f44.google.com ([209.85.166.44]:46947 "EHLO
-        mail-io1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725999AbfLJXVC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Dec 2019 18:21:02 -0500
-Received: by mail-io1-f44.google.com with SMTP id t26so9255386ioi.13;
-        Tue, 10 Dec 2019 15:21:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=foqkgB/JB6+t9GtkeI0/v69A3WTYRuMmhheGXZPoVyU=;
-        b=tQhie18DXLsqr3QaYFZA6shYyGcJ+iRyabhedxNyvH6IjbObZUxUQjzhi2jyk9mYb+
-         EL7ajBglWroU3sH0mh6mJittsTSrmOKQqZh7v9h5SWWdgWl8VUy3CIskfnpAgZuswAus
-         vLXEB4rvGNKXujmxKUHD4KeCCcZd3n8KlZi4xu4/vcHLIsnEV4e3wu3C1/YZlCLR5U0Q
-         +Wc9hGrCgO7KOzUpcy1DlenGfzGC1IJzbgt+vd0w7WT6Y5a10muqF2EogoumfRPzeVEs
-         B4qD/LGOw0nIKXKAIcoIF1m87qhvDH8eW5+RWNwob1EaThMCHw/uQcfhOszg+8KXbWyb
-         bxTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=foqkgB/JB6+t9GtkeI0/v69A3WTYRuMmhheGXZPoVyU=;
-        b=nHWbozfmAYippHIGhKyUS9FM3/lqG6zHUAR5l8fQaKuF2tJRN2wTDLU0ssFD2OO3HA
-         /WyK9Aj4WcfB3bxZj5MIU3XJm69+FfJ+vufzOREbnr4PVAmaKNI6V5+0zXwYV6ckiXyB
-         GHBHHiSapP6ssLznMvXukU52fSJGTTOnjO1icU4qemrS6IMq4M9h/N/9IwVIEREHrKKW
-         JxPj6G+SODxLDkO8fdIheEETiE5r4C3d9AJmJ1rGhI/EiXyJJW/UyLhKsonC8Z30B0AU
-         8IloFG5CmYNS4QJ+L4IOw1ckATD5LbKSoDpP9vMAjycSuphmLc+So3CCQ38RYt6J0NIj
-         54YA==
-X-Gm-Message-State: APjAAAVXpEIFQDGY+01Tcpyo6TReBp+lTNjFMvGTR7sBdl6ZIRrqNY72
-        tNcOz67Vjt3FX3YCAlLLH+oJ/VOqMp3whEep8ek=
-X-Google-Smtp-Source: APXvYqzYVyLjo70klJZxUmJnME71xKiN5+hJQHOQGSR2h3s+/POcE8veBRuwcVPYyp+N0Wog9Ozwzu4Z6ANoKYeVwYY=
-X-Received: by 2002:a05:6602:2346:: with SMTP id r6mr508394iot.133.1576020061746;
- Tue, 10 Dec 2019 15:21:01 -0800 (PST)
+        id S1727462AbfLJXY7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Dec 2019 18:24:59 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57281 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727489AbfLJXY7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Dec 2019 18:24:59 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Xbkb4Xf4z9sPh;
+        Wed, 11 Dec 2019 10:24:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576020296;
+        bh=uCoc12Pet8WQmpschZh+CqMD1M9wWkIH4XIWAJZ6Rwk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pqWaPhq5t/1wLbWRty5QzrzDlNZjnB1k/tmUvg2wkUfsQIByymp3/1LDrSVDRRhZm
+         dXvdBjSDSLFRhVMUMnxNr5GWzw0d9Yv+CmqqIZXG0Sp7cLezZ6Ldl2rZixHTGN/o+7
+         cK4S0JwQvX0LGFtitlhWnHN5tbpzPBHv8JIidqyULtViibCDLK5Finciug9b1J3fMm
+         iO4AvcZ/sMfkcvpQFMo8UytBsC8srRTKFgfuElQZZ06OkI3pf2j9wBeMCrfrvFRcbm
+         TlLda16QGBfwDshJVssan3EEFSEtbKJzkiWVxYsyfG9LpyN8h9Tki3pUdjx9aL2hON
+         j/ZoWZMt/X7hg==
+Date:   Wed, 11 Dec 2019 10:24:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     "kernelci.org bot" <bot@kernelci.org>, linux-next@vger.kernel.org,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: Re: next/master build: 214 builds: 10 failed, 204 passed, 17
+ errors, 57 warnings (next-20191210)
+Message-ID: <20191211102455.7b55218e@canb.auug.org.au>
+In-Reply-To: <5def8fc0.1c69fb81.d0c08.f4f4@mx.google.com>
+References: <5def8fc0.1c69fb81.d0c08.f4f4@mx.google.com>
 MIME-Version: 1.0
-References: <20191211101004.35db8a07@canb.auug.org.au>
-In-Reply-To: <20191211101004.35db8a07@canb.auug.org.au>
-From:   =?UTF-8?Q?Andreas_Gr=C3=BCnbacher?= <andreas.gruenbacher@gmail.com>
-Date:   Wed, 11 Dec 2019 00:20:49 +0100
-Message-ID: <CAHpGcMKKwtxcaHRuhVWzRNLK=Cpw1sBd9zOKP-zTbgOstM7tzg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the gfs2 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Steven Whitehouse <swhiteho@redhat.com>,
-        Bob Peterson <rpeterso@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/jojN3qX8pgpqY2kxvzXkuY4";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/jojN3qX8pgpqY2kxvzXkuY4
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Am Mi., 11. Dez. 2019 um 00:10 Uhr schrieb Stephen Rothwell
-<sfr@canb.auug.org.au>:
-> Hi all,
->
-> After merging the gfs2 tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
->
-> fs/gfs2/lops.c: In function 'gfs2_find_jhead':
-> fs/gfs2/lops.c:536:13: warning: 'bio_chained' may be used uninitialized in this function [-Wmaybe-uninitialized]
->   536 |    if (!bio || (bio_chained && !off)) {
->       |        ~~~~~^~~~~~~~~~~~~~~~~~~~~~~~
->
-> Introduced by commit
->
->   1ee366c67176 ("gfs2: Another gfs2_find_jhead fix")
+Hi all,
 
-thanks. It's actually a false positive and I'm not getting this
-warning, but I'll make the code more explicit.
+On Tue, 10 Dec 2019 04:29:52 -0800 (PST) "kernelci.org bot" <bot@kernelci.o=
+rg> wrote:
+>
+> allmodconfig (arm, gcc-8) =E2=80=94 FAIL, 2 errors, 20 warnings, 0 sectio=
+n mismatches
+>=20
+> Errors:
+>     ERROR: "curve25519_base_arch" [drivers/net/wireguard/wireguard.ko] un=
+defined!
 
-Andreas
+curve25519_base_arch() is only defined for X86.  Though its use is
+restricted to CONFIG_CRYPTO_ARCH_HAVE_LIB_CURVE25519 being enabled.
+Arm selects this if CRYPTO_CURVE25519_NEON is enabled (which it
+probably is for an allmodconfig build).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/jojN3qX8pgpqY2kxvzXkuY4
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3wKUcACgkQAVBC80lX
+0GwmZAf9G06t6XBSBFoYm0OmGAjGAtWU0CbCyDUCClLjajfq/jevXtgkjr6yoiTd
+l46ufzE1IaeL9F0hZDS4kA/fzLIKeWEueToQsnmpbEDgVFqh2h9cSHEIBfN+ts1N
+Kygd3LLC8FWggVOmOVQPQflIAQbZtKb4pQamDeVaiEGln2HK4A86KzxHuknW8XFY
+QdPHOXlBdt2CnCMFDFwr5Z9FG+cvslWfwFScwyEa6tFdH3vPgvJNAHVASesR3629
+gtzOJnN8AGWJYbmZzD2MiGdHVa70/9EayaPN1YrhAfaqZjXsWH8yyQ6YtMw44grl
+Wf5OvyT9Kx9QHPAc10qYtfqQoG1tRQ==
+=GUn4
+-----END PGP SIGNATURE-----
+
+--Sig_/jojN3qX8pgpqY2kxvzXkuY4--

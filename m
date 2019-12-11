@@ -2,168 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CBFD11A2E2
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 04:14:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4D611A2F2
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 04:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727257AbfLKDOf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Dec 2019 22:14:35 -0500
-Received: from mail.kernel.org ([198.145.29.99]:51676 "EHLO mail.kernel.org"
+        id S1726989AbfLKDVE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Dec 2019 22:21:04 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:49031 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727059AbfLKDOe (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Dec 2019 22:14:34 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726687AbfLKDVE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Dec 2019 22:21:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 6C9142073B;
-        Wed, 11 Dec 2019 03:14:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576034073;
-        bh=pmvlsOu0diBAURZbR9jd8MzTlOmfxQW87R1HHSYaVTk=;
-        h=Date:From:To:Subject:In-Reply-To:From;
-        b=FnXCT3qL8jnGyeyjc7GY5eGaLUyEaa92VeU2r7NJyBWBEGbhnOXoRw5MgNtfak1el
-         AnWq3zY0AzMVAp7J2JotqYh5O1N5/C7w+zp4qZNqs6O+X/5XxJTbR9ox9TXr0uKku6
-         dKiatHS+geNjCfRilRQEm0Ob1YdusUQZdxGVdBfs=
-Date:   Tue, 10 Dec 2019 19:14:32 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject:  mmotm 2019-12-10-19-14 uploaded
-Message-ID: <20191211031432.iyKVQ6m9n%akpm@linux-foundation.org>
-In-Reply-To: <20191206170123.cb3ad1f76af2b48505fabb33@linux-foundation.org>
-User-Agent: s-nail v14.8.16
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Xhz15Fchz9sR7;
+        Wed, 11 Dec 2019 14:21:01 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576034461;
+        bh=lltzgu2HV7j5rxYl5lhex07J61NitzEC2ZoE4pCHpIg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HmRTRhxcZ9grRCSEYT2/9DRrMDDdddr0z1TdOQtRwQOw9zmNu9Ix9dhNSthsEKFnu
+         Anvpom5GkRcAEwQoNDc4dPEULUz5QwX0LkqAm02kHtUUZzR8MSJM1Amf2YonnDImrt
+         /uk6uNIHEaaHltb0+Bbm1gVT1+xxE6HNZHc/6ypjvf+LYa2LM0pHesTDwAWG9SO+FL
+         8jzKlZAn0book0XDxuEFc7x2/UOtqWxXxqqwi9LopBId7sOxFKLE3cab3tWUgnPipv
+         Qzg+hWK5bC4XiMPrpJyDbKO3pTOpbrMoyE/WfzZjiZtDnir0F5ajXeZ4+qPoZt2Crz
+         AH2gio3AJgdfg==
+Date:   Wed, 11 Dec 2019 14:21:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the cpufreq-arm
+ tree
+Message-ID: <20191211142100.423ef8b0@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/YJZo=hBYa+PDgd8yq.d8AT0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The mm-of-the-moment snapshot 2019-12-10-19-14 has been uploaded to
+--Sig_/YJZo=hBYa+PDgd8yq.d8AT0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-   http://www.ozlabs.org/~akpm/mmotm/
+Hi all,
 
-mmotm-readme.txt says
+Commit
 
-README for mm-of-the-moment:
+  dfb3f45d17b6 ("cpufreq: scmi: Match scmi device by both name and protocol=
+ id")
 
-http://www.ozlabs.org/~akpm/mmotm/
+is missing a Signed-off-by from its committer.
 
-This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-more than once a week.
+--=20
+Cheers,
+Stephen Rothwell
 
-You will need quilt to apply these patches to the latest Linus release (5.x
-or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-http://ozlabs.org/~akpm/mmotm/series
+--Sig_/YJZo=hBYa+PDgd8yq.d8AT0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-The file broken-out.tar.gz contains two datestamp files: .DATE and
-.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-followed by the base kernel version against which this patch series is to
-be applied.
+-----BEGIN PGP SIGNATURE-----
 
-This tree is partially included in linux-next.  To see which patches are
-included in linux-next, consult the `series' file.  Only the patches
-within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-linux-next.
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3wYJwACgkQAVBC80lX
+0GyUAwf/VIgHycApPnRen02Fqa5tcvRjO4MwWBJn5AWUEM01CHmt/u38yLFT5r5U
+HV/zAvol5YYgskpBh63MSpzIrlqdJkQ19hKlsmvqWiaCBzN08YLht7fuy9QBf2gU
+HPu5aLY+06XI22pJas5EF9nI8c7BDrsvdaOsafCT+zZ1kyxflAetJcdU2nmKjlw9
+pqPsB3IeJ/dBJDhSGgdrH93uNmMN8NGGDZJqmhWxqHiiSwCMz0XFzmUwJhL8EdIw
+QNeNiCKPxZfTNUonsJjgIAY2dkmQpEzTVQ8FWU/iUYbXdwuNTrfind2OeW8jopp3
+Kar68MufKyNMdmia0EsEfj3Xu1usnw==
+=1Fr0
+-----END PGP SIGNATURE-----
 
-
-A full copy of the full kernel tree with the linux-next and mmotm patches
-already applied is available through git within an hour of the mmotm
-release.  Individual mmotm releases are tagged.  The master branch always
-points to the latest release, so it's constantly rebasing.
-
-	https://github.com/hnaz/linux-mm
-
-The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-contains daily snapshots of the -mm tree.  It is updated more frequently
-than mmotm, and is untested.
-
-A git copy of this tree is also available at
-
-	https://github.com/hnaz/linux-mm
-
-
-
-This mmotm tree contains the following patches against 5.5-rc1:
-(patches marked "*" will be included in linux-next)
-
-  origin.patch
-* kasan-fix-crashes-on-access-to-memory-mapped-by-vm_map_ram.patch
-* kasan-fix-crashes-on-access-to-memory-mapped-by-vm_map_ram-v2.patch
-* mm-add-apply_to_existing_pages-helper.patch
-* mm-add-apply_to_existing_pages-helper-fix.patch
-* mm-add-apply_to_existing_pages-helper-fix-fix.patch
-* kasan-use-apply_to_existing_pages-for-releasing-vmalloc-shadow.patch
-* kasan-use-apply_to_existing_pages-for-releasing-vmalloc-shadow-fix.patch
-* kasan-dont-assume-percpu-shadow-allocations-will-succeed.patch
-* mm-vmscan-protect-shrinker-idr-replace-with-config_memcg.patch
-* lib-kconfigdebug-fix-some-messed-up-configurations.patch
-* lib-kconfigdebug-fix-some-messed-up-configurations-checkpatch-fixes.patch
-* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
-* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
-* mm-zsmallocc-fix-the-migrated-zspage-statistics.patch
-* mm-thp-tweak-reclaim-compaction-effort-of-local-only-and-all-node-allocations.patch
-* x86-mm-split-vmalloc_sync_all.patch
-* kcov-fix-struct-layout-for-kcov_remote_arg.patch
-* memcg-account-security-cred-as-well-to-kmemcg.patch
-* mm-move_pages-return-valid-node-id-in-status-if-the-page-is-already-on-the-target-node.patch
-* fs-direct-ioc-include-fs-internalh-for-missing-prototype.patch
-* fs-nsfsc-include-headers-for-missing-declarations.patch
-* fs-namespacec-make-to_mnt_ns-static.patch
-* hexagon-define-ioremap_uc.patch
-* hexagon-parenthesize-registers-in-asm-predicates.patch
-* hexagon-work-around-compiler-crash.patch
-* fs-fix-posix_aclc-kernel-doc-warnings.patch
-* init-kconfig-enable-o3-for-all-arches.patch
-* ramfs-support-o_tmpfile.patch
-  mm.patch
-* mm-avoid-slub-allocation-while-holding-list_lock.patch
-* mm-cleanup-some-useless-code.patch
-* mm-vmscan-expose-cgroup_ino-for-memcg-reclaim-tracepoints.patch
-* mm-pgmap-use-correct-alignment-when-looking-at-first-pfn-from-a-region.patch
-* mm-mmap-fix-the-adjusted-length-error.patch
-* mm-memmap_init-update-variable-name-in-memmap_init_zone.patch
-* mm-memory_hotplug-shrink-zones-when-offlining-memory.patch
-* mm-memory_hotplug-poison-memmap-in-remove_pfn_range_from_zone.patch
-* mm-memory_hotplug-we-always-have-a-zone-in-find_smallestbiggest_section_pfn.patch
-* mm-memory_hotplug-dont-check-for-all-holes-in-shrink_zone_span.patch
-* mm-memory_hotplug-drop-local-variables-in-shrink_zone_span.patch
-* mm-memory_hotplug-cleanup-__remove_pages.patch
-* mm-early_remap-use-%pa-to-print-resource_size_t-variables.patch
-* mm-oom-avoid-printk-iteration-under-rcu.patch
-* mm-oom-avoid-printk-iteration-under-rcu-fix.patch
-* mm-clean-up-obsolete-check-on-space-in-page-flags.patch
-* info-task-hung-in-generic_file_write_iter.patch
-* info-task-hung-in-generic_file_write-fix.patch
-* kernel-hung_taskc-monitor-killed-tasks.patch
-* lib-zlib-add-s390-hardware-support-for-kernel-zlib_deflate.patch
-* s390-boot-rename-heap_size-due-to-name-collision.patch
-* lib-zlib-add-s390-hardware-support-for-kernel-zlib_inflate.patch
-* s390-boot-add-dfltcc=-kernel-command-line-parameter.patch
-* lib-zlib-add-zlib_deflate_dfltcc_enabled-function.patch
-* btrfs-use-larger-zlib-buffer-for-s390-hardware-compression.patch
-* string-add-stracpy-and-stracpy_pad-mechanisms.patch
-* documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
-* elf-smaller-code-generation-around-auxv-vector-fill.patch
-* elf-fix-start_code-calculation.patch
-* elf-dont-copy-elf-header-around.patch
-* execve-warn-if-process-starts-with-executable-stack.patch
-* io-mapping-use-phys_pfn-macro-in-io_mapping_map_atomic_wc.patch
-* aio-simplify-read_events.patch
-* smp_mb__beforeafter_atomic-update-documentation.patch
-* ipc-mqueuec-remove-duplicated-code.patch
-* ipc-mqueuec-update-document-memory-barriers.patch
-* ipc-msgc-update-and-document-memory-barriers.patch
-* ipc-semc-document-and-update-memory-barriers.patch
-* ipc-consolidate-all-xxxctl_down-functions.patch
-  linux-next.patch
-  linux-next-build-fix.patch
-* drivers-block-null_blk_mainc-fix-layout.patch
-* drivers-block-null_blk_mainc-fix-uninitialized-var-warnings.patch
-* pinctrl-fix-pxa2xxc-build-warnings.patch
-* drivers-tty-serial-sh-scic-suppress-warning.patch
-* fix-read-buffer-overflow-in-delta-ipc.patch
-  make-sure-nobodys-leaking-resources.patch
-  releasing-resources-with-children.patch
-  mutex-subsystem-synchro-test-module.patch
-  kernel-forkc-export-kernel_thread-to-modules.patch
-  workaround-for-a-pci-restoring-bug.patch
+--Sig_/YJZo=hBYa+PDgd8yq.d8AT0--

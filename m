@@ -2,27 +2,27 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E823B11B0EE
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 16:27:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7689311B1A3
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 16:32:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733277AbfLKP1X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Dec 2019 10:27:23 -0500
-Received: from mail.kernel.org ([198.145.29.99]:32948 "EHLO mail.kernel.org"
+        id S2387779AbfLKP3B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Dec 2019 10:29:01 -0500
+Received: from mail.kernel.org ([198.145.29.99]:35426 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732967AbfLKP1X (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:27:23 -0500
+        id S2387773AbfLKP3A (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:29:00 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 9C8F924680;
-        Wed, 11 Dec 2019 15:27:20 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 37EAC24685;
+        Wed, 11 Dec 2019 15:28:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078041;
-        bh=1+PYsgrlVIXcy1sg+TkUNOPdnuEJTx9tNxWeA9loVaw=;
+        s=default; t=1576078139;
+        bh=6VMoStXN6SIwIDCEKs9FJWnG1jDwzKncsKoo8gUWlEY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uuZDXOIG0qB2lgJw6W3jWOep+mtmFpWT+p2wkkoIf+OFvekYDLJMISGtOQ7QCPJd6
-         owci1RkA6PDWp6UktpVEtyqCDxCdVun31YsYjRZMFY0WCu/Sb4II/6xB+GCu4Ueav6
-         7X9JhCky0jbToIWGplT0Xu83X2dNP5n3WiShHxjg=
+        b=sAtySrf+GNrxjeFAZp0s9BDVUwABZoR9IvecGqPD9mLYg7ETIWE0Zrr1bDfb+ViTJ
+         RdIaDYZfRepizpQ0/eo+hVyeLLJnOXW9JVRKQVYkE9piHq2a0ik7nOfPPhEIIr8FKR
+         O1tiRCjSaYjVjjVyfukTQdaCAsgeMge0QLz+FXUo=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
@@ -33,12 +33,12 @@ Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 35/79] scsi: lpfc: fix: Coverity: lpfc_cmpl_els_rsp(): Null pointer dereferences
-Date:   Wed, 11 Dec 2019 10:25:59 -0500
-Message-Id: <20191211152643.23056-35-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 26/58] scsi: lpfc: fix: Coverity: lpfc_cmpl_els_rsp(): Null pointer dereferences
+Date:   Wed, 11 Dec 2019 10:27:59 -0500
+Message-Id: <20191211152831.23507-26-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211152643.23056-1-sashal@kernel.org>
-References: <20191211152643.23056-1-sashal@kernel.org>
+In-Reply-To: <20191211152831.23507-1-sashal@kernel.org>
+References: <20191211152831.23507-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index 4f4d1b3b3bbc4..7398350b08b41 100644
+index c851fd14ff3e9..4c84c2ae1112d 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4110,7 +4110,7 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+@@ -4102,7 +4102,7 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
  		mempool_free(mbox, phba->mbox_mem_pool);
  	}
  out:

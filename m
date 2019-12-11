@@ -2,47 +2,45 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC7311B87E
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 17:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0F211B8D4
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 17:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730317AbfLKQVm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Dec 2019 11:21:42 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:46738 "EHLO
+        id S1730127AbfLKQbM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Dec 2019 11:31:12 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:52254 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728912AbfLKQVl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Dec 2019 11:21:41 -0500
+        with ESMTP id S1729522AbfLKQbM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Dec 2019 11:31:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
         Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
         Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
         List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=AxXuRP6SlO9EYVZsfKYGZTNvOdQRf3h3gzU4Dl8Nq0c=; b=g70pc2kei6mVg+B+h8YjfbGsg
-        mKZeb9t1jKfZKM8HyZWZkFBrKwtlXP8G4ceGlsVyVyzF9AO00JejYenmo4XxrsHfPrw/FSXvisxwb
-        bRiYSzfAhuRtD8shFf9H0KixFRC5QCTuik++EKIAO9xodk1ljCFZEYfSAZb6bS2dBWrmjAosXs3cQ
-        JoYQU3cmJJn1We/+FfugqqzCOVtaKCZnlJa7NDbLXbRkG2tRTu1twvygzBaq10Y/rldyBVDHHr4RK
-        AMMG5jNnzRd16N026VBWH2/TrzhTMgPf1g8Yr1lMDQjJMaql49Ap7FzgjsZhfXmL4BXjMoTpfXX1r
-        UrGFDzjhA==;
+         bh=7HvcTjE6EdC7yltRqiqqah/kodynClz3aRQRp8aRgEY=; b=NXPY98qGOhJENLSsyhO72Is0Y
+        u65NujtGA75NJD/hJUO8HPitfwjN78pkQZCl6rXf3hC2VZkJabei+vzL4kYuiGPC7reyOc/oSYBT5
+        Y3MeSG5+WuLGhQuBadXDWuXDJ0rY0O/Z6apD8vcXu+vkA7aZnzAOct1SzaEzhHJeNk2zOR11nFi3Y
+        iBteCHssgklWW7Iw+7jF306zMWZPxJGHFk2N1XQbmrJO1jkT9Yw1vp29D9zHMTAVcLIKuVhgRRBES
+        qJ9ujl/+gJtFN3bb0qpO9EOn1+vvVQuamvZ5i/ioT58HbniCfTNa8zYWIxq/PNag8W2YtTtvf1iPn
+        37ERdQIRQ==;
 Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1if4k7-0006LN-OM; Wed, 11 Dec 2019 16:21:39 +0000
-Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
-To:     dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Btrfs <linux-btrfs@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-References: <20191206135406.563336e7@canb.auug.org.au>
- <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
- <20191211134929.GL3929@twin.jikos.cz>
+        id 1if4tJ-0002Ac-BO; Wed, 11 Dec 2019 16:31:09 +0000
+Subject: Re: mmotm 2019-12-10-19-14 uploaded (objtool: func() falls through)
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20191211031432.iyKVQ6m9n%akpm@linux-foundation.org>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <c751bc1a-505c-5050-3c4c-c83be81b4e48@infradead.org>
-Date:   Wed, 11 Dec 2019 08:21:38 -0800
+Message-ID: <07777464-b9d8-ff1d-41d9-f62cc44f09f3@infradead.org>
+Date:   Wed, 11 Dec 2019 08:31:08 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.2.1
 MIME-Version: 1.0
-In-Reply-To: <20191211134929.GL3929@twin.jikos.cz>
+In-Reply-To: <20191211031432.iyKVQ6m9n%akpm@linux-foundation.org>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
@@ -51,42 +49,34 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-[oops, forgot to add Josh and PeterZ]
+On 12/10/19 7:14 PM, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2019-12-10-19-14 has been uploaded to
+> 
+>    http://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
 
-On 12/11/19 5:49 AM, David Sterba wrote:
-> On Fri, Dec 06, 2019 at 08:17:30AM -0800, Randy Dunlap wrote:
->> On 12/5/19 6:54 PM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Please do not add any material for v5.6 to your linux-next included
->>> trees until after v5.5-rc1 has been released.
->>>
->>> Changes since 20191204:
->>>
->>
->> on x86_64:
->>
->> fs/btrfs/ctree.o: warning: objtool: btrfs_search_slot()+0x2d4: unreachable instruction
-> 
-> Can somebody enlighten me what is one supposed to do to address the
-> warnings? Function names reported in the list contain our ASSERT macro
-> that conditionally calls BUG() that I believe is what could cause the
-> unreachable instructions but I don't see how.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/btrfs/ctree.h#n3113
-> 
-> __cold
-> static inline void assfail(const char *expr, const char *file, int line)
-> {
-> 	if (IS_ENABLED(CONFIG_BTRFS_ASSERT)) {
-> 		pr_err("assertion failed: %s, in %s:%d\n", expr, file, line);
-> 		BUG();
-> 	}
-> }
-> 
-> #define ASSERT(expr)	\
-> 	(likely(expr) ? (void)0 : assfail(#expr, __FILE__, __LINE__))
-> 
+on x86_64:
+
+drivers/hwmon/f71882fg.o: warning: objtool: f71882fg_update_device() falls through to next function show_pwm_auto_point_temp_hyst()
+drivers/ide/ide-probe.o: warning: objtool: hwif_register_devices() falls through to next function hwif_release_dev()
+drivers/ide/ide-probe.o: warning: objtool: ide_host_remove() falls through to next function ide_disable_port()
 
 
 -- 

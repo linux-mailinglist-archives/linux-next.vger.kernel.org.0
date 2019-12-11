@@ -2,27 +2,27 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7689311B1A3
-	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 16:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1889E11B2A7
+	for <lists+linux-next@lfdr.de>; Wed, 11 Dec 2019 16:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387779AbfLKP3B (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Dec 2019 10:29:01 -0500
-Received: from mail.kernel.org ([198.145.29.99]:35426 "EHLO mail.kernel.org"
+        id S2388175AbfLKPff (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Dec 2019 10:35:35 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44546 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387773AbfLKP3A (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Dec 2019 10:29:00 -0500
+        id S1733091AbfLKPfe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Dec 2019 10:35:34 -0500
 Received: from sasha-vm.mshome.net (c-73-47-72-35.hsd1.nh.comcast.net [73.47.72.35])
         (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 37EAC24685;
-        Wed, 11 Dec 2019 15:28:58 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id C353824658;
+        Wed, 11 Dec 2019 15:35:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576078139;
-        bh=6VMoStXN6SIwIDCEKs9FJWnG1jDwzKncsKoo8gUWlEY=;
+        s=default; t=1576078533;
+        bh=oCM1UPKZGfugxY/zFkaEvRN39bNFEO/SayzMnW2mjgA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sAtySrf+GNrxjeFAZp0s9BDVUwABZoR9IvecGqPD9mLYg7ETIWE0Zrr1bDfb+ViTJ
-         RdIaDYZfRepizpQ0/eo+hVyeLLJnOXW9JVRKQVYkE9piHq2a0ik7nOfPPhEIIr8FKR
-         O1tiRCjSaYjVjjVyfukTQdaCAsgeMge0QLz+FXUo=
+        b=pGnjHdpTSL6eXb0KsUuVN+qCz8Gz332th/d5S7HhP9eDO57chaE2wAx35gd7iYQiI
+         MAxItOXEXOUbO1vY7d2HP1Wl/iz4bEsRQj6eGzNmCBpAP9E+sq9m7OKcpMdWuuYAkE
+         rU5NvtAsZzYAMyfDHRPUwGUPTcz0aC+gIoiDs1Kk=
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     James Smart <jsmart2021@gmail.com>,
@@ -33,12 +33,12 @@ Cc:     James Smart <jsmart2021@gmail.com>,
         Dick Kennedy <dick.kennedy@broadcom.com>,
         "Martin K . Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>, linux-scsi@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 26/58] scsi: lpfc: fix: Coverity: lpfc_cmpl_els_rsp(): Null pointer dereferences
-Date:   Wed, 11 Dec 2019 10:27:59 -0500
-Message-Id: <20191211152831.23507-26-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.9 22/42] scsi: lpfc: fix: Coverity: lpfc_cmpl_els_rsp(): Null pointer dereferences
+Date:   Wed, 11 Dec 2019 10:34:50 -0500
+Message-Id: <20191211153510.23861-22-sashal@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20191211152831.23507-1-sashal@kernel.org>
-References: <20191211152831.23507-1-sashal@kernel.org>
+In-Reply-To: <20191211153510.23861-1-sashal@kernel.org>
+References: <20191211153510.23861-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -94,10 +94,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/lpfc/lpfc_els.c b/drivers/scsi/lpfc/lpfc_els.c
-index c851fd14ff3e9..4c84c2ae1112d 100644
+index 3702497b5b169..4901bf24916b5 100644
 --- a/drivers/scsi/lpfc/lpfc_els.c
 +++ b/drivers/scsi/lpfc/lpfc_els.c
-@@ -4102,7 +4102,7 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
+@@ -3863,7 +3863,7 @@ lpfc_cmpl_els_rsp(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
  		mempool_free(mbox, phba->mbox_mem_pool);
  	}
  out:

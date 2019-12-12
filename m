@@ -2,101 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D349511D833
-	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 21:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 954EA11D906
+	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 23:04:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730892AbfLLU6V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Dec 2019 15:58:21 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:31251 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1730860AbfLLU6V (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Dec 2019 15:58:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1576184300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xFBksdHVlqSH2UyhAzKrEfmaK2aji1YTG0bwajfDZLs=;
-        b=DqN9lB24EhqUvYcjtHsukTTHIaqRiE7PrVMXWrL9vRcyBdGPM/ZeDT+YceQV0Uj3lyHbOe
-        ylLJDvZho8Yv0vwyWdR3bftdW75Vlnr/HAKh8cVsebiD2fIPeWeb7b+331/V/0Jq9ZmxlJ
-        UNngXEkX2G/V0EBMSJLXveDwIAdra44=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-286-b45Qw4c8MFKlLP0zkn1p-w-1; Thu, 12 Dec 2019 15:58:16 -0500
-X-MC-Unique: b45Qw4c8MFKlLP0zkn1p-w-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D9159DB78;
-        Thu, 12 Dec 2019 20:58:14 +0000 (UTC)
-Received: from treble (ovpn-123-178.rdu2.redhat.com [10.10.123.178])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 785E95C548;
-        Thu, 12 Dec 2019 20:58:13 +0000 (UTC)
-Date:   Thu, 12 Dec 2019 14:58:11 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: mmotm 2019-12-10-19-14 uploaded (objtool: func() falls through)
-Message-ID: <20191212205811.4vrrb4hou3tbiada@treble>
-References: <20191211031432.iyKVQ6m9n%akpm@linux-foundation.org>
- <07777464-b9d8-ff1d-41d9-f62cc44f09f3@infradead.org>
- <20191212184859.zjj2ycfkvpcns5bk@treble>
- <042c6cd7-c983-03f1-6a79-5642549f57c4@infradead.org>
+        id S1731280AbfLLWEv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Dec 2019 17:04:51 -0500
+Received: from linux.microsoft.com ([13.77.154.182]:50040 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730779AbfLLWEu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Dec 2019 17:04:50 -0500
+Received: by linux.microsoft.com (Postfix, from userid 1001)
+        id DE80920B7187; Thu, 12 Dec 2019 14:04:49 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com DE80920B7187
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
+        s=default; t=1576188289;
+        bh=jkm72bW0CrlIB8ikaKjBSdd8IXwgeJj35zWeOybEfsc=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=JaiU05aLioDaWOBB2diCOCBUvavRkymjLyLOPgH+/O67bH2oVDs2wTOCF82t1RU55
+         kzfqm/HXl/Xp/5ANfJ31B6RsCVXz1C0h+xhHIpUs8HMT78pr8AMoW6VsV/GxgI1sYY
+         HG/E4wRPS4Bc6x9f9HRp5RWQoZcO0yTZVL3cssNU=
+Received: from localhost (localhost [127.0.0.1])
+        by linux.microsoft.com (Postfix) with ESMTP id DBC003070327;
+        Thu, 12 Dec 2019 14:04:49 -0800 (PST)
+Date:   Thu, 12 Dec 2019 14:04:49 -0800 (PST)
+From:   James Morris <jamorris@linuxonhyperv.com>
+X-X-Sender: jamorris@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net
+To:     Paul Moore <paul@paul-moore.com>
+cc:     Stephen Smalley <sds@tycho.nsa.gov>, selinux@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-next@vger.kernel.org,
+        jamorris@linux.microsoft.com
+Subject: Re: [PATCH] security: only build lsm_audit if CONFIG_SECURITY=y
+In-Reply-To: <CAHC9VhRnqfuVUTDZA+8G-_OTqqN8M7XJhOpiO1m3t0XhY584Xw@mail.gmail.com>
+Message-ID: <alpine.LRH.2.21.1912121404420.96286@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.inter>
+References: <20191210165541.85245-1-sds@tycho.nsa.gov> <CAHC9VhRnqfuVUTDZA+8G-_OTqqN8M7XJhOpiO1m3t0XhY584Xw@mail.gmail.com>
+User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <042c6cd7-c983-03f1-6a79-5642549f57c4@infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 12:21:17PM -0800, Randy Dunlap wrote:
-> On 12/12/19 10:48 AM, Josh Poimboeuf wrote:
-> > On Wed, Dec 11, 2019 at 08:31:08AM -0800, Randy Dunlap wrote:
-> >> On 12/10/19 7:14 PM, Andrew Morton wrote:
-> >>> The mm-of-the-moment snapshot 2019-12-10-19-14 has been uploaded to
-> >>>
-> >>>    http://www.ozlabs.org/~akpm/mmotm/
-> >>>
-> >>> mmotm-readme.txt says
-> >>>
-> >>> README for mm-of-the-moment:
-> >>>
-> >>> http://www.ozlabs.org/~akpm/mmotm/
-> >>>
-> >>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> >>> more than once a week.
-> >>>
-> >>> You will need quilt to apply these patches to the latest Linus release (5.x
-> >>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> >>> http://ozlabs.org/~akpm/mmotm/series
-> >>>
-> >>> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> >>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> >>> followed by the base kernel version against which this patch series is to
-> >>> be applied.
-> >>
-> >> on x86_64:
-> >>
-> >> drivers/hwmon/f71882fg.o: warning: objtool: f71882fg_update_device() falls through to next function show_pwm_auto_point_temp_hyst()
-> >> drivers/ide/ide-probe.o: warning: objtool: hwif_register_devices() falls through to next function hwif_release_dev()
-> >> drivers/ide/ide-probe.o: warning: objtool: ide_host_remove() falls through to next function ide_disable_port()
-> > 
-> > Randy, can you share the .o files?
-> 
-> Sure. They are attached.
+On Tue, 10 Dec 2019, Paul Moore wrote:
 
-These look like compiler bugs to me... execution is falling off the edge
-of the functions for no apparent reason.  Could potentially be triggered
-by the '#define if' trace code.
+> On Tue, Dec 10, 2019 at 11:55 AM Stephen Smalley <sds@tycho.nsa.gov> wrote:
+> > The lsm_audit code is only required when CONFIG_SECURITY is enabled.
+> > It does not have a build dependency on CONFIG_AUDIT since audit.h
+> > provides trivial static inlines for audit_log*() when CONFIG_AUDIT
+> > is disabled.  Hence, the Makefile should only add lsm_audit to the
+> > obj lists based on CONFIG_SECURITY, not CONFIG_AUDIT.
+> >
+> > Fixes: 59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
+> > Signed-off-by: Stephen Smalley <sds@tycho.nsa.gov>
+> > ---
+> >  security/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Merged into selinux/next in order to fix the linux-next build
+> breakage.  James, if you would prefer a different fix, let us know.
+
+LGTM
+
+> 
+> > diff --git a/security/Makefile b/security/Makefile
+> > index be1dd9d2cb2f..746438499029 100644
+> > --- a/security/Makefile
+> > +++ b/security/Makefile
+> > @@ -22,7 +22,7 @@ obj-$(CONFIG_SECURITY)                        += security.o
+> >  obj-$(CONFIG_SECURITYFS)               += inode.o
+> >  obj-$(CONFIG_SECURITY_SELINUX)         += selinux/
+> >  obj-$(CONFIG_SECURITY_SMACK)           += smack/
+> > -obj-$(CONFIG_AUDIT)                    += lsm_audit.o
+> > +obj-$(CONFIG_SECURITY)                 += lsm_audit.o
+> >  obj-$(CONFIG_SECURITY_TOMOYO)          += tomoyo/
+> >  obj-$(CONFIG_SECURITY_APPARMOR)                += apparmor/
+> >  obj-$(CONFIG_SECURITY_YAMA)            += yama/
+> > --
+> > 2.23.0
+> 
+> -- 
+> paul moore
+> www.paul-moore.com
+> 
+
 
 -- 
-Josh
-
+James Morris
+<jamorris@linuxonhyperv.com>

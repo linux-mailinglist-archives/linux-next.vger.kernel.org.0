@@ -2,89 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2D811CC94
-	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 12:52:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF5F11CCDD
+	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 13:14:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729086AbfLLLwM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Dec 2019 06:52:12 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41755 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726492AbfLLLwL (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Dec 2019 06:52:11 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47YXGJ2qdGz9sPK;
-        Thu, 12 Dec 2019 22:52:04 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576151529;
-        bh=pQx0Hn9VwNLWs+av3Y7yIbP9UhlN3gaBjg53IUB7FOY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dVS8H5UBT3DT1URweU/fcAirs7m9wmDanPXZGLx3ZDie2r4yawSyVX/F24SI6VouN
-         GkDywmopFogv11mxprxZ7SwWURh+WIhX2GccEf2Rtkellz3xoNTy/deoDuwcF4/JH7
-         XRs3KPPTJH0HZpTfTbcC9FrV/gdlk+fBLYgxz/ABaSJHCwDKQUA6cvdSExBFwag0xA
-         N6L2n32CzxmvpCPUikkk7qTMhw962qIlWE4Ily9oGCt7qteQcC49L+HfcRSQExseJo
-         K4GomS2ji1C56tD/QaoV43+I94K31Phr/UH1KHlq4uey0uMrnihJw/tTlllrJCtgxd
-         cm5ey8N/EXlIQ==
-Date:   Thu, 12 Dec 2019 22:52:02 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ben Skeggs <bskeggs@redhat.com>
-Subject: linux-next: Fixes tag needs some work in the drm-fixes tree
-Message-ID: <20191212225202.04d0d0e7@canb.auug.org.au>
+        id S1729060AbfLLMOe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Dec 2019 07:14:34 -0500
+Received: from mail-wm1-f48.google.com ([209.85.128.48]:52051 "EHLO
+        mail-wm1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729004AbfLLMOe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Dec 2019 07:14:34 -0500
+Received: by mail-wm1-f48.google.com with SMTP id d73so2127197wmd.1
+        for <linux-next@vger.kernel.org>; Thu, 12 Dec 2019 04:14:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Tv6dHqBkBPgl9z3ceHqB4AFZ+7hgyg++/TBBMMyK/co=;
+        b=WCidlDDy0tAYy/yPB4XZCwWK9Ow5ip4t8dndd9KuYaMt3tWSOwVR0ShcyDzHq9HZh0
+         7W7Ocn1EdqS5Y9ygGwW0F/30KBLZw9ngEU+/MmLk5h9G1g++wgiVExyObqRZqEvQNjMQ
+         WIw0VuLiawMod/WrvgY63udYELTRV6FfuPOZjsnrMr6ZIFCE6f+dUWkJqDpcQYUW74Q2
+         V0z8mJcbLvE/N6X3y+HVixcL2m/Sz6VloCI/kSzihl6wZl/4pqzwuIfJgnKG3FyqauRh
+         F8yOMd6NvfmTXn5dp8UTwHcTvd+Pwn/hKBI5Y6HbdTWw57P9Z1UclTnT5Qce7WkC9Hax
+         CaHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Tv6dHqBkBPgl9z3ceHqB4AFZ+7hgyg++/TBBMMyK/co=;
+        b=ekNMbkwjsO68qvfRxgYrbBGuRaK1wnPK9oOwoLO5+Hlyy4uM9VlHleA1WCVhD+AC7V
+         jSjPFXTlA/fas7jEaE+pJeR9bUwihyne0SK+4zMOdjdGL7MOSRwiViHpa8kTUilA0BZI
+         xF/pyZUFKCm9NdKQjyFJNlQZc2/ztqu9YwPnXTKR8PTpA9AXxrQ+sdVkgxOzblqQzBfJ
+         KZhoiEh9bR3GheaaGbdAYEsLo5zhGeAIEDJGWEl1mtDgprDxin5lHJvu5H4zu08Wa75T
+         xrZ/16p8fqHlxeTEbL/8xjoTBn6hx48O4QWmrT5VAoiZTJG7N7LX4BritBL8O7VP3t4s
+         Mb6A==
+X-Gm-Message-State: APjAAAUNBrSxDCHkJcn8d3swGC9xWiod0i8WoR4ON5Yo6iGv+QA+Gw5o
+        7nnUGl+aHHUJ4ZMXdWYSFTj6SocxacV4NA==
+X-Google-Smtp-Source: APXvYqyCdfYqV1ZK66fe1CyteCrn1Wa6EU76tC03AaOBu8uYE5SnqT6y3QlzygVnL3eKLZ3Ric3v9w==
+X-Received: by 2002:a1c:f705:: with SMTP id v5mr6215862wmh.82.1576152872150;
+        Thu, 12 Dec 2019 04:14:32 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id j12sm5984521wrt.55.2019.12.12.04.14.31
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2019 04:14:31 -0800 (PST)
+Message-ID: <5df22f27.1c69fb81.651e3.ddf5@mx.google.com>
+Date:   Thu, 12 Dec 2019 04:14:31 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oCbuhG6LIC_mZCajeFNESo1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191212
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 156 boots: 3 failed, 153 passed (next-20191212)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oCbuhG6LIC_mZCajeFNESo1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 156 boots: 3 failed, 153 passed (next-20191212)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191212/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191212/
 
-n commit
+Tree: next
+Branch: master
+Git Describe: next-20191212
+Git Commit: 78adcacd4edbd6795e164bbda9a4b2b7e51666a7
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 61 unique boards, 18 SoC families, 25 builds out of 214
 
-  64d17f25dcad ("drm/nouveau: Fix drm-core using atomic code-paths on pre-n=
-v50 hardware")
+Boot Failures Detected:
 
-Fixes tag
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
 
-  Fixes: https://bugzilla.redhat.com/show_bug.cgi?id=3D1706557
+    defconfig:
+        gcc-8:
+            meson-gxl-s905x-khadas-vim: 1 failed lab
+            msm8998-mtp: 1 failed lab
 
-has these problem(s):
-
-  - No SHA1 recognised
-
-I haven't seen a Fixes tag with a bug URL before, they usually reference
-the buggy commit.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/oCbuhG6LIC_mZCajeFNESo1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3yKeIACgkQAVBC80lX
-0Gx7OwgAi97JtVQ8Ok7s9cphYws5Mo8MnUQVlRIG5zkbVjeOK7UcVYjWvAFU/YdW
-Kvz1yC12va5kcSZycsE24KvVPOY8+sxJYb/asbqg+xZzcG/hpdUlv0aUCb/4Ch2I
-lxBkcAz7pnb/r6Mccfgxgv6hbUCxuaNmySNJuDEXNWRURFKIvKsPQDBdfX+ZAeoK
-1pij0d0SFR0zM3G1IEJ9+C7UwDoQWFqjVmqwluEu9C/zTR9pGQN2L5Lq5MUdHY7B
-YhJoXlOf/3U9FZxHnKVOSrFIQePYPAgZhs4a4xtDD0IlqUfY72v9Ryi5G1h2VVv1
-R5ZcakJSEzTsSjR+TWOohEOKIbiwIw==
-=NdW3
------END PGP SIGNATURE-----
-
---Sig_/oCbuhG6LIC_mZCajeFNESo1--
+---
+For more info write to <info@kernelci.org>

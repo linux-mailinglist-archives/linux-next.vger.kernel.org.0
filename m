@@ -2,110 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F4911C49C
-	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 05:07:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5A011C4F1
+	for <lists+linux-next@lfdr.de>; Thu, 12 Dec 2019 05:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727632AbfLLEHj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Dec 2019 23:07:39 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37378 "EHLO mail.kernel.org"
+        id S1727507AbfLLE0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Dec 2019 23:26:18 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37931 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726769AbfLLEHi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Dec 2019 23:07:38 -0500
-Received: from paulmck-ThinkPad-P72.home (199-192-87-166.static.wiline.com [199.192.87.166])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727541AbfLLE0S (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Dec 2019 23:26:18 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 01891206C3;
-        Thu, 12 Dec 2019 04:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576123658;
-        bh=XO3UIsiT7lgIlluvra0obFaodZI0dYDEZe6IgMN6kDk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=VzBdb8s1umvM/sS6v3VE4M7OqiQoQK7ASMD13a6MQuyrjr2NopDf/v9Y9Em+lryyQ
-         NCr9rB7g2vBvzLQzh0vQg+AxvrRvMZ4r2uT0jjoWO7rp4xvTi4kcZ6o1+bHm8gho9y
-         4c1g+1UTOBtgbE69oK0C9GiyU/a1MO6bzNFK0qP4=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id A592A352035F; Wed, 11 Dec 2019 20:07:37 -0800 (PST)
-Date:   Wed, 11 Dec 2019 20:07:37 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47YLMp2JKDz9s4Y;
+        Thu, 12 Dec 2019 15:26:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576124774;
+        bh=Eqai7+WQWBkKaqBz7HdJtgVKHhsjgX3gWrQDtFd14uU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e7LFQ1VfcShH+XZ+HvM54md4KWtORBdcZ7ZwN8Wi42bZYbTZ4zGtTa9NXYPWF3clT
+         h7XS60jIpFYNd5T3gY2f14M0C3f8cQxYURxdMNi1mbcvcE/s0vG5B9ncZb7yCfTS0v
+         1AOmM7S1k1h5e5fGNGSzplAYgdnQ1VN1ApIbbapnaUVtCrknw9w8An3gVvBp101pEi
+         xKyCjdCiYI86wG6D3M10iibP0XR43nRV2JppJzLQpTIkk6PxwZn1PGuHKWon6U1l8f
+         2lMBWL+0fyQavmfuT/2OiVmu2lsWSTs7qiHDt/RfunWFuKWa3YubJpDPnJYBuVsX4T
+         ufu1QTO4J3ntA==
+Date:   Thu, 12 Dec 2019 15:26:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     David Howells <dhowells@redhat.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <20191212040737.GR2889@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
+Message-ID: <20191212152613.7ad30842@canb.auug.org.au>
+In-Reply-To: <20191212040737.GR2889@paulmck-ThinkPad-P72>
 References: <20191212134516.3b5f4a4e@canb.auug.org.au>
+        <20191212040737.GR2889@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212134516.3b5f4a4e@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/Re48kZjn=vaHox2Q=VY6NBy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 01:45:16PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> drivers/misc/watch_queue.c: In function 'watch_queue_set_filter':
-> drivers/misc/watch_queue.c:526:2: error: implicit declaration of function 'rcu_swap_protected' [-Werror=implicit-function-declaration]
->   526 |  rcu_swap_protected(wqueue->filter, wfilter,
->       |  ^~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   af8c9224182e ("rcu: Remove rcu_swap_protected()")
-> 
-> interacting with commit
-> 
->   fe78d401ca6b ("General notification queue with user mmap()'able ring buffer")
-> 
-> from the keys tree.
-> 
-> I have added the following merge fix patch for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 12 Dec 2019 13:37:52 +1100
-> Subject: [PATCH] rcu: fix up for "Remove rcu_swap_protected()"
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+--Sig_/Re48kZjn=vaHox2Q=VY6NBy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
+Hi Paul,
 
-I would be happy to take this if desired, but it would probably be better
-for this to be applied directly to the keys tree.  Either way, please let
-me know.
+On Wed, 11 Dec 2019 20:07:37 -0800 "Paul E. McKenney" <paulmck@kernel.org> =
+wrote:
+>
+> On Thu, Dec 12, 2019 at 01:45:16PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the rcu tree, today's linux-next build (x86_64 allmodconf=
+ig)
+> > failed like this:
+> >=20
+> > drivers/misc/watch_queue.c: In function 'watch_queue_set_filter':
+> > drivers/misc/watch_queue.c:526:2: error: implicit declaration of functi=
+on 'rcu_swap_protected' [-Werror=3Dimplicit-function-declaration]
+> >   526 |  rcu_swap_protected(wqueue->filter, wfilter,
+> >       |  ^~~~~~~~~~~~~~~~~~
+> >=20
+> > Caused by commit
+> >=20
+> >   af8c9224182e ("rcu: Remove rcu_swap_protected()")
+> >=20
+> > interacting with commit
+> >=20
+> >   fe78d401ca6b ("General notification queue with user mmap()'able ring =
+buffer")
+> >=20
+> > from the keys tree.
+> >=20
+> > I have added the following merge fix patch for today:
+> >=20
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Thu, 12 Dec 2019 13:37:52 +1100
+> > Subject: [PATCH] rcu: fix up for "Remove rcu_swap_protected()"
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au> =20
+>=20
+> Reviewed-by: Paul E. McKenney <paulmck@kernel.org>
 
-							Thanx, Paul
+Thanks.
 
-> ---
->  drivers/misc/watch_queue.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/misc/watch_queue.c b/drivers/misc/watch_queue.c
-> index b3fc59b4ef6c..a4a77ec977ac 100644
-> --- a/drivers/misc/watch_queue.c
-> +++ b/drivers/misc/watch_queue.c
-> @@ -523,8 +523,8 @@ static long watch_queue_set_filter(struct inode *inode,
->  	kfree(tf);
->  set:
->  	inode_lock(inode);
-> -	rcu_swap_protected(wqueue->filter, wfilter,
-> -			   lockdep_is_held(&inode->i_rwsem));
-> +	wfilter = rcu_replace_pointer(wqueue->filter, wfilter,
-> +				      lockdep_is_held(&inode->i_rwsem));
->  	inode_unlock(inode);
->  	if (wfilter)
->  		kfree_rcu(wfilter, rcu);
-> -- 
-> 2.24.0
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> I would be happy to take this if desired, but it would probably be better
+> for this to be applied directly to the keys tree.  Either way, please let
+> me know.
 
+Well, you can't take this fix up without merging the keys tree ... and
+the keys tree is currently in flux so it should be easy for it to be
+applied there since rcu_replace_pointer() already exists in Linus'
+tree, right?.
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Re48kZjn=vaHox2Q=VY6NBy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3xwWUACgkQAVBC80lX
+0GzCOgf7BbFJvolBAPWDOWrgwhfUfMapwwP5QE3aI7cYu0J2cWjEzbllDe5rgnfe
+3XpBtxZvs6wHs+g3Hnu+VwNY8bX6JzZ3pDsS4f+3vpotS72ZdTnenXM4XLYncb60
+h5AQ0Rzxr7xVxVBPpsdNx09W7zmquL/ZtC5s4+KEt/1d2+bavVByzVXZEZWuQcqY
+79AeTsPjCDX7map9eEqmFK8dsrKQO2w4/i327LmmSQBmalImHwmPtAoFY19C2MNr
+rAvmVLDwVZjMxaH2HumnhNEIs18QI7nEKHOaIABgOMxpwIJ6kyVqAhQ4Lp2PGlE9
+W6g6mMOGDJiXADlh09bMi5gkIjbCCA==
+=tcPR
+-----END PGP SIGNATURE-----
+
+--Sig_/Re48kZjn=vaHox2Q=VY6NBy--

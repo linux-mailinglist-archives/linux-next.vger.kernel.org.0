@@ -2,140 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD64711E00D
-	for <lists+linux-next@lfdr.de>; Fri, 13 Dec 2019 09:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4F511E195
+	for <lists+linux-next@lfdr.de>; Fri, 13 Dec 2019 11:05:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725770AbfLMI7w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Dec 2019 03:59:52 -0500
-Received: from mail-wr1-f54.google.com ([209.85.221.54]:45586 "EHLO
-        mail-wr1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725882AbfLMI7w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Dec 2019 03:59:52 -0500
-Received: by mail-wr1-f54.google.com with SMTP id j42so5716057wrj.12
-        for <linux-next@vger.kernel.org>; Fri, 13 Dec 2019 00:59:50 -0800 (PST)
+        id S1726313AbfLMKFl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Dec 2019 05:05:41 -0500
+Received: from mail-lj1-f194.google.com ([209.85.208.194]:45941 "EHLO
+        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725793AbfLMKFl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Dec 2019 05:05:41 -0500
+Received: by mail-lj1-f194.google.com with SMTP id d20so1947785ljc.12
+        for <linux-next@vger.kernel.org>; Fri, 13 Dec 2019 02:05:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Th+9IfPLl2pKF+sY0jTUPOJ+7ILsyueyEMcb0Lu7Te4=;
-        b=qtD77WMvwBTtRpWCrxpndDcaFA8u6QXHeCweEteuMza4lzA98pB/0xJePdAo5J2A3G
-         pZj5oP5u7/VjFd7uVcSvPclDi24OXwww2E2dloz31T5YO2a+l7+E3gF9Y/UyQd7GbtAp
-         fGreNVVtX8FtpHs33JtYeDi/D+6FLU7qI5BwrLeDQn4cI5UkZjmBmk6lBcrDpfA7slDk
-         uOz8FkXy+zbLmhre69hYr3pObIaWW3matOFZKgzK4cZdG4pnEx3d5iO93HYcnNtjKcQK
-         q7hJlRbJ63QKnhWZTrPe1npZOvspGWN2hFJgfCS5GNLQKZ8SX6T/BusNZRYVEyCCV9SX
-         xyUg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=oghGxm/Txk0ydLM4nCCqz7DnsmQdDf+yHTL2M4IdnQ4=;
+        b=rieWzSbFKmC8n8c1EKomfpWiGNBNZOamuuF/BIH9a6QstQiu6xHzKvkOPMGxW2R5xk
+         /DerBZzH/XnbtYU1ke2XupRADC/0Vsoqo37GYn+Gj0MPr/vK7UOcFrM97kDvIjSH2LVi
+         dUALb7ggGS0+mIOsIp3GELyzxEbUMwcsRtaQjFGEm2UPfFhH54QNN3mldjStaUanzGZi
+         AvZ9ygknSfvCrhEMaU7ntTNie9HXRapIWOYtCsbNFDXuFRM7H425lV+w5GJ0BhNo3NEU
+         qVYteKoU86vXvsm5P/6GB4RclQrKXt2vTTXN0H1j7N9jm1BDBjB97IFkbwzW98F65ErX
+         YmVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Th+9IfPLl2pKF+sY0jTUPOJ+7ILsyueyEMcb0Lu7Te4=;
-        b=TKuifJn1HQlAuMt/1XCuc309CsWSxpw5qslop6wDBpEzIiamAwKyhyazbzmmJ3YDYq
-         TqrXOahV4PF5Jis2q6gr2ZgRi1AQSdinx+y2KYwqeN8wp6wEZj1BSkYHH4KTTzKp7fBz
-         SJhSgY7jk4a6QsPkrE5NQHPoPWgoKlacMAdSMZ4UzCAr2Nsv6uaxogS8Xmaad8BfTlC9
-         mFDmoWV5bkfSD/o2QFuLc0GZDPFNEBZgpKCcxkEAX5ul3V3j3Bid09GSqvRRl1A7EEQ5
-         CXqw0GqaQTJMDNa/QHK2KnDiCQMMuAUFsc3ACu/GNmAFOBg5bS7Qecb//hShX9WNfgGe
-         U+7A==
-X-Gm-Message-State: APjAAAUwyLVi0qziJRBUc6DqkLcCPa1dl9Q5EjvWUE45Vh+7O/JVJHYQ
-        oPZ2vAbiuR6d6U1HRl4tWZpCC7NR3pHVWQ==
-X-Google-Smtp-Source: APXvYqzZnNGqPSD3vArs3SakmjqhX6VWFn0ALBmonNglG9T+LJ+BbKMI6by58fyNuFtwOnHrIsVimQ==
-X-Received: by 2002:a5d:610a:: with SMTP id v10mr7558336wrt.267.1576227589265;
-        Fri, 13 Dec 2019 00:59:49 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id x7sm9090630wrq.41.2019.12.13.00.59.48
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2019 00:59:48 -0800 (PST)
-Message-ID: <5df35304.1c69fb81.4a21b.e325@mx.google.com>
-Date:   Fri, 13 Dec 2019 00:59:48 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=oghGxm/Txk0ydLM4nCCqz7DnsmQdDf+yHTL2M4IdnQ4=;
+        b=hliMejHQnt5ciuxTB77W/72hd9S4rdPIEP0G8dyuKtiyBBC13KG4fjzIMzJ+Lj+8f3
+         uIllTaNjdMe7vX3g6COysIrmR9OLl/kSUe+FqCdZnalh33aoBJYmmmEwfJ3hg3smdtml
+         RvQcLUvZtVIAii873mfe5Evg0e56FaX2vy9AGwxMhZBZrg2t93lOXOMx6HmMOkw7vjzI
+         JYpzSeKLBieZvMfR7evi5Tg6pED6C7qlaMByEBKvlKwqL1uXfmrmwQLuVgWcJp5yIvt4
+         ZDatRyrJ7HnRHlCSxsyl2C/bxcNpYUtMDyeb508q6y7m0k23ciqgqkqQ33iTJ06OC/mK
+         p2wQ==
+X-Gm-Message-State: APjAAAU3qdMD8WKYbpgIzEIb2aKkbAUEY0x3iQxc7fZeJjfArdiEy9YN
+        H68juvT2fUZn+oYPnOPlioOOA97cINuJb8gD7dtP/A==
+X-Google-Smtp-Source: APXvYqwRqbc5Uv+MaUhx8941W65wH+aMUFGZmpuTY3+LqoZli2TemQ+jVAOAjbDZ41EX0OqkMjz9VnJj/mMWpj88iLE=
+X-Received: by 2002:a05:651c:1049:: with SMTP id x9mr8822965ljm.233.1576231538948;
+ Fri, 13 Dec 2019 02:05:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191213
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 209 boots: 8 failed,
- 200 passed with 1 untried/unknown (next-20191213)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <cover.1575514110.git.rahul.tanwar@linux.intel.com> <ba937f271d1a2173828a2325990d62cb36d61595.1575514110.git.rahul.tanwar@linux.intel.com>
+In-Reply-To: <ba937f271d1a2173828a2325990d62cb36d61595.1575514110.git.rahul.tanwar@linux.intel.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Fri, 13 Dec 2019 11:05:27 +0100
+Message-ID: <CACRpkdZnr7JfqTKksOnpTdLq=3g8nfPbeqidJrLu9+cG9ry7Xw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] pinctrl: Modify Kconfig to fix linker error
+To:     Rahul Tanwar <rahul.tanwar@linux.intel.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 209 boots: 8 failed, 200 passed with 1 untried/unknown (n=
-ext-20191213)
+On Thu, Dec 5, 2019 at 4:01 AM Rahul Tanwar
+<rahul.tanwar@linux.intel.com> wrote:
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191213/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191213/
+> Fix below linker error
+>
+>     ld: drivers/pinctrl/pinctrl-equilibrium.o: in function
+>     `pinconf_generic_dt_node_to_map_all':
+>     pinctrl-equilibrium.c:(.text+0xb): undefined reference
+>     to `pinconf_generic_dt_node_to_map'
+>
+> Caused by below commit
+>
+>     1948d5c51dba ("pinctrl: Add pinmux & GPIO controller driver for a new SoC")
+>
+> by adding 'depends on OF' in Kconfig driver entry.
+>
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>>
+> Signed-off-by: Rahul Tanwar <rahul.tanwar@linux.intel.com>
 
-Tree: next
-Branch: master
-Git Describe: next-20191213
-Git Commit: 32b8acf85223448973ca0bf0ee8149a01410f3a0
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 70 unique boards, 19 SoC families, 25 builds out of 214
+Patch applied for fixes, thanks!
 
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20191211)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20191211)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: next-20191212)
-          meson-gxl-s905x-khadas-vim:
-              lab-baylibre: new failure (last pass: next-20191212)
-          r8a7795-salvator-x:
-              lab-baylibre: new failure (last pass: next-20191212)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20191212)
-          r8a7795-salvator-x:
-              lab-baylibre: new failure (last pass: next-20191212)
-
-Boot Failures Detected:
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s905x-khadas-vim: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+Linus Walleij

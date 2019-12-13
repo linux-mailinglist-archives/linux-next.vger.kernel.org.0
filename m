@@ -2,65 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8ED11DBB4
-	for <lists+linux-next@lfdr.de>; Fri, 13 Dec 2019 02:31:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5F011DBD0
+	for <lists+linux-next@lfdr.de>; Fri, 13 Dec 2019 02:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731481AbfLMBbz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Dec 2019 20:31:55 -0500
-Received: from mail.kernel.org ([198.145.29.99]:44872 "EHLO mail.kernel.org"
+        id S1731224AbfLMBtI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Dec 2019 20:49:08 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54933 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727070AbfLMBby (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Dec 2019 20:31:54 -0500
-Received: from paulmck-ThinkPad-P72.home (unknown [199.201.64.130])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727084AbfLMBtI (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Dec 2019 20:49:08 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4EF69206B7;
-        Fri, 13 Dec 2019 01:31:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576200714;
-        bh=34CASTniCaPDj4mjipOQZOhdbDU3h+A6sqXdrXBKDI4=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=PF1MW1H5Me7IakC/MvwcYTzIHaT57QDN4NhNImZAYC9nKSrLZ12Li+wd01ka66pmV
-         7TvCT8L4DIXxkfApdfxFETMp+ms3vEBWHJn4lcC/ypScxGtC07WTdOfu5Pmk9Yo8d7
-         stBuP2wUxEq3DaFompzeH887tu8CWQIwnCL7rdRQ=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id E82AD35227E8; Thu, 12 Dec 2019 17:31:53 -0800 (PST)
-Date:   Thu, 12 Dec 2019 17:31:53 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47Ytr13FGyz9sPT;
+        Fri, 13 Dec 2019 12:49:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576201745;
+        bh=Vq9r75kTrcGQj0IfaZDoNCuocae9mJfyEKqKph3OmCM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=eIp0qYbQU7O8oscmSzM2cqy0xFBNCuzvFG29508QeEtKm5M+qZiXX9raP6CEwjbLq
+         Cdb6zhAof63h9a60IlORsQz/jlIdJrlkvtfOL+pGAIcAlJPX1o68Ii9grbCehJDVco
+         FVWe2fi9G5JEU5OYfyX+/aFL0P5wuWi8fJ8EaUJDY8HHGTm7iGoU0CjhJyU6tEMHAv
+         paXrx/KMScVoNl6WnsNKS/muh/vA9a7VwvsBG3FJSbUudKJdOEUZsofMybgcokqrDt
+         /SPwHAB5yDJkFSI4HIquXrfaNm6FBnckfYJUTmuu7Xtz0iBz9BF05Gl8ZeK7y3972w
+         huitWPCfSWo8A==
+Date:   Fri, 13 Dec 2019 12:49:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Chanwoo Choi <cw00.choi@samsung.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-Subject: Re: linux-next: build warning after merge of the rcu tree
-Message-ID: <20191213013153.GF2889@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20191212160622.021517d3@canb.auug.org.au>
- <20191212060200.GW2889@paulmck-ThinkPad-P72>
- <20191212224050.3ef73e82@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the devfreq tree
+Message-ID: <20191213124904.467443c1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191212224050.3ef73e82@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/d2nyw.a._8NN8zVPn4uY9_E";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Dec 12, 2019 at 10:40:50PM +1100, Stephen Rothwell wrote:
-> Hi Paul,
-> 
-> On Wed, 11 Dec 2019 22:02:00 -0800 "Paul E. McKenney" <paulmck@kernel.org> wrote:
-> >
-> > On Thu, Dec 12, 2019 at 04:06:22PM +1100, Stephen Rothwell wrote:
-> > > 
-> > > x86_64-linux-gnu-gcc (Debian 9.2.1-21) 9.2.1 20191130  
-> > 
-> > I don't see this warning with gcc version 7.4.0.  Just out of curiosity,
-> > what are you running, Stephen?
-> 
-> See above (9.2.1). ;-)
+--Sig_/d2nyw.a._8NN8zVPn4uY9_E
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Color me blind.  :-/
+Hi all,
 
-							Thanx, Paul
+After merging the devfreq tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+ERROR: "__arm_smccc_smc" [drivers/devfreq/rk3399_dmc.ko] undefined!
+
+Caused by commit
+
+  6c877bff8315 ("PM / devfreq: rk3399_dmc: Add COMPILE_TEST dependency")
+
+I reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/d2nyw.a._8NN8zVPn4uY9_E
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3y7hAACgkQAVBC80lX
+0Gy9EAf+P+3ZT3IT/ku+xBAGRaooPdsXiCcJpe14/brCf9ipJEwud8B7SJBEbf+f
+7V5EBfjLt+wzo+Dht52W2t/7lBEgvOcIRyDyFhzIxNBYXRTWtY3yHMl89hIclE3F
+r7bkA1mIsTYj6lmZ7+QgacP77k/w04373dbtO0tIJ1FvJcsCUWxeLQc/5x0OO2On
+nyBxYYQ34Hzt2QosmasEHgh/nQa/K1JW90Q4FE7aOqz2K/hAywsY4E1TIQRPMovG
+XY/ncO0rFxS8ZSwKxivW8r23etLNEFWccj9NdkU2yAz6fhBG4gaG+l83JdDOqmGt
+S2UinyBBrNtCFKoI51JWp7OEhH/ubQ==
+=FJw0
+-----END PGP SIGNATURE-----
+
+--Sig_/d2nyw.a._8NN8zVPn4uY9_E--

@@ -2,229 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C65F11FBA0
-	for <lists+linux-next@lfdr.de>; Sun, 15 Dec 2019 23:03:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A17611FBBB
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2019 00:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726267AbfLOWDv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Dec 2019 17:03:51 -0500
-Received: from ozlabs.org ([203.11.71.1]:60089 "EHLO ozlabs.org"
+        id S1726299AbfLOXFV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Dec 2019 18:05:21 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:50453 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbfLOWDv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Dec 2019 17:03:51 -0500
+        id S1726260AbfLOXFV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Dec 2019 18:05:21 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47bdhf6PTbz9sPW;
-        Mon, 16 Dec 2019 09:03:46 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47bg3f0NzNz9sP6;
+        Mon, 16 Dec 2019 10:05:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576447427;
-        bh=LKOQjoyP/DytLKa5tScoJIiXOC4BgSHniwnQS2sOOw4=;
+        s=201702; t=1576451118;
+        bh=784n75LssZqq0BD3ApIFwrO1v+2m+UVROA25VXJx33c=;
         h=Date:From:To:Cc:Subject:From;
-        b=Y2GvNnd74mbrIdjVwvleyccdLLN72P7Ul47lLnlWHCJgp0YJwHWMoKbQgtWqkR4AL
-         g+gXQbhzXqipsXkySi6M9zZ17pFtCZyQ/ps6tD36zFFJ7PUuEzWRP7IQLRjWO1KIFc
-         AdMbLs5qdxwS7BVCvHTIns3rx0Ipxal2yAeOJpAelz3MvMSlNpIrE4f+B+NMkjx+Os
-         /fEXrbe11Lmbo6BQZMz32+pWEfQGwbx+W3TpBxdQhWSZ3m7CQHxcuH1tCO5R3fb3Sj
-         t/lc598AhhrMufR8jf8NCqTz8uqfA43CNUWURii2UFV+bQApiIpP9iaGFvwdEefn9x
-         QDP+8e5cV7H0w==
-Date:   Mon, 16 Dec 2019 09:03:37 +1100
+        b=EYxQ6HYbpWD7HWKYQfMZ3cbBsxopENyiUXSGZhH4eWyT4jaYDxVi2HwL1nKIgAzFn
+         i8K5iYzU2u7Hyk3/Vb90ZAHGS3Kdy4o1Wze+gxS7khziWLZq5DFGLv1fCCQEdwg1Xc
+         YxuvN2SEulRjXslGODI6jhIU61qIfJtadJ/SnkyDUmBfJF2dCWwvFQOwPKsdZYAANH
+         MEdob+BuIZ/nE4Gol3flCXZZpTN2ErgKY0A5BfUElzOwVQ080SwgtQ5uhXT450koow
+         M3EMaw+eoZsrpYiyecWzYWQbzGRyV7DFRRgC1be+uDHhuu/382gNe+odviKnaDtc92
+         nzRhK3Gk/MYJA==
+Date:   Mon, 16 Dec 2019 10:05:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mars Cheng <mars.cheng@mediatek.com>,
-        Owen Chen <owen.chen@mediatek.com>,
-        Macpaul Lin <macpaul.lin@mediatek.com>
-Subject: linux-next: build failure after merge of the mediatek tree
-Message-ID: <20191216090337.4b4cfb42@canb.auug.org.au>
+        Netanel Belgazal <netanel@amazon.com>,
+        Sameeh Jubran <sameehj@amazon.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20191216100516.22d2d85f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2rdamvqKBDcBqSxPN4w/jiD";
+Content-Type: multipart/signed; boundary="Sig_/kO=0q4ENmladIFze3Wkvczy";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2rdamvqKBDcBqSxPN4w/jiD
+--Sig_/kO=0q4ENmladIFze3Wkvczy
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mediatek tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Today's linux-next merge of the net-next tree got a conflict in:
 
-drivers/soc/mediatek/mtk-scpsys.c:773:4: error: 'const struct scp_domain_da=
-ta' has no member named 'subsys_clk_prefix'
-  773 |   .subsys_clk_prefix =3D "isp",
-      |    ^~~~~~~~~~~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:773:24: warning: initialization of 'unsig=
-ned int' from 'char *' makes integer from pointer without a cast [-Wint-con=
-version]
-  773 |   .subsys_clk_prefix =3D "isp",
-      |                        ^~~~~
-drivers/soc/mediatek/mtk-scpsys.c:773:24: note: (near initialization for 's=
-cp_domain_data_mt6765[3].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:774:4: error: 'const struct scp_domain_da=
-ta' has no member named 'bp_table'
-  774 |   .bp_table =3D {
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:775:4: error: implicit declaration of fun=
-ction 'BUS_PROT' [-Werror=3Dimplicit-function-declaration]
-  775 |    BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:775:13: error: 'IFR_TYPE' undeclared here=
- (not in a function)
-  775 |    BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-      |             ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:777:13: error: 'SMI_TYPE' undeclared here=
- (not in a function)
-  777 |    BUS_PROT(SMI_TYPE, 0x3C4, 0x3C8, 0, 0x3C0,
-      |             ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:787:4: error: 'const struct scp_domain_da=
-ta' has no member named 'basic_clk_id'
-  787 |   .basic_clk_id =3D {"mm"},
-      |    ^~~~~~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:787:3: warning: braces around scalar init=
-ializer
-  787 |   .basic_clk_id =3D {"mm"},
-      |   ^
-drivers/soc/mediatek/mtk-scpsys.c:787:3: note: (near initialization for 'sc=
-p_domain_data_mt6765[1].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:787:20: warning: initialization of 'u32' =
-{aka 'unsigned int'} from 'char *' makes integer from pointer without a cas=
-t [-Wint-conversion]
-  787 |   .basic_clk_id =3D {"mm"},
-      |                    ^~~~
-drivers/soc/mediatek/mtk-scpsys.c:787:20: note: (near initialization for 's=
-cp_domain_data_mt6765[1].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:788:4: error: 'const struct scp_domain_da=
-ta' has no member named 'subsys_clk_prefix'
-  788 |   .subsys_clk_prefix =3D "mm",
-      |    ^~~~~~~~~~~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:788:24: error: cannot initialize array of=
- 'enum clk_id' from a string literal with type array of 'char'
-  788 |   .subsys_clk_prefix =3D "mm",
-      |                        ^~~~
-drivers/soc/mediatek/mtk-scpsys.c:788:24: note: (near initialization for 's=
-cp_domain_data_mt6765[1].clk_id')
-drivers/soc/mediatek/mtk-scpsys.c:789:4: error: 'const struct scp_domain_da=
-ta' has no member named 'bp_table'
-  789 |   .bp_table =3D {
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:789:3: warning: braces around scalar init=
-ializer
-  789 |   .bp_table =3D {
-      |   ^
-drivers/soc/mediatek/mtk-scpsys.c:789:3: note: (near initialization for 'sc=
-p_domain_data_mt6765[1].caps')
-drivers/soc/mediatek/mtk-scpsys.c:792:4: warning: excess elements in scalar=
- initializer
-  792 |    BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:792:4: note: (near initialization for 'sc=
-p_domain_data_mt6765[1].caps')
-drivers/soc/mediatek/mtk-scpsys.c:794:4: warning: excess elements in scalar=
- initializer
-  794 |    BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:794:4: note: (near initialization for 'sc=
-p_domain_data_mt6765[1].caps')
-drivers/soc/mediatek/mtk-scpsys.c:804:4: error: 'const struct scp_domain_da=
-ta' has no member named 'bp_table'
-  804 |   .bp_table =3D {
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:804:3: warning: braces around scalar init=
-ializer
-  804 |   .bp_table =3D {
-      |   ^
-drivers/soc/mediatek/mtk-scpsys.c:804:3: note: (near initialization for 'sc=
-p_domain_data_mt6765[0].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:807:4: warning: excess elements in scalar=
- initializer
-  807 |    BUS_PROT(IFR_TYPE, 0x2A8, 0x2AC, 0, 0x258,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:807:4: note: (near initialization for 'sc=
-p_domain_data_mt6765[0].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:809:4: warning: excess elements in scalar=
- initializer
-  809 |    BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:809:4: note: (near initialization for 'sc=
-p_domain_data_mt6765[0].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:819:4: error: 'const struct scp_domain_da=
-ta' has no member named 'basic_clk_id'
-  819 |   .basic_clk_id =3D {"mfg"},
-      |    ^~~~~~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:819:3: warning: braces around scalar init=
-ializer
-  819 |   .basic_clk_id =3D {"mfg"},
-      |   ^
-drivers/soc/mediatek/mtk-scpsys.c:819:3: note: (near initialization for 'sc=
-p_domain_data_mt6765[2].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:819:20: warning: initialization of 'u32' =
-{aka 'unsigned int'} from 'char *' makes integer from pointer without a cas=
-t [-Wint-conversion]
-  819 |   .basic_clk_id =3D {"mfg"},
-      |                    ^~~~~
-drivers/soc/mediatek/mtk-scpsys.c:819:20: note: (near initialization for 's=
-cp_domain_data_mt6765[2].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:827:4: error: 'const struct scp_domain_da=
-ta' has no member named 'bp_table'
-  827 |   .bp_table =3D {
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:827:3: warning: braces around scalar init=
-ializer
-  827 |   .bp_table =3D {
-      |   ^
-drivers/soc/mediatek/mtk-scpsys.c:827:3: note: (near initialization for 'sc=
-p_domain_data_mt6765[4].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:830:4: warning: excess elements in scalar=
- initializer
-  830 |    BUS_PROT(IFR_TYPE, 0x2A0, 0x2A4, 0, 0x228,
-      |    ^~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:830:4: note: (near initialization for 'sc=
-p_domain_data_mt6765[4].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:840:4: error: 'const struct scp_domain_da=
-ta' has no member named 'subsys_clk_prefix'
-  840 |   .subsys_clk_prefix =3D "cam",
-      |    ^~~~~~~~~~~~~~~~~
-drivers/soc/mediatek/mtk-scpsys.c:840:24: warning: initialization of 'unsig=
-ned int' from 'char *' makes integer from pointer without a cast [-Wint-con=
-version]
-  840 |   .subsys_clk_prefix =3D "cam",
-      |                        ^~~~~
-drivers/soc/mediatek/mtk-scpsys.c:840:24: note: (near initialization for 's=
-cp_domain_data_mt6765[6].bus_prot_mask')
-drivers/soc/mediatek/mtk-scpsys.c:841:4: error: 'const struct scp_domain_da=
-ta' has no member named 'bp_table'
-  841 |   .bp_table =3D {
-      |    ^~~~~~~~
+  drivers/net/ethernet/amazon/ena/ena_netdev.c
 
-Caused by commit
+between commit:
 
-  3742fd77013f ("soc: mediatek: add MT6765 scpsys and subdomain support")
+  24dee0c7478d ("net: ena: fix napi handler misbehavior when the napi budge=
+t is zero")
 
-I have used the mediatek tree from next-20191213 for today.
+from the net tree and commit:
+
+  548c4940b9f1 ("net: ena: Implement XDP_TX action")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/2rdamvqKBDcBqSxPN4w/jiD
+diff --cc drivers/net/ethernet/amazon/ena/ena_netdev.c
+index 948583fdcc28,26954fde4766..000000000000
+--- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
++++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+@@@ -1237,9 -1861,8 +1861,8 @@@ static int ena_io_poll(struct napi_stru
+  {
+  	struct ena_napi *ena_napi =3D container_of(napi, struct ena_napi, napi);
+  	struct ena_ring *tx_ring, *rx_ring;
+-=20
+ -	u32 tx_work_done;
+ -	u32 rx_work_done;
+ +	int tx_work_done;
+ +	int rx_work_done =3D 0;
+  	int tx_budget;
+  	int napi_comp_call =3D 0;
+  	int ret;
+
+--Sig_/kO=0q4ENmladIFze3Wkvczy
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl32rbkACgkQAVBC80lX
-0GyYJggAobtbP+e+RQMr+snhsxsaJfFeBH/qaT/4329nxAD7LvUVDxSfx7EshPnj
-1Jqu7RZDLD5s/q/zuO5UDGzjAkl12W2LUVLuC8rJwxSudzMFsJqH1iKanlAdJ1QW
-gxnuYcCrF+rna2jnFwQykrHqf8KddKr73+nzXpiZ4qgk0vlnfs2Oh5L6PGUvuBSM
-IstKR5284NKoqQkr80JvGjYPLQKfkraldwDgXChWkM9qsO+tV1BXS3aChOk5X5RW
-DDv+3Tu7bwNWBbYxOaoIGg8KFWr13oYUHYW9hlZ6dyoO+XIPTVkirWyYYHDf0Tui
-lFa19+h7Wo+toATEAaot+fL4wYBl9g==
-=ODgc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl32vCwACgkQAVBC80lX
+0GzjWgf/fhKAC7ROSD+Ay7jyW01YhtFCfStpWnu2JvaxGC32ZACZbK+DMxnhQuqR
+UnvHWnzfq8qnUHZp3Jw8DmseaXc/Z0RU3wK3VyojTL8exsnAjW8DNYQ6SkpM7wNW
+uFTD1qF1VSax5cuLhh4QX0876qwbECeA3gqiP8vM7t15jvbGtTmvGUeEa4S1DxsZ
+U2ZNoXrpdmEk9FZrmcTn1OmOIlgpn/pKfA6uwERgWHcOX9lOEI1k6mo5Xe+JXAQT
+vqq+1BIcgR2XBa6SRiwoDFEEPuQlJUtomQ11CpM4ShyZNN9nGACEW1sLJJBXFq4B
+1329RiHXQQwyxKo+ohPFahwtiffS/Q==
+=SXQM
 -----END PGP SIGNATURE-----
 
---Sig_/2rdamvqKBDcBqSxPN4w/jiD--
+--Sig_/kO=0q4ENmladIFze3Wkvczy--

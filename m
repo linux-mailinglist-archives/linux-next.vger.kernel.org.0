@@ -2,130 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A41C11FC5B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2019 01:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF24E11FC87
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2019 02:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfLPAvs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Dec 2019 19:51:48 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:40257 "EHLO ozlabs.org"
+        id S1726426AbfLPBXi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Dec 2019 20:23:38 -0500
+Received: from ozlabs.org ([203.11.71.1]:50125 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726299AbfLPAvs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Dec 2019 19:51:48 -0500
+        id S1726299AbfLPBXh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Dec 2019 20:23:37 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47bjQT4Mwwz9sNH;
-        Mon, 16 Dec 2019 11:51:45 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47bk784hz8z9sP6;
+        Mon, 16 Dec 2019 12:23:32 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576457505;
-        bh=barIgZhfjdNaSR9zBtj2KFrVq4xY0e5qWMY9AxtpYqY=;
+        s=201702; t=1576459414;
+        bh=bFoEp0Oze1uoHC2r3Fp1CEYcJF/UHb71fRXsGtfYZIY=;
         h=Date:From:To:Cc:Subject:From;
-        b=MpW1QRXKX9RFkxvglPSI06kUY0h7nF2FWLtfVi+zJRuT59YycQjQMDeDVqRqirLxx
-         bM3mlmsh7UzanCbbuptc6EW+cth9WbS1NvNVYtQkfrbhaAjL1RE4qveSiuFqEQnhMe
-         rLbs5byUaRmdIgJWpHOnsdtryYahmNIYoAR5LMnT3bttY/PTqdxHybnXrdsQDSz7QN
-         06wER/JDj8sthx2goX1f3vg6UXxmz100jNT26hfQkTEW6VJtfEGGllEjk5xvhkJaR+
-         NDd31o4Qcj1flI/zZOtwtI2akvvKb7dChFVPCJkl30VJAWkUAE1prO5xc4agnenNZg
-         QLF/ZT8KKtTcQ==
-Date:   Mon, 16 Dec 2019 11:51:45 +1100
+        b=isCPi/8AXANwUAv7CIHOP3YyUqe1M13CxS7FNwVn5LSnOYxaShAHu6U4KV7L8BEiI
+         kCBNwYRS40ivvFQUmwcR7LZjzhhddVeBBkJaPj1MkaMBsBgoGVDQwvqOwxNW6G96x/
+         0+LbVYrLtZhQo12LRpH75E0gr4AkkwSfufYRTZjnL1KceqqeJ11wUU82rC+vaKg32Q
+         3KyGMKSI0kfWHS4dz62eEMLjq15DkSfKyOWtklUXKi44Ng1u2FmxDh/V3xrHIiNnC8
+         4C6DjdvGRFSa27gZ1U9G2vVNi7pLyVNp2L0QmhRfYIRxqQn8zBilHXJhk19SZxz36s
+         Zbp884+wsJXZA==
+Date:   Mon, 16 Dec 2019 12:23:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
         Intel Graphics <intel-gfx@lists.freedesktop.org>,
         DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Lyude Paul <lyude@redhat.com>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20191216115145.4f5cc123@canb.auug.org.au>
+        Icenowy Zheng <icenowy@aosc.io>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Subject: linux-next: build failure after merge of the drm-misc tree
+Message-ID: <20191216122331.43c766f1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/frIcPPG8WbhjeYa/mWDsggn";
+Content-Type: multipart/signed; boundary="Sig_/zeyYGkAXi=.XMxUHhTLcnmI";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/frIcPPG8WbhjeYa/mWDsggn
+--Sig_/zeyYGkAXi=.XMxUHhTLcnmI
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-misc tree got a conflict in:
+After merging the drm-misc tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  include/drm/drm_dp_mst_helper.h
+drivers/gpu/drm/bridge/analogix/analogix-anx6345.c: In function 'anx6345_i2=
+c_probe':
+drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:30: error: implicit =
+declaration of function 'i2c_new_dummy' [-Werror=3Dimplicit-function-declar=
+ation]
+  738 |    anx6345->i2c_clients[i] =3D i2c_new_dummy(client->adapter,
+      |                              ^~~~~~~~~~~~~
+drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:28: warning: assignm=
+ent to 'struct i2c_client *' from 'int' makes pointer from integer without =
+a cast [-Wint-conversion]
+  738 |    anx6345->i2c_clients[i] =3D i2c_new_dummy(client->adapter,
+      |                            ^
 
-between commit:
+Caused by commit
 
-  14692a3637d4 ("drm/dp_mst: Add probe_lock")
+  6aa192698089 ("drm/bridge: Add Analogix anx6345 support")
 
-from the Linus' tree and commit:
+interacting with commit
 
-  f79489074c59 ("drm/dp_mst: Clear all payload id tables downstream when in=
-itializing")
+  2c2f00ab1641 ("i2c: remove i2c_new_dummy() API")
 
-from the drm-misc tree.
+=46rom Linus' tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have applied the following fix up patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 16 Dec 2019 12:11:19 +1100
+Subject: [PATCH] drm/bridge: fix up for removal of i2c_new_dummy()
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/bridge/analogix/analogix-anx6345.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c b/drivers/g=
+pu/drm/bridge/analogix/analogix-anx6345.c
+index 9917ce0d86a0..56f55c53abfd 100644
+--- a/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c
++++ b/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c
+@@ -735,13 +735,13 @@ static int anx6345_i2c_probe(struct i2c_client *clien=
+t,
+ 	/* Map slave addresses of ANX6345 */
+ 	for (i =3D 0; i < I2C_NUM_ADDRESSES; i++) {
+ 		if (anx6345_i2c_addresses[i] >> 1 !=3D client->addr)
+-			anx6345->i2c_clients[i] =3D i2c_new_dummy(client->adapter,
++			anx6345->i2c_clients[i] =3D i2c_new_dummy_device(client->adapter,
+ 						anx6345_i2c_addresses[i] >> 1);
+ 		else
+ 			anx6345->i2c_clients[i] =3D client;
+=20
+-		if (!anx6345->i2c_clients[i]) {
+-			err =3D -ENOMEM;
++		if (IS_ERR(anx6345->i2c_clients[i])) {
++			err =3D PTR_ERR(anx6345->i2c_clients[i]);
+ 			DRM_ERROR("Failed to reserve I2C bus %02x\n",
+ 				  anx6345_i2c_addresses[i]);
+ 			goto err_unregister_i2c;
+--=20
+2.24.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc include/drm/drm_dp_mst_helper.h
-index d5fc90b30487,a448d701dc7e..000000000000
---- a/include/drm/drm_dp_mst_helper.h
-+++ b/include/drm/drm_dp_mst_helper.h
-@@@ -565,18 -495,18 +566,25 @@@ struct drm_dp_mst_topology_mgr=20
-  	 */
-  	struct mutex lock;
- =20
- +	/**
- +	 * @probe_lock: Prevents @work and @up_req_work, the only writers of
- +	 * &drm_dp_mst_port.mstb and &drm_dp_mst_branch.ports, from racing
- +	 * while they update the topology.
- +	 */
- +	struct mutex probe_lock;
- +
-  	/**
-- 	 * @mst_state: If this manager is enabled for an MST capable port. False
-- 	 * if no MST sink/branch devices is connected.
-+ 	 * @mst_state: If this manager is enabled for an MST capable port.
-+ 	 * False if no MST sink/branch devices is connected.
-  	 */
-- 	bool mst_state;
-+ 	bool mst_state : 1;
-+=20
-+ 	/**
-+ 	 * @payload_id_table_cleared: Whether or not we've cleared the payload
-+ 	 * ID table for @mst_primary. Protected by @lock.
-+ 	 */
-+ 	bool payload_id_table_cleared : 1;
-+=20
-  	/**
-  	 * @mst_primary: Pointer to the primary/first branch device.
-  	 */
-
---Sig_/frIcPPG8WbhjeYa/mWDsggn
+--Sig_/zeyYGkAXi=.XMxUHhTLcnmI
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl321SEACgkQAVBC80lX
-0GxkGggAlbCXpG7jCrvVDB2pJnRYmmHYGa9snqllJr3avUva39HJgOEHVcZKjNou
-zbOWU2JW9iWxm7n5ar3bFomH+r3/tE1T1/KmxTKF+PmFSKAzptMyeJ4MM8D+iZb7
-cyu3+jG0bOouRrwNrdGV5UD4WHig9KR67geBY6a6iIheMk9J3j+ngR0obs9D89iZ
-9A08yTnaYEdqjwnBgQLF85N3PCdygZ01FGjXypM98yxGtDQhCbVV78ybJBJGJR97
-eZB3CNimqXjU5ExSnd6/sEifeF+6jxnzv5B+S2nChf6nUdMSvSegXGFhktIKg18W
-TC4XZ+bFPFiCQj+tEgpqk/WsqCybOA==
-=3+Ni
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl323JMACgkQAVBC80lX
+0GxN4QgAj7cSKYl22karaXz89XosCJqL4gvGd9bkeZ5Xb+s0IxEa+wWqHBlypzSK
+CgwKRM52IvdDillgu4OrUswwU3uOnGVwpDzhaAEPud2MlVHwW8FUVpVWXMS/R0T9
+ioq2BZghynAVV4bk7BtJbqGT4/NWyLOLqMNRJc87ab314NQ/ndHVhND9dRRnarka
+iDuQJA9LeT8a2nAVjK7h3eaX2kwBVOARZuOY5nODMeRyKzaYyWo4RVn4B5bCR+gY
+wBugDDotCKnOgI3ZwdLySA9A5cPbySMuIXK5d30QDptp6vH0YzbI8nFc+/S7XFQm
+RnTk93uuVVln84h0daNEeovw8VE/nQ==
+=ycV+
 -----END PGP SIGNATURE-----
 
---Sig_/frIcPPG8WbhjeYa/mWDsggn--
+--Sig_/zeyYGkAXi=.XMxUHhTLcnmI--

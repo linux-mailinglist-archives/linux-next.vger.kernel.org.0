@@ -2,110 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D55711FCF4
-	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2019 03:44:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E02B511FD55
+	for <lists+linux-next@lfdr.de>; Mon, 16 Dec 2019 04:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726437AbfLPCoF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Dec 2019 21:44:05 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39169 "EHLO ozlabs.org"
+        id S1726551AbfLPDtp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Dec 2019 22:49:45 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37811 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726373AbfLPCoF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Dec 2019 21:44:05 -0500
+        id S1726528AbfLPDtp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Dec 2019 22:49:45 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47blvz1Pzrz9sPT;
-        Mon, 16 Dec 2019 13:43:58 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47bnMp6YNBz9sNH;
+        Mon, 16 Dec 2019 14:49:42 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576464242;
-        bh=mwTmF/orU3wxOqHiDxX05Eq3VuWMUDRQgKa8U4iZlQI=;
+        s=201702; t=1576468182;
+        bh=sGY2O5X36neo/pFKW9IY4SqpPcrhzO+xMhavweaplXs=;
         h=Date:From:To:Cc:Subject:From;
-        b=FO1+7e5pfrfo+AVb6t3W/8NFRt5uxz8q4eejd0i/rKl3STvTdmk1TqqL4rm6c9wSt
-         A2ADMgHrv5Q05wq7veDmkH9YZh0fLv1Fddqo1FWywsmSK3cqD0hne3rQwGZfAOMGDe
-         ZRwlqDoxAtP4gSsfmLtOa6dYpPGM55FbX1wJdzWcv9jQcO3spyoV4ebLcxL7lmoKZ0
-         OoZpXmfSRQIiz7yHdIB8/eqL0twjCpGnOpBAd2QnMjoeW1/37Kteu91+uRwWIg2ID8
-         KuVgmkjOCFOs8tUOzd8YG1ubQWmvWTHAiHQdV7ucBMaS2sZ9UaEA9s8wL2fxrm4faT
-         toUt162y+tECQ==
-Date:   Mon, 16 Dec 2019 13:43:51 +1100
+        b=BAnyBqYl/Zc2/w5BibKGylYV7tjX0Nfhe5lQ3YfKqEaehrhPinDzdC98s4OWMfjqg
+         3D8tdchKogVMBZp23RIr0qE5Fn5W6yXiNBO5Nq3bCR/7+w8qzm7feSb3lWnyd9goHV
+         IuKbxHLZTIRFmy8AzJjAPWFdWI/s1aWakTPj3JSFvCBm2UN3CdxVCl3lf/cfUf86/Y
+         4w8JYuLp2DW8SveWwlUqzoTnXpUUyicGUq8Wep3HXoXwD2do9O4f1lLeIf8BPtBDEM
+         x1wmCDApAHZXNyllNC6MLDyn04VoEexs2fjCUcyrDix4Dy7eYmCSFLPx/0VPHVea6G
+         MBPSSeku1rTpQ==
+Date:   Mon, 16 Dec 2019 14:49:40 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     "Michael S. Tsirkin" <mst@redhat.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20191216134351.7bc39894@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the vhost tree
+Message-ID: <20191216144940.014b2aa7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/GYZsxuoQ/5fTlkH+PtsGgc9";
+Content-Type: multipart/signed; boundary="Sig_/DgP2aYm5g_4k1KpVKlxNJKD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/GYZsxuoQ/5fTlkH+PtsGgc9
+--Sig_/DgP2aYm5g_4k1KpVKlxNJKD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+After merging the vhost tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-  init/main.c
+In file included from include/linux/list.h:9,
+                 from include/linux/preempt.h:11,
+                 from include/linux/spinlock.h:51,
+                 from include/linux/seqlock.h:36,
+                 from include/linux/time.h:6,
+                 from include/linux/stat.h:19,
+                 from include/linux/fcntl.h:5,
+                 from include/linux/eventfd.h:12,
+                 from drivers/vhost/vhost.c:13:
+drivers/vhost/vhost.c: In function 'vhost_log_write':
+include/linux/kernel.h:844:29: warning: comparison of distinct pointer type=
+s lacks a cast
+  844 |   (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
+      |                             ^~
+include/linux/kernel.h:858:4: note: in expansion of macro '__typecheck'
+  858 |   (__typecheck(x, y) && __no_side_effects(x, y))
+      |    ^~~~~~~~~~~
+include/linux/kernel.h:868:24: note: in expansion of macro '__safe_cmp'
+  868 |  __builtin_choose_expr(__safe_cmp(x, y), \
+      |                        ^~~~~~~~~~
+include/linux/kernel.h:877:19: note: in expansion of macro '__careful_cmp'
+  877 | #define min(x, y) __careful_cmp(x, y, <)
+      |                   ^~~~~~~~~~~~~
+drivers/vhost/vhost.c:1968:11: note: in expansion of macro 'min'
+ 1968 |   u64 l =3D min(log[i].len, len);
+      |           ^~~
 
-between commit:
+Introduced by commit
 
-  8243186f0cc7 ("fs: remove ksys_dup()")
+  b072ae74df17 ("vhost: use vhost_desc instead of vhost_log")
 
-from Linus' tree and commit:
-
-  dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+vhost_log::len was u64 and vhost_desc::len is u32 and len is u64.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc init/main.c
-index ec3a1463ac69,4d814de017ee..000000000000
---- a/init/main.c
-+++ b/init/main.c
-@@@ -93,7 -93,7 +93,8 @@@
-  #include <linux/rodata_test.h>
-  #include <linux/jump_label.h>
-  #include <linux/mem_encrypt.h>
- +#include <linux/file.h>
-+ #include <linux/kcsan.h>
- =20
-  #include <asm/io.h>
-  #include <asm/bugs.h>
-
---Sig_/GYZsxuoQ/5fTlkH+PtsGgc9
+--Sig_/DgP2aYm5g_4k1KpVKlxNJKD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl3272cACgkQAVBC80lX
-0GxVXAgAnBPo2cbQuIIqPQNNrG6l9AI1VsFD//t2mLp56qVdMSwyVY+GRMrHa0nc
-BEe7AabmwJHw/dbZ/4EFYTl3XjEB9W1ydbgdKeASSh//vawMHgAUaRmlUgfHWYLK
-33f7WxAon5Ybn0lDm54XMarJNEFcu5i/hrAm4fA9eBg6FzyRdg3rG7hu8f/JBvU4
-11BUWluPlg4sPrTS71tZLuqI2mkKWIryIHM5GsTq96yNujY3g9Pedve3anahAXGd
-JQMMN7kqsD6OY1qSZWIrIBRxx55YGBO0q6yskVZzZ8yUBkl8XjS14sPLImhRJe4C
-+DOejq439Cd9aWPpvcFiCw5QYWE90A==
-=Ti2i
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl32/tQACgkQAVBC80lX
+0GzSTgf/fv3oiHyqKm8C+KlTzVdPvKLVelaoOXntLLd7iCskm/bWaoad244zCsh1
+A34x01gnoasKR2Avl+0Yzk1+CAQPUD+zJzEzx/fUTecOSRssol5LMCiIauYpPeUV
+80miYjRdw8Cr+Mpe9zDVnDWBt8iO+07ih15YeVwJGTrKLn85lFP9XkgkPDlFchek
+WPEINaTQTQc/AJMVENiTgNIYR3nildCowWWb5+F/utF6FZBq4iQMc8e1E4E0U9he
+t3l/ztP050bY08+8zZVYLROIC4lCZN+Q/vhLpQD5YPB/aImiFWSKgnMHsA6MPP6e
+9izjmwsTZhfuVkS5Lm+ZTtW9xOJdBQ==
+=lTry
 -----END PGP SIGNATURE-----
 
---Sig_/GYZsxuoQ/5fTlkH+PtsGgc9--
+--Sig_/DgP2aYm5g_4k1KpVKlxNJKD--

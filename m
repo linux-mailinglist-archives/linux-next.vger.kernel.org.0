@@ -2,104 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E6943122E08
-	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 15:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A75C5123037
+	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 16:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728722AbfLQOH1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Dec 2019 09:07:27 -0500
-Received: from mga12.intel.com ([192.55.52.136]:36812 "EHLO mga12.intel.com"
+        id S1727897AbfLQPZP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Dec 2019 10:25:15 -0500
+Received: from mx2.suse.de ([195.135.220.15]:42974 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728824AbfLQOH0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Dec 2019 09:07:26 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 17 Dec 2019 06:07:26 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.69,325,1571727600"; 
-   d="scan'208";a="212583235"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga008.fm.intel.com with ESMTP; 17 Dec 2019 06:07:23 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 51FE112A; Tue, 17 Dec 2019 16:07:22 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
+        id S1727723AbfLQPZP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Dec 2019 10:25:15 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 42562AC5F;
+        Tue, 17 Dec 2019 15:25:13 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 6F254DA81D; Tue, 17 Dec 2019 16:25:11 +0100 (CET)
+Date:   Tue, 17 Dec 2019 16:25:11 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH v1 1/1] drm/drm_panel: Fix EXPORT of drm_panel_of_backlight() one more time
-Date:   Tue, 17 Dec 2019 16:07:21 +0200
-Message-Id: <20191217140721.42432-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.24.0
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs <linux-btrfs@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
+Message-ID: <20191217152511.GG3929@suse.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Randy Dunlap <rdunlap@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs <linux-btrfs@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
+ <20191211134929.GL3929@twin.jikos.cz>
+ <c751bc1a-505c-5050-3c4c-c83be81b4e48@infradead.org>
+ <20191212184725.db3ost7rcopotr5u@treble>
+ <b9b0c81b-0ca8-dfb7-958f-cd58a449b6fb@infradead.org>
+ <ba2a7a9b-933b-d4e4-8970-85b6c1291fca@infradead.org>
+ <20191213235054.6k2lcnwa63r26zwi@treble>
+ <c6a33c21-3e71-ac98-cc95-db008764917c@infradead.org>
+ <20191214054515.ougsr5ykhl3vvy57@treble>
+ <fe1e0318-9b74-7ae0-07bd-d7a6c908e79a@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <fe1e0318-9b74-7ae0-07bd-d7a6c908e79a@infradead.org>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The initial commit followed by the fix didn't take into consideration the case
+On Fri, Dec 13, 2019 at 11:05:18PM -0800, Randy Dunlap wrote:
+> OK, that fixes most of them, but still leaves these 2:
+> 
+> btrfs006.out:fs/btrfs/extent_io.o: warning: objtool: __set_extent_bit()+0x536: unreachable instruction
 
-CONFIG_DRM_PANEL=y
-CONFIG_BACKLIGHT_CLASS_DEVICE=m
-CONFIG_DRM_I915=y
+Hard to read from the assembly what C statement is it referring to. I
+think there are also several functions inlined, I don't see anything
+suspicious inside __set_extent_bit itself.
 
-where symbol devm_of_find_backlight() is not reachable from DRM subsystem.
-Quick fix is to avoid drm_panel_of_backlight() from exporting in such case.
+> btrfs006.out:fs/btrfs/relocation.o: warning: objtool: add_tree_block()+0x501: unreachable instruction
 
-Fixes: 907aa265fde6 ("drm/drm_panel: fix EXPORT of drm_panel_of_backlight")
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>
-Cc: Sam Ravnborg <sam@ravnborg.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Thierry Reding <thierry.reding@gmail.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Sean Paul <sean@poorly.run>
-Cc: David Airlie <airlied@linux.ie>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/gpu/drm/drm_panel.c | 2 +-
- include/drm/drm_panel.h     | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Probably also heavily inlined, the function has like 50 lines, a few
+non-trivial function calls but the offset in the warning suggests a
+larger size.
 
-diff --git a/drivers/gpu/drm/drm_panel.c b/drivers/gpu/drm/drm_panel.c
-index 79ff3fdf6f6e..8c7bac85a793 100644
---- a/drivers/gpu/drm/drm_panel.c
-+++ b/drivers/gpu/drm/drm_panel.c
-@@ -302,7 +302,7 @@ struct drm_panel *of_drm_find_panel(const struct device_node *np)
- EXPORT_SYMBOL(of_drm_find_panel);
- #endif
- 
--#if IS_ENABLED(CONFIG_BACKLIGHT_CLASS_DEVICE)
-+#if IS_REACHABLE(CONFIG_BACKLIGHT_CLASS_DEVICE)
- /**
-  * drm_panel_of_backlight - use backlight device node for backlight
-  * @panel: DRM panel
-diff --git a/include/drm/drm_panel.h b/include/drm/drm_panel.h
-index 5f27b693e1a0..121f7aabccd1 100644
---- a/include/drm/drm_panel.h
-+++ b/include/drm/drm_panel.h
-@@ -198,7 +198,7 @@ static inline struct drm_panel *of_drm_find_panel(const struct device_node *np)
- }
- #endif
- 
--#if IS_ENABLED(CONFIG_BACKLIGHT_CLASS_DEVICE)
-+#if IS_REACHABLE(CONFIG_BACKLIGHT_CLASS_DEVICE)
- int drm_panel_of_backlight(struct drm_panel *panel);
- #else
- static inline int drm_panel_of_backlight(struct drm_panel *panel)
--- 
-2.24.0
+While browsing the callees I noticed that both have in common a function
+that is supposed to print and stop at fatal errors. They're
+extent_io_tree_panic (extent_io.c) and backref_tree_panic
+(relocation.c). Both call btrfs_panic which is a macro:
 
+3239 #define btrfs_panic(fs_info, errno, fmt, args...)                       \
+3240 do {                                                                    \
+3241         __btrfs_panic(fs_info, __func__, __LINE__, errno, fmt, ##args); \
+3242         BUG();                                                          \
+3243 } while (0)
+
+There are no conditionals and BUG has the __noreturn annotation
+(unreachable()) so all is in place and I don't have better ideas what's
+causing the reports.

@@ -2,93 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 805AD123A15
-	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 23:32:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E41123ABC
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 00:23:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbfLQWcd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Dec 2019 17:32:33 -0500
-Received: from mail-io1-f65.google.com ([209.85.166.65]:46194 "EHLO
-        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725812AbfLQWcd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 17:32:33 -0500
-Received: by mail-io1-f65.google.com with SMTP id t26so12469542ioi.13
-        for <linux-next@vger.kernel.org>; Tue, 17 Dec 2019 14:32:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=AJQ4yXr3qoN1hjhKWDArRNAmY71wLud1xFR7+oVugag=;
-        b=bGYprhIf7VAF7FbABnwsBkjZS69HNuxahvqi+4yEZJHTiTR0ck5kTtCUo+IudDDTj0
-         F7ES6NN4/BarX1cB2hkW1/fYj2St16xZ0F9x40Nr03+UEIcLzIKTUJRMCH24S1W2579e
-         FJIee4qsQlJ3aGaHJ6uR3+Cn5/tL4Uxpj08zk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=AJQ4yXr3qoN1hjhKWDArRNAmY71wLud1xFR7+oVugag=;
-        b=BQ7V8ugxrxrfCn9VClb3g6mBOnkRTp15BlmkJGO6sChW6CMrN/Kza3hnLbOppX3hp4
-         r/y1jxuFRFYEDBC8BEF+Pk0rUSysHHEMWTXdV8MV8JrLCGDqTDuRfm16SZTjk2DbqbF6
-         vPi/GK7I9gBsOSrQLoLF0rNbZoPd08XCVi5hzcy7U3KVps28Nw5i/SR/FTaF/l2y93kX
-         XwCqUWhXLsziM9OVYC0fnZPlew3vgseNk1IKnHAcHyZhmrIJblB65bR7vSOhIwtQNx/g
-         9QusOK/Y7leGinYTvSeKT/2m0TOZS6Ey7i+i+IMx50F2X4VNICWn3xxiWaQ6GkFNU9UG
-         70Rg==
-X-Gm-Message-State: APjAAAUWWvMADbFmJOSVQnzN9vGiD5HFD40XjOm5ciy1OuG/7qFOr8S8
-        PkKQTjdRdHNvvKi6ZK/tU5YNjg==
-X-Google-Smtp-Source: APXvYqwxtlJDvIRvLOaDSKh5H+3y0sEBWIYtFfOQdlnZymy1S4DH63apXdGN3RLUES7HOOQLsxWCcw==
-X-Received: by 2002:a6b:3941:: with SMTP id g62mr124158ioa.195.1576621952724;
-        Tue, 17 Dec 2019 14:32:32 -0800 (PST)
-Received: from [192.168.1.112] (c-24-9-64-241.hsd1.co.comcast.net. [24.9.64.241])
-        by smtp.gmail.com with ESMTPSA id 81sm27134ilx.40.2019.12.17.14.32.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2019 14:32:31 -0800 (PST)
-Subject: Re: Request to add linux-kselftest kunit branch
+        id S1726143AbfLQXXF convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 17 Dec 2019 18:23:05 -0500
+Received: from muru.com ([72.249.23.125]:49072 "EHLO muru.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725940AbfLQXXF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Dec 2019 18:23:05 -0500
+Received: from atomide.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id A89FC8116;
+        Tue, 17 Dec 2019 23:23:44 +0000 (UTC)
+Date:   Tue, 17 Dec 2019 15:23:02 -0800
+From:   Tony Lindgren <tony@atomide.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        "skh >> Shuah Khan" <skhan@linuxfoundation.org>
-References: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
- <20191218070732.18b35b17@canb.auug.org.au>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <99badaa1-276c-f110-f6b9-7f518972eaab@linuxfoundation.org>
-Date:   Tue, 17 Dec 2019 15:32:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>
+Subject: Re: linux-next: Fixes tag needs some work in the omap-fixes tree
+Message-ID: <20191217232302.GF35479@atomide.com>
+References: <20191218071348.024f73e4@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20191218070732.18b35b17@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+In-Reply-To: <20191218071348.024f73e4@canb.auug.org.au>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/17/19 1:07 PM, Stephen Rothwell wrote:
-> Hi Shuah,
+* Stephen Rothwell <sfr@canb.auug.org.au> [191217 20:53]:
+> Hi all,
 > 
-> On Tue, 17 Dec 2019 11:21:18 -0700 Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> Please add the following linux-kselftest kunit branch to linux-next.
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/log/?h=kunit
->>
->> Please include Brendan Higgins on the CC list for any issues on
->> this branch.
+> In commit
 > 
-> I already have this included as the kunit tree:
+>   d094e1b4b232 ("ARM: dts: am571x-idk: Fix gpios property to have the correct  gpio number")
 > 
-> branch test of
-> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+> Fixes tag
 > 
+>   Fixes: d23f3839fe97d8dce03d ("ARM: dts: DRA7: Add pcie1 dt node for
+> 
+> has these problem(s):
+> 
+>   - Subject has leading but no trailing parentheses
+>   - Subject has leading but no trailing quotes
+> 
+> Please do not break FIxes tags over more that one line.  Also, keep all
+> the tags together at the end of the commit message.
 
-Hi Stephen,
+Thanks will fix up.
 
-Yes. I am going towards a clear naming convention for kunit than
-ambiguous test. I would leave test branch in there as well for
-general test patches.
+Tony
 
-Hope this makes sense.
-
-thanks,
--- Shuah

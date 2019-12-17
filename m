@@ -2,95 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B51911224C3
-	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 07:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F24122510
+	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 07:55:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbfLQGhp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Dec 2019 01:37:45 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:36284 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726699AbfLQGhp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 01:37:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=C4prl5hgq8EyxMDzUKjiRjIgpSu8ZtR82zxGAFc4PYg=; b=tkxGlDIGnZdsoAldXhYWgXCMO
-        0+xpZfW5WDybgWcngKS+cgdvSj70cQI+WfNeYS+nbNbcAgwOmEvWNXpZLJz45VCLKFlqOtrt4oGf2
-        LnD5ZOeYg0yGEcgnz1a8iJOENVz/3QAqtI4bDjulzUIl/9EoJt296ph/GhWSxsu5qPsnUtALWhmam
-        iGYvSyeAaP8pgSJdE16QjC5LUo2V0v4+a6MoyXFqXjO9604CeBH05JRjeaMMg8txZfO0M7USGOPcU
-        xmfez8M1M31DOnbtK8LE5eDxgwPtVtN74+/gW3jgZUN9MtoU0h8Usvyx9C6YQ3k4tiQMfHg3oQ40a
-        x4pZ8Hqsw==;
-Received: from [2601:1c0:6280:3f0::fee9]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ih6UI-0002pz-LT; Tue, 17 Dec 2019 06:37:42 +0000
-Subject: Re: linux-next: Tree for Dec 16 (drm_panel & intel_panel)
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        intel-gfx <intel-gfx@lists.freedesktop.org>
-References: <20191216162209.5b5256dd@canb.auug.org.au>
- <d92bec2a-62cb-004e-7f8c-01fc12a53a74@infradead.org>
- <20191217054255.GA26868@ravnborg.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <65c9dc7b-3c61-8204-07da-212632732791@infradead.org>
-Date:   Mon, 16 Dec 2019 22:37:41 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
-MIME-Version: 1.0
-In-Reply-To: <20191217054255.GA26868@ravnborg.org>
-Content-Type: text/plain; charset=utf-8
+        id S1726767AbfLQGzU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Dec 2019 01:55:20 -0500
+Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:37728 "EHLO
+        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726167AbfLQGzU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 01:55:20 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1576565719; x=1608101719;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=T9K3lKhMfSN5B7d68XGv/PcvnlA/60URcRUENSGixLQ=;
+  b=PK58Xwfjmo6NIrN7BymuOHoq3as4F7hlZDQ+97/mrsmi4ytpXWO3elwz
+   BoKBnMNBDC5xEleyrfups1FGvKB5QOtxz+xoO04JLp6cwgqvCG6OIdaW5
+   R2vmu2bz2BRudg77mGhoYaHRaZQOazGoQkN8zIZ9G5ncQ2Tov25QUWvTE
+   E=;
+IronPort-SDR: rNnwRIUsCfyGZDs3c0A73mBnWIKyIxTRSURqOA14JXu1aDa5YpMgUeJ8O5Xegn4At2JfEXTgKr
+ Ng2MSyrGZnAw==
+X-IronPort-AV: E=Sophos;i="5.69,324,1571702400"; 
+   d="scan'208";a="13948926"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2c-168cbb73.us-west-2.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 17 Dec 2019 06:55:07 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
+        by email-inbound-relay-2c-168cbb73.us-west-2.amazon.com (Postfix) with ESMTPS id 82AE6A2373;
+        Tue, 17 Dec 2019 06:55:07 +0000 (UTC)
+Received: from EX13D06EUC002.ant.amazon.com (10.43.164.186) by
+ EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1236.3; Tue, 17 Dec 2019 06:55:07 +0000
+Received: from EX13D11EUB003.ant.amazon.com (10.43.166.58) by
+ EX13D06EUC002.ant.amazon.com (10.43.164.186) with Microsoft SMTP Server (TLS)
+ id 15.0.1367.3; Tue, 17 Dec 2019 06:55:06 +0000
+Received: from EX13D11EUB003.ant.amazon.com ([10.43.166.58]) by
+ EX13D11EUB003.ant.amazon.com ([10.43.166.58]) with mapi id 15.00.1367.000;
+ Tue, 17 Dec 2019 06:55:05 +0000
+From:   "Jubran, Samih" <sameehj@amazon.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Belgazal, Netanel" <netanel@amazon.com>
+Subject: RE: linux-next: manual merge of the net-next tree with the net tree
+Thread-Topic: linux-next: manual merge of the net-next tree with the net tree
+Thread-Index: AQHVs5wu+ZmsiIcfoUW6P1PgUrQTwae95g1A
+Date:   Tue, 17 Dec 2019 06:55:05 +0000
+Message-ID: <56c41d0552944b1fb62b466aea6c79ee@EX13D11EUB003.ant.amazon.com>
+References: <20191216100516.22d2d85f@canb.auug.org.au>
+In-Reply-To: <20191216100516.22d2d85f@canb.auug.org.au>
+Accept-Language: en-US
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.43.164.68]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/16/19 9:42 PM, Sam Ravnborg wrote:
-> Hi Randy.
-> 
-> On Mon, Dec 16, 2019 at 08:25:11AM -0800, Randy Dunlap wrote:
->> On 12/15/19 9:22 PM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20191213:
->>>
->>
->> on x86_64:
->>
->> ld: drivers/gpu/drm/drm_panel.o: in function `drm_panel_of_backlight':
->> (.text+0x2ee): undefined reference to `devm_of_find_backlight'
->>
->> ld: drivers/gpu/drm/i915/display/intel_panel.o: in function `intel_backlight_device_register':
->> intel_panel.c:(.text+0x593e): undefined reference to `backlight_device_register'
->> ld: drivers/gpu/drm/i915/display/intel_panel.o: in function `intel_backlight_device_unregister':
->> intel_panel.c:(.text+0x5a04): undefined reference to `backlight_device_unregister'
->>
->> CONFIG_DRM_PANEL=y
->> CONFIG_BACKLIGHT_CLASS_DEVICE=m
->> CONFIG_DRM_I915=y
->>
->> Full randconfig file is attached.
-> 
-> Can you please verify if you have:
-> 907aa265fde6589b8059dc51649c6d1f49ade2f3
-> ("drm/drm_panel: fix EXPORT of drm_panel_of_backlight")
-> 
-> This commit is supposed to fix it.
-> 
-> 	Sam
-> 
 
-Hi Sam,
-I don't have the linux-next.git tree so I can't check that.
-I just built whatever is in linux-next of 20191216.
 
--- 
-~Randy
+> -----Original Message-----
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Sent: Monday, December 16, 2019 1:05 AM
+> To: David Miller <davem@davemloft.net>; Networking
+> <netdev@vger.kernel.org>
+> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel
+> Mailing List <linux-kernel@vger.kernel.org>; Belgazal, Netanel
+> <netanel@amazon.com>; Jubran, Samih <sameehj@amazon.com>
+> Subject: linux-next: manual merge of the net-next tree with the net tree
+>=20
+> Hi all,
+>=20
+> Today's linux-next merge of the net-next tree got a conflict in:
+>=20
+>   drivers/net/ethernet/amazon/ena/ena_netdev.c
+>=20
+> between commit:
+>=20
+>   24dee0c7478d ("net: ena: fix napi handler misbehavior when the napi
+> budget is zero")
+>=20
+> from the net tree and commit:
+>=20
+>   548c4940b9f1 ("net: ena: Implement XDP_TX action")
+>=20
+> from the net-next tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This is now=
+ fixed
+> as far as linux-next is concerned, but any non trivial conflicts should b=
+e
+> mentioned to your upstream maintainer when your tree is submitted for
+> merging.  You may also want to consider cooperating with the maintainer o=
+f
+> the conflicting tree to minimise any particularly complex conflicts.
+>=20
+> --
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc drivers/net/ethernet/amazon/ena/ena_netdev.c
+> index 948583fdcc28,26954fde4766..000000000000
+> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
+> @@@ -1237,9 -1861,8 +1861,8 @@@ static int ena_io_poll(struct napi_stru
+>   {
+>   	struct ena_napi *ena_napi =3D container_of(napi, struct ena_napi,
+> napi);
+>   	struct ena_ring *tx_ring, *rx_ring;
+> -
+>  -	u32 tx_work_done;
+>  -	u32 rx_work_done;
+>  +	int tx_work_done;
+>  +	int rx_work_done =3D 0;
+>   	int tx_budget;
+>   	int napi_comp_call =3D 0;
+>   	int ret;
 
+Thanks, looks good to me. Sorry for the inconvenience.

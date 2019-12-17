@@ -2,89 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 041E61235DD
-	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 20:41:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AD1123681
+	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 21:08:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727836AbfLQTlH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Dec 2019 14:41:07 -0500
-Received: from asavdk3.altibox.net ([109.247.116.14]:46666 "EHLO
-        asavdk3.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726742AbfLQTlG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 14:41:06 -0500
-Received: from ravnborg.org (unknown [158.248.194.18])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1727036AbfLQUH4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Dec 2019 15:07:56 -0500
+Received: from ozlabs.org ([203.11.71.1]:53849 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726967AbfLQUH4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Dec 2019 15:07:56 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by asavdk3.altibox.net (Postfix) with ESMTPS id 9425E20022;
-        Tue, 17 Dec 2019 20:40:59 +0100 (CET)
-Date:   Tue, 17 Dec 2019 20:40:58 +0100
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v1 1/1] drm/drm_panel: Fix EXPORT of
- drm_panel_of_backlight() one more time
-Message-ID: <20191217194058.GA30852@ravnborg.org>
-References: <20191217140721.42432-1-andriy.shevchenko@linux.intel.com>
- <63f068fe-13b4-98d1-8e27-faa1bd0bdf23@infradead.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47cq213YDSz9sR4;
+        Wed, 18 Dec 2019 07:07:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576613273;
+        bh=LDkztAi2mI+/R6SQTFXDFmEGbzB/j/IdAy/d/nXhzIE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qVuvZtje0Cz0ea0dKOZ9fu68wmgkmktzlMkuirzQQavp56H29ZKNIpQV9NR3gN0f3
+         Wh9bMPLgIXy0fRaxGtA+9T9Ca7zHRzKGGIechwEC2dZlRBis21xeXU2TF8XvuRl2sI
+         ula1/tRy5KjTsS6bKAeUWB9x7XMiv341DOXLGmnxYi02nftM2nw6o7f6KCS/Uh1YOE
+         jM9yDJmFe9ClO+USIqLn05gVcwwg7Jx8ZLgonamW8EmRXmsnTbrZLZZZktq8f4fByH
+         lhF9GgAYEv1sPiQgO0yHbxOVJFDHkl8sQXI3hI36jzE5in8wP6MzjSeIvf604DgfGI
+         gPkvgd/qQwaug==
+Date:   Wed, 18 Dec 2019 07:07:32 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: Request to add linux-kselftest kunit branch
+Message-ID: <20191218070732.18b35b17@canb.auug.org.au>
+In-Reply-To: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
+References: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63f068fe-13b4-98d1-8e27-faa1bd0bdf23@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.3 cv=eMA9ckh1 c=1 sm=1 tr=0
-        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
-        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10 a=JfrnYn6hAAAA:8
-        a=KKAkSRfTAAAA:8 a=7gkXJVJtAAAA:8 a=P1BnusSwAAAA:8 a=pGLkceISAAAA:8
-        a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=e5mUnYsNAAAA:8 a=-g4Mg-S7RQq0A9TmIasA:9
-        a=CjuIK1q_8ugA:10 a=1CNFftbPRP8L7MoqJWF3:22 a=cvBusfyB2V15izCimMoJ:22
-        a=E9Po1WZjFZOl8hwRPBS3:22 a=D0XLA9XvdZm18NrgonBM:22
-        a=AjGcO6oz07-iQ99wixmX:22 a=Vxmtnl_E_bksehYqCbjh:22
+Content-Type: multipart/signed; boundary="Sig_/GCbHFTMTXJI.eBkWTFZ5XvT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 08:25:03AM -0800, Randy Dunlap wrote:
-> On 12/17/19 6:07 AM, Andy Shevchenko wrote:
-> > The initial commit followed by the fix didn't take into consideration the case
-> > 
-> > CONFIG_DRM_PANEL=y
-> > CONFIG_BACKLIGHT_CLASS_DEVICE=m
-> > CONFIG_DRM_I915=y
-> > 
-> > where symbol devm_of_find_backlight() is not reachable from DRM subsystem.
-> > Quick fix is to avoid drm_panel_of_backlight() from exporting in such case.
-> > 
-> > Fixes: 907aa265fde6 ("drm/drm_panel: fix EXPORT of drm_panel_of_backlight")
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Linus Walleij <linus.walleij@linaro.org>
-> > Cc: Sam Ravnborg <sam@ravnborg.org>
-> > Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> > Cc: Thierry Reding <thierry.reding@gmail.com>
-> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > Cc: Sean Paul <sean@poorly.run>
-> > Cc: David Airlie <airlied@linux.ie>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > Cc: Maxime Ripard <mripard@kernel.org>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> 
-> Yes, that fixes the build error.  Thanks.
-> 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+--Sig_/GCbHFTMTXJI.eBkWTFZ5XvT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy - thanks for fixing this. And thanks Randy for verifying the
-fix.
-It passed my build test and is now pushed to drm-misc-next.
+Hi Shuah,
 
-	Sam
+On Tue, 17 Dec 2019 11:21:18 -0700 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>=20
+> Please add the following linux-kselftest kunit branch to linux-next.
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/log/?h=3Dkunit
+>=20
+> Please include Brendan Higgins on the CC list for any issues on
+> this branch.
+
+I already have this included as the kunit tree:
+
+branch test of
+git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/GCbHFTMTXJI.eBkWTFZ5XvT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl35NYQACgkQAVBC80lX
+0GzemAf/ZrvV3cGR6c238FH/AtcHMwZEpJVS62FpruaUHF2FfTQoqfvW4Yq88Q8S
+BKYjLIKt7HIsuN3U35+Omr3AlH1rUPRZm+QJYWb0psp5XK72YYtrsTUiu36Y7aCw
+H0Nt11CzMxjLBEfna6RmG/iWyCy9/x/n3xQy2YUjd1taChKMKtL9xPXqL6ZIq4Yu
+NiU0s3E+DPpdpGeSLgB8QVmw3iK3resMACck5pT/corhJhW6Cp13dbcxCQr3pOC2
+LU8xtp6ZX/7l17MjDsdQXvhjN270JDO2agxkWPE4Z4madYktV1S5ls/TVGBX2sTE
+1zCDWVKlQBrDFbUDcJjY81TkhaNo8Q==
+=BCAq
+-----END PGP SIGNATURE-----
+
+--Sig_/GCbHFTMTXJI.eBkWTFZ5XvT--

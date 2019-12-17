@@ -2,150 +2,165 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF6B122CC0
-	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 14:19:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A52F122D78
+	for <lists+linux-next@lfdr.de>; Tue, 17 Dec 2019 14:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727807AbfLQNTm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Dec 2019 08:19:42 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:35840 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726411AbfLQNTm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 08:19:42 -0500
-Received: by mail-wm1-f67.google.com with SMTP id p17so3146413wma.1
-        for <linux-next@vger.kernel.org>; Tue, 17 Dec 2019 05:19:41 -0800 (PST)
+        id S1728642AbfLQNxS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Dec 2019 08:53:18 -0500
+Received: from mail-wr1-f44.google.com ([209.85.221.44]:45609 "EHLO
+        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728554AbfLQNxS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Dec 2019 08:53:18 -0500
+Received: by mail-wr1-f44.google.com with SMTP id j42so7191541wrj.12
+        for <linux-next@vger.kernel.org>; Tue, 17 Dec 2019 05:53:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=date:from:to:cc:subject:message-id:mail-followup-to:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=H37dVUR9kItBvLUhcmZ+2qSu16q4UES9ihUAcWiQsd4=;
-        b=lWK6Tmlb4CiC9XzLfvUIj8N5I8DLeA+H1Y7mjuOk755VqB9iDzMMLxdGwdLFY85lVw
-         4sqlcrnt3Az8PoDhFaiD36oyNuhg5c54qQM3qcCNlFI3OkXedhTO/ufNX/oRgkPlyvFo
-         PqZBPbGE42+XNecHMEWm3VvJY/RrrIL0uLgko=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=uNW5byEOi5e2MV+d0u2RMRL/tor0KYARrjwCxoBaWMs=;
+        b=OpqZOGBFe0nJ+rpEmTJ16n1VLVD8Q14K+hPm5Xa15u9c6W8M9OoTcTm6MbYre17SAr
+         ckd4qL7nqdZumlJsUKZEojFIEh5zcJDxLnkQW8wf3fiw/rKmnkvgreYsVB7xjWXox+01
+         bT/uJrk7r2Xt2E5CStdqrXEGwLNb15bTk75JrfqJiyzWsLDtlWw6RgNPizJul0zrp0E3
+         vKII64H4P68jA5+TE0JkqDFmnhLGeW4dkHnYVmFfTWmczDa0QnfRvJV5rsxvsqc/hs4o
+         ZHBXv6X3Z1vWSBs9eWJQVDVsZSQ5DzGGkJSHLUVrkonu9pjtXJksHxeoEjmzNHw0X8dM
+         vjag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to:user-agent;
-        bh=H37dVUR9kItBvLUhcmZ+2qSu16q4UES9ihUAcWiQsd4=;
-        b=IzXipLcwiUh5Z4eJ02awnsvA9mXIGCzYQZ6hbcR12kIiwKN23cC6yHnkb9ucOoO9Gc
-         jUI/5fJ/nEytFSGaEUuUuqV1hS2N9tAXBbX1++64AvVm5k8duDMliXw36UpzWCG8wok8
-         xB84jXcjJr2Bcc9J0rbT66O49UAp76/tUY4wu+Uxqwkf0+SEIl7ivot9r89iIaAkA5se
-         1le+rRb+TLqJakucg3aCP7iFC5k6O3QTtHHSuI9NLHyYsNY+enJjz+1QI2GuQbDU4i25
-         6FuXpYMU1OOo6x/22jFqczy+pwBpiAseLLw72yYHyOcFaOz32a5ydtAYHttYYhfeMK6a
-         9iZQ==
-X-Gm-Message-State: APjAAAWrOH0t74OU3wSjlW4pCaK6bf/JXJLqddOhgjkA0DiyxQm3thav
-        efF8m0g25jifrWcLvbwbAkt9ig==
-X-Google-Smtp-Source: APXvYqzliw8g7eRzBJ1o76RhQOcEfDchV4RUR+NMlKni9Ot6SqnYzUe0jGJN/na2F7kQol/nHxfaqw==
-X-Received: by 2002:a7b:c934:: with SMTP id h20mr5421444wml.103.1576588780369;
-        Tue, 17 Dec 2019 05:19:40 -0800 (PST)
-Received: from phenom.ffwll.local ([2a02:168:564b:0:7567:bb67:3d7f:f863])
-        by smtp.gmail.com with ESMTPSA id f1sm25264661wru.6.2019.12.17.05.19.38
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=uNW5byEOi5e2MV+d0u2RMRL/tor0KYARrjwCxoBaWMs=;
+        b=J4ziU3W+bFesq7ypZeVAzE72X94KNXgxRN/oFh26FdrvPC6dvSDMy5AWdao6EadGyP
+         mcmUtRw4tcbm3uTX5sU8YbmJM1a1NL26E+5BcLekgnyk5ko5ogowmapSwB8FeWLzXM5R
+         ege7SwdKoVeWPhwjHSfWZGczOziwQQn4dpIRS975txuyxcwnWt1KnzcZziIMfVL5ndFG
+         klyzOMAnNF5+Li1/qFoRZy11m2p+rkJqNhLUv2m1uB4jjuaSCw0MwyzFkly7n0ICRium
+         sIwmtXCENUlVuDksDIM+JCg0xZJee9X4+/NdksRbfTuIqaN3quq1PZhbRzDwCWf2OHjs
+         lhyQ==
+X-Gm-Message-State: APjAAAVwW+oJQZRb2i+3H2WY69meESh0uHC9MGB+Lcq2uuDqkzxbfvSp
+        84z8xbIqIkQD5wG7LRxEJ+U5gpuoKXY36w==
+X-Google-Smtp-Source: APXvYqy2wQTy59PFEU+xpvZ1se6mfTyYO12pcflhuBVc60DxVXZkBQ8+F41x09z3SzXxBOKPXkSSEg==
+X-Received: by 2002:adf:fe86:: with SMTP id l6mr35725338wrr.252.1576590795834;
+        Tue, 17 Dec 2019 05:53:15 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id j12sm26763314wrw.54.2019.12.17.05.53.14
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2019 05:19:39 -0800 (PST)
-Date:   Tue, 17 Dec 2019 14:19:37 +0100
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20191217131937.GZ624164@phenom.ffwll.local>
-Mail-Followup-To: Stephen Rothwell <sfr@canb.auug.org.au>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Icenowy Zheng <icenowy@aosc.io>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wolfram Sang <wsa@the-dreams.de>
-References: <20191216122331.43c766f1@canb.auug.org.au>
+        Tue, 17 Dec 2019 05:53:15 -0800 (PST)
+Message-ID: <5df8ddcb.1c69fb81.9425b.8871@mx.google.com>
+Date:   Tue, 17 Dec 2019 05:53:15 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20191216122331.43c766f1@canb.auug.org.au>
-X-Operating-System: Linux phenom 5.3.0-2-amd64 
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20191217
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 203 boots: 7 failed, 172 passed with 23 offline,
+ 1 untried/unknown (next-20191217)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Dec 16, 2019 at 12:23:31PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the drm-misc tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/gpu/drm/bridge/analogix/analogix-anx6345.c: In function 'anx6345_i2c_probe':
-> drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:30: error: implicit declaration of function 'i2c_new_dummy' [-Werror=implicit-function-declaration]
->   738 |    anx6345->i2c_clients[i] = i2c_new_dummy(client->adapter,
->       |                              ^~~~~~~~~~~~~
-> drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:28: warning: assignment to 'struct i2c_client *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   738 |    anx6345->i2c_clients[i] = i2c_new_dummy(client->adapter,
->       |                            ^
-> 
-> Caused by commit
-> 
->   6aa192698089 ("drm/bridge: Add Analogix anx6345 support")
-> 
-> interacting with commit
-> 
->   2c2f00ab1641 ("i2c: remove i2c_new_dummy() API")
-> 
-> From Linus' tree.
-> 
-> I have applied the following fix up patch for today:
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 16 Dec 2019 12:11:19 +1100
-> Subject: [PATCH] drm/bridge: fix up for removal of i2c_new_dummy()
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+next/master boot: 203 boots: 7 failed, 172 passed with 23 offline, 1 untrie=
+d/unknown (next-20191217)
 
-Thanks pulled into drm-next since I just processed the first drm-misc-next
-pull.
--Daniel
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20191217/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20191217/
 
-> ---
->  drivers/gpu/drm/bridge/analogix/analogix-anx6345.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c b/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c
-> index 9917ce0d86a0..56f55c53abfd 100644
-> --- a/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c
-> +++ b/drivers/gpu/drm/bridge/analogix/analogix-anx6345.c
-> @@ -735,13 +735,13 @@ static int anx6345_i2c_probe(struct i2c_client *client,
->  	/* Map slave addresses of ANX6345 */
->  	for (i = 0; i < I2C_NUM_ADDRESSES; i++) {
->  		if (anx6345_i2c_addresses[i] >> 1 != client->addr)
-> -			anx6345->i2c_clients[i] = i2c_new_dummy(client->adapter,
-> +			anx6345->i2c_clients[i] = i2c_new_dummy_device(client->adapter,
->  						anx6345_i2c_addresses[i] >> 1);
->  		else
->  			anx6345->i2c_clients[i] = client;
->  
-> -		if (!anx6345->i2c_clients[i]) {
-> -			err = -ENOMEM;
-> +		if (IS_ERR(anx6345->i2c_clients[i])) {
-> +			err = PTR_ERR(anx6345->i2c_clients[i]);
->  			DRM_ERROR("Failed to reserve I2C bus %02x\n",
->  				  anx6345_i2c_addresses[i]);
->  			goto err_unregister_i2c;
-> -- 
-> 2.24.0
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Tree: next
+Branch: master
+Git Describe: next-20191217
+Git Commit: fca4fe890ea0352f7e9e4bf33ffed287946ff59e
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 85 unique boards, 22 SoC families, 27 builds out of 214
 
+Boot Failures Detected:
 
+arm:
+    qcom_defconfig:
+        gcc-8:
+            qcom-apq8064-cm-qs600: 1 failed lab
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+    exynos_defconfig:
+        gcc-8:
+            exynos5250-arndale: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            meson8b-odroidc1: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+            meson-gxm-khadas-vim2: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    omap2plus_defconfig:
+        gcc-8
+            omap4-panda: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            mt7629-rfb: 1 offline lab
+            omap4-panda: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
+            meson-sm1-sei610: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-g12b-s922x-khadas-vim3: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
+            meson-sm1-sei610: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-g12b-s922x-khadas-vim3: 1 offline lab
+            meson-gxl-s905x-libretech-cc: 1 offline lab
+            meson-sm1-khadas-vim3l: 1 offline lab
+            meson-sm1-sei610: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

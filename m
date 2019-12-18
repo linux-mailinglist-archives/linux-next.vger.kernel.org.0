@@ -2,85 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5C3123FAC
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 07:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CBD3124007
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 08:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725881AbfLRGf3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Dec 2019 01:35:29 -0500
-Received: from ozlabs.org ([203.11.71.1]:50729 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725799AbfLRGf3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Dec 2019 01:35:29 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47d4y61nmGz9sS3;
-        Wed, 18 Dec 2019 17:35:26 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576650926;
-        bh=BRsF0Dl7f917DVhX5qy9xBkJQ4N03Gdm7hNrZ69WciI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=bj+js8MB9gKbOsTdmpIh3sLO838ozUpHQJnp//wi5xa/EXVG5SOE/c9YFihy+BTy6
-         pfrSNmvPIrt88q7yq+A8Ounqn4njaAs5isXcqjcnR9ZWmpwCyuAIE/Wq4oPxkRIXW3
-         i48J4GG8jsYBf1/Am3h8M2Y7cLiCte5tE8/CbhXbBOaa/r9wrrtCxHcEaidPwj2i1c
-         Zbord9/uVA9wMRu6QtYfS19Ml0mBJNQv3d7b9mNS2ieXbX8h5e1SfuvDifn2A3xvbC
-         IRHA1MT2eF0TkWa+0iN+KDuWDEvRFC032mlNDn36vF6iXtjiSk6v7Spv9GhcG4+PiQ
-         ElRECGBwFzUwQ==
-Date:   Wed, 18 Dec 2019 17:35:24 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+        id S1725799AbfLRHFt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Dec 2019 02:05:49 -0500
+Received: from out4-smtp.messagingengine.com ([66.111.4.28]:53023 "EHLO
+        out4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725881AbfLRHFt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Dec 2019 02:05:49 -0500
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8E47222254;
+        Wed, 18 Dec 2019 02:05:47 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Wed, 18 Dec 2019 02:05:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm2; bh=IXbhvHhEiOcanqsvUj4NZqgbgNp
+        bD1LGN3GihPvyCVQ=; b=C/cUhQKq0NO773ahmOBJgfDtxr2P7Y7/r8wG7AwIajc
+        XNeOYl6Lmi7cU1PTgZnq8Vo0ACElBq8eZJLnpvXnf5vU302rSjVEUIA2g1k/MJWH
+        NoyI2KmHvvGVjs1G5V7vItZ5apwx74rDBN21oXRhY3jf8AH29khp/fBHCNH0SsRr
+        ock2uSf4HOjBd+Pixq+Ry/USAJWYXW4RZ1sBq3iWphabnxjmLXK0RWZOMX93pUeP
+        RFEz9ckQhtEHE3Ii0Kvw7vHR+22Z/rA/71JEvStpDnzwB1gQUODwOUTpOjf/lYvn
+        NL9aOkivVYsRoH4g9jVrHTJOjrEegtD0FYAOfJqwpkw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; bh=IXbhvH
+        hEiOcanqsvUj4NZqgbgNpbD1LGN3GihPvyCVQ=; b=FZKeQSNIppdbLc+D+CO0aY
+        Z18JxJg0yhDoPO2AWFD4ZzxeiwKQ30TNEzn/kuEiioRvjbuL3UY7wigXzyrTa6Vb
+        Ri/7uuDv8S/kKpcZlJg+KPXllnT9LGu8FLV9GDX8GtCk7G/q3+rrsiw0CSxB9CpX
+        9u4UY7qEiSDD5HKz95hto4K+AxMtYppF/MSjV8iJhDT4XwPq1nJK+oO0CniR70r5
+        c6qzqBTy1Vt6FrhBd0cstCowL6Ird2gOMQRTsFmJGlEXLbEUYAULmdF12UNO1E35
+        hxYxsOELkrY8hDDxJ+tAGLt82W8dfZNECvSe5ZFRpEcJRw71Xo8woDW/DJCGnytw
+        ==
+X-ME-Sender: <xms:ys_5XWUfim4uPCzEVbtpnkE8HwyJaLtavtAhNvfISNDVUL1O8ycd4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedufedrvddtkedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucfrrghrrghmpehmrghilhhfrhhomhepghhrvghgsehkrhhorghhrdgtohhmnecu
+    vehluhhsthgvrhfuihiivgeptd
+X-ME-Proxy: <xmx:ys_5XTiaWOy1jL0tAqKbiEb7dATiQR0Dj_KRsEVNFxEC0p2MJoozqQ>
+    <xmx:ys_5Xav_lNamCXA0WKfxJnfZcasorRYKdnFZ2P4RFhoU5CQiNq9Vzw>
+    <xmx:ys_5XbxHSuSQyU_XKY0oNNklt2Tnh6867kEy2lMojza_8cpKB-DpHg>
+    <xmx:y8_5XRAB3MI8Jhry_P9VeKT7YhUtbW09h7XTdulEEsoIbK2aqYfhsg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 6BA8A8005A;
+        Wed, 18 Dec 2019 02:05:46 -0500 (EST)
+Date:   Wed, 18 Dec 2019 08:05:44 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jon Maloy <jon.maloy@ericsson.com>
-Subject: linux-next: Fixes tag needs some work in the net-next tree
-Message-ID: <20191218173524.7080b228@canb.auug.org.au>
+        David Engraf <david.engraf@sysgo.com>
+Subject: Re: linux-next: manual merge of the tty tree with the tty.current
+ tree
+Message-ID: <20191218070544.GA1303688@kroah.com>
+References: <20191218114942.59cc0446@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xE=+se5c9PhkgCY=hDadDfc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191218114942.59cc0446@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xE=+se5c9PhkgCY=hDadDfc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Dec 18, 2019 at 11:49:42AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the tty tree got a conflict in:
+> 
+>   drivers/tty/serial/atmel_serial.c
+> 
+> between commit:
+> 
+>   cb47b9f8630a ("tty/serial: atmel: fix out of range clock divider handling")
+> 
+> from the tty.current tree and commit:
+> 
+>   751d0017334d ("tty/serial: atmel: fix out of range clock divider handling")
+> 
+> from the tty tree.
+> 
+> These are 2 version of the same change, I guess.
+> 
+> I fixed it up (I just used the tty tree version) and can carry the fix
+> as necessary. This is now fixed as far as linux-next is concerned, but
+> any non trivial conflicts should be mentioned to your upstream maintainer
+> when your tree is submitted for merging.  You may also want to consider
+> cooperating with the maintainer of the conflicting tree to minimise any
+> particularly complex conflicts.
+> 
 
-Hi all,
+Oops, thanks for noticing that, I'll go revert th eone in the tty-next
+branch as that should not be there, the one in tty-linus is correct.
 
-In commit
+thanks,
 
-  b7ffa045e700 ("tipc: don't send gap blocks in ACK messages")
-
-Fixes tag
-
-  Fixes: commit 02288248b051 ("tipc: eliminate gap indicator from ACK messa=
-ges")
-
-has these problem(s):
-
-  - leading word 'commit' unexpected
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/xE=+se5c9PhkgCY=hDadDfc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl35yKwACgkQAVBC80lX
-0GyR1QgAk7mKLSurBOrrAxNbqswLck4/KF9aT4gamZKT3RjO+2dzpKixCFb5TnR7
-YLiiyjFPS6QPy5EqrECZhB7szAOXceHOYHDccUjtqCvDLZ9VvK1ee1xMlstosBP4
-pyQkcEyECezgDjHrem8q/sSwI1fL5gsWGWu0yuQk4zQFMtzztKH35lt5l18bg3SR
-WrIKA6MTYnVslkO7xBYkIwFfnuCyGetFDTOqxk3jvAQg5Tkdi6LBiUkwHfqXZIFu
-4GmqOybgbFLM95GjHb1EjFkYKUUmnhyFkO3Wm1OdFIrFBDZ9sPz0oQaoFRrhHVCM
-wN+LC3qCJ9m/GiHyCIV2iTZMJPuYEA==
-=MbNd
------END PGP SIGNATURE-----
-
---Sig_/xE=+se5c9PhkgCY=hDadDfc--
+greg k-h

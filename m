@@ -2,120 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 493D612456D
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 12:12:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EFDF12462C
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 12:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726734AbfLRLMT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Dec 2019 06:12:19 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:46237 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726674AbfLRLMT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Dec 2019 06:12:19 -0500
-Received: by mail-wr1-f67.google.com with SMTP id z7so1787639wrl.13
-        for <linux-next@vger.kernel.org>; Wed, 18 Dec 2019 03:12:18 -0800 (PST)
+        id S1726881AbfLRLxf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Dec 2019 06:53:35 -0500
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:36499 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726029AbfLRLxf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Dec 2019 06:53:35 -0500
+Received: by mail-ot1-f68.google.com with SMTP id w1so2216051otg.3
+        for <linux-next@vger.kernel.org>; Wed, 18 Dec 2019 03:53:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Dd5rYDQnNzdfAZXhDOBvUuCUMLtmExIHD7F8EeHHEHM=;
-        b=FsNT5MwkVSi+HEFMyfYV5qRta5uW2ezDgyqLOJUR/8r3myW5sT9NCVp+vnZ3CdFCX9
-         e5DlrXFCm0FdBgLV+Bgh93FRmY6vT87cvw93BC/dbrrY+SiGZcIvInSGub3AA5QCxqvu
-         KURnLDn9O4o0hlO65xUwUI9++06bOiEwWjyszuW+V4cIvKpUKZllN9UiT2qzfR5rFKzi
-         allGBJZFm6P/joZMSbRihDFuzrTx0HGrqqoMW0/SSjL7FKycVHYP0owRWxqE0FV5A2Lu
-         9hVKvKKXceltKnX4QYCQ5i5o/ga4/tN6RRQA0KoTvChcIusdMQ4W223Ts1zA476WimQz
-         7F0g==
+        d=ffwll.ch; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zxFvtFTUUwA+ohr/zrRpzlWmODeoFm2SoCv2eQrZOew=;
+        b=J48SMSEiIFOTZZrDBYTL8471LENC+N0zDlbkFHNuPd/2b+nORHyKXx8d+YGno8LNAG
+         NtHMUA/vq9d1ti4k0oikgyLm1T9J0OAssIWOJY5Crw9urZmg41ZGRIRDsPY/zGDMqEhx
+         66BavbQBE34xD3VQEIkVDXmLLsvxLewI1nvW8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Dd5rYDQnNzdfAZXhDOBvUuCUMLtmExIHD7F8EeHHEHM=;
-        b=oHdVtwIK8im+DyQ6gyLLb+It6ZsG+gKVW8yOvQjOj5kEGNVLxbEpxQLeGWklwL2pnO
-         poAsJx/HqGmPiPDDyrKUWwTN6uny2pHPneRky6stqqIn2fJ7htTvCwj6odKpGLUUeMhR
-         5sHQGM4TyJTCDOHaYHCBOqmbZefvX5A4Tflm24rUHMqoqdY21JbqHMd1RzvApOyskHNc
-         aLRB5mkfs3+MjrqFKqkni7B87pOvBechBrPO/bbm+vYZ0j1CIGU/hVOxmYegUZCSq/M9
-         rV5dv5RROp18XdfSAyJcB4S0c3z0oh8pZjlqcF2xz6zz2CcZr306/v932+za7GNgjFIg
-         oPdQ==
-X-Gm-Message-State: APjAAAUAMyG90KGOMvbem2neRsP+bY/KoqNF23MnO+/GgdcpnwNqxGaS
-        0u4pGmmPSOqLua4pR0kfMHPmgnFw7uHBgw==
-X-Google-Smtp-Source: APXvYqyrfO+SddMwtgkH/o2LaxwJxoqKbQGp/UvPJwn9ig/NpOWdIGyYW8PMgR1xw6ILJgl9RxiC1w==
-X-Received: by 2002:adf:cd0a:: with SMTP id w10mr2125546wrm.107.1576667537453;
-        Wed, 18 Dec 2019 03:12:17 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id o4sm2146566wrx.25.2019.12.18.03.12.16
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 03:12:17 -0800 (PST)
-Message-ID: <5dfa0991.1c69fb81.c0efd.9ebd@mx.google.com>
-Date:   Wed, 18 Dec 2019 03:12:17 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zxFvtFTUUwA+ohr/zrRpzlWmODeoFm2SoCv2eQrZOew=;
+        b=gPgHMYu+RiloZCzFxGUQ3CPKHfbw3Yraxgnlm84LKkMjmIoTUP2vmnEUnEtxFGmeUS
+         DVtlzlsGwmEFveHBkfsgX076pw6ReXXGbHqLhaU9VVJWRvh4GU4ER1FkC3MpIQT/0+HN
+         LyCYETnV42uBSc8lhHFmc60X0IQRiY6T7tqxePoM2xVY1JuR6ZX8YO6oE+0rfJ3pauZt
+         dKj1TsaE8EfWBEV5sfxhvCBLjOVdscR1nd9H++FaIaIs39qg6k2nBLMXOQgT4YHN00bF
+         A1O8uiIfcbF6EduimobUQqitewoXo0PTp5nhlul+M6ZQ0+luHa24jLiOlErAUwRzjvMe
+         xojg==
+X-Gm-Message-State: APjAAAVCjNj8HnuZxeo16i2w77nq2U0QMDxl93pZgOHAGz9nxEiwzRRl
+        +c/mKeSAy8V1j+MYc2HBqbHYXwmnShF9p7la5O5QVsjd
+X-Google-Smtp-Source: APXvYqzOWxFUYC1FyvGnADEA9Hj69nxuYFuE8i0P3qMz16x3t8aw/ipFN63K/R08PfO4EqHEfOLYiOtz+OqGLgE1lF4=
+X-Received: by 2002:a05:6830:1415:: with SMTP id v21mr2319204otp.188.1576670014731;
+ Wed, 18 Dec 2019 03:53:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.5-rc2-432-g9eed7d73a938
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 219 boots: 2 failed,
- 210 passed with 6 offline, 1 untried/unknown (v5.5-rc2-432-g9eed7d73a938)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20191216122331.43c766f1@canb.auug.org.au> <20191217131937.GZ624164@phenom.ffwll.local>
+ <20191218072204.06ca0cd9@canb.auug.org.au>
+In-Reply-To: <20191218072204.06ca0cd9@canb.auug.org.au>
+From:   Daniel Vetter <daniel@ffwll.ch>
+Date:   Wed, 18 Dec 2019 12:53:23 +0100
+Message-ID: <CAKMK7uHP2LL=pZA3ppbz-+=wKs6QXY_7360xTjMUc-Qqp1ftrg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Wolfram Sang <wsa@the-dreams.de>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 219 boots: 2 failed, 210 passed with 6 offline, 1 =
-untried/unknown (v5.5-rc2-432-g9eed7d73a938)
+On Tue, Dec 17, 2019 at 9:22 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Daniel,
+>
+> On Tue, 17 Dec 2019 14:19:37 +0100 Daniel Vetter <daniel@ffwll.ch> wrote:
+> >
+> > On Mon, Dec 16, 2019 at 12:23:31PM +1100, Stephen Rothwell wrote:
+> > >
+> > > After merging the drm-misc tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > >
+> > > drivers/gpu/drm/bridge/analogix/analogix-anx6345.c: In function 'anx6345_i2c_probe':
+> > > drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:30: error: implicit declaration of function 'i2c_new_dummy' [-Werror=implicit-function-declaration]
+> > >   738 |    anx6345->i2c_clients[i] = i2c_new_dummy(client->adapter,
+> > >       |                              ^~~~~~~~~~~~~
+> > > drivers/gpu/drm/bridge/analogix/analogix-anx6345.c:738:28: warning: assignment to 'struct i2c_client *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+> > >   738 |    anx6345->i2c_clients[i] = i2c_new_dummy(client->adapter,
+> > >       |                            ^
+> > >
+> > > Caused by commit
+> > >
+> > >   6aa192698089 ("drm/bridge: Add Analogix anx6345 support")
+> > >
+> > > interacting with commit
+> > >
+> > >   2c2f00ab1641 ("i2c: remove i2c_new_dummy() API")
+> > >
+> > > From Linus' tree.
+> > >
+> > > I have applied the following fix up patch for today:
+> > >
+> > > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > > Date: Mon, 16 Dec 2019 12:11:19 +1100
+> > > Subject: [PATCH] drm/bridge: fix up for removal of i2c_new_dummy()
+> > >
+> > > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> >
+> > Thanks pulled into drm-next since I just processed the first drm-misc-next
+> > pull.
+>
+> Thanks.  For the future, though, merge fixes like this should be part
+> of the actual merge commit to avoid bisection problems.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.5-rc2-432-g9eed7d73a938/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.5-rc2-432-g9eed7d73a938/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.5-rc2-432-g9eed7d73a938
-Git Commit: 9eed7d73a938cef7d99ec6551b4f35eb1376d2c6
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 89 unique boards, 23 SoC families, 27 builds out of 214
-
-Boot Failures Detected:
-
-arm:
-    qcom_defconfig:
-        gcc-8:
-            qcom-apq8064-cm-qs600: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+I flip flop on this one, between retaining your contribution
+explicitly and merging them in. Usually I squash them in, but this
+felt substantial enough to retain explicitly. Worst case if someone is
+unlucky they need to git bisect skip once. I guess next time I should
+do a topic branch, apply it there on top of the pull, and then pull
+that in so that it's both pretty history and no bisect hole.
+-Daniel
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
++41 (0) 79 365 57 48 - http://blog.ffwll.ch

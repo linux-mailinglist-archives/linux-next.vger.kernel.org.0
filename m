@@ -2,104 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9A1125389
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 21:35:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BE5B125493
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 22:26:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726591AbfLRUfb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Dec 2019 15:35:31 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50987 "EHLO ozlabs.org"
+        id S1726530AbfLRV0C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Dec 2019 16:26:02 -0500
+Received: from ozlabs.org ([203.11.71.1]:43423 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726387AbfLRUfb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Dec 2019 15:35:31 -0500
+        id S1725991AbfLRV0C (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Dec 2019 16:26:02 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47dRbN56pjz9sPL;
-        Thu, 19 Dec 2019 07:35:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47dSjg0BpLz9sNH;
+        Thu, 19 Dec 2019 08:25:59 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576701328;
-        bh=tZtgKOAHxUKtlvJa5+RwtCVgmondBdgUVpeAW6lZYjg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BfwPrEaTMh1wx8TiQN2zllA0u/VozrIlr25H03ISiCsuDVV5jVKemRWTKtrXuFoJK
-         TqxZPAv+tNo9/fOsM2Es93GeLi9EhST2fTcAGSDGxqExu8CY2dePfPiQSLubGjyQQj
-         pb3K7y57Hpe2fKbtBSzwNHwicjM1d/RlLFkAZN3u0PCebcG/3apxE8J0pkXueRy6fO
-         mONn/PZzTe3ri9T/l/2YMEFpSR0Kd1goB4x6oBuAMTHw/9Vw8m4tdRm5W7d34ixHJ2
-         aVnOixn8EKCmtkY4qDNE7mr+Xt50iIaCOuL26ktaEqKESaiVAlSK57baVUFlasqbiR
-         53bxvkhbomLBg==
-Date:   Thu, 19 Dec 2019 07:35:21 +1100
+        s=201702; t=1576704360;
+        bh=GOIYpn/ab2CPptA+x9ffjyx71HgDPJ19mxjxlTi0ve0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QmCIip7N4XCFSbPlYwcVfH2oeIkgRfC0YzNBDiZfV9Le/3Gv6UY5pf/6BZy+c4SHr
+         SeoKEe6DrLw7YvFW14V+t4tdgbDj7wDoSFdOXlTLHg5/zdNFXptoYc8rfJmg55mWqC
+         0hzoAHViS5smBRKKdqODV/qGzFM9C31JVs6LtAG+QoHsR+SQFq48huKXg0ot+MCc2U
+         nJtZwN40WWITcOJvTf3MypMnjdPXchJgaG1vK6PcMUkSfAR5r4LDeiy+aguXdSKAO5
+         On377RpngMcnn/RUuDRMITlAp3GWoj+uOI7BTOYJUZhj4VdbtXnLAnaXlE28vr1Cfl
+         IJZcwBWDlsMwg==
+Date:   Thu, 19 Dec 2019 08:25:57 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Subject: Re: Request to add linux-kselftest kunit branch
-Message-ID: <20191219073521.5d27d8e5@canb.auug.org.au>
-In-Reply-To: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
-References: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Guchun Chen <guchun.chen@amd.com>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20191219082557.16092126@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NMNtpGgXNyuG/DADfmhTBGC";
+Content-Type: multipart/signed; boundary="Sig_/Ktdcr=UUjQSm5MpHlWZXq4U";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NMNtpGgXNyuG/DADfmhTBGC
+--Sig_/Ktdcr=UUjQSm5MpHlWZXq4U
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Shuah,
+Hi all,
 
-On Tue, 17 Dec 2019 11:21:18 -0700 Shuah Khan <skhan@linuxfoundation.org> w=
-rote:
->
-> Please add the following linux-kselftest kunit branch to linux-next.
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
-/log/?h=3Dkunit
->=20
-> Please include Brendan Higgins on the CC list for any issues on
-> this branch.
+In commit
 
-Added from today.  It is currently called kunit-next, but I may
-rearrange the naming.
+  caa01659028a ("drm/amdgpu: move umc offset to one new header file for Arc=
+turus")
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
+Fixes tag
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  Fixes: 9686563c4c42 drm/amdgpu: Added RAS UMC error query support for Arc=
+turus
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Did you mean
+
+Fixes: 4cf781c24c3b ("drm/amdgpu: Added RAS UMC error query support for Arc=
+turus")
+
+Also, please keep all the tags together at the end of the commit message.
 
 --=20
 Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
+Stephen Rothwell
 
---Sig_/NMNtpGgXNyuG/DADfmhTBGC
+--Sig_/Ktdcr=UUjQSm5MpHlWZXq4U
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl36jYoACgkQAVBC80lX
-0Gwadwf7BZ5lssFdKGTorhcpcpQFqcEAu9GrwbAyi5hGaboUJRtvxODg1LwFcR0a
-0pHeEVbZUw6Yvsff1lnvQX0YyYcnhsnW0N+jlsyLdC413o4zPu6ovLxK1tePet1p
-xW8Im3VIrpkfmK+CT54QgTRRCtcH52uVDK5h8MOF7ZaWBGpBcxjv5NZk7+ZzEeta
-f42er3glKP6ggbFPOouInY/fG9weKVuxB9rQiaUhDkZe82E75TWmTHP5SUgQuT90
-qH0/nFo2ccydlvmCX+kqA/MXmvUz1ceFHorQQ8hIhU7lD3QiyufDFkGzJGaKMbB9
-acKDkAnB4dEDIwHvZSU5hrN+F8MSBA==
-=l1xC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl36mWUACgkQAVBC80lX
+0GzVfAf9H6WAfaQX5WeWp/V4bwhmV0z802JF5zuaL9K47JbPzesPP6GpA3TvtQ0O
+ZlKNUH2DORyI0hr6WIuTmpn1SsY8EFnrKPDuyOMD6ZT9h2Ya5WmCU2dY8lQc/KXs
+sD0haB5YE+qd9k9Pf9fVHkATNKLghrbYgp2utZd7+n9G97B++FbSRXZ40pJNOz1y
+YT+YN9xkook9P82dNOaTi+3Q2Su7LfcifcLB01oy59xyMh5QnWBTT9Jn5+AcVw6s
+rfd1x0PBo2nsMth5E6IBXZu4FBSfmjArxjzKENN8/Ou5PDKC7qzA2nFFAR9L0Vki
+vWeDvtt/lP+0d1jjN2pVlmUUH7XJYQ==
+=DKII
 -----END PGP SIGNATURE-----
 
---Sig_/NMNtpGgXNyuG/DADfmhTBGC--
+--Sig_/Ktdcr=UUjQSm5MpHlWZXq4U--

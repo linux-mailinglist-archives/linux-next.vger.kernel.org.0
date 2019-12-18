@@ -2,122 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A489E124CDD
-	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 17:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F9A1125389
+	for <lists+linux-next@lfdr.de>; Wed, 18 Dec 2019 21:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727021AbfLRQMX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Dec 2019 11:12:23 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:38772 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726980AbfLRQMW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Dec 2019 11:12:22 -0500
-Received: by mail-wm1-f66.google.com with SMTP id u2so2532379wmc.3
-        for <linux-next@vger.kernel.org>; Wed, 18 Dec 2019 08:12:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ndsJoApL/85/7YB5qQHXoIAeCbi1P4fhg5uSEk7aQ6w=;
-        b=yFaAikfMA34oWg+fHz9xKqmBN6ZTvtFKbg/w69mFZG8B1QxIpK5dWiMt8r6+c7BZn9
-         n7bSa7XafumWGbmIrkX4lyAkCkQOvG2vKcXYsjZW1ILpHzDnRTR3//TEn/D93ejj3uIH
-         uyZ2yXwKfP5T9K/b8vcscUnK4maWo76UqfpNuYfo+o+ekj46f7I3ynMfjng8Pz2XRR/X
-         zIswQkiQF5SGY4eWL/U4jzzIR47xu284TE2v4d6spm14sxSMcV9Ihwy/usEs1y53c8zE
-         iJjx8cYRdda2Ux3yQ0+4RL4CmtN3QlpzgxeGvtBxFKFHOaHKa4Zx7m1xwg+cbnxNcoih
-         KldQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ndsJoApL/85/7YB5qQHXoIAeCbi1P4fhg5uSEk7aQ6w=;
-        b=jtBDUTNugr/1yWVq1azwySXhPtLN5vFkrdfID4EWidloIgaD5ossYQpc1e4ur/cO3X
-         CMvgSaVMk1FfUpG16UV31AeMWhySBEMw7FfKNDucnWqnjKFJFZ9nJIWSCM6EYC2w6BX7
-         5mMttpwj1ltaKbpFKvRkm+lkHPgeW99RFbDNOUNB4d5v2Txky/t9qznYILgI2jBSCV3v
-         2HSa1zVlBw5963cuMuSa8UL9piMoHBEiaz/9PVdy4ktFZV0Zd01TnAucI7/35AgNMVJg
-         6jDxFxO+rht4KaA+3WoOYgHzbVJMcfeb6JNh5tOMY1QvrL2emyhw2JaTTNftVWdMYwGu
-         Nffw==
-X-Gm-Message-State: APjAAAUTS0kDppiORN5kFz+H5Q7KL6iOZM2EINkdugYBTH925pLhEyyD
-        nER6N/OzxqOuW7ltAJhIWw5p4qRJ6mcY1Q==
-X-Google-Smtp-Source: APXvYqxe0heY8qhP3SORcnvlqyizUEvMJr+c3pe6ZpDCB2256sbk8UfsNOScLeMt85jpSrUovl6KEg==
-X-Received: by 2002:a1c:16:: with SMTP id 22mr4324969wma.8.1576685540603;
-        Wed, 18 Dec 2019 08:12:20 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id x26sm2769750wmc.30.2019.12.18.08.12.19
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2019 08:12:20 -0800 (PST)
-Message-ID: <5dfa4fe4.1c69fb81.8d266.d6b5@mx.google.com>
-Date:   Wed, 18 Dec 2019 08:12:20 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726591AbfLRUfb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Dec 2019 15:35:31 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:50987 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726387AbfLRUfb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Dec 2019 15:35:31 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47dRbN56pjz9sPL;
+        Thu, 19 Dec 2019 07:35:28 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1576701328;
+        bh=tZtgKOAHxUKtlvJa5+RwtCVgmondBdgUVpeAW6lZYjg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BfwPrEaTMh1wx8TiQN2zllA0u/VozrIlr25H03ISiCsuDVV5jVKemRWTKtrXuFoJK
+         TqxZPAv+tNo9/fOsM2Es93GeLi9EhST2fTcAGSDGxqExu8CY2dePfPiQSLubGjyQQj
+         pb3K7y57Hpe2fKbtBSzwNHwicjM1d/RlLFkAZN3u0PCebcG/3apxE8J0pkXueRy6fO
+         mONn/PZzTe3ri9T/l/2YMEFpSR0Kd1goB4x6oBuAMTHw/9Vw8m4tdRm5W7d34ixHJ2
+         aVnOixn8EKCmtkY4qDNE7mr+Xt50iIaCOuL26ktaEqKESaiVAlSK57baVUFlasqbiR
+         53bxvkhbomLBg==
+Date:   Thu, 19 Dec 2019 07:35:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: Request to add linux-kselftest kunit branch
+Message-ID: <20191219073521.5d27d8e5@canb.auug.org.au>
+In-Reply-To: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
+References: <15fd4946-1f64-cb36-c74c-1126e070d93b@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191218
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 152 boots: 4 failed, 141 passed with 6 offline,
- 1 untried/unknown (next-20191218)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/NMNtpGgXNyuG/DADfmhTBGC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 152 boots: 4 failed, 141 passed with 6 offline, 1 untried=
-/unknown (next-20191218)
+--Sig_/NMNtpGgXNyuG/DADfmhTBGC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191218/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191218/
+Hi Shuah,
 
-Tree: next
-Branch: master
-Git Describe: next-20191218
-Git Commit: b9c5ef25038d14f0e02d4c5077bd3edb2e577034
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 65 unique boards, 21 SoC families, 27 builds out of 214
+On Tue, 17 Dec 2019 11:21:18 -0700 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>
+> Please add the following linux-kselftest kunit branch to linux-next.
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/log/?h=3Dkunit
+>=20
+> Please include Brendan Higgins on the CC list for any issues on
+> this branch.
 
-Boot Failures Detected:
+Added from today.  It is currently called kunit-next, but I may
+rearrange the naming.
 
-arm:
-    qcom_defconfig:
-        gcc-8:
-            qcom-apq8064-cm-qs600: 1 failed lab
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
 
-    exynos_defconfig:
-        gcc-8:
-            exynos5250-arndale: 1 failed lab
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
 
-    multi_v7_defconfig:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
 
-Offline Platforms:
+--Sig_/NMNtpGgXNyuG/DADfmhTBGC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm:
+-----BEGIN PGP SIGNATURE-----
 
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl36jYoACgkQAVBC80lX
+0Gwadwf7BZ5lssFdKGTorhcpcpQFqcEAu9GrwbAyi5hGaboUJRtvxODg1LwFcR0a
+0pHeEVbZUw6Yvsff1lnvQX0YyYcnhsnW0N+jlsyLdC413o4zPu6ovLxK1tePet1p
+xW8Im3VIrpkfmK+CT54QgTRRCtcH52uVDK5h8MOF7ZaWBGpBcxjv5NZk7+ZzEeta
+f42er3glKP6ggbFPOouInY/fG9weKVuxB9rQiaUhDkZe82E75TWmTHP5SUgQuT90
+qH0/nFo2ccydlvmCX+kqA/MXmvUz1ceFHorQQ8hIhU7lD3QiyufDFkGzJGaKMbB9
+acKDkAnB4dEDIwHvZSU5hrN+F8MSBA==
+=l1xC
+-----END PGP SIGNATURE-----
 
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            stih410-b2120: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/NMNtpGgXNyuG/DADfmhTBGC--

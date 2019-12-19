@@ -2,95 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C23125943
-	for <lists+linux-next@lfdr.de>; Thu, 19 Dec 2019 02:35:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39526125A58
+	for <lists+linux-next@lfdr.de>; Thu, 19 Dec 2019 05:46:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726536AbfLSBfF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Dec 2019 20:35:05 -0500
-Received: from mail.kernel.org ([198.145.29.99]:37946 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726463AbfLSBfF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Dec 2019 20:35:05 -0500
-Received: from earth.universe (dyndsl-095-033-172-209.ewe-ip-backbone.de [95.33.172.209])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 16FAB21D7D;
-        Thu, 19 Dec 2019 01:35:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1576719304;
-        bh=zlmjIO2b2FaAxQJsiqVFTASCy9VFPOanROvzfemYg04=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TxrLoohY3XDvgA14Z27//h7jfxW7HgNwqhR3liMAnPf3Sg+y4hjvHwGb1zXNb+BgE
-         Hm7y29f49ENkibEgd3Oyn60eSKCfxkHDknqox6clDWUpbgvs0xUMRP1BsFsGt5si3b
-         Cs4ItrX6b2emX1Q04gbb2u3PVz9yGg4bD+J3uXZU=
-Received: by earth.universe (Postfix, from userid 1000)
-        id 58BF53C0C7B; Thu, 19 Dec 2019 02:35:02 +0100 (CET)
-Date:   Thu, 19 Dec 2019 02:35:02 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Elliot Berman <eberman@codeaurora.org>
-Subject: Re: linux-next: build failure after merge of the battery tree
-Message-ID: <20191219013502.npqamx4m63hw4af6@earth.universe>
-References: <20191219110144.0ccba0bf@canb.auug.org.au>
+        id S1726846AbfLSEqw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Dec 2019 23:46:52 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:41908 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726841AbfLSEqw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Dec 2019 23:46:52 -0500
+Received: by mail-wr1-f68.google.com with SMTP id c9so4561249wrw.8;
+        Wed, 18 Dec 2019 20:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=RewqfyyXUZkV87uK4kzXKpumYayj1KfeiY2XdrXVvEk=;
+        b=b2kXwGjF/KZC5BAJK9E3w3S4vTSW8QqbTmD28QRCHDLL6jJjM5W9g1pAx2tJqGqhRR
+         i0DCFfZEOsPIGP2LFB0q8y6qo5i6+OH5O797VULZS7zQR2QSMMnHAnhUtMFgeSNJEkFu
+         Mm6ZJsSy+oAO9LnFYbVyIDaY64+C5XCApp1Pqn+jf11v2EMM6CMkWIWqoGome5bX8pml
+         lV9N84SDRP7/XgQP3ZaBxaDKkl9HYNwbeLEVm0P+JyVnGnXjj0R6rtTGk3gJ3S+CGOoR
+         i52HLQEPX8Tqq82QniHc9BejR2N0pV94jMk3qnZt0wckij2a3r6y7g7TAdEChSWKzrHY
+         MyzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=RewqfyyXUZkV87uK4kzXKpumYayj1KfeiY2XdrXVvEk=;
+        b=bO0mgmjhaFjuF53oH1LhTtupvi4izfNRSIWvFNZdJD/6kYpx9G7klwDdODOnEJceRE
+         5IMvqJ52TtczEeKQ8hycfDft/tL/SJmjpb4VdYBkIGJZ7nphpP53n8LJmj0sasVX3/Qz
+         KY+bVNaGPd0TRUhm5f7AapWHvMhp8YUPsmWTQ94vQ14cx70Yq5FLn+OBHRIdvwnyYOm/
+         vUa0ZLBoHWZQsuYKYmucWaZ/JtppZluUQhHwFJ0qR6ncnPa8lEKzkFtKusJW2Y4g2Vwo
+         m3RVRKn8ls1HICepZx2038hvFS1XrkDMU2z2jfONnizpEd1wG2yPDNSYBsmT54O0feFa
+         WQsA==
+X-Gm-Message-State: APjAAAXo9g5QHvaopQ5iSFq3MQStQwcC4JDYWsKCbxNSjG5BlxdyjkE8
+        S+brsjrbPwYhbX2IOJ8EqprFgPCQuJEpjvZKNBcAEQ==
+X-Google-Smtp-Source: APXvYqyCxuxeVFw1b72FQxFm4sMDuoygQtpMel373KN75/FGpF7gKkbQCxJa2BmXRzAOoSqBKxXUIOnvzpMfdZHbfuU=
+X-Received: by 2002:a5d:4692:: with SMTP id u18mr3557822wrq.206.1576730809795;
+ Wed, 18 Dec 2019 20:46:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="56lbjnfnwaqtrgrv"
-Content-Disposition: inline
-In-Reply-To: <20191219110144.0ccba0bf@canb.auug.org.au>
+References: <20191219082557.16092126@canb.auug.org.au> <BYAPR12MB2806A8EBBB8B6F9AE29FBC00F1520@BYAPR12MB2806.namprd12.prod.outlook.com>
+In-Reply-To: <BYAPR12MB2806A8EBBB8B6F9AE29FBC00F1520@BYAPR12MB2806.namprd12.prod.outlook.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 18 Dec 2019 23:46:38 -0500
+Message-ID: <CADnq5_PTLEXHd3U8fkKVcckFjCDN_p3n9PoQWwLkzRODqDd71A@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the amdgpu tree
+To:     "Chen, Guchun" <Guchun.Chen@amd.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Wed, Dec 18, 2019 at 8:22 PM Chen, Guchun <Guchun.Chen@amd.com> wrote:
+>
+> [AMD Official Use Only - Internal Distribution Only]
+>
+> Hi Stephen,
+>
+> Sorry for the inconvenience. How I can fix this?
+>
 
---56lbjnfnwaqtrgrv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Already fixed.
 
-Hi Stephen,
+Alex
 
-On Thu, Dec 19, 2019 at 11:01:44AM +1100, Stephen Rothwell wrote:
-> After merging the battery tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> ERROR: "machine_restart" [drivers/power/reset/restart-poweroff.ko] undefi=
-ned!
->=20
-> Caused by commit
->=20
->   263ec7d0c497 ("power: reset: Enable tristate on restart power-off drive=
-r")
-
-Thanks, I already dropped that commit after noticing the problem myself.
-
-> I have used the bettery tree from next-20191218 for today.
-
-Maybe renaming the battery tree to bettery helps to get only good
-patches? :)
-
--- Sebastian
-
---56lbjnfnwaqtrgrv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAl3608EACgkQ2O7X88g7
-+pqqSQ//asM/GhQXI+uC0W/yWFv/A8VIYcSpXuyrfcchR9hzCi85Dt6jm1znjrGa
-lA9C9GVFFKrutVWx5ysKXcaAxYFV0zKl8VlxDkOAUgTJW6plfGANjDHhDdxj1hXl
-VQBm/t7otXvn1jxm6475rjyUQtWCy9sLswWDgBl+p6GnEQ8EyT9JmaByQ6qPRd/7
-MY4eVNtW9o8TK99Exzd327wR+2HGdubvJfW1oCKsMiyTKifBG4i0f/3iqbzzmNlw
-u9oZzo67kY5TvF9QlWwGkggy207FNps3LZjmTLTmiQTyrieGUOp/iqg297AlNW1M
-qZJGqnxc5qPkINTpxLOV9eU6xeiAGlvGCgZFVKO42eW2ErK1BzthrwiIw5P+fIjR
-ribdi1MgEmcN1+F1SRyYTzt+QY4Fl6mevuYJXGEuXU4Oic6moEsUQsGC9J4eOVOL
-WCev8yRVORpN8atk1iAkMmBEXdz+4cwp6BEPVMekawzm8U4/0ehsJmgLNd5xZyVB
-M4KOYIHxPNPLIW+Fj2BOiNKWalWMRRp6mC50eTGPBfw4OeW8t/mY4DI6ejHh7CHx
-axmxdsbS6QNScyxhRQgLSCaBRj08JUog/s4B0AL7wC9R1+ZejpI9rSvfGv1zkWMw
-Kv/+GltEFda4rGgFWPbN9f7JRHbHkmCI0PZU7HYJCoAT9chpSqE=
-=eNIV
------END PGP SIGNATURE-----
-
---56lbjnfnwaqtrgrv--
+> Regards,
+> Guchun
+>
+> -----Original Message-----
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Sent: Thursday, December 19, 2019 5:26 AM
+> To: Alex Deucher <alexdeucher@gmail.com>
+> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel Mailing List <linux-kernel@vger.kernel.org>; Chen, Guchun <Guchun.Chen@amd.com>
+> Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+>
+> Hi all,
+>
+> In commit
+>
+>   caa01659028a ("drm/amdgpu: move umc offset to one new header file for Arcturus")
+>
+> Fixes tag
+>
+>   Fixes: 9686563c4c42 drm/amdgpu: Added RAS UMC error query support for Arcturus
+>
+> has these problem(s):
+>
+>   - Target SHA1 does not exist
+>
+> Did you mean
+>
+> Fixes: 4cf781c24c3b ("drm/amdgpu: Added RAS UMC error query support for Arcturus")
+>
+> Also, please keep all the tags together at the end of the commit message.
+>
+> --
+> Cheers,
+> Stephen Rothwell

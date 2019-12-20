@@ -2,136 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 518CA127ACD
-	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 13:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FCA1283D9
+	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 22:26:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727197AbfLTMOL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Dec 2019 07:14:11 -0500
-Received: from mail-wm1-f41.google.com ([209.85.128.41]:50700 "EHLO
-        mail-wm1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727191AbfLTMOL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Dec 2019 07:14:11 -0500
-Received: by mail-wm1-f41.google.com with SMTP id a5so8716699wmb.0
-        for <linux-next@vger.kernel.org>; Fri, 20 Dec 2019 04:14:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2AONt3uKYEROHCwq0toY7E0/i4tdAP1QegACJTBhANc=;
-        b=PZU83Ps+HIL5WyWn1lvMgg3SIXOGRmDR0vqmMkfPrhi+enfCoNgvK2vNwmkxROgbaa
-         TQmPBIrCy9oppxOdIPrY9EoCz2waxQplsdmL/VK2hD6MW00ZZ6yCVIcn1/Onp8bZQCHk
-         KbUEdP1MtT6YnSsSWA3tIGnok/KxlVOJ+bIxJr8qt5r2usBKupOwzGkd2NEboN5q9JDY
-         9nQbTAPYmRh84ONqEvV7ZNcNyXrn++O5NFAQeYwiCS5FOHHjKRe27cstq5rhCk5UGxQ7
-         NX4EK8ixKlIunWxmCT4WSS4XCYPF1wNMPlLoLQJ8HKigIwfhChYe1zz9pwvIT7QCXWOh
-         wR3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2AONt3uKYEROHCwq0toY7E0/i4tdAP1QegACJTBhANc=;
-        b=VWQL4ODlWXe4MHV4KuWpN/6sSnwk6FhFzevjBwBBBCKqT2TtCJ2GbWVZMbrptIOF1U
-         gfOoe7cATX6FxwV61K0EZxqr8llQOh8t96o9+ya3QB3SO8fSqE1Do9EaxN1O4bG4P3IW
-         Xc2W094JQZY8WS8uz9/DsTiGAZKR3s5pmVDsMwBwYZlm2qEwOHWH5GBvMfFJrQZgcbpq
-         P4WbzIjSEGYfVfQ1W/YolZLMhGE8T42SghgV90Q+Uu2OOqcsc/xSW1pi3f8+E53dtH6+
-         MtiqrC0pb4YEzrOZDiCjvKe/cPBQ2AeAJTUZQlSOGpr1m/+ZOhf5bExIwtj0NBY4Ts7b
-         9kQw==
-X-Gm-Message-State: APjAAAUD8Qd5C8kFB+5YwIKVO5GwzCJ6m6rcbvyWTNTTz2VvCYnNbqeZ
-        SWj6rt5jg/q8kkFaVYuf5taJTNfb7ceLTg==
-X-Google-Smtp-Source: APXvYqxsib+kvJbgZLiH7ygULY4gVEoJfD2GibDoq3mzm1MWTtX8oUN8pTOMBInMAsB4BFY6MPkwLg==
-X-Received: by 2002:a1c:61d6:: with SMTP id v205mr16865846wmb.91.1576844048784;
-        Fri, 20 Dec 2019 04:14:08 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id k8sm9721811wrl.3.2019.12.20.04.14.07
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2019 04:14:07 -0800 (PST)
-Message-ID: <5dfcbb0f.1c69fb81.375af.14fa@mx.google.com>
-Date:   Fri, 20 Dec 2019 04:14:07 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727489AbfLTV0r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Dec 2019 16:26:47 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56122 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727473AbfLTV0r (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 20 Dec 2019 16:26:47 -0500
+Received: from localhost (unknown [104.132.0.81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 82FDE206DA;
+        Fri, 20 Dec 2019 21:26:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1576877206;
+        bh=GB0uH5v3CIKNR642grWZ0+CyMiDRyZ1gPbwQP4C+Aw0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mnD/cqIsY2DEGGEQjd5GSK4d6ltKJg8qF/7HVUf0RdCncfWQz6dCALsQSlUt4WWO5
+         GQjczmmQeTpmisqGhWEcfBC3ePvP11TPVHCEOxmgXyYC8Kd+cni1wpwfewiyQapBan
+         bbci6tmLpqU1uq5xNWdo1u7EofBgHvoVgC/xCiTQ=
+Date:   Fri, 20 Dec 2019 13:26:45 -0800
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Chao Yu <yuchao0@huawei.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chao Yu <chao@kernel.org>,
+        Linux-Next <linux-next@vger.kernel.org>
+Subject: Re: [RFC PATCH v5] f2fs: support data compression
+Message-ID: <20191220212645.GA14042@jaegeuk-macbookpro.roam.corp.google.com>
+References: <20191216062806.112361-1-yuchao0@huawei.com>
+ <CAMuHMdUDURUQJjJU+2QQgY1hXN8ndJ6dwc-PF1CWc-HAio0sKA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20191220
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 215 boots: 7 failed,
- 202 passed with 6 offline (next-20191220)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdUDURUQJjJU+2QQgY1hXN8ndJ6dwc-PF1CWc-HAio0sKA@mail.gmail.com>
+User-Agent: Mutt/1.8.2 (2017-04-18)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 215 boots: 7 failed, 202 passed with 6 offline (next-2019=
-1220)
+On 12/19, Geert Uytterhoeven wrote:
+> Hi,
+> 
+> On Mon, Dec 16, 2019 at 7:29 AM Chao Yu <yuchao0@huawei.com> wrote:
+> >
+> > This patch tries to support compression in f2fs.
+> 
+> 
+> 
+> > --- a/fs/f2fs/file.c
+> > +++ b/fs/f2fs/file.c
+> 
+> > @@ -667,6 +719,24 @@ int f2fs_truncate_blocks(struct inode *inode, u64 from, bool lock)
+> >         return err;
+> >  }
+> >
+> > +int f2fs_truncate_blocks(struct inode *inode, u64 from, bool lock)
+> > +{
+> > +       u64 free_from = from;
+> > +
+> > +       /*
+> > +        * for compressed file, only support cluster size
+> > +        * aligned truncation.
+> > +        */
+> > +       if (f2fs_compressed_file(inode)) {
+> > +               size_t cluster_size = PAGE_SIZE <<
+> > +                                       F2FS_I(inode)->i_log_cluster_size;
+> > +
+> > +               free_from = roundup(from, cluster_size);
+> 
+> This is a 64-by-32 or 64-by-64 division, causing a link failure on
+> 32-bit platforms:
+> 
+>     fs/f2fs/file.o: In function `f2fs_truncate_blocks':
+>     file.c:(.text+0x1db4): undefined reference to `__udivdi3'
+> 
+> Please use DIV_ROUND_UP_ULL() instead.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20191220/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20191220/
+Thanks, I applied it in:
+https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git/commit/?h=dev
 
-Tree: next
-Branch: master
-Git Describe: next-20191220
-Git Commit: 7ddd09fc4b745fb1d8942f95389583e08412e0cd
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 86 unique boards, 22 SoC families, 21 builds out of 214
-
-Boot Failures Detected:
-
-arm:
-    qcom_defconfig:
-        gcc-8:
-            qcom-apq8064-cm-qs600: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5250-arndale: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            meson8b-odroidc1: 2 failed labs
-
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
-    sunxi_defconfig:
-        gcc-8
-            sun7i-a20-bananapi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+> 
+> Reported-by: <noreply@ellerman.id.au>
+> 
+> > +       }
+> > +
+> > +       return do_truncate_blocks(inode, free_from, lock);
+> > +}
+> 
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> 
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

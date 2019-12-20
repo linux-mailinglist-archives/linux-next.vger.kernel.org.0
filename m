@@ -2,190 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F431272D4
-	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 02:36:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DAE812730C
+	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 02:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727024AbfLTBgU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Dec 2019 20:36:20 -0500
-Received: from ozlabs.org ([203.11.71.1]:41217 "EHLO ozlabs.org"
+        id S1727119AbfLTBxq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Dec 2019 20:53:46 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56225 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727020AbfLTBgU (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Dec 2019 20:36:20 -0500
+        id S1726963AbfLTBxq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 19 Dec 2019 20:53:46 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47fBCz3rWGz9sPT;
-        Fri, 20 Dec 2019 12:36:15 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47fBc65PtVz9sPT;
+        Fri, 20 Dec 2019 12:53:42 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1576805776;
-        bh=HbJSgAPpeVSdyHoi1ilZt4nel092vLCUO02ZJNeCLTQ=;
+        s=201702; t=1576806824;
+        bh=V61oflJvWEqxzkw6SwVzXbZeO5cG362lxo1Q4I+Rwtg=;
         h=Date:From:To:Cc:Subject:From;
-        b=WAlArbUZRjFeIDoB5OGkp4Q/pyUREfJKylBegTakkkPaZPoOGQA8x40j0mMMo1RoX
-         W3YK1Y665Fs10b2zSV2Ed9j8mS44EWzwUeiMBgzzmakkljDaXopqjKv00AOB2X117c
-         EV/UFeXoMO7UrFImIiukp0zg9A3y/sUfAdaTf9E4cpQYfIaHY6Sf/LE/D6jAw0YOc1
-         kRvI2Dk9tQ76eQPkOt9hREhM5ImKi2YCRHan4E3icdklyOOaomdzyY7u0L9cTT6CkW
-         EJEeN07A9KVDJW0We6S7y7tw4hfLvrQpoRCXc1gh5vjcUVSlRlU4E5d1HROIWuUdCV
-         ZhGbVvxC4fmNw==
-Date:   Fri, 20 Dec 2019 12:36:14 +1100
+        b=HRoMj8SW0FWH77JrQJf2atoXVPYAW0UtKX9o7uyadyG5/PUonu0a9Mryn8hfdaJNf
+         rby1DlDvsZ9pCCSEx7om44ewAQRF8WWg4DVMhRBnLhPLSCp8vh7Y8iZ8DYVPwv+eNQ
+         m5Eb5PRmzzXAt+ip3G90OffWmNfRWiOHJh1lTkLHJW5r+VvCibow8tTuKusBxwIVMA
+         j6WX/g4y0/+Vn4uBEgtajfNErChs/+EY5edg9WyPwnmPFYem7eBRMo6e1fbTY0vQr7
+         u4njn21Cka5W/iYhS5xQzFYVF+qPg4NHAPWKhx6L89QiQhuXUkdeq+5Ol/GCF4eefu
+         sUUxAHap1dz3g==
+Date:   Fri, 20 Dec 2019 12:53:41 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@ZenIV.linux.org.uk>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>
-Subject: linux-next: manual merge of the block tree with the vfs tree
-Message-ID: <20191220123614.5f11d2e3@canb.auug.org.au>
+        Changbin Du <changbin.du@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: linux-next: manual merge of the tip tree with Linus' tree
+Message-ID: <20191220125341.51cd2448@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/838RX.1z8k=IWCSx+a4itv.";
+Content-Type: multipart/signed; boundary="Sig_/sxvwauLpjDBgVnETGxMFZ8T";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/838RX.1z8k=IWCSx+a4itv.
+--Sig_/sxvwauLpjDBgVnETGxMFZ8T
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the block tree got a conflict in:
+Today's linux-next merge of the tip tree got a conflict in:
 
-  fs/open.c
+  lib/Kconfig.debug
 
 between commit:
 
-  0a51692d49ec ("open: introduce openat2(2) syscall")
+  045f6d7942be ("lib/Kconfig.debug: fix some messed up configurations")
 
-from the vfs tree and commit:
+from Linus' tree and commit:
 
-  252270311374 ("fs: make build_open_flags() available internally")
+  dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
 
-from the block tree.
+from the tip tree.
 
-I fixed it up (see at end, plus the merge fix patch below) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the
-conflicting tree to minimise any particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 20 Dec 2019 11:50:51 +1100
-Subject: [PATCH] io_uring: fix up for "open: introduce openat2(2) syscall"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/internal.h | 3 ++-
- fs/io_uring.c | 6 ++++--
- 2 files changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/fs/internal.h b/fs/internal.h
-index 166134be439f..dabf747c14fd 100644
---- a/fs/internal.h
-+++ b/fs/internal.h
-@@ -124,7 +124,8 @@ extern struct file *do_filp_open(int dfd, struct filena=
-me *pathname,
- 		const struct open_flags *op);
- extern struct file *do_file_open_root(struct dentry *, struct vfsmount *,
- 		const char *, const struct open_flags *);
--extern int build_open_flags(int flags, umode_t mode, struct open_flags *op=
-);
-+extern struct open_how build_open_how(int flags, umode_t mode);
-+extern int build_open_flags(const struct open_how *how, struct open_flags =
-*op);
-=20
- long do_sys_ftruncate(unsigned int fd, loff_t length, int small);
- long do_faccessat(int dfd, const char __user *filename, int mode);
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 26edb980df02..c756b8fc44c6 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -2337,19 +2337,21 @@ static int io_openat(struct io_kiocb *req, struct i=
-o_kiocb **nxt,
- 		     bool force_nonblock)
- {
- 	struct open_flags op;
-+	struct open_how how;
- 	struct file *file;
- 	int ret;
-=20
- 	ret =3D io_openat_prep(req);
- 	if (ret)
- 		goto err;
--	ret =3D build_open_flags(req->open.flags, req->open.mode, &op);
-+	how =3D build_open_how(req->open.flags, req->open.mode);
-+	ret =3D build_open_flags(&how, &op);
- 	if (ret)
- 		goto err;
- 	if (force_nonblock)
- 		op.lookup_flags |=3D LOOKUP_NONBLOCK;
-=20
--	ret =3D get_unused_fd_flags(req->open.flags);
-+	ret =3D get_unused_fd_flags(how.flags);
- 	if (ret < 0)
- 		goto err;
-=20
---=20
-2.24.0
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc fs/open.c
-index 50a46501bcc9,24cb5d58bbda..000000000000
---- a/fs/open.c
-+++ b/fs/open.c
-@@@ -955,29 -955,8 +955,29 @@@ struct file *open_with_fake_path(const=20
-  }
-  EXPORT_SYMBOL(open_with_fake_path);
+diff --cc lib/Kconfig.debug
+index 5ffe144c9794,bee08ed4a139..000000000000
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@@ -447,6 -447,6 +447,8 @@@ source "lib/Kconfig.kgdb
  =20
- -inline int build_open_flags(int flags, umode_t mode, struct open_flags *o=
-p)
- +#define WILL_CREATE(flags)	(flags & (O_CREAT | __O_TMPFILE))
- +#define O_PATH_FLAGS		(O_DIRECTORY | O_NOFOLLOW | O_PATH | O_CLOEXEC)
- +
-- static inline struct open_how build_open_how(int flags, umode_t mode)
-++inline struct open_how build_open_how(int flags, umode_t mode)
- +{
- +	struct open_how how =3D {
- +		.flags =3D flags & VALID_OPEN_FLAGS,
- +		.mode =3D mode & S_IALLUGO,
- +	};
- +
- +	/* O_PATH beats everything else. */
- +	if (how.flags & O_PATH)
- +		how.flags &=3D O_PATH_FLAGS;
- +	/* Modes should only be set for create-like flags. */
- +	if (!WILL_CREATE(how.flags))
- +		how.mode =3D 0;
- +	return how;
- +}
- +
-- static inline int build_open_flags(const struct open_how *how,
-++inline int build_open_flags(const struct open_how *how,
- +				   struct open_flags *op)
-  {
- +	int flags =3D how->flags;
-  	int lookup_flags =3D 0;
-  	int acc_mode =3D ACC_MODE(flags);
+  source "lib/Kconfig.ubsan"
  =20
+++source "lib/Kconfig.kcsan"
+++
+  endmenu
+ =20
+  config DEBUG_KERNEL
+@@@ -2175,8 -2130,55 +2177,6 @@@ config MEMTES
+  	        memtest=3D17, mean do 17 test patterns.
+  	  If you are unsure how to answer this question, answer N.
+ =20
+ -source "samples/Kconfig"
+ -
+ -source "lib/Kconfig.kcsan"
+ -
+ -config ARCH_HAS_DEVMEM_IS_ALLOWED
+ -	bool
+ -
+ -config STRICT_DEVMEM
+ -	bool "Filter access to /dev/mem"
+ -	depends on MMU && DEVMEM
+ -	depends on ARCH_HAS_DEVMEM_IS_ALLOWED
+ -	default y if PPC || X86 || ARM64
+ -	---help---
+ -	  If this option is disabled, you allow userspace (root) access to all
+ -	  of memory, including kernel and userspace memory. Accidental
+ -	  access to this is obviously disastrous, but specific access can
+ -	  be used by people debugging the kernel. Note that with PAT support
+ -	  enabled, even in this case there are restrictions on /dev/mem
+ -	  use due to the cache aliasing requirements.
+ -
+ -	  If this option is switched on, and IO_STRICT_DEVMEM=3Dn, the /dev/mem
+ -	  file only allows userspace access to PCI space and the BIOS code and
+ -	  data regions.  This is sufficient for dosemu and X and all common
+ -	  users of /dev/mem.
+ -
+ -	  If in doubt, say Y.
+ -
+ -config IO_STRICT_DEVMEM
+ -	bool "Filter I/O access to /dev/mem"
+ -	depends on STRICT_DEVMEM
+ -	---help---
+ -	  If this option is disabled, you allow userspace (root) access to all
+ -	  io-memory regardless of whether a driver is actively using that
+ -	  range.  Accidental access to this is obviously disastrous, but
+ -	  specific access can be used by people debugging kernel drivers.
+ -
+ -	  If this option is switched on, the /dev/mem file only allows
+ -	  userspace access to *idle* io-memory ranges (see /proc/iomem) This
+ -	  may break traditional users of /dev/mem (dosemu, legacy X, etc...)
+ -	  if the driver using a given range cannot be disabled.
+ -
+ -	  If in doubt, say Y.
+ -
+ -menu "$(SRCARCH) Debugging"
+ -
+ -source "arch/$(SRCARCH)/Kconfig.debug"
+--
+ -endmenu
+--
+  config HYPERV_TESTING
+  	bool "Microsoft Hyper-V driver testing"
+  	default n
 
---Sig_/838RX.1z8k=IWCSx+a4itv.
+--Sig_/sxvwauLpjDBgVnETGxMFZ8T
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl38JY4ACgkQAVBC80lX
-0GxEoQgAorTaH+zAjQtnCGGhhrkRrOLs2vcx2ZQHjVFu3HyN9rwnI2AxFxs89coM
-RgBhv7FqJObmGu4S1HYhG1q3V8Lf7HeaxVPyiQ6clq1kSs3dVP1y0au9HRRVtlU1
-wEg4Vx8z40V5R9W8kG/zlGBUSBoaO+9XM37ZhlPecaXQaPVUAw+x+4+ODgBxBLfg
-XYslhaMkEX5QAO4AtKqhCtDsTf0UuWT+yrvA87MuH+0arFzJnOSooZ6zGZNLRZZz
-rQ1Sq+1NT6SbueXWbfSro9TOx15nryz1Ij3KO7iWsIx4zYmhdWNm8BXXOfHErOlz
-0bWWVskOqQu+o+4TvyO+y5EwBQaHIQ==
-=m5tl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl38KaUACgkQAVBC80lX
+0GzyHAf/SG+fdGKOkvu0j4KmnxABWrDJJN+FFhyInBNIOlarrH0K7JGeE/xy4BA2
+w5wwfjpT+RwIeWviz11syW9APsl7R6O+humnvNGHRiRtZKPWDfK3dUl1Of8VZw0p
+3y4nw1EEJbRzdHEgFMMZZ5rdCRqWyMO1XXj5cNa+eKJugx32Pxl3LLaDYoWsy1tI
+9SzhC1zN1SuIvXoI8E0a1wSvhLD9A3H/Guw60MBLflR0CgZlW1de6ukAPPs1OgXg
+Gf7DSdr0qZCdFblO/rNPNqbry0GaD+Jb1OHyuiBqpWAtsHSJ/1onIu0X672rFyDs
+wKBmXyCu+okvP7BeukW8Q4jHPhGwTg==
+=nOcc
 -----END PGP SIGNATURE-----
 
---Sig_/838RX.1z8k=IWCSx+a4itv.--
+--Sig_/sxvwauLpjDBgVnETGxMFZ8T--

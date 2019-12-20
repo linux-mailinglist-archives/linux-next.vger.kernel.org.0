@@ -2,91 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 272F712777D
-	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 09:48:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022F2127833
+	for <lists+linux-next@lfdr.de>; Fri, 20 Dec 2019 10:33:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727174AbfLTIs6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Dec 2019 03:48:58 -0500
-Received: from mail25.static.mailgun.info ([104.130.122.25]:30851 "EHLO
-        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727084AbfLTIs6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 20 Dec 2019 03:48:58 -0500
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1576831737; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=GgfymSp4WXJavxzZ/gU/V2dOSz8ELQUdgDkVM3WpurY=; b=RPxvt4Tlz6Sp/uDWF2u1p4NQaESbITnJAgLRfaKq7+KvpTuYeXSKfHZRKsv/UCZ2mNTtTWui
- UOxb9Bvk3YiC9LX4SU1CCaMx1hrchxmAYuJLoI3MyTKLII7CU99AYv56VQ/zhs5RR4xCcfX2
- Qdk/Qum5AE45STuhXWAYWK1S8xU=
-X-Mailgun-Sending-Ip: 104.130.122.25
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
- by mxa.mailgun.org with ESMTP id 5dfc8af3.7f6b64ac8ea0-smtp-out-n03;
- Fri, 20 Dec 2019 08:48:51 -0000 (UTC)
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 91266C433A2; Fri, 20 Dec 2019 08:48:51 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id B9805C43383;
-        Fri, 20 Dec 2019 08:48:47 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org B9805C43383
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     John Crispin <john@phrozen.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wireless <linux-wireless@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pradeep Kumar Chitrapu <pradeepc@codeaurora.org>
-Subject: Re: linux-next: Fixes tag needs some work in the wireless-drivers tree
-References: <20191220075337.789971fe@canb.auug.org.au>
-        <739b70e9-6a77-9d4e-2331-16022325cd34@phrozen.org>
-Date:   Fri, 20 Dec 2019 10:48:45 +0200
-In-Reply-To: <739b70e9-6a77-9d4e-2331-16022325cd34@phrozen.org> (John
-        Crispin's message of "Thu, 19 Dec 2019 21:55:32 +0100")
-Message-ID: <87y2v72xhu.fsf@kamboji.qca.qualcomm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1727193AbfLTJda (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Dec 2019 04:33:30 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:40215 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727184AbfLTJda (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Dec 2019 04:33:30 -0500
+Received: by mail-wr1-f51.google.com with SMTP id c14so8708133wrn.7
+        for <linux-next@vger.kernel.org>; Fri, 20 Dec 2019 01:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Zuh2ZSP3DfllxFcJRtUPhgXKUPJVYzI3/bJYFuEcDQ8=;
+        b=FceX9V/FATMJmsHMCH7Wz4WFnPhY3smvNMnYtQt8pDd814GduEDWr6XwxxUMOjA0iU
+         FtOpBLIJz9if4lXU734i9MMaxxMaqvAnJSNyA7vO9oPXK+XbYYRcyoapr910IDLIGPYh
+         R784wD6y4OFUcvbLlE6tByBnoX/mef+SSRcMqYKbPtGtw6kA6hsYdxyjw/8+vSqteTbW
+         2CJJaQYNKoVy0aoK0/+4uLCum6JY0htoMlkAuSw8YQhGvIahVFBUhUtVLkE+FcmrPPGQ
+         4RFVV/Hgb8b0JIrIm610YxsQMJM87JJoNz7f71uEAy7sXtv+uoJW90vWGF1etTGHqLq+
+         KRbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Zuh2ZSP3DfllxFcJRtUPhgXKUPJVYzI3/bJYFuEcDQ8=;
+        b=uYuO0jUA5cYpZlKv0OGFGrDHPUmEpJfgyO+gv9GnRZIObLb5Knbya8F+Sv5oEmXOmM
+         s9kZxzGMTd6S9C9Yq6VDuIogFUSDNrzIC/USC3jyw37dLTxt3FRN3HX++csyk69mN53/
+         D4bFst0bzoarDu0tStTYeyivu9/JbWK80WNPP4qZPgQnz+I2D7V02uKI6ytEzbJy2Nbl
+         ClM/XcEO2lPyxPHBk1oEZ6GXu+OXOKOy8uCPbs8uPGDZzZVmYXnxQq6JmtPS6q2j3zhZ
+         6bd/vEpF6coL/g6UrBbLyJcFgklMCAfhUQRF585//Vq0Yfa6I5YlTEagGp0NsyVGH4tY
+         1DBg==
+X-Gm-Message-State: APjAAAUdKql/+4FfQje5/CwifYRqJxPtdJbLbHPhOMbiq1UJ103Nbv5t
+        ap9UFEAMLzkVX4T0bDPesVVrZuaGOQBAiw==
+X-Google-Smtp-Source: APXvYqzzeDDw+HhTsfuzusAvWIfdla1aujkzbx79SS2lfCZ0dprz8nEz5/jXS1o/aP9FD3vemp8mBw==
+X-Received: by 2002:adf:e2cf:: with SMTP id d15mr14080291wrj.225.1576834407465;
+        Fri, 20 Dec 2019 01:33:27 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id o194sm9447896wme.45.2019.12.20.01.33.26
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Dec 2019 01:33:26 -0800 (PST)
+Message-ID: <5dfc9566.1c69fb81.a0c92.01ce@mx.google.com>
+Date:   Fri, 20 Dec 2019 01:33:26 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: v5.5-rc2-549-g9125728fcf86
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 219 boots: 3 failed,
+ 208 passed with 5 offline, 3 untried/unknown (v5.5-rc2-549-g9125728fcf86)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-John Crispin <john@phrozen.org> writes:
+next/pending-fixes boot: 219 boots: 3 failed, 208 passed with 5 offline, 3 =
+untried/unknown (v5.5-rc2-549-g9125728fcf86)
 
-> On 19/12/2019 21:53, Stephen Rothwell wrote:
->> Hi all,
->>
->> In commit
->>
->>    485add35771b ("ath11k: fix pdev when invoking ath11k_wmi_send_twt_enable_cmd()")
->>
->> Fixes tag
->>
->>    Fixes: e65a616f4e74 ("ath11k: add TWT support")
->>
->> has these problem(s):
->>
->>    - Target SHA1 does not exist
->>
->> Did you mean
->>
->> Fixes: 6d293d447670 ("ath11k: add TWT support")
->>
->
-> My bad, sorry, I was sitting on an old tree apparently.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.5-rc2-549-g9125728fcf86/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.5-rc2-549-g9125728fcf86/
 
-And I didn't catch it either. I try to avoid rebasing my trees so I'm
-not planning fix this, let's just avoid this in the future.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.5-rc2-549-g9125728fcf86
+Git Commit: 9125728fcf863412fb80f042c39ff891ab9f48c4
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 87 unique boards, 23 SoC families, 21 builds out of 214
 
--- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Boot Regressions Detected:
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          sun50i-a64-bananapi-m64:
+              lab-clabbe: new failure (last pass: v5.5-rc1-399-g9626c50a1d3=
+d)
+          sun50i-h6-orangepi-one-plus:
+              lab-clabbe: new failure (last pass: v5.5-rc2-502-gd5e7f2ed7f9=
+5)
+
+Boot Failures Detected:
+
+arm:
+    qcom_defconfig:
+        gcc-8:
+            qcom-apq8064-cm-qs600: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            dm365evm,legacy: 1 offline lab
+
+    sunxi_defconfig:
+        gcc-8
+            sun7i-a20-bananapi: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

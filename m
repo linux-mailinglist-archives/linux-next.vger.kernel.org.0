@@ -2,83 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B773D128AE0
-	for <lists+linux-next@lfdr.de>; Sat, 21 Dec 2019 19:45:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AD21295F0
+	for <lists+linux-next@lfdr.de>; Mon, 23 Dec 2019 13:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726648AbfLUSpT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 21 Dec 2019 13:45:19 -0500
-Received: from aserp2120.oracle.com ([141.146.126.78]:36088 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbfLUSpT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 21 Dec 2019 13:45:19 -0500
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBLIj2lJ080577;
-        Sat, 21 Dec 2019 18:45:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : references : date : in-reply-to : message-id : mime-version :
- content-type; s=corp-2019-08-05;
- bh=DOaak8punvqKDEKEpw641d8QYPKm92fSr8hBvOTIyBw=;
- b=il8wPESIsWwngVDgYbKOGibMN08/LnygoQKtaXwdo2KDbjMLR1nDN2VUWHzvBg8TkpZL
- KpEX8u0botJ9uC2WqzBsifohKEYAcO6eeukFBMmwHPagb0+V2BXF5wkQ72JhDLPXQE3+
- F3FpWvm7nTJB1KAXHTWXWbfm7XrTic1PRRj6NX8tt22+tDC7KZVdXU6KQMtMUNsZ6X4e
- dQ32I6M+6u29ZPw0VPpeQpLjREnsEkznwG1itsj6vK4A6rwLcQ2ByDOeuK4Ym7E5Hxlr
- o0J+mTmofA9FaggBIromGfYSCh8No/sFAwbWzT3EhA2ILjkJpvHuyzwY4YY6E+9XS02q hA== 
-Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
-        by aserp2120.oracle.com with ESMTP id 2x1bbphjb9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 21 Dec 2019 18:45:11 +0000
-Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
-        by aserp3030.oracle.com (8.16.0.27/8.16.0.27) with SMTP id xBLIhh1f103306;
-        Sat, 21 Dec 2019 18:45:11 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3030.oracle.com with ESMTP id 2x19f5kjwg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sat, 21 Dec 2019 18:45:11 +0000
-Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id xBLIj98c006721;
-        Sat, 21 Dec 2019 18:45:09 GMT
-Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Sat, 21 Dec 2019 10:45:09 -0800
-To:     Anders Roxell <anders.roxell@linaro.org>
+        id S1726733AbfLWMUX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Dec 2019 07:20:23 -0500
+Received: from mail-lj1-f196.google.com ([209.85.208.196]:40514 "EHLO
+        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726257AbfLWMUX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Dec 2019 07:20:23 -0500
+Received: by mail-lj1-f196.google.com with SMTP id u1so17536163ljk.7
+        for <linux-next@vger.kernel.org>; Mon, 23 Dec 2019 04:20:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6maFNccIr4FVjyCOffu4Z8M0jZ8asTN08k4BjiYMbgY=;
+        b=mvJq3RZ5/SO08RF45Cl4hy811+yrHDwoEQjAneQaQEVZstNfZP7KOidREMLRqt8oAb
+         lPq5feT+FUQiCdFKwGpdVuXWmBOFfbm9SEAmdnvaskLV2wy03xGcAh0aR+SC3BT//2TC
+         Rd4/AyqnxvFS8ouYHAgY4wUEJ8BUiqNEYp9wDM3kfhGy2aDsKGQjxoWnJws/sb3VG85W
+         KVzzp2GFYXa+WinThnUTD+RP99hXmHYiTtqNDApmbMj/Ww1UjZZpNM3V/agIA4gGdlOn
+         I6S+TCTdVAB76SSZ9vwiPkkRe/D+ykxnaA7DXTCZVnyR50UfX/6udCPA6Axaf+Xx5ad/
+         Hpcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6maFNccIr4FVjyCOffu4Z8M0jZ8asTN08k4BjiYMbgY=;
+        b=Bf25hi2DN10VJmiQC7FKAoX3Yka1hZW0eGhzjuyZMC/TJ8C9mGCFyi7QBfyBkhYU8I
+         +EXCSmoFuTaqeVmP+oAauC1+R52Uy0fknYX3z16iEYxpZW0Aa3bB/DK49yq9bR92vHUE
+         UEYGrTCJIQKdpDXmNxjAQ/TAcEpQ1Ab2PRSGgmrAOxyJg6TV/cwGl55LmBjCrY5zpg7Z
+         KkdN+nFoXaC1hKr1Kf5LOzrSdx4fuofJTkCgHs6H9DbduDts8vWw/CMlzG/WinK0iPzR
+         1doLNRIvboD7Svp2QDdLtgwGxkTVgqXBouxI7Cr/IhqwqOlRmM7BNWqYXNcPO9bzyO4K
+         1JrQ==
+X-Gm-Message-State: APjAAAUJbI3FAyLLWkVtqD5Nah6zQsiNrOabZzWqH/CvFSAnMPPxtfTJ
+        ftly6jJNldvcKpJ75ogXdkHlsz65Zcljn4QqGtqQgg==
+X-Google-Smtp-Source: APXvYqz6tEPq0Je/g2RvV/4JEMlHwxH5Lsaksz2cZf1nATKkAhAzRATNBacsWQl7vRCo0BaBd/u71PIfzDoEUQyFHDM=
+X-Received: by 2002:a2e:97d9:: with SMTP id m25mr4441817ljj.146.1577103621011;
+ Mon, 23 Dec 2019 04:20:21 -0800 (PST)
+MIME-Version: 1.0
+References: <20191220160639.3406a5de@canb.auug.org.au> <CADYN=9JjqvNWEsHLW5+GgSvkUkuz_6iMpD=X4Vk6nLQXtXa2Dw@mail.gmail.com>
+ <yq1tv5t7c25.fsf@oracle.com>
+In-Reply-To: <yq1tv5t7c25.fsf@oracle.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Mon, 23 Dec 2019 13:20:09 +0100
+Message-ID: <CADYN=9+FCsq-AaxCV9-qG0tFNZ2w=8cd87+pa2bP8p6LRgrxiw@mail.gmail.com>
+Subject: Re: linux-next: Tree for Dec 20
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        martin.petersen@oracle.com, Stanley Chu <stanley.chu@mediatek.com>,
+        Stanley Chu <stanley.chu@mediatek.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 20
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-References: <20191220160639.3406a5de@canb.auug.org.au>
-        <CADYN=9JjqvNWEsHLW5+GgSvkUkuz_6iMpD=X4Vk6nLQXtXa2Dw@mail.gmail.com>
-Date:   Sat, 21 Dec 2019 13:45:06 -0500
-In-Reply-To: <CADYN=9JjqvNWEsHLW5+GgSvkUkuz_6iMpD=X4Vk6nLQXtXa2Dw@mail.gmail.com>
-        (Anders Roxell's message of "Fri, 20 Dec 2019 12:55:10 +0100")
-Message-ID: <yq1tv5t7c25.fsf@oracle.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9478 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=855
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.0.1-1911140001 definitions=main-1912210165
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9478 signatures=668685
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
- suspectscore=0 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
- lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=933 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
- definitions=main-1912210165
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Sat, 21 Dec 2019 at 19:45, Martin K. Petersen
+<martin.petersen@oracle.com> wrote:
+>
+>
+> Anders,
+>
+> > ../drivers/scsi/ufs/ufs-mediatek.c: In function ufs_mtk_setup_ref_clk:
+>
+> This change was very briefly in my tree. It has since been dropped.
 
-Anders,
+OK, thank you Martin then I know.
 
-> ../drivers/scsi/ufs/ufs-mediatek.c: In function ufs_mtk_setup_ref_clk:
-
-This change was very briefly in my tree. It has since been dropped.
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
+Cheers,
+Anders

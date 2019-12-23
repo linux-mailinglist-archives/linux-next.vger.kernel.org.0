@@ -2,74 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AD21295F0
-	for <lists+linux-next@lfdr.de>; Mon, 23 Dec 2019 13:20:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3F5E129B58
+	for <lists+linux-next@lfdr.de>; Mon, 23 Dec 2019 23:01:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726733AbfLWMUX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Dec 2019 07:20:23 -0500
-Received: from mail-lj1-f196.google.com ([209.85.208.196]:40514 "EHLO
-        mail-lj1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726257AbfLWMUX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Dec 2019 07:20:23 -0500
-Received: by mail-lj1-f196.google.com with SMTP id u1so17536163ljk.7
-        for <linux-next@vger.kernel.org>; Mon, 23 Dec 2019 04:20:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=6maFNccIr4FVjyCOffu4Z8M0jZ8asTN08k4BjiYMbgY=;
-        b=mvJq3RZ5/SO08RF45Cl4hy811+yrHDwoEQjAneQaQEVZstNfZP7KOidREMLRqt8oAb
-         lPq5feT+FUQiCdFKwGpdVuXWmBOFfbm9SEAmdnvaskLV2wy03xGcAh0aR+SC3BT//2TC
-         Rd4/AyqnxvFS8ouYHAgY4wUEJ8BUiqNEYp9wDM3kfhGy2aDsKGQjxoWnJws/sb3VG85W
-         KVzzp2GFYXa+WinThnUTD+RP99hXmHYiTtqNDApmbMj/Ww1UjZZpNM3V/agIA4gGdlOn
-         I6S+TCTdVAB76SSZ9vwiPkkRe/D+ykxnaA7DXTCZVnyR50UfX/6udCPA6Axaf+Xx5ad/
-         Hpcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=6maFNccIr4FVjyCOffu4Z8M0jZ8asTN08k4BjiYMbgY=;
-        b=Bf25hi2DN10VJmiQC7FKAoX3Yka1hZW0eGhzjuyZMC/TJ8C9mGCFyi7QBfyBkhYU8I
-         +EXCSmoFuTaqeVmP+oAauC1+R52Uy0fknYX3z16iEYxpZW0Aa3bB/DK49yq9bR92vHUE
-         UEYGrTCJIQKdpDXmNxjAQ/TAcEpQ1Ab2PRSGgmrAOxyJg6TV/cwGl55LmBjCrY5zpg7Z
-         KkdN+nFoXaC1hKr1Kf5LOzrSdx4fuofJTkCgHs6H9DbduDts8vWw/CMlzG/WinK0iPzR
-         1doLNRIvboD7Svp2QDdLtgwGxkTVgqXBouxI7Cr/IhqwqOlRmM7BNWqYXNcPO9bzyO4K
-         1JrQ==
-X-Gm-Message-State: APjAAAUJbI3FAyLLWkVtqD5Nah6zQsiNrOabZzWqH/CvFSAnMPPxtfTJ
-        ftly6jJNldvcKpJ75ogXdkHlsz65Zcljn4QqGtqQgg==
-X-Google-Smtp-Source: APXvYqz6tEPq0Je/g2RvV/4JEMlHwxH5Lsaksz2cZf1nATKkAhAzRATNBacsWQl7vRCo0BaBd/u71PIfzDoEUQyFHDM=
-X-Received: by 2002:a2e:97d9:: with SMTP id m25mr4441817ljj.146.1577103621011;
- Mon, 23 Dec 2019 04:20:21 -0800 (PST)
-MIME-Version: 1.0
-References: <20191220160639.3406a5de@canb.auug.org.au> <CADYN=9JjqvNWEsHLW5+GgSvkUkuz_6iMpD=X4Vk6nLQXtXa2Dw@mail.gmail.com>
- <yq1tv5t7c25.fsf@oracle.com>
-In-Reply-To: <yq1tv5t7c25.fsf@oracle.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Mon, 23 Dec 2019 13:20:09 +0100
-Message-ID: <CADYN=9+FCsq-AaxCV9-qG0tFNZ2w=8cd87+pa2bP8p6LRgrxiw@mail.gmail.com>
-Subject: Re: linux-next: Tree for Dec 20
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+        id S1726832AbfLWWBx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Dec 2019 17:01:53 -0500
+Received: from mail.kernel.org ([198.145.29.99]:33156 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726817AbfLWWBw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Dec 2019 17:01:52 -0500
+Received: from X1 (nat-ab2241.sltdut.senawave.net [162.218.216.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 0A6D4206B7;
+        Mon, 23 Dec 2019 22:01:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1577138512;
+        bh=cvBxc4WmSagTT1y4VAUM0/tpLY90rFtmuzPh60X44l0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dUQyymDZpS8ieDiLpX7hkhz6mBdQuLmrcPET7KIRfHOhXojpwj0s0BlzgLCJpWaj2
+         E2oPEZcZqqs4seNr/Mu0YH/rkQXPgdtJN03vRggrcdL7QWwnRzd8IAOxWfdZZ9GSjA
+         37rmBkc5T3XJVAHC7iLWSs0+PEpIHWksAKbeBCvA=
+Date:   Mon, 23 Dec 2019 14:01:51 -0800
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Christoph Hellwig <hch@lst.de>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Stanley Chu <stanley.chu@mediatek.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ generic-ioremap tree
+Message-Id: <20191223140151.7aceb059297338f5912b0f35@linux-foundation.org>
+In-Reply-To: <20191221083211.GA3465@lst.de>
+References: <20191218133025.15356802@canb.auug.org.au>
+        <20191221083211.GA3465@lst.de>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, 21 Dec 2019 at 19:45, Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Anders,
->
-> > ../drivers/scsi/ufs/ufs-mediatek.c: In function ufs_mtk_setup_ref_clk:
->
-> This change was very briefly in my tree. It has since been dropped.
+On Sat, 21 Dec 2019 09:32:11 +0100 Christoph Hellwig <hch@lst.de> wrote:
 
-OK, thank you Martin then I know.
+> Andrew,
+> 
+> do you plan to send this to Linus for 5.5 to fix the warning from the
+> new devm_ioremap_uc addition in this cycle?  If so I can rebase the
+> ioremap tree one more time.
 
-Cheers,
-Anders
+I'm not sure what to do about this because of
+https://lore.kernel.org/lkml/CAMuHMdUO=cZMsFx4t_uULNRuwnGLjbRYOJAo7j5gC-iSV3wy5w@mail.gmail.com/
+
+I'd rather just drop the patch.  Can you please take care of it all?  
+
+
+From: Nick Desaulniers <ndesaulniers@google.com>
+Subject: hexagon: define ioremap_uc
+
+Similar to commit 38e45d81d14e ("sparc64: implement ioremap_uc") define
+ioremap_uc for hexagon to avoid errors from
+-Wimplicit-function-definition.
+
+Link: http://lkml.kernel.org/r/20191209222956.239798-2-ndesaulniers@google.com
+Link: https://github.com/ClangBuiltLinux/linux/issues/797
+Fixes: e537654b7039 ("lib: devres: add a helper function for ioremap_uc")
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Suggested-by: Nathan Chancellor <natechancellor@gmail.com>
+Acked-by: Brian Cain <bcain@codeaurora.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Tuowen Zhao <ztuowen@gmail.com>
+Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Alexios Zavras <alexios.zavras@intel.com>
+Cc: Allison Randal <allison@lohutok.net>
+Cc: Will Deacon <will@kernel.org>
+Cc: Richard Fontana <rfontana@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+---
+
+ arch/hexagon/include/asm/io.h |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/arch/hexagon/include/asm/io.h~hexagon-define-ioremap_uc
++++ a/arch/hexagon/include/asm/io.h
+@@ -173,6 +173,7 @@ static inline void writel(u32 data, vola
+ 
+ void __iomem *ioremap(unsigned long phys_addr, unsigned long size);
+ #define ioremap_nocache ioremap
++#define ioremap_uc(X, Y) ioremap((X), (Y))
+ 
+ 
+ #define __raw_writel writel
+_
+

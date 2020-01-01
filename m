@@ -2,64 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F70812D8E6
-	for <lists+linux-next@lfdr.de>; Tue, 31 Dec 2019 14:16:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D50212DE04
+	for <lists+linux-next@lfdr.de>; Wed,  1 Jan 2020 08:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726659AbfLaNQo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Dec 2019 08:16:44 -0500
-Received: from mail-lj1-f193.google.com ([209.85.208.193]:38360 "EHLO
-        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbfLaNQo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Dec 2019 08:16:44 -0500
-Received: by mail-lj1-f193.google.com with SMTP id w1so14351781ljh.5
-        for <linux-next@vger.kernel.org>; Tue, 31 Dec 2019 05:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to
-         :content-transfer-encoding;
-        bh=TxEyvS0UFeAqStLumur6M/ZL5xZO9h4HS1RgkJvp7mw=;
-        b=dO+nybyEImb9Kj4C4y8GC7RYkoACHIvhorO4HjqyBtEc0N0fFBXibVnuQ1kCf8pL/U
-         MpK70uNYj43ifVlZ6G2bCKhbVMjJLek4uq1Xub0t5VLXW8T/DdHSDgnrmFduZP1ekway
-         0v76iGL2Fs2SQgFMhfYFO2GgkjRyo3/zCo4FhWhSvhtJUgc6SoOFX6iQdkEV97FKaQAI
-         2aR2oHiMKMccBoyuzTse3YneDLjkRazGsweeXWVqAhJmRNMtMfjuoUI1PAa8JDN1LH1H
-         vMFp9yoe77KylP22a6GAvZ8XcctoMO8hTQbAamTlKfyKeMoTt7haha1Eg1k+orxBUqyD
-         z4/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to:content-transfer-encoding;
-        bh=TxEyvS0UFeAqStLumur6M/ZL5xZO9h4HS1RgkJvp7mw=;
-        b=Ko/E1ueKfQd4Ntd/ILSYYuyiQsH9Ny5AfBKQ9+xXZji7ncuKZJO2PLrey66qHRZy6D
-         6LZVlnPpHq0n1G1PdUkyBl8T41cphKOuWRoSpSn2+F7Pnx4x+F2M79QucXIAt5my/7hp
-         x/6VkzFDydTub+iRnYh5Hb6zc2rxztMivxvJy4J4KKVffjLzJddLOsrwj9V6Jvdt2pYR
-         U6fShCbbW0IBTP9E5JRKovfaqRYlWRqZXJs9hgpO0ubHf4lKQhEdZsZckqip7sUC5Gog
-         g3Enxp4KOwWfpzIryMENfUiEDak2s5Pt5atwCj8KAI0zkk+CF/O0yMEdnQ6r80vcpW2X
-         RaRQ==
-X-Gm-Message-State: APjAAAU4dnqpBIRgLyVVcg9UzW3TlN6HC8aEO5ttThBwMVwfenDN+6xK
-        THEjg0idRscjcPZFuq/8NQq8Dt8kgsn/5Iv48Vw=
-X-Google-Smtp-Source: APXvYqw5BV/+15Ef2Q4dGFGLqqwoXS/zDGLm1ZVccNA1gZq7/KFJZWD9eTMm2YKlKUh/JZT8ABhBVIlDa7g7SfFSjec=
-X-Received: by 2002:a2e:b4cf:: with SMTP id r15mr42371465ljm.52.1577798202146;
- Tue, 31 Dec 2019 05:16:42 -0800 (PST)
+        id S1725890AbgAAHQb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Jan 2020 02:16:31 -0500
+Received: from ozlabs.org ([203.11.71.1]:47605 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725790AbgAAHQb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 1 Jan 2020 02:16:31 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47nhLc08Xmz9sPW;
+        Wed,  1 Jan 2020 17:37:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1577860680;
+        bh=93Fnsa30PklcDpFSSNiGRs2LS3a6XWqJl1XuNw+iCbs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PfRxVU9uKUIksJWSdwOWYmFbhLVwm/JBTmRtq4zc3D1erXmAK3MUU5xAFqAd8tcFv
+         wRbACeBibuhC8SQfQFa0BFKTGiOrqcZOFmzFNKtAUNQ94jngNZ6hYmdwWQ0KeYSqMB
+         L3/pQRlQmTrznsySzoSMGO74IoZ2xcM5f+gAlPrPwmZLjzIoUqE/d8MqJOHe+9NChz
+         XkwCc1+2PlergTqvC7LZFJXO108Pm56SwITV31HByIWdGTbzUIjNJrDXmEslYiWyx0
+         FlphcWOSMncvpdASrB+/Tw+kkAJXKC29h/KYKO7zBG2rdJ3X0lFn3Ps2LWNy00M4RO
+         qUgs8iJ88kDqw==
+Date:   Wed, 1 Jan 2020 17:38:01 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the scmi tree
+Message-ID: <20200101173801.2e9a1758@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:ac2:4c27:0:0:0:0:0 with HTTP; Tue, 31 Dec 2019 05:16:41
- -0800 (PST)
-Reply-To: michellegoodman45@gmail.com
-From:   Shayma <shaymamarwan09@gmail.com>
-Date:   Tue, 31 Dec 2019 13:16:41 +0000
-Message-ID: <CAMz+VjSVianR0gdHKRr9-WGE3GvHY+FQSr2sn8_SBRQNRLE7Cg@mail.gmail.com>
-Subject: From Michelle
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/7_XYvOjSZ_sYAbguaP_I6MW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Witaj kochanie, mam nadziej=C4=99, =C5=BCe wszystko z tob=C4=85 w porz=C4=
-=85dku
-i twoja rodzina? Mam wa=C5=BCn=C4=85 umow=C4=99 do om=C3=B3wienia z tob=C4=
-=85
-Prosz=C4=99 od razu mi odpowiedzie=C4=87.
-Dzi=C4=99kuj=C4=99
-Michelle
+--Sig_/7_XYvOjSZ_sYAbguaP_I6MW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Commits
+
+  75ee475c4018 ("drivers: firmware: scmi: Extend SCMI transport layer by tr=
+ace events")
+  60542ecbce11 ("include: trace: Add SCMI header with trace events")
+
+are missing a Signed-off-by from their committers.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7_XYvOjSZ_sYAbguaP_I6MW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4MPkkACgkQAVBC80lX
+0Gxbzgf/RDclKyAOMExaFHKCBl+P5RpJySrigWUl6112IofAr0oPjsiznWaCp9Mg
+oN+dbfI4supoUQP6yrlIglCA72E3wlzKAlKxepKgqq/PvTT0MXvs2dWyiz6XWFps
+MtkTH14n7nEYI35ypHCAY/bkOvrl15iUdop9hzvfVkiE2t+ezFeywrvJAxKqX60g
+zMT9e6kh8iGRoXRYyuAhBdey+7SsSBtxGsDuqQsVBomKR3UdOI5XxILELZ0DuMII
+IUXxCFb2Ar5NNHbboxTfVWWUnsIDM4PznD2XwC+0ZMboDCxyXaY7j82068OSOqPp
+Cm3g5/DpSKap7SmxBVHlM28Dkei8pQ==
+=Spr3
+-----END PGP SIGNATURE-----
+
+--Sig_/7_XYvOjSZ_sYAbguaP_I6MW--

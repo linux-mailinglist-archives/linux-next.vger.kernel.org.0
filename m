@@ -2,95 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C2B9131570
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 16:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE799131716
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 18:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgAFPwQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jan 2020 10:52:16 -0500
-Received: from honk.sigxcpu.org ([24.134.29.49]:41292 "EHLO honk.sigxcpu.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726508AbgAFPwQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Jan 2020 10:52:16 -0500
-Received: from localhost (localhost [127.0.0.1])
-        by honk.sigxcpu.org (Postfix) with ESMTP id 4A4D1FB03;
-        Mon,  6 Jan 2020 16:52:13 +0100 (CET)
-X-Virus-Scanned: Debian amavisd-new at honk.sigxcpu.org
-Received: from honk.sigxcpu.org ([127.0.0.1])
-        by localhost (honk.sigxcpu.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id sImuiCrcHRMc; Mon,  6 Jan 2020 16:52:11 +0100 (CET)
-Received: by bogon.sigxcpu.org (Postfix, from userid 1000)
-        id 7681549D3D; Mon,  6 Jan 2020 16:52:11 +0100 (CET)
-Date:   Mon, 6 Jan 2020 16:52:11 +0100
-From:   Guido =?iso-8859-1?Q?G=FCnther?= <agx@sigxcpu.org>
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the leds tree
-Message-ID: <20200106155211.GA30225@bogon.m.sigxcpu.org>
-References: <20200106142116.538320e1@canb.auug.org.au>
- <20200106093129.GA13043@bogon.m.sigxcpu.org>
- <20200106103233.GA32426@amd>
+        id S1726643AbgAFRv7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jan 2020 12:51:59 -0500
+Received: from mail-io1-f68.google.com ([209.85.166.68]:34042 "EHLO
+        mail-io1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726448AbgAFRv6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jan 2020 12:51:58 -0500
+Received: by mail-io1-f68.google.com with SMTP id z193so49477038iof.1
+        for <linux-next@vger.kernel.org>; Mon, 06 Jan 2020 09:51:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Qy8kmkp8a0gmcpulrYZGNAm7gLvS5DkjoDa1dT+iaq8=;
+        b=jzrof668V7p7TIEBZmcBr7HsXeQHx4Y/82FDTr/eUsL2QuB+qyXSDZPa7kUuOW4p4V
+         aQDgWoEHRRaMXH2PbD5aNjNwR4/aok96ojD23mByECE8J/9RVT5Qxcx1m+Nzu+10gkjE
+         SnmQYwRYzPnX9blWGY3RBLpqxH9HNLy2+U6YVhhVSoBfFvzZlepNx/ajOLI29PDltHmI
+         GUn/LnnhMEFQquexorSKg8FbdHrsVah6Ucn5QZvBeqI9DkJiBJDMiXlIecF01kRGlfbz
+         bmiJ6ex6i/ZJgeTsQQ9i//PmTbQha9ze3n/iSkJf1V1vwxHCqgjWmbnX7S2xll8o81aQ
+         W21Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Qy8kmkp8a0gmcpulrYZGNAm7gLvS5DkjoDa1dT+iaq8=;
+        b=gn7FJ7l0rBTgiP8jhWRx3FJYuLXhNFnzBS7351p0106ETu8a7+e6uz+M3koyYzf/HR
+         J2gL2xRhtXN3gmsKh7IcwuMqEC+r8mC/YeaEUx1Jiizt1hD8nwt5tvHn48C9C2sQ5puP
+         nFh8kJDB+8ER/Q4hXHDlSgNUcnNIw2wImleQnGU/qCYBTlq6sTRqPT53YnxCpBA3OQ13
+         jKaEOz1tUweWZBIJ4B4wry9GQA+ePk8mkRpqK07DpLS7fImh3O0iARqr3481vua5Qu1m
+         NmHB/rJtCCx8MArA96ydy/pKLmI+N79OUwn5nnh7YaY4ba4J1oHq4CDuUtCcT9O6w8OP
+         Jiow==
+X-Gm-Message-State: APjAAAVZRNOa1LETD7UT2ewkLTkh9PxWE7t+T7CdSiH7xbVX70u3vfmT
+        4snn9gKwJHtpI6ABIWj0IVH3js/5L2Ow6C0GUb332w==
+X-Google-Smtp-Source: APXvYqzxsugGn2yxQHaeUuSSUV2TAe/3zs6sdz/iqVons8XXpedlHaNhKZESuFkh1KRYRsPmdvlmPUWnayfpHU/1dgI=
+X-Received: by 2002:a5e:9907:: with SMTP id t7mr69813324ioj.72.1578333118209;
+ Mon, 06 Jan 2020 09:51:58 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200106103233.GA32426@amd>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <20191212160622.021517d3@canb.auug.org.au>
+In-Reply-To: <20191212160622.021517d3@canb.auug.org.au>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Mon, 6 Jan 2020 09:51:47 -0800
+Message-ID: <CAOesGMiabP7nAPYKrmP=j_8bSj-UfUSFoiD0W+kqzaBp-6J2hQ@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the rcu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 Hi,
-On Mon, Jan 06, 2020 at 11:32:33AM +0100, Pavel Machek wrote:
-> Hi!
-> 
-> > > After merging the leds tree, today's linux-next build (x86_64
-> > > allmodconfig) failed like this:
-> > > 
-> > > drivers/leds/leds-lm3692x.c: In function 'lm3692x_max_brightness':
-> > > drivers/leds/leds-lm3692x.c:355:9: error: 'struct lm3692x_led' has no member named 'brightness_ctrl'
-> > >   355 |  if (led->brightness_ctrl & LM3692X_MAP_MODE_EXP) {
-> > >       |         ^~
-> > 
-> > That's a result of a patch from the mid of the series not being applied.
-> > 'leds: lm3692x: Allow to configure brigthness mode' introduces that
-> > struct member.
-> > 
-> > > drivers/leds/leds-lm3692x.c: In function 'lm3692x_probe_dt':
-> > > drivers/leds/leds-lm3692x.c:437:61: error: 'max_cur' undeclared (first use in this function)
-> > >   437 |  ret = fwnode_property_read_u32(child, "led-max-microamp", &max_cur);
-> > >       |                                                             ^~~~~~~
-> > 
-> > That somehow got lost during merge of this commit:
-> > 
-> >     https://lore.kernel.org/linux-leds/5826b77d42521595e93d01d53475a8881cad1875.1578134779.git.agx@sigxcpu.org/T/#u
-> > 
-> > Pavel, shall i send a patch to fix that up or should we rather try to
-> > get the rest of the series in in the right order? Resetting linux-next
-> > back to cffd61a5c7755546154539dcd7f36590e91e002f for the moment?
-> 
-> I kept just three patches from the series, and pushed the result.
-> 
-> Could I get the rest of the series, minus the "exponential" stuff, on
-> top of that?
-> 
-> Sorry for the confusion,
 
-No problem, reshuffling stuff turned out to be simpler than expected:
+On Wed, Dec 11, 2019 at 9:06 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the rcu (I think) tree, today's linux-next build (x86_64
+> allnoconfig) produced this warning:
+>
+> kernel/time/timer.c: In function 'schedule_timeout':
+> kernel/time/timer.c:969:20: warning: 'timer.expires' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   969 |   long diff = timer->expires - expires;
+>       |               ~~~~~^~~~~~~~~
+>
+> Introduced by (bisected to) commit
+>
+>   c4127fce1d02 ("timer: Use hlist_unhashed_lockless() in timer_pending()")
+>
+> x86_64-linux-gnu-gcc (Debian 9.2.1-21) 9.2.1 20191130
 
-     https://lore.kernel.org/linux-leds/cover.1578324703.git.agx@sigxcpu.org/T/#mbbbaabea8ebaba1f864d8a4211d9bcac780261aa
-
-If you don't want the exponential mode setting just omit 5/6 and
-6/6.
-
-Cheers,
- -- Guido
-
-> 
-> 									Pavel
-> -- 
-> (english) http://www.livejournal.com/~pavelmachek
-> (cesky, pictures) http://atrey.karlin.mff.cuni.cz/~pavel/picture/horses/blog.html
+This is still there as of last night's -next. Any update on getting a
+fix queued together with the offending patch?
 
 
+Thanks!
+
+-Olof

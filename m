@@ -2,83 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C7709130BEE
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 02:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 438C3130C04
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 03:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727278AbgAFBzk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Jan 2020 20:55:40 -0500
-Received: from ozlabs.org ([203.11.71.1]:40341 "EHLO ozlabs.org"
+        id S1727278AbgAFCRY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 5 Jan 2020 21:17:24 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:42149 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727226AbgAFBzk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 5 Jan 2020 20:55:40 -0500
+        id S1726743AbgAFCRY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 5 Jan 2020 21:17:24 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47rdrT1tm4z9sPJ;
-        Mon,  6 Jan 2020 12:55:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47rfKV1FwZz9sQp;
+        Mon,  6 Jan 2020 13:17:17 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578275737;
-        bh=H8huH0kHSTplQmOfDL3UG9eTTuXnRHDVPGYIItGVNwg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CoMIQEDINd6JcqxZRnnBV5qztqn9gPn1h6L/M5OcDNoxpcN1O0l2kcmZZSKj9r/zs
-         ed0+sNSp10WIH6goQ+lC2XDofTdAaV3cv67jEIKntJdls8vVPWfWGgrmDBdbCi6al2
-         UeLjV/nWAf5zgeTxUJa5j+wsYK222KkdmReDHrHeN9aVoMLbGXZBxWSEde6EICmXfw
-         EHUhLJ2q6uwQ5alyfOHDxxlj/QyExsZYB5cxE5ujicV35qR2XBoRexW4Xy5iZoefqP
-         WBsGiwW217koFQ4rNXHIFc/fOqG0y30+cosMpHt1JbNPqETNBBkBmPHzF1fbw4V+7E
-         7AskMCowbqV6A==
-Date:   Mon, 6 Jan 2020 12:55:36 +1100
+        s=201702; t=1578277041;
+        bh=g5hgS8PaXyRwMeuMb9SrHjBiLH+iyoGniQ/pgQSZF8s=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ecZrBJ+rq2WoNXmqlFfe5IUNxBhupGIVk4NTltnykY/IlSezbsad8wvnVzOzpGofy
+         P2r42COhwdI+glxmJy9uJl3nD612KMOTE1Wd9qsindWpphJ+tbplIq3xG+xuwg7JUj
+         4CqqdI7H6wxA253Ugs4tH72NGZr43srU4uW081uxaZZ2b9+4jXdiPEAiY4yMCsccwC
+         nkmlH68jpJSCnPjl+jnmOkkdeoUJZcCNRU01wzoc9faQVbsva7otUlTJgpbRNW1tz2
+         8BAdT8//egmGHtgGkHJsePYdIpazxtDT8MFnP8dBtDbYhCf5uGthpHNy2QJrsDPuea
+         anEKTOipvKOzw==
+Date:   Mon, 6 Jan 2020 13:17:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the risc-v tree with Linus' tree
-Message-ID: <20200106125536.42fa3df4@canb.auug.org.au>
-In-Reply-To: <alpine.DEB.2.21.9999.2001051749560.484919@viisi.sifive.com>
-References: <20200106093246.6abbb7e9@canb.auug.org.au>
-        <alpine.DEB.2.21.9999.2001051749560.484919@viisi.sifive.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Marco Elver <elver@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: linux-next: manual merge of the tip tree with Linus' tree
+Message-ID: <20200106131716.3cb701e4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+cGBlbluk_+o6SF.ktlJQ/T";
+Content-Type: multipart/signed; boundary="Sig_/cL4=G8M+QYfb2enyyq=q7yt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+cGBlbluk_+o6SF.ktlJQ/T
+--Sig_/cL4=G8M+QYfb2enyyq=q7yt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+Hi all,
 
-On Sun, 5 Jan 2020 17:50:35 -0800 (PST) Paul Walmsley <paul.walmsley@sifive=
-.com> wrote:
->=20
-> Thanks, I just reset our for-next branch to v5.5-rc5, so this won't=20
-> reappear.
+Today's linux-next merge of the tip tree got a conflict in:
 
-Excellent, thanks.
+  init/main.c
+
+between commit:
+
+  74f1a299107b ("Revert "fs: remove ksys_dup()"")
+
+from Linus' tree and commit:
+
+  dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
+
+from the tip tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/+cGBlbluk_+o6SF.ktlJQ/T
+diff --cc init/main.c
+index 2cd736059416,919f65faeb7e..000000000000
+--- a/init/main.c
++++ b/init/main.c
+@@@ -93,6 -93,8 +93,7 @@@
+  #include <linux/rodata_test.h>
+  #include <linux/jump_label.h>
+  #include <linux/mem_encrypt.h>
+ -#include <linux/file.h>
++ #include <linux/kcsan.h>
+ =20
+  #include <asm/io.h>
+  #include <asm/bugs.h>
+
+--Sig_/cL4=G8M+QYfb2enyyq=q7yt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4Sk5gACgkQAVBC80lX
-0Gw0Owf9EGr7v1YpBlpF5thV9GQWkE2gQ5/p9GQ78vTSscEut3TAKP6svS2b/74c
-NK8mpeIjVLPiIacaZNe4eWnFIxGb8Z0hbBVSYiU4eMQSU8OnEWOYWoRtWwOYHuRj
-WqizGY2hvK6T2VDmZb502cSH2cgIzv9h7lXZ9G8+F18qy9jF9XdjKDko/Gtn4e0o
-6lCvlsxZvoCiZBwq+e/KHAUgz0sq+BkPC1sT9iVmZvPZL75/ZPTfONlWM8v4yHPa
-XOpXhYuacnMw6sy7EWJoNgtyXyRnLG5DQTmeyp3M9OpH22nBh/HX+cKeTLAAWrDe
-AFfVAVnt6n+SGD9QjMn20EnGN+c4QA==
-=zceD
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4SmKwACgkQAVBC80lX
+0GwTiAf9GWwzdc4WYSAk0xSvIytCJHZi8dFOhoA6mFnsjI2QDb7oyZiIvF06XGvy
+U6sN2oCtnY5ps+VHaQ7WYwra5crwbdFlUIzTDLoNjMhBZ8hA+9LA3B4Q8rUOSewl
+8ZgObYu7Uib/dBb1EQVEw5dzhKAAvxQTWgrVRXTyGpUzoyuAHKx4GBYlrbXVWhyA
+y2zEoBO53s0/A2cKXHbLAM3AfXMs8NkBYQuwd1LhEz2FeTwUBWpeXOxFz3ZZpF0c
+Mzq4WNNya/o+tgG/UbSE7GtgsA6oGqH+KNrvLYt9KxFPfxs/blWxQwId0N+bnjXX
+dFsBq5pkIvr/PmkdaA++TKYcYkTe/w==
+=7i5u
 -----END PGP SIGNATURE-----
 
---Sig_/+cGBlbluk_+o6SF.ktlJQ/T--
+--Sig_/cL4=G8M+QYfb2enyyq=q7yt--

@@ -2,235 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9616D131168
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 12:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0221E13141D
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 15:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgAFL1H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jan 2020 06:27:07 -0500
-Received: from mail-wm1-f44.google.com ([209.85.128.44]:35663 "EHLO
-        mail-wm1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726155AbgAFL1H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jan 2020 06:27:07 -0500
-Received: by mail-wm1-f44.google.com with SMTP id p17so14915208wmb.0
-        for <linux-next@vger.kernel.org>; Mon, 06 Jan 2020 03:27:05 -0800 (PST)
+        id S1726422AbgAFOxt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jan 2020 09:53:49 -0500
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:33068 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726303AbgAFOxt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jan 2020 09:53:49 -0500
+Received: by mail-pf1-f193.google.com with SMTP id z16so27090412pfk.0;
+        Mon, 06 Jan 2020 06:53:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ovzcBh65yT39kD5/9e961doNb2hDWF5Mgl7lDgD9euA=;
-        b=Er+8kE+xpD88IIZqkMBXmI9df5kgj7Zpdbf+TPBpRTH0ZXFmvq8brCFgeunyARBMpg
-         LhmscMsN7mnxHeQqPG2o3+jLg7MEksmhtI432yW9AvNCM8G5G2JkLT30bAujn0NloHbq
-         O3C+EOYKHAtiKXTHdCtEGUHkX40YgQZWVPTzdO5gtPYzMUaXqG+F1YnZO+nSvmyNKXuw
-         9hyAcvmW6Lji5n+41hiRJ8/FYlz1I63slzl5JDD7eyuHs2dPlSYIb6hrRYIGU6aZhM66
-         Yz5sVZPQsP3qVQPaG755H9vhN7lWX6LqZiGZYjxY9FNM2vUwrd/JyZVrFziIUsh1j61L
-         7TBA==
+        d=gmail.com; s=20161025;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references;
+        bh=YhQDamaD2tNdmc+V00meTK3ORRFRFdzBTdJOGSQGU3w=;
+        b=qN/YmmVlqcMs6bjhH0TQKxVmMSiaYC/KTjHDLMQ1juGRg/rC/F+l7b9g0jqb1A9ZEe
+         P++6gN1aSXwUAH5nLt5AKZFDJJWcpF7fj5nMeVyfZKo8NT1cro8LRZxZmsLOysBlawfe
+         dWGrF9COCIeIf5Bjo0i7GBlZgCT0SRzP5pEAGlFs/U5m7d01xQmB3iGgS+UneBuregtY
+         JOb9uOawmtLcwZfre20gC8+6ajR3WnrJY1jt8n/yvohaklvwQHADGpfne98M3v/CKmUC
+         bm11mc4TuOave3+pTojj7Ltj5FonDJ5whibztnkmErqVDz3+c85fxt/+dC9uKXcca3we
+         awtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ovzcBh65yT39kD5/9e961doNb2hDWF5Mgl7lDgD9euA=;
-        b=bpalantdrGWqVm0di5gIbAjP0DiuAjusPk0GYFvqLkY6h1hg6HBoeSFBL4EJIKKw95
-         adchFttzF4SNH0w3OoXcTs0roLIvp9it+XAko+SC3TGZ0DFIhM3UhcrktTXULh6OHXhX
-         4w5P6zoc4VCgKYzpQFES/aDINYztQH3UBmEF4xKdQhOsTEa4J3OeAKtKS+/6WOuc46h2
-         CRR1RtunT8+JnA3u/RCvcbJeBo0RzxjWIu136R2C4OxAS21xD0cW/GJ4RMqq0Fj2ALbU
-         k8LpImGXOQnHGdoVpwQ/uAuFwfoHbeHn8A6zSYxc4cWJ8xGqOL6eq8fSll5WvNN26VZa
-         FhHQ==
-X-Gm-Message-State: APjAAAV3fozhoNJho1WQ/tzJHYI88NskYgQzs71v1Nk6x122SS+dy+RL
-        6Rukt1kHdTWAryts4BRlBe1eQL6YLCM=
-X-Google-Smtp-Source: APXvYqzIxGr2pyqsloy1iyCfkAljtoBL8gGA+C4xI7/ry2ci5hA8hs7wazaYgVruIu/c+AZK9jxAlw==
-X-Received: by 2002:a1c:dc85:: with SMTP id t127mr33737796wmg.16.1578310024316;
-        Mon, 06 Jan 2020 03:27:04 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id v14sm70834435wrm.28.2020.01.06.03.27.03
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2020 03:27:03 -0800 (PST)
-Message-ID: <5e131987.1c69fb81.2bd95.069d@mx.google.com>
-Date:   Mon, 06 Jan 2020 03:27:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200106
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 137 boots: 31 failed,
- 102 passed with 4 untried/unknown (next-20200106)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references;
+        bh=YhQDamaD2tNdmc+V00meTK3ORRFRFdzBTdJOGSQGU3w=;
+        b=YPxdozV0JkICN4nGL7wBB2mH9a7D2gp1gSp5mXNXf9w9Gw0U95kWionTxnCr7BUVCt
+         6CMYjLKv7JWbOB9PDtKHs618rabArlYrgFBn4nk5H5iwF3LwS/hBqEQQHj4wQuReu3NP
+         5k6ZLMiYdz9DFI2Sg7YxrvTKZxdD9PL3n17cj6NCbtUjInyliFmmmpNuGPj+gfhV92MI
+         KqiNTebNKwKjdJ7I+u++u22J3KxBx3YBtQHIHbqMViFlFFzwKeTHecyo09zJ/hLnmp/W
+         4xkGmOz7o5+fequGk9WJk+q02zAmY1XAuhXmwwlC6XEFmfQWZ0zUZzfF0Vc2n+j1SLCL
+         Q0iA==
+X-Gm-Message-State: APjAAAUKU4yi5svrSLWKetm5UTt9Pyq/WXG30e6C2nGwUyDCjRpEZtIO
+        HLPmx2lUfbH1mcrxci5WNJuGpsL4CII=
+X-Google-Smtp-Source: APXvYqxEyTjAmMLLrt4adDCZ6oS0TylD6XosUAW+7ur1eAZcA8/6Y5ZBwOvFxGH7WHSpZPvd8ieAhg==
+X-Received: by 2002:a65:4d46:: with SMTP id j6mr113572562pgt.63.1578322428186;
+        Mon, 06 Jan 2020 06:53:48 -0800 (PST)
+Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
+        by smtp.gmail.com with ESMTPSA id j8sm51602193pfe.182.2020.01.06.06.53.44
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
+        Mon, 06 Jan 2020 06:53:46 -0800 (PST)
+From:   Akinobu Mita <akinobu.mita@gmail.com>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au
+Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Stanislaw Gruszka <stf_xl@wp.pl>
+Subject: [PATCH] iwlwifi: fix build warnings with format string
+Date:   Mon,  6 Jan 2020 23:53:09 +0900
+Message-Id: <1578322389-13716-1-git-send-email-akinobu.mita@gmail.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20200106171452.201c3b4c@canb.auug.org.au>
+References: <20200106171452.201c3b4c@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 137 boots: 31 failed, 102 passed with 4 untried/unknown (=
-next-20200106)
+This fixes build warnings introduced by commit "iwlegacy: use
+<linux/units.h> helpers" (iwlegacy-use-linux-unitsh-helpers.patch in -mm)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200106/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200106/
+The format '%d' has to be changed to '%ld' because the return type of
+kelvin_to_celsius() is 'long'.
 
-Tree: next
-Branch: master
-Git Describe: next-20200106
-Git Commit: 9eb1b48ca4ce1406628ffe1a11b684a96e83ca08
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 57 unique boards, 12 SoC families, 22 builds out of 214
-
-Boot Regressions Detected:
-
-arm:
-
-    davinci_all_defconfig:
-        gcc-8:
-          da850-lcdk:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-    multi_v7_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: next-20191220)
-              lab-drue: new failure (last pass: next-20191220)
-          am57xx-beagle-x15:
-              lab-drue: new failure (last pass: next-20191220)
-          imx6q-sabrelite:
-              lab-baylibre: new failure (last pass: next-20191220)
-          omap4-panda:
-              lab-baylibre: new failure (last pass: next-20191220)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20191217)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: new failure (last pass: next-20191220)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: next-20191220)
-              lab-drue: new failure (last pass: next-20191220)
-          am57xx-beagle-x15:
-              lab-drue: new failure (last pass: next-20191220)
-          imx6q-sabrelite:
-              lab-baylibre: new failure (last pass: next-20191220)
-          omap4-panda:
-              lab-baylibre: new failure (last pass: next-20191220)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20191219)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: new failure (last pass: next-20191220)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-    omap2plus_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: next-20191220)
-              lab-drue: new failure (last pass: next-20191220)
-          am57xx-beagle-x15:
-              lab-drue: new failure (last pass: next-20191220)
-          omap4-panda:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-    oxnas_v6_defconfig:
-        gcc-8:
-          ox820-cloudengines-pogoplug-series-3:
-              lab-baylibre: new failure (last pass: next-20191219)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20191219)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: new failure (last pass: next-20191220)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: new failure (last pass: next-20191220)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: next-20191220)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20191220)
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20191220)
-          sun50i-a64-bananapi-m64:
-              lab-clabbe: new failure (last pass: next-20191220)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20191220)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            am57xx-beagle-x15: 1 failed lab
-            imx6q-sabrelite: 1 failed lab
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-
-    omap2plus_defconfig:
-        gcc-8:
-            am335x-boneblack: 2 failed labs
-            am57xx-beagle-x15: 1 failed lab
-            omap4-panda: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            am335x-boneblack: 2 failed labs
-            am57xx-beagle-x15: 1 failed lab
-            imx6q-sabrelite: 1 failed lab
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 1 failed lab
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-
-    davinci_all_defconfig:
-        gcc-8:
-            da850-lcdk: 1 failed lab
-
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Link: https://lore.kernel.org/r/20200106171452.201c3b4c@canb.auug.org.au
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/net/wireless/intel/iwlegacy/4965.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/wireless/intel/iwlegacy/4965.c b/drivers/net/wireless/intel/iwlegacy/4965.c
+index 31b346c..34d0579 100644
+--- a/drivers/net/wireless/intel/iwlegacy/4965.c
++++ b/drivers/net/wireless/intel/iwlegacy/4965.c
+@@ -1611,7 +1611,7 @@ il4965_hw_get_temperature(struct il_priv *il)
+ 	temperature =
+ 	    (temperature * 97) / 100 + TEMPERATURE_CALIB_KELVIN_OFFSET;
+ 
+-	D_TEMP("Calibrated temperature: %dK, %dC\n", temperature,
++	D_TEMP("Calibrated temperature: %dK, %ldC\n", temperature,
+ 	       kelvin_to_celsius(temperature));
+ 
+ 	return temperature;
+@@ -1671,11 +1671,11 @@ il4965_temperature_calib(struct il_priv *il)
+ 
+ 	if (il->temperature != temp) {
+ 		if (il->temperature)
+-			D_TEMP("Temperature changed " "from %dC to %dC\n",
++			D_TEMP("Temperature changed " "from %ldC to %ldC\n",
+ 			       kelvin_to_celsius(il->temperature),
+ 			       kelvin_to_celsius(temp));
+ 		else
+-			D_TEMP("Temperature " "initialized to %dC\n",
++			D_TEMP("Temperature " "initialized to %ldC\n",
+ 			       kelvin_to_celsius(temp));
+ 	}
+ 
+-- 
+2.7.4
+

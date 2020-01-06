@@ -2,116 +2,2191 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 57E81130DBA
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 07:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EDE130E3B
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 08:57:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726391AbgAFGxv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jan 2020 01:53:51 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:55468 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726294AbgAFGxv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jan 2020 01:53:51 -0500
-Received: by mail-wm1-f67.google.com with SMTP id q9so13932360wmj.5;
-        Sun, 05 Jan 2020 22:53:49 -0800 (PST)
+        id S1725843AbgAFH56 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jan 2020 02:57:58 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:39813 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725446AbgAFH56 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jan 2020 02:57:58 -0500
+Received: by mail-wm1-f65.google.com with SMTP id 20so14298739wmj.4
+        for <linux-next@vger.kernel.org>; Sun, 05 Jan 2020 23:57:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=b9tBBunsWX4vmu6ZQ3cKhGspbAtWJGC3UVGHOJzfXH0=;
-        b=qtZZb9jtRCrF7yQntqQigPv2EIi7MbqQ8L6DMWeo7f1Yw/2f9HYJupJ/6S8jaX2BxJ
-         Nxle72+OCiV2FNy1cohzTzkh73IhoJpQ2yQF56OxzSZ8JTseK1Vq3nvkPnS3cIIv+//H
-         nUHOOUbKZewCcXZczWx9V4UvgMwb0C+VbIEgyrQK6OMqAl/XedzijzKXuLXk1ehBnK8Q
-         4iqVQIKxnK5rdUGr007M4ghljH1PrKK8YMXacxwmYZtzqKG9dVY4cFAQMMFwCIrQOB6N
-         ZKP9NTTC/fX/ZHE83pt3j1GGW/Q8Y3NHOJz668Np9ynnokZkHYTgnyHgwe6Ym1lvD0qE
-         2L3w==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=MXOeBca9dB9Qm5tBkSflXtZXhRyqQmYKpVH3ZOGtQ4Y=;
+        b=B2Mqt5moe4Xrbo+GjweBKOrATGXNMuZvXloiiUGCruD/Q7X6rFXi8nbZ9NLrrhsjxQ
+         SxGmGpnBVkU6EtTtdEKFXrX8CGLFV9TKF09O1Z6vdzmLs2uqNUQUykNOCh6+HaxmWYV6
+         S99CKAo9LB7Y/5O/zeD8ypuw9JUE4Oh78sSRTJ3s3jV60GfY83/5lNvWcMSJMLWj/B+z
+         KFv+ZM99mwHo/fuLWiM/8b044PD6GBIpxa3qk75Y1e1EW0H4UAsodY6CufgvWCIYJWT8
+         wlrblW2TBnbOp9KQmq4Kkcje2z9+o0ACev2cPUh66ykXbhm5sbwcW6JXvuFWSZmvcJJz
+         q7GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to:user-agent;
-        bh=b9tBBunsWX4vmu6ZQ3cKhGspbAtWJGC3UVGHOJzfXH0=;
-        b=cI1j/jfqpWqlN6gZ8Z/tkt+J9DqMpujV6+Fm0wV92x+Al+nKMjO5Pbv990E9+oB2P4
-         5pl6yRVgkpfRfshzfz4K5KqDt2QcbN2s0D7fFEx2kn8orDY9dQ6g28QYru7Dhv3ulhjU
-         3EpykfkHcyC6v3F0xl+YDlsD1IMsdItl/2bLHSVH+6u7rLned7xxyrABPphYfsPBS6uY
-         Gk8xyvVcgWIpCEWgSYhuvLV3kQhSl5Nj5scA7yLkupgAwBnRUb9G0omk5viZSvlip96G
-         MIaUZyMswSmJMJkxBbrGn7bTuqT1NP1YOtUSy1m9iXax9Jf0180BZCD6k4EAzA/DVs4J
-         GH1w==
-X-Gm-Message-State: APjAAAVFQXsrth64/NQsxn0zGkROkgBx7QHKglG4Fm7/uUF3nD6lc1yn
-        8DMeFLLmT9tv237To6+NpRA=
-X-Google-Smtp-Source: APXvYqxwf1zNb0IvPQOprVPZkwKkekwBc4EorSEB4RKpFSAIU0R1cYeElHu1KpH7OAO34BEICCSjiw==
-X-Received: by 2002:a1c:6a07:: with SMTP id f7mr33689168wmc.171.1578293629097;
-        Sun, 05 Jan 2020 22:53:49 -0800 (PST)
-Received: from gmail.com (54033286.catv.pool.telekom.hu. [84.3.50.134])
-        by smtp.gmail.com with ESMTPSA id v62sm21936097wmg.3.2020.01.05.22.53.47
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=MXOeBca9dB9Qm5tBkSflXtZXhRyqQmYKpVH3ZOGtQ4Y=;
+        b=P2mf/m1rRnR0ZmLA8mJJbW2le1bAcEAmkbmi2ZoeDEmEpvv+YJdBFk+h9mjpHxz5A3
+         A4L1aEX7PtsSp5meZWCz5ONXEl0/OThmxZtcN/sokcr6f8XZUA0VZI8+pzzbN6X7weDR
+         LvOvOFGLIdjBqYecE9BOZXfUwy1g4ojxY//e+167B9RUAFWxk3j2d6aywbMMY60tdDHm
+         UvlTuTKZuqeiarLIg8RjN3NAeOXrIUpf8JZtbZnIDiEg1tmjBmwYZzlrYk6ROOOgeF4s
+         U6fkEbzzsJrUy2mct3irj6AIjPplv8wVO7OXnfcDUBKmiZ6sk+wgHxFC2NJNZcL2kWQi
+         MOVQ==
+X-Gm-Message-State: APjAAAUMBM22IKqJEXrIrtXpPV01RyyQMMnVdzQ8V8Aj4CMmVl+5XH8V
+        0/g6ORbh9+t99chK6O0Ti/4lvRybypY=
+X-Google-Smtp-Source: APXvYqxIuOuXk8cw3jeqYoFCQTQVvnUCSbpSzGNeeZtOGnP73rMHJVsbYYtq8zAtm3q2pUIYDtX/WA==
+X-Received: by 2002:a1c:6755:: with SMTP id b82mr32419417wmc.126.1578297471732;
+        Sun, 05 Jan 2020 23:57:51 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id q3sm73696633wrn.33.2020.01.05.23.57.50
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2020 22:53:48 -0800 (PST)
-Date:   Mon, 6 Jan 2020 07:53:46 +0100
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Marco Elver <elver@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20200106065346.GA34594@gmail.com>
-References: <20200106131716.3cb701e4@canb.auug.org.au>
+        Sun, 05 Jan 2020 23:57:51 -0800 (PST)
+Message-ID: <5e12e87f.1c69fb81.71a0d.c607@mx.google.com>
+Date:   Sun, 05 Jan 2020 23:57:51 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200106131716.3cb701e4@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200106
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+Subject: next/master build: 214 builds: 0 failed, 214 passed,
+ 206 warnings (next-20200106)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/master build: 214 builds: 0 failed, 214 passed, 206 warnings (next-202=
+00106)
 
-* Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200106/
 
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   init/main.c
-> 
-> between commit:
-> 
->   74f1a299107b ("Revert "fs: remove ksys_dup()"")
-> 
-> from Linus' tree and commit:
-> 
->   dfd402a4c4ba ("kcsan: Add Kernel Concurrency Sanitizer infrastructure")
-> 
-> from the tip tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc init/main.c
-> index 2cd736059416,919f65faeb7e..000000000000
-> --- a/init/main.c
-> +++ b/init/main.c
-> @@@ -93,6 -93,8 +93,7 @@@
->   #include <linux/rodata_test.h>
->   #include <linux/jump_label.h>
->   #include <linux/mem_encrypt.h>
->  -#include <linux/file.h>
-> + #include <linux/kcsan.h>
+Tree: next
+Branch: master
+Git Describe: next-20200106
+Git Commit: 9eb1b48ca4ce1406628ffe1a11b684a96e83ca08
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-I've resolved this conflict in -tip as well, so this should go away on 
-the next integration of -next.
+Warnings Detected:
 
-Thanks,
+arc:
+    allnoconfig (gcc-8): 2 warnings
+    axs103_defconfig (gcc-8): 2 warnings
+    axs103_smp_defconfig (gcc-8): 2 warnings
+    haps_hs_defconfig (gcc-8): 2 warnings
+    haps_hs_smp_defconfig (gcc-8): 2 warnings
+    hsdk_defconfig (gcc-8): 2 warnings
+    nsimosci_hs_defconfig (gcc-8): 2 warnings
+    nsimosci_hs_smp_defconfig (gcc-8): 2 warnings
+    tinyconfig (gcc-8): 1 warning
+    vdk_hs38_defconfig (gcc-8): 1 warning
+    vdk_hs38_smp_defconfig (gcc-8): 1 warning
 
-	Ingo
+arm64:
+    allmodconfig (gcc-8): 5 warnings
+    allnoconfig (gcc-8): 1 warning
+    defconfig (gcc-8): 1 warning
+    defconfig (gcc-8): 1 warning
+    defconfig (gcc-8): 1 warning
+
+arm:
+    allmodconfig (gcc-8): 24 warnings
+    allnoconfig (gcc-8): 1 warning
+    am200epdkit_defconfig (gcc-8): 1 warning
+    assabet_defconfig (gcc-8): 1 warning
+    axm55xx_defconfig (gcc-8): 1 warning
+    badge4_defconfig (gcc-8): 1 warning
+    cerfcube_defconfig (gcc-8): 1 warning
+    clps711x_defconfig (gcc-8): 1 warning
+    cm_x2xx_defconfig (gcc-8): 1 warning
+    cm_x300_defconfig (gcc-8): 1 warning
+    cns3420vb_defconfig (gcc-8): 1 warning
+    colibri_pxa270_defconfig (gcc-8): 1 warning
+    colibri_pxa300_defconfig (gcc-8): 1 warning
+    collie_defconfig (gcc-8): 1 warning
+    corgi_defconfig (gcc-8): 1 warning
+    davinci_all_defconfig (gcc-8): 1 warning
+    dove_defconfig (gcc-8): 1 warning
+    ebsa110_defconfig (gcc-8): 1 warning
+    em_x270_defconfig (gcc-8): 1 warning
+    ep93xx_defconfig (gcc-8): 1 warning
+    eseries_pxa_defconfig (gcc-8): 1 warning
+    footbridge_defconfig (gcc-8): 1 warning
+    gemini_defconfig (gcc-8): 1 warning
+    h3600_defconfig (gcc-8): 1 warning
+    h5000_defconfig (gcc-8): 1 warning
+    hackkit_defconfig (gcc-8): 1 warning
+    hisi_defconfig (gcc-8): 1 warning
+    integrator_defconfig (gcc-8): 1 warning
+    iop32x_defconfig (gcc-8): 1 warning
+    ixp4xx_defconfig (gcc-8): 1 warning
+    jornada720_defconfig (gcc-8): 1 warning
+    lart_defconfig (gcc-8): 1 warning
+    lpd270_defconfig (gcc-8): 1 warning
+    lubbock_defconfig (gcc-8): 1 warning
+    magician_defconfig (gcc-8): 1 warning
+    mainstone_defconfig (gcc-8): 1 warning
+    mini2440_defconfig (gcc-8): 1 warning
+    mmp2_defconfig (gcc-8): 1 warning
+    multi_v4t_defconfig (gcc-8): 1 warning
+    multi_v5_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    multi_v7_defconfig (gcc-8): 1 warning
+    mvebu_v5_defconfig (gcc-8): 1 warning
+    neponset_defconfig (gcc-8): 1 warning
+    netwinder_defconfig (gcc-8): 1 warning
+    nhk8815_defconfig (gcc-8): 1 warning
+    omap1_defconfig (gcc-8): 1 warning
+    omap2plus_defconfig (gcc-8): 1 warning
+    orion5x_defconfig (gcc-8): 1 warning
+    palmz72_defconfig (gcc-8): 1 warning
+    pcm027_defconfig (gcc-8): 1 warning
+    pleb_defconfig (gcc-8): 1 warning
+    prima2_defconfig (gcc-8): 1 warning
+    pxa168_defconfig (gcc-8): 1 warning
+    pxa255-idp_defconfig (gcc-8): 1 warning
+    pxa3xx_defconfig (gcc-8): 1 warning
+    pxa910_defconfig (gcc-8): 1 warning
+    realview_defconfig (gcc-8): 1 warning
+    rpc_defconfig (gcc-8): 1 warning
+    s3c2410_defconfig (gcc-8): 1 warning
+    s3c6400_defconfig (gcc-8): 1 warning
+    s5pv210_defconfig (gcc-8): 1 warning
+    sama5_defconfig (gcc-8): 1 warning
+    shannon_defconfig (gcc-8): 1 warning
+    simpad_defconfig (gcc-8): 1 warning
+    spear13xx_defconfig (gcc-8): 1 warning
+    spear3xx_defconfig (gcc-8): 1 warning
+    spear6xx_defconfig (gcc-8): 1 warning
+    spitz_defconfig (gcc-8): 1 warning
+    sunxi_defconfig (gcc-8): 1 warning
+    tango4_defconfig (gcc-8): 1 warning
+    tct_hammer_defconfig (gcc-8): 1 warning
+    trizeps4_defconfig (gcc-8): 1 warning
+    u300_defconfig (gcc-8): 1 warning
+    u8500_defconfig (gcc-8): 1 warning
+    versatile_defconfig (gcc-8): 1 warning
+    vf610m4_defconfig (gcc-8): 1 warning
+    viper_defconfig (gcc-8): 1 warning
+    vt8500_v6_v7_defconfig (gcc-8): 1 warning
+    xcep_defconfig (gcc-8): 1 warning
+    zeus_defconfig (gcc-8): 1 warning
+    zx_defconfig (gcc-8): 1 warning
+
+i386:
+    allnoconfig (gcc-8): 1 warning
+
+mips:
+    32r2el_defconfig (gcc-8): 2 warnings
+    allnoconfig (gcc-8): 1 warning
+    ar7_defconfig (gcc-8): 1 warning
+    ath79_defconfig (gcc-8): 1 warning
+    bcm63xx_defconfig (gcc-8): 1 warning
+    bigsur_defconfig (gcc-8): 1 warning
+    bmips_be_defconfig (gcc-8): 1 warning
+    bmips_stb_defconfig (gcc-8): 1 warning
+    capcella_defconfig (gcc-8): 1 warning
+    cavium_octeon_defconfig (gcc-8): 1 warning
+    cobalt_defconfig (gcc-8): 1 warning
+    db1xxx_defconfig (gcc-8): 1 warning
+    decstation_64_defconfig (gcc-8): 1 warning
+    decstation_defconfig (gcc-8): 1 warning
+    decstation_r4k_defconfig (gcc-8): 1 warning
+    e55_defconfig (gcc-8): 1 warning
+    gcw0_defconfig (gcc-8): 1 warning
+    ip22_defconfig (gcc-8): 1 warning
+    ip27_defconfig (gcc-8): 1 warning
+    ip28_defconfig (gcc-8): 1 warning
+    jazz_defconfig (gcc-8): 1 warning
+    jmr3927_defconfig (gcc-8): 1 warning
+    lasat_defconfig (gcc-8): 1 warning
+    loongson3_defconfig (gcc-8): 1 warning
+    malta_defconfig (gcc-8): 1 warning
+    malta_kvm_guest_defconfig (gcc-8): 1 warning
+    malta_qemu_32r6_defconfig (gcc-8): 2 warnings
+    maltaaprp_defconfig (gcc-8): 1 warning
+    maltasmvp_defconfig (gcc-8): 1 warning
+    maltasmvp_eva_defconfig (gcc-8): 1 warning
+    maltaup_defconfig (gcc-8): 1 warning
+    maltaup_xpa_defconfig (gcc-8): 1 warning
+    markeins_defconfig (gcc-8): 1 warning
+    mips_paravirt_defconfig (gcc-8): 1 warning
+    mpc30x_defconfig (gcc-8): 1 warning
+    msp71xx_defconfig (gcc-8): 1 warning
+    pnx8335_stb225_defconfig (gcc-8): 1 warning
+    qi_lb60_defconfig (gcc-8): 1 warning
+    rb532_defconfig (gcc-8): 1 warning
+    rbtx49xx_defconfig (gcc-8): 2 warnings
+    rm200_defconfig (gcc-8): 1 warning
+    sb1250_swarm_defconfig (gcc-8): 1 warning
+    tb0219_defconfig (gcc-8): 1 warning
+    tb0226_defconfig (gcc-8): 1 warning
+    tb0287_defconfig (gcc-8): 1 warning
+    workpad_defconfig (gcc-8): 1 warning
+
+riscv:
+    allnoconfig (gcc-8): 1 warning
+    defconfig (gcc-8): 1 warning
+    rv32_defconfig (gcc-8): 7 warnings
+
+x86_64:
+    allmodconfig (gcc-8): 7 warnings
+    allnoconfig (gcc-8): 3 warnings
+    tinyconfig (gcc-8): 1 warning
+
+
+Warnings summary:
+
+    134  kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+    20   <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    8    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=
+=E2=80=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+    6    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: for=
+mat =E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, bu=
+t argument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    6    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: for=
+mat =E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, bu=
+t argument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    3    WARNING: unmet direct dependencies detected for PHY_DA8XX_USB
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable =E2=80=
+=98rtd=E2=80=99 [-Wunused-variable]
+    1    mm/hmm.c:478:9: warning: unused variable =E2=80=98pmdp=E2=80=99 [-=
+Wunused-variable]
+    1    mm/hmm.c:477:30: warning: unused variable =E2=80=98next=E2=80=99 [=
+-Wunused-variable]
+    1    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%ld=E2=
+=80=99 expects argument of type =E2=80=98long int=E2=80=99, but argument 5 =
+has type =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wf=
+ormat=3D]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/base/test/property-entry-test.c:214:1: warning: the frame =
+size of 3128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    1    arch/x86/kernel/unwind_orc.c:210:12: warning: =E2=80=98orc_sort_cm=
+p=E2=80=99 defined but not used [-Wunused-function]
+    1    arch/x86/kernel/unwind_orc.c:190:13: warning: =E2=80=98orc_sort_sw=
+ap=E2=80=99 defined but not used [-Wunused-function]
+    1    /tmp/cch3e0yk.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/cch3e0yk.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1162:warning: override: UNWINDER_GUESS changes choice state
+
+Section mismatches summary:
+
+    5    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    3    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    3    WARNING: vmlinux.o(.text.unlikely+0x8d8): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    1    WARNING: vmlinux.o(.text.unlikely+0x97c): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    1    WARNING: vmlinux.o(.text.unlikely+0x860): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    1    WARNING: vmlinux.o(.text.unlikely+0x7a4): Section mismatch in refe=
+rence from the function free_memmap() to the function .meminit.text:membloc=
+k_free()
+    1    WARNING: vmlinux.o(.text.unlikely+0x3a98): Section mismatch in ref=
+erence from the function pmax_setup_memory_region() to the function .init.t=
+ext:add_memory_region()
+    1    WARNING: vmlinux.o(.text.unlikely+0x3740): Section mismatch in ref=
+erence from the function pmax_setup_memory_region() to the function .init.t=
+ext:add_memory_region()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 5 warnings, 0 section=
+ mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for PHY_DA8XX_USB
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for PHY_DA8XX_USB
+    mm/hmm.c:478:9: warning: unused variable =E2=80=98pmdp=E2=80=99 [-Wunus=
+ed-variable]
+    mm/hmm.c:477:30: warning: unused variable =E2=80=98next=E2=80=99 [-Wunu=
+sed-variable]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 section =
+mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for PHY_DA8XX_USB
+    drivers/base/test/property-entry-test.c:214:1: warning: the frame size =
+of 3128 bytes is larger than 2048 bytes [-Wframe-larger-than=3D]
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+    /tmp/cch3e0yk.s:18119: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/cch3e0yk.s:18191: Warning: using r15 results in unpredictable beha=
+viour
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
+er of different size [-Wpointer-to-int-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 6 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    drivers/net/wireless/intel/iwlegacy/common.h:2928:32: warning: format =
+=E2=80=98%d=E2=80=99 expects argument of type =E2=80=98int=E2=80=99, but ar=
+gument 5 has type =E2=80=98long int=E2=80=99 [-Wformat=3D]
+    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%ld=E2=80=99=
+ expects argument of type =E2=80=98long int=E2=80=99, but argument 5 has ty=
+pe =E2=80=98size_t=E2=80=99 {aka =E2=80=98unsigned int=E2=80=99} [-Wformat=
+=3D]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section mi=
+smatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 3 warnings, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+    arch/x86/kernel/unwind_orc.c:210:12: warning: =E2=80=98orc_sort_cmp=E2=
+=80=99 defined but not used [-Wunused-function]
+    arch/x86/kernel/unwind_orc.c:190:13: warning: =E2=80=98orc_sort_swap=E2=
+=80=99 defined but not used [-Wunused-function]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8d8): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x3a98): Section mismatch in referenc=
+e from the function pmax_setup_memory_region() to the function .init.text:a=
+dd_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x3740): Section mismatch in referenc=
+e from the function pmax_setup_memory_region() to the function .init.text:a=
+dd_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 1 warning, 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 1 warning, 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x7a4): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8d8): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 section=
+ mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x860): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+lasat_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warning=
+s, 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+    {standard input}:141: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mips_paravirt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, =
+0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+msp71xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 1 warning, 0 section mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 1 warning, 0 section mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 =
+warning, 0 section mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings=
+, 0 section mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    drivers/clocksource/timer-ti-dm.c:798:13: warning: =E2=80=98timer=E2=80=
+=99 may be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8d8): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning,=
+ 0 section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+    sound/soc/txx9/txx9aclc.c:54:30: warning: unused variable =E2=80=98rtd=
+=E2=80=99 [-Wunused-variable]
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x97c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 7 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0=
+ section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x95c): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x8e4): Section mismatch in reference=
+ from the function free_memmap() to the function .meminit.text:memblock_fre=
+e()
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 se=
+ction mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mism=
+atches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    .config:1162:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 secti=
+on mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 =
+section mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---------------------------------------------------------------------------=
+-----
+zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mi=
+smatches
+
+Warnings:
+    kernel/time/timer.c:969:20: warning: =E2=80=98timer.expires=E2=80=99 ma=
+y be used uninitialized in this function [-Wmaybe-uninitialized]
+
+---
+For more info write to <info@kernelci.org>

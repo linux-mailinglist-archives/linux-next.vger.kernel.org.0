@@ -2,135 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3564C131B3B
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 23:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D770131B4F
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jan 2020 23:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726721AbgAFWU0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jan 2020 17:20:26 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33381 "EHLO ozlabs.org"
+        id S1726731AbgAFW2A (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jan 2020 17:28:00 -0500
+Received: from mail.kernel.org ([198.145.29.99]:58422 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726695AbgAFWU0 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Jan 2020 17:20:26 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726721AbgAFW2A (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 6 Jan 2020 17:28:00 -0500
+Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47s91g6hSnz9sPK;
-        Tue,  7 Jan 2020 09:20:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578349224;
-        bh=D4L4d0o2nGXQmsn4N43cbibnhfi2fb4y3rP05X2ZFm4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BcJXEtH4ciYUdQ9TcUeoVBbDzM4KyfLWuZ0bGVqnzvPhzDMfxQInzypRvZheC/L7x
-         oPcXIRBYCJ+pJOybA7CpIoHS8h1U+8AdFIjMYXfn+oqWYv3kVuXSrt/HWAhr+jJPX2
-         z+OmYtexUNAodjXUetlZkzsZGmwSxRoKfUy1ujHZ8GlM+e5AA276KcLrFbOdLl42sg
-         SXzgXUl+64+1Gs5xBkr94KqWW1q2oAT/2i9V0Fro0An3yyv9sVfRfHMrG7B5PLnQUf
-         VRvvoVjT+VTo0Rh3rqMi97NLJLigOUkhSMwaINTN5KqRZN9PI6Jjfij6ysrMTAheaV
-         2nD5do5NR/cfg==
-Date:   Tue, 7 Jan 2020 09:20:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id D4FC42072A;
+        Mon,  6 Jan 2020 22:27:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578349677;
+        bh=9/pXoDuPOel5TvHcthR39pw/yucCrUp29xCV7mhe3QQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gyvZqGKWN+TsgfzXDFiTRGYsvBq7Q2MieKNhkhDGeIT8rrGK9G5mFScXCIJmUsQEC
+         X0VqSfRNfHB+Zg7QDvWsLp/ZhLiLM0Mpjhbu576bkI9VZv2JYtKd5RzEwJ23cEbAyO
+         9a4HTX2s5+2+3B80fCLdmtSexKfuOxG58nZU0/yQ=
+Date:   Mon, 6 Jan 2020 23:27:55 +0100
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Andre Przywara <andre.przywara@arm.com>
-Subject: linux-next: build failure after merge of the sunxi tree
-Message-ID: <20200107092017.1f219a19@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the sunxi tree
+Message-ID: <20200106222755.hdi6fna2ypjwl2em@gilmour.lan>
+References: <20200107092017.1f219a19@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_j1Wl=vgzOhip/lEsdpXq7K";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="xzhf6pkz635zwjnk"
+Content-Disposition: inline
+In-Reply-To: <20200107092017.1f219a19@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_j1Wl=vgzOhip/lEsdpXq7K
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+--xzhf6pkz635zwjnk
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After merging the sunxi tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Hi,
 
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-v40-bananap=
-i-m2-berry.dtb] Error 2
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-r40-bananap=
-i-m2-ultra.dtb] Error 2
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): =
-/soc/spi@1c05000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): =
-/soc/spi@1c06000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): =
-/soc/spi@1c07000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): =
-/soc/spi@1c0f000: Reference to non-existent node or label "dma"
-ERROR: Input tree has errors, aborting (use -f to force output)
-make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-t3-cqa3t-bv=
-3.dtb] Error 2
+On Tue, Jan 07, 2020 at 09:20:17AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the sunxi tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> ERROR: Input tree has errors, aborting (use -f to force output)
+> make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-v40-bananapi-m2-berry.dtb] Error 2
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> ERROR: Input tree has errors, aborting (use -f to force output)
+> make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-r40-bananapi-m2-ultra.dtb] Error 2
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:656.21-669.5: ERROR (phandle_references): /soc/spi@1c05000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:671.21-684.5: ERROR (phandle_references): /soc/spi@1c06000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:686.21-699.5: ERROR (phandle_references): /soc/spi@1c07000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> arch/arm/boot/dts/sun8i-r40.dtsi:701.21-714.5: ERROR (phandle_references): /soc/spi@1c0f000: Reference to non-existent node or label "dma"
+> ERROR: Input tree has errors, aborting (use -f to force output)
+> make[2]: *** [scripts/Makefile.lib:292: arch/arm/boot/dts/sun8i-t3-cqa3t-bv3.dtb] Error 2
+>
+> I am not sure which commits caused this.  I have used the sunxi tree
+> from next-20200106 for today.
 
-I am not sure which commits caused this.  I have used the sunxi tree
-from next-20200106 for today.
+I just (~1 minute ago) pushed a fix for this.
 
---=20
-Cheers,
-Stephen Rothwell
+sorry for the troubles.
 
---Sig_/_j1Wl=vgzOhip/lEsdpXq7K
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Maxime
+
+--xzhf6pkz635zwjnk
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4TsqEACgkQAVBC80lX
-0Gy9Qwf/cClLDg1KvU91VRswOst+kXxmgf0ef66eYzrt85Gyrsio9BnQzOopKKGG
-Couog5WucGyww0DFi1SugQXD7PYD1wClUogwCPeQ3Ge/u2tX0glBYGX6cZoTAeW8
-mtJBl6EJwA79XmvMqteDX/ZWrFr1aA560YZ41O42l92CrN4QFcgg5vJeV2XNkwOC
-ibZzlfPHGhUSu+lyi4rHVdAeCllINor0qnaJO59j20ZRyZyzuEI/ifZ3Q7JP4HoC
-LNfNdHZcmrU3tvazfTqi+eHeCBVyMX56CPLpO3VC6XjRwoh9I2HVYqvw0MQldeco
-s6XB2Ef6Ww/J4wcx7MHPfuOZLB4q7Q==
-=3prn
+iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXhO0awAKCRDj7w1vZxhR
+xVXmAP9x3chdiZO7vDUMjdoWrEWEYIaYadKmWP/sF08xr/6/lQD+KgZDJYGY78dz
+Sj3QiWhIuOMfwoMgPId46V/s2CIaaAI=
+=MG1a
 -----END PGP SIGNATURE-----
 
---Sig_/_j1Wl=vgzOhip/lEsdpXq7K--
+--xzhf6pkz635zwjnk--

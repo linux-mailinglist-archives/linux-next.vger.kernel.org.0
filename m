@@ -2,56 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CD476132523
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2020 12:48:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4FC132558
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2020 12:55:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgAGLr7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jan 2020 06:47:59 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:51786 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727894AbgAGLr7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jan 2020 06:47:59 -0500
+        id S1727834AbgAGLze (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jan 2020 06:55:34 -0500
+Received: from us-smtp-2.mimecast.com ([207.211.31.81]:21282 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728039AbgAGLzd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jan 2020 06:55:33 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578397677;
+        s=mimecast20190719; t=1578398133;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ajwwg1tTuaqvf2+iTZv4F7nVRs4fx4vlQX7SEEZvm5I=;
-        b=DZgoJYmZNJ3FmMRl/rHqxtw4+6HPduNl0WtgdLkJMQQbE3+PNVV3HnYstXkhOUPnRX5oYR
-        bw6OwuIQ5Ybzkvzs9qv7KGkSdKAjksS4RlG0ba3Hs5AVoLXd3xp/eq+GpIxizD04dmdATY
-        qrS3tSJbFEWCF7psE1nZnScbhfO/W1w=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-9-6-Z0iuEOO6Cg01PeXzQ0og-1; Tue, 07 Jan 2020 06:47:57 -0500
-X-MC-Unique: 6-Z0iuEOO6Cg01PeXzQ0og-1
-Received: by mail-qv1-f70.google.com with SMTP id d7so36349139qvq.12
-        for <linux-next@vger.kernel.org>; Tue, 07 Jan 2020 03:47:56 -0800 (PST)
+        bh=KKDZj81sAccgrzkhgIj794ifqolNRhLOvA0CIx37wWs=;
+        b=GWZlxia2OLck7dyO3CLIiEuITX0CA+diEfr03RweLNvhuY1tOTIVCBwrh74wL7qS59N7B0
+        2kUwsNxbXyUJrPzts6ZK5BLIzioNZ64ik5YGkTzp3u3kqjminHDwNZRVF6Tc4A+8HiuZ0Z
+        0LUQAg5xnooB9qrzLZ6imPJfQREmB3I=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-213-ms9W50ofOcy3P7w9lhSJ2g-1; Tue, 07 Jan 2020 06:55:28 -0500
+X-MC-Unique: ms9W50ofOcy3P7w9lhSJ2g-1
+Received: by mail-qk1-f200.google.com with SMTP id w64so31566977qka.3
+        for <linux-next@vger.kernel.org>; Tue, 07 Jan 2020 03:55:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:content-transfer-encoding
          :in-reply-to;
-        bh=Ajwwg1tTuaqvf2+iTZv4F7nVRs4fx4vlQX7SEEZvm5I=;
-        b=PXVZ1VqxmftlAzfoC2PJH8ZzdysJtCySrXZKO5hkeWb2eb0Hn65PVme0x5GwBIOyXL
-         Rrs744gedw9VPk0j0lamlPU6XjPyZS+SqseXUimq2TigjbsUEEmNiaeJFxCIbTgHtavK
-         hy6f5haT2BT6Nbv97TmPMzBAncrt+MlPLejKbd/JiM/SAk6I89KZcsKBtX29RcPL+Dns
-         Ki2zedJwBF4V/U7WKeTd6/Q5cb+BxoozcGeGm8d20TIJMudHzaK+x7Mvq4i0+qkNRiyT
-         euTrHHQo/WlO+4AU/SelF8Z6pka4YWic+VT3xRXZyIA68bHs8mRyt2yEAXLa2Y9LWX1y
-         LhCg==
-X-Gm-Message-State: APjAAAUpGY8oDgK9lLBEOquUc06oRPYAoKTEGnv+TgZuydo5wSfawp0b
-        Stqf7GqoOyUnOkZ+cbyUqQmdWl1cZrQLSSdwnleB8K5TVR+nDbfx7/jWLrdfMEdq3hvtryUXTAv
-        1qYhcAX0QZtpqaIyLxdQbHg==
-X-Received: by 2002:a05:620a:548:: with SMTP id o8mr89001517qko.490.1578397676015;
-        Tue, 07 Jan 2020 03:47:56 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwPdW3bN5Qrk8jx6DNFsiQ6HbJh5wOHP1je7PYJ8IDXlHg3qat/Sw8UC73f0mXWvj1+oj563Q==
-X-Received: by 2002:a05:620a:548:: with SMTP id o8mr89001491qko.490.1578397675714;
-        Tue, 07 Jan 2020 03:47:55 -0800 (PST)
+        bh=KKDZj81sAccgrzkhgIj794ifqolNRhLOvA0CIx37wWs=;
+        b=qE4UJAC+1hLt7ZoL8pmRLqDkwUUh2TvaqCXOijyN39xl7NGmTiAQTzcGB4j3ykU3Do
+         /XWsN8UXdGFAHQfGRR8FAZIJHtwSnbMpvMxlO7txTiUVo2oYvFEjglu6+oio0InHFIWB
+         niS3VzjkHsXpkI4k5CcdPtW6X9kvzDjf3oQFWwV4ioLsES5C2Yb10RKJa9EMHOCiKAns
+         +9lyjWGR2D14FM4M1ZlGVOd67QyyWsAFKtqr9el51CmGJHR8g/2CGiLadZdQBP2Jo4bQ
+         eTvq5WZ9hybQFHcUtHlp0al9GgAaY4mmJmPhtzgep38KZcV6MeriEiKBXFfzMSlTTO+b
+         ExsA==
+X-Gm-Message-State: APjAAAWokmVyx1zMSls4YhwShGe5u8TAMacSDosdFTK3FwqRK1Ye8FwK
+        eua8DdDqtQKuXXl5JlJTUg5YDu2kWd5BmFmIFDehjLhITf/WTw+RQV1qEaZkuCXjFcX3VXLUtDG
+        aXxiagQE+G/uGdTnKBo9ZpQ==
+X-Received: by 2002:a37:a642:: with SMTP id p63mr80587782qke.85.1578398127872;
+        Tue, 07 Jan 2020 03:55:27 -0800 (PST)
+X-Google-Smtp-Source: APXvYqyq1n8OiAxkRvySBU4BNoH32+bCXpIgv5dDJl00BVFh2v1+ue0mG4WwIqiHHC8FA0mwU5qoug==
+X-Received: by 2002:a37:a642:: with SMTP id p63mr80587764qke.85.1578398127536;
+        Tue, 07 Jan 2020 03:55:27 -0800 (PST)
 Received: from redhat.com (bzq-79-183-34-164.red.bezeqint.net. [79.183.34.164])
-        by smtp.gmail.com with ESMTPSA id f19sm22090879qkk.69.2020.01.07.03.47.51
+        by smtp.gmail.com with ESMTPSA id d71sm22259619qkg.4.2020.01.07.03.55.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 03:47:54 -0800 (PST)
-Date:   Tue, 7 Jan 2020 06:47:49 -0500
+        Tue, 07 Jan 2020 03:55:26 -0800 (PST)
+Date:   Tue, 7 Jan 2020 06:55:22 -0500
 From:   "Michael S. Tsirkin" <mst@redhat.com>
 To:     Christian Borntraeger <borntraeger@de.ibm.com>
 Cc:     "virtualization@lists.linux-foundation.org" 
@@ -63,7 +63,7 @@ Cc:     "virtualization@lists.linux-foundation.org"
         Halil Pasic <pasic@linux.ibm.com>
 Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
  crashes in KVM guests after reboot
-Message-ID: <20200107064113-mutt-send-email-mst@kernel.org>
+Message-ID: <20200107065434-mutt-send-email-mst@kernel.org>
 References: <c022e1d6-0d57-ae07-5e6b-8e40d3b01f4b@de.ibm.com>
  <20191218100926-mutt-send-email-mst@kernel.org>
  <2ffdbd95-e375-a627-55a1-6990b0a0e37a@de.ibm.com>
@@ -147,10 +147,7 @@ On Tue, Jan 07, 2020 at 12:34:50PM +0100, Christian Borntraeger wrote:
 >       |        i
 > 
 > I changed that to i
-
-Hmm no that's wrong I think. Sorry about all the errors. Let me push a
-fixed v3.
-
+> 
 > 
 > The last step then gave me  (on commit 50297a8480b439efc5f3f23088cb2d90b799acef vhost: use batched version by default)
 > net enc1: Unexpected TXQ (0) queue failure: -5
@@ -171,5 +168,9 @@ fixed v3.
 > git bisect bad 1414d7ee3d10d2ec2bc4ee652d1d90ec91da1c79
 > 
 > 
-> 
+
+I pushed batched-v3 - same head but bisect should work now.
+
+-- 
+MST
 

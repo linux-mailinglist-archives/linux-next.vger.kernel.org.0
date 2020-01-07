@@ -2,265 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F4125132DB0
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2020 18:56:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C622133099
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jan 2020 21:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728358AbgAGR4H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jan 2020 12:56:07 -0500
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:38652 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728266AbgAGR4H (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jan 2020 12:56:07 -0500
-Received: by mail-wm1-f65.google.com with SMTP id u2so493994wmc.3
-        for <linux-next@vger.kernel.org>; Tue, 07 Jan 2020 09:56:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=zWtVZ2mPaQyhV05fhLGyFc22WtDvmlFzORtB5rKK4Ec=;
-        b=PrVIoNSLJDki12v5daVLUz2H13Ay7ChDipeh/KBJb1vKt+Mt9bnQBHvTvSFZ47K43y
-         O+3zh0fTeYBCA/K75ip2lb9+PXAYYmi8rMja1i5p3G8ISI+YjT7ptE9T+UE7ihaWmQcQ
-         rMkUU/GcwzORVYoCha8tSPblxMkgeuUHq59jqdKGtJOZDL2DBXo3Fmwtb/yFziqN2b7Y
-         Ysov/eLRAgqfn1dL/6ev20fpPHPNrrlqWnpqeVgHmpM/NPgS1EOYuyasjAjdjUi1hNrl
-         T6bs7ZSMdtMycQlL0aiaxgkUl4+hg3cKomyd4clPgjsUOldrhS9Yf6QyK9iaqY9OVqJA
-         3l8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=zWtVZ2mPaQyhV05fhLGyFc22WtDvmlFzORtB5rKK4Ec=;
-        b=JmOJtyh87XE+At6l1t1//Rs9UJRMYeJ40WXXzhPpnEakqJndExhgwdei8wJWKx3DWY
-         mHnK5DiGuz54od7r8GaoA85n0R/luZdiHT42WHFaRHk8FbPbuVaakO7HwcccnLpxfCBc
-         NMwKghxg8uyPLQyQ6YboejNLwnKTYuXC5YQk9+xxh0F8gVkLb1NrS2uEbG/7Mo1ZAHYI
-         i5OF+R/Tg6/YbnZ/vpI1uC+5v0/0TgQ+exUEUv9lo0PhKy6hercWjoA/PHAU/9xBAuEF
-         cQGGZj0jY7hsdqkDVeqdiEVYsDPAaLv2WcfiZiKJP+dfNamrFjJJXs8qwg2pswjWLuCG
-         VktA==
-X-Gm-Message-State: APjAAAVRG1CXmBLuS/lH8oWr8pL77sudJxVktTd4TB+lQOvRcyl0a/HW
-        5PcUND3S82Ra2ZqbIX6BmeuW2IgKUtOXug==
-X-Google-Smtp-Source: APXvYqzrrp6imfZSFtysyruUBh2SNhJVIKgf5y2RGRFtlGtlsKrqUPSykAYAtO21bybXWqA5vm6Zkg==
-X-Received: by 2002:a1c:18e:: with SMTP id 136mr249874wmb.53.1578419764129;
-        Tue, 07 Jan 2020 09:56:04 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id u22sm723091wru.30.2020.01.07.09.56.03
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2020 09:56:03 -0800 (PST)
-Message-ID: <5e14c633.1c69fb81.35e9b.4266@mx.google.com>
-Date:   Tue, 07 Jan 2020 09:56:03 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1728749AbgAGUd6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jan 2020 15:33:58 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37735 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728561AbgAGUd6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 7 Jan 2020 15:33:58 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47skcM2xFdz9sR0;
+        Wed,  8 Jan 2020 07:33:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578429235;
+        bh=OFs/IkFFrLcuDeusWvjaN3qFeCgRqQ1i+hTSsiEXdVk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nCuR6y8VmYxn0TbgxkCOmwNZwfaW13814iSF20y9jF6VHA/y+tNpIebCdCrzzfNOm
+         FC//9e8E+70v72HpAtDa6WE8uKxaGh3YWoGC/yMDla6LFzZoEJNwj6HHeEVH/crrCh
+         EjWSdcIkWggky5P+MYa9lGWKqLFlF9ntiDxe1wgOz1KawDxxH8n4DvJzTgoFCVkidc
+         wAZtiGYiqBfX5q5dwOSgmcuqdUoMydsgOYUzsZU3taGadMXi7dC9s+J5oUWzUT3cZ0
+         h4rsjMcmNpozbm/cDL9eyFy+1G1mdUuENEg3W+adhjV+HgmFq09CXkGd5NR20NO6Vf
+         F4fgsdOoEFjXQ==
+Date:   Wed, 8 Jan 2020 07:33:49 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Michael J. Ruhl" <michael.j.ruhl@intel.com>,
+        Kaike Wan <kaike.wan@intel.com>,
+        Dennis Dalessandro <dennis.dalessandro@intel.com>
+Subject: linux-next: Fixes tag needs some work in the rdma tree
+Message-ID: <20200108073349.2b270de3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200107
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 190 boots: 41 failed,
- 146 passed with 3 untried/unknown (next-20200107)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/LiN5NbM_U/GS/M5ePDbAkVD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 190 boots: 41 failed, 146 passed with 3 untried/unknown (=
-next-20200107)
+--Sig_/LiN5NbM_U/GS/M5ePDbAkVD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200107/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200107/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20200107
-Git Commit: 2646738520338211e74394857e36df7c455a8a91
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 67 unique boards, 16 SoC families, 25 builds out of 214
+In commit
 
-Boot Regressions Detected:
+  44ec5aa3c615 ("IB/hfi1: List all receive contexts from debugfs")
 
-arm:
+Fixes tag
 
-    multi_v7_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-              lab-drue: failing since 1 day (last pass: next-20191220 - fir=
-st fail: next-20200106)
-          am57xx-beagle-x15:
-              lab-drue: failing since 1 day (last pass: next-20191220 - fir=
-st fail: next-20200106)
-          imx6q-sabrelite:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          rk3288-rock2-square:
-              lab-collabora: new failure (last pass: next-20191220)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 1 day (last pass: next-20191217 -=
- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 1 day (last pass: next-20191220 - f=
-irst fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          tegra124-jetson-tk1:
-              lab-collabora: new failure (last pass: next-20191220)
+  Fixes: bf808b5039c ("IB/hfi1: Add kernel receive context info to debugfs")
 
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          rk3288-rock2-square:
-              lab-collabora: new failure (last pass: next-20191220)
-          tegra124-jetson-tk1:
-              lab-collabora: new failure (last pass: next-20191220)
+has these problem(s):
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          imx6q-sabrelite:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          rk3288-rock2-square:
-              lab-collabora: new failure (last pass: next-20191220)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 1 day (last pass: next-20191219 -=
- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 1 day (last pass: next-20191220 - f=
-irst fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          tegra124-jetson-tk1:
-              lab-collabora: new failure (last pass: next-20191220)
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
-    omap2plus_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-              lab-drue: failing since 1 day (last pass: next-20191220 - fir=
-st fail: next-20200106)
-          am57xx-beagle-x15:
-              lab-drue: failing since 1 day (last pass: next-20191220 - fir=
-st fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
+--=20
+Cheers,
+Stephen Rothwell
 
-    oxnas_v6_defconfig:
-        gcc-8:
-          ox820-cloudengines-pogoplug-series-3:
-              lab-baylibre: failing since 1 day (last pass: next-20191219 -=
- first fail: next-20200106)
+--Sig_/LiN5NbM_U/GS/M5ePDbAkVD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 1 day (last pass: next-20191219 -=
- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 1 day (last pass: next-20191220 - f=
-irst fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          sun8i-a83t-bananapi-m3:
-              lab-clabbe: new failure (last pass: next-20200106)
+-----BEGIN PGP SIGNATURE-----
 
-    tegra_defconfig:
-        gcc-8:
-          tegra124-jetson-tk1:
-              lab-collabora: new failure (last pass: next-20191220)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4U6y0ACgkQAVBC80lX
+0GxrgQf9FLbTeg9iPajwYLHI4J2BJeP/gbu6sO0GH8j5iIerFgs6jdDhwFZyHuEa
+DZUAkNMljNnOAlaQAF5OU6O26fx37WFUSHUCTrN28PNB3y1C/vz8wwFbpW7atSLe
+DYwGCO6o2CEITfru8xr9C2vByKuDcHDPfkXmUCgjqCwmPNmuNjZxjmPJ03CVJyhJ
+j5X9pX7BXieYDQKEnCCTgblgcTZDLhMsr5XGzQqr4l3CeSi8vZx5fijjxmne9lhC
+mktutQb29p0d27ODa0MjwQcvCigjNhPK88dYeLqk9Ix/3KYWzXUqBEdHQ29+VgSw
+QdbBKrdn6SrJMzPSnyTyNSYV0feLWg==
+=chLr
+-----END PGP SIGNATURE-----
 
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 1 day (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          meson-gxbb-p200:
-              lab-baylibre: failing since 1 day (last pass: next-20191220 -=
- first fail: next-20200106)
-          qcs404-evb-4k:
-              lab-bjorn: new failure (last pass: next-20200106)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s905d-p230: 1 failed lab
-            msm8998-mtp: 1 failed lab
-            qcs404-evb-4k: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            imx6q-sabrelite: 2 failed labs
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-            rk3288-rock2-square: 1 failed lab
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    omap2plus_defconfig:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            am57xx-beagle-x15: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    multi_v7_defconfig:
-        gcc-8:
-            am335x-boneblack: 2 failed labs
-            am57xx-beagle-x15: 1 failed lab
-            imx6q-sabrelite: 2 failed labs
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-            rk3288-rock2-square: 1 failed lab
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/LiN5NbM_U/GS/M5ePDbAkVD--

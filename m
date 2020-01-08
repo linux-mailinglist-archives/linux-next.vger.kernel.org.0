@@ -2,264 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B51AA1345ED
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2020 16:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB00134613
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jan 2020 16:24:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727400AbgAHPRj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jan 2020 10:17:39 -0500
-Received: from mail-wr1-f46.google.com ([209.85.221.46]:46163 "EHLO
-        mail-wr1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726651AbgAHPRj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jan 2020 10:17:39 -0500
-Received: by mail-wr1-f46.google.com with SMTP id z7so3713809wrl.13
-        for <linux-next@vger.kernel.org>; Wed, 08 Jan 2020 07:17:37 -0800 (PST)
+        id S1728468AbgAHPYY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jan 2020 10:24:24 -0500
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:42516 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728603AbgAHPYX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jan 2020 10:24:23 -0500
+Received: by mail-wr1-f68.google.com with SMTP id q6so3776785wro.9
+        for <linux-next@vger.kernel.org>; Wed, 08 Jan 2020 07:24:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=yTai2f2DsIoTx6MhKUju2GApFxFcOe5QMLzXB/EO6bU=;
-        b=V0GfMYxv0WDeknuAqBsGNybKQKRhTSvKPdd5OLAQuZ8/Gh8J75/0CsupzAU44kV1oF
-         AgNqbEh8m1ZqiqeTKvqL6UwUOYw1zVmm+uL6aoQ+knN+nswJveJPsSkbDm93l8be/7WJ
-         he+h5SKXUQ24Tzis/cm+kkp0+EBP0tfX1vNT0J8Ehxk4qfHOKwsFYmcyTSYxGA9HirKu
-         m6nICaw4oKnYkptax59N8q1o5fOxsUQs6O2PChDVl6a0RHxlf0ilVdS6dIpGOOK5rLKg
-         hEMGNk0pOEcWMR++5Ntp/z6RI8Fa3bZZ8h4FgK04b84Hx9TdAwUPnAsOwvL9Hnx//Gyj
-         zIdQ==
+        d=dev-mellanox-co-il.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=WY8LswhWtBe+DJC/DEGAG0v0KweIWUFyKsy0DnI+itc=;
+        b=ZXUvw/vhiVbJH+1wtwf5xxWbV9B3EDKLGgk9nZLyC9y0XZMJuFRdJO5tuYwtkFbOyP
+         FralA2sMLvFQDB14ET8u6vgtQdJbh4cvA9p55FRNByr2yf3FXy/NIY9nTBGpK5LUxcq4
+         1by3MPlRENUwrEj+Sezq+4Hy2bCik9nFCqlZYFmw9NvFsGy8I8giq3+itv9gstEAWAmQ
+         2kV7+GrmtGpLDfnI2DKBBwsLOzcLLw9vSGgYAxKhrEejMx8BPnZpMfueADS0lPsoEpQB
+         1Wb/L2J/vP/di06i2RyNw0jRZM8kmLnNDOKlFV52GSMVHcCpiwYy7ZVl2Hil9XybPnRb
+         zn1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=yTai2f2DsIoTx6MhKUju2GApFxFcOe5QMLzXB/EO6bU=;
-        b=gN/dQFeIST2ivochBbSN980FEzhglUZ3Lbk7hAs6BflgJ1cAsBzV7TugwdzZVjjpSo
-         e/TMJDvmEXlpD3mb2dmAvpb0GxcgLLna2+HDUQOvZ3HLfFng+MriS8E/7DX3X01DIljh
-         tYq+vDsO6L173kN/hxvqPoVV3URNiFHey5dHua1lyYWoUUa6ijWT39znwSvwESn9Cq92
-         5MdHZp9WFoixSdfnLKA40CchyXuyEBb9WzHGS24F471r/R8bNVdxIgf0eSYTk9hLDKS7
-         KEvi9Z5W+rOBJ3HVkQKrFHDs1hJegRpW0WsjZX01KVzW9RsX9TVbVBCgVS1CteLQfrEe
-         IGbQ==
-X-Gm-Message-State: APjAAAUml+SA6CvD7sdBT/1TnOCm0vlJq+0UKK3IchhigvEHTQKgm5lq
-        ScU7LKME7wQvYLK2F4asVd5N85Cz9dP3Xw==
-X-Google-Smtp-Source: APXvYqyjXlblLyEziUlQ9A6Qfy9iU1bTYshwzYnkCCSfx1XcVnCr3NpuQAGYZoh7KftIgNMP0MefEg==
-X-Received: by 2002:adf:c446:: with SMTP id a6mr4973742wrg.218.1578496656468;
-        Wed, 08 Jan 2020 07:17:36 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id l3sm4503245wrt.29.2020.01.08.07.17.35
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2020 07:17:35 -0800 (PST)
-Message-ID: <5e15f28f.1c69fb81.64fc1.49b9@mx.google.com>
-Date:   Wed, 08 Jan 2020 07:17:35 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=WY8LswhWtBe+DJC/DEGAG0v0KweIWUFyKsy0DnI+itc=;
+        b=JgbfLQn41bvEnnf3P40xHAdsIaKMePEbAqdxGfW0+K9HidtRDClBjs47vpw1pG9oos
+         eSROOF8FejnctB6dWDW3D6MPS2UXaZCwo/j3DphUaTsflfCSNVRQ+RCgZyZX7iYtmiKi
+         z9gNStxUHTKlv1Nuzf63QQHYpRlGk1bPeflkIMOTRXblqrwtnhupZhUi3rvjZe0rUIVm
+         /yImOAjdfYIwafIGBEJydUQ+hN5OMzHZ+ngf1bE3VmZN4Zr+VY+Ll1Elg7XebT0Dg/fo
+         sbXR4nRS+32i4WX4KIplZZgRAsfdLzneWA7pRNuk881158f2lGkdARpKlhkqE6RUl8tI
+         r5Aw==
+X-Gm-Message-State: APjAAAXmBudV3v9P/jeK2aRIDk3U5RA2nX9z5ZB92Q6if9fz7WQOxAQX
+        1dHBsGOpSkUuwaIWhEMO62sEnA==
+X-Google-Smtp-Source: APXvYqy/vleudjcx/xMUWMn9iSG/9C+uIhSD3GlJinfMIalsB8y/BxdVFOkayIHlOLB7/RHQFVWGOw==
+X-Received: by 2002:adf:b605:: with SMTP id f5mr4964464wre.383.1578497061827;
+        Wed, 08 Jan 2020 07:24:21 -0800 (PST)
+Received: from [10.80.2.221] ([193.47.165.251])
+        by smtp.googlemail.com with ESMTPSA id o16sm4337490wmc.18.2020.01.08.07.24.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2020 07:24:21 -0800 (PST)
+Subject: Re: [PATCH rdma-rc 3/3] IB/core: Fix ODP with IB_ACCESS_HUGETLB
+ handling
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Leon Romanovsky <leon@kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Leon Romanovsky <leonro@mellanox.com>,
+        RDMA mailing list <linux-rdma@vger.kernel.org>,
+        Artemy Kovalyov <artemyko@mellanox.com>,
+        Aviad Yehezkel <aviadye@mellanox.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@mellanox.com>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-mm@kvack.org
+References: <20191219134646.413164-1-leon@kernel.org>
+ <20191219134646.413164-4-leon@kernel.org>
+ <alpine.DEB.2.21.2001081352560.23971@ramsan.of.borg>
+From:   Yishai Hadas <yishaih@dev.mellanox.co.il>
+Message-ID: <ff4da6a1-609a-546c-e56c-e3ac529d4496@dev.mellanox.co.il>
+Date:   Wed, 8 Jan 2020 17:24:19 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200108
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 165 boots: 37 failed,
- 127 passed with 1 untried/unknown (next-20200108)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <alpine.DEB.2.21.2001081352560.23971@ramsan.of.borg>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 165 boots: 37 failed, 127 passed with 1 untried/unknown (=
-next-20200108)
+On 1/8/2020 2:56 PM, Geert Uytterhoeven wrote:
+>      Hi Leon,
+> 
+> On Thu, 19 Dec 2019, Leon Romanovsky wrote:
+>> From: Yishai Hadas <yishaih@mellanox.com>
+>>
+>> As VMAs for a given range might not be available as part of the
+>> registration phase in ODP, IB_ACCESS_HUGETLB/page_shift must be checked
+>> as part of the page fault flow.
+>>
+>> If the application didn't mmap the backed memory with huge pages or
+>> released part of that hugepage area, an error will be set as part of the
+>> page fault flow once be detected.
+>>
+>> Fixes: 0008b84ea9af ("IB/umem: Add support to huge ODP")
+>> Signed-off-by: Yishai Hadas <yishaih@mellanox.com>
+>> Reviewed-by: Artemy Kovalyov <artemyko@mellanox.com>
+>> Reviewed-by: Aviad Yehezkel <aviadye@mellanox.com>
+>> Signed-off-by: Leon Romanovsky <leonro@mellanox.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/infiniband/core/umem_odp.c
+>> +++ b/drivers/infiniband/core/umem_odp.c
+>> @@ -241,22 +241,10 @@ struct ib_umem_odp *ib_umem_odp_get(struct 
+>> ib_udata *udata, unsigned long addr,
+>>     umem_odp->umem.owning_mm = mm = current->mm;
+>>     umem_odp->notifier.ops = ops;
+>>
+>> -    umem_odp->page_shift = PAGE_SHIFT;
+>> -    if (access & IB_ACCESS_HUGETLB) {
+>> -        struct vm_area_struct *vma;
+>> -        struct hstate *h;
+>> -
+>> -        down_read(&mm->mmap_sem);
+>> -        vma = find_vma(mm, ib_umem_start(umem_odp));
+>> -        if (!vma || !is_vm_hugetlb_page(vma)) {
+>> -            up_read(&mm->mmap_sem);
+>> -            ret = -EINVAL;
+>> -            goto err_free;
+>> -        }
+>> -        h = hstate_vma(vma);
+>> -        umem_odp->page_shift = huge_page_shift(h);
+>> -        up_read(&mm->mmap_sem);
+>> -    }
+>> +    if (access & IB_ACCESS_HUGETLB)
+>> +        umem_odp->page_shift = HPAGE_SHIFT;
+>> +    else
+>> +        umem_odp->page_shift = PAGE_SHIFT;
+>>
+>>     umem_odp->tgid = get_task_pid(current->group_leader, PIDTYPE_PID);
+>>     ret = ib_init_umem_odp(umem_odp, ops);
+> 
+> noreply@ellerman.id.au reports for linux-next/m68k-allmodconfig/m68k:
+> 
+>      drivers/infiniband/core/umem_odp.c:245:26: error: 'HPAGE_SHIFT' 
+> undeclared (first use in this function); did you mean 'PAGE_SHIFT'?
+> 
+> Should this depend on some HUGETLBFS option?
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200108/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200108/
+Thanks for pointing on,
+We would expect to use #ifdef CONFIG_HUGETLB_PAGE as done in below 
+kernel code [1] that also used HPAGE_SHIFT.
 
-Tree: next
-Branch: master
-Git Describe: next-20200108
-Git Commit: 4becfd1b26ef4014a20fb38dd17554077adbed5d
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 66 unique boards, 17 SoC families, 25 builds out of 214
+I'll send some patch to 'for-next' to handle it.
 
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          imx6q-sabrelite:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          rk3288-rock2-square:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 2 days (last pass: next-20191217 =
-- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 2 days (last pass: next-20191220 - =
-first fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          tegra124-jetson-tk1:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          rk3288-rock2-square:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-          tegra124-jetson-tk1:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          imx6q-sabrelite:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          rk3288-rock2-square:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 2 days (last pass: next-20191219 =
-- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 2 days (last pass: next-20191220 - =
-first fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          tegra124-jetson-tk1:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-
-    omap2plus_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-    oxnas_v6_defconfig:
-        gcc-8:
-          ox820-cloudengines-pogoplug-series-3:
-              lab-baylibre: failing since 2 days (last pass: next-20191219 =
-- first fail: next-20200106)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: failing since 2 days (last pass: next-20191219 =
-- first fail: next-20200106)
-          sun7i-a20-cubieboard2:
-              lab-clabbe: failing since 2 days (last pass: next-20191220 - =
-first fail: next-20200106)
-          sun7i-a20-olinuxino-lime2:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-    tegra_defconfig:
-        gcc-8:
-          tegra124-jetson-tk1:
-              lab-collabora: failing since 1 day (last pass: next-20191220 =
-- first fail: next-20200107)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 2 days (last pass: next-20191220 - f=
-irst fail: next-20200106)
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: next-20200107)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200107)
-          qcs404-evb-4k:
-              lab-bjorn: failing since 1 day (last pass: next-20200106 - fi=
-rst fail: next-20200107)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200107)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            apq8096-db820c: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-            msm8998-mtp: 1 failed lab
-            qcs404-evb-4k: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            imx6q-sabrelite: 2 failed labs
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-            rk3288-rock2-square: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    omap2plus_defconfig:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    multi_v7_defconfig:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            imx6q-sabrelite: 2 failed labs
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-            rk3288-rock2-square: 1 failed lab
-            sun4i-a10-olinuxino-lime: 1 failed lab
-            sun7i-a20-cubieboard2: 1 failed lab
-            sun7i-a20-olinuxino-lime2: 1 failed lab
-            tegra124-jetson-tk1: 1 failed lab
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-jetson-tk1: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+[1] 
+https://elixir.bootlin.com/linux/v5.3-rc7/source/drivers/misc/sgi-gru/grufault.c#L183

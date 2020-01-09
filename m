@@ -2,63 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B36135B3E
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2020 15:22:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA54E136419
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 00:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728406AbgAIOWV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jan 2020 09:22:21 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:47798 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727854AbgAIOWV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jan 2020 09:22:21 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=DxwGKPgO3D2IF3vBmmjgp81bFThWYwYhX5RdXbco5Vo=; b=B/NJisdCPQlvKBnTqKVFtn2Go
-        NAg3mAMBmiN3dBFD8HAHKGw5ee+Ur9TD1HKyNvo+32i/1abY6CP2Ru/6fLY3gFHq209m04Xh3cBci
-        jr+snZNNUC5MR+kYlsBiz5Ngw+VLANGRmFWYtq3EtsqFn5qW0eDDiEbjs60yj4kJ7m0O4pNs3v7Ie
-        utaeWhVrty7kE6rbBn/yUyUiM1VnzaxNYRRGqLkyYvGe7XwQOT2pY6WFGk5flU9TqWIc2d5fFJYe8
-        xx/2P49Gsio08YULRWfK+RrcUVEVVrKoECNvRBcvCn6D7J7BS+1nm6Dsf119Q7sqpK77yOFgt9tio
-        sKS2iXZew==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ipYhW-0005xu-97; Thu, 09 Jan 2020 14:22:18 +0000
-Date:   Thu, 9 Jan 2020 06:22:18 -0800
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        sachinp <sachinp@linux.vnet.ibm.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
-        linux-next <linux-next@vger.kernel.org>,
-        Oliver <oohall@gmail.com>,
-        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
-        Brian King <brking@linux.vnet.ibm.com>,
-        manvanth <manvanth@linux.vnet.ibm.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
- mpt3sas driver
-Message-ID: <20200109142218.GA16477@infradead.org>
-References: <1578489498.29952.11.camel@abdul>
- <1578560245.30409.0.camel@abdul.in.ibm.com>
+        id S1729734AbgAIX5u (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jan 2020 18:57:50 -0500
+Received: from ozlabs.org ([203.11.71.1]:34947 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729706AbgAIX5t (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 9 Jan 2020 18:57:49 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47v32d5WMzz9sPJ;
+        Fri, 10 Jan 2020 10:57:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578614265;
+        bh=TD8bO5jX3Cr1I+bGYFerSH/F4hLEBVl6YkrtZuz68zM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LsQyQfMlP1tgYGBZJgmTIEEz5R1UP4JmnyNqf8bBsjEzii9VSjUr3hvHaVyGT7aU5
+         GemcnYx75IR4YAWxpC6B75fahuRcIofOMbLX9FryEFfokKgjQ0VLmNG4NwP+pR7/3X
+         2ecdPXeJnJKqDBQf+Ah703P0P3Mo/3Zwn6BXh+xlMsyekJTnLHoef577NnFvgwTj4Q
+         2cpowU1NwBf/UxOOw85XLkrGb3aaND3+14ipaoxgmXbaqYRtLYKDTvGIWc2uG7exvS
+         0QrLfyqJTTvUqeu5jHN2iO031Z2tnalqQtxKnWJ3rWNIbEvY0wvWxwujx5VWcaDsSz
+         +mFuIAINK+Lvg==
+Date:   Fri, 10 Jan 2020 10:57:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Petr Machata <petrm@mellanox.com>
+Subject: linux-next: build failure after merge of the net-next tree
+Message-ID: <20200110105738.2b20cbad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1578560245.30409.0.camel@abdul.in.ibm.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: multipart/signed; boundary="Sig_/=q81v8uInKOM8jRoLd774bH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 09, 2020 at 02:27:25PM +0530, Abdul Haleem wrote:
-> + CC Christoph Hellwig
+--Sig_/=q81v8uInKOM8jRoLd774bH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The only thing this commit changed for the dma coherent case (which
-ppc64 uses) is that we now look up the page to free by the DMA address
-instead of the virtual address passed in.  Which suggests this call
-stack passes in a broken dma address.  I suspect we somehow managed
-to disable the ppc iommu bypass mode after allocating memory, which
-would cause symptoms like this, and thus the commit is just exposing
-a pre-existing problem.
+Hi all,
+
+After merging the net-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
+
+drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c: In function '__mlxsw_=
+sp_qdisc_ets_graft':
+drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c:770:7: error: 'p' unde=
+clared (first use in this function); did you mean 'up'?
+  770 |  if (!p->child_handle) {
+      |       ^
+      |       up
+
+Caused by commit
+
+  345457a6e2cd ("Merge remote-tracking branch 'net-next/master'")
+
+i.e. an incorrect automatic merge between commit
+
+  3971a535b839 ("mlxsw: spectrum_qdisc: Ignore grafting of invisible FIFO")
+
+from Linus' tree and commit
+
+  7917f52ae188 ("mlxsw: spectrum_qdisc: Generalize PRIO offload to support =
+ETS")
+
+from the net-next tree.
+
+I have applied the following merge fix patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 10 Jan 2020 10:52:33 +1100
+Subject: [PATCH] mlxws: fix up for "mlxsw: spectrum_qdisc: Ignore grafting =
+of invisible FIFO"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c b/drivers=
+/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+index 17b29e2d19ed..54807b4930fe 100644
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+@@ -767,7 +767,7 @@ __mlxsw_sp_qdisc_ets_graft(struct mlxsw_sp_port *mlxsw_=
+sp_port,
+ 	    mlxsw_sp_port->tclass_qdiscs[tclass_num].handle =3D=3D child_handle)
+ 		return 0;
+=20
+-	if (!p->child_handle) {
++	if (!child_handle) {
+ 		/* This is an invisible FIFO replacing the original Qdisc.
+ 		 * Ignore it--the original Qdisc's destroy will follow.
+ 		 */
+--=20
+2.24.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=q81v8uInKOM8jRoLd774bH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4XvfIACgkQAVBC80lX
+0Gyy6Af/dR6/7p0+dYPXSjL00vZvIfMYEflpo+BHgiCVgt/cElOmeuOZhlz287x7
+RgdjhIBDD0LrYn+zmUmIgIrSxtv46bKvFaxJ17T7Fjf+jdWuWKfL4JJL0cLwidov
+Z5kQTG8zS67f0+nnE/P24XzHWK4Ds+d6lPbDqHgyJWo3Xk0e97XbpwvCX38WwSBu
+0nFiToIbHMYA2a5z/NmfL3m/DVjwFEQiX5KT7kBP9LRe30pwu8Sd/PmKF4ndNE1v
+NhWB98zQ5idy3YSJmMVZcqa3HxEGOZkSqbBBvJgwXF3VgY1beBiDhRVvqKZzV+il
+FFHo8f+J7QOeT/S5uNk6G+3TYmWR7A==
+=vAoK
+-----END PGP SIGNATURE-----
+
+--Sig_/=q81v8uInKOM8jRoLd774bH--

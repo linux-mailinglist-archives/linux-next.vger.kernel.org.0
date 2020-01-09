@@ -2,86 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 775A1135120
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2020 02:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67885135148
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2020 03:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727861AbgAIB67 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jan 2020 20:58:59 -0500
-Received: from mail-lf1-f48.google.com ([209.85.167.48]:33238 "EHLO
-        mail-lf1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727749AbgAIB67 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jan 2020 20:58:59 -0500
-Received: by mail-lf1-f48.google.com with SMTP id n25so3986757lfl.0
-        for <linux-next@vger.kernel.org>; Wed, 08 Jan 2020 17:58:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4HLXba65IV99LLkH3oDHgUrEsAK+Af9w2DfQh6SRBRg=;
-        b=CxBMXD1K0oXMPSBhBEDTwmq8dZh1xY7iXli6Q2oINfshT8e+3LbrF1lPNkx8u/PGJQ
-         luQnZipBucOXUA2y/xdFuXxvcQVPdpncXK5I/Tt+Cijw7UsEFPD5rCKKLMIzr5WLVIU8
-         z5nt5NTPz9s8EfX4UlaEZklWXYSWuxDLieUTyZ4ap8vS0J2mP+pXEDT1FfTzecqy9fir
-         Vd4jqS7IE5WQqoYuKYvoYELlNZJAsQ5qh//KKqTvJhIe6JukyPt0c62N5NPmFmZ0ljUn
-         wpmT2arhfy5K4eSN16I8A8JhXCLmv5cn90HaIIFpmXxjZy3BmxIic1u3P/HEjFi9DKbT
-         5npw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4HLXba65IV99LLkH3oDHgUrEsAK+Af9w2DfQh6SRBRg=;
-        b=hLvQrmJqGGaE75qIz/iZIRaa9CGot4zy//2bCoI9Ub93OdyRnMO+TTQ037qs6oi9rB
-         hdq/PVxQalIc5JRdRmwZVAyAeifxO1+BVH4PxhRXFSOujR/n9ARIw248jVJIET0doOeQ
-         NE0cVgKolWxqR5YLaRRfNzjeT68aPJ1mYKexO/DTkMf1qH3S4MwwEIX8LRz0MajMDoN6
-         qehg5EXImoHnED4Qyt0s4nELM2rtM+7kcwPvUyFby5V3LMpKg6/iygpawQ77s9BUu5C3
-         v2OZdrN3wAKqxc55U9zqw7ytpyzMCiCQWq8nh5ST722MxeLGOyglG5C0hnwE8lFJm1sp
-         ikfA==
-X-Gm-Message-State: APjAAAWC8Olcx9xQWBBRI6WXyvda78gj0tEXLj3nbeIrsshL6YYHpW6/
-        jXUw1bFC/PuFG+IkWXjZ6zl+64LI4eJj0xwnf1NhUA==
-X-Google-Smtp-Source: APXvYqym0x25O7/j2uOuILFJYpslF8H/cNSZB9HqV2Amzfra19PlmFsNj9gYjF3rDfVcy/PgZQAtlMNHT3HlwBxcZQ4=
-X-Received: by 2002:ac2:55a8:: with SMTP id y8mr4539518lfg.117.1578535137217;
- Wed, 08 Jan 2020 17:58:57 -0800 (PST)
-MIME-Version: 1.0
-References: <20200109112836.0649c578@canb.auug.org.au>
-In-Reply-To: <20200109112836.0649c578@canb.auug.org.au>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 9 Jan 2020 02:58:46 +0100
-Message-ID: <CACRpkdbZi3qV1RFvA4SDa_7T-b-eSaKGdA9_m4s_1gk=2MQNDQ@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1727417AbgAICWn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jan 2020 21:22:43 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38767 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726758AbgAICWn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 8 Jan 2020 21:22:43 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47tVJJ5rsgz9sRW;
+        Thu,  9 Jan 2020 13:22:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578536560;
+        bh=riqZCzpetlOrzK/RICQ5QDhyJ95/csHhh1IRUG1I734=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nik6mqC+89EH5JTyUpOQGKBSmw26Ta/Kuy6ojOKesw6AIimIe0QXUoc5c/D5e1LKH
+         dVxJ7JWTwvCh6Lu5JyyYqjyCCwwOpIYr6iYz5gSWqTvHP1plefT1A33UYhicsZPsRt
+         kCTB/W/7aJWnyloMXhooqWWa9hJOll8kW5ndjVhIcv12EUHuog31zBS4sSLHwLWAqF
+         MPc6kfd144FnMujGpQkvgsYvMkbPXQ6m6YaVySNAxcvvYZLXRcC0nK1Uv4j6gELBH2
+         TU1P5ImH5qvv8r+Ib/VhBIBGSftvIehBg11Ad3tFYNJ4sjZIx8Xpng5IKU3cwjBmIj
+         gbNk5GB4Syj7Q==
+Date:   Thu, 9 Jan 2020 13:22:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ma Feng <mafeng.ma@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failures after merge of the keys tree
+Message-ID: <20200109132240.264728ef@canb.auug.org.au>
+In-Reply-To: <20191212115901.221d8ba1@canb.auug.org.au>
+References: <20191212115901.221d8ba1@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/dyxcWIddM/xj714Xk.RfnNj";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 9, 2020 at 1:28 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/dyxcWIddM/xj714Xk.RfnNj
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> In commit
->
->   d5d3594db9f0 ("pinctrl: armada-37xx: Remove unneeded semicolon")
->
-> Fixes tag
->
->   Fixes: commit 5715092a458c ("pinctrl: armada-37xx: Add gpio support")
->
-> has these problem(s):
->
->   - leading word 'commit' unexpected
->
-> Also, each line listating a fixed commit should have a Fixes: prefix and
-> all the commit message tags should be kept together at the end of the
-> commit message.
+Hi David,
 
-Do we have to fix this? It is a trivial fix to a non-critial non-regression
-problem so it's not like we need those Fixes tags to get it picked to
-stable or anything. To me it's just some random free-form commit
-message.
+On Thu, 12 Dec 2019 11:59:01 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the keys tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 
-I have merged a bunch of pull requests on top so I need a real good
-reason to back all that out. :/ it just doesn't seem worth it.
+	....
 
-Yours,
-Linus Walleij
+> Caused by commit
+>=20
+>   068df091816a ("keys: Replace uid/gid/perm permissions checking with an =
+ACL")
+>=20
+> I have used the keys tree from next-20191211 for today.
+
+Any ETA on when this tree will be updated?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/dyxcWIddM/xj714Xk.RfnNj
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4WjnAACgkQAVBC80lX
+0Gym8Qf9Gse2VPOCLAAe/VZ/zBmm4qVu9RcJ9K4JT9ciwLOBaatZHwFcRGuiduTV
+o1MZLLdnQbfb6LOIKZN5CoENirJUC6qPj2z6LOEW2MG26BR4e28V9snV1BYLkfWi
+AL8l7MGNsZ5j9rNKneklSlOETNbzR1+50NGjnWfP44cUlwdFiUiLquJGAIOJ1G9U
+LUFRJuwTxODYBWbRX2BCmqmL3x++/4pY81stBzqvgqiBrO++jD8HhPR2YHo/oRxh
+DL4NzS61EBQgxqCpfpvM5NR/+Oh3Rcnw1JhuH3SuOSYoo5y++x9XIAfDRAQriJZH
+cSkC+41KrpuxDWC4+aScXjbymlxi4A==
+=bCkd
+-----END PGP SIGNATURE-----
+
+--Sig_/dyxcWIddM/xj714Xk.RfnNj--

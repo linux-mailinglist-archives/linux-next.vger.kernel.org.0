@@ -2,180 +2,63 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E6513585A
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2020 12:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B36135B3E
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jan 2020 15:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728887AbgAILqx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jan 2020 06:46:53 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]:33778 "EHLO
-        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728656AbgAILqx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jan 2020 06:46:53 -0500
-Received: by mail-wr1-f49.google.com with SMTP id b6so7130307wrq.0
-        for <linux-next@vger.kernel.org>; Thu, 09 Jan 2020 03:46:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=k5DiZFfgoIRJL4MER6PKu5bdCGKBet+bacSzU9yjh80=;
-        b=o7OmPi1DWDCoYFJJA+KPA4eFaEIRxxwt0IV6LB2JMeg/5hX+/2ZuiPzUd2kYktBZ2p
-         5ojcl+ZTFHb918hsCnLvHHBdn3zmwoprI4CPQM3RpC/uuwt8p7YzqK7I91kSDYuq/h9L
-         4wCwsIbTtFMfks60ACycVnZo13W4lf9yKjA7u42ShrhWrDW6xufsTLlGQIL3HgJwZwD6
-         4eVJnW60BqEUxMoUcaQ8yYSmBTHkhcr3PKPq+wnDrQbl2oEYa6Z/gIVqMMtfuPE8ZWPv
-         J0Qbgf34Bn2XeTgyAw5NbYD4GFd1PZFk2hnEdtkO6V4U0XgxBODqldRhU8buuCqS4d85
-         leWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=k5DiZFfgoIRJL4MER6PKu5bdCGKBet+bacSzU9yjh80=;
-        b=bJJpjab+uxT2gKwa57N7O5B9EANs1I/JcQvUSVvTTNQnvGzyu4cybDtTL2E4C5+9AB
-         voI7IIwZ6art9mt6akSqwRwBfNzta0HaZdbVoa9s80RCA8NXyV9x+HQhKWTWZ7HeYpq7
-         qfG+kNT+JIdbbZ1KR5V/Dd5TNy5hSppgm5R198vSuVHyh3UzHp596hNtycpFzPvWaAg8
-         ccd+egFWwtoNEkFebi65/Bu4PEylI/vZgO6aydrqjkjWl61UaFgp5YdrK0pul+7enXDc
-         j7b3o8f04KHcmA5Pb0T7WorGh//Pr9yK2R4geIAU3uiuOqvj7mrd8txzK1J+rf5opKL2
-         MU6Q==
-X-Gm-Message-State: APjAAAUKs+KhPFDQICfo7yPw32G+t6Buf/z7gjaqSUE4O0zzeFEG11/a
-        960GmY8wyZyrQ5tQiIGNVMQteiEm3aeOqQ==
-X-Google-Smtp-Source: APXvYqzeA2tqkXV1SWlh06yjZWhzecoHjO8walwqpk9/K7FK3PumK3yK+1a0zB0Pg2I65dH6fe46mw==
-X-Received: by 2002:adf:9c8f:: with SMTP id d15mr10544243wre.390.1578570411041;
-        Thu, 09 Jan 2020 03:46:51 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id z11sm7976231wrt.82.2020.01.09.03.46.49
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2020 03:46:49 -0800 (PST)
-Message-ID: <5e1712a9.1c69fb81.f39a7.6a4f@mx.google.com>
-Date:   Thu, 09 Jan 2020 03:46:49 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1728406AbgAIOWV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jan 2020 09:22:21 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:47798 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727854AbgAIOWV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jan 2020 09:22:21 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=DxwGKPgO3D2IF3vBmmjgp81bFThWYwYhX5RdXbco5Vo=; b=B/NJisdCPQlvKBnTqKVFtn2Go
+        NAg3mAMBmiN3dBFD8HAHKGw5ee+Ur9TD1HKyNvo+32i/1abY6CP2Ru/6fLY3gFHq209m04Xh3cBci
+        jr+snZNNUC5MR+kYlsBiz5Ngw+VLANGRmFWYtq3EtsqFn5qW0eDDiEbjs60yj4kJ7m0O4pNs3v7Ie
+        utaeWhVrty7kE6rbBn/yUyUiM1VnzaxNYRRGqLkyYvGe7XwQOT2pY6WFGk5flU9TqWIc2d5fFJYe8
+        xx/2P49Gsio08YULRWfK+RrcUVEVVrKoECNvRBcvCn6D7J7BS+1nm6Dsf119Q7sqpK77yOFgt9tio
+        sKS2iXZew==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1ipYhW-0005xu-97; Thu, 09 Jan 2020 14:22:18 +0000
+Date:   Thu, 9 Jan 2020 06:22:18 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
+        linux-next <linux-next@vger.kernel.org>,
+        Oliver <oohall@gmail.com>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
+ mpt3sas driver
+Message-ID: <20200109142218.GA16477@infradead.org>
+References: <1578489498.29952.11.camel@abdul>
+ <1578560245.30409.0.camel@abdul.in.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200109
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-Subject: next/master boot: 183 boots: 19 failed,
- 163 passed with 1 untried/unknown (next-20200109)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578560245.30409.0.camel@abdul.in.ibm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 183 boots: 19 failed, 163 passed with 1 untried/unknown (=
-next-20200109)
+On Thu, Jan 09, 2020 at 02:27:25PM +0530, Abdul Haleem wrote:
+> + CC Christoph Hellwig
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200109/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200109/
-
-Tree: next
-Branch: master
-Git Describe: next-20200109
-Git Commit: 85cff1ab64327cee3090050b3dd6b5f1df3e5e1f
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 64 unique boards, 16 SoC families, 25 builds out of 214
-
-Boot Regressions Detected:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200108)
-
-    multi_v7_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          am57xx-beagle-x15:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 3 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          am57xx-beagle-x15:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-    omap2plus_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          am57xx-beagle-x15:
-              lab-drue: failing since 2 days (last pass: next-20191220 - fi=
-rst fail: next-20200106)
-          omap4-panda:
-              lab-baylibre: failing since 2 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 2 days (last pass: next-20191220 - f=
-irst fail: next-20200106)
-          qcs404-evb-4k:
-              lab-bjorn: failing since 1 day (last pass: next-20200106 - fi=
-rst fail: next-20200107)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200108)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            msm8998-mtp: 1 failed lab
-            qcs404-evb-4k: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            am57xx-beagle-x15: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    multi_v7_defconfig:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            am57xx-beagle-x15: 1 failed lab
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            am335x-boneblack: 1 failed lab
-            am57xx-beagle-x15: 1 failed lab
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+The only thing this commit changed for the dma coherent case (which
+ppc64 uses) is that we now look up the page to free by the DMA address
+instead of the virtual address passed in.  Which suggests this call
+stack passes in a broken dma address.  I suspect we somehow managed
+to disable the ppc iommu bypass mode after allocating memory, which
+would cause symptoms like this, and thus the commit is just exposing
+a pre-existing problem.

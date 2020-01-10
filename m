@@ -2,70 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D36137282
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 17:10:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2693113776E
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 20:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728598AbgAJQJ1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 11:09:27 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:58896 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728408AbgAJQJ1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 11:09:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=fRa0AWajRky2XVf3fbVWPpWSKtLLfakhnhtk3oANo5Y=; b=BVVoA1vpiXxufgxsL4a/LbnYj
-        fwc2ITR4+UHXAJ5R/Dli2qVrZH8rdmNrcGSJeUs51tjLHoNhHVTLhkA7Mir6U0P0qINfaA/r31mx3
-        cb3i6YEHqUVkK1FOJ4prR0uRfIfIB7Qh/8ML0jYJUBu+xTX2O0OI/qD4qTnwH5vUEoRbt8sYBIZj7
-        fUgaI3loPRo+VyUx5RpgnDI3o3ww1vJxDRtvEXm+lbU1ViXr7ijryQTo9VAjkwFZNrQJJ4nUQjZO6
-        +90FnOw7NfHw1DOL/n5V9juNdFfKYMHp/novkigOm2fABgs7oVuVTkKk/HO+/p1SXKQZyWlDSypPE
-        QYLIM/pMA==;
-Received: from [2601:1c0:6280:3f0::ed68]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ipwqk-00083d-LR; Fri, 10 Jan 2020 16:09:26 +0000
-Subject: Re: linux-next: Tree for Jan 10 (amdgpu)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-References: <20200110190737.65d8881b@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <eb8c8e0a-9fd8-07a3-3596-d57b48b220e0@infradead.org>
-Date:   Fri, 10 Jan 2020 08:09:24 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1727956AbgAJTqi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 14:46:38 -0500
+Received: from mx2.suse.de ([195.135.220.15]:49252 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727812AbgAJTqi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jan 2020 14:46:38 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id E6526AAC2;
+        Fri, 10 Jan 2020 19:46:35 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 10A02DA78B; Fri, 10 Jan 2020 20:46:22 +0100 (CET)
+Date:   Fri, 10 Jan 2020 20:46:22 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     dsterba@suse.cz, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs <linux-btrfs@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
+Message-ID: <20200110194622.GS3929@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Josh Poimboeuf <jpoimboe@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Btrfs <linux-btrfs@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
+ <20191211134929.GL3929@twin.jikos.cz>
+ <c751bc1a-505c-5050-3c4c-c83be81b4e48@infradead.org>
+ <20191212184725.db3ost7rcopotr5u@treble>
+ <b9b0c81b-0ca8-dfb7-958f-cd58a449b6fb@infradead.org>
+ <ba2a7a9b-933b-d4e4-8970-85b6c1291fca@infradead.org>
+ <20191213235054.6k2lcnwa63r26zwi@treble>
+ <c6a33c21-3e71-ac98-cc95-db008764917c@infradead.org>
+ <20191214054515.ougsr5ykhl3vvy57@treble>
+ <20191217152954.GH3929@suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20200110190737.65d8881b@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20191217152954.GH3929@suse.cz>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/10/20 12:07 AM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20200109:
-> 
+On Tue, Dec 17, 2019 at 04:29:54PM +0100, David Sterba wrote:
+> Separating the definitions by #ifdef looks ok, I'd rather do separate
+> definitions of ASSERT too, to avoid the ternary operator. I'll send the
+> patch.
 
+Subject: [PATCH] btrfs: separate definition of assertion failure handlers
 
-on i386:
+There's a report where objtool detects unreachable instructions, eg.:
 
-ld: drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.o: in function `compute_mst_dsc_configs_for_link':
-amdgpu_dm_mst_types.c:(.text+0x784): undefined reference to `__udivdi3'
-ld: amdgpu_dm_mst_types.c:(.text+0x7a2): undefined reference to `__udivdi3'
-ld: amdgpu_dm_mst_types.c:(.text+0x84a): undefined reference to `__udivdi3'
-ld: amdgpu_dm_mst_types.c:(.text+0x868): undefined reference to `__udivdi3'
-ld: amdgpu_dm_mst_types.c:(.text+0x8d0): undefined reference to `__udivdi3'
-ld: drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.o:amdgpu_dm_mst_types.c:(.text+0x8ee): more undefined references to `__udivdi3' follow
+  fs/btrfs/ctree.o: warning: objtool: btrfs_search_slot()+0x2d4: unreachable instruction
 
+This seems to be a false positive due to compiler version. The cause is
+in the ASSERT macro implementation that does the conditional check as
+IS_DEFINED(CONFIG_BTRFS_ASSERT) and not an #ifdef.
 
--- 
-~Randy
+To avoid that, use the ifdefs directly.
+
+CC: Josh Poimboeuf <jpoimboe@redhat.com>
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: David Sterba <dsterba@suse.com>
+---
+ fs/btrfs/ctree.h | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
+
+diff --git a/fs/btrfs/ctree.h b/fs/btrfs/ctree.h
+index 569931dd0ce5..f90b82050d2d 100644
+--- a/fs/btrfs/ctree.h
++++ b/fs/btrfs/ctree.h
+@@ -3157,17 +3157,21 @@ do {								\
+ 	rcu_read_unlock();					\
+ } while (0)
+ 
+-__cold
+-static inline void assfail(const char *expr, const char *file, int line)
++#ifdef CONFIG_BTRFS_ASSERT
++__cold __noreturn
++static inline void assertfail(const char *expr, const char *file, int line)
+ {
+-	if (IS_ENABLED(CONFIG_BTRFS_ASSERT)) {
+-		pr_err("assertion failed: %s, in %s:%d\n", expr, file, line);
+-		BUG();
+-	}
++	pr_err("assertion failed: %s, in %s:%d\n", expr, file, line);
++	BUG();
+ }
+ 
+-#define ASSERT(expr)	\
+-	(likely(expr) ? (void)0 : assfail(#expr, __FILE__, __LINE__))
++#define ASSERT(expr)						\
++	(likely(expr) ? (void)0 : assertfail(#expr, __FILE__, __LINE__))
++
++#else
++static inline void assertfail(const char *expr, const char* file, int line) { }
++#define ASSERT(expr)	(void)(expr)
++#endif
+ 
+ /*
+  * Use that for functions that are conditionally exported for sanity tests but
+-- 

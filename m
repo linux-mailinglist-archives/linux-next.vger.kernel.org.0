@@ -2,262 +2,191 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6501364D6
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 02:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F5D0136556
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 03:30:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730616AbgAJBeS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jan 2020 20:34:18 -0500
-Received: from mail.kernel.org ([198.145.29.99]:39224 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730579AbgAJBeS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 9 Jan 2020 20:34:18 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5E3E9206ED;
-        Fri, 10 Jan 2020 01:34:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1578620056;
-        bh=NTyPyLJyooH1sEVo1CzHFs8IcgvCnYnQcuZ30/nwD24=;
-        h=Date:From:To:Subject:From;
-        b=Muz22P264kl3qC+1A5enz15SKQYVRLX07pgy4eX9Pq4hozVm15o0nq0YQ0Xzhom0y
-         FQhRbHMGK6C9fZJPFMY7Jp8PCDSSElcTjK3F2rap4TK4O/0QfZzAxXdpWfkM0WFHRT
-         FiwFGlJ0jHWUX2TZo1B8mLlbQWhsCQ9Y3z/hdTfA=
-Date:   Thu, 09 Jan 2020 17:34:13 -0800
-From:   akpm@linux-foundation.org
-To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject:  mmotm 2020-01-09-17-33 uploaded
-Message-ID: <20200110013413.NNeLcxiMi%akpm@linux-foundation.org>
-User-Agent: s-nail v14.8.16
+        id S1730870AbgAJCaF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jan 2020 21:30:05 -0500
+Received: from shards.monkeyblade.net ([23.128.96.9]:60700 "EHLO
+        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730868AbgAJCaF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jan 2020 21:30:05 -0500
+Received: from localhost (unknown [IPv6:2601:601:9f00:1c3::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 694911573640C;
+        Thu,  9 Jan 2020 18:30:04 -0800 (PST)
+Date:   Thu, 09 Jan 2020 18:30:01 -0800 (PST)
+Message-Id: <20200109.183001.2198948440388440605.davem@davemloft.net>
+To:     sfr@canb.auug.org.au
+Cc:     netdev@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, petrm@mellanox.com
+Subject: Re: linux-next: build failure after merge of the net-next tree
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <20200110105738.2b20cbad@canb.auug.org.au>
+References: <20200110105738.2b20cbad@canb.auug.org.au>
+X-Mailer: Mew version 6.8 on Emacs 26.1
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Thu, 09 Jan 2020 18:30:04 -0800 (PST)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The mm-of-the-moment snapshot 2020-01-09-17-33 has been uploaded to
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 10 Jan 2020 10:57:38 +1100
 
-   http://www.ozlabs.org/~akpm/mmotm/
+> After merging the net-next tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> diff --git a/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c b/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+> index 17b29e2d19ed..54807b4930fe 100644
+> --- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+> +++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+> @@ -767,7 +767,7 @@ __mlxsw_sp_qdisc_ets_graft(struct mlxsw_sp_port *mlxsw_sp_port,
+>  	    mlxsw_sp_port->tclass_qdiscs[tclass_num].handle == child_handle)
+>  		return 0;
+>  
+> -	if (!p->child_handle) {
+> +	if (!child_handle) {
+>  		/* This is an invisible FIFO replacing the original Qdisc.
+>  		 * Ignore it--the original Qdisc's destroy will follow.
+>  		 */
+> -- 
+> 2.24.0
 
-mmotm-readme.txt says
+Yep, this is the merge resolution you will find in net-next at commit:
 
-README for mm-of-the-moment:
+commit a2d6d7ae591c47ebc04926cb29a840adfdde49e6
+Merge: b1daa4d19473 e69ec487b2c7
+Author: David S. Miller <davem@davemloft.net>
+Date:   Thu Jan 9 12:10:26 2020 -0800
 
-http://www.ozlabs.org/~akpm/mmotm/
+    Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
+    
+    The ungrafting from PRIO bug fixes in net, when merged into net-next,
+    merge cleanly but create a build failure.  The resolution used here is
+    from Petr Machata.
+    
+    Signed-off-by: David S. Miller <davem@davemloft.net>
 
-This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-more than once a week.
-
-You will need quilt to apply these patches to the latest Linus release (5.x
-or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-http://ozlabs.org/~akpm/mmotm/series
-
-The file broken-out.tar.gz contains two datestamp files: .DATE and
-.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-followed by the base kernel version against which this patch series is to
-be applied.
-
-This tree is partially included in linux-next.  To see which patches are
-included in linux-next, consult the `series' file.  Only the patches
-within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-linux-next.
-
-
-A full copy of the full kernel tree with the linux-next and mmotm patches
-already applied is available through git within an hour of the mmotm
-release.  Individual mmotm releases are tagged.  The master branch always
-points to the latest release, so it's constantly rebasing.
-
-	https://github.com/hnaz/linux-mm
-
-The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-contains daily snapshots of the -mm tree.  It is updated more frequently
-than mmotm, and is untested.
-
-A git copy of this tree is also available at
-
-	https://github.com/hnaz/linux-mm
-
-
-
-This mmotm tree contains the following patches against 5.5-rc5:
-(patches marked "*" will be included in linux-next)
-
-  origin.patch
-* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
-* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
-* mm-thp-tweak-reclaim-compaction-effort-of-local-only-and-all-node-allocations.patch
-* x86-mm-split-vmalloc_sync_all.patch
-* revert-ipcsem-remove-uneeded-sem_undo_list-lock-usage-in-exit_sem.patch
-* mm-fix-uninitialized-memmaps-on-a-partially-populated-last-section.patch
-* fs-proc-pagec-allow-inspection-of-last-section-and-fix-end-detection.patch
-* mm-initialize-memmap-of-unavailable-memory-directly.patch
-* mm-memory_hotplug-dont-free-usage-map-when-removing-a-re-added-early-section.patch
-* thp-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment.patch
-* thp-shmem-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment.patch
-* thp-shmem-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment-fix.patch
-* mm-memcg-slab-fix-percpu-slab-vmstats-flushing.patch
-* mm-debug_pagealloc-dont-rely-on-static-keys-too-early.patch
-* mm-debug_pagealloc-dont-rely-on-static-keys-too-early-fix.patch
-* mm-page-writebackc-avoid-potential-division-by-zero-in-wb_min_max_ratio.patch
-* mm-page-writebackc-use-div64_ul-for-u64-by-unsigned-long-divide.patch
-* mm-page-writebackc-improve-arithmetic-divisions.patch
-* mm-memcg-slab-call-flush_memcg_workqueue-only-if-memcg-workqueue-is-valid.patch
-* mm-khugepaged-add-trace-status-description-for-scan_page_has_private.patch
-* mm-thp-grab-the-lock-before-manipulation-defer-list.patch
-* lib-test_bitmap-correct-test-data-offsets-for-32-bit.patch
-* watchdog-fix-uaf-in-reboot-notifier-handling-in-watchdog-core-code.patch
-* memcg-fix-a-crash-in-wb_workfn-when-a-device-disappears.patch
-* scripts-spellingtxt-add-more-spellings-to-spellingtxt.patch
-* scripts-spellingtxt-add-issus-typo.patch
-* fs-ocfs-remove-unnecessary-assertion-in-dlm_migrate_lockres.patch
-* ocfs2-remove-unneeded-semicolon.patch
-* ocfs2-make-local-header-paths-relative-to-c-files.patch
-* ocfs2-dlm-remove-redundant-assignment-to-ret.patch
-* ocfs2-dlm-move-bits_to_bytes-to-bitopsh-for-wider-use.patch
-* ramfs-support-o_tmpfile.patch
-* watchdog-fix-possible-soft-lockup-warning-at-bootup.patch
-* watchdog-fix-possible-soft-lockup-warning-at-bootup-v2.patch
-  mm.patch
-* mm-avoid-slub-allocation-while-holding-list_lock.patch
-* kmemleak-turn-kmemleak_lock-and-object-lock-to-raw_spinlock_t.patch
-* mm-clean-up-filemap_write_and_wait.patch
-* mm-fix-gup_pud_range.patch
-* mm-cleanup-some-useless-code.patch
-* mm-vmscan-expose-cgroup_ino-for-memcg-reclaim-tracepoints.patch
-* mm-pgmap-use-correct-alignment-when-looking-at-first-pfn-from-a-region.patch
-* mm-mmap-fix-the-adjusted-length-error.patch
-* drivers-base-memoryc-cache-blocks-in-radix-tree-to-accelerate-lookup.patch
-* drivers-base-memoryc-cache-blocks-in-radix-tree-to-accelerate-lookup-fix.patch
-* mm-memmap_init-update-variable-name-in-memmap_init_zone.patch
-* mm-memory_hotplug-poison-memmap-in-remove_pfn_range_from_zone.patch
-* mm-memory_hotplug-we-always-have-a-zone-in-find_smallestbiggest_section_pfn.patch
-* mm-memory_hotplug-dont-check-for-all-holes-in-shrink_zone_span.patch
-* mm-memory_hotplug-drop-local-variables-in-shrink_zone_span.patch
-* mm-memory_hotplug-cleanup-__remove_pages.patch
-* mm-tracing-print-symbol-name-for-kmem_alloc_node-call_site-events.patch
-* mm-early_remap-use-%pa-to-print-resource_size_t-variables.patch
-* mm-page_alloc-skip-non-present-sections-on-zone-initialization.patch
-* mm-vmscanc-remove-unused-return-value-of-shrink_node.patch
-* mm-memblock-define-memblock_physmem_add.patch
-* memblock-use-__func__-in-remaining-memblock_dbg-call-sites.patch
-* mm-oom-avoid-printk-iteration-under-rcu.patch
-* mm-oom-avoid-printk-iteration-under-rcu-fix.patch
-* mm-hugetlb-controller-for-cgroups-v2.patch
-* mm-migrate-remove-useless-mask-of-start-address.patch
-* mm-migrate-clean-up-some-minor-coding-style.patch
-* mm-migrate-add-stable-check-in-migrate_vma_insert_page.patch
-* mm-get-rid-of-odd-jump-labels-in-find_mergeable_anon_vma.patch
-* zswap-add-allocation-hysteresis-if-pool-limit-is-hit.patch
-* mm-clean-up-obsolete-check-on-space-in-page-flags.patch
-* mm-remove-dead-code-totalram_pages_set.patch
-* mm-drop-elements-hw-and-phys_callback-from-struct-memory_block.patch
-* mm-fix-comments-related-to-node-reclaim.patch
-* zram-try-to-avoid-worst-case-scenario-on-same-element-pages.patch
-* zram-fix-error-return-codes-not-being-returned-in-writeback_store.patch
-* info-task-hung-in-generic_file_write_iter.patch
-* info-task-hung-in-generic_file_write-fix.patch
-* kernel-hung_taskc-monitor-killed-tasks.patch
-* add-helpers-for-kelvin-to-from-celsius-conversion.patch
-* acpi-thermal-switch-to-use-linux-unitsh-helpers.patch
-* platform-x86-asus-wmi-switch-to-use-linux-unitsh-helpers.patch
-* platform-x86-intel_menlow-switch-to-use-linux-unitsh-helpers.patch
-* thermal-int340x-switch-to-use-linux-unitsh-helpers.patch
-* thermal-intel_pch-switch-to-use-linux-unitsh-helpers.patch
-* nvme-hwmon-switch-to-use-linux-unitsh-helpers.patch
-* thermal-remove-kelvin-to-from-celsius-conversion-helpers-from-linux-thermalh.patch
-* iwlegacy-use-linux-unitsh-helpers.patch
-* iwlwifi-use-linux-unitsh-helpers.patch
-* thermal-armada-remove-unused-to_mcelsius-macro.patch
-* iio-adc-qcom-vadc-common-use-linux-unitsh-helpers.patch
-* lib-zlib-add-s390-hardware-support-for-kernel-zlib_deflate.patch
-* s390-boot-rename-heap_size-due-to-name-collision.patch
-* lib-zlib-add-s390-hardware-support-for-kernel-zlib_inflate.patch
-* s390-boot-add-dfltcc=-kernel-command-line-parameter.patch
-* lib-zlib-add-zlib_deflate_dfltcc_enabled-function.patch
-* btrfs-use-larger-zlib-buffer-for-s390-hardware-compression.patch
-* lib-scatterlist-adjust-indentation-in-__sg_alloc_table.patch
-* uapi-rename-ext2_swab-to-swab-and-share-globally-in-swabh.patch
-* lib-find_bitc-join-_find_next_bit_le.patch
-* lib-find_bitc-uninline-helper-_find_next_bit.patch
-* string-add-stracpy-and-stracpy_pad-mechanisms.patch
-* documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
-* elf-smaller-code-generation-around-auxv-vector-fill.patch
-* elf-fix-start_code-calculation.patch
-* elf-dont-copy-elf-header-around.patch
-* elf-better-codegen-around-current-mm.patch
-* elf-make-bad_addr-unlikely.patch
-* elf-coredump-allocate-core-elf-header-on-stack.patch
-* elf-coredump-delete-duplicated-overflow-check.patch
-* elf-coredump-allow-process-with-empty-address-space-to-coredump.patch
-* init-mainc-log-arguments-and-environment-passed-to-init.patch
-* init-mainc-remove-unnecessary-repair_env_string-in-do_initcall_level.patch
-* init-mainc-fix-quoted-value-handling-in-unknown_bootoption.patch
-* init-fix-misleading-this-architecture-does-not-have-kernel-memory-protection-message.patch
-* reiserfs-prevent-null-pointer-dereference-in-reiserfs_insert_item.patch
-* execve-warn-if-process-starts-with-executable-stack.patch
-* io-mapping-use-phys_pfn-macro-in-io_mapping_map_atomic_wc.patch
-* aio-simplify-read_events.patch
-* smp_mb__beforeafter_atomic-update-documentation.patch
-* ipc-mqueuec-remove-duplicated-code.patch
-* ipc-mqueuec-update-document-memory-barriers.patch
-* ipc-msgc-update-and-document-memory-barriers.patch
-* ipc-semc-document-and-update-memory-barriers.patch
-* ipc-consolidate-all-xxxctl_down-functions.patch
-* ipc-consolidate-all-xxxctl_down-functions-fix.patch
-  linux-next.patch
-  linux-next-rejects.patch
-  linux-next-fix.patch
-  linux-next-fix-2.patch
-* drivers-block-null_blk_mainc-fix-layout.patch
-* drivers-block-null_blk_mainc-fix-uninitialized-var-warnings.patch
-* pinctrl-fix-pxa2xxc-build-warnings.patch
-* mm-remove-__krealloc.patch
-* mm-add-generic-pd_leaf-macros.patch
-* arc-mm-add-pd_leaf-definitions.patch
-* arm-mm-add-pd_leaf-definitions.patch
-* arm64-mm-add-pd_leaf-definitions.patch
-* mips-mm-add-pd_leaf-definitions.patch
-* powerpc-mm-add-pd_leaf-definitions.patch
-* riscv-mm-add-pd_leaf-definitions.patch
-* s390-mm-add-pd_leaf-definitions.patch
-* sparc-mm-add-pd_leaf-definitions.patch
-* x86-mm-add-pd_leaf-definitions.patch
-* mm-pagewalk-add-p4d_entry-and-pgd_entry.patch
-* mm-pagewalk-add-p4d_entry-and-pgd_entry-fix.patch
-* mm-pagewalk-allow-walking-without-vma.patch
-* mm-pagewalk-dont-lock-ptes-for-walk_page_range_novma.patch
-* mm-pagewalk-fix-termination-condition-in-walk_pte_range.patch
-* mm-pagewalk-add-depth-parameter-to-pte_hole.patch
-* x86-mm-point-to-struct-seq_file-from-struct-pg_state.patch
-* x86-mmefi-convert-ptdump_walk_pgd_level-to-take-a-mm_struct.patch
-* x86-mm-convert-ptdump_walk_pgd_level_debugfs-to-take-an-mm_struct.patch
-* mm-add-generic-ptdump.patch
-* x86-mm-convert-dump_pagetables-to-use-walk_page_range.patch
-* arm64-mm-convert-mm-dumpc-to-use-walk_page_range.patch
-* arm64-mm-display-non-present-entries-in-ptdump.patch
-* mm-ptdump-reduce-level-numbers-by-1-in-note_page.patch
-* x86-mm-avoid-allocating-struct-mm_struct-on-the-stack.patch
-* proc-decouple-proc-from-vfs-with-struct-proc_ops.patch
-* proc-convert-everything-to-struct-proc_ops.patch
-* proc-convert-everything-to-struct-proc_ops-fix.patch
-* lib-string-add-strnchrnul.patch
-* bitops-more-bits_to_-macros.patch
-* lib-add-test-for-bitmap_parse.patch
-* lib-add-test-for-bitmap_parse-fix.patch
-* lib-add-test-for-bitmap_parse-fix-2.patch
-* lib-make-bitmap_parse_user-a-wrapper-on-bitmap_parse.patch
-* lib-rework-bitmap_parse.patch
-* lib-new-testcases-for-bitmap_parse_user.patch
-* cpumask-dont-calculate-length-of-the-input-string.patch
-* treewide-remove-redundent-is_err-before-error-code-check.patch
-* arm-dma-api-fix-max_pfn-off-by-one-error-in-__dma_supported.patch
-* drivers-tty-serial-sh-scic-suppress-warning.patch
-* fix-read-buffer-overflow-in-delta-ipc.patch
-  make-sure-nobodys-leaking-resources.patch
-  releasing-resources-with-children.patch
-  mutex-subsystem-synchro-test-module.patch
-  kernel-forkc-export-kernel_thread-to-modules.patch
-  workaround-for-a-pci-restoring-bug.patch
+diff --cc drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+index 81a2c087f534,46d43cfd04e9..54807b4930fe
+--- a/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
++++ b/drivers/net/ethernet/mellanox/mlxsw/spectrum_qdisc.c
+@@@ -681,92 -631,33 +681,99 @@@ static struct mlxsw_sp_qdisc_ops mlxsw_
+  	.clean_stats = mlxsw_sp_setup_tc_qdisc_prio_clean_stats,
+  };
+  
+ -/* Grafting is not supported in mlxsw. It will result in un-offloading of the
+ - * grafted qdisc as well as the qdisc in the qdisc new location.
+ - * (However, if the graft is to the location where the qdisc is already at, it
+ - * will be ignored completely and won't cause un-offloading).
+ +static int
+ +mlxsw_sp_qdisc_ets_check_params(struct mlxsw_sp_port *mlxsw_sp_port,
+ +				struct mlxsw_sp_qdisc *mlxsw_sp_qdisc,
+ +				void *params)
+ +{
+ +	struct tc_ets_qopt_offload_replace_params *p = params;
+ +
+ +	return __mlxsw_sp_qdisc_ets_check_params(p->bands);
+ +}
+ +
+ +static int
+ +mlxsw_sp_qdisc_ets_replace(struct mlxsw_sp_port *mlxsw_sp_port,
+ +			   struct mlxsw_sp_qdisc *mlxsw_sp_qdisc,
+ +			   void *params)
+ +{
+ +	struct tc_ets_qopt_offload_replace_params *p = params;
+ +
+ +	return __mlxsw_sp_qdisc_ets_replace(mlxsw_sp_port, p->bands,
+ +					    p->quanta, p->weights, p->priomap);
+ +}
+ +
+ +static void
+ +mlxsw_sp_qdisc_ets_unoffload(struct mlxsw_sp_port *mlxsw_sp_port,
+ +			     struct mlxsw_sp_qdisc *mlxsw_sp_qdisc,
+ +			     void *params)
+ +{
+ +	struct tc_ets_qopt_offload_replace_params *p = params;
+ +
+ +	__mlxsw_sp_qdisc_ets_unoffload(mlxsw_sp_port, mlxsw_sp_qdisc,
+ +				       p->qstats);
+ +}
+ +
+ +static int
+ +mlxsw_sp_qdisc_ets_destroy(struct mlxsw_sp_port *mlxsw_sp_port,
+ +			   struct mlxsw_sp_qdisc *mlxsw_sp_qdisc)
+ +{
+ +	return __mlxsw_sp_qdisc_ets_destroy(mlxsw_sp_port);
+ +}
+ +
+ +static struct mlxsw_sp_qdisc_ops mlxsw_sp_qdisc_ops_ets = {
+ +	.type = MLXSW_SP_QDISC_ETS,
+ +	.check_params = mlxsw_sp_qdisc_ets_check_params,
+ +	.replace = mlxsw_sp_qdisc_ets_replace,
+ +	.unoffload = mlxsw_sp_qdisc_ets_unoffload,
+ +	.destroy = mlxsw_sp_qdisc_ets_destroy,
+ +	.get_stats = mlxsw_sp_qdisc_get_prio_stats,
+ +	.clean_stats = mlxsw_sp_setup_tc_qdisc_prio_clean_stats,
+ +};
+ +
+ +/* Linux allows linking of Qdiscs to arbitrary classes (so long as the resulting
+ + * graph is free of cycles). These operations do not change the parent handle
+ + * though, which means it can be incomplete (if there is more than one class
+ + * where the Qdisc in question is grafted) or outright wrong (if the Qdisc was
+ + * linked to a different class and then removed from the original class).
+ + *
+ + * E.g. consider this sequence of operations:
+ + *
+ + *  # tc qdisc add dev swp1 root handle 1: prio
+ + *  # tc qdisc add dev swp1 parent 1:3 handle 13: red limit 1000000 avpkt 10000
+ + *  RED: set bandwidth to 10Mbit
+ + *  # tc qdisc link dev swp1 handle 13: parent 1:2
+ + *
+ + * At this point, both 1:2 and 1:3 have the same RED Qdisc instance as their
+ + * child. But RED will still only claim that 1:3 is its parent. If it's removed
+ + * from that band, its only parent will be 1:2, but it will continue to claim
+ + * that it is in fact 1:3.
+ + *
+ + * The notification for child Qdisc replace (e.g. TC_RED_REPLACE) comes before
+ + * the notification for parent graft (e.g. TC_PRIO_GRAFT). We take the replace
+ + * notification to offload the child Qdisc, based on its parent handle, and use
+ + * the graft operation to validate that the class where the child is actually
+ + * grafted corresponds to the parent handle. If the two don't match, we
+ + * unoffload the child.
+   */
+  static int
+ -mlxsw_sp_qdisc_prio_graft(struct mlxsw_sp_port *mlxsw_sp_port,
+ -			  struct mlxsw_sp_qdisc *mlxsw_sp_qdisc,
+ -			  struct tc_prio_qopt_offload_graft_params *p)
+ +__mlxsw_sp_qdisc_ets_graft(struct mlxsw_sp_port *mlxsw_sp_port,
+ +			   struct mlxsw_sp_qdisc *mlxsw_sp_qdisc,
+ +			   u8 band, u32 child_handle)
+  {
+ -	int tclass_num = MLXSW_SP_PRIO_BAND_TO_TCLASS(p->band);
+ +	int tclass_num = MLXSW_SP_PRIO_BAND_TO_TCLASS(band);
+  	struct mlxsw_sp_qdisc *old_qdisc;
+  
+ -	/* Check if the grafted qdisc is already in its "new" location. If so -
+ -	 * nothing needs to be done.
+ -	 */
+ -	if (p->band < IEEE_8021QAZ_MAX_TCS &&
+ -	    mlxsw_sp_port->tclass_qdiscs[tclass_num].handle == p->child_handle)
+ +	if (band < IEEE_8021QAZ_MAX_TCS &&
+ +	    mlxsw_sp_port->tclass_qdiscs[tclass_num].handle == child_handle)
+  		return 0;
+  
+ -	if (!p->child_handle) {
+++	if (!child_handle) {
++ 		/* This is an invisible FIFO replacing the original Qdisc.
++ 		 * Ignore it--the original Qdisc's destroy will follow.
++ 		 */
++ 		return 0;
++ 	}
++ 
+  	/* See if the grafted qdisc is already offloaded on any tclass. If so,
+  	 * unoffload it.
+  	 */

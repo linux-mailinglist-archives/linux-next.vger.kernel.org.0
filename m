@@ -2,127 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AA10136CD8
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 13:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0ACC136D9D
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 14:17:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728106AbgAJMP1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 07:15:27 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:42847 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727900AbgAJMP1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 07:15:27 -0500
-Received: by mail-wr1-f65.google.com with SMTP id q6so1580984wro.9
-        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2020 04:15:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=23rEqI48NreftWhiybQ9NxbKeVhWiru13KhgEpruzdg=;
-        b=1t4XEjitxBjbIq15LZgXkkMt3MTNMXyi5erUxujdYfR0I2XHzcVvMePLNiDheQb6Wm
-         trYbNlrYDbQRHT+ZkmNnGTOxFeOYC0W4Wr7XqjMjQJdTL9KRRtsrYiBapY5jRdQunkv8
-         9ROQe24HB2i34HWqT7l7YQcH0bP6bxfKQgz7rf5IjmMBpRpDH5XAkPvX3iPXr+Qh18Gg
-         lFSLbg4fcnfNitTZQAUrZv1sUNqUdwqIR1dm+CAV0ijUgOfJdBbaEq98RgHjYTMtVCZE
-         7WTBik0vF1ha3eG6b04wSFWvGvex8JqFxjH9JQc0nZiB3+RVCdaBqpKA7E/OrlYdGUSx
-         PaiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=23rEqI48NreftWhiybQ9NxbKeVhWiru13KhgEpruzdg=;
-        b=Lkkmz/ceS0Ytz2rBuQnYeBGe/nWzk75RbUE6CwTRqW/q6MiT1ujMHp3yyBELo2lcvQ
-         IQ/G2UFh21nVIsmKRBy83p77Xzv7WEQr/IbCaJmDS+2+/kF7Hr3evWI2csisF8kDKzWz
-         IOdozYPyQED/eeiwqsJA2nRfPMKK1eWYRX5R0IVD2WiNeuh/idpJ62maA/VAIdsvK5Cv
-         EVjdFnaU2r2l79IZ7IvWQPnzUMDSC77IHnhjxN794QgX783OPW8QiyxOZsZqCsC/O7sA
-         eBNgvdoSO0Ge/twtEztuCpxIqVK/m48pqbhRQurSAsLoVsmZrSfI8hXyUTEp89qM7SOt
-         DXeg==
-X-Gm-Message-State: APjAAAXx+RgNr4/O4bOTIsJGgwccYI4MUM6peqFJrm3D+l8HvN+kU9e3
-        4sL0omnw9hbpXYYA/GGceWWB92P9NsIcEg==
-X-Google-Smtp-Source: APXvYqxw4rwEy06IhNSoII+OxPTL5/xP58neVU6k+K77hr1ci/vALCaXYoBX6KvsKIAosDZBMjbSNw==
-X-Received: by 2002:adf:e6cb:: with SMTP id y11mr3310440wrm.345.1578658525177;
-        Fri, 10 Jan 2020 04:15:25 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id g21sm2027796wrb.48.2020.01.10.04.15.24
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 04:15:24 -0800 (PST)
-Message-ID: <5e186adc.1c69fb81.4f04c.94e1@mx.google.com>
-Date:   Fri, 10 Jan 2020 04:15:24 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727820AbgAJNQ0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 08:16:26 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:63919 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727458AbgAJNQZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jan 2020 08:16:25 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1578662185; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: From: Sender;
+ bh=i+FSacw/oKHPosASdYmNACUkHU9zjbv90HutOF8oZS0=; b=CiTatVn+nwJ3IpFyd/mbdSAYYTe5IyAv5zAOs2LFg0n6IuQc/ms7WAO/QTKvxcPX+LxM7jaU
+ BPgqCHUDPAps1Ot+VwmD+yYWd/PEyhCaLanPf57GpgmjPlH1UHqjrrW3Dupk2Pvg0xmbgLtw
+ EACm9PbahxBUTslCzmVwuxW6hRA=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e187928.7f556634fa08-smtp-out-n03;
+ Fri, 10 Jan 2020 13:16:24 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 49E1EC447A5; Fri, 10 Jan 2020 13:16:24 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=0.2 required=2.0 tests=ALL_TRUSTED,MISSING_HEADERS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.0
+Received: from x230.qca.qualcomm.com (unknown [83.145.195.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 8EFE4C447A4;
+        Fri, 10 Jan 2020 13:16:21 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 8EFE4C447A4
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        linux-wireless@vger.kernel.org
+Subject: Re: [PATCH] iwlwifi: fix build warnings with format string
+References: <20200106171452.201c3b4c@canb.auug.org.au>
+        <1578322389-13716-1-git-send-email-akinobu.mita@gmail.com>
+nTo:    Akinobu Mita <akinobu.mita@gmail.com>
+Date:   Fri, 10 Jan 2020 15:16:18 +0200
+In-Reply-To: <1578322389-13716-1-git-send-email-akinobu.mita@gmail.com>
+        (Akinobu Mita's message of "Mon, 6 Jan 2020 23:53:09 +0900")
+Message-ID: <87muavsb8d.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.5-rc5-445-gecb24723e078
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 186 boots: 3 failed,
- 178 passed with 5 untried/unknown (v5.5-rc5-445-gecb24723e078)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 186 boots: 3 failed, 178 passed with 5 untried/unk=
-nown (v5.5-rc5-445-gecb24723e078)
+(please cc linux-wireless on all wireless patches)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.5-rc5-445-gecb24723e078/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.5-rc5-445-gecb24723e078/
+Akinobu Mita <akinobu.mita@gmail.com> writes:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.5-rc5-445-gecb24723e078
-Git Commit: ecb24723e078820b92525fd2bc07cc2daff2ac94
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 67 unique boards, 18 SoC families, 26 builds out of 214
+> This fixes build warnings introduced by commit "iwlegacy: use
+> <linux/units.h> helpers" (iwlegacy-use-linux-unitsh-helpers.patch in -mm)
+>
+> The format '%d' has to be changed to '%ld' because the return type of
+> kelvin_to_celsius() is 'long'.
+>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Link: https://lore.kernel.org/r/20200106171452.201c3b4c@canb.auug.org.au
+> Cc: Kalle Valo <kvalo@codeaurora.org>
+> Cc: Stanislaw Gruszka <stf_xl@wp.pl>
+> Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
 
-Boot Regressions Detected:
+I don't know what's Andrew's workflow, but shouldn't the original patch
+be fixed instead?
 
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: v5.5-rc2-432-g9eed7d73a=
-938)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.5-rc5-266-ga617565a3=
-afb)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-g12a-sei510:
-              lab-baylibre: new failure (last pass: v5.5-rc5-266-ga617565a3=
-afb)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: v5.5-rc5-266-ga617565a3=
-afb)
-          meson-sm1-sei610:
-              lab-baylibre: new failure (last pass: v5.5-rc5-266-ga617565a3=
-afb)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+-- 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

@@ -2,94 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD64136A03
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 10:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936B1136A30
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 10:47:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726814AbgAJJcB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 04:32:01 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:42285 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726759AbgAJJcB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 04:32:01 -0500
-Received: by mail-wr1-f66.google.com with SMTP id q6so1086714wro.9;
-        Fri, 10 Jan 2020 01:31:59 -0800 (PST)
+        id S1727275AbgAJJr4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 04:47:56 -0500
+Received: from mail-pj1-f66.google.com ([209.85.216.66]:55722 "EHLO
+        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727169AbgAJJr4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 04:47:56 -0500
+Received: by mail-pj1-f66.google.com with SMTP id d5so742436pjz.5;
+        Fri, 10 Jan 2020 01:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=/eHOMT158nZ3peFbo4qmkM+fTWEBBXxh1kcQu4MDcJc=;
-        b=KnZcmzMEmGfAMH7grsvVsqcBdGL6MhwPQWUGn4JZaqe0gTZnKDKrrmL7Lp59/TNZSk
-         ZYvD7tYTRXnYP37mhOk3B1ii+Lwn8cqKN9M125Qogr2eDs8FbVrbI7I+luMhKGzErdxx
-         d5/6vz+HUpD3fcImxQesPG4RAqc+7ogRd8LaMJmht4Jz1xH0oWpFDwswKh0oEi6ssfOg
-         LHQWpOptVeLC5DuAlwBA32rfWFgV7cEfhM+gIuz/jeGuUiyktzRs3EpTaQ4d0ljMAPhX
-         tUtzrw2mSZBOK4AdGUvatGszwXQBUSxjy4Pv3cgeO7/2x0JeYQyj+32fICPcWT8um/ht
-         tY0g==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xUtkm5SWvjOCUNG6Kj/w4f8xU5kM2qIughxa5r9D+Os=;
+        b=sNSet1OyIgkNI/qrjyjttp8QqIx7ruS/NKlIzHceThM8Am7XRdCBtTurRKD3rC6q8P
+         XM3WJnJ1m156rFIyxkd8p9h+aUT30OS1ZLrFA0P+9vHWOSu4z3NUNIWRYOT8z8Mp8lfG
+         b2pzd16xZKYgaiDAUzaNaJWmjQ+tzyur80Kcy+oGLFyIF61Of2FN/3Dnf2Q3OYVcfwCj
+         RM9+3GMVLqZZVNZ+9WaNZqH7QCtLtY9XVFTIeYv7PZJaFBkR1oi5R1+ufj4d29Cs8hgP
+         whB/eKI8ci+07blppD7iI9nM7wsiIQ06FwVUYq39nDIFYblGhWzUZuV1z0ElL4P4elti
+         D1eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=/eHOMT158nZ3peFbo4qmkM+fTWEBBXxh1kcQu4MDcJc=;
-        b=EoHRNDjqRAwlUVCB0OaRoQzFbED6nraJOa5l5r0SHsV4LWLJ9Y4W70I03HxLKFcSAZ
-         Amgoyi51lyQ/uNePjlK4IepBD9Wx2RJ/EK1yMTWG8c5a+GZYu44qEV34DJIECyI4Rygf
-         QVvlxE7BZm8b0wotlRwloWyhS6rbCcGV/yRAtibPzsbbYotTbXJmcAqtMeHE8FEJY9K9
-         A4EqzD1EXSbistukaj08gz2eC5Q/65pHqbzih6b8leqiQ2w8eFsvY5y5KTZjQ5ofLEUz
-         oFwefJ69pcmn+sVV0+n2/lS0yk3ZDuMborGTvG8xsoEDnrglKfzyrvToglabwZfG6ejy
-         LKXA==
-X-Gm-Message-State: APjAAAV1t1gttgtPanF98Pw8IU1kWGXEXzVvAtkZG9+tDdAO3mNuIbSX
-        U6HS0B0jIRC2+dY+WN9nkkSDQiPTIhe9Lw==
-X-Google-Smtp-Source: APXvYqzhUK46UM0hHL0B059hi9oo0YikxkTn2vNa6AzVI9NaDlYQirdb/QPiPBnLiyOL/UyR6jiCdg==
-X-Received: by 2002:a5d:458d:: with SMTP id p13mr2518223wrq.314.1578648718675;
-        Fri, 10 Jan 2020 01:31:58 -0800 (PST)
-Received: from localhost.localdomain (p5B3F6BF6.dip0.t-ipconnect.de. [91.63.107.246])
-        by smtp.gmail.com with ESMTPSA id q3sm1473054wmj.38.2020.01.10.01.31.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 01:31:57 -0800 (PST)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     sravanhome@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        sfr@canb.auug.org.au
-Cc:     linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] regulator: mpq7920: Fix Woverflow warning on conversion
-Date:   Fri, 10 Jan 2020 10:31:48 +0100
-Message-Id: <20200110093148.6718-1-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.17.1
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xUtkm5SWvjOCUNG6Kj/w4f8xU5kM2qIughxa5r9D+Os=;
+        b=jdm5xMRLs0s0bMViNGYORtL4j8/4jixLip6MqFjNK1Nz9oL1KmcytJOJXNBwwDaVbY
+         Ouj0kaGbx4jzQVzIkMpTHxE6iTm1q8+xpoB8MG+WatcwetNCzN43V3O5q53bkH1lJol4
+         IEpTiGasCCXz8UdxTWYPtP7XI8NfgWLqvdrY9IeL9jWIcJi4hF0HiOxnUAZFVe/4NhJD
+         xAN9SIcwj/YLEToZ/aVJedyYlsPJo5hAmxQsT03T3SFEYoO2OC0cab7MxVuZE3L+cube
+         AnmyH8/f5o5PdVyKc/ew8qUixIZ8uWoLOvk4OStI/bHExt6IDIDylO/VEfZv/UBQ5H8V
+         gxkg==
+X-Gm-Message-State: APjAAAW5Fs8W4BuFkB2K9DaI7jHU6lIWbO9SC8EZX+WYJV+e0MLuA6c+
+        frFUqC8YJAFPO+rZR5WyOLN7Uloy1utAZVf+mMlLJDtPRQA=
+X-Google-Smtp-Source: APXvYqzBTEsZHHyoP+5JDstC17gTyvy/NWE5s+I6Q5L8nTnSSDPE7n9TFNJfCtTir67r5G/twUYiCflm4nyWE+70UwU=
+X-Received: by 2002:a17:90b:3109:: with SMTP id gc9mr3647243pjb.30.1578649675696;
+ Fri, 10 Jan 2020 01:47:55 -0800 (PST)
+MIME-Version: 1.0
+References: <20200110145703.59a89bac@canb.auug.org.au>
+In-Reply-To: <20200110145703.59a89bac@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 10 Jan 2020 11:47:47 +0200
+Message-ID: <CAHp75VeYU6WbRXdWoFttD8FCKniTc36riX_rN4XV=tANXtysjA@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        kbuild test robot <lkp@intel.com>
+Cc:     Darren Hart <dvhart@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fix warning Woverflow warning on type conversion reported on X86.
+On Fri, Jan 10, 2020 at 5:57 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the drivers-x86 tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+>
+> drivers/platform/x86/intel_telemetry_pltdrv.c: In function 'telemetry_pltdrv_probe':
+> drivers/platform/x86/intel_telemetry_pltdrv.c:1121:6: warning: unused variable 'size' [-Wunused-variable]
+>  1121 |  int size, ret = -ENOMEM;
+>       |      ^~~~
+>
+> Introduced by commit
+>
+>   ebc28a8e59ca ("platform/x86: intel_telemetry_pltdrv: use devm_platform_ioremap_resource()")
 
-Fixes: 6501c1f54a17 (regulator: mpq7920: add mpq7920 regulator driver)
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
----
- drivers/regulator/mpq7920.c | 2 +-
- drivers/regulator/mpq7920.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+Thanks for a report. I'll fix soon.
+I'm wondering why I didn't get any report from LKP.
 
-diff --git a/drivers/regulator/mpq7920.c b/drivers/regulator/mpq7920.c
-index c603d60fb87b..ab1b847c57e5 100644
---- a/drivers/regulator/mpq7920.c
-+++ b/drivers/regulator/mpq7920.c
-@@ -221,7 +221,7 @@ static int mpq7920_parse_cb(struct device_node *np,
- 	if (of_property_read_bool(np, "mps,buck-ovp-disable")) {
- 		regmap_update_bits(config->regmap,
- 				MPQ7920_BUCK1_REG_B + (rdesc->id * 4),
--				BIT(6), ~BIT(6));
-+				MPQ7920_MASK_OVP, MPQ7920_OVP_DISABLE);
- 	}
- 
- 	ret = of_property_read_u8(np, "mps,buck-phase-delay", &val);
-diff --git a/drivers/regulator/mpq7920.h b/drivers/regulator/mpq7920.h
-index 6a93bfbc750c..1498a1e3f4f5 100644
---- a/drivers/regulator/mpq7920.h
-+++ b/drivers/regulator/mpq7920.h
-@@ -55,6 +55,8 @@
- #define MPQ7920_MASK_SWITCH_FREQ	0x30
- #define MPQ7920_MASK_BUCK_PHASE_DEALY	0x30
- #define MPQ7920_MASK_DVS_SLEWRATE	0xc0
-+#define MPQ7920_MASK_OVP		0x40
-+#define MPQ7920_OVP_DISABLE		~(0x40)
- #define MPQ7920_DISCHARGE_ON		0x1
- 
- #define MPQ7920_REGULATOR_EN_OFFSET	7
+>
+> --
+> Cheers,
+> Stephen Rothwell
+
+
+
 -- 
-2.17.1
-
+With Best Regards,
+Andy Shevchenko

@@ -2,96 +2,544 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E1291366EE
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 06:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88ABA1367A0
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 07:43:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726655AbgAJFwg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 00:52:36 -0500
-Received: from ozlabs.org ([203.11.71.1]:60663 "EHLO ozlabs.org"
+        id S1731533AbgAJGnO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 01:43:14 -0500
+Received: from ozlabs.org ([203.11.71.1]:38913 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726096AbgAJFwg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 10 Jan 2020 00:52:36 -0500
+        id S1731530AbgAJGnN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jan 2020 01:43:13 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47vBw218Spz9sRQ;
-        Fri, 10 Jan 2020 16:52:34 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47vD2N6lMlz9s1x;
+        Fri, 10 Jan 2020 17:43:08 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578635554;
-        bh=ZgObojzw/bkaVacqay+uyCForK3P1Xluwr5FWR62KkA=;
+        s=201702; t=1578638589;
+        bh=bQJkjPgx4zMc8s4HZ0xAIGUI0WthC9/dsPjsHbkHDe8=;
         h=Date:From:To:Cc:Subject:From;
-        b=drA2EQW2G76LkTT8bxDqDXYCrdXJsXGpSuB1MOynNb7TBiaZowcxUCsKRyXtYHnXm
-         nKz2AmrB8voSxk+wmlApOUrnKNgSWEEn+vgaWGQ+s7g1QIQ/TobQRDrsuMShWt/s4t
-         UbCy4/5Z3AQCoZFfl0GD7GEHS180G5CvbSp5Kxh4RJEFWtdGpfUS4EGgd7VLAKDg+v
-         yEEKo5cy2piaIP1OrdQFe2ERmh3Ql9F5WzfHzy3qJNOtZd6kv0kfu4RpW4aF5xKBQn
-         XKGN1vZDJoWMsAgpmc29hb9pPwvoh3KDXKW0NkqVVxAUaSh6umPopWV5/2dNoGqYNF
-         Pv07ojKFK7bUQ==
-Date:   Fri, 10 Jan 2020 16:52:33 +1100
+        b=Rf/EmApYM9VlL3PToAUjCiFrl/yXZ0DSSEvsOYDBfZXiw+vjMdieQKhQd6PisTC4k
+         Pc7hZu6aY8Eup5k5LpSmFMshiSjgtP5tQiMI/WXcdKt/1uVjrZAM8yR1BfQ+Nv+eYj
+         hVp95qb8bCPOsr4tId/JPoXnAVC6V90BcpUfkvRhLXeradGuzWf+n9V8pIOutOii8a
+         7Sb0FI0q6KbvmI3olZ9io+q2FtvkmOGMCGD7Tz+PTLWZnP0xQZNpgmZfOn0Kmz/mcj
+         DeD6+SP7UIiLMMOkYiC61LlUIH5+dsC68587EhGvjoq+5EPPbIXJeIPj9a81Ud8AjH
+         HOp8llX0ZDxQw==
+Date:   Fri, 10 Jan 2020 17:43:00 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>, Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the generic-ioremap tree with the
- drivers-x86 tree
-Message-ID: <20200110165233.0ee71ee4@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Salvatore <mike.salvatore@canonical.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: linux-next: build failure after merge of the kunit-next tree
+Message-ID: <20200110174300.1836d6c3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.MqWFzW0QPGZWg/nTuWGK=5";
+Content-Type: multipart/signed; boundary="Sig_//o=QzQJ2OGp17p+d.b3BrkN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.MqWFzW0QPGZWg/nTuWGK=5
+--Sig_//o=QzQJ2OGp17p+d.b3BrkN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the generic-ioremap tree got a conflict in:
+After merging the kunit-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/platform/x86/intel_telemetry_pltdrv.c
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_X_out_of_bounds':
+policy_unpack.c:(.text+0xf5c): undefined reference to `kunit_unary_assert_f=
+ormat'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0xf6f): undefined reference to =
+`kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_X_code_mismatch':
+policy_unpack.c:(.text+0x1113): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1126): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1161): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x11a5): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_X_code_match':
+policy_unpack.c:(.text+0x1350): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1363): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x139e): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x13e9): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u64_out_of_bounds':
+policy_unpack.c:(.text+0x15a1): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x15b4): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1646): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1677): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u64_with_name':
+policy_unpack.c:(.text+0x17e7): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x17fa): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1857): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x18a2): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1934): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1965): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u64_with_null_name':
+policy_unpack.c:(.text+0x1ab0): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1ac3): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1b20): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1b6b): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1bfd): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1c2e): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u32_out_of_bounds':
+policy_unpack.c:(.text+0x1db1): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1dc4): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1e56): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1e87): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u32_with_name':
+policy_unpack.c:(.text+0x1feb): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x1ffe): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2060): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x20b3): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2145): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2176): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u32_with_null_name':
+policy_unpack.c:(.text+0x22b4): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x22c7): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2329): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x237c): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x240e): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x243f): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u16_chunk_out_of_bounds_2':
+policy_unpack.c:(.text+0x2643): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x266c): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x26b4): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x26dd): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2757): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2777): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u16_chunk_out_of_bounds_1':
+policy_unpack.c:(.text+0x297e): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x29a7): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x29ef): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2a18): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2a94): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2ab4): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_u16_chunk_basic':
+policy_unpack.c:(.text+0x2ce1): undefined reference to `kunit_binary_ptr_as=
+sert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2d01): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2d4e): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2d7a): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2ddf): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2e07): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_strdup_out_of_bounds':
+policy_unpack.c:(.text+0x2f86): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x2fcc): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3023): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3052): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x30bf): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x30ea): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_strdup_with_name':
+policy_unpack.c:(.text+0x324f): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x329f): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x32da): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3350): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x33c9): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3418): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_strdup_with_null_name':
+policy_unpack.c:(.text+0x359c): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x35ec): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3627): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x369d): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3716): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3765): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_str_out_of_bounds':
+policy_unpack.c:(.text+0x38d3): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3919): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3986): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x39b1): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_str_with_name':
+policy_unpack.c:(.text+0x3ae7): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3b2e): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3b95): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3bdb): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_str_with_null_name':
+policy_unpack.c:(.text+0x3d26): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3d6d): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3dd4): undefined reference to=
+ `kunit_binary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3e1a): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_nameX_with_wrong_name':
+policy_unpack.c:(.text+0x3f55): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3f68): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x3ffa): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x402b): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_nameX_with_name':
+policy_unpack.c:(.text+0x4186): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4199): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4229): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x425a): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_nameX_with_wrong_code':
+policy_unpack.c:(.text+0x4390): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x43a3): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4435): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4466): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_nameX_with_null_name':
+policy_unpack.c:(.text+0x459f): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x45b2): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4642): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4673): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_blob_out_of_bounds':
+policy_unpack.c:(.text+0x47f3): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4839): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x48a6): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x48d1): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_blob_with_name':
+policy_unpack.c:(.text+0x4a2a): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4a7a): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4ac3): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4af9): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_blob_with_null_name':
+policy_unpack.c:(.text+0x4c55): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4ca5): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4cee): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4d24): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_array_out_of_bounds':
+policy_unpack.c:(.text+0x4eac): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4eed): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4f6c): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x4f8c): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_array_with_name':
+policy_unpack.c:(.text+0x50ec): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x512e): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x51ad): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x51cd): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_unpack_array_with_null_name':
+policy_unpack.c:(.text+0x52f8): undefined reference to `kunit_binary_assert=
+_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x533a): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x53b9): undefined reference to=
+ `kunit_binary_ptr_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x53d9): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_inbounds_when_out_of_bounds':
+policy_unpack.c:(.text+0x54cf): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x5533): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_inbounds_when_inbounds':
+policy_unpack.c:(.text+0x562e): undefined reference to `kunit_unary_assert_=
+format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x5641): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x5685): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x56e8): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x5727): undefined reference to=
+ `kunit_unary_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x5787): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `kunit_=
+test_suites_init':
+policy_unpack.c:(.text+0x57f6): undefined reference to `kunit_run_tests'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `build_=
+aa_ext_struct':
+policy_unpack.c:(.text+0x9e2e): undefined reference to `kunit_kmalloc'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x9e69): undefined reference to=
+ `kunit_ptr_not_err_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x9ebc): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x9ece): undefined reference to=
+ `kunit_kmalloc'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x9f09): undefined reference to=
+ `kunit_ptr_not_err_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0x9f5d): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: security/apparmor/policy_unpack.o: in function `policy=
+_unpack_test_init':
+policy_unpack.c:(.text+0xa216): undefined reference to `kunit_kmalloc'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0xa251): undefined reference to=
+ `kunit_ptr_not_err_assert_format'
+x86_64-linux-gnu-ld: policy_unpack.c:(.text+0xa2a1): undefined reference to=
+ `kunit_do_assertion'
+x86_64-linux-gnu-ld: drivers/base/power/qos-test.o: in function `kunit_test=
+_suites_init':
+qos-test.c:(.text+0x26): undefined reference to `kunit_run_tests'
+x86_64-linux-gnu-ld: drivers/base/power/qos-test.o: in function `freq_qos_t=
+est_readd':
+qos-test.c:(.text+0x179): undefined reference to `kunit_binary_assert_forma=
+t'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1c8): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x244): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x294): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x306): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x359): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x3c3): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x413): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x482): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x4d1): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x54d): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x59d): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x60f): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x662): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: drivers/base/power/qos-test.o: in function `freq_qos_t=
+est_min':
+qos-test.c:(.text+0x7f8): undefined reference to `kunit_binary_assert_forma=
+t'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x848): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x8c7): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x917): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x989): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x9dc): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xa49): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xa99): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xb0b): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xb5e): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xbc8): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xc18): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xc87): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xcd6): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: drivers/base/power/qos-test.o: in function `freq_qos_t=
+est_maxdef':
+qos-test.c:(.text+0xe6e): undefined reference to `kunit_binary_assert_forma=
+t'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xec1): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xf3a): undefined reference to `kuni=
+t_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0xf89): undefined reference to `kuni=
+t_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1005): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1054): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x10c3): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1113): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1185): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x11d8): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1247): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1296): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1308): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x135b): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x13c5): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1415): undefined reference to `kun=
+it_do_assertion'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x1487): undefined reference to `kun=
+it_binary_assert_format'
+x86_64-linux-gnu-ld: qos-test.c:(.text+0x14da): undefined reference to `kun=
+it_do_assertion'
 
-between commit:
+I am not sure what caused this.
 
-  ebc28a8e59ca ("platform/x86: intel_telemetry_pltdrv: use devm_platform_io=
-remap_resource()")
+This build is a cross build and using a separate object directory (in
+case that matters).
 
-from the drivers-x86 tree and commit:
-
-  4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
-
-from the generic-ioremap tree.
-
-I fixed it up (the former removed th referneved to ioremap_nocache so
-I just used that) and can carry the fix as necessary. This is now fixed
-as far as linux-next is concerned, but any non trivial conflicts should
-be mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
-
+I used the kunit-next tree from next-20200109 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/.MqWFzW0QPGZWg/nTuWGK=5
+--Sig_//o=QzQJ2OGp17p+d.b3BrkN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4YESEACgkQAVBC80lX
-0Gw84gf/f+cJv+9SUPipLb6vA5WGY4HWIqZs4pxTyZJ/5yOs3TLMTkNX0GK7FIHS
-NXq3Rd+4/RSbQ8aLH4XxhmqdqVkPj+KQxjMxUazrHgjBWP5hyUZjGUn7FoS8Il5Z
-jMuqqijNa93xDjLZNICLyF7mZN8Xbpo7I5f7FPWZbEKT+klq9Iz2v7h/guk/IgAA
-mmnh0VqQedoZvA9WiINU7Tsl5B8z0QJ0hSzUiVQKyIRMhEvoaJkIj867qmCt/c0D
-z53E0oPjaUZm+2byd/a+KaY5N6m7lptU2kD/gsuLX+kuJ9lK/eWOsTlOq4SrmLTw
-V6XuBYp/3UgrTVauCOgVWNSC8BTPFA==
-=GpJC
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4YHPQACgkQAVBC80lX
+0Gz5Sgf/UwjEuUuD8mhR8HZCbh/DseLTY+hvYpd5MhCosWX6kBp05NBKTv1JrhIi
+7nCQXM0EwDmiYSBXWuYnNdNVLYF088GQChcq9QDHbPmSNFRoKbfS4CPwwkAXkupR
+9RUZ2IYNRiciJKU6h2lNXtgPqdlqCbp+S8y+324bWyARN4UvAcTgR7OgQUQHfvNt
+oTcqycM4Hmn/Mp7dExyQMyPhcSs/+BG3ZSoJKzFpfm0/bg5tcoINxaNmFIgv8zId
+d3/J5Dqj8XCPfM/bh1HgQ9dWKNJRBMkZGUzjXd2doG47lT/Pjm1dgb5VIpMhBSWC
+E5M7KlnYzco14Vp5aWM3h+eKrJI8Lw==
+=pIQ8
 -----END PGP SIGNATURE-----
 
---Sig_/.MqWFzW0QPGZWg/nTuWGK=5--
+--Sig_//o=QzQJ2OGp17p+d.b3BrkN--

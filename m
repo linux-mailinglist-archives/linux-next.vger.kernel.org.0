@@ -2,83 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A42B1379A3
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 23:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 733DB1379D6
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 23:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727454AbgAJW2X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 17:28:23 -0500
-Received: from relay10.mail.gandi.net ([217.70.178.230]:58527 "EHLO
-        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727369AbgAJW2X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 17:28:23 -0500
-Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alexandre@ghiti.fr)
-        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 2EFE3240002;
-        Fri, 10 Jan 2020 22:28:18 +0000 (UTC)
-Subject: Re: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org, zong.li@sifive.com
-References: <20191018105657.4584ec67@canb.auug.org.au>
- <20191028110257.6d6dba6e@canb.auug.org.au>
-From:   Alexandre Ghiti <alexandre@ghiti.fr>
-Message-ID: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
-Date:   Fri, 10 Jan 2020 17:28:17 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S1727370AbgAJWor (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 17:44:47 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59011 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727299AbgAJWor (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jan 2020 17:44:47 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47vdMw3sdGz9sP6;
+        Sat, 11 Jan 2020 09:44:44 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578696285;
+        bh=Apvk3yrpOhiX5OvarieBn2JJQfdeDB4VG1WdLXCTCyw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B1uWpHd/0spnE56yycJEFVUDcxrDoYwdIHjjQ4hcwSjog1tSFO6uE9SIlcdFEkNKu
+         0ZnEAnAVR6ckP6E643UpXOwk3unadJUlUl/HtdCezMD1HbaLMHbrO/A/sEQQbDmWgl
+         JSA7KZ9agHjy5iAt5ZZ4z3IA7OP17aFjAwBz4wE9OzxQAfMPO3qGY4w/SmhH02Kbtj
+         Ls5mddxqHFzXBt0GhiGjzQ0Bncm271wFml8EbCHoDlJWf56qV3zGAJpcTiXFDd3vuD
+         3Y0MW7Z3lDHmWjStcOIQsFeVGaXEruyUA+Uu8RFJIQTxwDPUHu6N2q/m24I9z8V8Vl
+         GWLZG8ekW1g3w==
+Date:   Sat, 11 Jan 2020 09:44:27 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Carlos Maiolino <cmaiolino@redhat.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the vfs tree
+Message-ID: <20200111094427.4c875a90@canb.auug.org.au>
+In-Reply-To: <20200110110353.klnooeqv4b6ipxid@orion>
+References: <20200110175729.3b5d2338@canb.auug.org.au>
+        <20200110110353.klnooeqv4b6ipxid@orion>
 MIME-Version: 1.0
-In-Reply-To: <20191028110257.6d6dba6e@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: sv-FI
+Content-Type: multipart/signed; boundary="Sig_/Mlis1=vKdeNGCdq4xnpbc.J";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi guys,
+--Sig_/Mlis1=vKdeNGCdq4xnpbc.J
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 10/27/19 8:02 PM, Stephen Rothwell wrote:
-> Hi all,
+Hi Carlos,
+
+On Fri, 10 Jan 2020 12:03:53 +0100 Carlos Maiolino <cmaiolino@redhat.com> w=
+rote:
 >
-> On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->> Hi all,
->>
->> After merging the bpf-next tree, today's linux-next build (powerpc
->> ppc64_defconfig) produced this warning:
->>
->> WARNING: 2 bad relocations
->> c000000001998a48 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
->> c000000001998a50 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end
->>
->> Introduced by commit
->>
->>    8580ac9404f6 ("bpf: Process in-kernel BTF")
-> This warning now appears in the net-next tree build.
->
->
-I bump that thread up because Zong also noticed that 2 new relocations for
-those symbols appeared in my riscv relocatable kernel branch following 
-that commit.
+> Eitherway, I am not 100% sure this is the right fix for this case, I reme=
+mber
+> some bmap() users who didn't need CONFIG_BLOCK, so we may still need to e=
+xport
+> it without CONFIG_BLOCK.
+> Can you please send me your configuration?
 
-I also noticed 2 new relocations R_AARCH64_ABS64 appearing in arm64 kernel.
+It was a x86_64 allnoconfig build.
 
-Those 2 weak undefined symbols have existed since commit
-341dfcf8d78e ("btf: expose BTF info through sysfs") but this is the fact
-to declare those symbols into btf.c that produced those relocations.
+--=20
+Cheers,
+Stephen Rothwell
 
-I'm not sure what this all means, but this is not something I expected 
-for riscv for
-a kernel linked with -shared/-fpie. Maybe should we just leave them to 
-zero ?
+--Sig_/Mlis1=vKdeNGCdq4xnpbc.J
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-I think that deserves a deeper look if someone understands all this 
-better than I do.
+-----BEGIN PGP SIGNATURE-----
 
-Alex
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4Y/ksACgkQAVBC80lX
+0Gz9lgf9Htt8ftvZ4BlviyTTQNomQeDxppmoLs3SYfj9tC2CJuZ1Rj4/pjsibtON
+weNP4H2F1JM0Y+2sLWG7uq2h4WV7v00G5ACYCTQSaQxqMqexZji/xzVrI9/RCBwM
+nwME9Y2EJtHU066dUV8aX3fxohAs6ySrxVYx69bzcOHEGG2ITxKS88Zut4cCaNmE
++I028yiSZEZDMNBL6Ldl+ZOLYwdpDCHecp4useDAVe6+EJksluWDJ0i7Wn4QZqo/
+kwWehgExt8xTS0V6TTpF/JLlbBkQmF5AEBJy3hksI5KqqupKyHeRhRvkdM1EpmjE
+bg6m5EGN32/mpmElGT/40Nq4j3N6xQ==
+=4tNp
+-----END PGP SIGNATURE-----
 
+--Sig_/Mlis1=vKdeNGCdq4xnpbc.J--

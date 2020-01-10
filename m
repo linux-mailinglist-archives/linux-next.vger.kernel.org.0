@@ -2,80 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3945013666C
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 06:04:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19FA51366B9
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jan 2020 06:33:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726096AbgAJFDu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 00:03:50 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:39160 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725822AbgAJFDu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 00:03:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=yem7mNV6de7IX0DO/36hylIc+6dUlrfXgqqGPK5W0k4=; b=Z0IE3wfgrmq+qtQwy1TI67pGE
-        E/pcYuE9l9EM9UdFVEsfN9t8ybwEr/jd6xeOo6ClBUIIwKwgeoq75YchaemoDUQ+YiwHsJ/lXMm6G
-        yVfo4kI8uYGx0z1YcUUBdXcPS131fUdR8eLL6CCI+ob75O7a9rXJ8KW1KSkyfSzf+SofQ7APDGQTr
-        z2gj1WJbRMXT0sKnQUQA/1wVccjke37aCVJaHe1etZ6SzglPz1u+MChU1WrKFkiZB7x7g4NxE9Wb8
-        R7CS2kpvypJPNVfoJC7dB42DQMRoBulD5D+MDgg0xO9iR9hsps68yWioSYZVEPBcaMKpjAruBxl4d
-        50QDTOqCg==;
-Received: from [2601:1c0:6280:3f0::ed68]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ipmSX-00054i-0S; Fri, 10 Jan 2020 05:03:46 +0000
-Subject: Re: mmotm 2020-01-09-17-33 uploaded (PHY_EXYNOS5250_SATA)
-To:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Kishon Vijay Abraham I <kishon@ti.com>
-References: <20200110013413.NNeLcxiMi%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <19fac75f-ad09-dbf5-1d11-6e91c759aa02@infradead.org>
-Date:   Thu, 9 Jan 2020 21:03:30 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.1
+        id S1726211AbgAJFdm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 00:33:42 -0500
+Received: from ozlabs.org ([203.11.71.1]:38505 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726096AbgAJFdl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jan 2020 00:33:41 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47vBVC3rdYz9sRK;
+        Fri, 10 Jan 2020 16:33:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578634419;
+        bh=b99mOMHx0BXMMxx8Wkq1lFhZYw8ZnBB96n6c/KObwWQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bfohFeTIoqrPg7Js40bEjbaN6wZCeZK/oo4xzhFXB5h3OXKd3B93O54LHNPvJUlp2
+         a7vZW3MytZ8IBnEW3blU+c/E5DalZB5nXIXolr0i621EC2MG3fpauWwRIgRKTz1r01
+         tOSckv1rVZo4m/3QKFYA2VlKCz8a3Rp8ggDqeK/DPObb5Ax3pN6Zs94Eh7yBEWXN9v
+         XTU5NfldDBrcvDk4XidYQHR+gKrWdpQOnPu05xJibagEhlXCXBfa9s5WYgkjPcjtUO
+         IzLHGdu3RNrhNqhDX38PheD+eNv4+6gIGvOfMo6SYNqd8zysOcvL0SMIurfo30frnB
+         Ra25oyQdR7ttg==
+Date:   Fri, 10 Jan 2020 16:33:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Khouloud Touil <ktouil@baylibre.com>
+Subject: linux-next: build warning after merge of the at24 tree
+Message-ID: <20200110163337.07099844@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200110013413.NNeLcxiMi%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_//DXboDVVpZLnaR+MY/GWjlq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/9/20 5:34 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2020-01-09-17-33 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
+--Sig_//DXboDVVpZLnaR+MY/GWjlq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-on i386:
+Hi all,
 
+After merging the at24 tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-WARNING: unmet direct dependencies detected for I2C_S3C2410
-  Depends on [n]: I2C [=y] && HAS_IOMEM [=y] && HAVE_S3C2410_I2C [=n]
-  Selected by [m]:
-  - PHY_EXYNOS5250_SATA [=m] && (SOC_EXYNOS5250 || COMPILE_TEST [=y]) && HAS_IOMEM [=y] && OF [=y]
+drivers/nvmem/core.c: In function 'nvmem_register':
+drivers/nvmem/core.c:354:10: warning: returning 'long int' from a function =
+with return type 'struct nvmem_device *' makes pointer from integer without=
+ a cast [-Wint-conversion]
+  354 |   return PTR_ERR(nvmem->wp_gpio);
+      |          ^~~~~~~~~~~~~~~~~~~~~~~
 
+Introduced by commit
 
-I also notice that PHY_EXYNOS5250_SATA also selects I2C.
-It is preferable not to select an entire subsystem.  If a user wants a subsystem
-enabled, then the user should enable it.  This driver should instead depend on I2C.
+  2a127da461a9 ("nvmem: add support for the write-protect pin")
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_//DXboDVVpZLnaR+MY/GWjlq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4YDLEACgkQAVBC80lX
+0GzoKgf/VJtkEesSaLf7ywFWiWP8AvRe2Fy9OaEsdtb5zV8cOKmJYW785fj/MUWA
+cSR+xFRajVa/xvFKNld97zFbUiBvkLXA6wBpqyqBjFpp3YkEkAIxqrq3PVm5GU4i
+YcUQKcIVTcX9yYLABWAMChJQrumoETAOBcI77MQdLQyQVp0Dcctmu3UTMvsKKTSU
+usCwPEjOZVLkJPQbWoGAVAszywXPY5U57t0MQg+LXJqUAk559IioAy311NsuKer1
++zhaBAqQQjyWBDoq5LHJMwC7jcmzPqw62BokIAFIBHsj7M8QUpTEEdS9UFzWfRsK
+gjx01mVr4Ta8HvhlSE6iqNvO9gH1qA==
+=ffNK
+-----END PGP SIGNATURE-----
+
+--Sig_//DXboDVVpZLnaR+MY/GWjlq--

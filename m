@@ -2,91 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCA1137A0B
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jan 2020 00:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C71137A85
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jan 2020 01:20:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727370AbgAJXTD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 18:19:03 -0500
-Received: from mail-lj1-f195.google.com ([209.85.208.195]:35935 "EHLO
-        mail-lj1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727324AbgAJXTD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 18:19:03 -0500
-Received: by mail-lj1-f195.google.com with SMTP id r19so3828336ljg.3;
-        Fri, 10 Jan 2020 15:19:02 -0800 (PST)
+        id S1727810AbgAKAUN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jan 2020 19:20:13 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:43114 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727764AbgAKAUM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 19:20:12 -0500
+Received: by mail-pg1-f194.google.com with SMTP id k197so1738237pga.10
+        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2020 16:20:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sDCm2fAgdbf9iSd/cGIS/CChQu2q61Zn9eY7u0OfUvA=;
-        b=mSXSzvDisimwy4fkPM0YoB3LyDLUDwqWRyHDDL9TbdonJkxVuiWmNym9tx/UBqT/oy
-         6YyoKqxhS9fU2n/yHjkdK/4+dWFx80x6lGGx4ruh0cLAJwHoASZQo0QaqjFECG0yrNN7
-         TbLzcJubxPIWx14YYb3VytxYW/tOw0lsHTOfF76XMnpFYUuZ7aZ6omUmN7D+ob09G+7B
-         y306y84V1d4qg9kP6oYcVS5FmbYeB2MXPegicIZWqJK7A0kDC1wknXUtB/b6nG/TQ6vc
-         v7vrI/Oh+C9/RDE3+jI5vVi9FDgAZcb51u6HuQXb7o/cR/5xo67iIdyoADeuKbQFQRYQ
-         X0Jw==
+        d=google.com; s=20161025;
+        h=date:from:subject:cc:to:in-reply-to:references:message-id
+         :mime-version:content-transfer-encoding;
+        bh=c3X7AVrd0eaweLYAuO8RL12YZV2EtbyuB8unmVAV0Nc=;
+        b=o/riBuR2mH3VghdAJD08lJGw+G6Nmt2YFqawukfV3FgIyraZCC33g4w6UUkTg4B9YA
+         bPaQ7HIdl9EVvkaFzug0pY/FlWJECuXnToQMWAXeRVE0al9hqWVAVcLgt0QhvWPJSBsQ
+         bB5dxtI06QKGwTmE7+MmdzSWdr5sWOBaOx8ylflwJxzwunQWhFk0yZMqgjvLjx3Ta6Qw
+         IY0NzO2fCoYN5CkwLwDpJMeX7S6jXG0r+Ka/MngphRFWsDvtkDRIbForX/TrNPi0+IDh
+         9ZHCf9TkSZkGR/2ZIQQ0xtQVlRTLSLv2/gi03mwbtBLmcgcOWB86bKQt7FFpTbEBt+yn
+         J0AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sDCm2fAgdbf9iSd/cGIS/CChQu2q61Zn9eY7u0OfUvA=;
-        b=VbSlsvy6S9zx7Dh3mbwJoy9Pg14lYmFHgD4YW4+IKZdNpimA8lgJ2n+OaCiyesXtiU
-         SNo+qPssErTGRUPONz6VuqCf+fS3fI/I+WZOPE2pQs1QbPOUupCj64WDWDY0UF4cM8P3
-         chIIPsJ/7k9+395h+OuOY+gNr9OpD79SRHQOoLIogAgGXR8MO69p4Oi6sHcOpU3lnGU+
-         of+ymcLlBP8fW06SB1DrElyF+xnSGsmSotsEYtajmK8tqYAViCSW1WsQ2ywuJBT5DhXB
-         u6tMprn7NhOzZiqv8YrAETE+dI+19/COuc1NSGivx1xo0YqiFEjPaCXtj6aJG4dED3U9
-         gdug==
-X-Gm-Message-State: APjAAAXRIDo6iP6bWDUKjlW8E5fHXJIZbnsR7M+RgxgjmccTSM57yXq+
-        8G0Dt8w20EkIyuxMSTWGc/9JnT14zMtunP0JMus=
-X-Google-Smtp-Source: APXvYqyaEFKCy5sJpJYQlDZvnYhNy46CPEXRLWAVXF7WAT3sWxG5jqbHave+p4yRBIPkNC2TJa/MqW6xq+4teZD3kgY=
-X-Received: by 2002:a2e:58c:: with SMTP id 134mr4241974ljf.12.1578698341335;
- Fri, 10 Jan 2020 15:19:01 -0800 (PST)
-MIME-Version: 1.0
-References: <20191018105657.4584ec67@canb.auug.org.au> <20191028110257.6d6dba6e@canb.auug.org.au>
- <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
+        h=x-gm-message-state:date:from:subject:cc:to:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=c3X7AVrd0eaweLYAuO8RL12YZV2EtbyuB8unmVAV0Nc=;
+        b=MHX4MjvGCaN2pGQQvIiTuDE9/F1H4s923r17otTA3qziWxQXEqpXDX4AZ8bL9oBX7Z
+         UQZMfY2DQurRrd7f0cHkHfvef//qQYdgNv3mT/NvattS+0p42G4tJx83Oc8+Eeuib6yS
+         da9F53CpK3c54E+Asu5J3R6uDdqQcB5WjKIkaM3s70vYAnv1wrdR6nLHZHhnQXHUvACb
+         nAUohCfnYKAqu1Mkd6ej4J5ArPwP5OGAuCfHpUDLGOErOrHNGOdvs7XdP7uWkgrTA/nJ
+         FO51LaDu854yis6FgbmnjL9l48dZ2PP2edsmHrDLbcCUsz6K7+X53inwztsOwfxwuYzk
+         QufA==
+X-Gm-Message-State: APjAAAVejN+ErQ8MrnTrCS13wXgFeVomY7LxLRmyMW91mP56ebXMHf40
+        u+uCkwrPL+5BN93zdzm0swaLBg==
+X-Google-Smtp-Source: APXvYqz94HjiloVFGVWbZus+RYXmvPQjwFd3nN3tcOUYSqCGg0YFmHQZNCSbn5YazmB7epfwxn4mvg==
+X-Received: by 2002:a63:e30a:: with SMTP id f10mr7422254pgh.331.1578702011266;
+        Fri, 10 Jan 2020 16:20:11 -0800 (PST)
+Received: from localhost ([2620:0:1000:2514:7f69:cd98:a2a2:a03d])
+        by smtp.gmail.com with ESMTPSA id c14sm4013510pjr.24.2020.01.10.16.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2020 16:20:10 -0800 (PST)
+Date:   Fri, 10 Jan 2020 16:20:10 -0800 (PST)
+X-Google-Original-Date: Fri, 10 Jan 2020 16:19:54 PST (-0800)
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+X-Google-Original-From: Palmer Dabbelt <palmer@dabbelt.com>
+Subject:     Re: Re: linux-next: build warning after merge of the bpf-next tree
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>, daniel@iogearbox.net,
+        ast@kernel.org, netdev@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, zong.li@sifive.com
+To:     alexandre@ghiti.fr
 In-Reply-To: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 10 Jan 2020 15:18:50 -0800
-Message-ID: <CAADnVQLo5HEjTpTTRm=BtExuKifPtCJm+Hu_WP6yeyV-Er55Qg@mail.gmail.com>
-Subject: Re: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Alexandre Ghiti <alexandre@ghiti.fr>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org, zong.li@sifive.com,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+References: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
+  <20191018105657.4584ec67@canb.auug.org.au> <20191028110257.6d6dba6e@canb.auug.org.au>
+Message-ID: <mhng-0daa1a90-2bed-4b2e-833e-02cd9c0aa73f@palmerdabbelt-glaptop>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jan 10, 2020 at 2:28 PM Alexandre Ghiti <alexandre@ghiti.fr> wrote:
->
+On Fri, 10 Jan 2020 14:28:17 PST (-0800), alexandre@ghiti.fr wrote:
 > Hi guys,
 >
 > On 10/27/19 8:02 PM, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >> Hi all,
-> >>
-> >> After merging the bpf-next tree, today's linux-next build (powerpc
-> >> ppc64_defconfig) produced this warning:
-> >>
-> >> WARNING: 2 bad relocations
-> >> c000000001998a48 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
-> >> c000000001998a50 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end
-> >>
-> >> Introduced by commit
-> >>
-> >>    8580ac9404f6 ("bpf: Process in-kernel BTF")
-> > This warning now appears in the net-next tree build.
-> >
-> >
+>> Hi all,
+>>
+>> On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>> Hi all,
+>>>
+>>> After merging the bpf-next tree, today's linux-next build (powerpc
+>>> ppc64_defconfig) produced this warning:
+>>>
+>>> WARNING: 2 bad relocations
+>>> c000000001998a48 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
+>>> c000000001998a50 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end
+>>>
+>>> Introduced by commit
+>>>
+>>>    8580ac9404f6 ("bpf: Process in-kernel BTF")
+>> This warning now appears in the net-next tree build.
+>>
+>>
 > I bump that thread up because Zong also noticed that 2 new relocations for
 > those symbols appeared in my riscv relocatable kernel branch following
 > that commit.
@@ -105,11 +106,15 @@ On Fri, Jan 10, 2020 at 2:28 PM Alexandre Ghiti <alexandre@ghiti.fr> wrote:
 > I think that deserves a deeper look if someone understands all this
 > better than I do.
 
-Are you saying there is a warning for arm64 as well?
-Can ppc folks explain the above warning?
-What does it mean "2 bad relocations"?
-The code is doing:
-extern char __weak _binary__btf_vmlinux_bin_start[];
-extern char __weak _binary__btf_vmlinux_bin_end[];
-Since they are weak they should be zero when not defined.
-What's the issue?
+Can you give me a pointer to your tree and how to build a relocatable kernel?
+Weak undefined symbols have the absolute value 0, but the kernel is linked at
+an address such that 0 can't be reached by normal means.  When I added support
+to binutils for this I did it in a way that required almost no code --
+essetially I just stopped dissallowing x0 as a possible base register for PCREL
+relocations, which results in 0 always being accessible.  I just wanted to get
+the kernel to build again, so I didn't worry about chasing around all the
+addressing modes.  The PIC/PIE support generates different relocations and I
+wouldn't be surprised if I just missed one (or more likely all) of them.
+
+It's probably a simple fix, though I feel like every time I say that about the
+linker I end up spending a month in there...

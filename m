@@ -2,119 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C71137A85
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jan 2020 01:20:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D44138176
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jan 2020 15:06:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727810AbgAKAUN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jan 2020 19:20:13 -0500
-Received: from mail-pg1-f194.google.com ([209.85.215.194]:43114 "EHLO
-        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727764AbgAKAUM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jan 2020 19:20:12 -0500
-Received: by mail-pg1-f194.google.com with SMTP id k197so1738237pga.10
-        for <linux-next@vger.kernel.org>; Fri, 10 Jan 2020 16:20:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:subject:cc:to:in-reply-to:references:message-id
-         :mime-version:content-transfer-encoding;
-        bh=c3X7AVrd0eaweLYAuO8RL12YZV2EtbyuB8unmVAV0Nc=;
-        b=o/riBuR2mH3VghdAJD08lJGw+G6Nmt2YFqawukfV3FgIyraZCC33g4w6UUkTg4B9YA
-         bPaQ7HIdl9EVvkaFzug0pY/FlWJECuXnToQMWAXeRVE0al9hqWVAVcLgt0QhvWPJSBsQ
-         bB5dxtI06QKGwTmE7+MmdzSWdr5sWOBaOx8ylflwJxzwunQWhFk0yZMqgjvLjx3Ta6Qw
-         IY0NzO2fCoYN5CkwLwDpJMeX7S6jXG0r+Ka/MngphRFWsDvtkDRIbForX/TrNPi0+IDh
-         9ZHCf9TkSZkGR/2ZIQQ0xtQVlRTLSLv2/gi03mwbtBLmcgcOWB86bKQt7FFpTbEBt+yn
-         J0AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:subject:cc:to:in-reply-to:references
-         :message-id:mime-version:content-transfer-encoding;
-        bh=c3X7AVrd0eaweLYAuO8RL12YZV2EtbyuB8unmVAV0Nc=;
-        b=MHX4MjvGCaN2pGQQvIiTuDE9/F1H4s923r17otTA3qziWxQXEqpXDX4AZ8bL9oBX7Z
-         UQZMfY2DQurRrd7f0cHkHfvef//qQYdgNv3mT/NvattS+0p42G4tJx83Oc8+Eeuib6yS
-         da9F53CpK3c54E+Asu5J3R6uDdqQcB5WjKIkaM3s70vYAnv1wrdR6nLHZHhnQXHUvACb
-         nAUohCfnYKAqu1Mkd6ej4J5ArPwP5OGAuCfHpUDLGOErOrHNGOdvs7XdP7uWkgrTA/nJ
-         FO51LaDu854yis6FgbmnjL9l48dZ2PP2edsmHrDLbcCUsz6K7+X53inwztsOwfxwuYzk
-         QufA==
-X-Gm-Message-State: APjAAAVejN+ErQ8MrnTrCS13wXgFeVomY7LxLRmyMW91mP56ebXMHf40
-        u+uCkwrPL+5BN93zdzm0swaLBg==
-X-Google-Smtp-Source: APXvYqz94HjiloVFGVWbZus+RYXmvPQjwFd3nN3tcOUYSqCGg0YFmHQZNCSbn5YazmB7epfwxn4mvg==
-X-Received: by 2002:a63:e30a:: with SMTP id f10mr7422254pgh.331.1578702011266;
-        Fri, 10 Jan 2020 16:20:11 -0800 (PST)
-Received: from localhost ([2620:0:1000:2514:7f69:cd98:a2a2:a03d])
-        by smtp.gmail.com with ESMTPSA id c14sm4013510pjr.24.2020.01.10.16.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2020 16:20:10 -0800 (PST)
-Date:   Fri, 10 Jan 2020 16:20:10 -0800 (PST)
-X-Google-Original-Date: Fri, 10 Jan 2020 16:19:54 PST (-0800)
-From:   Palmer Dabbelt <palmerdabbelt@google.com>
-X-Google-Original-From: Palmer Dabbelt <palmer@dabbelt.com>
-Subject:     Re: Re: linux-next: build warning after merge of the bpf-next tree
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>, daniel@iogearbox.net,
-        ast@kernel.org, netdev@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel@lists.infradead.org, zong.li@sifive.com
-To:     alexandre@ghiti.fr
-In-Reply-To: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
-References: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
-  <20191018105657.4584ec67@canb.auug.org.au> <20191028110257.6d6dba6e@canb.auug.org.au>
-Message-ID: <mhng-0daa1a90-2bed-4b2e-833e-02cd9c0aa73f@palmerdabbelt-glaptop>
-Mime-Version: 1.0 (MHng)
+        id S1729627AbgAKOGH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jan 2020 09:06:07 -0500
+Received: from relay2-d.mail.gandi.net ([217.70.183.194]:59487 "EHLO
+        relay2-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729622AbgAKOGH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jan 2020 09:06:07 -0500
+X-Originating-IP: 79.86.19.127
+Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alexandre@ghiti.fr)
+        by relay2-d.mail.gandi.net (Postfix) with ESMTPSA id EE08540002;
+        Sat, 11 Jan 2020 14:06:00 +0000 (UTC)
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux-arm-kernel@lists.infradead.org, zong.li@sifive.com,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>
+References: <20191018105657.4584ec67@canb.auug.org.au>
+ <20191028110257.6d6dba6e@canb.auug.org.au>
+ <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
+ <CAADnVQLo5HEjTpTTRm=BtExuKifPtCJm+Hu_WP6yeyV-Er55Qg@mail.gmail.com>
+From:   Alexandre Ghiti <alexandre@ghiti.fr>
+Message-ID: <3e6f298c-e428-fdee-47a8-14addc581501@ghiti.fr>
+Date:   Sat, 11 Jan 2020 09:06:00 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
+MIME-Version: 1.0
+In-Reply-To: <CAADnVQLo5HEjTpTTRm=BtExuKifPtCJm+Hu_WP6yeyV-Er55Qg@mail.gmail.com>
 Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 10 Jan 2020 14:28:17 PST (-0800), alexandre@ghiti.fr wrote:
-> Hi guys,
->
-> On 10/27/19 8:02 PM, Stephen Rothwell wrote:
->> Hi all,
+
+On 1/10/20 6:18 PM, Alexei Starovoitov wrote:
+> On Fri, Jan 10, 2020 at 2:28 PM Alexandre Ghiti <alexandre@ghiti.fr> wrote:
+>> Hi guys,
 >>
->> On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>> On 10/27/19 8:02 PM, Stephen Rothwell wrote:
 >>> Hi all,
 >>>
->>> After merging the bpf-next tree, today's linux-next build (powerpc
->>> ppc64_defconfig) produced this warning:
+>>> On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>> Hi all,
+>>>>
+>>>> After merging the bpf-next tree, today's linux-next build (powerpc
+>>>> ppc64_defconfig) produced this warning:
+>>>>
+>>>> WARNING: 2 bad relocations
+>>>> c000000001998a48 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
+>>>> c000000001998a50 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end
+>>>>
+>>>> Introduced by commit
+>>>>
+>>>>     8580ac9404f6 ("bpf: Process in-kernel BTF")
+>>> This warning now appears in the net-next tree build.
 >>>
->>> WARNING: 2 bad relocations
->>> c000000001998a48 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
->>> c000000001998a50 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end
 >>>
->>> Introduced by commit
->>>
->>>    8580ac9404f6 ("bpf: Process in-kernel BTF")
->> This warning now appears in the net-next tree build.
+>> I bump that thread up because Zong also noticed that 2 new relocations for
+>> those symbols appeared in my riscv relocatable kernel branch following
+>> that commit.
 >>
+>> I also noticed 2 new relocations R_AARCH64_ABS64 appearing in arm64 kernel.
 >>
-> I bump that thread up because Zong also noticed that 2 new relocations for
-> those symbols appeared in my riscv relocatable kernel branch following
-> that commit.
->
-> I also noticed 2 new relocations R_AARCH64_ABS64 appearing in arm64 kernel.
->
-> Those 2 weak undefined symbols have existed since commit
-> 341dfcf8d78e ("btf: expose BTF info through sysfs") but this is the fact
-> to declare those symbols into btf.c that produced those relocations.
->
-> I'm not sure what this all means, but this is not something I expected
-> for riscv for
-> a kernel linked with -shared/-fpie. Maybe should we just leave them to
-> zero ?
->
-> I think that deserves a deeper look if someone understands all this
-> better than I do.
+>> Those 2 weak undefined symbols have existed since commit
+>> 341dfcf8d78e ("btf: expose BTF info through sysfs") but this is the fact
+>> to declare those symbols into btf.c that produced those relocations.
+>>
+>> I'm not sure what this all means, but this is not something I expected
+>> for riscv for
+>> a kernel linked with -shared/-fpie. Maybe should we just leave them to
+>> zero ?
+>>
+>> I think that deserves a deeper look if someone understands all this
+>> better than I do.
+> Are you saying there is a warning for arm64 as well?
 
-Can you give me a pointer to your tree and how to build a relocatable kernel?
-Weak undefined symbols have the absolute value 0, but the kernel is linked at
-an address such that 0 can't be reached by normal means.  When I added support
-to binutils for this I did it in a way that required almost no code --
-essetially I just stopped dissallowing x0 as a possible base register for PCREL
-relocations, which results in 0 always being accessible.  I just wanted to get
-the kernel to build again, so I didn't worry about chasing around all the
-addressing modes.  The PIC/PIE support generates different relocations and I
-wouldn't be surprised if I just missed one (or more likely all) of them.
 
-It's probably a simple fix, though I feel like every time I say that about the
-linker I end up spending a month in there...
+Nop.
+
+
+> Can ppc folks explain the above warning?
+> What does it mean "2 bad relocations"?
+
+
+This is what I'd like to understand too, it is not clear in
+the ppc tool that outputs this message why it is considered 'bad'.
+
+
+> The code is doing:
+> extern char __weak _binary__btf_vmlinux_bin_start[];
+> extern char __weak _binary__btf_vmlinux_bin_end[];
+> Since they are weak they should be zero when not defined.
+> What's the issue?
+
+
+There likely is no issue, I just want to make sure those relocations
+are legitimate and I want to understand what we should do with those.
+
+At the moment arm64 does not relocate those at runtime and purely
+ignore them: is this the right thing to do ?
+
+

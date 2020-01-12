@@ -2,80 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F82138815
-	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 20:58:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CC2813881A
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 21:00:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733283AbgALT6K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 12 Jan 2020 14:58:10 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51393 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1733277AbgALT6K (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 12 Jan 2020 14:58:10 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47wnZl5y5Tz9s29;
-        Mon, 13 Jan 2020 06:58:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578859088;
-        bh=RKOZ+KdcBYQcF9ag1+KXaAKuqw8iJQvL/zzqvJPuVWY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=JrJeekypbBbSNS4M2xqA8bGDnoncU4P+B/Z6ssxo1qb6058KvX3DDZH/l143bsG12
-         ojgeHmuOiPd94wM2cbZGsESowmuYmLF4Lp2bse4vA7bCCUlleKHAHsYBDMSBkflNWw
-         NPhPN6RQkhwyntQMTTrY50CBF+Wh86vrFDNC6j8b5DSmYdybT9NcQM3vnMr1gSTy89
-         6yAaAWXVBb4BTqNxOkfsjGcVx0BkEeJ+TonaUdcKcfmUPtUbMvv7tuKveqyKQQ/yn1
-         Wdddfabt0/SpICzBENOdMrTduIO/GOjEAV5wajfZId8DBsI7CfKUb5CKQhF7Lb1ctn
-         NtQh3O+LFlfcw==
-Date:   Mon, 13 Jan 2020 06:58:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1733277AbgALUAK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 12 Jan 2020 15:00:10 -0500
+Received: from mail-io1-f67.google.com ([209.85.166.67]:34389 "EHLO
+        mail-io1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1733272AbgALUAK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 12 Jan 2020 15:00:10 -0500
+Received: by mail-io1-f67.google.com with SMTP id z193so7371620iof.1
+        for <linux-next@vger.kernel.org>; Sun, 12 Jan 2020 12:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=lixom-net.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4mB/pHZUD7pjqdY45Y5CDvGVoduZ0ZQ2r5DCq1x4iog=;
+        b=UPPSeWIa8hQFLkbNLWRaxUgSYb7TwmCHtvRkLp1TpTRt4i0ahGu0JrwZmLsSVBtxef
+         fOvWys6QfXgKHL5I6BAgz+e/whyHzQjbg5WP8MI2J7qEjPtaYm40v/8CsdeIbs/F3CNF
+         zK1T3MvNTJ2UPXusLsfkZ3t4FlycfJoxPvPS6jErw5AFU7u1dy62EgZJllR4weH/vj/R
+         eoI1j+iqmk4ttbJ1xX9uvw/SyCaZ2Fcn52DUxkynHOwRMpo3HVnzt6QdJ0a5pgWphPln
+         pFkXqHo1ud5kQrIU1zlHrq4w86zzD6u2vo2/HEjtTEF5PVcJqJVKqRhGiZc8wAhojoTW
+         183Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4mB/pHZUD7pjqdY45Y5CDvGVoduZ0ZQ2r5DCq1x4iog=;
+        b=lwxTsVMby/DmkJR1zkPkjdwM7ii3yB5OmTLIqlouyvtXIl6GgVFzZlomOnXuFs3xko
+         ggDOsOJNODQ8oKKNnYeJhvGVILZbpY5kmzHSZ5ynRcMMPYgLwQt8H9p4s3K8oSw61gpj
+         XAeVqJIVGYw4GXU70C54iriBSHvb8EXuOnGhf3heyNVG2e2B6+AaMRCiz/byvJQNjUXZ
+         Cu2UzU24P7IefI1UPENH5AUGu7DA7EYY9AFG8y9juxrYFErF6iY+sYrKLy4Sz6wqEDuB
+         3Fb/b3De8uDvZuh/PWSPESSzXURjJlio/2NE/qeO+QsGuKwocr/GNqI5dpaVxZ3BQqcZ
+         tOSQ==
+X-Gm-Message-State: APjAAAWm5NGS48xPrLCIVXg5yXDllriQOsvt1Npb3IJJ6a4eGgILY3px
+        mqh4bPp3EjzXLoLzAu7d1zkmpdNttRN+7eEFb1khfw==
+X-Google-Smtp-Source: APXvYqyqtIdNVp4dAlM2o9n7nX85aZbnej16a5k16emsTD5losR5+msLRBN07golodtkhQMVuCOh2ZGuVt7FoBUusA8=
+X-Received: by 2002:a02:7fd0:: with SMTP id r199mr11669542jac.126.1578859209969;
+ Sun, 12 Jan 2020 12:00:09 -0800 (PST)
+MIME-Version: 1.0
+References: <20200113065808.25f28c40@canb.auug.org.au>
+In-Reply-To: <20200113065808.25f28c40@canb.auug.org.au>
+From:   Olof Johansson <olof@lixom.net>
+Date:   Sun, 12 Jan 2020 11:59:58 -0800
+Message-ID: <CAOesGMifHn6DbNgYm6YUbdKjSL5rNgdWrq+HX9dEusrOr9xX2A@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Alexandre Torgue <alexandre.torgue@st.com>,
         Ludovic Barre <ludovic.barre@st.com>,
         Yann Gautier <yann.gautier@st.com>
-Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
-Message-ID: <20200113065808.25f28c40@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UM6nfW.JtSHOQCmzDuvZ2HJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UM6nfW.JtSHOQCmzDuvZ2HJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen,
 
-Hi all,
+Thanks for the report. Time to automate this at our end, we've had a
+few too many of these slip through all the way to you lately.
 
-Commit
+Where do you keep your scripts that you catch these things with? Do
+you have a writeup of the checks you do? I should add it to my
+automation once and for all.
 
-  7e5d83981911 ("ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards")
 
-is missing a Signed-off-by from its committer.
+-Olof
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UM6nfW.JtSHOQCmzDuvZ2HJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4belAACgkQAVBC80lX
-0GzfOgf+IpncsQ3XUqU6+JhxmTJ/qxlVRmqjtF2BD0VTCaWzvLIpqVTngnd+tHk8
-7FEi5i9JmhUmwWsd3C33unnbwpnemGCvNsl+oYxXG9IGne/z/JNihH3ExLBxQdK9
-ODnyiGn4ar9piq10GgsdAf2s/qWOrQUabHKnK2RxUTVof4LEb8ktLzdMwkmg8QIY
-+7/IwOk7gU1f+EqAp1G37KZ70nRYc5HCyCGJw0BwT0VBPDGBgPYf3DWexKFJ15TG
-7VRDwUbiynwrI3O5jkB+CztjIKO21CVylQlUiaetG5hPOA7/aQG/NsWGQGNYHfKp
-f9ruFlO+WAXgonMO6Beuv7xcdjpNrg==
-=DlFx
------END PGP SIGNATURE-----
-
---Sig_/UM6nfW.JtSHOQCmzDuvZ2HJ--
+On Sun, Jan 12, 2020 at 11:58 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   7e5d83981911 ("ARM: dts: stm32: add sdmmc3 node for STM32MP1 boards")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell

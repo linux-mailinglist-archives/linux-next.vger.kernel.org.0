@@ -2,89 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B85D138820
-	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 21:01:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 52BA8138832
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 21:22:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733293AbgALUBo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 12 Jan 2020 15:01:44 -0500
-Received: from mail-il1-f194.google.com ([209.85.166.194]:38896 "EHLO
-        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1733064AbgALUBn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 12 Jan 2020 15:01:43 -0500
-Received: by mail-il1-f194.google.com with SMTP id f5so6131324ilq.5
-        for <linux-next@vger.kernel.org>; Sun, 12 Jan 2020 12:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lixom-net.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vltSl3yoS/o4Pj3eivfuysNtj4INdjuW6Z4PNbKDFMw=;
-        b=kVUKzsKNr/UN1LgzbrH3VmkkKF/GgSjl47zvtaJVSsJ4ANthVbnW21/egA78M/fnrl
-         IfpicMsnXfcbxwEqpieyIAu8rZRsUkSQRo/OPoNmBXJgds0yfPDiduhz+VPWjSk+tw4S
-         dYJ4Iug6HP0lwCjKdXgp0ltM2EaGfFIhJlSMu3sjA13JJMNDfovRQT0axtVMsKmy7QeG
-         97lJNUoTmoQFhyrPZb5ZJHgZF4Tw67Kd0VGatq8d7xoZCL9rnyXYoLYrTLM+LRVDbrrn
-         BI7LN23YdH7gkAhLbb4SXaSD+V+WoL4rQIyWhZfvMuQ14H4G79pr3EyrPWvHL2bNFpYt
-         r1Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vltSl3yoS/o4Pj3eivfuysNtj4INdjuW6Z4PNbKDFMw=;
-        b=Ti1xmVbNiYpeiO8d7Qi1b+LQyqcJgaqvY7kSfI8dC+lUJxJLJZCHLS+o8cCpG/MIUy
-         rtPy1HQMen1+qTy2U+4n/3hnABWv96W3+DOV4k0y/sLMcDSgZSgNhlYQ6UVNCSRiidr3
-         sNg+KP1LJuLiPxBj44BNwDtgahdvjl9VdzLzqTdK+BGVqzrX723lvlE7/ZQk8SwFDo1r
-         J0vriLxlOa9iP/L2IsGowEdawWLvNO5ybjppv0Ut+ONxWZoLdpV2Fr3/xgRgp42BdEUT
-         pNFKO0pXiSH62Hw7KfHP0OKwO3tXO9tef2uvf8RNCc66N2J/gG7LQNiIgkFhuV1hs+kL
-         ZJTQ==
-X-Gm-Message-State: APjAAAVUPYfP+k6vHGqUJPXmuqX16fAxO6TX7ETBO+q4Xfln/Tm1J8u7
-        0sbgwBi2nI/IilYxhnNbWdxouuqLofOR9fHdhZeCPg==
-X-Google-Smtp-Source: APXvYqxhD0AB5i0ZIFt3OAw1DMt1N8WD3Cw6RX5iRKqkktFYUteW/DA4rDMoJZRrtrEqDiSmAxbWzcBPtQpncRxq5eM=
-X-Received: by 2002:a92:afc5:: with SMTP id v66mr11073775ill.123.1578859303168;
- Sun, 12 Jan 2020 12:01:43 -0800 (PST)
+        id S2387416AbgALUWZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 12 Jan 2020 15:22:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:60617 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1733252AbgALUWZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 12 Jan 2020 15:22:25 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47wp6k3Dhtz9sPW;
+        Mon, 13 Jan 2020 07:22:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578860542;
+        bh=TWjACBIuITD5+iRtXqdg9WcsJ8IQsCpM8+xX8Hbw8j8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fAR8z+LJT6Z3qGAY2MoFCUOUGr5/SXHUMCblfCQFUFLOMus0FGMB8a1NkxOxB05mb
+         bKMgqykInwMypI0CrW2hTjYEVSEAsqeeBquqbEEaw/zs7Fy4DLZVGyPC/db5e5XvRK
+         TKCZw9pr59N8btihMgG6Mxl+qq8UGYYdsYJPwIM4iF1a173hiD3fQZOxYoFrH6mYrn
+         a/hNE71viKEaR8fRupawIbO/A1V66K2K9CFdHA4z+sURz8F6PRh/pMNXEAU+/YWhj4
+         Z+xgLzNF2NSFhJ0losJPCBaQbunB6Glu1ReDArPmohlH3rr+UoRKpwmTnu3MxUbikC
+         0BJVPuJw1VBaA==
+Date:   Mon, 13 Jan 2020 07:22:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian@brauner.io>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the pidfd tree
+Message-ID: <20200113072221.4c17f28a@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200113065622.15eb3c87@canb.auug.org.au>
-In-Reply-To: <20200113065622.15eb3c87@canb.auug.org.au>
-From:   Olof Johansson <olof@lixom.net>
-Date:   Sun, 12 Jan 2020 12:01:32 -0800
-Message-ID: <CAOesGMjZQTjos9fU52zsrKFZj9LVE3oUXQFpjJov3-dBD0cT+w@mail.gmail.com>
-Subject: Re: linux-next: Fixes tag needs some work in the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Benjamin Gaignard <benjamin.gaignard@st.com>,
-        Alexandre Torgue <alexandre.torgue@st.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/84duewguahvoZKXFL9gKXzK";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen,
+--Sig_/84duewguahvoZKXFL9gKXzK
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jan 12, 2020 at 11:56 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> n commit
->
->   0ff15a86d0c5 ("ARM: dts: stm32: Add power-supply for DSI panel on stm32f469-disco")
->
-> Fixes tag
->
->   Fixes: 18c8866266 ("ARM: dts: stm32: Add display support on stm32f469-disco")
->
-> has these problem(s):
->
->   - SHA1 should be at least 12 digits long
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
->
-> Also, please keep the commit message tags together.
+Hi all,
 
-Thanks for the report, we'll keep an eye out for these formatting
-tweaks in the future.
+Commits
 
-Alexandre; no respin needed to fix this IMHO, just something to keep in mind.
+  f8e8354b6b5f ("test: Add test for pidfd getfd")
+  666c3470317f ("arch: wire up pidfd_getfd syscall")
+  527051993a23 ("pid: Implement pidfd_getfd syscall")
+  6fbe955c41ae ("vfs, fdtable: Add fget_task helper")
 
--Olof
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/84duewguahvoZKXFL9gKXzK
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4bf/0ACgkQAVBC80lX
+0GyJoggAnZsAzVoo99N6DfpwJBmA9u3NVA+2p/QHIi6b4f1eKcnOU5tNhDoziIyD
+CyjH7HA/VDbkDTw3Wls3IVyEkFfPcKkxLLqu3IztPWzpZon1U1HPaFWHsY4SwNAQ
+rM8aowpADnesFUCu5kmOIjn505X2SDxUnr/PH2YY02+0pHyzqtUcsfv4La7gICMt
+e7eEtpMwCQOQlmfCa50W+A8A+0P0B6uPOfBNaIOBogvcqJYy1GBSEz8UaIjl9k/9
+QDf+9nmOCSnO6v/cBTiOJqyxPXWzs91xkxQE+SeB+yV8/9FxXSqRrSbqUH4hIp9F
+Dj5yKKdR07jjhqYnei8AWIljXD9gaQ==
+=wTyA
+-----END PGP SIGNATURE-----
+
+--Sig_/84duewguahvoZKXFL9gKXzK--

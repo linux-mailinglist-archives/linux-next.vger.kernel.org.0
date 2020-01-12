@@ -2,97 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B577D1387B9
-	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 19:33:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E4D21387F6
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jan 2020 20:51:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733152AbgALScj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 12 Jan 2020 13:32:39 -0500
-Received: from zeniv.linux.org.uk ([195.92.253.2]:38282 "EHLO
-        ZenIV.linux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732957AbgALScj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 12 Jan 2020 13:32:39 -0500
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1iqi2N-006mo9-2h; Sun, 12 Jan 2020 18:32:35 +0000
-Date:   Sun, 12 Jan 2020 18:32:35 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1733064AbgALTvG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 12 Jan 2020 14:51:06 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45273 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1732957AbgALTvG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 12 Jan 2020 14:51:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47wnQb4Mvpz9s29;
+        Mon, 13 Jan 2020 06:51:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578858664;
+        bh=YJrCAGCTW+pQ5Aa6nSfF6ttqD/5c99CvooxYkZ1k7rI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=s+QfH5pVowiaXM4tywG/+M7If6zwgOb/MjyXy2j/qUFmgni+FKvPzcBDCfZd2q5L9
+         nynP+RbvfbHgUpK2gYE3yKtv4Rjzrs5ll+E4MLMcJSdXG6cc669SoA/z+4b22BI9f6
+         seQAmfWRZzP/EOcBk82fJlOZqDTe5hPfTaFt+h5X9tMmoH9BA1xKY7qUw7PkNQdeTx
+         xmHzQwhzuEgAS7WX8MnnGxd1Oo3cjRnDSs6YiaYX3IX7VgeIcyTgaL7q+OLOjuAGMn
+         1GavuWld8l0vILEd9jeUX0Nina7UMgy74EjccQfpmheUhrHHJLGIFf8kg+2DAzhwro
+         hqiuloOW9VEXA==
+Date:   Mon, 13 Jan 2020 06:50:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>
-Subject: Re: linux-next: build failure after merge of the block tree
-Message-ID: <20200112183235.GO8904@ZenIV.linux.org.uk>
-References: <20200106123027.1a162197@canb.auug.org.au>
- <e9a87175-64c9-46da-4737-72987a53e836@kernel.dk>
+        Dan Murphy <dmurphy@ti.com>
+Subject: linux-next: Fixes tags need some work in the net tree
+Message-ID: <20200113065054.25c85bac@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e9a87175-64c9-46da-4737-72987a53e836@kernel.dk>
+Content-Type: multipart/signed; boundary="Sig_/CvnqbAAkyhjcYWh8YyqqyGO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 06, 2020 at 09:04:01PM -0700, Jens Axboe wrote:
-> On 1/5/20 6:30 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the block tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> > 
-> > fs/open.c:977:12: error: conflicting types for 'build_open_flags'
-> >   977 | inline int build_open_flags(const struct open_how *how,
-> >       |            ^~~~~~~~~~~~~~~~
-> > In file included from /home/sfr/next/next/fs/open.c:36:
-> > fs/internal.h:127:12: note: previous declaration of 'build_open_flags' was here
-> >   127 | extern int build_open_flags(int flags, umode_t mode, struct open_flags *op);
-> >       |            ^~~~~~~~~~~~~~~~
-> > 
-> > Caused by commits
-> > 
-> >   4e9e15c9426e ("fs: make build_open_flags() available internally")
-> >   3bba3e571bc8 ("io_uring: add support for IORING_OP_OPENAT")
-> > 
-> > interacting with commit
-> > 
-> >   0a51692d49ec ("open: introduce openat2(2) syscall")
-> > 
-> > from the vfs tree.
-> > 
-> > I have applied the following fix up patch for today:
-> 
-> Thanks Stephen - I'll pull in the VFS tree and rebase the 5.6 io_uring
-> bits on that. Then I'll send it out for review again, haven't heard from
-> Al on the non-block open change.
+--Sig_/CvnqbAAkyhjcYWh8YyqqyGO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FWIW, I don't believe that your approach is workable.  First of all,
-*ANY* transition out of RCU mode can lead to blocking.  You need to
-acquire several references (mount and dentry, at the very least).
-Suppose the last one fails (->d_seq mismatch).  Now you suddenly
-have to drop the one(s) you've acquired.  And both dput() and mntput()
-are fundamentally blocking operations.
+Hi all,
 
-It simply does not work.  You could cobble up something that kinda-sorta
-works, if your added flag had
-	* caused hard failure on unlazy_child()
-	* caused hard failure on unlazy_walk() with any symlinks in stack
-	* caused hard failure on unlazy_walk() if it would've been required
-to grab root
-	* made unlazy_walk() go through very careful dance if it's just
-about nd->path; I'm not sure how well that could be done, but theoretically
-it's not impossible.
+In commit
 
-But for open() it's not going to work at all.  Any open for write => you
-will have to wait if you run into fs freeze.  O_TRUNC => you've got IO
-to do.  Worst of all, once you've dropped out of RCU mode, *YOU* *CAN'T*
-*FAIL*.  Because that means blocking operations.  So you need to verify
-that you won't run into a blocking ->open(), IMA deciding to play silly
-buggers and read through the entire file, etc., etc. _before_ dropping
-out of RCU mode.
+  a26ad4d5676f ("net: phy: DP83822: Update Kconfig with DP83825I support")
 
-do_last() is messy enough as it is; adding _this_ is completely out of
-question.
+Fixes tag
 
-Jens, if you have a workable plan on that non-blocking open of yours,
-post it in full details.  Until then - NAK, and that's about as hard one
-as I ever had to give.
+  Fixes: 32b12dc8fde1  ("net: phy: Add DP83825I to the DP83822 driver")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 06acc17a9621 ("net: phy: Add DP83825I to the DP83822 driver")
+
+In commit
+
+  443180567763 ("net: phy: DP83TC811: Fix typo in Kconfig")
+
+Fixes tag
+
+  Fixes: 6d749428788b {"net: phy: DP83TC811: Introduce support for the DP83=
+TC811 phy")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b753a9faaf9a ("net: phy: DP83TC811: Introduce support for the DP83TC=
+811 phy")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/CvnqbAAkyhjcYWh8YyqqyGO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4beJ4ACgkQAVBC80lX
+0Gyx5Af/XjIKBgM9cjcJWHgZQVHNKx9nPlblb1KgEZfAZTIk3X72akLIlxzQB2CN
+NQwKRLiK3ulDnqbJGGoPan3AUXFulQCl5O7W4+Dh0zp55pdOjvSJMCrd/aDHrdhL
+ub19p6H/cG08+t+tkiamIl5JTMPqwrfcFBWsxIBs1qPGX5rQRaum+hvQa0ZjMdE/
+7yQhQ4Pq6pJ8rg3O48/6QnCQ3aCxWnOVnnSKTa4aJMZODPL2g4a3v2CL83O6S2qf
+lLKR/dendQVHRRKoEcglqDuhYRykZlLcYIkUyDZ0PRvAmyKvAAOc1EFBswo8luN1
+Q9sZJ/VgfpGJ/fLokgawkeRlyee9ew==
+=iWsT
+-----END PGP SIGNATURE-----
+
+--Sig_/CvnqbAAkyhjcYWh8YyqqyGO--

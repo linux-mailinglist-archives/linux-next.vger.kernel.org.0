@@ -2,156 +2,359 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82343138A3A
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 05:33:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F46138A8A
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 06:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387628AbgAMEdx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 12 Jan 2020 23:33:53 -0500
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:35160 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387540AbgAMEdx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 12 Jan 2020 23:33:53 -0500
-Received: by mail-ot1-f67.google.com with SMTP id i15so7803210oto.2
-        for <linux-next@vger.kernel.org>; Sun, 12 Jan 2020 20:33:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0SADaU9gu70a2Bm0Kanw0/QkZVrOHiIb+3LRKLBcUWk=;
-        b=OxFJ5+uPpMQkwvT9Qje5xmITqR1pEl3memtQG8Of66iLLXIir/M+praEuySJUPpWqx
-         B7k8EbjZfdkqQtjY7IOgRq/+bLOoJw0+Spj1+UCP9x0BoGO+r6hPIyQ9fl/tDsd1miBa
-         RD7OyyUJkbYPcTYY11AR32jO97qb5LBnOc6cysWfFY761YIxTiErD/jyiKNnNneKy8Ek
-         VJ8n3eNNluAdNyiiQrPSN050ayi1RvZbWNM07Dwfo+GwlQrh4LBz2p+loFt7Ezh9PzS5
-         hRO1OvgiH8Xrlt5JLkPpxi2yPu9JEOjmeygncihU08HnpWE6Bz4mej+gZFrOGt7W+9CS
-         eUqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0SADaU9gu70a2Bm0Kanw0/QkZVrOHiIb+3LRKLBcUWk=;
-        b=HxBkM404MzmqsVJRA9D3gw1Hf54cIhxFNoCI+WYZ16lMxppJ+1I6b+Na4TvPAH8eo2
-         tddzv33kKnkmH694vdQxTqYVjffphcBBkg5NyLQm+dgWRApxT5sgYjWDE6DrL4ZUrqiO
-         9YcFMFXisSx92ErFxub7cX+hRyMZCi5DTCtFIPeoghD8h7Y4ZIa+C314kvnufmRxeFSD
-         Z8DCUouM/czSVpPD3qdmyL8GZ22epz0l06PiNmNrvVThHUYpS7KjfKpMG+7P1yeX3e5H
-         37Uh4wnpK4hi965yr3SiAct43zFxEp0p/UY4zQcGR/jN7TVlO3upUfulX6I+b7Fu0GRG
-         9Pog==
-X-Gm-Message-State: APjAAAW2ORDxj3VuiYXEQDC12L8zk0IbxKq+428HdOQhH7YQIMSZJycO
-        RAjdWOHU9CgM4wDzBQNFZ6LgEv1LV6KZn/uZNem66g==
-X-Google-Smtp-Source: APXvYqzKKJLKVTUSZcp0sj2AT+aiCvmTg5KUl6YAuMPe9/ClQhmL25Wu+pX1UtlR8rzIUjHdZZAxcUMMWVH9uWU1+Sw=
-X-Received: by 2002:a9d:2c68:: with SMTP id f95mr12075160otb.33.1578890030841;
- Sun, 12 Jan 2020 20:33:50 -0800 (PST)
+        id S1725815AbgAMFDD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 00:03:03 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:33115 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725263AbgAMFDC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jan 2020 00:03:02 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47x1gQ63hwz9sP6;
+        Mon, 13 Jan 2020 16:02:58 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578891779;
+        bh=KfV8PnwbCpXJ1YJLrzQAWbPYiu8XsdiL3qsRE4uT2/k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QlhxIU17tFmYdSBRDH7Uy4z5FHogu3NMfyzLxGwZxh4vP+0Jp9roPHbylXoxg3zRS
+         lCPkTSaKvr053SUwLa9L/EPUir2czHOP/K86rwyIXKv6mQI9YBYEpjqTwDL8MYu1L4
+         yKOLvR0/jBIJJhGOozGwkjEGImq0/D1gBrbOQ45diZ9x7R+fNszFN5Pr77PlBwdAom
+         LBrTHq0X9vDLDtH92i2K9pXu8A+aQP8jenjJIcjXldB3Rc3SPELL7sytXFOeIlDkZq
+         EJOuTGPwQvaDF5ec3yxyqCW37xfnPfcwKFdHj0cA8YDUAaZaNzMvCkQGVlVV1nKuPB
+         ITYwPMvNeLqmw==
+Date:   Mon, 13 Jan 2020 16:02:52 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian@brauner.io>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        David Howells <dhowells@redhat.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sargun Dhillon <sargun@sargun.me>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Kars de Jong <jongk@linux-m68k.org>
+Subject: linux-next: manual merge of the pidfd tree with the m68k, vfs and
+ keys trees
+Message-ID: <20200113160252.7003c102@canb.auug.org.au>
 MIME-Version: 1.0
-References: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
- <20191018105657.4584ec67@canb.auug.org.au> <20191028110257.6d6dba6e@canb.auug.org.au>
- <mhng-0daa1a90-2bed-4b2e-833e-02cd9c0aa73f@palmerdabbelt-glaptop> <d5d59f54-e391-3659-d4c0-eada50f88187@ghiti.fr>
-In-Reply-To: <d5d59f54-e391-3659-d4c0-eada50f88187@ghiti.fr>
-From:   Zong Li <zong.li@sifive.com>
-Date:   Mon, 13 Jan 2020 12:33:40 +0800
-Message-ID: <CANXhq0pn+Nq6T5dNyJiB6xvmqTnPSzo8sVfqHhGyWUURY+1ydg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Alexandre Ghiti <alexandre@ghiti.fr>
-Cc:     Palmer Dabbelt <palmerdabbelt@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, daniel@iogearbox.net,
-        ast@kernel.org, netdev@vger.kernel.org, linux-next@vger.kernel.org,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/C3mY7wIq26haiVzoL+kT5wi";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Jan 11, 2020 at 10:31 PM Alexandre Ghiti <alexandre@ghiti.fr> wrote:
->
->
-> On 1/10/20 7:20 PM, Palmer Dabbelt wrote:
-> > On Fri, 10 Jan 2020 14:28:17 PST (-0800), alexandre@ghiti.fr wrote:
-> >> Hi guys,
-> >>
-> >> On 10/27/19 8:02 PM, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> On Fri, 18 Oct 2019 10:56:57 +1100 Stephen Rothwell
-> >>> <sfr@canb.auug.org.au> wrote:
-> >>>> Hi all,
-> >>>>
-> >>>> After merging the bpf-next tree, today's linux-next build (powerpc
-> >>>> ppc64_defconfig) produced this warning:
-> >>>>
-> >>>> WARNING: 2 bad relocations
-> >>>> c000000001998a48 R_PPC64_ADDR64 _binary__btf_vmlinux_bin_start
-> >>>> c000000001998a50 R_PPC64_ADDR64 _binary__btf_vmlinux_bin_end
-> >>>>
-> >>>> Introduced by commit
-> >>>>
-> >>>>    8580ac9404f6 ("bpf: Process in-kernel BTF")
-> >>> This warning now appears in the net-next tree build.
-> >>>
-> >>>
-> >> I bump that thread up because Zong also noticed that 2 new
-> >> relocations for
-> >> those symbols appeared in my riscv relocatable kernel branch following
-> >> that commit.
-> >>
-> >> I also noticed 2 new relocations R_AARCH64_ABS64 appearing in arm64
-> >> kernel.
-> >>
-> >> Those 2 weak undefined symbols have existed since commit
-> >> 341dfcf8d78e ("btf: expose BTF info through sysfs") but this is the fact
-> >> to declare those symbols into btf.c that produced those relocations.
-> >>
-> >> I'm not sure what this all means, but this is not something I expected
-> >> for riscv for
-> >> a kernel linked with -shared/-fpie. Maybe should we just leave them to
-> >> zero ?
-> >>
-> >> I think that deserves a deeper look if someone understands all this
-> >> better than I do.
-> >
-> > Can you give me a pointer to your tree and how to build a relocatable
-> > kernel?
-> > Weak undefined symbols have the absolute value 0,
->
->
-> So according to you the 2 new relocations R_RISCV_64 are normal and
-> should not
-> be modified at runtime right ?
->
->
-> > but the kernel is linked at
-> > an address such that 0 can't be reached by normal means.  When I added
-> > support
-> > to binutils for this I did it in a way that required almost no code --
-> > essetially I just stopped dissallowing x0 as a possible base register
-> > for PCREL
-> > relocations, which results in 0 always being accessible.  I just
-> > wanted to get
-> > the kernel to build again, so I didn't worry about chasing around all the
-> > addressing modes.  The PIC/PIE support generates different relocations
-> > and I
-> > wouldn't be surprised if I just missed one (or more likely all) of them.
-> >
-> > It's probably a simple fix, though I feel like every time I say that
-> > about the
-> > linker I end up spending a month in there...
->
-> You can find it here:
->
-> https://github.com/AlexGhiti/riscv-linux/tree/int/alex/riscv_relocatable_v1
->
-> Zong fixed the bug introduced by those 2 new relocations and everything
-> works
-> like a charm, so I'm not sure you have to dig in the linker :)
->
+--Sig_/C3mY7wIq26haiVzoL+kT5wi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm not quite familiar with btf, so I have no idea why there are two
-weak symbols be added in 8580ac9404f6 ("bpf: Process in-kernel BTF")
-as well, According on relocation mechanism, maybe it is unnecessary to
-handle weak undefined symbol at this time, because there is no
-substantive help to relocate the absolute value 0. I just simply
-ignore the non-relative relocation types to make processing can go
-forward, and it works for me based on v5.5-rc5.
+Hi all,
 
-> Alex
->
+Today's linux-next merge of the pidfd tree got conflicts in:
+
+  arch/alpha/kernel/syscalls/syscall.tbl
+  arch/arm/tools/syscall.tbl
+  arch/arm64/include/asm/unistd.h
+  arch/arm64/include/asm/unistd32.h
+  arch/ia64/kernel/syscalls/syscall.tbl
+  arch/m68k/kernel/syscalls/syscall.tbl
+  arch/microblaze/kernel/syscalls/syscall.tbl
+  arch/mips/kernel/syscalls/syscall_n32.tbl
+  arch/mips/kernel/syscalls/syscall_n64.tbl
+  arch/mips/kernel/syscalls/syscall_o32.tbl
+  arch/parisc/kernel/syscalls/syscall.tbl
+  arch/powerpc/kernel/syscalls/syscall.tbl
+  arch/s390/kernel/syscalls/syscall.tbl
+  arch/sh/kernel/syscalls/syscall.tbl
+  arch/sparc/kernel/syscalls/syscall.tbl
+  arch/x86/entry/syscalls/syscall_32.tbl
+  arch/x86/entry/syscalls/syscall_64.tbl
+  arch/xtensa/kernel/syscalls/syscall.tbl
+  include/linux/syscalls.h
+  include/uapi/asm-generic/unistd.h
+
+between commits:
+
+  e8bb2a2a1d51 ("m68k: Wire up clone3() syscall")
+  0a51692d49ec ("open: introduce openat2(2) syscall")
+  3a92c6e49c47 ("Add a general, global device notification watch list")
+
+from the m68k, vfs and keys trees and commit:
+
+  27063d9f5fbf ("arch: wire up pidfd_getfd syscall")
+
+from the pidfd tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/alpha/kernel/syscalls/syscall.tbl
+index e56950f23b49,82301080f5e7..000000000000
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@@ -475,5 -475,4 +475,6 @@@
+  543	common	fspick				sys_fspick
+  544	common	pidfd_open			sys_pidfd_open
+  # 545 reserved for clone3
+ +546	common	watch_devices			sys_watch_devices
+ +547	common	openat2				sys_openat2
++ 548	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/arm/tools/syscall.tbl
+index 7fb2f4d59210,ba045e2f3a60..000000000000
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@@ -449,5 -449,4 +449,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  435	common	clone3				sys_clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/arm64/include/asm/unistd.h
+index 0f255a23733d,b722e47377a5..000000000000
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+diff --cc arch/arm64/include/asm/unistd32.h
+index 31f0ce25719e,a8da97a2de41..000000000000
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@@ -879,10 -879,8 +879,12 @@@ __SYSCALL(__NR_fspick, sys_fspick
+  __SYSCALL(__NR_pidfd_open, sys_pidfd_open)
+  #define __NR_clone3 435
+  __SYSCALL(__NR_clone3, sys_clone3)
+ +#define __NR_watch_devices 436
+ +__SYSCALL(__NR_watch_devices, sys_watch_devices)
+ +#define __NR_openat2 437
+ +__SYSCALL(__NR_openat2, sys_openat2)
++ #define __NR_pidfd_getfd 438
++ __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
+ =20
+  /*
+   * Please add new compat syscalls above this comment and update
+diff --cc arch/ia64/kernel/syscalls/syscall.tbl
+index b9aa59931905,2b11adfc860c..000000000000
+--- a/arch/ia64/kernel/syscalls/syscall.tbl
++++ b/arch/ia64/kernel/syscalls/syscall.tbl
+@@@ -356,5 -356,4 +356,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  # 435 reserved for clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/m68k/kernel/syscalls/syscall.tbl
+index 7e6fd536e1ae,44e879e98459..000000000000
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@@ -434,6 -434,5 +434,7 @@@
+  432	common	fsmount				sys_fsmount
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+ -# 435 reserved for clone3
+ +435	common	clone3				__sys_clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/microblaze/kernel/syscalls/syscall.tbl
+index 544b4cef18b3,7afa00125cc4..000000000000
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@@ -441,5 -441,4 +441,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  435	common	clone3				sys_clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/mips/kernel/syscalls/syscall_n32.tbl
+index 05e8aee5dae7,856d5ba34461..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@@ -374,5 -374,4 +374,6 @@@
+  433	n32	fspick				sys_fspick
+  434	n32	pidfd_open			sys_pidfd_open
+  435	n32	clone3				__sys_clone3
+ +436	n32	watch_devices			sys_watch_devices
+ +437	n32	openat2				sys_openat2
++ 438	n32	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/mips/kernel/syscalls/syscall_n64.tbl
+index 24d6c01328fb,2db6075352f3..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@@ -350,5 -350,4 +350,6 @@@
+  433	n64	fspick				sys_fspick
+  434	n64	pidfd_open			sys_pidfd_open
+  435	n64	clone3				__sys_clone3
+ +436	n64	watch_devices			sys_watch_devices
+ +437	n64	openat2				sys_openat2
++ 438	n64	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/mips/kernel/syscalls/syscall_o32.tbl
+index 05579c1a9bec,e9f9d4a9b105..000000000000
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@@ -423,5 -423,4 +423,6 @@@
+  433	o32	fspick				sys_fspick
+  434	o32	pidfd_open			sys_pidfd_open
+  435	o32	clone3				__sys_clone3
+ +436	o32	watch_devices			sys_watch_devices
+ +437	o32	openat2				sys_openat2
++ 438	o32	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/parisc/kernel/syscalls/syscall.tbl
+index 4b5f77a4e1a2,c58c7eb144ca..000000000000
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@@ -433,5 -433,4 +433,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  435	common	clone3				sys_clone3_wrapper
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/powerpc/kernel/syscalls/syscall.tbl
+index 9716dc85a517,707609bfe3ea..000000000000
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@@ -517,5 -517,4 +517,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  435	nospu	clone3				ppc_clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/s390/kernel/syscalls/syscall.tbl
+index 7da330f8b03e,185cd624face..000000000000
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@@ -438,5 -438,4 +438,6 @@@
+  433  common	fspick			sys_fspick			sys_fspick
+  434  common	pidfd_open		sys_pidfd_open			sys_pidfd_open
+  435  common	clone3			sys_clone3			sys_clone3
+ +436  common	watch_devices		sys_watch_devices		sys_watch_devices
+ +437  common	openat2			sys_openat2			sys_openat2
++ 438  common	pidfd_getfd		sys_pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/sh/kernel/syscalls/syscall.tbl
+index bb7e68e25337,88f90895aad8..000000000000
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@@ -438,5 -438,4 +438,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  # 435 reserved for clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/sparc/kernel/syscalls/syscall.tbl
+index 646a1fad7218,218df6a2326e..000000000000
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@@ -481,5 -481,4 +481,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  # 435 reserved for clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2			sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc arch/x86/entry/syscalls/syscall_32.tbl
+index 57c53acee290,9c3101b65e0f..000000000000
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@@ -440,5 -440,4 +440,6 @@@
+  433	i386	fspick			sys_fspick			__ia32_sys_fspick
+  434	i386	pidfd_open		sys_pidfd_open			__ia32_sys_pidfd_open
+  435	i386	clone3			sys_clone3			__ia32_sys_clone3
+ +436	i386	watch_devices		sys_watch_devices		__ia32_sys_watch_devices
+ +437	i386	openat2			sys_openat2			__ia32_sys_openat2
++ 438	i386	pidfd_getfd		sys_pidfd_getfd			__ia32_sys_pidfd_getfd
+diff --cc arch/x86/entry/syscalls/syscall_64.tbl
+index 1dd8d21f6500,cef85db75a62..000000000000
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@@ -357,8 -357,7 +357,9 @@@
+  433	common	fspick			__x64_sys_fspick
+  434	common	pidfd_open		__x64_sys_pidfd_open
+  435	common	clone3			__x64_sys_clone3/ptregs
+ +436	common	watch_devices		__x64_sys_watch_devices
+ +437	common	openat2			__x64_sys_openat2
++ 438	common	pidfd_getfd		__x64_sys_pidfd_getfd
+ =20
+  #
+  # x32-specific system call numbers start at 512 to avoid cache impact
+diff --cc arch/xtensa/kernel/syscalls/syscall.tbl
+index 0f48ab7bd75b,ae15183def12..000000000000
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@@ -406,5 -406,4 +406,6 @@@
+  433	common	fspick				sys_fspick
+  434	common	pidfd_open			sys_pidfd_open
+  435	common	clone3				sys_clone3
+ +436	common	watch_devices			sys_watch_devices
+ +437	common	openat2				sys_openat2
++ 438	common	pidfd_getfd			sys_pidfd_getfd
+diff --cc include/linux/syscalls.h
+index ce992e3d7378,8640af30c506..000000000000
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@@ -1002,7 -1000,7 +1002,8 @@@ asmlinkage long sys_fspick(int dfd, con
+  asmlinkage long sys_pidfd_send_signal(int pidfd, int sig,
+  				       siginfo_t __user *info,
+  				       unsigned int flags);
+ +asmlinkage long sys_watch_devices(int watch_fd, int watch_id, unsigned in=
+t flags);
++ asmlinkage long sys_pidfd_getfd(int pidfd, int fd, unsigned int flags);
+ =20
+  /*
+   * Architecture-specific system calls
+diff --cc include/uapi/asm-generic/unistd.h
+index 33f3856a9c3c,d36ec3d645bd..000000000000
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@@ -850,14 -850,11 +850,17 @@@ __SYSCALL(__NR_pidfd_open, sys_pidfd_op
+  #define __NR_clone3 435
+  __SYSCALL(__NR_clone3, sys_clone3)
+  #endif
+ +#define __NR_watch_devices 436
+ +__SYSCALL(__NR_watch_devices, sys_watch_devices)
+ +
+ +#define __NR_openat2 437
+ +__SYSCALL(__NR_openat2, sys_openat2)
+ +
++ #define __NR_pidfd_getfd 438
++ __SYSCALL(__NR_pidfd_getfd, sys_pidfd_getfd)
++=20
+  #undef __NR_syscalls
+- #define __NR_syscalls 438
++ #define __NR_syscalls 439
+ =20
+  /*
+   * 32 bit systems traditionally used different
+
+--Sig_/C3mY7wIq26haiVzoL+kT5wi
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4b+fwACgkQAVBC80lX
+0GxqSwf/VFIEV6MIqtBbYkI8KJgzaCafK0fSkre0EfKOxupYY/iW6egEorzX04N1
+hQ2PzK7bw8C2ctmUr2GvFph2cUAs3i9ah9qIY9rA4bmrEnW8K3nMAavT6VzZ5veE
+0wgu+sttuZfEUxn+zfhW+aso8iIW0gqRmpCUgHQoOIlrJ+rj6ZdgUMFoDiiATCHU
+X/Q11r4tRJnHbJOShYrfC/BXalyXbTh+pZpgePrlX79YLkTpGbbOP5SV2N0Hslru
+KnkpLk+20WQw1XYOtyMA0LIZy3AP2iIROF6lKVxncACKK0qqZbix2cWda8eak67T
+MVMvdBiEmr/vUgj2WilayRTRq5HPDw==
+=aTDf
+-----END PGP SIGNATURE-----
+
+--Sig_/C3mY7wIq26haiVzoL+kT5wi--

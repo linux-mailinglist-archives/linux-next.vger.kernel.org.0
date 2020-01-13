@@ -2,100 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C15139052
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 12:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4BDB139058
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 12:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgAMLpK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 06:45:10 -0500
-Received: from ozlabs.org ([203.11.71.1]:57525 "EHLO ozlabs.org"
+        id S1726985AbgAMLqZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 06:46:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:59025 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726180AbgAMLpK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Jan 2020 06:45:10 -0500
+        id S1727014AbgAMLqZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jan 2020 06:46:25 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xBbQ4bRrz9sPn;
-        Mon, 13 Jan 2020 22:45:06 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xBct6Vspz9s29;
+        Mon, 13 Jan 2020 22:46:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578915908;
-        bh=IXKyUBUCDLTAywTR1RL6Xi0GNhSjDf+D2mhoFHC6EQg=;
+        s=201702; t=1578915983;
+        bh=Sh68xlWSgpVZrv++dSyLP0Le2vIlTkF8lE0AjArMEOA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q3nLPy4z0RX9D785IyiL7XwSL9oH26CwvrNLRpid5WAanrMziqXiApq/q7eYlHWt3
-         oPJbcauXKpDSs4tyNdv6D5tzqZp9S1MQ8jRIkBrAf55TkTUY8xFTR3gDvxE70PsMZy
-         IQFKiCNswGyOgiLNDU6KM6C8a1hIUAMge9wkQtgbLHr9rHke5HxXEfx3u9Axxm0GLk
-         nq2w0UASDm3ODKmGuKie7z5bZSX5t+aKFr52i2+zfU+SlTfZxwixs9NiR/VwF8duvA
-         Aw4MPsOut2pFO4zj/h0Zn3f1guzfIkEZR4CaSfpQ36jhkKRDifMIX5Te1OTUwblUcx
-         pES2wBz9XshMQ==
-Date:   Mon, 13 Jan 2020 22:45:03 +1100
+        b=Y8Mxd7gDqddqPKQNgM9mgu3S8Fp/8KtSQwcmErzilZxDxNe7wUdI0WyFOpsVrhY/p
+         oJmlFbdzAAn/MhQmEfOsqOx6MXZPyJvll7FETmJ4P+WUStUxWug5iDUwOaTRSa9Me4
+         jc1U4Sb4pCNRj3M2U5H5ZbcKnYutKwwL4c0x10XdNM7wZx84tdMcAJQoB3QygUr6o2
+         v2mwkuX57RPr16M8z1U34Qj39b/75/GMEAcvh4ZgYCdXof0LVzsKKJ5OLkA+aDtpYM
+         0csj7e8xlfUYrUA6MEwKu4jyAXiqrHtyOYBxNuTLstG12h8jfsse16JOJdYRPOdUJf
+         LUBdqddVNyiFQ==
+Date:   Mon, 13 Jan 2020 22:46:20 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>,
+To:     Alexandre Torgue <alexandre.torgue@st.com>
+Cc:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "=?UTF-8?B?5ZGo55Cw5p2w?= (Zhou Yanjie)" <zhouyanjie@wanyeetech.com>,
-        Paul Burton <paulburton@kernel.org>
-Subject: Re: linux-next: manual merge of the gpio tree with the mips tree
-Message-ID: <20200113224503.1e1e3235@canb.auug.org.au>
-In-Reply-To: <20200113091237.GA1748@aptenodytes>
-References: <20200110155150.3942c3fc@canb.auug.org.au>
-        <20200113091237.GA1748@aptenodytes>
+        Ludovic Barre <ludovic.barre@st.com>,
+        Yann Gautier <yann.gautier@st.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc
+ tree
+Message-ID: <20200113224620.5d33fa63@canb.auug.org.au>
+In-Reply-To: <caeb1af8-4aa2-71dc-0a70-127c0b474f93@st.com>
+References: <20200113065808.25f28c40@canb.auug.org.au>
+        <CAOesGMifHn6DbNgYm6YUbdKjSL5rNgdWrq+HX9dEusrOr9xX2A@mail.gmail.com>
+        <20200113113837.130c3936@canb.auug.org.au>
+        <caeb1af8-4aa2-71dc-0a70-127c0b474f93@st.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XVqxA34AbA8M9k+VfVfN24r";
+Content-Type: multipart/signed; boundary="Sig_/5U+lfpyJ0sr9Nz20/hiiLBb";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XVqxA34AbA8M9k+VfVfN24r
+--Sig_/5U+lfpyJ0sr9Nz20/hiiLBb
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+Hi Alexandre,
 
-On Mon, 13 Jan 2020 10:12:37 +0100 Paul Kocialkowski <paul.kocialkowski@boo=
-tlin.com> wrote:
+On Mon, 13 Jan 2020 09:17:08 +0100 Alexandre Torgue <alexandre.torgue@st.co=
+m> wrote:
 >
-> Thanks for the fix. We might want to keep the list ordered though, with
-> "xylon" listed after "xunlong" and before "yna".
->=20
-> >       description: Xilinx
-> >     "^xunlong,.*":
-> >       description: Shenzhen Xunlong Software CO.,Limited
-> >  +  "^yna,.*":
-> >  +    description: YSH & ATIL
-> > +   "^xylon,.*":
-> > +     description: Xylon =20
->=20
-> So reversing the two blocks above.
->=20
-> What do you think?
+> Sorry for this oversight. DO I have something to do ? (except to not=20
+> forget to check my signed-off next time).
 
-Absolutely.  I have changed my resolution for tomorrow.  What really
-matters, though is what we end up with in Linus' tree.
+That is up to the arm-soc tree maintainers.
 
-Thanks for checking.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/XVqxA34AbA8M9k+VfVfN24r
+--Sig_/5U+lfpyJ0sr9Nz20/hiiLBb
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4cWD8ACgkQAVBC80lX
-0GzXPQf/RJ1akP2I79Hp8O/XJOfOG5jJYa7/NoHvmkbh5STF6VLA2ZKypKADn6X3
-URmKbWQfdD5JDC9hO/FuCeQ5yk3qtCmM3lnY1Xjo3RxH9IlkLlCkiZ2N6gnCcsY4
-y9luesBrOsgV+LUABbDOl7XWAiq4+5UBo8qYaiaSHK5skCIkCl4Gvu0TqgNsxbxC
-EmKODQ7sjOK6bGc3K9FBV/4My0xvGeVklemVioxd/CQJHfYhz5AORH9AFIma3jFb
-iwwyetKDfALPO0a/4gn7wqevwAoiia8ePe8YfMrtDSPVibJFchpCYF+4a8PokPJ0
-20iGgZ3160ei0HfDrhK1vmc4SlI2fQ==
-=AuZX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4cWIwACgkQAVBC80lX
+0GyzLQf/V4IXMNSIMAQSE7qdmrM7ue4ZAsvi3rn9G+gFcSjsnB+S7hpuWQAzKxpq
+5z8xVd9L33CLY+8FG8pvFW6qaOoo+vcw5XRnJvJPeC8ptkThTSwVocqlV9BEVIvT
+76j27n+cMqMlXAdQtuHgquyVW6T2uK9wT3tzeGVejmw0YBWp2k7g4MnzNIvaF/bn
+qE09LuWS5GGyvzhMd5MHEeHOq6eIu6vRTWeDLyYa3CvNiTNpjtNwI+Hg/9/2JsWO
+v1h8GLlDlmfB1Xl+xQmlXy6m5hqoNDj4IcCWPNPwNDrBNgxn87UwQiqSRkHJN0GB
+2bQBARTGtpXW4LuLgFRvNtr3J302bQ==
+=b67J
 -----END PGP SIGNATURE-----
 
---Sig_/XVqxA34AbA8M9k+VfVfN24r--
+--Sig_/5U+lfpyJ0sr9Nz20/hiiLBb--

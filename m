@@ -2,131 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C16A6138DC4
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 10:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DC1138F18
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 11:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725978AbgAMJ2X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 04:28:23 -0500
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:50514 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725832AbgAMJ2X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Jan 2020 04:28:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1578907701;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=R3C4Q941xE3AXEWBJErO7jF+8a/J+pt1q7fx5URkZDQ=;
-        b=LRdnajscsIfSpImUc19xZUeW8wHngGPjE1tD6inPbJcEi6RXDwB3tMnR2WX7aiVsz/Kdj/
-        QkWwMxwweInNC/Ta14YEF1aPwF2/KNPQUZM0MRWIy5B27aUqjWJGVdbe8XNWruNL4DjmII
-        XbNsPg54n8SrBPtGtvWhubODypYqf3I=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-347-w0d3Mc0IMw2EZcjYE1xdYA-1; Mon, 13 Jan 2020 04:28:19 -0500
-X-MC-Unique: w0d3Mc0IMw2EZcjYE1xdYA-1
-Received: by mail-wm1-f69.google.com with SMTP id y125so2416154wmg.1
-        for <linux-next@vger.kernel.org>; Mon, 13 Jan 2020 01:28:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id
-         :mail-followup-to:references:mime-version:content-disposition
-         :in-reply-to;
-        bh=R3C4Q941xE3AXEWBJErO7jF+8a/J+pt1q7fx5URkZDQ=;
-        b=Meyd7vvuUn9UX5ySnqcaZP9q7GQ0f7MCZkoZClAVBfJ5kJFlSk7zpjToSXBrgClYXa
-         lLJ1S3twfVeNW6PF4ZH0YbuVqMvd87Tx63xgNSexOeY5ui3UupyxVhjdb9jDsVPBVfWY
-         z3zORB3QsNOFl+a6LBu14pE4APj07qtr7IlFH8v8VtG6Pt8Dq/jWcJj8zMvb357spzg7
-         XS7KcMLp7tXbIHIKp2/wp7jV5mz9ecT4WebNe+ZGbAirwhYT9v1YGpneQhi62KPB+Z7V
-         4I+VgGBfx0QVqmdhsHqoR9vVyV7wD/Ig43zOeRms8F/yDyragyaiP7DE8pTpXZbPIM+P
-         KjPA==
-X-Gm-Message-State: APjAAAVFA0hx7ToQEqMErKgoLF0/ZHmlzbk4s9UtnZx+ui2xQx7rFZ/e
-        Ce46AzxeTrwU+ID1UeaHkJETiXSoVjjEZus9HBPLDLHCWg3HW3y4sjMM2pL2XlyEbucd8XO1ho3
-        6wFTDNmsr7In94N/NbTQ6LQ==
-X-Received: by 2002:a5d:49c7:: with SMTP id t7mr16792089wrs.369.1578907698501;
-        Mon, 13 Jan 2020 01:28:18 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwssFIroUIb1buW5MykkVVj/TQlDVXxwPmj/97+2mYHumLWKoldzBD8ViDURwXYkubqia4XUw==
-X-Received: by 2002:a5d:49c7:: with SMTP id t7mr16792071wrs.369.1578907698283;
-        Mon, 13 Jan 2020 01:28:18 -0800 (PST)
-Received: from orion (ip-89-103-126-188.net.upcbroadband.cz. [89.103.126.188])
-        by smtp.gmail.com with ESMTPSA id m7sm13200881wma.39.2020.01.13.01.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 01:28:17 -0800 (PST)
-Date:   Mon, 13 Jan 2020 10:28:15 +0100
-From:   Carlos Maiolino <cmaiolino@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the vfs tree
-Message-ID: <20200113092815.qwndd7oi5wglxh3c@orion>
-Mail-Followup-To: Carlos Maiolino <cmaiolino@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1725978AbgAMKar (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 05:30:47 -0500
+Received: from michel.telenet-ops.be ([195.130.137.88]:37314 "EHLO
+        michel.telenet-ops.be" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726133AbgAMKaq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jan 2020 05:30:46 -0500
+Received: from ramsan ([84.195.182.253])
+        by michel.telenet-ops.be with bizsmtp
+        id pmWi210035USYZQ06mWi1z; Mon, 13 Jan 2020 11:30:44 +0100
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan with esmtp (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iqwzZ-0000aP-SZ; Mon, 13 Jan 2020 11:30:41 +0100
+Received: from geert by rox.of.borg with local (Exim 4.90_1)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1iqwzZ-0006AN-Pz; Mon, 13 Jan 2020 11:30:41 +0100
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     Amanieu d'Antras <amanieu@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Kars de Jong <jongk@linux-m68k.org>,
         Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200110175729.3b5d2338@canb.auug.org.au>
- <20200110110353.klnooeqv4b6ipxid@orion>
- <20200111094427.4c875a90@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200111094427.4c875a90@canb.auug.org.au>
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] m68k: Implement copy_thread_tls()
+Date:   Mon, 13 Jan 2020 11:30:40 +0100
+Message-Id: <20200113103040.23661-1-geert@linux-m68k.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Jan 11, 2020 at 09:44:27AM +1100, Stephen Rothwell wrote:
-> Hi Carlos,
-> 
-> On Fri, 10 Jan 2020 12:03:53 +0100 Carlos Maiolino <cmaiolino@redhat.com> wrote:
-> >
-> > Eitherway, I am not 100% sure this is the right fix for this case, I remember
-> > some bmap() users who didn't need CONFIG_BLOCK, so we may still need to export
-> > it without CONFIG_BLOCK.
-> > Can you please send me your configuration?
-> 
-> It was a x86_64 allnoconfig build.
+This is required for clone3(), which passes the TLS value through a
+struct rather than a register.
 
-Thanks for the info Stephen.
+As do_fork() is only available if CONFIG_HAVE_COPY_THREAD_TLS is set,
+m68k_clone() must be changed to call _do_fork() directly.
 
-I think the correct way to fix this though, is to wrap the whole bmap(){}
-definition in a #ifdef block, not only the EXPORT symbol, as, by my patches, we
-redefine bmap() as an inline symbol if CONFIG_BLOCK is not set. So, something
-like this:
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+This is a dependency for the combination of commits
+e8bb2a2a1d51511e ("m68k: Wire up clone3() syscall") in m68k/for-next,
+dd499f7a7e342702 ("clone3: ensure copy_thread_tls is implemented") in
+v5.5-rc6.
+---
+ arch/m68k/Kconfig          |  1 +
+ arch/m68k/kernel/process.c | 31 ++++++++++++++++++++++---------
+ 2 files changed, 23 insertions(+), 9 deletions(-)
 
-
-diff --git a/fs/inode.c b/fs/inode.c
-index 9f894b25af2b..21e58542801b 100644
---- a/fs/inode.c
-+++ b/fs/inode.c
-@@ -1612,6 +1612,8 @@ EXPORT_SYMBOL(iput);
-  *	Returns -EINVAL in case of error, 0 otherwise. If mapping falls into a
-  *	hole, returns 0 and *block is also set to 0.
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index 6663f1741798e83f..6ad6cdac74b3dc42 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -14,6 +14,7 @@ config M68K
+ 	select HAVE_AOUT if MMU
+ 	select HAVE_ASM_MODVERSIONS
+ 	select HAVE_DEBUG_BUGVERBOSE
++	select HAVE_COPY_THREAD_TLS
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_ATOMIC64
+ 	select HAVE_UID16
+diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+index 22e6b8f4f9582aa4..8f0d9140700f09ad 100644
+--- a/arch/m68k/kernel/process.c
++++ b/arch/m68k/kernel/process.c
+@@ -108,16 +108,28 @@ void flush_thread(void)
+  * on top of pt_regs, which means that sys_clone() arguments would be
+  * buried.  We could, of course, copy them, but it's too costly for no
+  * good reason - generic clone() would have to copy them *again* for
+- * do_fork() anyway.  So in this case it's actually better to pass pt_regs *
+- * and extract arguments for do_fork() from there.  Eventually we might
+- * go for calling do_fork() directly from the wrapper, but only after we
+- * are finished with do_fork() prototype conversion.
++ * _do_fork() anyway.  So in this case it's actually better to pass pt_regs *
++ * and extract arguments for _do_fork() from there.  Eventually we might
++ * go for calling _do_fork() directly from the wrapper, but only after we
++ * are finished with _do_fork() prototype conversion.
   */
-+
-+#ifdef CONFIG_BLOCK
- int bmap(struct inode *inode, sector_t *block)
+ asmlinkage int m68k_clone(struct pt_regs *regs)
  {
- 	if (!inode->i_mapping->a_ops->bmap)
-@@ -1621,6 +1623,7 @@ int bmap(struct inode *inode, sector_t *block)
- 	return 0;
+ 	/* regs will be equal to current_pt_regs() */
+-	return do_fork(regs->d1, regs->d2, 0,
+-		       (int __user *)regs->d3, (int __user *)regs->d4);
++	struct kernel_clone_args args = {
++		.flags		= regs->d1 & ~CSIGNAL,
++		.pidfd		= (int __user *)regs->d3,
++		.child_tid	= (int __user *)regs->d4,
++		.parent_tid	= (int __user *)regs->d3,
++		.exit_signal	= regs->d1 & CSIGNAL,
++		.stack		= regs->d2,
++		.tls		= regs->d5,
++	};
++
++	if (!legacy_clone_args_valid(&args))
++		return -EINVAL;
++
++	return _do_fork(&args);
  }
- EXPORT_SYMBOL(bmap);
-+#endif
  
  /*
-  * With relative atime, only update atime if the previous atime is
-
-So, we preserve the original inline definition in include/fs.h (making bmap()
-just returning -EINVAL). What do you think?
-
-Viro, mind to share your opinion? I can send a 'Fixes:' patch.
-
-Cheers
-
-
-
+@@ -130,8 +142,9 @@ asmlinkage int m68k_clone3(struct pt_regs *regs)
+ 	return sys_clone3((struct clone_args __user *)regs->d1, regs->d2);
+ }
+ 
+-int copy_thread(unsigned long clone_flags, unsigned long usp,
+-		 unsigned long arg, struct task_struct *p)
++int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
++		    unsigned long arg, struct task_struct *p,
++		    unsigned long tls)
+ {
+ 	struct fork_frame {
+ 		struct switch_stack sw;
+@@ -166,7 +179,7 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
+ 	p->thread.usp = usp ?: rdusp();
+ 
+ 	if (clone_flags & CLONE_SETTLS)
+-		task_thread_info(p)->tp_value = frame->regs.d5;
++		task_thread_info(p)->tp_value = tls;
+ 
+ #ifdef CONFIG_FPU
+ 	if (!FPU_IS_EMU) {
 -- 
-Carlos
+2.17.1
 

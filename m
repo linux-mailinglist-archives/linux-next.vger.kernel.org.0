@@ -2,165 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 763EC13937A
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 15:17:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BF813970B
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jan 2020 18:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728688AbgAMORf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 09:17:35 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:37807 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727494AbgAMORe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jan 2020 09:17:34 -0500
-Received: by mail-wm1-f66.google.com with SMTP id f129so9829210wmf.2
-        for <linux-next@vger.kernel.org>; Mon, 13 Jan 2020 06:17:33 -0800 (PST)
+        id S1728920AbgAMRJF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 12:09:05 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:45062 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728916AbgAMRJE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jan 2020 12:09:04 -0500
+Received: by mail-io1-f65.google.com with SMTP id i11so10568296ioi.12
+        for <linux-next@vger.kernel.org>; Mon, 13 Jan 2020 09:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=zZvfan/gshCqUSYOLlH4aminH1sxQr2O7tdxwLRibeA=;
-        b=qnoASoM4MPbOdkbJC1N1GFDiDyQ5qwjYTf01YufBLphy/ze6dg5f2I3mCkJ1On7p9L
-         8VtGh8DAgspnBO7LZ33kdbx3SLSADQjUHJfJStPCq+2lc6nEF5PnNiJR5+uRaNIK1sT6
-         VfzpPaoynpKmu0VcvlLxaK8sP0fRSShqhpxSLL2eQnvAWw9fQQLd2/giP+eP2Pi1ZF9M
-         8MKRGcEtlYNr7bCQVwkacitq2tVSJ00IMFOarXxqIgW2L2zkAOL6Ka50/WTv6VzPmg0K
-         Kg5/0cqBx4vZrkmrj1fZE684BVmCVqKB4UE49KZJN7e3M7ytlXTmi6G1Mg+6Ug5BaeeZ
-         0nwA==
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HwOMSNU0BOcmSRdPEWKuyZX5aZw+rCZHEo3YxXXPbFY=;
+        b=WKqIN2x4arw2oKUauJg3IzH0Qjl/mB5DQfhbHOo9RwqOxk1NJAI/DXrWhbYvac3FUU
+         6z14DZZMo1fvXjZbp/NMHMaMWa3xcDbxdnXLXMKhGK0DYjmHTKtTpAyFbGxMVFVSK4mQ
+         1M6o9th63zQJ7uVxLbmFHDx+V1IVk0PBWnWfHNjj+DAROwY9Sz1zLTOGUkAyjytc3LXw
+         TNAFCePAGIquBokzfdvjK5TWHwCsRtCc2XevcbVtPPT5OePT53zNlRKrZNAEC982It9U
+         98EWBsgK2gb1Hf8NPxoFa/rIm/s4UpeMeR4NOEZDdBcoKet82/f4Me+lSg19PNK4sKHP
+         i49A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=zZvfan/gshCqUSYOLlH4aminH1sxQr2O7tdxwLRibeA=;
-        b=bdhjeu180uME/oJ0MNvUJG7qrwCDR08l6/lLpjS3q82+t79sKQxpFieChX/qrE5jVf
-         Go1jS8UFpvNXwN6nT825otC0ZqQFl5+kQLpnOjiKsm3pDCir168onD4PQXFUaddZkch4
-         TplChHZ44OUCgoBVjSy2yku3ArSde2cn+5WSU7wWdJQt3A2DzIKBmN0f9C84uyhyEuHU
-         yHC6nIiaPevzlQZ48i9nBwSbBlijrfi9KaccqUzo9Le//dbJiBz+ysS0AS0SPRc7Q3gy
-         4qU9GWfbktp03qLmsbiTvaIeHRmLh+XCW/+0g1MTd7BX0bm/A83qIpJEN54v9hMO3ctP
-         a1kw==
-X-Gm-Message-State: APjAAAVHsPMjmwwaQ8+LOS9L1ZzzZCAwG5NhEbYkLK9BQVIP3TOIQDef
-        IP8xEv+Lk+vqb2PLpNXzxSJteg8wgdVnQg==
-X-Google-Smtp-Source: APXvYqzF1M5V1Ivg6LKguNp6XHgVGIFF+SPrP/I8wVFIM+hYjjTdKBtHGayp9H7dUe10m0cYOj2RCw==
-X-Received: by 2002:a05:600c:246:: with SMTP id 6mr21265905wmj.122.1578925052251;
-        Mon, 13 Jan 2020 06:17:32 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id f127sm14508381wma.4.2020.01.13.06.17.31
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 06:17:31 -0800 (PST)
-Message-ID: <5e1c7bfb.1c69fb81.3cd71.b956@mx.google.com>
-Date:   Mon, 13 Jan 2020 06:17:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HwOMSNU0BOcmSRdPEWKuyZX5aZw+rCZHEo3YxXXPbFY=;
+        b=Pq/BsrLl79PxnPZeKwm0Wa+2w+ekbC3r346YcEXFwdzJQKfFlEc9k51iKN8d2lmtAc
+         THaKY20lnqN/3wKBQ5QT3Aam/B/oozoxZtQkIW/ChwbH35I6u+Za1hgm0wRcCwGQlvcA
+         TK22ZuCvXpHrGCkEWu6Z6LVnshebfRSCCOpJVjoy3tQxdWqQev4z3vlG1KBm8rV/UGSA
+         YLl6qc3UdkKRF5EJUsMFpyvRyXzVSQDQjt8lJVE6kgBu7X9JmaKwDq7dVPhTYWEtzCiG
+         slBs1kBV+WcqwTEIS4sAYFgaghNHTQ5nPjKBGRPtX/tBTuXjVUpNOamTtOh20XNz8gJS
+         388w==
+X-Gm-Message-State: APjAAAVMfM8qRjh4/Tz5JelxVVjfX0KVXiJ6MInHDTLQ+/KofVzaAY7K
+        8FEUk29aI61dBqx3BumQtYjs1A==
+X-Google-Smtp-Source: APXvYqy68d9Ng4v1S+3XbifY4an9Sl2hEGBXR3rUtx/ooElUc+fi5+WPRSFy8jmCisZsF0cjR9P+zg==
+X-Received: by 2002:a6b:c986:: with SMTP id z128mr13473801iof.8.1578935343131;
+        Mon, 13 Jan 2020 09:09:03 -0800 (PST)
+Received: from [192.168.1.159] ([65.144.74.34])
+        by smtp.gmail.com with ESMTPSA id x62sm4000954ill.86.2020.01.13.09.09.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2020 09:09:02 -0800 (PST)
+Subject: Re: linux-next: build failure after merge of the block tree
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>
+References: <20200106123027.1a162197@canb.auug.org.au>
+ <e9a87175-64c9-46da-4737-72987a53e836@kernel.dk>
+ <20200112183235.GO8904@ZenIV.linux.org.uk>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <b177c427-ca94-bbbf-b09d-6f2faef4121c@kernel.dk>
+Date:   Mon, 13 Jan 2020 10:09:01 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20200113
-Subject: next/master boot: 184 boots: 14 failed,
- 166 passed with 4 untried/unknown (next-20200113)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200112183235.GO8904@ZenIV.linux.org.uk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 184 boots: 14 failed, 166 passed with 4 untried/unknown (=
-next-20200113)
+On 1/12/20 11:32 AM, Al Viro wrote:
+> On Mon, Jan 06, 2020 at 09:04:01PM -0700, Jens Axboe wrote:
+>> On 1/5/20 6:30 PM, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> After merging the block tree, today's linux-next build (arm
+>>> multi_v7_defconfig) failed like this:
+>>>
+>>> fs/open.c:977:12: error: conflicting types for 'build_open_flags'
+>>>   977 | inline int build_open_flags(const struct open_how *how,
+>>>       |            ^~~~~~~~~~~~~~~~
+>>> In file included from /home/sfr/next/next/fs/open.c:36:
+>>> fs/internal.h:127:12: note: previous declaration of 'build_open_flags' was here
+>>>   127 | extern int build_open_flags(int flags, umode_t mode, struct open_flags *op);
+>>>       |            ^~~~~~~~~~~~~~~~
+>>>
+>>> Caused by commits
+>>>
+>>>   4e9e15c9426e ("fs: make build_open_flags() available internally")
+>>>   3bba3e571bc8 ("io_uring: add support for IORING_OP_OPENAT")
+>>>
+>>> interacting with commit
+>>>
+>>>   0a51692d49ec ("open: introduce openat2(2) syscall")
+>>>
+>>> from the vfs tree.
+>>>
+>>> I have applied the following fix up patch for today:
+>>
+>> Thanks Stephen - I'll pull in the VFS tree and rebase the 5.6 io_uring
+>> bits on that. Then I'll send it out for review again, haven't heard from
+>> Al on the non-block open change.
+> 
+> FWIW, I don't believe that your approach is workable.  First of all,
+> *ANY* transition out of RCU mode can lead to blocking.  You need to
+> acquire several references (mount and dentry, at the very least).
+> Suppose the last one fails (->d_seq mismatch).  Now you suddenly
+> have to drop the one(s) you've acquired.  And both dput() and mntput()
+> are fundamentally blocking operations.
+> 
+> It simply does not work.  You could cobble up something that kinda-sorta
+> works, if your added flag had
+> 	* caused hard failure on unlazy_child()
+> 	* caused hard failure on unlazy_walk() with any symlinks in stack
+> 	* caused hard failure on unlazy_walk() if it would've been required
+> to grab root
+> 	* made unlazy_walk() go through very careful dance if it's just
+> about nd->path; I'm not sure how well that could be done, but theoretically
+> it's not impossible.
+> 
+> But for open() it's not going to work at all.  Any open for write => you
+> will have to wait if you run into fs freeze.  O_TRUNC => you've got IO
+> to do.  Worst of all, once you've dropped out of RCU mode, *YOU* *CAN'T*
+> *FAIL*.  Because that means blocking operations.  So you need to verify
+> that you won't run into a blocking ->open(), IMA deciding to play silly
+> buggers and read through the entire file, etc., etc. _before_ dropping
+> out of RCU mode.
+> 
+> do_last() is messy enough as it is; adding _this_ is completely out of
+> question.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200113/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200113/
+Thanks Al, that's useful! Sounds like the lookup is doable, but the open
+part is just a wasp nest of "don't even go there". For now, I'll drop
+the lookup change and just have the io_uring open punt to async. With
+that, I don't need any non-blocking guarantees. That is workable for
+now.
 
-Tree: next
-Branch: master
-Git Describe: next-20200113
-Git Commit: 8a28e614e1dba64463521149af18a2fede7d9e08
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 64 unique boards, 16 SoC families, 25 builds out of 215
+> Jens, if you have a workable plan on that non-blocking open of yours,
+> post it in full details.  Until then - NAK, and that's about as hard one
+> as I ever had to give.
 
-Boot Regressions Detected:
+It's like the other io_uring opcodes - we prefer to try a non-blocking
+attempt first, and if that fails, then we go async. I have no grand
+async open design, was just hoping I could make it work with minimal
+effort. That's obviously not doable. I would not mind working on
+actually making it doable, but that's a bigger project than I originally
+wanted to take on.
 
-arm:
+So the most likely outcome longer term is for io_uring to adopt a syslet
+type of approach to this, where we always just just call the open
+helper, and if we need to block/reschedule, then we move context to an
+appropriate worker thread. Time is better spent there rather than trying
+to make every useful system call provide a sane non-blocking path, I
+think.
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200110)
+-- 
+Jens Axboe
 
-    multi_v7_defconfig:
-        gcc-8:
-          omap4-panda:
-              lab-baylibre: failing since 7 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          omap4-panda:
-              lab-baylibre: failing since 7 days (last pass: next-20191220 =
-- first fail: next-20200106)
-          sun8i-a83t-bananapi-m3:
-              lab-clabbe: new failure (last pass: next-20200110)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap4-panda:
-              lab-baylibre: failing since 7 days (last pass: next-20191220 =
-- first fail: next-20200106)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 7 days (last pass: next-20191220 - f=
-irst fail: next-20200106)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200110)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200110)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: next-20200110)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: next-20200110)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-            sun50i-a64-pine64-plus: 1 failed lab
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            omap4-panda: 2 failed labs
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-            omap4-panda: 2 failed labs
-
----
-For more info write to <info@kernelci.org>

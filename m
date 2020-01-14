@@ -2,90 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0BF139EA6
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 01:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA1D139EC1
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 02:10:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728778AbgANA6C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 19:58:02 -0500
-Received: from ozlabs.org ([203.11.71.1]:39397 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728733AbgANA6C (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Jan 2020 19:58:02 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xXBJ17NPz9sPW;
-        Tue, 14 Jan 2020 11:58:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578963480;
-        bh=xzhfYEl3jUECW13fzefYrZJhju/7UmLdpLux5euJGFM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=USd0rVW7ARBCjdekxDeQdctiLB8pFaG7s4ICwxkSR6rFZFgSvp6nAiKOcoOC2AQcY
-         Oo0KO0iEbJWTWyBxt2wQwx9J9LDNlBk7aeYMtDTL1s4UWS5zcrN3J9j/e035Hfh0n1
-         JvDEX/Q+prkfG3PVfYFNxC3Bk1aP5mJmiZu+er++1voc2AjjrVQoOpl1hQQxDS3sI6
-         dbxCCV0SJZvtIAvf4HwNdnlGvCCIomWgb+q/U+4tKl9gwWc4Co4XdrycTO/B3sKkzc
-         UCWhSP+tGYAPbXTGX5lUZBd056M+DvMfruyphKr1IJ7zE8Im/V225eTxYeO6P9AOTn
-         jTmAQIG3gnDkw==
-Date:   Tue, 14 Jan 2020 11:57:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jack Yu <jack.yu@realtek.com>
-Subject: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20200114115759.123d5b80@canb.auug.org.au>
+        id S1729238AbgANBKQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 20:10:16 -0500
+Received: from mail-pg1-f194.google.com ([209.85.215.194]:37262 "EHLO
+        mail-pg1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729163AbgANBKP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jan 2020 20:10:15 -0500
+Received: by mail-pg1-f194.google.com with SMTP id q127so5570608pga.4
+        for <linux-next@vger.kernel.org>; Mon, 13 Jan 2020 17:10:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=MuIq//wCZduhaibSe5/7hJSdzVgRZqtQMOj1BjJPoMI=;
+        b=SQvzCTBn4LLS8Q9CzT8sA1qDOJ8VkKjMfUwbVDNSUA0tX3hZrm0WkpV/WhqdmjAHPD
+         brbBybX4G9nflXxIIEAeoUxh5cWc5hbsn7sPNyXTeTgGiibchfrwdufAZRtYC5VFFUZ6
+         cQbhcCGEZyeGCEKBK6hnZZxW5ngpun0A8PvTgqCgArxzzgDhEjkIWSzwnVSKnSYBW5Uo
+         pba2KL34YtVeP783g46fUUVCefzyytk+Xq0/rRz2AukRa04uGt/tOXd59NqRh6esJsnK
+         +q5+guqlvIgYo/J20T8aqnyQF8xGgSXuQEk5vDN1q+taj0OApxeRz8a6uBShVF2KtM8Z
+         ezqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=MuIq//wCZduhaibSe5/7hJSdzVgRZqtQMOj1BjJPoMI=;
+        b=sU/0zcU95rKZ9AnToRAYuuSfu7+jM5jfxr4wlZGiT+tdY4cTUgS/bEzv0q5SwOeoKl
+         1fVzRf2sqRuPOI4jmDZbZeSGJfoMHMZWadXR1JjtMMtT4xPukknoYZRIMbsvDPRKJ4uo
+         M3yI2ixx/VGLTi8pRoV9ZrjChiX64WCbgjLFUHfxrvgVomiDWRRcHqN7iZBVY5QUqu8S
+         Wrwfj9NIwgX09Cp+JkdK4fjBHfuq+DfwBSYMnHSQPC7TueKr0u6i3/121e8yAVBbSKLH
+         RJEsr7xLInvB6cf9V5XxwbQRHblo3f3p3SQ7wJVw04xkDDmC7YxG9mSM9ZdxJWrp6r6u
+         gEhw==
+X-Gm-Message-State: APjAAAUwBb2sQQdgmYEU6AeVvtp1bHd7eFEQ25nCjX4KxrBfqosz+j9N
+        X7NrDBgESPnlB4CcZoydS0GgRf71MFVI3UX/izkecA==
+X-Google-Smtp-Source: APXvYqxTzPsgCrp/FhpOnGVwtu5xXbBt+F5nJ89uUP7Tfv62ZdI+z61Ccr6Na7E1+73rp1o09IfvgjZk9cycnSFTC44=
+X-Received: by 2002:a63:597:: with SMTP id 145mr23090242pgf.384.1578964214716;
+ Mon, 13 Jan 2020 17:10:14 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r9A53FvEKgyzy5X4JAG711J";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200113181457.209ab4a5@canb.auug.org.au> <eddaa93c-3bde-a9ed-5ee7-766f3cd51a43@infradead.org>
+ <20200114104049.5244f612@canb.auug.org.au>
+In-Reply-To: <20200114104049.5244f612@canb.auug.org.au>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 13 Jan 2020 17:10:03 -0800
+Message-ID: <CAFd5g454Xgb-tnG-rBQ3fkCe2bsO7M8_dauOTpG3bxDjnxOX9A@mail.gmail.com>
+Subject: Re: linux-next: Tree for Jan 13 (drivers/base/test/property-entry-test.o)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Alan Maguire <alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/r9A53FvEKgyzy5X4JAG711J
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
++KUnit Development
++open list:KERNEL SELFTEST FRAMEWORK
 
-Hi all,
+On Mon, Jan 13, 2020 at 3:40 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Randy,
+>
+> On Mon, 13 Jan 2020 14:59:54 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
+> >
+> > on i386:
+> >
+> > WARNING: modpost: missing MODULE_LICENSE() in drivers/base/test/property-entry-test.o
+> > see include/linux/module.h for more information
+>
+> Sorry, I missed that yesterday.
+>
+> Caused by commit
+>
+>   c032ace71c29 ("software node: add basic tests for property entries")
+>
+> from the pm tree interacting with commit
+>
+>   9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
+>
+> from the kunit-next tree.
 
-After merging the sound-asoc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Yes, the problem seems to be that the property-entry-test is turned on
+when CONFIG_KUNIT is y or m.
 
-sound/soc/codecs/rt715-sdw.c: In function 'rt715_dev_resume':
-sound/soc/codecs/rt715-sdw.c:568:28: error: implicit declaration of functio=
-n 'to_sdw_slave_device' [-Werror=3Dimplicit-function-declaration]
-  568 |  struct sdw_slave *slave =3D to_sdw_slave_device(dev);
-      |                            ^~~~~~~~~~~~~~~~~~~
-sound/soc/codecs/rt715-sdw.c:568:28: warning: initialization of 'struct sdw=
-_slave *' from 'int' makes pointer from integer without a cast [-Wint-conve=
-rsion]
+From drivers/base/test/Makefile:
+...
+obj-$(CONFIG_KUNIT) += property-entry-test.o
 
-Caused by commit
-
-  d1ede0641b05 ("ASoC: rt715: add RT715 codec driver")
-
-I have used the sound-asoc tree from next-20200113 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/r9A53FvEKgyzy5X4JAG711J
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4dEhcACgkQAVBC80lX
-0GzVTQf/eGIocbfUE2GrOBBcfRa8TO3qvyX/pnVOXWPUZLiuqkiFj3MCXpqEkIG5
-3QJJ1xcDBGEDIf/zSwJCmfGdFnuUfRL1M98BMlX/ifBY/LuZ3SGXnmsaNpG1No95
-kBaTvs5bmZxeZ2+Kx7v+7acB0uiaBvBQwFZ9xe8oegCQi++IUfxZ5cgAe6Bta45C
-qmQDX5WwVnxKoBQYlsILySVnGkPQSqfVUjU/spx14ENbjpdgEJtCj3Dbr6NYFa8g
-mnXoxaluKHETF/uDBfBEsqXxrmXFCkuQl5wTRMeZrQgwY3vHKr6kI1fbWptPiOcm
-in9Yf42mPeQ/YCDIrz2pzFD51hJwcA==
-=Cq6z
------END PGP SIGNATURE-----
-
---Sig_/r9A53FvEKgyzy5X4JAG711J--
+It seems we can fix it just by adding the missing MODULE_LICENSE, but
+I think there is a bigger question of whether we should let people do
+this. Do we want to just let people have their tests run whenever
+CONFIG_KUNIT is enabled? I am inclined to think no. It should be
+possible for people to run their test and their test only.

@@ -2,75 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 64E7813B495
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 22:41:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F007113B552
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 23:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728731AbgANVl5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 16:41:57 -0500
-Received: from mail-qt1-f180.google.com ([209.85.160.180]:45175 "EHLO
-        mail-qt1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728656AbgANVl5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 16:41:57 -0500
-Received: by mail-qt1-f180.google.com with SMTP id w30so13849773qtd.12
-        for <linux-next@vger.kernel.org>; Tue, 14 Jan 2020 13:41:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=rjPJ3lo5JGTg8CpqtNYllzVD94USGlVvFifDLA2rj1Y=;
-        b=rTnI6apOGb+RrfZjQi5iT/wWCr7DSsbfy/yLZjfDIbKgIew/rtpAFtS/CZ48Ug0PVa
-         oBHbUVx645E912fE/h2yuAn4pb5NqFZ+030PIpCGEwc2KvAmAJRxHViM74GOjJ8rKvoE
-         FoxVXwbvEETy1ps2i1A+C3IpnLkUbL0D9InTYO0cak2pzSdRWbV6fRyj3feEIg5FG1MK
-         u9p/+Gq0PLhElImcANrzbAU4rimSJoblnG3shQh0hcyN43cATfftS4Ns2+fO9n2lc8r3
-         STfJUK5CZB6R2I4rxfTwvLXdw1QPTX9FTK3EaAP2aHB6qwAsrioXHU6cnA34kiUpgCvI
-         +S/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=rjPJ3lo5JGTg8CpqtNYllzVD94USGlVvFifDLA2rj1Y=;
-        b=FGD47iQwogObF60Ve1cAYx5YUzDcKoiSKkmwymVuJ6N9IP2lsjdtowEbvydSHauC2S
-         PlV9BJjjgsh4Z2OzBMaNazKOCm5HQtYDYRDVaqLMjcNCS/162Nay9JCnisznhqqvi6Bn
-         ENeG4DG904mVJNZSaSHMLrXit6aMnsp5cI/QjQsqKHgVK/z7uiSCrPkfKIMR3T3Nd14O
-         eoeUTm+X4pT/hCA3CgZkOWwLkPJYzgAsNf57lR7np3CU2tCCy6kLuHPKXcLPp7hO3fHF
-         qghdIq9R/9TdL2KiC4hLIZSM6qAhZMEzkF3gSbKJnbNfHIrhcyz2TqNjvnsj+PYIF9Yq
-         owtg==
-X-Gm-Message-State: APjAAAUd7SSFzzKRBdne639drXgrAN94t2gsuRxqRyefIXMPtna8xJPH
-        8LHRL36Q7dSM+deUE+hKe4qtMg==
-X-Google-Smtp-Source: APXvYqxPvFjMv9Qqx3+x3V/ymx12/LeM1yrzTQbP5zPRPG25CfkMW1ZHD/7QThRy0WJp22sAsUFAQQ==
-X-Received: by 2002:ac8:4446:: with SMTP id m6mr646917qtn.159.1579038116250;
-        Tue, 14 Jan 2020 13:41:56 -0800 (PST)
-Received: from ?IPv6:2600:1000:b029:6649:f4b1:4b94:dfb9:77cf? ([2600:1000:b029:6649:f4b1:4b94:dfb9:77cf])
-        by smtp.gmail.com with ESMTPSA id c84sm7416080qkg.78.2020.01.14.13.41.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2020 13:41:55 -0800 (PST)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: linux-next: Signed-off-by missing for commit in the random tree
-Date:   Tue, 14 Jan 2020 16:41:54 -0500
-Message-Id: <56AE8C0F-6133-42A5-932A-46A81F25CE0C@lca.pw>
-References: <20200114213332.GF140865@mit.edu>
-Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <20200114213332.GF140865@mit.edu>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-X-Mailer: iPhone Mail (17C54)
+        id S1727073AbgANWaN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 17:30:13 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38797 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727072AbgANWaN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jan 2020 17:30:13 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47y4sH0VLmz9sPW;
+        Wed, 15 Jan 2020 09:30:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579041011;
+        bh=NEyZJYZ0Wq7zlfwJk42V8nW+vPRzTpG+cWsKZeFQRgA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=faeHL1MeMav1a0X+8Y1c6OAfPBA398tCKV5VoATsdSz/6aCifZ3fBP006RgLmvPd4
+         M8PRf7UDDzxFApb7/1HNQ5HRyev1pQAgutXOEMRzrgvtyRFtnpDahdmchIfOUTr3Fm
+         N8drLu9W5J6431wDQhWDxikiv2MD+nnRRrsd5O6mkENl/s7IgxFMMigEWct+aI9+c6
+         2TMAnPMJDpc9mET4iwIBiJPlrToLWQWGg168nnYLObbEE1PDBr2UgsmOvZ4c8qZOnA
+         CWLprIYI0FIM3vxUOhSzC/kDgWfGR6+p1BEuvTSzbOOIZRjmHhlodmLUuloOnMfLj4
+         tHcvxX1AUpZlA==
+Date:   Wed, 15 Jan 2020 09:30:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nikolay Borisov <nborisov@suse.com>
+Subject: linux-next: build warnings after merge of the btrfs tree
+Message-ID: <20200115093004.1a4a6794@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/hS6V9eJG40BaX1ithXhU/rw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/hS6V9eJG40BaX1ithXhU/rw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-> On Jan 14, 2020, at 4:33 PM, Theodore Y. Ts'o <tytso@mit.edu> wrote:
-> 
-> Thanks for the clarification; given that you composed the commit log,
-> would you like me to add a "Signed-off-by: Qian Cai <cai@lca.pw>" for
-> you as well?  Given that you added the commit description, it would be
-> fair to give you credit as well.
+After merging the btrfs tree, today's linux-next build (powerpc
+ppc64_defconfig) produced these warnings:
 
-Yes, the patch has already had my SoB.
+fs/btrfs/block-group.c: In function 'exclude_super_stripes':
+fs/btrfs/block-group.c:1706:5: warning: 'logical' may be used uninitialized=
+ in this function [-Wmaybe-uninitialized]
+ 1706 |     kfree(logical);
+      |     ^~~~~~~~~~~~~~
+fs/btrfs/block-group.c:1691:20: warning: 'stripe_len' may be used uninitial=
+ized in this function [-Wmaybe-uninitialized]
+ 1691 |    if (logical[nr] + stripe_len <=3D cache->start)
+      |        ~~~~~~~~~~~~^~~~~~~~~~~~
+
+Introduced by commit
+
+  767f58cdaf20 ("btrfs: Refactor btrfs_rmap_block to improve readability")
+
+btrfs_rmap_block() returns zero even if its output arguments are not
+assigned to ... maybe the final "return 0" should be "return ret"?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hS6V9eJG40BaX1ithXhU/rw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4eQO0ACgkQAVBC80lX
+0GxQbwf9Hg+Wi6//EPHnaAr2giyKJhiYRS2Ms9Xm9pz7Ik78TQErqjqmv0zFZ3mZ
++FwowhYgb+xxdaZgo+15oUMlxqkN2Xigdsj9hcVsq7nq2W2E1GlFSuBTdIxI03rh
+AKvT4NhSGJFo10S8tWSDLhnqgdmhn2EoIAGMq1AFSgaLuun88Z9PcSbl/9qf8GfK
+FbewHJgSAoNc4/DIwsR+HuP2tBTLXCdgJ9/9LeXFdPJvWTvApC3HYqlK6gim0VGn
+0szrB5MguWCrKEEVi/hjyOa4ikMcIiDxMAJW/SaZNZBWDM+VTLFdbKaqErl6SYcW
+0pV3pSvMSlmGWWO5ORGulLYnAV/AuA==
+=NpJ1
+-----END PGP SIGNATURE-----
+
+--Sig_/hS6V9eJG40BaX1ithXhU/rw--

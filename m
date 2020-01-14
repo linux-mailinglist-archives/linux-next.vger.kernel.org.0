@@ -2,101 +2,280 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C89139D83
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 00:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A7F139DBC
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 01:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgAMXkx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 18:40:53 -0500
-Received: from ozlabs.org ([203.11.71.1]:48263 "EHLO ozlabs.org"
+        id S1728802AbgANACk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 19:02:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:44250 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728820AbgAMXkw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Jan 2020 18:40:52 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1728800AbgANACk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jan 2020 19:02:40 -0500
+Received: from akpm3.svl.corp.google.com (unknown [104.133.8.65])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xVTF6nGWz9sNx;
-        Tue, 14 Jan 2020 10:40:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578958850;
-        bh=A848NZEiEcaXz060s2a1b3NhnA3pCu9FGX7S09l4sQ8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qJvILkfYlBGvHI4BPNiRy0MTc+GdRHUnn5aPKW7QRixCbHT36vJxHwli81Wzp3tTg
-         JMX42zi5+Si5Ra0qc/Fdqf0xzBEec2ACYVbtGXyChUrwrN1ISC4WFl0X+BcQ52V7x8
-         t7pNd9b4my7XOYfVZGVIK1snPSEjvDw4amfTop7WMvfPs4DRRYC3+dxVop5+bz3AtW
-         eqxXnF23uVxU4CWOoqdOPb8eSOjaYkBrCAdhULu5FrnWVLVvhvY5uGV0phCYr5qnKO
-         Jzj4sJ80+HXzw0WiiCbbgJx0sRdRWMKCrBQiK92K3LmRzCNSCtfDY95dwa7BtxXzTW
-         7e3dfhOdwcnzA==
-Date:   Tue, 14 Jan 2020 10:40:49 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: linux-next: Tree for Jan 13
- (drivers/base/test/property-entry-test.o)
-Message-ID: <20200114104049.5244f612@canb.auug.org.au>
-In-Reply-To: <eddaa93c-3bde-a9ed-5ee7-766f3cd51a43@infradead.org>
-References: <20200113181457.209ab4a5@canb.auug.org.au>
-        <eddaa93c-3bde-a9ed-5ee7-766f3cd51a43@infradead.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o_gDCpRQjvTiTFnAR6E4otA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by mail.kernel.org (Postfix) with ESMTPSA id E0A8B2084D;
+        Tue, 14 Jan 2020 00:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1578960159;
+        bh=3rMP88KeQ95Q1jALKKLcvL/uxmNmdiRFVwsItINpQOY=;
+        h=Date:From:To:Subject:From;
+        b=HTCYuNmSlWl8GiuRzzB3EfHwdW9BcN3tOFIiX9O/0+mNkiTMCBE12DnmHn4yBB6Ba
+         b7vg2q6c8v5Q6x7MdY6CO7q8/tF74v3c2XUHKOjdPkCE78o00XVaqADdS90+XKDWId
+         9+E/RF7KWoqpCtOwRYM2tAjO6wNdrX9MdpW9/Jc0=
+Date:   Mon, 13 Jan 2020 16:02:38 -0800
+From:   akpm@linux-foundation.org
+To:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org
+Subject:  mmotm 2020-01-13-16-02 uploaded
+Message-ID: <20200114000238.AdMWG%akpm@linux-foundation.org>
+User-Agent: s-nail v14.9.15
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/o_gDCpRQjvTiTFnAR6E4otA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The mm-of-the-moment snapshot 2020-01-13-16-02 has been uploaded to
 
-Hi Randy,
+   http://www.ozlabs.org/~akpm/mmotm/
 
-On Mon, 13 Jan 2020 14:59:54 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> on i386:
->=20
-> WARNING: modpost: missing MODULE_LICENSE() in drivers/base/test/property-=
-entry-test.o
-> see include/linux/module.h for more information
+mmotm-readme.txt says
 
-Sorry, I missed that yesterday.
+README for mm-of-the-moment:
 
-Caused by commit
+http://www.ozlabs.org/~akpm/mmotm/
 
-  c032ace71c29 ("software node: add basic tests for property entries")
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-from the pm tree interacting with commit
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+http://ozlabs.org/~akpm/mmotm/series
 
-  9fe124bf1b77 ("kunit: allow kunit to be loaded as a module")
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-from the kunit-next tree.
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/o_gDCpRQjvTiTFnAR6E4otA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
------BEGIN PGP SIGNATURE-----
+	https://github.com/hnaz/linux-mm
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4dAAEACgkQAVBC80lX
-0GyOCQf/XF1HpPDPAJkgZkwD5+/qpEus4WuG8BcwMiVelJBZVjXUSyau3hKu3PIN
-+mgQM6hVoAfV0BllZpIFyNFMRwpJe8hEVfiFR1BkNO9NutXPhBwZk5+poK9zScMD
-CypNpPfA9LuKuhlAviZUtReISVYsAYF9Jl7T+sj6XTmUNdZC6PRlfMyk8TAGXRw6
-oJeMfnXYv4xnXsRymo3TMCpT2yDQ6XzH2T2TGXNe/rQKcUkJRbGQGGoCcf7oH/Mx
-BhSgNlNiRoqKRsHJU054Is2RtQhHMpNNtxs38H+mezQJdkN7n7k/5tjgvmay0wra
-wkIE8gG9LRQVnrQk4xD2bilcJGPypw==
-=nphE
------END PGP SIGNATURE-----
+The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
---Sig_/o_gDCpRQjvTiTFnAR6E4otA--
+A git copy of this tree is also available at
+
+	https://github.com/hnaz/linux-mm
+
+
+
+This mmotm tree contains the following patches against 5.5-rc6:
+(patches marked "*" will be included in linux-next)
+
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* mm-thp-tweak-reclaim-compaction-effort-of-local-only-and-all-node-allocations.patch
+* x86-mm-split-vmalloc_sync_all.patch
+* revert-ipcsem-remove-uneeded-sem_undo_list-lock-usage-in-exit_sem.patch
+* mm-fix-uninitialized-memmaps-on-a-partially-populated-last-section.patch
+* fs-proc-pagec-allow-inspection-of-last-section-and-fix-end-detection.patch
+* mm-initialize-memmap-of-unavailable-memory-directly.patch
+* mm-memory_hotplug-dont-free-usage-map-when-removing-a-re-added-early-section.patch
+* thp-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment.patch
+* thp-shmem-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment.patch
+* thp-shmem-fix-conflict-of-above-47bit-hint-address-and-pmd-alignment-fix.patch
+* mm-memcg-slab-fix-percpu-slab-vmstats-flushing.patch
+* mm-debug_pagealloc-dont-rely-on-static-keys-too-early.patch
+* mm-debug_pagealloc-dont-rely-on-static-keys-too-early-fix.patch
+* mm-page-writebackc-avoid-potential-division-by-zero-in-wb_min_max_ratio.patch
+* mm-page-writebackc-use-div64_ul-for-u64-by-unsigned-long-divide.patch
+* mm-page-writebackc-improve-arithmetic-divisions.patch
+* mm-memcg-slab-call-flush_memcg_workqueue-only-if-memcg-workqueue-is-valid.patch
+* mm-khugepaged-add-trace-status-description-for-scan_page_has_private.patch
+* mm-thp-grab-the-lock-before-manipulation-defer-list.patch
+* lib-test_bitmap-correct-test-data-offsets-for-32-bit.patch
+* watchdog-fix-uaf-in-reboot-notifier-handling-in-watchdog-core-code.patch
+* memcg-fix-a-crash-in-wb_workfn-when-a-device-disappears.patch
+* scripts-spellingtxt-add-more-spellings-to-spellingtxt.patch
+* scripts-spellingtxt-add-issus-typo.patch
+* fs-ocfs-remove-unnecessary-assertion-in-dlm_migrate_lockres.patch
+* ocfs2-remove-unneeded-semicolon.patch
+* ocfs2-make-local-header-paths-relative-to-c-files.patch
+* ocfs2-dlm-remove-redundant-assignment-to-ret.patch
+* ocfs2-dlm-move-bits_to_bytes-to-bitopsh-for-wider-use.patch
+* ocfs2-fix-a-null-pointer-dereference-when-call-ocfs2_update_inode_fsync_trans.patch
+* ocfs2-use-ocfs2_update_inode_fsync_trans-to-access-t_tid-in-handle-h_transaction.patch
+* ramfs-support-o_tmpfile.patch
+* watchdog-fix-possible-soft-lockup-warning-at-bootup.patch
+* watchdog-fix-possible-soft-lockup-warning-at-bootup-v2.patch
+  mm.patch
+* mm-avoid-slub-allocation-while-holding-list_lock.patch
+* kmemleak-turn-kmemleak_lock-and-object-lock-to-raw_spinlock_t.patch
+* mm-clean-up-filemap_write_and_wait.patch
+* mm-fix-gup_pud_range.patch
+* mm-gupc-use-is_vm_hugetlb_page-to-check-whether-to-follow-huge.patch
+* mm-cleanup-some-useless-code.patch
+* mm-vmscan-expose-cgroup_ino-for-memcg-reclaim-tracepoints.patch
+* mm-pgmap-use-correct-alignment-when-looking-at-first-pfn-from-a-region.patch
+* mm-mmap-fix-the-adjusted-length-error.patch
+* mm-page_vma_mappedc-explicitly-compare-pfn-for-normal-hugetlbfs-and-thp-page.patch
+* drivers-base-memoryc-cache-blocks-in-radix-tree-to-accelerate-lookup.patch
+* drivers-base-memoryc-cache-blocks-in-radix-tree-to-accelerate-lookup-fix-2.patch
+* mm-memmap_init-update-variable-name-in-memmap_init_zone.patch
+* mm-memory_hotplug-poison-memmap-in-remove_pfn_range_from_zone.patch
+* mm-memory_hotplug-we-always-have-a-zone-in-find_smallestbiggest_section_pfn.patch
+* mm-memory_hotplug-dont-check-for-all-holes-in-shrink_zone_span.patch
+* mm-memory_hotplug-drop-local-variables-in-shrink_zone_span.patch
+* mm-memory_hotplug-cleanup-__remove_pages.patch
+* mm-memory_hotplug-drop-valid_start-valid_end-from-test_pages_in_a_zone.patch
+* mm-memory_hotplug-pass-in-nid-to-online_pages.patch
+* drivers-base-memoryc-get-rid-of-find_memory_block.patch
+* mm-tracing-print-symbol-name-for-kmem_alloc_node-call_site-events.patch
+* mm-early_remap-use-%pa-to-print-resource_size_t-variables.patch
+* mm-page_alloc-skip-non-present-sections-on-zone-initialization.patch
+* mm-page_alloc-fix-and-rework-pfn-handling-in-memmap_init_zone.patch
+* mm-factor-out-next_present_section_nr.patch
+* mm-remove-the-memory-isolate-notifier.patch
+* mm-remove-count-parameter-from-has_unmovable_pages.patch
+* mm-vmscanc-remove-unused-return-value-of-shrink_node.patch
+* mm-memblock-define-memblock_physmem_add.patch
+* memblock-use-__func__-in-remaining-memblock_dbg-call-sites.patch
+* mm-oom-avoid-printk-iteration-under-rcu.patch
+* mm-oom-avoid-printk-iteration-under-rcu-fix.patch
+* mm-hugetlb-controller-for-cgroups-v2.patch
+* mm-huge_memoryc-use-head-to-check-huge-zero-page.patch
+* mm-huge_memoryc-use-head-to-emphasize-the-purpose-of-page.patch
+* mm-huge_memoryc-reduce-critical-section-protected-by-split_queue_lock.patch
+* mm-migrate-remove-useless-mask-of-start-address.patch
+* mm-migrate-clean-up-some-minor-coding-style.patch
+* mm-migrate-add-stable-check-in-migrate_vma_insert_page.patch
+* mm-get-rid-of-odd-jump-labels-in-find_mergeable_anon_vma.patch
+* zswap-add-allocation-hysteresis-if-pool-limit-is-hit.patch
+* mm-clean-up-obsolete-check-on-space-in-page-flags.patch
+* mm-remove-dead-code-totalram_pages_set.patch
+* mm-drop-elements-hw-and-phys_callback-from-struct-memory_block.patch
+* mm-fix-comments-related-to-node-reclaim.patch
+* lib-rbtree-avoid-pointless-rb_node-alignment.patch
+* zram-try-to-avoid-worst-case-scenario-on-same-element-pages.patch
+* zram-try-to-avoid-worst-case-scenario-on-same-element-pages-update.patch
+* zram-fix-error-return-codes-not-being-returned-in-writeback_store.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* y2038-remove-ktime-to-from-timespec-timeval-conversion.patch
+* y2038-remove-unused-time32-interfaces.patch
+* y2038-hide-timeval-timespec-itimerval-itimerspec-types.patch
+* add-helpers-for-kelvin-to-from-celsius-conversion.patch
+* acpi-thermal-switch-to-use-linux-unitsh-helpers.patch
+* platform-x86-asus-wmi-switch-to-use-linux-unitsh-helpers.patch
+* platform-x86-intel_menlow-switch-to-use-linux-unitsh-helpers.patch
+* thermal-int340x-switch-to-use-linux-unitsh-helpers.patch
+* thermal-intel_pch-switch-to-use-linux-unitsh-helpers.patch
+* nvme-hwmon-switch-to-use-linux-unitsh-helpers.patch
+* thermal-remove-kelvin-to-from-celsius-conversion-helpers-from-linux-thermalh.patch
+* iwlegacy-use-linux-unitsh-helpers.patch
+* iwlwifi-use-linux-unitsh-helpers.patch
+* thermal-armada-remove-unused-to_mcelsius-macro.patch
+* iio-adc-qcom-vadc-common-use-linux-unitsh-helpers.patch
+* lib-zlib-add-s390-hardware-support-for-kernel-zlib_deflate.patch
+* s390-boot-rename-heap_size-due-to-name-collision.patch
+* lib-zlib-add-s390-hardware-support-for-kernel-zlib_inflate.patch
+* s390-boot-add-dfltcc=-kernel-command-line-parameter.patch
+* lib-zlib-add-zlib_deflate_dfltcc_enabled-function.patch
+* btrfs-use-larger-zlib-buffer-for-s390-hardware-compression.patch
+* lib-scatterlist-adjust-indentation-in-__sg_alloc_table.patch
+* uapi-rename-ext2_swab-to-swab-and-share-globally-in-swabh.patch
+* lib-find_bitc-join-_find_next_bit_le.patch
+* lib-find_bitc-uninline-helper-_find_next_bit.patch
+* string-add-stracpy-and-stracpy_pad-mechanisms.patch
+* documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
+* elf-smaller-code-generation-around-auxv-vector-fill.patch
+* elf-fix-start_code-calculation.patch
+* elf-dont-copy-elf-header-around.patch
+* elf-better-codegen-around-current-mm.patch
+* elf-make-bad_addr-unlikely.patch
+* elf-coredump-allocate-core-elf-header-on-stack.patch
+* elf-coredump-delete-duplicated-overflow-check.patch
+* elf-coredump-allow-process-with-empty-address-space-to-coredump.patch
+* init-mainc-log-arguments-and-environment-passed-to-init.patch
+* init-mainc-remove-unnecessary-repair_env_string-in-do_initcall_level.patch
+* init-mainc-fix-quoted-value-handling-in-unknown_bootoption.patch
+* init-fix-misleading-this-architecture-does-not-have-kernel-memory-protection-message.patch
+* reiserfs-prevent-null-pointer-dereference-in-reiserfs_insert_item.patch
+* execve-warn-if-process-starts-with-executable-stack.patch
+* io-mapping-use-phys_pfn-macro-in-io_mapping_map_atomic_wc.patch
+* aio-simplify-read_events.patch
+* smp_mb__beforeafter_atomic-update-documentation.patch
+* ipc-mqueuec-remove-duplicated-code.patch
+* ipc-mqueuec-update-document-memory-barriers.patch
+* ipc-msgc-update-and-document-memory-barriers.patch
+* ipc-semc-document-and-update-memory-barriers.patch
+* ipc-consolidate-all-xxxctl_down-functions.patch
+* ipc-consolidate-all-xxxctl_down-functions-fix.patch
+  linux-next.patch
+  linux-next-rejects.patch
+  linux-next-fix.patch
+* drivers-block-null_blk_mainc-fix-layout.patch
+* drivers-block-null_blk_mainc-fix-uninitialized-var-warnings.patch
+* pinctrl-fix-pxa2xxc-build-warnings.patch
+* mm-remove-__krealloc.patch
+* mm-add-generic-pd_leaf-macros.patch
+* arc-mm-add-pd_leaf-definitions.patch
+* arm-mm-add-pd_leaf-definitions.patch
+* arm64-mm-add-pd_leaf-definitions.patch
+* mips-mm-add-pd_leaf-definitions.patch
+* powerpc-mm-add-pd_leaf-definitions.patch
+* riscv-mm-add-pd_leaf-definitions.patch
+* s390-mm-add-pd_leaf-definitions.patch
+* sparc-mm-add-pd_leaf-definitions.patch
+* x86-mm-add-pd_leaf-definitions.patch
+* mm-pagewalk-add-p4d_entry-and-pgd_entry.patch
+* mm-pagewalk-add-p4d_entry-and-pgd_entry-fix.patch
+* mm-pagewalk-allow-walking-without-vma.patch
+* mm-pagewalk-dont-lock-ptes-for-walk_page_range_novma.patch
+* mm-pagewalk-fix-termination-condition-in-walk_pte_range.patch
+* mm-pagewalk-add-depth-parameter-to-pte_hole.patch
+* x86-mm-point-to-struct-seq_file-from-struct-pg_state.patch
+* x86-mmefi-convert-ptdump_walk_pgd_level-to-take-a-mm_struct.patch
+* x86-mm-convert-ptdump_walk_pgd_level_debugfs-to-take-an-mm_struct.patch
+* mm-add-generic-ptdump.patch
+* x86-mm-convert-dump_pagetables-to-use-walk_page_range.patch
+* arm64-mm-convert-mm-dumpc-to-use-walk_page_range.patch
+* arm64-mm-display-non-present-entries-in-ptdump.patch
+* mm-ptdump-reduce-level-numbers-by-1-in-note_page.patch
+* x86-mm-avoid-allocating-struct-mm_struct-on-the-stack.patch
+* x86-mm-avoid-allocating-struct-mm_struct-on-the-stack-fix.patch
+* proc-decouple-proc-from-vfs-with-struct-proc_ops.patch
+* proc-convert-everything-to-struct-proc_ops.patch
+* proc-convert-everything-to-struct-proc_ops-fix.patch
+* lib-string-add-strnchrnul.patch
+* bitops-more-bits_to_-macros.patch
+* lib-add-test-for-bitmap_parse.patch
+* lib-add-test-for-bitmap_parse-fix.patch
+* lib-add-test-for-bitmap_parse-fix-2.patch
+* lib-make-bitmap_parse_user-a-wrapper-on-bitmap_parse.patch
+* lib-rework-bitmap_parse.patch
+* lib-new-testcases-for-bitmap_parse_user.patch
+* cpumask-dont-calculate-length-of-the-input-string.patch
+* treewide-remove-redundent-is_err-before-error-code-check.patch
+* arm-dma-api-fix-max_pfn-off-by-one-error-in-__dma_supported.patch
+* drivers-tty-serial-sh-scic-suppress-warning.patch
+* fix-read-buffer-overflow-in-delta-ipc.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

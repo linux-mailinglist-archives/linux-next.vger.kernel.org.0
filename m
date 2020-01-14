@@ -2,87 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61442139EDB
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 02:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAC7139F35
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 02:55:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729335AbgANBWZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jan 2020 20:22:25 -0500
-Received: from mail-pf1-f193.google.com ([209.85.210.193]:38309 "EHLO
-        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729334AbgANBWZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jan 2020 20:22:25 -0500
-Received: by mail-pf1-f193.google.com with SMTP id x185so5750845pfc.5;
-        Mon, 13 Jan 2020 17:22:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=oISwi8GU+7YIyrOrSfp4ImJj1Y/DvBujca93dXgVtlA=;
-        b=pmmufy/ruG8Yk3G13Kk0n9FsWP+7iMJUHICK7QN050PdDEd4giLRkBn68WZcc2EV+0
-         9U7cu7H2gOwIcWuz/79yklnSATdq/nwpUeOhBZuKqNWFH3Y7bN/S/DaPqwj/IX4go2vU
-         ULzTZmdp8fgsjcKdy0sRQHww2xsUpeu7kLfrbupH29QNXVlHScgUXEN9nvX2qp+7BfY6
-         fqwZVvdTyHBmLXcMxgHL7RKlq4o8F/wRJi9RNnUAkcExc0SI5RQouFkeidFaBeWNxo41
-         hdBO+d8W5OKRdl8bJ8XKN+6XZtuxc5XmU/PcGfgyLHHQa7nmjB9kaz8aBpU1/MVjykN5
-         r0rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=oISwi8GU+7YIyrOrSfp4ImJj1Y/DvBujca93dXgVtlA=;
-        b=e9o3EiEMlyD+dq5LVUxaFznKK3HdaPwyybyyBkdeNk43qxA+fzgV3OwvMFgjdT+F0k
-         OVAQdACdyj4/Ixlp3cIItkGrImbRMQk3FnHfeXFqF2tCS5hEhHmxS45YXoN/6udzkIwe
-         Ujz7ThuXf3uRzemef7MIM0kCngUBa1Q9Xc5QOUDuRjRffx8WSUD5O1Cw4jgeSceRUHJH
-         xyoLNGSjvSZ4E/bF8+muUcrYgwuAzx4H5DSLpAigB9BtYRtBL5iZecGmlI//nhcPyOsf
-         viyB7gAyY4Mm0fSfuwdmq02aKB3aIPKNiRkKIPHQvLhKJ8xijTjJSOluA/La/NOVPJ6q
-         Qn4g==
-X-Gm-Message-State: APjAAAXJBQCGbFqyMDbIfByVV5q+HjXXt1nIo0U24yT+R4xPq2Vl/xr6
-        asFSWmQE1O60TJqJa4hCG7o=
-X-Google-Smtp-Source: APXvYqxWg2ne000PwbmOdByZWSA7GR4T3UfyDJ0wmkkVI3T+MK4h1azrhhO9WUaiajXlX7hD2ww7Tg==
-X-Received: by 2002:a63:7705:: with SMTP id s5mr23498344pgc.379.1578964944815;
-        Mon, 13 Jan 2020 17:22:24 -0800 (PST)
-Received: from localhost ([2401:fa00:8f:203:250d:e71d:5a0a:9afe])
-        by smtp.gmail.com with ESMTPSA id fa21sm14526963pjb.17.2020.01.13.17.22.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2020 17:22:23 -0800 (PST)
-Date:   Tue, 14 Jan 2020 10:22:21 +0900
-From:   Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-To:     "Theodore Y. Ts'o" <tytso@mit.edu>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>,
-        Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the random tree
-Message-ID: <20200114012221.GC202391@google.com>
-References: <20200108113953.1a92a90f@canb.auug.org.au>
- <20200114001832.GP76141@mit.edu>
+        id S1729281AbgANBzO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jan 2020 20:55:14 -0500
+Received: from mail.kernel.org ([198.145.29.99]:47478 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728838AbgANBzM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jan 2020 20:55:12 -0500
+Received: from [10.44.0.22] (unknown [103.48.210.53])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id B5259207FF;
+        Tue, 14 Jan 2020 01:55:09 +0000 (UTC)
+Subject: Re: [PATCH] m68k: Implement copy_thread_tls()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Amanieu d'Antras <amanieu@gmail.com>,
+        Christian Brauner <christian@brauner.io>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-m68k@lists.linux-m68k.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+References: <20200113103040.23661-1-geert@linux-m68k.org>
+From:   Greg Ungerer <gerg@linux-m68k.org>
+Message-ID: <f744a139-f2ae-a07f-e7e7-a1aaca946f8c@linux-m68k.org>
+Date:   Tue, 14 Jan 2020 11:55:06 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200114001832.GP76141@mit.edu>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200113103040.23661-1-geert@linux-m68k.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On (20/01/13 19:18), Theodore Y. Ts'o wrote:
-> On Wed, Jan 08, 2020 at 11:39:53AM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Commit
-> > 
-> >   1b710b1b10ef ("char/random: silence a lockdep splat with printk()")
-> > 
-> > is missing a Signed-off-by from its author.
+Hi Geert,
+
+On 13/1/20 8:30 pm, Geert Uytterhoeven wrote:
+> This is required for clone3(), which passes the TLS value through a
+> struct rather than a register.
 > 
-> Sergey, can you confirm that you intended to add a Signed-off-by: for
-> this patch?
+> As do_fork() is only available if CONFIG_HAVE_COPY_THREAD_TLS is set,
+> m68k_clone() must be changed to call _do_fork() directly.
+> 
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 
-Oh, I didn't realize I was the author. Sorry!
+Looks good for ColdFire too. I compiled for both MMU and non-MMU
+targets and no regressions (I did not test clone3() itself though).
 
-Sure, confirmed
+Acked-by: Greg Ungerer <gerg@linux-m68k.org>
 
-Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Regards
+Greg
 
-	-ss
+
+> ---
+> This is a dependency for the combination of commits
+> e8bb2a2a1d51511e ("m68k: Wire up clone3() syscall") in m68k/for-next,
+> dd499f7a7e342702 ("clone3: ensure copy_thread_tls is implemented") in
+> v5.5-rc6.
+> ---
+>   arch/m68k/Kconfig          |  1 +
+>   arch/m68k/kernel/process.c | 31 ++++++++++++++++++++++---------
+>   2 files changed, 23 insertions(+), 9 deletions(-)
+> 
+> diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+> index 6663f1741798e83f..6ad6cdac74b3dc42 100644
+> --- a/arch/m68k/Kconfig
+> +++ b/arch/m68k/Kconfig
+> @@ -14,6 +14,7 @@ config M68K
+>   	select HAVE_AOUT if MMU
+>   	select HAVE_ASM_MODVERSIONS
+>   	select HAVE_DEBUG_BUGVERBOSE
+> +	select HAVE_COPY_THREAD_TLS
+>   	select GENERIC_IRQ_SHOW
+>   	select GENERIC_ATOMIC64
+>   	select HAVE_UID16
+> diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+> index 22e6b8f4f9582aa4..8f0d9140700f09ad 100644
+> --- a/arch/m68k/kernel/process.c
+> +++ b/arch/m68k/kernel/process.c
+> @@ -108,16 +108,28 @@ void flush_thread(void)
+>    * on top of pt_regs, which means that sys_clone() arguments would be
+>    * buried.  We could, of course, copy them, but it's too costly for no
+>    * good reason - generic clone() would have to copy them *again* for
+> - * do_fork() anyway.  So in this case it's actually better to pass pt_regs *
+> - * and extract arguments for do_fork() from there.  Eventually we might
+> - * go for calling do_fork() directly from the wrapper, but only after we
+> - * are finished with do_fork() prototype conversion.
+> + * _do_fork() anyway.  So in this case it's actually better to pass pt_regs *
+> + * and extract arguments for _do_fork() from there.  Eventually we might
+> + * go for calling _do_fork() directly from the wrapper, but only after we
+> + * are finished with _do_fork() prototype conversion.
+>    */
+>   asmlinkage int m68k_clone(struct pt_regs *regs)
+>   {
+>   	/* regs will be equal to current_pt_regs() */
+> -	return do_fork(regs->d1, regs->d2, 0,
+> -		       (int __user *)regs->d3, (int __user *)regs->d4);
+> +	struct kernel_clone_args args = {
+> +		.flags		= regs->d1 & ~CSIGNAL,
+> +		.pidfd		= (int __user *)regs->d3,
+> +		.child_tid	= (int __user *)regs->d4,
+> +		.parent_tid	= (int __user *)regs->d3,
+> +		.exit_signal	= regs->d1 & CSIGNAL,
+> +		.stack		= regs->d2,
+> +		.tls		= regs->d5,
+> +	};
+> +
+> +	if (!legacy_clone_args_valid(&args))
+> +		return -EINVAL;
+> +
+> +	return _do_fork(&args);
+>   }
+>   
+>   /*
+> @@ -130,8 +142,9 @@ asmlinkage int m68k_clone3(struct pt_regs *regs)
+>   	return sys_clone3((struct clone_args __user *)regs->d1, regs->d2);
+>   }
+>   
+> -int copy_thread(unsigned long clone_flags, unsigned long usp,
+> -		 unsigned long arg, struct task_struct *p)
+> +int copy_thread_tls(unsigned long clone_flags, unsigned long usp,
+> +		    unsigned long arg, struct task_struct *p,
+> +		    unsigned long tls)
+>   {
+>   	struct fork_frame {
+>   		struct switch_stack sw;
+> @@ -166,7 +179,7 @@ int copy_thread(unsigned long clone_flags, unsigned long usp,
+>   	p->thread.usp = usp ?: rdusp();
+>   
+>   	if (clone_flags & CLONE_SETTLS)
+> -		task_thread_info(p)->tp_value = frame->regs.d5;
+> +		task_thread_info(p)->tp_value = tls;
+>   
+>   #ifdef CONFIG_FPU
+>   	if (!FPU_IS_EMU) {
+> 

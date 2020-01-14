@@ -2,60 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9FF13B1F0
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 19:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0587313B46A
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 22:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726523AbgANSVE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 13:21:04 -0500
-Received: from mail-il1-f195.google.com ([209.85.166.195]:44258 "EHLO
-        mail-il1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726491AbgANSVE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 13:21:04 -0500
-Received: by mail-il1-f195.google.com with SMTP id z12so12340203iln.11
-        for <linux-next@vger.kernel.org>; Tue, 14 Jan 2020 10:21:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:from:date:message-id:subject:to;
-        bh=Aqqoijo0TG/5B67gFmxNNUrQLpFyHcUIdq9VshsVtgQ=;
-        b=uz/aTSe/X7Vfv+XXOIp6ZVhz8FW3s7Sq+jooy27EUV7HNfTm6OLeGMcIUlPVsJmdV1
-         YeZcIlFxat/UiApiomvtpAGYg467SQoCFKzucLNdIMvH3SpRFho3hqB0kjanB/gVzRjY
-         WyS/sekYq5tOcWyarMBxV0z9a8A43hb1hpM00nZfoHK3RJNX4PKgzyVx1ukX2GdUjWue
-         iGtNYOnz/63Qt/sr4LlGTnHHBEaHJ/tuzRr7zxyvnjJrc0+LZYMcH8eVz8B6vszHarHU
-         6uiS2j1/U1Zue+MsnotOe0b+pwgz5Q3YtojJ530XxT2HoCW1R4Trz0DZSEVr9Vwa51rX
-         VqIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to;
-        bh=Aqqoijo0TG/5B67gFmxNNUrQLpFyHcUIdq9VshsVtgQ=;
-        b=hq6RvnIio4bwUSRmrI7UDfwO+eAJ1RH0oMxqdZrFGRKrcFBH1WiRjZsFFB24kXI/yV
-         05QA3YCFKJKBMjtEZS1yGLXT1lxGqfe7NLtKOd+EHd5bEMsn23BhY7VIzI8YdlyNF9Eu
-         Ts+gb4A7oB1yENgCYbJGD3+oo0lLVqGb7z0bu3pmmq9ol8uftFKk3A7AMxTWiI/6vcd4
-         iM5jxVE13eZTqSa+2bSqvRRl0Fb2iNf7deOC+Ca6D41wAZk68+Ad8hQjIooV/AUotM7s
-         0mWPLq5WRlUVG7KIKM0IuPX330/tJaUO8EC/WN18SJlu94wOAMevTTFkZjannL3vh7vI
-         VZoQ==
-X-Gm-Message-State: APjAAAW8Wid0CFm0Dh2XEGAmTw9EJt0tN+hYKSqQgwTsjEdLqzB1g8KG
-        gbcLCWu/MThrikJyeC/nHFO9+ME0P2984Xxpor0=
-X-Google-Smtp-Source: APXvYqzXoFaOmoRu+QjFBn6QUvweoCguct/8j5VhDuVmFQq7QeAPYAy8q4tSdVeUxCpBjXmkgXUMivCpMIquMbwSru0=
-X-Received: by 2002:a92:c984:: with SMTP id y4mr4707988iln.238.1579026063303;
- Tue, 14 Jan 2020 10:21:03 -0800 (PST)
+        id S1728656AbgANVds (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 16:33:48 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:49648 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726491AbgANVds (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 16:33:48 -0500
+Received: from callcc.thunk.org (guestnat-104-133-0-108.corp.google.com [104.133.0.108] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 00ELXXC9023515
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 16:33:34 -0500
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 095E24207DF; Tue, 14 Jan 2020 16:33:33 -0500 (EST)
+Date:   Tue, 14 Jan 2020 16:33:32 -0500
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the random tree
+Message-ID: <20200114213332.GF140865@mit.edu>
+References: <20200108113953.1a92a90f@canb.auug.org.au>
+ <20200114001832.GP76141@mit.edu>
+ <20200114012221.GC202391@google.com>
+ <20200114165739.GB140865@mit.edu>
+ <613F42EB-F993-4F39-AD9B-A86E06A875AA@lca.pw>
 MIME-Version: 1.0
-Received: by 2002:a6b:39d7:0:0:0:0:0 with HTTP; Tue, 14 Jan 2020 10:21:02
- -0800 (PST)
-From:   WILLIAM DAVID <williamdavid0115@gmail.com>
-Date:   Tue, 14 Jan 2020 19:21:02 +0100
-Message-ID: <CAO9Tg7CC3LV1NzbmpZPxcrgU+Ga3O-Nxmp9Y95KUYmqDU2TV+Q@mail.gmail.com>
-Subject: PRONTO
-To:     williamdavid0115 <williamdavid0115@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <613F42EB-F993-4F39-AD9B-A86E06A875AA@lca.pw>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Good day , my name is David William , i sent you a mail and there was
-no response , please confirm that you did get this mail for more
-details.
+On Tue, Jan 14, 2020 at 12:31:04PM -0500, Qian Cai wrote:
+> It is actually Sergey proposed an informal patch here [1]. I just sent on
+> his behave and adding a commit log.
+> 
+> [1] https://lore.kernel.org/linux-mm/20190911011008.GA4420@jagdpanzerIV/ 
+> 
 
-Regards.
+Thanks for the clarification; given that you composed the commit log,
+would you like me to add a "Signed-off-by: Qian Cai <cai@lca.pw>" for
+you as well?  Given that you added the commit description, it would be
+fair to give you credit as well.
 
-David William
+Regards,
+
+					- Ted

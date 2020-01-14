@@ -2,105 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D2B313AFBC
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 17:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566B113B023
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 17:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgANQp7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 11:45:59 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:33284 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728739AbgANQp7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 11:45:59 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=Flw8yamdhbUI/Y8isJM9I81gkbm2so+Fjah3kdZccsI=; b=d2OVa2oiSFbtq1TKQwTTOGbix
-        +J7m6UjsOOPGsrC7vja9rBloPfhe00FEHIT2QzGCRF3/8hg290T8McF7EA/HHhSz8ovVYDTk9AoYw
-        PuLWKu7sggYQj7lxpZUbRHHsmLhv85btRed/hc55TtkxEekUY4XmMHozA3Fm6pPgm0UGYpXNg30lu
-        3WczxIg7RBeglC/yD3ZQvBgDHrjkEKoqLLiG2DcEQfKzEgj+jpMj0jIlav9pLkiSqiFxxWJzaatiR
-        n4EOUYy93yNWtzTH2Blz7OcnE3+7BcitVKqeNU2fxJ5bziallXXPHLAkE1RRhSAp3GLI1pfqZXg3M
-        GVvDl87eQ==;
-Received: from [2601:1c0:6280:3f0::ed68]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1irPKI-0007IP-Gy; Tue, 14 Jan 2020 16:45:58 +0000
-Subject: Re: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
-To:     Alan Maguire <alan.maguire@oracle.com>
-Cc:     brendanhiggins@google.com, gregkh@linuxfoundation.org,
-        rjw@rjwysocki.net, dmitry.torokhov@gmail.com, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-References: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
- <2242e184-93a5-147d-d603-4017ca86eba9@infradead.org>
- <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <51d7d427-2ef6-b0cd-ad23-2fb75b06b763@infradead.org>
-Date:   Tue, 14 Jan 2020 08:45:56 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.3.0
+        id S1728773AbgANQ54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 11:57:56 -0500
+Received: from outgoing-auth-1.mit.edu ([18.9.28.11]:57072 "EHLO
+        outgoing.mit.edu" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726195AbgANQ54 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 11:57:56 -0500
+Received: from callcc.thunk.org (guestnat-104-133-0-111.corp.google.com [104.133.0.111] (may be forged))
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 00EGvdbn022943
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 11:57:40 -0500
+Received: by callcc.thunk.org (Postfix, from userid 15806)
+        id 0B01E4207DF; Tue, 14 Jan 2020 11:57:39 -0500 (EST)
+Date:   Tue, 14 Jan 2020 11:57:39 -0500
+From:   "Theodore Y. Ts'o" <tytso@mit.edu>
+To:     Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Qian Cai <cai@lca.pw>
+Subject: Re: linux-next: Signed-off-by missing for commit in the random tree
+Message-ID: <20200114165739.GB140865@mit.edu>
+References: <20200108113953.1a92a90f@canb.auug.org.au>
+ <20200114001832.GP76141@mit.edu>
+ <20200114012221.GC202391@google.com>
 MIME-Version: 1.0
-In-Reply-To: <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200114012221.GC202391@google.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/14/20 8:42 AM, Alan Maguire wrote:
-> On Tue, 14 Jan 2020, Randy Dunlap wrote:
+On Tue, Jan 14, 2020 at 10:22:21AM +0900, Sergey Senozhatsky wrote:
 > 
->> Hi Alan,
->>
->> On 1/14/20 8:09 AM, Alan Maguire wrote:
->>> currently the property entry kunit tests are built if CONFIG_KUNIT=y.
->>> This will cause warnings when merged with the kunit tree that now
->>> supports tristate CONFIG_KUNIT.  While the tests appear to compile
->>> as a module, we get a warning about missing module license.
->>>
->>> It's better to have a per-test suite CONFIG variable so that
->>> we can do selective building of kunit-based suites, and can
->>> also avoid merge issues like this.
->>>
->>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
->>
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>
+> Oh, I didn't realize I was the author. Sorry!
 > 
-> Apologies for missing you out here.
->  
->>> Fixes: c032ace71c29 ("software node: add basic tests for property entries")
->>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>> ---
->>>  drivers/base/test/Kconfig  | 3 +++
->>>  drivers/base/test/Makefile | 2 +-
->>>  2 files changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
->>> index 86e85da..d29ae95 100644
->>> --- a/drivers/base/test/Kconfig
->>> +++ b/drivers/base/test/Kconfig
->>> @@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
->>>  	  The module name will be test_async_driver_probe.ko
->>>  
->>>  	  If unsure say N.
->>> +config KUNIT_DRIVER_PE_TEST
->>> +	bool "KUnit Tests for property entry API"
->>> +	depends on KUNIT
->>
->> Why is this bool instead of tristate?
->>
+> Sure, confirmed
 > 
-> The support for building kunit and kunit tests as modules has not merged 
-> into linux-next yet, so if we set the option to tristate the build would
-> fail for allmodconfig builds.   Once it's merged we can revisit though; I 
-> should have mentioned this, thanks for reminding me!
+> Signed-off-by: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
+>
 
-Oh. I see.  Thanks.
+Hmm... the e-mail in question[1] was sent by Qian Cai, but there was a
 
--- 
-~Randy
+   From: Sergey Senozhatsky <sergey.senozhatsky.work@gmail.com>
 
+in the first line of the body which attributed the patch to you.  But
+then e-mail continues:
+
+   Sergey didn't like the locking order .... but those code is so old,
+   and I have no clue how to de-couple it after checking other locks in
+   the splat. There is an onging effort to make all printk() as deferred,
+   so until that happens, workaround it for now as a short-term fix.
+
+So did Qian Cai author the patch, and this should have been
+"Reported-by Sergey Senozhatsky"?  In which case I need a
+Signed-off-by from Qian Cai.
+
+This is a pretty trivial patch, but it would be good to get the
+attributions and credit correct!
+
+						- Ted
+
+[1] https://lore.kernel.org/linux-arm-kernel/1573679785-21068-1-git-send-email-cai@lca.pw/

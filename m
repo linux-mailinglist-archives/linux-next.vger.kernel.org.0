@@ -2,78 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E657613A084
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 06:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 588C413A0BE
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 06:42:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbgANFYE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 00:24:04 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:40233 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725842AbgANFYD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 00:24:03 -0500
-Received: by mail-lj1-f194.google.com with SMTP id u1so12810929ljk.7;
-        Mon, 13 Jan 2020 21:24:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xOe8cEwY/+ggWSrDf4teIOpCv6NdYHvbvkF1XKTEocs=;
-        b=LOtEzdzO4P0gGkSt2/IoHR9VPfhIc06dybg249hC4fdFHKqGeaO8YxYjcto8GZcco6
-         HX2osGkURrzyuWIDMmPjKH6D5ziJteWrS8nP6g8cIpsmxO3g6xKeyta0lNcLNXqImGgD
-         C61+M2tHogtE/Tl8QJKImmlO9aOGwRqlrM74DKpVkzILRUlW2Xd3NWS6eUv1BHk1+oxv
-         6Nz/uoqwbBG4FLBT0+T4Qdp3BXsK2hZReGH8l838Wpi3S4hKpZI+O6PN3yd+BgnhdqGt
-         70U3ZQqzxQXRssZfvaI+neH8/KYxh+qMbdUQS85U95UhbJwfqdQbTlh4qpLZ9gE8FNO/
-         Mnog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xOe8cEwY/+ggWSrDf4teIOpCv6NdYHvbvkF1XKTEocs=;
-        b=Q8eDO77pETAyZ5dNyBs0evbD+ZGsOWpADSCg4uQMl3tZNOfdlDB2ChnXbEMNwSLUW5
-         xLn6M8JqgrPNHD/4ScpbJKioGZzvJgSFXPfUOF2WrmG4/jSrG6CHwP1NG0I5v7LUG5XX
-         VKwznSaY2cePVU8ykwSzZ1wQF3+m3Z2OV+RFBk6kkfb2UMs1Oz42PkMRH4ISK+GVxfF2
-         9+ZdevaC+KKBUA4B/BC71fgNAfTr+WkKyVplubxUxMzkPH4Keku/rnJF8I59Dsi0ZYD6
-         SDWNZLNyzu/Cil2rVL2kePYJ50+RXh+hfnCDswQYBvf02BK0HDTeEB2tSGuNXXAimFfS
-         Uxhw==
-X-Gm-Message-State: APjAAAXl43d0NEDHzMjnkgviIAiptTfUABSRdQ1popCKxkG5D1htywna
-        /hq/xL0ztfyVqQkhocJJJOe2l+MgucIXapAU8ZI=
-X-Google-Smtp-Source: APXvYqwLRjvJGcaSQN7MdhbIG50V/jBBlGzk43plCv5NgKLK461rA5mo+qyywlltVwtQwDPfSOV1dXQ6+y5OCmX7tEU=
-X-Received: by 2002:a2e:884d:: with SMTP id z13mr13271564ljj.116.1578979441504;
- Mon, 13 Jan 2020 21:24:01 -0800 (PST)
+        id S1725820AbgANFmV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 00:42:21 -0500
+Received: from ozlabs.org ([203.11.71.1]:36877 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725860AbgANFmV (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jan 2020 00:42:21 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xfVL6Bk9z9s29;
+        Tue, 14 Jan 2020 16:42:18 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1578980538;
+        bh=7poh02xTRO6wfo0XB/ilDDsHGirN92XbvbpYK6uKkBI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=l0LdRAiKc5WcixYKBiz5S0Jp4BovSaAk41ooR+eVZlAIq6in0yulJK2T3glbKjtZx
+         190NFsKIdsEh8iL8NH5bMbcgbFhXtTQFeFtdRUo4860b8+1x04qNcMnmyjD7isyGA+
+         Mk120iCzTNw8PoSFQojhiln5WkRHayu4G2zcGCqKnD5dIzc3O2M729aiTY8NWBqYz5
+         M8ZDgwGpSZm0Ol27yLT7eA6fmqAPfgszbiKEvHpbv+cmx5SR2UFTFUstl1kK72a+7D
+         qpRm4uxAc4JhkDkNzl4L65jcME6LYGcVA6jdzih38njEOjhBU/pFXjZqwmIeT8uDgn
+         XhUlSbRSZHUTw==
+Date:   Tue, 14 Jan 2020 16:42:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Hildenbrand <david@redhat.com>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200114164217.55c2425b@canb.auug.org.au>
 MIME-Version: 1.0
-References: <a367af4d-7267-2e94-74dc-2a2aac204080@ghiti.fr>
- <20191018105657.4584ec67@canb.auug.org.au> <20191028110257.6d6dba6e@canb.auug.org.au>
- <mhng-0daa1a90-2bed-4b2e-833e-02cd9c0aa73f@palmerdabbelt-glaptop>
- <d5d59f54-e391-3659-d4c0-eada50f88187@ghiti.fr> <CANXhq0pn+Nq6T5dNyJiB6xvmqTnPSzo8sVfqHhGyWUURY+1ydg@mail.gmail.com>
-In-Reply-To: <CANXhq0pn+Nq6T5dNyJiB6xvmqTnPSzo8sVfqHhGyWUURY+1ydg@mail.gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 13 Jan 2020 21:23:50 -0800
-Message-ID: <CAADnVQ+kbxpw7fxRZodTtE7AmEmRDgO9fcmMD8kKRssS8WJizA@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-To:     Zong Li <zong.li@sifive.com>
-Cc:     Alexandre Ghiti <alexandre@ghiti.fr>,
-        Palmer Dabbelt <palmerdabbelt@google.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        ppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/rJPFmu9=LUV=/KtcSaEPkkI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Jan 12, 2020 at 8:33 PM Zong Li <zong.li@sifive.com> wrote:
->
-> I'm not quite familiar with btf, so I have no idea why there are two
-> weak symbols be added in 8580ac9404f6 ("bpf: Process in-kernel BTF")
+--Sig_/rJPFmu9=LUV=/KtcSaEPkkI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I can explain what these weak symbols are for, but that won't change
-the fact that compiler or linker are buggy. The weak symbols should work
-in all cases and compiler should pick correct relocation.
-In this case it sounds that compiler picked relative relocation and failed
-to reach zero from that address.
+Hi all,
+
+After merging the akpm-current tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+arch/powerpc/platforms/pseries/hotplug-memory.c: In function 'lmb_to_memblo=
+ck':
+arch/powerpc/platforms/pseries/hotplug-memory.c:217:14: error: implicit dec=
+laration of function 'find_memory_block'; did you mean 'walk_memory_blocks'=
+? [-Werror=3Dimplicit-function-declaration]
+  217 |  mem_block =3D find_memory_block(mem_sect);
+      |              ^~~~~~~~~~~~~~~~~
+      |              walk_memory_blocks
+
+Caused by commit
+
+  eca658f58c58 ("drivers/base/memory.c: get rid of find_memory_block()")
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rJPFmu9=LUV=/KtcSaEPkkI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4dVLkACgkQAVBC80lX
+0GwH/gf/dlbfgIFR0q11bhtv09iauxBxgTLsKnR8kgkTogtZJD8MQVcr/OsL10py
+EinfidS8uuk+cFBzwxuqc4wcA/VnNhEjrrNmf3WtlhFqQ02XnW7JCLuNQNGJjJJ4
+TU28ghuf03UY+lUGYH0AEvqGST43fnBTp064GZoewAxGeMw6qrIAiBeYlmCaPdVF
+oK/tGLwM0sByUD0nG+7IuGWgXlynMMTWWH8QJGR61KM2jbvdVH3ZpvdyTmbxLvPr
+uqx01G/XPKo0wqUY35VECPmeW7mjJ2Q9n/9pbymp3nLkd85DNHK+QNRMdVoTwn0J
+Mtzf2DwAekXPni2DmaoTjQuwXoQzYg==
+=+w3p
+-----END PGP SIGNATURE-----
+
+--Sig_/rJPFmu9=LUV=/KtcSaEPkkI--

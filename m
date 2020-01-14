@@ -2,89 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 588C413A0BE
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 06:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F2913A0C2
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 06:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725820AbgANFmV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 00:42:21 -0500
-Received: from ozlabs.org ([203.11.71.1]:36877 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725860AbgANFmV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jan 2020 00:42:21 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47xfVL6Bk9z9s29;
-        Tue, 14 Jan 2020 16:42:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1578980538;
-        bh=7poh02xTRO6wfo0XB/ilDDsHGirN92XbvbpYK6uKkBI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=l0LdRAiKc5WcixYKBiz5S0Jp4BovSaAk41ooR+eVZlAIq6in0yulJK2T3glbKjtZx
-         190NFsKIdsEh8iL8NH5bMbcgbFhXtTQFeFtdRUo4860b8+1x04qNcMnmyjD7isyGA+
-         Mk120iCzTNw8PoSFQojhiln5WkRHayu4G2zcGCqKnD5dIzc3O2M729aiTY8NWBqYz5
-         M8ZDgwGpSZm0Ol27yLT7eA6fmqAPfgszbiKEvHpbv+cmx5SR2UFTFUstl1kK72a+7D
-         qpRm4uxAc4JhkDkNzl4L65jcME6LYGcVA6jdzih38njEOjhBU/pFXjZqwmIeT8uDgn
-         XhUlSbRSZHUTw==
-Date:   Tue, 14 Jan 2020 16:42:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20200114164217.55c2425b@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rJPFmu9=LUV=/KtcSaEPkkI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S1725860AbgANFsR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 00:48:17 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:54826 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725819AbgANFsR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jan 2020 00:48:17 -0500
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00E5lZP1125933;
+        Tue, 14 Jan 2020 00:48:01 -0500
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xfvjfk7yk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 00:48:01 -0500
+Received: from m0098413.ppops.net (m0098413.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 00E5m16B127552;
+        Tue, 14 Jan 2020 00:48:01 -0500
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2xfvjfk7y9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 00:48:01 -0500
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 00E5kEwq006242;
+        Tue, 14 Jan 2020 05:48:00 GMT
+Received: from b03cxnp08028.gho.boulder.ibm.com (b03cxnp08028.gho.boulder.ibm.com [9.17.130.20])
+        by ppma05wdc.us.ibm.com with ESMTP id 2xf755gut9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Jan 2020 05:48:00 +0000
+Received: from b03ledav006.gho.boulder.ibm.com (b03ledav006.gho.boulder.ibm.com [9.17.130.237])
+        by b03cxnp08028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00E5lxu124772898
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 05:47:59 GMT
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 60D51C6057;
+        Tue, 14 Jan 2020 05:47:59 +0000 (GMT)
+Received: from b03ledav006.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 45600C6055;
+        Tue, 14 Jan 2020 05:47:56 +0000 (GMT)
+Received: from [9.85.73.158] (unknown [9.85.73.158])
+        by b03ledav006.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Jan 2020 05:47:55 +0000 (GMT)
+Message-ID: <1578980874.11996.3.camel@abdul.in.ibm.com>
+Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when
+ unloading mpt3sas driver
+From:   Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
+        linux-next <linux-next@vger.kernel.org>,
+        Oliver <oohall@gmail.com>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>
+Date:   Tue, 14 Jan 2020 11:17:54 +0530
+In-Reply-To: <20200109142218.GA16477@infradead.org>
+References: <1578489498.29952.11.camel@abdul>
+         <1578560245.30409.0.camel@abdul.in.ibm.com>
+         <20200109142218.GA16477@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.10.4-0ubuntu1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-14_01:2020-01-13,2020-01-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 suspectscore=2
+ impostorscore=0 malwarescore=0 mlxlogscore=759 phishscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001140051
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rJPFmu9=LUV=/KtcSaEPkkI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 2020-01-09 at 06:22 -0800, Christoph Hellwig wrote:
+> On Thu, Jan 09, 2020 at 02:27:25PM +0530, Abdul Haleem wrote:
+> > + CC Christoph Hellwig
+> 
+> The only thing this commit changed for the dma coherent case (which
+> ppc64 uses) is that we now look up the page to free by the DMA address
+> instead of the virtual address passed in.  Which suggests this call
+> stack passes in a broken dma address.  I suspect we somehow managed
+> to disable the ppc iommu bypass mode after allocating memory, which
+> would cause symptoms like this, and thus the commit is just exposing
+> a pre-existing problem.
 
-Hi all,
+Trace with printk added for page->addr, will this help ?
 
-After merging the akpm-current tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+mpt3sas_cm0: removing handle(0x000f), sas_addr(0x500304801f080d3d)
+mpt3sas_cm0: enclosure logical id(0x500304801f080d3f), slot(12)
+mpt3sas_cm0: enclosure level(0x0000), connector name(     )
+mpt3sas_cm0: mpt3sas_transport_port_remove: removed:
+sas_addr(0x500304801f080d3f)
+mpt3sas_cm0: expander_remove: handle(0x0009),
+sas_addr(0x500304801f080d3f)
+mpt3sas_cm0: sending diag reset !!
+mpt3sas_cm0: diag reset: SUCCESS 
+page->vaddr = 0xc000003f2d200000
+page->vaddr = 0xc000003f2ef00000
+page->vaddr = 0xc000003f38430000
+page->vaddr = 0xc000003f3d7d0000
+page->vaddr = 0xc000003f75760000
+BUG: Unable to handle kernel data access on write at 0xc04a000000017c34
+Faulting instruction address: 0xc0000000002fb2b0
+Oops: Kernel access of bad area, sig: 11 [#1]
+LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA PowerNV
+Modules linked in: iptable_mangle xt_MASQUERADE iptable_nat nf_nat
+xt_conntrack nf_conntrack nf_defrag_ipv4 ipt_REJECT nf_reject_ipv4
+xt_tcpudp tun bridge stp llc btrfs blake2b_generic xor zstd_decompress
+zstd_compress lzo_compress iptable_filter raid6_pq mpt3sas(-) vmx_crypto
+gf128mul nfsd powernv_rng rng_core raid_class scsi_transport_sas kvm_hv
+kvm binfmt_misc ip_tables x_tables xfs libcrc32c qla2xxx ixgbe i40e
+nvme_fc nvme_fabrics mdio nvme_core autofs4
+CPU: 13 PID: 17267 Comm: rmmod Not tainted 5.5.0-rc5-next-20200108-autotest-00002-g36e1367-dirty #1
+NIP:  c0000000002fb2b0 LR: c0000000001aa5b4 CTR: c00000000004a010
+REGS: c000003fc3f9f5d0 TRAP: 0380   Not tainted  (5.5.0-rc5-next-20200108-autotest-00002-g36e1367-dirty)
+MSR:  9000000000009033 <SF,HV,EE,ME,IR,DR,RI,LE>  CR: 22002424  XER: 20000000  
+CFAR: c0000000001aa5b0 IRQMASK: 0 
+GPR00: c00000000004a0a8 c000003fc3f9f860 c000000001311300 c04a000000017c00 
+GPR04: 0000000000000000 c000003f75760000 003e000000017c00 0000000000000000 
+GPR08: 0000000000000000 c0000000013bd000 c04a000000017c34 00000000000005bf 
+GPR12: c00000000004a010 c000003fffff4a80 0000000000000000 0000000000000000 
+GPR16: 0000000000000000 0000000000000000 000001001b4e0180 0000000010020098 
+GPR20: 0000000010020050 0000000010020038 0000000010020078 0000000005f00000 
+GPR24: c000000000d4e8a8 c000000000d4e8c8 0000000005f00000 0000000000000000 
+GPR28: c000000001299398 c000003f75760000 0000000000010000 c000003fdde0d0a8 
+NIP [c0000000002fb2b0] __free_pages+0x10/0x50
+LR [c0000000001aa5b4] dma_direct_free_pages+0x54/0x90
+Call Trace:
+[c000003fc3f9f860] [c000000000d4e8a8] str_spec.72296+0x199114/0x2009cc (unreliable)
+[c000003fc3f9f880] [c00000000004a0a8] dma_iommu_free_coherent+0x98/0xd0
+[c000003fc3f9f8d0] [c0000000001a95e8] dma_free_attrs+0xf8/0x100
+[c000003fc3f9f920] [c00000000031205c] dma_pool_destroy+0x19c/0x230
+[c000003fc3f9f9d0] [c00800001c181e98] _base_release_memory_pools+0x1d8/0x4b0 [mpt3sas]
+[c000003fc3f9fa60] [c00800001c18b9f0] mpt3sas_base_detach+0x40/0x150 [mpt3sas]
+[c000003fc3f9fad0] [c00800001c19c92c] scsih_remove+0x24c/0x3e0 [mpt3sas]
+[c000003fc3f9fb90] [c0000000006126a4] pci_device_remove+0x64/0x110
+[c000003fc3f9fbd0] [c0000000006c7ea4] device_release_driver_internal+0x154/0x260
+[c000003fc3f9fc10] [c0000000006c807c] driver_detach+0x8c/0x140
+[c000003fc3f9fc50] [c0000000006c6188] bus_remove_driver+0x78/0x100
+[c000003fc3f9fc80] [c0000000006c8d90] driver_unregister+0x40/0x90
+[c000003fc3f9fcf0] [c000000000611dc8] pci_unregister_driver+0x38/0x110
+[c000003fc3f9fd40] [c00800001c1af108] _mpt3sas_exit+0x50/0x40c8 [mpt3sas]
+[c000003fc3f9fda0] [c0000000001d8ed8] sys_delete_module+0x1a8/0x2a0
+[c000003fc3f9fe20] [c00000000000b9d0] system_call+0x5c/0x68
+Instruction dump:
+88830051 2fa40000 41de0008 4bffe87c 7d234b78 4bfffe94 60000000 60420000 
+3c4c0101 38426060 39430034 7c0004ac <7d005028> 3108ffff 7d00512d 40c2fff4 
+---[ end trace c5ab52378eb942ad ]---
+Segmentation fault
 
-arch/powerpc/platforms/pseries/hotplug-memory.c: In function 'lmb_to_memblo=
-ck':
-arch/powerpc/platforms/pseries/hotplug-memory.c:217:14: error: implicit dec=
-laration of function 'find_memory_block'; did you mean 'walk_memory_blocks'=
-? [-Werror=3Dimplicit-function-declaration]
-  217 |  mem_block =3D find_memory_block(mem_sect);
-      |              ^~~~~~~~~~~~~~~~~
-      |              walk_memory_blocks
+-- 
+Regard's
 
-Caused by commit
+Abdul Haleem
+IBM Linux Technology Centre
 
-  eca658f58c58 ("drivers/base/memory.c: get rid of find_memory_block()")
 
-I have reverted that commit for today.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/rJPFmu9=LUV=/KtcSaEPkkI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4dVLkACgkQAVBC80lX
-0GwH/gf/dlbfgIFR0q11bhtv09iauxBxgTLsKnR8kgkTogtZJD8MQVcr/OsL10py
-EinfidS8uuk+cFBzwxuqc4wcA/VnNhEjrrNmf3WtlhFqQ02XnW7JCLuNQNGJjJJ4
-TU28ghuf03UY+lUGYH0AEvqGST43fnBTp064GZoewAxGeMw6qrIAiBeYlmCaPdVF
-oK/tGLwM0sByUD0nG+7IuGWgXlynMMTWWH8QJGR61KM2jbvdVH3ZpvdyTmbxLvPr
-uqx01G/XPKo0wqUY35VECPmeW7mjJ2Q9n/9pbymp3nLkd85DNHK+QNRMdVoTwn0J
-Mtzf2DwAekXPni2DmaoTjQuwXoQzYg==
-=+w3p
------END PGP SIGNATURE-----
-
---Sig_/rJPFmu9=LUV=/KtcSaEPkkI--

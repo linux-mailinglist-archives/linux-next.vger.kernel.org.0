@@ -2,106 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DAD13AD22
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 16:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D7613AEA3
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jan 2020 17:10:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729010AbgANPIc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 10:08:32 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:42521 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726450AbgANPIb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 10:08:31 -0500
-Received: by mail-pl1-f193.google.com with SMTP id p9so5340906plk.9;
-        Tue, 14 Jan 2020 07:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:subject:date:message-id;
-        bh=8rpa2DTMKBUpU7PSeVZCOwWKjfcl4QZLI8268nb9OR8=;
-        b=kS4cMATDa920zQP8KA/lx981IvG+CXVpSkc3ZJlJ1Ks9JvZdBHh8aSSkFhVL0VUtTG
-         jsnSfIOqN3G3C2Fj2ZZ+Nntre/yPcKxof2GVsDNBEM1LxOny7J9SnLimP4mDegbVgw2f
-         LWfDSqXZSDCMbVlziyz4HooiolDkY0AX0F1y5dtlElraiXky49ppMZhim3Zy3fHgVkMm
-         zQ0JGPC7QpXsXmgGIJtXFINWGPLj193T0oci+P4j1ophKfUbhsWhUq9qsvOUBJ4XIExn
-         CRaRAIS4BEIIEeJ06r4Um4bfMQZJ3o3pIFy6pVyHgMzZ+ziXBm1tBEV0eHAUvh3rmIYG
-         V/5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=8rpa2DTMKBUpU7PSeVZCOwWKjfcl4QZLI8268nb9OR8=;
-        b=RQZMEVn/QgullKlAzZwD0dEc5QOClMhoDOTfSbhck+x09QiyRj9c+1zxOLYmmnZS49
-         KQ66c2FSccbqjzjYbDGHCjkLuHMyMTgW8TCSpr0PQa5YCMzm4bUrA13UjUTD6ms9gkT9
-         6GEEFoInFUmzpiiXWJe/JjlTP/+gV2YNjSUSdt/RIisQZFJADvFkO5A/vWpT4Fm7TUss
-         NBrrHSFKu1y5ME5hi10k+z6P1vxfzj+lVFWpMvFqvKwhRaklB3XFAxN5E576izg302SG
-         XEY//R5tsrVnjTlJSWidVAr68ghbGU6uGBYAW7A1FRq4Bg4l/udjApT8vmFyM0rw2768
-         TemQ==
-X-Gm-Message-State: APjAAAUa1XsN3a4Al4N8VlJ0fHmeQHN9y9mCCQZlST7nthC78YJjVsip
-        M0OkFiF+f9Pub3lE9jhQtrcZ2WFa
-X-Google-Smtp-Source: APXvYqyDn+HL5CnYDQ8AsxYxY/88v+ejGsozlp0bvsuT6W2fd+zvkxwg2c1UX5ValvbuAnNoBO/GZw==
-X-Received: by 2002:a17:902:9698:: with SMTP id n24mr20469473plp.312.1579014510423;
-        Tue, 14 Jan 2020 07:08:30 -0800 (PST)
-Received: from localhost.localdomain ([240f:34:212d:1:368e:e048:68f1:84e7])
-        by smtp.gmail.com with ESMTPSA id 100sm16964654pjo.17.2020.01.14.07.08.27
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-SHA bits=128/128);
-        Tue, 14 Jan 2020 07:08:29 -0800 (PST)
-From:   Akinobu Mita <akinobu.mita@gmail.com>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        linux-next@vger.kernel.org
-Cc:     Akinobu Mita <akinobu.mita@gmail.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Stanislaw Gruszka <stf_xl@wp.pl>
-Subject: [PATCH v2 -mm] iwlegacy: fix build warnings with format string
-Date:   Wed, 15 Jan 2020 00:08:03 +0900
-Message-Id: <1579014483-9226-1-git-send-email-akinobu.mita@gmail.com>
-X-Mailer: git-send-email 2.7.4
+        id S1728688AbgANQKi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 11:10:38 -0500
+Received: from userp2130.oracle.com ([156.151.31.86]:46722 "EHLO
+        userp2130.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726342AbgANQKi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 11:10:38 -0500
+Received: from pps.filterd (userp2130.oracle.com [127.0.0.1])
+        by userp2130.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00EG8DBH069867;
+        Tue, 14 Jan 2020 16:10:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id; s=corp-2019-08-05;
+ bh=DXGEyr5ta0XlqUrJRWrExFRIxM3FCYNIxMhvm8kVLdE=;
+ b=ZI3C7yuVyQIPUg9GH91miMNTre/ToCR/HIiHa97eUXdjlFjn/9nZU30Sb1RwVufHnRyv
+ 0HwOKjY0uFb7isZPVyzuCOXXlMoMmOiDVKnNfUTey6jXtv1B2Hr8tytKkpWhZZLjvm25
+ oFdoDNbaOlKXKkK15Kzm9skxBszekYmb+9U4dMAnwRI/JRY7+j7Y+jWGsWWUesJ9MIoc
+ w2FPPEIuZNwiHq+aIauj3Yu4OmyPUwkJ3/di+G6ZwjIaIgdqeO76Q2AkS8oCcBpCl0kz
+ f3f5uYAG1k58SZTz45Ja+Qgf59QUsP4k9Qo7G0hI4PDpQHWEgBlTOLBGB0svdoCVbVin Ug== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2130.oracle.com with ESMTP id 2xf74s6yb2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 16:10:09 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.27/8.16.0.27) with SMTP id 00EG9QRW168893;
+        Tue, 14 Jan 2020 16:10:08 GMT
+Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
+        by userp3020.oracle.com with ESMTP id 2xh8esas4m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Jan 2020 16:10:08 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 00EG9umn004555;
+        Tue, 14 Jan 2020 16:09:56 GMT
+Received: from dhcp-10-175-171-251.vpn.oracle.com (/10.175.171.251)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 14 Jan 2020 08:09:55 -0800
+From:   Alan Maguire <alan.maguire@oracle.com>
+To:     brendanhiggins@google.com, gregkh@linuxfoundation.org,
+        rjw@rjwysocki.net, dmitry.torokhov@gmail.com
+Cc:     sfr@canb.auug.org.au, rdunlap@infradead.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Subject: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
+Date:   Tue, 14 Jan 2020 16:09:43 +0000
+Message-Id: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=3 malwarescore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.0.1-1911140001 definitions=main-2001140137
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9499 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 priorityscore=1501 malwarescore=0
+ suspectscore=3 phishscore=0 bulkscore=0 spamscore=0 clxscore=1011
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.0.1-1911140001
+ definitions=main-2001140137
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This fixes build warnings introduced by commit "iwlegacy: use
-<linux/units.h> helpers" (iwlegacy-use-linux-unitsh-helpers.patch in -mm)
+currently the property entry kunit tests are built if CONFIG_KUNIT=y.
+This will cause warnings when merged with the kunit tree that now
+supports tristate CONFIG_KUNIT.  While the tests appear to compile
+as a module, we get a warning about missing module license.
 
-The format '%d' has to be changed to '%ld' because the return type of
-kelvin_to_celsius() is 'long'.
+It's better to have a per-test suite CONFIG variable so that
+we can do selective building of kunit-based suites, and can
+also avoid merge issues like this.
 
 Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Link: https://lore.kernel.org/r/20200106171452.201c3b4c@canb.auug.org.au
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: Stanislaw Gruszka <stf_xl@wp.pl>
-Signed-off-by: Akinobu Mita <akinobu.mita@gmail.com>
+Fixes: c032ace71c29 ("software node: add basic tests for property entries")
+Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 ---
-* v2
-- fix subject line (s/iwlwifi/iwlegacy/)
+ drivers/base/test/Kconfig  | 3 +++
+ drivers/base/test/Makefile | 2 +-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
- drivers/net/wireless/intel/iwlegacy/4965.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlegacy/4965.c b/drivers/net/wireless/intel/iwlegacy/4965.c
-index 31b346c..34d0579 100644
---- a/drivers/net/wireless/intel/iwlegacy/4965.c
-+++ b/drivers/net/wireless/intel/iwlegacy/4965.c
-@@ -1611,7 +1611,7 @@ il4965_hw_get_temperature(struct il_priv *il)
- 	temperature =
- 	    (temperature * 97) / 100 + TEMPERATURE_CALIB_KELVIN_OFFSET;
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 86e85da..d29ae95 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
+ 	  The module name will be test_async_driver_probe.ko
  
--	D_TEMP("Calibrated temperature: %dK, %dC\n", temperature,
-+	D_TEMP("Calibrated temperature: %dK, %ldC\n", temperature,
- 	       kelvin_to_celsius(temperature));
+ 	  If unsure say N.
++config KUNIT_DRIVER_PE_TEST
++	bool "KUnit Tests for property entry API"
++	depends on KUNIT
+diff --git a/drivers/base/test/Makefile b/drivers/base/test/Makefile
+index 2214310..3ca5636 100644
+--- a/drivers/base/test/Makefile
++++ b/drivers/base/test/Makefile
+@@ -1,4 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-$(CONFIG_TEST_ASYNC_DRIVER_PROBE)	+= test_async_driver_probe.o
  
- 	return temperature;
-@@ -1671,11 +1671,11 @@ il4965_temperature_calib(struct il_priv *il)
- 
- 	if (il->temperature != temp) {
- 		if (il->temperature)
--			D_TEMP("Temperature changed " "from %dC to %dC\n",
-+			D_TEMP("Temperature changed " "from %ldC to %ldC\n",
- 			       kelvin_to_celsius(il->temperature),
- 			       kelvin_to_celsius(temp));
- 		else
--			D_TEMP("Temperature " "initialized to %dC\n",
-+			D_TEMP("Temperature " "initialized to %ldC\n",
- 			       kelvin_to_celsius(temp));
- 	}
- 
+-obj-$(CONFIG_KUNIT) += property-entry-test.o
++obj-$(CONFIG_KUNIT_DRIVER_PE_TEST) += property-entry-test.o
 -- 
-2.7.4
+1.8.3.1
 

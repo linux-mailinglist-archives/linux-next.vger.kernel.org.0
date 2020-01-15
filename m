@@ -2,84 +2,231 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE5D813B837
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2020 04:41:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB0C13B8CA
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2020 06:09:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729130AbgAODlD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 22:41:03 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51867 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729123AbgAODlB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jan 2020 22:41:01 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726553AbgAOFJL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jan 2020 00:09:11 -0500
+Received: from mail-out.m-online.net ([212.18.0.10]:38902 "EHLO
+        mail-out.m-online.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725942AbgAOFJK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jan 2020 00:09:10 -0500
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+        by mail-out.m-online.net (Postfix) with ESMTP id 47yFjb18nFz1rVvt;
+        Wed, 15 Jan 2020 06:09:07 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
+        by mail.m-online.net (Postfix) with ESMTP id 47yFjb0Rryz1r0GR;
+        Wed, 15 Jan 2020 06:09:07 +0100 (CET)
+X-Virus-Scanned: amavisd-new at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
+        with ESMTP id wv2R1Mb3tDIk; Wed, 15 Jan 2020 06:09:05 +0100 (CET)
+X-Auth-Info: m7VLb3Fv9Vu6GyyKS3Q9hd/0Pv7crRUj+i9rR/1cWSQ=
+Received: from [IPv6:::1] (unknown [195.140.253.167])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yClt5xcVz9sRm;
-        Wed, 15 Jan 2020 14:40:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579059659;
-        bh=VAvZvVR15vPdcx+T1ys/TSqLDnhWyjaURUFwoNhttGs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=uMEXpdVOW+s6yy7uQLy3dBFKOFpR9lXk5oNz7VEqA5T/6TGKsiPJLEavzMeth/ou8
-         Khdhq4ge7vdj1TExB85I9q83MVgwIEKcw6YEtu/QFew6MQYcVxuJ21LCZtKARy8cHx
-         aqRdSX/1IIJJkDh+WPMv4WgHAImxQBJs3XSJmdk3gJAuDtBGKufT34sjB/pfsR0tU9
-         a8M18txb8rF9qCm1qlX5APRZkjDKgK678drMlfrNj+Ok0ryv2TOpS8ohZGvWrK9CQP
-         Eaw9v1mjtAYFBim2NA9gbhJWVWZVzQB0ZLoNVvvnUbJRHV9LKYmbjsMCi2t3HjiliA
-         haALCePNMuRIw==
-Date:   Wed, 15 Jan 2020 14:40:57 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jayshri Pawar <jpawar@cadence.com>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: linux-next: manual merge of the usb-gadget tree with Linus'
- tree
-Message-ID: <20200115144057.7b72d7b9@canb.auug.org.au>
-In-Reply-To: <CAMuHMdVY2W1=9paE+WpJUHprocOdutRMcNUJenn+jz9A-iv90A@mail.gmail.com>
-References: <20200110153207.70c888cd@canb.auug.org.au>
-        <CAMuHMdVY2W1=9paE+WpJUHprocOdutRMcNUJenn+jz9A-iv90A@mail.gmail.com>
+        by mail.mnet-online.de (Postfix) with ESMTPSA;
+        Wed, 15 Jan 2020 06:09:05 +0100 (CET)
+Subject: Re: linux-next: build failure after merge of the sound-asoc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200115120258.0e535fcb@canb.auug.org.au>
+From:   Marek Vasut <marex@denx.de>
+Message-ID: <d9b60770-fa22-deaa-3a80-6dad0fba3aa3@denx.de>
+Date:   Wed, 15 Jan 2020 06:09:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZmWZVVMQHE/=k9OQRCnD3CJ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200115120258.0e535fcb@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZmWZVVMQHE/=k9OQRCnD3CJ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/15/20 2:02 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the sound-asoc tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/phy/phy-core.c:17:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/common/common.c:15:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/phy/of.c:9:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from drivers/usb/host/ohci-hcd.c:37:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from drivers/usb/host/ehci-hub.c:17,
+>                  from drivers/usb/host/ehci-hcd.c:305:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/amba/bus.h:19,
+>                  from drivers/of/platform.c:14:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> In file included from include/linux/amba/bus.h:19,
+>                  from drivers/of/platform.c:14:
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/usb/core/phy.c:12:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/ata/ahci.h:25,
+>                  from drivers/ata/ahci.c:35:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/core/usb.c:42:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/core/of.c:12:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/core/of.c:12:
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/ata/ahci.h:25,
+>                  from drivers/ata/libahci.c:32:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/usb/core/hcd.c:35:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from drivers/ata/sata_mv.c:50:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from include/linux/usb/of.h:12,
+>                  from drivers/usb/core/message.c:21:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> In file included from include/linux/phy/phy.h:17,
+>                  from include/linux/usb/otg.h:13,
+>                  from drivers/usb/core/hub.c:26:
+> include/linux/regulator/consumer.h:600:1: error: expected identifier or '(' before '{' token
+>   600 | {
+>       | ^
+> include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' declared 'static' but never defined [-Wunused-function]
+>   599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+>       | ^~~~~~~~~~~~~~~~~~
+> 
+> Caused by commit
+> 
+>   b059b7e0ec32 ("regulator: core: Add regulator_is_equal() helper")
+> 
+> I have added the following fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 15 Jan 2020 11:58:36 +1100
+> Subject: [PATCH] fix for "regulator: core: Add regulator_is_equal() helper"
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  include/linux/regulator/consumer.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/consumer.h
+> index 2c89d886595c..6a92fd3105a3 100644
+> --- a/include/linux/regulator/consumer.h
+> +++ b/include/linux/regulator/consumer.h
+> @@ -596,7 +596,7 @@ regulator_bulk_set_supply_names(struct regulator_bulk_data *consumers,
+>  }
+>  
+>  static inline bool
+> -regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+> +regulator_is_equal(struct regulator *reg1, struct regulator *reg2)
+>  {
+>  	return false;
+>  }
 
-Hi Geert,
+Sorry for the breakage, thanks for the patch.
 
-On Tue, 14 Jan 2020 09:41:57 +0100 Geert Uytterhoeven <geert@linux-m68k.org=
-> wrote:
->
-> For today's renesas-drivers, I'm using the attached conflict resolution.
-
-Thanks, I will use your resolution from now on.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZmWZVVMQHE/=k9OQRCnD3CJ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4eickACgkQAVBC80lX
-0Gx3WQf+ISvunKWj6CeTwh6faiTYiSC7RBDTJ+iJ1SDnsWjFH5ZpMZgW2Hk4Qwtc
-ZpV1OnJUvdl1fRMXaq1kQKPzCECio47lnHqk/GGGGpVTwcKXfOzOtva1VPoD7ba7
-lnH5ZiGF968gynqTuPP6yostnLFcor9mlbRt/ADZKB6VOmx3Ly4GUgjlkeCKh/X9
-wOEKbZYStyYeqbtyMB2j7I1bNq+Y8jC53f3dw0Pr8FNWfDVw97cUGAMTeuwK2JM4
-BHDkKz9NO87va4cXeBhAnWIoR+jnU79xLpO+cU3YMd0LLMopt2+hBg2ZbRUkAjbh
-uijM7GaGV2uFJwlczg0xUGQwmaw3tA==
-=uYy6
------END PGP SIGNATURE-----
-
---Sig_/ZmWZVVMQHE/=k9OQRCnD3CJ--
+Acked-by: Marek Vasut <marex@denx.de>

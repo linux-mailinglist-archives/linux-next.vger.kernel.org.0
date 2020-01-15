@@ -2,124 +2,281 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A8513B634
-	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2020 00:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD6713B6A9
+	for <lists+linux-next@lfdr.de>; Wed, 15 Jan 2020 02:03:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729052AbgANXxL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jan 2020 18:53:11 -0500
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:55036 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728769AbgANXxL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jan 2020 18:53:11 -0500
-Received: by mail-pj1-f67.google.com with SMTP id kx11so6463663pjb.4
-        for <linux-next@vger.kernel.org>; Tue, 14 Jan 2020 15:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j2E7ZFy6aieNRC/FnnKvvkc+wJEJ/BlK5p7TcHenYqg=;
-        b=Fb+1mHnYFzLqwCbfsucuxwt0wY+h3w4IlMju1fc0DKE2j5G5drb/oMOhZOLjmhY6Cm
-         UBSBLkcRwfQkWW3VcGlkbdZFmm/CxHmc/2Cyf3jsXzVSebCwPNJ3gbxegEJgO4vqXYuB
-         O6G/wcmz551H/oc5Zazco/bimLiHWykwQs3jvWoCtz62t2knGN1/LLs8UoT4ZgOKAYWH
-         xfsjM0/XnppMiz0cPvApP3BH8y6C9sq7q14LY5ZBZd7oVtj9doWc8+zZqozQo5urFXRP
-         BYH5UgxcjFbZ66PDI/USdqohoUsrFnrXl82ZSjpngY7c4LxdgZrXmdEbjMwrrUsUffKQ
-         DEwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j2E7ZFy6aieNRC/FnnKvvkc+wJEJ/BlK5p7TcHenYqg=;
-        b=sB5ANqzUFhxTsmVqgPuBed/B+vSZ4F/aZw+zgTc3Sed6IHAvvSlnlWlJ8yZ3NCxrcd
-         OKu+B7BMv8GMu7S42wChSYKMgVbzwBmqRB7Ol0HxGuF4d8698OHKZOjdFHk/no3H6rKE
-         Eirs0Mc+TrccbbHczmbkPKxC0pOa3jr3zXyBMeJpMoUWd9G7yer8dABlyeRmxGbPjq0H
-         djzPLtIMbnpmPxQk4NKx9Ygqi0tKoLyNtzgLPRRY7qi8kHO0Rr3wyRbrketF3PntWO/k
-         dGr3NMt2WtoPM35xCgSmgESELdW0zGHN9mByQA+WlDp9iQg3iWWlTBSAcnWfTcgG/AXP
-         k1IA==
-X-Gm-Message-State: APjAAAWPLBSeCFh/Kt3+vNo/3SxkpuOt0aHHvBY2GcqGbfpCfPP+G+zx
-        W16ptu3LcysfQ9aEQyr42ubSRKv8xgMnVJn0n++y62d2LfA=
-X-Google-Smtp-Source: APXvYqwnx0dad7N/SaM9hd+5nBJXlA/iobnlbtzjmtuuf7lccodkk2OuAJgL+VX8zJSDFFC3D20UmtA5hgMoLN2iXRA=
-X-Received: by 2002:a17:902:7d94:: with SMTP id a20mr22016821plm.297.1579045989763;
- Tue, 14 Jan 2020 15:53:09 -0800 (PST)
-MIME-Version: 1.0
-References: <1579018183-14879-1-git-send-email-alan.maguire@oracle.com>
- <alpine.LRH.2.20.2001141639240.15464@dhcp-10-175-171-251.vpn.oracle.com>
- <51d7d427-2ef6-b0cd-ad23-2fb75b06b763@infradead.org> <1973062.CA44Rh9njY@kreacher>
-In-Reply-To: <1973062.CA44Rh9njY@kreacher>
-From:   Brendan Higgins <brendanhiggins@google.com>
-Date:   Tue, 14 Jan 2020 15:52:57 -0800
-Message-ID: <CAFd5g46q94DZYtk-dfDaX=nNaGdXoYZeshvTiFh6D8UsQrvVHg@mail.gmail.com>
-Subject: Re: [PATCH] software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Alan Maguire <alan.maguire@oracle.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1728890AbgAOBDD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jan 2020 20:03:03 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54859 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728795AbgAOBDD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jan 2020 20:03:03 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47y8Fb2dKSz9sR0;
+        Wed, 15 Jan 2020 12:02:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579050179;
+        bh=LJCcVrrgYKckWP47OjF4ERfV0sPUZuTKdgMkL4ZCdiE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Bn/vp9x4S57H0GjfjON3BsL6uP+p4CVX79/woRN5+l7vAx4PvUd9TLcua2zMjNX6B
+         7aP/7RFktx6DVDflVoBZJk1EHf9RmVO/fZ3wUboqN9w4dcp46rBvuo3O5LbnipdeWi
+         /MMEmG985CyvDu+4DLu3zWqtMGJ55+KDjifwesbC3mrGTOwhebSc/zY8S6iDqT7TIK
+         pHO1prC45Ix5/VPYciVvRiuls8q3q3SQIg1B8oJqTHc68VFw1XeBIu1v9/cqXw+ttd
+         pOBIIiI3QSsmm2LZfWm7PlczF8kU3QdH6Wciscuenx45PpoO+RMgg4V5IlyS/Kl87M
+         eR4tghdVDk8Tg==
+Date:   Wed, 15 Jan 2020 12:02:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Marek Vasut <marex@denx.de>
+Subject: linux-next: build failure after merge of the sound-asoc tree
+Message-ID: <20200115120258.0e535fcb@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/lnOhZIOaJhOTKMBDnOOcfE1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 14, 2020 at 2:43 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> On Tuesday, January 14, 2020 5:45:56 PM CET Randy Dunlap wrote:
-> > On 1/14/20 8:42 AM, Alan Maguire wrote:
-> > > On Tue, 14 Jan 2020, Randy Dunlap wrote:
-> > >
-> > >> Hi Alan,
-> > >>
-> > >> On 1/14/20 8:09 AM, Alan Maguire wrote:
-> > >>> currently the property entry kunit tests are built if CONFIG_KUNIT=y.
-> > >>> This will cause warnings when merged with the kunit tree that now
-> > >>> supports tristate CONFIG_KUNIT.  While the tests appear to compile
-> > >>> as a module, we get a warning about missing module license.
-> > >>>
-> > >>> It's better to have a per-test suite CONFIG variable so that
-> > >>> we can do selective building of kunit-based suites, and can
-> > >>> also avoid merge issues like this.
-> > >>>
-> > >>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > >>
-> > >> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > >>
-> > >
-> > > Apologies for missing you out here.
-> > >
-> > >>> Fixes: c032ace71c29 ("software node: add basic tests for property entries")
-> > >>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> > >>> ---
-> > >>>  drivers/base/test/Kconfig  | 3 +++
-> > >>>  drivers/base/test/Makefile | 2 +-
-> > >>>  2 files changed, 4 insertions(+), 1 deletion(-)
-> > >>>
-> > >>> diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
-> > >>> index 86e85da..d29ae95 100644
-> > >>> --- a/drivers/base/test/Kconfig
-> > >>> +++ b/drivers/base/test/Kconfig
-> > >>> @@ -8,3 +8,6 @@ config TEST_ASYNC_DRIVER_PROBE
-> > >>>     The module name will be test_async_driver_probe.ko
-> > >>>
-> > >>>     If unsure say N.
-> > >>> +config KUNIT_DRIVER_PE_TEST
-> > >>> + bool "KUnit Tests for property entry API"
-> > >>> + depends on KUNIT
-> > >>
-> > >> Why is this bool instead of tristate?
-> > >>
-> > >
-> > > The support for building kunit and kunit tests as modules has not merged
-> > > into linux-next yet, so if we set the option to tristate the build would
-> > > fail for allmodconfig builds.   Once it's merged we can revisit though; I
-> > > should have mentioned this, thanks for reminding me!
-> >
-> > Oh. I see.  Thanks.
->
-> Patch applied, thanks!
+--Sig_/lnOhZIOaJhOTKMBDnOOcfE1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Cool, looks good. Thanks!
+Hi all,
+
+After merging the sound-asoc tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
+
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/phy/phy-core.c:17:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/common/common.c:15:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/phy/of.c:9:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from drivers/usb/host/ohci-hcd.c:37:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from drivers/usb/host/ehci-hub.c:17,
+                 from drivers/usb/host/ehci-hcd.c:305:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/amba/bus.h:19,
+                 from drivers/of/platform.c:14:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+In file included from include/linux/amba/bus.h:19,
+                 from drivers/of/platform.c:14:
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/usb/core/phy.c:12:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/ata/ahci.h:25,
+                 from drivers/ata/ahci.c:35:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/core/usb.c:42:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/core/of.c:12:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/core/of.c:12:
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/ata/ahci.h:25,
+                 from drivers/ata/libahci.c:32:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/usb/core/hcd.c:35:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from drivers/ata/sata_mv.c:50:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from include/linux/usb/of.h:12,
+                 from drivers/usb/core/message.c:21:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+In file included from include/linux/phy/phy.h:17,
+                 from include/linux/usb/otg.h:13,
+                 from drivers/usb/core/hub.c:26:
+include/linux/regulator/consumer.h:600:1: error: expected identifier or '('=
+ before '{' token
+  600 | {
+      | ^
+include/linux/regulator/consumer.h:599:1: warning: 'regulator_is_equal' dec=
+lared 'static' but never defined [-Wunused-function]
+  599 | regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
+      | ^~~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  b059b7e0ec32 ("regulator: core: Add regulator_is_equal() helper")
+
+I have added the following fix patch for today.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 15 Jan 2020 11:58:36 +1100
+Subject: [PATCH] fix for "regulator: core: Add regulator_is_equal() helper"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/regulator/consumer.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/regulator/consumer.h b/include/linux/regulator/c=
+onsumer.h
+index 2c89d886595c..6a92fd3105a3 100644
+--- a/include/linux/regulator/consumer.h
++++ b/include/linux/regulator/consumer.h
+@@ -596,7 +596,7 @@ regulator_bulk_set_supply_names(struct regulator_bulk_d=
+ata *consumers,
+ }
+=20
+ static inline bool
+-regulator_is_equal(struct regulator *reg1, struct regulator *reg2);
++regulator_is_equal(struct regulator *reg1, struct regulator *reg2)
+ {
+ 	return false;
+ }
+--=20
+2.24.0
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lnOhZIOaJhOTKMBDnOOcfE1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4eZMIACgkQAVBC80lX
+0GxAlQf/b8Mr6rvfdc0VDbyQ1FO2hobSrC+63oSbLsFXCEGmH1Z7vKfgp7viQPff
+Eb2rtqYo0lY0eLiWlfZED9mIcqj0URw0jqA9BMrY+0DUzTYmU9+iA8VBYJVBIVq3
+AuV2U3NstVVdd57TMiCrq2bi8ISVa3W10W2Akrb0nStmDCJaGOE36fZE5t5uBwph
+bEesvHQgtVGB5EqC0kBwHEi+yy+R8lyf8uQ2nNN2lDYItMy9MTqS+z+NMlGsD0H5
+Kh0GLn9eMETXMTyvU2F8v3T4QO9T4o3XyQ/pWuCMN1qqrJqCPmn8BvLhBfONS0LJ
+fCPYyZEEv1rUVXHoype9jQQoa+kk3Q==
+=pH2l
+-----END PGP SIGNATURE-----
+
+--Sig_/lnOhZIOaJhOTKMBDnOOcfE1--

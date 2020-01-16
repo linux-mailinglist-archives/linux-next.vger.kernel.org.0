@@ -2,110 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1932F13D0AF
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 00:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E5913D130
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 01:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730183AbgAOXji (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jan 2020 18:39:38 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51827 "EHLO ozlabs.org"
+        id S1729372AbgAPAh2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jan 2020 19:37:28 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57531 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726472AbgAOXjh (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Jan 2020 18:39:37 -0500
+        id S1729110AbgAPAh2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Jan 2020 19:37:28 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ykLs4sxMz9sR1;
-        Thu, 16 Jan 2020 10:39:33 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yldd5QYKz9sR0;
+        Thu, 16 Jan 2020 11:37:25 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579131575;
-        bh=bM+tz2kFdbTfR+m35IrApP9n+YHuTQq0hXIrBD1g6p0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=B5o0Q+Qbz+Fh9nE6jGV8mxlgxUvMrP7QnMN7U8rJQtga5PK4LN11cKBT/wLOLs4YP
-         XuuAQ+Bsk3h7dQ/zO7fab/eJr7Cxr4uhtJBmsVRPA+PgjEJ/yxN53hXroCdOuOKYOI
-         G7bcHeM5X2XLDhiLYdnIe0Axc0SBLxrU0i7U4WOHBcmlZY0kXD0cH0eJ+Lv/Y2HtlN
-         qnJ8Vu/9spGH3FAwSo+F+6zs/eA2zf+UOzdgE8mt36GSlxCcpJs1KMdLt98Flz6JRN
-         soQ0lm8kiGof8G9XlKjoX8QxuJzgqqnC47fhhJTpIaLHyzovjA8fUUdGyoLkFITU1E
-         nE9c9dUXrF6Hw==
-Date:   Thu, 16 Jan 2020 10:39:32 +1100
+        s=201702; t=1579135045;
+        bh=GbTt+rKa0V2mpaEa87nv0cC/Exer67Ry1d8s0Ahz1w0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Q1y7+qBrzUIndY2aaSQNZkTDMed3sC37GDZKbSeXuzT8/r3GG5/g8JyQhfho78X38
+         3PLd3mRPcYSX/+esXQ9awFbjh+Xex9dvOL5srLf8TYA/eMkW3qZEQ2n3OClEB8MMFn
+         HCBEpL59medOPPWMIdL40Y/n801lEMItsjSwp4wUsRPIay5Sw+U4cq7O6kVvnz/kDN
+         /d54N8SI+2VNQ0gKOkDSHlK7pK1eGUD5qjQ/FSWrzmeSoue7ec66MqTmfQPrCxXWOa
+         dBA6iILQsTOtTAGdMbAVRPfwseMNb2+BNlVkoBlueE50x1YIyVaQAHgl8ry2t2/Jr/
+         +VpsuO4VzKKlg==
+Date:   Thu, 16 Jan 2020 11:37:25 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-next@vger.kernel.org, Zong Li <zong.li@sifive.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Subject: Re: [PATCH] powerpc: Do not consider weak unresolved symbol
- relocations as bad
-Message-ID: <20200116103932.2e603cf9@canb.auug.org.au>
-In-Reply-To: <20200115204648.7179-1-alex@ghiti.fr>
-References: <20200115204648.7179-1-alex@ghiti.fr>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the xfs tree
+Message-ID: <20200116113725.0223f18c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X0ES/Pzabz50rIWcgod6J4G";
+Content-Type: multipart/signed; boundary="Sig_/fzDzLL6F/gLixfTVWdm9Y72";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X0ES/Pzabz50rIWcgod6J4G
+--Sig_/fzDzLL6F/gLixfTVWdm9Y72
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alexandre,
+Hi all,
 
-Thanks for sorting this out.  Just a few comments below.
+After merging the xfs tree, today's linux-next build
+(powerpppc64_defconfig) produced this warning:
 
-On Wed, 15 Jan 2020 15:46:48 -0500 Alexandre Ghiti <alex@ghiti.fr> wrote:
->
+fs/xfs/xfs_inode.c: In function 'xfs_itruncate_extents_flags':
+fs/xfs/xfs_inode.c:1523:8: warning: unused variable 'done' [-Wunused-variab=
+le]
+ 1523 |  int   done =3D 0;
+      |        ^~~~
 
-> =20
->  # Have Kbuild supply the path to objdump so we handle cross compilation.
-                                            ^
-"and nm"
+Introduced by commit
 
-> +# Remove from the bad relocations those that match an undefined weak sym=
-bol
-> +# which will result in an absolute relocation to 0.
-> +# Weak unresolved symbols are of that form in nm output:
-> +# "                  w _binary__btf_vmlinux_bin_end"
-> +undef_weak_symbols=3D$($nm "$vmlinux" | awk -e '$1 ~ /w/ { print $2 }')
-> +
-> +while IFS=3D read -r weak_symbol; do
-> +	bad_relocs=3D"$(echo -n "$bad_relocs" | sed "/$weak_symbol/d")"
-> +done <<< "$undef_weak_symbols"
+  4bbb04abb4ee ("xfs: truncate should remove all blocks, not just to the en=
+d of the page cache")
 
-This is not a bash script, and the above is a bashism :-(
-Also, my version of awk (mawk) doesn't have a -e option.
 
-How about something like :
 
-undef_weak_symbols=3D$($nm "$vmlinux" | awk '$1 ~ /w/ { print $2 }')
-if [ "$undef_weak_symbols" ]; then
-	bad_relocs=3D"$(echo "$bad_relocs" | grep -F -w -v "$undef_weak_symbols")"
-fi
-
-Or do this near the top and add the grep to the others.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/X0ES/Pzabz50rIWcgod6J4G
+--Sig_/fzDzLL6F/gLixfTVWdm9Y72
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4forQACgkQAVBC80lX
-0GyunwgAkZoBTpQAhgoODm6QrksXXQEyfUW4a4mYnW8Q62gQraQoNVv0H9M1Irnu
-1W7s/FfgvSNAom/ST78bdY0mPdADH0TZmyyRJbv2EIYvnwUdXva5UwAboMLCacnW
-PZKeC8ox9F57/Td+tDK7okuk/uO17KKp+Uo70DeDeS2i8KUZyUJxD+mO7y173pUj
-hNt25ESQEqrC4Lvu9I16kyLjxvjzMRv4unaQIy3htYQCbxF7/X1Lu33FEhvAJ9vx
-4BY7VWCaE2KNUMEaupSvJiXKfKWWGw6uMNZysIM17C5CfdHZvhaeMNYjNq03A6tX
-jalLi/Ycc9raelW8W8CmcuHx5CzvDA==
-=q+Te
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4fsEUACgkQAVBC80lX
+0GySSQf8CfAFnI3m7FiUt+ghaT7pAAinT5QZxeWmF/OD3jULbGZmtvFnDIhwMLXx
+pat7wO4rb0NK46aCuDqJR5+1UpbHbG+kMofImfuFWBdkUAxDpeOjgFpg1hgZpQDq
+GFG72BD/Xp4Ggfwq64K1nvNxyD5ujzjHNYFGUeC+uExda4u8DSFBKMU0XNIcatKo
+obOkvEx7mz7IRLqhHlpRBilyoBXT5qRDRYieUYrdw827Exm/vRhKxd97TJUC3u9K
+snbiRabSQKUSKjjvbAidUWmHMylodYZp/AIB5PNGUaioCsz+4YY3l4vdWKHPmRV2
+2pfobsgBzAkh0c5ktruLnQe1c59aig==
+=BD0u
 -----END PGP SIGNATURE-----
 
---Sig_/X0ES/Pzabz50rIWcgod6J4G--
+--Sig_/fzDzLL6F/gLixfTVWdm9Y72--

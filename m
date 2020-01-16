@@ -2,81 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5BE13D19F
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 02:41:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6AE13D1A8
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 02:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730155AbgAPBlD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jan 2020 20:41:03 -0500
-Received: from ozlabs.org ([203.11.71.1]:43565 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729048AbgAPBlD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Jan 2020 20:41:03 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47yn306yYJz9sPW;
-        Thu, 16 Jan 2020 12:41:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579138861;
-        bh=iF8dGjvO6kswMpy1JZRItoPj/hzZRrEEPqmUL5wGpiA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XimebBJCPS8AzMG/J5PAGPqz4AWIIePzkdVzN7XQvlpJqyFeOJXCsZIzlYm91uGJW
-         z0AMRhNBn9tx23suVfpmMITvkFHpHHOmx/ZHkDs8LTkh8F1NWBTPSd0VdDdaTjEF2i
-         yd/uSiCQXZ/SJOKitsX1sY3pUnfkcLdd7jyCrhxZ0SPq4BSzocCSq4QJ4xsNcx+HJB
-         qhixqedNRRHWdXDtvC7NtNIpN39rn5LWUQPWVjOkL6B9FJDZ+10lpNu0SChbPZ42Tk
-         dgHq1kOzY+WyI7VgF4Cb6aM+rekD5gv/3M6C4yxy48RirtzDLjFVtP5Xa6wvLUOKcq
-         WZtYzbNRwJsuA==
-Date:   Thu, 16 Jan 2020 12:41:00 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+        id S1730253AbgAPBo6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jan 2020 20:44:58 -0500
+Received: from mail-wr1-f41.google.com ([209.85.221.41]:37364 "EHLO
+        mail-wr1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730244AbgAPBo6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jan 2020 20:44:58 -0500
+Received: by mail-wr1-f41.google.com with SMTP id w15so17570405wru.4
+        for <linux-next@vger.kernel.org>; Wed, 15 Jan 2020 17:44:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=HHyBv9/uEUzj2yZpH1lPNDp/96TDlfsa3OqJUI+/4dM=;
+        b=ajk8NqoFzUUWEVPoY2YbpKmKovEbVpNC/G8dbwzkRIfRyNhL/ngheXVmIgb6pDrbao
+         FUWhzGPpa/oEe1zobU9JNgXhpZR1XjDfdqrnxlYFhEwi3N4INsKVi0qiqTLwCvTZF32u
+         kTNLBQH2N4O7WDwxfsALb9HrTzCIM/7Iqx+Wxrsq4/oqq3RyS2rxcy4tdmClzQIGLf74
+         2rJT0IBbeB3YWi5aFnrq5PQ1liOv66yMK5P6RZOY67JG69r3y2P1E3+VpHrKOxgabfeH
+         RJjutBwAPLO5mSrvgLl6KfcaPukSK3YQm0fWt8Wb7zx7l+ESm85Rw2s7gEMlu59ZQ1t/
+         QCjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=HHyBv9/uEUzj2yZpH1lPNDp/96TDlfsa3OqJUI+/4dM=;
+        b=EYGIkUqIwSS1W7r/hIMGxyiJI1wBa95179gndhZdGPCF2pIdx44X2PYSrHZSEARoUH
+         DfEqHH6hu+O+ply7yODFjvqjhPF+K8rrNKbChohDxFKpX6BykZfYao20+XF8XCcQsHMU
+         AgG1zKUN+FJ58o5+ifQVEvjMK27YUpxZ2j517Y7Qt8tmfJVBwScMzvtNavosuo4d5TKk
+         PwD+J0end+4uwsYWlKgZRF4esVk+MRiraO8vHxm39CQeaAoEqRGnSS1OD7BtrmZAIxl6
+         z7jte9eC2KLkzSxGGEIzkh/O6B3+NjHrCi+J4A3mih57nDKQ0mYren1Kl893UMV3/4/d
+         CQyA==
+X-Gm-Message-State: APjAAAV/DZ4RdK5K/hx4ChLLbDNBAK2RC/LJbVJSB+o9p2g9nu2Txc+Z
+        tOzmVBZpCMJ0O2wJuFM+/RLeU1XrBAE=
+X-Google-Smtp-Source: APXvYqzrdHr6ViCBpGA8HoqiJ6r1JJpA8bbbJfh9MIOIuK0CtXAFlGH5oCt5SaUo7gz/zIiiwaNuPA==
+X-Received: by 2002:a5d:46d0:: with SMTP id g16mr246806wrs.287.1579139096285;
+        Wed, 15 Jan 2020 17:44:56 -0800 (PST)
+Received: from [192.168.0.38] ([176.61.57.127])
+        by smtp.gmail.com with ESMTPSA id k16sm27619337wru.0.2020.01.15.17.44.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2020 17:44:55 -0800 (PST)
+Subject: Re: linux-next: Fixes tag needs some work in the usb-gadget tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Felipe Balbi <balbi@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the usb-gadget tree
-Message-ID: <20200116124100.58af81d5@canb.auug.org.au>
-In-Reply-To: <b7ef5047-c8c3-42cc-d049-fb72563d3544@linaro.org>
 References: <20200116070726.7e2ef8cc@canb.auug.org.au>
-        <b7ef5047-c8c3-42cc-d049-fb72563d3544@linaro.org>
+ <b7ef5047-c8c3-42cc-d049-fb72563d3544@linaro.org>
+ <20200116124100.58af81d5@canb.auug.org.au>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Message-ID: <6b984328-b3f4-a23d-efb3-7e7955ad165a@linaro.org>
+Date:   Thu, 16 Jan 2020 01:45:25 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0jsW41eyiDVWTdreT2TM8+y";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200116124100.58af81d5@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0jsW41eyiDVWTdreT2TM8+y
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 16/01/2020 01:41, Stephen Rothwell wrote:
+> Hi Bryan,
+> 
+> On Thu, 16 Jan 2020 01:19:22 +0000 Bryan O'Donoghue <bryan.odonoghue@linaro.org> wrote:
+>>
+>> How should extra long fixes like this be divided up ?
+> 
+> Just let them run on even if they are too long i.e. don't split them at all.
 
-Hi Bryan,
-
-On Thu, 16 Jan 2020 01:19:22 +0000 Bryan O'Donoghue <bryan.odonoghue@linaro=
-.org> wrote:
->
-> How should extra long fixes like this be divided up ?
-
-Just let them run on even if they are too long i.e. don't split them at all.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/0jsW41eyiDVWTdreT2TM8+y
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4fvywACgkQAVBC80lX
-0GxLkgf/b0A+nGrggj9HA9czdShu5o3SQFdD46v4dtIOSJL5Ix4DaTqGH/lST817
-7IDySPHCs6gilXop6l6ZzVbw6gFQ47xGMn34WCrGQDthLM3D14yZoQp79VzQCE9m
-rp0uilwLyMzPRjX9D68RBZRBmeSr4BhZ0TCHjrpUnEGuHiVfCKCOBXbeCJdFT6Wy
-1JKwGYrh+ScFYq/XBkvYIasXIuH5aKdObvHKDE9VnXcyuzc/n0oMaC2HSiBaXC/z
-6CIeAxSiPRrtV9DeWkVx0vUCjULV/FdXRNTkEDvam7wfiFqOmILfQh/FVfoBTGTR
-vYSMijraYROwIyiFwv6MnQNI0aU6hA==
-=TWxy
------END PGP SIGNATURE-----
-
---Sig_/0jsW41eyiDVWTdreT2TM8+y--
+That's what's in the git commit log though isn't it ?

@@ -2,483 +2,213 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A60713DE59
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 16:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 069F113EC0C
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 18:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726908AbgAPPM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jan 2020 10:12:57 -0500
-Received: from mail-wr1-f51.google.com ([209.85.221.51]:45988 "EHLO
-        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726587AbgAPPM4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 10:12:56 -0500
-Received: by mail-wr1-f51.google.com with SMTP id j42so19483638wrj.12
-        for <linux-next@vger.kernel.org>; Thu, 16 Jan 2020 07:12:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=PYTh8r3LWDKDfBCFNrsp9nJkZH7OhwH9QF++6wpRQws=;
-        b=lpBgP7v5TggxXLUgKfDPMOBBEF+K+lVvYivrxSgtaNz2I8EJLAatj75odbmcWoZndz
-         kXR9vm1cEyjX9Zk8ro2WHpPLhlZ5AX0q2JpSjhX0v+ZPHsJ/nFeXk25U3F1tCzV1RQQQ
-         MseMnpDqr/gfWPgKLqwZ4kzr8Wc3U09xA6MX44HNnDLtOV7yADNd8cTyB6Um0mImnoGn
-         FGGNYaUWlviXaDmyctqRXNMiUyEUmG0qiXURQGtzLR2/JaDxqDkje9O3OCy26oSVzf4x
-         QzQJQcyBProGa+jpFWe9DO01oFLD/aytqiCNTgf+vAVFfQvapwA7XgNttBygVWdfuZ9E
-         GlxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=PYTh8r3LWDKDfBCFNrsp9nJkZH7OhwH9QF++6wpRQws=;
-        b=pZlT5mysb3u5UQsn+7InLs7vMkV73PaAoOoC5Kq4K0ir6d1YKUI/bu5OdFCNKCW0jJ
-         lss0ZkCsOMz+EimOnlMT5LB8ilu8G4/lWzGAGHMrP1NFMZfTRIkt6X4lJCiLzv06/wpE
-         vH10gVAKP3v4EcALFV/q5EYaT/LBmpxAf74WcKfneAFALSwOtFdpQv/0JdaR7Xuj+RuR
-         QcC+ZE9qCt5S0iiSMKgRPsF0o52yOuU9dJcunuUydLUg3pGRiOswE0li9dVEAYj0d5IN
-         hG3zoSf5Z4iCX+Zn+rDvJEoxUmQyg3SY8NMI4Ymz6+IXDi0dVqlmDZC/aguFZrY9wzu6
-         JVuQ==
-X-Gm-Message-State: APjAAAVZzrqtXBdddTMF06IeoeTD0R2NIyQWtMUUbQJT2y0q6PUbLeSA
-        gw/0zjfMhYL2tvfsQYPr+/x7iQtoHJvjfw==
-X-Google-Smtp-Source: APXvYqzvpXOy/eNqx6cUrW1GV23lpX1UyejTFZjm6HTP/UAOSnZ8Ac5gw5bodWqCTTVSI6Zojr1Frg==
-X-Received: by 2002:a5d:6048:: with SMTP id j8mr3830964wrt.41.1579187573013;
-        Thu, 16 Jan 2020 07:12:53 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id l15sm28439614wrv.39.2020.01.16.07.12.52
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2020 07:12:52 -0800 (PST)
-Message-ID: <5e207d74.1c69fb81.7f3c0.5e62@mx.google.com>
-Date:   Thu, 16 Jan 2020 07:12:52 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S2405974AbgAPRyc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jan 2020 12:54:32 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55714 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405940AbgAPRoo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 12:44:44 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=P0ujeKY7h/62OJnX1PYjinltna+YaYSFTchSZ0TA9WA=; b=RD6amf3ZQL/0bf9oJtita8Ly6
+        TRFI18VJHo5iLj3eHVWnW3bzCtvUy3ZaMrBgZqe4HHNjdbOQho2cOpOEhA/J08NuQTm0cDZGNJM3Z
+        tqG6d7ehcMYo5AK62JDM/ckapAVXsaBKVOXCM597TByf7ftJnrJpni3irARG6fW6GuHErCp5FZljt
+        c7hJO95yMx8vpb4Sz9d86xkoGDrUFRtxvNXm71sajTsOQEVuHNfABj161iMm5cxLNLZNmeJi2bR4S
+        ZdQ6QqcSDkNrRrNvu689AwFl6X4ZZt7Hm1spbvrgBEsnNXP9Dp92VmvrmdSmnCIj/To+U6OxZxv2r
+        lYIZYOsDw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1is9CF-0004c6-7v; Thu, 16 Jan 2020 17:44:43 +0000
+Date:   Thu, 16 Jan 2020 09:44:43 -0800
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
+        linux-next <linux-next@vger.kernel.org>,
+        Oliver <oohall@gmail.com>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        iommu@lists.linux-foundation.org,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        MPT-FusionLinux.pdl@broadcom.com
+Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
+ mpt3sas driver
+Message-ID: <20200116174443.GA30158@infradead.org>
+References: <1578489498.29952.11.camel@abdul>
+ <1578560245.30409.0.camel@abdul.in.ibm.com>
+ <20200109142218.GA16477@infradead.org>
+ <1578980874.11996.3.camel@abdul.in.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20200116
-Subject: next/master boot: 249 boots: 9 failed, 176 passed with 60 offline,
- 4 untried/unknown (next-20200116)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1578980874.11996.3.camel@abdul.in.ibm.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 249 boots: 9 failed, 176 passed with 60 offline, 4 untrie=
-d/unknown (next-20200116)
+Hi Abdul,
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200116/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200116/
+I think the problem is that mpt3sas has some convoluted logic to do
+some DMA allocations with a 32-bit coherent mask, and then switches
+to a 63 or 64 bit mask, which is not supported by the DMA API.
 
-Tree: next
-Branch: master
-Git Describe: next-20200116
-Git Commit: 2747d5fdab78f43210256cd52fb2718e0b3cce74
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 96 unique boards, 24 SoC families, 29 builds out of 215
-
-Boot Regressions Detected:
-
-arm:
-
-    bcm2835_defconfig:
-        gcc-8:
-          bcm2835-rpi-b:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    davinci_all_defconfig:
-        gcc-8:
-          da850-evm:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          dm365evm,legacy:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5250-arndale:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          exynos5420-arndale-octa:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 3 days (last pass: next-20200110=
- - first fail: next-20200113)
-          exynos5800-peach-pi:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-          imx6dl-wandboard_dual:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx6dl-wandboard_solo:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx6q-wandboard:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx7s-warp:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          vf610-colibri-eval-v3:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    multi_v7_defconfig:
-        gcc-8:
-          armada-xp-openblocks-ax3-4:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          at91-sama5d4ek:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          bcm4708-smartrg-sr400ac:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          exynos5250-arndale:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          exynos5420-arndale-octa:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          exynos5800-peach-pi:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx6dl-wandboard_dual:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx6dl-wandboard_solo:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx6q-wandboard:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          imx7s-warp:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson8b-odroidc1:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          mt7623n-bananapi-bpi-r2:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          mt7629-rfb:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          omap3-beagle:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          omap4-panda:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          qcom-apq8064-cm-qs600:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          socfpga_cyclone5_de0_sockit:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          stih410-b2120:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun5i-r8-chip:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun7i-a20-bananapi:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          tegra30-beaver:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          vf610-colibri-eval-v3:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          zynq-zc702:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          armada-xp-openblocks-ax3-4:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    mvebu_v7_defconfig:
-        gcc-8:
-          armada-xp-openblocks-ax3-4:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          omap4-panda:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4ek:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    socfpga_defconfig:
-        gcc-8:
-          socfpga_cyclone5_de0_sockit:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun5i-r8-chip:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun7i-a20-bananapi:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    tegra_defconfig:
-        gcc-8:
-          tegra30-beaver:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200115)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 10 days (last pass: next-20191220 - =
-first fail: next-20200106)
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: next-20200115)
-          juno-r2:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-axg-s400:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200115)
-          meson-gxl-s905x-nexbox-a95x:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-gxm-nexbox-a1:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          mt7622-rfb1:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun50i-a64-bananapi-m64:
-              lab-clabbe: new failure (last pass: next-20200115)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          juno-r2:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-axg-s400:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: next-20200115)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20200115)
-          meson-gxl-s905x-nexbox-a95x:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          juno-r2:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-axg-s400:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-gxl-s905x-nexbox-a95x:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          meson-gxm-nexbox-a1:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          mt7622-rfb1:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-191220 - first fail: next-20200115)
-          sun50i-h5-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: next-20200115)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: new failure (last pass: next-20191220)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            apq8096-db820c: 1 failed lab
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-
-arm:
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-
-Offline Platforms:
-
-riscv:
-
-    defconfig:
-        gcc-8
-            sifive_fu540: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            juno-r2: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-            meson-gxm-nexbox-a1: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig:
-        gcc-8
-            juno-r2: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-            meson-gxm-nexbox-a1: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            juno-r2: 1 offline lab
-            meson-axg-s400: 1 offline lab
-            meson-gxl-s905x-nexbox-a95x: 1 offline lab
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun4i-a10-cubieboard: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-
-    sama5_defconfig:
-        gcc-8
-            at91-sama5d4ek: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5250-arndale: 1 offline lab
-            exynos5420-arndale-octa: 1 offline lab
-            exynos5800-peach-pi: 1 offline lab
-
-    mvebu_v7_defconfig:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-
-    tegra_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
-    socfpga_defconfig:
-        gcc-8
-            socfpga_cyclone5_de0_sockit: 1 offline lab
-
-    omap2plus_defconfig:
-        gcc-8
-            omap3-beagle: 1 offline lab
-            omap4-panda: 1 offline lab
-
-    bcm2835_defconfig:
-        gcc-8
-            bcm2835-rpi-b: 1 offline lab
-
-    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            armada-xp-openblocks-ax3-4: 1 offline lab
-            at91-sama5d4ek: 1 offline lab
-            bcm4708-smartrg-sr400ac: 1 offline lab
-            exynos5250-arndale: 1 offline lab
-            exynos5420-arndale-octa: 1 offline lab
-            exynos5800-peach-pi: 1 offline lab
-            imx6dl-wandboard_dual: 1 offline lab
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-            imx7s-warp: 1 offline lab
-            meson8b-odroidc1: 1 offline lab
-            mt7623n-bananapi-bpi-r2: 1 offline lab
-            mt7629-rfb: 1 offline lab
-            omap3-beagle: 1 offline lab
-            omap4-panda: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            socfpga_cyclone5_de0_sockit: 1 offline lab
-            stih410-b2120: 1 offline lab
-            sun4i-a10-cubieboard: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-            sun7i-a20-bananapi: 1 offline lab
-            tegra30-beaver: 1 offline lab
-            vf610-colibri-eval-v3: 1 offline lab
-            zynq-zc702: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-            dm365evm,legacy: 1 offline lab
-
-    imx_v6_v7_defconfig:
-        gcc-8
-            imx6dl-wandboard_dual: 1 offline lab
-            imx6dl-wandboard_solo: 1 offline lab
-            imx6q-wandboard: 1 offline lab
-            imx7s-warp: 1 offline lab
-            vf610-colibri-eval-v3: 1 offline lab
+Can you try the patch below?
 
 ---
-For more info write to <info@kernelci.org>
+From 0738b1704ed528497b41b0408325f6828a8e51f6 Mon Sep 17 00:00:00 2001
+From: Christoph Hellwig <hch@lst.de>
+Date: Thu, 16 Jan 2020 18:31:38 +0100
+Subject: mpt3sas: don't change the dma coherent mask after allocations
+
+The DMA layer does not allow changing the DMA coherent mask after
+there are outstanding allocations.  Stop doing that and always
+use a 32-bit coherent DMA mask in mpt3sas.
+
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+---
+ drivers/scsi/mpt3sas/mpt3sas_base.c | 67 ++++++++---------------------
+ drivers/scsi/mpt3sas/mpt3sas_base.h |  2 -
+ 2 files changed, 19 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.c b/drivers/scsi/mpt3sas/mpt3sas_base.c
+index fea3cb6a090b..3b51bed05008 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.c
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.c
+@@ -2706,58 +2706,38 @@ _base_build_sg_ieee(struct MPT3SAS_ADAPTER *ioc, void *psge,
+ static int
+ _base_config_dma_addressing(struct MPT3SAS_ADAPTER *ioc, struct pci_dev *pdev)
+ {
+-	u64 required_mask, coherent_mask;
+ 	struct sysinfo s;
+-	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
+-	int dma_mask = (ioc->hba_mpi_version_belonged > MPI2_VERSION) ? 63 : 64;
+-
+-	if (ioc->is_mcpu_endpoint)
+-		goto try_32bit;
++	int dma_mask;
+ 
+-	required_mask = dma_get_required_mask(&pdev->dev);
+-	if (sizeof(dma_addr_t) == 4 || required_mask == 32)
+-		goto try_32bit;
+-
+-	if (ioc->dma_mask)
+-		coherent_mask = DMA_BIT_MASK(dma_mask);
++	if (ioc->is_mcpu_endpoint ||
++	    sizeof(dma_addr_t) == 4 ||
++	    dma_get_required_mask(&pdev->dev) <= 32)
++		dma_mask = 32;
++	/* Set 63 bit DMA mask for all SAS3 and SAS35 controllers */
++	else if (ioc->hba_mpi_version_belonged > MPI2_VERSION)
++		dma_mask = 63;
+ 	else
+-		coherent_mask = DMA_BIT_MASK(32);
++		dma_mask = 64;
+ 
+ 	if (dma_set_mask(&pdev->dev, DMA_BIT_MASK(dma_mask)) ||
+-	    dma_set_coherent_mask(&pdev->dev, coherent_mask))
+-		goto try_32bit;
+-
+-	ioc->base_add_sg_single = &_base_add_sg_single_64;
+-	ioc->sge_size = sizeof(Mpi2SGESimple64_t);
+-	ioc->dma_mask = dma_mask;
+-	goto out;
+-
+- try_32bit:
+-	if (dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32)))
++	    dma_set_coherent_mask(&pdev->dev, DMA_BIT_MASK(32)))
+ 		return -ENODEV;
+ 
+-	ioc->base_add_sg_single = &_base_add_sg_single_32;
+-	ioc->sge_size = sizeof(Mpi2SGESimple32_t);
+-	ioc->dma_mask = 32;
+- out:
++	if (dma_mask > 32) {
++		ioc->base_add_sg_single = &_base_add_sg_single_64;
++		ioc->sge_size = sizeof(Mpi2SGESimple64_t);
++	} else {
++		ioc->base_add_sg_single = &_base_add_sg_single_32;
++		ioc->sge_size = sizeof(Mpi2SGESimple32_t);
++	}
++
+ 	si_meminfo(&s);
+ 	ioc_info(ioc, "%d BIT PCI BUS DMA ADDRESSING SUPPORTED, total mem (%ld kB)\n",
+-		 ioc->dma_mask, convert_to_kb(s.totalram));
++		 dma_mask, convert_to_kb(s.totalram));
+ 
+ 	return 0;
+ }
+ 
+-static int
+-_base_change_consistent_dma_mask(struct MPT3SAS_ADAPTER *ioc,
+-				      struct pci_dev *pdev)
+-{
+-	if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(ioc->dma_mask))) {
+-		if (pci_set_consistent_dma_mask(pdev, DMA_BIT_MASK(32)))
+-			return -ENODEV;
+-	}
+-	return 0;
+-}
+-
+ /**
+  * _base_check_enable_msix - checks MSIX capabable.
+  * @ioc: per adapter object
+@@ -5030,14 +5010,6 @@ _base_allocate_memory_pools(struct MPT3SAS_ADAPTER *ioc)
+ 		total_sz += sz;
+ 	} while (ioc->rdpq_array_enable && (++i < ioc->reply_queue_count));
+ 
+-	if (ioc->dma_mask > 32) {
+-		if (_base_change_consistent_dma_mask(ioc, ioc->pdev) != 0) {
+-			ioc_warn(ioc, "no suitable consistent DMA mask for %s\n",
+-				 pci_name(ioc->pdev));
+-			goto out;
+-		}
+-	}
+-
+ 	ioc->scsiio_depth = ioc->hba_queue_depth -
+ 	    ioc->hi_priority_depth - ioc->internal_depth;
+ 
+@@ -6965,7 +6937,6 @@ mpt3sas_base_attach(struct MPT3SAS_ADAPTER *ioc)
+ 	ioc->smp_affinity_enable = smp_affinity_enable;
+ 
+ 	ioc->rdpq_array_enable_assigned = 0;
+-	ioc->dma_mask = 0;
+ 	if (ioc->is_aero_ioc)
+ 		ioc->base_readl = &_base_readl_aero;
+ 	else
+diff --git a/drivers/scsi/mpt3sas/mpt3sas_base.h b/drivers/scsi/mpt3sas/mpt3sas_base.h
+index faca0a5e71f8..e57cade1155c 100644
+--- a/drivers/scsi/mpt3sas/mpt3sas_base.h
++++ b/drivers/scsi/mpt3sas/mpt3sas_base.h
+@@ -1011,7 +1011,6 @@ typedef void (*MPT3SAS_FLUSH_RUNNING_CMDS)(struct MPT3SAS_ADAPTER *ioc);
+  * @ir_firmware: IR firmware present
+  * @bars: bitmask of BAR's that must be configured
+  * @mask_interrupts: ignore interrupt
+- * @dma_mask: used to set the consistent dma mask
+  * @pci_access_mutex: Mutex to synchronize ioctl, sysfs show path and
+  *			pci resource handling
+  * @fault_reset_work_q_name: fw fault work queue
+@@ -1185,7 +1184,6 @@ struct MPT3SAS_ADAPTER {
+ 	u8		ir_firmware;
+ 	int		bars;
+ 	u8		mask_interrupts;
+-	int		dma_mask;
+ 
+ 	/* fw fault handler */
+ 	char		fault_reset_work_q_name[20];
+-- 
+2.24.1
+

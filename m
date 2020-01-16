@@ -2,127 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B63313D35C
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 06:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA70713D402
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 06:57:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725800AbgAPFCo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jan 2020 00:02:44 -0500
-Received: from ozlabs.org ([203.11.71.1]:59861 "EHLO ozlabs.org"
+        id S1726957AbgAPF5Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jan 2020 00:57:25 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40331 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725768AbgAPFCn (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Jan 2020 00:02:43 -0500
+        id S1726933AbgAPF5Z (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jan 2020 00:57:25 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ysWg0nWlz9sPW;
-        Thu, 16 Jan 2020 16:02:39 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ytkp3hYGz9sPW;
+        Thu, 16 Jan 2020 16:57:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579150960;
-        bh=tcjsFmtE6rwms6qQPruMfvGEI5InVaCHB4/OPSGS+T8=;
+        s=201702; t=1579154243;
+        bh=TIBTkvq4qX5YeghYiAJQ60HvuvhkHq5DZiUwvOkT5no=;
         h=Date:From:To:Cc:Subject:From;
-        b=R/eZmHbITuTL8Zh8t8EDnHVIYtwWdYLbUOh8TabazN+bkU578Ncpg9PZF62He+lsK
-         X24MIwG6OQKNkOKURecrQ4oeUDCGXbWoDOVh6hWeH+1dAPn7NeqY94C/GHQA07Ab4T
-         nHUtxonLzSC8E7PrKwLp6xza3EQTq82thEu2Uq0cE/BLNzZAeOSKL42jv0g4ia1EbW
-         0qNrSwpKVweZDx6oTH2ZcIWNzXaJH9qE8uQe3IqdXZXsgTe8aMmuabvKG/Ns87/3W5
-         51hMagjPvz38pNrN4EzskidTlzV8au75HSI4NcCA8dDoNV4FyHK+Ysfs0X8n/61Q1c
-         IxJ+OHvrVj0yQ==
-Date:   Thu, 16 Jan 2020 16:02:38 +1100
+        b=BmcKpvf4nxsIdgUpsRtWI0b0DvH2vVAMlzGZMtVO4nuuVvkb1BGdwH+QVbe0jP8HA
+         TxmOlwNUpcQn6Rzi4PYrjSsi6TWX2nc9N80R8UWOBUyHZghXF5STD/Fi68u9x7jUF1
+         IKRKbUVvZeTkoZTPVJifcyPqi40Z19rfj0aPQRlGxiR8XLdj/Xe/zfZ7KNbbWdWP1S
+         624QjEFNfXpfH9x8w5OcluJjI5dhzEUm4lWAqGx3JDFjotqu+2dYmFjpCQYqYGhxPe
+         q4/9YfXnIKgv/tn7Yo/UzB/gA954SxWp6vKovsRe0fQ32syZj0/2t/Inu/cY6yWDOY
+         IAgSJAGfQwqkA==
+Date:   Thu, 16 Jan 2020 16:57:03 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christoph Hellwig <hch@lst.de>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Julia Lawall <Julia.Lawall@inria.fr>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
-Subject: linux-next: manual merge of the generic-ioremap tree with the
- drm-misc tree
-Message-ID: <20200116160238.6cbdc6b0@canb.auug.org.au>
+        Alan Maguire <alan.maguire@oracle.com>
+Subject: linux-next: build failure after merge of the kunit-next tree
+Message-ID: <20200116165703.4e04be51@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/i2nN6Em1mLxCXpTGTPgmt4/";
+Content-Type: multipart/signed; boundary="Sig_/Rw3GuoXIcZBOMK6Di9auPIJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/i2nN6Em1mLxCXpTGTPgmt4/
+--Sig_/Rw3GuoXIcZBOMK6Di9auPIJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the generic-ioremap tree got a conflict in:
+After merging the kunit-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  drivers/video/fbdev/s1d13xxxfb.c
+x86_64-linux-gnu-ld: drivers/base/test/property-entry-test.o: in function `=
+kunit_test_suites_init':
+property-entry-test.c:(.text+0x26): undefined reference to `kunit_run_tests'
+x86_64-linux-gnu-ld: drivers/base/test/property-entry-test.o: in function `=
+pe_test_reference':
+property-entry-test.c:(.text+0x275): undefined reference to `kunit_binary_a=
+ssert_format'
+x86_64-linux-gnu-ld: property-entry-test.c:(.text+0x2c4): undefined referen=
+ce to `kunit_do_assertion'
 
-between commit:
+and lots more ...
 
-  091be7245a03 ("fbdev: s1d13xxxfb: use resource_size")
+Caused by commit
 
-from the drm-misc tree and commit:
+  27f9d7e984d9 ("software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST")
 
-  4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
+from the pm tree interacting with commit
 
-from the generic-ioremap tree.
+  35c57fc3f8ea ("kunit: building kunit as a module breaks allmodconfig")
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have disabled CONFIG_KUNIT_DRIVER_PE_TEST for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/video/fbdev/s1d13xxxfb.c
-index c23defa27036,8048499e398d..000000000000
---- a/drivers/video/fbdev/s1d13xxxfb.c
-+++ b/drivers/video/fbdev/s1d13xxxfb.c
-@@@ -809,8 -809,8 +809,8 @@@ static int s1d13xxxfb_probe(struct plat
- =20
-  	platform_set_drvdata(pdev, info);
-  	default_par =3D info->par;
-- 	default_par->regs =3D ioremap_nocache(pdev->resource[1].start,
-- 					    resource_size(&pdev->resource[1]));
-+ 	default_par->regs =3D ioremap(pdev->resource[1].start,
- -			pdev->resource[1].end - pdev->resource[1].start +1);
-++				    resource_size(&pdev->resource[1]));
-  	if (!default_par->regs) {
-  		printk(KERN_ERR PFX "unable to map registers\n");
-  		ret =3D -ENOMEM;
-@@@ -818,8 -818,9 +818,8 @@@
-  	}
-  	info->pseudo_palette =3D default_par->pseudo_palette;
- =20
-- 	info->screen_base =3D ioremap_nocache(pdev->resource[0].start,
-- 					    resource_size(&pdev->resource[0]));
-+ 	info->screen_base =3D ioremap(pdev->resource[0].start,
- -			pdev->resource[0].end - pdev->resource[0].start +1);
- -
-++				    resource_size(&pdev->resource[0]));
-  	if (!info->screen_base) {
-  		printk(KERN_ERR PFX "unable to map framebuffer\n");
-  		ret =3D -ENOMEM;
-
---Sig_/i2nN6Em1mLxCXpTGTPgmt4/
+--Sig_/Rw3GuoXIcZBOMK6Di9auPIJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4f7m4ACgkQAVBC80lX
-0GzgUgf8DoZP7ANEwFA1gmq90A09IBorF75zwmqIymxdXpOi2T7CVq6q1yR29A95
-mXpemEXluocHJCNOqavmRW7aLHFmGI1LwxuG7axjp+GX65/AMxKS0VXi01BT8yEN
-aisQSiccDkWvrU+pZaBDpWVFSGAoyNwk/tCLcdKtKnix3pPpTfvmmZ9wJZVqeKsb
-56XAFmkLzaXY7VicldQxNslF6c4NCn19WUZ7wdcPxY01/0JhyN3Bhbe46wCLjgwX
-OGondzDPgu00D8OOAvVhvY4nixZjybjQPqVCqsjVgwRUgWxGkZK2YQ5sxHUxyXYZ
-3shGjgS1i7cNrSAsoaqXIVaWobs8Ng==
-=yLii
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4f+y8ACgkQAVBC80lX
+0Gxnvwf/cClvAMqnOdUDL/t2vAYzPc1Z8B3a6ELAnp+nU0uTkkyUtfssOyvbim+A
+5MszgCFPxmSewp8AwmHnlz+zJv7JbvXS5Rubj0EzQHxxRIxvD8Z9Ewe/g71vRKE3
+IeAxZGmt1K+rVFilKNOfObP69v2xiC3b2f+MzaHTVgCNmZp5yhNX69GyxT7k5OO2
+O8Y3uz4atSnJmX+30WsXHXt4O7Y8kX7tB6JkqoT0i4obg8gv0bq2WXLs/BwXrWTp
+hNmm5kenmFXy1+VxE3Hd1P5F5PomTC/NeatLJSOk+9n/bDccESAtF4rEftGvgNf+
+VOeHwrcqlQlz9CTZAum7SNo3lv+6Mw==
+=V2DI
 -----END PGP SIGNATURE-----
 
---Sig_/i2nN6Em1mLxCXpTGTPgmt4/--
+--Sig_/Rw3GuoXIcZBOMK6Di9auPIJ--

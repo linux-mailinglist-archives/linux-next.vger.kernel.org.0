@@ -2,86 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B00D313D349
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 05:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B63313D35C
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 06:02:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729174AbgAPEuy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jan 2020 23:50:54 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:38981 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729064AbgAPEuy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jan 2020 23:50:54 -0500
-Received: by mail-pf1-f195.google.com with SMTP id q10so9601787pfs.6
-        for <linux-next@vger.kernel.org>; Wed, 15 Jan 2020 20:50:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=S/UKnCMf1wphMoJ4OYkcWAh+SusvLOSqiimKcfL2Y9A=;
-        b=ZfjwP8mMty/3gY8/7UyP5mWSz503gg00xAVxGRihUuAduwFvWaB5lLxfmhETa49rMr
-         x4GYE1l0nvMUbDVJ9Lvx/+zMU1/HCc9pieJX9hHMpJj3da7TCmRWlTN2dvnSvSpY1++A
-         Qj5gfy3a35lBXVXhgQZoAIy2jcQpQ128Dd7BtTaiNtc3Y2mZurC9MLwSC9Cj7u8nzC1+
-         hbpb2au3IUCG9bUfDSMUji+kJlXbCsVJqnDoCIndvE5bv8w9j8f4m9QGdN/AUlllv347
-         8jYF57jjhMVk0zVu5pBjqRI1AaBTR7Ujbr+B3rAGYirbKAIIv5hUb4d52TaU8aA37eDf
-         3AYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=S/UKnCMf1wphMoJ4OYkcWAh+SusvLOSqiimKcfL2Y9A=;
-        b=fytDwkoa1Q1oLGJyhPn6atJt8xMKsltMGr7X9b0HULvrVzk2eFhj2omUIaukspOPfL
-         7Mlm0OYL4XR7AyjON9bfuh7waH/ju+04chCggBUo7HF52NZ9PBLRfpe/13FJ6vNcy3Ua
-         9TODjjgVm5WqGyYLJ4esHWq/+BPkqZY/MZtd/ZGazbVTLS7gPpWTTbjkQfpdFCtQgv2D
-         mdQx1sZHRozmAGxKjkNS5LkDqP8AYVKNGam2c4tbue5m2dxsOyf26SkA76H315VkKcsa
-         opLD6yK5mdR3+Ao+K3wguI7UzUunX08Au2XXNSaJvzqSJIQMvY/q3pA/pMlIViHiXmFn
-         P2HQ==
-X-Gm-Message-State: APjAAAXx5EI7i6VgbuD2oSjMygArhWcS4RFDwyG2sPGWtTzxqpvKhzlf
-        XkJW4Q1P9vIkrk0HSK8aczpAMcA3qgw=
-X-Google-Smtp-Source: APXvYqx8W8T4r676wWslp3VTMNL+6BkVR5IFd2Wz44CBYJOKTlTYL/G6uYUGnCSjOZMsZRMCILUWpg==
-X-Received: by 2002:a05:6a00:90:: with SMTP id c16mr34347767pfj.230.1579150254055;
-        Wed, 15 Jan 2020 20:50:54 -0800 (PST)
-Received: from [192.168.1.188] ([66.219.217.145])
-        by smtp.gmail.com with ESMTPSA id i66sm24001901pfg.85.2020.01.15.20.50.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 15 Jan 2020 20:50:53 -0800 (PST)
-Subject: Re: linux-next: build warning after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1725800AbgAPFCo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jan 2020 00:02:44 -0500
+Received: from ozlabs.org ([203.11.71.1]:59861 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725768AbgAPFCn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Jan 2020 00:02:43 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ysWg0nWlz9sPW;
+        Thu, 16 Jan 2020 16:02:39 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579150960;
+        bh=tcjsFmtE6rwms6qQPruMfvGEI5InVaCHB4/OPSGS+T8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=R/eZmHbITuTL8Zh8t8EDnHVIYtwWdYLbUOh8TabazN+bkU578Ncpg9PZF62He+lsK
+         X24MIwG6OQKNkOKURecrQ4oeUDCGXbWoDOVh6hWeH+1dAPn7NeqY94C/GHQA07Ab4T
+         nHUtxonLzSC8E7PrKwLp6xza3EQTq82thEu2Uq0cE/BLNzZAeOSKL42jv0g4ia1EbW
+         0qNrSwpKVweZDx6oTH2ZcIWNzXaJH9qE8uQe3IqdXZXsgTe8aMmuabvKG/Ns87/3W5
+         51hMagjPvz38pNrN4EzskidTlzV8au75HSI4NcCA8dDoNV4FyHK+Ysfs0X8n/61Q1c
+         IxJ+OHvrVj0yQ==
+Date:   Thu, 16 Jan 2020 16:02:38 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200116115430.74ba615a@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <4d97c033-c00f-bf96-30f5-9eadab8a2214@kernel.dk>
-Date:   Wed, 15 Jan 2020 21:50:51 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Julia Lawall <Julia.Lawall@inria.fr>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: linux-next: manual merge of the generic-ioremap tree with the
+ drm-misc tree
+Message-ID: <20200116160238.6cbdc6b0@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200116115430.74ba615a@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/i2nN6Em1mLxCXpTGTPgmt4/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/15/20 5:54 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> fs/io_uring.c: In function '__io_sqe_files_update':
-> fs/io_uring.c:5567:8: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->  5567 |  fds = (__s32 __user *) up->fds;
->       |        ^
-> 
-> Introduced by commit
-> 
->   813668c6099b ("io_uring: avoid ring quiesce for fixed file set unregister and update")
+--Sig_/i2nN6Em1mLxCXpTGTPgmt4/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed up, thanks.
+Hi all,
 
--- 
-Jens Axboe
+Today's linux-next merge of the generic-ioremap tree got a conflict in:
 
+  drivers/video/fbdev/s1d13xxxfb.c
+
+between commit:
+
+  091be7245a03 ("fbdev: s1d13xxxfb: use resource_size")
+
+from the drm-misc tree and commit:
+
+  4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
+
+from the generic-ioremap tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/video/fbdev/s1d13xxxfb.c
+index c23defa27036,8048499e398d..000000000000
+--- a/drivers/video/fbdev/s1d13xxxfb.c
++++ b/drivers/video/fbdev/s1d13xxxfb.c
+@@@ -809,8 -809,8 +809,8 @@@ static int s1d13xxxfb_probe(struct plat
+ =20
+  	platform_set_drvdata(pdev, info);
+  	default_par =3D info->par;
+- 	default_par->regs =3D ioremap_nocache(pdev->resource[1].start,
+- 					    resource_size(&pdev->resource[1]));
++ 	default_par->regs =3D ioremap(pdev->resource[1].start,
+ -			pdev->resource[1].end - pdev->resource[1].start +1);
+++				    resource_size(&pdev->resource[1]));
+  	if (!default_par->regs) {
+  		printk(KERN_ERR PFX "unable to map registers\n");
+  		ret =3D -ENOMEM;
+@@@ -818,8 -818,9 +818,8 @@@
+  	}
+  	info->pseudo_palette =3D default_par->pseudo_palette;
+ =20
+- 	info->screen_base =3D ioremap_nocache(pdev->resource[0].start,
+- 					    resource_size(&pdev->resource[0]));
++ 	info->screen_base =3D ioremap(pdev->resource[0].start,
+ -			pdev->resource[0].end - pdev->resource[0].start +1);
+ -
+++				    resource_size(&pdev->resource[0]));
+  	if (!info->screen_base) {
+  		printk(KERN_ERR PFX "unable to map framebuffer\n");
+  		ret =3D -ENOMEM;
+
+--Sig_/i2nN6Em1mLxCXpTGTPgmt4/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4f7m4ACgkQAVBC80lX
+0GzgUgf8DoZP7ANEwFA1gmq90A09IBorF75zwmqIymxdXpOi2T7CVq6q1yR29A95
+mXpemEXluocHJCNOqavmRW7aLHFmGI1LwxuG7axjp+GX65/AMxKS0VXi01BT8yEN
+aisQSiccDkWvrU+pZaBDpWVFSGAoyNwk/tCLcdKtKnix3pPpTfvmmZ9wJZVqeKsb
+56XAFmkLzaXY7VicldQxNslF6c4NCn19WUZ7wdcPxY01/0JhyN3Bhbe46wCLjgwX
+OGondzDPgu00D8OOAvVhvY4nixZjybjQPqVCqsjVgwRUgWxGkZK2YQ5sxHUxyXYZ
+3shGjgS1i7cNrSAsoaqXIVaWobs8Ng==
+=yLii
+-----END PGP SIGNATURE-----
+
+--Sig_/i2nN6Em1mLxCXpTGTPgmt4/--

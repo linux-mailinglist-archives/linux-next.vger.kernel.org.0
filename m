@@ -2,180 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B6713D24D
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 03:49:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00D313D349
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 05:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729031AbgAPCtG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jan 2020 21:49:06 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38455 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726552AbgAPCtG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Jan 2020 21:49:06 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ypYS49Njz9sR0;
-        Thu, 16 Jan 2020 13:49:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579142943;
-        bh=pOkguxtakW7odgcyaEbAn/6knPxLxlPQVmo68XZDtCo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=leyAg/8DW7ay+aNLPmZjNSzU286S50440mIwwQJEyVWhqed7pedb+12yFfHF5ho2o
-         +AbAov3T/Vqc0bMnVyUFDc4ohXQBOQUXFnWHWkMqT4akhDwj3WLIY6WaegZ1Cbc/uP
-         KUaE1bwtaEbZLzj3ziARkZHOethZ6qM6mQdK5XpxbpRNJiuIOtuOxP7M3nnhy6Fqrj
-         n60/9zxPDQwY1XtlJyzvgTuMDTVyKkt6OwGckDRfnQJKsJXOjscSoRazT4oipfAL8d
-         1VJx07TQc7lNKmfP2geeWdylS+nQpL8h9RC6fusnwPMqxdRL0H/s+UiFNDVRV/xU8T
-         TKaHBPkHlooZQ==
-Date:   Thu, 16 Jan 2020 13:48:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
-        KVM <kvm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+        id S1729174AbgAPEuy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jan 2020 23:50:54 -0500
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:38981 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729064AbgAPEuy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Jan 2020 23:50:54 -0500
+Received: by mail-pf1-f195.google.com with SMTP id q10so9601787pfs.6
+        for <linux-next@vger.kernel.org>; Wed, 15 Jan 2020 20:50:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=S/UKnCMf1wphMoJ4OYkcWAh+SusvLOSqiimKcfL2Y9A=;
+        b=ZfjwP8mMty/3gY8/7UyP5mWSz503gg00xAVxGRihUuAduwFvWaB5lLxfmhETa49rMr
+         x4GYE1l0nvMUbDVJ9Lvx/+zMU1/HCc9pieJX9hHMpJj3da7TCmRWlTN2dvnSvSpY1++A
+         Qj5gfy3a35lBXVXhgQZoAIy2jcQpQ128Dd7BtTaiNtc3Y2mZurC9MLwSC9Cj7u8nzC1+
+         hbpb2au3IUCG9bUfDSMUji+kJlXbCsVJqnDoCIndvE5bv8w9j8f4m9QGdN/AUlllv347
+         8jYF57jjhMVk0zVu5pBjqRI1AaBTR7Ujbr+B3rAGYirbKAIIv5hUb4d52TaU8aA37eDf
+         3AYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=S/UKnCMf1wphMoJ4OYkcWAh+SusvLOSqiimKcfL2Y9A=;
+        b=fytDwkoa1Q1oLGJyhPn6atJt8xMKsltMGr7X9b0HULvrVzk2eFhj2omUIaukspOPfL
+         7Mlm0OYL4XR7AyjON9bfuh7waH/ju+04chCggBUo7HF52NZ9PBLRfpe/13FJ6vNcy3Ua
+         9TODjjgVm5WqGyYLJ4esHWq/+BPkqZY/MZtd/ZGazbVTLS7gPpWTTbjkQfpdFCtQgv2D
+         mdQx1sZHRozmAGxKjkNS5LkDqP8AYVKNGam2c4tbue5m2dxsOyf26SkA76H315VkKcsa
+         opLD6yK5mdR3+Ao+K3wguI7UzUunX08Au2XXNSaJvzqSJIQMvY/q3pA/pMlIViHiXmFn
+         P2HQ==
+X-Gm-Message-State: APjAAAXx5EI7i6VgbuD2oSjMygArhWcS4RFDwyG2sPGWtTzxqpvKhzlf
+        XkJW4Q1P9vIkrk0HSK8aczpAMcA3qgw=
+X-Google-Smtp-Source: APXvYqx8W8T4r676wWslp3VTMNL+6BkVR5IFd2Wz44CBYJOKTlTYL/G6uYUGnCSjOZMsZRMCILUWpg==
+X-Received: by 2002:a05:6a00:90:: with SMTP id c16mr34347767pfj.230.1579150254055;
+        Wed, 15 Jan 2020 20:50:54 -0800 (PST)
+Received: from [192.168.1.188] ([66.219.217.145])
+        by smtp.gmail.com with ESMTPSA id i66sm24001901pfg.85.2020.01.15.20.50.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 15 Jan 2020 20:50:53 -0800 (PST)
+Subject: Re: linux-next: build warning after merge of the block tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20200116134859.36d203de@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200116115430.74ba615a@canb.auug.org.au>
+From:   Jens Axboe <axboe@kernel.dk>
+Message-ID: <4d97c033-c00f-bf96-30f5-9eadab8a2214@kernel.dk>
+Date:   Wed, 15 Jan 2020 21:50:51 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NtwKBjK.BWs6ckv++FgVmkE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200116115430.74ba615a@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NtwKBjK.BWs6ckv++FgVmkE
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/15/20 5:54 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the block tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> fs/io_uring.c: In function '__io_sqe_files_update':
+> fs/io_uring.c:5567:8: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+>  5567 |  fds = (__s32 __user *) up->fds;
+>       |        ^
+> 
+> Introduced by commit
+> 
+>   813668c6099b ("io_uring: avoid ring quiesce for fixed file set unregister and update")
 
-Hi all,
+Fixed up, thanks.
 
-Today's linux-next merge of the kvm tree got a conflict in:
+-- 
+Jens Axboe
 
-  arch/x86/include/asm/vmx.h
-
-between commit:
-
-  b39033f504a7 ("KVM: VMX: Use VMX_FEATURE_* flags to define VMCS control b=
-its")
-
-from the tip tree and commits:
-
-  9dadc2f918df ("KVM: VMX: Rename INTERRUPT_PENDING to INTERRUPT_WINDOW")
-  4e2a0bc56ad1 ("KVM: VMX: Rename NMI_PENDING to NMI_WINDOW")
-  5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING=
-")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/x86/include/asm/vmx.h
-index 9fbba31be825,d716fe938fc0..000000000000
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@@ -22,27 -19,27 +22,27 @@@
-  /*
-   * Definitions of Primary Processor-Based VM-Execution Controls.
-   */
-- #define CPU_BASED_VIRTUAL_INTR_PENDING          VMCS_CONTROL_BIT(VIRTUAL_=
-INTR_PENDING)
-- #define CPU_BASED_USE_TSC_OFFSETING             VMCS_CONTROL_BIT(TSC_OFFS=
-ETTING)
- -#define CPU_BASED_INTR_WINDOW_EXITING           0x00000004
- -#define CPU_BASED_USE_TSC_OFFSETTING            0x00000008
- -#define CPU_BASED_HLT_EXITING                   0x00000080
- -#define CPU_BASED_INVLPG_EXITING                0x00000200
- -#define CPU_BASED_MWAIT_EXITING                 0x00000400
- -#define CPU_BASED_RDPMC_EXITING                 0x00000800
- -#define CPU_BASED_RDTSC_EXITING                 0x00001000
- -#define CPU_BASED_CR3_LOAD_EXITING		0x00008000
- -#define CPU_BASED_CR3_STORE_EXITING		0x00010000
- -#define CPU_BASED_CR8_LOAD_EXITING              0x00080000
- -#define CPU_BASED_CR8_STORE_EXITING             0x00100000
- -#define CPU_BASED_TPR_SHADOW                    0x00200000
- -#define CPU_BASED_NMI_WINDOW_EXITING		0x00400000
- -#define CPU_BASED_MOV_DR_EXITING                0x00800000
- -#define CPU_BASED_UNCOND_IO_EXITING             0x01000000
- -#define CPU_BASED_USE_IO_BITMAPS                0x02000000
- -#define CPU_BASED_MONITOR_TRAP_FLAG             0x08000000
- -#define CPU_BASED_USE_MSR_BITMAPS               0x10000000
- -#define CPU_BASED_MONITOR_EXITING               0x20000000
- -#define CPU_BASED_PAUSE_EXITING                 0x40000000
- -#define CPU_BASED_ACTIVATE_SECONDARY_CONTROLS   0x80000000
-++#define CPU_BASED_INTR_WINDOW_EXITING           VMCS_CONTROL_BIT(VIRTUAL_=
-INTR_PENDING)
-++#define CPU_BASED_USE_TSC_OFFSETTING            VMCS_CONTROL_BIT(TSC_OFFS=
-ETTING)
- +#define CPU_BASED_HLT_EXITING                   VMCS_CONTROL_BIT(HLT_EXIT=
-ING)
- +#define CPU_BASED_INVLPG_EXITING                VMCS_CONTROL_BIT(INVLPG_E=
-XITING)
- +#define CPU_BASED_MWAIT_EXITING                 VMCS_CONTROL_BIT(MWAIT_EX=
-ITING)
- +#define CPU_BASED_RDPMC_EXITING                 VMCS_CONTROL_BIT(RDPMC_EX=
-ITING)
- +#define CPU_BASED_RDTSC_EXITING                 VMCS_CONTROL_BIT(RDTSC_EX=
-ITING)
- +#define CPU_BASED_CR3_LOAD_EXITING		VMCS_CONTROL_BIT(CR3_LOAD_EXITING)
- +#define CPU_BASED_CR3_STORE_EXITING		VMCS_CONTROL_BIT(CR3_STORE_EXITING)
- +#define CPU_BASED_CR8_LOAD_EXITING              VMCS_CONTROL_BIT(CR8_LOAD=
-_EXITING)
- +#define CPU_BASED_CR8_STORE_EXITING             VMCS_CONTROL_BIT(CR8_STOR=
-E_EXITING)
- +#define CPU_BASED_TPR_SHADOW                    VMCS_CONTROL_BIT(VIRTUAL_=
-TPR)
-- #define CPU_BASED_VIRTUAL_NMI_PENDING		VMCS_CONTROL_BIT(VIRTUAL_NMI_PENDI=
-NG)
-++#define CPU_BASED_NMI_WINDOW_EXITING		VMCS_CONTROL_BIT(VIRTUAL_NMI_PENDIN=
-G)
- +#define CPU_BASED_MOV_DR_EXITING                VMCS_CONTROL_BIT(MOV_DR_E=
-XITING)
- +#define CPU_BASED_UNCOND_IO_EXITING             VMCS_CONTROL_BIT(UNCOND_I=
-O_EXITING)
- +#define CPU_BASED_USE_IO_BITMAPS                VMCS_CONTROL_BIT(USE_IO_B=
-ITMAPS)
- +#define CPU_BASED_MONITOR_TRAP_FLAG             VMCS_CONTROL_BIT(MONITOR_=
-TRAP_FLAG)
- +#define CPU_BASED_USE_MSR_BITMAPS               VMCS_CONTROL_BIT(USE_MSR_=
-BITMAPS)
- +#define CPU_BASED_MONITOR_EXITING               VMCS_CONTROL_BIT(MONITOR_=
-EXITING)
- +#define CPU_BASED_PAUSE_EXITING                 VMCS_CONTROL_BIT(PAUSE_EX=
-ITING)
- +#define CPU_BASED_ACTIVATE_SECONDARY_CONTROLS   VMCS_CONTROL_BIT(SEC_CONT=
-ROLS)
- =20
-  #define CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR	0x0401e172
- =20
-
---Sig_/NtwKBjK.BWs6ckv++FgVmkE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4fzxsACgkQAVBC80lX
-0GxBewf/SkwUpGnobAk1as6az5NdudN61GnARdOiac3VXERb9UtgT6t7LvsvTo7z
-SSHn4fPIOUMooEmsk0f22E6b4QPUYDmqUpWqUerUquQps9wtink5qvo7+Dae8fKO
-g9tZucPQkjknE7Sgyojt9w0V34qEVWlFhrT+dT5m/cbsB8RHgS3Llv1QenYg3gL0
-C+C3h4DiY/0WDMkQebZOIXCH7gbRz3CoJgFNwxzYjyz+z68tlurmv1YviwjIweKt
-znaPCQuYk7yvBAZ3Ayit1p9wMWLkiG7j1OzlrKbIXMnY95WToXEHwhMZ7E1RkF4Y
-EzgldM8Uu1rLa/8paq79OPd9xYVLfQ==
-=fFyn
------END PGP SIGNATURE-----
-
---Sig_/NtwKBjK.BWs6ckv++FgVmkE--

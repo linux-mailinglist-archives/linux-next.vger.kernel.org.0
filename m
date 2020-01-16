@@ -2,133 +2,180 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8611413D242
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 03:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B6713D24D
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 03:49:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgAPCje (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Jan 2020 21:39:34 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41419 "EHLO ozlabs.org"
+        id S1729031AbgAPCtG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Jan 2020 21:49:06 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38455 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729559AbgAPCje (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Jan 2020 21:39:34 -0500
+        id S1726552AbgAPCtG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Jan 2020 21:49:06 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ypLW1t7yz9sR0;
-        Thu, 16 Jan 2020 13:39:31 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 47ypYS49Njz9sR0;
+        Thu, 16 Jan 2020 13:49:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579142371;
-        bh=wwSov16NNA8eswhryaE9UVLHmePc/RJK9qgpOXHnWd4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DACA5Q1+K6Xubv01HoN0I+VY0B6GvNV2+HNVMUHkr3DrgLR6967Ruzl8cgBKCF3ly
-         GnPZC3QOGgAUAUh6W7XlAUEvVnDW+ff5zQl3xn8VQHI/+cMqfe00yImz54P1vgGf1j
-         ZJoWNIP/5+qVjzgxDZcT3kZNxX4blUDYygREfiNDDKeuejt7ylHj3xS+T930E40JOm
-         CgueStoiSAI4n37zEkRCPokkIg0xNHAan/3TE/xPj3pxLpwrvNGCLAKrK3hCX0n3tk
-         UMB5O+b9Fq0Yfc05pe1T17WkgvcTlvSqx2XnX5un3/9l19Lgu/alsS1Zn1ERx7DwGH
-         o6AUXH4HCfd3A==
-Date:   Thu, 16 Jan 2020 13:39:30 +1100
+        s=201702; t=1579142943;
+        bh=pOkguxtakW7odgcyaEbAn/6knPxLxlPQVmo68XZDtCo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=leyAg/8DW7ay+aNLPmZjNSzU286S50440mIwwQJEyVWhqed7pedb+12yFfHF5ho2o
+         +AbAov3T/Vqc0bMnVyUFDc4ohXQBOQUXFnWHWkMqT4akhDwj3WLIY6WaegZ1Cbc/uP
+         KUaE1bwtaEbZLzj3ziARkZHOethZ6qM6mQdK5XpxbpRNJiuIOtuOxP7M3nnhy6Fqrj
+         n60/9zxPDQwY1XtlJyzvgTuMDTVyKkt6OwGckDRfnQJKsJXOjscSoRazT4oipfAL8d
+         1VJx07TQc7lNKmfP2geeWdylS+nQpL8h9RC6fusnwPMqxdRL0H/s+UiFNDVRV/xU8T
+         TKaHBPkHlooZQ==
+Date:   Thu, 16 Jan 2020 13:48:59 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Felipe Balbi <balbi@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the usb-gadget tree
-Message-ID: <20200116133930.74afaa91@canb.auug.org.au>
-In-Reply-To: <043cbd87-1d7d-e998-04a8-bbc9aec686df@linaro.org>
-References: <20200116070726.7e2ef8cc@canb.auug.org.au>
-        <b7ef5047-c8c3-42cc-d049-fb72563d3544@linaro.org>
-        <20200116124100.58af81d5@canb.auug.org.au>
-        <6b984328-b3f4-a23d-efb3-7e7955ad165a@linaro.org>
-        <20200116125851.474f3021@canb.auug.org.au>
-        <043cbd87-1d7d-e998-04a8-bbc9aec686df@linaro.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Radim =?UTF-8?B?S3LEjW3DocWZ?= <rkrcmar@redhat.com>,
+        KVM <kvm@vger.kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: linux-next: manual merge of the kvm tree with the tip tree
+Message-ID: <20200116134859.36d203de@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8bjwNIkrgQ751QRdgJdr8ni";
+Content-Type: multipart/signed; boundary="Sig_/NtwKBjK.BWs6ckv++FgVmkE";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8bjwNIkrgQ751QRdgJdr8ni
+--Sig_/NtwKBjK.BWs6ckv++FgVmkE
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Bryan,
+Hi all,
 
-On Thu, 16 Jan 2020 02:08:55 +0000 Bryan O'Donoghue <bryan.odonoghue@linaro=
-.org> wrote:
->
-> On 16/01/2020 01:58, Stephen Rothwell wrote:
-> >=20
-> > On Thu, 16 Jan 2020 01:45:25 +0000 Bryan O'Donoghue <bryan.odonoghue@li=
-naro.org> wrote: =20
-> >>
-> >> On 16/01/2020 01:41, Stephen Rothwell wrote: =20
-> >>> Hi Bryan,
-> >>>
-> >>> On Thu, 16 Jan 2020 01:19:22 +0000 Bryan O'Donoghue <bryan.odonoghue@=
-linaro.org> wrote: =20
-> >>>>
-> >>>> How should extra long fixes like this be divided up ? =20
-> >>>
-> >>> Just let them run on even if they are too long i.e. don't split them =
-at all. =20
-> >>
-> >> That's what's in the git commit log though isn't it ? =20
-> >=20
-> > When you add a Fixes: tag to a commit, you quote the subject line of
-> > the commit you are fixing which, by definition, is a single line.  We
-> > want to keep it that way so it can be searched for easily.
-> >=20
-> > So to create a fixes line you can use this:
-> >=20
-> > git log -1 --format=3D'Fixes: %h ("%s")' <commit being fixed>
-> >=20
-> > i.e. in this case:
-> >=20
-> > $ git log -1 --format=3D'Fixes: %h (\"%s\")' 40d133d7f5426
-> > Fixes: 40d133d7f542 ("usb: gadget: f_ncm: convert to new function inter=
-face with backward compatibility")
-> >  =20
->=20
-> doh sorry still not seeing it
->=20
-> git remote -v
-> usb-next	git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=20
-> (fetch)
->=20
-> git fetch usb-next
-> git show 5b24c28cfe13
->=20
-> that's a correctly formatted fixes right i.e. the same one as above
->=20
-> :(
->=20
-> not seeing the difference...
+Today's linux-next merge of the kvm tree got a conflict in:
 
-Now I see our confusion.  There is another version of this patch in
-Felipe's tree as a different commit (6a6ae4e8e926) which has the Fixes
-tag split ...
+  arch/x86/include/asm/vmx.h
+
+between commit:
+
+  b39033f504a7 ("KVM: VMX: Use VMX_FEATURE_* flags to define VMCS control b=
+its")
+
+from the tip tree and commits:
+
+  9dadc2f918df ("KVM: VMX: Rename INTERRUPT_PENDING to INTERRUPT_WINDOW")
+  4e2a0bc56ad1 ("KVM: VMX: Rename NMI_PENDING to NMI_WINDOW")
+  5e3d394fdd9e ("KVM: VMX: Fix the spelling of CPU_BASED_USE_TSC_OFFSETTING=
+")
+
+from the kvm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8bjwNIkrgQ751QRdgJdr8ni
+diff --cc arch/x86/include/asm/vmx.h
+index 9fbba31be825,d716fe938fc0..000000000000
+--- a/arch/x86/include/asm/vmx.h
++++ b/arch/x86/include/asm/vmx.h
+@@@ -22,27 -19,27 +22,27 @@@
+  /*
+   * Definitions of Primary Processor-Based VM-Execution Controls.
+   */
+- #define CPU_BASED_VIRTUAL_INTR_PENDING          VMCS_CONTROL_BIT(VIRTUAL_=
+INTR_PENDING)
+- #define CPU_BASED_USE_TSC_OFFSETING             VMCS_CONTROL_BIT(TSC_OFFS=
+ETTING)
+ -#define CPU_BASED_INTR_WINDOW_EXITING           0x00000004
+ -#define CPU_BASED_USE_TSC_OFFSETTING            0x00000008
+ -#define CPU_BASED_HLT_EXITING                   0x00000080
+ -#define CPU_BASED_INVLPG_EXITING                0x00000200
+ -#define CPU_BASED_MWAIT_EXITING                 0x00000400
+ -#define CPU_BASED_RDPMC_EXITING                 0x00000800
+ -#define CPU_BASED_RDTSC_EXITING                 0x00001000
+ -#define CPU_BASED_CR3_LOAD_EXITING		0x00008000
+ -#define CPU_BASED_CR3_STORE_EXITING		0x00010000
+ -#define CPU_BASED_CR8_LOAD_EXITING              0x00080000
+ -#define CPU_BASED_CR8_STORE_EXITING             0x00100000
+ -#define CPU_BASED_TPR_SHADOW                    0x00200000
+ -#define CPU_BASED_NMI_WINDOW_EXITING		0x00400000
+ -#define CPU_BASED_MOV_DR_EXITING                0x00800000
+ -#define CPU_BASED_UNCOND_IO_EXITING             0x01000000
+ -#define CPU_BASED_USE_IO_BITMAPS                0x02000000
+ -#define CPU_BASED_MONITOR_TRAP_FLAG             0x08000000
+ -#define CPU_BASED_USE_MSR_BITMAPS               0x10000000
+ -#define CPU_BASED_MONITOR_EXITING               0x20000000
+ -#define CPU_BASED_PAUSE_EXITING                 0x40000000
+ -#define CPU_BASED_ACTIVATE_SECONDARY_CONTROLS   0x80000000
+++#define CPU_BASED_INTR_WINDOW_EXITING           VMCS_CONTROL_BIT(VIRTUAL_=
+INTR_PENDING)
+++#define CPU_BASED_USE_TSC_OFFSETTING            VMCS_CONTROL_BIT(TSC_OFFS=
+ETTING)
+ +#define CPU_BASED_HLT_EXITING                   VMCS_CONTROL_BIT(HLT_EXIT=
+ING)
+ +#define CPU_BASED_INVLPG_EXITING                VMCS_CONTROL_BIT(INVLPG_E=
+XITING)
+ +#define CPU_BASED_MWAIT_EXITING                 VMCS_CONTROL_BIT(MWAIT_EX=
+ITING)
+ +#define CPU_BASED_RDPMC_EXITING                 VMCS_CONTROL_BIT(RDPMC_EX=
+ITING)
+ +#define CPU_BASED_RDTSC_EXITING                 VMCS_CONTROL_BIT(RDTSC_EX=
+ITING)
+ +#define CPU_BASED_CR3_LOAD_EXITING		VMCS_CONTROL_BIT(CR3_LOAD_EXITING)
+ +#define CPU_BASED_CR3_STORE_EXITING		VMCS_CONTROL_BIT(CR3_STORE_EXITING)
+ +#define CPU_BASED_CR8_LOAD_EXITING              VMCS_CONTROL_BIT(CR8_LOAD=
+_EXITING)
+ +#define CPU_BASED_CR8_STORE_EXITING             VMCS_CONTROL_BIT(CR8_STOR=
+E_EXITING)
+ +#define CPU_BASED_TPR_SHADOW                    VMCS_CONTROL_BIT(VIRTUAL_=
+TPR)
+- #define CPU_BASED_VIRTUAL_NMI_PENDING		VMCS_CONTROL_BIT(VIRTUAL_NMI_PENDI=
+NG)
+++#define CPU_BASED_NMI_WINDOW_EXITING		VMCS_CONTROL_BIT(VIRTUAL_NMI_PENDIN=
+G)
+ +#define CPU_BASED_MOV_DR_EXITING                VMCS_CONTROL_BIT(MOV_DR_E=
+XITING)
+ +#define CPU_BASED_UNCOND_IO_EXITING             VMCS_CONTROL_BIT(UNCOND_I=
+O_EXITING)
+ +#define CPU_BASED_USE_IO_BITMAPS                VMCS_CONTROL_BIT(USE_IO_B=
+ITMAPS)
+ +#define CPU_BASED_MONITOR_TRAP_FLAG             VMCS_CONTROL_BIT(MONITOR_=
+TRAP_FLAG)
+ +#define CPU_BASED_USE_MSR_BITMAPS               VMCS_CONTROL_BIT(USE_MSR_=
+BITMAPS)
+ +#define CPU_BASED_MONITOR_EXITING               VMCS_CONTROL_BIT(MONITOR_=
+EXITING)
+ +#define CPU_BASED_PAUSE_EXITING                 VMCS_CONTROL_BIT(PAUSE_EX=
+ITING)
+ +#define CPU_BASED_ACTIVATE_SECONDARY_CONTROLS   VMCS_CONTROL_BIT(SEC_CONT=
+ROLS)
+ =20
+  #define CPU_BASED_ALWAYSON_WITHOUT_TRUE_MSR	0x0401e172
+ =20
+
+--Sig_/NtwKBjK.BWs6ckv++FgVmkE
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4fzOIACgkQAVBC80lX
-0GwXoQf/Q7fcXZ24AxZZ5wvRgp2jqX4PaOKj+wNvbbYmqrsCkrnRQ2NsVsz3hxvs
-iLSXkggMlfL8AW8j2/utwI2SQ5+kwGRISkGNf7pTA+D+qbkyZVoCi+pNWCAu80+4
-4HtlMxKP3Q6gNs9uF9CFDXPX7L7EaIMbcUUIFX+VCz013sLT8w2vRewqzVXsHWxn
-Fez9vLKoYRTKw8875XWi+XXrj03AsguG+Q+miTR9k6DMuN35JkxZc+tFnBAfO9W/
-iId5mTWfDyay5r4FjjY9Oh/d7OnP5onQHnE+T+FK4QEQEQ0BTsf+s+sfdWKVw5WM
-0mYIVcy9jdWGvY5htg26JrwhopZsWA==
-=Kd58
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4fzxsACgkQAVBC80lX
+0GxBewf/SkwUpGnobAk1as6az5NdudN61GnARdOiac3VXERb9UtgT6t7LvsvTo7z
+SSHn4fPIOUMooEmsk0f22E6b4QPUYDmqUpWqUerUquQps9wtink5qvo7+Dae8fKO
+g9tZucPQkjknE7Sgyojt9w0V34qEVWlFhrT+dT5m/cbsB8RHgS3Llv1QenYg3gL0
+C+C3h4DiY/0WDMkQebZOIXCH7gbRz3CoJgFNwxzYjyz+z68tlurmv1YviwjIweKt
+znaPCQuYk7yvBAZ3Ayit1p9wMWLkiG7j1OzlrKbIXMnY95WToXEHwhMZ7E1RkF4Y
+EzgldM8Uu1rLa/8paq79OPd9xYVLfQ==
+=fFyn
 -----END PGP SIGNATURE-----
 
---Sig_/8bjwNIkrgQ751QRdgJdr8ni--
+--Sig_/NtwKBjK.BWs6ckv++FgVmkE--

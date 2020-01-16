@@ -2,71 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FDE13FC03
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 23:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CAEA13FDA8
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2020 00:30:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389613AbgAPWJs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jan 2020 17:09:48 -0500
-Received: from mail-lf1-f45.google.com ([209.85.167.45]:43943 "EHLO
-        mail-lf1-f45.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731371AbgAPWJr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 17:09:47 -0500
-Received: by mail-lf1-f45.google.com with SMTP id 9so16792962lfq.10
-        for <linux-next@vger.kernel.org>; Thu, 16 Jan 2020 14:09:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ma3+17ZZw0mon2WBoQcLIrloN+FKMVrAslE65nnRmDA=;
-        b=kZT+DulkHCqy+z9iJX+SHAKY9BwVQlJATSgdWFeUbn7HaJQDtzziiH3vaLXlz4iKwN
-         u5yD1A/ZIU6Q972Sf8Y6Ylc1c+wQ7VMa+EcHijAzmMAuucz9hf7NyhjRkGrV2Rec/hzf
-         3UEb/tttT/0v1oxYKXmSzyRqPmzHA0Mdt0O/15NddIbfeEk1mR2FjW5m79XhkbEX/u5I
-         2uYn9A6U5G7WrcuLQWORCOIg+rL71/igO6Gp11Rw+CKS6/LZxOFKlWlyGDwtpl4/0sZS
-         ymWd+XgIIJ+8XR8U/h0mt1jm74DGkXiSMFHxJ6Q6R+lF02SRPPGkKur13KBVrX+5bCS3
-         uYWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ma3+17ZZw0mon2WBoQcLIrloN+FKMVrAslE65nnRmDA=;
-        b=VY+lfEXeYWi36A/0/UF2O253NBEHsjj3UsuZO21rJ9yb8jv+Jv2PLb3pNGzwlMMjc0
-         zj17s7yl39LKmuDos4ivvROmagdcK4byzEjm3sWvgN6YCMGU2lGEPiUlm7UPUxsg274s
-         G9j17hSBa6gSY94AmulVwf974y+4aeqJsdFInC+65r2UgBAhkk2qo2pE2h0/ENhF8vAK
-         8vra6vJVUQ4HzZziotibk0+KNeQOHtqtk7vxpFxcvwl1uj9/YA5idrBtbQMp29n+wvgf
-         jphCKrNJJ34zIVw9p+GrIUewVyp5w9cJmid/y2kY3i54f5WBM2TEe8movGZS6eR2CtHh
-         e8NA==
-X-Gm-Message-State: APjAAAWrSi5TQY3P56DTaksuzuzP+EXY6L9EXYoVorTZWZsjSo+XJYYX
-        npJLysN7OKHeqGOAYQrhHHW44+9ZpKtrKGgKmidv
-X-Google-Smtp-Source: APXvYqzMOxzibWcE6CtAi+rGfwOr+6ooiwokDkgIntDt/gMGu/mDs+ST/UaDzUnKHlt/sxNtsDRsfQRolFYXIA/uVs4=
-X-Received: by 2002:a19:dc1e:: with SMTP id t30mr3612160lfg.34.1579212585522;
- Thu, 16 Jan 2020 14:09:45 -0800 (PST)
-MIME-Version: 1.0
-References: <20200117090248.392f40cb@canb.auug.org.au>
-In-Reply-To: <20200117090248.392f40cb@canb.auug.org.au>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 16 Jan 2020 17:09:35 -0500
-Message-ID: <CAHC9VhT_mCdJvm-ndx+A=ezBUqKBP1D0WG=9TT2H4pwyspTydQ@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the selinux tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729401AbgAPX1o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jan 2020 18:27:44 -0500
+Received: from cloudserver094114.home.pl ([79.96.170.134]:42951 "EHLO
+        cloudserver094114.home.pl" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390324AbgAPX1o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 18:27:44 -0500
+Received: from 79.184.255.90.ipv4.supernova.orange.pl (79.184.255.90) (HELO kreacher.localnet)
+ by serwer1319399.home.pl (79.96.170.134) with SMTP (IdeaSmtpServer 0.83.320)
+ id 4b8442e69dabda39; Fri, 17 Jan 2020 00:27:41 +0100
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alan Maguire <alan.maguire@oracle.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the kunit-next tree
+Date:   Fri, 17 Jan 2020 00:27:41 +0100
+Message-ID: <1721306.C5hDvk6sIF@kreacher>
+In-Reply-To: <alpine.LRH.2.20.2001161120230.2505@dhcp-10-175-200-122.vpn.oracle.com>
+References: <20200116165703.4e04be51@canb.auug.org.au> <alpine.LRH.2.20.2001161120230.2505@dhcp-10-175-200-122.vpn.oracle.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 16, 2020 at 5:02 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
->
-> Commit
->
->   6bae00459f0c ("selinux: do not allocate ancillary buffer on first load")
->
-> is missing a Signed-off-by from its committer.
+On Thursday, January 16, 2020 12:23:09 PM CET Alan Maguire wrote:
+> On Thu, 16 Jan 2020, Stephen Rothwell wrote:
+> 
+> > Hi all,
+> > 
+> > After merging the kunit-next tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> > 
+> > x86_64-linux-gnu-ld: drivers/base/test/property-entry-test.o: in function `kunit_test_suites_init':
+> > property-entry-test.c:(.text+0x26): undefined reference to `kunit_run_tests'
+> > x86_64-linux-gnu-ld: drivers/base/test/property-entry-test.o: in function `pe_test_reference':
+> > property-entry-test.c:(.text+0x275): undefined reference to `kunit_binary_assert_format'
+> > x86_64-linux-gnu-ld: property-entry-test.c:(.text+0x2c4): undefined reference to `kunit_do_assertion'
+> > 
+> > and lots more ...
+> > 
+> > Caused by commit
+> > 
+> >   27f9d7e984d9 ("software node: introduce CONFIG_KUNIT_DRIVER_PE_TEST")
+> > 
+> > from the pm tree interacting with commit
+> > 
+> >   35c57fc3f8ea ("kunit: building kunit as a module breaks allmodconfig")
+> > 
+> > I have disabled CONFIG_KUNIT_DRIVER_PE_TEST for today.
+> >
+> 
+> Apologies again, I should have explicitly specified that
+> CONFIG_KUNIT_DRIVER_PE_TEST depends on KUNIT=y; I've
+> sent a patch to fix this:
+> 
+> https://lore.kernel.org/lkml/1579173451-2439-1-git-send-email-alan.maguire@oracle.com/T/#u
 
-My apologies.  Fixed and force pushed to selinux/next.
+I have folded this into the original patch and remerged the linux-next branch.
 
--- 
-paul moore
-www.paul-moore.com
+Thanks!
+
+
+

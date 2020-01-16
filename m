@@ -2,154 +2,483 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 259C213DB19
-	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 14:06:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A60713DE59
+	for <lists+linux-next@lfdr.de>; Thu, 16 Jan 2020 16:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgAPNG1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Jan 2020 08:06:27 -0500
-Received: from mail-lf1-f65.google.com ([209.85.167.65]:34278 "EHLO
-        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726018AbgAPNG1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 08:06:27 -0500
-Received: by mail-lf1-f65.google.com with SMTP id l18so15523392lfc.1;
-        Thu, 16 Jan 2020 05:06:26 -0800 (PST)
+        id S1726908AbgAPPM5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Jan 2020 10:12:57 -0500
+Received: from mail-wr1-f51.google.com ([209.85.221.51]:45988 "EHLO
+        mail-wr1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726587AbgAPPM4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Jan 2020 10:12:56 -0500
+Received: by mail-wr1-f51.google.com with SMTP id j42so19483638wrj.12
+        for <linux-next@vger.kernel.org>; Thu, 16 Jan 2020 07:12:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=+dNIN0Bjh5Sxdgv0PYr0Z5RysmQAzFZOMNbfc2kLg64=;
-        b=bpnPK79KV8o1kxZWO2tX6t8DYBai/NrXry7NuVI+5uPOVE0k9lc6d+ARUf2cN9bxf/
-         5WJW5601UNN7/NimbpIgTrqweltBCD1kBQAQIqDf2wny3D53fBc+L4Yapykz2LevNFcN
-         bck07JqEMIMsh7RBuGkHWvYCwxWLh4DevgmqkEAGgVRVVGX1BsuDiyalR9+XQb/6pjwn
-         k6mUTr7p5fPvCwC9/p6UGhGF5flumXwyYSf5I/MmO5M3t7fDONpQao4Lr5es+46mM3Se
-         IGCk3xbKs+5F8Ja1qlalybnqI+olQ03wjhR108GUtDzNxdhUVUwCdL+cfA570MFoIJt8
-         IlhQ==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=PYTh8r3LWDKDfBCFNrsp9nJkZH7OhwH9QF++6wpRQws=;
+        b=lpBgP7v5TggxXLUgKfDPMOBBEF+K+lVvYivrxSgtaNz2I8EJLAatj75odbmcWoZndz
+         kXR9vm1cEyjX9Zk8ro2WHpPLhlZ5AX0q2JpSjhX0v+ZPHsJ/nFeXk25U3F1tCzV1RQQQ
+         MseMnpDqr/gfWPgKLqwZ4kzr8Wc3U09xA6MX44HNnDLtOV7yADNd8cTyB6Um0mImnoGn
+         FGGNYaUWlviXaDmyctqRXNMiUyEUmG0qiXURQGtzLR2/JaDxqDkje9O3OCy26oSVzf4x
+         QzQJQcyBProGa+jpFWe9DO01oFLD/aytqiCNTgf+vAVFfQvapwA7XgNttBygVWdfuZ9E
+         GlxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=+dNIN0Bjh5Sxdgv0PYr0Z5RysmQAzFZOMNbfc2kLg64=;
-        b=rxCdOKKWNoCu19bu9n4seyjjkMskzVCZM88JpMyfHUknurm+mwwZDjHy5nRfGK4X1G
-         FRZjwtmQCHNRetT+Anzz192yjGBK+0NYNHqjmn7GQvYTq4Pc6AZc3AtLbUQQShSQSU3v
-         hv08roMik0wPAmIZfdJ4BAVATEAIRwmDh/scBa7BLjOFUoUgXozRw2Rf81h2UHKDwyqc
-         qRHRMRKWFPP4xspIiCwVh/063I5opkUgjZjgve9megk54mTn9u88ZSIMjyRhcc0fVHiV
-         hETvC4QJbA70cCvxUXYggtdOWYCZDCKnGUVDejUTPWU119znsB7tVV3hxKdxNGiU3CRa
-         jU2Q==
-X-Gm-Message-State: APjAAAVVJZ2ddLkvNNGhf8FiW+Dd2ruDYgGuSTuLpCh2IseI9ho7cEbI
-        fSZEfp9R+AOorU8nhBFUwY+xJ0zN9WANzQ==
-X-Google-Smtp-Source: APXvYqxGw8p8gSkVUsyQc0mke41Aje2NcawWOQbz83HoLaJGXLV3PNEs1w430cZplT5IhJcD2DDGhQ==
-X-Received: by 2002:ac2:5c4b:: with SMTP id s11mr2529380lfp.133.1579179984942;
-        Thu, 16 Jan 2020 05:06:24 -0800 (PST)
-Received: from saruman (88-113-215-33.elisa-laajakaista.fi. [88.113.215.33])
-        by smtp.gmail.com with ESMTPSA id k12sm10540574lfc.33.2020.01.16.05.06.23
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 16 Jan 2020 05:06:24 -0800 (PST)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the usb-gadget tree
-In-Reply-To: <20200116133930.74afaa91@canb.auug.org.au>
-References: <20200116070726.7e2ef8cc@canb.auug.org.au> <b7ef5047-c8c3-42cc-d049-fb72563d3544@linaro.org> <20200116124100.58af81d5@canb.auug.org.au> <6b984328-b3f4-a23d-efb3-7e7955ad165a@linaro.org> <20200116125851.474f3021@canb.auug.org.au> <043cbd87-1d7d-e998-04a8-bbc9aec686df@linaro.org> <20200116133930.74afaa91@canb.auug.org.au>
-Date:   Thu, 16 Jan 2020 15:07:24 +0200
-Message-ID: <87d0bj5z3n.fsf@kernel.org>
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=PYTh8r3LWDKDfBCFNrsp9nJkZH7OhwH9QF++6wpRQws=;
+        b=pZlT5mysb3u5UQsn+7InLs7vMkV73PaAoOoC5Kq4K0ir6d1YKUI/bu5OdFCNKCW0jJ
+         lss0ZkCsOMz+EimOnlMT5LB8ilu8G4/lWzGAGHMrP1NFMZfTRIkt6X4lJCiLzv06/wpE
+         vH10gVAKP3v4EcALFV/q5EYaT/LBmpxAf74WcKfneAFALSwOtFdpQv/0JdaR7Xuj+RuR
+         QcC+ZE9qCt5S0iiSMKgRPsF0o52yOuU9dJcunuUydLUg3pGRiOswE0li9dVEAYj0d5IN
+         hG3zoSf5Z4iCX+Zn+rDvJEoxUmQyg3SY8NMI4Ymz6+IXDi0dVqlmDZC/aguFZrY9wzu6
+         JVuQ==
+X-Gm-Message-State: APjAAAVZzrqtXBdddTMF06IeoeTD0R2NIyQWtMUUbQJT2y0q6PUbLeSA
+        gw/0zjfMhYL2tvfsQYPr+/x7iQtoHJvjfw==
+X-Google-Smtp-Source: APXvYqzvpXOy/eNqx6cUrW1GV23lpX1UyejTFZjm6HTP/UAOSnZ8Ac5gw5bodWqCTTVSI6Zojr1Frg==
+X-Received: by 2002:a5d:6048:: with SMTP id j8mr3830964wrt.41.1579187573013;
+        Thu, 16 Jan 2020 07:12:53 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id l15sm28439614wrv.39.2020.01.16.07.12.52
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 16 Jan 2020 07:12:52 -0800 (PST)
+Message-ID: <5e207d74.1c69fb81.7f3c0.5e62@mx.google.com>
+Date:   Thu, 16 Jan 2020 07:12:52 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: boot
+X-Kernelci-Kernel: next-20200116
+Subject: next/master boot: 249 boots: 9 failed, 176 passed with 60 offline,
+ 4 untried/unknown (next-20200116)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 249 boots: 9 failed, 176 passed with 60 offline, 4 untrie=
+d/unknown (next-20200116)
 
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200116/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200116/
 
-Hi
+Tree: next
+Branch: master
+Git Describe: next-20200116
+Git Commit: 2747d5fdab78f43210256cd52fb2718e0b3cce74
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 96 unique boards, 24 SoC families, 29 builds out of 215
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> Hi Bryan,
->
-> On Thu, 16 Jan 2020 02:08:55 +0000 Bryan O'Donoghue <bryan.odonoghue@lina=
-ro.org> wrote:
->>
->> On 16/01/2020 01:58, Stephen Rothwell wrote:
->> >=20
->> > On Thu, 16 Jan 2020 01:45:25 +0000 Bryan O'Donoghue <bryan.odonoghue@l=
-inaro.org> wrote:=20=20
->> >>
->> >> On 16/01/2020 01:41, Stephen Rothwell wrote:=20=20
->> >>> Hi Bryan,
->> >>>
->> >>> On Thu, 16 Jan 2020 01:19:22 +0000 Bryan O'Donoghue <bryan.odonoghue=
-@linaro.org> wrote:=20=20
->> >>>>
->> >>>> How should extra long fixes like this be divided up ?=20=20
->> >>>
->> >>> Just let them run on even if they are too long i.e. don't split them=
- at all.=20=20
->> >>
->> >> That's what's in the git commit log though isn't it ?=20=20
->> >=20
->> > When you add a Fixes: tag to a commit, you quote the subject line of
->> > the commit you are fixing which, by definition, is a single line.  We
->> > want to keep it that way so it can be searched for easily.
->> >=20
->> > So to create a fixes line you can use this:
->> >=20
->> > git log -1 --format=3D'Fixes: %h ("%s")' <commit being fixed>
->> >=20
->> > i.e. in this case:
->> >=20
->> > $ git log -1 --format=3D'Fixes: %h (\"%s\")' 40d133d7f5426
->> > Fixes: 40d133d7f542 ("usb: gadget: f_ncm: convert to new function inte=
-rface with backward compatibility")
->> >=20=20=20
->>=20
->> doh sorry still not seeing it
->>=20
->> git remote -v
->> usb-next	git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git=20
->> (fetch)
->>=20
->> git fetch usb-next
->> git show 5b24c28cfe13
->>=20
->> that's a correctly formatted fixes right i.e. the same one as above
->>=20
->> :(
->>=20
->> not seeing the difference...
->
-> Now I see our confusion.  There is another version of this patch in
-> Felipe's tree as a different commit (6a6ae4e8e926) which has the Fixes
-> tag split ...
+Boot Regressions Detected:
 
-Right, Greg applied my tree as patches to fix this problem. I need to
-rebase my tree on Greg's to get rid of this problem.
+arm:
 
-=2D-=20
-balbi
+    bcm2835_defconfig:
+        gcc-8:
+          bcm2835-rpi-b:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+    davinci_all_defconfig:
+        gcc-8:
+          da850-evm:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          dm365evm,legacy:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
 
------BEGIN PGP SIGNATURE-----
+    exynos_defconfig:
+        gcc-8:
+          exynos5250-arndale:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          exynos5420-arndale-octa:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 3 days (last pass: next-20200110=
+ - first fail: next-20200113)
+          exynos5800-peach-pi:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl4gYAwACgkQzL64meEa
-mQa55w//YQdHsr9ZTJ5WnNG3W05EC7qG6HDXzicUiSf2XyrnRytXO6IMxGFTQ9I7
-iEUbF1iudLZ6jdSbSbYEnkBTRL9iMrFYQSMy6IWgedTKOyn21e0gK9pELtyB62Di
-tSktp8NDMiMb6WSynL1nkNmkT+NNEYAFPBGk4DLqQ8FH6io3WRQgbMR42+tYh+OQ
-ZvGy88PtALdQsy/BWjiVSG86wCcpMBpO0oK+KcQV8BijPGxTaW46kFjtH2zHImXt
-arXl/fODh2VHwQZPvCkFer5UBR4CM7a230yfSRqlh1HVjQHRD5XcQXp/i94ZUsIJ
-ibW47ApsAv2IlqhSIzyt+78CgGTqkW7cuDGwVRQW6uQiZtVgtulZyBnRVYeIRQPt
-RjIqSdaDxbn6bMmUt/sERuPwoj2PPAEHBhT4TD3X4GmFgqHlhoK8Qzm/pxsuZxz5
-yHEw/lL8WLFhspdnC966VjyUnYwoj6Vuim6zzeclswFk1RL7Ny2oGgrhw30xj3bU
-7/NK/1GJ/OFzJF9OHnwR3PavWm3hW8N9c2ohStW/s5FjMX5OMBe48EcuyTRhX5kE
-tovBcA1uuoFkwmd7oVUlG+6alXsGo4SxHNgdZosezbF6T6gbH0Wm8jgpZpUung8U
-/QGLf/LnPkCgl0h3aZdnqcj3OCssiQ1TKs4behXrx+mz/eGMdtw=
-=OZMi
------END PGP SIGNATURE-----
---=-=-=--
+    imx_v6_v7_defconfig:
+        gcc-8:
+          imx6dl-wandboard_dual:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx6dl-wandboard_solo:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx6q-wandboard:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx7s-warp:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          vf610-colibri-eval-v3:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    multi_v7_defconfig:
+        gcc-8:
+          armada-xp-openblocks-ax3-4:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          at91-sama5d4ek:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          bcm4708-smartrg-sr400ac:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          exynos5250-arndale:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          exynos5420-arndale-octa:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          exynos5800-peach-pi:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx6dl-wandboard_dual:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx6dl-wandboard_solo:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx6q-wandboard:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          imx7s-warp:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson8b-odroidc1:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          mt7623n-bananapi-bpi-r2:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          mt7629-rfb:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          omap3-beagle:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          omap4-panda:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          qcom-apq8064-cm-qs600:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          socfpga_cyclone5_de0_sockit:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          stih410-b2120:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun4i-a10-cubieboard:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun5i-r8-chip:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun7i-a20-bananapi:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          tegra30-beaver:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          vf610-colibri-eval-v3:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          zynq-zc702:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          armada-xp-openblocks-ax3-4:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    mvebu_v7_defconfig:
+        gcc-8:
+          armada-xp-openblocks-ax3-4:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    omap2plus_defconfig:
+        gcc-8:
+          omap3-beagle:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          omap4-panda:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4ek:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    socfpga_defconfig:
+        gcc-8:
+          socfpga_cyclone5_de0_sockit:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    sunxi_defconfig:
+        gcc-8:
+          sun4i-a10-cubieboard:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun5i-r8-chip:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun7i-a20-bananapi:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    tegra_defconfig:
+        gcc-8:
+          tegra30-beaver:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200115)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          apq8016-sbc:
+              lab-bjorn: failing since 10 days (last pass: next-20191220 - =
+first fail: next-20200106)
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: next-20200115)
+          juno-r2:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-axg-s400:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: next-20200115)
+          meson-gxl-s905x-nexbox-a95x:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-gxm-nexbox-a1:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          mt7622-rfb1:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun50i-a64-bananapi-m64:
+              lab-clabbe: new failure (last pass: next-20200115)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          juno-r2:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-axg-s400:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-gxbb-p200:
+              lab-baylibre: new failure (last pass: next-20200115)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: next-20200115)
+          meson-gxl-s905x-nexbox-a95x:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          juno-r2:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-axg-s400:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-gxl-s905x-nexbox-a95x:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          meson-gxm-nexbox-a1:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          mt7622-rfb1:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+191220 - first fail: next-20200115)
+          sun50i-h5-libretech-all-h3-cc:
+              lab-baylibre: new failure (last pass: next-20200115)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: new failure (last pass: next-20191220)
+
+Boot Failures Detected:
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8016-sbc: 1 failed lab
+            apq8096-db820c: 1 failed lab
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+arm:
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            meson8b-odroidc1: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            meson8b-odroidc1: 1 failed lab
+
+Offline Platforms:
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            juno-r2: 1 offline lab
+            meson-axg-s400: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+            mt7622-rfb1: 1 offline lab
+
+    defconfig:
+        gcc-8
+            juno-r2: 1 offline lab
+            meson-axg-s400: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+            mt7622-rfb1: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            juno-r2: 1 offline lab
+            meson-axg-s400: 1 offline lab
+            meson-gxl-s905x-nexbox-a95x: 1 offline lab
+
+arm:
+
+    sunxi_defconfig:
+        gcc-8
+            sun4i-a10-cubieboard: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+
+    sama5_defconfig:
+        gcc-8
+            at91-sama5d4ek: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5250-arndale: 1 offline lab
+            exynos5420-arndale-octa: 1 offline lab
+            exynos5800-peach-pi: 1 offline lab
+
+    mvebu_v7_defconfig:
+        gcc-8
+            armada-xp-openblocks-ax3-4: 1 offline lab
+
+    tegra_defconfig:
+        gcc-8
+            tegra30-beaver: 1 offline lab
+
+    socfpga_defconfig:
+        gcc-8
+            socfpga_cyclone5_de0_sockit: 1 offline lab
+
+    omap2plus_defconfig:
+        gcc-8
+            omap3-beagle: 1 offline lab
+            omap4-panda: 1 offline lab
+
+    bcm2835_defconfig:
+        gcc-8
+            bcm2835-rpi-b: 1 offline lab
+
+    multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            armada-xp-openblocks-ax3-4: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            armada-xp-openblocks-ax3-4: 1 offline lab
+            at91-sama5d4ek: 1 offline lab
+            bcm4708-smartrg-sr400ac: 1 offline lab
+            exynos5250-arndale: 1 offline lab
+            exynos5420-arndale-octa: 1 offline lab
+            exynos5800-peach-pi: 1 offline lab
+            imx6dl-wandboard_dual: 1 offline lab
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            imx7s-warp: 1 offline lab
+            meson8b-odroidc1: 1 offline lab
+            mt7623n-bananapi-bpi-r2: 1 offline lab
+            mt7629-rfb: 1 offline lab
+            omap3-beagle: 1 offline lab
+            omap4-panda: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            socfpga_cyclone5_de0_sockit: 1 offline lab
+            stih410-b2120: 1 offline lab
+            sun4i-a10-cubieboard: 1 offline lab
+            sun5i-r8-chip: 1 offline lab
+            sun7i-a20-bananapi: 1 offline lab
+            tegra30-beaver: 1 offline lab
+            vf610-colibri-eval-v3: 1 offline lab
+            zynq-zc702: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    davinci_all_defconfig:
+        gcc-8
+            da850-evm: 1 offline lab
+            dm365evm,legacy: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_dual: 1 offline lab
+            imx6dl-wandboard_solo: 1 offline lab
+            imx6q-wandboard: 1 offline lab
+            imx7s-warp: 1 offline lab
+            vf610-colibri-eval-v3: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

@@ -2,107 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A59140FD1
-	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2020 18:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1B7714106F
+	for <lists+linux-next@lfdr.de>; Fri, 17 Jan 2020 19:11:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726973AbgAQR0k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Jan 2020 12:26:40 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:32582 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726761AbgAQR0j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Jan 2020 12:26:39 -0500
+        id S1729123AbgAQSLj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Jan 2020 13:11:39 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36674 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728901AbgAQSLi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Jan 2020 13:11:38 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579281998;
+        s=mimecast20190719; t=1579284697;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=lK3eediDWtVCh47lizBT55QqgySEaj52x7m9+e9sBh8=;
-        b=iqXMZ7SaEZWu55xq1C/E12C0FMSuuTajzGDtRCm5q/2esoBREr8cPJp8vFdF/C+2Tg7nwH
-        /4WHE8ag9hK4fA9uLeLwRKxnaa1fHjVrto8oNR+xN3cjh9ASwfSvddAzKjTmEp6GnoxWtx
-        LtNskhAsKAJYGp5ycqftb56mqgvm7gA=
+        bh=QsgYM2TGG8lRq9niu1aCEnMk5zwASxNohdIB47d0fPM=;
+        b=B14OnPZkA69YgOilBeX//8x/Dix1CZ9uWMyDqUmNl/dBaY1Bn3Y29rV3wIWS37qiZQ7tW2
+        2R79kzNdCQk6uOdiA9jTeNaUHItGbZ/Ajio07x8kN7TKwNikeGSdr43RXz9c3QYWJkNr9r
+        S3t353iC9DNYxgCowhjTGmxkHDYmT5k=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-351-4Q0abMuQNvWwEwjouYkmuQ-1; Fri, 17 Jan 2020 12:26:34 -0500
-X-MC-Unique: 4Q0abMuQNvWwEwjouYkmuQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+ us-mta-9-cuZZlEvPPxqHNMDkMEDNpQ-1; Fri, 17 Jan 2020 13:11:28 -0500
+X-MC-Unique: cuZZlEvPPxqHNMDkMEDNpQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8D0B8DB20;
-        Fri, 17 Jan 2020 17:26:32 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id EAEBDDB20;
+        Fri, 17 Jan 2020 18:11:25 +0000 (UTC)
 Received: from treble (ovpn-123-54.rdu2.redhat.com [10.10.123.54])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1906C9A84;
-        Fri, 17 Jan 2020 17:26:31 +0000 (UTC)
-Date:   Fri, 17 Jan 2020 11:26:29 -0600
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ED0E95D9CD;
+        Fri, 17 Jan 2020 18:11:23 +0000 (UTC)
+Date:   Fri, 17 Jan 2020 12:11:21 -0600
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     David Sterba <dsterba@suse.cz>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Btrfs <linux-btrfs@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Marco Elver <elver@google.com>
-Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
-Message-ID: <20200117172629.yqowxl642hdx4vcm@treble>
-References: <20191211134929.GL3929@twin.jikos.cz>
- <c751bc1a-505c-5050-3c4c-c83be81b4e48@infradead.org>
- <20191212184725.db3ost7rcopotr5u@treble>
- <b9b0c81b-0ca8-dfb7-958f-cd58a449b6fb@infradead.org>
- <ba2a7a9b-933b-d4e4-8970-85b6c1291fca@infradead.org>
- <20191213235054.6k2lcnwa63r26zwi@treble>
- <c6a33c21-3e71-ac98-cc95-db008764917c@infradead.org>
- <20191214054515.ougsr5ykhl3vvy57@treble>
- <fe1e0318-9b74-7ae0-07bd-d7a6c908e79a@infradead.org>
- <20191217152511.GG3929@suse.cz>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: mmotm 2019-12-10-19-14 uploaded (objtool: func() falls through)
+Message-ID: <20200117181121.3h72dajey7oticbf@treble>
+References: <20191211031432.iyKVQ6m9n%akpm@linux-foundation.org>
+ <07777464-b9d8-ff1d-41d9-f62cc44f09f3@infradead.org>
+ <20191212184859.zjj2ycfkvpcns5bk@treble>
+ <042c6cd7-c983-03f1-6a79-5642549f57c4@infradead.org>
+ <20191212205811.4vrrb4hou3tbiada@treble>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20191217152511.GG3929@suse.cz>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
+In-Reply-To: <20191212205811.4vrrb4hou3tbiada@treble>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Dec 17, 2019 at 04:25:11PM +0100, David Sterba wrote:
-> On Fri, Dec 13, 2019 at 11:05:18PM -0800, Randy Dunlap wrote:
-> > OK, that fixes most of them, but still leaves these 2:
+On Thu, Dec 12, 2019 at 02:58:11PM -0600, Josh Poimboeuf wrote:
+> On Thu, Dec 12, 2019 at 12:21:17PM -0800, Randy Dunlap wrote:
+> > On 12/12/19 10:48 AM, Josh Poimboeuf wrote:
+> > > On Wed, Dec 11, 2019 at 08:31:08AM -0800, Randy Dunlap wrote:
+> > >> On 12/10/19 7:14 PM, Andrew Morton wrote:
+> > >>> The mm-of-the-moment snapshot 2019-12-10-19-14 has been uploaded to
+> > >>>
+> > >>>    http://www.ozlabs.org/~akpm/mmotm/
+> > >>>
+> > >>> mmotm-readme.txt says
+> > >>>
+> > >>> README for mm-of-the-moment:
+> > >>>
+> > >>> http://www.ozlabs.org/~akpm/mmotm/
+> > >>>
+> > >>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > >>> more than once a week.
+> > >>>
+> > >>> You will need quilt to apply these patches to the latest Linus release (5.x
+> > >>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > >>> http://ozlabs.org/~akpm/mmotm/series
+> > >>>
+> > >>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > >>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> > >>> followed by the base kernel version against which this patch series is to
+> > >>> be applied.
+> > >>
+> > >> on x86_64:
+> > >>
+> > >> drivers/hwmon/f71882fg.o: warning: objtool: f71882fg_update_device() falls through to next function show_pwm_auto_point_temp_hyst()
+> > >> drivers/ide/ide-probe.o: warning: objtool: hwif_register_devices() falls through to next function hwif_release_dev()
+> > >> drivers/ide/ide-probe.o: warning: objtool: ide_host_remove() falls through to next function ide_disable_port()
+> > > 
+> > > Randy, can you share the .o files?
 > > 
-> > btrfs006.out:fs/btrfs/extent_io.o: warning: objtool: __set_extent_bit()+0x536: unreachable instruction
+> > Sure. They are attached.
 > 
-> Hard to read from the assembly what C statement is it referring to. I
-> think there are also several functions inlined, I don't see anything
-> suspicious inside __set_extent_bit itself.
-> 
-> > btrfs006.out:fs/btrfs/relocation.o: warning: objtool: add_tree_block()+0x501: unreachable instruction
-> 
-> Probably also heavily inlined, the function has like 50 lines, a few
-> non-trivial function calls but the offset in the warning suggests a
-> larger size.
-> 
-> While browsing the callees I noticed that both have in common a function
-> that is supposed to print and stop at fatal errors. They're
-> extent_io_tree_panic (extent_io.c) and backref_tree_panic
-> (relocation.c). Both call btrfs_panic which is a macro:
-> 
-> 3239 #define btrfs_panic(fs_info, errno, fmt, args...)                       \
-> 3240 do {                                                                    \
-> 3241         __btrfs_panic(fs_info, __func__, __LINE__, errno, fmt, ##args); \
-> 3242         BUG();                                                          \
-> 3243 } while (0)
-> 
-> There are no conditionals and BUG has the __noreturn annotation
-> (unreachable()) so all is in place and I don't have better ideas what's
-> causing the reports.
+> These look like compiler bugs to me... execution is falling off the edge
+> of the functions for no apparent reason.  Could potentially be triggered
+> by the '#define if' trace code.
 
-I think KCSAN is somehow disabling GCC's detection of implicit noreturn
-functions -- or at least some calls to them.  So GCC is inserting dead
-code after the calls.  BUG() uses __builtin_unreachable(), so GCC should
-know better.
-
-If this is specific to KCSAN then I might just disable these warnings
-for KCSAN configs.
+Randy, do you happen to have a config which triggers the above bugs?  I
+can reduce the test cases and open a GCC bug.
 
 -- 
 Josh

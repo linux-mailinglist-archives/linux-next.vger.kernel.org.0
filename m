@@ -2,138 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C2F141894
-	for <lists+linux-next@lfdr.de>; Sat, 18 Jan 2020 18:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1210141ABA
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2020 02:03:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726502AbgARREV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Jan 2020 12:04:21 -0500
-Received: from relay1-d.mail.gandi.net ([217.70.183.193]:48293 "EHLO
-        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726455AbgARREU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Jan 2020 12:04:20 -0500
-X-Originating-IP: 79.86.19.127
-Received: from debian.numericable.fr (127.19.86.79.rev.sfr.net [79.86.19.127])
-        (Authenticated sender: alex@ghiti.fr)
-        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 66CDB240002;
-        Sat, 18 Jan 2020 17:03:56 +0000 (UTC)
-From:   Alexandre Ghiti <alex@ghiti.fr>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-next@vger.kernel.org, Zong Li <zong.li@sifive.com>,
-        Palmer Dabbelt <palmerdabbelt@google.com>
-Cc:     Alexandre Ghiti <alex@ghiti.fr>
-Subject: [PATCH v2] powerpc: Do not consider weak unresolved symbol relocations as bad
-Date:   Sat, 18 Jan 2020 12:03:35 -0500
-Message-Id: <20200118170335.21440-1-alex@ghiti.fr>
-X-Mailer: git-send-email 2.20.1
+        id S1727043AbgASBDZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Jan 2020 20:03:25 -0500
+Received: from ozlabs.org ([203.11.71.1]:37959 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727012AbgASBDZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 18 Jan 2020 20:03:25 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 480c4B31Rjz9sP3;
+        Sun, 19 Jan 2020 12:03:21 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579395802;
+        bh=/2SmNmlfOgWM5RrYHVJdCGkll3jc1LtqGFzGrdHQK/A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RoCYrpkOF9rxjvJ95Z9jAv52IKvnFYZAsTcFKu3XLH4hMK2NfuDgChtPqT/ikFXnA
+         DYdLzEW5K6cwpuKnjoYRounn8fzAPJRwFtQSabPHCbkR2gACsk5fL+OShycBRxEyqG
+         DY9F4Zi5C/8kt0CDEP65262suwmQc2DOZUXs3GksrT3XwV6pEDfBef1NRudiV76kjt
+         Ogpd/QxC43iSg0GLIBlobth274AYQCsjgSJJ5rYY95VFl38wQ2FTpg/Rt9INoz2Z6K
+         SutxZ7xVA9tPjaut0VbSQs0zEY5Xw7HvypJpoNLQupa890bopLOp9eYkgmLGUgWmjo
+         VEkL+0ueGmrig==
+Date:   Sun, 19 Jan 2020 12:03:21 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alex Sverdlin <alexander.sverdlin@nokia.com>
+Subject: linux-next: Fixes tag needs some work in the arm-current tree
+Message-ID: <20200119120321.43e69cdf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/1BgSCQMfrFItgzw4O2ssgEQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Commit 8580ac9404f6 ("bpf: Process in-kernel BTF") introduced two weak
-symbols that may be unresolved at link time which result in an absolute
-relocation to 0. relocs_check.sh emits the following warning:
+--Sig_/1BgSCQMfrFItgzw4O2ssgEQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-"WARNING: 2 bad relocations
-c000000001a41478 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
-c000000001a41480 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end"
+Hi all,
 
-whereas those relocations are legitimate even for a relocatable kernel
-compiled with -pie option.
+In commit
 
-relocs_check.sh already excluded some weak unresolved symbols explicitly:
-remove those hardcoded symbols and add some logic that parses the symbols
-using nm, retrieves all the weak unresolved symbols and excludes those from
-the list of the potential bad relocations.
+  76540facd203 ("ARM: 8950/1: ftrace/recordmcount: filter relocation types")
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
----
+Fixes tag
 
-Changes in v2:
-- Follow Stephen advice of using grep -F instead of looping over weak symbols
-  using read, patch is way smaller and cleaner.
-- Add missing nm in comment
+  Fixes: ed60453fa8 ("ARM: 6511/1: ftrace: add ARM support for C version of=
+ recordmcount")
 
- arch/powerpc/Makefile.postlink     |  4 ++--
- arch/powerpc/tools/relocs_check.sh | 20 ++++++++++++--------
- 2 files changed, 14 insertions(+), 10 deletions(-)
+has these problem(s):
 
-diff --git a/arch/powerpc/Makefile.postlink b/arch/powerpc/Makefile.postlink
-index 134f12f89b92..2268396ff4bb 100644
---- a/arch/powerpc/Makefile.postlink
-+++ b/arch/powerpc/Makefile.postlink
-@@ -17,11 +17,11 @@ quiet_cmd_head_check = CHKHEAD $@
- quiet_cmd_relocs_check = CHKREL  $@
- ifdef CONFIG_PPC_BOOK3S_64
-       cmd_relocs_check =						\
--	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$@" ; \
-+	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@" ; \
- 	$(BASH) $(srctree)/arch/powerpc/tools/unrel_branch_check.sh "$(OBJDUMP)" "$@"
- else
-       cmd_relocs_check =						\
--	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$@"
-+	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@"
- endif
- 
- # `@true` prevents complaint when there is nothing to be done
-diff --git a/arch/powerpc/tools/relocs_check.sh b/arch/powerpc/tools/relocs_check.sh
-index 7b9fe0a567cf..014e00e74d2b 100755
---- a/arch/powerpc/tools/relocs_check.sh
-+++ b/arch/powerpc/tools/relocs_check.sh
-@@ -10,14 +10,21 @@
- # based on relocs_check.pl
- # Copyright © 2009 IBM Corporation
- 
--if [ $# -lt 2 ]; then
--	echo "$0 [path to objdump] [path to vmlinux]" 1>&2
-+if [ $# -lt 3 ]; then
-+	echo "$0 [path to objdump] [path to nm] [path to vmlinux]" 1>&2
- 	exit 1
- fi
- 
--# Have Kbuild supply the path to objdump so we handle cross compilation.
-+# Have Kbuild supply the path to objdump and nm so we handle cross compilation.
- objdump="$1"
--vmlinux="$2"
-+nm="$2"
-+vmlinux="$3"
-+
-+# Remove from the bad relocations those that match an undefined weak symbol
-+# which will result in an absolute relocation to 0.
-+# Weak unresolved symbols are of that form in nm output:
-+# "                  w _binary__btf_vmlinux_bin_end"
-+undef_weak_symbols=$($nm "$vmlinux" | awk '$1 ~ /w/ { print $2 }')
- 
- bad_relocs=$(
- $objdump -R "$vmlinux" |
-@@ -26,8 +33,6 @@ $objdump -R "$vmlinux" |
- 	# These relocations are okay
- 	# On PPC64:
- 	#	R_PPC64_RELATIVE, R_PPC64_NONE
--	#	R_PPC64_ADDR64 mach_<name>
--	#	R_PPC64_ADDR64 __crc_<name>
- 	# On PPC:
- 	#	R_PPC_RELATIVE, R_PPC_ADDR16_HI,
- 	#	R_PPC_ADDR16_HA,R_PPC_ADDR16_LO,
-@@ -39,8 +44,7 @@ R_PPC_ADDR16_HI
- R_PPC_ADDR16_HA
- R_PPC_RELATIVE
- R_PPC_NONE' |
--	grep -E -v '\<R_PPC64_ADDR64[[:space:]]+mach_' |
--	grep -E -v '\<R_PPC64_ADDR64[[:space:]]+__crc_'
-+	([ "$undef_weak_symbols" ] && grep -F -w -v "$undef_weak_symbols" || cat)
- )
- 
- if [ -z "$bad_relocs" ]; then
--- 
-2.20.1
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/1BgSCQMfrFItgzw4O2ssgEQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4jqtkACgkQAVBC80lX
+0Gx+Vgf9GNIr6GdzkdCDWFtFKM6wc7WTPqvg70/HQWZ5WY1/l97yQJjOzTSswxZc
+fv8a9sqFiwVXUY+602KGRJfA4n65LY3AAMHYdfIDZxniTqXECyz9rDqbu3f3nqiV
+aINKd0jhKShhogwRCWtCyE7FAtBp5wIar2NHr5+uQFHNjRsCpTFE2kxOnDJrU+gx
+sBZYWvRUqvR7Q2MHT+l9q4S5suEDPnEAmbV7DZ3lNcAjw3/pqadCMISh3SSLChkI
+rol9C22OriErJaK944JrtWc5EefFZSLc70guoF1PKn9KWxWo+MVnwe2LCTw8GO8D
+dywyK5hAK+DiC+aIPpXIoMltwmhTJA==
+=gK0n
+-----END PGP SIGNATURE-----
+
+--Sig_/1BgSCQMfrFItgzw4O2ssgEQ--

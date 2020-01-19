@@ -2,48 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1210141ABA
-	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2020 02:03:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68675141AC1
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2020 02:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727043AbgASBDZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Jan 2020 20:03:25 -0500
-Received: from ozlabs.org ([203.11.71.1]:37959 "EHLO ozlabs.org"
+        id S1727051AbgASBGJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Jan 2020 20:06:09 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59575 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727012AbgASBDZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 18 Jan 2020 20:03:25 -0500
+        id S1727043AbgASBGJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 18 Jan 2020 20:06:09 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 480c4B31Rjz9sP3;
-        Sun, 19 Jan 2020 12:03:21 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 480c7L6K7fz9sP3;
+        Sun, 19 Jan 2020 12:06:06 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579395802;
-        bh=/2SmNmlfOgWM5RrYHVJdCGkll3jc1LtqGFzGrdHQK/A=;
+        s=201702; t=1579395967;
+        bh=WB2vHqaSoZLAA5Tp3IIAjL7KxrkZjeK/A4htgKEjG4w=;
         h=Date:From:To:Cc:Subject:From;
-        b=RoCYrpkOF9rxjvJ95Z9jAv52IKvnFYZAsTcFKu3XLH4hMK2NfuDgChtPqT/ikFXnA
-         DYdLzEW5K6cwpuKnjoYRounn8fzAPJRwFtQSabPHCbkR2gACsk5fL+OShycBRxEyqG
-         DY9F4Zi5C/8kt0CDEP65262suwmQc2DOZUXs3GksrT3XwV6pEDfBef1NRudiV76kjt
-         Ogpd/QxC43iSg0GLIBlobth274AYQCsjgSJJ5rYY95VFl38wQ2FTpg/Rt9INoz2Z6K
-         SutxZ7xVA9tPjaut0VbSQs0zEY5Xw7HvypJpoNLQupa890bopLOp9eYkgmLGUgWmjo
-         VEkL+0ueGmrig==
-Date:   Sun, 19 Jan 2020 12:03:21 +1100
+        b=VSivGPphpDCu4Q0KxR1BvrvEeK1LJPqqWpFU/5d812sWpydkXsYUSalp7dGKmyr58
+         GtAoxqqXaZY26fpML9o4ZBmAsheL6pJJyVKnBJgGR5kdrdS2WRJax3vRat1L9OCvp+
+         gVa9ViHYQYfTBRd0f8l4TZlVKO3/95c0Er6vi4RCR5MgJTwg1XjHAQQciZ6V107Lu5
+         m7sVDsTLVkL5PY+FkegFcvam859+iJma21bTBxdoKgmI5tr7Xk5Ukob4Veeev7y6tQ
+         gw7TV6OnxxGWGMRylzea/pZ6xudOAO55NjXg1NQPxWHpVaLQ6gEwbs1ZNASEH6S3rU
+         Psj3MTgixW9qw==
+Date:   Sun, 19 Jan 2020 12:06:05 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Russell King <linux@armlinux.org.uk>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alex Sverdlin <alexander.sverdlin@nokia.com>
-Subject: linux-next: Fixes tag needs some work in the arm-current tree
-Message-ID: <20200119120321.43e69cdf@canb.auug.org.au>
+        Florian Fainelli <f.fainelli@gmail.com>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20200119120605.5417fc50@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1BgSCQMfrFItgzw4O2ssgEQ";
+Content-Type: multipart/signed; boundary="Sig_/_MFy/01xHWYblFpWPCbdiXU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1BgSCQMfrFItgzw4O2ssgEQ
+--Sig_/_MFy/01xHWYblFpWPCbdiXU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,37 +52,40 @@ Hi all,
 
 In commit
 
-  76540facd203 ("ARM: 8950/1: ftrace/recordmcount: filter relocation types")
+  8f1880cbe8d0 ("net: dsa: bcm_sf2: Configure IMP port for 2Gb/sec")
 
 Fixes tag
 
-  Fixes: ed60453fa8 ("ARM: 6511/1: ftrace: add ARM support for C version of=
- recordmcount")
+  Fixes: 01b0ac07589e ("net: dsa: bcm_sf2: Add support for optional reset c=
+ontroller line")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: eee87e4377a4 ("net: dsa: bcm_sf2: Add support for optional reset con=
+troller line")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1BgSCQMfrFItgzw4O2ssgEQ
+--Sig_/_MFy/01xHWYblFpWPCbdiXU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4jqtkACgkQAVBC80lX
-0Gx+Vgf9GNIr6GdzkdCDWFtFKM6wc7WTPqvg70/HQWZ5WY1/l97yQJjOzTSswxZc
-fv8a9sqFiwVXUY+602KGRJfA4n65LY3AAMHYdfIDZxniTqXECyz9rDqbu3f3nqiV
-aINKd0jhKShhogwRCWtCyE7FAtBp5wIar2NHr5+uQFHNjRsCpTFE2kxOnDJrU+gx
-sBZYWvRUqvR7Q2MHT+l9q4S5suEDPnEAmbV7DZ3lNcAjw3/pqadCMISh3SSLChkI
-rol9C22OriErJaK944JrtWc5EefFZSLc70guoF1PKn9KWxWo+MVnwe2LCTw8GO8D
-dywyK5hAK+DiC+aIPpXIoMltwmhTJA==
-=gK0n
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4jq30ACgkQAVBC80lX
+0GzFxQf/Wcy8+0nzLxFi7ni6yXKnLjkIUGFrYNj3oCR8jerj+z6uWVMaQxqhMuBj
+4NGpsfulLGT20d47bx/IZix8BjvFOAb+plHwSpHYO5NMKwcbjADoPYJPn5dS553E
+ojubAqbfet8qwAPSMeHjjoeCpEE/TDdBE3nhUNhusOJbrrKsoiXGCItIWvd+taV0
+r4NZ+sFYpzxlFWjbML5o9GgzHW0NYwj75T3C7Z0EML7R0dbtL3Bl1LobQHMhgP+t
+ceVUMBeRQHNTg0PWd3UsbqmbjVDqwveRyylQDOgsGalsA76jy16rr+QEzR9Yq3Kx
+SNPVspKfcsiB51qhnkXRuw12kYS2Aw==
+=P1JM
 -----END PGP SIGNATURE-----
 
---Sig_/1BgSCQMfrFItgzw4O2ssgEQ--
+--Sig_/_MFy/01xHWYblFpWPCbdiXU--

@@ -2,83 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F18F5142051
-	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2020 23:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F336D14205F
+	for <lists+linux-next@lfdr.de>; Sun, 19 Jan 2020 23:12:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728670AbgASWCg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Jan 2020 17:02:36 -0500
-Received: from pandora.armlinux.org.uk ([78.32.30.218]:52794 "EHLO
-        pandora.armlinux.org.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727556AbgASWCf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Jan 2020 17:02:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=s7rnapALkocYuGpPU7BNCPSg8c2Zf+5ywHOGUWObJQQ=; b=HlCxnC2RDqup9VGr0k+YNkHXX
-        O9T5UpS6DF2GbP5Buu//bhmQQgV6GJFB+g5dixq/ev7GgQ5vLVGoDIlHVYZQDCQo+h2Ir5JwwV8V5
-        5RBE65ajUuL+VK5HcLV7xjjf4wfFQK63kxLHJRhIlihsGJMc7ws9vICNd5F/ZdgI1JtNywyYMZyZK
-        IUdS9eRh9wDVDLFPsKFz4w42UO0yJfIC3J4v7hxZ4S/KpEEIdkLrhhFIjyjh+J39FUmyjo0NJ3+OI
-        p1VDBgFTM+r3vxQWlMz9CSUThMa3bbnrotuQLjEHvBdHeRDz6ltL5ymojf+yrmyLbYZ2+ZwI1ADDv
-        kNty7tT/A==;
-Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:57150)
-        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1itIeN-0002F8-P9; Sun, 19 Jan 2020 22:02:31 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1itIeM-0002BY-BX; Sun, 19 Jan 2020 22:02:30 +0000
-Date:   Sun, 19 Jan 2020 22:02:30 +0000
-From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1728655AbgASWMq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Jan 2020 17:12:46 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38055 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727195AbgASWMp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 19 Jan 2020 17:12:45 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4818Dp68rjz9sR1;
+        Mon, 20 Jan 2020 09:12:42 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579471963;
+        bh=F0/uUBWapm8iYojCapqbHi7fMNj227TO/r4QzxxIdLc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i7LinkgYPBe+SJDaRtt33rOeynzd+tJb0+tYp9KJxSV2vjz1b0E+DIwxapZ3OZRpU
+         aatFbRZ6SwKP/N3wtDUq296MCHutvHhjSWLaTe6/rcgVmd6r0AwBZHB3D9rJLiL2Ag
+         IoMMEXJzo/KNSd1e9KA87n/aRFdgur52iiVpf4+LyZS3vgtTFdA9F545yX+39K7u4i
+         JSFL78TnByhmOJuxBFevkQXrBFZ6FS8tK5tM+4xRO/NuMzt19leripjDkbg7Mj9h+9
+         8BPPR3DeNn+/jZ+k1NT24WUo16QuKklwF3cqTBJORFmmU3VijZRF8O93KltScXyy1q
+         t5FYLeCJFi3kw==
+Date:   Mon, 20 Jan 2020 09:12:39 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Artem Bityutskiy <dedekind1@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-next: build failure after merge of the arm tree
-Message-ID: <20200119220230.GX25745@shell.armlinux.org.uk>
-References: <20200120082447.7fea4d55@canb.auug.org.au>
+        Quanyang Wang <quanyang.wang@windriver.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: linux-next: Fixes tag needs some work in the ubifs tree
+Message-ID: <20200120091239.045c7c65@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200120082447.7fea4d55@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/g+65TJXtNyGmwDCUORN8KC6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/g+65TJXtNyGmwDCUORN8KC6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Patch dropped.
+Hi all,
 
-I think this needs to wait until it's been properly tested before I
-apply the next version.
+In commit
 
-On Mon, Jan 20, 2020 at 08:24:47AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the arm tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> 
-> Caused by commit
-> 
->   e3a0e1427dcb ("ARM: 8953/1: decompressor: simplify libfdt builds")
-> 
-> My arm builds are ppc64le hosted cross compiles using Debian's cross
-> gcc package.
-> 
-> I have reverted that commit for today.
-> -- 
-> Cheers,
-> Stephen Rothwell
+  31f36312d2ca ("ubifs: fix memory leak from c->sup_node")
 
+Fixes tag
 
+  Fixes: 4793e7c5e1c8 ("ubifs: Store read superblock node")
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTC broadband for 0.8mile line in suburbia: sync at 12.1Mbps down 622kbps up
-According to speedtest.net: 11.9Mbps down 500kbps up
+has these problem(s):
+
+  - Subject does not match target commit subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+Did you meean
+
+Fixes: 4793e7c5e1c8 ("UBIFS: add bulk-read facility")
+
+or
+
+Fixes: fd6150051bec ("ubifs: Store read superblock node")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/g+65TJXtNyGmwDCUORN8KC6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4k1FcACgkQAVBC80lX
+0GyT9Qf+MotPR0x7r98Q9ekpoN17qvRdsh5rrFIHc8HsDaEwZkLpLiUbxkMqJ6tw
+3CUohzjJTb+tVjpq/CHdBrHr9GZKqrNTSS//muwclQaVtmHQilyRO0lsFLuND2DF
+VwTEqUpVG5Tj2ZmzDjM/t+kAHcKSkatWSw2klOFjoGZLLLBktEiJ4an+8ORlhMbh
+YckZmfoJ/roYvVvvnbUKXEsVzCA1FPfrNTGl7Z8HFHNp6OfE2YVKKDGk62VHHf/N
+KgXgZzykr/NmU8/3MTNMtQfOpDBWSaQ8mKsoma3TxlkjfSktWdaBi7tEXfAREUfO
+3M0mAcEdpQIc/sef3cAm8O7HpRi9xw==
+=P34F
+-----END PGP SIGNATURE-----
+
+--Sig_/g+65TJXtNyGmwDCUORN8KC6--

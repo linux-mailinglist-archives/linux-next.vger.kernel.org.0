@@ -2,65 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5AC0142F08
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2020 16:52:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 759F414336A
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2020 22:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726876AbgATPwZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Jan 2020 10:52:25 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45290 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726626AbgATPwY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Jan 2020 10:52:24 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1579535543;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=siJ2sfjzWDacIjNlyKFxd2oMlncO7B3hkvb0Wjp0h7Y=;
-        b=dJ0DR4T30jcCK+PeV/MYoN4HJAwe+omtpJ4nFGPLVzve3DIvkboD31IYZv40Z+WEDu8h7Z
-        Pz0o7BVvK/HZjAF3OkDSGV7k0YO7HU5gah53nxxapg7erYnq4FpqOon66f1VRU2twokHiY
-        LdA3JfFp1JDGLwA589Gjf/GpY0X/TbI=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-197-wXNF9myXPlCSEOjSfBcqig-1; Mon, 20 Jan 2020 10:52:22 -0500
-X-MC-Unique: wXNF9myXPlCSEOjSfBcqig-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1726843AbgATVef (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jan 2020 16:34:35 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:32949 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726752AbgATVef (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Jan 2020 16:34:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 27FAB800D41;
-        Mon, 20 Jan 2020 15:52:21 +0000 (UTC)
-Received: from treble (ovpn-125-19.rdu2.redhat.com [10.10.125.19])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1C87360BF7;
-        Mon, 20 Jan 2020 15:52:20 +0000 (UTC)
-Date:   Mon, 20 Jan 2020 09:52:17 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Dec 6 (objtool, lots in btrfs)
-Message-ID: <20200120155217.ikvlphvlaswh3twt@treble>
-References: <20191206135406.563336e7@canb.auug.org.au>
- <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 481lLG6Vcgz9sPK;
+        Tue, 21 Jan 2020 08:34:30 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579556073;
+        bh=B/uaXNOzGmgYx5o+zZDaRq+uyNaotC/PaEI4OhmL6/U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=JBcc76639Ocp2dtjOb89h6KEIrZHrNc76gi8rxRpVYHULgmOvMOm+/4DYaicgmAu3
+         pn9dM+seyoL9/Xhygb0wuiC1eJEpKlIKL8Q/WoDUUKCoA6uJ+o3vvrmuAOykE8QUcH
+         TtQ/Xn8qQe5gxVogUjoiK4Iu79289rmju09O7k70S1PwX4L0Qh9b7pprkSAwUjYit0
+         Os8ZceP+1jmsEXuph1TfaGwU9FdeMZr5a6gK104S4ryRmuhKHggfLEOINlrW1u7Qx1
+         20JvLonvHgPhWpqNcGi8bkSCZp+gHhKjqBR+zQzMSMVm/RyZmYRBsJcyDJeSr2GJ0d
+         RaY3CsRLFPZ0A==
+Date:   Tue, 21 Jan 2020 08:34:24 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>
+Subject: linux-next: build failure after merge of the drm-intel-fixes tree
+Message-ID: <20200121083424.66d98dc5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <cd4091e4-1c04-a880-f239-00bc053f46a2@infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: multipart/signed; boundary="Sig_/XwC9.aYjJCeolnFRpcIZ6sg";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Dec 06, 2019 at 08:17:30AM -0800, Randy Dunlap wrote:
-> On 12/5/19 6:54 PM, Stephen Rothwell wrote:
-> 
-> kernel/cred.o: warning: objtool: prepare_creds()+0x2c3: unreachable instruction
+--Sig_/XwC9.aYjJCeolnFRpcIZ6sg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Here's another one I haven't recreated yet - if you can share the .o and
-the config that would be helpful.
+Hi all,
 
--- 
-Josh
+After merging the drm-intel-fixes tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
+
+Caused by commit
+
+  d8fcca47e195 ("drm/i915/userptr: fix size calculation")
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/XwC9.aYjJCeolnFRpcIZ6sg
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4mHOAACgkQAVBC80lX
+0GyiIggAh+uEumRRLd/uzS0G2uWsepBy1Yq2Du+SZOvq5q6eXzxPFi3v4yq5G/Z3
+91kKDbUbXIq0bt+4ZeBWCVa9JHfac7zaD6v96oj0/WAGptURVMWs8IQzSeCE5ly8
+OaRbBIw0l/7R6oDXh0+UmePioF1mh1PiZ2uHQNmVgGS9ECzzGsHYst0WlWKbfrcW
+tF/i5GkROKKAy92QKh+SHQKa+QMi9qYOzffYXqyVbTmUD4BUit9Es86qFcYnMebu
+60CJT2QjE1vOcPeThd8mRGmHy9qrMlLypvMnEV4KmI4hDq3X9LR4GnDsms5Ej+nI
+AhoRQjAGR3OGYJqZGubAw/fwzQw1Zg==
+=0wfI
+-----END PGP SIGNATURE-----
+
+--Sig_/XwC9.aYjJCeolnFRpcIZ6sg--

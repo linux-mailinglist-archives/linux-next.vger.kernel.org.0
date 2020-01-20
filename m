@@ -2,116 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 614BF1421B0
-	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2020 03:57:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0371422DF
+	for <lists+linux-next@lfdr.de>; Mon, 20 Jan 2020 06:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729014AbgATC5V (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Jan 2020 21:57:21 -0500
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:33068 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728949AbgATC5V (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 19 Jan 2020 21:57:21 -0500
-Received: by mail-pl1-f193.google.com with SMTP id ay11so12540425plb.0
-        for <linux-next@vger.kernel.org>; Sun, 19 Jan 2020 18:57:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:from:to:cc:references:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=lL6iVMmM5FZ4RvYRtuuFami6NaDQhGQQ9qR5Ay6sAFs=;
-        b=SjjfKJ+FDmOJ+uTtb4EnvhQr7orxOzRbOi9ecJ/NQ78M3AeHtn+4wkeyl4CdcTHDst
-         Eh0q8VmkA/Yqft9zNnawSA9cLpPC6v6cwPHl1BchbsrNyVdsKB9gr6oJ6dI1l8yhhAAa
-         xwauWK3WBYb+5MZYrNr1HfILtD4Bs2x4h+838rKtpkPlRfRY+cy5PBm4G0YUZcBPqYOB
-         /yCAA5FnceANrO0J5oRTcQiT3QaMWOhZO/75L91KXTmyUE+/kk6txj2mBGEMuzolSnPQ
-         trqbGP9MCVKFxZEF5iNMSf94KkwBE+lGMkot2sEa9B2xVQIxKpH0D5FU/V1m3ILap/TI
-         9/hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:from:to:cc:references:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=lL6iVMmM5FZ4RvYRtuuFami6NaDQhGQQ9qR5Ay6sAFs=;
-        b=Y43BKVkba1tmOpWnJbg/y37bdZYG0BDOcqznD+vZV6jD80JqIIgTz3zfZi/QnCPdBF
-         WAOmQdzjSJcpmw8p+d2jK9bnWjCud0DYJo74OSFgeOxU3TmfgbTP/m9g0h6TXUONlwTI
-         zw9H8X/WBo3BU89TtDs639Q1d8Dl4gVEsCjDwN/EE1W6G28AMojOISdPptsFTAQOmRj/
-         9V66HpRtXFgX8WUqgUM8vCOIza59YVtYyTXiQ5ryh9mjQRZHGgj7GmJpxTdqNXCBmYwn
-         wy64xojzVaEvPiXAoyqFzqOMQGnxnxv2fS5ec8O2DLdwW0tY7Oyy2vYY2WvQ/aJ5SwY5
-         0yFw==
-X-Gm-Message-State: APjAAAUpikmtRckEXjMIs0luwIPPml6SoJ5vRGQ06HkNzg4GRSTZTSkG
-        aWv6wy0TEt6zm/wB4gmoCBW+Fw==
-X-Google-Smtp-Source: APXvYqyb9jl2Kpipboz2mtxHgmWbjzquRNedlGqEpzfQA/Q0QXm2Z8/kbOOtoJQ7EsgEolYE/aw60w==
-X-Received: by 2002:a17:90a:d143:: with SMTP id t3mr20741568pjw.106.1579489040694;
-        Sun, 19 Jan 2020 18:57:20 -0800 (PST)
-Received: from [192.168.1.188] ([66.219.217.145])
-        by smtp.gmail.com with ESMTPSA id z16sm37959284pff.125.2020.01.19.18.57.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 19 Jan 2020 18:57:20 -0800 (PST)
-Subject: Re: linux-next: manual merge of the block tree with the vfs tree
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725788AbgATFjD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Jan 2020 00:39:03 -0500
+Received: from ozlabs.org ([203.11.71.1]:33485 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725783AbgATFjD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Jan 2020 00:39:03 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 481L7l3BLmz9sRQ;
+        Mon, 20 Jan 2020 16:38:59 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1579498741;
+        bh=I8Lh+RA8avcoXnghl+JZrgYPpe7DTQbPFeiLUa8yXq0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=J+1jjLQ4/2jn70tfJi+iTpd+0lH+f4qmZO/g48dbBc7fVswSflzXL+/OGY8wgIVx3
+         TcjgnSQXtmkO86CT5jcyWyuk2BL9zvkkN91QAbPgmBIvnZtefaK795QHMs+8N3/ozC
+         4grmP2EcoPxcVpDdLavn87X6JfYfTWI9NKmzAzVtbZjefeuaqHsvd5tyHW5bfDRtsN
+         BNRwKJitm42JA3Z2ZAp8SJ/I3QdcFktJH2FSgFjT6WK7ZVNTek9X7L/Plw8NwFjQLc
+         Vgs23yWMYXSssRa37rX+hFxaN3CpAfGt1snf0CP5hHYT2wiYW1Mc38UeVPdOBqTP3s
+         RcoV6+iog9jOw==
+Date:   Mon, 20 Jan 2020 16:38:53 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Aleksa Sarai <cyphar@cyphar.com>
-References: <20191220123614.5f11d2e3@canb.auug.org.au>
- <f6ff3aa5-e08b-8b25-454a-9aa51b8b5c37@kernel.dk>
- <20200120124051.2fdcfc61@canb.auug.org.au>
- <e0af609c-aa1b-5a8b-89d4-ea6aff779c67@kernel.dk>
-Message-ID: <c37a907f-03d0-2789-7b8d-fc4e496de530@kernel.dk>
-Date:   Sun, 19 Jan 2020 19:57:18 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: linux-next: build warning after merge of the tip tree
+Message-ID: <20200120163853.53da0ac5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <e0af609c-aa1b-5a8b-89d4-ea6aff779c67@kernel.dk>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/y5z4jywl5eWu=/1eiCAP6Q7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/19/20 7:45 PM, Jens Axboe wrote:
-> On 1/19/20 6:40 PM, Stephen Rothwell wrote:
->> Hi Jens,
->>
->> On Thu, 19 Dec 2019 22:34:59 -0700 Jens Axboe <axboe@kernel.dk> wrote:
->>>
->>> On 12/19/19 6:36 PM, Stephen Rothwell wrote:
->>>>
->>>> Today's linux-next merge of the block tree got a conflict in:
->>>>
->>>>   fs/open.c
->>>>
->>>> between commit:
->>>>
->>>>   0a51692d49ec ("open: introduce openat2(2) syscall")
->>>>
->>>> from the vfs tree and commit:
->>>>
->>>>   252270311374 ("fs: make build_open_flags() available internally")
->>>>
->>>> from the block tree.
->>>>
->>>> I fixed it up (see at end, plus the merge fix patch below) and can
->>>> carry the fix as necessary. This is now fixed as far as linux-next is
->>>> concerned, but any non trivial conflicts should be mentioned to your
->>>> upstream maintainer when your tree is submitted for merging.  You may
->>>> also want to consider cooperating with the maintainer of the
->>>> conflicting tree to minimise any particularly complex conflicts.  
->>>
->>> Thanks Stephen, I may just pull in the vfs tree to avoid this conflict.
->>
->> I looks like Al has rewritten the branch you merged from his tree and
->> caused various conflicts in my merge of the block tree today.  I used
->> Al's new versions of the conflicting files.
-> 
-> That's a bummer. I guess I'll have to rebase on top of the new one. Al,
-> is the new one going to be persistent?
+--Sig_/y5z4jywl5eWu=/1eiCAP6Q7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Stephen, I rebased and pushed it out, verified that the io_uring bits
-are identical to before. So at least this should be painless for you on
-next pull.
+Hi all,
 
--- 
-Jens Axboe
+After merging the tip tree, today's linux-next build (x86_64 allnoconfig
+and a couple of other allnoconfigs) produced this warning:
 
+kernel/sched/fair.c:5221:12: warning: 'sched_idle_cpu' defined but not used=
+ [-Wunused-function]
+ 5221 | static int sched_idle_cpu(int cpu)
+      |            ^~~~~~~~~~~~~~
+
+Introduced (I think) by commit
+
+  323af6deaf70 ("sched/fair: Load balance aggressively for SCHED_IDLE CPUs")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/y5z4jywl5eWu=/1eiCAP6Q7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4lPO0ACgkQAVBC80lX
+0Gzfbwf/QBxTNLlsonWssDSAEzGq3OCAIHM7LHiSVb2R7I2BD53VnsFWnN46zmhA
+VN0/oH525des+4RKdtCRX/8fyRjxsmi81bpdy0WawWjggo3REtXankV+3sM17qAH
+LripUkm6VvMqnjgBmvAcc0YoDWgR9IjuFOpspMJzs+7bri8aO37kp2coRTy7qWQt
+xc1q1OtVJyVUOEvjRHSPt4sr+XAXvjogEHGKtjU24xyXywc8ag5Aim3Hon5DT6Xr
+yHMY9CUNaQOhdAjkuGrCfNV3qMHvuUGscFt9eI/N2xFqiLXMnoHKISUvSWkepkes
+qGwo3tmqitjIdCfSnStPGYomsD3MKA==
+=tRSA
+-----END PGP SIGNATURE-----
+
+--Sig_/y5z4jywl5eWu=/1eiCAP6Q7--

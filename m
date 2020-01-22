@@ -2,85 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFBA144AB6
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 05:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4668F144AB8
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 05:12:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728609AbgAVELF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jan 2020 23:11:05 -0500
-Received: from ozlabs.org ([203.11.71.1]:34297 "EHLO ozlabs.org"
+        id S1728609AbgAVEL7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jan 2020 23:11:59 -0500
+Received: from mail.kernel.org ([198.145.29.99]:57792 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727141AbgAVELE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Jan 2020 23:11:04 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1727141AbgAVEL7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Jan 2020 23:11:59 -0500
+Received: from localhost.localdomain (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 482X5L0rZpz9sRR;
-        Wed, 22 Jan 2020 15:11:02 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579666262;
-        bh=qrvzB3vEuxB1QqbgDsl30qtbycln/l2c4UMczIawoZY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=gdH8SWymMz8+lz2k+GqdqVlSp1FXksqW5XsF6oi12X7SmFq2XunfXbP1Q0pR5uqi4
-         nHGBdVHVo3u1Ava6ORhHQrCXA8gLUyoZyhRS7WDirPomLKVsPPoiypBK1/gQZ4DErV
-         aLPuInBUuCAr4lBKrCHrnwwTE+4F+KG/oKEoVCL5qiWfYvdGC7lnULkiM5Rm9YpoZB
-         DB1R1bYCBat0HNO/OjQp1Uf2kq350nuySViyabfz6GPuown24Ig3dk3AdeEuAqGrXH
-         E2AdmXwvkDkpmmOplq4HXYvXFk5ZJQKJd7S8Z4MvsBTNWgdZTEVehfLY+s5KwNGvaL
-         Ku4L8xFPRSB4g==
-Date:   Wed, 22 Jan 2020 15:10:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id C134F2070C;
+        Wed, 22 Jan 2020 04:11:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1579666318;
+        bh=v29QQvk5dO+gNH/UWuB5vLE2PNIwKeDSrqt3jQ8zSH4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I0Mn4qCt9fghJspZGWTvyWcZ0hohhHl4QR7wkS6Q5qkxGTqI7NiES5StcLYpY8851
+         ncD+JLBJVjC0zhi+GK0n8LXlizKjoLuK38A/k2yr47p9cuBwmAWF7vOwYj9Ekk4x6m
+         Q2a1fAxXMsRpDhFXniMMflyco4DjPhYuptn9HxSE=
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        John Garry <john.garry@huawei.com>
-Subject: linux-next: build failure after merge of the scsi-mkp tree
-Message-ID: <20200122151056.7d09abf0@canb.auug.org.au>
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        X86 ML <x86@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH -tip] [RESEND] x86/decoder: Add TEST opcode to Group3-2
+Date:   Wed, 22 Jan 2020 13:11:54 +0900
+Message-Id: <157966631413.9580.10311036595431878351.stgit@devnote2>
+X-Mailer: git-send-email 2.20.1
+User-Agent: StGit/0.17.1-dirty
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/e4ndf2+nh.Fv1o5+f20VbAz";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/e4ndf2+nh.Fv1o5+f20VbAz
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add TEST opcode to Group3-2 reg=001b as same as Group3-1 does.
 
-Hi all,
+Commit 12a78d43de76 ("x86/decoder: Add new TEST instruction pattern")
+added a TEST opcode assignment to f6 XX/001/XXX (Group 3-1), but not
+added f7 XX/001/XXX (Group 3-2). Actually these TEST opcode is not
+described in Intel SDM Vol2, but described in AMD64 Architecture
+Programmer's Manual Vol.3, Appendix A.2 Table A-6. ModRM.reg
+Extensions for the Primary Opcode Map.
 
-After merging the scsi-mkp tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Without this fix, Randy found a warning by insn_decoder_test related
+to this issue as below.
 
-ERROR: "irq_create_affinity_masks" [drivers/scsi/hisi_sas/hisi_sas_v2_hw.ko=
-] undefined!
-ERROR: "__irq_set_affinity" [drivers/scsi/hisi_sas/hisi_sas_v2_hw.ko] undef=
-ined!
+  HOSTCC  arch/x86/tools/insn_decoder_test
+  HOSTCC  arch/x86/tools/insn_sanity
+  TEST    posttest
+arch/x86/tools/insn_decoder_test: warning: Found an x86 instruction decoder bug, please report this.
+arch/x86/tools/insn_decoder_test: warning: ffffffff81000bf1:	f7 0b 00 01 08 00    	testl  $0x80100,(%rbx)
+arch/x86/tools/insn_decoder_test: warning: objdump says 6 bytes, but insn_get_length() says 2
+arch/x86/tools/insn_decoder_test: warning: Decoded and checked 11913894 instructions with 1 failures
+  TEST    posttest
+arch/x86/tools/insn_sanity: Success: decoded and checked 1000000 random instructions with 0 errors (seed:0x871ce29c)
 
-Caused by commit
+To fix this error, add TEST opcode according to AMD64 APM Vol.3.
 
-  3869a618eb88 ("scsi: hisi_sas: Use reply map for v2 hw")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+---
+ arch/x86/lib/x86-opcode-map.txt       |    2 +-
+ tools/arch/x86/lib/x86-opcode-map.txt |    2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-I have reverted that commit for today.
+diff --git a/arch/x86/lib/x86-opcode-map.txt b/arch/x86/lib/x86-opcode-map.txt
+index 8908c58bd6cd..53adc1762ec0 100644
+--- a/arch/x86/lib/x86-opcode-map.txt
++++ b/arch/x86/lib/x86-opcode-map.txt
+@@ -929,7 +929,7 @@ EndTable
+ 
+ GrpTable: Grp3_2
+ 0: TEST Ev,Iz
+-1:
++1: TEST Ev,Iz
+ 2: NOT Ev
+ 3: NEG Ev
+ 4: MUL rAX,Ev
+diff --git a/tools/arch/x86/lib/x86-opcode-map.txt b/tools/arch/x86/lib/x86-opcode-map.txt
+index 8908c58bd6cd..53adc1762ec0 100644
+--- a/tools/arch/x86/lib/x86-opcode-map.txt
++++ b/tools/arch/x86/lib/x86-opcode-map.txt
+@@ -929,7 +929,7 @@ EndTable
+ 
+ GrpTable: Grp3_2
+ 0: TEST Ev,Iz
+-1:
++1: TEST Ev,Iz
+ 2: NOT Ev
+ 3: NEG Ev
+ 4: MUL rAX,Ev
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/e4ndf2+nh.Fv1o5+f20VbAz
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4ny1AACgkQAVBC80lX
-0GyOgAf/TeQCpz99pkq5AgSe2EeBxd/fs+4uaZAukWdgUwrDcv6ZQBhgZqJ/ChYo
-armOFsEpeUJQMnzXWw5nJYtZmn1UaP13gIfoJX0WEQRCvCR3d66sGIhYesxbOEGN
-4RjQfegntkADX0DXbcneIJJaIZCWko0VtinzXD05Qg2PYwptKgWntXXjg2RzkgmF
-BVywaSpTnnZB6NpZ+xv1DDMSxQ4kdCcV0VgqYruahIGyn+UjcKMqYu2gqEWPNikl
-/6tebPWhGmoo9VDPX7bPZY7AXap/nTNmiLA3oA4UYS1HQQd+dflWHV9NVKusUdTb
-RF0d9o/4zpz3ppuhYTlvVq3WCACwSA==
-=UNFA
------END PGP SIGNATURE-----
-
---Sig_/e4ndf2+nh.Fv1o5+f20VbAz--

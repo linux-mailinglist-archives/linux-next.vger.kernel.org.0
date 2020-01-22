@@ -2,140 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE411448FB
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 01:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1867C1449C4
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 03:25:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728665AbgAVAho (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Jan 2020 19:37:44 -0500
-Received: from ozlabs.org ([203.11.71.1]:36297 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726970AbgAVAhn (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Jan 2020 19:37:43 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 482RM46tSvz9sRG;
-        Wed, 22 Jan 2020 11:37:35 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1579653461;
-        bh=PJKoeTUvZRzpyMSjdbuqjPU1o/xVBju6xZV9Su82U4I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DDz18igmUVSn515Aej90Gx/ujacrBQr1pEcvCH05DJCJwjmhp7HfRi2cgwMV5HHCv
-         EQRM6C9dMOEkQf70YVIArOilurLNRcPk2SrxjrrcjGcGQHU+z4rkvhvv8kNs6z4Eur
-         fvueZ3ogcWcW6nzl/9KZDhSCWWy+19hOwy2zftvpbsLnYfkxBCKxRKGCzKwLV9s6aP
-         DGW3pG1tVVRLtaleJ9oDc9cXqpJmqVBqNLbMb45/Bd6BS1u1nbrc36OgYAqmYEsYGe
-         zRXHDAG2nKcSAo418EjsbJfdYZoH7Z9U8o9kGhDI+Bmh+IwYWMS83Wc68Tdwx41c53
-         att7JtWEr8CNw==
-Date:   Wed, 22 Jan 2020 11:37:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Auld <matthew.auld@intel.com>
-Subject: linux-next: manual merge of the drm tree with the drm-intel-fixes
- tree
-Message-ID: <20200122113731.4566ffda@canb.auug.org.au>
+        id S1728809AbgAVCZi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Jan 2020 21:25:38 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:44410 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726396AbgAVCZi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 21 Jan 2020 21:25:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=9ZOGsttRmOTfzjL1ECAYcpfTSZoQqHHRoblxH4x0j4M=; b=XhszVteo70FgyKJG9DtA7o+hV
+        lGwkANDHq2wJhjn1MqGcqwTJUma+irli294AufHU/9wJByJWODQdSMqejTOSp7RhswG4C+IA43k1S
+        n09gLgOqssnByXkE/bCGX/JzPVZsdlMUPKHehIk88YKYk4VXLYMdJyxJwOE2zjMK15HrO0MeKnpLP
+        R+ZH2c8rygQO5+8BKLrSfTwDNDrSlx35LEV6aBqhpnDwMSq93IYl/wDvEvmsBvo0kQ94ttkqvnI64
+        xqMCl2/SxHizEC8XYpRFJLxl9ufloOdrpXp3/aypAorvYDZGa7ybSY5N6rtXqrTT8zNwI+0rslWc4
+        tU4Da/UJg==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iu5i4-0001Bw-5r; Wed, 22 Jan 2020 02:25:36 +0000
+Subject: Re: mmotm 2020-01-21-13-28 uploaded (convert everything to struct
+ proc_ops)
+To:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        Alexey Dobriyan <adobriyan@gmail.com>
+References: <20200121212915.APuBK%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <5a81ab98-4f02-f415-4da5-3d5685915a0e@infradead.org>
+Date:   Tue, 21 Jan 2020 18:25:34 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Y+gwNNIz3WOk7KKp./fX9p.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200121212915.APuBK%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Y+gwNNIz3WOk7KKp./fX9p.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 1/21/20 1:29 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-01-21-13-28 has been uploaded to
+> 
+>    http://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
 
-Hi all,
+NULL seems to be misspelled as NUL in the proc-convert-everything-to-struct-proc_ops.patch
+patch for kernel/sched/psi.c:
 
-Today's linux-next merge of the drm tree got a conflict in:
+ static int __init psi_proc_init(void)
+ {
+ 	if (psi_enable) {
+ 		proc_mkdir("pressure", NULL);
+-		proc_create("pressure/io", 0, NULL, &psi_io_fops);
+-		proc_create("pressure/memory", 0, NULL, &psi_memory_fops);
+-		proc_create("pressure/cpu", 0, NULL, &psi_cpu_fops);
++		proc_create("pressure/io", 0, NULL, &psi_io_proc_ops);
++		proc_create("pressure/memory", 0, NUL, &psi_memory_proc_ops); <<<<<<<<<<
++		proc_create("pressure/cpu", 0, NULL &psi_cpu_proc_ops);
 
-  drivers/gpu/drm/i915/i915_gem_gtt.c
+also missing a comma above...
 
-between commit:
+ 	}
+ 	return 0;
 
-  ecc4d2a52df6 ("drm/i915/userptr: fix size calculation")
 
-from the drm-intel-fixes tree and commit:
+../kernel/sched/psi.c: In function ‘psi_proc_init’:
+../kernel/sched/psi.c:1286:37: error: ‘NUL’ undeclared (first use in this function); did you mean ‘_UL’?
+   proc_create("pressure/memory", 0, NUL, &psi_memory_proc_ops);
+                                     ^~~
+                                     _UL
+../kernel/sched/psi.c:1286:37: note: each undeclared identifier is reported only once for each function it appears in
+../kernel/sched/psi.c:1287:39: error: invalid operands to binary & (have ‘void *’ and ‘const struct proc_ops’)
+   proc_create("pressure/cpu", 0, NULL &psi_cpu_proc_ops);
+                                       ^
+../kernel/sched/psi.c:1287:3: error: too few arguments to function ‘proc_create’
+   proc_create("pressure/cpu", 0, NULL &psi_cpu_proc_ops);
+   ^~~~~~~~~~~
+In file included from ../kernel/sched/psi.c:133:0:
+../include/linux/proc_fs.h:64:24: note: declared here
+ struct proc_dir_entry *proc_create(const char *name, umode_t mode, struct proc_dir_entry *parent, const struct proc_ops *proc_ops);
+                        ^~~~~~~~~~~
 
-  2c86e55d2ab5 ("drm/i915/gtt: split up i915_gem_gtt")
 
-from the drm tree.
-
-I fixed it up (I used the latter version of the file and applied teh
-following merge fix patch) and can carry the fix as necessary. This is
-now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your
-tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 22 Jan 2020 11:33:32 +1100
-Subject: [PATCH] fix up for "drm/i915/userptr: fix size calculation"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/i915/gt/gen6_ppgtt.c | 1 +
- drivers/gpu/drm/i915/gt/gen8_ppgtt.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c b/drivers/gpu/drm/i915/gt=
-/gen6_ppgtt.c
-index f10b2c41571c..f4fec7eb4064 100644
---- a/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
-+++ b/drivers/gpu/drm/i915/gt/gen6_ppgtt.c
-@@ -131,6 +131,7 @@ static void gen6_ppgtt_insert_entries(struct i915_addre=
-ss_space *vm,
-=20
- 	vaddr =3D kmap_atomic_px(i915_pt_entry(pd, act_pt));
- 	do {
-+		GEM_BUG_ON(iter.sg->length < I915_GTT_PAGE_SIZE);
- 		vaddr[act_pte] =3D pte_encode | GEN6_PTE_ADDR_ENCODE(iter.dma);
-=20
- 		iter.dma +=3D I915_GTT_PAGE_SIZE;
-diff --git a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c b/drivers/gpu/drm/i915/gt=
-/gen8_ppgtt.c
-index 077b8f7cf6cb..4d1de2d97d5c 100644
---- a/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
-+++ b/drivers/gpu/drm/i915/gt/gen8_ppgtt.c
-@@ -379,6 +379,7 @@ gen8_ppgtt_insert_pte(struct i915_ppgtt *ppgtt,
- 	pd =3D i915_pd_entry(pdp, gen8_pd_index(idx, 2));
- 	vaddr =3D kmap_atomic_px(i915_pt_entry(pd, gen8_pd_index(idx, 1)));
- 	do {
-+		GEM_BUG_ON(iter->sg->length < I915_GTT_PAGE_SIZE);
- 		vaddr[gen8_pd_index(idx, 0)] =3D pte_encode | iter->dma;
-=20
- 		iter->dma +=3D I915_GTT_PAGE_SIZE;
---=20
-2.24.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Y+gwNNIz3WOk7KKp./fX9p.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4nmUsACgkQAVBC80lX
-0GyF+AgAntdfWyi+nWURGuUwXk/YgnDc0blPdAG4t5WCRt1+nMpn6MbILg3Tj3hX
-crgqIf/d0wuINZOzejwOF1ITIRDVfefqy2WzCAPfhnp3xEhcQViZy7dzjj7ywEYD
-LL27MO4rFnXObNpm/a1ShFZBPaU4Rzapug32308BQQlLLwX1X6fWaq4UiQJd3OK2
-sJrbqfbgBVRWsPhWi4MlfqVsKFQXOCTTN5To69sPHtggtWVTdLT7ezT6NZ+aulLz
-rm3mhaf7bX6dpyRp7lpwg8yJ2As4BqbKm7lKg1P+91qCeja+Z/41E44AmUWgTZVg
-MF54Hk2pkeMNc1wgSl4UwOvmUZ8x0g==
-=jspa
------END PGP SIGNATURE-----
-
---Sig_/Y+gwNNIz3WOk7KKp./fX9p.--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

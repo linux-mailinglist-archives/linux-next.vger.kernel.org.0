@@ -2,204 +2,175 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 26903145777
-	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 15:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8256B145C7C
+	for <lists+linux-next@lfdr.de>; Wed, 22 Jan 2020 20:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725805AbgAVOJz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Jan 2020 09:09:55 -0500
-Received: from mail-wr1-f43.google.com ([209.85.221.43]:42221 "EHLO
-        mail-wr1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725802AbgAVOJz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Jan 2020 09:09:55 -0500
-Received: by mail-wr1-f43.google.com with SMTP id q6so7379424wro.9
-        for <linux-next@vger.kernel.org>; Wed, 22 Jan 2020 06:09:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vCoK6dwFPRP92WQn/cRQGxpYKYCK570Lgw68r8KgxpQ=;
-        b=0c2hSpuHbbD+vJka0cWnGeBrSZh42axo18AYOrdg73vsTw+91nj457B1yAzeGVeWIo
-         ORpbSHwqJXy0cVmaoIWOvo8pFPC8IeEIJrGzeIrgunDTd3dDKIo8CgB/cn1D/s4zEWWn
-         r/SigHZwGbKT6cKS9X2uD9MuiwjId327lYvihUTNEzVozmngKkKDkDb3AMWhJJztK+/C
-         XusNz3vOm+8Q3ZFc75uv8PS0a/RGL/467qbk1VkMbsNnFSDkq4JBc6ojCUMRJVtn3s/c
-         5Ip0qbqNIGLertjTrD9hFaH02dQCHZ5sITUHUA1VkeeEXTqzUC9YdSVRuzOxMysDBKzr
-         32bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vCoK6dwFPRP92WQn/cRQGxpYKYCK570Lgw68r8KgxpQ=;
-        b=Bk6ncoFBWIgIig64qLprBR/E+9MmnwFq5n4bVmFwmyB9MphGy6AQebY23eWrb3sLMm
-         XUhR+jJ2MUE82S2MlZsA6ENkgdEn/DVbbXUnRivODGnng9c/VXvFYrKCk2IAQJQ2veB3
-         gnx62/UINI0R7tm6NjvQBjP2K2qMdHsJbZowIuv7Qwl/sWwTE/P1NnO3XfBCBL4nRI7+
-         YKMeltrXZ+6IxzQZXF9iNMMV/k4R2ZIpHVI8/O23a2NTwEIJGITfgNxPTlA7KTSA8Cvv
-         fCNu5NJjBg1IxUlfXfJXWomHwkAoVir2mMRiDjtggaxMEuenC49gpGOABvl76L/JQCau
-         wSZw==
-X-Gm-Message-State: APjAAAUq05jdkEeyNjpKcid8qDU1eKyZeY1KadgFm6vlspyOxSaXPd71
-        p35HSrH5usV7aI+oOdCyix0sM8RHmWNeDg==
-X-Google-Smtp-Source: APXvYqw+rY9jFjSmN4GYD9Tw1jfzATbzqPgW+sl7G5AsLtUGXlb8XPayuITSVVkPybUDevzB+YOWdg==
-X-Received: by 2002:adf:ef0b:: with SMTP id e11mr11995823wro.128.1579702192882;
-        Wed, 22 Jan 2020 06:09:52 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id w17sm57368548wrt.89.2020.01.22.06.09.51
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2020 06:09:51 -0800 (PST)
-Message-ID: <5e2857af.1c69fb81.5d284.6063@mx.google.com>
-Date:   Wed, 22 Jan 2020 06:09:51 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726049AbgAVTc3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Jan 2020 14:32:29 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:37482 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725946AbgAVTc3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Jan 2020 14:32:29 -0500
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 00MJSUgq070674
+        for <linux-next@vger.kernel.org>; Wed, 22 Jan 2020 14:32:28 -0500
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2xnx9bxumc-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Wed, 22 Jan 2020 14:32:28 -0500
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Wed, 22 Jan 2020 19:32:26 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 22 Jan 2020 19:32:23 -0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 00MJWMp951970252
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Jan 2020 19:32:22 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3C43F4C04E;
+        Wed, 22 Jan 2020 19:32:22 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C616E4C050;
+        Wed, 22 Jan 2020 19:32:21 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.160.236])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 22 Jan 2020 19:32:21 +0000 (GMT)
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
+ crashes in KVM guests after reboot
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>
+References: <c022e1d6-0d57-ae07-5e6b-8e40d3b01f4b@de.ibm.com>
+ <20191218100926-mutt-send-email-mst@kernel.org>
+ <2ffdbd95-e375-a627-55a1-6990b0a0e37a@de.ibm.com>
+ <20200106054041-mutt-send-email-mst@kernel.org>
+ <08ae8d28-3d8c-04e8-bdeb-0117d06c6dc7@de.ibm.com>
+ <20200107042401-mutt-send-email-mst@kernel.org>
+ <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
+ <20200107065434-mutt-send-email-mst@kernel.org>
+ <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
+ <20200120012724-mutt-send-email-mst@kernel.org>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Wed, 22 Jan 2020 20:32:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20200122
-Subject: next/master boot: 256 boots: 12 failed, 227 passed with 15 offline,
- 2 untried/unknown (next-20200122)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200120012724-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20012219-0008-0000-0000-0000034BCDE0
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20012219-0009-0000-0000-00004A6C37EA
+Message-Id: <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-01-22_08:2020-01-22,2020-01-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-1910280000 definitions=main-2001220165
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 256 boots: 12 failed, 227 passed with 15 offline, 2 untri=
-ed/unknown (next-20200122)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200122/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200122/
 
-Tree: next
-Branch: master
-Git Describe: next-20200122
-Git Commit: ba0b4dfd6466b7e2984dbe52242686e0dd184bf1
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 100 unique boards, 24 SoC families, 30 builds out of 215
+On 20.01.20 07:27, Michael S. Tsirkin wrote:
+> On Tue, Jan 07, 2020 at 01:16:50PM +0100, Christian Borntraeger wrote:
+>> On 07.01.20 12:55, Michael S. Tsirkin wrote:
+>>
+>>>
+>>> I pushed batched-v3 - same head but bisect should work now.
+>>>
+>>
+>> With 
+>> commit 38ced0208491103b50f1056f0d1c8f28e2e13d08 (HEAD)
+>> Author:     Michael S. Tsirkin <mst@redhat.com>
+>> AuthorDate: Wed Dec 11 12:19:26 2019 -0500
+>> Commit:     Michael S. Tsirkin <mst@redhat.com>
+>> CommitDate: Tue Jan 7 06:52:42 2020 -0500
+>>
+>>     vhost: use batched version by default
+>>
+>>
+>> I have exactly one successful ping and then the network inside the guest is broken (no packet
+>> anymore).
+> 
+> Does anything appear in host's dmesg when this happens?
 
-Boot Regressions Detected:
+I think there was nothing, but I am not sure. I would need to redo the test if this is important to know.
 
-arm:
+> 
+> 
+>> So you could consider this commit broken (but in a different way and also without any
+>> guest reboot necessary).
+>>
+>>
+>> bisect log:
+>> git bisect start
+>> # bad: [d2f6175f52062ee51ee69754a6925608213475d2] vhost: use vhost_desc instead of vhost_log
+>> git bisect bad d2f6175f52062ee51ee69754a6925608213475d2
+>> # good: [d1281e3a562ec6a08f944a876481dd043ba739b9] virtio-blk: remove VIRTIO_BLK_F_SCSI support
+>> git bisect good d1281e3a562ec6a08f944a876481dd043ba739b9
+>> # good: [fac7c0f46996e32d996f5c46121df24a6b95ec3b] vhost: option to fetch descriptors through an independent struct
+>> git bisect good fac7c0f46996e32d996f5c46121df24a6b95ec3b
+>> # bad: [539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc] vhost: batching fetches
+>> git bisect bad 539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc
+> 
 
-    davinci_all_defconfig:
-        gcc-8:
-          da850-lcdk:
-              lab-baylibre: new failure (last pass: next-20200117)
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200121)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4ek:
-              lab-baylibre-seattle: new failure (last pass: next-20200121)
-
-    socfpga_defconfig:
-        gcc-8:
-          socfpga_cyclone5_de0_sockit:
-              lab-baylibre-seattle: new failure (last pass: next-20200121)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          bcm2837-rpi-3-b:
-              lab-baylibre: new failure (last pass: next-20200121)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200121)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-arm:
-    oxnas_v6_defconfig:
-        gcc-8:
-            ox820-cloudengines-pogoplug-series-3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            meson8b-odroidc1: 2 failed labs
-
-    davinci_all_defconfig:
-        gcc-8:
-            da850-evm: 1 failed lab
-            da850-lcdk: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            meson8b-odroidc1: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            juno-r2: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig:
-        gcc-8
-            juno-r2: 1 offline lab
-            mt7622-rfb1: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            juno-r2: 1 offline lab
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-    socfpga_defconfig:
-        gcc-8
-            socfpga_cyclone5_de0_sockit: 1 offline lab
-
-    sama5_defconfig:
-        gcc-8
-            at91-sama5d4ek: 1 offline lab
-
-    bcm2835_defconfig:
-        gcc-8
-            bcm2835-rpi-b: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            at91-sama5d4ek: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            socfpga_cyclone5_de0_sockit: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

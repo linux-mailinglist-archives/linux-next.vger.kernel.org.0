@@ -2,70 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0BB146CE0
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 16:31:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A83A8147233
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 20:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726771AbgAWPba (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jan 2020 10:31:30 -0500
-Received: from ns.iliad.fr ([212.27.33.1]:56996 "EHLO ns.iliad.fr"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726232AbgAWPba (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 23 Jan 2020 10:31:30 -0500
-Received: from ns.iliad.fr (localhost [127.0.0.1])
-        by ns.iliad.fr (Postfix) with ESMTP id 23CB5218D8;
-        Thu, 23 Jan 2020 16:31:28 +0100 (CET)
-Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
-        by ns.iliad.fr (Postfix) with ESMTP id 0AFC31FF32;
-        Thu, 23 Jan 2020 16:31:28 +0100 (CET)
-Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        Jean Delvare <jdelvare@suse.de>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        I2C <linux-i2c@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg KH <greg@kroah.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
-From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
-Message-ID: <2ef0dfb9-6f25-29c7-153b-3e4dfa15df8e@free.fr>
-Date:   Thu, 23 Jan 2020 16:31:27 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1728911AbgAWT5G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jan 2020 14:57:06 -0500
+Received: from asavdk4.altibox.net ([109.247.116.15]:54558 "EHLO
+        asavdk4.altibox.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgAWT5G (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jan 2020 14:57:06 -0500
+X-Greylist: delayed 422 seconds by postgrey-1.27 at vger.kernel.org; Thu, 23 Jan 2020 14:57:05 EST
+Received: from ravnborg.org (unknown [158.248.194.18])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by asavdk4.altibox.net (Postfix) with ESMTPS id 763698046E;
+        Thu, 23 Jan 2020 20:50:00 +0100 (CET)
+Date:   Thu, 23 Jan 2020 20:49:59 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Thierry Reding <thierry.reding@gmail.com>
+Subject: Re: linux-next: Tree for Jan 23 (gpu/drm/panel/)
+Message-ID: <20200123194959.GA25073@ravnborg.org>
+References: <20200123172101.2f31947c@canb.auug.org.au>
+ <098616df-a696-9544-5ca2-c84ce9980999@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <1578384779-15487-1-git-send-email-krzk@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Thu Jan 23 16:31:28 2020 +0100 (CET)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <098616df-a696-9544-5ca2-c84ce9980999@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-CMAE-Score: 0
+X-CMAE-Analysis: v=2.3 cv=VcLZwmh9 c=1 sm=1 tr=0
+        a=UWs3HLbX/2nnQ3s7vZ42gw==:117 a=UWs3HLbX/2nnQ3s7vZ42gw==:17
+        a=jpOVt7BSZ2e4Z31A5e1TngXxSK0=:19 a=kj9zAlcOel0A:10
+        a=92UefTgV_KLRBibrx7QA:9 a=CjuIK1q_8ugA:10
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 07/01/2020 09:12, Krzysztof Kozlowski wrote:
+Hi Randy.
 
-> Some of the I2C bus drivers can be compile tested to increase build
-> coverage.  This requires also:
-> 1. Adding dependencies on COMMON_CLK for BCM2835 and Meson I2C
->    controllers,
-> 2. Adding 'if' conditional to 'default y' so they will not get enabled
->    by default on all other architectures,
-> 3. Limiting few compile test options to supported architectures (which
->    provide the readsX()/writesX() primitives).
+Thanks - I think (kidding, this has bugged of for a long time).
+
+On Thu, Jan 23, 2020 at 12:44:25AM -0800, Randy Dunlap wrote:
+> On 1/22/20 10:21 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200122:
+> > 
 > 
->  config I2C_BCM_KONA
->  	tristate "BCM Kona I2C adapter"
-> -	depends on ARCH_BCM_MOBILE
-> -	default y
-> +	depends on ARCH_BCM_MOBILE || COMPILE_TEST
-> +	default y if ARCH_BCM_MOBILE
+> 
+> on i386:
+> 
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-sharp-lq101r1sx01.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-rocktech-jh057n00900.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-raydium-rm68200.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-panasonic-vvx10f034n00.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-osd-osd101t2587-53ts.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-olimex-lcd-olinuxino.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-leadtek-ltk500hd1829.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-kingdisplay-kd097d04.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-innolux-p079zca.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-ilitek-ili9881c.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-lvds.ko] undefined!
+> ERROR: "drm_panel_of_backlight" [drivers/gpu/drm/panel/panel-boe-himax8279d.ko]
+> 
+> 
+> Full randconfig file is attached.
 
-Why not the simpler:
-default ARCH_BCM_MOBILE
+I tried reproducing with latest drm-misc-next - no luck.
 
-Regards.
+Can you check if you have:
+
+8d6cb2f7fb90018d9e3efdc9bc95e6da213a352f
+    drm/drm_panel: fix export of drm_panel_of_backlight, try #3
+
+
+As we expect this to fix it for good.
+Maybe the patch has not hit the right tree
+and is thus not in -next.
+
+	Sam

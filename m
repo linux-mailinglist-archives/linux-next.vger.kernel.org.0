@@ -2,91 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE54146854
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 13:46:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD0BB146CE0
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 16:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728057AbgAWMqa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jan 2020 07:46:30 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:48311 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgAWMq3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jan 2020 07:46:29 -0500
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iubsM-0004im-Jb; Thu, 23 Jan 2020 13:46:22 +0100
-Received: from ukl by ptx.hi.pengutronix.de with local (Exim 4.89)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1iubsI-000588-JH; Thu, 23 Jan 2020 13:46:18 +0100
-Date:   Thu, 23 Jan 2020 13:46:18 +0100
-From:   Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     Wolfram Sang <wsa@the-dreams.de>
-Cc:     Krzysztof Kozlowski <krzk@kernel.org>,
+        id S1726771AbgAWPba (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jan 2020 10:31:30 -0500
+Received: from ns.iliad.fr ([212.27.33.1]:56996 "EHLO ns.iliad.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726232AbgAWPba (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 23 Jan 2020 10:31:30 -0500
+Received: from ns.iliad.fr (localhost [127.0.0.1])
+        by ns.iliad.fr (Postfix) with ESMTP id 23CB5218D8;
+        Thu, 23 Jan 2020 16:31:28 +0100 (CET)
+Received: from [192.168.108.51] (freebox.vlq16.iliad.fr [213.36.7.13])
+        by ns.iliad.fr (Postfix) with ESMTP id 0AFC31FF32;
+        Thu, 23 Jan 2020 16:31:28 +0100 (CET)
+Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        Wolfram Sang <wsa@the-dreams.de>,
         Jean Delvare <jdelvare@suse.de>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        I2C <linux-i2c@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Kishon Vijay Abraham I <kishon@ti.com>,
         Greg KH <greg@kroah.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-Message-ID: <20200123124618.ijzasifjbbmzyh4d@pengutronix.de>
 References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
- <20200123091228.GB1105@ninjato>
- <20200123093120.GA2365@pi3>
- <20200123094107.GD1105@ninjato>
+From:   Marc Gonzalez <marc.w.gonzalez@free.fr>
+Message-ID: <2ef0dfb9-6f25-29c7-153b-3e4dfa15df8e@free.fr>
+Date:   Thu, 23 Jan 2020 16:31:27 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200123094107.GD1105@ninjato>
-User-Agent: NeoMutt/20170113 (1.7.2)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+In-Reply-To: <1578384779-15487-1-git-send-email-krzk@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: ClamAV using ClamSMTP ; ns.iliad.fr ; Thu Jan 23 16:31:28 2020 +0100 (CET)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:41:07AM +0100, Wolfram Sang wrote:
-> On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
-> > > 
-> > > >  config I2C_ZX2967
-> > > >  	tristate "ZTE ZX2967 I2C support"
-> > > > -	depends on ARCH_ZX
-> > > > -	default y
-> > > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K || RISCV || SUPERH || SPARC))
-> > > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitives
-> > > 
-> > > The list of archs neither looks pretty nor very maintainable. My
-> > > suggestion is that we leave this out of COMPILE_TEST until we have
-> > > something like ARCH_HAS_READS or something. What do you think?
-> > 
-> > Indeed it does not look good. However having compile testing allows
-> > kbuild to run sparse and smatch which already started pointing minor
-> > issues in existing drivers.
-> > 
-> > Yeah... pros and cons... I don't have a strong opinion to keep it. Since
-> > patch is important, maybe let's just skip this part?
+On 07/01/2020 09:12, Krzysztof Kozlowski wrote:
+
+> Some of the I2C bus drivers can be compile tested to increase build
+> coverage.  This requires also:
+> 1. Adding dependencies on COMMON_CLK for BCM2835 and Meson I2C
+>    controllers,
+> 2. Adding 'if' conditional to 'default y' so they will not get enabled
+>    by default on all other architectures,
+> 3. Limiting few compile test options to supported architectures (which
+>    provide the readsX()/writesX() primitives).
 > 
-> Yeah, let's skip it for now. If you or someone is keen on having it,
-> something like ARCH_HAS_READS (<- needs better name) should be
-> introduced so we can use it here. But that can/should be handled
-> incrementally.
+>  config I2C_BCM_KONA
+>  	tristate "BCM Kona I2C adapter"
+> -	depends on ARCH_BCM_MOBILE
+> -	default y
+> +	depends on ARCH_BCM_MOBILE || COMPILE_TEST
+> +	default y if ARCH_BCM_MOBILE
 
-Isn't this "HAS_IOMEM" already today? The driver compiles for me on
-amd64, too, so ...
+Why not the simpler:
+default ARCH_BCM_MOBILE
 
-Best regards
-Uwe
-
--- 
-Pengutronix e.K.                           | Uwe Kleine-König            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+Regards.

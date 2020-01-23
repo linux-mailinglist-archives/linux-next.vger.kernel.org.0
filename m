@@ -2,21 +2,40 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76F1E1464B6
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 10:41:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E06C7146543
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 11:00:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726103AbgAWJlK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jan 2020 04:41:10 -0500
-Received: from sauhun.de ([88.99.104.3]:51474 "EHLO pokefinder.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726026AbgAWJlK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 23 Jan 2020 04:41:10 -0500
-Received: from localhost (p54B335E9.dip0.t-ipconnect.de [84.179.53.233])
-        by pokefinder.org (Postfix) with ESMTPSA id DC3322C00DA;
-        Thu, 23 Jan 2020 10:41:07 +0100 (CET)
-Date:   Thu, 23 Jan 2020 10:41:07 +0100
-From:   Wolfram Sang <wsa@the-dreams.de>
-To:     Krzysztof Kozlowski <krzk@kernel.org>
+        id S1726605AbgAWKAo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jan 2020 05:00:44 -0500
+Received: from mail-ed1-f66.google.com ([209.85.208.66]:33827 "EHLO
+        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbgAWKAo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jan 2020 05:00:44 -0500
+Received: by mail-ed1-f66.google.com with SMTP id r18so587247edl.1;
+        Thu, 23 Jan 2020 02:00:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Vf2LEPghHkSvKBrXWZPAO0VwLPzYKVKYFia5aNnUKic=;
+        b=m7CBXOBtT0/JTJUfRyO9+W8uZureQ2zd3/SddGPwABQhmu/j/LH8yyZ5+apWU2i1NO
+         O/srFD48Q5a6ONJtFdWTLdDv5l0srILlASGN1dgsCLTSDkjHyFaT/baZ5CIN22Zn1t/N
+         4KqfEBtOvrf1Zac5liWrOm7GnfA1rWyagNfRlyJhdFVQwhtR6y3F+S0ms4fq3DkybNil
+         AMOTYRCivASul9nsADHwUR/br9XgdZaT4YUhyKWr/FUGwH2y3xuRv5ehyDGSNiZEghzh
+         HheTjQz0kAqw3GZ7ccfZ6g1dtsvUhaeLSQKHq+PtzA7ebTr/7xhNaUY17LEkO2NGGG6F
+         AI9g==
+X-Gm-Message-State: APjAAAWtPckzwBHzH/g/2AwlgZ8WUCzy1Z0RZKcJ2kRLoIVm4vgVc72a
+        7FYnlaTPinVicGMo1fLDLPE=
+X-Google-Smtp-Source: APXvYqwg6hvXvf9VIf9L/M232l4c4678SdLLT/iriy2Shu2alAX41WXTpnBjPFK2hZjvXrRcm3n3kQ==
+X-Received: by 2002:a17:906:19d8:: with SMTP id h24mr6143965ejd.166.1579773642698;
+        Thu, 23 Jan 2020 02:00:42 -0800 (PST)
+Received: from pi3 ([194.230.155.229])
+        by smtp.googlemail.com with ESMTPSA id r24sm10440edp.15.2020.01.23.02.00.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2020 02:00:41 -0800 (PST)
+Date:   Thu, 23 Jan 2020 11:00:39 +0100
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+To:     Wolfram Sang <wsa@the-dreams.de>
 Cc:     Jean Delvare <jdelvare@suse.de>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -27,74 +46,50 @@ Cc:     Jean Delvare <jdelvare@suse.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-Message-ID: <20200123094107.GD1105@ninjato>
+Message-ID: <20200123100039.GA2465@pi3>
 References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
  <20200123091228.GB1105@ninjato>
  <20200123093120.GA2365@pi3>
+ <20200123094107.GD1105@ninjato>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="EY/WZ/HvNxOox07X"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200123093120.GA2365@pi3>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200123094107.GD1105@ninjato>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, Jan 23, 2020 at 10:41:07AM +0100, Wolfram Sang wrote:
+> On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
+> > On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
+> > > 
+> > > >  config I2C_ZX2967
+> > > >  	tristate "ZTE ZX2967 I2C support"
+> > > > -	depends on ARCH_ZX
+> > > > -	default y
+> > > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K || RISCV || SUPERH || SPARC))
+> > > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitives
+> > > 
+> > > The list of archs neither looks pretty nor very maintainable. My
+> > > suggestion is that we leave this out of COMPILE_TEST until we have
+> > > something like ARCH_HAS_READS or something. What do you think?
+> > 
+> > Indeed it does not look good. However having compile testing allows
+> > kbuild to run sparse and smatch which already started pointing minor
+> > issues in existing drivers.
+> > 
+> > Yeah... pros and cons... I don't have a strong opinion to keep it. Since
+> > patch is important, maybe let's just skip this part?
+> 
+> Yeah, let's skip it for now. If you or someone is keen on having it,
+> something like ARCH_HAS_READS (<- needs better name) should be
+> introduced so we can use it here. But that can/should be handled
+> incrementally.
 
---EY/WZ/HvNxOox07X
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Shall I send v3 or mayybe can you apply without this hunk?
 
-On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
-> On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
-> >=20
-> > >  config I2C_ZX2967
-> > >  	tristate "ZTE ZX2967 I2C support"
-> > > -	depends on ARCH_ZX
-> > > -	default y
-> > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K=
- || RISCV || SUPERH || SPARC))
-> > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitiv=
-es
-> >=20
-> > The list of archs neither looks pretty nor very maintainable. My
-> > suggestion is that we leave this out of COMPILE_TEST until we have
-> > something like ARCH_HAS_READS or something. What do you think?
->=20
-> Indeed it does not look good. However having compile testing allows
-> kbuild to run sparse and smatch which already started pointing minor
-> issues in existing drivers.
->=20
-> Yeah... pros and cons... I don't have a strong opinion to keep it. Since
-> patch is important, maybe let's just skip this part?
-
-Yeah, let's skip it for now. If you or someone is keen on having it,
-something like ARCH_HAS_READS (<- needs better name) should be
-introduced so we can use it here. But that can/should be handled
-incrementally.
+Best regards,
+Krzysztof
 
 
---EY/WZ/HvNxOox07X
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4pai8ACgkQFA3kzBSg
-KbZuMA/+MDdZn6LKAYPb/hGGIvu1E0SYz615wqwiPR0e0E+41UdROF/YpdKyisqD
-oMbbHYOilLd2KIF/7Df+LnU4UHjGj3PV7U6+uO2ZHYxHlZHY1jLLk4zaS/2U6IUm
-AQ+ItfGt6ShpBeShwTtMTeTB9HRh9Btpyv5fvD3Y0Y5g/u/nTzTx3a9wqnUPQy7g
-JNrazF6w1k//66RxU4X1hRj/8Bw50C3Cubj/1CI09BtNhjSECeGXVti9658ujvU2
-d10NY4tUyAPw4SL+nbT3BTAQprJLQWa91s5aDBQa3EheulM17deLNux97Sj7lwv9
-y2Uhsgm1gEsy2rskMvxeKMr0nj6YfA782FbLY7cCXAApUR2moJqIwM1JWGCY8Oqw
-VdT1oPG46f29CeW9JvEv7OPp9WfhODMnvbd22tY2sy9GmsToRqRZV9qfSlRAbgiX
-xVJ2UiZT85Phdk19o3xcHAtYXQlzG1PARVkYrEaSN9hd6RHZirojM4WyWNQ1Jge7
-5KBdmjzVjj9RBaV1XKxVdoAht6Sghesog5S+k13eB2a/UURXOgOEZX+1M4QfoLBM
-/uoguJSkyRXSUUVThcZGXCgu3j6yRVUTBM/ZLDzT5yNgQRzfcdLtuvn0xuUoj+pH
-WarmvqCuPGb840nx3XN0POZr30iIus/U+HVCEQw2//9MLEjQh3M=
-=iauM
------END PGP SIGNATURE-----
-
---EY/WZ/HvNxOox07X--

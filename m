@@ -2,40 +2,21 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E06C7146543
-	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 11:00:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 993ED146636
+	for <lists+linux-next@lfdr.de>; Thu, 23 Jan 2020 11:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726605AbgAWKAo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Jan 2020 05:00:44 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:33827 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgAWKAo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Jan 2020 05:00:44 -0500
-Received: by mail-ed1-f66.google.com with SMTP id r18so587247edl.1;
-        Thu, 23 Jan 2020 02:00:43 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Vf2LEPghHkSvKBrXWZPAO0VwLPzYKVKYFia5aNnUKic=;
-        b=m7CBXOBtT0/JTJUfRyO9+W8uZureQ2zd3/SddGPwABQhmu/j/LH8yyZ5+apWU2i1NO
-         O/srFD48Q5a6ONJtFdWTLdDv5l0srILlASGN1dgsCLTSDkjHyFaT/baZ5CIN22Zn1t/N
-         4KqfEBtOvrf1Zac5liWrOm7GnfA1rWyagNfRlyJhdFVQwhtR6y3F+S0ms4fq3DkybNil
-         AMOTYRCivASul9nsADHwUR/br9XgdZaT4YUhyKWr/FUGwH2y3xuRv5ehyDGSNiZEghzh
-         HheTjQz0kAqw3GZ7ccfZ6g1dtsvUhaeLSQKHq+PtzA7ebTr/7xhNaUY17LEkO2NGGG6F
-         AI9g==
-X-Gm-Message-State: APjAAAWtPckzwBHzH/g/2AwlgZ8WUCzy1Z0RZKcJ2kRLoIVm4vgVc72a
-        7FYnlaTPinVicGMo1fLDLPE=
-X-Google-Smtp-Source: APXvYqwg6hvXvf9VIf9L/M232l4c4678SdLLT/iriy2Shu2alAX41WXTpnBjPFK2hZjvXrRcm3n3kQ==
-X-Received: by 2002:a17:906:19d8:: with SMTP id h24mr6143965ejd.166.1579773642698;
-        Thu, 23 Jan 2020 02:00:42 -0800 (PST)
-Received: from pi3 ([194.230.155.229])
-        by smtp.googlemail.com with ESMTPSA id r24sm10440edp.15.2020.01.23.02.00.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2020 02:00:41 -0800 (PST)
-Date:   Thu, 23 Jan 2020 11:00:39 +0100
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-To:     Wolfram Sang <wsa@the-dreams.de>
+        id S1729108AbgAWK7h (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Jan 2020 05:59:37 -0500
+Received: from sauhun.de ([88.99.104.3]:52104 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728921AbgAWK7K (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 23 Jan 2020 05:59:10 -0500
+Received: from localhost (p54B335E9.dip0.t-ipconnect.de [84.179.53.233])
+        by pokefinder.org (Postfix) with ESMTPSA id C8C832C00DA;
+        Thu, 23 Jan 2020 11:59:08 +0100 (CET)
+Date:   Thu, 23 Jan 2020 11:59:08 +0100
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
 Cc:     Jean Delvare <jdelvare@suse.de>,
         Jarkko Nikula <jarkko.nikula@linux.intel.com>,
         linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -46,50 +27,59 @@ Cc:     Jean Delvare <jdelvare@suse.de>,
         Geert Uytterhoeven <geert@linux-m68k.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
 Subject: Re: [PATCH v2 1/2] i2c: Enable compile testing for some of drivers
-Message-ID: <20200123100039.GA2465@pi3>
+Message-ID: <20200123105908.GE1105@ninjato>
 References: <1578384779-15487-1-git-send-email-krzk@kernel.org>
- <20200123091228.GB1105@ninjato>
- <20200123093120.GA2365@pi3>
- <20200123094107.GD1105@ninjato>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zjcmjzIkjQU2rmur"
 Content-Disposition: inline
-In-Reply-To: <20200123094107.GD1105@ninjato>
+In-Reply-To: <1578384779-15487-1-git-send-email-krzk@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jan 23, 2020 at 10:41:07AM +0100, Wolfram Sang wrote:
-> On Thu, Jan 23, 2020 at 10:31:20AM +0100, Krzysztof Kozlowski wrote:
-> > On Thu, Jan 23, 2020 at 10:12:28AM +0100, Wolfram Sang wrote:
-> > > 
-> > > >  config I2C_ZX2967
-> > > >  	tristate "ZTE ZX2967 I2C support"
-> > > > -	depends on ARCH_ZX
-> > > > -	default y
-> > > > +	depends on ARCH_ZX || (COMPILE_TEST && (ARC || ARM || ARM64 || M68K || RISCV || SUPERH || SPARC))
-> > > > +	# COMPILE_TEST needs architectures with readsX()/writesX() primitives
-> > > 
-> > > The list of archs neither looks pretty nor very maintainable. My
-> > > suggestion is that we leave this out of COMPILE_TEST until we have
-> > > something like ARCH_HAS_READS or something. What do you think?
-> > 
-> > Indeed it does not look good. However having compile testing allows
-> > kbuild to run sparse and smatch which already started pointing minor
-> > issues in existing drivers.
-> > 
-> > Yeah... pros and cons... I don't have a strong opinion to keep it. Since
-> > patch is important, maybe let's just skip this part?
-> 
-> Yeah, let's skip it for now. If you or someone is keen on having it,
-> something like ARCH_HAS_READS (<- needs better name) should be
-> introduced so we can use it here. But that can/should be handled
-> incrementally.
 
-Shall I send v3 or mayybe can you apply without this hunk?
+--zjcmjzIkjQU2rmur
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Tue, Jan 07, 2020 at 09:12:58AM +0100, Krzysztof Kozlowski wrote:
+> Some of the I2C bus drivers can be compile tested to increase build
+> coverage.  This requires also:
+> 1. Adding dependencies on COMMON_CLK for BCM2835 and Meson I2C
+>    controllers,
+> 2. Adding 'if' conditional to 'default y' so they will not get enabled
+>    by default on all other architectures,
+> 3. Limiting few compile test options to supported architectures (which
+>    provide the readsX()/writesX() primitives).
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzk@kernel.org>
+>=20
+
+Applied to for-next with the zx chunk removed, thanks!
 
 
+--zjcmjzIkjQU2rmur
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl4pfHgACgkQFA3kzBSg
+KbYnrg/9HyJVjx09jFKG5CydmnTSMXzOKZ7M9Ck+0pdZwsLKttoMrJjFabpiqykr
+A7AOaTgkaQQLK79xHuVHwu5bYCzwVtRBElFNQzwYyFmeIfAd2Cf2LoMBzOC0T7DP
+/nMkU+2PEmeTSZtDuBLLNrckEpw0gcbaXZhLrWIcXaZHpglbonZxa/2DJSEfpLj2
+Z5rpZ17O4X20GEjJ6cunddM7mmNFmoB6I/kYsaOsOmrR0xCXVV+j+IPArvvCj0hQ
+8+LNK/KredOVKemDkXjdYPUXry3l56jTCbiOHumuKCKFL/+bskmvjVhmg7mMaCHd
+fHi3n2/UQFxTinDSWQjQTcd85HQkQIuIK0FAqRhAP3illfHaEZ/Vmt0Yh5+dnutu
+RUkzlrx17lbmOjChb5SJ1Sc7AbJiXT4N/6q3ZmaJv+S+Aa3imwcXmJIDtFzVJd3T
+Q/7noIG4fWOfp+d8ajt3lTJSq0r6eWZjMSAU/gxmG3RYZNikLTpNFcn4gBIIRfzK
+Um1pj+g6leb7Wp2wOS/ONBMdDkLCRgBv9nhhlvQgPfR8me2iJh9ndJFFRWFWxzQc
+v8hEuez1m9rPVG77Kg7CTdIUJcxzjziEP8kTmtlfXB0nfbhG7+XWUsIYeCPnJFqs
+je7itrWyURZUNEZePmRyCRAu2EAwxTy+BIYg68e0WuwfN/CNpXY=
+=RIMX
+-----END PGP SIGNATURE-----
+
+--zjcmjzIkjQU2rmur--

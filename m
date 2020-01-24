@@ -2,142 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D9F5148F2C
-	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2020 21:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F2B148FCA
+	for <lists+linux-next@lfdr.de>; Fri, 24 Jan 2020 21:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388015AbgAXUNn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Jan 2020 15:13:43 -0500
-Received: from mail-wm1-f46.google.com ([209.85.128.46]:53279 "EHLO
-        mail-wm1-f46.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387535AbgAXUNn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Jan 2020 15:13:43 -0500
-Received: by mail-wm1-f46.google.com with SMTP id m24so659406wmc.3
-        for <linux-next@vger.kernel.org>; Fri, 24 Jan 2020 12:13:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vzpZ0ogaIvLoQtiHl8emXnXsd6gq0sBujp+ICIaMSRE=;
-        b=TfZhXQ3AJ9Bn6mot3QoVpvwa+DkhWxd70VJkH69sDYtlNXFVviV+8mJTC2VHgsVcBh
-         scRtGGbkN+P3zoEzgMsYhzmCgh3eVNMNovSnSprWaSoS1UQfPKyPL0r6fUJ9i/ZHdO1M
-         1Gg3ZyPuCwtcnTBYPSnxtYcymkFtcZmQHWB8f7wQy36GY0qQIaZ1LzM1mqD5qLA2ECi1
-         3wic6Cq5fDLZcktuGC5ZLrl/IhRd1If1kWjZg4jiAWcCc8tFZsu7HKn06B8j7brgM03m
-         4F49gn2rdKnhhIOqTs7StP9hqYaa65NxC+7m7AjSqxEh3coJmAUb9TzvEwzqc/8snVsB
-         VHEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vzpZ0ogaIvLoQtiHl8emXnXsd6gq0sBujp+ICIaMSRE=;
-        b=SIwQowseuaAmXczT3izxPPxqNuUUATYJVzJwovpTcTtQtXmUQIEJNxod3LbyCsMhhu
-         e6+pbiSVmNi9f4VonxOWFYgjCPfI4OnpezVOqPULpHOW+nVM/lLjv15OQS10XULHfm/c
-         +UHyTN3z1142YiuQgCwvTTi5X0vT9NbJ1h8FVr5fTN0OVs2WDzts5+STWzH1fPAv8KVt
-         MnePhuG5ebGXV23YZpOa7X/PjmiCHg63IToNf8GwEMp2SY30cBp94xJraOleDPmK8MyT
-         xcxnIDj+OjQaei/uU9V8kZCL5kTzfGPdSsT7aPtu/b8qzpRyCYKsXzLhVkcR0MrpTUtt
-         G/IA==
-X-Gm-Message-State: APjAAAWwkyLuBmZzCEEs3LoItkSScF2XfbJjEaEdn+NPj0QyMQhjFmc4
-        M4W5AdyRZclWJmqMaxdI6TtU/c0w1s914A==
-X-Google-Smtp-Source: APXvYqxSbFv161/H0ewEF/oyFDc09S9AxtHrFPGchsLyDMwSE1hm0q5msp6cJF4u4iiVgtKi0TLlhQ==
-X-Received: by 2002:a1c:49c2:: with SMTP id w185mr462675wma.138.1579896820159;
-        Fri, 24 Jan 2020 12:13:40 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id n3sm8440440wrs.8.2020.01.24.12.13.39
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2020 12:13:39 -0800 (PST)
-Message-ID: <5e2b4ff3.1c69fb81.22b9c.49bb@mx.google.com>
-Date:   Fri, 24 Jan 2020 12:13:39 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1729262AbgAXUvs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Jan 2020 15:51:48 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:40434 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725767AbgAXUvs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 24 Jan 2020 15:51:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=FwREgydDWTl0lQurue8lUof7m5LIZcaBwElWWmm89gA=; b=b/0DNAeAJS+nDvbt3wDRcnA32
+        1H4DWcGQTha7XXhJ5+Zhu0O4ywluj7AcsEMQ1NUcriBNyvblnE2dwPumIFCDERk+3/e2K9cDbZErv
+        8cW4p7QGjG7rFKaTjHEDJJnR5CSkOGhhHXQauVQKHBRpwI9W86o6U1og2zdT1KLVxf6ZxZgcvfsHe
+        W/7/j7xgm6QhXHRn8088MUZv+KfTcwMVE4oPra1YJ6VWQWl/2EAUoZT8H8sWiYbp+JXJ/OS2x+P4+
+        SPffvg8Ml15waloWyfFuoeJBdO7R0d0PemoHSF+jlSFhwMTj40Os/GI9cqZsCZFMaMlvvw4LzzcoF
+        Xa4gwsicA==;
+Received: from [2601:1c0:6280:3f0::ed68]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iv5vS-0004HL-5n; Fri, 24 Jan 2020 20:51:34 +0000
+Subject: Re: linux-next: Tree for Jan 24 (kvm)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, KVM <kvm@vger.kernel.org>
+References: <20200124173302.2c3228b2@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <38d53302-b700-b162-e766-2e2a461fc569@infradead.org>
+Date:   Fri, 24 Jan 2020 12:51:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: v5.5-rc7-366-g2e30f8d48084
-Subject: next/pending-fixes boot: 265 boots: 7 failed,
- 248 passed with 8 offline, 2 untried/unknown (v5.5-rc7-366-g2e30f8d48084)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200124173302.2c3228b2@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 265 boots: 7 failed, 248 passed with 8 offline, 2 =
-untried/unknown (v5.5-rc7-366-g2e30f8d48084)
+On 1/23/20 10:33 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200123:
+> 
+> The kvm tree gained a conflict against Linus' tree.
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.5-rc7-366-g2e30f8d48084/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.5-rc7-366-g2e30f8d48084/
+on i386:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.5-rc7-366-g2e30f8d48084
-Git Commit: 2e30f8d480842313c3de748bedd0a469f131f12e
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 102 unique boards, 26 SoC families, 29 builds out of 210
+../arch/x86/kvm/x86.h:363:16: warning: right shift count >= width of type [-Wshift-count-overflow]
 
-Boot Failures Detected:
 
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-            r8a7795-salvator-x: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-arm:
-
-    sunxi_defconfig:
-        gcc-8
-            sun5i-r8-chip: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            sun5i-r8-chip: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            dm365evm,legacy: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,77 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71AC214ABB6
-	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2020 22:38:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CEC414ABB8
+	for <lists+linux-next@lfdr.de>; Mon, 27 Jan 2020 22:39:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726303AbgA0Vip (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jan 2020 16:38:45 -0500
-Received: from ozlabs.org ([203.11.71.1]:43399 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725946AbgA0Vip (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Jan 2020 16:38:45 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48635t21Lbz9sNx;
-        Tue, 28 Jan 2020 08:38:42 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580161122;
-        bh=bm5DRTf8LkaPVNLK8Gr0ajXrGGi2+RdpyrhkpBOSE8I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oYuRkUN/cFYoi9rV3sdUWQyTbEYBzopLveSAgY8F5+C2zr/ve/zp5sbvbV/beq2Ey
-         TieWqSVmFDDVcDFPsiniMgO4zE5/neeuXbve8TJz7gnuWq0YgmvlwkTlcD7i/37C2c
-         glRq+msYdXy0+ku4/m9iUKfdAyhPrN2fx1WDCAmh52Cp+egW1NN7InCBceEJrz7QEe
-         aIvuDK5aqI+Qry/TXWTgK6/NKRJDrv+W6McT/IYZ0CKAqoNPKdssLSY9L8ILnGfVeU
-         8DAJ0+RI60SH4hcIuK9l2Z+035b/I2izlv5y/x3OPwLvK1cGZ8jT2F8a40QWHaO5oe
-         aJpqsXZk20n2w==
-Date:   Tue, 28 Jan 2020 08:38:38 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the amdgpu tree
-Message-ID: <20200128083838.12b2cd2c@canb.auug.org.au>
+        id S1726080AbgA0Vji (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jan 2020 16:39:38 -0500
+Received: from mail-ot1-f67.google.com ([209.85.210.67]:33781 "EHLO
+        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725946AbgA0Vji (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 27 Jan 2020 16:39:38 -0500
+Received: by mail-ot1-f67.google.com with SMTP id b18so9996572otp.0;
+        Mon, 27 Jan 2020 13:39:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=emATBRbaUsYnGzrnrWbUfoRnXZ/zt1eiX/9E0bH5l+0=;
+        b=T1w+sMLT0SEgmbEGn5GrSas3493ob7c9cbaw0ucQlBvGfCOV7RD1OyShezg8ClKBJ4
+         hXnCoMGCx8q/M8IYmBXJyxOhhdXMTbQerBPuBIqB5yoBIP49lNI+LkJsORsvvkc+EVhE
+         db/iijZthEE/MEnq4zcctQD8dqen9J9yl6dEHhruVqGkaVcyK+oZYjUHO/WDIWnxBOic
+         alI1gZLmXt5t1MIRgSxzddE5XvV6YamJEGZ9wB6om5tWIKsf2HFWtHLmXFVgz3wLArtn
+         ZQ30rhnGpqdeivFndEfZewC8+9mKRoDePWPtvKdnCkgF6eZu5kCkPtRBTFULBCMFIxQo
+         U+FQ==
+X-Gm-Message-State: APjAAAVUXtAAq+E9yKIgYHL4YMkWuW6f2GIHAcglO9KGHuGuMsLWkrfT
+        lOHqtWrN1HPO+HWEA2yRgNSvsYNzsUQGVtTZBc8=
+X-Google-Smtp-Source: APXvYqxFa1UtWtyjRF3EQiTAjTCqvdldmiC9GZPMzwr5pDulk3WxtW2FMWKnbfesUT1eYkMBNrHPZ5F7D1quQs8gtfg=
+X-Received: by 2002:a9d:8f1:: with SMTP id 104mr13258704otf.107.1580161177379;
+ Mon, 27 Jan 2020 13:39:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/18Agw/yPg7Wd00rHatx5e=n";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200113095037.156597ff@canb.auug.org.au> <20200128074942.74ae0eaf@canb.auug.org.au>
+In-Reply-To: <20200128074942.74ae0eaf@canb.auug.org.au>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 27 Jan 2020 22:39:26 +0100
+Message-ID: <CAMuHMdVRvvmHOCx=pqMJqxS0eHaSA+w0NJdZdfz7Rak_6rBKvA@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the vfs tree with the m68k tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kars de Jong <jongk@linux-m68k.org>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/18Agw/yPg7Wd00rHatx5e=n
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Mon, Jan 27, 2020 at 9:49 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Mon, 13 Jan 2020 09:50:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > Today's linux-next merge of the vfs tree got a conflict in:
+> >
+> >   arch/m68k/kernel/syscalls/syscall.tbl
+> >
+> > between commit:
+> >
+> >   e8bb2a2a1d51 ("m68k: Wire up clone3() syscall")
+> >
+> > from the m68k tree and commit:
+> >
+> >   0a51692d49ec ("open: introduce openat2(2) syscall")
+> >
+> > from the vfs tree.
+> >
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> >
+> > --
+> > Cheers,
+> > Stephen Rothwell
+> >
+> > diff --cc arch/m68k/kernel/syscalls/syscall.tbl
+> > index a00a5d0db602,2559925f1924..000000000000
+> > --- a/arch/m68k/kernel/syscalls/syscall.tbl
+> > +++ b/arch/m68k/kernel/syscalls/syscall.tbl
+> > @@@ -434,4 -434,5 +434,5 @@@
+> >   432 common  fsmount                         sys_fsmount
+> >   433 common  fspick                          sys_fspick
+> >   434 common  pidfd_open                      sys_pidfd_open
+> >  -# 435 reserved for clone3
+> >  +435 common  clone3                          __sys_clone3
+> > + 437 common  openat2                         sys_openat2
+>
+> This is now a conflict between the vfs tree and Linus' tree - just a
+> reminder for pull requests.
 
-Commit
+Thanks, I completely forgot about these conflicts.
+Fortunately I always send my pull requests early ;-)
 
-  9909ad4c6545 ("drm/amdgpu: Fix TLB invalidation request when using semaph=
-ore")
+Gr{oetje,eeting}s,
 
-is missing a Signed-off-by from its committer.
+                        Geert
 
---=20
-Cheers,
-Stephen Rothwell
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
---Sig_/18Agw/yPg7Wd00rHatx5e=n
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4vWF4ACgkQAVBC80lX
-0Gz5hwgAhUXG5tgLjoIuTxNDIxvTfxoR9cJpQIf+rbaUOpMeN1hvFN1tmjSP+kQd
-g4DM2bi3Gk38F8By5g6iN7iX9Hows6fQuIK0OVSVtOplANIoC7vhUEc/PoX7cBtc
-9hMDMrfvl/tr8pJ9Fpx/oWxgMQNSPX6XPpBGjDA9IZhsIUZv3uL0dEbbhSfjEB+G
-L1qYpDH4+/Uy5/XSMiXmDZFcwQvtUAZaF9pWmvda7QsP4kWJkP3xDRL8eZZIlKMJ
-2GAIpJv5fbxz8vghL9YtdPv5v/ul16MeAjxdQWmCB1gimIHxDMz2PifSAyPZ/hA1
-6k3OoLFqfMMPoPpXRg7KJP9laVZ1xA==
-=gTMR
------END PGP SIGNATURE-----
-
---Sig_/18Agw/yPg7Wd00rHatx5e=n--
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

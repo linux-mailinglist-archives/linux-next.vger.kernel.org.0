@@ -2,110 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E67C14B180
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 10:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC24C14B199
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 10:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725848AbgA1JIv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 04:08:51 -0500
-Received: from mail-qv1-f66.google.com ([209.85.219.66]:45351 "EHLO
-        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbgA1JIu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 04:08:50 -0500
-Received: by mail-qv1-f66.google.com with SMTP id l14so5881957qvu.12
-        for <linux-next@vger.kernel.org>; Tue, 28 Jan 2020 01:08:50 -0800 (PST)
+        id S1725879AbgA1JLl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 04:11:41 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:45273 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725848AbgA1JLk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 04:11:40 -0500
+Received: by mail-pl1-f194.google.com with SMTP id b22so4838277pls.12;
+        Tue, 28 Jan 2020 01:11:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=V9xAyfYvshxDtwWMgT0zgZJ0j7N3J44CYOXm6ENX55s=;
-        b=UBM+ALw8CpI4ev4pjKDHghR0t6BBgD/1R2c9dxpJJ6uPN9cRyxne6hUg5PZwNOH19H
-         hALAbYYOUfFDKSm9eXlQN/NN9tzITc8DjLZasBqt0hIvKjly0Ib0N0yaoST95Mz7bcOH
-         yHUd/Ry/FDID53tCKpDPzxkj2EC5C/cx2d3fJ5OCFyt/5hV84RF+AVzLtLlKjUUmLdPv
-         PIDvbbRM4Azq4pGaUJRRihjz1nnK1UZxiMh5EIoaA2yPIjBtT0ylGPpHdc8NExuKyL76
-         3FToEHAO9Du/AIujx4S9AAJSMPjihk4fOihEnKx8WkOM42Nx51bgYn4zoo+7/j+a0o2i
-         B/ig==
+        bh=unMfPG99T1AKKHKiItdEAt564JyG03P4dOBDlwaWG6U=;
+        b=UnmbRH7ZXXMNOcrYNw144+NVTSNLDm4TEzmTiHQ4kjMV6/zMNfWuqhT1GmeFpHWF6d
+         rlRqCpAWNyTmEtsnyUYcOMe070tCPaqqepgLaWGi2KG1tGdriEfRchqnSaIUlh5ZOkhS
+         h4lcxsCXNK3wnch8ay6sCSlLo5Ks9fub8jErvRE7KT2r/QDLFyp0jscAKFEwCAvRcLUg
+         vEOTSO37MuaKrue0pnp1NbdEOL7ufgZVSyqkP/+XyJ8mSpw0H+mJR26IDrGsclMR8LdO
+         FVwPxQoIrsxhTwwb15fSP8d0tnFGaxL0G99+lsqJL1U0tfuu4C7Jxj7UFSi+ya+CLSwY
+         +4Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=V9xAyfYvshxDtwWMgT0zgZJ0j7N3J44CYOXm6ENX55s=;
-        b=O34lt635XTCit/M6ef1VxephjUU/43oRUcPFrLt5u3Y/iwVqkAHXsTj1ioXL9ZsF37
-         QH5Ow1UsnhmOwiNEqE2DADCevSvZ1rGECiTI1l9E5fP7fwCyN6C2bX6yVSSCMqduh3VW
-         0l/um+3ej0ino1HRvP+R15YcZB3GVRzt/U3bu+VrOGkuO2w7N1/VVugoi5GE7tl0AMq5
-         880qJBcZSjnnXt/pmrPDbbQH787ylVK/s5/gzn8AslzT2F+lty3q+Flwp+MlyQuFgpXa
-         x/NLzTp0RtL3RfqmkfptUekdkMsYzBrlVPxL3lKhdi3SQxHeVOKKHzVCdWF7750dhmkm
-         25Lw==
-X-Gm-Message-State: APjAAAWGKm7iT3jh8dxUCXLr+rGlZYiWXqos51fv9Bn5tQg7/b2kn2Uk
-        s13nNMo4VIVPoqf7r6Bdg70Rt7/Y0hk2CwVU2cvavw==
-X-Google-Smtp-Source: APXvYqyLGSeVtyPa6QvM+kGBBxvn+S/PP0KC3EUV34HcvopeZQfmGmHJBrOqaSvVp0ThT/bYujA9Vllz/L/0apuA1W4=
-X-Received: by 2002:a05:6214:1874:: with SMTP id eh20mr21684750qvb.122.1580202529263;
- Tue, 28 Jan 2020 01:08:49 -0800 (PST)
+        bh=unMfPG99T1AKKHKiItdEAt564JyG03P4dOBDlwaWG6U=;
+        b=t3/bypwIiYB0BSgkKgCIMvwF/f8jcgKxXy2nsuhuh4PfXT1N9tKMpqvcwMXhwFsJXF
+         nUmvzgVbUdIh/+J66kyWYgaL59st8HxbGgpeJKEbtQfTm3jUYud7e3sf+c3EvLEL6XcT
+         nAjFgf8uHwmjAmaExOjZLWRLYScsnIk18AXp8SbBjC6+SVWEVPKzmFQgji6J0NMb4uku
+         RS+SolNQaiHbZuHyeEv60dYpbsPc1U+H41HLjUVfzg5CyxnP5N8FLqUdfkd1MMC0elpq
+         K+kR2luAJa4NZApqCY/SId4dRR11K1FYbNXyLpzUnRYo2doi7eQgkw/j2sQwu/alxl8Q
+         sgxw==
+X-Gm-Message-State: APjAAAWM49fQJHLdteATe1Rg/C0hi9A/TbZyfXJVOsRUccI9Qc2eiDcz
+        NB1BPKxAUoiCJBlOcKoAvVHvMWzHilIuEF3MOqNzfFLr524Jrw==
+X-Google-Smtp-Source: APXvYqweRolvFWVz18/sM7wnKCMsZZnHBdEwDqKRPeZ/wvUcduW6V8RHCRetRsDXKNvvy1iEh2A07CmEOANF0U+2tug=
+X-Received: by 2002:a17:902:d20c:: with SMTP id t12mr22509768ply.18.1580202700174;
+ Tue, 28 Jan 2020 01:11:40 -0800 (PST)
 MIME-Version: 1.0
-References: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
- <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw> <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
- <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com>
-In-Reply-To: <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 28 Jan 2020 10:08:37 +0100
-Message-ID: <CACT4Y+Z+vYF=6h0+ioMXGX6OHVnAXyHqOQLNFmngT9TqNwAgKA@mail.gmail.com>
-Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Cc:     Qian Cai <cai@lca.pw>, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+References: <20200124161558.7cbb88c9@canb.auug.org.au> <20200128100311.3ca81231@canb.auug.org.au>
+In-Reply-To: <20200128100311.3ca81231@canb.auug.org.au>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 28 Jan 2020 11:11:32 +0200
+Message-ID: <CAHp75VctM6DBpDFj0eXUo4ipawCpfDgqexBHwjQGQpomjY2YDQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the generic-ioremap tree with the
+ drivers-x86 tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Darren Hart <dvhart@infradead.org>, Christoph Hellwig <hch@lst.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
+        Mika Westerberg <mika.westerberg@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 28, 2020 at 8:33 AM Ard Biesheuvel
-<ard.biesheuvel@linaro.org> wrote:
-> > > > Should be fixed by
-> > > >
-> > > > https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
-> > >
-> > > Cc kasan-devel@
-> > >
-> > > If everyone has to disable KASAN for the whole subdirectories like this, I am worried about we are losing testing coverage fairly quickly. Is there a bug in compiler?
+On Tue, Jan 28, 2020 at 1:03 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Fri, 24 Jan 2020 16:15:58 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > My understanding is that this is invalid C code in the first place,
-> > no? It just happened to compile with some compilers, some options and
-> > probably only with high optimization level.
+> > Today's linux-next merge of the generic-ioremap tree got a conflict in:
+> >
+> >   drivers/platform/x86/intel_scu_ipc.c
+> >
+> > between commit:
+> >
+> >   74e9748b9b21 ("platform/x86: intel_scu_ipc: Drop intel_scu_ipc_i2c_cntrl()")
+> >
+> > from the drivers-x86 tree and commit:
+> >
+> >   4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
+> >
+> > from the generic-ioremap tree.
+> >
+> > I fixed it up (the former removed the code updated by the latter, so I
+> > just did that) and can carry the fix as necessary. This is now fixed as
+> > far as linux-next is concerned, but any non trivial conflicts should be
+> > mentioned to your upstream maintainer when your tree is submitted for
+> > merging.  You may also want to consider cooperating with the maintainer
+> > of the conflicting tree to minimise any particularly complex conflicts.
 >
-> No, this is not true. The whole point of favoring IS_ENABLED(...) over
-> #ifdef ... has always been that the code remains visible to the
-> compiler, regardless of whether the option is selected or not, but
-> that it gets optimized away entirely. The linker errors prove that
-> there is dead code remaining in the object files, which means we can
-> no longer rely on IS_ENABLED() to work as intended.
+> This is now a conflict between the driver-x86 tree and Linus' tree.
 
-I agree that exposing more code to compiler is good, I prefer to do it
-as well. But I don't see how this proves anything wrt this particular
-code being invalid C. Called functions still need to be defined. There
-is no notion of dead code in C. Yes, this highly depends on compiler,
-options, optimization level, etc. Some combinations may work, some
-won't. E.g. my compiler compiles it just fine (clang 10) without
-disabling instrumentation... what does it prove? I don't know.
+I can't reproduce this. Linus already pulled PR for PDx86,
 
-To clarify: I completely don't object to patching this case in gcc
-with -O2, it just may be hard to find anybody willing to do this work
-if we are talking about fixing compilation of invalid code.
+$ git checkout -b test-xxx origin/master
+Branch 'test-xxx' set up to track remote branch 'master' from 'origin'.
+Switched to a new branch 'test-xxx'
+$ git merge for-next
+Already up to date.
 
 
 
-> > There is a known, simple fix that is used throughout the kernel -
-> > provide empty static inline stub, or put whole calls under ifdef.
->
-> No, sorry, that doesn't work for me. I think it is great that we have
-> diagnostic features that are as powerful as KASAN, but if they require
-> code changes beyond enable/disable, I am not going to rely on them.
+-- 
+With Best Regards,
+Andy Shevchenko

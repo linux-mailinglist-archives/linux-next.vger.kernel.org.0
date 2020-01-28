@@ -2,86 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F66E14AFA3
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 07:15:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FB214AFCB
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 07:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725844AbgA1GP2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 01:15:28 -0500
-Received: from mail-qk1-f196.google.com ([209.85.222.196]:43687 "EHLO
-        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725791AbgA1GPZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 01:15:25 -0500
-Received: by mail-qk1-f196.google.com with SMTP id j20so12259033qka.10
-        for <linux-next@vger.kernel.org>; Mon, 27 Jan 2020 22:15:24 -0800 (PST)
+        id S1725844AbgA1G0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 01:26:12 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:43475 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725799AbgA1G0M (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 01:26:12 -0500
+Received: by mail-qv1-f66.google.com with SMTP id p2so5737705qvo.10
+        for <linux-next@vger.kernel.org>; Mon, 27 Jan 2020 22:26:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=IX6vC1lqC7B6QSvzPSA4RSu0dRAbEMHe13lqUpG29i8=;
-        b=VKXqwFjmNXdB/wJW5knEKaf8vqMoxWZxZenXmtRbHfj2GkPH84URj6RIU7kuu9br/n
-         cO100UpGyUFr7n85BLlnvIKAGP009/Hcaf4XQmBvgCO4s5t20dg0E/x5WFuF1JfPexca
-         qKucwEcgFyhAQqLSQGzAgwSYxg/Krp1wdD+33iDC3XcjfzHjLG/WmY7kCH57ovDlVBWy
-         CInbxtz0nSTJ/aPX70647beyykTi1bIki7ecWq/g+4KVqa/PF299NRyKANNx082/SYZg
-         a66f6lAnlak0GqZDiNdAB9xuMjwBEyXfJgmNT0Lq1U8INg0B+xHSCqmhtit3iHj6blvY
-         73tA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9qvkTLwVKoGDoIQ0qZA+h5T3eIEbfaZcuduwqWx0fOQ=;
+        b=umPiQ/Jc483p2aL2/oJAHwfr4tIc7mtr3ZJq4N/f1VORKo0TAa5SRG8G77mYww8Av7
+         hrVngEqDPr0QBwpbKQhzICex0V1ldJ61rmWhIXtfawr8bvS2RsS6oQzeewh1FT4w6zdo
+         hR2a5zDv30tcCVdZ9Tm0PPwDOxBAHEQiKIVZPFxVSOzIPp1wewtLYjgHwehtWdB6M3RR
+         Ptl12HYJ2DRV5tH26RCssSzh0nHBTcUsB6XQVzTQx6+W61J2JOTqdEYHj4+CLt59Rg4n
+         EbQw/kFGbbKp2SoCItM2cgGi07f1Pql5jjHzDdwYWHLS3kWqBZhPWyTloanFaR3KDljb
+         XoKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=IX6vC1lqC7B6QSvzPSA4RSu0dRAbEMHe13lqUpG29i8=;
-        b=Y4ZwiWsSzo4GTAu7Hd8Kmv2pblQv0lsSNc+JWlmQd7ApUSyAv2Lkt9D6Q32XddedYl
-         fOM7fqU8DXFBMKu7pywbTqnxtmQPg+LrSkQ/4rAqH/WZCYI6kXnDpWwzStc6mL16Ve3h
-         JcNHKoewTdNoo60kHYzeN0LSl9Q95lvp1NobltJPoY70J6Qormcx90iBuleKoS1WgwQ+
-         PoPPiPwaGNGZ+wvn/ifWnAG6nhM2zin3w13wNl+I2vAz5Ycne+4eslg/lChzAJzantZQ
-         DrAned8MX2pFMGZkcR7jEiJDGkcnCI+rvsiZPJm7f1mr1YFMKVp2MVf2ske1sVnP1phk
-         EO6w==
-X-Gm-Message-State: APjAAAVV9j3G1i3HGsHzf0U7xGzW/RfpPYECQz038cyJq1B5/XFUTeRH
-        ZN55SjFwZYkrE0f9Llf+TKEJgA==
-X-Google-Smtp-Source: APXvYqz7X3XsotDyp2Rkn3xurztaEfQuChOv10+xbCcj0AINYcjgBapre5/9nAD2nqzDixYkJRy09Q==
-X-Received: by 2002:a37:814:: with SMTP id 20mr20434739qki.314.1580192124338;
-        Mon, 27 Jan 2020 22:15:24 -0800 (PST)
-Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id e16sm11951755qtc.85.2020.01.27.22.15.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2020 22:15:23 -0800 (PST)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
-Date:   Tue, 28 Jan 2020 01:15:22 -0500
-Message-Id: <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9qvkTLwVKoGDoIQ0qZA+h5T3eIEbfaZcuduwqWx0fOQ=;
+        b=Utfxz26rp869liC4/O9fU5GMHkWijE5C6RaV4ooPt2dIifDjk45ivrBC+iWLKXJRQe
+         8USRONhWOAX+1WdVAe1g3Oktz6Hbmb8gztoD31K5vt6XxwpLbQOp2XbeB1K5VfguJzNB
+         KmOkjyFWcJO2gTovR2zhZk8w3Prafwa2kcAyhwIUj3HqvM946RC2XfNkIQe7tVi9Anuq
+         K2lNRGduVte7BdcAFWUUPHtcXhMHJwLQRUB1Deur4ozT4gl5eFL/iEUX2M2NQ8QQseDV
+         tkVS5KRjlUeuDUojmWgAs7jwpBBCns4WfMmII9p4HRkP9Bk8MKZu7bq39vviUJSJyak8
+         OxQg==
+X-Gm-Message-State: APjAAAXiI+s2w6etyMKgxLFfKhhC7ldJBOBqU/iOq5zwfRY/YwHDVxMn
+        b0sGlXHs6TMyjKZ501VtNcPn5+fUtmP3yrjEgYRBsw==
+X-Google-Smtp-Source: APXvYqwlp9eMndZLbPF7wU3j9cmpZgXD7WkbLqp0gyMi+lDMoN5F3scc8NmK6lgOR0CJQQ7lXYmcbspCgKeURS6lznU=
+X-Received: by 2002:a0c:ee91:: with SMTP id u17mr20061495qvr.22.1580192770479;
+ Mon, 27 Jan 2020 22:26:10 -0800 (PST)
+MIME-Version: 1.0
 References: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
+ <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw>
+In-Reply-To: <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 28 Jan 2020 07:25:59 +0100
+Message-ID: <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
+Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
+To:     Qian Cai <cai@lca.pw>
+Cc:     Ard Biesheuvel <ard.biesheuvel@linaro.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>, linux-fsdevel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux-MM <linux-mm@kvack.org>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        mhocko@suse.cz, mm-commits@vger.kernel.org,
+        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Ard Biesheuvel <ardb@kernel.org>,
         linux-efi <linux-efi@vger.kernel.org>,
         kasan-dev <kasan-dev@googlegroups.com>
-In-Reply-To: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
-To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
-X-Mailer: iPhone Mail (17C54)
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Jan 28, 2020 at 7:15 AM Qian Cai <cai@lca.pw> wrote:
+> > Should be fixed by
+> >
+> > https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
+>
+> Cc kasan-devel@
+>
+> If everyone has to disable KASAN for the whole subdirectories like this, I am worried about we are losing testing coverage fairly quickly. Is there a bug in compiler?
 
-
-> On Jan 25, 2020, at 2:06 AM, Ard Biesheuvel <ard.biesheuvel@linaro.org> wr=
-ote:
->=20
-> Should be fixed by
->=20
-> https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
-
-Cc kasan-devel@
-
-If everyone has to disable KASAN for the whole subdirectories like this, I a=
-m worried about we are losing testing coverage fairly quickly. Is there a bu=
-g in compiler?=
+My understanding is that this is invalid C code in the first place,
+no? It just happened to compile with some compilers, some options and
+probably only with high optimization level.
+There is a known, simple fix that is used throughout the kernel -
+provide empty static inline stub, or put whole calls under ifdef.

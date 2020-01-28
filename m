@@ -2,96 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A1A14B078
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 08:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C131314B07E
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 08:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725867AbgA1HeB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 02:34:01 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:35601 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725853AbgA1Hd6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 02:33:58 -0500
-Received: by mail-wr1-f66.google.com with SMTP id g17so14758866wro.2
-        for <linux-next@vger.kernel.org>; Mon, 27 Jan 2020 23:33:56 -0800 (PST)
+        id S1725825AbgA1Hiv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 02:38:51 -0500
+Received: from mail-wm1-f67.google.com ([209.85.128.67]:34422 "EHLO
+        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbgA1Hiu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 02:38:50 -0500
+Received: by mail-wm1-f67.google.com with SMTP id s144so1128273wme.1
+        for <linux-next@vger.kernel.org>; Mon, 27 Jan 2020 23:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M8/h2bPEqPWeThJEypD1fDrIV3uZkJ0Spf9SsxFALTw=;
-        b=dwotw4KanF7Rr5R8R+2zrC3GotxW2umZNPfukUzk39baBmVods+BoK4dMAq69uYY7g
-         w+SGWEGZHNJ117MWwkKscB+LUpFA0VTRNzPK5XqDaJvKe5Qj2nkaCcDoJ37jygI6Qko+
-         TrLELDx6JWBc5d4RGGgNhVk054IOYJNs7Gz1W+rYkqSELCoMtxiqUTLaa+Ua/RvykWui
-         fB3lw5IUXN6sGkdbULostObMmmUdEVueFtG0ZIY2lKIFB1p2LE2rZw9EW/wnf5Kug4nS
-         MGe6fZlyEvhDmlbzuJY2E+FIUkQkEF8t9chSY/c3eX8dC4ULgOQy+d2PN6O42rumfvFZ
-         6/mQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=7GokS7CdGeZZPn1PrPOCpSW46TjRecT73s9cRiHualM=;
+        b=Aq5w/piHruuGbRmgv2bptrp+x3Rne0Dds30PKNJDd+TQX6uSVzfNvVGDZ5dGmxw06n
+         ka7bPmWRge0gXpL7diWJGs4suptUJBHoUjL2JILNDtKmDb7RtAZoAgmbuXttgYRsjMSv
+         y8YRti/wIOZ5TE5fTYdDFqDSGH/UkZDiFHRDvKnBiaXWd2i3uTXG14V+DLJMvRsXFq0H
+         u4K/4d4TKrH8J6SdWziqPMVN20kBc8KyvvCIU41/1y7mmbOdKaO521gnsck3mCQNsC5p
+         ltwoUPfpgXITfVZcvW8G2jgOIhBas+jV7K08IKXtL8MyShFp0TigB0Dh6bCC0G+J0d4p
+         yf+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M8/h2bPEqPWeThJEypD1fDrIV3uZkJ0Spf9SsxFALTw=;
-        b=rbBammtIOfDhJK//30LI6vFjobVBXbLu6fD/xcF+aHECdWhYDkXht2iGqjFOlK818r
-         sywfCPiU8jU8t0tmD2iKdYEWpb2us258k6KlnwC+bRmJAjHpzVHSC75Y1vnX6DeSxQAw
-         wjK37tktUDqUTYsPljgUJoMtxCMJIQsWGqBbn8r3eYU2BAuXSMKa5SW6uMc+qL1FJrpi
-         hH8Oz3JZb8y8ktCQ4uN2jPLJlhJ/e/pcDlhPw+CzTpecngy0xQRdkff4IUIBPeZ53Zka
-         rXwDcEgcAg38uv1OORuNr+oZVoJRqYf8cK2Cvz2xtdx5zvpZGzAHw3G6ZizwDsnrXnQL
-         c7aQ==
-X-Gm-Message-State: APjAAAVy35kceL9C0JUYFCx5cs/yeDOn5futHakthqDEZQaI2HyfXExF
-        XrcjamW+uL77XSUtgw+PfZfxUUGYf1UDk9mJb80KveAle68AZA==
-X-Google-Smtp-Source: APXvYqzRsFwG9bEQ85NBunD148AjHa0dxOfEOo4Rm/EgIgpxum6o/BtnVYQzHUFVAAdT5QZodGqW2WChnr5jeU+fLZs=
-X-Received: by 2002:a5d:65cf:: with SMTP id e15mr26280990wrw.126.1580196836110;
- Mon, 27 Jan 2020 23:33:56 -0800 (PST)
-MIME-Version: 1.0
-References: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
- <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw> <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
-In-Reply-To: <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
-From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
-Date:   Tue, 28 Jan 2020 08:33:45 +0100
-Message-ID: <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com>
-Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
-To:     Dmitry Vyukov <dvyukov@google.com>
-Cc:     Qian Cai <cai@lca.pw>, Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=7GokS7CdGeZZPn1PrPOCpSW46TjRecT73s9cRiHualM=;
+        b=XEfBwVuS11wtn+uB6AaVQD7FY3o8aQGaiuzgf48H+uk9kifQeXYKXagaiRMRxuy3ka
+         FtcFY0EGLM2OMSZqRx5lp0EO3f1mniNuKA0FABXZoqFith6m+6vZSbDXetHaB4dRXEQ1
+         Ob9OtAwWIx8pjX1XUoqxMp13G4vwggYfL3wju9Tb4dSen9GRue3js6h87s2StNqbxvK8
+         W7YkJ8iejH8GqAyDrdMrl0vL8wzGIPhDDT+5R5xKMUTGadzhcZL+uthwIChP0kx9tx0O
+         Cu1rsSx8wcMmpUlsvXV+F/hJVx0fYdy+htAE3q0fSQdWLOb3GlNRmh4/0CB+It33tJ32
+         VSOQ==
+X-Gm-Message-State: APjAAAVmmAxDTr/IJJAK+emYipQPJxBR/+CQIkveoWR4pWCVvOPRidOV
+        fV/yoTIg1LlMeujXs4fTMgNv4Q==
+X-Google-Smtp-Source: APXvYqwrMMc5NSaCSwiz7Idymm7eGqj7dO9/KFj2t5izUkAQHpe5nczm+vvnroV1+xYW6bFEoBrFuw==
+X-Received: by 2002:a7b:c93a:: with SMTP id h26mr3417536wml.83.1580197128140;
+        Mon, 27 Jan 2020 23:38:48 -0800 (PST)
+Received: from dell ([2.27.35.227])
+        by smtp.gmail.com with ESMTPSA id c17sm23961385wrr.87.2020.01.27.23.38.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2020 23:38:47 -0800 (PST)
+Date:   Tue, 28 Jan 2020 07:39:01 +0000
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        linux-efi <linux-efi@vger.kernel.org>,
-        kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Axel Lin <axel.lin@ingics.com>
+Subject: Re: linux-next: manual merge of the mfd tree with the
+ regulator-fixes tree
+Message-ID: <20200128073901.GB3548@dell>
+References: <20200128120220.53494c29@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200128120220.53494c29@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 28 Jan 2020 at 07:26, Dmitry Vyukov <dvyukov@google.com> wrote:
->
-> On Tue, Jan 28, 2020 at 7:15 AM Qian Cai <cai@lca.pw> wrote:
-> > > Should be fixed by
-> > >
-> > > https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
-> >
-> > Cc kasan-devel@
-> >
-> > If everyone has to disable KASAN for the whole subdirectories like this, I am worried about we are losing testing coverage fairly quickly. Is there a bug in compiler?
->
-> My understanding is that this is invalid C code in the first place,
-> no? It just happened to compile with some compilers, some options and
-> probably only with high optimization level.
+On Tue, 28 Jan 2020, Stephen Rothwell wrote:
 
-No, this is not true. The whole point of favoring IS_ENABLED(...) over
-#ifdef ... has always been that the code remains visible to the
-compiler, regardless of whether the option is selected or not, but
-that it gets optimized away entirely. The linker errors prove that
-there is dead code remaining in the object files, which means we can
-no longer rely on IS_ENABLED() to work as intended.
+> Hi all,
+> 
+> Today's linux-next merge of the mfd tree got a conflict in:
+> 
+>   drivers/regulator/bd718x7-regulator.c
+> 
+> between commit:
+> 
+>   b389ceae4a8f ("regulator: bd718x7: Simplify the code by removing struct bd718xx_pmic_inits")
+> 
+> from the regulator-fixes tree and commit:
+> 
+>   1b1c26b24a6e ("mfd: Rohm PMICs: Use platform_device_id to match MFD sub-devices")
+> 
+> from the mfd tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-> There is a known, simple fix that is used throughout the kernel -
-> provide empty static inline stub, or put whole calls under ifdef.
+A pull-request was sent out to avoid this.
 
-No, sorry, that doesn't work for me. I think it is great that we have
-diagnostic features that are as powerful as KASAN, but if they require
-code changes beyond enable/disable, I am not going to rely on them.
+If Mark pulls it, this should just go away.
+
+-- 
+Lee Jones [李琼斯]
+Linaro Services Technical Lead
+Linaro.org │ Open source software for ARM SoCs
+Follow Linaro: Facebook | Twitter | Blog

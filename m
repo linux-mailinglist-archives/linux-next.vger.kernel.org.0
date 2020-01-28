@@ -2,145 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A1B14AD66
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 02:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6F714AEBB
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 05:42:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726099AbgA1BCZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Jan 2020 20:02:25 -0500
-Received: from ozlabs.org ([203.11.71.1]:34687 "EHLO ozlabs.org"
+        id S1726275AbgA1Emb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Jan 2020 23:42:31 -0500
+Received: from ozlabs.org ([203.11.71.1]:51603 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726083AbgA1BCZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Jan 2020 20:02:25 -0500
+        id S1726080AbgA1Emb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Jan 2020 23:42:31 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4867cr75J5z9sP3;
-        Tue, 28 Jan 2020 12:02:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 486DVr1gM1z9sP3;
+        Tue, 28 Jan 2020 15:42:28 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580173342;
-        bh=Wkr8ksztdFnzpNY0uZjxXq/vQG8DOZMe0OVzHE236G8=;
+        s=201702; t=1580186548;
+        bh=mdFAlO4xqDSxUJvby4gyYXsCSkEtFdc1ndNP7fQ7gaY=;
         h=Date:From:To:Cc:Subject:From;
-        b=GZzeSHPW5c1t/GMK2/diXN8HcGNe0cf6+Kvw898RyR3gYJA3B9RqXMEQcgIMQW2Ld
-         SVrFoJ9zt3QqLCQDORfEmcvc8Qv6r3boQuxTxQaMQb6IFGBIywrmdMciCpo6KZolcz
-         kGPB1SA4Ll6V1amB8olWqY58ZvJmhvPO97Uf5QmjmfUsI4og9xol4bZW7MyvmS7YdR
-         KOFTXPueBfOmRovU0tWur+InfV3VFf6TT6InmYxOqEMtzLL9zsVpFJ1UCGIszrzyFK
-         xt9m75/BLh8bBzN0HjoLnM5GtHNEUqUa9bNnDfJKDdpgnm+i6uau+7QrbSPLw3H2Q9
-         RlF5RHIbrc1Tg==
-Date:   Tue, 28 Jan 2020 12:02:20 +1100
+        b=LJ6J9ShT0EGSyYxosF0fADdsq9URPFj9N1Zxn7klEv/GvwdvVlz6O7zBbxVtSIJrV
+         XITaRDT2HCRyh65DaGgvnHsW85Fnc7rXRPcBFOfHI6AqeUyO+wWBR/TBzeYIO09KAH
+         /qV5zpH6BQ88KZy0030jw1TZufueISLVDq+CO0fZvsRcOMEtL9tv0S8n6J4MOVdfQV
+         QmYYTXqbb87WNpDpqveUEWqJXruumFKJisj5rr6szVBlWNZ3S/5s2WW+SWrfyrQ1/b
+         /Ov3M1XbT8LudfzbMqJAoiUEmSwCD3zmiLSLYsOCdsHkvML/c1F1Q5I0g0srycRyS9
+         BmfmdKyFT1RcA==
+Date:   Tue, 28 Jan 2020 15:42:27 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee.jones@linaro.org>, Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Axel Lin <axel.lin@ingics.com>
-Subject: linux-next: manual merge of the mfd tree with the regulator-fixes
- tree
-Message-ID: <20200128120220.53494c29@canb.auug.org.au>
+        "Tianci.Yin" <tianci.yin@amd.com>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20200128154227.43f15a1f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uEAyqUdHDuR2=EIxfTmmBgw";
+Content-Type: multipart/signed; boundary="Sig_/_fqnv+_6hBGTPV2SB6_uoQe";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uEAyqUdHDuR2=EIxfTmmBgw
+--Sig_/_fqnv+_6hBGTPV2SB6_uoQe
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the mfd tree got a conflict in:
+After merging the amdgpu tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-  drivers/regulator/bd718x7-regulator.c
+drivers/gpu/drm/amd/amdgpu/psp_v11_0.c: In function 'psp_v11_0_memory_train=
+ing':
+drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:9: error: implicit declaration =
+of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=3Dimplicit-functio=
+n-declaration]
+ 1047 |   buf =3D vmalloc(sz);
+      |         ^~~~~~~
+      |         kvmalloc
+drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:7: warning: assignment to 'void=
+ *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+ 1047 |   buf =3D vmalloc(sz);
+      |       ^
+drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1057:4: error: implicit declaration =
+of function 'vfree'; did you mean 'kvfree'? [-Werror=3Dimplicit-function-de=
+claration]
+ 1057 |    vfree(buf);
+      |    ^~~~~
+      |    kvfree
 
-between commit:
+Caused by commit
 
-  b389ceae4a8f ("regulator: bd718x7: Simplify the code by removing struct b=
-d718xx_pmic_inits")
+  240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GDDR6 m=
+emory training(V2)")
 
-from the regulator-fixes tree and commit:
+I have applied this patch for today:
 
-  1b1c26b24a6e ("mfd: Rohm PMICs: Use platform_device_id to match MFD sub-d=
-evices")
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 28 Jan 2020 15:33:44 +1100
+Subject: [PATCH] amdgpu: using vmalloc requires includeing vmalloc.h
 
-from the mfd tree.
+Fixes: 240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GD=
+DR6 memory training(V2)")
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/gpu/drm/amd/amdgpu/psp_v11_0.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c b/drivers/gpu/drm/amd/a=
+mdgpu/psp_v11_0.c
+index ac173d2eb809..0829188c1a5c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
+@@ -22,6 +22,7 @@
+=20
+ #include <linux/firmware.h>
+ #include <linux/module.h>
++#include <linux/vmalloc.h>
+=20
+ #include "amdgpu.h"
+ #include "amdgpu_psp.h"
+--=20
+2.24.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/regulator/bd718x7-regulator.c
-index 8f9b2d8eaf10,55decb58c777..000000000000
---- a/drivers/regulator/bd718x7-regulator.c
-+++ b/drivers/regulator/bd718x7-regulator.c
-@@@ -1146,10 -1078,20 +1073,11 @@@ static int bd718xx_probe(struct platfor
-  {
-  	struct bd718xx *mfd;
-  	struct regulator_config config =3D { 0 };
- -	struct bd718xx_pmic_inits pmic_regulators[ROHM_CHIP_TYPE_AMOUNT] =3D {
- -		[ROHM_CHIP_TYPE_BD71837] =3D {
- -			.r_datas =3D bd71837_regulators,
- -			.r_amount =3D ARRAY_SIZE(bd71837_regulators),
- -		},
- -		[ROHM_CHIP_TYPE_BD71847] =3D {
- -			.r_datas =3D bd71847_regulators,
- -			.r_amount =3D ARRAY_SIZE(bd71847_regulators),
- -		},
- -	};
- -
-  	int i, j, err;
-  	bool use_snvs;
- +	const struct bd718xx_regulator_data *reg_data;
- +	unsigned int num_reg_data;
-+ 	enum rohm_chip_type chip =3D platform_get_device_id(pdev)->driver_data;
- =20
-  	mfd =3D dev_get_drvdata(pdev->dev.parent);
-  	if (!mfd) {
-@@@ -1158,16 -1100,8 +1086,16 @@@
-  		goto err;
-  	}
- =20
-- 	switch (mfd->chip.chip_type) {
- -	if (chip >=3D ROHM_CHIP_TYPE_AMOUNT || chip < 0 ||
- -	    !pmic_regulators[chip].r_datas) {
-++	switch (chip) {
- +	case ROHM_CHIP_TYPE_BD71837:
- +		reg_data =3D bd71837_regulators;
- +		num_reg_data =3D ARRAY_SIZE(bd71837_regulators);
- +		break;
- +	case ROHM_CHIP_TYPE_BD71847:
- +		reg_data =3D bd71847_regulators;
- +		num_reg_data =3D ARRAY_SIZE(bd71847_regulators);
- +		break;
- +	default:
-  		dev_err(&pdev->dev, "Unsupported chip type\n");
-  		err =3D -EINVAL;
-  		goto err;
-
---Sig_/uEAyqUdHDuR2=EIxfTmmBgw
+--Sig_/_fqnv+_6hBGTPV2SB6_uoQe
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4viBwACgkQAVBC80lX
-0GwnAQf+MScNX4DXx7hNGB8XwpLtDOAo+3EBttQeTy+bTa3ZptIx5Rw4Jo8w0ap/
-SBSN7zxW9NRtgqTDUqT4cX+STwAojxOiD0VxDB+yT46jLSbE2P3/7DVcWSgB6KrI
-G5nQsd3R42g0b41TzsF1/r/OcXcLU3EYUukuxa3ny9aZsKbYzCJXogf3jVdhuAIY
-70uFJPP8T0BGWZuPHLo05ZzN9BUr8Ph8vBjMdMYRV9WEjPThiTq1dgbC6zpF9AAm
-quqRXvKshSJxzWvbNIeBCDDTPxNcxHAxwUfKRDP49P1toIYNwLFdZKYC17xPkYoj
-KbLS8JG1i8aQYUbCsHPThpy0xzQYGQ==
-=oWFg
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4vu7MACgkQAVBC80lX
+0GzDEwf/eOakLMi/zmYAX55knylSvMVaF+QmQKA7pbz5RumsuD/XL97BnI1RtO0U
+3TyeZySkyxuWAtMNqkXxPJIaPWBApUcSVQVt2ECRRzWQLB84+JxlqfG6Wx0WDgkO
+68ekuZOQvqws38EMrxEFzbu18EL558kNyAWRsqIufdiVnqeY8lnG5ao/QlzHLRWe
+37M3ed+1BUWrRx7Z2T+buvIlzYebWJiGGzJz+B5tpl3Zuxht/PweSsaJfJUosUFK
+4lQDTbqsvDF+5KG7Om2PltU8YJoyL//jBZZQNz28v1taM8B8svo2D+PO4Zo+KeqK
+6Ptmy+5DjgNrxqkgPdoDHae3EuHW2A==
+=IAbN
 -----END PGP SIGNATURE-----
 
---Sig_/uEAyqUdHDuR2=EIxfTmmBgw--
+--Sig_/_fqnv+_6hBGTPV2SB6_uoQe--

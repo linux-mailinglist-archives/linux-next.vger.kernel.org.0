@@ -2,140 +2,117 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 940E114C1F5
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 22:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C870B14C1FD
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 22:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726422AbgA1VQq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 16:16:46 -0500
-Received: from ozlabs.org ([203.11.71.1]:49327 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726211AbgA1VQq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Jan 2020 16:16:46 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 486fZ15jfFz9sNT;
-        Wed, 29 Jan 2020 08:16:41 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580246202;
-        bh=znBPl4ee35QRiKKMj1IQ0LS/r8uB/BO2eAzVRMxlpbE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u8ngAzFhMKfp/dMM02griDzeRlvEGx8zNGu570k3jabOi7r8aXkHLNGFyW18yyIjn
-         w5JFRt3vO+NqoDoro7fdRG0w11EQDa2QK/Cv1gkXsaa70yWm6dGFllToDKerhow/Vy
-         K6X7fGGDCrYi3+Be3qnIXOcb6jGRgZgEVXevryPqRgOs2I+pgkSoHxTWs/VzAB++eK
-         FLi4jmoOugI/XUID0YM95fCyoh6Gw0Ng/uojITKFK0QiIns0JszyRmP7PmPYbe0Y91
-         PZImZNvG6z96oqcmZc64RvxvqlTa51tchCbR6wu4QoEqXTrTNC2molUT6R+M7XoW+C
-         wWADUuo9A7cLg==
-Date:   Wed, 29 Jan 2020 08:16:28 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexandru-Mihai Maftei <amaftei@solarflare.com>
-Subject: Re: linux-next: manual merge of the generic-ioremap tree with the
- net-next tree
-Message-ID: <20200129081628.750f5e05@canb.auug.org.au>
-In-Reply-To: <20200128095449.5688fddc@canb.auug.org.au>
-References: <20200109161202.1b0909d9@canb.auug.org.au>
-        <20200128095449.5688fddc@canb.auug.org.au>
+        id S1726257AbgA1VSy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 16:18:54 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:40862 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726143AbgA1VSx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 16:18:53 -0500
+Received: by mail-wr1-f65.google.com with SMTP id j104so1873038wrj.7;
+        Tue, 28 Jan 2020 13:18:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vqrFGl4DYQ6rBDtmgmAyCIFwbIeB0lM4NEh8e6KqoQY=;
+        b=SDdQka3jB7cfln27F1gTq4Fx8sx4W8EYxf/E3vwRlzZODWF0xXkomBM2O0FIIMhFpt
+         qB9QJjMwEqxYdqthj1WOSAo05ZbnWUALLUzmHbRaCkAN5JaeKheGJMN3x9OSTRece0Zx
+         +IaVhN8fve0gmbNXRIgJelEbysxd8xfSfJhMg1lfOimQJmW7ngJQegYwdigGJrD7mD2x
+         jIymh1wyYeTy2mfMFlTWBdFCDH9UwRCJBhQAsAGGCmQkk9Wo8rGoKgLnhxp23OafbYuy
+         xyrzYR6p3fksBmI11NS/7w95JMQgn64rzoggMMdRtWJlsxC57lp3ZgE2kVeVJt3O9ECr
+         Ujgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vqrFGl4DYQ6rBDtmgmAyCIFwbIeB0lM4NEh8e6KqoQY=;
+        b=IaZQYT8j0h7qL9L9paq6wVzqSZ+oe8s076wygtMlcD0sgdIS7ICdc1q5OGxoBzzvFU
+         JvjOfojNuht7NUsM1Bsnr/agkZkldRniFa/6de+xVAe3w2ZttNH/I8C/nLUwl8I2kWoB
+         YrM9TBmgB1q0yI/B4QDKI2UbKkstji7citJVsYk+Q8hdRn6NdST9znh5KeXaFlj1CYz1
+         B74mEnPi2Z9Rh4s8DwoVbCQn35q3n9mt7arv7nzsNC/0+RheE+qSbolmu6UKPcIJOWBZ
+         N+dn1YiiZbQtWb9vCdzz8memjztSbCp3wUcRri7cgvHvBwxbarrnBwlVpCh61JlP8j5Q
+         QJJQ==
+X-Gm-Message-State: APjAAAU3W+0kxYGLP+x2JbtEPRUboUe2YQhreU22oDA6fnp9aAhZ2oon
+        nGN52dA0HUuB/nDdopXCNrYw/1fmM9/YaKHn8X0=
+X-Google-Smtp-Source: APXvYqzU39n+7gDP5IecAKJU2PwwUD3Oq2p0BtGAC6k1BXDb1seK0Kzycq+zX8/RWXr46l71QQTb6vYsiRjS4KjZvOg=
+X-Received: by 2002:a5d:40c9:: with SMTP id b9mr32033070wrq.419.1580246331794;
+ Tue, 28 Jan 2020 13:18:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/H80WBqcdd8x4xb7Ec0IpJys";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200128154227.43f15a1f@canb.auug.org.au>
+In-Reply-To: <20200128154227.43f15a1f@canb.auug.org.au>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 28 Jan 2020 16:18:40 -0500
+Message-ID: <CADnq5_Pc8SCfek7D86qwt1bWut-RD6SUVZzH=ccK+BsdDcvN2g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the amdgpu tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Tianci.Yin" <tianci.yin@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/H80WBqcdd8x4xb7Ec0IpJys
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Tue, 28 Jan 2020 09:54:49 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, Jan 27, 2020 at 11:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Thu, 9 Jan 2020 16:12:02 +1100 Stephen Rothwell <sfr@canb.auug.org.au>=
- wrote:
-> >=20
-> > Today's linux-next merge of the generic-ioremap tree got a conflict in:
-> >=20
-> >   drivers/net/ethernet/sfc/efx.c
-> >=20
-> > between commit:
-> >=20
-> >   f1826756b499 ("sfc: move struct init and fini code")
-> >=20
-> > from the net-next tree and commit:
-> >=20
-> >   4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
-> >=20
-> > from the generic-ioremap tree.
-> >=20
-> > I fixed it up (the latter moved the code, so I applied the following
-> > merge fix patch) and can carry the fix as necessary. This is now fixed
-> > as far as linux-next is concerned, but any non trivial conflicts should
-> > be mentioned to your upstream maintainer when your tree is submitted
-> > for merging.  You may also want to consider cooperating with the
-> > maintainer of the conflicting tree to minimise any particularly complex
-> > conflicts.
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Thu, 9 Jan 2020 16:08:52 +1100
-> > Subject: [PATCH] fix up for "sfc: move struct init and fini code"
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/net/ethernet/sfc/efx_common.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/net/ethernet/sfc/efx_common.c b/drivers/net/ethern=
-et/sfc/efx_common.c
-> > index fe74c66c8ec6..bf0126633c25 100644
-> > --- a/drivers/net/ethernet/sfc/efx_common.c
-> > +++ b/drivers/net/ethernet/sfc/efx_common.c
-> > @@ -954,7 +954,7 @@ int efx_init_io(struct efx_nic *efx, int bar, dma_a=
-ddr_t dma_mask,
-> >  		goto fail3;
-> >  	}
-> > =20
-> > -	efx->membase =3D ioremap_nocache(efx->membase_phys, mem_map_size);
-> > +	efx->membase =3D ioremap(efx->membase_phys, mem_map_size);
-> >  	if (!efx->membase) {
-> >  		netif_err(efx, probe, efx->net_dev,
-> >  			  "could not map memory BAR at %llx+%x\n",
-> > --=20
-> > 2.24.0 =20
->=20
-> This is now a conflict between the net-next tree and Linus' tree.
+> Hi all,
+>
+> After merging the amdgpu tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+>
+> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c: In function 'psp_v11_0_memory_training':
+> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:9: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
+>  1047 |   buf = vmalloc(sz);
+>       |         ^~~~~~~
+>       |         kvmalloc
+> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:7: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>  1047 |   buf = vmalloc(sz);
+>       |       ^
+> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1057:4: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
+>  1057 |    vfree(buf);
+>       |    ^~~~~
+>       |    kvfree
+>
+> Caused by commit
+>
+>   240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GDDR6 memory training(V2)")
+>
+> I have applied this patch for today:
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 28 Jan 2020 15:33:44 +1100
+> Subject: [PATCH] amdgpu: using vmalloc requires includeing vmalloc.h
+>
+> Fixes: 240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GDDR6 memory training(V2)")
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-It actually turns out that this is a conflict between the
-wireless-drivers tree and Linus' tree since the wireless-drivers tree
-has merged most of the net-next tree.
+Applied.  thanks!
 
---=20
-Cheers,
-Stephen Rothwell
+Alex
 
---Sig_/H80WBqcdd8x4xb7Ec0IpJys
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4wpKwACgkQAVBC80lX
-0GyOJAf/VlXWXj3k+51plddZl88xdeutVOpBxXmovQt+7ecZdqniu8CMA4YCipTv
-JLGwp7h/0zoxsDMu7ddzJectmvR5EbQZbKIST+lYVSpYCOkuXMNIastFwWNlAg08
-FSdvCllk2X09M69WuvEFfABd4UY9Uj4xRcCWZIKiQzSokaHRxTw5hhmkw+BnEW3T
-eZS8HNw+HitwLAgDa7Dt+Goz7zFe4qJldYHiP4eRpJ9OKG1uolGE5gA3NnN8PnVJ
-63k5U1Aohojt5m8MRb64oqNJ8k+09Oe7pqTUTdzdJJotTRiQREiA2S5Dklnr4+1y
-MpWd7x5b5nBXPmpB0TE5Wdlh5HqRuA==
-=wRbj
------END PGP SIGNATURE-----
-
---Sig_/H80WBqcdd8x4xb7Ec0IpJys--
+> ---
+>  drivers/gpu/drm/amd/amdgpu/psp_v11_0.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
+> index ac173d2eb809..0829188c1a5c 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
+> @@ -22,6 +22,7 @@
+>
+>  #include <linux/firmware.h>
+>  #include <linux/module.h>
+> +#include <linux/vmalloc.h>
+>
+>  #include "amdgpu.h"
+>  #include "amdgpu_psp.h"
+> --
+> 2.24.1
+>
+> --
+> Cheers,
+> Stephen Rothwell

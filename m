@@ -2,105 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C131314B07E
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 08:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E67C14B180
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 10:08:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725825AbgA1Hiv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 02:38:51 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:34422 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgA1Hiu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 02:38:50 -0500
-Received: by mail-wm1-f67.google.com with SMTP id s144so1128273wme.1
-        for <linux-next@vger.kernel.org>; Mon, 27 Jan 2020 23:38:48 -0800 (PST)
+        id S1725848AbgA1JIv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 04:08:51 -0500
+Received: from mail-qv1-f66.google.com ([209.85.219.66]:45351 "EHLO
+        mail-qv1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgA1JIu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 04:08:50 -0500
+Received: by mail-qv1-f66.google.com with SMTP id l14so5881957qvu.12
+        for <linux-next@vger.kernel.org>; Tue, 28 Jan 2020 01:08:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=7GokS7CdGeZZPn1PrPOCpSW46TjRecT73s9cRiHualM=;
-        b=Aq5w/piHruuGbRmgv2bptrp+x3Rne0Dds30PKNJDd+TQX6uSVzfNvVGDZ5dGmxw06n
-         ka7bPmWRge0gXpL7diWJGs4suptUJBHoUjL2JILNDtKmDb7RtAZoAgmbuXttgYRsjMSv
-         y8YRti/wIOZ5TE5fTYdDFqDSGH/UkZDiFHRDvKnBiaXWd2i3uTXG14V+DLJMvRsXFq0H
-         u4K/4d4TKrH8J6SdWziqPMVN20kBc8KyvvCIU41/1y7mmbOdKaO521gnsck3mCQNsC5p
-         ltwoUPfpgXITfVZcvW8G2jgOIhBas+jV7K08IKXtL8MyShFp0TigB0Dh6bCC0G+J0d4p
-         yf+A==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=V9xAyfYvshxDtwWMgT0zgZJ0j7N3J44CYOXm6ENX55s=;
+        b=UBM+ALw8CpI4ev4pjKDHghR0t6BBgD/1R2c9dxpJJ6uPN9cRyxne6hUg5PZwNOH19H
+         hALAbYYOUfFDKSm9eXlQN/NN9tzITc8DjLZasBqt0hIvKjly0Ib0N0yaoST95Mz7bcOH
+         yHUd/Ry/FDID53tCKpDPzxkj2EC5C/cx2d3fJ5OCFyt/5hV84RF+AVzLtLlKjUUmLdPv
+         PIDvbbRM4Azq4pGaUJRRihjz1nnK1UZxiMh5EIoaA2yPIjBtT0ylGPpHdc8NExuKyL76
+         3FToEHAO9Du/AIujx4S9AAJSMPjihk4fOihEnKx8WkOM42Nx51bgYn4zoo+7/j+a0o2i
+         B/ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=7GokS7CdGeZZPn1PrPOCpSW46TjRecT73s9cRiHualM=;
-        b=XEfBwVuS11wtn+uB6AaVQD7FY3o8aQGaiuzgf48H+uk9kifQeXYKXagaiRMRxuy3ka
-         FtcFY0EGLM2OMSZqRx5lp0EO3f1mniNuKA0FABXZoqFith6m+6vZSbDXetHaB4dRXEQ1
-         Ob9OtAwWIx8pjX1XUoqxMp13G4vwggYfL3wju9Tb4dSen9GRue3js6h87s2StNqbxvK8
-         W7YkJ8iejH8GqAyDrdMrl0vL8wzGIPhDDT+5R5xKMUTGadzhcZL+uthwIChP0kx9tx0O
-         Cu1rsSx8wcMmpUlsvXV+F/hJVx0fYdy+htAE3q0fSQdWLOb3GlNRmh4/0CB+It33tJ32
-         VSOQ==
-X-Gm-Message-State: APjAAAVmmAxDTr/IJJAK+emYipQPJxBR/+CQIkveoWR4pWCVvOPRidOV
-        fV/yoTIg1LlMeujXs4fTMgNv4Q==
-X-Google-Smtp-Source: APXvYqwrMMc5NSaCSwiz7Idymm7eGqj7dO9/KFj2t5izUkAQHpe5nczm+vvnroV1+xYW6bFEoBrFuw==
-X-Received: by 2002:a7b:c93a:: with SMTP id h26mr3417536wml.83.1580197128140;
-        Mon, 27 Jan 2020 23:38:48 -0800 (PST)
-Received: from dell ([2.27.35.227])
-        by smtp.gmail.com with ESMTPSA id c17sm23961385wrr.87.2020.01.27.23.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jan 2020 23:38:47 -0800 (PST)
-Date:   Tue, 28 Jan 2020 07:39:01 +0000
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Axel Lin <axel.lin@ingics.com>
-Subject: Re: linux-next: manual merge of the mfd tree with the
- regulator-fixes tree
-Message-ID: <20200128073901.GB3548@dell>
-References: <20200128120220.53494c29@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=V9xAyfYvshxDtwWMgT0zgZJ0j7N3J44CYOXm6ENX55s=;
+        b=O34lt635XTCit/M6ef1VxephjUU/43oRUcPFrLt5u3Y/iwVqkAHXsTj1ioXL9ZsF37
+         QH5Ow1UsnhmOwiNEqE2DADCevSvZ1rGECiTI1l9E5fP7fwCyN6C2bX6yVSSCMqduh3VW
+         0l/um+3ej0ino1HRvP+R15YcZB3GVRzt/U3bu+VrOGkuO2w7N1/VVugoi5GE7tl0AMq5
+         880qJBcZSjnnXt/pmrPDbbQH787ylVK/s5/gzn8AslzT2F+lty3q+Flwp+MlyQuFgpXa
+         x/NLzTp0RtL3RfqmkfptUekdkMsYzBrlVPxL3lKhdi3SQxHeVOKKHzVCdWF7750dhmkm
+         25Lw==
+X-Gm-Message-State: APjAAAWGKm7iT3jh8dxUCXLr+rGlZYiWXqos51fv9Bn5tQg7/b2kn2Uk
+        s13nNMo4VIVPoqf7r6Bdg70Rt7/Y0hk2CwVU2cvavw==
+X-Google-Smtp-Source: APXvYqyLGSeVtyPa6QvM+kGBBxvn+S/PP0KC3EUV34HcvopeZQfmGmHJBrOqaSvVp0ThT/bYujA9Vllz/L/0apuA1W4=
+X-Received: by 2002:a05:6214:1874:: with SMTP id eh20mr21684750qvb.122.1580202529263;
+ Tue, 28 Jan 2020 01:08:49 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200128120220.53494c29@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
+ <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw> <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
+ <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com>
+In-Reply-To: <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 28 Jan 2020 10:08:37 +0100
+Message-ID: <CACT4Y+Z+vYF=6h0+ioMXGX6OHVnAXyHqOQLNFmngT9TqNwAgKA@mail.gmail.com>
+Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
+To:     Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Cc:     Qian Cai <cai@lca.pw>, Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 28 Jan 2020, Stephen Rothwell wrote:
+On Tue, Jan 28, 2020 at 8:33 AM Ard Biesheuvel
+<ard.biesheuvel@linaro.org> wrote:
+> > > > Should be fixed by
+> > > >
+> > > > https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
+> > >
+> > > Cc kasan-devel@
+> > >
+> > > If everyone has to disable KASAN for the whole subdirectories like this, I am worried about we are losing testing coverage fairly quickly. Is there a bug in compiler?
+> >
+> > My understanding is that this is invalid C code in the first place,
+> > no? It just happened to compile with some compilers, some options and
+> > probably only with high optimization level.
+>
+> No, this is not true. The whole point of favoring IS_ENABLED(...) over
+> #ifdef ... has always been that the code remains visible to the
+> compiler, regardless of whether the option is selected or not, but
+> that it gets optimized away entirely. The linker errors prove that
+> there is dead code remaining in the object files, which means we can
+> no longer rely on IS_ENABLED() to work as intended.
 
-> Hi all,
-> 
-> Today's linux-next merge of the mfd tree got a conflict in:
-> 
->   drivers/regulator/bd718x7-regulator.c
-> 
-> between commit:
-> 
->   b389ceae4a8f ("regulator: bd718x7: Simplify the code by removing struct bd718xx_pmic_inits")
-> 
-> from the regulator-fixes tree and commit:
-> 
->   1b1c26b24a6e ("mfd: Rohm PMICs: Use platform_device_id to match MFD sub-devices")
-> 
-> from the mfd tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+I agree that exposing more code to compiler is good, I prefer to do it
+as well. But I don't see how this proves anything wrt this particular
+code being invalid C. Called functions still need to be defined. There
+is no notion of dead code in C. Yes, this highly depends on compiler,
+options, optimization level, etc. Some combinations may work, some
+won't. E.g. my compiler compiles it just fine (clang 10) without
+disabling instrumentation... what does it prove? I don't know.
 
-A pull-request was sent out to avoid this.
+To clarify: I completely don't object to patching this case in gcc
+with -O2, it just may be hard to find anybody willing to do this work
+if we are talking about fixing compilation of invalid code.
 
-If Mark pulls it, this should just go away.
 
--- 
-Lee Jones [李琼斯]
-Linaro Services Technical Lead
-Linaro.org │ Open source software for ARM SoCs
-Follow Linaro: Facebook | Twitter | Blog
+
+> > There is a known, simple fix that is used throughout the kernel -
+> > provide empty static inline stub, or put whole calls under ifdef.
+>
+> No, sorry, that doesn't work for me. I think it is great that we have
+> diagnostic features that are as powerful as KASAN, but if they require
+> code changes beyond enable/disable, I am not going to rely on them.

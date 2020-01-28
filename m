@@ -2,99 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AC24C14B199
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 10:11:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10C3B14B1A3
+	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 10:17:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725879AbgA1JLl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 04:11:41 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45273 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725848AbgA1JLk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 04:11:40 -0500
-Received: by mail-pl1-f194.google.com with SMTP id b22so4838277pls.12;
-        Tue, 28 Jan 2020 01:11:40 -0800 (PST)
+        id S1725901AbgA1JRY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 04:17:24 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:45722 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgA1JRX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 04:17:23 -0500
+Received: by mail-wr1-f65.google.com with SMTP id a6so494541wrx.12
+        for <linux-next@vger.kernel.org>; Tue, 28 Jan 2020 01:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=unMfPG99T1AKKHKiItdEAt564JyG03P4dOBDlwaWG6U=;
-        b=UnmbRH7ZXXMNOcrYNw144+NVTSNLDm4TEzmTiHQ4kjMV6/zMNfWuqhT1GmeFpHWF6d
-         rlRqCpAWNyTmEtsnyUYcOMe070tCPaqqepgLaWGi2KG1tGdriEfRchqnSaIUlh5ZOkhS
-         h4lcxsCXNK3wnch8ay6sCSlLo5Ks9fub8jErvRE7KT2r/QDLFyp0jscAKFEwCAvRcLUg
-         vEOTSO37MuaKrue0pnp1NbdEOL7ufgZVSyqkP/+XyJ8mSpw0H+mJR26IDrGsclMR8LdO
-         FVwPxQoIrsxhTwwb15fSP8d0tnFGaxL0G99+lsqJL1U0tfuu4C7Jxj7UFSi+ya+CLSwY
-         +4Ig==
+        bh=/eguvHwOu0sO1sY9Y2sGUaUw1z+hAiiwi7HS5TszeM0=;
+        b=dv17cOT0ZvLsFiZ0yr19WQNg2zQBv0lDkp9UA7o/+y3XapJI+0ZYTgo1dbErZaZkI+
+         VrtRoHSf7fPZX9AWCfQzGVqgL9EAuEBlB6i7HvsuqsCnHRWJuNNVzZyRxwgyp2FmPVho
+         iFppSCBqiKHitwA6onSMY3z5RpDrNdMnxU15dXUTYM8xvoWUhhwKbjywt+TkbGN0YeMD
+         M91dazJWXfRdPk/Q/Gn9y31TrOaoJhmzBFpY/fdbKC9GQCG4ON5AJ7lEP4+lM87TSTnK
+         wuL8JxVTOoq0uDzlXO4dfd3FwW07HCMcNZnOdzlJZVYuUb67qj6Ho/HPEiR8FrAWjPkT
+         iHaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=unMfPG99T1AKKHKiItdEAt564JyG03P4dOBDlwaWG6U=;
-        b=t3/bypwIiYB0BSgkKgCIMvwF/f8jcgKxXy2nsuhuh4PfXT1N9tKMpqvcwMXhwFsJXF
-         nUmvzgVbUdIh/+J66kyWYgaL59st8HxbGgpeJKEbtQfTm3jUYud7e3sf+c3EvLEL6XcT
-         nAjFgf8uHwmjAmaExOjZLWRLYScsnIk18AXp8SbBjC6+SVWEVPKzmFQgji6J0NMb4uku
-         RS+SolNQaiHbZuHyeEv60dYpbsPc1U+H41HLjUVfzg5CyxnP5N8FLqUdfkd1MMC0elpq
-         K+kR2luAJa4NZApqCY/SId4dRR11K1FYbNXyLpzUnRYo2doi7eQgkw/j2sQwu/alxl8Q
-         sgxw==
-X-Gm-Message-State: APjAAAWM49fQJHLdteATe1Rg/C0hi9A/TbZyfXJVOsRUccI9Qc2eiDcz
-        NB1BPKxAUoiCJBlOcKoAvVHvMWzHilIuEF3MOqNzfFLr524Jrw==
-X-Google-Smtp-Source: APXvYqweRolvFWVz18/sM7wnKCMsZZnHBdEwDqKRPeZ/wvUcduW6V8RHCRetRsDXKNvvy1iEh2A07CmEOANF0U+2tug=
-X-Received: by 2002:a17:902:d20c:: with SMTP id t12mr22509768ply.18.1580202700174;
- Tue, 28 Jan 2020 01:11:40 -0800 (PST)
+        bh=/eguvHwOu0sO1sY9Y2sGUaUw1z+hAiiwi7HS5TszeM0=;
+        b=Hck7A7V8QQ0JVBPqWStjzJqaQnsA343Xbk7rmBDMWcJiUcI8blMb13v0iQKaFxlzBy
+         9YU9sIMBUWlbMgDgfzNNiqFnl0k3J0R7vk1baGXuqo4A8pSTVD4fLOo1419CeRdEit/o
+         t9uOABGfHUFJYpVZGDjtJArNb5Wwq9rYNjruvdMYpXg0K18Kxl3JL6whPt4gcRGCJTcV
+         MkxHn4wKCJ3QfhNGVbrkd6MDuOwNVeAaVnWjgJoMyMp4PKXbJ+Jp6xJl4PNDAtI3yL0I
+         S+T6P2rZrvz9MR6l31K68c8oPMTgLwlIfUMzoDxVrPhlrKOeGK/VWpzM8KbbW82KwCCi
+         4inA==
+X-Gm-Message-State: APjAAAXf76e7tD0N2CzDbUaCh1m3wcPV+h3kuYKi3fLjvAVTZYoj4bh1
+        nkSfzf6S+apVr/XQHEwgz8qBtwIZfkFwyIC+upCFRQ==
+X-Google-Smtp-Source: APXvYqyZYgpjDLF5ghzGbSKFBjB5YpA2p+s3dNc4AhugXoRohektUWFPHnw5CjmXnUhh7MD4cnmybDhoxJETks+GwMU=
+X-Received: by 2002:a5d:50cb:: with SMTP id f11mr1884084wrt.252.1580203042186;
+ Tue, 28 Jan 2020 01:17:22 -0800 (PST)
 MIME-Version: 1.0
-References: <20200124161558.7cbb88c9@canb.auug.org.au> <20200128100311.3ca81231@canb.auug.org.au>
-In-Reply-To: <20200128100311.3ca81231@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 28 Jan 2020 11:11:32 +0200
-Message-ID: <CAHp75VctM6DBpDFj0eXUo4ipawCpfDgqexBHwjQGQpomjY2YDQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the generic-ioremap tree with the
- drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Darren Hart <dvhart@infradead.org>, Christoph Hellwig <hch@lst.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+References: <CAKv+Gu8ZcO3jRMuMJL_eTmWtuzJ+=qEA9muuN5DpdpikFLwamg@mail.gmail.com>
+ <E600649B-A8CA-48D3-AD86-A2BAAE0BCA25@lca.pw> <CACT4Y+a5q1dWrm+PhWH3uQRfLWZ0HOyHA6Er4V3bn9tk85TKYA@mail.gmail.com>
+ <CAKv+Gu8ZRjqvQvOJ5JXpAQXyApMQNAFz7cRO9NSjq9u=WnjkTA@mail.gmail.com> <CACT4Y+Z+vYF=6h0+ioMXGX6OHVnAXyHqOQLNFmngT9TqNwAgKA@mail.gmail.com>
+In-Reply-To: <CACT4Y+Z+vYF=6h0+ioMXGX6OHVnAXyHqOQLNFmngT9TqNwAgKA@mail.gmail.com>
+From:   Ard Biesheuvel <ard.biesheuvel@linaro.org>
+Date:   Tue, 28 Jan 2020 10:17:11 +0100
+Message-ID: <CAKv+Gu8-LxoYNCtwG76UkUkNC_7XrRSfwfRm9=6WdZy=C_buJw@mail.gmail.com>
+Subject: Re: mmotm 2020-01-23-21-12 uploaded (efi)
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Qian Cai <cai@lca.pw>, Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
+        Linux-MM <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-efi <linux-efi@vger.kernel.org>,
+        kasan-dev <kasan-dev@googlegroups.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 28, 2020 at 1:03 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Fri, 24 Jan 2020 16:15:58 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Today's linux-next merge of the generic-ioremap tree got a conflict in:
-> >
-> >   drivers/platform/x86/intel_scu_ipc.c
-> >
-> > between commit:
-> >
-> >   74e9748b9b21 ("platform/x86: intel_scu_ipc: Drop intel_scu_ipc_i2c_cntrl()")
-> >
-> > from the drivers-x86 tree and commit:
-> >
-> >   4bdc0d676a64 ("remove ioremap_nocache and devm_ioremap_nocache")
-> >
-> > from the generic-ioremap tree.
-> >
-> > I fixed it up (the former removed the code updated by the latter, so I
-> > just did that) and can carry the fix as necessary. This is now fixed as
-> > far as linux-next is concerned, but any non trivial conflicts should be
-> > mentioned to your upstream maintainer when your tree is submitted for
-> > merging.  You may also want to consider cooperating with the maintainer
-> > of the conflicting tree to minimise any particularly complex conflicts.
+On Tue, 28 Jan 2020 at 10:08, Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> This is now a conflict between the driver-x86 tree and Linus' tree.
+> On Tue, Jan 28, 2020 at 8:33 AM Ard Biesheuvel
+> <ard.biesheuvel@linaro.org> wrote:
+> > > > > Should be fixed by
+> > > > >
+> > > > > https://lore.kernel.org/linux-efi/20200121093912.5246-1-ardb@kernel.org/
+> > > >
+> > > > Cc kasan-devel@
+> > > >
+> > > > If everyone has to disable KASAN for the whole subdirectories like this, I am worried about we are losing testing coverage fairly quickly. Is there a bug in compiler?
+> > >
+> > > My understanding is that this is invalid C code in the first place,
+> > > no? It just happened to compile with some compilers, some options and
+> > > probably only with high optimization level.
+> >
+> > No, this is not true. The whole point of favoring IS_ENABLED(...) over
+> > #ifdef ... has always been that the code remains visible to the
+> > compiler, regardless of whether the option is selected or not, but
+> > that it gets optimized away entirely. The linker errors prove that
+> > there is dead code remaining in the object files, which means we can
+> > no longer rely on IS_ENABLED() to work as intended.
+>
+> I agree that exposing more code to compiler is good, I prefer to do it
+> as well. But I don't see how this proves anything wrt this particular
+> code being invalid C. Called functions still need to be defined. There
+> is no notion of dead code in C. Yes, this highly depends on compiler,
+> options, optimization level, etc. Some combinations may work, some
+> won't. E.g. my compiler compiles it just fine (clang 10) without
+> disabling instrumentation... what does it prove? I don't know.
+>
+> To clarify: I completely don't object to patching this case in gcc
+> with -O2, it just may be hard to find anybody willing to do this work
+> if we are talking about fixing compilation of invalid code.
+>
 
-I can't reproduce this. Linus already pulled PR for PDx86,
-
-$ git checkout -b test-xxx origin/master
-Branch 'test-xxx' set up to track remote branch 'master' from 'origin'.
-Switched to a new branch 'test-xxx'
-$ git merge for-next
-Already up to date.
-
-
-
--- 
-With Best Regards,
-Andy Shevchenko
+I don't mind simply disabling KASAN altogether for this code if nobody
+can be bothered to fix the compiler.

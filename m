@@ -2,117 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C870B14C1FD
-	for <lists+linux-next@lfdr.de>; Tue, 28 Jan 2020 22:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF34014C464
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 02:25:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726257AbgA1VSy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Jan 2020 16:18:54 -0500
-Received: from mail-wr1-f65.google.com ([209.85.221.65]:40862 "EHLO
-        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726143AbgA1VSx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Jan 2020 16:18:53 -0500
-Received: by mail-wr1-f65.google.com with SMTP id j104so1873038wrj.7;
-        Tue, 28 Jan 2020 13:18:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=vqrFGl4DYQ6rBDtmgmAyCIFwbIeB0lM4NEh8e6KqoQY=;
-        b=SDdQka3jB7cfln27F1gTq4Fx8sx4W8EYxf/E3vwRlzZODWF0xXkomBM2O0FIIMhFpt
-         qB9QJjMwEqxYdqthj1WOSAo05ZbnWUALLUzmHbRaCkAN5JaeKheGJMN3x9OSTRece0Zx
-         +IaVhN8fve0gmbNXRIgJelEbysxd8xfSfJhMg1lfOimQJmW7ngJQegYwdigGJrD7mD2x
-         jIymh1wyYeTy2mfMFlTWBdFCDH9UwRCJBhQAsAGGCmQkk9Wo8rGoKgLnhxp23OafbYuy
-         xyrzYR6p3fksBmI11NS/7w95JMQgn64rzoggMMdRtWJlsxC57lp3ZgE2kVeVJt3O9ECr
-         Ujgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vqrFGl4DYQ6rBDtmgmAyCIFwbIeB0lM4NEh8e6KqoQY=;
-        b=IaZQYT8j0h7qL9L9paq6wVzqSZ+oe8s076wygtMlcD0sgdIS7ICdc1q5OGxoBzzvFU
-         JvjOfojNuht7NUsM1Bsnr/agkZkldRniFa/6de+xVAe3w2ZttNH/I8C/nLUwl8I2kWoB
-         YrM9TBmgB1q0yI/B4QDKI2UbKkstji7citJVsYk+Q8hdRn6NdST9znh5KeXaFlj1CYz1
-         B74mEnPi2Z9Rh4s8DwoVbCQn35q3n9mt7arv7nzsNC/0+RheE+qSbolmu6UKPcIJOWBZ
-         N+dn1YiiZbQtWb9vCdzz8memjztSbCp3wUcRri7cgvHvBwxbarrnBwlVpCh61JlP8j5Q
-         QJJQ==
-X-Gm-Message-State: APjAAAU3W+0kxYGLP+x2JbtEPRUboUe2YQhreU22oDA6fnp9aAhZ2oon
-        nGN52dA0HUuB/nDdopXCNrYw/1fmM9/YaKHn8X0=
-X-Google-Smtp-Source: APXvYqzU39n+7gDP5IecAKJU2PwwUD3Oq2p0BtGAC6k1BXDb1seK0Kzycq+zX8/RWXr46l71QQTb6vYsiRjS4KjZvOg=
-X-Received: by 2002:a5d:40c9:: with SMTP id b9mr32033070wrq.419.1580246331794;
- Tue, 28 Jan 2020 13:18:51 -0800 (PST)
-MIME-Version: 1.0
-References: <20200128154227.43f15a1f@canb.auug.org.au>
-In-Reply-To: <20200128154227.43f15a1f@canb.auug.org.au>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 28 Jan 2020 16:18:40 -0500
-Message-ID: <CADnq5_Pc8SCfek7D86qwt1bWut-RD6SUVZzH=ccK+BsdDcvN2g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726604AbgA2BZl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Jan 2020 20:25:41 -0500
+Received: from ozlabs.org ([203.11.71.1]:44195 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726556AbgA2BZk (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Jan 2020 20:25:40 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 486m5C6Pkyz9s29;
+        Wed, 29 Jan 2020 12:25:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580261138;
+        bh=bNk4+04lZrrQBvhTZxDuTUNrFeZd4M8y80KF6+f/G6c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RJhq8MahjkRuDkbjdqvqJykdgLR1D6IR0d68XayASh7HLJfyn9+T60k6mCM5iNIUO
+         OfFlyna5UmHE68VHPs/z5usSUyaK3Mba1fW67SnzOyxs7FRkPg9s7CxryAJ5mY4fCp
+         WoNbFgPNHtM6DBm8u63UeEqAwssBeJx+y0M3dAqsI3wvWybdGm8eynWiQAHgA0d58j
+         KHifPwPkIN5rwDy1w0tLroznv/dPbO58/ZDgo0J9qJs5UoqwsHb5A2Cu4nHq/7nojP
+         zpy9z0MrovXjIY1BAmg1Nf2SCu5zgLqUICZMgyd2H9SRiY6Nm3f1eHXEN80qMhF1rC
+         JvxRjy4q62EFA==
+Date:   Wed, 29 Jan 2020 12:25:30 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Tianci.Yin" <tianci.yin@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+        Stephen Smalley <sds@tycho.nsa.gov>,
+        James Morris <jamorris@linux.microsoft.com>,
+        Casey Schaufler <casey@schaufler-ca.com>
+Subject: Re: linux-next: manual merge of the selinux tree with the keys tree
+Message-ID: <20200129122530.7d4659f6@canb.auug.org.au>
+In-Reply-To: <20191210105037.085b3418@canb.auug.org.au>
+References: <20191210105037.085b3418@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/AqXG295sS9XOYlLq+q3g.f+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jan 27, 2020 at 11:42 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the amdgpu tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
->
-> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c: In function 'psp_v11_0_memory_training':
-> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:9: error: implicit declaration of function 'vmalloc'; did you mean 'kvmalloc'? [-Werror=implicit-function-declaration]
->  1047 |   buf = vmalloc(sz);
->       |         ^~~~~~~
->       |         kvmalloc
-> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1047:7: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->  1047 |   buf = vmalloc(sz);
->       |       ^
-> drivers/gpu/drm/amd/amdgpu/psp_v11_0.c:1057:4: error: implicit declaration of function 'vfree'; did you mean 'kvfree'? [-Werror=implicit-function-declaration]
->  1057 |    vfree(buf);
->       |    ^~~~~
->       |    kvfree
->
-> Caused by commit
->
->   240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GDDR6 memory training(V2)")
->
-> I have applied this patch for today:
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 28 Jan 2020 15:33:44 +1100
-> Subject: [PATCH] amdgpu: using vmalloc requires includeing vmalloc.h
->
-> Fixes: 240c811ccde4 ("drm/amdgpu: fix VRAM partially encroached issue in GDDR6 memory training(V2)")
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+--Sig_/AqXG295sS9XOYlLq+q3g.f+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Applied.  thanks!
+Hi all,
 
-Alex
-
-> ---
->  drivers/gpu/drm/amd/amdgpu/psp_v11_0.c | 1 +
->  1 file changed, 1 insertion(+)
+On Tue, 10 Dec 2019 10:50:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> diff --git a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-> index ac173d2eb809..0829188c1a5c 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/psp_v11_0.c
-> @@ -22,6 +22,7 @@
->
->  #include <linux/firmware.h>
->  #include <linux/module.h>
-> +#include <linux/vmalloc.h>
->
->  #include "amdgpu.h"
->  #include "amdgpu_psp.h"
-> --
-> 2.24.1
->
-> --
+> Today's linux-next merge of the selinux tree got a conflict in:
+>=20
+>   include/linux/lsm_audit.h
+>=20
+> between commit:
+>=20
+>   59336b0f8000 ("smack: Implement the watch_key and post_notification hoo=
+ks")
+>=20
+> from the keys tree and commit:
+>=20
+>   59438b46471a ("security,lockdown,selinux: implement SELinux lockdown")
+>=20
+> from the selinux tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
 > Cheers,
 > Stephen Rothwell
+>=20
+> diff --cc include/linux/lsm_audit.h
+> index 734d67889826,99d629fd9944..000000000000
+> --- a/include/linux/lsm_audit.h
+> +++ b/include/linux/lsm_audit.h
+> @@@ -74,7 -74,7 +74,8 @@@ struct common_audit_data=20
+>   #define LSM_AUDIT_DATA_FILE	12
+>   #define LSM_AUDIT_DATA_IBPKEY	13
+>   #define LSM_AUDIT_DATA_IBENDPORT 14
+>  -#define LSM_AUDIT_DATA_LOCKDOWN 15
+>  +#define LSM_AUDIT_DATA_NOTIFICATION 15
+> ++#define LSM_AUDIT_DATA_LOCKDOWN 16
+>   	union 	{
+>   		struct path path;
+>   		struct dentry *dentry;
+
+This is now a conflict between the keys tree and Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/AqXG295sS9XOYlLq+q3g.f+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4w3woACgkQAVBC80lX
+0GzElAf+KEy7SHAbO38xCJdlsXNy/wNDUDp5cWwrraYJbV1gXViajkHtlPBsTDre
+P8AJsXSBLbLUg0glDpIFJfVueC6P5y5JacBrcOh2vRjq96K2KnHdwTY7GZfdYb8y
+re4mkNQsblh6pjRZAWpjwOn0I/n79fiPZD1nSBIvQnA29cU7CMd/G2JyQG/Njdc6
+IYQBMhfXDOU7jQmFOIHWOISqTYFYufxIIZvnUqJBvh8YIQ2AXqwAt+jw2IYzx6Og
+S6Csu00TYvzQ+HLE9V90kc/KEzfCM0hsb2zvFhaIIoWJiV9Upv3cZOwe5HMSCHDf
+UlhhcIoYtZuYbCI+sVRDjJ23OZwOVA==
+=/lgy
+-----END PGP SIGNATURE-----
+
+--Sig_/AqXG295sS9XOYlLq+q3g.f+--

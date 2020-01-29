@@ -2,94 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 139A814CA9C
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 13:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 232E914CAC0
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 13:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726358AbgA2MPe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jan 2020 07:15:34 -0500
-Received: from frisell.zx2c4.com ([192.95.5.64]:60663 "EHLO frisell.zx2c4.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726256AbgA2MPe (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Jan 2020 07:15:34 -0500
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 2d4a5f4a;
-        Wed, 29 Jan 2020 12:15:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
-        :from:date:message-id:subject:to:content-type; s=mail; bh=bHEDAC
-        llkomB/iUjyWoesygVpj8=; b=tDU0csZ7/+Q8X+BqhpGDOWRM/LU9VawEj5CMAi
-        0PXYjh01kQ90u4h53BC6ThihbYwc5e/2srX8uIVUxEZC1uCp4Xy0YDdteDbD9Kwn
-        fsYNY9IszTlCKWF15lN2N5ARLG9ZNgLqN63xkAdvLW5+5NFmZDTlbvubhTNlFRcY
-        1FGVxb2rn0T6hGP0obgd3s8jRwc191f7yEwFnOR/18Y2xbmX6QhfB4pJTskcYA3x
-        JH+TZdBxnS4YMxrXbACE7x53T85QhXpsHpnhRYwonO5oSPsG9mDkLDfJMSRUILoq
-        g2rhOgoJUa1ifTRwPXJov5Ll2HWyowXtRRc24WVHP3lUDO/g==
-Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f27b5d92 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
-        Wed, 29 Jan 2020 12:15:30 +0000 (UTC)
-Received: by mail-ot1-f42.google.com with SMTP id a15so15300601otf.1;
-        Wed, 29 Jan 2020 04:15:31 -0800 (PST)
-X-Gm-Message-State: APjAAAU9LfLcUwgIRHC3e+p/YA6dMZoEo/BGQ2zuRNIB53c3NPE/Adki
-        cjoBmY3JQ++zmDyU8146F/JK6NOhSu6xwysj34I=
-X-Google-Smtp-Source: APXvYqxJypQ1UgGrE8bjJimKMKeAtsELhQjFOTmf0/hm0fKoKjpfT8uV1Ak1niOk5q9jBXlP0X+2ln2EJz4pVUrEQkk=
-X-Received: by 2002:a9d:811:: with SMTP id 17mr20808826oty.369.1580300130876;
- Wed, 29 Jan 2020 04:15:30 -0800 (PST)
-MIME-Version: 1.0
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 29 Jan 2020 13:15:20 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
-Message-ID: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
-Subject: wireguard ci hooked up to quite a few kernel trees
-To:     WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        id S1726256AbgA2MXP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jan 2020 07:23:15 -0500
+Received: from mail-pg1-f196.google.com ([209.85.215.196]:35103 "EHLO
+        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726067AbgA2MXP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jan 2020 07:23:15 -0500
+Received: by mail-pg1-f196.google.com with SMTP id l24so8761338pgk.2;
+        Wed, 29 Jan 2020 04:23:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:mail-followup-to:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=Zw2QOXTYa4DPfoFWBlgmT0QVWsY+VSIRNslcmp73E4U=;
+        b=dLloQdRrHAzD9N+RT3r+t+VeVn1ngk7JOdmn4PXhf9VBwZ5aqozvIWUq0QzaSf+6w2
+         49nN1Nl1bC6myj8/VRFvqtknJXFC9Bw8rZ4pXwBXjGnfRpIzQFHeStnGX84YaP8wOvmm
+         43IkND/A1PK9AndEw8xUfQVnteZ6/CiuAS9Zp3HIfBa0iwSTA2Zcw41EkjM1x1caTvU4
+         gr9y9Rx/QoQmf0wCJBBaklKAwEtYIHWh7+UKTlnASItW7O9w4r/9nCWX/K+P3Bs/1mv5
+         S9YKrAUWrzS4p3Q0DyrxvV2iSdNIGY8XoA67arpfYzNPZabxza5uhPQmzGj85/yl6EvV
+         VOOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id
+         :mail-followup-to:references:mime-version:content-disposition
+         :in-reply-to:user-agent;
+        bh=Zw2QOXTYa4DPfoFWBlgmT0QVWsY+VSIRNslcmp73E4U=;
+        b=MhYhGi/eSDH4MZ03LoKe1f40cR3hm/AyhyURHTPoTlSiP3hB2VnBjJ66JOlze2HPk9
+         ak/GD0YsfRHmfrngz/SY+eePXYV0WJos9hVG+KucpurXvW4bs21KjV6aqFz+mxFADNCI
+         UAfjQ7M1x0o7n/e+g2w4oa+day7jQADnrWwFSZuvkwoMmjivCZVJp2pgilSHsZ7gqFUM
+         1hqKg6zaV7CTJsFGkWlrnsBGxmOD4vwhT0Eckpzr4dhVEuRSrgDF+CKB4J8MqUDepqzY
+         hCdmHjh5k1I0TSOrF2cFVl8gPLOYO+Lpd5R4YhBDseB9OWzrVZtRd0k2w3I6h5KuN8jk
+         eR9Q==
+X-Gm-Message-State: APjAAAW8hv7xy7yGfFQ1CGzE5JyQs4BzU81N6Eg1iQqiaPAt5xrEEJRO
+        Io2N7eAdSfn/GDzzB1k1Pko=
+X-Google-Smtp-Source: APXvYqxsajtGXiWfJo7puAJC96Gh1QHON9TNgislJuPYpCDA2oHS69K5SxciFe4TldTfyBS2XnF8Mg==
+X-Received: by 2002:a63:f403:: with SMTP id g3mr30619483pgi.62.1580300594266;
+        Wed, 29 Jan 2020 04:23:14 -0800 (PST)
+Received: from Gentoo ([103.231.91.35])
+        by smtp.gmail.com with ESMTPSA id r145sm2749967pfr.5.2020.01.29.04.23.09
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 29 Jan 2020 04:23:13 -0800 (PST)
+Date:   Wed, 29 Jan 2020 17:53:01 +0530
+From:   Bhaskar Chowdhury <unixbhaskar@gmail.com>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     WireGuard mailing list <wireguard@lists.zx2c4.com>,
         LKML <linux-kernel@vger.kernel.org>,
         Netdev <netdev@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: wireguard ci hooked up to quite a few kernel trees
+Message-ID: <20200129122259.GA25949@Gentoo>
+Mail-Followup-To: Bhaskar Chowdhury <unixbhaskar@gmail.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="oyUTqETQ0mS9luUI"
+Content-Disposition: inline
+In-Reply-To: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
 
-With the merging of wireguard, I've hooked the project's CI up to
-quite a few trees. We now have:
+--oyUTqETQ0mS9luUI
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
 
-- net-next
-- net
-- linux-next
-- linux (Linus' tree)
-- wireguard-linux (my tree)
-- wireguard-linux-compat (backports to kernels 3.10 - 5.5)
+Looks bloody good Jason! thanks, man!
 
-When the various pushes and pulls click a few more cranks through the
-machinery, I'll probably add crypto and cryptodev, and eventually
-Greg's stable trees. If anybody has suggestions on other relevant
-trees that might help catch bugs as early as possible, I'm all ears.
+~Bhaskar
 
-Right now builds are kicked off for every single commit made to each
-one of these trees, on x86_64, i686, aarch64, aarch64_be, arm, armeb,
-mips64, mips64el, mips, mipsel, powerpc64le, powerpc, and m68k. For
-each of these, a fresh kernel and miniature userland containing the
-test suite is built from source, and then booted in qemu.
+On 13:15 Wed 29 Jan 2020, Jason A. Donenfeld wrote:
+>Hi all,
+>
+>With the merging of wireguard, I've hooked the project's CI up to
+>quite a few trees. We now have:
+>
+>- net-next
+>- net
+>- linux-next
+>- linux (Linus' tree)
+>- wireguard-linux (my tree)
+>- wireguard-linux-compat (backports to kernels 3.10 - 5.5)
+>
+>When the various pushes and pulls click a few more cranks through the
+>machinery, I'll probably add crypto and cryptodev, and eventually
+>Greg's stable trees. If anybody has suggestions on other relevant
+>trees that might help catch bugs as early as possible, I'm all ears.
+>
+>Right now builds are kicked off for every single commit made to each
+>one of these trees, on x86_64, i686, aarch64, aarch64_be, arm, armeb,
+>mips64, mips64el, mips, mipsel, powerpc64le, powerpc, and m68k. For
+>each of these, a fresh kernel and miniature userland containing the
+>test suite is built from source, and then booted in qemu.
+>
+>Even though the CI at the moment is focused on the wireguard test
+>suite, it has a habit of finding lots of bugs and regressions in other
+>weird places. For example, linux-next is failing at the moment on a
+>few archs.
+>
+>I run this locally every day all day while developing kernel things
+>too. It's one command to test a full kernel for whatever thing I'm
+>working on, and this winds up saving a lot of time in development and
+>lets me debug things with printk in the dumbest ways possible while
+>still being productive and efficient.
+>
+>You can view the current build status here:
+>https://www.wireguard.com/build-status/
+>
+>This sort of CI is another take on the kernel CI problem; I know a few
+>organizations are doing similar things. I'd be happy to eventually
+>expand this into something more general, should there be sufficient
+>interest -- probably initially on networking stuff -- or it might turn
+>out that this simply inspires something else that is more general and
+>robust, which is fine too. Either way, here's my contribution to the
+>modicum of kernel CI things happening.
+>
+>Regards,
+>Jason
 
-Even though the CI at the moment is focused on the wireguard test
-suite, it has a habit of finding lots of bugs and regressions in other
-weird places. For example, linux-next is failing at the moment on a
-few archs.
+--oyUTqETQ0mS9luUI
+Content-Type: application/pgp-signature; name="signature.asc"
 
-I run this locally every day all day while developing kernel things
-too. It's one command to test a full kernel for whatever thing I'm
-working on, and this winds up saving a lot of time in development and
-lets me debug things with printk in the dumbest ways possible while
-still being productive and efficient.
+-----BEGIN PGP SIGNATURE-----
 
-You can view the current build status here:
-https://www.wireguard.com/build-status/
+iQEzBAABCAAdFiEEnwF+nWawchZUPOuwsjqdtxFLKRUFAl4xeR8ACgkQsjqdtxFL
+KRX0iQf/TkKseJ2jksqjmC+bnMd9mnIox1pWzGwElpv1csKIwul3m+TnHGRFSCOu
+FBbHlw0MSrrEB0dOyG5NJr2GqtGiEJ1ogoLT6XjUq4qpcaIljJU3gU35c6UKiM12
+ThYstC9ZfdXoPgPI5n5qL3p8rTp71Aj7b947ZRfQ2SEMQiEZ5wEgwAwK+fV0yAsa
+VwqJxZy2jZTiOABqW8Ez65YyhceUDvGfv0G1K6EdZdyWfHsoOHXUH24C4jdtGFWi
+m+I7ZnFM9LFlzz1Fyh62PDwIBMYHegW3rvm6q3XawJo4+8VYodApw5axbRDfjGFK
+tMcQCZyCSD4Rtpv+Vrfg0Toveq4nOw==
+=cnyd
+-----END PGP SIGNATURE-----
 
-This sort of CI is another take on the kernel CI problem; I know a few
-organizations are doing similar things. I'd be happy to eventually
-expand this into something more general, should there be sufficient
-interest -- probably initially on networking stuff -- or it might turn
-out that this simply inspires something else that is more general and
-robust, which is fine too. Either way, here's my contribution to the
-modicum of kernel CI things happening.
-
-Regards,
-Jason
+--oyUTqETQ0mS9luUI--

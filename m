@@ -2,89 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C7914D31E
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 23:33:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E8914D322
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 23:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726663AbgA2WdE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jan 2020 17:33:04 -0500
-Received: from ozlabs.org ([203.11.71.1]:39457 "EHLO ozlabs.org"
+        id S1726283AbgA2Wh5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jan 2020 17:37:57 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35693 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726222AbgA2WdD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Jan 2020 17:33:03 -0500
+        id S1726222AbgA2Wh5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jan 2020 17:37:57 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 487JCb1szQz9s29;
-        Thu, 30 Jan 2020 09:32:57 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 487JKD69sgz9sPJ;
+        Thu, 30 Jan 2020 09:37:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580337180;
-        bh=kNacujBNtky+MXS90bf53so+l7F4oZQu+AtY0NhlJNQ=;
+        s=201702; t=1580337473;
+        bh=EgmeNMrvCEd3zUS/i/Bc1sWsF9BwQ0AaSWL1ZOK7nBc=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ex3FCk1X/t/U9hHBF2sRLvLfDOEKSrMvujvDnzfhanC0NRvt3DsN24J6O2vyUAMCL
-         zd5wiTlkznS2Qu75ufZ1OmIFrswaqkqp05j3+j6LMqUrpfGqmYe1e76wMt3YBrbgQf
-         QtfvrLVl3YQiAo2dkQLIfIX6m+/43xgK9V5xcy1P7DxsGzUKB4FeH95m/Pdjy7zuB6
-         rePlTin9IP1is3iKQ0qzdOBPp8shvDhtv4oQ90JEN/PgfX5rP/iu/WoApUjxCPBdUa
-         QGVzYQ2EjMHc2l60+oIVwpfchVBbb8SI+M5J1/QfirVBRT1RLaORPWLLuL7cw36A0Z
-         W0Ynqk7uxFNSA==
-Date:   Thu, 30 Jan 2020 09:32:51 +1100
+        b=VTbqO7q5Ma90gkuWS/1lmCDKNy0BD+muiL2a05HUmB5jMdUa6cuWdkr65H6o75akj
+         Y9NGAKtwnLTaNJPUgdhEVwGHr+GNnI2HDGGd5vXmK2imM/jTTTwmunO4FOYLTMlqdF
+         +RfI/YEZhSlG8rOO1wR6EStDWWLN5Zcb2QtAWHccETTn90g3EjvlgiBRpbjD/+//Sz
+         NtcaT0mdjqhKYX90RmZHeYxlURK17kA60lTHjpaHfE7VAfWrcrGIwSAo5fJatgTupr
+         hj7BvvpBARfld1fQeBVjcHpRXippVVMt+gAlHIG9auGGuyY7TeSwJvvyixivDwDNth
+         ySDjgQA0czn7Q==
+Date:   Thu, 30 Jan 2020 09:37:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: Re: mmotm 2020-01-28-20-05 uploaded (security/security.c)
-Message-ID: <20200130093251.16e35ed3@canb.auug.org.au>
-In-Reply-To: <56177bc4-441d-36f4-fe73-4e86edf02899@infradead.org>
-References: <20200129040640.6PNuz0vcp%akpm@linux-foundation.org>
-        <56177bc4-441d-36f4-fe73-4e86edf02899@infradead.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        James Hogan <jhogan@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        "=?UTF-8?B?5ZGo55Cw5p2w?= (Zhou Yanjie)" <zhouyanjie@wanyeetech.com>,
+        Paul Burton <paulburton@kernel.org>
+Subject: Re: linux-next: manual merge of the gpio tree with the mips tree
+Message-ID: <20200130093752.68d23f7c@canb.auug.org.au>
+In-Reply-To: <20200110155150.3942c3fc@canb.auug.org.au>
+References: <20200110155150.3942c3fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hT0psqc8acn.2nhNMeCMlga";
+Content-Type: multipart/signed; boundary="Sig_/nl+WtKD6Q1WOsaXMICTwUGM";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hT0psqc8acn.2nhNMeCMlga
+--Sig_/nl+WtKD6Q1WOsaXMICTwUGM
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Randy,
+Hi all,
 
-On Tue, 28 Jan 2020 20:52:28 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
+On Fri, 10 Jan 2020 15:51:50 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> security/security.c contains duplicate lines for <lockdown_reasons> array:
+> Today's linux-next merge of the gpio tree got a conflict in:
 >=20
-> Stephen, you might delete half of those for linux-next....
+>   Documentation/devicetree/bindings/vendor-prefixes.yaml
+>=20
+> between commit:
+>=20
+>   9d022be3c192 ("dt-bindings: Document yna vendor-prefix.")
+>=20
+> from the mips tree and commit:
+>=20
+>   885503fbea21 ("dt-bindings: Add Xylon vendor prefix")
+>=20
+> from the gpio tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc Documentation/devicetree/bindings/vendor-prefixes.yaml
+> index b44257d0e16e,9cb3bc683db7..000000000000
+> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> @@@ -1082,8 -1060,8 +1082,10 @@@ patternProperties
+>       description: Xilinx
+>     "^xunlong,.*":
+>       description: Shenzhen Xunlong Software CO.,Limited
+>  +  "^yna,.*":
+>  +    description: YSH & ATIL
+> +   "^xylon,.*":
+> +     description: Xylon
+>     "^yones-toptech,.*":
+>       description: Yones Toptech Co., Ltd.
+>     "^ysoft,.*":
 
-I did not get that in my import of mmotm today.  But I actually git
-merge the appropriate part of linux-next rather than applying the
-linux-next.patch from mmotm - so that may have taken care of it.
+This is now a conflict between the mips tree and Linus' tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/hT0psqc8acn.2nhNMeCMlga
+--Sig_/nl+WtKD6Q1WOsaXMICTwUGM
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4yCBMACgkQAVBC80lX
-0GxZwAf/ax84ntnjUlSEUbrRhOtzhkbCC0qfQRNOTKs4fDx067hyyDhauWtomiRK
-MZQYkycawPmOiDwBhuaDpt7sYfa0/SculyJff5znss4VzIFrGjiHKRRfvsczKsqK
-9y7yDCbR4PI2iIfId4iRp5qtj1Sx8NhUclS41DfgKFSsLicXrjWEcEVCqfjzKTjX
-t9sUKS02kqpqY9YFN1+H87rvw/MTqYl5vKc2lbWQzE9DXxUqSwW972sTt2p2PEqT
-tGkBV0tpmYvzP6E8Fbn8yQY5i8xen44TpVoMFRRdbutat74drdvKDUpVHxWUZsu3
-3otwkaIwi2M98a6uRHAgMyJ/h0pMuA==
-=FooJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4yCUAACgkQAVBC80lX
+0GwCzQgAoEmjmPDcfqLNSFR85qoWYPk4iwMR1DF20IUhlXZtVVKZrKAMlOuCuxCC
+9hUOPNi7Y1LpJdQGD/K4tS1pPXmSQ/LSJ6FNntMbO6ltQEHN7UULpi+/VsBgh3bP
+YQu6oZZzakzt4rvB0CYXaJvuGpel9AVevisAcOBn+Q+TtlcHZkwvO5eVFoVchyf0
+HUOLgYDTfwNpCgCdgsNIH+LYevWFMLeT7bMP0Azx1ItMdKeknnY6M2I1Mi7nbJwZ
+4tCemx7PibaOjW81qO5XVjJRYPXGzxTFCrmW0eUq2U2lwoNJeDLNBHhuziuJ5GML
+rlTfR8K6V5XNemqjjEgOuMmJn9k9Kw==
+=BtxV
 -----END PGP SIGNATURE-----
 
---Sig_/hT0psqc8acn.2nhNMeCMlga--
+--Sig_/nl+WtKD6Q1WOsaXMICTwUGM--

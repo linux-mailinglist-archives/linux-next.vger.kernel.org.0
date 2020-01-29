@@ -2,90 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5079714CBBF
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 14:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB5A14CC14
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 15:05:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726650AbgA2NwL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jan 2020 08:52:11 -0500
-Received: from mail-ed1-f66.google.com ([209.85.208.66]:37497 "EHLO
-        mail-ed1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726487AbgA2NwG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jan 2020 08:52:06 -0500
-Received: by mail-ed1-f66.google.com with SMTP id cy15so18705724edb.4
-        for <linux-next@vger.kernel.org>; Wed, 29 Jan 2020 05:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=g/z/wuxc+7xT2yV/Klj0Qifjo3UGoZMxK1efiAVi90k=;
-        b=OA+jLaOxwv5kxEK2jsC84DNaLbn6Q1JxahmQrobXYSjuoltN+RtJtJ4ZtScgLiCFu3
-         T5UYzEfynULE4EaZg4NBya6auTieKqJkB2N44rpxTyRYKKTCiGSN3sfgKbWAjKWTZZgk
-         bAD8Oj8cd64yGmTYuHWo3WiQieUFsd3dneI8ES7qmXhnxxYMoRE/LfryOQtanjRzfZkC
-         hKKe/5J/uYyUdKpTYVjyKNMTSptlQBaj2dAw2epcloBiAsIge+mEKsRomG6oAnqwGVMe
-         3NY7D1MfljKmmnH8QiCR5CwQaU5BXX/6xWOJPMIlDcDhlRKQTQTuG2EXA+XQ0hioW122
-         +fAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=g/z/wuxc+7xT2yV/Klj0Qifjo3UGoZMxK1efiAVi90k=;
-        b=mS2M2OH/nC178fNMEhJ5530vFYcasXKkm34yRtSUuiQAmLh+nrGS+h9+r3Ci45ft74
-         kPEFbfsE+QNhLVBB3AQdPeI4xGfLaqyXXK22C+8sm3zFBKsuZvimOUMAAv/EoQjvteXD
-         KFvIHDg52Xd6mVGA+sQWdaQRLRv1PfKEXzfuvygbZUUBlCp/ZH1AwncRI7OHQ8xwgr4m
-         hsk/4gqRMuZze/5PMcKuyhXFQ649SCz5SXVsxd2LJbQO3kgORXhHYxwTUGC5i8VfmOJi
-         z634nZ4ABEqH0WbqAwRS0gRnveoJ3rPGxgaMTFgyhEyMyl1uj/htgva96fxf2XKh/SkU
-         /EJw==
-X-Gm-Message-State: APjAAAVJcaAaa43agDj6OeJKL8nenDFHGs+GbEicYCR/sfKVAFT4UNch
-        kVKAonEzVSP32B+oPvPBcmn037LU7CIqGYA6rqgV
-X-Google-Smtp-Source: APXvYqzfpqAQqbk304DWn4ktRIxY8tzK9qnQQq5mo7EYBxsHQtxhRehkW3/mP7Fefk8Y240fGdoIbbYINrSyMgy7Rl0=
-X-Received: by 2002:a17:906:f251:: with SMTP id gy17mr7400826ejb.308.1580305924909;
- Wed, 29 Jan 2020 05:52:04 -0800 (PST)
+        id S1726808AbgA2OFm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jan 2020 09:05:42 -0500
+Received: from mail25.static.mailgun.info ([104.130.122.25]:64227 "EHLO
+        mail25.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726314AbgA2OFm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jan 2020 09:05:42 -0500
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1580306741; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=15AGAb6xpQISvcFQW1tkjmK4LdTdUPgvzOyitjXpL0s=; b=VFW6kz4nLFusUT/adOHIps7Lkk6emqOm7Fit/M6PJe5oagCVVaZbt6cgENXRXV/Go0fBfncZ
+ 9GnFIF3pTNE6522XLBq8h7UNpt9nMIN1HkY+GPNVGT8CH/LBG+1rFTSx3nTnVOn/UWWyxXyB
+ zGWVL3oanQgsTSl2Ju/VsB/LxGQ=
+X-Mailgun-Sending-Ip: 104.130.122.25
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171])
+ by mxa.mailgun.org with ESMTP id 5e319133.7f32a97f3d88-smtp-out-n02;
+ Wed, 29 Jan 2020 14:05:39 -0000 (UTC)
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 590FBC447A1; Wed, 29 Jan 2020 14:05:38 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from x230.qca.qualcomm.com (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 28446C43383;
+        Wed, 29 Jan 2020 14:05:34 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 28446C43383
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wireless <linux-wireless@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rakesh Pillai <pillair@codeaurora.org>
+Subject: Re: linux-next: Fixes tag needs some work in the wireless-drivers-next tree
+References: <20200127114221.52ba6027@canb.auug.org.au>
+Date:   Wed, 29 Jan 2020 16:05:32 +0200
+In-Reply-To: <20200127114221.52ba6027@canb.auug.org.au> (Stephen Rothwell's
+        message of "Mon, 27 Jan 2020 11:42:21 +1100")
+Message-ID: <87k15a8ij7.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
 MIME-Version: 1.0
-References: <20200129040640.6PNuz0vcp%akpm@linux-foundation.org> <56177bc4-441d-36f4-fe73-4e86edf02899@infradead.org>
-In-Reply-To: <56177bc4-441d-36f4-fe73-4e86edf02899@infradead.org>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Wed, 29 Jan 2020 08:51:53 -0500
-Message-ID: <CAHC9VhRW68ccE_8HJnv4anFdSgkY2Yk3612LPCT5o4+vXQGqQA@mail.gmail.com>
-Subject: Re: mmotm 2020-01-28-20-05 uploaded (security/security.c)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        linux-security-module <linux-security-module@vger.kernel.org>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jan 28, 2020 at 11:52 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 1/28/20 8:06 PM, akpm@linux-foundation.org wrote:
-> > The mm-of-the-moment snapshot 2020-01-28-20-05 has been uploaded to
-> >
-> >    http://www.ozlabs.org/~akpm/mmotm/
-> >
-> > mmotm-readme.txt says
-> >
-> > README for mm-of-the-moment:
-> >
-> > http://www.ozlabs.org/~akpm/mmotm/
-> >
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> >
->
-> security/security.c contains duplicate lines for <lockdown_reasons> array:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-Hmmm.  Commit 59438b46471a ("security,lockdown,selinux: implement
-SELinux lockdown"), which was merged into Linus' tree during the
-current merge window, moved the lockdown_reasons array from
-security/lockdown/lockdown.c to security/security.c; is there another
-tree in linux-next which is moving lockdown_reasons into
-security/security.c?
+> Hi all,
+>
+> n commit
+>
+>   6ba8b3b6bd77 ("ath10k: Correct the DMA direction for management tx buffers")
+>
+> Fixes tag
+>
+>   Fixes: dc405152bb6 ("ath10k: handle mgmt tx completion event")
+>
+> has these problem(s):
+>
+>   - SHA1 should be at least 12 digits long
+>     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>     or later) just making sure it is not set (or set to "auto").
+
+Doh, I missed that but naturally there's nothing we can do now as the
+commit is in Linus' tree. I really should implement some kind of
+automatic check to my patchwork script for this.
 
 -- 
-paul moore
-www.paul-moore.com
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

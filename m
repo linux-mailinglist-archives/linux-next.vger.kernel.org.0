@@ -2,157 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B226A14C723
-	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 09:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 139A814CA9C
+	for <lists+linux-next@lfdr.de>; Wed, 29 Jan 2020 13:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbgA2IBM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jan 2020 03:01:12 -0500
-Received: from mail-wr1-f49.google.com ([209.85.221.49]:34333 "EHLO
-        mail-wr1-f49.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726068AbgA2IBM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Jan 2020 03:01:12 -0500
-Received: by mail-wr1-f49.google.com with SMTP id t2so19004935wrr.1
-        for <linux-next@vger.kernel.org>; Wed, 29 Jan 2020 00:01:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=FJCTGeNs7Yz9Sm5gHt1l1V7OJCzErejTB1qP4vMsuWU=;
-        b=OfTSGFyO8brFoaz32kKMR81YgL8KuwdYP9hduVINEFrsR1TPYN9vpnCtLne/UhW03A
-         D8iRGPniA0+wsMUYJkA5ikE9ZGoedXrOgx2Rdt2WzJy+txLecEws2ybT+m3hhg3fxgWF
-         +PPDT5pma0aJstKxTCzERzs5DfzCmo6i2h7D+3Y3Fc7fsyHpHFZBR8/X20RxHpmfmg2O
-         T00QuWoAH3X4d2lZW9Kvu3+PueNnT0FHw8VM9BNhzMGc06TATjyxLSaWdEy98Znt0bVL
-         1rpYLiiP4DHrGdfIBbhAVDld4gpoRRm+cgtnJXYsTlPOTrF0VSD1OFBu4F/mV/ncMMmO
-         FuZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=FJCTGeNs7Yz9Sm5gHt1l1V7OJCzErejTB1qP4vMsuWU=;
-        b=auRmyLvcANmc6mxjW9jdxXdl7pLyebMCnojusKtabe1NLm5TJqbofCYsSGmKawCUeh
-         u++fH+LjpIsIy6ffIAK7kbQPtrRpQWkBmHjySmWUyuJq7W+bu1J3KqSlALc1vdH/Umxw
-         dhk7/4S+BhGqU7tANECR2gLOGHzmzUwLw+hpuZYlx64eO9ymM2E7evSwRcFZnXpwYrkg
-         dVLvWZTFEDlnbFs+dfyTZeBZ/ho345B8cIJWhu7vrG8hgcxT92m7kN1OZVgmIa1qM0gw
-         JxpLaQlhYPzW8lga8uRhOzabl+oHFuL2z4CrRW92QXzZqrmRrWwtcSaHDZRusqeFx7y4
-         HBpA==
-X-Gm-Message-State: APjAAAWVJCT41t/FgGuBBuQk9xK1cYtOdlL0xIsCcTgRRw/qalSdxDYt
-        eOCsXSy104yv++IrgrRvME8aYzpnx2ZPNg==
-X-Google-Smtp-Source: APXvYqzedbxxVPUIAe/dhRTm2Vza0eLP/eRFNZ6omCwjtpOOzaUXiuYJDrDGhNwDHDYJNwaN1+RCng==
-X-Received: by 2002:a5d:44cd:: with SMTP id z13mr34372065wrr.104.1580284870326;
-        Wed, 29 Jan 2020 00:01:10 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id a9sm1312577wmm.15.2020.01.29.00.01.09
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2020 00:01:09 -0800 (PST)
-Message-ID: <5e313bc5.1c69fb81.4be02.4b1b@mx.google.com>
-Date:   Wed, 29 Jan 2020 00:01:09 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726358AbgA2MPe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jan 2020 07:15:34 -0500
+Received: from frisell.zx2c4.com ([192.95.5.64]:60663 "EHLO frisell.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726256AbgA2MPe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jan 2020 07:15:34 -0500
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTP id 2d4a5f4a;
+        Wed, 29 Jan 2020 12:15:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :from:date:message-id:subject:to:content-type; s=mail; bh=bHEDAC
+        llkomB/iUjyWoesygVpj8=; b=tDU0csZ7/+Q8X+BqhpGDOWRM/LU9VawEj5CMAi
+        0PXYjh01kQ90u4h53BC6ThihbYwc5e/2srX8uIVUxEZC1uCp4Xy0YDdteDbD9Kwn
+        fsYNY9IszTlCKWF15lN2N5ARLG9ZNgLqN63xkAdvLW5+5NFmZDTlbvubhTNlFRcY
+        1FGVxb2rn0T6hGP0obgd3s8jRwc191f7yEwFnOR/18Y2xbmX6QhfB4pJTskcYA3x
+        JH+TZdBxnS4YMxrXbACE7x53T85QhXpsHpnhRYwonO5oSPsG9mDkLDfJMSRUILoq
+        g2rhOgoJUa1ifTRwPXJov5Ll2HWyowXtRRc24WVHP3lUDO/g==
+Received: by frisell.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f27b5d92 (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256:NO);
+        Wed, 29 Jan 2020 12:15:30 +0000 (UTC)
+Received: by mail-ot1-f42.google.com with SMTP id a15so15300601otf.1;
+        Wed, 29 Jan 2020 04:15:31 -0800 (PST)
+X-Gm-Message-State: APjAAAU9LfLcUwgIRHC3e+p/YA6dMZoEo/BGQ2zuRNIB53c3NPE/Adki
+        cjoBmY3JQ++zmDyU8146F/JK6NOhSu6xwysj34I=
+X-Google-Smtp-Source: APXvYqxJypQ1UgGrE8bjJimKMKeAtsELhQjFOTmf0/hm0fKoKjpfT8uV1Ak1niOk5q9jBXlP0X+2ln2EJz4pVUrEQkk=
+X-Received: by 2002:a9d:811:: with SMTP id 17mr20808826oty.369.1580300130876;
+ Wed, 29 Jan 2020 04:15:30 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.5-3974-gf60232fa162d
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 184 boots: 10 failed,
- 172 passed with 2 untried/unknown (v5.5-3974-gf60232fa162d)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 29 Jan 2020 13:15:20 +0100
+X-Gmail-Original-Message-ID: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
+Message-ID: <CAHmME9rProfVf4VGHGX9no3KTa08nL_oYkK8Nv+eknk4ewVMAw@mail.gmail.com>
+Subject: wireguard ci hooked up to quite a few kernel trees
+To:     WireGuard mailing list <wireguard@lists.zx2c4.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 184 boots: 10 failed, 172 passed with 2 untried/un=
-known (v5.5-3974-gf60232fa162d)
+Hi all,
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.5-3974-gf60232fa162d/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.5-3974-gf60232fa162d/
+With the merging of wireguard, I've hooked the project's CI up to
+quite a few trees. We now have:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.5-3974-gf60232fa162d
-Git Commit: f60232fa162dc5f5f83d71775957c24976b144eb
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 66 unique boards, 17 SoC families, 22 builds out of 200
+- net-next
+- net
+- linux-next
+- linux (Linus' tree)
+- wireguard-linux (my tree)
+- wireguard-linux-compat (backports to kernels 3.10 - 5.5)
 
-Boot Regressions Detected:
+When the various pushes and pulls click a few more cranks through the
+machinery, I'll probably add crypto and cryptodev, and eventually
+Greg's stable trees. If anybody has suggestions on other relevant
+trees that might help catch bugs as early as possible, I'm all ears.
 
-arm:
+Right now builds are kicked off for every single commit made to each
+one of these trees, on x86_64, i686, aarch64, aarch64_be, arm, armeb,
+mips64, mips64el, mips, mipsel, powerpc64le, powerpc, and m68k. For
+each of these, a fresh kernel and miniature userland containing the
+test suite is built from source, and then booted in qemu.
 
-    exynos_defconfig:
-        gcc-8:
-          exynos4412-odroidx2:
-              lab-collabora: new failure (last pass: v5.5-rc7-273-g56dd35ec=
-1a09)
+Even though the CI at the moment is focused on the wireguard test
+suite, it has a habit of finding lots of bugs and regressions in other
+weird places. For example, linux-next is failing at the moment on a
+few archs.
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          exynos4412-odroidx2:
-              lab-collabora: new failure (last pass: v5.5-rc7-366-g2e30f8d4=
-8084)
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: v5.5-rc7-366-g2e30f8d4=
-8084)
+I run this locally every day all day while developing kernel things
+too. It's one command to test a full kernel for whatever thing I'm
+working on, and this winds up saving a lot of time in development and
+lets me debug things with printk in the dumbest ways possible while
+still being productive and efficient.
 
-arm64:
+You can view the current build status here:
+https://www.wireguard.com/build-status/
 
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: v5.5-rc7-366-g2e30f8d48084)
-          bcm2837-rpi-3-b:
-              lab-baylibre: new failure (last pass: v5.5-rc7-366-g2e30f8d48=
-084)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: v5.5-rc7-366-g2e30f8d48=
-084)
-          rk3399-gru-kevin:
-              lab-collabora: new failure (last pass: v5.5-rc7-366-g2e30f8d4=
-8084)
+This sort of CI is another take on the kernel CI problem; I know a few
+organizations are doing similar things. I'd be happy to eventually
+expand this into something more general, should there be sufficient
+interest -- probably initially on networking stuff -- or it might turn
+out that this simply inspires something else that is more general and
+robust, which is fine too. Either way, here's my contribution to the
+modicum of kernel CI things happening.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          r8a7795-salvator-x:
-              lab-baylibre: new failure (last pass: v5.5-rc7-366-g2e30f8d48=
-084)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.5-rc7-366-g2e30f8d48=
-084)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            exynos4412-odroidx2: 1 failed lab
-            exynos5422-odroidxu3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos4412-odroidx2: 1 failed lab
-            exynos5422-odroidxu3: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            bcm2837-rpi-3-b: 1 failed lab
-            msm8998-mtp: 1 failed lab
-            rk3399-gru-kevin: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            r8a7795-salvator-x: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+Regards,
+Jason

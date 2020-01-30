@@ -2,77 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5ED14D41D
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2020 00:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CADC714D4B0
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2020 01:31:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726856AbgA2Xzo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Jan 2020 18:55:44 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57089 "EHLO ozlabs.org"
+        id S1726528AbgA3AbP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Jan 2020 19:31:15 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45529 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726648AbgA2Xzo (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Jan 2020 18:55:44 -0500
+        id S1726401AbgA3AbP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Jan 2020 19:31:15 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 487L305zq0z9s29;
-        Thu, 30 Jan 2020 10:55:40 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 487Lr15Sc6z9sRK;
+        Thu, 30 Jan 2020 11:31:13 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580342142;
-        bh=tgC0XCu5sJjdp7keIzOjDIZLm8jl3OfcV5uW9ev8uR0=;
+        s=201702; t=1580344273;
+        bh=UasNzZsdmoKqNzUfwBDjvPcSgD+GAGln/F/xYXps81o=;
         h=Date:From:To:Cc:Subject:From;
-        b=BusKtRyqT/RhUD6liA9jHULVhJpMDSqDRNJa8izS95+sXWZG3FWKz02MOmniw396T
-         OeJc6SvxKouBEBZ5SzoTTgjJLqaQbZMgWPkxG+QZhb2mbGiM12gotglbj+TFzcX3UN
-         Mfvo+LqefxTea5Ks9513xPnRQAGA+qND9o4KRhTuEyUujpFpHBFGXhf6Zp0ipZKMOm
-         a11tkOyX2aa9Lch7qbJ19bCa9gEljRS2ZxR1b57k1M3L7EgoQfFZCHUyK4ASBtJGBi
-         szXeqSRsGqYOq7cTgx5BF9tIMvK3YHYlqIOn96iK+RgGbPE14qXzN8JQti//vgAdPs
-         VdK/g9SbwSThA==
-Date:   Thu, 30 Jan 2020 10:55:38 +1100
+        b=qau+JTU08cJFdWkUIptCsK37f/CFd4NAlRjttvCBkXbtu0xA/fru9yoWjMwHgj6a7
+         beYh76PnWpZ89kn2m+RFG0LfjbViYk8WUgYDd5CrfBzqcQaPGM8Ud0meRYonJm9/Vy
+         Yp8AVNoICa8dpFcoeocRW6y5mQllA7Bc2LviyAM5F9jXErCSCn7qFRyeufNtCUJv+X
+         PbjAcDIxuuyxVsV/aY9qIhQ35M1nkN+JflTI9gVkP7DCd2mluVWHXesWuOVnGM42Ce
+         7kS7wvF7RWRJ394T7uWge08cT+cXxRoMs9HeboOUSN2sn2ISQzQfitsPRYkfyyNEPK
+         XMCD5NV2v+wAg==
+Date:   Thu, 30 Jan 2020 11:31:13 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Samuel Ortiz <sameo@linux.intel.com>
+To:     Paul Mackerras <paulus@ozlabs.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Johannes Berg <johannes@sipsolutions.net>
-Subject: linux-next: the nfc-next tree seems to be old
-Message-ID: <20200130105538.7b07b150@canb.auug.org.au>
+        Bharata B Rao <bharata@linux.ibm.com>
+Subject: linux-next: Fixes tag needs some work in the kvm-ppc tree
+Message-ID: <20200130113113.590049a8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rT9R.nc+iQmvEO+FTdpSqU.";
+Content-Type: multipart/signed; boundary="Sig_/Xu5GMCSQAi5uoDfLLOScfP3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rT9R.nc+iQmvEO+FTdpSqU.
+--Sig_/Xu5GMCSQAi5uoDfLLOScfP3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Samuel,
+Hi all,
 
-I noticed that the nfc-next tree has not changed since June 2018 and
-has been orphaned in May 2019, so am wondering if the commits in it are
-still relevant or should I just remove the tree from linux-next.
+In commit
+
+  e032e3b55b6f ("KVM: PPC: Book3S HV: Release lock on page-out failure path=
+")
+
+Fixes tag
+
+  Fixes: ca9f4942670 ("KVM: PPC: Book3S HV: Support for running secure gues=
+ts")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rT9R.nc+iQmvEO+FTdpSqU.
+--Sig_/Xu5GMCSQAi5uoDfLLOScfP3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4yG3sACgkQAVBC80lX
-0GxP1gf/QLVqOstMt03A5P3vqBe+E7KT8eKT4gKwAz4HyPMrnG3eNpOELmBD1hUi
-aZCY7Fqt2oKoDgIF1GFO9mxs8RuLmqQZiN9r1uKzGGOZdDoQwxncEZrKVCJjI0go
-GL3f+zizKgaTo2nZr7yjrpvfGAaq9bAKlMT0EcQVghCxSE1Ob9lztw/qD6puFNwo
-nrJMogkld3aYucyJDxSaC57xSfLNtUj7zv2B9VwUp06ku6LjbYvWD1ixWi1NW0SY
-0bYDz1IpN4u/KMeCH6Gk5BaT2XsSpvjx5KOIZJwNo6QPDOhEFiN45HJ0Bp5tYk5j
-f0RMVwvuRt98RMASPvi+skJgy4YJjQ==
-=KaQf
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl4yI9EACgkQAVBC80lX
+0GyJcQf+MISFUiMhzEks+ikpdj72fIkC97dYHjTN+yZaaAvl9zcS3vhILNLVJcM+
+JdEM0EbECnsz/WzT6NHx7YMRUSUmry8R5hw/DXQFTIBnlWtHdr/9LkANs+Lpusua
+JcLnDjHPHDFhYE4NLNATSCoQUjrdROUcSdb318O5wdBvDm94JZEKwg6apBhjPtLD
+WbmJOlNfR/Akje6EwT7Y/HiY4afYLnS2cgoAhLt2eP+/5t7MapJMoiR3yxZzEPYX
+wML+Rjr6dfLVqqLnb7Htlx6XcYOBSYRPmyDwfgNMvP2kDj3N3VaxYqsrWmTN4/Y5
+DFW03GM/LIbL8QfSmYoHXlSOH+vM+A==
+=3sm1
 -----END PGP SIGNATURE-----
 
---Sig_/rT9R.nc+iQmvEO+FTdpSqU.--
+--Sig_/Xu5GMCSQAi5uoDfLLOScfP3--

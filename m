@@ -2,230 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A1A14DF0F
-	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2020 17:26:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF22B14E3AE
+	for <lists+linux-next@lfdr.de>; Thu, 30 Jan 2020 21:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727263AbgA3Q0J (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 30 Jan 2020 11:26:09 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:37608 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727241AbgA3Q0J (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jan 2020 11:26:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=+/B0HE6zQa3p2gL4st+HS2DOfpN4KdCnCEoeP4VJIFo=; b=LZWDyaRDVFK+syuICN40rElEC
-        1Yj1lKoUS7e2q4dPB93/dwLIgVJf+pH7Rvj2MftTdNrrjQXIuPWTpA9/w3ATVvLELmaLqooyWOdWq
-        8gkaDUu4xNRq+AzZ+e5fzxmH0Sphe9rOOdL+duuX6FSOfIo6gYG8bQzMRfjafRsWNHTiKkXFLzCO3
-        PDCPi7ZUIZvM7m1ZN2fGwt3O0Hiqht5HWt8bEqsnD28QQmD1TATBNGC2go4wLQyU25YTVC+ybUs64
-        4R/4RssO4UvkpleSCUqtZJnwtCVuzpVNx7Fotq/ISHx7GQPDvl6+tsqNUGcHEfWEclqPLOsOdW5y4
-        OtFUvezVg==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ixCdp-0002Wz-8Q; Thu, 30 Jan 2020 16:26:05 +0000
-Subject: Re: [PATCH rdma-rc] RDMA/mlx5: Fix compilation breakage without
- INFINIBAND_USER_ACCESS
-To:     Jason Gunthorpe <jgg@mellanox.com>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Doug Ledford <dledford@redhat.com>,
-        Leon Romanovsky <leonro@mellanox.com>,
-        RDMA mailing list <linux-rdma@vger.kernel.org>,
-        Yishai Hadas <yishaih@mellanox.com>,
+        id S1727554AbgA3UIR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Jan 2020 15:08:17 -0500
+Received: from relay4-d.mail.gandi.net ([217.70.183.196]:48449 "EHLO
+        relay4-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726267AbgA3UIR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 30 Jan 2020 15:08:17 -0500
+X-Originating-IP: 79.86.19.127
+Received: from [192.168.0.12] (127.19.86.79.rev.sfr.net [79.86.19.127])
+        (Authenticated sender: alex@ghiti.fr)
+        by relay4-d.mail.gandi.net (Postfix) with ESMTPSA id EC913E0008;
+        Thu, 30 Jan 2020 20:08:10 +0000 (UTC)
+Subject: Re: [PATCH v2] powerpc: Do not consider weak unresolved symbol
+ relocations as bad
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20200130112957.337869-1-leon@kernel.org>
- <20200130153426.GF21192@mellanox.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <b619c5ca-dac0-cb02-21a3-68dfeb59cd1d@infradead.org>
-Date:   Thu, 30 Jan 2020 08:26:03 -0800
+        Alexei Starovoitov <ast@kernel.org>,
+        linux-next@vger.kernel.org, Zong Li <zong.li@sifive.com>,
+        Palmer Dabbelt <palmerdabbelt@google.com>
+References: <20200118170335.21440-1-alex@ghiti.fr>
+From:   Alex Ghiti <alex@ghiti.fr>
+Message-ID: <8a8d45c6-4ad2-c682-abfb-3d97188d0d45@ghiti.fr>
+Date:   Thu, 30 Jan 2020 15:07:10 -0500
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-In-Reply-To: <20200130153426.GF21192@mellanox.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200118170335.21440-1-alex@ghiti.fr>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 1/30/20 7:34 AM, Jason Gunthorpe wrote:
-> On Thu, Jan 30, 2020 at 01:29:57PM +0200, Leon Romanovsky wrote:
->> From: Leon Romanovsky <leonro@mellanox.com>
->>
->> Compilation of mlx5 driver without CONFIG_INFINIBAND_USER_ACCESS generates
->> the following error.
->>
->> on x86_64:
->>
->> ld: drivers/infiniband/hw/mlx5/main.o: in function `mlx5_ib_handler_MLX5_IB_METHOD_VAR_OBJ_ALLOC':
->> main.c:(.text+0x186d): undefined reference to `ib_uverbs_get_ucontext_file'
->> ld: drivers/infiniband/hw/mlx5/main.o:(.rodata+0x2480): undefined reference to `uverbs_idr_class'
->> ld: drivers/infiniband/hw/mlx5/main.o:(.rodata+0x24d8): undefined reference to `uverbs_destroy_def_handler'
->>
->> Guard the problematic code, so VAR objects API won't be compiled without CONFIG_INFINIBAND_USER_ACCESS.
->>
->> Fixes: 7be76bef320b ("IB/mlx5: Introduce VAR object and its alloc/destroy methods")
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->> Signed-off-by: Leon Romanovsky <leonro@mellanox.com>
->>  drivers/infiniband/hw/mlx5/main.c | 22 +++++++++++++---------
->>  1 file changed, 13 insertions(+), 9 deletions(-)
-> 
-> Hurm. This is actually a side effect of some other code that needs to
-> be deleted.. We can now make all the generated structs static and rely
-> on compiler pruning to sort this out.
-> 
-> So this:
-> 
->         if (IS_ENABLED(CONFIG_INFINIBAND_USER_ACCESS))
->                 dev->ib_dev.driver_def = mlx5_ib_defs;
-> 
-> Will cause the compiler to drop the entire tree of stuff, above
-> references inclded.
-> 
-> See below:
-> 
-> From fb22c0daf5fac6fd5e014e691f7c92421d848330 Mon Sep 17 00:00:00 2001
-> From: Jason Gunthorpe <jgg@mellanox.com>
-> Date: Thu, 30 Jan 2020 11:21:21 -0400
-> Subject: [PATCH] RDMA/core: Make the entire API tree static
-> 
-> Compilation of mlx5 driver without CONFIG_INFINIBAND_USER_ACCESS generates
-> the following error.
-> 
-> on x86_64:
-> 
->  ld: drivers/infiniband/hw/mlx5/main.o: in function `mlx5_ib_handler_MLX5_IB_METHOD_VAR_OBJ_ALLOC':
->  main.c:(.text+0x186d): undefined reference to `ib_uverbs_get_ucontext_file'
->  ld: drivers/infiniband/hw/mlx5/main.o:(.rodata+0x2480): undefined reference to `uverbs_idr_class'
->  ld: drivers/infiniband/hw/mlx5/main.o:(.rodata+0x24d8): undefined reference to `uverbs_destroy_def_handler'
-> 
-> This is happening because some parts of the UAPI description are not
-> static. This is a hold over from earlier code that relied on struct
-> pointers to refer to object types, now object types are referenced by
-> number. Remove the unused globals and add statics to the remaining UAPI
-> description elements.
-> 
-> Remove the redundent #ifdefs around mlx5_ib_*defs and obsolete
-> mlx5_ib_get_devx_tree().
-> 
-> The compiler now trims alot more unused code, including the above
-> problematic definitions when !CONFIG_INFINIBAND_USER_ACCESS.
-> 
-> Fixes: 7be76bef320b ("IB/mlx5: Introduce VAR object and its alloc/destroy methods")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Jason Gunthorpe <jgg@mellanox.com>
-
-Yes, that works also.  Thanks.
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
-
-
+On 1/18/20 12:03 PM, Alexandre Ghiti wrote:
+> Commit 8580ac9404f6 ("bpf: Process in-kernel BTF") introduced two weak
+> symbols that may be unresolved at link time which result in an absolute
+> relocation to 0. relocs_check.sh emits the following warning:
+>
+> "WARNING: 2 bad relocations
+> c000000001a41478 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_start
+> c000000001a41480 R_PPC64_ADDR64    _binary__btf_vmlinux_bin_end"
+>
+> whereas those relocations are legitimate even for a relocatable kernel
+> compiled with -pie option.
+>
+> relocs_check.sh already excluded some weak unresolved symbols explicitly:
+> remove those hardcoded symbols and add some logic that parses the symbols
+> using nm, retrieves all the weak unresolved symbols and excludes those from
+> the list of the potential bad relocations.
+>
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Alexandre Ghiti <alex@ghiti.fr>
 > ---
->  drivers/infiniband/core/uverbs.h     | 17 -----------------
->  drivers/infiniband/hw/mlx5/main.c    |  2 --
->  drivers/infiniband/hw/mlx5/mlx5_ib.h |  6 +++---
->  include/rdma/uverbs_named_ioctl.h    |  6 +++---
->  4 files changed, 6 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/infiniband/core/uverbs.h b/drivers/infiniband/core/uverbs.h
-> index 4d4cec46d25132..7df71983212d6f 100644
-> --- a/drivers/infiniband/core/uverbs.h
-> +++ b/drivers/infiniband/core/uverbs.h
-> @@ -271,23 +271,6 @@ int ib_uverbs_kern_spec_to_ib_spec_filter(enum ib_flow_spec_type type,
->  					  size_t kern_filter_sz,
->  					  union ib_flow_spec *ib_spec);
->  
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_DEVICE);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_PD);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_MR);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_COMP_CHANNEL);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_CQ);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_QP);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_AH);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_MW);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_SRQ);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_FLOW);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_WQ);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_RWQ_IND_TBL);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_XRCD);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_FLOW_ACTION);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_DM);
-> -extern const struct uverbs_object_def UVERBS_OBJECT(UVERBS_OBJECT_COUNTERS);
-> -
->  /*
->   * ib_uverbs_query_port_resp.port_cap_flags started out as just a copy of the
->   * PortInfo CapabilityMask, but was extended with unique bits.
-> diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
-> index 01fc09f3ddd3f9..0ca9581432808c 100644
-> --- a/drivers/infiniband/hw/mlx5/main.c
-> +++ b/drivers/infiniband/hw/mlx5/main.c
-> @@ -6247,10 +6247,8 @@ ADD_UVERBS_ATTRIBUTES_SIMPLE(
->  			     enum mlx5_ib_uapi_flow_action_flags));
->  
->  static const struct uapi_definition mlx5_ib_defs[] = {
-> -#if IS_ENABLED(CONFIG_INFINIBAND_USER_ACCESS)
->  	UAPI_DEF_CHAIN(mlx5_ib_devx_defs),
->  	UAPI_DEF_CHAIN(mlx5_ib_flow_defs),
-> -#endif
->  
->  	UAPI_DEF_CHAIN_OBJ_TREE(UVERBS_OBJECT_FLOW_ACTION,
->  				&mlx5_ib_flow_action),
-> diff --git a/drivers/infiniband/hw/mlx5/mlx5_ib.h b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> index 7b019bd4de4b2b..c160a43d77f0fd 100644
-> --- a/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> +++ b/drivers/infiniband/hw/mlx5/mlx5_ib.h
-> @@ -1379,14 +1379,14 @@ int mlx5_ib_fill_res_entry(struct sk_buff *msg,
->  int mlx5_ib_fill_stat_entry(struct sk_buff *msg,
->  			    struct rdma_restrack_entry *res);
->  
-> +extern const struct uapi_definition mlx5_ib_devx_defs[];
-> +extern const struct uapi_definition mlx5_ib_flow_defs[];
+>
+> Changes in v2:
+> - Follow Stephen advice of using grep -F instead of looping over weak symbols
+>    using read, patch is way smaller and cleaner.
+> - Add missing nm in comment
+>
+>   arch/powerpc/Makefile.postlink     |  4 ++--
+>   arch/powerpc/tools/relocs_check.sh | 20 ++++++++++++--------
+>   2 files changed, 14 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/powerpc/Makefile.postlink b/arch/powerpc/Makefile.postlink
+> index 134f12f89b92..2268396ff4bb 100644
+> --- a/arch/powerpc/Makefile.postlink
+> +++ b/arch/powerpc/Makefile.postlink
+> @@ -17,11 +17,11 @@ quiet_cmd_head_check = CHKHEAD $@
+>   quiet_cmd_relocs_check = CHKREL  $@
+>   ifdef CONFIG_PPC_BOOK3S_64
+>         cmd_relocs_check =						\
+> -	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$@" ; \
+> +	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@" ; \
+>   	$(BASH) $(srctree)/arch/powerpc/tools/unrel_branch_check.sh "$(OBJDUMP)" "$@"
+>   else
+>         cmd_relocs_check =						\
+> -	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$@"
+> +	$(CONFIG_SHELL) $(srctree)/arch/powerpc/tools/relocs_check.sh "$(OBJDUMP)" "$(NM)" "$@"
+>   endif
+>   
+>   # `@true` prevents complaint when there is nothing to be done
+> diff --git a/arch/powerpc/tools/relocs_check.sh b/arch/powerpc/tools/relocs_check.sh
+> index 7b9fe0a567cf..014e00e74d2b 100755
+> --- a/arch/powerpc/tools/relocs_check.sh
+> +++ b/arch/powerpc/tools/relocs_check.sh
+> @@ -10,14 +10,21 @@
+>   # based on relocs_check.pl
+>   # Copyright © 2009 IBM Corporation
+>   
+> -if [ $# -lt 2 ]; then
+> -	echo "$0 [path to objdump] [path to vmlinux]" 1>&2
+> +if [ $# -lt 3 ]; then
+> +	echo "$0 [path to objdump] [path to nm] [path to vmlinux]" 1>&2
+>   	exit 1
+>   fi
+>   
+> -# Have Kbuild supply the path to objdump so we handle cross compilation.
+> +# Have Kbuild supply the path to objdump and nm so we handle cross compilation.
+>   objdump="$1"
+> -vmlinux="$2"
+> +nm="$2"
+> +vmlinux="$3"
 > +
->  #if IS_ENABLED(CONFIG_INFINIBAND_USER_ACCESS)
->  int mlx5_ib_devx_create(struct mlx5_ib_dev *dev, bool is_user);
->  void mlx5_ib_devx_destroy(struct mlx5_ib_dev *dev, u16 uid);
->  void mlx5_ib_devx_init_event_table(struct mlx5_ib_dev *dev);
->  void mlx5_ib_devx_cleanup_event_table(struct mlx5_ib_dev *dev);
-> -const struct uverbs_object_tree_def *mlx5_ib_get_devx_tree(void);
-> -extern const struct uapi_definition mlx5_ib_devx_defs[];
-> -extern const struct uapi_definition mlx5_ib_flow_defs[];
->  struct mlx5_ib_flow_handler *mlx5_ib_raw_fs_rule_add(
->  	struct mlx5_ib_dev *dev, struct mlx5_ib_flow_matcher *fs_matcher,
->  	struct mlx5_flow_context *flow_context,
-> diff --git a/include/rdma/uverbs_named_ioctl.h b/include/rdma/uverbs_named_ioctl.h
-> index 3447bfe356d6ea..6ae6cf8e4c2e13 100644
-> --- a/include/rdma/uverbs_named_ioctl.h
-> +++ b/include/rdma/uverbs_named_ioctl.h
-> @@ -76,7 +76,7 @@
->  #define DECLARE_UVERBS_NAMED_OBJECT(_object_id, _type_attrs, ...)              \
->  	static const struct uverbs_method_def *const UVERBS_OBJECT_METHODS(    \
->  		_object_id)[] = { __VA_ARGS__ };                               \
-> -	const struct uverbs_object_def UVERBS_OBJECT(_object_id) = {           \
-> +	static const struct uverbs_object_def UVERBS_OBJECT(_object_id) = {    \
->  		.id = _object_id,                                              \
->  		.type_attrs = &_type_attrs,                                    \
->  		.num_methods = ARRAY_SIZE(UVERBS_OBJECT_METHODS(_object_id)),  \
-> @@ -88,10 +88,10 @@
->   * identify all uapi methods with a (object,method) tuple. However, they have
->   * no type pointer.
->   */
-> -#define DECLARE_UVERBS_GLOBAL_METHODS(_object_id, ...)	\
-> +#define DECLARE_UVERBS_GLOBAL_METHODS(_object_id, ...)                         \
->  	static const struct uverbs_method_def *const UVERBS_OBJECT_METHODS(    \
->  		_object_id)[] = { __VA_ARGS__ };                               \
-> -	const struct uverbs_object_def UVERBS_OBJECT(_object_id) = {           \
-> +	static const struct uverbs_object_def UVERBS_OBJECT(_object_id) = {    \
->  		.id = _object_id,                                              \
->  		.num_methods = ARRAY_SIZE(UVERBS_OBJECT_METHODS(_object_id)),  \
->  		.methods = &UVERBS_OBJECT_METHODS(_object_id)                  \
-> 
+> +# Remove from the bad relocations those that match an undefined weak symbol
+> +# which will result in an absolute relocation to 0.
+> +# Weak unresolved symbols are of that form in nm output:
+> +# "                  w _binary__btf_vmlinux_bin_end"
+> +undef_weak_symbols=$($nm "$vmlinux" | awk '$1 ~ /w/ { print $2 }')
+>   
+>   bad_relocs=$(
+>   $objdump -R "$vmlinux" |
+> @@ -26,8 +33,6 @@ $objdump -R "$vmlinux" |
+>   	# These relocations are okay
+>   	# On PPC64:
+>   	#	R_PPC64_RELATIVE, R_PPC64_NONE
+> -	#	R_PPC64_ADDR64 mach_<name>
+> -	#	R_PPC64_ADDR64 __crc_<name>
+>   	# On PPC:
+>   	#	R_PPC_RELATIVE, R_PPC_ADDR16_HI,
+>   	#	R_PPC_ADDR16_HA,R_PPC_ADDR16_LO,
+> @@ -39,8 +44,7 @@ R_PPC_ADDR16_HI
+>   R_PPC_ADDR16_HA
+>   R_PPC_RELATIVE
+>   R_PPC_NONE' |
+> -	grep -E -v '\<R_PPC64_ADDR64[[:space:]]+mach_' |
+> -	grep -E -v '\<R_PPC64_ADDR64[[:space:]]+__crc_'
+> +	([ "$undef_weak_symbols" ] && grep -F -w -v "$undef_weak_symbols" || cat)
+>   )
+>   
+>   if [ -z "$bad_relocs" ]; then
 
 
--- 
-~Randy
+Hi guys,
+
+
+Any thought about that ?
+
+I do think this patch makes the whole check about absolute relocations 
+clearer.
+And in the future, it will avoid anyone to spend some time on those 
+"bad" relocations
+which actually aren't.
+
+Thanks,
+
+Alex
 

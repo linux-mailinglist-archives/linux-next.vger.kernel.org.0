@@ -2,67 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BEAE714F15C
-	for <lists+linux-next@lfdr.de>; Fri, 31 Jan 2020 18:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765BB14F56D
+	for <lists+linux-next@lfdr.de>; Sat,  1 Feb 2020 01:32:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726869AbgAaRf1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 31 Jan 2020 12:35:27 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:35262 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726912AbgAaRf1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 31 Jan 2020 12:35:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580492126;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=a+dgvjmZL1Am8SwTNXtC3xi/4UF0VAsvDkpYJZdr/1w=;
-        b=ICNfGwLe+/uNXjSxCO8nsSR8QS8ybRNixtDR8J+/LendKec5aOkEJCRvUwUoLxgfEZX5Iw
-        XBGlgGqP1L1pd112uaA/qaWwVQWrX/SdPDEAtygwC1AbDaYpreNk9WF3+oMGlrHEotPu1d
-        mtiwfXWP2ReHuD/g1qC97oWYUPLx674=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-44-zBt8VshqNJmmOhFbxUnxBw-1; Fri, 31 Jan 2020 12:35:13 -0500
-X-MC-Unique: zBt8VshqNJmmOhFbxUnxBw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B480A8017CC;
-        Fri, 31 Jan 2020 17:35:11 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-120-218.rdu2.redhat.com [10.10.120.218])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 28F8160BE0;
-        Fri, 31 Jan 2020 17:35:10 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <3ac1c817-b310-c8f8-6990-1602db540106@schaufler-ca.com>
-References: <3ac1c817-b310-c8f8-6990-1602db540106@schaufler-ca.com> <20200129155431.76bd7f25@canb.auug.org.au> <e66a563e-b612-c5b6-7bdd-b55113a9b822@infradead.org>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     dhowells@redhat.com, Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726322AbgBAAcb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 31 Jan 2020 19:32:31 -0500
+Received: from fieldses.org ([173.255.197.46]:57216 "EHLO fieldses.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726264AbgBAAcb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 31 Jan 2020 19:32:31 -0500
+Received: by fieldses.org (Postfix, from userid 2815)
+        id A22E12012; Fri, 31 Jan 2020 19:32:30 -0500 (EST)
+Date:   Fri, 31 Jan 2020 19:32:30 -0500
+From:   "J. Bruce Fields" <bfields@fieldses.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-security-module <linux-security-module@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jan 29 (security/smack/)
+        Roberto Bergantinos Corpas <rbergant@redhat.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200201003230.GA32350@fieldses.org>
+References: <20200131141309.367c9d8b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <266824.1580492109.1@warthog.procyon.org.uk>
-Date:   Fri, 31 Jan 2020 17:35:09 +0000
-Message-ID: <266825.1580492109@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200131141309.367c9d8b@canb.auug.org.au>
+User-Agent: Mutt/1.5.21 (2010-09-15)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Casey Schaufler <casey@schaufler-ca.com> wrote:
+On Fri, Jan 31, 2020 at 02:13:09PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+> 
+> net/sunrpc/auth_gss/svcauth_gss.c: In function 'gss_proxy_save_rsc':
+> net/sunrpc/auth_gss/svcauth_gss.c:1251:19: error: storage size of 'boot' isn't known
+>  1251 |   struct timespec boot;
+>       |                   ^~~~
+> net/sunrpc/auth_gss/svcauth_gss.c:1273:3: error: implicit declaration of function 'getboottime'; did you mean 'getboottime64'? [-Werror=implicit-function-declaration]
+>  1273 |   getboottime(&boot);
+>       |   ^~~~~~~~~~~
+>       |   getboottime64
+> net/sunrpc/auth_gss/svcauth_gss.c:1251:19: warning: unused variable 'boot' [-Wunused-variable]
+>  1251 |   struct timespec boot;
+>       |                   ^~~~
+> 
+> Caused by commit
+> 
+>   a415f20a18c9 ("sunrpc: expiry_time should be seconds not timeval")
+> 
+> from the nfsd tree interacting with commits
+> 
+>   de371b6c7b73 ("y2038: remove unused time32 interfaces")
+>   aa7ff200a719 ("y2038: hide timeval/timespec/itimerval/itimerspec types")
+> 
+> from the akpm-current tree.
+> 
+> I have reverted the nfsd commit for today.  A better solution is requested.
 
-> This keeps coming up. It's in David Howells' watch queue changes.
-> David, could you please fix this?
+Unfortunately that expiry time seems to be a signed 32-bit integer in
+both the kernel<->gss-proxy and the gss-proxy<->krb5 interfaces.
 
-That should be fixed now in my keys-next branch.
+I guess we'll have to come to an agreement with the krb5 developers.
 
-David
+Simplest might be to agree that the thing's unsigned.  The expiry
+shouldn't ever need to be decades in the future, so unsigned mod 2^32
+arithmetic should work forever.
 
+--b.

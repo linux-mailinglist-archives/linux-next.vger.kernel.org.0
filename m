@@ -2,112 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 012CA14F720
-	for <lists+linux-next@lfdr.de>; Sat,  1 Feb 2020 08:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5618D14F8F6
+	for <lists+linux-next@lfdr.de>; Sat,  1 Feb 2020 17:37:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726133AbgBAHyU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 1 Feb 2020 02:54:20 -0500
-Received: from mout.kundenserver.de ([217.72.192.75]:60447 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726121AbgBAHyU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Feb 2020 02:54:20 -0500
-Received: from mail-qk1-f182.google.com ([209.85.222.182]) by
- mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1MaIGB-1j0s9f1OCr-00WDRn; Sat, 01 Feb 2020 08:54:18 +0100
-Received: by mail-qk1-f182.google.com with SMTP id x1so9033590qkl.12;
-        Fri, 31 Jan 2020 23:54:18 -0800 (PST)
-X-Gm-Message-State: APjAAAUCkr2U/V42J2Uw4zDUgQYClOJ80jBHIySkWZsOkaqLIsrnkPlZ
-        R1lTiLsQSh1iucH0wDKDc4vO5kH09MINDr2Ets0=
-X-Google-Smtp-Source: APXvYqyNQnpxEBtv4vRLe1sVwoTOmRvI7Or42gQvFykFz8mdLXAwXfpEfrCQZJZ73WNx9A4iV5Bp5Af5CouWgkX9434=
-X-Received: by 2002:a05:620a:218d:: with SMTP id g13mr14826914qka.286.1580543657085;
- Fri, 31 Jan 2020 23:54:17 -0800 (PST)
+        id S1726669AbgBAQhg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 1 Feb 2020 11:37:36 -0500
+Received: from sonic317-15.consmr.mail.ne1.yahoo.com ([66.163.184.234]:35058
+        "EHLO sonic317-15.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726947AbgBAQhf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 1 Feb 2020 11:37:35 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1580575054; bh=VxFSqOLnoyhxZXWK73TPGK3hr8yutZ4yWmLQa/jSY/I=; h=Date:From:Reply-To:Subject:References:From:Subject; b=LKbtbCUY9lPYKVVGwnv9pW1f0Pq0MOXz1+mSiFCmfevuBUYrMhnAD5uOeKCUqt9sPriBYiHxo8PWRcFrarsbedItg4+REkgrwrKHK3GlL5PF8xcyAMBChQ4oWoPheqN/AAp3PAfbXk8ziFbN3cOG4HkbEd8Kb2mJZr4TAN4fc/9dCbg/TP5QdUOoTZFATw4fM9zw7FJREa/zwpPepvLWDSezNns2ipU5/tZvNe4yL9jLc3PkfAFRRx+DC9GpyYI6P25LLddPpWFXH7DR0DrcXiYe30vG/yjSwJG6SvLOoXjiYVCZVTi3IcPQfuKr/UCexQn/zzNUNyZ/p2bpug/brg==
+X-YMail-OSG: wkjFVJgVM1k3gPCl9FrsaMGmGCDMeRyqdBC1V6sL1fEukM1Eawu7VpR3g7QcT1e
+ S2qavHjPRF6QxhxLrCP2R..wfVX_al8I6wD7ew3EJ03Vd.K1KTEHh4pMk5lOYXO0Yyh4YWPEEwxg
+ Jp2geZ6mow8zLAyLLG.3R_VjaJHXb71ACLJnM1w9EKVY_3lWLVb6bvOpvHDCCqum9sAuE79ZBQ3_
+ oWsHfrpqjtnuR4uO3J5_MC5tNmpnO8xJXpYJs15nukqs79zk2CstAQYCDOc.F.bScSwBbG5aFObY
+ 2J6a1kc623GyJ4cjSfrPdNU1CNGDGuPd.7tBk7ulwPNvwxmcLCxnlu3_3hoACljrBdnpcLAlbGKb
+ ruozrrF_Rbujc1cQYoxpYDEptr5E9xx.jflcmAPaMJ4AawXc_ro2puczw.eaXkFtIsNDFaNmynLo
+ 6kN8ddvXkxFpxl0wfci_LtJIsf83Ua4x42mAou_b5W8w60LTAvocOjfBFg3xvV9qBl3rwbRQwlz3
+ tHOt.qq2kmBleFDvvB_2va7RJrgiWfZxFOlXKVsdSpz4vdqbgB6tHIlpB0iBTIUq94cf0h5EDxrS
+ yWArjOlqFeW8n17OV0fVOUhRRNpC5IjEpZoK_7SH6LCEMKN_IVCZJow4h1IsSnKCtKe_SpGdgX4C
+ VAbui_2IKylM3MPPm7vtynSFBwStm7aSZa11XQXCdlKnCw2o5s5fSnSgmogAf5oKt7Kz_1sKYXVY
+ c1VHNX3XstIeMtLzv2UzZgHwFD9fSB..dEJ1PGFNN0_8Rbj6UotcRKml.aJw1F1aYQFKpygGJrlm
+ IDMFU0if6SLL9bU8vgXXKEBYaF7_ZoLzl0XzhQXQnaI94ShxdwSG3ATGBORNDdecbpcWgHYj8MKW
+ g9aaejafd9g3lRhDPWW5on_a2l6SyEzma2E5DAX4WhO15Z36BKBau_m_FNQLkptwBaNH6UJAmESE
+ yCZDIsJZFaoFazgjo_R5mJSkem9muweqAn_teUymPV9duWE1ybme6hjFyXYFXx8ke5wJCpAIun._
+ l0jkWsXLDcc2DNLLAowaevZ4v8W.UYgIYUB19UMo0R5ENw9H9UHzGaGXRoqSYJeeVQtGc08kE.7w
+ eP1M5jF1uNUTsu20d9AnW_14kWLImlhYSJPOfsp0C70STYQoAGo2ricwGvbt_dHbTMnM1Q4d0Wdd
+ SkF_Otn.EkZeRJ8F7dyvl8egxsTrywkb6tip53g1xub6Ms5_pNC1NTixcSV8oxuk9FUWf5tWxrk6
+ s9FjlEeY7Tdwf8HgGRBZ0UwmdMVzaJ_ugSsuNYUGzRkQkHC7LD4wVid0.GPD7mfwkc_CQb0wqpAr
+ Msmd5MvXAj9LqZw.eohfKYG0iNbotMheO8852
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic317.consmr.mail.ne1.yahoo.com with HTTP; Sat, 1 Feb 2020 16:37:34 +0000
+Date:   Sat, 1 Feb 2020 16:35:33 +0000 (UTC)
+From:   "Mrs. Maureen Hinckley" <zz14@gczao.com>
+Reply-To: maurhinck6@gmail.com
+Message-ID: <553755720.261268.1580574933325@mail.yahoo.com>
+Subject: 
 MIME-Version: 1.0
-References: <20200131141309.367c9d8b@canb.auug.org.au> <20200201003230.GA32350@fieldses.org>
-In-Reply-To: <20200201003230.GA32350@fieldses.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Sat, 1 Feb 2020 08:54:01 +0100
-X-Gmail-Original-Message-ID: <CAK8P3a2sWmeATCC67g+dr0qbBschztNuj8ATewdSay6Na13ARg@mail.gmail.com>
-Message-ID: <CAK8P3a2sWmeATCC67g+dr0qbBschztNuj8ATewdSay6Na13ARg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Roberto Bergantinos Corpas <rbergant@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:97sbIK9+56zG/Pl/3nTMcsLgxkzt6oinf5xBBeBY+HzhdFjjuds
- T10A21WB/wpUf/dee7ImGAUxbZU0n5dF7ojV770RRHEldaeSjKtnbi0bpqmr+XOkn2Mt+8w
- SJdyvA+DmFxkg82uGdq+o1QnD860OQyGlfxhe1hMjxeqjpaZQzIV3CT8az0IDJnj82IP4BR
- dLwFaiINd3Nda61nq88zA==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:+eeKMtLniI0=:Hd+kkX9vn+/f9dYOSwIIZY
- g8tkEdQM09OKSu12hduKGNkK6+Wbv3BV9UZFwrynpxosHQVtu4W89QF2CcSGp82ZIFKvZE6IM
- sqICGz9HGD7FDuQ7LrqM7uuVUbaOwTWdtS2zyKXsBSAmJ0IZSRNbnejpcaP9cpIG/UQN4afs+
- mx2oAFQhYhc1LCg88KuoWTiRYKutrqDFU0HFfNEeCOBiZl+J6scgUQhwwc/bcHKIvxTXY8zYu
- rNjldBBSPb17OHO6RxV61Da5UffgqTF197DG/KOUOOSil/ISwCVURMv8ZQ+mdJMDzmGGvXM76
- D9Cxk8/Ueijx3P4oDs7ad4f/B8Rx0pZ+wAm09cK/1AGyJ5a5A6n7FcwOovGWaLpBqn9TSNhf4
- k+W4V9m28EB0kpT/iauA3hpmkeXIZWW1lcuWYEhmRqgLGFHNoa+WQCs344DZ8BzNSgV61afOD
- 677S3RkunFcY4FlWFobdq4jD9ya6I/rKx4QgNrtuOfwxIdkB2H/J/+mY1gi9mPzxCAic485xq
- J2TIiP+6PENVHa+LEQAf2D0E3vPlgA35gVT4TWUNRfvC+8OwP7bx5/Y0yqt/fnMlul2ku1jt1
- gdls5SXhRJI/y91pNdANsEoumH9do3dmSU8MN7asn/CD5Ezm11/axYTpBs4PcdeDU0pOXc0dj
- GrhH8awS3ObjXhyhTuNa8WCVF2wukbD0u9CXqaJxJmrNEvWsC1AQ7GTTuo5fq7Ccxq4+lTTXP
- scCoQaTfv58JJbu+YxNiPevVWPcRSfFQ1fnO1ynOJ738EFJQl8XtHy3lW/7BEDnhG1CdO3t/j
- lSa9Bz6kENLruAalNLqJt/EC8XBJQgAAdJuNNbaMJvbo/gjzX8=
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <553755720.261268.1580574933325.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15149 YMailNodin Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36 OPR/66.0.3515.44
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Feb 1, 2020 at 1:32 AM J. Bruce Fields <bfields@fieldses.org> wrote:
->
-> On Fri, Jan 31, 2020 at 02:13:09PM +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the akpm-current tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >
-> > net/sunrpc/auth_gss/svcauth_gss.c: In function 'gss_proxy_save_rsc':
-> > net/sunrpc/auth_gss/svcauth_gss.c:1251:19: error: storage size of 'boot' isn't known
-> >  1251 |   struct timespec boot;
-> >       |                   ^~~~
-> > net/sunrpc/auth_gss/svcauth_gss.c:1273:3: error: implicit declaration of function 'getboottime'; did you mean 'getboottime64'? [-Werror=implicit-function-declaration]
-> >  1273 |   getboottime(&boot);
-> >       |   ^~~~~~~~~~~
-> >       |   getboottime64
-> > net/sunrpc/auth_gss/svcauth_gss.c:1251:19: warning: unused variable 'boot' [-Wunused-variable]
-> >  1251 |   struct timespec boot;
-> >       |                   ^~~~
-> >
-> > Caused by commit
-> >
-> >   a415f20a18c9 ("sunrpc: expiry_time should be seconds not timeval")
 
-This commit uses the now-removed 'struct timespec' type and 'getboottime()'
-function, so to fix the compilation error, the 64-bit replacements need to e
-used as described in Documentation/core-api/timekeeping.rst
 
-> > from the nfsd tree interacting with commits
-> >
-> >   de371b6c7b73 ("y2038: remove unused time32 interfaces")
-> >   aa7ff200a719 ("y2038: hide timeval/timespec/itimerval/itimerspec types")
-> >
-> > from the akpm-current tree.
-> >
-> > I have reverted the nfsd commit for today.  A better solution is requested.
->
-> Unfortunately that expiry time seems to be a signed 32-bit integer in
-> both the kernel<->gss-proxy and the gss-proxy<->krb5 interfaces.
->
-> I guess we'll have to come to an agreement with the krb5 developers.
->
-> Simplest might be to agree that the thing's unsigned.  The expiry
-> shouldn't ever need to be decades in the future, so unsigned mod 2^32
-> arithmetic should work forever.
+I am Maureen Hinckley and my foundation is donating (Five hundred and fifty=
+ thousand USD) to you. Contact us via my email at (maurhinck6@gmail.com) fo=
+r further details.
 
-Can you be more specific which interface you are referring to?
-My change to gss_import_v1_context() is now part of mainline
-as of 294ec5b87a8a ("sunrpc: convert to time64_t for expiry"),
-is anything else needed there?
-
-       Arnd
+Best Regards,
+Mrs. Maureen Hinckley,
+Copyright =C2=A92020 The Maureen Hinckley Foundation All Rights Reserved.

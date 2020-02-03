@@ -2,123 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BB5150830
-	for <lists+linux-next@lfdr.de>; Mon,  3 Feb 2020 15:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18DC5150DD2
+	for <lists+linux-next@lfdr.de>; Mon,  3 Feb 2020 17:47:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbgBCOQr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Feb 2020 09:16:47 -0500
-Received: from mail-lf1-f43.google.com ([209.85.167.43]:42591 "EHLO
-        mail-lf1-f43.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728074AbgBCOQr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Feb 2020 09:16:47 -0500
-Received: by mail-lf1-f43.google.com with SMTP id y19so9804649lfl.9
-        for <linux-next@vger.kernel.org>; Mon, 03 Feb 2020 06:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=s8HN/ssfW3RrGfj5iOn18Wtg7GOj1L1nchbFe0O3XtE=;
-        b=xxf3hbaWq7V1P+it5KB8wcbCcFCotmfcg+NAH0x6Wy9SdhEhFcv6ono0niHnd6HLqY
-         jnVyLBB4qRwClW/4Ie2u8LE98KmeCtBHnnwq4r99g6PlSmPm/VaBN/ABAedO56zGjqOb
-         vUzERbQOxjASHgg/8lb6bL+g//KeqtgJL8yP9388ySSB47cXviHzJaUoOOjoVUbZjdRg
-         rR1bMwrB7lL3+akdmFdBeSMRxcWW9AYyAKqmmJyrfx90V3gl7/0E0dxJChgy6h3pSyLR
-         8d0MasMk7SKLpwRN9Vq+su0okTJG/hVqThERV2IKhz1x9VEMI4xCPayMeDuk7IUw8xli
-         IGxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=s8HN/ssfW3RrGfj5iOn18Wtg7GOj1L1nchbFe0O3XtE=;
-        b=B+jzbv1whea6P9J1ehxsrktEPXQ+vJhHvmcpxGB1Ii3C55uU6LolbJSw0bL84+Agc9
-         hMW+EOXWcFVsZPfZ8w9ncgi50mcEP2+JTXf8BZxFyUeX8e9mRbZaLm42dt9ng86c7gtZ
-         aXLONb+snUPgr7IoPJ/nSTH69K2bNABDwOuOydGRkJKlCbFxXdGrMROgYnCoKtXnmeZ3
-         L4GbNYT8sV5fT4STxkzAlw8joxYbp6F32u7dNw5PKkxVjmNYRSNl1pXhUbY0slOhc4vT
-         Ubbz1jNJcqRG2ThIe7CkwYKN7pHELoUU8LZ3CSxggZmsFoCIQOF1JhyC4K7pirMJuqen
-         SA7g==
-X-Gm-Message-State: APjAAAVoISHl1qZitLtTudOjwotjQ62heW0fNxfLcaHUhZ2FRG2GWlv2
-        Ee5JdQqwzgdF7C3qief7QFZ47ekNTftzhyqN/J+F6w==
-X-Google-Smtp-Source: APXvYqxlH+MsUuRAcTfdFjXSPCXxa+6z6dX4MgpSyEhbTxumvWgRTMDWlXIst132BjcY9+0l4qdxd/lXkZbRE4+uk9E=
-X-Received: by 2002:ac2:5467:: with SMTP id e7mr11547220lfn.74.1580739405080;
- Mon, 03 Feb 2020 06:16:45 -0800 (PST)
+        id S1729420AbgBCQ1f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Feb 2020 11:27:35 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:57974 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729435AbgBCQ1e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Feb 2020 11:27:34 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=GlhiWZUF/YX3gEFzvjYXVXI3s+IP0haz6QdP1XP2Q4c=; b=kgo2mZARm8v3jQFbI3uCEpxH6U
+        NrmKQla4px8BTh70BOn737Z9BQ9vJ+P6KkOfQOO+oDa3aX79Mo8HTpZdx0ixdfGULQnTa+x7CIZaW
+        4FvO8K4pY8lG89evFWlYd5jmRkfuuTibRnswe4k1mfSvHdlsgFWKUalivplkEc9Se3/+Y8HqHY8LW
+        s2VxB3aNiEISZsdJrK+ijLNY3K0vXqtib3rE7usWPMxSnamH2ZaxOmiDv/Uf91pjSS+siRzJgAXdp
+        2cC05VxR7Ub15GuCb4+zJBk4YyYwZ8cDHUFewBU0hsmd+MMK0xgNfeLHZu4DCGNYQoMDkMZ9ToE0C
+        yXoNhI1Q==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1iyeZQ-00016X-5u; Mon, 03 Feb 2020 16:27:32 +0000
+Subject: Re: linux-next: Tree for Feb 3 (arch/x86/{various}; all PCI-related)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        X86 ML <x86@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>
+References: <20200203142334.4f699874@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <b569f6f3-a757-5bbb-3e1a-9d78b12709b7@infradead.org>
+Date:   Mon, 3 Feb 2020 08:27:31 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 3 Feb 2020 19:46:34 +0530
-Message-ID: <CA+G9fYvi8g=5MG4HzN0QPH+_LEX1xXo-m2xmbHRqdMJzaqBCFQ@mail.gmail.com>
-Subject: OF: ERROR: Bad of_node_put() on /ocp/interconnect
-To:     linux-omap@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tony Lindgren <tony@atomide.com>, bcousson@baylibre.com,
-        lkft-triage@lists.linaro.org
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200203142334.4f699874@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The following error/warning noticed on beagleboard x15 running linux
-next 5.5.0-next-20200203.
+On 2/2/20 7:23 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Please do not add any v5.7 material to your linux-next included
+> branches until after v5.6-rc1 has been released.
+> 
+> News: I have added an htmldocs build to the end of my day.  It seems to
+> be building at the moment, but has many warnings.
+> 
+> Changes since 20200131:
+> 
 
-metadata:
-  git branch: master
-  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-  git commit: cee5a42837d4a6c4189f06f7bf355b97a24c3c93
-  git describe: next-20200203
-  make_kernelversion: 5.5.0
-  kernel-config:
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/am57xx-evm/lkft/linux-next/694/config
+(trying this again, with more Cc:s since last week's report [on Jan. 28]
+got no response)
 
 
-[    0.000000] OF: ERROR: Bad of_node_put() on
-/ocp/interconnect@4a000000/segment@0/target-module@8000/cm_core@0/l4per-cm@1700/l4per-clkctrl@28
-[    0.000000] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G        W
-  5.5.0-next-20200203 #1
-[    0.000000] Hardware name: Generic DRA74X (Flattened Device Tree)
-[    0.000000] Backtrace:
-[    0.000000] [<c040fac4>] (dump_backtrace) from [<c040fdf8>]
-(show_stack+0x20/0x24)
-[    0.000000]  r7:c23f2e68 r6:00000000 r5:600000d3 r4:c23f2e68
-[    0.000000] [<c040fdd8>] (show_stack) from [<c14144d0>]
-(dump_stack+0xe8/0x114)
-[    0.000000] [<c14143e8>] (dump_stack) from [<c112b7cc>]
-(of_node_release+0xb4/0xcc)
-[    0.000000]  r10:efca9a44 r9:00000001 r8:00000000 r7:00000000
-r6:c23d2350 r5:efca9a44
-[    0.000000]  r4:efca9a70 r3:be2d277f
-[    0.000000] [<c112b718>] (of_node_release) from [<c1419c28>]
-(kobject_put+0x11c/0x23c)
-[    0.000000]  r5:c2422cb8 r4:efca9a70
-[    0.000000] [<c1419b0c>] (kobject_put) from [<c112aa98>]
-(of_node_put+0x24/0x28)
-[    0.000000]  r7:e98f7980 r6:c2201ef4 r5:00000000 r4:e98f7940
-[    0.000000] [<c112aa74>] (of_node_put) from [<c20474a0>]
-(of_clk_init+0x1a4/0x248)
-[    0.000000] [<c20472fc>] (of_clk_init) from [<c20140dc>]
-(omap_clk_init+0x4c/0x68)
-[    0.000000]  r10:efc8b8c0 r9:c2433054 r8:00000000 r7:c2208700
-r6:00000066 r5:c20dab64
-[    0.000000]  r4:c2434500
-[    0.000000] [<c2014090>] (omap_clk_init) from [<c2014afc>]
-(omap4_sync32k_timer_init+0x18/0x3c)
-[    0.000000]  r5:c20dab64 r4:c2433000
-[    0.000000] [<c2014ae4>] (omap4_sync32k_timer_init) from
-[<c2014de8>] (omap5_realtime_timer_init+0x1c/0x258)
-[    0.000000] [<c2014dcc>] (omap5_realtime_timer_init) from
-[<c2005954>] (time_init+0x30/0x44)
-[    0.000000]  r9:c2433054 r8:00000000 r7:c2208700 r6:00000066
-r5:c20dab64 r4:c2433000
-[    0.000000] [<c2005924>] (time_init) from [<c20012dc>]
-(start_kernel+0x590/0x720)
-[    0.000000] [<c2000d4c>] (start_kernel) from [<00000000>] (0x0)
-[    0.000000]  r10:30c5387d r9:412fc0f2 r8:8ffdc000 r7:00000000
-r6:30c0387d r5:00000000
-[    0.000000]  r4:c2000330
+on x86_64:
 
-full test log,
-https://lkft.validation.linaro.org/scheduler/job/1158386#L3677
+# CONFIG_PCI is not set
+
+Several source files will not build when CONFIG_PCI is not set/enabled.
+
+Examples:
+
+  CC      arch/x86/events/amd/ibs.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/events/amd/ibs.c:12:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_dev'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_dev
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+  CC      arch/x86/kernel/cpu/cacheinfo.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/kernel/cpu/cacheinfo.c:17:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_bus'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_bus
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+  CC      arch/x86/kernel/apic/io_apic.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/kernel/apic/io_apic.c:40:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_bus'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_bus
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+  CC      arch/x86/kernel/setup.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/kernel/setup.c:16:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_bus'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_bus
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+  CC      arch/x86/kernel/x86_init.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/kernel/x86_init.c:9:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_bus'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_bus
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+  CC      arch/x86/kernel/irqinit.o
+In file included from ../include/linux/pci.h:1778:0,
+                 from ../arch/x86/include/asm/prom.h:15,
+                 from ../arch/x86/kernel/irqinit.c:29:
+../arch/x86/include/asm/pci.h: In function '__pcibus_to_node':
+../arch/x86/include/asm/pci.h:126:9: error: implicit declaration of function 'to_pci_sysdata'; did you mean 'to_pci_dev'? [-Werror=implicit-function-declaration]
+  return to_pci_sysdata(bus)->node;
+         ^~~~~~~~~~~~~~
+         to_pci_dev
+../arch/x86/include/asm/pci.h:126:28: error: invalid type argument of '->' (have 'int')
+  return to_pci_sysdata(bus)->node;
+                            ^~
+
+
+That's just a sample:
+
+$ buildsummary.pl build-r9671.out 
+file: arch/x86/boot/header.S: errors: 1, warnings: 0
+file: arch/x86/include/asm/pci.h: errors: 234, warnings: 0
+build-r9671.out: totals: error/warning files: 2, errors: 235, warnings: 0, Section mismatches: 0
+
+
+
 
 -- 
-Linaro LKFT
-https://lkft.linaro.org
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

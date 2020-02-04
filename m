@@ -2,101 +2,227 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD52151163
-	for <lists+linux-next@lfdr.de>; Mon,  3 Feb 2020 21:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BABB71513A3
+	for <lists+linux-next@lfdr.de>; Tue,  4 Feb 2020 01:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726331AbgBCUwC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Feb 2020 15:52:02 -0500
-Received: from fieldses.org ([173.255.197.46]:35694 "EHLO fieldses.org"
+        id S1726930AbgBDA0E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Feb 2020 19:26:04 -0500
+Received: from ozlabs.org ([203.11.71.1]:47245 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726287AbgBCUwC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 3 Feb 2020 15:52:02 -0500
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 374F31F65; Mon,  3 Feb 2020 15:52:01 -0500 (EST)
-Date:   Mon, 3 Feb 2020 15:52:01 -0500
-From:   "J. Bruce Fields" <bfields@fieldses.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Roberto Bergantinos Corpas <rbergant@redhat.com>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <20200203205201.GA31794@fieldses.org>
-References: <20200131141309.367c9d8b@canb.auug.org.au>
- <20200201003230.GA32350@fieldses.org>
- <CAK8P3a2sWmeATCC67g+dr0qbBschztNuj8ATewdSay6Na13ARg@mail.gmail.com>
+        id S1726369AbgBDA0E (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 3 Feb 2020 19:26:04 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48BQTh6513z9sVq;
+        Tue,  4 Feb 2020 11:26:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580775961;
+        bh=IzeSB1JA+5+yWUhdAoaDKlStkEb4KtlAKroT6KOh75k=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o5qaJ+vMM312813ssE2+dDh2yC0BlXuxGklvhDwqFI2ZUK9B2yokVbGNich+TOfOF
+         sAejUy0yjn5JuVJXch4cNGWzVP2yApBWJWgPWXqoA7QhPyISUrt8Qmo/Cz8qTEKTxz
+         cu7DEnpE6gIcIebkuKOa9tEflnkW/qI2qYQ30kQVuHEXnki60cWOihgEJ+Yf5diABN
+         t6fzfARVcdI+a5WPD8psk6jM+pYCRxCbSuC16vrXupznayFcISDiQKg9broVlNEuu+
+         cmstvHMX76Kz2sYnKUyEmDpCmpsBv5osrd2Gt6YHwndvpgwbnEQOZeBcfJ+4vGQxX0
+         Cm+pTHdvBPzGQ==
+Date:   Tue, 4 Feb 2020 11:25:55 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20200204112555.0f1b1490@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a2sWmeATCC67g+dr0qbBschztNuj8ATewdSay6Na13ARg@mail.gmail.com>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+Content-Type: multipart/signed; boundary="Sig_/b/Aj3Hdi.3EGAh74frIhOng";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Feb 01, 2020 at 08:54:01AM +0100, Arnd Bergmann wrote:
-> On Sat, Feb 1, 2020 at 1:32 AM J. Bruce Fields <bfields@fieldses.org> wrote:
-> >
-> > On Fri, Jan 31, 2020 at 02:13:09PM +1100, Stephen Rothwell wrote:
-> > > Hi all,
-> > >
-> > > After merging the akpm-current tree, today's linux-next build (arm
-> > > multi_v7_defconfig) failed like this:
-> > >
-> > > net/sunrpc/auth_gss/svcauth_gss.c: In function 'gss_proxy_save_rsc':
-> > > net/sunrpc/auth_gss/svcauth_gss.c:1251:19: error: storage size of 'boot' isn't known
-> > >  1251 |   struct timespec boot;
-> > >       |                   ^~~~
-> > > net/sunrpc/auth_gss/svcauth_gss.c:1273:3: error: implicit declaration of function 'getboottime'; did you mean 'getboottime64'? [-Werror=implicit-function-declaration]
-> > >  1273 |   getboottime(&boot);
-> > >       |   ^~~~~~~~~~~
-> > >       |   getboottime64
-> > > net/sunrpc/auth_gss/svcauth_gss.c:1251:19: warning: unused variable 'boot' [-Wunused-variable]
-> > >  1251 |   struct timespec boot;
-> > >       |                   ^~~~
-> > >
-> > > Caused by commit
-> > >
-> > >   a415f20a18c9 ("sunrpc: expiry_time should be seconds not timeval")
-> 
-> This commit uses the now-removed 'struct timespec' type and 'getboottime()'
-> function, so to fix the compilation error, the 64-bit replacements need to e
-> used as described in Documentation/core-api/timekeeping.rst
-> 
-> > > from the nfsd tree interacting with commits
-> > >
-> > >   de371b6c7b73 ("y2038: remove unused time32 interfaces")
-> > >   aa7ff200a719 ("y2038: hide timeval/timespec/itimerval/itimerspec types")
-> > >
-> > > from the akpm-current tree.
-> > >
-> > > I have reverted the nfsd commit for today.  A better solution is requested.
-> >
-> > Unfortunately that expiry time seems to be a signed 32-bit integer in
-> > both the kernel<->gss-proxy and the gss-proxy<->krb5 interfaces.
-> >
-> > I guess we'll have to come to an agreement with the krb5 developers.
-> >
-> > Simplest might be to agree that the thing's unsigned.  The expiry
-> > shouldn't ever need to be decades in the future, so unsigned mod 2^32
-> > arithmetic should work forever.
-> 
-> Can you be more specific which interface you are referring to?
-> My change to gss_import_v1_context() is now part of mainline
-> as of 294ec5b87a8a ("sunrpc: convert to time64_t for expiry"),
-> is anything else needed there?
+--Sig_/b/Aj3Hdi.3EGAh74frIhOng
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Oops, thanks, I was looking at a branch without that patch and forgot
-that it changed that field to unsigned.
+Hi all,
 
-Looking at gss-proxy: it gets this expiration time from the krb5
-libraries with a call to gss_inquire_context(..., &lifetime_rec, ...)
-where lifetime_rec is uint32_t.
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-Treating this as a 64-bit time makes everything work till 2106, but, for
-what it's worth, keeping it a u32 would make it correct forever (since
-mod-2^32 subtraction will still give a reasonable answer).
+In file included from include/linux/eventfd.h:15,
+                 from drivers/vhost/vhost.c:13:
+include/linux/percpu-defs.h:50:34: error: 'PER_CPU_BASE_SECTION' undeclared=
+ here (not in a function); did you mean 'PER_CPU_FIRST_SECTION'?
+   50 |  __percpu __attribute__((section(PER_CPU_BASE_SECTION sec))) \
+      |                                  ^~~~~~~~~~~~~~~~~~~~
+include/linux/percpu-defs.h:101:9: note: in expansion of macro '__PCPU_ATTR=
+S'
+  101 |  extern __PCPU_ATTRS(sec) __typeof__(type) name
+      |         ^~~~~~~~~~~~
+include/linux/percpu-defs.h:112:2: note: in expansion of macro 'DECLARE_PER=
+_CPU_SECTION'
+  112 |  DECLARE_PER_CPU_SECTION(type, name, "")
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+include/linux/eventfd.h:44:1: note: in expansion of macro 'DECLARE_PER_CPU'
+   44 | DECLARE_PER_CPU(int, eventfd_wake_count);
+      | ^~~~~~~~~~~~~~~
+include/linux/percpu-defs.h:112:38: error: expected ')' before string const=
+ant
+  112 |  DECLARE_PER_CPU_SECTION(type, name, "")
+      |                                      ^~
+include/linux/percpu-defs.h:50:55: note: in definition of macro '__PCPU_ATT=
+RS'
+   50 |  __percpu __attribute__((section(PER_CPU_BASE_SECTION sec))) \
+      |                                                       ^~~
+include/linux/percpu-defs.h:112:2: note: in expansion of macro 'DECLARE_PER=
+_CPU_SECTION'
+  112 |  DECLARE_PER_CPU_SECTION(type, name, "")
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+include/linux/eventfd.h:44:1: note: in expansion of macro 'DECLARE_PER_CPU'
+   44 | DECLARE_PER_CPU(int, eventfd_wake_count);
+      | ^~~~~~~~~~~~~~~
+include/linux/percpu-defs.h:50:59: error: expected identifier or '(' before=
+ ')' token
+   50 |  __percpu __attribute__((section(PER_CPU_BASE_SECTION sec))) \
+      |                                                           ^
+include/linux/percpu-defs.h:101:9: note: in expansion of macro '__PCPU_ATTR=
+S'
+  101 |  extern __PCPU_ATTRS(sec) __typeof__(type) name
+      |         ^~~~~~~~~~~~
+include/linux/percpu-defs.h:112:2: note: in expansion of macro 'DECLARE_PER=
+_CPU_SECTION'
+  112 |  DECLARE_PER_CPU_SECTION(type, name, "")
+      |  ^~~~~~~~~~~~~~~~~~~~~~~
+include/linux/eventfd.h:44:1: note: in expansion of macro 'DECLARE_PER_CPU'
+   44 | DECLARE_PER_CPU(int, eventfd_wake_count);
+      | ^~~~~~~~~~~~~~~
+include/linux/eventfd.h: In function 'eventfd_signal_count':
+include/linux/eventfd.h:48:23: error: 'eventfd_wake_count' undeclared (firs=
+t use in this function); did you mean 'eventfd_signal_count'?
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |                       ^~~~~~~~~~~~~~~~~~
+include/linux/percpu-defs.h:319:9: note: in definition of macro '__pcpu_siz=
+e_call_return'
+  319 |  typeof(variable) pscr_ret__;     \
+      |         ^~~~~~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
+include/linux/eventfd.h:48:23: note: each undeclared identifier is reported=
+ only once for each function it appears in
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |                       ^~~~~~~~~~~~~~~~~~
+include/linux/percpu-defs.h:319:9: note: in definition of macro '__pcpu_siz=
+e_call_return'
+  319 |  typeof(variable) pscr_ret__;     \
+      |         ^~~~~~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
+include/linux/percpu-defs.h:508:53: error: implicit declaration of function=
+ 'this_cpu_read_1'; did you mean 'this_cpu_read'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+  508 | #define this_cpu_read(pcp)  __pcpu_size_call_return(this_cpu_read_,=
+ pcp)
+      |                                                     ^~~~~~~~~~~~~~
+include/linux/percpu-defs.h:322:23: note: in definition of macro '__pcpu_si=
+ze_call_return'
+  322 |  case 1: pscr_ret__ =3D stem##1(variable); break;   \
+      |                       ^~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
+include/linux/percpu-defs.h:508:53: error: implicit declaration of function=
+ 'this_cpu_read_2'; did you mean 'this_cpu_read'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+  508 | #define this_cpu_read(pcp)  __pcpu_size_call_return(this_cpu_read_,=
+ pcp)
+      |                                                     ^~~~~~~~~~~~~~
+include/linux/percpu-defs.h:323:23: note: in definition of macro '__pcpu_si=
+ze_call_return'
+  323 |  case 2: pscr_ret__ =3D stem##2(variable); break;   \
+      |                       ^~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
+include/linux/percpu-defs.h:508:53: error: implicit declaration of function=
+ 'this_cpu_read_4'; did you mean 'this_cpu_read'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+  508 | #define this_cpu_read(pcp)  __pcpu_size_call_return(this_cpu_read_,=
+ pcp)
+      |                                                     ^~~~~~~~~~~~~~
+include/linux/percpu-defs.h:324:23: note: in definition of macro '__pcpu_si=
+ze_call_return'
+  324 |  case 4: pscr_ret__ =3D stem##4(variable); break;   \
+      |                       ^~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
+include/linux/percpu-defs.h:508:53: error: implicit declaration of function=
+ 'this_cpu_read_8'; did you mean 'this_cpu_read'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+  508 | #define this_cpu_read(pcp)  __pcpu_size_call_return(this_cpu_read_,=
+ pcp)
+      |                                                     ^~~~~~~~~~~~~~
+include/linux/percpu-defs.h:325:23: note: in definition of macro '__pcpu_si=
+ze_call_return'
+  325 |  case 8: pscr_ret__ =3D stem##8(variable); break;   \
+      |                       ^~~~
+include/linux/eventfd.h:48:9: note: in expansion of macro 'this_cpu_read'
+   48 |  return this_cpu_read(eventfd_wake_count);
+      |         ^~~~~~~~~~~~~
 
---b.
+Caused by commit
+
+  230665a4f25c ("eventfd: track eventfd_signal() recursion depth")
+
+I have added the following patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 4 Feb 2020 11:20:12 +1100
+Subject: [PATCH] eventfd: include percpu.h instead of percpu-defs.h
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/eventfd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/eventfd.h b/include/linux/eventfd.h
+index 02e794816c12..224e8334042b 100644
+--- a/include/linux/eventfd.h
++++ b/include/linux/eventfd.h
+@@ -12,7 +12,7 @@
+ #include <linux/fcntl.h>
+ #include <linux/wait.h>
+ #include <linux/err.h>
+-#include <linux/percpu-defs.h>
++#include <linux/percpu.h>
+=20
+ /*
+  * CAREFUL: Check include/uapi/asm-generic/fcntl.h when defining
+--=20
+2.24.1
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/b/Aj3Hdi.3EGAh74frIhOng
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl44uhMACgkQAVBC80lX
+0GwzdAf/eU4AUYpoXQ41Sld5p8MfgaFsAu80RPyfs4OHZVDYpOmAuphYaxIekbuh
+3BZs2jCGIZheOWa99f+pWme+ioNojbKwjdGcG7n0kzYVW3aFNYnEqWj23gsU0KMP
+KEXXZqTH789vQq3Kn4laLAbH0iVkccjoIqaePidXs+AZtH7wdNMHriIQaYwVIgeq
+zyVQeJ3lNB5CmbHE6FR7UsB71HF7v2QesoOjYzplsoGvUD4D2IF/4Ch2PvIjjpn1
+rXcs2GDf2WEkQVEU0fUUbTemdfs4XYout4FMuiY7XTvsUkEeLg/1YpqFv04tzxhD
+wfK4thaaXvYxDe3PqeP2K0f21gDVfA==
+=/ysx
+-----END PGP SIGNATURE-----
+
+--Sig_/b/Aj3Hdi.3EGAh74frIhOng--

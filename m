@@ -2,80 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DC3701513A7
-	for <lists+linux-next@lfdr.de>; Tue,  4 Feb 2020 01:28:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FDE15146F
+	for <lists+linux-next@lfdr.de>; Tue,  4 Feb 2020 04:03:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726924AbgBDA2i (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 3 Feb 2020 19:28:38 -0500
-Received: from mail-pg1-f196.google.com ([209.85.215.196]:33923 "EHLO
-        mail-pg1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726834AbgBDA2i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 3 Feb 2020 19:28:38 -0500
-Received: by mail-pg1-f196.google.com with SMTP id j4so8751826pgi.1
-        for <linux-next@vger.kernel.org>; Mon, 03 Feb 2020 16:28:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=vAhBNULLMh9XOTvTdD4G3os1qV1uXBckyQ+ldlyDpfU=;
-        b=cPhAokTZ9kQlxDMTNKVdWb25SdZQI8UBNjRVl3ZSbzLxuAeFM6nmq3+LvH5C//TF72
-         KnmhtKKTDOHe+qmvVNbgnDAq2Img5xAMjhjYPLWv+sLiUToMmBjdRXFhceXTZHrF2ZbY
-         QAgYwXicceFkzvpgstFkXqu24LkxVf4tauXIa/0VhQSciw8bdJEQn5AkAx2RfGETBATL
-         sTUJK4WpvdJJ+lHg8NEvi1TaCek47dl7BprkR5UbBzvJ0SEB9KQamt7iu86LmxJXmwnt
-         /6C7kujevhxm1/7+UJB4473pqpmOeMG8UwOChUsbyZ0K12JZ/+PasYw2ROZpLYfmIVgv
-         Wfnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=vAhBNULLMh9XOTvTdD4G3os1qV1uXBckyQ+ldlyDpfU=;
-        b=pTWPW/SYD1C/hBayGOeqqRAZ4O9WsbpZhvJGnvv3BgJrprAse+juKLNTWTdLwCb69s
-         0eOdJsIKk8SS/aOeIz9sqXbUs8VSQpBb/eKa7QZs+UfkR/59oaHV8FUVsl/PT2hTfRuX
-         Agj939XQe1nPRPZU+CsjIq/LjtNqNhHTpIPASCwOEEPOVpA7FcJUCjH9vAzBwpsFCoMB
-         bLcbnhgpbalO13JQuyp2EeQayyUSNnCQi5joKKg/0o9mhHA1vg1UzaWKY5VL2WTP/6xJ
-         YChacj/gIMV1PQhI/3Sjf+vruKVyEE4C0uZlozMfOiaDTprIBNwT/viTpTxEg/CIOAzn
-         IKOg==
-X-Gm-Message-State: APjAAAVXPU7lYG1NCmyUm9UzZy3ZwyLnZuCG1pWpV/ZKlmH+EErq5VDv
-        ztDXtXjVTaT74pgCiAU4aiFBXih0iM8=
-X-Google-Smtp-Source: APXvYqwUc9cZI7DMbGryZAH6VeR/EOia6vpZadPgVDPS+m5PjCNf3yY9tmflych0xth95EjpIgFBDg==
-X-Received: by 2002:aa7:864b:: with SMTP id a11mr27630304pfo.175.1580776117631;
-        Mon, 03 Feb 2020 16:28:37 -0800 (PST)
-Received: from [192.168.1.188] ([66.219.217.145])
-        by smtp.gmail.com with ESMTPSA id g13sm17438595pfo.169.2020.02.03.16.28.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Feb 2020 16:28:37 -0800 (PST)
-Subject: Re: linux-next: build failure after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726984AbgBDDDH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 3 Feb 2020 22:03:07 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45087 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726992AbgBDDDH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 3 Feb 2020 22:03:07 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48BTyw3cLWz9sXF;
+        Tue,  4 Feb 2020 14:03:04 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580785385;
+        bh=f4bKvAY3IkHW8E8G+srPYzm7WFzsms2KBAcbUO6YL3w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qpd77wEBG27F6ykwMDIDYYGkGsOpSZJb8GsFIjpRx0iKH/BdckBgTonmhy43H3mUX
+         qeBtLcGTLoWv2KIHDkA0W8lyxPvrq8J/kTEY11aPV20ULJjyR7ZRSDF1ec0ZoCrZ8w
+         mDUrGN4syThVbvAogczYxAd8ddjnkf4wCSDqMY2E6IzIRl4PbNEL0d+YLgJTXYKoEL
+         cQbwc8ZXKRxpp72H5IQ4PxpWMPo2UAYX9gk33ymD/HLnwezQs+wXv0TBm2fQWRbOVM
+         B6N6mJGl+v68Qsz4kpTpBEOwsWHrtHNRQhEgnukHfCQv5nNZm9dgSGqPiud6WBZtp0
+         Y9CbmXf8a9BhA==
+Date:   Tue, 4 Feb 2020 14:03:00 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Lee Jones <lee.jones@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200204112555.0f1b1490@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <eaad4710-872e-a0fd-33df-747d16c8c293@kernel.dk>
-Date:   Mon, 3 Feb 2020 17:28:36 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: linux-next: build failure after merge of the mfd tree
+Message-ID: <20200204140300.7537283c@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200204112555.0f1b1490@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/6Nr7eXC_NyQrqlGVH.I9iir";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/3/20 5:25 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
+--Sig_/6Nr7eXC_NyQrqlGVH.I9iir
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-[snip]
+Hi all,
 
-Thanks, apparently we needed two includes... I've folded in your
-fix.
+After merging the mfd tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
--- 
-Jens Axboe
+ld: sound/soc/codecs/wcd934x.o:(.toc+0x0): undefined reference to `of_clk_s=
+rc_simple_get'
+ld: sound/soc/codecs/wcd934x.o: in function `.wcd934x_codec_probe':
+wcd934x.c:(.text.wcd934x_codec_probe+0x3d4): undefined reference to `.__clk=
+_get_name'
+ld: wcd934x.c:(.text.wcd934x_codec_probe+0x438): undefined reference to `.c=
+lk_hw_register'
+ld: wcd934x.c:(.text.wcd934x_codec_probe+0x474): undefined reference to `.o=
+f_clk_add_provider'
 
+Caused by commit
+
+  6ac7e4d7ad70 ("mfd: wcd934x: Add support to wcd9340/wcd9341 codec")
+
+Unfortunately that commit is now in Linus' tree (and was never in
+linux-next).
+
+I marked CONFIG_MFD_STMFX as BROKEN for now.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/6Nr7eXC_NyQrqlGVH.I9iir
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl443uQACgkQAVBC80lX
+0GxZswf/cp+SmpQRyGcIquTeIQknXyRR+bRIj60qb0CeYYyuYiEw8bG2QUbc3sbO
+zTOGZmn6dzC4u0RDSZF9haC3DXfa6Gp0lolc9s3hk9QPTYo4TczSLeqjLGvhDjze
+chbhJ69feTEuhDY+J/2IwOwRujtIzXJ24R5UQENWFwlN3rIh6GemvLem5+Jh4hkt
+rzktHjgqOHJsPOvLP5CuHY0E9UsfSwRfucDJVkwrlq83YvB/46dywb8KFAnAQ6eW
+iRW4Y2Lqz7QmlHIgR3y8kykoxAeQQylnsuS4zlMiHtzaUqPN/KFb5o0cC6zCCMeH
+eJ8dOXv7G95CGGxL0qYQPGnX0VJ8AA==
+=PrLd
+-----END PGP SIGNATURE-----
+
+--Sig_/6Nr7eXC_NyQrqlGVH.I9iir--

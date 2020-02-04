@@ -2,160 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D540151F59
-	for <lists+linux-next@lfdr.de>; Tue,  4 Feb 2020 18:24:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10721152271
+	for <lists+linux-next@lfdr.de>; Tue,  4 Feb 2020 23:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbgBDRYI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 4 Feb 2020 12:24:08 -0500
-Received: from mail-wr1-f44.google.com ([209.85.221.44]:41348 "EHLO
-        mail-wr1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727314AbgBDRYI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 4 Feb 2020 12:24:08 -0500
-Received: by mail-wr1-f44.google.com with SMTP id c9so24108175wrw.8
-        for <linux-next@vger.kernel.org>; Tue, 04 Feb 2020 09:24:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=00nuKK+LdYxeG/GhMq0KAQk7fb2U5F5sZi0m88nVBZo=;
-        b=zpBCS1hMRZ4QiTlWTulJ4yazjsn99ONvHhkGhS/wvGAXpb6q9nBiGomkei3qAiRpPK
-         Z9eXc+dCA/a1l1BDZjSqc7LfxgZZl8dgGu0S0yz7Pzg+ApwFuQu21mbpuct3uh0LZuLk
-         QOXRn8Tx2mlorC6yqrwgJe6oj7JJK0v/uuQznzuxWfWuZ++tWyIkrXsFIR2CLE1+BmWm
-         E8aDifrlMd2N9j0TUQEmf9Rld3YCTUY1FADCD06x5r1KfpOivNA2fBt3/37i5k+L+EJd
-         3iS9JLjM7t6WtJfXuUYLFCclxkFbWTKIiAcZdgHzC2jG8E/OeH19DBFAaKH9lne0loyy
-         l8Gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=00nuKK+LdYxeG/GhMq0KAQk7fb2U5F5sZi0m88nVBZo=;
-        b=jkBFH4Ry94gr3P1FUbjPpaJtqalSGJLxXjS9L8Nnpx3AtpgTR76Gj+OaXOawfsVqxj
-         9iyFmM/Fuwv1wocFsU2s8lZlqNieV30G/iK9GIy+ySTBtybfNUz2m4nmt0AqiJjXj1Pe
-         yMagw4yYS+QvGeEeot28O/M5qaTGapKuo/BL0wbQDpwmpbPc0KdhrEBkAPPaTklhyM8O
-         OU0sjXChRdyMLK4XEiO36CIU0bqk9fO+YL7rZveq0A1xMPalpRc3rrUi7Sf6PSJDXbBX
-         HdMs/jgYRHIvoXWMzBDrln8F/wDvlgnx/QIMyApBmCS2sUyNjJ022o9iHoJv1daK0Y81
-         ZxAg==
-X-Gm-Message-State: APjAAAUqvL7nm/hDRV7vQccteBLpnMXrMXttR8yqFRK/XoLE2ngUZ9RR
-        x/r4VrewP5zExpPS7k3i+idQCaNObbTswQ==
-X-Google-Smtp-Source: APXvYqyKKXcZEKLap9IExNOzeagcNQmU8KoLhC0Th95s2QbhdpEp1I9BF+hfC09vtm8K9aUtU4Py2Q==
-X-Received: by 2002:a5d:55d2:: with SMTP id i18mr21773561wrw.287.1580837046237;
-        Tue, 04 Feb 2020 09:24:06 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id 11sm5237310wmb.14.2020.02.04.09.24.05
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2020 09:24:05 -0800 (PST)
-Message-ID: <5e39a8b5.1c69fb81.8ed49.8655@mx.google.com>
-Date:   Tue, 04 Feb 2020 09:24:05 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727468AbgBDWpG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 4 Feb 2020 17:45:06 -0500
+Received: from ozlabs.org ([203.11.71.1]:34401 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727604AbgBDWpG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 4 Feb 2020 17:45:06 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48C0Bk6P1yz9sRG;
+        Wed,  5 Feb 2020 09:45:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580856303;
+        bh=XjnKhWUeT2aA272cve5msZ/Tda9nKnRkTA8Pr4oy1n4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Qhm990WxfqRRwkRtSwa0SJBCa904qwiBhhS9hBAqPBr+d2VXcSzRmh4fvTLT1vR+B
+         aoZpL0sKPjqjInpcQVSziNADhfNfTJWRFJcZHK9CmQlHuR9wtBH3JvlKDrp7mfTVKm
+         EKYdM/JScO6FjxLxGhheXl8EtrP2xApE8SbxxNlXY1cjTuR6s1Q93WVi+Uc4Zf50TD
+         ftki6fCnGiYruBRdxrvba+MEB77Vc3fHo7+tqDtxzFDF2f+VU+fryYVQPRPMLw3dn+
+         BaAlv+9/H/Rin07MStjg+9MTtFp7KB56YXxxFPxvZoueV5WcZIbi+1gIqJxpglBM5Z
+         cL41glO29ZoUw==
+Date:   Wed, 5 Feb 2020 09:44:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Frank Min <Frank.Min@amd.com>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20200205094456.7f41ec4e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20200204
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 245 boots: 12 failed,
- 231 passed with 2 offline (next-20200204)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/+4nzSf1pdYqPUBdli9k.RjM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 245 boots: 12 failed, 231 passed with 2 offline (next-202=
-00204)
+--Sig_/+4nzSf1pdYqPUBdli9k.RjM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200204/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200204/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20200204
-Git Commit: 03cd8b289266238f8122d11c2aa14763ca1e2971
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 101 unique boards, 25 SoC families, 29 builds out of 200
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Boot Regressions Detected:
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c: In function 'amdgpu_xgmi_remove_d=
+evice':
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:466:3: warning: 'return' with no v=
+alue, in function returning non-void [-Wreturn-type]
+  466 |   return;
+      |   ^~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:461:5: note: declared here
+  461 | int amdgpu_xgmi_remove_device(struct amdgpu_device *adev)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:470:3: warning: 'return' with no v=
+alue, in function returning non-void [-Wreturn-type]
+  470 |   return;
+      |   ^~~~~~
+drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c:461:5: note: declared here
+  461 | int amdgpu_xgmi_remove_device(struct amdgpu_device *adev)
+      |     ^~~~~~~~~~~~~~~~~~~~~~~~~
 
-arm:
+Introduced by commit
 
-    davinci_all_defconfig:
-        gcc-8:
-          da850-lcdk:
-              lab-baylibre: new failure (last pass: next-20200203)
+  2fe4750e8506 ("drm/amdgpu: move xgmi init/fini to xgmi_add/remove_device =
+call")
 
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: next-20200203)
+--=20
+Cheers,
+Stephen Rothwell
 
-    tegra_defconfig:
-        gcc-8:
-          tegra30-beaver:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-200131 - first fail: next-20200203)
+--Sig_/+4nzSf1pdYqPUBdli9k.RjM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm64:
+-----BEGIN PGP SIGNATURE-----
 
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 4 days (last pass: next-20200130 - f=
-irst fail: next-20200131)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200203)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl458+gACgkQAVBC80lX
+0GxITwf/cH9GSswlD1acan05JLq1aabo0qjT7kk5myR7hvtjwt1e9UQnPzTVp+hN
+mzyV9+MpqOdn3WetotHQnSccPIIVTh2/bj8X9BXtDj8huv9EtV9/SAfHlvUUWHDy
+qJluJeySzqMOWtZWCj9x5l41Pq6BIXv1UZ3oBjn/49+UkvrdcyPGx5qpGQJW97XT
+Uv6RmP6VmSfSWXC5Am9R3qWem9Tph2QeBcbn25mfWVKjzsvgpF3GgqcnWlFLXfd7
+WdRh0z9TCMgkh4BwKtDPT5YVsbJMQQQVIhPZZc54y0YmkdhcE60zEWdxu4VRe5Ke
+edmxd2/vqT/UWyFyc0YSYi7Rm+xGpg==
+=+ka6
+-----END PGP SIGNATURE-----
 
-Boot Failures Detected:
-
-arm:
-    multi_v5_defconfig:
-        gcc-8:
-            da850-lcdk: 1 failed lab
-
-    qcom_defconfig:
-        gcc-8:
-            qcom-apq8064-cm-qs600: 1 failed lab
-
-    davinci_all_defconfig:
-        gcc-8:
-            da850-evm: 1 failed lab
-            da850-lcdk: 1 failed lab
-            dm365evm,legacy: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            sun4i-a10-cubieboard: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
-    tegra_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/+4nzSf1pdYqPUBdli9k.RjM--

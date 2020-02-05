@@ -2,182 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 753FE152805
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2020 10:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 303FD153A49
+	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2020 22:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728029AbgBEJHC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Feb 2020 04:07:02 -0500
-Received: from mail-wm1-f52.google.com ([209.85.128.52]:53240 "EHLO
-        mail-wm1-f52.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727068AbgBEJHC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Feb 2020 04:07:02 -0500
-Received: by mail-wm1-f52.google.com with SMTP id p9so1527759wmc.2
-        for <linux-next@vger.kernel.org>; Wed, 05 Feb 2020 01:07:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=N4PDtDHaIZz1FvVK38oxFDF/fV+YA9B0oSLI+BppZF4=;
-        b=HSgfBgwtxWHreeeTPTS4TARonbXwq9HwqlYPJWOvzQhabnvfeNWqXyFkyyrBUmWllL
-         FaB07aiBfu93BpbBWEBuFvKB36Yi6nlApJwnb2grwgvahkADJs5eickk/QjBmisCpHwm
-         0W95TAmoRDcm8tsE4tIgD4tx4EcDiENvco7dDNOi1frYXqtg8IH2HKIx5yayJXVGtFdd
-         qRLZ65kreFkIK0RH9OWUd5B5+1/PIJQfyifoxrpV3q8EHNyQJ3CQlcfvYPN+YYTPgROw
-         nzaJwFH5cGEkvCRBTT4ecgla7bl/wr4FvIeWL3mJ/nsBSmyU7kBPcZFjEIEW9v72IJSP
-         qDSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=N4PDtDHaIZz1FvVK38oxFDF/fV+YA9B0oSLI+BppZF4=;
-        b=H0FUA2/f9LgHgG2GPa/uRz6ZrMkhFYblCVT3ux6K310fSF3jCWwHrD7HEKLDWQOba8
-         pTJtGoqYTl8Nv2Ra5Zx9Q3DyhXkOgPAJd5sM/Tnx+toy8AaqX43vwkAXM9xPmSoLpQNR
-         o9+fDiSAJZrcIe+l90uLDxgER8ox72PYzMsdpvdPR7OhJ66l7rd4qS732nUl5c4+nM5K
-         kK9GUuFnoCvddYRgi4lVdmPrxTUf5c+E4D7dvrmN4cbTFGp7HFQjXQ9ipMeITGU1yHv3
-         ZsuVEVpBXn02CuVDlzImP3rQS0kjRZzZwuwZr+HiyF3hiT8xqBEvJfsg8vdiuww4ETzH
-         sHmg==
-X-Gm-Message-State: APjAAAVFqStX38aoB+CTzMmE55ox+sfgQxIBEggSvIiur2grnYAnyEG4
-        GkHLp0u9SitglPT2TX+WHLm/hsad1fhP/g==
-X-Google-Smtp-Source: APXvYqymc31AX+re7nDAu6CKNuMVnHTmHxL0GT6E+8PEBrg8yOKSwf/BoLNeTl3dLNUy0XRuWZZIZg==
-X-Received: by 2002:a1c:20d6:: with SMTP id g205mr4718763wmg.38.1580893619460;
-        Wed, 05 Feb 2020 01:06:59 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id b17sm34214271wrp.49.2020.02.05.01.06.58
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 01:06:58 -0800 (PST)
-Message-ID: <5e3a85b2.1c69fb81.43a73.4882@mx.google.com>
-Date:   Wed, 05 Feb 2020 01:06:58 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727234AbgBEVef (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Feb 2020 16:34:35 -0500
+Received: from ozlabs.org ([203.11.71.1]:56187 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727106AbgBEVef (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 5 Feb 2020 16:34:35 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48CZZw6zZyz9sRK;
+        Thu,  6 Feb 2020 08:34:32 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1580938473;
+        bh=WHWmgC92V20TWOcLw6cqHC4Npa7P7iAOG0Aue8L20SY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VWLJmndAsgyvjjAoWkjrxGvUjbJVi1VQSUynCmDSWg1IDiX5yLeYNy6p/8RjzLAJI
+         kHlkVzpAaw+PiYNLJWDgAnypMpaNJzzsiMt9QxIi+e5kNfQY4XdA28/352K8ZCfWQ8
+         6pTiFACXppQE86tOdnEHGYQVx+Ckzi9BRokIpT95+hA6ZJaZ8iii2P5O8g9mOQ6YdT
+         75DwJ6vDvNpNpga/rpktKfgbgQRmW72m6585bp5fZ3X+COlb9nH236yFLQ6iwahgIf
+         hMh/F+JOtxpnFG0+aGoi9OFiTd4hf15l30BFMyoWE4dghNSDtM3mLN6RSkn24EtnxG
+         UPnkxTju8vfBA==
+Date:   Thu, 6 Feb 2020 08:34:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robherring2@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: linux-next: manual merge of the clk tree with the devicetree-fixes
+ tree
+Message-ID: <20200206083418.3a6025f6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20200205
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 207 boots: 9 failed, 192 passed with 5 offline,
- 1 untried/unknown (next-20200205)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/itjbU1yiKo8ojp_0haFe1Oo";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 207 boots: 9 failed, 192 passed with 5 offline, 1 untried=
-/unknown (next-20200205)
+--Sig_/itjbU1yiKo8ojp_0haFe1Oo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200205/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200205/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20200205
-Git Commit: 14b549456391a8b8f812529896b2690c16349734
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 90 unique boards, 22 SoC families, 27 builds out of 194
+Today's linux-next merge of the clk tree got conflicts in:
 
-Boot Regressions Detected:
+  Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml
+  Documentation/devicetree/bindings/clock/qcom,sdm845-videocc.yaml
 
-arm:
+between commit:
 
-    davinci_all_defconfig:
-        gcc-8:
-          da850-lcdk:
-              lab-baylibre: failing since 1 day (last pass: next-20200203 -=
- first fail: next-20200204)
+  04dbd86539fd ("dt-bindings: Fix paths in schema $id fields")
 
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
-200203 - first fail: next-20200204)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20200204)
+from the devicetree-fixes tree and commits:
 
-    tegra_defconfig:
-        gcc-8:
-          tegra30-beaver:
-              lab-baylibre-seattle: failing since 2 days (last pass: next-2=
-0200131 - first fail: next-20200203)
+  e6747e24f15d ("dt-bindings: clock: Fix qcom,gpucc bindings for sdm845/sc7=
+180/msm8998")
+  8cff43d46cfc ("dt-bindings: clock: Cleanup qcom,videocc bindings for sdm8=
+45/sc7180")
 
-arm64:
+from the clk tree.
 
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 4 days (last pass: next-20200130 - f=
-irst fail: next-20200131)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200204)
+I fixed it up (the latter changes seem to have included the former,
+plus I removed Documentation/devicetree/bindings/clock/qcom,gpucc.yaml)
+and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be
+mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200204)
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200204)
 
-Boot Failures Detected:
+--=20
+Cheers,
+Stephen Rothwell
 
-arm:
-    multi_v5_defconfig:
-        gcc-8:
-            da850-lcdk: 1 failed lab
+--Sig_/itjbU1yiKo8ojp_0haFe1Oo
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-    qcom_defconfig:
-        gcc-8:
-            qcom-apq8064-cm-qs600: 1 failed lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl47NNoACgkQAVBC80lX
+0GzUeAf8CMywMkYHpwZfBxydz0Psln0BS6hlNDVSHzbpenZhAuOZMKOE9/4NbSQZ
+Y6IMWosY1v72zRgpxb2wEZQGQWppjzyGYOAk8Rp/m30y+4WWKCsxg+dxmeOL1CNk
+QTfyRd0zXHLKTd6HqN1sfDHmM8kw/zrD3xei1SkkSCRG75Fny4Oyyt6Wo7L7VAhC
+LowsqTxW7tVgKwQ8aZd1BVdvfXYUcptCfSLXjDqwHMnUB9unuwD0D8Wz0Zg0Zi7j
+ZjtHM6o3VTISrXDbL63laZ43AXf1mbevpgLWKiedsG+3UG7zhn3/mNPp5BdcrjGG
+z9sYlSJ7V9RAJvQWj/uu7PhPT90+qA==
+=UlbT
+-----END PGP SIGNATURE-----
 
-    davinci_all_defconfig:
-        gcc-8:
-            da850-evm: 1 failed lab
-            da850-lcdk: 1 failed lab
-            dm365evm,legacy: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
-    tegra_defconfig:
-        gcc-8
-            tegra30-beaver: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/itjbU1yiKo8ojp_0haFe1Oo--

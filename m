@@ -2,102 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 303FD153A49
-	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2020 22:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBFB153AB7
+	for <lists+linux-next@lfdr.de>; Wed,  5 Feb 2020 23:10:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727234AbgBEVef (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 5 Feb 2020 16:34:35 -0500
-Received: from ozlabs.org ([203.11.71.1]:56187 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727106AbgBEVef (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 5 Feb 2020 16:34:35 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48CZZw6zZyz9sRK;
-        Thu,  6 Feb 2020 08:34:32 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1580938473;
-        bh=WHWmgC92V20TWOcLw6cqHC4Npa7P7iAOG0Aue8L20SY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VWLJmndAsgyvjjAoWkjrxGvUjbJVi1VQSUynCmDSWg1IDiX5yLeYNy6p/8RjzLAJI
-         kHlkVzpAaw+PiYNLJWDgAnypMpaNJzzsiMt9QxIi+e5kNfQY4XdA28/352K8ZCfWQ8
-         6pTiFACXppQE86tOdnEHGYQVx+Ckzi9BRokIpT95+hA6ZJaZ8iii2P5O8g9mOQ6YdT
-         75DwJ6vDvNpNpga/rpktKfgbgQRmW72m6585bp5fZ3X+COlb9nH236yFLQ6iwahgIf
-         hMh/F+JOtxpnFG0+aGoi9OFiTd4hf15l30BFMyoWE4dghNSDtM3mLN6RSkn24EtnxG
-         UPnkxTju8vfBA==
-Date:   Thu, 6 Feb 2020 08:34:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robherring2@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>
-Subject: linux-next: manual merge of the clk tree with the devicetree-fixes
- tree
-Message-ID: <20200206083418.3a6025f6@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/itjbU1yiKo8ojp_0haFe1Oo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S1727309AbgBEWJZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 5 Feb 2020 17:09:25 -0500
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:39788 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727109AbgBEWJZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 5 Feb 2020 17:09:25 -0500
+Received: by mail-pl1-f194.google.com with SMTP id g6so1443313plp.6
+        for <linux-next@vger.kernel.org>; Wed, 05 Feb 2020 14:09:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:subject:cc:to:in-reply-to:references:message-id
+         :mime-version:content-transfer-encoding;
+        bh=BwOR++ZlI6migVRrZllQL8QE2OBgARO29djPlfB1kgE=;
+        b=hbQjZrJyGrjjwI9FPYinl8+m5gQisyU9AMnTVhV3q4AIJiN1IRCJflkpWBiOfD0MoK
+         3drh9YEc91+HHXaJShaImcpZch6Y0VlXLm2Ea7E7xySAAJvbW1iPHqWQNe6WTHv3hBpE
+         60It/p1iY96KFvPF/1gOprmQZkOhqSjorXYOaUR7W5eh2lgeNY5Y5GPdtIITC5neBsIi
+         lebr6ME4/wppFvq4zpyrkJN8h53PWmUxNwDepWY6SoWGVfHVy8grlEimmuAnp7QqayE0
+         EsLTRWdAl7LivfUGaN/CKkfWG6QNWPrJ6UKccjmjj3CBx1lqatXoPRru9IufCF/fupG1
+         Tntw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:subject:cc:to:in-reply-to:references
+         :message-id:mime-version:content-transfer-encoding;
+        bh=BwOR++ZlI6migVRrZllQL8QE2OBgARO29djPlfB1kgE=;
+        b=EbojvR8wrIVN0jYuT6Zf7VEd7RRM6KZBLMf1sX6BHPFG1WtSgegrL1lZJBexEgJeWF
+         Z/7BmEmfqJojxtTphhV5yS2/m5VU9HduHPWFzD/Zj1a3DjazUBmZpEMsBQnWn1mYtDbs
+         btSWnkdXg4Mxx50hl1XAUY51jKHUpJ2oIEhCEqa9Lr7kRlvv3U2DvdkWb68yM9vJFfdh
+         DP9m7JytdyheDDlz0ZC0u/imzTKjExWy58ybb/tly5oi+Y1TM6pVUdqRY05NN6x4PJMe
+         8azH6ofef2D81xCNLjeGOub3/hEgoJsAxiGmi39juifVg+tAaiU1Nu8qL5CN8OZ3tG4f
+         wk5Q==
+X-Gm-Message-State: APjAAAXP9Vv8CAlQnHiQIOqnRximk5pIi66O7Dk6MqzO4lzWMAiTfwtf
+        6E2emNEI+d8trVxdka+PGwPGwUv0x9M=
+X-Google-Smtp-Source: APXvYqyleGHIquua3OENEm1+gLOxATE978T3cJZVn62CI27PBhGzKyFGm8DASmLMaMBSeBFrZw3W+Q==
+X-Received: by 2002:a17:90a:8547:: with SMTP id a7mr418620pjw.0.1580940564417;
+        Wed, 05 Feb 2020 14:09:24 -0800 (PST)
+Received: from localhost ([2620:0:1000:2514:23a5:d584:6a92:3e3c])
+        by smtp.gmail.com with ESMTPSA id y16sm742663pgf.41.2020.02.05.14.09.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2020 14:09:24 -0800 (PST)
+Date:   Wed, 05 Feb 2020 14:09:24 -0800 (PST)
+X-Google-Original-Date: Wed, 05 Feb 2020 14:09:22 PST (-0800)
+From:   Palmer Dabbelt <palmerdabbelt@google.com>
+X-Google-Original-From: Palmer Dabbelt <palmer@dabbelt.com>
+Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v tree
+CC:     Paul Walmsley <paul@pwsan.com>, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org, guoren@linux.alibaba.com
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+In-Reply-To: <20200131071718.248da483@canb.auug.org.au>
+References: <20200131071718.248da483@canb.auug.org.au>
+Message-ID: <mhng-377e44c9-bdcd-4473-8541-f1c00d249adc@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/itjbU1yiKo8ojp_0haFe1Oo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 30 Jan 2020 12:17:18 PST (-0800), Stephen Rothwell wrote:
+> Hi all,
+>
+> Commit
+>
+>   4d99abce8ce8 ("riscv: Use flush_icache_mm for flush_icache_user_range")
+>
+> is missing a Signed-off-by from its author.
 
-Hi all,
+Thanks.  This one didn't play nice with git-am, so I needed to manually
+reconstruct the patch and I forgot to add the tag.  I've fixed it, the original
+thread was
+<https://lore.kernel.org/linux-riscv/mhng-19381e7d-faca-4e0d-87e6-29d43d7796e0@palmerdabbelt-glaptop1/T/#t>.
 
-Today's linux-next merge of the clk tree got conflicts in:
-
-  Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml
-  Documentation/devicetree/bindings/clock/qcom,sdm845-videocc.yaml
-
-between commit:
-
-  04dbd86539fd ("dt-bindings: Fix paths in schema $id fields")
-
-from the devicetree-fixes tree and commits:
-
-  e6747e24f15d ("dt-bindings: clock: Fix qcom,gpucc bindings for sdm845/sc7=
-180/msm8998")
-  8cff43d46cfc ("dt-bindings: clock: Cleanup qcom,videocc bindings for sdm8=
-45/sc7180")
-
-from the clk tree.
-
-I fixed it up (the latter changes seem to have included the former,
-plus I removed Documentation/devicetree/bindings/clock/qcom,gpucc.yaml)
-and can carry the fix as necessary. This is now fixed as far as
-linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
-
-
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/itjbU1yiKo8ojp_0haFe1Oo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl47NNoACgkQAVBC80lX
-0GzUeAf8CMywMkYHpwZfBxydz0Psln0BS6hlNDVSHzbpenZhAuOZMKOE9/4NbSQZ
-Y6IMWosY1v72zRgpxb2wEZQGQWppjzyGYOAk8Rp/m30y+4WWKCsxg+dxmeOL1CNk
-QTfyRd0zXHLKTd6HqN1sfDHmM8kw/zrD3xei1SkkSCRG75Fny4Oyyt6Wo7L7VAhC
-LowsqTxW7tVgKwQ8aZd1BVdvfXYUcptCfSLXjDqwHMnUB9unuwD0D8Wz0Zg0Zi7j
-ZjtHM6o3VTISrXDbL63laZ43AXf1mbevpgLWKiedsG+3UG7zhn3/mNPp5BdcrjGG
-z9sYlSJ7V9RAJvQWj/uu7PhPT90+qA==
-=UlbT
------END PGP SIGNATURE-----
-
---Sig_/itjbU1yiKo8ojp_0haFe1Oo--
+>
+> -- 
+> Cheers,
+> Stephen Rothwell

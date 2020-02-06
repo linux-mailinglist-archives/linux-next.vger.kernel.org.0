@@ -2,180 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F32115464B
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 15:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5656154747
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 16:12:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727945AbgBFOf1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Feb 2020 09:35:27 -0500
-Received: from mail-eopbgr40060.outbound.protection.outlook.com ([40.107.4.60]:37028
-        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727918AbgBFOf1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 6 Feb 2020 09:35:27 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RwgcDWwZRD32mMDps33Te0LlcQ7wiajK3pF1I4Q64bi3QaybDJDYvtqutLw1IcJ3h5qSz+hTNIN8V7BQeceRrndyMOZXuKa/Z6s2sxcrSx/OHgMWuGmFmRicYlnjrURA+BsRYCzM5B/lMy7pzbcMVMG5Gd0OrsXQIZavJDtelRCtWCUW/sDpKtBDGgIIFWyVfaJqhwqoQFBilY3B64blRjo5aHXPgrHObbturByT/qkQ1k6MAf3gFVhwp7TcYjXh+OnjezB0jZODs8oPIpGYOzC0K0XKoBSkfOub56eHBEEwi2Zvh+HW8KZXET5vOWu6qsv2xaZ7HfUkYIp+rBflEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s4kAMfxPzTvQfHwjGMiM95IjpPHEZyE9ARG2oKE2seA=;
- b=WGCZEfLcV/kQFiVs+UzPO4yceCufZQ7UJjlaf2G11cPy4k+dKhEd2TFd/MIUWDIg5qZeJn/KV4ISURmIkfXS+Xm9iQ/Z0gfXSrPoIG9/VWOJD93qrPN+vWskMqUE5sWwCvCwgsi8XX68hh4wbH8MLBjYEU6wFDx0dHtFL+2pCBJ+/1JRVuDYKZkhuczpd5AHMGDONb5aNIFbSb4ujRjFE9geiQfJPcop/S6HoLmdKiWyWGsjO/Cm67/4l3IhFUnZwUhmX9Lm8Id/djyLjqxxE0Q5pUtD/kpxgOz3ZzS1/Aii81feGftQDa+as3M6tVU+TMLZhV+7tAHSbTKnbrOdzA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s4kAMfxPzTvQfHwjGMiM95IjpPHEZyE9ARG2oKE2seA=;
- b=UB4wxoDFYlIMtM7tc6sXspFoPSnYZJIKqDipQ2pfI8PeRuihvE/PHKCMM5YbdxTJwNUDi/gONUb+KoiHl9jGGFznWCkxAVbThVI/WUTp4H/89OGGi0B9bMRTUGXa7HfgulTQ9yTMOUp2+RRaESCAMX6SzhqapPee/ZhLvu31KR8=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=leonro@mellanox.com; 
-Received: from AM6PR05MB6408.eurprd05.prod.outlook.com (20.179.5.215) by
- AM6PR05MB4904.eurprd05.prod.outlook.com (20.177.33.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2707.23; Thu, 6 Feb 2020 14:35:21 +0000
-Received: from AM6PR05MB6408.eurprd05.prod.outlook.com
- ([fe80::c99f:9130:561f:dea0]) by AM6PR05MB6408.eurprd05.prod.outlook.com
- ([fe80::c99f:9130:561f:dea0%3]) with mapi id 15.20.2707.024; Thu, 6 Feb 2020
- 14:35:21 +0000
-Date:   Thu, 6 Feb 2020 16:35:19 +0200
-From:   Leon Romanovsky <leonro@mellanox.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        id S1727484AbgBFPM3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Feb 2020 10:12:29 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:5406 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727456AbgBFPM3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 10:12:29 -0500
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 016F8xj2086922
+        for <linux-next@vger.kernel.org>; Thu, 6 Feb 2020 10:12:28 -0500
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y0ktrbtcg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 10:12:27 -0500
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Thu, 6 Feb 2020 15:12:26 -0000
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Thu, 6 Feb 2020 15:12:23 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 016FCMTf47513742
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 6 Feb 2020 15:12:22 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0AFBEAE05D;
+        Thu,  6 Feb 2020 15:12:22 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C5B48AE04D;
+        Thu,  6 Feb 2020 15:12:21 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.152.224.61])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  6 Feb 2020 15:12:21 +0000 (GMT)
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
+ crashes in KVM guests after reboot
+To:     eperezma@redhat.com
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: Re: linux-next: Tree for Jan 30 + 20200206
- (drivers/infiniband/hw/mlx5/)
-Message-ID: <20200206143519.GH414821@unreal>
-References: <20200130152852.6056b5d8@canb.auug.org.au>
- <df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org>
- <ee5f17b6-3282-2137-7e9d-fa0008f9eeb0@infradead.org>
- <20200206073019.GC414821@unreal>
- <20200206114033.GF414821@unreal>
- <20200206143201.GF25297@ziepe.ca>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200206143201.GF25297@ziepe.ca>
-X-ClientProxiedBy: AM0PR07CA0007.eurprd07.prod.outlook.com
- (2603:10a6:208:ac::20) To AM6PR05MB6408.eurprd05.prod.outlook.com
- (2603:10a6:20b:b8::23)
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>
+References: <c022e1d6-0d57-ae07-5e6b-8e40d3b01f4b@de.ibm.com>
+ <20191218100926-mutt-send-email-mst@kernel.org>
+ <2ffdbd95-e375-a627-55a1-6990b0a0e37a@de.ibm.com>
+ <20200106054041-mutt-send-email-mst@kernel.org>
+ <08ae8d28-3d8c-04e8-bdeb-0117d06c6dc7@de.ibm.com>
+ <20200107042401-mutt-send-email-mst@kernel.org>
+ <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
+ <20200107065434-mutt-send-email-mst@kernel.org>
+ <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
+ <20200120012724-mutt-send-email-mst@kernel.org>
+ <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+ <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Thu, 6 Feb 2020 16:12:21 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.3.0
 MIME-Version: 1.0
-Received: from localhost (193.47.165.251) by AM0PR07CA0007.eurprd07.prod.outlook.com (2603:10a6:208:ac::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.9 via Frontend Transport; Thu, 6 Feb 2020 14:35:20 +0000
-X-Originating-IP: [193.47.165.251]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 03bb7ec1-9b13-4037-8111-08d7ab11cb5c
-X-MS-TrafficTypeDiagnostic: AM6PR05MB4904:
-X-Microsoft-Antispam-PRVS: <AM6PR05MB4904B0EEC7D5E82F57F90CC9B01D0@AM6PR05MB4904.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:7691;
-X-Forefront-PRVS: 0305463112
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(366004)(396003)(136003)(376002)(346002)(39860400002)(189003)(199004)(81156014)(5660300002)(54906003)(478600001)(33656002)(1076003)(316002)(6486002)(6916009)(966005)(8936002)(956004)(53546011)(66476007)(66946007)(66556008)(6496006)(81166006)(86362001)(9686003)(8676002)(4326008)(2906002)(26005)(33716001)(186003)(16526019)(52116002);DIR:OUT;SFP:1101;SCL:1;SRVR:AM6PR05MB4904;H:AM6PR05MB6408.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-Received-SPF: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: weE7GGCBXWN92RrX6Q8JNOkObPRRz4J9zXNEBR/IG6MZcvzRWzWbwrlu0crnVQvzGdX9IyQ1f+rV5iEZBzH+XFOrtH0r1UouAnVhA1jHVaotEO86cUskz/d2q8wPRIVP7PWOh5Snp+g/pz6fuuVqn2UxIK2wiqrnsSOPc15trIZhGfGmbzBVjY114Kum0HebSUKMocJMVx3OyjrvBwPwcGxnHQCD2XqduUNHqns2CoPGr3HEmTQWsNI4tb40ytfgmDw7UMZ8PLV0oinjJCJ4hhJ7GSI48SZRA1wgdtzm0BV7jHjfv54+vV/9E1b168nct447v90j4qHc17kMPmaayhWi496BbLIx2ikatpHQZRZ22UeIoxQEVw5O3HmM7gdItjgtfcSn3JaVBR6ho/Ui3fCW4NNvtNp2y5e3q0VnSi9QViv+hHqcfFzxT3z0yiwjvPFvl5rq9XKP45Wqu2l6ESY7KMxlgdL5CSNyCok/DyCEC7dcbcuf9vpTaOi+iWf5pgEvgu551LS2G78a6A+pzw==
-X-MS-Exchange-AntiSpam-MessageData: j98p+KKh8L+WDpue832bxERTmDURES0tuqxcYItHQg0trnT7A3ed4QbMcKTwHMqFmS5URb2FpiVLDnNTt0rUqfjwShJ2otsvNHQKjnU8SVIUtvWGrsursDdyvWMnzyzSldLc60FStOWimwUGW/qFPg==
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03bb7ec1-9b13-4037-8111-08d7ab11cb5c
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2020 14:35:21.2524
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u/LUdzBWhI5LHiu/Ru3ilPa14lfgFqJ9ztZFSj8foi20zjtnR2fPX0+B3hUOQQDQXQQsxCkCF4MzENUGt/V73A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM6PR05MB4904
+In-Reply-To: <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20020615-0008-0000-0000-0000035057B5
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20020615-0009-0000-0000-00004A70EC21
+Message-Id: <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-06_01:2020-02-06,2020-02-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=804
+ impostorscore=0 malwarescore=0 suspectscore=1 phishscore=0 adultscore=0
+ lowpriorityscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002060116
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Feb 06, 2020 at 10:32:01AM -0400, Jason Gunthorpe wrote:
-> On Thu, Feb 06, 2020 at 01:40:33PM +0200, Leon Romanovsky wrote:
-> > On Thu, Feb 06, 2020 at 09:30:19AM +0200, Leon Romanovsky wrote:
-> > > On Wed, Feb 05, 2020 at 09:31:15PM -0800, Randy Dunlap wrote:
-> > > > On 1/30/20 5:47 AM, Randy Dunlap wrote:
-> > > > > On 1/29/20 8:28 PM, Stephen Rothwell wrote:
-> > > > >> Hi all,
-> > > > >>
-> > > > >> Please do not add any v5.7 material to your linux-next included
-> > > > >> branches until after v5.6-rc1 has been released.
-> > > > >>
-> > > > >> Changes since 20200129:
-> > > > >>
-> > > > >
-> > > > > on i386:
-> > > > >
-> > > > > ERROR: "__udivdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-> > > > > ERROR: "__divdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-> > > > >
-> > > > >
-> > > > > Full randconfig file is attached.
-> > > > >
-> > > > >
-> > > >
-> > > > I am still seeing this on linux-next of 20200206.
-> > >
-> > > Sorry, I was under wrong impression that this failure is connected to
-> > > other issue reported by you.
-> > >
-> > > I'm looking on it right now.
-> >
-> > Randy,
-> >
-> > I'm having hard time to reproduce the failure.
-> > ➜  kernel git:(a0c61bf1c773) ✗ git fixes
-> > Fixes: a0c61bf1c773 ("Add linux-next specific files for 20200206")
-> > ➜  kernel git:(a0c61bf1c773) ✗ wget https://lore.kernel.org/lkml/df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org/2-config-r9621
-> > from https://lore.kernel.org/lkml/df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org/
-> > ➜  kernel git:(a0c61bf1c773) ✗ mv 2-config-r9621 .config
-> > ➜  kernel git:(a0c61bf1c773) ✗ make ARCH=i386 -j64 -s M=drivers/infiniband/hw/mlx5
-> > ➜  kernel git:(a0c61bf1c773) ✗ file drivers/infiniband/hw/mlx5/mlx5_ib.ko
-> > drivers/infiniband/hw/mlx5/mlx5_ib.ko: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), BuildID[sha1]=49f81f5d56f7caf95d4a6cc9097391622c34f4ba, not stripped
-> >
-> > on my 64bit system:
-> > ➜  kernel git:(rdma-next) file drivers/infiniband/hw/mlx5/mlx5_ib.ko
-> > drivers/infiniband/hw/mlx5/mlx5_ib.ko: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), BuildID[sha1]=2dcb1e30d0bba9885d5a824f6f57488a98f0c95d, with debug_info, not stripped
->
-> You need to link to see it..
 
-I tried to run full compilation but didn't see too :(.
 
-Thanks for the patch.
+On 06.02.20 15:22, eperezma@redhat.com wrote:
+> Hi Christian.
+> 
+> Could you try this patch on top of ("38ced0208491 vhost: use batched version by default")?
+> 
+> It will not solve your first random crash but it should help with the lost of network connectivity.
+> 
+> Please let me know how does it goes.
 
->
-> From bee7b242c2c6a3bfb696cd5fa37d83a731f3ab15 Mon Sep 17 00:00:00 2001
-> From: Jason Gunthorpe <jgg@mellanox.com>
-> Date: Thu, 6 Feb 2020 10:27:54 -0400
-> Subject: [PATCH] IB/mlx5: Use div64_u64 for num_var_hw_entries calculation
->
-> On i386:
->
-> ERROR: "__udivdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
-> ERROR: "__divdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
->
-> Fixes: f164be8c0366 ("IB/mlx5: Extend caps stage to handle VAR capabilities")
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Jason Gunthorpe <jgg@mellanox.com>
-> ---
->  drivers/infiniband/hw/mlx5/main.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
-> index 0ca9581432808c..9b88935f805ba2 100644
-> --- a/drivers/infiniband/hw/mlx5/main.c
-> +++ b/drivers/infiniband/hw/mlx5/main.c
-> @@ -6543,7 +6543,7 @@ static int mlx5_ib_init_var_table(struct mlx5_ib_dev *dev)
->  					doorbell_bar_offset);
->  	bar_size = (1ULL << log_doorbell_bar_size) * 4096;
->  	var_table->stride_size = 1ULL << log_doorbell_stride;
-> -	var_table->num_var_hw_entries = bar_size / var_table->stride_size;
-> +	var_table->num_var_hw_entries = div64_u64(bar_size, var_table->stride_size);
->  	mutex_init(&var_table->bitmap_lock);
->  	var_table->bitmap = bitmap_zalloc(var_table->num_var_hw_entries,
->  					  GFP_KERNEL);
-> --
-> 2.25.0
->
+
+38ced0208491 + this seem to be ok.
+
+Not sure if you can make out anything of this (and the previous git bisect log)
+

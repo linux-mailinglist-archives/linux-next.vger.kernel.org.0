@@ -2,128 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 12069154EC7
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 23:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31927154ED1
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 23:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727450AbgBFWOX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Feb 2020 17:14:23 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:55721 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727441AbgBFWOX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 6 Feb 2020 17:14:23 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48DCQN6Gm2z9sRR;
-        Fri,  7 Feb 2020 09:14:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581027260;
-        bh=A8ZkmoXRk52v2YSgwclUIU3fxx5CAge0vR2/vjgapwQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GmJwhs+VtDRhJz6vn51njO9UOKEZXEeEZBDh4MFJFiwXZ/CqfM1nVtmQKOJoxt68e
-         6baZM+XG1kz3stSx3gfRRzkTWI+Gbfy41ela0X5K8cEJ/uc9qihhK6faTooN+6cDSJ
-         qj/cFZV2wFfSHHbpvYCSAxQJ8Xsbz/IRgSKK704JOdsylBAPFleiw/MacpXjT1EqVX
-         nAmA1GN4/RWBp9XPUoHBfXGJ/93aqjW7UVvv+xQVieSny3iyIzIHmnTKFTiDNlZ/ek
-         0JE++hfYebgPr/AF6XSaDXw7y4qE9HszV93sAY9NPQipLKBNfwYI6qHahT0JGkb5qc
-         TQ9fUI8PH8MEw==
-Date:   Fri, 7 Feb 2020 09:14:20 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        zhengbin <zhengbin13@huawei.com>
-Subject: linux-next: manual merge of the vfs tree with the fuse tree
-Message-ID: <20200207091420.7a01cf4b@canb.auug.org.au>
+        id S1727441AbgBFWR2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Feb 2020 17:17:28 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:36016 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727443AbgBFWR2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 17:17:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581027447;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dliw2RAM/nP3vDLbquqsu5FLbVnJwrHBsnpHt8MF4Y8=;
+        b=Bs9Lz2p+ZXJ0cJFtnPu/BAAhMbvh+j1yvWg144fj50x5xlkBdyoBEr2x8q1HVxOJK2QHhl
+        29l4blarwSvcj4vjMulxcihFrrX0oAMlPtF40SASaP5nrL9Ejfry5jZl0q0rQqEJfXqhla
+        jc8TW2xr73wHMEjOjScOc/uan276LJQ=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-295-1c6ft0thN1ODtMveAnLwlw-1; Thu, 06 Feb 2020 17:17:25 -0500
+X-MC-Unique: 1c6ft0thN1ODtMveAnLwlw-1
+Received: by mail-qv1-f69.google.com with SMTP id c1so4631931qvw.17
+        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 14:17:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=dliw2RAM/nP3vDLbquqsu5FLbVnJwrHBsnpHt8MF4Y8=;
+        b=QWuQPFSKjYsQYJ2i4efUMbV9sJ9ax5wVJ3JqqumExWCjIVIbZiMf90DCSeTIfVb7S6
+         Ke3KTNrsuOLXksBvrLMVfT3Ynut0IJ+ABkLLsFOG9HKApp3E+mzHXFeuou9p3yTt/9vZ
+         cIOv+gg7vmAEAzPKabp1Kbw1Gbp267LDmILEEiD4WBblfb6aIFjdr5stmVBWPQD7NLe7
+         PxFkzzAPhV/iB+dfXyrDF3A7ElfdwmvlHk8nIl62mYdQhz5FuCpIKak9asmDvE2WsOQI
+         x6VomGOX9AYYpRMO825oaGMrjCpQHu8913Kz+NR521NblsvDtJ8n4wnYA0XGDRZ7cUZV
+         Tjbw==
+X-Gm-Message-State: APjAAAWRyoQQd0dKhSXh3rhWHt6X23bg0GWKXD0bAXSKz9ySCQC+ejlm
+        duSfq6Y9tKpp8ToXgQV0UR3Iu2gIJozRTWSgegQD/66paOJY5mHpAEScAMTDW8ZFDI3VFS6G19v
+        QUx4zgWqTOuKE+HUrYGExNw==
+X-Received: by 2002:ad4:4c42:: with SMTP id cs2mr4304146qvb.198.1581027445020;
+        Thu, 06 Feb 2020 14:17:25 -0800 (PST)
+X-Google-Smtp-Source: APXvYqx4aT6nHPT/UCOxB/dIpvh77YFb+ccbCujxO7QlHqlvH0kWVJQHP+Kls/zNpxqC5KRYicsxvQ==
+X-Received: by 2002:ad4:4c42:: with SMTP id cs2mr4304120qvb.198.1581027444763;
+        Thu, 06 Feb 2020 14:17:24 -0800 (PST)
+Received: from redhat.com (bzq-79-176-41-183.red.bezeqint.net. [79.176.41.183])
+        by smtp.gmail.com with ESMTPSA id s22sm362089qke.19.2020.02.06.14.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2020 14:17:23 -0800 (PST)
+Date:   Thu, 6 Feb 2020 17:17:19 -0500
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     eperezma@redhat.com,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
+ crashes in KVM guests after reboot
+Message-ID: <20200206171349-mutt-send-email-mst@kernel.org>
+References: <20200106054041-mutt-send-email-mst@kernel.org>
+ <08ae8d28-3d8c-04e8-bdeb-0117d06c6dc7@de.ibm.com>
+ <20200107042401-mutt-send-email-mst@kernel.org>
+ <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
+ <20200107065434-mutt-send-email-mst@kernel.org>
+ <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
+ <20200120012724-mutt-send-email-mst@kernel.org>
+ <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+ <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+ <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NimPq_aa3RhVoJVZdgT6mys";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NimPq_aa3RhVoJVZdgT6mys
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 06, 2020 at 04:12:21PM +0100, Christian Borntraeger wrote:
+> 
+> 
+> On 06.02.20 15:22, eperezma@redhat.com wrote:
+> > Hi Christian.
+> > 
+> > Could you try this patch on top of ("38ced0208491 vhost: use batched version by default")?
+> > 
+> > It will not solve your first random crash but it should help with the lost of network connectivity.
+> > 
+> > Please let me know how does it goes.
+> 
+> 
+> 38ced0208491 + this seem to be ok.
+> 
+> Not sure if you can make out anything of this (and the previous git bisect log)
 
-Hi all,
+Yes it does - that this is just bad split-up of patches, and there's
+still a real bug that caused worse crashes :)
 
-Today's linux-next merge of the vfs tree got a conflict in:
+So I just pushed batch-v4.
+I expect that will fail, and bisect to give us
+    vhost: batching fetches
+Can you try that please?
 
-  fs/fuse/inode.c
 
-between commit:
-
-  cabdb4fa2f66 ("fuse: use true,false for bool variable")
-
-from the fuse tree and commit:
-
-  76c50219b279 ("fuse: switch to use errorfc() et.al.")
-
-from the vfs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/fuse/inode.c
-index 77fef29ebe4f,557611dc2d46..000000000000
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@@ -499,23 -494,23 +494,23 @@@ static int fuse_parse_param(struct fs_c
- =20
-  	case OPT_ROOTMODE:
-  		if (!fuse_valid_type(result.uint_32))
-- 			return invalf(fc, "fuse: Invalid rootmode");
-+ 			return invalfc(fc, "Invalid rootmode");
-  		ctx->rootmode =3D result.uint_32;
- -		ctx->rootmode_present =3D 1;
- +		ctx->rootmode_present =3D true;
-  		break;
- =20
-  	case OPT_USER_ID:
-  		ctx->user_id =3D make_kuid(fc->user_ns, result.uint_32);
-  		if (!uid_valid(ctx->user_id))
-- 			return invalf(fc, "fuse: Invalid user_id");
-+ 			return invalfc(fc, "Invalid user_id");
- -		ctx->user_id_present =3D 1;
- +		ctx->user_id_present =3D true;
-  		break;
- =20
-  	case OPT_GROUP_ID:
-  		ctx->group_id =3D make_kgid(fc->user_ns, result.uint_32);
-  		if (!gid_valid(ctx->group_id))
-- 			return invalf(fc, "fuse: Invalid group_id");
-+ 			return invalfc(fc, "Invalid group_id");
- -		ctx->group_id_present =3D 1;
- +		ctx->group_id_present =3D true;
-  		break;
- =20
-  	case OPT_DEFAULT_PERMISSIONS:
-
---Sig_/NimPq_aa3RhVoJVZdgT6mys
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl48j7wACgkQAVBC80lX
-0GwTqwf/Ra+DuKCaCFeOB/Qag645dJEQWR/OayhGkAd7WP+2EumT/7DaDZYrbcN7
-Jf0Wvp2kLXTAF2j7qhZ9MKQ24FURxqJbQKQHfnjDH4II/PqV2V9BUYEbLfjFieWm
-l3hgRfAnOFL+BSzdm2S6lRsSLras4dODIR74/7/r4CBT+CmMH1nz9VAkBGUzVbgi
-QygVU4grO+DjTYqRNGyo28nZlMob0bJ+lL3UR+Uj+8ETfZfdoy/Y9Woviu1L6rFw
-ETMJIfaYU7CIepXxPBRW9agSUEZyMqA7ftZRXU4W/GdtDP+EIHLqMqV/AxJWz9Cd
-tI6Jbty7fTEcgaFmsB980FJo0uKnlA==
-=rM/r
------END PGP SIGNATURE-----
-
---Sig_/NimPq_aa3RhVoJVZdgT6mys--

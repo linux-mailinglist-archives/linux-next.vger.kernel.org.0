@@ -2,354 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C04153E5F
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 06:53:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C468153F3F
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 08:30:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726673AbgBFFxC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Feb 2020 00:53:02 -0500
-Received: from mail-wm1-f50.google.com ([209.85.128.50]:35479 "EHLO
-        mail-wm1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725895AbgBFFxC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 00:53:02 -0500
-Received: by mail-wm1-f50.google.com with SMTP id b17so5488596wmb.0
-        for <linux-next@vger.kernel.org>; Wed, 05 Feb 2020 21:53:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=pmUu9FHYSOZN0BmsEHSKbxSw9vaVlZRHBvj7ijlJHKQ=;
-        b=QOuGS90zpuYk3A76bTH86wC+qJTxPXiJQZHle71e6teT7fofKDum7EJHXc0ZUyXRsu
-         Jr02txNP45mtr3D/cc5JerUqKRsk9hydFJVwdhpkZzIdhQ4mPc94pKlPY2Bjy7b52f53
-         Z4H3qrumdCWZgLReXP9TCx+rurfEg3IMdMaDe6Zg602u/0i2DgvU59qUVb6NBTy+kb1H
-         bRa+TxxR91k8JEmndyZyEbiQNbtLgl2jPE4s/WleveQwoCOJhlAYWXkNgPezO794WdWD
-         uIblOdaAppAo1MJbkvNyLO7sCyu2FFiW5+x/61SCELoFbJW6tPash2AlOcIuP2zbrYSS
-         MgXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=pmUu9FHYSOZN0BmsEHSKbxSw9vaVlZRHBvj7ijlJHKQ=;
-        b=Y5z7AzFHm4MTvjXJF0sXBaUrQzvLkzvjbH6oYTgqxyVqs/Yyd4xY9ix2WJBr5SFxMx
-         zM+lkouB6wcPC/aAsWqaxzyWyASS+Oxi0vK/T/iZeyTxCuGBTmAzkk96ryTrzRBkrnI0
-         I0D7sKmOiAQc/S7+2x8rnQc2QWGPMg9TzWtYFS+Cxjpp7nMPZx4hx1ociIp2Kkd3VBR6
-         T9gk80ho7taTxSAdKd7UQNnShEKoZK4Zxr3TRVmDk2jLovXh1aMZs93ikcP0EEruN6q3
-         w+7yreDkJ/o6aVn95SzeGF/tjIK4AY8Pz61F2dBuNOmzXf5JZugYvfRr22SXeVKqBbZy
-         J+zA==
-X-Gm-Message-State: APjAAAVUMwODE6CwcAbfuAf8BoDmgRtDlyKDWc5B309FC4PyxadWSOrB
-        LkfAs3Dd4XquOhzh2qosZXUk+cptAOaW/A==
-X-Google-Smtp-Source: APXvYqy2ieTinwvSYAbp75458yyZBez3JNBXCdFX8nLbeIGY/cyRe1+nL2rUYm0dVl6W/nNT7odXUA==
-X-Received: by 2002:a7b:c318:: with SMTP id k24mr2289552wmj.54.1580968379295;
-        Wed, 05 Feb 2020 21:52:59 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id t12sm2722199wrq.97.2020.02.05.21.52.58
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2020 21:52:58 -0800 (PST)
-Message-ID: <5e3ba9ba.1c69fb81.511c5.b9ba@mx.google.com>
-Date:   Wed, 05 Feb 2020 21:52:58 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1727925AbgBFHa1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Feb 2020 02:30:27 -0500
+Received: from mail-eopbgr40057.outbound.protection.outlook.com ([40.107.4.57]:23438
+        "EHLO EUR03-DB5-obe.outbound.protection.outlook.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1727904AbgBFHa1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 6 Feb 2020 02:30:27 -0500
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Cc6sAe9fPlIttTG8dfENGGNxuEdinRdHOGfEInA9M1xZD7AZHU2G99QxXXcESpjpSNSxx6fgd6MPHnfd8Lj/Aznc9fQ22baZFf9m92nwPlmIwu787JbeIDd8Wan7TcM0bAb2xAcO6j0a20uSNeRAePGw/SIDsYo6qhWnRiNzNTm4oUeIpNDpUsmUGZlUdRGp6hiXZdUSNRVSKaA0lbfrII9rh0aNHUJHC+gHgN5KxuHxLtB6KC9UoFZjLJdXj98Mi27usHEzM8A39q4QxkZj4FmD6ORYhwFe82mfJzS00684/cmyGUh+aM4e67wayAr7ECeEKGVZbHSs/FEk23emOg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZwAV2qlksA6YChr6UNE4kFlDPkmy0EXusnEqLepTHrM=;
+ b=IIurxGNFGLILrH/S2Wo+GmjyA66KyiucAoSdjq5J6qKoxy1RnsVeUAVZqYaYfIYNBdlJuKZBvTFlv5M5jTvKVujJj4ybjMVJQ3JCE2C5Gc9uNx+EldRs19XLWfuKNkP38WgKMms68rPRCKZqxRoRzU947b76JhPiwv/VU8tkJ31qWtl31lCOiB+Lu0tkKGL7hYDFz8PU3gbINx/2UCxA/zl7U208Xsi4utEfETWuzpa1LRPSbzF12EiJTPP/Tu8sImS/rUUagZgCMwtWDBjm7osWINUeOvXUuYbmWYOg3C29lSB7n25XGY6C7i6uH1ml4C+dKRWKk507Ug1MAz5WrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
+ dkim=pass header.d=mellanox.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZwAV2qlksA6YChr6UNE4kFlDPkmy0EXusnEqLepTHrM=;
+ b=Ld6PaD377rscZWSsdlcxslKYthkoZZSxqtpisK44rh5qHYMHupE9b9eK3NjJaq+hVhbSXOl63UcmJqa8i/NM5+mDZsfTEySZsAeLRAPopsqRMIeIr327T9A6fYW5nShRMxNpvJVI4XoyjmDquLeXfvOaDSoY41Qc8PDDvkyCIvw=
+Authentication-Results: spf=none (sender IP is )
+ smtp.mailfrom=leonro@mellanox.com; 
+Received: from AM0PR05MB6401.eurprd05.prod.outlook.com (20.179.33.209) by
+ AM0PR05MB4530.eurprd05.prod.outlook.com (52.133.60.18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.2686.32; Thu, 6 Feb 2020 07:30:21 +0000
+Received: from AM0PR05MB6401.eurprd05.prod.outlook.com
+ ([fe80::696a:cf1d:c438:bcd5]) by AM0PR05MB6401.eurprd05.prod.outlook.com
+ ([fe80::696a:cf1d:c438:bcd5%7]) with mapi id 15.20.2686.034; Thu, 6 Feb 2020
+ 07:30:21 +0000
+Date:   Thu, 6 Feb 2020 09:30:19 +0200
+From:   Leon Romanovsky <leonro@mellanox.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: linux-next: Tree for Jan 30 + 20200206
+ (drivers/infiniband/hw/mlx5/)
+Message-ID: <20200206073019.GC414821@unreal>
+References: <20200130152852.6056b5d8@canb.auug.org.au>
+ <df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org>
+ <ee5f17b6-3282-2137-7e9d-fa0008f9eeb0@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee5f17b6-3282-2137-7e9d-fa0008f9eeb0@infradead.org>
+X-ClientProxiedBy: FRYP281CA0010.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::20)
+ To AM0PR05MB6401.eurprd05.prod.outlook.com (2603:10a6:208:13e::17)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.5-9670-g2c46fb8a6882
-X-Kernelci-Report-Type: build
-Subject: next/pending-fixes build: 33 builds: 0 failed, 33 passed,
- 33 warnings (v5.5-9670-g2c46fb8a6882)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Received: from localhost (193.47.165.251) by FRYP281CA0010.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10::20) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2707.21 via Frontend Transport; Thu, 6 Feb 2020 07:30:21 +0000
+X-Originating-IP: [193.47.165.251]
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-HT: Tenant
+X-MS-Office365-Filtering-Correlation-Id: 11554267-29a1-4024-99e0-08d7aad66c52
+X-MS-TrafficTypeDiagnostic: AM0PR05MB4530:
+X-Microsoft-Antispam-PRVS: <AM0PR05MB45303831FF10A80A005FF894B01D0@AM0PR05MB4530.eurprd05.prod.outlook.com>
+X-MS-Oob-TLC-OOBClassifiers: OLM:3513;
+X-Forefront-PRVS: 0305463112
+X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(7916004)(4636009)(39860400002)(136003)(366004)(396003)(376002)(346002)(189003)(199004)(9686003)(956004)(66476007)(66556008)(52116002)(66946007)(186003)(53546011)(5660300002)(316002)(54906003)(81166006)(81156014)(8676002)(6496006)(86362001)(6486002)(33716001)(478600001)(8936002)(33656002)(26005)(16526019)(2906002)(1076003)(6916009)(4744005)(4326008);DIR:OUT;SFP:1101;SCL:1;SRVR:AM0PR05MB4530;H:AM0PR05MB6401.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
+Received-SPF: None (protection.outlook.com: mellanox.com does not designate
+ permitted sender hosts)
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pJtRCL0rANp7tf1P8IiJg6wpLWahCUiHlr+0zmyr6pNG0RYeaiP7/tmjqCKx0rjnQYO35dEDOB2gv87iy+yeWZ6vR9kr8emm4jBrJlyOt3806aKMOp+HVHa6BInp7tifu55kVqUzCZYbOsltpzkAmIf3VurXfbUX17yQdDSePfc+0ATlZJX5y7X27+VKLM6o/NIUMWxGg6n6BBRJuOxxL/bc/b+MCyYHs1EPlcTaTagbTqTnu9ly/fhxYgbnIeoYEV/gIvlWAv0NBgOt2SYT4Kwe3vgE6JDe12/NxZTBKz01oIpnyFsb6BOF4Eox1Joeql5Bbj9bgb/ma6MSxmo/BH81npIofZVbJl0/7jBtU18iLHsX/YvGgfBBtlFJaobSBP3kFRodweX+9UcYT3/3R4ZYsIRLtCbBjrmm9E/OmKLatHELzlv2PamNA4QdrSPH
+X-MS-Exchange-AntiSpam-MessageData: v3zTRxPXd4gXJ2kFjSsFlWdDLwBM7ATjgpiNGnbLNA9KUBv0NuYY7YJkGD791POdijiP2NQEtuRxJciG3idd6+or/3b0u5wO2WVPykLhszEH91eQlRjZ3QNWVFUCYsorz68oNg0DLscUt4rTSydcQg==
+X-OriginatorOrg: Mellanox.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11554267-29a1-4024-99e0-08d7aad66c52
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2020 07:30:21.4599
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YMk2hCQa82Rcn1rb/s70whecCYXpjIav/7wzfd9BKM6en1u/AXzxZeWn7dZWMiJVI1XWc4A7m8PnCTThGJ4bNA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR05MB4530
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 33 builds: 0 failed, 33 passed, 33 warnings (v5.5=
--9670-g2c46fb8a6882)
+On Wed, Feb 05, 2020 at 09:31:15PM -0800, Randy Dunlap wrote:
+> On 1/30/20 5:47 AM, Randy Dunlap wrote:
+> > On 1/29/20 8:28 PM, Stephen Rothwell wrote:
+> >> Hi all,
+> >>
+> >> Please do not add any v5.7 material to your linux-next included
+> >> branches until after v5.6-rc1 has been released.
+> >>
+> >> Changes since 20200129:
+> >>
+> >
+> > on i386:
+> >
+> > ERROR: "__udivdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+> > ERROR: "__divdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+> >
+> >
+> > Full randconfig file is attached.
+> >
+> >
+>
+> I am still seeing this on linux-next of 20200206.
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.5-9670-g2c46fb8a6882/
+Sorry, I was under wrong impression that this failure is connected to
+other issue reported by you.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.5-9670-g2c46fb8a6882
-Git Commit: 2c46fb8a6882cf96d34fe1c2ac2cd097de58a68e
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 5 unique architectures
+I'm looking on it right now.
 
-Warnings Detected:
+Thanks
 
-arm64:
-
-arm:
-    allmodconfig (gcc-8): 16 warnings
-
-i386:
-    i386_defconfig (gcc-8): 16 warnings
-
-mips:
-
-x86_64:
-    tinyconfig (gcc-8): 1 warning
-
-
-Warnings summary:
-
-    16   arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width o=
-f type [-Wshift-count-overflow]
-    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
-integer of different size [-Wpointer-to-int-cast]
-    1    /tmp/cctiBRPU.s:18191: Warning: using r15 results in unpredictable=
- behaviour
-    1    /tmp/cctiBRPU.s:18119: Warning: using r15 results in unpredictable=
- behaviour
-    1    .config:1159:warning: override: UNWINDER_GUESS changes choice state
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 section =
-mismatches
-
-Warnings:
-    /tmp/cctiBRPU.s:18119: Warning: using r15 results in unpredictable beha=
-viour
-    /tmp/cctiBRPU.s:18191: Warning: using r15 results in unpredictable beha=
-viour
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
-er of different size [-Wpointer-to-int-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
-mismatches
-
----------------------------------------------------------------------------=
------
-hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 16 warning=
-s, 0 section mismatches
-
-Warnings:
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-    arch/x86/kvm/x86.h:363:16: warning: right shift count >=3D width of typ=
-e [-Wshift-count-overflow]
-
----------------------------------------------------------------------------=
------
-ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
-ismatches
-
-Warnings:
-    .config:1159:warning: override: UNWINDER_GUESS changes choice state
-
----------------------------------------------------------------------------=
------
-vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----
-For more info write to <info@kernelci.org>
+>
+> --
+> ~Randy
+>

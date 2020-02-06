@@ -2,190 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7522D1545FA
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 15:22:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 290E515463B
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 15:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727980AbgBFOWr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Feb 2020 09:22:47 -0500
-Received: from us-smtp-1.mimecast.com ([205.139.110.61]:49742 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727415AbgBFOWr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 09:22:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1580998966;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=E33KDfHwzzctyySWOHYAqupA1xDN5Ko7hssayl+bQwc=;
-        b=CYybzKXKpiEkqGxbMBCWUVNg0dNRA8hNPnZ6piupJA+t8il638NdNodDlrtXZHAvTtW2Y9
-        yTVlCfzYFfjNoA2/hjgEmRItvngO0xHn/ZabQIaVnjWn0sMLv9Ki3K6+PqNQ/0IxZxabJi
-        ru+6eHu3xzMwiiFB2htCNDuGmZYiic4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-140-Rt31B9JhNv2Pp6SduOzrsQ-1; Thu, 06 Feb 2020 09:22:44 -0500
-X-MC-Unique: Rt31B9JhNv2Pp6SduOzrsQ-1
-Received: by mail-wm1-f71.google.com with SMTP id o24so49987wmh.0
-        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 06:22:44 -0800 (PST)
+        id S1728039AbgBFOcE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Feb 2020 09:32:04 -0500
+Received: from mail-qt1-f196.google.com ([209.85.160.196]:44355 "EHLO
+        mail-qt1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727925AbgBFOcD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 09:32:03 -0500
+Received: by mail-qt1-f196.google.com with SMTP id w8so4593147qts.11
+        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 06:32:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=pyov8FWczadKme8MmKIuLoy6Cco1Gr8F1ki//7JnOus=;
+        b=WtfTXcpxEKjugOdoQ3xRt6ZtM85WSP/qurSvrIDFedMQ2O9pvih8+hrmBuSGbGmtGa
+         N1n3Fw8knLnnvb4ofVFPGUTG8T0U0PeyP8xMS3/9Phf4gnK3Xkuo5liOPa6zSihQt050
+         bHZ6g4WV7jzYWWvSMRUIjVeclvvWj1QN/pRkO/wlWK/FS9lTji60yAGE2RAh4DvLbG3A
+         AJscWPn+Yr6fwftqrnGtCXO/BsrB/LhpM8M7B90l4AynGy1W+ewNGKa5Hg98AllDlDfW
+         F8d0+S5Wal6FlyjvAqBXml5yz3NfepnpIaBxYYKBSvjyeI6ovASl9pm85dJE0IsAYwq1
+         2pPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=E33KDfHwzzctyySWOHYAqupA1xDN5Ko7hssayl+bQwc=;
-        b=PgM4S7gwCA/QermE393LG4/UcnBGoZm9ihvHvCB5ZXh3jVNA4kJrHT/AwDWQRuw6Q/
-         TYtjdGo9zd44WmEEVlKXPhMTBg6c9YKuo+K2ZsCCAkHSQ07PVdULfnH51+M7yOE+ZVh+
-         mUJMZ8Nh49Ipr3JyUvcncHRJH+UzcKdXLfL23HYCzI3/pt+0ZkW3dy1jjhrP8Nmv795p
-         eOVTrSbWrhUihkwU+dCmW7iGpaQ2Oq1Q4mFf5PGtVB8b47Uy87cO8ysthOB09qGS6DrQ
-         8OnBPneb8+7ru9R3MGVu66qXvNHNxu4ABOg/ID2QGsDawAM4KwaOMPnaoVE7kFhEjveR
-         G5tw==
-X-Gm-Message-State: APjAAAX4mdvoQezqEAjbGlgdzndT7cUcUloa9KoS3naTjxIQZi+q4+OL
-        EGkHo4QFsq9qTHOBo/QvIf6or8GBrXTjyi/h0UrQ+zOLmUYTMxvjiQ1IbVzsKxAc8Swc7k7cIkz
-        9UsiZNTbjbtxv0yfMfTvcKA==
-X-Received: by 2002:adf:ebc6:: with SMTP id v6mr3994367wrn.75.1580998962366;
-        Thu, 06 Feb 2020 06:22:42 -0800 (PST)
-X-Google-Smtp-Source: APXvYqxG7BBemHdFdSKhjME040XnbLs09XyhcJynHyJNGXKCsyl9KkmnJAkxk+E5CCHZv+jaiz2pCA==
-X-Received: by 2002:adf:ebc6:: with SMTP id v6mr3994337wrn.75.1580998962098;
-        Thu, 06 Feb 2020 06:22:42 -0800 (PST)
-Received: from eperezma.remote.csb (static-143-30-231-77.ipcom.comunitel.net. [77.231.30.143])
-        by smtp.gmail.com with ESMTPSA id 21sm3825312wmo.8.2020.02.06.06.22.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 06:22:41 -0800 (PST)
-Message-ID: <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
-Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
- random crashes in KVM guests after reboot
-From:   eperezma@redhat.com
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=pyov8FWczadKme8MmKIuLoy6Cco1Gr8F1ki//7JnOus=;
+        b=XQot1YBm3VywS/8XsaBpWM8CW03ZecIaw/rLX8XRrth70DOqzIgpo9QpELPMQ1yaiC
+         otk7VyjjujHGkofZkqkIASNdM0gtKAv880doVKMxWn+wddKG+vP+mP64I2kF4519MZEu
+         ql4AkSREKv3iCH5HPGDxqMh7bAuD1ZpadKonzVzPqUwUT8ubdN5wjzBztuphDv6QisYq
+         FndmPQM5stR11eJGUHDNB1iGFnuAgoC+gZJK6YsKYDxB9qLzQbqUYyP9xDObIilyoCQe
+         KLu+s8DhGiCugFJZTrnbfGGQcWEJmjxbYferUnibW/uHBdaYUti22p8+jXc0v6ct9k6k
+         cOIA==
+X-Gm-Message-State: APjAAAUmGs34O+VKZGXDmN0C+Oyn0VsQOAKSTXwvGcwO7D/4Sjmey5Ep
+        ArEpRAzHfuhOC6juNu6qzWGinA==
+X-Google-Smtp-Source: APXvYqxaFmlEZVaYCGxniyRdpgnZCuo+d+DFXAYGbH+kt4gdysoKdLuey3EiRMl+NGSIfVqKZgszig==
+X-Received: by 2002:ac8:7695:: with SMTP id g21mr2570013qtr.99.1580999522855;
+        Thu, 06 Feb 2020 06:32:02 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-68-57-212.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.57.212])
+        by smtp.gmail.com with ESMTPSA id 69sm1464198qkk.106.2020.02.06.06.32.02
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 06 Feb 2020 06:32:02 -0800 (PST)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1iziCH-0005pg-Sr; Thu, 06 Feb 2020 10:32:01 -0400
+Date:   Thu, 6 Feb 2020 10:32:01 -0400
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Leon Romanovsky <leonro@mellanox.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>
-Date:   Thu, 06 Feb 2020 15:22:39 +0100
-In-Reply-To: <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
-References: <c022e1d6-0d57-ae07-5e6b-8e40d3b01f4b@de.ibm.com>
-         <20191218100926-mutt-send-email-mst@kernel.org>
-         <2ffdbd95-e375-a627-55a1-6990b0a0e37a@de.ibm.com>
-         <20200106054041-mutt-send-email-mst@kernel.org>
-         <08ae8d28-3d8c-04e8-bdeb-0117d06c6dc7@de.ibm.com>
-         <20200107042401-mutt-send-email-mst@kernel.org>
-         <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
-         <20200107065434-mutt-send-email-mst@kernel.org>
-         <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
-         <20200120012724-mutt-send-email-mst@kernel.org>
-         <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
-Mime-Version: 1.0
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: linux-next: Tree for Jan 30 + 20200206
+ (drivers/infiniband/hw/mlx5/)
+Message-ID: <20200206143201.GF25297@ziepe.ca>
+References: <20200130152852.6056b5d8@canb.auug.org.au>
+ <df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org>
+ <ee5f17b6-3282-2137-7e9d-fa0008f9eeb0@infradead.org>
+ <20200206073019.GC414821@unreal>
+ <20200206114033.GF414821@unreal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200206114033.GF414821@unreal>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Christian.
+On Thu, Feb 06, 2020 at 01:40:33PM +0200, Leon Romanovsky wrote:
+> On Thu, Feb 06, 2020 at 09:30:19AM +0200, Leon Romanovsky wrote:
+> > On Wed, Feb 05, 2020 at 09:31:15PM -0800, Randy Dunlap wrote:
+> > > On 1/30/20 5:47 AM, Randy Dunlap wrote:
+> > > > On 1/29/20 8:28 PM, Stephen Rothwell wrote:
+> > > >> Hi all,
+> > > >>
+> > > >> Please do not add any v5.7 material to your linux-next included
+> > > >> branches until after v5.6-rc1 has been released.
+> > > >>
+> > > >> Changes since 20200129:
+> > > >>
+> > > >
+> > > > on i386:
+> > > >
+> > > > ERROR: "__udivdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+> > > > ERROR: "__divdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+> > > >
+> > > >
+> > > > Full randconfig file is attached.
+> > > >
+> > > >
+> > >
+> > > I am still seeing this on linux-next of 20200206.
+> >
+> > Sorry, I was under wrong impression that this failure is connected to
+> > other issue reported by you.
+> >
+> > I'm looking on it right now.
+> 
+> Randy,
+> 
+> I'm having hard time to reproduce the failure.
+> ➜  kernel git:(a0c61bf1c773) ✗ git fixes
+> Fixes: a0c61bf1c773 ("Add linux-next specific files for 20200206")
+> ➜  kernel git:(a0c61bf1c773) ✗ wget https://lore.kernel.org/lkml/df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org/2-config-r9621
+> from https://lore.kernel.org/lkml/df42492f-a57e-bf71-e7e2-ce4dd7864462@infradead.org/
+> ➜  kernel git:(a0c61bf1c773) ✗ mv 2-config-r9621 .config
+> ➜  kernel git:(a0c61bf1c773) ✗ make ARCH=i386 -j64 -s M=drivers/infiniband/hw/mlx5
+> ➜  kernel git:(a0c61bf1c773) ✗ file drivers/infiniband/hw/mlx5/mlx5_ib.ko
+> drivers/infiniband/hw/mlx5/mlx5_ib.ko: ELF 32-bit LSB relocatable, Intel 80386, version 1 (SYSV), BuildID[sha1]=49f81f5d56f7caf95d4a6cc9097391622c34f4ba, not stripped
+> 
+> on my 64bit system:
+> ➜  kernel git:(rdma-next) file drivers/infiniband/hw/mlx5/mlx5_ib.ko
+> drivers/infiniband/hw/mlx5/mlx5_ib.ko: ELF 64-bit LSB relocatable, x86-64, version 1 (SYSV), BuildID[sha1]=2dcb1e30d0bba9885d5a824f6f57488a98f0c95d, with debug_info, not stripped
 
-Could you try this patch on top of ("38ced0208491 vhost: use batched version by default")?
+You need to link to see it..
 
-It will not solve your first random crash but it should help with the lost of network connectivity.
+From bee7b242c2c6a3bfb696cd5fa37d83a731f3ab15 Mon Sep 17 00:00:00 2001
+From: Jason Gunthorpe <jgg@mellanox.com>
+Date: Thu, 6 Feb 2020 10:27:54 -0400
+Subject: [PATCH] IB/mlx5: Use div64_u64 for num_var_hw_entries calculation
 
-Please let me know how does it goes.
+On i386:
 
-Thanks!
+ERROR: "__udivdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
+ERROR: "__divdi3" [drivers/infiniband/hw/mlx5/mlx5_ib.ko] undefined!
 
-From 99f0f543f3939dbe803988c9153a95616ccccacd Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-Date: Thu, 6 Feb 2020 15:13:42 +0100
-Subject: [PATCH] vhost: filter valid vhost descriptors flags
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-Previous commit copy _NEXT flag, and it complains if a copied descriptor
-contains it.
-
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+Fixes: f164be8c0366 ("IB/mlx5: Extend caps stage to handle VAR capabilities")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Jason Gunthorpe <jgg@mellanox.com>
 ---
- drivers/vhost/vhost.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/infiniband/hw/mlx5/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 27ae5b4872a0..56c5253056ee 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -2125,6 +2125,8 @@ static void pop_split_desc(struct vhost_virtqueue *vq)
- 	--vq->ndescs;
- }
- 
-+#define VHOST_DESC_FLAGS (VRING_DESC_F_INDIRECT | VRING_DESC_F_WRITE | \
-+			  VRING_DESC_F_NEXT)
- static int push_split_desc(struct vhost_virtqueue *vq, struct vring_desc *desc, u16 id)
- {
- 	struct vhost_desc *h;
-@@ -2134,7 +2136,7 @@ static int push_split_desc(struct vhost_virtqueue *vq, struct vring_desc *desc,
- 	h = &vq->descs[vq->ndescs++];
- 	h->addr = vhost64_to_cpu(vq, desc->addr);
- 	h->len = vhost32_to_cpu(vq, desc->len);
--	h->flags = vhost16_to_cpu(vq, desc->flags);
-+	h->flags = vhost16_to_cpu(vq, desc->flags) & VHOST_DESC_FLAGS;
- 	h->id = id;
- 
- 	return 0;
-@@ -2343,7 +2345,7 @@ int vhost_get_vq_desc(struct vhost_virtqueue *vq,
- 		struct vhost_desc *desc = &vq->descs[i];
- 		int access;
- 
--		if (desc->flags & ~(VRING_DESC_F_INDIRECT | VRING_DESC_F_WRITE)) {
-+		if (desc->flags & ~VHOST_DESC_FLAGS) {
- 			vq_err(vq, "Unexpected flags: 0x%x at descriptor id 0x%x\n",
- 			       desc->flags, desc->id);
- 			ret = -EINVAL;
+diff --git a/drivers/infiniband/hw/mlx5/main.c b/drivers/infiniband/hw/mlx5/main.c
+index 0ca9581432808c..9b88935f805ba2 100644
+--- a/drivers/infiniband/hw/mlx5/main.c
++++ b/drivers/infiniband/hw/mlx5/main.c
+@@ -6543,7 +6543,7 @@ static int mlx5_ib_init_var_table(struct mlx5_ib_dev *dev)
+ 					doorbell_bar_offset);
+ 	bar_size = (1ULL << log_doorbell_bar_size) * 4096;
+ 	var_table->stride_size = 1ULL << log_doorbell_stride;
+-	var_table->num_var_hw_entries = bar_size / var_table->stride_size;
++	var_table->num_var_hw_entries = div64_u64(bar_size, var_table->stride_size);
+ 	mutex_init(&var_table->bitmap_lock);
+ 	var_table->bitmap = bitmap_zalloc(var_table->num_var_hw_entries,
+ 					  GFP_KERNEL);
 -- 
-2.18.1
-
-
-On Wed, 2020-01-22 at 20:32 +0100, Christian Borntraeger wrote:
-> 
-> On 20.01.20 07:27, Michael S. Tsirkin wrote:
-> > On Tue, Jan 07, 2020 at 01:16:50PM +0100, Christian Borntraeger wrote:
-> > > On 07.01.20 12:55, Michael S. Tsirkin wrote:
-> > > 
-> > > > I pushed batched-v3 - same head but bisect should work now.
-> > > > 
-> > > 
-> > > With 
-> > > commit 38ced0208491103b50f1056f0d1c8f28e2e13d08 (HEAD)
-> > > Author:     Michael S. Tsirkin <mst@redhat.com>
-> > > AuthorDate: Wed Dec 11 12:19:26 2019 -0500
-> > > Commit:     Michael S. Tsirkin <mst@redhat.com>
-> > > CommitDate: Tue Jan 7 06:52:42 2020 -0500
-> > > 
-> > >     vhost: use batched version by default
-> > > 
-> > > 
-> > > I have exactly one successful ping and then the network inside the guest is broken (no packet
-> > > anymore).
-> > 
-> > Does anything appear in host's dmesg when this happens?
-> 
-> I think there was nothing, but I am not sure. I would need to redo the test if this is important to know.
-> 
-> > 
-> > > So you could consider this commit broken (but in a different way and also without any
-> > > guest reboot necessary).
-> > > 
-> > > 
-> > > bisect log:
-> > > git bisect start
-> > > # bad: [d2f6175f52062ee51ee69754a6925608213475d2] vhost: use vhost_desc instead of vhost_log
-> > > git bisect bad d2f6175f52062ee51ee69754a6925608213475d2
-> > > # good: [d1281e3a562ec6a08f944a876481dd043ba739b9] virtio-blk: remove VIRTIO_BLK_F_SCSI support
-> > > git bisect good d1281e3a562ec6a08f944a876481dd043ba739b9
-> > > # good: [fac7c0f46996e32d996f5c46121df24a6b95ec3b] vhost: option to fetch descriptors through an independent
-> > > struct
-> > > git bisect good fac7c0f46996e32d996f5c46121df24a6b95ec3b
-> > > # bad: [539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc] vhost: batching fetches
-> > > git bisect bad 539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc
+2.25.0
 

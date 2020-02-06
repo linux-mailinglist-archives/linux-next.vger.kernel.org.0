@@ -2,319 +2,190 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DA41543AD
-	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 13:02:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7522D1545FA
+	for <lists+linux-next@lfdr.de>; Thu,  6 Feb 2020 15:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727851AbgBFMCQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 6 Feb 2020 07:02:16 -0500
-Received: from mail-wr1-f53.google.com ([209.85.221.53]:32829 "EHLO
-        mail-wr1-f53.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727111AbgBFMCQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 07:02:16 -0500
-Received: by mail-wr1-f53.google.com with SMTP id u6so6880784wrt.0
-        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 04:02:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=L20zQSI/DQmWielg2Bg3cTc7/75t4RAMtN0tfSg6mbY=;
-        b=fxLaRIKF2kuTGK1/hQEXF3N5AYiEliMpzwQd8aHNtiEasGw7QOGn21lwFWc9IrbAGT
-         soFa9LQB6UjDGiRD51IY8gXegVLGnxddQCfA0GwVk16Zg/xg1K0/uxrQ4WnAME3tHkRy
-         29hWN59Co0WLVHxYQz1G18E02MvrYgMof9Q0q/vuqaMD4jNFyduAzXRy2vxsG07eevBt
-         +DC6hCWLpF10vQ0cISole66aQJ3oEXlkR+ZK+aS/em2aQetBn+1phw8iU2EM+//Y9CG0
-         tcq9Hez/ObEu4bj9sQeVbhQAyprSwsInbmW5LURX+hurw1mWrFOXro4CtyG8xBuNammm
-         oRiQ==
+        id S1727980AbgBFOWr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 6 Feb 2020 09:22:47 -0500
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:49742 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727415AbgBFOWr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 6 Feb 2020 09:22:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1580998966;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=E33KDfHwzzctyySWOHYAqupA1xDN5Ko7hssayl+bQwc=;
+        b=CYybzKXKpiEkqGxbMBCWUVNg0dNRA8hNPnZ6piupJA+t8il638NdNodDlrtXZHAvTtW2Y9
+        yTVlCfzYFfjNoA2/hjgEmRItvngO0xHn/ZabQIaVnjWn0sMLv9Ki3K6+PqNQ/0IxZxabJi
+        ru+6eHu3xzMwiiFB2htCNDuGmZYiic4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-140-Rt31B9JhNv2Pp6SduOzrsQ-1; Thu, 06 Feb 2020 09:22:44 -0500
+X-MC-Unique: Rt31B9JhNv2Pp6SduOzrsQ-1
+Received: by mail-wm1-f71.google.com with SMTP id o24so49987wmh.0
+        for <linux-next@vger.kernel.org>; Thu, 06 Feb 2020 06:22:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=L20zQSI/DQmWielg2Bg3cTc7/75t4RAMtN0tfSg6mbY=;
-        b=FBBlidQarUOCXhRHs5dmtJgEovof74bHbOe7eWSqQpflYa0rhpRBKWqCpsEYYwgbPV
-         JZlzVPj7zEogBl/J7tbj6ZPcZmjF8MLrHtHlvPggbfMNAzX412Pd+hIJbXprn0j50G2/
-         DFVn5BZht3GlxlfuTsMY8Rx1l5d7oNmbYWLzvZF7lTxTOrCQSCrq5QdPXWA80njYYp68
-         QOKHZVHhYpLwoaepvPLMAJ/u+S+dnDdow3vhR3K1t2Hd8hJlXzXTiAITgVrbsSYop3SJ
-         JiplmvjXxfDRFa2IVNKYNjQcb9n11GcZcvg0S9I7wNbEjDu7SMqQ0EDEaZsqd21iH4ry
-         xrxA==
-X-Gm-Message-State: APjAAAU9yq/I3+gByEQJL10xVDKkrIbMernRyCpZrvc9Mp0hANRh3cQQ
-        D6FB3h/bC4bgtTtsav3QlzgJ9QLsm1z4FA==
-X-Google-Smtp-Source: APXvYqxyRNEQlQtr4hrLMgH6QcojL5x08VAeIaGGYs6cTv2/kIxHlGmnz/YA7PPrTFzpGwIDxwhA7A==
-X-Received: by 2002:adf:8442:: with SMTP id 60mr3563142wrf.416.1580990532138;
-        Thu, 06 Feb 2020 04:02:12 -0800 (PST)
-Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id a5sm3348848wmb.37.2020.02.06.04.02.11
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=E33KDfHwzzctyySWOHYAqupA1xDN5Ko7hssayl+bQwc=;
+        b=PgM4S7gwCA/QermE393LG4/UcnBGoZm9ihvHvCB5ZXh3jVNA4kJrHT/AwDWQRuw6Q/
+         TYtjdGo9zd44WmEEVlKXPhMTBg6c9YKuo+K2ZsCCAkHSQ07PVdULfnH51+M7yOE+ZVh+
+         mUJMZ8Nh49Ipr3JyUvcncHRJH+UzcKdXLfL23HYCzI3/pt+0ZkW3dy1jjhrP8Nmv795p
+         eOVTrSbWrhUihkwU+dCmW7iGpaQ2Oq1Q4mFf5PGtVB8b47Uy87cO8ysthOB09qGS6DrQ
+         8OnBPneb8+7ru9R3MGVu66qXvNHNxu4ABOg/ID2QGsDawAM4KwaOMPnaoVE7kFhEjveR
+         G5tw==
+X-Gm-Message-State: APjAAAX4mdvoQezqEAjbGlgdzndT7cUcUloa9KoS3naTjxIQZi+q4+OL
+        EGkHo4QFsq9qTHOBo/QvIf6or8GBrXTjyi/h0UrQ+zOLmUYTMxvjiQ1IbVzsKxAc8Swc7k7cIkz
+        9UsiZNTbjbtxv0yfMfTvcKA==
+X-Received: by 2002:adf:ebc6:: with SMTP id v6mr3994367wrn.75.1580998962366;
+        Thu, 06 Feb 2020 06:22:42 -0800 (PST)
+X-Google-Smtp-Source: APXvYqxG7BBemHdFdSKhjME040XnbLs09XyhcJynHyJNGXKCsyl9KkmnJAkxk+E5CCHZv+jaiz2pCA==
+X-Received: by 2002:adf:ebc6:: with SMTP id v6mr3994337wrn.75.1580998962098;
+        Thu, 06 Feb 2020 06:22:42 -0800 (PST)
+Received: from eperezma.remote.csb (static-143-30-231-77.ipcom.comunitel.net. [77.231.30.143])
+        by smtp.gmail.com with ESMTPSA id 21sm3825312wmo.8.2020.02.06.06.22.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2020 04:02:11 -0800 (PST)
-Message-ID: <5e3c0043.1c69fb81.f082c.e833@mx.google.com>
-Date:   Thu, 06 Feb 2020 04:02:11 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-X-Kernelci-Kernel: next-20200206
-X-Kernelci-Report-Type: build
-Subject: next/master build: 34 builds: 0 failed, 34 passed,
- 16 warnings (next-20200206)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        Thu, 06 Feb 2020 06:22:41 -0800 (PST)
+Message-ID: <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
+ random crashes in KVM guests after reboot
+From:   eperezma@redhat.com
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>
+Date:   Thu, 06 Feb 2020 15:22:39 +0100
+In-Reply-To: <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+References: <c022e1d6-0d57-ae07-5e6b-8e40d3b01f4b@de.ibm.com>
+         <20191218100926-mutt-send-email-mst@kernel.org>
+         <2ffdbd95-e375-a627-55a1-6990b0a0e37a@de.ibm.com>
+         <20200106054041-mutt-send-email-mst@kernel.org>
+         <08ae8d28-3d8c-04e8-bdeb-0117d06c6dc7@de.ibm.com>
+         <20200107042401-mutt-send-email-mst@kernel.org>
+         <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
+         <20200107065434-mutt-send-email-mst@kernel.org>
+         <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
+         <20200120012724-mutt-send-email-mst@kernel.org>
+         <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master build: 34 builds: 0 failed, 34 passed, 16 warnings (next-202002=
-06)
+Hi Christian.
 
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200206/
+Could you try this patch on top of ("38ced0208491 vhost: use batched version by default")?
 
-Tree: next
-Branch: master
-Git Describe: next-20200206
-Git Commit: a0c61bf1c773bfe510d125606253857f02c58797
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 6 unique architectures
+It will not solve your first random crash but it should help with the lost of network connectivity.
 
-Warnings Detected:
+Please let me know how does it goes.
 
-arc:
+Thanks!
 
-arm64:
+From 99f0f543f3939dbe803988c9153a95616ccccacd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+Date: Thu, 6 Feb 2020 15:13:42 +0100
+Subject: [PATCH] vhost: filter valid vhost descriptors flags
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-arm:
-    allmodconfig (gcc-8): 16 warnings
+Previous commit copy _NEXT flag, and it complains if a copied descriptor
+contains it.
 
-i386:
-
-mips:
-
-x86_64:
-
-
-Warnings summary:
-
-    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
-integer of different size [-Wpointer-to-int-cast]
-    1    /tmp/ccYdaih2.s:18191: Warning: using r15 results in unpredictable=
- behaviour
-    1    /tmp/ccYdaih2.s:18119: Warning: using r15 results in unpredictable=
- behaviour
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 section =
-mismatches
-
-Warnings:
-    /tmp/ccYdaih2.s:18119: Warning: using r15 results in unpredictable beha=
-viour
-    /tmp/ccYdaih2.s:18191: Warning: using r15 results in unpredictable beha=
-viour
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
-er of different size [-Wpointer-to-int-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
-eger of different size [-Wint-to-pointer-cast]
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----------------------------------------------------------------------------=
------
-ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
-, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
- mismatches
-
----------------------------------------------------------------------------=
------
-mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
-tion mismatches
-
----------------------------------------------------------------------------=
------
-nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
-section mismatches
-
----------------------------------------------------------------------------=
------
-pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
-, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
-n mismatches
-
----------------------------------------------------------------------------=
------
-tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
----------------------------------------------------------------------------=
------
-tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
-smatches
-
----------------------------------------------------------------------------=
------
-vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
-ion mismatches
-
+Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
 ---
-For more info write to <info@kernelci.org>
+ drivers/vhost/vhost.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index 27ae5b4872a0..56c5253056ee 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -2125,6 +2125,8 @@ static void pop_split_desc(struct vhost_virtqueue *vq)
+ 	--vq->ndescs;
+ }
+ 
++#define VHOST_DESC_FLAGS (VRING_DESC_F_INDIRECT | VRING_DESC_F_WRITE | \
++			  VRING_DESC_F_NEXT)
+ static int push_split_desc(struct vhost_virtqueue *vq, struct vring_desc *desc, u16 id)
+ {
+ 	struct vhost_desc *h;
+@@ -2134,7 +2136,7 @@ static int push_split_desc(struct vhost_virtqueue *vq, struct vring_desc *desc,
+ 	h = &vq->descs[vq->ndescs++];
+ 	h->addr = vhost64_to_cpu(vq, desc->addr);
+ 	h->len = vhost32_to_cpu(vq, desc->len);
+-	h->flags = vhost16_to_cpu(vq, desc->flags);
++	h->flags = vhost16_to_cpu(vq, desc->flags) & VHOST_DESC_FLAGS;
+ 	h->id = id;
+ 
+ 	return 0;
+@@ -2343,7 +2345,7 @@ int vhost_get_vq_desc(struct vhost_virtqueue *vq,
+ 		struct vhost_desc *desc = &vq->descs[i];
+ 		int access;
+ 
+-		if (desc->flags & ~(VRING_DESC_F_INDIRECT | VRING_DESC_F_WRITE)) {
++		if (desc->flags & ~VHOST_DESC_FLAGS) {
+ 			vq_err(vq, "Unexpected flags: 0x%x at descriptor id 0x%x\n",
+ 			       desc->flags, desc->id);
+ 			ret = -EINVAL;
+-- 
+2.18.1
+
+
+On Wed, 2020-01-22 at 20:32 +0100, Christian Borntraeger wrote:
+> 
+> On 20.01.20 07:27, Michael S. Tsirkin wrote:
+> > On Tue, Jan 07, 2020 at 01:16:50PM +0100, Christian Borntraeger wrote:
+> > > On 07.01.20 12:55, Michael S. Tsirkin wrote:
+> > > 
+> > > > I pushed batched-v3 - same head but bisect should work now.
+> > > > 
+> > > 
+> > > With 
+> > > commit 38ced0208491103b50f1056f0d1c8f28e2e13d08 (HEAD)
+> > > Author:     Michael S. Tsirkin <mst@redhat.com>
+> > > AuthorDate: Wed Dec 11 12:19:26 2019 -0500
+> > > Commit:     Michael S. Tsirkin <mst@redhat.com>
+> > > CommitDate: Tue Jan 7 06:52:42 2020 -0500
+> > > 
+> > >     vhost: use batched version by default
+> > > 
+> > > 
+> > > I have exactly one successful ping and then the network inside the guest is broken (no packet
+> > > anymore).
+> > 
+> > Does anything appear in host's dmesg when this happens?
+> 
+> I think there was nothing, but I am not sure. I would need to redo the test if this is important to know.
+> 
+> > 
+> > > So you could consider this commit broken (but in a different way and also without any
+> > > guest reboot necessary).
+> > > 
+> > > 
+> > > bisect log:
+> > > git bisect start
+> > > # bad: [d2f6175f52062ee51ee69754a6925608213475d2] vhost: use vhost_desc instead of vhost_log
+> > > git bisect bad d2f6175f52062ee51ee69754a6925608213475d2
+> > > # good: [d1281e3a562ec6a08f944a876481dd043ba739b9] virtio-blk: remove VIRTIO_BLK_F_SCSI support
+> > > git bisect good d1281e3a562ec6a08f944a876481dd043ba739b9
+> > > # good: [fac7c0f46996e32d996f5c46121df24a6b95ec3b] vhost: option to fetch descriptors through an independent
+> > > struct
+> > > git bisect good fac7c0f46996e32d996f5c46121df24a6b95ec3b
+> > > # bad: [539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc] vhost: batching fetches
+> > > git bisect bad 539eb9d738f048cd7be61f404e8f9c7d9d2ff3cc
+

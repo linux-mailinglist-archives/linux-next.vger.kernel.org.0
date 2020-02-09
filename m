@@ -2,183 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC4F3156CDD
-	for <lists+linux-next@lfdr.de>; Sun,  9 Feb 2020 23:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B8D156CF6
+	for <lists+linux-next@lfdr.de>; Sun,  9 Feb 2020 23:57:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726961AbgBIWee (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Feb 2020 17:34:34 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53601 "EHLO ozlabs.org"
+        id S1726860AbgBIW5k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Feb 2020 17:57:40 -0500
+Received: from mail.kernel.org ([198.145.29.99]:56908 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726798AbgBIWee (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 9 Feb 2020 17:34:34 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726843AbgBIW5j (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 9 Feb 2020 17:57:39 -0500
+Received: from disco-boy.misterjones.org (disco-boy.misterjones.org [51.254.78.96])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48G3kG36G4z9s3x;
-        Mon, 10 Feb 2020 09:34:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581287670;
-        bh=ffXjd4VhSrlkpb235rHpNxHYAPKFxOrUGZz38tgar7c=;
-        h=Date:From:To:Cc:Subject:From;
-        b=c5axue+oz0IuR/8w1alPVvIhpTMn4LBt/PPrlL5TC884UDT4AxxR8wOeH+tvFdXyU
-         ChaULgpJ6e01XZJMK1NYFfOYD2ZbiD2xLUISloJJEC6h0of9WH9SgonYgiKKaZwm/t
-         cBjoX+UuyBPaJX52+388T7eORahGgGaf8Srp5DincTW57c6mUiYs7wprpqquqe3AlN
-         oroRNJ0wlyDXSrgTJmUMZmG9sQCp4XBv3/aiai66ioNoyRLGl3rjcSbnSfWbR1umC4
-         ckoXRJ0v4vIPSsEmY/LLGPeqZye/ZLqtdksfJSLcVSPN4TXXh2IHs57k7n06tG6Tz7
-         6oJIBVHQJRNDg==
-Date:   Mon, 10 Feb 2020 09:34:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.kernel.org (Postfix) with ESMTPSA id BFA99207FF;
+        Sun,  9 Feb 2020 22:57:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1581289058;
+        bh=DxHH/6KEUU3zTOXsaCU8t2IAUpHzhTqiEU3ywqLZ4xQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=txaPllr+Kl78scBUBbbEr/WoRS0VdruoEROS2B5NJZ5BkGeMrUI0eLWO7A01plfcl
+         RO8L1nGrVaxykC0WSaYEafR6hAeiDMdj5GE5JCubdl5YVpT+Nacv0s8PrefpwrvYSA
+         CKoR2gH9w484u4ppnEByYZRc0JnvH1FTUy/HfLwE=
+Received: from 78.163-31-62.static.virginmediabusiness.co.uk ([62.31.163.78] helo=why)
+        by disco-boy.misterjones.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <maz@kernel.org>)
+        id 1j0vWC-003wRy-P8; Sun, 09 Feb 2020 22:57:36 +0000
+Date:   Sun, 9 Feb 2020 22:57:35 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: manual merge of the keys tree with Linus' tree
-Message-ID: <20200210093423.3041c316@canb.auug.org.au>
+Subject: Re: linux-next: build failure in Linus' tree
+Message-ID: <20200209225735.3c2eacb6@why>
+In-Reply-To: <CAHk-=wiM9gSf=EifmenHZOccd16xvFgQyV=V=9jEHR7_h3b0JA@mail.gmail.com>
+References: <20200210080821.691261a8@canb.auug.org.au>
+        <CAHk-=wiM9gSf=EifmenHZOccd16xvFgQyV=V=9jEHR7_h3b0JA@mail.gmail.com>
+Organization: Approximate
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ye78Ofs234F6BRPSMl8quaT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 62.31.163.78
+X-SA-Exim-Rcpt-To: torvalds@linux-foundation.org, sfr@canb.auug.org.au, yuzenghui@huawei.com, linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ye78Ofs234F6BRPSMl8quaT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, 9 Feb 2020 13:24:18 -0800
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Hi all,
+Stephen, Linus,
 
-Today's linux-next merge of the keys tree got a conflict in:
+> On Sun, Feb 9, 2020 at 1:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wr=
+ote:
+> >
+> > Just building Linus' tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >
+> > arm-linux-gnueabi-ld: drivers/irqchip/irq-gic-v3-its.o: in function `it=
+s_vpe_irq_domain_alloc':
+> > irq-gic-v3-its.c:(.text+0x3d50): undefined reference to `__aeabi_uldivm=
+od'
+> >
+> > Caused by commit
+> >
+> >   4e6437f12d6e ("irqchip/gic-v4.1: Ensure L2 vPE table is allocated at =
+RD level") =20
 
-  fs/pipe.c
+Gniii... Sorry for the breakage.
 
-between commit:
+>=20
+> Ahh. 64-bit divides without using do_div() and friends.
+>=20
+> Is GICv4 even relevant for 32-bit ARM?
 
-  0ddad21d3e99 ("pipe: use exclusive waits when reading or writing")
+Only should someone boot a large 64bit server in 32bit mode and run VMs
+with direct injection of interrupts. And definitely not once we get rid
+of 32bit KVM.
 
-from Linus' tree and commits:
+Do you mind applying the following patch on top? It fixes the breakage
+here.
 
-  57421d0685a3 ("pipe: Add general notification queue support")
-  95e0a8b2f657 ("pipe: Add notification lossage handling")
+Thanks,
 
-from the keys tree.
+	M.
 
-I fixed it up (I think - see below) and can carry the fix as necessary.
-This is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+=46rom d06ab34c3491d3cd191e024bf2da1eb9b8caccdd Mon Sep 17 00:00:00 2001
+From: Marc Zyngier <maz@kernel.org>
+Date: Sun, 9 Feb 2020 22:48:50 +0000
+Subject: [PATCH] irqchip/gic-v4.1: Avoid 64bit division for the sake of 32b=
+it
+ ARM
+
+In order to allow the GICv4 code to link properly on 32bit ARM,
+make sure we don't use 64bit divisions when it isn't strictly
+necessary.
+
+Fixes: 4e6437f12d6e ("irqchip/gic-v4.1: Ensure L2 vPE table is allocated at=
+ RD level")
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+---
+ drivers/irqchip/irq-gic-v3-its.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-=
+its.c
+index 1ee95f546cb0..83b1186ffcad 100644
+--- a/drivers/irqchip/irq-gic-v3-its.c
++++ b/drivers/irqchip/irq-gic-v3-its.c
+@@ -2444,8 +2444,8 @@ static u64 inherit_vpe_l1_table_from_rd(cpumask_t **m=
+ask)
+ static bool allocate_vpe_l2_table(int cpu, u32 id)
+ {
+ 	void __iomem *base =3D gic_data_rdist_cpu(cpu)->rd_base;
+-	u64 val, gpsz, npg;
+-	unsigned int psz, esz, idx;
++	unsigned int psz, esz, idx, npg, gpsz;
++	u64 val;
+ 	struct page *page;
+ 	__le64 *table;
+=20
+--=20
+2.20.1
+
 
 --=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/pipe.c
-index 5a34d6c22d4c,423aafca4338..000000000000
---- a/fs/pipe.c
-+++ b/fs/pipe.c
-@@@ -347,10 -375,14 +378,14 @@@ pipe_read(struct kiocb *iocb, struct io
- =20
-  			if (!buf->len) {
-  				pipe_buf_release(pipe, buf);
- -				spin_lock_irq(&pipe->wait.lock);
- +				spin_lock_irq(&pipe->rd_wait.lock);
-+ #ifdef CONFIG_WATCH_QUEUE
-+ 				if (buf->flags & PIPE_BUF_FLAG_LOSS)
-+ 					pipe->note_loss =3D true;
-+ #endif
-  				tail++;
-  				pipe->tail =3D tail;
- -				spin_unlock_irq(&pipe->wait.lock);
- +				spin_unlock_irq(&pipe->rd_wait.lock);
-  			}
-  			total_len -=3D chars;
-  			if (!total_len)
-@@@ -1268,11 -1290,62 +1310,63 @@@ int pipe_resize_ring(struct pipe_inode_
-  	kfree(pipe->bufs);
-  	pipe->bufs =3D bufs;
-  	pipe->ring_size =3D nr_slots;
-- 	pipe->max_usage =3D nr_slots;
-+ 	if (pipe->max_usage > nr_slots)
-+ 		pipe->max_usage =3D nr_slots;
-  	pipe->tail =3D tail;
-  	pipe->head =3D head;
- -	wake_up_interruptible_all(&pipe->wait);
- +	wake_up_interruptible_all(&pipe->rd_wait);
- +	wake_up_interruptible_all(&pipe->wr_wait);
-+ 	return 0;
-+ }
-+=20
-+ /*
-+  * Allocate a new array of pipe buffers and copy the info over. Returns t=
-he
-+  * pipe size if successful, or return -ERROR on error.
-+  */
-+ static long pipe_set_size(struct pipe_inode_info *pipe, unsigned long arg)
-+ {
-+ 	unsigned long user_bufs;
-+ 	unsigned int nr_slots, size;
-+ 	long ret =3D 0;
-+=20
-+ #ifdef CONFIG_WATCH_QUEUE
-+ 	if (pipe->watch_queue)
-+ 		return -EBUSY;
-+ #endif
-+=20
-+ 	size =3D round_pipe_size(arg);
-+ 	nr_slots =3D size >> PAGE_SHIFT;
-+=20
-+ 	if (!nr_slots)
-+ 		return -EINVAL;
-+=20
-+ 	/*
-+ 	 * If trying to increase the pipe capacity, check that an
-+ 	 * unprivileged user is not trying to exceed various limits
-+ 	 * (soft limit check here, hard limit check just below).
-+ 	 * Decreasing the pipe capacity is always permitted, even
-+ 	 * if the user is currently over a limit.
-+ 	 */
-+ 	if (nr_slots > pipe->max_usage &&
-+ 			size > pipe_max_size && !capable(CAP_SYS_RESOURCE))
-+ 		return -EPERM;
-+=20
-+ 	user_bufs =3D account_pipe_buffers(pipe->user, pipe->nr_accounted, nr_sl=
-ots);
-+=20
-+ 	if (nr_slots > pipe->max_usage &&
-+ 			(too_many_pipe_buffers_hard(user_bufs) ||
-+ 			 too_many_pipe_buffers_soft(user_bufs)) &&
-+ 			pipe_is_unprivileged_user()) {
-+ 		ret =3D -EPERM;
-+ 		goto out_revert_acct;
-+ 	}
-+=20
-+ 	ret =3D pipe_resize_ring(pipe, nr_slots);
-+ 	if (ret < 0)
-+ 		goto out_revert_acct;
-+=20
-+ 	pipe->max_usage =3D nr_slots;
-+ 	pipe->nr_accounted =3D nr_slots;
-  	return pipe->max_usage * PAGE_SIZE;
- =20
-  out_revert_acct:
-
---Sig_/ye78Ofs234F6BRPSMl8quaT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5AiO8ACgkQAVBC80lX
-0GzyBwgAg/02d9Gyqto/e0Xu5M3VmRwSWBB748F9kvTaftxEEnEwu0L1L4jr97em
-BnvEi4uBN1EQI8qRxZ/hWCY6Db1MSAl56m2HpHhrzMI11J+ZmkewqjMgI5FeTUwR
-t7BlUlo+WETBZL7UTK/RVeeLViZ0cYv3/l35UA+kZj/ptoao+o4GpILnRFLtBNI9
-Vx6Ner/4XnIR3GmfoVhj4gSIY+tCsoPoRg72Ofb5bIwBl30Hgh/UbXH6p4ugi7cS
-ZwYCYom9f7oFPPzB0dAttuCIvwU+2t0r0Q7b7WnmrJDV8LAeFtLAG6M5MmFRIEJ3
-CHCTtV+D698eHGqjLCzBY3G1dcD7qQ==
-=uZZf
------END PGP SIGNATURE-----
-
---Sig_/ye78Ofs234F6BRPSMl8quaT--
+Jazz is not dead. It just smells funny...

@@ -2,86 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C24156C84
-	for <lists+linux-next@lfdr.de>; Sun,  9 Feb 2020 22:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E9E156C96
+	for <lists+linux-next@lfdr.de>; Sun,  9 Feb 2020 22:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727892AbgBIVIb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 9 Feb 2020 16:08:31 -0500
-Received: from ozlabs.org ([203.11.71.1]:52353 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727427AbgBIVIb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 9 Feb 2020 16:08:31 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48G1q05xd2z9sPF;
-        Mon, 10 Feb 2020 08:08:28 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581282509;
-        bh=St5JVkuSYW1A7y8Lc0zUdZEiVp6nSc1m0KlMME2hf5M=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Pzxqvj5OJwYysZdq/aFCzHnxBSiFVf6TE23fqItlhNbLQeVkTN1vmVWbtQZQkZIRA
-         CrQX76Yn/yFyeLpkSxTOU6ozAB9iyFEIo2N/SZ2XZxgdCb0y9jLqsuv8NicStHNs/K
-         eqWtOoYAL1yz0r7RwKOpxR7nMnA8bw3JH2m/cNqIocO0GJgzNvzXirOHMLfrhAk6eH
-         LKmTiYETY5MNsH+TONX86NLaf/LzRM6z6XUltcxgSZpA5whieHaf7nQDoWaDJc/jxt
-         CHMe+Y3OB1zXVbOcs5FLw0b9iI7vwmk6Jgm6xPECEhzSSpZp3/sDh3+Seg60mSWn5D
-         RiaJ/r2YKgWcQ==
-Date:   Mon, 10 Feb 2020 08:08:21 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Zenghui Yu <yuzenghui@huawei.com>, Marc Zyngier <maz@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        id S1727416AbgBIVYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 9 Feb 2020 16:24:40 -0500
+Received: from mail-lf1-f65.google.com ([209.85.167.65]:41756 "EHLO
+        mail-lf1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727592AbgBIVYj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 9 Feb 2020 16:24:39 -0500
+Received: by mail-lf1-f65.google.com with SMTP id m30so2745144lfp.8
+        for <linux-next@vger.kernel.org>; Sun, 09 Feb 2020 13:24:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eSee5NK6rMwjcOB2vYpOQ3otLhrgERKcdaUqTAoj0vc=;
+        b=Vq7OLj9qWUS+0Xf+qXZzIh79iP+ijjjlhTE3Myev+SZmQM0Vq7vODPSmjZMmWykhPi
+         Qs7D+CQVo4yUs+Mh4IcTBeqpksFHFMA+3l9GsiSq7q4YIjm+scKGht1wY1Vb6Tu8b9CA
+         1m0snQXIHcauCaYxJQgfR9difYFbGhRpxRxIE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eSee5NK6rMwjcOB2vYpOQ3otLhrgERKcdaUqTAoj0vc=;
+        b=avxbSK4s2GnMbwGfZWwL07TnDtDe/QoBm9vCJi1lGAv7nZOb0F7IIizla0gef45Ecf
+         4zS8drL9KEIzqKXnd25TMQf1CKQpYd4iHqmVWDwQ7uAV/KnYqIVgGAgetHfg1+Nhir57
+         jMIS6SLcdO8/MAmRx+bEenxTy82DCpGnqnlGvOg4Fszd6GBQl6UFooDJ8bB/keIHdqUL
+         ZF2umvhPq/IXRFhJTLXarmOTChmvzcxPEf6DXVSWt0IiN7yTyQDL7Tu4MoutgdjZIwar
+         jO23hsInZ/P5+KCl6jc/AyVpj3WS95zOEZQ8g4FgZvD1ZvEYjXm9ZF7D0M1AJTp+DQzN
+         9MBg==
+X-Gm-Message-State: APjAAAWZEfyTPhQgpaHMzJUGTn+Ewba6S/GLyeJ8/lVV+g/ZHMarex7x
+        vXQnCBR7kpN+gth86RZLJdRZeiDxvwk=
+X-Google-Smtp-Source: APXvYqxTS1k+nQD3zjwP0O5PH0eaWg4LS6extCf5zPpCiHCIGZfHwZI5FhYlfVcMYRNiODG1xXM0Kg==
+X-Received: by 2002:a05:6512:7c:: with SMTP id i28mr4503706lfo.131.1581283475572;
+        Sun, 09 Feb 2020 13:24:35 -0800 (PST)
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com. [209.85.167.52])
+        by smtp.gmail.com with ESMTPSA id d22sm4302570lfi.49.2020.02.09.13.24.34
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 09 Feb 2020 13:24:34 -0800 (PST)
+Received: by mail-lf1-f52.google.com with SMTP id c23so2755422lfi.7
+        for <linux-next@vger.kernel.org>; Sun, 09 Feb 2020 13:24:34 -0800 (PST)
+X-Received: by 2002:ac2:4839:: with SMTP id 25mr4397561lft.192.1581283473980;
+ Sun, 09 Feb 2020 13:24:33 -0800 (PST)
+MIME-Version: 1.0
+References: <20200210080821.691261a8@canb.auug.org.au>
+In-Reply-To: <20200210080821.691261a8@canb.auug.org.au>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sun, 9 Feb 2020 13:24:18 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiM9gSf=EifmenHZOccd16xvFgQyV=V=9jEHR7_h3b0JA@mail.gmail.com>
+Message-ID: <CAHk-=wiM9gSf=EifmenHZOccd16xvFgQyV=V=9jEHR7_h3b0JA@mail.gmail.com>
+Subject: Re: linux-next: build failure in Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Zenghui Yu <yuzenghui@huawei.com>, Marc Zyngier <maz@kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure in Linus' tree
-Message-ID: <20200210080821.691261a8@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TsrSAy65/=mCa9QMYadIE.Z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TsrSAy65/=mCa9QMYadIE.Z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Feb 9, 2020 at 1:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Just building Linus' tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> arm-linux-gnueabi-ld: drivers/irqchip/irq-gic-v3-its.o: in function `its_vpe_irq_domain_alloc':
+> irq-gic-v3-its.c:(.text+0x3d50): undefined reference to `__aeabi_uldivmod'
+>
+> Caused by commit
+>
+>   4e6437f12d6e ("irqchip/gic-v4.1: Ensure L2 vPE table is allocated at RD level")
 
-Hi all,
+Ahh. 64-bit divides without using do_div() and friends.
 
-Just building Linus' tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Is GICv4 even relevant for 32-bit ARM?
 
-arm-linux-gnueabi-ld: drivers/irqchip/irq-gic-v3-its.o: in function `its_vp=
-e_irq_domain_alloc':
-irq-gic-v3-its.c:(.text+0x3d50): undefined reference to `__aeabi_uldivmod'
-
-Caused by commit
-
-  4e6437f12d6e ("irqchip/gic-v4.1: Ensure L2 vPE table is allocated at RD l=
-evel")
-
-I have reverted that commit (and the following 3 commits) for today.
-
-Those commits were not in linux-next before being merged by Linus. :-(
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TsrSAy65/=mCa9QMYadIE.Z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5AdMUACgkQAVBC80lX
-0Gznnwf/fCUCPGeQX13kpt7GpZBVj+PO55anMftx1uaeLsVjUyo0+nbvl9ZRD3wd
-BfDwJ1W06iTYG0nIRb6OXzwK04osDq9BoD0JDA4npEV7WL+RWUvTDQWZ1HWI/CRg
-TAT1MIOEBulSbfDYZL22ZJLrQ+otyJiD1vjhwFSR78rwzfYeayA4Ve+8T9Hg81cY
-DK7p1n+9l8KIaEauLEjKEP2H3Ap0d+F86QAczCabbfBLl3TmGAvI6x9YhzHF5V98
-0lm39YNtbxRHO0faGpoitAQLIiRsrBx4WhlMve/5X4O5Ijbc24GhuE1XmAqY+OVN
-sOUEMl+HGtbckOe3RruefeC3QDP5mA==
-=Xvgc
------END PGP SIGNATURE-----
-
---Sig_/TsrSAy65/=mCa9QMYadIE.Z--
+            Linus

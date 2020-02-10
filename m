@@ -2,77 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A7730158457
-	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 21:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21F8615852F
+	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 22:44:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727003AbgBJUmS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Feb 2020 15:42:18 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54819 "EHLO ozlabs.org"
+        id S1727414AbgBJVo6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Feb 2020 16:44:58 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:40895 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726563AbgBJUmS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 10 Feb 2020 15:42:18 -0500
+        id S1727385AbgBJVo6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 10 Feb 2020 16:44:58 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48GdBJ4Qp0z9sPF;
-        Tue, 11 Feb 2020 07:42:16 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48GfZb4QZxz9sPF;
+        Tue, 11 Feb 2020 08:44:55 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581367336;
-        bh=kXMVdBaIv15+3S5E6H+mlqHGS96jd8kMmA7ruP5v6KM=;
+        s=201702; t=1581371095;
+        bh=pFYPa389Myh8Etid3glnG3ZLrUhuvH/ahhE3Z1NHmko=;
         h=Date:From:To:Cc:Subject:From;
-        b=ZYsxv5Anbr6Hq7FFU0RWgNZ9EsDs0cpOg+dTRuqYvNnwxIsXPjJc7m9eMG+PWs+8H
-         Gps8MJ81lAfM/XmsRsFOXFPrP5klJP2unr8NXcCVGofrQtzwyDB81nvNlCa1pLBUKb
-         EsGsI2bWWslx6sJ5r9piaQW43u/XqvPV48vAUjXYKnTj+csiDUg0xl4Vv2I60xMHTt
-         265rUT1m67VOPRVmM1I4Gqf//5UoALWQwUbw+sEjr+HMex7Kk4Vvgj4XjaCVOzfuTp
-         EAq/CX0VrIYY8HCRQo/GwoLNbx93lY4mX0EO2Fvis543jp1gxov4jDxiYG37BoOwjk
-         GPqt94tPatzeg==
-Date:   Tue, 11 Feb 2020 07:42:09 +1100
+        b=e+l08ZvJOftRjq0SpqSNch2S8Gaon2mQmEglbUOBX62JWUrCpxvanEKhW+3ZvsaxJ
+         +aSUid4jSeDSHX4r/oBsKARiAIwefXz852Txvx9mnWWh4ctwsCePfrtp9VsQuIqDzK
+         Rjj4W7bIN1vSNi/FOfOX2lFSJrVd378HmmQKDhzvU8z6nrZLqiH4S+uF7BjTWoSuA1
+         oJweNchQuglQF/aLNG9ZS5S+aAeWvsaAiA3P9Sia4xXmdd/7cmX3RVOqJ4pvZoBsXZ
+         Gbg61fzL5r0aKha62eRqJ3ow2lhQZMmiT39kgQQC/nohAKz4Tet93ZeiDavXTDqS/U
+         Q4eN8Wa0f1PKQ==
+Date:   Tue, 11 Feb 2020 08:44:49 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Leon Romanovsky <leon@kernel.org>
+To:     Joel Stanley <joel@jms.id.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the mlx5-next tree
-Message-ID: <20200211074209.3e0a1b19@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Eddie James <eajames@linux.ibm.com>,
+        Vijay Khemka <vijaykhemka@fb.com>
+Subject: linux-next: build failure after merge of the aspeed tree
+Message-ID: <20200211084449.05e3b3cb@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7a/4BJAxvxPe4hQtVlShozH";
+Content-Type: multipart/signed; boundary="Sig_//uccmwmo=OMY=wvpBR7nK5B";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7a/4BJAxvxPe4hQtVlShozH
+--Sig_//uccmwmo=OMY=wvpBR7nK5B
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+After merging the aspeed tree, today's linux-next build (arm
+multi_v7_defconfig) failed like this:
 
-  a4ad6db8a2de ("net/mlx5: Add bit to indicate support for encap/decap in s=
-w-steering managed tables")
+arch/arm/boot/dts/aspeed-g6.dtsi:322.35-327.7: ERROR (duplicate_node_names)=
+: /ahb/apb/syscon@1e6e2000/interrupt-controller: Duplicate node name
+ERROR: Input tree has errors, aborting (use -f to force output)
 
-is missing a Signed-off-by from its committer.
+Caused by commit
+
+  091ff5206ef3 ("ARM: dts: aspeed: ast2600: Fix SCU IRQ controller node add=
+resses")
+
+Also these warnings:
+
+arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit addr=
+ess format error, expected "40000010"
+arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (i2c_=
+bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address must =
+be less than 10-bits, got "0x40000010"
+arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit addr=
+ess format error, expected "40000010"
+arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (i2c_=
+bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address must =
+be less than 10-bits, got "0x40000010"
+
+Caused by commit
+
+  a59b1792adf1 ("ARM: dts: aspeed: tiogapass: Add IPMB device")
+
+I have used the aspeed tree from next-20200210 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7a/4BJAxvxPe4hQtVlShozH
+--Sig_//uccmwmo=OMY=wvpBR7nK5B
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5BwCEACgkQAVBC80lX
-0GxuVgf/fES8Hrb3HVelFHtFl8gA/XQgSxG3iYWCugiF6beIlEoE5R7rsBoD7S0z
-z+8GY9csShtM9XnGm4z9hKsIUVvVqW6XWW8jQGD9nbqa+1S4Uih5UAbCUQsTOBjI
-BX8kcrmzCBkZT/cbxcU29JGgvRqKepZQfLnRmakjV7tz0JC5O5jElhAXs4TX3B3G
-HR5SyII9dkfIKIVwal0P6WfQYf5ev2CHTwzqYW38aHgX1pwypp6NW9JJZ+BzSyk5
-072krYL/jJtFZX6CARs7jaTLpdYWhtrhuIoamxUyQ38980eJFHxtSvzg6QAmi1J2
-Ui2t6vtTbHIDMktoqCNZacGakMsTGA==
-=9q7M
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5BztEACgkQAVBC80lX
+0GzldQf+JvoIHOKolA59g+PX2HyBgvof6Vp48UXcTxJEmPXGH+xC7Wr6P7jA3Q9/
+gJYdvKDqlRVMiUZsxnUFLWQ1FZ0c8lA89TRUclvTXvkvKXpxbNy8KrkZ5EzV+qhE
+Oc65dPyCYakQN7wOQmYO5pc/TZq7xTeuqkt53CEpw0FufYUS4thUXwOLhvUf5ce9
+uyGuBmdyACi+LREuH/2EWJPPWK+TlTH8cgxm/5Lan+h2WlsWsB9393CXYk9leBzQ
+NU2bEwuG4Dl1QFY0qcZOIz4qfOvNmJ1Uyr1pqFuEUTeNtXSQb3PEN5kervq29/PN
+MHERhjzJn2LGW2MoqtiOXuWMa4hLOg==
+=c5uw
 -----END PGP SIGNATURE-----
 
---Sig_/7a/4BJAxvxPe4hQtVlShozH--
+--Sig_//uccmwmo=OMY=wvpBR7nK5B--

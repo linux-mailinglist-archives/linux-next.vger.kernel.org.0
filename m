@@ -2,94 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F07215855B
-	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 23:17:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8EAA158569
+	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 23:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727385AbgBJWRb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Feb 2020 17:17:31 -0500
-Received: from mail-qt1-f193.google.com ([209.85.160.193]:33552 "EHLO
-        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727254AbgBJWRb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 10 Feb 2020 17:17:31 -0500
-Received: by mail-qt1-f193.google.com with SMTP id d5so6487314qto.0;
-        Mon, 10 Feb 2020 14:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=CmgTcu/fFYYpKXFvht5dzhta71UBVw1looUG6zt0U94=;
-        b=CctA2H86sxtdH5v71aEu72PhwH5x799/qgYDMZvGJm7uXmFZ6qj/TS1HUWUNimSD2y
-         E3Ag4BVr1WAQBQ+nuCO2smXtObNXAcJp2DBOdPxBAONUWFB7mIYNQeexIWuuT3VKjvKj
-         P2fC6YeCaBbrGMSeSaMP1kv9k4uuiqf6NoV6Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CmgTcu/fFYYpKXFvht5dzhta71UBVw1looUG6zt0U94=;
-        b=Pmpmya47vQAK+ytFh6lb0on2yC6PKlMtlPfxKo8gIKZ+ybmmyZ0oBrUcnBx6omKuyi
-         0DW6+O5bJPRAPlNeiJs6HP8sRl3o2cLryO9yTY6KrL+XWN2RIcaUTUZp3InfWDL/IxvN
-         xJKld5k1edObPAhDb0viJ+hxTeXs37Fx3WiXCluuWOkahySbY7ls7fsIVWbJIpVVATdb
-         w9r4CaUgrAy5UZjjzycRJ1oi2ms5YVR/XXDFD0DjtP9DFqg5W/QdOHldRN+M6LXj/j83
-         x3+QmyvC0fIP15M8JH41isSpg3na6YTZ0lkxfurv2jEVzVwTEXIMv9QDfKxM314SiuW5
-         7ffQ==
-X-Gm-Message-State: APjAAAUaoo8x3wGKGywshLM5n9pOWplxdXUWHoHa1RqKhm70fhFbK1Xc
-        S5EnH8IZolQPzC4RdyXSDfXrQ+C2L1ge17YCsAg=
-X-Google-Smtp-Source: APXvYqwAamyYSCO/Ahy9S/Rvqx/QRtw1yIry5sXT7elT4A0TQg+lKr5YxXdxvWSa3i+hpLqMsuINRcG5rxi8riHqit4=
-X-Received: by 2002:ac8:73c7:: with SMTP id v7mr7782393qtp.269.1581373050285;
- Mon, 10 Feb 2020 14:17:30 -0800 (PST)
-MIME-Version: 1.0
-References: <20200211084449.05e3b3cb@canb.auug.org.au>
-In-Reply-To: <20200211084449.05e3b3cb@canb.auug.org.au>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Mon, 10 Feb 2020 22:17:18 +0000
-Message-ID: <CACPK8XfGKox38H1XQaGKUDe5y2hV06+WSmtJDNz4zLtE7k9ZjA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the aspeed tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1727385AbgBJWXi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Feb 2020 17:23:38 -0500
+Received: from ozlabs.org ([203.11.71.1]:58657 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727254AbgBJWXi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 10 Feb 2020 17:23:38 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48GgRC3C26z9sPF;
+        Tue, 11 Feb 2020 09:23:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1581373415;
+        bh=5SNgMbuqxpx5DVSV6miPMGG8tUdpANItUtT3Sbh809Y=;
+        h=Date:From:To:Cc:Subject:From;
+        b=btqasubZvu/nPqQEQUrJfExh5dIjqi8npyLdzPTcOY/U++RKTUIOOUcwz2g5+ZqXs
+         jDImQUZWsOKe4EMOK2PcA5Bec5Onl2eGkrQKJ72T32K8Fi6pZGpyi2BviEOfWK5LHe
+         Ujr+67926U6Ioj/gBfOqoBwphV/Tgvq6Yl8H45MR6kR8JySJZNymSuEXwQ4L8/3RO0
+         0R9Fk23q/wQ74s9TyL8SLGeEC8j5yvnT+9KP1cPZSAoK60nYbF+IScLfJETaw6Tm8T
+         5vIJq/eVb6K407E/d2l2aY9JX8gafCpSZGok6krYDC4Ae0QfqbYXxRkR3eo2LjvTK5
+         vc+VvajCjgctQ==
+Date:   Tue, 11 Feb 2020 09:23:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Eddie James <eajames@linux.ibm.com>,
-        Vijay Khemka <vijaykhemka@fb.com>
-Content-Type: text/plain; charset="UTF-8"
+        Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>
+Subject: linux-next: build warning after merge of the hwmon-staging tree
+Message-ID: <20200211092328.34ba4b9e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/M4Y3xAJX6HxqGWLa=p2cFqt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 10 Feb 2020 at 21:45, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the aspeed tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> arch/arm/boot/dts/aspeed-g6.dtsi:322.35-327.7: ERROR (duplicate_node_names): /ahb/apb/syscon@1e6e2000/interrupt-controller: Duplicate node name
-> ERROR: Input tree has errors, aborting (use -f to force output)
+--Sig_/M4Y3xAJX6HxqGWLa=p2cFqt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for the report Stephen. I've dropped the offending commit and
-re-pushed. We should be good for tomorrow's next.
+Hi all,
 
+After merging the hwmon-staging tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
+
+drivers/hwmon/axi-fan-control.c: In function 'axi_fan_control_probe':
+drivers/hwmon/axi-fan-control.c:419:26: warning: 'res' may be used uninitia=
+lized in this function [-Wmaybe-uninitialized]
+  419 |   (unsigned long long)res->start, ctl->base);
+      |                          ^~
+
+Introduced by commit
+
+  690dd9ce04f6 ("hwmon: Support ADI Fan Control IP")
+
+--=20
 Cheers,
+Stephen Rothwell
 
-Joel
+--Sig_/M4Y3xAJX6HxqGWLa=p2cFqt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
->
-> Caused by commit
->
->   091ff5206ef3 ("ARM: dts: aspeed: ast2600: Fix SCU IRQ controller node addresses")
->
-> Also these warnings:
->
-> arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit address format error, expected "40000010"
-> arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address must be less than 10-bits, got "0x40000010"
-> arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit address format error, expected "40000010"
-> arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address must be less than 10-bits, got "0x40000010"
->
-> Caused by commit
->
->   a59b1792adf1 ("ARM: dts: aspeed: tiogapass: Add IPMB device")
->
-> I have used the aspeed tree from next-20200210 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5B1+AACgkQAVBC80lX
+0Gz6jgf7BgIi0EslwcsgRAQnmM94XpJTX6SlHaJAIWNwGutFOc7kwIT4px92smkX
+9Pasm6dm3najlsuPtgHG8BsBOR8Oln3ge5JifVH+qYWaoPoVV8WG6iQKhknIgbZL
+sNu4tEWTVI27c78/CMpk+Yr1CzgLyhWIB7M6oe8e7n3Fr0jvtQ7qZiPOODN1ThOB
+5HRMXPD+tLPvbgdLK1tolug1V1s0D0rv2a2eQAoJ4KqIK1iZo3mtiFq8WPDVKoxG
+h+lJ/ezFZ5NN6belk4eREruw4B7ECMo+TIPWC+Z0mYBOiQpKim0aoWW2gbw9A3rq
+9GiwXbV+Oxr+A8RLxkClmVyYafNl3g==
+=IXTq
+-----END PGP SIGNATURE-----
+
+--Sig_/M4Y3xAJX6HxqGWLa=p2cFqt--

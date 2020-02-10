@@ -2,83 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D0FC1582EA
-	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 19:45:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7730158457
+	for <lists+linux-next@lfdr.de>; Mon, 10 Feb 2020 21:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727054AbgBJSpf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 10 Feb 2020 13:45:35 -0500
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:20963 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726816AbgBJSpf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 10 Feb 2020 13:45:35 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581360334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=W5raNMTAVRb/PEnA4MMky/l8xEhbFC7BwZGHg9uA2fk=;
-        b=UV4IcU34/Toh4aisvoGEFtf+7pgNugoaudZKjfiwCBJUimFNhfD/TnBq4XhfWWcq74mKTX
-        SsqpYtGG+uamaoasC9WXnCgFOaKzp66uYam2NQQKkaRB+2INSXrVO6BdaXVppKJHW0W+LK
-        zKprCu+tQSgB7RujSQ7mdFOLZ/1/Opo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-327-6Pd3NwZwP12W-w5F_Q55Zw-1; Mon, 10 Feb 2020 13:45:19 -0500
-X-MC-Unique: 6Pd3NwZwP12W-w5F_Q55Zw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1727003AbgBJUmS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 10 Feb 2020 15:42:18 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54819 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726563AbgBJUmS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 10 Feb 2020 15:42:18 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B95C2192299C;
-        Mon, 10 Feb 2020 18:45:17 +0000 (UTC)
-Received: from treble (ovpn-122-45.rdu2.redhat.com [10.10.122.45])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 65CDE1001281;
-        Mon, 10 Feb 2020 18:45:16 +0000 (UTC)
-Date:   Mon, 10 Feb 2020 12:45:14 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48GdBJ4Qp0z9sPF;
+        Tue, 11 Feb 2020 07:42:16 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1581367336;
+        bh=kXMVdBaIv15+3S5E6H+mlqHGS96jd8kMmA7ruP5v6KM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZYsxv5Anbr6Hq7FFU0RWgNZ9EsDs0cpOg+dTRuqYvNnwxIsXPjJc7m9eMG+PWs+8H
+         Gps8MJ81lAfM/XmsRsFOXFPrP5klJP2unr8NXcCVGofrQtzwyDB81nvNlCa1pLBUKb
+         EsGsI2bWWslx6sJ5r9piaQW43u/XqvPV48vAUjXYKnTj+csiDUg0xl4Vv2I60xMHTt
+         265rUT1m67VOPRVmM1I4Gqf//5UoALWQwUbw+sEjr+HMex7Kk4Vvgj4XjaCVOzfuTp
+         EAq/CX0VrIYY8HCRQo/GwoLNbx93lY4mX0EO2Fvis543jp1gxov4jDxiYG37BoOwjk
+         GPqt94tPatzeg==
+Date:   Tue, 11 Feb 2020 07:42:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Feb 7 (objtool warning)
-Message-ID: <20200210184514.phyq462bvpxwdiss@treble>
-References: <20200207115949.7bd62ec3@canb.auug.org.au>
- <cc2b942d-d29d-710c-a9f3-e762c76c3d06@infradead.org>
- <20200210102951.GD14879@hirez.programming.kicks-ass.net>
- <20200210172603.ujtupdib5gcpmo6v@treble>
+Subject: linux-next: Signed-off-by missing for commit in the mlx5-next tree
+Message-ID: <20200211074209.3e0a1b19@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200210172603.ujtupdib5gcpmo6v@treble>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+Content-Type: multipart/signed; boundary="Sig_/7a/4BJAxvxPe4hQtVlShozH";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Feb 10, 2020 at 11:26:03AM -0600, Josh Poimboeuf wrote:
-> On Mon, Feb 10, 2020 at 11:29:51AM +0100, Peter Zijlstra wrote:
-> > On Fri, Feb 07, 2020 at 08:17:25AM -0800, Randy Dunlap wrote:
-> > > on x86_64:
-> > > 
-> > > drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: i915_gem_execbuffer2_ioctl()+0x6c7: call to gen8_canonical_addr() with UACCESS enabled
-> > 
-> > > CONFIG_CC_OPTIMIZE_FOR_SIZE=y
-> > > CONFIG_64BIT=y
-> > 
-> > That's just really sad, stupid compiler.
-> > 
-> > Something like so I suppose...
-> 
-> This looks familiar... here's the approach we decided on before, before
-> I subsequently dropped the ball:
-> 
->   https://lkml.kernel.org/r/20190923141657.p6kpqro3q4p4umwi@treble
+--Sig_/7a/4BJAxvxPe4hQtVlShozH
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Though that patch looks broken because it masks off the UPDATE bit in
-the first loop (via PIN_OFFSET_MASK) before checking UPDATE in the second
-loop.
+Hi all,
 
--- 
-Josh
+Commit
 
+  a4ad6db8a2de ("net/mlx5: Add bit to indicate support for encap/decap in s=
+w-steering managed tables")
+
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/7a/4BJAxvxPe4hQtVlShozH
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5BwCEACgkQAVBC80lX
+0GxuVgf/fES8Hrb3HVelFHtFl8gA/XQgSxG3iYWCugiF6beIlEoE5R7rsBoD7S0z
+z+8GY9csShtM9XnGm4z9hKsIUVvVqW6XWW8jQGD9nbqa+1S4Uih5UAbCUQsTOBjI
+BX8kcrmzCBkZT/cbxcU29JGgvRqKepZQfLnRmakjV7tz0JC5O5jElhAXs4TX3B3G
+HR5SyII9dkfIKIVwal0P6WfQYf5ev2CHTwzqYW38aHgX1pwypp6NW9JJZ+BzSyk5
+072krYL/jJtFZX6CARs7jaTLpdYWhtrhuIoamxUyQ38980eJFHxtSvzg6QAmi1J2
+Ui2t6vtTbHIDMktoqCNZacGakMsTGA==
+=9q7M
+-----END PGP SIGNATURE-----
+
+--Sig_/7a/4BJAxvxPe4hQtVlShozH--

@@ -2,95 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CF682159AEF
-	for <lists+linux-next@lfdr.de>; Tue, 11 Feb 2020 22:07:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C882159BF3
+	for <lists+linux-next@lfdr.de>; Tue, 11 Feb 2020 23:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729688AbgBKVHe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 11 Feb 2020 16:07:34 -0500
-Received: from mail-pj1-f68.google.com ([209.85.216.68]:35204 "EHLO
-        mail-pj1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729031AbgBKVHd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 11 Feb 2020 16:07:33 -0500
-Received: by mail-pj1-f68.google.com with SMTP id q39so1799044pjc.0;
-        Tue, 11 Feb 2020 13:07:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=KpRqerCMQ04uyIy1W6ZXPeXHMY8KzTG2gyT5gFoRSVc=;
-        b=DsC1UsmRMmRXY8sU9+BTseC3/NFr2rLiH1mSi1tgFe0XBprAHzKLHjYMiXJaySCpe4
-         S9lHiKM2bj0x/UEAJuIx7Xup22fdWYJsZlGGWBq2KjtfaKQiGdZEAD0qyNmj51SEQD8q
-         MSw4qn+LtBhVmPzmyARmGef5mpvjGJTP6sbiUcBGhebXbDiH00FQMfzY29nDRqYbkHY8
-         zIi/C9fP0OQXrU6povPH++wuR+E/cRbA7PIHWXhofvuYuCa8JAjTmEqPgIjEQ5mRsFId
-         9Un3fJOm1KDqxml3H9y8nGDXmV03jIkyz0Cu3UCO486omPjkt8l3atAzog5y2BhY70pD
-         DLFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=KpRqerCMQ04uyIy1W6ZXPeXHMY8KzTG2gyT5gFoRSVc=;
-        b=eTCU56lMBhhCwqI6p/lfJyqUJq9tTKjt2jyCnyGOr/+SFbyX24b091sqT8wWh+m5aK
-         7duPlRMbexUkBA/HAa8gOuzlOMECVQ3Uj4wkAzeCPZRqzWaoQez5RTftot/Qse2b71iq
-         nTF5yKwXPUhDqgNGCFPHacAW5YEwgMIFYWawt1tBBmgErARLie/umt/peZsefsCvxSw0
-         siRmw8NhUuj42+Z+WEfmvCEBhY7gE7ZZw7/5XlNTXr6+kDCk22jh91dHJWrkLWYOP/vR
-         TUoegVoNmpjg1/o3tZC79FABkYm6bSIMS74+6xuCubOvcvpjB9OG4Z7rWTQdD8z4aZfW
-         dM1g==
-X-Gm-Message-State: APjAAAWra1tb58rT0cJdzYEusaFK+ekp8NPRf5NI0TUWH+Ibgha/BWnn
-        8XI9BzmQQzizFgX+PTyGnVPu8E8NeFDdCr+qLZI=
-X-Google-Smtp-Source: APXvYqxmevX/lfQ/fN2gDs/u6hX13MluFuzD8BjfKrZJrTNFcQ+u+SNTLTxm61XjsRC5p6r9CReQxe8j7L+8IzyGG5A=
-X-Received: by 2002:a17:902:758e:: with SMTP id j14mr20279886pll.18.1581455252938;
- Tue, 11 Feb 2020 13:07:32 -0800 (PST)
-MIME-Version: 1.0
-References: <20200211103530.41d1e6ed@canb.auug.org.au>
-In-Reply-To: <20200211103530.41d1e6ed@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 11 Feb 2020 23:07:21 +0200
-Message-ID: <CAHp75Vf6p4Sf3hcNV-q_pfDYvgDVodPykgn98mumcj13BGN+Vg@mail.gmail.com>
-Subject: Re: linux-next: build warning after merge of the drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Darren Hart <dvhart@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727264AbgBKWKi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 11 Feb 2020 17:10:38 -0500
+Received: from ozlabs.org ([203.11.71.1]:52471 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727041AbgBKWKi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 11 Feb 2020 17:10:38 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48HH5l4F5Zz9sP7;
+        Wed, 12 Feb 2020 09:10:35 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1581459035;
+        bh=Dr0xxLn39dedMpKaNvhAU5gACpir80RsihGYKjZ3Tjs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=CncI3Edg7u+wORMgie7PUBjmfwr/3sHavtDmLriAb3JumUowOI5OqNnn70GYsrl6T
+         Hv2pm3RLftEErAnt3V630n4aejWv1yjxDVHBUp2gxtWtu9r2QRshmHHix2pe2VoHtr
+         9+abtNo8law4JHWUiSrN3nB3GsQ3pB/SdJ2zmnkYuOYzibUGZk9aKMpgWdidxiiRpq
+         5Vxcj4Yhm6g5xRtT8DJBCtpUmYc3QXKLMR6tQ4xBBZ5+fC8u+CBVCsC1oUGw1ZeU+j
+         nqMYY5ISzWBVayV6FraTPgmuTicOWREAJl5BhcwOsbp4PEbrFv8h05f84ciRSnnvMC
+         SlJ2JT7v4m5YQ==
+Date:   Wed, 12 Feb 2020 09:10:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Gayatri Kammela <gayatri.kammela@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Subject: linux-next: build warning after merge of the btrfs tree
+Message-ID: <20200212091028.718ca6dc@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/oVBlPMaZa.OWXMy_9UTwBAR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Feb 11, 2020 at 1:35 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the drivers-x86 tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
->
-> drivers/platform/x86/intel_pmc_core.c: In function 'pmc_core_resume':
-> drivers/platform/x86/intel_pmc_core.c:1329:43: warning: passing argument 4 of 'pmc_core_lpm_display' makes integer from pointer without a cast [-Wint-conversion]
->  1329 |   pmc_core_lpm_display(pmcdev, dev, NULL, "STATUS", offset, maps);
->       |                                           ^~~~~~~~
->       |                                           |
->       |                                           char *
-> drivers/platform/x86/intel_pmc_core.c:978:30: note: expected 'u32' {aka 'unsigned int'} but argument is of type 'char *'
->   978 |      struct seq_file *s, u32 offset,
->       |                          ~~~~^~~~~~
-> drivers/platform/x86/intel_pmc_core.c:1329:53: warning: passing argument 5 of 'pmc_core_lpm_display' makes pointer from integer without a cast [-Wint-conversion]
->  1329 |   pmc_core_lpm_display(pmcdev, dev, NULL, "STATUS", offset, maps);
->       |                                                     ^~~~~~
->       |                                                     |
->       |                                                     int
-> drivers/platform/x86/intel_pmc_core.c:979:18: note: expected 'const char *' but argument is of type 'int'
->   979 |      const char *str,
->       |      ~~~~~~~~~~~~^~~
->
-> Introduced by commit
->
->   2cf128fbf321 ("platform/x86: intel_pmc_core: Dump low power status registers on an S0ix.y failure")
+--Sig_/oVBlPMaZa.OWXMy_9UTwBAR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thank you, Stephen,
-Fix had been incorporated.
+Hi all,
 
+After merging the btrfs tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
--- 
-With Best Regards,
-Andy Shevchenko
+fs/btrfs/volumes.c: In function 'btrfs_scratch_superblocks':
+fs/btrfs/volumes.c:7338:3: warning: ignoring return value of 'write_one_pag=
+e', declared with attribute warn_unused_result [-Wunused-result]
+ 7338 |   write_one_page(page);
+      |   ^~~~~~~~~~~~~~~~~~~~
+
+Introduced by commit
+
+  d19ec014a46b ("btrfs: use the page-cache for super block reading")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/oVBlPMaZa.OWXMy_9UTwBAR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5DJlQACgkQAVBC80lX
+0GydCQf9G7svO/es8Fnp872Ion2c01UCumtSN8FBdKv2DdYnrQXz/lC8EJuTjKDL
+e74AiQSULPR16estXzu/En1wV5tbIBMVv8E55tJ7oBrFkVCEm+e8UvEQbhMjB/mk
+sdSc2ZK09UhLDmIbkvknWnYw4v5wWOy/Hy+GNo1kLIRp3wo2R1Ez4IPDz530pWTa
+FEgRrvgJlpgdAGc4SI1rYcRfB/fWcTQnyzmrPx0OMlbBkZOUQDlxZTuTtER+nZhJ
+XcoawJWgDlv5L/WEIgwFMc82dJQwkSD+auhHVTpw5OioMVr3tMCRLBllZd+8d6S5
+rG4aKh3UsBhT7AM1IuPj9Dhh4bFFMg==
+=c4cO
+-----END PGP SIGNATURE-----
+
+--Sig_/oVBlPMaZa.OWXMy_9UTwBAR--

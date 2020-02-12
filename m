@@ -2,159 +2,180 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A75815ACF1
-	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 17:15:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C8D15AD77
+	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 17:34:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgBLQPJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Feb 2020 11:15:09 -0500
-Received: from mail-dm6nam10on2045.outbound.protection.outlook.com ([40.107.93.45]:23489
-        "EHLO NAM10-DM6-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1727439AbgBLQPJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 12 Feb 2020 11:15:09 -0500
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SMXAkLH4ueFVVq0K3kkDmuimSHFP3B19/LGT18c5lta7plAly6sEH4ADLfzEGvqTtsTs8WTftbWpb1LUwVbXTl+7PUxlhXelfFbhowdCTnWTbrwNqnHF/cAyobbgxJ1O1IWZfLUgs+sMjdKKwdfRoVU69s8RoBOeQsN5Bw4ReJJkom7SaXGha9wO2mhAgKW/ASlCnvmpVitiCzfCsqOZDGRgWKj+Mhw1bEWH2dKyvhk87GyDpbhoAAW1AHkVYeYHVs7BPA/cgmLLJAq3qey3nHTa8o0SR7w5azeS9yrhG6qn0iIniOkHZZwT2ot/byybC3qeUcBAdeHyNZ7ceTQVxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8NHCy4DuKN9F7W6AsOPSnaJ6eMCAlmaQ51Gvf2AIXLo=;
- b=Ikuov+lU9WC3CHONWLi4O+c39QsbIvUVFSGWXq+VhYjZsVqEy/uM+q5jgY2l84s98TDUkMI5HBUmUi5hs7/X2ZMKNI9u5MmpiDEpU5OqeqkWRrLcnyq/vI7WveSyaE0CJLEqV1iwzMH5h5QFmJc8ATX9heQPL3mB9fEqZMrYhYhpFLZ4GRZk91J8/katBGkWHdVxPOb3Cfp1Tj3ef134MVXHAtewTSx0M/0bO0puG+mqba4yTbN/jf+sBSVN5SlYWaHGfoO3YPmoN8UFvcM7reDs8p3E1aqKVRtEylV9abdbOMcBS9b+glo3Bq5/XNJPL6mXieIWs0XMbzS790uLUQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=amdcloud.onmicrosoft.com; s=selector2-amdcloud-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8NHCy4DuKN9F7W6AsOPSnaJ6eMCAlmaQ51Gvf2AIXLo=;
- b=Z1P6PqCU6SgaZZ4OUPDvFBr8/9aSYzbwMYyHIV3je1AzXsmJJR7uHjyL/w2hQmsgYN5o4/8YPIj/V0ld8jkncu42zczFbXPaXuUIfz4i6UXiCAVBtM8ei2lwmefM4aVySHo1aqNLaRyzLPLAgvIbKy6gtbsri9WnLfN/mGoC2ag=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=Rodrigo.Siqueira@amd.com; 
-Received: from MW2PR12MB2524.namprd12.prod.outlook.com (52.132.180.155) by
- MW2PR12MB2348.namprd12.prod.outlook.com (52.132.183.19) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2707.23; Wed, 12 Feb 2020 16:15:02 +0000
-Received: from MW2PR12MB2524.namprd12.prod.outlook.com
- ([fe80::c15:4b9f:526:4736]) by MW2PR12MB2524.namprd12.prod.outlook.com
- ([fe80::c15:4b9f:526:4736%7]) with mapi id 15.20.2707.030; Wed, 12 Feb 2020
- 16:15:01 +0000
-Date:   Wed, 12 Feb 2020 11:14:53 -0500
-From:   Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        id S1728624AbgBLQeX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Feb 2020 11:34:23 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50790 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1727279AbgBLQeW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Feb 2020 11:34:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581525261;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XeLe0VqvdqoWiGR03rxndmykwmmXsnBvd6JZdgln7y4=;
+        b=POlhJANYimN8IanVDLDyKw5Vm92rElusmK1HDa36YIsL0TR/GUlzBc2rg+uPesIbsxFgNq
+        Ye3beJ3IcgEzFLVgIiqeovem1t5Hxl/cDuWjImWiBTaH/mLic/WIbAcMcp96kd9RVUGHb9
+        /t64QnwgNzPjBWffstFgO3V2dzmh5CY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-96-tKO_ttqFOpGoXBfHGnkLDw-1; Wed, 12 Feb 2020 11:34:19 -0500
+X-MC-Unique: tKO_ttqFOpGoXBfHGnkLDw-1
+Received: by mail-wm1-f72.google.com with SMTP id o24so945041wmh.0
+        for <linux-next@vger.kernel.org>; Wed, 12 Feb 2020 08:34:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=XeLe0VqvdqoWiGR03rxndmykwmmXsnBvd6JZdgln7y4=;
+        b=txXHhU7mhSqYTzDCdlC/7VxRtAFPwQuXKdaY2Y7uk3593xDwu3lg4ZTpEPuBgy6TKI
+         fLHdwBasGkNaRGBqJBeazYE46PN247JP6a+e41Ovp+cNq9fvLwVbOlVjHQzW2hDdT9te
+         vW3nM51yUbRfaSeMMNsHysLPwMw+B3Yc2UZ6RJ1f6b16ygwFwRf0kBd4E07E/7pJsvSZ
+         +gL1DtIkUz/XHkhiyaI7qUluHotaWK+yCZ+O5oipHgT8TX5X7l5mfLUB87QUgiB/AINj
+         x4ds2L91+aCtHKLJ9YPY+QiRc7JIObCtk/6qNeVMyBr9JtkHC7Y/3EIUx52aq440Zw+0
+         X07g==
+X-Gm-Message-State: APjAAAVa9iAEYOqKvQcUYTm9kmdDELo+hOxfndAWuKEAmE6pR7wPIza+
+        WeQz6tHfvEfMA4USnTM/yCoR+hMowht89xA47j9TQ9gbBX5msmnf68EukmuOOIFnV6KUByk7D9W
+        v2BxaZ9S6v+BnOm6ZJVP09Q==
+X-Received: by 2002:a05:600c:21c5:: with SMTP id x5mr13953424wmj.72.1581525258503;
+        Wed, 12 Feb 2020 08:34:18 -0800 (PST)
+X-Google-Smtp-Source: APXvYqwzR9LoAw0PLm1NN8TKVgvBlTdyQ4+WmwfyRs+Y2SnZ+YimN+K/oDsDwHuGaXIU12ce2wCypA==
+X-Received: by 2002:a05:600c:21c5:: with SMTP id x5mr13953400wmj.72.1581525258231;
+        Wed, 12 Feb 2020 08:34:18 -0800 (PST)
+Received: from eperezma.remote.csb (153.143.221.87.dynamic.jazztel.es. [87.221.143.153])
+        by smtp.gmail.com with ESMTPSA id a16sm1172111wrt.30.2020.02.12.08.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 08:34:17 -0800 (PST)
+Message-ID: <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
+ random crashes in KVM guests after reboot
+From:   Eugenio =?ISO-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Eric Yang <eric.yang2@amd.com>,
-        Michael Strauss <Michael.Strauss@amd.com>,
-        "Wentland, Harry" <Harry.Wentland@amd.com>,
-        "Lakha, Bhawanpreet" <Bhawanpreet.Lakha@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20200212161453.x6ijsoeitik2xfqn@outlook.office365.com>
-References: <20200212094838.4465f954@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vejvm5ky6sii2nop"
-Content-Disposition: inline
-In-Reply-To: <20200212094838.4465f954@canb.auug.org.au>
-X-ClientProxiedBy: YTOPR0101CA0016.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b00:15::29) To MW2PR12MB2524.namprd12.prod.outlook.com
- (2603:10b6:907:9::27)
-MIME-Version: 1.0
-Received: from outlook.office365.com (165.204.55.250) by YTOPR0101CA0016.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b00:15::29) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2729.22 via Frontend Transport; Wed, 12 Feb 2020 16:15:00 +0000
-X-Originating-IP: [165.204.55.250]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 07eebf53-cce7-4abe-29e5-08d7afd6b62c
-X-MS-TrafficTypeDiagnostic: MW2PR12MB2348:|MW2PR12MB2348:
-X-MS-Exchange-Transport-Forked: True
-X-Microsoft-Antispam-PRVS: <MW2PR12MB234847AF0B708E85790EFCCB981B0@MW2PR12MB2348.namprd12.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:2733;
-X-Forefront-PRVS: 0311124FA9
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10001)(10009020)(4636009)(376002)(39860400002)(396003)(346002)(136003)(366004)(189003)(199004)(8676002)(8936002)(86362001)(81156014)(26005)(956004)(6916009)(66946007)(16526019)(54906003)(5660300002)(316002)(2906002)(81166006)(66476007)(66556008)(186003)(44144004)(52116002)(6666004)(4326008)(1076003)(6506007)(55016002)(7696005)(21480400003)(966005)(9686003)(478600001)(2700100001);DIR:OUT;SFP:1101;SCL:1;SRVR:MW2PR12MB2348;H:MW2PR12MB2524.namprd12.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;MX:1;A:1;
-Received-SPF: None (protection.outlook.com: amd.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CIvp6sTbT2175ByuhVgjTTG5OkT+TcuT3DpipmVsQ1I8P2Q6pJ+njMBP2+YW8RvduQxJLQmQB/8USfAynrz/AQ3Q9LO4qZTpIA8EHntbMebOTmIwfgIhinh9d0ENmeXzFyqU9Y7c7zS4x3sxwOYWWrgvbjdfZLdqsFUIVEhaaw+fxw0uv8wU0R8UJ4l6r1l0bEQPGZXscQumAzlAna8vVoUvkrRP78J+iimnud9V23eBCGzwwzWr0JQhhHJwcBo3TVKo8V5Dgc2i2aExzOAH3FOFOTbJnUdOd2tbfgSYabFnRPQ1I4ifI+YypSLAJBKaTqHkL9fo1AqX3woP+e2Fgtefe583XLfdK1AIXEfYFnJO/rZ7U51uPxkJP2IZ1LqFvMunePHm38BU0UUpkj9lQcOByOX1Iwt4DCSnYs5GOVDPjBc4BzQhS4wS1OawiO5D7vs66iukmg5rAdUe9iZ9OVcm4H/4bfUsMVi45EqE21NEtLwchyiC3MbD8hI54/iEbHAA3x1Dj3czPbqYrUYe6b/QXdsQ86bJ/4mHPsU922ykqO0OLbQ8TCDaS4/f/cqow/nCFErkl0eT3nhxv19TY341GUWlP6SYd7X/DyuMETwCJkJLL48b6lps/tVvyfbyybf3nwv2AAbnpXxT9ZzX3w==
-X-MS-Exchange-AntiSpam-MessageData: xYi6t5M0xX4UAcRcjLfRCpuRPfPdk4PjhTM2y/vjvZDMQjx+8pK7dR8szlGYqhT1/mI6wHWbCOzVjHx+E5z7c+lAxonI+rBvNPE5fGqM3QPHOC8vamdNFBNJY5XIEBVDnvjwtaXfnvRNJ+YIWVGW9Q==
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 07eebf53-cce7-4abe-29e5-08d7afd6b62c
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2020 16:15:01.2812
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6a5tl57MhqKTn24SV8JbU5wh0PBoH3OCv1bac8E7MlOOqLOUPwnpefE862FmnZlz15VxbvwpqUrVUK1mRedSYQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW2PR12MB2348
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Date:   Wed, 12 Feb 2020 17:34:16 +0100
+In-Reply-To: <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
+References: <20200107042401-mutt-send-email-mst@kernel.org>
+         <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
+         <20200107065434-mutt-send-email-mst@kernel.org>
+         <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
+         <20200120012724-mutt-send-email-mst@kernel.org>
+         <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+         <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+         <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
+         <20200206171349-mutt-send-email-mst@kernel.org>
+         <5c860fa1-cef5-b389-4ebf-99a62afa0fe8@de.ibm.com>
+         <20200207025806-mutt-send-email-mst@kernel.org>
+         <97c93d38-ef07-e321-d133-18483d54c0c0@de.ibm.com>
+         <CAJaqyWfngzP4d01B6+Sqt8FXN6jX7kGegjx8ie4no_1Er3igQA@mail.gmail.com>
+         <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
+         <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
+         <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---vejvm5ky6sii2nop
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, 2020-02-11 at 14:13 +0100, Christian Borntraeger wrote:
+> 
+> On 11.02.20 14:04, Eugenio Pérez wrote:
+> > On Mon, 2020-02-10 at 12:01 +0100, Christian Borntraeger wrote:
+> > > On 10.02.20 10:47, Eugenio Perez Martin wrote:
+> > > > Hi Christian.
+> > > > 
+> > > > I'm not able to reproduce the failure with eccb852f1fe6bede630e2e4f1a121a81e34354ab commit. Could you add more
+> > > > data?
+> > > > Your configuration (libvirt or qemu line), and host's dmesg output if any?
+> > > > 
+> > > > Thanks!
+> > > 
+> > > If it was not obvious, this is on s390x, a big endian system.
+> > > 
+> > 
+> > Hi Christian. Thank you very much for your fast responses.
+> > 
+> > Could you try this patch on top of eccb852f1fe6bede630e2e4f1a121a81e34354ab?
+> 
+> I still get 
+> [   43.665145] Guest moved used index from 0 to 289
+> after some reboots.
+> 
+> 
+> > Thanks!
+> > 
+> > From 71d0f9108a18aa894cc0c0c1c7efbad39f465a27 Mon Sep 17 00:00:00 2001
+> > From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <
+> > eperezma@redhat.com>
+> > Date: Tue, 11 Feb 2020 13:19:10 +0100
+> > Subject: [PATCH] vhost: fix return value of vhost_get_vq_desc
+> > 
+> > Before of the batch change, it was the chain's head. Need to keep that
+> > way or we will not be able to free a chain of descriptors.
+> > 
+> > Fixes: eccb852f1fe6 ("vhost: batching fetches")
+> > ---
+> >  drivers/vhost/vhost.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> > index b5a51b1f2e79..fc422c3e5c08 100644
+> > --- a/drivers/vhost/vhost.c
+> > +++ b/drivers/vhost/vhost.c
+> > @@ -2409,12 +2409,11 @@ int vhost_get_vq_desc(struct vhost_virtqueue *vq,
+> >  			*out_num += ret;
+> >  		}
+> >  
+> > -		ret = desc->id;
+> > -
+> >  		if (!(desc->flags & VRING_DESC_F_NEXT))
+> >  			break;
+> >  	}
+> >  
+> > +	ret = vq->descs[vq->first_desc].id;
+> >  	vq->first_desc = i + 1;
+> >  
+> >  	return ret;
+> > 
 
-Hi Stephen,
+Sorry, still not able to reproduce the issue.
 
-First of all, thanks for your report
+Could we try to disable all the vhost features?
 
-On 02/12, Stephen Rothwell wrote:
-> Hi all,
->=20
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->=20
-> ERROR: "get_num_odm_splits" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefi=
-ned!
->=20
-> Presumably caused by commit
->=20
->   5bf24270d1cc ("drm/amd/display: add odm split logic to scaling calculat=
-ions")
+Thanks!
 
-Today I managed to reproduce the issue with 'make allmodconfig', now I'm
-trying to understand why my .config file did not trigger this issue.  At
-first glance looks like 'make allmodconfig' does not add
-'CONFIG_DRM_AMD_DC_DCN=3Dy' as a result files under
-'drivers/gpu/drm/amd/display/dc/' directory does not get compiled which
-includes the file that defines 'get_num_odm_splits'. I'm still looking
-at it...=20
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index 661088ae6dc7..08f6d2ccb697 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -250,11 +250,11 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled);
+        } while (0)
+ 
+ enum {
+-       VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
+-                        (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
+-                        (1ULL << VIRTIO_RING_F_EVENT_IDX) |
+-                        (1ULL << VHOST_F_LOG_ALL) |
+-                        (1ULL << VIRTIO_F_ANY_LAYOUT) |
++       VHOST_FEATURES = /* (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) | */
++                        /* (1ULL << VIRTIO_RING_F_INDIRECT_DESC) | */
++                        /* (1ULL << VIRTIO_RING_F_EVENT_IDX) | */
++                        /* (1ULL << VHOST_F_LOG_ALL) | */
++                        /* (1ULL << VIRTIO_F_ANY_LAYOUT) | */
+                         (1ULL << VIRTIO_F_VERSION_1)
+ };
 
-Thanks
-=20
-> I used the amdgpu tree from next-20200211 for today.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
-
-
-
---=20
-Rodrigo Siqueira
-Software Engineer, Advanced Micro Devices (AMD)
-https://siqueira.tech
-
---vejvm5ky6sii2nop
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCgAdFiEE4tZ+ii1mjMCMQbfkWJzP/comvP8FAl5EJHgACgkQWJzP/com
-vP8HZA//bMsHUtPkmCZU1U9+zoOm93x/vhDWl6lldWKubHKMkK0CmGbO4R6OuIbJ
-++jKXShBuZ8kv5/37DgjxDMVSwTueH9pmti11cwiH4/OdlpArFBLpLRrfdrb0OEa
-6QYcO9uDKEYRoSnXWfcNZQ0FXN8pCQRfaRhNBqVQwu04gr4U51XoIR2+yftOnaef
-JgqTYzFcCXKVYW0OafgtEbFjCkOuwdq+kgScXL7NGfUShzB6djDINt4xeLeXed+O
-CVVgchS/s6r4mvLAHaNxqVLj4o059dYh9wC56ScYbs45ejQHDNh1pDHP7v9FthX3
-mV/iGQ1QUJYu/oTUJxoAroI1rMOZHz2airW+dMXEUlj38Tpj/L18nfJ4a/SRjqPj
-+yStuaronhqbYFCUM5p5qWk/F31H21h5sZTf4btz5VeCUZD0DotVJkd1S3B+CIJO
-9Uaqb87e0VMG/alZUlXxdmjkqNoNWSZ3/4Oexiv+0fJ1lL6YMiCsQO4yx7MRcrPU
-FNKlxKARhn/OFJzdHHoo/5gFkw4pwbDUt1oXaZZnYohJ3UGc3976NJC6nwhnWo0s
-3RhDQxtbpQcdHP9V7xqgw9qwnXNKE7roqmZkmSXa1jZIiLPyzzRNazNfUyV2HXmH
-CKmqCHrWZpQMCl7ASj6+tJnQ47GmeQqQXmVWH8y6/TVg2e4an6o=
-=PCSk
------END PGP SIGNATURE-----
-
---vejvm5ky6sii2nop--

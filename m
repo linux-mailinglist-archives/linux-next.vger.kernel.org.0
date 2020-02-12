@@ -2,100 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CED8315ABF4
-	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 16:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A140615ABCE
+	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 16:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728094AbgBLP04 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Feb 2020 10:26:56 -0500
-Received: from mailomta25-re.btinternet.com ([213.120.69.118]:39277 "EHLO
-        re-prd-fep-048.btinternet.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727698AbgBLP0z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 12 Feb 2020 10:26:55 -0500
-X-Greylist: delayed 12198 seconds by postgrey-1.27 at vger.kernel.org; Wed, 12 Feb 2020 10:26:55 EST
-Received: from re-prd-rgout-004.btmx-prd.synchronoss.net ([10.2.54.7])
-          by re-prd-fep-047.btinternet.com with ESMTP
-          id <20200212120334.PPOK16580.re-prd-fep-047.btinternet.com@re-prd-rgout-004.btmx-prd.synchronoss.net>;
-          Wed, 12 Feb 2020 12:03:34 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=btinternet.com; s=btmx201904; t=1581509014; 
-        bh=kHGdWcUTXHR3UL14kLf9Zry9N63KEVIVP1LWL5DkSqQ=;
-        h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:MIME-Version;
-        b=WtlM0Xyht+vuAwdt/l8f1czhehZX34hzsp9kCVtmGoM91BcQRd0eVw0SfDA0hgWa4i+Q2A5EN/3fG1KpGHmDPkyLvwio5Yt7/2GLYX38G7p47HyhlMR69Q2vT9cWk88EcPVevMNPocTs3T+BX3Bjg+4jTOaRenLqqO27ATrF8XEPKXPiOI/HWuOd5Fd5LY+GnAlIb1jbqTKRt5nuWZw2CzeqXqWzQCEH2pRwa7rWmB5hUrZV6ABquYod3KE7x+1euxIGk0q1njvgF6MXQs5U37Z3PDwVTWPtIQjkE/LlteHp1jiTSzUBD95vvFHD2XRIoUo/kDKIisuNnEnNpXOBZw==
-Authentication-Results: btinternet.com;
-    auth=pass (PLAIN) smtp.auth=richard_c_haines@btinternet.com
-X-Originating-IP: [31.49.60.248]
-X-OWM-Source-IP: 31.49.60.248 (GB)
-X-OWM-Env-Sender: richard_c_haines@btinternet.com
-X-VadeSecure-score: verdict=clean score=0/300, class=clean
-X-RazorGate-Vade: gggruggvucftvghtrhhoucdtuddrgedugedrieehgdefiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemuceutffkvffkuffjvffgnffgvefqofdpqfgfvfenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepkffuhffvffgjfhgtfggggfesthejredttderjeenucfhrhhomheptfhitghhrghrugcujfgrihhnvghsuceorhhitghhrghruggptggphhgrihhnvghssegsthhinhhtvghrnhgvthdrtghomheqnecukfhppeefuddrgeelrdeitddrvdegkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhephhgvlhhopehlohgtrghlhhhoshhtrdhlohgtrghlughomhgrihhnpdhinhgvthepfedurdegledriedtrddvgeekpdhmrghilhhfrhhomhepoehrihgthhgrrhgupggtpghhrghinhgvshessghtihhnthgvrhhnvghtrdgtohhmqecuuefqffgjpeekuefkvffokffogfdprhgtphhtthhopeeotghgiihonhgvshesghhoohhglhgvmhgrihhlrdgtohhmqedprhgtphhtthhopeeoughhohifvghllhhssehrvgguhhgrthdrtghomheqpdhrtghpthhtohepoehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgheqpdhrtghpthhtohepoehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgheqpdhrtghpthhtohepoehprghulhesphgruhhlqdhmohhorhgvrdgtohhmqedprhgtphhtthho
-        peeorhhitghhrghruggptggphhgrihhnvghssehhohhtmhgrihhlrdgtohhmqedprhgtphhtthhopeeoshgushesthihtghhohdrnhhsrgdrghhovheqpdhrtghpthhtohepoehsfhhrsegtrghnsgdrrghuuhhgrdhorhhgrdgruheq
-X-RazorGate-Vade-Verdict: clean 0
-X-RazorGate-Vade-Classification: clean
-Received: from localhost.localdomain (31.49.60.248) by re-prd-rgout-004.btmx-prd.synchronoss.net (5.8.340) (authenticated as richard_c_haines@btinternet.com)
-        id 5E3A181A01289E90; Wed, 12 Feb 2020 12:03:34 +0000
-Message-ID: <1d0b80d272a8e8c4a7b322d2d2bcc483d9e41a28.camel@btinternet.com>
-Subject: Re: linux-next: manual merge of the selinux tree with the keys tree
-From:   Richard Haines <richard_c_haines@btinternet.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Paul Moore <paul@paul-moore.com>,
-        David Howells <dhowells@redhat.com>, sds@tycho.nsa.gov
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian =?ISO-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        Stephen Smalley <sds@tycho.nsa.gov>
-Date:   Wed, 12 Feb 2020 12:03:33 +0000
-In-Reply-To: <20200212103548.266f81fd@canb.auug.org.au>
-References: <20200212103548.266f81fd@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.2 (3.34.2-1.fc31) 
+        id S1728393AbgBLPQf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Feb 2020 10:16:35 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:50605 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728247AbgBLPQf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Feb 2020 10:16:35 -0500
+Received: by mail-wm1-f65.google.com with SMTP id a5so2727103wmb.0
+        for <linux-next@vger.kernel.org>; Wed, 12 Feb 2020 07:16:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=K7RIY+4kAOToikoZA87KbVKD/yPHm259oFpCQyJwGC4=;
+        b=ENoDiFSH5yBF5jcv+prsG5x0FVNfTDGKUujRnb1yTgVozjYkY3RTn9i3UYA/KJUSLi
+         R9WER3wuXP59UrA1Z7O+wBFYWjtne77FIj0vdGYfUNTs+7ALQw2lwjmzTvYt55e8MJ2e
+         0IZdWM45scYpf5kQAfmaKXSG3iDotjgJNguk1J83Dnialky/D+7pFx5HW113ybJlqxlz
+         gQNMzwAfGWkbgocaIbvbdT+HSiLb5Hpi9YBvD79kOtPexOoB7PBYxz6o968a9Qa7tDkK
+         odH7OyTskS3UsBXNey2xDXrzeAEBarp3gl/YDQ/L68iX3xIeJgnsQvY/FHe06hP8tt1q
+         u2uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=K7RIY+4kAOToikoZA87KbVKD/yPHm259oFpCQyJwGC4=;
+        b=eOAsptJWH9VytTD42VhfzbiZQwsOnyroSlITxFyKISjPbr4yxErhkLQkOf3FqH3n3F
+         2elQkkL91VpdIKMMBExwt98FVjCuj+QkyV0tXykafE6z47NcwNx50ni9/ZlwNbIYXuZp
+         VRA9tNpM/ry4NvV2sJZmZ6rvyPj+tmSfG5llsaR0nowapHeKDYkFf7XefjgVWHF0Ojyh
+         JQs5lNf5/Q9XjI6+ofZFn7AtjIoFrJ4SSU+gmKe9x9aHFDkj6fTOr0QevAE5E0FZSTpp
+         NFeIjl4Q1alM4FXE1AFCfcNNN/0h0Ief3D2AuXuv9SsSImQCaZYhjv/k1O77LhxiY4SD
+         wf3g==
+X-Gm-Message-State: APjAAAXC4HlFnrqQ/A31qcqxIqOaXrTV//QyGrCd6FEKRUcK6xzqNwrs
+        Dg30wbT04hoe+NG2QCatQ47jAFwjCf531g==
+X-Google-Smtp-Source: APXvYqwBNmb9e+2ggGElOlA/Hsoy0lkmJ/6svvGQv9OFnlHDbeUyPIwJw+G7+5DyQXokO31lZRSMlg==
+X-Received: by 2002:a05:600c:2c53:: with SMTP id r19mr13282960wmg.39.1581520593894;
+        Wed, 12 Feb 2020 07:16:33 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id z6sm998915wrw.36.2020.02.12.07.16.33
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2020 07:16:33 -0800 (PST)
+Message-ID: <5e4416d1.1c69fb81.87ea6.5b23@mx.google.com>
+Date:   Wed, 12 Feb 2020 07:16:33 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc1-154-g2c2a150a97e7
+Subject: next/pending-fixes boot: 94 boots: 4 failed,
+ 85 passed with 5 offline (v5.6-rc1-154-g2c2a150a97e7)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 2020-02-12 at 10:35 +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the selinux tree got conflicts in:
-> 
->   security/selinux/include/security.h
->   security/selinux/ss/services.c
-> 
-> between commit:
-> 
->   87b14da5b76a ("security/selinux: Add support for new key
-> permissions")
-> 
-> from the keys tree and commit:
-> 
->   7470d0d13fb6 ("selinux: allow kernfs symlinks to inherit parent
-> directory context")
-> 
-> from the selinux tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your
-> tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any
-> particularly
-> complex conflicts.
-> 
+next/pending-fixes boot: 94 boots: 4 failed, 85 passed with 5 offline (v5.6=
+-rc1-154-g2c2a150a97e7)
 
-I think 87b14da5b76a ("security/selinux: Add support for new key
-permissions") should be revoked and resubmitted via selinux as it was
-never ack'ed there and produced before 7470d0d13fb6 ("selinux: allow
-kernfs symlinks to inherit parent directory context"), that has been
-ack'ed.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc1-154-g2c2a150a97e7/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc1-154-g2c2a150a97e7/
 
-Because of this the policy capability ids are out of sync with what has
-been committed in userspace libsepol.
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc1-154-g2c2a150a97e7
+Git Commit: 2c2a150a97e729922815d12c2c3be883713f79ac
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 73 unique boards, 19 SoC families, 24 builds out of 168
 
-Plus as Paul mentioned there is an outstanding query on the permission
-loop that David needs to answer.
+Boot Regressions Detected:
 
+arm:
 
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: v5.5-11478-g1433b2950f=
+a9)
 
+arm64:
+
+    defconfig:
+        gcc-8:
+          apq8016-sbc:
+              lab-bjorn: failing since 6 days (last pass: v5.5-9475-g7c2eb3=
+712de1 - first fail: v5.5-9670-g2c46fb8a6882)
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc1-120-ge=
+3ed5d1c150d)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.5-11478-g143=
+3b2950fa9)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc1-120-ge=
+3ed5d1c150d)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc1-120-ge=
+3ed5d1c150d)
+
+Boot Failures Detected:
+
+arm:
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8016-sbc: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6dl-wandboard_dual: 1 offline lab
+
+riscv:
+
+    defconfig:
+        gcc-8
+            sifive_fu540: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

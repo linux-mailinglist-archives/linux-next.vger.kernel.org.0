@@ -2,180 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C8D15AD77
-	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 17:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E26315B225
+	for <lists+linux-next@lfdr.de>; Wed, 12 Feb 2020 21:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728624AbgBLQeX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Feb 2020 11:34:23 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:50790 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727279AbgBLQeW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Feb 2020 11:34:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581525261;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XeLe0VqvdqoWiGR03rxndmykwmmXsnBvd6JZdgln7y4=;
-        b=POlhJANYimN8IanVDLDyKw5Vm92rElusmK1HDa36YIsL0TR/GUlzBc2rg+uPesIbsxFgNq
-        Ye3beJ3IcgEzFLVgIiqeovem1t5Hxl/cDuWjImWiBTaH/mLic/WIbAcMcp96kd9RVUGHb9
-        /t64QnwgNzPjBWffstFgO3V2dzmh5CY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-96-tKO_ttqFOpGoXBfHGnkLDw-1; Wed, 12 Feb 2020 11:34:19 -0500
-X-MC-Unique: tKO_ttqFOpGoXBfHGnkLDw-1
-Received: by mail-wm1-f72.google.com with SMTP id o24so945041wmh.0
-        for <linux-next@vger.kernel.org>; Wed, 12 Feb 2020 08:34:19 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=XeLe0VqvdqoWiGR03rxndmykwmmXsnBvd6JZdgln7y4=;
-        b=txXHhU7mhSqYTzDCdlC/7VxRtAFPwQuXKdaY2Y7uk3593xDwu3lg4ZTpEPuBgy6TKI
-         fLHdwBasGkNaRGBqJBeazYE46PN247JP6a+e41Ovp+cNq9fvLwVbOlVjHQzW2hDdT9te
-         vW3nM51yUbRfaSeMMNsHysLPwMw+B3Yc2UZ6RJ1f6b16ygwFwRf0kBd4E07E/7pJsvSZ
-         +gL1DtIkUz/XHkhiyaI7qUluHotaWK+yCZ+O5oipHgT8TX5X7l5mfLUB87QUgiB/AINj
-         x4ds2L91+aCtHKLJ9YPY+QiRc7JIObCtk/6qNeVMyBr9JtkHC7Y/3EIUx52aq440Zw+0
-         X07g==
-X-Gm-Message-State: APjAAAVa9iAEYOqKvQcUYTm9kmdDELo+hOxfndAWuKEAmE6pR7wPIza+
-        WeQz6tHfvEfMA4USnTM/yCoR+hMowht89xA47j9TQ9gbBX5msmnf68EukmuOOIFnV6KUByk7D9W
-        v2BxaZ9S6v+BnOm6ZJVP09Q==
-X-Received: by 2002:a05:600c:21c5:: with SMTP id x5mr13953424wmj.72.1581525258503;
-        Wed, 12 Feb 2020 08:34:18 -0800 (PST)
-X-Google-Smtp-Source: APXvYqwzR9LoAw0PLm1NN8TKVgvBlTdyQ4+WmwfyRs+Y2SnZ+YimN+K/oDsDwHuGaXIU12ce2wCypA==
-X-Received: by 2002:a05:600c:21c5:: with SMTP id x5mr13953400wmj.72.1581525258231;
-        Wed, 12 Feb 2020 08:34:18 -0800 (PST)
-Received: from eperezma.remote.csb (153.143.221.87.dynamic.jazztel.es. [87.221.143.153])
-        by smtp.gmail.com with ESMTPSA id a16sm1172111wrt.30.2020.02.12.08.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2020 08:34:17 -0800 (PST)
-Message-ID: <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
-Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
- random crashes in KVM guests after reboot
-From:   Eugenio =?ISO-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Date:   Wed, 12 Feb 2020 17:34:16 +0100
-In-Reply-To: <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
-References: <20200107042401-mutt-send-email-mst@kernel.org>
-         <c6795e53-d12c-0709-c2e9-e35d9af1f693@de.ibm.com>
-         <20200107065434-mutt-send-email-mst@kernel.org>
-         <fe6e7e90-3004-eb7a-9ed8-b53a7667959f@de.ibm.com>
-         <20200120012724-mutt-send-email-mst@kernel.org>
-         <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
-         <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
-         <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
-         <20200206171349-mutt-send-email-mst@kernel.org>
-         <5c860fa1-cef5-b389-4ebf-99a62afa0fe8@de.ibm.com>
-         <20200207025806-mutt-send-email-mst@kernel.org>
-         <97c93d38-ef07-e321-d133-18483d54c0c0@de.ibm.com>
-         <CAJaqyWfngzP4d01B6+Sqt8FXN6jX7kGegjx8ie4no_1Er3igQA@mail.gmail.com>
-         <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
-         <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
-         <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        id S1727548AbgBLUt5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Feb 2020 15:49:57 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59089 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727111AbgBLUt5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 12 Feb 2020 15:49:57 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48HsG92BKjz9sPF;
+        Thu, 13 Feb 2020 07:49:53 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1581540593;
+        bh=J4dkHbEB6RBjqAe2DsJvhKK3a5yp+QsKjyiLfWeKdQ8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=NlAKLCPh3d/AEovh1gYr2h0iCC8F/OVilArU2v3uqrK3EFOXC+GqCW0jq5KoPZZ9O
+         /Y68aS/pbVOHPI8cbC+ODN/W0LX97JUIQyIRM7f1J89x7CPCIe3zSMZI6BOWSsIF37
+         o9kd5JPAe5xm+OOVODhFSSrajqhqJh82q+GJmfsH3Uc2kepV3tZrvLMxwf1uNnuD+w
+         bNqsR/P9Rj/mKaHL6BhRCUkObsNTh6Han8IS+UbUY5O/qw8uAEyAJD21xW09eOFpX9
+         aAkgeJTZEcky6gxt0+NKNvQD19/OczGV7VYNu/sbBjgtT7ERCfHw/RWksqP4vbOaHD
+         Iq8L6X+ltfpJQ==
+Date:   Thu, 13 Feb 2020 07:49:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Johan Korsnes <jkorsnes@cisco.com>
+Subject: linux-next: Fixes tag needs some work in the hid tree
+Message-ID: <20200213074940.4fc25926@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Tizg3_K0VfuuX+xai=TK+ti";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 2020-02-11 at 14:13 +0100, Christian Borntraeger wrote:
-> 
-> On 11.02.20 14:04, Eugenio Pérez wrote:
-> > On Mon, 2020-02-10 at 12:01 +0100, Christian Borntraeger wrote:
-> > > On 10.02.20 10:47, Eugenio Perez Martin wrote:
-> > > > Hi Christian.
-> > > > 
-> > > > I'm not able to reproduce the failure with eccb852f1fe6bede630e2e4f1a121a81e34354ab commit. Could you add more
-> > > > data?
-> > > > Your configuration (libvirt or qemu line), and host's dmesg output if any?
-> > > > 
-> > > > Thanks!
-> > > 
-> > > If it was not obvious, this is on s390x, a big endian system.
-> > > 
-> > 
-> > Hi Christian. Thank you very much for your fast responses.
-> > 
-> > Could you try this patch on top of eccb852f1fe6bede630e2e4f1a121a81e34354ab?
-> 
-> I still get 
-> [   43.665145] Guest moved used index from 0 to 289
-> after some reboots.
-> 
-> 
-> > Thanks!
-> > 
-> > From 71d0f9108a18aa894cc0c0c1c7efbad39f465a27 Mon Sep 17 00:00:00 2001
-> > From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <
-> > eperezma@redhat.com>
-> > Date: Tue, 11 Feb 2020 13:19:10 +0100
-> > Subject: [PATCH] vhost: fix return value of vhost_get_vq_desc
-> > 
-> > Before of the batch change, it was the chain's head. Need to keep that
-> > way or we will not be able to free a chain of descriptors.
-> > 
-> > Fixes: eccb852f1fe6 ("vhost: batching fetches")
-> > ---
-> >  drivers/vhost/vhost.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> > index b5a51b1f2e79..fc422c3e5c08 100644
-> > --- a/drivers/vhost/vhost.c
-> > +++ b/drivers/vhost/vhost.c
-> > @@ -2409,12 +2409,11 @@ int vhost_get_vq_desc(struct vhost_virtqueue *vq,
-> >  			*out_num += ret;
-> >  		}
-> >  
-> > -		ret = desc->id;
-> > -
-> >  		if (!(desc->flags & VRING_DESC_F_NEXT))
-> >  			break;
-> >  	}
-> >  
-> > +	ret = vq->descs[vq->first_desc].id;
-> >  	vq->first_desc = i + 1;
-> >  
-> >  	return ret;
-> > 
+--Sig_/Tizg3_K0VfuuX+xai=TK+ti
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sorry, still not able to reproduce the issue.
+Hi all,
 
-Could we try to disable all the vhost features?
+In commit
 
-Thanks!
+  5ebdffd25098 ("HID: core: fix off-by-one memset in hid_report_raw_event()=
+")
 
-diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index 661088ae6dc7..08f6d2ccb697 100644
---- a/drivers/vhost/vhost.h
-+++ b/drivers/vhost/vhost.h
-@@ -250,11 +250,11 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled);
-        } while (0)
- 
- enum {
--       VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
--                        (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
--                        (1ULL << VIRTIO_RING_F_EVENT_IDX) |
--                        (1ULL << VHOST_F_LOG_ALL) |
--                        (1ULL << VIRTIO_F_ANY_LAYOUT) |
-+       VHOST_FEATURES = /* (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) | */
-+                        /* (1ULL << VIRTIO_RING_F_INDIRECT_DESC) | */
-+                        /* (1ULL << VIRTIO_RING_F_EVENT_IDX) | */
-+                        /* (1ULL << VHOST_F_LOG_ALL) | */
-+                        /* (1ULL << VIRTIO_F_ANY_LAYOUT) | */
-                         (1ULL << VIRTIO_F_VERSION_1)
- };
+Fixes tag
 
+  Fixes: 966922f26c7f ("HID: fix a crash in hid_report_raw_event()
+
+has these problem(s):
+
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Tizg3_K0VfuuX+xai=TK+ti
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5EZOQACgkQAVBC80lX
+0GzFkwf8DVL2KKXhB0IZt+fgPLqZ/8eSIRb6zCgUr7K7z9+sKP7Nl56Zh7G0mG78
+3YTuRolnXtlsJHk7UE2L4LPzh0VMSx8CvSVcHt2uan/wNVvMaSvOcWprEvUzYOKA
+PiVLjhh6Z30XAxToQBN8RotSciM6fKS96Onys1Nx5EzCutq9d7fWuHUT/7rz0P2s
+SqYwveUggnAjGtJUhTt0drIEuGThhT1xJ+BPrY0l2Zig/aHBdy/yRPY77aAU9Nl2
+DaeoMGZpHeY11u0vCthK+LGm7L9NPJY1pYANn9RcHjFuVa7ets0wzSw5SLdin6Lb
+zHArYw+sjNvF9i1kkQ1Ed8ziD46pVQ==
+=yomP
+-----END PGP SIGNATURE-----
+
+--Sig_/Tizg3_K0VfuuX+xai=TK+ti--

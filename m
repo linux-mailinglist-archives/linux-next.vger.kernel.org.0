@@ -2,76 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 454F515B812
-	for <lists+linux-next@lfdr.de>; Thu, 13 Feb 2020 05:05:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F25FF15B898
+	for <lists+linux-next@lfdr.de>; Thu, 13 Feb 2020 05:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729603AbgBMEFS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 12 Feb 2020 23:05:18 -0500
-Received: from ozlabs.org ([203.11.71.1]:52631 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729407AbgBMEFS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 12 Feb 2020 23:05:18 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48J2wW5hw8z9s29;
-        Thu, 13 Feb 2020 15:05:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581566715;
-        bh=OgihZt7c9BLtQOmNmp8YnDZixVLslxy/IHs2OBp+TaM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WpuYjPYo0YZpGpGKoBq+zFMWRfrqSuxtXpWddJYRUGPUrZY3M354jNjCKPwu962uk
-         GIMP3QeUUxueWkXFOuekrmfj0YIcZwbcnZylBVhPM0ItpBWYyKK8txoKdmhLvwH+5W
-         M5Kra139qiHW+poMdjlCsGvlOINYEjWgRLg7doyMY9zd69ooJ8+bDmRd6zakyUywcO
-         WBNoTSVGSIJpBcEKwb5eBFaa7g3wGBFGVANuH4/btZ5LjJtPx6Q+bo7FlJ0GaqjqJm
-         J1luErcjktV43OZdapIBb/gaQ1u2+nkol+hvtvBcXk6tCw3ZT4gswcLpSKCYol14dg
-         jEl8+/pLeegNw==
-Date:   Thu, 13 Feb 2020 15:05:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Guo Ren <ren_guo@c-sky.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the csky tree
-Message-ID: <20200213150514.0478d0f5@canb.auug.org.au>
+        id S1729383AbgBME3x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 12 Feb 2020 23:29:53 -0500
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:45074 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729358AbgBME3w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 12 Feb 2020 23:29:52 -0500
+Received: by mail-pf1-f194.google.com with SMTP id 2so2352676pfg.12;
+        Wed, 12 Feb 2020 20:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=d63fwL3mQlEY9URLyw++u6iCkUWQ2XdExRhc8h0yDNU=;
+        b=UJ5Ab0o1cfQabSJla6EbrekipLuPUonjjW8d/ALEevTqBUh6q9XtjEFMLWpum9zNVr
+         fjZ7+N++6IKbgotW8rw8uYyyhwA8ZhKqAsWXmY6C9YW7wr7SiWWe8vDca361wmbJ6miF
+         qC1Mfui/X2xiea4QP4Tb2jdwFhcs4bmieR4GshiUfZ8TZbDpHy/UtDV4nbIijjnhtu8b
+         d4WMFpNWAR0VncO4HexeoatlM6m09B7DDMbdtChSRD1k2jVIleYXI6O2xSj/reztKeqt
+         DJcSo1JAZIvfxH532n7fIB07hUPJzNiHQpthD2o3Wm2kLc7CJHgBU65jx6IG/5FcNVB7
+         JFxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:subject:to:cc:references:from:message-id
+         :date:user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=d63fwL3mQlEY9URLyw++u6iCkUWQ2XdExRhc8h0yDNU=;
+        b=fP3zmNMmx7vzs0ZNByhn9cl7u0t0PhAfp+ghU8yCOPWb+qOcrFTGfWfP33ZChcnsK5
+         viCl7mjDge3stl9yhkTjomBJteuh30unnB/Mw1Ko4KXE96pnSZaN3PzhFbwFwnnd6uS3
+         UgJiUoS8OPyrvC91p5yLh4rZ3nhB0kpFxAB4afXKGw2ydZVTDmEJgM4IE0/vXEFrYJwx
+         JP4gBh81nEQXUU6sXEsZoc3V/7QzNOSN9AYeynx/YcB61k+HcRQItkp0tN6KQ5AoGsHh
+         Ba4ad7igLzJj9Wz65QUHRQQddcy5wkWTKoc+U2Fc9DSQQ6wPuGct2I5czNwsBIFGDH9L
+         wusA==
+X-Gm-Message-State: APjAAAVwt2CVNdpMietJ19s7PnCHVUna4T6+KgQIUzpOdq8L/ucHW2TQ
+        5JzZ91/IddJImPCCT+0lVIyob6/K
+X-Google-Smtp-Source: APXvYqytb4SQtG0yBYx5hpP/7CpUI8zayt/nDYZQm1eKrFpUFoKI6ry+DhDBjbybak0AW+lQSYUGhg==
+X-Received: by 2002:a62:64d8:: with SMTP id y207mr11681344pfb.208.1581568190482;
+        Wed, 12 Feb 2020 20:29:50 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id e4sm703094pgg.94.2020.02.12.20.29.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Feb 2020 20:29:49 -0800 (PST)
+Subject: Re: linux-next: Tree for Feb 12 (Documentation/hwmon/ltc2978.rst)
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-hwmon@vger.kernel.org
+References: <20200212135836.5b03e755@canb.auug.org.au>
+ <4f6b763f-25ff-22f4-7ac4-527752840aa4@infradead.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Message-ID: <4b1897ea-bfcd-142a-a834-4f49eb68513b@roeck-us.net>
+Date:   Wed, 12 Feb 2020 20:29:47 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MbIiYJL4MhL0czCz3rROdJx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <4f6b763f-25ff-22f4-7ac4-527752840aa4@infradead.org>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MbIiYJL4MhL0czCz3rROdJx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Randy,
 
-Hi all,
+On 2/12/20 7:39 PM, Randy Dunlap wrote:
+> On 2/11/20 6:58 PM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20200211:
+>>
+> 
+> Hi Guenter,
+> 
+> The changes in linux-next to Documentation/hwmon/ltc2978.rst cause a Sphinx warning:
+> 
+> linux-next-20200212/Documentation/hwmon/ltc2978.rst:251: WARNING: Malformed table.
+> Text in column margin in table line 11.
+> 
+> The indentation in the table that begins around line 241 is all mucked up.
+> I prepared a patch but it looks like a (partial) revert is what is needed.
+> 
 
-Commit
+Thanks for the note. I'll fix it up.
 
-  85ea1329d674 ("csky: Replace <linux/clk-provider.h> by <linux/of_clk.h>")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/MbIiYJL4MhL0czCz3rROdJx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5EyvoACgkQAVBC80lX
-0Gzbdgf/eqDlQdAWguhDLGD6gibFvhqiVMmNHG1V9Mp6q2tVhJS3tTfZ3Y3VxJdC
-ctuR7pA8iHorhIDOZS81Y/weH1LT78sAqeMHa05brZRXHzsTsqxAeGSn/+Wp5blT
-xvCDenO5nKqAzt125De58buaIxyneVfJOi/1YDHaEhVVe3+rIiJ7aiL3BNOHpKnf
-kilkiLfhV3QLTCzIkjZEu3Jjp5Sfd+s/f9tUlZaM0Sx+16oY+nrUVPVeXmESdHBp
-NOD4NO5DrC14gn0GOGLVj69c8avY4N9nCaW7eMM0hNFefid7OrLOdRTJoVLCtPj4
-5NeA3JFsID54okPBBEmUOjBp2Itb5g==
-=Q5r+
------END PGP SIGNATURE-----
-
---Sig_/MbIiYJL4MhL0czCz3rROdJx--
+Guenter

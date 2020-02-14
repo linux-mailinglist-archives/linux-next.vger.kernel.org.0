@@ -2,302 +2,1374 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BF27015D77C
-	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 13:35:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DED9315D7DA
+	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 13:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729087AbgBNMfF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Feb 2020 07:35:05 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13838 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728582AbgBNMfF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 14 Feb 2020 07:35:05 -0500
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01ECYkZA168511
-        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 07:35:02 -0500
-Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2y4j8avpx0-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 07:35:02 -0500
-Received: from localhost
-        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
-        Fri, 14 Feb 2020 12:35:00 -0000
-Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
-        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Fri, 14 Feb 2020 12:34:57 -0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01ECY1jJ48562472
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 14 Feb 2020 12:34:01 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4F3BCAE053;
-        Fri, 14 Feb 2020 12:34:56 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E3422AE045;
-        Fri, 14 Feb 2020 12:34:55 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.152.224.211])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Fri, 14 Feb 2020 12:34:55 +0000 (GMT)
-Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
- crashes in KVM guests after reboot
-To:     =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-References: <20200107042401-mutt-send-email-mst@kernel.org>
- <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
- <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
- <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
- <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
- <8fbbfb49-99d1-7fee-e713-d6d5790fe866@de.ibm.com>
- <2364d0728c3bb4bcc0c13b591f774109a9274a30.camel@redhat.com>
- <bb9fb726-306c-5330-05aa-a86bd1b18097@de.ibm.com>
- <468983fad50a5e74a739f71487f0ea11e8d4dfd1.camel@redhat.com>
- <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
- <bd9c9b4d99abd20d5420583af5a4954ea1cf4618.camel@redhat.com>
- <e11ba53c-a5fa-0518-2e06-9296897ed529@de.ibm.com>
- <CAJaqyWfJFArAdpOwehTn5ci-frqai+pazGgcn2VvQSebqGRVtg@mail.gmail.com>
- <80520391-d90d-e10d-a107-7a18f2810900@de.ibm.com>
- <dabe59fe-e068-5935-f49e-bc1da3d8471a@de.ibm.com>
- <35dca16b9a85eb203f35d3e55dcaa9d0dae5a922.camel@redhat.com>
- <3144806d-436e-86a1-2e29-74f7027f7f0b@de.ibm.com>
- <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
- xsFNBE6cPPgBEAC2VpALY0UJjGmgAmavkL/iAdqul2/F9ONz42K6NrwmT+SI9CylKHIX+fdf
- J34pLNJDmDVEdeb+brtpwC9JEZOLVE0nb+SR83CsAINJYKG3V1b3Kfs0hydseYKsBYqJTN2j
- CmUXDYq9J7uOyQQ7TNVoQejmpp5ifR4EzwIFfmYDekxRVZDJygD0wL/EzUr8Je3/j548NLyL
- 4Uhv6CIPf3TY3/aLVKXdxz/ntbLgMcfZsDoHgDk3lY3r1iwbWwEM2+eYRdSZaR4VD+JRD7p8
- 0FBadNwWnBce1fmQp3EklodGi5y7TNZ/CKdJ+jRPAAnw7SINhSd7PhJMruDAJaUlbYaIm23A
- +82g+IGe4z9tRGQ9TAflezVMhT5J3ccu6cpIjjvwDlbxucSmtVi5VtPAMTLmfjYp7VY2Tgr+
- T92v7+V96jAfE3Zy2nq52e8RDdUo/F6faxcumdl+aLhhKLXgrozpoe2nL0Nyc2uqFjkjwXXI
- OBQiaqGeWtxeKJP+O8MIpjyGuHUGzvjNx5S/592TQO3phpT5IFWfMgbu4OreZ9yekDhf7Cvn
- /fkYsiLDz9W6Clihd/xlpm79+jlhm4E3xBPiQOPCZowmHjx57mXVAypOP2Eu+i2nyQrkapaY
- IdisDQfWPdNeHNOiPnPS3+GhVlPcqSJAIWnuO7Ofw1ZVOyg/jwARAQABzUNDaHJpc3RpYW4g
- Qm9ybnRyYWVnZXIgKDJuZCBJQk0gYWRkcmVzcykgPGJvcm50cmFlZ2VyQGxpbnV4LmlibS5j
- b20+wsF5BBMBAgAjBQJdP/hMAhsDBwsJCAcDAgEGFQgCCQoLBBYCAwECHgECF4AACgkQEXu8
- gLWmHHy/pA/+JHjpEnd01A0CCyfVnb5fmcOlQ0LdmoKWLWPvU840q65HycCBFTt6V62cDljB
- kXFFxMNA4y/2wqU0H5/CiL963y3gWIiJsZa4ent+KrHl5GK1nIgbbesfJyA7JqlB0w/E/SuY
- NRQwIWOo/uEvOgXnk/7+rtvBzNaPGoGiiV1LZzeaxBVWrqLtmdi1iulW/0X/AlQPuF9dD1Px
- hx+0mPjZ8ClLpdSp5d0yfpwgHtM1B7KMuQPQZGFKMXXTUd3ceBUGGczsgIMipZWJukqMJiJj
- QIMH0IN7XYErEnhf0GCxJ3xAn/J7iFpPFv8sFZTvukntJXSUssONnwiKuld6ttUaFhSuSoQg
- OFYR5v7pOfinM0FcScPKTkrRsB5iUvpdthLq5qgwdQjmyINt3cb+5aSvBX2nNN135oGOtlb5
- tf4dh00kUR8XFHRrFxXx4Dbaw4PKgV3QLIHKEENlqnthH5t0tahDygQPnSucuXbVQEcDZaL9
- WgJqlRAAj0pG8M6JNU5+2ftTFXoTcoIUbb0KTOibaO9zHVeGegwAvPLLNlKHiHXcgLX1tkjC
- DrvE2Z0e2/4q7wgZgn1kbvz7ZHQZB76OM2mjkFu7QNHlRJ2VXJA8tMXyTgBX6kq1cYMmd/Hl
- OhFrAU3QO1SjCsXA2CDk9MM1471mYB3CTXQuKzXckJnxHkHOwU0ETpw8+AEQAJjyNXvMQdJN
- t07BIPDtbAQk15FfB0hKuyZVs+0lsjPKBZCamAAexNRk11eVGXK/YrqwjChkk60rt3q5i42u
- PpNMO9aS8cLPOfVft89Y654Qd3Rs1WRFIQq9xLjdLfHh0i0jMq5Ty+aiddSXpZ7oU6E+ud+X
- Czs3k5RAnOdW6eV3+v10sUjEGiFNZwzN9Udd6PfKET0J70qjnpY3NuWn5Sp1ZEn6lkq2Zm+G
- 9G3FlBRVClT30OWeiRHCYB6e6j1x1u/rSU4JiNYjPwSJA8EPKnt1s/Eeq37qXXvk+9DYiHdT
- PcOa3aNCSbIygD3jyjkg6EV9ZLHibE2R/PMMid9FrqhKh/cwcYn9FrT0FE48/2IBW5mfDpAd
- YvpawQlRz3XJr2rYZJwMUm1y+49+1ZmDclaF3s9dcz2JvuywNq78z/VsUfGz4Sbxy4ShpNpG
- REojRcz/xOK+FqNuBk+HoWKw6OxgRzfNleDvScVmbY6cQQZfGx/T7xlgZjl5Mu/2z+ofeoxb
- vWWM1YCJAT91GFvj29Wvm8OAPN/+SJj8LQazd9uGzVMTz6lFjVtH7YkeW/NZrP6znAwv5P1a
- DdQfiB5F63AX++NlTiyA+GD/ggfRl68LheSskOcxDwgI5TqmaKtX1/8RkrLpnzO3evzkfJb1
- D5qh3wM1t7PZ+JWTluSX8W25ABEBAAHCwV8EGAECAAkFAk6cPPgCGwwACgkQEXu8gLWmHHz8
- 2w//VjRlX+tKF3szc0lQi4X0t+pf88uIsvR/a1GRZpppQbn1jgE44hgF559K6/yYemcvTR7r
- 6Xt7cjWGS4wfaR0+pkWV+2dbw8Xi4DI07/fN00NoVEpYUUnOnupBgychtVpxkGqsplJZQpng
- v6fauZtyEcUK3dLJH3TdVQDLbUcL4qZpzHbsuUnTWsmNmG4Vi0NsEt1xyd/Wuw+0kM/oFEH1
- 4BN6X9xZcG8GYUbVUd8+bmio8ao8m0tzo4pseDZFo4ncDmlFWU6hHnAVfkAs4tqA6/fl7RLN
- JuWBiOL/mP5B6HDQT9JsnaRdzqF73FnU2+WrZPjinHPLeE74istVgjbowvsgUqtzjPIG5pOj
- cAsKoR0M1womzJVRfYauWhYiW/KeECklci4TPBDNx7YhahSUlexfoftltJA8swRshNA/M90/
- i9zDo9ySSZHwsGxG06ZOH5/MzG6HpLja7g8NTgA0TD5YaFm/oOnsQVsf2DeAGPS2xNirmknD
- jaqYefx7yQ7FJXXETd2uVURiDeNEFhVZWb5CiBJM5c6qQMhmkS4VyT7/+raaEGgkEKEgHOWf
- ZDP8BHfXtszHqI3Fo1F4IKFo/AP8GOFFxMRgbvlAs8z/+rEEaQYjxYJqj08raw6P4LFBqozr
- nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
-Date:   Fri, 14 Feb 2020 13:34:55 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726191AbgBNM6F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Feb 2020 07:58:05 -0500
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:33402 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728036AbgBNM6F (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Feb 2020 07:58:05 -0500
+Received: by mail-wr1-f65.google.com with SMTP id u6so10847292wrt.0
+        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 04:58:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=HG71svEk0iP/BZ0ES2aXUI3uOpLKGlt8yqznH7Y4D4s=;
+        b=LpQ0OOmRxwvZByXnv0Ve4DvGa6vRNex1HCUAeDpau6VOv/jTMvLwG5swYoahmbFlwt
+         K6uZPaCe03K+5hmHagxD3yjr3BjUaoay5NR8nhqAWXgX3duO5YFv/CAdsj8DsXQIdXtP
+         Hey6k9xpQ51UeNrqjQuvJEuspV0B3JHxBACzIUkXnFABa2swnNEkBqj3JARXox29IX9Y
+         gCafFEcBDt1+venPwsq3X71pfICranm4Jo8zvDRAzqa4oOfA2Z1sr4kHVc4jXi8kswPb
+         7Np2W/EzmtB9W2q6/sbNq7WJ2Rsz5njF+gCNlBJsAepEGJZs4PxVrH2Q6XhXLQMQMB6P
+         mqug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=HG71svEk0iP/BZ0ES2aXUI3uOpLKGlt8yqznH7Y4D4s=;
+        b=YDxLlDxh0bKiatuoLku6NoLqYYGbHKaCtOwQl9MPQiEMaKF5noK0zvKR5/8MhBSpuf
+         1sOnWrHnpAxOlo1wy7UnTCkM7uY261cDhzAcy6/1Z4MNj3x2H5Tmc2uiDVXDeNbybIZG
+         vSgjV+6xfZdNL5ShAOz5qX5bAm/RuzLYBeRAuvlxnEgwEVl3UFGb4UZoHAoPhKk8OX4k
+         rwUBz8TNRwf/VK9MmFWPNirpY8Fm/3Ld9HF491ZnsQ2ibZvFP+ewbNufddeBHqwTFzxT
+         i6x0/KPrqpxmkhZrv8iecvBvYV11bGbSIS+rElIeBC5yNfOcmKXZAKr0ChvdwHRoMq2V
+         6/og==
+X-Gm-Message-State: APjAAAVzY1cNalkgiV5mGsyaa00YteT2IY3ewHp+/4Wre7q+Xc7PA2cD
+        QgfKIVWHJxozXtmFMd+gKVuV2BvMqmDY+A==
+X-Google-Smtp-Source: APXvYqxln3Lx8ufOONNfFAun3/BlY9RxbAWdtJmVgygJogyDN6YgUlaNCO9ZCUge5od3L5u/voZuzg==
+X-Received: by 2002:a5d:6708:: with SMTP id o8mr4115497wru.296.1581685078514;
+        Fri, 14 Feb 2020 04:57:58 -0800 (PST)
+Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
+        by smtp.gmail.com with ESMTPSA id w1sm7442718wro.72.2020.02.14.04.57.57
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2020 04:57:57 -0800 (PST)
+Message-ID: <5e469955.1c69fb81.e9297.0166@mx.google.com>
+Date:   Fri, 14 Feb 2020 04:57:57 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-x-cbid: 20021412-0012-0000-0000-00000386CC25
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20021412-0013-0000-0000-000021C352D5
-Message-Id: <1ee3a272-e391-e2e8-9cbb-5d3e2d40bec2@de.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-14_03:2020-02-12,2020-02-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=857
- clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- suspectscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
- definitions=main-2002140103
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200214
+Subject: next/master build: 162 builds: 0 failed, 162 passed,
+ 135 warnings (next-20200214)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+next/master build: 162 builds: 0 failed, 162 passed, 135 warnings (next-202=
+00214)
+
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200214/
+
+Tree: next
+Branch: master
+Git Describe: next-20200214
+Git Commit: 9f01828e9e1655836fea88d0c8225d648850b33a
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+    allmodconfig (clang-8): 69 warnings
+    allmodconfig (gcc-8): 1 warning
+    defconfig (gcc-8): 1 warning
+    defconfig (clang-8): 9 warnings
+    defconfig (gcc-8): 1 warning
+
+arm:
+    allmodconfig (gcc-8): 22 warnings
+    aspeed_g5_defconfig (gcc-8): 4 warnings
+    multi_v5_defconfig (gcc-8): 4 warnings
+    multi_v7_defconfig (gcc-8): 5 warnings
+    multi_v7_defconfig (gcc-8): 6 warnings
+    sunxi_defconfig (gcc-8): 1 warning
+
+i386:
+
+mips:
+    ip27_defconfig (gcc-8): 1 warning
+    lemote2f_defconfig (gcc-8): 1 warning
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+
+riscv:
+    defconfig (gcc-8): 1 warning
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+    allmodconfig (gcc-8): 1 warning
+    tinyconfig (gcc-8): 1 warning
 
 
-On 14.02.20 13:26, Eugenio Pérez wrote:
-> On Fri, 2020-02-14 at 13:22 +0100, Christian Borntraeger wrote:
->>
->> On 14.02.20 13:17, Eugenio Pérez wrote:
->>> Can you try the inlined patch over 52c36ce7f334 ("vhost: use batched version by default")? My intention is to check
->>> if
->>> "strange VHOST_SET_VRING_BASE" line appears. In previous tests, it appears very fast, but maybe it takes some time
->>> for
->>> it to appear, or it does not appear anymore.
+Warnings summary:
 
+    24   1 warning generated.
+    9    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=
+=80=98write_one_page=E2=80=99, declared with attribute warn_unused_result [=
+-Wunused-result]
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    7    2 warnings generated.
+    5    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    5    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    5    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    5    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    4    drivers/gpu/drm/drm_dp_mst_topology.c:5400:30: warning: suggest br=
+aces around initialization of subobject [-Wmissing-braces]
+    4    drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [=
+-Wunused-value]
+    2    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of funct=
+ion declared with 'warn_unused_result' attribute [-Wunused-result]
+    2    fs/btrfs/backref.c:394:30: warning: suggest braces around initiali=
+zation of subobject [-Wmissing-braces]
+    2    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:722:36: warning: suggest br=
+aces around initialization of subobject [-Wmissing-braces]
+    2    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2675:80=
+: warning: suggest braces around initialization of subobject [-Wmissing-bra=
+ces]
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    2    3 warnings generated.
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    1    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitia=
+lized when used within its own initialization [-Wuninitialized]
+    1    mm/shmem.c:2742:35: warning: variable 'shmem_falloc_waitq' is unin=
+itialized when used within its own initialization [-Wuninitialized]
+    1    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    1    fs/proc/base.c:1985:35: warning: variable 'wq' is uninitialized wh=
+en used within its own initialization [-Wuninitialized]
+    1    fs/nfs/dir.c:461:34: warning: variable 'wq' is uninitialized when =
+used within its own initialization [-Wuninitialized]
+    1    fs/nfs/dir.c:1532:34: warning: variable 'wq' is uninitialized when=
+ used within its own initialization [-Wuninitialized]
+    1    fs/namei.c:3213:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1    fs/namei.c:1736:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized =
+when used within its own initialization [-Wuninitialized]
+    1    fs/cifs/readdir.c:84:34: warning: variable 'wq' is uninitialized w=
+hen used within its own initialization [-Wuninitialized]
+    1    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized=
+ when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/lpfc/lpfc_sli.c:11909:34: warning: variable 'done_q' =
+is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/lpfc/lpfc_scsi.c:4728:34: warning: variable 'waitq' i=
+s uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1    drivers/net/wireless/ath/ath11k/debugfs_sta.c:185:7: warning: vari=
+able 'rate_idx' is used uninitialized whenever 'if' condition is false [-Ws=
+ometimes-uninitialized]
+    1    drivers/net/wireless/ath/ath11k/debugfs_sta.c:184:13: warning: var=
+iable 'rate_idx' is used uninitialized whenever 'if' condition is false [-W=
+sometimes-uninitialized]
+    1    drivers/net/wireless/ath/ath11k/debugfs_sta.c:175:7: warning: vari=
+able 'rate_idx' is used uninitialized whenever 'if' condition is false [-Ws=
+ometimes-uninitialized]
+    1    drivers/net/wireless/ath/ath11k/debugfs_sta.c:139:13: note: initia=
+lize the variable 'rate_idx' to silence this warning
+    1    drivers/net/usb/lan78xx.c:2659:34: warning: variable 'unlink_wakeu=
+p' is uninitialized when used within its own initialization [-Wuninitialize=
+d]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/net/ethernet/amazon/ena/ena_netdev.c:313:38: warning: sugg=
+est braces around initialization of subobject [-Wmissing-braces]
+    1    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake'=
+ is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake'=
+ is uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is unin=
+itialized when used within its own initialization [-Wuninitialized]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2673:53=
+: warning: suggest braces around initialization of subobject [-Wmissing-bra=
+ces]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link.c:980:36: wa=
+rning: address of 'sink->edid_caps.panel_patch.skip_scdc_overwrite' will al=
+ways evaluate to 'true' [-Wpointer-bool-conversion]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:342=
+:53: warning: suggest braces around initialization of subobject [-Wmissing-=
+braces]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:116=
+:62: warning: suggest braces around initialization of subobject [-Wmissing-=
+braces]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:297:4=
+1: warning: suggest braces around initialization of subobject [-Wmissing-br=
+aces]
+    1    drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:8538:4=
+3: warning: suggest braces around initialization of subobject [-Wmissing-br=
+aces]
+    1    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is =
+uninitialized when used within its own initialization [-Wuninitialized]
+    1    drivers/android/binderfs.c:657:41: warning: suggest braces around =
+initialization of subobject [-Wmissing-braces]
+    1    /tmp/cc6h79th.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/cc6h79th.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1163:warning: override: UNWINDER_GUESS changes choice state
 
-yep it does:
+Section mismatches summary:
 
-[   67.801012] [1917] vhost:vhost_vring_ioctl:1655: VHOST_SET_VRING_BASE [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=0][s.index=0][s.num=0]
-[   67.801018] [1917] vhost:vhost_vring_ioctl:1655: VHOST_SET_VRING_BASE [vq=00000000175f11ec][vq->last_avail_idx=0][vq->avail_idx=0][s.index=1][s.num=0]
-[   67.801026] [1917] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   67.801028] [1917] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=0 fd=39 vq=0000000088199421
-[   67.801032] [1917] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
-[   67.801033] [1917] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   67.801034] [1917] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=1 fd=39 vq=00000000175f11ec
-[   67.801035] [1917] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
-[   67.801037] [1915] vhost:vhost_discard_vq_desc:2424: DISCARD [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=0][n=0]
-[   68.648803] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=256][vq->ndescs=1]
-[   68.648810] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=1][vq->avail_idx=256][vq->ndescs=1]
-[   68.648812] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=2][vq->avail_idx=256][vq->ndescs=1]
-[   68.648815] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=3][vq->avail_idx=256][vq->ndescs=1]
-[   68.648817] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=4][vq->avail_idx=256][vq->ndescs=1]
-[   68.648818] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=5][vq->avail_idx=256][vq->ndescs=1]
-[   68.648820] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=6][vq->avail_idx=256][vq->ndescs=1]
-[   68.648822] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=7][vq->avail_idx=256][vq->ndescs=1]
-[   68.648824] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=8][vq->avail_idx=256][vq->ndescs=1]
-[   68.648826] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=9][vq->avail_idx=256][vq->ndescs=1]
-[   68.648828] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=10][vq->avail_idx=256][vq->ndescs=1]
-[   68.648829] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=11][vq->avail_idx=256][vq->ndescs=1]
-[   68.648831] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=12][vq->avail_idx=256][vq->ndescs=1]
-[   68.648832] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=13][vq->avail_idx=256][vq->ndescs=1]
-[   68.648833] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=14][vq->avail_idx=256][vq->ndescs=1]
-[   68.670292] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=0][vq->avail_idx=1][vq->ndescs=1]
-[   68.687187] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=1][vq->avail_idx=2][vq->ndescs=1]
-[   68.687623] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=15][vq->avail_idx=256][vq->ndescs=1]
-[   68.687641] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=2][vq->avail_idx=4][vq->ndescs=1]
-[   68.687642] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=3][vq->avail_idx=4][vq->ndescs=1]
-[   68.690274] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=16][vq->avail_idx=256][vq->ndescs=1]
-[   68.690539] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=4][vq->avail_idx=5][vq->ndescs=1]
-[   68.715379] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=17][vq->avail_idx=256][vq->ndescs=1]
-[   68.800525] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=5][vq->avail_idx=6][vq->ndescs=1]
-[   68.890537] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=6][vq->avail_idx=7][vq->ndescs=1]
-[   68.900587] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=7][vq->avail_idx=8][vq->ndescs=1]
-[   68.916837] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=8][vq->avail_idx=9][vq->ndescs=2]
-[   68.928828] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=18][vq->avail_idx=256][vq->ndescs=1]
-[   69.090540] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=9][vq->avail_idx=10][vq->ndescs=1]
-[   69.119651] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=10][vq->avail_idx=11][vq->ndescs=2]
-[   69.132325] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=19][vq->avail_idx=256][vq->ndescs=1]
-[   69.323473] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=11][vq->avail_idx=12][vq->ndescs=2]
-[   69.354557] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=20][vq->avail_idx=256][vq->ndescs=1]
-[   69.442550] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=21][vq->avail_idx=256][vq->ndescs=1]
-[   69.523593] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=12][vq->avail_idx=13][vq->ndescs=2]
-[   69.557360] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=22][vq->avail_idx=256][vq->ndescs=1]
-[   69.980634] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=13][vq->avail_idx=14][vq->ndescs=1]
-[   69.981364] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=14][vq->avail_idx=15][vq->ndescs=1]
-[   70.010545] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=15][vq->avail_idx=16][vq->ndescs=1]
-[   70.161316] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=23][vq->avail_idx=256][vq->ndescs=1]
-[   70.177640] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=24][vq->avail_idx=256][vq->ndescs=1]
-[   70.280564] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=16][vq->avail_idx=17][vq->ndescs=1]
-[   70.670327] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=17][vq->avail_idx=18][vq->ndescs=1]
-[   70.932887] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=18][vq->avail_idx=19][vq->ndescs=2]
-[   70.940587] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=19][vq->avail_idx=20][vq->ndescs=1]
-[   70.947598] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=25][vq->avail_idx=256][vq->ndescs=1]
-[   71.070388] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=20][vq->avail_idx=21][vq->ndescs=1]
-[   71.070770] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=26][vq->avail_idx=256][vq->ndescs=1]
-[   71.070805] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=21][vq->avail_idx=22][vq->ndescs=1]
-[   71.070977] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=27][vq->avail_idx=256][vq->ndescs=1]
-[   71.071049] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=22][vq->avail_idx=23][vq->ndescs=1]
-[   71.071195] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=28][vq->avail_idx=256][vq->ndescs=1]
-[   71.071243] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=23][vq->avail_idx=24][vq->ndescs=1]
-[   71.071386] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=29][vq->avail_idx=256][vq->ndescs=1]
-[   71.071433] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=24][vq->avail_idx=25][vq->ndescs=1]
-[   71.071575] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=30][vq->avail_idx=256][vq->ndescs=1]
-[   71.071611] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=25][vq->avail_idx=26][vq->ndescs=1]
-[   71.071747] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=31][vq->avail_idx=256][vq->ndescs=1]
-[   71.071789] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=26][vq->avail_idx=27][vq->ndescs=1]
-[   71.071923] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=32][vq->avail_idx=256][vq->ndescs=1]
-[   71.071960] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=27][vq->avail_idx=28][vq->ndescs=1]
-[   71.072096] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=33][vq->avail_idx=256][vq->ndescs=1]
-[   71.072128] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=28][vq->avail_idx=29][vq->ndescs=1]
-[   71.072267] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=34][vq->avail_idx=256][vq->ndescs=1]
-[   71.072300] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=29][vq->avail_idx=30][vq->ndescs=1]
-[   71.072432] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=35][vq->avail_idx=256][vq->ndescs=1]
-[   71.072463] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=30][vq->avail_idx=31][vq->ndescs=1]
-[   71.072596] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=36][vq->avail_idx=256][vq->ndescs=1]
-[   71.072630] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=31][vq->avail_idx=32][vq->ndescs=1]
-[   71.072759] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=37][vq->avail_idx=256][vq->ndescs=1]
-[   71.072791] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=32][vq->avail_idx=33][vq->ndescs=1]
-[   71.072933] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=38][vq->avail_idx=256][vq->ndescs=1]
-[   71.073054] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=33][vq->avail_idx=34][vq->ndescs=1]
-[   71.073193] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=39][vq->avail_idx=256][vq->ndescs=1]
-[   71.073247] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=34][vq->avail_idx=35][vq->ndescs=1]
-[   71.073383] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=40][vq->avail_idx=256][vq->ndescs=1]
-[   71.073434] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=35][vq->avail_idx=36][vq->ndescs=1]
-[   71.073571] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=41][vq->avail_idx=256][vq->ndescs=1]
-[   71.073627] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=36][vq->avail_idx=37][vq->ndescs=1]
-[   71.073762] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=42][vq->avail_idx=256][vq->ndescs=1]
-[   71.073813] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=37][vq->avail_idx=38][vq->ndescs=1]
-[   71.073948] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=43][vq->avail_idx=256][vq->ndescs=1]
-[   71.073998] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=38][vq->avail_idx=39][vq->ndescs=1]
-[   71.074136] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=44][vq->avail_idx=256][vq->ndescs=1]
-[   71.074186] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=39][vq->avail_idx=40][vq->ndescs=1]
-[   71.074320] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=45][vq->avail_idx=256][vq->ndescs=1]
-[   71.074370] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=40][vq->avail_idx=41][vq->ndescs=1]
-[   71.074503] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=46][vq->avail_idx=256][vq->ndescs=1]
-[   72.344493] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=47][vq->avail_idx=256][vq->ndescs=1]
-[   72.553413] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=48][vq->avail_idx=256][vq->ndescs=1]
-[   73.522174] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=49][vq->avail_idx=256][vq->ndescs=1]
-[   73.705202] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=50][vq->avail_idx=256][vq->ndescs=1]
-[   73.705239] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=41][vq->avail_idx=42][vq->ndescs=1]
-[   73.994388] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=51][vq->avail_idx=256][vq->ndescs=1]
-[   74.208443] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=52][vq->avail_idx=256][vq->ndescs=1]
-[   74.433345] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=53][vq->avail_idx=256][vq->ndescs=1]
-[   74.594756] [1910] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   74.594761] [1910] vhost_net:vhost_net_set_backend:1538: sock=000000001ae027fd != oldsock=0000000082d8d291 index=0 fd=-1 vq=0000000088199421
-[   74.594762] [1910] vhost_net:vhost_net_set_backend:1573: sock=000000001ae027fd
-[   74.594803] [1910] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   74.594804] [1910] vhost_net:vhost_net_set_backend:1538: sock=000000001ae027fd != oldsock=0000000082d8d291 index=1 fd=-1 vq=00000000175f11ec
-[   74.594805] [1910] vhost_net:vhost_net_set_backend:1573: sock=000000001ae027fd
-[   74.594847] [1910] vhost:vhost_vring_ioctl:1664: VHOST_GET_VRING_BASE [vq=0000000088199421][vq->last_avail_idx=54][vq->avail_idx=256][s.index=0][s.num=54]
-[   74.594850] [1910] vhost:vhost_vring_ioctl:1664: VHOST_GET_VRING_BASE [vq=00000000175f11ec][vq->last_avail_idx=42][vq->avail_idx=42][s.index=1][s.num=42]
-[   77.003191] [1918] vhost:vhost_vring_ioctl:1645: strange VHOST_SET_VRING_BASE [vq=0000000088199421][s.index=0][s.num=0]
-[   77.003194] CPU: 62 PID: 1918 Comm: CPU 1/KVM Not tainted 5.5.0+ #22
-[   77.003197] Hardware name: IBM 3906 M04 704 (LPAR)
-[   77.003198] Call Trace:
-[   77.003207]  [<0000000b8d93c132>] show_stack+0x8a/0xd0 
-[   77.003211]  [<0000000b8e32e72a>] dump_stack+0x8a/0xb8 
-[   77.003224]  [<000003ff803567ae>] vhost_vring_ioctl+0x6fe/0x858 [vhost] 
-[   77.003228]  [<000003ff8036c670>] vhost_net_ioctl+0x510/0x570 [vhost_net] 
-[   77.003234]  [<0000000b8dbecdd8>] do_vfs_ioctl+0x430/0x6f8 
-[   77.003235]  [<0000000b8dbed124>] ksys_ioctl+0x84/0xb0 
-[   77.003237]  [<0000000b8dbed1ba>] __s390x_sys_ioctl+0x2a/0x38 
-[   77.003240]  [<0000000b8e34ff72>] system_call+0x2a6/0x2c8 
-[   77.003261] [1918] vhost:vhost_vring_ioctl:1645: strange VHOST_SET_VRING_BASE [vq=00000000175f11ec][s.index=1][s.num=0]
-[   77.003262] CPU: 62 PID: 1918 Comm: CPU 1/KVM Not tainted 5.5.0+ #22
-[   77.003263] Hardware name: IBM 3906 M04 704 (LPAR)
-[   77.003264] Call Trace:
-[   77.003266]  [<0000000b8d93c132>] show_stack+0x8a/0xd0 
-[   77.003267]  [<0000000b8e32e72a>] dump_stack+0x8a/0xb8 
-[   77.003270]  [<000003ff803567ae>] vhost_vring_ioctl+0x6fe/0x858 [vhost] 
-[   77.003271]  [<000003ff8036c670>] vhost_net_ioctl+0x510/0x570 [vhost_net] 
-[   77.003273]  [<0000000b8dbecdd8>] do_vfs_ioctl+0x430/0x6f8 
-[   77.003274]  [<0000000b8dbed124>] ksys_ioctl+0x84/0xb0 
-[   77.003276]  [<0000000b8dbed1ba>] __s390x_sys_ioctl+0x2a/0x38 
-[   77.003277]  [<0000000b8e34ff72>] system_call+0x2a6/0x2c8 
-[   77.003297] [1918] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   77.003300] [1918] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=0 fd=39 vq=0000000088199421
-[   77.003304] [1918] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
-[   77.003305] [1918] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
-[   77.003306] [1918] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=1 fd=39 vq=00000000175f11ec
-[   77.003308] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=54][vq->avail_idx=256][vq->ndescs=1]
-[   77.003308] [1918] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
-[   77.003310] [1915] vhost_net:get_rx_bufs:1061: unexpected descriptor format for RX: out 0, in 0
-[   77.003312] [1915] vhost:vhost_discard_vq_desc:2424: DISCARD [vq=0000000088199421][vq->last_avail_idx=55][vq->avail_idx=256][n=0]
+    1    WARNING: vmlinux.o(.text.unlikely+0x3a8c): Section mismatch in ref=
+erence from the function pmax_setup_memory_region() to the function .init.t=
+ext:add_memory_region()
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 69 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    mm/shmem.c:2742:35: warning: variable 'shmem_falloc_waitq' is uninitial=
+ized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/base.c:1985:35: warning: variable 'wq' is uninitialized when us=
+ed within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/proc/proc_sysctl.c:705:35: warning: variable 'wq' is uninitialized w=
+hen used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/namei.c:1736:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    fs/namei.c:3213:34: warning: variable 'wq' is uninitialized when used w=
+ithin its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/android/binderfs.c:657:41: warning: suggest braces around initi=
+alization of subobject [-Wmissing-braces]
+    1 warning generated.
+    fs/afs/dir_silly.c:205:34: warning: variable 'wq' is uninitialized when=
+ used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/bluetooth/bluecard_cs.c:282:36: warning: variable 'wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/gpu/host1x/syncpt.c:208:34: warning: variable 'wq' is uninitial=
+ized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/cifs/readdir.c:84:34: warning: variable 'wq' is uninitialized when u=
+sed within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of function d=
+eclared with 'warn_unused_result' attribute [-Wunused-result]
+    1 warning generated.
+    fs/fuse/readdir.c:161:34: warning: variable 'wq' is uninitialized when =
+used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    net/nfc/hci/command.c:59:34: warning: variable 'ew_wq' is uninitialized=
+ when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    net/nfc/hci/llc_shdlc.c:687:34: warning: variable 'connect_wq' is unini=
+tialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    fs/btrfs/backref.c:394:30: warning: suggest braces around initializatio=
+n of subobject [-Wmissing-braces]
+    1 warning generated.
+    fs/nfs/dir.c:461:34: warning: variable 'wq' is uninitialized when used =
+within its own initialization [-Wuninitialized]
+    fs/nfs/dir.c:1532:34: warning: variable 'wq' is uninitialized when used=
+ within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:722:36: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/misc/mic/vop/vop_vringh.c:155:34: warning: variable 'wake' is u=
+ninitialized when used within its own initialization [-Wuninitialized]
+    drivers/misc/mic/vop/vop_vringh.c:399:34: warning: variable 'wake' is u=
+ninitialized when used within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/net/ethernet/amazon/ena/ena_netdev.c:313:38: warning: suggest b=
+races around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/gpu/drm/drm_dp_mst_topology.c:5400:30: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    drivers/gpu/drm/drm_dp_mst_topology.c:5400:30: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    2 warnings generated.
+    drivers/net/usb/lan78xx.c:2659:34: warning: variable 'unlink_wakeup' is=
+ uninitialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/net/wireless/ath/ath11k/debugfs_sta.c:185:7: warning: variable =
+'rate_idx' is used uninitialized whenever 'if' condition is false [-Wsometi=
+mes-uninitialized]
+    drivers/net/wireless/ath/ath11k/debugfs_sta.c:184:13: warning: variable=
+ 'rate_idx' is used uninitialized whenever 'if' condition is false [-Wsomet=
+imes-uninitialized]
+    drivers/net/wireless/ath/ath11k/debugfs_sta.c:175:7: warning: variable =
+'rate_idx' is used uninitialized whenever 'if' condition is false [-Wsometi=
+mes-uninitialized]
+    drivers/net/wireless/ath/ath11k/debugfs_sta.c:139:13: note: initialize =
+the variable 'rate_idx' to silence this warning
+    3 warnings generated.
+    drivers/scsi/bfa/bfad_im.c:301:34: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    drivers/scsi/bfa/bfad_im.c:378:34: warning: variable 'wq' is uninitiali=
+zed when used within its own initialization [-Wuninitialized]
+    2 warnings generated.
+    drivers/scsi/lpfc/lpfc_sli.c:11909:34: warning: variable 'done_q' is un=
+initialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/amdgpu_dm/amdgpu_dm.c:8538:43: wa=
+rning: suggest braces around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/scsi/lpfc/lpfc_scsi.c:4728:34: warning: variable 'waitq' is uni=
+nitialized when used within its own initialization [-Wuninitialized]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:116:62: =
+warning: suggest braces around initialization of subobject [-Wmissing-brace=
+s]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/command_table2.c:342:53: =
+warning: suggest braces around initialization of subobject [-Wmissing-brace=
+s]
+    2 warnings generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/bios/bios_parser2.c:297:41: wa=
+rning: suggest braces around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link.c:980:36: warning=
+: address of 'sink->edid_caps.panel_patch.skip_scdc_overwrite' will always =
+evaluate to 'true' [-Wpointer-bool-conversion]
+    1 warning generated.
+    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2673:53: war=
+ning: suggest braces around initialization of subobject [-Wmissing-braces]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2675:80: war=
+ning: suggest braces around initialization of subobject [-Wmissing-braces]
+    drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:2675:80: war=
+ning: suggest braces around initialization of subobject [-Wmissing-braces]
+    3 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 22 warnings, 0 section =
+mismatches
+
+Warnings:
+    /tmp/cc6h79th.s:18119: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/cc6h79th.s:18191: Warning: using r15 results in unpredictable beha=
+viour
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+    drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [-Wunu=
+sed-value]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
+er of different size [-Wpointer-to-int-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section =
+mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 se=
+ction mismatches
+
+Warnings:
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: vmlinux.o(.text.unlikely+0x3a8c): Section mismatch in referenc=
+e from the function pmax_setup_memory_region() to the function .init.text:a=
+dd_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section mis=
+matches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, clang-8) =E2=80=94 PASS, 0 errors, 9 warnings, 0 section =
+mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of function d=
+eclared with 'warn_unused_result' attribute [-Wunused-result]
+    1 warning generated.
+    fs/btrfs/backref.c:394:30: warning: suggest braces around initializatio=
+n of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c:722:36: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    1 warning generated.
+    drivers/gpu/drm/drm_dp_mst_topology.c:5400:30: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    drivers/gpu/drm/drm_dp_mst_topology.c:5400:30: warning: suggest braces =
+around initialization of subobject [-Wmissing-braces]
+    2 warnings generated.
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 s=
+ection mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lasat_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sec=
+tion mismatches
+
+Warnings:
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    {standard input}:141: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+msp71xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 4 warnings, 0 sec=
+tion mismatches
+
+Warnings:
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 5 =
+warnings, 0 section mismatches
+
+Warnings:
+    drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [-Wunu=
+sed-value]
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 6 warni=
+ngs, 0 section mismatches
+
+Warnings:
+    drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [-Wunu=
+sed-value]
+    fs/btrfs/volumes.c:7338:3: warning: ignoring return value of =E2=80=98w=
+rite_one_page=E2=80=99, declared with attribute warn_unused_result [-Wunuse=
+d-result]
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warni=
+ng (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit =
+address format error, expected "40000010"
+    arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (=
+i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address m=
+ust be less than 10-bits, got "0x40000010"
+
+---------------------------------------------------------------------------=
+-----
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [-Wunu=
+sed-value]
+
+---------------------------------------------------------------------------=
+-----
+tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    .config:1163:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---
+For more info write to <info@kernelci.org>

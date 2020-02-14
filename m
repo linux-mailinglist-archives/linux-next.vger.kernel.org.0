@@ -2,218 +2,287 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CDDA15D20C
-	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 07:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C91A415D287
+	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 08:06:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728775AbgBNG0t (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Feb 2020 01:26:49 -0500
-Received: from mail.kernel.org ([198.145.29.99]:34280 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725828AbgBNG0s (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 14 Feb 2020 01:26:48 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 957632187F;
-        Fri, 14 Feb 2020 06:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1581661607;
-        bh=cZvQf/Zrw6vHMiKMktyJm0gFIAZcuSUKt5L1jmSbSMI=;
-        h=Date:From:To:Subject:In-Reply-To:From;
-        b=FTV1FYupFn88vrsR+5ONX9BLWLcpKQmd8zlL+oIrSxc9AD0nRuWwcf2WePgSbE+Tw
-         XoVMtjvScHt32B5etXlPR6AYvywShOeNGfa3eKDm6p++Jdwfp1WzkUBhAZk9WQyMEN
-         h1bpjE8xtRGppiVW08zUYZ3XgGqC09SMrluwuJAQ=
-Date:   Thu, 13 Feb 2020 22:26:47 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject:  mmotm 2020-02-13-22-26 uploaded
-Message-ID: <20200214062647.A2Mb_X-mP%akpm@linux-foundation.org>
-In-Reply-To: <20200203173311.6269a8be06a05e5a4aa08a93@linux-foundation.org>
-User-Agent: s-nail v14.8.16
+        id S1726181AbgBNHG1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Feb 2020 02:06:27 -0500
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:39161 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726048AbgBNHG0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Feb 2020 02:06:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1581663985;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=joi4hdbT/PEqrxIlM8FM0lvHAsXkV/1ju6c1JWExbtc=;
+        b=boh1HmFJIQ4OIb7yJ+Ckn6YJk63elS+2kJQ7UXR84/jNUUHdeafAkaCuxNjSRnoVwGfv0Q
+        n2dIl6Czz0mYLuOcvQn0D2A2Kzi9w7/ird+atA1UTB6cgofadqvd0QpEUKaFT0vM3YI9hc
+        kdwzMOZSnvqVLhUGcSfXoEApLo0cFn4=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-177-Qe12ZrUVNQi-f4-s4jFxBQ-1; Fri, 14 Feb 2020 02:06:21 -0500
+X-MC-Unique: Qe12ZrUVNQi-f4-s4jFxBQ-1
+Received: by mail-wr1-f71.google.com with SMTP id v17so3519873wrm.17
+        for <linux-next@vger.kernel.org>; Thu, 13 Feb 2020 23:06:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=joi4hdbT/PEqrxIlM8FM0lvHAsXkV/1ju6c1JWExbtc=;
+        b=UEB+7ThFXIu9XrUqFzUEaBnmwIxOeo+Be16xrCxt4dmQSFHOAbZGRyjcJM7+9DS5rp
+         n4T9Kdry0W/iVkVGw0QjD3blQpuDkmvehlAPBP7P7JzmbauwdT2h/9Ps+9uYfxcHL9N3
+         RsbtPlkAZlKhdfdAFjcGWGmuZVnc5gU1RvgS6Z7rLur8cTzRiPEtOHzHjOKDu/ECsgxc
+         Gcm3Wcf8ZKf/0qhfC6ygATmofGV42S9zCIu00pceA2SvhINHo2ZKGEMYDtHKma1Rsujg
+         iBKxCTcBJg1Hp812OMMoivAcym6YQ8PH/s7QISHrrQs9lxQhw3rE/ayaC7rEMtYKiZhA
+         Vpqw==
+X-Gm-Message-State: APjAAAXk/Oq4veUvU5UQpe6kFqu8cnkLK1nzGxWfqt8cHyB7GP/6w8oG
+        SUrOkxxOZNUjSMI3tlIs6/XPVI88u3LZCAJrBxEG7hJvuxDD2hilVU9hxaK+zLs0tx4jQqviBTD
+        GnsYvzhtARleDgZD+VcUTVg==
+X-Received: by 2002:adf:9c8d:: with SMTP id d13mr2366673wre.392.1581663980141;
+        Thu, 13 Feb 2020 23:06:20 -0800 (PST)
+X-Google-Smtp-Source: APXvYqy/hl6Fu9TcFxtBPEUCswq44byuSe4qYHucXXSp7h5vRi4HvogGKz4tM4My1eXz5pD3XgMNCQ==
+X-Received: by 2002:adf:9c8d:: with SMTP id d13mr2366647wre.392.1581663979871;
+        Thu, 13 Feb 2020 23:06:19 -0800 (PST)
+Received: from eperezma.remote.csb (189.140.78.188.dynamic.jazztel.es. [188.78.140.189])
+        by smtp.gmail.com with ESMTPSA id l6sm5980807wrn.26.2020.02.13.23.06.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2020 23:06:19 -0800 (PST)
+Message-ID: <bd9c9b4d99abd20d5420583af5a4954ea1cf4618.camel@redhat.com>
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
+ random crashes in KVM guests after reboot
+From:   Eugenio =?ISO-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Date:   Fri, 14 Feb 2020 08:06:17 +0100
+In-Reply-To: <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
+References: <20200107042401-mutt-send-email-mst@kernel.org>
+         <20200120012724-mutt-send-email-mst@kernel.org>
+         <2a63b15f-8cf5-5868-550c-42e2cfd92c60@de.ibm.com>
+         <b6e32f58e5d85ac5cc3141e9155fb140ae5cd580.camel@redhat.com>
+         <1ade56b5-083f-bb6f-d3e0-3ddcf78f4d26@de.ibm.com>
+         <20200206171349-mutt-send-email-mst@kernel.org>
+         <5c860fa1-cef5-b389-4ebf-99a62afa0fe8@de.ibm.com>
+         <20200207025806-mutt-send-email-mst@kernel.org>
+         <97c93d38-ef07-e321-d133-18483d54c0c0@de.ibm.com>
+         <CAJaqyWfngzP4d01B6+Sqt8FXN6jX7kGegjx8ie4no_1Er3igQA@mail.gmail.com>
+         <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
+         <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
+         <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
+         <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
+         <8fbbfb49-99d1-7fee-e713-d6d5790fe866@de.ibm.com>
+         <2364d0728c3bb4bcc0c13b591f774109a9274a30.camel@redhat.com>
+         <bb9fb726-306c-5330-05aa-a86bd1b18097@de.ibm.com>
+         <468983fad50a5e74a739f71487f0ea11e8d4dfd1.camel@redhat.com>
+         <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The mm-of-the-moment snapshot 2020-02-13-22-26 has been uploaded to
+Hi Christian.
 
-   http://www.ozlabs.org/~akpm/mmotm/
+Sorry, that was meant to be applied over previous debug patch.
 
-mmotm-readme.txt says
+Here I inline the one meant to be applied over eccb852f1fe6bede630e2e4f1a121a81e34354ab.
 
-README for mm-of-the-moment:
+Thanks!
 
-http://www.ozlabs.org/~akpm/mmotm/
+From d978ace99e4844b49b794d768385db3d128a4cc0 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
+Date: Fri, 14 Feb 2020 08:02:26 +0100
+Subject: [PATCH] vhost: disable all features and trace last_avail_idx and
+ ioctl calls
 
-This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-more than once a week.
+---
+ drivers/vhost/net.c   | 20 +++++++++++++++++---
+ drivers/vhost/vhost.c | 25 +++++++++++++++++++++++--
+ drivers/vhost/vhost.h | 10 +++++-----
+ 3 files changed, 45 insertions(+), 10 deletions(-)
 
-You will need quilt to apply these patches to the latest Linus release (5.x
-or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-http://ozlabs.org/~akpm/mmotm/series
+diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+index e158159671fa..e4d5f843f9c0 100644
+--- a/drivers/vhost/net.c
++++ b/drivers/vhost/net.c
+@@ -1505,10 +1505,13 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
+ 
+ 	mutex_lock(&n->dev.mutex);
+ 	r = vhost_dev_check_owner(&n->dev);
+-	if (r)
++	if (r) {
++		pr_debug("vhost_dev_check_owner index=%u fd=%d rc r=%d", index, fd, r);
+ 		goto err;
++	}
+ 
+ 	if (index >= VHOST_NET_VQ_MAX) {
++		pr_debug("vhost_dev_check_owner index=%u fd=%d MAX=%d", index, fd, VHOST_NET_VQ_MAX);
+ 		r = -ENOBUFS;
+ 		goto err;
+ 	}
+@@ -1518,22 +1521,26 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
+ 
+ 	/* Verify that ring has been setup correctly. */
+ 	if (!vhost_vq_access_ok(vq)) {
++		pr_debug("vhost_net_set_backend index=%u fd=%d !vhost_vq_access_ok", index, fd);
+ 		r = -EFAULT;
+ 		goto err_vq;
+ 	}
+ 	sock = get_socket(fd);
+ 	if (IS_ERR(sock)) {
+ 		r = PTR_ERR(sock);
++		pr_debug("vhost_net_set_backend index=%u fd=%d get_socket err r=%d", index, fd, r);
+ 		goto err_vq;
+ 	}
+ 
+ 	/* start polling new socket */
+ 	oldsock = vq->private_data;
+ 	if (sock != oldsock) {
++		pr_debug("sock=%p != oldsock=%p index=%u fd=%d vq=%p", sock, oldsock, index, fd, vq);
+ 		ubufs = vhost_net_ubuf_alloc(vq,
+ 					     sock && vhost_sock_zcopy(sock));
+ 		if (IS_ERR(ubufs)) {
+ 			r = PTR_ERR(ubufs);
++			pr_debug("ubufs index=%u fd=%d err r=%d vq=%p", index, fd, r, vq);
+ 			goto err_ubufs;
+ 		}
+ 
+@@ -1541,11 +1548,15 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
+ 		vq->private_data = sock;
+ 		vhost_net_buf_unproduce(nvq);
+ 		r = vhost_vq_init_access(vq);
+-		if (r)
++		if (r) {
++			pr_debug("init_access index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
+ 			goto err_used;
++		}
+ 		r = vhost_net_enable_vq(n, vq);
+-		if (r)
++		if (r) {
++			pr_debug("enable_vq index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
+ 			goto err_used;
++		}
+ 		if (index == VHOST_NET_VQ_RX)
+ 			nvq->rx_ring = get_tap_ptr_ring(fd);
+ 
+@@ -1559,6 +1570,8 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
+ 
+ 	mutex_unlock(&vq->mutex);
+ 
++	pr_debug("sock=%p", sock);
++
+ 	if (oldubufs) {
+ 		vhost_net_ubuf_put_wait_and_free(oldubufs);
+ 		mutex_lock(&vq->mutex);
+@@ -1710,6 +1723,7 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
+ 
+ 	switch (ioctl) {
+ 	case VHOST_NET_SET_BACKEND:
++		pr_debug("VHOST_NET_SET_BACKEND");
+ 		if (copy_from_user(&backend, argp, sizeof backend))
+ 			return -EFAULT;
+ 		return vhost_net_set_backend(n, backend.index, backend.fd);
+diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+index b5a51b1f2e79..ec25ba32fe81 100644
+--- a/drivers/vhost/vhost.c
++++ b/drivers/vhost/vhost.c
+@@ -1642,15 +1642,30 @@ long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *arg
+ 			r = -EINVAL;
+ 			break;
+ 		}
++
++		if (vq->last_avail_idx || vq->avail_idx) {
++			pr_debug(
++				"strange VHOST_SET_VRING_BASE [vq=%p][s.index=%u][s.num=%u]",
++				vq, s.index, s.num);
++			dump_stack();
++			r = 0;
++			break;
++		}
+ 		vq->last_avail_idx = s.num;
+ 		/* Forget the cached index value. */
+ 		vq->avail_idx = vq->last_avail_idx;
++		pr_debug(
++			"VHOST_SET_VRING_BASE [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][s.index=%u][s.num=%u]",
++			vq, vq->last_avail_idx, vq->avail_idx, s.index, s.num);
+ 		break;
+ 	case VHOST_GET_VRING_BASE:
+ 		s.index = idx;
+ 		s.num = vq->last_avail_idx;
+ 		if (copy_to_user(argp, &s, sizeof s))
+ 			r = -EFAULT;
++		pr_debug(
++			"VHOST_GET_VRING_BASE [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][s.index=%u][s.num=%u]",
++			vq, vq->last_avail_idx, vq->avail_idx, s.index, s.num);
+ 		break;
+ 	case VHOST_SET_VRING_KICK:
+ 		if (copy_from_user(&f, argp, sizeof f)) {
+@@ -2239,8 +2254,8 @@ static int fetch_buf(struct vhost_virtqueue *vq)
+ 		vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
+ 
+ 		if (unlikely((u16)(vq->avail_idx - last_avail_idx) > vq->num)) {
+-			vq_err(vq, "Guest moved used index from %u to %u",
+-				last_avail_idx, vq->avail_idx);
++			vq_err(vq, "Guest moved vq %p used index from %u to %u",
++				vq, last_avail_idx, vq->avail_idx);
+ 			return -EFAULT;
+ 		}
+ 
+@@ -2316,6 +2331,9 @@ static int fetch_buf(struct vhost_virtqueue *vq)
+ 	BUG_ON(!(vq->used_flags & VRING_USED_F_NO_NOTIFY));
+ 
+ 	/* On success, increment avail index. */
++	pr_debug(
++		"[vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][vq->ndescs=%d][vq->first_desc=%d]",
++		vq, vq->last_avail_idx, vq->avail_idx, vq->ndescs, vq->first_desc);
+ 	vq->last_avail_idx++;
+ 
+ 	return 0;
+@@ -2432,6 +2450,9 @@ EXPORT_SYMBOL_GPL(vhost_get_vq_desc);
+ /* Reverse the effect of vhost_get_vq_desc. Useful for error handling. */
+ void vhost_discard_vq_desc(struct vhost_virtqueue *vq, int n)
+ {
++	pr_debug(
++		"DISCARD [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][n=%d]",
++		vq, vq->last_avail_idx, vq->avail_idx, n);
+ 	vq->last_avail_idx -= n;
+ }
+ EXPORT_SYMBOL_GPL(vhost_discard_vq_desc);
+diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
+index 661088ae6dc7..08f6d2ccb697 100644
+--- a/drivers/vhost/vhost.h
++++ b/drivers/vhost/vhost.h
+@@ -250,11 +250,11 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled);
+ 	} while (0)
+ 
+ enum {
+-	VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
+-			 (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
+-			 (1ULL << VIRTIO_RING_F_EVENT_IDX) |
+-			 (1ULL << VHOST_F_LOG_ALL) |
+-			 (1ULL << VIRTIO_F_ANY_LAYOUT) |
++	VHOST_FEATURES = /* (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) | */
++			 /* (1ULL << VIRTIO_RING_F_INDIRECT_DESC) | */
++			 /* (1ULL << VIRTIO_RING_F_EVENT_IDX) | */
++			 /* (1ULL << VHOST_F_LOG_ALL) | */
++			 /* (1ULL << VIRTIO_F_ANY_LAYOUT) | */
+ 			 (1ULL << VIRTIO_F_VERSION_1)
+ };
+ 
+-- 
+2.18.1
 
-The file broken-out.tar.gz contains two datestamp files: .DATE and
-.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-followed by the base kernel version against which this patch series is to
-be applied.
 
-This tree is partially included in linux-next.  To see which patches are
-included in linux-next, consult the `series' file.  Only the patches
-within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
-linux-next.
-
-
-A full copy of the full kernel tree with the linux-next and mmotm patches
-already applied is available through git within an hour of the mmotm
-release.  Individual mmotm releases are tagged.  The master branch always
-points to the latest release, so it's constantly rebasing.
-
-	https://github.com/hnaz/linux-mm
-
-The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
-contains daily snapshots of the -mm tree.  It is updated more frequently
-than mmotm, and is untested.
-
-A git copy of this tree is also available at
-
-	https://github.com/hnaz/linux-mm
-
-
-
-This mmotm tree contains the following patches against 5.6-rc1:
-(patches marked "*" will be included in linux-next)
-
-  origin.patch
-* y2038-remove-ktime-to-from-timespec-timeval-conversion.patch
-* y2038-remove-unused-time32-interfaces.patch
-* y2038-hide-timeval-timespec-itimerval-itimerspec-types.patch
-* revert-ipcsem-remove-uneeded-sem_undo_list-lock-usage-in-exit_sem.patch
-* uapi-fix-userspace-breakage-use-__bits_per_long-for-swap.patch
-* mm-dont-prepare-anon_vma-if-vma-has-vm_wipeonfork.patch
-* revert-mm-rmapc-reuse-mergeable-anon_vma-as-parent-when-fork.patch
-* mm-set-vm_next-and-vm_prev-to-null-in-vm_area_dup.patch
-* selftests-vm-add-missed-tests-in-run_vmtests.patch
-* get_maintainer-remove-uses-of-p-for-maintainer-name.patch
-* scripts-get_maintainerpl-deprioritize-old-fixes-addresses.patch
-* mm-fix-a-comment-in-sys_swapon.patch
-* memcg-lost-css_put-in-memcg_expand_shrinker_maps.patch
-* lib-string-update-match_string-doc-strings-with-correct-behavior.patch
-* mm-vmscan-dont-round-up-scan-size-for-online-memory-cgroup.patch
-* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
-* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
-* x86-mm-split-vmalloc_sync_all.patch
-* asm-generic-make-more-kernel-space-headers-mandatory.patch
-* ramfs-support-o_tmpfile.patch
-* kernel-watchdog-flush-all-printk-nmi-buffers-when-hardlockup-detected.patch
-  mm.patch
-* mm-dont-bother-dropping-mmap_sem-for-zero-size-readahead.patch
-* mm-gup-split-get_user_pages_remote-into-two-routines.patch
-* mm-gup-pass-a-flags-arg-to-__gup_device_-functions.patch
-* mm-introduce-page_ref_sub_return.patch
-* mm-gup-pass-gup-flags-to-two-more-routines.patch
-* mm-gup-require-foll_get-for-get_user_pages_fast.patch
-* mm-gup-track-foll_pin-pages.patch
-* mm-gup-page-hpage_pinned_refcount-exact-pin-counts-for-huge-pages.patch
-* mm-gup-proc-vmstat-pin_user_pages-foll_pin-reporting.patch
-* mm-gup_benchmark-support-pin_user_pages-and-related-calls.patch
-* selftests-vm-run_vmtests-invoke-gup_benchmark-with-basic-foll_pin-coverage.patch
-* mm-improve-dump_page-for-compound-pages.patch
-* mm-dump_page-additional-diagnostics-for-huge-pinned-pages.patch
-* mm-swap-move-inode_lock-out-of-claim_swapfile.patch
-* mm-swapfilec-fix-comments-for-swapcache_prepare.patch
-* mm-memcg-fix-build-error-around-the-usage-of-kmem_caches.patch
-* mm-allocate-shrinker_map-on-appropriate-numa-node.patch
-* mm-mapping_dirty_helpers-update-huge-page-table-entry-callbacks.patch
-* mm-refactor-insert_page-to-prepare-for-batched-lock-insert.patch
-* mm-add-vm_insert_pages.patch
-* mm-add-vm_insert_pages-fix.patch
-* mm-add-vm_insert_pages-2.patch
-* net-zerocopy-use-vm_insert_pages-for-tcp-rcv-zerocopy.patch
-* net-zerocopy-use-vm_insert_pages-for-tcp-rcv-zerocopy-fix.patch
-* mm-mmap-fix-the-adjusted-length-error.patch
-* mm-add-mremap_dontunmap-to-mremap.patch
-* mm-sparsemem-get-address-to-page-struct-instead-of-address-to-pfn.patch
-* mm-vmpressure-dont-need-call-kfree-if-kstrndup-fails.patch
-* mm-vmpressure-use-mem_cgroup_is_root-api.patch
-* mm-vmscan-replace-open-codings-to-numa_no_node.patch
-* mm-mempolicy-support-mpol_mf_strict-for-huge-page-mapping.patch
-* mm-mempolicy-use-vm_bug_on_vma-in-queue_pages_test_walk.patch
-* hugetlb_cgroup-add-hugetlb_cgroup-reservation-counter.patch
-* hugetlb_cgroup-add-interface-for-charge-uncharge-hugetlb-reservations.patch
-* hugetlb_cgroup-add-reservation-accounting-for-private-mappings.patch
-* hugetlb-disable-region_add-file_region-coalescing.patch
-* hugetlb_cgroup-add-accounting-for-shared-mappings.patch
-* hugetlb_cgroup-support-noreserve-mappings.patch
-* hugetlb-support-file_region-coalescing-again.patch
-* hugetlb_cgroup-add-hugetlb_cgroup-reservation-tests.patch
-* hugetlb_cgroup-add-hugetlb_cgroup-reservation-docs.patch
-* mm-migratec-no-need-to-check-for-i-start-in-do_pages_move.patch
-* mm-migratec-wrap-do_move_pages_to_node-and-store_status.patch
-* mm-migratec-check-pagelist-in-move_pages_and_store_status.patch
-* mm-migratec-unify-not-queued-for-migration-handling-in-do_pages_move.patch
-* mm-migratec-migrate-pg_readahead-flag.patch
-* mm-migratec-migrate-pg_readahead-flag-fix.patch
-* drivers-base-memoryc-cache-memory-blocks-in-xarray-to-accelerate-lookup.patch
-* drivers-base-memoryc-cache-memory-blocks-in-xarray-to-accelerate-lookup-fix.patch
-* mm-adjust-shuffle-code-to-allow-for-future-coalescing.patch
-* mm-use-zone-and-order-instead-of-free-area-in-free_list-manipulators.patch
-* mm-add-function-__putback_isolated_page.patch
-* mm-introduce-reported-pages.patch
-* virtio-balloon-pull-page-poisoning-config-out-of-free-page-hinting.patch
-* virtio-balloon-add-support-for-providing-free-page-reports-to-host.patch
-* mm-page_reporting-rotate-reported-pages-to-the-tail-of-the-list.patch
-* mm-page_reporting-add-budget-limit-on-how-many-pages-can-be-reported-per-pass.patch
-* mm-page_reporting-add-free-page-reporting-documentation.patch
-* drivers-base-memoryc-indicate-all-memory-blocks-as-removable.patch
-* drivers-base-memoryc-drop-section_count.patch
-* drivers-base-memoryc-drop-pages_correctly_probed.patch
-* mm-page_extc-drop-pfn_present-check-when-onlining.patch
-* zswap-allow-setting-default-status-compressor-and-allocator-in-kconfig.patch
-* info-task-hung-in-generic_file_write_iter.patch
-* info-task-hung-in-generic_file_write-fix.patch
-* kernel-hung_taskc-monitor-killed-tasks.patch
-* asm-generic-fix-unistd_32h-generation-format.patch
-* maintainers-add-an-entry-for-kfifo.patch
-* lib-test_lockup-test-module-to-generate-lockups.patch
-* lib-bch-replace-zero-length-array-with-flexible-array-member.patch
-* lib-objagg-replace-zero-length-arrays-with-flexible-array-member.patch
-* lib-ts_bm-replace-zero-length-array-with-flexible-array-member.patch
-* lib-ts_fsm-replace-zero-length-array-with-flexible-array-member.patch
-* lib-ts_kmp-replace-zero-length-array-with-flexible-array-member.patch
-* lib-scatterlist-fix-sg_copy_buffer-kerneldoc.patch
-* string-add-stracpy-and-stracpy_pad-mechanisms.patch
-* documentation-checkpatch-prefer-stracpy-strscpy-over-strcpy-strlcpy-strncpy.patch
-* checkpatch-remove-email-address-comment-from-email-address-comparisons.patch
-* checkpatch-check-spdx-tags-in-yaml-files.patch
-* checkpatch-support-base-commit-format.patch
-* checkpatch-prefer-fallthrough-over-fallthrough-comments.patch
-* kernel-relayc-fix-read_pos-error-when-multiple-readers.patch
-* aio-simplify-read_events.patch
-* init-cleanup-anon_inodes-and-old-io-schedulers-options.patch
-  linux-next.patch
-  linux-next-rejects.patch
-  linux-next-fix.patch
-* mm-frontswap-mark-various-intentional-data-races.patch
-* mm-page_io-mark-various-intentional-data-races.patch
-* mm-page_io-mark-various-intentional-data-races-v2.patch
-* mm-swap_state-mark-various-intentional-data-races.patch
-* mm-kmemleak-annotate-various-data-races-obj-ptr.patch
-* mm-filemap-fix-a-data-race-in-filemap_fault.patch
-* mm-swapfile-fix-and-annotate-various-data-races.patch
-* mm-swapfile-fix-and-annotate-various-data-races-v2.patch
-* mm-page_counter-fix-various-data-races-at-memsw.patch
-* mm-memcontrol-fix-a-data-race-in-scan-count.patch
-* mm-list_lru-fix-a-data-race-in-list_lru_count_one.patch
-* mm-mempool-fix-a-data-race-in-mempool_free.patch
-* mm-util-annotate-an-data-race-at-vm_committed_as.patch
-* mm-rmap-annotate-a-data-race-at-tlb_flush_batched.patch
-* drivers-tty-serial-sh-scic-suppress-warning.patch
-* fix-read-buffer-overflow-in-delta-ipc.patch
-  make-sure-nobodys-leaking-resources.patch
-  releasing-resources-with-children.patch
-  mutex-subsystem-synchro-test-module.patch
-  kernel-forkc-export-kernel_thread-to-modules.patch
-  workaround-for-a-pci-restoring-bug.patch

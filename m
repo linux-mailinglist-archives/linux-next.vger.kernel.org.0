@@ -2,112 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F22315CECB
-	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 00:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC1B15CED2
+	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 01:00:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727940AbgBMXz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 13 Feb 2020 18:55:29 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:59313 "EHLO ozlabs.org"
+        id S1727665AbgBNAAm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 13 Feb 2020 19:00:42 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58345 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727571AbgBMXz2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 13 Feb 2020 18:55:28 -0500
+        id S1727594AbgBNAAm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 13 Feb 2020 19:00:42 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48JYKn3XnWz9sP7;
-        Fri, 14 Feb 2020 10:55:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48JYRr0dfZz9sP7;
+        Fri, 14 Feb 2020 11:00:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581638126;
-        bh=ceZrviBRKVvu16rikYXya7GUmEF2cpSJLZgrV4mGZ48=;
+        s=201702; t=1581638440;
+        bh=+bF0ogXTKSBSFulDbq0Q/LY5vp9XJnDtkN1Dl7LfxWw=;
         h=Date:From:To:Cc:Subject:From;
-        b=T2c6lkeiqF5WAjfkeAAD2z/zIlGnUth0EGniAKaxgD+ta/drcI2YVJ1HlqJAhlfsD
-         Cy1JUFafJnf4UB93yDCES4t4XnxYZAbLiC1aspTMJVMY7zfCc0OEFJfx/LNTUbgqJI
-         8c4BLlr+uYkkgXnqmjFbT5LDK5I1OYLI7/ZqBX8wCOY/9sSNxHj2qonUaAWLDhVDz9
-         Vs9fS7OEv1aG5EbUfkIO1hRdjfLQQXUNtP7cyk6LRZVFOqMSaywcOFEkeP2w31xYOe
-         BUM8jckrvd94vdupKZ6JHgDFhh1Da2bym/7JPe+LBfH1b5o2q81oKLNy3uxJHTyUHI
-         OQ3P+Uftfg57A==
-Date:   Fri, 14 Feb 2020 10:55:19 +1100
+        b=mz2PKB2cNg5619CstdtvI52ETpbWrPplje9a2IQk6p+MZaNZYBeN+CXLrQBweIbnA
+         lDfV5ov5d7xlVdd5sna3CS68yCJeFoKyo0dtVG/GRc9d6GoIheNi8RM1vYofpFbRdK
+         Zm2d6lwBf+8L7bJr4DY4O6a5SpO9D+KpZXjilDGYkK2L7nHwoEnsAqMfKLq1WMjn7k
+         0wdxazSlLOoo43RSaPqNQ6cRaSVqQVu6pKkz3Ck34ymMNGe1pqiVHKf3v518h6+4Jn
+         XqkVR1KPp95Xa4RH6RypFeojZssOLHY6T4HWwZBy7EMgmWVDMtavV45jCHbR2FwMno
+         Q+/aSMvdQEkig==
+Date:   Fri, 14 Feb 2020 11:00:39 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>
+To:     Vinod Koul <vkoul@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>
-Subject: linux-next: manual merge of the staging tree with the
- char-misc.current tree
-Message-ID: <20200214105519.70a7f6a2@canb.auug.org.au>
+        YueHaibing <yuehaibing@huawei.com>
+Subject: linux-next: build warning after merge of the slave-dma tree
+Message-ID: <20200214110039.51369fae@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Smlk6vsDS=3NJbDff6Y_bIp";
+Content-Type: multipart/signed; boundary="Sig_/_BOx+yha+JxtMQq8mnV==N/";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Smlk6vsDS=3NJbDff6Y_bIp
+--Sig_/_BOx+yha+JxtMQq8mnV==N/
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the staging tree got a conflict in:
+After merging the slave-dma tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-  MAINTAINERS
+drivers/dma/sun4i-dma.c: In function 'sun4i_dma_prep_dma_cyclic':
+drivers/dma/sun4i-dma.c:30:51: warning: statement with no effect [-Wunused-=
+value]
+   30 | #define SUN4I_DMA_CFG_SRC_ADDR_MODE(mode) ((mode) << 5)
+      |                                           ~~~~~~~~^~~~~
+drivers/dma/sun4i-dma.c:701:8: note: in expansion of macro 'SUN4I_DMA_CFG_S=
+RC_ADDR_MODE'
+  701 |        SUN4I_DMA_CFG_SRC_ADDR_MODE(linear_mode);
+      |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-between commit:
+Introduced by commit
 
-  95ba79e89c10 ("MAINTAINERS: remove unnecessary ':' characters")
+  6ebb827f7aad ("dmaengine: sun4i: use 'linear_mode' in sun4i_dma_prep_dma_=
+cyclic")
 
-from the char-misc.current tree and commit:
-
-  caa6772db4c1 ("Staging: remove wusbcore and UWB from the kernel tree.")
-
-from the staging tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Please do not ignore/dismiss new warnings ... this one points out a real is=
+sue.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index a9a93de6223c,9a4c715d1e50..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -17118,12 -17089,7 +17113,7 @@@ S:	Maintaine
-  F:	drivers/usb/common/ulpi.c
-  F:	include/linux/ulpi/
- =20
-- ULTRA-WIDEBAND (UWB) SUBSYSTEM
-- L:	devel@driverdev.osuosl.org
-- S:	Obsolete
-- F:	drivers/staging/uwb/
--=20
- -UNICODE SUBSYSTEM:
- +UNICODE SUBSYSTEM
-  M:	Gabriel Krisman Bertazi <krisman@collabora.com>
-  L:	linux-fsdevel@vger.kernel.org
-  S:	Supported
-
---Sig_/Smlk6vsDS=3NJbDff6Y_bIp
+--Sig_/_BOx+yha+JxtMQq8mnV==N/
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5F4ecACgkQAVBC80lX
-0GwF0Af7BTU7MS3/iSpXfR9yrTShmRmfCQIzpFBUoa0L5RH3mNftnKSt8eAX6pPV
-wiJUbjzrQCk/tNYUUPAXA9as7iMxfJkNvDZqXZJ7SSmlHqeiBPyBLQ6Lr4a0Oen0
-y394k+owPGdyeFhUp2xDqc2l+7w9/sdzuwdHnrhg7I0Bi/Sntv7KucRxkhWuOL7E
-RGwGvYof2TKYSYKbDE0ZBOjxOJQ7XCzt2wxBDwp6uxNwKIu7qZAI/i+CY6zyP8h4
-eGBryc2Kc7prfDO0Mt24zzg7lhjV0Z65mwxIM5JAmRB9EvnCd2FDhgk02GmxJSsW
-A9ejDaHFqngsLhYfxjQILhul0kGWGA==
-=RN28
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5F4ycACgkQAVBC80lX
+0GxOvwf+MB1EzOgp+Vo4F6r9heRIKSAI0850IsLlx/eD2f9YISEhJ4Xzxx+lSpSu
+uygD61J0UcsKP089KUA4y+OeoRcDDpWY5fgFyuWXWR5v851RF16BB0XCRcdXGj6c
+hqFiWxNBLpTPq/0I6itDYT2Q8N5xvmWhTsfFf5WK1zMDn7rwF2RZosftLSIlKBJj
+ZD5Lgux3dofNudSZab0+V/rv3pkqLkJ/sYd150BHYyordibTZoCIecK/4LL6oPPu
+j9tVuCw1iqyUPaMSCKjSH91wYHmpoFv1wvEqLkShxglwGwAyU/0ivUSs1aw6H/Ol
+5Jabb3LcXz9Cwfh3gVSGg4/I5Ef1Qg==
+=XPkO
 -----END PGP SIGNATURE-----
 
---Sig_/Smlk6vsDS=3NJbDff6Y_bIp--
+--Sig_/_BOx+yha+JxtMQq8mnV==N/--

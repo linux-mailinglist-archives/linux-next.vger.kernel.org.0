@@ -2,145 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 21F3E15F837
-	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 21:53:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3BF15F857
+	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 22:00:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387852AbgBNUvt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Feb 2020 15:51:49 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:43005 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387970AbgBNUvp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Feb 2020 15:51:45 -0500
-Received: by mail-oi1-f194.google.com with SMTP id j132so10695850oih.9
-        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 12:51:45 -0800 (PST)
+        id S1728941AbgBNVAn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Feb 2020 16:00:43 -0500
+Received: from mail-ot1-f65.google.com ([209.85.210.65]:46004 "EHLO
+        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726191AbgBNVAn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 14 Feb 2020 16:00:43 -0500
+Received: by mail-ot1-f65.google.com with SMTP id 59so10440534otp.12
+        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 13:00:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=OUZEy9409pppSXljzrVzSPjPdAQw80MGvX16nfBY0dg=;
-        b=XC8kv3Wy0OyQoREJOWp1L8cEyQ1FThdUzVe8SxPcm6z+yNRZQ+w+96qmHNRFnE0zFg
-         0hrWiuwrQwnBJGouFTTXBqkYyEhKJxCYJDtYNeEe9OWB3N1pVH0I00UjWuZYf2/Znysx
-         SPzGijZ1p4bQOVDd742sL44fHmIGY83rZEZ2IxU9hePz7S6GslxhIsa+CXggRmpc3fmn
-         /IDtI1izIrcvu5l6OVgLMW7UONPNSOyuf+GFqyD3aH8X8c4RM4ZrT35d2x1EPfZD/4g4
-         KCBAVALHP9sq7Szy9JydAPABAeA6ts9S2QwivSYQFWXMO/vdM6Vhmxc63Y0/zub5qTZN
-         5B0A==
+         :cc;
+        bh=7DMurB2EcIliipQAm/Fyz3iYQa8JFCY3mjh5m99SUJQ=;
+        b=K7T9OJLg4Rd6RuoeGZfJRBGbV7nSZMbJ5Vfkg9phnHv4jBT/9bBmEuX7Ysbb7zSCfq
+         2s+cMkr/gk9UaS2jQgaY4MoqrLuxyZxKIBNhGOf2D64qdFVNqOKzpV14sAYT0iHNnM4l
+         lyzdxLTmt1uf3N/8m89DK6/febbiFEDywSo/UGz5XRmKsA8ecZHAr6YVgqG/2c8L9Ie2
+         lmVDfCT4+tNZ14mSY+CSv1w+C5mhumA18t6gnUWBqmdmA91FK6d6fbiUWXJCtFdm0RNG
+         YnUxig7JD1deO+/D/aY8AFrxQmrDEkq5L6qeijk4AHlMztzl8h84OP5LzX5rK/NmK5f/
+         fqOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=OUZEy9409pppSXljzrVzSPjPdAQw80MGvX16nfBY0dg=;
-        b=uJXIPGlG8YbsVVDvH5sF4DEzpyGB8+mzxasfkuIBJnXYqEeEa4ORgoHouoFVTwwazV
-         Vbo38HC8wTmZmFBy3vA9RFFgn3Z5gsGRNpENED9je2CfZBGdP8fG2UIMwq4LqBBcKwgh
-         CnpjPdTbT6GrjVjQlXKNerFqZJPWqQc3O1DlF6fVNTwVCpgJuw2dKdKAnC1LqiYq1sTZ
-         TT0ru0qz4hNgifJRUkBjbMUCuHEkL1+TyPen8GJPDkwIQrHNWe4RUFhxXWABne8XtweQ
-         hWIZI7BnuSaIpIAIcEMMM5z9QSeYRDMnF4R4vF6Ikt+Hg4OiGUrZYGHB5KzZpHczYEzA
-         aZEA==
-X-Gm-Message-State: APjAAAXvSnMNC0WFeRZ81wva3MSdtnv51L2TId7rU/peD1711bU5AXPb
-        UHzsMWGLvXfHOIComSiapURUhpcv+UIo7JjVQKWCHgTkhb0p+A==
-X-Google-Smtp-Source: APXvYqzu3C9V7D+AKDrsqCeye+pwVxWPDK+1pbaapoGpynmu2dpDODFT4oXrbdidRtdJXmKi1nMiF5ljl7HP+schbaM=
-X-Received: by 2002:a54:4086:: with SMTP id i6mr3197997oii.65.1581713504693;
- Fri, 14 Feb 2020 12:51:44 -0800 (PST)
+         :message-id:subject:to:cc;
+        bh=7DMurB2EcIliipQAm/Fyz3iYQa8JFCY3mjh5m99SUJQ=;
+        b=Bnr0A3HkXHwKSPNTgABZV2iFPMfsGmi/VQX6LjEt6dQRmhynVyUexfJHyzCreqeuY+
+         /eGXafOlp6iOTFSNSPcW7DhEGQsHbCVfKfeMFIofySGdJzqePbq//VTh8TCgseydWXnB
+         y93GU1eh0nttFJ77b+ofVe+wf/Q36mMc89TiU803irrvb627FOFK355bG95TUXeDldbc
+         tJLE2gdHiCFxSvJ6ttNR8Hjrz3opyueiELeOH5jbqwAvGhhWmMAOdHFW02UafJI6Rvjk
+         5ydnvhjYLQ7io85xhRibydM3mbmz+OCekjvUDFwZpbwoGq0l1oeKflbVuurDSqJauofV
+         Lvag==
+X-Gm-Message-State: APjAAAUqjywRlIx/2MDgt5x11LfadW9NV7Oz/TJvqRpSTPTjy2ZvXQKf
+        B/yqggHuDx38HjkJsiGmbA2crIhntb2gYGXQycNZOg==
+X-Google-Smtp-Source: APXvYqwVLssaKbrmX/2dVzzlIfrCtRMpETQMFACNwFjNeW45I2jNMr2nyglMTtsq4MTz7pBu11KLlg1FFHUUKP9tKjM=
+X-Received: by 2002:a9d:2028:: with SMTP id n37mr3941956ota.127.1581714042131;
+ Fri, 14 Feb 2020 13:00:42 -0800 (PST)
 MIME-Version: 1.0
-References: <20200214062647.A2Mb_X-mP%akpm@linux-foundation.org>
- <8e1e8f6e-0da1-e9e0-fa1b-bfd792256604@infradead.org> <7ff9e944-1c6c-f7c1-d812-e12817c7a317@oracle.com>
-In-Reply-To: <7ff9e944-1c6c-f7c1-d812-e12817c7a317@oracle.com>
+References: <7ff9e944-1c6c-f7c1-d812-e12817c7a317@oracle.com> <20200214204544.231482-1-almasrymina@google.com>
+In-Reply-To: <20200214204544.231482-1-almasrymina@google.com>
 From:   Mina Almasry <almasrymina@google.com>
-Date:   Fri, 14 Feb 2020 12:51:33 -0800
-Message-ID: <CAHS8izMhJ-2Bf+BBtXothR9nsLz9A5jJiv_tVRKUb9DwLKiN3g@mail.gmail.com>
-Subject: Re: mmotm 2020-02-13-22-26 uploaded (mm/hugetlb.c)
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        "open list:FILESYSTEMS (VFS and infrastructure)" 
-        <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Matthew Wilcox <willy@infradead.org>
+Date:   Fri, 14 Feb 2020 13:00:31 -0800
+Message-ID: <CAHS8izMjyLzCsSga59dE+zDC3sLBuA=_u4EtsShN+EZQ1EQitw@mail.gmail.com>
+Subject: Re: [PATCH] hugetlb: fix CONFIG_CGROUP_HUGETLB ifdefs
+To:     linux-mm@kvack.org, linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Feb 14, 2020 at 9:18 AM Mike Kravetz <mike.kravetz@oracle.com> wrot=
-e:
+On Fri, Feb 14, 2020 at 12:46 PM Mina Almasry <almasrymina@google.com> wrote:
 >
-> + Mina
+> Fixes an #ifdef bug in the patch referred to below that was
+> causing a build error when CONFIG_DEBUG_VM &&
+> !CONFIG_CCGROUP_HUGETLB.
 >
-> Andrew, you might want to remove those hugetlb cgroup patches from mmotm
-> as they are not yet fully reviewed and have some build issues.
+> Fixes: b5f16a533ce8a ("hugetlb: support file_region coalescing again")
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> Cc: David Rientjes <rientjes@google.com>
+> Cc: Greg Thelen <gthelen@google.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: Shakeel Butt <shakeelb@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> ---
+>  mm/hugetlb.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index ee6d262fe6ac0..95d34c58981d2 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -289,7 +289,7 @@ static bool has_same_uncharge_info(struct file_region *rg,
+>  #endif
+>  }
+>
+> -#ifdef CONFIG_DEBUG_VM
+> +#if defined(CONFIG_DEBUG_VM) && defined(CONFIG_CGROUP_HUGETLB)
+>  static void dump_resv_map(struct resv_map *resv)
+>  {
+>         struct list_head *head = &resv->regions;
+> @@ -325,6 +325,10 @@ static void check_coalesce_bug(struct resv_map *resv)
+>                 }
+>         }
+>  }
+> +#else
+> +static void check_coalesce_bug(struct resv_map *resv)
+> +{
+> +}
+>  #endif
+>
+>  static void coalesce_file_region(struct resv_map *resv, struct file_region *rg)
+> @@ -431,9 +435,7 @@ static long add_reservation_in_range(struct resv_map *resv, long f, long t,
+>         }
+>
+>         VM_BUG_ON(add < 0);
+> -#ifdef CONFIG_DEBUG_VM
+>         check_coalesce_bug(resv);
+> -#endif
+>         return add;
+>  }
 >
 > --
-> Mike Kravetz
-
-Up to you guys but I just sent you a patch ("hugetlb: fix
-CONFIG_CGROUP_HUGETLB ifdefs") that should fix this build issue.
-
->
-> On 2/14/20 8:29 AM, Randy Dunlap wrote:
-> > On 2/13/20 10:26 PM, Andrew Morton wrote:
-> >> The mm-of-the-moment snapshot 2020-02-13-22-26 has been uploaded to
-> >>
-> >>    http://www.ozlabs.org/~akpm/mmotm/
-> >>
-> >> mmotm-readme.txt says
-> >>
-> >> README for mm-of-the-moment:
-> >>
-> >> http://www.ozlabs.org/~akpm/mmotm/
-> >>
-> >> This is a snapshot of my -mm patch queue.  Uploaded at random hopefull=
-y
-> >> more than once a week.
-> >>
-> >
-> > on x86_64:
-> >
-> >   CC      mm/hugetlb.o
-> > In file included from ../include/linux/kernel.h:15:0,
-> >                  from ../include/linux/list.h:9,
-> >                  from ../mm/hugetlb.c:6:
-> > ../mm/hugetlb.c: In function =E2=80=98dump_resv_map=E2=80=99:
-> > ../mm/hugetlb.c:301:30: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98reservation_counter=E2=80=99
-> >           rg->from, rg->to, rg->reservation_counter, rg->css);
-> >                               ^
-> > ../include/linux/printk.h:304:33: note: in definition of macro =E2=80=
-=98pr_err=E2=80=99
-> >   printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> >                                  ^~~~~~~~~~~
-> > ../mm/hugetlb.c:301:55: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98css=E2=80=99
-> >           rg->from, rg->to, rg->reservation_counter, rg->css);
-> >                                                        ^
-> > ../include/linux/printk.h:304:33: note: in definition of macro =E2=80=
-=98pr_err=E2=80=99
-> >   printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-> >                                  ^~~~~~~~~~~
-> > ../mm/hugetlb.c: In function =E2=80=98check_coalesce_bug=E2=80=99:
-> > ../mm/hugetlb.c:320:10: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98reservation_counter=E2=80=99
-> >    if (nrg->reservation_counter && nrg->from =3D=3D rg->to &&
-> >           ^~
-> > ../mm/hugetlb.c:321:10: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98reservation_counter=E2=80=99
-> >        nrg->reservation_counter =3D=3D rg->reservation_counter &&
-> >           ^~
-> > ../mm/hugetlb.c:321:37: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98reservation_counter=E2=80=99
-> >        nrg->reservation_counter =3D=3D rg->reservation_counter &&
-> >                                      ^~
-> > ../mm/hugetlb.c:322:10: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98css=E2=80=99
-> >        nrg->css =3D=3D rg->css) {
-> >           ^~
-> > ../mm/hugetlb.c:322:21: error: =E2=80=98struct file_region=E2=80=99 has=
- no member named =E2=80=98css=E2=80=99
-> >        nrg->css =3D=3D rg->css) {
-> >                      ^~
-> >
-> >
-> > Full randconfig file is attached.
-> >
+> 2.25.0.265.gbab2e86ba0-goog

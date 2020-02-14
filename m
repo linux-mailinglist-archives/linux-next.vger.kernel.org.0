@@ -2,60 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D415615D762
-	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 13:26:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF27015D77C
+	for <lists+linux-next@lfdr.de>; Fri, 14 Feb 2020 13:35:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729020AbgBNM0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 14 Feb 2020 07:26:18 -0500
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:55776 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727970AbgBNM0R (ORCPT
+        id S1729087AbgBNMfF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 14 Feb 2020 07:35:05 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:13838 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728582AbgBNMfF (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Fri, 14 Feb 2020 07:26:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1581683175;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ibw1Q++Q4alVu1hcKbvKDaIWm8eWhfdJDb9bC2WZ1Ao=;
-        b=cZ8cIh4jZLede3ACevDRIjDlS9gml0KPEewaBkE7dx2p/nzJ9vpVyIpPHFIDU74Vd0x0zL
-        Lzd58itTNG1weKf5D/1ASMF1lJU/UsW2dkBecgI8udyl4gOmMN3gEBOGQx19d+RqZGIjO8
-        ejhkmQ0QwegtBRlmWBmAlP/G+NDad4E=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-144-FVX5NY7UPmKIHfmkYXk5Uw-1; Fri, 14 Feb 2020 07:26:14 -0500
-X-MC-Unique: FVX5NY7UPmKIHfmkYXk5Uw-1
-Received: by mail-wr1-f72.google.com with SMTP id u18so3905591wrn.11
-        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 04:26:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ibw1Q++Q4alVu1hcKbvKDaIWm8eWhfdJDb9bC2WZ1Ao=;
-        b=chSjmFWSGNyCqZFZ88fFyb5zz5KX4l7i+LJ5y3ZfN5EqA01Mft1H4LExh0kqNjyeKN
-         fTi8bz6lJkdqiMDwTXrTRl5bExX8J1ZbKIDzxLMLT6ZXcmuJzfM41vWU7rioJhGv3B/0
-         5QiN2zF1WTABj6su+BjWvFBq3icOkV2HVubXcXRs9TQDxTv0DL2fLMNT4HXS7+75iFWY
-         vKG8uAybJhkOz3TueygqShi0N0XAHsPjhLD8oF7vJlWkgb2g+gS3lfE/4CV0HR5dFpHY
-         xVAGvbLfq8K2b1BFI86o7W4bJzy2J/j24pUiye85n55dK3LNHxopD96Z9kdGJgA1v9If
-         lqRQ==
-X-Gm-Message-State: APjAAAXzWJxbq1AvrIp3Z+bRv6sqhxqji+x4LN0XuSHLG357RkYA1As6
-        6T+mASG4Nexqwg/+84idtTT0VUoejZxntjoGEzZHjdpIuunqLbySrPHlHioeJB5pHWDGYrY2GzV
-        DzdnMWu8YO5vAaYyuOr3KEA==
-X-Received: by 2002:a05:600c:290e:: with SMTP id i14mr4404311wmd.24.1581683172453;
-        Fri, 14 Feb 2020 04:26:12 -0800 (PST)
-X-Google-Smtp-Source: APXvYqz57ZxlTUj3stEOLCT8yikmhbZJkMCDyCyKrvhjLgrxEqgR3d8kGoHWZaxtJc8ThIT/rPugyQ==
-X-Received: by 2002:a05:600c:290e:: with SMTP id i14mr4404279wmd.24.1581683172125;
-        Fri, 14 Feb 2020 04:26:12 -0800 (PST)
-Received: from eperezma.remote.csb (189.140.78.188.dynamic.jazztel.es. [188.78.140.189])
-        by smtp.gmail.com with ESMTPSA id b11sm7119616wrx.89.2020.02.14.04.26.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2020 04:26:11 -0800 (PST)
-Message-ID: <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
-Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
- random crashes in KVM guests after reboot
-From:   Eugenio =?ISO-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
+        Fri, 14 Feb 2020 07:35:05 -0500
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01ECYkZA168511
+        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 07:35:02 -0500
+Received: from e06smtp03.uk.ibm.com (e06smtp03.uk.ibm.com [195.75.94.99])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2y4j8avpx0-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Fri, 14 Feb 2020 07:35:02 -0500
+Received: from localhost
+        by e06smtp03.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Fri, 14 Feb 2020 12:35:00 -0000
+Received: from b06avi18626390.portsmouth.uk.ibm.com (9.149.26.192)
+        by e06smtp03.uk.ibm.com (192.168.101.133) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 14 Feb 2020 12:34:57 -0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01ECY1jJ48562472
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 14 Feb 2020 12:34:01 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4F3BCAE053;
+        Fri, 14 Feb 2020 12:34:56 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E3422AE045;
+        Fri, 14 Feb 2020 12:34:55 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.152.224.211])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 14 Feb 2020 12:34:55 +0000 (GMT)
+Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger random
+ crashes in KVM guests after reboot
+To:     =?UTF-8?Q?Eugenio_P=c3=a9rez?= <eperezma@redhat.com>
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         "virtualization@lists.linux-foundation.org" 
         <virtualization@lists.linux-foundation.org>,
@@ -65,255 +52,252 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         kvm list <kvm@vger.kernel.org>,
         Halil Pasic <pasic@linux.ibm.com>,
         Cornelia Huck <cohuck@redhat.com>
-Date:   Fri, 14 Feb 2020 13:26:10 +0100
-In-Reply-To: <3144806d-436e-86a1-2e29-74f7027f7f0b@de.ibm.com>
 References: <20200107042401-mutt-send-email-mst@kernel.org>
-         <CAJaqyWfngzP4d01B6+Sqt8FXN6jX7kGegjx8ie4no_1Er3igQA@mail.gmail.com>
-         <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
-         <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
-         <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
-         <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
-         <8fbbfb49-99d1-7fee-e713-d6d5790fe866@de.ibm.com>
-         <2364d0728c3bb4bcc0c13b591f774109a9274a30.camel@redhat.com>
-         <bb9fb726-306c-5330-05aa-a86bd1b18097@de.ibm.com>
-         <468983fad50a5e74a739f71487f0ea11e8d4dfd1.camel@redhat.com>
-         <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
-         <bd9c9b4d99abd20d5420583af5a4954ea1cf4618.camel@redhat.com>
-         <e11ba53c-a5fa-0518-2e06-9296897ed529@de.ibm.com>
-         <CAJaqyWfJFArAdpOwehTn5ci-frqai+pazGgcn2VvQSebqGRVtg@mail.gmail.com>
-         <80520391-d90d-e10d-a107-7a18f2810900@de.ibm.com>
-         <dabe59fe-e068-5935-f49e-bc1da3d8471a@de.ibm.com>
-         <35dca16b9a85eb203f35d3e55dcaa9d0dae5a922.camel@redhat.com>
-         <3144806d-436e-86a1-2e29-74f7027f7f0b@de.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
-Mime-Version: 1.0
+ <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
+ <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
+ <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
+ <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
+ <8fbbfb49-99d1-7fee-e713-d6d5790fe866@de.ibm.com>
+ <2364d0728c3bb4bcc0c13b591f774109a9274a30.camel@redhat.com>
+ <bb9fb726-306c-5330-05aa-a86bd1b18097@de.ibm.com>
+ <468983fad50a5e74a739f71487f0ea11e8d4dfd1.camel@redhat.com>
+ <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
+ <bd9c9b4d99abd20d5420583af5a4954ea1cf4618.camel@redhat.com>
+ <e11ba53c-a5fa-0518-2e06-9296897ed529@de.ibm.com>
+ <CAJaqyWfJFArAdpOwehTn5ci-frqai+pazGgcn2VvQSebqGRVtg@mail.gmail.com>
+ <80520391-d90d-e10d-a107-7a18f2810900@de.ibm.com>
+ <dabe59fe-e068-5935-f49e-bc1da3d8471a@de.ibm.com>
+ <35dca16b9a85eb203f35d3e55dcaa9d0dae5a922.camel@redhat.com>
+ <3144806d-436e-86a1-2e29-74f7027f7f0b@de.ibm.com>
+ <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Fri, 14 Feb 2020 13:34:55 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
+MIME-Version: 1.0
+In-Reply-To: <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20021412-0012-0000-0000-00000386CC25
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20021412-0013-0000-0000-000021C352D5
+Message-Id: <1ee3a272-e391-e2e8-9cbb-5d3e2d40bec2@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-14_03:2020-02-12,2020-02-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=857
+ clxscore=1015 phishscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 spamscore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2002140103
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, 2020-02-14 at 13:22 +0100, Christian Borntraeger wrote:
-> 
-> On 14.02.20 13:17, Eugenio Pérez wrote:
-> > Can you try the inlined patch over 52c36ce7f334 ("vhost: use batched version by default")? My intention is to check
-> > if
-> > "strange VHOST_SET_VRING_BASE" line appears. In previous tests, it appears very fast, but maybe it takes some time
-> > for
-> > it to appear, or it does not appear anymore.
-> 
->   LD [M]  drivers/vhost/vhost_vsock.o
->   CC [M]  drivers/vhost/vhost.o
-> In file included from ./include/linux/printk.h:331,
->                  from ./include/linux/kernel.h:15,
->                  from ./include/linux/list.h:9,
->                  from ./include/linux/wait.h:7,
->                  from ./include/linux/eventfd.h:13,
->                  from drivers/vhost/vhost.c:13:
-> drivers/vhost/vhost.c: In function ‘fetch_descs’:
-> drivers/vhost/vhost.c:2330:56: error: ‘struct vhost_virtqueue’ has no member named ‘first_desc’
->  2330 |   vq, vq->last_avail_idx, vq->avail_idx, vq->ndescs, vq->first_desc);
->       |                                                        ^~
-> ./include/linux/dynamic_debug.h:125:15: note: in definition of macro ‘__dynamic_func_call’
->   125 |   func(&id, ##__VA_ARGS__);  \
->       |               ^~~~~~~~~~~
-> ./include/linux/dynamic_debug.h:153:2: note: in expansion of macro ‘_dynamic_func_call’
->   153 |  _dynamic_func_call(fmt, __dynamic_pr_debug,  \
->       |  ^~~~~~~~~~~~~~~~~~
-> ./include/linux/printk.h:335:2: note: in expansion of macro ‘dynamic_pr_debug’
->   335 |  dynamic_pr_debug(fmt, ##__VA_ARGS__)
->       |  ^~~~~~~~~~~~~~~~
-> drivers/vhost/vhost.c:2328:2: note: in expansion of macro ‘pr_debug’
->  2328 |  pr_debug(
->       |  ^~~~~~~~
-> make[2]: *** [scripts/Makefile.build:266: drivers/vhost/vhost.o] Error 1
-> make[1]: *** [scripts/Makefile.build:503: drivers/vhost] Error 2
-> 
 
-Sorry about that. Here is the right patch.
 
-From 5d7b5304c163910936382d46561fc43eb770aad2 Mon Sep 17 00:00:00 2001
-From: =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-Date: Fri, 14 Feb 2020 08:02:26 +0100
-Subject: [PATCH] vhost: disable all features and trace last_avail_idx and
- ioctl calls
+On 14.02.20 13:26, Eugenio Pérez wrote:
+> On Fri, 2020-02-14 at 13:22 +0100, Christian Borntraeger wrote:
+>>
+>> On 14.02.20 13:17, Eugenio Pérez wrote:
+>>> Can you try the inlined patch over 52c36ce7f334 ("vhost: use batched version by default")? My intention is to check
+>>> if
+>>> "strange VHOST_SET_VRING_BASE" line appears. In previous tests, it appears very fast, but maybe it takes some time
+>>> for
+>>> it to appear, or it does not appear anymore.
 
----
- drivers/vhost/net.c   | 20 +++++++++++++++++---
- drivers/vhost/vhost.c | 25 +++++++++++++++++++++++--
- drivers/vhost/vhost.h | 10 +++++-----
- 3 files changed, 45 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index e158159671fa..e4d5f843f9c0 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1505,10 +1505,13 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	mutex_lock(&n->dev.mutex);
- 	r = vhost_dev_check_owner(&n->dev);
--	if (r)
-+	if (r) {
-+		pr_debug("vhost_dev_check_owner index=%u fd=%d rc r=%d", index, fd, r);
- 		goto err;
-+	}
- 
- 	if (index >= VHOST_NET_VQ_MAX) {
-+		pr_debug("vhost_dev_check_owner index=%u fd=%d MAX=%d", index, fd, VHOST_NET_VQ_MAX);
- 		r = -ENOBUFS;
- 		goto err;
- 	}
-@@ -1518,22 +1521,26 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	/* Verify that ring has been setup correctly. */
- 	if (!vhost_vq_access_ok(vq)) {
-+		pr_debug("vhost_net_set_backend index=%u fd=%d !vhost_vq_access_ok", index, fd);
- 		r = -EFAULT;
- 		goto err_vq;
- 	}
- 	sock = get_socket(fd);
- 	if (IS_ERR(sock)) {
- 		r = PTR_ERR(sock);
-+		pr_debug("vhost_net_set_backend index=%u fd=%d get_socket err r=%d", index, fd, r);
- 		goto err_vq;
- 	}
- 
- 	/* start polling new socket */
- 	oldsock = vq->private_data;
- 	if (sock != oldsock) {
-+		pr_debug("sock=%p != oldsock=%p index=%u fd=%d vq=%p", sock, oldsock, index, fd, vq);
- 		ubufs = vhost_net_ubuf_alloc(vq,
- 					     sock && vhost_sock_zcopy(sock));
- 		if (IS_ERR(ubufs)) {
- 			r = PTR_ERR(ubufs);
-+			pr_debug("ubufs index=%u fd=%d err r=%d vq=%p", index, fd, r, vq);
- 			goto err_ubufs;
- 		}
- 
-@@ -1541,11 +1548,15 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 		vq->private_data = sock;
- 		vhost_net_buf_unproduce(nvq);
- 		r = vhost_vq_init_access(vq);
--		if (r)
-+		if (r) {
-+			pr_debug("init_access index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
- 			goto err_used;
-+		}
- 		r = vhost_net_enable_vq(n, vq);
--		if (r)
-+		if (r) {
-+			pr_debug("enable_vq index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
- 			goto err_used;
-+		}
- 		if (index == VHOST_NET_VQ_RX)
- 			nvq->rx_ring = get_tap_ptr_ring(fd);
- 
-@@ -1559,6 +1570,8 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	mutex_unlock(&vq->mutex);
- 
-+	pr_debug("sock=%p", sock);
-+
- 	if (oldubufs) {
- 		vhost_net_ubuf_put_wait_and_free(oldubufs);
- 		mutex_lock(&vq->mutex);
-@@ -1710,6 +1723,7 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 
- 	switch (ioctl) {
- 	case VHOST_NET_SET_BACKEND:
-+		pr_debug("VHOST_NET_SET_BACKEND");
- 		if (copy_from_user(&backend, argp, sizeof backend))
- 			return -EFAULT;
- 		return vhost_net_set_backend(n, backend.index, backend.fd);
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index 56c5253056ee..2e72bbeffac7 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -1640,15 +1640,30 @@ long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *arg
- 			r = -EINVAL;
- 			break;
- 		}
-+
-+		if (vq->last_avail_idx || vq->avail_idx) {
-+			pr_debug(
-+				"strange VHOST_SET_VRING_BASE [vq=%p][s.index=%u][s.num=%u]",
-+				vq, s.index, s.num);
-+			dump_stack();
-+			r = 0;
-+			break;
-+		}
- 		vq->last_avail_idx = s.num;
- 		/* Forget the cached index value. */
- 		vq->avail_idx = vq->last_avail_idx;
-+		pr_debug(
-+			"VHOST_SET_VRING_BASE [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][s.index=%u][s.num=%u]",
-+			vq, vq->last_avail_idx, vq->avail_idx, s.index, s.num);
- 		break;
- 	case VHOST_GET_VRING_BASE:
- 		s.index = idx;
- 		s.num = vq->last_avail_idx;
- 		if (copy_to_user(argp, &s, sizeof s))
- 			r = -EFAULT;
-+		pr_debug(
-+			"VHOST_GET_VRING_BASE [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][s.index=%u][s.num=%u]",
-+			vq, vq->last_avail_idx, vq->avail_idx, s.index, s.num);
- 		break;
- 	case VHOST_SET_VRING_KICK:
- 		if (copy_from_user(&f, argp, sizeof f)) {
-@@ -2233,8 +2248,8 @@ static int fetch_descs(struct vhost_virtqueue *vq)
- 		vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
- 
- 		if (unlikely((u16)(vq->avail_idx - last_avail_idx) > vq->num)) {
--			vq_err(vq, "Guest moved used index from %u to %u",
--				last_avail_idx, vq->avail_idx);
-+			vq_err(vq, "Guest moved vq %p used index from %u to %u",
-+				vq, last_avail_idx, vq->avail_idx);
- 			return -EFAULT;
- 		}
- 
-@@ -2310,6 +2325,9 @@ static int fetch_descs(struct vhost_virtqueue *vq)
- 	BUG_ON(!(vq->used_flags & VRING_USED_F_NO_NOTIFY));
- 
- 	/* On success, increment avail index. */
-+	pr_debug(
-+		"[vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][vq->ndescs=%d]",
-+		vq, vq->last_avail_idx, vq->avail_idx, vq->ndescs);
- 	vq->last_avail_idx++;
- 
- 	return 0;
-@@ -2403,6 +2421,9 @@ EXPORT_SYMBOL_GPL(vhost_get_vq_desc);
- /* Reverse the effect of vhost_get_vq_desc. Useful for error handling. */
- void vhost_discard_vq_desc(struct vhost_virtqueue *vq, int n)
- {
-+	pr_debug(
-+		"DISCARD [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][n=%d]",
-+		vq, vq->last_avail_idx, vq->avail_idx, n);
- 	vq->last_avail_idx -= n;
- }
- EXPORT_SYMBOL_GPL(vhost_discard_vq_desc);
-diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index a0bcf8bffa43..2ce2d3a97c31 100644
---- a/drivers/vhost/vhost.h
-+++ b/drivers/vhost/vhost.h
-@@ -248,11 +248,11 @@ int vhost_init_device_iotlb(struct vhost_dev *d, bool enabled);
- 	} while (0)
- 
- enum {
--	VHOST_FEATURES = (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) |
--			 (1ULL << VIRTIO_RING_F_INDIRECT_DESC) |
--			 (1ULL << VIRTIO_RING_F_EVENT_IDX) |
--			 (1ULL << VHOST_F_LOG_ALL) |
--			 (1ULL << VIRTIO_F_ANY_LAYOUT) |
-+	VHOST_FEATURES = /* (1ULL << VIRTIO_F_NOTIFY_ON_EMPTY) | */
-+			 /* (1ULL << VIRTIO_RING_F_INDIRECT_DESC) | */
-+			 /* (1ULL << VIRTIO_RING_F_EVENT_IDX) | */
-+			 /* (1ULL << VHOST_F_LOG_ALL) | */
-+			 /* (1ULL << VIRTIO_F_ANY_LAYOUT) | */
- 			 (1ULL << VIRTIO_F_VERSION_1)
- };
- 
--- 
-2.18.1
+yep it does:
 
+[   67.801012] [1917] vhost:vhost_vring_ioctl:1655: VHOST_SET_VRING_BASE [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=0][s.index=0][s.num=0]
+[   67.801018] [1917] vhost:vhost_vring_ioctl:1655: VHOST_SET_VRING_BASE [vq=00000000175f11ec][vq->last_avail_idx=0][vq->avail_idx=0][s.index=1][s.num=0]
+[   67.801026] [1917] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   67.801028] [1917] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=0 fd=39 vq=0000000088199421
+[   67.801032] [1917] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
+[   67.801033] [1917] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   67.801034] [1917] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=1 fd=39 vq=00000000175f11ec
+[   67.801035] [1917] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
+[   67.801037] [1915] vhost:vhost_discard_vq_desc:2424: DISCARD [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=0][n=0]
+[   68.648803] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=0][vq->avail_idx=256][vq->ndescs=1]
+[   68.648810] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=1][vq->avail_idx=256][vq->ndescs=1]
+[   68.648812] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=2][vq->avail_idx=256][vq->ndescs=1]
+[   68.648815] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=3][vq->avail_idx=256][vq->ndescs=1]
+[   68.648817] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=4][vq->avail_idx=256][vq->ndescs=1]
+[   68.648818] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=5][vq->avail_idx=256][vq->ndescs=1]
+[   68.648820] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=6][vq->avail_idx=256][vq->ndescs=1]
+[   68.648822] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=7][vq->avail_idx=256][vq->ndescs=1]
+[   68.648824] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=8][vq->avail_idx=256][vq->ndescs=1]
+[   68.648826] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=9][vq->avail_idx=256][vq->ndescs=1]
+[   68.648828] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=10][vq->avail_idx=256][vq->ndescs=1]
+[   68.648829] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=11][vq->avail_idx=256][vq->ndescs=1]
+[   68.648831] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=12][vq->avail_idx=256][vq->ndescs=1]
+[   68.648832] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=13][vq->avail_idx=256][vq->ndescs=1]
+[   68.648833] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=14][vq->avail_idx=256][vq->ndescs=1]
+[   68.670292] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=0][vq->avail_idx=1][vq->ndescs=1]
+[   68.687187] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=1][vq->avail_idx=2][vq->ndescs=1]
+[   68.687623] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=15][vq->avail_idx=256][vq->ndescs=1]
+[   68.687641] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=2][vq->avail_idx=4][vq->ndescs=1]
+[   68.687642] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=3][vq->avail_idx=4][vq->ndescs=1]
+[   68.690274] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=16][vq->avail_idx=256][vq->ndescs=1]
+[   68.690539] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=4][vq->avail_idx=5][vq->ndescs=1]
+[   68.715379] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=17][vq->avail_idx=256][vq->ndescs=1]
+[   68.800525] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=5][vq->avail_idx=6][vq->ndescs=1]
+[   68.890537] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=6][vq->avail_idx=7][vq->ndescs=1]
+[   68.900587] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=7][vq->avail_idx=8][vq->ndescs=1]
+[   68.916837] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=8][vq->avail_idx=9][vq->ndescs=2]
+[   68.928828] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=18][vq->avail_idx=256][vq->ndescs=1]
+[   69.090540] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=9][vq->avail_idx=10][vq->ndescs=1]
+[   69.119651] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=10][vq->avail_idx=11][vq->ndescs=2]
+[   69.132325] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=19][vq->avail_idx=256][vq->ndescs=1]
+[   69.323473] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=11][vq->avail_idx=12][vq->ndescs=2]
+[   69.354557] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=20][vq->avail_idx=256][vq->ndescs=1]
+[   69.442550] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=21][vq->avail_idx=256][vq->ndescs=1]
+[   69.523593] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=12][vq->avail_idx=13][vq->ndescs=2]
+[   69.557360] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=22][vq->avail_idx=256][vq->ndescs=1]
+[   69.980634] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=13][vq->avail_idx=14][vq->ndescs=1]
+[   69.981364] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=14][vq->avail_idx=15][vq->ndescs=1]
+[   70.010545] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=15][vq->avail_idx=16][vq->ndescs=1]
+[   70.161316] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=23][vq->avail_idx=256][vq->ndescs=1]
+[   70.177640] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=24][vq->avail_idx=256][vq->ndescs=1]
+[   70.280564] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=16][vq->avail_idx=17][vq->ndescs=1]
+[   70.670327] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=17][vq->avail_idx=18][vq->ndescs=1]
+[   70.932887] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=18][vq->avail_idx=19][vq->ndescs=2]
+[   70.940587] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=19][vq->avail_idx=20][vq->ndescs=1]
+[   70.947598] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=25][vq->avail_idx=256][vq->ndescs=1]
+[   71.070388] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=20][vq->avail_idx=21][vq->ndescs=1]
+[   71.070770] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=26][vq->avail_idx=256][vq->ndescs=1]
+[   71.070805] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=21][vq->avail_idx=22][vq->ndescs=1]
+[   71.070977] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=27][vq->avail_idx=256][vq->ndescs=1]
+[   71.071049] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=22][vq->avail_idx=23][vq->ndescs=1]
+[   71.071195] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=28][vq->avail_idx=256][vq->ndescs=1]
+[   71.071243] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=23][vq->avail_idx=24][vq->ndescs=1]
+[   71.071386] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=29][vq->avail_idx=256][vq->ndescs=1]
+[   71.071433] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=24][vq->avail_idx=25][vq->ndescs=1]
+[   71.071575] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=30][vq->avail_idx=256][vq->ndescs=1]
+[   71.071611] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=25][vq->avail_idx=26][vq->ndescs=1]
+[   71.071747] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=31][vq->avail_idx=256][vq->ndescs=1]
+[   71.071789] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=26][vq->avail_idx=27][vq->ndescs=1]
+[   71.071923] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=32][vq->avail_idx=256][vq->ndescs=1]
+[   71.071960] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=27][vq->avail_idx=28][vq->ndescs=1]
+[   71.072096] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=33][vq->avail_idx=256][vq->ndescs=1]
+[   71.072128] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=28][vq->avail_idx=29][vq->ndescs=1]
+[   71.072267] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=34][vq->avail_idx=256][vq->ndescs=1]
+[   71.072300] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=29][vq->avail_idx=30][vq->ndescs=1]
+[   71.072432] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=35][vq->avail_idx=256][vq->ndescs=1]
+[   71.072463] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=30][vq->avail_idx=31][vq->ndescs=1]
+[   71.072596] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=36][vq->avail_idx=256][vq->ndescs=1]
+[   71.072630] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=31][vq->avail_idx=32][vq->ndescs=1]
+[   71.072759] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=37][vq->avail_idx=256][vq->ndescs=1]
+[   71.072791] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=32][vq->avail_idx=33][vq->ndescs=1]
+[   71.072933] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=38][vq->avail_idx=256][vq->ndescs=1]
+[   71.073054] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=33][vq->avail_idx=34][vq->ndescs=1]
+[   71.073193] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=39][vq->avail_idx=256][vq->ndescs=1]
+[   71.073247] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=34][vq->avail_idx=35][vq->ndescs=1]
+[   71.073383] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=40][vq->avail_idx=256][vq->ndescs=1]
+[   71.073434] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=35][vq->avail_idx=36][vq->ndescs=1]
+[   71.073571] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=41][vq->avail_idx=256][vq->ndescs=1]
+[   71.073627] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=36][vq->avail_idx=37][vq->ndescs=1]
+[   71.073762] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=42][vq->avail_idx=256][vq->ndescs=1]
+[   71.073813] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=37][vq->avail_idx=38][vq->ndescs=1]
+[   71.073948] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=43][vq->avail_idx=256][vq->ndescs=1]
+[   71.073998] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=38][vq->avail_idx=39][vq->ndescs=1]
+[   71.074136] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=44][vq->avail_idx=256][vq->ndescs=1]
+[   71.074186] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=39][vq->avail_idx=40][vq->ndescs=1]
+[   71.074320] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=45][vq->avail_idx=256][vq->ndescs=1]
+[   71.074370] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=40][vq->avail_idx=41][vq->ndescs=1]
+[   71.074503] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=46][vq->avail_idx=256][vq->ndescs=1]
+[   72.344493] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=47][vq->avail_idx=256][vq->ndescs=1]
+[   72.553413] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=48][vq->avail_idx=256][vq->ndescs=1]
+[   73.522174] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=49][vq->avail_idx=256][vq->ndescs=1]
+[   73.705202] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=50][vq->avail_idx=256][vq->ndescs=1]
+[   73.705239] [1915] vhost:fetch_descs:2328: [vq=00000000175f11ec][vq->last_avail_idx=41][vq->avail_idx=42][vq->ndescs=1]
+[   73.994388] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=51][vq->avail_idx=256][vq->ndescs=1]
+[   74.208443] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=52][vq->avail_idx=256][vq->ndescs=1]
+[   74.433345] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=53][vq->avail_idx=256][vq->ndescs=1]
+[   74.594756] [1910] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   74.594761] [1910] vhost_net:vhost_net_set_backend:1538: sock=000000001ae027fd != oldsock=0000000082d8d291 index=0 fd=-1 vq=0000000088199421
+[   74.594762] [1910] vhost_net:vhost_net_set_backend:1573: sock=000000001ae027fd
+[   74.594803] [1910] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   74.594804] [1910] vhost_net:vhost_net_set_backend:1538: sock=000000001ae027fd != oldsock=0000000082d8d291 index=1 fd=-1 vq=00000000175f11ec
+[   74.594805] [1910] vhost_net:vhost_net_set_backend:1573: sock=000000001ae027fd
+[   74.594847] [1910] vhost:vhost_vring_ioctl:1664: VHOST_GET_VRING_BASE [vq=0000000088199421][vq->last_avail_idx=54][vq->avail_idx=256][s.index=0][s.num=54]
+[   74.594850] [1910] vhost:vhost_vring_ioctl:1664: VHOST_GET_VRING_BASE [vq=00000000175f11ec][vq->last_avail_idx=42][vq->avail_idx=42][s.index=1][s.num=42]
+[   77.003191] [1918] vhost:vhost_vring_ioctl:1645: strange VHOST_SET_VRING_BASE [vq=0000000088199421][s.index=0][s.num=0]
+[   77.003194] CPU: 62 PID: 1918 Comm: CPU 1/KVM Not tainted 5.5.0+ #22
+[   77.003197] Hardware name: IBM 3906 M04 704 (LPAR)
+[   77.003198] Call Trace:
+[   77.003207]  [<0000000b8d93c132>] show_stack+0x8a/0xd0 
+[   77.003211]  [<0000000b8e32e72a>] dump_stack+0x8a/0xb8 
+[   77.003224]  [<000003ff803567ae>] vhost_vring_ioctl+0x6fe/0x858 [vhost] 
+[   77.003228]  [<000003ff8036c670>] vhost_net_ioctl+0x510/0x570 [vhost_net] 
+[   77.003234]  [<0000000b8dbecdd8>] do_vfs_ioctl+0x430/0x6f8 
+[   77.003235]  [<0000000b8dbed124>] ksys_ioctl+0x84/0xb0 
+[   77.003237]  [<0000000b8dbed1ba>] __s390x_sys_ioctl+0x2a/0x38 
+[   77.003240]  [<0000000b8e34ff72>] system_call+0x2a6/0x2c8 
+[   77.003261] [1918] vhost:vhost_vring_ioctl:1645: strange VHOST_SET_VRING_BASE [vq=00000000175f11ec][s.index=1][s.num=0]
+[   77.003262] CPU: 62 PID: 1918 Comm: CPU 1/KVM Not tainted 5.5.0+ #22
+[   77.003263] Hardware name: IBM 3906 M04 704 (LPAR)
+[   77.003264] Call Trace:
+[   77.003266]  [<0000000b8d93c132>] show_stack+0x8a/0xd0 
+[   77.003267]  [<0000000b8e32e72a>] dump_stack+0x8a/0xb8 
+[   77.003270]  [<000003ff803567ae>] vhost_vring_ioctl+0x6fe/0x858 [vhost] 
+[   77.003271]  [<000003ff8036c670>] vhost_net_ioctl+0x510/0x570 [vhost_net] 
+[   77.003273]  [<0000000b8dbecdd8>] do_vfs_ioctl+0x430/0x6f8 
+[   77.003274]  [<0000000b8dbed124>] ksys_ioctl+0x84/0xb0 
+[   77.003276]  [<0000000b8dbed1ba>] __s390x_sys_ioctl+0x2a/0x38 
+[   77.003277]  [<0000000b8e34ff72>] system_call+0x2a6/0x2c8 
+[   77.003297] [1918] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   77.003300] [1918] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=0 fd=39 vq=0000000088199421
+[   77.003304] [1918] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
+[   77.003305] [1918] vhost_net:vhost_net_ioctl:1726: VHOST_NET_SET_BACKEND
+[   77.003306] [1918] vhost_net:vhost_net_set_backend:1538: sock=0000000082d8d291 != oldsock=000000001ae027fd index=1 fd=39 vq=00000000175f11ec
+[   77.003308] [1915] vhost:fetch_descs:2328: [vq=0000000088199421][vq->last_avail_idx=54][vq->avail_idx=256][vq->ndescs=1]
+[   77.003308] [1918] vhost_net:vhost_net_set_backend:1573: sock=0000000082d8d291
+[   77.003310] [1915] vhost_net:get_rx_bufs:1061: unexpected descriptor format for RX: out 0, in 0
+[   77.003312] [1915] vhost:vhost_discard_vq_desc:2424: DISCARD [vq=0000000088199421][vq->last_avail_idx=55][vq->avail_idx=256][n=0]
 

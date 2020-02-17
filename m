@@ -2,104 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2405B16086D
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2020 04:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 604D916094D
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2020 04:53:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgBQDD1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 16 Feb 2020 22:03:27 -0500
-Received: from condef-09.nifty.com ([202.248.20.74]:64493 "EHLO
-        condef-09.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726485AbgBQDD1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Feb 2020 22:03:27 -0500
-X-Greylist: delayed 411 seconds by postgrey-1.27 at vger.kernel.org; Sun, 16 Feb 2020 22:03:26 EST
-Received: from conssluserg-01.nifty.com ([10.126.8.80])by condef-09.nifty.com with ESMTP id 01H2jWYg024852
-        for <linux-next@vger.kernel.org>; Mon, 17 Feb 2020 11:45:33 +0900
-Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com [209.85.221.176]) (authenticated)
-        by conssluserg-01.nifty.com with ESMTP id 01H2jPY1032324;
-        Mon, 17 Feb 2020 11:45:25 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-01.nifty.com 01H2jPY1032324
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1581907525;
-        bh=dFtfS7OE4fr2IIqmIi4GkbGlqk2GjJVy7T+VtdQBYyw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=MiffLscpW6V/vY9NKjcmqQBPbl0SyUVp2sekNgvCzRPQlWjQqRuKFYUWc46uJmzzk
-         bbJv08L8LcVqFXwYVGa7fiAGTg1JsRK7llWmGuKlPSt4p5gOSiIO30FadQCL0S7OKF
-         OxGAWxpGRloMyedZ2paHpUnQmEEAaLrbqLn9VieWSSymuI4XLk/2yJktwy2m8L11/h
-         gfCLOJVy6Y6yaq6vAytmIw7Xx/I1pg/BX3BPWFZS6t6PzmSXUt0tIeNiicpOyqROTV
-         a5c0qjOqnuHwOt6z7lrK66e+wzaMEBlKIQYktKdUpLrDXbEC4NSP08/+of5Iqk0H+k
-         WAxcxlXm+MlAQ==
-X-Nifty-SrcIP: [209.85.221.176]
-Received: by mail-vk1-f176.google.com with SMTP id i4so4161947vkc.3;
-        Sun, 16 Feb 2020 18:45:25 -0800 (PST)
-X-Gm-Message-State: APjAAAVYqcVqacfq4iVCBeUciJmXS3u7i0jsbB0lmsveAHbicP+IRTuu
-        4AZIQ4L9/CtxGZlLSM3SHdxiEj2vXihRlU0bwUA=
-X-Google-Smtp-Source: APXvYqzN9GjDEyUEGugCEeJ16X4r7qJ6iHnC3AzqP0bd8iZ52TjtI/Hgij0iqKDtnn5jy/2Gi4w3i0xR2LHl4BZLwqQ=
-X-Received: by 2002:a1f:1bc3:: with SMTP id b186mr4702934vkb.96.1581907524503;
- Sun, 16 Feb 2020 18:45:24 -0800 (PST)
+        id S1726672AbgBQDxS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 Feb 2020 22:53:18 -0500
+Received: from ozlabs.org ([203.11.71.1]:34255 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726498AbgBQDxS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 16 Feb 2020 22:53:18 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48LVSq3DZkz9sPk;
+        Mon, 17 Feb 2020 14:53:15 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1581911596;
+        bh=5VCPa5NUSKYweRlJklpG5EFZGukFdUuJk3mNUBPYQ68=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QvuPAkhNwsK1S9MHoYyH4ZaxStf7/F1fclVHFEKcrghFeYjav8xZsF/Cv5tpaZ1AM
+         XqSZL0uZY8bxrpkPh489SBI9VOwBLBGkokVWMPC5g9C0IHExdJlbYW7TJlFU8ZgGX1
+         z7SzR3AzbpkwfBLVSqNR3euiILM9hJOkfOKTj6z3vUUPsx64b3jIyzEPpqRbRCC1oY
+         2Z9tFYhFBmMVKBDscEQds60kn3qR2b1sDcr+hLaiChPVQvkGKRFdRKGjA4z+iOnszt
+         eENuqlTgG1ZcLSJLtb4EYrqGVoCOsuunX9uFUHYuOWOPAhUurpIlH2krDVus/Btrdz
+         2rVdcI7GSMPjQ==
+Date:   Mon, 17 Feb 2020 14:53:13 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Mina Almasry <almasrymina@google.com>, linux-mm@kvack.org,
+        linux-next@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Greg Thelen <gthelen@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH] hugetlb: fix CONFIG_CGROUP_HUGETLB ifdefs
+Message-ID: <20200217145313.74ded08a@canb.auug.org.au>
+In-Reply-To: <f0fd4a6b-1d4a-8e7d-65c0-a454fbf550a2@infradead.org>
+References: <7ff9e944-1c6c-f7c1-d812-e12817c7a317@oracle.com>
+        <20200214204544.231482-1-almasrymina@google.com>
+        <CAHS8izMjyLzCsSga59dE+zDC3sLBuA=_u4EtsShN+EZQ1EQitw@mail.gmail.com>
+        <5237b9bc-2614-0a3a-afa5-5015f30d28bc@infradead.org>
+        <f0fd4a6b-1d4a-8e7d-65c0-a454fbf550a2@infradead.org>
 MIME-Version: 1.0
-References: <20200217122242.2da61737@canb.auug.org.au>
-In-Reply-To: <20200217122242.2da61737@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 17 Feb 2020 11:44:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARMBiu24R40ChLT7W6sWCsRA+62M71hQw1nnBWquCW7sg@mail.gmail.com>
-Message-ID: <CAK7LNARMBiu24R40ChLT7W6sWCsRA+62M71hQw1nnBWquCW7sg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the akpm-current tree with the csky tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Guo Ren <ren_guo@c-sky.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        MaJun <majun258@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/jzURkaov_SBnAHtSB5RJrSw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/jzURkaov_SBnAHtSB5RJrSw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 17, 2020 at 10:22 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the akpm-current tree got a conflict in:
->
->   arch/csky/include/asm/Kbuild
->
-> between commit:
->
->   aeb58bb21421 ("csky: Add PCI support")
->
-> from the csky tree and commit:
->
->   25e6e2bca62a ("asm-generic: make more kernel-space headers mandatory")
->
-> from the akpm-current tree.
->
-> I fixed it up (the latter is a superset of the former) and can carry the
-> fix as necessary.
+Hi all,
 
-
-Correct. The latter is a superset.
-
-Andrew sends rebased patches to Linus,
-so it should be probably fine.
-
-Thanks.
-
-
-> This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
+On Fri, 14 Feb 2020 17:56:57 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
 >
-> --
-> Cheers,
-> Stephen Rothwell
+> On 2/14/20 5:17 PM, Randy Dunlap wrote:
+> > On 2/14/20 1:00 PM, Mina Almasry wrote: =20
+> >> On Fri, Feb 14, 2020 at 12:46 PM Mina Almasry <almasrymina@google.com>=
+ wrote: =20
+> >>>
+> >>> Fixes an #ifdef bug in the patch referred to below that was
+> >>> causing a build error when CONFIG_DEBUG_VM &&
+> >>> !CONFIG_CCGROUP_HUGETLB. =20
+> >=20
+> > Hi Mina,
+> >=20
+> > I don't know if this was supposed to fix the 2 build reports that I mad=
+e,
+> > but this does not apply cleanly to mmotm (and it's a reply email so it's
+> > more difficult to apply anyway):
+> >=20
+> > Applying patch mm-hugetlb-fix-CONFIG_CGROUP_HUGETLB.patch
+> > patching file mm/hugetlb.c
+> > Hunk #1 succeeded at 289 with fuzz 1.
+> > Hunk #2 succeeded at 325 with fuzz 2.
+> > Hunk #3 FAILED at 435.
+> > 1 out of 3 hunks FAILED -- rejects in file mm/hugetlb.c
+> >  =20
+>=20
+> OK, I applied this patch manually and it does fix most of the reported bu=
+ild problems.
 
+I have also applied that patch by had to linux-next today.
 
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-Best Regards
-Masahiro Yamada
+--Sig_/jzURkaov_SBnAHtSB5RJrSw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5KDikACgkQAVBC80lX
+0GwF4Qf7BoduopqFiXC3494akasAS4zs+vDcOMcp20jHC46eD5nEHC/PeeygJRZv
+ThMHmY/3i+t0cYxelRsxJofHPuAhSEHe7HO3ElrfruXz/FnFunTrVT7TH+jLLczY
+hqXIvXHN2U14D3JomA/0/i04i4t7CI7EJZMWhAjw16byKLgT8R0C3Rvjp2gGC5jv
+BNX1NkOgWDCd6xuJV85w8No6I5wbRH15Wb15jVJSIe3rbo/0Krfu7pb291TB7dTd
+cPc86NPnRN7K1InnIMBeCERT9lBz0m5+wDrib3SmfwmPsZ14rGD9nx3K4iiWudGd
+u6dPfWDbztQbBGTZbrYnw0pm4w8mpA==
+=IiZh
+-----END PGP SIGNATURE-----
+
+--Sig_/jzURkaov_SBnAHtSB5RJrSw--

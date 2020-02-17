@@ -2,96 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AEAA160955
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2020 04:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8C916097C
+	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2020 05:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726672AbgBQD5O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 16 Feb 2020 22:57:14 -0500
-Received: from ozlabs.org ([203.11.71.1]:59041 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726498AbgBQD5O (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 16 Feb 2020 22:57:14 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48LVYN0rkdz9sPk;
-        Mon, 17 Feb 2020 14:57:12 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1581911832;
-        bh=6EWniJol+6DZkQ5B4Jfa+YWG9P7G35svR3KRf67fL8Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=q2EKQ/PJhAT/4CJYNJLDeR7GFfOg01Z4K/As1M2am/8q8aXDozdXz+YQGnQea52lZ
-         Re3oo47Um6E7dQHU5s3Rxaa3PFKRhtE/5+6dVCKBKxpPDjEcdjKKHuzCjUATnMOqn/
-         oGqXKXKPHNf+xToJoU/CoaETjJL8ZTgZT3NGBaqi3nRNBU972FZEN9Zl3+1I59yY27
-         CqR8jBoj7w8Nplr5dnJh1g3fY5Z8d1ynZbSFIX29M2r1rWonq9PNhtsjrYS0IqTW1M
-         y1+0Zyk1jfgMAUg7mj7b/tABGOjYLxTlfvfRzsmbn4SPu+8Fe1bb1cRxcjfm/Njga5
-         PrBnVvuJwa42g==
-Date:   Mon, 17 Feb 2020 14:57:11 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Arjun Roy <arjunroy@google.com>,
-        David Miller <davem@davemloft.net>
-Subject: linux-next: build failure after merge of the akpm tree
-Message-ID: <20200217145711.4af495a3@canb.auug.org.au>
+        id S1726656AbgBQENH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 16 Feb 2020 23:13:07 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:38515 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726560AbgBQENH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 16 Feb 2020 23:13:07 -0500
+Received: by mail-wr1-f66.google.com with SMTP id y17so17901024wrh.5
+        for <linux-next@vger.kernel.org>; Sun, 16 Feb 2020 20:13:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+t2lAkJHHWrFw6xWV3SgprQvUaUl1BY+kJcD9vJxAFw=;
+        b=DqBHCUg2BEqvLrW9aug6Iu5M9vdgPJjktizhhWsUeAu9Myk3h+5eSsIIJphj0G7roz
+         dgn4pQJbXjvsyltRE9cC6TJlZ+F2H/zKmtqph8PZ5Wlyuc0lUStJJcCPwJtPs9RRvd+M
+         fvw+HeUSFawyfABLMJfZeaXjKf6APAuj4KIntzf3+LbMYc3pVNw8HfE0VQZSXrLfCRG+
+         NNz/Rw9ExeK8O2kWRK80ffyKPdQ4GKcmaG99DCSO8ys6GjrVW/m0Ejcmv5hg5Jp+Q/AR
+         f3kw0avsgwosAwxT3pOISPkuAytimngtFCEPqmalzrl+dX4d+FbjHyEPnW8MDb6jlgXC
+         rtOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+t2lAkJHHWrFw6xWV3SgprQvUaUl1BY+kJcD9vJxAFw=;
+        b=bJmv0DEUQgA+BbxtiiCvQGCjqejhE1hkp4fXSUsFckxUHNAwZSy/QYRw3a8L2N0e1M
+         5mCSSlfqgYayIckMsG7UyBFPvTJg/5Vo8qSB5Lq1dgj0ppNIpu2369ldbefzpXFNTvfO
+         e6l25XDGkpVIjCDmQMRCIu4oEioynpbwHXV/4frV/fcGOk/hKJUfNjJdmfIkqdB09hiB
+         uIpesHRrp3Wl7M9h42uENR0FHpkes+VvuSsRODpi7GCvUZx9afsP5Wi7Oc9yiXb43PgJ
+         N77xHtukqhAAPxKuKBaPsBTgT5dIEyfRz0UniE50myA5lSkNCxgf70To6kFdrXpqPeur
+         qHaw==
+X-Gm-Message-State: APjAAAWhSSGnPI+CCQfsS/oAshsXzk0DDJ/Ap5MRuZKqSgLK6OfVQ5rr
+        wqC7bj7zWGep3Py8RljyFph5nnDNjAOkCXqemJzqMw==
+X-Google-Smtp-Source: APXvYqy8DstK6bOQQIriUK8rvFbqZFNIo81H4tlz+QiKRzdpPok+ra2ukbmMzZMLo/NfxDuNVumQ/EXyHtEI2PS90oE=
+X-Received: by 2002:a5d:6545:: with SMTP id z5mr18921279wrv.3.1581912784734;
+ Sun, 16 Feb 2020 20:13:04 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SS_/My0x1KTFXdXhlWyA9Zl";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200217145711.4af495a3@canb.auug.org.au>
+In-Reply-To: <20200217145711.4af495a3@canb.auug.org.au>
+From:   Arjun Roy <arjunroy@google.com>
+Date:   Sun, 16 Feb 2020 20:12:53 -0800
+Message-ID: <CAOFY-A1nfPjf3EcQB6KiEifbFR+aUtdSgK=CHGt_k3ziSG6T_Q@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SS_/My0x1KTFXdXhlWyA9Zl
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Feb 16, 2020 at 7:57 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the akpm tree, today's linux-next build (sparc64 defconfig)
+> failed like this:
+>
+> mm/memory.c: In function 'insert_pages':
+> mm/memory.c:1523:56: error: macro "pte_index" requires 2 arguments, but only 1 given
+>    remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
+>                                                         ^
+>
+> Caused by commit
+>
+>   366142f0b000 ("mm/memory.c: add vm_insert_pages()")
+>
+> This is the first use of pte_index() outside arch specific code and the
+> sparc64 version of pte_index() nas an extra argument.
+>
 
-Hi all,
+Looks like this happens for sparc, and also metag. Other platforms
+just take the addr parameter based on a quick search.
 
-After merging the akpm tree, today's linux-next build (sparc64 defconfig)
-failed like this:
+> I have reverted these commits for today:
+>
+>   219ae14a9686 ("net-zerocopy-use-vm_insert_pages-for-tcp-rcv-zerocopy-fix")
+>   cb912fdf96bf ("net-zerocopy: use vm_insert_pages() for tcp rcv zerocopy")
+>   72c684430b94 ("add missing page_count() check to vm_insert_pages().")
+>   dbd9553775f3 ("mm-add-vm_insert_pages-fix")
+>   366142f0b000 ("mm/memory.c: add vm_insert_pages()")
+>
 
-mm/memory.c: In function 'insert_pages':
-mm/memory.c:1523:56: error: macro "pte_index" requires 2 arguments, but onl=
-y 1 given
-   remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
-                                                        ^
+In terms of fixing this; passing in an appropriate dir parameter is
+not really a problem, but what is concerning that it seems messy to
+have a per-platform ifdef to pass it either two arguments or one in
+this case. But it seems like either that would be one way to fix it,
+or having some arch method across all arches that takes two arguments
+(and ignores one of them for most arches).
 
-Caused by commit
+Is there a general preference for the right way forward, in this case?
 
-  366142f0b000 ("mm/memory.c: add vm_insert_pages()")
+Thanks,
+-Arjun
 
-This is the first use of pte_index() outside arch specific code and the
-sparc64 version of pte_index() nas an extra argument.
-
-I have reverted these commits for today:
-
-  219ae14a9686 ("net-zerocopy-use-vm_insert_pages-for-tcp-rcv-zerocopy-fix")
-  cb912fdf96bf ("net-zerocopy: use vm_insert_pages() for tcp rcv zerocopy")
-  72c684430b94 ("add missing page_count() check to vm_insert_pages().")
-  dbd9553775f3 ("mm-add-vm_insert_pages-fix")
-  366142f0b000 ("mm/memory.c: add vm_insert_pages()")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/SS_/My0x1KTFXdXhlWyA9Zl
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5KDxcACgkQAVBC80lX
-0GzNzQf/RUXYmAlRVOUsQT+ZKEgcgos9XIO/TDwMGTGkw9qdYFFL04N5SFmk7fRh
-UhDeEowgceP7iMvOLD2pHTwYLbEwQ/h0FldvvUcJXLtRSnXHpd1hmlze3mCVMOkt
-EKGQm93UqF836GUvqOPjjJtm6/YIgqhmCIb/TQuttZ/ZhWK0AqHzUrHNyI5hSGge
-fQcjwYNqCk01SqQLVruXPD3tHTpD7DRQzG7254KLx74vTDCmfiOcdRz6ycQNmZQ5
-8h8MyuN0XRC0fD1pZLf0q27JHPAmaG3NEGLRDphwRSvh18NfEeS+E1wU9ONfdPOR
-rdk7PeacEmhi+aca7RY+WX+AwEo8xQ==
-=wLJm
------END PGP SIGNATURE-----
-
---Sig_/SS_/My0x1KTFXdXhlWyA9Zl--
+> --
+> Cheers,
+> Stephen Rothwell

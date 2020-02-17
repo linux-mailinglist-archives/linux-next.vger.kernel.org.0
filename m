@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9FB0161CBF
-	for <lists+linux-next@lfdr.de>; Mon, 17 Feb 2020 22:23:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A08A5161DC8
+	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2020 00:20:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729016AbgBQVXF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 17 Feb 2020 16:23:05 -0500
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:46116 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728676AbgBQVXF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Feb 2020 16:23:05 -0500
-Received: by mail-wr1-f68.google.com with SMTP id z7so21414351wrl.13
-        for <linux-next@vger.kernel.org>; Mon, 17 Feb 2020 13:23:03 -0800 (PST)
+        id S1725941AbgBQXUv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 17 Feb 2020 18:20:51 -0500
+Received: from mail-wm1-f47.google.com ([209.85.128.47]:52828 "EHLO
+        mail-wm1-f47.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725927AbgBQXUv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 17 Feb 2020 18:20:51 -0500
+Received: by mail-wm1-f47.google.com with SMTP id p9so941708wmc.2
+        for <linux-next@vger.kernel.org>; Mon, 17 Feb 2020 15:20:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=O567mvCA+yazzfh/RMHw88iQ3meEjD9ib39JrzlWcHk=;
-        b=Jn0Twtfa6IZ2hw4h/HHiUVoC5ZBTG+rbLRrQw+0aySqvNRnlJa1GH/lj5YOPwyIDo9
-         4bZT4wdaBv2fpHlYKIrHCYAgkU+Fo0Ad6LucuLONr4jxBzII5ST6UijKCIQW8XvdZ7e6
-         CoVhSdp099qrdxhY/8gClQrg7q3NeQzSuqC6fdXDaVfV24n0DfdSRtXrrPLRmxmyh4BY
-         xsDXxRBcLf3FQ/fRmdBZuPV2Uhg0dsHp+gBD0tBYZ5jbWt2w9CPz2WIzGWcfLCo8wJkr
-         IaTkBMJLXDv7iQjvamUr/Jcy5DsFj6f+T3/7NzhFgJo1uTCvJWR39fqGulcsM2xN8hxK
-         1NpQ==
+        bh=IXfFT9w4NpT/Fdov76FMynTFMdTjyuOwBLGkvr34+NY=;
+        b=sCXiN1EjBKrYxAeOBva7J5GQqx9+SBLLbYSaklp5bp/KnNWOLBv0bmoApc5ufDWEtN
+         bjE8PH6fgnERiaP7Wp3lqirV+Z2Ckuqx6yBfbBA5d07zfgd7dibtZqj7GVhnCygOXiXy
+         Z8GFa9CQzSawS6Cop8Bd2Q+Q9WLazlkdI2gCDgG8XiGFsgXDvQXjNCHY9ov+Bto+CyLT
+         RdKlxQhN45QRtnMmCOfrjbCjdSh0QtPBo0oX8ueAs4oj9pcYBqLTznjNMzApzdrN9GX4
+         q9KgnV83RsWZHrdk5c0L65tHCqDQnaTdxqhD3JTx5Yuh3KWo5GhgQtPXx5pMHClmnpbu
+         5nwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=O567mvCA+yazzfh/RMHw88iQ3meEjD9ib39JrzlWcHk=;
-        b=JvlYTRvXLa/vWRjgh+DEb/23DDzhavdYA8YABcoSatSRxL2JQvAGBgwd6FF1Vf3u3F
-         +TleHgNmOYPEl+p44o+dNBcndWOUdgrQ0SE/ikgOZ/HtqZebaLjM6GNr5yc/AsH3uRc+
-         u3YOz8B7s8uUgKZ58CVvwhAxKVmJBDyDhGQk5eyQsqhGvRhe9Xck7hUiOoPHLXl64hcu
-         6YfatzxW1vMPPmvuw+jeBQjJ1eaiGj6/6V+8KH+/1gQOWxjNDhfZNPg46+DD7wiPVVi6
-         ELYR8TYTSuL54NDBtnFF3xvo8PgHiQhe1NNHAkshkt24OqWG1vpHR7Ct5rt1guyB5X5k
-         95AA==
-X-Gm-Message-State: APjAAAXQxubeIb64hwDZHjV+V7EO/Gf5/YeH49NkHei7UFiN5wVC6Eb+
-        AfWPzAClEeRITMU+zoyqxQeqSiiR0A6CsQ==
-X-Google-Smtp-Source: APXvYqwC5rftLl0KbCZUUjgWe6+xEH49eWD+n9rtompArUSGSnAFIthL8jZaaMSxSarzeM/ESeExsw==
-X-Received: by 2002:adf:f80c:: with SMTP id s12mr24315673wrp.1.1581974582690;
-        Mon, 17 Feb 2020 13:23:02 -0800 (PST)
+        bh=IXfFT9w4NpT/Fdov76FMynTFMdTjyuOwBLGkvr34+NY=;
+        b=Io7exOsba8JW+Oa5yRMfQwpaakDTjKsfaI0++yZ6I4dOjEXNVP6bWAEVmM7sxnOH1O
+         icIJ7cAPmEVnnC3WCETeMESNrcottY3+U8jdxVaqV8DTsoNUdkjBvnVNCOjspIn7iQJn
+         CrRem2MV64oVhfqOj7SbzE8GpfDy87BxkPN55L+cLMNscay20Au2RsWJK8P/zAbtTCPK
+         keuTDrh0yH0eVT6fpYAIeKTJHxRguxocTzo9VPTStaGECBDzsedT5negFLzEFHWJjFAg
+         K0ZN6l+ZHhJ5to8lFPHbY1zqS0I/o+erZDoxe3yxfICvCKONyeNDesk/P+77/HJ5+Fjn
+         Ixug==
+X-Gm-Message-State: APjAAAWw9HFb3CCmT+D4zatC2y0iojUKyREIk/m8SLL/jNzwO9Y/PXDr
+        VkeNQsZFRjUxC6/8i8zOJUvLq8YFijvOIQ==
+X-Google-Smtp-Source: APXvYqy6PVbU5lh6sX6oC0ab3P7KZQO3p+Ebc6DK/HFqCwADDGJKA3QxQjshe5IjnqB0LXJ8K0UyEA==
+X-Received: by 2002:a1c:ac46:: with SMTP id v67mr1162577wme.153.1581981648861;
+        Mon, 17 Feb 2020 15:20:48 -0800 (PST)
 Received: from [148.251.42.114] ([2a01:4f8:201:9271::2])
-        by smtp.gmail.com with ESMTPSA id k7sm801126wmi.19.2020.02.17.13.23.02
+        by smtp.gmail.com with ESMTPSA id e1sm3204787wrt.84.2020.02.17.15.20.48
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2020 13:23:02 -0800 (PST)
-Message-ID: <5e4b0436.1c69fb81.ebc94.4151@mx.google.com>
-Date:   Mon, 17 Feb 2020 13:23:02 -0800 (PST)
+        Mon, 17 Feb 2020 15:20:48 -0800 (PST)
+Message-ID: <5e4b1fd0.1c69fb81.28880.f10c@mx.google.com>
+Date:   Mon, 17 Feb 2020 15:20:48 -0800 (PST)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
+X-Kernelci-Branch: master
 X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc1-553-g98fb8f80927f
-Subject: next/pending-fixes boot: 87 boots: 3 failed, 79 passed with 4 offline,
- 1 untried/unknown (v5.6-rc1-553-g98fb8f80927f)
+X-Kernelci-Kernel: next-20200217
+Subject: next/master boot: 155 boots: 35 failed, 113 passed with 5 offline,
+ 2 untried/unknown (next-20200217)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,70 +63,194 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 87 boots: 3 failed, 79 passed with 4 offline, 1 un=
-tried/unknown (v5.6-rc1-553-g98fb8f80927f)
+next/master boot: 155 boots: 35 failed, 113 passed with 5 offline, 2 untrie=
+d/unknown (next-20200217)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc1-553-g98fb8f80927f/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc1-553-g98fb8f80927f/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200217/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200217/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc1-553-g98fb8f80927f
-Git Commit: 98fb8f80927f8f95c1022542f50c1f15176e8316
+Branch: master
+Git Describe: next-20200217
+Git Commit: c25a951c50dca1da4a449a985a9debd82dc18573
 Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 55 unique boards, 20 SoC families, 20 builds out of 155
+Tested: 84 unique boards, 20 SoC families, 16 builds out of 168
 
 Boot Regressions Detected:
 
 arm:
 
+    multi_v7_defconfig:
+        gcc-8:
+          sun7i-a20-cubieboard2:
+              lab-baylibre: new failure (last pass: next-20200213)
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun7i-a20-olinuxino-lime2:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-a33-olinuxino:
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun8i-a83t-bananapi-m3:
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun8i-h2-plus-libretech-all-h3-cc:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h2-plus-orangepi-zero:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h3-libretech-all-h3-cc:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h3-orangepi-pc:
+              lab-clabbe: new failure (last pass: next-20200213)
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun7i-a20-cubieboard2:
+              lab-baylibre: new failure (last pass: next-20200213)
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun7i-a20-olinuxino-lime2:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-a33-olinuxino:
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun8i-a83t-bananapi-m3:
+              lab-clabbe: new failure (last pass: next-20200213)
+          sun8i-h2-plus-libretech-all-h3-cc:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h2-plus-orangepi-zero:
+              lab-baylibre: new failure (last pass: next-20200213)
+          sun8i-h3-libretech-all-h3-cc:
+              lab-baylibre: new failure (last pass: next-20200213)
+
     omap2plus_defconfig:
         gcc-8:
           omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: v5.6-rc1-279-g2e409d666=
-4fd)
+              lab-baylibre: new failure (last pass: next-20200214)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: new failure (last pass: next-20200214)
 
     sunxi_defconfig:
         gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: failing since 3 days (last pass: v5.6-r=
-c1-279-g2e409d6664fd - first fail: v5.6-rc1-311-ge58961fba99f)
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: v5.6-rc1-279-g2e409d666=
-4fd)
+          sun7i-a20-cubieboard2:
+              lab-baylibre: failing since 3 days (last pass: next-20200212 =
+- first fail: next-20200214)
+              lab-clabbe: failing since 3 days (last pass: next-20200212 - =
+first fail: next-20200214)
+          sun7i-a20-olinuxino-lime2:
+              lab-baylibre: failing since 3 days (last pass: next-20200212 =
+- first fail: next-20200214)
+          sun8i-a33-olinuxino:
+              lab-clabbe: failing since 3 days (last pass: next-20200212 - =
+first fail: next-20200214)
+          sun8i-a83t-bananapi-m3:
+              lab-clabbe: failing since 3 days (last pass: next-20200211 - =
+first fail: next-20200214)
+          sun8i-h2-plus-libretech-all-h3-cc:
+              lab-baylibre: failing since 3 days (last pass: next-20200212 =
+- first fail: next-20200214)
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: failing since 3 days (last pass: next-20200207 =
+- first fail: next-20200214)
+          sun8i-h2-plus-orangepi-zero:
+              lab-baylibre: failing since 3 days (last pass: next-20200212 =
+- first fail: next-20200214)
+          sun8i-h3-orangepi-pc:
+              lab-clabbe: failing since 3 days (last pass: next-20200212 - =
+first fail: next-20200214)
 
 arm64:
 
     defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
         gcc-8:
           meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc1-311-ge=
-58961fba99f)
+              lab-baylibre-seattle: new failure (last pass: next-20200211)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200213)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: next-20200213)
+          meson-gxl-s905x-libretech-cc:
+              lab-clabbe: new failure (last pass: next-20200213)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: next-20200213)
+          rk3399-puma-haikou:
+              lab-theobroma-systems: new failure (last pass: next-20200213)
+          sun50i-a64-bananapi-m64:
+              lab-clabbe: new failure (last pass: next-20200213)
 
 Boot Failures Detected:
 
 arm:
     sunxi_defconfig:
         gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
+            sun7i-a20-cubieboard2: 2 failed labs
+            sun7i-a20-olinuxino-lime2: 1 failed lab
+            sun8i-a33-olinuxino: 1 failed lab
+            sun8i-a83t-bananapi-m3: 1 failed lab
+            sun8i-h2-plus-libretech-all-h3-cc: 1 failed lab
+            sun8i-h2-plus-orangepi-r1: 1 failed lab
+            sun8i-h2-plus-orangepi-zero: 1 failed lab
+            sun8i-h3-libretech-all-h3-cc: 1 failed lab
+            sun8i-h3-orangepi-pc: 1 failed lab
 
     sama5_defconfig:
         gcc-8:
             at91-sama5d4_xplained: 1 failed lab
 
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            sun7i-a20-cubieboard2: 2 failed labs
+            sun7i-a20-olinuxino-lime2: 1 failed lab
+            sun8i-a33-olinuxino: 1 failed lab
+            sun8i-a83t-bananapi-m3: 1 failed lab
+            sun8i-h2-plus-libretech-all-h3-cc: 1 failed lab
+            sun8i-h2-plus-orangepi-r1: 1 failed lab
+            sun8i-h2-plus-orangepi-zero: 1 failed lab
+            sun8i-h3-libretech-all-h3-cc: 1 failed lab
+
     omap2plus_defconfig:
         gcc-8:
             omap3-beagle-xm: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            sun7i-a20-cubieboard2: 2 failed labs
+            sun7i-a20-olinuxino-lime2: 1 failed lab
+            sun8i-a33-olinuxino: 1 failed lab
+            sun8i-a83t-bananapi-m3: 1 failed lab
+            sun8i-h2-plus-libretech-all-h3-cc: 1 failed lab
+            sun8i-h2-plus-orangepi-r1: 1 failed lab
+            sun8i-h2-plus-orangepi-zero: 1 failed lab
+            sun8i-h3-libretech-all-h3-cc: 1 failed lab
+            sun8i-h3-orangepi-pc: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+            meson-gxm-q200: 1 failed lab
+            rk3399-puma-haikou: 1 failed lab
+
+    defconfig:
+        clang-8:
+            msm8998-mtp: 1 failed lab
 
 Offline Platforms:
 
 arm:
 
-    qcom_defconfig:
+    imx_v6_v7_defconfig:
         gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
+            imx6dl-wandboard_dual: 1 offline lab
 
     multi_v7_defconfig:
         gcc-8
@@ -134,6 +258,10 @@ arm:
             qcom-apq8064-cm-qs600: 1 offline lab
 
 arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
 
     defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
         gcc-8

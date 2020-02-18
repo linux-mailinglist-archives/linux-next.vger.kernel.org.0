@@ -2,164 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F526162816
-	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2020 15:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 985A4162916
+	for <lists+linux-next@lfdr.de>; Tue, 18 Feb 2020 16:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgBRO00 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 18 Feb 2020 09:26:26 -0500
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:40090 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726442AbgBRO00 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 18 Feb 2020 09:26:26 -0500
-Received: by mail-wr1-f67.google.com with SMTP id t3so24163077wru.7
-        for <linux-next@vger.kernel.org>; Tue, 18 Feb 2020 06:26:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=REpDYrMDr1F8l6vs7u4Dy3bhPqgDpY15dwPo3RCkxOA=;
-        b=l3uUh39E+k8Bd7V2/BBVQW+50SGgmn15Wl6K0skzQX5C3WI8OIdNsihry7N0QJwXsA
-         /2JsQsIyxGukPDQxKiMp1FmH0dIPykbQmoF7mriG6tchWYktyIv4I0oZKI3sKLVgIU0F
-         yPcyatxq39TcRs6HVVxiWVHNm/UwQ+bwF1beOhFTlayYPk7r+T3FsWYs5vEJSBpQrzL+
-         EQ5TpYTszAIGCYo3pUUg+XbVr89mG1rJDFn/eHocEPuvlEYFNle0oYORX0g/xdF+HHUb
-         6yJMCpWol5tIIgoiLZ0qiSY8qf85X9cT4ibEUvdn/hg2an8YCCr8HsteFUVubgz/aT38
-         mVHQ==
-X-Gm-Message-State: APjAAAWsfGo+HyRlBxNopQfS/ypCSAQxiTQVLru3mUR81JbtGnBxYTsH
-        aGkG82oY1BsiuxP1bAcGF0Q=
-X-Google-Smtp-Source: APXvYqwv4AJP+4dReH+edYE8YWBQ8CSzircAin9vIvKPRhcT3a36e/EGZ5x7r18KGe2vccRwcQ52fw==
-X-Received: by 2002:a05:6000:12c7:: with SMTP id l7mr27941784wrx.136.1582035982059;
-        Tue, 18 Feb 2020 06:26:22 -0800 (PST)
-Received: from localhost (prg-ext-pat.suse.com. [213.151.95.130])
-        by smtp.gmail.com with ESMTPSA id c13sm6557632wrn.46.2020.02.18.06.26.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2020 06:26:21 -0800 (PST)
-Date:   Tue, 18 Feb 2020 15:26:20 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
+        id S1726817AbgBRPLW convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 18 Feb 2020 10:11:22 -0500
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26884 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726692AbgBRPLW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 18 Feb 2020 10:11:22 -0500
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01IEtNsC122203
+        for <linux-next@vger.kernel.org>; Tue, 18 Feb 2020 10:11:20 -0500
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 2y6dkxqseg-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Tue, 18 Feb 2020 10:11:20 -0500
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <sachinp@linux.vnet.ibm.com>;
+        Tue, 18 Feb 2020 15:11:17 -0000
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (9.149.109.198)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Tue, 18 Feb 2020 15:11:15 -0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01IFBEEF33423404
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 18 Feb 2020 15:11:14 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14285A406A;
+        Tue, 18 Feb 2020 15:11:14 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F272A4062;
+        Tue, 18 Feb 2020 15:11:13 +0000 (GMT)
+Received: from [9.102.1.5] (unknown [9.102.1.5])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue, 18 Feb 2020 15:11:12 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20200218142620.GF4151@dhcp22.suse.cz>
+Date:   Tue, 18 Feb 2020 20:41:12 +0530
 Cc:     Kirill Tkhai <ktkhai@virtuozzo.com>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         linuxppc-dev@lists.ozlabs.org
-Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
-Message-ID: <20200218142620.GF4151@dhcp22.suse.cz>
+Content-Transfer-Encoding: 8BIT
 References: <3381CD91-AB3D-4773-BA04-E7A072A63968@linux.vnet.ibm.com>
  <cf6be5f5-4bbc-0d34-fb64-33fd37bc48d9@virtuozzo.com>
  <0ba2a3c6-6593-2cee-1cef-983cd75f920f@virtuozzo.com>
  <F5A68B0C-AFDE-4C45-B0F3-12A5154204E6@linux.vnet.ibm.com>
  <20200218115525.GD4151@dhcp22.suse.cz>
  <D6F45EDD-9F2E-4593-B630-55E5BD7DE915@linux.vnet.ibm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <D6F45EDD-9F2E-4593-B630-55E5BD7DE915@linux.vnet.ibm.com>
+ <20200218142620.GF4151@dhcp22.suse.cz>
+To:     Michal Hocko <mhocko@kernel.org>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-TM-AS-GCONF: 00
+x-cbid: 20021815-0008-0000-0000-000003542747
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20021815-0009-0000-0000-00004A7530F6
+Message-Id: <35EE65CF-40E3-4870-AEBC-D326977176DA@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-02-18_02:2020-02-17,2020-02-18 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ adultscore=0 priorityscore=1501 mlxlogscore=635 suspectscore=2
+ malwarescore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2002180117
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue 18-02-20 19:30:33, Sachin Sant wrote:
-> 
-> 
-> > On 18-Feb-2020, at 5:25 PM, Michal Hocko <mhocko@kernel.org> wrote:
-> > 
-> > On Tue 18-02-20 17:10:47, Sachin Sant wrote:
-> >> 
-> >>>> could you please test your boot with original patch from here:
-> >>>> 
-> >>>> https://patchwork.kernel.org/patch/11360007/
-> >>> 
-> >>> After you tried the above patch instead of the problem patch,
-> >>> do one more test and apply the below on current linux-next.
-> >>> Please, say which of the patches makes your kernel bootable again.
-> >>> 
-> >>> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> >>> index 63bb6a2aab81..7b9b48dcbc60 100644
-> >>> --- a/mm/memcontrol.c
-> >>> +++ b/mm/memcontrol.c
-> >>> @@ -334,7 +334,7 @@ static int memcg_expand_one_shrinker_map(struct mem_cgroup *memcg,
-> >>> 		if (!old)
-> >>> 			return 0;
-> >>> 
-> >>> -		new = kvmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
-> >>> +		new = kmalloc_node(sizeof(*new) + size, GFP_KERNEL, nid);
-> >>> 		if (!new)
-> >>> 			return -ENOMEM;
-> >>> 
-> >>> @@ -378,7 +378,7 @@ static int memcg_alloc_shrinker_maps(struct mem_cgroup *memcg)
-> >>> 	mutex_lock(&memcg_shrinker_map_mutex);
-> >>> 	size = memcg_shrinker_map_size;
-> >>> 	for_each_node(nid) {
-> >>> -		map = kvzalloc_node(sizeof(*map) + size, GFP_KERNEL, nid);
-> >>> +		map = kzalloc_node(sizeof(*map) + size, GFP_KERNEL, nid);
-> >>> 		if (!map) {
-> >>> 			memcg_free_shrinker_maps(memcg);
-> >>> 			ret = -ENOMEM;
-> >> 
-> >> With this incremental patch applied on top of current linux-next, machine fails to boot
-> > 
-> > Your calltrace points to a standard system call path. I do not see any
-> > reason why that commit should cause any problems. Do you see the
-> > same when applying the patch you managed to bisect to on top of Linus
-> > tree? Just to rule out any other potential problems in linux-next?
-> 
-> Yes, I can recreate the same problem with the patch applied on top of
-> 5.6.0-rc2. 
 
-And just to make sure. This was with http://lkml.kernel.org/r/fff0e636-4c36-ed10-281c-8cdb0687c839@virtuozzo.com
-right?
-
-If yes, is it possible that the specific node is somehow crippled (e.g.
-some nodes don't have any memory and thus the allocator blows up)? In
-other words what is the numa topology? (numactl -H)
-
-> CONFIG_SLUB is enabled in my case. I have attached the .config.
-> The LPAR has 34GB of memory allocated.
+>> Yes, I can recreate the same problem with the patch applied on top of
+>> 5.6.0-rc2. 
 > 
-> [    8.766078] BUG: Kernel NULL pointer dereference on read at 0x000073b0
-> [    8.766083] Faulting instruction address: 0xc0000000003d38a4
-> [    8.766089] Oops: Kernel access of bad area, sig: 11 [#1]
-> [    8.766093] LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-> [    8.766098] Modules linked in:
-> [    8.766103] CPU: 12 PID: 1 Comm: systemd Not tainted 5.6.0-rc2-autotest+ #2
-> [    8.766107] NIP:  c0000000003d38a4 LR: c0000000003d3e44 CTR: 0000000000000000
-> [    8.766113] REGS: c0000008b37836e0 TRAP: 0300   Not tainted  (5.6.0-rc2-autotest+)
-> [    8.766118] MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 24004844  XER: 00000000
-> [    8.766125] CFAR: c00000000000dec4 DAR: 00000000000073b0 DSISR: 40000000 IRQMASK: 1 
-> [    8.766125] GPR00: c0000000003d3e44 c0000008b3783970 c00000000155d500 c0000008b301f500 
-> [    8.766125] GPR04: 0000000000000dc0 0000000000000002 c0000000003443f8 c0000008bac98620 
-> [    8.766125] GPR08: 00000008b9bf0000 0000000000000001 0000000000000000 0000000000000000 
-> [    8.766125] GPR12: 0000000024004844 c00000001ec5d200 0000000000000000 0000000000000000 
-> [    8.766125] GPR16: c000000007be2048 c000000001595818 c000000001750c98 0000000000000002 
-> [    8.766125] GPR20: c000000001750ca8 c000000001624470 0000000fffffffe0 5deadbeef0000122 
-> [    8.766125] GPR24: 0000000000000001 0000000000000dc0 0000000000000002 c0000000003443f8 
-> [    8.766125] GPR28: c0000008b301f500 c0000008bac98620 0000000000000000 c00c000002286fc0 
-> [    8.766172] NIP [c0000000003d38a4] ___slab_alloc+0x1f4/0x760
-> [    8.766177] LR [c0000000003d3e44] __slab_alloc+0x34/0x60
-> [    8.766181] Call Trace:
-> [    8.766184] [c0000008b3783970] [c0000000003d39e4] ___slab_alloc+0x334/0x760 (unreliable)
-> [    8.766191] [c0000008b3783a50] [c0000000003d3e44] __slab_alloc+0x34/0x60
-> [    8.766196] [c0000008b3783a80] [c0000000003d5250] __kmalloc_node+0x110/0x490
-> [    8.766203] [c0000008b3783b00] [c0000000003443f8] kvmalloc_node+0x58/0x110
-> [    8.766208] [c0000008b3783b40] [c0000000003fcf58] mem_cgroup_css_online+0x108/0x270
-> [    8.766215] [c0000008b3783ba0] [c000000000236078] online_css+0x48/0xd0
-> [    8.766220] [c0000008b3783bd0] [c00000000023eebc] cgroup_apply_control_enable+0x2ec/0x4d0
-> [    8.766226] [c0000008b3783cb0] [c000000000242728] cgroup_mkdir+0x228/0x5f0
-> [    8.766232] [c0000008b3783d20] [c00000000051ab48] kernfs_iop_mkdir+0xb8/0x170
-> [    8.766238] [c0000008b3783d50] [c00000000043a7c0] vfs_mkdir+0x110/0x230
-> [    8.766243] [c0000008b3783da0] [c00000000043e8a0] do_mkdirat+0xb0/0x1a0
-> [    8.766249] [c0000008b3783e20] [c00000000000b278] system_call+0x5c/0x68
-> [    8.766253] Instruction dump:
-> [    8.766257] 7c421378 e95f0000 714a0001 4082fff0 4bffff64 60000000 60000000 faa10088 
-> [    8.766264] 3ea2000c 3ab56f70 7b4a1f24 7d55502a <e94a73b0> 2faa0000 409e0394 3d02002a 
-> [    8.766271] ---[ end trace d651c32e3d9219fb ]---
-> [    8.768347] 
-> [    9.768359] Kernel panic - not syncing: Fatal exception
+> And just to make sure. This was with http://lkml.kernel.org/r/fff0e636-4c36-ed10-281c-8cdb0687c839@virtuozzo.com
+> right?
 > 
-> Thanks
-> -Sachin
+Yes, the same patch.
+
+> If yes, is it possible that the specific node is somehow crippled (e.g.
+> some nodes don't have any memory and thus the allocator blows up)? In
+> other words what is the numa topology? (numactl -H)
 > 
 
+Here is the o/p of numactl
 
+# numactl -H
+available: 2 nodes (0-1)
+node 0 cpus:
+node 0 size: 0 MB
+node 0 free: 0 MB
+node 1 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
+node 1 size: 35247 MB
+node 1 free: 30907 MB
+node distances:
+node   0   1 
+  0:  10  40 
+  1:  40  10 
+# 
 
--- 
-Michal Hocko
-SUSE Labs
+Thanks
+-Sachin

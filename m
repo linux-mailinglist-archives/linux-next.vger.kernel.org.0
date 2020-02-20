@@ -2,190 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CFFA4166AD4
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 00:12:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF9A166ADC
+	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 00:18:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727135AbgBTXMk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 20 Feb 2020 18:12:40 -0500
-Received: from ozlabs.org ([203.11.71.1]:38461 "EHLO ozlabs.org"
+        id S1729258AbgBTXSs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 20 Feb 2020 18:18:48 -0500
+Received: from ozlabs.org ([203.11.71.1]:39979 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729027AbgBTXMk (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 20 Feb 2020 18:12:40 -0500
+        id S1727135AbgBTXSs (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 20 Feb 2020 18:18:48 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Nr382l3Sz9sPk;
-        Fri, 21 Feb 2020 10:12:36 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48NrBG4yv9z9sRh;
+        Fri, 21 Feb 2020 10:18:46 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582240356;
-        bh=9q6mRNIp03dcqTokBVM+57+us+Lfs23/8GR9JHEgJnI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TdDjBgqCXTJ+Q4VMJ95puLVMlZFFgOjsIMfbnW2+V2udyMnmoLqhuiq9wnXdla900
-         xAU5WkUQU9cJpCehqNaKUK1s3MiaapJYz2nNake0RUtR9FFTQaePylNynrzCJhLYfa
-         os21j+z89s87vSZjjjDzq2z+2tB9pXds/xAktfWSYpUOdQ5IRryaV5Co6XfJkoPLv7
-         +K0c3iOJDmuOnIagX7re0Nd46pSNuadcn7RYRFAAsHm5PgEfwhBhd1vU7WxHULGYTg
-         t70mGoHTpf+PpKfSK+fXfod2VCAps1mxh24nh8YNgm0zYeBWazAd5boRIK5DbT8feV
-         wTeFUaRSG9mKw==
-Date:   Fri, 21 Feb 2020 10:12:35 +1100
+        s=201702; t=1582240727;
+        bh=l9UM+zCUkLs/4YBcjYo+To2tyvruDnuXxmfULpRo/nc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ph/K03WW88ta7deHSfNMWrMWAY2i0/4+eSc/7QB5c6RNdMvfsygVVQUdFbXejRlLy
+         cZKoka5PT4lQXU/wSZNNkgUG4ic3pEMcMazmdIIZDrEX70jTqfX32nHtUR9hFhg0rV
+         r4BH0vhOKuiwsbVFPYAZaYEHa4VKijg5HLShb84Ikj4tkIAGQ3Frz3r5ibHp3AJlyo
+         UM2CAMa6XZ+D64/e5GbO5bVA12c37KVOThfHcDa9nwNaOetZJ3s2t+9nnYm78P8DvO
+         qOVNpYLEaKJzc12HDfzuXVLSqg/w3oml5XDMtAVgjMj6XEkHs/wRA8ZP/Q84dU0Fi1
+         FSVOco/62GyKw==
+Date:   Fri, 21 Feb 2020 10:18:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Arjun Roy <arjunroy@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brett Creeley <brett.creeley@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200221101235.3db4fc56@canb.auug.org.au>
+        David Miller <davem@davemloft.net>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+Message-ID: <20200221101845.21c0c8c5@canb.auug.org.au>
+In-Reply-To: <CAOFY-A3q_pmtHKAoOJdbB09wy=dxs9SdpXjCsU1wBxU5EDHVmw@mail.gmail.com>
+References: <20200217145711.4af495a3@canb.auug.org.au>
+        <CAOFY-A1nfPjf3EcQB6KiEifbFR+aUtdSgK=CHGt_k3ziSG6T_Q@mail.gmail.com>
+        <CAOFY-A3q_pmtHKAoOJdbB09wy=dxs9SdpXjCsU1wBxU5EDHVmw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8kFVcoFSaXg35pzhBJbQ1WN";
+Content-Type: multipart/signed; boundary="Sig_/WlSQA3zZeWd/av48Z2WLf9P";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8kFVcoFSaXg35pzhBJbQ1WN
+--Sig_/WlSQA3zZeWd/av48Z2WLf9P
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+On Sun, 16 Feb 2020 22:45:35 -0800 Arjun Roy <arjunroy@google.com> wrote:
+>
+> On Sun, Feb 16, 2020 at 8:12 PM Arjun Roy <arjunroy@google.com> wrote:
+> >
+> > On Sun, Feb 16, 2020 at 7:57 PM Stephen Rothwell <sfr@canb.auug.org.au>=
+ wrote: =20
+> > >
+> > > After merging the akpm tree, today's linux-next build (sparc64 defcon=
+fig)
+> > > failed like this:
+> > >
+> > > mm/memory.c: In function 'insert_pages':
+> > > mm/memory.c:1523:56: error: macro "pte_index" requires 2 arguments, b=
+ut only 1 given
+> > >    remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
+> > >                                                         ^
+> > >
+> > > Caused by commit
+> > >
+> > >   366142f0b000 ("mm/memory.c: add vm_insert_pages()")
+> > >
+> > > This is the first use of pte_index() outside arch specific code and t=
+he
+> > > sparc64 version of pte_index() nas an extra argument.
+> >
+> > Looks like this happens for sparc, and also metag. Other platforms
+> > just take the addr parameter based on a quick search.
+>=20
+> And actually I guess there's no metag anyways now.
+> Looking further, then, it looks like in every non-sparc pte_index() is
+> an actual numerical index, while on sparc it goes a step further to
+> yield a pte_t *.
+> As far as I can tell, the sparc incarnation of this is only used by
+> the pte_offset_(kernel/map) macros.
+>=20
+> So I think a possibly sane way to fix this would be:
+> 1. Define pte_index() to be a numerical index, like the other architectur=
+es,
+> 2. Define something like pte_entry() that uses pte_index(), and
+> 3. Have pte_offset_(kernel/map) be defined as pte_entry() instead.
+>=20
+> Then pte_index would be operating on just an address for all
+> platforms, and the reverted patchset would work without any changes.
+>=20
+> If this sounds acceptable, I can send a patch.
+>=20
+> > > I have reverted these commits for today:
+> > >
+> > >   219ae14a9686 ("net-zerocopy-use-vm_insert_pages-for-tcp-rcv-zerocop=
+y-fix")
+> > >   cb912fdf96bf ("net-zerocopy: use vm_insert_pages() for tcp rcv zero=
+copy")
+> > >   72c684430b94 ("add missing page_count() check to vm_insert_pages().=
+")
+> > >   dbd9553775f3 ("mm-add-vm_insert_pages-fix")
+> > >   366142f0b000 ("mm/memory.c: add vm_insert_pages()")
+> > > =20
+> >
+> > In terms of fixing this; passing in an appropriate dir parameter is
+> > not really a problem, but what is concerning that it seems messy to
+> > have a per-platform ifdef to pass it either two arguments or one in
+> > this case. But it seems like either that would be one way to fix it,
+> > or having some arch method across all arches that takes two arguments
+> > (and ignores one of them for most arches).
+> >
+> > Is there a general preference for the right way forward, in this case?
 
-  drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-
-between commit:
-
-  c54d209c78b8 ("ice: Wait for VF to be reset/ready before configuration")
-
-from the net tree and commits:
-
-  b093841f9ac9 ("ice: Refactor port vlan configuration for the VF")
-  61c9ce86a6f5 ("ice: Fix Port VLAN priority bits")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Has there been any progress with this?  I am still reverting the above
+commits, so they are not getting any linux-next testing ...
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-index 75c70d432c72,a21f9d2edbbb..000000000000
---- a/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-+++ b/drivers/net/ethernet/intel/ice/ice_virtchnl_pf.c
-@@@ -2738,7 -2786,8 +2828,8 @@@ ice_set_vf_port_vlan(struct net_device=20
-  	struct ice_vsi *vsi;
-  	struct device *dev;
-  	struct ice_vf *vf;
-+ 	u16 vlanprio;
- -	int ret =3D 0;
- +	int ret;
- =20
-  	dev =3D ice_pf_to_dev(pf);
-  	if (ice_validate_vf_id(pf, vf_id))
-@@@ -2756,47 -2806,58 +2848,59 @@@
- =20
-  	vf =3D &pf->vf[vf_id];
-  	vsi =3D pf->vsi[vf->lan_vsi_idx];
- -	if (ice_check_vf_init(pf, vf))
- -		return -EBUSY;
- +
- +	ret =3D ice_check_vf_ready_for_cfg(vf);
- +	if (ret)
- +		return ret;
- =20
-- 	if (le16_to_cpu(vsi->info.pvid) =3D=3D vlanprio) {
-+ 	vlanprio =3D vlan_id | (qos << VLAN_PRIO_SHIFT);
-+=20
-+ 	if (vf->port_vlan_info =3D=3D vlanprio) {
-  		/* duplicate request, so just return success */
-  		dev_dbg(dev, "Duplicate pvid %d request\n", vlanprio);
- -		return ret;
- +		return 0;
-  	}
- =20
-- 	/* If PVID, then remove all filters on the old VLAN */
-- 	if (vsi->info.pvid)
-- 		ice_vsi_kill_vlan(vsi, (le16_to_cpu(vsi->info.pvid) &
-- 				  VLAN_VID_MASK));
--=20
-  	if (vlan_id || qos) {
-+ 		/* remove VLAN 0 filter set by default when transitioning from
-+ 		 * no port VLAN to a port VLAN. No change to old port VLAN on
-+ 		 * failure.
-+ 		 */
-+ 		ret =3D ice_vsi_kill_vlan(vsi, 0);
-+ 		if (ret)
-+ 			return ret;
-  		ret =3D ice_vsi_manage_pvid(vsi, vlanprio, true);
-  		if (ret)
-  			return ret;
-  	} else {
-- 		ice_vsi_manage_pvid(vsi, 0, false);
-- 		vsi->info.pvid =3D 0;
-+ 		/* add VLAN 0 filter back when transitioning from port VLAN to
-+ 		 * no port VLAN. No change to old port VLAN on failure.
-+ 		 */
-+ 		ret =3D ice_vsi_add_vlan(vsi, 0);
-+ 		if (ret)
-+ 			return ret;
-+ 		ret =3D ice_vsi_manage_pvid(vsi, 0, false);
-+ 		if (ret)
- -			goto error_manage_pvid;
-++			return ret;
-  	}
- =20
-  	if (vlan_id) {
-  		dev_info(dev, "Setting VLAN %d, QoS 0x%x on VF %d\n",
-  			 vlan_id, qos, vf_id);
- =20
-- 		/* add new VLAN filter for each MAC */
-+ 		/* add VLAN filter for the port VLAN */
-  		ret =3D ice_vsi_add_vlan(vsi, vlan_id);
-  		if (ret)
- -			goto error_manage_pvid;
- +			return ret;
-  	}
-+ 	/* remove old port VLAN filter with valid VLAN ID or QoS fields */
-+ 	if (vf->port_vlan_info)
-+ 		ice_vsi_kill_vlan(vsi, vf->port_vlan_info & VLAN_VID_MASK);
- =20
-- 	/* The Port VLAN needs to be saved across resets the same as the
-- 	 * default LAN MAC address.
-- 	 */
-- 	vf->port_vlan_id =3D le16_to_cpu(vsi->info.pvid);
-+ 	/* keep port VLAN information persistent on resets */
-+ 	vf->port_vlan_info =3D le16_to_cpu(vsi->info.pvid);
- =20
- -error_manage_pvid:
- -	return ret;
- +	return 0;
-  }
- =20
-  /**
-
---Sig_/8kFVcoFSaXg35pzhBJbQ1WN
+--Sig_/WlSQA3zZeWd/av48Z2WLf9P
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PEmMACgkQAVBC80lX
-0Gzoqwf9FP4eMWnPBiWV08yZ3C7pb8dz5+Azf24h1tq8kFFCrDYcB/F7H3QDEUFk
-gKie/4sunhaV93GKs9nQwJLwV0IQU1CbtZAdIj4vqK/ERzr8MwxgBNFA05PFjiUm
-51UkjkMNDBSBxwsDXpFMpZS4VJw8EvVAmT3cC9VrlwU1wnJQiPmFSIFq7I9ZD//k
-BPqbPCGlDI0g4hBN/DO10vfsFM382UVlrqEy9jj8xgfO3ccmkaG+ZyGZ8pN8kMKf
-ad2Wq5oRvtZ75gdM9AAvCw7hCer7qrOHj46tjUBcJOLo/S5WqWu7XdPAGwsnCPSX
-mubFsy0nZRZ1DZwR+KFCdohrAUpyog==
-=OU+m
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PE9UACgkQAVBC80lX
+0GyOYggAjTGf7PaO6OpUQE/582qJnBS/Bp2yGI8K1o335IWQtnBApGbPvy/v/k1e
+BupKbY4mBVQhC0fZnLoNwBoZ2iDnjWwkQVYnNyQFohUv5xoDjnoLBJp1BSbpnlLA
+wkWRAG20ZK7NK+r5rKv6kNt1PWyRheBucfFUYabPrBuvHqSm7z5RXKjEWSw4bTIS
+VIEfO17i/5iNt2h+b1+BNcVq5cr2r/6LZYadTWS+4j0yP2mnRZKdvAsTCq8Nn6+7
+8cRSOoONNfsHShRnhHzKf+rOHCbGSgvm6rJEA2bWXLzDan4DqpQF/jD2jfJ982Mx
+KvP2uxCsDiv9f3eEGBpMuCsirLTfag==
+=THYJ
 -----END PGP SIGNATURE-----
 
---Sig_/8kFVcoFSaXg35pzhBJbQ1WN--
+--Sig_/WlSQA3zZeWd/av48Z2WLf9P--

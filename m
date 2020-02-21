@@ -2,166 +2,67 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2775916765C
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 09:37:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E95F167933
+	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 10:19:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733210AbgBUIcq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Feb 2020 03:32:46 -0500
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:52060 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732763AbgBUIcp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 21 Feb 2020 03:32:45 -0500
-Received: by mail-wm1-f66.google.com with SMTP id t23so744320wmi.1
-        for <linux-next@vger.kernel.org>; Fri, 21 Feb 2020 00:32:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
-         :mime-version:in-reply-to;
-        bh=MFBkOBl3vMPcTP2LxPfANNNiV1IdpbUuNOmkpwgugEg=;
-        b=lq+K9+sq+I82qYKV7mW5DELtZGxd44h5cJVhMkvjZh+iTvaFzCZEz9yw2flaGZzz3K
-         V746KiDhrKvJxywLale/5eDfpiHLKjqqIwMHo5mZwPnde0GVNrnOtfwvfYb9mXxW7avX
-         KksvTvbCAfxI5vEJE3VgsSUvbye3xi//TnPwkBrFv7fs010aYl9XZ6rsJGT1SbPyWzJE
-         vBuSew4qUVaD0xrysr+nPLWyUzF+vtUCzNGgDxEuvsZ79dSLBTsDN+rcpFCBR4nGI9Jx
-         d2Tvk2DP+Pmfc6rOHHK2iZQ7r06fQA6jR4qODUZhrRrz5nKqUdMxLrmfkYyIdPONRmqr
-         Gsmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=MFBkOBl3vMPcTP2LxPfANNNiV1IdpbUuNOmkpwgugEg=;
-        b=GWYbMaAnb1agcpNkzcPL4YnF1ohofhhgn8hkOtZlbQ2T3t1Z/r1uzh1qyomRFjZhpM
-         wZ9WqzD+siOZBcFWXkjarBqpazaslJhFs30F5aRs28Thkm6Q3rp+avAM3kNwJxo7zyIy
-         v4zgWAh3prgwS56PPOGX35sgA9h3MTpjjlFy+a+/L0XI+5LqFmAGU1P5b9VoMly0t+Mx
-         M4rh+tVcNsQYbg1VnyiIQAJlHIdu2V5oSnlUsz6Jrfa/fHmUZNDhJqhp28a92Ctd0BWb
-         CoYnOqBURo4h/o7gRmMVljhtDDv4J/iVMdStkCIc+eG3LuctEzX3OCgZihJauravQTIB
-         8EeA==
-X-Gm-Message-State: APjAAAUogpvX4f7UNt0T3hH9x9omUJ700vTxW3pfVK5BJzD+uOvDdpKM
-        seykez24CCclYLmb9MuX9isu2g==
-X-Google-Smtp-Source: APXvYqwdsTK/MbgxLKcjdvmMqTtyGiM4cnI3k3+XS7mf5Nv/XXQtOnt4JfSnbOCyEadACZuV7YfBvw==
-X-Received: by 2002:a1c:2b44:: with SMTP id r65mr2263549wmr.72.1582273963138;
-        Fri, 21 Feb 2020 00:32:43 -0800 (PST)
-Received: from ?IPv6:2a01:e34:ed2f:f020:2dfb:b5ce:9043:4adb? ([2a01:e34:ed2f:f020:2dfb:b5ce:9043:4adb])
-        by smtp.googlemail.com with ESMTPSA id a62sm2853052wmh.33.2020.02.21.00.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2020 00:32:42 -0800 (PST)
-Subject: Re: linux-next: please clean up the clockevents tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200221113714.7293f125@canb.auug.org.au>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Autocrypt: addr=daniel.lezcano@linaro.org; prefer-encrypt=mutual; keydata=
- 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
-Message-ID: <501d1b8c-ae24-bdfd-e56f-7f5e907a2083@linaro.org>
-Date:   Fri, 21 Feb 2020 09:32:40 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1727015AbgBUJTu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Feb 2020 04:19:50 -0500
+Received: from sonic306-20.consmr.mail.ne1.yahoo.com ([66.163.189.82]:39813
+        "EHLO sonic306-20.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726984AbgBUJTu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 21 Feb 2020 04:19:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1582276789; bh=5gcjSyntdQ2SQ2GwLs8w0yMxWPFH8Sibsmrdid2aSoQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=SBcLFosmhYCMk+KrbvFxKB4psZmxX9Z2ZnqSPn2bXSR/WVel7VkRA4aU3kzTUA0Jey2C4PH6eUvMmU75tGKnpF6cedM/cSl16uzqaVTtmpvObA5bZ3gRE6noDmroHHnLkw3pvwkr18D/eHwXisuyojqX0VCIbNQnWNokGQJO+9ue7V01RBH3mzXlACnhoYu/B34BG+uqLRdcOLp0wHIaEv4No2kwruws9LFDNfFr7atfO6x26IHlccGKXXvSpS9kj+7I2DiMM/ikxzqgLCN/BLC3H/oYkFgaxxpDpgmU3sH6VzqjOIebnme/oY46mo9TJ58mx/rFG9QmyPbiLokBpg==
+X-YMail-OSG: 5774msUVM1nIQe.lvPlz41T4KyVoj2PME7x8ChZHUBKW8X_FC0OcZTGWugxdoP3
+ ytO_e93qe4vODr2dHGnIyTGw7ayhAh_cLWuz5rcezAMRF9TLnjcoTZIRc6Uciwqzje4oWNVi2oze
+ AA_Xq8EGY6ReznCAn_jhG.wpWGLUhI._i12gM1grjxJDJwXMuuBmnMxMQbNtZ6IV0MHRYxddkMWS
+ akFvwZmiLAXffFbTiXx9EiqRUG1XThzkOHSXFc_4nByi7SmcC3O8d16HqA5SXlv4fKhNrrzqJwPl
+ GIK_Rh8lQODkDsSP.hlhzLmeYoE0km3v4Mdjv7rfoinGXPwAzEIgnWN0NeYpnikvD4jUXC8vfcB1
+ DXC4.VbgPh6KWCE78cpKKMOch49mXicwwTCrpLe2.0Ey4QaZzTQICMN3KhfwWH30s0p.3viKB_Uy
+ Q1ZAwjk1D5XpUng.04LrhykvdQsrEcPODKvOx6XSdfaAkapP_La7ZpismnMbM7FxBG1yDOwPU9N5
+ nJGL7STQzhDpjXljxthGuQLrfXBcPSRKn7JgjA59XZ2biN5E7g_iB8TqRzCYhWcYreSYDFoLoLiE
+ NkZ3L23hwChUga5kBqU1xLuOwV8fumhUMQ7uNGrm8VNLwNp84Y9N1eGnncyQHBKCp1gyuKfN485.
+ oqkJd.dKPk4UqGtuCuP4pVGAKadoKdaX9xdRPtyKD6ehdRLZaXqeK0jkCrUjbiCNZRlKs7jcHC3.
+ HVACV0DqvxeaG1DmRx4df.eERXydnkpq37qtulWxeBDLVLmT1QFSgGxo2agMcS0JeDEDzzYPz3AF
+ pBKynn2ehd73kCCEAjrjZu.A0QMNqJBYj2RiM4aFb2qBtNJCbdfvzzLZo8mMwxaVjVdrJjZfEZmy
+ zWyIUvZlPj5M8L.L9WRLyHtT2.3m7Q9s0EKvHQK1c0srQpS.Io2G4p4KyyVpnxlGUMxJnQtTEotX
+ zcLF8d8hOtlrbURWjJVNFiiqKVbJBvEupbJvLfgGFV1xx1FAEwx_vqc_rIOzrbhHK0w8EVv.E6I5
+ O6rmzLCxMU2IVbmUFuLFGb2hEngvJcuhr8cguQHEo92SFUyhOkw0CcuRUTUNjyXGeCZ6.hnfrtYg
+ Bixc4uhksaQFN.OdRj_xa3BOyQxQo674HSwjA0Esq718VDzIalp8mkI41kX7MBc9nhVKc2mEnlnR
+ lFiAtXSo.Oj6kzVJcaPBCPzLp1tq4unFRkSm8H5wB_yuENlTnX9fktWVpiEEJsAo_MJo17.5O35m
+ .FAOauxHTtZeey4TOIkrXN9SiIQe2WV8qr0mS9_vs2tr2CZMmpruK_q4jIIVPO4dCttdnCMk-
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Fri, 21 Feb 2020 09:19:49 +0000
+Date:   Fri, 21 Feb 2020 09:19:46 +0000 (UTC)
+From:   Ayesha Coulibaly <missayeshawarlord@aol.com>
+Reply-To: aycl111@aol.com
+Message-ID: <142114973.6098855.1582276786850@mail.yahoo.com>
+Subject: =?UTF-8?Q?Hi=C2=A0dear=C2=A0,?=
 MIME-Version: 1.0
-In-Reply-To: <20200221113714.7293f125@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="wSSbaXgSqW4PXUUnEStSrR77zzH24rit8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+References: <142114973.6098855.1582276786850.ref@mail.yahoo.com>
+X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
+To:     unlisted-recipients:; (no To-header on input)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---wSSbaXgSqW4PXUUnEStSrR77zzH24rit8
-Content-Type: multipart/mixed; boundary="c2gGM3Lgf5aCP5z4G4XSt2A8z0baaFgxK"
-
---c2gGM3Lgf5aCP5z4G4XSt2A8z0baaFgxK
-Content-Type: text/plain; charset=UTF-8
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 21/02/2020 01:37, Stephen Rothwell wrote:
-> Hi Daniel,
->=20
-> All the commits in the clockevents tree
-> (git://git.linaro.org/people/daniel.lezcano/linux.git#timers/drivers/ne=
-xt)
-> seem to have been applied to other trees as different commits. Please
-> clean it up as it is starting to cause unnecessary conflicts.
-
-Done
-
-
---=20
- <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for A=
-RM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
 
 
---c2gGM3Lgf5aCP5z4G4XSt2A8z0baaFgxK--
+Hi=C2=A0dear=C2=A0,
 
---wSSbaXgSqW4PXUUnEStSrR77zzH24rit8
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+With=C2=A0warm=C2=A0heart,=C2=A0I=C2=A0offer=C2=A0my=C2=A0friendship=C2=A0a=
+nd=C2=A0greetings,=C2=A0I=C2=A0hope=C2=A0this=C2=A0message=C2=A0meet=C2=A0y=
+ou=C2=A0in=C2=A0good=C2=A0time.=C2=A0However,=C2=A0Mine=C2=A0names=C2=A0are=
+=C2=A0Ms.=C2=A0Ayesha=C2=A0Coulibaly.=C2=A0I=C2=A0am=C2=A024=C2=A0years=C2=
+=A0old=C2=A0female.=C2=A0I=C2=A0have=C2=A0sent=C2=A0you=C2=A0mail=C2=A0twic=
+e=C2=A0but=C2=A0you=C2=A0never=C2=A0replied=C2=A0any=C2=A0of=C2=A0them.=C2=
+=A0I=C2=A0humbly=C2=A0ask=C2=A0that=C2=A0you=C2=A0reply=C2=A0this=C2=A0mess=
+age,=C2=A0to=C2=A0enable=C2=A0me=C2=A0disclose=C2=A0the=C2=A0reason=C2=A0wh=
+ile=C2=A0I=C2=A0have=C2=A0been=C2=A0trying=C2=A0to=C2=A0reach=C2=A0out=C2=
+=A0to=C2=A0you.=C2=A0I=C2=A0do=C2=A0apologize=C2=A0for=C2=A0infringing=C2=
+=A0on=C2=A0your=C2=A0privacy.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYIAB0WIQRuKdf4M92Gi9vqihve5qtOL396pgUCXk+VqQAKCRDe5qtOL396
-prnpAQDNQo6Rj148yOA/foN6557qqsyVLJ2BPk0ZeEuXNXSGOQEAo2ZINVMAQ7WB
-CIvTq3B57lSeF0PqYckAFDXIttptoAk=
-=NkPM
------END PGP SIGNATURE-----
-
---wSSbaXgSqW4PXUUnEStSrR77zzH24rit8--
+greetings=C2=A0Ayesha=C2=A0Coulibaly.

@@ -2,98 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C94F2167ADD
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 11:35:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37F2167B86
+	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 12:11:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726989AbgBUKfS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Feb 2020 05:35:18 -0500
-Received: from mga07.intel.com ([134.134.136.100]:47673 "EHLO mga07.intel.com"
+        id S1726410AbgBULLX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Feb 2020 06:11:23 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59011 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726100AbgBUKfS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 21 Feb 2020 05:35:18 -0500
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Feb 2020 02:35:12 -0800
-X-IronPort-AV: E=Sophos;i="5.70,467,1574150400"; 
-   d="scan'208";a="229811346"
-Received: from jmiler-mobl.ger.corp.intel.com (HELO localhost) ([10.249.38.187])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Feb 2020 02:35:07 -0800
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
-        broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org,
-        intel-gfx <intel-gfx@lists.freedesktop.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: [Intel-gfx] mmotm 2020-02-19-19-51 uploaded (gpu/drm/i915/ + HDRTEST)
-In-Reply-To: <d8112767-4089-4c58-d7d3-2ce03139858a@infradead.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20200220035155.PempH%akpm@linux-foundation.org> <d8112767-4089-4c58-d7d3-2ce03139858a@infradead.org>
-Date:   Fri, 21 Feb 2020 12:35:13 +0200
-Message-ID: <874kvkz0ri.fsf@intel.com>
+        id S1726325AbgBULLX (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 21 Feb 2020 06:11:23 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48P80S1tlfz9sRG;
+        Fri, 21 Feb 2020 22:11:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582283480;
+        bh=8kb61WM1YPs0DETp0NgqxihFVRjLzn4BG1ZpL5dqpWs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cxJV+YHAe30x4Lwh+5YKtGtRqYYY3gbrb+UfedYbfXYcFI+NDAtfAwttifS0rylpo
+         liRAJFUryQn1UW5pCJ/2orsUCebJeaZj/euQcgbrK+hgfbZcxvGHt1CC/Pzs4kwwpg
+         wgz/CfFUgbfnfjgmSYdMHtgQQAUfYkkq25TBjIYDiv8v9jTA7xNbPef+MuORAvowZQ
+         Lm8ffLiRtPImnte15v4iHJjV1HfV86RT2mEki5GBNdiFw9K0V8Wfu109VBUtt3YRae
+         xdf7KHsph4batvIVTqACnYNIYggo+B1Fq2b5gLNM/DQaRCj9lu6N359l2nByOk3n4v
+         +hNoSW7Gow66w==
+Date:   Fri, 21 Feb 2020 22:11:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: please clean up the clockevents tree
+Message-ID: <20200221221103.02818754@canb.auug.org.au>
+In-Reply-To: <501d1b8c-ae24-bdfd-e56f-7f5e907a2083@linaro.org>
+References: <20200221113714.7293f125@canb.auug.org.au>
+        <501d1b8c-ae24-bdfd-e56f-7f5e907a2083@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: multipart/signed; boundary="Sig_/EO304nrXrFZHP2hr=1vmxsv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 20 Feb 2020, Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 2/19/20 7:51 PM, akpm@linux-foundation.org wrote:
->> The mm-of-the-moment snapshot 2020-02-19-19-51 has been uploaded to
->> 
->>    http://www.ozlabs.org/~akpm/mmotm/
->> 
->> mmotm-readme.txt says
->> 
->> README for mm-of-the-moment:
->> 
->> http://www.ozlabs.org/~akpm/mmotm/
->> 
->> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->> more than once a week.
->> 
+--Sig_/EO304nrXrFZHP2hr=1vmxsv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Daniel,
+
+On Fri, 21 Feb 2020 09:32:40 +0100 Daniel Lezcano <daniel.lezcano@linaro.or=
+g> wrote:
 >
-> on x86_64:
-> when GCOV is set/enabled:
->
->   HDRTEST drivers/gpu/drm/i915/display/intel_frontbuffer.h
-> /dev/null:1:0: error: cannot open /dev/null.gcno
->   HDRTEST drivers/gpu/drm/i915/display/intel_ddi.h
-> /dev/null:1:0: error: cannot open /dev/null.gcno
-> make[5]: *** [../drivers/gpu/drm/i915/Makefile:307: drivers/gpu/drm/i915/display/intel_ddi.hdrtest] Error 1
-> make[5]: *** Waiting for unfinished jobs....
-> make[5]: *** [../drivers/gpu/drm/i915/Makefile:307: drivers/gpu/drm/i915/display/intel_frontbuffer.hdrtest] Error 1
->
->
-> Full randconfig file is attached.
+> On 21/02/2020 01:37, Stephen Rothwell wrote:
+> >=20
+> > All the commits in the clockevents tree
+> > (git://git.linaro.org/people/daniel.lezcano/linux.git#timers/drivers/ne=
+xt)
+> > seem to have been applied to other trees as different commits. Please
+> > clean it up as it is starting to cause unnecessary conflicts. =20
+>=20
+> Done
 
-We're trying to hide that from the general population, only to be used
-by our developers and CI, with e.g. "depends on !COMPILE_TEST". Can't
-hide from randconfig it seems.
+Thanks.
+--=20
+Cheers,
+Stephen Rothwell
 
-Does the below patch help?
+--Sig_/EO304nrXrFZHP2hr=1vmxsv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-BR,
-Jani.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PuscACgkQAVBC80lX
+0GzLAggAlKHUvIdAcYvPZNRadcf/hgFZKnNpfbIA9oG0DxivJvY3OJDyXlDRmWlO
+mf/BBZxwVUHnvbdV+W0hqnU+eb3a3ubIxTUyBrb5OyeJbPomrgM4r6j2BNVd5xic
+V7ADqUcilbBZb40WjZwxjwyJOEm0lqtQ5DHaAz7EYkB43MUSBm/tkH87w/nU3CDJ
+gqhPzCxqwUP5OSNRwujmO9l2/1BmZkrTW/U7tBpnqgR6FD8lscMqYxwDLvTKpTnq
+rsXIhADpeNej8J37uO9wUczCgiawVSduitiBDHdd6znvv/1ppOqtkag7I6gX/Ao1
+OwGB0EtwBf09t8WKEtjWbe2J1GW0iQ==
+=XuNc
+-----END PGP SIGNATURE-----
 
-diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
-index b314d44ded5e..bc28c31c4f78 100644
---- a/drivers/gpu/drm/i915/Makefile
-+++ b/drivers/gpu/drm/i915/Makefile
-@@ -301,7 +301,7 @@ extra-$(CONFIG_DRM_I915_WERROR) += \
- 		$(shell cd $(srctree)/$(src) && find * -name '*.h')))
- 
- quiet_cmd_hdrtest = HDRTEST $(patsubst %.hdrtest,%.h,$@)
--      cmd_hdrtest = $(CC) $(c_flags) -S -o /dev/null -x c /dev/null -include $<; touch $@
-+      cmd_hdrtest = $(CC) $(filter-out $(CFLAGS_GCOV), $(c_flags)) -S -o /dev/null -x c /dev/null -include $<; touch $@
- 
- $(obj)/%.hdrtest: $(src)/%.h FORCE
- 	$(call if_changed_dep,hdrtest)
-
-
--- 
-Jani Nikula, Intel Open Source Graphics Center
+--Sig_/EO304nrXrFZHP2hr=1vmxsv--

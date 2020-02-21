@@ -2,87 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D37F2167B86
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 12:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC52B167C22
+	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 12:30:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726410AbgBULLX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Feb 2020 06:11:23 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:59011 "EHLO ozlabs.org"
+        id S1727053AbgBULaU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Feb 2020 06:30:20 -0500
+Received: from mx2.suse.de ([195.135.220.15]:53814 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726325AbgBULLX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 21 Feb 2020 06:11:23 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48P80S1tlfz9sRG;
-        Fri, 21 Feb 2020 22:11:20 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582283480;
-        bh=8kb61WM1YPs0DETp0NgqxihFVRjLzn4BG1ZpL5dqpWs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cxJV+YHAe30x4Lwh+5YKtGtRqYYY3gbrb+UfedYbfXYcFI+NDAtfAwttifS0rylpo
-         liRAJFUryQn1UW5pCJ/2orsUCebJeaZj/euQcgbrK+hgfbZcxvGHt1CC/Pzs4kwwpg
-         wgz/CfFUgbfnfjgmSYdMHtgQQAUfYkkq25TBjIYDiv8v9jTA7xNbPef+MuORAvowZQ
-         Lm8ffLiRtPImnte15v4iHJjV1HfV86RT2mEki5GBNdiFw9K0V8Wfu109VBUtt3YRae
-         xdf7KHsph4batvIVTqACnYNIYggo+B1Fq2b5gLNM/DQaRCj9lu6N359l2nByOk3n4v
-         +hNoSW7Gow66w==
-Date:   Fri, 21 Feb 2020 22:11:03 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: please clean up the clockevents tree
-Message-ID: <20200221221103.02818754@canb.auug.org.au>
-In-Reply-To: <501d1b8c-ae24-bdfd-e56f-7f5e907a2083@linaro.org>
-References: <20200221113714.7293f125@canb.auug.org.au>
-        <501d1b8c-ae24-bdfd-e56f-7f5e907a2083@linaro.org>
+        id S1727046AbgBULaU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 21 Feb 2020 06:30:20 -0500
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 05511AC66;
+        Fri, 21 Feb 2020 11:30:18 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id BF10DDA70E; Fri, 21 Feb 2020 12:30:00 +0100 (CET)
+Date:   Fri, 21 Feb 2020 12:30:00 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Sterba <dsterba@suse.cz>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nikolay Borisov <nborisov@suse.com>
+Subject: Re: linux-next: build failure after merge of the btrfs tree
+Message-ID: <20200221113000.GC2902@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+Mail-Followup-To: dsterba@suse.cz, Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Nikolay Borisov <nborisov@suse.com>
+References: <20200220092344.2a738574@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EO304nrXrFZHP2hr=1vmxsv";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200220092344.2a738574@canb.auug.org.au>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EO304nrXrFZHP2hr=1vmxsv
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 20, 2020 at 09:23:44AM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the btrfs tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> fs/btrfs/extent-tree.c: In function 'btrfs_alloc_logged_file_extent':
+> fs/btrfs/extent-tree.c:4425:20: error: passing argument 1 of 'btrfs_pin_extent' from incompatible pointer type [-Werror=incompatible-pointer-types]
+>  4425 |   btrfs_pin_extent(fs_info, ins->objectid, ins->offset, 1);
+>       |                    ^~~~~~~
+>       |                    |
+>       |                    struct btrfs_fs_info *
+> fs/btrfs/extent-tree.c:2609:49: note: expected 'struct btrfs_trans_handle *' but argument is of type 'struct btrfs_fs_info *'
+>  2609 | int btrfs_pin_extent(struct btrfs_trans_handle *trans,
+>       |                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+> 
+> Caused by commit
+> 
+>   4e2c2f96e6a3 ("btrfs: Make btrfs_pin_extent take trans handle")
+> 
+> interacting with commit
+> 
+>   bd727173e443 ("btrfs: handle logged extent failure properly")
+> 
+> from the btrfs-fixes tree.
+> 
+> I have applied the following merge fix patch for today.
 
-Hi Daniel,
-
-On Fri, 21 Feb 2020 09:32:40 +0100 Daniel Lezcano <daniel.lezcano@linaro.or=
-g> wrote:
->
-> On 21/02/2020 01:37, Stephen Rothwell wrote:
-> >=20
-> > All the commits in the clockevents tree
-> > (git://git.linaro.org/people/daniel.lezcano/linux.git#timers/drivers/ne=
-xt)
-> > seem to have been applied to other trees as different commits. Please
-> > clean it up as it is starting to cause unnecessary conflicts. =20
->=20
-> Done
-
-Thanks.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/EO304nrXrFZHP2hr=1vmxsv
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5PuscACgkQAVBC80lX
-0GzLAggAlKHUvIdAcYvPZNRadcf/hgFZKnNpfbIA9oG0DxivJvY3OJDyXlDRmWlO
-mf/BBZxwVUHnvbdV+W0hqnU+eb3a3ubIxTUyBrb5OyeJbPomrgM4r6j2BNVd5xic
-V7ADqUcilbBZb40WjZwxjwyJOEm0lqtQ5DHaAz7EYkB43MUSBm/tkH87w/nU3CDJ
-gqhPzCxqwUP5OSNRwujmO9l2/1BmZkrTW/U7tBpnqgR6FD8lscMqYxwDLvTKpTnq
-rsXIhADpeNej8J37uO9wUczCgiawVSduitiBDHdd6znvv/1ppOqtkag7I6gX/Ao1
-OwGB0EtwBf09t8WKEtjWbe2J1GW0iQ==
-=XuNc
------END PGP SIGNATURE-----
-
---Sig_/EO304nrXrFZHP2hr=1vmxsv--
+Sorry, I'll fix the branch in the next for-next snapshot.

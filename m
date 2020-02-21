@@ -2,67 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E95F167933
-	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 10:19:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C94F2167ADD
+	for <lists+linux-next@lfdr.de>; Fri, 21 Feb 2020 11:35:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbgBUJTu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 21 Feb 2020 04:19:50 -0500
-Received: from sonic306-20.consmr.mail.ne1.yahoo.com ([66.163.189.82]:39813
-        "EHLO sonic306-20.consmr.mail.ne1.yahoo.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726984AbgBUJTu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 21 Feb 2020 04:19:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aol.com; s=a2048; t=1582276789; bh=5gcjSyntdQ2SQ2GwLs8w0yMxWPFH8Sibsmrdid2aSoQ=; h=Date:From:Reply-To:Subject:References:From:Subject; b=SBcLFosmhYCMk+KrbvFxKB4psZmxX9Z2ZnqSPn2bXSR/WVel7VkRA4aU3kzTUA0Jey2C4PH6eUvMmU75tGKnpF6cedM/cSl16uzqaVTtmpvObA5bZ3gRE6noDmroHHnLkw3pvwkr18D/eHwXisuyojqX0VCIbNQnWNokGQJO+9ue7V01RBH3mzXlACnhoYu/B34BG+uqLRdcOLp0wHIaEv4No2kwruws9LFDNfFr7atfO6x26IHlccGKXXvSpS9kj+7I2DiMM/ikxzqgLCN/BLC3H/oYkFgaxxpDpgmU3sH6VzqjOIebnme/oY46mo9TJ58mx/rFG9QmyPbiLokBpg==
-X-YMail-OSG: 5774msUVM1nIQe.lvPlz41T4KyVoj2PME7x8ChZHUBKW8X_FC0OcZTGWugxdoP3
- ytO_e93qe4vODr2dHGnIyTGw7ayhAh_cLWuz5rcezAMRF9TLnjcoTZIRc6Uciwqzje4oWNVi2oze
- AA_Xq8EGY6ReznCAn_jhG.wpWGLUhI._i12gM1grjxJDJwXMuuBmnMxMQbNtZ6IV0MHRYxddkMWS
- akFvwZmiLAXffFbTiXx9EiqRUG1XThzkOHSXFc_4nByi7SmcC3O8d16HqA5SXlv4fKhNrrzqJwPl
- GIK_Rh8lQODkDsSP.hlhzLmeYoE0km3v4Mdjv7rfoinGXPwAzEIgnWN0NeYpnikvD4jUXC8vfcB1
- DXC4.VbgPh6KWCE78cpKKMOch49mXicwwTCrpLe2.0Ey4QaZzTQICMN3KhfwWH30s0p.3viKB_Uy
- Q1ZAwjk1D5XpUng.04LrhykvdQsrEcPODKvOx6XSdfaAkapP_La7ZpismnMbM7FxBG1yDOwPU9N5
- nJGL7STQzhDpjXljxthGuQLrfXBcPSRKn7JgjA59XZ2biN5E7g_iB8TqRzCYhWcYreSYDFoLoLiE
- NkZ3L23hwChUga5kBqU1xLuOwV8fumhUMQ7uNGrm8VNLwNp84Y9N1eGnncyQHBKCp1gyuKfN485.
- oqkJd.dKPk4UqGtuCuP4pVGAKadoKdaX9xdRPtyKD6ehdRLZaXqeK0jkCrUjbiCNZRlKs7jcHC3.
- HVACV0DqvxeaG1DmRx4df.eERXydnkpq37qtulWxeBDLVLmT1QFSgGxo2agMcS0JeDEDzzYPz3AF
- pBKynn2ehd73kCCEAjrjZu.A0QMNqJBYj2RiM4aFb2qBtNJCbdfvzzLZo8mMwxaVjVdrJjZfEZmy
- zWyIUvZlPj5M8L.L9WRLyHtT2.3m7Q9s0EKvHQK1c0srQpS.Io2G4p4KyyVpnxlGUMxJnQtTEotX
- zcLF8d8hOtlrbURWjJVNFiiqKVbJBvEupbJvLfgGFV1xx1FAEwx_vqc_rIOzrbhHK0w8EVv.E6I5
- O6rmzLCxMU2IVbmUFuLFGb2hEngvJcuhr8cguQHEo92SFUyhOkw0CcuRUTUNjyXGeCZ6.hnfrtYg
- Bixc4uhksaQFN.OdRj_xa3BOyQxQo674HSwjA0Esq718VDzIalp8mkI41kX7MBc9nhVKc2mEnlnR
- lFiAtXSo.Oj6kzVJcaPBCPzLp1tq4unFRkSm8H5wB_yuENlTnX9fktWVpiEEJsAo_MJo17.5O35m
- .FAOauxHTtZeey4TOIkrXN9SiIQe2WV8qr0mS9_vs2tr2CZMmpruK_q4jIIVPO4dCttdnCMk-
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.ne1.yahoo.com with HTTP; Fri, 21 Feb 2020 09:19:49 +0000
-Date:   Fri, 21 Feb 2020 09:19:46 +0000 (UTC)
-From:   Ayesha Coulibaly <missayeshawarlord@aol.com>
-Reply-To: aycl111@aol.com
-Message-ID: <142114973.6098855.1582276786850@mail.yahoo.com>
-Subject: =?UTF-8?Q?Hi=C2=A0dear=C2=A0,?=
+        id S1726989AbgBUKfS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 21 Feb 2020 05:35:18 -0500
+Received: from mga07.intel.com ([134.134.136.100]:47673 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726100AbgBUKfS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 21 Feb 2020 05:35:18 -0500
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Feb 2020 02:35:12 -0800
+X-IronPort-AV: E=Sophos;i="5.70,467,1574150400"; 
+   d="scan'208";a="229811346"
+Received: from jmiler-mobl.ger.corp.intel.com (HELO localhost) ([10.249.38.187])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 21 Feb 2020 02:35:07 -0800
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
+        broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org,
+        intel-gfx <intel-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Subject: Re: [Intel-gfx] mmotm 2020-02-19-19-51 uploaded (gpu/drm/i915/ + HDRTEST)
+In-Reply-To: <d8112767-4089-4c58-d7d3-2ce03139858a@infradead.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200220035155.PempH%akpm@linux-foundation.org> <d8112767-4089-4c58-d7d3-2ce03139858a@infradead.org>
+Date:   Fri, 21 Feb 2020 12:35:13 +0200
+Message-ID: <874kvkz0ri.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-References: <142114973.6098855.1582276786850.ref@mail.yahoo.com>
-X-Mailer: WebService/1.1.15199 YMailNodin Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36
-To:     unlisted-recipients:; (no To-header on input)
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Thu, 20 Feb 2020, Randy Dunlap <rdunlap@infradead.org> wrote:
+> On 2/19/20 7:51 PM, akpm@linux-foundation.org wrote:
+>> The mm-of-the-moment snapshot 2020-02-19-19-51 has been uploaded to
+>> 
+>>    http://www.ozlabs.org/~akpm/mmotm/
+>> 
+>> mmotm-readme.txt says
+>> 
+>> README for mm-of-the-moment:
+>> 
+>> http://www.ozlabs.org/~akpm/mmotm/
+>> 
+>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>> more than once a week.
+>> 
+>
+> on x86_64:
+> when GCOV is set/enabled:
+>
+>   HDRTEST drivers/gpu/drm/i915/display/intel_frontbuffer.h
+> /dev/null:1:0: error: cannot open /dev/null.gcno
+>   HDRTEST drivers/gpu/drm/i915/display/intel_ddi.h
+> /dev/null:1:0: error: cannot open /dev/null.gcno
+> make[5]: *** [../drivers/gpu/drm/i915/Makefile:307: drivers/gpu/drm/i915/display/intel_ddi.hdrtest] Error 1
+> make[5]: *** Waiting for unfinished jobs....
+> make[5]: *** [../drivers/gpu/drm/i915/Makefile:307: drivers/gpu/drm/i915/display/intel_frontbuffer.hdrtest] Error 1
+>
+>
+> Full randconfig file is attached.
+
+We're trying to hide that from the general population, only to be used
+by our developers and CI, with e.g. "depends on !COMPILE_TEST". Can't
+hide from randconfig it seems.
+
+Does the below patch help?
+
+BR,
+Jani.
 
 
+diff --git a/drivers/gpu/drm/i915/Makefile b/drivers/gpu/drm/i915/Makefile
+index b314d44ded5e..bc28c31c4f78 100644
+--- a/drivers/gpu/drm/i915/Makefile
++++ b/drivers/gpu/drm/i915/Makefile
+@@ -301,7 +301,7 @@ extra-$(CONFIG_DRM_I915_WERROR) += \
+ 		$(shell cd $(srctree)/$(src) && find * -name '*.h')))
+ 
+ quiet_cmd_hdrtest = HDRTEST $(patsubst %.hdrtest,%.h,$@)
+-      cmd_hdrtest = $(CC) $(c_flags) -S -o /dev/null -x c /dev/null -include $<; touch $@
++      cmd_hdrtest = $(CC) $(filter-out $(CFLAGS_GCOV), $(c_flags)) -S -o /dev/null -x c /dev/null -include $<; touch $@
+ 
+ $(obj)/%.hdrtest: $(src)/%.h FORCE
+ 	$(call if_changed_dep,hdrtest)
 
-Hi=C2=A0dear=C2=A0,
 
-With=C2=A0warm=C2=A0heart,=C2=A0I=C2=A0offer=C2=A0my=C2=A0friendship=C2=A0a=
-nd=C2=A0greetings,=C2=A0I=C2=A0hope=C2=A0this=C2=A0message=C2=A0meet=C2=A0y=
-ou=C2=A0in=C2=A0good=C2=A0time.=C2=A0However,=C2=A0Mine=C2=A0names=C2=A0are=
-=C2=A0Ms.=C2=A0Ayesha=C2=A0Coulibaly.=C2=A0I=C2=A0am=C2=A024=C2=A0years=C2=
-=A0old=C2=A0female.=C2=A0I=C2=A0have=C2=A0sent=C2=A0you=C2=A0mail=C2=A0twic=
-e=C2=A0but=C2=A0you=C2=A0never=C2=A0replied=C2=A0any=C2=A0of=C2=A0them.=C2=
-=A0I=C2=A0humbly=C2=A0ask=C2=A0that=C2=A0you=C2=A0reply=C2=A0this=C2=A0mess=
-age,=C2=A0to=C2=A0enable=C2=A0me=C2=A0disclose=C2=A0the=C2=A0reason=C2=A0wh=
-ile=C2=A0I=C2=A0have=C2=A0been=C2=A0trying=C2=A0to=C2=A0reach=C2=A0out=C2=
-=A0to=C2=A0you.=C2=A0I=C2=A0do=C2=A0apologize=C2=A0for=C2=A0infringing=C2=
-=A0on=C2=A0your=C2=A0privacy.
-
-greetings=C2=A0Ayesha=C2=A0Coulibaly.
+-- 
+Jani Nikula, Intel Open Source Graphics Center

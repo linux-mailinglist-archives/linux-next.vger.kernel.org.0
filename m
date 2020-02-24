@@ -2,119 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 32ED016B371
-	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 23:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51D4E16B3E9
+	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 23:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727742AbgBXWA3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Feb 2020 17:00:29 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36210 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727421AbgBXWA3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Feb 2020 17:00:29 -0500
-Received: by mail-pf1-f196.google.com with SMTP id 185so6054311pfv.3
-        for <linux-next@vger.kernel.org>; Mon, 24 Feb 2020 14:00:28 -0800 (PST)
+        id S1727459AbgBXW1m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Feb 2020 17:27:42 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:46331 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727219AbgBXW1m (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Feb 2020 17:27:42 -0500
+Received: by mail-io1-f65.google.com with SMTP id e7so1865871ioe.13;
+        Mon, 24 Feb 2020 14:27:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=dnT+BR+qy+DBwAIlLvmqu08CusF+HZe4pzRiTljNytw=;
-        b=18i2QdEhNXImEDa/t4a322+WjOQ3fOg+lEDGXcrdsWhZH3sLxuiOXP8gIWL/eR1LLH
-         VjfrAyyfKwMb5nssRnYmHeUCOhbINiYFPFT9GMQ+mKfHwSnYiPYUR7J+jpnpIjW9VxEz
-         NOaQ/fPUerijvns6MCUXWNHXLkkiqSjlBSbUHj+/uWbHk4nLSD6s5ocLKoaZb9FA6hS+
-         w7GupNhyqawIFSnxdcodRQsy0W4Y6mQtOHA2FNIsajR1ktyCs1heovN5NHajfeYCtNIx
-         flru6nlKZyVCFQjQBzkZljxPEAXQCB5RCSqfx/C/yzCS6OYPGY8FWicNc6vUS7Ify3t7
-         ZavA==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=okoEokk8koFi0gbrNVrs/CtK734/+xWplYEPxW27+Gc=;
+        b=Wci2Ct75KDbCFUhLx2OoDlxXrlzD6YzLomd/+CaJKS7ovaUCAfTfeP+SKU3NDEQBKG
+         X5UJJrKhPzn5aPiK0tCRQJAOx6GCV3NJsv3ahtsP55qKWaBjuwD0lhuhZ7DUAnzH2Bqi
+         xTdlPhbbBl8o0UjlB3xFGoTkKtSRVV4p9yrPaPR5H7gbe9K3tQbQ7wWiI5CqXlpdFWM8
+         f/0JJGm1fMj8xFUACo8xRr+jXCzDwQolfdJxkynDJdkQ2UF4Th9PtcXeaVPYfqoswlV8
+         Aq/PVHB7koAmFnt/R7pFT6gZpoWuv9XuLOvXP3EaArqfs7jj/mUGLbxUcDBhuwbfpng2
+         nQBg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=dnT+BR+qy+DBwAIlLvmqu08CusF+HZe4pzRiTljNytw=;
-        b=Zo0CMFjYuRJ3ijd37pBI63tN5moWJiqhnRe1jlPvGSkqw454erV/aVnHl54uEDPc1V
-         3hl63cYfDiQ7Zou7gFjZ5uBK+7m+nB/aBoP4eKXV89LzBXmPekxs2JU/BP6IQzSD35EF
-         tvCRJGuFqs4e0U8yd1zqdxEWVaVrk4qa2xi6yLxwxH8X7CPgTExsb6RIIDyJcwK/0LYE
-         c1gbS+TxoK2jWgYzahzVruE7OrSWlxwLdziRewb5ar3LSAUIFjVTda4JkcQuNJx65XRY
-         Psje16ZmzoojpE//agbLdnhAceMlrS1eZPe/QtzXiNmkXpByhwKMNYtUdtdLpsIeYyR2
-         y2dA==
-X-Gm-Message-State: APjAAAUucvq4FaIjOA8hL2CwByUgK4iQKFFmsGa47PFb5gY2m/7pItJt
-        ng9EDlgVgfTE55/oP2RbNbsoqMmes/o=
-X-Google-Smtp-Source: APXvYqxNHaUobj3vL3KlWQ+HmfyPJTDeyhY9wy/Em80uFNrQ92zBLWH5a600cWFnDepMBJiAO3qJFw==
-X-Received: by 2002:a63:1845:: with SMTP id 5mr55687128pgy.311.1582581627854;
-        Mon, 24 Feb 2020 14:00:27 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i64sm14214948pgc.51.2020.02.24.14.00.26
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2020 14:00:27 -0800 (PST)
-Message-ID: <5e54477b.1c69fb81.8ecf9.57e8@mx.google.com>
-Date:   Mon, 24 Feb 2020 14:00:27 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=okoEokk8koFi0gbrNVrs/CtK734/+xWplYEPxW27+Gc=;
+        b=LtWhOWBg4FDJdDjGaBzQcYApdIoX3PqBiDtIm0Ep0iiiCPLZbI8IyYxqipMOdAG5JR
+         9dolEYQFgoDlv4mwB9r8WOtROuI2CA9Q4owI7dl6GMTmDQXqcMoLNAMoP1uDNwpJMX1x
+         SdnBKtSOWhNxG1NWCZXw7NryMDmQ8byxe7ys7RKIc02ZojMlww67PFqfAeauTfvOd6Gk
+         loh2OxHtlfdfpedbQn/N9l8d/nNfZGKH3VOer9uq+QwzsPK7PDnW+9uo/SOQV+66HIV9
+         AT4c4ZHoHHF4pfJ2ZtFZLiwod1sbFzEK7dgqKO84zn0sK3yUnr6m5WB9ODPBm8vWckoB
+         XStQ==
+X-Gm-Message-State: APjAAAVhnCJuCe9ahEuCTNDMUud4ybPsTlHvgchbSOvykSEwUTFhzr+K
+        ytyJ3tiH8kua+UseiGXtrq9uS8jpZItF3q1wtqeBQA==
+X-Google-Smtp-Source: APXvYqyvB53aFrIiMdZSK+Pyl7Sam7svWwN4rs//H5xeSV3qfK+PHY59oqCwhlbWovNG9LjrT85SyFgM+QyFjzuDSKs=
+X-Received: by 2002:a02:5b8a:: with SMTP id g132mr2106136jab.78.1582583261895;
+ Mon, 24 Feb 2020 14:27:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc2-548-g14e518b63427
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 198 boots: 4 failed,
- 193 passed with 1 untried/unknown (v5.6-rc2-548-g14e518b63427)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200225075237.61e103e4@canb.auug.org.au>
+In-Reply-To: <20200225075237.61e103e4@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 24 Feb 2020 16:27:31 -0600
+Message-ID: <CAH2r5mv0YhqRNYogxo4TkK9FdzG1JrDz1SBfQt2+91RgdiAEfg@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 198 boots: 4 failed, 193 passed with 1 untried/unk=
-nown (v5.6-rc2-548-g14e518b63427)
+fixed
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc2-548-g14e518b63427/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc2-548-g14e518b63427/
+On Mon, Feb 24, 2020 at 2:52 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   39452a5239bb ("cifs: call wake_up(&server->response_q) inside of cifs_reconnect()")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc2-548-g14e518b63427
-Git Commit: 14e518b63427c1224d3f30dd93757cb32a9aa167
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 68 unique boards, 18 SoC families, 26 builds out of 216
 
-Boot Regressions Detected:
 
-arm:
+-- 
+Thanks,
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 10 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.6-rc2-429-g943e218ed=
-d5a)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
----
-For more info write to <info@kernelci.org>
+Steve

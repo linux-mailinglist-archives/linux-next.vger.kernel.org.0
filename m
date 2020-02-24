@@ -2,78 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EBAE616B136
-	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 21:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32ED016B371
+	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 23:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727479AbgBXUw6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Feb 2020 15:52:58 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38675 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726722AbgBXUw5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 24 Feb 2020 15:52:57 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48RDm56mz5z9sNg;
-        Tue, 25 Feb 2020 07:52:53 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582577574;
-        bh=MAXNZNQzY7aWe610oRUrFuU3fPXDxQs5ZuGRxGqGl+s=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WN8t6JCTEEWspOP6wUG02//WxqNNyCl/nUuZHhC/p8JPKQjxiHFOy1L9sKlIjpQu9
-         cyDZF3y36tuIjFmlxiTm6CI/+zUxFHldY9pou8K57hfmOJeZbbEhtayxMZbGlKw6C9
-         AlZWbSjlSrGPToKerpyHYk2L6HZj2W1q58gZqmG5Fln0guHeRcngd7ajwo2zsCIeP1
-         Fc2Hfv/qIQWW4y/dQjQM6DyEQR25221idG1gqpyC8xliSu+gRCYEqZJuZrkNKJNP9b
-         BI4pF/xKXdCMbJdT4EPscVz3EgmfW5fzhF25ETjdiMWaGlIRXWjt5uSN6tBCW9vqU/
-         xUBFsK9pdbuCw==
-Date:   Tue, 25 Feb 2020 07:52:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Steve French <smfrench@gmail.com>,
-        CIFS <linux-cifs@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the cifs tree
-Message-ID: <20200225075237.61e103e4@canb.auug.org.au>
+        id S1727742AbgBXWA3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Feb 2020 17:00:29 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36210 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727421AbgBXWA3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Feb 2020 17:00:29 -0500
+Received: by mail-pf1-f196.google.com with SMTP id 185so6054311pfv.3
+        for <linux-next@vger.kernel.org>; Mon, 24 Feb 2020 14:00:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=dnT+BR+qy+DBwAIlLvmqu08CusF+HZe4pzRiTljNytw=;
+        b=18i2QdEhNXImEDa/t4a322+WjOQ3fOg+lEDGXcrdsWhZH3sLxuiOXP8gIWL/eR1LLH
+         VjfrAyyfKwMb5nssRnYmHeUCOhbINiYFPFT9GMQ+mKfHwSnYiPYUR7J+jpnpIjW9VxEz
+         NOaQ/fPUerijvns6MCUXWNHXLkkiqSjlBSbUHj+/uWbHk4nLSD6s5ocLKoaZb9FA6hS+
+         w7GupNhyqawIFSnxdcodRQsy0W4Y6mQtOHA2FNIsajR1ktyCs1heovN5NHajfeYCtNIx
+         flru6nlKZyVCFQjQBzkZljxPEAXQCB5RCSqfx/C/yzCS6OYPGY8FWicNc6vUS7Ify3t7
+         ZavA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=dnT+BR+qy+DBwAIlLvmqu08CusF+HZe4pzRiTljNytw=;
+        b=Zo0CMFjYuRJ3ijd37pBI63tN5moWJiqhnRe1jlPvGSkqw454erV/aVnHl54uEDPc1V
+         3hl63cYfDiQ7Zou7gFjZ5uBK+7m+nB/aBoP4eKXV89LzBXmPekxs2JU/BP6IQzSD35EF
+         tvCRJGuFqs4e0U8yd1zqdxEWVaVrk4qa2xi6yLxwxH8X7CPgTExsb6RIIDyJcwK/0LYE
+         c1gbS+TxoK2jWgYzahzVruE7OrSWlxwLdziRewb5ar3LSAUIFjVTda4JkcQuNJx65XRY
+         Psje16ZmzoojpE//agbLdnhAceMlrS1eZPe/QtzXiNmkXpByhwKMNYtUdtdLpsIeYyR2
+         y2dA==
+X-Gm-Message-State: APjAAAUucvq4FaIjOA8hL2CwByUgK4iQKFFmsGa47PFb5gY2m/7pItJt
+        ng9EDlgVgfTE55/oP2RbNbsoqMmes/o=
+X-Google-Smtp-Source: APXvYqxNHaUobj3vL3KlWQ+HmfyPJTDeyhY9wy/Em80uFNrQ92zBLWH5a600cWFnDepMBJiAO3qJFw==
+X-Received: by 2002:a63:1845:: with SMTP id 5mr55687128pgy.311.1582581627854;
+        Mon, 24 Feb 2020 14:00:27 -0800 (PST)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id i64sm14214948pgc.51.2020.02.24.14.00.26
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2020 14:00:27 -0800 (PST)
+Message-ID: <5e54477b.1c69fb81.8ecf9.57e8@mx.google.com>
+Date:   Mon, 24 Feb 2020 14:00:27 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/PMq/HqWQoevQGdgfHWnJ69F";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-rc2-548-g14e518b63427
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 198 boots: 4 failed,
+ 193 passed with 1 untried/unknown (v5.6-rc2-548-g14e518b63427)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/PMq/HqWQoevQGdgfHWnJ69F
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 198 boots: 4 failed, 193 passed with 1 untried/unk=
+nown (v5.6-rc2-548-g14e518b63427)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc2-548-g14e518b63427/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc2-548-g14e518b63427/
 
-Commit
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc2-548-g14e518b63427
+Git Commit: 14e518b63427c1224d3f30dd93757cb32a9aa167
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 68 unique boards, 18 SoC families, 26 builds out of 216
 
-  39452a5239bb ("cifs: call wake_up(&server->response_q) inside of cifs_rec=
-onnect()")
+Boot Regressions Detected:
 
-is missing a Signed-off-by from its committer.
+arm:
 
---=20
-Cheers,
-Stephen Rothwell
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 10 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
 
---Sig_/PMq/HqWQoevQGdgfHWnJ69F
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm64:
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc2-429-g943e218ed=
+d5a)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5UN5UACgkQAVBC80lX
-0GwMwQf/RKRlhmK1GG9uxgicXXh6I9YeBC8wbuEM0dWRRh/PtFuBm3CJ4S1Rp/l7
-5qy7A4tMWBP0NZ4jYeVRVyNVZdhLpIykZGBgUiBUD0RVA0fiIDSgMfB5El+hJDJI
-SdvmjOBMxuif17PS08n7VcIWS84vKTQ2T8Ih/wgyHO0/olVR206fqvV/wzRgmZ1N
-gTj2JtDnWPDXbgX1g3ejWnOKzVvOK4SpcQdR6T5WtxN1E+rdB7TPHiMRhQoG78pL
-b1nGAWJMJhYAqLAVA+K9/uZpe9AO6ZmVhLlzOJPqb32ghZX/xapPm5bVqNRn7bqp
-VseVTIAUSNNIYkBIq0q9gedwfI43Gg==
-=EFT4
------END PGP SIGNATURE-----
+Boot Failures Detected:
 
---Sig_/PMq/HqWQoevQGdgfHWnJ69F--
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-p241: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>

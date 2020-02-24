@@ -2,101 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1796116B458
-	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 23:43:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB25C16B47E
+	for <lists+linux-next@lfdr.de>; Mon, 24 Feb 2020 23:47:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728365AbgBXWmr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 24 Feb 2020 17:42:47 -0500
-Received: from shards.monkeyblade.net ([23.128.96.9]:39606 "EHLO
-        shards.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728361AbgBXWmr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 24 Feb 2020 17:42:47 -0500
-Received: from localhost (unknown [50.226.181.18])
-        (using TLSv1 with cipher AES256-SHA (256/256 bits))
-        (Client did not present a certificate)
-        (Authenticated sender: davem-davemloft)
-        by shards.monkeyblade.net (Postfix) with ESMTPSA id 51CF21235830D;
-        Mon, 24 Feb 2020 14:42:46 -0800 (PST)
-Date:   Mon, 24 Feb 2020 14:42:43 -0800 (PST)
-Message-Id: <20200224.144243.1485587034182183004.davem@davemloft.net>
-To:     sfr@canb.auug.org.au
+        id S1727740AbgBXWrT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 24 Feb 2020 17:47:19 -0500
+Received: from ozlabs.org ([203.11.71.1]:33421 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726651AbgBXWrT (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 24 Feb 2020 17:47:19 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48RHJ54KSbz9sPR;
+        Tue, 25 Feb 2020 09:47:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582584437;
+        bh=vfJOx5tLhhMomws9ueSanwVw/zLkBBGcyCECo+XL7EE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=D1Nb9GkFHHoYso8VO2hzVDarY4ayYPEIaHCSvftsIN4iKcTMmUYfp0icyWhelT3jk
+         pVcnGj3FJll26r/gL2IXExj+Saa8NXG0hr505VkNpUbhKWeZnCdV8phwYIRl40bZBv
+         FVsMIjDmHFzR57BLiwjHwLwKe8qrDaklaAjFcdT3kMwMDwq018V5Xmsmx1CXcO6UM5
+         YYMmv5Q5kdthvVpHVPjjT0FDjsFljLdkGQPb6VZY/hdhxl+gr2cTiS4uCw1pIQyxlI
+         Yg3HQDvOSBlL8uuN5ED4TAkyAGo9gK6+Sspsvi5GCbMIosKASiUdBAF3Uq6In8BJXt
+         5DDry5CrY/tdQ==
+Date:   Tue, 25 Feb 2020 09:47:17 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
 Cc:     netdev@vger.kernel.org, linux-next@vger.kernel.org,
         linux-kernel@vger.kernel.org, martin.varghese@nokia.com,
         willemb@google.com
 Subject: Re: linux-next: build warning after merge of the net-next tree
-From:   David Miller <davem@davemloft.net>
-In-Reply-To: <20200225092736.137df206@canb.auug.org.au>
+Message-ID: <20200225094717.241cef90@canb.auug.org.au>
+In-Reply-To: <20200224.144243.1485587034182183004.davem@davemloft.net>
 References: <20200225092736.137df206@canb.auug.org.au>
-X-Mailer: Mew version 6.8 on Emacs 26.3
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Mon, 24 Feb 2020 14:42:47 -0800 (PST)
+        <20200224.144243.1485587034182183004.davem@davemloft.net>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/7WdfuLsgSNjHxudAQ3i4qO6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 25 Feb 2020 09:27:36 +1100
+--Sig_/7WdfuLsgSNjHxudAQ3i4qO6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> After merging the net-next tree, today's linux-next build (x86_64
-> allmodconfig) produced this warning:
-> 
-> drivers/net/bareudp.c: In function 'bareudp_xmit_skb':
-> drivers/net/bareudp.c:346:9: warning: 'err' may be used uninitialized in this function [-Wmaybe-uninitialized]
->   346 |  return err;
->       |         ^~~
-> drivers/net/bareudp.c: In function 'bareudp6_xmit_skb':
-> drivers/net/bareudp.c:407:9: warning: 'err' may be used uninitialized in this function [-Wmaybe-uninitialized]
->   407 |  return err;
->       |         ^~~
-> 
-> Introduced by commit
-> 
->   571912c69f0e ("net: UDP tunnel encapsulation module for tunnelling different protocols like MPLS, IP, NSH etc.")
+Hi Dave,
 
-Sorry, my compiler didn't show this.
+On Mon, 24 Feb 2020 14:42:43 -0800 (PST) David Miller <davem@davemloft.net>=
+ wrote:
+>
+> Sorry, my compiler didn't show this.
 
-I've committed the following into net-next, hopefully it does the trick:
+Yeah, these ones especially change with compiler version.  I am
+currently running gcc v9.2.1 if it matters.
 
-====================
-[PATCH] bareudp: Fix uninitialized variable warnings.
+> I've committed the following into net-next, hopefully it does the trick:
 
-drivers/net/bareudp.c: In function 'bareudp_xmit_skb':
-drivers/net/bareudp.c:346:9: warning: 'err' may be used uninitialized in this function [-Wmaybe-uninitialized]
-  346 |  return err;
-      |         ^~~
-drivers/net/bareudp.c: In function 'bareudp6_xmit_skb':
-drivers/net/bareudp.c:407:9: warning: 'err' may be used uninitialized in this function [-Wmaybe-uninitialized]
-  407 |  return err;
+Thanks.
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: David S. Miller <davem@davemloft.net>
----
- drivers/net/bareudp.c | 2 ++
- 1 file changed, 2 insertions(+)
+--=20
+Cheers,
+Stephen Rothwell
 
-diff --git a/drivers/net/bareudp.c b/drivers/net/bareudp.c
-index 77e72477499d..15337e9d4fad 100644
---- a/drivers/net/bareudp.c
-+++ b/drivers/net/bareudp.c
-@@ -320,6 +320,7 @@ static int bareudp_xmit_skb(struct sk_buff *skb, struct net_device *dev,
- 	df = key->tun_flags & TUNNEL_DONT_FRAGMENT ? htons(IP_DF) : 0;
- 	skb_scrub_packet(skb, xnet);
- 
-+	err = -ENOSPC;
- 	if (!skb_pull(skb, skb_network_offset(skb)))
- 		goto free_dst;
- 
-@@ -381,6 +382,7 @@ static int bareudp6_xmit_skb(struct sk_buff *skb, struct net_device *dev,
- 
- 	skb_scrub_packet(skb, xnet);
- 
-+	err = -ENOSPC;
- 	if (!skb_pull(skb, skb_network_offset(skb)))
- 		goto free_dst;
- 
--- 
-2.21.1
+--Sig_/7WdfuLsgSNjHxudAQ3i4qO6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5UUnUACgkQAVBC80lX
+0GyJcwf+OpfhwXjW2MtUL3rY/Aup9ojzEyDatjhR7JjeW7LxMavSo/ZJkq9Xctr9
+zOHUk9NznLJrg1JA5SXkO/h8nvPzYhB78bOZ79KgkNwepDjc4Ip71z0RpwLFv0x9
+Y6jFHlX/Y+LoWSCrUrrc00B0dJKiE4yXcmBfn8Cu2BEGBG3s0KGATTNkmFYxQuha
+JhyGgd336Ik48fG1CE967vfjomfKTQSbQEkrzPS+UkY5o9xtzFTXDOjDbaAF3Xcg
+L+5NS0if9VXhwlrM+TgkiWW7e2ystAXD37Tf3sGQpHg1FiVCnc91kgDN+Nn2K1oU
+o7CPaxN6r9GFRGx/AlCTLkoq3oBuuA==
+=vP2X
+-----END PGP SIGNATURE-----
+
+--Sig_/7WdfuLsgSNjHxudAQ3i4qO6--

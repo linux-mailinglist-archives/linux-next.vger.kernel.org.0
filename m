@@ -2,75 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C11916ED5A
-	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 18:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61A716F0D2
+	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 22:03:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731098AbgBYR72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Feb 2020 12:59:28 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:39164 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730829AbgBYR72 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Feb 2020 12:59:28 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=/kPd72L2NTbA3prrCkJX+T5HQUkpWtEmXQRVd+BkfJ0=; b=AcufC8xSi1fboQhsUYGFToSFOR
-        78qYe41745VJ22m4tMZ1rEHdv7ghQ8RZZ9FQFWO9KN3O87ToWyXBaJiMxGBRT4qLo/Vaa1S3TTY5K
-        Bg+chVynEZjdk3F6MhkRnBWxvWwvDDQzqLOZbbh3FTOz57vEOtDO9CWTmEAbrru8adqN8M1bq4n7N
-        7tkGFSV2aAdu+P9HEb3HiZAlmUsfr85SfCGusyQA7994aaRrs/EqkNdTotVK8Yd3bug0hV1MjssMg
-        CnqwnjynmSwuZYTeSKl9+9tMgrIRCYfz7gubrrGTuH5kfyRPM6ca/aaBUbY8OAeE+ZFS/iM4+/urK
-        ntXvLOEw==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j6eUQ-00043g-VW; Tue, 25 Feb 2020 17:59:27 +0000
-Subject: Re: [PATCH] bootconfig: Fix CONFIG_BOOTTIME_TRACING dependency issue
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1728383AbgBYVDu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Feb 2020 16:03:50 -0500
+Received: from ozlabs.org ([203.11.71.1]:53599 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728315AbgBYVDu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 25 Feb 2020 16:03:50 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48RryC5xCzz9sPK;
+        Wed, 26 Feb 2020 08:03:47 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582664627;
+        bh=HPqXkIn+MgJBZsNBSijjuS9LP2UjJf6VabZzx7IxYd4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YfFQpEC6yskyvsN3rUFpUb+aL7qEsfxAJZUqcb+uxaJHIpAueW5oH8oCKyPBRiZE5
+         EH+qx69XzEdluP0I6BDE5CFpVmYok8X0HAx7h+GrJx8nxunlz/VTYL8UVRW5J9X3E6
+         DwVeB71NfAnH+TFLJnOGSyZ9496GhoW5y12yZQuY0h/B/282K7nZ4DNHCEfnRGo2O1
+         3me2eUZVJgIYHX3j/IRbC76mmhXk5C7HcZQgAmAL9xvNHojSyDCQ4DmKZs4TOFikEl
+         htzDob37wsebS7czP0zRQ6gO/VvzPRUDFsq3q53VLaC8DdyDhdedwfv9BzmfdEe7Ym
+         mOKjs/mSChzVA==
+Date:   Wed, 26 Feb 2020 08:03:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200225220551.d9a409bc04b77cdf48eae3ea@kernel.org>
- <158264140162.23842.11237423518607465535.stgit@devnote2>
- <c9604764-bd0f-67e9-56c8-fb6ffaf9b430@infradead.org>
- <20200225125335.5bbc3ed4@gandalf.local.home>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <aa78add3-a6d9-e316-cfba-3432e347bec4@infradead.org>
-Date:   Tue, 25 Feb 2020 09:59:25 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+Subject: linux-next: error when fetching the kasan-bitops tree
+Message-ID: <20200226080344.609a0bf8@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200225125335.5bbc3ed4@gandalf.local.home>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/RfhLAwFap6JBP49g.cDIL9O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/25/20 9:53 AM, Steven Rostedt wrote:
-> On Tue, 25 Feb 2020 09:49:25 -0800
-> Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
->>> Fixes: d8a953ddde5e ("bootconfig: Set CONFIG_BOOT_CONFIG=n by default")
->>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
->>> Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>  
->>
->> Hi,
->> I'm no fan of "select", but this does fix the kconfig warnings and
->> build errors that I have reported.  Thanks.
-> 
-> I'm not big on select either, but this is fine (I'm running it through my
-> tests now).
-> 
->>
->> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> 
-> Is it OK if I change this to "Tested-by:"?
+--Sig_/RfhLAwFap6JBP49g.cDIL9O
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Yes, as long as someone doesn't read (interpret) that as runtime-tested-by. :)
+Hi all,
 
--- 
-~Randy
+Fetching the kasan-bitops tree
+(git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git#topic/kasa=
+n-bitops)
+produces this error:
 
+fatal: couldn't find remote ref refs/heads/topic/kasan-bitops
+
+Should I just remove it?
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/RfhLAwFap6JBP49g.cDIL9O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5Vi7AACgkQAVBC80lX
+0GxQVQf/ZELYJXfHaIlnuQoBcOBXpiu9R/+uBoefy+iIW5iQ65iG1HTsnqvON4RV
++t1DFr2TjuYdP6EXhoUP8gCt819b50ANkDqOdFUjma0y/HnIjRa6GO0F0S0EJ4JT
+Zq5JlMIsEHtSkpVbQBCwVhL4Yr9EqfOblP3vlJ7QPFG9Tf+dGZ0AaJ96X64uPT5X
+0VWRx9/1mmmTVYgqxva5D3+W03p7ZLk5eLaJp3jCsBED37zbBBO62dm9yzmIXhkD
+0aMXF6+6WW/Y37OEoeEpGh7FIaxUZqnFk/4OsOHNLyvcPInYAgSuSTWryc/llAkR
+OamAddC1woWVLDQc6LWDlNMHcIXr4g==
+=Bbjl
+-----END PGP SIGNATURE-----
+
+--Sig_/RfhLAwFap6JBP49g.cDIL9O--

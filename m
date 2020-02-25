@@ -2,95 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C014316B998
-	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 07:21:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C5F16BA1C
+	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 07:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728978AbgBYGV0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Feb 2020 01:21:26 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:54112 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727005AbgBYGV0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Feb 2020 01:21:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:To:From:
-        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
-        bh=4iYPOTp2LZ1qIzMj4QQw8cQncxOOfZ4aN2TcrdSKwNU=; b=U7O9xh0p50CZcLpe6IkVglT4y7
-        CXTs2/Or/AlPTvsZXEVAg9mZJIX7NrIHsjuCDFszKGvphtM8OiTDv1vIPxyPGIhzJOH+SkuyXC4kr
-        Z5IJKIoiuVK90MXmvcn0NKCtG+CBiczhRwivuIycD4SPDElBzdt64fT8Uu7MepAvupQEWOmvU7785
-        X4MyAaosxybvjMD+nHIxKdI9Hx08CwXR9OMMYZB3l5OP3vhEirsbmwkDhC5MfVEF08/G+QgKS3Taz
-        U/os5C2cGzPE3hZwSgT0MehKj0Uwp9rtPLIDT9OGxP10NJfW9/gb+uQ3fij3+ulXXpaeQbb1vbQZg
-        gcSTfE3A==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j6Tat-00062D-Hw; Tue, 25 Feb 2020 06:21:23 +0000
-Subject: Re: mmotm 2020-02-24-19-53 uploaded (init/main.c: initrd*)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-References: <20200225035348.xf9KRK471%akpm@linux-foundation.org>
- <ba775044-c408-23d3-998d-38fd59d4face@infradead.org>
- <fb37122d-c787-fb1f-10e6-a0795ef91b71@infradead.org>
-Message-ID: <3f5ec5dd-8388-13b9-3f22-43505922c561@infradead.org>
-Date:   Mon, 24 Feb 2020 22:21:19 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1729073AbgBYGx0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Feb 2020 01:53:26 -0500
+Received: from mail-oi1-f195.google.com ([209.85.167.195]:32978 "EHLO
+        mail-oi1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729031AbgBYGx0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Feb 2020 01:53:26 -0500
+Received: by mail-oi1-f195.google.com with SMTP id q81so11603596oig.0
+        for <linux-next@vger.kernel.org>; Mon, 24 Feb 2020 22:53:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fSxteq8BvR6bLu5LA6jd2BwkLJks1DyRranxnHnzEYU=;
+        b=QSWYzPYTbGtdSQcLlCKj5AEGOQ+3AMV+xZg0/U1875q3JKfM5DYKKf5p6HAK6CwjIP
+         AOzaHHJjmake0476dUff+71jZhuvNc745oA0rLIGZ2I2H4J5IKOXbhyQXmahB1wqF2Iv
+         U7eNIah3q24sEOYyMKrA6vRUfjNnXNBHWLXsY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fSxteq8BvR6bLu5LA6jd2BwkLJks1DyRranxnHnzEYU=;
+        b=Fw8mjWotBgDJQ96ZbSwyh+clo0hGreOPpRC11mFIlpcMFt6cQaLjtLLlNsDNw4xc3u
+         UELSGDLFxRGyVKdtIe8L805Teo3o3uVCamIPrVIwtKFMoQXEUgLeF50JN2+r5Dx3z6MS
+         TcgEDXd5UtslBA3O3vBdHA49W0Lqfl/k70p/ooO1B9zg3z5EB3lnU6Cc/vQ1bgDrsYVC
+         iquQ/35DTFp00Q35RQ7f03IPIxgwxSfvU4l06Eqlp91maxl752YBMiWW6keYxnOxzqcR
+         iNI7IDhv16DASuOe/noUbJSHaF+tu1A1BT7GvGb75+odSgE7XHwzazQ5nT9ub4VsHXDx
+         Ps9w==
+X-Gm-Message-State: APjAAAUM75M+In2L/H+NcLOHFmzQBizHaf15o7pZXfVSyDxiXMFbhFwD
+        fBGNttYFSsGWgFdv+buonz8X8zcO7ZaIFJabhlK44heXFbvzYZ+I
+X-Google-Smtp-Source: APXvYqzA/xFMqccjb+BVRQhIHMzDqHfwlaweZ5oYatBKG1/zxpMzG0KS3wxN/jHbU7SS9W3Ga5Oz56oRA9wsAEb0Dk0=
+X-Received: by 2002:aca:f587:: with SMTP id t129mr2226747oih.143.1582613605142;
+ Mon, 24 Feb 2020 22:53:25 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <fb37122d-c787-fb1f-10e6-a0795ef91b71@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <1578489498.29952.11.camel@abdul> <1578560245.30409.0.camel@abdul.in.ibm.com>
+ <20200109142218.GA16477@infradead.org> <1578980874.11996.3.camel@abdul.in.ibm.com>
+ <20200116174443.GA30158@infradead.org> <1579265473.17382.5.camel@abdul> <1582611644.19645.6.camel@abdul.in.ibm.com>
+In-Reply-To: <1582611644.19645.6.camel@abdul.in.ibm.com>
+From:   Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+Date:   Tue, 25 Feb 2020 12:23:13 +0530
+Message-ID: <CAK=zhgpWCz0+xpSGymbQEAbysH_rQf=s8iQ1gn4KwysP3c1Gcw@mail.gmail.com>
+Subject: Re: [linux-next/mainline][bisected 3acac06][ppc] Oops when unloading
+ mpt3sas driver
+To:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>, jcmvbkbc@gmail.com,
+        linux-next <linux-next@vger.kernel.org>,
+        Oliver <oohall@gmail.com>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        Brian King <brking@linux.vnet.ibm.com>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        iommu@lists.linux-foundation.org,
+        Sathya Prakash <sathya.prakash@broadcom.com>,
+        Chaitra P B <chaitra.basappa@broadcom.com>,
+        Suganath Prabu Subramani 
+        <suganath-prabu.subramani@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/24/20 10:18 PM, Randy Dunlap wrote:
-> On 2/24/20 10:16 PM, Randy Dunlap wrote:
->> On 2/24/20 7:53 PM, Andrew Morton wrote:
->>> The mm-of-the-moment snapshot 2020-02-24-19-53 has been uploaded to
->>>
->>>    http://www.ozlabs.org/~akpm/mmotm/
->>>
->>> mmotm-readme.txt says
->>>
->>> README for mm-of-the-moment:
->>>
->>> http://www.ozlabs.org/~akpm/mmotm/
->>>
->>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->>> more than once a week.
->>>
->>
->> (I don't see what patch is causing this)
->>
-> 
-> It appears to be related to BOOTCONFIG.
-> 
+On Tue, Feb 25, 2020 at 11:51 AM Abdul Haleem
+<abdhalee@linux.vnet.ibm.com> wrote:
+>
+> On Fri, 2020-01-17 at 18:21 +0530, Abdul Haleem wrote:
+> > On Thu, 2020-01-16 at 09:44 -0800, Christoph Hellwig wrote:
+> > > Hi Abdul,
+> > >
+> > > I think the problem is that mpt3sas has some convoluted logic to do
+> > > some DMA allocations with a 32-bit coherent mask, and then switches
+> > > to a 63 or 64 bit mask, which is not supported by the DMA API.
+> > >
+> > > Can you try the patch below?
+> >
+> > Thank you Christoph, with the given patch applied the bug is not seen.
+> >
+> > rmmod of mpt3sas driver is successful, no kernel Oops
+> >
+> > Reported-and-tested-by: Abdul Haleem <abdhalee@linux.vnet.ibm.com>
+>
+> Hi Christoph,
+>
+> I see the patch is under discussion, will this be merged upstream any
+> time soon ? as boot is broken on our machines with out your patch.
+>
 
-Argh.  My bad.  This build error happens in linux-next-20200225, not mmotm.
+Hi Abdul,
 
+We have posted a new set of patches to fix this issue. This patch set
+won't change the DMA Mask on the fly and also won't hardcode the DMA
+mask to 32 bit.
 
->>
->> on i386:
->> # CONFIG_BLK_DEV_INITRD is not set
->>
->>
->> ld: init/main.o: in function `start_kernel':
->> main.c:(.init.text+0x7c8): undefined reference to `initrd_end'
->> ld: main.c:(.init.text+0x803): undefined reference to `initrd_start'
->>
->>
->> Full randconfig file is attached.
->>
-> 
-> 
+[PATCH 0/5] mpt3sas: Fix changing coherent mask after allocation.
 
+This patchset will have below patches, Please review and try with this
+patch set.
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Suganath Prabu S (5):
+  mpt3sas: Don't change the dma coherent mask after      allocations
+  mpt3sas: Rename function name is_MSB_are_same
+  mpt3sas: Code Refactoring.
+  mpt3sas: Handle RDPQ DMA allocation in same 4g region
+  mpt3sas: Update version to 33.101.00.00
+
+Regards,
+Sreekanth
+
+> --
+> Regard's
+>
+> Abdul Haleem
+> IBM Linux Technology Centre
+>
+>
+>

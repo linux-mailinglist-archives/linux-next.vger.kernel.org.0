@@ -2,71 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CBCDF16BD4D
-	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 10:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23EA216BE87
+	for <lists+linux-next@lfdr.de>; Tue, 25 Feb 2020 11:23:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729043AbgBYJbL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Feb 2020 04:31:11 -0500
-Received: from metis.ext.pengutronix.de ([85.220.165.71]:45723 "EHLO
-        metis.ext.pengutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727114AbgBYJbL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Feb 2020 04:31:11 -0500
-Received: from dude02.hi.pengutronix.de ([2001:67c:670:100:1d::28] helo=dude02.lab.pengutronix.de)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j6WYW-0002LE-E6; Tue, 25 Feb 2020 10:31:08 +0100
-Received: from mfe by dude02.lab.pengutronix.de with local (Exim 4.92)
-        (envelope-from <mfe@pengutronix.de>)
-        id 1j6WYV-0005TJ-Oi; Tue, 25 Feb 2020 10:31:07 +0100
-From:   Marco Felsch <m.felsch@pengutronix.de>
-To:     sfr@canb.auug.org.au, linus.walleij@linaro.org,
-        bgolaszewski@baylibre.com
-Cc:     linux-next@vger.kernel.org, kernel@pengutronix.de,
-        linux-gpio@vger.kernel.org
-Subject: [PATCH] gpiolib: export gpiochip_get_desc
-Date:   Tue, 25 Feb 2020 10:31:02 +0100
-Message-Id: <20200225093102.10964-1-m.felsch@pengutronix.de>
-X-Mailer: git-send-email 2.20.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::28
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-next@vger.kernel.org
+        id S1730019AbgBYKXJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Feb 2020 05:23:09 -0500
+Received: from mail.kernel.org ([198.145.29.99]:34226 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729952AbgBYKXJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 25 Feb 2020 05:23:09 -0500
+Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 2349320714;
+        Tue, 25 Feb 2020 10:23:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1582626188;
+        bh=DYiay3oUSGnjUy47lcrMMw5qfTeq2ck0vpHNo8qT5c4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k+YSZJtOOBoQBU4BrsLXSp3OshcrZ6TP+oNBa4LF8i/EPKTyHq1BfvPqQx85qXydv
+         KjchrgmH7hmARWdj68OazcHspXQcpYC0oo17JfBV5iX803kXiEZd/fVJXKOrVRPcKf
+         qE9y+XPLSNA/lKu027fqnaQ3bcM6i4ftfRDElTMY=
+Date:   Tue, 25 Feb 2020 19:23:04 +0900
+From:   Masami Hiramatsu <mhiramat@kernel.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: linux-next: Tree for Feb 25 (BOOT_CONFIG)
+Message-Id: <20200225192304.f3ccd36bd1c451e3a1969255@kernel.org>
+In-Reply-To: <7e8f78b4-12f9-6bd3-72dc-08152fbe9345@infradead.org>
+References: <20200225142452.14d4e169@canb.auug.org.au>
+        <7e8f78b4-12f9-6bd3-72dc-08152fbe9345@infradead.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The function was currently used internal by the gpiolib. Since commit
-56cc3af4e8c8 ("pinctrl: da9062: add driver support") it is also used by
-drivers so we need to export the symbol.
+On Mon, 24 Feb 2020 22:58:01 -0800
+Randy Dunlap <rdunlap@infradead.org> wrote:
 
-Signed-off-by: Marco Felsch <m.felsch@pengutronix.de>
----
-Hi,
+> On 2/24/20 7:24 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200224:
+> > 
+> 
+> 
+> on i386:
+> 
+> WARNING: unmet direct dependencies detected for BOOT_CONFIG
+>   Depends on [n]: BLK_DEV_INITRD [=n]
+>   Selected by [y]:
+>   - BOOTTIME_TRACING [=y] && TRACING_SUPPORT [=y] && FTRACE [=y] && TRACING [=y]
 
-This commit needs to be applied to address the build failure reported by
-Stephen [1].
+Oops, thanks for reporting!
 
-[1] https://lkml.org/lkml/2020/2/24/1446
+So I made the Boottime tracing selects the bootconfig, but the bootconfig depends on initrd support.
+Hmm, should I make BOOTTIME_TRACING depends on BLK_DEV_INITRD??
 
- drivers/gpio/gpiolib.c | 1 +
- 1 file changed, 1 insertion(+)
+Thank you,
 
-diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-index 753283486037..1dbd0e6d240b 100644
---- a/drivers/gpio/gpiolib.c
-+++ b/drivers/gpio/gpiolib.c
-@@ -149,6 +149,7 @@ struct gpio_desc *gpiochip_get_desc(struct gpio_chip *chip,
- 
- 	return &gdev->descs[hwnum];
- }
-+EXPORT_SYMBOL_GPL(gpiochip_get_desc);
- 
- /**
-  * desc_to_gpio - convert a GPIO descriptor to the integer namespace
+> 
+> 
+> Full randconfig file is attached.
+> 
+> -- 
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+
 -- 
-2.20.1
-
+Masami Hiramatsu <mhiramat@kernel.org>

@@ -2,90 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B3180170838
-	for <lists+linux-next@lfdr.de>; Wed, 26 Feb 2020 20:02:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D84F17094F
+	for <lists+linux-next@lfdr.de>; Wed, 26 Feb 2020 21:17:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727137AbgBZTCN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Feb 2020 14:02:13 -0500
-Received: from mail-wm1-f67.google.com ([209.85.128.67]:37643 "EHLO
-        mail-wm1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727146AbgBZTCN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 26 Feb 2020 14:02:13 -0500
-Received: by mail-wm1-f67.google.com with SMTP id a141so453119wme.2
-        for <linux-next@vger.kernel.org>; Wed, 26 Feb 2020 11:02:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=wma8//MuEJ5lDMCNv7woFeX6q3iIbYqlguJq6Z39y9g=;
-        b=Oajr6u/nAc7/f0TLXLZ6Tuu5ZHl/Whb5opx1e6hFNH66QQHD5mECKuP+1A9zwiL2VG
-         TgwgvJx2k+3WnQxbm3yKIEKBtysA6MuhknlPUoLcS0psbiJ5hreYiwfxLrhB92OxG2Ag
-         tw+1EBDMeUQ28de3gJ0Mw8AIkCB/Ymq9zjqjz38BpLUqJbJynvrpTgPhT8QwcF7EKWsW
-         6HDjFng+/LiaWnswRsVBF9ZakRaDz0j2wJlMPHpHFdfNeQQN3DwejpcwgU0GbquNUjEM
-         K5LFeeSSSQ+tAnBAsUZYfEG+HIrvJhmgZPJ9oUcF1rM0WT0uuUIaUXl/3lFL7HIXAbc2
-         xmHA==
-X-Gm-Message-State: APjAAAVE98Y1RqqZJdJkDMjN7dlPPduiOdVvOafFD8A2YbHSou8pZrdc
-        AsnHF3T6d7kxUuf847Fc0J5GILj0
-X-Google-Smtp-Source: APXvYqy1WHHW7PhNyQZfNF9Uby7MTmMW2VacmOxQznSOX8L9F7K9RTZt3mm2UBxnU4ncOA9Q4kOakw==
-X-Received: by 2002:a1c:a706:: with SMTP id q6mr288531wme.23.1582743731757;
-        Wed, 26 Feb 2020 11:02:11 -0800 (PST)
-Received: from localhost (ip-37-188-190-100.eurotel.cz. [37.188.190.100])
-        by smtp.gmail.com with ESMTPSA id t133sm4060446wmf.31.2020.02.26.11.01.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2020 11:01:56 -0800 (PST)
-Date:   Wed, 26 Feb 2020 20:01:47 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Christopher Lameter <cl@linux.com>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
-Message-ID: <20200226190147.GR3771@dhcp22.suse.cz>
-References: <20200218115525.GD4151@dhcp22.suse.cz>
- <D6F45EDD-9F2E-4593-B630-55E5BD7DE915@linux.vnet.ibm.com>
- <20200218142620.GF4151@dhcp22.suse.cz>
- <35EE65CF-40E3-4870-AEBC-D326977176DA@linux.vnet.ibm.com>
- <20200218152441.GH4151@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002220337030.2000@www.lameter.com>
- <20200224085812.GB22443@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002261823270.8012@www.lameter.com>
- <20200226184152.GQ3771@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002261843200.8915@www.lameter.com>
+        id S1727277AbgBZURo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Feb 2020 15:17:44 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53763 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727240AbgBZURo (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 26 Feb 2020 15:17:44 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48SRtX2Byyz9sP7;
+        Thu, 27 Feb 2020 07:17:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582748262;
+        bh=w8Bl+jm/s3dXNYwwhBW0f4fxyzFVtgaq08H1fuuT+Ys=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cDSk6gAEr5Ah9XHv546qz2AGx81dzUVfwxZlNqcWKEWEPgQaUnp4zSEddl+OmgBhq
+         qqP832PgTTTqLrLi2fbC+6S6rDOnjRkVXLYqQPlu8a50hxfJHYpMeoX2YhxyFZWNge
+         KgelaWs0Hi+FL9ZrKfv2FjPKLhcrnauiLbQdpMiyXBC4RHGq/Fwu0hqu0Z+BOvFkEV
+         o3xRg4I+Y8QxwW6vIztSU79Y5Sb6PD4GR1Kiu7foZHZjxHeXuT7vwA43+HtDESDYBf
+         /Pho6ItdWLAQLFQcifFNUKm2IjB2xDO0dTOC6OslMzR2jmCQCfTCbJbiymYrvE9lvt
+         FKDVIjMOGR+fQ==
+Date:   Thu, 27 Feb 2020 07:17:18 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     James Hogan <jhogan@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: linux-next: Fixes tag needs some work in the mips-fixes tree
+Message-ID: <20200227071718.5aac4713@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2002261843200.8915@www.lameter.com>
+Content-Type: multipart/signed; boundary="Sig_/tjWP9pweg6DvKRdwhhQ.f_T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed 26-02-20 18:44:13, Cristopher Lameter wrote:
-> On Wed, 26 Feb 2020, Michal Hocko wrote:
-> 
-> > Besides that kmalloc_node shouldn't really have an implicit GFP_THISNODE
-> > semantic right? At least I do not see anything like that documented
-> > anywhere.
-> 
-> Kmalloc_node does not support memory policies etc. Only kmalloc does.
-> kmalloc_node is mostly used by subsystems that have determined the active
-> nodes and want a targeted allocation on those nodes.
- 
-I am sorry but I have hard time to follow your responses here. They open
-more questions than they answer for me. The primary point here is that
-kmalloc_node on a memory less node blows up and panics the kernel. I
-strongly believe this is a bug. We cannot really make all callers of
-kmalloc_node and co. to be hotplug aware.
+--Sig_/tjWP9pweg6DvKRdwhhQ.f_T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Another question is the semantic of kmalloc_node when the node cannot
-satisfy the request. I have always thought that the allocation would
-simply fall back to any other node unless __GFP_THISNODE is explicitly
-specified.
+Hi all,
 
--- 
-Michal Hocko
-SUSE Labs
+In commit
+
+  3944dee0c6cd ("MIPS: Fix CONFIG_MIPS_CMDLINE_DTB_EXTEND handling")
+
+Fixes tag
+
+  Fixes: 7784cac69735 ("MIPS: cmdline: Clean up boot_command_line
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/tjWP9pweg6DvKRdwhhQ.f_T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5W0k8ACgkQAVBC80lX
+0GyWBAgAhO2i3i88Bv8yJcvRjSPgKstNsKuS02T8mHX3CkOJLv36UEIK+DV8Xks1
+Rt8ukgLZWiJgGa1R//b5swoFycgdbRm88nQjP6WWPKiSCU8iME0vvYLXTJwpjkOh
+rJUaFNDPSx1WYqL1tq1OCfxCi/nOJLZNHFO4tX3RDHjCzHfFrOwHKO1gCcrjRlj0
+hJBXPO38riaDAkRCWToU5xza+RqRKqU7OAetD3AS1tG8+GYZfQwciQE3U8GRVHtq
+gQy1OzRRJQ2wYhhbbF/tU/KmtoscJz1CZ24kzjLrUjj5fEZSaHrsvbhLZ90e3Ic0
+TEhwj7hPjbOIuTVGfNLGRJDCIz8cGA==
+=aEhZ
+-----END PGP SIGNATURE-----
+
+--Sig_/tjWP9pweg6DvKRdwhhQ.f_T--

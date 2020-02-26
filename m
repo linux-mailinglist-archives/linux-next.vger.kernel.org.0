@@ -2,135 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FE5916F5CC
-	for <lists+linux-next@lfdr.de>; Wed, 26 Feb 2020 03:51:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E660016F5ED
+	for <lists+linux-next@lfdr.de>; Wed, 26 Feb 2020 04:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729226AbgBZCva (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 25 Feb 2020 21:51:30 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:47195 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728989AbgBZCv3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 25 Feb 2020 21:51:29 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48S0gM6B71z9sRG;
-        Wed, 26 Feb 2020 13:51:27 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582685487;
-        bh=IgJ1YOP5fDNpf2g4PqvkI6AXvNeHCE9jibzVxZ6n8ow=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MPwe0oZ/f4skWUd0TbAc0hje3fN3TByrWyBQ1qeZlS/tzr2HO25PZSoNWiG9z//hu
-         IkGlMvgoiEz5CyciQ2c+ong78pVQLayFoZ90m2aB/z7ty2WgnpWsIo7ltWE3tLVmHA
-         RlQ6p2VLTTib4oIfVqhtTUhJCUVWBUAWp27yWsuseLK2Gg1AxGgZ2bsei13KTwR6Z2
-         MoRSzli1Ryh/bNWal8bNvIiayYfUiROH1yUGLjxf1rPVJrE+vh0WaUDuHcv522zdKD
-         LZ0+/Mi6n2EIQZxICbvi6hv7gfTFcA3E8VxhoIyRs6xxN+H4ZSeYCyNrMdGxmu+oIf
-         WnfUJPdY5N6mQ==
-Date:   Wed, 26 Feb 2020 13:51:27 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729982AbgBZDFg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 25 Feb 2020 22:05:36 -0500
+Received: from mail-io1-f65.google.com ([209.85.166.65]:45932 "EHLO
+        mail-io1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729623AbgBZDFf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 25 Feb 2020 22:05:35 -0500
+Received: by mail-io1-f65.google.com with SMTP id w9so1650744iob.12
+        for <linux-next@vger.kernel.org>; Tue, 25 Feb 2020 19:05:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ZpoXmSgMubpOi5DQxpDALTYtlMkwTsn3LdFqrSxzDHI=;
+        b=VQcINmPs7W5dpGMJBINFbHd6yvMbf22ThLQddwiXyeYpHR4PCI4PeVBa9ioLx2tkG8
+         Isnk8ag7ErjArIdrBZYkQA0LsDVLirTcaKkB7k5NaIsPjtfbts/xsgCIxpzTiFQlbuob
+         /sG1urZZG/LZoZQEGixRj7qURMgo5IEM/tHZs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ZpoXmSgMubpOi5DQxpDALTYtlMkwTsn3LdFqrSxzDHI=;
+        b=K5+5n5JMH47A1swq1LL+DdHRJGcejjx/mS/0S/VsbZ8oFLREbdxxyrJ2hMU22AExvx
+         X7LMOlhPrZsJnRgF5HioBgANeYpmxj9PAlk66VgBIxumf3ZTfZP37Q4sRhghD3XVVet5
+         Hc90nrXAS2rIxE9HWn53HrfPG/kd/SLQ5x+dKiDATza8vrSNFTLVX2snaxOFt9MOs3ov
+         DyUYS3YRNMPV+OxOcdalvzrmGDwe4v/18mcX7sWQgotV6RT/vcN1OPUTgr+FzsSjJcuu
+         O7nlCRBK0JL3yP5WYLG/RixnHxKjTdDGTMEKaxIuQ07Y+RmnReAhPIpzRa7Nb7LemnRl
+         WxBQ==
+X-Gm-Message-State: APjAAAWSfTbZUuqG8dojXws0MgSpqDZLfVKg9P+2zXxVEA+iCCnJswvb
+        8AHwHD09ab3hqN/nSD9nwNDCjW04SmfrEk0JYJVIxxj1
+X-Google-Smtp-Source: APXvYqwzZpOup7HNjSuyaBr2WfdKmSPxs3zxBDbSBpnTKJKzjrq4aUtMcaYJS3D4NxC2YjwRsGV2uPLsVlQ2PmWN8/8=
+X-Received: by 2002:a6b:c9c6:: with SMTP id z189mr1848962iof.285.1582686334967;
+ Tue, 25 Feb 2020 19:05:34 -0800 (PST)
+MIME-Version: 1.0
+References: <20200226135127.31667f48@canb.auug.org.au>
+In-Reply-To: <20200226135127.31667f48@canb.auug.org.au>
+From:   Devesh Sharma <devesh.sharma@broadcom.com>
+Date:   Wed, 26 Feb 2020 08:34:58 +0530
+Message-ID: <CANjDDBg0P=zi-L8kwd4RYCPt62U5zxdDyeST9ej6t4QqePp7iQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the rdma tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Devesh Sharma <devesh.sharma@broadcom.com>,
         Naresh Kumar PBS <nareshkumar.pbs@broadcom.com>,
         Selvin Xavier <selvin.xavier@broadcom.com>
-Subject: linux-next: build failure after merge of the rdma tree
-Message-ID: <20200226135127.31667f48@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pr_i=riB3ZvQhbtLbWqPRK5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pr_i=riB3ZvQhbtLbWqPRK5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Feb 26, 2020 at 8:21 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the rdma tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+>
+> drivers/infiniband/hw/bnxt_re/qplib_res.c: In function '__free_pbl':
+> drivers/infiniband/hw/bnxt_re/qplib_res.c:78:2: error: implicit declaration of function 'vfree'; did you mean 'kfree'? [-Werror=implicit-function-declaration]
+>    78 |  vfree(pbl->pg_arr);
+>       |  ^~~~~
+>       |  kfree
+> drivers/infiniband/hw/bnxt_re/qplib_res.c: In function '__alloc_pbl':
+> drivers/infiniband/hw/bnxt_re/qplib_res.c:117:16: error: implicit declaration of function 'vmalloc'; did you mean 'kmalloc'? [-Werror=implicit-function-declaration]
+>   117 |  pbl->pg_arr = vmalloc(pages * sizeof(void *));
+>       |                ^~~~~~~
+>       |                kmalloc
+> drivers/infiniband/hw/bnxt_re/qplib_res.c:117:14: warning: assignment to 'void **' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>   117 |  pbl->pg_arr = vmalloc(pages * sizeof(void *));
+>       |              ^
+> drivers/infiniband/hw/bnxt_re/qplib_res.c:121:18: warning: assignment to 'dma_addr_t *' {aka 'long long unsigned int *'} from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>   121 |  pbl->pg_map_arr = vmalloc(pages * sizeof(dma_addr_t));
+>       |                  ^
+>
+> Caused by commit
+>
+>   0c4dcd602817 ("RDMA/bnxt_re: Refactor hardware queue memory allocation")
+>
+> I added the following fix for today:
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 26 Feb 2020 13:46:02 +1100
+> Subject: [PATCH] RDMA/bnxt_re: using vmalloc requires including vmalloc.h
+>
+> Fixes: 0c4dcd602817 ("RDMA/bnxt_re: Refactor hardware queue memory allocation")
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/infiniband/hw/bnxt_re/qplib_res.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+> index 4346b95963cf..fc5909c7f2e0 100644
+> --- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
+> +++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
+> @@ -44,6 +44,7 @@
+>  #include <linux/inetdevice.h>
+>  #include <linux/dma-mapping.h>
+>  #include <linux/if_vlan.h>
+> +#include <linux/vmalloc.h>
+>  #include "roce_hsi.h"
+>  #include "qplib_res.h"
+>  #include "qplib_sp.h"
+> --
+> 2.25.0
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-Hi all,
-
-After merging the rdma tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
-
-drivers/infiniband/hw/bnxt_re/qplib_res.c: In function '__free_pbl':
-drivers/infiniband/hw/bnxt_re/qplib_res.c:78:2: error: implicit declaration=
- of function 'vfree'; did you mean 'kfree'? [-Werror=3Dimplicit-function-de=
-claration]
-   78 |  vfree(pbl->pg_arr);
-      |  ^~~~~
-      |  kfree
-drivers/infiniband/hw/bnxt_re/qplib_res.c: In function '__alloc_pbl':
-drivers/infiniband/hw/bnxt_re/qplib_res.c:117:16: error: implicit declarati=
-on of function 'vmalloc'; did you mean 'kmalloc'? [-Werror=3Dimplicit-funct=
-ion-declaration]
-  117 |  pbl->pg_arr =3D vmalloc(pages * sizeof(void *));
-      |                ^~~~~~~
-      |                kmalloc
-drivers/infiniband/hw/bnxt_re/qplib_res.c:117:14: warning: assignment to 'v=
-oid **' from 'int' makes pointer from integer without a cast [-Wint-convers=
-ion]
-  117 |  pbl->pg_arr =3D vmalloc(pages * sizeof(void *));
-      |              ^
-drivers/infiniband/hw/bnxt_re/qplib_res.c:121:18: warning: assignment to 'd=
-ma_addr_t *' {aka 'long long unsigned int *'} from 'int' makes pointer from=
- integer without a cast [-Wint-conversion]
-  121 |  pbl->pg_map_arr =3D vmalloc(pages * sizeof(dma_addr_t));
-      |                  ^
-
-Caused by commit
-
-  0c4dcd602817 ("RDMA/bnxt_re: Refactor hardware queue memory allocation")
-
-I added the following fix for today:
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 26 Feb 2020 13:46:02 +1100
-Subject: [PATCH] RDMA/bnxt_re: using vmalloc requires including vmalloc.h
-
-Fixes: 0c4dcd602817 ("RDMA/bnxt_re: Refactor hardware queue memory allocati=
-on")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/infiniband/hw/bnxt_re/qplib_res.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/infiniband/hw/bnxt_re/qplib_res.c b/drivers/infiniband=
-/hw/bnxt_re/qplib_res.c
-index 4346b95963cf..fc5909c7f2e0 100644
---- a/drivers/infiniband/hw/bnxt_re/qplib_res.c
-+++ b/drivers/infiniband/hw/bnxt_re/qplib_res.c
-@@ -44,6 +44,7 @@
- #include <linux/inetdevice.h>
- #include <linux/dma-mapping.h>
- #include <linux/if_vlan.h>
-+#include <linux/vmalloc.h>
- #include "roce_hsi.h"
- #include "qplib_res.h"
- #include "qplib_sp.h"
---=20
-2.25.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/pr_i=riB3ZvQhbtLbWqPRK5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5V3S8ACgkQAVBC80lX
-0Gx4awf/QWzDqlqRj+GiL3/p9a9b+E+ws8DyHibVIXP/FlgteQwBYkeAjxxetJZ/
-6nueYqCrYCwOczNjRwBYuIOE8YXFAEMdL/A98wgfkSKuHXD+3HLkneN1fv65jjMJ
-1gYiGVM0R/gclJZL7s7IxyUeRmlx1/9QuFAz/1ZF4wHOS6dlh7XuLezgxY/Z6UUp
-slPwnoQyPvAs6d/piObsrLD+Dmv3D9B5RCDGTt1DnDoD51KTXWab58VbCDiIYtuF
-KrI1JHzzvleVwV84qCR11ZPFoCWMuFTot/KQD4i0QdT8mgp3qHFZLq/Xrk7lA3FF
-2N4VOa6qrxr2JiMmKDn07VRglmHv5Q==
-=8WZc
------END PGP SIGNATURE-----
-
---Sig_/pr_i=riB3ZvQhbtLbWqPRK5--
+Thanks!
+Acked-by: Devesh Sharma <devesh.sharma@broadcom.com>

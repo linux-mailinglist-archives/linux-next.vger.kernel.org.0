@@ -2,121 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ED48617239B
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 17:39:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5023D1724BD
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 18:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730234AbgB0Qir (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 11:38:47 -0500
-Received: from mail.kernel.org ([198.145.29.99]:59986 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729693AbgB0Qiq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 27 Feb 2020 11:38:46 -0500
-Received: from devnote2 (NE2965lan1.rev.em-net.ne.jp [210.141.244.193])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 47FBA2469C;
-        Thu, 27 Feb 2020 16:38:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1582821525;
-        bh=anbSeKn4xU2mzevjDtEBX87CI2iq94Uc7JA+ZiMfyIU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oFZlZ9rb/YqyB6VM7JPuL1dDEWOyonrNW/I/W5NW5GzoLp3cMqsRNjKxGAoyBHeyR
-         mEZANRFMyCIyPAedNMlBjI6vLgR8qMjqs8OLCcIlJi+zB4eoh2QHNa7pTCiOHplqJv
-         9KG96Dxy1zVFFEFZhDqx+yLVTlDZw/AqejVomxYM=
-Date:   Fri, 28 Feb 2020 01:38:41 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
+        id S1729618AbgB0RNy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 12:13:54 -0500
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:38621 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgB0RNx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 12:13:53 -0500
+Received: by mail-wm1-f65.google.com with SMTP id a9so154729wmj.3
+        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 09:13:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=kRFodb2ms+/Ze84f7ezZLQgjnfHyEqMYKFplavQU274=;
+        b=GFeWkNfAeFE1PGxbru1Sszjp4401EcQ+VWatx1HlhLSe4ix2kBEeJ41isVFUKdvpXf
+         Qc5kYZCEp5CrqbH2wU0Qhzq6BBm0MsrxtA1EhRqOY10IY+N0Ssefg+CyCKkeVgOxbVtJ
+         VqrKS2fJ06pY/5Sv/021+h54fqqCO7WwOsbDXrzZM6ejGQFYRK9CB/0onzt0KnP0Xyfg
+         aUljwm5ng9jv7V1otJqoMYEdb76PfawPqdgV1TdgZBlgEaSieGAjel1n29ALB1XcT4Pt
+         BpUBteZTDViUBBZD7Kua27z1UaRzJmAA2J1aKm3e0dVywvpTUP0Eqbex73loF8rZA4x2
+         wDMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=kRFodb2ms+/Ze84f7ezZLQgjnfHyEqMYKFplavQU274=;
+        b=AqfhnlrRHdR/4BfFo5u3krRbYsgfDrd8DnfUhFIT1WVTCcoTtNhJgx50o2YKxWtEeC
+         bW4iC+v5yPghKPweM0GlTOjXxPuwiaWk5n7LqhQ+uf+cnmUPgCibkxsDaFCgPmoffasg
+         L80hYF9DrI8DrFu+RtaucfYOva76k7Sh9l7T8/ouCxV1O9rZyPoZq68YywOxDGIYyVlX
+         FDUq/Cyzm5tsvTafe0IbdVKwf1QvREc1ZkxAABvfwdnD9TXWNG7J9wLzEC5BzRm9Sw4k
+         Rtjom1QFBgKW8RZ2jpwPiv0DkmgSrW8b7T5PRVxndsyklAxj8LIkAnc5FQLh7SmVkduT
+         5L3Q==
+X-Gm-Message-State: APjAAAWmhSaa86HuBRBK1X9vucWsYRdFeiACQFn3+AcfzxvasI9i12eq
+        qFROgcoqa+4HRf8atL5g8fAqKO7G68ifr34DiIfj8w==
+X-Google-Smtp-Source: APXvYqzFW1PtGlKB8R/X9OvHP+SCq22XUNfUC5pbpz3qORBFSTYYYtRqiPKMJqj1H+J2yo2wzf6sS/WyUUnY2nIBPpI=
+X-Received: by 2002:a1c:2358:: with SMTP id j85mr510453wmj.137.1582823629861;
+ Thu, 27 Feb 2020 09:13:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20200227151143.6a6edaf9@canb.auug.org.au> <CAMuHMdVc-vyQfuLUgbF6ei9Qrr+fryA-j1PHsrsjTNiOYvUk+w@mail.gmail.com>
+In-Reply-To: <CAMuHMdVc-vyQfuLUgbF6ei9Qrr+fryA-j1PHsrsjTNiOYvUk+w@mail.gmail.com>
+From:   Arjun Roy <arjunroy@google.com>
+Date:   Thu, 27 Feb 2020 09:13:38 -0800
+Message-ID: <CAOFY-A0=AYDSdGq5tf7s6_kRjnDGLfLjCV9p+LdKbLwyw0J9nA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm tree
 To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] bootconfig: Fix CONFIG_BOOTTIME_TRACING dependency
- issue
-Message-Id: <20200228013841.c5d50d881a3ec0f87d273bbe@kernel.org>
-In-Reply-To: <CAMuHMdUXqH6yE17Us+k7T4VnhyiWdRuEexWXMyc9x5yuT_41vg@mail.gmail.com>
-References: <20200225220551.d9a409bc04b77cdf48eae3ea@kernel.org>
-        <158264140162.23842.11237423518607465535.stgit@devnote2>
-        <CAMuHMdW+JECxNPX8yDswARq+fLXig7VAo0oosCPAkZhtc_XR0g@mail.gmail.com>
-        <20200227092518.2096344e@gandalf.local.home>
-        <CAMuHMdUXqH6yE17Us+k7T4VnhyiWdRuEexWXMyc9x5yuT_41vg@mail.gmail.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 27 Feb 2020 15:33:44 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-
-> Hi Steven,
-> 
-> On Thu, Feb 27, 2020 at 3:25 PM Steven Rostedt <rostedt@goodmis.org> wrote:
-> > On Thu, 27 Feb 2020 10:18:08 +0100
-> > Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Tue, Feb 25, 2020 at 4:47 PM Masami Hiramatsu <mhiramat@kernel.org> wrote:
-> > > > Since commit d8a953ddde5e ("bootconfig: Set CONFIG_BOOT_CONFIG=n by
-> > > > default") also changed the CONFIG_BOOTTIME_TRACING to select
-> > > > CONFIG_BOOT_CONFIG to show the boot-time tracing on the menu,
-> > > > it introduced wrong dependencies with BLK_DEV_INITRD as below.
-> > > >
-> > > > WARNING: unmet direct dependencies detected for BOOT_CONFIG
-> > > >   Depends on [n]: BLK_DEV_INITRD [=n]
-> > > >   Selected by [y]:
-> > > >   - BOOTTIME_TRACING [=y] && TRACING_SUPPORT [=y] && FTRACE [=y] && TRACING [=y]
-> > > >
-> > > > This makes the CONFIG_BOOT_CONFIG selects CONFIG_BLK_DEV_INITRD to
-> > > > fix this error and make CONFIG_BOOTTIME_TRACING=n by default, so
-> > > > that both boot-time tracing and boot configuration off but those
-> > > > appear on the menu list.
-> > > >
-> > > > Fixes: d8a953ddde5e ("bootconfig: Set CONFIG_BOOT_CONFIG=n by default")
-> > > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > > > Signed-off-by: Masami Hiramatsu <mhiramat@kernel.org>
-> > > > ---
-> > > >  init/Kconfig         |    2 +-
-> > > >  kernel/trace/Kconfig |    1 -
-> > > >  2 files changed, 1 insertion(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/init/Kconfig b/init/Kconfig
-> > > > index a84e7aa89a29..8b4c3e8c05ea 100644
-> > > > --- a/init/Kconfig
-> > > > +++ b/init/Kconfig
-> > > > @@ -1217,7 +1217,7 @@ endif
-> > > >
-> > > >  config BOOT_CONFIG
-> > > >         bool "Boot config support"
-> > > > -       depends on BLK_DEV_INITRD
-> > > > +       select BLK_DEV_INITRD
-> > > >         help
-> > > >           Extra boot config allows system admin to pass a config file as
-> > > >           complemental extension of kernel cmdline when booting.
-> > > > diff --git a/kernel/trace/Kconfig b/kernel/trace/Kconfig
-> > > > index 795c3e02d3f1..402eef84c859 100644
-> > > > --- a/kernel/trace/Kconfig
-> > > > +++ b/kernel/trace/Kconfig
-> > > > @@ -145,7 +145,6 @@ config BOOTTIME_TRACING
-> > > >         bool "Boot-time Tracing support"
-> > > >         depends on TRACING
-> > >
-> > > Why not "depends on BLK_DEV_INITRD?" here?
-> > >
-> > > /me tries to contain the bloat introduced by the bootconfig stuff.
+On Thu, Feb 27, 2020 at 1:03 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Stephen et al,
+>
+> On Thu, Feb 27, 2020 at 5:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > After merging the akpm tree, today's linux-next build (sparc defconfig)
+> > failed like this:
 > >
-> > Because people like me will be scratching my head trying to figure out why
-> > I don't see Boot-time Tracing support ;-)
-> 
-> AFAIUI, without using an initrd, your fancy bootconfig cannot be appended
-> anywhere anyway?
+> > In file included from include/linux/list.h:9:0,
+> >                  from include/linux/smp.h:12,
+> >                  from include/linux/kernel_stat.h:5,
+> >                  from mm/memory.c:42:
+> > mm/memory.c: In function 'insert_pages':
+> > mm/memory.c:1523:41: error: implicit declaration of function 'pte_index'; did you mean 'page_index'? [-Werror=implicit-function-declaration]
+> >    remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
+> >                                          ^
+> > include/linux/kernel.h:842:40: note: in definition of macro '__typecheck'
+> >    (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+> >                                         ^
+> > include/linux/kernel.h:866:24: note: in expansion of macro '__safe_cmp'
+> >   __builtin_choose_expr(__safe_cmp(x, y), \
+> >                         ^~~~~~~~~~
+> > include/linux/kernel.h:934:27: note: in expansion of macro '__careful_cmp'
+> >  #define min_t(type, x, y) __careful_cmp((type)(x), (type)(y), <)
+> >                            ^~~~~~~~~~~~~
+> > mm/memory.c:1522:26: note: in expansion of macro 'min_t'
+> >   pages_to_write_in_pmd = min_t(unsigned long,
+> >                           ^~~~~
+>
+> Same issue on m68k, as per a report from kisskb.
+>
+> > Caused by patch
+> >
+> >   "mm/memory.c: add vm_insert_pages()"
+> >
+> > sparc32 does not implement pte_index at all :-(
+>
+> Seems like about only half of the architectures do.
+>
 
-Hm, this is a good motivation for me to find a way to append the bootconfig
-to kernel image itself. :)
+:/ I begin to suspect the only sane way to make this work is to have a
+per-arch header defined method, returning a bool saying whether
+pte_index() is meaningful or not on that arch, and early on in
+vm_insert_pages() if that bool returns true, to just call
+vm_insert_page() in a loop.
 
-Thank you,
+-Arjun
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
+>
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+>
+> In personal conversations with technical people, I call myself a hacker. But
+> when I'm talking to journalists I just say "programmer" or something like that.
+>                                 -- Linus Torvalds

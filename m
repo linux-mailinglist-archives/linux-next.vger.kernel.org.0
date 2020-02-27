@@ -2,234 +2,211 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8126A1711E0
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 09:02:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E4A7817135F
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 09:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728502AbgB0ICi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 03:02:38 -0500
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:46430 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728440AbgB0ICh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 27 Feb 2020 03:02:37 -0500
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 01R7xtN5007665
-        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 03:02:36 -0500
-Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 2ydqf8bkq1-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 03:02:36 -0500
-Received: from localhost
-        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
-        Thu, 27 Feb 2020 08:02:34 -0000
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 27 Feb 2020 08:02:31 -0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 01R82TI458916868
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 27 Feb 2020 08:02:29 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 94B84A405B;
-        Thu, 27 Feb 2020 08:02:29 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 4EAC7A4055;
-        Thu, 27 Feb 2020 08:02:29 +0000 (GMT)
-Received: from oc7455500831.ibm.com (unknown [9.152.224.219])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 27 Feb 2020 08:02:29 +0000 (GMT)
+        id S1728606AbgB0IxG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 03:53:06 -0500
+Received: from mail-wr1-f67.google.com ([209.85.221.67]:41887 "EHLO
+        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728469AbgB0IxF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 03:53:05 -0500
+Received: by mail-wr1-f67.google.com with SMTP id v4so2241169wrs.8
+        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 00:53:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20150623.gappssmtp.com; s=20150623;
+        h=subject:to:cc:references:from:autocrypt:message-id:date:user-agent
+         :mime-version:in-reply-to;
+        bh=fgYlP/63gmski/xyKuI7YVyJZfrCucr1X0cXA7auMaM=;
+        b=ojqPtHvwgr3b6ZeOM6Rpz3YEWhRvcbUlpin6U8+FsgHNgfBiLgKFwJsURbfD9B2Q/D
+         7A2Eycospba5KoM7EWCv1vEYoMH9a2J8bR1cz/6aLTyaIRakn4VdBIavpbMTJsE95KWp
+         SKv0Dl9YuV+mIc0Jq4X9FUPC1zTATARh/SAGX0kVKQzzk2hTfN2D5g/EQu7w+f//spFL
+         TOmmw6ALXCDyimYNyj9hM7ppeKXhz/O5zuohEMUH3ca2QV+H4RQa2efmGvyMJ1be0JwW
+         JXcWdko80pCDNnKwgDbCxK9kgm4E4GJVFlva75ax8+9HujQGjaNLtDh/NLcXoWJ/1f0l
+         8KLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
+         :message-id:date:user-agent:mime-version:in-reply-to;
+        bh=fgYlP/63gmski/xyKuI7YVyJZfrCucr1X0cXA7auMaM=;
+        b=iZ1/OfLBjlW0oQA/Cl/ewvuPB+bb6sOUvyseFgGEQpCNreID0M59TR/Fq2Bek8aG0C
+         lzCllYcSwtCvbwhjz03iiGOdbJ1macEvoyEbx/cFL5JNlGu12Ug0KANEDgH3HFpof0Bq
+         qbSqy/Js255qFsSBu62TGFAtLqyBvsLz5mpHHBDr+/qFgbw+C8rIRJLtvcWhvNOn7MmU
+         I2OVjsqTqf5dEJXY9fzFdv1beXXYV1QH4JEBf2XXMiLwtqFag1Uvj9ZNyfPDELXArqn8
+         6JBjSl71kjBRXFSlAxltgK/QBZXY5VFvNTQDkoho+dDxAFkVxBxnRcRPJAfiLggQw+nO
+         nA+g==
+X-Gm-Message-State: APjAAAXegRXyR+YIfDI+MYPbB9gDk+jbQHeG8Wz7NwrGivktDfk8wuCP
+        J3e9rzx8suV2esq2G8vbNanpsw==
+X-Google-Smtp-Source: APXvYqyJfFM5Nxo5jqnW4vX3OJwcBkRtzgKQY5BGSfYEH0jMkPwf/byL3BY4kTfTyMgJRzVEINTxhg==
+X-Received: by 2002:adf:eec3:: with SMTP id a3mr3399233wrp.337.1582793582837;
+        Thu, 27 Feb 2020 00:53:02 -0800 (PST)
+Received: from [64.233.167.108] ([149.199.62.131])
+        by smtp.gmail.com with ESMTPSA id l6sm7312597wrb.75.2020.02.27.00.52.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2020 00:53:01 -0800 (PST)
 Subject: Re: linux-next: manual merge of the akpm-current tree with the
- kvms390 tree
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Janosch Frank <frankja@linux.ibm.com>
+ microblaze tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20200227141148.05d7d502@canb.auug.org.au>
- <1217420e-42e4-9179-883f-125cf278caec@nvidia.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
-Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
- 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
- nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
-Date:   Thu, 27 Feb 2020 09:02:29 +0100
+        Masahiro Yamada <masahiroy@kernel.org>
+References: <20200226140942.1a944ba9@canb.auug.org.au>
+From:   Michal Simek <monstr@monstr.eu>
+Autocrypt: addr=monstr@monstr.eu; keydata=
+ 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
+ 0Z1MQlmNcq2bhOMzTxuXX2NDzUZs4aqEyZQ=
+Message-ID: <3583538d-fc1a-823d-671a-8259f0e8ad41@monstr.eu>
+Date:   Thu, 27 Feb 2020 09:52:43 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.4.1
 MIME-Version: 1.0
-In-Reply-To: <1217420e-42e4-9179-883f-125cf278caec@nvidia.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20022708-0028-0000-0000-000003DE69E1
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20022708-0029-0000-0000-000024A3883F
-Message-Id: <9bf8aa40-d92b-3d85-9999-c376f05fa963@de.ibm.com>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
- definitions=2020-02-27_02:2020-02-26,2020-02-27 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
- mlxlogscore=999 bulkscore=0 priorityscore=1501 impostorscore=0
- phishscore=0 malwarescore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2001150001 definitions=main-2002270064
+In-Reply-To: <20200226140942.1a944ba9@canb.auug.org.au>
+Content-Type: multipart/signed; micalg=pgp-sha1;
+ protocol="application/pgp-signature";
+ boundary="aAMPGxfBqVwC2Hn6OYj7zW9uSrWUtHPCg"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--aAMPGxfBqVwC2Hn6OYj7zW9uSrWUtHPCg
+Content-Type: multipart/mixed; boundary="t5vBABA4hAeho7rCBOmv9y3tziBUs6pAn";
+ protected-headers="v1"
+From: Michal Simek <monstr@monstr.eu>
+To: Stephen Rothwell <sfr@canb.auug.org.au>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Linux Next Mailing List <linux-next@vger.kernel.org>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Masahiro Yamada <masahiroy@kernel.org>
+Message-ID: <3583538d-fc1a-823d-671a-8259f0e8ad41@monstr.eu>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ microblaze tree
+References: <20200226140942.1a944ba9@canb.auug.org.au>
+In-Reply-To: <20200226140942.1a944ba9@canb.auug.org.au>
+
+--t5vBABA4hAeho7rCBOmv9y3tziBUs6pAn
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: quoted-printable
+
+Hi Stephen,
+
+On 26. 02. 20 4:09, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Today's linux-next merge of the akpm-current tree got a conflict in:
+>=20
+>   arch/microblaze/include/asm/Kbuild
+>=20
+> between commits:
+>=20
+>   59d85c0a3696 ("microblaze: Remove architecture tlb.h and use generic =
+one")
+>   7e8f54cd4e26 ("microblaze: Remove empty headers")
+>=20
+> from the microblaze tree and commit:
+>=20
+>   3ece10f6aa9e ("asm-generic: make more kernel-space headers mandatory"=
+)
+>=20
+> from the akpm-current tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tre=
+e
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularl=
+y
+> complex conflicts.
+
+Thanks for heads up. I was expecting this conflict.
+
+Thanks,
+Michal
+
+--=20
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
 
-On 27.02.20 06:58, John Hubbard wrote:
-> On 2/26/20 7:11 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Today's linux-next merge of the akpm-current tree got a conflict in:
->>
->>   mm/gup.c
->>
->> between commit:
->>
->>   732b80e677b8 ("mm/gup/writeback: add callbacks for inaccessible pages")
->>
->> from the kvms390 tree and commit:
->>
->>   9947ea2c1e60 ("mm/gup: track FOLL_PIN pages")
->>
->> from the akpm-current tree.
->>
->> I fixed it up (see below - maybe not optimally) and can carry the fix as
->> necessary. This is now fixed as far as linux-next is concerned, but any
->> non trivial conflicts should be mentioned to your upstream maintainer
->> when your tree is submitted for merging.  You may also want to consider
->> cooperating with the maintainer of the conflicting tree to minimise any
->> particularly complex conflicts.
->>
-> 
-> Yes. Changes to mm/gup.c really should normally go through linux-mm and 
-> Andrew's tree, if at all possible. This would have been caught, and figured out
-> on linux-mm, had that been done--instead of leaving the linux-next maintainer
-> trying to guess at how to resolve the conflict.
 
-Yes. This patch should go via Andrew. Claudio is going to provide a fixed up
-version that takes care of the new semantics.
+--t5vBABA4hAeho7rCBOmv9y3tziBUs6pAn--
 
-This patch was posted several times on linux-mm (also before rc1) and I will 
-drop it from my tree due to the conflict.
+--aAMPGxfBqVwC2Hn6OYj7zW9uSrWUtHPCg
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iF0EARECAB0WIQQbPNTMvXmYlBPRwx7KSWXLKUoMIQUCXleDZAAKCRDKSWXLKUoM
+Icu2AJ9UkuPPpz3bb0kjVCtbkS1mskF2UgCePVd8FW3Jz0MhBUBZVTiw87076fA=
+=Yexa
+-----END PGP SIGNATURE-----
 
-> 
-> +Cc David Hildenbrand, who I see looked at the kvms390 proposed patch a bit.
-> Maybe he has some opinions, especially about my questions below.
-> 
-> The fix-up below may (or may not) need some changes:
-
-
-
-> 
-> 
-> diff --cc mm/gup.c
-> index 354bcfbd844b,f589299b0d4a..000000000000
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@@ -269,18 -470,11 +468,19 @@@ retry
->   		goto retry;
->   	}
->   
-> + 	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
-> + 	if (unlikely(!try_grab_page(page, flags))) {
-> + 		page = ERR_PTR(-ENOMEM);
-> + 		goto out;
-> + 	}
->  +	if (flags & FOLL_GET) {
-> 
-> 
-> If I'm reading the diff correctly, I believe that line should *maybe* be changed to:
-> 
-> 	if (flags & (FOLL_GET | FOLL_PIN)) {
-> 
-> ...because each of those flags has a similar effect: pinned pages for DMA or RDMA
-> use. So either flag will require a call to arch_make_page_accessible()...except that
-> I'm not sure that's what you want. Would the absence of a call to 
-> arch_make_page_accessible() cause things like pin_user_pages() to not work correctly?
-> Seems like it would, to me.
-> 
-> (I'm pretty unhappy that we have to ask this at the linux-next level.)
-> 
-> Also below...
-> 
-> 
-> - 		if (unlikely(!try_get_page(page))) {
-> - 			page = ERR_PTR(-ENOMEM);
-> - 			goto out;
-> - 		}
->  +		ret = arch_make_page_accessible(page);
->  +		if (ret) {
->  +			put_page(page);
-> 
-> 
-> put_page() only works with FOLL_GET. So if we do allow to get here via either FOLL_GET or
-> FOLL_PIN, the we need to do an unpin_user_page(), like this:
-> 
-> 		if (flags & FOLL_PIN)
-> 			unpin_user_page(page);
-> 		else
-> 			put_page(page);
-> 
-> 
-> 
->  +			page = ERR_PTR(ret);
->  +			goto out;
->  +		}
->  +	}
->   	if (flags & FOLL_TOUCH) {
->   		if ((flags & FOLL_WRITE) &&
->   		    !pte_dirty(pte) && !PageDirty(page))
-> 
-> thanks,
-> 
-
+--aAMPGxfBqVwC2Hn6OYj7zW9uSrWUtHPCg--

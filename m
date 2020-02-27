@@ -2,93 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8ED170B93
-	for <lists+linux-next@lfdr.de>; Wed, 26 Feb 2020 23:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E80170EDA
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 04:11:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727746AbgBZW3c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 26 Feb 2020 17:29:32 -0500
-Received: from mx2.suse.de ([195.135.220.15]:50496 "EHLO mx2.suse.de"
+        id S1728220AbgB0DLv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 26 Feb 2020 22:11:51 -0500
+Received: from ozlabs.org ([203.11.71.1]:48643 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727709AbgBZW3c (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 26 Feb 2020 17:29:32 -0500
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id D919DAE84;
-        Wed, 26 Feb 2020 22:29:29 +0000 (UTC)
-Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Michal Hocko <mhocko@kernel.org>,
-        Christopher Lameter <cl@linux.com>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org
-References: <0ba2a3c6-6593-2cee-1cef-983cd75f920f@virtuozzo.com>
- <F5A68B0C-AFDE-4C45-B0F3-12A5154204E6@linux.vnet.ibm.com>
- <20200218115525.GD4151@dhcp22.suse.cz>
- <D6F45EDD-9F2E-4593-B630-55E5BD7DE915@linux.vnet.ibm.com>
- <20200218142620.GF4151@dhcp22.suse.cz>
- <35EE65CF-40E3-4870-AEBC-D326977176DA@linux.vnet.ibm.com>
- <20200218152441.GH4151@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002220337030.2000@www.lameter.com>
- <20200224085812.GB22443@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002261823270.8012@www.lameter.com>
- <20200226184152.GQ3771@dhcp22.suse.cz>
- <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; prefer-encrypt=mutual; keydata=
- mQINBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABtCBWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBzdXNlLmN6PokCVAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJcbbyGBQkH8VTqAAoJECJPp+fMgqZkpGoP
- /1jhVihakxw1d67kFhPgjWrbzaeAYOJu7Oi79D8BL8Vr5dmNPygbpGpJaCHACWp+10KXj9yz
- fWABs01KMHnZsAIUytVsQv35DMMDzgwVmnoEIRBhisMYOQlH2bBn/dqBjtnhs7zTL4xtqEcF
- 1hoUFEByMOey7gm79utTk09hQE/Zo2x0Ikk98sSIKBETDCl4mkRVRlxPFl4O/w8dSaE4eczH
- LrKezaFiZOv6S1MUKVKzHInonrCqCNbXAHIeZa3JcXCYj1wWAjOt9R3NqcWsBGjFbkgoKMGD
- usiGabetmQjXNlVzyOYdAdrbpVRNVnaL91sB2j8LRD74snKsV0Wzwt90YHxDQ5z3M75YoIdl
- byTKu3BUuqZxkQ/emEuxZ7aRJ1Zw7cKo/IVqjWaQ1SSBDbZ8FAUPpHJxLdGxPRN8Pfw8blKY
- 8mvLJKoF6i9T6+EmlyzxqzOFhcc4X5ig5uQoOjTIq6zhLO+nqVZvUDd2Kz9LMOCYb516cwS/
- Enpi0TcZ5ZobtLqEaL4rupjcJG418HFQ1qxC95u5FfNki+YTmu6ZLXy+1/9BDsPuZBOKYpUm
- 3HWSnCS8J5Ny4SSwfYPH/JrtberWTcCP/8BHmoSpS/3oL3RxrZRRVnPHFzQC6L1oKvIuyXYF
- rkybPXYbmNHN+jTD3X8nRqo+4Qhmu6SHi3Vq
-Message-ID: <dd450314-d428-6776-af07-f92c04c7b967@suse.cz>
-Date:   Wed, 26 Feb 2020 23:29:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.2
+        id S1728173AbgB0DLv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 26 Feb 2020 22:11:51 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Sd4P0RpTz9sQx;
+        Thu, 27 Feb 2020 14:11:49 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582773109;
+        bh=eHa+3pK4PlM4yhNHt2NS/FOBoc7mPNn7GOxAa/M0LMg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Nyq+0yKTfhkk5WFspY03agxZgzcUEHdh1/60g1acP+MphqdJaseXmlmMdDuMzyTBq
+         IG/9Lrb1T/g5Ni6X+oXbU7sq+4vLNUQvnHMhU3JxAZdTr6lkNFJToST0Ml9/Gqnzed
+         LykgaI4+dPdJXVxGDPPe1Lwyx09nNBBx4Qb6MbPEgtOSHmlDAoDoHZSnLixQpEZMRS
+         5arX4GrauYai0Bi5iO9/VBjNnw41ChA1g3jnZVKXr+yNNKM88aBa12ul66xhW1q7lo
+         GJetiGnzra6R5LfguWCesz2F2tHu/DKEGmibdTNAeXebHhBSwgKJJ+mmkIVSIpHOXu
+         3OxuY5idVDJfQ==
+Date:   Thu, 27 Feb 2020 14:11:48 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: linux-next: manual merge of the akpm-current tree with the kvms390
+ tree
+Message-ID: <20200227141148.05d7d502@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/GX7+R1ByaTc96Id/6+oIct9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/26/20 10:45 PM, Vlastimil Babka wrote:
-> 
-> 
-> if (node == NUMA_NO_NODE)
->     page = alloc_pages(flags, order);
-> else
->     page = __alloc_pages_node(node, flags, order);
-> 
-> So yeah looks like SLUB's kmalloc_node() is supposed to behave like the
-> page allocator's __alloc_pages_node() and respect __GFP_THISNODE but not
-> enforce it by itself. There's probably just some missing data structure
-> initialization somewhere right now for memoryless nodes.
+--Sig_/GX7+R1ByaTc96Id/6+oIct9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Upon more digging, I think the problem could manifest if
-node_to_mem_node(0) (_node_numa_mem_[0]) returned 0 instead of 1,
-because it wasn't initialized properly for a memoryless node. Can you
-e.g. print it somewhere?
+Hi all,
+
+Today's linux-next merge of the akpm-current tree got a conflict in:
+
+  mm/gup.c
+
+between commit:
+
+  732b80e677b8 ("mm/gup/writeback: add callbacks for inaccessible pages")
+
+from the kvms390 tree and commit:
+
+  9947ea2c1e60 ("mm/gup: track FOLL_PIN pages")
+
+from the akpm-current tree.
+
+I fixed it up (see below - maybe not optimally) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/gup.c
+index 354bcfbd844b,f589299b0d4a..000000000000
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@@ -269,18 -470,11 +468,19 @@@ retry
+  		goto retry;
+  	}
+ =20
++ 	/* try_grab_page() does nothing unless FOLL_GET or FOLL_PIN is set. */
++ 	if (unlikely(!try_grab_page(page, flags))) {
++ 		page =3D ERR_PTR(-ENOMEM);
++ 		goto out;
++ 	}
+ +	if (flags & FOLL_GET) {
+- 		if (unlikely(!try_get_page(page))) {
+- 			page =3D ERR_PTR(-ENOMEM);
+- 			goto out;
+- 		}
+ +		ret =3D arch_make_page_accessible(page);
+ +		if (ret) {
+ +			put_page(page);
+ +			page =3D ERR_PTR(ret);
+ +			goto out;
+ +		}
+ +	}
+  	if (flags & FOLL_TOUCH) {
+  		if ((flags & FOLL_WRITE) &&
+  		    !pte_dirty(pte) && !PageDirty(page))
+
+--Sig_/GX7+R1ByaTc96Id/6+oIct9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5XM3QACgkQAVBC80lX
+0Gxbrwf/QMaJBJLbG8u0mjOZR+stuPMQ5XeLc3F0RdgSbb6OOG3TWsvaSutk6WSI
+P0d8yxNW5FbFe/Bk9aWekvpl75nUEhxqv9TosNEmTDo58PmZ6XNZ1N74Tiy6oHTP
+cqgwVc7G1kG/iSv4w8A2GZjqiaZMcgUexEWfG4FessQdUsZ8eyapYWZfiZqwDg4A
+ec5zYwqtse/hcvKHgDd0QdFhqzXdnp+/LtwZ1WDRAKeL0n5XPkRWtI6uPduDhttH
+J9MVJmlC8Z6Q4xtnsbjBWA7EyIrL5egzuCW9lO2dqWQCWUJVh6f73g9eJW3fAiSO
+PxsqoKewipY27I3WpObTzXNHYwGKXA==
+=f+KP
+-----END PGP SIGNATURE-----
+
+--Sig_/GX7+R1ByaTc96Id/6+oIct9--

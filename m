@@ -2,110 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AF6172C3E
-	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 00:29:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DB6172C7E
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 00:47:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729657AbgB0X3r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 18:29:47 -0500
-Received: from ozlabs.org ([203.11.71.1]:48847 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729391AbgB0X3r (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 27 Feb 2020 18:29:47 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48T85h46BWz9sPk;
-        Fri, 28 Feb 2020 10:29:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582846185;
-        bh=AimF7zFnDLGiRjkIKIYbj4qkmOdhvGUC2m3nzv39Agk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mrN83AWcJ6/btlCRyg5pW8NkyQhOA/1Ts8Pf/WhimzGfcGLOi/vg3PO9gZgU0WvKE
-         LJcGxzRvNM8aCmAxWkMgWLyKD7pIqr8qwnQ0fIP+caPEg2XDd2m9hgJ66OpWacYYb8
-         2LvS9ZJU2oDDz93KP6GU7bv5T9XIGi/JKpwCuNt2j0Mec1yprm0ClAQz42hpdoVtNc
-         3mTW02Wb6NoBeTY5evNOjET3Crr7+PLbEmIhwmydRfs6f3eNYVEgqR607aftAlQhmv
-         AYBSIjf05qy/qylLpFrX5mfQtN/oaALjwMy5t4QbdYx4FGpOaLWvzaCkhbDbbemsuD
-         mDGgStFbndM4w==
-Date:   Fri, 28 Feb 2020 10:29:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ursula Braun <ubraun@linux.ibm.com>,
-        Karsten Graul <kgraul@linux.ibm.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200228102942.54a6fb76@canb.auug.org.au>
+        id S1729828AbgB0Xrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 18:47:45 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:55856 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729796AbgB0Xrp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 18:47:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=28jcykxKbJYL83IzLpxZlMJpogx12W0uOAOwjpNqnaI=; b=Heq4GnYY+Oj+WGi9WwRBC2i0+a
+        VDiEiN5ZK58MZelkOzLVC0Lo9BM/xYuYGNVXP9K/p+iYWu5eb46I3FZyzyBkk8Hdu4kN2zk38OXLp
+        fvQmkAQ3Y4XwKGHnzDQN3O1dAnOd/DwzCVdjTkt5mmPyVOqhNwLsJsEMdWZuj9riqSmoqc1aC442E
+        H3gxgwSY8w49zA/hp8CiVplCDKXUDvVhGFRh5E/z/8khTOS/dEUHq/QsNQGVmFW5r3rM7q5ARE0w1
+        8ItcDm1gnyhcSAEg6Je9qtj/S+jDmNJvyotvv5BmQ9SRca38X+95XLIIA3A2Ph04JtFW58ZOaSpV+
+        6k2hiJdw==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j7Ssa-0005zI-WE; Thu, 27 Feb 2020 23:47:45 +0000
+Subject: Re: linux-next: Tree for Feb 27 (drivers/of/unittest.c)
+To:     Frank Rowand <frowand.list@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
+References: <20200227152223.3d8442f0@canb.auug.org.au>
+ <ed57c797-1d40-0786-2cdc-adae7047a86f@infradead.org>
+ <0bd9179f-c448-c40d-f520-d568547bc810@gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <63b12f5e-e5e5-a3ca-70a3-0c65075f657a@infradead.org>
+Date:   Thu, 27 Feb 2020 15:47:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/C.hgIVj1Jct2d93PVo6HLu3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <0bd9179f-c448-c40d-f520-d568547bc810@gmail.com>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/C.hgIVj1Jct2d93PVo6HLu3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2/27/20 1:12 PM, Frank Rowand wrote:
+> Hi Randy,
+> 
+> On 2/27/20 10:23 AM, Randy Dunlap wrote:
+>> On 2/26/20 8:22 PM, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20200226:
+>>>
+>>
+>> on x86_64:
+>>
+>> # CONFIG_GPIOLIB is not set
+>>
+>> ../drivers/of/unittest.c: In function ‘unittest_gpio_probe’:
+>> ../drivers/of/unittest.c:94:14: error: ‘struct gpio_chip’ has no member named ‘of_node’
+>>   devptr->chip.of_node = pdev->dev.of_node;
+>>               ^
+>> In file included from ../include/linux/kernel.h:15:0,
+>>                  from ../include/asm-generic/bug.h:19,
+>>                  from ../arch/x86/include/asm/bug.h:83,
+>>                  from ../include/linux/bug.h:5,
+>>                  from ../include/linux/mmdebug.h:5,
+>>                  from ../include/linux/mm.h:9,
+>>                  from ../include/linux/memblock.h:13,
+>>                  from ../drivers/of/unittest.c:8:
+>> ../drivers/of/unittest.c:103:73: error: ‘struct gpio_chip’ has no member named ‘of_node’
+>>     "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
+>>                                                                          ^
+>>
+>> Full randconfig file is attached.
+>>
+> 
+> I am trying to build a kernel with the randconfig you provided.
+> 
+> I am trying to figure out how to build with the exact configuration,
+> but every way I've tried to build modifies the .config file.
+> 
+> Do you have any pointers to info on how to get the build system
+> to use exactly the .config without modification?
+> 
+> (Just in case it is pertinent, I am using Linux 5.6-rc1 instead
+> of -next.)
 
-Hi all,
+Hi Frank,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Yeah, I can't get 5.6-rc1 to use that same .config file either.
+There are too many differences from rc1 to rc3+next and any
+'make' command will automatically run oldconfig (or silentoldconfig)
+to update the .config file.
 
-  net/smc/smc_core.h
+-- 
+~Randy
 
-between commit:
-
-  51e3dfa8906a ("net/smc: fix cleanup for linkgroup setup failures")
-
-from the net tree and commits:
-
-  ba9520604209 ("net/smc: remove unused parameter of smc_lgr_terminate()")
-  5f78fe968d76 ("net/smc: simplify normal link termination")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc net/smc/smc_core.h
-index 234ae25f0025,5695c7bc639e..000000000000
---- a/net/smc/smc_core.h
-+++ b/net/smc/smc_core.h
-@@@ -296,8 -290,7 +290,8 @@@ struct smc_clc_msg_accept_confirm
-  struct smc_clc_msg_local;
- =20
-  void smc_lgr_forget(struct smc_link_group *lgr);
- +void smc_lgr_cleanup_early(struct smc_connection *conn);
-- void smc_lgr_terminate(struct smc_link_group *lgr, bool soft);
-+ void smc_lgr_terminate_sched(struct smc_link_group *lgr);
-  void smc_port_terminate(struct smc_ib_device *smcibdev, u8 ibport);
-  void smc_smcd_terminate(struct smcd_dev *dev, u64 peer_gid,
-  			unsigned short vlan);
-
---Sig_/C.hgIVj1Jct2d93PVo6HLu3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5YUOYACgkQAVBC80lX
-0Gy+7QgAh4GZUYZETO9wUtc7CK12z39t2M8I09br8zGCJrR2eo4d2t+u3Dk3hvzK
-EEedxJRjP779+WliOim3TStCh6yIn68CvLfhuNF131QnAsXdRAPJxgPbJ6l6qf2b
-bs46pY4M10F7Ba8ekRO5J698uxM35cvC2qMn3TUplgX8XbS0CR+fWsVgjVF+iK9X
-O9JafPF6l/vvF0YuJp5SSF67ICsPQovJkYe42Fe6YHLZ8nb3oshV29b2TTC+xh7W
-Dy5T2WBtvgdXmzBn4Ix4fWonav7pOG+pWgGAR9JXk1vOCQRdyW+P8NIfOA0ZDMwT
-4/iOD+ZiC03a3mCoohvwKoNtbUQF2g==
-=QsW9
------END PGP SIGNATURE-----
-
---Sig_/C.hgIVj1Jct2d93PVo6HLu3--

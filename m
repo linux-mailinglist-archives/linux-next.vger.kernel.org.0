@@ -2,116 +2,162 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C7A1724E0
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 18:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1271A172594
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 18:49:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728028AbgB0RSw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 12:18:52 -0500
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:46861 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729297AbgB0RSw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 12:18:52 -0500
-Received: by mail-pf1-f195.google.com with SMTP id o24so124860pfp.13
-        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 09:18:51 -0800 (PST)
+        id S1730669AbgB0RpJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 12:45:09 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36563 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729752AbgB0RpI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 12:45:08 -0500
+Received: by mail-wr1-f66.google.com with SMTP id j16so2960278wrt.3
+        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 09:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=kvH4XVhhPYVTmIyacHLw0H2K9bo8dgjOnfjNpM59qXg=;
-        b=kzxaaL4hVXdqE5LgdTq+mES13txAegdaGRWi6evlNy+zWIO5vzNgOT40KLH3qb/lP2
-         sGAWm811NBbycXOW+bV/H7w+CSEylETuDPvNWUfgRvEghfERTt9TkzAHp0Quo3MFgnNL
-         mCxJK3KtZL6G1zJsxilFip4FJSB6Mjcn9ZaEbrrtPdspYHyqnea4ElUKssLhG1aRAEWI
-         X2T9fYV0Z/+LYDB7a73a4q+YqwX2GEGOljzTQVxzCo1uEN05YxBE1xwZSNNAcBYqohJN
-         Qlhk09Agg2RE4U/pFsl5AceAObxDgypmcw9FereOzOdHJdRC4lXZHI+K45AJb4ZQLYAu
-         inxA==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=WixaM9tNI8jnTh9C4+zTeTZp1lxDIM/c/EPF+3v0ZBE=;
+        b=KDUCet3qoAEaSacVzuXwe3JXolr9HmgHhC00ZjEyN12KdAZzPjkwxMYSF3VaIUHJoM
+         bpu5F79pIc91/TImFBOK34U/6TrFa0dvkKANTi4aZL8uJpMsvb1t/ywuXH8nUdEIvLmO
+         XlGtPRbZi9RWArB5f43EpVdrrn3vhnykxhPXDhT/jLvH/+smjUGkohWMJfAoZFO31hcM
+         tKc7ABcXYFEC2ysVSQRGKuCZyrBbMnW/Joy9VqtMH5/FFljEqQaxq7FioaRIcR/HcbWc
+         86CYOefkozOo91gDg/8hiBPn4UeCJSH/ZxIDDxJH7FxuFAaRUGBY037M5wjHACD545C0
+         TQJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=kvH4XVhhPYVTmIyacHLw0H2K9bo8dgjOnfjNpM59qXg=;
-        b=pVWk61KdrFjBy0M0S2sDovPG2sZp24qFwQaFaWgIN7Y2EcsV/l6A4xGFlz/ooIa5eB
-         /klI3xyCObliV1fxvugvg3LeHFk8To+eLOl4k1OHZu3/NnzA2+yVAELeFZhpywzMU9SV
-         qwAtNsDuUByjXjGRfx9UPozC9WT/of2szznvBo7+z/8QaqWa7DZTFL11fhOiXg8Dv+Ba
-         vYMZQ1/2mdoFvCTlzHXmqaJYrXnWExiwehb2yPZtAUA0aOfXn0oXE0xubYTuy7bLm/P+
-         iRAJIdXHC6LHw+W34jkhniJMakqG0TDwVqZBjVq0DZ1nlmZ9iF9rRPEoQ2SM0BICGUkm
-         0Afg==
-X-Gm-Message-State: APjAAAURD4zIC0+7SxBewboor5LBxchNWNVT/+l3Sfu+ffKbbnrrWraf
-        Up7YU9MENkKWq1gW+ZQvUhZ35tH4DPc=
-X-Google-Smtp-Source: APXvYqydiOzbUYmRILi14ZnNL6BrUUiksuT/TgjtWrMFM9FXmV12xYb6S45afnJWPthbH4F5uYd18w==
-X-Received: by 2002:a63:e509:: with SMTP id r9mr422155pgh.274.1582823930551;
-        Thu, 27 Feb 2020 09:18:50 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 64sm7768530pfd.48.2020.02.27.09.18.49
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2020 09:18:49 -0800 (PST)
-Message-ID: <5e57f9f9.1c69fb81.f933e.457c@mx.google.com>
-Date:   Thu, 27 Feb 2020 09:18:49 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=WixaM9tNI8jnTh9C4+zTeTZp1lxDIM/c/EPF+3v0ZBE=;
+        b=qX3yApXbkeYAm0jQR+G3PLz7QRAwRigzTvlEmkbRxI8oRAMKANOw0ZoolwUIGCBGig
+         lZ7jymCv9T0CMBVoLK0wtVdI2E1x3vyw0A1co4XA+b9rj2t11FmxRvK8X8kQ2gSKcw2J
+         BElP9xTYPg4YHnYGQKF8Ho6PVlqG07TEKqo5y99JxWLX+LXu8UHVHwQ0x+qkzjbKmsn6
+         aR3l3Ewd1HBx93Wq5FdrZ57gsEo9N11mMtQ+wk6oxAlw7q8NwJmljZMiA7tSii+1koID
+         4rEwdn7oWihOzjIPaYxvIOxZiBX84JX1FA6zdBavE5GoxpUBMNUemnGJR4J9so6QsN3E
+         I9BQ==
+X-Gm-Message-State: APjAAAW4HBJV2HeWuvZr/ZSMP6ryI/CB9Bu6JqJyalqHLItwCupgankx
+        eza8ygc3Wbs41CMVU1/J2Qwto08mKzj3CwYT8fz0Vw0U
+X-Google-Smtp-Source: APXvYqz21p2um6MK62mRZ+SLuFxx5C/Fc3SSLuIrFollTsWhEO4W2YdbT0+eur1+lWAujIwnB6aoW5WY0MRu3tAN8TA=
+X-Received: by 2002:a5d:674d:: with SMTP id l13mr8276wrw.11.1582825505785;
+ Thu, 27 Feb 2020 09:45:05 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc3-250-gfaf01b3dbee3
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 153 boots: 3 failed,
- 149 passed with 1 conflict (v5.6-rc3-250-gfaf01b3dbee3)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200227151143.6a6edaf9@canb.auug.org.au> <CAMuHMdVc-vyQfuLUgbF6ei9Qrr+fryA-j1PHsrsjTNiOYvUk+w@mail.gmail.com>
+ <CAOFY-A0=AYDSdGq5tf7s6_kRjnDGLfLjCV9p+LdKbLwyw0J9nA@mail.gmail.com>
+In-Reply-To: <CAOFY-A0=AYDSdGq5tf7s6_kRjnDGLfLjCV9p+LdKbLwyw0J9nA@mail.gmail.com>
+From:   Arjun Roy <arjunroy@google.com>
+Date:   Thu, 27 Feb 2020 09:44:54 -0800
+Message-ID: <CAOFY-A2CFi0pX1BBsuruntk0AM9doseCMnFCJi192BYojaBUUw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Soheil Hassas Yeganeh <soheil@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 153 boots: 3 failed, 149 passed with 1 conflict (v=
-5.6-rc3-250-gfaf01b3dbee3)
+On Thu, Feb 27, 2020 at 9:13 AM Arjun Roy <arjunroy@google.com> wrote:
+>
+> On Thu, Feb 27, 2020 at 1:03 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Hi Stephen et al,
+> >
+> > On Thu, Feb 27, 2020 at 5:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > > After merging the akpm tree, today's linux-next build (sparc defconfig)
+> > > failed like this:
+> > >
+> > > In file included from include/linux/list.h:9:0,
+> > >                  from include/linux/smp.h:12,
+> > >                  from include/linux/kernel_stat.h:5,
+> > >                  from mm/memory.c:42:
+> > > mm/memory.c: In function 'insert_pages':
+> > > mm/memory.c:1523:41: error: implicit declaration of function 'pte_index'; did you mean 'page_index'? [-Werror=implicit-function-declaration]
+> > >    remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
+> > >                                          ^
+> > > include/linux/kernel.h:842:40: note: in definition of macro '__typecheck'
+> > >    (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
+> > >                                         ^
+> > > include/linux/kernel.h:866:24: note: in expansion of macro '__safe_cmp'
+> > >   __builtin_choose_expr(__safe_cmp(x, y), \
+> > >                         ^~~~~~~~~~
+> > > include/linux/kernel.h:934:27: note: in expansion of macro '__careful_cmp'
+> > >  #define min_t(type, x, y) __careful_cmp((type)(x), (type)(y), <)
+> > >                            ^~~~~~~~~~~~~
+> > > mm/memory.c:1522:26: note: in expansion of macro 'min_t'
+> > >   pages_to_write_in_pmd = min_t(unsigned long,
+> > >                           ^~~~~
+> >
+> > Same issue on m68k, as per a report from kisskb.
+> >
+> > > Caused by patch
+> > >
+> > >   "mm/memory.c: add vm_insert_pages()"
+> > >
+> > > sparc32 does not implement pte_index at all :-(
+> >
+> > Seems like about only half of the architectures do.
+> >
+>
+> :/ I begin to suspect the only sane way to make this work is to have a
+> per-arch header defined method, returning a bool saying whether
+> pte_index() is meaningful or not on that arch, and early on in
+> vm_insert_pages() if that bool returns true, to just call
+> vm_insert_page() in a loop.
+>
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc3-250-gfaf01b3dbee3/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc3-250-gfaf01b3dbee3/
+So, here is what I propose: something like the following macro in a
+per-arch header:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc3-250-gfaf01b3dbee3
-Git Commit: faf01b3dbee3526006a7a2b6bb8c0a06c296b453
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 63 unique boards, 16 SoC families, 25 builds out of 216
+#define PTE_INDEX_DEFINED 1 // or 0 if it is not
 
-Boot Regressions Detected:
+In mm/memory.c, another macro:
 
-arm:
+#ifndef PTE_INDEX_DEFINED
+#define PTE_INDEX_DEFINED 0
+#endifndef
 
-    sunxi_defconfig:
-        gcc-8:
-          sun8i-h3-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: v5.6-rc3-209-g2bda1ca06=
-ff4)
+And inside vm_insert_pages:
 
-Boot Failures Detected:
+int vm_insert_pages() {
 
-arm:
-    sunxi_defconfig:
-        gcc-8:
-            sun8i-h3-libretech-all-h3-cc: 1 failed lab
+#if PTE_INDEX_DEFINED
 
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
+// The existing method
 
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
+#else
 
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
+for (i=0; i<n; ++i)
+        vm_insert_page(i)
 
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        meson-gxl-s905x-libretech-cc:
-            lab-clabbe: FAIL (gcc-8)
-            lab-baylibre: PASS (gcc-8)
+#endif
+}
 
----
-For more info write to <info@kernelci.org>
+That way:
+1. No playing whack-a-mole with different architectures
+2. Architecture that knows pte_index is meaningful works can define
+this explicitly
+3. Can remove the sparc patches modifying pte_index that Stephen and I
+contributed.
+
+If that sounds acceptable I can cook a patch.
+
+Thanks,
+-Arjun
+
+> -Arjun
+>
+> > Gr{oetje,eeting}s,
+> >
+> >                         Geert
+> >
+> > --
+> > Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> >
+> > In personal conversations with technical people, I call myself a hacker. But
+> > when I'm talking to journalists I just say "programmer" or something like that.
+> >                                 -- Linus Torvalds

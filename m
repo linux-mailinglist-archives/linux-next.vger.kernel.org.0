@@ -2,82 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ECCE7172A76
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 22:52:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9AB172C31
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 00:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729864AbgB0Vwj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 16:52:39 -0500
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:47826 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729535AbgB0Vwi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 16:52:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1582840358;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UXkdCtTkO49ytr+egfYOWUQHFCGfaWE6lMIRwlJTVOE=;
-        b=PQGRMm4cLUiX37IgUATneFKikK7A9QiU+lttp7emE0ZC69FXva4X79nTOIkNBk7R8k0QV3
-        biQd70GC9zrKMfAoeYuhnY556sD0Nj0FgqxS4uoKg/HvqkUmAv08G0LFu8g1sdgHGQyJGK
-        dWmM0RP3C97RmVg2nT1k/2Es+LM8XhA=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-57-SOFEDrlRNbWXKgxjkOOMeg-1; Thu, 27 Feb 2020 16:52:31 -0500
-X-MC-Unique: SOFEDrlRNbWXKgxjkOOMeg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.phx2.redhat.com [10.5.11.12])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729586AbgB0XZA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 18:25:00 -0500
+Received: from ozlabs.org ([203.11.71.1]:38043 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729391AbgB0XZA (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 27 Feb 2020 18:25:00 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3444800D5E;
-        Thu, 27 Feb 2020 21:52:28 +0000 (UTC)
-Received: from treble (ovpn-121-128.rdu2.redhat.com [10.10.121.128])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 91E1460BE0;
-        Thu, 27 Feb 2020 21:52:26 +0000 (UTC)
-Date:   Thu, 27 Feb 2020 15:52:24 -0600
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: mmotm 2020-02-24-19-53 uploaded (objtool warning)
-Message-ID: <20200227215224.5q7slx2eikkxwhwi@treble>
-References: <20200225035348.xf9KRK471%akpm@linux-foundation.org>
- <c15a7c7e-df7c-8a30-0bb1-03f8b04b7be5@infradead.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48T808521Qz9sPk;
+        Fri, 28 Feb 2020 10:24:55 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582845898;
+        bh=To3tzqfMsnkCEAkQZKONomjnYrthyCCicrzs9dIy7to=;
+        h=Date:From:To:Cc:Subject:From;
+        b=dTuaz+BzpPrKtQu42RNSwZPRg+oncKghmYa7G1kwVghJr9dUlIK4huqzAVrsfF1G1
+         o+9T8GKSkjbPpigAI2/XcNl+Ma78uM1CI7pJDL9RONt4P0mr9aBdbqH5aN/cjwGmUt
+         3wpfLyNV2z990izlCVcl5t8kf4p+7XdweRkCVR8gkY0QKdkPchl5k0yg/M37rdSF1e
+         fwyyFoU43TdAoEtY9YHrWBWmyS4R45mlE96Cf0X+zJDrxZrd0UkByWFIAvi+zvOXvj
+         CBerchfBrKzyXIV3/K/9GJJADLqER9Y0UtOrgCxhnDequEWQiu0crOqoPTE/Q0dyzP
+         j4nqE3KRS28dA==
+Date:   Fri, 28 Feb 2020 10:24:51 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Westphal <fw@strlen.de>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20200228102451.0a3d2057@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c15a7c7e-df7c-8a30-0bb1-03f8b04b7be5@infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.12
+Content-Type: multipart/signed; boundary="Sig_/JVbqX+zVa7eXIucuJAD39hv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Feb 25, 2020 at 09:01:54AM -0800, Randy Dunlap wrote:
-> On 2/24/20 7:53 PM, Andrew Morton wrote:
-> > The mm-of-the-moment snapshot 2020-02-24-19-53 has been uploaded to
-> > 
-> >    http://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > mmotm-readme.txt says
-> > 
-> > README for mm-of-the-moment:
-> > 
-> > http://www.ozlabs.org/~akpm/mmotm/
-> > 
-> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > more than once a week.
-> > 
-> 
-> Still seeing this one:
-> 
-> on x86_64:
-> 
-> drivers/gpu/drm/i915/gem/i915_gem_execbuffer.o: warning: objtool: i915_gem_execbuffer2_ioctl()+0x5b7: call to gen8_canonical_addr() with UACCESS enabled
+--Sig_/JVbqX+zVa7eXIucuJAD39hv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Forgot I had a patch for this.  Posting shortly.
+Hi all,
 
--- 
-Josh
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  net/mptcp/protocol.c
+
+between commit:
+
+  dc24f8b4ecd3 ("mptcp: add dummy icsk_sync_mss()")
+
+from the net tree and commit:
+
+  80992017150b ("mptcp: add work queue skeleton")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/mptcp/protocol.c
+index 3c19a8efdcea,044295707bbf..000000000000
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@@ -543,20 -666,26 +666,32 @@@ static void __mptcp_close_ssk(struct so
+  	}
+  }
+ =20
+ +static unsigned int mptcp_sync_mss(struct sock *sk, u32 pmtu)
+ +{
+ +	return 0;
+ +}
+ +
++ static void mptcp_worker(struct work_struct *work)
++ {
++ 	struct mptcp_sock *msk =3D container_of(work, struct mptcp_sock, work);
++ 	struct sock *sk =3D &msk->sk.icsk_inet.sk;
++=20
++ 	lock_sock(sk);
++ 	__mptcp_move_skbs(msk);
++ 	release_sock(sk);
++ 	sock_put(sk);
++ }
++=20
+  static int __mptcp_init_sock(struct sock *sk)
+  {
+  	struct mptcp_sock *msk =3D mptcp_sk(sk);
+ =20
+  	INIT_LIST_HEAD(&msk->conn_list);
+  	__set_bit(MPTCP_SEND_SPACE, &msk->flags);
++ 	INIT_WORK(&msk->work, mptcp_worker);
+ =20
+  	msk->first =3D NULL;
+ +	inet_csk(sk)->icsk_sync_mss =3D mptcp_sync_mss;
+ =20
+  	return 0;
+  }
+
+--Sig_/JVbqX+zVa7eXIucuJAD39hv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5YT8MACgkQAVBC80lX
+0GxXUgf/eb8o92fkFNcCN1qB8ycZGoXyKwCqNr7xKpnIJoj16vINIdmVcxdPippj
+41ME2k0DE7xp94UioXDKX+jnquLu9/eFXtxzW3Q/4kh8rEfM8DPxpC0eqtbKASOK
++QhF3qJ7P05oXaweUnjwWfOxKN09wJmlHNihQy3SePLXaqDbisubrDD652cljv8z
+/GmOVssH7LmRup+HvpABOcJnST7+y08x6KEVqmlUr+y4WFRNaX7p66XeLmKhoYKN
+V2xY6/7IXgg6GUmkJgFDy9a81usJd9BdOZCFatUoIfYrVnKATxzMVJkROuBRyMpU
+IxL+nPwvoEcU8P7qLXsx8ElUqlpNGg==
+=qjZb
+-----END PGP SIGNATURE-----
+
+--Sig_/JVbqX+zVa7eXIucuJAD39hv--

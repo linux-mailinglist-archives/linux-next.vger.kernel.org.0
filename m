@@ -2,153 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FA671725C4
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 18:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4DD172788
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 19:32:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729433AbgB0R5j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 12:57:39 -0500
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:41033 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgB0R5i (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 12:57:38 -0500
-Received: by mail-ot1-f65.google.com with SMTP id v19so3746960ote.8;
-        Thu, 27 Feb 2020 09:57:38 -0800 (PST)
+        id S1729317AbgB0S04 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 13:26:56 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:51152 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729258AbgB0S0z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 13:26:55 -0500
+Received: by mail-wm1-f68.google.com with SMTP id a5so502791wmb.0
+        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 10:26:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=AE8wb0HG+3vuy1qodVFMwqdvcyEFEcaDAhlJidYfCs0=;
-        b=sXvgBWBybj8Pin0WtXpzccj6sQB8c80C6mV06prDPwqlvT5xdkfH2i1zUngz+KZIVe
-         HMwInSeuQH+aySGAFQkI5BYWMTF5XGkQcawDMGrYlRi+VlarJwIlSPT5UUXdAjBCNk+U
-         dmH7vaobepfo8lJpl/748+IsVr4KETSIjZTnN+EB/kj8SA4cmgD3zs4P/basbDWiFl18
-         gPfLaxc2ClcCzbwHhRVtmIyBxrjn4V+gA+/+dcRKf/2YeipoySnsS6CxgYSDCmmwB4WO
-         oolZBmNS5ManzMgu1E51xXoJaEgbzaMZVMJHZwGkeQ6Pt8sHc7xhrQNtQdeSH/BZJNtJ
-         bm+w==
-X-Gm-Message-State: APjAAAVrsXOE0TRtUWxr1X8PSuZSzJ2vY3LIqiI4PgbprJWSdo/0zky0
-        lCZq5VZhSPguP33R/p1Pq7wrlWeSHIKNthywOXA=
-X-Google-Smtp-Source: APXvYqy3ggWLS/5mUneApKM2x+tXn239hPyRVnHqSbQHT+/fvBYj77PEXaw0d7lsEwKOkN6sn5MDEP7+B/X6E22cwvE=
-X-Received: by 2002:a9d:5c0c:: with SMTP id o12mr67639otk.145.1582826257924;
- Thu, 27 Feb 2020 09:57:37 -0800 (PST)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=nuYWGvXIJxnKaPJUN7O6fqH652rzQXPhnsvypnDtqKs=;
+        b=T5krsejAiXTorzdRUzUCiVaUW5By7YoR21QHlUlqj27wYatLOBfRsiBJ/J2811FIIl
+         2R09TqBx2cbkQqdmRj/EBZEcb3MIrDc8V+J3qYyxneZIPUvB291GXV6kT3CxjSKtgs5R
+         hJ0lBM/JEnCRHvLILb9pQRYGcwxddi45oZ7GtDiKFjEU8HE0kekSW3Ei/NZ1J6iUyWkN
+         qPiDj7sbHarnHatziUtk2Sdv6iQWwsWw6mZVMqSa/i3IJy2PjYMz+1kAfyCU+O2yLn2u
+         TDq4GHpfTKZgYEQvd7kgeVeixGpbHiv3JprpYEceIm2ErJEEqVNATYx/H4JAHwcx//Hs
+         i9xA==
+X-Gm-Message-State: APjAAAWKfHAAE/iGyKn8YRwD/FPzCk7FMRhvGAey1NpGP8wKITkHBXat
+        2Hl1AhqsTNVxHrMhGVOowN4=
+X-Google-Smtp-Source: APXvYqx82ijERbvyDfB3ZxoT7lm5HutF/9NedvT6IjWQepUKymCSU7QWzkD1heIcOCKUVN7tFyWCjg==
+X-Received: by 2002:a1c:67c3:: with SMTP id b186mr108626wmc.36.1582828014406;
+        Thu, 27 Feb 2020 10:26:54 -0800 (PST)
+Received: from localhost (ip-37-188-246-93.eurotel.cz. [37.188.246.93])
+        by smtp.gmail.com with ESMTPSA id g7sm1739081wrm.72.2020.02.27.10.26.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2020 10:26:53 -0800 (PST)
+Date:   Thu, 27 Feb 2020 19:26:50 +0100
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Christopher Lameter <cl@linux.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
+Message-ID: <20200227182650.GG3771@dhcp22.suse.cz>
+References: <20200218152441.GH4151@dhcp22.suse.cz>
+ <alpine.DEB.2.21.2002220337030.2000@www.lameter.com>
+ <20200224085812.GB22443@dhcp22.suse.cz>
+ <alpine.DEB.2.21.2002261823270.8012@www.lameter.com>
+ <20200226184152.GQ3771@dhcp22.suse.cz>
+ <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz>
+ <dd450314-d428-6776-af07-f92c04c7b967@suse.cz>
+ <20200227121214.GE3771@dhcp22.suse.cz>
+ <52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com>
+ <9a86f865-50b5-7483-9257-dbb08fecd62b@suse.cz>
 MIME-Version: 1.0
-References: <20200227151143.6a6edaf9@canb.auug.org.au> <CAMuHMdVc-vyQfuLUgbF6ei9Qrr+fryA-j1PHsrsjTNiOYvUk+w@mail.gmail.com>
- <CAOFY-A0=AYDSdGq5tf7s6_kRjnDGLfLjCV9p+LdKbLwyw0J9nA@mail.gmail.com> <CAOFY-A2CFi0pX1BBsuruntk0AM9doseCMnFCJi192BYojaBUUw@mail.gmail.com>
-In-Reply-To: <CAOFY-A2CFi0pX1BBsuruntk0AM9doseCMnFCJi192BYojaBUUw@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 27 Feb 2020 18:57:26 +0100
-Message-ID: <CAMuHMdW-0xuxK_Cd2t3=BZwwOUhrYf-Ctn+frW_1tTsO5eQxOw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the akpm tree
-To:     Arjun Roy <arjunroy@google.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Soheil Hassas Yeganeh <soheil@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9a86f865-50b5-7483-9257-dbb08fecd62b@suse.cz>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Arjun,
+[Cc ppc maintainers]
+On Thu 27-02-20 17:16:41, Vlastimil Babka wrote:
+> On 2/27/20 5:00 PM, Sachin Sant wrote:
+> > 
+> > 
+> >> On 27-Feb-2020, at 5:42 PM, Michal Hocko <mhocko@kernel.org> wrote:
+> >> 
+> >> A very good hint indeed. I would do this
+> >> diff --git a/include/linux/topology.h b/include/linux/topology.h
+> >> index eb2fe6edd73c..d9f1b6737e4d 100644
+> >> --- a/include/linux/topology.h
+> >> +++ b/include/linux/topology.h
+> >> @@ -137,6 +137,8 @@ static inline void set_numa_mem(int node)
+> >> {
+> >> 	this_cpu_write(_numa_mem_, node);
+> >> 	_node_numa_mem_[numa_node_id()] = node;
+> >> +	pr_info("%s %d -> %d\n", __FUNCTION__, numa_node_id(), node);
+> >> +	dump_stack();
+> >> }
+> >> #endif
+> >> 
+> >> Btw. it would be also helpful to get
+> >> `faddr2line ___slab_alloc+0x334' from your kernel Sachin.
+> > 
+> > [linux-next]# ./scripts/faddr2line ./vmlinux ___slab_alloc+0x334 
+> > ___slab_alloc+0x334/0x760:
+> > new_slab_objects at mm/slub.c:2478
+> > (inlined by) ___slab_alloc at mm/slub.c:2628
+> > [linux-next]# 
+> 
+> Hmm that doesn't look relevant, but that address was marked as unreliable, no?
+> Don't we actually need this one?
+> 
+> [    8.768727] NIP [c0000000003d55f4] ___slab_alloc+0x1f4/0x760
+> 
+> > I have also attached boot log with a kernel that include about change.
+> > I see the following o/p during boot:
+> > 
+> > [    0.005269] set_numa_mem 1 -> 1
+> 
+> So there's no "set_numa_mem 0 -> X", specifically not
+> "set_numa_mem 0 -> 1" which I would have expected. That seems to confirm my
+> suspicion that the arch code doesn't set up the memoryless node 0 properly.
 
-On Thu, Feb 27, 2020 at 6:45 PM Arjun Roy <arjunroy@google.com> wrote:
-> On Thu, Feb 27, 2020 at 9:13 AM Arjun Roy <arjunroy@google.com> wrote:
-> > On Thu, Feb 27, 2020 at 1:03 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > On Thu, Feb 27, 2020 at 5:12 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > > > After merging the akpm tree, today's linux-next build (sparc defconfig)
-> > > > failed like this:
-> > > >
-> > > > In file included from include/linux/list.h:9:0,
-> > > >                  from include/linux/smp.h:12,
-> > > >                  from include/linux/kernel_stat.h:5,
-> > > >                  from mm/memory.c:42:
-> > > > mm/memory.c: In function 'insert_pages':
-> > > > mm/memory.c:1523:41: error: implicit declaration of function 'pte_index'; did you mean 'page_index'? [-Werror=implicit-function-declaration]
-> > > >    remaining_pages_total, PTRS_PER_PTE - pte_index(addr));
-> > > >                                          ^
-> > > > include/linux/kernel.h:842:40: note: in definition of macro '__typecheck'
-> > > >    (!!(sizeof((typeof(x) *)1 == (typeof(y) *)1)))
-> > > >                                         ^
-> > > > include/linux/kernel.h:866:24: note: in expansion of macro '__safe_cmp'
-> > > >   __builtin_choose_expr(__safe_cmp(x, y), \
-> > > >                         ^~~~~~~~~~
-> > > > include/linux/kernel.h:934:27: note: in expansion of macro '__careful_cmp'
-> > > >  #define min_t(type, x, y) __careful_cmp((type)(x), (type)(y), <)
-> > > >                            ^~~~~~~~~~~~~
-> > > > mm/memory.c:1522:26: note: in expansion of macro 'min_t'
-> > > >   pages_to_write_in_pmd = min_t(unsigned long,
-> > > >                           ^~~~~
-> > >
-> > > Same issue on m68k, as per a report from kisskb.
-> > >
-> > > > Caused by patch
-> > > >
-> > > >   "mm/memory.c: add vm_insert_pages()"
-> > > >
-> > > > sparc32 does not implement pte_index at all :-(
-> > >
-> > > Seems like about only half of the architectures do.
-> > >
-> >
-> > :/ I begin to suspect the only sane way to make this work is to have a
-> > per-arch header defined method, returning a bool saying whether
-> > pte_index() is meaningful or not on that arch, and early on in
-> > vm_insert_pages() if that bool returns true, to just call
-> > vm_insert_page() in a loop.
-> >
->
-> So, here is what I propose: something like the following macro in a
-> per-arch header:
->
-> #define PTE_INDEX_DEFINED 1 // or 0 if it is not
+Please have a look at http://lkml.kernel.org/r/52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com
+for the boot log with the debugging patch which tracks set_numa_mem.
+This seems to lead to a crash in the slab allocator bebcause
+node_to_mem_node(0) for memory less node resolves to the memory less
+node http://lkml.kernel.org/r/dd450314-d428-6776-af07-f92c04c7b967@suse.cz.
+The original report is http://lkml.kernel.org/r/3381CD91-AB3D-4773-BA04-E7A072A63968@linux.vnet.ibm.com
 
-pte_index is already a #define on architectures where it exists, so
-you can just use that.
-
-> In mm/memory.c, another macro:
->
-> #ifndef PTE_INDEX_DEFINED
-> #define PTE_INDEX_DEFINED 0
-> #endifndef
-
-No need for the above...
-
-> And inside vm_insert_pages:
->
-> int vm_insert_pages() {
->
-> #if PTE_INDEX_DEFINED
-
-... if you use "#ifdef" here.
-
->
-> // The existing method
->
-> #else
->
-> for (i=0; i<n; ++i)
->         vm_insert_page(i)
->
-> #endif
-> }
->
-> That way:
-> 1. No playing whack-a-mole with different architectures
-> 2. Architecture that knows pte_index is meaningful works can define
-> this explicitly
-> 3. Can remove the sparc patches modifying pte_index that Stephen and I
-> contributed.
->
-> If that sounds acceptable I can cook a patch.
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> 
+> > [    0.005270] CPU: 12 PID: 0 Comm: swapper/12 Not tainted 5.6.0-rc3-next-20200227-autotest+ #6
+> > [    0.005271] Call Trace:
+> > [    0.005272] [c0000008b37dfe80] [c000000000b5d948] dump_stack+0xbc/0x104 (unreliable)
+> > [    0.005274] [c0000008b37dfec0] [c000000000059320] start_secondary+0x600/0x6e0
+> > [    0.005277] [c0000008b37dff90] [c00000000000ac54] start_secondary_prolog+0x10/0x14
+> > 
+> > Thanks
+> > -Sachin
+> > 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Michal Hocko
+SUSE Labs

@@ -2,44 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC805172344
-	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 17:25:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B7E2172374
+	for <lists+linux-next@lfdr.de>; Thu, 27 Feb 2020 17:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730243AbgB0QXu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 11:23:50 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:48970 "EHLO
+        id S1729968AbgB0Qez (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 11:34:55 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:46370 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730079AbgB0QXu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 11:23:50 -0500
+        with ESMTP id S1729169AbgB0Qez (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 11:34:55 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Type:In-Reply-To:MIME-Version
         :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rs2E1XcrwutAvQMh+j1D9o/zwg24tPG9++Eq0EImFqs=; b=tpjDSkD2otX4CuuSCWw/rcU+XD
-        4oLLSNIxD0+FFiYMug2PahbexUTt3IpIRY8yi/sILwSXPzXYk2BvLcIh5hdMfSY1AwHFL8fKZdgb8
-        zZ+j9BMHNak/nfXzVyAws42U7PAGVkA2Vf4Y2U9OCvmLC/8ADt0+VeS/zzhvQUAsUQUmBsyDLklqc
-        mQ5g+tDY/Ur8D+nBY+yUSDdkkEuk5zKwV/Gm3T/MovL4Zhu1l6xofME0iAKmXibOuEHW8qaUdX/w+
-        WpWqY/pt3sU/V82HhxOlfRY2CjPA9Dd2sUH7u36wWVqqjEniCJqgn0Xc5BQRw7wUB4RoVVnrDhDIW
-        U8apoefQ==;
+        bh=UFTTT+A0JO8wAoVWZ9pwFQQc7RyyLnYGwfFsLhpJ+fQ=; b=TNqjjzIaFyVWXkkk3NlJPkPi9i
+        aq7MBioR6MgMTCMKUWojjP7Pt8D+y6eXmKeEjmQs5qr5+O8SU3LHh67ugXkbEoB9j7eYEv4jLhyGj
+        uW/P2twrqniAieuuX95ph7ceKnWDMKmmECs7UV5ug9X2v64RYnfyigLSNHlXYmT5TOLnp6A7tEMms
+        IyQc76s+E9dK7g8tKv5yL8LsPcIOyfzmXP0NXBy0JDoLspS4D6boOCdcw29s9Dy2kk8GYRpolpEGf
+        xQje7+WdGqd/0mnW+LvMd04Dad2L0RTvqQ4QfK1o4hl5JQKXN3pKh3kQWn5e73yJs0p9QKWC7Y9/w
+        VuI9w17Q==;
 Received: from [2601:1c0:6280:3f0::19c2]
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j7Lwx-0002b4-5G; Thu, 27 Feb 2020 16:23:47 +0000
-Subject: Re: linux-next: Tree for Feb 27 (drivers/of/unittest.c)
+        id 1j7M7b-0001Kv-TW; Thu, 27 Feb 2020 16:34:48 +0000
+Subject: Re: linux-next: Tree for Feb 27 (sound/soc/codecs/:
+ SND_SOC_MAX98357A)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Frank Rowand <frowand.list@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        moderated for non-subscribers <alsa-devel@alsa-project.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
 References: <20200227152223.3d8442f0@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ed57c797-1d40-0786-2cdc-adae7047a86f@infradead.org>
-Date:   Thu, 27 Feb 2020 08:23:44 -0800
+Message-ID: <e5a0edc7-3816-fd16-6fd9-8e91dad3aae6@infradead.org>
+Date:   Thu, 27 Feb 2020 08:34:47 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
 In-Reply-To: <20200227152223.3d8442f0@canb.auug.org.au>
 Content-Type: multipart/mixed;
- boundary="------------D1AC38C32E62E8347BBAD5A1"
+ boundary="------------E94D343DB851ED36530DD23D"
 Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
@@ -47,9 +50,9 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------D1AC38C32E62E8347BBAD5A1
+--------------E94D343DB851ED36530DD23D
 Content-Type: text/plain; charset=windows-1252
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 On 2/26/20 8:22 PM, Stephen Rothwell wrote:
 > Hi all,
@@ -58,32 +61,27 @@ On 2/26/20 8:22 PM, Stephen Rothwell wrote:
 > 
 
 on x86_64:
-
 # CONFIG_GPIOLIB is not set
 
-../drivers/of/unittest.c: In function ‘unittest_gpio_probe’:
-../drivers/of/unittest.c:94:14: error: ‘struct gpio_chip’ has no member named ‘of_node’
-  devptr->chip.of_node = pdev->dev.of_node;
-              ^
-In file included from ../include/linux/kernel.h:15:0,
-                 from ../include/asm-generic/bug.h:19,
-                 from ../arch/x86/include/asm/bug.h:83,
-                 from ../include/linux/bug.h:5,
-                 from ../include/linux/mmdebug.h:5,
-                 from ../include/linux/mm.h:9,
-                 from ../include/linux/memblock.h:13,
-                 from ../drivers/of/unittest.c:8:
-../drivers/of/unittest.c:103:73: error: ‘struct gpio_chip’ has no member named ‘of_node’
-    "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
-                                                                         ^
+SND_SOC_MAX98357A depends on GPIOLIB, which is not enabled.
+Some driver(s) is selecting GPIOLIB in error.
+
+
+WARNING: unmet direct dependencies detected for SND_SOC_MAX98357A
+  Depends on [n]: SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && GPIOLIB [=n]
+  Selected by [m]:
+  - SND_SOC_AMD_RV_RT5682_MACH [=m] && SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_AMD_ACP3x [=m] && I2C [=y]
+  - SND_SOC_STORM [=m] && SOUND [=m] && !UML && SND [=m] && SND_SOC [=m] && SND_SOC_QCOM [=m]
+
 
 Full randconfig file is attached.
+
 
 -- 
 ~Randy
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
---------------D1AC38C32E62E8347BBAD5A1
+--------------E94D343DB851ED36530DD23D
 Content-Type: text/plain; charset=UTF-8;
  name="config-r1122"
 Content-Transfer-Encoding: 7bit
@@ -6598,4 +6596,4 @@ CONFIG_TEST_MEMINIT=m
 
 # CONFIG_WARN_MISSING_DOCUMENTS is not set
 
---------------D1AC38C32E62E8347BBAD5A1--
+--------------E94D343DB851ED36530DD23D--

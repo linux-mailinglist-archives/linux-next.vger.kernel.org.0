@@ -2,135 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BA229172CF4
-	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 01:21:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCA4172D6D
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 01:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730233AbgB1AVR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 19:21:17 -0500
-Received: from ozlabs.org ([203.11.71.1]:44989 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1730028AbgB1AVR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 27 Feb 2020 19:21:17 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48T9F16RlXz9sRR;
-        Fri, 28 Feb 2020 11:21:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1582849274;
-        bh=bqdlhaCdEDQDT6fMYuS3yfXwDRqxYLhmkBEqspxX+SA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=PVVcUtLncUnQHw/RSYelG+mm5ydul2tL/gOubl5BsQOKfaJMlVQdOHTx0aos5eO5d
-         HXphgeaI3XHAbCJvyuzAxRK0PDoij9NE3DnOUTNrVlfhZB4kHJ8IRoyX4viFyDlDOz
-         R6xrJg2DqL0dkzUL1htwpy9tdbtMP+rEyiokKEpLqiE6RE+ykHyS/oSExseE5QdrUK
-         h86heK9ArpX6KbYq1s0PuCvJ59s+ozbhW8k14ueSFRS5RqSBTvRQVX/eW1YXE325eR
-         x/dRGbMprADGFbTU+dRFPQW582Nn06rU5SHydvTZjolbbr4NxvqhklV9OkbJGG16TC
-         x8SnX+qnbKhcA==
-Date:   Fri, 28 Feb 2020 11:21:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>
-Subject: linux-next: manual merge of the amdgpu tree with the drm tree
-Message-ID: <20200228112104.519f002a@canb.auug.org.au>
+        id S1729984AbgB1AfE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 19:35:04 -0500
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:54470 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730034AbgB1AfD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 19:35:03 -0500
+Received: by mail-wm1-f66.google.com with SMTP id z12so1442608wmi.4
+        for <linux-next@vger.kernel.org>; Thu, 27 Feb 2020 16:35:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=o+y+J6aBAVQm7+lBq+/zozG5JL2IvJJLjLrQfS4QdVQ=;
+        b=AdYaaS+z+BmKy2R4hzS0e0h6MCTJzCLfwcVwFY72/idqQIjeHS5Wtnv/QRN0RvFf0L
+         Un5qUTpREaru8OKagFadavE5NB2uGDKjRv4UvBNjALauBiwh9WMfJ7+eXNpDhTnmDfte
+         bAl+kMgFgAi70PTn10seOYYcZbcfC4OjEoksSakPEmJ8pQRwKU/r8s41tLPGzmcYT7/7
+         EEhndo0236jBuNhE3FW8I1fv8sZI+PjgUWlXEt9fCfabeHx5OUBudowQM+2l1m4smH55
+         fZg9fZ5Wy0rQuuuI0IHLifpFccz+1hUk1BvyjFJjBfWLOObzXwCHJUOTIaaWEHGnzv92
+         aj2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=o+y+J6aBAVQm7+lBq+/zozG5JL2IvJJLjLrQfS4QdVQ=;
+        b=FyhsNHFy5td97BJnwjpUYmjyzbqX+6V5wyCd7EvJTIpucfQ/vp/u6kQvpGwinr5XvN
+         2Z+iKeELS5U54A87kTzQIoa/PHqfSW7pB7MQoRs72bhQUysua0vG7GfpkvyUMmFvVT5L
+         zknXNC6UnWx3iqdxiUDW3IdFiWaR2kQv5fyeIdWlTDI8r/NjKMWYOF9moAnmEtxsRnED
+         JrhbEfwyEyYP0LDZABbsvOaCWWsrvDmIHF01ijxn45ncCMGP2R0kYszuoyo7UFPdDW9d
+         yrb6te3nBFsH5qs1BX+M9lDxilxGrVV3cmA/pvF6UndmR4l4A0BHL49wXA0/P5kB3Tz7
+         jMbA==
+X-Gm-Message-State: APjAAAVgR3yHZmhi0J58cUFtOSKb2gCIlf3NRDzo4azpuSN28gh6YfP0
+        3ykcUeXFPwWJaq66zLEK5IVRx/Us7hv21lyA2GPuuw==
+X-Google-Smtp-Source: APXvYqzCW1mGRZylyx23Rk8Wc+OsvoYXqbmKSb28ENyZ8D2cARNMUch6jMz915hBoo5e4HcHmmudR8qltx0UYXMUbAk=
+X-Received: by 2002:a1c:9c4c:: with SMTP id f73mr1333343wme.125.1582850100078;
+ Thu, 27 Feb 2020 16:35:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200227151143.6a6edaf9@canb.auug.org.au> <CAMuHMdVc-vyQfuLUgbF6ei9Qrr+fryA-j1PHsrsjTNiOYvUk+w@mail.gmail.com>
+ <CAOFY-A0=AYDSdGq5tf7s6_kRjnDGLfLjCV9p+LdKbLwyw0J9nA@mail.gmail.com>
+ <CAOFY-A2CFi0pX1BBsuruntk0AM9doseCMnFCJi192BYojaBUUw@mail.gmail.com>
+ <CAMuHMdW-0xuxK_Cd2t3=BZwwOUhrYf-Ctn+frW_1tTsO5eQxOw@mail.gmail.com>
+ <CAOFY-A0icFrzHibVrUu04JaiBBqNoNoEDYVjHGi4eMgDT1Z2KQ@mail.gmail.com> <20200228082831.0149e354@canb.auug.org.au>
+In-Reply-To: <20200228082831.0149e354@canb.auug.org.au>
+From:   Arjun Roy <arjunroy@google.com>
+Date:   Thu, 27 Feb 2020 16:34:48 -0800
+Message-ID: <CAOFY-A0an+H=aP6vANr17rrv7v5F99azi4UVaYNTAcpRSRsHUA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Soheil Hassas Yeganeh <soheil@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Feb 27, 2020 at 1:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Arjun,
+>
+> On Thu, 27 Feb 2020 10:50:51 -0800 Arjun Roy <arjunroy@google.com> wrote:
+> >
+> > On Thu, Feb 27, 2020 at 9:57 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> >
+> > Sounds good, thanks. I'll cook up a patch and send it along.
+>
+> You will need to keep the sparc64 patch to correct pte_index in this case.
+>
+Agreed on sparc64; I think the sparc32 patch ought to be reverted,
+though (since pte_index may be meaningless to it).
 
-Hi all,
+Thanks,
+-Arjun
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
-
-  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-
-between commits:
-
-  ea702333e567 ("drm/amdgpu: Convert to struct drm_crtc_helper_funcs.get_sc=
-anout_position()")
-  e3eff4b5d91e ("drm/amdgpu: Convert to CRTC VBLANK callbacks")
-
-from the drm tree and commit:
-
-  c6385e503aea ("drm/amdgpu: drop legacy drm load and unload callbacks")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 4598836c5fa4,4e868229e3b7..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@@ -1377,17 -1434,30 +1434,15 @@@ int amdgpu_file_to_fpriv(struct file *f
-  	return 0;
-  }
- =20
- -static bool
- -amdgpu_get_crtc_scanout_position(struct drm_device *dev, unsigned int pip=
-e,
- -				 bool in_vblank_irq, int *vpos, int *hpos,
- -				 ktime_t *stime, ktime_t *etime,
- -				 const struct drm_display_mode *mode)
- -{
- -	return amdgpu_display_get_crtc_scanoutpos(dev, pipe, 0, vpos, hpos,
- -						  stime, etime, mode);
- -}
- -
-  static struct drm_driver kms_driver =3D {
-  	.driver_features =3D
-- 	    DRIVER_USE_AGP | DRIVER_ATOMIC |
-+ 	    DRIVER_ATOMIC |
-  	    DRIVER_GEM |
-  	    DRIVER_RENDER | DRIVER_MODESET | DRIVER_SYNCOBJ |
-  	    DRIVER_SYNCOBJ_TIMELINE,
-  	.open =3D amdgpu_driver_open_kms,
-  	.postclose =3D amdgpu_driver_postclose_kms,
-  	.lastclose =3D amdgpu_driver_lastclose_kms,
-- 	.unload =3D amdgpu_driver_unload_kms,
- -	.get_vblank_counter =3D amdgpu_get_vblank_counter_kms,
- -	.enable_vblank =3D amdgpu_enable_vblank_kms,
- -	.disable_vblank =3D amdgpu_disable_vblank_kms,
- -	.get_vblank_timestamp =3D drm_calc_vbltimestamp_from_scanoutpos,
- -	.get_scanout_position =3D amdgpu_get_crtc_scanout_position,
-  	.irq_handler =3D amdgpu_irq_handler,
-  	.ioctls =3D amdgpu_ioctls_kms,
-  	.gem_free_object_unlocked =3D amdgpu_gem_object_free,
-
---Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5YXPAACgkQAVBC80lX
-0GzenAf/Wd+u9XikAJGbQ9oKu7F78Ud8B02dUODEjH+XLQi4E6Ng3RqFVWjhJr82
-a3PevgG/R6G0SfkWMK2flCtxQ7zFRbzmBrhrP19PVi/uv7YuJ0KzFkQY4UOnQL+O
-rBwsCjqzALfNS4cI5yYoALHfB43/oscyHB6aGLZyaGo1V8m5kIYr7k0ihq92XLcv
-HV10qLd4W73ww0kzqc+LMSQhSieRTcQ3ZlshsryU/I92UO9ca95itgfZyCpXlefk
-CtnkHl/XBhQtQKXHAmuXXH8OhPLLQZ3AfAfw1h6y2lztEPvkWWqBmkQrS8xlPt/b
-GeozJOzvKNaqk7hXGDMBrRddlgG1zg==
-=/PX2
------END PGP SIGNATURE-----
-
---Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY--
+> --
+> Cheers,
+> Stephen Rothwell

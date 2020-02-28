@@ -2,103 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DB6172C7E
-	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 00:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BA229172CF4
+	for <lists+linux-next@lfdr.de>; Fri, 28 Feb 2020 01:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729828AbgB0Xrp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 27 Feb 2020 18:47:45 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:55856 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729796AbgB0Xrp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 27 Feb 2020 18:47:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=28jcykxKbJYL83IzLpxZlMJpogx12W0uOAOwjpNqnaI=; b=Heq4GnYY+Oj+WGi9WwRBC2i0+a
-        VDiEiN5ZK58MZelkOzLVC0Lo9BM/xYuYGNVXP9K/p+iYWu5eb46I3FZyzyBkk8Hdu4kN2zk38OXLp
-        fvQmkAQ3Y4XwKGHnzDQN3O1dAnOd/DwzCVdjTkt5mmPyVOqhNwLsJsEMdWZuj9riqSmoqc1aC442E
-        H3gxgwSY8w49zA/hp8CiVplCDKXUDvVhGFRh5E/z/8khTOS/dEUHq/QsNQGVmFW5r3rM7q5ARE0w1
-        8ItcDm1gnyhcSAEg6Je9qtj/S+jDmNJvyotvv5BmQ9SRca38X+95XLIIA3A2Ph04JtFW58ZOaSpV+
-        6k2hiJdw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j7Ssa-0005zI-WE; Thu, 27 Feb 2020 23:47:45 +0000
-Subject: Re: linux-next: Tree for Feb 27 (drivers/of/unittest.c)
-To:     Frank Rowand <frowand.list@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-References: <20200227152223.3d8442f0@canb.auug.org.au>
- <ed57c797-1d40-0786-2cdc-adae7047a86f@infradead.org>
- <0bd9179f-c448-c40d-f520-d568547bc810@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <63b12f5e-e5e5-a3ca-70a3-0c65075f657a@infradead.org>
-Date:   Thu, 27 Feb 2020 15:47:42 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1730233AbgB1AVR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 27 Feb 2020 19:21:17 -0500
+Received: from ozlabs.org ([203.11.71.1]:44989 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1730028AbgB1AVR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 27 Feb 2020 19:21:17 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48T9F16RlXz9sRR;
+        Fri, 28 Feb 2020 11:21:09 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1582849274;
+        bh=bqdlhaCdEDQDT6fMYuS3yfXwDRqxYLhmkBEqspxX+SA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PVVcUtLncUnQHw/RSYelG+mm5ydul2tL/gOubl5BsQOKfaJMlVQdOHTx0aos5eO5d
+         HXphgeaI3XHAbCJvyuzAxRK0PDoij9NE3DnOUTNrVlfhZB4kHJ8IRoyX4viFyDlDOz
+         R6xrJg2DqL0dkzUL1htwpy9tdbtMP+rEyiokKEpLqiE6RE+ykHyS/oSExseE5QdrUK
+         h86heK9ArpX6KbYq1s0PuCvJ59s+ozbhW8k14ueSFRS5RqSBTvRQVX/eW1YXE325eR
+         x/dRGbMprADGFbTU+dRFPQW582Nn06rU5SHydvTZjolbbr4NxvqhklV9OkbJGG16TC
+         x8SnX+qnbKhcA==
+Date:   Fri, 28 Feb 2020 11:21:04 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the amdgpu tree with the drm tree
+Message-ID: <20200228112104.519f002a@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <0bd9179f-c448-c40d-f520-d568547bc810@gmail.com>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2/27/20 1:12 PM, Frank Rowand wrote:
-> Hi Randy,
-> 
-> On 2/27/20 10:23 AM, Randy Dunlap wrote:
->> On 2/26/20 8:22 PM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20200226:
->>>
->>
->> on x86_64:
->>
->> # CONFIG_GPIOLIB is not set
->>
->> ../drivers/of/unittest.c: In function ‘unittest_gpio_probe’:
->> ../drivers/of/unittest.c:94:14: error: ‘struct gpio_chip’ has no member named ‘of_node’
->>   devptr->chip.of_node = pdev->dev.of_node;
->>               ^
->> In file included from ../include/linux/kernel.h:15:0,
->>                  from ../include/asm-generic/bug.h:19,
->>                  from ../arch/x86/include/asm/bug.h:83,
->>                  from ../include/linux/bug.h:5,
->>                  from ../include/linux/mmdebug.h:5,
->>                  from ../include/linux/mm.h:9,
->>                  from ../include/linux/memblock.h:13,
->>                  from ../drivers/of/unittest.c:8:
->> ../drivers/of/unittest.c:103:73: error: ‘struct gpio_chip’ has no member named ‘of_node’
->>     "gpiochip_add_data() for node @%pOF failed, ret = %d\n", devptr->chip.of_node, ret);
->>                                                                          ^
->>
->> Full randconfig file is attached.
->>
-> 
-> I am trying to build a kernel with the randconfig you provided.
-> 
-> I am trying to figure out how to build with the exact configuration,
-> but every way I've tried to build modifies the .config file.
-> 
-> Do you have any pointers to info on how to get the build system
-> to use exactly the .config without modification?
-> 
-> (Just in case it is pertinent, I am using Linux 5.6-rc1 instead
-> of -next.)
+--Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Frank,
+Hi all,
 
-Yeah, I can't get 5.6-rc1 to use that same .config file either.
-There are too many differences from rc1 to rc3+next and any
-'make' command will automatically run oldconfig (or silentoldconfig)
-to update the .config file.
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
--- 
-~Randy
+  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
 
+between commits:
+
+  ea702333e567 ("drm/amdgpu: Convert to struct drm_crtc_helper_funcs.get_sc=
+anout_position()")
+  e3eff4b5d91e ("drm/amdgpu: Convert to CRTC VBLANK callbacks")
+
+from the drm tree and commit:
+
+  c6385e503aea ("drm/amdgpu: drop legacy drm load and unload callbacks")
+
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index 4598836c5fa4,4e868229e3b7..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@@ -1377,17 -1434,30 +1434,15 @@@ int amdgpu_file_to_fpriv(struct file *f
+  	return 0;
+  }
+ =20
+ -static bool
+ -amdgpu_get_crtc_scanout_position(struct drm_device *dev, unsigned int pip=
+e,
+ -				 bool in_vblank_irq, int *vpos, int *hpos,
+ -				 ktime_t *stime, ktime_t *etime,
+ -				 const struct drm_display_mode *mode)
+ -{
+ -	return amdgpu_display_get_crtc_scanoutpos(dev, pipe, 0, vpos, hpos,
+ -						  stime, etime, mode);
+ -}
+ -
+  static struct drm_driver kms_driver =3D {
+  	.driver_features =3D
+- 	    DRIVER_USE_AGP | DRIVER_ATOMIC |
++ 	    DRIVER_ATOMIC |
+  	    DRIVER_GEM |
+  	    DRIVER_RENDER | DRIVER_MODESET | DRIVER_SYNCOBJ |
+  	    DRIVER_SYNCOBJ_TIMELINE,
+  	.open =3D amdgpu_driver_open_kms,
+  	.postclose =3D amdgpu_driver_postclose_kms,
+  	.lastclose =3D amdgpu_driver_lastclose_kms,
+- 	.unload =3D amdgpu_driver_unload_kms,
+ -	.get_vblank_counter =3D amdgpu_get_vblank_counter_kms,
+ -	.enable_vblank =3D amdgpu_enable_vblank_kms,
+ -	.disable_vblank =3D amdgpu_disable_vblank_kms,
+ -	.get_vblank_timestamp =3D drm_calc_vbltimestamp_from_scanoutpos,
+ -	.get_scanout_position =3D amdgpu_get_crtc_scanout_position,
+  	.irq_handler =3D amdgpu_irq_handler,
+  	.ioctls =3D amdgpu_ioctls_kms,
+  	.gem_free_object_unlocked =3D amdgpu_gem_object_free,
+
+--Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5YXPAACgkQAVBC80lX
+0GzenAf/Wd+u9XikAJGbQ9oKu7F78Ud8B02dUODEjH+XLQi4E6Ng3RqFVWjhJr82
+a3PevgG/R6G0SfkWMK2flCtxQ7zFRbzmBrhrP19PVi/uv7YuJ0KzFkQY4UOnQL+O
+rBwsCjqzALfNS4cI5yYoALHfB43/oscyHB6aGLZyaGo1V8m5kIYr7k0ihq92XLcv
+HV10qLd4W73ww0kzqc+LMSQhSieRTcQ3ZlshsryU/I92UO9ca95itgfZyCpXlefk
+CtnkHl/XBhQtQKXHAmuXXH8OhPLLQZ3AfAfw1h6y2lztEPvkWWqBmkQrS8xlPt/b
+GeozJOzvKNaqk7hXGDMBrRddlgG1zg==
+=/PX2
+-----END PGP SIGNATURE-----
+
+--Sig_/AVQw4vs8Tk23cwQ7zQ.TRLY--

@@ -2,70 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8631B175C06
-	for <lists+linux-next@lfdr.de>; Mon,  2 Mar 2020 14:47:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98726175C0F
+	for <lists+linux-next@lfdr.de>; Mon,  2 Mar 2020 14:48:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726872AbgCBNq7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 08:46:59 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:44922 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgCBNq6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Mar 2020 08:46:58 -0500
-Received: by mail-wr1-f66.google.com with SMTP id n7so4755026wrt.11;
-        Mon, 02 Mar 2020 05:46:57 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=EsNI7T8fx9/zJXjOHaygab/3xTyRqQbHWTw10t+dBzA=;
-        b=jZZiwCACFxH1dWhm1nAaqz/yKHB7KknhPpSizcZguUpTair8VZuvNld6PdLyqo9uMH
-         VC5PFVLz3nYJT4Af2BJA7gam3vS3rFpLSJvFumgWCJy0RxA2KFHjUh+M4140Sk+YH64O
-         HEqZr7E57HSROrw4ZfnvRYqKu84pmKSc2O9s1Dzl0XclO3AibWqkYEAtg+Jn4b4ckwbY
-         ulNGxRXlDIcR/vfLaY37y10GGYXPMKc3sgcDn8v8CHEvqdsHWCq1jJuuNd6v7Fsn0OYA
-         18sK8C4I97WRv3mx9TnwjGdMix8FOTp20C//OlgOhonvNichSIjJ4x8THVi/KVTtYgdM
-         3nzw==
-X-Gm-Message-State: ANhLgQ1IeTfJ6SSFkme+reMSANyEb8sR7JWeKUo5aEbJswPpIjm71zyY
-        QGya1Ax74E7stqsbbMkxRq4FhUYF
-X-Google-Smtp-Source: ADFU+vsk/lNuhHwpxpNwBVIC3coW7NDluM9AGC/3y86Bm7OKnhdIXSzQoDViXc7JHCsYkjCUFwi+xQ==
-X-Received: by 2002:a5d:5643:: with SMTP id j3mr9174610wrw.337.1583156816652;
-        Mon, 02 Mar 2020 05:46:56 -0800 (PST)
-Received: from localhost (prg-ext-pat.suse.com. [213.151.95.130])
-        by smtp.gmail.com with ESMTPSA id z2sm23174843wrq.95.2020.03.02.05.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2020 05:46:55 -0800 (PST)
-Date:   Mon, 2 Mar 2020 14:46:55 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     John Hubbard <jhubbard@nvidia.com>
-Cc:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        linux-next@vger.kernel.org, akpm@linux-foundation.org,
-        borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
-        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Jan Kara <jack@suse.cz>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>
-Subject: Re: [RFC v1 1/2] mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track
- FOLL_PIN pages"
-Message-ID: <20200302134655.GL4380@dhcp22.suse.cz>
-References: <20200228154322.329228-1-imbrenda@linux.ibm.com>
- <20200228154322.329228-3-imbrenda@linux.ibm.com>
- <c98038da-cf52-27f5-1aed-b69287a5dec0@nvidia.com>
+        id S1726621AbgCBNsY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 08:48:24 -0500
+Received: from foss.arm.com ([217.140.110.172]:32932 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726300AbgCBNsY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Mar 2020 08:48:24 -0500
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90C8E2F;
+        Mon,  2 Mar 2020 05:48:23 -0800 (PST)
+Received: from [10.163.1.119] (unknown [10.163.1.119])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83AAE3F534;
+        Mon,  2 Mar 2020 05:48:16 -0800 (PST)
+Subject: Re: Linux-next-20200302: arm64 build failed
+To:     Will Deacon <will@kernel.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        catalin.marinas@arm.com
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        rppt@linux.ibm.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>, lkft-triage@lists.linaro.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        suzuki.poulose@arm.com, Anders Roxell <anders.roxell@linaro.org>
+References: <CA+G9fYtAM-m0jygud+i0ymU+XknV9_GcAbDQChiD2NZjvQ+D3w@mail.gmail.com>
+ <20200302104726.GA7995@willie-the-truck>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+Message-ID: <d2d8d359-3e48-b5b7-2944-be3d54ba1d32@arm.com>
+Date:   Mon, 2 Mar 2020 19:18:16 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c98038da-cf52-27f5-1aed-b69287a5dec0@nvidia.com>
+In-Reply-To: <20200302104726.GA7995@willie-the-truck>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri 28-02-20 15:08:35, John Hubbard wrote:
-[...]
-> (Aside: I'm using the linux-next commit hash. How does one get the correct hash before
-> it goes to mainline? I guess maintainer scripts fix all those up?)
 
-There is no such maging going on AFAIK. Please just do not use sha1 from
-linux-next unless it is really clear that those are not going to change.
-So essentially everything from mmotm is out of question.
--- 
-Michal Hocko
-SUSE Labs
+
+On 03/02/2020 04:17 PM, Will Deacon wrote:
+> [+Anshuman and Catalin]
+> 
+> On Mon, Mar 02, 2020 at 01:58:26PM +0530, Naresh Kamboju wrote:
+>> Linux-Next 20200302 arm64 build failed due to below errors,
+>> Suspecting patch causing this build break.
+>>
+>> 87d900aef3e2  arm/arm64: add support for folded p4d page tables
+>>
+>> Error log,
+>> -------------
+>> arch/arm64/mm/mmu.c: In function 'unmap_hotplug_pud_range':
+>> include/linux/compiler.h:284:1: error: incompatible type for argument
+>> 1 of 'p4d_page_paddr'
+>>  ({         \
+>>  ^
+>> arch/arm64/include/asm/memory.h:270:45: note: in definition of macro
+>> '__phys_to_virt'
+>>  #define __phys_to_virt(x) ((unsigned long)((x) - physvirt_offset))
+>>                                              ^
+>> arch/arm64/include/asm/pgtable.h:629:42: note: in expansion of macro '__va'
+>>  #define pud_offset(dir, addr)  ((pud_t *)__va(pud_offset_phys((dir), (addr))))
+>>                                           ^~~~
+>> include/linux/compiler.h:293:22: note: in expansion of macro '__READ_ONCE'
+>>  #define READ_ONCE(x) __READ_ONCE(x, 1)
+>>                       ^~~~~~~~~~~
+>> arch/arm64/include/asm/pgtable.h:628:52: note: in expansion of macro 'READ_ONCE'
+>>  #define pud_offset_phys(dir, addr) (p4d_page_paddr(READ_ONCE(*(dir)))
+>> + pud_index(addr) * sizeof(pud_t))
+>>                                                     ^~~~~~~~~
+>> arch/arm64/include/asm/pgtable.h:629:47: note: in expansion of macro
+>> 'pud_offset_phys'
+>>  #define pud_offset(dir, addr)  ((pud_t *)__va(pud_offset_phys((dir), (addr))))
+>>                                                ^~~~~~~~~~~~~~~
+>> arch/arm64/mm/mmu.c:827:10: note: in expansion of macro 'pud_offset'
+>>    pudp = pud_offset(pgdp, addr);
+>>           ^~~~~~~~~~
+> 
+> Looks like we need an implementation of unmap_hotplug_p4d_range() to
+> walk the dummy p4d level. Unfortunately, we don't have the folded p4d
+> patches in the arm64 tree so we'll either need a common branch or the
+> hotplug patches will need to be dropped for the moment.
+
+If we decide to get a common branch, will try to get this sorted with
+an unmap_hotplug_p4d_range() implementation as you have suggested.
+
+> 
+> Will
+> 

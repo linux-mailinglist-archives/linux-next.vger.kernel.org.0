@@ -2,111 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80207176815
-	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 00:25:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDEE176862
+	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 00:42:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726793AbgCBXZg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 18:25:36 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58635 "EHLO ozlabs.org"
+        id S1726755AbgCBXmf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 18:42:35 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57895 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726728AbgCBXZg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Mar 2020 18:25:36 -0500
+        id S1726752AbgCBXmf (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Mar 2020 18:42:35 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Wbq12bG1z9sSN;
-        Tue,  3 Mar 2020 10:25:33 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48WcBb4vhTz9sSG;
+        Tue,  3 Mar 2020 10:42:31 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583191533;
-        bh=y2qlCjjTFOCCt5mgeBh0PcMBGGz27m+6/Ieaf0dvbCM=;
+        s=201702; t=1583192553;
+        bh=EMV2RIhXT1qcKJvmz8MZ9k1xFEfE96bVhk+RcPQAa4Y=;
         h=Date:From:To:Cc:Subject:From;
-        b=XbsezIDMZSPyNhHGAtO/4cUhjJ2wlTdbMgb0FOM9aD+HCJir8pZo+r+wECIDhIGYN
-         LVYkq8/nmTGToZAh2A8B6Bd3b2S3daJM4xcDE0LmoDRFYbKt/9nAfPir75Xw9v3Wts
-         3A7EM8LlbG0TABFfXSN6FbTqM27Rl+IriFMLbNQJsZ3+WEYZBAgOVNAdnPgDBM7QOl
-         F7mHdxJ5tjSALnJ55RNqvnJZuQ6rAp0P+AE0KBQAxGP9aUaMa3BGxjtVJ7DK5K+qez
-         UR9ulfxasPX3nsxfsvmFXcsCC+bb35E2tq1TXUxTArjXMWdNHPVwl7T+61qBEYM48I
-         1vZpEOh/OFvPg==
-Date:   Tue, 3 Mar 2020 10:25:23 +1100
+        b=ahsns2BOV/cJplB+GU35NEkwIXlstiWuy4P468nm94WUPpfZHUiPReas8kZcV7m4H
+         Rkt2bLq9TRNdfizut6xwiEoucSFIG2AhYm8zrR55wwwFY91PCPMxY+XgBTu2KEFW/D
+         eotH5mbLQYLYWUV81unPZoPQhplATKtuClfHj4E/UYmOpH+VxdO2CG8lzps82iAq14
+         fPo2waFvUmIiLL9SNu34QVp7awx0OewzSS06DZb+bR4VMK4LltN9aGGTv1fbWvmHOf
+         Sx8OJxyi97HH+o1LyNek0AmVuYTMqhZrLvc1IuF0pF+TgcTrZL744ovnVWDTOD9H7r
+         0Oz0AZDrex0Iw==
+Date:   Tue, 3 Mar 2020 10:42:23 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: linux-next: manual merge of the jc_docs tree with Linus' tree
-Message-ID: <20200303102523.0b3b4e52@canb.auug.org.au>
+        Anson Huang <Anson.Huang@nxp.com>
+Subject: linux-next: build warning after merge of the thermal tree
+Message-ID: <20200303104223.73222b9f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ua05MdXoOqRfMvbYTbMkgEv";
+Content-Type: multipart/signed; boundary="Sig_/Ab3Fk/hXAl/HSy+pEijU/ma";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ua05MdXoOqRfMvbYTbMkgEv
+--Sig_/Ab3Fk/hXAl/HSy+pEijU/ma
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the jc_docs tree got a conflict in:
+After merging the thermal tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-  Documentation/filesystems/zonefs.rst
+In file included from drivers/hwmon/hwmon.c:22:
+include/linux/thermal.h:382:12: warning: 'thermal_zone_of_get_sensor_id' de=
+fined but not used [-Wunused-function]
+  382 | static int thermal_zone_of_get_sensor_id(struct device_node *tz_np,
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-between commit:
+and many more the same ...
 
-  4c5fd3b791a0 ("zonefs: fix documentation typos etc.")
+Introduced by commit
 
-from Linus' tree and commit:
+  0629521dc9c9 ("thermal: of-thermal: add API for getting sensor ID from DT=
+")
 
-  9a6108124c1d ("docs: filesystems: convert zonefs.txt to ReST")
-
-from the jc_docs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Missing "inline" in the !defined(CONFIG_THERMAL_OF) update.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/filesystems/zonefs.rst
-index d54fa98ac158,7e733e751e98..000000000000
---- a/Documentation/filesystems/zonefs.rst
-+++ b/Documentation/filesystems/zonefs.rst
-@@@ -301,7 -308,8 +308,8 @@@ Mount option
- =20
-  zonefs define the "errors=3D<behavior>" mount option to allow the user to=
- specify
-  zonefs behavior in response to I/O errors, inode size inconsistencies or =
-zone
- -condition chages. The defined behaviors are as follow:
- +condition changes. The defined behaviors are as follow:
-+=20
-  * remount-ro (default)
-  * zone-ro
-  * zone-offline
-
---Sig_/ua05MdXoOqRfMvbYTbMkgEv
+--Sig_/Ab3Fk/hXAl/HSy+pEijU/ma
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5dleMACgkQAVBC80lX
-0GxTygf9GQA6rR4DPbEoVrs2TwZKZXskfqiyMRQXc/T5RlG70D6to4IUFVHOuYAv
-bubD8mJjPkoAfkXSVX2WrGqgMWlemTcG7fuE3y2CMP60JpTs9/zvJCGkoclmMjhG
-L4THZfK3LWHDQQTDkFxw05svfw5LVkX5v3iD/LlrZHyLXzdr7xLkAfGCwPIl8LzU
-3spp/P10mF7Fbhxx/FJGvv3HJfK0dirxlBO+jvMJ8l3Atwamtw4Alw5S5Kdhkgfv
-gA8O704xX7EwHYn3VGeHRhAo9aG8C83sBRvg/UHiIdcAMza4MINVnnd4o6x9+dUf
-2prvZHjJppnkFzP4uwbj5FfEcFPP4g==
-=bhy6
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5dmd8ACgkQAVBC80lX
+0GzHeAgAloSOvzXzmYIj+wnsqfknHJhHZSFdzRG+tG225sYspoHQHqx/iMtSr6v4
+35uXNRcwEY98wZMmZ+Q4pNqd3qoYgZmxRp2yz2RxacKXb637DUDHiGy0jZfwxcjl
+uIaatF2TORowleYAh+bPZ/FRXd4QKACD0LU8KAvyeP7ACRxPCB+1L2qc9CdktiOc
+MA4OJMy3leigRpfL+YRH3WcxgYlNkJH778jQrYRG+pGt+yl8My68bOodJxH63p09
+2EYh3RoJgKiR75Lm+wHolUwggj1aHA31beTyXARxdIZ8pE4HHP8Gm9jqCfUoGZSY
+e9PgTgy8s7beeP7qEZZxqcc3AUtA4Q==
+=4esK
 -----END PGP SIGNATURE-----
 
---Sig_/ua05MdXoOqRfMvbYTbMkgEv--
+--Sig_/Ab3Fk/hXAl/HSy+pEijU/ma--

@@ -2,72 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 669101766D4
-	for <lists+linux-next@lfdr.de>; Mon,  2 Mar 2020 23:24:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80207176815
+	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 00:25:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726744AbgCBWYO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 17:24:14 -0500
-Received: from mail.kernel.org ([198.145.29.99]:38296 "EHLO mail.kernel.org"
+        id S1726793AbgCBXZg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 18:25:36 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58635 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725781AbgCBWYN (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Mar 2020 17:24:13 -0500
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726728AbgCBXZg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Mar 2020 18:25:36 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B597421775;
-        Mon,  2 Mar 2020 22:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1583187853;
-        bh=JUU4hEGar97jd+V9k2N9lDEIJZMNf+Nfj+ecj2VanY4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=V/qsC4MIBAWcfedFF9SutIYTIaKV0oVS8iCnFgaa6E1jLw3KpHxkKliWr7CsDcakJ
-         msAYZl44Nk/pYtoLL6DV6GCON0+oUguHaQ+pT0TezlWz9BE4LhccfO6Td8JX+FtF6f
-         Ui3csBq7LDMKCXTzP+CUnkwubKa926b83ECFvsOs=
-Date:   Mon, 2 Mar 2020 14:24:12 -0800
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Mike Rapoport <rppt@linux.ibm.com>, Will Deacon <will@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        anshuman.khandual@arm.com,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Wbq12bG1z9sSN;
+        Tue,  3 Mar 2020 10:25:33 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583191533;
+        bh=y2qlCjjTFOCCt5mgeBh0PcMBGGz27m+6/Ieaf0dvbCM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XbsezIDMZSPyNhHGAtO/4cUhjJ2wlTdbMgb0FOM9aD+HCJir8pZo+r+wECIDhIGYN
+         LVYkq8/nmTGToZAh2A8B6Bd3b2S3daJM4xcDE0LmoDRFYbKt/9nAfPir75Xw9v3Wts
+         3A7EM8LlbG0TABFfXSN6FbTqM27Rl+IriFMLbNQJsZ3+WEYZBAgOVNAdnPgDBM7QOl
+         F7mHdxJ5tjSALnJ55RNqvnJZuQ6rAp0P+AE0KBQAxGP9aUaMa3BGxjtVJ7DK5K+qez
+         UR9ulfxasPX3nsxfsvmFXcsCC+bb35E2tq1TXUxTArjXMWdNHPVwl7T+61qBEYM48I
+         1vZpEOh/OFvPg==
+Date:   Tue, 3 Mar 2020 10:25:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnd Bergmann <arnd@arndb.de>, lkft-triage@lists.linaro.org,
-        suzuki.poulose@arm.com, Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: Linux-next-20200302: arm64 build failed
-Message-Id: <20200302142412.f8f2b17a3387b46ce94c7cb6@linux-foundation.org>
-In-Reply-To: <20200302174553.GC4166275@arrakis.emea.arm.com>
-References: <CA+G9fYtAM-m0jygud+i0ymU+XknV9_GcAbDQChiD2NZjvQ+D3w@mail.gmail.com>
-        <20200302104726.GA7995@willie-the-truck>
-        <20200302135443.GA24831@linux.ibm.com>
-        <20200302174553.GC4166275@arrakis.emea.arm.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@wdc.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: linux-next: manual merge of the jc_docs tree with Linus' tree
+Message-ID: <20200303102523.0b3b4e52@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ua05MdXoOqRfMvbYTbMkgEv";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2 Mar 2020 17:45:53 +0000 Catalin Marinas <catalin.marinas@arm.com> wrote:
+--Sig_/ua05MdXoOqRfMvbYTbMkgEv
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> >  static void unmap_hotplug_range(unsigned long addr, unsigned long end,
-> >  				bool free_mapped)
-> >  {
-> > @@ -854,7 +872,7 @@ static void unmap_hotplug_range(unsigned long addr, unsigned long end,
-> >  			continue;
-> >  
-> >  		WARN_ON(!pgd_present(pgd));
-> > -		unmap_hotplug_pud_range(pgdp, addr, next, free_mapped);
-> > +		unmap_hotplug_p4d_range(pgdp, addr, next, free_mapped);
-> >  	} while (addr = next, addr < end);
-> >  }
-> 
-> Thanks Mike. With the additional diff below, I can get it to build with
-> and without the p4d clean-up patches in -next. If Anshuman confirms that
-> they work, I can add them on top of the arm64 for-next/memory-hotremove
-> branch
+Hi all,
 
-Can't I simply fold these into the offending -mm
-arm-arm64-add-support-for-folded-p4d-page-tables.patch?
+Today's linux-next merge of the jc_docs tree got a conflict in:
+
+  Documentation/filesystems/zonefs.rst
+
+between commit:
+
+  4c5fd3b791a0 ("zonefs: fix documentation typos etc.")
+
+from Linus' tree and commit:
+
+  9a6108124c1d ("docs: filesystems: convert zonefs.txt to ReST")
+
+from the jc_docs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/filesystems/zonefs.rst
+index d54fa98ac158,7e733e751e98..000000000000
+--- a/Documentation/filesystems/zonefs.rst
++++ b/Documentation/filesystems/zonefs.rst
+@@@ -301,7 -308,8 +308,8 @@@ Mount option
+ =20
+  zonefs define the "errors=3D<behavior>" mount option to allow the user to=
+ specify
+  zonefs behavior in response to I/O errors, inode size inconsistencies or =
+zone
+ -condition chages. The defined behaviors are as follow:
+ +condition changes. The defined behaviors are as follow:
++=20
+  * remount-ro (default)
+  * zone-ro
+  * zone-offline
+
+--Sig_/ua05MdXoOqRfMvbYTbMkgEv
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5dleMACgkQAVBC80lX
+0GxTygf9GQA6rR4DPbEoVrs2TwZKZXskfqiyMRQXc/T5RlG70D6to4IUFVHOuYAv
+bubD8mJjPkoAfkXSVX2WrGqgMWlemTcG7fuE3y2CMP60JpTs9/zvJCGkoclmMjhG
+L4THZfK3LWHDQQTDkFxw05svfw5LVkX5v3iD/LlrZHyLXzdr7xLkAfGCwPIl8LzU
+3spp/P10mF7Fbhxx/FJGvv3HJfK0dirxlBO+jvMJ8l3Atwamtw4Alw5S5Kdhkgfv
+gA8O704xX7EwHYn3VGeHRhAo9aG8C83sBRvg/UHiIdcAMza4MINVnnd4o6x9+dUf
+2prvZHjJppnkFzP4uwbj5FfEcFPP4g==
+=bhy6
+-----END PGP SIGNATURE-----
+
+--Sig_/ua05MdXoOqRfMvbYTbMkgEv--

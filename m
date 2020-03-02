@@ -2,44 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 15EB317600E
-	for <lists+linux-next@lfdr.de>; Mon,  2 Mar 2020 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B560176012
+	for <lists+linux-next@lfdr.de>; Mon,  2 Mar 2020 17:36:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727104AbgCBQgA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 11:36:00 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:52404 "EHLO
+        id S1727305AbgCBQgJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 11:36:09 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:52422 "EHLO
         bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727054AbgCBQf7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Mar 2020 11:35:59 -0500
+        with ESMTP id S1726872AbgCBQgJ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Mar 2020 11:36:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Type:In-Reply-To:MIME-Version
         :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=JFP9UyMIDde+5n1VAVAoTWObi//5jo+baOlBITwCbUM=; b=QY1e7NDFhOzsU1bVs23ow6pRuW
-        hPlzP54FAQaQ0cJUavkBEm4ePzWAyCQISrISFTLOhtzLWNP94VxCKdexH/Qw+jRcNA22w7kPccJbl
-        TgJv/qWbiUG4I1tY6VrXc6oSkjOZgVP+i+/0O5bs/VMhvQoFLafK4Of1csC5g7WApBe1y/VYwrlBB
-        NFILVr97OrQJZbRnkm7oBpXwZeGG6PVy8e+CNrz+kNcWDO2ip24BKhfg4w1ngcOKPetbxTs7mJ0Nf
-        FeOWQUoOKfUPOY1eKiVPF1cR/KCAX51fVtnLlawrGOTGFrGaV3HAIzC+sZTByK5KJ4zZKr61xakCv
-        iKIAu1Iw==;
+        bh=o36bpTMrJkx5ooKVI+3qo52vidfdqIjmS1sQWDrd+f0=; b=O/aJYIOrG1MmI69xJVhnRPMbuo
+        8JK+REWGgW6Tsi9UlmtqHEY3D7ae437KY+M1yktsDb70544pvjh13rm9e74pii7M4EMoS/+RI2xeu
+        PYRb4seo3I98J/h61KsnYcvOGUCpR21BKgtmyQBwkP5dg5Bm2Wcfdptf1P1dCMfcM+ocNEfnXhP4O
+        Z7uW9hMt+lqzRdU5rygHAcdPGUhHNOGiPoalWDhvLHWPKhmPlm/cz9lOSTFZgnOEgdHvgRJbOSM5u
+        cqXqLXyIchtyMFlUrINiikdpfYDw2nO9i/9Gg+NfI4nKojjKUhEhrL+AGW5/47bmLN6Ptf41jbqKI
+        d5nZfOsw==;
 Received: from [2601:1c0:6280:3f0::19c2]
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j8o2t-0001HU-SC; Mon, 02 Mar 2020 16:35:56 +0000
-Subject: Re: linux-next: Tree for Mar 2 (objtool warning)
+        id 1j8o36-0001Ie-7l; Mon, 02 Mar 2020 16:36:08 +0000
+Subject: Re: linux-next: Tree for Mar 2 (pinctrl/sprd/pinctrl-sprd.c)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        Baolin Wang <baolin.wang7@gmail.com>,
+        Baolin Wang <baolin.wang@spreadtrum.com>
 References: <20200302182552.724cf197@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <bb18088b-2ae6-f26d-43e4-5a9a98034b93@infradead.org>
-Date:   Mon, 2 Mar 2020 08:35:54 -0800
+Message-ID: <ccba6f43-a803-62e7-193f-cba0704a163a@infradead.org>
+Date:   Mon, 2 Mar 2020 08:36:07 -0800
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
 In-Reply-To: <20200302182552.724cf197@canb.auug.org.au>
 Content-Type: multipart/mixed;
- boundary="------------F6C0D7E27DB71478AC7554C3"
+ boundary="------------91CD0B61DD139B047F6FC64B"
 Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
@@ -47,7 +49,7 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------F6C0D7E27DB71478AC7554C3
+--------------91CD0B61DD139B047F6FC64B
 Content-Type: text/plain; charset=windows-1252
 Content-Transfer-Encoding: 7bit
 
@@ -57,9 +59,20 @@ On 3/1/20 11:25 PM, Stephen Rothwell wrote:
 > Changes since 20200228:
 > 
 
-on x86_64:
+on i386 or x86_64:
 
-kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x2b: unreachable instruction
+kconfig warnings and build error:
+
+WARNING: unmet direct dependencies detected for PINCTRL_SPRD
+  Depends on [n]: PINCTRL [=y] && OF [=n] && (ARCH_SPRD || COMPILE_TEST [=y])
+  Selected by [m]:
+  - PINCTRL_SPRD_SC9860 [=m] && PINCTRL [=y]
+
+../drivers/pinctrl/sprd/pinctrl-sprd.c: In function 'sprd_dt_node_to_map':
+../drivers/pinctrl/sprd/pinctrl-sprd.c:282:8: error: implicit declaration of function 'pinconf_generic_parse_dt_config'; did you mean 'pinconf_generic_dump_config'? [-Werror=implicit-function-declaration]
+  ret = pinconf_generic_parse_dt_config(np, pctldev, &configs,
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        pinconf_generic_dump_config
 
 
 Full randconfig file is attached.
@@ -68,7 +81,7 @@ Full randconfig file is attached.
 ~Randy
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
---------------F6C0D7E27DB71478AC7554C3
+--------------91CD0B61DD139B047F6FC64B
 Content-Type: text/plain; charset=UTF-8;
  name="config-r1184"
 Content-Transfer-Encoding: 7bit
@@ -5238,4 +5251,4 @@ CONFIG_MEMTEST=y
 
 # CONFIG_WARN_MISSING_DOCUMENTS is not set
 
---------------F6C0D7E27DB71478AC7554C3--
+--------------91CD0B61DD139B047F6FC64B--

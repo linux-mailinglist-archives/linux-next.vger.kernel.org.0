@@ -2,99 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB35176CCF
-	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 03:59:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F4146176DAC
+	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 04:49:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728226AbgCCC7S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 21:59:18 -0500
-Received: from mail-pg1-f193.google.com ([209.85.215.193]:36168 "EHLO
+        id S1726891AbgCCDtA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 22:49:00 -0500
+Received: from mail-pg1-f193.google.com ([209.85.215.193]:38614 "EHLO
         mail-pg1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728571AbgCCC7L (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Mar 2020 21:59:11 -0500
-Received: by mail-pg1-f193.google.com with SMTP id d9so819869pgu.3
-        for <linux-next@vger.kernel.org>; Mon, 02 Mar 2020 18:59:10 -0800 (PST)
+        with ESMTP id S1726843AbgCCDtA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 2 Mar 2020 22:49:00 -0500
+Received: by mail-pg1-f193.google.com with SMTP id x7so865239pgh.5
+        for <linux-next@vger.kernel.org>; Mon, 02 Mar 2020 19:48:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=TKO0L3z/J7Uevo3j6Cjbfw67QzjwRhKOacKqgs2izaw=;
-        b=ogqzViFeXGao56AivP/vc0QdZ44N/zp3LPAu9t7auJ6D5w4BYt32BdcsGMVwKMJMLX
-         V17HhvkBFQuG/pXjAeSdKXMWBIETLu5a09qRe6As23S2FzKG8qNZn7G649/7kIe3bLZI
-         rvSZ5EvCIjyaeqwp71KKRZAe+yN/wPQNTbgyxc+SvzIuGf1KyC5SJpWDuNtq+1EdkgR4
-         ArbPJcGMikx2+KnUS5KbPa361UGsUE+oCIpKZ/c2JbYcp4vWUnfG/AJk1yT3ArzQFxZR
-         k/5X/Uq/EHXpgB3JoiIVdklAEamobQMFUfx4YwjR7hf5rq+HPAXBqQ/K2ZcORZ6n+waK
-         ZMOw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ZI6xLPqW5KvVhIcnrPvrcxsWU4QVhmFtSfyvD0blst8=;
+        b=Y4y9VeQDJKS1FeMHG6fOOIho3lgVdrCsBgnm2f8Y8rh769bayhM7EJxmiECi8a0Maa
+         7dYv6zI5o8xsf+FeJJqkjApwAN/Q/7Mw7xmaKRu10xhr4ZTHrcPTqdHl+29DTrrdubNp
+         6VoTFn/gy/QG1covURa4YfZa9W2NKEtQpOn1wkCoyrr4SWFcdjDyhQausYfJb8mm+il7
+         pRZIZGzLXnqttDYzrqgqSf2GDix2teMkBVj2CZdb+DXIzgx45KEBva1UGtaWyTxGbkCg
+         uxmGB58Q9bHm5CegM97/DTERO9OAa0Dz0yJGawuedlpI27acb0M9MG0BshfZGTD8VJvK
+         NqzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=TKO0L3z/J7Uevo3j6Cjbfw67QzjwRhKOacKqgs2izaw=;
-        b=A6DnAsTlQeYvlQ8Vtbr7Sopf3dfB1mSCVqLWt+QANvQRlZ3gPg5XfdVKPnh+I+eh/e
-         ZS/VLa++YcG9Lwu0jb69WMvdLHveoEaTmLXpkJcNLLFqLySVzu+emP8ouIfyhvXgrzTN
-         YhO2UR12WRtl7d1Bmjn/gI1dNaGAJjfGFVbRPJZjtXpfTriLyke4NW1CUWYphufUSYz6
-         OYDA0S96zHLuKbbs2CBnJ7bnWexm87Of8GG+kWnzKqr7nfABdyCeF515d02nVbPti/Ae
-         YcI+6ZHWXJ4OZx9ea6tbSnVDnHA1sfbpsDFo12Dwdi8lsAaOLwasRA5H87dkpBH8Fnqj
-         qIYw==
-X-Gm-Message-State: ANhLgQ2QcjeAIr/rrkxDc1z9VnBSmq2hfQO/LdFoCAvq4PUPW7tMrZ/2
-        ZtHrKYlpaHUwmvoq/sVjlaoAYw==
-X-Google-Smtp-Source: ADFU+vvAe42HEiTPq5z1cVZS5f+hW7AQAx29DDs4d+zaE0yVL/aZyCp8qfPq7TSX5al2Gq0NZRN78A==
-X-Received: by 2002:aa7:82ce:: with SMTP id f14mr2028100pfn.167.1583204349805;
-        Mon, 02 Mar 2020 18:59:09 -0800 (PST)
-Received: from [192.168.1.188] ([66.219.217.145])
-        by smtp.gmail.com with ESMTPSA id w76sm3982670pfc.154.2020.03.02.18.59.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Mar 2020 18:59:09 -0800 (PST)
-Subject: Re: linux-next: build warnings after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200303124133.13309249@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <ab8305a0-dda4-7b5d-2dec-00032410d6a3@kernel.dk>
-Date:   Mon, 2 Mar 2020 19:59:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ZI6xLPqW5KvVhIcnrPvrcxsWU4QVhmFtSfyvD0blst8=;
+        b=e8j3wIGNQ5zejiWMeSg3CZL7DVy6KVHzYNVc17q2ql98lqcVIwAqwa3DptUjOFjisW
+         ui8wIlUz84tPjUAAWcwikXbKdZ6eRKbd+LBxY9Bd9pEcUhcxRACZae8fn12QQy2G+rvn
+         +MyqAfQpwzUzatxVP6ZIYKgimrjWv4kV6pQ/uzYf6/6AuZHpWt18YDkj/asdn3spQMAP
+         tYC0dxKtMVJuVqo3JNF5If+utZ+wjo6evQHrvqzjUPdHqQKfNEpSSKg7gSVmLT9EOd3C
+         uXcCdASha3Nssxlq81ni/VF0LGIU6JxHpk2hacaegGzOPKnFb8YxytmXt531+Pgse4L0
+         YYpg==
+X-Gm-Message-State: ANhLgQ2L+L69uuiOLqcRR0++q4B7wHi86nnvubLfznwfS0CRZ3i7KY1H
+        AEVXyW/H1GKDI4sVkz4kaTXswKpGNqs=
+X-Google-Smtp-Source: ADFU+vsGs9KOQtpcp0nqn9nsoOAvUR6Gl/Aw7P266oofJWMw/ozJOKIV89pNummzG0U12nRh4wAmbw==
+X-Received: by 2002:a63:441e:: with SMTP id r30mr2127180pga.51.1583207338502;
+        Mon, 02 Mar 2020 19:48:58 -0800 (PST)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id o66sm8165343pfb.93.2020.03.02.19.48.56
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2020 19:48:57 -0800 (PST)
+Message-ID: <5e5dd3a9.1c69fb81.530cb.7992@mx.google.com>
+Date:   Mon, 02 Mar 2020 19:48:57 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200303124133.13309249@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.6-rc4-203-g8f169e319c63
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+Subject: next/pending-fixes boot: 143 boots: 2 failed,
+ 140 passed with 1 untried/unknown (v5.6-rc4-203-g8f169e319c63)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/2/20 6:41 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the block tree, today's linux-next build (arm
-> multi_v7_defconfig) produced these warnings:
-> 
-> fs/io_uring.c: In function 'io_put_kbuf':
-> fs/io_uring.c:1651:27: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->  1651 |  struct io_buffer *kbuf = (struct io_buffer *) req->rw.addr;
->       |                           ^
-> fs/io_uring.c: In function 'io_rw_buffer_select':
-> fs/io_uring.c:2209:27: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->  2209 |  struct io_buffer *kbuf = (struct io_buffer *) req->rw.addr;
->       |                           ^
-> fs/io_uring.c:2216:17: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
->  2216 |  req->rw.addr = (u64) kbuf;
->       |                 ^
-> fs/io_uring.c: In function 'io_cleanup_req':
-> fs/io_uring.c:4897:10: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
->  4897 |    kfree((void *)req->rw.addr);
->       |          ^
-> 
-> Introduced by commits
-> 
->   7efcbb97deab ("io_uring: support buffer selection for OP_READ and OP_RECV")
->   8cab19f460b6 ("io_uring: add IOSQE_BUFFER_SELECT support for IORING_OP_READV")
+next/pending-fixes boot: 143 boots: 2 failed, 140 passed with 1 untried/unk=
+nown (v5.6-rc4-203-g8f169e319c63)
 
-Thanks Stephen, I added a fixup patch. I wish we had u64_to_ptr() and
-ptr_to_u64(), but that's only for the __user pointers...
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc4-203-g8f169e319c63/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc4-203-g8f169e319c63/
 
--- 
-Jens Axboe
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc4-203-g8f169e319c63
+Git Commit: 8f169e319c63e8577283198ea35fb333134d3edd
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 67 unique boards, 16 SoC families, 23 builds out of 216
 
+Boot Regressions Detected:
+
+arm:
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc3-420-gead17be0=
+3762)
+
+Boot Failures Detected:
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>

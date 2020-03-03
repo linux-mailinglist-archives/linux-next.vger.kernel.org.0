@@ -2,117 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D37C617694F
-	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 01:26:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE01B176A07
+	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 02:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727041AbgCCA0X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 2 Mar 2020 19:26:23 -0500
-Received: from ozlabs.org ([203.11.71.1]:58941 "EHLO ozlabs.org"
+        id S1726871AbgCCB3S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 2 Mar 2020 20:29:18 -0500
+Received: from ozlabs.org ([203.11.71.1]:54153 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726915AbgCCA0X (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 2 Mar 2020 19:26:23 -0500
+        id S1726755AbgCCB3S (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 2 Mar 2020 20:29:18 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Wd985fPQz9sSG;
-        Tue,  3 Mar 2020 11:26:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48WfYl1pJrz9sRf;
+        Tue,  3 Mar 2020 12:29:15 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583195181;
-        bh=6pNAZ4DNdVjlv1OmTqyQ0CQpMidWYRVRMi415EdzFLc=;
+        s=201702; t=1583198955;
+        bh=9JgwDHLebH7yM40ELOfocC40qLVAwpcXJe/0yOA1g88=;
         h=Date:From:To:Cc:Subject:From;
-        b=kzv9byorkfPrd7DYiYlrIPiBbd+bYYnp1AXR3ttQVpD56sZ0IK0gsrwntv/HpxQgL
-         tph+FEXez5mEAa5IucY03akcTStY9ZKyWP1Zrhj/SesO87572xUk+yiUv3R3gq2GZj
-         fjJpiaaECCy0k/Hpx9MRY0eKyHYq5rLcSVPNslFFvM2tHxhpY55XSV61hACWdTqGAS
-         BJjgI0kOw/f+zhj5EgogimWiT6mZws2xzwSiZSCx9TBAdcExgtytDpJi/nWqDtQ19Y
-         k/9G2pNHci/NSDfcAEIUT7GUn/zhqXId1+WQQy0kPh9ZWQ7lT/eKmOcJ3TB+H9uUxc
-         ZmXU/lc5DXfXw==
-Date:   Tue, 3 Mar 2020 11:26:14 +1100
+        b=a0C+82I54n/QClXx9rJSYbqBaN2rESCM8Xf98eHGox4eNhyd3FYuy0udTiL2JCqIt
+         I+ynQ99jXZNcld6w3lGDOfhH0XvL53uDA639VunJX/8+4Q4A+3z3nmZ6kSXRLFohgk
+         VnPiGdLOj66ZoaS95IsFiZPwb1nXPv6H+SoKhHiLmVXRAbFOqYrY5NTgSqjBZcZ6pb
+         /Kj5nf6FoR1vbDSCqpIyGNw8rwsZhC7rZIOpqnw0vNNJSENdLZ0XQVgD9k4Jyq/r41
+         IGrm9hbzo/BaWx3P+xkEGu5yqeBrpo/RS74kkKx2R6ySk9OJssV3J1kjOoZEKZ1Jgn
+         2uotJ7RMbj79w==
+Date:   Tue, 3 Mar 2020 12:29:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        NetFilter <netfilter-devel@vger.kernel.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Subject: linux-next: manual merge of the netfilter-next tree with Linus'
- tree
-Message-ID: <20200303112614.546aa34f@canb.auug.org.au>
+        Akshu Agrawal <akshu.agrawal@amd.com>
+Subject: linux-next: build warning after merge of the sound-asoc tree
+Message-ID: <20200303122909.0d760f83@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/QYioLg.i7ALBe_AZALOdD7Y";
+Content-Type: multipart/signed; boundary="Sig_/k8LROJLLNdbDSbqbVb3+ij6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/QYioLg.i7ALBe_AZALOdD7Y
+--Sig_/k8LROJLLNdbDSbqbVb3+ij6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the netfilter-next tree got a conflict in:
+After merging the sound-asoc tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-  net/netfilter/ipset/ip_set_hash_gen.h
+In file included from include/linux/device.h:15,
+                 from include/sound/core.h:10,
+                 from sound/soc/amd/acp3x-rt5682-max9836.c:7:
+sound/soc/amd/acp3x-rt5682-max9836.c: In function 'acp3x_probe':
+sound/soc/amd/acp3x-rt5682-max9836.c:341:23: warning: format '%d' expects a=
+rgument of type 'int', but argument 3 has type 'long int' [-Wformat=3D]
+  341 |   dev_err(&pdev->dev, "DMIC gpio failed err=3D%d\n",
+      |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+include/linux/dev_printk.h:19:22: note: in definition of macro 'dev_fmt'
+   19 | #define dev_fmt(fmt) fmt
+      |                      ^~~
+sound/soc/amd/acp3x-rt5682-max9836.c:341:3: note: in expansion of macro 'de=
+v_err'
+  341 |   dev_err(&pdev->dev, "DMIC gpio failed err=3D%d\n",
+      |   ^~~~~~~
+sound/soc/amd/acp3x-rt5682-max9836.c:341:46: note: format string is defined=
+ here
+  341 |   dev_err(&pdev->dev, "DMIC gpio failed err=3D%d\n",
+      |                                             ~^
+      |                                              |
+      |                                              int
+      |                                             %ld
 
-between commit:
+Introduced by commit
 
-  f66ee0410b1c ("netfilter: ipset: Fix "INFO: rcu detected stall in hash_xx=
-x" reports")
-
-from Linus' tree and commit:
-
-  9fabbf56abfe ("netfilter: Replace zero-length array with flexible-array m=
-ember")
-
-from the netfilter-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+  72c3b2b09fcd ("ASoc: amd: Add DMIC switch capability to machine driver")
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc net/netfilter/ipset/ip_set_hash_gen.h
-index e52d7b7597a0,f1edc5b9b4ce..1ee43752d6d3
---- a/net/netfilter/ipset/ip_set_hash_gen.h
-+++ b/net/netfilter/ipset/ip_set_hash_gen.h
-@@@ -105,11 -75,9 +105,11 @@@ struct htable_gc=20
-  /* The hash table: the table size stored here in order to make resizing e=
-asy */
-  struct htable {
-  	atomic_t ref;		/* References for resizing */
- -	atomic_t uref;		/* References for dumping */
- +	atomic_t uref;		/* References for dumping and gc */
-  	u8 htable_bits;		/* size of hash table =3D=3D 2^htable_bits */
- +	u32 maxelem;		/* Maxelem per region */
- +	struct ip_set_region *hregion;	/* Region locks and ext sizes */
-- 	struct hbucket __rcu *bucket[0]; /* hashtable buckets */
-+ 	struct hbucket __rcu *bucket[]; /* hashtable buckets */
-  };
- =20
-  #define hbucket(h, i)		((h)->bucket[i])
-
---Sig_/QYioLg.i7ALBe_AZALOdD7Y
+--Sig_/k8LROJLLNdbDSbqbVb3+ij6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5dpCYACgkQAVBC80lX
-0Gw3uwf/RaVvcJWrbYdHPzAx4vdbLuHRp6bdBd+kgaV3Np/hFh/ipUI5+fq2yeWK
-ZogcV2y+VqXIVTliSHhNN0RkH9vlwo/tylSfs9WFERG1HmrMsQmhtTt0Idjfef0y
-AD/S+WYSn0uV5eZxHa/ZUUS4xkdqvfrumnXVlz7haeert/+FrHDFc3BkzgxdJxLi
-REVLdgBvyrly5ZiwaVqQliQ+NlyG3uRVhRMNiPwLq4hTjnauy5gIukRqsMwUmGeb
-RT6U1skYeytt7UDFWKEkX/8s3PG/1jqdTf9dEKPgOybaqAsl5W+uidZTdvmHiIVW
-JFbEtM9+NNJBpmmh6LlVCR/cltXNLw==
-=Ig/C
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5dsuUACgkQAVBC80lX
+0GyXTwf/Viokg1Oor3erp/lUXDSs9qHoliYCz0MYQFs/YxrQ55wseIqA15yPKOJU
+Ks7A2hptHkfyljjP8fNsZY841javuNi8/k+gxqmiN4E1YhzAvzSUw51ptSk1b+qO
+aZY6Hf/yd3oDpS2WKh2jOqrRcFR3e9c2EGoioElMeP0yn2oxr3ZuYLOEgH3diHNc
+GGWxE9ytM0MqZeMyrppNzR9wyBylLr3X2MOYqo5M7JAAQApud8kDfD9BNmk5zgfQ
+J8B40jPk826UZ8Rvx3AI/GoYdRBpAehlvL7Km51y4/1GQNRrk68y4zlg+SeDOZ2l
+eifKqPPYPIGUSxUX/nO0eai0STg+Gg==
+=OzbO
 -----END PGP SIGNATURE-----
 
---Sig_/QYioLg.i7ALBe_AZALOdD7Y--
+--Sig_/k8LROJLLNdbDSbqbVb3+ij6--

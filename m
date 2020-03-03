@@ -2,93 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD1F177643
-	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 13:45:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B33C11776F5
+	for <lists+linux-next@lfdr.de>; Tue,  3 Mar 2020 14:28:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728493AbgCCMpA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 3 Mar 2020 07:45:00 -0500
-Received: from mail-lj1-f194.google.com ([209.85.208.194]:44877 "EHLO
-        mail-lj1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727896AbgCCMpA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Mar 2020 07:45:00 -0500
-Received: by mail-lj1-f194.google.com with SMTP id a10so3305790ljp.11
-        for <linux-next@vger.kernel.org>; Tue, 03 Mar 2020 04:44:59 -0800 (PST)
+        id S1729375AbgCCN2P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 3 Mar 2020 08:28:15 -0500
+Received: from mail-qk1-f196.google.com ([209.85.222.196]:46768 "EHLO
+        mail-qk1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727913AbgCCN2P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 3 Mar 2020 08:28:15 -0500
+Received: by mail-qk1-f196.google.com with SMTP id u124so3269286qkh.13;
+        Tue, 03 Mar 2020 05:28:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=evBBjz9U85vcZNZZum1Slxsx5UFRYSR0J1vw207eOiw=;
-        b=briYpDcVVWZUVDIFgqyV6cNFPFZtBrD4hN2SQA9RIULfrQoVS3OwSb4tMkXEgUhL7d
-         WZGM7wJPzWcp7JQbbIbPU8yZbmk9G13QrMifNCdIPzswPWznVZFWpb6ylFPt8uV7ebQ6
-         OurrOGfFkQ/cN+fJK9mbKs3RvKUsObLdFNDml1GdVyn32vTHoa4pezriZWZjzSrrj5mW
-         16WL9SALUboYb8T0vtNyBIwr8UZZLZEGKsci91FKaws8uIEmO8Xoqex7H5sgEtO/GLny
-         uA52xwO0zagbBnYtan6hjg/V4eR58fwgVvY8iVPbEuNIeMke/Yjek/J047DznYasiuh9
-         Bhbw==
+        bh=k+RjkZNVBTQF8AzTpSWG5LJtd246vYUWKTAxkIql6+A=;
+        b=ubjlZr8/2D8teU3kDdJ1ja7NFLKRlRFYQh2yQl8Hf+UWLS0oYFNiSPRq+w8OH82yza
+         /ZHs6DMPovozJLnZuwLfhcOnO2NM1W6R6fHKOnNASOVMAToExkyYm2nd14sdxyNDDZz7
+         7D4Dp5HHVf8jD1ODqLYJaVACJmQ1wPc7Imr5Mbb1zSkJkoBhO8DdOyRdItV8sKizqZ+C
+         0q/j42mk3+AwbiepGWVxBb5wC5CSx9AQq46ZTXBOlUci8fT5mfyG6gd/UcSPnIGnMb5D
+         9hksY2ZysGt+cuG0SFidqvROLBGIjZAUe0UgLRpFpFoO27Z5K3g6UPBOOJnGC1ZqMEnB
+         RLyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=evBBjz9U85vcZNZZum1Slxsx5UFRYSR0J1vw207eOiw=;
-        b=daPAKSsJMPb7tXxx63bxy9xLroubtfuF5mRZK0JKY7Oyx7ERavzp58m47QovYFhSya
-         /pKI9EnAx72oSlVsn2HoHLvdwhlAmxB6OoDHIgtHczLSt7basgNRttxkMM7e1xK65JDl
-         7IrZtb9+hss2SR5/aw+F7p51EsbIz9exWKRY3jTKiONrasBv7fiusqKQ3UT3nLzs/oeB
-         rpcR+a2qacdX8FrbADOQS9mrxDgTYqT9CmI0ZFFQEU+TuW7YEifjjvVyqYokA8NZZVuw
-         vktWmGMm/rBI8+TYXsupytPtpbyEcmpdPsB4BkyE0SiwVqYwGllEoR6EGoEOJdkVII9k
-         FfWg==
-X-Gm-Message-State: ANhLgQ065u8wbqX4HXv8YO5hXBWNZ3/lfMNzEp1OYFifZbiy7BI0cPC0
-        6WAmUBawUyEcJBKv3lSC5Ne1xH0lVp/oOEDptqq19w==
-X-Google-Smtp-Source: ADFU+vtT0CJ25xhmeEgN1GhW/qH/dAyDjAKDZAfgH63Fo9MDo7daTii7BbgtD/P65Cr3BKtEzTxVJtL/0EYFvL+JY6o=
-X-Received: by 2002:a05:651c:44b:: with SMTP id g11mr2285809ljg.168.1583239498582;
- Tue, 03 Mar 2020 04:44:58 -0800 (PST)
+        bh=k+RjkZNVBTQF8AzTpSWG5LJtd246vYUWKTAxkIql6+A=;
+        b=jloYufHAsnas85oQ5ciMsyPEH/CSR90CMLP1luMyZnJuZ+kMw97VaCYuOYlXQt0gYI
+         7fOpnnZiw2wwMpI4D7hQ7j0Q/I9BcXAD/jvp3wqhQ2LrIaQsAXwYV0/VJggO2Vmf8sJx
+         0CfxPf6FBDJ/nqYccq//2yM3uMJuxVa+Zh0XRMxyATUH8lRpUlAht1I1whr9MgrPEAYz
+         1kal8z1TJqHW8YgkXVJ8cmHV8Xzk7YHvBvs+iq9cKMBOoJcUbnwicBO+V7pKNlKKu4yg
+         fzsayCcvZSnex/cQ7MuUvNc/mpdroB2bK4Nd/29I1P+LaxcShmbU/6QiHPEHjUG+nlwC
+         Aeuw==
+X-Gm-Message-State: ANhLgQ1QWBwf8Oq6PnE7wHw1npb5iivUKpcXWoM8WoQOrSjt5PopeD4e
+        Z6Zmd3hkje0DJuYjAbbFw2fvyUJ3fc8CtiUfJOI=
+X-Google-Smtp-Source: ADFU+vu04x+YnOzO9JpwN7FD1ENNIDZ5TTmQijEEFjWkxq672wtKoTEdKtSNfTli5L1H3kjL7ZhIlHNPAR1qn952Wzg=
+X-Received: by 2002:a05:620a:806:: with SMTP id s6mr4228410qks.235.1583242094163;
+ Tue, 03 Mar 2020 05:28:14 -0800 (PST)
 MIME-Version: 1.0
 References: <20200302182552.724cf197@canb.auug.org.au> <ccba6f43-a803-62e7-193f-cba0704a163a@infradead.org>
-In-Reply-To: <ccba6f43-a803-62e7-193f-cba0704a163a@infradead.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 3 Mar 2020 13:44:47 +0100
-Message-ID: <CACRpkdZ3guZGLmZwtQSMT+NV=wL5dr4pdwKb7vhQ4Ut_K0dKYA@mail.gmail.com>
+ <CACRpkdZ3guZGLmZwtQSMT+NV=wL5dr4pdwKb7vhQ4Ut_K0dKYA@mail.gmail.com>
+In-Reply-To: <CACRpkdZ3guZGLmZwtQSMT+NV=wL5dr4pdwKb7vhQ4Ut_K0dKYA@mail.gmail.com>
+From:   Baolin Wang <baolin.wang7@gmail.com>
+Date:   Tue, 3 Mar 2020 21:28:02 +0800
+Message-ID: <CADBw62o-nvBu4QLD4f10sFCd4E+C68ghUwaUPfL-LeD5Ctrpog@mail.gmail.com>
 Subject: Re: linux-next: Tree for Mar 2 (pinctrl/sprd/pinctrl-sprd.c)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Baolin Wang <baolin.wang@spreadtrum.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Baolin Wang <baolin.wang@spreadtrum.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        Baolin Wang <baolin.wang7@gmail.com>
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 2, 2020 at 5:36 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 3/1/20 11:25 PM, Stephen Rothwell wrote:
-> > Hi all,
+Hi Linus,
+
+On Tue, Mar 3, 2020 at 8:44 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Mon, Mar 2, 2020 at 5:36 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > On 3/1/20 11:25 PM, Stephen Rothwell wrote:
+> > > Hi all,
+> > >
+> > > Changes since 20200228:
+> > >
 > >
-> > Changes since 20200228:
+> > on i386 or x86_64:
 > >
+> > kconfig warnings and build error:
+> >
+> > WARNING: unmet direct dependencies detected for PINCTRL_SPRD
+> >   Depends on [n]: PINCTRL [=y] && OF [=n] && (ARCH_SPRD || COMPILE_TEST [=y])
+> >   Selected by [m]:
+> >   - PINCTRL_SPRD_SC9860 [=m] && PINCTRL [=y]
+> >
+> > ../drivers/pinctrl/sprd/pinctrl-sprd.c: In function 'sprd_dt_node_to_map':
+> > ../drivers/pinctrl/sprd/pinctrl-sprd.c:282:8: error: implicit declaration of function 'pinconf_generic_parse_dt_config'; did you mean 'pinconf_generic_dump_config'? [-Werror=implicit-function-declaration]
+> >   ret = pinconf_generic_parse_dt_config(np, pctldev, &configs,
+> >         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> >         pinconf_generic_dump_config
 >
-> on i386 or x86_64:
+> Should be fixed with
 >
-> kconfig warnings and build error:
+> depends on OF=y
 >
-> WARNING: unmet direct dependencies detected for PINCTRL_SPRD
->   Depends on [n]: PINCTRL [=y] && OF [=n] && (ARCH_SPRD || COMPILE_TEST [=y])
->   Selected by [m]:
->   - PINCTRL_SPRD_SC9860 [=m] && PINCTRL [=y]
+> in drivers/pinctrl/sprd/Kconfig
 >
-> ../drivers/pinctrl/sprd/pinctrl-sprd.c: In function 'sprd_dt_node_to_map':
-> ../drivers/pinctrl/sprd/pinctrl-sprd.c:282:8: error: implicit declaration of function 'pinconf_generic_parse_dt_config'; did you mean 'pinconf_generic_dump_config'? [-Werror=implicit-function-declaration]
->   ret = pinconf_generic_parse_dt_config(np, pctldev, &configs,
->         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         pinconf_generic_dump_config
+> Baolin are you onto it?
 
-Should be fixed with
+Yes, I've sent out a patch to fix this issue, and I saw you've applied it.
+Sorry, I forgot replying in this thread.
 
-depends on OF=y
-
-in drivers/pinctrl/sprd/Kconfig
-
-Baolin are you onto it?
-
-Yours,
-Linus Walleij
+-- 
+Baolin Wang

@@ -2,87 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AECD41789D2
-	for <lists+linux-next@lfdr.de>; Wed,  4 Mar 2020 06:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32475178A59
+	for <lists+linux-next@lfdr.de>; Wed,  4 Mar 2020 06:52:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725797AbgCDFII (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 4 Mar 2020 00:08:08 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39585 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725774AbgCDFII (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 4 Mar 2020 00:08:08 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48XMMp0NZTz9sSG;
-        Wed,  4 Mar 2020 16:08:05 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583298486;
-        bh=2AGvzSo4s7yhovCwuUDqMjs/grp1mZuL0AMqAnlZklM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GLpcWwZfIAXZpPi4bzUvT3dJeKXxNG6lhocAyBNQR0KsJvnu9etxsVgkmlNj5snfh
-         b59YfRvkChaT9d5/GApcB9L3EKT8Up9vpOQYESo64DBNbG5ex7EXKfyhuW3u+shUbm
-         wKcxpIad65+xIjY1aPEo6JtWmwXoVFlBe+Wq+v6KGiqvCEPzL1ikPtd2xITiz1OMli
-         qyOKRDmuJEMJXg1hKcU2c5Q4grxNWVUDUzNiOWjU5z1/+AUhLuqiK04g0t6J/sUFvu
-         Gt0RvOznEYwOQe/kUHdwKxBKijVaAuE2YyIM5MkuIncP0i6hz7vAd3MkffeaDjiqZJ
-         l/lxUnpzun4gA==
-Date:   Wed, 4 Mar 2020 16:08:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jacob Keller <jacob.e.keller@intel.com>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20200304160804.6daf438c@canb.auug.org.au>
+        id S1725791AbgCDFwD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 4 Mar 2020 00:52:03 -0500
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:54869 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725271AbgCDFwD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 4 Mar 2020 00:52:03 -0500
+Received: by mail-pj1-f41.google.com with SMTP id dw13so409995pjb.4
+        for <linux-next@vger.kernel.org>; Tue, 03 Mar 2020 21:52:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=RuH1JKceqXgS09cU/pqDoAziqdqK8klEc27lrkGpAZE=;
+        b=UFJ7f4N4qJ/WA1jtKISZhSgRS+6vXj0dmEi7yYARnPSCTy4otZgSNktxRXdSHe6Gy7
+         Gbr3hDZ1KhbFXytBE2J88CYruc5HY8/c0rhxcV5qt5KkdfNNCX92f/FS6ZhOg+PDy2rr
+         kX8fmdbioMKCaffUAQIYSyFzmF65oCwDGuSIOuJM27ihzrFfyjvEPC4yvpCcy97mvuQd
+         gSJJjc1XzE+jdOxQqE/2KBEm5yhBEsJyW1AZy+pChFeVgykeu4bcJUnmFyhwYKR1Nk8L
+         X+JCCPtSKxATDL6rdaXdwudoNjK83RFvYayjwyWisfVbulb/mGBA6H75DWkrHkxPTxh9
+         Wr2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=RuH1JKceqXgS09cU/pqDoAziqdqK8klEc27lrkGpAZE=;
+        b=R3CzlzGJitePwhrStK9LgBzaVt1DnprNRnMbmX1A3xJWya1NNs+uH/SEiFyHL1+2AJ
+         Ye0ysRzqkLVMlkkIq411ciRzYMU7Krh7KCMelGp6Sf7ruqns4qx8fp2Z51ci28cDK2gn
+         5fp/qXFb8WYhtfXKqjnllzp0B7UurT0U3b9zuRFGkS0Wtx2X8ueGj1mxF9ZaoxZHNsdX
+         qSq/txjsLh6s6r2crNEOLwUDGkJ16IqQH75m3ib4+ZmVW16icxMLctRYH84YaLH+enq2
+         c1T4VAegeX0342EY/wPTW5m568BY3WitSi5RDMOHjXRQnxkYKlfWbkRoJ8npo4ki1ifm
+         8KlA==
+X-Gm-Message-State: ANhLgQ3ySfTGdheDVGObTI4Rb+eeDG0Wg+dLU1Fur4JmDLw4u5sgdLtV
+        FF6hAHbVVDR69+0c8QpA8Tg8vRPDlzU=
+X-Google-Smtp-Source: ADFU+vs2crouA7mmd8981OTEpl5I1qonrbEF6FEL4fZ0fzDtxuwSKsimlJRo6/XVW7x3597zPMbJVw==
+X-Received: by 2002:a17:902:8d94:: with SMTP id v20mr1612304plo.259.1583301121897;
+        Tue, 03 Mar 2020 21:52:01 -0800 (PST)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u12sm20920630pgh.52.2020.03.03.21.52.00
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2020 21:52:00 -0800 (PST)
+Message-ID: <5e5f4200.1c69fb81.939e1.7aca@mx.google.com>
+Date:   Tue, 03 Mar 2020 21:52:00 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/L_ubD/qdKwECXxCSoVa4ke3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Kernel: v5.6-rc4-219-g02c04c823da1
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+Subject: next/pending-fixes boot: 110 boots: 6 failed,
+ 104 passed (v5.6-rc4-219-g02c04c823da1)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/L_ubD/qdKwECXxCSoVa4ke3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 110 boots: 6 failed, 104 passed (v5.6-rc4-219-g02c=
+04c823da1)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc4-219-g02c04c823da1/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc4-219-g02c04c823da1/
 
-In commit
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc4-219-g02c04c823da1
+Git Commit: 02c04c823da1fd91807196316b7a7c472027c11e
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 59 unique boards, 13 SoC families, 21 builds out of 216
 
-  707518348ae7 ("devlink: remove trigger command from devlink-region.rst")
+Boot Regressions Detected:
 
-Fixes tag
+arm:
 
-  Fixes: 0b0f945f5458 ("devlink: add a file documenting devlink regions", 2=
-020-01-10)
+    bcm2835_defconfig:
+        gcc-8:
+          bcm2837-rpi-3-b:
+              lab-baylibre: new failure (last pass: v5.6-rc4-203-g8f169e319=
+c63)
 
-has these problem(s):
+arm64:
 
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+    defconfig:
+        gcc-8:
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: v5.6-rc4-203-g8f169e319c63)
 
---=20
-Cheers,
-Stephen Rothwell
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc4-203-g8f169e319=
+c63)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: v5.6-rc4-203-g8f169e319=
+c63)
 
---Sig_/L_ubD/qdKwECXxCSoVa4ke3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Boot Failures Detected:
 
------BEGIN PGP SIGNATURE-----
+arm:
+    bcm2835_defconfig:
+        gcc-8:
+            bcm2837-rpi-3-b: 1 failed lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5fN7QACgkQAVBC80lX
-0GwMlgf8Dygoxwl0X0rv2dDXN+aY/CishuG1osiVecepQPFnpu1+O9Bk4ufJPw6T
-YVE9sdKtg2Ia6//b5MABqCRQvaZHdZmTeen53IUqiUQriin0//6QZCknAPfvBiMy
-cCcIFiTIvq6Xf61fRDVAyhavsw3ysEZ+hIyHO72sD1Ye0uHEExy6SFBSwk0ObVxw
-mODqt8UTDDxlmC4eje9Mg2qig8Vht/PxxRgBoXPQrBZhluUUS1X/8zh0ML2mIsWZ
-uKkiWEs37pjy+clK4yFS9tx9UTIQkwGetsQ8ozMyz8e5qjJd70/V60HpabOpb+r4
-YKybPO//2oKbfVruJBRiPpDX3ikbEA==
-=zCxu
------END PGP SIGNATURE-----
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
 
---Sig_/L_ubD/qdKwECXxCSoVa4ke3--
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-p241: 1 failed lab
+            meson-gxm-q200: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>

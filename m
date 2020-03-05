@@ -2,257 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 089CD17B171
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C737117B19D
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726259AbgCEWaF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 17:30:05 -0500
-Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:3237 "EHLO
-        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725991AbgCEWaF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:30:05 -0500
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e617d420001>; Thu, 05 Mar 2020 14:29:22 -0800
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Thu, 05 Mar 2020 14:30:04 -0800
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Thu, 05 Mar 2020 14:30:04 -0800
-Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Mar
- 2020 22:30:03 +0000
-Subject: Re: [PATCH v3 2/2] mm/gup/writeback: add callbacks for inaccessible
- pages
-To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        <linux-next@vger.kernel.org>, <akpm@linux-foundation.org>,
-        <jack@suse.cz>, <kirill@shutemov.name>
-CC:     <borntraeger@de.ibm.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <linux-mm@kvack.org>,
-        <frankja@linux.ibm.com>, <sfr@canb.auug.org.au>,
-        <linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>,
-        Will Deacon <will@kernel.org>
-References: <20200304130655.462517-1-imbrenda@linux.ibm.com>
- <20200304130655.462517-3-imbrenda@linux.ibm.com>
-X-Nvconfidentiality: public
-From:   John Hubbard <jhubbard@nvidia.com>
-Message-ID: <f58b6839-5233-5ccf-1f1d-60b3b8aaf417@nvidia.com>
-Date:   Thu, 5 Mar 2020 14:30:03 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726173AbgCEWnU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 17:43:20 -0500
+Received: from mail-pf1-f196.google.com ([209.85.210.196]:36086 "EHLO
+        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726128AbgCEWnU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:43:20 -0500
+Received: by mail-pf1-f196.google.com with SMTP id i13so92669pfe.3;
+        Thu, 05 Mar 2020 14:43:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=jA8p1VP2pt+JFWnPp+edirLjgTdOXHSljdFxDv1Za7g=;
+        b=VVk9njl/Z7IPKK7+37XT+aObuQJtyevHOfm9ww2KAU8DY5xN2+hsFugWK5Ojh5MQuj
+         5vx+8Ld8/LATRnhUv+IniR1NOsPDoXiCRyF5JX/o7M21UgJopSVbFomOMuwBAiWNd4u4
+         jO7eDdbTkII28GQm6aS++5e3CRlwLEZiGklNOJMtJmspY+5xILJF3+I2T6j/uJ9CKiXs
+         E54YCzd8yEXAEVLe6sGUrSvC9THlvKR/TAlRVRGzrYGk6fXuURl7ZtUy3Eiguj4uBJUy
+         lWTyI/9uJQowsxyOn3Ao+fn3l9dzUEL0KilFXDgcjWHPhKiJDSR2APQIaPThlorgostA
+         KHHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=jA8p1VP2pt+JFWnPp+edirLjgTdOXHSljdFxDv1Za7g=;
+        b=GjIQpH0VGUtKyjStxuOPu6N0IoP7fdBML5f3bzXw7acokBu8pnsi6cFdHc9H8TE4KV
+         J97HeNaa9HEqDGpeBt8LQw4FzTYtGj8qvhTQq0KnYrTWRl8ILJoxfU2E+KJJIJbug+J+
+         q9rVAEXRXbdluMFquryqRSmtascyGDiCjDOxztXZ0S8XoFt4xawU4/0pAZ1xvYE8N3qu
+         PebLEw7zLl38bM0B1Hm1UYXzQ/os4VqWh8V0p/NvfGrcki62QAcKeHzk1120w4Fa9PKC
+         PUOq+W+mIwzwQE0rpvzxauhbZLAZyGTLWHQI8uNZuA3xgkAu+8TitwbIzSFmrlVtrOyw
+         m4Vw==
+X-Gm-Message-State: ANhLgQ3fg/SR8SnLXUZVRFjbhRdDOxDwSyw+WjqBrilb+ezvvrshOJLk
+        kZPBextAptmpxedtUWTkxbc=
+X-Google-Smtp-Source: ADFU+vvleMQSez6lc/fdx5SiFd17q0R3BrugPniE+eI/y2FdayIn84wcAqemUuX8tx5E/KZNeAmrig==
+X-Received: by 2002:a63:5713:: with SMTP id l19mr387069pgb.216.1583448199145;
+        Thu, 05 Mar 2020 14:43:19 -0800 (PST)
+Received: from ast-mbp ([2620:10d:c090:400::5:f0e7])
+        by smtp.gmail.com with ESMTPSA id e30sm33471914pga.6.2020.03.05.14.43.17
+        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 05 Mar 2020 14:43:18 -0800 (PST)
+Date:   Thu, 5 Mar 2020 14:43:16 -0800
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To:     KP Singh <kpsingh@chromium.org>
+Cc:     linux-security-module@vger.kernel.org, linux-next@vger.kernel.org,
+        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
+Subject: Re: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for
+ !CONFIG_NET
+Message-ID: <20200305224315.i4wfxfrugcey22mm@ast-mbp>
+References: <20200305220127.29109-1-kpsingh@chromium.org>
 MIME-Version: 1.0
-In-Reply-To: <20200304130655.462517-3-imbrenda@linux.ibm.com>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1583447362; bh=AIy2F0cXJ6vERrZGXDyU4ocJ5/9VuGMIm2jFeH0zjLU=;
-        h=X-PGP-Universal:Subject:To:CC:References:X-Nvconfidentiality:From:
-         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=AAq6QJXIsjboZ/XB07RxXDRGm5iG+3TzRkSS7LAYrsQMUZXHbrR8PgbK0uhKdMVQq
-         c/BjYVCVwNfY0gGGWH7GclhFlaw0CPg+WeFFXWgFB2fYoG8If0fH3eL8uiC9tBfV7E
-         +uTz9fGnxPZVG/49xXQ8aPaO0n6kFuPYry23/BrY9KT2E0CvNFvsK1qr/kbLmIu99z
-         bfskLayB2MtSXEDL3LGAi+M9h50IJs1z+0wWqkmHN0yCrxTE9kgsPFJgceOjg/9pII
-         fPw5iHdg+VlGfC/KBkmyFmjxfHGEwhQ+QH+wHWRcaYqP3nn+6YoUDjK8jO47/7kgGM
-         lLtLDZKfB4JJw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200305220127.29109-1-kpsingh@chromium.org>
+User-Agent: NeoMutt/20180223
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/4/20 5:06 AM, Claudio Imbrenda wrote:
-> With the introduction of protected KVM guests on s390 there is now a
-> concept of inaccessible pages. These pages need to be made accessible
-> before the host can access them.
+On Thu, Mar 05, 2020 at 11:01:27PM +0100, KP Singh wrote:
+> From: KP Singh <kpsingh@google.com>
 > 
-> While cpu accesses will trigger a fault that can be resolved, I/O
-> accesses will just fail.  We need to add a callback into architecture
-> code for places that will do I/O, namely when writeback is started or
-> when a page reference is taken.
+> test_run.o is not built when CONFIG_NET is not set and
+> bpf_prog_test_run_tracing being referenced in bpf_trace.o causes the
+> linker error:
 > 
-> This is not only to enable paging, file backing etc, it is also
-> necessary to protect the host against a malicious user space.  For
-> example a bad QEMU could simply start direct I/O on such protected
-> memory.  We do not want userspace to be able to trigger I/O errors and
-> thus the logic is "whenever somebody accesses that page (gup) or does
-> I/O, make sure that this page can be accessed".  When the guest tries
-> to access that page we will wait in the page fault handler for
-> writeback to have finished and for the page_ref to be the expected
-> value.
+> ld: kernel/trace/bpf_trace.o:(.rodata+0x38): undefined reference to
+>  `bpf_prog_test_run_tracing'
 > 
-> On s390x the function is not supposed to fail, so it is ok to use a
-> WARN_ON on failure. If we ever need some more finegrained handling
-> we can tackle this when we know the details.
+> Add a __weak function in bpf_trace.c to handle this.
 > 
-> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-> Acked-by: Will Deacon <will@kernel.org>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Reviewed-by: Christian Borntraeger <borntraeger@de.ibm.com>
-> ---
->  include/linux/gfp.h |  6 ++++++
->  mm/gup.c            | 30 +++++++++++++++++++++++++++---
->  mm/page-writeback.c |  5 +++++
->  3 files changed, 38 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index e5b817cb86e7..be2754841369 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -485,6 +485,12 @@ static inline void arch_free_page(struct page *page, int order) { }
->  #ifndef HAVE_ARCH_ALLOC_PAGE
->  static inline void arch_alloc_page(struct page *page, int order) { }
->  #endif
-> +#ifndef HAVE_ARCH_MAKE_PAGE_ACCESSIBLE
-> +static inline int arch_make_page_accessible(struct page *page)
-> +{
-> +	return 0;
-> +}
-> +#endif
->  
->  struct page *
->  __alloc_pages_nodemask(gfp_t gfp_mask, unsigned int order, int preferred_nid,
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 81a95fbe9901..d0c4c6f336bb 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -413,6 +413,7 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  	struct page *page;
->  	spinlock_t *ptl;
->  	pte_t *ptep, pte;
-> +	int ret;
->  
->  	/* FOLL_GET and FOLL_PIN are mutually exclusive. */
->  	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
-> @@ -471,8 +472,6 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  		if (is_zero_pfn(pte_pfn(pte))) {
->  			page = pte_page(pte);
->  		} else {
-> -			int ret;
-> -
->  			ret = follow_pfn_pte(vma, address, ptep, flags);
->  			page = ERR_PTR(ret);
->  			goto out;
-> @@ -480,7 +479,6 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  	}
->  
->  	if (flags & FOLL_SPLIT && PageTransCompound(page)) {
-> -		int ret;
->  		get_page(page);
->  		pte_unmap_unlock(ptep, ptl);
->  		lock_page(page);
-> @@ -497,6 +495,19 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
->  		page = ERR_PTR(-ENOMEM);
->  		goto out;
->  	}
-> +	/*
-> +	 * We need to make the page accessible if and only if we are going
-> +	 * to access its content (the FOLL_PIN case).  Please see
-> +	 * Documentation/core-api/pin_user_pages.rst for details.
-> +	 */
-> +	if (flags & FOLL_PIN) {
-> +		ret = arch_make_page_accessible(page);
-> +		if (ret) {
-> +			unpin_user_page(page);
-> +			page = ERR_PTR(ret);
-> +			goto out;
-> +		}
-> +	}
->  	if (flags & FOLL_TOUCH) {
->  		if ((flags & FOLL_WRITE) &&
->  		    !pte_dirty(pte) && !PageDirty(page))
-> @@ -2162,6 +2173,19 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  
->  		VM_BUG_ON_PAGE(compound_head(page) != head, page);
->  
-> +		/*
-> +		 * We need to make the page accessible if and only if we are
-> +		 * going to access its content (the FOLL_PIN case).  Please
-> +		 * see Documentation/core-api/pin_user_pages.rst for
-> +		 * details.
-> +		 */
-> +		if (flags & FOLL_PIN) {
-> +			ret = arch_make_page_accessible(page);
-> +			if (ret) {
-> +				unpin_user_page(page);
-> +				goto pte_unmap;
-> +			}
-> +		}
->  		SetPageReferenced(page);
->  		pages[*nr] = page;
->  		(*nr)++;
-> diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-> index ab5a3cee8ad3..8384be5a2758 100644
-> --- a/mm/page-writeback.c
-> +++ b/mm/page-writeback.c
-> @@ -2807,6 +2807,11 @@ int __test_set_page_writeback(struct page *page, bool keep_write)
->  		inc_zone_page_state(page, NR_ZONE_WRITE_PENDING);
->  	}
->  	unlock_page_memcg(page);
-> +	/*
-> +	 * If writeback has been triggered on a page that cannot be made
-> +	 * accessible, it is too late.
-> +	 */
-> +	WARN_ON(arch_make_page_accessible(page));
+> Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
+> Signed-off-by: KP Singh <kpsingh@google.com>
 
-Hi,
-
-Sorry for not commenting on this earlier. After looking at this a bit, I think a tiny 
-tweak would be helpful, because:
-
-a) WARN_ON() is a big problem for per-page issues, because, like ants, pages are prone to
-   show up in large groups. And a warning and backtrace for each such page can easily
-   bring a system to a crawl.
-
-b) Based on your explanation of how this works, what your situation really seems to call
-   for is the standard "crash hard in DEBUG builds, in order to keep developers out of
-   trouble, but continue on in non-DEBUG builds".
-
-So maybe you'd be better protected with this instead:
-
-diff --git a/mm/page-writeback.c b/mm/page-writeback.c
-index ab5a3cee8ad3..b7f3d0766a5f 100644
---- a/mm/page-writeback.c
-+++ b/mm/page-writeback.c
-@@ -2764,7 +2764,7 @@ int test_clear_page_writeback(struct page *page)
- int __test_set_page_writeback(struct page *page, bool keep_write)
- {
-        struct address_space *mapping = page_mapping(page);
--       int ret;
-+       int ret, access_ret;
- 
-        lock_page_memcg(page);
-        if (mapping && mapping_use_writeback_tags(mapping)) {
-@@ -2807,6 +2807,13 @@ int __test_set_page_writeback(struct page *page, bool keep_write)
-                inc_zone_page_state(page, NR_ZONE_WRITE_PENDING);
-        }
-        unlock_page_memcg(page);
-+       access_ret = arch_make_page_accessible(page);
-+       /*
-+        * If writeback has been triggered on a page that cannot be made
-+        * accessible, it is too late to recover here.
-+        */
-+       VM_BUG_ON_PAGE(access_ret != 0, page);
-+
-        return ret;
- 
- }
-
-Assuming that's acceptable, you can add:
-
-      Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-
-to the updated patch.  
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
->  	return ret;
->  
->  }
-> 
+Applied. Thanks

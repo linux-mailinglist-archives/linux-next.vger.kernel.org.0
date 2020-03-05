@@ -2,73 +2,55 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C737117B19D
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B312C17B216
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 00:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726173AbgCEWnU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 17:43:20 -0500
-Received: from mail-pf1-f196.google.com ([209.85.210.196]:36086 "EHLO
-        mail-pf1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbgCEWnU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:43:20 -0500
-Received: by mail-pf1-f196.google.com with SMTP id i13so92669pfe.3;
-        Thu, 05 Mar 2020 14:43:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=jA8p1VP2pt+JFWnPp+edirLjgTdOXHSljdFxDv1Za7g=;
-        b=VVk9njl/Z7IPKK7+37XT+aObuQJtyevHOfm9ww2KAU8DY5xN2+hsFugWK5Ojh5MQuj
-         5vx+8Ld8/LATRnhUv+IniR1NOsPDoXiCRyF5JX/o7M21UgJopSVbFomOMuwBAiWNd4u4
-         jO7eDdbTkII28GQm6aS++5e3CRlwLEZiGklNOJMtJmspY+5xILJF3+I2T6j/uJ9CKiXs
-         E54YCzd8yEXAEVLe6sGUrSvC9THlvKR/TAlRVRGzrYGk6fXuURl7ZtUy3Eiguj4uBJUy
-         lWTyI/9uJQowsxyOn3Ao+fn3l9dzUEL0KilFXDgcjWHPhKiJDSR2APQIaPThlorgostA
-         KHHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jA8p1VP2pt+JFWnPp+edirLjgTdOXHSljdFxDv1Za7g=;
-        b=GjIQpH0VGUtKyjStxuOPu6N0IoP7fdBML5f3bzXw7acokBu8pnsi6cFdHc9H8TE4KV
-         J97HeNaa9HEqDGpeBt8LQw4FzTYtGj8qvhTQq0KnYrTWRl8ILJoxfU2E+KJJIJbug+J+
-         q9rVAEXRXbdluMFquryqRSmtascyGDiCjDOxztXZ0S8XoFt4xawU4/0pAZ1xvYE8N3qu
-         PebLEw7zLl38bM0B1Hm1UYXzQ/os4VqWh8V0p/NvfGrcki62QAcKeHzk1120w4Fa9PKC
-         PUOq+W+mIwzwQE0rpvzxauhbZLAZyGTLWHQI8uNZuA3xgkAu+8TitwbIzSFmrlVtrOyw
-         m4Vw==
-X-Gm-Message-State: ANhLgQ3fg/SR8SnLXUZVRFjbhRdDOxDwSyw+WjqBrilb+ezvvrshOJLk
-        kZPBextAptmpxedtUWTkxbc=
-X-Google-Smtp-Source: ADFU+vvleMQSez6lc/fdx5SiFd17q0R3BrugPniE+eI/y2FdayIn84wcAqemUuX8tx5E/KZNeAmrig==
-X-Received: by 2002:a63:5713:: with SMTP id l19mr387069pgb.216.1583448199145;
-        Thu, 05 Mar 2020 14:43:19 -0800 (PST)
-Received: from ast-mbp ([2620:10d:c090:400::5:f0e7])
-        by smtp.gmail.com with ESMTPSA id e30sm33471914pga.6.2020.03.05.14.43.17
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 05 Mar 2020 14:43:18 -0800 (PST)
-Date:   Thu, 5 Mar 2020 14:43:16 -0800
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     linux-security-module@vger.kernel.org, linux-next@vger.kernel.org,
-        bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        id S1726162AbgCEXMw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 18:12:52 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:45788 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726128AbgCEXMw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 18:12:52 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=k34Jf9CwWQcBMtRBm/LyMJ1NsIiaNj1/P9aA0ygmbpE=; b=Pn9FOiOTq9I8lSUk8SMxNLpvDX
+        ntEeZoHx/4KAbXCrRLRGixJqP+FEV7oZa68b/v3AO7BDcPSyDusNqbXTCDG1ZTjXgcc8TtxHaPlxh
+        L0U8++hapYIH+CVFz+W4ZdEnSRsHLsjcOspneFpwAnU++p4B9XR3UcJTfPhKO3kdQkmNiDSvmMIZ1
+        xoEbPFIxJpdY0YDjtRBgfWkPBFbs6V5hFn5FIJDtHp1uc2BocXZwtzmKq+Cubt6JTf4viE7gn+QF7
+        lF2p1DTtubQLilOR2Ahw4mKsTZ21H08FSeGMHKBBZlb1HGvBdpUD6hL4wGcPXYyLDeXFh+GSP4j3a
+        k4MooAtg==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j9zfa-0001f4-BJ; Thu, 05 Mar 2020 23:12:46 +0000
+Subject: Re: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for
+ !CONFIG_NET
+To:     KP Singh <kpsingh@chromium.org>,
+        linux-security-module@vger.kernel.org, linux-next@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         Florent Revest <revest@chromium.org>,
         Brendan Jackman <jackmanb@chromium.org>
-Subject: Re: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for
- !CONFIG_NET
-Message-ID: <20200305224315.i4wfxfrugcey22mm@ast-mbp>
 References: <20200305220127.29109-1-kpsingh@chromium.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <92937298-69c1-be6f-3e40-75af1bc72d9e@infradead.org>
+Date:   Thu, 5 Mar 2020 15:12:42 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 In-Reply-To: <20200305220127.29109-1-kpsingh@chromium.org>
-User-Agent: NeoMutt/20180223
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 11:01:27PM +0100, KP Singh wrote:
+On 3/5/20 2:01 PM, KP Singh wrote:
 > From: KP Singh <kpsingh@google.com>
 > 
 > test_run.o is not built when CONFIG_NET is not set and
@@ -83,4 +65,35 @@ On Thu, Mar 05, 2020 at 11:01:27PM +0100, KP Singh wrote:
 > Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
 > Signed-off-by: KP Singh <kpsingh@google.com>
 
-Applied. Thanks
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
+> ---
+>  kernel/trace/bpf_trace.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 363e0a2c75cf..6a490d8ce9de 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1252,6 +1252,13 @@ static bool tracing_prog_is_valid_access(int off, int size,
+>  	return btf_ctx_access(off, size, type, prog, info);
+>  }
+>  
+> +int __weak bpf_prog_test_run_tracing(struct bpf_prog *prog,
+> +				     const union bpf_attr *kattr,
+> +				     union bpf_attr __user *uattr)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +
+>  const struct bpf_verifier_ops raw_tracepoint_verifier_ops = {
+>  	.get_func_proto  = raw_tp_prog_func_proto,
+>  	.is_valid_access = raw_tp_prog_is_valid_access,
+> 
+
+
+-- 
+~Randy

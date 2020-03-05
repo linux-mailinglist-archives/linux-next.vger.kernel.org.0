@@ -2,86 +2,222 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2501617B21B
-	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 00:16:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F3917B22E
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 00:22:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgCEXQl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 18:16:41 -0500
-Received: from mail-lf1-f66.google.com ([209.85.167.66]:33098 "EHLO
-        mail-lf1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726049AbgCEXQl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 18:16:41 -0500
-Received: by mail-lf1-f66.google.com with SMTP id c20so374515lfb.0;
-        Thu, 05 Mar 2020 15:16:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cim/Thkuor6laFixPM1YB3JnZEsbRCv4QIOJYjrt0Q4=;
-        b=msQAFYu3OlBmRhSaPBKtAX4bKi0OIGZTAe9UfYq0nAA1gPNpyT75F1DBpwb4zSBdC+
-         FE8Emg8mufZgTfON7GnOjREg5GiPxCcSidPRSQlI8a9Xd+utvyciXBfzJxcnKAWmbjcD
-         0JqYpOvkRXfp7IizE/vxoVxjrCNMhrg4oe+U4g+bANE9dhbXsJyzerXmzI4s0Way8/GL
-         8xjum81AukSkZm8mEkbFoYfawujIMtYXZlTtxRM7vAlLJS+UEaWWBSONJ/HGl/8r/Yzp
-         eUf4APomWCkvKxwrLe2WJhuvMqhQYiDcaQ+/+SSVtVObblTZJGmntIOkbI/D1OwWZNGT
-         F6uA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cim/Thkuor6laFixPM1YB3JnZEsbRCv4QIOJYjrt0Q4=;
-        b=O3I9hy3Col55XLyQ3bP9uteEObnvtyFawp42qjwL3mt6zn1ODe95tnYSbl6fFP6Gpt
-         8O3w9b137zP1YvB0sOpCrCJg1E3it7XdnVoLKQV6sNqz72xr55XakvL4/HJxJjaNrxQY
-         50EcCH1lcLoOkSKazr/IlMLiIXOFPkZfXaRwvhABILR55X/G+bdIPq0zJlOwpbO5DgLH
-         9THb+t1Lg3v7Da+2RN8XA6x37KipXpeAO8wQrTtf5LtuIRn7q47s0RFmZgwdUd4rC42n
-         +RY8KNzdAi+e2yQq3rncLBP4dAah5EO6PbCufdDV7GJyPRHeBGLru8HEYzBVMUmbnPif
-         pm8Q==
-X-Gm-Message-State: ANhLgQ323O6aQaEResn1e3DGzZCpbz9MGmPXbyZu7b4/j87unZ3ph3jv
-        HdD+D+FRCsE5Uwp/ae7nPklh3TCNY/4RuvAAczo=
-X-Google-Smtp-Source: ADFU+vsydeXS7gIGr0pLvQ4U17zsMvqXLMumhLO1I975zWMP89UrMbpRkpDRFCxhCNrgVkMXe0GHgvCrK6g/MfCSJGw=
-X-Received: by 2002:ac2:418b:: with SMTP id z11mr90295lfh.134.1583450197267;
- Thu, 05 Mar 2020 15:16:37 -0800 (PST)
+        id S1726177AbgCEXWJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 18:22:09 -0500
+Received: from ozlabs.org ([203.11.71.1]:43211 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbgCEXWJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 5 Mar 2020 18:22:09 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48YRbd5SFrz9sNg;
+        Fri,  6 Mar 2020 10:22:05 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583450526;
+        bh=PvR3xvSSafUOmuGnnxb06iTcgtURZdFSYRFughwx4Jc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=psMUlKTkLtxWgoN1IA50NGPWdGS3hB3HdMRoe5FDUpSOS1fIY6HWjZYAyHKKzxF3D
+         9NRhvJfHINFTJlf/SEKKty3sKJso2RH/4AMJez+pTVPVImvYfGyhM5YSyz8famnEvr
+         obKpExYXgAU0g+ek1XBiV2G8bTZ2+BgByr/cqdOD9Qy03CYWfR2c9/9m40GVsUpy+4
+         G4DuKxrduayZUIizWVcBReAfCIj4MaMf+v0ehJqTivyZRB3FXxbDAVqDQqXh7kOdtD
+         CSd8iwgoQ159AM0f1MOW29lgknQmmrVG4ayd2iMxg+hAo1r5LtulZwr0GCbpc4BGqW
+         xh62PJw55My3Q==
+Date:   Fri, 6 Mar 2020 10:21:58 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sourabh Jain <sourabhjain@linux.ibm.com>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: linux-next: manual merge of the net-next tree with the powerpc tree
+Message-ID: <20200306102158.0b88e0a0@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200305220127.29109-1-kpsingh@chromium.org> <92937298-69c1-be6f-3e40-75af1bc72d9e@infradead.org>
-In-Reply-To: <92937298-69c1-be6f-3e40-75af1bc72d9e@infradead.org>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 5 Mar 2020 15:16:25 -0800
-Message-ID: <CAADnVQLjj+eMMLU3H4oNkzwPiSugm1knzd3RfBGb3NcVC785kg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for !CONFIG_NET
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     KP Singh <kpsingh@chromium.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/MiD=6dX41diOlbdUFdeLJ7D";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 5, 2020 at 3:12 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->
-> On 3/5/20 2:01 PM, KP Singh wrote:
-> > From: KP Singh <kpsingh@google.com>
-> >
-> > test_run.o is not built when CONFIG_NET is not set and
-> > bpf_prog_test_run_tracing being referenced in bpf_trace.o causes the
-> > linker error:
-> >
-> > ld: kernel/trace/bpf_trace.o:(.rodata+0x38): undefined reference to
-> >  `bpf_prog_test_run_tracing'
-> >
-> > Add a __weak function in bpf_trace.c to handle this.
-> >
-> > Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
-> > Signed-off-by: KP Singh <kpsingh@google.com>
->
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+--Sig_/MiD=6dX41diOlbdUFdeLJ7D
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Since it was at the top of the tree I amended the commit
-with your tags.
-Thanks for reporting and testing.
+Hi all,
+
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  fs/sysfs/group.c
+
+between commit:
+
+  9255782f7061 ("sysfs: Wrap __compat_only_sysfs_link_entry_to_kobj functio=
+n to change the symlink name")
+
+from the powerpc tree and commit:
+
+  303a42769c4c ("sysfs: add sysfs_group{s}_change_owner()")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc fs/sysfs/group.c
+index 1e2a096057bc,5afe0e7ff7cd..000000000000
+--- a/fs/sysfs/group.c
++++ b/fs/sysfs/group.c
+@@@ -478,4 -457,118 +479,118 @@@ int compat_only_sysfs_link_entry_to_kob
+  	kernfs_put(target);
+  	return PTR_ERR_OR_ZERO(link);
+  }
+ -EXPORT_SYMBOL_GPL(__compat_only_sysfs_link_entry_to_kobj);
+ +EXPORT_SYMBOL_GPL(compat_only_sysfs_link_entry_to_kobj);
++=20
++ static int sysfs_group_attrs_change_owner(struct kernfs_node *grp_kn,
++ 					  const struct attribute_group *grp,
++ 					  struct iattr *newattrs)
++ {
++ 	struct kernfs_node *kn;
++ 	int error;
++=20
++ 	if (grp->attrs) {
++ 		struct attribute *const *attr;
++=20
++ 		for (attr =3D grp->attrs; *attr; attr++) {
++ 			kn =3D kernfs_find_and_get(grp_kn, (*attr)->name);
++ 			if (!kn)
++ 				return -ENOENT;
++=20
++ 			error =3D kernfs_setattr(kn, newattrs);
++ 			kernfs_put(kn);
++ 			if (error)
++ 				return error;
++ 		}
++ 	}
++=20
++ 	if (grp->bin_attrs) {
++ 		struct bin_attribute *const *bin_attr;
++=20
++ 		for (bin_attr =3D grp->bin_attrs; *bin_attr; bin_attr++) {
++ 			kn =3D kernfs_find_and_get(grp_kn, (*bin_attr)->attr.name);
++ 			if (!kn)
++ 				return -ENOENT;
++=20
++ 			error =3D kernfs_setattr(kn, newattrs);
++ 			kernfs_put(kn);
++ 			if (error)
++ 				return error;
++ 		}
++ 	}
++=20
++ 	return 0;
++ }
++=20
++ /**
++  * sysfs_group_change_owner - change owner of an attribute group.
++  * @kobj:	The kobject containing the group.
++  * @grp:	The attribute group.
++  * @kuid:	new owner's kuid
++  * @kgid:	new owner's kgid
++  *
++  * Returns 0 on success or error code on failure.
++  */
++ int sysfs_group_change_owner(struct kobject *kobj,
++ 			     const struct attribute_group *grp, kuid_t kuid,
++ 			     kgid_t kgid)
++ {
++ 	struct kernfs_node *grp_kn;
++ 	int error;
++ 	struct iattr newattrs =3D {
++ 		.ia_valid =3D ATTR_UID | ATTR_GID,
++ 		.ia_uid =3D kuid,
++ 		.ia_gid =3D kgid,
++ 	};
++=20
++ 	if (!kobj->state_in_sysfs)
++ 		return -EINVAL;
++=20
++ 	if (grp->name) {
++ 		grp_kn =3D kernfs_find_and_get(kobj->sd, grp->name);
++ 	} else {
++ 		kernfs_get(kobj->sd);
++ 		grp_kn =3D kobj->sd;
++ 	}
++ 	if (!grp_kn)
++ 		return -ENOENT;
++=20
++ 	error =3D kernfs_setattr(grp_kn, &newattrs);
++ 	if (!error)
++ 		error =3D sysfs_group_attrs_change_owner(grp_kn, grp, &newattrs);
++=20
++ 	kernfs_put(grp_kn);
++=20
++ 	return error;
++ }
++ EXPORT_SYMBOL_GPL(sysfs_group_change_owner);
++=20
++ /**
++  * sysfs_groups_change_owner - change owner of a set of attribute groups.
++  * @kobj:	The kobject containing the groups.
++  * @groups:	The attribute groups.
++  * @kuid:	new owner's kuid
++  * @kgid:	new owner's kgid
++  *
++  * Returns 0 on success or error code on failure.
++  */
++ int sysfs_groups_change_owner(struct kobject *kobj,
++ 			      const struct attribute_group **groups,
++ 			      kuid_t kuid, kgid_t kgid)
++ {
++ 	int error =3D 0, i;
++=20
++ 	if (!kobj->state_in_sysfs)
++ 		return -EINVAL;
++=20
++ 	if (!groups)
++ 		return 0;
++=20
++ 	for (i =3D 0; groups[i]; i++) {
++ 		error =3D sysfs_group_change_owner(kobj, groups[i], kuid, kgid);
++ 		if (error)
++ 			break;
++ 	}
++=20
++ 	return error;
++ }
++ EXPORT_SYMBOL_GPL(sysfs_groups_change_owner);
+
+--Sig_/MiD=6dX41diOlbdUFdeLJ7D
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5hiZYACgkQAVBC80lX
+0GwNjgf+NR8vXKVJAOj4wfPbS7Z86o+CKOI/QhegsGe9hQhSVkfAPt2iQ44y3B4c
+8zSfBQW5uYRwXALv7eiFKnIBw1rFg66smu7svvbEIFE/siwIMqGZJW0gOpVwIAF7
+qgO7qyQJlRa7G3+vZsA8VDA/1ti+juHCJHikLmzHRZOB6hF2QQTGLodXuD0ReJHQ
+D0seqE0uNkN5DO/5KifBic8SHGRMAv0P28MC2SH8Si/YmF4CwN4E9gp9fKsQ4vo5
+dBpZvDO345/zQO7p31mIV/exmvQZ68ttELulIYglGLY2d3c245eBf432lqT9EIIk
+SlGc8Nxd/I8v17zpel/hCzWN1KrnxQ==
+=ApLk
+-----END PGP SIGNATURE-----
+
+--Sig_/MiD=6dX41diOlbdUFdeLJ7D--

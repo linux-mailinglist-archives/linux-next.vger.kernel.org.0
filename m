@@ -2,94 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D05617B232
-	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 00:22:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDD3817B267
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 00:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726049AbgCEXWT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 18:22:19 -0500
-Received: from mail-wr1-f66.google.com ([209.85.221.66]:46985 "EHLO
-        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726128AbgCEXWT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 18:22:19 -0500
-Received: by mail-wr1-f66.google.com with SMTP id n15so161330wrw.13
-        for <linux-next@vger.kernel.org>; Thu, 05 Mar 2020 15:22:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UlJYZnn8gF6EelxRY7x9k7613SCS7XFaITrtE8tR1vQ=;
-        b=Q0eAh/OF99KaSC2bJbBgNXpd2QkbUTjmndCby1sHRDc4RDN9PLzt+IU13Y/EcIRT3X
-         wECALzFKTcmLuaIiGhTxjNKI+t6/1bm4eI9ziAC1ihdUoFAMxA+YaqzyE3zscFC153kG
-         /hOYqdVEr9Qn2KYRL0tkuuHahZW5sWUkMgC34=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UlJYZnn8gF6EelxRY7x9k7613SCS7XFaITrtE8tR1vQ=;
-        b=hlQazKlsUWhV9L/cS82wPCTAR52A+4oriSrTytchKu2R/8low+Qwa3U2s+OLWnxQLF
-         PqpXAnqy2wp9PPRB2sywB4QJ3JL4dyuYx75E7dXlTOmu5I7SlrzSgJ5PNXktwgAcqjPE
-         O4xz1tMubKbd/j5CFbnRjcjR6EqWMDEUVOGyD1uAHUnQmOspxNA88pLK1ePn1crNIII0
-         L8SVSYpZV6cAjd0pEo2KBAKIJoyeUYyrYpn8zy8qUtX5+o63vWrbzPnbqp8vCpPiDghR
-         pHXeU6noGEkp8oW7L2Gs5MrnjRUeO6XJCzvc+Xxb+GsmbbpaD88OZYr5l8qAEj5wFN2g
-         /LBQ==
-X-Gm-Message-State: ANhLgQ1lrQg/FIuGSQ4G4E29Q+QRkupcE1XzfXtSpvYRzo5CLr2zRIZl
-        zphOUfMhMtcZqlwD7MUpFB4QmQcdkiyl7vQsyQbVQQ==
-X-Google-Smtp-Source: ADFU+vtuvKFZ8s0RSzwglFPDiN/FF9/4W9jJ87Uq/hW3kxlvaebx5BVTUTkvJRxM0Q/UeUYHe8Dj5RI0gNK8ohHJwL8=
-X-Received: by 2002:adf:ded2:: with SMTP id i18mr271722wrn.173.1583450536966;
- Thu, 05 Mar 2020 15:22:16 -0800 (PST)
+        id S1726608AbgCEXs3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 18:48:29 -0500
+Received: from ozlabs.org ([203.11.71.1]:41713 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726128AbgCEXs3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 5 Mar 2020 18:48:29 -0500
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48YSB155jSz9sP7;
+        Fri,  6 Mar 2020 10:48:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583452106;
+        bh=aKI80ctxF7IvsW1krFEsE8cXOaKoo4tVc2DQGlUj7rI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WxFZB3GwZo6Ut4w78eBhRwny/yH4RSgXiwcxD5cc3se6aUgSML98td+Lzj7j4WATJ
+         xa5dxrFC4sHrgN1WZ7CEn5GQ9ckIJG+C9pCbre539QRgCK5sgfyAL16gO0CB2h003n
+         +MaUlaahiBtvGaQG0/gWvHD/LSKOWs0L6fZYbHE7mITHkOXTqt3ZzbjmWzsw9lNHSn
+         e4oTj6M9j2VI3kJitMLrK5LlQvjtwa4cyC5h0/yhDYdUuGC7jGbuWDg3ZoxZCzxmzD
+         7gZN4qdrc3ogMuy8KYP5DubWvO05JEtbY/MmeeEjnATJsouquJCXnjv/OysBBAvm7S
+         GF1icts+c4YEA==
+Date:   Fri, 6 Mar 2020 10:48:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Samuel Ortiz <sameo@linux.intel.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+Subject: Re: linux-next: the nfc-next tree seems to be old
+Message-ID: <20200306104825.068268eb@canb.auug.org.au>
+In-Reply-To: <20200130105538.7b07b150@canb.auug.org.au>
+References: <20200130105538.7b07b150@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200305220127.29109-1-kpsingh@chromium.org> <92937298-69c1-be6f-3e40-75af1bc72d9e@infradead.org>
- <CAADnVQLjj+eMMLU3H4oNkzwPiSugm1knzd3RfBGb3NcVC785kg@mail.gmail.com>
-In-Reply-To: <CAADnVQLjj+eMMLU3H4oNkzwPiSugm1knzd3RfBGb3NcVC785kg@mail.gmail.com>
-From:   KP Singh <kpsingh@chromium.org>
-Date:   Fri, 6 Mar 2020 00:22:06 +0100
-Message-ID: <CACYkzJ5apfT5F4RGvnZiCZnfMOqi7n8_sypQgeLhZY7J4RdDjg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for !CONFIG_NET
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        LSM List <linux-security-module@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Florent Revest <revest@chromium.org>,
-        Brendan Jackman <jackmanb@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/jZ4rfO48cZsNWT59fxfh2e/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Mar 6, 2020 at 12:16 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+--Sig_/jZ4rfO48cZsNWT59fxfh2e/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Thu, 30 Jan 2020 10:55:38 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On Thu, Mar 5, 2020 at 3:12 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >
-> > On 3/5/20 2:01 PM, KP Singh wrote:
-> > > From: KP Singh <kpsingh@google.com>
-> > >
-> > > test_run.o is not built when CONFIG_NET is not set and
-> > > bpf_prog_test_run_tracing being referenced in bpf_trace.o causes the
-> > > linker error:
-> > >
-> > > ld: kernel/trace/bpf_trace.o:(.rodata+0x38): undefined reference to
-> > >  `bpf_prog_test_run_tracing'
-> > >
-> > > Add a __weak function in bpf_trace.c to handle this.
-> > >
-> > > Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
-> > > Signed-off-by: KP Singh <kpsingh@google.com>
-> >
-> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Hi Samuel,
+>=20
+> I noticed that the nfc-next tree has not changed since June 2018 and
+> has been orphaned in May 2019, so am wondering if the commits in it are
+> still relevant or should I just remove the tree from linux-next.
 
-Thanks!
+Since I have had no response, I will remove it tomorrow.
 
-Apologies, I should have added the "Reported-by:" tag.
+--=20
+Cheers,
+Stephen Rothwell
 
-- KP
+--Sig_/jZ4rfO48cZsNWT59fxfh2e/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-> > Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
->
-> Since it was at the top of the tree I amended the commit
-> with your tags.
-> Thanks for reporting and testing.
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5hj8kACgkQAVBC80lX
+0GxKXQf/QrO0WJTnS2wQvjtyNK40yRXdrrmm6M8Oim+Rwv3/BL6RCTPSXkoXngAD
+bkKuOZ1S3hs6dJy9YI31pFjJ4dU80gZgyKidcAggX5zBba2xqlAaBm5n7f4BMkis
+z13+zYkHlnD0KSFtItp3rZa0eXbW3lx24baJxzluJFfJxMH8PUx9uM5uiPxUO48U
+uo77cNLpiyfRXTHYu8t+hpTwhfXZkPacpQM4fSCkK9CdfJV0ibbO5xMsia4GfhLl
+KeC1+EHvKTt6G/PECYLr08Oi776kFAZLeHkZxS1EHE2WLGo6HYKOJtVKm0uM+yyT
+Q/4VzFZx0GuQeHieQ3Bpu7LPGL849g==
+=OkeH
+-----END PGP SIGNATURE-----
+
+--Sig_/jZ4rfO48cZsNWT59fxfh2e/--

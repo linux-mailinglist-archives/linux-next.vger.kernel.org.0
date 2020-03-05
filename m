@@ -2,131 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8B117AB23
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 18:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D5817AD50
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 18:32:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726164AbgCEREN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 12:04:13 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:35008 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbgCEREN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 12:04:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=vF3Qg1jYVPL0fMpAIJJ4hQLf8PLL9mugK11wImvRR4I=; b=FiF59DD7vx7aBlltd/4aw7x57/
-        GaZd9usctGv0IU3Gl089qW9i9VcxMvq97k5+zt7P+tTeB0UTg3pyvjtMTKVaa6HVDvI8GwzqU2S13
-        F1zzzkUHDo3n7j9zwXeZiJuSLU8RpMJCgIqqxUq3S5XUTuMz1SiMXsf6DAop0haWe7IgS42lp0V4D
-        1ZyjHXa2tZWiSiN2mTNPkmPsmRPBqyj7mPDQR0wUJpoKsUdozDTNoTGxj09l/y5T9j+Xy6TlsjhMQ
-        6NYn2Xy/k+vUzXzlyvbY7B46PWRy4tJqSUrerDFCyCe5DT6FUBa/8hJ0VyeJ2X5J+ni31FKBGWdCQ
-        mWI35ZAw==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j9tuq-0007DD-EB; Thu, 05 Mar 2020 17:04:08 +0000
-Subject: Re: mmotm 2020-03-03-22-28 uploaded (warning: objtool:)
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Walter Wu <walter-zh.wu@mediatek.com>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Josh Poimboeuf <jpoimboe@redhat.com>, dvyukov@google.com
-References: <20200304062843.9yA6NunM5%akpm@linux-foundation.org>
- <cd1c6bd2-3db3-0058-f3b4-36b2221544a0@infradead.org>
- <20200305081717.GT2596@hirez.programming.kicks-ass.net>
- <20200305081842.GB2619@hirez.programming.kicks-ass.net>
- <1583399782.17146.14.camel@mtksdccf07>
- <20200305095436.GV2596@hirez.programming.kicks-ass.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <eb96f240-63ba-c1b1-7696-07ace3ffe13b@infradead.org>
-Date:   Thu, 5 Mar 2020 09:04:07 -0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1726067AbgCERcq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 12:32:46 -0500
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:40334 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725977AbgCERcq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 12:32:46 -0500
+Received: by mail-wm1-f68.google.com with SMTP id e26so6629861wme.5
+        for <linux-next@vger.kernel.org>; Thu, 05 Mar 2020 09:32:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=uKve1FzC0bUeOwmZph4lB5S6WHjrFbK8ta6DQAIinis=;
+        b=S/Z0lJckipqa5hqxTOLLVLnw63asKRFvzFZCb1Wa4R5561zKoAhZUf6I8sn2VY5pQj
+         9MAcPxu4Iuvr3cdkLXm7C3Vj8tOBMCiS9BqDP8OQlZQelJycidGJiQ/rTOMi612IVyjT
+         0ekvGti7mX/YkMGSqVspVoglef9rF+3ZAMUTc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=uKve1FzC0bUeOwmZph4lB5S6WHjrFbK8ta6DQAIinis=;
+        b=KBHkWecRj5Fuu0eAtTyZoUOpDdmT3RXRAP7zbnaYqJwSFUyd2NXzRHoeM2BiskBEAe
+         f+0ohpAnR2yaNtgQGic37s6jLmzC6A/8rB527SYyJpT/dU4qbmC7gLmVtnUDgJaYsFtv
+         yAO2AY7ZAN9EP8dBnhPBNNQekq0MVp4jl7ahh8Zfk7p6KdNyze1Ue6n7IS974BYKDz31
+         OdcxBqisBDObG+CxdOZ943KFcTIvyfRX98b+a0E8tw0qrGtqeyYHkOFHHHWxwEZKEoF3
+         VlIcOIJhZ4pyxRQcr5NwqApoQ85YYtc6WJW/Cg4KCz2588qui/kYvEdes8ntl4pwKia0
+         MwEw==
+X-Gm-Message-State: ANhLgQ1BbJ6BnM40VZopu48BhV+qXDIQk1TSzDAJ7foLEXmkL/Llzket
+        l0WygSBy/4Pv6Yehh9CZY+v5eY9vaZyarr4via/0YQ==
+X-Google-Smtp-Source: ADFU+vuWp699fZXvPlnYzdSTJu6gqW8QE9Dy7HEdvkWGiDovYo6X7AdXdsYYM9mLGXcgc1GTGtt4/xsmq7w6ol/Zg90=
+X-Received: by 2002:a1c:f610:: with SMTP id w16mr10529527wmc.136.1583429564761;
+ Thu, 05 Mar 2020 09:32:44 -0800 (PST)
 MIME-Version: 1.0
-In-Reply-To: <20200305095436.GV2596@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200305175528.5b3ccc09@canb.auug.org.au> <715919f5-e256-fbd1-44ff-8934bda78a71@infradead.org>
+ <CAADnVQ+TYiVu+Ksstj4LmYa=+UPwbv-dv-tscRaKn_0FcpstBg@mail.gmail.com> <CACYkzJ4ks6VgxeGpJApvqJdx6Q-8PZwk-r=q4ySWsDBDy1jp+g@mail.gmail.com>
+In-Reply-To: <CACYkzJ4ks6VgxeGpJApvqJdx6Q-8PZwk-r=q4ySWsDBDy1jp+g@mail.gmail.com>
+From:   KP Singh <kpsingh@chromium.org>
+Date:   Thu, 5 Mar 2020 18:32:34 +0100
+Message-ID: <CACYkzJ5_8yQV2JPHFz_ZE0vYdASmrAes3Boy_sjbicX6LuiORw@mail.gmail.com>
+Subject: Re: linux-next: Tree for Mar 5 (bpf_trace)
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/5/20 1:54 AM, Peter Zijlstra wrote:
-> On Thu, Mar 05, 2020 at 05:16:22PM +0800, Walter Wu wrote:
->> On Thu, 2020-03-05 at 09:18 +0100, Peter Zijlstra wrote:
->>> On Thu, Mar 05, 2020 at 09:17:17AM +0100, Peter Zijlstra wrote:
->>>> On Wed, Mar 04, 2020 at 09:34:49AM -0800, Randy Dunlap wrote:
->>>
->>>>> mm/kasan/common.o: warning: objtool: kasan_report()+0x13: call to report_enabled() with UACCESS enabled
->>>>
->>>> I used next/master instead, and found the below broken commit
->>>> responsible for this.
+This fails as we added bpf_test_run_tracing in net/bpf/test_run.c
+which gets built only CONFIG_NET is enabled. Which, this particular
+config, disables.
 
-Yes, I see that same warning in linux-next of 20200305.
+Alexei, if it's okay with you. I can send a patch that separates the
+tracing test code into kernel/bpf/test_run_trace.c which depends
+only on CONFIG_BPF_SYSCALL.
 
->>>> @@ -634,12 +637,20 @@ void kasan_free_shadow(const struct vm_struct *vm)
->>>>  #endif
->>>>  
->>>>  extern void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip);
->>>> +extern bool report_enabled(void);
->>>>  
->>>> -void kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
->>>> +bool kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
->>>>  {
->>>> -	unsigned long flags = user_access_save();
->>>> +	unsigned long flags;
->>>> +
->>>> +	if (likely(!report_enabled()))
->>>> +		return false;
->>>
->>> This adds an explicit call before the user_access_save() and that is a
->>> straight on bug.
->>>
->> Hi Peter,
->>
->> Thanks for your help. Unfortunately, I don't reproduce it in our
->> environment, so I have asked Stephen, if I can reproduce it, then we
->> will send new patch.
-> 
-> The patch is trivial; and all you need is an x86_64 (cross) compiler to
-> reproduce.
-> 
-> 
-> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-> index ad2dc0c9cc17..2906358e42f0 100644
-> --- a/mm/kasan/common.c
-> +++ b/mm/kasan/common.c
-> @@ -618,16 +618,17 @@ extern bool report_enabled(void);
->  
->  bool kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
->  {
-> -	unsigned long flags;
-> +	unsigned long flags = user_access_save();
-> +	bool ret = false;
->  
-> -	if (likely(!report_enabled()))
-> -		return false;
-> +	if (likely(report_enabled())) {
-> +		__kasan_report(addr, size, is_write, ip);
-> +		ret = true;
-> +	}
->  
-> -	flags = user_access_save();
-> -	__kasan_report(addr, size, is_write, ip);
->  	user_access_restore(flags);
->  
-> -	return true;
-> +	return ret;
->  }
->  
->  #ifdef CONFIG_MEMORY_HOTPLUG
-> 
+- KP
 
-and that fixes the warning.  Thanks.
-
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-
--- 
-~Randy
+On Thu, Mar 5, 2020 at 5:22 PM KP Singh <kpsingh@chromium.org> wrote:
+>
+> On Thu, Mar 5, 2020 at 5:18 PM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Mar 5, 2020 at 8:13 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+> > >
+> > > On 3/4/20 10:55 PM, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > Changes since 20200304:
+> > > >
+> > >
+> > > on i386:
+> > >
+> > > ld: kernel/trace/bpf_trace.o:(.rodata+0x38): undefined reference to `bpf_prog_test_run_tracing'
+> >
+> > KP,
+> > Please take a look.
+>
+> Sure. Taking a look.
+>
+> - KP

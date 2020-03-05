@@ -2,95 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A6F179F9F
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 06:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D37A5179FA9
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 06:54:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbgCEFuu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 00:50:50 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41845 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725866AbgCEFuu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 5 Mar 2020 00:50:50 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Y0Gc0zV8z9sQx;
-        Thu,  5 Mar 2020 16:50:47 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583387448;
-        bh=HIjreBzySCUIEeSuzsf//lPHRyDfWa5LHfVrm9KtDe4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FetoxYDyI8llhhNu/cO6NFR/xmg8Nx71iNmUUZGG2pUhTGqMq/N/P46dsEAJbdOp6
-         e4He9ia3XUEQSMhxPOsEVYQvcDqh5B5k+D/TXrnrlDNHF1UTOq+ae68TBcSCGhMi1W
-         ggnQV/ZK/JyqD6EDcFEuaEDwZbgvYxc2YAZqlEKJO39SFLQaqWlFbMdhcMcg5YudiI
-         eMMepFyA/sXmB6j9rdWLm0ouB1M4hLM5Tdn90mF18yYlN9Y+sid7zXzB0v4AYD8Wl3
-         Vy1PQo7I3tQ/pZf9uUE9uRREJXTG0YJr4nAZkv+yW6rFXjucHdIJd6IddSAN9TX310
-         jzsTkoLtc95vQ==
-Date:   Thu, 5 Mar 2020 16:50:46 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Subject: linux-next: manual merge of the akpm tree with the arm64 tree
-Message-ID: <20200305165046.42e62969@canb.auug.org.au>
+        id S1726164AbgCEFyW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 00:54:22 -0500
+Received: from mail-qt1-f193.google.com ([209.85.160.193]:33415 "EHLO
+        mail-qt1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725903AbgCEFyV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 00:54:21 -0500
+Received: by mail-qt1-f193.google.com with SMTP id d22so3328431qtn.0
+        for <linux-next@vger.kernel.org>; Wed, 04 Mar 2020 21:54:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=+7mgcJIet7qBayZZcIdFHC3F2O5NeLmq5vShyrq3W0w=;
+        b=dY9g6SaFxN9gyIiVuNUf1N24ghTHSEPIiKO6j1gQ7lJvXc/g0lC4uPLA/xNS6La82i
+         v6iOG6cjJopKQ+A3S9uWOyabqxqc3R//HFFVmnsAdtqOUobD/UvkHyyagFzUZ9eHUx67
+         nNa5NNGd3JKATe9NJ5WnBiKUMJYO/6IE1Ae5XzY3g3wTBWu3odx6cSNzjtfiNO6XTb8U
+         T7MrVuE7JjIQ0wc4HFK6GjzZH384Ov7XWOYe6EOb5woc6wz8raapd3D2MP1RRvRHQ3En
+         I/Jet0BWFRonDyGXBoXbjIYFvufiSvVbir0txzFOqF/f1otES0ly9YMfTjGz/GrqPVNw
+         SU5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=+7mgcJIet7qBayZZcIdFHC3F2O5NeLmq5vShyrq3W0w=;
+        b=K6cQxLG2VC2Z26r+mpKNbL6rB/Kb4EIvhDV0caWLvlAjDbBkAyQqvCHcaWFX0j7Zvx
+         myT5AliK89j+P3F9lubpCSM0HgUL9yfvaRrm0u7eLea6fRG6C60a6xzFdF2DRzfDFRp/
+         HwgqKV7SZOsTLGJM1peVxKlLadNN6X9KW8zBwgNtSRfFMSvHsHVQlYkIcD4Uvj6GLGhg
+         /GktY1IWjVcGlqyJALgcptLRz4h3P/KMlw0Ho0kE6RRqh6TKPOfB/kELY9cRYwB+Xlau
+         6yeZSmYSH0QmcuUNfzsdSzXCJpO5NHyVMeQSPrGn3+jUozOFood5cReJCy2QTcrVzIln
+         LLuQ==
+X-Gm-Message-State: ANhLgQ3y9+230ylQ3JN9Ew1S7jcFDflSQJYPZTBNkkzWCOBQ1sp23FeC
+        j8ZcLva50SaN0HAXZeGvC8iqmbhpiYhSf34KvwzBTw==
+X-Google-Smtp-Source: ADFU+vvpfm81OA3PanYLFThp3djsW6cZtJxs9xKlCyhKW+1/lC8XEgyQ51fGhGDLsry1t6MC9Ui/IdM3QW2eFKcg2Wo=
+X-Received: by 2002:ac8:3778:: with SMTP id p53mr5648903qtb.158.1583387659031;
+ Wed, 04 Mar 2020 21:54:19 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y0C2FS1i35Qy6f.w0Srhio3";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200305163743.7128c251@canb.auug.org.au>
+In-Reply-To: <20200305163743.7128c251@canb.auug.org.au>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 5 Mar 2020 06:54:07 +0100
+Message-ID: <CACT4Y+ZX0xaZNnNqOzassKi2=NSPz-9K4VpxdL6FGx_Y4vWSUg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Walter Wu <walter-zh.wu@mediatek.com>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>,
+        kasan-dev <kasan-dev@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/y0C2FS1i35Qy6f.w0Srhio3
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 5, 2020 at 6:37 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the akpm-current tree, today's linux-next build (x86_64
+> allmodconfig) produced this warning:
+>
+> mm/kasan/common.o: warning: objtool: kasan_report()+0x17: call to report_enabled() with UACCESS enabled
+> In file included from include/linux/bitmap.h:9,
+>                  from include/linux/cpumask.h:12,
+>                  from arch/x86/include/asm/paravirt.h:17,
+>                  from arch/x86/include/asm/irqflags.h:72,
+>                  from include/linux/irqflags.h:16,
+>                  from include/linux/rcupdate.h:26,
+>                  from include/linux/rculist.h:11,
+>                  from include/linux/pid.h:5,
+>                  from include/linux/sched.h:14,
+>                  from include/linux/uaccess.h:6,
+>                  from arch/x86/include/asm/fpu/xstate.h:5,
+>                  from arch/x86/include/asm/pgtable.h:26,
+>                  from include/linux/kasan.h:15,
+>                  from lib/test_kasan.c:12:
+> In function 'memmove',
+>     inlined from 'kmalloc_memmove_invalid_size' at lib/test_kasan.c:301:2:
+> include/linux/string.h:441:9: warning: '__builtin_memmove' specified bound 18446744073709551614 exceeds maximum object size 9223372036854775807 [-Wstringop-overflow=]
 
-Hi all,
++kasan-dev
 
-Today's linux-next merge of the akpm tree got a conflict in:
+We probably need to make this 18446744073709551614 constant "dynamic"
+so that compiler does not see it.
 
-  arch/arm64/mm/mmu.c
+Walter, will you take a look? Thanks
 
-between commit:
-
-  bbd6ec605c0f ("arm64/mm: Enable memory hot remove")
-
-from the arm64 tree and patch:
-
-  37be0f08b1cc ("arm64/mm: implement unmap_hotplug_p4d_range")
-
-from the akpm tree.
-
-I fixed it up (I just dropped the latter (and its followup fix) for today)
-and can carry the fix as necessary. This is now fixed as far as linux-next
-is concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/y0C2FS1i35Qy6f.w0Srhio3
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5gkzYACgkQAVBC80lX
-0Gxg0wgAm8DDZt6CLQjeJJbqvceZ1BDeCuM+74tqQx2JzHgmTgJimDgXQdOnhIRO
-huNUayfzgSmE8XK0waaj2M9tfhJZpqKOwt2zh1xFud1/ahkBOhpv9j7Q0MBA7QTY
-SFD7CsSiUeKHQv1a57N82ikPSUUrG9QmbE9EydTu3meJU6nRHUR9hAHP70I3fETY
-DiXxaLJEsgdkMPrMgMYUSAElSFvUxDXhb8Uvml9hlHixacXagJSI+XbKn2UaQFpH
-w/1WdSrrc51p53JZ0g1eRGjY5D1Tvsek1yU2Q9Qsp4ubPOldZUEfP5B4QO1R4Eer
-1IZnrwG28U9aCV3mFkYhjerYfa4LSA==
-=OWEV
------END PGP SIGNATURE-----
-
---Sig_/y0C2FS1i35Qy6f.w0Srhio3--
+>   441 |  return __builtin_memmove(p, q, size);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Introduced by commit
+>
+>   519e500fac64 ("kasan: add test for invalid size in memmove")
+>
+> That's a bit annoying during a normal x86_64 allmodconfig build ...
+>
+> --
+> Cheers,
+> Stephen Rothwell

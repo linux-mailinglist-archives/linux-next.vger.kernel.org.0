@@ -2,97 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4AF17B129
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AD817B16E
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726351AbgCEWFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 17:05:05 -0500
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:35678 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726178AbgCEWFF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:05:05 -0500
-Received: by mail-wm1-f68.google.com with SMTP id m3so260412wmi.0
-        for <linux-next@vger.kernel.org>; Thu, 05 Mar 2020 14:05:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to
-         :user-agent;
-        bh=EhKBVdcz866K4wnwDswHBvfCjaO9wEJhCH3XfiyKgH0=;
-        b=MYUSp1yyHIyfUQoBkSk++6L+gN9r2CwS6n7XkTuy1COjDTQP+RfiPbvYpgCWNB/Dv8
-         sb5vDOYw1Z7pFoHO5thDajUFJAo6C4pYdDrdygO3xiE8rrUEFoFH01hJcxq+Nqgjrdgy
-         OXDziGaw1xQ8TuYPiJ3kjXynyA6ecUiNdvFOU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to:user-agent;
-        bh=EhKBVdcz866K4wnwDswHBvfCjaO9wEJhCH3XfiyKgH0=;
-        b=DCijosRZUr5UrvjJXaeID/t1jLX7FnhXaEP4KMYxIjOIdx3wN9Hii6Wy/wkSS89bYz
-         JLQdyy8nBLHaKSU0cimJ3D7Kgo9LpDSzn5/UU1jnx1KS3pq2s3Zff5NzZRweOL45br+G
-         WgqbIHa/iQr1gWm2/1SUBYRVUv9gcV/VMnR9JCUwELT5wg4TvaTBPaYt1FTPYl76etX2
-         D+FSaK1lfaHBAqz3bQdtyAzHgXxUkisOoL6EOfhMRJvhZdVcJIv4kDcjGFtcDB9bdktj
-         HTz9WJh6dDdXjuTTiqL8bMhidmKv/x5ciVXGf8CYJrdUSy23BdOvStoslwtB4EwA+W8d
-         hLmA==
-X-Gm-Message-State: ANhLgQ02hZvm+2HUa8hskXZcBmWWow2PXfO3I/pcdmLb070muatXSxO7
-        6YnaFybJPpZVSm2cI9NLqwkRzA==
-X-Google-Smtp-Source: ADFU+vt6t8EoUGCNV2n58jrEKH2onN0n0W2VGeqOhMgZzwWhHn5Ke5k36KI3cmY21zNutLgVSU0kHA==
-X-Received: by 2002:a1c:e918:: with SMTP id q24mr865012wmc.25.1583445902100;
-        Thu, 05 Mar 2020 14:05:02 -0800 (PST)
-Received: from chromium.org (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
-        by smtp.gmail.com with ESMTPSA id p16sm46052523wrw.15.2020.03.05.14.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 14:05:01 -0800 (PST)
-From:   KP Singh <kpsingh@chromium.org>
-X-Google-Original-From: KP Singh <kpsingh>
-Date:   Thu, 5 Mar 2020 23:04:59 +0100
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>
-Subject: Re: linux-next: Tree for Mar 5 (bpf_trace)
-Message-ID: <20200305220459.GA29785@chromium.org>
-References: <20200305175528.5b3ccc09@canb.auug.org.au>
- <715919f5-e256-fbd1-44ff-8934bda78a71@infradead.org>
- <CAADnVQ+TYiVu+Ksstj4LmYa=+UPwbv-dv-tscRaKn_0FcpstBg@mail.gmail.com>
- <CACYkzJ4ks6VgxeGpJApvqJdx6Q-8PZwk-r=q4ySWsDBDy1jp+g@mail.gmail.com>
- <CACYkzJ5_8yQV2JPHFz_ZE0vYdASmrAes3Boy_sjbicX6LuiORw@mail.gmail.com>
- <CAADnVQ+K4Vc2_=tB7COFFBy3uswike-TERoSF=1=GdnWFDUutQ@mail.gmail.com>
+        id S1726080AbgCEWaC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 17:30:02 -0500
+Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:5458 "EHLO
+        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725991AbgCEWaC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:30:02 -0500
+Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e617d120001>; Thu, 05 Mar 2020 14:28:35 -0800
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate101.nvidia.com (PGP Universal service);
+  Thu, 05 Mar 2020 14:30:00 -0800
+X-PGP-Universal: processed;
+        by hqpgpgate101.nvidia.com on Thu, 05 Mar 2020 14:30:00 -0800
+Received: from [10.110.48.28] (10.124.1.5) by HQMAIL107.nvidia.com
+ (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Thu, 5 Mar
+ 2020 22:30:00 +0000
+Subject: Re: [PATCH v3 1/2] mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track
+ FOLL_PIN pages"
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        <linux-next@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <jack@suse.cz>, <kirill@shutemov.name>
+CC:     <borntraeger@de.ibm.com>, <david@redhat.com>,
+        <aarcange@redhat.com>, <linux-mm@kvack.org>,
+        <frankja@linux.ibm.com>, <sfr@canb.auug.org.au>,
+        <linux-kernel@vger.kernel.org>, <linux-s390@vger.kernel.org>
+References: <20200304130655.462517-1-imbrenda@linux.ibm.com>
+ <20200304130655.462517-2-imbrenda@linux.ibm.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+X-Nvconfidentiality: public
+Message-ID: <09e0d5ec-c799-be0b-b85e-39c1c5d2c3cd@nvidia.com>
+Date:   Thu, 5 Mar 2020 14:29:59 -0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+K4Vc2_=tB7COFFBy3uswike-TERoSF=1=GdnWFDUutQ@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200304130655.462517-2-imbrenda@linux.ibm.com>
+X-Originating-IP: [10.124.1.5]
+X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
+ HQMAIL107.nvidia.com (172.20.187.13)
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1583447315; bh=G0GpTxxXqdbtdW7cvxOSO9IvDVSA9OIAX1/SJBkdy8s=;
+        h=X-PGP-Universal:Subject:To:CC:References:From:X-Nvconfidentiality:
+         Message-ID:Date:User-Agent:MIME-Version:In-Reply-To:
+         X-Originating-IP:X-ClientProxiedBy:Content-Type:Content-Language:
+         Content-Transfer-Encoding;
+        b=RSHxAgBTLKqlsZQt0fTf/84P0PyKMR6VEDO7qYpR5iLwVoHGHmSOrhs3OZP1atZ25
+         lMA2bwFQiucKM67o/Rz2ZB/KPh26k7wlfcEaFGyhqpsph8Cnq2PMqiiJprHKlfkZYU
+         DpNRPLh6+a3VpKTd8ZEeUNmZcC/DC1/OWB+8T+dRtWftUOJ7NkQFEgJ8rfL25QTQq6
+         qp0jpqcukDDh+9aNcOrQEE5Lhn5aKcLYyRIUS0jyuBJu4Scn98swF+zLKEIpESexuJ
+         GdUWFCloHvAKcsZ63yopSJbeZNM2N+t4Psmg2H6Wt6a/+E6oePSZ8nHrQDG0Arv82i
+         q6qgwq1M/unkA==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 05-Mär 09:38, Alexei Starovoitov wrote:
-> On Thu, Mar 5, 2020 at 9:32 AM KP Singh <kpsingh@chromium.org> wrote:
-> >
-> > This fails as we added bpf_test_run_tracing in net/bpf/test_run.c
-> > which gets built only CONFIG_NET is enabled. Which, this particular
-> > config, disables.
-> >
-> > Alexei, if it's okay with you. I can send a patch that separates the
-> > tracing test code into kernel/bpf/test_run_trace.c which depends
-> > only on CONFIG_BPF_SYSCALL.
+On 3/4/20 5:06 AM, Claudio Imbrenda wrote:
+> In case pin fails, we need to unpin, a simple put_page will not be enough
 > 
-> In such situation we typically add __weak dummy call.
+> fixup for commit 9947ea2c1e608e32 ("mm/gup: track FOLL_PIN pages")
+> 
+> it can be simply squashed in
+> 
+> Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
+> ---
 
-I would prefer this. Less chances for breaking something. Sent:
+Although it won't show up anywhere, in case this helps Andrew sort out what
+has been looked at, you can add: 
 
-  https://lore.kernel.org/bpf/20200305220127.29109-1-kpsingh@chromium.org/T/#u
+    Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-> May be split will work too.
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
-We can do that separately (if needed).
-
-- KP
-
-> or move tracing_prog_ops to kernel/bpf/core.c ?
+>  mm/gup.c | 46 +++++++++++++++++++++++-----------------------
+>  1 file changed, 23 insertions(+), 23 deletions(-)
+> 
+> diff --git a/mm/gup.c b/mm/gup.c
+> index f589299b0d4a..81a95fbe9901 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -116,6 +116,28 @@ static __maybe_unused struct page *try_grab_compound_head(struct page *page,
+>  	return NULL;
+>  }
+>  
+> +static void put_compound_head(struct page *page, int refs, unsigned int flags)
+> +{
+> +	if (flags & FOLL_PIN) {
+> +		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED,
+> +				    refs);
+> +
+> +		if (hpage_pincount_available(page))
+> +			hpage_pincount_sub(page, refs);
+> +		else
+> +			refs *= GUP_PIN_COUNTING_BIAS;
+> +	}
+> +
+> +	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
+> +	/*
+> +	 * Calling put_page() for each ref is unnecessarily slow. Only the last
+> +	 * ref needs a put_page().
+> +	 */
+> +	if (refs > 1)
+> +		page_ref_sub(page, refs - 1);
+> +	put_page(page);
+> +}
+> +
+>  /**
+>   * try_grab_page() - elevate a page's refcount by a flag-dependent amount
+>   *
+> @@ -2134,7 +2156,7 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
+>  			goto pte_unmap;
+>  
+>  		if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+> -			put_page(head);
+> +			put_compound_head(head, 1, flags);
+>  			goto pte_unmap;
+>  		}
+>  
+> @@ -2267,28 +2289,6 @@ static int record_subpages(struct page *page, unsigned long addr,
+>  	return nr;
+>  }
+>  
+> -static void put_compound_head(struct page *page, int refs, unsigned int flags)
+> -{
+> -	if (flags & FOLL_PIN) {
+> -		mod_node_page_state(page_pgdat(page), NR_FOLL_PIN_RELEASED,
+> -				    refs);
+> -
+> -		if (hpage_pincount_available(page))
+> -			hpage_pincount_sub(page, refs);
+> -		else
+> -			refs *= GUP_PIN_COUNTING_BIAS;
+> -	}
+> -
+> -	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
+> -	/*
+> -	 * Calling put_page() for each ref is unnecessarily slow. Only the last
+> -	 * ref needs a put_page().
+> -	 */
+> -	if (refs > 1)
+> -		page_ref_sub(page, refs - 1);
+> -	put_page(page);
+> -}
+> -
+>  #ifdef CONFIG_ARCH_HAS_HUGEPD
+>  static unsigned long hugepte_addr_end(unsigned long addr, unsigned long end,
+>  				      unsigned long sz)
+> 

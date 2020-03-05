@@ -2,88 +2,124 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B57417A245
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 10:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD8217A287
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 10:54:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725912AbgCEJeB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 04:34:01 -0500
-Received: from ozlabs.org ([203.11.71.1]:37949 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726101AbgCEJeB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 5 Mar 2020 04:34:01 -0500
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Y5D658rdz9sPg;
-        Thu,  5 Mar 2020 20:33:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583400839;
-        bh=0VNV0vcRlSNoebDfMcN1IfFTAHR24zqhJXQME3nFPck=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dBIKgr3G8RXKFx5zbWL1ChjyJtRat+8eo1d9KcybZdtaGBMz5RCCDdKLE04xj8cYC
-         4pz+cVbI2CNDJMaLwKUsNWYvngiqMHSbx1qcO3QF7ZI5y0juH1Un3u7uYOn8E3QOFY
-         RYxzhmq95aD+tkYsysjgsjRs8Zxh/nYBhQY6YYHVt7aiAoub6YhzthOF2Ko852IM6l
-         u6kC+tDyT+FviTkF2WmRR6PPcVtjrsG/MSuJUZYzSD6e2o1TsDJV+z/7sGwaS9j6CW
-         hOgNFxbi30NsfV1TtYQJKfrksRVuNCM71QywxDoh65t5lQEllWB2Z/Xe8T3FkhBKx1
-         mfgH0b/mDPdnQ==
-Date:   Thu, 5 Mar 2020 20:33:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726048AbgCEJyq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 04:54:46 -0500
+Received: from bombadil.infradead.org ([198.137.202.133]:44246 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725877AbgCEJyq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 04:54:46 -0500
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gGA7flVCST725vtJqB26uJyaaG/lu1I8Qz42onV745s=; b=XDSFNWk5Ipa30OZfsw2YqPZNqS
+        0jh9PBOidx9nmuBysUH6767sUR6aNmMdZt4qGxdwR02hSbr1E7usd6xToFhaU0uZL7oPlEuhj3/pv
+        wfTiZbVLTywcNIgleBztTZfHBKOtgF0Sj6/hW120Qik5I8TX252+LoAollcXU0MszWLZ1qXtOdwbS
+        s+3xbMeJhTzJ+GgQf2RLGzzT6xVU+GMtW0uEcBoM8MqcqFCWpaSrMh6KE0r4a8NcUJkadizEhA3ql
+        D9AsIBdHJQuq2dUkboUn+S5cYDknYz2dSIS56y0zcqyI+RQH87x7zbRFWHwfZtVJmPLV+CvhNTMuf
+        79sRhkpA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1j9nDC-0008AR-Rr; Thu, 05 Mar 2020 09:54:39 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 92D92300606;
+        Thu,  5 Mar 2020 10:52:37 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2106C23D4FA17; Thu,  5 Mar 2020 10:54:36 +0100 (CET)
+Date:   Thu, 5 Mar 2020 10:54:36 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
 To:     Walter Wu <walter-zh.wu@mediatek.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20200305203356.307c0a18@canb.auug.org.au>
-In-Reply-To: <1583398476.17146.6.camel@mtksdccf07>
-References: <20200305163743.7128c251@canb.auug.org.au>
-        <1583398476.17146.6.camel@mtksdccf07>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, akpm@linux-foundation.org,
+        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Josh Poimboeuf <jpoimboe@redhat.com>, dvyukov@google.com
+Subject: Re: mmotm 2020-03-03-22-28 uploaded (warning: objtool:)
+Message-ID: <20200305095436.GV2596@hirez.programming.kicks-ass.net>
+References: <20200304062843.9yA6NunM5%akpm@linux-foundation.org>
+ <cd1c6bd2-3db3-0058-f3b4-36b2221544a0@infradead.org>
+ <20200305081717.GT2596@hirez.programming.kicks-ass.net>
+ <20200305081842.GB2619@hirez.programming.kicks-ass.net>
+ <1583399782.17146.14.camel@mtksdccf07>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/vs3T5M5K+OJMDk5rszPkr5S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1583399782.17146.14.camel@mtksdccf07>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/vs3T5M5K+OJMDk5rszPkr5S
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 05, 2020 at 05:16:22PM +0800, Walter Wu wrote:
+> On Thu, 2020-03-05 at 09:18 +0100, Peter Zijlstra wrote:
+> > On Thu, Mar 05, 2020 at 09:17:17AM +0100, Peter Zijlstra wrote:
+> > > On Wed, Mar 04, 2020 at 09:34:49AM -0800, Randy Dunlap wrote:
+> > 
+> > > > mm/kasan/common.o: warning: objtool: kasan_report()+0x13: call to report_enabled() with UACCESS enabled
+> > > 
+> > > I used next/master instead, and found the below broken commit
+> > > responsible for this.
+> > 
+> > > @@ -634,12 +637,20 @@ void kasan_free_shadow(const struct vm_struct *vm)
+> > >  #endif
+> > >  
+> > >  extern void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip);
+> > > +extern bool report_enabled(void);
+> > >  
+> > > -void kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
+> > > +bool kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
+> > >  {
+> > > -	unsigned long flags = user_access_save();
+> > > +	unsigned long flags;
+> > > +
+> > > +	if (likely(!report_enabled()))
+> > > +		return false;
+> > 
+> > This adds an explicit call before the user_access_save() and that is a
+> > straight on bug.
+> > 
+> Hi Peter,
+> 
+> Thanks for your help. Unfortunately, I don't reproduce it in our
+> environment, so I have asked Stephen, if I can reproduce it, then we
+> will send new patch.
 
-Hi Walter,
+The patch is trivial; and all you need is an x86_64 (cross) compiler to
+reproduce.
 
-On Thu, 5 Mar 2020 16:54:36 +0800 Walter Wu <walter-zh.wu@mediatek.com> wro=
-te:
->
-> I'm sorry for the build warning, it doesn't generate in our local
-> environment(arm64/x86_64). Would you tell me what toolchains can
-> reproduce it?
 
-I am using a PowerPC LE hosted x86_64 gcc v9.2.1 (Debian cross compiler).
-
-$ /usr/bin/x86_64-linux-gnu-gcc --version
-x86_64-linux-gnu-gcc (Debian 9.2.1-21) 9.2.1 20191130
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/vs3T5M5K+OJMDk5rszPkr5S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5gx4UACgkQAVBC80lX
-0Gw8BQgAjSdyOpTjhzBm5yJfu5c8Yrc2F7VT6ZOM5TSPPHHiLhr38Yy+VcLzFf+N
-GuDIUJ1oiVsXmLrR/VGyu8/IK4HRe+niva2hvQdYT3ewcxJGD9FuXcIcLA70oOeU
-yNbH1QEeejpHJ89i+ceAO29G6EL1+6o765j4Ky9NOGOlEl1DWBNBOQGeTKa/8M3H
-q9TlaWhzhnlrjbZfjp2t/GZqTMZmUYSINijFj/X3VCswNK3WZIGmJ+MK+FE1Yvr9
-SCmevgyiBNhBkHgLVDoVOV8cJQapWqfZLThBAH8kDT0N5c1SmwVo9OnLN/xNePrt
-V+akoU3CRdpf8ad95DfOXCWALYwjvw==
-=6mz4
------END PGP SIGNATURE-----
-
---Sig_/vs3T5M5K+OJMDk5rszPkr5S--
+diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+index ad2dc0c9cc17..2906358e42f0 100644
+--- a/mm/kasan/common.c
++++ b/mm/kasan/common.c
+@@ -618,16 +618,17 @@ extern bool report_enabled(void);
+ 
+ bool kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
+ {
+-	unsigned long flags;
++	unsigned long flags = user_access_save();
++	bool ret = false;
+ 
+-	if (likely(!report_enabled()))
+-		return false;
++	if (likely(report_enabled())) {
++		__kasan_report(addr, size, is_write, ip);
++		ret = true;
++	}
+ 
+-	flags = user_access_save();
+-	__kasan_report(addr, size, is_write, ip);
+ 	user_access_restore(flags);
+ 
+-	return true;
++	return ret;
+ }
+ 
+ #ifdef CONFIG_MEMORY_HOTPLUG

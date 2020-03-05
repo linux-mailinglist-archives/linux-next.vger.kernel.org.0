@@ -2,89 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 784D517A11D
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 09:19:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E03717A1B9
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 09:54:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725924AbgCEISu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 03:18:50 -0500
-Received: from bombadil.infradead.org ([198.137.202.133]:35708 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgCEISu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 03:18:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3m703ypRjAtYhbKTkAxqNaRn33lkF344lR7igeRi5dw=; b=QeDESQWxblcd1ICzrOjpd4hCUd
-        qsEvNamu4phC6ep6Go1fma5VlXhdDamQawtlV0GF1uJ/nY66ALRpwbJquIX4xw+ldXjLejEWIg7YH
-        uXcyDaNH7zXvWAmMYuLZRDUOJeeAZGqvTEc0U6f7Zr8W8/wpcDEmip3IXXXupMOacO+KA6/AJxbbe
-        VbaB9MadDZ/5IxdnJYyeBdbmY3HmJmUKL/VVl0bcSvl7EUyDm3EY7EYt80tfpwVptOQ1sPdS8Idkf
-        QBkBdclOUqOhXgHaRRBGtYB5nc/xE8r/VfTl7NdVhXIuinI1KKF38twaZ4Xp19Y+qNsB4JE2+RpcJ
-        oKF9xrMg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1j9liO-0003xf-73; Thu, 05 Mar 2020 08:18:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 9EBB630066E;
-        Thu,  5 Mar 2020 09:16:43 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8F9FE20D3014E; Thu,  5 Mar 2020 09:18:42 +0100 (CET)
-Date:   Thu, 5 Mar 2020 09:18:42 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        walter-zh.wu@mediatek.com, dvyukov@google.com
-Subject: Re: mmotm 2020-03-03-22-28 uploaded (warning: objtool:)
-Message-ID: <20200305081842.GB2619@hirez.programming.kicks-ass.net>
-References: <20200304062843.9yA6NunM5%akpm@linux-foundation.org>
- <cd1c6bd2-3db3-0058-f3b4-36b2221544a0@infradead.org>
- <20200305081717.GT2596@hirez.programming.kicks-ass.net>
+        id S1726131AbgCEIym (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 03:54:42 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:42671 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725944AbgCEIym (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 03:54:42 -0500
+X-UUID: daf7a5ef966d44a4ab90f1e22b62f28a-20200305
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lxr/bby5v3dgaounRNkNHYBEf64DNBdkypfjfP7E/iA=;
+        b=kHO3IyO3HGXKZhjaK/pP/x5T/oT3yb5bRYgrlpDvYK3TzQ7wdbz2SmWCAvxQwqpWpbwDrw0w2OrESJLvIfXLwk+ScNZ029XnHpT5jyIHKJwm7TmQTmkffQKuF8v17dVxA/f5r3s+gbtGVzOEoEL9krmYiT5JW/P252xXrAdhFRk=;
+X-UUID: daf7a5ef966d44a4ab90f1e22b62f28a-20200305
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <walter-zh.wu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 881533357; Thu, 05 Mar 2020 16:54:37 +0800
+Received: from MTKCAS06.mediatek.inc (172.21.101.30) by
+ mtkmbs06n1.mediatek.inc (172.21.101.129) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Thu, 5 Mar 2020 16:54:36 +0800
+Received: from [172.21.84.99] (172.21.84.99) by MTKCAS06.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Thu, 5 Mar 2020 16:52:02 +0800
+Message-ID: <1583398476.17146.6.camel@mtksdccf07>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+From:   Walter Wu <walter-zh.wu@mediatek.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dmitry Vyukov <dvyukov@google.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>
+Date:   Thu, 5 Mar 2020 16:54:36 +0800
+In-Reply-To: <20200305163743.7128c251@canb.auug.org.au>
+References: <20200305163743.7128c251@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200305081717.GT2596@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 05, 2020 at 09:17:17AM +0100, Peter Zijlstra wrote:
-> On Wed, Mar 04, 2020 at 09:34:49AM -0800, Randy Dunlap wrote:
+T24gVGh1LCAyMDIwLTAzLTA1IGF0IDE2OjM3ICsxMTAwLCBTdGVwaGVuIFJvdGh3ZWxsIHdyb3Rl
+Og0KPiBIaSBhbGwsDQo+IA0KPiBBZnRlciBtZXJnaW5nIHRoZSBha3BtLWN1cnJlbnQgdHJlZSwg
+dG9kYXkncyBsaW51eC1uZXh0IGJ1aWxkICh4ODZfNjQNCj4gYWxsbW9kY29uZmlnKSBwcm9kdWNl
+ZCB0aGlzIHdhcm5pbmc6DQo+IA0KPiBtbS9rYXNhbi9jb21tb24ubzogd2FybmluZzogb2JqdG9v
+bDoga2FzYW5fcmVwb3J0KCkrMHgxNzogY2FsbCB0byByZXBvcnRfZW5hYmxlZCgpIHdpdGggVUFD
+Q0VTUyBlbmFibGVkDQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBpbmNsdWRlL2xpbnV4L2JpdG1h
+cC5oOjksDQo+ICAgICAgICAgICAgICAgICAgZnJvbSBpbmNsdWRlL2xpbnV4L2NwdW1hc2suaDox
+MiwNCj4gICAgICAgICAgICAgICAgICBmcm9tIGFyY2gveDg2L2luY2x1ZGUvYXNtL3BhcmF2aXJ0
+Lmg6MTcsDQo+ICAgICAgICAgICAgICAgICAgZnJvbSBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9pcnFm
+bGFncy5oOjcyLA0KPiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9pcnFmbGFn
+cy5oOjE2LA0KPiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9yY3VwZGF0ZS5o
+OjI2LA0KPiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51eC9yY3VsaXN0Lmg6MTEs
+DQo+ICAgICAgICAgICAgICAgICAgZnJvbSBpbmNsdWRlL2xpbnV4L3BpZC5oOjUsDQo+ICAgICAg
+ICAgICAgICAgICAgZnJvbSBpbmNsdWRlL2xpbnV4L3NjaGVkLmg6MTQsDQo+ICAgICAgICAgICAg
+ICAgICAgZnJvbSBpbmNsdWRlL2xpbnV4L3VhY2Nlc3MuaDo2LA0KPiAgICAgICAgICAgICAgICAg
+IGZyb20gYXJjaC94ODYvaW5jbHVkZS9hc20vZnB1L3hzdGF0ZS5oOjUsDQo+ICAgICAgICAgICAg
+ICAgICAgZnJvbSBhcmNoL3g4Ni9pbmNsdWRlL2FzbS9wZ3RhYmxlLmg6MjYsDQo+ICAgICAgICAg
+ICAgICAgICAgZnJvbSBpbmNsdWRlL2xpbnV4L2thc2FuLmg6MTUsDQo+ICAgICAgICAgICAgICAg
+ICAgZnJvbSBsaWIvdGVzdF9rYXNhbi5jOjEyOg0KPiBJbiBmdW5jdGlvbiAnbWVtbW92ZScsDQo+
+ICAgICBpbmxpbmVkIGZyb20gJ2ttYWxsb2NfbWVtbW92ZV9pbnZhbGlkX3NpemUnIGF0IGxpYi90
+ZXN0X2thc2FuLmM6MzAxOjI6DQo+IGluY2x1ZGUvbGludXgvc3RyaW5nLmg6NDQxOjk6IHdhcm5p
+bmc6ICdfX2J1aWx0aW5fbWVtbW92ZScgc3BlY2lmaWVkIGJvdW5kIDE4NDQ2NzQ0MDczNzA5NTUx
+NjE0IGV4Y2VlZHMgbWF4aW11bSBvYmplY3Qgc2l6ZSA5MjIzMzcyMDM2ODU0Nzc1ODA3IFstV3N0
+cmluZ29wLW92ZXJmbG93PV0NCj4gICA0NDEgfCAgcmV0dXJuIF9fYnVpbHRpbl9tZW1tb3ZlKHAs
+IHEsIHNpemUpOw0KPiAgICAgICB8ICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
+fn4NCj4gDQo+IEludHJvZHVjZWQgYnkgY29tbWl0DQo+IA0KPiAgIDUxOWU1MDBmYWM2NCAoImth
+c2FuOiBhZGQgdGVzdCBmb3IgaW52YWxpZCBzaXplIGluIG1lbW1vdmUiKQ0KPiANCj4gVGhhdCdz
+IGEgYml0IGFubm95aW5nIGR1cmluZyBhIG5vcm1hbCB4ODZfNjQgYWxsbW9kY29uZmlnIGJ1aWxk
+IC4uLg0KPiANCg0KSGkgU3RlcGhlbiBhbmQgRG1pdHJ5LA0KDQpJJ20gc29ycnkgZm9yIHRoZSBi
+dWlsZCB3YXJuaW5nLCBpdCBkb2Vzbid0IGdlbmVyYXRlIGluIG91ciBsb2NhbA0KZW52aXJvbm1l
+bnQoYXJtNjQveDg2XzY0KS4gV291bGQgeW91IHRlbGwgbWUgd2hhdCB0b29sY2hhaW5zIGNhbg0K
+cmVwcm9kdWNlIGl0Pw0KDQpEbWl0cnksIFRoYW5rcyBmb3IgeW91ciBzdWdnZXN0aW9uLg0KDQoN
+ClRoYW5rcw0KDQpXYWx0ZXINCg0KDQoNCg==
 
-> > mm/kasan/common.o: warning: objtool: kasan_report()+0x13: call to report_enabled() with UACCESS enabled
-> 
-> I used next/master instead, and found the below broken commit
-> responsible for this.
-
-> @@ -634,12 +637,20 @@ void kasan_free_shadow(const struct vm_struct *vm)
->  #endif
->  
->  extern void __kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip);
-> +extern bool report_enabled(void);
->  
-> -void kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
-> +bool kasan_report(unsigned long addr, size_t size, bool is_write, unsigned long ip)
->  {
-> -	unsigned long flags = user_access_save();
-> +	unsigned long flags;
-> +
-> +	if (likely(!report_enabled()))
-> +		return false;
-
-This adds an explicit call before the user_access_save() and that is a
-straight on bug.
-
-> +
-> +	flags = user_access_save();
->  	__kasan_report(addr, size, is_write, ip);
->  	user_access_restore(flags);
-> +
-> +	return true;
->  }

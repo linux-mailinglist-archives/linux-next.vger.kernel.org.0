@@ -2,163 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C5A9017B0A9
-	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 22:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A943F17B115
+	for <lists+linux-next@lfdr.de>; Thu,  5 Mar 2020 23:01:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726128AbgCEV3S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 16:29:18 -0500
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:34679 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726211AbgCEV3R (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 16:29:17 -0500
-Received: by mail-pl1-f195.google.com with SMTP id j7so3196975plt.1
-        for <linux-next@vger.kernel.org>; Thu, 05 Mar 2020 13:29:17 -0800 (PST)
+        id S1726178AbgCEWBi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 5 Mar 2020 17:01:38 -0500
+Received: from mail-wr1-f66.google.com ([209.85.221.66]:36656 "EHLO
+        mail-wr1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726181AbgCEWBi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 5 Mar 2020 17:01:38 -0500
+Received: by mail-wr1-f66.google.com with SMTP id j16so24469wrt.3
+        for <linux-next@vger.kernel.org>; Thu, 05 Mar 2020 14:01:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3hQtrH0t/Y+JM13CkGPYaEDgoceif6ybzNJIYlg2bZ4=;
-        b=pK8MNFu4twQhqhkaiToxYiLwKga8vArEN//ZNRf+zP1nFUNM+2A483moOtKqrxl+ol
-         IiOx1VnOUBIxoAdW2jPFDafr+RXV80/nldhvnRwWX2gEwSSD00Z4qEYx7xUjOXiaYgEM
-         s7BAe2imFbTT5DTb6i24CawHXJn1VPXli8oUs8ppEsLi4DTIkMMTlH/yVm12oln3R8dD
-         uPZWEj7vGaLzgVzLIAMICN+Sme8funtBTvGXWBDDt+AocEPVcB5XDIhbrCfTqJlVfxFI
-         /CxA5717gu2B1wItE7aCgO5gNf4fQdnJhdqpndgdaAWq0124vqqshQ3Sbm2sJTho6JKY
-         KOqg==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QRs769N8QUo0slXGjoV/bE6quT349p8P4cDyvi5+xSs=;
+        b=OyN0As3WtsQyPWrtZ0mTiBeTZecUOCo749mffQpTDmTx69lKJuE4osS24tJYR/gpHX
+         9VrzXIzE920xZDE0WeBQEVk4jHfPgbL+L8RNeX1VBPd6m95OUXVDG4faYkaORxj/wR5E
+         oXvLlM71z+RvpZVtk0IWK8zhjSZ6NIBdrlVwA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3hQtrH0t/Y+JM13CkGPYaEDgoceif6ybzNJIYlg2bZ4=;
-        b=X0LXm1rLEK8w2KHuY6Qt9oubfH0TIcDRd4WW9/36ZebTkCQ99SLreSuBFYP+NU2x2X
-         iWIGPB3C3sWdqBymzSZ4qy5V2LTfDyQDipITKKlLyI953vEYdevOYsCmEEnH6v/9m8eT
-         /J/ljM1oD4aEh2PSzlcbklaJ1qO0jx7zVCb+TktNWRaB9M/SYHLAnfpsrslSEAoDHMoG
-         E3x0eE6tTDGTuXjA3TaiQ+GrwLbHuYDCMXDtn8QSgEh/Ssg8pkd+Z1vQErt5hiQXgcCn
-         AtKzTsJwt4RcVYOHo6V87RaAy6LLEbtbxwEiHQDVIHfvt9GRBjZyhEuCniRuYRnrW74R
-         8dSw==
-X-Gm-Message-State: ANhLgQ114oIAwHlzsFhzJ8Qw5/riegPXHkuH53B7F4uMLeaHutE19EqF
-        b6o+dZbVWznHDiHIAljb8XhE62ULDG8=
-X-Google-Smtp-Source: ADFU+vstPy3dRvJ5gI4gh6u+AkY+9bi23QVrO0KnmqQQLcc+oNuH0eULqPlLCuGzDFwwIeW/p0W7yg==
-X-Received: by 2002:a17:90a:7ac6:: with SMTP id b6mr88323pjl.105.1583443756292;
-        Thu, 05 Mar 2020 13:29:16 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c17sm12247804pfo.71.2020.03.05.13.29.15
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=QRs769N8QUo0slXGjoV/bE6quT349p8P4cDyvi5+xSs=;
+        b=ToQ0IK8W6Udy1zvY2ECkrPp++BXj4LUpMeGjmrzeDfq/nt9mpFfw7EG+fq4pxfasdv
+         Kc9KkvOr9wrcxkMN02eYaazv858X5RIcPJNZApRypbcatTbL8FSq8XSQ4TTgp5NESLqo
+         s90lyv05/rSw7e5SGO6SUq87juGjSnh69EB9kPoyEHDsVdc1sdD63oXFc2ZvEoU1Hcqn
+         OF9YkrqTk79G2Hs249/TfQdC9HrerUl8TJAusMwEEVrgXn9h00bA9E2B329PJNLeZsyo
+         jquc/Oyz/Az78y21buqzhgooC++TtM8sK+pT4woGSBdl8jpO9szz9MTgZjrWhuch5FPE
+         HooA==
+X-Gm-Message-State: ANhLgQ1XkrPdQADcGBAL2SelEg1WoR5v02eHqiXvBJYNDSgHQeB6/gQP
+        v7e2NN2ow8jNjZ9xRUfHjiX8Ww==
+X-Google-Smtp-Source: ADFU+vuNWeddf1HH7nZX+stJXAplqB1550B+DJXHvxhEuJ8KddsSUGbg7If5vezjuGur7ZvPeojLkw==
+X-Received: by 2002:adf:d4d2:: with SMTP id w18mr66826wrk.180.1583445696430;
+        Thu, 05 Mar 2020 14:01:36 -0800 (PST)
+Received: from kpsingh-kernel.localdomain (77-56-209-237.dclient.hispeed.ch. [77.56.209.237])
+        by smtp.gmail.com with ESMTPSA id x9sm5002641wrx.0.2020.03.05.14.01.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Mar 2020 13:29:15 -0800 (PST)
-Message-ID: <5e616f2b.1c69fb81.3e2e2.18a9@mx.google.com>
-Date:   Thu, 05 Mar 2020 13:29:15 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 05 Mar 2020 14:01:35 -0800 (PST)
+From:   KP Singh <kpsingh@chromium.org>
+To:     linux-security-module@vger.kernel.org, linux-next@vger.kernel.org,
+        bpf@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Florent Revest <revest@chromium.org>,
+        Brendan Jackman <jackmanb@chromium.org>
+Subject: [PATCH bpf-next] bpf: Fix bpf_prog_test_run_tracing for !CONFIG_NET
+Date:   Thu,  5 Mar 2020 23:01:27 +0100
+Message-Id: <20200305220127.29109-1-kpsingh@chromium.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Kernel: v5.6-rc4-359-gd038c5cebb94
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 196 boots: 5 failed,
- 185 passed with 4 offline, 2 untried/unknown (v5.6-rc4-359-gd038c5cebb94)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 196 boots: 5 failed, 185 passed with 4 offline, 2 =
-untried/unknown (v5.6-rc4-359-gd038c5cebb94)
+From: KP Singh <kpsingh@google.com>
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc4-359-gd038c5cebb94/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc4-359-gd038c5cebb94/
+test_run.o is not built when CONFIG_NET is not set and
+bpf_prog_test_run_tracing being referenced in bpf_trace.o causes the
+linker error:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc4-359-gd038c5cebb94
-Git Commit: d038c5cebb945e819c82bb7dc88d661b74cabde5
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 96 unique boards, 24 SoC families, 28 builds out of 216
+ld: kernel/trace/bpf_trace.o:(.rodata+0x38): undefined reference to
+ `bpf_prog_test_run_tracing'
 
-Boot Regressions Detected:
+Add a __weak function in bpf_trace.c to handle this.
 
-arm:
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5800-peach-pi:
-              lab-collabora: new failure (last pass: v5.6-rc4-203-g8f169e31=
-9c63)
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          tegra124-nyan-big:
-              lab-collabora: new failure (last pass: v5.6-rc4-203-g8f169e31=
-9c63)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc4-219-g0=
-2c04c823da1)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: failing since 1 day (last pass: v5.6-rc4-203-g8f16=
-9e319c63 - first fail: v5.6-rc4-219-g02c04c823da1)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc4-219-g0=
-2c04c823da1)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc4-219-g0=
-2c04c823da1)
-
-Boot Failures Detected:
-
-arm:
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            tegra124-nyan-big: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
+Fixes: da00d2f117a0 ("bpf: Add test ops for BPF_PROG_TYPE_TRACING")
+Signed-off-by: KP Singh <kpsingh@google.com>
 ---
-For more info write to <info@kernelci.org>
+ kernel/trace/bpf_trace.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 363e0a2c75cf..6a490d8ce9de 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -1252,6 +1252,13 @@ static bool tracing_prog_is_valid_access(int off, int size,
+ 	return btf_ctx_access(off, size, type, prog, info);
+ }
+ 
++int __weak bpf_prog_test_run_tracing(struct bpf_prog *prog,
++				     const union bpf_attr *kattr,
++				     union bpf_attr __user *uattr)
++{
++	return -ENOTSUPP;
++}
++
+ const struct bpf_verifier_ops raw_tracepoint_verifier_ops = {
+ 	.get_func_proto  = raw_tp_prog_func_proto,
+ 	.is_valid_access = raw_tp_prog_is_valid_access,
+-- 
+2.20.1
+

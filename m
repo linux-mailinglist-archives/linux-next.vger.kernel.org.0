@@ -2,87 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B510317BC8C
-	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 13:18:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F085717BE40
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 14:25:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgCFMSF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Mar 2020 07:18:05 -0500
-Received: from mail-oi1-f194.google.com ([209.85.167.194]:35428 "EHLO
-        mail-oi1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726974AbgCFMSE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Mar 2020 07:18:04 -0500
-Received: by mail-oi1-f194.google.com with SMTP id c1so2340049oiy.2;
-        Fri, 06 Mar 2020 04:18:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zCzopvBe5pClIDQDJUrJo6Mdp8tlxa91qM1CJIBUoZU=;
-        b=pmAH3Nl0rCv4tpkxXRd/+418oHnQ3rfDMD/Q/nM3HfFppl2u0zX4yqCzMSUyMek1gq
-         TIwmFGSpfHgBoSb6GU2GA9OQFklG7TSB5fK9C7ArCqWDgy77FD6GmnFBXNGW4ylxSsd6
-         1LEzlalcl2XpHDLFSveXEsY4ji0C2uvC3wzNJtzWwjiYV5k45X79MqT5aw3n0Wzh6YGW
-         K/vzooN38qK1lY8OccEIgxfAT2+EDvQaZ4LFByU7OR7uoKCMXsv5J3/wkPilpuregi/J
-         cxfo3jfV1jloDLsfcsn0VwX5JivCT6LKPNJBGcZ5uLzTz1+e25D3/SJl2u6YhQMI3Cpw
-         pJ9A==
-X-Gm-Message-State: ANhLgQ1VeaVoIN/Al9grAWokWspS6suIF7uxOBnJcT4c2yVXMF5aJuYu
-        XV9UbotuK1bd781243svRoHlZUGBfFlb3PnGo+o=
-X-Google-Smtp-Source: ADFU+vv2jlvbLhAc6REVXuwMcnoIkqf+yF7o6TIX59QZjp7iyI4Ry7WdpVGYuGOEEDGnsDWTufmFHi8kMV3eEpcMQTg=
-X-Received: by 2002:aca:1a06:: with SMTP id a6mr2240414oia.148.1583497083839;
- Fri, 06 Mar 2020 04:18:03 -0800 (PST)
+        id S1727185AbgCFNZr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Mar 2020 08:25:47 -0500
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:8522 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726524AbgCFNZr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Mar 2020 08:25:47 -0500
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 026DLGl9087771
+        for <linux-next@vger.kernel.org>; Fri, 6 Mar 2020 08:25:46 -0500
+Received: from e06smtp05.uk.ibm.com (e06smtp05.uk.ibm.com [195.75.94.101])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ykmr6e496-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Fri, 06 Mar 2020 08:25:46 -0500
+Received: from localhost
+        by e06smtp05.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <imbrenda@linux.ibm.com>;
+        Fri, 6 Mar 2020 13:25:43 -0000
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp05.uk.ibm.com (192.168.101.135) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 6 Mar 2020 13:25:40 -0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 026DPcAu28180808
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 6 Mar 2020 13:25:38 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8A7A2A4053;
+        Fri,  6 Mar 2020 13:25:38 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E6C3BA4057;
+        Fri,  6 Mar 2020 13:25:37 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.145.0.1])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri,  6 Mar 2020 13:25:37 +0000 (GMT)
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     linux-next@vger.kernel.org, akpm@linux-foundation.org,
+        jack@suse.cz, kirill@shutemov.name
+Cc:     borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
+        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: [PATCH v4 0/2] add callbacks for inaccessible pages
+Date:   Fri,  6 Mar 2020 14:25:35 +0100
+X-Mailer: git-send-email 2.24.1
 MIME-Version: 1.0
-References: <20200305175528.5b3ccc09@canb.auug.org.au> <fabd49c7-d72e-a5a2-7f2c-47a8bd6c36a1@infradead.org>
-In-Reply-To: <fabd49c7-d72e-a5a2-7f2c-47a8bd6c36a1@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 6 Mar 2020 13:17:52 +0100
-Message-ID: <CAMuHMdUs00Qtm0CMBTougPyTZxS_cN+x8QWezs_OtPFWB0B2Pw@mail.gmail.com>
-Subject: Re: linux-next: Tree for Mar 5 (sound/soc/codecs/wcd934x.o)
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        moderated for non-subscribers <alsa-devel@alsa-project.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+x-cbid: 20030613-0020-0000-0000-000003B11797
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20030613-0021-0000-0000-0000220957F9
+Message-Id: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.572
+ definitions=2020-03-06_04:2020-03-06,2020-03-06 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
+ malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 mlxlogscore=800
+ priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2001150001 definitions=main-2003060096
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Randy,
+This patchset has a fixup for gup/mm, and provides the necessary arch
+hooks to enable protected virtualization.
 
-On Thu, Mar 5, 2020 at 5:49 PM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 3/4/20 10:55 PM, Stephen Rothwell wrote:
-> > Changes since 20200304:
-> >
->
-> on x86_64:
->
-> CONFIG_MFD_WCD934X=m
-> CONFIG_SND_SOC_WCD934X=y
->
-> ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_trigger':
-> wcd934x.c:(.text+0x754): undefined reference to `slim_stream_prepare'
-> ld: wcd934x.c:(.text+0x768): undefined reference to `slim_stream_enable'
-> ld: wcd934x.c:(.text+0x797): undefined reference to `slim_stream_unprepare'
-> ld: wcd934x.c:(.text+0x7ab): undefined reference to `slim_stream_disable'
-> ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_codec_probe':
-> wcd934x.c:(.text+0x4c6c): undefined reference to `of_slim_get_device'
-> ld: wcd934x.c:(.text+0x4cd4): undefined reference to `slim_get_logical_addr'
-> ld: wcd934x.c:(.text+0x4cfe): undefined reference to `__regmap_init_slimbus'
-> ld: sound/soc/codecs/wcd934x.o: in function `wcd934x_hw_params':
-> wcd934x.c:(.text+0x6027): undefined reference to `slim_stream_allocate'
+Andrew: please simply squash/fixup the first patch into the appropriate
+one that is already in your tree.
 
-This is fixed by:
-https://lore.kernel.org/linux-doc/20200302062340.21453-1-masahiroy@kernel.org/
+v3-> v4:
+* changed WARN_ON into VM_BUG_ON_PAGE as per review,
+* and small improvement of the associated comment
+v2 -> v3:
+* revert some cosmetic changes to improve readability
+* improve some comments
+v1 -> v2:
+* use put_compound_head in the first patch
+* fix commit message of the second patch
+* minor code cleanups
+* some comments to explain why sometimes we are not doing things
 
-Gr{oetje,eeting}s,
+Claudio Imbrenda (2):
+  mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track FOLL_PIN pages"
+  mm/gup/writeback: add callbacks for inaccessible pages
 
-                        Geert
+ include/linux/gfp.h |  6 ++++
+ mm/gup.c            | 76 +++++++++++++++++++++++++++++----------------
+ mm/page-writeback.c |  9 +++++-
+ 3 files changed, 64 insertions(+), 27 deletions(-)
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.24.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

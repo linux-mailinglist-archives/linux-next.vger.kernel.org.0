@@ -2,89 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 463DB17B5D9
-	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 05:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 540B417B65C
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 06:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726378AbgCFExv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 5 Mar 2020 23:53:51 -0500
-Received: from bilbo.ozlabs.org ([203.11.71.1]:41109 "EHLO ozlabs.org"
+        id S1725847AbgCFF3l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Mar 2020 00:29:41 -0500
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60975 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726368AbgCFExv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 5 Mar 2020 23:53:51 -0500
+        id S1725835AbgCFF3l (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 6 Mar 2020 00:29:41 -0500
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48YZyN5CJCz9sPg;
-        Fri,  6 Mar 2020 15:53:48 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48Ybll3vDpz9sPg;
+        Fri,  6 Mar 2020 16:29:39 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583470429;
-        bh=yMx47DN5cVj1bo6PsxadEb0QYyIOSVKVLG24evYZuig=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s7exIuAv8/oFib89u1Bym0H7AmD/GAP+T8G7tkvpnWqopI2aQcdq/Co0UzpAmaZ6R
-         SbZpIcy3CqgDcEjTVW9R3LIxIXgx2nCUmzG+yZGgPx+arww8yUVJuFpvjIX3Z3UFL9
-         PAsxFu2CkHPoLtEEoZjepoZ1QZpzwQKYMucxEfwJ+IYvFI8TFcvWjAXBRjsccvJ4bn
-         yxxpROEuVlDZSSkJjogzUwRtRXGKaL1n1n/nZ5lqlS4fqmZ+KZwaveffAAvnmhNTYC
-         Cs25tZj7FEbC9Lyv3J5tvtkNjwCyn2DmVvtLwjCCsd5KEsxJ7ge3ySD1OWLODBLBQr
-         +44gYqxjve62g==
-Date:   Fri, 6 Mar 2020 15:53:48 +1100
+        s=201702; t=1583472579;
+        bh=t7kO+23O4AQyWMQiGP82lyAOnnJwgWc5WAO5yzIARVM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MB7NafcyEAvifyEqL4xotZBIPNbRnJQmwFUwYa7iYH8hdKnUCjdW9duKcu+KiDAJO
+         c/5FDp7bZHGTuNwv/1AN0KyWusqj/rnzl3GlcsJ3cGZf+ZKRHSAjxIYXxy7rJn3xhs
+         xuZbXEksJaRLU/cZzt213IMcRsP2gS7RNgZ91Pgz4EmSlDy5nCI8/2nqYZAlGJmtli
+         QKkdi9BgYQ5qmHUMrIX0bCrNp6ZtLJlqWPIbcqJK0R5fa20q8MqE+kkW5p//CXK83b
+         HMmEvbflS8HPi1M8ZCRAbFhTnDlcaHE+sLDZu5lhGkL5ZoD71uiNI4QdXXTC0IjwV8
+         5ljuOD1ENnbBQ==
+Date:   Fri, 6 Mar 2020 16:29:37 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: linux-next: build warning after merge of the random tree
-Message-ID: <20200306155348.7bdc9622@canb.auug.org.au>
-In-Reply-To: <20200302144452.6a7c4907@canb.auug.org.au>
-References: <20200302144452.6a7c4907@canb.auug.org.au>
+        Christophe Leroy <christophe.leroy@c-s.fr>
+Subject: linux-next: manual merge of the akpm tree with the powerpc tree
+Message-ID: <20200306162937.082cd994@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6pDETBXvvN0ia_QueXdZ42T";
+Content-Type: multipart/signed; boundary="Sig_/AxSgnHjYYrwYT+IA1LV6HOX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6pDETBXvvN0ia_QueXdZ42T
+--Sig_/AxSgnHjYYrwYT+IA1LV6HOX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 2 Mar 2020 14:44:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
->
-> After merging the random tree, today's linux-next build (x86_64
-> allnoconfig) produced this warning:
->=20
-> drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' define=
-d but not used [-Wunused-function]
->   820 | static void crng_initialize_secondary(struct crng_state *crng)
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Introduced by commit
->=20
->   5cbe0f13b51a ("random: split primary/secondary crng init paths")
+Today's linux-next merge of the akpm tree got a conflict in:
 
-I am still getting this warning.
+  arch/powerpc/mm/pgtable_32.c
+
+between commit:
+
+  2efc7c085f05 ("powerpc/32: drop get_pteptr()")
+
+from the powerpc tree and patch:
+
+  "powerpc/32: drop get_pteptr()"
+
+from the akpm tree.
+
+I fixed it up (I just dropped the latter version) and can carry the fix
+as necessary. This is now fixed as far as linux-next is concerned, but
+any non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6pDETBXvvN0ia_QueXdZ42T
+--Sig_/AxSgnHjYYrwYT+IA1LV6HOX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5h11wACgkQAVBC80lX
-0GxPqQf/e2WqxfcblgL1WawrIftLywpWOef6xvH4tjsQsWEwB/5PHw+wdcnetCcF
-tFmUYL0Q5uVbhm9tiqjnbR6NoU2+KTq4ZnrUzQsnOztE71GWZGcWziLAaAOFBioE
-jVS1Smgdc6r+GkFO6RGXPJA6laWKEXRtnSNzl4cAQTvytkW/CiSveK+tGA7AlQQq
-Gm9iMrkuGB76yj6cAjuv+RpuNiRDHar+6Kh21Cpj0TtKFfeKmkm6tK6usVpgV3oE
-SkZZnAbb2Nwzk1H+40FBbGpkzvq0bu+YTzcveZMM0mtCXgFwWvGhQGMabikv4fOC
-0EDQzApzuCc2np6DiHtUp3ZLQMY/3g==
-=EKiY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5h38EACgkQAVBC80lX
+0GwWVgf/b9cMicIX4DCt/qrkOHGgvNBu+8TbB7gAfYs65qisVKTSU7grIUTkqxKS
+xpUBgKhBUiAtC/JkLkzm2VAaX/WyjEJ04u/9ebeqWZFZVAuvfbqu1sG+CYm22lKo
+g2D1xC+8oWMZ16Xap91ByEUiXQ+pG1zVgTFG9O+WDv9mFrFnl2ONsLGxrleqHD5o
+lIPTwAn5r7PYCmXy/9jSKZE5Ry5FhB+t7mHt6xzd3mJKno2TiqmDIKIBj6EVeS+I
+vjLdv+EVLFTOD4vMz1eXz2qg2+JiGnTMBzW5GjdXHZMIOVSBrykPK6zdagjP0mjf
+yrciqH/VnA9EPN7RiUQ42pGU38yQOw==
+=gutR
 -----END PGP SIGNATURE-----
 
---Sig_/6pDETBXvvN0ia_QueXdZ42T--
+--Sig_/AxSgnHjYYrwYT+IA1LV6HOX--

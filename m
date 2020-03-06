@@ -2,173 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 065B617C69F
-	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 20:57:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F1117C73A
+	for <lists+linux-next@lfdr.de>; Fri,  6 Mar 2020 21:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726498AbgCFT5P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 6 Mar 2020 14:57:15 -0500
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:38533 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725873AbgCFT5O (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Mar 2020 14:57:14 -0500
-Received: by mail-pl1-f194.google.com with SMTP id w3so1298648plz.5
-        for <linux-next@vger.kernel.org>; Fri, 06 Mar 2020 11:57:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ehZ2ZlF9iDDleMAXVnfnfhrFZZMLYF0kd8+ncb0ATVQ=;
-        b=g2ZekVYlSJTNQGjIGKGKrtyYY5SpVqBWfVdnurtbF10vCiedc7z8ddsSW8AgoRTYpA
-         FypeJGBEH/AtNosxd05aiyGdIfsB5Cat3dsGlBVL2RCezJIvdX1R1jj/qkxFbsOVquIn
-         z0F0pt4gTW8eS7+VgFHzm6oeu1PXZmzVoTyfiqs4J40eDhxpC+2iN8/L8gyeVdixMOpn
-         q8FuCZuIAmgmhMBGmN/E0ISFIOmXNzhiTwIxwvDR+jmWYSpIqAdS86vJfq/KoAaoxjrU
-         zoFGEBBqbKv7nG5l+889qvTLVYm6FJ2OAA/QFmNtKMBP1QzAMvzxhGjboxGnCAvNLCtw
-         LLzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ehZ2ZlF9iDDleMAXVnfnfhrFZZMLYF0kd8+ncb0ATVQ=;
-        b=nTg10sb9VEAjquAqq3zzNiwbg7GKlJs0/4PqVZE64Uxs3YZeo1A0cUEksSPptsQEc5
-         4LPlzhfaQGk/75cvJxV6zf0+VuEh+P7xPmYrPzPQoAKlJiqHo4FP9U9SWXUtLfEdB0fn
-         uZgwskyQtLnlE1iKh1namxnMmYdY8hcUPdcmLT1CZ3prt8ONozl0SpKAyw82DFuXJPc3
-         mwC+va4xC1swxS//cBnrBa+ov1WUjBYaQozvtM8DbY7NR16p9wyl61nTMmhg+9xTSSiF
-         k4MJhn2O2Spupxx2jSFCalBcVCh+mTw9b8VjfHbOxbHCvIAR3HzOPLmxnOf+rxQvWdlj
-         hZ2w==
-X-Gm-Message-State: ANhLgQ1Qt4w7968vvf9xFKM6Z4cvvci8U7B+kZ/5cOXtZz6GG4aq6Sft
-        Bn2XixmPs0FWNKyryTdyE9py2tPW05s=
-X-Google-Smtp-Source: ADFU+vv5NA6neddpOAKtipzOasM7LpdYUGzehBGm1/VRlhKDxPuj19leBYUGc1eMvwZSIokkmZrHqQ==
-X-Received: by 2002:a17:90a:2551:: with SMTP id j75mr5059322pje.165.1583524632867;
-        Fri, 06 Mar 2020 11:57:12 -0800 (PST)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id v8sm10356737pjr.10.2020.03.06.11.57.10
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Mar 2020 11:57:11 -0800 (PST)
-Message-ID: <5e62ab17.1c69fb81.4114c.b6aa@mx.google.com>
-Date:   Fri, 06 Mar 2020 11:57:11 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        id S1726397AbgCFUqA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 6 Mar 2020 15:46:00 -0500
+Received: from mailgw02.mediatek.com ([210.61.82.184]:1575 "EHLO
+        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726194AbgCFUp7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 6 Mar 2020 15:45:59 -0500
+X-UUID: ff4e7cfd56f94ad9ae4dfdd8f2b94adf-20200307
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=BteGj9cR8u5AHAP2PqMX0uctwlUFo5lvUvScIiAzIgo=;
+        b=S/O7B5UR9UkLp+UURfcL4zlKp3I2x+S9QA7zOwoBkoido8aMPuDSWba2SZbxYQVKLExUTE1qSrU1pLwpxzwB+xOFG1CtOk0ZXiCiGJvRBgoFPeClFeTpgI6y78BAEsXVrFyV/D9opZSfIJ4R/LB9cjbuNb5hJRT1Yfh6PXjoPvo=;
+X-UUID: ff4e7cfd56f94ad9ae4dfdd8f2b94adf-20200307
+Received: from mtkcas06.mediatek.inc [(172.21.101.30)] by mailgw02.mediatek.com
+        (envelope-from <walter-zh.wu@mediatek.com>)
+        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
+        with ESMTP id 1011641253; Sat, 07 Mar 2020 04:45:56 +0800
+Received: from mtkcas08.mediatek.inc (172.21.101.126) by
+ mtkmbs02n1.mediatek.inc (172.21.101.77) with Microsoft SMTP Server (TLS) id
+ 15.0.1395.4; Sat, 7 Mar 2020 04:43:44 +0800
+Received: from [172.21.84.99] (172.21.84.99) by mtkcas08.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
+ Transport; Sat, 7 Mar 2020 04:46:16 +0800
+Message-ID: <1583527548.8911.23.camel@mtksdccf07>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+From:   Walter Wu <walter-zh.wu@mediatek.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Dmitry Vyukov <dvyukov@google.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>
+Date:   Sat, 7 Mar 2020 04:45:48 +0800
+In-Reply-To: <1583521173.8911.9.camel@mtksdccf07>
+References: <20200305163743.7128c251@canb.auug.org.au>
+         <1583398476.17146.6.camel@mtksdccf07>
+         <20200305203356.307c0a18@canb.auug.org.au>
+         <1583521173.8911.9.camel@mtksdccf07>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.2.3-0ubuntu6 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200306
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 197 boots: 12 failed, 181 passed with 3 offline,
- 1 untried/unknown (next-20200306)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-MTK:  N
+Content-Transfer-Encoding: base64
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 197 boots: 12 failed, 181 passed with 3 offline, 1 untrie=
-d/unknown (next-20200306)
+T24gU2F0LCAyMDIwLTAzLTA3IGF0IDAyOjU5ICswODAwLCBXYWx0ZXIgV3Ugd3JvdGU6DQo+IE9u
+IFRodSwgMjAyMC0wMy0wNSBhdCAyMDozMyArMTEwMCwgU3RlcGhlbiBSb3Rod2VsbCB3cm90ZToN
+Cj4gPiBIaSBXYWx0ZXIsDQo+ID4gDQo+ID4gT24gVGh1LCA1IE1hciAyMDIwIDE2OjU0OjM2ICsw
+ODAwIFdhbHRlciBXdSA8d2FsdGVyLXpoLnd1QG1lZGlhdGVrLmNvbT4gd3JvdGU6DQo+ID4gPg0K
+PiA+ID4gSSdtIHNvcnJ5IGZvciB0aGUgYnVpbGQgd2FybmluZywgaXQgZG9lc24ndCBnZW5lcmF0
+ZSBpbiBvdXIgbG9jYWwNCj4gPiA+IGVudmlyb25tZW50KGFybTY0L3g4Nl82NCkuIFdvdWxkIHlv
+dSB0ZWxsIG1lIHdoYXQgdG9vbGNoYWlucyBjYW4NCj4gPiA+IHJlcHJvZHVjZSBpdD8NCj4gPiAN
+Cj4gPiBJIGFtIHVzaW5nIGEgUG93ZXJQQyBMRSBob3N0ZWQgeDg2XzY0IGdjYyB2OS4yLjEgKERl
+YmlhbiBjcm9zcyBjb21waWxlcikuDQo+ID4gDQo+ID4gJCAvdXNyL2Jpbi94ODZfNjQtbGludXgt
+Z251LWdjYyAtLXZlcnNpb24NCj4gPiB4ODZfNjQtbGludXgtZ251LWdjYyAoRGViaWFuIDkuMi4x
+LTIxKSA5LjIuMSAyMDE5MTEzMA0KPiA+IA0KPiBIaSBTdGVwaGVuLA0KPiANCj4gVGhhbmtzIGZv
+ciB5b3VyIGluZm9ybWF0aW9uLCBJdCBkb2Vzbid0IGdlbmVyYXRlIHdhcm5pbmcgbWVzc2FnZSBp
+bg0KPiBnY2MtOC4zLjAoRGViaWFuIDguMy4wLTYpIGFmdGVyIGFwcGx5IGJlbG93IHBhdGNoLg0K
+PiANCj4gDQo+IC0tLSBhL2xpYi90ZXN0X2thc2FuLmMNCj4gKysrIGIvbGliL3Rlc3Rfa2FzYW4u
+Yw0KPiBAQCAtMjg2LDE3ICsyODYsMTkgQEAgc3RhdGljIG5vaW5saW5lIHZvaWQgX19pbml0DQo+
+IGttYWxsb2Nfb29iX2luX21lbXNldCh2b2lkKQ0KPiAgc3RhdGljIG5vaW5saW5lIHZvaWQgX19p
+bml0IGttYWxsb2NfbWVtbW92ZV9pbnZhbGlkX3NpemUodm9pZCkNCj4gIHsNCj4gICAgICAgICBj
+aGFyICpwdHI7DQo+IC0gICAgICAgc2l6ZV90IHNpemUgPSA2NDsNCj4gKyAgICAgICBzaXplX3Qg
+c2l6ZTEgPSA2NDsNCj4gKyAgICAgICBzaXplX3Qgc2l6ZTIgPSA2MjsNCj4gDQo+ICAgICAgICAg
+cHJfaW5mbygiaW52YWxpZCBzaXplIGluIG1lbW1vdmVcbiIpOw0KPiAtICAgICAgIHB0ciA9IGtt
+YWxsb2Moc2l6ZSwgR0ZQX0tFUk5FTCk7DQo+ICsgICAgICAgcHRyID0ga21hbGxvYyhzaXplMSwg
+R0ZQX0tFUk5FTCk7DQo+ICAgICAgICAgaWYgKCFwdHIpIHsNCj4gICAgICAgICAgICAgICAgIHBy
+X2VycigiQWxsb2NhdGlvbiBmYWlsZWRcbiIpOw0KPiAgICAgICAgICAgICAgICAgcmV0dXJuOw0K
+PiAgICAgICAgIH0NCj4gDQo+IC0gICAgICAgbWVtc2V0KChjaGFyICopcHRyLCAwLCA2NCk7DQo+
+IC0gICAgICAgbWVtbW92ZSgoY2hhciAqKXB0ciwgKGNoYXIgKilwdHIgKyA0LCAtMik7DQo+ICsg
+ICAgICAgbWVtc2V0KChjaGFyICopcHRyLCAwLCBzaXplMSk7DQo+ICsgICAgICAgLyogdGhlIHNp
+emUgb2YgbWVtbW92ZSgpIGlzIG5lZ2F0aXZlIG51bWJlcnMgKi8NCj4gKyAgICAgICBtZW1tb3Zl
+KChjaGFyICopcHRyLCAoY2hhciAqKXB0ciArIDQsIHNpemUyIC0gc2l6ZTEpOw0KPiAgICAgICAg
+IGtmcmVlKHB0cik7DQo+ICB9DQo+IA0KSGkgU3RlcGhlbiwNCg0KUGxlYXNlIGlnbm9yZSBwcmV2
+aW91cyBtYWlsLCBJIG1pc3MgdGhlIG1lc3NhZ2UuIEJlbG93IHRoZSBwYXRjaCB3aWxsDQpmaXgg
+dGhlIHdhcm5pbmcuDQoNCg0KLS0tIGEvbGliL3Rlc3Rfa2FzYW4uYw0KKysrIGIvbGliL3Rlc3Rf
+a2FzYW4uYw0KQEAgLTI4NiwxNyArMjg2LDE5IEBAIHN0YXRpYyBub2lubGluZSB2b2lkIF9faW5p
+dA0Ka21hbGxvY19vb2JfaW5fbWVtc2V0KHZvaWQpDQogc3RhdGljIG5vaW5saW5lIHZvaWQgX19p
+bml0IGttYWxsb2NfbWVtbW92ZV9pbnZhbGlkX3NpemUodm9pZCkNCiB7DQogICAgICAgIGNoYXIg
+KnB0cjsNCi0gICAgICAgc2l6ZV90IHNpemUgPSA2NDsNCisgICAgICAgc2l6ZV90IHNpemUxID0g
+NjQ7DQorICAgICAgIHZvbGF0aWxlIHNpemVfdCBzaXplMiA9IC0yOw0KDQogICAgICAgIHByX2lu
+Zm8oImludmFsaWQgc2l6ZSBpbiBtZW1tb3ZlXG4iKTsNCi0gICAgICAgcHRyID0ga21hbGxvYyhz
+aXplLCBHRlBfS0VSTkVMKTsNCisgICAgICAgcHRyID0ga21hbGxvYyhzaXplMSwgR0ZQX0tFUk5F
+TCk7DQogICAgICAgIGlmICghcHRyKSB7DQogICAgICAgICAgICAgICAgcHJfZXJyKCJBbGxvY2F0
+aW9uIGZhaWxlZFxuIik7DQogICAgICAgICAgICAgICAgcmV0dXJuOw0KICAgICAgICB9DQoNCi0g
+ICAgICAgbWVtc2V0KChjaGFyICopcHRyLCAwLCA2NCk7DQotICAgICAgIG1lbW1vdmUoKGNoYXIg
+KilwdHIsIChjaGFyICopcHRyICsgNCwgLTIpOw0KKyAgICAgICBtZW1zZXQoKGNoYXIgKilwdHIs
+IDAsIHNpemUxKTsNCisgICAgICAgLyogdGhlIHNpemUgb2YgbWVtbW92ZSgpIGlzIG5lZ2F0aXZl
+IG51bWJlciAqLw0KKyAgICAgICBtZW1tb3ZlKChjaGFyICopcHRyLCAoY2hhciAqKXB0ciArIDQs
+IHNpemUyKTsNCiAgICAgICAga2ZyZWUocHRyKTsNCiB9DQo=
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200306/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200306/
-
-Tree: next
-Branch: master
-Git Describe: next-20200306
-Git Commit: b86a6a241b7c60ca7a6ca4fb3c0d2aedbbf2c1b6
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 98 unique boards, 24 SoC families, 28 builds out of 329
-
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          rk3288-rock2-square:
-              lab-collabora: failing since 14 days (last pass: next-2020021=
-3 - first fail: next-20200221)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 17 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200305)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: next-20200304)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200305)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s905x-libretech-cc:
-              lab-clabbe: new failure (last pass: next-20200305)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200305)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-rock2-square: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            rk3399-gru-kevin: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-            msm8998-mtp: 1 failed lab
-            rk3399-gru-kevin: 1 failed lab
-            rk3399-puma-haikou: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

@@ -2,84 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69ADA17EC6C
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:08:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF86817EC8B
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:17:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgCIXIC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Mar 2020 19:08:02 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39217 "EHLO ozlabs.org"
+        id S1727125AbgCIXRm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Mar 2020 19:17:42 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40156 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726536AbgCIXIC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 9 Mar 2020 19:08:02 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726698AbgCIXRm (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Mar 2020 19:17:42 -0400
+Received: from pali.im (pali.im [31.31.79.79])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48bv5X1368z9sPF;
-        Tue, 10 Mar 2020 10:08:00 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583795280;
-        bh=Y/1vQP+6MEAUcRXqDqjNGMgG1RWqFT0/Us8Xg4YZJt4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=O4pP+x7FIJ+aHoxCZxuaID4txbbGk4v/XdfpsuLY/gKpr1mjv4S249NYca/HtuSB1
-         abGRcpNMa2Kd1+MK2G0IHjcjbL+7vgJiWoA97kAs5vbDlb8EyZzfFT990g5uJ5JhyJ
-         BhZozUmDOrN/mnolsAK8lrptqUJUbfUe34rknQX5xzfx2S31yesK41bsaZKQaAk4RM
-         2AKfF4JHHMWNvm9bHGy9CB8+j862UtttuVkzO1JAlM2RM8GlCbX8hLoMjGHwY3zCQq
-         BzUN7TgUKKBjow+kQgVpsvJScRp4Dd8nxqtx4JInfD4CniJBs4QMLiMDwQ3c+lvgqb
-         BjXs774SiVLIg==
-Date:   Tue, 10 Mar 2020 10:07:59 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the pci tree
-Message-ID: <20200310100759.221c6add@canb.auug.org.au>
+        by mail.kernel.org (Postfix) with ESMTPSA id 94F312146E;
+        Mon,  9 Mar 2020 23:17:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1583795861;
+        bh=wa+lBkf3egB7zRHwcS9hbPziO+9VWjfRhmzJ9OncfhU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G1JR/s2UTlzLt0tpi1/04f6wBI8VwOzSxJwSrp4qLheDI2MPWk4mavivfdGql7bnb
+         4stwQkgd84rA/09sXtz9CV/avYAGmLRbLshkkMg5tRN4WAspUiEcDVXk/GY0jy2Mfy
+         XgnNmQyL7nmLbFHZLb69XKfpE31I2SYP30OKRhgo=
+Received: by pali.im (Postfix)
+        id 9A556BE0; Tue, 10 Mar 2020 00:17:39 +0100 (CET)
+Date:   Tue, 10 Mar 2020 00:17:39 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Al Viro <viro@ZenIV.linux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Namjae Jeon <namjae.jeon@samsung.com>,
+        Sungjong Seo <sj1557.seo@samsung.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: linux-next: build warning after merge of the vfs tree
+Message-ID: <20200309231739.2w45cleifsmwbfd6@pali>
+References: <20200310095918.3ea6432f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8EQD6ymTlscBFC+C=Rgaix=";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200310095918.3ea6432f@canb.auug.org.au>
+User-Agent: NeoMutt/20180716
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8EQD6ymTlscBFC+C=Rgaix=
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tuesday 10 March 2020 09:59:18 Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the vfs tree, today's linux-next build (x86_64 allmodconfig)
+> produced this warning:
+> 
+> warning: same module names found:
+>   fs/exfat/exfat.ko
+>   drivers/staging/exfat/exfat.ko
+> 
+> Introduced by commit
+> 
+>   b9d1e2e6265f ("exfat: add Kconfig and Makefile")
+> 
+> and not fixed by commit
+> 
+>   1a3c0509ce83 ("staging: exfat: make staging/exfat and fs/exfat mutually exclusive")
 
-Hi all,
+Hello Stephen!
 
-After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+exfat.ko from fs/exfat subdirectory is a rewrite/cleanup of staging
+exfat driver. It means that fs/exfat replaces staging/exfat and so after
+fs/exfat is merged, the old staging/exfat code is not needed anymore.
 
-ERROR: "pci_speed_string" [drivers/pci/controller/pcie-brcmstb.ko] undefine=
-d!
-ERROR: "pcie_link_speed" [drivers/pci/controller/pcie-brcmstb.ko] undefined!
+Therefore I think that instead of hacking Kconfig/Makefile files to
+define mutually exclusivity, it is better to remove staging/exfat code.
 
-Caused by commit
+Removal of old staging code should be easy and should fix this problem.
 
-  31483a35dbed ("PCI: Use pci_speed_string() for all PCI/PCI-X/PCIe strings=
-")
-
-I have used the pci tree from next-20200306 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8EQD6ymTlscBFC+C=Rgaix=
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5mzE8ACgkQAVBC80lX
-0Gxnwwf/bEdPZOSkwQlHOCmwVjxxO8JmY49sU+L2Qvwgr7e4ZY1ojLVb6ZApes4R
-pcXX8YUuKoDZpfBTzJ6UEYzfK7VGuFL++9PELbZZOjyY/96QrkWB3wJephqq/JL+
-w3cmXILqwYucKqjmb1W/IiqvbVsT17D5Phpb3kzj4E/1pGEvqffBMYnWPj0qAXi+
-7QrHs6z1tSlLXPyHK/YvjOA+nk2pOY2OUGKlx71yehbajRQR7y97SIkB/uYz+8Ve
-NJ1AkNySW26mK9Y4M0+E65KzIChhPOCVACnbvMycW1nfIUsjx7MPwEeaLwtQXX+7
-DYQzIPcpWVEq75V+5L+uVKxWMqaTlg==
-=xVMu
------END PGP SIGNATURE-----
-
---Sig_/8EQD6ymTlscBFC+C=Rgaix=--
+Any objections? Or other ideas?

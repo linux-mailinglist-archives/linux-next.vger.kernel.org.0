@@ -2,72 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0267F17D82B
-	for <lists+linux-next@lfdr.de>; Mon,  9 Mar 2020 03:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D657317E148
+	for <lists+linux-next@lfdr.de>; Mon,  9 Mar 2020 14:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726595AbgCICgb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 8 Mar 2020 22:36:31 -0400
-Received: from ozlabs.org ([203.11.71.1]:33231 "EHLO ozlabs.org"
+        id S1726469AbgCINe6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Mar 2020 09:34:58 -0400
+Received: from ozlabs.org ([203.11.71.1]:57213 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726363AbgCICga (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 8 Mar 2020 22:36:30 -0400
+        id S1726427AbgCINe5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Mar 2020 09:34:57 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48bMmX40LRz9sPR;
-        Mon,  9 Mar 2020 13:36:28 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48bfNG6J86z9sPJ;
+        Tue, 10 Mar 2020 00:34:52 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583721388;
-        bh=QQw9WbytSDhYA/BkG7VxeYruBYQ7kB5jABrAmHvvyOc=;
+        s=201702; t=1583760895;
+        bh=AltDo9M4fmtAGo4MuZpe3IL+JKXOUDDbG5Ju5kWPlzU=;
         h=Date:From:To:Cc:Subject:From;
-        b=DD9AreUtY0jads3rBTBAWhWm+9+DXPAgx0ysecfqe+ZlSiWsgPe/Ba2wS33iYpotA
-         yTDGbh39J7/YeDwBh+mmRsAmmYbzLUiJWKp0P/pnLlM3NLq3G35QnKCY6DEVAwUuYj
-         1PKrvnSiLOtPFQdKevQIHl5coK194xcLbpoj4w3DkaBFXPWtbbgrpVJG8C6E30b+KH
-         ClxVC1pAQ2iTdmlcLuJFgXLDB3KZIoFwD9W4sGMPX6SDS+DgVLzB528XoY1zYNJRTl
-         N7GykcHhpqEoSXr/2eV9cZhnI/ximcohA7fw8K77rAP9DSY3cTRqneXeEUFI3nn62q
-         TEu6YHr1rYFCQ==
-Date:   Mon, 9 Mar 2020 13:35:59 +1100
+        b=HUKsGOZNoD/te05QzCuOH5xOMAGmE8JRbKNKkpaTXJ1ZzKV5vbXa0raElhp/ZT957
+         o3iMUYMaLV81+C4vf4400rdAmIVw/dIO3Yj0RGgyHXJrOdQHK14jQQt7CUDpVNN6ew
+         A7aVDV5C3DwPQ2I9JWk0a5J15KpvDeck0Kuh6RUx3cUzNrnY1vmEdoeiQc2kRNPXQA
+         RDht92uRhdMvHu7BNQZursRnGFiw3VY8drRhW7YIm7u/g/xHKOgjknQt5K3W5B6bVO
+         ZRdelHNVYTs4j6EAFEEVunBthX98KCK4bmTjOiOrvFG/f7znD5TVS5R0bnhXhIQrd3
+         nqOCOt0X0ginA==
+Date:   Tue, 10 Mar 2020 00:34:44 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: no release today
-Message-ID: <20200309133559.29174498@canb.auug.org.au>
+To:     Michal Simek <monstr@monstr.eu>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the microblaze tree
+Message-ID: <20200310003444.50d98639@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7P3pAaUQY7VBQW4i.6uh=Zd";
+Content-Type: multipart/signed; boundary="Sig_/Q=ETE/5qIJmjC2kZiRgdeYz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7P3pAaUQY7VBQW4i.6uh=Zd
+--Sig_/Q=ETE/5qIJmjC2kZiRgdeYz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-There will be no linux-next release today (20200309).  Normal service
-will recommence tomorrow.
+Commit
+
+  299c61cb37fb ("microblaze: Replace setup_irq() by request_irq()")
+
+is missing a Signed-off-by from its committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/7P3pAaUQY7VBQW4i.6uh=Zd
+--Sig_/Q=ETE/5qIJmjC2kZiRgdeYz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5lq5AACgkQAVBC80lX
-0Gy9Xgf/T4ewe2EZ03T8RVgxwtab7ODwDeGvYFLSivOepZUAdbTIUdT3m8mawgrh
-KWPrWI1WefwHOfzELx4dcdIF/LqkcjZT88EsuLujxTxkaFiF8HzbOobR/91GbpeB
-q9zLRBBA9uen0+fJ/CWMpbZwFjGMz+XQ57qSrBtuF22Joc4tzORL2y2cInDGP+NE
-V+kjhA7Cj+SatByXuhHipcEMANnjKN24ScoJtj8tn7qHpKjJBlV9TDVosZ+rh4yJ
-WFLY+FlMKz6pjs8Z1SKUcFkwpCvAYYl6PnKPzxUetO3c5ppLXi9oGFAmLSpdjfSG
-N9n2mwlDDrcug9qVL6C/fioeKtETmA==
-=Rumr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5mRfQACgkQAVBC80lX
+0GwtcAf/Z2CxfR3xoP3bIYlqUSH57eFGqlmYokVnfJg2+jMXhasG7dmChKrBj+iE
+uvyTMS8Xs0ytkNbocF22v0NF3w6KB7q9WNAQ2eKm8ycOw0lHh+WVy3dE3cVrSuOR
+d/OFJsVoQDJjp/06L6xpTvXlXaE5/eXaqAJJmgOKIdoqRpxWvidhydUs/Whtvdn3
+BMfKuiM90iUwVa8jJceQD49eTScPcRjkk+TlLxXTuWKdVW/nc5gsP6eEatus+X0l
+OJ5xG543gIr1hZbyNbotIPm5lnVWIUx9c+78+kquvU8iAWbBOAHUkT0gytLhWbuK
+uV7ADACUieNitNHchEEKMbGmtW1BPw==
+=psrd
 -----END PGP SIGNATURE-----
 
---Sig_/7P3pAaUQY7VBQW4i.6uh=Zd--
+--Sig_/Q=ETE/5qIJmjC2kZiRgdeYz--

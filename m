@@ -2,104 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 5897317EC5D
-	for <lists+linux-next@lfdr.de>; Mon,  9 Mar 2020 23:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3F3317EC6E
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726698AbgCIW7W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Mar 2020 18:59:22 -0400
-Received: from ozlabs.org ([203.11.71.1]:36845 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726536AbgCIW7W (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 9 Mar 2020 18:59:22 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48btvW4YyRz9sPJ;
-        Tue, 10 Mar 2020 09:59:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583794760;
-        bh=206rIbkp0C/1Ogfui2ffVjFpvbdu0zvMFzur9BTxmis=;
-        h=Date:From:To:Cc:Subject:From;
-        b=KL0cHZS1CHJrnpydDUzSv+aZO234X7kPD9BBh4vKBn2nGlncweo5Fz0QTjScDjYnG
-         st6l0WXtJWNVQWk/ri+oWWAu9EJ0arvZopaua3/XRZQlMUlXT78VbEWph+hezrT1aA
-         byXy30GsiySgmsxBSwvRpyp2G6+IEqESd9Zfl/LF/+60ChIWPCb4Wk+vqwZfaeMYBB
-         sTLlTLXy499jrUmwMTp/9OpXmZSPk1gneV+Dkbkl2pdAFSZsM3746Cry9UmqIjMW60
-         5uze4UAw+ief5KjguJKTmG+J+DM5m7BljWLNrSlfMs+37/oqYuHtBh4qDP8h+Y1Odi
-         vWEpwy+XEvUlg==
-Date:   Tue, 10 Mar 2020 09:59:18 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Namjae Jeon <namjae.jeon@samsung.com>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali.rohar@gmail.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: linux-next: build warning after merge of the vfs tree
-Message-ID: <20200310095918.3ea6432f@canb.auug.org.au>
+        id S1727391AbgCIXIO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Mar 2020 19:08:14 -0400
+Received: from mail-yw1-f65.google.com ([209.85.161.65]:43246 "EHLO
+        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726536AbgCIXIO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Mar 2020 19:08:14 -0400
+Received: by mail-yw1-f65.google.com with SMTP id p69so11889394ywh.10;
+        Mon, 09 Mar 2020 16:08:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YBrgj95YDWeT6B7iosvroZAr99Kor3UDGVq8CoZfnPk=;
+        b=ErJy79KbuvPzPWmVfQGUBPh4YGQxBGv+HXj2NN6SlbrXkPaNqqGLloBZxX6bcp5bF4
+         8RRbr3YGFC+WRncP9c0C9CDhuAMxJr+bZY9cjAc6IWTTWMhvR9VVWmrDW4dtV07TWr0A
+         YZsN8n+gtCVhem8fQXcE1uX6ks2EuF0d4WX2EkzB4l5iloMj7t4g1uBfxTkPFFf52NZb
+         LNsddCPb1F4XMpM9+obTNHSF1GK8INf+D/uwdQZJTReVcLiHpmkPaPEanilm6bkZHiSO
+         +Nt8NaX0pGFPEAzkYU8KV62VN+rcupaTFPgZM1cJiiMT1IKyKjy7eiZLO87b22TJNovi
+         RZOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YBrgj95YDWeT6B7iosvroZAr99Kor3UDGVq8CoZfnPk=;
+        b=tIbseVC2JDiZtPsPyUD/xLxqAZJXDAc5pyed5oXOTD67ZKllQl4vaQ5jpo/ZEEV2KT
+         gFUiThL+bhdxDcLALVyEPpEsw8TZAvXTMzwqgSiYrWs/cmb4M7f6asx/BjxiLlaCJ57X
+         FOZWz38OTZ1D4sx1x786Lf+OGqqbrHNHJVy9ggVR4ImbZ1FGBZicRxnkcHUK8Wwe6SlJ
+         tDyw+d3M7f4I+iPWQDZG/L7o34s7OQHe68J5TkqBtUaD40TzB8Izt/WSondzEctj7CkA
+         XXYbQFTvb160jAcKjl4ApTXaaywSiJ0B3Zc8dX1NvcuGlNcbJEOnPZIDFa+EeFVQ6YjI
+         rEWA==
+X-Gm-Message-State: ANhLgQ0qijlj35a+Z625p98MePttChvXJ0Dv8kwU1dGd7RmYTkL3vS/x
+        WCWfMeCa0iGAeApBp84Cgus7ypnFZOOB9Y6S0FGbS3GP
+X-Google-Smtp-Source: ADFU+vsjOKr6BzWi6LrzbOSSXDkC0x4ZWL/FbgfxVnW15EhwjJKLEZxvrIO+r5LlDMRETQJl0Ryj/5vl8XVT1tT2/6w=
+X-Received: by 2002:a25:86c9:: with SMTP id y9mr21568200ybm.376.1583795293391;
+ Mon, 09 Mar 2020 16:08:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/knfUsg6=EcD246GvZQuo23u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200310092805.7c37c3c1@canb.auug.org.au>
+In-Reply-To: <20200310092805.7c37c3c1@canb.auug.org.au>
+From:   Steve French <smfrench@gmail.com>
+Date:   Mon, 9 Mar 2020 18:07:25 -0500
+Message-ID: <CAH2r5ms6qT7gd7HbZQ3UDYyY8VX+Oqu2xbYw4wixNTDDAtbg5Q@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     CIFS <linux-cifs@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/knfUsg6=EcD246GvZQuo23u
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+fixed
 
-Hi all,
+On Mon, Mar 9, 2020 at 5:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Commit
+>
+>   91737cf1a418 ("cifs: smb2pdu.h: Replace zero-length array with flexible-array member")
+>
+> is missing a Signed-off-by from its committer.
+>
+> --
+> Cheers,
+> Stephen Rothwell
 
-After merging the vfs tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
 
-warning: same module names found:
-  fs/exfat/exfat.ko
-  drivers/staging/exfat/exfat.ko
 
-Introduced by commit
+-- 
+Thanks,
 
-  b9d1e2e6265f ("exfat: add Kconfig and Makefile")
-
-and not fixed by commit
-
-  1a3c0509ce83 ("staging: exfat: make staging/exfat and fs/exfat mutually e=
-xclusive")
-
-$ grep EXFAT .config
-CONFIG_STAGING_EXFAT_FS=3Dm
-CONFIG_STAGING_EXFAT_DISCARD=3Dy
-CONFIG_STAGING_EXFAT_DELAYED_SYNC=3Dy
-CONFIG_STAGING_EXFAT_KERNEL_DEBUG=3Dy
-CONFIG_STAGING_EXFAT_DEBUG_MSG=3Dy
-CONFIG_STAGING_EXFAT_DEFAULT_CODEPAGE=3D437
-CONFIG_STAGING_EXFAT_DEFAULT_IOCHARSET=3D"utf8"
-# DOS/FAT/EXFAT/NT Filesystems
-CONFIG_EXFAT_FS=3Dm
-CONFIG_EXFAT_DEFAULT_IOCHARSET=3D"utf8"
-# end of DOS/FAT/EXFAT/NT Filesystems
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/knfUsg6=EcD246GvZQuo23u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5mykYACgkQAVBC80lX
-0GzkhQf/exGVw+61mho1oNpxk0lkPhRIPu1I+ySRrOBDnt9vf3ltuv3S1ZTyQiA/
-NAAp15Shp3oe99nvLX5Hr709QdTxdvjbEC74aekJtglpUNUfXyoP5fcwplGgAZ1Y
-W9rNhapWVjcIozUnVrynTgp4joVv1MzvmjXDKH+pPHA6ndYe/4dw+VoApupldasE
-08zMQ3wC7TWwjO7vjzp7L0M5Zkv2Mj9v2vX68ZErjGMkHDer2E46SIOXPu52lMhY
-e2zi2VQdG0/kq679dB0kdnsnStXzdO+NonbCKfuk8bxLpTCfeAwpCqTwvXIkDG1A
-54ax7ZOZ2c/L4EPt2GYbERvHeSEwmg==
-=e7uC
------END PGP SIGNATURE-----
-
---Sig_/knfUsg6=EcD246GvZQuo23u--
+Steve

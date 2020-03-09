@@ -2,80 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3F3317EC6E
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:08:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69ADA17EC6C
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:08:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727391AbgCIXIO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Mar 2020 19:08:14 -0400
-Received: from mail-yw1-f65.google.com ([209.85.161.65]:43246 "EHLO
-        mail-yw1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726536AbgCIXIO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Mar 2020 19:08:14 -0400
-Received: by mail-yw1-f65.google.com with SMTP id p69so11889394ywh.10;
-        Mon, 09 Mar 2020 16:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YBrgj95YDWeT6B7iosvroZAr99Kor3UDGVq8CoZfnPk=;
-        b=ErJy79KbuvPzPWmVfQGUBPh4YGQxBGv+HXj2NN6SlbrXkPaNqqGLloBZxX6bcp5bF4
-         8RRbr3YGFC+WRncP9c0C9CDhuAMxJr+bZY9cjAc6IWTTWMhvR9VVWmrDW4dtV07TWr0A
-         YZsN8n+gtCVhem8fQXcE1uX6ks2EuF0d4WX2EkzB4l5iloMj7t4g1uBfxTkPFFf52NZb
-         LNsddCPb1F4XMpM9+obTNHSF1GK8INf+D/uwdQZJTReVcLiHpmkPaPEanilm6bkZHiSO
-         +Nt8NaX0pGFPEAzkYU8KV62VN+rcupaTFPgZM1cJiiMT1IKyKjy7eiZLO87b22TJNovi
-         RZOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YBrgj95YDWeT6B7iosvroZAr99Kor3UDGVq8CoZfnPk=;
-        b=tIbseVC2JDiZtPsPyUD/xLxqAZJXDAc5pyed5oXOTD67ZKllQl4vaQ5jpo/ZEEV2KT
-         gFUiThL+bhdxDcLALVyEPpEsw8TZAvXTMzwqgSiYrWs/cmb4M7f6asx/BjxiLlaCJ57X
-         FOZWz38OTZ1D4sx1x786Lf+OGqqbrHNHJVy9ggVR4ImbZ1FGBZicRxnkcHUK8Wwe6SlJ
-         tDyw+d3M7f4I+iPWQDZG/L7o34s7OQHe68J5TkqBtUaD40TzB8Izt/WSondzEctj7CkA
-         XXYbQFTvb160jAcKjl4ApTXaaywSiJ0B3Zc8dX1NvcuGlNcbJEOnPZIDFa+EeFVQ6YjI
-         rEWA==
-X-Gm-Message-State: ANhLgQ0qijlj35a+Z625p98MePttChvXJ0Dv8kwU1dGd7RmYTkL3vS/x
-        WCWfMeCa0iGAeApBp84Cgus7ypnFZOOB9Y6S0FGbS3GP
-X-Google-Smtp-Source: ADFU+vsjOKr6BzWi6LrzbOSSXDkC0x4ZWL/FbgfxVnW15EhwjJKLEZxvrIO+r5LlDMRETQJl0Ryj/5vl8XVT1tT2/6w=
-X-Received: by 2002:a25:86c9:: with SMTP id y9mr21568200ybm.376.1583795293391;
- Mon, 09 Mar 2020 16:08:13 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200310092805.7c37c3c1@canb.auug.org.au>
-In-Reply-To: <20200310092805.7c37c3c1@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Mon, 9 Mar 2020 18:07:25 -0500
-Message-ID: <CAH2r5ms6qT7gd7HbZQ3UDYyY8VX+Oqu2xbYw4wixNTDDAtbg5Q@mail.gmail.com>
-Subject: Re: linux-next: Signed-off-by missing for commit in the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726698AbgCIXIC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Mar 2020 19:08:02 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39217 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726536AbgCIXIC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Mar 2020 19:08:02 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48bv5X1368z9sPF;
+        Tue, 10 Mar 2020 10:08:00 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583795280;
+        bh=Y/1vQP+6MEAUcRXqDqjNGMgG1RWqFT0/Us8Xg4YZJt4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=O4pP+x7FIJ+aHoxCZxuaID4txbbGk4v/XdfpsuLY/gKpr1mjv4S249NYca/HtuSB1
+         abGRcpNMa2Kd1+MK2G0IHjcjbL+7vgJiWoA97kAs5vbDlb8EyZzfFT990g5uJ5JhyJ
+         BhZozUmDOrN/mnolsAK8lrptqUJUbfUe34rknQX5xzfx2S31yesK41bsaZKQaAk4RM
+         2AKfF4JHHMWNvm9bHGy9CB8+j862UtttuVkzO1JAlM2RM8GlCbX8hLoMjGHwY3zCQq
+         BzUN7TgUKKBjow+kQgVpsvJScRp4Dd8nxqtx4JInfD4CniJBs4QMLiMDwQ3c+lvgqb
+         BjXs774SiVLIg==
+Date:   Tue, 10 Mar 2020 10:07:59 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: linux-next: build failure after merge of the pci tree
+Message-ID: <20200310100759.221c6add@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8EQD6ymTlscBFC+C=Rgaix=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-fixed
+--Sig_/8EQD6ymTlscBFC+C=Rgaix=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 9, 2020 at 5:28 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Commit
->
->   91737cf1a418 ("cifs: smb2pdu.h: Replace zero-length array with flexible-array member")
->
-> is missing a Signed-off-by from its committer.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Hi all,
 
+After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
+ERROR: "pci_speed_string" [drivers/pci/controller/pcie-brcmstb.ko] undefine=
+d!
+ERROR: "pcie_link_speed" [drivers/pci/controller/pcie-brcmstb.ko] undefined!
 
--- 
-Thanks,
+Caused by commit
 
-Steve
+  31483a35dbed ("PCI: Use pci_speed_string() for all PCI/PCI-X/PCIe strings=
+")
+
+I have used the pci tree from next-20200306 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8EQD6ymTlscBFC+C=Rgaix=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5mzE8ACgkQAVBC80lX
+0Gxnwwf/bEdPZOSkwQlHOCmwVjxxO8JmY49sU+L2Qvwgr7e4ZY1ojLVb6ZApes4R
+pcXX8YUuKoDZpfBTzJ6UEYzfK7VGuFL++9PELbZZOjyY/96QrkWB3wJephqq/JL+
+w3cmXILqwYucKqjmb1W/IiqvbVsT17D5Phpb3kzj4E/1pGEvqffBMYnWPj0qAXi+
+7QrHs6z1tSlLXPyHK/YvjOA+nk2pOY2OUGKlx71yehbajRQR7y97SIkB/uYz+8Ve
+NJ1AkNySW26mK9Y4M0+E65KzIChhPOCVACnbvMycW1nfIUsjx7MPwEeaLwtQXX+7
+DYQzIPcpWVEq75V+5L+uVKxWMqaTlg==
+=xVMu
+-----END PGP SIGNATURE-----
+
+--Sig_/8EQD6ymTlscBFC+C=Rgaix=--

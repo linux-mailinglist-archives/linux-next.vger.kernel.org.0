@@ -2,115 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 0082D17F73D
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 13:17:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E7F17FF7A
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 14:49:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgCJMRy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 08:17:54 -0400
-Received: from foss.arm.com ([217.140.110.172]:34848 "EHLO foss.arm.com"
+        id S1727082AbgCJNtF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 09:49:05 -0400
+Received: from mga01.intel.com ([192.55.52.88]:22466 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726211AbgCJMRy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Mar 2020 08:17:54 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B1ED30E;
-        Tue, 10 Mar 2020 05:17:53 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 593743F67D;
-        Tue, 10 Mar 2020 05:17:52 -0700 (PDT)
-Date:   Tue, 10 Mar 2020 12:17:47 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Theodore Ts'o <tytso@mit.edu>
+        id S1726390AbgCJNtE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Mar 2020 09:49:04 -0400
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+X-Amp-File-Uploaded: False
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/DHE-RSA-AES256-GCM-SHA384; 10 Mar 2020 06:49:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.70,518,1574150400"; 
+   d="scan'208";a="260793292"
+Received: from akharche-mobl2.ccr.corp.intel.com (HELO localhost) ([10.251.86.23])
+  by orsmga002.jf.intel.com with ESMTP; 10 Mar 2020 06:49:01 -0700
+Date:   Tue, 10 Mar 2020 15:49:00 +0200
+From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the random tree
-Message-ID: <20200310121747.GA49602@lakrids.cambridge.arm.com>
-References: <20200302144452.6a7c4907@canb.auug.org.au>
- <20200306155348.7bdc9622@canb.auug.org.au>
+Subject: Re: linux-next: Signed-off-by missing for commits in the tpmdd tree
+Message-ID: <20200310134900.GB32334@linux.intel.com>
+References: <20200310004629.5a752080@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200306155348.7bdc9622@canb.auug.org.au>
-User-Agent: Mutt/1.11.1+11 (2f07cb52) (2018-12-01)
+In-Reply-To: <20200310004629.5a752080@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Mar 06, 2020 at 03:53:48PM +1100, Stephen Rothwell wrote:
+On Tue, Mar 10, 2020 at 12:46:29AM +1100, Stephen Rothwell wrote:
 > Hi all,
 > 
-> On Mon, 2 Mar 2020 14:44:52 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > After merging the random tree, today's linux-next build (x86_64
-> > allnoconfig) produced this warning:
-> > 
-> > drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' defined but not used [-Wunused-function]
-> >   820 | static void crng_initialize_secondary(struct crng_state *crng)
-> >       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-> > 
-> > Introduced by commit
-> > 
-> >   5cbe0f13b51a ("random: split primary/secondary crng init paths")
+> Commits
 > 
-> I am still getting this warning.
+>   4eecda6b7df2 ("tpm: tpm_tis_spi_cr50: use new structure for SPI transfer delays")
+>   0fbd8fe52759 ("tpm_tis_spi: use new 'delay' structure for SPI transfer delays")
+> 
+> are missing a Signed-off-by from their committer.
+> 
+> Not really, but "Signed-off-by" is misspelled.  Please fix up what ever
+> script produces this (or your finger memory :-)).
 
-Sorry, this is my bad.
+Sure thing!
 
-We only call crng_initialize_secondary() in do_numa_crng_init(), which
-is only built for CONFIG_NUMA. We can either drop both
-crng_initialize_secondary() and crng_init_try_arch() under the
-CONFIG_NUMA ifdef, or add __maybe_unused to crng_initialize_secondary().
+Backtracked to a manual typo in a filter-branch spell. I'll convert my
+regulary used fb-spells as scripts to counter measure this in the future.
 
-Ted, does the below look ok to you? Or would you prefer moving things
-under the ifdeffery?
-
-Thanks,
-Mark.
-
----->8----
-From 6c3a35cd562d53066e11f5f8a6c3a6f63701d3ed Mon Sep 17 00:00:00 2001
-From: Mark Rutland <mark.rutland@arm.com>
-Date: Tue, 10 Mar 2020 12:09:12 +0000
-Subject: [PATCH] random: avoid warnings for !CONFIG_NUMA builds
-
-As crng_initialize_secondary() is only called by do_numa_crng_init(),
-and the latter is under ifdeffery for CONFIG_NUMA, when CONFIG_NUMA is
-not selected the compiler will warn that the former is unused:
-
-| drivers/char/random.c:820:13: warning: 'crng_initialize_secondary' defined but not used [-Wunused-function]
-|   820 | static void crng_initialize_secondary(struct crng_state *crng)
-|       |             ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-Stephen reports that this happens for x86_64 noallconfig builds.
-
-We could move crng_initialize_secondary() and crng_init_try_arch() under
-the CONFIG_NUMA ifdeffery, but this has the unfortunate property of
-separating them from crng_initialize_primary() and
-crng_init_try_arch_early() respectively. Instead, let's mark
-crng_initialize_secondary() as __maybe_unused.
-
-Fixes: 5cbe0f13b51a ("random: split primary/secondary crng init paths")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Theodore Ts'o <tytso@mit.edu>
----
- drivers/char/random.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/random.c b/drivers/char/random.c
-index f43f65c2195d..0d10e31fd342 100644
---- a/drivers/char/random.c
-+++ b/drivers/char/random.c
-@@ -817,7 +817,7 @@ static bool __init crng_init_try_arch_early(struct crng_state *crng)
- 	return arch_init;
- }
- 
--static void crng_initialize_secondary(struct crng_state *crng)
-+static void __maybe_unused crng_initialize_secondary(struct crng_state *crng)
- {
- 	memcpy(&crng->state[0], "expand 32-byte k", 16);
- 	_get_random_bytes(&crng->state[4], sizeof(__u32) * 12);
--- 
-2.11.0
-
+/Jarkko

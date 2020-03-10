@@ -2,148 +2,167 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BE3CE17ECAF
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 00:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC31F17ED0F
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 01:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727322AbgCIXgJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 9 Mar 2020 19:36:09 -0400
-Received: from mailout4.samsung.com ([203.254.224.34]:51746 "EHLO
-        mailout4.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727287AbgCIXgJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 9 Mar 2020 19:36:09 -0400
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20200309233607epoutp0405c625a7ac25f25f750eb8b08d3b8329~6xvNnjl4T1193611936epoutp04g
-        for <linux-next@vger.kernel.org>; Mon,  9 Mar 2020 23:36:07 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20200309233607epoutp0405c625a7ac25f25f750eb8b08d3b8329~6xvNnjl4T1193611936epoutp04g
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1583796967;
-        bh=SBRQkWad05dqzHnOR2IAhxtJj3eNNpvFOW3EZIyo7+8=;
-        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-        b=f30bqAJtuUovurzPlILWDG3jQjqCuKD0YgCXyWqIII/UNGsOVpLwQO3HFpL5P7pcN
-         Q9sKZqDh1txWptglXKECv7voNbcOSC6/zzErWMFsrywOjXxsqlwfY/GRv9t8QgqD0T
-         GK1R6X72xYqDDzP1Ue1RZLkrs8WGpApV5opZh1Pw=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTP id
-        20200309233607epcas1p36e73afbceb394c70dffbaf787f530a1f~6xvNBKfPb2658026580epcas1p3g;
-        Mon,  9 Mar 2020 23:36:07 +0000 (GMT)
-Received: from epsmges1p5.samsung.com (unknown [182.195.40.164]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 48bvjx4pfwzMqYkf; Mon,  9 Mar
-        2020 23:36:05 +0000 (GMT)
-Received: from epcas1p1.samsung.com ( [182.195.41.45]) by
-        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AE.8B.51241.5E2D66E5; Tue, 10 Mar 2020 08:36:05 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas1p3.samsung.com (KnoxPortal) with ESMTPA id
-        20200309233604epcas1p38fa6c3d9bdba591598402c6808334b1b~6xvK2IKHM1438514385epcas1p3L;
-        Mon,  9 Mar 2020 23:36:04 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200309233604epsmtrp2bff4a8319f1732459e830a1c96b8c3e0~6xvK1Sti90692206922epsmtrp2g;
-        Mon,  9 Mar 2020 23:36:04 +0000 (GMT)
-X-AuditID: b6c32a39-14bff7000001c829-57-5e66d2e5eaaf
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        9B.71.06569.4E2D66E5; Tue, 10 Mar 2020 08:36:04 +0900 (KST)
-Received: from namjaejeon01 (unknown [10.88.104.63]) by epsmtip1.samsung.com
-        (KnoxPortal) with ESMTPA id
-        20200309233604epsmtip13d6ce217c3a2b1d88ed793ed014cf45a~6xvKmGLvz2347423474epsmtip19;
-        Mon,  9 Mar 2020 23:36:04 +0000 (GMT)
-From:   "Namjae Jeon" <namjae.jeon@samsung.com>
-To:     =?iso-8859-1?Q?'Pali_Roh=E1r'?= <pali@kernel.org>,
-        "'Stephen Rothwell'" <sfr@canb.auug.org.au>,
-        "'Greg Kroah-Hartman'" <gregkh@linuxfoundation.org>
-Cc:     "'Al Viro'" <viro@ZenIV.linux.org.uk>,
-        "'Linux Next Mailing List'" <linux-next@vger.kernel.org>,
-        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
-        "'Sungjong Seo'" <sj1557.seo@samsung.com>,
-        "'Christoph Hellwig'" <hch@lst.de>
-In-Reply-To: <20200309231739.2w45cleifsmwbfd6@pali>
-Subject: RE: linux-next: build warning after merge of the vfs tree
-Date:   Tue, 10 Mar 2020 08:36:04 +0900
-Message-ID: <003501d5f66b$7fe3b260$7fab1720$@samsung.com>
+        id S1727287AbgCJAGS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 9 Mar 2020 20:06:18 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:59487 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727242AbgCJAGR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 9 Mar 2020 20:06:17 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48bwNk5B2wz9sRR;
+        Tue, 10 Mar 2020 11:06:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583798774;
+        bh=7lQ8pI0XYE2KiKCl/kYDNDDZgptti74pekITiXXL/J4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qlovkNo+ecl805wgOZLkxTq3lDnuiYfJU7lYf6AbpXwQmTVPlBu4i32Nzze2BZIn2
+         5A6NXjCJS2bK+Vm78cXyz224iXG2POPHTfG232Lfvefp9iefGY4rK+hL0aiVxI8dvF
+         6cdZxLrNL+yyyR5v1TyY9QGLX5Q/9OV1HB/sq20fAelfx8jWcZQHhsah747qb11KHs
+         uv5aJ4iEqxOF2WTRlbTMa0cav4fjHTc+XG/FqFFDdlBG2Dx33fEUmh76Tmgrn+vWzN
+         Zf6rV+mHQt2qlC3h4ttpclRImktidvF9smUBab8JZNVirG62zGXJCm5pvFOMJpkpFG
+         QgEfu5WD/pc5w==
+Date:   Tue, 10 Mar 2020 11:06:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Dmitry Yakunin <zeil@yandex-team.ru>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20200310110612.611ab9ad@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: ko
-Thread-Index: AQLhnT+ZUEFtORUKwX4A79zpVs4A5gKBNZQWAseM+v6l/1Lw8A==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmru7TS2lxBgeOqVs0L17PZrFy9VEm
-        i8u75rBZHFzYxmixYM9pNoute6+yW2z5d4TV4vzf46wOHB6NN26weWxa1cnmsX/uGnaP3Tcb
-        2Dz6tqxi9Pi8Sc5j05O3TAHsUTk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koK
-        eYm5qbZKLj4Bum6ZOUBXKSmUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKDA0K9IoT
-        c4tL89L1kvNzrQwNDIxMgSoTcjJ2b73OVNDKWTG74SxbA+ME9i5GTg4JAROJWXfWMHYxcnEI
-        CexglLi44jkbhPOJUWJn7xk2kCohgW+MEitOO8J0TDzQwwpRtJdRYs6ST1DtLxklps46C9bB
-        JqAr8e/PfrBRIgIzGSXmr9rKDJJgBhm1q1UOxOYUMJb4suct2CHCAk4Sd85PYgSxWQRUJZ43
-        rgOL8wpYSrza3MMIYQtKnJz5hAVijp7EjalT2CBseYntb+cwQ5ynIPHz6TJWiLiIxOzONrC4
-        CND8W/92gR0kIdDMLvFy+WVoCLhIfLrQAGULS7w6vgXKlpL4/G4vUAMHkF0t8XE/1PwORokX
-        320hbGOJm+s3sELYihI7f89lhNjLJ/HuKyiIQFp5JTrahCBKVCX6Lh1mgrClJbraP7BPYFSa
-        heSzWUg+m4Xks1lIvlnAyLKKUSy1oDg3PbXYsMAUObo3MYLTrJblDsZj53wOMQpwMCrx8Gbo
-        psUJsSaWFVfmHmKU4GBWEuFt1EqOE+JNSaysSi3Kjy8qzUktPsRoCgz5icxSosn5wByQVxJv
-        aGpkbGxsYWJmbmZqrCTO+zBSM05IID2xJDU7NbUgtQimj4mDU6qB8bDepp3Lf2l/LTxx4/wG
-        HcYwkxbnH3IPntfUOhr+OnJ0RdpizUOXamwWCGzfvkwhUHDH0TsXK6YHtPP9fNSzzPu24cWm
-        5Nl3H1fea5qt//JT4awV03P3+8z4drjdeFqV6lq2yh7t0DlfhY7ua8k4t+xRpuad4qdaSzVP
-        pHLF3V6rEq09T+19+CQlluKMREMt5qLiRACj0fncyQMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHIsWRmVeSWpSXmKPExsWy7bCSnO6TS2lxBp2XlS2aF69ns1i5+iiT
-        xeVdc9gsDi5sY7RYsOc0m8XWvVfZLbb8O8Jqcf7vcVYHDo/GGzfYPDat6mTz2D93DbvH7psN
-        bB59W1YxenzeJOex6clbpgD2KC6blNSczLLUIn27BK6M3VuvMxW0clbMbjjL1sA4gb2LkZND
-        QsBEYuKBHlYQW0hgN6PE6RXREHFpiWMnzjB3MXIA2cIShw8XQ5Q8Z5R41RgOYrMJ6Er8+7Of
-        rYuRi0NEYDajRFfXW3YQh1ngB6PEnWfrGSE61jNK/LuuAmJzChhLfNnzFmyxsICTxJ3zk8Bq
-        WARUJZ43rgOL8wpYSrza3MMIYQtKnJz5hAXEZhYwkLh/qIMVwpaX2P52DjPEoQoSP58ug4qL
-        SMzubAOLiwDNv/VvF9sERuFZSEbNQjJqFpJRs5C0L2BkWcUomVpQnJueW2xYYJSXWq5XnJhb
-        XJqXrpecn7uJERxrWlo7GE+ciD/EKMDBqMTDK6idFifEmlhWXJl7iFGCg1lJhLdRKzlOiDcl
-        sbIqtSg/vqg0J7X4EKM0B4uSOK98/rFIIYH0xJLU7NTUgtQimCwTB6dUA2N0+OpnZzJ2HBVX
-        YC64ePDmt9xPM3dK3dl/2XvTm+7b8XfmhG0uOPIzJawo0vHE7m9nJi8VypTm7Lsiu/CK8UWl
-        N0uz0xKk/thobV5ZVZuZfGRtYMj7zQuS3y3d7/n947eIkkOTpdfsWabr9ebQXPN+h4CWeRNZ
-        67eETJLYkVfirLhM1GDC7sXySizFGYmGWsxFxYkAoF7YXLECAAA=
-X-CMS-MailID: 20200309233604epcas1p38fa6c3d9bdba591598402c6808334b1b
-X-Msg-Generator: CA
-X-Sendblock-Type: SVC_REQ_APPROVE
-CMS-TYPE: 101P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20200309231744epcas1p3c0c6f455449fbcbb67df2fdcbe7ba351
-References: <20200310095918.3ea6432f@canb.auug.org.au>
-        <CGME20200309231744epcas1p3c0c6f455449fbcbb67df2fdcbe7ba351@epcas1p3.samsung.com>
-        <20200309231739.2w45cleifsmwbfd6@pali>
+Content-Type: multipart/signed; boundary="Sig_/7r9Ijk1oPrdyyqujRJR6XhL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-> On Tuesday 10 March 2020 09:59:18 Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the vfs tree, today's linux-next build (x86_64
-> > allmodconfig) produced this warning:
-> >
-> > warning: same module names found:
-> >   fs/exfat/exfat.ko
-> >   drivers/staging/exfat/exfat.ko
-> >
-> > Introduced by commit
-> >
-> >   b9d1e2e6265f ("exfat: add Kconfig and Makefile")
-> >
-> > and not fixed by commit
-> >
-> >   1a3c0509ce83 ("staging: exfat: make staging/exfat and fs/exfat
-> > mutually exclusive")
-> 
-> Hello Stephen!
-> 
-> exfat.ko from fs/exfat subdirectory is a rewrite/cleanup of staging exfat
-> driver. It means that fs/exfat replaces staging/exfat and so after
-> fs/exfat is merged, the old staging/exfat code is not needed anymore.
-> 
-> Therefore I think that instead of hacking Kconfig/Makefile files to define
-> mutually exclusivity, it is better to remove staging/exfat code.
-> 
-> Removal of old staging code should be easy and should fix this problem.
-Agree.
-Greg, You told me to let me know when fs/exfat gets accepted. Now it's time
-to drop staging/exfat.
+--Sig_/7r9Ijk1oPrdyyqujRJR6XhL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks!
-> 
-> Any objections? Or other ideas?
+Hi all,
 
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  net/ipv4/inet_diag.c
+
+between commit:
+
+  83f73c5bb7b9 ("inet_diag: return classid for all socket types")
+
+from the net tree and commit:
+
+  085c20cacf2b ("bpf: inet_diag: Dump bpf_sk_storages in inet_diag_dump()")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/ipv4/inet_diag.c
+index 8c8377568a78,e1cad25909df..000000000000
+--- a/net/ipv4/inet_diag.c
++++ b/net/ipv4/inet_diag.c
+@@@ -298,6 -289,66 +303,48 @@@ int inet_sk_diag_fill(struct sock *sk,=20
+  			goto errout;
+  	}
+ =20
+ -	if (ext & (1 << (INET_DIAG_CLASS_ID - 1)) ||
+ -	    ext & (1 << (INET_DIAG_TCLASS - 1))) {
+ -		u32 classid =3D 0;
+ -
+ -#ifdef CONFIG_SOCK_CGROUP_DATA
+ -		classid =3D sock_cgroup_classid(&sk->sk_cgrp_data);
+ -#endif
+ -		/* Fallback to socket priority if class id isn't set.
+ -		 * Classful qdiscs use it as direct reference to class.
+ -		 * For cgroup2 classid is always zero.
+ -		 */
+ -		if (!classid)
+ -			classid =3D sk->sk_priority;
+ -
+ -		if (nla_put_u32(skb, INET_DIAG_CLASS_ID, classid))
+ -			goto errout;
+ -	}
+ -
++ 	/* Keep it at the end for potential retry with a larger skb,
++ 	 * or else do best-effort fitting, which is only done for the
++ 	 * first_nlmsg.
++ 	 */
++ 	if (cb_data->bpf_stg_diag) {
++ 		bool first_nlmsg =3D ((unsigned char *)nlh =3D=3D skb->data);
++ 		unsigned int prev_min_dump_alloc;
++ 		unsigned int total_nla_size =3D 0;
++ 		unsigned int msg_len;
++ 		int err;
++=20
++ 		msg_len =3D skb_tail_pointer(skb) - (unsigned char *)nlh;
++ 		err =3D bpf_sk_storage_diag_put(cb_data->bpf_stg_diag, sk, skb,
++ 					      INET_DIAG_SK_BPF_STORAGES,
++ 					      &total_nla_size);
++=20
++ 		if (!err)
++ 			goto out;
++=20
++ 		total_nla_size +=3D msg_len;
++ 		prev_min_dump_alloc =3D cb->min_dump_alloc;
++ 		if (total_nla_size > prev_min_dump_alloc)
++ 			cb->min_dump_alloc =3D min_t(u32, total_nla_size,
++ 						   MAX_DUMP_ALLOC_SIZE);
++=20
++ 		if (!first_nlmsg)
++ 			goto errout;
++=20
++ 		if (cb->min_dump_alloc > prev_min_dump_alloc)
++ 			/* Retry with pskb_expand_head() with
++ 			 * __GFP_DIRECT_RECLAIM
++ 			 */
++ 			goto errout;
++=20
++ 		WARN_ON_ONCE(total_nla_size <=3D prev_min_dump_alloc);
++=20
++ 		/* Send what we have for this sk
++ 		 * and move on to the next sk in the following
++ 		 * dump()
++ 		 */
++ 	}
++=20
+  out:
+  	nlmsg_end(skb, nlh);
+  	return 0;
+
+--Sig_/7r9Ijk1oPrdyyqujRJR6XhL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5m2fQACgkQAVBC80lX
+0GwjnQgAhFFX8PDORAxjYrJAEHqRPBUIQhcpfE5KhtzuJur5SaOmFlsjVTwN41CM
+TVHs6u5kJAL/stdMAFPca4YXEE66+N7PDs81uYDmqZL8/ogkDeDd2blw0brWq/uE
+f5RG7pD+oADLfuA9gLr+aUXrctXvDopKwaEvDOu3FG6qH8yGkfiX2GcwCjPTGOPm
+hQJn/z2iv/murAVsNC9X39F/W/kTCOuSLAxL2pVmyBkCI1CaGYGpbD5iJzO/MG19
+6bvfuwNOYWfWjC77I0zbQs6BCvMejSwJDe95b9pQ1BA1BhZd5lWhcBbX0z1KVoRF
+hjCNg1YxZReN9kC8Bc0l/t3wh/eCyQ==
+=uQDe
+-----END PGP SIGNATURE-----
+
+--Sig_/7r9Ijk1oPrdyyqujRJR6XhL--

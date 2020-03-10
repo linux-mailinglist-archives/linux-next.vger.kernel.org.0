@@ -2,89 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 71380180708
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 19:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F641807B2
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 20:10:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727210AbgCJSix (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 14:38:53 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2545 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726315AbgCJSiw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Mar 2020 14:38:52 -0400
-Received: from lhreml706-cah.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 273686508D9D73721EED;
-        Tue, 10 Mar 2020 18:38:51 +0000 (GMT)
-Received: from lhreml724-chm.china.huawei.com (10.201.108.75) by
- lhreml706-cah.china.huawei.com (10.201.108.47) with Microsoft SMTP Server
- (TLS) id 14.3.408.0; Tue, 10 Mar 2020 18:38:50 +0000
-Received: from [127.0.0.1] (10.202.226.45) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.1713.5; Tue, 10 Mar
- 2020 18:38:50 +0000
-From:   John Garry <john.garry@huawei.com>
-Subject: arm64 system corruption on linux-next?
-To:     "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Message-ID: <8c018ee5-de2a-d948-fcae-feaf1303e160@huawei.com>
-Date:   Tue, 10 Mar 2020 18:38:49 +0000
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        id S1726545AbgCJTKz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 15:10:55 -0400
+Received: from mail-il1-f196.google.com ([209.85.166.196]:45218 "EHLO
+        mail-il1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726290AbgCJTKz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Mar 2020 15:10:55 -0400
+Received: by mail-il1-f196.google.com with SMTP id p1so9050430ils.12;
+        Tue, 10 Mar 2020 12:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=jjnyhl2FYqCdEa8C1IU6yaoLQD+IEMohhTYkXDXFwXg=;
+        b=iVIzZxj52oys0hJS3rR/En8hMcB36oUDmU63gslfN7T0CTSFQ7LBnATPWjw/nOZGAK
+         9TK3a7XXJWAt3I0yBdHuYjF54vSYKQtgERNSOnCY5DwbKOn+Rr5yhv0Ul64DwmwxSbSR
+         +GNnenSEEDZXs1Cyr2Xf+SO9gBUHIKqRpNnZHQZs5pNAHl6U9yYn2TBA09FFVo3W+Nc/
+         E2wXK6uM1sGIB1Gmp2wbb10RMX4E0QK6FXOkre2zhFrAhrZrHx1TUlnYEgDjwo00s7sK
+         AUa+QCSVaBxxKi55raD9RaTVe7jA867nGaDgmJj9Zdt9X7pe74jUL+7XWd5FVn2Uwf1L
+         tf1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=jjnyhl2FYqCdEa8C1IU6yaoLQD+IEMohhTYkXDXFwXg=;
+        b=G2uiqNQAoLaq2gaL394WfMEIoYgE47+JDjJHvc5OCn9FqABcrggJUqQuhwfsx5zIF4
+         Hu1cjYA8NJDhuhnuLUNw+8i2sgutJ1pTfjUjc4UkrLZuu0CPoF89abbBfz6lzXnoT8TO
+         gqSZY+WHjwlQlU6b5IgzUwUjDy0lxzYjjGjcyQPXhUSNOcHTjvsRnQ+x2vZm8voSyyYC
+         GM7lc789F5AlmwE6lc4zXbPbkUZMjLGT88Kg/BbnAKpJj/DsHWTB3RmsAzUDJ47zJk3K
+         ZxpxAtPZSRAkOFJDYTYrVp01TXhNRR3JYXbJTZQ90uJnc0VzWwILOVguzUHCtA7D7b42
+         6ogg==
+X-Gm-Message-State: ANhLgQ1/C0xii8DRftHiv1zmBmSkpPESHoEQ0wP1o0Ebn8pgyPFC8NHz
+        EqqsPmAe4xKJkyHMCmAX5SaVPg7AE9wwFECIigP80HhA
+X-Google-Smtp-Source: ADFU+vvXcT/o8b1SSUtJFkEDsr3+Ew6tI4k1rSEuqXV6mIs7zKvrePUZLJRwO5bJLHj3hQ2X3q6S7DVAhpp33yviBuM=
+X-Received: by 2002:a92:d702:: with SMTP id m2mr20771311iln.149.1583867454421;
+ Tue, 10 Mar 2020 12:10:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.226.45]
-X-ClientProxiedBy: lhreml706-chm.china.huawei.com (10.201.108.55) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+References: <20200310100759.221c6add@canb.auug.org.au>
+In-Reply-To: <20200310100759.221c6add@canb.auug.org.au>
+Reply-To: bjorn@helgaas.com
+From:   Bjorn Helgaas <bjorn.helgaas@gmail.com>
+Date:   Tue, 10 Mar 2020 14:10:43 -0500
+Message-ID: <CABhMZUUSJTCVuS+2svEJcLGSuKxwCxznxCHa9tUUL7cr_teg_g@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the pci tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On Mon, Mar 9, 2020 at 6:08 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>
+> ERROR: "pci_speed_string" [drivers/pci/controller/pcie-brcmstb.ko] undefined!
+> ERROR: "pcie_link_speed" [drivers/pci/controller/pcie-brcmstb.ko] undefined!
 
-On my arm64 Huawei D06 dev board, I see this on sometimes on linux-next 
-20200310 just as the boot completes:
-
-[   48.452674] pcieport 0000:b4:01.0: Adding to iommu group 40
-[   48.473426] rtc-efi rtc-efi.0: setting system clock to 
-2020-03-10T18:31:29 UTC (1583865089)
-[   48.473426] rtc-efi rtc-efi.0: setting system clock to 
-2020-03-10T18:31:29 UTC (1583865089)
-[   48.486755] hid-generic 0003:12D1:0003.0001: input: USB HID v1.10 
-Keyboard [Keyboard/Mouse KVM 1.1.0] on usb-0000:7a:01.0-1.1/input0
-[   48.486755] hid-generic 0003:12D1:0003.0001: input: USB HID v1.10 
-Keyboard [Keyboard/Mouse KVM 1.1.0] on usb-0000:7a:01.0-1.1/input0
-[   48.491033] ALSA device list:
-[   48A device list:
-[   48.522304]   No soundcards found.
-[   48.522304]   No soundcards found.
-[   48.526319] input: Keyboard/Mouse KVM 1.1.0 as 
-/devices/pci0000:7a/0000:7a:01.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:12D1:0003.0002/input/input2
-[   48.526319] input: Keyboard/Mouse KVM 1.1.0 as 
-/devices/pci0000:7a/0000:7a:01.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:12D1:0003.0002/input/input2
-[|Uz
-���p X4n0Jj ЬH,p~wv�^;�~Tt�k�v��"��±�
-                                       �rZ�,� � ��Hk��
-                                                       v7�C (���� չ�E^�- z
-                                                                          �
-±� 
-  � ��� �\ ���p X4n0Jj p�H,p~wv�^;+~Tt�k�v� "�
-w�b���P�k�h�P��.�p���N�P P�X��9� 0� �k�h�P�i.�p���N��&�����.¬�jP�V�v 
-t�Y��*�v���� �F9�
-
-
-The system is still alive, as keypresses respond with garbage.
-
-Full dmesg:
-https://pastebin.com/C2Xy0yUW
-
-
-v5.6-rc4 is ok from my attempts.
-
-Anyone else see such an issue?
-
-Thanks,
-John
+Fixed, thanks!

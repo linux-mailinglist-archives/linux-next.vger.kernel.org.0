@@ -2,83 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 658CC1800F2
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 16:01:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B01180124
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 16:06:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726466AbgCJPBX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 11:01:23 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:40987 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726295AbgCJPBX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Mar 2020 11:01:23 -0400
-Received: by mail-ot1-f66.google.com with SMTP id s15so5191838otq.8
-        for <linux-next@vger.kernel.org>; Tue, 10 Mar 2020 08:01:21 -0700 (PDT)
+        id S1726295AbgCJPGE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 11:06:04 -0400
+Received: from mail-pg1-f173.google.com ([209.85.215.173]:36775 "EHLO
+        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727880AbgCJPGD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Mar 2020 11:06:03 -0400
+Received: by mail-pg1-f173.google.com with SMTP id c7so697168pgw.3
+        for <linux-next@vger.kernel.org>; Tue, 10 Mar 2020 08:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=xZrONkrYPpI841BZd6erSC1fke62KKghVSvsW09baKI=;
+        b=G3bRJ3yz/eQyFp6cTeO+AGn/MPd/enNdkxMo2WUOfJuSNy8dpZf4Ngi/nvYIU7xNUY
+         bqNpk3a4S3JAgqT7uz9zNttcxxF2Z0CoAnVuJfThvpfIegn5DbamzNvCquH5uz5rLPnt
+         onZ0ZrgTRqUPK2T7TWVC8bWIdbmG8VfFELaofMmo8AzSuEcgqxqccf5ZNAhv789wZa1D
+         dP4TvUxI1Y2534r3crlsAQzLq6wo05IfOyxmNUd3/L+h0HF6ka0RWkTMiOIuacDgTEhe
+         HPrvtUIkJWxEKH59YN7JYPncCXUnTb35QKALfGmoumDDri5aQ9NurJO/QsAMXzNtRW98
+         Deow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=dX3tIfhg8Pgw7VaqAcNR8DRUcVBfEcC2G/jhaGAghMc=;
-        b=HZ15u88YqS/n+EfRybOQiygomwrVZICw36HdPWInCHkT8w3PLO7pDGDQM80oUoZTyr
-         DfypAudJYavBBE15UuSXR58HSmbiiPUouB8r1GiWVaRueImc6Z3YAogIQjwPgfz/zT4z
-         P+AhGBDs/Nq8XdqSxnDZv/A56Iqe+lEYwBJGCOXjpN756jzpiNVmq3n+FDbIxna/KWSe
-         jM4SAfRBQtsmUOboGcrUjpuVgbJjGfcxaEQ8PuyJN4R/7u2Xhh/AhPaSKfJhnwq5JmsI
-         U0UVDV5FtbE7a76Mb6y9jtG4snHvs3dD6Ggu+L1Ky2eGCykG4tBzKtNfp68nwGpS1L9b
-         ivbw==
-X-Gm-Message-State: ANhLgQ34zt8cD77eN8GzgLKZQiOLhNQTZ2du0q0OIvRhhmsn0KweT695
-        OE1qw6jBoCgaLYIH8iqL3cA=
-X-Google-Smtp-Source: ADFU+vuQuFenZSPppKiEGnjSnrmQcdZgNpbb5fhlH5HInmerm41VCtvaEccg65uDW45jDgzov0aZXA==
-X-Received: by 2002:a9d:4798:: with SMTP id b24mr10336276otf.243.1583852480995;
-        Tue, 10 Mar 2020 08:01:20 -0700 (PDT)
-Received: from localhost (prg-ext-pat.suse.com. [213.151.95.130])
-        by smtp.gmail.com with ESMTPSA id z23sm11802570otm.79.2020.03.10.08.01.19
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=xZrONkrYPpI841BZd6erSC1fke62KKghVSvsW09baKI=;
+        b=Z2IEJfQvBvX6YqKUfGNjvbAvc15ngPXXEmK/wlssjxjWngwbO6+9Ry4GLQIxXwZaO6
+         JMAxm7lMO5T/V4VL1/6E2yyxBWw3y2lF+f+RzqUP9aetn+03FN69wVCjWuwGEPoAlFzQ
+         WpKX1qKSdeef5lJUZqPD0fczH+vZ+SEtL8cdiyHcfnO+Y/DQzggr7VYfzYowS8yHeOOh
+         7rjS6BwaOO24bJKes75hSBPou9cWBBV4HOtGyxkPbxsM7v++TvzXlIYMGdcPNAA1G+RH
+         2u2T5Wf7hKMUWFpfPn6/lRhV+mxTLV8Ku4bvvJjL1Vkmv0/SAp/IslGoKEVj/mBC/w1v
+         riyw==
+X-Gm-Message-State: ANhLgQ3PqGCkzQTr7C2RJwn5b21y2iNbsr0ZrjzVPsAgb7uCAUW2IvVS
+        ynkyAa94C9zWNZL6xrL8czg6VBO/XDU=
+X-Google-Smtp-Source: ADFU+vvmEtDItxpdAasizshgvemMcms8J9NRpRdAhBn1LJdyhhf8ISFUgJ0BrE7Q/RsWD+38ukAnow==
+X-Received: by 2002:a62:14d7:: with SMTP id 206mr5739021pfu.43.1583852762147;
+        Tue, 10 Mar 2020 08:06:02 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r10sm43706282pgv.25.2020.03.10.08.06.00
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 08:01:19 -0700 (PDT)
-Date:   Tue, 10 Mar 2020 16:01:14 +0100
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Christopher Lameter <cl@linux.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
-Message-ID: <20200310150114.GO8447@dhcp22.suse.cz>
-References: <alpine.DEB.2.21.2002220337030.2000@www.lameter.com>
- <20200224085812.GB22443@dhcp22.suse.cz>
- <alpine.DEB.2.21.2002261823270.8012@www.lameter.com>
- <20200226184152.GQ3771@dhcp22.suse.cz>
- <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz>
- <dd450314-d428-6776-af07-f92c04c7b967@suse.cz>
- <20200227121214.GE3771@dhcp22.suse.cz>
- <52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com>
- <9a86f865-50b5-7483-9257-dbb08fecd62b@suse.cz>
- <20200227182650.GG3771@dhcp22.suse.cz>
+        Tue, 10 Mar 2020 08:06:01 -0700 (PDT)
+Message-ID: <5e67acd9.1c69fb81.89d00.769e@mx.google.com>
+Date:   Tue, 10 Mar 2020 08:06:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200227182650.GG3771@dhcp22.suse.cz>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200310
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 78 boots: 4 failed,
+ 72 passed with 2 offline (next-20200310)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu 27-02-20 19:26:54, Michal Hocko wrote:
-> [Cc ppc maintainers]
-[...]
-> Please have a look at http://lkml.kernel.org/r/52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com
-> for the boot log with the debugging patch which tracks set_numa_mem.
-> This seems to lead to a crash in the slab allocator bebcause
-> node_to_mem_node(0) for memory less node resolves to the memory less
-> node http://lkml.kernel.org/r/dd450314-d428-6776-af07-f92c04c7b967@suse.cz.
-> The original report is http://lkml.kernel.org/r/3381CD91-AB3D-4773-BA04-E7A072A63968@linux.vnet.ibm.com
+next/master boot: 78 boots: 4 failed, 72 passed with 2 offline (next-202003=
+10)
 
-ping 
--- 
-Michal Hocko
-SUSE Labs
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200310/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200310/
+
+Tree: next
+Branch: master
+Git Describe: next-20200310
+Git Commit: 134546626849cd6852d6d4bf8f207b5fbc54261b
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 54 unique boards, 18 SoC families, 24 builds out of 329
+
+Boot Regressions Detected:
+
+arm:
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 21 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+            sun4i-a10-cubieboard: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

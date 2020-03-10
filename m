@@ -2,49 +2,48 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B09180B13
-	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 23:01:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E575D180BB2
+	for <lists+linux-next@lfdr.de>; Tue, 10 Mar 2020 23:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727735AbgCJWB2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 18:01:28 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34347 "EHLO ozlabs.org"
+        id S1726463AbgCJWgt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 18:36:49 -0400
+Received: from ozlabs.org ([203.11.71.1]:58541 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727688AbgCJWB1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Mar 2020 18:01:27 -0400
+        id S1726293AbgCJWgs (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Mar 2020 18:36:48 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cTZF1NB6z9s3x;
-        Wed, 11 Mar 2020 09:01:25 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cVM10TXCz9sPR;
+        Wed, 11 Mar 2020 09:36:44 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583877685;
-        bh=wzZzebi45AhIS8HGeVFhdyHkTlG8O3pVyWnqNN9rlqQ=;
+        s=201702; t=1583879806;
+        bh=CLv7hGFjlbOC8UF3UvUUq0ZMzr5+UfHAttKthpqwaOA=;
         h=Date:From:To:Cc:Subject:From;
-        b=jVjC6Nju7T0T9y+wjzfdyl/mtjA8IR7sw+h4jd/f7Ti0Pd40VyYazZf2eRRWGU2mJ
-         PMqLMtTwnNkj3c/CHqenS59dGXobbwChG76kOW9xmamf5QnIyr5FK1eRI1sIZ2FaB0
-         Bwjj+3QYsrECTk7K6BrA2eptDTkI3Hb+C8mSO6rAoAAkGKAcS54fhRGdya0LcP2sfd
-         wpJVBUW/zwHo0xZaI0kF0wMR5/8TnYhOkOsZOuYz/Le8XteAsq7frdw8bLNcGq6mLf
-         RwgMpX1YvHtGgNcFe5CG/0TlaZv7FMXzY3cKdh2nbwpGk2WgXWjeR8sJ/knchFE/9w
-         1tv7+owRHiwVw==
-Date:   Wed, 11 Mar 2020 09:01:15 +1100
+        b=cMUkKlSmmUhuIdJCuXMEWa+Am3RqCLFahJ8Lpv2IWRdilU/87/+/EHG2mGPLD+hh+
+         WDQcNuCnqStPu9B4eKjL63ilPLbd4mPcuu+cmwgdbajJP35QSHU9C/62Qcvskf+Yk6
+         UbB5DoHmYaCOQQRCcBMtq+Dwluw+CJvw6b1BlNnHOgmt2rF/vHzGm6mVHiudj1CaKJ
+         JKwmh19wOpenkYK6p0gdTFax1gl9dYowph/E3CmW0iHBT2pcWUAQkW7KLpGY1tWhPE
+         +NmT/kGJXXgUM4g+aTrqSoYt0FkMCCjMM2cp9qdRPsKXsADM25QDaI2folPCR/NgWd
+         n8Pbi4J+vVxRw==
+Date:   Wed, 11 Mar 2020 09:36:38 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        KVM <kvm@vger.kernel.org>, S390 <linux-s390@vger.kernel.org>
+To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kvms390-fixes tree
-Message-ID: <20200311090115.3967bbc6@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: linux-next: Fixes tag needs some work in the iommu tree
+Message-ID: <20200311093638.3b442a3d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kv.9uJJpUfaryogAyL3K1zT";
+Content-Type: multipart/signed; boundary="Sig_/H8NPKyaDKE3Y1MrDmm5zvzX";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kv.9uJJpUfaryogAyL3K1zT
+--Sig_/H8NPKyaDKE3Y1MrDmm5zvzX
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -52,37 +51,39 @@ Hi all,
 
 In commit
 
-  b5de9eede579 ("KVM: s390: Also reset registers in sync regs for initial c=
-pu reset")
+  57744190bf30 ("iommu/vt-d: dmar: replace WARN_TAINT with pr_warn + add_ta=
+int")
 
 Fixes tag
 
-  Fixes: 7de3f1423ff ("KVM: s390: Add new reset vcpu API")
+  Fixes: fd0c8894893c ("intel-iommu: Set a more specific taint flag for inv=
+alid BI
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not truncate Fixes tag lines.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kv.9uJJpUfaryogAyL3K1zT
+--Sig_/H8NPKyaDKE3Y1MrDmm5zvzX
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oDisACgkQAVBC80lX
-0GzYaAf9FXBdN/sPL0m1wS/M8NvQrp0wWqykM2mze0kNV+wY77eqasWuk3dSkCZQ
-YOWpjCN/T6FTBwJpiNLZMtgoKYOKFwkPToNXjCNkl+3sXrp/8xhKREmnobTSpqyP
-XWhIzMfqyXRn5/5gWg44M/pVIE5KIDeDxZzeU4tbcDCCsoHOeqkdne1n7KOkRk+L
-yTw1hgzfqPeT6uegHLvSwgO1K1XwLDZagZJrPzdMgr5wGvMMEe6J4gk7msoXBpia
-3n+gZjDjDeYb8erVrRxqR7niqGb7vIPeeKkP4PNVKxnVoIg2N0/kLrQHHvnZGEaU
-prhFRX7EBNh0WELfnGmQDRa/L3c75Q==
-=IiMa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oFnYACgkQAVBC80lX
+0GyELAf/XWOlUEiepjVfgfYIM37l2gBqC02UDPSigZnCoKrX1VwQp5mRxwWqCTU6
+6AWdfIovRfc135uPCT904DfU/sBng+JqHFFkd6TAQ53k2mPQ+g7VPP8cAV039Peg
+JpNhFU71i5otiYw8rIVN2HkshxbSlI1DO8FJ9Dpfokp/dXdB0f5a+xQ2VWUr5SFI
+K3wEo1FYJaSsrFaq6yV690ARDmOMMjLmALq/0BWKRgILDYR1rXZ3Tom5bmML83nO
+tKV/MpM6TbSRr/44cc5pYvZTs86EURt/pKLd7ZlW2KKm2k+zFTYKz3FiIeoMrWeF
+Jb8IK7iCt2CqCyr6z7EZ4ssDQYi5yA==
+=5eaz
 -----END PGP SIGNATURE-----
 
---Sig_/kv.9uJJpUfaryogAyL3K1zT--
+--Sig_/H8NPKyaDKE3Y1MrDmm5zvzX--

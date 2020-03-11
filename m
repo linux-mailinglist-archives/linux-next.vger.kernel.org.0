@@ -2,105 +2,154 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D3F180EE8
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 05:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3983180F99
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 06:14:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725813AbgCKE1W (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Mar 2020 00:27:22 -0400
-Received: from condef-10.nifty.com ([202.248.20.75]:51779 "EHLO
-        condef-10.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725379AbgCKE1V (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Mar 2020 00:27:21 -0400
-Received: from conssluserg-06.nifty.com ([10.126.8.85])by condef-10.nifty.com with ESMTP id 02B4NP4F004610
-        for <linux-next@vger.kernel.org>; Wed, 11 Mar 2020 13:23:25 +0900
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 02B4NDEw031353;
-        Wed, 11 Mar 2020 13:23:14 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 02B4NDEw031353
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1583900594;
-        bh=D34pHK0RFulSRoIYPAPeyEM8GpXVGs0kK0sAr2243Jk=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=d4pYut8wCPq5aa/7Zw7vMLJK0pyiaCpDnIXiKq82adJ7+tJsCg7jg//5aiZtc848F
-         rOm7abD9cemq+3EJxgAJaHMArtRhXWF6F4/w9R6idF3HAIU/TEGjAOkD/VFuogwKDr
-         5PXmnCjfkV6Zyx6fRNQVfOIu3nDD49IQp99K6Nn3K2YLu+kX3wZO6azFSEWb1U8n69
-         n4EXdIpeYlDh96CqDu4QAPuoATUdiR9r+vyc/Wzi+HGvsIs/tTCeyXu78l9MPCe2Lt
-         NliwAk2qNyv4K1ZYATnItFA6RP8iwPPbThkmClZlhOCYkertBxVEmsNVMqlExGwEY7
-         FWBrTlQgsCE8Q==
-X-Nifty-SrcIP: [209.85.222.52]
-Received: by mail-ua1-f52.google.com with SMTP id g21so247918uaj.1;
-        Tue, 10 Mar 2020 21:23:14 -0700 (PDT)
-X-Gm-Message-State: ANhLgQ1AA3EwkRUpQo6Og7zymBGvCWhmdGzqd6KIrdR67clacs8bU0D7
-        3L/Bi4K4sZx+1hlqsETd/2bVjeGBYMsSVoHAbJk=
-X-Google-Smtp-Source: ADFU+vuGf8cuwxCb/5JsZbCbmJEl0UWpBpVQYM9pwDP7QyQHNOGRyKBKssHZk11vU3CPs1PX27P2wukXXPVR3KS+XAY=
-X-Received: by 2002:ab0:3485:: with SMTP id c5mr558341uar.109.1583900593235;
- Tue, 10 Mar 2020 21:23:13 -0700 (PDT)
+        id S1728135AbgCKFON (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Mar 2020 01:14:13 -0400
+Received: from mail-pf1-f171.google.com ([209.85.210.171]:45883 "EHLO
+        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726883AbgCKFOM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Mar 2020 01:14:12 -0400
+Received: by mail-pf1-f171.google.com with SMTP id 2so597116pfg.12
+        for <linux-next@vger.kernel.org>; Tue, 10 Mar 2020 22:14:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=92dhMrq4RadqmdTssB1FVKtqtRVsC4xC5jV3susNzmc=;
+        b=qhjHBo9BXrRY331ODvuHV7djhQd01r6iocUSD+hmSVVc3YqMkqAXalNXRR7eVjJFY1
+         Aez0NRyH4T22KFBf6BpSb3ZHmHvKC0Xi0kxJL4ks3mnj6ceBbs877WODiFYPX/DO3NX2
+         tAHnbtbOvZEUyFKPDctws31oelXFYKF8ESHuYgswV/Dj+04DC4Bv9lNC9dhrEOAmLHVl
+         jNQN2k+GdXOG0SC4MUh5CQGIZbnL1ZitSTjI4IYhEFGMi5bFZxR7xSkDZ55nV3HVH4zc
+         UH8YVzSZSlEGHNcNoLdFM/2lh4ntDgyUgcL8OLVpQi/mNifbAzWwHRYbqKN5KY8He9I5
+         9rtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=92dhMrq4RadqmdTssB1FVKtqtRVsC4xC5jV3susNzmc=;
+        b=fHSY7z4NSqtb/9zRC9ERK14EBykU4uIOjwDJLgp8/yk2Bm8LXPKqdeDfW4wi7/OB9r
+         KRnpW2wowwQo5oZnlLzb9hsyFRB9Nhj176B85XLaNY0i9WMRKEjPUxR+bAZSgpmhFBx7
+         VFGtSHKNGwr+VNBEe6uXfMXoHUZ1OD1ngVKRSoJo9u+uZAjOUdEIz9KgIEVM0xJCS7R4
+         PNVIJJEQlT2RdIOwRCdKTFrKWBA5xtiBk1leCfeFWaXRl5zwK1jlfIeeFEjCJBs3atAH
+         4D/tPwy+qjS58c3jbcSvoa9s+98BU3yddzGUm892Og/OeQkwFzNhC1UUDtIqxnlhHTq2
+         yAYA==
+X-Gm-Message-State: ANhLgQ31CAwNXOMiayIFClUWeFaVQng4QAEGzmZlsH+W7o6fbKuiYJcF
+        mB0EKpyjd4gw3HnU15zmuryutXZJttY=
+X-Google-Smtp-Source: ADFU+vvTmbrjuQSWZR+3ZKfgO9FlnA4FXgqjT0AAudpDdZ+UNuGJ1zNbOmW2bz4L8hfDUp/UbrpBvA==
+X-Received: by 2002:a63:cb4a:: with SMTP id m10mr353556pgi.101.1583903651344;
+        Tue, 10 Mar 2020 22:14:11 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k1sm45898443pgt.70.2020.03.10.22.14.09
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Mar 2020 22:14:10 -0700 (PDT)
+Message-ID: <5e6873a2.1c69fb81.3f268.d17c@mx.google.com>
+Date:   Tue, 10 Mar 2020 22:14:10 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200311095319.30e14ac0@canb.auug.org.au>
-In-Reply-To: <20200311095319.30e14ac0@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 11 Mar 2020 13:22:37 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARmD5AaHmgpSk4Z8+NPd0kwSrVQnnx27vPci19KJ0+DPA@mail.gmail.com>
-Message-ID: <CAK7LNARmD5AaHmgpSk4Z8+NPd0kwSrVQnnx27vPci19KJ0+DPA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nicolas Pitre <nico@fluxnic.net>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc5-213-g683f454b6b26
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 201 boots: 3 failed,
+ 191 passed with 4 offline, 3 untried/unknown (v5.6-rc5-213-g683f454b6b26)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen,
+next/pending-fixes boot: 201 boots: 3 failed, 191 passed with 4 offline, 3 =
+untried/unknown (v5.6-rc5-213-g683f454b6b26)
 
-On Wed, Mar 11, 2020 at 7:53 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the kbuild tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> x86_64-linux-gnu-ld: net/core/devlink.o: in function `devlink_trap_report':
-> (.text+0x4e7e): undefined reference to `net_dm_hw_report'
->
-> Caused by commit
->
->   af20db858358 ("kconfig: allow symbols implied by y to become m")
->
-> At least, reverting that commit (and commit
->
->   d590d0a6e6fe ("kconfig: make 'imply' obey the direct dependency"))
->
-> allows the build to work.
->
-> Advice, please.  Does someone need to audit all the uses of "imply"?
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc5-213-g683f454b6b26/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc5-213-g683f454b6b26/
 
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc5-213-g683f454b6b26
+Git Commit: 683f454b6b2603237feaa043f7535b933310ced3
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 97 unique boards, 23 SoC families, 28 builds out of 216
 
-The following patch should fix the build error.
+Boot Regressions Detected:
 
+arm:
 
-index 2ab668461463..f68bc373544a 100644
---- a/include/net/drop_monitor.h
-+++ b/include/net/drop_monitor.h
-@@ -19,7 +19,7 @@ struct net_dm_hw_metadata {
-        struct net_device *input_dev;
- };
+    sunxi_defconfig:
+        gcc-8:
+          sun4i-a10-cubieboard:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
+3e1475cd019)
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: new failure (last pass: v5.6-rc5-158-g83e1475cd=
+019)
 
--#if IS_ENABLED(CONFIG_NET_DROP_MONITOR)
-+#if IS_REACHABLE(CONFIG_NET_DROP_MONITOR)
- void net_dm_hw_report(struct sk_buff *skb,
-                      const struct net_dm_hw_metadata *hw_metadata);
- #else
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc5-158-g83e1475c=
+d019)
 
+arm64:
 
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
+3e1475cd019)
+          meson-gxbb-p200:
+              lab-baylibre: new failure (last pass: v5.6-rc5-158-g83e1475cd=
+019)
 
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
+3e1475cd019)
 
-I will propose this fix-up in the net ML.
+Boot Failures Detected:
 
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            sun4i-a10-cubieboard: 1 failed lab
 
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
 
--- 
-Best Regards
-Masahiro Yamada
+    sunxi_defconfig:
+        gcc-8:
+            sun4i-a10-cubieboard: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

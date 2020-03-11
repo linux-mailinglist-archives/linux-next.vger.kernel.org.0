@@ -2,77 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A646F181AF5
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 15:18:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69613181C02
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 16:04:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729719AbgCKOSQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Mar 2020 10:18:16 -0400
-Received: from ozlabs.org ([203.11.71.1]:53959 "EHLO ozlabs.org"
+        id S1729811AbgCKPEp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Mar 2020 11:04:45 -0400
+Received: from foss.arm.com ([217.140.110.172]:50816 "EHLO foss.arm.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729559AbgCKOSQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 11 Mar 2020 10:18:16 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cvFG60Tbz9sPF;
-        Thu, 12 Mar 2020 01:18:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583936294;
-        bh=7/Zpw+iQg6yYYoyvhDYNahBVanAKxjeXCSO/xB7KURM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ph2wxm08Vgrk1cRuxoio2XPs0veC+rrubQUK14mHY30HB4td3+9+MTjwMfTdJz8WM
-         9zMTQ+dz9w0LIB3hUU3A8jsaSOLXAMdik+JkWxLUqUVsiW3fG6CdgeJxFwOdfHc/JY
-         LaKgFbVSw4BUHRFyKZehG7nXBqfUNr7MlAT7Q2I7bhQkH0N7ZKGeFNdAnjVrFI2vCA
-         s8LFm+42y+zm9fugHyaCt1uE/pENvERVNuZ7X1ldsec6YCAOOA5cI6DVwmXwtDE068
-         0WaxAeGEwe4a6W4Q/YoC49CIres7OLz6aBzWutX4ycUIcAyzrDBZ3MGISgcjmJc6qA
-         ntzz4kxwevlQg==
-Date:   Thu, 12 Mar 2020 01:18:09 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        NeilBrown <neilb@suse.de>
-Subject: linux-next: Signed-off-by missing for commit in the file-locks tree
-Message-ID: <20200312011809.408fd045@canb.auug.org.au>
+        id S1729100AbgCKPEp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Mar 2020 11:04:45 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D937731B;
+        Wed, 11 Mar 2020 08:04:44 -0700 (PDT)
+Received: from [10.1.196.37] (e121345-lin.cambridge.arm.com [10.1.196.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A53C23F67D;
+        Wed, 11 Mar 2020 08:04:39 -0700 (PDT)
+Subject: Re: arm64 system corruption on linux-next?
+To:     John Garry <john.garry@huawei.com>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+References: <8c018ee5-de2a-d948-fcae-feaf1303e160@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <38086674-4d19-e828-cc75-0e7775ccdc23@arm.com>
+Date:   Wed, 11 Mar 2020 15:04:34 +0000
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/q8Qt0lCox7tKsfSN0bsFcmc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <8c018ee5-de2a-d948-fcae-feaf1303e160@huawei.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/q8Qt0lCox7tKsfSN0bsFcmc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi John,
 
-Hi all,
+On 10/03/2020 6:38 pm, John Garry wrote:
+> Hi all,
+> 
+> On my arm64 Huawei D06 dev board, I see this on sometimes on linux-next 
+> 20200310 just as the boot completes:
+> 
+> [   48.452674] pcieport 0000:b4:01.0: Adding to iommu group 40
+> [   48.473426] rtc-efi rtc-efi.0: setting system clock to 
+> 2020-03-10T18:31:29 UTC (1583865089)
+> [   48.473426] rtc-efi rtc-efi.0: setting system clock to 
+> 2020-03-10T18:31:29 UTC (1583865089)
+> [   48.486755] hid-generic 0003:12D1:0003.0001: input: USB HID v1.10 
+> Keyboard [Keyboard/Mouse KVM 1.1.0] on usb-0000:7a:01.0-1.1/input0
+> [   48.486755] hid-generic 0003:12D1:0003.0001: input: USB HID v1.10 
+> Keyboard [Keyboard/Mouse KVM 1.1.0] on usb-0000:7a:01.0-1.1/input0
+> [   48.491033] ALSA device list:
+> [   48A device list:
+> [   48.522304]   No soundcards found.
+> [   48.522304]   No soundcards found.
+> [   48.526319] input: Keyboard/Mouse KVM 1.1.0 as 
+> /devices/pci0000:7a/0000:7a:01.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:12D1:0003.0002/input/input2 
+> 
+> [   48.526319] input: Keyboard/Mouse KVM 1.1.0 as 
+> /devices/pci0000:7a/0000:7a:01.0/usb1/1-1/1-1.1/1-1.1:1.1/0003:12D1:0003.0002/input/input2 
+> 
+> [|Uz
+> ���p X4n0Jj ЬH,p~wv�^;�~Tt�k�v��"��±�
+>                                        �rZ�,� � ��Hk��
+>                                                        v7�C (���� չ�E^�- z
+>                                                                           �
+> ±�  � ��� �\ ���p X4n0Jj p�H,p~wv�^;+~Tt�k�v� "�
+> w�b���P�k�h�P��.�p���N�P P�X��9� 0� �k�h�P�i.�p���N��&�����.¬�jP�V�v 
+> t�Y��*�v���� �F9�
+> 
+> 
+> The system is still alive, as keypresses respond with garbage.
 
-Commit
+FWIW, that looks every bit like something changing the UART baud rate 
+under the console's feet, either explicitly, or implicitly by messing 
+with the input clock behind the driver's back.
 
-  e2de130a568c ("locks: reintroduce locks_delete_lock shortcut")
+Robin.
 
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/q8Qt0lCox7tKsfSN0bsFcmc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5o8yEACgkQAVBC80lX
-0Gx93Af9GDGS5lFo2SBj9y+p7l7uPx8fKx0o4iECB1GxWVGnY2wNXkXjiIJIO2ih
-moMtlkqIiqk9260fxNlxLuf79zkf4yrLBIyJMCifH8mooJ0tm7UL5dGRnZ8jFHi8
-1mkzSva/3W5kpu8r4E+RpWsxOnhvWoBPTRH2n2oGBA1IH/1vYHCNu+Q9y/OHKIMG
-3pHBX68lIVxugpEouZ1PUDXPB84tnDIJihgfkzm3pSjD3tfV60zvEsYsbt25wYoe
-x5XHxnocnZQ2FOvWGRnJCTNAXTy//NTqMkpX0XL3QS3uwzqyoLpkDxfDActa8+32
-mS5SbKll+a2BTltmWhPlxOi4THmDlg==
-=uqnI
------END PGP SIGNATURE-----
-
---Sig_/q8Qt0lCox7tKsfSN0bsFcmc--
+> 
+> Full dmesg:
+> https://pastebin.com/C2Xy0yUW
+> 
+> 
+> v5.6-rc4 is ok from my attempts.
+> 
+> Anyone else see such an issue?
+> 
+> Thanks,
+> John
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

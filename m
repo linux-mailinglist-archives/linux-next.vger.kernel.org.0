@@ -2,154 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F3983180F99
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 06:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E57918117B
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 08:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728135AbgCKFON (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Mar 2020 01:14:13 -0400
-Received: from mail-pf1-f171.google.com ([209.85.210.171]:45883 "EHLO
-        mail-pf1-f171.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726883AbgCKFOM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Mar 2020 01:14:12 -0400
-Received: by mail-pf1-f171.google.com with SMTP id 2so597116pfg.12
-        for <linux-next@vger.kernel.org>; Tue, 10 Mar 2020 22:14:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=92dhMrq4RadqmdTssB1FVKtqtRVsC4xC5jV3susNzmc=;
-        b=qhjHBo9BXrRY331ODvuHV7djhQd01r6iocUSD+hmSVVc3YqMkqAXalNXRR7eVjJFY1
-         Aez0NRyH4T22KFBf6BpSb3ZHmHvKC0Xi0kxJL4ks3mnj6ceBbs877WODiFYPX/DO3NX2
-         tAHnbtbOvZEUyFKPDctws31oelXFYKF8ESHuYgswV/Dj+04DC4Bv9lNC9dhrEOAmLHVl
-         jNQN2k+GdXOG0SC4MUh5CQGIZbnL1ZitSTjI4IYhEFGMi5bFZxR7xSkDZ55nV3HVH4zc
-         UH8YVzSZSlEGHNcNoLdFM/2lh4ntDgyUgcL8OLVpQi/mNifbAzWwHRYbqKN5KY8He9I5
-         9rtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=92dhMrq4RadqmdTssB1FVKtqtRVsC4xC5jV3susNzmc=;
-        b=fHSY7z4NSqtb/9zRC9ERK14EBykU4uIOjwDJLgp8/yk2Bm8LXPKqdeDfW4wi7/OB9r
-         KRnpW2wowwQo5oZnlLzb9hsyFRB9Nhj176B85XLaNY0i9WMRKEjPUxR+bAZSgpmhFBx7
-         VFGtSHKNGwr+VNBEe6uXfMXoHUZ1OD1ngVKRSoJo9u+uZAjOUdEIz9KgIEVM0xJCS7R4
-         PNVIJJEQlT2RdIOwRCdKTFrKWBA5xtiBk1leCfeFWaXRl5zwK1jlfIeeFEjCJBs3atAH
-         4D/tPwy+qjS58c3jbcSvoa9s+98BU3yddzGUm892Og/OeQkwFzNhC1UUDtIqxnlhHTq2
-         yAYA==
-X-Gm-Message-State: ANhLgQ31CAwNXOMiayIFClUWeFaVQng4QAEGzmZlsH+W7o6fbKuiYJcF
-        mB0EKpyjd4gw3HnU15zmuryutXZJttY=
-X-Google-Smtp-Source: ADFU+vvTmbrjuQSWZR+3ZKfgO9FlnA4FXgqjT0AAudpDdZ+UNuGJ1zNbOmW2bz4L8hfDUp/UbrpBvA==
-X-Received: by 2002:a63:cb4a:: with SMTP id m10mr353556pgi.101.1583903651344;
-        Tue, 10 Mar 2020 22:14:11 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k1sm45898443pgt.70.2020.03.10.22.14.09
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Mar 2020 22:14:10 -0700 (PDT)
-Message-ID: <5e6873a2.1c69fb81.3f268.d17c@mx.google.com>
-Date:   Tue, 10 Mar 2020 22:14:10 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726672AbgCKHLp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Mar 2020 03:11:45 -0400
+Received: from ozlabs.org ([203.11.71.1]:40623 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726160AbgCKHLp (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Mar 2020 03:11:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cjn35DqDz9s3x;
+        Wed, 11 Mar 2020 18:11:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583910701;
+        bh=ho8g4Hr7x80fXCgcTBaMtv85FnVp0fBOvHpikFCX93w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=aVo1KIq/juUBNyhHoNTJZC5c/DohxRuuD3TO+LAKHfQAcvOk/HER6+ZBsfG2yAkCI
+         Ughaz5MW8uSEsF4covPLzebFHClLjlq9a65eQBcFa/zyJsArxC74m+9VIupctzFBA3
+         r+b7YwZSXRjnmxcdaWQZg8IQEbsKqzQl8BdCh4AcBGZIssnypw9m8DvidZq6LS+ik8
+         LGyz24WuH5JR2xpDiaw0esX9as2P8XRipmmXUw+Q4ZNW0LMyqapE9DAbCjKiMCo0At
+         WDLYrPZOGdxG7cAmAjEhYuGlbqKzVTOG7CuYgkPp5MViItx9TG2lJC6oELEf2GJdvR
+         PsIH82o4TitUg==
+Date:   Wed, 11 Mar 2020 18:11:20 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nitin Gote <nitin.r.gote@intel.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: linux-next: manual merge of the akpm-current tree with the jc_docs
+ tree
+Message-ID: <20200311181120.4fb51c72@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc5-213-g683f454b6b26
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 201 boots: 3 failed,
- 191 passed with 4 offline, 3 untried/unknown (v5.6-rc5-213-g683f454b6b26)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/=pK9XZzpjWvR34mrdQiH2zw";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 201 boots: 3 failed, 191 passed with 4 offline, 3 =
-untried/unknown (v5.6-rc5-213-g683f454b6b26)
+--Sig_/=pK9XZzpjWvR34mrdQiH2zw
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc5-213-g683f454b6b26/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc5-213-g683f454b6b26/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc5-213-g683f454b6b26
-Git Commit: 683f454b6b2603237feaa043f7535b933310ced3
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 97 unique boards, 23 SoC families, 28 builds out of 216
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-Boot Regressions Detected:
+  Documentation/process/deprecated.rst
 
-arm:
+between commit:
 
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
-3e1475cd019)
-          sun8i-h2-plus-orangepi-r1:
-              lab-baylibre: new failure (last pass: v5.6-rc5-158-g83e1475cd=
-019)
+  d8401f504b49 ("docs: deprecated.rst: Add %p to the list")
+  76136e028d3b ("docs: deprecated.rst: Clean up fall-through details")
+  7929b9836ed0 ("docs: Remove :c:func: from process/deprecated.rst")
 
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc5-158-g83e1475c=
-d019)
+from the jc_docs tree and commit:
 
-arm64:
+  eacc9a8c9c2d ("Documentation/checkpatch: prefer stracpy/strscpy over strc=
+py/strlcpy/strncpy.")
 
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
-3e1475cd019)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.6-rc5-158-g83e1475cd=
-019)
+from the akpm-current tree.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-158-g8=
-3e1475cd019)
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-Boot Failures Detected:
+--=20
+Cheers,
+Stephen Rothwell
 
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
+diff --cc Documentation/process/deprecated.rst
+index e924d3197761,a0ffdc8daef3..000000000000
+--- a/Documentation/process/deprecated.rst
++++ b/Documentation/process/deprecated.rst
+@@@ -93,44 -93,22 +93,44 @@@ will be NUL terminated. This can lead t
+  and other misbehavior due to the missing termination. It also NUL-pads the
+  destination buffer if the source contents are shorter than the destination
+  buffer size, which may be a needless performance penalty for callers using
+- only NUL-terminated strings. The safe replacement is strscpy().
+- (Users of strscpy() still needing NUL-padding should instead
+- use strscpy_pad().)
++ only NUL-terminated strings. In this case, the safe replacement is
++ stracpy() or strscpy(). If, however, the destination buffer still needs
++ NUL-padding, the safe replacement is stracpy_pad().
+ =20
+ -If a caller is using non-NUL-terminated strings, :c:func:`strncpy()` can
+ +If a caller is using non-NUL-terminated strings, strncpy()() can
+  still be used, but destinations should be marked with the `__nonstring
+  <https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html>`_
+  attribute to avoid future compiler warnings.
+ =20
+  strlcpy()
+  ---------
+ -:c:func:`strlcpy` reads the entire source buffer first, possibly exceeding
+ +strlcpy() reads the entire source buffer first, possibly exceeding
+  the given limit of bytes to copy. This is inefficient and can lead to
+  linear read overflows if a source string is not NUL-terminated. The
+- safe replacement is strscpy().
++ safe replacement is stracpy() or strscpy().
+ =20
+ +%p format specifier
+ +-------------------
+ +Traditionally, using "%p" in format strings would lead to regular address
+ +exposure flaws in dmesg, proc, sysfs, etc. Instead of leaving these to
+ +be exploitable, all "%p" uses in the kernel are being printed as a hashed
+ +value, rendering them unusable for addressing. New uses of "%p" should not
+ +be added to the kernel. For text addresses, using "%pS" is likely better,
+ +as it produces the more useful symbol name instead. For nearly everything
+ +else, just do not add "%p" at all.
+ +
+ +Paraphrasing Linus's current `guidance <https://lore.kernel.org/lkml/CA+5=
+5aFwQEd_d40g4mUCSsVRZzrFPUJt74vc6PPpb675hYNXcKw@mail.gmail.com/>`_:
+ +
+ +- If the hashed "%p" value is pointless, ask yourself whether the pointer
+ +  itself is important. Maybe it should be removed entirely?
+ +- If you really think the true pointer value is important, why is some
+ +  system state or user privilege level considered "special"? If you think
+ +  you can justify it (in comments and commit log) well enough to stand
+ +  up to Linus's scrutiny, maybe you can use "%px", along with making sure
+ +  you have sensible permissions.
+ +
+ +And finally, know that a toggle for "%p" hashing will `not be accepted <h=
+ttps://lore.kernel.org/lkml/CA+55aFwieC1-nAs+NFq9RTwaR8ef9hWa4MjNBWL41F-8wM=
+49eA@mail.gmail.com/>`_.
+ +
+  Variable Length Arrays (VLAs)
+  -----------------------------
+  Using stack VLAs produces much worse machine code than statically
 
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
+--Sig_/=pK9XZzpjWvR34mrdQiH2zw
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-Offline Platforms:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5ojxgACgkQAVBC80lX
+0GxXBQf/WEhrM1It9/SFpFrqBtc6vnNpfO3V8ejGlLJUwy4dxWIRmFTjsYLuMICy
+LMPoNxquTTFhrsnEBW+KazaYFWU2AHoRSBnL2rnCNyCmGyqbXw0qiYBYzleX92CU
+5TKelFgy/122JIbbpIziT1LysdlZ7mBVS9Asw5qNlcV4zDQNvVBFB7e8RdccVNTK
+g4ASojd+XJ7XHuc4Vyp4T8AEZxamVG6gfCjNrt/t5rbjamk2d3a+naXRclluZfgk
+CvlKLIQNXLo09IxLGFYh4cVYMo3qZTjBxFYyRFT7HR+5L7J4X1/TtdaKid4QGO5I
+5EgtnHHyt6dcmZjWU9N+cCAPi9CXZA==
+=wgrx
+-----END PGP SIGNATURE-----
 
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/=pK9XZzpjWvR34mrdQiH2zw--

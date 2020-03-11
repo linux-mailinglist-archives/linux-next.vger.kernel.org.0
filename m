@@ -2,118 +2,129 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B6C180DE7
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 03:20:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F988180E00
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 03:37:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727528AbgCKCU4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 22:20:56 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:58670 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727506AbgCKCU4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Mar 2020 22:20:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=As1+POUoIPHOMCen+D9GFw1eWTMvv4YWaMUIwymo7Lk=; b=MP7VS+oIfxrHOSS0CLGhz7zMyR
-        rQbVB5ZgZ7/O/AclQd/xmxUqUq9IQvzEW4Sv7ycz6wMP6yVHEyueDbOcnt02th0D/5cXdkJjifvRS
-        EFBMhwbLtNJPo/Wh0sdbFZ1gKS5r9eTgOqfDnfMD2G92lJ6eIXg/Zb45EeDwS3YOw3f0h9EAa7z9s
-        OyKd+XmWwquTmkY2Mh9hZTCcBGb4L1KfH6Al8UZkxd/VpADA3a635fvh2lx8s36r7Yk2duBt280Rj
-        oQeoW1hmrU5hUk5kokwWI6xr6CFPXE4K0zMbIfsOjpDW3xWv1EBsoMeW4rPHd09l5eDbE5rl1sBwG
-        ciB8VwdQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jBqzJ-0000X2-AI; Wed, 11 Mar 2020 02:20:49 +0000
-Subject: Re: linux-next: Tree for Mar 10 (mtd/spi-nor/)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     John Garry <john.garry@huawei.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     linux-mtd@lists.infradead.org,
+        id S1727659AbgCKChM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 22:37:12 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46073 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727307AbgCKChM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Mar 2020 22:37:12 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cbgs1DRzz9sPF;
+        Wed, 11 Mar 2020 13:36:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583894228;
+        bh=+JH45CaJ8RQ/br5Hf0W4Xq5hn+PXWNj2y+4emeie5wI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=byC3Zym4NutwqTImCcrtNlHWWJ7KK3rLjQP5yRiWg9wgwsBYwuNKh9HflAVBDQcNm
+         ocfdgkGgFozYLDZUhQrH1lPoHBuI0avdI5uD6v6NyqtbB3fUWEEhacgV/WHmUlNYU3
+         dx1y376SwRSWyIU58Yls8ihRzOMgMinuypHeIeQ+2irvEvsVT/j/ZyYZHnvnPaBp+w
+         Qu0eTtrc7NUywKnQj2OpbIut6NbOuClNq4qCf6Jvvzl4w7VojsviW1JBVzi/es0gWb
+         lN8sNUChe4zF58IA4N/LxWqa1eJzWfBraK/vqzp9R1SpZSr1n7Ta6ltldYbuasoqD7
+         bOWgfB5URtq0Q==
+Date:   Wed, 11 Mar 2020 13:36:35 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Joe Perches <joe@perches.com>, Mark Brown <broonie@kernel.org>
-References: <20200310201923.24e34363@canb.auug.org.au>
- <43df5279-7d91-020d-1632-9b3528f4feee@infradead.org>
- <f9d33b09-fe9f-2c26-96dc-b2eaa53c614b@huawei.com>
- <aa3b19cd-e043-e5ea-5d77-38b53bda2e60@infradead.org>
-Message-ID: <befa858c-cac9-521b-93ea-eb5722738998@infradead.org>
-Date:   Tue, 10 Mar 2020 19:20:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
+Subject: linux-next: manual merge of the drm-intel tree with the
+ drm-intel-fixes tree
+Message-ID: <20200311133635.7fcb422e@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <aa3b19cd-e043-e5ea-5d77-38b53bda2e60@infradead.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/Cm=kxNYzaFTdCCtVhbFDBzh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/10/20 1:36 PM, Randy Dunlap wrote:
-> On 3/10/20 10:14 AM, John Garry wrote:
->> +
->>
->> On 10/03/2020 14:37, Randy Dunlap wrote:
->>> On 3/10/20 2:19 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20200306:
->>>>
->>>> Removed tree: nfc-next (abanboned)
->>>
->>>                                doned
->>>
->>>
->>> on i386:
->>>
->>> WARNING: unmet direct dependencies detected for MTD_SPI_NOR
->>
->> Uh, so kbuild honors a "select" of a config option which has unmet dependencies:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/kbuild/kconfig-language.rst?h=v5.6-rc5#n143
-> 
-> Yes.
-> 
->> So this looks introduced by:
->>
->> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/drivers/spi/Kconfig?h=next-20200310&id=e14572c52546c16e159c4c1814984843a119e823
->>
->>>    Depends on [m]: MTD [=m] && SPI_MASTER [=y] >    Selected by [y]:
->>>    - SPI_HISI_SFC_V3XX [=y] && SPI [=y] && SPI_MASTER [=y] && (ARM64 && ACPI [=y] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
-> 
-> Would it be acceptable to move the Kconfig entry for this:
-> 
-> config SPI_HISI_SFC_V3XX
-> 	tristate "HiSilicon SPI-NOR Flash Controller for Hi16XX chipsets"
-> 	depends on (ARM64 && ACPI) || COMPILE_TEST
-> 	depends on HAS_IOMEM
-> 	select MTD_SPI_NOR
-> 
-> into drivers/mtd/spi-nor/Kconfig, say after this one:
-> 
-> config SPI_HISI_SFC
-> 	tristate "Hisilicon FMC SPI-NOR Flash Controller(SFC)"
-> 	depends on ARCH_HISI || COMPILE_TEST
-> 	depends on HAS_IOMEM
-> 
-> and drop the "select MTD_SPI_NOR" because when it's in drivers/mtd/spi-nor/Kconfig,
-> it will depend on MTD_SPI_NOR.
-> 
+--Sig_/Cm=kxNYzaFTdCCtVhbFDBzh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-These changes to 2 Kconfig files does fix the kconfig warning and build errors.
-I don't know if it's acceptable, or if the source file also wants to be
-relocated.  (I almost said "needs to be relocated," but it builds fine without
-that change.)
+Hi all,
 
-> 
->>> ERROR: "spi_nor_scan" [drivers/mtd/spi-nor/intel-spi.ko] undefined!
->>> ERROR: "spi_nor_scan" [drivers/mtd/spi-nor/mtk-quadspi.ko] undefined!
->>> ERROR: "spi_nor_scan" [drivers/mtd/spi-nor/hisi-sfc.ko] undefined!
->>> ERROR: "spi_nor_scan" [drivers/mtd/spi-nor/aspeed-smc.ko] undefined!
+Today's linux-next merge of the drm-intel tree got a conflict in:
 
+  drivers/gpu/drm/i915/gvt/vgpu.c
 
--- 
-~Randy
+between commit:
 
+  04d6067f1f19 ("drm/i915/gvt: Fix unnecessary schedule timer when no vGPU =
+exits")
+
+from the drm-intel-fixes tree and commit:
+
+  12d5861973c7 ("drm/i915/gvt: Make WARN* drm specific where vgpu ptr is av=
+ailable")
+
+from the drm-intel tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/i915/gvt/vgpu.c
+index 345c2aa3b491,abcde8ce1a9a..000000000000
+--- a/drivers/gpu/drm/i915/gvt/vgpu.c
++++ b/drivers/gpu/drm/i915/gvt/vgpu.c
+@@@ -271,18 -272,12 +272,19 @@@ void intel_gvt_release_vgpu(struct inte
+  void intel_gvt_destroy_vgpu(struct intel_vgpu *vgpu)
+  {
+  	struct intel_gvt *gvt =3D vgpu->gvt;
++ 	struct drm_i915_private *i915 =3D gvt->gt->i915;
+ =20
+- 	WARN(vgpu->active, "vGPU is still active!\n");
+ -	mutex_lock(&vgpu->vgpu_lock);
+ -
++ 	drm_WARN(&i915->drm, vgpu->active, "vGPU is still active!\n");
+ =20
+ +	/*
+ +	 * remove idr first so later clean can judge if need to stop
+ +	 * service if no active vgpu.
+ +	 */
+ +	mutex_lock(&gvt->lock);
+ +	idr_remove(&gvt->vgpu_idr, vgpu->id);
+ +	mutex_unlock(&gvt->lock);
+ +
+ +	mutex_lock(&vgpu->vgpu_lock);
+  	intel_gvt_debugfs_remove_vgpu(vgpu);
+  	intel_vgpu_clean_sched_policy(vgpu);
+  	intel_vgpu_clean_submission(vgpu);
+
+--Sig_/Cm=kxNYzaFTdCCtVhbFDBzh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oTrMACgkQAVBC80lX
+0GxCfwf8DF6UZIwJBxtfb8gzkqDJvX/8pPbpOWpeUrdQTiqxjvVkMLh9wg2em+U5
+TeNW2XcAameNYoShX3Vd1m72DRtsBhkzWSlhDvvTcb/bJ26nFUAUqZmR8UouGCnw
+99Sfw5k13EFOYXN9hLocEEi63T5Stlo9Sd97XyJuky3MFObStnc+38WAAspTioyC
+FNIZwHjC6+MtY95jeuH81GlsjQcDl42GrK+/Quxc2xEi61BI5FrTFC20TskItmYp
+0beAHa0nZ42ZoMwU7QhCTzDMzcFD1O/GRhmTxEtcm0BxXnz5G+Z+oTmkkEwQWbgg
+QufOTS0DpsdJ3dogPO5z1Ew4wr3AIA==
+=H4EQ
+-----END PGP SIGNATURE-----
+
+--Sig_/Cm=kxNYzaFTdCCtVhbFDBzh--

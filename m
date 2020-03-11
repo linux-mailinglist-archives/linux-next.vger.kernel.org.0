@@ -2,129 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F988180E00
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 03:37:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D294D180E62
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 04:21:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727659AbgCKChM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 22:37:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:46073 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727307AbgCKChM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Mar 2020 22:37:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cbgs1DRzz9sPF;
-        Wed, 11 Mar 2020 13:36:36 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583894228;
-        bh=+JH45CaJ8RQ/br5Hf0W4Xq5hn+PXWNj2y+4emeie5wI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=byC3Zym4NutwqTImCcrtNlHWWJ7KK3rLjQP5yRiWg9wgwsBYwuNKh9HflAVBDQcNm
-         ocfdgkGgFozYLDZUhQrH1lPoHBuI0avdI5uD6v6NyqtbB3fUWEEhacgV/WHmUlNYU3
-         dx1y376SwRSWyIU58Yls8ihRzOMgMinuypHeIeQ+2irvEvsVT/j/ZyYZHnvnPaBp+w
-         Qu0eTtrc7NUywKnQj2OpbIut6NbOuClNq4qCf6Jvvzl4w7VojsviW1JBVzi/es0gWb
-         lN8sNUChe4zF58IA4N/LxWqa1eJzWfBraK/vqzp9R1SpZSr1n7Ta6ltldYbuasoqD7
-         bOWgfB5URtq0Q==
-Date:   Wed, 11 Mar 2020 13:36:35 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Pankaj Bharadiya <pankaj.laxminarayan.bharadiya@intel.com>
-Subject: linux-next: manual merge of the drm-intel tree with the
- drm-intel-fixes tree
-Message-ID: <20200311133635.7fcb422e@canb.auug.org.au>
+        id S1727659AbgCKDV6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 23:21:58 -0400
+Received: from hqnvemgate25.nvidia.com ([216.228.121.64]:2076 "EHLO
+        hqnvemgate25.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727307AbgCKDV6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 10 Mar 2020 23:21:58 -0400
+Received: from hqpgpgate102.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate25.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
+        id <B5e6859290000>; Tue, 10 Mar 2020 20:21:13 -0700
+Received: from hqmail.nvidia.com ([172.20.161.6])
+  by hqpgpgate102.nvidia.com (PGP Universal service);
+  Tue, 10 Mar 2020 20:21:58 -0700
+X-PGP-Universal: processed;
+        by hqpgpgate102.nvidia.com on Tue, 10 Mar 2020 20:21:58 -0700
+Received: from HQMAIL109.nvidia.com (172.20.187.15) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 11 Mar
+ 2020 03:21:57 +0000
+Received: from rnnvemgw01.nvidia.com (10.128.109.123) by HQMAIL109.nvidia.com
+ (172.20.187.15) with Microsoft SMTP Server (TLS) id 15.0.1473.3 via Frontend
+ Transport; Wed, 11 Mar 2020 03:21:57 +0000
+Received: from blueforge.nvidia.com (Not Verified[10.110.48.28]) by rnnvemgw01.nvidia.com with Trustwave SEG (v7,5,8,10121)
+        id <B5e6859550000>; Tue, 10 Mar 2020 20:21:57 -0700
+From:   John Hubbard <jhubbard@nvidia.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+CC:     Linux Next <linux-next@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: [PATCH] pid: fix uninitialized retval in alloc_pid()
+Date:   Tue, 10 Mar 2020 20:21:53 -0700
+Message-ID: <20200311032153.431492-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Cm=kxNYzaFTdCCtVhbFDBzh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-NVConfidentiality: public
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
+        t=1583896873; bh=aNbMTHzEBed2jLOkpeGMmsEaPHwGzRfzqOjyErWK5uk=;
+        h=X-PGP-Universal:From:To:CC:Subject:Date:Message-ID:X-Mailer:
+         MIME-Version:X-NVConfidentiality:Content-Transfer-Encoding:
+         Content-Type;
+        b=KX3p6IR6m/cQXjuSydvF0pEZ0gTdkgVJTOLRSOdojHLdH5cQZk+I1nwGRl7Kg3Kcx
+         +eHwLyP6kuBpa7FnsUx7RtImMfZi1udoigiyeUtkKskqhxifRO4MYg01M0jc0qFiOe
+         Z5FQvDYPOfdRrMdvcbnPl94iuMROFDiRBShgbJNnsVaDn3IfhjEHulDKNfTpfOVJsr
+         mizltKbR1xzsUzhDYx0ENA8xRQkz3zWcK4ZAaDkLNq2pfAGov0hIV0glXu6Y3o903p
+         /wRm1fGcK/W0WgG32Hf3STT45EgDarQKBrCareLKlyLOCH5ZnFCqYdXcdwSkq6EBd2
+         r0E2TKg4ssdYw==
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Cm=kxNYzaFTdCCtVhbFDBzh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Commit 8deb24dcb89cb ("pid: make ENOMEM return value more obvious")
+left the return value uninitialized in one error case. The justification
+for the above commit included a statement that retval is "initialized on
+ever[y] failure path in the loop". However, that is not quite good
+enough because there is an earlier case that is before the loop. And
+also, it's more maintenance and merge-safe to initialize it once at the
+top, as evidenced by this build warning that we now have.
 
-Hi all,
+Therefore, restore the top-level initialization of retval.
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+Also move the descriptive comment up, and remove the now-redundant
+later initialization of retval.
 
-  drivers/gpu/drm/i915/gvt/vgpu.c
+Fixes: 8deb24dcb89cb ("pid: make ENOMEM return value more obvious")
+Cc: Christian Brauner <christian.brauner@ubuntu.com>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ kernel/pid.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-between commit:
+diff --git a/kernel/pid.c b/kernel/pid.c
+index ff6cd6786d10..49bf6dd32de4 100644
+--- a/kernel/pid.c
++++ b/kernel/pid.c
+@@ -162,7 +162,16 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t =
+*set_tid,
+ 	int i, nr;
+ 	struct pid_namespace *tmp;
+ 	struct upid *upid;
+-	int retval;
++
++	/*
++	 * ENOMEM is not the most obvious choice especially for the case
++	 * where the child subreaper has already exited and the pid
++	 * namespace denies the creation of any new processes. But ENOMEM
++	 * is what we have exposed to userspace for a long time and it is
++	 * documented behavior for pid namespaces. So we can't easily
++	 * change it even if there were an error code better suited.
++	 */
++	int retval =3D -ENOMEM;
+=20
+ 	/*
+ 	 * set_tid_size contains the size of the set_tid array. Starting at
+@@ -244,16 +253,6 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t =
+*set_tid,
+ 		tmp =3D tmp->parent;
+ 	}
+=20
+-	/*
+-	 * ENOMEM is not the most obvious choice especially for the case
+-	 * where the child subreaper has already exited and the pid
+-	 * namespace denies the creation of any new processes. But ENOMEM
+-	 * is what we have exposed to userspace for a long time and it is
+-	 * documented behavior for pid namespaces. So we can't easily
+-	 * change it even if there were an error code better suited.
+-	 */
+-	retval =3D -ENOMEM;
+-
+ 	get_pid_ns(ns);
+ 	refcount_set(&pid->count, 1);
+ 	for (type =3D 0; type < PIDTYPE_MAX; ++type)
 
-  04d6067f1f19 ("drm/i915/gvt: Fix unnecessary schedule timer when no vGPU =
-exits")
-
-from the drm-intel-fixes tree and commit:
-
-  12d5861973c7 ("drm/i915/gvt: Make WARN* drm specific where vgpu ptr is av=
-ailable")
-
-from the drm-intel tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
+base-commit: 134546626849cd6852d6d4bf8f207b5fbc54261b
 --=20
-Cheers,
-Stephen Rothwell
+2.25.1
 
-diff --cc drivers/gpu/drm/i915/gvt/vgpu.c
-index 345c2aa3b491,abcde8ce1a9a..000000000000
---- a/drivers/gpu/drm/i915/gvt/vgpu.c
-+++ b/drivers/gpu/drm/i915/gvt/vgpu.c
-@@@ -271,18 -272,12 +272,19 @@@ void intel_gvt_release_vgpu(struct inte
-  void intel_gvt_destroy_vgpu(struct intel_vgpu *vgpu)
-  {
-  	struct intel_gvt *gvt =3D vgpu->gvt;
-+ 	struct drm_i915_private *i915 =3D gvt->gt->i915;
- =20
-- 	WARN(vgpu->active, "vGPU is still active!\n");
- -	mutex_lock(&vgpu->vgpu_lock);
- -
-+ 	drm_WARN(&i915->drm, vgpu->active, "vGPU is still active!\n");
- =20
- +	/*
- +	 * remove idr first so later clean can judge if need to stop
- +	 * service if no active vgpu.
- +	 */
- +	mutex_lock(&gvt->lock);
- +	idr_remove(&gvt->vgpu_idr, vgpu->id);
- +	mutex_unlock(&gvt->lock);
- +
- +	mutex_lock(&vgpu->vgpu_lock);
-  	intel_gvt_debugfs_remove_vgpu(vgpu);
-  	intel_vgpu_clean_sched_policy(vgpu);
-  	intel_vgpu_clean_submission(vgpu);
-
---Sig_/Cm=kxNYzaFTdCCtVhbFDBzh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oTrMACgkQAVBC80lX
-0GxCfwf8DF6UZIwJBxtfb8gzkqDJvX/8pPbpOWpeUrdQTiqxjvVkMLh9wg2em+U5
-TeNW2XcAameNYoShX3Vd1m72DRtsBhkzWSlhDvvTcb/bJ26nFUAUqZmR8UouGCnw
-99Sfw5k13EFOYXN9hLocEEi63T5Stlo9Sd97XyJuky3MFObStnc+38WAAspTioyC
-FNIZwHjC6+MtY95jeuH81GlsjQcDl42GrK+/Quxc2xEi61BI5FrTFC20TskItmYp
-0beAHa0nZ42ZoMwU7QhCTzDMzcFD1O/GRhmTxEtcm0BxXnz5G+Z+oTmkkEwQWbgg
-QufOTS0DpsdJ3dogPO5z1Ew4wr3AIA==
-=H4EQ
------END PGP SIGNATURE-----
-
---Sig_/Cm=kxNYzaFTdCCtVhbFDBzh--

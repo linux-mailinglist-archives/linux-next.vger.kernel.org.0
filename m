@@ -2,140 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EEB181AB8
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 15:04:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A646F181AF5
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 15:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729717AbgCKOEn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 11 Mar 2020 10:04:43 -0400
-Received: from mail-pl1-f179.google.com ([209.85.214.179]:36654 "EHLO
-        mail-pl1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729716AbgCKOEm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 11 Mar 2020 10:04:42 -0400
-Received: by mail-pl1-f179.google.com with SMTP id g12so1164354plo.3
-        for <linux-next@vger.kernel.org>; Wed, 11 Mar 2020 07:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2EHgZAEr4Nd8ZOKlMXD/6Sm4HfcwOXx/9rktQKB44rQ=;
-        b=zgzPF1pTDexD/7CXSJ8vDAB5PWQ+V2sYJKrSHqjdErz1thp3QfxBtoOnHf9q1kV7Zp
-         xFVP29Yj0HwwtjWOJNwIupanOCFuHqTDZ8Z1YgYLHeFLDt6vhZKUy+MixgNF/mKA964F
-         SmnTZTwFskq/kcdBqMVbJ4c8kg2Juo1Zeujkd7eBpse0+Xs9KNscHCKzWTJpKScfBeqg
-         iOki1ratWILlExf6qmOqaXggcdC5RosnuEdl8Arc5g3GK73TUW8M4clTBBc2NVMEIk6x
-         Nwy816fOwgMpW5yW4PuvXpZLhivaiQqMQQf0/QRr6U7fkxFb6JZNovoayN3BPobOys/A
-         medQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2EHgZAEr4Nd8ZOKlMXD/6Sm4HfcwOXx/9rktQKB44rQ=;
-        b=j0BFqCADh7QgIoD2WFAW4yH+S8aDvHGeOeGeV3/Ezsbp5x/FCo7oNdB+OuzHe4Dy9B
-         ifyW6jw5w/4nSgolGGWeH17KXQba1UjzCt8TqU0LNx7zgZ5nTYaZ6eyMnfBN1iekLRXx
-         2wgb/sWJd5AOllQt0juEM+m0JW4DY+Qxy+S5UO3E2Yq4fzHbEIOr5SvGfxEphtXHlEJm
-         tx7hO1ffwJDtixg+p3b9NoLM2RUuGJ96vGwwD0aDGb8pZC0EQ2/qsa0S6fbfsrrmEWJV
-         kFKwHPlr0/rYo5oZCamhC9EUsBjSgBF/wVyJDFtocjU4S2/1aEO2ebqgdbTAZxtz2oS2
-         +DIg==
-X-Gm-Message-State: ANhLgQ38SudkJvKh60Ohf+bWcqp9MKaW/zXeO67SDdA+KpwYLoE60xgR
-        G2mps5isBkL4QtsYHsSjlQrLLTbr19k=
-X-Google-Smtp-Source: ADFU+vsL/sCuPOvLtQrU3uBEQa3HjVeHsks2a8Oi0Tftogi0JiKQKjlTJzlHYRh/3BRlCR35yOmruA==
-X-Received: by 2002:a17:90b:352:: with SMTP id fh18mr3624432pjb.168.1583935481451;
-        Wed, 11 Mar 2020 07:04:41 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d77sm39619355pfd.109.2020.03.11.07.04.40
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Mar 2020 07:04:40 -0700 (PDT)
-Message-ID: <5e68eff8.1c69fb81.25703.bdb3@mx.google.com>
-Date:   Wed, 11 Mar 2020 07:04:40 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1729719AbgCKOSQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 11 Mar 2020 10:18:16 -0400
+Received: from ozlabs.org ([203.11.71.1]:53959 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729559AbgCKOSQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 11 Mar 2020 10:18:16 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cvFG60Tbz9sPF;
+        Thu, 12 Mar 2020 01:18:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583936294;
+        bh=7/Zpw+iQg6yYYoyvhDYNahBVanAKxjeXCSO/xB7KURM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ph2wxm08Vgrk1cRuxoio2XPs0veC+rrubQUK14mHY30HB4td3+9+MTjwMfTdJz8WM
+         9zMTQ+dz9w0LIB3hUU3A8jsaSOLXAMdik+JkWxLUqUVsiW3fG6CdgeJxFwOdfHc/JY
+         LaKgFbVSw4BUHRFyKZehG7nXBqfUNr7MlAT7Q2I7bhQkH0N7ZKGeFNdAnjVrFI2vCA
+         s8LFm+42y+zm9fugHyaCt1uE/pENvERVNuZ7X1ldsec6YCAOOA5cI6DVwmXwtDE068
+         0WaxAeGEwe4a6W4Q/YoC49CIres7OLz6aBzWutX4ycUIcAyzrDBZ3MGISgcjmJc6qA
+         ntzz4kxwevlQg==
+Date:   Thu, 12 Mar 2020 01:18:09 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        NeilBrown <neilb@suse.de>
+Subject: linux-next: Signed-off-by missing for commit in the file-locks tree
+Message-ID: <20200312011809.408fd045@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200311
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 76 boots: 6 failed,
- 68 passed with 2 offline (next-20200311)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/q8Qt0lCox7tKsfSN0bsFcmc";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 76 boots: 6 failed, 68 passed with 2 offline (next-202003=
-11)
+--Sig_/q8Qt0lCox7tKsfSN0bsFcmc
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200311/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200311/
+Hi all,
 
-Tree: next
-Branch: master
-Git Describe: next-20200311
-Git Commit: d44a64766795839eaa0f79a9e5365e8a794a1642
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 53 unique boards, 19 SoC families, 25 builds out of 329
+Commit
 
-Boot Regressions Detected:
+  e2de130a568c ("locks: reintroduce locks_delete_lock shortcut")
 
-arc:
+is missing a Signed-off-by from its author.
 
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: new failure (last pass: next-20200306)
+--=20
+Cheers,
+Stephen Rothwell
 
-arm:
+--Sig_/q8Qt0lCox7tKsfSN0bsFcmc
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 22 days (last pass: next-20200214=
- - first fail: next-20200217)
+-----BEGIN PGP SIGNATURE-----
 
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: next-20200310)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5o8yEACgkQAVBC80lX
+0Gx93Af9GDGS5lFo2SBj9y+p7l7uPx8fKx0o4iECB1GxWVGnY2wNXkXjiIJIO2ih
+moMtlkqIiqk9260fxNlxLuf79zkf4yrLBIyJMCifH8mooJ0tm7UL5dGRnZ8jFHi8
+1mkzSva/3W5kpu8r4E+RpWsxOnhvWoBPTRH2n2oGBA1IH/1vYHCNu+Q9y/OHKIMG
+3pHBX68lIVxugpEouZ1PUDXPB84tnDIJihgfkzm3pSjD3tfV60zvEsYsbt25wYoe
+x5XHxnocnZQ2FOvWGRnJCTNAXTy//NTqMkpX0XL3QS3uwzqyoLpkDxfDActa8+32
+mS5SbKll+a2BTltmWhPlxOi4THmDlg==
+=uqnI
+-----END PGP SIGNATURE-----
 
-Boot Failures Detected:
-
-arc:
-    hsdk_defconfig:
-        gcc-8:
-            hsdk: 1 failed lab
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-            sun4i-a10-cubieboard: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/q8Qt0lCox7tKsfSN0bsFcmc--

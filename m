@@ -2,86 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DD429180DD6
-	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 03:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5895F180DE4
+	for <lists+linux-next@lfdr.de>; Wed, 11 Mar 2020 03:16:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727506AbgCKCHD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 10 Mar 2020 22:07:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56817 "EHLO ozlabs.org"
+        id S1727528AbgCKCQY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 10 Mar 2020 22:16:24 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41481 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726463AbgCKCHC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 10 Mar 2020 22:07:02 -0400
+        id S1727506AbgCKCQY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 10 Mar 2020 22:16:24 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cb1G6ZwWz9sPF;
-        Wed, 11 Mar 2020 13:06:42 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48cbDQ4nw3z9sPF;
+        Wed, 11 Mar 2020 13:16:22 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583892421;
-        bh=stRdRWNv5YaKlTh7eqaHiBGxhax7fUt8NJXuvnDHIOQ=;
+        s=201702; t=1583892982;
+        bh=IUNSc58Jz6r6hiWS7vwzc6j+AQinhAUb1odUaLgBQoQ=;
         h=Date:From:To:Cc:Subject:From;
-        b=fQ9TlMHsoe5lUVDvD1G/QXfsFUh70LJqWZ8YNr2JVAXuKUu/uc3jgK8tducIcMBpW
-         bZkKU6pizbJePcLwz9f7iGnTrPwEiqOJ8HAhfTbRHaSpR33J4jnUQ44RNObTWNiEzm
-         icSOl5z3CCALRPnXEu4AG7WoTS0nS1a00jmvhW5n3lt8FpwDYF78JMAprs/6ZEaAg3
-         RtRq8rKtTeTpvIqiNloI0jD9lEtae/QudEr5N+DCQ32qSWD/mcHYzNXaqe1lx1OfAU
-         aRvKa2PnFMAejDZwBi4hv925Nakcdc1J06lPkHH82NwPGwKFCQ+ydYg34A+V3RKsYm
-         MMmvtedAVTzIw==
-Date:   Wed, 11 Mar 2020 13:06:38 +1100
+        b=gikDt68mh47MXcNctlx//GD0dNwSONcLDZXZo42RCvULWeue4ye11pP+nPDibdyWe
+         X6IbM9FH6EJSmyOE0xVLslZHK2thNJTUVWKE+YBuRQOAuejufKIhNotnZD61Nt50OZ
+         /vHq5DJfaEIyqnCw2s2cue/r1yJES9q+gwL+kh5UZEQhcsCIzcHqBvxoT9uUX2dCZc
+         gvSeFFptGrULG4F3nrg4UrxzO+cvWGDCEZkufchij435iWcazkaTWmvs0WyioqJ+hw
+         EIOP2GJc2mUBlYDWOq8WeYWpdIu0yT6tQjJA2t0sbH3FB2PGAMPUIbGQtONrJ4NX0e
+         YKe5EZJyJ/ENg==
+Date:   Wed, 11 Mar 2020 13:16:16 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Boris Brezillon <boris.brezillon@collabora.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mason Yang <masonccyang@mxic.com.tw>
-Subject: linux-next: build warning after merge of the nand tree
-Message-ID: <20200311130638.37e937fa@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the nand tree
+Message-ID: <20200311131616.41e728a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ACw=fCJaCMbYXfuOHfXyrxZ";
+Content-Type: multipart/signed; boundary="Sig_/0V/_r3uLAw0Z0QjKz.4eQAc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ACw=fCJaCMbYXfuOHfXyrxZ
+--Sig_/0V/_r3uLAw0Z0QjKz.4eQAc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the nand tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+After merging the nand tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-drivers/mtd/nand/raw/nand_macronix.c:301:13: warning: 'macronix_nand_deep_p=
-ower_down_support' defined but not used [-Wunused-function]
-  301 | static void macronix_nand_deep_power_down_support(struct nand_chip =
-*chip)
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FATAL: modpost: drivers/mtd/nand/raw/ams-delta: sizeof(struct of_device_id)=
+=3D200 is not a modulo of the size of section __mod_of__<identifier>_device=
+_table=3D64.
+Fix definition of struct of_device_id in mod_devicetable.h
 
-Introduced by commit
+Maybe caused by commit
 
-  18870c34d1a8 ("mtd: rawnand: macronix: Add support for deep power down mo=
-de")
+  966d708517e3 ("mtd: rawnand: ams-delta: Add module device tables")
+
+But I have no idea why.
+
+I have used the nand tree from next-20200310 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ACw=fCJaCMbYXfuOHfXyrxZ
+--Sig_/0V/_r3uLAw0Z0QjKz.4eQAc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oR64ACgkQAVBC80lX
-0GwLqwf+JvEHos2BTJHk7Wtq5siUFKJo7PfxJlby5eoyeUAopdbXZvzPUcDHUvAl
-X+xCmQ6eA/rzXWaeX2qib5k77Lz6PNeqo3KnCh2vU/Yq6P48PazR4DT+iFAvdkZs
-eMSo64RRwpwyHBaVF1aERhF5FApuacIHS9RtTnSYkz36XAtvyIxsSMJ3Gjt12/c1
-aCInB8KI8guX2h9wrsIMevIiDKKsBgNrjGKwwIvbSblOaE+2fv0JTMOj4yxYvbq+
-dWJmkCahYrp647uBT26Xdrt1hptS6v2QctZk+hCsnCSlsaKuWd80/hS+bY0c9dNe
-XtbMY5A/Ipzn8w6yNz/K06V229BCCA==
-=RIhJ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5oSfAACgkQAVBC80lX
+0GxGEwf/bj6EsI/hl1fveK/KX7xJ+ovgNbwjOVAJ+PPiUpiUnkTgJ/2FnCJ9Wd0g
+Ijny1ky4hGEmd842/q7nOXK3Q9vpatQj9EukNa0dfuTVQcCHtJK0kDhWW8wg75v3
+UfBNx5rmFr1HyP7dyOrdsdkVZun3jDQ/i/xGcbU9NJrh7qyvKdia1mI0QW4aWOlB
+RItlSm+8LHle/Pn8D/r1Oj4CIZYuxYdHoNPkXHCL12KnHaSDoR5rOFY+pqLKtaBA
+lGRzn8sInx28ux6BVJ9BkssmE8FySG+8VwML9LaxuzdbVbTLTOspppGBcx2SDsxz
+nZsWag6QZI5RoiU+enwZbXocYxE8yg==
+=EvU6
 -----END PGP SIGNATURE-----
 
---Sig_/ACw=fCJaCMbYXfuOHfXyrxZ--
+--Sig_/0V/_r3uLAw0Z0QjKz.4eQAc--

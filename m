@@ -2,127 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A49ED1829D7
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:36:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37269182A65
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 09:03:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388027AbgCLHgm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 03:36:42 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:32965 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2387999AbgCLHgm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 03:36:42 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id E2B4122301;
-        Thu, 12 Mar 2020 03:36:41 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 12 Mar 2020 03:36:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=sXB0flAU1OUXmWUTjTmnOCoAJ76
-        OTucwn09Wbo61ZUQ=; b=h67NDXEm//u4Jo4ujVbWvsuemkHUE/wt0X4YOXyW3SB
-        sMx9h1vhd+TJYw9FzlG5soXcVfq09zsLiqcwa5dKyEOhPnEpLJ1HdLWs/PFuNuDU
-        nywrPphuH+fkAJhLbMnJcHxh9uUruoEJJx4ilZczC55l3SwoMITOZ9K9w0Hhi/jT
-        TiCoB+ZIMvj2jilHke0v7VjZu/qI0SwnWnb5I1wjmwt9XPpFmZ5PX1yCd+ozSjzT
-        SX4Xtf+/h3fHz+crJWTLHHD8fcxwmHvD1uCFaUhPNoJYONPp04EykHnRpSf/pXRp
-        zBph7JJz830mPaWLQh85je0ouF/S9nuDGW/HYogTHQg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=sXB0fl
-        AU1OUXmWUTjTmnOCoAJ76OTucwn09Wbo61ZUQ=; b=Peb3ncnzo60f0plhVtYEvW
-        nMQDRsX0eGV+hzuFpoOKig8xqEvYsgWp5NAJVE6ZQqw+G2UV37tIESIMuO932lrw
-        S42q2563mAYSMH3Ux3aaOFtwe7gOKL0fh0x1jrAc0tVv8se6S+ZT5EgvCjjkjhG6
-        S7hhtN7ifrcj62Yg/237zp0zAaqqgDgkHfm1PkoBwK9ugezoVka301EHax+ALYJd
-        12ruSsl1XySnZlyPyYtslmivueXW7CawEWTiow9WOAjIaQ0hDpXtKAf/yXutZ7py
-        SApH3mdIyDIH7AEnPhBtk3c08q/AzE051JYbz9FaqWOxbe+2FskyWJR7qMV1OgeA
-        ==
-X-ME-Sender: <xms:ieZpXi6YCUAedBPwdgqqINu1XkbEwnW5Fwre5U78lBiUuiroxUBVkw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddvgedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
-    dtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehg
-    rhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:ieZpXovGnjm1hxmXg1IUKBnRUCnpLj425dNcuVvTgpzFsYs2v8G0hA>
-    <xmx:ieZpXsVPx2WfYm0OUpYEIALvYTbHHbl5wciDZ4qlZGBPgDPU8j9q-w>
-    <xmx:ieZpXqAWt_V_nifuRtPbSNAKGMJboKCYuedeCAu-2u1xFwYJR1mg1w>
-    <xmx:ieZpXo6YvHJYDEDUOrc0ioA7-kbPDgCE_3h4HC1TPCIV8tI2KT2fuQ>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id C4B70328005E;
-        Thu, 12 Mar 2020 03:36:40 -0400 (EDT)
-Date:   Thu, 12 Mar 2020 08:36:38 +0100
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Namjae Jeon <namjae.jeon@samsung.com>
-Subject: Re: linux-next: manual merge of the staging tree with the vfs tree
-Message-ID: <20200312073638.GA4171972@kroah.com>
-References: <20200312161657.57abd6c2@canb.auug.org.au>
+        id S2388081AbgCLIDl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 04:03:41 -0400
+Received: from mail-pj1-f67.google.com ([209.85.216.67]:37986 "EHLO
+        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388171AbgCLIDl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Mar 2020 04:03:41 -0400
+Received: by mail-pj1-f67.google.com with SMTP id m15so1626446pje.3
+        for <linux-next@vger.kernel.org>; Thu, 12 Mar 2020 01:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=M2tSqdpfrsDuf3StpICf3QcTzKRSkhjObL2IQ92Qre4=;
+        b=oFOT6kpHxlCh2Dhn+wAn80eHlGK9ifUqPTtZ4m5HUOWIS+S9YuJNo0qGsXYK7rOGfc
+         Dh1G+zFoCRWhh6Jyu7fDiVtfVZ1ok95NczaC3nLDM+1z8aq2YQy97TNliEaiYC6GKMVg
+         PjLglnW18N9SDf610T8bJ8TAr3AvyIC4VoUdSdK/Z7oZaEh3kkOT5HfjPYnv8WnxRJpl
+         f+7qcaRj6/vYMpC3ZIV+VTphe92EEXOpotyLxxsTZ7z0yw8wtM8rKf4/mslmou6QLxn1
+         z+xI05jMfPXkYvmGb4h8pRYNgaUicSYixEJkCjvmQGFsDxM2RnFs/x+I7qt+Dd5z2bYz
+         ngYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=M2tSqdpfrsDuf3StpICf3QcTzKRSkhjObL2IQ92Qre4=;
+        b=sMK5i7sqhkYUInEOm4diK6zMpuU+yd1Rhs4RAuWTQxq9Q8BQ8L1G74alilfXecn96r
+         xJ/J5N0k0xAfJJTahjr4DEXhVII/1LJTAbq7OfCXc3gvSxZ4e1lcBlPdqp2N/FilYyKJ
+         bJxyo3rgnHfXIfacLN1VpPQJbL2iUeHT4fgGWmOkySspBi9xvtOO3cPTRJcqJKsF759y
+         ugahuYeZNTsoTQhtSh5hvRQ8VNcu7TgvSJ0EVnYJl5jzqj3DpggUhAaMxdGRmh42zPxd
+         cUbQn+TusPjoCVrr6trbCPAokmII5X72FXuLkBdUrKKgbdd0tZhT0UpZg4X8mmm+olHT
+         N1MQ==
+X-Gm-Message-State: ANhLgQ3zJHreiOHGEcEBpbC1dhTDq2xTY5MxGnBoKVydpn67lKvkTAfD
+        rct/pnRL+logLZYTbWmHXy+BXOoAxRA=
+X-Google-Smtp-Source: ADFU+vueIhdrmS9ovNeHytUSG3XAdXWIFVC2SGDKkEWCJ3Uew4lvhWHm7N0KJw/MgJWUoPDMawVHWw==
+X-Received: by 2002:a17:90a:8915:: with SMTP id u21mr2772719pjn.87.1584000220093;
+        Thu, 12 Mar 2020 01:03:40 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 69sm35170976pfz.97.2020.03.12.01.03.39
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Mar 2020 01:03:39 -0700 (PDT)
+Message-ID: <5e69ecdb.1c69fb81.5d0e7.42ae@mx.google.com>
+Date:   Thu, 12 Mar 2020 01:03:39 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200312161657.57abd6c2@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc5-294-g878792b73893
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 202 boots: 4 failed,
+ 192 passed with 5 offline, 1 untried/unknown (v5.6-rc5-294-g878792b73893)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 04:16:57PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the staging tree got conflicts in:
-> 
->   drivers/staging/exfat/Kconfig
->   MAINTAINERS
-> 
-> between commits:
-> 
->   88ab55f16aae ("MAINTAINERS: add exfat filesystem")
->   1a3c0509ce83 ("staging: exfat: make staging/exfat and fs/exfat mutually exclusive")
-> 
-> from the vfs tree and commit:
-> 
->   590a95e418d1 ("staging: exfat: remove staging version of exfat filesystem")
-> 
-> from the staging tree.
-> 
-> I fixed it up (I removed the first file and see below) and can carry the
-> fix as necessary. This is now fixed as far as linux-next is concerned,
-> but any non trivial conflicts should be mentioned to your upstream
-> maintainer when your tree is submitted for merging.  You may also want
-> to consider cooperating with the maintainer of the conflicting tree to
-> minimise any particularly complex conflicts.
-> 
-> diff --cc MAINTAINERS
-> index 4698de48c727,836f1e262b4e..000000000000
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@@ -6361,19 -6301,6 +6356,13 @@@ F:	include/trace/events/mdio.
->   F:	include/uapi/linux/mdio.h
->   F:	include/uapi/linux/mii.h
->   
->  +EXFAT FILE SYSTEM
->  +M:	Namjae Jeon <namjae.jeon@samsung.com>
->  +M:	Sungjong Seo <sj1557.seo@samsung.com>
->  +L:	linux-fsdevel@vger.kernel.org
->  +S:	Maintained
->  +F:	fs/exfat/
->  +
-> - EXFAT FILE SYSTEM
-> - M:	Valdis Kletnieks <valdis.kletnieks@vt.edu>
-> - L:	linux-fsdevel@vger.kernel.org
-> - S:	Maintained
-> - F:	drivers/staging/exfat/
-> - 
->   EXT2 FILE SYSTEM
->   M:	Jan Kara <jack@suse.com>
->   L:	linux-ext4@vger.kernel.org
-> 
+next/pending-fixes boot: 202 boots: 4 failed, 192 passed with 5 offline, 1 =
+untried/unknown (v5.6-rc5-294-g878792b73893)
 
-Patch looks good to me, thanks!
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc5-294-g878792b73893/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc5-294-g878792b73893/
 
-greg k-h
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc5-294-g878792b73893
+Git Commit: 878792b73893e82f444c85548198d0d5c50459ea
+Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 100 unique boards, 23 SoC families, 27 builds out of 216
+
+Boot Regressions Detected:
+
+arm:
+
+    omap2plus_defconfig:
+        gcc-8:
+          omap3-beagle-xm:
+              lab-baylibre: new failure (last pass: v5.6-rc5-213-g683f454b6=
+b26)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc5-213-g683f454b=
+6b26)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-213-g6=
+83f454b6b26)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-213-g6=
+83f454b6b26)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-213-g6=
+83f454b6b26)
+          meson-gxl-s905d-p230:
+              lab-baylibre: new failure (last pass: v5.6-rc5-213-g683f454b6=
+b26)
+
+Boot Failures Detected:
+
+arm:
+    omap2plus_defconfig:
+        gcc-8:
+            omap3-beagle-xm: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

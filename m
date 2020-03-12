@@ -2,133 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3678C182D30
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 11:13:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBF318300D
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 13:18:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726752AbgCLKNf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 06:13:35 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:33835 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725978AbgCLKNd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 06:13:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584008012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ejjCb6q7RFGex98QgUcKFdkFFuRhyJT6HKlrMbk1V7o=;
-        b=gm6FGjZscELt61+WdcUcexOyYRglg6O1LyIhYMHaXiQzwuZ6FX2L/Br7kWTOMSwoE+sy8x
-        994/vdtLnl19f3HlJXsT/bGrIrnuUP0by9x/D/yA4HYYLLKbnKRgxIZuKVr/NW8jN0bd6T
-        QTxNkzUcA2lhbNwYbjRPAOkt6LM9TEI=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-291-PPjdMHr9OgWNf8K8V24qZQ-1; Thu, 12 Mar 2020 06:13:28 -0400
-X-MC-Unique: PPjdMHr9OgWNf8K8V24qZQ-1
-Received: by mail-ed1-f69.google.com with SMTP id r30so4428670edi.9
-        for <linux-next@vger.kernel.org>; Thu, 12 Mar 2020 03:13:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ejjCb6q7RFGex98QgUcKFdkFFuRhyJT6HKlrMbk1V7o=;
-        b=qDDglIqU0qiVh0DQ2r5dpA2xLk9HCx31zMa9C6M9OOZokYEDtFqTEV1j3LUVg1YJs9
-         +E+7g06rIzdt20C0cU0znOeYu0+g03XRcmXTqg9iwBdW9ASgavm73pTBvtfnk4Pgvn93
-         KZnMtnnaIHkXHzlYN1+z1/JRuXtA/zklLpcER3Gb/EG6qxPrsu9zUW1/+uNh3hs3rQ3i
-         F8otBqb81fsIGM/F9rRzWBNuUZo2FsQWMpqDe5m3xbqxRZDzqdgfVHSAjiaDnMF8BAo6
-         UTR6WnbJqkWYS2HW/f6M+NuggGZLakV6S+D+IpRxDTY67kLWXx6RJdrQ/Qnh/pg8e2lx
-         z2+A==
-X-Gm-Message-State: ANhLgQ0M8Ije4Qp3F7Cii9kQ5N9q+M95aPew9X4Q/9PpI00gEbloJQP6
-        aDd7iC2OCPEgT1imwSi260IXc/Z9WUEy1pleODNxL9bGZtjfFBzKYA4R6wWycsppNQEVbrX5N/5
-        W9wKuA9ed+hVuSO3DCQe5xnO+gW8ryxp1V27jVA==
-X-Received: by 2002:a17:906:52c9:: with SMTP id w9mr6171793ejn.70.1584008007514;
-        Thu, 12 Mar 2020 03:13:27 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vvpEEsl+KDmI2d5YoafqKJXuS1jFr+++rr3fY/v2Mogk34K+lvAjJl+ymSHsNqgBDuc+bVz8D/6j6haGwk/nZA=
-X-Received: by 2002:a17:906:52c9:: with SMTP id w9mr6171780ejn.70.1584008007278;
- Thu, 12 Mar 2020 03:13:27 -0700 (PDT)
+        id S1726571AbgCLMSy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 08:18:54 -0400
+Received: from ozlabs.org ([203.11.71.1]:56761 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725268AbgCLMSy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Mar 2020 08:18:54 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dSY504TYz9sP7;
+        Thu, 12 Mar 2020 23:18:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
+        s=201909; t=1584015530;
+        bh=uzPQHcKFUKJMHkfBDqG3/L/YcmfDrTWlBQVsywQ7YR0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=NJk9WkVNueZQ8JdTLd9cdYNpSN2l6FT4LixC6H90elMVVUziqXUwM3RZoMTQAiKml
+         0XILov+55gYBGdg8UkJjOdPWCJeY7LTUyBuOoYDF4L/lyfe4Ed7uQpd6XvohxIZ2Fu
+         hTIQkj/+zL2Oi9JUlzURBepA/uzEBhlnZGodbw5XVMSaXrodPbv2Fe3/3M/mBL5K+s
+         WNI5yQJAJtWKbH31lUb4g/3lVpIZOXhi5fiHqOGBebL2V2V/DXWIGZ4X7Qsxddzi4K
+         kRsBDzdH9twBbOzDAKozBKyUeMLfPTe0zpgk7dWPLH8zgbViB75ySHi9KhHuu+NxK9
+         9pJJQwPX+9vEA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Michal Hocko <mhocko@kernel.org>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Paul Mackerras <paulus@samba.org>
+Cc:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Christopher Lameter <cl@linux.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kirill Tkhai <ktkhai@virtuozzo.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
+In-Reply-To: <20200310150114.GO8447@dhcp22.suse.cz>
+References: <alpine.DEB.2.21.2002220337030.2000@www.lameter.com> <20200224085812.GB22443@dhcp22.suse.cz> <alpine.DEB.2.21.2002261823270.8012@www.lameter.com> <20200226184152.GQ3771@dhcp22.suse.cz> <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz> <dd450314-d428-6776-af07-f92c04c7b967@suse.cz> <20200227121214.GE3771@dhcp22.suse.cz> <52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com> <9a86f865-50b5-7483-9257-dbb08fecd62b@suse.cz> <20200227182650.GG3771@dhcp22.suse.cz> <20200310150114.GO8447@dhcp22.suse.cz>
+Date:   Thu, 12 Mar 2020 23:18:42 +1100
+Message-ID: <87a74lix5p.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-References: <20200312135457.6891749e@canb.auug.org.au>
-In-Reply-To: <20200312135457.6891749e@canb.auug.org.au>
-From:   Matteo Croce <mcroce@redhat.com>
-Date:   Thu, 12 Mar 2020 11:12:51 +0100
-Message-ID: <CAGnkfhztbmpP0=KT-iNbkUGKerhX04ENFsexA4_2cP_RUs0Png@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Coly Li <colyli@suse.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 3:55 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+Michal Hocko <mhocko@kernel.org> writes:
+> On Thu 27-02-20 19:26:54, Michal Hocko wrote:
+>> [Cc ppc maintainers]
+> [...]
+>> Please have a look at http://lkml.kernel.org/r/52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com
+>> for the boot log with the debugging patch which tracks set_numa_mem.
+>> This seems to lead to a crash in the slab allocator bebcause
+>> node_to_mem_node(0) for memory less node resolves to the memory less
+>> node http://lkml.kernel.org/r/dd450314-d428-6776-af07-f92c04c7b967@suse.cz.
+>> The original report is http://lkml.kernel.org/r/3381CD91-AB3D-4773-BA04-E7A072A63968@linux.vnet.ibm.com
 >
-> Hi all,
->
-> After merging the block tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> In file included from fs/erofs/xattr.h:10,
->                  from fs/erofs/inode.c:7:
-> fs/erofs/inode.c: In function 'erofs_read_inode':
-> fs/erofs/internal.h:197:31: error: 'PAGE_SECTORS_SHIFT' undeclared (first use in this function); did you mean 'PA_SECTION_SHIFT'?
->   197 | #define LOG_SECTORS_PER_BLOCK PAGE_SECTORS_SHIFT
->       |                               ^~~~~~~~~~~~~~~~~~
-> fs/erofs/inode.c:122:30: note: in expansion of macro 'LOG_SECTORS_PER_BLOCK'
->   122 |   inode->i_blocks = nblks << LOG_SECTORS_PER_BLOCK;
->       |                              ^~~~~~~~~~~~~~~~~~~~~
-> fs/erofs/internal.h:197:31: note: each undeclared identifier is reported only once for each function it appears in
->   197 | #define LOG_SECTORS_PER_BLOCK PAGE_SECTORS_SHIFT
->       |                               ^~~~~~~~~~~~~~~~~~
-> fs/erofs/inode.c:122:30: note: in expansion of macro 'LOG_SECTORS_PER_BLOCK'
->   122 |   inode->i_blocks = nblks << LOG_SECTORS_PER_BLOCK;
->       |                              ^~~~~~~~~~~~~~~~~~~~~
-> In file included from fs/erofs/data.c:7:
-> fs/erofs/data.c: In function 'erofs_read_raw_page':
-> fs/erofs/internal.h:197:31: error: 'PAGE_SECTORS_SHIFT' undeclared (first use in this function); did you mean 'PA_SECTION_SHIFT'?
->   197 | #define LOG_SECTORS_PER_BLOCK PAGE_SECTORS_SHIFT
->       |                               ^~~~~~~~~~~~~~~~~~
-> fs/erofs/data.c:226:4: note: in expansion of macro 'LOG_SECTORS_PER_BLOCK'
->   226 |    LOG_SECTORS_PER_BLOCK;
->       |    ^~~~~~~~~~~~~~~~~~~~~
-> fs/erofs/internal.h:197:31: note: each undeclared identifier is reported only once for each function it appears in
->   197 | #define LOG_SECTORS_PER_BLOCK PAGE_SECTORS_SHIFT
->       |                               ^~~~~~~~~~~~~~~~~~
-> fs/erofs/data.c:226:4: note: in expansion of macro 'LOG_SECTORS_PER_BLOCK'
->   226 |    LOG_SECTORS_PER_BLOCK;
->       |    ^~~~~~~~~~~~~~~~~~~~~
-> fs/erofs/data.c: In function 'erofs_bmap':
-> fs/erofs/internal.h:197:31: error: 'PAGE_SECTORS_SHIFT' undeclared (first use in this function); did you mean 'PA_SECTION_SHIFT'?
->   197 | #define LOG_SECTORS_PER_BLOCK PAGE_SECTORS_SHIFT
->       |                               ^~~~~~~~~~~~~~~~~~
-> fs/erofs/data.c:351:16: note: in expansion of macro 'LOG_SECTORS_PER_BLOCK'
->   351 |   if (block >> LOG_SECTORS_PER_BLOCK >= blks)
->       |                ^~~~~~~~~~~~~~~~~~~~~
->
-> Caused by commit
->
->   61c7d3d5e015 ("block: refactor duplicated macros")
->
-> I have used the block tree from next-20200311 for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+> ping 
 
-Hi,
+The obvious fix is:
 
-I was building a kernel without erofs. Just including
-include/linux/blkdev.h will fix it, should I amend the
-patch or send a fix?
-
-Cheers,
+diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
+index 37c12e3bab9e..33b1fca0b258 100644
+--- a/arch/powerpc/kernel/smp.c
++++ b/arch/powerpc/kernel/smp.c
+@@ -892,6 +892,7 @@ void smp_prepare_boot_cpu(void)
+ 	paca_ptrs[boot_cpuid]->__current = current;
+ #endif
+ 	set_numa_node(numa_cpu_lookup_table[boot_cpuid]);
++	set_numa_mem(local_memory_node(numa_cpu_lookup_table[boot_cpuid]));
+ 	current_set[boot_cpuid] = current;
+ }
 
 
---
-Matteo Croce
-per aspera ad upstream
+But that doesn't work because smp_prepare_boot_cpu() is called too
+early:
 
+asmlinkage __visible void __init start_kernel(void)
+{
+	...
+	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
+	boot_cpu_hotplug_init();
+
+	build_all_zonelists(NULL);
+
+
+And local_memory_node() uses first_zones_zonelist() which doesn't work
+prior to build_all_zonelists() being called.
+
+
+The patch below might work. Sachin can you test this? I tried faking up
+a system with a memoryless node zero but couldn't get it to even start
+booting.
+
+cheers
+
+
+diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+index 9b4f5fb719e0..d1f11437f6c4 100644
+--- a/arch/powerpc/mm/mem.c
++++ b/arch/powerpc/mm/mem.c
+@@ -282,6 +282,9 @@ void __init mem_init(void)
+ 	 */
+ 	BUILD_BUG_ON(MMU_PAGE_COUNT > 16);
+ 
++	BUG_ON(smp_processor_id() != boot_cpuid);
++	set_numa_mem(local_memory_node(numa_cpu_lookup_table[boot_cpuid]));
++
+ #ifdef CONFIG_SWIOTLB
+ 	/*
+ 	 * Some platforms (e.g. 85xx) limit DMA-able memory way below

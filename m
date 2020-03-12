@@ -2,281 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B2E182864
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 06:26:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A719C182998
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:16:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387805AbgCLF0T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 01:26:19 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:47825 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387802AbgCLF0S (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 01:26:18 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dHP25zDRz9sNg;
-        Thu, 12 Mar 2020 16:26:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583990775;
-        bh=J3NxTfTBNnYfk+42d00utDzX+xv3mvYH+ai44NEd8FI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ODkxtSlNQ2HQ2E+jO80/rZrxqaPV1e6eMTz+f4qXyFdO4LwB1LBXMbhi+80L7cidj
-         PpwwmJun3/xo0jI2NjBa73fSLN1PR3XD3dCCDzgpug34FNQ87vo7CjJgp3xaPiSIY4
-         cwijCluzdz5hbIoe7JcGlG4YQhh8Fsuvb04j4i30dxlF2lR7typcCXQkRuAJgUB/GE
-         DPTE3qzG9hkZvpfSIGqpGM/8ARIho1KTUOJAprjaLlUAn2T72qdmNxlKM2WBzAw/ga
-         V6NhTdVu9MfJBdOsXrYorusfGxZnevSg2udgsqzg4AgDpyhWItO513eOE+J6HHs57f
-         IYnS9yma2bXdw==
-Date:   Thu, 12 Mar 2020 16:26:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@ti.com>
-Subject: linux-next: manual merge of the slave-dma tree with Linus' tree
-Message-ID: <20200312162614.1b6b2b0e@canb.auug.org.au>
+        id S2387958AbgCLHQH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 03:16:07 -0400
+Received: from fllv0015.ext.ti.com ([198.47.19.141]:50288 "EHLO
+        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387898AbgCLHQH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Mar 2020 03:16:07 -0400
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02C7Fvgo010988;
+        Thu, 12 Mar 2020 02:15:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1583997357;
+        bh=b5RMjrsaJ/tF3XIM+XteOW0uR+vWszSVGVq35yuwKQ8=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=fD/e3TA4IlqAWgkG0666RGs4VV6uBYE0XgSyHtXo18SZZ3rhSYphA0Q5dqU2Mu7Jm
+         voNccUhTDwY56RMRwgiXP/le3wU9SM3hGfHsv5W+BeLnpl+5GvpzjYBxlXi7qIXErb
+         FhoYc3dANkUVd7dWrIcKFvaWX6+Cp9jcGct3gPTg=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02C7Fvil126816
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 12 Mar 2020 02:15:57 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
+ Mar 2020 02:15:57 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
+ Frontend Transport; Thu, 12 Mar 2020 02:15:57 -0500
+Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02C7Ftmg065648;
+        Thu, 12 Mar 2020 02:15:56 -0500
+Subject: Re: linux-next: manual merge of the slave-dma tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vinod Koul <vkoul@kernel.org>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200312162614.1b6b2b0e@canb.auug.org.au>
+From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
+Message-ID: <68408777-afd4-78c0-9e15-fa7ac050bb17@ti.com>
+Date:   Thu, 12 Mar 2020 09:16:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KuEAi6yx2/LKGQjG4dq9pdN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200312162614.1b6b2b0e@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KuEAi6yx2/LKGQjG4dq9pdN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen, Vinod,
 
-Hi all,
+On 12/03/2020 7.26, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the slave-dma tree got a conflict in:
+> 
+>   drivers/dma/ti/k3-udma.c
+> 
+> between commit:
+> 
+>   16cd3c670183 ("dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer")
+> 
+> from Linus' tree
 
-Today's linux-next merge of the slave-dma tree got a conflict in:
+In Linus' tree the drivers/dma/ti/k3-udma.c latest commit is:
+8390318c04bb ("dmaengine: ti: k3-udma: Fix terminated transfer handling")
 
-  drivers/dma/ti/k3-udma.c
+git log --oneline drivers/dma/ti/k3-udma.c shows:
+8390318c04bb dmaengine: ti: k3-udma: Fix terminated transfer handling
+c7450bb211f3 dmaengine: ti: k3-udma: Use the channel direction in pause/resume functions
+6cf668a4ef82 dmaengine: ti: k3-udma: Use the TR counter helper for slave_sg and cyclic
+a97934071fc3 dmaengine: ti: k3-udma: Move the TR counter calculation to helper function
+16cd3c670183 dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer
+1c83767c9d41 dmaengine: ti: k3-udma: Use ktime/usleep_range based TX completion check
+6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
+d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
+25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
 
-between commit:
+> and commit:
+> 
+>   db8d9b4c9b30 ("dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs")
 
-  16cd3c670183 ("dmaengine: ti: k3-udma: Workaround for RX teardown with st=
-ale data in peer")
+However slave-dma's next branch shows the following log for k3-udma.c:
+db8d9b4c9b30 dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs
+0ebcf1a274c5 dmaengine: ti: k3-udma: Implement support for atype (for virtualization)
+6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
+d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
+25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
 
-from Linus' tree and commit:
+The 5.6-rc5 patches (1c83767c9d41...8390318c04bb) is not present in slave-dma/next which
+causes the conflict.
+ 
+> from the slave-dma tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-  db8d9b4c9b30 ("dmaengine: ti: k3-udma: Implement custom dbg_summary_show =
-for debugfs")
+I ended up with the exactly same resolution patch when merging dlave-dma/next
+to Linus' tree.
 
-from the slave-dma tree.
+Stephen, thank you!
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+Vinod, is there anything I can do?
 
---=20
-Cheers,
-Stephen Rothwell
+- Péter
 
-diff --cc drivers/dma/ti/k3-udma.c
-index 0536866a58ce,1e6aac87302d..000000000000
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@@ -149,8 -128,19 +149,9 @@@ struct udma_dev=20
- =20
-  	struct udma_chan *channels;
-  	u32 psil_base;
-+ 	u32 atype;
-  };
- =20
- -struct udma_hwdesc {
- -	size_t cppi5_desc_size;
- -	void *cppi5_desc_vaddr;
- -	dma_addr_t cppi5_desc_paddr;
- -
- -	/* TR descriptor internal pointers */
- -	void *tr_req_base;
- -	struct cppi5_tr_resp_t *tr_resp_base;
- -};
- -
-  struct udma_desc {
-  	struct virt_dma_desc vd;
- =20
-@@@ -3381,98 -3276,66 +3409,158 @@@ static int udma_setup_resources(struct=
-=20
-  	return ch_count;
-  }
- =20
- +static int udma_setup_rx_flush(struct udma_dev *ud)
- +{
- +	struct udma_rx_flush *rx_flush =3D &ud->rx_flush;
- +	struct cppi5_desc_hdr_t *tr_desc;
- +	struct cppi5_tr_type1_t *tr_req;
- +	struct cppi5_host_desc_t *desc;
- +	struct device *dev =3D ud->dev;
- +	struct udma_hwdesc *hwdesc;
- +	size_t tr_size;
- +
- +	/* Allocate 1K buffer for discarded data on RX channel teardown */
- +	rx_flush->buffer_size =3D SZ_1K;
- +	rx_flush->buffer_vaddr =3D devm_kzalloc(dev, rx_flush->buffer_size,
- +					      GFP_KERNEL);
- +	if (!rx_flush->buffer_vaddr)
- +		return -ENOMEM;
- +
- +	rx_flush->buffer_paddr =3D dma_map_single(dev, rx_flush->buffer_vaddr,
- +						rx_flush->buffer_size,
- +						DMA_TO_DEVICE);
- +	if (dma_mapping_error(dev, rx_flush->buffer_paddr))
- +		return -ENOMEM;
- +
- +	/* Set up descriptor to be used for TR mode */
- +	hwdesc =3D &rx_flush->hwdescs[0];
- +	tr_size =3D sizeof(struct cppi5_tr_type1_t);
- +	hwdesc->cppi5_desc_size =3D cppi5_trdesc_calc_size(tr_size, 1);
- +	hwdesc->cppi5_desc_size =3D ALIGN(hwdesc->cppi5_desc_size,
- +					ud->desc_align);
- +
- +	hwdesc->cppi5_desc_vaddr =3D devm_kzalloc(dev, hwdesc->cppi5_desc_size,
- +						GFP_KERNEL);
- +	if (!hwdesc->cppi5_desc_vaddr)
- +		return -ENOMEM;
- +
- +	hwdesc->cppi5_desc_paddr =3D dma_map_single(dev, hwdesc->cppi5_desc_vadd=
-r,
- +						  hwdesc->cppi5_desc_size,
- +						  DMA_TO_DEVICE);
- +	if (dma_mapping_error(dev, hwdesc->cppi5_desc_paddr))
- +		return -ENOMEM;
- +
- +	/* Start of the TR req records */
- +	hwdesc->tr_req_base =3D hwdesc->cppi5_desc_vaddr + tr_size;
- +	/* Start address of the TR response array */
- +	hwdesc->tr_resp_base =3D hwdesc->tr_req_base + tr_size;
- +
- +	tr_desc =3D hwdesc->cppi5_desc_vaddr;
- +	cppi5_trdesc_init(tr_desc, 1, tr_size, 0, 0);
- +	cppi5_desc_set_pktids(tr_desc, 0, CPPI5_INFO1_DESC_FLOWID_DEFAULT);
- +	cppi5_desc_set_retpolicy(tr_desc, 0, 0);
- +
- +	tr_req =3D hwdesc->tr_req_base;
- +	cppi5_tr_init(&tr_req->flags, CPPI5_TR_TYPE1, false, false,
- +		      CPPI5_TR_EVENT_SIZE_COMPLETION, 0);
- +	cppi5_tr_csf_set(&tr_req->flags, CPPI5_TR_CSF_SUPR_EVT);
- +
- +	tr_req->addr =3D rx_flush->buffer_paddr;
- +	tr_req->icnt0 =3D rx_flush->buffer_size;
- +	tr_req->icnt1 =3D 1;
- +
- +	/* Set up descriptor to be used for packet mode */
- +	hwdesc =3D &rx_flush->hwdescs[1];
- +	hwdesc->cppi5_desc_size =3D ALIGN(sizeof(struct cppi5_host_desc_t) +
- +					CPPI5_INFO0_HDESC_EPIB_SIZE +
- +					CPPI5_INFO0_HDESC_PSDATA_MAX_SIZE,
- +					ud->desc_align);
- +
- +	hwdesc->cppi5_desc_vaddr =3D devm_kzalloc(dev, hwdesc->cppi5_desc_size,
- +						GFP_KERNEL);
- +	if (!hwdesc->cppi5_desc_vaddr)
- +		return -ENOMEM;
- +
- +	hwdesc->cppi5_desc_paddr =3D dma_map_single(dev, hwdesc->cppi5_desc_vadd=
-r,
- +						  hwdesc->cppi5_desc_size,
- +						  DMA_TO_DEVICE);
- +	if (dma_mapping_error(dev, hwdesc->cppi5_desc_paddr))
- +		return -ENOMEM;
- +
- +	desc =3D hwdesc->cppi5_desc_vaddr;
- +	cppi5_hdesc_init(desc, 0, 0);
- +	cppi5_desc_set_pktids(&desc->hdr, 0, CPPI5_INFO1_DESC_FLOWID_DEFAULT);
- +	cppi5_desc_set_retpolicy(&desc->hdr, 0, 0);
- +
- +	cppi5_hdesc_attach_buf(desc,
- +			       rx_flush->buffer_paddr, rx_flush->buffer_size,
- +			       rx_flush->buffer_paddr, rx_flush->buffer_size);
- +
- +	dma_sync_single_for_device(dev, hwdesc->cppi5_desc_paddr,
- +				   hwdesc->cppi5_desc_size, DMA_TO_DEVICE);
- +	return 0;
- +}
- +
-+ #ifdef CONFIG_DEBUG_FS
-+ static void udma_dbg_summary_show_chan(struct seq_file *s,
-+ 				       struct dma_chan *chan)
-+ {
-+ 	struct udma_chan *uc =3D to_udma_chan(chan);
-+ 	struct udma_chan_config *ucc =3D &uc->config;
-+=20
-+ 	seq_printf(s, " %-13s| %s", dma_chan_name(chan),
-+ 		   chan->dbg_client_name ?: "in-use");
-+ 	seq_printf(s, " (%s, ", dmaengine_get_direction_text(uc->config.dir));
-+=20
-+ 	switch (uc->config.dir) {
-+ 	case DMA_MEM_TO_MEM:
-+ 		seq_printf(s, "chan%d pair [0x%04x -> 0x%04x], ", uc->tchan->id,
-+ 			   ucc->src_thread, ucc->dst_thread);
-+ 		break;
-+ 	case DMA_DEV_TO_MEM:
-+ 		seq_printf(s, "rchan%d [0x%04x -> 0x%04x], ", uc->rchan->id,
-+ 			   ucc->src_thread, ucc->dst_thread);
-+ 		break;
-+ 	case DMA_MEM_TO_DEV:
-+ 		seq_printf(s, "tchan%d [0x%04x -> 0x%04x], ", uc->tchan->id,
-+ 			   ucc->src_thread, ucc->dst_thread);
-+ 		break;
-+ 	default:
-+ 		seq_printf(s, ")\n");
-+ 		return;
-+ 	}
-+=20
-+ 	if (ucc->ep_type =3D=3D PSIL_EP_NATIVE) {
-+ 		seq_printf(s, "PSI-L Native");
-+ 		if (ucc->metadata_size) {
-+ 			seq_printf(s, "[%s", ucc->needs_epib ? " EPIB" : "");
-+ 			if (ucc->psd_size)
-+ 				seq_printf(s, " PSDsize:%u", ucc->psd_size);
-+ 			seq_printf(s, " ]");
-+ 		}
-+ 	} else {
-+ 		seq_printf(s, "PDMA");
-+ 		if (ucc->enable_acc32 || ucc->enable_burst)
-+ 			seq_printf(s, "[%s%s ]",
-+ 				   ucc->enable_acc32 ? " ACC32" : "",
-+ 				   ucc->enable_burst ? " BURST" : "");
-+ 	}
-+=20
-+ 	seq_printf(s, ", %s)\n", ucc->pkt_mode ? "Packet mode" : "TR mode");
-+ }
-+=20
-+ static void udma_dbg_summary_show(struct seq_file *s,
-+ 				  struct dma_device *dma_dev)
-+ {
-+ 	struct dma_chan *chan;
-+=20
-+ 	list_for_each_entry(chan, &dma_dev->channels, device_node) {
-+ 		if (chan->client_count)
-+ 			udma_dbg_summary_show_chan(s, chan);
-+ 	}
-+ }
-+ #endif /* CONFIG_DEBUG_FS */
-+=20
-  #define TI_UDMAC_BUSWIDTHS	(BIT(DMA_SLAVE_BUSWIDTH_1_BYTE) | \
-  				 BIT(DMA_SLAVE_BUSWIDTH_2_BYTES) | \
-  				 BIT(DMA_SLAVE_BUSWIDTH_3_BYTES) | \
-
---Sig_/KuEAi6yx2/LKGQjG4dq9pdN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5px/YACgkQAVBC80lX
-0GxgiggAk/E0rkHCjTQkK8H2kZGlD/6twDyxiXipWdvcpYOa70rY5TDykg1rMahH
-F4ehqcW1Z7I9fwnz/ZQ2Y5WXcB7WfqUqIdrnSUMjV9+JcUWdEOExaeV+slPmd0r7
-MCx/5eRci2gOfwUnZ75Y0zLHlCBqlM9oBSWguZ3BimxbOpk7Fz6MzB22Hlul93hZ
-F9PWhEqYjsiBWOvItccZWuejQ5Ndq1JeMD76y07aTulZbCorTFYeNDu1EL4aGDyT
-8bU1D4dzypdhXVP+aCtTorajPOnmJcrtE3pdRT6vkEUU0kFbA96iGNzvxhmGHBje
-uBrMeadxO5LaxBOd1f3G1SDhXzn3qw==
-=klqm
------END PGP SIGNATURE-----
-
---Sig_/KuEAi6yx2/LKGQjG4dq9pdN--
+Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki

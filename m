@@ -2,132 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A83A1835FA
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 17:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24587183681
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 17:48:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727175AbgCLQSD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 12:18:03 -0400
-Received: from mail-pj1-f54.google.com ([209.85.216.54]:34378 "EHLO
-        mail-pj1-f54.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbgCLQSD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Mar 2020 12:18:03 -0400
-Received: by mail-pj1-f54.google.com with SMTP id 39so2794444pjo.1
-        for <linux-next@vger.kernel.org>; Thu, 12 Mar 2020 09:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=uXuPtg+dQhTTtGcZ1+60TyDGbF5QtYwqVbiiCmQl+30=;
-        b=btVg6iOU3rKbrq0U11EA5tFU+hAdiHIRrOQa3L+mM/c7gF06Il0nCkR9nV3jajoYz1
-         olv4psLwi0MHzulbCTc8ryi4CIx+Iux8L2el+JgwCoo5EmjQ2a9BbyHJvRhwss9CRUI9
-         nP/YegdlorFxvoAJ/EpUEEB3U8hcWWczfSqLdgvpKNyk5EFo/7D5bkmCVnTLkydNLGSk
-         NJ0tcJKc8MPJ+cIXJd9XVS0FAllTNk//rUD+P2QI3HbAQUSkP27m+uyTgzm/10jwQxDS
-         JopQ0+zQjgbVsxdgwVqbSAmaE2Mc6Naoc314PuHiVqxtUh5JO5SFhxZXYMdbVSYZrT54
-         SKtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=uXuPtg+dQhTTtGcZ1+60TyDGbF5QtYwqVbiiCmQl+30=;
-        b=Yy1np6jKXZJrCoB4A/5x3Jovx1wshxgpMh1DNcIsFo2t7xUOt4yKmBX0JZT601bVJD
-         shbtds7ehvFsNQWB09L4pvroaC8EW09cCoQVbTHNjUys/BpFOMoUsaH7yT685UB4f3Pd
-         qephMzYVwr0XtsnB4V7RLMopP81WtR89cNLIoU+dO5vzgAyWI3Qr/P59N5LHucqtUqQl
-         AgO1CqS9oL/ycXaTgf4kG9+VnsS/ocmiWyzb5dyC9f8uKJabVS8JJXrideuZIKNQt6pF
-         zyIfv7HTQpnsUEvKR7/c01fSgZq7TlYB3IDya60uG7ROWknb2MtblHceSwxR5sws7Iww
-         93iA==
-X-Gm-Message-State: ANhLgQ2ne1h2oxPWalkftsAap3zQtmoTeXJmX6tWdoCOOrhY7WCt23uF
-        qqDgOYBAQVfiIZ+YnrUSLfrQAYU5afI=
-X-Google-Smtp-Source: ADFU+vvVUKdNNhmnPdwRHe4uhPp1dPSRfcXArt2/PoOjGKyCk5Xwd4/eonRirsRD6gmEqeIKI53sMg==
-X-Received: by 2002:a17:902:7043:: with SMTP id h3mr8554643plt.207.1584029881666;
-        Thu, 12 Mar 2020 09:18:01 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z17sm7246048pff.12.2020.03.12.09.18.00
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Mar 2020 09:18:00 -0700 (PDT)
-Message-ID: <5e6a60b8.1c69fb81.234e5.44af@mx.google.com>
-Date:   Thu, 12 Mar 2020 09:18:00 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726385AbgCLQsQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 12:48:16 -0400
+Received: from userp2120.oracle.com ([156.151.31.85]:37538 "EHLO
+        userp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726099AbgCLQsQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Mar 2020 12:48:16 -0400
+Received: from pps.filterd (userp2120.oracle.com [127.0.0.1])
+        by userp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02CGi5iM183139;
+        Thu, 12 Mar 2020 16:48:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=WrMmx2DDsTqMo/jYyhxelBCY3lDUc+W1B/z+/bIn6zc=;
+ b=SdKeG9d8850Zg/StyrlJHSQH/HWmkR1zRpT/1J8fOcltDvJULts1C2eMurOhvFUnqp5M
+ 6h5qX1P7ZpTt5xi+CaZTEnNDMMEDZ9d/wK6V1OgU8nolAieaxT5w7V4JwVjAWMWcnM0U
+ RdGZmA/FacQ+lqIH4H9ritW1Wv8oSWVXA9tzB1yKe5xT5Kl8NYZF6m2USIqPC3i7m8AH
+ n2XGIWOdpArOVg+I7dSmT68Q0rRXIIENhj2jsX19seO0Vj+uCRip16qfpxsijP31S0fI
+ 3suhf7P8ZkxDBYeDJ7G7IJ2VzjqeBbn0w39AGgd8IknawHW3qKz+LV4UR83A40deXTkv ng== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by userp2120.oracle.com with ESMTP id 2yqkg89ybk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Mar 2020 16:48:07 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 02CGm6gW048560;
+        Thu, 12 Mar 2020 16:48:06 GMT
+Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
+        by userp3020.oracle.com with ESMTP id 2yqgvdat68-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Mar 2020 16:48:06 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 02CGm1sL006874;
+        Thu, 12 Mar 2020 16:48:01 GMT
+Received: from [192.168.1.206] (/71.63.128.209)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Thu, 12 Mar 2020 09:48:01 -0700
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200312183142.108df9ac@canb.auug.org.au>
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+Message-ID: <4e163fd8-4d76-4bdf-daea-4d0ae7eb78f7@oracle.com>
+Date:   Thu, 12 Mar 2020 09:48:00 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200312
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 97 boots: 4 failed, 90 passed with 2 offline,
- 1 untried/unknown (next-20200312)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200312183142.108df9ac@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwarescore=0 adultscore=0
+ phishscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003120085
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9558 signatures=668685
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=999 spamscore=0 phishscore=0 adultscore=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 bulkscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2001150001
+ definitions=main-2003120084
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 97 boots: 4 failed, 90 passed with 2 offline, 1 untried/u=
-nknown (next-20200312)
+On 3/12/20 12:31 AM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+> 
+> fs/hugetlbfs/inode.c: In function 'remove_inode_hugepages':
+> fs/hugetlbfs/inode.c:460:44: warning: 'hash' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   460 |     mutex_unlock(&hugetlb_fault_mutex_table[hash]);
+>       |                                            ^
+> fs/hugetlbfs/inode.c:463:5: warning: 'index' may be used uninitialized in this function [-Wmaybe-uninitialized]
+>   463 |     hugetlb_vmdelete_list(&mapping->i_mmap,
+>       |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   464 |      index * pages_per_huge_page(h),
+>       |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   465 |      (index + 1) * pages_per_huge_page(h));
+>       |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   6fdc8f8d1781 ("hugetlbfs: use i_mmap_rwsem to address page fault/truncate race")
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200312/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200312/
+This is a false positive.  However, there are more serious issues with this
+patch series as reported here:
+https://lore.kernel.org/linux-mm/1584028670.7365.182.camel@lca.pw/
 
-Tree: next
-Branch: master
-Git Describe: next-20200312
-Git Commit: 407b0a62b422526e943e1261c7939b2e52ee17cb
-Git URL: git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 59 unique boards, 19 SoC families, 24 builds out of 329
-
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200306)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 23 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200311)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+I'm working on the issue, but these may need to be reverted if I can not come
+up with a solution quickly.  So, I am ignoring the false positive warning
+until the more serious issue is resolved.
+-- 
+Mike Kravetz

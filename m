@@ -2,93 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BB381829C4
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A49ED1829D7
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:36:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387958AbgCLHbp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 03:31:45 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45233 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387930AbgCLHbp (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 03:31:45 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dL9q2TQ8z9sP7;
-        Thu, 12 Mar 2020 18:31:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1583998303;
-        bh=tr4pcdZrcg5CsFj28lSfbnVDXMuBw83K/m/0UMQaYEc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u7CsECuTYZHX2H/btk5IfjZ6RzQFQhucbNRB1/bBCvKW0qCy3SQaLWvw+eeur7KxO
-         ycS7qF1E7816Eb8j74sb9CyhuvdlTF2/NflABFK9KfxKW4Jgt+Hd+H4afZgz+tyINt
-         eic0bDlVqCWPpE+6vTwRvre9bl8uwVWd58JrfPCPIDCEXJRnQGDQ37TccQHxh42WJg
-         aOGKrxiQyb9Qd3JPrmK8mOd1YsSCjOlUfIFTLSmaFyj3m0+D5/x8MKM6WvFXWwiWKK
-         oSs0zF4FfJEj85ak/3iyaY+oGPgM2NWmU78KPtRaVT1oIuSyfVZf4UK0l4qjWTCfkh
-         dR0xIo1nRX5yg==
-Date:   Thu, 12 Mar 2020 18:31:42 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S2388027AbgCLHgm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 03:36:42 -0400
+Received: from out1-smtp.messagingengine.com ([66.111.4.25]:32965 "EHLO
+        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S2387999AbgCLHgm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Mar 2020 03:36:42 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id E2B4122301;
+        Thu, 12 Mar 2020 03:36:41 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 12 Mar 2020 03:36:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=sXB0flAU1OUXmWUTjTmnOCoAJ76
+        OTucwn09Wbo61ZUQ=; b=h67NDXEm//u4Jo4ujVbWvsuemkHUE/wt0X4YOXyW3SB
+        sMx9h1vhd+TJYw9FzlG5soXcVfq09zsLiqcwa5dKyEOhPnEpLJ1HdLWs/PFuNuDU
+        nywrPphuH+fkAJhLbMnJcHxh9uUruoEJJx4ilZczC55l3SwoMITOZ9K9w0Hhi/jT
+        TiCoB+ZIMvj2jilHke0v7VjZu/qI0SwnWnb5I1wjmwt9XPpFmZ5PX1yCd+ozSjzT
+        SX4Xtf+/h3fHz+crJWTLHHD8fcxwmHvD1uCFaUhPNoJYONPp04EykHnRpSf/pXRp
+        zBph7JJz830mPaWLQh85je0ouF/S9nuDGW/HYogTHQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=sXB0fl
+        AU1OUXmWUTjTmnOCoAJ76OTucwn09Wbo61ZUQ=; b=Peb3ncnzo60f0plhVtYEvW
+        nMQDRsX0eGV+hzuFpoOKig8xqEvYsgWp5NAJVE6ZQqw+G2UV37tIESIMuO932lrw
+        S42q2563mAYSMH3Ux3aaOFtwe7gOKL0fh0x1jrAc0tVv8se6S+ZT5EgvCjjkjhG6
+        S7hhtN7ifrcj62Yg/237zp0zAaqqgDgkHfm1PkoBwK9ugezoVka301EHax+ALYJd
+        12ruSsl1XySnZlyPyYtslmivueXW7CawEWTiow9WOAjIaQ0hDpXtKAf/yXutZ7py
+        SApH3mdIyDIH7AEnPhBtk3c08q/AzE051JYbz9FaqWOxbe+2FskyWJR7qMV1OgeA
+        ==
+X-ME-Sender: <xms:ieZpXi6YCUAedBPwdgqqINu1XkbEwnW5Fwre5U78lBiUuiroxUBVkw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedruddvgedguddvudcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehg
+    rhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:ieZpXovGnjm1hxmXg1IUKBnRUCnpLj425dNcuVvTgpzFsYs2v8G0hA>
+    <xmx:ieZpXsVPx2WfYm0OUpYEIALvYTbHHbl5wciDZ4qlZGBPgDPU8j9q-w>
+    <xmx:ieZpXqAWt_V_nifuRtPbSNAKGMJboKCYuedeCAu-2u1xFwYJR1mg1w>
+    <xmx:ieZpXo6YvHJYDEDUOrc0ioA7-kbPDgCE_3h4HC1TPCIV8tI2KT2fuQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id C4B70328005E;
+        Thu, 12 Mar 2020 03:36:40 -0400 (EDT)
+Date:   Thu, 12 Mar 2020 08:36:38 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-Subject: linux-next: build warning after merge of the akpm-current tree
-Message-ID: <20200312183142.108df9ac@canb.auug.org.au>
+        Namjae Jeon <namjae.jeon@samsung.com>
+Subject: Re: linux-next: manual merge of the staging tree with the vfs tree
+Message-ID: <20200312073638.GA4171972@kroah.com>
+References: <20200312161657.57abd6c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T0FSRC7ijNDTJtpHotdrX3G";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200312161657.57abd6c2@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T0FSRC7ijNDTJtpHotdrX3G
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 12, 2020 at 04:16:57PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the staging tree got conflicts in:
+> 
+>   drivers/staging/exfat/Kconfig
+>   MAINTAINERS
+> 
+> between commits:
+> 
+>   88ab55f16aae ("MAINTAINERS: add exfat filesystem")
+>   1a3c0509ce83 ("staging: exfat: make staging/exfat and fs/exfat mutually exclusive")
+> 
+> from the vfs tree and commit:
+> 
+>   590a95e418d1 ("staging: exfat: remove staging version of exfat filesystem")
+> 
+> from the staging tree.
+> 
+> I fixed it up (I removed the first file and see below) and can carry the
+> fix as necessary. This is now fixed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
+> 
+> diff --cc MAINTAINERS
+> index 4698de48c727,836f1e262b4e..000000000000
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@@ -6361,19 -6301,6 +6356,13 @@@ F:	include/trace/events/mdio.
+>   F:	include/uapi/linux/mdio.h
+>   F:	include/uapi/linux/mii.h
+>   
+>  +EXFAT FILE SYSTEM
+>  +M:	Namjae Jeon <namjae.jeon@samsung.com>
+>  +M:	Sungjong Seo <sj1557.seo@samsung.com>
+>  +L:	linux-fsdevel@vger.kernel.org
+>  +S:	Maintained
+>  +F:	fs/exfat/
+>  +
+> - EXFAT FILE SYSTEM
+> - M:	Valdis Kletnieks <valdis.kletnieks@vt.edu>
+> - L:	linux-fsdevel@vger.kernel.org
+> - S:	Maintained
+> - F:	drivers/staging/exfat/
+> - 
+>   EXT2 FILE SYSTEM
+>   M:	Jan Kara <jack@suse.com>
+>   L:	linux-ext4@vger.kernel.org
+> 
 
-Hi all,
+Patch looks good to me, thanks!
 
-After merging the akpm-current tree, today's linux-next build (powerpc
-ppc64_defconfig) produced this warning:
-
-fs/hugetlbfs/inode.c: In function 'remove_inode_hugepages':
-fs/hugetlbfs/inode.c:460:44: warning: 'hash' may be used uninitialized in t=
-his function [-Wmaybe-uninitialized]
-  460 |     mutex_unlock(&hugetlb_fault_mutex_table[hash]);
-      |                                            ^
-fs/hugetlbfs/inode.c:463:5: warning: 'index' may be used uninitialized in t=
-his function [-Wmaybe-uninitialized]
-  463 |     hugetlb_vmdelete_list(&mapping->i_mmap,
-      |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  464 |      index * pages_per_huge_page(h),
-      |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  465 |      (index + 1) * pages_per_huge_page(h));
-      |      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Introduced by commit
-
-  6fdc8f8d1781 ("hugetlbfs: use i_mmap_rwsem to address page fault/truncate=
- race")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/T0FSRC7ijNDTJtpHotdrX3G
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5p5V4ACgkQAVBC80lX
-0GwuWAgAoEjRkTiMX28W5uTOc5rB63U0wSnJEEDEbmS5US18fI106fc3/sDaVYK+
-315ePqdGhrLs6nWFx3e6ReGXljadSx504eZU1OYgGmprxxPmjzMylKAckeoyF4mf
-/RufpuFReYXXKaNy57OAhcWaeVlU0GkWC5qtt6HMOm0TjLJZG1W/eggM0EHuDGO+
-0FtegC1dUur+I/fpluDig2Nl4F1uOkt5/LJsN1TBZB5NazG3jXITi8zKs4oBOE1R
-1nZNYeE2MrBbxCQ1Dz8cxvS+acZII2lgeuio8ACV6Qi2m8mhCvB8H+qiv9hkxRcy
-L0KCpt/84+XfXIciGVBLfbQ1Z3SpWw==
-=UrJz
------END PGP SIGNATURE-----
-
---Sig_/T0FSRC7ijNDTJtpHotdrX3G--
+greg k-h

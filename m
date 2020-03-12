@@ -2,121 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A719C182998
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:16:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8EA1829BC
+	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 08:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387958AbgCLHQH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 03:16:07 -0400
-Received: from fllv0015.ext.ti.com ([198.47.19.141]:50288 "EHLO
-        fllv0015.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387898AbgCLHQH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 12 Mar 2020 03:16:07 -0400
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 02C7Fvgo010988;
-        Thu, 12 Mar 2020 02:15:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1583997357;
-        bh=b5RMjrsaJ/tF3XIM+XteOW0uR+vWszSVGVq35yuwKQ8=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=fD/e3TA4IlqAWgkG0666RGs4VV6uBYE0XgSyHtXo18SZZ3rhSYphA0Q5dqU2Mu7Jm
-         voNccUhTDwY56RMRwgiXP/le3wU9SM3hGfHsv5W+BeLnpl+5GvpzjYBxlXi7qIXErb
-         FhoYc3dANkUVd7dWrIcKFvaWX6+Cp9jcGct3gPTg=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 02C7Fvil126816
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 12 Mar 2020 02:15:57 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3; Thu, 12
- Mar 2020 02:15:57 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1847.3 via
- Frontend Transport; Thu, 12 Mar 2020 02:15:57 -0500
-Received: from [192.168.2.6] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 02C7Ftmg065648;
-        Thu, 12 Mar 2020 02:15:56 -0500
-Subject: Re: linux-next: manual merge of the slave-dma tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200312162614.1b6b2b0e@canb.auug.org.au>
-From:   Peter Ujfalusi <peter.ujfalusi@ti.com>
-Message-ID: <68408777-afd4-78c0-9e15-fa7ac050bb17@ti.com>
-Date:   Thu, 12 Mar 2020 09:16:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        id S2388086AbgCLH1n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 03:27:43 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:36763 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387898AbgCLH1n (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Mar 2020 03:27:43 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dL582Qy8z9sP7;
+        Thu, 12 Mar 2020 18:27:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1583998060;
+        bh=c+rAYHbp+CWwrpwAgZbZp1cZ0QKLCcf5lW53irVv3PI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OzGXpN/7wXBQU6t1aFaQaVvZO+aL1CGyxX0Uui0vFCpb7+8QLws07oX+UgD1SBIfI
+         VKxJ4huhnbN/rZAy1UhMyA8uJvgjkjC8EUzz6ps+v+4VWWCRurrsRTsbeFDJkinHcz
+         uxukrM8bx21Ciicge6j2Gl89GfbEJYmIxZ2/GNClVa2CmrGFwaszk7Qz1weyrYTHcR
+         j6Q4FKdDxMGmTBIWvEiWWfks5ivC1jfEm7rI53U4gYrtNLFrQzW/stEoCiicMthUC+
+         A1Cl/4x3T8yMgu3ObF0K+gacLPof8r5pPLIk/Q9md0MNOkeCzdXofpwf09BltQyqxL
+         NMQ+pu4J8gwOQ==
+Date:   Thu, 12 Mar 2020 18:27:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200312182725.618ca518@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200312162614.1b6b2b0e@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Type: multipart/signed; boundary="Sig_/6AnB0cUAvhJeWDf2gBGAu8J";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen, Vinod,
+--Sig_/6AnB0cUAvhJeWDf2gBGAu8J
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 12/03/2020 7.26, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the slave-dma tree got a conflict in:
-> 
->   drivers/dma/ti/k3-udma.c
-> 
-> between commit:
-> 
->   16cd3c670183 ("dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer")
-> 
-> from Linus' tree
+Hi all,
 
-In Linus' tree the drivers/dma/ti/k3-udma.c latest commit is:
-8390318c04bb ("dmaengine: ti: k3-udma: Fix terminated transfer handling")
+After merging the akpm-current tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-git log --oneline drivers/dma/ti/k3-udma.c shows:
-8390318c04bb dmaengine: ti: k3-udma: Fix terminated transfer handling
-c7450bb211f3 dmaengine: ti: k3-udma: Use the channel direction in pause/resume functions
-6cf668a4ef82 dmaengine: ti: k3-udma: Use the TR counter helper for slave_sg and cyclic
-a97934071fc3 dmaengine: ti: k3-udma: Move the TR counter calculation to helper function
-16cd3c670183 dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer
-1c83767c9d41 dmaengine: ti: k3-udma: Use ktime/usleep_range based TX completion check
-6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
-d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
-25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
+mm/gup.c:119:13: warning: 'put_compound_head' defined but not used [-Wunuse=
+d-function]
+  119 | static void put_compound_head(struct page *page, int refs, unsigned=
+ int flags)
+      |             ^~~~~~~~~~~~~~~~~
 
-> and commit:
-> 
->   db8d9b4c9b30 ("dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs")
+Introduced by commit
 
-However slave-dma's next branch shows the following log for k3-udma.c:
-db8d9b4c9b30 dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs
-0ebcf1a274c5 dmaengine: ti: k3-udma: Implement support for atype (for virtualization)
-6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
-d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
-25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
+  6379e529ebe4 ("mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track FOLL_PIN=
+ pages"")
 
-The 5.6-rc5 patches (1c83767c9d41...8390318c04bb) is not present in slave-dma/next which
-causes the conflict.
- 
-> from the slave-dma tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+--=20
+Cheers,
+Stephen Rothwell
 
-I ended up with the exactly same resolution patch when merging dlave-dma/next
-to Linus' tree.
+--Sig_/6AnB0cUAvhJeWDf2gBGAu8J
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Stephen, thank you!
+-----BEGIN PGP SIGNATURE-----
 
-Vinod, is there anything I can do?
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5p5F0ACgkQAVBC80lX
+0GwjOAf/cdZH8I0YAlg+3Fy/ktiK28PhLGJWZjcUtuSZKv50dP9+cxAvTFjwBUtw
+d13vEwqe5JugAadgw5coPwam6SczTs6QPtG+Pya9REV81Pau93UKzNpGk/sPbi5d
+AMTOOAf+PYaQAETGRO0+VD85xi4Dk7Eh6X6rFV1FiLnem0y7WEA5ejpvLIJJZ3mv
+h/660GsYR8dO05THCqp7EftGIUjaDHLsXrx3Tt+ZQSVHsoPh/e5iSnrRqIkQMQCA
++9RjbZwe76AeyP41UXfEML21JCo2LKARnjIH67ecuhMW+mEmWMDFdYkrPaB+PGz2
+KulttTHAVjcvuuMtWrc83IDi7jpQWQ==
+=IB4z
+-----END PGP SIGNATURE-----
 
-- Péter
-
-Texas Instruments Finland Oy, Porkkalankatu 22, 00180 Helsinki. Y-tunnus/Business ID: 0615521-4. Kotipaikka/Domicile: Helsinki
+--Sig_/6AnB0cUAvhJeWDf2gBGAu8J--

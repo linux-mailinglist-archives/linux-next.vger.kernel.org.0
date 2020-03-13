@@ -2,106 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AF36F184719
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 13:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D486118474E
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 13:56:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgCMMms (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Mar 2020 08:42:48 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34964 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726646AbgCMMms (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 13 Mar 2020 08:42:48 -0400
-Received: from localhost (unknown [171.76.107.175])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726591AbgCMM4e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Mar 2020 08:56:34 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:28707 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726426AbgCMM4e (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 13 Mar 2020 08:56:34 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584104193;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oFffVLBSrzUJVd5vEtDabzgVlUp9IT+H+W/QmhOzo6U=;
+        b=ekZ6qGKojEKQL9dYsAZ0HIkVitI6dml8zSPcLfInU55AJmlIWJjThdcV/OJ/PpKnpc0IcD
+        kpSDpXIL2gEGLzB+5dOtLdMC4w74FT/mnEEHlfERel8b/ZKDp3wKIRpR/Xqnyo8nBSy8ki
+        GPtK0mYMjEmqRMR26zOHlDzSM4Imy4g=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-206-02CmSrC5PQeF8AD9mm0GyQ-1; Fri, 13 Mar 2020 08:56:31 -0400
+X-MC-Unique: 02CmSrC5PQeF8AD9mm0GyQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 096B820768;
-        Fri, 13 Mar 2020 12:42:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584103366;
-        bh=zIiBLpsC2cdf0q4TDq2aJKvTn5547w1lAXM8kNFd8n8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YKqDBkWaJDWrQwNGF5uNuVNxqC3SdFkhG82BMiUpvT/6fhH4FmsniXwwHXqxQIaxK
-         1178LargHGszpbV/DakUIHcNHVFiNoo9UQy3MTJ7zkuVGCX88nHPHcoc+8MFrRM1Hz
-         4ruyA0ue65UvD48oCXBI85pLogN2sBnNW/HBPcjU=
-Date:   Fri, 13 Mar 2020 18:12:42 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Peter Ujfalusi <peter.ujfalusi@ti.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 5A99A800D50;
+        Fri, 13 Mar 2020 12:56:30 +0000 (UTC)
+Received: from localhost (ovpn-12-51.pek2.redhat.com [10.72.12.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B7F921001902;
+        Fri, 13 Mar 2020 12:56:29 +0000 (UTC)
+Date:   Fri, 13 Mar 2020 20:56:27 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the slave-dma tree with Linus' tree
-Message-ID: <20200313124242.GK4885@vkoul-mobl>
-References: <20200312162614.1b6b2b0e@canb.auug.org.au>
- <68408777-afd4-78c0-9e15-fa7ac050bb17@ti.com>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200313125627.GA8518@MiWiFi-R3L-srv>
+References: <20200313214214.4d2e2af6@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <68408777-afd4-78c0-9e15-fa7ac050bb17@ti.com>
+In-Reply-To: <20200313214214.4d2e2af6@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12-03-20, 09:16, Peter Ujfalusi wrote:
-> Hi Stephen, Vinod,
+On 03/13/20 at 09:42pm, Stephen Rothwell wrote:
+> Hi all,
 > 
-> On 12/03/2020 7.26, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Today's linux-next merge of the slave-dma tree got a conflict in:
-> > 
-> >   drivers/dma/ti/k3-udma.c
-> > 
-> > between commit:
-> > 
-> >   16cd3c670183 ("dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer")
-> > 
-> > from Linus' tree
+> After merging the akpm-current tree, today's linux-next build (x86_64
+> allnoconfig) produced this warning:
 > 
-> In Linus' tree the drivers/dma/ti/k3-udma.c latest commit is:
-> 8390318c04bb ("dmaengine: ti: k3-udma: Fix terminated transfer handling")
+> mm/sparse.c:311:12: warning: 'fill_subsection_map' defined but not used [-Wunused-function]
+>   311 | static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
+>       |            ^~~~~~~~~~~~~~~~~~~
+> mm/sparse.c:306:13: warning: 'is_subsection_map_empty' defined but not used [-Wunused-function]
+>   306 | static bool is_subsection_map_empty(struct mem_section *ms)
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~
+> mm/sparse.c:301:12: warning: 'clear_subsection_map' defined but not used [-Wunused-function]
+>   301 | static int clear_subsection_map(unsigned long pfn, unsigned long nr_pages)
+>       |            ^~~~~~~~~~~~~~~~~~~~
 > 
-> git log --oneline drivers/dma/ti/k3-udma.c shows:
-> 8390318c04bb dmaengine: ti: k3-udma: Fix terminated transfer handling
-> c7450bb211f3 dmaengine: ti: k3-udma: Use the channel direction in pause/resume functions
-> 6cf668a4ef82 dmaengine: ti: k3-udma: Use the TR counter helper for slave_sg and cyclic
-> a97934071fc3 dmaengine: ti: k3-udma: Move the TR counter calculation to helper function
-> 16cd3c670183 dmaengine: ti: k3-udma: Workaround for RX teardown with stale data in peer
-> 1c83767c9d41 dmaengine: ti: k3-udma: Use ktime/usleep_range based TX completion check
-> 6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
-> d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
-> 25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
+> Introduced by commits
 > 
-> > and commit:
-> > 
-> >   db8d9b4c9b30 ("dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs")
-> 
-> However slave-dma's next branch shows the following log for k3-udma.c:
-> db8d9b4c9b30 dmaengine: ti: k3-udma: Implement custom dbg_summary_show for debugfs
-> 0ebcf1a274c5 dmaengine: ti: k3-udma: Implement support for atype (for virtualization)
-> 6c0157be02f0 dmaengine: ti: k3-udma: fix spelling mistake "limted" -> "limited"
-> d70241913413 dmaengine: ti: k3-udma: Add glue layer for non DMAengine users
-> 25dcb5dd7b7c dmaengine: ti: New driver for K3 UDMA
-> 
-> The 5.6-rc5 patches (1c83767c9d41...8390318c04bb) is not present in slave-dma/next which
-> causes the conflict.
+>   38eb09ac7c29 ("mm/sparse.c: introduce new function fill_subsection_map()")
+>   334411156ba6 ("mm/sparse.c: introduce a new function clear_subsection_map()")
 
-Yeah I typically dont merge fixes to next, unless we have a dependency.
+Hi Stephen,
 
-> > from the slave-dma tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> 
-> I ended up with the exactly same resolution patch when merging dlave-dma/next
-> to Linus' tree.
+I made below change, but I can't triger these warnings. Could you try
+below patch, see if it's works?
 
-Thanks for confirming.. I will let Linus know about this, I dont think
-we need to do much here :)
 
+From 9be668f1e30b6bb4ed5f4a07e7d3bb76d3f58f35 Mon Sep 17 00:00:00 2001
+From: Baoquan He <bhe@redhat.com>
+Date: Fri, 13 Mar 2020 20:25:54 +0800
+Subject: [PATCH] mm/sparse.c: fix the building warning with !SPARSEMEM
+
+Stephen reported below warnings are seen with allnoconfig on x86_64.
+Fix it by making those dummy functions sub-section map handling visible
+with CONFIG_SPARSEMEM enabled.
+
+mm/sparse.c:311:12: warning: 'fill_subsection_map' defined but not used [-Wunused-function]
+  311 | static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
+      |            ^~~~~~~~~~~~~~~~~~~
+mm/sparse.c:306:13: warning: 'is_subsection_map_empty' defined but not used [-Wunused-function]
+  306 | static bool is_subsection_map_empty(struct mem_section *ms)
+      |             ^~~~~~~~~~~~~~~~~~~~~~~
+mm/sparse.c:301:12: warning: 'clear_subsection_map' defined but not used [-Wunused-function]
+  301 | static int clear_subsection_map(unsigned long pfn, unsigned long nr_pages)
+      |            ^~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Baoquan He <bhe@redhat.com>
+---
+ mm/sparse.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/sparse.c b/mm/sparse.c
+index 362018e82e22..9e08d118719f 100644
+--- a/mm/sparse.c
++++ b/mm/sparse.c
+@@ -293,7 +293,7 @@ static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
+ 
+ 	return rc;
+ }
+-#else
++#elif defined(CONFIG_SPARSEMEM)
+ void __init subsection_map_init(unsigned long pfn, unsigned long nr_pages)
+ {
+ }
 -- 
-~Vinod
+2.17.2
+

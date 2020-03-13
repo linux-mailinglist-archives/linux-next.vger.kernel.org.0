@@ -2,115 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 31198183DDD
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 01:31:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 765DE183EE0
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 02:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726910AbgCMAbu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 20:31:50 -0400
-Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
+        id S1726230AbgCMBzG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 21:55:06 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43625 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726620AbgCMAbu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 20:31:50 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726194AbgCMBzG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Mar 2020 21:55:06 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 2F9E6205F4;
-        Fri, 13 Mar 2020 00:31:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1584059509;
-        bh=U6yu3h1JK3KYJor/2fq9U7mcNdls4bBnMQ63AohUn3s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=k0hfjg76kLJmC1o/ed6y+DKXm+1hSq9XjHy56gkrPxIn1xmxjuNe6vjBVy5dF6Jzy
-         3JWhHOXmBXxL+uAHm+kAtb0I8xUJgj7kFd1q4VpC8sgTYXdjA55Xf56X+iT+3/lHU5
-         On1nYG8MSqt41J1nrnU4vHCSkaCmrROEUWrISTdo=
-Date:   Thu, 12 Mar 2020 17:31:48 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dpfv08WZz9sQx;
+        Fri, 13 Mar 2020 12:55:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584064504;
+        bh=Oe3ismlq739fmrVVvyGbgIVXeF+BRmS6+YyGbgOEgw0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=V3BfsLIJ+e/hULC3ZlLht/uHfO5y9O34dKyAelJeKUuIq0IjomUWwDjluAex8d3iB
+         IGUrCxxZmc6jj0L67VBxZckypxcEB4tPsGxa/ob22nw6OonC9wLgxT2+PMBBm2G/KU
+         oUSkbtfHGgB2VSKTeMbNsPUPK24zllLHuZW4+i/5nCwBtHl1T6FF/rV16GKVvvbV9E
+         ndsl2SApzjcaRgt22WmruLpk1xz5VFYUF14x+VEUYpmr+Y0WUcl6tqNeNquK7U7VqV
+         kIGSrfJ7YpcSs1e/XsB8227oRE19hYOYJaOrKCswYReuSqKqsLj/0utClJ5GMitXE9
+         scujTWox9NnoQ==
+Date:   Fri, 13 Mar 2020 12:54:54 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: linux-next: build warning after merge of the akpm-current tree
-Message-Id: <20200312173148.6647751b1ad538687563f652@linux-foundation.org>
-In-Reply-To: <20200312182725.618ca518@canb.auug.org.au>
-References: <20200312182725.618ca518@canb.auug.org.au>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Subject: linux-next: build failure after merge of the pci tree
+Message-ID: <20200313125454.6314a687@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/MwBqppDMHPigmi0FDsWwnm9";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 12 Mar 2020 18:27:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/MwBqppDMHPigmi0FDsWwnm9
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> Hi all,
-> 
-> After merging the akpm-current tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> mm/gup.c:119:13: warning: 'put_compound_head' defined but not used [-Wunused-function]
->   119 | static void put_compound_head(struct page *page, int refs, unsigned int flags)
->       |             ^~~~~~~~~~~~~~~~~
-> 
-> Introduced by commit
-> 
->   6379e529ebe4 ("mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track FOLL_PIN pages"")
-> 
+Hi all,
 
-Thanks.
+After merging the pci tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-I think this is right.  And I don't think it'll apply to most recent
--next.
+In file included from <command-line>:32:
+./usr/include/linux/pcitest.h:25:2: error: unknown type name 'bool'
+   25 |  bool use_dma;
+      |  ^~~~
 
---- a/mm/gup.c~mm-gup-track-foll_pin-pages-fix-2-fix
-+++ a/mm/gup.c
-@@ -78,21 +78,6 @@ static __maybe_unused struct page *try_g
- 	return NULL;
- }
- 
--static void put_compound_head(struct page *page, int refs, unsigned int flags)
--{
--	if (flags & FOLL_PIN)
--		refs *= GUP_PIN_COUNTING_BIAS;
--
--	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
--	/*
--	 * Calling put_page() for each ref is unnecessarily slow. Only the last
--	 * ref needs a put_page().
--	 */
--	if (refs > 1)
--		page_ref_sub(page, refs - 1);
--	put_page(page);
--}
--
- /**
-  * try_grab_page() - elevate a page's refcount by a flag-dependent amount
-  *
-@@ -1967,7 +1952,24 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
-  * This code is based heavily on the PowerPC implementation by Nick Piggin.
-  */
- #ifdef CONFIG_HAVE_FAST_GUP
-+
-+static void put_compound_head(struct page *page, int refs, unsigned int flags)
-+{
-+	if (flags & FOLL_PIN)
-+		refs *= GUP_PIN_COUNTING_BIAS;
-+
-+	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
-+	/*
-+	 * Calling put_page() for each ref is unnecessarily slow. Only the last
-+	 * ref needs a put_page().
-+	 */
-+	if (refs > 1)
-+		page_ref_sub(page, refs - 1);
-+	put_page(page);
-+}
-+
- #ifdef CONFIG_GUP_GET_PTE_LOW_HIGH
-+
- /*
-  * WARNING: only to be used in the get_user_pages_fast() implementation.
-  *
-_
+Caused by commit
 
+  f6628e69c581 ("tools: PCI: Add 'd' command line option to support DMA")
+
+I have used the pci tree from next-20200312 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/MwBqppDMHPigmi0FDsWwnm9
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5q5+4ACgkQAVBC80lX
+0GwAGgf6Azu/zqCqW3/1HAjctt6rSEJ4NCWSNzQ4tUwTKybCrIRzSCekzRFoYvrl
+jqkWekWTf/HT7TMKGrIVxvgwN3NP5Lm90FN3B7QXKQlRzwDNombQ7hfzVVqwab0/
+0uIExOTrQghg6tD7IMp5Zm8CZ/9XdNYy64tNAkFWYns2R5sGGmnqFrVbejinxj8+
+rNfBLTdejAOZWnQ/np2yhd4nY+YFH+xzYmmIIXtoWGI1xD6plhQ6Pxxm7CZ2w46q
+w/hhp6ga5Rtsuf8qkqnhdIQAYQzTfNPJs/DDHzRge1qYgE1yF+C0TLR/56W0ZBd+
+W8ffJ3QxvLllU+soqU8Frbnrpv5beg==
+=H2gt
+-----END PGP SIGNATURE-----
+
+--Sig_/MwBqppDMHPigmi0FDsWwnm9--

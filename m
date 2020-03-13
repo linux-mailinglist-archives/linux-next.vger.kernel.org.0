@@ -2,91 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 68A0318452D
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 11:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E42184556
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 11:55:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgCMKsK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Mar 2020 06:48:10 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53057 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726364AbgCMKsK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 13 Mar 2020 06:48:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726387AbgCMKzf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Mar 2020 06:55:35 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:40364 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726364AbgCMKzf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 13 Mar 2020 06:55:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584096933;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OKE4vw7Aq1hkeMcRey40fPC/eJbamV54hF6NTYtSkDU=;
+        b=J7Wxj2BN2OKItwppe0OxVSuFcILEg+1cKzi0MIKJBNjI3m1VvRKb+MUgbms6UejfuxypCw
+        TOJk51uQTOxJx9IWUsf8v2Ids5osUqWFf1m8dprSYUrHh7m2lLvqf5QXvef1ZhvCJO3nYq
+        Dg4SxlpAis0Mv5F3FVEL4hJrOtNHB1o=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-58-xiJ0T0aOOeuAPdCscmJDng-1; Fri, 13 Mar 2020 06:55:31 -0400
+X-MC-Unique: xiJ0T0aOOeuAPdCscmJDng-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48f2Tz1sGtz9sQx;
-        Fri, 13 Mar 2020 21:48:07 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ellerman.id.au;
-        s=201909; t=1584096489;
-        bh=TNViHpKk4+9SVYM3ONqfC3TtBfsR1McnFUkkh1JnlwQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=DyJSbF/Wt9DbDw6xPgz+T8Hd8fnbglhUwE//2Z1WjkfY3/YZphz5JzYJiRn+7IL44
-         WTWTo+Cvf/b99Ycqu2Xm6wX4ZRec0wioNZ0zn7yit23SbRHeApoY71Mm+zCNeVvOTR
-         S//rDaCv8QMLkXvNuy5EtuwayqC/eYQZh4LRmP0W4aziUzQmLwJUomDWCqZddugkLK
-         TaTGvI7onl9YZzXur6VJtNqxD2/SXeLnBMBs+Ry3xxyqODSfWK9qb9yJTdQdA1PDb4
-         P5UblCPRmKDd6kGa6z0BtsyVG69Gn9NptnCBpcKmmAbBtZREsHFdzCprlGy5IwV5NP
-         7RyVweIAi100A==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
-Cc:     Michal Hocko <mhocko@kernel.org>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Pekka Enberg <penberg@kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Christopher Lameter <cl@linux.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kirill Tkhai <ktkhai@virtuozzo.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Subject: Re: [5.6.0-rc2-next-20200218/powerpc] Boot failure on POWER9
-In-Reply-To: <F0FBAD4E-3257-4DFD-BFE2-4AD7D811CFB3@linux.vnet.ibm.com>
-References: <alpine.DEB.2.21.2002220337030.2000@www.lameter.com> <20200224085812.GB22443@dhcp22.suse.cz> <alpine.DEB.2.21.2002261823270.8012@www.lameter.com> <20200226184152.GQ3771@dhcp22.suse.cz> <c412ee69-80f9-b013-67d4-3b0a2f6aff7f@suse.cz> <dd450314-d428-6776-af07-f92c04c7b967@suse.cz> <20200227121214.GE3771@dhcp22.suse.cz> <52EF4673-7292-4C4C-B459-AF583951BA48@linux.vnet.ibm.com> <9a86f865-50b5-7483-9257-dbb08fecd62b@suse.cz> <20200227182650.GG3771@dhcp22.suse.cz> <20200310150114.GO8447@dhcp22.suse.cz> <87a74lix5p.fsf@mpe.ellerman.id.au> <F0FBAD4E-3257-4DFD-BFE2-4AD7D811CFB3@linux.vnet.ibm.com>
-Date:   Fri, 13 Mar 2020 21:48:06 +1100
-Message-ID: <875zf8y1i1.fsf@mpe.ellerman.id.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id AAF8B801E6C;
+        Fri, 13 Mar 2020 10:55:30 +0000 (UTC)
+Received: from localhost (ovpn-12-51.pek2.redhat.com [10.72.12.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B087C19C6A;
+        Fri, 13 Mar 2020 10:55:29 +0000 (UTC)
+Date:   Fri, 13 Mar 2020 18:55:26 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200313105526.GM27711@MiWiFi-R3L-srv>
+References: <20200313214214.4d2e2af6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200313214214.4d2e2af6@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Sachin Sant <sachinp@linux.vnet.ibm.com> writes:
->> The patch below might work. Sachin can you test this? I tried faking up
->> a system with a memoryless node zero but couldn't get it to even start
->> booting.
->> 
-> The patch did not help. The kernel crashed during
-> the boot with the same call trace.
->
-> BUG_ON() introduced with the patch was not triggered.
+On 03/13/20 at 09:42pm, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (x86_64
+> allnoconfig) produced this warning:
 
-OK, that's weird.
+I tried with allnoconfig on x86_64, make doesn't trigger below warnings.
 
-I eventually managed to get a memoryless node going in sim, and it
-appears to work there.
+Hi Andrew,
 
-eg in dmesg:
+Should we fix this kind of warning? If have to, I'll try to make several 
+macro functions like subsection_map_init does for !CONFIG_SPARSEMEM.
 
-  [    0.000000][    T0] numa:   NODE_DATA [mem 0x2000fffa2f80-0x2000fffa7fff]
-  [    0.000000][    T0] numa:     NODE_DATA(0) on node 1
-  [    0.000000][    T0] numa:   NODE_DATA [mem 0x2000fff9df00-0x2000fffa2f7f]
-  ...
-  [    0.000000][    T0] Early memory node ranges
-  [    0.000000][    T0]   node   1: [mem 0x0000000000000000-0x00000000ffffffff]
-  [    0.000000][    T0]   node   1: [mem 0x0000200000000000-0x00002000ffffffff]
-  [    0.000000][    T0] Could not find start_pfn for node 0
-  [    0.000000][    T0] Initmem setup node 0 [mem 0x0000000000000000-0x0000000000000000]
-  [    0.000000][    T0] On node 0 totalpages: 0
-  [    0.000000][    T0] Initmem setup node 1 [mem 0x0000000000000000-0x00002000ffffffff]
-  [    0.000000][    T0] On node 1 totalpages: 131072
-  
-  # dmesg | grep set_numa
-  [    0.000000][    T0] set_numa_mem: mem node for 0 = 1
-  [    0.005654][    T0] set_numa_mem: mem node for 1 = 1
+> 
+> mm/sparse.c:311:12: warning: 'fill_subsection_map' defined but not used [-Wunused-function]
+>   311 | static int fill_subsection_map(unsigned long pfn, unsigned long nr_pages)
+>       |            ^~~~~~~~~~~~~~~~~~~
+> mm/sparse.c:306:13: warning: 'is_subsection_map_empty' defined but not used [-Wunused-function]
+>   306 | static bool is_subsection_map_empty(struct mem_section *ms)
+>       |             ^~~~~~~~~~~~~~~~~~~~~~~
+> mm/sparse.c:301:12: warning: 'clear_subsection_map' defined but not used [-Wunused-function]
+>   301 | static int clear_subsection_map(unsigned long pfn, unsigned long nr_pages)
+>       |            ^~~~~~~~~~~~~~~~~~~~
+> 
+> Introduced by commits
+> 
+>   38eb09ac7c29 ("mm/sparse.c: introduce new function fill_subsection_map()")
+>   334411156ba6 ("mm/sparse.c: introduce a new function clear_subsection_map()")
+> 
+> Or maybe laster patches.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-So is the problem more than just node zero having no memory?
 
-cheers

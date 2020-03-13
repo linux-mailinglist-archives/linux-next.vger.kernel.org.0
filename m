@@ -2,123 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A59E9184935
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 15:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84FDC18497A
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 15:36:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726480AbgCMOXA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Mar 2020 10:23:00 -0400
-Received: from mail-wm1-f65.google.com ([209.85.128.65]:56220 "EHLO
-        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726406AbgCMOXA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Mar 2020 10:23:00 -0400
-Received: by mail-wm1-f65.google.com with SMTP id 6so10158395wmi.5;
-        Fri, 13 Mar 2020 07:22:57 -0700 (PDT)
+        id S1726446AbgCMOg6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Mar 2020 10:36:58 -0400
+Received: from mail-lf1-f44.google.com ([209.85.167.44]:38247 "EHLO
+        mail-lf1-f44.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726436AbgCMOg5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Mar 2020 10:36:57 -0400
+Received: by mail-lf1-f44.google.com with SMTP id n13so6269112lfh.5
+        for <linux-next@vger.kernel.org>; Fri, 13 Mar 2020 07:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lS49J6xe9O18O9rcu2kU0PUQpZVP23hwbK2ESpDCzbU=;
-        b=fMzpDmJUGYOajQP7Y97dYff/Au+aJtOrAeG8WU7UFIlVMCKlTnC0DbQeXMrJfahHFb
-         2X87Z1IvFmRAUr8fjUsX9m+j0zZlSRLwai3MepZaOIrb+EOIaIqNPR5rNiwYWxzRmV9K
-         7dlAsiiodnKbAKwy0JG8WbU4BYz5+OvAwDDyL5asezMxfdZ9ieeaOuoOF5ySmH3TZvL0
-         ihOeE/lLWBIgZvYKijIV/CSzFV99wwGktDZs8qZcRc/In3yZVbaUqYNbJlqJ5zAifhuc
-         Q/ukYBLRb7V8UERJ3wDQnhk19IZQ1jxum2BuXWzhjUK1EsIwZbj0QALr/WE2xUM8Kaqc
-         CNSw==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mgh/LtawAyvtzo4cEDEYIHcPGiQwM8KZegFqOkKa+BY=;
+        b=eId94T6axz3/a2w6OrytW+1TJV06pQ6vCwYZc7fT1UDsv0xse5UukW+83WS19sxUF0
+         h5GyfS7fZE6Fw/zZF+n8v7Ee/2pq6zhTixijCSI4DIc23tUiGy9fFSIJV2LV0VbqUFQr
+         1b2dTBt587iHOvXIZRSPEQz+PkH40xvLtIAtkHZeqUqsMJD27f0PgPjRkZwQytPYz5jF
+         f+hOK53jia9RMUFJqfv+Vq/PpMWZDlNXI9oiuywpfH8Vjqc4KLYJE71F4UK52LWsw3c+
+         /wKML9ELR41LCt41AidEfttjpdxUf4NwR1KvV9Pl4Vybc8bzfRl7s5M0qe0ht3bRaZud
+         UElQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lS49J6xe9O18O9rcu2kU0PUQpZVP23hwbK2ESpDCzbU=;
-        b=bhjKPArog57mYFDlxR2JO6vnIh7IaJgTmmB2umfyVldYQhc7jSpP3MFyz1Mn99aH1U
-         6fEftdgMPLnQPX3Are71n4GAohn6Uxm8aI87Ovgu3w3er0AqoWF4B5ncDXr/oeYi4HJ+
-         ZPBOTPMIyw9Uji2/PV9ir3AMI2mRHEDrBfgDYxXbctZ7XDncIePsZWvuNarvPIV/Y4id
-         q6O5D9ACxREahIM2RLObTXAXEYPBEAVwA/nRciwOYNUbBr3W8vB8JUqYcMPXGK+m9HgQ
-         E5NiSWepx/KcVUq5PFDjoQ/eD8SiPKQAXp9GSY7twFjt0H4IPAMMN6e2FXPPfGGKl7JH
-         tUxw==
-X-Gm-Message-State: ANhLgQ2LFzQ9IeMNRWMB2vOJfgs/ehZVdzU5xsRDE/zcNX5Sukx35100
-        QKRbKoRnsdsI29vXKaAHi/ruVlkw/pJuDEdlWlznDA==
-X-Google-Smtp-Source: ADFU+vtK1crtde2+NFsIU5I6g4Z2V2bkR2JqJNr61b5NbN18ks983WaQ0Ne/oquXFz+WVEBk12Mk0geKDCJpolW97Bo=
-X-Received: by 2002:a1c:f21a:: with SMTP id s26mr11119920wmc.39.1584109376765;
- Fri, 13 Mar 2020 07:22:56 -0700 (PDT)
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc
+         :content-transfer-encoding;
+        bh=mgh/LtawAyvtzo4cEDEYIHcPGiQwM8KZegFqOkKa+BY=;
+        b=knM2QTpc9rme21vaOL4SWCtRmUDLVADiXV7HIqKRoEAIN/TirmgNwaecxiXine6Q4s
+         eKWjjo/LvhE1ikgVRdhWsFDtwh0vjpGmri/bjgQQjDn5wSOW7t/pObA1o25HCcXSrtUY
+         LqXynBMNdhTeEpq4zcdPTaWQfue4I+CPVH2MFe0dpUXBgd2yBX2uV+A9e9SJHoA78/kZ
+         YsgMtBtyOdf/01OY8JPwCkDOGMicFFU3MbuDW5GxU+REAmmBLcKEXfkA8kOJN2afdrz5
+         R47ub2bFnaEsK4dNaPpDcCQHIYGeaBTosq1tvnP3kLqWITyfQQlj3/RdsE9DHMBnNFXn
+         lekw==
+X-Gm-Message-State: ANhLgQ1ReywnMfxOCP41RwpMjW0lC8yLRtZhPh1zCF20uBlf7poicuLU
+        uO3f9+skc45YP+HnotTbnsZqza4vAqawrXcK9JtKsSvI43dc4w==
+X-Google-Smtp-Source: ADFU+vtpi7SjAlNDkLzhS+6D+P783QQKHNf3Rqik1y/mFUVrj4WEJxPwQ3nUjmXyNDd/1759jAKsuhXafhkRvGazGQI=
+X-Received: by 2002:a05:6512:3188:: with SMTP id i8mr9084499lfe.26.1584110215584;
+ Fri, 13 Mar 2020 07:36:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200313205748.03d30145@canb.auug.org.au> <d67ed65313f3a1579c1cf88348e8853c5cca4598.camel@perches.com>
-In-Reply-To: <d67ed65313f3a1579c1cf88348e8853c5cca4598.camel@perches.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Fri, 13 Mar 2020 10:22:45 -0400
-Message-ID: <CADnq5_MEFu+6Hgp4jZQJpskHbZmK=UiKtSJrdB92_NYZyyjtAg@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/powerplay: Move fallthrough; into containing #ifdef/#endif
-To:     Joe Perches <joe@perches.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 13 Mar 2020 20:06:44 +0530
+Message-ID: <CA+G9fYvTmoge3esSO-gDU=jLwun-f8hs9-CgXUdGaysVge21Hw@mail.gmail.com>
+Subject: =?UTF-8?Q?include=2Flinux=2Fbitfield=2Eh=3A131=3A3=3A_error=3A_call_to_=E2=80=98=5F=5F?=
+        =?UTF-8?Q?field=5Foverflow=E2=80=99_declared_with_attribute_error=3A_value_doesn?=
+        =?UTF-8?Q?=27t_fit_into_mask?=
+To:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     lkft-triage@lists.linaro.org, elder@linaro.org,
+        "David S. Miller" <davem@davemloft.net>, kuba@kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Mar 13, 2020 at 8:59 AM Joe Perches <joe@perches.com> wrote:
->
-> The automated conversion of /* fallthrough */ comments converted
-> a comment outside of an #ifdef/#endif case block that should be
-> inside the block.
->
-> Move the fallthrough inside the block to silence the warning.
->
-> Signed-off-by: Joe Perches <joe@perches.com>
+The following error noticed while building linux-next kernel modules
+for arm64 with CONFIG_ARM64_64K_PAGES=3Dy
 
-Applied.  Thanks!
+# make -sk KBUILD_BUILD_USER=3DTuxBuild -C/linux -j16 ARCH=3Darm64
+CROSS_COMPILE=3Daarch64-linux-gnu- HOSTCC=3Dgcc CC=3D"sccache
+aarch64-linux-gnu-gcc" O=3Dbuild modules
+#
+In file included from ../drivers/net/ipa/ipa_endpoint.c:10:
+In function =E2=80=98u32_encode_bits=E2=80=99,
+    inlined from =E2=80=98ipa_endpoint_init_aggr=E2=80=99 at
+../drivers/net/ipa/ipa_endpoint.c:544:11:
+../include/linux/bitfield.h:131:3: error: call to =E2=80=98__field_overflow=
+=E2=80=99
+declared with attribute error: value doesn't fit into mask
+  131 |   __field_overflow();     \
+      |   ^~~~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:151:2: note: in expansion of macro =E2=80=98___=
+_MAKE_OP=E2=80=99
+  151 |  ____MAKE_OP(u##size,u##size,,)
+      |  ^~~~~~~~~~~
+../include/linux/bitfield.h:154:1: note: in expansion of macro =E2=80=98__M=
+AKE_OP=E2=80=99
+  154 | __MAKE_OP(32)
+      | ^~~~~~~~~
+make[4]: *** [../scripts/Makefile.build:268:
+drivers/net/ipa/ipa_endpoint.o] Error 1
 
-Alex
+ref:
+https://gitlab.com/Linaro/lkft/kernel-runs/-/jobs/470723504
 
-> ---
->
-> On Fri, 2020-03-13 at 20:57 +1100, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the amdgpu tree, today's linux-next build (powerpc
-> > allyesconfig) produced this warning:
-> >
-> > In file included from include/linux/compiler_types.h:59,
-> >                  from <command-line>:
-> > drivers/gpu/drm/amd/amdgpu/../powerplay/hwmgr/smu7_hwmgr.c: In function 'smu7_request_link_speed_change_before_state_change':
-> > include/linux/compiler_attributes.h:200:41: warning: statement will never be executed [-Wswitch-unreachable]
-> >   200 | # define fallthrough                    __attribute__((__fallthrough__))
-> >       |                                         ^~~~~~~~~~~~~
-> > drivers/gpu/drm/amd/amdgpu/../powerplay/hwmgr/smu7_hwmgr.c:3706:4: note: in expansion of macro 'fallthrough'
-> >  3706 |    fallthrough;
-> >       |    ^~~~~~~~~~~
-> >
-> > Introduced by commit
-> >
-> >   e86efa063cd1 ("AMD POWERPLAY: Use fallthrough;")
->
-> This is also one of the #ifdef/#endif pairs
-> where the fallthrough is outside of the #endif.
->
-> https://lore.kernel.org/lkml/cover.1584040050.git.joe@perches.com/
->
-> Here is a delta patch for this.
-> Let me know if another form is needed.
->
->  drivers/gpu/drm/amd/powerplay/hwmgr/smu7_hwmgr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/amd/powerplay/hwmgr/smu7_hwmgr.c b/drivers/gpu/drm/amd/powerplay/hwmgr/smu7_hwmgr.c
-> index fc5236c..774048 100644
-> --- a/drivers/gpu/drm/amd/powerplay/hwmgr/smu7_hwmgr.c
-> +++ b/drivers/gpu/drm/amd/powerplay/hwmgr/smu7_hwmgr.c
-> @@ -3702,8 +3702,8 @@ static int smu7_request_link_speed_change_before_state_change(
->                 case PP_PCIEGen2:
->                         if (0 == amdgpu_acpi_pcie_performance_request(hwmgr->adev, PCIE_PERF_REQ_GEN2, false))
->                                 break;
-> -#endif
->                         fallthrough;
-> +#endif
->                 default:
->                         data->force_pcie_gen = smu7_get_current_pcie_speed(hwmgr);
->                         break;
-> --
-> 2.24.0
->
->
+--=20
+Linaro LKFT
+https://lkft.linaro.org

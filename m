@@ -2,124 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C13183C6E
-	for <lists+linux-next@lfdr.de>; Thu, 12 Mar 2020 23:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31198183DDD
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 01:31:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgCLW2O (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 12 Mar 2020 18:28:14 -0400
-Received: from ozlabs.org ([203.11.71.1]:35053 "EHLO ozlabs.org"
+        id S1726910AbgCMAbu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 12 Mar 2020 20:31:50 -0400
+Received: from mail.kernel.org ([198.145.29.99]:56970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726621AbgCLW2O (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 12 Mar 2020 18:28:14 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726620AbgCMAbu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 12 Mar 2020 20:31:50 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48dk4B5czqz9sPF;
-        Fri, 13 Mar 2020 09:28:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584052091;
-        bh=63PdcdFvxOn7maIsNxv4gPOidzgydD7v9/ZPumiuoMM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XpmmFK/Oxw7VscPXVbd67VKM/yVOi/aZU3p9Abb+nFd4F1dXvxk6qsl7PiVK6FTxR
-         mSITjul6a5oeEGwJkXTtIIdxxw6BDLUSLo9v1fwlGCGTYuGdWb5wfuPU/O1Y1y82O/
-         TyMn4dhru1Ms5p/aifDgZqZF6Ot+x89u6cbfWOdotwcDMOfki/MfqWUj0XAMHh7U+P
-         Iq5NmqWb/C/+H1S3br+PTbr+CBp/0NaLQjzJLjF+TDWVFoC29H5v3LIC5GwGFE0wKz
-         1QwHgXKjsEsyIw3P9NTdtCvqbG3YmDfXQms8WE/jaLjsBPUtE7Qsnbu/gSszkEKPDQ
-         eJBqBhSbZFqJQ==
-Date:   Fri, 13 Mar 2020 09:28:07 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andy Gross <agross@kernel.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 2F9E6205F4;
+        Fri, 13 Mar 2020 00:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1584059509;
+        bh=U6yu3h1JK3KYJor/2fq9U7mcNdls4bBnMQ63AohUn3s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=k0hfjg76kLJmC1o/ed6y+DKXm+1hSq9XjHy56gkrPxIn1xmxjuNe6vjBVy5dF6Jzy
+         3JWhHOXmBXxL+uAHm+kAtb0I8xUJgj7kFd1q4VpC8sgTYXdjA55Xf56X+iT+3/lHU5
+         On1nYG8MSqt41J1nrnU4vHCSkaCmrROEUWrISTdo=
+Date:   Thu, 12 Mar 2020 17:31:48 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: linux-next: manual merge of the renesas tree with the qcom tree
-Message-ID: <20200313092807.0a3383fa@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/SW69qZ2xMjwdUh.LvCNEsy_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-Id: <20200312173148.6647751b1ad538687563f652@linux-foundation.org>
+In-Reply-To: <20200312182725.618ca518@canb.auug.org.au>
+References: <20200312182725.618ca518@canb.auug.org.au>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/SW69qZ2xMjwdUh.LvCNEsy_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 12 Mar 2020 18:27:25 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Hi all,
+> Hi all,
+> 
+> After merging the akpm-current tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+> 
+> mm/gup.c:119:13: warning: 'put_compound_head' defined but not used [-Wunused-function]
+>   119 | static void put_compound_head(struct page *page, int refs, unsigned int flags)
+>       |             ^~~~~~~~~~~~~~~~~
+> 
+> Introduced by commit
+> 
+>   6379e529ebe4 ("mm/gup: fixup for 9947ea2c1e608e32 "mm/gup: track FOLL_PIN pages"")
+> 
 
-Today's linux-next merge of the renesas tree got a conflict in:
+Thanks.
 
-  arch/arm64/configs/defconfig
+I think this is right.  And I don't think it'll apply to most recent
+-next.
 
-between commit:
+--- a/mm/gup.c~mm-gup-track-foll_pin-pages-fix-2-fix
++++ a/mm/gup.c
+@@ -78,21 +78,6 @@ static __maybe_unused struct page *try_g
+ 	return NULL;
+ }
+ 
+-static void put_compound_head(struct page *page, int refs, unsigned int flags)
+-{
+-	if (flags & FOLL_PIN)
+-		refs *= GUP_PIN_COUNTING_BIAS;
+-
+-	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
+-	/*
+-	 * Calling put_page() for each ref is unnecessarily slow. Only the last
+-	 * ref needs a put_page().
+-	 */
+-	if (refs > 1)
+-		page_ref_sub(page, refs - 1);
+-	put_page(page);
+-}
+-
+ /**
+  * try_grab_page() - elevate a page's refcount by a flag-dependent amount
+  *
+@@ -1967,7 +1952,24 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
+  * This code is based heavily on the PowerPC implementation by Nick Piggin.
+  */
+ #ifdef CONFIG_HAVE_FAST_GUP
++
++static void put_compound_head(struct page *page, int refs, unsigned int flags)
++{
++	if (flags & FOLL_PIN)
++		refs *= GUP_PIN_COUNTING_BIAS;
++
++	VM_BUG_ON_PAGE(page_ref_count(page) < refs, page);
++	/*
++	 * Calling put_page() for each ref is unnecessarily slow. Only the last
++	 * ref needs a put_page().
++	 */
++	if (refs > 1)
++		page_ref_sub(page, refs - 1);
++	put_page(page);
++}
++
+ #ifdef CONFIG_GUP_GET_PTE_LOW_HIGH
++
+ /*
+  * WARNING: only to be used in the get_user_pages_fast() implementation.
+  *
+_
 
-  d0a9e6319257 ("arm64: defconfig: Enable Truly NT35597 WQXGA panel")
-
-from the qcom tree and commit:
-
-  bf9e333ec0d5 ("arm64: defconfig: Enable additional support for Renesas pl=
-atforms")
-
-from the renesas tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/arm64/configs/defconfig
-index b4f42c04f936,49053323323f..000000000000
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@@ -552,17 -557,21 +563,23 @@@ CONFIG_ROCKCHIP_DW_HDMI=3D
-  CONFIG_ROCKCHIP_DW_MIPI_DSI=3Dy
-  CONFIG_ROCKCHIP_INNO_HDMI=3Dy
-  CONFIG_DRM_RCAR_DU=3Dm
-+ CONFIG_DRM_RCAR_DW_HDMI=3Dm
-  CONFIG_DRM_SUN4I=3Dm
- +CONFIG_DRM_SUN6I_DSI=3Dm
-  CONFIG_DRM_SUN8I_DW_HDMI=3Dm
-  CONFIG_DRM_SUN8I_MIXER=3Dm
-  CONFIG_DRM_MSM=3Dm
-  CONFIG_DRM_TEGRA=3Dm
-+ CONFIG_DRM_PANEL_LVDS=3Dm
-  CONFIG_DRM_PANEL_SIMPLE=3Dm
- +CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA=3Dm
-+ CONFIG_DRM_DUMB_VGA_DAC=3Dm
-  CONFIG_DRM_SII902X=3Dm
-+ CONFIG_DRM_THINE_THC63LVD1024=3Dm
-  CONFIG_DRM_TI_SN65DSI86=3Dm
-  CONFIG_DRM_I2C_ADV7511=3Dm
-+ CONFIG_DRM_DW_HDMI_AHB_AUDIO=3Dm
-+ CONFIG_DRM_DW_HDMI_CEC=3Dm
-  CONFIG_DRM_VC4=3Dm
-  CONFIG_DRM_ETNAVIV=3Dm
-  CONFIG_DRM_HISI_HIBMC=3Dm
-
---Sig_/SW69qZ2xMjwdUh.LvCNEsy_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5qt3cACgkQAVBC80lX
-0GwQpAf/ec1dVSAg5OX93J5VFJVu7RPjGKGi7XTA3IdMF/ga9h6y5tPUC/pfn4sb
-Q58eKMDrmLxwu9ChptvXEVZm6UklJvXcYmazHQRxh4O1MzALtK8ni5uhDVLWypT2
-QxJP8HUENObw7CKeRhSKzod43Vet9SwnKW9uGAryhE5hy2WkUcJeMJltAEjuvgRh
-r2jZm6J2r4Jhs4/TVihKSAmoNucGLXUNjy3/eW3Q+BwtXLVQrzcNE0DnpjTjlQoL
-iitZg/72+t6UrAofUx4bCt3qy6Gs1G0h/DVFpL+01kHXQGwcAhjkEggKddnBkNc8
-A11CIt/CcPbxd4nQRsDLd3zpswlOnw==
-=lZxv
------END PGP SIGNATURE-----
-
---Sig_/SW69qZ2xMjwdUh.LvCNEsy_--

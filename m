@@ -2,104 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C15184425
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 10:54:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54EA3184437
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 10:57:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726491AbgCMJyW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Mar 2020 05:54:22 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57499 "EHLO ozlabs.org"
+        id S1726443AbgCMJ5v (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Mar 2020 05:57:51 -0400
+Received: from ozlabs.org ([203.11.71.1]:42371 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726055AbgCMJyW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 13 Mar 2020 05:54:22 -0400
+        id S1726216AbgCMJ5v (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 13 Mar 2020 05:57:51 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48f1Ht6Vddz9sRN;
-        Fri, 13 Mar 2020 20:54:18 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48f1Mw69v5z9sPF;
+        Fri, 13 Mar 2020 20:57:48 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584093260;
-        bh=F5IlTkk39IWDGQXRHNm9wo5PIlgf3hecyR/kHVYijRo=;
+        s=201702; t=1584093469;
+        bh=pe1kF012lJcfDdaduHbyryL8XG5t/pVUetl6nXOwlLA=;
         h=Date:From:To:Cc:Subject:From;
-        b=T3nJ0/V8OTTViHqS0mLFA9PYluXBlprdrRZjsFRq7yG6mkjXeQS20NxUw5MC7R+fL
-         C7JKgiD+UF2Egc7f58QFaGXKoUR4j9d5h0ZRpivIIrXMBjKhAwSLg3DGKpGxiG/23+
-         imLYgV/sf4HTG3uraT/qPTY9Z3c2+gGGpQ+hXIa0WVkyZzLgSQFQ7J05pnJsmkI7w3
-         7EvDn8pBte+cBbr8I1McqvXXntjv+TrS6RWUfCKnw7HfNvNx+n4jT9RghsfsZfNmag
-         vlbQnz+HJPlgPPS9hjPiGxhwGfkvNcdTCx73+tTenElvrBu5xilr/S+NSSa8vroij8
-         5q763xQ4laBLA==
-Date:   Fri, 13 Mar 2020 20:54:15 +1100
+        b=jkBwnhJqXYBYY2DFtN2siMvaX9KSJEH40JeC1M7R4MW+FXmQrc025WT0OgxDGMduc
+         M6Omwyh78A+9NimmLk9GPIC2aUq79GycKA5QwyO/YRARqmKfVBs0JbvxkwG+2QlCR3
+         IxYZxUQ4AAMHlIoRygglrjF2MZ9ViiwO5Vas0VHyzkY6MO/JB1grd7ojmegJlEpwXM
+         GBPgzYBr/KVivdFQ0cGggAzH947c+jYj2r/q+EH5PSSpYVMdMb0cSy1XHMiICUnAiq
+         7s7X91B55uirRvm5SwOFBu9qGShYGrZFwf+k6N6VUCIjVFJZbcO483UgLFs4de7OkV
+         Pbjt8LP9HQVTw==
+Date:   Fri, 13 Mar 2020 20:57:48 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Bersenev <bay@hackerdom.ru>
-Subject: linux-next: build warning after merge of the net-next tree
-Message-ID: <20200313205415.021b7875@canb.auug.org.au>
+        Joe Perches <joe@perches.com>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20200313205748.03d30145@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3KNBiHufKXAROnO8L5EJBeW";
+Content-Type: multipart/signed; boundary="Sig_/O8Uy58JlLveRERi9.xdDOtx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3KNBiHufKXAROnO8L5EJBeW
+--Sig_/O8Uy58JlLveRERi9.xdDOtx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the net-next tree, today's linux-next build (powerpc
+After merging the amdgpu tree, today's linux-next build (powerpc
 allyesconfig) produced this warning:
 
-In file included from include/linux/byteorder/big_endian.h:5,
-                 from arch/powerpc/include/uapi/asm/byteorder.h:14,
-                 from include/asm-generic/bitops/le.h:6,
-                 from arch/powerpc/include/asm/bitops.h:250,
-                 from include/linux/bitops.h:29,
-                 from include/linux/kernel.h:12,
-                 from include/linux/list.h:9,
-                 from include/linux/module.h:12,
-                 from drivers/net/usb/cdc_ncm.c:41:
-drivers/net/usb/cdc_ncm.c: In function 'cdc_ncm_ndp32':
-include/uapi/linux/byteorder/big_endian.h:33:26: warning: conversion from '=
-unsigned int' to '__le16' {aka 'short unsigned int'} changes value from '40=
-2653184' to '0' [-Woverflow]
-   33 | #define __cpu_to_le32(x) ((__force __le32)__swab32((x)))
-      |                          ^
-include/linux/byteorder/generic.h:88:21: note: in expansion of macro '__cpu=
-_to_le32'
-   88 | #define cpu_to_le32 __cpu_to_le32
-      |                     ^~~~~~~~~~~~~
-drivers/net/usb/cdc_ncm.c:1175:19: note: in expansion of macro 'cpu_to_le32'
- 1175 |  ndp32->wLength =3D cpu_to_le32(sizeof(struct usb_cdc_ncm_ndp32) + =
-sizeof(struct usb_cdc_ncm_dpe32));
-      |                   ^~~~~~~~~~~
+In file included from include/linux/compiler_types.h:59,
+                 from <command-line>:
+drivers/gpu/drm/amd/amdgpu/../powerplay/hwmgr/smu7_hwmgr.c: In function 'sm=
+u7_request_link_speed_change_before_state_change':
+include/linux/compiler_attributes.h:200:41: warning: statement will never b=
+e executed [-Wswitch-unreachable]
+  200 | # define fallthrough                    __attribute__((__fallthroug=
+h__))
+      |                                         ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/../powerplay/hwmgr/smu7_hwmgr.c:3706:4: note: in=
+ expansion of macro 'fallthrough'
+ 3706 |    fallthrough;
+      |    ^~~~~~~~~~~
 
 Introduced by commit
 
-  0fa81b304a79 ("cdc_ncm: Implement the 32-bit version of NCM Transfer Bloc=
-k")
+  e86efa063cd1 ("AMD POWERPLAY: Use fallthrough;")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3KNBiHufKXAROnO8L5EJBeW
+--Sig_/O8Uy58JlLveRERi9.xdDOtx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5rWEcACgkQAVBC80lX
-0GzATAf+JG6bIEFdkQXTzmfqkIiSFrbGZKNZgOnrKWxp9PIWUhk/fVl3L1ikJwD9
-yYfw303c1qBkdBaHolIdVk5hpWhXO4L9TspaIukZ7sGCS6pE/LItUpnz+iaEPq01
-XGrZt1hjTbiGsebrhUV99zSowk4JJuGAu5aL6fiqYG7ShjRwrrpmAcCTeSW/ZevN
-PRbvOidkpc+S7KIBNprE7Wd9fp031mIsTTIMx22mq445vS+lJUP1aZox4s5x8NHL
-kay2z8m+dgB+LiOYgh4PyI4bsdeZTRs312yrJ1IMqv7jR4GsYAQx+cAvO+ZszxvY
-aJSJE4egr1eWxNmwM4Mcquxj3Tuixw==
-=K044
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5rWRwACgkQAVBC80lX
+0GwJiAf+KQoFAS6xFVfJ5xJwdEkRbrjdmhSC0DeBjcu5qXpIsaVty8HfoG9tDV2U
+CIZtHbBvFr7K7B9YC4pVmRPs8JsVPHBPqy2cwdctG1CZaLbsp+RSw8ieldi1MRHB
+RsrES8Zk1R+oaGr8Roj8jDd8GLrLnwx2G8A4a8LlGBJjaN72fbc8cAsqKRPvidft
+qn3+MJ+2fmmGOglw6mcUY1ySh1nYLHk/g9G9hkwonhu4HeWYfpN8ZZ0CJEyR1r41
+46Kd5G73aYI8mBDWiQjVUUV+KZx3OfkxmkkVtzF69lJea2hn8uh7NMJ163iRkapv
+AWQzihrby85HtqpXvMSNmSSBI1wp4w==
+=WkAW
 -----END PGP SIGNATURE-----
 
---Sig_/3KNBiHufKXAROnO8L5EJBeW--
+--Sig_/O8Uy58JlLveRERi9.xdDOtx--

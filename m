@@ -2,83 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E1C184F9C
-	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 20:53:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FA8185048
+	for <lists+linux-next@lfdr.de>; Fri, 13 Mar 2020 21:28:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727303AbgCMTwL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 13 Mar 2020 15:52:11 -0400
-Received: from mail-lf1-f68.google.com ([209.85.167.68]:36762 "EHLO
-        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726477AbgCMTwK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Mar 2020 15:52:10 -0400
-Received: by mail-lf1-f68.google.com with SMTP id s1so8867025lfd.3;
-        Fri, 13 Mar 2020 12:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=jIzR2VF5pztT8bGJoCnv210VBMIFx941tvF4lgwyJhk=;
-        b=H/4G0a4inqFmyc/ZgU9YotdnJII5m3EQDJJrxGps6EtV0QFXrC//vl5+03L3cOHdGy
-         rMuPqzftPUB77oaFRc0jdyTu0Yd6DIIQSwMTTRG/sHMUExTW8d1AayCkiDJJQG10AnNu
-         wF51wj5tDrEa/x/K4FUtkoVv7DcbniTMXF8sWXczVij4/XuwPKHrgdF/Dsuj3PyShFF8
-         JlyZvWRVMrR+UgaSu/cQLLQTUZ0gyWV/trt4RNPtAcBWFKC1fRpRh6qJlYAIB2iiHe7x
-         S7sAQ+KVKb6x3q9rQahoc4H/t+Vfyzt/KUe9t3Hd9nhA2g22AnR9lR6X+FdWPH39Wlfr
-         QVkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=jIzR2VF5pztT8bGJoCnv210VBMIFx941tvF4lgwyJhk=;
-        b=BihbkNG7oQ9vxR4qDFz2nU8scLKdMEWWqYyJDLbga6k6uWXJfxqllEF6wURbwSOMs6
-         BvH2QO8RF3/Xo6KxRKSBLxdhVFIbElQoxb1hgTfjm1XqrVAN3afxpjDO8nBPrC7p+G7n
-         qqyIGL5XZFVJU01FcQ8llbOjTuNVhgz88oQKNAcLffB0I+jZLbDM+XznR/G+Q8XEUE6n
-         2/ZdRLZSxWSIf0jGippVRVJOVfMCES+Bvc21AnrLg1LIxvRq9zgByIpk0vOlEaBAdT2V
-         YaL9+WxG2w0fX42LErzKxWVIJEN8Zh/kY5pzwyi/ANcI+FdvQ2l9ma+CIIBjuAJ5/rME
-         nC6g==
-X-Gm-Message-State: ANhLgQ3eg2Yh4rJxL7q6Eo4+311fSzEpBLSOFqP9rcilEDNIaNx9dGy+
-        G+BboGZAYDO7IUWIv3sDkqmdOoyO/TOHOqtsyg8=
-X-Google-Smtp-Source: ADFU+vuyob2kNVFX2qwNK4cHEIyyfQOOrYJ9edLrWt/ZgCK5EyTlrU/7fRLKklUBicSDGHyC6BLUkY/zy7R10T1EXd0=
-X-Received: by 2002:a19:a401:: with SMTP id q1mr9255620lfc.157.1584129126306;
- Fri, 13 Mar 2020 12:52:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200313135850.2329f480@canb.auug.org.au>
-In-Reply-To: <20200313135850.2329f480@canb.auug.org.au>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 13 Mar 2020 12:51:54 -0700
-Message-ID: <CAADnVQ+r3hMEtqbkhm1j9HyXYxSNihbX=VCR9erUGXoE72Pwsg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the jc_docs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        id S1726637AbgCMU22 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 13 Mar 2020 16:28:28 -0400
+Received: from 1.mo2.mail-out.ovh.net ([46.105.63.121]:45317 "EHLO
+        1.mo2.mail-out.ovh.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726480AbgCMU21 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 13 Mar 2020 16:28:27 -0400
+X-Greylist: delayed 1180 seconds by postgrey-1.27 at vger.kernel.org; Fri, 13 Mar 2020 16:28:26 EDT
+Received: from player788.ha.ovh.net (unknown [10.110.208.120])
+        by mo2.mail-out.ovh.net (Postfix) with ESMTP id 5C18D1C92D7
+        for <linux-next@vger.kernel.org>; Fri, 13 Mar 2020 21:08:45 +0100 (CET)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player788.ha.ovh.net (Postfix) with ESMTPSA id C03D510713CE3;
+        Fri, 13 Mar 2020 20:08:31 +0000 (UTC)
+Date:   Fri, 13 Mar 2020 21:08:24 +0100
+From:   Stephen Kitt <steve@sk2.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Borkmann <daniel@iogearbox.net>,
         Alexei Starovoitov <ast@kernel.org>,
         Networking <netdev@vger.kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Kitt <steve@sk2.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the bpf-next tree with the jc_docs
+ tree
+Message-ID: <20200313210824.177688ba@heffalump.sk2.org>
+In-Reply-To: <CAADnVQ+r3hMEtqbkhm1j9HyXYxSNihbX=VCR9erUGXoE72Pwsg@mail.gmail.com>
+References: <20200313135850.2329f480@canb.auug.org.au>
+        <CAADnVQ+r3hMEtqbkhm1j9HyXYxSNihbX=VCR9erUGXoE72Pwsg@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+ boundary="Sig_/2PzWJQucE+G5Q=dyzzxVk2k"; protocol="application/pgp-signature"
+X-Ovh-Tracer-Id: 16739035391216012653
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedugedruddvjedgudeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvuffkjghfofggtgesghdtreerredtjeenucfhrhhomhepufhtvghphhgvnhcumfhithhtuceoshhtvghvvgesshhkvddrohhrgheqnecukfhppedtrddtrddtrddtpdekvddrieehrddvhedrvddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhhouggvpehsmhhtphdqohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdprhgtphhtthhopehlihhnuhigqdhnvgigthesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 12, 2020 at 7:59 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   Documentation/admin-guide/sysctl/kernel.rst
->
-> between commit:
->
->   a3cb66a50852 ("docs: pretty up sysctl/kernel.rst")
->
-> from the jc_docs tree and commit:
->
->   c480a3b79cbc ("docs: sysctl/kernel: Document BPF entries")
->
-> from the bpf-next tree.
+--Sig_/2PzWJQucE+G5Q=dyzzxVk2k
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-I dropped this commit from bpf-next, since it causes unnecessary conflicts.
-Please steer it via Jon's tree.
-Thanks
+On Fri, 13 Mar 2020 12:51:54 -0700, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+> On Thu, Mar 12, 2020 at 7:59 PM Stephen Rothwell <sfr@canb.auug.org.au>
+> wrote:
+> > Today's linux-next merge of the bpf-next tree got a conflict in:
+> >
+> >   Documentation/admin-guide/sysctl/kernel.rst
+> >
+> > between commit:
+> >
+> >   a3cb66a50852 ("docs: pretty up sysctl/kernel.rst")
+> >
+> > from the jc_docs tree and commit:
+> >
+> >   c480a3b79cbc ("docs: sysctl/kernel: Document BPF entries")
+> >
+> > from the bpf-next tree. =20
+>=20
+> I dropped this commit from bpf-next, since it causes unnecessary conflict=
+s.
+> Please steer it via Jon's tree.
+
+OK, I=E2=80=99ll do that.
+
+Regards,
+
+Stephen
+
+--Sig_/2PzWJQucE+G5Q=dyzzxVk2k
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEnPVX/hPLkMoq7x0ggNMC9Yhtg5wFAl5r6DgACgkQgNMC9Yht
+g5y4KA/+OXRIzjiG6db3rZOSUGlJes+prq9WGuRY85rB7yud6Ohfj9RAITPQkFjv
+uDfvkiI8ctrDhJ3dAo06dG9GPj8S0PHHoig5jKBvXQ/cHPHeeDpAvXXM/1PUFENC
+mDt3KZQ+XfiJjThCx40/cNmEnEYJUX93KlheJddmJplZzdbFOnHZ/Ww9dfE88yH7
+4xByXsy8IBgCZ+JLwOAawC3TICOTGi96mgrkhCvwFzUI7HeU0Y6VRKV5SiP/hW1B
++3yrgxTRPKzZcQfTgsXaeY6141+FSaTDQrGtM02THs6+IKwjcPcZCSG0EHROxWds
+jvZxJIph2+il4L0Sqw89xx0TG7lYmrqnpmHDFUYx0NqeGlAcxeLhSVKfDPCCdSDu
+LYWk+whzj5zoZjqYK5Twhw34S3ScQPC8dtcIico9plGsLur7iwajAHpO0JyTlmh/
+CBTHY2JHaY7SKzaBoBx1dsQcM6phNx3+WEIZY91JKXZkIK2aMmYdVH1bfEAvoGDH
+lcGCT5YWWxkG1DbLT6h5BnXHg196xR2e4wLagDTYnbd0KueEf70v7GFUf3o2Pg7Y
+FRwtvpt3AZejSK7ScKyZ/mAi85XFuAU5hmrzvpciJXzQWTfC0tey98QkwzJ1Q05s
+/Gf11/7pLXNQXzVOw5kiYQMbgGwhbUtrR+YSU++apusiEv4hD3k=
+=o9fM
+-----END PGP SIGNATURE-----
+
+--Sig_/2PzWJQucE+G5Q=dyzzxVk2k--

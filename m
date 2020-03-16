@@ -2,92 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 180F918653B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 07:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84ACB18653F
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 07:52:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729598AbgCPGu4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Mar 2020 02:50:56 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:59576 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729319AbgCPGu4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Mar 2020 02:50:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:
-        From:Date:Sender:Reply-To:Content-ID:Content-Description;
-        bh=SKnVJCjbHwmPoGe+RkPuz81Tn+6L6Koglli9Tj3YLN4=; b=O0XZlj6GKpAQPQafflVRSGDtMG
-        C3uZfQJFK2YuT7J11FVX1AV2Ie0S5Wr24GckNYeeqjxeHw4tv/m/9R4pXXBbqr+0fvbUE3lMGcSGn
-        13uZNI/1YJuRzb4DPNNCPCq/gyzSBxEJhYoSOnkibJpne6S8zmZW3vp/DbKkW7fi+zSEzgGbqTAUG
-        2yLwZ/yq8NtaCrZbZKdMAZr9OGiHkuhPVkTCsOcga8YQD7liUBDlZN0+rvxsSTxZeUcaUUGQ2CXmk
-        /vKAmi8lehD75Mo+wVBdbscg1tAUqaCbxIWZbPvu8ceOSKTvcM1yAWrxed97loVEfNAcw00c7rP2N
-        Dd0qjtvQ==;
-Received: from ip5f5ad4e9.dynamic.kabel-deutschland.de ([95.90.212.233] helo=coco.lan)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jDjaO-0000Bk-Ns; Mon, 16 Mar 2020 06:50:53 +0000
-Date:   Mon, 16 Mar 2020 07:50:46 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+        id S1729684AbgCPGwK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Mar 2020 02:52:10 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:53978 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729319AbgCPGwK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Mar 2020 02:52:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584341529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wrXJ80WidgPz0D0bsI6MMgP3Bq85czaehdGVGfo95B0=;
+        b=HMn9+qgZ75e+FEtF0bZlmRfliiUXQ5923HPJN0K+msqDPvbcVaiTYz36K9ypaXlKDIUFWP
+        AcAxS7JFziCciJ0qlfi8B2W+WZtKUq0tvZDp8uKTpEi9P7nm7noYBCF3D8Eag6L8jryHiH
+        VhP9Aimm663/hkZR74p7Ehh/nLY2blU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-40-BGkMqSSjOuKQWUXLxR1RvA-1; Mon, 16 Mar 2020 02:52:07 -0400
+X-MC-Unique: BGkMqSSjOuKQWUXLxR1RvA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1A110107ACCA;
+        Mon, 16 Mar 2020 06:52:06 +0000 (UTC)
+Received: from localhost (ovpn-12-129.pek2.redhat.com [10.72.12.129])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D17F5C1B2;
+        Mon, 16 Mar 2020 06:52:05 +0000 (UTC)
+Date:   Mon, 16 Mar 2020 14:51:59 +0800
+From:   Baoquan He <bhe@redhat.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: linux-next: build failure after merge of the v4l-dvb tree
-Message-ID: <20200316075046.067984a1@coco.lan>
-In-Reply-To: <20200313080209.0c36c2b7@coco.lan>
-References: <20200313131903.3975cdd2@canb.auug.org.au>
-        <20200313080209.0c36c2b7@coco.lan>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200316065159.GA32517@MiWiFi-R3L-srv>
+References: <20200313214214.4d2e2af6@canb.auug.org.au>
+ <20200316045804.GC3486@MiWiFi-R3L-srv>
+ <20200316171326.7ee3eebd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200316171326.7ee3eebd@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Em Fri, 13 Mar 2020 08:07:35 +0100
-Mauro Carvalho Chehab <mchehab@kernel.org> escreveu:
-
-> Em Fri, 13 Mar 2020 13:19:03 +1100
-> Stephen Rothwell <sfr@canb.auug.org.au> escreveu:
+On 03/16/20 at 05:13pm, Stephen Rothwell wrote:
+> Hi Baoquan,
 > 
-> > Hi all,
+> On Mon, 16 Mar 2020 12:58:04 +0800 Baoquan He <bhe@redhat.com> wrote:
+> >
+> > I made a patch to fix these warnings, the reason has been told in the
+> > log. Or just drop below patch. Both is fine to me.
 > > 
-> > After merging the v4l-dvb tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
+> > mm-sparsec-move-subsection_map-related-functions-together.patch
 > > 
-> > ERROR: modpost: "fwnode_get_name" [drivers/media/v4l2-core/v4l2-fwnode.ko] undefined!
-> > 
-> > Caused by commit
-> > 
-> >   dfc22c073b78 ("media: v4l2-fwnode: add initial connector parsing support")
-> > 
-> > I have used the v4l-dvb tree from next-20200312 for today.  
->  
-> Hmm... I double-checked at next-20200312. This function is defined
-> at linux/property.h header:
+> > From 273196eeb7bbc4af93bef18f594af91541e3ce8a Mon Sep 17 00:00:00 2001
+> > From: Baoquan He <bhe@redhat.com>
+> > Date: Sat, 14 Mar 2020 17:01:01 +0800
+> > Subject: [PATCH] mm/sparse.c: move functions into CONFIG_MEMORY_HOTPLUG
+> >  ifdeffery scope
 > 
-> 	include/linux/property.h:const char *fwnode_get_name(const struct fwnode_handle *fwnode);
+> I have applied this to linux-next today to see how it goes.
 
-...
+Thanks.
 
-> So, at least up to next-20200312, everything looks fine on my eyes.
-> 
-> The header is probably there, as the error happened at link stage.
-> 
-> Maybe there is some merge conflict caused by merging a patch from
-> some other tree that might have renamed or removed its implementation
-> after next-20200312, or changed from obj-y target?
-> 
-> Or maybe this changeset got reverted?
-> 
-> 	a7914d1072fb ("device property: Export fwnode_get_name()")
-
-I ended by cherry-picking this patch, applying it today on my tree.
-
-Hopefully, this would avoid build problems and won't cause non-trivial
-merge conflicts.
-
-Thanks,
-Mauro

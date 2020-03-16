@@ -2,51 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F8A186395
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 04:14:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B2F21863A8
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 04:23:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729663AbgCPDOj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Mar 2020 23:14:39 -0400
-Received: from ozlabs.org ([203.11.71.1]:34999 "EHLO ozlabs.org"
+        id S1729430AbgCPDXP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Mar 2020 23:23:15 -0400
+Received: from ozlabs.org ([203.11.71.1]:34907 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729655AbgCPDOj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Mar 2020 23:14:39 -0400
+        id S1729383AbgCPDXP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 15 Mar 2020 23:23:15 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48ghHK1nppz9sP7;
-        Mon, 16 Mar 2020 14:14:37 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48ghTC5tPNz9sP7;
+        Mon, 16 Mar 2020 14:23:11 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584328477;
-        bh=5N2MgFvt+u4m3pMT4rzBFHd1Ae2gPlXu7fZF/DEo/2I=;
+        s=201702; t=1584328992;
+        bh=YckoU2FJHhEBGM3DYcWS9rZ8ocZFXiJ8Us337YfMlKo=;
         h=Date:From:To:Cc:Subject:From;
-        b=iGg05VAIG2sIlwe19oNPJOgxzikHUYlJHgswB3sPEJD+4OyWRI0DvXOE6h3UYyzCR
-         1yoOO9FvcsFC2WJOLMlann/K9FxJ2x0c8fXuLjdat8ce8HiX+06rbdVy9OAs0w2SC/
-         z/vEBWdGEXYoDvQ2Sa009SFDGril6oGIEYF7PLjkdhf8j7aY6MsOClnZ5g/R4aYwFo
-         FOqBKPyQuyWcgorYHYu93s4XDkLuHUjc//PMLjSo2FqxFEbSQtu3FouocA+A3AwAZn
-         GNlDpEZyi5O9bBDHZQQa85jp4cJd/IcJBN6prRq0OA2isjq7fKw4w3N4ZWNdm0OrAo
-         X800ptsDP/Tlg==
-Date:   Mon, 16 Mar 2020 14:14:36 +1100
+        b=jLjBxAz02i4FoMXnnIwVXTTqcQ4XnpH28MeKgIFh9M2TtBU0MZpss5OtLx63V/HDK
+         GQlYQCz9Fntn+iYpO82Wr9VoExVUZO/fY5DoOhQdfKiTYYvm7yDO01bH5ZjwtRXN6I
+         W1JuqX9XvnQAuHvAnj1Onppq8XH1PQMAugoeVMVRCRIuRuy95dpqrNC1PRhzOAyduu
+         L6GZ/i9RCx+MzVCQvnWHIcf9Hh4YSvPdX0OV2GHNevDBOmCVx80IZAxrTkEe0jJmOW
+         WFFlvyw9C1cRGBtXhqA9am3ZbJxhXk6pXHKg8l6R6U9iKCNK3/GY6TgR877vI1IK2E
+         kU8RHqvlnoQlg==
+Date:   Mon, 16 Mar 2020 14:23:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robherring2@gmail.com>
+To:     Felipe Balbi <balbi@kernel.org>, Greg KH <greg@kroah.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: linux-next: manual merge of the usb-gadget tree with the devicetree
- tree
-Message-ID: <20200316141436.2113f68c@canb.auug.org.au>
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>
+Subject: linux-next: manual merge of the usb-gadget tree with the usb tree
+Message-ID: <20200316142309.19cb3aa8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JHsccSclAd4l8cAX/NDuV7e";
+Content-Type: multipart/signed; boundary="Sig_/ch=Gh9hu/coqNj_Gr.lg8x6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JHsccSclAd4l8cAX/NDuV7e
+--Sig_/ch=Gh9hu/coqNj_Gr.lg8x6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -54,16 +53,16 @@ Hi all,
 
 Today's linux-next merge of the usb-gadget tree got a conflict in:
 
-  Documentation/devicetree/bindings/usb/generic.txt
+  drivers/usb/dwc3/dwc3-meson-g12a.c
 
 between commit:
 
-  431a30b7d495 ("dt-bindings: Convert usb-connector to YAML format.")
+  bce3052f0c16 ("usb: roles: Provide the switch drivers handle to the switc=
+h in the API")
 
-from the devicetree tree and commit:
+from the usb tree and commit:
 
-  dd2d0d1fac2b ("dt-bindings: usb: generic: Add role-switch-default-mode bi=
-nding")
+  1e355f21d3fb ("usb: dwc3: Add Amlogic A1 DWC3 glue")
 
 from the usb-gadget tree.
 
@@ -78,41 +77,80 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc Documentation/devicetree/bindings/usb/generic.txt
-index 474e74c06522,67c51759a642..000000000000
---- a/Documentation/devicetree/bindings/usb/generic.txt
-+++ b/Documentation/devicetree/bindings/usb/generic.txt
-@@@ -34,7 -34,13 +34,13 @@@ Optional properties
-   - usb-role-switch: boolean, indicates that the device is capable of assi=
-gning
-  			the USB data role (USB host or USB device) for a given
-  			USB connector, such as Type-C, Type-B(micro).
- -			see connector/usb-connector.txt.
- +			see connector/usb-connector.yaml.
-+  - role-switch-default-mode: indicating if usb-role-switch is enabled, the
-+ 			device default operation mode of controller while usb
-+ 			role is USB_ROLE_NONE. Valid arguments are "host" and
-+ 			"peripheral". Defaults to "peripheral" if not
-+ 			specified.
+diff --cc drivers/usb/dwc3/dwc3-meson-g12a.c
+index 3309ce90ca14,902553f39889..000000000000
+--- a/drivers/usb/dwc3/dwc3-meson-g12a.c
++++ b/drivers/usb/dwc3/dwc3-meson-g12a.c
+@@@ -381,6 -408,53 +409,54 @@@ static struct device *dwc3_meson_g12_fi
+  	return &pdev->dev;
+  }
+ =20
++ static int dwc3_meson_g12a_otg_init(struct platform_device *pdev,
++ 				    struct dwc3_meson_g12a *priv)
++ {
++ 	enum phy_mode otg_id;
++ 	int ret, irq;
++ 	struct device *dev =3D &pdev->dev;
 +=20
- =20
-  This is an attribute to a USB controller such as:
- =20
++ 	if (!priv->drvdata->otg_switch_supported)
++ 		return 0;
++=20
++ 	if (priv->otg_mode =3D=3D USB_DR_MODE_OTG) {
++ 		/* Ack irq before registering */
++ 		regmap_update_bits(priv->regmap, USB_R5,
++ 				   USB_R5_ID_DIG_IRQ, 0);
++=20
++ 		irq =3D platform_get_irq(pdev, 0);
++ 		ret =3D devm_request_threaded_irq(&pdev->dev, irq, NULL,
++ 						dwc3_meson_g12a_irq_thread,
++ 						IRQF_ONESHOT, pdev->name, priv);
++ 		if (ret)
++ 			return ret;
++ 	}
++=20
++ 	/* Setup OTG mode corresponding to the ID pin */
++ 	if (priv->otg_mode =3D=3D USB_DR_MODE_OTG) {
++ 		otg_id =3D dwc3_meson_g12a_get_id(priv);
++ 		if (otg_id !=3D priv->otg_phy_mode) {
++ 			if (dwc3_meson_g12a_otg_mode_set(priv, otg_id))
++ 				dev_warn(dev, "Failed to switch OTG mode\n");
++ 		}
++ 	}
++=20
++ 	/* Setup role switcher */
++ 	priv->switch_desc.usb2_port =3D dwc3_meson_g12_find_child(dev,
++ 								"snps,dwc3");
++ 	priv->switch_desc.udc =3D dwc3_meson_g12_find_child(dev, "snps,dwc2");
++ 	priv->switch_desc.allow_userspace_control =3D true;
++ 	priv->switch_desc.set =3D dwc3_meson_g12a_role_set;
++ 	priv->switch_desc.get =3D dwc3_meson_g12a_role_get;
+++	priv->switch_desc.driver_data =3D priv;
++=20
++ 	priv->role_switch =3D usb_role_switch_register(dev, &priv->switch_desc);
++ 	if (IS_ERR(priv->role_switch))
++ 		dev_warn(dev, "Unable to register Role Switch\n");
++=20
++ 	return 0;
++ }
++=20
+  static int dwc3_meson_g12a_probe(struct platform_device *pdev)
+  {
+  	struct dwc3_meson_g12a	*priv;
 
---Sig_/JHsccSclAd4l8cAX/NDuV7e
+--Sig_/ch=Gh9hu/coqNj_Gr.lg8x6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5u7xwACgkQAVBC80lX
-0GxnrwgAnWg0FEc/D17k1v601YqL9c7GdX9Xkcvqy8WB+1Leeg8bJS9LMlDhuy5M
-OJiJ7oIOM3dhdTaFW1qPx+QrKd7Vh37kpGmuD6BdLTXTc1Y+rvshgQSUfwb5bSUp
-fgWKgD7DnnR5iEnSNK+JlheuTVpb8X5h8gWdca2tya/hrlzZ3kAQh8lvxYTgcIQl
-CgIQ78QcaLOwVxcds7icofeAT4kXEjPq/R4iz4BWCc+zS/4reM/g+WuwQkyNmSCY
-IWUdC+I+TEMcb16XiQLGXpPn2C/UKERbjbz8fSOMBTpk33on3XrILRPUIc6pkqqJ
-xP2rzo3gbAbTUk8tJSUFfqDSSaBqoA==
-=59uV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5u8R0ACgkQAVBC80lX
+0GwM9Af/QPpC71d6MIom2jRdVHcxvxySN3LfQoIpAz+REdRJnGvCm+Xgx8GMxrpx
+f1NLOSxPx0NSELJtPkm89q0LYGap3QnRfhugcv1x4H4W58oJYy7iIWkNjOYKh0tN
+5TlFekBrSe5Dw+gCSgIhVb16ilRZqJnza2wi9mcS1l+hPdb89XK6yy33wQcg2cdZ
+/ZCvajVxog9ky0VRaGjqs07zWliq7Y+KFq3G4QsXycEATix7HCxny/5AQPC8xYPf
+q7N2f8dBpvdI/8FjKLP/to3E3oAQwOArJV0xLL4s+2g3NorYkbCi4MmeKwqmGKY3
+Sa7MerYuWIZ/KqIjTvZzgrCu27uAXA==
+=kwyJ
 -----END PGP SIGNATURE-----
 
---Sig_/JHsccSclAd4l8cAX/NDuV7e--
+--Sig_/ch=Gh9hu/coqNj_Gr.lg8x6--

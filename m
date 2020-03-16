@@ -2,102 +2,198 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E4018612E
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 02:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1124186175
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 03:14:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729345AbgCPBLw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 15 Mar 2020 21:11:52 -0400
-Received: from ozlabs.org ([203.11.71.1]:40103 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729300AbgCPBLw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 15 Mar 2020 21:11:52 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48gdYd51YGz9sQt;
-        Mon, 16 Mar 2020 12:11:49 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584321110;
-        bh=TONNJhWJly+zoYUt5zQ+eqWuGEiT9Xm7B7CzlZKAEUs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VAdNUfp2NJ5g5KCnficA8TvVefqXi8wZYKfj9rSUI42TCeIpB/pPF32Ig2ZaOZeIU
-         VTm019AwGl6eVcJW52DKNmw3pgbebDnFfrKfK1UddKyLx5bMphRn8STgj0X5nxHFBT
-         cGnsruv8EmjdvS2E6cNA1e0IkwOCFxNq1syo1qkPfBBG5Ck0FNVR17/VYGjryt3Ru2
-         I9w8EZBqdFtp7+XmDKMxrVoEPK0alRTglwbURf9Euc6KmxDNIyqZSsyioy7CR3aFEO
-         cZoyY5xo3PjQ+RGrKjqHUr811E8dkw1OrLBDhRuTJ9h23psTvi3f05bR880Ejsx9/9
-         58e3lBHF+hiMA==
-Date:   Mon, 16 Mar 2020 12:11:48 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warnings after merge of the devicetree tree
-Message-ID: <20200316121148.6f65f3f9@canb.auug.org.au>
+        id S1729301AbgCPCN6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 15 Mar 2020 22:13:58 -0400
+Received: from mail-pf1-f169.google.com ([209.85.210.169]:33537 "EHLO
+        mail-pf1-f169.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729324AbgCPCN6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 15 Mar 2020 22:13:58 -0400
+Received: by mail-pf1-f169.google.com with SMTP id n7so9062833pfn.0
+        for <linux-next@vger.kernel.org>; Sun, 15 Mar 2020 19:13:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=ABfC7oMBF6MP3hRG1QSWtlL5bllPDvnRXPuJtGWNIng=;
+        b=EgkUq8jZEK7FkGARHpYw4pWxSVTXCDH9XZ9+5vuyESF8fTqUu96mhc9UHU80WT9q0H
+         zkcDHDGv79gpAmALxUDKcJl1Yn/Lm/HjPjCki9WWXwhgnBcpcJs6Ep1/mt8KlWnuD4iR
+         2AkejekuewSQfKMhsY8mGok1cY8Ne5vRwLnmJDnjlfN7A3OF/3FpmzgtZij6I0ZCMCeL
+         VnFFmdrRISqCJCXTboAdgSi/xUdjXBYnyMNso1uEAgKYna7DV8Wt7zww/fT6jkMfTAHo
+         UdvNXSSjUaFKXdjNcdkOwB5qvm89BqhC0tmgMVa7nw5VpNYuh/+ZwTkn+4etH96sTLLY
+         lF4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=ABfC7oMBF6MP3hRG1QSWtlL5bllPDvnRXPuJtGWNIng=;
+        b=jwdgdZNyr0A4uv8lqpITPA2Wx4pY4+5aHYUuBQUFSOHsiJnLJjGvsF/ERvrZ62B/Mk
+         F32xX3/KHUxrJlJKwH4B4eCXcyEnrfvr2hCM0WJVy0YX7vQRsq+jN1lLKGU+6EET7uEy
+         caqHlONlOEv2old9Ko2C0CjR7K65i9F+QmQ7EYYgZnnfTkjADQW0EE95tqyhpq7MtqY0
+         3zyNYAW0b8SHMXzFpFQ/HyK/0sJ3yEzqlPd+8zU0kHs568U4kxPBrXSIs97pYEeCHx+a
+         tjCpdPlZQu3cgQIlc8oTrDnLfYFt4nw64rfwaZ3xOS1QurnBW1PUJnlnmIkkVEVk4DDr
+         UeIw==
+X-Gm-Message-State: ANhLgQ38x5Mi2p/OV9iFSE/x+B0Pu0+NAM2UyUSeSUFBj3MX8ytSJ2Es
+        BINOuDCw6TEmEzvWnyn+KSm4zH6VrGo=
+X-Google-Smtp-Source: ADFU+vtl/GCJiG5GJ9LLa67XzAtUTKGQ2SMA9WsR9WVpk0zh7Qolj7GF5iSTARvF0s0WlZ2I9+CMPQ==
+X-Received: by 2002:aa7:96a6:: with SMTP id g6mr24838772pfk.88.1584324834196;
+        Sun, 15 Mar 2020 19:13:54 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q9sm61992539pgs.89.2020.03.15.19.13.53
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Mar 2020 19:13:53 -0700 (PDT)
+Message-ID: <5e6ee0e1.1c69fb81.f3e6e.7a0e@mx.google.com>
+Date:   Sun, 15 Mar 2020 19:13:53 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/q4Cg4nRI+Axz/UwWZOuGBnQ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc5-468-g47d215bb9783
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 278 boots: 6 failed,
+ 259 passed with 8 offline, 5 untried/unknown (v5.6-rc5-468-g47d215bb9783)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/q4Cg4nRI+Axz/UwWZOuGBnQ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 278 boots: 6 failed, 259 passed with 8 offline, 5 =
+untried/unknown (v5.6-rc5-468-g47d215bb9783)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc5-468-g47d215bb9783/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc5-468-g47d215bb9783/
 
-After merging the devicetree tree, today's linux-next build (arm
-multi_v7_defconfig) produced these warnings:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc5-468-g47d215bb9783
+Git Commit: 47d215bb9783a05a8f790b7e316e9ced91af6a2f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 105 unique boards, 24 SoC families, 30 builds out of 215
 
-arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: Warning (=
-i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus unit addr=
-ess format error, expected "40000010"
-arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warning (i2c_=
-bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C address must =
-be less than 10-bits, got "0x40000010"
-arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: Warning (=
-i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus unit addr=
-ess format error, expected "40000010"
-arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warning (i2c_=
-bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C address must =
-be less than 10-bits, got "0x40000010"
-arch/arm/boot/dts/sun5i.dtsi:189.4-52: Warning (dma_ranges_format): /soc/dr=
-am-controller@1c01000:dma-ranges: "dma-ranges" property has invalid length =
-(12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D 2, =
-#size-cells =3D=3D 1)
-arch/arm/boot/dts/sun8i-r40.dtsi:769.4-52: Warning (dma_ranges_format): /so=
-c/dram-controller@1c62000:dma-ranges: "dma-ranges" property has invalid len=
-gth (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=3D=
- 2, #size-cells =3D=3D 1)
-arch/arm/boot/dts/sunxi-h3-h5.dtsi:563.4-52: Warning (dma_ranges_format): /=
-soc/dram-controller@1c62000:dma-ranges: "dma-ranges" property has invalid l=
-ength (12 bytes) (parent #address-cells =3D=3D 1, child #address-cells =3D=
-=3D 2, #size-cells =3D=3D 1)
+Boot Regressions Detected:
 
-(Originally there were 51 lines of messages, but I removed the duplicates.)
+arm:
 
-I am assuming that these are due to the dtc update. :-(
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: v5.6-rc5-338-gb1d59e1c=
+c3e8)
 
---=20
-Cheers,
-Stephen Rothwell
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 30 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
 
---Sig_/q4Cg4nRI+Axz/UwWZOuGBnQ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc5-338-gb1d59e1c=
+c3e8)
 
------BEGIN PGP SIGNATURE-----
+    vexpress_defconfig:
+        gcc-8:
+          vexpress-v2p-ca15-tc1:
+              lab-collabora: new failure (last pass: v5.6-rc5-338-gb1d59e1c=
+c3e8)
+              lab-baylibre: new failure (last pass: v5.6-rc5-338-gb1d59e1cc=
+3e8)
+          vexpress-v2p-ca9:
+              lab-collabora: new failure (last pass: v5.6-rc5-338-gb1d59e1c=
+c3e8)
+              lab-baylibre: new failure (last pass: v5.6-rc5-338-gb1d59e1cc=
+3e8)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5u0lQACgkQAVBC80lX
-0Gy8VAgApCpmayavhPVofQP5fn2Ii6CmQUmBSdgDyGGMf/I4kGl3eGUZXKb1E7Yd
-wqyXaRP9zbwQX3bzZCSqihxO0K4XtPXuoPW2dm2rcmBbXL919MCkP3jYkpVfe5cG
-q3UhjYs4VENDViaqita/K1ppzeHpnIQPH0ogH49cnC/3gDeDer3v8Qu6+9yHHaZj
-vyHngs9bBxU5k099JNkpetUkAJKMX/a+9wIdwoYnEiFVfO754Na0a1Jb1flAKhjM
-bXBZTfFEFb/SFU5+URmWmB1xUW8XCQcHPHpCkCSJhqUjp+e1wj5XjAKplUJKMmah
-z9QZOyHCoNVnXCKT2FSp2hXStNQuag==
-=Wmnd
------END PGP SIGNATURE-----
+arm64:
 
---Sig_/q4Cg4nRI+Axz/UwWZOuGBnQ--
+    defconfig:
+        gcc-8:
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: v5.6-rc5-338-gb1d59e1cc3e8)
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-338-gb=
+1d59e1cc3e8)
+          meson-gxl-s905x-libretech-cc:
+              lab-clabbe: new failure (last pass: v5.6-rc5-338-gb1d59e1cc3e=
+8)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-338-gb=
+1d59e1cc3e8)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-338-gb=
+1d59e1cc3e8)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            sun4i-a10-cubieboard: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6q-wandboard: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

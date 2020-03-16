@@ -2,120 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A9AF18654B
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 07:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7020E1865A3
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 08:25:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729739AbgCPG7N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Mar 2020 02:59:13 -0400
-Received: from mailgw02.mediatek.com ([1.203.163.81]:42077 "EHLO
-        mailgw02.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729319AbgCPG7N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Mar 2020 02:59:13 -0400
-X-UUID: 588b13627a9243e19d07350d889f03a6-20200316
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=rPV2PYDH/uN9KjdiCX6a2FWijysnZQsqChjH/MPZToI=;
-        b=hb+6LufoTvu3iX57+jxVZdGiQhxjKGm8aq5CD8U3812KGBAzROjFXHo7GFoW69cEEgdHI3ur0S3FgLL1QEZ3taJC9dSdHkUdKmw/CAb0+hSvqNp8Yf79A9IzctKnWH1tCg49i3Sh1AyhSz5IrA2vZImlDzbAwa7bXqBoA1y1v4g=;
-X-UUID: 588b13627a9243e19d07350d889f03a6-20200316
-Received: from mtkcas36.mediatek.inc [(172.27.4.253)] by mailgw02.mediatek.com
-        (envelope-from <ran.bi@mediatek.com>)
-        (mailgw01.mediatek.com ESMTP with TLS)
-        with ESMTP id 414160655; Mon, 16 Mar 2020 14:59:05 +0800
-Received: from MTKCAS36.mediatek.inc (172.27.4.186) by MTKMBS31N1.mediatek.inc
- (172.27.4.69) with Microsoft SMTP Server (TLS) id 15.0.1395.4; Mon, 16 Mar
- 2020 14:58:49 +0800
-Received: from [10.17.3.153] (10.17.3.153) by MTKCAS36.mediatek.inc
- (172.27.4.170) with Microsoft SMTP Server id 15.0.1395.4 via Frontend
- Transport; Mon, 16 Mar 2020 14:58:33 +0800
-Message-ID: <1584341922.16860.5.camel@mhfsdcap03>
-Subject: Re: linux-next: build failure after merge of the rtc tree
-From:   Ran Bi <ran.bi@mediatek.com>
+        id S1729767AbgCPHZK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Mar 2020 03:25:10 -0400
+Received: from wout4-smtp.messagingengine.com ([64.147.123.20]:51889 "EHLO
+        wout4-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1729877AbgCPHZK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Mar 2020 03:25:10 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 93CCC76F;
+        Mon, 16 Mar 2020 03:25:08 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 16 Mar 2020 03:25:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=Jjp6BybYfn/ndx0oEnovfVST1j4
+        uHSDa0Z1vfLeuRV0=; b=bMKeNTrCWhSq0ZMnJdAFF0VOBrdBj/iGgDT3qGhmE3+
+        UfgLXThsSuFW22+8An3Tz1nXmgDjQGc3iIGerxBlMDcWWw8zfPIDhSgwitmfGyNl
+        H67auJ2mCHKpv1MQD5DVWfRaHnhzw9HDX/ROW2muVXd6UPWLTeLaQU/W/M6tF9wU
+        x7lU3SMW3+Vc+wkOX979qLdSnAQd6kvrJuiTunWXgG5PGvWGr/6fPChiNQpC271+
+        rw6lnOMjv1H6hUA3srEnGndM2Xa5zIxjKKps+8StNNJBXfwIs0mNIDtMhvT/D552
+        jfVQgCu97vHYutca4e7gW+VUI+FV8dFwR+lZuM5+XJw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Jjp6By
+        bYfn/ndx0oEnovfVST1j4uHSDa0Z1vfLeuRV0=; b=RKOxV1OoQEzhQk98ANL2RR
+        +UuRrxjpLgHFQVW5yaRXaEJdtoZv+K79+heRUhTj0rlbq9aAMrfpRgs6jC8pVL/a
+        GOnOvxPRv13acvYHaxVPf8UrHYfTPibHeNCazDnnawSc8TJkiPEdu+RdihnHHCV5
+        6g68Cw9zvTPzL5VReCXMUCR0IB7AFDNriGlJ/jIjEG4Z0JbY26ZNBu4yYfETPpw4
+        Y4scXWoBs01VSI6Fq0ZQard7TXqvzJjMKRp9cwU+w22c3TVit23yN01DOm3JpHGh
+        nOrsmOpC6eAH2BT0BbvfFjWku7SgsB4JBvQStWn7vXBf3PVYAnpdefv/Vgkkf2Gg
+        ==
+X-ME-Sender: <xms:0ylvXsh4J36MQlguZ4kn1Xba0evTKsGQ1JtQ7zbQzH6oQaZLfKNudA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudefvddgvdekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhr
+    vghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:0ylvXgpU0_Ly_Ovg1iMotzziU9g0n40yNVSEY1jmcXkNUd3zluEXzw>
+    <xmx:0ylvXug6lgF-jMwpvhPowIKlNloMkFGtx-a6Zvn8_1C7n9q7MagxXg>
+    <xmx:0ylvXrKdMoexxkPTEXfPC6BGPJAm0mE4p9WfdMh50lRRzszkmQI_ZQ>
+    <xmx:1ClvXipgXD1Y3Qe6LqDoip3JocV3i8iYEYdhF4SQr0nFHch9E0IJVg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 3F025328005D;
+        Mon, 16 Mar 2020 03:25:07 -0400 (EDT)
+Date:   Mon, 16 Mar 2020 08:25:05 +0100
+From:   Greg KH <greg@kroah.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Mon, 16 Mar 2020 14:58:42 +0800
-In-Reply-To: <20200316161558.438c7d8b@canb.auug.org.au>
-References: <20200316161558.438c7d8b@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+Cc:     Felipe Balbi <balbi@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Hanjie Lin <hanjie.lin@amlogic.com>,
+        Yue Wang <yue.wang@amlogic.com>
+Subject: Re: linux-next: manual merge of the usb-gadget tree with the usb tree
+Message-ID: <20200316072505.GB3019942@kroah.com>
+References: <20200316142309.19cb3aa8@canb.auug.org.au>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: D27664E4EE8A3F429F3D7505BE7B8E49CB41C96B659CEF7BC0E7A7F10F3DEE412000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200316142309.19cb3aa8@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-SGkgQmVsbG9uaSwNCg0KT24gTW9uLCAyMDIwLTAzLTE2IGF0IDE2OjE1ICsxMTAwLCBTdGVwaGVu
-IFJvdGh3ZWxsIHdyb3RlOg0KPiBIaSBhbGwsDQo+IA0KPiBBZnRlciBtZXJnaW5nIHRoZSBydGMg
-dHJlZSwgdG9kYXkncyBsaW51eC1uZXh0IGJ1aWxkICh4ODZfNjQgYWxsbW9kY29uZmlnKQ0KPiBm
-YWlsZWQgbGlrZSB0aGlzOg0KPiANCj4gZHJpdmVycy9ydGMvcnRjLW10MjcxMi5jOiBJbiBmdW5j
-dGlvbiAnbXQyNzEyX3J0Y19zZXRfYWxhcm0nOg0KPiBkcml2ZXJzL3J0Yy9ydGMtbXQyNzEyLmM6
-MjM1OjY6IHdhcm5pbmc6IHVudXNlZCB2YXJpYWJsZSAnaXJxZW4nIFstV3VudXNlZC12YXJpYWJs
-ZV0NCj4gICAyMzUgfCAgdTE2IGlycWVuOw0KPiAgICAgICB8ICAgICAgXn5+fn4NCj4gZHJpdmVy
-cy9ydGMvcnRjLW10MjcxMi5jOiBBdCB0b3AgbGV2ZWw6DQo+IGRyaXZlcnMvcnRjL3J0Yy1tdDI3
-MTIuYzo0MDk6MTogZXJyb3I6IGV4cGVjdGVkICcsJyBvciAnOycgYmVmb3JlICdzdGF0aWMnDQo+
-ICAgNDA5IHwgc3RhdGljIHN0cnVjdCBwbGF0Zm9ybV9kcml2ZXIgbXQyNzEyX3J0Y19kcml2ZXIg
-PSB7DQo+ICAgICAgIHwgXn5+fn5+DQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBkcml2ZXJzL3J0
-Yy9ydGMtbXQyNzEyLmM6MTQ6DQo+IGRyaXZlcnMvcnRjL3J0Yy1tdDI3MTIuYzogSW4gZnVuY3Rp
-b24gJ210MjcxMl9ydGNfZHJpdmVyX2luaXQnOg0KPiBkcml2ZXJzL3J0Yy9ydGMtbXQyNzEyLmM6
-NDE4OjI0OiBlcnJvcjogJ210MjcxMl9ydGNfZHJpdmVyJyB1bmRlY2xhcmVkIChmaXJzdCB1c2Ug
-aW4gdGhpcyBmdW5jdGlvbik7IGRpZCB5b3UgbWVhbiAnbXQyNzEyX3J0Y19wcm9iZSc/DQo+ICAg
-NDE4IHwgbW9kdWxlX3BsYXRmb3JtX2RyaXZlcihtdDI3MTJfcnRjX2RyaXZlcik7DQo+ICAgICAg
-IHwgICAgICAgICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fg0KPiBpbmNsdWRlL2xp
-bnV4L3BsYXRmb3JtX2RldmljZS5oOjIxNDoyOTogbm90ZTogaW4gZGVmaW5pdGlvbiBvZiBtYWNy
-byAncGxhdGZvcm1fZHJpdmVyX3JlZ2lzdGVyJw0KPiAgIDIxNCB8ICBfX3BsYXRmb3JtX2RyaXZl
-cl9yZWdpc3RlcihkcnYsIFRISVNfTU9EVUxFKQ0KPiAgICAgICB8ICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICBefn4NCj4gaW5jbHVkZS9saW51eC9wbGF0Zm9ybV9kZXZpY2UuaDoyNDQ6Mjog
-bm90ZTogaW4gZXhwYW5zaW9uIG9mIG1hY3JvICdtb2R1bGVfZHJpdmVyJw0KPiAgIDI0NCB8ICBt
-b2R1bGVfZHJpdmVyKF9fcGxhdGZvcm1fZHJpdmVyLCBwbGF0Zm9ybV9kcml2ZXJfcmVnaXN0ZXIs
-IFwNCj4gICAgICAgfCAgXn5+fn5+fn5+fn5+fg0KPiBkcml2ZXJzL3J0Yy9ydGMtbXQyNzEyLmM6
-NDE4OjE6IG5vdGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnbW9kdWxlX3BsYXRmb3JtX2RyaXZl
-cicNCj4gICA0MTggfCBtb2R1bGVfcGxhdGZvcm1fZHJpdmVyKG10MjcxMl9ydGNfZHJpdmVyKTsN
-Cj4gICAgICAgfCBefn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+IGRyaXZlcnMvcnRjL3J0Yy1tdDI3
-MTIuYzo0MTg6MjQ6IG5vdGU6IGVhY2ggdW5kZWNsYXJlZCBpZGVudGlmaWVyIGlzIHJlcG9ydGVk
-IG9ubHkgb25jZSBmb3IgZWFjaCBmdW5jdGlvbiBpdCBhcHBlYXJzIGluDQo+ICAgNDE4IHwgbW9k
-dWxlX3BsYXRmb3JtX2RyaXZlcihtdDI3MTJfcnRjX2RyaXZlcik7DQo+ICAgICAgIHwgICAgICAg
-ICAgICAgICAgICAgICAgICBefn5+fn5+fn5+fn5+fn5+fg0KPiBpbmNsdWRlL2xpbnV4L3BsYXRm
-b3JtX2RldmljZS5oOjIxNDoyOTogbm90ZTogaW4gZGVmaW5pdGlvbiBvZiBtYWNybyAncGxhdGZv
-cm1fZHJpdmVyX3JlZ2lzdGVyJw0KPiAgIDIxNCB8ICBfX3BsYXRmb3JtX2RyaXZlcl9yZWdpc3Rl
-cihkcnYsIFRISVNfTU9EVUxFKQ0KPiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICBefn4NCj4gaW5jbHVkZS9saW51eC9wbGF0Zm9ybV9kZXZpY2UuaDoyNDQ6Mjogbm90ZTogaW4g
-ZXhwYW5zaW9uIG9mIG1hY3JvICdtb2R1bGVfZHJpdmVyJw0KPiAgIDI0NCB8ICBtb2R1bGVfZHJp
-dmVyKF9fcGxhdGZvcm1fZHJpdmVyLCBwbGF0Zm9ybV9kcml2ZXJfcmVnaXN0ZXIsIFwNCj4gICAg
-ICAgfCAgXn5+fn5+fn5+fn5+fg0KPiBkcml2ZXJzL3J0Yy9ydGMtbXQyNzEyLmM6NDE4OjE6IG5v
-dGU6IGluIGV4cGFuc2lvbiBvZiBtYWNybyAnbW9kdWxlX3BsYXRmb3JtX2RyaXZlcicNCj4gICA0
-MTggfCBtb2R1bGVfcGxhdGZvcm1fZHJpdmVyKG10MjcxMl9ydGNfZHJpdmVyKTsNCj4gICAgICAg
-fCBefn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+IEluIGZpbGUgaW5jbHVkZWQgZnJvbSBpbmNsdWRl
-L2xpbnV4L2RldmljZS5oOjMxLA0KPiAgICAgICAgICAgICAgICAgIGZyb20gaW5jbHVkZS9saW51
-eC9wbGF0Zm9ybV9kZXZpY2UuaDoxMywNCj4gICAgICAgICAgICAgICAgICBmcm9tIGRyaXZlcnMv
-cnRjL3J0Yy1tdDI3MTIuYzoxNDoNCj4gZHJpdmVycy9ydGMvcnRjLW10MjcxMi5jOiBJbiBmdW5j
-dGlvbiAnbXQyNzEyX3J0Y19kcml2ZXJfZXhpdCc6DQo+IGRyaXZlcnMvcnRjL3J0Yy1tdDI3MTIu
-Yzo0MTg6MjQ6IGVycm9yOiAnbXQyNzEyX3J0Y19kcml2ZXInIHVuZGVjbGFyZWQgKGZpcnN0IHVz
-ZSBpbiB0aGlzIGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuICdtdDI3MTJfcnRjX3Byb2JlJz8NCj4g
-ICA0MTggfCBtb2R1bGVfcGxhdGZvcm1fZHJpdmVyKG10MjcxMl9ydGNfZHJpdmVyKTsNCj4gICAg
-ICAgfCAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+DQo+IGluY2x1ZGUv
-bGludXgvZGV2aWNlL2RyaXZlci5oOjI2NjoxNzogbm90ZTogaW4gZGVmaW5pdGlvbiBvZiBtYWNy
-byAnbW9kdWxlX2RyaXZlcicNCj4gICAyNjYgfCAgX191bnJlZ2lzdGVyKCYoX19kcml2ZXIpICwg
-IyNfX1ZBX0FSR1NfXyk7IFwNCj4gICAgICAgfCAgICAgICAgICAgICAgICAgXn5+fn5+fn4NCj4g
-ZHJpdmVycy9ydGMvcnRjLW10MjcxMi5jOjQxODoxOiBub3RlOiBpbiBleHBhbnNpb24gb2YgbWFj
-cm8gJ21vZHVsZV9wbGF0Zm9ybV9kcml2ZXInDQo+ICAgNDE4IHwgbW9kdWxlX3BsYXRmb3JtX2Ry
-aXZlcihtdDI3MTJfcnRjX2RyaXZlcik7DQo+ICAgICAgIHwgXn5+fn5+fn5+fn5+fn5+fn5+fn5+
-fg0KPiBkcml2ZXJzL3J0Yy9ydGMtbXQyNzEyLmM6IEluIGZ1bmN0aW9uICdtdDI3MTJfcnRjX2Ry
-aXZlcl9pbml0JzoNCj4gZHJpdmVycy9ydGMvcnRjLW10MjcxMi5jOjQxODoxOiB3YXJuaW5nOiBj
-b250cm9sIHJlYWNoZXMgZW5kIG9mIG5vbi12b2lkIGZ1bmN0aW9uIFstV3JldHVybi10eXBlXQ0K
-PiAgIDQxOCB8IG1vZHVsZV9wbGF0Zm9ybV9kcml2ZXIobXQyNzEyX3J0Y19kcml2ZXIpOw0KPiAg
-ICAgICB8IF5+fn5+fn5+fn5+fn5+fn5+fn5+fn4NCj4gQXQgdG9wIGxldmVsOg0KPiBkcml2ZXJz
-L3J0Yy9ydGMtbXQyNzEyLmM6MzEyOjEyOiB3YXJuaW5nOiAnbXQyNzEyX3J0Y19wcm9iZScgZGVm
-aW5lZCBidXQgbm90IHVzZWQgWy1XdW51c2VkLWZ1bmN0aW9uXQ0KPiAgIDMxMiB8IHN0YXRpYyBp
-bnQgbXQyNzEyX3J0Y19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgICAg
-ICB8ICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fg0KPiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0K
-PiANCj4gICAwMGMzNmQ3MzE3MWIgKCJydGM6IGFkZCBzdXBwb3J0IGZvciB0aGUgTWVkaWFUZWsg
-TVQyNzEyIFJUQyIpDQo+IA0KPiBJIGhhdmUgdXNlZCB0aGUgdmVyc2lvbiBmcm9tIG5leHQtMjAy
-MDAzMTMgZm9yIHRvZGF5Lg0KPiANCg0KVGhpcyBidWlsZCBmYWlsIG9ubHkgaGFwcGVuIGlmIHJ0
-Yy1tdDI3MTIgYnVpbGQgYXMgbW9kdWxlIHdoaWNoIEkNCmhhdmVuJ3QgdHJ5LiBJdCBiZWNhdXNl
-ICI7IiB3YXMgbWlzc2VkIGFmdGVyICJNT0RVTEVfREVWSUNFX1RBQkxFKG9mLA0KbXQyNzEyX3J0
-Y19vZl9tYXRjaCkiLiBTaG91bGQgSSBzZW5kIGEgZml4IHBhdGNoIGZvciB0aGlzIG9yIHJlc2Vu
-ZCB0aGUNCndob2xlIHJ0Yy1tdDI3MTIgZHJpdmVyPw0KDQpSZWdhcmRzLA0KUmFuDQo=
+On Mon, Mar 16, 2020 at 02:23:09PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb-gadget tree got a conflict in:
+> 
+>   drivers/usb/dwc3/dwc3-meson-g12a.c
+> 
+> between commit:
+> 
+>   bce3052f0c16 ("usb: roles: Provide the switch drivers handle to the switch in the API")
+> 
+> from the usb tree and commit:
+> 
+>   1e355f21d3fb ("usb: dwc3: Add Amlogic A1 DWC3 glue")
+> 
+> from the usb-gadget tree.
 
+Thanks for this, I just hit this issue as I just merged the gadget tree
+into mine.  I'll queue it up into my tree...
+
+thanks,
+
+greg k-h

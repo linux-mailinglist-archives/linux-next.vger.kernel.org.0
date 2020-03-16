@@ -2,42 +2,44 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F340186509
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 07:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D8C718651A
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 07:38:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729485AbgCPGeV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Mar 2020 02:34:21 -0400
-Received: from mail-wr1-f67.google.com ([209.85.221.67]:45860 "EHLO
-        mail-wr1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729407AbgCPGeV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Mar 2020 02:34:21 -0400
-Received: by mail-wr1-f67.google.com with SMTP id t2so9601215wrx.12;
-        Sun, 15 Mar 2020 23:34:18 -0700 (PDT)
+        id S1729633AbgCPGih (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Mar 2020 02:38:37 -0400
+Received: from mail-wm1-f65.google.com ([209.85.128.65]:51369 "EHLO
+        mail-wm1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729435AbgCPGih (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Mar 2020 02:38:37 -0400
+Received: by mail-wm1-f65.google.com with SMTP id a132so16297756wme.1;
+        Sun, 15 Mar 2020 23:38:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to;
-        bh=k7NxWyQOWr0SwUBxYMG9c7DtM1CeQgn0vuN+gW0d0aQ=;
-        b=Laf3kdYQ4yYUlsH2k9nkkWpi3JZte7GYf0PppARndx5GYXHU3HK9w57FHIaMibyZk3
-         fzLlXaZpCypupLTCKfknl0LShGedMsp67DephI8/xQey7lgsocSYRa3mGmSYqixxFk1G
-         lmZq51yUY/X6uMk6xdazq8IzmH1tn72Wkd6pe2I3HAA+qHrN5zYTO5Zos961x2h7H7ke
-         GAZSoOJ2kY8FKg/Zeh48rjrz234v62bzLq4tx0g3iiNWgjmhpZV+dy0/WDdSSAz/jbwH
-         Y0YdXaGxdrLYnpb+377vPBAJtH8y6xG0JEcINUtiA5IBo8X3+Df0RAzQrROTQeoWC25K
-         ehkA==
-X-Gm-Message-State: ANhLgQ230Ium+b82dNvZEkfIgpvp0eUFNqH2rToXpFpGe0jcQ9s0h+7+
-        tFRVvVx3VPDt1GlccT38Tpa8p3bA
-X-Google-Smtp-Source: ADFU+vtJSta5p4kj/XnAnH2DrWE+S0jblqCxEDzrbc+1Oy2Dd+4TRAZpu9yhllmvIGn/Bj3ZRY3Wuw==
-X-Received: by 2002:adf:e4c9:: with SMTP id v9mr4812016wrm.188.1584340457660;
-        Sun, 15 Mar 2020 23:34:17 -0700 (PDT)
+         :message-id:date:user-agent:mime-version:in-reply-to
+         :content-language:content-transfer-encoding;
+        bh=L/hVm9PFFup3qS7IkAWx1YNVvGEF1kg6IBxXb7BSSz4=;
+        b=oV5obvJhF2zMHd+Irf8W7beSFHNQS3maE+DsmjzgTJs2mHRFBFyHd1yk+Sxy7D1Q+6
+         Myt3Yjx8/H6vKJoIn/KFmSTQpy61x7eiYN/fTf4q6ra4y32X473TTno8q2s5jCwqKioz
+         URWwp//aiBG2LLITeZK8kjFTrgEWk/i/mjYqo5PYQQZ+Ks/wGb+jLatkSAUgiCD9Z+Fa
+         HTx6Jt0mXa4MKA7VkRxyPR4nRV/AHg4euVGTcW5Hy36B+q/p+Bw0PI7y0Cxby2HKPPy5
+         Tv/UakuW9NxYu/qPMXO7M+K6QAt4w3R3Uijv1eJ9orcMHysmSf1a+50co0tzB+sO1hx5
+         kZ5Q==
+X-Gm-Message-State: ANhLgQ1t00nuoyP1qqCCJERxUiwDuk82p8WduEe+SUX95Kq8fsGm3O7S
+        g9ZV4D+HYIwooN9925c9rcdhFBB9
+X-Google-Smtp-Source: ADFU+vslDcUQeSCwZ7u/5/zXeSvaSUK8YUvibE0DUSA2CdPPk5TwiMHhfiR9C8IryrwYPhZLRD+XRw==
+X-Received: by 2002:a1c:9658:: with SMTP id y85mr16958701wmd.63.1584340714724;
+        Sun, 15 Mar 2020 23:38:34 -0700 (PDT)
 Received: from ?IPv6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id q11sm101975wrp.53.2020.03.15.23.34.16
+        by smtp.gmail.com with ESMTPSA id i12sm330803wro.46.2020.03.15.23.38.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Mar 2020 23:34:16 -0700 (PDT)
+        Sun, 15 Mar 2020 23:38:34 -0700 (PDT)
 Subject: Re: linux-next: manual merge of the tty tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, Greg KH <greg@kroah.com>
+To:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 References: <20200310144013.6df85b46@canb.auug.org.au>
+ <20200310090422.GB2445065@kroah.com>
 From:   Jiri Slaby <jslaby@suse.cz>
 Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
  mQINBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
@@ -81,107 +83,72 @@ Autocrypt: addr=jslaby@suse.cz; prefer-encrypt=mutual; keydata=
  9HKkJqkN9xYEYaxtfl5pelF8idoxMZpTvCZY7jhnl2IemZCBMs6s338wS12Qro5WEAxV6cjD
  VSdmcD5l9plhKGLmgVNCTe8DPv81oDn9s0cIRLg9wNnDtj8aIiH8lBHwfUkpn32iv0uMV6Ae
  sLxhDWfOR4N+wu1gzXWgLel4drkCJcuYK5IL1qaZDcuGR8RPo3jbFO7Y
-Message-ID: <ccc23257-233e-ca00-9fa6-596bc4b08dae@suse.cz>
-Date:   Mon, 16 Mar 2020 07:34:11 +0100
+Message-ID: <b518b4d6-b959-525f-1425-cdcb1277958f@suse.cz>
+Date:   Mon, 16 Mar 2020 07:38:33 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <20200310144013.6df85b46@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="ZVA7EKDl256spfdtSNyDhkH6Du5TPeCCM"
+In-Reply-To: <20200310090422.GB2445065@kroah.com>
+Content-Type: text/plain; charset=iso-8859-2
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---ZVA7EKDl256spfdtSNyDhkH6Du5TPeCCM
-Content-Type: multipart/mixed; boundary="1ep3e9yoQ5QiHww58iGupQyB8rkrfSScA"
+On 10. 03. 20, 10:04, Greg KH wrote:
+> On Tue, Mar 10, 2020 at 02:40:13PM +1100, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the tty tree got a conflict in:
+>>
+>>   drivers/tty/vt/selection.c
+>>
+>> between commits:
+>>
+>>   4b70dd57a15d ("vt: selection, push console lock down")
+>>   e8c75a30a23c ("vt: selection, push sel_lock up")
+>>
+>> from Linus' tree and commits:
+>>
+>>   9256d09f1da1 ("vt: selection, create struct from console selection globals")
+>>   bc80932cc25a ("vt: selection, indent switch-case properly")
+>>
+>> from the tty tree.
+>>
+>> I fixed it up (I think - see below) and can carry the fix as necessary.
+>> This is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+> 
+> Thank you for this, I hadn't gotten to it yet.
+> 
+> Your merge looks the same as mine, and I've pushed out the merge
+> resolution in my tree.
 
---1ep3e9yoQ5QiHww58iGupQyB8rkrfSScA
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Ah, the two merges differ, actually.
 
-On 10. 03. 20, 4:40, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the tty tree got a conflict in:
->=20
->   drivers/tty/vt/selection.c
->=20
-> between commits:
->=20
->   4b70dd57a15d ("vt: selection, push console lock down")
->   e8c75a30a23c ("vt: selection, push sel_lock up")
->=20
-> from Linus' tree and commits:
->=20
->   9256d09f1da1 ("vt: selection, create struct from console selection gl=
-obals")
->   bc80932cc25a ("vt: selection, indent switch-case properly")
->=20
-> from the tty tree.
->=20
-> I fixed it up (I think - see below) and can carry the fix as necessary.=
+Stepen's (cdc26c076ff):
 
-> This is now fixed as far as linux-next is concerned, but any non trivia=
-l
-> conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularl=
-y
-> complex conflicts.
+-       if (sel_cons != vc_cons[fg_console].d) {
+ -      mutex_lock(&vc_sel.lock);
++       if (vc_sel.cons != vc_cons[fg_console].d) {
 
-I checked the result previously, but now I see a double lock there. Did
-something change?
 
-Anyway, vc_sel.lock cannot be taken in both set_selection_kernel and
-__set_selection_kernel:
+Yours (cb05c6c82fb0):
+ -      if (sel_cons != vc_cons[fg_console].d) {
+ +      mutex_lock(&vc_sel.lock);
+ +      if (vc_sel.cons != vc_cons[fg_console].d) {
 
---- a/drivers/tty/vt/selection.c
-+++ b/drivers/tty/vt/selection.c
-@@ -219,7 +219,6 @@ static int __set_selection_kernel(struct
-tiocl_selection *v, struct tty_struct *
-        if (ps > pe)    /* make vc_sel.start <=3D vc_sel.end */
-                swap(ps, pe);
+> Jiri, can you double-check to verify that the merge is correct in my
+> tree?
 
--       mutex_lock(&vc_sel.lock);
-        if (vc_sel.cons !=3D vc_cons[fg_console].d) {
-                clear_selection();
-                vc_sel.cons =3D vc_cons[fg_console].d;
-
+So this is now a tty tree problem. Will send a patch in a minute.
 
 thanks,
---=20
+-- 
 js
 suse labs
-
-
---1ep3e9yoQ5QiHww58iGupQyB8rkrfSScA--
-
---ZVA7EKDl256spfdtSNyDhkH6Du5TPeCCM
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEE1pWBVg1LlveO4uo2vSWxBAa0cEkFAl5vHecACgkQvSWxBAa0
-cEk8sQ//fC8k8tbKzYNA2RkESA++67gtJKyXy+q5biumck9PFpzukwcuopjBnpah
-gj7BY/DyFuzl7KHAY9KIswn1G+P30J39lGZyCX8t3tAxxGbBw9jW+lHeWNG78uqI
-lYzXxSTiSEOxz9dv7pyYvZdWuliYJZNcLoX46sBTm4dHEWacE1tU2h78USWWqOAZ
-tkkLEL9UqkoPXyvEuiq9J7fLPooSldaPv1sZTzB7sIk6qf4cWN5lv2MluX3D0s8x
-RiL11bB23nWA7znAgKu+nBWbPEQLOHt69bGU/PV0yU6EXT7YUXBoPXCjCUQVOm0P
-3K1olhtU2KaHLHgw+vgNs+1XHJJiL1TSBj0HaVAomTYApd2vhGuveVGflsdiz6pg
-ncgCOaKZ2WXExtPcrEzLfenRYV+e8P0yNC1iIoXpHpL2159Yu2Hyb06vi7ni2rUu
-R37AdT2yN8wL233p4kv/ixwZgHNKlPFkosGR8msU1tEbQFIjSYomzEGAB/EeeCxi
-JqHuRTARDBUh9ObVfejeqDY9Dj5J+viGDa56lCiS+azbaiuzHhExFdqzcYTCibMx
-cfwFVQya4VcbtVGzZLzvsdFVNGBXJILc4D5xVHP3sehCtLrdA7gwls+r8Ugfkymt
-XfpRwfR4Z0tTiOXjgaf+xlFbCx4WcwKTtttgMxkiosg0PUMA158=
-=ecZ0
------END PGP SIGNATURE-----
-
---ZVA7EKDl256spfdtSNyDhkH6Du5TPeCCM--

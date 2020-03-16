@@ -2,302 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B7C186BF3
-	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 14:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA539186C04
+	for <lists+linux-next@lfdr.de>; Mon, 16 Mar 2020 14:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731250AbgCPNYJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 16 Mar 2020 09:24:09 -0400
-Received: from mail-pj1-f51.google.com ([209.85.216.51]:53253 "EHLO
-        mail-pj1-f51.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731225AbgCPNYI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 16 Mar 2020 09:24:08 -0400
-Received: by mail-pj1-f51.google.com with SMTP id l36so8335703pjb.3
-        for <linux-next@vger.kernel.org>; Mon, 16 Mar 2020 06:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=kNT8p2WRRmzYzGy/neC4sVnubN6GAkRswm1RtwEBxVM=;
-        b=Zho+rZ/FNeFLg6DeJ/6bTVHpdxVYC5FqOVv4wroA8FY6wd+VVWdEhkGGpPTDLxinfy
-         V2OL3Yd8miG6bMSH7KpJ07R8LKg4jbyiok9ssY6wZt6sLefIHX3Ra4M9bBm/ml77J3nK
-         4dCGG0AJOAIqsuwHNjtzpMGvj+TzHYEQ6I/Uek/ndm3i7Y67yg1LGDfW37qJ3qYRuGn8
-         njuiAKh7KWlDh6T0F19TdNpiwzVn234Hrel2LVtzXCiVQxvg9ggKltzBmSWo6JGqDHK1
-         wFjgx2S5UEFpwqi8YNW6BGT+nSLC9anfBqS71jMWhPhEwMgmdt1DUUope+Snj/FGL4BH
-         rGEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=kNT8p2WRRmzYzGy/neC4sVnubN6GAkRswm1RtwEBxVM=;
-        b=NL8jAcrruxNNCXsiRHGW9NvJLeMRmJQi/4zzqngm9m9r2CIqtMEUYwUTDzioXpRwYd
-         GHFqiVECzJrNeH7d0tFE7pzC+WqbajeLWqOYTwMUhb6g7ymebVKBKAXYxmz51E0Tl0J2
-         MbJLovPcQj+LdamHlLdoGzGPDILCZBP4qMmG9mAIisyStpfgwhofucBUbf5M50+keE2N
-         MzTunqRMsM3WBxm6XZ/AYkmSr1zC6D6lIre2gCWVqFiFjuVftwOXm38PpD6VaKSIJnow
-         7Lgsir/z3IsDwR81Sj7hgvqe4epFT/SscNqL7Dxkj/YgNQEvA95GlHaic6OsegejoNZv
-         GSTA==
-X-Gm-Message-State: ANhLgQ2z9Rwx9L8RIDouDRo4lEzrrgfXhjEhuBN7Lxj47zAmxi6F2QsZ
-        eoqxyh0sGbTpoViYD8ebkNDRjoxOE8M=
-X-Google-Smtp-Source: ADFU+vtwX04zn7buNxo4AHnETr63+1XJuzXCVd9ReRbZSMI9euIEvx3dZJxZHlICykJUvkOQEccZzg==
-X-Received: by 2002:a17:90a:bf0b:: with SMTP id c11mr26534631pjs.28.1584365046752;
-        Mon, 16 Mar 2020 06:24:06 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 136sm64628660pgh.26.2020.03.16.06.24.05
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Mar 2020 06:24:06 -0700 (PDT)
-Message-ID: <5e6f7df6.1c69fb81.bf0f2.942b@mx.google.com>
-Date:   Mon, 16 Mar 2020 06:24:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1731329AbgCPN2y (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 16 Mar 2020 09:28:54 -0400
+Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:33255 "EHLO
+        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1731154AbgCPN2y (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 16 Mar 2020 09:28:54 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 58BB38A3;
+        Mon, 16 Mar 2020 09:28:53 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 16 Mar 2020 09:28:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=kUt0/mQF3fFJa+SaSINLmVBKDef
+        IWc4N6QePTDuzfSE=; b=MMITke/te69dqqbGeQu04RBDJ/CNFu9Mv7nGTbowzXQ
+        xehmmtXo4k3FoXwb7bFvEt+NxawRNiLdWElmv5a9sO+ElRJBFW1tX2aTQMS0Dg1F
+        bgPbGsl87QnQi3MjbqsE2+AhbfFmfVekKhzUHvKHVItp1zkRR9mARHPBX9U2IkRG
+        J/sZxAyc4NkCLU18nWG4NHw1ZWJBq9I3Iwrn7CCcxhS+EvR5V1aLnTGy1ZurYaBL
+        ip6SYvODCmITn1WB376t6NfiQohRp/hNAbn8/M/sPlzw+2gEP0nMp7sHWbj639nM
+        BUsQyg3/mVQsRKogD4c6c6QBtJw36laiKWoHXClyiOg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=kUt0/m
+        QF3fFJa+SaSINLmVBKDefIWc4N6QePTDuzfSE=; b=E54II+Zr/SHosUpbY1exrD
+        7+e/dfXdJWjLHcaFp4ZWnrrX6ggOODSWkM3EGj1UA2RAQRGftL0M46aRp0721gzC
+        NMEcE2o5p3KB+FSL9N5fMb5QnLX/vnoNqMn+q4FoTMGEbq9QO5klV/6R9Eti3D9b
+        z7qeNVtMR30/buyfqBc3XOkdAfEmZmewKxoeWE8Lq+TmzxPGVUcXJfM3Waqs115H
+        5wlNw/mmLQQk2011MOnqD4Ft1/ksvICBeomJY3r/KqeEKkeOO9mp9YXpGwL8L+tx
+        gc8wPv5tzpOaSSk4PUVsShiDTlvsRPrBZe3L0xG8mEEOIGUOZqLKN2npUMCmzREg
+        ==
+X-ME-Sender: <xms:E39vXhN3ZlO3f_vOQKtaXChXo1UDvkVWaVPnwxl4F32q_QNynJ_c2g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudeffedgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucfkphepkeefrdekiedrkeelrddutd
+    ejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhr
+    vghgsehkrhhorghhrdgtohhm
+X-ME-Proxy: <xmx:FH9vXtb6YH76y_EsKcEvxoCb9vzxCMqmqBtTd2Y89tOnWXhJEiqZmQ>
+    <xmx:FH9vXv1ehRBIrcJZo3SdhEU9g3eH4nR_W5e6EwN7LIGrvxCQGsr8MA>
+    <xmx:FH9vXjfTR1tjN_Fnh7KZstrJtqZdkJHWKRJDKjKC6jPdOnHryLL5Yg>
+    <xmx:FH9vXmXmU3EM1KURrh4IVJR_6wiDZoMX0ZKKfAOwyXJmu_QNo7ESdQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 9B6F83061CB6;
+        Mon, 16 Mar 2020 09:28:51 -0400 (EDT)
+Date:   Mon, 16 Mar 2020 14:28:50 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Thierry Reding <thierry.reding@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Colin Cross <ccross@android.com>,
+        Olof Johansson <olof@lixom.net>,
+        Thierry Reding <treding@nvidia.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nagarjuna Kristam <nkristam@nvidia.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Subject: Re: linux-next: build failure after merge of the usb tree
+Message-ID: <20200316132850.GB3960435@kroah.com>
+References: <20200316141004.171649a5@canb.auug.org.au>
+ <20200316113012.GA3049021@ulmo>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200316
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 275 boots: 23 failed, 233 passed with 7 offline,
- 12 untried/unknown (next-20200316)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200316113012.GA3049021@ulmo>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 275 boots: 23 failed, 233 passed with 7 offline, 12 untri=
-ed/unknown (next-20200316)
+On Mon, Mar 16, 2020 at 12:30:12PM +0100, Thierry Reding wrote:
+> On Mon, Mar 16, 2020 at 02:10:04PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the usb tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> > 
+> > drivers/phy/tegra/xusb.c: In function 'tegra_xusb_setup_usb_role_switch':
+> > drivers/phy/tegra/xusb.c:641:10: error: initialization of 'int (*)(struct usb_role_switch *, enum usb_role)' from incompatible pointer type 'int (*)(struct device *, enum usb_role)' [-Werror=incompatible-pointer-types]
+> >   641 |   .set = tegra_xusb_role_sw_set,
+> >       |          ^~~~~~~~~~~~~~~~~~~~~~
+> > drivers/phy/tegra/xusb.c:641:10: note: (near initialization for 'role_sx_desc.set')
+> > 
+> > Caused by commit
+> > 
+> >   bce3052f0c16 ("usb: roles: Provide the switch drivers handle to the switch in the API")
+> > 
+> > interacting with commit
+> > 
+> >   5a00c7c7604f ("phy: tegra: xusb: Add usb-role-switch support")
+> > 
+> > from the tegra tree.
+> > 
+> > I have added this merge fix patch (which may need more work):
+> > 
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Mon, 16 Mar 2020 14:04:20 +1100
+> > Subject: [PATCH] phy: tegra: fix up for set_role API change
+> > 
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/phy/tegra/xusb.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/phy/tegra/xusb.c b/drivers/phy/tegra/xusb.c
+> > index d907f03bf282..25223c350e66 100644
+> > --- a/drivers/phy/tegra/xusb.c
+> > +++ b/drivers/phy/tegra/xusb.c
+> > @@ -596,11 +596,12 @@ static void tegra_xusb_usb_phy_work(struct work_struct *work)
+> >  	atomic_notifier_call_chain(&port->usb_phy.notifier, 0, &port->usb_phy);
+> >  }
+> >  
+> > -static int tegra_xusb_role_sw_set(struct device *dev, enum usb_role role)
+> > +static int tegra_xusb_role_sw_set(struct usb_role_switch *sw,
+> > +				  enum usb_role role)
+> >  {
+> > -	struct tegra_xusb_port *port = dev_get_drvdata(dev);
+> > +	struct tegra_xusb_port *port = usb_role_switch_get_drvdata(sw);
+> >  
+> > -	dev_dbg(dev, "%s(): role %s\n", __func__, usb_roles[role]);
+> > +	dev_dbg(&port->dev, "%s(): role %s\n", __func__, usb_roles[role]);
+> >  
+> >  	schedule_work(&port->usb_phy_work);
+> >  
+> > -- 
+> > 2.25.0
+> 
+> I can rebase the branch that contains this commit on top of Greg's USB
+> tree. These are a dependency for the UDC and host driver changes that I
+> have sent as a pull request to Greg, so this should all work out nicely.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200316/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200316/
+Ok, should I take your pull request then, or not?
 
-Tree: next
-Branch: master
-Git Describe: next-20200316
-Git Commit: 8548fd2f20ed19b0e8c0585b71fdfde1ae00ae3c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 104 unique boards, 23 SoC families, 30 builds out of 329
+> Greg, I recall that you've said in the past that you don't rebase your
+> trees. Is that still the case for the USB tree? Do you have a preference
+> what to base my branch on? The earliest of your USB tree that contains
+> all patches needed to make this compile? Or the latest?
 
-Boot Regressions Detected:
+Yes, I do not rebase my tree.  Please work off of the usb-next branch,
+and you can send me a pull request based anywhere, it should work just
+fine :)
 
-arm:
+thanks,
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200313)
-
-    imx_v4_v5_defconfig:
-        gcc-8:
-          imx27-phytec-phycard-s-rdk:
-              lab-pengutronix: new failure (last pass: next-20191011)
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: new failure (last pass: next-20191011)
-
-    multi_v5_defconfig:
-        gcc-8:
-          imx27-phytec-phycard-s-rdk:
-              lab-pengutronix: new failure (last pass: next-20191011)
-
-    multi_v7_defconfig:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: new failure (last pass: next-20191011)
-          tegra124-nyan-big:
-              lab-collabora: new failure (last pass: next-20200226)
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200313)
-          rk3288-veyron-jaq:
-              lab-collabora: failing since 2 days (last pass: next-20200312=
- - first fail: next-20200313)
-          tegra124-nyan-big:
-              lab-collabora: failing since 2 days (last pass: next-20200312=
- - first fail: next-20200313)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: new failure (last pass: next-20191011)
-          tegra124-nyan-big:
-              lab-collabora: new failure (last pass: next-20200226)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20200313)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 27 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-cubieboard:
-              lab-baylibre-seattle: new failure (last pass: next-20200313)
-          sun8i-h2-plus-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: next-20200313)
-
-    tegra_defconfig:
-        gcc-8:
-          tegra124-nyan-big:
-              lab-collabora: failing since 2 days (last pass: next-20200312=
- - first fail: next-20200313)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200313)
-
-    vexpress_defconfig:
-        gcc-8:
-          vexpress-v2p-ca15-tc1:
-              lab-collabora: new failure (last pass: next-20200313)
-              lab-baylibre: new failure (last pass: next-20200313)
-          vexpress-v2p-ca9:
-              lab-collabora: new failure (last pass: next-20200313)
-              lab-baylibre: new failure (last pass: next-20200313)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: failing since 9 days (last pass: next-20200304 - f=
-irst fail: next-20200306)
-          bcm2837-rpi-3-b:
-              lab-baylibre: new failure (last pass: next-20200313)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200313)
-          meson-g12a-sei510:
-              lab-baylibre: new failure (last pass: next-20200313)
-          meson-gxl-s905d-p230:
-              lab-baylibre: failing since 2 days (last pass: next-20200306 =
-- first fail: next-20200313)
-          meson-sm1-sei610:
-              lab-baylibre: new failure (last pass: next-20200313)
-          sun50i-h5-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: next-20200313)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200313)
-          meson-gxl-s905x-libretech-cc:
-              lab-clabbe: new failure (last pass: next-20200313)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200313)
-          meson-gxm-khadas-vim2:
-              lab-baylibre: new failure (last pass: next-20200313)
-          sun50i-h5-libretech-all-h3-cc:
-              lab-baylibre: new failure (last pass: next-20200313)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-    imx_v4_v5_defconfig:
-        gcc-8:
-            imx27-phytec-phycard-s-rdk: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v5_defconfig:
-        gcc-8:
-            imx27-phytec-phycard-s-rdk: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            imx6ul-pico-hobbit: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-            sun4i-a10-cubieboard: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-nyan-big: 1 failed lab
-
-    sunxi_defconfig:
-        gcc-8:
-            sun4i-a10-cubieboard: 1 failed lab
-            sun8i-h2-plus-libretech-all-h3-cc: 1 failed lab
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-            imx6ul-pico-hobbit: 1 failed lab
-            vf610-colibri-eval-v3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            imx6ul-pico-hobbit: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxm-khadas-vim2: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+greg k-h

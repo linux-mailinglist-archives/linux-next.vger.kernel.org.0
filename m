@@ -2,131 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA3818901A
-	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 22:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF88B1890B7
+	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 22:44:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726388AbgCQVKT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 17:10:19 -0400
-Received: from mail-ed1-f68.google.com ([209.85.208.68]:34365 "EHLO
-        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726680AbgCQVKT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 17:10:19 -0400
-Received: by mail-ed1-f68.google.com with SMTP id i24so24521922eds.1
-        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 14:10:16 -0700 (PDT)
+        id S1726801AbgCQVog (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 17:44:36 -0400
+Received: from mail-pg1-f177.google.com ([209.85.215.177]:46252 "EHLO
+        mail-pg1-f177.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726388AbgCQVof (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 17:44:35 -0400
+Received: by mail-pg1-f177.google.com with SMTP id y30so12427063pga.13
+        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 14:44:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nCoCinlfBkBrhCUwU5qZ/6v2x0D3qEE7/5CcMYa+4Hc=;
-        b=QtVvsnITXMu+JQHBuRJji7ST79Y05GMFLP3W+OVBiySALav+qQYW4roSiH/boPJdn1
-         0Ro+edqcp+QsD5buq/7z9JaNDMhOp3n0swq2vlcMaWU9bASfUxXyHFpaKOkUBreYaFlt
-         Zg4iJA8r5Ez4lHcHaRGan64Mgfx3yB+4w6RRJCj6iWneEIQFUmiV/cB6CpnsFSBy6x9T
-         3wyrKvg4gM7zBrYrmk1gQJE5mwkiUiPeXSTkUWttUaaBQRkbRHf39WE5DP/IFhTa6Npc
-         HDBgL/ZrtUU04XlpUQJmIUM27sHpMY+Ggg+4JeEAgAYcrJTlRUKC0m5UPLkQsQVTxFVp
-         /hTA==
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=89otpOHrqk65HILXOK8dtO4Tm8VdMpFbokIxr7Ul0QE=;
+        b=FjjHUtkJheETmfhQrBxIxdeDgTh5g3mNgUDR8CMgqBg5NSygh4l0kpfSMQfPvoWtqe
+         yE/H+c/99PR4h+31OiUlQsZ2oj3MTjTrP7TAJbO+Asq6YLKt4GJw+EWDLbk/bGsDEZbo
+         M4bMM4H87plQiFMH9GlwoSd85at5c9ZRwRYgW/c26sC/jq/Qxv8wrEFgf4qNXa0U3R9y
+         AHMYrbaPeRdMDVh7IBxidWmu47tAv7VW2YY53zr0MC876S04M3ZE5o+TSDsLikY6t8kU
+         xBCiBOLV9xQAFSCwTwFjPSZB2fofjtGbzEgzNfGLWLL60w7r+7c1tfbpoBjhuimL5/Y0
+         3SIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nCoCinlfBkBrhCUwU5qZ/6v2x0D3qEE7/5CcMYa+4Hc=;
-        b=Qz46NcI3/W26D6+iKu+s5bHTmpH/N/8Kt/pBiq6D/Gp86G+GOmAxaHDgyLb/MdYydd
-         oedu0/62EAlpHZxbKoaSZd39xRNUo2oW3srQGfUeTIDJOcAuqQU9HfACFBGy3BUxpqE7
-         rnLybFkxTHpbFSoVQID3e90WRI4AFsBjTX1afOt/f5yPjGsl4ieGvJwf4TTmNnQ3hkhn
-         Jl06fxoic5JZuM/Q9aS+DtQzaCFWjJwUMFDyxiKzq6aXX/1o5MG9y7H2+sIwny7zhC4v
-         TcofNOv4oABQkCOkaGHivP0zEOLYlqSyJnO7dF9BwMs/8GvHdfVgunSMoNaYsl6fS5Gf
-         RBrQ==
-X-Gm-Message-State: ANhLgQ1fqjFfuc5vuhL+Am+AyEDsYHk4E0LmqaZK3UVgMsahjg8g0zAa
-        48Kg30q3+h1XSRbfReb2xxlSsTPShLv+gC5J6Jo1
-X-Google-Smtp-Source: ADFU+vuu3jh28tAHj31MfyqCk4tbUgblW6g9cs4HTgMeREjvSzhKoCWkLyDPKfUdpsdchb1gV5IOO3pO8CNY2PtTOfg=
-X-Received: by 2002:a17:907:105a:: with SMTP id oy26mr1044369ejb.308.1584479415386;
- Tue, 17 Mar 2020 14:10:15 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=89otpOHrqk65HILXOK8dtO4Tm8VdMpFbokIxr7Ul0QE=;
+        b=SSEOSaH4h7HivpngpjI75q0E8eg8TO30xjRg3MsVH+zlM4g2WFza9mm3HSkz82J8nr
+         FRZR6DAEfvbwUccCeT9ksdLC0yIG4VsMUe0ACga/ZXoVxKzBznSUlLlK3S89XAKDJldw
+         5hF9IYnDqnqIKUTFobIMtkcqnhdV2FEnwkUpiyNuZlfSl2jATVGnqvX4GPwLVOGCUcIy
+         axRe5R8WbUznS2Ip4TtE168Hf5SkulPo9pl0TIZGEQ2goWTq3DFnwP7NUaFFuS0oLew/
+         bGvOXqAYsYPnabL5fqrk1NotSJtx/wME7Uq4QL11D3qGMRSUV6HwCiy0fsTY1nEhzlSd
+         CJDQ==
+X-Gm-Message-State: ANhLgQ2jw0mb8qFjS19fZfSbVagTTdSGyVCFI+9Km4bDCQ8MQXI2Cwuj
+        EQx82tX48D3sBFbMkrx9TRlW2w==
+X-Google-Smtp-Source: ADFU+vtCttadpOSvgkvm0uTCHYh4bF3AqGgbUut40qc5YKbdk0olQXxLurvHS3X5RXp3U6GQWDyx+w==
+X-Received: by 2002:a63:5324:: with SMTP id h36mr1231564pgb.414.1584481472660;
+        Tue, 17 Mar 2020 14:44:32 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:bc61:d85d:eb16:9036])
+        by smtp.gmail.com with ESMTPSA id mg16sm317366pjb.12.2020.03.17.14.44.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2020 14:44:31 -0700 (PDT)
+Date:   Tue, 17 Mar 2020 14:44:25 -0700
+From:   Benson Leung <bleung@google.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commit in the
+ chrome-platform tree
+Message-ID: <20200317214425.GA79639@google.com>
+References: <20200318074536.3121af53@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200317133117.4569cc6a@canb.auug.org.au> <bb623275e936c026cc425904e6c1cee0cbe85f28.camel@hammerspace.com>
- <20200317151829.GA4442@aion.usersys.redhat.com> <c28fe5dc9bd58388ce413f30878fd35ef0f1eb1b.camel@hammerspace.com>
-In-Reply-To: <c28fe5dc9bd58388ce413f30878fd35ef0f1eb1b.camel@hammerspace.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 17 Mar 2020 17:10:04 -0400
-Message-ID: <CAHC9VhR8rXQLyfdwmV3xxRLeQF57N28T1rqpLN5fG0R77U5_4A@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the selinux tree with the nfs tree
-To:     Trond Myklebust <trondmy@hammerspace.com>
-Cc:     "smayhew@redhat.com" <smayhew@redhat.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NzB8fVQJ5HfG6fxh"
+Content-Disposition: inline
+In-Reply-To: <20200318074536.3121af53@canb.auug.org.au>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 17, 2020 at 12:12 PM Trond Myklebust
-<trondmy@hammerspace.com> wrote:
-> On Tue, 2020-03-17 at 11:18 -0400, Scott Mayhew wrote:
-> > On Tue, 17 Mar 2020, Trond Myklebust wrote:
-> >
-> > > On Tue, 2020-03-17 at 13:31 +1100, Stephen Rothwell wrote:
-> > > > Hi all,
-> > > >
-> > > > Today's linux-next merge of the selinux tree got a conflict in:
-> > > >
-> > > >   fs/nfs/getroot.c
-> > > >
-> > > > between commit:
-> > > >
-> > > >   e8213ffc2aec ("NFS: Ensure security label is set for root
-> > > > inode")
-> > > >
-> > > > from the nfs tree and commit:
-> > > >
-> > > >   28d4d0e16f09 ("When using NFSv4.2, the security label for the
-> > > > root
-> > > > inode should be set via a call to nfs_setsecurity() during the
-> > > > mount
-> > > > process, otherwise the inode will appear as unlabeled for up to
-> > > > acdirmin seconds.  Currently the label for the root inode is
-> > > > allocated, retrieved, and freed entirely witin
-> > > > nfs4_proc_get_root().")
-> > > >
-> > > > from the selinux tree.
-> > > >
-> > > > These are basically the same patch with slight formatting
-> > > > differences.
-> > > >
-> > > > I fixed it up (I used the latter) and can carry the fix as
-> > > > necessary.
-> > > > This is now fixed as far as linux-next is concerned, but any non
-> > > > trivial
-> > > > conflicts should be mentioned to your upstream maintainer when
-> > > > your
-> > > > tree
-> > > > is submitted for merging.  You may also want to consider
-> > > > cooperating
-> > > > with the maintainer of the conflicting tree to minimise any
-> > > > particularly
-> > > > complex conflicts.
-> > > >
-> > > OK... Why is this being pushed through the selinux tree? Was that
-> > > your
-> > > intention Scott?
-> >
-> > Not really... I addressed the patch to you and Anna, after all.  On
-> > the
-> > other hand, I didn't object when Paul picked up the patch in his
-> > tree.
-> > I'm guessing I should have spoken up.  Sorry about that.
-> >
->
-> OK. Well there doesn't seem to be anything else touching the NFS mount
-> code in this dev cycle, so I don't expect any integration issues at
-> this point. I'm therefore OK with it going through the selinux tree.
->
-> I'll therefore drop the patch from the NFS tree, assuming you still
-> have it in the selinux tree, Paul.
 
-I was waiting to hear back from you before reverting, I'll go ahead
-and leave it in the selinux/next tree.  If anything changes on the NFS
-side, let me know.
+--NzB8fVQJ5HfG6fxh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-paul moore
-www.paul-moore.com
+Hi Stephen,
+
+On Wed, Mar 18, 2020 at 07:45:36AM +1100, Stephen Rothwell wrote:
+> Hi all,
+>=20
+> Commit
+>=20
+>   6314450ece4c ("platform/chrome: cros_usbpd_notify: Fix cros-usbpd-notif=
+y notifier")
+>=20
+> is missing a Signed-off-by from its committer.
+>=20
+
+Thanks. This has been rectified. The for-next branch has been rebased
+and all commits have the correct S-o-B.
+
+Thanks,
+Benson
+
+> --=20
+> Cheers,
+> Stephen Rothwell
+
+
+
+--=20
+Benson Leung
+Staff Software Engineer
+Chrome OS Kernel
+Google Inc.
+bleung@google.com
+Chromium OS Project
+bleung@chromium.org
+
+--NzB8fVQJ5HfG6fxh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCXnFEuQAKCRBzbaomhzOw
+woDOAQDIs4TkP5CwMMgmdTuvIMv1Pzvm4NdqQgN6kbNhvJ2g7QEAsX+pDp0/atFF
+gjg3eVUBfF/oY6pZ/uXf8/JBzUZQtAQ=
+=LaX7
+-----END PGP SIGNATURE-----
+
+--NzB8fVQJ5HfG6fxh--

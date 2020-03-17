@@ -2,87 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E66AE188F49
-	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 21:50:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA3818901A
+	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 22:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726564AbgCQUug (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 16:50:36 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38983 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726388AbgCQUug (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Mar 2020 16:50:36 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48hlgG1Vjtz9sPJ;
-        Wed, 18 Mar 2020 07:50:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584478234;
-        bh=YxislPlYDcOrbEnlAds6A8PAKFcAav8LkLzt+kSz4SY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oYcqLL7NgrNuGaIMJIrjz1kdu9lxBVyn43gSCqFN80uOwmt3h3dFJWeJVg5yGfZqo
-         JspQwD4mJxoAXSV6uIt5LEa5G/mjF2/JB5D/KMrIk9EQPZouY8EMjJbTI+9ngQNHqK
-         ig8/rJ1c+OAA5n9mvoDDX999ip5IhJnHQ33mKAOCBU5nZG5dMU9Y+D4AwkVykCp6Et
-         GRvttE26L+szGybMwyNpOyJxWaNxDKCusjgdpMvM6UcYqGwSov9ldsvu+E4tBj/qn/
-         E1WlMe7Z7ZIQ+VtoijFfdzva3PpGhcUQqiB8rQ/LICBpIeTt6gS3IgEsYVQXGZ0zdI
-         G6rx2QvY/0YJQ==
-Date:   Wed, 18 Mar 2020 07:50:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: linux-next: Fixes tag needs some work in the hmm tree
-Message-ID: <20200318075033.4d06b1be@canb.auug.org.au>
+        id S1726388AbgCQVKT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 17:10:19 -0400
+Received: from mail-ed1-f68.google.com ([209.85.208.68]:34365 "EHLO
+        mail-ed1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726680AbgCQVKT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 17:10:19 -0400
+Received: by mail-ed1-f68.google.com with SMTP id i24so24521922eds.1
+        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 14:10:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20150623.gappssmtp.com; s=20150623;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nCoCinlfBkBrhCUwU5qZ/6v2x0D3qEE7/5CcMYa+4Hc=;
+        b=QtVvsnITXMu+JQHBuRJji7ST79Y05GMFLP3W+OVBiySALav+qQYW4roSiH/boPJdn1
+         0Ro+edqcp+QsD5buq/7z9JaNDMhOp3n0swq2vlcMaWU9bASfUxXyHFpaKOkUBreYaFlt
+         Zg4iJA8r5Ez4lHcHaRGan64Mgfx3yB+4w6RRJCj6iWneEIQFUmiV/cB6CpnsFSBy6x9T
+         3wyrKvg4gM7zBrYrmk1gQJE5mwkiUiPeXSTkUWttUaaBQRkbRHf39WE5DP/IFhTa6Npc
+         HDBgL/ZrtUU04XlpUQJmIUM27sHpMY+Ggg+4JeEAgAYcrJTlRUKC0m5UPLkQsQVTxFVp
+         /hTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nCoCinlfBkBrhCUwU5qZ/6v2x0D3qEE7/5CcMYa+4Hc=;
+        b=Qz46NcI3/W26D6+iKu+s5bHTmpH/N/8Kt/pBiq6D/Gp86G+GOmAxaHDgyLb/MdYydd
+         oedu0/62EAlpHZxbKoaSZd39xRNUo2oW3srQGfUeTIDJOcAuqQU9HfACFBGy3BUxpqE7
+         rnLybFkxTHpbFSoVQID3e90WRI4AFsBjTX1afOt/f5yPjGsl4ieGvJwf4TTmNnQ3hkhn
+         Jl06fxoic5JZuM/Q9aS+DtQzaCFWjJwUMFDyxiKzq6aXX/1o5MG9y7H2+sIwny7zhC4v
+         TcofNOv4oABQkCOkaGHivP0zEOLYlqSyJnO7dF9BwMs/8GvHdfVgunSMoNaYsl6fS5Gf
+         RBrQ==
+X-Gm-Message-State: ANhLgQ1fqjFfuc5vuhL+Am+AyEDsYHk4E0LmqaZK3UVgMsahjg8g0zAa
+        48Kg30q3+h1XSRbfReb2xxlSsTPShLv+gC5J6Jo1
+X-Google-Smtp-Source: ADFU+vuu3jh28tAHj31MfyqCk4tbUgblW6g9cs4HTgMeREjvSzhKoCWkLyDPKfUdpsdchb1gV5IOO3pO8CNY2PtTOfg=
+X-Received: by 2002:a17:907:105a:: with SMTP id oy26mr1044369ejb.308.1584479415386;
+ Tue, 17 Mar 2020 14:10:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZRJgaeRkzV8__XxmSCxCH7T";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200317133117.4569cc6a@canb.auug.org.au> <bb623275e936c026cc425904e6c1cee0cbe85f28.camel@hammerspace.com>
+ <20200317151829.GA4442@aion.usersys.redhat.com> <c28fe5dc9bd58388ce413f30878fd35ef0f1eb1b.camel@hammerspace.com>
+In-Reply-To: <c28fe5dc9bd58388ce413f30878fd35ef0f1eb1b.camel@hammerspace.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 17 Mar 2020 17:10:04 -0400
+Message-ID: <CAHC9VhR8rXQLyfdwmV3xxRLeQF57N28T1rqpLN5fG0R77U5_4A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the selinux tree with the nfs tree
+To:     Trond Myklebust <trondmy@hammerspace.com>
+Cc:     "smayhew@redhat.com" <smayhew@redhat.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZRJgaeRkzV8__XxmSCxCH7T
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 17, 2020 at 12:12 PM Trond Myklebust
+<trondmy@hammerspace.com> wrote:
+> On Tue, 2020-03-17 at 11:18 -0400, Scott Mayhew wrote:
+> > On Tue, 17 Mar 2020, Trond Myklebust wrote:
+> >
+> > > On Tue, 2020-03-17 at 13:31 +1100, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > >
+> > > > Today's linux-next merge of the selinux tree got a conflict in:
+> > > >
+> > > >   fs/nfs/getroot.c
+> > > >
+> > > > between commit:
+> > > >
+> > > >   e8213ffc2aec ("NFS: Ensure security label is set for root
+> > > > inode")
+> > > >
+> > > > from the nfs tree and commit:
+> > > >
+> > > >   28d4d0e16f09 ("When using NFSv4.2, the security label for the
+> > > > root
+> > > > inode should be set via a call to nfs_setsecurity() during the
+> > > > mount
+> > > > process, otherwise the inode will appear as unlabeled for up to
+> > > > acdirmin seconds.  Currently the label for the root inode is
+> > > > allocated, retrieved, and freed entirely witin
+> > > > nfs4_proc_get_root().")
+> > > >
+> > > > from the selinux tree.
+> > > >
+> > > > These are basically the same patch with slight formatting
+> > > > differences.
+> > > >
+> > > > I fixed it up (I used the latter) and can carry the fix as
+> > > > necessary.
+> > > > This is now fixed as far as linux-next is concerned, but any non
+> > > > trivial
+> > > > conflicts should be mentioned to your upstream maintainer when
+> > > > your
+> > > > tree
+> > > > is submitted for merging.  You may also want to consider
+> > > > cooperating
+> > > > with the maintainer of the conflicting tree to minimise any
+> > > > particularly
+> > > > complex conflicts.
+> > > >
+> > > OK... Why is this being pushed through the selinux tree? Was that
+> > > your
+> > > intention Scott?
+> >
+> > Not really... I addressed the patch to you and Anna, after all.  On
+> > the
+> > other hand, I didn't object when Paul picked up the patch in his
+> > tree.
+> > I'm guessing I should have spoken up.  Sorry about that.
+> >
+>
+> OK. Well there doesn't seem to be anything else touching the NFS mount
+> code in this dev cycle, so I don't expect any integration issues at
+> this point. I'm therefore OK with it going through the selinux tree.
+>
+> I'll therefore drop the patch from the NFS tree, assuming you still
+> have it in the selinux tree, Paul.
 
-Hi all,
+I was waiting to hear back from you before reverting, I'll go ahead
+and leave it in the selinux/next tree.  If anything changes on the NFS
+side, let me know.
 
-In commit
-
-  ee37d9e6e474 ("mm/hmm: don't handle the non-fault case in hmm_vma_walk_ho=
-le_()")
-
-Fixes tag
-
-  Fixes: 2aee09d ("mm/hmm: change hmm_vma_fault() to allow write fault on p=
-age basis")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZRJgaeRkzV8__XxmSCxCH7T
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5xOBkACgkQAVBC80lX
-0GxN3ggAhjiTiQKbNQ2Wi3SP1s4/L9Q3XyLBFZAKeK7lZrCQ49QTqOlFqJY9AiF3
-dxFcwat9O7l3hX6ZwJyimPWCVEWjeB9L7bYaIyrj/6+Zha6dg4BrxifcPmuIukKC
-LZQR4tgjET+VOYKH+wJpD2Ac9vAC2pOkGx39NuYohh3nSDPc193J5gLECKoMDnIJ
-TtZ5Y8U6MhVL5O+SdAJ6I1NdNsRUKQtemw7Kz2fYeq55LhAkKfmQTv7ts67LMFGH
-rD7TYIJWQzp7YhK4l1QFz0pgDIhBZZEtM+XDQ/oT0HoUUzWLLkpykEJ0vvLrzwcS
-79tGbnt4q1U+tBwUE+UOfO14jC9z3g==
-=/FGJ
------END PGP SIGNATURE-----
-
---Sig_/ZRJgaeRkzV8__XxmSCxCH7T--
+-- 
+paul moore
+www.paul-moore.com

@@ -2,218 +2,189 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 538CD187DC5
-	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 11:05:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 308EE187DCE
+	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 11:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgCQKFT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 06:05:19 -0400
-Received: from mail-eopbgr60042.outbound.protection.outlook.com ([40.107.6.42]:53312
-        "EHLO EUR04-DB3-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725916AbgCQKFT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Mar 2020 06:05:19 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MBupvSURk+oVB346pPRtaRcrgHgzFbLxT4vRgjGQsqjSXS0/Uv8Dqwe3zDqCW/Zylwgi4hlPynAADKecTac/TE8ogiQJR/FuM1nvnSf3SkoOumFEFjpue3aGhNRWSYiF/n/ekmSUmsq0LxJXSi2lcHXEkQXLCTl6bSz/k65SKPqYDuFTw+D+LV/1egCFO22hwWV0SkQKqqz7SR1U26yIRCxRJqrzxLYYZgySRlR0jRYKBDJHyT2d1hWkNtBmNyYnuwxELOXBmAvikNkLGNC9YeRhfwbDi1b4nqCmH02nPMozGxjD9WW/k0lK40XixVGWoLnVjv6hnxEsYHhcM+0nqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FkOsSbUppGJpqlHbRCW7sfvXio4DtW12vni8K8mjGbM=;
- b=lIiVGIPyEQHoxHc3iWFaFYn0Iiy+OTPXyqQDZzh0Hbsx22TnEuJfVAP5VtKzhRichwu6iOmBKwLqMiI51+ZovvhSkGZIadL01D9Qqkz8/QqzrdDQ6iXfyrCAovW76n8tnAb0y3S3x6AnodLrRba/NDA9d8SPKf9NonUUY7yZkSBqo83MKToxgjfZKjwZGWzOzzQkwp2G6auGkHK5V9LuQv3/+Gj5fBBccFHIuAK03bTmZJql/fkB4I/lQUBYzWzJR6F4Xqvi0KXisXD8GUKvBg+YnX0ihCddT/l0/0BrkYRP5mL6IidiBPUeWMOQktmrgTfSnjwUVqR1rWQa0lOVNw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FkOsSbUppGJpqlHbRCW7sfvXio4DtW12vni8K8mjGbM=;
- b=WBPfB7lEPNwyv6l6rOaM21hY+ZsZlox6Ek/a4LVX/lfL19lCXQ2zy7dmZlJsK2+8rcR4rzF519MBSCKDpSiJOVRXnPP1SzocvEy/Ed+86LBo0ugb+8H9C3rbTm15xHBvLUafCp75nhWqtZfGAcf59smkriz+unzZnZcmAwA3m4E=
-Received: from DB8PR04MB6747.eurprd04.prod.outlook.com (20.179.250.159) by
- DB8PR04MB6363.eurprd04.prod.outlook.com (10.255.170.14) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2814.21; Tue, 17 Mar 2020 10:05:14 +0000
-Received: from DB8PR04MB6747.eurprd04.prod.outlook.com
- ([fe80::4528:6120:94a4:ce1e]) by DB8PR04MB6747.eurprd04.prod.outlook.com
- ([fe80::4528:6120:94a4:ce1e%5]) with mapi id 15.20.2814.016; Tue, 17 Mar 2020
- 10:05:14 +0000
-From:   "Z.q. Hou" <zhiqiang.hou@nxp.com>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>
-Subject: RE: linux-next: Tree for Mar 12 (pci/controller/mobiveil/)
-Thread-Topic: linux-next: Tree for Mar 12 (pci/controller/mobiveil/)
-Thread-Index: AQHV+IDZ0AdozfzAfUCC22i6ufIb7KhFWtOAgAbdJrCAAAhtgIAAU7Sg
-Date:   Tue, 17 Mar 2020 10:05:14 +0000
-Message-ID: <DB8PR04MB6747E855D3349173CE2AE9F684F60@DB8PR04MB6747.eurprd04.prod.outlook.com>
-References: <4c0db5d0-1a61-cb80-2bcb-034f5bcd1597@infradead.org>
- <20200312193917.GA160316@google.com>
- <DB8PR04MB6747C1032BF126CFFB5720E084F60@DB8PR04MB6747.eurprd04.prod.outlook.com>
- <e53be1bc-e84d-433a-e9a7-ea442c93f2cf@infradead.org>
-In-Reply-To: <e53be1bc-e84d-433a-e9a7-ea442c93f2cf@infradead.org>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: spf=none (sender IP is )
- smtp.mailfrom=zhiqiang.hou@nxp.com; 
-x-originating-ip: [92.121.68.129]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-ht: Tenant
-x-ms-office365-filtering-correlation-id: ae121392-3c90-40b7-2b41-08d7ca5ab023
-x-ms-traffictypediagnostic: DB8PR04MB6363:
-x-microsoft-antispam-prvs: <DB8PR04MB6363E70C4C4C347EAC4D92F884F60@DB8PR04MB6363.eurprd04.prod.outlook.com>
-x-ms-oob-tlc-oobclassifiers: OLM:9508;
-x-forefront-prvs: 0345CFD558
-x-forefront-antispam-report: SFV:NSPM;SFS:(10009020)(4636009)(366004)(376002)(39860400002)(346002)(396003)(136003)(199004)(478600001)(71200400001)(2906002)(4326008)(81166006)(81156014)(55016002)(8676002)(8936002)(110136005)(7696005)(316002)(9686003)(54906003)(6506007)(53546011)(33656002)(66446008)(64756008)(66556008)(66476007)(76116006)(186003)(66946007)(86362001)(52536014)(5660300002)(26005);DIR:OUT;SFP:1101;SCL:1;SRVR:DB8PR04MB6363;H:DB8PR04MB6747.eurprd04.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-received-spf: None (protection.outlook.com: nxp.com does not designate
- permitted sender hosts)
-x-ms-exchange-senderadcheck: 1
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ixxfDSlwrUCdnBiSo9QsBieOo5sgzlsLX4WgAeXavrOTUMkYh0X8tgAO7quA/FAdQgMPqCo2H1c11HWq3LDV2xYAOxWJMdNbds0YIHMjoMcMg4/WKLZ7ZemUVHzGr4hKF137DGIFJ0dHfHu4EjNXElGkzqGeiMG2e4CNOfaJvsce06trPBq3EGSUx9n2ZUgEpdOH21RPCgJYIC8K91HHwcrxvXFXRHnDHBk1j0qfHs/Ras0QuJ2kgy6a1Ou0+PJ04lv0YFEYdk1Yi0B8/DKpEWC3bDAwuyKrok5SCC5rCNk4Br3lKIKHc6RcqAC3kKxKbWz+wiPhzSMs6g07eKsvGBpatrsSbQtzhOWzUBYWbUkCEik8IVPpPJS0XqJyIjstsj2qv4CBsVViNPSyihqd0+dT8GI12QvUg7P3oJ3b3JkhxOmKSnq0EaNABGMd9ed6
-x-ms-exchange-antispam-messagedata: lKJS51fmLZ0O6sQJXWREGOhcw65cmzyy1b2Ub3rMPegS37nnHCkG0m9Cj4Lx2jbpFwd6PXIl1Xdf9HuqE3J8Ex0Mu5Cwfm4+dxhMs/Llt4zzObndiOG1cbtIre15SOxo1sITjcBEuvR74RyQ/eJdTw==
-x-ms-exchange-transport-forked: True
+        id S1725906AbgCQKHN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 06:07:13 -0400
+Received: from mail-pg1-f181.google.com ([209.85.215.181]:45887 "EHLO
+        mail-pg1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725794AbgCQKHN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 06:07:13 -0400
+Received: by mail-pg1-f181.google.com with SMTP id m15so11446217pgv.12
+        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 03:07:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=lOrAvwtcWEP8Ylyf66qEQNn0HJFUQSVCZaSpJyTrLqQ=;
+        b=zcGRbXdm9aJ5IbBzvCp92oMVNK2PkvNNJ12PV1SgVBqX2gu4shkFbO+zNjQFucwuTN
+         Yc+ykk386hQNHPvYOGBLe7YR9RxO9PW9OZ7h63fK3PeCjcyZm4+nbDsHoJ7pLF+Z3mgD
+         EVXItC4jyx50nhe8/rhdSaiBrcG+OC6wnBQhNC0uty0JITF0f6qEcPK4NAwIKJht8oVo
+         FWFG8hN2Ui0vdKsYOrgZ2IBUgCR5CxjOh9r9FLFwrs0oawEo0BQfhsl2kt8xGnn81303
+         ZKn7CY/sAG1LgPk6jPijRrh7T7JslcU2GtDYAywSQFoBEc6BYnj3F411tJLw5je1ONk5
+         hAAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=lOrAvwtcWEP8Ylyf66qEQNn0HJFUQSVCZaSpJyTrLqQ=;
+        b=m7FOKDzQnx6U3v3Mu/VaZuskgRX76AdDEFxNbCPGXnD0DgilobBFjdVN1r1LF0on/u
+         pXOHZXFLAWKrHG9xxrBLhn9mTliePdypaTvTir2AduCqIjWqkBlqhw40QrnOnxU6ru6Q
+         B3OAty5qBB1Knamuuy7KIFQ4BvJ57NPccq8YFgvqi9PDvKIUXfzgv4jrylIz7n33mGWb
+         NmjoHY2xHhZLIlj58TMsSQ67B7GFObN7hyvwV0RrmZQgDRhw97Jzdpu7oTJd7yS/xP99
+         xWhIqqFY7SQOWp/jEx/iXQahmjm4ByhrEikXnmSpvvOU7dC2a+74mficnMnRH6vTO9PZ
+         ZoJQ==
+X-Gm-Message-State: ANhLgQ1Gi5HhLYKuixHzO2Dyjt+llYXTLMep4xay3uMdNdtK/ke6DCLs
+        heCcvAM9riYAWoA7nYH7jsoeaRQ3tzk=
+X-Google-Smtp-Source: ADFU+vtp5fO6Hpl30orbZGgbVU5CP3H/54bTEzSvDqbxPvVm9qNx6HxSWXWAYlkzwNWiGjDCEmaWIw==
+X-Received: by 2002:a63:e511:: with SMTP id r17mr4283870pgh.352.1584439629856;
+        Tue, 17 Mar 2020 03:07:09 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q20sm2558713pfh.89.2020.03.17.03.07.08
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Mar 2020 03:07:09 -0700 (PDT)
+Message-ID: <5e70a14d.1c69fb81.c3868.a02c@mx.google.com>
+Date:   Tue, 17 Mar 2020 03:07:09 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ae121392-3c90-40b7-2b41-08d7ca5ab023
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Mar 2020 10:05:14.5557
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9if1ooHOV7Yn9bxoEB/DM9Y6GTgejczwwCVxdL2a9e8d2kzco8xnRFe4eQJuEWb3jveivAKLarGDJGqBCqQGbg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6363
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc6-178-g95cd16255210
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 277 boots: 5 failed,
+ 255 passed with 9 offline, 8 untried/unknown (v5.6-rc6-178-g95cd16255210)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-SGkgUmFuZHksDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogUmFuZHkg
-RHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+DQo+IFNlbnQ6IDIwMjDlubQz5pyIMTfml6Ug
-MTI6NTkNCj4gVG86IFoucS4gSG91IDx6aGlxaWFuZy5ob3VAbnhwLmNvbT47IEJqb3JuIEhlbGdh
-YXMgPGhlbGdhYXNAa2VybmVsLm9yZz4NCj4gQ2M6IFN0ZXBoZW4gUm90aHdlbGwgPHNmckBjYW5i
-LmF1dWcub3JnLmF1PjsgTGludXggTmV4dCBNYWlsaW5nIExpc3QNCj4gPGxpbnV4LW5leHRAdmdl
-ci5rZXJuZWwub3JnPjsgTGludXggS2VybmVsIE1haWxpbmcgTGlzdA0KPiA8bGludXgta2VybmVs
-QHZnZXIua2VybmVsLm9yZz47IGxpbnV4LXBjaSA8bGludXgtcGNpQHZnZXIua2VybmVsLm9yZz47
-DQo+IEthcnRoaWtleWFuIE1pdHJhbiA8bS5rYXJ0aGlrZXlhbkBtb2JpdmVpbC5jby5pbj4NCj4g
-U3ViamVjdDogUmU6IGxpbnV4LW5leHQ6IFRyZWUgZm9yIE1hciAxMiAocGNpL2NvbnRyb2xsZXIv
-bW9iaXZlaWwvKQ0KPiANCj4gT24gMy8xNi8yMCA5OjMxIFBNLCBaLnEuIEhvdSB3cm90ZToNCj4g
-PiBIaSBSYW5keSBhbmQgQmpvcm4sDQo+ID4NCj4gPj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gPj4gRnJvbTogQmpvcm4gSGVsZ2FhcyA8aGVsZ2Fhc0BrZXJuZWwub3JnPg0KPiA+PiBT
-ZW50OiAyMDIw5bm0M+aciDEz5pelIDM6MzkNCj4gPj4gVG86IFoucS4gSG91IDx6aGlxaWFuZy5o
-b3VAbnhwLmNvbT4NCj4gPj4gQ2M6IFJhbmR5IER1bmxhcCA8cmR1bmxhcEBpbmZyYWRlYWQub3Jn
-PjsgU3RlcGhlbiBSb3Rod2VsbA0KPiA+PiA8c2ZyQGNhbmIuYXV1Zy5vcmcuYXU+OyBMaW51eCBO
-ZXh0IE1haWxpbmcgTGlzdA0KPiA+PiA8bGludXgtbmV4dEB2Z2VyLmtlcm5lbC5vcmc+OyBMaW51
-eCBLZXJuZWwgTWFpbGluZyBMaXN0DQo+ID4+IDxsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3Jn
-PjsgbGludXgtcGNpDQo+ID4+IDxsaW51eC1wY2lAdmdlci5rZXJuZWwub3JnPjsgS2FydGhpa2V5
-YW4gTWl0cmFuDQo+ID4+IDxtLmthcnRoaWtleWFuQG1vYml2ZWlsLmNvLmluPg0KPiA+PiBTdWJq
-ZWN0OiBSZTogbGludXgtbmV4dDogVHJlZSBmb3IgTWFyIDEyIChwY2kvY29udHJvbGxlci9tb2Jp
-dmVpbC8pDQo+ID4+DQo+ID4+IE9uIFRodSwgTWFyIDEyLCAyMDIwIGF0IDA4OjEzOjUwQU0gLTA3
-MDAsIFJhbmR5IER1bmxhcCB3cm90ZToNCj4gPj4+IE9uIDMvMTIvMjAgMzowNCBBTSwgU3RlcGhl
-biBSb3Rod2VsbCB3cm90ZToNCj4gPj4+PiBIaSBhbGwsDQo+ID4+Pj4NCj4gPj4+PiBDaGFuZ2Vz
-IHNpbmNlIDIwMjAwMzExOg0KPiA+Pj4+DQo+ID4+Pg0KPiA+Pj4gb24gaTM4NjoNCj4gPj4+ICMg
-Q09ORklHX1BDSV9NU0kgaXMgbm90IHNldA0KPiA+Pj4NCj4gPj4+IFdBUk5JTkc6IHVubWV0IGRp
-cmVjdCBkZXBlbmRlbmNpZXMgZGV0ZWN0ZWQgZm9yDQo+IFBDSUVfTU9CSVZFSUxfSE9TVA0KPiA+
-Pj4gICBEZXBlbmRzIG9uIFtuXTogUENJIFs9eV0gJiYgUENJX01TSV9JUlFfRE9NQUlOIFs9bl0N
-Cj4gPj4+ICAgU2VsZWN0ZWQgYnkgW3ldOg0KPiA+Pj4gICAtIFBDSUVfTU9CSVZFSUxfUExBVCBb
-PXldICYmIFBDSSBbPXldICYmIChBUkNIX1pZTlFNUCB8fA0KPiA+PiBDT01QSUxFX1RFU1QgWz15
-XSkgJiYgT0YgWz15XQ0KPiA+Pg0KPiA+PiBUaGFua3MsIFJhbmR5Lg0KPiA+Pg0KPiA+PiBJJ20g
-bm90IHN1cmUgaWYgdGhpcyBpcyBhIG5ldyBwcm9ibGVtIGludHJvZHVjZWQgYnkgc29tZXRoaW5n
-IGluIG15DQo+ID4+ICJuZXh0IiBicmFuY2gsIG9yIGlmIHRoaXMgaXMgYW4gZXhpc3RpbmcgcHJv
-YmxlbSB3ZSBqdXN0IGhhcHBlbmVkIHRvDQo+ID4+IGhpdCB3aXRoIHJhbmRjb25maWcuDQo+ID4+
-DQo+ID4+IEhlcmUgYXJlIHRoZSBjb21taXRzIG9uIHJlbW90ZXMvbG9yZW56by9wY2kvbW9iaXZl
-aWwgYnJhbmNoOg0KPiA+Pg0KPiA+PiAgIGQyOWFkNzBhODEzYiAoIlBDSTogbW9iaXZlaWw6IEFk
-ZCBQQ0llIEdlbjQgUkMgZHJpdmVyIGZvcg0KPiA+PiBMYXllcnNjYXBlDQo+ID4+IFNvQ3MiKQ0K
-PiA+PiAgIDNlZGViNDk1MjViYiAoImR0LWJpbmRpbmdzOiBQQ0k6IEFkZCBOWFAgTGF5ZXJzY2Fw
-ZSBTb0NzIFBDSWUgR2VuNA0KPiA+PiBjb250cm9sbGVyIikNCj4gPj4gICAxMWQyMmNjMzk1Y2Eg
-KCJQQ0k6IG1vYml2ZWlsOiBBZGQgSGVhZGVyIFR5cGUgZmllbGQgY2hlY2siKQ0KPiA+PiAgIDAy
-OWRlYTNjZGM2NyAoIlBDSTogbW9iaXZlaWw6IEFkZCA4LWJpdCBhbmQgMTYtYml0IENTUiByZWdp
-c3Rlcg0KPiA+PiBhY2Nlc3NvcnMiKQ0KPiA+PiAgIDUyY2FlNGM3MDgyZiAoIlBDSTogbW9iaXZl
-aWw6IEFsbG93IG1vYml2ZWlsX2hvc3RfaW5pdCgpIHRvIGJlIHVzZWQNCj4gPj4gdG8gcmUtaW5p
-dCBob3N0IikNCj4gPj4gICBmYzk5YjMzMTFhZjcgKCJQQ0k6IG1vYml2ZWlsOiBBZGQgY2FsbGJh
-Y2sgZnVuY3Rpb24gZm9yIGxpbmsgdXAgY2hlY2siKQ0KPiA+PiAgIGVkNjIwZTk2NTQxZiAoIlBD
-STogbW9iaXZlaWw6IEFkZCBjYWxsYmFjayBmdW5jdGlvbiBmb3IgaW50ZXJydXB0DQo+ID4+IGlu
-aXRpYWxpemF0aW9uIikNCj4gPj4gICAwM2JkYzM4ODQwMTkgKCJQQ0k6IG1vYml2ZWlsOiBNb2R1
-bGFyaXplIHRoZSBNb2JpdmVpbCBQQ0llIEhvc3QNCj4gPj4gQnJpZGdlIElQDQo+ID4+IGRyaXZl
-ciIpDQo+ID4+ICAgMzllM2EwM2VlYTViICgiUENJOiBtb2JpdmVpbDogQ29sbGVjdCB0aGUgaW50
-ZXJydXB0IHJlbGF0ZWQNCj4gPj4gb3BlcmF0aW9ucyBpbnRvIGEgZnVuY3Rpb24iKQ0KPiA+PiAg
-IDJiYTI0ODQyZDZiNCAoIlBDSTogbW9iaXZlaWw6IE1vdmUgdGhlIGhvc3QgaW5pdGlhbGl6YXRp
-b24gaW50byBhDQo+IGZ1bmN0aW9uIikNCj4gPj4gICAxZjQ0MjIxOGQ2NTcgKCJQQ0k6IG1vYml2
-ZWlsOiBJbnRyb2R1Y2UgYSBuZXcgc3RydWN0dXJlDQo+ID4+IG1vYml2ZWlsX3Jvb3RfcG9ydCIp
-DQo+ID4+DQo+ID4+IEkgZHJvcHBlZCB0aGF0IG1vYml2ZWlsIGJyYW5jaCBmb3Igbm93LCBzbyBI
-b3UsIGNhbiB5b3UgcGxlYXNlIGNoZWNrDQo+ID4+IHRoaXMgb3V0IGFuZCByZXNvbHZlIGl0IG9u
-ZSB3YXkgb3IgdGhlIG90aGVyPw0KPiA+DQo+ID4gSSBkb24ndCByZXByb2R1Y2UgdGhpcyBpc3N1
-ZSB3aXRoIGkzODZfZGVmY29uZmlnLCBjYW4geW91IGhlbHAgbWUgdG8NCj4gcmVwcm9kdWNlIGl0
-Pw0KPiANCj4gU3VyZSwgc2VlIGJlbG93Lg0KPiANCj4gDQo+ID4gVGhhbmtzLA0KPiA+IFpoaXFp
-YW5nDQo+ID4NCj4gPj4NCj4gPj4+IC4uL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvbW9iaXZlaWwv
-cGNpZS1tb2JpdmVpbC1ob3N0LmM6Mzc1OjE1OiBlcnJvcjoNCj4gPj4gdmFyaWFibGUg4oCYbW9i
-aXZlaWxfbXNpX2RvbWFpbl9pbmZv4oCZIGhhcyBpbml0aWFsaXplciBidXQgaW5jb21wbGV0ZQ0K
-PiA+PiB0eXBlDQo+ID4+PiAgc3RhdGljIHN0cnVjdCBtc2lfZG9tYWluX2luZm8gbW9iaXZlaWxf
-bXNpX2RvbWFpbl9pbmZvID0gew0KPiA+Pj4gICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+
-DQo+ID4+PiAuLi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL21vYml2ZWlsL3BjaWUtbW9iaXZlaWwt
-aG9zdC5jOjM3NjozOg0KPiA+Pj4gZXJyb3I6IOKAmHN0cnVjdA0KPiA+PiBtc2lfZG9tYWluX2lu
-Zm/igJkgaGFzIG5vIG1lbWJlciBuYW1lZCDigJhmbGFnc+KAmQ0KPiA+Pj4gICAuZmxhZ3MgPSAo
-TVNJX0ZMQUdfVVNFX0RFRl9ET01fT1BTIHwNCj4gPj4gTVNJX0ZMQUdfVVNFX0RFRl9DSElQX09Q
-UyB8DQo+ID4+PiAgICBefn5+fg0KPiA+Pj4gLi4vZHJpdmVycy9wY2kvY29udHJvbGxlci9tb2Jp
-dmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzozNzY6MTI6IGVycm9yOg0KPiA+PiDigJhNU0lfRkxB
-R19VU0VfREVGX0RPTV9PUFPigJkgdW5kZWNsYXJlZCBoZXJlIChub3QgaW4gYSBmdW5jdGlvbik7
-DQo+IGRpZA0KPiA+PiB5b3UgbWVhbiDigJhTSU1QTEVfREVWX1BNX09QU+KAmT8NCj4gPj4+ICAg
-LmZsYWdzID0gKE1TSV9GTEFHX1VTRV9ERUZfRE9NX09QUyB8DQo+ID4+IE1TSV9GTEFHX1VTRV9E
-RUZfQ0hJUF9PUFMgfA0KPiA+Pj4gICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+
-DQo+ID4+PiAgICAgICAgICAgICBTSU1QTEVfREVWX1BNX09QUw0KPiA+Pj4gLi4vZHJpdmVycy9w
-Y2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzozNzY6Mzk6IGVycm9y
-Og0KPiA+PiDigJhNU0lfRkxBR19VU0VfREVGX0NISVBfT1BT4oCZIHVuZGVjbGFyZWQgaGVyZSAo
-bm90IGluIGEgZnVuY3Rpb24pOyBkaWQNCj4gPj4geW91IG1lYW4g4oCYTVNJX0ZMQUdfVVNFX0RF
-Rl9ET01fT1BT4oCZPw0KPiA+Pj4gICAuZmxhZ3MgPSAoTVNJX0ZMQUdfVVNFX0RFRl9ET01fT1BT
-IHwNCj4gPj4gTVNJX0ZMQUdfVVNFX0RFRl9DSElQX09QUyB8DQo+ID4+Pg0KPiA+PiBefn5+fn5+
-fn5+fn5+fn5+fn5+fn5+fn5+DQo+ID4+Pg0KPiA+PiBNU0lfRkxBR19VU0VfREVGX0RPTV9PUFMN
-Cj4gPj4+IC4uL2RyaXZlcnMvcGNpL2NvbnRyb2xsZXIvbW9iaXZlaWwvcGNpZS1tb2JpdmVpbC1o
-b3N0LmM6Mzc3OjY6IGVycm9yOg0KPiA+PiDigJhNU0lfRkxBR19QQ0lfTVNJWOKAmSB1bmRlY2xh
-cmVkIGhlcmUgKG5vdCBpbiBhIGZ1bmN0aW9uKTsgZGlkIHlvdSBtZWFuDQo+ID4+IOKAmFNTX0ZM
-QUdfQklUU+KAmT8NCj4gPj4+ICAgICAgIE1TSV9GTEFHX1BDSV9NU0lYKSwNCj4gPj4+ICAgICAg
-IF5+fn5+fn5+fn5+fn5+fn5+DQo+ID4+PiAgICAgICBTU19GTEFHX0JJVFMNCj4gPj4+IC4uL2Ry
-aXZlcnMvcGNpL2NvbnRyb2xsZXIvbW9iaXZlaWwvcGNpZS1tb2JpdmVpbC1ob3N0LmM6Mzc2OjEx
-OiB3YXJuaW5nOg0KPiA+PiBleGNlc3MgZWxlbWVudHMgaW4gc3RydWN0IGluaXRpYWxpemVyDQo+
-ID4+PiAgIC5mbGFncyA9IChNU0lfRkxBR19VU0VfREVGX0RPTV9PUFMgfA0KPiA+PiBNU0lfRkxB
-R19VU0VfREVGX0NISVBfT1BTIHwNCj4gPj4+ICAgICAgICAgICAgXg0KPiA+Pj4gLi4vZHJpdmVy
-cy9wY2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzozNzY6MTE6DQo+
-ID4+PiBub3RlOiAobmVhcg0KPiA+PiBpbml0aWFsaXphdGlvbiBmb3Ig4oCYbW9iaXZlaWxfbXNp
-X2RvbWFpbl9pbmZv4oCZKQ0KPiA+Pj4gLi4vZHJpdmVycy9wY2kvY29udHJvbGxlci9tb2JpdmVp
-bC9wY2llLW1vYml2ZWlsLWhvc3QuYzozNzg6MzoNCj4gPj4+IGVycm9yOiDigJhzdHJ1Y3QNCj4g
-Pj4gbXNpX2RvbWFpbl9pbmZv4oCZIGhhcyBubyBtZW1iZXIgbmFtZWQg4oCYY2hpcOKAmQ0KPiA+
-Pj4gICAuY2hpcCA9ICZtb2JpdmVpbF9tc2lfaXJxX2NoaXAsDQo+ID4+PiAgICBefn5+DQo+ID4+
-PiAuLi9kcml2ZXJzL3BjaS9jb250cm9sbGVyL21vYml2ZWlsL3BjaWUtbW9iaXZlaWwtaG9zdC5j
-OjM3ODoxMDogd2FybmluZzoNCj4gPj4gZXhjZXNzIGVsZW1lbnRzIGluIHN0cnVjdCBpbml0aWFs
-aXplcg0KPiA+Pj4gICAuY2hpcCA9ICZtb2JpdmVpbF9tc2lfaXJxX2NoaXAsDQo+ID4+PiAgICAg
-ICAgICAgXg0KPiA+Pj4gLi4vZHJpdmVycy9wY2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1v
-Yml2ZWlsLWhvc3QuYzozNzg6MTA6DQo+ID4+PiBub3RlOiAobmVhcg0KPiA+PiBpbml0aWFsaXph
-dGlvbiBmb3Ig4oCYbW9iaXZlaWxfbXNpX2RvbWFpbl9pbmZv4oCZKQ0KPiA+Pj4gLi4vZHJpdmVy
-cy9wY2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzogSW4gZnVuY3Rp
-b24NCj4gPj4g4oCYbW9iaXZlaWxfYWxsb2NhdGVfbXNpX2RvbWFpbnPigJk6DQo+ID4+PiAuLi9k
-cml2ZXJzL3BjaS9jb250cm9sbGVyL21vYml2ZWlsL3BjaWUtbW9iaXZlaWwtaG9zdC5jOjQ2OToy
-MDogZXJyb3I6DQo+ID4+IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1bmN0aW9uIOKAmHBjaV9t
-c2lfY3JlYXRlX2lycV9kb21haW7igJk7IGRpZCB5b3UNCj4gPj4gbWVhbiDigJhwY2lfbXNpX2dl
-dF9kZXZpY2VfZG9tYWlu4oCZPw0KPiA+PiBbLVdlcnJvcj1pbXBsaWNpdC1mdW5jdGlvbi1kZWNs
-YXJhdGlvbl0NCj4gPj4+ICAgbXNpLT5tc2lfZG9tYWluID0gcGNpX21zaV9jcmVhdGVfaXJxX2Rv
-bWFpbihmd25vZGUsDQo+ID4+PiAgICAgICAgICAgICAgICAgICAgIF5+fn5+fn5+fn5+fn5+fn5+
-fn5+fn5+fn4NCj4gPj4+ICAgICAgICAgICAgICAgICAgICAgcGNpX21zaV9nZXRfZGV2aWNlX2Rv
-bWFpbg0KPiA+Pj4gLi4vZHJpdmVycy9wY2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1vYml2
-ZWlsLWhvc3QuYzo0Njk6MTg6IHdhcm5pbmc6DQo+ID4+IGFzc2lnbm1lbnQgbWFrZXMgcG9pbnRl
-ciBmcm9tIGludGVnZXIgd2l0aG91dCBhIGNhc3QNCj4gPj4gWy1XaW50LWNvbnZlcnNpb25dDQo+
-ID4+PiAgIG1zaS0+bXNpX2RvbWFpbiA9IHBjaV9tc2lfY3JlYXRlX2lycV9kb21haW4oZndub2Rl
-LA0KPiA+Pj4gICAgICAgICAgICAgICAgICAgXg0KPiA+Pj4gLi4vZHJpdmVycy9wY2kvY29udHJv
-bGxlci9tb2JpdmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzogQXQgdG9wIGxldmVsOg0KPiA+Pj4g
-Li4vZHJpdmVycy9wY2kvY29udHJvbGxlci9tb2JpdmVpbC9wY2llLW1vYml2ZWlsLWhvc3QuYzoz
-NzU6MzE6IGVycm9yOg0KPiA+PiBzdG9yYWdlIHNpemUgb2Yg4oCYbW9iaXZlaWxfbXNpX2RvbWFp
-bl9pbmZv4oCZIGlzbuKAmXQga25vd24NCj4gPj4+ICBzdGF0aWMgc3RydWN0IG1zaV9kb21haW5f
-aW5mbyBtb2JpdmVpbF9tc2lfZG9tYWluX2luZm8gPSB7DQo+ID4+PiAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgXn5+fn5+fn5+fn5+fn5+fn5+fn5+fn5+DQo+ID4+Pg0KPiA+Pj4NCj4g
-Pj4+DQo+ID4+PiBGdWxsIHJhbmRjb25maWcgZmlsZSBpcyBhdHRhY2hlZC4NCj4gDQo+IFVzZSB0
-aGUgLmNvbmZpZyBmaWxlIHRoYXQgd2FzIGF0dGFjaGVkIGluIHRoZSByZXBvcnQuDQoNCk9uZSBx
-dWVyeSwgd2hpY2ggZGVmYXVsdCBjb25maWcgeW91IHVzZWQgdG8gZ2VuZXJhdGUgdGhpcyAuY29u
-ZmlnPyBJIGNhbm5vdCBzZWxlY3QNCnRoZSBQQ0lFX01PQklWRUlMX1BMQVQgaW4gJ21lbnVjb25m
-aWcnIHdoZW4gdXNlIHRoZSBpMzg2X2RlZmNvbmZpZy4NCg0KVGhhbmtzLA0KWmhpcWlhbmcNCg0K
-PiANCj4gDQo+IC0tDQo+IH5SYW5keQ0KDQo=
+next/pending-fixes boot: 277 boots: 5 failed, 255 passed with 9 offline, 8 =
+untried/unknown (v5.6-rc6-178-g95cd16255210)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc6-178-g95cd16255210/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc6-178-g95cd16255210/
+
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc6-178-g95cd16255210
+Git Commit: 95cd1625521058ba7fe28b48c107a9a4f56a71e7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 104 unique boards, 22 SoC families, 30 builds out of 216
+
+Boot Regressions Detected:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 31 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc5-468-g47d215bb=
+9783)
+
+    vexpress_defconfig:
+        gcc-8:
+          vexpress-v2p-ca15-tc1:
+              lab-baylibre: failing since 1 day (last pass: v5.6-rc5-338-gb=
+1d59e1cc3e8 - first fail: v5.6-rc5-468-g47d215bb9783)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-468-g4=
+7d215bb9783)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-468-g4=
+7d215bb9783)
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc5-468-g47d215bb9=
+783)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc5-468-g4=
+7d215bb9783)
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc5-468-g47d215bb9=
+783)
+          meson-gxm-khadas-vim2:
+              lab-baylibre: new failure (last pass: v5.6-rc5-468-g47d215bb9=
+783)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: v5.6-rc5-468-g47d215bb9=
+783)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            bcm4708-smartrg-sr400ac: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+            meson-gxm-nexbox-a1: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

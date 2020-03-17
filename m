@@ -2,271 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 164E5188930
-	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 16:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D787188932
+	for <lists+linux-next@lfdr.de>; Tue, 17 Mar 2020 16:31:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgCQPar (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 11:30:47 -0400
-Received: from mail-pf1-f175.google.com ([209.85.210.175]:33870 "EHLO
-        mail-pf1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726019AbgCQPar (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 11:30:47 -0400
-Received: by mail-pf1-f175.google.com with SMTP id 23so12161366pfj.1
-        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 08:30:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=dc1NuV0ndcXMLi1UoE+L1BqYhmpmN5TTkM9RVIgyQmQ=;
-        b=esBB0Ngv/pQlFv1agozvolnjrD0EFb6v670VDBfY++VKcH0B4RrpYLCZ3f8g2KKjsj
-         w9Xac8uFy6CuBuheaRknG50dgN5AmQ/NsGDVFiCylzB8ig0nCj7a8d00jQaqRhoFP1n1
-         zJmpYmFH++8t7/3vNWLkxyPjNV038fF/Riw0lP4YCiLHzgWTO3HBEXQAWP6oIoKlT3Ak
-         QSphMEq6iQUr6xFSTm+llJOfq56d0Zo04JIsL8Ut8HyE4R1F39gKwkpWMOwhZiOnuSZi
-         aqMA5TDob0mKRrVNuvwpYodoFNHsgqhrRyNDrEwRHUSxz12lSoSxbgK1eCluHvmu0KDu
-         mbZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=dc1NuV0ndcXMLi1UoE+L1BqYhmpmN5TTkM9RVIgyQmQ=;
-        b=NupZj6w2sUmnPmezb+cLpDOMM0YufDumlQ9TifOBV1lsnPtAX4pZ0WJKO6RHAIvkGx
-         2jfnY/s4i3IOKH12WhnFjnUs0ozLJysx7QLuvozkW43zZXJFSDaAFsZnbE1J1gDY7jO5
-         3sY5+KUyJRjEUVqzislyzHFoWwfw8yfVlr0I8eXh8fMfRzJAoViMIzCI4+NEEPlQTRWH
-         ujtnBDuCT/twrCD+qv1PACG1amdA0rRI5IXALzrhIGpE+Kg9jbA+XrGigFGNOiGkWPZ1
-         qXMRLH7fjpL2szLdXoBvFGWz8bQnSyXLeba3l5HK3QLCAqdd5aD/eg7MMfJoRl8GZ1xb
-         9ltQ==
-X-Gm-Message-State: ANhLgQ02hEDiEt0lFezHJcPTlZ3bv1OCnnniNbkydesob9Ga7krCg9lE
-        OCFqvgSt8WyiaQezw4TEOMke/y6f1f8=
-X-Google-Smtp-Source: ADFU+vsyDSnLRr+dhk1Bf4iF2dVsv2sZKvGTUMz5MkqeXnR6w/gnCZcBbh7cpwxwp8eVrN3V8yEm2g==
-X-Received: by 2002:a62:a501:: with SMTP id v1mr6043096pfm.7.1584459045344;
-        Tue, 17 Mar 2020 08:30:45 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s39sm163631pjb.10.2020.03.17.08.30.44
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 08:30:44 -0700 (PDT)
-Message-ID: <5e70ed24.1c69fb81.2c114.06e1@mx.google.com>
-Date:   Tue, 17 Mar 2020 08:30:44 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726222AbgCQPbM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 11:31:12 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60452 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726019AbgCQPbM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Mar 2020 11:31:12 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02HFLvcn072619;
+        Tue, 17 Mar 2020 11:30:52 -0400
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 2ytb4uk3v9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Mar 2020 11:30:52 -0400
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02HFH5Lv006235;
+        Tue, 17 Mar 2020 15:30:51 GMT
+Received: from b01cxnp23034.gho.pok.ibm.com (b01cxnp23034.gho.pok.ibm.com [9.57.198.29])
+        by ppma03wdc.us.ibm.com with ESMTP id 2yrpw696ww-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Mar 2020 15:30:51 +0000
+Received: from b01ledav005.gho.pok.ibm.com (b01ledav005.gho.pok.ibm.com [9.57.199.110])
+        by b01cxnp23034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02HFUoca16384432
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 17 Mar 2020 15:30:51 GMT
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF441AE062;
+        Tue, 17 Mar 2020 15:30:50 +0000 (GMT)
+Received: from b01ledav005.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CFD5FAE05F;
+        Tue, 17 Mar 2020 15:30:50 +0000 (GMT)
+Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
+        by b01ledav005.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 17 Mar 2020 15:30:50 +0000 (GMT)
+Subject: Re: [PATCH] tpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as
+ module
+To:     Sachin Sant <sachinp@linux.vnet.ibm.com>,
+        Stefan Berger <stefanb@linux.vnet.ibm.com>
+Cc:     jarkko.sakkinen@linux.intel.com, linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au
+References: <20200317130819.720318-1-stefanb@linux.vnet.ibm.com>
+ <03C24A2B-643D-4CDB-99FA-F5321684EEE4@linux.vnet.ibm.com>
+From:   Stefan Berger <stefanb@linux.ibm.com>
+Message-ID: <d0c79cd1-a16b-b0c2-1828-69133670ea82@linux.ibm.com>
+Date:   Tue, 17 Mar 2020 11:30:50 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.4.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200317
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 278 boots: 19 failed, 246 passed with 7 offline,
- 6 untried/unknown (next-20200317)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <03C24A2B-643D-4CDB-99FA-F5321684EEE4@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
+ definitions=2020-03-17_05:2020-03-17,2020-03-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 impostorscore=0
+ suspectscore=0 malwarescore=0 spamscore=0 clxscore=1011 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2003170062
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 278 boots: 19 failed, 246 passed with 7 offline, 6 untrie=
-d/unknown (next-20200317)
+On 3/17/20 11:22 AM, Sachin Sant wrote:
+>> On 17-Mar-2020, at 6:38 PM, Stefan Berger <stefanb@linux.vnet.ibm.com> wrote:
+>>
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>>
+>> This patch fixes the following problem when the ibmvtpm driver
+>> is built as a module:
+>>
+>> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
+>> make: *** [Makefile:1298: modules] Error 2
+>>
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+> Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200317/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200317/
+Thank you!
 
-Tree: next
-Branch: master
-Git Describe: next-20200317
-Git Commit: ec947d0be5f959fff44d59161401515a98a837f3
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 105 unique boards, 23 SoC families, 30 builds out of 329
+    Stefan
 
-Boot Regressions Detected:
 
-arm:
-
-    imx_v4_v5_defconfig:
-        gcc-8:
-          imx27-phytec-phycard-s-rdk:
-              lab-pengutronix: failing since 1 day (last pass: next-2019101=
-1 - first fail: next-20200316)
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: failing since 1 day (last pass: next-2019101=
-1 - first fail: next-20200316)
-
-    multi_v5_defconfig:
-        gcc-8:
-          imx27-phytec-phycard-s-rdk:
-              lab-pengutronix: failing since 1 day (last pass: next-2019101=
-1 - first fail: next-20200316)
-
-    multi_v7_defconfig:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: failing since 1 day (last pass: next-2019101=
-1 - first fail: next-20200316)
-          sun8i-h2-plus-orangepi-r1:
-              lab-baylibre: new failure (last pass: next-20200316)
-          tegra124-nyan-big:
-              lab-collabora: failing since 1 day (last pass: next-20200226 =
-- first fail: next-20200316)
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          rk3288-veyron-jaq:
-              lab-collabora: failing since 3 days (last pass: next-20200312=
- - first fail: next-20200313)
-          tegra124-nyan-big:
-              lab-collabora: failing since 3 days (last pass: next-20200312=
- - first fail: next-20200313)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          imx6ul-pico-hobbit:
-              lab-pengutronix: failing since 1 day (last pass: next-2019101=
-1 - first fail: next-20200316)
-          tegra124-nyan-big:
-              lab-collabora: failing since 1 day (last pass: next-20200226 =
-- first fail: next-20200316)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: failing since 1 day (last pass: next-20200313 -=
- first fail: next-20200316)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 28 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    tegra_defconfig:
-        gcc-8:
-          tegra124-nyan-big:
-              lab-collabora: failing since 3 days (last pass: next-20200312=
- - first fail: next-20200313)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200316)
-
-    vexpress_defconfig:
-        gcc-8:
-          vexpress-v2p-ca9:
-              lab-collabora: failing since 1 day (last pass: next-20200313 =
-- first fail: next-20200316)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200316)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200316)
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20200316)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200316)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200316)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200316)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            rk3288-veyron-jaq: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-    imx_v4_v5_defconfig:
-        gcc-8:
-            imx27-phytec-phycard-s-rdk: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v5_defconfig:
-        gcc-8:
-            imx27-phytec-phycard-s-rdk: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            imx6ul-pico-hobbit: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-    tegra_defconfig:
-        gcc-8:
-            tegra124-nyan-big: 1 failed lab
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-            imx6ul-pico-hobbit: 1 failed lab
-            vf610-colibri-eval-v3: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            imx6ul-pico-hobbit: 1 failed lab
-            rk3288-veyron-jaq: 1 failed lab
-            tegra124-nyan-big: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

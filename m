@@ -2,188 +2,112 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C68118940A
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 03:38:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D769818942B
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 03:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgCRCi0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 22:38:26 -0400
-Received: from mail-pf1-f179.google.com ([209.85.210.179]:40342 "EHLO
-        mail-pf1-f179.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbgCRCi0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 17 Mar 2020 22:38:26 -0400
-Received: by mail-pf1-f179.google.com with SMTP id l184so13029742pfl.7
-        for <linux-next@vger.kernel.org>; Tue, 17 Mar 2020 19:38:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=/EJBEB3n54YiLnmMmjex6mmilbfYe2+TeSmhP9prUCE=;
-        b=qS59ROKTFvglSivTGdo7zCRT9ebTbV28wRqaqEe3ipN3Ox3xh+yBhqlfjNW57Jy/XH
-         3biNBYlV4D+5yUIh8xs8vt9Wxxk9YN6NevNZ3qLER7D3lp+FNpwitoJrXTIh2n3/AC3b
-         TcpGs7BwZo97pO49nbv8/ABJYH+zOJ17DaeW9CguBJvkDMHpVwhEC4L+I4hyNfobboZk
-         Nk3jZ/XXypQLXIfvpnQQ/P72FO50sOKwfZlnJqp71JiIUR9SfFI6SPqT9LeVIYE5scXK
-         cz1O9gsKp0w49iIgOYVFzUOvGNSskNZgZrp85VAwEB7Sbur1N3aCo29whBQSz0Bqbhio
-         aNqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=/EJBEB3n54YiLnmMmjex6mmilbfYe2+TeSmhP9prUCE=;
-        b=FEPeU5zqm7Hyh89s0IWifKQARkdf4GuOa/Mo7U/zPR8Fz00RyoRPX/b+aWRrzz8HKQ
-         Jg3HlyvgQnt3HzNwUU8RgDYUWwX5AFVLj/lA+XltqF8F/wbGU/FCfiVmi1bBVU+RAEVc
-         5uvy3cun/Grog0EyAC7rXFW787NK4IduHzEtwBfa02GlfO6H0WKkAqpd8Ouk/J2hFRnU
-         tx4aye33fqYIs6rNPztb+AIheGHUCerEp3ANSQNv4hatC0PXxK4/lS/0H8iPTER6z5kD
-         Z7kSsfamMhQ+buEoa3KCWIVDEtwWD973aY6tsRJ8ZeujJAmsQ24+bH/6a9t6FySbiRUF
-         /94g==
-X-Gm-Message-State: ANhLgQ3zzH5xxqNuP6YBapxhSE5tjS+JahuiTVKWNB5IdMPR8L8RLT00
-        OgvhV1PgzNxS131giO+Z/FWBx1ZfjF0=
-X-Google-Smtp-Source: ADFU+vssnoluIPJ+A4iSCD1up85mCS4nJkwa/BAcvhsEAuuvKX4aaCmZxRQFtYykcuMfAWPwWY0EsA==
-X-Received: by 2002:a62:3786:: with SMTP id e128mr2022774pfa.124.1584499104539;
-        Tue, 17 Mar 2020 19:38:24 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i131sm3971969pgc.18.2020.03.17.19.38.23
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Mar 2020 19:38:23 -0700 (PDT)
-Message-ID: <5e71899f.1c69fb81.369b1.eeab@mx.google.com>
-Date:   Tue, 17 Mar 2020 19:38:23 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726478AbgCRCum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 22:50:42 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60869 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726229AbgCRCul (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Mar 2020 22:50:41 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48hvfh5jKTz9sPk;
+        Wed, 18 Mar 2020 13:50:36 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584499838;
+        bh=ZDEifc+Hg8BVtIkvCwsPziddGTXcFJ+ZXnXSJLzRcGA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ps1QdUJ8pbOVV342GdkNCiCwMCGzN3VPLndwDCDTtYhPL7alX+FcbHub0s1PN71uS
+         m/atrOLNNC+wZJv5mYdhDrzlz/XJiOHVsuAn9M0LMdW0DPZQ0kGVxJM7OiRbznlOjw
+         03+zqEmTPKRfgfSylyGB/t6Yvg7/VdDbqgps4W50VC4oc6fuytGkqJFyEk/HdAkZQn
+         87D1Pd0vGnlHZ9gKHcCg+FfiSIyYZFCkhB0tG9Tw4XXNpUfaxw3Krg/qyD/NFYdbss
+         1ZTANQ4Na/NSyo4gDLsgq5Px/WbB0x+2vW9srmFAHQ1RuG6UqfQHODTu545dSn1OOS
+         D62de6MqgUigA==
+Date:   Wed, 18 Mar 2020 13:50:34 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>
+Subject: linux-next: manual merge of the drm tree with the omap tree
+Message-ID: <20200318135034.242d9edf@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc6-220-g39ff0c2fc628
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 282 boots: 6 failed,
- 264 passed with 7 offline, 5 untried/unknown (v5.6-rc6-220-g39ff0c2fc628)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/Jywf5AF0NmomlGRZsbo/ll7";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 282 boots: 6 failed, 264 passed with 7 offline, 5 =
-untried/unknown (v5.6-rc6-220-g39ff0c2fc628)
+--Sig_/Jywf5AF0NmomlGRZsbo/ll7
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc6-220-g39ff0c2fc628/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc6-220-g39ff0c2fc628/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc6-220-g39ff0c2fc628
-Git Commit: 39ff0c2fc628b3cbff9e9433dade7685692754ad
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 106 unique boards, 23 SoC families, 30 builds out of 213
+Today's linux-next merge of the drm tree got a conflict in:
 
-Boot Regressions Detected:
+  arch/arm/configs/omap2plus_defconfig
 
-arm:
+between commit:
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: v5.6-rc6-178-g95cd1625=
-5210)
+  98c2cc359f8f ("ARM: omap2plus_defconfig: Update for moved and dropped opt=
+ions")
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 32 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+from the omap tree and commit:
 
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc6-178-g95cd1625=
-5210)
+  e7e67d9a2f1d ("drm/omap: Switch the HDMI and VENC outputs to drm_bridge")
 
-arm64:
+from the drm tree.
 
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-178-g9=
-5cd16255210)
-          meson-gxl-s905x-libretech-cc:
-              lab-clabbe: new failure (last pass: v5.6-rc6-178-g95cd1625521=
-0)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.6-rc6-178-g95cd16255=
-210)
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-178-g9=
-5cd16255210)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.6-rc6-178-g95cd16255=
-210)
+--=20
+Cheers,
+Stephen Rothwell
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-178-g9=
-5cd16255210)
+diff --cc arch/arm/configs/omap2plus_defconfig
+index eedb26ff93f9,54f1a21de7e0..000000000000
+--- a/arch/arm/configs/omap2plus_defconfig
++++ b/arch/arm/configs/omap2plus_defconfig
+@@@ -360,10 -353,10 +360,9 @@@ CONFIG_OMAP2_DSS_DSI=3D
+  CONFIG_DRM_OMAP_PANEL_DSI_CM=3Dm
+  CONFIG_DRM_TILCDC=3Dm
+  CONFIG_DRM_PANEL_SIMPLE=3Dm
++ CONFIG_DRM_DISPLAY_CONNECTOR=3Dm
++ CONFIG_DRM_SIMPLE_BRIDGE=3Dm
+ -CONFIG_DRM_TI_TFP410=3Dm
++ CONFIG_DRM_TI_TPD12S015=3Dm
+  CONFIG_DRM_PANEL_LG_LB035Q02=3Dm
+  CONFIG_DRM_PANEL_NEC_NL8048HL11=3Dm
+  CONFIG_DRM_PANEL_SHARP_LS037V7DW01=3Dm
 
-Boot Failures Detected:
+--Sig_/Jywf5AF0NmomlGRZsbo/ll7
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
+-----BEGIN PGP SIGNATURE-----
 
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5xjHoACgkQAVBC80lX
+0GzIdQgAgRxMoqzoOCQk/qQ8NtySkvYGLqXff2HykmMA+hzn9XoPP4BtSd7mlSm8
+IQx2+bAooyRU1Dg6369LGbYBNCU2AB52hbg3WAYOxIvyRx+1T0iORg9ygRPWENKK
+bqN4/rhbbWY0o2KVwlXQh5BIqdsJzgX3v7Bq/sqhYL6jTzFGxO1StusqDabzcm0x
+aPN3dKlaKoVSEmWbv65p7Pyv+09Y33lfUScXKdFXmL83z541cv1dn3bI+TShNEOg
+qgRRKtm0km5OUF+byzJY61qTxv+v3DWBk0Gm46/y3ygje8XoyI4YhqvAIOE/sjSL
+JuWN9KZpajiIEZz/dZb/++eZ949gkw==
+=f4tr
+-----END PGP SIGNATURE-----
 
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/Jywf5AF0NmomlGRZsbo/ll7--

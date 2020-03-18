@@ -2,85 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1092B189BD2
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 13:18:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F459189DEC
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 15:33:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgCRMSm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Mar 2020 08:18:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44089 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726616AbgCRMSm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Mar 2020 08:18:42 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48j8G70yW8z9sQt;
-        Wed, 18 Mar 2020 23:18:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584533919;
-        bh=xKauPM00syGypjbw94/KFEkZTZqlv1ME2ttiZ53fWVE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=q+5q+2k6Ug6F+kocM7xBXWa1PUfxczld5z/K9d4QAxyXvsz7sTzWUs0oqgYoVKXh6
-         Usgqx+uW/Dw5MyQdjkv4J2Y2eMR9Z9yPp3xyy0DXrQ+SLwLiaV4Lrh2ByklEvHH9pZ
-         tl1D1Apl3+cVGiJ67WMrrSmSrfIOH+IpA26nL0bO6cTwhDevv8giqORFJPhegXNOS3
-         MhEqsM3VorWD46qpcY/7obyxQ3Jyve6C+gtMs0WMWVbvchNN2d1+h9mrIYx7Ph6Rbd
-         3tJu9Wf4eQRhK00gEDs3cNR96QLI/XwAhKeR8FWNzAA7xDbg7/GSnk0xmadiyjTjQg
-         IBhqD3+Uziw3Q==
-Date:   Wed, 18 Mar 2020 23:18:37 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Colin Ian King <colin.king@canonical.com>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the pm tree
-Message-ID: <20200318231837.4041cd8f@canb.auug.org.au>
-In-Reply-To: <ddc7ae33-1b82-ae48-5a7e-e78144fb2a8b@canonical.com>
-References: <20200317185252.3cfeecde@canb.auug.org.au>
-        <20200318224458.1980e10c@canb.auug.org.au>
-        <ddc7ae33-1b82-ae48-5a7e-e78144fb2a8b@canonical.com>
+        id S1727122AbgCROdW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 10:33:22 -0400
+Received: from mail-lj1-f180.google.com ([209.85.208.180]:38773 "EHLO
+        mail-lj1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726596AbgCROdW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Mar 2020 10:33:22 -0400
+Received: by mail-lj1-f180.google.com with SMTP id w1so27330107ljh.5
+        for <linux-next@vger.kernel.org>; Wed, 18 Mar 2020 07:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=XF5S4XxJDvzuKvczlMPC3brfPAk78vzQeXC6ETpLBZI=;
+        b=l81RBBfzP7Dw/gUWj2/x/6CbwsAtfF9hI/+ROQMlzJ85+02CYWcRou9ncfaDyyssCH
+         ejEaoS7axwEdCEbJloyWnQjeAqyRLvzQPTQki2cVvGGVBObg6nbjUI64ao/WLfuA5U9V
+         dThsCy8N5yaveHKJJ4S4jgBYVh2kN1FJsKoYa8cD5sLXMFgVrwKNSUhentKpaLvGTrPD
+         S5eTslz9LLWRlpgJAPV0IHN6wC5Ro5sTTVgd0MoI+UXvgw86dJMiUfB1Jl9Z8IDE1J3Z
+         UGcz0WMMx3dVmMhIu5o39jMKy+PheMk3gWKIlLJLoKqhzotkG3Ev4x6rwpaAHFq0Rqoo
+         w0zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=XF5S4XxJDvzuKvczlMPC3brfPAk78vzQeXC6ETpLBZI=;
+        b=lzdf5kyCyBhSgHtHCSwrjVpx+ESiMQK9EfwKDmXs/CBwtkgJoD9+OY9jaBsU+jPoGi
+         D5GRSrfcBeCgyxAAlDrFQxxXWaahiPFGNqp4lU6+R38CH5VtuQduAkZ+FqIxF5BOsG8G
+         V6mtDttTSTNydsZtNucJDx9oTnVbF+OInLrJPffNlfSHyVsZmqmzYfiUUk7Mt1qBTpWK
+         Wt7kfddxxptVcDWToxbeKW0YWPZ8Ip+HzmhbYuDzn69Wq2vEFOfx79/v+0RJbmbU4xxd
+         Qy7f6aNfS1ZNKOwUFmKKJykmdRRfQ5Xo4CFWucy0puetyfVaS5izhvZjHq4yu3xOXNtJ
+         pRng==
+X-Gm-Message-State: ANhLgQ3WIDQLuyNdIHc2GOtrBUscNbze3Be8Dkj6vfSkw+l/7CK+5STc
+        OhLcrepYG2lY2C51mWzG9jQTgTkJMFG5hhg5DUbLFA==
+X-Google-Smtp-Source: ADFU+vvDUw2azv5wuxvYN1sBPD4zgg6lx6ShyeW7lx3uJBMBnxMuGtEecjIe9jUXO8NzsyMmVaCSoFcH62+sHNrNuOY=
+X-Received: by 2002:a05:651c:285:: with SMTP id b5mr2500039ljo.165.1584542000262;
+ Wed, 18 Mar 2020 07:33:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/lkteiqNJ+pRCAR+LQjfQi8Z";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 18 Mar 2020 20:03:09 +0530
+Message-ID: <CA+G9fYtk0jCB1M=MeYP4SshXjyyhLJbHuSzpOkq0OPVjSRpqZg@mail.gmail.com>
+Subject: mm: hugetlb.c:5449:62: error: expected ';' before '{' token
+  for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL)
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Cc:     lkft-triage@lists.linaro.org, Roman Gushchin <guro@fb.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michal Hocko <mhocko@kernel.org>,
+        Rik van Riel <riel@surriel.com>, andreas.schaufler@gmx.de,
+        js1304@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/lkteiqNJ+pRCAR+LQjfQi8Z
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Linux next build failed on arm beagleboard x15.
 
-Hi Colin,
+Build error:
+/mm/hugetlb.c: In function 'hugetlb_cma_reserve':
+/mm/hugetlb.c:5449:3: error: implicit declaration of function
+'for_each_mem_pfn_range'; did you mean 'for_each_mem_range'?
+[-Werror=implicit-function-declaration]
+   for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
+   ^~~~~~~~~~~~~~~~~~~~~~
+   for_each_mem_range
+/mm/hugetlb.c:5449:62: error: expected ';' before '{' token
+   for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
 
-On Wed, 18 Mar 2020 11:52:00 +0000 Colin Ian King <colin.king@canonical.com=
-> wrote:
->
-> > This was fixed today (by including linux/ioh), but the latest update to
-> > the pm tree has removed that include again.
-> >  =20
-> Hopefully it won't be reverted from linux-next?
+config:
+http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/am57xx-evm/lkft/linux-next/718/config
+                                                              ^
+full build url:
+https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=am57xx-evm,label=docker-lkft/727/consoleText
 
-Linux-next just contains what its constituent trees contain each day ...
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/lkteiqNJ+pRCAR+LQjfQi8Z
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5yEZ0ACgkQAVBC80lX
-0GySQwgAoR+5qipE5cyNLFPp8YjbVqPFWBTtPBjo6G91bxM8lqymu1iBj3Msj6BM
-N2oY7F8k7wMAFO3bDiNAPb/uOpC8R2oapM7YQZj+93AJQ6RPdm1N90nlpFJ9e/E1
-fm6u2dQe1YO2jfD302fkMicUIuHu/bUilvSCRBQdfPo5WvGTkxS/S6zgb74E0aRB
-FR8Dau+S4d6vsby+MlT3vBbBEzi4bUscOwi9ISOU29kqTuXhz6GUDB/nYRan47Rz
-jbtKdAbkD/G04VBzfPuI4vxHtByN1AE5ZtUV3nidlGVZ6KOpb6EuUKYKQAeLAGPm
-K5dBbLRQ2THA14jZonwgWd3UusG3Lg==
-=e5Oo
------END PGP SIGNATURE-----
-
---Sig_/lkteiqNJ+pRCAR+LQjfQi8Z--
+-- 
+Linaro LKFT
+https://lkft.linaro.org

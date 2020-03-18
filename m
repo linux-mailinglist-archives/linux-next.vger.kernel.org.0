@@ -2,87 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D30F418A245
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 19:24:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C59F18A26A
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 19:34:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726623AbgCRSYA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Mar 2020 14:24:00 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:60440 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726596AbgCRSYA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Mar 2020 14:24:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1584555839;
+        id S1726813AbgCRSes (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 14:34:48 -0400
+Received: from mail.skyhub.de ([5.9.137.197]:53450 "EHLO mail.skyhub.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726647AbgCRSes (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Mar 2020 14:34:48 -0400
+Received: from zn.tnic (p200300EC2F0B450084928C9FAEA2F9FB.dip0.t-ipconnect.de [IPv6:2003:ec:2f0b:4500:8492:8c9f:aea2:f9fb])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id EE3541EC0CFB;
+        Wed, 18 Mar 2020 19:34:46 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1584556487;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1BhPTAKqSYELkcumcDrePcKLFULRe/8k/IRbjYPD+Us=;
-        b=aFvqpM0Q7oB0vA5/KHOmtj/bmwvRddSdNus3bGEKu2J0vq+u1XY2XRwfqE3ZnUMnpGTgPt
-        6o93AuZLEemxJcUay223/pZ3Q9hRDAWuDX/mc/BDjWelq6dOyaBEJQMeHWma4S9sL7/6BB
-        Pd2yYK238x0U6zbnwxED4MY+f2B+hhQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-304-Gr67u16UMG-dw6JrsGdxxg-1; Wed, 18 Mar 2020 14:23:57 -0400
-X-MC-Unique: Gr67u16UMG-dw6JrsGdxxg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 50D95107ACCA;
-        Wed, 18 Mar 2020 18:23:56 +0000 (UTC)
-Received: from treble (unknown [10.10.110.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C08E119756;
-        Wed, 18 Mar 2020 18:23:54 +0000 (UTC)
-Date:   Wed, 18 Mar 2020 13:23:52 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=CJE3KOqbdzcdAA4tnut68OnvOQdfGMEspNjEMsSW2gw=;
+        b=dZRhDVxLhreppLmXOhJXaAhCr9vGDc9tMADcynzUXsN63kewjWMLY5zcIA43nffCLFygDH
+        n38J8+tdTtXmS/lRor00/yio7W8kTTTg/uN8mvnsgaBKg9NjPulRssJIsbs85nwppYNt0f
+        oAldBT+C/Rj4L6JadK4EL07mLiVYsa0=
+Date:   Wed, 18 Mar 2020 19:34:51 +0100
+From:   Borislav Petkov <bp@alien8.de>
 To:     Randy Dunlap <rdunlap@infradead.org>
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: linux-next: Tree for Mar 18 (objtool)
-Message-ID: <20200318182352.2dgwwl4ugbwndi4x@treble>
-References: <20200318220920.48df2e76@canb.auug.org.au>
- <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
+        X86 ML <x86@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>
+Subject: [PATCH] x86/ioremap: Fix CONFIG_EFI=n build
+Message-ID: <20200318183451.GC4377@zn.tnic>
+References: <20200316183039.0d1c45ce@canb.auug.org.au>
+ <7561e981-0d9b-d62c-0ef2-ce6007aff1ab@infradead.org>
+ <20200318151707.GB4377@zn.tnic>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20200318151707.GB4377@zn.tnic>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 09:48:01AM -0700, Randy Dunlap wrote:
-> On 3/18/20 4:09 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200317:
-> > 
+On Wed, Mar 18, 2020 at 04:17:07PM +0100, Borislav Petkov wrote:
+> > ld: arch/x86/mm/ioremap.o: in function `__ioremap_caller':
+> > ioremap.c:(.text+0x150): undefined reference to `efi_mem_type'
 > 
-> Hi,
-> 
-> For some reason, the attached .config file generates over 350 objtool warnings.
-> There are all "unreachable instruction" warnings.
-> 
-> Here is a small sample:
-> 
-> mm/page-writeback.o: warning: objtool: __set_page_dirty_nobuffers()+0x25b: unreachable instruction
-> kernel/sched/fair.o: warning: objtool: load_balance()+0x54c: unreachable instruction
-> kernel/power/process.o: warning: objtool: freeze_kernel_threads()+0x115: unreachable instruction
-> mm/readahead.o: warning: objtool: read_cache_pages_invalidate_page()+0x1b5: unreachable instruction
-> kernel/power/suspend.o: warning: objtool: suspend_devices_and_enter()+0x101f: unreachable instruction
-> kernel/sched/rt.o: warning: objtool: dequeue_top_rt_rq()+0x67: unreachable instruction
+> Working on it.
 
-This seems to be caused by 
+The below should fix it:
 
-  545ed6816b72 ("ubsan: add trap instrumentation option")
+---
+From: Borislav Petkov <bp@suse.de>
+Date: Wed, 18 Mar 2020 19:27:48 +0100
 
-Kees, any idea why that commit causes at least some BUG() statements to
-output an extra UD2?
+In order to use efi_mem_type(), one needs CONFIG_EFI enabled. Otherwise
+that function is undefined. Use IS_ENABLED() to check and avoid the
+ifdeffery as the compiler optimizes away the following unreachable code
+then.
+
+Fixes: 985e537a4082 ("x86/ioremap: Map EFI runtime services data as encrypted for SEV")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>
+Link: https://lkml.kernel.org/r/7561e981-0d9b-d62c-0ef2-ce6007aff1ab@infradead.org
+---
+ arch/x86/mm/ioremap.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/x86/mm/ioremap.c b/arch/x86/mm/ioremap.c
+index 935a91e1fd77..18c637c0dc6f 100644
+--- a/arch/x86/mm/ioremap.c
++++ b/arch/x86/mm/ioremap.c
+@@ -115,6 +115,9 @@ static void __ioremap_check_other(resource_size_t addr, struct ioremap_desc *des
+ 	if (!sev_active())
+ 		return;
+ 
++	if (!IS_ENABLED(CONFIG_EFI))
++		return;
++
+ 	if (efi_mem_type(addr) == EFI_RUNTIME_SERVICES_DATA)
+ 		desc->flags |= IORES_MAP_ENCRYPTED;
+ }
+-- 
+2.21.0
 
 -- 
-Josh
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

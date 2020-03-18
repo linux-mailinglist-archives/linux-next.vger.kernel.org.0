@@ -2,99 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FEB418A361
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 20:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D75E318A374
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 21:05:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726704AbgCRTyG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Mar 2020 15:54:06 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:1950 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726647AbgCRTyG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Mar 2020 15:54:06 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 02IJXENF025898;
-        Wed, 18 Mar 2020 15:53:58 -0400
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 2yupjt6m4q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Mar 2020 15:53:57 -0400
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 02IJZI8b005100;
-        Wed, 18 Mar 2020 19:53:56 GMT
-Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
-        by ppma01wdc.us.ibm.com with ESMTP id 2yrpw6jyjm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 18 Mar 2020 19:53:56 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 02IJrtfH38338984
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 18 Mar 2020 19:53:55 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B8938BE04F;
-        Wed, 18 Mar 2020 19:53:55 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 09626BE051;
-        Wed, 18 Mar 2020 19:53:54 +0000 (GMT)
-Received: from sbct-3.pok.ibm.com (unknown [9.47.158.153])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 18 Mar 2020 19:53:54 +0000 (GMT)
-Subject: Re: [PATCH] tpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as
- module
-To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        Stefan Berger <stefanb@linux.vnet.ibm.com>
-Cc:     linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sachinp@linux.vnet.ibm.com, mpe@ellerman.id.au
-References: <20200317130819.720318-1-stefanb@linux.vnet.ibm.com>
- <20200318194247.GC48177@linux.intel.com>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-Message-ID: <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
-Date:   Wed, 18 Mar 2020 15:53:54 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.4.1
+        id S1726733AbgCRUFs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 16:05:48 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52636 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726647AbgCRUFr (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Mar 2020 16:05:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gkorsAd3/7p8i8lrK7OdE0hB+8nbrVh0s1P6M0zluoI=; b=SUl4y5Z3PgoJ4Tx8P7YHb3xZSm
+        1lLwge50z34Q5sqZY0MMIEc0eMOubZkce41p6fbuXSbpxY70gXBcpambdUeh19eLa5T/WRmLYjf6L
+        jqgOV6ZnQiFSQbWpghciQk3+wlAnBnn7FlNneweuDHmdgob2rKSolR1dCP2WU1hFWcgA4s13nJ7FJ
+        ziI7xzGDYRD+uzAhp7OrL2MKqas3IbZrc+SlqffAsxAi2BYhRsI6XMeLYcRRUrZlJC4X0AJREvonh
+        XRXWuxOB03BrRGd3aBPNIoDhO5TS7D9b7fRHo8Ro85YFzqnuabXqfW+q9PzC3pA8QWZiOati+wm/y
+        x3NTmaAA==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jEewi-0004bA-No; Wed, 18 Mar 2020 20:05:44 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 85DA73010C2;
+        Wed, 18 Mar 2020 21:05:42 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4950B28528244; Wed, 18 Mar 2020 21:05:42 +0100 (CET)
+Date:   Wed, 18 Mar 2020 21:05:42 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: linux-next: Tree for Mar 18 (objtool)
+Message-ID: <20200318200542.GK20730@hirez.programming.kicks-ass.net>
+References: <20200318220920.48df2e76@canb.auug.org.au>
+ <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
+ <20200318182352.2dgwwl4ugbwndi4x@treble>
 MIME-Version: 1.0
-In-Reply-To: <20200318194247.GC48177@linux.intel.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.645
- definitions=2020-03-18_07:2020-03-18,2020-03-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
- impostorscore=0 phishscore=0 clxscore=1015 malwarescore=0 adultscore=0
- mlxlogscore=999 lowpriorityscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2003180086
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200318182352.2dgwwl4ugbwndi4x@treble>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/18/20 3:42 PM, Jarkko Sakkinen wrote:
-> On Tue, Mar 17, 2020 at 09:08:19AM -0400, Stefan Berger wrote:
->> From: Stefan Berger <stefanb@linux.ibm.com>
->>
->> This patch fixes the following problem when the ibmvtpm driver
->> is built as a module:
->>
->> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
->> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
->> make: *** [Makefile:1298: modules] Error 2
->>
->> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> Hi, wrong tag (we use "tpm:"), missing fixes tag and please cc stable.
-> Thanks.
+On Wed, Mar 18, 2020 at 01:23:52PM -0500, Josh Poimboeuf wrote:
+> On Wed, Mar 18, 2020 at 09:48:01AM -0700, Randy Dunlap wrote:
+> > On 3/18/20 4:09 AM, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Changes since 20200317:
+> > > 
+> > 
+> > Hi,
+> > 
+> > For some reason, the attached .config file generates over 350 objtool warnings.
+> > There are all "unreachable instruction" warnings.
+> > 
+> > Here is a small sample:
+> > 
+> > mm/page-writeback.o: warning: objtool: __set_page_dirty_nobuffers()+0x25b: unreachable instruction
+> > kernel/sched/fair.o: warning: objtool: load_balance()+0x54c: unreachable instruction
+> > kernel/power/process.o: warning: objtool: freeze_kernel_threads()+0x115: unreachable instruction
+> > mm/readahead.o: warning: objtool: read_cache_pages_invalidate_page()+0x1b5: unreachable instruction
+> > kernel/power/suspend.o: warning: objtool: suspend_devices_and_enter()+0x101f: unreachable instruction
+> > kernel/sched/rt.o: warning: objtool: dequeue_top_rt_rq()+0x67: unreachable instruction
+> 
+> This seems to be caused by 
+> 
+>   545ed6816b72 ("ubsan: add trap instrumentation option")
+> 
+> Kees, any idea why that commit causes at least some BUG() statements to
+> output an extra UD2?
 
-I did not add the fixes tag because I do not know the final commit hash, 
-or is it the final commit hash once it is in linux-next? I doubt it with 
-all the merging that can occur.
+"Built-in Function: void __builtin_trap (void)
 
+    This function causes the program to exit abnormally. GCC implements
+    this function by using a target-dependent mechanism (such as
+    intentionally executing an illegal instruction) or by calling abort.
+    The mechanism used may vary from release to release so you should
+    not rely on any particular implementation."
 
-    Stefan
+Sounds encouraging :-(
 
+Clearly it now emits UD2, but who knows what it'll do next week.
 
->
-> /Jarkko
+I think what happens is that we have code that does:
+
+	if (cond)
+		BUG()/WARN()
+
+And ubsan figures that @cond is something undefined, and then we get
+transformed into:
+
+	if (cond) {
+		__builtin_trap();
+		BUG()/WARN()
+	}
+
+And presto, double UD2.
+
+Since x86 has GENERIC_BUG unconditionally, we should actually have
+__bug_table entries for each BUG()/WARN() instance, which should allow
+us to distinguish between a proper BUG()/WARN() and this
+__builtin_trap() nonsense.
 
 

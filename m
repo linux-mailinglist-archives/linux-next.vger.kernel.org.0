@@ -2,83 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C24B18A0F8
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 17:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4073818A0FB
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 17:55:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726631AbgCRQzV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Wed, 18 Mar 2020 12:55:21 -0400
-Received: from muru.com ([72.249.23.125]:60734 "EHLO muru.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726506AbgCRQzV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 18 Mar 2020 12:55:21 -0400
-Received: from atomide.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 0F27580B6;
-        Wed, 18 Mar 2020 16:56:06 +0000 (UTC)
-Date:   Wed, 18 Mar 2020 09:55:17 -0700
-From:   Tony Lindgren <tony@atomide.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
+        id S1727150AbgCRQzo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 12:55:44 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:20817 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727144AbgCRQzo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Mar 2020 12:55:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1584550543;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Gw8dSJcxAXn8cbdNXnASK9oycQDUpTjvTj4lA80tno0=;
+        b=RERh36mNVaH9Si4IhaY0isL0WIpGI43WeXDQ4FikbkHeAM7Ms5y7O1QTuKNkd5+AfpUCS+
+        dXBRSFe5ZWlYSgiueJSR6D4M1FK/yNPAkz3XKy392TRGWJapTmRS5trBMiLDbXvHa26esO
+        9hh8g47LBo2J5dOUxMPMgpzxiVpnqgc=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-320-I5vSD3jsM3ifT26mfsHPPQ-1; Wed, 18 Mar 2020 12:55:41 -0400
+X-MC-Unique: I5vSD3jsM3ifT26mfsHPPQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 4914D800D4E;
+        Wed, 18 Mar 2020 16:55:40 +0000 (UTC)
+Received: from treble (unknown [10.10.110.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 321225D9E2;
+        Wed, 18 Mar 2020 16:55:38 +0000 (UTC)
+Date:   Wed, 18 Mar 2020 11:55:36 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: Re: linux-next: manual merge of the drm tree with the omap tree
-Message-ID: <20200318165517.GO37466@atomide.com>
-References: <20200318135034.242d9edf@canb.auug.org.au>
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Mar 18 (objtool)
+Message-ID: <20200318165536.5cz4mzgb7xyxvjop@treble>
+References: <20200318220920.48df2e76@canb.auug.org.au>
+ <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20200318135034.242d9edf@canb.auug.org.au>
+In-Reply-To: <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-* Stephen Rothwell <sfr@canb.auug.org.au> [200318 02:51]:
-> Hi all,
+On Wed, Mar 18, 2020 at 09:48:01AM -0700, Randy Dunlap wrote:
+> On 3/18/20 4:09 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200317:
+> > 
 > 
-> Today's linux-next merge of the drm tree got a conflict in:
+> Hi,
 > 
->   arch/arm/configs/omap2plus_defconfig
+> For some reason, the attached .config file generates over 350 objtool warnings.
+> There are all "unreachable instruction" warnings.
 > 
-> between commit:
+> Here is a small sample:
 > 
->   98c2cc359f8f ("ARM: omap2plus_defconfig: Update for moved and dropped options")
-> 
-> from the omap tree and commit:
-> 
->   e7e67d9a2f1d ("drm/omap: Switch the HDMI and VENC outputs to drm_bridge")
-> 
-> from the drm tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+> mm/page-writeback.o: warning: objtool: __set_page_dirty_nobuffers()+0x25b: unreachable instruction
+> kernel/sched/fair.o: warning: objtool: load_balance()+0x54c: unreachable instruction
+> kernel/power/process.o: warning: objtool: freeze_kernel_threads()+0x115: unreachable instruction
+> mm/readahead.o: warning: objtool: read_cache_pages_invalidate_page()+0x1b5: unreachable instruction
+> kernel/power/suspend.o: warning: objtool: suspend_devices_and_enter()+0x101f: unreachable instruction
+> kernel/sched/rt.o: warning: objtool: dequeue_top_rt_rq()+0x67: unreachable instruction
 
-OK thanks!
+WTH.  This looks like the BUG "double ud2" problem we saw the other day.
 
-Tony
+I wonder what changed.
 
-
-> diff --cc arch/arm/configs/omap2plus_defconfig
-> index eedb26ff93f9,54f1a21de7e0..000000000000
-> --- a/arch/arm/configs/omap2plus_defconfig
-> +++ b/arch/arm/configs/omap2plus_defconfig
-> @@@ -360,10 -353,10 +360,9 @@@ CONFIG_OMAP2_DSS_DSI=
->   CONFIG_DRM_OMAP_PANEL_DSI_CM=m
->   CONFIG_DRM_TILCDC=m
->   CONFIG_DRM_PANEL_SIMPLE=m
-> + CONFIG_DRM_DISPLAY_CONNECTOR=m
-> + CONFIG_DRM_SIMPLE_BRIDGE=m
->  -CONFIG_DRM_TI_TFP410=m
-> + CONFIG_DRM_TI_TPD12S015=m
->   CONFIG_DRM_PANEL_LG_LB035Q02=m
->   CONFIG_DRM_PANEL_NEC_NL8048HL11=m
->   CONFIG_DRM_PANEL_SHARP_LS037V7DW01=m
-
+-- 
+Josh
 

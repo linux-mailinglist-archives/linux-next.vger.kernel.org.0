@@ -2,102 +2,179 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9001891C7
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 00:08:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 058101893C4
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 02:40:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726765AbgCQXI5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 19:08:57 -0400
-Received: from mail-eopbgr70072.outbound.protection.outlook.com ([40.107.7.72]:7335
-        "EHLO EUR04-HE1-obe.outbound.protection.outlook.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726564AbgCQXI5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Mar 2020 19:08:57 -0400
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AHHLOxgTZ9osNtl13qHdM5Z9KckCIUmyZRIo7RfDJwkiJ7bfaQQ7LKoo4ctz+XrfOoBVY3LCNDT/SlQuPtfQ46DM5mkZbveWP8ecwqu8tiOfGdwwdCvIqGg4PpWWb/JkJmMhh7iP+8s8upskm3YSAuB3zVEpHCQMAHXX5ro/MuW4BjOJaxAMdS2/fy+fdbDdtQm/NuqRKjDPXtt6R+7WCKRCBLRy70n7qUlpNnE+QFBQEwyPOVlePxjgzplvexinUuXCKegsfoNYxdJrrdWJkTkm62Gh0lLXIhilB/dbhl7UXxZkU+UXJzCpUoz5uMUhEVIxIX4ryOuCvdvZTSroIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/kIQOG/Nvz7fSiNMeqDevp9eAESKDUfoimHXRWkvmTE=;
- b=Up5mu2MCFEBJ57dAvBohlCc5Kybe7DuQjzHenjnOztmVkZC6/61on8lmT384K8/4DRbMwCseMzFbMwRhfofSHpX/0OE1S4O7kWyFknDimUwGot4dQHsJXqRkG5UITOqkmnzcPbGVA6neNX+xPdpCPhoGZQCnGLKI+1wNUyHRahzrtRi9s4TSwYUYwv5dHS7UMNCxDM7VQ5e+T1vtvj+sosy98p3FSGH0BWxiuZwEfoa0Mi0BYzZQ/W5XK6g2aVQv8CMCB06lLdGfbjMSRfPlbTkIPz8uuoEZWR4TK0Y6KzRwe7aJ1nqbwJppiUv2e2ndiZity2WhkoJdkckYfuaJkw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mellanox.com; dmarc=pass action=none header.from=mellanox.com;
- dkim=pass header.d=mellanox.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Mellanox.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/kIQOG/Nvz7fSiNMeqDevp9eAESKDUfoimHXRWkvmTE=;
- b=Of7bWqEY0/oQim1ykK0IJpxAhvWpVwhTNqIOkjCOqszL2XycAOswMwgWuR6TEOw+FhocLyE5EyPGOg+/1Ljy47XFefOvedMpTnoev1tf39Qzf2y54yZ4IAYnphH0rWdCmuY0zBd6kkl28Vu33gUDDaToDp4wJ2yErttMwwrNB9U=
-Authentication-Results: spf=none (sender IP is )
- smtp.mailfrom=jgg@mellanox.com; 
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com (52.133.14.15) by
- VI1PR05MB6286.eurprd05.prod.outlook.com (20.179.24.86) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.2814.19; Tue, 17 Mar 2020 23:08:50 +0000
-Received: from VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::18d2:a9ea:519:add3]) by VI1PR05MB4141.eurprd05.prod.outlook.com
- ([fe80::18d2:a9ea:519:add3%7]) with mapi id 15.20.2814.021; Tue, 17 Mar 2020
- 23:08:50 +0000
-Date:   Tue, 17 Mar 2020 20:08:47 -0300
-From:   Jason Gunthorpe <jgg@mellanox.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1726871AbgCRBkv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 17 Mar 2020 21:40:51 -0400
+Received: from ozlabs.org ([203.11.71.1]:40361 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726680AbgCRBku (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 17 Mar 2020 21:40:50 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48ht666PH8z9sNg;
+        Wed, 18 Mar 2020 12:40:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584495647;
+        bh=anDP3nx12ruwkIJDh64jQV8DzkTYUP30jaeOxQMxsgY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mLJNxZyco2WMBPmJPM8uj5tOvbVITfxvKZHeIeby3yWz6h0nWWK+b5QGiSky8Drgt
+         83qzpPqXpf8DLw0potVWfWHyeldo07AS3VykWPjVuY2lHjmkrQetzZsgfm+PWz5Znu
+         iAFJKC2pFoc1n7XpL4VQiWWeLY/s4Llv8Zs5JrBLbAvlOmn2nM0x6I8y0FnvAKP3pg
+         5jntUAoNItIR7mxv2DRu16cdGvKN5NcSNepW+0J6NBGUzQr4E5g7e53yd7HA0mxIyj
+         /BkJ1GD/LXde7IE8HTCZyvd2Lg1PrDOSpg7Oz/f5YS+hk/kfTvHAxB9f5K+w6Pszsc
+         jpz2vhFXS3y/w==
+Date:   Wed, 18 Mar 2020 12:40:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: Fixes tag needs some work in the hmm tree
-Message-ID: <20200317230847.GB13183@mellanox.com>
-References: <20200318075033.4d06b1be@canb.auug.org.au>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200318075033.4d06b1be@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MN2PR19CA0015.namprd19.prod.outlook.com
- (2603:10b6:208:178::28) To VI1PR05MB4141.eurprd05.prod.outlook.com
- (2603:10a6:803:44::15)
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Subject: linux-next: manual merge of the jc_docs tree with the arm64 tree
+Message-ID: <20200318124033.6c523374@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-Received: from mlx.ziepe.ca (142.68.57.212) by MN2PR19CA0015.namprd19.prod.outlook.com (2603:10b6:208:178::28) with Microsoft SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.2814.19 via Frontend Transport; Tue, 17 Mar 2020 23:08:50 +0000
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)     (envelope-from <jgg@mellanox.com>)      id 1jELKJ-0007sv-6j; Tue, 17 Mar 2020 20:08:47 -0300
-X-Originating-IP: [142.68.57.212]
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-HT: Tenant
-X-MS-Office365-Filtering-Correlation-Id: 122d8ce8-f9fb-47ce-fe87-08d7cac8279a
-X-MS-TrafficTypeDiagnostic: VI1PR05MB6286:
-X-Microsoft-Antispam-PRVS: <VI1PR05MB62868A124DA4D3EDFDA3268BCFF60@VI1PR05MB6286.eurprd05.prod.outlook.com>
-X-MS-Oob-TLC-OOBClassifiers: OLM:335;
-X-Forefront-PRVS: 0345CFD558
-X-Forefront-Antispam-Report: SFV:NSPM;SFS:(10009020)(4636009)(346002)(376002)(366004)(39860400002)(136003)(396003)(199004)(478600001)(2616005)(6916009)(86362001)(36756003)(1076003)(8676002)(81166006)(186003)(4744005)(81156014)(2906002)(33656002)(26005)(66946007)(66556008)(8936002)(54906003)(5660300002)(52116002)(9786002)(9746002)(4326008)(316002)(66476007)(24400500001);DIR:OUT;SFP:1101;SCL:1;SRVR:VI1PR05MB6286;H:VI1PR05MB4141.eurprd05.prod.outlook.com;FPR:;SPF:None;LANG:en;PTR:InfoNoRecords;A:1;
-Received-SPF: None (protection.outlook.com: mellanox.com does not designate
- permitted sender hosts)
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nT0aGwSPrHfJ62QgFPm3Yd3MeFDdE+gRcsIaqDaTaD+Ntuprne7qUERVGsOd1f0+cM7pIEw/kQGnYTG8ON5oH6QL3HmwwIzOfFKY8e7qh+GFZfc/9hGgwgWh40bQpoyjOrWuVCZbFSqhzOMpapICbvgFMLmqWnL+76GReBo43gCSQ5TSrfF4eLRQDiKcRlM4gfW5V8uqC3i30vIJS1m5zK0gssf4AiGwsaHDjIijWcFN9KFBHHSCjg1WL5m7Dh0NGlgnQkYoJWgrBmoIzHGKkBE7FHaFyn6QOeXAyFbqN82q1uqV3+4Dajacu9k978EULg+zNcZJkzmqGKyyPwuo9SkmXVY5n4GUIoCBXqnrovf6f+MPIIBAU8pGD3RUIoUgotSV4ewNSUv3IlfZi5ewlNLnAziQbsQx/tVjNbsiFHhXPBynk8rQnuO+T6Rj25ZsXfqhJ4e6nxf0xWhVxdjO2IRNfkjbrgzBHcJZYSPhDQERHvvi2NVSrY6JGHpcZugU
-X-MS-Exchange-AntiSpam-MessageData: p00qTaYFJuhwn1XcaziPu/2+FR+zh/5YhINEGfqf+uuXqNHUlt+wGwBKlaK+G5sp8XT+ZjkdD0GYz7Y3BN+HYKy5KYSPTrY3pKpBj0x/ru+CHeQ0KGlTAXXmvNPIpsHYxy3iAyYt6KKYxP7bmKVSfw==
-X-OriginatorOrg: Mellanox.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 122d8ce8-f9fb-47ce-fe87-08d7cac8279a
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Mar 2020 23:08:50.4932
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: a652971c-7d2e-4d9b-a6a4-d149256f461b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7MCR9yjUe9NooJUOXGD3T79RaeQDUH8erMz4UnEruvgMl5UY2KyJERKqhp+L8UIC9UBI8svuKNyKdHNAw9YpCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR05MB6286
+Content-Type: multipart/signed; boundary="Sig_/uK=nKxU3a1Nu0GPtSHTU0E_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 07:50:33AM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   ee37d9e6e474 ("mm/hmm: don't handle the non-fault case in hmm_vma_walk_hole_()")
-> 
-> Fixes tag
-> 
->   Fixes: 2aee09d ("mm/hmm: change hmm_vma_fault() to allow write fault on page basis")
+--Sig_/uK=nKxU3a1Nu0GPtSHTU0E_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixed, and really confused how it happened :\
+Hi all,
 
-Thanks,
-Jason
+Today's linux-next merge of the jc_docs tree got a conflict in:
+
+  Documentation/filesystems/proc.rst
+
+between commit:
+
+  424037b77519 ("mm: smaps: Report arm64 guarded pages in smaps")
+
+from the arm64 tree and commit:
+
+  c33e97efa9d9 ("docs: filesystems: convert proc.txt to ReST")
+
+from the jc_docs tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc Documentation/filesystems/proc.rst
+index ed5465d0f435,38b606991065..000000000000
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@@ -489,37 -511,39 +511,40 @@@ does not take into account swapped out=20
+  "THPeligible" indicates whether the mapping is eligible for allocating THP
+  pages - 1 if true, 0 otherwise. It just shows the current status.
+ =20
+- "VmFlags" field deserves a separate description. This member represents t=
+he kernel
+- flags associated with the particular virtual memory area in two letter en=
+coded
+- manner. The codes are the following:
+-     rd  - readable
+-     wr  - writeable
+-     ex  - executable
+-     sh  - shared
+-     mr  - may read
+-     mw  - may write
+-     me  - may execute
+-     ms  - may share
+-     gd  - stack segment growns down
+-     pf  - pure PFN range
+-     dw  - disabled write to the mapped file
+-     lo  - pages are locked in memory
+-     io  - memory mapped I/O area
+-     sr  - sequential read advise provided
+-     rr  - random read advise provided
+-     dc  - do not copy area on fork
+-     de  - do not expand area on remapping
+-     ac  - area is accountable
+-     nr  - swap space is not reserved for the area
+-     ht  - area uses huge tlb pages
+-     ar  - architecture specific flag
+-     dd  - do not include area into core dump
+-     sd  - soft-dirty flag
+-     mm  - mixed map area
+-     hg  - huge page advise flag
+-     nh  - no-huge page advise flag
+-     mg  - mergable advise flag
++ "VmFlags" field deserves a separate description. This member represents t=
+he
++ kernel flags associated with the particular virtual memory area in two le=
+tter
++ encoded manner. The codes are the following:
++=20
++     =3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
++     rd    readable
++     wr    writeable
++     ex    executable
++     sh    shared
++     mr    may read
++     mw    may write
++     me    may execute
++     ms    may share
++     gd    stack segment growns down
++     pf    pure PFN range
++     dw    disabled write to the mapped file
++     lo    pages are locked in memory
++     io    memory mapped I/O area
++     sr    sequential read advise provided
++     rr    random read advise provided
++     dc    do not copy area on fork
++     de    do not expand area on remapping
++     ac    area is accountable
++     nr    swap space is not reserved for the area
++     ht    area uses huge tlb pages
++     ar    architecture specific flag
++     dd    do not include area into core dump
++     sd    soft dirty flag
++     mm    mixed map area
++     hg    huge page advise flag
++     nh    no huge page advise flag
++     mg    mergable advise flag
+++    bt    arm64 BTI guarded page
++     =3D=3D    =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+ =20
+  Note that there is no guarantee that every flag and associated mnemonic w=
+ill
+  be present in all further kernel releases. Things get changed, the flags =
+may
+
+--Sig_/uK=nKxU3a1Nu0GPtSHTU0E_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5xfBIACgkQAVBC80lX
+0GyOQgf/TwsXkd50WM3hZbWNlmomsyCOrJEg8CqVbiEyrF24ncfkxJ9OoBzBg+SM
+rlJE73yy/Pcf6Qidaa2FOMl86UjNirH55xBZ1c4kY+yXMNpXIK+5DcsYmhoZghaj
+nCZnTS/u5brQXyS6hTQbofMkLU3Qcw084LKa42cnKYTO+Y2NpPeB6k411kUJybuK
+60/Is1QPKzYNxMHd3K6NtL6x3wk9ZTtqtH8moi/pyM/K9Eima1aE2q+8Ehp4bfFB
+vQlE2LgazsCo90DB7a8MIZ717OG0nJhMntT8ISHYJKVIEMCJy7HhybkQdFoRvb9A
+samJZL/kYIF0/JC0EJI0qEjc0VsflA==
+=SM/t
+-----END PGP SIGNATURE-----
+
+--Sig_/uK=nKxU3a1Nu0GPtSHTU0E_--

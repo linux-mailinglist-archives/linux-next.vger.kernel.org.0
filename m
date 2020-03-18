@@ -2,70 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id D769818942B
-	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 03:50:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ED5D1894E2
+	for <lists+linux-next@lfdr.de>; Wed, 18 Mar 2020 05:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgCRCum (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 17 Mar 2020 22:50:42 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60869 "EHLO ozlabs.org"
+        id S1726550AbgCRE1j (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 00:27:39 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:41781 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726229AbgCRCul (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 17 Mar 2020 22:50:41 -0400
+        id S1726250AbgCRE1j (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Mar 2020 00:27:39 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48hvfh5jKTz9sPk;
-        Wed, 18 Mar 2020 13:50:36 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48hxpY5tS1z9sP7;
+        Wed, 18 Mar 2020 15:27:33 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584499838;
-        bh=ZDEifc+Hg8BVtIkvCwsPziddGTXcFJ+ZXnXSJLzRcGA=;
+        s=201702; t=1584505656;
+        bh=dOom9243483APTZDiyPHNPbFu2OaGWNAJteJqH6nYOE=;
         h=Date:From:To:Cc:Subject:From;
-        b=Ps1QdUJ8pbOVV342GdkNCiCwMCGzN3VPLndwDCDTtYhPL7alX+FcbHub0s1PN71uS
-         m/atrOLNNC+wZJv5mYdhDrzlz/XJiOHVsuAn9M0LMdW0DPZQ0kGVxJM7OiRbznlOjw
-         03+zqEmTPKRfgfSylyGB/t6Yvg7/VdDbqgps4W50VC4oc6fuytGkqJFyEk/HdAkZQn
-         87D1Pd0vGnlHZ9gKHcCg+FfiSIyYZFCkhB0tG9Tw4XXNpUfaxw3Krg/qyD/NFYdbss
-         1ZTANQ4Na/NSyo4gDLsgq5Px/WbB0x+2vW9srmFAHQ1RuG6UqfQHODTu545dSn1OOS
-         D62de6MqgUigA==
-Date:   Wed, 18 Mar 2020 13:50:34 +1100
+        b=V2FURspAyd6rp2hfmM0VQz+6s314vqb7VwTQpddc4UfOXOUAaSAFfcD6C0Qp6AKYl
+         w1ph966rg1RKcLcPMCUYr3z+5ioIoVnx9ufUVLiYTcA3gEnG94zCihuqvYvZYfG8mC
+         L3lWevvqdUJlShqFTpE8Kfr0NwQl5vv2q4f1w21W9lvkdaofnfS98IhQhVJf8FYFgU
+         oiWZp9jcFlL20FNJdda4aWFWWPDt0KNKzeyOnELGhY9jRuvJZbvWp+zLU6IjZDProZ
+         Ahxwb7nnR+n5W1glTGXFp+JCjptMN/lDsu+/A6ms2+MBp6RNlHQu/72XwOmSIM/OqG
+         Mv4wn+oPQ7vDw==
+Date:   Wed, 18 Mar 2020 15:27:31 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Tony Lindgren <tony@atomide.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Tomi Valkeinen <tomi.valkeinen@ti.com>
-Subject: linux-next: manual merge of the drm tree with the omap tree
-Message-ID: <20200318135034.242d9edf@canb.auug.org.au>
+        Dave Martin <Dave.Martin@arm.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: linux-next: manual merge of the tip tree with the arm64 tree
+Message-ID: <20200318152731.0114975c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Jywf5AF0NmomlGRZsbo/ll7";
+Content-Type: multipart/signed; boundary="Sig_/Tx/x6nL20AR7lvSvJW/WvKc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Jywf5AF0NmomlGRZsbo/ll7
+--Sig_/Tx/x6nL20AR7lvSvJW/WvKc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm tree got a conflict in:
+Today's linux-next merge of the tip tree got a conflict in:
 
-  arch/arm/configs/omap2plus_defconfig
+  arch/arm64/Kconfig
 
 between commit:
 
-  98c2cc359f8f ("ARM: omap2plus_defconfig: Update for moved and dropped opt=
-ions")
+  ab7876a98a21 ("arm64: elf: Enable BTI at exec based on ELF program proper=
+ties")
 
-from the omap tree and commit:
+from the arm64 tree and commit:
 
-  e7e67d9a2f1d ("drm/omap: Switch the HDMI and VENC outputs to drm_bridge")
+  5e3c6a312a09 ("ARM/arm64: vdso: Use common vdso clock mode storage")
 
-from the drm tree.
+from the tip tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -78,36 +80,34 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/arm/configs/omap2plus_defconfig
-index eedb26ff93f9,54f1a21de7e0..000000000000
---- a/arch/arm/configs/omap2plus_defconfig
-+++ b/arch/arm/configs/omap2plus_defconfig
-@@@ -360,10 -353,10 +360,9 @@@ CONFIG_OMAP2_DSS_DSI=3D
-  CONFIG_DRM_OMAP_PANEL_DSI_CM=3Dm
-  CONFIG_DRM_TILCDC=3Dm
-  CONFIG_DRM_PANEL_SIMPLE=3Dm
-+ CONFIG_DRM_DISPLAY_CONNECTOR=3Dm
-+ CONFIG_DRM_SIMPLE_BRIDGE=3Dm
- -CONFIG_DRM_TI_TFP410=3Dm
-+ CONFIG_DRM_TI_TPD12S015=3Dm
-  CONFIG_DRM_PANEL_LG_LB035Q02=3Dm
-  CONFIG_DRM_PANEL_NEC_NL8048HL11=3Dm
-  CONFIG_DRM_PANEL_SHARP_LS037V7DW01=3Dm
+diff --cc arch/arm64/Kconfig
+index fdfdc77c5067,c6c32fb7f546..000000000000
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@@ -9,8 -9,6 +9,7 @@@ config ARM6
+  	select ACPI_MCFG if (ACPI && PCI)
+  	select ACPI_SPCR_TABLE if ACPI
+  	select ACPI_PPTT if ACPI
+ +	select ARCH_BINFMT_ELF_STATE
+- 	select ARCH_CLOCKSOURCE_DATA
+  	select ARCH_HAS_DEBUG_VIRTUAL
+  	select ARCH_HAS_DEVMEM_IS_ALLOWED
+  	select ARCH_HAS_DMA_PREP_COHERENT
 
---Sig_/Jywf5AF0NmomlGRZsbo/ll7
+--Sig_/Tx/x6nL20AR7lvSvJW/WvKc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5xjHoACgkQAVBC80lX
-0GzIdQgAgRxMoqzoOCQk/qQ8NtySkvYGLqXff2HykmMA+hzn9XoPP4BtSd7mlSm8
-IQx2+bAooyRU1Dg6369LGbYBNCU2AB52hbg3WAYOxIvyRx+1T0iORg9ygRPWENKK
-bqN4/rhbbWY0o2KVwlXQh5BIqdsJzgX3v7Bq/sqhYL6jTzFGxO1StusqDabzcm0x
-aPN3dKlaKoVSEmWbv65p7Pyv+09Y33lfUScXKdFXmL83z541cv1dn3bI+TShNEOg
-qgRRKtm0km5OUF+byzJY61qTxv+v3DWBk0Gm46/y3ygje8XoyI4YhqvAIOE/sjSL
-JuWN9KZpajiIEZz/dZb/++eZ949gkw==
-=f4tr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5xozMACgkQAVBC80lX
+0Gx2/Af/SkdPef8QdhKnLjlPoRG6LCcDhCTftfEGrL+BS5vepl3QAfYxFf6qWDXg
+PZHuRXlqBMySa9yLUZaBSBgIidGvQ95TpxzKtL2B4jhfw4xNlvdq+fq8FOEQfWyf
+V71FrWoxU4xTw6fGC5t+U0aM3FVQgN5atdjtp3DeI8VCvk6JtbIp0y14GHqiRGEE
+6xtIDLBB/qLnY3bwgdvjvF6P8DiyQgPTrJ9qMH3Ln6CtC5dff0Dt2MFa9MCYfCAI
+rxbzgqFW+++ubUK+gNNNXBLFJ01edaASkb0IxQDgHeBpXitdaTAzO+BbUOwi6eAM
+Xa24s7qldsRaj+gTpc6WuLb53RybQA==
+=nvGD
 -----END PGP SIGNATURE-----
 
---Sig_/Jywf5AF0NmomlGRZsbo/ll7--
+--Sig_/Tx/x6nL20AR7lvSvJW/WvKc--

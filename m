@@ -2,71 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 456B318B953
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 15:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244FB18B9B3
+	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 15:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727102AbgCSO1U (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Mar 2020 10:27:20 -0400
-Received: from mga14.intel.com ([192.55.52.115]:29627 "EHLO mga14.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726892AbgCSO1U (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Mar 2020 10:27:20 -0400
-IronPort-SDR: wnimBr6TMM/qvZ3Eq8LRWvp9TFzr5L76J8AEl0FA2N+sA0p7u6eDtbUy6VtQOHI/9vn2IdObx9
- VFZZhG4B719w==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 07:27:19 -0700
-IronPort-SDR: EtchYp8B7uoiL7wXlFcN9kwhNz4PotBR5UDN4L88/9cjUnL/sX041L43u1+FsR1fQ8+fpnnp2x
- +Sf2pLhtxX4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,571,1574150400"; 
-   d="scan'208";a="245175060"
-Received: from awagner-mobl1.ger.corp.intel.com (HELO localhost) ([10.249.86.227])
-  by orsmga003.jf.intel.com with ESMTP; 19 Mar 2020 07:27:15 -0700
-Date:   Thu, 19 Mar 2020 16:27:14 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sachinp@linux.vnet.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH] tpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as
- module
-Message-ID: <20200319142714.GB3703@linux.intel.com>
-References: <20200317130819.720318-1-stefanb@linux.vnet.ibm.com>
- <20200318194247.GC48177@linux.intel.com>
- <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
+        id S1727116AbgCSOr7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Mar 2020 10:47:59 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:33651 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727095AbgCSOr7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Mar 2020 10:47:59 -0400
+Received: from ip5f5bf7ec.dynamic.kabel-deutschland.de ([95.91.247.236] helo=wittgenstein.fritz.box)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jEwSg-0005CN-C9; Thu, 19 Mar 2020 14:47:54 +0000
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        linux-pm@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: [PATCH net-next] sysfs: fix static inline declaration of sysfs_groups_change_owner()
+Date:   Thu, 19 Mar 2020 15:47:41 +0100
+Message-Id: <20200319144741.3864191-1-christian.brauner@ubuntu.com>
+X-Mailer: git-send-email 2.25.2
+In-Reply-To: <20200319142002.7382ed70@canb.auug.org.au>
+References: <20200319142002.7382ed70@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Mar 18, 2020 at 03:53:54PM -0400, Stefan Berger wrote:
-> On 3/18/20 3:42 PM, Jarkko Sakkinen wrote:
-> > On Tue, Mar 17, 2020 at 09:08:19AM -0400, Stefan Berger wrote:
-> > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > 
-> > > This patch fixes the following problem when the ibmvtpm driver
-> > > is built as a module:
-> > > 
-> > > ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
-> > > make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
-> > > make: *** [Makefile:1298: modules] Error 2
-> > > 
-> > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Hi, wrong tag (we use "tpm:"), missing fixes tag and please cc stable.
-> > Thanks.
-> 
-> I did not add the fixes tag because I do not know the final commit hash, or
-> is it the final commit hash once it is in linux-next? I doubt it with all
-> the merging that can occur.
+The CONFIG_SYSFS declaration of sysfs_group_change_owner() is different
+from the !CONFIG_SYSFS version and thus causes build failurs when
+!CONFIG_SYSFS is set.
 
-Can you send me a new version after rc1 is out?
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Fixes: 303a42769c4c ("sysfs: add sysfs_group{s}_change_owner()")
+Signed-off-by: Christian Brauner <christian.brauner@ubuntu.com>
+---
+ include/linux/sysfs.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-/Jarkko
+diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+index 9e531ec76274..4beb51009b62 100644
+--- a/include/linux/sysfs.h
++++ b/include/linux/sysfs.h
+@@ -562,8 +562,8 @@ static inline int sysfs_groups_change_owner(struct kobject *kobj,
+ }
+ 
+ static inline int sysfs_group_change_owner(struct kobject *kobj,
+-			 const struct attribute_group **groups,
+-			 kuid_t kuid, kgid_t kgid)
++					   const struct attribute_group *groups,
++					   kuid_t kuid, kgid_t kgid)
+ {
+ 	return 0;
+ }
+
+base-commit: 79e28519ac78dde6d38fe6ea22286af574f5c7db
+-- 
+2.25.2
+

@@ -2,88 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 636DB18ADEB
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 09:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEC8B18AE54
+	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 09:30:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgCSIGS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Mar 2020 04:06:18 -0400
-Received: from ozlabs.org ([203.11.71.1]:52547 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725768AbgCSIGS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Mar 2020 04:06:18 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jfcR2SLrz9sPR;
-        Thu, 19 Mar 2020 19:06:15 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584605175;
-        bh=EH/L6fX7wgJb6pRdg36al/X3NXleOWD/3Z64SARsFMk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=u61RNhW6t4RWzEZN1a5j0zEeQuZYw5KgDNQY5htzde6SJEO7yC6BidlMgpapfXfKN
-         wfd7bLEsneBTiwAUpO/CsoZi0tjYOBiUzFN2r0zk8rW2cruyVVN2t+ivgrkVKzGypZ
-         7z2gWmnmsNFWgi8DxPThfoCQehejcRm96ltSGioEs6SSWS62JDKDxC0XRUuo8JOcRG
-         P/cPhSBXBo42fTeSgqiig0Umc/EOxA4xvy6QhoDZtgDuzruRN+lPadKwb/+8MBjiuz
-         DmpIH/0CorvlHuTiIPPaci0UJzm+GsBh1RGavR3C2mW3baXXNLZnz8daiSRebl0YZ/
-         NDHSPpvoXxlVA==
-Date:   Thu, 19 Mar 2020 19:06:13 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726188AbgCSIaX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Mar 2020 04:30:23 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:33573 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725787AbgCSIaX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 19 Mar 2020 04:30:23 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0D0CC5C01DC;
+        Thu, 19 Mar 2020 04:30:22 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Thu, 19 Mar 2020 04:30:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=gajfaTL3PAKHDhRdTc7KNDL7rvV
+        RUvBpFsfEaLk0fuQ=; b=bn2FT8BM3J90FCyXgaed34O39nzCV5Iatt61RvHgYfg
+        ZcSneD2mrZkSD6GVyieygvphEFFwMtDQruxmF5MFGMlMWJWmJ17VGI675yK9bPxY
+        +rHNsmQdwCdCtpOQO8ypUldnsbccZYKyyM11dJKdeDJplCMJ5LkeJcZzJeGaux6k
+        m4SDvr2qj+it7khepYU8s78vMndDFcf1eXt8S+euSyn+pXeHDKB/JIciw7RmYljq
+        3rVvCTL1lBjYOVap8+tZ2422akHHecRKY6HUVV0EVDTYnIuPKWXeemOtVOsFm8+p
+        Db/xnJ2Uy5SMJFY8gUgkuwkQPhOOS4bDstljxrz0LCQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=gajfaT
+        L3PAKHDhRdTc7KNDL7rvVRUvBpFsfEaLk0fuQ=; b=Ix98sw+2aqXclPNpszFS0L
+        IvpTHajWKlaz2gXoiHoQuzf6EtRyHQiUnj1jOC+rCSfxfPjT4u3Wm4DfKqSJ0kWz
+        FwPcOnu5X3Y/CKq11qtrLcc6JetiRVktZybkb3vnThGsaimUoquu5jhufOhUYfgJ
+        Dtc69Z+ab4moPZ6nZHrQpYSZh6z5OCGbMFsA0ylenTVEXQ0Wk4mMgwLFiV0mXT2S
+        /Kl+twpAtRiQj1PvH4O1yMeRClJG0ie1Ro/Rj1kffpmo9xg9m3+6YCeAeTd3q2HX
+        lYdebdOp/FJ3o7EHgM0FVYixpGFgvCn884cxre4RD/p2W2/zjqRSmDxY6lyyBSWg
+        ==
+X-ME-Sender: <xms:nC1zXk0FuwzJGkSFf-qQ7H3UEa3cuAnfShR45G3jqscBKHkJzXYrjg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedugedrudefkedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledrud
+    dtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehg
+    rhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:nC1zXkI-Ygiggx3ephSW8hQEoqnepZufl3x3MRxmqLF5NsGzoIbBGA>
+    <xmx:nC1zXp4TwmH1ibbA43V6q1XOrIardJjie4GEVhp2eO_uIzu2AUQGAw>
+    <xmx:nC1zXrjvGIxiWMTEJQozuJpOeVMe7zhCI7krw47hnGmV8ZjdNYuPzg>
+    <xmx:ni1zXrUwoh-X0z4rGEjKLxm7m7uoAnEMD6MX1NUJwJm1AuanAvHLwg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id B42CA328005A;
+        Thu, 19 Mar 2020 04:30:19 -0400 (EDT)
+Date:   Thu, 19 Mar 2020 09:30:18 +0100
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>
-Subject: linux-next: Fixes tag needs some work in the risc-v-fixes tree
-Message-ID: <20200319190613.36d687a6@canb.auug.org.au>
+        Chuhong Yuan <hslester96@gmail.com>,
+        Kaaira Gupta <kgupta@es.iitr.ac.in>
+Subject: Re: linux-next: manual merge of the staging tree with the v4l-dvb
+ tree
+Message-ID: <20200319083018.GB3489391@kroah.com>
+References: <20200319144411.47150f3b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uStiTNL_rbDnIIFyUCu0Kdb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200319144411.47150f3b@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/uStiTNL_rbDnIIFyUCu0Kdb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 19, 2020 at 02:44:11PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the staging tree got a conflict in:
+> 
+>   drivers/staging/media/allegro-dvt/allegro-core.c
+> 
+> between commit:
+> 
+>   cc62c74749a3 ("media: allegro: add missed checks in allegro_open()")
+> 
+> from the v4l-dvb tree and commit:
+> 
+>   e3d21cbfa978 ("staging: media: allegro: align with parenthesis")
+> 
+> from the staging tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
 
-Hi all,
+Fix looks good, thanks!
 
-In commit
-
-  3384b043ea15 ("riscv: fix the IPI missing issue in nommu mode")
-
-Fixes tag
-
-  Fixes: b2d36b5668f6 ("riscv: provide native clint access for M-mode")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: fcdc65375186 ("riscv: provide native clint access for M-mode")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/uStiTNL_rbDnIIFyUCu0Kdb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5zJ/UACgkQAVBC80lX
-0GwlXwf/ULRvjx5WzHutdXLTeeHiE1tzmBRKlY2teSVW2DtdlvTtVFpZCN15xu7r
-lmfT0SEGpldEwVTE8G0HJwi39ZdShqfZo+cHibe5TEsFt8SRUhnr2ON2w7ZZhhyL
-2sNPHAf2oa6WUIkbuLPQr8lRhwrB5FUPL2qTVN4l606TU5o6X6Q87yUcWvwtysAa
-vxW86iwqCsFvQ6JZuwAvIFbnXU9eIxook2isBVPS1UYO56Iaax5PDFq0VTH3jykU
-nEkLND4nceABg6mb2/+htAWliGj8uqn10bEYNxwjVCxymLCdavAhQAkPwcJ5bZZd
-9Pl/wFksEPAsDLdAjr2W+/jQwllrVA==
-=oR/9
------END PGP SIGNATURE-----
-
---Sig_/uStiTNL_rbDnIIFyUCu0Kdb--
+greg k-h

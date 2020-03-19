@@ -2,92 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8676518ABF3
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 06:00:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC7118AC67
+	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 06:43:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726589AbgCSFAG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Mar 2020 01:00:06 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:35491 "EHLO ozlabs.org"
+        id S1725874AbgCSFnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Mar 2020 01:43:06 -0400
+Received: from ozlabs.org ([203.11.71.1]:46601 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725874AbgCSFAG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Mar 2020 01:00:06 -0400
+        id S1725767AbgCSFnG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 19 Mar 2020 01:43:06 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jZTZ1tJcz9sPR;
-        Thu, 19 Mar 2020 16:00:02 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jbRC4tDWz9sPk;
+        Thu, 19 Mar 2020 16:43:03 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584594003;
-        bh=aTbHR7hHUN6fU6enhevF6rNEujrRIXd6MP2kaGHM6ps=;
+        s=201702; t=1584596584;
+        bh=y84bblK27nWKwmaC9KF1aLCcYU/Cn/0VfU66+sQZemo=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=o0jRAuHPTG7y3TjFRIfqgvymrH9m/fme+Jp30Ajqu21qSWhQqDEUytv3LpXEOx6t/
-         c7nLrs4jJfrqg2oxcWwTMMp9aHMhmXOkm6EPt3rWzMmilW2ny2+CBovAu95NNznj9A
-         YFjcNlLCx6g4pwTUeSFPH7SMhq6c7uco0PeANTvRiP3bmtsSHJ3XeutqNSrBWeSUFo
-         g/lC7kZe4rrF4j4icfWZScp8qw3qvPgc24inkaF+O2fS+4ptQvbYteVpgc68Y6ZIBQ
-         GzzB7ZFWJYpoOvOefHRuliCiBYhXdKHpZ2yTrNWNe5tmTSWpB7UY4GEorz2Bn1MoeP
-         DDj/kyIWvzpkw==
-Date:   Thu, 19 Mar 2020 15:59:56 +1100
+        b=JGyPSjhJjcMZ5dcpgAmSThijGM/bjpPdOLdQOsFrBIQcl/Rexay7OY6ocIhtdIQct
+         MPoqauXaHFo1R+DSUf0NBVXX7+19GcH5TkW18cHuQ8HSWkJjVNN6kf1xr4ioo8vAl7
+         dWNeoLmDIOmO0LhWH/3SKthgVmVMIxebp7TlN4Ojeh4nkDTL605pkxUh2PljGGQWA0
+         9gn/owPz1YRVj8maFpaAZVO434rguC5iYVqFdwrJr5xJwj4mKj/u9LgaR8ZcBMbg/u
+         ogqSzMlLezNa2oBAe7aAiAP8ywheJToDNUrTLezQEzzksgHmbHHwuETBYRwarVMLES
+         29S9+d3ZyharA==
+Date:   Thu, 19 Mar 2020 16:42:59 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Colin Ian King <colin.king@canonical.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200319155956.1e916454@canb.auug.org.au>
-In-Reply-To: <CA+h21hq1pVEJCZHzM4mCPEWhOL-_ugJ5h=EA4g=Lv5sweXGnAA@mail.gmail.com>
-References: <20200311123318.51eff802@canb.auug.org.au>
-        <CA+h21hq1pVEJCZHzM4mCPEWhOL-_ugJ5h=EA4g=Lv5sweXGnAA@mail.gmail.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the pm tree
+Message-ID: <20200319164259.34a3df52@canb.auug.org.au>
+In-Reply-To: <20200318231837.4041cd8f@canb.auug.org.au>
+References: <20200317185252.3cfeecde@canb.auug.org.au>
+        <20200318224458.1980e10c@canb.auug.org.au>
+        <ddc7ae33-1b82-ae48-5a7e-e78144fb2a8b@canonical.com>
+        <20200318231837.4041cd8f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/aKmygoOAv6BkFT.MF31uU50";
+Content-Type: multipart/signed; boundary="Sig_/Pgc07lYg4LlrlRQi0UWj2DK";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/aKmygoOAv6BkFT.MF31uU50
+--Sig_/Pgc07lYg4LlrlRQi0UWj2DK
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Vladimir,
+Hi Stephen,
 
-[Sorry fr the slow response]
-
-On Wed, 11 Mar 2020 11:50:17 +0200 Vladimir Oltean <olteanv@gmail.com> wrot=
-e:
+On Wed, 18 Mar 2020 23:18:37 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> What would be the takeaway here? I did bring the fact that it will
-> conflict to David's attention here, not sure what else should have
-> been done:
-> https://www.spinics.net/lists/netdev/msg636207.html
-> The conflict resolution looks fine btw, I've tested linux-next and it
-> also works.
+> Hi Colin,
+>=20
+> On Wed, 18 Mar 2020 11:52:00 +0000 Colin Ian King <colin.king@canonical.c=
+om> wrote:
+> > =20
+> > > This was fixed today (by including linux/ioh), but the latest update =
+to
+> > > the pm tree has removed that include again.
+> > >    =20
+> > Hopefully it won't be reverted from linux-next? =20
+>=20
+> Linux-next just contains what its constituent trees contain each day ...
 
-David has now merged the two trees and resolved this.  My notification
-is just so that people are aware of conflicts in separate trees that
-usually only come together in Linus' tree.
+I have had to revert commit
+
+  08c07cefb304 ("ACPI: sysfs: copy ACPI data using io memory copying")
+
+again.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/aKmygoOAv6BkFT.MF31uU50
+--Sig_/Pgc07lYg4LlrlRQi0UWj2DK
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5y/EwACgkQAVBC80lX
-0Gwcnwf/Y/1g384Izgi4aLvLdFAw7MtRWrwTnTUWPbITPyFb3/N0Gqr+18wLDWsq
-tN/m2dEWW5vxPhKt5f6GP99eZldcmJjxGCJwseix/LZNgtIbynZuf8Y2txNMaBoe
-fKqgzlb28t8BfKdXvnvsY0EhUJMqyg8NMCyx1eK0BgfNlWdURf/qU+kRo87l4Ptg
-soXxtL3ldR1pbu924PzCnCDpwyahDCPlEAoCHRsU5WVpaPepzyb2dAu4YBG1Y5AP
-tWPrjAxirMfzJPWbv0ME7rsk8QT5knPnPc8K+gpuTeAJ6Vk3SjlSFyWz2sLyjLxf
-ujzMaw75yyZbCnmSzrCVzTVnVL+DWw==
-=nXma
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5zBmMACgkQAVBC80lX
+0GzN8wgAoInnlFPbWqojFwNMHvNURO+rmiw6bWgvKSq4l0b9FtcWI6ZgT/tNXKnc
+CHGaVkNlkkNckJ1O/ebarikuuBSm80gFH8K7Z4tZX65MD8EI+Vn/yFTguT++eeFC
+WWVx8DVB8vOfawqAdoTI9d5Ytv0F5vrk1KUFgNLwD24F3DTzOpxNMakeCMiSlaJS
+XcbdelrLnN8W9pWEQqGmG92EXaSSSB9l36L46Glrvu9ktcI4Yw/nY98Ms6ifMd/2
+ciM/3n5yCHoKMYVY5oFldg++hBqqnQaclHgh/N8MIYjuOy7ri6JM9YrGSTsdHSFV
+OEKEc4ZSp1IFK8J1br5EwrjEZrNnHg==
+=oXci
 -----END PGP SIGNATURE-----
 
---Sig_/aKmygoOAv6BkFT.MF31uU50--
+--Sig_/Pgc07lYg4LlrlRQi0UWj2DK--

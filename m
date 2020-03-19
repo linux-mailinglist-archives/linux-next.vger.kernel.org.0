@@ -2,139 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CE88718AB32
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 04:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D9418AB3A
+	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 04:44:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726838AbgCSDga (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 18 Mar 2020 23:36:30 -0400
-Received: from smtp-fw-9102.amazon.com ([207.171.184.29]:2321 "EHLO
-        smtp-fw-9102.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726596AbgCSDga (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 18 Mar 2020 23:36:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1584588991; x=1616124991;
-  h=from:to:cc:date:message-id:references:in-reply-to:
-   content-transfer-encoding:mime-version:subject;
-  bh=GAsCjObHr/8ZfqVLUIhArlaI/oXvJvWpmdlCiLb6Fsw=;
-  b=CR16xe7cODieYNLasRul/izFrZQA/sQWrE7RkSH3AThjVHSULfhHKnvR
-   l9+p7XhQM6Y6/u6A77rmw9Ctie1Km+TbqCZIQ/b0IN5xj2jV5By7PlIDC
-   jTGmPO70T2UGdoMGMEZVaiDFhZPI6Hfob1dDHidHcWyK6HcX7MIW81Eef
-   E=;
-IronPort-SDR: ruMMCJZ7fApUQIVF9DZVeM3dvRT/AWslGTOzt0cfEeIfviEUYbCa7vdtNwrGQfSu56xWm9MDTl
- pRn3VzwX/y5g==
-X-IronPort-AV: E=Sophos;i="5.70,570,1574121600"; 
-   d="scan'208";a="32039858"
-Subject: RE: linux-next: manual merge of the net-next tree with the net tree
-Thread-Topic: linux-next: manual merge of the net-next tree with the net tree
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-2b-c7131dcf.us-west-2.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9102.sea19.amazon.com with ESMTP; 19 Mar 2020 03:36:28 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (pdx4-ws-svc-p6-lb7-vlan2.pdx.amazon.com [10.170.41.162])
-        by email-inbound-relay-2b-c7131dcf.us-west-2.amazon.com (Postfix) with ESMTPS id 76563A247B;
-        Thu, 19 Mar 2020 03:36:27 +0000 (UTC)
-Received: from EX13D17EUB003.ant.amazon.com (10.43.166.139) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1236.3; Thu, 19 Mar 2020 03:36:26 +0000
-Received: from EX13D22EUA004.ant.amazon.com (10.43.165.129) by
- EX13D17EUB003.ant.amazon.com (10.43.166.139) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Thu, 19 Mar 2020 03:36:25 +0000
-Received: from EX13D22EUA004.ant.amazon.com ([10.43.165.129]) by
- EX13D22EUA004.ant.amazon.com ([10.43.165.129]) with mapi id 15.00.1497.006;
- Thu, 19 Mar 2020 03:36:25 +0000
-From:   "Kiyanovski, Arthur" <akiyano@amazon.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Dagan, Noam" <ndagan@amazon.com>,
-        Leon Romanovsky <leonro@mellanox.com>,
-        "Jubran, Samih" <sameehj@amazon.com>,
-        "Tzalik, Guy" <gtzalik@amazon.com>
-Thread-Index: AQHV/YLplQ6FCTxckkWvIAUktW3nY6hPQn/Q
-Date:   Thu, 19 Mar 2020 03:36:07 +0000
-Deferred-Delivery: Thu, 19 Mar 2020 03:35:53 +0000
-Message-ID: <cd2de6ba830f4f5ea897f4b7969248ea@EX13D22EUA004.ant.amazon.com>
-References: <20200319111053.597bd4d1@canb.auug.org.au>
-In-Reply-To: <20200319111053.597bd4d1@canb.auug.org.au>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.43.166.36]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        id S1726646AbgCSDoR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 18 Mar 2020 23:44:17 -0400
+Received: from ozlabs.org ([203.11.71.1]:53845 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726596AbgCSDoR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 18 Mar 2020 23:44:17 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jXp52jlyz9sPF;
+        Thu, 19 Mar 2020 14:44:13 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584589454;
+        bh=8etUWPTqtQkjATtbjyZYzPluA401McEpzaaW2UAYglY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tK268a2bLYDFV1xl0cqQmqujdpb696Dq3xl1DmLl0DWqy9rXjntHqDqEHboLPW3ra
+         25kt3Oap7sE8GfNRpD/EX/khPFc9yN1c9SB7SFJUrMgqvibUyytt0uZbKwXmhdu/NS
+         Er4C3GdTpMf3z1L8ITLqCA5Jj+AeWdeQWBCp7IJSglvuCUe9+73U7vyB7j20kFS3Z3
+         6SwcYtIKO0C6T4QDp6rnzd4kSbgMQm1M4f5rK20y3bwMWSzV9Tp2AxUz1HmEJTrXzR
+         QnZgLpfZYBUg3glZCgtTTI6kx5tdzcY+nnkooler+Kq8yQ3qHZnzfKc6z1o2yHZd/5
+         qwLkqXeN/e2AA==
+Date:   Thu, 19 Mar 2020 14:44:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chuhong Yuan <hslester96@gmail.com>,
+        Kaaira Gupta <kgupta@es.iitr.ac.in>
+Subject: linux-next: manual merge of the staging tree with the v4l-dvb tree
+Message-ID: <20200319144411.47150f3b@canb.auug.org.au>
 MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/__nxe++7r88FQE1eAPyIgUC";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-> -----Original Message-----
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Sent: Thursday, March 19, 2020 2:11 AM
-> To: David Miller <davem@davemloft.net>; Networking
-> <netdev@vger.kernel.org>
-> Cc: Linux Next Mailing List <linux-next@vger.kernel.org>; Linux Kernel Ma=
-iling
-> List <linux-kernel@vger.kernel.org>; Kiyanovski, Arthur
-> <akiyano@amazon.com>; Dagan, Noam <ndagan@amazon.com>; Leon
-> Romanovsky <leonro@mellanox.com>
-> Subject: [EXTERNAL] linux-next: manual merge of the net-next tree with th=
-e net
-> tree
->=20
-> Hi all,
->=20
-> Today's linux-next merge of the net-next tree got a conflict in:
->=20
->   drivers/net/ethernet/amazon/ena/ena_netdev.c
->=20
-> between commit:
->=20
->   dfdde1345bc1 ("net: ena: fix continuous keep-alive resets")
->=20
-> from the net tree and commit:
->=20
->   1a63443afd70 ("net/amazon: Ensure that driver version is aligned to the=
- linux
-> kernel")
->=20
-> from the net-next tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This is now=
- fixed as
-> far as linux-next is concerned, but any non trivial conflicts should be m=
-entioned
-> to your upstream maintainer when your tree is submitted for merging.  You=
- may
-> also want to consider cooperating with the maintainer of the conflicting =
-tree to
-> minimise any particularly complex conflicts.
->=20
-> --
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc drivers/net/ethernet/amazon/ena/ena_netdev.c
-> index 4647d7656761,555c7273d712..000000000000
-> --- a/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> +++ b/drivers/net/ethernet/amazon/ena/ena_netdev.c
-> @@@ -3486,10 -3473,7 +3483,8 @@@ static int ena_restore_device(struct en
->   		netif_carrier_on(adapter->netdev);
->=20
->   	mod_timer(&adapter->timer_service, round_jiffies(jiffies + HZ));
->  +	adapter->last_keep_alive_jiffies =3D jiffies;
-> - 	dev_err(&pdev->dev,
-> - 		"Device reset completed successfully, Driver info: %s\n",
-> - 		version);
-> + 	dev_err(&pdev->dev, "Device reset completed successfully\n");
->=20
->   	return rc;
->   err_disable_msix:
+--Sig_/__nxe++7r88FQE1eAPyIgUC
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Arthur Kiyanovski <akiyano@amazon.com>
+Hi all,
 
-Thanks!
+Today's linux-next merge of the staging tree got a conflict in:
 
+  drivers/staging/media/allegro-dvt/allegro-core.c
+
+between commit:
+
+  cc62c74749a3 ("media: allegro: add missed checks in allegro_open()")
+
+from the v4l-dvb tree and commit:
+
+  e3d21cbfa978 ("staging: media: allegro: align with parenthesis")
+
+from the staging tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/staging/media/allegro-dvt/allegro-core.c
+index 3c949090e8d2,1162cc38f3fc..000000000000
+--- a/drivers/staging/media/allegro-dvt/allegro-core.c
++++ b/drivers/staging/media/allegro-dvt/allegro-core.c
+@@@ -2321,15 -2324,10 +2321,15 @@@ static int allegro_open(struct file *fi
+  			0, ALLEGRO_GOP_SIZE_MAX,
+  			1, channel->gop_size);
+  	v4l2_ctrl_new_std(handler,
+- 			&allegro_ctrl_ops,
+- 			V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
+- 			1, 32,
+- 			1, 1);
++ 			  &allegro_ctrl_ops,
++ 			  V4L2_CID_MIN_BUFFERS_FOR_OUTPUT,
++ 			  1, 32,
++ 			  1, 1);
+ +	if (handler->error !=3D 0) {
+ +		ret =3D handler->error;
+ +		goto error;
+ +	}
+ +
+  	channel->fh.ctrl_handler =3D handler;
+ =20
+  	channel->mcu_channel_id =3D -1;
+
+--Sig_/__nxe++7r88FQE1eAPyIgUC
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5y6osACgkQAVBC80lX
+0Gzgcgf9H0E/AraQZJRVb0y+72iXqeKhizq2R8LLr6XD4mYzG4P8GFCIvw8P8Vae
+Y6v2ytbMsOaXlmA27uu6rFWNF6UljEW7GKgbGmB3q3UvrolbzjtOBnDS6OIuqptC
+wrlaGPNbwjLVyatBrIDGDBJXGoHmkODern80i3H8c9fHZ2rCxzHK6oTDu/ugRNWA
+9aFvM3+smBJNcweoYrkaQNuJZSeK8Kea61sy38OoaL18k9nAJV9tKYsu7QYNTYnU
+EQ21/UBkxYAnTMLizSzcR5YUTF43/Ujn4vDlnV0Qh9qT1PaKAmnAlW0E2nyesWYa
+1nDAQf6S7+/KfGHD9BhCINJTmjKfvw==
+=GgZX
+-----END PGP SIGNATURE-----
+
+--Sig_/__nxe++7r88FQE1eAPyIgUC--

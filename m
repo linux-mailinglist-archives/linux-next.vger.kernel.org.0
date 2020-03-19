@@ -2,166 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DDD518ABB7
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 05:22:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8676518ABF3
+	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 06:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgCSEWu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Mar 2020 00:22:50 -0400
-Received: from mail-pg1-f173.google.com ([209.85.215.173]:40694 "EHLO
-        mail-pg1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725747AbgCSEWu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 19 Mar 2020 00:22:50 -0400
-Received: by mail-pg1-f173.google.com with SMTP id t24so523833pgj.7
-        for <linux-next@vger.kernel.org>; Wed, 18 Mar 2020 21:22:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5fynDUultTpiU/d6r/q1D9QPVS98JeaGRFOc8zAU0cE=;
-        b=Ykvy53+7OWz++G8fkQs1tx1S1yRLkG3wF2g29o1Q7tJ39FwT1RHLq1XegQFXdAK7m5
-         kYrFkHBkTzrt+OZQT4rQSt39QwlDb2xctPwvETFNIX71OomtBacoRgC/D9ahl3ErKnMH
-         kTKmuqScatDg56rEP5PBqRLjQxvrgukj0I5BMz3jZ9aSde8/M9QvUA9HjeoC1EKRJtV3
-         q8/Lb/yPRdfyV7KXCCF4gnqGH0u8FVbFSvjj6HlUxZu9qxuWALlQM/BkqHRM4HQ9uUZ6
-         SsC3b+9uVmx8xvPsyJmaL3ZLrHl4AEXFNhOtX72RJGO+EvtFc8bdk75eLUga3hDnzSID
-         mqaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5fynDUultTpiU/d6r/q1D9QPVS98JeaGRFOc8zAU0cE=;
-        b=SySvUAPfACj/+JwHIiVVg+Xm3SKVxx5hOSXdqsE6/k0YMFlLBCiAQi98771/9/EfwE
-         z1JTdv5Wqf28fr+iBxhamdXjwQrt+tZaYmYQQLym5bk80fPfi/oBKJCglaqZhNjc8vPb
-         UQTVHY7107RvqXu7bY4NY9DPsrnfvTNsNbcq5BfZE4Tbv+gwHY7BjtX/Vu+fpOPZ1rIt
-         uIQRyOoB90YHxhJyoFbhzDyP3ri+WaCQG/y5scDik/N1nd8tYFo/gMqMAhHL1C08bO/j
-         vBHXP5V2wRrRsLhhP45qyjBGv03nFesinx65c1IInIoTaTqrjJuPlQpP5lkj7gjCwU4F
-         YGGA==
-X-Gm-Message-State: ANhLgQ0WtzRw0eg9NJoJiJ18fb/bx1PXimLGg9eu03Y1pOW/Bw/d5qIE
-        K+OQDzC3irILgmIlaMyBINoSS6lYQ2k=
-X-Google-Smtp-Source: ADFU+vszKd6S9nv17HvKFud5HMdECoIjLtvtm7Qot7rg1TwVpIcPlWAhD9+/axhy5YluT345jlesAQ==
-X-Received: by 2002:a63:2989:: with SMTP id p131mr1307315pgp.281.1584591767135;
-        Wed, 18 Mar 2020 21:22:47 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id m68sm449693pjb.0.2020.03.18.21.22.45
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Mar 2020 21:22:46 -0700 (PDT)
-Message-ID: <5e72f396.1c69fb81.167a2.3e7d@mx.google.com>
-Date:   Wed, 18 Mar 2020 21:22:46 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726589AbgCSFAG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Mar 2020 01:00:06 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35491 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725874AbgCSFAG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 19 Mar 2020 01:00:06 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48jZTZ1tJcz9sPR;
+        Thu, 19 Mar 2020 16:00:02 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584594003;
+        bh=aTbHR7hHUN6fU6enhevF6rNEujrRIXd6MP2kaGHM6ps=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=o0jRAuHPTG7y3TjFRIfqgvymrH9m/fme+Jp30Ajqu21qSWhQqDEUytv3LpXEOx6t/
+         c7nLrs4jJfrqg2oxcWwTMMp9aHMhmXOkm6EPt3rWzMmilW2ny2+CBovAu95NNznj9A
+         YFjcNlLCx6g4pwTUeSFPH7SMhq6c7uco0PeANTvRiP3bmtsSHJ3XeutqNSrBWeSUFo
+         g/lC7kZe4rrF4j4icfWZScp8qw3qvPgc24inkaF+O2fS+4ptQvbYteVpgc68Y6ZIBQ
+         GzzB7ZFWJYpoOvOefHRuliCiBYhXdKHpZ2yTrNWNe5tmTSWpB7UY4GEorz2Bn1MoeP
+         DDj/kyIWvzpkw==
+Date:   Thu, 19 Mar 2020 15:59:56 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20200319155956.1e916454@canb.auug.org.au>
+In-Reply-To: <CA+h21hq1pVEJCZHzM4mCPEWhOL-_ugJ5h=EA4g=Lv5sweXGnAA@mail.gmail.com>
+References: <20200311123318.51eff802@canb.auug.org.au>
+        <CA+h21hq1pVEJCZHzM4mCPEWhOL-_ugJ5h=EA4g=Lv5sweXGnAA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc6-269-g4a20aa053992
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 279 boots: 7 failed,
- 263 passed with 3 offline, 6 untried/unknown (v5.6-rc6-269-g4a20aa053992)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/aKmygoOAv6BkFT.MF31uU50";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 279 boots: 7 failed, 263 passed with 3 offline, 6 =
-untried/unknown (v5.6-rc6-269-g4a20aa053992)
+--Sig_/aKmygoOAv6BkFT.MF31uU50
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc6-269-g4a20aa053992/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc6-269-g4a20aa053992/
+Hi Vladimir,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc6-269-g4a20aa053992
-Git Commit: 4a20aa053992133bed0f57663ae6c2d53f05fabe
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 105 unique boards, 23 SoC families, 30 builds out of 216
+[Sorry fr the slow response]
 
-Boot Regressions Detected:
+On Wed, 11 Mar 2020 11:50:17 +0200 Vladimir Oltean <olteanv@gmail.com> wrot=
+e:
+>
+> What would be the takeaway here? I did bring the fact that it will
+> conflict to David's attention here, not sure what else should have
+> been done:
+> https://www.spinics.net/lists/netdev/msg636207.html
+> The conflict resolution looks fine btw, I've tested linux-next and it
+> also works.
 
-arm:
+David has now merged the two trees and resolved this.  My notification
+is just so that people are aware of conflicts in separate trees that
+usually only come together in Linus' tree.
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 1 day (last pass: v5.6-rc6-178-g=
-95cd16255210 - first fail: v5.6-rc6-220-g39ff0c2fc628)
+--=20
+Cheers,
+Stephen Rothwell
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 33 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+--Sig_/aKmygoOAv6BkFT.MF31uU50
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc6-220-g39ff0c2f=
-c628)
+-----BEGIN PGP SIGNATURE-----
 
-arm64:
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl5y/EwACgkQAVBC80lX
+0Gwcnwf/Y/1g384Izgi4aLvLdFAw7MtRWrwTnTUWPbITPyFb3/N0Gqr+18wLDWsq
+tN/m2dEWW5vxPhKt5f6GP99eZldcmJjxGCJwseix/LZNgtIbynZuf8Y2txNMaBoe
+fKqgzlb28t8BfKdXvnvsY0EhUJMqyg8NMCyx1eK0BgfNlWdURf/qU+kRo87l4Ptg
+soXxtL3ldR1pbu924PzCnCDpwyahDCPlEAoCHRsU5WVpaPepzyb2dAu4YBG1Y5AP
+tWPrjAxirMfzJPWbv0ME7rsk8QT5knPnPc8K+gpuTeAJ6Vk3SjlSFyWz2sLyjLxf
+ujzMaw75yyZbCnmSzrCVzTVnVL+DWw==
+=nXma
+-----END PGP SIGNATURE-----
 
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: v5.6-rc6-220-g39ff0c2fc628)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: v5.6-rc6-220-g39ff0c2fc=
-628)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-220-g3=
-9ff0c2fc628)
-          meson-gxm-q200:
-              lab-baylibre: failing since 1 day (last pass: v5.6-rc6-178-g9=
-5cd16255210 - first fail: v5.6-rc6-220-g39ff0c2fc628)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/aKmygoOAv6BkFT.MF31uU50--

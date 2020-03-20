@@ -2,152 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B67718C692
-	for <lists+linux-next@lfdr.de>; Fri, 20 Mar 2020 05:38:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5281218C8F2
+	for <lists+linux-next@lfdr.de>; Fri, 20 Mar 2020 09:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725996AbgCTEis (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Mar 2020 00:38:48 -0400
-Received: from mail-pl1-f195.google.com ([209.85.214.195]:40439 "EHLO
-        mail-pl1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725446AbgCTEis (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Mar 2020 00:38:48 -0400
-Received: by mail-pl1-f195.google.com with SMTP id h11so1985236plk.7
-        for <linux-next@vger.kernel.org>; Thu, 19 Mar 2020 21:38:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=KM4nn+vUN7I2c9qdeIJzjiFjj0AGSJ8NOSjI7cHRCqY=;
-        b=GBxiMyos+V+7EX590vHG1GhgHINe44CnmMh380KtYasBaZp7h3gmREJT5f5ok8mDhl
-         7jJzG1XXqNuVi+6fjIQ4h321wRY6Yk1Cger2skv0I58XFPVoAaf1LpXj1yXAEiP0PrkW
-         Xs5qZeJlBULO4gsHCviWI48zMoOXWs7swmqPBZQ48QTrQ5Jnh5NNNI1BEHvs2df0aa0R
-         QmdKgx1dL+ByvFeTlQwDRzSiKlVgAPpmvH/XJuJ2YWq9Tpds/+EAyzCYACKnh7yPC/Ol
-         P0miFRXdrksRTg5antLqo/s5latYnwggjFLQrV7JoxGLYZD9Pm1cixXjdh3Yh+qW2pN+
-         M5Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=KM4nn+vUN7I2c9qdeIJzjiFjj0AGSJ8NOSjI7cHRCqY=;
-        b=XzG5FAgfFD7Uf1lRtT6Q/y+6jcFJySYYSbyrWt1jDMzy8/tKxx6kNv5ljCeju4cKcU
-         42JIGCDK67/Loo1iWI0Uv2kq5C5snl8vXb8Cytw42AZqR6z3WNlWbETq8bSWJGU2TVoa
-         kWzeKavPSASeC8ftsuWep6ptSHG+rHzrmSbPd2z/MzQh2KLGNS+P80vH8EaEWmpacQTA
-         EvkmYVqPjVbJ3Yakrh4vXL2HSWeUwKXcLS8zt+2wpM4uefmJHgpEVzmGyoGHi0EcLB48
-         On14nuBOCw1OsBWWcNTIvoeDgCvNKVUwjJcY+UFx8ceN+HkzfUjm5jOqeRKLQZ4wSoab
-         6bqQ==
-X-Gm-Message-State: ANhLgQ3I3qpwbx2D3VVFeWflQ6lu4eCwMwK+d6889IA8kZ7mHgXP7Byx
-        yFhz9E86kpLOU50/XSmpKs8Wb4ZETdg=
-X-Google-Smtp-Source: ADFU+vts4PDo/zAOgsc/VmucjI6uHNLMOLaBtORoYlLfJf72xVsiXpTBRuyzEwQQ5zjEzumUukP71A==
-X-Received: by 2002:a17:90a:364d:: with SMTP id s71mr7055618pjb.185.1584679126084;
-        Thu, 19 Mar 2020 21:38:46 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y193sm3739500pgd.87.2020.03.19.21.38.44
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Mar 2020 21:38:45 -0700 (PDT)
-Message-ID: <5e7448d5.1c69fb81.1cbd8.e6a8@mx.google.com>
-Date:   Thu, 19 Mar 2020 21:38:45 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726527AbgCTI0T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Mar 2020 04:26:19 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:52524 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726232AbgCTI0T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Mar 2020 04:26:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=RAiCDcH77jHDXYkeTD8SKPLyPkTVQvNLw8kPgs7l5xU=; b=pUzm+5eUP3tPVNOkrWaFIeBxRc
+        yRcTLahi18JHzsFCG6HFwFLz0Do+6lzpyphE8AszSbKwXFoUEgFrGwEx42r8QazBKt4v0nzF4e/KE
+        Ybkd/YoygJOTf+ovXA8ew0amG51k21gWYNi2V615IE1hEeEvrfJ3Uz1W5ceti7ea6JiWFRq2wmJPh
+        Yq4zZpyCdMfJDPc9wMdrZ4FmxIy7Xw/BriaARsAc42/DDtHmsNAiGrfPWduspu5o0NxYB3C1SCqUW
+        jl2J526fddPFI3U6poBL3EueBCU72Uv/ZF7ZH3b6rDEDjsnZLzx2ZxkPmReA7OzsBC3GOLFFT61Wm
+        d4SBC+Qw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jFCyu-0008KV-9t; Fri, 20 Mar 2020 08:26:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CFE08300235;
+        Fri, 20 Mar 2020 09:26:13 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 8F16E286B1726; Fri, 20 Mar 2020 09:26:13 +0100 (CET)
+Date:   Fri, 20 Mar 2020 09:26:13 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: linux-next: Tree for Mar 18 (objtool)
+Message-ID: <20200320082613.GA20696@hirez.programming.kicks-ass.net>
+References: <20200318220920.48df2e76@canb.auug.org.au>
+ <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
+ <20200318182352.2dgwwl4ugbwndi4x@treble>
+ <20200318200542.GK20730@hirez.programming.kicks-ass.net>
+ <20200319173101.wufpymi7obhqgoqd@treble>
+ <20200319173326.oj4qs24x4ly5lrgt@treble>
+ <20200319174028.azzaisoj5gbss7zk@treble>
+ <20200319174550.4wpx4j357nw67nzz@treble>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc6-295-g996cfaad8d71
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 280 boots: 3 failed,
- 267 passed with 4 offline, 6 untried/unknown (v5.6-rc6-295-g996cfaad8d71)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200319174550.4wpx4j357nw67nzz@treble>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 280 boots: 3 failed, 267 passed with 4 offline, 6 =
-untried/unknown (v5.6-rc6-295-g996cfaad8d71)
+On Thu, Mar 19, 2020 at 12:45:50PM -0500, Josh Poimboeuf wrote:
+> > On Thu, Mar 19, 2020 at 12:33:31PM -0500, Josh Poimboeuf wrote:
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc6-295-g996cfaad8d71/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc6-295-g996cfaad8d71/
+> > > Actually I suspect it's the __builtin_unreachable() annotation which is
+> > > making UBSAN add the __builtin_trap()...  because I don't see any double
+> > > UD2s for WARNs.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc6-295-g996cfaad8d71
-Git Commit: 996cfaad8d71b254a245cfbb6f04852fb68fa85e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 106 unique boards, 25 SoC families, 31 builds out of 216
+> Actually, removing __builtin_unreachable() *does* make the extra UD2 go
+> away -- I forgot I had some silly debug code.
 
-Boot Regressions Detected:
+LOL, check this:
 
-arm:
+"Built-in Function: void __builtin_unreachable (void)
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 34 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+    If control flow reaches the point of the __builtin_unreachable, the
+    program is undefined. It is useful in situations where the compiler
+    cannot deduce the unreachability of the code. "
 
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc6-269-g4a20aa05=
-3992)
+Which, I bet, is what makes UBSAN insert that __builtin_trap().
 
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-269-g4=
-a20aa053992)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: v5.6-rc6-269-g4a20aa053=
-992)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-269-g4=
-a20aa053992)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+What a friggin mess :/

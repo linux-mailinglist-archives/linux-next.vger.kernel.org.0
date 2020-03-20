@@ -2,81 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8668B18C220
-	for <lists+linux-next@lfdr.de>; Thu, 19 Mar 2020 22:16:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A051A18C44F
+	for <lists+linux-next@lfdr.de>; Fri, 20 Mar 2020 01:40:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726619AbgCSVQq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 19 Mar 2020 17:16:46 -0400
-Received: from mga05.intel.com ([192.55.52.43]:13705 "EHLO mga05.intel.com"
+        id S1726663AbgCTAkw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 19 Mar 2020 20:40:52 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56855 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725787AbgCSVQq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 19 Mar 2020 17:16:46 -0400
-IronPort-SDR: kFWj6QTzoA9tNrJ6AycpRyGHDyCgUMnIi7bve/d1EpBn+YaiQCmQ2OsczPRHYBqEe2Y1dlzptB
- hmblyVMVCKqA==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Mar 2020 14:16:46 -0700
-IronPort-SDR: OBRhkR5VnCf/p7xoXpuzUddSNSb1jZn/xUmnKQPVBXKXMUsYDj29anBBw5c+nly35wywnl9icp
- KXe3LQ+7zEaw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.70,573,1574150400"; 
-   d="scan'208";a="237054181"
-Received: from oamor-mobl1.ger.corp.intel.com (HELO localhost) ([10.251.182.181])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Mar 2020 14:16:43 -0700
-Date:   Thu, 19 Mar 2020 23:16:42 +0200
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sachinp@linux.vnet.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH] tpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver as
- module
-Message-ID: <20200319211642.GB167847@linux.intel.com>
-References: <20200317130819.720318-1-stefanb@linux.vnet.ibm.com>
- <20200318194247.GC48177@linux.intel.com>
- <4b2949a9-b251-906d-d513-1b2ccef758a0@linux.ibm.com>
- <20200319142714.GB3703@linux.intel.com>
- <17b5d98c-76b2-63c0-798a-920d91fec618@linux.ibm.com>
+        id S1725787AbgCTAkw (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 19 Mar 2020 20:40:52 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48k4gy0jfhz9sPF;
+        Fri, 20 Mar 2020 11:40:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584664850;
+        bh=kaiv7JfWV9XDlC9+SYuxgC5j8/RZ50es9ayK3qs/2mE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X/NxKWZemt66UvIxUjXOVw4Ptdq5QHAibdHiX49Zi2JwwzXqL7fZsrvCHK4pc1/HI
+         xmV3fWx9tBjrII4nXI07rqlc2SQ3Ecjg8NugayPwrMz9BbIB6BCilhIeQ8UMY3jgFg
+         wU5pH4MmUKmZVg/yVuNMY3cUOb/pecDC5ddriTNyls2NUVXWwZr2vWxlYtVBZQG2Ec
+         a+MN1HcDFE2aKP4kL8Ri2k85U1v2Epj7nsQo5VEzVUwhBgn6m4BsJCWr0798kGst5C
+         DVdnDHFp9E625KaXfUvOldJNXHVRPfV5D7ARR1reAupt/qv9memPvCIZC6jA/Ykjmu
+         /yIBiPddIy2pw==
+Date:   Fri, 20 Mar 2020 11:40:44 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Tomi Valkeinen <tomi.valkeinen@ti.com>,
+        Ilia Mirkin <imirkin@alum.mit.edu>
+Subject: linux-next: manual merge of the drm-msm tree with the drm tree
+Message-ID: <20200320114044.095fbabe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <17b5d98c-76b2-63c0-798a-920d91fec618@linux.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/nk3CTyDI3Fd+oc.bbR+_9NN";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 19, 2020 at 11:56:11AM -0400, Stefan Berger wrote:
-> On 3/19/20 10:27 AM, Jarkko Sakkinen wrote:
-> > On Wed, Mar 18, 2020 at 03:53:54PM -0400, Stefan Berger wrote:
-> > > On 3/18/20 3:42 PM, Jarkko Sakkinen wrote:
-> > > > On Tue, Mar 17, 2020 at 09:08:19AM -0400, Stefan Berger wrote:
-> > > > > From: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > 
-> > > > > This patch fixes the following problem when the ibmvtpm driver
-> > > > > is built as a module:
-> > > > > 
-> > > > > ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
-> > > > > make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
-> > > > > make: *** [Makefile:1298: modules] Error 2
-> > > > > 
-> > > > > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > Hi, wrong tag (we use "tpm:"), missing fixes tag and please cc stable.
-> > > > Thanks.
-> > > I did not add the fixes tag because I do not know the final commit hash, or
-> > > is it the final commit hash once it is in linux-next? I doubt it with all
-> > > the merging that can occur.
-> > Can you send me a new version after rc1 is out?
-> 
-> Michael Ellerman (cc'ed) told me that the fixes tag should 'work' once the
-> bad patch is in linux-next. So I reposted yesterday (with a stray 'q' in the
-> title :-( ):
+--Sig_/nk3CTyDI3Fd+oc.bbR+_9NN
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-OK, cool, I'll correct it and apply thanks.
+Hi all,
 
-Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+Today's linux-next merge of the drm-msm tree got conflicts in:
 
-/Jarkko
+  drivers/gpu/drm/msm/edp/edp.c
+  drivers/gpu/drm/msm/hdmi/hdmi.c
+
+between commit:
+
+  a25b988ff83f ("drm/bridge: Extend bridge API to disable connector creatio=
+n")
+
+from the drm tree and commit:
+
+  c479017faa3a ("drm/msm: avoid double-attaching hdmi/edp bridges")
+
+from the drm-msm tree.
+
+I fixed it up (the latter removed the code updated by the former) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nk3CTyDI3Fd+oc.bbR+_9NN
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl50EQwACgkQAVBC80lX
+0Gy4ggf/Um5vg3cQw7/Kf4wCqd36b0TiemhzY/v900X4mUeNOHB5sQx04VwZ52CN
+BjuwJ5xmSEV15OuJPg3Kgg4RTIBP+BkrXSXblVQPynTLk+7uEhRosZ/fqq6/3g/J
+O+dyZWmok+O18ftHXo2MwueP2aNrSOam35uBGMcNd75Ur97CjC3ZiSUjEoeCYEMA
+SbWMKBRLDS6L6nr0iI2+ETqPj7CDLpfn9ZPKjrL63GTTQSazyF1t9Tyvyb7BLidT
+QILfn9Qr0TRFGB6UroyFpRQ5ZX2S+hrQBq2SX8V51D98R/PdTNGldaklTsHIkK74
+0a8F17UrjI5Tqmycyjx7eCvMXFTHgQ==
+=ZJSE
+-----END PGP SIGNATURE-----
+
+--Sig_/nk3CTyDI3Fd+oc.bbR+_9NN--

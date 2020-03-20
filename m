@@ -2,72 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D0D18D620
-	for <lists+linux-next@lfdr.de>; Fri, 20 Mar 2020 18:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B275418D737
+	for <lists+linux-next@lfdr.de>; Fri, 20 Mar 2020 19:35:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727105AbgCTRnJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 20 Mar 2020 13:43:09 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:51170 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726843AbgCTRnJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Mar 2020 13:43:09 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=eS+NnV6FJoMlcqmhEEwy7k3fo9pqU7mmrHR91RmppDQ=; b=pBExgnhM5X2ow1Ilj9kYwyBh/J
-        NNIfsJUhE9ZA6Ojr0SwSHLPArB+BoTlzfydGs0jrAMH9gSANItut4woxN3U7I72StR7GZLpOsRrP/
-        XrEY61pVNir/XOZQ75UABnESxtB5Ggrq/UNpLfSbEH+wXCdAWRWPdn4UKQ6+puUmpichYu7HrWZuK
-        J5wBP4YLL0xShOZ+M+cXaim38AbP4GOCPw74x+odpbdKx3ClWtzasWOyTJbR4Qnu3b+e8YSXDSv2g
-        qkOK5hS7apqTnu4u/md+qkgA0Jh33C2M+teQKjicp4721DyT8XLfOR7JUfPMyVsLhIxtI2B80EkGP
-        mRBghRlg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jFLfm-0007Lw-AK; Fri, 20 Mar 2020 17:43:06 +0000
-Subject: Re: linux-next: Tree for Mar 20 (objtool warnings)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20200320201539.3a3a8640@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ca0078e2-89b5-09a7-f61e-7f2906900622@infradead.org>
-Date:   Fri, 20 Mar 2020 10:43:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        id S1727601AbgCTSfl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 20 Mar 2020 14:35:41 -0400
+Received: from mail-pl1-f196.google.com ([209.85.214.196]:42244 "EHLO
+        mail-pl1-f196.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727511AbgCTSfk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 20 Mar 2020 14:35:40 -0400
+Received: by mail-pl1-f196.google.com with SMTP id t3so2865203plz.9
+        for <linux-next@vger.kernel.org>; Fri, 20 Mar 2020 11:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=C2S9KcZfRO3g4bCqyBJ1x6LnernhbhoQu1YGXwjigeE=;
+        b=lg6/6huYLirk1oHz4QX7GSjg9GV6zihardksLMc6FOA8Sy6sc2bqpuFKvzGGtMcCnH
+         UDBJCq4y1M+6TbPn0rSkXRtzh80xyvo4xLzvJBirxM15UMl/9ISMoEG/tEeeFcP/jFRl
+         ER5vrSby+4tui/fclDJjj+xToNeTJxb7QoID0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=C2S9KcZfRO3g4bCqyBJ1x6LnernhbhoQu1YGXwjigeE=;
+        b=Y089FBnP+I2eghvLntgMzZzPxmJzgB3ibfMeZlf/A9qFDkyIoIQ0xVq7bW5hcdpzlg
+         4ENbJr/26FmfRM9WCbJD9SGk99hSQ9CK8I0dDzf4CmCEsJhBC0DSk/DgDtJBoTLbwu4B
+         8d6gO/mqPD/sQ0SrGFeCKFNEYbCtdhDFq3rYTe4SZynZcPsuNJg/5TFogPMAc0ySoRMF
+         c2opVkg26P/tORDtyfUahX0nMFl81qm0oSRD9JRXLvujYHEJ06V0FcE9K4pt0VbpuIHC
+         mNFcCLDCUxMYVwDn22Yc0nunauZj+jzuBoFRP+BuFeH8m8rjAr1yDBDhqQVWP+sumNEX
+         CNpw==
+X-Gm-Message-State: ANhLgQ1KbXC0pYb1QT27FNkqJPLA3yG4z6kXtosulLNTTp7qEGKX7W6E
+        9FPRh0hZjKpBw2rhL5FL0CAJnw==
+X-Google-Smtp-Source: ADFU+vuo1bX8k5FNn27x7znpbXtPAwDztmbevA4C+IVKqZXlu1aOcJJE/TkXqQM0ofU+D8g2EOXyfw==
+X-Received: by 2002:a17:902:9a98:: with SMTP id w24mr9918310plp.40.1584729339384;
+        Fri, 20 Mar 2020 11:35:39 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c11sm6356557pfc.216.2020.03.20.11.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Mar 2020 11:35:38 -0700 (PDT)
+Date:   Fri, 20 Mar 2020 11:35:37 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Mar 18 (objtool)
+Message-ID: <202003201131.9B688BC@keescook>
+References: <20200318220920.48df2e76@canb.auug.org.au>
+ <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
+ <20200318182352.2dgwwl4ugbwndi4x@treble>
+ <20200318200542.GK20730@hirez.programming.kicks-ass.net>
+ <20200319173101.wufpymi7obhqgoqd@treble>
+ <20200319173326.oj4qs24x4ly5lrgt@treble>
+ <20200319174028.azzaisoj5gbss7zk@treble>
+ <20200319174550.4wpx4j357nw67nzz@treble>
+ <20200320082613.GA20696@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200320201539.3a3a8640@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200320082613.GA20696@hirez.programming.kicks-ass.net>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/20/20 2:15 AM, Stephen Rothwell wrote:
-> Hi all,
+On Fri, Mar 20, 2020 at 09:26:13AM +0100, Peter Zijlstra wrote:
+> On Thu, Mar 19, 2020 at 12:45:50PM -0500, Josh Poimboeuf wrote:
+> > > On Thu, Mar 19, 2020 at 12:33:31PM -0500, Josh Poimboeuf wrote:
 > 
-> Changes since 20200319:
+> > > > Actually I suspect it's the __builtin_unreachable() annotation which is
+> > > > making UBSAN add the __builtin_trap()...  because I don't see any double
+> > > > UD2s for WARNs.
 > 
+> > Actually, removing __builtin_unreachable() *does* make the extra UD2 go
+> > away -- I forgot I had some silly debug code.
+> 
+> LOL, check this:
+> 
+> "Built-in Function: void __builtin_unreachable (void)
+> 
+>     If control flow reaches the point of the __builtin_unreachable, the
+>     program is undefined. It is useful in situations where the compiler
+>     cannot deduce the unreachability of the code. "
+> 
+> Which, I bet, is what makes UBSAN insert that __builtin_trap().
+> 
+> What a friggin mess :/
 
+What I'd like is to be able to specify to UBSAN what function to call
+for the trap. I'd prefer to specify a well-defined exception handler,
+but at present, UBSAN just inserts __builtin_trap().
 
-Today's linux-next gives these objtool warnings:
+Can't objtool be told to ignore a ud2 that lacks an execution path to it?
 
-arch/x86/entry/vdso/vma.o: warning: objtool: vdso_fault()+0x201: unreachable instruction
-
-drivers/ide/ide-tape.o: warning: objtool: idetape_chrdev_release()+0x109: unreachable instruction
-
-drivers/media/i2c/ir-kbd-i2c.o: warning: objtool: ir_probe()+0xdaa: unreachable instruction
-
-kernel/kcov.o: warning: objtool: __sanitizer_cov_trace_pc()+0x89: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
-
-
-all in (4) separate builds (.configs).
-Do you want all 4 randconfig files?
-
-cheers.
 -- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Kees Cook

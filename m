@@ -2,123 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D78318ED5F
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 00:50:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD4B18ED69
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 01:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726897AbgCVXui (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Mar 2020 19:50:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:54887 "EHLO ozlabs.org"
+        id S1726896AbgCWAJC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Mar 2020 20:09:02 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46053 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726872AbgCVXui (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 22 Mar 2020 19:50:38 -0400
+        id S1726880AbgCWAJC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 22 Mar 2020 20:09:02 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48lvQg4JHBz9sPk;
-        Mon, 23 Mar 2020 10:50:35 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48lvqv0Pmfz9sR4;
+        Mon, 23 Mar 2020 11:08:59 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584921036;
-        bh=ARu6Ei0cv/23Co1L6oD9zdq5jUCcNLUVYb7GCNu8lHk=;
+        s=201702; t=1584922139;
+        bh=ACWBe2oMssP/YXGsVmDDBnwhrVKVcmLPP/x9O78bYn0=;
         h=Date:From:To:Cc:Subject:From;
-        b=ig4Wws9OBnBNm9obGL4PRJ2aLOVrQMPaHtZCYncP//G5FLws71giVvRT0nLGRW/8e
-         kjhcwzfY64QfYtKXXr/ZlrCaArQ7StjQ7EfPcr1BfaJXpXbAQmWJMbkMahHEt7nQGG
-         BbtgOIasv4ruVTH2oNUoWMPwvqGHFfzD/7QtXSeJTNDpkWMnWMu9ujkUCHTi+UmPz6
-         2kjZ2iP8nxhZEASfHhSMQytDmKmJbxtUnYkAsp1Up5raCUVm+DRoTxrQagf5qYMWf0
-         F3kvtLo7DOdzUsSEB1/LDgLscnLvWxxE3/YKGWqb/V4VgadQd+afg4IjdBqxTjIRmG
-         CbliwvUN36iIA==
-Date:   Mon, 23 Mar 2020 10:50:32 +1100
+        b=htcvcK+Z+cuM9hMMVWFfFCwW8Zj9ruG/bppuA7faIPOsEXbIHQS4BBjHir+HNlEnO
+         hA+JovUQdxm2SaHKqRz1bl+Ey7Z/209xOmf6/u4zuSACehg8Oe2KH6uDt9rclG0TLL
+         XUEs4AKruoCGdcoJPQ8+yPB2ipXPBBOkJ2ziqOsOfrSbS/g9ZFMOiRYWqSVdKsm+Xl
+         Ypd4R1/aGSETan9sJrfjJNg2azHBas8maACkhiRKupsJWCO2++ZUSH8qEC+lhfvoNM
+         zxrZDZIPbjGOQ8B/x4AAmb8rMDsw2LHVVQd5kzs4PfOJ1NjDzotwGVhp/9MIpvE/K4
+         Q40//kGMVm7Rw==
+Date:   Mon, 23 Mar 2020 11:08:52 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Eduardo Valentin <edubezval@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Tyler Hicks <tyhicks@canonical.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: linux-next: manual merge of the jc_docs tree with Linus' tree
-Message-ID: <20200323105032.2a068daa@canb.auug.org.au>
+        Andres Freund <andres@anarazel.de>
+Subject: linux-next: build failure after merge of the thermal tree
+Message-ID: <20200323110852.1f08e4f1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/hRIJeYCYBu1I/YyWZtHJhSo";
+Content-Type: multipart/signed; boundary="Sig_/d0pCu5gVhX4E70F69PYcKFQ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/hRIJeYCYBu1I/YyWZtHJhSo
+--Sig_/d0pCu5gVhX4E70F69PYcKFQ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the jc_docs tree got a conflict in:
+After merging the thermal tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-  MAINTAINERS
+drivers/thermal/intel/intel_pch_thermal.c:306:2: error: expected '}' before=
+ '[' token
+  306 |  [board_lwb] =3D {
+      |  ^
+drivers/thermal/intel/intel_pch_thermal.c:285:18: note: to match this '{'
+  285 | } board_info[] =3D {
+      |                  ^
 
-between commit:
+Caused by commit
 
-  726464596b5d ("MAINTAINERS: eCryptfs: Update maintainer address and downg=
-rade status")
+  16cd95bab00f ("thermal: intel_pch_thermal: Add PCI ids for Lewisburg PCH.=
+")
 
-from Linus' tree and commit:
-
-  19e91e543c82 ("MAINTAINERS: adjust to filesystem doc ReST conversion")
-
-from the jc_docs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the thermal tree from next-20200320 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc MAINTAINERS
-index 8882742b0f5b,38f58b85eb06..000000000000
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@@ -3917,10 -3906,10 +3917,10 @@@ W:	http://ceph.com
-  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/sage/ceph-client.git
-  T:	git git://github.com/ceph/ceph-client.git
-  S:	Supported
-- F:	Documentation/filesystems/ceph.txt
-+ F:	Documentation/filesystems/ceph.rst
-  F:	fs/ceph/
- =20
- -CERTIFICATE HANDLING:
- +CERTIFICATE HANDLING
-  M:	David Howells <dhowells@redhat.com>
-  M:	David Woodhouse <dwmw2@infradead.org>
-  L:	keyrings@vger.kernel.org
-@@@ -5948,8 -5937,8 +5948,8 @@@ L:	ecryptfs@vger.kernel.or
-  W:	http://ecryptfs.org
-  W:	https://launchpad.net/ecryptfs
-  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tyhicks/ecryptfs.git
- -S:	Supported
- +S:	Odd Fixes
-- F:	Documentation/filesystems/ecryptfs.txt
-+ F:	Documentation/filesystems/ecryptfs.rst
-  F:	fs/ecryptfs/
- =20
-  EDAC-AMD64
-
---Sig_/hRIJeYCYBu1I/YyWZtHJhSo
+--Sig_/d0pCu5gVhX4E70F69PYcKFQ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl53+ckACgkQAVBC80lX
-0Gwx+Qf9EQ5tXVNZ36wL5huTApq2krS0NR74/JD8qgmmiDVmxoK+16tlbDCHhwif
-w7/PKw2RJXqx7fVBgObhMfnK6WgJfMaHfGcL1SeehvcxYnJguxHNHWXy1pQnkLGL
-TsagmVxRwugoyPZbmuJXORLiWtz+Dlmjv6s9NgNqtznb2BEmmKVd8bZDLyYqQpjF
-tUx/sJUa+88wiZ9wX+mia2YJ6JMKH9kXMxM22QGrCaumtO765KCQo4EdxIF7GbSX
-OR4Ejd1Mm1ovPZiu6aXYw+MzAndKxYVoYzsKKAMQAOjsXF7zoH5vpPZ7lcVovKa9
-TvoETRnb/pfv9Zympkp+7fUA9K9yiA==
-=qBfV
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl53/hQACgkQAVBC80lX
+0GyOvQf/ZFpiGgLq3KpQLnH3ng2eFPohH0X/43kpVM4WQYnUgvY/3tgOAxh2R9lR
+55zotLxYbY5O/hqeT5cfOlpoFwTlcY8+5KLTLVfILLkWrSh/8PBu+OjuUxb5pw7c
+2bAKXs2CQv8TMqs1rNvsujqEjXDRKF8+H2KlysVy/Qe36PdE3dyzGJ9t5gLXOaPO
+RgrfQ+zO18PbAZ7vTty20VmDNcousImAYznh51nH/hdJmIwaUz+Og38hNVA8wb3d
+J4C1/V/2A2oQbnZXiCNIqtCiD7gu6mhguJJx5IrnonGt/rCfY2gWZNCyjrlOGlP1
+Yre7TUJttF59tUJj7EQB8elKbUpc2A==
+=VxOa
 -----END PGP SIGNATURE-----
 
---Sig_/hRIJeYCYBu1I/YyWZtHJhSo--
+--Sig_/d0pCu5gVhX4E70F69PYcKFQ--

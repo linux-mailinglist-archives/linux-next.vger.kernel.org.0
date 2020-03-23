@@ -2,84 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C1118EF21
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 06:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807F318F004
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 07:59:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725926AbgCWFYK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Mar 2020 01:24:10 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56983 "EHLO ozlabs.org"
+        id S1727334AbgCWG72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Mar 2020 02:59:28 -0400
+Received: from mga18.intel.com ([134.134.136.126]:32005 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725858AbgCWFYK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Mar 2020 01:24:10 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48m2qW3LkLz9sPF;
-        Mon, 23 Mar 2020 16:24:06 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584941048;
-        bh=VVtxptXrHm7fxbzdp+HNdvCUwHj5djcCobU0ICFzZg0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=E9FvGKA5OkKCb4C6oTuPcmPRWRvs3XQa7gJoSI2FJjrScn69WCAdOyg9b8A5ZtsYv
-         OtuExuyQlTcZ05g7KhoCfNVNWVtWjYViJa+IQ6rI8HZqLumxwXHo56XTDrbXaflC1N
-         ryiyYIfKTKvBxbqiN+Kx+WKuTOEjBuWpj7Z6I1LAIv6Yle/L+8OAoqPPUK4/KXCN0k
-         9C5qi7il8WgPUr0FQvi1grwzQpaWuTc/5heJMJqREa76eF9kQG2YO7FTDFFruaG61x
-         OXlg4tLObZGmrFh/YLM8NFwDwxOWrux7tp4m6S6MFjPUPgYGbdbF1hnSlDjVEc+QJN
-         fNaBaH/3/lHvA==
-Date:   Mon, 23 Mar 2020 16:24:06 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+        id S1727164AbgCWG72 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Mar 2020 02:59:28 -0400
+IronPort-SDR: 6mr2jgrVmXoC+DhfbQj1lUB3/VCHSyZRCF/ZRCpnWUXkCVqvHfnjSgfLiYce31Frl4uAM3jRd7
+ /OuxmKG/pmDQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2020 23:59:27 -0700
+IronPort-SDR: cA2lPX0pXEB4WbXpZNzyZ6o003Vj3Hz6tZxc8gwP70Shsc5CrZjpoUQk90wYjym2ikqqEMAwyr
+ F65MQg6NEaMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,295,1580803200"; 
+   d="scan'208";a="445703253"
+Received: from rupengwe-mobl1.ccr.corp.intel.com ([10.249.168.143])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2020 23:59:25 -0700
+Message-ID: <9698a9f2c49e3ca286b946eeb7de3399c406ea5e.camel@intel.com>
+Subject: Re: linux-next: build failure after merge of the thermal tree
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peng Ma <peng.ma@nxp.com>
-Subject: linux-next: build warning after merge of the rtc tree
-Message-ID: <20200323162406.7b1059c1@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/k/3A=_ND52nCta1sUiwOw2P";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Andres Freund <andres@anarazel.de>
+Date:   Mon, 23 Mar 2020 14:59:24 +0800
+In-Reply-To: <20200323110852.1f08e4f1@canb.auug.org.au>
+References: <20200323110852.1f08e4f1@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/k/3A=_ND52nCta1sUiwOw2P
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, 2020-03-23 at 11:08 +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the thermal tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/thermal/intel/intel_pch_thermal.c:306:2: error: expected '}'
+> before '[' token
+>   306 |  [board_lwb] = {
+>       |  ^
+> drivers/thermal/intel/intel_pch_thermal.c:285:18: note: to match this
+> '{'
+>   285 | } board_info[] = {
+>       |                  ^
+> 
+> Caused by commit
+> 
+>   16cd95bab00f ("thermal: intel_pch_thermal: Add PCI ids for
+> Lewisburg PCH.")
+> 
+> I have used the thermal tree from next-20200320 for today.
+> 
+Bug has been fixed.
+BTW, I think you can remove Eduardo from this loop, because he is not
+working as the thermal maintainer right now.
 
-Hi all,
+thanks,
+rui
 
-After merging the rtc tree, today's linux-next build (x86_64 allmodconfig)
-produced this warning:
-
-drivers/rtc/rtc-fsl-ftm-alarm.c: In function 'ftm_rtc_probe':
-drivers/rtc/rtc-fsl-ftm-alarm.c:246:22: warning: unused variable 'np' [-Wun=
-used-variable]
-  246 |  struct device_node *np =3D pdev->dev.of_node;
-      |                      ^~
-
-Introduced by commit
-
-  cd49b579e705 ("rtc: fsl-ftm-alarm: enable acpi support")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/k/3A=_ND52nCta1sUiwOw2P
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl54R/YACgkQAVBC80lX
-0Gz9tggAlXepGECLH8DAJnUWBVsJnOtnzS3I002uQ7L3oX5oB0iVX4TRN9PmIFGq
-PAfBESdjQLyVnL2+aOKEuIHSLKKYKHCRAkyp4HvLGgCKtQNyeVV08NrX+7/5W8HD
-OlLGJp+jr54CXY6/nh4j4NOo2RujufWfZVDFbfpmnCdYlA9ZSc8+ujOs6cEoF3cR
-pw6MOT2R87j4uJPM+xL3bfq0cdHY12yHQJN9U7AdStswaMfN0oUghPeM0EJfDyF6
-OvpjzNEZjU8DPbuJXuN+/Ad9u0VCrm9sbACqM2wkeXFhb/CDlNlm51DsZPbQhYtm
-0CvK0IuShtxfOOyY5MAXollKFWmJHw==
-=OG5V
------END PGP SIGNATURE-----
-
---Sig_/k/3A=_ND52nCta1sUiwOw2P--

@@ -2,190 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E7418F3DD
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 12:43:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F1418F699
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 15:12:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728151AbgCWLnn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Mar 2020 07:43:43 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:36624 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728115AbgCWLnn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Mar 2020 07:43:43 -0400
-Received: by mail-pj1-f65.google.com with SMTP id nu11so5980854pjb.1;
-        Mon, 23 Mar 2020 04:43:41 -0700 (PDT)
+        id S1728407AbgCWOMy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Mar 2020 10:12:54 -0400
+Received: from mail-pj1-f41.google.com ([209.85.216.41]:39045 "EHLO
+        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728378AbgCWOMy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Mar 2020 10:12:54 -0400
+Received: by mail-pj1-f41.google.com with SMTP id ck23so6139835pjb.4
+        for <linux-next@vger.kernel.org>; Mon, 23 Mar 2020 07:12:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0JOxub9d4VjSXMXskvu51BJ1QSfTigyzc+ouxeQXEaA=;
-        b=S9OGfzCzXIcIMKESKPTI8raOcWYhYOumisUPYKGxWopELZnGo5EDBHP/9ZZS5gbe2w
-         /VTjACjsW0S8pFuQGPsuNAD02f/dEozjEJFpH5Z1GV7cWF8qnArzU276bY5yjQSo9nIz
-         X73BPjrLKVNUTOwzrSuYKxnKHFcTqFBAzwoeL6W5vJCUg40UR2s1Y2qDM6AUAoDaKJed
-         btej/h4t866SU5t06/GAQEmKvVjlUHZY8h40F+nfPoJ1oLfDWeUCLdAl+vi6KMqt9oOv
-         BGeMy3giOF5S5/Mmt/bOMKFKK/A7lvtg5zZsbFXTDjKNyPeMKWq1GNyJTEPgCHccCcSr
-         ewIw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=l0LCaYw/ab9BoMQ3c+KRsBOBhS0ePv1YruGQLiOxPuM=;
+        b=Dw+UKEXSEEfhPQpfz30Jn84K7VsRTKvvn7KL60YiUjMO447ZdOliQHywEi2y6udw0n
+         K564EpUNfHoN4+rlkwpC92OyFMuW/kCiHJwZBjalCOZrPxIiX93BsOR5yes79OV29V4g
+         YINySB5WQmbRbxKXVZi/eOvIGhQVO7D9FC+inQ96nfvE92qqImO8KJjKl4BvKLzE3gmG
+         V1zkisrXSC5bakBt84hC7BIco5mwJLGtphtqhJtanx2STJi7G6ImCDedesPHBHn20yue
+         MVkX3f/jNO12N5u+0+zFauHEFy9LpKnZbN/nW0jD8XsrqSXG3TskvwntAeXg47MpZCYb
+         EHhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0JOxub9d4VjSXMXskvu51BJ1QSfTigyzc+ouxeQXEaA=;
-        b=Ih3JJyT6aNicrBjzXNw/Q0CizylZFqDORNSptfhlvt1nr/1doWkqaPP1q+MBofbGn7
-         YWdIUuZUXucYfrf1+xrfDbVIPwsXbDKBi/yMivR1uQZMYml/UuDw5Rk+VFZ1VMKOmzVU
-         DYXMxx3mTvaKXZOFl1FwWF5XtMtlP8FnOpc29FPkT2L4FWtEfYjU49yEaYnnCm01YzVn
-         juRzJL8Y0jHdupwe0ME4WtPymxYgKeUpmP4uWhnFhBY3g/92eHAzxIeR3uh0Vg41Cn+e
-         uG1QjkBRIW8TRGxe1aZ6s9PJNDsqGcRYbFrhJFYrT9L/3ARk73wmi6BS62YdYutDuWM0
-         oNvg==
-X-Gm-Message-State: ANhLgQ2vQKduxw7COvRi3P+0qiTQfb9JcbQ2uNuR3wnB0BmrEqytP+D2
-        SfJUU8SC8Ge30kUHU+QGqMQ9kM6A9bcNyO2eGpA=
-X-Google-Smtp-Source: ADFU+vuipq4kIJ7C8yZtaz5IdeyNyOaNs3ZibsKgTMdYID/vP2bcwGDGGG4hdry0X8YTgQB/Xzpul6noFe7xvMN8AYs=
-X-Received: by 2002:a17:90a:8403:: with SMTP id j3mr25160854pjn.8.1584963820252;
- Mon, 23 Mar 2020 04:43:40 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=l0LCaYw/ab9BoMQ3c+KRsBOBhS0ePv1YruGQLiOxPuM=;
+        b=E2T/M2tk/b+JQxxv1MSPMlDBsWdmopHN5hQ2WjvNa6ZHFwvtmplz2/gTL6y/jnwn++
+         ydYsrYhTA6FcziaCjTMQlYm4RZj07EeL7Ozzc6gFE9YpUi6c5apYp0L/X2cIesrcIkOd
+         EkJuBjH6Gb3RDLewq0HRViHQAi2TN/OmseRDVohKakDz1nYRF//PaSvFDzeoEA22Y7JX
+         RQ+GmQmSCzOGTYQPPVMWz4QhX9KvAD5rMRezO+kRFHeb3Afq8fMcoR6SVCiSl/lFeVVq
+         tXNJk17fqmIkEzGFa30Bxnilpc3qFu+mO+vGbFGOeJS2P0Rt51xDJi6UdcKnR5QnklOJ
+         uSgw==
+X-Gm-Message-State: ANhLgQ1q4E7HLtpRlFwVdcTjli9/knL1ruCSj9QjNjV/iwFAg1n8C5rs
+        sgyxGdeaZpMpAl2RELpGAV/0sXEkqmI=
+X-Google-Smtp-Source: ADFU+vtr7PHq0OQ1IkC9oNsS5y5XgGSfMbKJY4l46iQ7YCeJvoZa+7h3oq0UsrhQcLTw6h2ixhw8Dg==
+X-Received: by 2002:a17:902:562:: with SMTP id 89mr22544121plf.58.1584972772858;
+        Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id q9sm12552960pgs.89.2020.03.23.07.12.51
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
+Message-ID: <5e78c3e4.1c69fb81.7bca3.e7d1@mx.google.com>
+Date:   Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200323143816.345b3d54@canb.auug.org.au>
-In-Reply-To: <20200323143816.345b3d54@canb.auug.org.au>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 23 Mar 2020 13:43:32 +0200
-Message-ID: <CAHp75Vfozkw2sBwLO95EEsW955Wqi9G1JOW-zpretnhHS2waSA@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- drivers-x86 tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Greg KH <greg@kroah.com>, Darren Hart <dvhart@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200323
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 275 boots: 5 failed, 258 passed with 5 offline,
+ 7 untried/unknown (next-20200323)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 23, 2020 at 5:38 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Today's linux-next merge of the driver-core tree got a conflict in:
->
->   drivers/platform/x86/Kconfig
->
-> between commit:
->
->   45a3d578f2ed ("platform/x86: Kconfig: Group modules by companies and functions")
->
-> from the drivers-x86 tree and commit:
->
->   835e1b86ef8c ("platform/x86: touchscreen_dmi: Add EFI embedded firmware info support")
->
-> from the driver-core tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+next/master boot: 275 boots: 5 failed, 258 passed with 5 offline, 7 untried=
+/unknown (next-20200323)
 
-Thank you, Stephen, looks good to me!
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200323/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200323/
 
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc drivers/platform/x86/Kconfig
-> index ae75b19e8649,cd9e2758c479..000000000000
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@@ -1134,46 -978,54 +1134,47 @@@ config TOPSTAR_LAPTO
->         depends on ACPI
->         depends on INPUT
->         select INPUT_SPARSEKMAP
->  -      help
->  -        This driver provides support for the Intel Virtual Button interface.
->  -        Some laptops require this driver for power button support.
->  -
->  -        To compile this driver as a module, choose M here: the module will
->  -        be called intel_vbtn.
->  -
->  -config INTEL_SCU_IPC
->  -      bool "Intel SCU IPC Support"
->  -      depends on X86_INTEL_MID
->  -      default y
->  +      select LEDS_CLASS
->  +      select NEW_LEDS
->         ---help---
->  -        IPC is used to bridge the communications between kernel and SCU on
->  -        some embedded Intel x86 platforms. This is not needed for PC-type
->  -        machines.
->  +        This driver adds support for hotkeys found on Topstar laptops.
->
->  -config INTEL_SCU_IPC_UTIL
->  -      tristate "Intel SCU IPC utility driver"
->  -      depends on INTEL_SCU_IPC
->  -      ---help---
->  -        The IPC Util driver provides an interface with the SCU enabling
->  -        low level access for debug work and updating the firmware. Say
->  -        N unless you will be doing this on an Intel MID platform.
->  +        If you have a Topstar laptop, say Y or M here.
->
->  -config INTEL_MID_POWER_BUTTON
->  -      tristate "power button driver for Intel MID platforms"
->  -      depends on INTEL_SCU_IPC && INPUT
->  +config I2C_MULTI_INSTANTIATE
->  +      tristate "I2C multi instantiate pseudo device driver"
->  +      depends on I2C && ACPI
->         help
->  -        This driver handles the power button on the Intel MID platforms.
->  +        Some ACPI-based systems list multiple i2c-devices in a single ACPI
->  +        firmware-node. This driver will instantiate separate i2c-clients
->  +        for each device in the firmware-node.
->
->  -        If unsure, say N.
->  +        To compile this driver as a module, choose M here: the module
->  +        will be called i2c-multi-instantiate.
->
->  -config INTEL_MFLD_THERMAL
->  -       tristate "Thermal driver for Intel Medfield platform"
->  -       depends on MFD_INTEL_MSIC && THERMAL
->  -       help
->  -         Say Y here to enable thermal driver support for the  Intel Medfield
->  -         platform.
->  +config MLX_PLATFORM
->  +      tristate "Mellanox Technologies platform support"
->  +      depends on I2C && REGMAP
->  +      ---help---
->  +        This option enables system support for the Mellanox Technologies
->  +        platform. The Mellanox systems provide data center networking
->  +        solutions based on Virtual Protocol Interconnect (VPI) technology
->  +        enable seamless connectivity to 56/100Gb/s InfiniBand or 10/40/56GbE
->  +        connection.
->
->  -config INTEL_IPS
->  -      tristate "Intel Intelligent Power Sharing"
->  -      depends on ACPI && PCI
->  +        If you have a Mellanox system, say Y or M here.
->  +
->  +config TOUCHSCREEN_DMI
->  +      bool "DMI based touchscreen configuration info"
->  +      depends on ACPI && DMI && I2C=y && TOUCHSCREEN_SILEAD
-> ++      select EFI_EMBEDDED_FIRMWARE if EFI
->         ---help---
->  -        Intel Calpella platforms support dynamic power sharing between the
->  -        CPU and GPU, maximizing performance in a given TDP.  This driver,
->  -        along with the CPU frequency and i915 drivers, provides that
->  -        functionality.  If in doubt, say Y here; it will only load on
->  -        supported platforms.
->  +        Certain ACPI based tablets with e.g. Silead or Chipone touchscreens
->  +        do not have enough data in ACPI tables for the touchscreen driver to
->  +        handle the touchscreen properly, as OEMs expect the data to be baked
->  +        into the tablet model specific version of the driver shipped with the
->  +        the OS-image for the device. This option supplies the missing info.
->  +        Enable this for x86 tablets with Silead or Chipone touchscreens.
->
->   config INTEL_IMR
->         bool "Intel Isolated Memory Region support"
+Tree: next
+Branch: master
+Git Describe: next-20200323
+Git Commit: 5149100c3aebe5e640d6ff68e0b5e5a7eb8638e0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 103 unique boards, 23 SoC families, 29 builds out of 329
 
+Boot Regressions Detected:
 
+arm:
 
--- 
-With Best Regards,
-Andy Shevchenko
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 2 days (last pass: next-20200319=
+ - first fail: next-20200320)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 34 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+    sunxi_defconfig:
+        gcc-8:
+          sun4i-a10-olinuxino-lime:
+              lab-baylibre: new failure (last pass: next-20200320)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200320)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200320)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200320)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200320)
+          meson-gxl-s905x-khadas-vim:
+              lab-baylibre: new failure (last pass: next-20200320)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: next-20200320)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    imx_v6_v7_defconfig:
+        gcc-8:
+            vf610-colibri-eval-v3: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    imx_v6_v7_defconfig:
+        gcc-8
+            imx6q-wandboard: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

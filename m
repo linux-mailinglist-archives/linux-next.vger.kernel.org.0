@@ -2,178 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 48F1418F699
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 15:12:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DDDF18F992
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 17:22:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728407AbgCWOMy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Mar 2020 10:12:54 -0400
-Received: from mail-pj1-f41.google.com ([209.85.216.41]:39045 "EHLO
-        mail-pj1-f41.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728378AbgCWOMy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Mar 2020 10:12:54 -0400
-Received: by mail-pj1-f41.google.com with SMTP id ck23so6139835pjb.4
-        for <linux-next@vger.kernel.org>; Mon, 23 Mar 2020 07:12:53 -0700 (PDT)
+        id S1727391AbgCWQWS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Mar 2020 12:22:18 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:32909 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727067AbgCWQWQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 23 Mar 2020 12:22:16 -0400
+Received: by mail-pf1-f195.google.com with SMTP id j1so5022095pfe.0
+        for <linux-next@vger.kernel.org>; Mon, 23 Mar 2020 09:22:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=l0LCaYw/ab9BoMQ3c+KRsBOBhS0ePv1YruGQLiOxPuM=;
-        b=Dw+UKEXSEEfhPQpfz30Jn84K7VsRTKvvn7KL60YiUjMO447ZdOliQHywEi2y6udw0n
-         K564EpUNfHoN4+rlkwpC92OyFMuW/kCiHJwZBjalCOZrPxIiX93BsOR5yes79OV29V4g
-         YINySB5WQmbRbxKXVZi/eOvIGhQVO7D9FC+inQ96nfvE92qqImO8KJjKl4BvKLzE3gmG
-         V1zkisrXSC5bakBt84hC7BIco5mwJLGtphtqhJtanx2STJi7G6ImCDedesPHBHn20yue
-         MVkX3f/jNO12N5u+0+zFauHEFy9LpKnZbN/nW0jD8XsrqSXG3TskvwntAeXg47MpZCYb
-         EHhQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=X405kXogs75SeRFQPkZ3ngDiddPS9RSpwQdMmSv6ymA=;
+        b=M8R/zrqvqiWuTZPUqiknMuMdNwurrcv1et7jgSkbB9K+KJFSRy9FCtrR0IjL4CgXSL
+         FT+XB9kjgJo5qy33/IY6+1Av4B3f0hkhyGrm6YuLtoMH8Z4DiJT4oh7u2ePA5RcgsSqW
+         OkLXjVnBCQRLp5lGgvml7s19GW6YB+kIaad/8y0kJMYHCpu4Sm23EaZ1sd1tyzoDZaRB
+         8PoLY4zk+R9jGlhBQekDdyG8gow5K88F+R7zdD980hwFw+QW73ukVYgC7d29NPo95UZj
+         s7D3HyrJWMOmCXqZDY+UP2do2A6V7b4RuCQ3lNxwWfspoFB2zogshNaSXRfsvIFEdPRh
+         H73Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=l0LCaYw/ab9BoMQ3c+KRsBOBhS0ePv1YruGQLiOxPuM=;
-        b=E2T/M2tk/b+JQxxv1MSPMlDBsWdmopHN5hQ2WjvNa6ZHFwvtmplz2/gTL6y/jnwn++
-         ydYsrYhTA6FcziaCjTMQlYm4RZj07EeL7Ozzc6gFE9YpUi6c5apYp0L/X2cIesrcIkOd
-         EkJuBjH6Gb3RDLewq0HRViHQAi2TN/OmseRDVohKakDz1nYRF//PaSvFDzeoEA22Y7JX
-         RQ+GmQmSCzOGTYQPPVMWz4QhX9KvAD5rMRezO+kRFHeb3Afq8fMcoR6SVCiSl/lFeVVq
-         tXNJk17fqmIkEzGFa30Bxnilpc3qFu+mO+vGbFGOeJS2P0Rt51xDJi6UdcKnR5QnklOJ
-         uSgw==
-X-Gm-Message-State: ANhLgQ1q4E7HLtpRlFwVdcTjli9/knL1ruCSj9QjNjV/iwFAg1n8C5rs
-        sgyxGdeaZpMpAl2RELpGAV/0sXEkqmI=
-X-Google-Smtp-Source: ADFU+vtr7PHq0OQ1IkC9oNsS5y5XgGSfMbKJY4l46iQ7YCeJvoZa+7h3oq0UsrhQcLTw6h2ixhw8Dg==
-X-Received: by 2002:a17:902:562:: with SMTP id 89mr22544121plf.58.1584972772858;
-        Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q9sm12552960pgs.89.2020.03.23.07.12.51
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=X405kXogs75SeRFQPkZ3ngDiddPS9RSpwQdMmSv6ymA=;
+        b=aBS4qoGLbeey6W7zmY1kfa8C7wuo9X6HXMUualLcziiJwjHcYA0P2OtTbqbSsavP8q
+         3ieTzaT8STs+RHs0j6jtuFxiHfhzL1MSqukK5duWD75ejHrOGBZQzB1d7ZFrptPmspgt
+         AxepGh1WtIE++66HIMNibf670ulDUuDAbMR5JWlhD76wvell/LPdaqJJOG8cCTT8Jkgn
+         yfzCrKYjC4Atlh1EpoSZOpvbuUfdoVmoHD5tVeVvzlY5EmwxHTOaB7Loy44hBCzK1uZF
+         GdDs1yimAL9dK7Z1+405bNpxceQB0gBTpMMUP5xnZ3OI/JIXeNDWSQwkg8/V5MBp3zvj
+         M1VA==
+X-Gm-Message-State: ANhLgQ0wjq0C5nSf38IUG/crWEPuyHyHt4dj/rARibMi6AaXXFVG2QpP
+        5LjHT8ouq+RAD7x4qjIvggrwcw==
+X-Google-Smtp-Source: ADFU+vsGAHdZKOvaknEf8iV4YErBF/ssy2BOTgFl5g7QMB8hbd+PQGM/OpNtNxvOnORNA5PdH9Y+iA==
+X-Received: by 2002:aa7:94a6:: with SMTP id a6mr24656285pfl.214.1584980535561;
+        Mon, 23 Mar 2020 09:22:15 -0700 (PDT)
+Received: from xps15 (S0106002369de4dac.cg.shawcable.net. [68.147.8.254])
+        by smtp.gmail.com with ESMTPSA id y28sm12364569pgc.69.2020.03.23.09.22.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
-Message-ID: <5e78c3e4.1c69fb81.7bca3.e7d1@mx.google.com>
-Date:   Mon, 23 Mar 2020 07:12:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 23 Mar 2020 09:22:15 -0700 (PDT)
+Date:   Mon, 23 Mar 2020 10:22:13 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Greg KH <greg@kroah.com>, Arnd Bergmann <arnd@arndb.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: linux-next: manual merge of the coresight tree with the
+ char-misc tree
+Message-ID: <20200323162213.GA3291@xps15>
+References: <20200323162018.17d3091f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200323
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 275 boots: 5 failed, 258 passed with 5 offline,
- 7 untried/unknown (next-20200323)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200323162018.17d3091f@canb.auug.org.au>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 275 boots: 5 failed, 258 passed with 5 offline, 7 untried=
-/unknown (next-20200323)
+On Mon, Mar 23, 2020 at 04:20:18PM +1100, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the coresight tree got conflicts in:
+> 
+>   Documentation/ABI/testing/sysfs-bus-coresight-devices-cti
+>   Documentation/trace/coresight/coresight-ect.rst
+>   drivers/hwtracing/coresight/coresight-cti-sysfs.c
+>   drivers/hwtracing/coresight/coresight-cti.c
+>   drivers/hwtracing/coresight/coresight-priv.h
+>   drivers/hwtracing/coresight/coresight.c
+>   include/linux/coresight.h
+> 
+> There are a series of commits in both the char-misc tree and the coresight
+> tree that have the same subjects but are slightly different patches.
+> Since the coresight tree is merged via the char-misc tree (and that tree's
+> commits are more recent), I have dropped the coresoght tree for today.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200323/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200323/
+That was the right thing to do.  I will align my tree with Greg's in the coming
+minutes.
 
-Tree: next
-Branch: master
-Git Describe: next-20200323
-Git Commit: 5149100c3aebe5e640d6ff68e0b5e5a7eb8638e0
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 103 unique boards, 23 SoC families, 29 builds out of 329
+Regards,
+Mathieu
 
-Boot Regressions Detected:
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-arm:
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 2 days (last pass: next-20200319=
- - first fail: next-20200320)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 34 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20200320)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200320)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200320)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200320)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200320)
-          meson-gxl-s905x-khadas-vim:
-              lab-baylibre: new failure (last pass: next-20200320)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200320)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-            vf610-colibri-eval-v3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    imx_v6_v7_defconfig:
-        gcc-8
-            imx6q-wandboard: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

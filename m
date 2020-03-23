@@ -2,117 +2,163 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 91ABF18ED81
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 01:50:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D53318EE00
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 03:31:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726954AbgCWAuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 22 Mar 2020 20:50:19 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33241 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726925AbgCWAuT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 22 Mar 2020 20:50:19 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48lwlQ5dCrz9sQt;
-        Mon, 23 Mar 2020 11:50:09 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1584924615;
-        bh=h33vmQmR6+cqLLlsiq13QBebcQ0ZhM+IXVkPxrbI3sw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=s+b/7F1hz2XX8IFv8SVcPNBWwsFksv6UfxV56FmhQnQkVj7/QLTqE2XLu3m3T4UyF
-         iuOc7qBBrn3G9BT8Je+YXOTsUYEH+cZz7CLfMpncKCnBJzziGE1jUxT5N2EGCz+1BX
-         CKXAxxjYoQPcN53TpZDk1gQvtjDJXde3z1xkQRZFg9i/X5hEMYBAelGQ6pl1963ByP
-         KGUGF0tWKadyaoYXv4duycxdM05sfkLKxCUJ4P6f/KAXX+BMuYFgQB0/f1AgqMyDqQ
-         FteN/OqHiN7OSDNlhTVzsyOry408ZMw0OlJ/6eLhWqAJY39itYuzbZCSjWar3fMajl
-         N6z2diZM0cPmQ==
-Date:   Mon, 23 Mar 2020 11:50:08 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mario Kleiner <mario.kleiner.de@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Lyude Paul <lyude@redhat.com>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20200323115008.7ff7dcbf@canb.auug.org.au>
+        id S1726979AbgCWCbf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 22 Mar 2020 22:31:35 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:33563 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726954AbgCWCbf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 22 Mar 2020 22:31:35 -0400
+Received: by mail-pg1-f180.google.com with SMTP id d17so5848867pgo.0
+        for <linux-next@vger.kernel.org>; Sun, 22 Mar 2020 19:31:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=9KDK93xOdeufRCmEhSK0GjQCWTBjpgAHAJSHZXq4puQ=;
+        b=udi3HLr6Yyt2fu3p8HB2S0DAawmvWK6E/v5MGkDN7r9yHOSfzvFSpdKxNuE0SQh8U2
+         ePKAsWaV8LIc/APMbAc0NnFdJYHXrnU7tBWc6Z4XMKWyWKH2va7KuTDpdt7Sx0NpJQvm
+         r0Q86aOglwRpFE0xIzJ/ACqDXQdThOxri47CpB5/SVknnTxlAoo+UI4OYYPyza4tJfPu
+         YdQUkODDjasi/8Fy0Y5ro9QjCfJLiwuO53ALLJOCX4KMm9/8arUOtjldh7GgSd65BCbX
+         7hLog3H8JOxki/jVzJjpGyi5oA6z7E7bo4CrusRmFzxC+jxTNt1G9RJ0KmDNxho2D0ag
+         AHIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=9KDK93xOdeufRCmEhSK0GjQCWTBjpgAHAJSHZXq4puQ=;
+        b=rfGVpfXyBpUPFvOzCcN/B3wttvqX+COg8enQqKVfEJPY/ldHWiar0PZn6UJZfsR0Rz
+         cwAGrlYlhDVv0kFJmCRybWgMMRMHDU5ro8hPEjiiiS5miEh4+rACrmMrDNsdTuu7t8JW
+         UeKPNl0oW3BcRqllpPe6e3v/yiPb4yKhhRCmfeXb1a9ytm1RIKeezLz0JjqmrVDkIcw/
+         gcMmW5y9NtsO7oLhkTY3RMOAxMEsh1s/SDmuu2ZgdVCdEoCvPaKvzvk/8oSaz/Z3JJrZ
+         0EKh297ZfxyubebH0QozSkTV9PG7F4MNE7iIhJoP4NXsU7cofT9Y0bygVyBDuoivCav/
+         yQ/g==
+X-Gm-Message-State: ANhLgQ0mCGK/Qyecp+wkjAcfiwFrOINen3HJqJ4NZyZiFK/H1JEHq25s
+        BfIjmB1qe4MmXBszcQhREEemaz16+Uk=
+X-Google-Smtp-Source: ADFU+vvRQHW2lXLJcmgsizYu5w+t1J9YJuCk2TZLg/LB/5k79GzuGYqJvgPbawJ4BxQOlScdhcU3hQ==
+X-Received: by 2002:a62:fb06:: with SMTP id x6mr21720930pfm.149.1584930692142;
+        Sun, 22 Mar 2020 19:31:32 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a127sm11701803pfa.111.2020.03.22.19.31.30
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 22 Mar 2020 19:31:31 -0700 (PDT)
+Message-ID: <5e781f83.1c69fb81.7a7c7.ca6a@mx.google.com>
+Date:   Sun, 22 Mar 2020 19:31:31 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/y432T03lLx=.CYyCQcKskh5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc6-370-ga32dcb4acc60
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 277 boots: 5 failed,
+ 262 passed with 4 offline, 6 untried/unknown (v5.6-rc6-370-ga32dcb4acc60)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/y432T03lLx=.CYyCQcKskh5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 277 boots: 5 failed, 262 passed with 4 offline, 6 =
+untried/unknown (v5.6-rc6-370-ga32dcb4acc60)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc6-370-ga32dcb4acc60/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc6-370-ga32dcb4acc60/
 
-Today's linux-next merge of the drm tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc6-370-ga32dcb4acc60
+Git Commit: a32dcb4acc60dc98badb734775b191d6d76f4b06
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 104 unique boards, 23 SoC families, 30 builds out of 216
 
-  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+Boot Regressions Detected:
 
-between commit:
+arm:
 
-  eb916a5a93a6 ("drm/amd/display: Fix pageflip event race condition for DCN=
-.")
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: v5.6-rc6-295-g996cfaad=
+8d71)
 
-from Linus' tree and commit:
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 37 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+          sun4i-a10-olinuxino-lime:
+              lab-baylibre: new failure (last pass: v5.6-rc6-295-g996cfaad8=
+d71)
 
-  7f2be468a855 ("drm/amdgpu: Stop using the DRIVER debugging flag for vblan=
-k debugging messages")
+arm64:
 
-from the drm tree.
+    defconfig:
+        gcc-8:
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: v5.6-rc6-295-g996cfaad8=
+d71)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-295-g9=
+96cfaad8d71)
 
---=20
-Cheers,
-Stephen Rothwell
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-295-g9=
+96cfaad8d71)
 
-diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 6240259b3a93,a4256780e70e..000000000000
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@@ -522,9 -524,8 +524,9 @@@ static void dm_dcn_crtc_high_irq(void *
- =20
-  	acrtc_state =3D to_dm_crtc_state(acrtc->base.state);
- =20
-- 	DRM_DEBUG_DRIVER("crtc:%d, vupdate-vrr:%d, planes:%d\n", acrtc->crtc_id,
-- 			 amdgpu_dm_vrr_active(acrtc_state),
-- 			 acrtc_state->active_planes);
- -	DRM_DEBUG_VBL("crtc:%d, vupdate-vrr:%d\n", acrtc->crtc_id,
- -		      amdgpu_dm_vrr_active(acrtc_state));
-++	DRM_DEBUG_VBL("crtc:%d, vupdate-vrr:%d, planes:%d\n", acrtc->crtc_id,
-++		      amdgpu_dm_vrr_active(acrtc_state),
-++		      acrtc_state->active_planes);
- =20
-  	amdgpu_dm_crtc_handle_crc_irq(&acrtc->base);
-  	drm_crtc_handle_vblank(&acrtc->base);
+Boot Failures Detected:
 
---Sig_/y432T03lLx=.CYyCQcKskh5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
 
------BEGIN PGP SIGNATURE-----
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl54B8AACgkQAVBC80lX
-0Gz4sQf8DK64MsvR28Pg6iyjefl0TmxbVajUlIjjkVlKKMFJKNQCC+H3zFFNfrRe
-ipkPPn0nA/2E/YLUID6lShntJ+4yGYutZFcGmWExj4JoMPANG97u/JdnCpGm2v5G
-87V96IbRNcYphchXLfyRXhz1rUKbUIk30DjQwPkdU+k+WwksVr+uXB20Li0TqOK2
-jgkKlv0JvRHI/sMrjmH4339Sw3OPF53WpanyA9xLW9yDyQNK6pkkDsMRSCkcI5Vm
-pTnEEEoNnmPY+uCxQXd0orB8n3PE1cz3+/DaEwuTFKdCHH9wsp32A7ICNrOGf5Td
-/cqLMWaDWD70wme7h+LUWS6rosC5aQ==
-=qYsy
------END PGP SIGNATURE-----
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
 
---Sig_/y432T03lLx=.CYyCQcKskh5--
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

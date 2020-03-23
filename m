@@ -2,74 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 807F318F004
-	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 07:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 323F118F006
+	for <lists+linux-next@lfdr.de>; Mon, 23 Mar 2020 07:59:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727334AbgCWG72 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 23 Mar 2020 02:59:28 -0400
-Received: from mga18.intel.com ([134.134.136.126]:32005 "EHLO mga18.intel.com"
+        id S1727164AbgCWG7w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 23 Mar 2020 02:59:52 -0400
+Received: from ozlabs.org ([203.11.71.1]:38041 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727164AbgCWG72 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 23 Mar 2020 02:59:28 -0400
-IronPort-SDR: 6mr2jgrVmXoC+DhfbQj1lUB3/VCHSyZRCF/ZRCpnWUXkCVqvHfnjSgfLiYce31Frl4uAM3jRd7
- /OuxmKG/pmDQ==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Mar 2020 23:59:27 -0700
-IronPort-SDR: cA2lPX0pXEB4WbXpZNzyZ6o003Vj3Hz6tZxc8gwP70Shsc5CrZjpoUQk90wYjym2ikqqEMAwyr
- F65MQg6NEaMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,295,1580803200"; 
-   d="scan'208";a="445703253"
-Received: from rupengwe-mobl1.ccr.corp.intel.com ([10.249.168.143])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Mar 2020 23:59:25 -0700
-Message-ID: <9698a9f2c49e3ca286b946eeb7de3399c406ea5e.camel@intel.com>
-Subject: Re: linux-next: build failure after merge of the thermal tree
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
+        id S1727130AbgCWG7w (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 23 Mar 2020 02:59:52 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48m4xw6NqGz9sQt;
+        Mon, 23 Mar 2020 17:59:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1584946789;
+        bh=4zVZ8n18b5z/arjANnQYCVNjH7d5lumRkPAkbt+RQzk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jgXvOZpYOkQ8iDTqdDNXWuGK+LzfxJqTI0F4GsHlQzmogZTFaPyHPl++GsMM41aYh
+         /PrHdlKU+3EXqqb94cVPvNVcfDKDf1F3Zm3byNPKbpos44pzLNq7SQW3i11ihDT2CM
+         DgZTfKIySKuAYvhh+zM7BraFubvx15mHVc6PQOBqyNSkRVy33PjV4e6saUXIaAkBS+
+         56a22mg0wp/MbTs1ONl7pdauEjZhEJjwlew6UkgT5QnZb+xk3N8vp0z7UZMp2VfU7D
+         qSB8hTTk0zUCaFbG1d4wqZkj9KuydzpmBS2kifZFgGFLmt+lwA6BxzTKeoAwC+Ws24
+         iBiILoZAa7N5Q==
+Date:   Mon, 23 Mar 2020 17:59:46 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marc Zyngier <marc.zyngier@arm.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andres Freund <andres@anarazel.de>
-Date:   Mon, 23 Mar 2020 14:59:24 +0800
-In-Reply-To: <20200323110852.1f08e4f1@canb.auug.org.au>
-References: <20200323110852.1f08e4f1@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.1 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Michal Simek <michal.simek@xilinx.com>,
+        Mubin Sayyed <mubin.usman.sayyed@xilinx.com>
+Subject: linux-next: build failure after merge of the irqchip tree
+Message-ID: <20200323175946.7ad497ea@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ohxYhixbqsgEzYBk7ocR=+3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 2020-03-23 at 11:08 +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the thermal tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> drivers/thermal/intel/intel_pch_thermal.c:306:2: error: expected '}'
-> before '[' token
->   306 |  [board_lwb] = {
->       |  ^
-> drivers/thermal/intel/intel_pch_thermal.c:285:18: note: to match this
-> '{'
->   285 | } board_info[] = {
->       |                  ^
-> 
-> Caused by commit
-> 
->   16cd95bab00f ("thermal: intel_pch_thermal: Add PCI ids for
-> Lewisburg PCH.")
-> 
-> I have used the thermal tree from next-20200320 for today.
-> 
-Bug has been fixed.
-BTW, I think you can remove Eduardo from this loop, because he is not
-working as the thermal maintainer right now.
+--Sig_/ohxYhixbqsgEzYBk7ocR=+3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-thanks,
-rui
+Hi all,
 
+After merging the irqchip tree, today's linux-next build (powerpc
+ppc44x_defconfig) failed like this:
+
+drivers/irqchip/irq-xilinx-intc.c: In function 'xil_intc_handle_irq':
+drivers/irqchip/irq-xilinx-intc.c:176:10: error: implicit declaration of fu=
+nction 'handle_domain_irq'; did you mean 'handle_bad_irq'? [-Werror=3Dimpli=
+cit-function-declaration]
+  176 |    ret =3D handle_domain_irq(irqc->root_domain, hwirq, regs);
+      |          ^~~~~~~~~~~~~~~~~
+      |          handle_bad_irq
+drivers/irqchip/irq-xilinx-intc.c: In function 'xilinx_intc_of_init':
+drivers/irqchip/irq-xilinx-intc.c:253:3: error: implicit declaration of fun=
+ction 'set_handle_irq'; did you mean 'generic_handle_irq'? [-Werror=3Dimpli=
+cit-function-declaration]
+  253 |   set_handle_irq(xil_intc_handle_irq);
+      |   ^~~~~~~~~~~~~~
+      |   generic_handle_irq
+
+Caused by commit
+
+  a0789993bf82 ("irqchip/xilinx: Enable generic irq multi handler")
+
+I have reverted that commit (and commit
+
+  9c2d4f525c00 ("irqchip/xilinx: Do not call irq_set_default_host()")
+
+that conflicted with the other revert).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ohxYhixbqsgEzYBk7ocR=+3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl54XmIACgkQAVBC80lX
+0Gwhgwf+Ov/dsYwLKygiz6exKxfyD1f2MpdvOBDZBjxZh+t608n60XxvsLBC21jY
+rdXY0uLYrEBZcNYQKMGGrecgvkgiOULJ6DPMDqL9a/dpL982k75HV9xw4B6oKN8O
+Dw2wLH+wYNYB2X797QF4PJ+X2zBM0i4+3pme5dchWPndLlf5Y8Ie0tvRydZhPwhB
+9J5XVr1mCAEhae2bW3nA/VMeB5ncCad+IqNJzuh4tZQUv6uLKBsMS3cOBXk3GF7s
+3s9U/r4wrBhO/OLGeNgQWDeRd+wYGyQPjWJXD7yyPd4QHJeDHZhhqpfFWIKz4+Un
+4veXEZQuPbZPKM1QlkEhtd4x1DXALQ==
+=kq9P
+-----END PGP SIGNATURE-----
+
+--Sig_/ohxYhixbqsgEzYBk7ocR=+3--

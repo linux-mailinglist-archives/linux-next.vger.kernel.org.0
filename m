@@ -2,88 +2,77 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 932B3191B3E
-	for <lists+linux-next@lfdr.de>; Tue, 24 Mar 2020 21:45:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70181191BC6
+	for <lists+linux-next@lfdr.de>; Tue, 24 Mar 2020 22:13:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727061AbgCXUpD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Mar 2020 16:45:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:39799 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726673AbgCXUpD (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 24 Mar 2020 16:45:03 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48n3Cb6Z11z9sP7;
-        Wed, 25 Mar 2020 07:44:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585082701;
-        bh=uxfXdme7kSOo5ScY047l1y4mJDhdqgK2wQe3px6SZRw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=YaAje7XVBnKutLEhBTf4J9DSu2chxI3Q4Cebpn20SfqvKlKEjo07PXPZRb0Qg5aIF
-         WuI/DNCfcxWOUuVs0wCqdKUOeusqwMsVIvK4f1vvO+Si5inHotgFCkJQWKuRXboVxH
-         eIdf8xFXZG9urCCkZpDbiXol9rFK4AckRi5TR6M5+t81M3JAFclpEEceg0nuxp0lWo
-         CxGOLwVT+0u9XoDoPPtSie3/w1TtJM7jvyzXrPIb4Fueu7cvhGhaaEQ/JR0wxueM/P
-         MmbYBXJTdEu1NKDZueBUeLPIOE9oQyBMM4w8Z5dam58ic66/XkCoFuGlG4y+n+kWfB
-         JGt+UfOFloxcw==
-Date:   Wed, 25 Mar 2020 07:44:53 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the tip tree
-Message-ID: <20200325074453.5c1a9faa@canb.auug.org.au>
+        id S1727023AbgCXVNO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Mar 2020 17:13:14 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:33770 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726673AbgCXVNO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Mar 2020 17:13:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=UBXTlfBB5V6oYxQxCHfMAgYy2LlHqpP4L4e/SUdnMD8=; b=OPCVrxwrDknGD1joDQe03rmnNE
+        72LgREK3mBMeamsc7gEiKlBNomk45jzZWIQQvLAt0Q9CgvmBBXJPV2yGTF/4LaBMBOk5TRzED7CJS
+        YLCKvhv7P1UQ/Vwy4ostNG3SrRx4QVwIGh1Z5oWVkgLIxscU4+Nbg7SBlMUSs4SLQoSX+0ba14Cxx
+        xNlgAQxuFxcxPj0aFYdgVp5dAFV4i4/4Maca2y0SilePnJyP6acrX+CJoO22MwcFYpTAXHeJwlce1
+        zyYAlgxGu87puwW0rcbJgZ/xR6/tEb3jEebyW3kqz5CqNZOG0dU//pm7IZ4C/wYP7H1AWRUu5R+0y
+        /tqDdS3A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jGqrC-0005Yd-CA; Tue, 24 Mar 2020 21:13:06 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 35847983502; Tue, 24 Mar 2020 22:13:03 +0100 (CET)
+Date:   Tue, 24 Mar 2020 22:13:03 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        andreyknvl@google.com, aryabinin@virtuozzo.com
+Subject: Re: linux-next: Tree for Mar 20 (objtool warnings)
+Message-ID: <20200324211303.GQ2452@worktop.programming.kicks-ass.net>
+References: <20200320201539.3a3a8640@canb.auug.org.au>
+ <ca0078e2-89b5-09a7-f61e-7f2906900622@infradead.org>
+ <20200324164709.ux4riz7v7uy32nlj@treble>
+ <39035493-9d5b-9da3-10d4-0af5d1cdb32a@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/o1HzDvp8R3YRp29je81zzK5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <39035493-9d5b-9da3-10d4-0af5d1cdb32a@infradead.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/o1HzDvp8R3YRp29je81zzK5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 24, 2020 at 10:53:05AM -0700, Randy Dunlap wrote:
+> >> kernel/kcov.o: warning: objtool: __sanitizer_cov_trace_pc()+0x89: call to __ubsan_handle_load_invalid_value() with UACCESS enabled
+> >>
+> 
+> config-r1510 is attached.
+> and kcov.o is attached.
 
-Hi all,
+I'm thinking this is because of commit:
 
-In commit
+  0d6958a70483 kcov: collect coverage from interrupts
 
-  d8a738689794 ("x86/optprobe: Fix OPTPROBE vs UACCESS")
+Which has:
 
-Fixes tag
+@@ -1230,6 +1230,9 @@ struct task_struct {
 
-  Fixes: ca0bbc70f147 ("sched/x86_64: Don't save flags on context switch")
++       bool                            kcov_softirq;
 
-has these problem(s):
+@@ -145,9 +157,10 @@ static notrace bool check_kcov_mode(enum kcov_mode needed_mode, struct task_stru
 
-  - Target SHA1 does not exist
++       if (!in_task() && !(in_serving_softirq() && t->kcov_softirq))
 
-Maybe you meant
+And this __ubsan_handle_load_invalid_value() is verifying a bool is 0,1.
 
-Fixes: 64604d54d311 ("sched/x86_64: Don't save flags on context switch")
+Another reason to hate on _Bool I suppose...
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/o1HzDvp8R3YRp29je81zzK5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl56cUUACgkQAVBC80lX
-0Gxj2QgApKY/mZqHeLD6ERGFWppRl3HP6T9OFrHPwmFw57vBPmM3G1fw/fek4kwv
-3M93KE29KX4zDtGn0Lku2QL+MBlern+hCA2I50T9rfWvqjUFOw7XcWYfmKpXiNdS
-69NbsWh4OToshPt7FWvfGJsj5GTlQsEh0BhPTXzOFDi9XgZvfxtWz5DotD5jO/3n
-9bW08Q2sjoBPS9yTwagMVfmjvFNxyAvRFS8mCvqZRZ3hC54iWPeNlnYStRbh32pQ
-cXChV7MlKF5Ardn83m/cYVr8A1BHgWQCdGwhv6BC1G9QCiB+GxgE6ee95BkAzIhp
-PSWXXPIhRWSLiaiC/RImcoyWwYeckA==
-=+X7r
------END PGP SIGNATURE-----
-
---Sig_/o1HzDvp8R3YRp29je81zzK5--
+Let me see what to do about that... :/

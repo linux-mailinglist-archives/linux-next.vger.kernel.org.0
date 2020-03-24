@@ -2,115 +2,190 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9124F1918B9
-	for <lists+linux-next@lfdr.de>; Tue, 24 Mar 2020 19:18:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 305A5191974
+	for <lists+linux-next@lfdr.de>; Tue, 24 Mar 2020 19:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727333AbgCXSSK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Mar 2020 14:18:10 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37882 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727310AbgCXSSK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Mar 2020 14:18:10 -0400
-Received: by mail-pl1-f193.google.com with SMTP id x1so3714945plm.4
-        for <linux-next@vger.kernel.org>; Tue, 24 Mar 2020 11:18:09 -0700 (PDT)
+        id S1727382AbgCXSuv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Mar 2020 14:50:51 -0400
+Received: from mail-pl1-f174.google.com ([209.85.214.174]:35276 "EHLO
+        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726879AbgCXSuv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Mar 2020 14:50:51 -0400
+Received: by mail-pl1-f174.google.com with SMTP id g6so7792484plt.2
+        for <linux-next@vger.kernel.org>; Tue, 24 Mar 2020 11:50:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=3sq9pHcqHya5zue49kGUODENoCs0RsvxG0c3HBz2PjI=;
-        b=B9NDjm09JdWYdq785zCJY1ixxoSeYv/L3VKvu6pp9N1R8gQKphIIWsTFh6+eUTcQ1I
-         cYoh9t++OOoLfXFnxVND7MZ+d9tAe5/WX7j2cyLi9vQcQCKFPnS4sPorZOzb9fKWSl8s
-         VrWYuLTsac7M2DXCgpMJsZ7RK+ynK8ba7I9Vs=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=tU7mnuXsCuzwqHFl/XTF3FYiDsxTibuiGDM+khtLhDc=;
+        b=R4Qu3CJN6InYOTCcJKPG+PCWqqMlZNW47UJtuydCWSVBZOp9EXfrl9Em5qVySIqGP8
+         GVNohV7wqMyoGrO0LACXs3tiFat+RLz1hwYaXfmvj6IUKwD628Anr8avTM4zJMs4OIyf
+         ujg3tzGnHdvsFOLr6O5BfQvNlN199VZBU+GHrKLWBQkvjmllrvb5Vws/2VE92/kXENIs
+         ujpn1h2fsh7vwfyPPgejyE4p3oG7gHVL4amc+XlggJ1hqQmlLx6J5cyFYQDkY7rFjavl
+         4Z6Yh7hqTp/E+9tLBhRiJ46WCnqZAcT+jbHMypkCP0YgrexQs+euexjjZ0w/JyhdxFXv
+         nY8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=3sq9pHcqHya5zue49kGUODENoCs0RsvxG0c3HBz2PjI=;
-        b=dvWun/Q0mLx196hwYW4nwCCuQ/6o3ZDnEPkPRnYA+FzijuCZAklUR+kRKwMV9t2l01
-         LP2XNLyruGjFT3h02by+0QzpAOXfO/D8dFlNjmKAL7kEe02W19Dkn44Q4DBabk4DqFqP
-         jvyug20vlP+EKlfneKkwZFzOM6aC5+kWVlbdBZOL7GxnTeqK4Y2FtoHABV2MWnD/4UNi
-         M69bkpzT/7KChyXfK+/xhq3JdXptwYmQ+0SscZux6HsRqQBOFVvNnBprfqaaC22IUZTZ
-         ZYAvpbTpdfczA9jdDPa9uIdla+WWtbZSiAW5J8N1Rw3hNaI2WotXujVcZ+qyp3ihp0Qx
-         188Q==
-X-Gm-Message-State: ANhLgQ0QtnargDkIyl4LLya+igE2kUkzG1FBxXpeHIQZYZJep7BJb0/0
-        USw0PCZSFlgkr0PbKEnfkwDKCQ==
-X-Google-Smtp-Source: ADFU+vsEdFjUwKZMsDQJKL6uR+OwPrlMyVYGwn2fM3M+jtHNpKg5OMxuVN1yJ+wVohL9JFtMAz4L+w==
-X-Received: by 2002:a17:902:8bc8:: with SMTP id r8mr27128809plo.48.1585073889258;
-        Tue, 24 Mar 2020 11:18:09 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 135sm17293101pfu.207.2020.03.24.11.18.08
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=tU7mnuXsCuzwqHFl/XTF3FYiDsxTibuiGDM+khtLhDc=;
+        b=IqrJFgR0eMBWbWYJ6MMESScfsO9Xa02h5lHuM5wq42o5OUkqNpVM1PGemxgu+01b1Q
+         /vrPCKuaq+OL+UuHyNfvlWvf7CO4hi0pmB7kNOoAkLJNh+2CStDJC+uo18zK1dqYklKy
+         CksQqThX31wHvWPFvQo7UsgcU9+KowgmTCbl3sjD5IB6nMEP7omqYYYN0Y8g+RDlKYon
+         q/0Vv+8+Ql7QnobT8a+CnWHamJOYti/m7AkxOQzlvJHKJz3sYCu+JlkMBFsGd5r1M2Ty
+         UY0dBatnkWBFnXeRzodGWXtHT8cndYxnxZzU0bO3KyIF8o2hF0HFZP9BLWTKjYx21U8O
+         L1aQ==
+X-Gm-Message-State: ANhLgQ0WARre/MIFjULzsu9v/E9qjKrH+erfBbaArMyYHhSklb5MBg3i
+        afx2+1pWHSum8m6DcyEzqKihppbG5Jg=
+X-Google-Smtp-Source: ADFU+vvutKuIRp+u/kSA40Am4XzogSRj9LvRSa0tBw5eVsRoYZmvRqKHY7BNoioLfCGp42nvkXhNXA==
+X-Received: by 2002:a17:90a:d205:: with SMTP id o5mr6924620pju.46.1585075848619;
+        Tue, 24 Mar 2020 11:50:48 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c7sm11431927pgg.11.2020.03.24.11.50.47
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Mar 2020 11:18:08 -0700 (PDT)
-Date:   Tue, 24 Mar 2020 11:18:07 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Mar 18 (objtool)
-Message-ID: <202003241105.4707F983@keescook>
-References: <d7dc5b4a-9a7e-ccf7-e00e-2e7f0e79a9bc@infradead.org>
- <20200318182352.2dgwwl4ugbwndi4x@treble>
- <20200318200542.GK20730@hirez.programming.kicks-ass.net>
- <20200319173101.wufpymi7obhqgoqd@treble>
- <20200319173326.oj4qs24x4ly5lrgt@treble>
- <20200319174028.azzaisoj5gbss7zk@treble>
- <20200319174550.4wpx4j357nw67nzz@treble>
- <20200320082613.GA20696@hirez.programming.kicks-ass.net>
- <202003201131.9B688BC@keescook>
- <20200324164433.qusyu5h7ykx3f2bu@treble>
+        Tue, 24 Mar 2020 11:50:47 -0700 (PDT)
+Message-ID: <5e7a5687.1c69fb81.6affa.d493@mx.google.com>
+Date:   Tue, 24 Mar 2020 11:50:47 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200324164433.qusyu5h7ykx3f2bu@treble>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.6-rc7-236-gaf338e2cb004
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 279 boots: 7 failed,
+ 261 passed with 5 offline, 6 untried/unknown (v5.6-rc7-236-gaf338e2cb004)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 24, 2020 at 11:44:33AM -0500, Josh Poimboeuf wrote:
-> On Fri, Mar 20, 2020 at 11:35:37AM -0700, Kees Cook wrote:
-> > On Fri, Mar 20, 2020 at 09:26:13AM +0100, Peter Zijlstra wrote:
-> > > On Thu, Mar 19, 2020 at 12:45:50PM -0500, Josh Poimboeuf wrote:
-> > > > > On Thu, Mar 19, 2020 at 12:33:31PM -0500, Josh Poimboeuf wrote:
-> > > 
-> > > > > > Actually I suspect it's the __builtin_unreachable() annotation which is
-> > > > > > making UBSAN add the __builtin_trap()...  because I don't see any double
-> > > > > > UD2s for WARNs.
-> > > 
-> > > > Actually, removing __builtin_unreachable() *does* make the extra UD2 go
-> > > > away -- I forgot I had some silly debug code.
-> > > 
-> > > LOL, check this:
-> > > 
-> > > "Built-in Function: void __builtin_unreachable (void)
-> > > 
-> > >     If control flow reaches the point of the __builtin_unreachable, the
-> > >     program is undefined. It is useful in situations where the compiler
-> > >     cannot deduce the unreachability of the code. "
-> > > 
-> > > Which, I bet, is what makes UBSAN insert that __builtin_trap().
-> > > 
-> > > What a friggin mess :/
-> > 
-> > What I'd like is to be able to specify to UBSAN what function to call
-> > for the trap. I'd prefer to specify a well-defined exception handler,
-> > but at present, UBSAN just inserts __builtin_trap().
-> > 
-> > Can't objtool be told to ignore a ud2 that lacks an execution path to it?
-> 
-> It can ignore unreachable UD2s, if we think that's the right fix.
-> 
-> I was hoping we could find a way to get rid of the double UD2s, but I
-> couldn't figure out a way to do that when I looked at it last week.
+next/pending-fixes boot: 279 boots: 7 failed, 261 passed with 5 offline, 6 =
+untried/unknown (v5.6-rc7-236-gaf338e2cb004)
 
-As far as I could tell, this needs patches to the UBSAN support in gcc
-and clang. I have opened bugs for each:
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc7-236-gaf338e2cb004/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc7-236-gaf338e2cb004/
 
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94307
-https://bugs.llvm.org/show_bug.cgi?id=45295
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc7-236-gaf338e2cb004
+Git Commit: af338e2cb004a98ef30ed65a5463b373d4478c48
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 106 unique boards, 24 SoC families, 30 builds out of 216
 
--- 
-Kees Cook
+Boot Regressions Detected:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 1 day (last pass: v5.6-rc6-295-g=
+996cfaad8d71 - first fail: v5.6-rc6-370-ga32dcb4acc60)
+
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 39 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-rc6-370-ga32dcb4a=
+cc60)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-370-ga=
+32dcb4acc60)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: v5.6-rc6-370-ga32dcb4ac=
+c60)
+          meson-gxm-q200:
+              lab-baylibre: failing since 1 day (last pass: v5.6-rc6-295-g9=
+96cfaad8d71 - first fail: v5.6-rc6-370-ga32dcb4acc60)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-370-ga=
+32dcb4acc60)
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: v5.6-rc6-370-ga32dcb4ac=
+c60)
+          meson-gxl-s905d-p230:
+              lab-baylibre: new failure (last pass: v5.6-rc6-370-ga32dcb4ac=
+c60)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: v5.6-rc6-370-ga32dcb4acc6=
+0)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc6-370-ga=
+32dcb4acc60)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+            meson-gxm-q200: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s805x-p241: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

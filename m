@@ -2,109 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB33B193286
-	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 22:20:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E221932AE
+	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 22:31:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727356AbgCYVUw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Mar 2020 17:20:52 -0400
-Received: from mail.kernel.org ([198.145.29.99]:58080 "EHLO mail.kernel.org"
+        id S1727376AbgCYVbk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Mar 2020 17:31:40 -0400
+Received: from mail.kernel.org ([198.145.29.99]:32970 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727351AbgCYVUv (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 25 Mar 2020 17:20:51 -0400
-Received: from localhost (mobile-166-175-186-165.mycingular.net [166.175.186.165])
+        id S1727374AbgCYVbi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 25 Mar 2020 17:31:38 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 81B2C20719;
-        Wed, 25 Mar 2020 21:20:50 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id 9B61C2070A;
+        Wed, 25 Mar 2020 21:31:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1585171250;
-        bh=5lTuaENgwe+jO4ZXbV3h/ksO3A+z4mLrxl48bAkXc/8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UuS66/kG5mkaUy0bO6ayqwJMAo9AR2uq3vqcnjv8Y+HgcqJM4627esOHHzOuwCvZ1
-         Gf3x8hT6p29vCTnWTLlx0FDdUrKAXhRcf3RDzONzKo46fRpejoJXscwJ9VP04FN0z1
-         ZVh/jsQVS2DqReiuMzEacuwL7B+3o2RJEjauJpa8=
-Date:   Wed, 25 Mar 2020 16:20:48 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        linux-pci <linux-pci@vger.kernel.org>
-Subject: Re: mmotm 2020-03-23-21-29 uploaded
- (pci/controller/dwc/pcie-tegra194.c)
-Message-ID: <20200325212048.GA72586@google.com>
+        s=default; t=1585171897;
+        bh=3+7KQZJ5Nvd1PglU7AEyPr1ORCka77d+dj1qqmwRAsw=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=taDCsXAXa0DN34PtzK/H7wtuMLdFVLQJObxsX5sGYSU8qqa1GZN4G2DQ9OSPdAXi1
+         vrIyhbVKoQWs8b4jgtxSOKqSwep42JFo132xGblmHviyJbyfRPU2W1rhih51XbGWvP
+         uBz8sZ8EcDWa++3NIhBd3Ix5SdjIThsYnhUU7Igc=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 6C04C3520C5D; Wed, 25 Mar 2020 14:31:37 -0700 (PDT)
+Date:   Wed, 25 Mar 2020 14:31:37 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the rcu tree with the tip tree
+Message-ID: <20200325213137.GA19107@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200325140845.5705b515@canb.auug.org.au>
+ <20200325031809.GQ19865@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200325170122.GA29504@red-moon.cambridge.arm.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+In-Reply-To: <20200325031809.GQ19865@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Mar 25, 2020 at 05:01:43PM +0000, Lorenzo Pieralisi wrote:
-> On Wed, Mar 25, 2020 at 08:43:32PM +0530, Vidya Sagar wrote:
-> > On 3/24/2020 9:48 PM, Bjorn Helgaas wrote:
-> > > On Tue, Mar 24, 2020 at 08:16:34AM -0700, Randy Dunlap wrote:
-> > > > On 3/23/20 9:30 PM, akpm@linux-foundation.org wrote:
-> > > > > The mm-of-the-moment snapshot 2020-03-23-21-29 has been uploaded to
-> > > > > 
-> > > > >     http://www.ozlabs.org/~akpm/mmotm/
-> > > > > 
-> > > > > mmotm-readme.txt says
-> > > > > 
-> > > > > README for mm-of-the-moment:
-> > > > > 
-> > > > > http://www.ozlabs.org/~akpm/mmotm/
-> > > > > 
-> > > > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > > > more than once a week.
-> > > > > 
-> > > > > You will need quilt to apply these patches to the latest Linus release (5.x
-> > > > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > > > > http://ozlabs.org/~akpm/mmotm/series
-> > > > 
-> > > > 
-> > > > on x86_64:
-> > > > 
-> > > > ../drivers/pci/controller/dwc/pcie-tegra194.c: In function ‘tegra_pcie_dw_parse_dt’:
-> > > > ../drivers/pci/controller/dwc/pcie-tegra194.c:1160:24: error: implicit declaration of function ‘devm_gpiod_get’; did you mean ‘devm_phy_get’? [-Werror=implicit-function-declaration]
-> > > >    pcie->pex_rst_gpiod = devm_gpiod_get(pcie->dev, "reset", GPIOD_IN);
-> > > >                          ^~~~~~~~~~~~~~
-> > > >                          devm_phy_get
-> > > 
-> > > Thanks a lot for the report!
-> > > 
-> > > This was found on mmotm, but I updated my -next branch with Lorenzo's
-> > > latest pci/endpoint branch (current head 775d9e68f470) and reproduced
-> > > this build failure with the .config you attached.
-> > > 
-> > > I dropped that branch from my -next branch for now and pushed it.
-> > I found that one header file inclusion is missing.
-> > The following patch fixes it.
-> > Also, I wanted to know how can I catch this locally? i.e. How can I
-> > generate the config file attached by Randy locally so that I can get the
-> > source ready without these kind of issues?
-
-Randy attached the config-r1578 file to his initial report.  I saved
-that attachment, then:
-
-  $ git checkout next
-  $ make mrproper
-  $ cp ~/Downloads/config-r1578 .config
-  $ make drivers/pci/controller/
-
-> > Bjorn/Lorenzo, would you be able to apply below change in your trees or
-> > do I need to send a patch for this?
+On Tue, Mar 24, 2020 at 08:18:09PM -0700, Paul E. McKenney wrote:
+> On Wed, Mar 25, 2020 at 02:08:45PM +1100, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the rcu tree got conflicts in:
+> > 
+> >   lib/Kconfig.kcsan
+> >   kernel/kcsan/report.c
+> >   kernel/kcsan/kcsan.h
+> >   kernel/kcsan/debugfs.c
+> >   kernel/kcsan/core.c
+> >   kernel/kcsan/atomic.h
+> >   include/linux/kcsan-checks.h
+> > 
+> > between a series of commits from the tip tree and the same series of
+> > patches (but different commits) in the rcu tre (followed by some more
+> > changes in the rcu tree).
+> > 
+> > I fixed it up (I just used the rcu tree versions of these files) and
+> > can carry the fix as necessary. This is now fixed as far as linux-next
+> > is concerned, but any non trivial conflicts should be mentioned to your
+> > upstream maintainer when your tree is submitted for merging.  You may
+> > also want to consider cooperating with the maintainer of the conflicting
+> > tree to minimise any particularly complex conflicts.
+> > 
+> > Please clean up the rcu tree WRT the tip tree.
 > 
-> Squashed in and re-pushed out pci/endpoint, it should have fixed this
-> issue.
+> Will do, and apologies for the hassle!
 
-I updated my -next branch with this, thanks!
+And done.  The rcu/next branch should now be fully compatible with
+tip/master.
 
-Bjorn
+							Thanx, Paul

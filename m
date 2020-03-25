@@ -2,78 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 526BE1932B7
-	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 22:34:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 541581934AA
+	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 00:34:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727358AbgCYVeL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Mar 2020 17:34:11 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:46708 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726081AbgCYVeL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Mar 2020 17:34:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=5CW2LFSFroNe8X3GnaRxYiUYrl2HMG+IcwPOPQea1Ao=; b=Lkr/Qdffvz/lLb8oqO84rvCguH
-        1yC/g4K8NWh7BWqLVFMtgOFxWKRB8/ukcVcsZp5Ycb59TzvWdBjd6Te7vzuN3OoVjmsIsW1s8tr+a
-        MrwBUT46+cqVPOC6Aylw1LqjCgJTPmdJ/T/jUqmmvMzZjHbqPeeoyHpAJ6KJxFaoJ7EbpayE6+M+Q
-        SwoX9eDW06M+ergFueLKUCgLyokrqaDYc4xFTZ63ZgZn2SEGdIoPHOmrSOKunLTtALRRgltSdH4BF
-        Rvw/GJe2bgyy8+RF2sQHxePFydd6Jj3pMQDrq5B3Lk4IDCyoDT3siPttWNoeVdGyk9IfwSVNDHa4A
-        USlALxBw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jHDf8-0006G3-1X; Wed, 25 Mar 2020 21:34:10 +0000
-Subject: Re: mmotm 2020-03-23-21-29 uploaded
- (pci/controller/dwc/pcie-tegra194.c)
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>, akpm@linux-foundation.org,
-        broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        linux-pci <linux-pci@vger.kernel.org>
-References: <20200325212048.GA72586@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <c1538231-196e-c99e-db48-a802bbab049d@infradead.org>
-Date:   Wed, 25 Mar 2020 14:34:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1727460AbgCYXet (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Mar 2020 19:34:49 -0400
+Received: from ozlabs.org ([203.11.71.1]:52653 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727395AbgCYXet (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 25 Mar 2020 19:34:49 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48nkx264C1z9sPk;
+        Thu, 26 Mar 2020 10:34:46 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585179287;
+        bh=2qT6Jbv2ojF384qMcI/I7l2UauIgXvUDKtuCjeKVD10=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oaUcwdnpxrD71muXG8iojgn9T/KL59Y8KLilYvPr2Ds0r3u/VtwIWRd5ybnC16QRq
+         KZFsC+LoSQq9jOGLbjnsfX3Q3uqreGciRWL3hmk9sBiNxRrm/mzp89XxGk1xvaDGoX
+         nvnih65Z+x5vXd3rFLdNKQVwtgHQGySmVuQMjiQqIlh/AjU0/TCydztiYl9tdNJt+c
+         8zZtJczqsJaAoZv9Gc8rdCOAIShy5Zn4awxkryJ6gxqJCw0hetPpyzIno9TUH02KWU
+         oFCla6Z4MhO1tHKyOzmCobvNHOUPCazOyV3Pzr6Kx3vOxqf9r7tQ66/9MKszQpGQsN
+         HE7R3jtbRIvmA==
+Date:   Thu, 26 Mar 2020 10:34:36 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Israel Rukshin <israelr@mellanox.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>
+Subject: linux-next: Signed-off-by missing for commits in the block tree
+Message-ID: <20200326103436.0fd71727@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200325212048.GA72586@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/kRpAp63FXvKcTDgJpYjl8n1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/25/20 2:20 PM, Bjorn Helgaas wrote:
-> On Wed, Mar 25, 2020 at 05:01:43PM +0000, Lorenzo Pieralisi wrote:
->> On Wed, Mar 25, 2020 at 08:43:32PM +0530, Vidya Sagar wrote:
+--Sig_/kRpAp63FXvKcTDgJpYjl8n1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
->>> Also, I wanted to know how can I catch this locally? i.e. How can I
->>> generate the config file attached by Randy locally so that I can get the
->>> source ready without these kind of issues?
-> 
-> Randy attached the config-r1578 file to his initial report.  I saved
-> that attachment, then:
-> 
->   $ git checkout next
->   $ make mrproper
->   $ cp ~/Downloads/config-r1578 .config
->   $ make drivers/pci/controller/
+Hi all,
 
-Hi Vidya,
+Commits
 
-All I do is run 20 of these on each linux-next and mmotm release:
+  c363f249e7e6 ("nvmet-rdma: allocate RW ctxs according to mdts")
+  ec6d20e16c2d ("nvmet-rdma: Implement get_mdts controller op")
+  02cb00e233ad ("nvmet: Add get_mdts op for controllers")
+  2db24e4a22bc ("nvme-pci: properly print controller address")
+  e2a366a4b0fe ("nvme-pci: slimmer CQ head update")
 
-$ make clean; make randconfig; make all
+are missing a Signed-off-by from their committer.
 
-and see what happens.
+--=20
+Cheers,
+Stephen Rothwell
 
--- 
-~Randy
+--Sig_/kRpAp63FXvKcTDgJpYjl8n1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl576owACgkQAVBC80lX
+0Gzu5gf/cSocBVOgOLbeGy5pP4hnBAhIJZI2U0/kKZiPthXod2eyYPij2UmwHowe
+AK6iqm/xLhz+dcy9WgPXJDRPNEE/i+7x0YndOiRpbkJMfByuy+yBN2i+Qb7tM5jM
+oDjnFX/7JR50ty2rUjJyKTBmqQZGuYYm/KwOOYiCXraoYU6+VEBaM9yeGf+GVJY3
++SBy7vASK51QJcHlbSUxKcn85IG8U5njgLHxFLM1WlDNuEoY7wqHXZHIacEjP6Bo
+CY3Ef4fEX7KZpO2LPcqmQdczZpVjDyMiMmRN5gFfN13tRmab2xS/0DmiwA53qubP
+gio96wMgVwt1jXMhFrf8B2jyL35hYw==
+=kX13
+-----END PGP SIGNATURE-----
+
+--Sig_/kRpAp63FXvKcTDgJpYjl8n1--

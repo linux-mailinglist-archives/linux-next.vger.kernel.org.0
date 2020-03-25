@@ -2,100 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 46E74191F18
-	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 03:33:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 405DC191F8C
+	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 04:08:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727348AbgCYCdA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Mar 2020 22:33:00 -0400
-Received: from ozlabs.org ([203.11.71.1]:56503 "EHLO ozlabs.org"
+        id S1727275AbgCYDIu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Mar 2020 23:08:50 -0400
+Received: from ozlabs.org ([203.11.71.1]:34145 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727305AbgCYCdA (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 24 Mar 2020 22:33:00 -0400
+        id S1727253AbgCYDIu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 24 Mar 2020 23:08:50 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48nBx36WTPz9sRY;
-        Wed, 25 Mar 2020 13:32:55 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48nCkS06Kmz9sR4;
+        Wed, 25 Mar 2020 14:08:47 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585103577;
-        bh=x6e3RNDMdZMU5+krqi2U/HIx3JNvnOWo1D/VYW8jf4Y=;
+        s=201702; t=1585105728;
+        bh=84M3aCyHg7ihqTzCAccbry4vzVPbTZx649eckN6ELtw=;
         h=Date:From:To:Cc:Subject:From;
-        b=Fry/d1eUyZI4SF6LJbPtYEZnM6pfhc1UjpV3+04jZAvyDwVUMt1R37ln2DAYV1CrH
-         rR+GVnPJjvHEf66cOs1/ntVaStfyb9a3YaY11QE0jHJxOXDBlRNXk34WOb+Q8TdMD6
-         jimMMayQn+FALwbAH9uVmJWHordPulaAenPEpb7/ZdL6dFAFFa2wX5puKQ3IY3AV2l
-         555Vi88VeeeUos8GpXpQQE4GP9MJHOJEQFYa5qJIKsDl7FuJvxh+vl4HcZqr0ca72K
-         htYOKLEUAETPX87JtKl1P/LNMhG0PhjI4197aEUdGHx10bVy7nRqQIMZNSiDdNb+hD
-         J2SxiuJxODKqQ==
-Date:   Wed, 25 Mar 2020 13:32:40 +1100
+        b=KKwLcLpuLampgN4EV3dEJKp7g6pJK8FP3eP1XLXi3lszfO9XBfV30q7hqyOscjRnk
+         PIMNpfcHNbfXpwsT39YTJll77y4V3kxuIkhtUsfWK0uzLCbJemtcPcVVaD0c3MbtMb
+         1cR4CWmkpLmpUyAi+UpXsbIEJ4WbBDnJo9cSCNyGw+4ohgSUmMICDlAL3Z7vJY3VD+
+         iW6b2+hHoHAZsMIiICuHoKQXX6sH7oir8TXB9QIEqfJivoyDN5X3KzEQM7IP/KDqMX
+         8/o8RQxIOI/0d5Ih4OJxi+gYtpTm2mNjL9J///NlJ2af1O5JWHYBNHbFVjuLKN9EZJ
+         ON8py7YcU7hBA==
+Date:   Wed, 25 Mar 2020 14:08:45 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Eduardo Valentin <edubezval@gmail.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Willy Wolff <willy.mh.wolff.ml@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: linux-next: manual merge of the tip tree with the thermal tree
-Message-ID: <20200325133240.50370c2f@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the rcu tree with the tip tree
+Message-ID: <20200325140845.5705b515@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/EKy9RTzTWh=MHRhsOjjX/lZ";
+Content-Type: multipart/signed; boundary="Sig_/wp3IF.h/ib6h6UGxkoT=UYF";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/EKy9RTzTWh=MHRhsOjjX/lZ
+--Sig_/wp3IF.h/ib6h6UGxkoT=UYF
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the rcu tree got conflicts in:
 
-  drivers/thermal/cpufreq_cooling.c
+  lib/Kconfig.kcsan
+  kernel/kcsan/report.c
+  kernel/kcsan/kcsan.h
+  kernel/kcsan/debugfs.c
+  kernel/kcsan/core.c
+  kernel/kcsan/atomic.h
+  include/linux/kcsan-checks.h
 
-between commit:
+between a series of commits from the tip tree and the same series of
+patches (but different commits) in the rcu tre (followed by some more
+changes in the rcu tree).
 
-  ff44f672d741 ("thermal/drivers/cpufreq_cooling: Fix return of cpufreq_set=
-_cur_state")
+I fixed it up (I just used the rcu tree versions of these files) and
+can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
 
-from the thermal tree and commit:
-
-  f12e4f66ab6a ("thermal/cpu-cooling: Update thermal pressure in case of a =
-maximum frequency capping")
-
-from the tip tree.
-
-I fixed it up (the latter seems to include the former, so I just used
-the latter) and can carry the fix as necessary. This is now fixed as
-far as linux-next is concerned, but any non trivial conflicts should be
-mentioned to your upstream maintainer when your tree is submitted for
-merging.  You may also want to consider cooperating with the maintainer
-of the conflicting tree to minimise any particularly complex conflicts.
+Please clean up the rcu tree WRT the tip tree.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/EKy9RTzTWh=MHRhsOjjX/lZ
+--Sig_/wp3IF.h/ib6h6UGxkoT=UYF
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl56wsgACgkQAVBC80lX
-0GxC2gf/b50X+3RlWUAq4IOpBu7mZuzgA8tUvHZz0yLjRXcmOzlwU9U8MhrVPO6t
-j69NOHVqerF/CRix5QVphgCOYKaCmg3UfjFkqNuq/tX8nTOj1IF/oJjEfhhWyEty
-wAueuUIBBcATWt+LuJA2rCGGRHJMbJRptagn+jMQWTcTGe2TTuYQYKnhvMulfi9z
-YK9ENXBxZ8FxSKqAH2ckJ7urD/9jiRL4dB043XeSPfOcCQq1tfir7PC7iAPmHQum
-SfdIqQ20qG/HyBPxJ4Rw7D+pNJSZOz8piLge/8EqVw4Yz8FYgQNlarK36972suQ6
-rLc+MAxRZDPRW7DpIR7zpSEYYzhmpg==
-=Khic
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl56yz0ACgkQAVBC80lX
+0GwV8gf9H9on3YVlkqf4Brvi8lDNPvuz4LoWpeQHixe7Ux37yLhOBhM2xupfJzKw
+C0VgomwWhCZMWUh8AuIMPb9usOrulbJ8SqkvZ8NB3guWc6M3XU8quUW2ORb9v7M/
+CxoulNvJmXGRp5q8+qAgZkSSg9svJkYfYSiDOCdbOgjoNqo0tAuCR3x6TQNk1jre
+ZFLM21p2rS53TqjMemK+6jC3zKprkkyBrFz0+MFuVadttIFoYTclomSOSrgLsIkS
+GLp8gcMzDyLbRStFa2GUZxd3GUDCntpbczwsTouxjUIX1q3R6/7LB9kWbOOPkMiS
+kwh64vJRC+WsKRpY1e1b3FnaRhPpgw==
+=zyl7
 -----END PGP SIGNATURE-----
 
---Sig_/EKy9RTzTWh=MHRhsOjjX/lZ--
+--Sig_/wp3IF.h/ib6h6UGxkoT=UYF--

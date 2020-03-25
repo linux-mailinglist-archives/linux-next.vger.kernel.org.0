@@ -2,108 +2,196 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A01D191E39
-	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 01:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC528191E88
+	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 02:19:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727199AbgCYAkX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 24 Mar 2020 20:40:23 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53419 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727099AbgCYAkX (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 24 Mar 2020 20:40:23 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48n8R80zKKz9sPk;
-        Wed, 25 Mar 2020 11:40:19 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585096820;
-        bh=Bai3sk8CLodeWGRu1CYGl+WPcRwjBXEwTh1ZqVH0/F0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SZuiJWZjueCoU/j2ge/QJZn5TO8/hbxrbvdGMY0tdUQznTjEXROCYx90KhZvK2r7S
-         AZUcYE3j69ONyJTPgm9k8VBQy+GRwJZOsS/n4xnyoeQR2YsMa/369Yw7+zT1pGktLq
-         cRbYBsWkQMwALGn+8J8xmqVFff5+8zUqedVzBK/W0eJBuLkKE+hvI27U2Uix83qAq/
-         bOVKLD2xjNYjAYsjBaujQaAT54kSwVI77/lzCNRG1nERhmv+8IL56VwN81LpHb6XW7
-         8q0sJ8JCVqDovfkLeLMOQLU4r+jIZIu3Dk0nQ/dTo9W6AVvRIyPJ8MWvHslbQMRlCL
-         +WJ1WbwJLx8eA==
-Date:   Wed, 25 Mar 2020 11:40:16 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Willem de Bruijn <willemb@google.com>,
-        Era Mayflower <mayflowerera@gmail.com>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200325114016.156768f2@canb.auug.org.au>
+        id S1727212AbgCYBTS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 24 Mar 2020 21:19:18 -0400
+Received: from mail-pl1-f175.google.com ([209.85.214.175]:45628 "EHLO
+        mail-pl1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727102AbgCYBTS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 24 Mar 2020 21:19:18 -0400
+Received: by mail-pl1-f175.google.com with SMTP id b9so133081pls.12
+        for <linux-next@vger.kernel.org>; Tue, 24 Mar 2020 18:19:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=3dtTC8+iZdjqxqy0sblaPakrFz1RxZMERSy1J/csk70=;
+        b=mu9SRN/9PJZnl0/w3XWF5nCO/MTGOzuLP1qqBpfIZnKwBvoe1B3u/XP78Zu33Urv4b
+         aMfCc9a9U3pIgxqIq22/T7F4YMwu+lcz3hm2s6VYSjydTFrN0WAovkdaqMjpQDylTOMy
+         FqlPddWKiLwMCkviNwiKHLncMlKykiflHzUUZdB2M1wWuhMiO6kII0WBUFFWHXsl17SM
+         zQT5bxa+wP4GgXJeMSqyhmMAqjCb6VXUcgVNndxHDePSncSOak+wU57WxEUWHANWLPdd
+         Txv2TGxfJyE5NaXQaUltMQl/9ID/fFEyCrhrVUTkktj+PGwPXKCMTaxRR9RAebPYXkHK
+         KDTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=3dtTC8+iZdjqxqy0sblaPakrFz1RxZMERSy1J/csk70=;
+        b=dOdoDJqNON62m+fHVHU7cgA7GRNLVVJqGoSCh/Ju734BXOzgqr6rW/F3ufperH+y0T
+         nAg4+GuP5OZPj6lU1k8Gn3rOR+0MN+Q9QYIC6KTOpIkyojYPTa3wRfF9e9dpzx6WBUE/
+         8AvzqwTVnW3Iy2n9B5RAABfc/ArfBVRD3LmRcfwNvWvU8INXhn4veJ259pD52tTRzX7s
+         2eBs7Vgx76N/phFcUKEm2N9wEdMOR1tuZn1NvDlnoPNndadI9+000bY8znHvkG4UhY/B
+         yWIqDCSujBuRDb/Ac2uFMChMiakc2G3xi/X9dqp/yrDNY4S5+1ZUxv1ZCGCj4sUE+MzK
+         vqXQ==
+X-Gm-Message-State: ANhLgQ1YYrghw7g+/aAmDz+Er5tOnxMfZXGxjn0Z+SY3Ab8pRIr3l8jG
+        sntt+wEqJP1paOppxO0NCsai/Hg43hk=
+X-Google-Smtp-Source: ADFU+vtf6iIQZRslk3xNe3anBEVPEmnVYZO+l8xE0cXD2yTbIEAf8PQjG+bSS2ZEV+f3Fn8S8SyQMA==
+X-Received: by 2002:a17:902:341:: with SMTP id 59mr842221pld.29.1585099156759;
+        Tue, 24 Mar 2020 18:19:16 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c1sm3347464pje.24.2020.03.24.18.19.15
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Mar 2020 18:19:16 -0700 (PDT)
+Message-ID: <5e7ab194.1c69fb81.682fb.e7fa@mx.google.com>
+Date:   Tue, 24 Mar 2020 18:19:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/sv3AX7jQUXkgO=e5bapi3NH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200324
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 278 boots: 8 failed, 259 passed with 4 offline,
+ 7 untried/unknown (next-20200324)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/sv3AX7jQUXkgO=e5bapi3NH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 278 boots: 8 failed, 259 passed with 4 offline, 7 untried=
+/unknown (next-20200324)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200324/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200324/
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Tree: next
+Branch: master
+Git Describe: next-20200324
+Git Commit: f15e8108f6251f3480d572bca5729c1b849edfb3
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 106 unique boards, 25 SoC families, 30 builds out of 329
 
-  drivers/net/macsec.c
+Boot Regressions Detected:
 
-between commit:
+arc:
 
-  b06d072ccc4b ("macsec: restrict to ethernet devices")
+    hsdk_defconfig:
+        gcc-8:
+          hsdk:
+              lab-baylibre: new failure (last pass: next-20200320)
 
-from the net tree and commit:
+arm:
 
-  a21ecf0e0338 ("macsec: Support XPN frame handling - IEEE 802.1AEbw")
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 4 days (last pass: next-20200319=
+ - first fail: next-20200320)
 
-from the net-next tree.
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 36 days (last pass: next-20200214=
+ - first fail: next-20200217)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200323)
 
---=20
-Cheers,
-Stephen Rothwell
+arm64:
 
-diff --cc drivers/net/macsec.c
-index 92bc2b2df660,49b138e7aeac..000000000000
---- a/drivers/net/macsec.c
-+++ b/drivers/net/macsec.c
-@@@ -19,7 -19,7 +19,8 @@@
-  #include <net/gro_cells.h>
-  #include <net/macsec.h>
-  #include <linux/phy.h>
- +#include <linux/if_arp.h>
-+ #include <linux/byteorder/generic.h>
- =20
-  #include <uapi/linux/if_macsec.h>
- =20
+    defconfig:
+        gcc-8:
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: next-20200323)
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200323)
+          meson-gxl-s905x-libretech-cc:
+              lab-clabbe: new failure (last pass: next-20200323)
 
---Sig_/sv3AX7jQUXkgO=e5bapi3NH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200323)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: next-20200323)
+          sun50i-a64-pine64-plus:
+              lab-baylibre: new failure (last pass: next-20200323)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: next-20200323)
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200323)
+          meson-gxl-s905x-khadas-vim:
+              lab-baylibre: failing since 1 day (last pass: next-20200320 -=
+ first fail: next-20200323)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: next-20200323)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl56qHAACgkQAVBC80lX
-0Gxt/Qf9H8xBjtaPori8bP7C7ScBjmtat11519pOpi5LyDdlD1TjEQNV93SmAi/h
-TsfTKpq63rLgfQuEdY7qX4HCfFZtjgfLENbt7Q4ManjoDBmtPTjUz9B7FA+q7nrI
-2bAUjLmapVq1WAK5C5B5kd1wsoVl77FEi7KU29lsYA8K0cgD7JsipSqEDQUldU78
-C2fRFgyde4XbCL+9VnPZmoWDA79qFINZZiYzPXk29lB8MGuE6EeAbYQDoYg7I5Eh
-eVShEytRIEbACpIyYotW8ucJLvOednmCYq1vldaw7BcSuUSlm2pxqbyp04gaMDIy
-A9TUG1Puw6EaisLvHAiLmhTzosv6ew==
-=nL9v
------END PGP SIGNATURE-----
+Boot Failures Detected:
 
---Sig_/sv3AX7jQUXkgO=e5bapi3NH--
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    imx_v6_v7_defconfig:
+        gcc-8:
+            vf610-colibri-eval-v3: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s905x-khadas-vim: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+            sun50i-a64-pine64-plus: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

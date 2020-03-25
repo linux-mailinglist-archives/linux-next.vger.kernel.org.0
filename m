@@ -2,218 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B36C192670
-	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 12:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79983192686
+	for <lists+linux-next@lfdr.de>; Wed, 25 Mar 2020 12:02:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727129AbgCYLAg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Mar 2020 07:00:36 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:52898 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726043AbgCYLAg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 25 Mar 2020 07:00:36 -0400
-Received: by mail-pj1-f65.google.com with SMTP id ng8so886137pjb.2
-        for <linux-next@vger.kernel.org>; Wed, 25 Mar 2020 04:00:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=CmrNsEcw4m2m+C5g9sugzfyHTslwKBSnHw/D+z4wpGo=;
-        b=UTa6RGqvF+crokG4YSu6e094BLeArPjQ7obK4pJjxg72vI5LRX5XbWOInfkrVWd9t1
-         JQfsZ3o5ItU84vKGWpo2lLmcSsy71igKmteMjAfoaska1qT4pkkAHZFw3U0ZMKCu91Q0
-         zjOr45c7A+oge7LUsZSDflh4k2zsh4+c6m2c/sJWDmJYSpad3vp4kDNuQ243AfZb71A7
-         zAPPDASZg3UBz4nUxRhVbqXxaQbl311WGfmOCrIe3XPlnasNg7/Vo+MsF8Kv8TUFzunb
-         LCZTO61mhVmLX/pRw6Z31tj6qOlTMqfNLFgTOhepECByZ0VSqJgJsrkb86esSvWMWWTg
-         iXhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=CmrNsEcw4m2m+C5g9sugzfyHTslwKBSnHw/D+z4wpGo=;
-        b=koKfqWmrQFmyyePYM3ZHT5tNgG2Mn2CGAJn9wORODmpEn8WrDTacHLv5yIfJd/fMK6
-         0htjW4sj6utWxcc71tLJoBwhzc5UApjvv/Hj2OvTy9Z443NwhpDw/Q0D/N7bo+0GUzKw
-         FD09EWeB1qPxSqjeto97Q5Re0Wmz8vD42NPYO28CKU6uv7vYs2wVZJIDbZfA5d7FVSdS
-         Uq9MjuaHfEt9FUGTn/zTaYY/aiFd3RZ0yvfi8lrhvVeZI41sczFy3tRB3v+8t2LXJGHa
-         TEBHaiv2hIjPwHheVCr+3I/m7zg4YE8ky1cp0+btrBDhv7v8pMJzHRYQnpLoD5qsabk9
-         I1og==
-X-Gm-Message-State: ANhLgQ3cVKkaTzC76gdl246OQTyd1tvI6xNpypFGsS4MSRMEJnWkwznU
-        ZIQNRRmp0soIUy9MZA7YEhF8BqRzgJw=
-X-Google-Smtp-Source: ADFU+vsvJ/IGh+9Cpeni54+i9UXdd8gDhbtMaU8npamMkg0T7nj71KjlVaacDZ8AL8gqIAavktl6pg==
-X-Received: by 2002:a17:90a:25c6:: with SMTP id k64mr3051122pje.9.1585134032317;
-        Wed, 25 Mar 2020 04:00:32 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 193sm11284397pfa.182.2020.03.25.04.00.30
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Mar 2020 04:00:31 -0700 (PDT)
-Message-ID: <5e7b39cf.1c69fb81.8450e.c90c@mx.google.com>
-Date:   Wed, 25 Mar 2020 04:00:31 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1727260AbgCYLCW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Mar 2020 07:02:22 -0400
+Received: from correo.us.es ([193.147.175.20]:56710 "EHLO mail.us.es"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727452AbgCYLCW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 25 Mar 2020 07:02:22 -0400
+Received: from antivirus1-rhel7.int (unknown [192.168.2.11])
+        by mail.us.es (Postfix) with ESMTP id C8BADFB44A
+        for <linux-next@vger.kernel.org>; Wed, 25 Mar 2020 12:01:43 +0100 (CET)
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id B7174FC5EC
+        for <linux-next@vger.kernel.org>; Wed, 25 Mar 2020 12:01:43 +0100 (CET)
+Received: by antivirus1-rhel7.int (Postfix, from userid 99)
+        id B673DFC5E9; Wed, 25 Mar 2020 12:01:43 +0100 (CET)
+X-Spam-Checker-Version: SpamAssassin 3.4.1 (2015-04-28) on antivirus1-rhel7.int
+X-Spam-Level: 
+X-Spam-Status: No, score=-108.2 required=7.5 tests=ALL_TRUSTED,BAYES_50,
+        SMTPAUTH_US2,URIBL_BLOCKED,USER_IN_WHITELIST autolearn=disabled version=3.4.1
+Received: from antivirus1-rhel7.int (localhost [127.0.0.1])
+        by antivirus1-rhel7.int (Postfix) with ESMTP id E10D9FC5E4;
+        Wed, 25 Mar 2020 12:01:41 +0100 (CET)
+Received: from 192.168.1.97 (192.168.1.97)
+ by antivirus1-rhel7.int (F-Secure/fsigk_smtp/550/antivirus1-rhel7.int);
+ Wed, 25 Mar 2020 12:01:41 +0100 (CET)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/antivirus1-rhel7.int)
+Received: from us.es (unknown [90.77.255.23])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: 1984lsi)
+        by entrada.int (Postfix) with ESMTPSA id BB38A42EF42A;
+        Wed, 25 Mar 2020 12:01:41 +0100 (CET)
+Date:   Wed, 25 Mar 2020 12:02:18 +0100
+X-SMTPAUTHUS: auth mail.us.es
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>,
+        coreteam@netfilter.org, netdev <netdev@vger.kernel.org>,
+        Linux-Next <linux-next@vger.kernel.org>
+Subject: Re: [PATCH] netfilter: nft_fwd_netdev: Fix CONFIG_NET_CLS_ACT=n build
+Message-ID: <20200325110218.ga2m5n2jfbdbfivs@salvia>
+References: <20200325093300.5455-1-geert@linux-m68k.org>
+ <20200325104001.yekvtbrw3lvkhvta@salvia>
+ <CAMuHMdWRKW3HoWk+drmbwKi6wArN9qjgjp=8NcyBK7P2kT=cLg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.6-rc7-277-g1e07787fb89d
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 273 boots: 5 failed,
- 253 passed with 4 offline, 9 untried/unknown,
- 2 conflicts (v5.6-rc7-277-g1e07787fb89d)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdWRKW3HoWk+drmbwKi6wArN9qjgjp=8NcyBK7P2kT=cLg@mail.gmail.com>
+User-Agent: NeoMutt/20170113 (1.7.2)
+X-Virus-Scanned: ClamAV using ClamSMTP
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 273 boots: 5 failed, 253 passed with 4 offline, 9 =
-untried/unknown, 2 conflicts (v5.6-rc7-277-g1e07787fb89d)
+On Wed, Mar 25, 2020 at 12:00:08PM +0100, Geert Uytterhoeven wrote:
+> Hi Pablo,
+> 
+> On Wed, Mar 25, 2020 at 11:40 AM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+> > On Wed, Mar 25, 2020 at 10:33:00AM +0100, Geert Uytterhoeven wrote:
+> > > If CONFIG_NET_CLS_ACT=n:
+> > >
+> > >     net/netfilter/nft_fwd_netdev.c: In function ‘nft_fwd_netdev_eval’:
+> > >     net/netfilter/nft_fwd_netdev.c:32:10: error: ‘struct sk_buff’ has no member named ‘tc_redirected’
+> > >       pkt->skb->tc_redirected = 1;
+> > >             ^~
+> > >     net/netfilter/nft_fwd_netdev.c:33:10: error: ‘struct sk_buff’ has no member named ‘tc_from_ingress’
+> > >       pkt->skb->tc_from_ingress = 1;
+> > >             ^~
+> > >
+> > > Fix this by protecting this code hunk with the appropriate #ifdef.
+> >
+> > Sorry about this, and thank you for fixing up this so fast.
+> >
+> > I'm attaching an alternative fix to avoid a dependency on tc from
+> > netfilter. Still testing, if fine and no objections I'll formally
+> > submit this.
+> 
+> Thanks, that fixes the issue, too.
+> (Note that I didn't do a full build).
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc7-277-g1e07787fb89d/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc7-277-g1e07787fb89d/
+Thanks. I'll submit formaly asap.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc7-277-g1e07787fb89d
-Git Commit: 1e07787fb89ded7f9b290af70c788c9f82f13cc1
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 105 unique boards, 25 SoC families, 31 builds out of 216
-
-Boot Regressions Detected:
-
-arc:
-
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: new failure (last pass: v5.6-rc6-295-g996cfaad8=
-d71)
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 39 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          sun8i-h2-plus-orangepi-r1:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-    sunxi_defconfig:
-        gcc-8:
-          sun8i-h2-plus-orangepi-r1:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc7-236-gaf338e2c=
-b004)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-236-ga=
-f338e2cb004)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: failing since 1 day (last pass: v5.6-rc6-370-ga=
-32dcb4acc60 - first fail: v5.6-rc7-236-gaf338e2cb004)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-236-ga=
-f338e2cb004)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-i386:
-
-    i386_defconfig:
-        gcc-8:
-          qemu_i386:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-    i386_defconfig+kselftest:
-        gcc-8:
-          qemu_i386:
-              lab-baylibre: new failure (last pass: v5.6-rc7-236-gaf338e2cb=
-004)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            sun50i-a64-pine64-plus: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig+kselftest:
-        qemu_i386:
-            lab-collabora: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
-    i386_defconfig:
-        qemu_i386:
-            lab-collabora: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+There was another spot I forgot to update in net/core/pktgen.c, I will
+include that chunk too in my formal submission.

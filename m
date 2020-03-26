@@ -2,116 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EB27C1934D9
-	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 01:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5FF3193635
+	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 03:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727536AbgCZAHb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 25 Mar 2020 20:07:31 -0400
-Received: from ozlabs.org ([203.11.71.1]:36159 "EHLO ozlabs.org"
+        id S1727612AbgCZCxD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 25 Mar 2020 22:53:03 -0400
+Received: from ozlabs.org ([203.11.71.1]:56355 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727498AbgCZAHa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 25 Mar 2020 20:07:30 -0400
+        id S1727560AbgCZCxD (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 25 Mar 2020 22:53:03 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48nlfl0q1gz9sRf;
-        Thu, 26 Mar 2020 11:07:26 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48nqKm0WB1z9sSH;
+        Thu, 26 Mar 2020 13:53:00 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585181247;
-        bh=keFlslcJaRKofY7rCRgd9PqhxN1VT7bn4dRi+eink6Q=;
+        s=201702; t=1585191181;
+        bh=fORvFbLTiAx94e97lpCZAqe3gHJ27vX7VBM8ULDRHog=;
         h=Date:From:To:Cc:Subject:From;
-        b=u5H7mQvME0/LhV28sahCWQsdPqO66ApJF46LerxHE2TEEqTAeGHV8gNNWSkbSg1ie
-         lr0tMuccAimUYshoe2krVlb5EbAeG7xi7xCgXAc8h3hnSsccLanRFsBkWEBbzZlewb
-         EnjS7xu0KzLGWcJu8iqMjaKHu4Vy7AcSN8AzMOi8aREcqT2XvdR5bmRtQUCrtcR2nk
-         yCv31Eg6RK4sc+A41ggN5o1ue3ojOs0zxmo17kmV1rlweikRESb4L+uS6ZT8tooYfE
-         M/EVBpKfqPlBZ2GNAUbpLq969nsh2WUlm6Fi0ZLRewO89K3BGZy3tRylAfdRYEZc5p
-         9/i/LQun+WZ3Q==
-Date:   Thu, 26 Mar 2020 11:07:25 +1100
+        b=E5L8CErG6TkovQfZga9ak/LyLKFNMRMX7BBSGkFKIpourr8oUGGsk+Ax7TFACXPc+
+         3Og1W0LGrTW5gRRqnluX5PMMYCWqx+3CTce44uDbwhbzMJJN8Lz2KnvTRxfg6LOhYV
+         EOgjmg42sFaPrOVtlwdplMVqSQ5wy8mn5QAeZ1tQeU7mwGAUss9CoBwpsu96J5D4XS
+         QpBCWHfcO0Knu5HHpnf3ZgZm403jghG3X21mZPHxVRT/6THi85yyixTWd8wXZQ78BF
+         hEuv9LwbqQg/lZWE45463tjCfcawU9BYDPdUvc2Izm6XxX7QNddeVRDQvoyU70K1+e
+         mSdyVTjPl5ZWw==
+Date:   Thu, 26 Mar 2020 13:52:58 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Reichel <sre@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.co.jp>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20200326110725.37b1e636@canb.auug.org.au>
+        Qais Yousef <qais.yousef@arm.com>,
+        Baolin Wang <baolin.wang7@gmail.com>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20200326135258.2764f0de@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/AzVdnvS/5ABMom621vxy99V";
+Content-Type: multipart/signed; boundary="Sig_/NdMCGHLO=BxLuZdCqOG9=4Y";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/AzVdnvS/5ABMom621vxy99V
+--Sig_/NdMCGHLO=BxLuZdCqOG9=4Y
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  tools/testing/selftests/net/Makefile
+drivers/power/reset/sc27xx-poweroff.c: In function 'sc27xx_poweroff_shutdow=
+n':
+drivers/power/reset/sc27xx-poweroff.c:38:4: error: implicit declaration of =
+function 'cpu_down' [-Werror=3Dimplicit-function-declaration]
+   38 |    cpu_down(cpu);
+      |    ^~~~~~~~
 
-between commit:
+Caused by commit
 
-  919a23e9d6cc ("selftests/net: add missing tests to Makefile")
+  33c3736ec888 ("cpu/hotplug: Hide cpu_up/down()")
 
-from the net tree and commit:
+interacting with commit
 
-  7f204a7de8b0 ("selftests: net: Add SO_REUSEADDR test to check if 4-tuples=
- are fully utilized.")
+  274afbc3ad33 ("power: reset: sc27xx: Change to use cpu_down()")
 
-from the net-next tree.
+from the battery tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have added the following merge fix patch:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 26 Mar 2020 13:42:00 +1100
+Subject: [PATCH] power: reset: sc27xx: use remove_cpu instead of cpu_down
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/power/reset/sc27xx-poweroff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/reset/sc27xx-poweroff.c b/drivers/power/reset/sc=
+27xx-poweroff.c
+index 69863074daf6..90287c31992c 100644
+--- a/drivers/power/reset/sc27xx-poweroff.c
++++ b/drivers/power/reset/sc27xx-poweroff.c
+@@ -35,7 +35,7 @@ static void sc27xx_poweroff_shutdown(void)
+=20
+ 	for_each_online_cpu(cpu) {
+ 		if (cpu !=3D smp_processor_id())
+-			cpu_down(cpu);
++			remove_cpu(cpu);
+ 	}
+ #endif
+ }
+--=20
+2.25.0
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/net/Makefile
-index 4c1bd03ffa1c,48063fd69924..000000000000
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@@ -11,9 -11,8 +11,10 @@@ TEST_PROGS +=3D udpgso_bench.sh fib_rule_
-  TEST_PROGS +=3D udpgro_bench.sh udpgro.sh test_vxlan_under_vrf.sh reusepo=
-rt_addr_any.sh
-  TEST_PROGS +=3D test_vxlan_fdb_changelink.sh so_txtime.sh ipv6_flowlabel.=
-sh
-  TEST_PROGS +=3D tcp_fastopen_backup_key.sh fcnal-test.sh l2tp.sh tracerou=
-te.sh
- -TEST_PROGS +=3D fin_ack_lat.sh
- +TEST_PROGS +=3D fin_ack_lat.sh fib_nexthop_multiprefix.sh fib_nexthops.sh
- +TEST_PROGS +=3D altnames.sh icmp_redirect.sh ip6_gre_headroom.sh
- +TEST_PROGS +=3D route_localnet.sh
-+ TEST_PROGS +=3D reuseaddr_ports_exhausted.sh
-  TEST_PROGS_EXTENDED :=3D in_netns.sh
-  TEST_GEN_FILES =3D  socket nettest
-  TEST_GEN_FILES +=3D psock_fanout psock_tpacket msg_zerocopy reuseport_add=
-r_any
-
---Sig_/AzVdnvS/5ABMom621vxy99V
+--Sig_/NdMCGHLO=BxLuZdCqOG9=4Y
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl578j0ACgkQAVBC80lX
-0GxLAwf+LDXAAlbFQJbPpQBxl2YhP9wzxhfQED180RaiXp3167dE5ubFlqkXz6W6
-M+ptm06I9Any+a5l13LkKm3I3A3Y+AEwjyQQzZaoKZtlfduahRB5JaTrzlP6jLTa
-kxt/bosF9kwKWgrL5p3GSjGN3qkIEBlwui2XbmZwCpOtH4zlPojDLxSHhalNeCsD
-kh4UgN/tMhZEnjcqjcS85eY1uuaNaz3yvRjpB5v+W7jWyyVQsZ35EaPIAJwo2BMc
-o7LreYonkNtKjBtQKuIKO8IJ5iyyzLgDs2VHL8qg9Fqhjmcg1IckduCZHyXk+AtS
-92iBUcQjpXAWvxQce8tI0Uf7sqsa9g==
-=JHqU
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl58GQoACgkQAVBC80lX
+0Gxb2Af/XnYUBmNvdAzIYpjAGQK/wFZn+29Mf0QJ9ZBiNePj3VV9S6xn9tkt9eq1
+YRcg4lvt7yFHec7xL2KtJWuegcYJ7gdMSl5YUlHWjaveGTUfRAEcD1QvE1RTUcEc
+4vXnxaMnIbqNMt+ZuX9ByHUcnDAO7XTq1IOJtuEj1Ib5OPdCgi9a44cVorvuzRBn
+F5j5ajlKBD5Ponk5niYHz0tSZZziQB6cpHtyZNPueZ/JyPGjp+Msn6QNw6GPv0qR
+6I0ykfZH4Yj7Mz5alqsgbRJSC1U+WToiJ2UitwK5v/r0c4uyUOdCru/8A6uyRScc
+vwplQV0bfZZQIkqK1D6GJbUksQEdZg==
+=ig3+
 -----END PGP SIGNATURE-----
 
---Sig_/AzVdnvS/5ABMom621vxy99V--
+--Sig_/NdMCGHLO=BxLuZdCqOG9=4Y--

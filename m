@@ -2,197 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B753193E1E
-	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 12:44:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1F14193E95
+	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 13:06:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727994AbgCZLoj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Mar 2020 07:44:39 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:44650 "EHLO
-        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727948AbgCZLoj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Mar 2020 07:44:39 -0400
-Received: by mail-pf1-f194.google.com with SMTP id b72so2617216pfb.11
-        for <linux-next@vger.kernel.org>; Thu, 26 Mar 2020 04:44:38 -0700 (PDT)
+        id S1728192AbgCZMFp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Mar 2020 08:05:45 -0400
+Received: from mail-lj1-f193.google.com ([209.85.208.193]:45068 "EHLO
+        mail-lj1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728001AbgCZMFp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 26 Mar 2020 08:05:45 -0400
+Received: by mail-lj1-f193.google.com with SMTP id t17so6081596ljc.12
+        for <linux-next@vger.kernel.org>; Thu, 26 Mar 2020 05:05:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=vzQSMlZDUXfHwHaj9aO0sBu7RhezGnNGMnvAIUqQbi4=;
-        b=Vcs6Dh9T+Z8l+E2nQjLnN8BQJqwfe3NPllF8xrkvXj0D1E7fMkO0kZ//x6IFrxOZqJ
-         bqB6aI0BBgYGFia+JjbDda/MhcHElRtdtWvoBZwXqSyEmbatJC/xW45NCfRcoTF2tlbK
-         LDRTvrSfvdQ85CBVir4uGR5aX1qfVS95ZSAkMFxwDS9jKKF/0cQEOTd7VMpwfuFTVJB7
-         0+HgwXdubqhRjpSoD5T8WyRL3pXJGx8CCho+B8t8Lg1yUsHTzvalrbd4sTPlcwCR5Gd5
-         4ZqihdbXsqJVpcif0H5x3tmS3yRfEScEF+Z9kHybDdglgjes+6zOV7KlIVfY3Pe4bRJR
-         Bzxw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=5nNaB9xpgft76kVOrndKIt++4NZQfhxGTzqRhmjvGb4=;
+        b=XWORKdbfk4/82GG2LMt8cw1STtFxI/ISwgvMyK9Jh8wthi51e4JxXSTZ0TJt5vpjBh
+         cO4sttEFEr4uECjeU0J+ooDJoDMx6wLr3W20rvJAV38zSVRH5O9uOVghjhyrb3y5wFFG
+         ilIYGxdeDyUMNNlr6MS/q/1gVYPChOTiPj8C+eqRP3RXb5i1iGN9COC/whQnMn5vK/tS
+         CVE7dMk0B9XObUIEAgeGtTVCRMlctuW8IkjDv7F1NSZ2zxdQKIRsbTsZAxY7DkXQt1Qw
+         IlWCh6R+pjDQfAdEcNyKTQn3orSJ8spu7mBrhwkAIwQ+ke5fQZRV+HgzJwsp8srg4GKA
+         Xa2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=vzQSMlZDUXfHwHaj9aO0sBu7RhezGnNGMnvAIUqQbi4=;
-        b=BVzNVHyGWQdkfZT8CGytgl9NjUmxVMeqna0KIvCjRyE0ku7HLxc3vKRlnkkyh3UFYn
-         WBkcNTpse/reNpnhIqVHpxr+FkBfWTxyWcUZqttHGWYlW9PVRx0UCfJ7hJjZ/pvjRpM8
-         ZMUGICWPIJtEjAPhpVBzLz9wZodD+Kq92IZ12aA0o34ty2AaEs5Cym4//owC5TpLCKoW
-         ZpIjBFNTV5zvDZAM1B4UvWKEDwD1ZSbIZKkOIBcdi5PoED1D01Qqy4vlu0qWzKTP6ZRd
-         WNOVcx++w1hUlu+TZt3ILYLIaySzwe5B/zflhO8jss7SnSsiePi/ErQ/yg943S2IGnK6
-         92AA==
-X-Gm-Message-State: ANhLgQ0HMpX7mNqqS4sEn8TsI3wPUMahSpjw/9Mlm0Wj0z55pyD5XAPh
-        f3udE3DswncPQZTspJFp3G7R4NbirW8=
-X-Google-Smtp-Source: ADFU+vvhNZodU+BoLpFDSfxFCjfm2PuyLnVDHRb4MQLucrhvkIyxSP7xZ5P49sBku3Qo8lWo5SViHw==
-X-Received: by 2002:a65:5a4f:: with SMTP id z15mr8199009pgs.103.1585223077456;
-        Thu, 26 Mar 2020 04:44:37 -0700 (PDT)
-Received: from [10.0.9.4] ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q15sm26696pfn.89.2020.03.26.04.44.36
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Mar 2020 04:44:36 -0700 (PDT)
-Message-ID: <5e7c95a4.1c69fb81.f399c.00e2@mx.google.com>
-Date:   Thu, 26 Mar 2020 04:44:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=5nNaB9xpgft76kVOrndKIt++4NZQfhxGTzqRhmjvGb4=;
+        b=o5djKHJUixILtUYEcJqc8rlQM/VC3oPqa/LDqfzpGNWNrvrFWNKa0hpD0pYlC9EBa+
+         xlTYJTTBH6wQTwFAxz0AYr8iaESbe3zZqvtNfGu0K80ix08NSQB4Z80N5SRrMHLkjWEU
+         e3i/+2uytXb1zpP7YB1aUMbDZx75HQprS12U4KO8Hd/U/XrnWckbHshp1FsjQZOypJCp
+         P9TUj8gR6lzW39Ts/Ogn77k4wSDv3HqqbbKb9OYijD6ZT+O0xlpQYLuqxJvjL4ufPdbo
+         WCClz5ISsrY6DB31oy/HIToNm8dy8D+4utmM4tRFTfRQ7isz6kUCMiVuzGonTDV8Fdf0
+         kA2Q==
+X-Gm-Message-State: ANhLgQ1B9wUmgwXGX+gfIP82H6/0yyXtNSnR+4Wo43IZt+KCaFa0Z4qE
+        gh5ecQoy2GvaG5D2fSkdQDuAMBZgTyWIEiXQyB2NXQ==
+X-Google-Smtp-Source: APiQypKOfvEhGwJX5+841/969FmwKYQ7PXm91S/4oiS1EpNSe8epGsQl/snZwjFZRDTJT3zfulTzEHZLNqv043QbqsY=
+X-Received: by 2002:a2e:730e:: with SMTP id o14mr4992253ljc.273.1585224342806;
+ Thu, 26 Mar 2020 05:05:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc7-337-g9a2ad1626af6
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 270 boots: 5 failed,
- 251 passed with 5 offline, 6 untried/unknown,
- 3 conflicts (v5.6-rc7-337-g9a2ad1626af6)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200326205025.7cdf0d4e@canb.auug.org.au>
+In-Reply-To: <20200326205025.7cdf0d4e@canb.auug.org.au>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Thu, 26 Mar 2020 13:05:31 +0100
+Message-ID: <CADYN=9+u3NY8MES7GihA1o_E0OdpRFtBDRBs5dxb4VeDoWO4+A@mail.gmail.com>
+Subject: Re: linux-next: Tree for Mar 26
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        enric.balletbo@collabora.com,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 270 boots: 5 failed, 251 passed with 5 offline, 6 =
-untried/unknown, 3 conflicts (v5.6-rc7-337-g9a2ad1626af6)
+On Thu, 26 Mar 2020 at 10:50, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> Changes since 20200325:
+>
+> The net-next tree gained a conflict against the net tree.
+>
+> The input tree still had its build failure for which I disabled a driver.
+>
+> The tip tree gained a semantic conflict against the battery tree.
+>
+> The irqchip tree still had its build failure for which I reverted
+> 2 commits.
+>
+> The rcu tree gained a conflict against the spdx tree.
+>
+> The kvm tree gained a conflict against the spdx tree.
+>
+> The drivers-x86 tree gained a conflict against the tip tree.
+>
+> The akpm tree lost a patch that turned up elsewhere.
+>
+> Non-merge commits (relative to Linus' tree): 10806
+>  9415 files changed, 417170 insertions(+), 204705 deletions(-)
+>
+> ----------------------------------------------------------------------------
+>
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+>
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+>
+> Below is a summary of the state of the merge.
+>
+> I am currently merging 316 trees (counting Linus' and 78 trees of bug
+> fix patches pending for the current merge release).
+>
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+>
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+>
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-rc7-337-g9a2ad1626af6/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc7-337-g9a2ad1626af6/
+When building todays tag on arm64 I see this error, CONFIG_DRM_MEDIATEK=m
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc7-337-g9a2ad1626af6
-Git Commit: 9a2ad1626af61c3d68f80b6a7301a94bd6ed0028
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 105 unique boards, 25 SoC families, 31 builds out of 216
+ERROR: modpost: "mtk_mmsys_ddp_disconnect"
+[drivers/gpu/drm/mediatek/mediatek-drm.ko] undefined!
+ERROR: modpost: "mtk_mmsys_ddp_connect"
+[drivers/gpu/drm/mediatek/mediatek-drm.ko] undefined!
+make[2]: *** [../scripts/Makefile.modpost:94: __modpost] Error 1
+make[1]: *** [/linux/Makefile:1299: modules] Error 2
+make: *** [Makefile:180: sub-make] Error 2
 
-Boot Regressions Detected:
+I think this is the problematic patch:
+396c3fccaf03 ("soc / drm: mediatek: Move routing control to mmsys device")
 
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 40 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: v5.6-rc7-277-g1e07787fb=
-89d)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.6-rc7-277-g1e07787f=
-b89d)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-277-g1=
-e07787fb89d)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-277-g1=
-e07787fb89d)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.6-rc7-277-g1e07787fb=
-89d)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-277-g1=
-e07787fb89d)
-
-Boot Failures Detected:
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            msm8998-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig+kselftest:
-        qemu_i386:
-            lab-baylibre: FAIL (gcc-8)
-            lab-collabora: PASS (gcc-8)
-
-x86_64:
-    x86_64_defconfig+kselftest:
-        qemu_x86_64:
-            lab-baylibre: FAIL (gcc-8)
-            lab-collabora: PASS (gcc-8)
-
-    x86_64_defconfig:
-        qemu_x86_64:
-            lab-baylibre: FAIL (gcc-8)
-            lab-collabora: PASS (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+Cheers,
+Anders

@@ -2,96 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D92194FD7
-	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 04:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0923A1951D6
+	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 08:21:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727719AbgC0DzU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Mar 2020 23:55:20 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:49567 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727708AbgC0DzU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 26 Mar 2020 23:55:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585281319;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jbUZbS8mLCFbjFYPv9xZPzpFZFr2HhSo9vjkHm0xqCQ=;
-        b=h2N8pfD/AWfFpEePUi91ZPJxUhzGcb2vHwYpKIGZHweRzSQJ/ZAdhQJ96CdJwtqfpbtsGj
-        g6vSNACa6xBdoPIm40Hv6EZIgyLhNVaEgekwEtb/wiFTOJDSmiNLfNGxYfTJDdINcHhmAF
-        9GpCvbReYMWLm6WFHuF8jTaVj2itDF8=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-359-FV5CEmW1NISu3HHUcOuYjQ-1; Thu, 26 Mar 2020 23:55:17 -0400
-X-MC-Unique: FV5CEmW1NISu3HHUcOuYjQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0194518C43D6;
-        Fri, 27 Mar 2020 03:55:16 +0000 (UTC)
-Received: from treble (unknown [10.10.110.12])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5792D9B93E;
-        Fri, 27 Mar 2020 03:55:14 +0000 (UTC)
-Date:   Thu, 26 Mar 2020 22:55:11 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Mar 18 (objtool)
-Message-ID: <20200327035511.7lqv5ij4e745vzv2@treble>
-References: <20200319174028.azzaisoj5gbss7zk@treble>
- <20200319174550.4wpx4j357nw67nzz@treble>
- <20200320082613.GA20696@hirez.programming.kicks-ass.net>
- <202003201131.9B688BC@keescook>
- <20200324164433.qusyu5h7ykx3f2bu@treble>
- <202003241105.4707F983@keescook>
- <20200324222406.zg6hylzqux353jhq@treble>
- <202003252251.771EF5EC5F@keescook>
- <20200326163110.n35lxcgkfcar7vd5@treble>
- <202003261133.814BEE9F@keescook>
+        id S1725956AbgC0HVz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Mar 2020 03:21:55 -0400
+Received: from mail-pl1-f194.google.com ([209.85.214.194]:38356 "EHLO
+        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725936AbgC0HVz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Mar 2020 03:21:55 -0400
+Received: by mail-pl1-f194.google.com with SMTP id w3so3133644plz.5
+        for <linux-next@vger.kernel.org>; Fri, 27 Mar 2020 00:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=8JJApL8ZuQ3qdajlUs1w/Mk8/YMkkptAtkD+K/QXKdo=;
+        b=CFt/rWyKg9I0V8yyRFg4gOknMgiS/9nVACgRhW3ghNS9HO25B1wR+zbdFtKzwGfg/D
+         v+tSDMZB7Gf7zPsNWNyCa9o9fdnMwwhwauegxdTxJD+bwLWwc4iJNGiDH0+HqBS3MdlF
+         u1+dZ0eRYbgE0EWA9DtGdmscQoqjJagY2qCHOoGIPRiPxeB7peOcLw2yn9MV2/zNHfOA
+         DDexjN6+CU3TEWXGodLRVDiVSUOnXTP3oVyiHiAok9J2SHLLC2N2dmmMVPpl2+551eZx
+         BWMBVxYp51Tz1t3dWBobcHsCTmtHlv4aL+g2EEn4DX1BnVsAIGkTZspmZZDIPECmRgFN
+         BMnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=8JJApL8ZuQ3qdajlUs1w/Mk8/YMkkptAtkD+K/QXKdo=;
+        b=UL6Epr8PWiASgkfX5390HcR9K8QQ3uUyVgIHE9j8ISsWdUrf3Y/LHZ1s3Lbr4REQ3N
+         rqVoqq1FcR5p8LnFVeQgQbpTKjltKNC8YVDeeLTYRa1KvM1pYakTzN3EV3b4JQjkaYFb
+         SRiFpWbPOb094LzCVliWNcVE3yHBly6ljTFA4WlvRQFqhbo5Cjibjd0q/Jkb2qBdztps
+         cFA+IzMlFd9Rkapy7SnWUN4NBtuI4EnhwRPov7+w1AG9RyE9GXJUG38YT628QPJgRk44
+         NSCFMgaX+8NG1QYd4bOKVrha1RCmGVgb6ul02uslXZDloybwiz4vhE3ikriO+6HCJPml
+         t8jw==
+X-Gm-Message-State: ANhLgQ3TTOSQpWPw2TsTl3NM8iArP8p1zX09nKm7tn+d2zDf+LSEINiF
+        f4awGHXrLTNmi0YMQ4o1qbgqgsbVsAQ=
+X-Google-Smtp-Source: ADFU+vvphyHwKQg5lmCeRlaKIG3Rj2pqk2nSEwDkZZBmo/ICFDTnZdeyfUouXHrG+La/4rL6vGMGZQ==
+X-Received: by 2002:a17:90a:8403:: with SMTP id j3mr4460527pjn.8.1585293712192;
+        Fri, 27 Mar 2020 00:21:52 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e187sm3255956pfe.143.2020.03.27.00.21.50
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Mar 2020 00:21:50 -0700 (PDT)
+Message-ID: <5e7da98e.1c69fb81.45baa.c845@mx.google.com>
+Date:   Fri, 27 Mar 2020 00:21:50 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202003261133.814BEE9F@keescook>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-rc7-360-g4dc51f5a7118
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes build: 216 builds: 0 failed, 216 passed,
+ 25 warnings (v5.6-rc7-360-g4dc51f5a7118)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Mar 26, 2020 at 11:36:10AM -0700, Kees Cook wrote:
-> On Thu, Mar 26, 2020 at 11:31:10AM -0500, Josh Poimboeuf wrote:
-> > On Wed, Mar 25, 2020 at 10:57:02PM -0700, Kees Cook wrote:
-> > > > In the meantime I can still change objtool to ignore unreachable UD2s if
-> > > > there aren't any better ideas.
-> > > 
-> > > It'll still need the objtool change for CONFIG_UBSAN_TRAP, though based on
-> > > the clang bug discussion, I'll probably _also_ be adding CONFIG_UBSAN_WARN
-> > > which won't have an unreachable (and won't bloat the kernel). Testing
-> > > still under way... it is possible that CONFIG_UBSAN_TRAP will go away
-> > > in the future, though. If that happens, should I also remove the change
-> > > at that time?
-> > 
-> > I'll go ahead and make the patch and post it soon.  It should be pretty
-> > trivial.  We can always revert it if CONFIG_UBSAN_TRAP goes away.
-> 
-> Awesome, thanks very much. After digging into the WARN-style option,
-> it seems that TRAP is unlikely to go away because it's Clang only;
-> GCC doesn't support the "minimal runtime" option. Yay compilers.
+next/pending-fixes build: 216 builds: 0 failed, 216 passed, 25 warnings (v5=
+.6-rc7-360-g4dc51f5a7118)
 
-Oh well...
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc7-360-g4dc51f5a7118/
 
-> Anyway, I'll still get the WARN mode sent out. Thanks for looking at this;
-> can you CC me on the patch? I'm trying to get more familiar with objtool
-> so I don't have to bug you when objtool is angered by crazy stuff I do. ;)
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc7-360-g4dc51f5a7118
+Git Commit: 4dc51f5a71180a89d86e20fe598316356568c951
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Will do.  I know objtool tends to get in the way of adding cool features
-sometimes.  More eyes on the objtool code are definitely welcome.
+Warnings Detected:
 
--- 
-Josh
+arc:
 
+arm64:
+
+arm:
+    allmodconfig (gcc-8): 16 warnings
+    multi_v7_defconfig (gcc-8): 1 warning
+
+i386:
+
+mips:
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+
+riscv:
+    rv32_defconfig (gcc-8): 6 warnings
+
+x86_64:
+    tinyconfig (gcc-8): 1 warning
+
+
+Warnings summary:
+
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 byte=
+s is larger than 1024 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    /tmp/ccKJcP7D.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/ccKJcP7D.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1160:warning: override: UNWINDER_GUESS changes choice state
+
+Section mismatches summary:
+
+    1    WARNING: vmlinux.o(.text.unlikely+0x39c8): Section mismatch in ref=
+erence from the function pmax_setup_memory_region() to the function .init.t=
+ext:add_memory_region()
+    1    WARNING: vmlinux.o(.text.unlikely+0x3674): Section mismatch in ref=
+erence from the function pmax_setup_memory_region() to the function .init.t=
+ext:add_memory_region()
+
+---
+For more info write to <info@kernelci.org>

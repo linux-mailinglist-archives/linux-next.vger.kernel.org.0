@@ -2,102 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 942C0195DE6
-	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 19:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86EA3195EE8
+	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 20:40:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgC0SvB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Mar 2020 14:51:01 -0400
-Received: from mail-ot1-f67.google.com ([209.85.210.67]:40314 "EHLO
-        mail-ot1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726758AbgC0SvA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Mar 2020 14:51:00 -0400
-Received: by mail-ot1-f67.google.com with SMTP id r19so4999015otn.7;
-        Fri, 27 Mar 2020 11:51:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition
-         :user-agent;
-        bh=wDI9SfzV2R8hyVfBWBp+68ChjK6A5bogDpMizFkhzeM=;
-        b=bhDkyxLxUVigjSTEIIzP1F4GbQDrLmGX2OdMX4YPUWRLfB0UdzopRsiocfCDBjnTCH
-         RccowB5sFrNiabPaBIkjd/u+7m5DcIO3wWRu5cdGJEWvvU+sCpTrpCGlbUyOTmaQJrZv
-         TVwQMh+CAx+tdev7JmWIoOnfVWJlBLYVq1XN6s3aWbrjD+5LhxukuUToVOhKjm0DZLvx
-         mo13kaE8Cb+i7Y5F8zyztPC2i1jBQBLPRcCfEyLorw5+87z/zdJokNhbZmY6fsoqA4GV
-         I0YC047l11ATgh0c9RELO5YkFJThfMeM2ktp+ELv4uL2jhUFUchxOqvYOOmvo+mYi9Ym
-         9ZQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition:user-agent;
-        bh=wDI9SfzV2R8hyVfBWBp+68ChjK6A5bogDpMizFkhzeM=;
-        b=hSByXtBdZXW9JJLFBumEtpyCRTjsGP41PWq0BnSVDTxXL4UqUv8L4pwebwqv5vrtRR
-         QGvuiDKTx6pbiv67iaAiv32y04gzZ3A86jSYFUQC2Y16XpSa1BuSPob7z7Ff7yMedHnw
-         /3pJwCk6Z1REP1Qad4vVUcpFGzniYSh2ibbZCYsYoUk4NExBP9eGDXk+vN/kIxy9MB28
-         jJlbeRuVlxXvHoGbXInPDKV6Dry26k8KDMhac3luBHOt2rdCLJBnqxtDAUWqTqemI73b
-         brFsPWd5KNTDj4EOt4/AhC18Xbb9wf1a+1sQ7V+GafrUEMzBU8gWUCRnzLYV+PEs8p3t
-         c6Pw==
-X-Gm-Message-State: ANhLgQ0nggW+Y/f8CnTrllASbDT7oMjfUHksVe9ySUEdaK6a8Zga6soL
-        pzN/4ZaZxhr+sllWG/58yy7yUZFttKk=
-X-Google-Smtp-Source: ADFU+vvuomHQOVxr5SPCDj1qBovJy4K7MFoYLPRUKu5zLKZaz14xBFFY2iM8Xphy/2s6CDhFP/+1MQ==
-X-Received: by 2002:a9d:3ea4:: with SMTP id b33mr89534otc.136.1585335059680;
-        Fri, 27 Mar 2020 11:50:59 -0700 (PDT)
-Received: from ubuntu-m2-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id h29sm1696493ooe.33.2020.03.27.11.50.57
-        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 27 Mar 2020 11:50:59 -0700 (PDT)
-Date:   Fri, 27 Mar 2020 11:50:55 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Build failure in omap_remoteproc due to 02e6d546e3bd
-Message-ID: <20200327185055.GA22438@ubuntu-m2-xlarge-x86>
+        id S1727252AbgC0Tk3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Mar 2020 15:40:29 -0400
+Received: from foss.arm.com ([217.140.110.172]:52252 "EHLO foss.arm.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726738AbgC0Tk2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 27 Mar 2020 15:40:28 -0400
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C0D3730E;
+        Fri, 27 Mar 2020 12:40:27 -0700 (PDT)
+Received: from [10.57.60.204] (unknown [10.57.60.204])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EB60E3F71E;
+        Fri, 27 Mar 2020 12:40:25 -0700 (PDT)
+Subject: Re: Re: [PATCH v2 3/3] driver core: Replace open-coded
+ list_last_entry()
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        fntoth@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
+ <20200324122023.9649-3-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
+ <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+Message-ID: <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com>
+Date:   Fri, 27 Mar 2020 19:40:25 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi all,
+On 2020-03-27 5:56 pm, Naresh Kamboju wrote:
+> The kernel warning noticed on arm64 juno-r2 device running linux
+> next-20200326 and next-20200327
 
-Apologies if this has already been reported, I did not see anything in
-the archives. On next-20200327, I see the following build error:
+I suspect this is the correct expected behaviour manifesting. If you're 
+using the upstream juno-r2.dts, the power domain being waited for here 
+is provided by SCPI, however unless you're using an SCP firmware from at 
+least 3 years ago you won't actually have SCPI since they switched it to 
+the newer SCMI protocol, which is not yet supported upstream for Juno. 
+See what happened earlier in the log:
 
-drivers/remoteproc/omap_remoteproc.c:174:44: error: too many arguments
-to function call, expected 2, have 3
-        timer->timer_ops->set_load(timer->odt, 0, 0);
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~                ^
-1 error generated.
+[    2.741206] scpi_protocol scpi: incorrect or no SCP firmware found
+[    2.747586] scpi_protocol: probe of scpi failed with error -110
 
-This is due to commit 02e6d546e3bd ("clocksource/drivers/timer-ti-dm:
-Enable autoreload in set_pwm") in the clockevents tree interacting with
-commit e28edc571925 ("remoteproc/omap: Request a timer(s) for remoteproc
-usage") from the rpmsg tree.
+Thus this is the "waiting for a dependency which will never appear" 
+case, for which I assume the warning is intentional, since the system is 
+essentially broken (i.e. the hardware/firmware doesn't actually match 
+what the DT describes).
 
-Something like the diff below should resolve it but it cannot be applied
-to the rpmsg tree because it does not have the clockevents change. It
-will have to be applied by Linus as a merge fixup.
+Robin.
 
-Stephen, would you mind applying this to whichever merge happens second?
-
-Cheers,
-Nathan
-
-diff --git a/drivers/remoteproc/omap_remoteproc.c b/drivers/remoteproc/omap_remoteproc.c
-index cdb546f7232e..6955fab0a78b 100644
---- a/drivers/remoteproc/omap_remoteproc.c
-+++ b/drivers/remoteproc/omap_remoteproc.c
-@@ -171,7 +171,7 @@ static int omap_rproc_request_timer(struct device *dev, struct device_node *np,
- 	}
- 
- 	/* clean counter, remoteproc code will set the value */
--	timer->timer_ops->set_load(timer->odt, 0, 0);
-+	timer->timer_ops->set_load(timer->odt, 0);
- 
- 	return 0;
- }
+> [   36.077086] ------------[ cut here ]------------
+> [   36.081752] amba 20010000.etf: deferred probe timeout, ignoring dependency
+> [   36.081859] WARNING: CPU: 1 PID: 42 at drivers/base/dd.c:270
+> driver_deferred_probe_check_state+0x54/0x80
+> [   36.098242] Modules linked in: fuse
+> [   36.101753] CPU: 1 PID: 42 Comm: kworker/1:1 Not tainted
+> 5.6.0-rc7-next-20200327 #1
+> [   36.109427] Hardware name: ARM Juno development board (r2) (DT)
+> [   36.115372] Workqueue: events amba_deferred_retry_func
+> [   36.120526] pstate: 60000005 (nZCv daif -PAN -UAO)
+> [   36.125334] pc : driver_deferred_probe_check_state+0x54/0x80
+> [   36.131010] lr : driver_deferred_probe_check_state+0x54/0x80
+> [   36.136680] sp : ffff000934e0fae0
+> [   36.140001] x29: ffff000934e0fae0 x28: ffff000934db5608
+> [   36.145337] x27: ffffa00013c63240 x26: ffff000934f2a800
+> [   36.150668] x25: 0000000000000001 x24: fffffffffffffffe
+> [   36.155996] x23: ffff000934c6ab80 x22: ffffa00011b39ea0
+> [   36.161322] x21: ffff000934f2a800 x20: ffffa00011905fe0
+> [   36.166649] x19: ffff000934f2a800 x18: 0000000000000000
+> [   36.171974] x17: 0000000000000000 x16: 0000000000000000
+> [   36.177299] x15: 0000000000000000 x14: 003d090000000000
+> [   36.182625] x13: 00003d0900000000 x12: ffff9400027ef445
+> [   36.187952] x11: 1ffff400027ef444 x10: ffff9400027ef444
+> [   36.193278] x9 : dfffa00000000000 x8 : 0000000000000000
+> [   36.198603] x7 : 0000000000000001 x6 : ffffa00013f7a220
+> [   36.203929] x5 : 0000000000000004 x4 : dfffa00000000000
+> [   36.209255] x3 : ffffa000101a74ec x2 : ffff8001269c1f26
+> [   36.214581] x1 : da1107b7b6a8fb00 x0 : 0000000000000000
+> [   36.219906] Call trace:
+> [   36.222369]  driver_deferred_probe_check_state+0x54/0x80
+> [   36.227698]  __genpd_dev_pm_attach+0x264/0x2a0
+> [   36.232154]  genpd_dev_pm_attach+0x68/0x78
+> [   36.236265]  dev_pm_domain_attach+0x6c/0x70
+> [   36.240463]  amba_device_try_add+0xec/0x3f8
+> [   36.244659]  amba_deferred_retry_func+0x84/0x158
+> [   36.249301]  process_one_work+0x3f0/0x660
+> [   36.253326]  worker_thread+0x74/0x698
+> [   36.256997]  kthread+0x218/0x220
+> [   36.260236]  ret_from_fork+0x10/0x1c
+> [   36.263819] ---[ end trace c637c10e549bd716 ]---#
+> 
+> Full test log,
+> https://lkft.validation.linaro.org/scheduler/job/1317079#L981
+> 
+> On Tue, 24 Mar 2020 at 18:24, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Tue, Mar 24, 2020 at 1:20 PM Andy Shevchenko
+>> <andriy.shevchenko@linux.intel.com> wrote:
+>>>
+>>> There is a place in the code where open-coded version of list entry accessors
+>>> list_last_entry() is used.
+>>>
+>>> Replace that with the standard macro.
+>>>
+>>> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>>
+>> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>>> ---
+>>> v2: no change
+>>>   drivers/base/dd.c | 2 +-
+>>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+>>> index efd0e4c16ba5..27a4d51b5bba 100644
+>>> --- a/drivers/base/dd.c
+>>> +++ b/drivers/base/dd.c
+>>> @@ -1226,7 +1226,7 @@ void driver_detach(struct device_driver *drv)
+>>>                          spin_unlock(&drv->p->klist_devices.k_lock);
+>>>                          break;
+>>>                  }
+>>> -               dev_prv = list_entry(drv->p->klist_devices.k_list.prev,
+>>> +               dev_prv = list_last_entry(&drv->p->klist_devices.k_list,
+>>>                                       struct device_private,
+>>>                                       knode_driver.n_node);
+>>>                  dev = dev_prv->device;
+> 
+> metadata:
+>    git branch: master
+>    git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+>    git describe: next-20200327
+>    kernel-config:
+> https://builds.tuxbuild.com/nqmmxorUbC1qTWp42iEKjQ/kernel.config
+> 
+> 

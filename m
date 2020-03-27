@@ -2,106 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1B6194B81
-	for <lists+linux-next@lfdr.de>; Thu, 26 Mar 2020 23:27:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D92194FD7
+	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 04:55:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726359AbgCZW1w (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 26 Mar 2020 18:27:52 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:43717 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726260AbgCZW1v (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 26 Mar 2020 18:27:51 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1727719AbgC0DzU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 26 Mar 2020 23:55:20 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:49567 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1727708AbgC0DzU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 26 Mar 2020 23:55:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585281319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jbUZbS8mLCFbjFYPv9xZPzpFZFr2HhSo9vjkHm0xqCQ=;
+        b=h2N8pfD/AWfFpEePUi91ZPJxUhzGcb2vHwYpKIGZHweRzSQJ/ZAdhQJ96CdJwtqfpbtsGj
+        g6vSNACa6xBdoPIm40Hv6EZIgyLhNVaEgekwEtb/wiFTOJDSmiNLfNGxYfTJDdINcHhmAF
+        9GpCvbReYMWLm6WFHuF8jTaVj2itDF8=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-359-FV5CEmW1NISu3HHUcOuYjQ-1; Thu, 26 Mar 2020 23:55:17 -0400
+X-MC-Unique: FV5CEmW1NISu3HHUcOuYjQ-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48pKPK1KNjz9sR4;
-        Fri, 27 Mar 2020 09:27:48 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585261669;
-        bh=TTUfgK8iyycLNqBt/AiEmDKjm1TJOM+wT3Gze1ZAfoI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OBFeeCUk/cwaKUMd5zgGF1BMof6bjIeMzIguMLlyDQUAgtrQYbv7wQgcB2tW6AzkO
-         Bc2qT6DLLdb5LleF8cZSIUnNxwaDEHdN5Nn2vbxKNjZBe9Tffd87OYb+SPPoGmu0mr
-         AWBNfhD8GMhnQVQLUMWwsgWkrCOBF50UuhiR23So90sSt+kxM1GZ1soIFpj5IxKHog
-         Ba3iKBpNxbhF84yVjQUyeXrt6SwLZB+yTFFtewWpAGuyk6uD7i+9Zek1bgQ8YgqnXQ
-         PV1KQ1alBU53uPOABEEmzdztbRq+f6k3PMkf/IuBXP0JMLzDGVK45jl3u6gaOFfUT2
-         u5BHSSZWbUx8g==
-Date:   Fri, 27 Mar 2020 09:27:41 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Colin Cross <ccross@android.com>, Olof Johansson <olof@lixom.net>,
-        Thierry Reding <treding@nvidia.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nagarjuna Kristam <nkristam@nvidia.com>,
-        JC Kuo <jckuo@nvidia.com>, Corentin Labbe <clabbe@baylibre.com>
-Subject: linux-next: manual merge of the tegra tree with the arm-soc tree
-Message-ID: <20200327092741.1dbd3242@canb.auug.org.au>
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0194518C43D6;
+        Fri, 27 Mar 2020 03:55:16 +0000 (UTC)
+Received: from treble (unknown [10.10.110.12])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5792D9B93E;
+        Fri, 27 Mar 2020 03:55:14 +0000 (UTC)
+Date:   Thu, 26 Mar 2020 22:55:11 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Tree for Mar 18 (objtool)
+Message-ID: <20200327035511.7lqv5ij4e745vzv2@treble>
+References: <20200319174028.azzaisoj5gbss7zk@treble>
+ <20200319174550.4wpx4j357nw67nzz@treble>
+ <20200320082613.GA20696@hirez.programming.kicks-ass.net>
+ <202003201131.9B688BC@keescook>
+ <20200324164433.qusyu5h7ykx3f2bu@treble>
+ <202003241105.4707F983@keescook>
+ <20200324222406.zg6hylzqux353jhq@treble>
+ <202003252251.771EF5EC5F@keescook>
+ <20200326163110.n35lxcgkfcar7vd5@treble>
+ <202003261133.814BEE9F@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Tjrk3Z.A=gzsIRzl_glEECC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <202003261133.814BEE9F@keescook>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Tjrk3Z.A=gzsIRzl_glEECC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, Mar 26, 2020 at 11:36:10AM -0700, Kees Cook wrote:
+> On Thu, Mar 26, 2020 at 11:31:10AM -0500, Josh Poimboeuf wrote:
+> > On Wed, Mar 25, 2020 at 10:57:02PM -0700, Kees Cook wrote:
+> > > > In the meantime I can still change objtool to ignore unreachable UD2s if
+> > > > there aren't any better ideas.
+> > > 
+> > > It'll still need the objtool change for CONFIG_UBSAN_TRAP, though based on
+> > > the clang bug discussion, I'll probably _also_ be adding CONFIG_UBSAN_WARN
+> > > which won't have an unreachable (and won't bloat the kernel). Testing
+> > > still under way... it is possible that CONFIG_UBSAN_TRAP will go away
+> > > in the future, though. If that happens, should I also remove the change
+> > > at that time?
+> > 
+> > I'll go ahead and make the patch and post it soon.  It should be pretty
+> > trivial.  We can always revert it if CONFIG_UBSAN_TRAP goes away.
+> 
+> Awesome, thanks very much. After digging into the WARN-style option,
+> it seems that TRAP is unlikely to go away because it's Clang only;
+> GCC doesn't support the "minimal runtime" option. Yay compilers.
 
-Hi all,
+Oh well...
 
-Today's linux-next merge of the tegra tree got conflicts in:
+> Anyway, I'll still get the WARN mode sent out. Thanks for looking at this;
+> can you CC me on the patch? I'm trying to get more familiar with objtool
+> so I don't have to bug you when objtool is angered by crazy stuff I do. ;)
 
-  drivers/phy/tegra/Kconfig
-  drivers/phy/tegra/xusb.c
+Will do.  I know objtool tends to get in the way of adding cool features
+sometimes.  More eyes on the objtool code are definitely welcome.
 
-between commits:
+-- 
+Josh
 
-  5a00c7c7604f ("phy: tegra: xusb: Add usb-role-switch support")
-  23babe30fb45 ("phy: tegra: xusb: Add usb-phy support")
-  d74ce0954cb2 ("phy: tegra: xusb: Add support to get companion USB 3 port")
-  58e7bd08b569 ("phy: tegra: xusb: Add Tegra194 support")
-
-from the arm-soc tree and commit:
-
-  f67213cee2b3 ("phy: tegra: xusb: Add usb-role-switch support")
-  e8f7d2f409a1 ("phy: tegra: xusb: Add usb-phy support")
-  5a40fc4b934c ("phy: tegra: xusb: Add support to get companion USB 3 port")
-  1ef535c6ba8e ("phy: tegra: xusb: Add Tegra194 support")
-
-from the tegra tree.
-
-These are slightly different patches (the latter has been rebased).
-Also there are further commits affecting these files in the tegra tree.
-
-I fixed it up (I just used the version from the tegra tree) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Tjrk3Z.A=gzsIRzl_glEECC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl59LF0ACgkQAVBC80lX
-0GwyAQf+I5kTj3T8nDJGpq9RC07WHcKa32mVQgkMo2yk0xHSeyeD/pVxCFFUTAGM
-Dbn3bOwyMiRP7eXlvvlMue8eIwqBa8iZefahef2i0CbV7nhKR8HLuvVJwspIilMP
-IwA9rlKRT+ESRlP6c76oHbV43qSY6Bg1RtOLPw8CgqzcVFriItgDSbApN+VWvQSY
-Fl8xpuqBhWajxLTjZULhQo/PpngggfPpTI2Z/PE2qBlh9HBQLAFYU/U2qcEaTah/
-86h1R29S1m7VEuHlmzKmwyhB/Z8tt4zXRwhoN5ZdvLB9vXfrqT3HA015xZrPK12Y
-/3jEJRBE5TZ4vM7QZ78S6h51LSEQsA==
-=oWYQ
------END PGP SIGNATURE-----
-
---Sig_/Tjrk3Z.A=gzsIRzl_glEECC--

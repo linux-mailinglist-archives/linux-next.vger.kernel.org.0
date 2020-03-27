@@ -2,299 +2,419 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFF3195600
-	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 12:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9C8195762
+	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 13:44:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgC0LIh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Mar 2020 07:08:37 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:55231 "EHLO
-        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726379AbgC0LIh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 27 Mar 2020 07:08:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585307315;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fH4qLur4ON8NrF1LbJv92KKQt8OnmUmCge5BUQOrlww=;
-        b=B5Zau70dS0vDMSirYNrba0dxfR/bbeByY9tmyK5bQVzJgF60JN2ADA9dh5AsF+l3UcgCSJ
-        Tzie7EvpBAd4gc2AlDAZcL9om3+ZcG58XCfpsHPTgsJ4KfB9O94+vTscQpIA61yjyEuKO7
-        LDGUoYkP8ItrVcbEGdcrpE5o84x2Jus=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-257-uotu5sBSOsG9-yxmqR9kjQ-1; Fri, 27 Mar 2020 07:08:33 -0400
-X-MC-Unique: uotu5sBSOsG9-yxmqR9kjQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 2so4226404wmf.1
-        for <linux-next@vger.kernel.org>; Fri, 27 Mar 2020 04:08:33 -0700 (PDT)
+        id S1727612AbgC0Mot (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Mar 2020 08:44:49 -0400
+Received: from mail-pf1-f193.google.com ([209.85.210.193]:46542 "EHLO
+        mail-pf1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727242AbgC0Mos (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Mar 2020 08:44:48 -0400
+Received: by mail-pf1-f193.google.com with SMTP id q3so4428830pff.13
+        for <linux-next@vger.kernel.org>; Fri, 27 Mar 2020 05:44:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=tknk/aeFPPGseyHj0/8JvKYKQtZ/6r+p9Q/LKWlKMEo=;
+        b=RihbPGWCFTGtGMgqx2a+/S76zwe3xPY5NWUk9rnllXoAhpnePPnm2k0Z2wjAJMzTH/
+         QKVgrfFskiANtRi5rgpqz+vdKdE1M2dkAU8bXRHflU6u8LbwyKCv3C7TL9zTtvOfkXdO
+         +OVyfWRSKNIcns/uNK4U6PtrSVqFaUV3QCvOXdlbeLFyPe0rXT+Rc90NMH+7CJBVsBrN
+         Rinfrtk5XaUQ/PVYSPAoYtwGSLoQz6yhaVAtQDdT5NFBFYCnUGmv6fwM7lzdYgDZjnmj
+         RNI+e2aoNVlaXuVAK58gRIobMXv+vxtsYZmWYGRenzKS8rEp9l29yTSCslcOFwItDaB+
+         16Ig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=fH4qLur4ON8NrF1LbJv92KKQt8OnmUmCge5BUQOrlww=;
-        b=V4GTLQYz9ktmbB+gjA5yvOpeUrR4igMpqERnwQNdBSq7Heu8h6TCtn5OJp50EjdHhg
-         tt1HJ+t6kEnCZmKQHE9Op6LgT4Y4EYMgYLdDdXBvwc4TX8G9KnPPDnuTxkIYAWyuy106
-         Bwloi8DmrYCJYeIYBOnP4fwWEyv2Zu0EYnfnm69MLFbPly+DzAm29u/TtII8hGq8Ggjf
-         J7teE82loVT5ybIygwf8M052juuBFog5Abpu1FzGpTIpPm30dcdf1FAdtyYSl/lZm+7W
-         qoUviRSgmcqyjQpJXF190+kao9INfDD7x6t9zaU5y6wM0yK0ZpL+DsyrC2KZK0e+NClh
-         awjw==
-X-Gm-Message-State: ANhLgQ1IObHMIYzpP2fuz95mG8JCI5/EGGCjD9tCzK212pKyl9c6RyBa
-        z8nkLgbvS/LZZiKxrKlpGCV8b8m6t5LYohpg0xzetFODxBwQWEoq+nyqyPhPpQihA+TIlN+e1aP
-        XK3P/pBnDh+WaNlzHqRii0g==
-X-Received: by 2002:a1c:1dcf:: with SMTP id d198mr4799002wmd.121.1585307312613;
-        Fri, 27 Mar 2020 04:08:32 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vuEzqlTQiXs79xG0qkAVhK3xd73wNi/LIsyb+cuWBmIMTWVMduaiA44lR9eb/fWOVKNj2sAcw==
-X-Received: by 2002:a1c:1dcf:: with SMTP id d198mr4798979wmd.121.1585307312252;
-        Fri, 27 Mar 2020 04:08:32 -0700 (PDT)
-Received: from eperezma.remote.csb (37.143.78.188.dynamic.jazztel.es. [188.78.143.37])
-        by smtp.gmail.com with ESMTPSA id d206sm7729385wmf.29.2020.03.27.04.08.31
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=tknk/aeFPPGseyHj0/8JvKYKQtZ/6r+p9Q/LKWlKMEo=;
+        b=qMt35n7adB5yqYyTgoh7HZOqrRVLwqB0HdvsuptYrDw4aJMnKKLxU2a9Uvl396QNy7
+         WzfbXqEpniMtdbUmmV6CjAI/2ETc5sF5DGXs0EfHCCL2Ur5IYDRyevFKXA/evspW8ukW
+         VDpEH42Fnp6cd4hf12cgcpO/gXXhXN8tAJ0Bx699TNQEvtJyDNnT+qG3Z4rew+6fglSs
+         Xa1ij69bStPKMCGUWPYxhQUbaw5I1LbAeyGrHimxowTcbdW042mmmIxv99bpqw9Ecjyt
+         MouqO/YJb39wxK5ROJL1I2i3gQR96hfhsg4wWbl0csqwt53pZHGDyy9eEjzS60YUpDGz
+         obKg==
+X-Gm-Message-State: ANhLgQ069c4ZkusjtRO1o49hXq8LCjV3KfCDed7RZIoxxwUPYXCklOpj
+        I5XTK5+VxrBit3NFK01eVk7E6xoTLhg=
+X-Google-Smtp-Source: ADFU+vs+zu7UPZJP5ivAXwX+3eRmNYH7NNYmon/eUmsXOSRSMUAj6iZo7JehXrIMAmaP39gABAtn4Q==
+X-Received: by 2002:a65:5a0e:: with SMTP id y14mr13626457pgs.90.1585313083520;
+        Fri, 27 Mar 2020 05:44:43 -0700 (PDT)
+Received: from [10.0.9.4] ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id fa16sm3723219pjb.39.2020.03.27.05.44.41
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Mar 2020 04:08:31 -0700 (PDT)
-Message-ID: <d093c51e5af2e86c1c7af0b2ee469157e92d8366.camel@redhat.com>
-Subject: Re: vhost changes (batched) in linux-next after 12/13 trigger
- random crashes in KVM guests after reboot
-From:   Eugenio =?ISO-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-To:     Christian Borntraeger <borntraeger@de.ibm.com>
-Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Cornelia Huck <cohuck@redhat.com>
-Date:   Fri, 27 Mar 2020 12:08:29 +0100
-In-Reply-To: <1ee3a272-e391-e2e8-9cbb-5d3e2d40bec2@de.ibm.com>
-References: <20200107042401-mutt-send-email-mst@kernel.org>
-         <43a5dbaa-9129-e220-8483-45c60a82c945@de.ibm.com>
-         <e299afca8e22044916abbf9fbbd0bff6b0ee9e13.camel@redhat.com>
-         <4c3f70b7-723a-8b0f-ac49-babef1bcc180@de.ibm.com>
-         <50a79c3491ac483583c97df2fac29e2c3248fdea.camel@redhat.com>
-         <8fbbfb49-99d1-7fee-e713-d6d5790fe866@de.ibm.com>
-         <2364d0728c3bb4bcc0c13b591f774109a9274a30.camel@redhat.com>
-         <bb9fb726-306c-5330-05aa-a86bd1b18097@de.ibm.com>
-         <468983fad50a5e74a739f71487f0ea11e8d4dfd1.camel@redhat.com>
-         <2dc1df65-1431-3917-40e5-c2b12096e2a7@de.ibm.com>
-         <bd9c9b4d99abd20d5420583af5a4954ea1cf4618.camel@redhat.com>
-         <e11ba53c-a5fa-0518-2e06-9296897ed529@de.ibm.com>
-         <CAJaqyWfJFArAdpOwehTn5ci-frqai+pazGgcn2VvQSebqGRVtg@mail.gmail.com>
-         <80520391-d90d-e10d-a107-7a18f2810900@de.ibm.com>
-         <dabe59fe-e068-5935-f49e-bc1da3d8471a@de.ibm.com>
-         <35dca16b9a85eb203f35d3e55dcaa9d0dae5a922.camel@redhat.com>
-         <3144806d-436e-86a1-2e29-74f7027f7f0b@de.ibm.com>
-         <8e226821a8878f53585d967b8af547526d84c73e.camel@redhat.com>
-         <1ee3a272-e391-e2e8-9cbb-5d3e2d40bec2@de.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-6.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
+        Fri, 27 Mar 2020 05:44:42 -0700 (PDT)
+Message-ID: <5e7df53a.1c69fb81.32c88.0334@mx.google.com>
+Date:   Fri, 27 Mar 2020 05:44:42 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200327
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master build: 227 builds: 14 failed, 213 passed, 21 errors,
+ 606 warnings (next-20200327)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Christian.
+next/master build: 227 builds: 14 failed, 213 passed, 21 errors, 606 warnin=
+gs (next-20200327)
 
-Sorry for the late response. Could we try this one over eccb852f1fe6bede630e2e4f1a121a81e34354ab, and see if you still
-can reproduce the bug?
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200327/
 
-Apart from that, could you print me the backtrace when qemu calls vhost_kernel_set_vring_base and
-vhost_kernel_get_vring_base functions?
+Tree: next
+Branch: master
+Git Describe: next-20200327
+Git Commit: 975f7a88c64dfdfde014530730ba7a6f3141f773
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Thank you very much!
+Build Failures Detected:
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index e158159671fa..a1a4239512bb 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1505,10 +1505,13 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	mutex_lock(&n->dev.mutex);
- 	r = vhost_dev_check_owner(&n->dev);
--	if (r)
-+	if (r) {
-+		pr_debug("vhost_dev_check_owner index=%u fd=%d rc r=%d", index, fd, r);
- 		goto err;
-+	}
- 
- 	if (index >= VHOST_NET_VQ_MAX) {
-+		pr_debug("vhost_dev_check_owner index=%u fd=%d MAX=%d", index, fd, VHOST_NET_VQ_MAX);
- 		r = -ENOBUFS;
- 		goto err;
- 	}
-@@ -1518,22 +1521,26 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	/* Verify that ring has been setup correctly. */
- 	if (!vhost_vq_access_ok(vq)) {
-+		pr_debug("vhost_net_set_backend index=%u fd=%d !vhost_vq_access_ok", index, fd);
- 		r = -EFAULT;
- 		goto err_vq;
- 	}
- 	sock = get_socket(fd);
- 	if (IS_ERR(sock)) {
- 		r = PTR_ERR(sock);
-+		pr_debug("vhost_net_set_backend index=%u fd=%d get_socket err r=%d", index, fd, r);
- 		goto err_vq;
- 	}
- 
- 	/* start polling new socket */
- 	oldsock = vq->private_data;
- 	if (sock != oldsock) {
-+		pr_debug("sock=%p != oldsock=%p index=%u fd=%d vq=%p", sock, oldsock, index, fd, vq);
- 		ubufs = vhost_net_ubuf_alloc(vq,
- 					     sock && vhost_sock_zcopy(sock));
- 		if (IS_ERR(ubufs)) {
- 			r = PTR_ERR(ubufs);
-+			pr_debug("ubufs index=%u fd=%d err r=%d vq=%p", index, fd, r, vq);
- 			goto err_ubufs;
- 		}
- 
-@@ -1541,11 +1548,15 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 		vq->private_data = sock;
- 		vhost_net_buf_unproduce(nvq);
- 		r = vhost_vq_init_access(vq);
--		if (r)
-+		if (r) {
-+			pr_debug("init_access index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
- 			goto err_used;
-+		}
- 		r = vhost_net_enable_vq(n, vq);
--		if (r)
-+		if (r) {
-+			pr_debug("enable_vq index=%u fd=%d r=%d vq=%p", index, fd, r, vq);
- 			goto err_used;
-+		}
- 		if (index == VHOST_NET_VQ_RX)
- 			nvq->rx_ring = get_tap_ptr_ring(fd);
- 
-@@ -1559,6 +1570,8 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
- 
- 	mutex_unlock(&vq->mutex);
- 
-+	pr_debug("sock=%p", sock);
-+
- 	if (oldubufs) {
- 		vhost_net_ubuf_put_wait_and_free(oldubufs);
- 		mutex_lock(&vq->mutex);
-@@ -1712,6 +1725,9 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 	case VHOST_NET_SET_BACKEND:
- 		if (copy_from_user(&backend, argp, sizeof backend))
- 			return -EFAULT;
-+		pr_debug("VHOST_NET_SET_BACKEND [b.index=%u][b.fd=%d]",
-+			 backend.index, backend.fd);
-+		dump_stack();
- 		return vhost_net_set_backend(n, backend.index, backend.fd);
- 	case VHOST_GET_FEATURES:
- 		features = VHOST_NET_FEATURES;
-diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-index b5a51b1f2e79..9dd0bcae0b22 100644
---- a/drivers/vhost/vhost.c
-+++ b/drivers/vhost/vhost.c
-@@ -372,6 +372,11 @@ static int vhost_worker(void *data)
- 	return 0;
- }
- 
-+static int vhost_vq_num_batch_descs(struct vhost_virtqueue *vq)
-+{
-+	return vq->max_descs - UIO_MAXIOV;
-+}
-+
- static void vhost_vq_free_iovecs(struct vhost_virtqueue *vq)
- {
- 	kfree(vq->descs);
-@@ -394,7 +399,9 @@ static long vhost_dev_alloc_iovecs(struct vhost_dev *dev)
- 	for (i = 0; i < dev->nvqs; ++i) {
- 		vq = dev->vqs[i];
- 		vq->max_descs = dev->iov_limit;
--		vq->batch_descs = dev->iov_limit - UIO_MAXIOV;
-+		if (vhost_vq_num_batch_descs(vq) < 0) {
-+			return -EINVAL;
-+		}
- 		vq->descs = kmalloc_array(vq->max_descs,
- 					  sizeof(*vq->descs),
- 					  GFP_KERNEL);
-@@ -1642,15 +1649,27 @@ long vhost_vring_ioctl(struct vhost_dev *d, unsigned int ioctl, void __user *arg
- 			r = -EINVAL;
- 			break;
- 		}
-+
-+		pr_debug(
-+			"VHOST_SET_VRING_BASE [vq=%p][s.index=%u][s.num=%u][vq->avail_idx=%d][vq->last_avail_idx=%d][vq-
->ndescs=%d][vq->first_desc=%d]",
-+			vq, s.index, s.num, vq->avail_idx, vq->last_avail_idx,
-+			vq->ndescs, vq->first_desc);
-+		dump_stack();
- 		vq->last_avail_idx = s.num;
- 		/* Forget the cached index value. */
- 		vq->avail_idx = vq->last_avail_idx;
-+		vq->ndescs = vq->first_desc = 0;
- 		break;
- 	case VHOST_GET_VRING_BASE:
- 		s.index = idx;
- 		s.num = vq->last_avail_idx;
- 		if (copy_to_user(argp, &s, sizeof s))
- 			r = -EFAULT;
-+		pr_debug(
-+			"VHOST_GET_VRING_BASE [vq=%p][s.index=%u][s.num=%u][vq->avail_idx=%d][vq->last_avail_idx=%d][vq-
->ndescs=%d][vq->first_desc=%d]",
-+			vq, s.index, s.num, vq->avail_idx, vq->last_avail_idx,
-+			vq->ndescs, vq->first_desc);
-+		dump_stack();
- 		break;
- 	case VHOST_SET_VRING_KICK:
- 		if (copy_from_user(&f, argp, sizeof f)) {
-@@ -2239,8 +2258,8 @@ static int fetch_buf(struct vhost_virtqueue *vq)
- 		vq->avail_idx = vhost16_to_cpu(vq, avail_idx);
- 
- 		if (unlikely((u16)(vq->avail_idx - last_avail_idx) > vq->num)) {
--			vq_err(vq, "Guest moved used index from %u to %u",
--				last_avail_idx, vq->avail_idx);
-+			vq_err(vq, "Guest moved vq %p used index from %u to %u",
-+				vq, last_avail_idx, vq->avail_idx);
- 			return -EFAULT;
- 		}
- 
-@@ -2316,6 +2335,9 @@ static int fetch_buf(struct vhost_virtqueue *vq)
- 	BUG_ON(!(vq->used_flags & VRING_USED_F_NO_NOTIFY));
- 
- 	/* On success, increment avail index. */
-+	pr_debug(
-+		"[vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][vq->ndescs=%d][vq->first_desc=%d]",
-+		vq, vq->last_avail_idx, vq->avail_idx, vq->ndescs, vq->first_desc);
- 	vq->last_avail_idx++;
- 
- 	return 0;
-@@ -2333,7 +2355,7 @@ static int fetch_descs(struct vhost_virtqueue *vq)
- 	if (vq->ndescs)
- 		return 0;
- 
--	while (!ret && vq->ndescs <= vq->batch_descs)
-+	while (!ret && vq->ndescs <= vhost_vq_num_batch_descs(vq))
- 		ret = fetch_buf(vq);
- 
- 	return vq->ndescs ? 0 : ret;
-@@ -2432,6 +2454,9 @@ EXPORT_SYMBOL_GPL(vhost_get_vq_desc);
- /* Reverse the effect of vhost_get_vq_desc. Useful for error handling. */
- void vhost_discard_vq_desc(struct vhost_virtqueue *vq, int n)
- {
-+	pr_debug(
-+		"DISCARD [vq=%p][vq->last_avail_idx=%u][vq->avail_idx=%u][n=%d]",
-+		vq, vq->last_avail_idx, vq->avail_idx, n);
- 	vq->last_avail_idx -= n;
- }
- EXPORT_SYMBOL_GPL(vhost_discard_vq_desc);
-diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-index 661088ae6dc7..e648b9b997d4 100644
---- a/drivers/vhost/vhost.h
-+++ b/drivers/vhost/vhost.h
-@@ -102,7 +102,6 @@ struct vhost_virtqueue {
- 	int ndescs;
- 	int first_desc;
- 	int max_descs;
--	int batch_descs;
- 
- 	const struct vhost_umem_node *meta_iotlb[VHOST_NUM_ADDRS];
- 	struct file *kick;
+arm64:
+    allmodconfig: (clang-9) FAIL
+    allmodconfig: (gcc-8) FAIL
 
+arm:
+    allmodconfig: (clang-9) FAIL
+    allmodconfig: (gcc-8) FAIL
+    mmp2_defconfig: (gcc-8) FAIL
+    omap2plus_defconfig: (gcc-8) FAIL
+    pxa168_defconfig: (gcc-8) FAIL
+    pxa910_defconfig: (gcc-8) FAIL
+    qcom_defconfig: (gcc-8) FAIL
+    vf610m4_defconfig: (gcc-8) FAIL
+
+mips:
+    mtx1_defconfig: (gcc-8) FAIL
+
+riscv:
+    allnoconfig: (gcc-8) FAIL
+    tinyconfig: (gcc-8) FAIL
+
+x86_64:
+    defconfig: (clang-9) FAIL
+
+Errors and Warnings Detected:
+
+arc:
+
+arm64:
+    allmodconfig (gcc-8): 2 errors
+    allmodconfig (clang-9): 2 errors
+    defconfig (gcc-8): 29 warnings
+    defconfig (clang-9): 29 warnings
+    defconfig (gcc-8): 29 warnings
+    defconfig (gcc-8): 29 warnings
+    defconfig (gcc-8): 29 warnings
+
+arm:
+    allmodconfig (gcc-8): 1 error, 17 warnings
+    allmodconfig (clang-9): 1 error, 17 warnings
+    aspeed_g4_defconfig (gcc-8): 4 warnings
+    aspeed_g5_defconfig (gcc-8): 4 warnings
+    aspeed_g5_defconfig (clang-9): 4 warnings
+    bcm2835_defconfig (gcc-8): 14 warnings
+    cm_x300_defconfig (gcc-8): 2 warnings
+    em_x270_defconfig (gcc-8): 2 warnings
+    eseries_pxa_defconfig (gcc-8): 2 warnings
+    mmp2_defconfig (gcc-8): 1 error
+    multi_v5_defconfig (clang-9): 4 warnings
+    multi_v5_defconfig (gcc-8): 4 warnings
+    multi_v7_defconfig (gcc-8): 36 warnings
+    multi_v7_defconfig (clang-9): 38 warnings
+    multi_v7_defconfig (gcc-8): 36 warnings
+    multi_v7_defconfig (gcc-8): 36 warnings
+    multi_v7_defconfig (gcc-8): 36 warnings
+    multi_v7_defconfig (gcc-8): 37 warnings
+    omap2plus_defconfig (gcc-8): 1 error
+    pxa168_defconfig (gcc-8): 1 error
+    pxa910_defconfig (gcc-8): 1 error
+    pxa_defconfig (gcc-8): 6 warnings
+    qcom_defconfig (gcc-8): 1 error
+    u8500_defconfig (gcc-8): 18 warnings
+    vf610m4_defconfig (gcc-8): 4 errors, 5 warnings
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-8): 3 warnings
+    32r2el_defconfig (gcc-8): 3 warnings
+    allnoconfig (gcc-8): 1 warning
+    ar7_defconfig (gcc-8): 2 warnings
+    ath25_defconfig (gcc-8): 2 warnings
+    ath79_defconfig (gcc-8): 2 warnings
+    bcm47xx_defconfig (gcc-8): 2 warnings
+    bcm63xx_defconfig (gcc-8): 1 warning
+    bigsur_defconfig (gcc-8): 2 warnings
+    bmips_be_defconfig (gcc-8): 1 warning
+    bmips_stb_defconfig (gcc-8): 1 warning
+    capcella_defconfig (gcc-8): 2 warnings
+    cavium_octeon_defconfig (gcc-8): 2 warnings
+    ci20_defconfig (gcc-8): 3 warnings
+    cobalt_defconfig (gcc-8): 2 warnings
+    cu1000-neo_defconfig (gcc-8): 1 warning
+    db1xxx_defconfig (gcc-8): 1 warning
+    decstation_64_defconfig (gcc-8): 2 warnings
+    decstation_defconfig (gcc-8): 2 warnings
+    decstation_r4k_defconfig (gcc-8): 2 warnings
+    e55_defconfig (gcc-8): 2 warnings
+    fuloong2e_defconfig (gcc-8): 2 warnings
+    gcw0_defconfig (gcc-8): 1 warning
+    gpr_defconfig (gcc-8): 2 warnings
+    ip22_defconfig (gcc-8): 2 warnings
+    ip27_defconfig (gcc-8): 2 warnings
+    ip28_defconfig (gcc-8): 2 warnings
+    ip32_defconfig (gcc-8): 2 warnings
+    jazz_defconfig (gcc-8): 2 warnings
+    jmr3927_defconfig (gcc-8): 1 warning
+    lasat_defconfig (gcc-8): 1 warning
+    lemote2f_defconfig (gcc-8): 2 warnings
+    loongson1b_defconfig (gcc-8): 2 warnings
+    loongson1c_defconfig (gcc-8): 2 warnings
+    loongson3_defconfig (gcc-8): 2 warnings
+    malta_defconfig (gcc-8): 2 warnings
+    malta_kvm_defconfig (gcc-8): 2 warnings
+    malta_kvm_guest_defconfig (gcc-8): 2 warnings
+    malta_qemu_32r6_defconfig (gcc-8): 3 warnings
+    maltaaprp_defconfig (gcc-8): 2 warnings
+    maltasmvp_defconfig (gcc-8): 2 warnings
+    maltasmvp_eva_defconfig (gcc-8): 2 warnings
+    maltaup_defconfig (gcc-8): 2 warnings
+    maltaup_xpa_defconfig (gcc-8): 2 warnings
+    markeins_defconfig (gcc-8): 2 warnings
+    mips_paravirt_defconfig (gcc-8): 2 warnings
+    mpc30x_defconfig (gcc-8): 2 warnings
+    msp71xx_defconfig (gcc-8): 2 warnings
+    mtx1_defconfig (gcc-8): 2 errors, 1 warning
+    nlm_xlp_defconfig (gcc-8): 2 warnings
+    nlm_xlr_defconfig (gcc-8): 2 warnings
+    omega2p_defconfig (gcc-8): 1 warning
+    pic32mzda_defconfig (gcc-8): 2 warnings
+    pistachio_defconfig (gcc-8): 2 warnings
+    pnx8335_stb225_defconfig (gcc-8): 2 warnings
+    qi_lb60_defconfig (gcc-8): 2 warnings
+    rb532_defconfig (gcc-8): 2 warnings
+    rbtx49xx_defconfig (gcc-8): 2 warnings
+    rm200_defconfig (gcc-8): 3 warnings
+    rt305x_defconfig (gcc-8): 2 warnings
+    sb1250_swarm_defconfig (gcc-8): 2 warnings
+    tb0219_defconfig (gcc-8): 2 warnings
+    tb0226_defconfig (gcc-8): 2 warnings
+    tb0287_defconfig (gcc-8): 2 warnings
+    tinyconfig (gcc-8): 1 warning
+    vocore2_defconfig (gcc-8): 1 warning
+    workpad_defconfig (gcc-8): 2 warnings
+    xway_defconfig (gcc-8): 2 warnings
+
+riscv:
+    allnoconfig (gcc-8): 1 error
+    rv32_defconfig (gcc-8): 6 warnings
+    tinyconfig (gcc-8): 1 error
+
+x86_64:
+    allmodconfig (clang-9): 4 warnings
+    defconfig (clang-9): 2 errors
+    tinyconfig (gcc-8): 1 warning
+
+Errors summary:
+
+    2    drivers/remoteproc/omap_remoteproc.c:174:2: error: too many argume=
+nts to function =E2=80=98timer->timer_ops->set_load=E2=80=99
+    2    arch/riscv/kernel/stacktrace.c:78:8: error: =E2=80=98sp_in_global=
+=E2=80=99 undeclared (first use in this function); did you mean =E2=80=98sp=
+in_lock=E2=80=99?
+    2    ERROR: modpost: "mtk_mmsys_ddp_disconnect" [drivers/gpu/drm/mediat=
+ek/mediatek-drm.ko] undefined!
+    2    ERROR: modpost: "mtk_mmsys_ddp_connect" [drivers/gpu/drm/mediatek/=
+mediatek-drm.ko] undefined!
+    2    /mnt/resource/workspace/workspace/kernel-build@7/linux/build/../dr=
+ivers/clk/mmp/clk.c:192: undefined reference to `mmp_clk_register_pll'
+    1    drivers/remoteproc/omap_remoteproc.c:174:44: error: too many argum=
+ents to function call, expected 2, have 3
+    1    drivers/clocksource/timer-vf-pit.c:194: error: unterminated argume=
+nt list invoking macro "BUG_ON"
+    1    drivers/clocksource/timer-vf-pit.c:131:8: error: expected =E2=80=
+=98;=E2=80=99 at end of input
+    1    drivers/clocksource/timer-vf-pit.c:131:2: error: =E2=80=98BUG_ON=
+=E2=80=99 undeclared (first use in this function)
+    1    drivers/clocksource/timer-vf-pit.c:131:2: error: expected declarat=
+ion or statement at end of input
+    1    clang: error: assembler command failed with exit code 1 (use -v to=
+ see invocation)
+    1    ERROR: modpost: "sysrq_toggle_support" [drivers/tty/serial/serial_=
+core.ko] undefined!
+    1    ERROR: modpost: "sysrq_mask" [drivers/tty/serial/serial_core.ko] u=
+ndefined!
+    1    ERROR: modpost: "rd_full" [drivers/gpu/drm/msm/msm.ko] undefined!
+    1    /tmp/cpudeadline-de66c1.s:76: Error: `%ecx' not allowed with `orb'
+    1    /home/buildslave/workspace/workspace/kernel-build@7/linux/build/..=
+/drivers/clk/mmp/clk.c:192: undefined reference to `mmp_clk_register_pll'
+
+Warnings summary:
+
+    125  <stdin>:1520:2: warning: #warning syscall process_madvise not impl=
+emented [-Wcpp]
+    98   arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_fo=
+rmat): /soc/firmware:dma-ranges: empty "dma-ranges" property but its #addre=
+ss-cells (2) differs from /soc (1)
+    80   arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1086.4-52: Warning (=
+dma_ranges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" p=
+roperty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, chil=
+d #address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    25   scripts/dtc/include-prefixes/arm/bcm2835-rpi.dtsi:18.4-15: Warning=
+ (dma_ranges_format): /soc/firmware:dma-ranges: empty "dma-ranges" property=
+ but its #address-cells (2) differs from /soc (1)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    14   arch/arm/boot/dts/ste-href-stuib.dtsi:205.6-16: Warning (reg_forma=
+t): /soc/mcde@a0350000/dsi@a0351000/panel:reg: property has invalid length =
+(4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    14   arch/arm/boot/dts/ste-href-stuib.dtsi:203.11-208.7: Warning (avoid=
+_default_addr_size): /soc/mcde@a0350000/dsi@a0351000/panel: Relying on defa=
+ult #size-cells value
+    14   arch/arm/boot/dts/ste-href-stuib.dtsi:203.11-208.7: Warning (avoid=
+_default_addr_size): /soc/mcde@a0350000/dsi@a0351000/panel: Relying on defa=
+ult #address-cells value
+    11   arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:523.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    11   arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:521.11-525.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@380/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    11   arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:437.3-30: Warn=
+ing (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10:reg: I2C addr=
+ess must be less than 10-bits, got "0x40000010"
+    11   arch/arm/boot/dts/aspeed-bmc-facebook-tiogapass.dts:435.11-439.4: =
+Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@140/ipmb0@10: I2C bus =
+unit address format error, expected "40000010"
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    8    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dts:377.6-16: Warning (=
+reg_format): /soc/mcde@a0350000/dsi@a0351000/panel:reg: property has invali=
+d length (4 bytes) (#address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dts:374.11-387.7: Warni=
+ng (avoid_default_addr_size): /soc/mcde@a0350000/dsi@a0351000/panel: Relyin=
+g on default #size-cells value
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dts:374.11-387.7: Warni=
+ng (avoid_default_addr_size): /soc/mcde@a0350000/dsi@a0351000/panel: Relyin=
+g on default #address-cells value
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dtb: Warning (spi_bus_r=
+eg): Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dtb: Warning (pci_devic=
+e_bus_num): Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-ux500-samsung-skomer.dtb: Warning (i2c_bus_r=
+eg): Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefv60plus-stuib.dtb: Warning (spi_bus_reg)=
+: Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefv60plus-stuib.dtb: Warning (pci_device_b=
+us_num): Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefv60plus-stuib.dtb: Warning (i2c_bus_reg)=
+: Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefprev60-stuib.dtb: Warning (spi_bus_reg):=
+ Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefprev60-stuib.dtb: Warning (pci_device_bu=
+s_num): Failed prerequisite 'reg_format'
+    7    arch/arm/boot/dts/ste-hrefprev60-stuib.dtb: Warning (i2c_bus_reg):=
+ Failed prerequisite 'reg_format'
+    6    1 warning generated.
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    2    arch/arm/lib/xor-neon.c:30:2: warning: This code requires at least=
+ version 4.6 of GCC [-W#warnings]
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    2    #warning This code requires at least version 4.6 of GCC
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    sound/soc/codecs/cros_ec_codec.c:776:12: warning: stack frame size=
+ of 1152 bytes in function 'wov_hotword_model_put' [-Wframe-larger-than=3D]
+    1    security/integrity/ima/ima_crypto.c:512:5: warning: stack frame si=
+ze of 1152 bytes in function 'ima_calc_field_array_hash' [-Wframe-larger-th=
+an=3D]
+    1    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 byte=
+s is larger than 1024 bytes [-Wframe-larger-than=3D]
+    1    include/linux/kern_levels.h:5:18: warning: format =E2=80=98%lu=E2=
+=80=99 expects argument of type =E2=80=98long unsigned int=E2=80=99, but ar=
+gument 2 has type =E2=80=98unsigned int=E2=80=99 [-Wformat=3D]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:77:13: =
+warning: stack frame size of 5648 bytes in function 'calculate_bandwidth' [=
+-Wframe-larger-than=3D]
+    1    drivers/gpu/drm/amd/amdgpu/../display/dc/calcs/dce_calcs.c:3014:6:=
+ warning: stack frame size of 1376 bytes in function 'bw_calcs' [-Wframe-la=
+rger-than=3D]
+    1    drivers/firmware/efi/libstub/file.c:123:21: warning: stack frame s=
+ize of 1232 bytes in function 'handle_cmdline_files' [-Wframe-larger-than=
+=3D]
+    1    drivers/crypto/inside-secure/safexcel_cipher.c:404:12: warning: st=
+ack frame size of 1136 bytes in function 'safexcel_aead_setkey' [-Wframe-la=
+rger-than=3D]
+    1    drivers/clocksource/timer-vf-pit.c:97:20: warning: =E2=80=98pit_ti=
+mer_interrupt=E2=80=99 defined but not used [-Wunused-function]
+    1    drivers/clocksource/timer-vf-pit.c:56:19: warning: =E2=80=98pit_cl=
+ocksource_init=E2=80=99 defined but not used [-Wunused-function]
+    1    drivers/clocksource/timer-vf-pit.c:131:2: warning: no return state=
+ment in function returning non-void [-Wreturn-type]
+    1    drivers/clocksource/timer-vf-pit.c:126:19: warning: =E2=80=98pit_c=
+lockevent_init=E2=80=99 defined but not used [-Wunused-function]
+    1    drivers/clocksource/timer-vf-pit.c:117:34: warning: =E2=80=98clock=
+event_pit=E2=80=99 defined but not used [-Wunused-variable]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    arch/x86/kernel/signal.o: warning: objtool: x32_setup_rt_frame()+0=
+x1fa: call to memset() with UACCESS enabled
+    1    arch/x86/kernel/signal.o: warning: objtool: __setup_rt_frame()+0x1=
+f8: call to memset() with UACCESS enabled
+    1    arch/mips/configs/ci20_defconfig:178:warning: override: reassignin=
+g to symbol LEDS_TRIGGER_ONESHOT
+    1    2 warnings generated.
+    1    /tmp/test-arm-3e6297.s:18788: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/test-arm-3e6297.s:18713: Warning: using r15 results in unpred=
+ictable behaviour
+    1    /tmp/ccFUnozp.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/ccFUnozp.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1164:warning: override: UNWINDER_GUESS changes choice state
+    1    ...mm/kasan/common.o: warning: objtool: kasan_report()+0x87: call =
+to __stack_chk_fail() with UACCESS enabled
+    1    ........arch/x86/ia32/ia32_signal.o: warning: objtool: ia32_setup_=
+rt_frame()+0x1ef: call to memset() with UACCESS enabled
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x39dc): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x3684): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+
+---
+For more info write to <info@kernelci.org>

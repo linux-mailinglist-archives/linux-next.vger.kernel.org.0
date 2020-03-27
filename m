@@ -2,146 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id CED7C1957D0
-	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 14:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5954D195860
+	for <lists+linux-next@lfdr.de>; Fri, 27 Mar 2020 14:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726640AbgC0NSf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 27 Mar 2020 09:18:35 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:1974 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726275AbgC0NSf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Mar 2020 09:18:35 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5e7dfccd0001>; Fri, 27 Mar 2020 06:17:01 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Fri, 27 Mar 2020 06:18:34 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Fri, 27 Mar 2020 06:18:34 -0700
-Received: from localhost (10.124.1.5) by HQMAIL107.nvidia.com (172.20.187.13)
- with Microsoft SMTP Server (TLS) id 15.0.1473.3; Fri, 27 Mar 2020 13:18:33
- +0000
-Date:   Fri, 27 Mar 2020 14:18:31 +0100
-From:   Thierry Reding <treding@nvidia.com>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726959AbgC0NvD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 27 Mar 2020 09:51:03 -0400
+Received: from mout.kundenserver.de ([217.72.192.73]:60299 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727242AbgC0NvD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 27 Mar 2020 09:51:03 -0400
+Received: from mail-qt1-f178.google.com ([209.85.160.178]) by
+ mrelayeu.kundenserver.de (mreue107 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MeC1p-1jpmpF1Dkt-00bKlk; Fri, 27 Mar 2020 14:51:02 +0100
+Received: by mail-qt1-f178.google.com with SMTP id 10so8554157qtp.1;
+        Fri, 27 Mar 2020 06:51:02 -0700 (PDT)
+X-Gm-Message-State: ANhLgQ3kECpU9S6Wb6XrTxkJMaTZTRurXZGwi74SaaSmHEErdlHsBzVJ
+        TAcGaByfyMq9s1HoPX+yYN++QM2VeZlkc3oLlqw=
+X-Google-Smtp-Source: ADFU+vshNURS/9HDv+oLa8JQm1ylr9owZmjcnTSkVVaH5iSMiWpwyPAHJ6GKmm1np7lsir9XH7ml3tLULZvcP2HhgCk=
+X-Received: by 2002:aed:3b4c:: with SMTP id q12mr13766906qte.18.1585317061089;
+ Fri, 27 Mar 2020 06:51:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200327092741.1dbd3242@canb.auug.org.au> <20200327131831.GC2282366@ulmo>
+In-Reply-To: <20200327131831.GC2282366@ulmo>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Fri, 27 Mar 2020 14:50:45 +0100
+X-Gmail-Original-Message-ID: <CAK8P3a3At56pHFJNojHFa=CHQxSXT1dtYTr8_t34AOcooE_b+A@mail.gmail.com>
+Message-ID: <CAK8P3a3At56pHFJNojHFa=CHQxSXT1dtYTr8_t34AOcooE_b+A@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the tegra tree with the arm-soc tree
+To:     Thierry Reding <treding@nvidia.com>
+Cc:     Olof Johansson <olof@lixom.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Colin Cross <ccross@android.com>,
         ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Nagarjuna Kristam <nkristam@nvidia.com>,
-        "JC Kuo" <jckuo@nvidia.com>, Corentin Labbe <clabbe@baylibre.com>
-Subject: Re: linux-next: manual merge of the tegra tree with the arm-soc tree
-Message-ID: <20200327131831.GC2282366@ulmo>
-References: <20200327092741.1dbd3242@canb.auug.org.au>
-MIME-Version: 1.0
-In-Reply-To: <20200327092741.1dbd3242@canb.auug.org.au>
-X-NVConfidentiality: public
-User-Agent: Mutt/1.13.1 (2019-12-14)
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL111.nvidia.com (172.20.187.18) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aT9PWwzfKXlsBJM1"
-Content-Disposition: inline
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1585315021; bh=Tpo3NqFxWgOJjyev4XqBDbAl2TDTNnyAFczdL+YC21g=;
-        h=X-PGP-Universal:Date:From:To:CC:Subject:Message-ID:References:
-         MIME-Version:In-Reply-To:X-NVConfidentiality:User-Agent:
-         X-Originating-IP:X-ClientProxiedBy:Content-Type:
-         Content-Disposition;
-        b=lfWDXAOR96Sjlm0y8L+D1ypT1+v1R9xGvPHeDtbELVHNFCjV1GaDYuazr2kJTBDxJ
-         Teel8GiBjWyk1OJUGbAbQzOUUzLp1cloS+Sg30/xyn8ECTmamNs3AP6L94p2svkR3l
-         g9g8eTGYP+0alfSdBm3rTgPOqay0fmkCtoJlBcUCsdwJq3j8B7sQ+ZKnnYozLFNCrI
-         eo1Yjbxu38HEFqf3DZsEu3V69ebQj85GB7uKb/RlUNoQDDSKI/dKNWoAH5+VVJKiwj
-         oflTlgPqfyXQPMAfv+4gJmYTaq9DSfd/MUvInfAoz7+aaJHE8gvXWdTHDOwnYvHh2K
-         lvMIRiIECsfEw==
+        JC Kuo <jckuo@nvidia.com>, Corentin Labbe <clabbe@baylibre.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:dNQpBz0UGSQQEBoCpfcR/7YzJDGh5st1/sA+hJoMw5gVYg2+9oe
+ vrq6gOPxrgK5kdq1EW/ICqxmVdYW8jbAqB5xhSatq1YLqXRubDjzvaaDQkb3HWWWeO0sE2t
+ 59ILrmzGw17JXE9TRU0hP4dmjLBjtZDT2cKro60jPHpsZEZayx99kQ2oi8Hei823u1dv8DY
+ juOs5DYWT1nKKSJ/naB/g==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:cW6VpA138hQ=:SYgv7dpo8BwKhIta+HphPz
+ Y5zjuHF5Znw57/lvMM+4eG/ZoKSDDSn1S5CPNKCMSEiEBKQya5Ndd2ECYmZupvXQTrwNICjjK
+ HMCoJBdNmakAUDiFfc0P29GAr0fyHxCm3eNVsDr31MQKOYTy+H3e7WRZgG3+ZOg7oAvqCI4Zf
+ ePyQYjbtKtOcjRzEiQX42XgYNnw8V6qoxlgVP7YDHLEzuq9PKqS1dr4130xm4iPauKyuA+mfA
+ r6Rt3Q7ooK6693ZDOyfKC5Plo5tGMd7w06+WaaN9uShDmXZAv1rjI4FF2EdghZAK5gdb02/wk
+ eieABsy7dsKx1RFHR100UfsmObccoen4m8qXotGsck3+XS11l8pcJq2KELnIULgKckaczFtwA
+ uHxFuppsDVXAtSbV8kEfBfI4Uu4Q/Pi7fMKlQ+0e5FhdJFU34bsKiOCxcPZZLpKqLQgxyhFx8
+ id8InO9+h21QNLtwXyp0yEWveNilZQL7BU3BgwnBGZIOv4RfTCr1I3sILKKcjQStcYebD+qTf
+ XzuML9D80pXnskHZ1cVmEcB5g/u369n2Iq5TXIznCZQrhLcKpXnK3JrJeuFsLpUUxIjdF0lXU
+ i/uhY3GS0MEgTHyYQ/+Ss+pxV9IoHi5k6FXILImzL6Awbk8GttAi6pewwn3Y5IXWZaMt1L+wU
+ BjrVY550r1i88K1/OOZ6vp1VtcxUuksg/uPazKAn3Tk353dAEx+oEiNrFQqCD/a+1sEIt+9AW
+ Hk+4/t43in3QCMZPSjtJ7AFS9M4SIcrUU8uZF7/3yyML5ChZzrnswNJq/AEcuNwkB/BjAmBxv
+ fG1QpJQGGzYQjPin2eLdvaewrYpNsSyZQLtIJWyyiTrhvKKgcI=
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---aT9PWwzfKXlsBJM1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, Mar 27, 2020 at 2:18 PM Thierry Reding <treding@nvidia.com> wrote:
+> On Fri, Mar 27, 2020 at 09:27:41AM +1100, Stephen Rothwell wrote:
+> > I fixed it up (I just used the version from the tegra tree) and can
+> > carry the fix as necessary. This is now fixed as far as linux-next is
+> > concerned, but any non trivial conflicts should be mentioned to your
+> > upstream maintainer when your tree is submitted for merging.  You may
+> > also want to consider cooperating with the maintainer of the conflicting
+> > tree to minimise any particularly complex conflicts.
+>
+> Olof, Arnd,
+>
+> There was a bit of back and forth on this because there happened to be a
+> conflict with the USB tree. I tried to clarify this as replies to the PR
+> request:
+>
+>         http://patchwork.ozlabs.org/patch/1254523/
+>
+> But I suspect you may have missed those replies. The bottom line is,
+> there is a v2 of the pull request that has the patches that are now in
+> the Tegra tree. That's already part of a PR that went in through the USB
+> tree as a dependency to resolve the conflict.
+>
+> So as a result there should be no need for ARM SoC to carry that PR. But
+> if you still want to merge it, please pull v2, which is here:
+>
+>         git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-for-5.7-phy-v2
+>
 
-On Fri, Mar 27, 2020 at 09:27:41AM +1100, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the tegra tree got conflicts in:
->=20
->   drivers/phy/tegra/Kconfig
->   drivers/phy/tegra/xusb.c
->=20
-> between commits:
->=20
->   5a00c7c7604f ("phy: tegra: xusb: Add usb-role-switch support")
->   23babe30fb45 ("phy: tegra: xusb: Add usb-phy support")
->   d74ce0954cb2 ("phy: tegra: xusb: Add support to get companion USB 3 por=
-t")
->   58e7bd08b569 ("phy: tegra: xusb: Add Tegra194 support")
->=20
-> from the arm-soc tree and commit:
->=20
->   f67213cee2b3 ("phy: tegra: xusb: Add usb-role-switch support")
->   e8f7d2f409a1 ("phy: tegra: xusb: Add usb-phy support")
->   5a40fc4b934c ("phy: tegra: xusb: Add support to get companion USB 3 por=
-t")
->   1ef535c6ba8e ("phy: tegra: xusb: Add Tegra194 support")
->=20
-> from the tegra tree.
->=20
-> These are slightly different patches (the latter has been rebased).
-> Also there are further commits affecting these files in the tegra tree.
->=20
-> I fixed it up (I just used the version from the tegra tree) and can
-> carry the fix as necessary. This is now fixed as far as linux-next is
-> concerned, but any non trivial conflicts should be mentioned to your
-> upstream maintainer when your tree is submitted for merging.  You may
-> also want to consider cooperating with the maintainer of the conflicting
-> tree to minimise any particularly complex conflicts.
+It was almost at the top of the branch, so I ended up just taking it out now, it
+should be gone from the soc tree by tomorrow.
 
-Olof, Arnd,
+I think I managed to skip it as you asked on my first pass, but then failed to
+reread the message when I went through the remaining entries in patchwork.
 
-There was a bit of back and forth on this because there happened to be a
-conflict with the USB tree. I tried to clarify this as replies to the PR
-request:
+Clearly my tooling still needs  a bit of improvement.
 
-	http://patchwork.ozlabs.org/patch/1254523/
-
-But I suspect you may have missed those replies. The bottom line is,
-there is a v2 of the pull request that has the patches that are now in
-the Tegra tree. That's already part of a PR that went in through the USB
-tree as a dependency to resolve the conflict.
-
-So as a result there should be no need for ARM SoC to carry that PR. But
-if you still want to merge it, please pull v2, which is here:
-
-	git://git.kernel.org/pub/scm/linux/kernel/git/tegra/linux.git tags/tegra-f=
-or-5.7-phy-v2
-
-Sorry for the confusion,
-Thierry
-
---aT9PWwzfKXlsBJM1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAl59/ScACgkQ3SOs138+
-s6FG7xAAtsFMFTXn2daJeAwduvHdzjYOHqDpnNb4BtG0GPNzYa972YzaOyVoDT/v
-7YxiIgLgXT8Nu1T4xA+CIJS9U9vtRv+Auvsd0knHCTAcU/plvVWf8E2eB7eITDaB
-k3HdW8shjJ9LO+P5juQiOnRX8gcUEXW8jrzB4maccsFnKPr2vN/xISm/zYAKYYX3
-pbZzGpl29ThP2hT/0MtWycK0NsXZM3GvAqsksnTScGRjRAg0LokpZiZxq2e9d+VE
-L3b0bWXqB6Bb7bqQX9oAKb0rS5nlg8im0y/cCapklk5UtfREAiIDtD4Y1yz91NwW
-y7gBiMJpjlk3eHPUv3Zf5KTNSArueFcz1qknm9UGYpSFw1oplLauGo15L8IkYQ83
-XYFqNuYlbel7AI68LZeurpMWBYSWDz4SjD7mz//WQ+Q/RwGNoSVS1+1YA4IezM60
-rrckIpHm9PuPtr4v21AqaFCeQ69TkRSY1rNg1h9yj1gPE65/BK7B8hg4ptIaQpCR
-Fgue7ST3LkGjmnLY4ke0kz6jm3q1rnAVt4nBb8AoV7YdWXgfI51XfyWTy1Fmp1U+
-jvg4TsYiPj5CEpG/dKfm5l9YrjTIHivMqUjTTQ90hL9HcYjmV+2UJOZwHsxQMr7r
-AxhSoQ4EJaqQgf0LV3RdkH18HKmz/pQaFecWKei9gj1Ck7wNCqU=
-=MO7Z
------END PGP SIGNATURE-----
-
---aT9PWwzfKXlsBJM1--
+      Arnd

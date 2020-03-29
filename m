@@ -2,59 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F7C196D17
-	for <lists+linux-next@lfdr.de>; Sun, 29 Mar 2020 13:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DFD196D3D
+	for <lists+linux-next@lfdr.de>; Sun, 29 Mar 2020 14:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726087AbgC2Ltb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Mar 2020 07:49:31 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:21108 "EHLO
+        id S1727965AbgC2MUi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Mar 2020 08:20:38 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:49721 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728070AbgC2Lta (ORCPT
+        by vger.kernel.org with ESMTP id S1727935AbgC2MUi (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Sun, 29 Mar 2020 07:49:30 -0400
+        Sun, 29 Mar 2020 08:20:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585482570;
+        s=mimecast20190719; t=1585484436;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Z3uSqDxAG/8s/s7cz44Y2/i4LCDpCHA9j5Si4puA7U0=;
-        b=boOnn0D/JfyJ1aF6HMIKAdXnrcNKV0egy0IY95A2jxP/Y3gWQ0uRYSiGFYp5K0pdKaoBKG
-        v33M0EQsycGaXf1zqJvvMDwUdkS/u4R9U9q68JLHne7QfxPrAp+9GR753EZeQzlq8Joy/T
-        xNdee+AyC4ExGlSc9j1hsMJ49ZhRonE=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-417-8Rx6gP-kOde-fEQxHje5NA-1; Sun, 29 Mar 2020 07:49:28 -0400
-X-MC-Unique: 8Rx6gP-kOde-fEQxHje5NA-1
-Received: by mail-wr1-f71.google.com with SMTP id d1so8334784wru.15
-        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 04:49:27 -0700 (PDT)
+        bh=JV+swSpDvLiRyfF8zduIYF+N/77uMAWPzm2YG1hsv6E=;
+        b=a2lGXucnr0oYXe/l1KoX6tzXbtnoB/ZFJnr4tTK1ALU2MJ7JwsCTDFk8AjMLYuXgseW+rl
+        PygIBWN7fUwuaLIY+3eelsoB2lt/JOzBRFYv/Wif5nK8M79YX9b2KFZ7ctHV0jchl7GcxY
+        rmvlQKp8RXB0GlqsKE/EDRRDwaVpFw4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-412-t0p_RwAnO42vyN0rqX0E6g-1; Sun, 29 Mar 2020 08:20:32 -0400
+X-MC-Unique: t0p_RwAnO42vyN0rqX0E6g-1
+Received: by mail-qv1-f72.google.com with SMTP id z2so11938784qvw.7
+        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=Z3uSqDxAG/8s/s7cz44Y2/i4LCDpCHA9j5Si4puA7U0=;
-        b=LDtqnzeVSwgjtZFLNDpCLnTVkrg75Ss1tb3dmJX58DHai0V0XRO7tfH+k50AQVa+MC
-         gZ1old510i5NqlsiMPjfmdP3DSf9v3OTSuOfgKfD+2q4fqpc0k4EeTaM8m+yt/Wig3RS
-         n5sOkb5v9bBc6EvjAO0NEkD4rC9YHSdErnDTYZigAgmXWFnp8FHd8S1gEPQ8/5YS4h0q
-         C/hiu6w/T6KARLs/SYpdLN4L9tRA9gV8EsTuOH9KkP+wpbxN7KL/weNGxjUk4ecSIj+Q
-         iM2q5eqFa7RUCIesEaNa7j5pUhwkQczU5z5hIk6Jog2WswpXs34neEOpMCkegWUAWbMs
-         N1Uw==
-X-Gm-Message-State: ANhLgQ1yzt6yFMoU/psMUkqL4z4M5uNCryezuYgIH2gCGQk1OYwJ6vqW
-        xSY0Ic9qrZJqT0Ks+GEBVDlX4qiktxE5IXJyz2NX6r6N3xOGMmNqInXKnGeiTJpt/SG8nNrimIm
-        bnecxx1/XIJhoaRzIhdboDQ==
-X-Received: by 2002:a1c:3241:: with SMTP id y62mr8524819wmy.66.1585482567003;
-        Sun, 29 Mar 2020 04:49:27 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vv7BukqLWASNd56mdBXcWIrZDO3DRdR8zJ4m6ol8Bj23sHTGubRNiILOzZ0ywfXFDGVJH4UAA==
-X-Received: by 2002:a1c:3241:: with SMTP id y62mr8524804wmy.66.1585482566822;
-        Sun, 29 Mar 2020 04:49:26 -0700 (PDT)
-Received: from redhat.com (bzq-79-183-139-129.red.bezeqint.net. [79.183.139.129])
-        by smtp.gmail.com with ESMTPSA id 19sm3668516wmi.32.2020.03.29.04.49.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 04:49:26 -0700 (PDT)
-Date:   Sun, 29 Mar 2020 07:49:23 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=JV+swSpDvLiRyfF8zduIYF+N/77uMAWPzm2YG1hsv6E=;
+        b=abXcnfwubOMxJlv/YRSCkEmEvzOI/YGRX/UwZAU2NUNjk7ZOUcwlD9Vsl5uyUPO4Cm
+         J/iNi56s5nOTp/dovF804IU1Dotl3f0Dcb8VgPM6Z/muL0dKUFjImnvkgFWFCvLkdB4a
+         DFCFy+j6h+hy9fXcPy+T5jfn8M53ag0Yyk6zYM6WeqL9hwaI986NACiw0sa2KL8OLjFX
+         Ir5r6Svts8upFGdSoE6jt+r7UAw+SP1sR8JvECu7oM51xrBdb8XaHH7cJ7QbgXy0gGPa
+         v3uLVhAaQIqWBhQ3rluhLrT8mfSRdmLdOamNAAFfWMCwpDQB37nWy8nrYBdPwTIF1JBr
+         kpTw==
+X-Gm-Message-State: ANhLgQ3Xi03Iysk2sxgtz2wfW+SHi9pqvB3h5OGMfpTbBzfsKL5E9QHY
+        mazLB6PnHSbuHf1VaGnpMBl7cbaBeylCsmjEMK+D7szb8P6sSSPuPV9/EzNPDlGUsJ4/nKrjcmQ
+        fJwSobIM4qWlHRxTQQvfcENgK8facXvDrrLa5gA==
+X-Received: by 2002:a37:648:: with SMTP id 69mr7654541qkg.353.1585484432325;
+        Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vtuKBV3ksCZe4Rr2ouEcNs/zf3hutRMu9QCFjAIZrqsuNifj5DJq+Vsezn48JCHiYyh/9SYn2/cqGNyipdDUvA=
+X-Received: by 2002:a37:648:: with SMTP id 69mr7654519qkg.353.1585484432049;
+ Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200329113359.30960-1-eperezma@redhat.com> <20200329074023-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20200329074023-mutt-send-email-mst@kernel.org>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Sun, 29 Mar 2020 14:19:55 +0200
+Message-ID: <CAJaqyWdO8CHuWFJv+TRgYJ7a3Cb06Ln3prnQZs69L1PPw4Rj1Q@mail.gmail.com>
+Subject: Re: [PATCH 0/6] vhost: Reset batched descriptors on SET_VRING_BASE call
+To:     "Michael S. Tsirkin" <mst@redhat.com>
 Cc:     "virtualization@lists.linux-foundation.org" 
         <virtualization@lists.linux-foundation.org>,
         Halil Pasic <pasic@linux.ibm.com>,
@@ -64,58 +64,73 @@ Cc:     "virtualization@lists.linux-foundation.org"
         Cornelia Huck <cohuck@redhat.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/6] vhost: Reset batched descriptors on SET_VRING_BASE
- call
-Message-ID: <20200329074023-mutt-send-email-mst@kernel.org>
-References: <20200329113359.30960-1-eperezma@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200329113359.30960-1-eperezma@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 01:33:53PM +0200, Eugenio Pérez wrote:
-> Vhost did not reset properly the batched descriptors on SET_VRING_BASE event. Because of that, is possible to return an invalid descriptor to the guest.
-> This series ammend this, and creates a test to assert correct behavior. To do that, they need to expose a new function in virtio_ring, virtqueue_reset_free_head. Not sure if this can be avoided.
+On Sun, Mar 29, 2020 at 1:49 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Sun, Mar 29, 2020 at 01:33:53PM +0200, Eugenio P=C3=A9rez wrote:
+> > Vhost did not reset properly the batched descriptors on SET_VRING_BASE =
+event. Because of that, is possible to return an invalid descriptor to the =
+guest.
+> > This series ammend this, and creates a test to assert correct behavior.=
+ To do that, they need to expose a new function in virtio_ring, virtqueue_r=
+eset_free_head. Not sure if this can be avoided.
+>
+> Question: why not reset the batch when private_data changes?
+> At the moment both net and scsi poke at private data directly,
+> if they do this through a wrapper we can use that to
+> 1. check that vq mutex is taken properly
+> 2. reset batching
+>
+> This seems like a slightly better API
+>
 
-Question: why not reset the batch when private_data changes?
-At the moment both net and scsi poke at private data directly,
-if they do this through a wrapper we can use that to
-1. check that vq mutex is taken properly
-2. reset batching
+I didn't do that way because qemu could just SET_BACKEND to -1 and
+SET_BACKEND to the same one, with no call to SET_VRING. In this case,
+I think that qemu should not change the descriptors already pushed. I
+do agree with the interface to modify private_data properly (regarding
+the mutex).
 
-This seems like a slightly better API
+However, I can see how your proposal is safer, so we don't even need
+to check if private_data is !=3D NULL when we have descriptors in the
+batch_descs array. Also, this ioctls should not be in the hot path, so
+we can change to that mode anyway.
 
-> 
-> Also, change from https://lkml.org/lkml/2020/3/27/108 is not included, that avoids to update a variable in a loop where it can be updated once.
-> 
-> This is meant to be applied on top of eccb852f1fe6bede630e2e4f1a121a81e34354ab in git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git, and some commits should be squashed with that series.
-
-Thanks a lot! I'll apply this for now so Christian can start testing,
-but I'd like the comment above addressed before I push this to Linus.
-
-> Eugenio Pérez (6):
->   tools/virtio: Add --batch option
->   tools/virtio: Add --batch=random option
->   tools/virtio: Add --reset=random
->   tools/virtio: Make --reset reset ring idx
->   vhost: Delete virtqueue batch_descs member
->   fixup! vhost: batching fetches
-> 
->  drivers/vhost/test.c         |  57 ++++++++++++++++
->  drivers/vhost/test.h         |   1 +
->  drivers/vhost/vhost.c        |  12 +++-
->  drivers/vhost/vhost.h        |   1 -
->  drivers/virtio/virtio_ring.c |  18 +++++
->  include/linux/virtio.h       |   2 +
->  tools/virtio/linux/virtio.h  |   2 +
->  tools/virtio/virtio_test.c   | 123 +++++++++++++++++++++++++++++++----
->  8 files changed, 201 insertions(+), 15 deletions(-)
-> 
-> -- 
-> 2.18.1
+> >
+> > Also, change from https://lkml.org/lkml/2020/3/27/108 is not included, =
+that avoids to update a variable in a loop where it can be updated once.
+> >
+> > This is meant to be applied on top of eccb852f1fe6bede630e2e4f1a121a81e=
+34354ab in git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git, and some =
+commits should be squashed with that series.
+>
+> Thanks a lot! I'll apply this for now so Christian can start testing,
+> but I'd like the comment above addressed before I push this to Linus.
+>
+> > Eugenio P=C3=A9rez (6):
+> >   tools/virtio: Add --batch option
+> >   tools/virtio: Add --batch=3Drandom option
+> >   tools/virtio: Add --reset=3Drandom
+> >   tools/virtio: Make --reset reset ring idx
+> >   vhost: Delete virtqueue batch_descs member
+> >   fixup! vhost: batching fetches
+> >
+> >  drivers/vhost/test.c         |  57 ++++++++++++++++
+> >  drivers/vhost/test.h         |   1 +
+> >  drivers/vhost/vhost.c        |  12 +++-
+> >  drivers/vhost/vhost.h        |   1 -
+> >  drivers/virtio/virtio_ring.c |  18 +++++
+> >  include/linux/virtio.h       |   2 +
+> >  tools/virtio/linux/virtio.h  |   2 +
+> >  tools/virtio/virtio_test.c   | 123 +++++++++++++++++++++++++++++++----
+> >  8 files changed, 201 insertions(+), 15 deletions(-)
+> >
+> > --
+> > 2.18.1
+>
 

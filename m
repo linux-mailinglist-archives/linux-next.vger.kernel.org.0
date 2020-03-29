@@ -2,59 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DFD196D3D
-	for <lists+linux-next@lfdr.de>; Sun, 29 Mar 2020 14:20:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD8BC196D45
+	for <lists+linux-next@lfdr.de>; Sun, 29 Mar 2020 14:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727965AbgC2MUi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Mar 2020 08:20:38 -0400
-Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:49721 "EHLO
+        id S1727998AbgC2MZN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Mar 2020 08:25:13 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([216.205.24.74]:50840 "EHLO
         us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727935AbgC2MUi (ORCPT
+        by vger.kernel.org with ESMTP id S1727916AbgC2MZN (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Sun, 29 Mar 2020 08:20:38 -0400
+        Sun, 29 Mar 2020 08:25:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585484436;
+        s=mimecast20190719; t=1585484712;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=JV+swSpDvLiRyfF8zduIYF+N/77uMAWPzm2YG1hsv6E=;
-        b=a2lGXucnr0oYXe/l1KoX6tzXbtnoB/ZFJnr4tTK1ALU2MJ7JwsCTDFk8AjMLYuXgseW+rl
-        PygIBWN7fUwuaLIY+3eelsoB2lt/JOzBRFYv/Wif5nK8M79YX9b2KFZ7ctHV0jchl7GcxY
-        rmvlQKp8RXB0GlqsKE/EDRRDwaVpFw4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-412-t0p_RwAnO42vyN0rqX0E6g-1; Sun, 29 Mar 2020 08:20:32 -0400
-X-MC-Unique: t0p_RwAnO42vyN0rqX0E6g-1
-Received: by mail-qv1-f72.google.com with SMTP id z2so11938784qvw.7
-        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
+        bh=7vKFOd347o9WoHxHI6B5j1Zjim146jeGZmfmqH7fBaE=;
+        b=VHUz0MaS4vNfPH/0cf3Zf+xwu5h5sHffUwCSz0zS8j0A333VSbvBkh+hV+phUmhOyoRAxJ
+        pNoJ+h/8MkpqRgeZfUFfJCLw0I4zWZi2ikLj+inNBjpba1JmErmu7Up7Ojaf1fo03fa8LU
+        neMk6zH/1A0wjNvjjeARfeaFcCYywO0=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-363-8HZDNI0jM6iLHM1IYcqd7A-1; Sun, 29 Mar 2020 08:25:10 -0400
+X-MC-Unique: 8HZDNI0jM6iLHM1IYcqd7A-1
+Received: by mail-wr1-f71.google.com with SMTP id o18so8411177wrx.9
+        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 05:25:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=JV+swSpDvLiRyfF8zduIYF+N/77uMAWPzm2YG1hsv6E=;
-        b=abXcnfwubOMxJlv/YRSCkEmEvzOI/YGRX/UwZAU2NUNjk7ZOUcwlD9Vsl5uyUPO4Cm
-         J/iNi56s5nOTp/dovF804IU1Dotl3f0Dcb8VgPM6Z/muL0dKUFjImnvkgFWFCvLkdB4a
-         DFCFy+j6h+hy9fXcPy+T5jfn8M53ag0Yyk6zYM6WeqL9hwaI986NACiw0sa2KL8OLjFX
-         Ir5r6Svts8upFGdSoE6jt+r7UAw+SP1sR8JvECu7oM51xrBdb8XaHH7cJ7QbgXy0gGPa
-         v3uLVhAaQIqWBhQ3rluhLrT8mfSRdmLdOamNAAFfWMCwpDQB37nWy8nrYBdPwTIF1JBr
-         kpTw==
-X-Gm-Message-State: ANhLgQ3Xi03Iysk2sxgtz2wfW+SHi9pqvB3h5OGMfpTbBzfsKL5E9QHY
-        mazLB6PnHSbuHf1VaGnpMBl7cbaBeylCsmjEMK+D7szb8P6sSSPuPV9/EzNPDlGUsJ4/nKrjcmQ
-        fJwSobIM4qWlHRxTQQvfcENgK8facXvDrrLa5gA==
-X-Received: by 2002:a37:648:: with SMTP id 69mr7654541qkg.353.1585484432325;
-        Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vtuKBV3ksCZe4Rr2ouEcNs/zf3hutRMu9QCFjAIZrqsuNifj5DJq+Vsezn48JCHiYyh/9SYn2/cqGNyipdDUvA=
-X-Received: by 2002:a37:648:: with SMTP id 69mr7654519qkg.353.1585484432049;
- Sun, 29 Mar 2020 05:20:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200329113359.30960-1-eperezma@redhat.com> <20200329074023-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20200329074023-mutt-send-email-mst@kernel.org>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Sun, 29 Mar 2020 14:19:55 +0200
-Message-ID: <CAJaqyWdO8CHuWFJv+TRgYJ7a3Cb06Ln3prnQZs69L1PPw4Rj1Q@mail.gmail.com>
-Subject: Re: [PATCH 0/6] vhost: Reset batched descriptors on SET_VRING_BASE call
-To:     "Michael S. Tsirkin" <mst@redhat.com>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=7vKFOd347o9WoHxHI6B5j1Zjim146jeGZmfmqH7fBaE=;
+        b=bCQ0FVDiQf2dP7Pu7fxLT8nklAaW2bNjjI14sUGPMn+EOG8D8GzoGFoDHc0QHuK2h7
+         ChCS08INYAVrDVYj3lnX7M3GwxLk6P8RTSuFYv4kIYjZOFcHSr/M8UuDmi1V37LcVjOW
+         Htu6+Taukn6twhRhjBM4cOpqnIuTOc8uAKcSEq1H1OzpnmulzFuAOgbpsxPWTjHj9ZGK
+         uqERhZijZfA/CqwU5KxBSj6iWRGwIdsHHp5rS20Ehrp+dLuSr+iXNQiutZ3iSh9+vxqH
+         HwwNRX3dayxHBacuZDUKlc2VGLu9aiN7B7pqbnNI1df6G6G5XimAIMXtMO6ZJk/3B0Bj
+         ZJUQ==
+X-Gm-Message-State: ANhLgQ2wGF9JZi+EnBbxK8d2XCDiorwk0YGzimqZEu//chcj6sPcEMKb
+        InaBN6djjZibxVt7kK77ptOjWaryk0/Ebq76CsKfxyne9WIZ18W9+0d7yBl0DIJGcFGB1OVhA6Y
+        v4Nxm/z+BS4CDbfudrxuL0A==
+X-Received: by 2002:adf:e942:: with SMTP id m2mr9560605wrn.364.1585484709222;
+        Sun, 29 Mar 2020 05:25:09 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vuHbrAQAMGspN3vkSyUCV4rlxQ2qSDmnNPRnKfein9CsAMF+8qjUPe34LCmI1NXow9ZnUY3qA==
+X-Received: by 2002:adf:e942:: with SMTP id m2mr9560582wrn.364.1585484708917;
+        Sun, 29 Mar 2020 05:25:08 -0700 (PDT)
+Received: from redhat.com (bzq-79-183-139-129.red.bezeqint.net. [79.183.139.129])
+        by smtp.gmail.com with ESMTPSA id z129sm16715180wmb.7.2020.03.29.05.25.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2020 05:25:08 -0700 (PDT)
+Date:   Sun, 29 Mar 2020 08:25:05 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio Perez Martin <eperezma@redhat.com>
 Cc:     "virtualization@lists.linux-foundation.org" 
         <virtualization@lists.linux-foundation.org>,
         Halil Pasic <pasic@linux.ibm.com>,
@@ -64,73 +64,81 @@ Cc:     "virtualization@lists.linux-foundation.org"
         Cornelia Huck <cohuck@redhat.com>,
         Christian Borntraeger <borntraeger@de.ibm.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/6] vhost: Reset batched descriptors on SET_VRING_BASE
+ call
+Message-ID: <20200329082055-mutt-send-email-mst@kernel.org>
+References: <20200329113359.30960-1-eperezma@redhat.com>
+ <20200329074023-mutt-send-email-mst@kernel.org>
+ <CAJaqyWdO8CHuWFJv+TRgYJ7a3Cb06Ln3prnQZs69L1PPw4Rj1Q@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJaqyWdO8CHuWFJv+TRgYJ7a3Cb06Ln3prnQZs69L1PPw4Rj1Q@mail.gmail.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Mar 29, 2020 at 1:49 PM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Sun, Mar 29, 2020 at 01:33:53PM +0200, Eugenio P=C3=A9rez wrote:
-> > Vhost did not reset properly the batched descriptors on SET_VRING_BASE =
-event. Because of that, is possible to return an invalid descriptor to the =
-guest.
-> > This series ammend this, and creates a test to assert correct behavior.=
- To do that, they need to expose a new function in virtio_ring, virtqueue_r=
-eset_free_head. Not sure if this can be avoided.
->
-> Question: why not reset the batch when private_data changes?
-> At the moment both net and scsi poke at private data directly,
-> if they do this through a wrapper we can use that to
-> 1. check that vq mutex is taken properly
-> 2. reset batching
->
-> This seems like a slightly better API
->
+On Sun, Mar 29, 2020 at 02:19:55PM +0200, Eugenio Perez Martin wrote:
+> On Sun, Mar 29, 2020 at 1:49 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Sun, Mar 29, 2020 at 01:33:53PM +0200, Eugenio Pérez wrote:
+> > > Vhost did not reset properly the batched descriptors on SET_VRING_BASE event. Because of that, is possible to return an invalid descriptor to the guest.
+> > > This series ammend this, and creates a test to assert correct behavior. To do that, they need to expose a new function in virtio_ring, virtqueue_reset_free_head. Not sure if this can be avoided.
+> >
+> > Question: why not reset the batch when private_data changes?
+> > At the moment both net and scsi poke at private data directly,
+> > if they do this through a wrapper we can use that to
+> > 1. check that vq mutex is taken properly
+> > 2. reset batching
+> >
+> > This seems like a slightly better API
+> >
+> 
+> I didn't do that way because qemu could just SET_BACKEND to -1 and
+> SET_BACKEND to the same one, with no call to SET_VRING. In this case,
+> I think that qemu should not change the descriptors already pushed.
 
-I didn't do that way because qemu could just SET_BACKEND to -1 and
-SET_BACKEND to the same one, with no call to SET_VRING. In this case,
-I think that qemu should not change the descriptors already pushed. I
-do agree with the interface to modify private_data properly (regarding
-the mutex).
+Well dropping the batch is always safe, batch is an optimization.
 
-However, I can see how your proposal is safer, so we don't even need
-to check if private_data is !=3D NULL when we have descriptors in the
-batch_descs array. Also, this ioctls should not be in the hot path, so
-we can change to that mode anyway.
 
+> I
+> do agree with the interface to modify private_data properly (regarding
+> the mutex).
+> 
+> However, I can see how your proposal is safer, so we don't even need
+> to check if private_data is != NULL when we have descriptors in the
+> batch_descs array. Also, this ioctls should not be in the hot path, so
+> we can change to that mode anyway.
+> 
+> > >
+> > > Also, change from https://lkml.org/lkml/2020/3/27/108 is not included, that avoids to update a variable in a loop where it can be updated once.
+> > >
+> > > This is meant to be applied on top of eccb852f1fe6bede630e2e4f1a121a81e34354ab in git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git, and some commits should be squashed with that series.
 > >
-> > Also, change from https://lkml.org/lkml/2020/3/27/108 is not included, =
-that avoids to update a variable in a loop where it can be updated once.
+> > Thanks a lot! I'll apply this for now so Christian can start testing,
+> > but I'd like the comment above addressed before I push this to Linus.
 > >
-> > This is meant to be applied on top of eccb852f1fe6bede630e2e4f1a121a81e=
-34354ab in git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git, and some =
-commits should be squashed with that series.
->
-> Thanks a lot! I'll apply this for now so Christian can start testing,
-> but I'd like the comment above addressed before I push this to Linus.
->
-> > Eugenio P=C3=A9rez (6):
-> >   tools/virtio: Add --batch option
-> >   tools/virtio: Add --batch=3Drandom option
-> >   tools/virtio: Add --reset=3Drandom
-> >   tools/virtio: Make --reset reset ring idx
-> >   vhost: Delete virtqueue batch_descs member
-> >   fixup! vhost: batching fetches
+> > > Eugenio Pérez (6):
+> > >   tools/virtio: Add --batch option
+> > >   tools/virtio: Add --batch=random option
+> > >   tools/virtio: Add --reset=random
+> > >   tools/virtio: Make --reset reset ring idx
+> > >   vhost: Delete virtqueue batch_descs member
+> > >   fixup! vhost: batching fetches
+> > >
+> > >  drivers/vhost/test.c         |  57 ++++++++++++++++
+> > >  drivers/vhost/test.h         |   1 +
+> > >  drivers/vhost/vhost.c        |  12 +++-
+> > >  drivers/vhost/vhost.h        |   1 -
+> > >  drivers/virtio/virtio_ring.c |  18 +++++
+> > >  include/linux/virtio.h       |   2 +
+> > >  tools/virtio/linux/virtio.h  |   2 +
+> > >  tools/virtio/virtio_test.c   | 123 +++++++++++++++++++++++++++++++----
+> > >  8 files changed, 201 insertions(+), 15 deletions(-)
+> > >
+> > > --
+> > > 2.18.1
 > >
-> >  drivers/vhost/test.c         |  57 ++++++++++++++++
-> >  drivers/vhost/test.h         |   1 +
-> >  drivers/vhost/vhost.c        |  12 +++-
-> >  drivers/vhost/vhost.h        |   1 -
-> >  drivers/virtio/virtio_ring.c |  18 +++++
-> >  include/linux/virtio.h       |   2 +
-> >  tools/virtio/linux/virtio.h  |   2 +
-> >  tools/virtio/virtio_test.c   | 123 +++++++++++++++++++++++++++++++----
-> >  8 files changed, 201 insertions(+), 15 deletions(-)
-> >
-> > --
-> > 2.18.1
->
 

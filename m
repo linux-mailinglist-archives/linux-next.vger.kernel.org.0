@@ -2,220 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C710E197781
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 11:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30183197798
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 11:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726887AbgC3JLl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 05:11:41 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:40474 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726127AbgC3JLl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 05:11:41 -0400
-Received: by mail-wr1-f68.google.com with SMTP id u10so20616012wro.7;
-        Mon, 30 Mar 2020 02:11:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=from:to:cc:references:in-reply-to:subject:date:message-id
-         :mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=0LeJgAAnqX5pXOrfef4xQXrRSfLT4+sg2yao8l8UpUo=;
-        b=oqSDgBmM5x17cFwzxmQ4aKtBKKTo3bCW+JdPMF4cGEbuLpL36HpfPPnhS+5EVme0lu
-         fDDoy3D0J2JgONLIoJV/zdCGmEliuTMPtSV4RDbi+YgixFtXbWz0NMA5CdbTh+XjHNKM
-         JN7dgbYWfyXFTS1v+/83Ecp7x5g8uhtq8Nv5BRUHhQSiwOUcQGe/KPK6pWb4wqCGTsGR
-         4lDNIA+N9dEo5/zu4GtDSwVmonvMFCfZnJ9XUmrzoECm8ZH/Hm+MmHNjfcczFkMFZ7XA
-         Nkn6DS2wmFhrRuadEsjIMbv9LGt3p3Wfz4R33XVzDnFf8Aa4GZZEOpQxTOZMaqeBJmAK
-         uodA==
+        id S1728292AbgC3JP7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 05:15:59 -0400
+Received: from us-smtp-delivery-74.mimecast.com ([63.128.21.74]:59403 "EHLO
+        us-smtp-delivery-74.mimecast.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726981AbgC3JP7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Mar 2020 05:15:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585559757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zemqa+eFWbSRqKFbVoTd6828wtJbQvKtR1Vj/t4nfws=;
+        b=ijkjwL5FqXjDfXTK6tSFRz/dMNqOl08HOKnAvrEWech/P8+rbowSpc9X5Y++NKQ24UNB0H
+        UHbqdTyh7sFzcQGMXdOP7ltvff1g45ILPVpg/fLNMhAgkeJHpNiur7C5E3GvT2IOIVvu1X
+        MOmyTpbgMbB09RzV3mQn4YJT7agPVFk=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-176-El040IxJMymsbgOigITN3Q-1; Mon, 30 Mar 2020 05:15:55 -0400
+X-MC-Unique: El040IxJMymsbgOigITN3Q-1
+Received: by mail-qt1-f198.google.com with SMTP id w1so14344870qte.6
+        for <linux-next@vger.kernel.org>; Mon, 30 Mar 2020 02:15:55 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:references:in-reply-to:subject:date
-         :message-id:mime-version:content-transfer-encoding:content-language
-         :thread-index;
-        bh=0LeJgAAnqX5pXOrfef4xQXrRSfLT4+sg2yao8l8UpUo=;
-        b=QpR93H0G0Xodh8euyQj1MDbTPDeG9tBGLrDAhRHucjB5JruX+L3IPBkW6eXK/vIafj
-         l2LihzgtLxVzSYDQadyp/QfbsbZhKSMtDCd1LvAUA1m9vgdkRgkWnNVAgzmKHca3mFkb
-         3wmuwCGWm8lHWwByvYM/y4EhmsSFuBoobLCcSi2FEfbBuo67nqt3IEvnklbyhRrxdhU9
-         5SOoWSFGnWatatoxz0z2oFuq4vnA2gxS0i+Ur9245ve6gtpdoAvnyFbEaxCB9LQ9ZKqK
-         T8Zxkh7mjF/LpuMKWILV5ZAN7DqT8Qly7fg/rx4nwwL1m+AH9AhzmtOlGX2ubqYz+xTi
-         79fA==
-X-Gm-Message-State: ANhLgQ1O8E3zuPjpBDxOv8XS3BOGtS3W/NYj5pSpea73vHqWRp98wMoU
-        /0sMCl0wRFJC4MGZsZc5NkGI3AZTeE8diQ==
-X-Google-Smtp-Source: ADFU+vt80BhEaT/0s1wFJRln1sRKF1TzwFGfKfiumPqP9pMb6+RbT2Vuuc3pqtdCItqkKlovRaxp/Q==
-X-Received: by 2002:a5d:460e:: with SMTP id t14mr13819799wrq.421.1585559498062;
-        Mon, 30 Mar 2020 02:11:38 -0700 (PDT)
-Received: from AnsuelXPS ([2001:470:b467:1:d1ad:50bb:f012:e16])
-        by smtp.gmail.com with ESMTPSA id l185sm10880289wml.44.2020.03.30.02.11.35
-        (version=TLS1_2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 30 Mar 2020 02:11:36 -0700 (PDT)
-From:   <ansuelsmth@gmail.com>
-To:     "'Stephen Rothwell'" <sfr@canb.auug.org.au>,
-        "'Linus Walleij'" <linus.walleij@linaro.org>
-Cc:     "'Linux Next Mailing List'" <linux-next@vger.kernel.org>,
-        "'Linux Kernel Mailing List'" <linux-kernel@vger.kernel.org>,
-        "'Ajay Kishore'" <akisho@codeaurora.org>,
-        "'Bjorn Andersson'" <bjorn.andersson@linaro.org>
-References: <20200330171946.4e48fbd9@canb.auug.org.au>
-In-Reply-To: <20200330171946.4e48fbd9@canb.auug.org.au>
-Subject: R: linux-next: build failure after merge of the pinctrl tree
-Date:   Mon, 30 Mar 2020 11:11:34 +0200
-Message-ID: <00ff01d60673$37177c20$a5467460$@gmail.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zemqa+eFWbSRqKFbVoTd6828wtJbQvKtR1Vj/t4nfws=;
+        b=okzwEQwQfnXvt3gjIKPOhd6lFBiYuFzIcAUvNupd0GE20j1YZTwKYA/X51r6IlIXnk
+         TbiMEDczjzj8hMOApHotkb61Qid3NHq2X4Qm5rmzULi33Rh9aApx/L9MOcmLcU+NtFh1
+         U8+/8I1740MSPBWiYyqVytJb+nOldEXEB4zA72Et4gbKABgxgrBllqUzNm+Fii91oM4e
+         L4zepEzIjcLERD1Fz8iBA9ZvpziVyMQKGfa3ZFAoxPZYzCySPr7DMCuL5gGHxaaWV6ab
+         9yumOfKurs/fPuCwpnQvolAgE9Kff4AksqXu7ogTae/Zo9A5tHubTihPGUvBeqsfWOFk
+         yOqQ==
+X-Gm-Message-State: ANhLgQ0A83a4mmSBCsJItwNj+Qp/z3InXLSwfGxlGhbLv8qPXvCt6KMD
+        +2B/PYyFhtYcTy8XyBSGy2UpDwV3WqUt61sizzjC4+AlmgvxR9Ncfn98V6mKhJIdh5DtBCcut8P
+        9gLTiyjFCtk5xGoqEMd8oe376XVXGUT7SrdfJNw==
+X-Received: by 2002:ae9:eb12:: with SMTP id b18mr4617815qkg.168.1585559755409;
+        Mon, 30 Mar 2020 02:15:55 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vtmZS/6wgLxWT3ZU/CS/qVPDcBOgRfiDiQ203JJ58Kdixi7MMbXpUC+A+8C7IiEGVQnJsaMv5FmAfbHLS/iB3g=
+X-Received: by 2002:ae9:eb12:: with SMTP id b18mr4617794qkg.168.1585559754968;
+ Mon, 30 Mar 2020 02:15:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: it
-Thread-Index: AQHOQtNMcV7el3iWp8zcu7kRQ8Bdo6hwYFzQ
+References: <20200329113359.30960-1-eperezma@redhat.com> <bb95e827-f219-32fd-0046-41046eec058b@de.ibm.com>
+ <CAJaqyWePfMcXhYEPxKYV22J3cYtO=DUXCj1Yf=7XH+khXHop9A@mail.gmail.com> <41dfa0e5-8013-db15-cbfe-aa4574cfb9a0@de.ibm.com>
+In-Reply-To: <41dfa0e5-8013-db15-cbfe-aa4574cfb9a0@de.ibm.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Mon, 30 Mar 2020 11:15:18 +0200
+Message-ID: <CAJaqyWfq3TGiQ9GSqdFVAZyydg29BoKiJFGKep+h3BoV5POLHQ@mail.gmail.com>
+Subject: Re: [PATCH 0/6] vhost: Reset batched descriptors on SET_VRING_BASE call
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-> Hi all,
-> 
-> After merging the pinctrl tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> drivers/pinctrl/qcom/pinctrl-msm.c:909:4: error: expected identifier or
-'('
-> before 'else'
->   909 |  } else {
->       |    ^~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:921:2: warning: data definition has no
-> type or storage class
->   921 |  val = msm_readl_intr_cfg(pctrl, g);
->       |  ^~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:921:2: error: type defaults to 'int' in
-> declaration of 'val' [-Werror=implicit-int]
-> drivers/pinctrl/qcom/pinctrl-msm.c:921:27: error: 'pctrl' undeclared here
-> (not in a function); did you mean 'pinctrl'?
->   921 |  val = msm_readl_intr_cfg(pctrl, g);
->       |                           ^~~~~
->       |                           pinctrl
-> drivers/pinctrl/qcom/pinctrl-msm.c:921:34: error: 'g' undeclared here (not
-> in a function)
->   921 |  val = msm_readl_intr_cfg(pctrl, g);
->       |                                  ^
-> drivers/pinctrl/qcom/pinctrl-msm.c:922:6: error: expected '=', ',', ';',
-'asm'
-> or '__attribute__' before '|=' token
->   922 |  val |= BIT(g->intr_raw_status_bit);
->       |      ^~
-> drivers/pinctrl/qcom/pinctrl-msm.c:923:2: error: expected identifier or
-'('
-> before 'if'
->   923 |  if (g->intr_detection_width == 2) {
->       |  ^~
-> drivers/pinctrl/qcom/pinctrl-msm.c:945:4: error: expected identifier or
-'('
-> before 'else'
->   945 |  } else if (g->intr_detection_width == 1) {
->       |    ^~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:966:4: error: expected identifier or
-'('
-> before 'else'
->   966 |  } else {
->       |    ^~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:969:2: warning: data definition has no
-> type or storage class
->   969 |  msm_writel_intr_cfg(val, pctrl, g);
->       |  ^~~~~~~~~~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:969:2: error: type defaults to 'int' in
-> declaration of 'msm_writel_intr_cfg' [-Werror=implicit-int]
-> drivers/pinctrl/qcom/pinctrl-msm.c:969:2: warning: parameter names
-> (without types) in function declaration
-> drivers/pinctrl/qcom/pinctrl-msm.c:969:2: error: conflicting types for
-> 'msm_writel_intr_cfg'
-> drivers/pinctrl/qcom/pinctrl-msm.c:84:13: note: previous definition of
-> 'msm_writel_intr_cfg' was here
->    84 | static void msm_writel_##name(u32 val, struct msm_pinctrl *pctrl,
-> \
->       |             ^~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:92:1: note: in expansion of macro
-> 'MSM_ACCESSOR'
->    92 | MSM_ACCESSOR(intr_cfg)
->       | ^~~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:971:2: error: expected identifier or
-'('
-> before 'if'
->   971 |  if (test_bit(d->hwirq, pctrl->dual_edge_irqs))
->       |  ^~
-> In file included from include/linux/vmalloc.h:5,
->                  from include/asm-generic/io.h:887,
->                  from arch/arm/include/asm/io.h:438,
->                  from include/linux/io.h:13,
->                  from drivers/pinctrl/qcom/pinctrl-msm.c:9:
-> include/linux/spinlock.h:287:2: error: expected identifier or '(' before
-'do'
->   287 |  do {       \
->       |  ^~
-> drivers/pinctrl/qcom/pinctrl-msm.c:974:2: note: in expansion of macro
-> 'raw_spin_unlock_irqrestore'
->   974 |  raw_spin_unlock_irqrestore(&pctrl->lock, flags);
->       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> include/linux/spinlock.h:290:4: error: expected identifier or '(' before
-'while'
->   290 |  } while (0)
->       |    ^~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:974:2: note: in expansion of macro
-> 'raw_spin_unlock_irqrestore'
->   974 |  raw_spin_unlock_irqrestore(&pctrl->lock, flags);
->       |  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:976:2: error: expected identifier or
-'('
-> before 'if'
->   976 |  if (type & (IRQ_TYPE_LEVEL_LOW | IRQ_TYPE_LEVEL_HIGH))
->       |  ^~
-> drivers/pinctrl/qcom/pinctrl-msm.c:978:2: error: expected identifier or
-'('
-> before 'else'
->   978 |  else if (type & (IRQ_TYPE_EDGE_FALLING |
-> IRQ_TYPE_EDGE_RISING))
->       |  ^~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:981:2: error: expected identifier or
-'('
-> before 'return'
->   981 |  return 0;
->       |  ^~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:982:1: error: expected identifier or
-'('
-> before '}' token
->   982 | }
->       | ^
-> drivers/pinctrl/qcom/pinctrl-msm.c: In function 'msm_gpio_irq_set_type':
-> drivers/pinctrl/qcom/pinctrl-msm.c:909:2: warning: control reaches end of
-> non-void function [-Wreturn-type]
->   909 |  } else {
->       |  ^
-> At top level:
-> drivers/pinctrl/qcom/pinctrl-msm.c:84:13: warning:
-> 'msm_writel_intr_target' defined but not used [-Wunused-function]
->    84 | static void msm_writel_##name(u32 val, struct msm_pinctrl *pctrl,
-> \
->       |             ^~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:94:1: note: in expansion of macro
-> 'MSM_ACCESSOR'
->    94 | MSM_ACCESSOR(intr_target)
->       | ^~~~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:79:12: warning:
-> 'msm_readl_intr_target' defined but not used [-Wunused-function]
->    79 | static u32 msm_readl_##name(struct msm_pinctrl *pctrl, \
->       |            ^~~~~~~~~~
-> drivers/pinctrl/qcom/pinctrl-msm.c:94:1: note: in expansion of macro
-> 'MSM_ACCESSOR'
->    94 | MSM_ACCESSOR(intr_target)
->       | ^~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   13bec8d49bdf ("pinctrl: qcom: use scm_call to route GPIO irq to Apps")
-> 
-> I have reverted that commit for today.
-> 
-> --
-> Cheers,
-> Stephen Rothwell
+On Mon, Mar 30, 2020 at 9:34 AM Christian Borntraeger
+<borntraeger@de.ibm.com> wrote:
+>
+>
+>
+> On 30.03.20 09:18, Eugenio Perez Martin wrote:
+> > On Mon, Mar 30, 2020 at 9:14 AM Christian Borntraeger
+> > <borntraeger@de.ibm.com> wrote:
+> >>
+> >>
+> >> On 29.03.20 13:33, Eugenio P=C3=A9rez wrote:
+> >>> Vhost did not reset properly the batched descriptors on SET_VRING_BAS=
+E event. Because of that, is possible to return an invalid descriptor to th=
+e guest.
+> >>
+> >> I guess this could explain my problems that I have seen during reset?
+> >>
+> >
+> > Yes, I think so. The series has a test that should reproduce more or
+> > less what you are seeing. However, it would be useful to reproduce on
+> > your system and to know what causes qemu to send the reset :).
+>
+> I do see SET_VRING_BASE in the debug output
+> [228101.438630] [2113] vhost:vhost_vring_ioctl:1668: VHOST_GET_VRING_BASE=
+ [vq=3D00000000618905fc][s.index=3D1][s.num=3D42424][vq->avail_idx=3D42424]=
+[vq->last_avail_idx=3D42424][vq->ndescs=3D0][vq->first_desc=3D0]
+> [228101.438631] CPU: 54 PID: 2113 Comm: qemu-system-s39 Not tainted 5.5.0=
++ #344
+> [228101.438632] Hardware name: IBM 3906 M04 704 (LPAR)
+> [228101.438633] Call Trace:
+> [228101.438634]  [<00000004fc71c132>] show_stack+0x8a/0xd0
+> [228101.438636]  [<00000004fd10e72a>] dump_stack+0x8a/0xb8
+> [228101.438639]  [<000003ff80377600>] vhost_vring_ioctl+0x668/0x848 [vhos=
+t]
+> [228101.438640]  [<000003ff80395fd4>] vhost_net_ioctl+0x4f4/0x570 [vhost_=
+net]
+> [228101.438642]  [<00000004fc9ccdd8>] do_vfs_ioctl+0x430/0x6f8
+> [228101.438643]  [<00000004fc9cd124>] ksys_ioctl+0x84/0xb0
+> [228101.438645]  [<00000004fc9cd1ba>] __s390x_sys_ioctl+0x2a/0x38
+> [228101.438646]  [<00000004fd12ff72>] system_call+0x2a6/0x2c8
+> [228103.682732] [2122] vhost:vhost_vring_ioctl:1653: VHOST_SET_VRING_BASE=
+ [vq=3D000000009e1ac3e7][s.index=3D0][s.num=3D0][vq->avail_idx=3D27875][vq-=
+>last_avail_idx=3D27709][vq->ndescs=3D65][vq->first_desc=3D22]
+> [228103.682735] CPU: 44 PID: 2122 Comm: CPU 0/KVM Not tainted 5.5.0+ #344
+> [228103.682739] Hardware name: IBM 3906 M04 704 (LPAR)
+> [228103.682741] Call Trace:
+> [228103.682748]  [<00000004fc71c132>] show_stack+0x8a/0xd0
+> [228103.682752]  [<00000004fd10e72a>] dump_stack+0x8a/0xb8
+> [228103.682761]  [<000003ff80377422>] vhost_vring_ioctl+0x48a/0x848 [vhos=
+t]
+> [228103.682764]  [<000003ff80395fd4>] vhost_net_ioctl+0x4f4/0x570 [vhost_=
+net]
+> [228103.682767]  [<00000004fc9ccdd8>] do_vfs_ioctl+0x430/0x6f8
+> [228103.682769]  [<00000004fc9cd124>] ksys_ioctl+0x84/0xb0
+> [228103.682771]  [<00000004fc9cd1ba>] __s390x_sys_ioctl+0x2a/0x38
+> [228103.682773]  [<00000004fd12ff72>] system_call+0x2a6/0x2c8
+> [228103.682794] [2122] vhost:vhost_vring_ioctl:1653: VHOST_SET_VRING_BASE=
+ [vq=3D00000000618905fc][s.index=3D1][s.num=3D0][vq->avail_idx=3D42424][vq-=
+>last_avail_idx=3D42424][vq->ndescs=3D0][vq->first_desc=3D0]
+> [228103.682795] CPU: 44 PID: 2122 Comm: CPU 0/KVM Not tainted 5.5.0+ #344
+> [228103.682797] Hardware name: IBM 3906 M04 704 (LPAR)
+> [228103.682797] Call Trace:
+> [228103.682799]  [<00000004fc71c132>] show_stack+0x8a/0xd0
+> [228103.682801]  [<00000004fd10e72a>] dump_stack+0x8a/0xb8
+> [228103.682804]  [<000003ff80377422>] vhost_vring_ioctl+0x48a/0x848 [vhos=
+t]
+> [228103.682806]  [<000003ff80395fd4>] vhost_net_ioctl+0x4f4/0x570 [vhost_=
+net]
+> [228103.682808]  [<00000004fc9ccdd8>] do_vfs_ioctl+0x430/0x6f8
+> [228103.682810]  [<00000004fc9cd124>] ksys_ioctl+0x84/0xb0
+> [228103.682812]  [<00000004fc9cd1ba>] __s390x_sys_ioctl+0x2a/0x38
+> [228103.682813]  [<00000004fd12ff72>] system_call+0x2a6/0x2c8
+>
+>
+> Isnt that triggered by resetting the virtio devices during system reboot?
+>
 
-Hello I sent a v4 of the broken patch. I'm really sorry for the mess... If I
-should fix 
-this in a different way pls tell me how and I will do ASAP.
+Yes. I don't know exactly why qemu is sending them, but vhost should
+be able to "protect/continue" the same way it used to be before
+batching patches.
+
+Did you lose connectivity or experienced rebooting with this patches applie=
+d?
+
+Thanks!
 

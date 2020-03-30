@@ -2,25 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 1080D197C2A
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 14:45:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9F6197C88
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 15:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729906AbgC3Mph (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 08:45:37 -0400
-Received: from foss.arm.com ([217.140.110.172]:52734 "EHLO foss.arm.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729705AbgC3Mpg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Mar 2020 08:45:36 -0400
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD46330E;
-        Mon, 30 Mar 2020 05:45:35 -0700 (PDT)
-Received: from [10.57.60.204] (unknown [10.57.60.204])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D01383F71E;
-        Mon, 30 Mar 2020 05:45:33 -0700 (PDT)
+        id S1730205AbgC3NLo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 09:11:44 -0400
+Received: from mail-pf1-f195.google.com ([209.85.210.195]:41058 "EHLO
+        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730209AbgC3NLo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 09:11:44 -0400
+Received: by mail-pf1-f195.google.com with SMTP id a24so1712441pfc.8;
+        Mon, 30 Mar 2020 06:11:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=xJ3TyvoFApvA3YeewIwlAIGLD0UIZM7kn/bRRvcTrjw=;
+        b=O0ZaJzjrsqaH8T7T/ksePnAm/NlJO+6qoptcFKLvEEgtxL5EtsV3CEpPxql6m4tpM8
+         6yN9iaczQ72XGuSQ4pjvRedRyRr18nJDix84RYE7+DJoArG8KgOkSbOv5IUieg6EcQ5g
+         guV2pClmvSsZ+bRlVwvjlyTPEG0N+CLkTjepcuhRamuJ05N3vVn0kg59vjM1VssGt9ai
+         y0GLKKgKLFhgRCEWYPX1HOzeXcujs5m/qZ8AMV//Cc87NCWXJU7v5uY7ZScfZw/x+HTS
+         T1y7hjgVMs3ZCp59wqnZckfhASiUOJDua1WoButL2R1sWItDpSZGb3FVWvHt5qLtQtBz
+         g50w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=xJ3TyvoFApvA3YeewIwlAIGLD0UIZM7kn/bRRvcTrjw=;
+        b=eAlTa/rQXIlqfR15R0T9YpGMM74cMotERgZcprPptm2282hPCXavPvHBT0diOdQZNc
+         FMmu/D6hwi9E84a0ycNXl4w2Tr+jNReEG41Yv6vYDkKpPnDa0Y+ayXp8iOym2NNIMy1p
+         B3JO/7LbzremQouH99r+LtT9wP6jFLWIl/DqZf7fXuGldnPUfsNAJK/5/n4j6d9TPRw2
+         GjuEWd5Tp3IYwC2Jrh1MBkCWlxSmvsDxUzG9o5YrU3+FZZyBkOEZjemoFOoanWtbOZ6H
+         y7ax1xAwOszHT8llXwU0TuJHLBc8snbgr5JSbHK/xSI86k2HEN09vjbwQHJxxRhOe9m5
+         nO/A==
+X-Gm-Message-State: ANhLgQ1qolmArYLZQHvNuz70MxDo5BN1qKT7RK9BVCBgIKv1I3Qw4/fT
+        Ps2qILOuFxlUUp2m1A9Ca7ODBe7pxgAl5UG8tD8=
+X-Google-Smtp-Source: ADFU+vt/wdF9Yz9aLGwEDV0amBEh7A3BOassb43ggpF/dr6JnjHGteI2QUsfwGMQgIfZ+egzDho/tSB1cI+UUvt5Elk=
+X-Received: by 2002:aa7:958f:: with SMTP id z15mr12440065pfj.130.1585573902959;
+ Mon, 30 Mar 2020 06:11:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
+ <20200324122023.9649-3-andriy.shevchenko@linux.intel.com> <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
+ <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
+ <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com> <20200330095707.GA10432@bogus> <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com>
+In-Reply-To: <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 30 Mar 2020 16:11:35 +0300
+Message-ID: <CAHp75VdBm8ZYOMWmQEA8LD6uGcJ0sZ=M6n3MSYxmO6UkXbu+-A@mail.gmail.com>
 Subject: Re: [PATCH v2 3/3] driver core: Replace open-coded list_last_entry()
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -28,76 +61,31 @@ Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
         Basil Eljuse <Basil.Eljuse@arm.com>,
         lkft-triage@lists.linaro.org,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        fntoth@gmail.com, Arnd Bergmann <arnd@arndb.de>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>
-References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
- <20200324122023.9649-3-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
- <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
- <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com> <20200330095707.GA10432@bogus>
-From:   Robin Murphy <robin.murphy@arm.com>
-Message-ID: <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com>
-Date:   Mon, 30 Mar 2020 13:45:32 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
-MIME-Version: 1.0
-In-Reply-To: <20200330095707.GA10432@bogus>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020-03-30 11:13 am, Sudeep Holla wrote:
-> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
->> On 2020-03-27 5:56 pm, Naresh Kamboju wrote:
->>> The kernel warning noticed on arm64 juno-r2 device running linux
->>> next-20200326 and next-20200327
->>
->> I suspect this is the correct expected behaviour manifesting. If you're
->> using the upstream juno-r2.dts, the power domain being waited for here is
->> provided by SCPI, however unless you're using an SCP firmware from at least
->> 3 years ago you won't actually have SCPI since they switched it to the newer
->> SCMI protocol, which is not yet supported upstream for Juno. See what
->> happened earlier in the log:
->>
->> [    2.741206] scpi_protocol scpi: incorrect or no SCP firmware found
->> [    2.747586] scpi_protocol: probe of scpi failed with error -110
->>
->> Thus this is the "waiting for a dependency which will never appear" case,
->> for which I assume the warning is intentional,
-> 
-> Is that the case ?
-> 
-> Previously we used to get the warning:
-> "amba xx: ignoring dependency for device, assuming no driver"
-> 
-> Now we have the kernel warning in addition to the above.
+On Mon, Mar 30, 2020 at 3:49 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> On 2020-03-30 11:13 am, Sudeep Holla wrote:
+> > On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
 
-AFAICS the difference is down to whether deferred_probe_timeout has 
-expired or not - I'm not familiar enough with this code to know 
-*exactly* what the difference is supposed to represent, nor which change 
-has actually pushed the Juno case from one state to the other (other 
-than it almost certainly can't be $SUBJECT - if this series is to blame 
-at all I'd assume it would be down to patch #1/3, but there's a bunch of 
-other rework previously queued in -next that is probably also interacting)
+...
 
->> since the system is essentially broken (i.e. the hardware/firmware doesn't
->> actually match what the DT describes).
->>
-> 
-> Not sure if we can term it as "essentially broken". Definitely not 100%
-> functional but not broken if the situation like on Juno where SCP firmware
-> is fundamental for all OSPM but not essential for boot and other minimum
-> set of functionality.
+> AFAICS the difference is down to whether deferred_probe_timeout has
+> expired or not - I'm not familiar enough with this code to know
+> *exactly* what the difference is supposed to represent, nor which change
+> has actually pushed the Juno case from one state to the other (other
+> than it almost certainly can't be $SUBJECT - if this series is to blame
+> at all I'd assume it would be down to patch #1/3, but there's a bunch of
+> other rework previously queued in -next that is probably also interacting)
 
-It's "broken" in the sense that the underlying system is *not* the 
-system described in the DT. Yes, all the parts that still happen to line 
-up will mostly still function OK, but those that don't will 
-fundamentally not work as the kernel has been told to expect. I'm not 
-sure what you prefer to call "not working as the kernel expects", but I 
-call it "broken" ;)
+JFYI: patch #1/3 wasn't applied.
 
-Robin.
+
+-- 
+With Best Regards,
+Andy Shevchenko

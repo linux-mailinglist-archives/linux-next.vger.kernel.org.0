@@ -2,78 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 952BE198226
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 19:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF44619824C
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 19:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728633AbgC3RWZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 13:22:25 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:60620 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727255AbgC3RWY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 13:22:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=RTo/l3mApqYi+FAC2NhO4jmI7vS3v+umdzjqut0gXrs=; b=epXZGh7AJkvwaCOfIcKqPes0O/
-        TZITBPLJ88zQPtBJYZxf/f+N9pIbvNHDFyWCZ0wjXtVdOjKd25Vc73LrepJ+kipztOfwjgUSVaryX
-        UG1rbVv8MnGL4HsfqIyw4Vh4iTHJCIU+4PhLMEhCEGoEC7az/TGfhzvfj0bNUpgc97iNQ8YDWnq5b
-        PRY3uA5tZ5rVg9ltHXbwyZolCXHdXcxmEXPANZeWq5aCsZrN1iq/sa05mLZwQMRu/PCBFRcpwsB3u
-        9nxP4tCR5U9Vp2iowEfYq/89hQp9GeyDH74PDtlQbZc8ZW54JObpESALTg8+N9k+oNVirfOtM2WJ0
-        Yp9p0LdA==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jIy7E-0005n4-7Q; Mon, 30 Mar 2020 17:22:24 +0000
-Subject: Re: linux-next: Tree for Mar 30 (vhost)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1728670AbgC3RZt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 13:25:49 -0400
+Received: from www62.your-server.de ([213.133.104.62]:39284 "EHLO
+        www62.your-server.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727890AbgC3RZt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 13:25:49 -0400
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.2:DHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.89_1)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jIyAK-0006tP-Rk; Mon, 30 Mar 2020 19:25:36 +0200
+Received: from [178.195.186.98] (helo=pc-9.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1jIyAK-000GDI-D1; Mon, 30 Mar 2020 19:25:36 +0200
+Subject: Re: linux-next: Tree for Mar 30 (bpf)
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        KVM <kvm@vger.kernel.org>, "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>
+        bpf@vger.kernel.org,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        kpsingh@chromium.org
 References: <20200330204307.669bbb4d@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <347c851a-b9f6-0046-f6c8-1db0b42be213@infradead.org>
-Date:   Mon, 30 Mar 2020 10:22:22 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ <86f7031a-57c6-5d50-2788-ae0e06a7c138@infradead.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <d5b4bd95-7ef9-58cb-1955-900e6edb2467@iogearbox.net>
+Date:   Mon, 30 Mar 2020 19:25:35 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-In-Reply-To: <20200330204307.669bbb4d@canb.auug.org.au>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <86f7031a-57c6-5d50-2788-ae0e06a7c138@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.102.2/25767/Mon Mar 30 15:08:30 2020)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/30/20 2:43 AM, Stephen Rothwell wrote:
-> Hi all,
+[Cc KP, ptal]
+
+On 3/30/20 7:15 PM, Randy Dunlap wrote:
+> On 3/30/20 2:43 AM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> The merge window has opened, so please do not add any material for the
+>> next release into your linux-next included trees/branches until after
+>> the merge window closes.
+>>
+>> Changes since 20200327:
 > 
-> The merge window has opened, so please do not add any material for the
-> next release into your linux-next included trees/branches until after
-> the merge window closes.
+> (note: linux-next is based on linux 5.6-rc7)
 > 
-> Changes since 20200327:
 > 
-> The vhost tree gained a conflict against the kvm-arm tree.
+> on i386:
+> 
+> ld: kernel/bpf/bpf_lsm.o:(.rodata+0x0): undefined reference to `bpf_tracing_func_proto'
+> 
+> 
+> Full randconfig file is attached.
 > 
 
-(note: today's linux-next is on 5.6-rc7.)
-
-on x86_64:
-
-# CONFIG_EVENTFD is not set
-
-../drivers/vhost/vhost.c: In function 'vhost_vring_ioctl':
-../drivers/vhost/vhost.c:1577:33: error: implicit declaration of function 'eventfd_fget'; did you mean 'eventfd_signal'? [-Werror=implicit-function-declaration]
-   eventfp = f.fd == -1 ? NULL : eventfd_fget(f.fd);
-                                 ^~~~~~~~~~~~
-                                 eventfd_signal
-../drivers/vhost/vhost.c:1577:31: warning: pointer/integer type mismatch in conditional expression
-   eventfp = f.fd == -1 ? NULL : eventfd_fget(f.fd);
-                               ^
-
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,107 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C4A19797B
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 12:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02D8197AE0
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 13:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728956AbgC3Knm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 06:43:42 -0400
-Received: from mga09.intel.com ([134.134.136.24]:26454 "EHLO mga09.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728912AbgC3Knm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Mar 2020 06:43:42 -0400
-IronPort-SDR: 9vD//3wRp0uiwiAWTFBn2VEfbc04iqkKNRVwgobCD24G/KasMYrH4tHI5ZZjIqPs6cELvTcNtD
- lcd3MON3X/hw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Mar 2020 03:43:41 -0700
-IronPort-SDR: wwUk+Jwnmz7vf91weyeKOqaGAh9J/oT3rFSilVdm0crTq+p/bvI0oy+69NMMUJGR3TGHDRKVQt
- zBxK7pVfY7Sw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,324,1580803200"; 
-   d="scan'208";a="294549884"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.68.40])
-  by FMSMGA003.fm.intel.com with ESMTP; 30 Mar 2020 03:43:38 -0700
-Received: from andy by smile with local (Exim 4.93)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1jIrtM-00EAdz-DH; Mon, 30 Mar 2020 13:43:40 +0300
-Date:   Mon, 30 Mar 2020 13:43:40 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        fntoth@gmail.com, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: Re: [PATCH v2 3/3] driver core: Replace open-coded
- list_last_entry()
-Message-ID: <20200330104340.GO1922688@smile.fi.intel.com>
-References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
- <20200324122023.9649-3-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
- <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
- <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com>
- <20200330095707.GA10432@bogus>
+        id S1729911AbgC3LfT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 07:35:19 -0400
+Received: from mail-il1-f193.google.com ([209.85.166.193]:45530 "EHLO
+        mail-il1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729845AbgC3LfS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 07:35:18 -0400
+Received: by mail-il1-f193.google.com with SMTP id x16so15384018ilp.12;
+        Mon, 30 Mar 2020 04:35:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=STJoDQnNxyxtNOLGstObx+rrMyRlmYWEbAqvXTqhttE=;
+        b=vGNB9mRlNrfqMzj5IVsAL3VvF1HanMFINy5IeVKBxINJJU8bwp84QKkff5z0BG2kPm
+         gA94RZSEIX/Q59LOO2bS5NE+d5iI1GWzP1uAQne47447kVmzLT0SRgUMhg7J7wt+vfGZ
+         iDvvKduOAJbrYuoIquLSisbo4NIBw4Dmzo5VFIefDn7NgD+qdWoc1X77QU0RkEnJkuJU
+         04epD4YNKd3ezf1+olSVJ5bTi0EenESNu/YFadSrczcRdoTFeVcQRQyihnMms4L2GWbw
+         L0Z0cUYMlrtHNWCggr0nSqQ51UMczv9vFKL/xgGLOTdcIN073fOgeA1Ud15pfZKJ6imY
+         Medw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=STJoDQnNxyxtNOLGstObx+rrMyRlmYWEbAqvXTqhttE=;
+        b=IQJaswTnva5XppY9TngIdfWHPBzAzsw7GRf5E5/DnobKgkPCQq1w5loaI+XRTJ4eqP
+         Gi8/f8AOiSMpyc3wP8JGzkl/qpZ8lR2Zmi9hUGxE1ksmQd3ryic0wpliVraDn/m1IRzC
+         kugbGK1lcNapwsqpCfnxnBIWbN5gvkVGjWikoR0cedo4HyMdZSvBCO7hkhcawyB9D1Yf
+         YXfqLpZ9mzZdtqgwthZonLCruoinb79WffKqK6IJkpV3xQciyty2E2lsfBWqKPuqtSIf
+         APgPJpUlONpW3xbyLlDfEd24JTdYjibei6zO+GYnIqaSbvoEopBktbS5AEY+6ab3AlJx
+         0E+A==
+X-Gm-Message-State: ANhLgQ1Kijf7a3XGT29+VH3FeeniSxwjaNn31WMKa06mKmx/2nAeKo/0
+        FUZZnyBRwLwH/V9/Xp8Vn/C3DuYy8WamAPOtOgkZYw==
+X-Google-Smtp-Source: ADFU+vsWtPyrwdqj71KtushyxMZ54QOSOtZLLcDf9wnU8XhfOES+G0fFINdp0iDYMhAPUprrWNtm7nOT6zRn2IKZrz8=
+X-Received: by 2002:a92:c00a:: with SMTP id q10mr10679625ild.151.1585568117885;
+ Mon, 30 Mar 2020 04:35:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200330095707.GA10432@bogus>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20200330143529.4dafeb34@canb.auug.org.au> <CAMe9rOqnRCEdHhSHOT=Ut11D3O2WhjiFYhvPnaU5dANZNPE-=A@mail.gmail.com>
+ <20200330150819.7f0199a2@canb.auug.org.au> <20200330074823.GA14624@zn.tnic>
+ <87wo72uv3z.fsf@mpe.ellerman.id.au> <20200330081652.GB14624@zn.tnic>
+In-Reply-To: <20200330081652.GB14624@zn.tnic>
+From:   "H.J. Lu" <hjl.tools@gmail.com>
+Date:   Mon, 30 Mar 2020 04:34:42 -0700
+Message-ID: <CAMe9rOqCEtn7e2NaKfnX97HUjcN54y481YGN28GfkwWHs8CfcQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To:     Borislav Petkov <bp@suse.de>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 11:13:21AM +0100, Sudeep Holla wrote:
-> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
-> > On 2020-03-27 5:56 pm, Naresh Kamboju wrote:
-> > > The kernel warning noticed on arm64 juno-r2 device running linux
-> > > next-20200326 and next-20200327
+On Mon, Mar 30, 2020 at 1:17 AM Borislav Petkov <bp@suse.de> wrote:
+>
+> On Mon, Mar 30, 2020 at 07:04:16PM +1100, Michael Ellerman wrote:
+> > Or just squash the hunk Stephen posted into the commit, which is what I
+> > thought would happen to begin with.
 > >
-> > I suspect this is the correct expected behaviour manifesting. If you're
-> > using the upstream juno-r2.dts, the power domain being waited for here is
-> > provided by SCPI, however unless you're using an SCP firmware from at least
-> > 3 years ago you won't actually have SCPI since they switched it to the newer
-> > SCMI protocol, which is not yet supported upstream for Juno. See what
-> > happened earlier in the log:
+> > You can have my ack for it:
 > >
-> > [    2.741206] scpi_protocol scpi: incorrect or no SCP firmware found
-> > [    2.747586] scpi_protocol: probe of scpi failed with error -110
-> >
-> > Thus this is the "waiting for a dependency which will never appear" case,
-> > for which I assume the warning is intentional,
-> 
-> Is that the case ?
-> 
-> Previously we used to get the warning:
-> "amba xx: ignoring dependency for device, assuming no driver"
-> 
-> Now we have the kernel warning in addition to the above.
-> 
-> > since the system is essentially broken (i.e. the hardware/firmware doesn't
-> > actually match what the DT describes).
-> >
-> 
-> Not sure if we can term it as "essentially broken". Definitely not 100%
-> functional but not broken if the situation like on Juno where SCP firmware
-> is fundamental for all OSPM but not essential for boot and other minimum
-> set of functionality.
-> 
-> Either way I am not against the warning, just wanted to get certain things
-> clarified myself.
+> > Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+>
+> Thanks but considering how this is not really urgent stuff and it can
+> take its time and get some wider testing before getting upstream, I'd
+> prefer to delay it.
 
-How this warning related to the patch in the subject? Does revert of the patch
-gives you no warning? (I will be very surprised).
+Skip my commit will also delay other commits since they depend on my
+commit.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+H.J.

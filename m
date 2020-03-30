@@ -2,134 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 075C71970FE
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 01:01:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2284197137
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 02:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728619AbgC2XB0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Mar 2020 19:01:26 -0400
-Received: from mail-pj1-f66.google.com ([209.85.216.66]:35985 "EHLO
-        mail-pj1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728548AbgC2XBZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Mar 2020 19:01:25 -0400
-Received: by mail-pj1-f66.google.com with SMTP id nu11so6518817pjb.1
-        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 16:01:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=UbizUVPVXpGyA3BsXl6Vd43AqsSRySswa+EaMqUJmJI=;
-        b=eCj6l69GIn2zfGol9w2eRh/FFh6puaHHX4Fbpca445P0wJe6Gr4q2YmSA6yojwXzhX
-         D7EkApD42dNhPAajprO6uz0Lf9EGaaWHOTSKdUi7TgAUl0Tt70DfTKS0aTB1DBsSGsHB
-         FGIvdmQ11ZslacYOR5QDkvbw5/BFYycQgSq8AbGWDRf+rRgRJmGRODHrBxei6u9VnAcj
-         DlPhmL246/D/0E4lnmtB6PCkLRIhmx+DykxH8LF9eSc91Y70CIseoeXzFBgKmSkEDQLQ
-         rv/t8/DcmUSMNmKUklzoNR19AB5tSXve1wr2+ssAj3F0kPvIAggfkh23U1BK/d7VgO55
-         Rurw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=UbizUVPVXpGyA3BsXl6Vd43AqsSRySswa+EaMqUJmJI=;
-        b=PlpU3aVx/8ThELeqHInBVbqMgMDrwC3KvMHaZQmbljF6uNNHWMKUhKaXpwZGdw+QKC
-         8Kt9qFmPWtCabn8Ee4A1OLJjejqQib3uGV+n376VsjTVmvx043gExOGzMAiQWxpPvWC2
-         ZS5LujPHyPda26GKCzaosY75hhhujmt2YEmeadTEKpTu3e3OJJZZFKcFtjCu+Dd6Uw8b
-         J4ZzqDfZtoK/bjlsGCTKROmv+6KiPX8bvWxUePshKya+P9fJy4GoVpI348q5RNDuDKLT
-         ChyRLEUNv5ck3vDrCU317Fs87qy1fZd7sb5yY+G6eWtUQyprp7obV4wq12TnlhLRe2VA
-         L3ig==
-X-Gm-Message-State: ANhLgQ0R+KySfbr5J/xjWQJPPDlOab7TGfeZAKeWSmO9Yz1fpa+lgcaU
-        ckd9LuHJ3ovgXJMA4U6xH1EDqcUH6AQ=
-X-Google-Smtp-Source: ADFU+vtG2CFynrm37xPrm5sFFHZwwRZJqxo/oElwoMGeqWw5zvxBqhHCu9+t9N79Tp36tj8ZXP9RsQ==
-X-Received: by 2002:a17:90a:30c7:: with SMTP id h65mr13242286pjb.44.1585522884216;
-        Sun, 29 Mar 2020 16:01:24 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o11sm8253814pgh.78.2020.03.29.16.01.23
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Mar 2020 16:01:23 -0700 (PDT)
-Message-ID: <5e8128c3.1c69fb81.52c43.4e56@mx.google.com>
-Date:   Sun, 29 Mar 2020 16:01:23 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1727461AbgC3A0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Mar 2020 20:26:18 -0400
+Received: from ozlabs.org ([203.11.71.1]:41701 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726661AbgC3A0S (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 29 Mar 2020 20:26:18 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48rCtZ31Wlz9sPR;
+        Mon, 30 Mar 2020 11:26:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585527975;
+        bh=QbXOxtxH7m6OajZuEjdOt9MJFpOMzsUFZjcVETW53l4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rFwbE5wqN4gkFsOdxwLcdIp1OKiK54nE83HOhjZ8TCr6JhSXRzsVYM0TaMQRNbdlg
+         cyrsDo/O002PsHFMhJXuuJYCwPSWZLoYQwXKXrZfOLUPRhYmMVZENsajimxJOu1lfG
+         FaVXd/j02xQljeCwxJXa5kAxm+Ve859sGmzk2IItxSTlxpgzfOAGbb4I6Q6yunaZ6M
+         AVDJEsMZvouc6q3LoRub0bvC0RiQxjrOOOx5soTxsmVbo52cKdsS5jFNNkMEXn/X8Z
+         FtcaIahtjEuBeWf80EbvC1337cpCVdRvi6ESRTPi9wIBJCutCr3qyIpY07J0vSStUz
+         UUfwL/kTX7q0g==
+Date:   Mon, 30 Mar 2020 11:26:11 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        NetFilter <netfilter-devel@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Haishuang Yan <yanhaishuang@cmss.chinamobile.com>
+Subject: linux-next: build warning after merge of the netfilter-next tree
+Message-ID: <20200330112611.5248d1d4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-rc7-404-gbcaebd8567a2
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes build: 216 builds: 0 failed, 216 passed,
- 25 warnings (v5.6-rc7-404-gbcaebd8567a2)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/GjAzYQMIwpxmCSVWZ4noGH5";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes build: 216 builds: 0 failed, 216 passed, 25 warnings (v5=
-.6-rc7-404-gbcaebd8567a2)
+--Sig_/GjAzYQMIwpxmCSVWZ4noGH5
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-rc7-404-gbcaebd8567a2/
+Hi all,
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-rc7-404-gbcaebd8567a2
-Git Commit: bcaebd8567a2ab4f4c551d5c503004a2059e2ac5
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
+After merging the netfilter-next tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Warnings Detected:
+In file included from net/netfilter/ipvs/ip_vs_core.c:52:
+net/netfilter/ipvs/ip_vs_core.c: In function 'ip_vs_in_icmp':
+include/net/ip_vs.h:233:4: warning: 'outer_proto' may be used uninitialized=
+ in this function [-Wmaybe-uninitialized]
+  233 |    printk(KERN_DEBUG pr_fmt(msg), ##__VA_ARGS__); \
+      |    ^~~~~~
+net/netfilter/ipvs/ip_vs_core.c:1666:8: note: 'outer_proto' was declared he=
+re
+ 1666 |  char *outer_proto;
+      |        ^~~~~~~~~~~
 
-arc:
+Introduced by commit
 
-arm64:
+  73348fed35d0 ("ipvs: optimize tunnel dumps for icmp errors")
 
-arm:
-    allmodconfig (gcc-8): 16 warnings
-    multi_v7_defconfig (gcc-8): 1 warning
+--=20
+Cheers,
+Stephen Rothwell
 
-i386:
+--Sig_/GjAzYQMIwpxmCSVWZ4noGH5
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-mips:
-    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+-----BEGIN PGP SIGNATURE-----
 
-riscv:
-    rv32_defconfig (gcc-8): 6 warnings
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6BPKMACgkQAVBC80lX
+0Gw3nwf/UYChx3lA48RPO6+ZQEyDam1RI2THknZFm7NiAGmhXrCKWsZHUHHt4kIC
+tYRXDI9i2Z8k0Imk+NlebECPZ0M3oJvLGG5u6eoB2B97e4R2I+mb2IqPtC/yj6pQ
++AlJVmB0pHyPEdN2Xg6tIoeGk24kKnz+OB37mEN7anHOn7mok4tGGQ+leV+ktnCQ
+qDBJBPY/FRWyEsl9GOut70z5YHS83pQwrk2MRq7QpFlhYlhtj7XqDmNQkFSc3FkK
+Rn0u0J3Cnnw8ObhwZCYk7ERZY9q5XQs5+HDyUDZwWDki4XjEQJGig1gfsRj4EOiZ
+z6Yb7PB2DrAeE/FQJIAPGX+9czzf7g==
+=IyIw
+-----END PGP SIGNATURE-----
 
-x86_64:
-    tinyconfig (gcc-8): 1 warning
-
-
-Warnings summary:
-
-    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
-m integer of different size [-Wint-to-pointer-cast]
-    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
--Wcpp]
-    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
-d [-Wcpp]
-    1    {standard input}:141: Warning: macro instruction expanded into mul=
-tiple instructions
-    1    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 byte=
-s is larger than 1024 bytes [-Wframe-larger-than=3D]
-    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
-integer of different size [-Wpointer-to-int-cast]
-    1    /tmp/ccNrnfBO.s:18191: Warning: using r15 results in unpredictable=
- behaviour
-    1    /tmp/ccNrnfBO.s:18119: Warning: using r15 results in unpredictable=
- behaviour
-    1    .config:1160:warning: override: UNWINDER_GUESS changes choice state
-
-Section mismatches summary:
-
-    1    WARNING: vmlinux.o(.text.unlikely+0x39c8): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-    1    WARNING: vmlinux.o(.text.unlikely+0x3674): Section mismatch in ref=
-erence from the function pmax_setup_memory_region() to the function .init.t=
-ext:add_memory_region()
-
----
-For more info write to <info@kernelci.org>
+--Sig_/GjAzYQMIwpxmCSVWZ4noGH5--

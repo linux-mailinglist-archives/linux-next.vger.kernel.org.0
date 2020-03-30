@@ -2,126 +2,152 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E25A219850F
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 22:03:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A4C0198526
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 22:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727996AbgC3UC4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 16:02:56 -0400
-Received: from mail-wr1-f68.google.com ([209.85.221.68]:39754 "EHLO
-        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727745AbgC3UC4 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 16:02:56 -0400
-Received: by mail-wr1-f68.google.com with SMTP id p10so23231920wrt.6;
-        Mon, 30 Mar 2020 13:02:54 -0700 (PDT)
+        id S1728334AbgC3UMT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 16:12:19 -0400
+Received: from mail-pl1-f180.google.com ([209.85.214.180]:37410 "EHLO
+        mail-pl1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727936AbgC3UMT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 16:12:19 -0400
+Received: by mail-pl1-f180.google.com with SMTP id x1so7179799plm.4
+        for <linux-next@vger.kernel.org>; Mon, 30 Mar 2020 13:12:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
-        b=fF3lDVd0+nOdf+SmI3pdq4CKWRPLEbKg+Iddc3FCIGFItLiFnhUd9ww8ytaaQzoVWm
-         isPZdjckh/nSC1WxgrhgigRTHzwEOPtTRnjBlYsbAEQTTi+NEA31IxAKVM32weUbryu7
-         Fsl/jare2y6apJbP5hmgKtocnok1+DZCqU0qb5dT/jo/FlsvvXBiY9pRyTx3HE4LCiBv
-         SupTvFWu7Jn5rcGOLaaUgrIaspQXX2WK3mAmQ9HHiQwHZVZ3Yx3gkDzfaZ7AXhWxLbm4
-         q7gWsytDf8liDhZ+vCwAgw7ioTuol++Gj+8BOWBSLTm36A32ULVHpPm2J9BUSVlLRVvv
-         o7mw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=T2NHDEm2F4UI5c9tNJ0H4l5GCrRH0MULN5O0CqevR2I=;
+        b=INAJO1EhSbzQ2MxUUVzFSq63+iNU2hHbqROKAsW9LwwJGgMZJTVGFIS7Cacj2wfg5L
+         f6youb8D8moaOiKVB6TkyX89gHGIJR1rfyalcXoNS88Gxsk3ymeeISoYSAWuPGL35e6P
+         cmZZAaMNi5VaEpkV5siqxmuaT6DcBzCnPg8yRSGlitumt/qyzIHKAIkTnu1Bta+LNgGb
+         7UJcPv8bRmdW+jiwgv6UHcBk6Z3NpiBrODsC5Euz3IXuFE8Q/y4lVS+RFxZ2ceOOaHA0
+         0jJewF1Kuvk35F4NtYMbKpuwxrj2mtlcWPLpq19ttdsRJL578LieRlBRViPBEoREczvT
+         6fSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
-        b=jlF9TbFUUlew41f0yQ+mVRXEot8zFj4r4UjqJmwiolF3KwXrRWWIf9Gt7WK0rWyKpP
-         l3S8Z9+KIOP9hG+COWoLP4Exdnovo/vjGgvh/LQCEzSRBJ6HifLqjRzre3tHNnX8bkWJ
-         QUBJfw7qpSXOhDPmubAEf+1/ncUZ5/V1nxL1X5Coe6D0jWjcu2OfY1yYHB9j2mcbGzg8
-         rGzV8Kd8e2MZfXO93E0p4rFbGPU1Nm3q87QnyoY7DE3T5dzbnDxyt4VGkep88S+1iDAN
-         r9TuUmL6AKVLAl/JaOAkqYbJC7oiZFmIZnEXc0ThPqtBiYpwthjutaKqoDyCWZcNBUo8
-         ueqQ==
-X-Gm-Message-State: ANhLgQ3oJgKGm2MeqSgh8Bp90ah/IrcHo7jeF+F0loIJnrvGsQL064lM
-        VMsMU0m5Dio42cUp72VOaYmRi6Qj3bgKzXuAhWg=
-X-Google-Smtp-Source: ADFU+vtQlK+r3Yrpq43PZR2UUtb2/43lw4wmabJo+l6BQcrfH3L3MQhoDPa7agHgdNMp3nuYxd0qACHoAz+25H8MyNg=
-X-Received: by 2002:adf:ecc3:: with SMTP id s3mr16006565wro.32.1585598573917;
- Mon, 30 Mar 2020 13:02:53 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=T2NHDEm2F4UI5c9tNJ0H4l5GCrRH0MULN5O0CqevR2I=;
+        b=muEMc266RlPG50wxaIxpeN4bgDtYd8BJy0KJ+ULs9ZQLRl+K3UJyIN0i2U48vP3unK
+         rdySXFhO69cAjSksjFseylG8laOg2DMUNX3dV3Wy8IYjvDuQxhFUk3dwF14K8qGNoGFc
+         lhngyCB1jI5Vfvf0LN96segl3hNCmopQ3nEriVwB/O2G4x2NcJebMKrDPZvr1hMcYDRS
+         dpk1RvDlXWV1f3V4D5s7A6A1QY9NMqLeB3NhJ0HOoATxe5F4obK3RSEojFSwti4ryu7w
+         +SFoOZSBGAH8c3qBhLARW8c7DcTWXMX4IehUZV7Cwx9+i6JznXGlVnPUvELU1P5sY4Ai
+         hxNA==
+X-Gm-Message-State: AGi0PuaX6x+0o5RrFzZ1onRu21Wd3rHqiOWBpGsOKVeTd2aKYEMR7jZf
+        n4dQBNPfnw924ytKsxRCjAu+yGpWpFQ=
+X-Google-Smtp-Source: APiQypLq3uyp8g2ny7/+axypRCygmQYieHD911ylQGAeacN9demPVMhp6BeRbIM3XOWKGCYbfVtQxw==
+X-Received: by 2002:a17:90a:e983:: with SMTP id v3mr903670pjy.62.1585599137860;
+        Mon, 30 Mar 2020 13:12:17 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x70sm5464053pfc.21.2020.03.30.13.12.16
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Mar 2020 13:12:16 -0700 (PDT)
+Message-ID: <5e8252a0.1c69fb81.76f06.8832@mx.google.com>
+Date:   Mon, 30 Mar 2020 13:12:16 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
- <20200324122023.9649-3-andriy.shevchenko@linux.intel.com> <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
- <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
- <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com> <20200330095707.GA10432@bogus>
- <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com> <CAHp75VdBm8ZYOMWmQEA8LD6uGcJ0sZ=M6n3MSYxmO6UkXbu+-A@mail.gmail.com>
- <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
-In-Reply-To: <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Mon, 30 Mar 2020 13:02:43 -0700
-Message-ID: <CANcMJZBEiXaw5=VW1tjShkULa0YdcKxAgudaBKhrgyRFe7HacQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] driver core: Replace open-coded list_last_entry()
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Basil Eljuse <Basil.Eljuse@arm.com>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200330
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master boot: 278 boots: 5 failed, 265 passed with 2 offline,
+ 6 untried/unknown (next-20200330)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 6:30 AM Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2020-03-30 2:11 pm, Andy Shevchenko wrote:
-> > On Mon, Mar 30, 2020 at 3:49 PM Robin Murphy <robin.murphy@arm.com> wrote:
-> >> On 2020-03-30 11:13 am, Sudeep Holla wrote:
-> >>> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
-> >
-> > ...
-> >
-> >> AFAICS the difference is down to whether deferred_probe_timeout has
-> >> expired or not - I'm not familiar enough with this code to know
-> >> *exactly* what the difference is supposed to represent, nor which change
-> >> has actually pushed the Juno case from one state to the other (other
-> >> than it almost certainly can't be $SUBJECT - if this series is to blame
-> >> at all I'd assume it would be down to patch #1/3, but there's a bunch of
-> >> other rework previously queued in -next that is probably also interacting)
-> >
-> > JFYI: patch #1/3 wasn't applied.
->
-> OK, so if anyone's invested enough to want to investigate, it must be
-> something in John's earlier changes here:
->
-> https://lore.kernel.org/lkml/20200225050828.56458-1-john.stultz@linaro.org/
+next/master boot: 278 boots: 5 failed, 265 passed with 2 offline, 6 untried=
+/unknown (next-20200330)
 
-Hey all,
-  Sorry, I just got a heads up about this thread.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200330/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200330/
 
-So yea, it looks like the change is due likely to the first patch in
-my series. Previously, after initcall_done, (since
-deferred_probe_timeout was -1 unless manually specified) if the driver
-wasn't already loaded we'd print "ignoring dependency for device,
-assuming no driver" and return ENODEV.
+Tree: next
+Branch: master
+Git Describe: next-20200330
+Git Commit: 27a8b6c16291760cfb7d955c58d8e34dc27ec9dc
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 107 unique boards, 25 SoC families, 30 builds out of 227
 
-Now, if modules are enabled (as without modules enabled, I believe
-you'd see the same behavior as previous), we wait 30 seconds  (for
-userspace to load any posssible modules that meet that dependency) and
-then the driver_deferred_probe_timeout fires and we print "deferred
-probe timeout, ignoring dependency".
+Boot Regressions Detected:
 
-It seems the issue here is the first message was printed with
-dev_warn() and the second with dev_WARN() which provides the scary
-backtrace.
+arm:
 
-I think functionally as mentioned above, there's no real behavioral
-change here. But please correct me if that's wrong.
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 10 days (last pass: next-2020031=
+9 - first fail: next-20200320)
 
-Since we are more likely to see the second message now, maybe we
-should make both print via dev_warn()?
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 41 days (last pass: next-20200214=
+ - first fail: next-20200217)
 
-I'll spin up a patch.
+arm64:
 
-thanks
--john
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-gxbb-p200:
+              lab-baylibre: new failure (last pass: next-20200303)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200327)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 3 days (last pass: next-2=
+0200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+            exynos5800-peach-pi: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

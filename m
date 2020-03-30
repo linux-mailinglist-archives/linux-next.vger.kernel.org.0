@@ -2,63 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 483CF197644
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 10:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A83197679
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 10:31:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729580AbgC3IRF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 04:17:05 -0400
-Received: from mx2.suse.de ([195.135.220.15]:39218 "EHLO mx2.suse.de"
+        id S1729639AbgC3Ibn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 04:31:43 -0400
+Received: from ozlabs.org ([203.11.71.1]:48929 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729575AbgC3IRF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 30 Mar 2020 04:17:05 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id C576DAEA1;
-        Mon, 30 Mar 2020 08:17:00 +0000 (UTC)
-Date:   Mon, 30 Mar 2020 10:16:52 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729626AbgC3Ibn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 30 Mar 2020 04:31:43 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48rQfh3672z9sPk;
+        Mon, 30 Mar 2020 19:31:40 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585557101;
+        bh=fbyUzA6k/iyA8xkI6Q4mzU0pOvTrxH+PkLD3DPXI62w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SzSmeEVLSRTxjv0gYODyjywi2vRhHmhyre+YyeaB1LeX9wbWSd7INz9DOiMy/cYbS
+         8XD5JGk1Oz4tfmuWxlhRYphWZ5oFajGnUMEGkTocK/ycxavKZrSOtpJZFz7Rw41lRp
+         Zfeg/VsG0joPt9qmlCVSl6MpgzX+dE2078LzCUfV8XUrf4HcRi/INC/C8hmTw/XejY
+         GSxcyGmUGlQ0uD/DWDL0te3FpVev4YflpeAUFZVjp0Bid/84CC9CjkixA2yo0YoQ+C
+         1gcjtxPr0lSp8t7egZgdwLB+wn144jK9XNeDG6G/jw8ztKbH5Ye/zEcAfFfGEpio3H
+         XdCDHG0fgG10Q==
+Date:   Mon, 30 Mar 2020 19:31:37 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200330081652.GB14624@zn.tnic>
-References: <20200330143529.4dafeb34@canb.auug.org.au>
- <CAMe9rOqnRCEdHhSHOT=Ut11D3O2WhjiFYhvPnaU5dANZNPE-=A@mail.gmail.com>
- <20200330150819.7f0199a2@canb.auug.org.au>
- <20200330074823.GA14624@zn.tnic>
- <87wo72uv3z.fsf@mpe.ellerman.id.au>
+        David Hildenbrand <david@redhat.com>,
+        Alexander Duyck <alexander.h.duyck@linux.intel.com>
+Subject: linux-next: manual merge of the akpm-current tree with the vhost
+ tree
+Message-ID: <20200330193137.44fd70c9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87wo72uv3z.fsf@mpe.ellerman.id.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/QNEToN4H55D=v4f2nByCx0m";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Mar 30, 2020 at 07:04:16PM +1100, Michael Ellerman wrote:
-> Or just squash the hunk Stephen posted into the commit, which is what I
-> thought would happen to begin with.
-> 
-> You can have my ack for it:
-> 
-> Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+--Sig_/QNEToN4H55D=v4f2nByCx0m
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks but considering how this is not really urgent stuff and it can
-take its time and get some wider testing before getting upstream, I'd
-prefer to delay it.
+Hi all,
 
--- 
-Regards/Gruss,
-    Boris.
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+  drivers/virtio/virtio_balloon.c
+
+between commit:
+
+  5a6b4cc5b7a1 ("virtio-balloon: Switch back to OOM handler for VIRTIO_BALL=
+OON_F_DEFLATE_ON_OOM")
+
+from the vhost tree and commits:
+
+  5193acb63eef ("virtio-balloon: pull page poisoning config out of free pag=
+e hinting")o
+  226d0484a676 ("virtio-balloon: add support for providing free page report=
+s to host")
+  49006aae9e94 ("virtio-balloon: switch back to OOM handler for VIRTIO_BALL=
+OON_F_DEFLATE_ON_OOM")
+
+from the akpm-current tree.
+
+OK, this is such a mess that all I could do was to revert commit
+5a6b4cc5b7a1 from the vhost tree and keep all the akpm-current tree
+patches. Please sort this out before Linus gets to see it.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QNEToN4H55D=v4f2nByCx0m
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6BrmoACgkQAVBC80lX
+0GyJdAgAjRKVv196kRPG89HoTU52QU7cAczx5LSTCdlveuCt2yP6VPRySJ3mqDgb
+nCj3+Wm5WIIMDuwIJp9z8RHM8bDCv9HN1Cum8JKx5LX8tYpc4wFid86+WFz1ycPM
+8ZxFP0ORpRc96ijr1fb1Ohm3Y3CvRLaA/hyWzSspcwV5sQVvvH0pO1royQ3QFBuH
+TSNEnVmAqMz90++uJ8iJKOAB6ZA46ekJBA4XZt70j4YVxD6WHS3p3TI0qxs6HmNR
+ZPdzmootgpKJj9KIppatq9I9ChX+yYHzXoxnh9peUW9Xi/zJ456zvKaDnhRoigro
+CzgB5/KYHu/fdfqUVvr22kCbdW46gg==
+=Ormc
+-----END PGP SIGNATURE-----
+
+--Sig_/QNEToN4H55D=v4f2nByCx0m--

@@ -2,130 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FCF61983B6
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 20:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25A219850F
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 22:03:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727072AbgC3Stf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 30 Mar 2020 14:49:35 -0400
-Received: from mail-wm1-f68.google.com ([209.85.128.68]:40470 "EHLO
-        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726518AbgC3Stf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 14:49:35 -0400
-Received: by mail-wm1-f68.google.com with SMTP id a81so23199507wmf.5
-        for <linux-next@vger.kernel.org>; Mon, 30 Mar 2020 11:49:34 -0700 (PDT)
+        id S1727996AbgC3UC4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 30 Mar 2020 16:02:56 -0400
+Received: from mail-wr1-f68.google.com ([209.85.221.68]:39754 "EHLO
+        mail-wr1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727745AbgC3UC4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 30 Mar 2020 16:02:56 -0400
+Received: by mail-wr1-f68.google.com with SMTP id p10so23231920wrt.6;
+        Mon, 30 Mar 2020 13:02:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=ik9JoE1yePkVW5pMmW8sNiDPHUTcFN32pUnnOtmd2X8=;
-        b=Zv3t+mfLAKwrtFlPXDlkRFJdfWkKdKBiP6oxIrn1G5XRV9GptwT8+6Lag7mLLRdVpg
-         MF+qJjLwk9SjGSI+B43Ogf7Qh3oZen/QxCAup76xenOzvYfgO+pgi6FJYjDZRhvLn1/H
-         quu1s+8IvShUGn8KiVxeU0qVnmlVVhfKaYfwk=
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
+        b=fF3lDVd0+nOdf+SmI3pdq4CKWRPLEbKg+Iddc3FCIGFItLiFnhUd9ww8ytaaQzoVWm
+         isPZdjckh/nSC1WxgrhgigRTHzwEOPtTRnjBlYsbAEQTTi+NEA31IxAKVM32weUbryu7
+         Fsl/jare2y6apJbP5hmgKtocnok1+DZCqU0qb5dT/jo/FlsvvXBiY9pRyTx3HE4LCiBv
+         SupTvFWu7Jn5rcGOLaaUgrIaspQXX2WK3mAmQ9HHiQwHZVZ3Yx3gkDzfaZ7AXhWxLbm4
+         q7gWsytDf8liDhZ+vCwAgw7ioTuol++Gj+8BOWBSLTm36A32ULVHpPm2J9BUSVlLRVvv
+         o7mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=ik9JoE1yePkVW5pMmW8sNiDPHUTcFN32pUnnOtmd2X8=;
-        b=ubR2OSaF55sCyOwwqKpABZ6xNa5kg2nSQ/J1mfG7xh7Xg0etWnsTQY5ZVM3pskbJyd
-         G/3NWzczO5AU1tl7WMAzT19bQg/V4Qv7DG7M1dbaURvLT05UVjneilkvwGV1gc+3obiJ
-         qHvt6BP8INIx40vXOyqpr6biWI+SqE7+MPTicL5zxisjxu8ugiXAxKBcXjDyGy1f+vTy
-         EYXPuSq+3gCo1WHflvACpp3QqGzR6sNDxW+cSFQCWlKvPF3WtZ+Eo8TZSAItnEiiTuPn
-         Fb9fwguk4RIFBiCHhca2Kia2yhHhFDfXUcFBUVq2uWL/p1lYNDpgfiVn9qOV2V2gvuVA
-         w7Tg==
-X-Gm-Message-State: ANhLgQ3GvKfZx/t7dJ25LhLDns1xB35xb808+H9vosH2s05gxtwHOH4C
-        7hjBMGsoTCzQ2//nJSCzY3QHAg==
-X-Google-Smtp-Source: ADFU+vupkbpxkRBF/jrJ9ZlFwutT/7Z3g9rubooBJWdjmh/ugoXzX8CRCRZ5ixDknBTQK+6eaM3OvQ==
-X-Received: by 2002:a1c:6a14:: with SMTP id f20mr675797wmc.53.1585594173976;
-        Mon, 30 Mar 2020 11:49:33 -0700 (PDT)
-Received: from google.com ([2a00:79e0:42:204:8a21:ba0c:bb42:75ec])
-        by smtp.gmail.com with ESMTPSA id h26sm500703wmb.19.2020.03.30.11.49.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Mar 2020 11:49:33 -0700 (PDT)
-From:   KP Singh <kpsingh@chromium.org>
-X-Google-Original-From: KP Singh <kpsingh>
-Date:   Mon, 30 Mar 2020 20:49:32 +0200
-To:     KP Singh <kpsingh@chromium.org>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: linux-next: Tree for Mar 30 (bpf)
-Message-ID: <20200330184932.GB180081@google.com>
-References: <20200330204307.669bbb4d@canb.auug.org.au>
- <86f7031a-57c6-5d50-2788-ae0e06a7c138@infradead.org>
- <d5b4bd95-7ef9-58cb-1955-900e6edb2467@iogearbox.net>
- <CACYkzJ72Uy9mnenO04OJaKH=Bk4ZENKJb9yw6i+EhJUa+ygngQ@mail.gmail.com>
- <20200330180538.GA180081@google.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lUoPyqpOq6RP3wBIxyXoInQVTdgsWS5bkgCqjwXu9nU=;
+        b=jlF9TbFUUlew41f0yQ+mVRXEot8zFj4r4UjqJmwiolF3KwXrRWWIf9Gt7WK0rWyKpP
+         l3S8Z9+KIOP9hG+COWoLP4Exdnovo/vjGgvh/LQCEzSRBJ6HifLqjRzre3tHNnX8bkWJ
+         QUBJfw7qpSXOhDPmubAEf+1/ncUZ5/V1nxL1X5Coe6D0jWjcu2OfY1yYHB9j2mcbGzg8
+         rGzV8Kd8e2MZfXO93E0p4rFbGPU1Nm3q87QnyoY7DE3T5dzbnDxyt4VGkep88S+1iDAN
+         r9TuUmL6AKVLAl/JaOAkqYbJC7oiZFmIZnEXc0ThPqtBiYpwthjutaKqoDyCWZcNBUo8
+         ueqQ==
+X-Gm-Message-State: ANhLgQ3oJgKGm2MeqSgh8Bp90ah/IrcHo7jeF+F0loIJnrvGsQL064lM
+        VMsMU0m5Dio42cUp72VOaYmRi6Qj3bgKzXuAhWg=
+X-Google-Smtp-Source: ADFU+vtQlK+r3Yrpq43PZR2UUtb2/43lw4wmabJo+l6BQcrfH3L3MQhoDPa7agHgdNMp3nuYxd0qACHoAz+25H8MyNg=
+X-Received: by 2002:adf:ecc3:: with SMTP id s3mr16006565wro.32.1585598573917;
+ Mon, 30 Mar 2020 13:02:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200330180538.GA180081@google.com>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+References: <20200324122023.9649-1-andriy.shevchenko@linux.intel.com>
+ <20200324122023.9649-3-andriy.shevchenko@linux.intel.com> <CAJZ5v0gg=V8uDd4afJ3MULsgKYvWajKJioANk4jj7xEhBzrRrQ@mail.gmail.com>
+ <CA+G9fYvFnXqSnoQSJ-DkQvAFv87iWmhH6dT1N79qrq=Aeuv4rw@mail.gmail.com>
+ <028b636f-6e0f-c36a-aa4e-6a16d936fc6a@arm.com> <20200330095707.GA10432@bogus>
+ <0a374eaa-92b3-0201-f357-4181542c98b6@arm.com> <CAHp75VdBm8ZYOMWmQEA8LD6uGcJ0sZ=M6n3MSYxmO6UkXbu+-A@mail.gmail.com>
+ <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
+In-Reply-To: <f2706518-def8-1566-149f-00fc1d8cc19f@arm.com>
+From:   John Stultz <john.stultz@linaro.org>
+Date:   Mon, 30 Mar 2020 13:02:43 -0700
+Message-ID: <CANcMJZBEiXaw5=VW1tjShkULa0YdcKxAgudaBKhrgyRFe7HacQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] driver core: Replace open-coded list_last_entry()
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Basil Eljuse <Basil.Eljuse@arm.com>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Ferry Toth <fntoth@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 30-Mar 20:05, KP Singh wrote:
-> On 30-Mar 19:54, KP Singh wrote:
-> 
-> So, it looks like bpf_tracing_func_proto is only defined when
-> CONFIG_BPF_EVENTS is set:
-> 
->         obj-$(CONFIG_BPF_EVENTS) += bpf_trace.o
-> 
-> We have a few options:
-> 
-> * Add a __weak symbol for bpf_tracing_func_proto which we have done in
->   the past for similar issues. This however, does not make much sense,
->   as CONFIG_BPF_LSM cannot really do much without its helpers.
-> * Make CONFIG_BPF_LSM depend on CONFIG_BPF_EVENTS, this should solve
->   it, but not for this particular Kconfig that was generated. Randy,
->   I am assuming if we add the dependency, this particular Kconfig
->   won't be generated.
-> 
-> I am assuming this patch now needs to be sent for "bpf" and not
-> "bpf-next" as the merge window has opened?
+On Mon, Mar 30, 2020 at 6:30 AM Robin Murphy <robin.murphy@arm.com> wrote:
+>
+> On 2020-03-30 2:11 pm, Andy Shevchenko wrote:
+> > On Mon, Mar 30, 2020 at 3:49 PM Robin Murphy <robin.murphy@arm.com> wrote:
+> >> On 2020-03-30 11:13 am, Sudeep Holla wrote:
+> >>> On Fri, Mar 27, 2020 at 07:40:25PM +0000, Robin Murphy wrote:
+> >
+> > ...
+> >
+> >> AFAICS the difference is down to whether deferred_probe_timeout has
+> >> expired or not - I'm not familiar enough with this code to know
+> >> *exactly* what the difference is supposed to represent, nor which change
+> >> has actually pushed the Juno case from one state to the other (other
+> >> than it almost certainly can't be $SUBJECT - if this series is to blame
+> >> at all I'd assume it would be down to patch #1/3, but there's a bunch of
+> >> other rework previously queued in -next that is probably also interacting)
+> >
+> > JFYI: patch #1/3 wasn't applied.
+>
+> OK, so if anyone's invested enough to want to investigate, it must be
+> something in John's earlier changes here:
+>
+> https://lore.kernel.org/lkml/20200225050828.56458-1-john.stultz@linaro.org/
 
-I am wrong, I will send the patch targeted for "bpf-next" and they
-will be applied after merge window closes (and the -next tree opens).
+Hey all,
+  Sorry, I just got a heads up about this thread.
 
-Apologies for the confusion.
+So yea, it looks like the change is due likely to the first patch in
+my series. Previously, after initcall_done, (since
+deferred_probe_timeout was -1 unless manually specified) if the driver
+wasn't already loaded we'd print "ignoring dependency for device,
+assuming no driver" and return ENODEV.
 
-- KP
+Now, if modules are enabled (as without modules enabled, I believe
+you'd see the same behavior as previous), we wait 30 seconds  (for
+userspace to load any posssible modules that meet that dependency) and
+then the driver_deferred_probe_timeout fires and we print "deferred
+probe timeout, ignoring dependency".
 
-> 
-> - KP
-> 
-> > Thanks for adding me Daniel, taking a look.
-> > 
-> > - KP
-> > 
-> > On Mon, Mar 30, 2020 at 7:25 PM Daniel Borkmann <daniel@iogearbox.net> wrote:
-> > >
-> > > [Cc KP, ptal]
-> > >
-> > > On 3/30/20 7:15 PM, Randy Dunlap wrote:
-> > > > On 3/30/20 2:43 AM, Stephen Rothwell wrote:
-> > > >> Hi all,
-> > > >>
-> > > >> The merge window has opened, so please do not add any material for the
-> > > >> next release into your linux-next included trees/branches until after
-> > > >> the merge window closes.
-> > > >>
-> > > >> Changes since 20200327:
-> > > >
-> > > > (note: linux-next is based on linux 5.6-rc7)
-> > > >
-> > > >
-> > > > on i386:
-> > > >
-> > > > ld: kernel/bpf/bpf_lsm.o:(.rodata+0x0): undefined reference to `bpf_tracing_func_proto'
-> > > >
-> > > >
-> > > > Full randconfig file is attached.
-> > > >
-> > >
+It seems the issue here is the first message was printed with
+dev_warn() and the second with dev_WARN() which provides the scary
+backtrace.
+
+I think functionally as mentioned above, there's no real behavioral
+change here. But please correct me if that's wrong.
+
+Since we are more likely to see the second message now, maybe we
+should make both print via dev_warn()?
+
+I'll spin up a patch.
+
+thanks
+-john

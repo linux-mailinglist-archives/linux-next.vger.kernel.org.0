@@ -2,137 +2,168 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA7819724B
-	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 04:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A07197273
+	for <lists+linux-next@lfdr.de>; Mon, 30 Mar 2020 04:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbgC3CGs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 29 Mar 2020 22:06:48 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:36265 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727801AbgC3CGs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 29 Mar 2020 22:06:48 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48rG6W4swcz9sPR;
-        Mon, 30 Mar 2020 13:06:43 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585534005;
-        bh=0y0U+Mr8OwI1iN2DZ+X0btlBxibOGWhQY/KkqJ6L2GU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iqTUzPx+Pj3Vvc04JgYyAFf6JTcSaVBbbS5K599XRLvuy7f/o6QksUkrv75QvRL6J
-         2Gq9OeApjUvHzFoYglF302jpWYfv+A1XBEIbWCy0EKf8j8UdEKdXqKhDw5XmtNXnjn
-         i+NEwZuQGnz1CR/ZK2H5ENnZKlkjo1h1Kf6WVDbQnTrJTm21fut2ggRuWUbJuHiM3F
-         q2eOjA86RvtxIZ40exX20Pqjw70K7sQXkfIAQwUMzqhyu7vVdncXM0ZlwndDGnpFay
-         cv3iu17baKj7dy2/h7YsPrx1eJAMVSzVjJddqzbswjXjKslYcDkHxMnLtj5wHH/LVT
-         5ie0iDrdhMxug==
-Date:   Mon, 30 Mar 2020 13:06:36 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@google.com>
-Subject: linux-next: manual merge of the keys tree with the bpf-next tree
-Message-ID: <20200330130636.0846e394@canb.auug.org.au>
+        id S1728297AbgC3CbG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 29 Mar 2020 22:31:06 -0400
+Received: from mail-pl1-f174.google.com ([209.85.214.174]:38686 "EHLO
+        mail-pl1-f174.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728231AbgC3CbG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 29 Mar 2020 22:31:06 -0400
+Received: by mail-pl1-f174.google.com with SMTP id w3so6138913plz.5
+        for <linux-next@vger.kernel.org>; Sun, 29 Mar 2020 19:31:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=Jssfjmmy5nkV0XkoRWjMBKaovhmGQ94NCk/p1qylt9w=;
+        b=e14zTc8mlXoHP2GAbZHwaZinOty7Lq98KTuZhbxki7ddNkhQjk6eTjRUITp7TDRbnO
+         3XE+ndvkAog5+FYxNDyHYHp9t1dlIn8SyI/8Pyo0qopm9oo+Ox+Itr3oVC2/YsE1IC5j
+         vjETC+HrmcEq6mJ1aL1Fcszf7TsEGRZfP2LfPvW9JK3rtzXDtc5ypVyYFSt0bK3cjHPY
+         VsYOxtYRhOYzKnPCOVvlrYT9Uh57QNgB4YSk2UMf548ljMEUYGuOjJQ+/rMvtAG0MVyG
+         vvNGmkGrNit/1o0Xt2ObGVpEQZbAtJ3W56K5oy85iqIUEX+V/wq26v3ZOD0lEttePnRB
+         0a0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=Jssfjmmy5nkV0XkoRWjMBKaovhmGQ94NCk/p1qylt9w=;
+        b=pWFlSFpUbObTTrxYg1oU1VptIACuGKwK1Vgqgdc+Wd4C4uvX2lAEBGqTCkWyAjvqBS
+         dPpS6MeaED06qqkyD7ns/gpVW+2bKoxgbF/C35+hDpWUSBHliVm+C7zY8Jlr7lq9oOc2
+         n95rjjBEL4vG6KXri0c4FkLInf65AHSSHSezx1KGYHObGLIOvsJztaEbM4ikLgVWzB22
+         cT+2KF6DsTUBkPquWLFj28uAibu3u7Up1SFAYjumpCnFqH/QrsvZ6AUz32DW7PC5OZSR
+         PRRkWyIOX5akIMn8TggVAV5xIXHzKn+dviPMAgePotcsvvBSkuAR+LTM9++2m5enJJGs
+         0X9w==
+X-Gm-Message-State: ANhLgQ32bBahsH6ZoxS73mfxl9kWolxzwYG0JzSzWmVPD8OT9/VUIm4A
+        SYN1ZHwvt1LohkAbCb7S7WQ+Ljfi/ns=
+X-Google-Smtp-Source: ADFU+vvwJP9FDMg+2Zs9SmGu+Qp6p4II0yUiKiG5u3seUSk+lZVHxtwAlVBd6rQEHJe6ak2Zfdnlug==
+X-Received: by 2002:a17:902:b692:: with SMTP id c18mr10737026pls.7.1585535464408;
+        Sun, 29 Mar 2020 19:31:04 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id r9sm4234283pfg.2.2020.03.29.19.31.03
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 29 Mar 2020 19:31:03 -0700 (PDT)
+Message-ID: <5e8159e7.1c69fb81.d34cb.6feb@mx.google.com>
+Date:   Sun, 29 Mar 2020 19:31:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=kvtbqHtnR+XTN_0xhli37h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-rc7-404-gbcaebd8567a2
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+Subject: next/pending-fixes boot: 278 boots: 6 failed,
+ 262 passed with 5 offline, 5 untried/unknown (v5.6-rc7-404-gbcaebd8567a2)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/=kvtbqHtnR+XTN_0xhli37h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 278 boots: 6 failed, 262 passed with 5 offline, 5 =
+untried/unknown (v5.6-rc7-404-gbcaebd8567a2)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-rc7-404-gbcaebd8567a2/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-rc7-404-gbcaebd8567a2/
 
-Today's linux-next merge of the keys tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-rc7-404-gbcaebd8567a2
+Git Commit: bcaebd8567a2ab4f4c551d5c503004a2059e2ac5
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 106 unique boards, 24 SoC families, 30 builds out of 216
 
-  include/linux/lsm_hooks.h
+Boot Regressions Detected:
 
-between commit:
+arm:
 
-  98e828a0650f ("security: Refactor declaration of LSM hooks")
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 44 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
 
-from the bpf-next tree and commits:
+arm64:
 
-  e8fa137bb3cb ("security: Add hooks to rule on setting a watch")
-  858bc27762c1 ("security: Add a hook for the point of notification inserti=
-on")
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-360-g4=
+dc51f5a7118)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: v5.6-rc7-360-g4dc51f5a7=
+118)
 
-from the keys tree.
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-360-g4=
+dc51f5a7118)
 
-I fixed it up (I used the former version of this file and added the
-following merge resolution patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-rc7-360-g4=
+dc51f5a7118)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: failing since 2 days (last pass: v5.6-rc7-236-g=
+af338e2cb004 - first fail: v5.6-rc7-337-g9a2ad1626af6)
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 30 Mar 2020 12:55:31 +1100
-Subject: [PATCH] security: keys: fixup for "security: Refactor declaration =
-of
- LSM hooks"
+Boot Failures Detected:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
 ---
- include/linux/lsm_hook_defs.h | 10 ++++++++++
- 1 file changed, 10 insertions(+)
-
-diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-index 9cd4455528e5..4f8d63fd1327 100644
---- a/include/linux/lsm_hook_defs.h
-+++ b/include/linux/lsm_hook_defs.h
-@@ -252,6 +252,16 @@ LSM_HOOK(int, 0, inode_notifysecctx, struct inode *ino=
-de, void *ctx, u32 ctxlen)
- LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 ct=
-xlen)
- LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
- 	 u32 *ctxlen)
-+#ifdef CONFIG_KEY_NOTIFICATIONS
-+LSM_HOOK(int, 0, watch_key, struct key *key)
-+#endif
-+#ifdef CONFIG_DEVICE_NOTIFICATIONS
-+LSM_HOOK(int, 0, watch_devices, void)
-+#endif
-+#ifdef CONFIG_WATCH_QUEUE
-+LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
-+	 const struct cred *cred, struct watch_notification *n)
-+#endif
-=20
- #ifdef CONFIG_SECURITY_NETWORK
- LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *othe=
-r,
---=20
-2.25.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=kvtbqHtnR+XTN_0xhli37h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6BVCwACgkQAVBC80lX
-0GxbRAf/SOe5GZaT6ReH7/jAinE4d7OsRxl89mO6U4JsHx/OoLjs6jeSSg3axjbD
-23biOI4B0FT6r0ABXGiQ3vK39bGmDCuvhB4ZrHat4sKeIy6i175JHEO5FtQvBX0D
-HNJvhaty5MeYqyXFioLecza6fcbEgEGg+Qio477a2y6wyIu1/UqVYCOeSxfQqgkW
-o97Wy1T+UVTJCnKKG7K+lqYKfpgOASjfokqw5RVCmaEUQKVRsdQ07qb8MEmFeZTf
-ksTk5pVb6DpNyoDghy5Sz+iAZPyvgxVMCl2Um9ZI6/2sY9qbwflF9lTzBUBlmzlr
-OlFjIlU7A4Vfk+sBjWNO8pZ3KNQMGA==
-=Uhwq
------END PGP SIGNATURE-----
-
---Sig_/=kvtbqHtnR+XTN_0xhli37h--
+For more info write to <info@kernelci.org>

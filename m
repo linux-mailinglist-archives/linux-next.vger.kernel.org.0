@@ -2,101 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF244199BF5
-	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 18:44:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4222199C0B
+	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 18:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731111AbgCaQo6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 12:44:58 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:50099 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1730442AbgCaQo6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 31 Mar 2020 12:44:58 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5F0C65C0397;
-        Tue, 31 Mar 2020 12:44:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 31 Mar 2020 12:44:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=+z62aXHMVsie2rw1NjMsXR8IK32
-        XeBZupuwxskbGWNs=; b=o1MvH1FRka3xxtt7Ii4J+i1hu2dcGz49gu7MzvYv95p
-        VfcvbTN7YBY4OpH8nBYV01ehBIAeHN9dX2X/CF1uqATT9ZiyVOZPtB4oOMKCE7z8
-        3d79qbzGBTCkt8oJC1Zo6TJsEVnKB9K2EEMEEtzRKN3FwU/nWgdwQm6zjvzUUBvn
-        KTs6avEcKXfQ79OujszLfiOJqR4lzeA2k+YgwhcURPW/tL7yHLIV9q6yDM1ZLi14
-        s3dmOXJwSX+90Li7f0JfRp4c6cvN9yAV5g8FILEglnMnxqLy9wCkVvwAd3BQkIG/
-        Mu5NraLlM9jPym5+xTdTnHK++OQ8OztfV4wQurbMs/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=+z62aX
-        HMVsie2rw1NjMsXR8IK32XeBZupuwxskbGWNs=; b=GIJAXGMDUuSeNVgfvqFpp1
-        q0edvoFTTvQeUopS4kZ9O0FoNbXxejivoUHh5qMf00hJ2mK8dlk63rE8zAixwgr8
-        yiHQEEyjCOFTHsu5VBa3+BLJbeRFsZn3xxCfVVjtHJdSz7Lq7Dy2C14Bgnq0eB0d
-        6HH+AQdbyDktiL/4I1P3zRz+dUJ1WhPjCwfUrQSz83wG72PpH5aW1JlvWtJqOksE
-        araVxLRSZ6vJ/uLO85wXMxabLpY8whGNha3AsnZNS2ehEOUCwthzo46C9LlJLhhf
-        HTHyon/EJ+XfwcZbjBfKxAoYNYZZb21ctm8IdMxLuWLj2m8P5IfVPjKFYtDcOmvA
-        ==
-X-ME-Sender: <xms:h3ODXodfBpnj1wWm2AbuvT_Uz9Q5mmjGnWL_v8oloOPLHI2Su6lC3w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrtddtgdejudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
-    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledruddtje
-    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
-    gheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:h3ODXvUMoo10qGjVc_wPa8AgmIb_lHEvHzxD6PZzpQn7fPOW0j9LAQ>
-    <xmx:h3ODXgysMJ0GdSqQG131oaEF7zpY5J3O3XictecMRyQMQ4ZZPqsLUw>
-    <xmx:h3ODXljqCanyc1eQC8-Eqzjn95ObvwNmQSNwuEKzE8_tQisaSLjpWw>
-    <xmx:iHODXvk_gqzekwhUO4e8rqC2uT8M6O7U6Gc1IXllCQDzk2htFvWL7g>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 31489306CBA9;
-        Tue, 31 Mar 2020 12:44:55 -0400 (EDT)
-Date:   Tue, 31 Mar 2020 18:44:48 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jian Yang <jianyang@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: Re: linux-next: manual merge of the net-next tree with the spdx tree
-Message-ID: <20200331164448.GB1821785@kroah.com>
-References: <20200331112334.213ea512@canb.auug.org.au>
+        id S1730521AbgCaQso (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 12:48:44 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:59426 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730413AbgCaQsn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 12:48:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=iBIZjEbhUqZOtk5V18poldKYJqWr17L3xpH+eAdVvpQ=; b=VoE/pOwTmbEoLZztds+Z6FQ5Oo
+        uqKJwve38PohsGjqmKA7k0xNE+sgE/Tq3j+draqv3XUq/XZ7bZl7K18U+4GiyNjDi5zTQ+quHOrTB
+        5oddyo7yRn8muBXIkO5DRQ3juwcUS7bRtAKmlrQmEy6+ZYvnyLvgSJzjBfHm9PZx7T1rV6Klxm6ve
+        imTPF+rxbLbqtqtxPCR4DLJxiDGD1jUab3iHF6eH6rCWrf6eF4QGt197Oxh9u5cTtKCdcg9mJfKWP
+        /OTD5pQmIqLUpba7IMtZBp6X9jl9au+9LHyd86/hCnvw9AH7dyValneKa8S46/t3cQlgD54BvPoUU
+        yxFbkeKA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jJK4B-0001WE-2W; Tue, 31 Mar 2020 16:48:43 +0000
+Subject: Re: mmotm 2020-03-30-18-46 uploaded (freesync)
+To:     Nathan Chancellor <natechancellor@gmail.com>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+References: <20200331014748.ajL0G62jF%akpm@linux-foundation.org>
+ <a266d6a4-6d48-aadc-afd7-af0eb7c2d9db@infradead.org>
+ <20200331073938.GA54733@ubuntu-m2-xlarge-x86>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <710856c8-b1d9-d03d-457c-99e55a2ff274@infradead.org>
+Date:   Tue, 31 Mar 2020 09:48:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200331112334.213ea512@canb.auug.org.au>
+In-Reply-To: <20200331073938.GA54733@ubuntu-m2-xlarge-x86>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 11:23:34AM +1100, Stephen Rothwell wrote:
-> Hi all,
+On 3/31/20 12:39 AM, Nathan Chancellor wrote:
+> On Mon, Mar 30, 2020 at 11:18:26PM -0700, Randy Dunlap wrote:
+>> On 3/30/20 6:47 PM, akpm@linux-foundation.org wrote:
+>>> The mm-of-the-moment snapshot 2020-03-30-18-46 has been uploaded to
+>>>
+>>>    http://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> http://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> http://ozlabs.org/~akpm/mmotm/series
+>>>
+>>
+>> on i386:
+>>
+>> ld: drivers/gpu/drm/amd/display/modules/freesync/freesync.o: in function `mod_freesync_build_vrr_params':
+>> freesync.c:(.text+0x790): undefined reference to `__udivdi3'
+>>
+>>
+>> Full randconfig file is attached.
+>>
+>> -- 
+>> ~Randy
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
 > 
-> Today's linux-next merge of the net-next tree got a conflict in:
+> Hi Randy,
 > 
->   tools/testing/selftests/networking/timestamping/.gitignore
+> I am guessing this should fix it since I ran into this on arm
+> allyesconfig:
 > 
-> between commit:
-> 
->   d198b34f3855 (".gitignore: add SPDX License Identifier")
-> 
-> from the spdx tree and commit:
-> 
->   5ef5c90e3cb3 ("selftests: move timestamping selftests to net folder")
-> 
-> from the net-next tree.
-> 
-> I fixed it up (I just deleted the file) and can carry the fix as
-> necessary. This is now fixed as far as linux-next is concerned, but any
-> non trivial conflicts should be mentioned to your upstream maintainer
-> when your tree is submitted for merging.  You may also want to consider
-> cooperating with the maintainer of the conflicting tree to minimise any
-> particularly complex conflicts.
+> https://lore.kernel.org/lkml/20200330221614.7661-1-natechancellor@gmail.com/
 
-That merge is fine, thanks,
+works for me. Thanks.
 
-greg k-h
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+
+> FWIW, not an mmotm issue since the patch comes from the AMD tree.
+
+Right.
+
+-- 
+~Randy

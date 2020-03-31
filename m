@@ -2,118 +2,102 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id F0A8619972B
-	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 15:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BD61999BE
+	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 17:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730832AbgCaNNX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 09:13:23 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:38169 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1730562AbgCaNNX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 09:13:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585660402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vhuhyUwYopA1n84wfzfATkQxt+0y/RkX+3b+ZUlYd24=;
-        b=RZ7ngAJdkDPn86WKQaYLt2pUEuhSmH7UQjI4mNH/9c3WIX5HLhXqa+IvXr61iZVepvOf7A
-        vclpH0Tqn1Q4qUV2ErAc+LQKmzrLlm5vFNx/kCodEQizWYM4NgKvrUcRh48votrUNMch7M
-        +OrnJLLPG4BP7nrWy9Yv4mt+t5p4Cxc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-380-JzHh5PnmOhOgoGDBABvpZw-1; Tue, 31 Mar 2020 09:13:21 -0400
-X-MC-Unique: JzHh5PnmOhOgoGDBABvpZw-1
-Received: by mail-wm1-f69.google.com with SMTP id f8so1050106wmh.4
-        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 06:13:20 -0700 (PDT)
+        id S1731022AbgCaPck (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 11:32:40 -0400
+Received: from mail-il1-f194.google.com ([209.85.166.194]:41591 "EHLO
+        mail-il1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730607AbgCaPck (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 11:32:40 -0400
+Received: by mail-il1-f194.google.com with SMTP id t6so16223960ilj.8;
+        Tue, 31 Mar 2020 08:32:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:reply-to:from:date:message-id
+         :subject:to:cc;
+        bh=Rgg5Di2BnonhUg9X8Y64Q4LDlrgSdihEBSObuvQpf8Q=;
+        b=CS4dFQ3BB1GOaQ/WAAzMDUEgOxIn9sat8djbqF4IpcktXvk5mhAU4/Jqyrv89fn3TW
+         MrvtKA6h+hWT/ZYbRZ75qzZSs7hFFmDJuUR9R2SJvb0tPjhJj66P5/sjx9CnsfoGOeiD
+         Td11Gdi1vW3eGYXJA/p0uRVaQi1gyl4+5DNPaILlVnu7wclAXpfrXZu+JZ60QtmyQqvR
+         40aJCQgO78AzUPqtx1m3uUQRhxkivUf4XOjj74pGwBP8FTUrmuLWFTS181ZtzczBFWTx
+         Ujjokmdm398BAUlDXVhKhX02t8c5mTltS35b/0/fLuGJeqwLNobUkpTzVzEQqyznqYlG
+         6W8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=vhuhyUwYopA1n84wfzfATkQxt+0y/RkX+3b+ZUlYd24=;
-        b=KHc0Q+Ql/Bs8t6GYR8BeAmz58iybRcKUb5shzqvhoxVXEOqVDOztqIZH79us6L9n/k
-         0nbYA53n4CrRFQB0vB0MAeNcYi6eMdQlCXn42Bs6W4a/t6UB5VWiXdEzbfbB8VdkIgvD
-         3r7aRxTnFVo0jbhu1YoeXiR8II++ycHUmovFlwhfZl+vjqyp5Kguc7t/xc/ANJ2IF4Xo
-         qU9SpWdsGS5ihyB8ZpWE44cP5LfDZcJzSgBZuwljDAP5OaTIja2Mf39qm/q0IjAcFXtL
-         vIB+FT33elbcngBCgF71ZtaL6lN7Zi5Hv4o81SGnePUYjD1zfGKU3yVfxjIiS+6tY7ns
-         qz8g==
-X-Gm-Message-State: ANhLgQ12gkGpDfuX2d63UcVkLIaR+oPICu9n9QWgOJpV9iJcjSZ3Vxxp
-        jZ/EzKW/f7KlqgbC6wAEhRBsKDXquH2qYgahiIX+mje/E2w6CaRbr6He+fUSgCOs6X6Sp7kalnV
-        sX4W73TdaxJHY5TcTwPnQ9g==
-X-Received: by 2002:adf:f610:: with SMTP id t16mr20105984wrp.30.1585660384342;
-        Tue, 31 Mar 2020 06:13:04 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vuM4mf6PErLBYuIr557Jbfwdq0tffIdJD4BRvVV+5LWR2L1gVxuCah7k8R5X7pszotZ2Uw5HA==
-X-Received: by 2002:adf:f610:: with SMTP id t16mr20105970wrp.30.1585660384168;
-        Tue, 31 Mar 2020 06:13:04 -0700 (PDT)
-Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
-        by smtp.gmail.com with ESMTPSA id j188sm3928906wmj.36.2020.03.31.06.13.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 06:13:03 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 09:13:01 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Jason Wang <jasowang@redhat.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        virtualization@lists.linux-foundation.org,
-        KVM <kvm@vger.kernel.org>
-Subject: Re: linux-next: Tree for Mar 30 (vhost)
-Message-ID: <20200331091138-mutt-send-email-mst@kernel.org>
-References: <20200330204307.669bbb4d@canb.auug.org.au>
- <347c851a-b9f6-0046-f6c8-1db0b42be213@infradead.org>
- <649927d4-9851-c369-2ad2-bf25527b057a@redhat.com>
+        h=x-gm-message-state:mime-version:references:in-reply-to:reply-to
+         :from:date:message-id:subject:to:cc;
+        bh=Rgg5Di2BnonhUg9X8Y64Q4LDlrgSdihEBSObuvQpf8Q=;
+        b=uA/dV+Ec2fgJ95HAXq93O1qnEIfS89fcEnVe4o0207PeFYjlZK0OFGeRGDbpjYo876
+         5CzCQWK722OPGAwB0bjPwzC/6g/Z16CbE9JtjRQN+Z6O/1PlB/RIc5OrRpfrTSJ39EY/
+         vrpKoGpp7DvAa5PBCS98Ow8KTxZlyAckkYIMS1HG7BQp2B7EK8fVAJUBFzPgi/xFnJR0
+         CWIu5vS1rTzIY+TUlOj8+QaAcvDi19ap57T/uExb15ytTNQ7+9ioPxNIpMq7R2Pyu+sy
+         xOOP3WqCvNjv8ce/DR2BLRnYx+oE8WI4CuCra4R5oSxCtyNMIyLAxFslu3yOavWuAb1a
+         8MxA==
+X-Gm-Message-State: ANhLgQ2feu71mjyuuXIgCvaNz6V45RC4SBZQrJC0NvcQxm9iLugC6u9Q
+        iCIajIKCKdV4SfN32H+JNq355aAz5z9biORoeaddPsT7DSw=
+X-Google-Smtp-Source: ADFU+vsbVAtdl5ORZ9iA+KqnPYG6cKehzBBiRati+N/S4FSSDpH6sw+mwsJSSMISqBepPsHuaEdaq+akTji2zUw6hm4=
+X-Received: by 2002:a92:c90d:: with SMTP id t13mr16681252ilp.10.1585668758387;
+ Tue, 31 Mar 2020 08:32:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <649927d4-9851-c369-2ad2-bf25527b057a@redhat.com>
+References: <20200331073852.54e44b21@canb.auug.org.au> <CABhMZUUuCRAgSd7ar90v4AC4q7u-vC04YTnX7j=a=vNaKvEY_g@mail.gmail.com>
+ <20200331031458.x6y73bisl7cj3gpd@wunner.de> <20200331033232.27ifep6igs45xv75@wunner.de>
+In-Reply-To: <20200331033232.27ifep6igs45xv75@wunner.de>
+Reply-To: bjorn@helgaas.com
+From:   Bjorn Helgaas <bjorn.helgaas@gmail.com>
+Date:   Tue, 31 Mar 2020 10:32:26 -0500
+Message-ID: <CABhMZUUFjiw3Xpmpe2e_D2SbH+z0SwqiX5sisUFRupbHk2320g@mail.gmail.com>
+Subject: Re: linux-next: Fixes tag needs some work in the pci tree
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 10:27:48AM +0800, Jason Wang wrote:
-> 
-> On 2020/3/31 上午1:22, Randy Dunlap wrote:
-> > On 3/30/20 2:43 AM, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > The merge window has opened, so please do not add any material for the
-> > > next release into your linux-next included trees/branches until after
-> > > the merge window closes.
-> > > 
-> > > Changes since 20200327:
-> > > 
-> > > The vhost tree gained a conflict against the kvm-arm tree.
-> > > 
-> > (note: today's linux-next is on 5.6-rc7.)
-> > 
-> > on x86_64:
-> > 
-> > # CONFIG_EVENTFD is not set
-> > 
-> > ../drivers/vhost/vhost.c: In function 'vhost_vring_ioctl':
-> > ../drivers/vhost/vhost.c:1577:33: error: implicit declaration of function 'eventfd_fget'; did you mean 'eventfd_signal'? [-Werror=implicit-function-declaration]
-> >     eventfp = f.fd == -1 ? NULL : eventfd_fget(f.fd);
-> >                                   ^~~~~~~~~~~~
-> >                                   eventfd_signal
-> > ../drivers/vhost/vhost.c:1577:31: warning: pointer/integer type mismatch in conditional expression
-> >     eventfp = f.fd == -1 ? NULL : eventfd_fget(f.fd);
-> 
-> 
-> Will fix.
-> 
-> VHOST should depend on EVENTFD now.
-> 
-> Thanks
+On Mon, Mar 30, 2020 at 10:32 PM Lukas Wunner <lukas@wunner.de> wrote:
+> On Tue, Mar 31, 2020 at 05:14:58AM +0200, Lukas Wunner wrote:
+> > On Mon, Mar 30, 2020 at 03:53:29PM -0500, Bjorn Helgaas wrote:
+> > > On Mon, Mar 30, 2020 at 3:39 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote> > In commit
+> > > >
+> > > >   fb3ffadca55a ("PCI: pciehp: Fix indefinite wait on sysfs requests")
+> > > >
+> > > > Fixes tag
+> > > >
+> > > >   Fixes: 54ecb8f7028c ("PCI: pciehp: Avoid returning prematurely from sysfs requests")
+> > > >
+> > > > has these problem(s):
+> > > >
+> > > >   - Subject does not match target commit subject
+> > > >     Just use
+> > > >         git log -1 --format='Fixes: %h ("%s")'
+> > > >
+> > > > Did you mean
+> > > >
+> > > > (probably not :-))
+> > > > Fixes: 54ecb8f7028c ("Linux 5.4-rc1")
+> > > >
+> > > > or
+> > > >
+> > > > Fixes: 157c1062fcd8 ("PCI: pciehp: Avoid returning prematurely from sysfs requests")
+> > >
+> > > Fixed, thanks!
+> >
+> > Ugh, sorry about that.
+> >
+> > In case you're not aware, it's only fixed on your next branch,
+> > not on the pci/hotplug branch.
+>
+> Also, the incorrect commit hash is repeated further up in the commit
+> message:  "This flag, which was introduced by commit 54ecb8f7028c"
 
+Thanks, I fixed that, too, and pushed my -next branch.  It's fixed on
+my local pci/hotplug branch, but I didn't bother pushing that branch
+because it doesn't need to be build-tested and it doesn't matter for
+any future hotplug patches.
 
-I did that and pushed. Pls take a look.
-
-> 
-> >                                 ^
-> > 
-
+Bjorn

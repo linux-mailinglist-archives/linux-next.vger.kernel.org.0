@@ -2,109 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A789D198EAC
-	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 10:37:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49F5A198EE8
+	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 10:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730186AbgCaIh6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 04:37:58 -0400
-Received: from mail-ot1-f66.google.com ([209.85.210.66]:33155 "EHLO
-        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729819AbgCaIh6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 04:37:58 -0400
-Received: by mail-ot1-f66.google.com with SMTP id 22so21226269otf.0;
-        Tue, 31 Mar 2020 01:37:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ICwZe74cinsq+H0Mi/M0UaoDjI0NelMBSLemc/4qo/U=;
-        b=DaWiXXxuW+hubThhZc6nQanxaJG1FaCt4Gagh5VUbOe+sM/L+mcOQMMnBEMeRSEvAU
-         ANXuhHig71Y9jQJeexgWjVNt22NpQ/EgpDrnARhMJWxnTQ5YNIQu0352U9f9sUS9BoAm
-         1LxECxDqXqIGavUYaY2hR8ItSkA6XsxxDRgF8C2M4dImsnYrbUPvD/0JVJTtqipMqflv
-         ZH9V5+SCUnV/Q6rG2j6HOB2tQSnUAYLXJ40+99etu6MKCeoiUdM56e+ExlUXOPzIjh7E
-         kPuS1m3ddD32s/V/ZqNl7jjmAo98V3Rc80fssLiNhOv3bQm6r2zVSR5Lf6ho7zh4K01H
-         yPeg==
-X-Gm-Message-State: ANhLgQ0+GiABFHxYHVT4ZTgYFaNdx/Wyv3GCIFbtOkQBhmrHMCA9GZRE
-        5xRgAAsJ/FNyCxzRy5WI8+1ospPOeDxBkqVIGfc=
-X-Google-Smtp-Source: ADFU+vtSPfJ+5lxhEQluC4omuajmCx1I5+UeA+6FUPL98dSUb/IOkPQ50CVMgweKGCB3Ke/QvJKhPWahlIZSg528NQg=
-X-Received: by 2002:a4a:a442:: with SMTP id w2mr9650592ool.90.1585643876316;
- Tue, 31 Mar 2020 01:37:56 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200331104947.264c98e5@canb.auug.org.au>
-In-Reply-To: <20200331104947.264c98e5@canb.auug.org.au>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 31 Mar 2020 10:37:45 +0200
-Message-ID: <CAMuHMdW_hUzSGnPg1NMtix9ztnAoJboX62H+Yja6P7M3xF9eFg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the pci tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726636AbgCaI4R (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 04:56:17 -0400
+Received: from ozlabs.org ([203.11.71.1]:57847 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726299AbgCaI4R (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 31 Mar 2020 04:56:17 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48s38Z73C3z9sR4;
+        Tue, 31 Mar 2020 19:56:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585644975;
+        bh=KqGbhMnBF2j9YnXQQuOMYuwr0ZhKMQgkIB87z8RrPhc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kvhOJMfT1PVSNBlWl/czsJ8Ts24c+9meGPOhkwP9eYvvkHvt9NyaMBPEnlbEAob3u
+         /OadihYFkLnGe5LS+F6GvHhlL2gX8EHotWf7ZpYAwsxGxDFuMc/Bh1m7ZMclFXdX1h
+         WkXh4DpD86RjKplyh81q5Lq1nNWUxFLF6iFez8c8yknNZpDxoOyQUns02aiTMrQlh1
+         LHr1XFiYq19rg08BF/fTKUQCFPLyVNKRdjF7NWvWmZkGxjXn0XeQ4CuJ2JYM8+Zfke
+         A1qUb3amxqOIbhCjZxZiAIEExOMCNXcftpB4/HtnGn222HE2JWAgqgyE6A1Shfll9K
+         wjYL8sCObVhnA==
+Date:   Tue, 31 Mar 2020 19:56:12 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Longpeng <longpeng2@huawei.com>
+Subject: linux-next: build warning after merge of the akpm-current tree
+Message-ID: <20200331195612.64c06485@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/zjBK/bv5oO=dW4e0jKXEPR=";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 1:52 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Today's linux-next merge of the pci tree got a conflict in:
->
->   drivers/net/ethernet/intel/ice/ice_main.c
->
-> between commit:
->
->   19cce2c6f6dc ("ice: Make print statements more compact")
+--Sig_/zjBK/bv5oO=dW4e0jKXEPR=
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FWIW, that doesn't really look like an improvement to me, as the long
-lines are now broken by my editor, making them harder to read...
+Hi all,
 
->
-> from Linus' tree and commit:
->
->   894020fdd88c ("PCI/AER: Rationalize error status register clearing")
->
-> from the pci tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc drivers/net/ethernet/intel/ice/ice_main.c
-> index 5ef28052c0f8,effca3fa92e0..000000000000
-> --- a/drivers/net/ethernet/intel/ice/ice_main.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_main.c
-> @@@ -3458,9 -3495,10 +3458,9 @@@ static pci_ers_result_t ice_pci_err_slo
->                         result = PCI_ERS_RESULT_DISCONNECT;
->         }
->
-> -       err = pci_cleanup_aer_uncorrect_error_status(pdev);
-> +       err = pci_aer_clear_nonfatal_status(pdev);
->         if (err)
-> -               dev_dbg(&pdev->dev, "pci_cleanup_aer_uncorrect_error_status failed, error %d\n",
->  -              dev_dbg(&pdev->dev,
->  -                      "pci_aer_clear_nonfatal_status() failed, error %d\n",
-> ++              dev_dbg(&pdev->dev, "pci_aer_clear_nonfatal_status() failed, error %d\n",
->                         err);
->                 /* non-fatal, continue */
+After merging the akpm-current tree, today's linux-next build (i386
+defconfig) produced this warning:
 
-Gr{oetje,eeting}s,
+mm/hugetlb.c: In function 'huge_pte_offset':
+cc1: warning: function may return address of local variable [-Wreturn-local=
+-addr]
+mm/hugetlb.c:5361:14: note: declared here
+ 5361 |  pud_t *pud, pud_entry;
+      |              ^~~~~~~~~
+cc1: warning: function may return address of local variable [-Wreturn-local=
+-addr]
+mm/hugetlb.c:5360:14: note: declared here
+ 5360 |  p4d_t *p4d, p4d_entry;
+      |              ^~~~~~~~~
 
-                        Geert
+Introduced by commit
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+  826ddc88e2cf ("mm/hugetlb: fix a addressing exception caused by huge_pte_=
+offset")
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/zjBK/bv5oO=dW4e0jKXEPR=
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6DBawACgkQAVBC80lX
+0GzuMwf9HnMeZGRTCVTyUMkj09xSVS7eZTYfC/WzQzG7HczBUVXkqIdqxXwQSHKg
+2NlWyMW7vyvn4ILTnoDoZwIc1twb7SRynr52SG+uDs75LrjPuEKBhkbZPwAH541/
+yaf5NvPIYC/g+pfW7GpmguBRpHf3VBe1XlyaxkMbQ09l+wmL+J/sBNloaBUay8+O
+xGUDNvPgtRdKSr8rztJgZ+jJiwI1KuCesJiKMHeKELlmLJ5B8NdY03ycePut32c2
+5kTzyJYAsNkkmvtBNYmZSKccgPSAy4nYuKrH6gqa5F2kl6SN1UW1PDJt8sf7kZAc
+LYQRjoZxQpW1W+01u/FcXvFnoFRBNw==
+=o7iV
+-----END PGP SIGNATURE-----
+
+--Sig_/zjBK/bv5oO=dW4e0jKXEPR=--

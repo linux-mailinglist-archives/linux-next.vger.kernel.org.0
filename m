@@ -2,311 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BA43199E06
-	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 20:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17AC199E27
+	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 20:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727226AbgCaS3F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 14:29:05 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:42554 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726000AbgCaS3F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 14:29:05 -0400
+        id S1726170AbgCaSiO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 14:38:14 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:30167 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727607AbgCaSiO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 31 Mar 2020 14:38:14 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585679343;
+        s=mimecast20190719; t=1585679892;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b5dWIETr4KPTa4P1RR7LQV/Jn7WI6760rymnOFO4Dv0=;
-        b=QlEdWyD+gz8/H2xAXqffn/ouSTBK7Ye3oqZk/19HvKbPbB/AvIURIu8tNbK+xbKB9MRIUa
-        nDFffo1EdhFB1cr9HPQdRU19wVRPUf8smSzgA/Hir6MfYLURFYtxdDNgbA5j+MGJO72Hjk
-        N/RXwO/Mxyd0cbjrgzwS86Tp9HLTbSE=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-330-NNjvkxdPN06P_Lvot2j1Mg-1; Tue, 31 Mar 2020 14:29:00 -0400
-X-MC-Unique: NNjvkxdPN06P_Lvot2j1Mg-1
-Received: by mail-wr1-f69.google.com with SMTP id v14so13342044wrq.13
-        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 11:29:00 -0700 (PDT)
+        bh=DCBEU8xfWPGRP7T0kzGMhyTHNf5Ar1K3myE5Isk/Yus=;
+        b=U2kQIH6QuSGzblMF5xFeKHOCx77Fb/0U+bkfuDRh1d9gVnBJHrr5SoWBrJJzf1pL/X/Qf0
+        14VnvSAJ8bQBJr4yf1U7f/v9I8TZbpooa7lIl6Nhq1M22GSaqVcHaz9We7X52Vq0hcvCVK
+        GSq9vDvVMlKEJfhWPET6EkwR/GkVM4E=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-396-_5yczRhVNZCTmhjrXUo60g-1; Tue, 31 Mar 2020 14:38:01 -0400
+X-MC-Unique: _5yczRhVNZCTmhjrXUo60g-1
+Received: by mail-wr1-f71.google.com with SMTP id y1so12223705wrp.5
+        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 11:38:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=b5dWIETr4KPTa4P1RR7LQV/Jn7WI6760rymnOFO4Dv0=;
-        b=WbiSJ1jDtl+gBXYUTOuQCSsXCunyJZFAdyX+XT47RhWNmnPLeh5896poWPAsZyehIU
-         Tj8xY31ZSiE8DsOiJcrqjQ5NBFVXlxWDk31X2trYMDGEgNFemCayyodlCJ9xDbKXQGHO
-         hX4yS+7Sage3i2Ni10Kal/ZChxSqwdAOwRl77+8tFb4Va/aczaN3jykLuhRmoBbJdmXB
-         tw+P1AtVOVzwqiBf7gPEa2HOoeSKPh1/ZDU5yZiYVVLPGoVl7zYJz3W0TEwBj58ppGh3
-         KgJ2EPEO3TpdnAex6Ywt5FzdrzYT01uGLFg7tRVxXvu9jhPqQXV6WzXbo9plSRskjZFa
-         kJWA==
-X-Gm-Message-State: ANhLgQ2+gszNzvHrgRUT0iZcrri6nSuMIVq1s7PSYljuCXC33pPY0P5l
-        Bhp4V9YX6J9X7VQlQSsPqff+LAhwomEZWDCwNyg2Kjs4rn3JIPZHqMxuMc2kcJSpkuXmqe5o04e
-        FKLJTWpYuId5f3wGFp2saOA==
-X-Received: by 2002:a5d:51cf:: with SMTP id n15mr20377991wrv.195.1585679339638;
-        Tue, 31 Mar 2020 11:28:59 -0700 (PDT)
-X-Google-Smtp-Source: ADFU+vsrRT7SyDvbvcazCfYAPjh1HEODlf301z86ujp6Ln0x2zj42AzBsllsuuoC5zRxIsUp9SilHA==
-X-Received: by 2002:a5d:51cf:: with SMTP id n15mr20377958wrv.195.1585679339265;
-        Tue, 31 Mar 2020 11:28:59 -0700 (PDT)
+         :mime-version:content-disposition:in-reply-to;
+        bh=DCBEU8xfWPGRP7T0kzGMhyTHNf5Ar1K3myE5Isk/Yus=;
+        b=dXTep9zAQnq0GriOek9i+z00a+3toFssxGJmfS7WaY274YCko3Q6vJI7Yf+SvtXUUI
+         TFB5Ng28haUMeRyJd1XVPltipWjArx3Lw7J8i+ODrZSTb7lqfOUyeUl51WGPfGJJKl5s
+         a6ahcivt/cPLJy7WdU3mf0+MeoPFIq8I2J+zeHPzKmLsx8EvIfi+yT8fgcWIbrh4IWxu
+         Lqkd4+4guoIttSYYL7QLc08A/86ulILaxWD3+dsjDU3ZD+mw1Cwv0gfxWvH0BEADtrA8
+         6RmQCLynv2m3QNgJiCZQ2OyQghP/rpXICcye+l+iX+rJpf3kjISqWVzrSXBkdaRp4fDA
+         rLyA==
+X-Gm-Message-State: ANhLgQ3pDq+n/QObZhuxyInTUf2guHazlnbgV7TWPQlQQYc3Qc0Vh7k9
+        Jce76nLiPLZwfHyz2Jv+VxaX31EGRB0j9TFiaECtfB69bgp6yTOkFbkJX0Tk177kHoxYr0RxiYs
+        jKQJcISPvc43T1GKU8TDypA==
+X-Received: by 2002:a5d:470b:: with SMTP id y11mr21278438wrq.282.1585679879820;
+        Tue, 31 Mar 2020 11:37:59 -0700 (PDT)
+X-Google-Smtp-Source: ADFU+vv7BkgR0ghsMi1Xgc6DnC2NK7tqfIaM77t9wkjqEFGZ1NVpf3iEEFN2O7dAkJUYQEvEgprBcw==
+X-Received: by 2002:a5d:470b:: with SMTP id y11mr21278415wrq.282.1585679879621;
+        Tue, 31 Mar 2020 11:37:59 -0700 (PDT)
 Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
-        by smtp.gmail.com with ESMTPSA id u128sm4909462wmu.31.2020.03.31.11.28.57
+        by smtp.gmail.com with ESMTPSA id l17sm28536847wrm.57.2020.03.31.11.37.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Mar 2020 11:28:58 -0700 (PDT)
-Date:   Tue, 31 Mar 2020 14:28:55 -0400
+        Tue, 31 Mar 2020 11:37:58 -0700 (PDT)
+Date:   Tue, 31 Mar 2020 14:37:56 -0400
 From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: Re: [PATCH v2 1/8] vhost: Create accessors for virtqueues
- private_data
-Message-ID: <20200331142426-mutt-send-email-mst@kernel.org>
-References: <20200331180006.25829-1-eperezma@redhat.com>
- <20200331180006.25829-2-eperezma@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>
+Subject: Re: mmotm 2020-03-30-18-46 uploaded (VDPA + vhost)
+Message-ID: <20200331143437-mutt-send-email-mst@kernel.org>
+References: <20200331014748.ajL0G62jF%akpm@linux-foundation.org>
+ <969cacf1-d420-223d-7cc7-5b1b2405ec2a@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200331180006.25829-2-eperezma@redhat.com>
+In-Reply-To: <969cacf1-d420-223d-7cc7-5b1b2405ec2a@infradead.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 07:59:59PM +0200, Eugenio Pérez wrote:
-> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> ---
->  drivers/vhost/net.c   | 28 +++++++++++++++-------------
->  drivers/vhost/vhost.h | 28 ++++++++++++++++++++++++++++
->  drivers/vhost/vsock.c | 14 +++++++-------
-
-
-Seems to be missing scsi and test.
-
-
->  3 files changed, 50 insertions(+), 20 deletions(-)
+On Tue, Mar 31, 2020 at 11:27:54AM -0700, Randy Dunlap wrote:
+> On 3/30/20 6:47 PM, akpm@linux-foundation.org wrote:
+> > The mm-of-the-moment snapshot 2020-03-30-18-46 has been uploaded to
+> > 
+> >    http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > mmotm-readme.txt says
+> > 
+> > README for mm-of-the-moment:
+> > 
+> > http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> > 
+> > You will need quilt to apply these patches to the latest Linus release (5.x
+> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > http://ozlabs.org/~akpm/mmotm/series
+> > 
+> > The file broken-out.tar.gz contains two datestamp files: .DATE and
+> > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> > followed by the base kernel version against which this patch series is to
+> > be applied.
+> > 
+> > This tree is partially included in linux-next.  To see which patches are
+> > included in linux-next, consult the `series' file.  Only the patches
+> > within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> > linux-next.
+> > 
+> > 
+> > A full copy of the full kernel tree with the linux-next and mmotm patches
+> > already applied is available through git within an hour of the mmotm
+> > release.  Individual mmotm releases are tagged.  The master branch always
+> > points to the latest release, so it's constantly rebasing.
+> > 
+> > 	https://github.com/hnaz/linux-mm
 > 
-> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-> index e158159671fa..6c5e7a6f712c 100644
-> --- a/drivers/vhost/net.c
-> +++ b/drivers/vhost/net.c
-> @@ -424,7 +424,7 @@ static void vhost_net_disable_vq(struct vhost_net *n,
->  	struct vhost_net_virtqueue *nvq =
->  		container_of(vq, struct vhost_net_virtqueue, vq);
->  	struct vhost_poll *poll = n->poll + (nvq - n->vqs);
-> -	if (!vq->private_data)
-> +	if (!vhost_vq_get_backend_opaque(vq))
->  		return;
->  	vhost_poll_stop(poll);
->  }
-> @@ -437,7 +437,7 @@ static int vhost_net_enable_vq(struct vhost_net *n,
->  	struct vhost_poll *poll = n->poll + (nvq - n->vqs);
->  	struct socket *sock;
->  
-> -	sock = vq->private_data;
-> +	sock = vhost_vq_get_backend_opaque(vq);
->  	if (!sock)
->  		return 0;
->  
-> @@ -524,7 +524,7 @@ static void vhost_net_busy_poll(struct vhost_net *net,
->  		return;
->  
->  	vhost_disable_notify(&net->dev, vq);
-> -	sock = rvq->private_data;
-> +	sock = vhost_vq_get_backend_opaque(rvq);
->  
->  	busyloop_timeout = poll_rx ? rvq->busyloop_timeout:
->  				     tvq->busyloop_timeout;
-> @@ -570,8 +570,10 @@ static int vhost_net_tx_get_vq_desc(struct vhost_net *net,
->  
->  	if (r == tvq->num && tvq->busyloop_timeout) {
->  		/* Flush batched packets first */
-> -		if (!vhost_sock_zcopy(tvq->private_data))
-> -			vhost_tx_batch(net, tnvq, tvq->private_data, msghdr);
-> +		if (!vhost_sock_zcopy(vhost_vq_get_backend_opaque(tvq)))
-> +			vhost_tx_batch(net, tnvq,
-> +				       vhost_vq_get_backend_opaque(tvq),
-> +				       msghdr);
->  
->  		vhost_net_busy_poll(net, rvq, tvq, busyloop_intr, false);
->  
-> @@ -685,7 +687,7 @@ static int vhost_net_build_xdp(struct vhost_net_virtqueue *nvq,
->  	struct vhost_virtqueue *vq = &nvq->vq;
->  	struct vhost_net *net = container_of(vq->dev, struct vhost_net,
->  					     dev);
-> -	struct socket *sock = vq->private_data;
-> +	struct socket *sock = vhost_vq_get_backend_opaque(vq);
->  	struct page_frag *alloc_frag = &net->page_frag;
->  	struct virtio_net_hdr *gso;
->  	struct xdp_buff *xdp = &nvq->xdp[nvq->batched_xdp];
-> @@ -952,7 +954,7 @@ static void handle_tx(struct vhost_net *net)
->  	struct socket *sock;
->  
->  	mutex_lock_nested(&vq->mutex, VHOST_NET_VQ_TX);
-> -	sock = vq->private_data;
-> +	sock = vhost_vq_get_backend_opaque(vq);
->  	if (!sock)
->  		goto out;
->  
-> @@ -1121,7 +1123,7 @@ static void handle_rx(struct vhost_net *net)
->  	int recv_pkts = 0;
->  
->  	mutex_lock_nested(&vq->mutex, VHOST_NET_VQ_RX);
-> -	sock = vq->private_data;
-> +	sock = vhost_vq_get_backend_opaque(vq);
->  	if (!sock)
->  		goto out;
->  
-> @@ -1344,9 +1346,9 @@ static struct socket *vhost_net_stop_vq(struct vhost_net *n,
->  		container_of(vq, struct vhost_net_virtqueue, vq);
->  
->  	mutex_lock(&vq->mutex);
-> -	sock = vq->private_data;
-> +	sock = vhost_vq_get_backend_opaque(vq);
->  	vhost_net_disable_vq(n, vq);
-> -	vq->private_data = NULL;
-> +	vhost_vq_set_backend_opaque(vq, NULL);
->  	vhost_net_buf_unproduce(nvq);
->  	nvq->rx_ring = NULL;
->  	mutex_unlock(&vq->mutex);
-> @@ -1528,7 +1530,7 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
->  	}
->  
->  	/* start polling new socket */
-> -	oldsock = vq->private_data;
-> +	oldsock = vhost_vq_get_backend_opaque(vq);
->  	if (sock != oldsock) {
->  		ubufs = vhost_net_ubuf_alloc(vq,
->  					     sock && vhost_sock_zcopy(sock));
-> @@ -1538,7 +1540,7 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
->  		}
->  
->  		vhost_net_disable_vq(n, vq);
-> -		vq->private_data = sock;
-> +		vhost_vq_set_backend_opaque(vq, sock);
->  		vhost_net_buf_unproduce(nvq);
->  		r = vhost_vq_init_access(vq);
->  		if (r)
-> @@ -1575,7 +1577,7 @@ static long vhost_net_set_backend(struct vhost_net *n, unsigned index, int fd)
->  	return 0;
->  
->  err_used:
-> -	vq->private_data = oldsock;
-> +	vhost_vq_set_backend_opaque(vq, oldsock);
->  	vhost_net_enable_vq(n, vq);
->  	if (ubufs)
->  		vhost_net_ubuf_put_wait_and_free(ubufs);
-> diff --git a/drivers/vhost/vhost.h b/drivers/vhost/vhost.h
-> index a123fd70847e..0808188f7e8f 100644
-> --- a/drivers/vhost/vhost.h
-> +++ b/drivers/vhost/vhost.h
-> @@ -244,6 +244,34 @@ enum {
->  			 (1ULL << VIRTIO_F_VERSION_1)
->  };
->  
-> +/**
-> + * vhost_vq_set_backend_opaque - Set backend opaque.
-> + *
-> + * @vq            Virtqueue.
-> + * @private_data  The private data.
-> + *
-> + * Context: Need to call with vq->mutex acquired.
-> + */
-> +static inline void vhost_vq_set_backend_opaque(struct vhost_virtqueue *vq,
-> +					       void *private_data)
-> +{
-> +	vq->private_data = private_data;
-> +}
-> +
-> +/**
-> + * vhost_vq_get_backend_opaque - Get backend opaque.
-> + *
-> + * @vq            Virtqueue.
-> + * @private_data  The private data.
-> + *
-> + * Context: Need to call with vq->mutex acquired.
-> + * Return: Opaque previously set with vhost_vq_set_backend_opaque.
+> on i386:
+> 
+> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_init':
+> vdpa.c:(.init.text+0x52): undefined reference to `__vdpa_register_driver'
+> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_exit':
+> vdpa.c:(.exit.text+0x14): undefined reference to `vdpa_unregister_driver'
+> 
+> 
+> 
+> drivers/virtio/vdpa/ is not being built. (confusing!)
+> 
+> CONFIG_VIRTIO=m
+> # CONFIG_VIRTIO_MENU is not set
+> CONFIG_VDPA=y
+
+Hmm. OK. Can't figure it out. CONFIG_VDPA is set why isn't
+drivers/virtio/vdpa/ built?
+we have:
 
 
-I prefer opaque -> private data in comments.
+obj-$(CONFIG_VDPA) += vdpa/
 
-> + */
+and under that:
+
+obj-$(CONFIG_VDPA) += vdpa.o
 
 
-
-
-> +static inline void *vhost_vq_get_backend_opaque(struct vhost_virtqueue *vq)
-> +{
-> +	return vq->private_data;
-> +}
-> +
->  static inline bool vhost_has_feature(struct vhost_virtqueue *vq, int bit)
->  {
->  	return vq->acked_features & (1ULL << bit);
-> diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
-> index c2d7d57e98cf..6e20dbe14acd 100644
-> --- a/drivers/vhost/vsock.c
-> +++ b/drivers/vhost/vsock.c
-> @@ -91,7 +91,7 @@ vhost_transport_do_send_pkt(struct vhost_vsock *vsock,
->  
->  	mutex_lock(&vq->mutex);
->  
-> -	if (!vq->private_data)
-> +	if (!vhost_vq_get_backend_opaque(vq))
->  		goto out;
->  
->  	/* Avoid further vmexits, we're already processing the virtqueue */
-> @@ -440,7 +440,7 @@ static void vhost_vsock_handle_tx_kick(struct vhost_work *work)
->  
->  	mutex_lock(&vq->mutex);
->  
-> -	if (!vq->private_data)
-> +	if (!vhost_vq_get_backend_opaque(vq))
->  		goto out;
->  
->  	vhost_disable_notify(&vsock->dev, vq);
-> @@ -533,8 +533,8 @@ static int vhost_vsock_start(struct vhost_vsock *vsock)
->  			goto err_vq;
->  		}
->  
-> -		if (!vq->private_data) {
-> -			vq->private_data = vsock;
-> +		if (!vhost_vq_get_backend_opaque(vq)) {
-> +			vhost_vq_set_backend_opaque(vq, vsock);
->  			ret = vhost_vq_init_access(vq);
->  			if (ret)
->  				goto err_vq;
-> @@ -547,14 +547,14 @@ static int vhost_vsock_start(struct vhost_vsock *vsock)
->  	return 0;
->  
->  err_vq:
-> -	vq->private_data = NULL;
-> +	vhost_vq_set_backend_opaque(vq, NULL);
->  	mutex_unlock(&vq->mutex);
->  
->  	for (i = 0; i < ARRAY_SIZE(vsock->vqs); i++) {
->  		vq = &vsock->vqs[i];
->  
->  		mutex_lock(&vq->mutex);
-> -		vq->private_data = NULL;
-> +		vhost_vq_set_backend_opaque(vq, NULL);
->  		mutex_unlock(&vq->mutex);
->  	}
->  err:
-> @@ -577,7 +577,7 @@ static int vhost_vsock_stop(struct vhost_vsock *vsock)
->  		struct vhost_virtqueue *vq = &vsock->vqs[i];
->  
->  		mutex_lock(&vq->mutex);
-> -		vq->private_data = NULL;
-> +		vhost_vq_set_backend_opaque(vq, NULL);
->  		mutex_unlock(&vq->mutex);
->  	}
->  
+> CONFIG_VDPA_MENU=y
+> # CONFIG_VDPA_SIM is not set
+> CONFIG_VHOST_IOTLB=y
+> CONFIG_VHOST_RING=m
+> CONFIG_VHOST=y
+> CONFIG_VHOST_SCSI=m
+> CONFIG_VHOST_VDPA=y
+> 
+> Full randconfig file is attached.
+> 
+> (This same build failure happens with today's linux-next, Mar. 31.)
+> 
+> @Yamada-san:  Is this a kbuild problem (or feature)?
+> 
 > -- 
-> 2.18.1
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
 

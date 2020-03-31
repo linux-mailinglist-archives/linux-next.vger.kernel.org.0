@@ -2,58 +2,57 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id A2413199F08
-	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 21:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08B9199F16
+	for <lists+linux-next@lfdr.de>; Tue, 31 Mar 2020 21:30:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727932AbgCaT3K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 15:29:10 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:52973 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731401AbgCaT3I (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 31 Mar 2020 15:29:08 -0400
+        id S1727575AbgCaTaT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 15:30:19 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:30090 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1726290AbgCaTaT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 31 Mar 2020 15:30:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585682946;
+        s=mimecast20190719; t=1585683017;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0om1tDTYIRQhTCKQFE/dlR8vuduWySdQ5AoKosLSrZY=;
-        b=h6xRWGVwrK26IBy/igL8vobIsPksk+viFKMKFvCBxrnHdEaXysHP9++z8wRN96beucjeSx
-        qLBr7cHqGxJnSqg+3qbvNYVJoGJEThy/0Z/OI4bWrWLX7xP+3M5lN5yb4cMRlrrN9fClAg
-        D/+WhMiH+MFcKnp5ef7pPtnXr1OUKps=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-311-dWSb9VacPSWNYYR6LO0ZNg-1; Tue, 31 Mar 2020 15:29:02 -0400
-X-MC-Unique: dWSb9VacPSWNYYR6LO0ZNg-1
-Received: by mail-lf1-f70.google.com with SMTP id c20so9204411lfh.6
-        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 12:29:02 -0700 (PDT)
+        bh=UpUD1JgEMbiTeKuDtcfbarlvunPYOvi5RMSv8hFzL24=;
+        b=ITEqrRvR342ja9Z0GhkIzHxmgcYj3fWDORmYT966ZmxdvK5AXTKAg44OdVSQmSbdKVDzzL
+        6Vg1mVnwhusy2SfvMLvvgtQuWyVnyZsEvAQ1zAmHBA1HtcMc1KLr2IkqIebbhzUo45+Veq
+        qQBrT+woLmNLL+aphxmdtg+wyFm/xJs=
+Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
+ [209.85.167.69]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-367-Slh-sP29PD-HLdaa9s0A0g-1; Tue, 31 Mar 2020 15:30:16 -0400
+X-MC-Unique: Slh-sP29PD-HLdaa9s0A0g-1
+Received: by mail-lf1-f69.google.com with SMTP id s6so9227561lfp.15
+        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 12:30:15 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc:content-transfer-encoding;
-        bh=0om1tDTYIRQhTCKQFE/dlR8vuduWySdQ5AoKosLSrZY=;
-        b=HDL0xieNTpaC2Vge/dtdYXoqONVfrNwBT3GsYg9eFpep5vHzZ6MZoxeyuqrn4DiNo9
-         1qxQYL1O0umh6I8EzSrOp8GuMqX4Q/RF733F9c0xpNbP/e0vKSob/Uo/xA/Ico4lQByc
-         R21XirZkknBeII5w8W3ayWh8GrzVQZviOzskd4gjDqwKVfvsdtGrGy5I4DIoTzWYMzMZ
-         d/ujYXsGVx6CeEj7nh0dicI+FoD0a600x8rZ32OxgDgJ+sdr3lFl73iskhxbU63jeVCt
-         Fq1cDlYc+pnhEX5/MvfJGQYmxnY5HbFcyeDIpV25Td3gCZO1rmIKQcPIhIClqGj26bCd
-         YVOA==
-X-Gm-Message-State: AGi0PubnsTCYGekBNZrjBxpsjcRXgEb4Ppp6vUxmJqVCE5sU41NwRQxz
-        X7cJT+7rHYv9XKtGAgKmSgs/ruHKkuKNzxk/S3Xf4nqsq4RFzA1bOyWuFFLF0jEo1gY1uMKIvVh
-        OBgE2krwWRzgsJtip0HTUnCXar1gh7JR/6eSZLw==
-X-Received: by 2002:ac2:5999:: with SMTP id w25mr12114702lfn.46.1585682940859;
-        Tue, 31 Mar 2020 12:29:00 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLpr8IXJs16xd9lebdc8tNMXZ0SZbvwQ/5Eviy4mM3IuzpP1FdXPWR68xZuJdl3TyvgE3tEk6BojOLJ5/7gjZo=
-X-Received: by 2002:ac2:5999:: with SMTP id w25mr12114683lfn.46.1585682940546;
- Tue, 31 Mar 2020 12:29:00 -0700 (PDT)
+        bh=UpUD1JgEMbiTeKuDtcfbarlvunPYOvi5RMSv8hFzL24=;
+        b=nB4suAdWEXK8U66j9XD8V9yvsy3VaQYjB+g4fXGL08RAEZ9+YwrnvjEiUQFr2aXe3C
+         JkjEGLxFQIoq7DtOzYUU223WWe29dt5asthseXJaniy2+8LzxXEaIgJ6DClFxmFM0rdl
+         E17vc2pWd41VV2K6NfD8cGnfhBNssfVmicm+FHw6/430U28EUlY80BK4gJz5dsgw4aFC
+         9vSmDI6MgQlB5KYP0bF6eo5VMGyxDhYE2Ydjv8kIUx3brqCZERXmk+DPGAQneTDJ7pjx
+         seriA++SuQVsli9dryu53ptVVUFpNLaYtwcaAahXnntKt2LJgcKw2cBFA9edVbtOHYfp
+         BiUg==
+X-Gm-Message-State: AGi0PubWYkIjYAjd29WkmNCVQj8jFmciB7j7smabx3NJlEuSKRwSMH9Y
+        32x/TlxBQA9Zx0nGwRbS/GCMAWicvIbvG1xbRZUJ8+483/Rw1S1fz7ccNFbySvwGTxI+sNGWs+q
+        KLPBUkE1t/AZ+Mm+l+R4bEJ8eSDDPjSbCi37TNg==
+X-Received: by 2002:ac2:4199:: with SMTP id z25mr12316651lfh.90.1585683014301;
+        Tue, 31 Mar 2020 12:30:14 -0700 (PDT)
+X-Google-Smtp-Source: APiQypJhWHR1e3yFKlW02voYvvq7yPGRxklHTLnYsbNB5eexsLfQZB5Gq+0Qo0MSOyWCKWui5xHhfhrh7QYm8fcFEMM=
+X-Received: by 2002:ac2:4199:: with SMTP id z25mr12316641lfh.90.1585683014001;
+ Tue, 31 Mar 2020 12:30:14 -0700 (PDT)
 MIME-Version: 1.0
 References: <20200331180006.25829-1-eperezma@redhat.com> <20200331180006.25829-2-eperezma@redhat.com>
- <20200331142426-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20200331142426-mutt-send-email-mst@kernel.org>
+ <20200331141244-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20200331141244-mutt-send-email-mst@kernel.org>
 From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Tue, 31 Mar 2020 21:28:24 +0200
-Message-ID: <CAJaqyWfaMb0ZojkeoPhM8b49wZnfwVFG7MbOsOqhRUgLJE_GCw@mail.gmail.com>
+Date:   Tue, 31 Mar 2020 21:29:37 +0200
+Message-ID: <CAJaqyWe2xxSR5GpV8c-mPoOizwe8nw-HrKPdjvr4ykOL_garKQ@mail.gmail.com>
 Subject: Re: [PATCH v2 1/8] vhost: Create accessors for virtqueues private_data
 To:     "Michael S. Tsirkin" <mst@redhat.com>
 Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -72,7 +71,7 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Mar 31, 2020 at 8:29 PM Michael S. Tsirkin <mst@redhat.com> wrote:
+On Tue, Mar 31, 2020 at 8:14 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 >
 > On Tue, Mar 31, 2020 at 07:59:59PM +0200, Eugenio P=C3=A9rez wrote:
 > > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
@@ -80,14 +79,6 @@ On Tue, Mar 31, 2020 at 8:29 PM Michael S. Tsirkin <mst@redhat.com> wrote:
 > >  drivers/vhost/net.c   | 28 +++++++++++++++-------------
 > >  drivers/vhost/vhost.h | 28 ++++++++++++++++++++++++++++
 > >  drivers/vhost/vsock.c | 14 +++++++-------
->
->
-> Seems to be missing scsi and test.
-
-Good point, changing them too!
-
->
->
 > >  3 files changed, 50 insertions(+), 20 deletions(-)
 > >
 > > diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
@@ -241,23 +232,7 @@ t *n, unsigned index, int fd)
 > > + *
 > > + * Context: Need to call with vq->mutex acquired.
 > > + * Return: Opaque previously set with vhost_vq_set_backend_opaque.
->
->
-> I prefer opaque -> private data in comments.
->
-
-Changing.
-
-v3 sent.
-
-Thanks!
-
-
 > > + */
->
->
->
->
 > > +static inline void *vhost_vq_get_backend_opaque(struct vhost_virtqueue=
  *vq)
 > > +{
@@ -268,6 +243,19 @@ Thanks!
 it)
 > >  {
 > >       return vq->acked_features & (1ULL << bit);
+>
+>
+> I think I prefer vhost_vq_get_backend and vhost_vq_set_backend.
+>
+> "opaque" just means that it's void * that is clear from the signature
+> anyway.
+>
+
+I agree. Changed in sent v3.
+
+Thanks!
+
+>
 > > diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
 > > index c2d7d57e98cf..6e20dbe14acd 100644
 > > --- a/drivers/vhost/vsock.c

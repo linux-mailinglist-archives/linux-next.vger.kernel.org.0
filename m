@@ -2,66 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B7B19A72E
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 10:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D38419A73F
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 10:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728236AbgDAIYP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 04:24:15 -0400
-Received: from mail-ot1-f65.google.com ([209.85.210.65]:36328 "EHLO
-        mail-ot1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728225AbgDAIYP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 04:24:15 -0400
-Received: by mail-ot1-f65.google.com with SMTP id l23so25070758otf.3;
-        Wed, 01 Apr 2020 01:24:14 -0700 (PDT)
+        id S1726977AbgDAI1K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 04:27:10 -0400
+Received: from mail-ot1-f66.google.com ([209.85.210.66]:45114 "EHLO
+        mail-ot1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726197AbgDAI1K (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 04:27:10 -0400
+Received: by mail-ot1-f66.google.com with SMTP id c9so25035573otl.12;
+        Wed, 01 Apr 2020 01:27:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=/vo7v3hANyUdQNEMlcVhlSk/PSBNwxY407hISvnXqDQ=;
-        b=QziwAt3PnjIK9UDHnILAUTBBcYj1gMxTi9iRj51kLZLAU2O0YzxwrykCe4KpG9p+Id
-         mXmn4ZGnq38Ma1Htw+e0WXKvWgQMoRm4gvRK+TMWyIjWUVksup9WENiUNynwqyqdSJMw
-         D2lykltITwJEvz2nTz8BjpRs9A2xmTW9EH3dmyg4V/DeGFJATusfV2IeDJX8cfJS+ZSG
-         Eqce696lqLb/apzI/8sm5kE/xsplVZUIKpmQsBR+iMnzifydyLxQCxSmVFc7hi5UGqgg
-         BC6cdzfsGXRvH4Mi9jv8hHw5/0uV+isQoerlOwT3XBeetrG8/h2rKT8CjC06i1iiplHt
-         39ZQ==
-X-Gm-Message-State: ANhLgQ2mNMnPA6csMlpzWbo34dl2g5VcYGFEwf54gQ9PxoHYYDdpzJt4
-        ETOLRsxLKO4rigFtZmEHDNWwB0ATLPJK7CZYXjU=
-X-Google-Smtp-Source: ADFU+vtF02ulNxvdGpxMJCuYuu0xIf1H76NF2cxxeeRDJLwiAHi86aGGQTy2tH4GSvezo6P1tNSGBkTbYVNjBSZRtZQ=
-X-Received: by 2002:a9d:76c7:: with SMTP id p7mr4825311otl.145.1585729454391;
- Wed, 01 Apr 2020 01:24:14 -0700 (PDT)
+        bh=8PWg6iL0RHDv3oeRI76vFJ9XdDEyjVI5/xkAD0j0fj0=;
+        b=kDzYxx38wK4dX1g7csnk6susgl0kMoY6gjnlu+klerEJbk8dze54Pq0hoN4ih4vpaZ
+         oSHl6ICBa1858xnEi6X22DruSM3R2/8Ux8+sS+z0uh1FYOohsWksCMYpVAnS2YybZ0zq
+         ECe7DxMMGE1kl+/hftLSoGiAapnZ1TFZjFGXtMeMbBKdOp6KNIJv33T8k1NBLSrjrZCA
+         hArB1Lh5votq8NqX5JKpa5xewuYSmi/XTuvoNkbXAQ4d9X0kkSBGbKVe6l5YPTXCLkom
+         YHd8Jwh+ud0NpVEPOuQJ+XXqmnE8n8a2RYS3oA3IdNRhQt0V6gF2thnAVvWdpwOKYRV1
+         0FEA==
+X-Gm-Message-State: ANhLgQ02gbsXGbEGrdeHvYlqpKo/bq+cPLKH3AY+4taUn857vrH3aorz
+        h2WBtabALTwnvny9DjEBXG7GmSYJtgZpwN+hnaY=
+X-Google-Smtp-Source: ADFU+vu5WCM8zr8UCxmvvPoHlaAcgIaE2nkkFI0Wude6ubPSLKcv/F/AiyEuwwF11uWc1fLXdqIdiOyHeUQC8aBj8T4=
+X-Received: by 2002:a05:6830:15c2:: with SMTP id j2mr15135322otr.107.1585729629608;
+ Wed, 01 Apr 2020 01:27:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200401151904.6948af20@canb.auug.org.au> <CAMuHMdXFHWFucxZbChxaM6w4q9Gu5pccMBP46N4Av1E2rNKddA@mail.gmail.com>
- <CACRpkdbP9gMLDnDSR6czN88Hjwu6HXSZ2jyYOo-iuq0W073Hbg@mail.gmail.com>
-In-Reply-To: <CACRpkdbP9gMLDnDSR6czN88Hjwu6HXSZ2jyYOo-iuq0W073Hbg@mail.gmail.com>
+References: <20200401190810.7a2cfa07@canb.auug.org.au> <20200401191810.1c06ead6@canb.auug.org.au>
+In-Reply-To: <20200401191810.1c06ead6@canb.auug.org.au>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 1 Apr 2020 10:24:03 +0200
-Message-ID: <CAMuHMdXPCwdd2-Hn0_N7nLgBatS8smnvLnxZD06Qsk+qGJKc7A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the gpio tree
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+Date:   Wed, 1 Apr 2020 10:26:58 +0200
+Message-ID: <CAMuHMdVqexMZKj8xtMb3NdV64xrq4ppiq0sLMfHdtft4stZZTQ@mail.gmail.com>
+Subject: Re: [PATCH] gpio: turn of_pinctrl_get() into a static inline
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <treding@nvidia.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Linus,
+Hi Stephen,
 
-On Wed, Apr 1, 2020 at 10:19 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> On Wed, Apr 1, 2020 at 9:49 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > > +EXPORT_SYMBOL_GPL(of_pinctrl_get);
+On Wed, Apr 1, 2020 at 10:18 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Wed, 1 Apr 2020 19:08:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > This avoids the overheads of an EXPORTed function.
 > >
-> > As exporting symbols has its (space) cost, and of_pinctrl_get() is a tiny
-> > function, what about making it an inline function in
-> > include/linux/pinctrl/pinctrl.h instead?
+> > Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/pinctrl/devicetree.c    | 6 ------
+> >  include/linux/pinctrl/pinctrl.h | 9 +++------
+> >  2 files changed, 3 insertions(+), 12 deletions(-)
+> >
+> > This is not even build tested, but is this what you meant, Geert?
 >
-> I'm all for it! :)
+> Actually this won't work because get_pinctrl_dev_from_of_node() is
+> declared in the private header file drivers/pinctrl/core.h :-(
 
-Want me to send a patch?
-Which base?
+Indeed :-(
+
+Just realized this myself, while reviewing your patch.
+Sorry for the bad suggestion.
 
 Gr{oetje,eeting}s,
 

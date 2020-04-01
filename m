@@ -2,196 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E8E19AEEF
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 17:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9651019B490
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 19:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732961AbgDAPke (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 11:40:34 -0400
-Received: from mail-pf1-f173.google.com ([209.85.210.173]:44016 "EHLO
-        mail-pf1-f173.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732861AbgDAPke (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 11:40:34 -0400
-Received: by mail-pf1-f173.google.com with SMTP id f206so97348pfa.10
-        for <linux-next@vger.kernel.org>; Wed, 01 Apr 2020 08:40:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=Ncpsl3gkJm79WCC+mzKR73+kcfsPG490ndXp8syoli8=;
-        b=vj+49XU/vDuBKAaMFonlp6Jlh3+E6DA1u1H3pni5FiNsq7nHLV4OPs9JdO/hDI8ZTC
-         zDC/qZOvFchp8KvsFv4/UzhOiWBgWf22q5VKEBT6mZpSNtIyn6Li1PDTsogN6fk9eNVS
-         ATapvr90ym2jbb8vcIsuot0/sTYkmVgyQNEyBjwy8YHUti/Anjuchxve+tEH94FYu/N9
-         1TXbl3HrBcASZ86zdCSfgV0APWNjel1bL4XV/dJ1VnjWU2qqaOr8umLr6TvMvsgRQ7QX
-         jtC8DhP1+qgN+AngNVPtLiwfAUpbDX5HB9uxpz1mZWKHe7asZTWUsp4nGnSYUDZv2D0y
-         Y7GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=Ncpsl3gkJm79WCC+mzKR73+kcfsPG490ndXp8syoli8=;
-        b=Y/MiZTmoF2adHcTcAF6Gl5jPAzvz67Xe9I5WkNT+XgdQ7QI0hBSG/xSvOsrplF68qz
-         Co5BHkI36E7U9G1Uop/oGvLtWwEf93WkBkfZ2f/P+TVIuKEBubBIkhMSsAPbGTcSwuZD
-         qpPpgRIZCM5shxBYNtUq3sSQBkf1PPs9mYZYN5bdPrEBxG6MFM8wKgZ2aCMlx2XkCucn
-         qY4wuGwiXQdfB2sqkClGU9dYvyskMHdxd7AGQGiO5IKJd3dg2V/Bc3B/IaDY0MJfHmob
-         cmc7QXJiJzYrb7JfiS95WrTDd6KwodQ35ehRT58h45D2sjijtj/bkILLWp/Vi9EMP8r0
-         oxrw==
-X-Gm-Message-State: ANhLgQ1nRIDSQCZh6GNJO66ZnpmKgsyly/lc7DHR1nvm1tY7sWmg3UmN
-        tWulcihbc3fhzl8HPvL4L8BKD27falk=
-X-Google-Smtp-Source: ADFU+vtSa3REpqQ11XpOlLphrwAVWY8uzp56S9j2R+LnqUMhzadrcK7ykang14SxMo3YToxPcpZCYg==
-X-Received: by 2002:a63:2360:: with SMTP id u32mr23700126pgm.190.1585755632140;
-        Wed, 01 Apr 2020 08:40:32 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u129sm1816787pfb.101.2020.04.01.08.40.30
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Apr 2020 08:40:31 -0700 (PDT)
-Message-ID: <5e84b5ef.1c69fb81.8ff50.8125@mx.google.com>
-Date:   Wed, 01 Apr 2020 08:40:31 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1732722AbgDARNR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 13:13:17 -0400
+Received: from bombadil.infradead.org ([198.137.202.133]:40874 "EHLO
+        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732137AbgDARNR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 13:13:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=wdgTSKNxkD1QrwAjRgDdie5nQ4gbwZFe8HVIvvfYi0s=; b=KJntRMJ8Qks9UoOE0UgBNQ4Dyr
+        oTcjRKMZ6Jf3Gk/IJlNgmVLKtTXcnPwXUsOSjEOz5uphzyUiBLQJo5o7PNsl5LrPcwVNnSiAKVvsb
+        EyuIe9gLPIJpM69FvjZNpfYVsJZoOmOs+Ik5+N0tX3FfjD3I1dSBXGZWHv9ASkPKrJValKJth9X0/
+        6qWTivVQG1Q4mPA/b4MTBvIzD3/W8/Z5t1IHR66LpXrQnSzPUGwU9UDR5BWrWiQvR8AWjNiN+T4wg
+        qrl22e1u2+csSEP8rhDaM5Xz9aNdmcjZXcpO4P4n77fobZ+0b07wCIh/WYLt/XTgeqmcKmYcvVp2R
+        +8bmJBbA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jJgvR-0000rx-7y; Wed, 01 Apr 2020 17:13:13 +0000
+Subject: Re: mmotm 2020-03-30-18-46 uploaded (VDPA + vhost)
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        virtualization@lists.linux-foundation.org,
+        Jason Wang <jasowang@redhat.com>
+References: <20200331014748.ajL0G62jF%akpm@linux-foundation.org>
+ <969cacf1-d420-223d-7cc7-5b1b2405ec2a@infradead.org>
+ <20200331143437-mutt-send-email-mst@kernel.org>
+ <9c03fee8-af1a-2035-b903-611a631094b0@infradead.org>
+ <20200331152106-mutt-send-email-mst@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <cd94bd62-57c4-b82e-0434-8a470a9ea613@infradead.org>
+Date:   Wed, 1 Apr 2020 10:13:10 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200401
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 284 boots: 9 failed, 264 passed with 3 offline,
- 8 untried/unknown (next-20200401)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200331152106-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 284 boots: 9 failed, 264 passed with 3 offline, 8 untried=
-/unknown (next-20200401)
+On 3/31/20 12:22 PM, Michael S. Tsirkin wrote:
+> On Tue, Mar 31, 2020 at 11:42:47AM -0700, Randy Dunlap wrote:
+>> On 3/31/20 11:37 AM, Michael S. Tsirkin wrote:
+>>> On Tue, Mar 31, 2020 at 11:27:54AM -0700, Randy Dunlap wrote:
+>>>> On 3/30/20 6:47 PM, akpm@linux-foundation.org wrote:
+>>>>> The mm-of-the-moment snapshot 2020-03-30-18-46 has been uploaded to
+>>>>>
+>>>>>    http://www.ozlabs.org/~akpm/mmotm/
+>>>>>
+>>>>> mmotm-readme.txt says
+>>>>>
+>>>>> README for mm-of-the-moment:
+>>>>>
+>>>>> http://www.ozlabs.org/~akpm/mmotm/
+>>>>>
+>>>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>>>> more than once a week.
+>>>>>
+>>>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>>>> http://ozlabs.org/~akpm/mmotm/series
+>>>>>
+>>>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>>>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>>>>> followed by the base kernel version against which this patch series is to
+>>>>> be applied.
+>>>>>
+>>>>> This tree is partially included in linux-next.  To see which patches are
+>>>>> included in linux-next, consult the `series' file.  Only the patches
+>>>>> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+>>>>> linux-next.
+>>>>>
+>>>>>
+>>>>> A full copy of the full kernel tree with the linux-next and mmotm patches
+>>>>> already applied is available through git within an hour of the mmotm
+>>>>> release.  Individual mmotm releases are tagged.  The master branch always
+>>>>> points to the latest release, so it's constantly rebasing.
+>>>>>
+>>>>> 	https://github.com/hnaz/linux-mm
+>>>>
+>>>> on i386:
+>>>>
+>>>> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_init':
+>>>> vdpa.c:(.init.text+0x52): undefined reference to `__vdpa_register_driver'
+>>>> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_exit':
+>>>> vdpa.c:(.exit.text+0x14): undefined reference to `vdpa_unregister_driver'
+>>>>
+>>>>
+>>>>
+>>>> drivers/virtio/vdpa/ is not being built. (confusing!)
+>>>>
+>>>> CONFIG_VIRTIO=m
+>>>> # CONFIG_VIRTIO_MENU is not set
+>>>> CONFIG_VDPA=y
+>>>
+>>> Hmm. OK. Can't figure it out. CONFIG_VDPA is set why isn't
+>>> drivers/virtio/vdpa/ built?
+>>> we have:
+>>>
+>>
+>> Ack.  Hopefully Yamada-san can tell us what is happening here.
+> 
+> OK I pushed a fix (moving the vdpa subsystem up a level) and pushed into
+> my tree, refs/heads/next .  Seems to build fine now, but I'd appreciate
+> it if you can give it a spin.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200401/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200401/
+This now builds successfully on linux-next of 20200401.
 
-Tree: next
-Branch: master
-Git Describe: next-20200401
-Git Commit: 8274500e2b6748d2d2226873ac88cedc3ad833e8
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 107 unique boards, 25 SoC families, 30 builds out of 227
+Thanks.
 
-Boot Regressions Detected:
+-- 
+~Randy
 
-arc:
-
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: new failure (last pass: next-20200330)
-
-arm:
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 11 days (last pass: next-2020031=
-9 - first fail: next-20200320)
-          exynos5800-peach-pi:
-              lab-collabora: failing since 1 day (last pass: next-20200305 =
-- first fail: next-20200331)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          exynos5800-peach-pi:
-              lab-collabora: failing since 1 day (last pass: next-20200129 =
-- first fail: next-20200331)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 43 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: next-20200330)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200331)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200331)
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: next-20200331)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200331)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200331)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 5 days (last pass: next-2=
-0200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-            exynos5800-peach-pi: 2 failed labs
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

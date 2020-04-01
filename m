@@ -2,76 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 895D719A3E2
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 05:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0753119A3E7
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 05:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731649AbgDADLU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 31 Mar 2020 23:11:20 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:53533 "EHLO ozlabs.org"
+        id S1731574AbgDADOO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 31 Mar 2020 23:14:14 -0400
+Received: from ozlabs.org ([203.11.71.1]:47957 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731611AbgDADLT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 31 Mar 2020 23:11:19 -0400
+        id S1731556AbgDADON (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 31 Mar 2020 23:14:13 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48sWS43cL6z9sPF;
-        Wed,  1 Apr 2020 14:11:15 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48sWWQ2WXjz9sPF;
+        Wed,  1 Apr 2020 14:14:10 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585710676;
-        bh=RCS6w+XsN2y2Hr3WJXdBqRTPgGg44FN2saBcX6nSQ+c=;
+        s=201702; t=1585710852;
+        bh=qppD3VaBMroI5+kNa0d+EAkJTB/0+a4Msi+tMCBmFF0=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KEmvZ8Mp87D1322Bw8TBxhvi/MCUlQmMlql4nUF3CqhHFTMMFBVUavMHUH7EatAyT
-         2hUWzJ1+BmWfpdq0+T5aa879I4WAoo2tuKOBVItKSFMUMk0LJQernI0fglZ4s+PYtg
-         3WcPqoRAdKgwFmV8PC0QfGAhP3Tc5CPDiD2YkXydVbI/SBqsxZmVq0+zMyS6QosE6i
-         yQQAIkQ7N1fayiEZrwKEtM9/p8Y0u3Gf7T4WXCyROVgyAww7ip//gQ1qsvBvjOegXU
-         Z+60oJHOn/oozfyxpyjfoXu5nSvVJk8vcdDG31ayl95cK5ryFck2YVleATg8sJmANe
-         oacjOGpV1Qimg==
-Date:   Wed, 1 Apr 2020 14:11:13 +1100
+        b=pC20x8sPHjqGIHNic38SUWahdy0y1+QHMg6pxSpzOacDGDHrYQjTXCF1HBnYdGOrF
+         24FlgA1Ssp1dvvSDYQcmCjmyFoVt5dYwcszXA5Ca6Zk5LS4lEtMsd0Fj6JJCFZn7ao
+         fGgG4xQ5nAdqID4HsOliea/xLqHnKfn1MKs3JwMNKN+AqGyfSYJZsSsz4UtSWKiT0A
+         lRC9rUVJU0ndhW3NBbhwYHjIdNcYzmkw5VJv4BfOuzhivdOEQi04J8vOyvdfZDawyr
+         Qwt79AVC6K01aBUFAgr2qFhbJ+FxuNs7qBwvTNQ/Fb3U+Vm9qqGh6uhvWDfT44vkaC
+         vchWG/iJr4k9g==
+Date:   Wed, 1 Apr 2020 14:14:09 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Greg KH <greg@kroah.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Gayatri Kammela <gayatri.kammela@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- drivers-x86 tree
-Message-ID: <20200401141113.21014665@canb.auug.org.au>
-In-Reply-To: <20200323143816.345b3d54@canb.auug.org.au>
-References: <20200323143816.345b3d54@canb.auug.org.au>
+        Borislav Petkov <bp@suse.de>
+Subject: Re: linux-next: manual merge of the drivers-x86 tree with the tip
+ tree
+Message-ID: <20200401141409.446e989b@canb.auug.org.au>
+In-Reply-To: <20200326150523.02c4ec48@canb.auug.org.au>
+References: <20200326150523.02c4ec48@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5cBGlr0KSr6lYUqc=FgqimL";
+Content-Type: multipart/signed; boundary="Sig_/UCk/pWw7YoTr5yoPdAvwp5g";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5cBGlr0KSr6lYUqc=FgqimL
+--Sig_/UCk/pWw7YoTr5yoPdAvwp5g
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 23 Mar 2020 14:38:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Thu, 26 Mar 2020 15:05:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Today's linux-next merge of the driver-core tree got a conflict in:
+> Today's linux-next merge of the drivers-x86 tree got a conflict in:
 >=20
->   drivers/platform/x86/Kconfig
+>   drivers/platform/x86/intel_pmc_core.c
 >=20
 > between commit:
 >=20
->   45a3d578f2ed ("platform/x86: Kconfig: Group modules by companies and fu=
-nctions")
+>   a69b3b1d4cf0 ("platform/x86: Convert to new CPU match macros")
 >=20
-> from the drivers-x86 tree and commit:
+> from the tip tree and commit:
 >=20
->   835e1b86ef8c ("platform/x86: touchscreen_dmi: Add EFI embedded firmware=
- info support")
+>   16292bed9c56 ("platform/x86: intel_pmc_core: Add Atom based Jasper Lake=
+ (JSL) platform support")
 >=20
-> from the driver-core tree.
+> from the drivers-x86 tree.
 >=20
 > I fixed it up (see below) and can carry the fix as necessary. This
 > is now fixed as far as linux-next is concerned, but any non trivial
@@ -84,120 +86,64 @@ nctions")
 > Cheers,
 > Stephen Rothwell
 >=20
-> diff --cc drivers/platform/x86/Kconfig
-> index ae75b19e8649,cd9e2758c479..000000000000
-> --- a/drivers/platform/x86/Kconfig
-> +++ b/drivers/platform/x86/Kconfig
-> @@@ -1134,46 -978,54 +1134,47 @@@ config TOPSTAR_LAPTO
->   	depends on ACPI
->   	depends on INPUT
->   	select INPUT_SPARSEKMAP
->  -	help
->  -	  This driver provides support for the Intel Virtual Button interface.
->  -	  Some laptops require this driver for power button support.
->  -
->  -	  To compile this driver as a module, choose M here: the module will
->  -	  be called intel_vbtn.
->  -
->  -config INTEL_SCU_IPC
->  -	bool "Intel SCU IPC Support"
->  -	depends on X86_INTEL_MID
->  -	default y
->  +	select LEDS_CLASS
->  +	select NEW_LEDS
->   	---help---
->  -	  IPC is used to bridge the communications between kernel and SCU on
->  -	  some embedded Intel x86 platforms. This is not needed for PC-type
->  -	  machines.
->  +	  This driver adds support for hotkeys found on Topstar laptops.
+> diff --cc drivers/platform/x86/intel_pmc_core.c
+> index 3df33ff50faa,d265cd5b1f45..000000000000
+> --- a/drivers/platform/x86/intel_pmc_core.c
+> +++ b/drivers/platform/x86/intel_pmc_core.c
+> @@@ -871,18 -1144,19 +1144,19 @@@ static inline void pmc_core_dbgfs_unreg
+>   #endif /* CONFIG_DEBUG_FS */
 >  =20
->  -config INTEL_SCU_IPC_UTIL
->  -	tristate "Intel SCU IPC utility driver"
->  -	depends on INTEL_SCU_IPC
->  -	---help---
->  -	  The IPC Util driver provides an interface with the SCU enabling
->  -	  low level access for debug work and updating the firmware. Say
->  -	  N unless you will be doing this on an Intel MID platform.
->  +	  If you have a Topstar laptop, say Y or M here.
+>   static const struct x86_cpu_id intel_pmc_core_ids[] =3D {
+>  -	INTEL_CPU_FAM6(SKYLAKE_L, spt_reg_map),
+>  -	INTEL_CPU_FAM6(SKYLAKE, spt_reg_map),
+>  -	INTEL_CPU_FAM6(KABYLAKE_L, spt_reg_map),
+>  -	INTEL_CPU_FAM6(KABYLAKE, spt_reg_map),
+>  -	INTEL_CPU_FAM6(CANNONLAKE_L, cnp_reg_map),
+>  -	INTEL_CPU_FAM6(ICELAKE_L, icl_reg_map),
+>  -	INTEL_CPU_FAM6(ICELAKE_NNPI, icl_reg_map),
+>  -	INTEL_CPU_FAM6(COMETLAKE, cnp_reg_map),
+>  -	INTEL_CPU_FAM6(COMETLAKE_L, cnp_reg_map),
+>  -	INTEL_CPU_FAM6(TIGERLAKE_L, tgl_reg_map),
+>  -	INTEL_CPU_FAM6(TIGERLAKE, tgl_reg_map),
+>  -	INTEL_CPU_FAM6(ATOM_TREMONT, tgl_reg_map),
+>  -	INTEL_CPU_FAM6(ATOM_TREMONT_L, tgl_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE_L,		&spt_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(SKYLAKE,		&spt_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE_L,		&spt_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(KABYLAKE,		&spt_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(CANNONLAKE_L,	&cnp_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_L,		&icl_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_NNPI,	&icl_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE,		&cnp_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(COMETLAKE_L,		&cnp_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE_L,		&tgl_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(TIGERLAKE,		&tgl_reg_map),
+>  +	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT,	&tgl_reg_map),
+> ++	X86_MATCH_INTEL_FAM6_MODEL(ATOM_TREMONT_L,	&tgl_reg_map),
+>   	{}
+>   };
 >  =20
->  -config INTEL_MID_POWER_BUTTON
->  -	tristate "power button driver for Intel MID platforms"
->  -	depends on INTEL_SCU_IPC && INPUT
->  +config I2C_MULTI_INSTANTIATE
->  +	tristate "I2C multi instantiate pseudo device driver"
->  +	depends on I2C && ACPI
->   	help
->  -	  This driver handles the power button on the Intel MID platforms.
->  +	  Some ACPI-based systems list multiple i2c-devices in a single ACPI
->  +	  firmware-node. This driver will instantiate separate i2c-clients
->  +	  for each device in the firmware-node.
->  =20
->  -	  If unsure, say N.
->  +	  To compile this driver as a module, choose M here: the module
->  +	  will be called i2c-multi-instantiate.
->  =20
->  -config INTEL_MFLD_THERMAL
->  -       tristate "Thermal driver for Intel Medfield platform"
->  -       depends on MFD_INTEL_MSIC && THERMAL
->  -       help
->  -         Say Y here to enable thermal driver support for the  Intel Med=
-field
->  -         platform.
->  +config MLX_PLATFORM
->  +	tristate "Mellanox Technologies platform support"
->  +	depends on I2C && REGMAP
->  +	---help---
->  +	  This option enables system support for the Mellanox Technologies
->  +	  platform. The Mellanox systems provide data center networking
->  +	  solutions based on Virtual Protocol Interconnect (VPI) technology
->  +	  enable seamless connectivity to 56/100Gb/s InfiniBand or 10/40/56GbE
->  +	  connection.
->  =20
->  -config INTEL_IPS
->  -	tristate "Intel Intelligent Power Sharing"
->  -	depends on ACPI && PCI
->  +	  If you have a Mellanox system, say Y or M here.
->  +
->  +config TOUCHSCREEN_DMI
->  +	bool "DMI based touchscreen configuration info"
->  +	depends on ACPI && DMI && I2C=3Dy && TOUCHSCREEN_SILEAD
-> ++	select EFI_EMBEDDED_FIRMWARE if EFI
->   	---help---
->  -	  Intel Calpella platforms support dynamic power sharing between the
->  -	  CPU and GPU, maximizing performance in a given TDP.  This driver,
->  -	  along with the CPU frequency and i915 drivers, provides that
->  -	  functionality.  If in doubt, say Y here; it will only load on
->  -	  supported platforms.
->  +	  Certain ACPI based tablets with e.g. Silead or Chipone touchscreens
->  +	  do not have enough data in ACPI tables for the touchscreen driver to
->  +	  handle the touchscreen properly, as OEMs expect the data to be baked
->  +	  into the tablet model specific version of the driver shipped with the
->  +	  the OS-image for the device. This option supplies the missing info.
->  +	  Enable this for x86 tablets with Silead or Chipone touchscreens.
->  =20
->   config INTEL_IMR
->   	bool "Intel Isolated Memory Region support"
+
 
 This is now a conflict between the drivers-x86 tree and Linus' tree.
-
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/5cBGlr0KSr6lYUqc=FgqimL
+--Sig_/UCk/pWw7YoTr5yoPdAvwp5g
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6EBlEACgkQAVBC80lX
-0Gx3rwf8C/NMQ4Erny1vLm0SimXyCLep+qkKpsMGe/j76SLAoooPbwij3q8mc6mT
-i1EN+ruVc6M5Ur0jojmXGrjmKE5AUj3qtA1PZqfOemFixinOWPQ0RtCqdKkJpwEP
-oWsczD12KhXCfhNmWfS2KbtK10Bu7Gt4kerGyAjZuMoyuj4+RkFoXtwL+zIiVgk8
-tEArHEdkYEDJCeKdNxxBNRt++vDBRs4AUH3wTueAbHQ87lG7Rkodj2Q4jVs+rxcl
-QlbxV3RBqh02Rb/ciujFERkk/FB9KetovVxeJNy5nHXgfBz+rYXeiJGCjHEDSGII
-TqDEkJiNQvWYhS8JW2D3/rGHBcMiZA==
-=+4l/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6EBwEACgkQAVBC80lX
+0Gxm8wf/S+jju3n5XIGVmNeohmJdVMA6fIb3xe2owDjd5Fgb+Arkk6YFodbksHWb
+ce+Snn0W6nWyj8FjskI42ng2VQulHwWIOdEsRLEpG1bpiasMO1h2pqHNDYx28YtL
+GP2kWRLRnVT4Iw+Xjy0OlHZN8uF/o8aXc1NvhtbItdmFWpDGfrhXM4Y9RrE92oXW
+eGSkfhF0ndyC6TPlYk5yN6NWUZa7KKMYw2NIiB993xMYPzV4zK8gn1SgikoGL0gX
+AOUv5ioolioyi2QFFuBOYJJZ905TRR13ej4ea9YmYouuNlPiJ2XkLuIXZAAwNpHb
+aMG+IppKi3p8mJ3dvcFWfnc3/uP+2g==
+=hn46
 -----END PGP SIGNATURE-----
 
---Sig_/5cBGlr0KSr6lYUqc=FgqimL--
+--Sig_/UCk/pWw7YoTr5yoPdAvwp5g--

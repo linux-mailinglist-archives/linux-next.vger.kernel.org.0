@@ -2,91 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 03CEB19A6FB
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 10:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4539219A70A
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 10:19:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730014AbgDAISO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 04:18:14 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49503 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727723AbgDAISO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Apr 2020 04:18:14 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48sfGC5sDKz9sRf;
-        Wed,  1 Apr 2020 19:18:11 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585729092;
-        bh=45h8GqJFGQK7xxRFCLSuE/+5xYhWiLofyTdYqaSBfHE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=VmNm2ujXqgQIF8s2wrreao8RO2PnOz7oyD6tW10IZMBuMkCMmUjy1KRNNnaR/LTu/
-         t6vUC0/3cilkY/s8JGo9zEdqE6gNyTW3EWTvAcbA5Ngp3ehOFu1GB7U5VcfHSauIaR
-         ECF/1pk6t6QX9hPzBl/TaYhNIn873Whkl9AkYUfLi1dVn5eypWUTV7ecULKGp9w4/H
-         wybyBMsNcbNJcMCu7jwYeyogT7URcljatA+UanrTyda2U6lDIhDGTbO8X7rL1WLCzd
-         3yU1x+pOX5IAtpB+b2i0ovC1jsmJcX3FC1dxl/2D00G+aIoG8fh9c4O5jzKEA35e9c
-         w7e7nbSnj/0kw==
-Date:   Wed, 1 Apr 2020 19:18:10 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Thierry Reding <treding@nvidia.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpio: turn of_pinctrl_get() into a static inline
-Message-ID: <20200401191810.1c06ead6@canb.auug.org.au>
-In-Reply-To: <20200401190810.7a2cfa07@canb.auug.org.au>
-References: <20200401190810.7a2cfa07@canb.auug.org.au>
+        id S1726230AbgDAITD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 04:19:03 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38247 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731729AbgDAITC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 04:19:02 -0400
+Received: by mail-lf1-f68.google.com with SMTP id c5so19677997lfp.5
+        for <linux-next@vger.kernel.org>; Wed, 01 Apr 2020 01:19:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3X5Ui3kFF/VqVsswCk+H6N1aAGKj9/qFdOpQH7o/fX0=;
+        b=e0LTts26IJz9re0PtsdlTkKxXPqOwfZhRTuSGc4FDNgszP3/5igArFPJjoOgRLWGnZ
+         tMQslUL+bzRbsSxpZxhnRq9vjS+Cl7Z1h/uamQ+GXW8A1+9+Wp7yqZsp9MRHRgXoW2a3
+         S7RsG1hkx+GMFXkxuZ1P8NxXMd/DweplNQJwWJQGRaaJvqcPZTuNnp/OgjEpLUR7TIsM
+         6dPemupP2KRzepkssvDiA8KVBzkPqBDk+VUd0PgoTHQ5gmnQuBHSGIceuuiY1r4EXI5L
+         1WsUqU/LD3pxYP66SnCFNyj15lAAfVTu/kKm0YebFbhad5JpLwZyY81BXtMmBgtgovKs
+         +1jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3X5Ui3kFF/VqVsswCk+H6N1aAGKj9/qFdOpQH7o/fX0=;
+        b=ObJHOrkVgzztgyMQDnCGJDhKzqPhU78813ZpM4+q4afFMC1BeQ4ujfWZStzk4Vh3Ab
+         sAtC6+zCFhj0joGpiouAMu/CJGppGwuA/vVrTshMT9VE0Zy6Y8urwisG2ghP9rAoPUXX
+         e3q9baACu8bJQEDwG2wB7QUevpbCpjttiYRQCiOrCzBWDrXbcDZvD9myWso9Ob008OpG
+         PSGPCMN4S2gwMK5aZfDsJJmirn/uSeB4WFruFiYBMP2RdKCGHy8nAK0i7fFiFX7UwQkF
+         JSUVPIQi1OfxX7MKKx0ivSZHIMGMlG65zadpqhsQ5nW2zWRUcEzDdvdZGx0qbsmtGeRr
+         E1LA==
+X-Gm-Message-State: AGi0PuZZQ6ROydFbHL6lpcryEZQxAbUFHdZDHvGMeZi2Dr2XX4CCjsah
+        bSFx3A2G9qwWk9tZe7cjzkdoHczOihUVtoArZLUEJgBF2VI=
+X-Google-Smtp-Source: APiQypIYt3HrVsUkJtt4Lm7oBM6f91bGNlBigjePb0aD8ENBx7WoHbbUlepDmqvOoaHvzYsmvLVS/FZ09CwwE4zAyyA=
+X-Received: by 2002:ac2:5f75:: with SMTP id c21mr13715722lfc.194.1585729139654;
+ Wed, 01 Apr 2020 01:18:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/+ilK2whdFO0nYeXvZmTtTS1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200401151904.6948af20@canb.auug.org.au> <CAMuHMdXFHWFucxZbChxaM6w4q9Gu5pccMBP46N4Av1E2rNKddA@mail.gmail.com>
+In-Reply-To: <CAMuHMdXFHWFucxZbChxaM6w4q9Gu5pccMBP46N4Av1E2rNKddA@mail.gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 1 Apr 2020 10:18:48 +0200
+Message-ID: <CACRpkdbP9gMLDnDSR6czN88Hjwu6HXSZ2jyYOo-iuq0W073Hbg@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the gpio tree
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thierry Reding <treding@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/+ilK2whdFO0nYeXvZmTtTS1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, Apr 1, 2020 at 9:49 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-Hi all,
-
-On Wed, 1 Apr 2020 19:08:10 +1100 Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+> > +EXPORT_SYMBOL_GPL(of_pinctrl_get);
 >
-> This avoids the overheads of an EXPORTed function.
->=20
-> Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  drivers/pinctrl/devicetree.c    | 6 ------
->  include/linux/pinctrl/pinctrl.h | 9 +++------
->  2 files changed, 3 insertions(+), 12 deletions(-)
->=20
-> This is not even build tested, but is this what you meant, Geert?
+> As exporting symbols has its (space) cost, and of_pinctrl_get() is a tiny
+> function, what about making it an inline function in
+> include/linux/pinctrl/pinctrl.h instead?
 
-Actually this won't work because get_pinctrl_dev_from_of_node() is
-declared in the private header file drivers/pinctrl/core.h :-(
+I'm all for it! :)
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/+ilK2whdFO0nYeXvZmTtTS1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6ETkIACgkQAVBC80lX
-0GwaTwf/ZXqXcE6OngE9UJ98CrEiUipSNOOyd3RoZQ2b8ddk92Mpafwx8aHt+KpP
-o3dRDhrQF7m/L6caa8kYzu12G5dUvn+Y/W+rn7jqZ8UlJr/rKHaR67YSgQtI2yDn
-1NS8RY2oiqvjVWD0KjSEat2VSWwsGZgvd6Dm71Tr5WBysBFQr9YvRZjltp0W1w1h
-JY0Qq8tdXA+RQ7lGMXBlODPy54IryxTw81wb7f57FbjT0huK1t1w16yz+DgzpgA/
-1Ybf71SzyLpadhZxPTgHIF5vgirYs59I2ITm7ZqCi6yYa4bOPzdF0QAErg4jA1Q5
-F1BphVn5143L3ziuwkzQHnJPJ1Z2Ew==
-=hkY7
------END PGP SIGNATURE-----
-
---Sig_/+ilK2whdFO0nYeXvZmTtTS1--
+Yours,
+Linus Walleij

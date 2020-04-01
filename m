@@ -2,79 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 75ED519A597
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 08:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3773019A59E
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 08:50:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731868AbgDAGrd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 02:47:33 -0400
-Received: from mail-pf1-f194.google.com ([209.85.210.194]:40533 "EHLO
+        id S1731791AbgDAGuC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 02:50:02 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:39394 "EHLO
         mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731850AbgDAGrd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 02:47:33 -0400
-Received: by mail-pf1-f194.google.com with SMTP id c20so9101131pfi.7;
-        Tue, 31 Mar 2020 23:47:32 -0700 (PDT)
+        with ESMTP id S1731741AbgDAGuC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 02:50:02 -0400
+Received: by mail-pf1-f194.google.com with SMTP id k15so6515285pfh.6;
+        Tue, 31 Mar 2020 23:50:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=mMQk64903L6tAck8jm35O7g6g92Bgi88bu7w7mbPreY=;
-        b=UiscXnX5l8+lKeHueM4pXQbIyNerEXuTPIhWKDBzq4J6OTms3t1UH1t8clofuh7i0N
-         F9gwbrZZx3IAqDNu2DtUaWVwtODmnJIz2VFwou2jSeIYTq5uLVPgRhcR7/H95zwOKw4e
-         H8B9EgsX96oX9tcN/i0qTVOePLyLshIzWr8v+M+MVTAyfDbEPNqvzZCdm9kV46WppGcn
-         byZev4rjSNX3yEZU1OFrD7C1aIVWnKERtN0VjXHMpq0s4QdA+jYsEP0etyyCnJEfcHsc
-         AfUaJ6n8Y43qF1zqUBB+3g0dTalj/KUxa3CphKf3vufnEN7nFJBzZA6L1z7SjKygcDwo
-         SUBA==
+        bh=tmKJc7NjnxN20fuxF0kGLk0WWkFLy1YBAKU11CgTRL4=;
+        b=Ply97XefMOgToljx9G/prcmyZ5K+d4DiZkRr5icJcP1YU0B9AOzcIBAPnXaLRb0P1M
+         b0sWz5eRki8aj0w/9YgHdfHjzt/Xuc7GUfdaENJVOD6gZG5jXtgUnBy+jmMerQPPMAeK
+         VibfpN6+N3fd/ThOZbzZsB2PSoiuXFz94YpkGqPhBKpu6ZYanEvWw9uL1ZI45KyYQw6Y
+         3TGM9UJc47Tsc2CggzCBoElod9uu9B18M4aY432KqgZC2jXo0GtjIOW55jnqj8km9eNW
+         Q1QNTOwjFAcF1+sZLfw+cLmqoDhky1fEmMZx8OEnYjhQVdab3x0Nv5m71jjFdk90I5nw
+         yDMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=mMQk64903L6tAck8jm35O7g6g92Bgi88bu7w7mbPreY=;
-        b=EJ5Aozpb3m9O0BioZy+wVI+ytAGIe43fwGWuUXXTzt/gVGacU34oi4atr8rzUwbOHs
-         wk6wgY1FvXAWx4OYZv1DfOSGADsGbhcG/26v0wynZH0AXDjp4Q8VPGTvX8TrL7eeaaXP
-         njaGX+oP1WNE+aTtLFlVwoE4O5BBJF+sajONaExrMTFG9gjn7ZN02k20jDjusPVm/5f6
-         GDcnXl7Yg3utHtCZDeFCRR7pqywePQg3oqXtKH2DCOSphfwcwcgXlMue3vMP2AFG9Dob
-         Gfmg5Ubt7SmKpC1+pIhi3Fh06HXIA15X1yPUrlmni8cJckJEychTm/xXx9yocWBdUsJJ
-         mbsA==
-X-Gm-Message-State: AGi0PuZqPdXxa6pVfuVlkBG/C0FZQOMnUB1BtL64+ZByo2uKk4oUSNZQ
-        fc9FTrWUgd4CJW8xtRq7OSqc9zUigID/nH5FxFwl+7Ypju0=
-X-Google-Smtp-Source: APiQypLYG7FDIzRj/aLjkhU5KlG0qqqrJEap+/dgRs8SECciM8BH7fFrpvPVsrEy/R354lCAVwMcSmLlQ21DVrlW4CU=
-X-Received: by 2002:a63:5859:: with SMTP id i25mr7460690pgm.74.1585723652026;
- Tue, 31 Mar 2020 23:47:32 -0700 (PDT)
+        bh=tmKJc7NjnxN20fuxF0kGLk0WWkFLy1YBAKU11CgTRL4=;
+        b=HFFwwyhcVTouufhRJr7qc6U0B08ESAjmMSe8PzF05rleofLvF5xYjmicCpSeF8exJH
+         l6MJ4sPdBorvkSZd7HsSvl56amK4Di6/7ZzsySxG9o8cQ1oDjcjxAeL2EOhBpxwX5DS8
+         ulfiU8cqIpkmWtx1XDAunoNIyYVHZSxHv5ipcL4fa5TTiyBrmsktMgHb1tSYFjwgNfiQ
+         QcxfB86xXC1hkCV63RNrjlTqp/dOJDOIpWCRvpETEGZlK6vRmfWlP/9YNsNsvBEIaLM+
+         4Opjq1TU4FDTy+eowosYfrFHkd4cA6JpjB5+HxcPc9iVc021AfNEnWqGlEIK1fZxOkDQ
+         S6EA==
+X-Gm-Message-State: AGi0PubJodXptgfZYvZbJC+Ycim38dPT/9RU2lUWoVIYslW/KtYqh0C8
+        Dqzt7ENP/Qmyoz14LoH2LpffbKRu0kVd1TIybv4=
+X-Google-Smtp-Source: APiQypJt8Tz9kYfeUxwq4p2WKLozKFChbs8KbZhYo6DlzntkZ3gcahNcIMJwo0Bl0X052O5PcRgloHA8BSrJZ0ywaYc=
+X-Received: by 2002:a05:6a00:2b4:: with SMTP id q20mr8515775pfs.36.1585723800741;
+ Tue, 31 Mar 2020 23:50:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200323143816.345b3d54@canb.auug.org.au> <20200401141113.21014665@canb.auug.org.au>
-In-Reply-To: <20200401141113.21014665@canb.auug.org.au>
+References: <20200326150523.02c4ec48@canb.auug.org.au> <20200401141409.446e989b@canb.auug.org.au>
+In-Reply-To: <20200401141409.446e989b@canb.auug.org.au>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 1 Apr 2020 09:47:20 +0300
-Message-ID: <CAHp75VdoMpA4tDg57UND5hnWXV60EGaThPxLnTpKT6wG7bdYYQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the driver-core tree with the
- drivers-x86 tree
+Date:   Wed, 1 Apr 2020 09:49:48 +0300
+Message-ID: <CAHp75VdaCfEBp0co611O8uCpu9fzOaobcE7EmZyHsX0D=4=neQ@mail.gmail.com>
+Subject: Re: linux-next: manual merge of the drivers-x86 tree with the tip tree
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Darren Hart <dvhart@infradead.org>, Greg KH <greg@kroah.com>,
+Cc:     Darren Hart <dvhart@infradead.org>,
+        Gayatri Kammela <gayatri.kammela@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>
+        Borislav Petkov <bp@suse.de>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 1, 2020 at 6:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> On Mon, 23 Mar 2020 14:38:16 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, Apr 1, 2020 at 6:14 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> On Thu, 26 Mar 2020 15:05:23 +1100 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > >
-> > Today's linux-next merge of the driver-core tree got a conflict in:
+> > Today's linux-next merge of the drivers-x86 tree got a conflict in:
 > >
-> >   drivers/platform/x86/Kconfig
+> >   drivers/platform/x86/intel_pmc_core.c
 > >
 > > between commit:
 > >
-> >   45a3d578f2ed ("platform/x86: Kconfig: Group modules by companies and functions")
+> >   a69b3b1d4cf0 ("platform/x86: Convert to new CPU match macros")
 > >
-> > from the drivers-x86 tree and commit:
+> > from the tip tree and commit:
 > >
-> >   835e1b86ef8c ("platform/x86: touchscreen_dmi: Add EFI embedded firmware info support")
+> >   16292bed9c56 ("platform/x86: intel_pmc_core: Add Atom based Jasper Lake (JSL) platform support")
 > >
-> > from the driver-core tree.
+> > from the drivers-x86 tree.
 > >
 > > I fixed it up (see below) and can carry the fix as necessary. This
 > > is now fixed as far as linux-next is concerned, but any non trivial
@@ -85,7 +88,7 @@ On Wed, Apr 1, 2020 at 6:11 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
 > This is now a conflict between the drivers-x86 tree and Linus' tree.
 
-PDx86 is in Linus tree already with conflict resolutions.
+PDx86 is in Linus tree with conflict resolution.
 
 -- 
 With Best Regards,

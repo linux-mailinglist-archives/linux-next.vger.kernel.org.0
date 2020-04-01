@@ -2,119 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F8B19B80F
-	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 00:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC8219B894
+	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 00:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732428AbgDAWBD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 18:01:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56413 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1732357AbgDAWBC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Apr 2020 18:01:02 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48t0WX17Mmz9sR4;
-        Thu,  2 Apr 2020 09:00:56 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585778459;
-        bh=r5b2piY6/n72uqJFBNUFlpkDoMERU0WoLrX1VqgXSkQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qeMTYdMz0vIBNJyd5+3em9tWCEcQD0RhARuMLoCxU3Ib6sSaQLaSDSMSFflGLD54g
-         UJoLZMIqokLiFWXBVsnJgQlqIuxcatpNwoaNR7fT+qDuhpyvWcKLKTVASxIPOwceJI
-         sSY3ZdauN4YMNFnkWj34v32hcBuO3I+szSxmGLh2JjmHr444piTkl2UlvRYntMbY7F
-         eKojTMrQ0tZesHuGNYR45AuVlopRj3SKqtfZYxm0lP6yuMQmZuLebGqyP+fe5Bmk1c
-         PEtmGkr/MITwjU/hb0qmtJtqWuCu6RcvrKPacvU4rmozwoLwxcx/3R2zXeM/26GvWy
-         gr7/r1VUudZ3w==
-Date:   Thu, 2 Apr 2020 09:00:51 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>
+        id S2387871AbgDAWkI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 18:40:08 -0400
+Received: from Galois.linutronix.de ([193.142.43.55]:35878 "EHLO
+        Galois.linutronix.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387876AbgDAWkH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 18:40:07 -0400
+Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
+        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
+        (Exim 4.80)
+        (envelope-from <tglx@linutronix.de>)
+        id 1jJm1c-0001q4-RA; Thu, 02 Apr 2020 00:39:57 +0200
+Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
+        id DC17E100D52; Thu,  2 Apr 2020 00:39:55 +0200 (CEST)
+From:   Thomas Gleixner <tglx@linutronix.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Al Viro <viro@zeniv.linux.org.uk>
 Subject: Re: linux-next: build warning after merge of the tip tree
-Message-ID: <20200402090051.741905cd@canb.auug.org.au>
-In-Reply-To: <877dyzv6y2.fsf@nanos.tec.linutronix.de>
-References: <20200330134746.627dcd93@canb.auug.org.au>
-        <20200401085753.617c1636@canb.auug.org.au>
-        <877dyzv6y2.fsf@nanos.tec.linutronix.de>
+In-Reply-To: <20200402090051.741905cd@canb.auug.org.au>
+References: <20200330134746.627dcd93@canb.auug.org.au> <20200401085753.617c1636@canb.auug.org.au> <877dyzv6y2.fsf@nanos.tec.linutronix.de> <20200402090051.741905cd@canb.auug.org.au>
+Date:   Thu, 02 Apr 2020 00:39:55 +0200
+Message-ID: <874ku2q18k.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T9rRW9/VqPZ6kK6l61A6RfB";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Linutronix-Spam-Score: -1.0
+X-Linutronix-Spam-Level: -
+X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T9rRW9/VqPZ6kK6l61A6RfB
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen,
 
-Hi Thomas,
-
-On Wed, 01 Apr 2020 12:25:25 +0200 Thomas Gleixner <tglx@linutronix.de> wro=
-te:
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> On Wed, 01 Apr 2020 12:25:25 +0200 Thomas Gleixner <tglx@linutronix.de> wrote:
+>> Me neither. Which compiler version?
 >
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> >
-> > On Mon, 30 Mar 2020 13:47:46 +1100 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> >>
-> >> After merging the tip tree, today's linux-next build (arm
-> >> multi_v7_defconfig) produced this warning:
-> >>=20
-> >> kernel/futex.c: In function 'do_futex':
-> >> kernel/futex.c:1676:17: warning: 'oldval' may be used uninitialized in=
- this function [-Wmaybe-uninitialized]
-> >>  1676 |   return oldval =3D=3D cmparg;
-> >>       |          ~~~~~~~^~~~~~~~~
-> >> kernel/futex.c:1652:6: note: 'oldval' was declared here
-> >>  1652 |  int oldval, ret;
-> >>       |      ^~~~~~
-> >>=20
-> >> Introduced by commit
-> >>=20
-> >>   a08971e9488d ("futex: arch_futex_atomic_op_inuser() calling
-> >>   conventions change") =20
->=20
-> Huch?
-> =20
-> >> but I don't arm-linux-gnueabi-gcc (Debian 9.2.1-21) 9.2.1 20191130see =
-how it makes this difference :-( =20
->=20
-> Me neither. Which compiler version?
+> arm-linux-gnueabi-gcc (Debian 9.2.1-21) 9.2.1 20191130
+>
+>> I'm using arm-linux-gnueabi-gcc (Debian 8.3.0-2) 8.3.0 which does not
+>> show that oddity.
+>
+> I assume it is because of the change to arch_futex_atomic_op_inuser()
+> for arm and the compiler is not clever enough to work out that the early
+> return from arch_futex_atomic_op_inuser() means that oldval is not
+> referenced in its caller.
 
-arm-linux-gnueabi-gcc (Debian 9.2.1-21) 9.2.1 20191130
+Actually no. It's the ASM part which causes this. With the following
+hack applied it compiles:
 
-> I'm using arm-linux-gnueabi-gcc (Debian 8.3.0-2) 8.3.0 which does not
-> show that oddity.
+diff --git a/arch/arm/include/asm/futex.h b/arch/arm/include/asm/futex.h
+index e133da303a98..2c6b40f71009 100644
+--- a/arch/arm/include/asm/futex.h
++++ b/arch/arm/include/asm/futex.h
+@@ -132,7 +132,7 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
+ static inline int
+ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ {
+-	int oldval = 0, ret, tmp;
++	int oldval = 0, ret;
+ 
+ 	if (!access_ok(uaddr, sizeof(u32)))
+ 		return -EFAULT;
+@@ -142,6 +142,7 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ #endif
+ 
+ 	switch (op) {
++#if 0
+ 	case FUTEX_OP_SET:
+ 		__futex_atomic_op("mov	%0, %4", ret, oldval, tmp, uaddr, oparg);
+ 		break;
+@@ -157,6 +158,7 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ 	case FUTEX_OP_XOR:
+ 		__futex_atomic_op("eor	%0, %1, %4", ret, oldval, tmp, uaddr, oparg);
+ 		break;
++#endif
+ 	default:
+ 		ret = -ENOSYS;
+ 	}
 
-I assume it is because of the change to arch_futex_atomic_op_inuser()
-for arm and the compiler is not clever enough to work out that the early
-return from arch_futex_atomic_op_inuser() means that oldval is not
-referenced in its caller.
+but with this is emits the warning:
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/arch/arm/include/asm/futex.h b/arch/arm/include/asm/futex.h
+index e133da303a98..5191d7b61b83 100644
+--- a/arch/arm/include/asm/futex.h
++++ b/arch/arm/include/asm/futex.h
+@@ -145,6 +145,7 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ 	case FUTEX_OP_SET:
+ 		__futex_atomic_op("mov	%0, %4", ret, oldval, tmp, uaddr, oparg);
+ 		break;
++#if 0
+ 	case FUTEX_OP_ADD:
+ 		__futex_atomic_op("add	%0, %1, %4", ret, oldval, tmp, uaddr, oparg);
+ 		break;
+@@ -157,6 +158,7 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ 	case FUTEX_OP_XOR:
+ 		__futex_atomic_op("eor	%0, %1, %4", ret, oldval, tmp, uaddr, oparg);
+ 		break;
++#endif
+ 	default:
+ 		ret = -ENOSYS;
+ 	}
 
---Sig_/T9rRW9/VqPZ6kK6l61A6RfB
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+and the below proves it:
 
------BEGIN PGP SIGNATURE-----
+diff --git a/arch/arm/include/asm/futex.h b/arch/arm/include/asm/futex.h
+index e133da303a98..a9151884bc85 100644
+--- a/arch/arm/include/asm/futex.h
++++ b/arch/arm/include/asm/futex.h
+@@ -165,8 +165,13 @@ arch_futex_atomic_op_inuser(int op, int oparg, int *oval, u32 __user *uaddr)
+ 	preempt_enable();
+ #endif
+ 
+-	if (!ret)
+-		*oval = oldval;
++	/*
++	 * Store unconditionally. If ret != 0 the extra store is the least
++	 * of the worries but GCC cannot figure out that __futex_atomic_op()
++	 * is either setting ret to -EFAULT or storing the old value in
++	 * oldval which results in a uninitialized warning at the call site.
++	 */
++	*oval = oldval;
+ 
+ 	return ret;
+ }
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6FDxMACgkQAVBC80lX
-0GwG+gf+KqrhLJkMSli8yzd+KnzQb3yhRcFWOx59V+ogiuf7SuvAa6/i+bIroF/c
-9vS7QbDSom9B4KmUpTmUO2HG9Hr3w9F9lidZ1x3PwR23zIDOQasevQ7BvdjTNi05
-KHWurUi8wpcrF8Szse8VnzznAwKzkpnzPbi8sJHVqfUMY+2BN6AmhY6yCZ/66YlD
-iSLzX9l+qkBeiEA7d+VMwRv4GHZTZ8lZyw+1bDotwJRE3YBrDNSpfcoolg2v/0xd
-U3bP2+6WMDOhFnWkyDtGGPNus3aCBipOuUHKNDeOuQK186j1jWVXQ08DyOVcOeT/
-knRVY5Ku0NhkXHbl1/v3ppt9DOm5UQ==
-=suJO
------END PGP SIGNATURE-----
+I think that's the right thing to do anyway. The conditional is pointless.
 
---Sig_/T9rRW9/VqPZ6kK6l61A6RfB--
+Thanks,
+
+        tglx

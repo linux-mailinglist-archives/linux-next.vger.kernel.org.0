@@ -2,127 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9651019B490
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 19:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08C8F19B4D2
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 19:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732722AbgDARNR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 13:13:17 -0400
-Received: from bombadil.infradead.org ([198.137.202.133]:40874 "EHLO
-        bombadil.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732137AbgDARNR (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 13:13:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=wdgTSKNxkD1QrwAjRgDdie5nQ4gbwZFe8HVIvvfYi0s=; b=KJntRMJ8Qks9UoOE0UgBNQ4Dyr
-        oTcjRKMZ6Jf3Gk/IJlNgmVLKtTXcnPwXUsOSjEOz5uphzyUiBLQJo5o7PNsl5LrPcwVNnSiAKVvsb
-        EyuIe9gLPIJpM69FvjZNpfYVsJZoOmOs+Ik5+N0tX3FfjD3I1dSBXGZWHv9ASkPKrJValKJth9X0/
-        6qWTivVQG1Q4mPA/b4MTBvIzD3/W8/Z5t1IHR66LpXrQnSzPUGwU9UDR5BWrWiQvR8AWjNiN+T4wg
-        qrl22e1u2+csSEP8rhDaM5Xz9aNdmcjZXcpO4P4n77fobZ+0b07wCIh/WYLt/XTgeqmcKmYcvVp2R
-        +8bmJBbA==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jJgvR-0000rx-7y; Wed, 01 Apr 2020 17:13:13 +0000
-Subject: Re: mmotm 2020-03-30-18-46 uploaded (VDPA + vhost)
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        virtualization@lists.linux-foundation.org,
-        Jason Wang <jasowang@redhat.com>
-References: <20200331014748.ajL0G62jF%akpm@linux-foundation.org>
- <969cacf1-d420-223d-7cc7-5b1b2405ec2a@infradead.org>
- <20200331143437-mutt-send-email-mst@kernel.org>
- <9c03fee8-af1a-2035-b903-611a631094b0@infradead.org>
- <20200331152106-mutt-send-email-mst@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <cd94bd62-57c4-b82e-0434-8a470a9ea613@infradead.org>
-Date:   Wed, 1 Apr 2020 10:13:10 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1732274AbgDARph (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 13:45:37 -0400
+Received: from mail-wm1-f68.google.com ([209.85.128.68]:50493 "EHLO
+        mail-wm1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1732196AbgDARpg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 13:45:36 -0400
+Received: by mail-wm1-f68.google.com with SMTP id t128so673166wma.0;
+        Wed, 01 Apr 2020 10:45:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=UwqDTvsisPwfePCehfqr6A88g6Iv1ZMZQoZxC5C+jkQ=;
+        b=AhP9xt+tFIItFgOSVdMrHojPCTwCvdlJp1g6h8sqHMr8jxj6SOaDxm+vQfCBqb9rWq
+         WLcJ85un5JpW69ES4eMihXsuJqN+dfvUjUOGv3tSOz8NG+e9Ir6ZaPZ6LM5ZydqHdG4o
+         9Yasr9+RWD8vlAzihcwx1Amo63Bko6VDSdszamRBqzT4NgwqC4rfpPiSE3ZyMye1Q0ax
+         R9dXQc8TxufuKmN1WK9Z5/VyYM0N8QVUFQVsqlU2HIcPYUIHPSUhEMtbMbOCpUkK4RgB
+         WFPc0UTT4GG9M+raqHb6l7k2XAhKUpYrbWeZtmN2ul4rwyY3hq9JBXv/6IJ7QtrQz2kM
+         0boA==
+X-Gm-Message-State: AGi0PuZqvmisjwkbJ3PLO2lt1JkmVEoy5is6FJxuH7QtOTBIuEeYCRxl
+        VcFz3vs9FM52ZFBDPNFk0Rmy4pAU
+X-Google-Smtp-Source: APiQypLeUEHvXYR2K3Q/4pSafCxa25hrl6/8SYqqEtMpnqTrGOVzbzKiNNFirdcEgOYfWPNvD2uz1Q==
+X-Received: by 2002:a05:600c:2197:: with SMTP id e23mr212700wme.90.1585763134625;
+        Wed, 01 Apr 2020 10:45:34 -0700 (PDT)
+Received: from debian (44.142.6.51.dyn.plus.net. [51.6.142.44])
+        by smtp.gmail.com with ESMTPSA id d18sm3998416wrn.9.2020.04.01.10.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Apr 2020 10:45:33 -0700 (PDT)
+Date:   Wed, 1 Apr 2020 18:45:31 +0100
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tianyu Lan <Tianyu.Lan@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: linux-next: build failure after merge of the hyperv tree
+Message-ID: <20200401174531.by77tjkc2w33fplw@debian>
+References: <20200331172335.2f71021b@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200331152106-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200331172335.2f71021b@canb.auug.org.au>
+User-Agent: NeoMutt/20180716
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 3/31/20 12:22 PM, Michael S. Tsirkin wrote:
-> On Tue, Mar 31, 2020 at 11:42:47AM -0700, Randy Dunlap wrote:
->> On 3/31/20 11:37 AM, Michael S. Tsirkin wrote:
->>> On Tue, Mar 31, 2020 at 11:27:54AM -0700, Randy Dunlap wrote:
->>>> On 3/30/20 6:47 PM, akpm@linux-foundation.org wrote:
->>>>> The mm-of-the-moment snapshot 2020-03-30-18-46 has been uploaded to
->>>>>
->>>>>    http://www.ozlabs.org/~akpm/mmotm/
->>>>>
->>>>> mmotm-readme.txt says
->>>>>
->>>>> README for mm-of-the-moment:
->>>>>
->>>>> http://www.ozlabs.org/~akpm/mmotm/
->>>>>
->>>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
->>>>> more than once a week.
->>>>>
->>>>> You will need quilt to apply these patches to the latest Linus release (5.x
->>>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
->>>>> http://ozlabs.org/~akpm/mmotm/series
->>>>>
->>>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
->>>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
->>>>> followed by the base kernel version against which this patch series is to
->>>>> be applied.
->>>>>
->>>>> This tree is partially included in linux-next.  To see which patches are
->>>>> included in linux-next, consult the `series' file.  Only the patches
->>>>> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
->>>>> linux-next.
->>>>>
->>>>>
->>>>> A full copy of the full kernel tree with the linux-next and mmotm patches
->>>>> already applied is available through git within an hour of the mmotm
->>>>> release.  Individual mmotm releases are tagged.  The master branch always
->>>>> points to the latest release, so it's constantly rebasing.
->>>>>
->>>>> 	https://github.com/hnaz/linux-mm
->>>>
->>>> on i386:
->>>>
->>>> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_init':
->>>> vdpa.c:(.init.text+0x52): undefined reference to `__vdpa_register_driver'
->>>> ld: drivers/vhost/vdpa.o: in function `vhost_vdpa_exit':
->>>> vdpa.c:(.exit.text+0x14): undefined reference to `vdpa_unregister_driver'
->>>>
->>>>
->>>>
->>>> drivers/virtio/vdpa/ is not being built. (confusing!)
->>>>
->>>> CONFIG_VIRTIO=m
->>>> # CONFIG_VIRTIO_MENU is not set
->>>> CONFIG_VDPA=y
->>>
->>> Hmm. OK. Can't figure it out. CONFIG_VDPA is set why isn't
->>> drivers/virtio/vdpa/ built?
->>> we have:
->>>
->>
->> Ack.  Hopefully Yamada-san can tell us what is happening here.
+On Tue, Mar 31, 2020 at 05:23:35PM +1100, Stephen Rothwell wrote:
+> Hi all,
 > 
-> OK I pushed a fix (moving the vdpa subsystem up a level) and pushed into
-> my tree, refs/heads/next .  Seems to build fine now, but I'd appreciate
-> it if you can give it a spin.
+> After merging the hyperv tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> ERROR: modpost: "panic_on_oops" [drivers/hv/hv_vmbus.ko] undefined!
+> 
+> Caused by commit
+> 
+>   a6a5aa4b0179 ("x86/Hyper-V: Report crash data in die() when panic_on_oops is set")
+> 
+> I have reverted that commit for today.
 
-This now builds successfully on linux-next of 20200401.
+I will remove that patch from hyperv-next. I have been busy with other
+things on Monday and Tuesday, so sorry for not paying close attention.
 
-Thanks.
+Wei.
 
--- 
-~Randy
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+
 

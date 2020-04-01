@@ -2,115 +2,208 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EDB19A42E
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 06:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67A0819A4FF
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 07:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731763AbgDAETM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 00:19:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:57801 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731589AbgDAETM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Apr 2020 00:19:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48sXyQ1lnNz9sR4;
-        Wed,  1 Apr 2020 15:19:10 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585714750;
-        bh=Ip9w489n84fN4lJPHrqx/kGSK1wuNSUz56EVAHU0vIY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=BWMgP7SW5RNf4nTV0Td2uQDVfvMAWSzKg+wljSgebOwn+9gaMJRq0e0622KhyxYz6
-         UFstpIBkeyjTNCRUNfhtaxaP1aMLoWpJXX9PahRQ39JQFLv0CPaVGzs8CRD9fkqlsr
-         pMI2De2EeG1hNrg6EkwEM/uR29JmRi5JmH24ORy7CJtm4tV9e0pDKucSl0GdCl5kf4
-         y0Kpd9C16BASqkc56YcZoZkbQQCeaLXjfK8FoxLBls+kPmAh80pxcSy9s4LpoEK0/M
-         E76BArAQQt57Yg6BhxCA1Gsheth1JqRqkun32vzXntsT8tg2RQN5NKlOZpbfsFQy3Z
-         f7RdV8ZJHlwog==
-Date:   Wed, 1 Apr 2020 15:19:04 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thierry Reding <treding@nvidia.com>
-Subject: linux-next: build failure after merge of the gpio tree
-Message-ID: <20200401151904.6948af20@canb.auug.org.au>
+        id S1731777AbgDAFzP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 01:55:15 -0400
+Received: from mail-pg1-f180.google.com ([209.85.215.180]:45762 "EHLO
+        mail-pg1-f180.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731589AbgDAFzP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 01:55:15 -0400
+Received: by mail-pg1-f180.google.com with SMTP id o26so11590123pgc.12
+        for <linux-next@vger.kernel.org>; Tue, 31 Mar 2020 22:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=suh3tziA6yl7zTIX03eEpUfx7EdVTWxAo/RrT0FglI0=;
+        b=oAXj17u3MS+wktjWpI1g84US7uKpjms5Gh1R0WjW7cL7/XooBV5fKU766xvbeE4wdR
+         RtR8PaXCVix9/ySHNWJif18nJKDg7KyjU7dcf7jsdnX7sxEKmDeJkzv+QvtI82n/X0sI
+         ILkK7VsNCdVqRB+WG583p4KBqJWS68dIgNwraS9zG9bhe+CY1iuZcrh69HAS+DVOROsy
+         ZazZq8bijFuUZP9C0jnHqS8zqN76KozCYXTRwOKy5U06/6snPtTS+UNRHuwPhzOSo0c6
+         z+eU6xFgxNAwvh7MaMKxQ8DvDGoEJeCy3uNoPC7ZdcDGw/m6mFweQgIhhG3zLo00qAQZ
+         zWfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=suh3tziA6yl7zTIX03eEpUfx7EdVTWxAo/RrT0FglI0=;
+        b=rSNsK3pYVAoWA6z61Qz956v6y569+JWWqVCBWrmbBM803hR22VSj++NS7mFL6yVUaK
+         nrHBkHvYAf0lqWRNbW4tdxynvhJ7AAkPVQC+qBX0SN1O2K87Qpoo5NUD24B1ehFXs/yy
+         ZtmB+OmI1scJi/nALB8H58R5nKmElJdYfuwjce9BXOlQJ2V+tOqfX6YlrL639arsTcK1
+         dGmZqbTK4+X+Ks+b9y8jc/p2y2lVVsrPdEUMWMSJzKZrKZZfYlT7oAlLRBOH8+sj8msv
+         2TLf5+/fuCcMcfjqNFvgwlFxySKpRcFV9VxcDbbicxJYyeP/YFgZ1S6N8HGzK7xhwEdo
+         Tkbw==
+X-Gm-Message-State: ANhLgQ2+ehUpSe58j8B8FDn2Y19L0LR6LwAsXKoDn5RiYsGI/ZXw6Tp3
+        Fn1jmz7CwTUI7/zXQ8RN92dZNHCvnDo=
+X-Google-Smtp-Source: ADFU+vt4GHKg4hPHvHM5MOKptNVjaMvvEruPtyZK2PwY4HNbLd2JyKGckoVkJB0vkQwSqt29WBfm4g==
+X-Received: by 2002:a63:5716:: with SMTP id l22mr21223454pgb.164.1585720511549;
+        Tue, 31 Mar 2020 22:55:11 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x4sm690378pfi.202.2020.03.31.22.55.10
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Mar 2020 22:55:10 -0700 (PDT)
+Message-ID: <5e842cbe.1c69fb81.b7f2e.3ab0@mx.google.com>
+Date:   Tue, 31 Mar 2020 22:55:10 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/mRsf+L7XTQT3RnhT7qNvor_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.6-3095-g771732386d6d
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes boot: 283 boots: 10 failed,
+ 262 passed with 5 offline, 5 untried/unknown,
+ 1 conflict (v5.6-3095-g771732386d6d)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/mRsf+L7XTQT3RnhT7qNvor_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes boot: 283 boots: 10 failed, 262 passed with 5 offline, 5=
+ untried/unknown, 1 conflict (v5.6-3095-g771732386d6d)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.6-3095-g771732386d6d/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.6-3095-g771732386d6d/
 
-After merging the gpio tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.6-3095-g771732386d6d
+Git Commit: 771732386d6d432929a4b34b06df4e5da23e2595
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 107 unique boards, 25 SoC families, 31 builds out of 216
 
-ERROR: modpost: "of_pinctrl_get" [drivers/gpio/gpio-tegra186.ko] undefined!
+Boot Regressions Detected:
 
-Caused by commit
+arm:
 
-  b64d6c9a6a05 ("gpio: tegra186: Add support for pin ranges")
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 1 day (last pass: v5.6-rc7-404-g=
+bcaebd8567a2 - first fail: v5.6-1227-ga325aefb3560)
+          exynos5800-peach-pi:
+              lab-collabora: failing since 26 days (last pass: v5.6-rc4-203=
+-g8f169e319c63 - first fail: v5.6-rc4-359-gd038c5cebb94)
 
-and not fixed by commit
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 46 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
 
-  e45ee71ae101 ("pinctrl: Define of_pinctrl_get() dummy for !PINCTRL")
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          exynos5800-peach-pi:
+              lab-collabora: new failure (last pass: v5.6-1227-ga325aefb356=
+0)
 
-CONFIG_OF=3Dy
-CONFIG_PINCTRL=3Dy
-CONFIG_GPIO_TEGRA186=3Dm
+    omap2plus_defconfig:
+        gcc-8:
+          omap3-beagle-xm:
+              lab-baylibre: new failure (last pass: v5.6-1227-ga325aefb3560)
 
-I applied this patch:
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.6-1227-ga325aefb356=
+0)
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 1 Apr 2020 15:14:32 +1100
-Subject: [PATCH] gpio: export of_pinctrl_get to modules
+arm64:
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-1227-ga325=
+aefb3560)
+          meson-gxl-s905d-p230:
+              lab-baylibre: new failure (last pass: v5.6-1227-ga325aefb3560)
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: v5.6-1227-ga325aefb3560)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-1227-ga325=
+aefb3560)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.6-1227-ga325=
+aefb3560)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+            exynos5800-peach-pi: 2 failed labs
+
+    omap2plus_defconfig:
+        gcc-8:
+            omap3-beagle-xm: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
+            meson-gxm-q200: 1 failed lab
+            msm8998-mtp: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+x86_64:
+    x86_64_defconfig+kselftest:
+        qemu_x86_64:
+            lab-collabora: PASS (gcc-8)
+            lab-baylibre: FAIL (gcc-8)
+
 ---
- drivers/pinctrl/devicetree.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/pinctrl/devicetree.c b/drivers/pinctrl/devicetree.c
-index 1ed20ac2243f..c6fe7d64c913 100644
---- a/drivers/pinctrl/devicetree.c
-+++ b/drivers/pinctrl/devicetree.c
-@@ -103,6 +103,7 @@ struct pinctrl_dev *of_pinctrl_get(struct device_node *=
-np)
- {
- 	return get_pinctrl_dev_from_of_node(np);
- }
-+EXPORT_SYMBOL_GPL(of_pinctrl_get);
-=20
- static int dt_to_map_one_config(struct pinctrl *p,
- 				struct pinctrl_dev *hog_pctldev,
---=20
-2.25.0
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/mRsf+L7XTQT3RnhT7qNvor_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6EFjgACgkQAVBC80lX
-0GzG4ggAmeAd11AKyKyb9YJREascIZWfbQe6eXDmdJVh/7ZOzObQKyTngmCN0XPg
-m2Un89Ykqcton7KmhHNRwTsjLTqOfrjfzOLpFg8cDydsqN6FxTmYy/DHJjnyszZR
-XMbtNiBy7m4YyEZnGP+RzoPdczcqvvVt9uDm5mvStIUOtmCQXRMws3ZElaKExnz5
-zVYT/VRXM+e6kiS5zeEJJItXBsd6O0OA3t/7z8MjewNyh0n/XP17b1noAcGgMdc4
-/mBnaOgkbxMTj5HuxvvGyTs+jRdYDdRieOc3KSh631bP2lzm3QIZ+pbI7sXPVhn0
-Jlwaj9HDR0H3nsNYY2EvyyPb3VSBJA==
-=KLU6
------END PGP SIGNATURE-----
-
---Sig_/mRsf+L7XTQT3RnhT7qNvor_--
+For more info write to <info@kernelci.org>

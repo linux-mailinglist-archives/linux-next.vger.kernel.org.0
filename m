@@ -2,84 +2,99 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 9358819A79C
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 10:43:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD43319A851
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 11:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728374AbgDAInq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 04:43:46 -0400
-Received: from ozlabs.org ([203.11.71.1]:44103 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726197AbgDAInq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Apr 2020 04:43:46 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48sfqh5YxJz9sPF;
-        Wed,  1 Apr 2020 19:43:44 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1585730624;
-        bh=5Lu4xFxkVuEa3u64hrRrVtYmPq4JWIpNgibLdD4r30M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tMTP3OEeL5B0FN2ZU2ypKkJmy0fqi/rRpTkP/VXQ1sxsiqoQ9bcCjpQ5ywx1ScMiI
-         bUHmicZ2bKilll7c1WmnzwHegAgg5rx9qOc1FavpatraTwTRga9jzoqRAwJA/Vc+qL
-         fVJYnDvAVvnmONILnMxa2oyKgHc4XVDTSHdPmmpwqpggj1rNHmcmvvguTAf59uWjV1
-         0Zq/Rdhy+QNHJ3RV4tHUGAsz56tMyc1vYhYut5c9f3iVqno9B8kXamqFgRCs/SXynu
-         zrEiDBPiwe41n4X7o3ygCF3UzeYv97VYsf4E++PEvYO7ajLQSA6DELCQXzQ+9GHP5R
-         f/6MxX4/pP2Jw==
-Date:   Wed, 1 Apr 2020 19:43:43 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <treding@nvidia.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpio: turn of_pinctrl_get() into a static inline
-Message-ID: <20200401194343.776a5738@canb.auug.org.au>
-In-Reply-To: <CAMuHMdVqexMZKj8xtMb3NdV64xrq4ppiq0sLMfHdtft4stZZTQ@mail.gmail.com>
-References: <20200401190810.7a2cfa07@canb.auug.org.au>
-        <20200401191810.1c06ead6@canb.auug.org.au>
-        <CAMuHMdVqexMZKj8xtMb3NdV64xrq4ppiq0sLMfHdtft4stZZTQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/enELNp.kJVGkB2/Zsu0Vi7x";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        id S1726536AbgDAJKl convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Wed, 1 Apr 2020 05:10:41 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:32290 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1730720AbgDAJKl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 05:10:41 -0400
+Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03195RBR003459
+        for <linux-next@vger.kernel.org>; Wed, 1 Apr 2020 05:10:40 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 303uj46fm2-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Wed, 01 Apr 2020 05:10:39 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <sachinp@linux.vnet.ibm.com>;
+        Wed, 1 Apr 2020 10:10:27 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Wed, 1 Apr 2020 10:10:24 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0319AXeI52953092
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 1 Apr 2020 09:10:33 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D910A4C044;
+        Wed,  1 Apr 2020 09:10:33 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 13A504C050;
+        Wed,  1 Apr 2020 09:10:32 +0000 (GMT)
+Received: from [9.102.26.109] (unknown [9.102.26.109])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  1 Apr 2020 09:10:31 +0000 (GMT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH v2] qtpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm driver
+ as module
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+In-Reply-To: <20200319195706.GD24804@linux.intel.com>
+Date:   Wed, 1 Apr 2020 14:40:30 +0530
+Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
+        linux-integrity@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
+        Stefan Berger <stefanb@linux.ibm.com>
+Content-Transfer-Encoding: 8BIT
+References: <20200319010017.738677-1-stefanb@linux.vnet.ibm.com>
+ <20200319195706.GD24804@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-TM-AS-GCONF: 00
+x-cbid: 20040109-0008-0000-0000-000003685D2C
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20040109-0009-0000-0000-00004A89E4CF
+Message-Id: <2BF66599-184A-4647-BC57-105A1512F119@linux.vnet.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-03-31_07:2020-03-31,2020-03-31 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ impostorscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004010078
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/enELNp.kJVGkB2/Zsu0Vi7x
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Geert,
 
-On Wed, 1 Apr 2020 10:26:58 +0200 Geert Uytterhoeven <geert@linux-m68k.org>=
- wrote:
->
-> Just realized this myself, while reviewing your patch.
-> Sorry for the bad suggestion.
+> On 20-Mar-2020, at 1:27 AM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
+> 
+> On Wed, Mar 18, 2020 at 09:00:17PM -0400, Stefan Berger wrote:
+>> From: Stefan Berger <stefanb@linux.ibm.com>
+>> 
+>> This patch fixes the following problem when the ibmvtpm driver
+>> is built as a module:
+>> 
+>> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
+>> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
+>> make: *** [Makefile:1298: modules] Error 2
+>> 
+>> Fixes: 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2")
+>> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
+>> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+>> Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
+> 
 
-No worries.
+Ping. This failure can now be seen in mainline (cad18da0af) as well.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/enELNp.kJVGkB2/Zsu0Vi7x
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6EVD8ACgkQAVBC80lX
-0Gxzjgf/ZzoNjpeWmGqWdBueI6Oly3QBLW43GrMximPJi2KidEzTg8sI9qy8k6Sw
-vR4HMdYqvQgg8fNhJzgvG+dr1i3fP/ho28S1NeP4ML2RYqaKWrhx0UWlD7vZT9qZ
-5SR9foWPc313t3MZpki9DB2iDVQeD5AiUkXv3qJxZk8JfHNkQ92C0EqTeKRjCiyS
-Fs6Yl6Bd8jFiRe3mGQP7qdJbdyU55zHSIZpobrYdYIgg3IIoyxZRExBJjAAhGxmv
-hUdRmbaSKAa9tDE5DE0dG9f6OT4IOihljTpKFPjfkw3pcdDW+4qzQtNLZq4dz2Se
-Kzo+qXV9ua3zwJIVDWCWByV74DtDKA==
-=O61X
------END PGP SIGNATURE-----
-
---Sig_/enELNp.kJVGkB2/Zsu0Vi7x--
+Thanks
+-Sachin

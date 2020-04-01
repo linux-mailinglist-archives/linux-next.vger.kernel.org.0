@@ -2,45 +2,46 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id ADAA719B5DA
-	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 20:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 820B719B648
+	for <lists+linux-next@lfdr.de>; Wed,  1 Apr 2020 21:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731749AbgDASoL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Apr 2020 14:44:11 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:36724 "EHLO
+        id S1732256AbgDATNb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Apr 2020 15:13:31 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52820 "EHLO
         mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726748AbgDASoL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 14:44:11 -0400
-Received: from pps.filterd (m0098413.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031IYK5w120162
-        for <linux-next@vger.kernel.org>; Wed, 1 Apr 2020 14:44:09 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 303uj4phks-1
+        by vger.kernel.org with ESMTP id S1732148AbgDATNb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 1 Apr 2020 15:13:31 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 031J4N71066359
+        for <linux-next@vger.kernel.org>; Wed, 1 Apr 2020 15:13:30 -0400
+Received: from e06smtp07.uk.ibm.com (e06smtp07.uk.ibm.com [195.75.94.103])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 304g86pcd6-1
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Wed, 01 Apr 2020 14:44:09 -0400
+        for <linux-next@vger.kernel.org>; Wed, 01 Apr 2020 15:13:30 -0400
 Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        by e06smtp07.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
         for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
-        Wed, 1 Apr 2020 19:43:53 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        Wed, 1 Apr 2020 20:13:26 +0100
+Received: from b06avi18878370.portsmouth.uk.ibm.com (9.149.26.194)
+        by e06smtp07.uk.ibm.com (192.168.101.137) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
         (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Wed, 1 Apr 2020 19:43:48 +0100
+        Wed, 1 Apr 2020 20:13:23 +0100
 Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 031Ii2Gb44105962
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 031JDOFu44761476
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 1 Apr 2020 18:44:02 GMT
+        Wed, 1 Apr 2020 19:13:24 GMT
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8491B4C040;
-        Wed,  1 Apr 2020 18:44:02 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 280A24C040;
+        Wed,  1 Apr 2020 19:13:24 +0000 (GMT)
 Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 105F84C044;
-        Wed,  1 Apr 2020 18:44:02 +0000 (GMT)
+        by IMSVA (Postfix) with ESMTP id 678F64C044;
+        Wed,  1 Apr 2020 19:13:23 +0000 (GMT)
 Received: from oc7455500831.ibm.com (unknown [9.145.71.143])
         by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed,  1 Apr 2020 18:44:01 +0000 (GMT)
+        Wed,  1 Apr 2020 19:13:23 +0000 (GMT)
 Subject: Re: [PATCH v3 0/8] vhost: Reset batched descriptors on SET_VRING_BASE
  call
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
 To:     Eugenio Perez Martin <eperezma@redhat.com>
 Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
@@ -54,7 +55,7 @@ Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
 References: <20200331192804.6019-1-eperezma@redhat.com>
  <c4d2b0b4-0b6d-cd74-0eb5-e7fdfe063d42@de.ibm.com>
  <CAJaqyWc+fNzHE_p-pApZtj2ypNQfFLawCWf8GJmP8e=k=C+EgA@mail.gmail.com>
-From:   Christian Borntraeger <borntraeger@de.ibm.com>
+ <916e60f8-45fe-5cc1-d5a1-defdcd00d75b@de.ibm.com>
 Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
  xsFNBE6cPPgBEAC2VpALY0UJjGmgAmavkL/iAdqul2/F9ONz42K6NrwmT+SI9CylKHIX+fdf
  J34pLNJDmDVEdeb+brtpwC9JEZOLVE0nb+SR83CsAINJYKG3V1b3Kfs0hydseYKsBYqJTN2j
@@ -98,74 +99,60 @@ Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
  jaqYefx7yQ7FJXXETd2uVURiDeNEFhVZWb5CiBJM5c6qQMhmkS4VyT7/+raaEGgkEKEgHOWf
  ZDP8BHfXtszHqI3Fo1F4IKFo/AP8GOFFxMRgbvlAs8z/+rEEaQYjxYJqj08raw6P4LFBqozr
  nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
-Date:   Wed, 1 Apr 2020 20:44:01 +0200
+Date:   Wed, 1 Apr 2020 21:13:23 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.5.0
 MIME-Version: 1.0
-In-Reply-To: <CAJaqyWc+fNzHE_p-pApZtj2ypNQfFLawCWf8GJmP8e=k=C+EgA@mail.gmail.com>
+In-Reply-To: <916e60f8-45fe-5cc1-d5a1-defdcd00d75b@de.ibm.com>
 Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-x-cbid: 20040118-0016-0000-0000-000002FC7C04
+x-cbid: 20040119-0028-0000-0000-000003F03378
 X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20040118-0017-0000-0000-000033604223
-Message-Id: <916e60f8-45fe-5cc1-d5a1-defdcd00d75b@de.ibm.com>
+x-cbparentid: 20040119-0029-0000-0000-000024B5BAC9
+Message-Id: <6d16572f-34e9-4806-a5f8-94d8f75db352@de.ibm.com>
 X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
  definitions=2020-04-01_04:2020-03-31,2020-04-01 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=2
- impostorscore=0 adultscore=0 mlxlogscore=999 lowpriorityscore=0
- malwarescore=0 bulkscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004010150
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
+ mlxlogscore=999 bulkscore=0 suspectscore=0 adultscore=0 mlxscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004010151
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-
-On 01.04.20 20:40, Eugenio Perez Martin wrote:
-> On Wed, Apr 1, 2020 at 9:19 AM Christian Borntraeger
-> <borntraeger@de.ibm.com> wrote:
->>
->> On 31.03.20 21:27, Eugenio Pérez wrote:
->>> Vhost did not reset properly the batched descriptors on SET_VRING_BASE
->>> event. Because of that, is possible to return an invalid descriptor to
->>> the guest.
->>>
->>> This series ammend this, resetting them every time backend changes, and
->>> creates a test to assert correct behavior. To do that, they need to
->>> expose a new function in virtio_ring, virtqueue_reset_free_head, only
->>> on test code.
->>>
->>> Another useful thing would be to check if mutex is properly get in
->>> vq private_data accessors. Not sure if mutex debug code allow that,
->>> similar to C++ unique lock::owns_lock. Not acquiring in the function
->>> because caller code holds the mutex in order to perform more actions.
->>
->>
->>
->>>
->>> v3:
->>> * Rename accesors functions.
->>> * Make scsi and test use the accesors too.
->>>
->>> v2:
->>> * Squashed commits.
->>> * Create vq private_data accesors (mst).
->>>
->>> This is meant to be applied on top of
->>> c4f1c41a6094582903c75c0dcfacb453c959d457 in
->>> git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git.
->>
->>
->> A quick test on s390 looks good.
->>
+>> Would it be possible to investigate when qemu launches the offending ioctls?
 > 
-> Really good to know :).
+> During guest reboot. This is obvious, no?
 > 
-> Would it be possible to investigate when qemu launches the offending ioctls?
 
-During guest reboot. This is obvious, no?
+
+For example during reboot we do re-setup the virt queues:
+
+#1  0x00000000010f3e7a in vhost_kernel_set_vring_base (dev=0x21f5f30, ring=0x3ff84d74e88) at /home/cborntra/REPOS/qemu/hw/virtio/vhost-backend.c:126
+#2  0x00000000010f2f92 in vhost_virtqueue_start (idx=0, vq=0x21f6180, vdev=0x241d570, dev=0x21f5f30) at /home/cborntra/REPOS/qemu/hw/virtio/vhost.c:1016
+#3  vhost_dev_start (hdev=hdev@entry=0x21f5f30, vdev=vdev@entry=0x241d570) at /home/cborntra/REPOS/qemu/hw/virtio/vhost.c:1646
+#4  0x00000000011c265a in vhost_net_start_one (dev=0x241d570, net=0x21f5f30) at /home/cborntra/REPOS/qemu/hw/net/vhost_net.c:236
+#5  vhost_net_start (dev=dev@entry=0x241d570, ncs=0x2450f40, total_queues=total_queues@entry=1) at /home/cborntra/REPOS/qemu/hw/net/vhost_net.c:338
+#6  0x00000000010cfdfe in virtio_net_vhost_status (status=15 '\017', n=0x241d570) at /home/cborntra/REPOS/qemu/hw/net/virtio-net.c:250
+#7  virtio_net_set_status (vdev=0x241d570, status=<optimized out>) at /home/cborntra/REPOS/qemu/hw/net/virtio-net.c:331
+#8  0x00000000010eaef4 in virtio_set_status (vdev=vdev@entry=0x241d570, val=<optimized out>) at /home/cborntra/REPOS/qemu/hw/virtio/virtio.c:1956
+#9  0x000000000110ba78 in virtio_ccw_cb (sch=0x2422c30, ccw=...) at /home/cborntra/REPOS/qemu/hw/s390x/virtio-ccw.c:509
+#10 0x00000000011053fc in css_interpret_ccw (sch=sch@entry=0x2422c30, ccw_addr=<optimized out>, suspend_allowed=suspend_allowed@entry=false) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1108
+#11 0x000000000110557c in sch_handle_start_func_virtual (sch=0x2422c30) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1162
+#12 do_subchannel_work_virtual (sch=0x2422c30) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1256
+#13 0x0000000001168592 in ioinst_handle_ssch (cpu=cpu@entry=0x234b920, reg1=<optimized out>, ipb=<optimized out>, ra=ra@entry=0) at /home/cborntra/REPOS/qemu/target/s390x/ioinst.c:218
+#14 0x0000000001170012 in handle_b2 (ipa1=<optimized out>, run=0x3ff97880000, cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1279
+#15 handle_instruction (run=0x3ff97880000, cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1664
+#16 handle_intercept (cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1747
+#17 kvm_arch_handle_exit (cs=cs@entry=0x234b920, run=run@entry=0x3ff97880000) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1937
+#18 0x00000000010972dc in kvm_cpu_exec (cpu=cpu@entry=0x234b920) at /home/cborntra/REPOS/qemu/accel/kvm/kvm-all.c:2445
+#19 0x00000000010784f6 in qemu_kvm_cpu_thread_fn (arg=0x234b920) at /home/cborntra/REPOS/qemu/cpus.c:1246
+#20 qemu_kvm_cpu_thread_fn (arg=arg@entry=0x234b920) at /home/cborntra/REPOS/qemu/cpus.c:1218
+#21 0x00000000013891fa in qemu_thread_start (args=0x2372f30) at /home/cborntra/REPOS/qemu/util/qemu-thread-posix.c:519
+#22 0x000003ff93809ed6 in start_thread () from target:/lib64/libpthread.so.0
+#23 0x000003ff93705e46 in thread_start () from target:/lib64/libc.so.6
 

@@ -2,139 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD0B19BD60
-	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 10:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD03419BD6E
+	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 10:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387698AbgDBIPJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Apr 2020 04:15:09 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:35327 "EHLO
+        id S2387766AbgDBIRn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Apr 2020 04:17:43 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:36335 "EHLO
         us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726211AbgDBIPI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 04:15:08 -0400
+        by vger.kernel.org with ESMTP id S2387663AbgDBIRm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 04:17:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585815307;
+        s=mimecast20190719; t=1585815461;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=sya16GgscQWBGe8FVvcdkczCb3z+w5XFXS8649TwHeM=;
-        b=bxcwX6KrYA+ODuKogiqqEnCYmXi4zYSKjbUCNQToVdo/BmFDAUA3bLhtbX4RV1ESE1Uyrp
-        Z2pqupmsEojcLhK9BS/3ygFNxRHmY1o9IUQXYdiG1ZL3D8XbWGgxr/6m7kF+Po9yk3nFGa
-        PjIWbti0NR9qAHzjn8MEwplnoXjIHHw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-336-d3VakBr2Nu65ESRYgnjViw-1; Thu, 02 Apr 2020 04:15:05 -0400
-X-MC-Unique: d3VakBr2Nu65ESRYgnjViw-1
-Received: by mail-wm1-f70.google.com with SMTP id f128so101994wmf.2
-        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 01:15:05 -0700 (PDT)
+        bh=qrXk8LVQd/CXKhg1TsCqsO3eX0JuDNOSoaTAXR1nr78=;
+        b=dUhX5pJexHddxKNsIgn0gvJKXkTUaydBGYOEJWW8sGiRnTT8L2zGWfR28LpHqmm5bJssxu
+        Q+oCNWj+eWEJ7dYNIg7Z49X11ahBxYhKm/dvsRMP39m5brd+eJet002JNuOSqQx0KqIzK+
+        UtdVxC1/NG1o2eiRU/jlU9TKVjiaZhY=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-48-GSHGOZkiOH2NsCfBdjdo7w-1; Thu, 02 Apr 2020 04:17:38 -0400
+X-MC-Unique: GSHGOZkiOH2NsCfBdjdo7w-1
+Received: by mail-qt1-f198.google.com with SMTP id n89so2451491qte.15
+        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 01:17:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=sya16GgscQWBGe8FVvcdkczCb3z+w5XFXS8649TwHeM=;
-        b=DLo1D6H5sBWCnVHrdUXauK19XlSv6ZgB6YUJl+8A0QZSGijZ6FC7OkKXyDeqfXVohZ
-         bpXm4Mcof/uVL6r+dOpuOggi6hPW8J6zge8jZ5ym8mU5evrubGarTDHMnjO5LIpIIR/N
-         0gzSJC/oP3mBN3HTTIJPGgdlQ/PGZXJuycSYbgus3ljC1AiZYDbsKAcFKbYUOix6H2eR
-         ky9AtqKmz1TOwKZXRSxuEszdLbgSOMnbFjxzAjtTZIfvHOjXmsA2/mNrGVoA8TY0fdyv
-         s2GQKolFXvRsFLT3d3oYFRlB4gYs5dtFlckVHf/zNjVn5NQr72WM8Gsu0jwPoPC6OUmk
-         RcgA==
-X-Gm-Message-State: AGi0PubXomSA0cJ6sPJBDmxS60gDTliHk4k07S4oWsBF6tI2ATVcNP39
-        +Nx31A9PUpZHnlkRInUHDcCdrblJQzRsvRICuMJUpQloLV9XANfPRM+JxmTkmG3FTNoltBsaasX
-        cx6WTyYEP5rKz85szw/veAA==
-X-Received: by 2002:a1c:9d8f:: with SMTP id g137mr1448323wme.178.1585815304265;
-        Thu, 02 Apr 2020 01:15:04 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKrVCvCu2TCJw9Lc9tHS5eH8r8weVzmyktk9rGmdg9mOVC7Tj0K5fqv9S8zIbPLu4KJEGJ0bw==
-X-Received: by 2002:a1c:9d8f:: with SMTP id g137mr1448286wme.178.1585815303858;
-        Thu, 02 Apr 2020 01:15:03 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:1868:42dd:216c:2c09? ([2001:b07:6468:f312:1868:42dd:216c:2c09])
-        by smtp.gmail.com with ESMTPSA id g2sm6289801wrs.42.2020.04.02.01.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2020 01:15:03 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the kvm tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Haiwei Li <lihaiwei.kernel@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Joerg Roedel <jroedel@suse.de>
-References: <20200402133637.296e70a9@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <2cdc7a3e-d516-70d5-9bfb-d077d40b07ed@redhat.com>
-Date:   Thu, 2 Apr 2020 10:15:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=qrXk8LVQd/CXKhg1TsCqsO3eX0JuDNOSoaTAXR1nr78=;
+        b=daZ5LBeX1BUwAIXMuXpwxa8ZJkmB7hsmvHCnCsY2fRHk+as1lItdDQlxVfJj6VspCQ
+         sqjX2r91AcodBR5z7fytBIZKsOHJOnUIjZ89XtAYzMpfcYVipnBfUtG7Y+BBUQ7tf+H+
+         MB1aGclDwgjrZVPlyBFSKk5OxZt/PXw7GAXA1CZBJQi9lj/G3Fkpjz98AiqOZOrZ0Imh
+         a8PyK0TEeaug5EQIVYfJGxewJBfHDHQIHJEX7U6ZQR/KfpPQwjj7zmX5UivC8v2anhFF
+         VbYC8TmNf1J25BkJg/8BCu8iboXxlzNoc80FyKknn0otWLA2fX0YZHfTR9lLEdhaWQBD
+         ZVqw==
+X-Gm-Message-State: AGi0PuYvY7Hz5PYsj3CGPt2EZ17CpLtzIL2kxrWu4YcJM3ZoDMXQcwyH
+        gqQO8+tIdVqLTeGzY36Ipy/kHXTlUuEJ3jTozw9ckU+NnXS0wxqBn6KudQ3Cgz8gk7anrj6lLpM
+        7qd+vJDVWfMCJSDF/MHHRmgn/6C723WYo4xMk7A==
+X-Received: by 2002:ac8:740b:: with SMTP id p11mr1626589qtq.379.1585815457653;
+        Thu, 02 Apr 2020 01:17:37 -0700 (PDT)
+X-Google-Smtp-Source: APiQypIWKQ0r7BLw/mXFg9PX+PpdHbG2jGnLDwo9XSxTQBg5Q2ggffGwidECmAS47ycvsUD64mF34zIwUE9GnhztrQo=
+X-Received: by 2002:ac8:740b:: with SMTP id p11mr1626573qtq.379.1585815457383;
+ Thu, 02 Apr 2020 01:17:37 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200402133637.296e70a9@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="BxqdilmDw8NfJrdybYlCOjBMxClEdTdaG"
+References: <20200331192804.6019-1-eperezma@redhat.com> <c4d2b0b4-0b6d-cd74-0eb5-e7fdfe063d42@de.ibm.com>
+ <CAJaqyWc+fNzHE_p-pApZtj2ypNQfFLawCWf8GJmP8e=k=C+EgA@mail.gmail.com>
+ <916e60f8-45fe-5cc1-d5a1-defdcd00d75b@de.ibm.com> <6d16572f-34e9-4806-a5f8-94d8f75db352@de.ibm.com>
+In-Reply-To: <6d16572f-34e9-4806-a5f8-94d8f75db352@de.ibm.com>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 2 Apr 2020 10:17:01 +0200
+Message-ID: <CAJaqyWdwqdyfY_ZrWXEGogoUKajEPpT3FdsDMdEUCZ0tt4Dh9w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/8] vhost: Reset batched descriptors on SET_VRING_BASE call
+To:     Christian Borntraeger <borntraeger@de.ibm.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kvm list <kvm@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---BxqdilmDw8NfJrdybYlCOjBMxClEdTdaG
-Content-Type: multipart/mixed; boundary="qoP0eidW5UXD2MMeQYcjy7cD7ZVgpOqFc"
+On Wed, Apr 1, 2020 at 9:13 PM Christian Borntraeger
+<borntraeger@de.ibm.com> wrote:
+>
+> >> Would it be possible to investigate when qemu launches the offending ioctls?
+> >
+> > During guest reboot. This is obvious, no?
+> >
+>
 
---qoP0eidW5UXD2MMeQYcjy7cD7ZVgpOqFc
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
-
-On 02/04/20 04:36, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the kvm tree got a conflict in:
->=20
->   arch/x86/kvm/svm/svm.c
->=20
-> between commits:
->=20
->   aaca21007ba1 ("KVM: SVM: Fix the svm vmexit code for WRMSR")
->   2da1ed62d55c ("KVM: SVM: document KVM_MEM_ENCRYPT_OP, let userspace d=
-etect if SEV is available")
->   2e2409afe5f0 ("KVM: SVM: Issue WBINVD after deactivating an SEV guest=
-")
->=20
-> from Linus' tree and commits:
->=20
->   83a2c705f002 ("kVM SVM: Move SVM related files to own sub-directory")=
-
->   41f08f0506c0 ("KVM: SVM: Move SEV code to separate file")
->=20
-> (at least)
->=20
-> from the kvm tree.
->=20
-> Its a bit of a pain this code movement appearing during the merge
-> window.  Is it really intended for v5.7?
-
-Yes, it's just due to code movement (a file was split, which I left last
-to avoid pain for contributors and minimal room for regressions).
-Unfortunately, git ends up being confused, but "git merge -X histogram"
-actually does the right thing.
-
-Paolo
+Got it. I thought you received it after the reboot AND once you sent
+the firsts packets, since you said that some pings worked. But now
+that this point is clear, I think we can move forward :). Thank you
+very much!
 
 
---qoP0eidW5UXD2MMeQYcjy7cD7ZVgpOqFc--
-
---BxqdilmDw8NfJrdybYlCOjBMxClEdTdaG
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEE8TM4V0tmI4mGbHaCv/vSX3jHroMFAl6FnwUACgkQv/vSX3jH
-roNcuQf+Pnwk8LWzhHjlkw+o2KkL4PGRDA/BdTHLccdoHWWnmGUQzwhlp31eIQP5
-4bccMDyxPhL/0y1a/zfto428r6kWHv6n/WevUKCkA44yHxVEPOY7r5mfB0oM0Q7D
-g56VanOOkTkT/iZ3IsAFvsR6YxsoWTok6i8Kq6DlPEtepGaYyvzJkiJojj3Wj5Co
-KSNoGFk9+1B4UvtButNuBxITfKbYIDiu78SYTzx5/EMQ4mvfVuYJHdF/tZGGq4vx
-2WJs5bB8cbd0BGomA6ITNJ/ar+WvzK+GQ5UNRQ7FTdelHqTQ0pUSGwhXc9PoST9A
-FSXeI+dBrwbXmwO8hTCBmqZUFpCHPQ==
-=sLmu
------END PGP SIGNATURE-----
-
---BxqdilmDw8NfJrdybYlCOjBMxClEdTdaG--
+>
+> For example during reboot we do re-setup the virt queues:
+>
+> #1  0x00000000010f3e7a in vhost_kernel_set_vring_base (dev=0x21f5f30, ring=0x3ff84d74e88) at /home/cborntra/REPOS/qemu/hw/virtio/vhost-backend.c:126
+> #2  0x00000000010f2f92 in vhost_virtqueue_start (idx=0, vq=0x21f6180, vdev=0x241d570, dev=0x21f5f30) at /home/cborntra/REPOS/qemu/hw/virtio/vhost.c:1016
+> #3  vhost_dev_start (hdev=hdev@entry=0x21f5f30, vdev=vdev@entry=0x241d570) at /home/cborntra/REPOS/qemu/hw/virtio/vhost.c:1646
+> #4  0x00000000011c265a in vhost_net_start_one (dev=0x241d570, net=0x21f5f30) at /home/cborntra/REPOS/qemu/hw/net/vhost_net.c:236
+> #5  vhost_net_start (dev=dev@entry=0x241d570, ncs=0x2450f40, total_queues=total_queues@entry=1) at /home/cborntra/REPOS/qemu/hw/net/vhost_net.c:338
+> #6  0x00000000010cfdfe in virtio_net_vhost_status (status=15 '\017', n=0x241d570) at /home/cborntra/REPOS/qemu/hw/net/virtio-net.c:250
+> #7  virtio_net_set_status (vdev=0x241d570, status=<optimized out>) at /home/cborntra/REPOS/qemu/hw/net/virtio-net.c:331
+> #8  0x00000000010eaef4 in virtio_set_status (vdev=vdev@entry=0x241d570, val=<optimized out>) at /home/cborntra/REPOS/qemu/hw/virtio/virtio.c:1956
+> #9  0x000000000110ba78 in virtio_ccw_cb (sch=0x2422c30, ccw=...) at /home/cborntra/REPOS/qemu/hw/s390x/virtio-ccw.c:509
+> #10 0x00000000011053fc in css_interpret_ccw (sch=sch@entry=0x2422c30, ccw_addr=<optimized out>, suspend_allowed=suspend_allowed@entry=false) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1108
+> #11 0x000000000110557c in sch_handle_start_func_virtual (sch=0x2422c30) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1162
+> #12 do_subchannel_work_virtual (sch=0x2422c30) at /home/cborntra/REPOS/qemu/hw/s390x/css.c:1256
+> #13 0x0000000001168592 in ioinst_handle_ssch (cpu=cpu@entry=0x234b920, reg1=<optimized out>, ipb=<optimized out>, ra=ra@entry=0) at /home/cborntra/REPOS/qemu/target/s390x/ioinst.c:218
+> #14 0x0000000001170012 in handle_b2 (ipa1=<optimized out>, run=0x3ff97880000, cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1279
+> #15 handle_instruction (run=0x3ff97880000, cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1664
+> #16 handle_intercept (cpu=0x234b920) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1747
+> #17 kvm_arch_handle_exit (cs=cs@entry=0x234b920, run=run@entry=0x3ff97880000) at /home/cborntra/REPOS/qemu/target/s390x/kvm.c:1937
+> #18 0x00000000010972dc in kvm_cpu_exec (cpu=cpu@entry=0x234b920) at /home/cborntra/REPOS/qemu/accel/kvm/kvm-all.c:2445
+> #19 0x00000000010784f6 in qemu_kvm_cpu_thread_fn (arg=0x234b920) at /home/cborntra/REPOS/qemu/cpus.c:1246
+> #20 qemu_kvm_cpu_thread_fn (arg=arg@entry=0x234b920) at /home/cborntra/REPOS/qemu/cpus.c:1218
+> #21 0x00000000013891fa in qemu_thread_start (args=0x2372f30) at /home/cborntra/REPOS/qemu/util/qemu-thread-posix.c:519
+> #22 0x000003ff93809ed6 in start_thread () from target:/lib64/libpthread.so.0
+> #23 0x000003ff93705e46 in thread_start () from target:/lib64/libc.so.6
+>
 

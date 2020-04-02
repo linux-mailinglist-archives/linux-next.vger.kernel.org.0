@@ -2,207 +2,208 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A6A19C18C
-	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 14:56:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB40819C29D
+	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 15:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388245AbgDBM4g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Apr 2020 08:56:36 -0400
-Received: from mail-pf1-f181.google.com ([209.85.210.181]:37772 "EHLO
-        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387580AbgDBM4g (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 08:56:36 -0400
-Received: by mail-pf1-f181.google.com with SMTP id u65so1719639pfb.4
-        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 05:56:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=EavKQbpVQj8lncwD/lQM50Vdh6Pmen59DTTyXPQocZw=;
-        b=1b99R0LqqFBDSOHMAB7qiryottxhE6wFRigJc87ASML3bItTz4ilPHWMaBBddVMtbr
-         +gP+zciozFSMHspZCpno3bO1bTp3+xfbWiYanrgJKitgOEU386jze6IqDf6e3gLt2dRB
-         zn1+Mo3nrO0nNnWwaBx6cVOBxiefgfDEcjUEWTd0mB8jKubn0kyEbRw4ucLTVDxEJYu2
-         qgCc32tIoxSxiTZbJ9oqXTuvJ85CVhCiX06iyw2gZhqQmD16gpO5lo7IEy5E6uS8YmNb
-         kKoAhWuPiu7KPsAMOoCckpQQviUqAcPRtHriU9gA6Ssw9PcpUCpmLCny2FrWzVTL0n2s
-         5jAA==
+        id S2388565AbgDBN1r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Apr 2020 09:27:47 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:21014 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387752AbgDBN1q (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 09:27:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1585834065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/1eX8MBJ9dVspbC5Z01wrbH0AdjiWCbWXslfX6OZ6hs=;
+        b=X073aojub94Upl6/d54MHh8luUumvIlR/kYvIKhaMCFefMv4Ej7X3AE+d5G4N8qLiaafyC
+        ObLJF31EBKDIt6JewWNXz4BPsdtIBqpT4osFwJMNIU0pcsqTn2uA43aL7lg8i0nPfYApvG
+        5tZRraKkQpJ0l5gA9dBlLf+YFsSa61Y=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-151-F3WkkVPbOiarLpFGwsA3lA-1; Thu, 02 Apr 2020 09:27:44 -0400
+X-MC-Unique: F3WkkVPbOiarLpFGwsA3lA-1
+Received: by mail-qv1-f71.google.com with SMTP id p6so2637993qvo.18
+        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 06:27:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=EavKQbpVQj8lncwD/lQM50Vdh6Pmen59DTTyXPQocZw=;
-        b=msYPTp7XZ2S9OGda9BfTAO6xohR5Y6uhBB9nxRpD4OgpQmyCWAm+z/1e/KYAu3Npsv
-         MvOXs8dsyyQhdzRvg5ookHVKgCQZMOPKH5ysxi6nQM25v7eccd7fc8jXjZpEhKNIX9HX
-         2BAEOJ1GMc/NXQgKZG768MF1ha0jtx94Drl84ocU5Mq/+m6tDWeqrBDq/9aJgvXMGV6g
-         CW0hs9F9SH9gWJlthLV+43OvfzfBAxowkTg8tb+xWatY7YOoUHjLwH6uli7l5Eqatj+K
-         BJu1IEWtDoiZCu1IiaJH/TM0qt7kJUpSw/2GS4KoZtekEGLXJ0SLxo1QaDT8uh8/oepK
-         rPog==
-X-Gm-Message-State: AGi0PuYmJJUt3Xm+tnLZrsKaEW/dfeMjNL9xOOOyqDsvNEhUKANRDYpp
-        ykEuhZ18PJIECQpVpQohU1t1FF3gM3I=
-X-Google-Smtp-Source: APiQypLkNGvYJNMlbD5eQAdOOhUdQsA4qyaECh1WR7DfCTx3cYEgOEr+9GudktS6oCGuxw59+iLXdw==
-X-Received: by 2002:a65:41c6:: with SMTP id b6mr3126493pgq.58.1585832194208;
-        Thu, 02 Apr 2020 05:56:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 6sm3685701pfx.69.2020.04.02.05.56.31
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=/1eX8MBJ9dVspbC5Z01wrbH0AdjiWCbWXslfX6OZ6hs=;
+        b=ltZWdNDfGXtns7RQmYqnwoN4KekPO5MQEIfjWR6dt4X3yBKV2PoEAQyIKHZ2mOif8h
+         tDvERgbLPslCuDD8P8pHckHlacHC5d9GjHaSdI8ePsYZY0gE/Kl1m1SUmVSwlo2mrZHi
+         cSSDTs/uYlHJng9Kg817xQcsSkXXsTKZauV3wZd5j6gHEVOWbIu36DEZynNbe8P7BijW
+         7XOg+tjyiMW0IOzdDMtkmm/aftdEkUiAwKO7lvwZAa5SNvFBcCr4Ba1cXe2E/tBSEc2a
+         awvKDwc0cC1kLQI80KT/chFxvIIJMKQEH/MbEav6wbqgzGxyijyaLHU6e93vK8+wsMM1
+         oPFg==
+X-Gm-Message-State: AGi0PuYjkbbGSLzJbgii6OAHA5fUbp2oS3YoyBPQqTzs+ZS1eTW6GNvu
+        HUlAfnc5SqqWRSXJ41DTdorF90Zxa7L3N8Pt4gPWzkD//q2z4D9Pi494AHKs9pCUUDtSgps04Ul
+        jMj6vbTXbGsvMJnR2TNgpdA==
+X-Received: by 2002:a37:7a84:: with SMTP id v126mr3349828qkc.423.1585834063878;
+        Thu, 02 Apr 2020 06:27:43 -0700 (PDT)
+X-Google-Smtp-Source: APiQypLxHjkaUsVorVDqnHwIHws97AjgXm5AAgFlj0iL+yJ0ouEjkj3oZQka7/SWWzBEH9hp1R5KqA==
+X-Received: by 2002:a37:7a84:: with SMTP id v126mr3349804qkc.423.1585834063566;
+        Thu, 02 Apr 2020 06:27:43 -0700 (PDT)
+Received: from redhat.com (bzq-79-176-51-222.red.bezeqint.net. [79.176.51.222])
+        by smtp.gmail.com with ESMTPSA id 31sm3619643qta.56.2020.04.02.06.27.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Apr 2020 05:56:33 -0700 (PDT)
-Message-ID: <5e85e101.1c69fb81.940a5.1333@mx.google.com>
-Date:   Thu, 02 Apr 2020 05:56:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 02 Apr 2020 06:27:42 -0700 (PDT)
+Date:   Thu, 2 Apr 2020 09:27:37 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kvm list <kvm@vger.kernel.org>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH v4 7/7] tools/virtio: Make --reset reset ring idx
+Message-ID: <20200402092529-mutt-send-email-mst@kernel.org>
+References: <20200401183118.8334-1-eperezma@redhat.com>
+ <20200401183118.8334-8-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200402
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 273 boots: 9 failed, 252 passed with 3 offline,
- 8 untried/unknown, 1 conflict (next-20200402)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200401183118.8334-8-eperezma@redhat.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 273 boots: 9 failed, 252 passed with 3 offline, 8 untried=
-/unknown, 1 conflict (next-20200402)
+On Wed, Apr 01, 2020 at 08:31:18PM +0200, Eugenio Pérez wrote:
+> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200402/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200402/
+I'm still a bit puzzled by this one - could you
+explain what the rationale here is?
 
-Tree: next
-Branch: master
-Git Describe: next-20200402
-Git Commit: 17f166b56b2583b97f0f6612cfbbb7f99e6889bb
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 100 unique boards, 25 SoC families, 30 builds out of 227
+> ---
+>  drivers/virtio/virtio_ring.c | 29 +++++++++++++++++++++++++++++
+>  tools/virtio/linux/virtio.h  |  2 ++
+>  tools/virtio/virtio_test.c   | 28 +++++++++++++++++++++++++++-
+>  3 files changed, 58 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> index 58b96baa8d48..f9153a381f72 100644
+> --- a/drivers/virtio/virtio_ring.c
+> +++ b/drivers/virtio/virtio_ring.c
+> @@ -1810,6 +1810,35 @@ int virtqueue_add_inbuf_ctx(struct virtqueue *vq,
+>  }
+>  EXPORT_SYMBOL_GPL(virtqueue_add_inbuf_ctx);
+>  
+> +#ifndef __KERNEL__
+> +
+> +/**
+> + * virtqueue_reset_free_head - Reset to 0 the members of split ring.
+> + * @vq: Virtqueue to reset.
+> + *
+> + * At this moment, is only meant for debug the ring index change, do not use
+> + * in production.
+> + */
+> +void virtqueue_reset_free_head(struct virtqueue *_vq)
+> +{
+> +	struct vring_virtqueue *vq = to_vvq(_vq);
+> +
+> +	// vq->last_used_idx = 0;
+> +	vq->num_added = 0;
+> +
+> +	vq->split.queue_size_in_bytes = 0;
+> +	vq->split.avail_flags_shadow = 0;
+> +	vq->split.avail_idx_shadow = 0;
+> +
+> +	memset(vq->split.desc_state, 0, vq->split.vring.num *
+> +			sizeof(struct vring_desc_state_split));
+> +
+> +	vq->free_head = 0;
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_reset_free_head);
+> +
+> +#endif
+> +
+>  /**
+>   * virtqueue_kick_prepare - first half of split virtqueue_kick call.
+>   * @_vq: the struct virtqueue
+> diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
+> index b751350d4ce8..5d33eab6b814 100644
+> --- a/tools/virtio/linux/virtio.h
+> +++ b/tools/virtio/linux/virtio.h
+> @@ -65,4 +65,6 @@ struct virtqueue *vring_new_virtqueue(unsigned int index,
+>  				      const char *name);
+>  void vring_del_virtqueue(struct virtqueue *vq);
+>  
+> +void virtqueue_reset_free_head(struct virtqueue *vq);
+> +
+>  #endif
+> diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
+> index 93d81cd64ba0..bf21ece30594 100644
+> --- a/tools/virtio/virtio_test.c
+> +++ b/tools/virtio/virtio_test.c
+> @@ -49,6 +49,7 @@ struct vdev_info {
+>  
+>  static const struct vhost_vring_file no_backend = { .fd = -1 },
+>  				     backend = { .fd = 1 };
+> +static const struct vhost_vring_state null_state = {};
+>  
+>  bool vq_notify(struct virtqueue *vq)
+>  {
+> @@ -218,10 +219,33 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
+>  			}
+>  
+>  			if (reset) {
+> +				struct vhost_vring_state s = { .index = 0 };
+> +				int i;
+> +				vq->vring.avail->idx = 0;
+> +				vq->vq->num_free = vq->vring.num;
+> +
+> +				// Put everything in free lists.
+> +				for (i = 0; i < vq->vring.num-1; i++)
+> +					vq->vring.desc[i].next =
+> +						cpu_to_virtio16(&dev->vdev,
+> +								i + 1);
+> +				vq->vring.desc[vq->vring.num-1].next = 0;
 
-Boot Regressions Detected:
 
-arm:
+Poking at vq descriptors like this seems fragile.
+I think this calls for a better API that handles everything
+internally.
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 12 days (last pass: next-2020031=
-9 - first fail: next-20200320)
-          exynos5800-peach-pi:
-              lab-collabora: failing since 1 day (last pass: next-20200305 =
-- first fail: next-20200331)
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          exynos5800-peach-pi:
-              lab-collabora: failing since 1 day (last pass: next-20200129 =
-- first fail: next-20200331)
+> +				virtqueue_reset_free_head(vq->vq);
+> +
+> +				r = ioctl(dev->control, VHOST_GET_VRING_BASE,
+> +					  &s);
+> +				assert(!r);
+> +
+> +				s.num = 0;
+> +				r = ioctl(dev->control, VHOST_SET_VRING_BASE,
+> +					  &null_state);
+> +				assert(!r);
+> +
+>  				r = ioctl(dev->control, VHOST_TEST_SET_BACKEND,
+>  					  &backend);
+>  				assert(!r);
+>  
+> +				started = completed;
+>                                  while (completed > next_reset)
+>  					next_reset += completed;
+>  			}
+> @@ -243,7 +267,9 @@ static void run_test(struct vdev_info *dev, struct vq_info *vq,
+>  	test = 0;
+>  	r = ioctl(dev->control, VHOST_TEST_RUN, &test);
+>  	assert(r >= 0);
+> -	fprintf(stderr, "spurious wakeups: 0x%llx\n", spurious);
+> +	fprintf(stderr,
+> +		"spurious wakeups: 0x%llx started=0x%lx completed=0x%lx\n",
+> +		spurious, started, completed);
+>  }
+>  
+>  const char optstring[] = "h";
+> -- 
+> 2.18.1
 
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20200401)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 44 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200401)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200401)
-          meson-gxm-q200:
-              lab-baylibre: failing since 1 day (last pass: next-20200331 -=
- first fail: next-20200401)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200401)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: failing since 1 day (last pass: next-20200331 -=
- first fail: next-20200401)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20200401)
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: next-20200401)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 5 days (last pass: next-2=
-0200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            exynos5800-peach-pi: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-            exynos5800-peach-pi: 2 failed labs
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-x86_64:
-    x86_64_defconfig+kselftest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>

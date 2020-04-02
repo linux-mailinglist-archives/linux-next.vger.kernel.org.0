@@ -2,242 +2,207 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB8219BF93
-	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 12:44:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61A6A19C18C
+	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 14:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387989AbgDBKov (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Apr 2020 06:44:51 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:24874 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728612AbgDBKov (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 06:44:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585824289;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EziteWbH1lD47MmLWhfo2eogYuPlqT+pPp28I6LSJEc=;
-        b=SEOQLo6Ny7IM8fa5qJUJIkeGAplLCfrOoWoUqf0xgcOoefSnvGa4YEO3GI4mgl/WccVWjg
-        JDQJgeQ5SLSYHOZ5xZxrh1JPbtoJWksQxj4U3Ep/AuDuhQUa6CRhqRNQhbn4Pp0yOJLA06
-        X2p8/JQTxeC+mRKu9nmJSTf6ubQ6XB8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-428-uQrEq8eCM3CUM4cNgZtPjg-1; Thu, 02 Apr 2020 06:44:47 -0400
-X-MC-Unique: uQrEq8eCM3CUM4cNgZtPjg-1
-Received: by mail-wr1-f72.google.com with SMTP id 91so434778wro.1
-        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 03:44:47 -0700 (PDT)
+        id S2388245AbgDBM4g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Apr 2020 08:56:36 -0400
+Received: from mail-pf1-f181.google.com ([209.85.210.181]:37772 "EHLO
+        mail-pf1-f181.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387580AbgDBM4g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Apr 2020 08:56:36 -0400
+Received: by mail-pf1-f181.google.com with SMTP id u65so1719639pfb.4
+        for <linux-next@vger.kernel.org>; Thu, 02 Apr 2020 05:56:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=EavKQbpVQj8lncwD/lQM50Vdh6Pmen59DTTyXPQocZw=;
+        b=1b99R0LqqFBDSOHMAB7qiryottxhE6wFRigJc87ASML3bItTz4ilPHWMaBBddVMtbr
+         +gP+zciozFSMHspZCpno3bO1bTp3+xfbWiYanrgJKitgOEU386jze6IqDf6e3gLt2dRB
+         zn1+Mo3nrO0nNnWwaBx6cVOBxiefgfDEcjUEWTd0mB8jKubn0kyEbRw4ucLTVDxEJYu2
+         qgCc32tIoxSxiTZbJ9oqXTuvJ85CVhCiX06iyw2gZhqQmD16gpO5lo7IEy5E6uS8YmNb
+         kKoAhWuPiu7KPsAMOoCckpQQviUqAcPRtHriU9gA6Ssw9PcpUCpmLCny2FrWzVTL0n2s
+         5jAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to;
-        bh=EziteWbH1lD47MmLWhfo2eogYuPlqT+pPp28I6LSJEc=;
-        b=Q8Vx+TrCKsz66IDMGVNYGyDzkFml2HpAC2EzdM85PYcyH1iSkPD63C8FJ8XtvmXCxH
-         eYu/jli74Xj+QffqOVYw05WvfBjjY6G8BP1/I4ooNVJV+07HWpNFbt41p0Sj9Zm1RIKS
-         7q/8D7Q9RCc5mlkcMj+fbv+lZedwLIJdgAK/A9EoMAwZfoNogZva2+zg5rRki1Ct9DhN
-         jThKXItFSkq23BNvR4lDjwuU+8ssobszIClrxyRGUHSfCWEU8khmC2Pgb/IltxfEceI6
-         xwnmt9LkMxPhzpYBTgznrcF7Cs/y2ydUyuHcRAqYGApK9jQ+uqDhZu/dzFfCszogWBma
-         bUaA==
-X-Gm-Message-State: AGi0PubDE+aBbjunIcp9It3gMapTgnSmxzz9SipXf048BWgTfl3iOBKr
-        9mLDlGxr67A/s3ZeAcDkf1QdjVZi2DuurCUWJZo4rRk2FGnZq4c3AnSjclCKaMkW71r3FIya+ZI
-        GZykCjbC5AC/SDvHR5GhDjw==
-X-Received: by 2002:a1c:2b43:: with SMTP id r64mr2939545wmr.77.1585824285814;
-        Thu, 02 Apr 2020 03:44:45 -0700 (PDT)
-X-Google-Smtp-Source: APiQypJ9ws7eVPM/42ryIkhOgIBcaE4xRcNVfISXRXL+Z0OVXAiOitgqXJ/x0SrofX/9qdOtEgM8cg==
-X-Received: by 2002:a1c:2b43:: with SMTP id r64mr2939522wmr.77.1585824285488;
-        Thu, 02 Apr 2020 03:44:45 -0700 (PDT)
-Received: from ?IPv6:2001:b07:6468:f312:1868:42dd:216c:2c09? ([2001:b07:6468:f312:1868:42dd:216c:2c09])
-        by smtp.gmail.com with ESMTPSA id u13sm7151479wru.88.2020.04.02.03.44.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Apr 2020 03:44:44 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the kvm tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, KVM <kvm@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Haiwei Li <lihaiwei.kernel@gmail.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Joerg Roedel <jroedel@suse.de>
-References: <20200402133637.296e70a9@canb.auug.org.au>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-Message-ID: <649ebb8f-d8c4-b893-eddb-9c0a00bf30e0@redhat.com>
-Date:   Thu, 2 Apr 2020 12:44:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.5.0
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=EavKQbpVQj8lncwD/lQM50Vdh6Pmen59DTTyXPQocZw=;
+        b=msYPTp7XZ2S9OGda9BfTAO6xohR5Y6uhBB9nxRpD4OgpQmyCWAm+z/1e/KYAu3Npsv
+         MvOXs8dsyyQhdzRvg5ookHVKgCQZMOPKH5ysxi6nQM25v7eccd7fc8jXjZpEhKNIX9HX
+         2BAEOJ1GMc/NXQgKZG768MF1ha0jtx94Drl84ocU5Mq/+m6tDWeqrBDq/9aJgvXMGV6g
+         CW0hs9F9SH9gWJlthLV+43OvfzfBAxowkTg8tb+xWatY7YOoUHjLwH6uli7l5Eqatj+K
+         BJu1IEWtDoiZCu1IiaJH/TM0qt7kJUpSw/2GS4KoZtekEGLXJ0SLxo1QaDT8uh8/oepK
+         rPog==
+X-Gm-Message-State: AGi0PuYmJJUt3Xm+tnLZrsKaEW/dfeMjNL9xOOOyqDsvNEhUKANRDYpp
+        ykEuhZ18PJIECQpVpQohU1t1FF3gM3I=
+X-Google-Smtp-Source: APiQypLkNGvYJNMlbD5eQAdOOhUdQsA4qyaECh1WR7DfCTx3cYEgOEr+9GudktS6oCGuxw59+iLXdw==
+X-Received: by 2002:a65:41c6:: with SMTP id b6mr3126493pgq.58.1585832194208;
+        Thu, 02 Apr 2020 05:56:34 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 6sm3685701pfx.69.2020.04.02.05.56.31
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Apr 2020 05:56:33 -0700 (PDT)
+Message-ID: <5e85e101.1c69fb81.940a5.1333@mx.google.com>
+Date:   Thu, 02 Apr 2020 05:56:33 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200402133637.296e70a9@canb.auug.org.au>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="Y2MKUGxe9yiNE6fExtMIK6kFebhy1L5tT"
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200402
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 273 boots: 9 failed, 252 passed with 3 offline,
+ 8 untried/unknown, 1 conflict (next-20200402)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---Y2MKUGxe9yiNE6fExtMIK6kFebhy1L5tT
-Content-Type: multipart/mixed; boundary="4tmLlM9A6UvIfiuvICLZvZtBPoFLHPGx7"
+next/master boot: 273 boots: 9 failed, 252 passed with 3 offline, 8 untried=
+/unknown, 1 conflict (next-20200402)
 
---4tmLlM9A6UvIfiuvICLZvZtBPoFLHPGx7
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: quoted-printable
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200402/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200402/
 
-On 02/04/20 04:36, Stephen Rothwell wrote:
-> Hi all,
->=20
-> Today's linux-next merge of the kvm tree got a conflict in:
->=20
->   arch/x86/kvm/svm/svm.c
->=20
-> between commits:
->=20
->   aaca21007ba1 ("KVM: SVM: Fix the svm vmexit code for WRMSR")
->   2da1ed62d55c ("KVM: SVM: document KVM_MEM_ENCRYPT_OP, let userspace d=
-etect if SEV is available")
->   2e2409afe5f0 ("KVM: SVM: Issue WBINVD after deactivating an SEV guest=
-")
->=20
-> from Linus' tree and commits:
->=20
->   83a2c705f002 ("kVM SVM: Move SVM related files to own sub-directory")=
+Tree: next
+Branch: master
+Git Describe: next-20200402
+Git Commit: 17f166b56b2583b97f0f6612cfbbb7f99e6889bb
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 100 unique boards, 25 SoC families, 30 builds out of 227
 
->   41f08f0506c0 ("KVM: SVM: Move SEV code to separate file")
->=20
-> (at least)
->=20
-> from the kvm tree.
->=20
-> Its a bit of a pain this code movement appearing during the merge
-> window.  Is it really intended for v5.7?
+Boot Regressions Detected:
 
-I'll send two separate pull requests to Linus so that he doesn't see the
-issues introduced by the code movement.
+arm:
 
-Paolo
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 12 days (last pass: next-2020031=
+9 - first fail: next-20200320)
+          exynos5800-peach-pi:
+              lab-collabora: failing since 1 day (last pass: next-20200305 =
+- first fail: next-20200331)
 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tre=
-e
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularl=
-y
-> complex conflicts.
->=20
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index 621a36702636..2be5bbae3a40 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -34,6 +34,7 @@
->  #include <asm/kvm_para.h>
->  #include <asm/irq_remapping.h>
->  #include <asm/spec-ctrl.h>
-> +#include <asm/cpu_device_id.h>
-> =20
->  #include <asm/virtext.h>
->  #include "trace.h"
-> @@ -47,7 +48,7 @@ MODULE_LICENSE("GPL");
-> =20
->  #ifdef MODULE
->  static const struct x86_cpu_id svm_cpu_id[] =3D {
-> -	X86_FEATURE_MATCH(X86_FEATURE_SVM),
-> +	X86_MATCH_FEATURE(X86_FEATURE_SVM, NULL),
->  	{}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, svm_cpu_id);
-> @@ -3715,7 +3716,8 @@ static void svm_handle_exit_irqoff(struct kvm_vcp=
-u *vcpu,
->  	enum exit_fastpath_completion *exit_fastpath)
->  {
->  	if (!is_guest_mode(vcpu) &&
-> -		to_svm(vcpu)->vmcb->control.exit_code =3D=3D EXIT_REASON_MSR_WRITE)
-> +	    to_svm(vcpu)->vmcb->control.exit_code =3D=3D SVM_EXIT_MSR &&
-> +	    to_svm(vcpu)->vmcb->control.exit_info_1)
->  		*exit_fastpath =3D handle_fastpath_set_msr_irqoff(vcpu);
->  }
->=20
-> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> index 3ef57dee48cc..0e3fc311d7da 100644
-> --- a/arch/x86/kvm/svm/sev.c
-> +++ b/arch/x86/kvm/svm/sev.c
-> @@ -920,6 +920,9 @@ int svm_mem_enc_op(struct kvm *kvm, void __user *ar=
-gp)
->  	if (!svm_sev_enabled())
->  		return -ENOTTY;
-> =20
-> +	if (!argp)
-> +		return 0;
-> +
->  	if (copy_from_user(&sev_cmd, argp, sizeof(struct kvm_sev_cmd)))
->  		return -EFAULT;
-> =20
-> @@ -1030,14 +1033,6 @@ find_enc_region(struct kvm *kvm, struct kvm_enc_=
-region *range)
->  static void __unregister_enc_region_locked(struct kvm *kvm,
->  					   struct enc_region *region)
->  {
-> -	/*
-> -	 * The guest may change the memory encryption attribute from C=3D0 ->=
- C=3D1
-> -	 * or vice versa for this memory range. Lets make sure caches are
-> -	 * flushed to ensure that guest data gets written into memory with
-> -	 * correct C-bit.
-> -	 */
-> -	sev_clflush_pages(region->pages, region->npages);
-> -
->  	sev_unpin_memory(kvm, region->pages, region->npages);
->  	list_del(&region->list);
->  	kfree(region);
-> @@ -1062,6 +1057,13 @@ int svm_unregister_enc_region(struct kvm *kvm,
->  		goto failed;
->  	}
-> =20
-> +	/*
-> +	 * Ensure that all guest tagged cache entries are flushed before
-> +	 * releasing the pages back to the system for use. CLFLUSH will
-> +	 * not do this, so issue a WBINVD.
-> +	 */
-> +	wbinvd_on_all_cpus();
-> +
->  	__unregister_enc_region_locked(kvm, region);
-> =20
->  	mutex_unlock(&kvm->lock);
-> @@ -1083,6 +1085,13 @@ void sev_vm_destroy(struct kvm *kvm)
-> =20
->  	mutex_lock(&kvm->lock);
-> =20
-> +	/*
-> +	 * Ensure that all guest tagged cache entries are flushed before
-> +	 * releasing the pages back to the system for use. CLFLUSH will
-> +	 * not do this, so issue a WBINVD.
-> +	 */
-> +	wbinvd_on_all_cpus();
-> +
->  	/*
->  	 * if userspace was terminated before unregistering the memory region=
-s
->  	 * then lets unpin all the registered memory.
->=20
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          exynos5800-peach-pi:
+              lab-collabora: failing since 1 day (last pass: next-20200129 =
+- first fail: next-20200331)
 
+    omap2plus_defconfig:
+        gcc-8:
+          omap3-beagle-xm:
+              lab-baylibre: new failure (last pass: next-20200401)
 
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 44 days (last pass: next-20200214=
+ - first fail: next-20200217)
 
---4tmLlM9A6UvIfiuvICLZvZtBPoFLHPGx7--
+arm64:
 
---Y2MKUGxe9yiNE6fExtMIK6kFebhy1L5tT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="signature.asc"
+    defconfig:
+        gcc-8:
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: next-20200401)
 
------BEGIN PGP SIGNATURE-----
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200401)
+          meson-gxm-q200:
+              lab-baylibre: failing since 1 day (last pass: next-20200331 -=
+ first fail: next-20200401)
 
-iQEzBAEBCAAdFiEE8TM4V0tmI4mGbHaCv/vSX3jHroMFAl6FwhsACgkQv/vSX3jH
-roPzhAf9HwI9/dqrFuR/k0dEdYmbqQwkD5sztWEDtP7BgQSQrW+r8gkfMgxcUHtG
-GTWFo6ByUXs17vkhsWE22aidSN/NHIZLl/xU+9vKtI+52qLrJxHHQHKLahkP+ENS
-VnvjQa8JN3U9OIGpMUwzLFKZsVpyrHkVsRflKOFECvhFncugUDW6BSvuPWmZgD37
-/OGvTxjuD1Kkw+yGGHo5wbcAUC15c423yAFelF7fF1QlwWD16sn61XrwqlaMPD5p
-VZSuEkJtt3nEDQ9aNMzChC2Ldb3mrT9yqDsHBfkOHaFt5eoflxMXCrOpqJ2V3RAa
-8tLe9FwGZe+1kUAIP2to1qNswEZHTQ==
-=DWPw
------END PGP SIGNATURE-----
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200401)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: failing since 1 day (last pass: next-20200331 -=
+ first fail: next-20200401)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: next-20200401)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: next-20200401)
 
---Y2MKUGxe9yiNE6fExtMIK6kFebhy1L5tT--
+riscv:
 
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 5 days (last pass: next-2=
+0200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+            exynos5800-peach-pi: 2 failed labs
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+x86_64:
+    x86_64_defconfig+kselftest:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

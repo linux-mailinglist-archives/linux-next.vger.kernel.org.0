@@ -2,75 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id E051819CA04
-	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 21:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ED519CC2D
+	for <lists+linux-next@lfdr.de>; Thu,  2 Apr 2020 22:59:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389665AbgDBTbq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Apr 2020 15:31:46 -0400
-Received: from mga09.intel.com ([134.134.136.24]:55074 "EHLO mga09.intel.com"
+        id S2389021AbgDBU70 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Apr 2020 16:59:26 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:48407 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389108AbgDBTbq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 2 Apr 2020 15:31:46 -0400
-IronPort-SDR: QiGyNbUFGh/kl5UgT6MXL48AH32OQO4b+wdFF1SQuiKXpRPWXpxnZRSX5vZzWUlPvDaGLC7whV
- hqnavcRWXi8Q==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2020 12:31:39 -0700
-IronPort-SDR: e818wdZCBUVsYzp4U6BJ2Qs8+Q43Q9Q/oXz4HQxZxW1jZNUehwjhCwCUuZOXi121xQ+V+8oFYI
- Ksm606buqnuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,336,1580803200"; 
-   d="scan'208";a="240914698"
-Received: from hbriegel-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.39.101])
-  by fmsmga007.fm.intel.com with ESMTP; 02 Apr 2020 12:31:36 -0700
-Date:   Thu, 2 Apr 2020 22:31:34 +0300
-From:   Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>
-To:     Sachin Sant <sachinp@linux.vnet.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.vnet.ibm.com>,
-        linux-integrity@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, linux-next@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au,
-        Stefan Berger <stefanb@linux.ibm.com>
-Subject: Re: [PATCH v2] qtpm2: Export tpm2_get_cc_attrs_tbl for ibmvtpm
- driver as module
-Message-ID: <20200402193134.GC10314@linux.intel.com>
-References: <20200319010017.738677-1-stefanb@linux.vnet.ibm.com>
- <20200319195706.GD24804@linux.intel.com>
- <2BF66599-184A-4647-BC57-105A1512F119@linux.vnet.ibm.com>
+        id S1730837AbgDBU70 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 2 Apr 2020 16:59:26 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48tb632pHjz9sQt;
+        Fri,  3 Apr 2020 07:59:22 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1585861163;
+        bh=A+oR9hYrpAXID36arZmYI+S3QzlBOfIt8pl4DJ3lP4U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SnFcrmj+5pd5Hyt6BS/oNj+TCs0yxTLASySQvrxSnkVoAFpp6cDsZFStHRchslABa
+         POutgJVVkAs0OdDenWV0qV1KfiV3Jkrvn8rwOat0hz0fJuTcfjZ6Nfzvo38CHLom1M
+         enAlcAGI228yRzlzibtjVbmtde6f8h1teAs6Ec3pR2zvfqjHoVZnr9Rxq1h0tZ3oNw
+         0rfZcYVgpJvHVjHP90MbTjUFGbDVAvqlzaGhohJlbPNH33iY1wM0nrcy7Wc8yhEACF
+         40xd9x3iTnmwtAGEVK3FnasJQS0GUm5htIJ1m/okV1GqGY8WMh/AT5zAgj5TzCaXYo
+         SbgM1zYc6frzw==
+Date:   Fri, 3 Apr 2020 07:59:19 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        kbuild test robot <lkp@intel.com>
+Subject: linux-next: Fixes tag needs some work in the net tree
+Message-ID: <20200403075919.7b3cf1f5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2BF66599-184A-4647-BC57-105A1512F119@linux.vnet.ibm.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: multipart/signed; boundary="Sig_/QE6o/a/tjzDPwQm.l780GoM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 01, 2020 at 02:40:30PM +0530, Sachin Sant wrote:
-> 
-> 
-> > On 20-Mar-2020, at 1:27 AM, Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com> wrote:
-> > 
-> > On Wed, Mar 18, 2020 at 09:00:17PM -0400, Stefan Berger wrote:
-> >> From: Stefan Berger <stefanb@linux.ibm.com>
-> >> 
-> >> This patch fixes the following problem when the ibmvtpm driver
-> >> is built as a module:
-> >> 
-> >> ERROR: modpost: "tpm2_get_cc_attrs_tbl" [drivers/char/tpm/tpm_ibmvtpm.ko] undefined!
-> >> make[1]: *** [scripts/Makefile.modpost:94: __modpost] Error 1
-> >> make: *** [Makefile:1298: modules] Error 2
-> >> 
-> >> Fixes: 18b3670d79ae ("tpm: ibmvtpm: Add support for TPM2")
-> >> Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> >> Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-> >> Tested-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-> > 
-> 
-> Ping. This failure can now be seen in mainline (cad18da0af) as well.
+--Sig_/QE6o/a/tjzDPwQm.l780GoM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It is in my tree
+Hi all,
 
-/Jarkko
+n commit
+
+  bf88dc327de8 ("net: dsa: dsa_bridge_mtu_normalization() can be static")
+
+Fixes tag
+
+  Fixes: f41071407c85 ("net: dsa: implement auto-normalization of MTU for b=
+ridge hardware datapath")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: bff33f7e2ae2 ("net: dsa: implement auto-normalization of MTU for bri=
+dge hardware datapath")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/QE6o/a/tjzDPwQm.l780GoM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6GUicACgkQAVBC80lX
+0GwsCQf/Q7YOGrhBDlI/W8UNAc1AwmOx/m/7SyCaD6X31sCd3wcRnSyS1cLAJhGa
+hZX6IQRSurA+uofJsZHMGpKqsbaHxkLdFbOX1k1JkW5CuOaECJY6eV3KQLsmqjet
+ol+aT4JCYzj36qYUB5MA7NZdFR0GLgdgwEVvuY6ILConclGGgyqZyroQcdoSJ9yu
+ucWWq7alm1V0YxuJ96MVONdh8mrGYba0xQVACX5qnF1s0oVisPUVxvHGK0A2Yt3/
+CzcSpbOXqhZkIeWAirGuqpEkJ+eonVhB1IT4BBmr3O4CDhL6ao5ji3B6TFtSUO3b
+3BXkklCMUh87eObTuGoB035+jwx8bA==
+=zimE
+-----END PGP SIGNATURE-----
+
+--Sig_/QE6o/a/tjzDPwQm.l780GoM--

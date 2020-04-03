@@ -2,103 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 145D219E16A
-	for <lists+linux-next@lfdr.de>; Sat,  4 Apr 2020 01:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFAF819E17B
+	for <lists+linux-next@lfdr.de>; Sat,  4 Apr 2020 01:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727924AbgDCX0F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Apr 2020 19:26:05 -0400
-Received: from mail-pj1-f50.google.com ([209.85.216.50]:38902 "EHLO
-        mail-pj1-f50.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726899AbgDCX0E (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Apr 2020 19:26:04 -0400
-Received: by mail-pj1-f50.google.com with SMTP id m15so3702965pje.3
-        for <linux-next@vger.kernel.org>; Fri, 03 Apr 2020 16:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=ewS2Lc380xH84B3Judf+b+VnGBZpV40YOpE3IopvlCI=;
-        b=aLTPuvi1duztNh4deJ5wKahKFc+6uE8xlwkIIMWFsa9Ar70zB5z0EXRLBdCni9OTip
-         pDNm1kYspZ8ljgJLxSUS8qDLzrbr++VDujkP5iuahF0yOnTKvUoGT4vzkqXrbBfpLJqo
-         dhTzXEQq5uldH2A7xbqa3J5L3vdOmloBfql9w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=ewS2Lc380xH84B3Judf+b+VnGBZpV40YOpE3IopvlCI=;
-        b=hOwwnsO0AanGclkZb7ZSth+khTEYx+g1LnpMAk/OkZuKAMq05RA0yDglJxmHXDn5az
-         FKdcFIGjPQI8IHqF2MkJys2J9ewLlrH2jsvRPGZe/cXGVhFFPY/wKbwijEB3q4ER9ByU
-         GMlUYbEgOREZw2kTQvG6pxUvsQrWNHHllDbNu3v6HHjHaEGFJhJiJzrKAOXCF8r7xmXO
-         dVeDYPK8hZzlCAoBZj2o0odJvWDIZl44D9auDzSdLr2slCCz44Pa1X31r4eskrEbiGsX
-         Tghk0JIOD+bZMXf2qX05LcV8IArdDI4SQ1vv/g4XPfH8C6SH5cxPZc8DuzmRDpcEKwmT
-         jQwQ==
-X-Gm-Message-State: AGi0PuZQh0pfRVtVsF4MMpdJ7vtT1l8y0VmdN9I8vmK5P4LadlAA/Bnd
-        oaCfTi7AGJSehTSloUnPgnxwQg==
-X-Google-Smtp-Source: APiQypJbVq51TEnbkO88X7g2UMDjcBZFUrwnDoqHGHCgb5oTZ+dGmojYhw5yn/2mhK7kLy+BsvXO4w==
-X-Received: by 2002:a17:90b:430f:: with SMTP id ih15mr12532178pjb.56.1585956361848;
-        Fri, 03 Apr 2020 16:26:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k6sm6525741pje.8.2020.04.03.16.26.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Apr 2020 16:26:01 -0700 (PDT)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 3 Apr 2020 16:26:00 -0700
-To:     Thomas Hellstrom <thomas_os@shipmail.org>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Roland Scheidegger <sroland@vmware.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Coverity: ttm_bo_vm_insert_huge(): Incorrect expression
-Message-ID: <202004031625.AE91497@keescook>
+        id S1727958AbgDCXb7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Apr 2020 19:31:59 -0400
+Received: from mx2.suse.de ([195.135.220.15]:37844 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726899AbgDCXb7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 3 Apr 2020 19:31:59 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 75F5BADD7;
+        Fri,  3 Apr 2020 23:31:55 +0000 (UTC)
+Message-ID: <cc05ef520927c64614acc54bf27e3df080f1fbbe.camel@suse.de>
+Subject: Re: linux-next: build warnings in Linus' tree
+From:   Nicolas Saenz Julienne <nsaenzjulienne@suse.de>
+To:     Rob Herring <robherring2@gmail.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Date:   Sat, 04 Apr 2020 01:31:53 +0200
+In-Reply-To: <CAL_JsqKd=3zw4uAbDthp-c=_+4XFup0XEdw8nHOmJDzxS2-qSA@mail.gmail.com>
+References: <20200404091916.6f00a24d@canb.auug.org.au>
+         <CAL_JsqKd=3zw4uAbDthp-c=_+4XFup0XEdw8nHOmJDzxS2-qSA@mail.gmail.com>
+Content-Type: multipart/signed; micalg="pgp-sha256";
+        protocol="application/pgp-signature"; boundary="=-7fYq0YQm3itsgYWiCcdC"
+User-Agent: Evolution 3.34.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
 
-This is an experimental automated report about issues detected by Coverity
-from a scan of next-20200403 as part of the linux-next weekly scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+--=-7fYq0YQm3itsgYWiCcdC
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by recent commits:
+Hi Rob, Stephen,
 
-314b6580adc5 ("drm/ttm, drm/vmwgfx: Support huge TTM pagefaults")
+On Fri, 2020-04-03 at 17:16 -0600, Rob Herring wrote:
+> +Nicolas
+>=20
+> On Fri, Apr 3, 2020 at 4:19 PM Stephen Rothwell <sfr@canb.auug.org.au> wr=
+ote:
+> > Hi all,
+> >=20
+> > Today's linux-next build of Linus' tree (arm multi_v7_defconfig) produc=
+ed
+> > these warnings:
+> >=20
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> > arch/arm/boot/dts/bcm2835-rpi.dtsi:18.4-15: Warning (dma_ranges_format)=
+:
+> > /soc/firmware:dma-ranges: empty "dma-ranges" property but its #address-
+cells=20
+> > (2) differs from /soc (1)
+> >=20
+> > I have no idea what caused this :-(
+>=20
+> A dtc update combined with changes that landed in the above file after
+> I tested and fixed the new warnings.
 
-Coverity reported the following:
+Sorry for the warnings. A fix is already making its way into the soc fixes
+tree.
 
-*** CID 1492487:  Incorrect expression  (PW.ASSIGN_WHERE_COMPARE_MEANT)
-/drivers/gpu/drm/ttm/ttm_bo_vm.c: 227 in ttm_bo_vm_insert_huge()
-221     		ret = vmf_insert_pfn_pmd_prot(vmf, pfnt, pgprot, write);
-222     #ifdef CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE_PUD
-223     	else if (fault_page_size == (HPAGE_PUD_SIZE >> PAGE_SHIFT))
-224     		ret = vmf_insert_pfn_pud_prot(vmf, pfnt, pgprot, write);
-225     #endif
-226     	else
-vvv     CID 1492487:  Incorrect expression  (PW.ASSIGN_WHERE_COMPARE_MEANT)
-vvv     use of "=" where "==" may have been intended
-227     		WARN_ON_ONCE(ret = VM_FAULT_FALLBACK);
-228
-229     	if (ret != VM_FAULT_NOPAGE)
-230     		goto out_fallback;
-231
-232     	return VM_FAULT_NOPAGE;
+Here's the commit for reference: https://lkml.org/lkml/2020/3/26/445
 
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1492487 ("Incorrect expression")
-Fixes: 314b6580adc5 ("drm/ttm, drm/vmwgfx: Support huge TTM pagefaults")
+Regards,
+Nicolas
 
 
-Thanks for your attention!
+--=-7fYq0YQm3itsgYWiCcdC
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+Content-Transfer-Encoding: 7bit
 
--- 
-Coverity-bot
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCAAdFiEErOkkGDHCg2EbPcGjlfZmHno8x/4FAl6Hx2kACgkQlfZmHno8
+x/6Jcwf+PvNs2r1TAijp16u3nVqgjgUkTsSV5gvsx+A3Z0rEvNVzBmyMx/xqiNHN
+pfzxLKe6Mypb/lGcJwmoFWkrJCPprifueKh7/WEXYAVyOS2MjV1OO7ehAazIfEyr
+4uvhFeHJyswHcTZlT3gkuMkhMpdifCXN46uXx2p8uAOmvVGhTnRIdEkloz+QPoUJ
+DPKsTHI3UWUSe64iHStxBBpZOfOl/qu+CuwyJYmtFdiMXAdETRFNizxdR5ieytRm
+njmxf77Bsy0CDVXNtZL1xnY3l2GItUCiPgLfWfTSayVsoMjxicOLMw2a6PlBjZHR
+Q/DsxgIISBV7Oo3bmseDqWexnh83VA==
+=u1wn
+-----END PGP SIGNATURE-----
+
+--=-7fYq0YQm3itsgYWiCcdC--
+

@@ -2,148 +2,180 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id EF0A219DC1C
-	for <lists+linux-next@lfdr.de>; Fri,  3 Apr 2020 18:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FCAD19DEEA
+	for <lists+linux-next@lfdr.de>; Fri,  3 Apr 2020 21:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404071AbgDCQwC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Apr 2020 12:52:02 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:43684 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2404636AbgDCQwB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Apr 2020 12:52:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1585932720;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yMmscrcPxrNtAuLRokAXM6YRXQcJoZNIY/bvDej50a4=;
-        b=XkSF5u4yxEUq9IfIqHE4l0Xm0d78gZvwxFpp5IBSN8JreRnSeC+u+XUopGlp7gXlkkDH3z
-        yi+aIsRZnJm09h34KAAD/dRrN5T0Ef6PlJ/ZlCWkUqjzm7lMg6UFAZ9ja+/uPzIgl5AbAf
-        TpJ09imSPcVZ1KZgCqEsABYteJl54Y0=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-93-22eF_FI-NECPEOFPgRuKEw-1; Fri, 03 Apr 2020 12:51:59 -0400
-X-MC-Unique: 22eF_FI-NECPEOFPgRuKEw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id BAABD477;
-        Fri,  3 Apr 2020 16:51:57 +0000 (UTC)
-Received: from eperezma.remote.csb (ovpn-113-28.ams2.redhat.com [10.36.113.28])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 50155A0A7B;
-        Fri,  3 Apr 2020 16:51:55 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     kvm list <kvm@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>
-Subject: [PATCH 8/8] tools/virtio: Use tools/include/list.h instead of stubs
-Date:   Fri,  3 Apr 2020 18:51:19 +0200
-Message-Id: <20200403165119.5030-9-eperezma@redhat.com>
-In-Reply-To: <20200403165119.5030-1-eperezma@redhat.com>
-References: <20200403165119.5030-1-eperezma@redhat.com>
+        id S1727322AbgDCT4H (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Apr 2020 15:56:07 -0400
+Received: from mail-pf1-f172.google.com ([209.85.210.172]:36747 "EHLO
+        mail-pf1-f172.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726460AbgDCT4H (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Apr 2020 15:56:07 -0400
+Received: by mail-pf1-f172.google.com with SMTP id n10so4060781pff.3
+        for <linux-next@vger.kernel.org>; Fri, 03 Apr 2020 12:56:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=jAwVTLLNmA2tXhM7Swt4hZt0ySHk2ZVCDfOhwnJ0PkU=;
+        b=TG/B0LKIDpRjoifAoDfjPQzag+TerK/ZV4+btsmf4xwq5ABztWgXFapxSQkNI7iwKH
+         UPMZJhc+rJJBaBFi3V3I4xQegRQ6zILefNmMYdfek/nqnwLXEGQyBgjTpEvbC3l9JxB/
+         XEDqVTq2TPcngP2QVEEeaj5rUSq7Gp3bJszjBTJTT2vSqJ7si0aNeWSrpExgBbRgxrMa
+         VJTmjUKGPfFN4lVguFVzdoSh9OYhdaivL4rjkuKDoiqojneipHaOO9V/Sid8aJIwNLX9
+         tWQBwcmh7Nq4lUEgVEM53K3X/v6dQjrZw6YDV4ONabDYBOOQxh2+ZSUuRorL03vLV6Cf
+         9qzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=jAwVTLLNmA2tXhM7Swt4hZt0ySHk2ZVCDfOhwnJ0PkU=;
+        b=korScmP7eqQjtb0RVNXP+Gxynt8f04Dn6NBT/WEbSKGr5g47+1E38+gSiHrOGFlNdc
+         bk1shMHR9VnFDxiKupzc//SqwSlKMm8d8SvoE++pvatab6eFMaIEivjnz9dN99qu18y4
+         hiSH2dONhGH7KZ+uzBSV858O8InSOSa1ntnyPgQ4NOqgLA2edgntTuqjKPfC0kIQpG18
+         zoQshS2UetTGZv3C3fAxNDDuffUdwkl593Z0tapTACFGVjCnzE6Lu13+lmIQHkLXBg6K
+         wjdC3O1aV0rWB3E8o4Ylryk3L0O3qJ5KflKLqEv6eZFD8BmxLlS2dm2uFjWQdk+nAD/9
+         A7IQ==
+X-Gm-Message-State: AGi0PuYcOiWsNGECJj/O8u1K3Z7YlZLY0NpCBEMgUEgrfn6zWxQ1wWuT
+        LemYY4+YN0yNGpa/3G7inN0hw5yjd60=
+X-Google-Smtp-Source: APiQypI+Xmw6skjYFCUWQygAmlHUxzhcjA4gWEvRDhXdXikDLKulwGNe2fdFs+ZDPECDNQO5odj6Tg==
+X-Received: by 2002:a63:a601:: with SMTP id t1mr9902296pge.23.1585943765455;
+        Fri, 03 Apr 2020 12:56:05 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id fa16sm6305406pjb.39.2020.04.03.12.56.03
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Apr 2020 12:56:04 -0700 (PDT)
+Message-ID: <5e8794d4.1c69fb81.faf4e.c215@mx.google.com>
+Date:   Fri, 03 Apr 2020 12:56:04 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200403
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 278 boots: 7 failed, 261 passed with 4 offline,
+ 6 untried/unknown (next-20200403)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-It should not make any significant difference but reduce stub code.
+next/master boot: 278 boots: 7 failed, 261 passed with 4 offline, 6 untried=
+/unknown (next-20200403)
 
-Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200403/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200403/
+
+Tree: next
+Branch: master
+Git Describe: next-20200403
+Git Commit: 606b5dac8e15e82e5866fa59e675ca6a6b7276c0
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 101 unique boards, 24 SoC families, 29 builds out of 227
+
+Boot Regressions Detected:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: failing since 13 days (last pass: next-2020031=
+9 - first fail: next-20200320)
+          exynos5800-peach-pi:
+              lab-collabora: failing since 3 days (last pass: next-20200305=
+ - first fail: next-20200331)
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          exynos5800-peach-pi:
+              lab-collabora: failing since 3 days (last pass: next-20200129=
+ - first fail: next-20200331)
+          sun8i-h2-plus-orangepi-r1:
+              lab-baylibre: new failure (last pass: next-20200401)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 45 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200402)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200402)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200402)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 7 days (last pass: next-2=
+0200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            exynos5800-peach-pi: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+            exynos5800-peach-pi: 2 failed labs
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
 ---
- tools/virtio/linux/kernel.h | 7 +------
- tools/virtio/linux/virtio.h | 5 ++---
- tools/virtio/virtio_test.c  | 1 +
- tools/virtio/vringh_test.c  | 2 ++
- 4 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 6683b4a70b05..caab980211a6 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -11,6 +11,7 @@
-=20
- #include <linux/compiler.h>
- #include <linux/types.h>
-+#include <linux/list.h>
- #include <linux/printk.h>
- #include <linux/bug.h>
- #include <errno.h>
-@@ -135,10 +136,4 @@ static inline void free_page(unsigned long addr)
- 	(void) (&_min1 =3D=3D &_min2);		\
- 	_min1 < _min2 ? _min1 : _min2; })
-=20
--/* TODO: empty stubs for now. Broken but enough for virtio_ring.c */
--#define list_add_tail(a, b) do {} while (0)
--#define list_del(a) do {} while (0)
--#define list_for_each_entry(a, b, c) while (0)
--/* end of stubs */
--
- #endif /* KERNEL_H */
-diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
-index b751350d4ce8..5d90254ddae4 100644
---- a/tools/virtio/linux/virtio.h
-+++ b/tools/virtio/linux/virtio.h
-@@ -11,12 +11,11 @@ struct device {
- struct virtio_device {
- 	struct device dev;
- 	u64 features;
-+	struct list_head vqs;
- };
-=20
- struct virtqueue {
--	/* TODO: commented as list macros are empty stubs for now.
--	 * Broken but enough for virtio_ring.c
--	 * struct list_head list; */
-+	struct list_head list;
- 	void (*callback)(struct virtqueue *vq);
- 	const char *name;
- 	struct virtio_device *vdev;
-diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-index 82902fc3ba2a..cb3f29c09aff 100644
---- a/tools/virtio/virtio_test.c
-+++ b/tools/virtio/virtio_test.c
-@@ -129,6 +129,7 @@ static void vdev_info_init(struct vdev_info* dev, uns=
-igned long long features)
- 	int r;
- 	memset(dev, 0, sizeof *dev);
- 	dev->vdev.features =3D features;
-+	INIT_LIST_HEAD(&dev->vdev.vqs);
- 	dev->buf_size =3D 1024;
- 	dev->buf =3D malloc(dev->buf_size);
- 	assert(dev->buf);
-diff --git a/tools/virtio/vringh_test.c b/tools/virtio/vringh_test.c
-index 293653463303..fa87b58bd5fa 100644
---- a/tools/virtio/vringh_test.c
-+++ b/tools/virtio/vringh_test.c
-@@ -307,6 +307,7 @@ static int parallel_test(u64 features,
- 		close(to_host[0]);
-=20
- 		gvdev.vdev.features =3D features;
-+		INIT_LIST_HEAD(&gvdev.vdev.vqs);
- 		gvdev.to_host_fd =3D to_host[1];
- 		gvdev.notifies =3D 0;
-=20
-@@ -453,6 +454,7 @@ int main(int argc, char *argv[])
-=20
- 	getrange =3D getrange_iov;
- 	vdev.features =3D 0;
-+	INIT_LIST_HEAD(&vdev.vqs);
-=20
- 	while (argv[1]) {
- 		if (strcmp(argv[1], "--indirect") =3D=3D 0)
---=20
-2.18.1
-
+For more info write to <info@kernelci.org>

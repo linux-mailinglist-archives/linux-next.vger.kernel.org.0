@@ -2,144 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D3119E828
-	for <lists+linux-next@lfdr.de>; Sun,  5 Apr 2020 03:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777FC19E82C
+	for <lists+linux-next@lfdr.de>; Sun,  5 Apr 2020 03:13:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726352AbgDEBDE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 4 Apr 2020 21:03:04 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:33033 "EHLO ozlabs.org"
+        id S1726352AbgDEBNM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 4 Apr 2020 21:13:12 -0400
+Received: from ozlabs.org ([203.11.71.1]:41101 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726057AbgDEBDE (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 4 Apr 2020 21:03:04 -0400
+        id S1726332AbgDEBNM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 4 Apr 2020 21:13:12 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 48vwQB4jswz9sP7;
-        Sun,  5 Apr 2020 11:02:58 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 48vwdx5YLDz9sRR;
+        Sun,  5 Apr 2020 11:13:09 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1586048580;
-        bh=1blZoo3vVyhmNqddNOFTZ6uyACtlgq/IeEhOrTE/sUc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=sXahE9V7LMQFiVUgz2ZqgK5vEh41rJ+3IMOw6bk7rr9TYxTAUsoAA/h0vIOiKSH+U
-         vvBi7QfCSzWPYWkTd/FKiz+GHke1z/hO+RSOyATnrJSRlFCNLABRGZ4bFBsatcRrZw
-         NYwMylTrS8WVV5UxEsiE3k0xJ5ZiM1G/Vy6WLLiSpXSh7WKTbDAtU1cCcfhOXuumjC
-         ZJG5TAoyQHOQFZ/uRv4NSBcXwDvBBUSNPSQIoCLhu0QT5Mwlb+ETKW2c1vdx/HWWSW
-         Lw2MDYk0fZSFzYDishXeqWxfgoHJHNwmF2xHh5xsDn2SX5LikUgNuIKD8fPNZc0fHv
-         NfcPDkj0hnaMg==
-Date:   Sun, 5 Apr 2020 11:02:51 +1000
+        s=201702; t=1586049190;
+        bh=3YZKWaUv/T/setVmm6Y8aUdwLJnkxxYLCvnrIMKQ2AM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X2xJWeh8/aoEV78VbreQ3J/MOKnM6UX8taUv/OPH75aw6i6wIIxcUExOwutC2nVW/
+         mDNWro5cvQv2FWTYqZLXPJ3BQVGKq3Htcuvba5rfNTMtWGl0QCnEbS39C43Wi1Srbw
+         52IrDIfliUz1pohfkN1vABoF83TV3vvlKbBPIxkPKiNYw60Daq+afp6xou5Sg63dSI
+         2nYg22RS/pPyeJfipiSbyReSoTjMuh0xt0CEe/8CC0yxYEjIfTFm6+qLkKt0etzj8O
+         oaKdow/pG6qtLCol96cfrXjxnD3Atua/BtV8Yb7rukmAR4V6v9yR0Qv2X6n6UIQaKh
+         BO09xv7S4+dkQ==
+Date:   Sun, 5 Apr 2020 11:13:07 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     David Miller <davem@davemloft.net>,
+        "kernelci.org bot" <bot@kernelci.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KP Singh <kpsingh@google.com>
-Subject: Re: linux-next: manual merge of the keys tree with the bpf-next
- tree
-Message-ID: <20200405110251.2a15afe2@canb.auug.org.au>
-In-Reply-To: <20200330130636.0846e394@canb.auug.org.au>
-References: <20200330130636.0846e394@canb.auug.org.au>
+        chenqiwu <chenqiwu@xiaomi.com>
+Subject: linux-next: build failure after merge of the ide tree
+Message-ID: <20200405111307.6d0ac36e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fmd/H82N.UluJmFTwe6HCM/";
+Content-Type: multipart/signed; boundary="Sig_/E6SS.F_Nk+ZIg05FmH33vi8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/fmd/H82N.UluJmFTwe6HCM/
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/E6SS.F_Nk+ZIg05FmH33vi8
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 30 Mar 2020 13:06:36 +1100 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Today's linux-next merge of the keys tree got a conflict in:
->=20
->   include/linux/lsm_hooks.h
->=20
-> between commit:
->=20
->   98e828a0650f ("security: Refactor declaration of LSM hooks")
->=20
-> from the bpf-next tree and commits:
->=20
->   e8fa137bb3cb ("security: Add hooks to rule on setting a watch")
->   858bc27762c1 ("security: Add a hook for the point of notification inser=
-tion")
->=20
-> from the keys tree.
->=20
-> I fixed it up (I used the former version of this file and added the
-> following merge resolution patch) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Mon, 30 Mar 2020 12:55:31 +1100
-> Subject: [PATCH] security: keys: fixup for "security: Refactor declaratio=
-n of
->  LSM hooks"
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  include/linux/lsm_hook_defs.h | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->=20
-> diff --git a/include/linux/lsm_hook_defs.h b/include/linux/lsm_hook_defs.h
-> index 9cd4455528e5..4f8d63fd1327 100644
-> --- a/include/linux/lsm_hook_defs.h
-> +++ b/include/linux/lsm_hook_defs.h
-> @@ -252,6 +252,16 @@ LSM_HOOK(int, 0, inode_notifysecctx, struct inode *i=
-node, void *ctx, u32 ctxlen)
->  LSM_HOOK(int, 0, inode_setsecctx, struct dentry *dentry, void *ctx, u32 =
-ctxlen)
->  LSM_HOOK(int, 0, inode_getsecctx, struct inode *inode, void **ctx,
->  	 u32 *ctxlen)
-> +#ifdef CONFIG_KEY_NOTIFICATIONS
-> +LSM_HOOK(int, 0, watch_key, struct key *key)
-> +#endif
-> +#ifdef CONFIG_DEVICE_NOTIFICATIONS
-> +LSM_HOOK(int, 0, watch_devices, void)
-> +#endif
-> +#ifdef CONFIG_WATCH_QUEUE
-> +LSM_HOOK(int, 0, post_notification, const struct cred *w_cred,
-> +	 const struct cred *cred, struct watch_notification *n)
-> +#endif
-> =20
->  #ifdef CONFIG_SECURITY_NETWORK
->  LSM_HOOK(int, 0, unix_stream_connect, struct sock *sock, struct sock *ot=
-her,
-> --=20
-> 2.25.0
+After merging the ide tree, yesterday's linux-next build (mips
+bigsur_defconfig) failed like this:
 
-This is now a conflict between the keys tree and Linus' tree.
+drivers/ide/ide-scan-pci.c:104:13: error: incompatible type for argument 1 =
+of =E2=80=98list_del=E2=80=99
+
+Caused by commit
+
+  6a0033457f23 ("drivers/ide: convert to list_for_each_entry_safe()")
+
+list_del() takes a "struct list_head *", struct pci_driver::node is a
+"struct list_head" i.e. there is a missing '&'.
+
+Reported by the kernelci.org bot.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/fmd/H82N.UluJmFTwe6HCM/
+--Sig_/E6SS.F_Nk+ZIg05FmH33vi8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6JLjsACgkQAVBC80lX
-0GyWVwgAkcTlPF9X4YXQU9Tf2+Zf/cdI2g0kySmk4IzT6s0bVWBr6pfHEuFWnMRy
-Yi8GZMF+sbbV4Agem5o/KdfzTrjF2xfnC4N/BRxTDwK6IavBBNIxwyQdOpkRcRSS
-b+WdKRnwwfszxWAAZa3oqXCKIdT9OSCjfZyEfTMYnEBS3MFDw/HhgJujHoG+EmVJ
-TF+9i59lT47/AN1Adwcs5Psr/aIxf6V/8+sl47e7TimgUnvch+LrEz53ByFhcMCg
-TYrKdXNjRdfD5F4xRJwQLGDjFJaEQxFchPhB7CD8sVDTSsXPYPQh7lYeC0PRC3iv
-0ouA1ztljHL3YloZ8wDHH9thoW0Fzg==
-=x0hx
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6JMKMACgkQAVBC80lX
+0Gyzwwf/Qg1FXs9DRibhpaSJvInzfnEIV6cN/gvgOEnAko1L0fpM2Yvz+OF35qXV
+Pst3YEKgZGJGOpPxgZY/LYo2/Q0LkHFwaJtYliIMBMRNFDE0+U4yBp5jBANxXhZr
+FLPuPmStEaqkrlAQ1G9JNBDrJEss+M3tp6xJkteNgPYyycFD82hZ38LI0JVWXQm9
+V8LsYxrb1w8yWkFijgYnx0MIWdgT6vfPCDznE5TG82562CkvYkl80wYZ26DdiENq
+Q18W83D/EP4P/Ika2Ot1vHhoF1Jwgow3Y+fayxpMckSBeCNcL0/SLG0aENQbxR54
+HD69fk2oZZY4hB+NbQM3F9771GUuwQ==
+=oEy9
 -----END PGP SIGNATURE-----
 
---Sig_/fmd/H82N.UluJmFTwe6HCM/--
+--Sig_/E6SS.F_Nk+ZIg05FmH33vi8--

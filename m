@@ -2,191 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id BD35419F39A
-	for <lists+linux-next@lfdr.de>; Mon,  6 Apr 2020 12:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63F1F19F3C0
+	for <lists+linux-next@lfdr.de>; Mon,  6 Apr 2020 12:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726934AbgDFKfL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Apr 2020 06:35:11 -0400
-Received: from mail-pl1-f175.google.com ([209.85.214.175]:34868 "EHLO
-        mail-pl1-f175.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726675AbgDFKfL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Apr 2020 06:35:11 -0400
-Received: by mail-pl1-f175.google.com with SMTP id c12so5751332plz.2
-        for <linux-next@vger.kernel.org>; Mon, 06 Apr 2020 03:35:10 -0700 (PDT)
+        id S1727331AbgDFKne (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Apr 2020 06:43:34 -0400
+Received: from mail-lf1-f68.google.com ([209.85.167.68]:38310 "EHLO
+        mail-lf1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727237AbgDFKne (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Apr 2020 06:43:34 -0400
+Received: by mail-lf1-f68.google.com with SMTP id l11so3970614lfc.5
+        for <linux-next@vger.kernel.org>; Mon, 06 Apr 2020 03:43:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=fDlsOKo2HS4YolopRHTCnAFLludI+daFEkBWGz1IIp8=;
-        b=VGE5HBCU6o+AWYxvGQSxZ/K0Ab56AQX1t6i/rt8XTG24sjHEjf1VGQ5rx9EzHX6OyR
-         w+g2/x4pkS9IRkA7zMilCBc6MefPa3qcUmGZbcOhlSuoCIPO3Kc65jRsbjaOg7SJaXkU
-         /yisBvbDNZynMkj8JcW3syer3PxvybrHThBnjJZANyukkH8FsNvR3Ji8HEwSNcz0tjEI
-         dTxBd+OQq3v2gEy0WGNJuESSS0edxDzvppEWw4djBYHSM4V4zEUJuG52aRFEVXw9FmW0
-         SISulNRSgeeNNWgkkc2bZOZsPKntgZKOysX0kVL6mPkwDUbai4SA77g0fuL6HX01I1dV
-         R2Lg==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=KvmRlJZD/otx8so6QDvSPODmkrR200UpnmTufaBUT38=;
+        b=Vr1zqOOW396ZD0mf9Mug4eLYzrEA29MI0brRL948nuMriYg6BZv0Tb5RtVP6HvLQQH
+         n+e/kbCoWSl3s6VqA7yKKJHaSKSKJqip1oXY0eWCGFezbHQijF0Q2SHcBSnkmFgWDywp
+         mljDJtyNhK8MPCl/YbBGGN9I6TayIpHMX1YCwWfvYG0ukJ/QSEL79rwxSPOAPax6PMRn
+         4vW4+hciDTqgLX/xTT9pOaPbnjoSanmMFnvRqIpLb/OUyiBUul53Gr2NXF3faCXkd492
+         UxelXakVnmE/s7zRk4mH7EhS5uXRSH7KMp2DFIXjE9f9xMBzwakQJR0SLqlLX7ithd8M
+         AAfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=fDlsOKo2HS4YolopRHTCnAFLludI+daFEkBWGz1IIp8=;
-        b=cexshR7cqjuVP99e3ddZkcTbgMUpooWS6QUbUaPTM7Ii24gmC+jotOEkBmPzYkga0H
-         1sYOEDuXTbkjYp+RqtdxRGQKprvtl/k9FidybgRgJ2bZDWhlLEr0GRwKferQr6sUCEJG
-         zZsifum+fRU/gP965k4xtOa9wPAsnc9z9Bl2DwEst+tvAYuZfhItWAoLOMglh/83Vut6
-         OXKHXNum+Tk9wDO3wdamQpniT4/ixjZpOM8fa3JO0peGTO65f0sqTvrTF29cxG5gKJnU
-         MlKWL6vL4Jx51ohfJGJvpxhQ+pNy3yN7iR2DcpfoRCAYjQej8OTSlVYCrZl6iVmkXBB5
-         RZXw==
-X-Gm-Message-State: AGi0PubJ7Crl7O+7FYc29z4ss3HGttCOIahaODv97AWitEw2OmJR6frC
-        daLexKGWTBN9bhqcFv5kqVZhGJKNXKk=
-X-Google-Smtp-Source: APiQypKXX2lWdLOz1Wv0kvQ1DhM4luU/ObJaR4N3b5LhTFnCUNrMOjUXIk6zhtjbQRaYqYrBIJDaAw==
-X-Received: by 2002:a17:902:b707:: with SMTP id d7mr9783311pls.297.1586169309272;
-        Mon, 06 Apr 2020 03:35:09 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s9sm11671526pjr.5.2020.04.06.03.35.08
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Apr 2020 03:35:08 -0700 (PDT)
-Message-ID: <5e8b05dc.1c69fb81.fae42.3939@mx.google.com>
-Date:   Mon, 06 Apr 2020 03:35:08 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=KvmRlJZD/otx8so6QDvSPODmkrR200UpnmTufaBUT38=;
+        b=Qy/A7HwUJvsNefUrqf412Uobqh6QM6ex68gRhzbSkmTp1oli07aAYdaIXWf7mI6K+Q
+         JpcU+yTJylU12iDoKjJaoWVFnnrQ+PsPke5mY+Zh3GbqW3gd6stxLtNeo7ukxgSdAaU0
+         UCQbaF3A7ELst49DeUjej2Jg7nzEqrSs5TjFnpqB1Izz7N2rlAgzqJ9YfUEGyjwoKHyy
+         FVHQugUrngZVHTd61TDYDQ8+ulfXF9xtXDep5q+BSKNgc9AHJRT/IrNI1DFuHDXM0/ck
+         tD5cgI9Ybk6nzw62hputmceu6Mjo5U1349j1O+rXOjB/0IV9xUMZgCbawri0BbD2P4qw
+         lqEA==
+X-Gm-Message-State: AGi0PuYT94R4NepLBLqCrM7vdGD35JPDwB4AdfsdJMFxYwmjX+ipI3OE
+        dCeSLpgSPWo1LI5bYBWTYAnAaMMb939KqrTZq1Uq7g==
+X-Google-Smtp-Source: APiQypL+PYJMVdhXWwODi3JLfZmWHtnhhJ1Bmk3hkaHHuLbTYE3Lvtel0nEM+hl0UytOiKrvXfhQVd51dtjxYjf9wL0=
+X-Received: by 2002:ac2:44c6:: with SMTP id d6mr9122969lfm.26.1586169811657;
+ Mon, 06 Apr 2020 03:43:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200406
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 271 boots: 8 failed, 252 passed with 4 offline,
- 7 untried/unknown (next-20200406)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200405234639.AU1f3x3Xg%akpm@linux-foundation.org>
+In-Reply-To: <20200405234639.AU1f3x3Xg%akpm@linux-foundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 6 Apr 2020 16:13:17 +0530
+Message-ID: <CA+G9fYsUsGS6ybozk3A=8aG5VFpF-+DJGNAim4o=Xi9CB43tDA@mail.gmail.com>
+Subject: Re: mmotm 2020-04-05-16-45 uploaded
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-fsdevel@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        mhocko@suse.cz, mm-commits@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 271 boots: 8 failed, 252 passed with 4 offline, 7 untried=
-/unknown (next-20200406)
+On Mon, 6 Apr 2020 at 05:16, <akpm@linux-foundation.org> wrote:
+>
+> The mm-of-the-moment snapshot 2020-04-05-16-45 has been uploaded to
+>
+>    http://www.ozlabs.org/~akpm/mmotm/
+>
+> mmotm-readme.txt says
+>
+> README for mm-of-the-moment:
+>
+> http://www.ozlabs.org/~akpm/mmotm/
+>
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+>
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
+>
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+>
+> This tree is partially included in linux-next.  To see which patches are
+> included in linux-next, consult the `series' file.  Only the patches
+> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> linux-next.
+>
+>
+> A full copy of the full kernel tree with the linux-next and mmotm patches
+> already applied is available through git within an hour of the mmotm
+> release.  Individual mmotm releases are tagged.  The master branch always
+> points to the latest release, so it's constantly rebasing.
+>
+>         https://github.com/hnaz/linux-mm
+>
+> The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+> contains daily snapshots of the -mm tree.  It is updated more frequently
+> than mmotm, and is untested.
+>
+> A git copy of this tree is also available at
+>
+>         https://github.com/hnaz/linux-mm
+>
+>
+>
+> This mmotm tree contains the following patches against 5.6:
+> (patches marked "*" will be included in linux-next)
+>
+>   origin.patch
+<>
+> * mm-hugetlb-optionally-allocate-gigantic-hugepages-using-cma.patch
+> * mm-hugetlb-optionally-allocate-gigantic-hugepages-using-cma-fix.patch
+> * mm-hugetlb-optionally-allocate-gigantic-hugepages-using-cma-fix-2.patch
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200406/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200406/
+While building Linux-next master for arm beagle board x15 the following
+build error was noticed.
 
-Tree: next
-Branch: master
-Git Describe: next-20200406
-Git Commit: b2e2a818a01717ba15c74fd355f76822b81a95f6
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 100 unique boards, 24 SoC families, 29 builds out of 228
+mm/hugetlb.c: In function 'hugetlb_cma_reserve':
+mm/hugetlb.c:5580:3: error: implicit declaration of function
+'for_each_mem_pfn_range'; did you mean 'for_each_mem_range'?
+[-Werror=implicit-function-declaration]
+   for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
+   ^~~~~~~~~~~~~~~~~~~~~~
+   for_each_mem_range
+mm/hugetlb.c:5580:62: error: expected ';' before '{' token
+   for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
+                                                              ^
 
-Boot Regressions Detected:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 16 days (last pass: next-2020031=
-9 - first fail: next-20200320)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 48 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200405)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200405)
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20200405)
-          meson-sm1-khadas-vim3l:
-              lab-baylibre: new failure (last pass: next-20200405)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200405)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: next-20200405)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: failing since 1 day (last pass: next-20200404 -=
- first fail: next-20200405)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200405)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200405)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 9 days (last pass: next-2=
-0200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            meson-gxl-s905d-p230: 1 failed lab
-            meson-sm1-khadas-vim3l: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+-- 
+Linaro LKFT
+https://lkft.linaro.org

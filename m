@@ -2,145 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FC11A135F
-	for <lists+linux-next@lfdr.de>; Tue,  7 Apr 2020 20:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 235DA1A1562
+	for <lists+linux-next@lfdr.de>; Tue,  7 Apr 2020 20:58:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726683AbgDGSOP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Apr 2020 14:14:15 -0400
-Received: from mail-pl1-f194.google.com ([209.85.214.194]:45865 "EHLO
-        mail-pl1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726332AbgDGSOP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Apr 2020 14:14:15 -0400
-Received: by mail-pl1-f194.google.com with SMTP id t4so1523715plq.12
-        for <linux-next@vger.kernel.org>; Tue, 07 Apr 2020 11:14:11 -0700 (PDT)
+        id S1726339AbgDGS6T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Apr 2020 14:58:19 -0400
+Received: from mail-ot1-f68.google.com ([209.85.210.68]:40772 "EHLO
+        mail-ot1-f68.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726332AbgDGS6T (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Apr 2020 14:58:19 -0400
+Received: by mail-ot1-f68.google.com with SMTP id q2so1503045otk.7;
+        Tue, 07 Apr 2020 11:58:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20161025;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=4GrjTb6c6VW31qLmsj2HyZal/skyI74Ce+BNO1NNlMQ=;
-        b=TtPVlvkJ617D2GXk1K/YAv6CLHuwBqieFKRHgC00xRhxVDI7bsLd/Yx30I+f7erpKm
-         H6TPFNTXdTvisXCb1ZARyEtMamlpDdEDTQI9+SLhcWsN6TDQf1Cl2xohlu0omrjKc0Kf
-         ZXG1Pi9rw6oUa0IUixsV/juCRlw7Rh1lQrDWk=
+         :content-disposition:in-reply-to:user-agent;
+        bh=QGY37FNAkjMLaN4OPkvvGVRfJPoF2m0cC0lGKtXcqAo=;
+        b=gr+rckUKI58G49Z44BoYW2p6LI6XQ7dJRWJrQ8Sd55kDDpeLB7+lboJBSJdfZGyJdC
+         wuK5DBxn3IGPtxEzcb8ydKbdLdhed+RrAscug86FQyWxSI97EUlig0rnLh5VqDANRDcN
+         arQxqN+pdjx7imdHu+s+JBYprOyvO0yAc5yu1pm3lixaXVZfAG3lqHuk8AbXtnKh/f8w
+         oxWugx2clNoJn7hvWIfqWRdn73eFz7blMNigUe5FHJYvtghxPJtIN1YAB9HYwSYFo6D8
+         B8O6b3GGlQHMX8omJh8mVtZDY7XoyBKNae4DcMaxcSd2cptIM5/jV/4+lsluvhn2LmcA
+         XAiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=4GrjTb6c6VW31qLmsj2HyZal/skyI74Ce+BNO1NNlMQ=;
-        b=M8T7pQeeUeV5R45XWKvPIxwRrM4heDI3PpUCI24TcVBqWara4Aqw1XDAzDhWoNhizX
-         k01hYJaw9+zOYybnTulcC+58yp76Msz1p5VCf7uF9m7XtFrNDItymxNu/RS654+V2T4D
-         x38HgHpLNhmNAGPwwy3AshTn6RrtRyeje2wYS3m4I5elj81C143NPI3fgf1PtXWq0kqL
-         Bxzps0jO6aY0jtwurtpjyYdpCRHioIJ2EFOAzwu+O96g832Bf2kxt+yG1nn2hvxyIZ+g
-         RwnJkiItweobkLGs+X2gC47AesfwUhDSprjyqA+JQf7XTpwGiCRPckZoC0Cr+wYLEPOr
-         hPWw==
-X-Gm-Message-State: AGi0PuaP28vRe+B4fwNdS/zcXlXJIOMpnGUJgA//GAXwzTEkEaBxhZuZ
-        rGu59SUAVElY7Z6xLU/2zosZQMN49gQ=
-X-Google-Smtp-Source: APiQypKrnztVekaDsMwPPT7kmZsgxTw9Y+bmA9S0ky5xhjxG5VlhyN4zzMYppWJPRdSSsdBUInBnkQ==
-X-Received: by 2002:a17:90a:3ee5:: with SMTP id k92mr621870pjc.184.1586283251202;
-        Tue, 07 Apr 2020 11:14:11 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t85sm13616976pgb.1.2020.04.07.11.14.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Apr 2020 11:14:10 -0700 (PDT)
-Date:   Tue, 7 Apr 2020 11:14:09 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Narasimman, Sathish" <sathish.narasimman@intel.com>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        "Tumkur Narayan, Chethan" <chethan.tumkur.narayan@intel.com>,
-        lkp <lkp@intel.com>, "Bag, Amit K" <amit.k.bag@intel.com>,
-        Hsin-Yu Chao <hychao@chromium.org>,
-        "Hedberg, Johan" <johan.hedberg@intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>
-Subject: Re: Coverity: btusb_work(): Null pointer dereferences
-Message-ID: <202004071113.0643A29@keescook>
-References: <202004060849.823489FC@keescook>
- <DM6PR11MB2715D200FA424448E05B64D494C30@DM6PR11MB2715.namprd11.prod.outlook.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=QGY37FNAkjMLaN4OPkvvGVRfJPoF2m0cC0lGKtXcqAo=;
+        b=CbhVjXc5dgH8Yq4qgVHNsiJ04dORbxi2Pemkvcv6LuDza5QSEs6Il1aW4Fa9qyYabC
+         ekcOMQjeRYO8W3N73mP3OuQCxIY6ybv38lW6N2vrUOZk/5CZmvZ2VBDPAIRZ/067W5h8
+         vPohMI3dTiB2IMeuOGhIny5AIvkeMInfO5Nhc8Nh26+SWaaq6L5zJ8gDZbLyAa/siN3+
+         YmRhyQSlGfZkSw2R5eX5z+v60dDIkAJKR0Fkbw1luXGwlaUli8ymN6nk5toHt6XhdDLb
+         Kh3o6yusU/8Yu7H2WL9cWwzu47n0Tr8nVSL9QjigY7M5MZ4dv4oRstmhdAE3jpwIdK12
+         I2sw==
+X-Gm-Message-State: AGi0PuabdDl4bM/umtfAqoF0L90qAX4cq2yWcLHdUDjlGAbuYb1wEwg3
+        horn532sP04zOSqwUlffItk=
+X-Google-Smtp-Source: APiQypKv050/wlgr0SPQh2dayH2Ig9WLi5w4zCIC06+rIw0jxXUib3/jR4GEycJh4cac4u8oLrmGgQ==
+X-Received: by 2002:a9d:75d0:: with SMTP id c16mr2826857otl.8.1586285897659;
+        Tue, 07 Apr 2020 11:58:17 -0700 (PDT)
+Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::3])
+        by smtp.gmail.com with ESMTPSA id 90sm5534875otc.29.2020.04.07.11.58.17
+        (version=TLS1_2 cipher=ECDHE-RSA-CHACHA20-POLY1305 bits=256/256);
+        Tue, 07 Apr 2020 11:58:17 -0700 (PDT)
+Date:   Tue, 7 Apr 2020 11:58:15 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        clang-built-linux@googlegroups.com
+Subject: Re: linux-next: build failure after merge of the vhost tree
+Message-ID: <20200407185815.GA1805@ubuntu-s3-xlarge-x86>
+References: <20200407130542.0e3b5d9d@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DM6PR11MB2715D200FA424448E05B64D494C30@DM6PR11MB2715.namprd11.prod.outlook.com>
+In-Reply-To: <20200407130542.0e3b5d9d@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 07, 2020 at 10:54:22AM +0000, Narasimman, Sathish wrote:
-> Hi
+On Tue, Apr 07, 2020 at 01:05:42PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> I think this is False Positive.
+> After merging the vhost tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
 > 
-> In the function btusb_probe the memory allocation is happened and verified for NULL.
-> I don't this so checking for NULL evey time is required.
+> drivers/gpu/drm/virtio/virtgpu_kms.c: In function 'virtio_gpu_init':
+> drivers/gpu/drm/virtio/virtgpu_kms.c:153:38: error: 'VIRTIO_RING_F_INDIRECT_DESC' undeclared (first use in this function)
+>   153 |  if (virtio_has_feature(vgdev->vdev, VIRTIO_RING_F_INDIRECT_DESC)) {
+>       |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+> drivers/gpu/drm/virtio/virtgpu_kms.c:153:38: note: each undeclared identifier is reported only once for each function it appears in
 > 
-> Sample code snip
+> Caused by commit
 > 
-> In function "btusb_probe"
-> {
->         data = devm_kzalloc(&intf->dev, sizeof(*data), GFP_KERNEL);
->         if (!data)
->                 return -ENOMEM;
-> ....
->        INIT_WORK(&data->work, btusb_work);
+>   898952f9597e ("virtio: stop using legacy struct vring in kernel")
 > 
-> }
+> interacting with commit
+> 
+>   5edbb5608256 ("drm/virtio: fix ring free check")
+> 
+> from Linus' tree (post v5.6).
+> 
+> I have added the following merge fix patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 7 Apr 2020 12:58:26 +1000
+> Subject: [PATCH] drm/virtio: fix up for include file changes
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/gpu/drm/virtio/virtgpu_kms.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/gpu/drm/virtio/virtgpu_kms.c b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> index 023a030ca7b9..f4ea4cef5e23 100644
+> --- a/drivers/gpu/drm/virtio/virtgpu_kms.c
+> +++ b/drivers/gpu/drm/virtio/virtgpu_kms.c
+> @@ -25,6 +25,7 @@
+>  
+>  #include <linux/virtio.h>
+>  #include <linux/virtio_config.h>
+> +#include <linux/virtio_ring.h>
+>  
+>  #include <drm/drm_file.h>
+>  
+> -- 
+> 2.25.0
+> 
+> I do have to wonder why all this code has been added to the vhost tree
+> during the second week of the merge window (especially when I see it
+> rebased 4 times in one day :-().  Is it really intended for v5.7?
+> -- 
+> Cheers,
+> Stephen Rothwell
 
-This warning is talking about data->isoc, which is checked for NULL in
-other places before the call to btusb_find_altsetting(), which doesn't
-check for NULL.
+Linaro's CI also reports an issue with this patch with the remoteproc
+drivers that were freshly merged in Linus' tree for 5.7-rc1 (seen with a
+simple arm allyesconfig build):
 
--Kees
+drivers/rpmsg/mtk_rpmsg.c:68:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:93:9: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:170:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:204:9: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:223:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:259:9: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:376:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:387:15: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
+drivers/rpmsg/mtk_rpmsg.c:409:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+drivers/remoteproc/stm32_rproc.c:152:14: error: implicit declaration of function 'kcalloc' [-Werror,-Wimplicit-function-declaration]
+drivers/remoteproc/stm32_rproc.c:179:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
 
-> 
-> 
-> Regards
-> Sathish N
-> 
-> -----Original Message-----
-> From: coverity-bot <keescook@chromium.org> 
-> Sent: Monday, April 6, 2020 9:20 PM
-> To: Narasimman, Sathish <sathish.narasimman@intel.com>
-> Cc: Marcel Holtmann <marcel@holtmann.org>; Tumkur Narayan, Chethan <chethan.tumkur.narayan@intel.com>; lkp <lkp@intel.com>; Bag, Amit K <amit.k.bag@intel.com>; Hsin-Yu Chao <hychao@chromium.org>; Hedberg, Johan <johan.hedberg@intel.com>; Gustavo A. R. Silva <gustavo@embeddedor.com>; linux-next@vger.kernel.org
-> Subject: Coverity: btusb_work(): Null pointer dereferences
-> 
-> Hello!
-> 
-> This is an experimental automated report about issues detected by Coverity from a scan of next-20200406 as part of the linux-next weekly scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified lines of code (noted below) that were touched by recent commits:
-> 
-> baac6276c0a9 ("Bluetooth: btusb: handle mSBC audio over USB Endpoints")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1492498:  Null pointer dereferences  (FORWARD_NULL)
-> /drivers/bluetooth/btusb.c: 1665 in btusb_work()
-> 1659     			}
-> 1660     		} else if (data->air_mode == HCI_NOTIFY_ENABLE_SCO_TRANSP) {
-> 1661
-> 1662     			data->usb_alt6_packet_flow = true;
-> 1663
-> 1664     			/* Check if Alt 6 is supported for Transparent audio */
-> vvv     CID 1492498:  Null pointer dereferences  (FORWARD_NULL)
-> vvv     Passing "data" to "btusb_find_altsetting", which dereferences null "data->isoc".
-> 1665     			if (btusb_find_altsetting(data, 6))
-> 1666     				new_alts = 6;
-> 1667     			else
-> 1668     				bt_dev_err(hdev, "Device does not support ALT setting 6");
-> 1669     		}
-> 1670
-> 
-> If this is a false positive, please let us know so we can mark it as such, or teach the Coverity rules to be smarter. If not, please make sure fixes get into linux-next. :) For patches fixing this, please include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1492498 ("Null pointer dereferences")
-> Fixes: baac6276c0a9 ("Bluetooth: btusb: handle mSBC audio over USB Endpoints")
-> 
-> 
-> Thanks for your attention!
-> 
-> --
-> Coverity-bot
+It seems like this series shouldn't be in -next until after 5.7-rc1 (or
+rebased on Linus' tree if it is intended for the merge window).
 
--- 
-Kees Cook
+Cheers,
+Nathan

@@ -2,60 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [209.132.180.67])
-	by mail.lfdr.de (Postfix) with ESMTP id 155A81A4F35
-	for <lists+linux-next@lfdr.de>; Sat, 11 Apr 2020 11:53:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA9C1A4F86
+	for <lists+linux-next@lfdr.de>; Sat, 11 Apr 2020 13:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726083AbgDKJxu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 11 Apr 2020 05:53:50 -0400
-Received: from mail-pj1-f48.google.com ([209.85.216.48]:39542 "EHLO
-        mail-pj1-f48.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725953AbgDKJxt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Apr 2020 05:53:49 -0400
-Received: by mail-pj1-f48.google.com with SMTP id o1so818289pjs.4
-        for <linux-next@vger.kernel.org>; Sat, 11 Apr 2020 02:53:48 -0700 (PDT)
+        id S1726069AbgDKLQs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Apr 2020 07:16:48 -0400
+Received: from mail-pf1-f176.google.com ([209.85.210.176]:33448 "EHLO
+        mail-pf1-f176.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726054AbgDKLQs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Apr 2020 07:16:48 -0400
+Received: by mail-pf1-f176.google.com with SMTP id c138so2216326pfc.0
+        for <linux-next@vger.kernel.org>; Sat, 11 Apr 2020 04:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernelci-org.20150623.gappssmtp.com; s=20150623;
         h=message-id:date:mime-version:content-transfer-encoding:subject:to
          :from;
-        bh=gx5dgr4z/8IiW6hsu5kKGP+e1yL8kKLRht5ICz12F8w=;
-        b=Oqrq5Uy3lltEyYD3gF2ZvCmLDbuPbnjlO5A6KvztQ2h6CpfzCz5AORKuRDjhLsVSNl
-         y590XXu3xpi2g+KB4VMN4JcX75dqOBu5aERSBkJewJQFi6xNH61eCgtN7CHk2Wrnm4Jl
-         mlDDmBp08FCwpwPBi3fhepMPt5V8s1w+nhxpve8gKKxZCQYYmgMRjTcvGVHTBJBQBkQi
-         IHLgMdTSRmdZB3mCjILKnwAJe5ayCu43UlTQ04zA+6QoiWSVDwC6EkPwNiM9TQEsIQMf
-         +epjSsYjrPG6pX1z6wFIIA6PwOx9rRA/cXbvRXSWksNTEgGzRCi/jCld09QsFUJCA1FU
-         BZpA==
+        bh=/EebWpNMQ0yc34+DzLKo0s1vA0LUj+dGeBC9tD7zQ0A=;
+        b=CPX++w51SZWjcihbOHpqMBDVqbsEC2bMFv6am/4qVXyXYi0d/rFccsmItjWZ7v7TqW
+         UGe4Dc8iuu1hI0syoYMppEB4QY0HfcnPcauNQXIPQCeqTUvuUzM+Na4Ss5xuTeFOhHml
+         m8AImFse4/hLjnloZN687osmhiF0N4cEgWe+7LqxmzY74gL2I+SQre74uV3aa9J+iC+i
+         fupbhpbTcM7/azH4yKQd9JXbNpSGtlFJ5DjToF4KQ+CtF30Lb4faOIL2Slhdex24l2dy
+         a36EQpCn1QNQjcM22cprrG/Jfv3xmH7z3yj3pO0PluxlMFfJ6IUG+vj9mwmMDkG94U0E
+         /CMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:message-id:date:mime-version
          :content-transfer-encoding:subject:to:from;
-        bh=gx5dgr4z/8IiW6hsu5kKGP+e1yL8kKLRht5ICz12F8w=;
-        b=A2rpPtPliKhCMHiUgu7vVqcDZB09OR0BvbFY+Eq3j4U35jFeYqIU+0RmiCzoBfdmRC
-         nsKrc+0z/Nr5jyDiBnqWynilSkIBQHwthiUWOhn+ZuQHgQZizrtWB+zQfbJzUxrj5H8o
-         LRW7uUc69nF21vF42Mw7VB9A0bzxaOF9XnHN3wF9aF1GNLogcIkhpZba+IYg4xoMxXtm
-         54Uq+8EOzy/VVDpzmXwgTrWIZ7BV8AfcizxrnCB6ZOeqZc3NsT+4r8pbk3wWMh30xoVW
-         g6+E23yQNVtoXNfG1CclSW6WJgbLbcRfuzdyelVvp5uP8sbIHLVc3dcZxuavCPOqmojD
-         TOeg==
-X-Gm-Message-State: AGi0PubNctVhdeSRU0QelcWxVQXE4M2JY79LL8ZdPLu7Urhb0ZfOT5hb
-        jAQ4fro0q0dMm/1g3BMTwC1Q4BcV418=
-X-Google-Smtp-Source: APiQypKZYmnlHgUobqCKgs5SsVLzoIWOfYHjpmSupL+7m74aDqrDuX5xM7SgzK/ncsglSppBW8GO/A==
-X-Received: by 2002:a17:90b:46c9:: with SMTP id jx9mr10604295pjb.2.1586598827179;
-        Sat, 11 Apr 2020 02:53:47 -0700 (PDT)
+        bh=/EebWpNMQ0yc34+DzLKo0s1vA0LUj+dGeBC9tD7zQ0A=;
+        b=Uj+cTgjUuSCBkLaSvZbyMDtBL1QVT3b9YN787tIKuh4RTYR6fy3YVpUtdhGYKRoshX
+         Ho9VrDJuFxZcl5Hrn0NJk8Huha1JtD+MXwMt/VZJ4LRQivnCtpdOyQPWkDjXtaopIktP
+         8g5hvuGZqu9BsOf74v99dgDCl9DvD1FOMoee4cNK0VAQPPKluPKewOd6qrtp0Z7pavqN
+         eJuF8I1JS7slk4XotKBqTYa0NU6rxfCGLybCYRqvxp2/YEDXFiGLPNUSn9x7Mb+7/LOE
+         NSrydbB578pxXuiQV92ePc5Uil+XR1x3+sf+70v4dRGGyT08mc52gPH5l9xH1G9rW0iG
+         4dqg==
+X-Gm-Message-State: AGi0Pub08UShlJFa7Vh8ZRQrSsai1Li+1FRIYHdZWSe5rRkClmCBiCoc
+        u+Jx9AGEX6rcqbBm4Mmk+rDya7BaggA=
+X-Google-Smtp-Source: APiQypIIw4qemTrH8K5pysTxDeNE2NnRMF55MzS+uMhB+lZlNhthG8WnUnFoFaYF0PQK5zRokoeSzA==
+X-Received: by 2002:a62:4dc3:: with SMTP id a186mr9645795pfb.40.1586603807597;
+        Sat, 11 Apr 2020 04:16:47 -0700 (PDT)
 Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 11sm3730865pfz.91.2020.04.11.02.53.46
+        by smtp.gmail.com with ESMTPSA id r24sm289428pfh.1.2020.04.11.04.16.46
         for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Apr 2020 02:53:46 -0700 (PDT)
-Message-ID: <5e9193aa.1c69fb81.646ec.c91d@mx.google.com>
-Date:   Sat, 11 Apr 2020 02:53:46 -0700 (PDT)
+        Sat, 11 Apr 2020 04:16:46 -0700 (PDT)
+Message-ID: <5e91a71e.1c69fb81.e39b5.0de6@mx.google.com>
+Date:   Sat, 11 Apr 2020 04:16:46 -0700 (PDT)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.6-12726-gcb0447b07277
+X-Kernelci-Kernel: next-20200411
 X-Kernelci-Report-Type: boot
 X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 216 boots: 5 failed,
- 199 passed with 8 offline, 4 untried/unknown (v5.6-12726-gcb0447b07277)
+X-Kernelci-Branch: master
+Subject: next/master boot: 273 boots: 6 failed, 253 passed with 7 offline,
+ 7 untried/unknown (next-20200411)
 To:     linux-next@vger.kernel.org
 From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
@@ -63,80 +63,85 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 216 boots: 5 failed, 199 passed with 8 offline, 4 =
-untried/unknown (v5.6-12726-gcb0447b07277)
+next/master boot: 273 boots: 6 failed, 253 passed with 7 offline, 7 untried=
+/unknown (next-20200411)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.6-12726-gcb0447b07277/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.6-12726-gcb0447b07277/
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200411/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200411/
 
 Tree: next
-Branch: pending-fixes
-Git Describe: v5.6-12726-gcb0447b07277
-Git Commit: cb0447b07277fe25e112206486da92f8d999acd8
+Branch: master
+Git Describe: next-20200411
+Git Commit: 11ecafc691e130cff72cc793ee085f5e4a6e127e
 Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 92 unique boards, 22 SoC families, 29 builds out of 217
+Tested: 101 unique boards, 24 SoC families, 29 builds out of 228
 
 Boot Regressions Detected:
 
 arm:
 
-    davinci_all_defconfig:
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
         gcc-8:
-          da850-evm:
-              lab-baylibre-seattle: new failure (last pass: v5.6-12503-g3a0=
-f8793ae13)
-          dm365evm,legacy:
-              lab-baylibre-seattle: new failure (last pass: v5.6-12503-g3a0=
-f8793ae13)
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: next-20200410)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 53 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200410)
 
 arm64:
 
     defconfig:
         gcc-8:
           meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-12503-g3a0=
-f8793ae13)
+              lab-baylibre-seattle: new failure (last pass: next-20200410)
           meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.6-12503-g3a0f8793ae1=
-3)
+              lab-baylibre: new failure (last pass: next-20200410)
           meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: v5.6-12503-g3a0f8793ae1=
-3)
+              lab-baylibre: failing since 1 day (last pass: next-20200409 -=
+ first fail: next-20200410)
 
     defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
         gcc-8:
           meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-12503-g3a0=
-f8793ae13)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.6-12503-g3a0f8793ae1=
-3)
+              lab-baylibre-seattle: new failure (last pass: next-20200410)
+          meson-sm1-khadas-vim3l:
+              lab-baylibre: new failure (last pass: next-20200410)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: next-20200410)
 
     defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
         gcc-8:
           meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.6-12503-g3a0=
-f8793ae13)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.6-12503-g3a0f8793ae1=
-3)
+              lab-baylibre-seattle: new failure (last pass: next-20200410)
 
 riscv:
 
     defconfig:
         gcc-8:
           sifive_fu540:
-              lab-baylibre-seattle: failing since 1 day (last pass: v5.6-12=
-182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
+              lab-baylibre-seattle: failing since 14 days (last pass: next-=
+20200326 - first fail: next-20200327)
 
 Boot Failures Detected:
 
 arm:
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
     multi_v7_defconfig:
         gcc-8:
-            stih410-b2120: 1 failed lab
+            bcm2836-rpi-2-b: 1 failed lab
 
     sama5_defconfig:
         gcc-8:
@@ -145,11 +150,11 @@ arm:
 arm64:
     defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
         gcc-8:
-            meson-gxbb-p200: 1 failed lab
+            meson-sm1-khadas-vim3l: 1 failed lab
 
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+    defconfig:
         gcc-8:
-            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s905d-p230: 1 failed lab
 
 riscv:
     defconfig:
@@ -160,15 +165,11 @@ Offline Platforms:
 
 arm:
 
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-            dm365evm,legacy: 1 offline lab
-
     multi_v7_defconfig:
         gcc-8
             exynos5800-peach-pi: 1 offline lab
             qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
 
     exynos_defconfig:
         gcc-8

@@ -2,166 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EFA61A6480
-	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 11:14:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 587AC1A6585
+	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 13:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727798AbgDMJOp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Apr 2020 05:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58280 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727879AbgDMJOn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Apr 2020 05:14:43 -0400
-X-Greylist: delayed 449 seconds by postgrey-1.27 at vger.kernel.org; Mon, 13 Apr 2020 05:14:43 EDT
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1076C008769
-        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 02:07:12 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id o1so2733719pjs.4
-        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 02:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=nLK6rQKnsYFgZHhqs3Dbe55s4KvmuXEbU2L4dtz+kYU=;
-        b=FFE7Xm2NKygDuQy+wFZcLHmkcw40sxIpphMCSksZYkud9HZFWYrWpkns5S1GHnbONV
-         bxnV9zE30FmqoROU3vHNVFRl2tb6xLWsz5EBGfHyPdlK2/bPr8ojZNTzBe2mHWavK8b9
-         YivRe8ZfycajFQAxIyiiZXbXnIX3wGgeuoY9DF7csuYW1M3+fhR3GhZZco2O+dkokJ61
-         IoB8vgMBFVhN0F3RybU7WRaPYBtvVq4TI+S7WfnRbtM+FIetnar0IJkrdJNqfbyHLWmj
-         vNPeH/zd39WhdUUm15SZIh42ay6lAyBjvFAFb+HiZEYCyjE2pl0bHxHFot8pp9Mj88tn
-         SIsw==
+        id S1728349AbgDMLNe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Apr 2020 07:13:34 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:22917 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1728128AbgDMLNd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Apr 2020 07:13:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1586776411;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RyXK4jTSyCrBgQI/g3NhhWf4Cadu8DGaHr+KG4J9oBY=;
+        b=hgHaYEtUl9ptOKad4D14mcsmxP7Oz4omdWPBR1ieb/dc+kyhnwlgEpGJRRat+sFtblposo
+        6btaospBujDDTFk5BIGfYjN8o+PWvr/7eau2eKv4yLqvXKq+8slOEcD0X5JT4/Dyrs1hP8
+        LVuuw+SONqNp7aj5J+vEK0ikggFb5Ks=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-437-94wG7ymvNIeC8SsuEAUXEg-1; Mon, 13 Apr 2020 07:13:28 -0400
+X-MC-Unique: 94wG7ymvNIeC8SsuEAUXEg-1
+Received: by mail-wr1-f70.google.com with SMTP id d4so6540975wrq.10
+        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 04:13:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=nLK6rQKnsYFgZHhqs3Dbe55s4KvmuXEbU2L4dtz+kYU=;
-        b=pTlY4qYYJGZaj+gYDR2Yf81kqw2YwNOnZHLAn0TG2PEvuL/OcR0U6eGJu3Mwo+7wwI
-         ugH4GANSUSDbklgR0fFDApNnLo/2Ce7zQSxDmM4xoh3fGNqLSNClvu8938mrsURK3E3Z
-         qvlHZogqvfPDToN8Qjq+j+cWADtJof6DEaZtQIVJl3+6sYOQsHYi0cGocV9MJSFUsR+0
-         qeUIfmkErORH26U80VblqeVaorJJdoJKpqQzhfXr7EmrgqARtXChZaKnPAk9xmAu1hRA
-         Iv5OVh19BV+GprxH222O4UGzJ2+ghXaWKFlW8dqdj4jaz+jeaOXr9DzGgYeEojB/SnNx
-         0q4w==
-X-Gm-Message-State: AGi0PuZ+Kooa2E1ADgNdScoAv8dXhXRBqyFsj5Ck4Gtk8DAqtLuee66s
-        qLrYWXwOUol5ybVjGXknp5R/GcSHvew=
-X-Google-Smtp-Source: APiQypKIZFCMDWY65nyUlaLRUbm0QyghwPZPF/1PbcgAH9lZplog+0svD+kn/L39VbNl2RPZ5orIsg==
-X-Received: by 2002:a17:90a:ca8c:: with SMTP id y12mr2639960pjt.195.1586768832119;
-        Mon, 13 Apr 2020 02:07:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ep21sm6461326pjb.24.2020.04.13.02.07.10
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=RyXK4jTSyCrBgQI/g3NhhWf4Cadu8DGaHr+KG4J9oBY=;
+        b=rihguxquD3C5g9B/B0QoRBjeTUmgFY9L77do+UlKIvQpbxBgVJ374EX1z/Q9HwyCt+
+         4vURAZn9HmiTZtrUFDLFXeFjVgfMZ+arUThzSLmpbtu12hgBadxWRDFDcfDAlbVYQhf9
+         0IGA2VhjeG7RD//wcJjZfoQANftAVWjl+xTlgc3KoqNhrMxXSMHmQOP+5TY9BWVuRLlW
+         X6R9pgWxat9PDAnJ/XrkmbJ7MD1FMyN/o4E+CGChrVC4q4SdsmrEu4LtKjG8Pme73N8U
+         yVY3SA+eY+WsOPSC+d086ojBBB19OZJfOQMR+WgiQwZeTKYSmQDn95ndboAfXz2zGmUF
+         ryYw==
+X-Gm-Message-State: AGi0PuYfw16nUMWCz7xVnyb8bdZDuLB2j/IjHnfJtGeucsTJFOjOYKHF
+        OqGINIoVIPNrFN2twCneE+EGTh8sQYuohrx7sA2ZQuphiRylrVCNRojdoDRhR1kFyTIhm+Ae6Ae
+        2GErtw3dTxp9EHYikIYzO4g==
+X-Received: by 2002:a5d:4442:: with SMTP id x2mr181622wrr.101.1586776407144;
+        Mon, 13 Apr 2020 04:13:27 -0700 (PDT)
+X-Google-Smtp-Source: APiQypJm7VAiU/q6lVzMdgLKKb2HWEjxDtZshQBgoe1KapbTIJWgwwS+QMx+dIDjpKr+0KXFEhxl+g==
+X-Received: by 2002:a5d:4442:: with SMTP id x2mr181605wrr.101.1586776406923;
+        Mon, 13 Apr 2020 04:13:26 -0700 (PDT)
+Received: from redhat.com ([185.107.45.41])
+        by smtp.gmail.com with ESMTPSA id b82sm15257603wme.25.2020.04.13.04.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 02:07:11 -0700 (PDT)
-Message-ID: <5e942bbf.1c69fb81.3da92.53b0@mx.google.com>
-Date:   Mon, 13 Apr 2020 02:07:11 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Apr 2020 04:13:26 -0700 (PDT)
+Date:   Mon, 13 Apr 2020 07:13:23 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Christian Borntraeger <borntraeger@de.ibm.com>
+Subject: Re: [PATCH 0/8] tools/vhost: Reset virtqueue on tests
+Message-ID: <20200413071044-mutt-send-email-mst@kernel.org>
+References: <20200403165119.5030-1-eperezma@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200413
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 272 boots: 6 failed, 257 passed with 4 offline,
- 5 untried/unknown (next-20200413)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20200403165119.5030-1-eperezma@redhat.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 272 boots: 6 failed, 257 passed with 4 offline, 5 untried=
-/unknown (next-20200413)
+On Fri, Apr 03, 2020 at 06:51:11PM +0200, Eugenio Pérez wrote:
+> This series add the tests used to validate the "vhost: Reset batched
+> descriptors on SET_VRING_BASE call" series, with a small change on the
+> reset code (delete an extra unneded reset on VHOST_SET_VRING_BASE).
+> 
+> They are based on the tests sent back them, the ones that were not
+> included (reasons in that thread). This series changes:
+> 
+> * Delete need to export the ugly function in virtio_ring, now all the
+> code is added in tools/virtio (except the one line fix).
+> * Add forgotten uses of vhost_vq_set_backend. Fix bad usage order in
+> vhost_test_set_backend.
+> * Drop random reset, not really needed.
+> * Minor changes updating tests code.
+> 
+> This serie is meant to be applied on top of
+> 5de4e0b7068337cf0d4ca48a4011746410115aae in
+> git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200413/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200413/
+Is this still needed? The patches lack Signed-off-by and
+commit log descriptions, reference commit Ids without subject.
+See Documentation/process/submitting-patches.rst
 
-Tree: next
-Branch: master
-Git Describe: next-20200413
-Git Commit: 3b2804993d1e9f2b01f4264993009d3e48722e0d
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 101 unique boards, 23 SoC families, 29 builds out of 228
+> Eugenio Pérez (8):
+>   tools/virtio: fix virtio_test.c indentation
+>   vhost: Not cleaning batched descs in VHOST_SET_VRING_BASE ioctl
+>   vhost: Replace vq->private_data access by backend accesors
+>   vhost: Fix bad order in vhost_test_set_backend at enable
+>   tools/virtio: Use __vring_new_virtqueue in virtio_test.c
+>   tools/virtio: Extract virtqueue initialization in vq_reset
+>   tools/virtio: Reset index in virtio_test --reset.
+>   tools/virtio: Use tools/include/list.h instead of stubs
+> 
+>  drivers/vhost/test.c        |  8 ++---
+>  drivers/vhost/vhost.c       |  1 -
+>  tools/virtio/linux/kernel.h |  7 +----
+>  tools/virtio/linux/virtio.h |  5 ++--
+>  tools/virtio/virtio_test.c  | 58 +++++++++++++++++++++++++++----------
+>  tools/virtio/vringh_test.c  |  2 ++
+>  6 files changed, 51 insertions(+), 30 deletions(-)
+> 
+> -- 
+> 2.18.1
 
-Boot Regressions Detected:
-
-arm:
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 55 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: next-20200412)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200412)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: next-20200412)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 16 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-            sun50i-a64-pine64-plus: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>

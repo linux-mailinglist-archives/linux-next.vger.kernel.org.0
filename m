@@ -2,58 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E751B1A69AD
-	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 18:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723741A69B6
+	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 18:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731427AbgDMQRx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Apr 2020 12:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38674 "EHLO
+        id S1731453AbgDMQTd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Apr 2020 12:19:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1731412AbgDMQRx (ORCPT
+        by vger.kernel.org with ESMTP id S1731429AbgDMQTc (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Apr 2020 12:17:53 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01141C0A3BDC
-        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 09:17:53 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id g2so3553371plo.3
-        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 09:17:52 -0700 (PDT)
+        Mon, 13 Apr 2020 12:19:32 -0400
+Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21F0C0A3BDC
+        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 09:19:30 -0700 (PDT)
+Received: by mail-pl1-x644.google.com with SMTP id z6so3539883plk.10
+        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 09:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=dZodWSADsD4+02W+uu26+GNwxjaMGZ2eoCvWU9+ybRQ=;
-        b=R+wl3a7IBhDa16N/zyXoQhOyiRo+axUJdCoy1fTU7XASodjFV0VB36KUDbXKE7NhNf
-         cvfqxcR0arixdWwxPCyy/NzwyvyPjry0FVCyTgEnndaPkf1N3EPU4Uv3zsRZ0Vz3M8ra
-         RzwZe/XeXEfxCaRtvVcbHJ3PW5x2GkDySKiwM=
+        bh=ZdouRLJ/FBr+/igs8CbEqlJ9kza6nnPJy2ipegTDjpY=;
+        b=cOjNniMEukIJSgumc6hLTT+DcJEkb2PYCf/+9dUiF4FSazDU/8tExzsa8vos8/sMI8
+         LliiP92WBtsDmDqvmYNGde5Id6c7JY7+Ygpk5lcVfU3U2ck9UpMKDe/lfRJ1aUuYdGsA
+         duWQU2oihifBqYcN6XGtgHqi9iATvoqsvNuok=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=dZodWSADsD4+02W+uu26+GNwxjaMGZ2eoCvWU9+ybRQ=;
-        b=KwkbJCqzCU4TkW9Uak3gvd9+dMCbyep9aE1FWFsPVlOBLyyfl0TZrD856aqmGLppJA
-         e/PJ3315yAayl/RzXX6yt8iHtn0AjpdDoBmvJfCTzX2TA0VWTHE9JzAA4ltVU5v+Wol/
-         tv4niDo+uAJe/cK+Oq5tgW/0+fW86LZtmL6IBswXlpChktFBospEJzqlctckdp5WE0GI
-         5+tcU/9HvyAkh+M3qJrJecG2o9rQkDz20sLjOd2ie/tv3dTiSePqFh7qqLNoFjJ/GoWh
-         TgLg4vxLPpG9XdjC1b+a2kublog0ssENUj9CMb0+NSRYWmVKhl7kbpbvVNVPjUPtHc05
-         DBWw==
-X-Gm-Message-State: AGi0Puav91n/YfcIMkLWGRmxbBMCUxXqYdJbYgoVvI06sSY0xr/5OHNh
-        Qaj+0GqRYCHlGFXHAjx2EdjGtA==
-X-Google-Smtp-Source: APiQypLsFO5YaDx0UfCNqNhFT3hgPVeQlhcrrYvegdBuiP5TOgelY9ej91SoKDRWuuXVwFJOZsQClA==
-X-Received: by 2002:a17:902:968a:: with SMTP id n10mr16961262plp.96.1586794672507;
-        Mon, 13 Apr 2020 09:17:52 -0700 (PDT)
+        bh=ZdouRLJ/FBr+/igs8CbEqlJ9kza6nnPJy2ipegTDjpY=;
+        b=duNfadzvlpiASBSCwUvqoRxsKWw7f1FMvyatZV+DWVaFrs8m4TopCkO5Ptdp/3Ex3D
+         +BINv3pgerFhZeAgh+Y8Pob1UaqmDeAoDuHAQ1S52i3LRZipeECefWMzKE3PEtVgczEY
+         v6qz4Qn7mWGQODLVcWt70SOpCc9eCUHh9JoHClQYy92H961ro4iB3ar6mTZisOWaSI8F
+         uSjMzu8VFeWqydg1hYFukONccHS229rpVSUJ1bkcUdF+KA5eXx5msEDljN7gavdUozHl
+         muz/AhGsrJPoPMS+sCL3s0OJOuGGHIrybrBWioiH3BoSR9yBcAyel/VSOzVODq8ykVRu
+         dBDw==
+X-Gm-Message-State: AGi0Pua2zv7teG7RlKI1NNtM2ie10SYpOBa0dBHkmOh4xkzudV6wQdf9
+        8b94WpBZ20ZK/cjNSnYFHGpBxg==
+X-Google-Smtp-Source: APiQypIgtWY4OzjordAUyaxuG5QrVVP07eRg8Kkh+lz8+Sw2aCPb57BQfkOa5aBiabQPYpD5S0KZSA==
+X-Received: by 2002:a17:902:b185:: with SMTP id s5mr11554389plr.99.1586794770531;
+        Mon, 13 Apr 2020 09:19:30 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id x7sm6866090pjg.26.2020.04.13.09.17.51
+        by smtp.gmail.com with ESMTPSA id n21sm8558879pgf.36.2020.04.13.09.19.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Apr 2020 09:17:51 -0700 (PDT)
+        Mon, 13 Apr 2020 09:19:29 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Mon, 13 Apr 2020 09:17:50 -0700
-To:     Ondrej Mosnacek <omosnace@redhat.com>
-Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
-        Paul Moore <paul@paul-moore.com>,
+Date:   Mon, 13 Apr 2020 09:19:28 -0700
+To:     Tiwei Bie <tiwei.bie@intel.com>
+Cc:     "Michael S. Tsirkin" <mst@redhat.com>,
+        Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: filename_trans_read_one(): Resource leaks
-Message-ID: <202004130917.435ED43FDB@keescook>
+Subject: Coverity: vhost_vdpa_open(): Control flow issues
+Message-ID: <202004130919.C9D96730@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -71,27 +72,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Tue Feb 18 12:27:34 2020 +0100
-    c3a276111ea2 ("selinux: optimize storage of filename transitions")
+  Thu Mar 26 22:01:23 2020 +0800
+    4c8cf31885f6 ("vhost: introduce vDPA-based backend")
 
 Coverity reported the following:
 
-*** CID 1461665:  Resource leaks  (RESOURCE_LEAK)
-/security/selinux/ss/policydb.c: 1862 in filename_trans_read_one()
-1856     		return rc;
-1857     	len = le32_to_cpu(buf[0]);
-1858
-1859     	/* path component string */
-1860     	rc = str_read(&name, GFP_KERNEL, fp, len);
-1861     	if (rc)
-vvv     CID 1461665:  Resource leaks  (RESOURCE_LEAK)
-vvv     Variable "name" going out of scope leaks the storage it points to.
-1862     		return rc;
-1863
-1864     	rc = next_entry(buf, fp, sizeof(u32) * 4);
-1865     	if (rc)
-1866     		goto out;
-1867
+*** CID 1461662:  Control flow issues  (DEADCODE)
+/drivers/vhost/vdpa.c: 682 in vhost_vdpa_open()
+676     	struct vhost_dev *dev;
+677     	struct vhost_virtqueue **vqs;
+678     	int nvqs, i, r, opened;
+679
+680     	v = container_of(inode->i_cdev, struct vhost_vdpa, cdev);
+681     	if (!v)
+vvv     CID 1461662:  Control flow issues  (DEADCODE)
+vvv     Execution cannot reach this statement: "return -19;".
+682     		return -ENODEV;
+683
+684     	opened = atomic_cmpxchg(&v->opened, 0, 1);
+685     	if (opened)
+686     		return -EBUSY;
+687
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -99,8 +100,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1461665 ("Resource leaks")
-Fixes: c3a276111ea2 ("selinux: optimize storage of filename transitions")
+Addresses-Coverity-ID: 1461662 ("Control flow issues")
+Fixes: 4c8cf31885f6 ("vhost: introduce vDPA-based backend")
 
 Thanks for your attention!
 

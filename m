@@ -2,126 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1BB1A6BA3
-	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 19:48:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE021A6D2C
+	for <lists+linux-next@lfdr.de>; Mon, 13 Apr 2020 22:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387437AbgDMRsj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Apr 2020 13:48:39 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:58087 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2387424AbgDMRsi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 13 Apr 2020 13:48:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1586800117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vWUTPbYWAoEUYC4XEPobf5xrH8FY2tB9rfmUCEXZteg=;
-        b=gA8oAYbCjZmdRXWDhgIyQzuHpzw9GzzsOgXR4NgEZivvhKgdWYfy99I/BZBsP5xXzruzhM
-        lzVmadhdGkVSYvzJBapgGfDhVuzq5w9dCsNGmtZEUZaTh/XqpTcIWV5Uso4wX9Ycp2nfqi
-        5KfLID92UCV+EOU1N2UK+kQ3S/QVw8Y=
-Received: from mail-ot1-f71.google.com (mail-ot1-f71.google.com
- [209.85.210.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-120-faAAmAjbNwKOBgtRK0t6Qw-1; Mon, 13 Apr 2020 13:48:32 -0400
-X-MC-Unique: faAAmAjbNwKOBgtRK0t6Qw-1
-Received: by mail-ot1-f71.google.com with SMTP id l16so8461892otj.0
-        for <linux-next@vger.kernel.org>; Mon, 13 Apr 2020 10:48:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=vWUTPbYWAoEUYC4XEPobf5xrH8FY2tB9rfmUCEXZteg=;
-        b=aZsymWzXj6hg/VJesFpT6YryDigVk863kGeZ/yrrVcBEZcDtV5KiEH0FwPOQcSgWNL
-         Y4mBfYNUIbw/ZyGYIeqOPF0DUJdToFETCIPjHf6d8XJNW7LGAxYani+d8n3JKtDgByCY
-         0tFmODvzg7B9xp5NAYBEJRhujxQPu825nMHKThtAHMlPyLXws0o40TUvlnDD5og77do5
-         TrXhVhbx9Hzj5P/UuD3Lc7zuzDYRdgb3ywvqNbhPl7OykhyZi51AKn21L5dYIlwaWU7N
-         zj5ps/K3Cg+98wSRb/JwX0gjhec9shDMeQiI+eSZkV0dGVIn2u3fJic/4vXUPAdMYguD
-         TyYg==
-X-Gm-Message-State: AGi0PubDiZPhjN4u3ZB8aIbRTrHh3jhjSi/SaaKLjudh8BlHp8rip+1P
-        WGlSQVgRiTXORolgrnf40pkLW16bGeaVkqNf/CO43u+62UMZGyNUIDtccStGCdz7Gj+z1peV2GX
-        NgsmWW7JVXm30aRWYEtzM3HQc9y1FKsYNKzT+6w==
-X-Received: by 2002:aca:b104:: with SMTP id a4mr10354669oif.103.1586800111266;
-        Mon, 13 Apr 2020 10:48:31 -0700 (PDT)
-X-Google-Smtp-Source: APiQypKpkjPEgWlIr/mM6dltj0iYO34p6ugR7Fh9HIZMa0sINTs+ZysmbG4I/d5ro8ngkSRJtm5bNkxnSVKDwGREY50=
-X-Received: by 2002:aca:b104:: with SMTP id a4mr10354663oif.103.1586800111015;
- Mon, 13 Apr 2020 10:48:31 -0700 (PDT)
+        id S2388323AbgDMUW3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Apr 2020 16:22:29 -0400
+Received: from mga06.intel.com ([134.134.136.31]:21847 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2388320AbgDMUW1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Apr 2020 16:22:27 -0400
+IronPort-SDR: FTOVhg26y2bKm0U7AV1hCSnQMOTVdJQ+FzMRJ4QbRO+K6n2tUid4oD3dtt8bnHiR16XkdCUpCc
+ hU5W6hWGft4g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2020 13:22:26 -0700
+IronPort-SDR: a8905DpdxxNiTAFLW7BYsAerQEfhR/gmPJhLPiKIslZa9ItIxKX3MJQ56ely1Dkyh/fIiBO07w
+ /OnVHI7DD4aA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,380,1580803200"; 
+   d="scan'208";a="256284586"
+Received: from bewang-mobl1.amr.corp.intel.com (HELO [10.254.69.99]) ([10.254.69.99])
+  by orsmga006.jf.intel.com with ESMTP; 13 Apr 2020 13:22:24 -0700
+Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
+ pages
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-next@vger.kernel.org, akpm@linux-foundation.org,
+        jack@suse.cz, kirill@shutemov.name
+Cc:     borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
+        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+ <20200306132537.783769-3-imbrenda@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <11dc928d-60b4-f04f-1ebf-f4cffb337a6c@intel.com>
+Date:   Mon, 13 Apr 2020 13:22:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-References: <202004130917.435ED43FDB@keescook>
-In-Reply-To: <202004130917.435ED43FDB@keescook>
-From:   Ondrej Mosnacek <omosnace@redhat.com>
-Date:   Mon, 13 Apr 2020 19:48:19 +0200
-Message-ID: <CAFqZXNtJsrSN22=NtQksOsacC=SkwKB9SLxH4NX-NMa9MUK+Jg@mail.gmail.com>
-Subject: Re: Coverity: filename_trans_read_one(): Resource leaks
-To:     coverity-bot <keescook@chromium.org>
-Cc:     Stephen Smalley <sds@tycho.nsa.gov>,
-        Paul Moore <paul@paul-moore.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org, SElinux list <selinux@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20200306132537.783769-3-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Apr 13, 2020 at 6:18 PM coverity-bot <keescook@chromium.org> wrote:
-> Hello!
->
-> This is an experimental automated report about issues detected by Coverity
-> from a scan of next-20200413 as part of the linux-next weekly scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->   Tue Feb 18 12:27:34 2020 +0100
->     c3a276111ea2 ("selinux: optimize storage of filename transitions")
->
-> Coverity reported the following:
->
-> *** CID 1461665:  Resource leaks  (RESOURCE_LEAK)
-> /security/selinux/ss/policydb.c: 1862 in filename_trans_read_one()
-> 1856                    return rc;
-> 1857            len = le32_to_cpu(buf[0]);
-> 1858
-> 1859            /* path component string */
-> 1860            rc = str_read(&name, GFP_KERNEL, fp, len);
-> 1861            if (rc)
-> vvv     CID 1461665:  Resource leaks  (RESOURCE_LEAK)
-> vvv     Variable "name" going out of scope leaks the storage it points to.
-> 1862                    return rc;
-> 1863
-> 1864            rc = next_entry(buf, fp, sizeof(u32) * 4);
-> 1865            if (rc)
-> 1866                    goto out;
-> 1867
+On 3/6/20 5:25 AM, Claudio Imbrenda wrote:
+> On s390x the function is not supposed to fail, so it is ok to use a
+> WARN_ON on failure. If we ever need some more finegrained handling
+> we can tackle this when we know the details.
 
-Right, I missed the fact that str_read() may give us back an allocated
-pointer even if it returns an error. I'll send a fix probably
-tomorrow. And I plan to have a look at refactoring the function so it
-cleans up upon error on its own (+ updating the caller accordingly).
-Its current interface just begs for trouble...
+Could you explain a bit why the function can't fail?
 
-Thank you for running the bot, Kees! It's cool :)
+If the guest has secret data in the page, then it *can* and does fail.
+It won't fail, though, if the host and guest agree on whether the page
+is protected.
 
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
->
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1461665 ("Resource leaks")
-> Fixes: c3a276111ea2 ("selinux: optimize storage of filename transitions")
->
-> Thanks for your attention!
->
-> --
-> Coverity-bot
->
+Right?
 
--- 
-Ondrej Mosnacek <omosnace at redhat dot com>
-Software Engineer, Security Technologies
-Red Hat, Inc.
+> @@ -2807,6 +2807,13 @@ int __test_set_page_writeback(struct page *page, bool keep_write)
+>  		inc_zone_page_state(page, NR_ZONE_WRITE_PENDING);
+>  	}
+>  	unlock_page_memcg(page);
+> +	access_ret = arch_make_page_accessible(page);
+> +	/*
+> +	 * If writeback has been triggered on a page that cannot be made
+> +	 * accessible, it is too late to recover here.
+> +	 */
+> +	VM_BUG_ON_PAGE(access_ret != 0, page);
+> +
+>  	return ret;
+>  
+>  }
 
+This seems like a really odd place to do this.  Writeback is specific to
+block I/O.  I would have thought there were other kinds of devices that
+matter, not just block devices.
+
+Also, this patch seems odd that it only does the
+arch_make_page_accessible() half.  Where's the other half where the page
+is made inaccessible?
+
+I assume it's OK to "leak" things like this, it's just not clear to me
+_why_ it's OK.

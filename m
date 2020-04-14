@@ -2,158 +2,203 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 59ADB1A85D1
-	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 18:53:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A01B1A8A36
+	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 20:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440527AbgDNQtz convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 14 Apr 2020 12:49:55 -0400
-Received: from mout.kundenserver.de ([212.227.126.135]:56361 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2501951AbgDNQtu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Apr 2020 12:49:50 -0400
-Received: from [192.168.1.183] ([37.4.249.171]) by mrelayeu.kundenserver.de
- (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
- 1MAOeB-1jZdAL1lEJ-00Bw1n; Tue, 14 Apr 2020 18:49:34 +0200
-Subject: Re: Coverity: mmal_setup_video_component(): Code maintainability
- issues
-To:     coverity-bot <keescook@chromium.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>
-Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-References: <202004140833.632892C8@keescook>
-From:   Stefan Wahren <stefan.wahren@i2se.com>
+        id S2504455AbgDNSuX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 14:50:23 -0400
+Received: from mga11.intel.com ([192.55.52.93]:42105 "EHLO mga11.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2504444AbgDNSuS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Apr 2020 14:50:18 -0400
+IronPort-SDR: 2LeQPx0Bn2/i+aG1bcwR0YCd1gKDDv5kUxUrzuSWakOWFiZNQaC/nzZ3OMI60oXaZhoLTW6SBZ
+ 8YZ8GtYlR56Q==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2020 11:50:16 -0700
+IronPort-SDR: PYQVkEfUchPkWpqwZZkb8t+LOcsZAU10TZeysUlOS43ZhWgPDhIyuDrzchhwDThEWAdpdMQHIS
+ NqLZPEZps9jg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,383,1580803200"; 
+   d="scan'208";a="256606792"
+Received: from nkadakia-mobl1.amr.corp.intel.com (HELO [10.251.28.160]) ([10.251.28.160])
+  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2020 11:50:16 -0700
+Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
+ pages
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-next@vger.kernel.org, akpm@linux-foundation.org,
+        jack@suse.cz, kirill@shutemov.name, borntraeger@de.ibm.com,
+        david@redhat.com, aarcange@redhat.com, linux-mm@kvack.org,
+        frankja@linux.ibm.com, sfr@canb.auug.org.au, jhubbard@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+ <20200306132537.783769-3-imbrenda@linux.ibm.com>
+ <11dc928d-60b4-f04f-1ebf-f4cffb337a6c@intel.com>
+ <20200414180300.52640444@p-imbrenda>
+From:   Dave Hansen <dave.hansen@intel.com>
 Openpgp: preference=signencrypt
-Autocrypt: addr=stefan.wahren@i2se.com; keydata=
- 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 AQ==
-Message-ID: <dad3abd9-c890-eb7b-efa5-f662b096f78e@i2se.com>
-Date:   Tue, 14 Apr 2020 18:49:33 +0200
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <93dc9885-adb4-8b9d-a62a-e40301053551@intel.com>
+Date:   Tue, 14 Apr 2020 11:50:16 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-In-Reply-To: <202004140833.632892C8@keescook>
+In-Reply-To: <20200414180300.52640444@p-imbrenda>
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8BIT
 Content-Language: en-US
-X-Provags-ID: V03:K1:0R6cj7E77qaLq3IS89zuWUpF+BMG+rH2swtRXyYfhgEaOPBqEk4
- NDt91UO0D9+p3hUEZqcUdo1vFIdYnOIFK3p2IGXuoo+ftAlffmapM63q0D/eV6qz4Cmj4Xd
- 8gFHVyIdHUorbQy9mZjWiSDmQCCa4Xw5MnHJ3oT7m7ke/0ExRZmU4bF4JV8asFE+YJm3Mp8
- Bvg8uzuNPu7itPUvnJ/Pg==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ysgSiAHHfAQ=:lZ/miOxQ7OBS0vo50SZOhp
- IR2Srir6xCIQ5yCXIaSnnDCGqLgec8mL8GuLDWLtms9aFRD7gTyBPtwJxP1zAI14Iu6UCMW6m
- sJEZcOULKtqkcrQKK/aRSKObB5vo4y4720eTl29okUqvnq5XDktVI9FdIhvr/NvBVcRidWYbw
- nnQk1gUE+yWpPsOcnPNq2ieFkk1vS3RNTw+4aa9ilMx4fv9x9tVTvYizCwzz5SW2N+vx+qWLD
- ScWVqVs+Qmljva0KS98FRbtM2fnyu+a8tII5lEjJRjuzEzJMyVxOlz5k/+bnhvSuE0UTtjntd
- emWpyuMV/H47G/M/XUsYBLmev9EF52Lg8rW4xbIN3RBY3RKWtkRXTfdQshSd45KIy4APki3oi
- 89hZVX9VmKXrVaEtWwBvl38Qaa5+dsvEnW+S8DsUVd0OKWUeTWFRNdOS1mNX7rFNn18ZNfDvF
- B6dtmqMktb1y4/b/p78l6EhaEkjNelJryU+0YMautok9//6lFJEbp8/vr2FXqiTo2TsdhiUBl
- eUtjtxCttq8TUPKob0luUvhallYrKY4kiq7B1j6ALDic83srHQfIdMdeT6UX6+6Keh/VtmF2T
- nKBJyEZxaUutEpwAZP80i9/jZaVwxeQqEgQDyL86netl0KaSfc/XeC6CgPSNyXIi+blGLe9ec
- HCV6NykmXmaVy8/kyaxfAeRwjdrnKw+9XVAewKkmrmL69R4hfFl5+4UTYfMDWfOGPUMzm+j/i
- HFnxJg4cDecrneEFJYrfw/Q7gt25oj3rby4lRi3BPWghKEFiVvQj5U+97VRfzxcpLe742NlBz
- 7FDJMCahcID8/RyoAONxOnbQhe+PgZeKAHJCzZPSpquYeHyhMgSzr+8tAd1rTBj0rS+xNxB
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi,
+On 4/14/20 9:03 AM, Claudio Imbrenda wrote:
+> On Mon, 13 Apr 2020 13:22:24 -0700
+> Dave Hansen <dave.hansen@intel.com> wrote:
+> 
+>> On 3/6/20 5:25 AM, Claudio Imbrenda wrote:
+>>> On s390x the function is not supposed to fail, so it is ok to use a
+>>> WARN_ON on failure. If we ever need some more finegrained handling
+>>> we can tackle this when we know the details.  
+>>
+>> Could you explain a bit why the function can't fail?
+> 
+> the concept of "making accessible" is only to make sure that accessing
+> the page will not trigger faults or I/O or DMA errors. in general it
+> does not mean freely accessing the content of the page in cleartext. 
+> 
+> on s390x, protected guest pages can be shared. the guest has to
+> actively share its pages, and in that case those pages are both part of
+> the protected VM and freely accessible by the host.
 
-Am 14.04.20 um 17:33 schrieb coverity-bot:
-> Hello!
->
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20200414 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
->
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
->
->   Sun Mar 29 14:44:58 2020 +0200
->     1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
->
-> Coverity reported the following:
->
-> *** CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
-> /drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c: 1014 in mmal_setup_video_component()
-> 1008     	if (overlay_enabled) {
-> 1009     		/* Need to disable the overlay before we can update
-> 1010     		 * the resolution
-> 1011     		 */
-> 1012     		ret = vchiq_mmal_port_disable(dev->instance, preview_port);
-> 1013     		if (!ret) {
-> vvv     CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
-> vvv     Assigning value from "vchiq_mmal_port_connect_tunnel(dev->instance, preview_port, NULL)" to "ret" here, but that stored value is overwritten before it can be used.
-> 1014     			ret = vchiq_mmal_port_connect_tunnel(dev->instance,
-> 1015     							     preview_port,
-> 1016     							     NULL);
-> 1017     		}
-> 1018     	}
-> 1019     	preview_port->es.video.width = f->fmt.pix.width;
->
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
+Oh, that's interesting.
 
-thanks for the report. The finding is correct, but the issue already
-exists before. The intention of my patch was to increase readibility,
-not to change the behavior.
+It sounds like there are three separate concepts:
+1. Protection
+2. Sharing
+3. Accessibility
 
-My problem is that i'm not aware how to handle the error case here.
+Protected pages may be shared and the request of the guest.
+Shared pages' plaintext can be accessed by the host.  For unshared
+pages, the host can only see ciphertext.
 
-@Dave Should we bail out or ignore the error?
+I wonder if Documentation/virt/kvm/s390-pv.rst can be beefed up with
+some of this information.  It seems a bit sparse on this topic.
 
-Best regards
-Stefan
+As it stands, if I were modifying generic code, I don't think I'd have
+even a chance of getting an arch_make_page_accessible() in the right spot.
 
->
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1492591 ("Code maintainability issues")
-> Fixes: 1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
->
-> Thanks for your attention!
->
+> in our case "making the page accessible" means:
+...
+>  - if the page was not shared, first encrypt it and then make it
+>    accessible to the host (both operations performed securely and
+>    atomically by the hardware)
 
+What happens to the guest's view of the page when this happens?  Does it
+keep seeing plaintext?
+
+> then the page can be swapped out, or used for direct I/O (obviously if
+> you do I/O on a page that was not shared, you cannot expect good
+> things to happen, since you basically corrupt the memory of the guest).
+
+So why even allow access to the encrypted contents if the host can't do
+anything useful with it?  Is there some reason for going to the trouble
+of encrypting it and exposing it to the host?
+
+> on s390x performing I/O directly on protected pages results in (in
+> practice) unrecoverable I/O errors, so we want to avoid it at all costs.
+
+This is understandable, but we usually steer I/O operations in places
+like the DMA API, not in the core VM.
+
+We *have* the concept of pages to which I/O can't be done.  There are
+plenty of crippled devices where we have to bounce data into a low
+buffer before it can go where we really want it to.  I think the AMD SEV
+patches do this, for instance.
+
+> accessing protected pages from the CPU triggers an exception that can
+> be handled (and we do handle it, in fact)
+> 
+> now imagine a buggy or malicious qemu process crashing the whole machine
+> just because it did I/O to/from a protected page. we clearly don't want
+> that.
+
+Is DMA disallowed to *all* protected pages?  Even pages which the guest
+has explicitly shared with the host?
+
+
+>>> @@ -2807,6 +2807,13 @@ int __test_set_page_writeback(struct page
+>>> *page, bool keep_write) inc_zone_page_state(page,
+>>> NR_ZONE_WRITE_PENDING); }
+>>>  	unlock_page_memcg(page);
+>>> +	access_ret = arch_make_page_accessible(page);
+>>> +	/*
+>>> +	 * If writeback has been triggered on a page that cannot
+>>> be made
+>>> +	 * accessible, it is too late to recover here.
+>>> +	 */
+>>> +	VM_BUG_ON_PAGE(access_ret != 0, page);
+>>> +
+>>>  	return ret;
+>>>  
+>>>  }  
+>>
+>> This seems like a really odd place to do this.  Writeback is specific
+>> to block I/O.  I would have thought there were other kinds of devices
+>> that matter, not just block devices.
+> 
+> well, yes and no. for writeback (block I/O and swap) this is the right
+> place. at this point we know that the page is present and nobody else
+> has started doing I/O yet, and I/O will happen soon-ish. so we make the
+> page accessible. there is no turning back here, unlike pinning. we
+> are not allowed to fail, we can't 
+
+This description sounds really incomplete to me.
+
+Not all swap involved device I/O.  For instance, zswap doesn't involve
+any devices.  Would zswap need this hook?

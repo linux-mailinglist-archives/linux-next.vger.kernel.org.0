@@ -2,103 +2,195 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F30A61A76F8
-	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 11:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385461A7721
+	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 11:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2437384AbgDNJHp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 05:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44918 "EHLO
+        id S2437498AbgDNJPS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 05:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2437383AbgDNJHo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Apr 2020 05:07:44 -0400
-X-Greylist: delayed 1495 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Apr 2020 02:07:44 PDT
-Received: from Galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25118C0A3BD0;
-        Tue, 14 Apr 2020 02:07:44 -0700 (PDT)
-Received: from p5de0bf0b.dip0.t-ipconnect.de ([93.224.191.11] helo=nanos.tec.linutronix.de)
-        by Galois.linutronix.de with esmtpsa (TLS1.2:DHE_RSA_AES_256_CBC_SHA256:256)
-        (Exim 4.80)
-        (envelope-from <tglx@linutronix.de>)
-        id 1jOHXP-00079g-G2; Tue, 14 Apr 2020 11:07:23 +0200
-Received: by nanos.tec.linutronix.de (Postfix, from userid 1000)
-        id D11CB100D14; Tue, 14 Apr 2020 11:07:22 +0200 (CEST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org
-Subject: ARM: futex: Address build warning
-In-Reply-To: <20200413100112.2e114e24@canb.auug.org.au>
-References: <20200330134746.627dcd93@canb.auug.org.au> <20200401085753.617c1636@canb.auug.org.au> <877dyzv6y2.fsf@nanos.tec.linutronix.de> <20200402090051.741905cd@canb.auug.org.au> <874ku2q18k.fsf@nanos.tec.linutronix.de> <20200413100112.2e114e24@canb.auug.org.au>
-Date:   Tue, 14 Apr 2020 11:07:22 +0200
-Message-ID: <87pncao2ph.fsf@nanos.tec.linutronix.de>
+        with ESMTP id S2437356AbgDNJPQ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Apr 2020 05:15:16 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261EEC0A3BD0
+        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 02:15:16 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id l1so5782555pff.10
+        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 02:15:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=3w7gSDDpCygGQsuxnFbSnGN/vGYV7pxbPEmtddZP0/k=;
+        b=aoLnmxqBF7FOJgXYsc1A28iLYANq1+UbHVpBT77yyEBRcFi91banW3o1+a37R+QsQz
+         gUyzczYrTlvyRa+f20TSY8/FXURb/WYzEZyPm5pCTDqoK1izTA0Z8/7KkS0MOAOTrtd7
+         00G6hByxZAfQoBTNMbpgWf6i9S4Y0OHvpCGPkQiGkmVNdvFIBZzjv6CTk/gj46zb/Bf6
+         rZIOjeo4M5ghRJo2hZYhlouh5hkUzwrlJaM0ZBx0mOH9ANiSGUARuL9SL0wHbogSCcmx
+         1wBsbIi3LqSd/MyfwClja06pL1J0qG67lZLKR/XKZ7cotAzjNUePuzZfhhHFtxTI3KY2
+         fJkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=3w7gSDDpCygGQsuxnFbSnGN/vGYV7pxbPEmtddZP0/k=;
+        b=bTysw33vi3x/MyoPHLHzRSM/4EV1Q/yIKuzu5WPZk381+VxL213m/uuq3yNsF5xU8L
+         lENV1MrogCEsoapz2RQs0TBuLaLGHxLALD6+ymNOFmq2W8BnPVhjOIjDrFny7mGxmUex
+         /3Hy1iqcvznq/p5ecUPxmwuwnha8MU/3++aQe/Y5QAeAdoz3VX9XdQTQGe8Fk4/89c9R
+         8XbE/6hP67D6/LSIEvifWs+lCx6PTrGnKKi0RC63S1gmK8/ULVSkwqSQFGDxpfy+Vmfj
+         +Ltz3ec+xKvtwUYsI2Mc3r2aH+yBxgl/Z77D5j8MbId/elrCuOahaGIatULRfE57hRCF
+         SuNw==
+X-Gm-Message-State: AGi0PubGag/SoVJpuC1L95/jqJR8fLH38ruzTEnoDpcyosa9u2RpX6+A
+        T3De0eYfOQLxoITAgp9kdAYskETndlk=
+X-Google-Smtp-Source: APiQypItWi47h/N+YV7K2nu17zzMWdQjFJaZPtbfKTYS+dcJT/X1mRypsW9u/FpapZUcTBK+dnqr8w==
+X-Received: by 2002:a62:5341:: with SMTP id h62mr21540749pfb.183.1586855714242;
+        Tue, 14 Apr 2020 02:15:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id p65sm5936056pgp.51.2020.04.14.02.15.13
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Apr 2020 02:15:13 -0700 (PDT)
+Message-ID: <5e957f21.1c69fb81.b7a21.2a49@mx.google.com>
+Date:   Tue, 14 Apr 2020 02:15:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Linutronix-Spam-Score: -1.0
-X-Linutronix-Spam-Level: -
-X-Linutronix-Spam-Status: No , -1.0 points, 5.0 required,  ALL_TRUSTED=-1,SHORTCIRCUIT=-0.0001
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200414
+X-Kernelci-Report-Type: boot
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master boot: 280 boots: 6 failed, 260 passed with 9 offline,
+ 5 untried/unknown (next-20200414)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen reported the following build warning on a ARM multi_v7_defconfig
-build with GCC 9.2.1:
+next/master boot: 280 boots: 6 failed, 260 passed with 9 offline, 5 untried=
+/unknown (next-20200414)
 
-kernel/futex.c: In function 'do_futex':
-kernel/futex.c:1676:17: warning: 'oldval' may be used uninitialized in this function [-Wmaybe-uninitialized]
- 1676 |   return oldval == cmparg;
-      |          ~~~~~~~^~~~~~~~~
-kernel/futex.c:1652:6: note: 'oldval' was declared here
- 1652 |  int oldval, ret;
-      |      ^~~~~~
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200414/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200414/
 
-introduced by commit a08971e9488d ("futex: arch_futex_atomic_op_inuser()
-calling conventions change").
+Tree: next
+Branch: master
+Git Describe: next-20200414
+Git Commit: f19bb13a0eaf0034a603e3b54a7c3a50faf6821e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 107 unique boards, 23 SoC families, 29 builds out of 228
 
-While that change should not make any difference it confuses GCC which
-fails to work out that oldval is not referenced when the return value is
-not zero.
+Boot Regressions Detected:
 
-GCC fails to properly analyze arch_futex_atomic_op_inuser(). It's not the
-early return, the issue is with the assembly macros. GCC fails to detect
-that those either set 'ret' to 0 and set oldval or set 'ret' to -EFAULT
-which makes oldval uninteresting. The store to the callsite supplied oldval
-pointer is conditional on ret == 0.
+arm:
 
-The straight forward way to solve this is to make the store unconditional.
+    davinci_all_defconfig:
+        gcc-8:
+          da850-evm:
+              lab-baylibre-seattle: new failure (last pass: next-20200413)
+          dm365evm,legacy:
+              lab-baylibre-seattle: new failure (last pass: next-20200413)
 
-Aside of addressing the build warning this makes sense anyway because it
-removes the conditional from the fastpath. In the error case the stored
-value is uninteresting and the extra store does not matter at all.
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: next-20200413)
 
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/874ku2q18k.fsf@nanos.tec.linutronix.de
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 56 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+arm64:
+
+    defconfig:
+        clang-9:
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: next-20200412)
+          sdm845-mtp:
+              lab-bjorn: new failure (last pass: next-20200412)
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200413)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200413)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200413)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 17 days (last pass: next-=
+20200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig:
+        clang-9:
+            apq8096-db820c: 1 failed lab
+            sdm845-mtp: 1 failed lab
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    davinci_all_defconfig:
+        gcc-8
+            da850-evm: 1 offline lab
+            dm365evm,legacy: 1 offline lab
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
 ---
- arch/arm/include/asm/futex.h |    9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
---- a/arch/arm/include/asm/futex.h
-+++ b/arch/arm/include/asm/futex.h
-@@ -165,8 +165,13 @@ arch_futex_atomic_op_inuser(int op, int
- 	preempt_enable();
- #endif
- 
--	if (!ret)
--		*oval = oldval;
-+	/*
-+	 * Store unconditionally. If ret != 0 the extra store is the least
-+	 * of the worries but GCC cannot figure out that __futex_atomic_op()
-+	 * is either setting ret to -EFAULT or storing the old value in
-+	 * oldval which results in a uninitialized warning at the call site.
-+	 */
-+	*oval = oldval;
- 
- 	return ret;
- }
+For more info write to <info@kernelci.org>

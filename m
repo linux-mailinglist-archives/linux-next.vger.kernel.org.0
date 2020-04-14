@@ -2,192 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4FB81A8426
-	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 18:06:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ADB1A85D1
+	for <lists+linux-next@lfdr.de>; Tue, 14 Apr 2020 18:53:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2391312AbgDNQF3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 12:05:29 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12618 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S2391232AbgDNQDp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Apr 2020 12:03:45 -0400
-Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03EG3FBO006645
-        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 12:03:44 -0400
-Received: from e06smtp04.uk.ibm.com (e06smtp04.uk.ibm.com [195.75.94.100])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30cwm0gtr9-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 12:03:43 -0400
-Received: from localhost
-        by e06smtp04.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-next@vger.kernel.org> from <imbrenda@linux.ibm.com>;
-        Tue, 14 Apr 2020 17:02:33 +0100
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (9.149.109.194)
-        by e06smtp04.uk.ibm.com (192.168.101.134) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Tue, 14 Apr 2020 17:02:30 +0100
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03EG33Nu43647070
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 14 Apr 2020 16:03:03 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 791F7A4059;
-        Tue, 14 Apr 2020 16:03:03 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C0AB9A404D;
-        Tue, 14 Apr 2020 16:03:02 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.12.13])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 14 Apr 2020 16:03:02 +0000 (GMT)
-Date:   Tue, 14 Apr 2020 18:03:00 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-next@vger.kernel.org, akpm@linux-foundation.org,
-        jack@suse.cz, kirill@shutemov.name, borntraeger@de.ibm.com,
-        david@redhat.com, aarcange@redhat.com, linux-mm@kvack.org,
-        frankja@linux.ibm.com, sfr@canb.auug.org.au, jhubbard@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
- pages
-In-Reply-To: <11dc928d-60b4-f04f-1ebf-f4cffb337a6c@intel.com>
-References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
-        <20200306132537.783769-3-imbrenda@linux.ibm.com>
-        <11dc928d-60b4-f04f-1ebf-f4cffb337a6c@intel.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S2440527AbgDNQtz convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Tue, 14 Apr 2020 12:49:55 -0400
+Received: from mout.kundenserver.de ([212.227.126.135]:56361 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2501951AbgDNQtu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Apr 2020 12:49:50 -0400
+Received: from [192.168.1.183] ([37.4.249.171]) by mrelayeu.kundenserver.de
+ (mreue010 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MAOeB-1jZdAL1lEJ-00Bw1n; Tue, 14 Apr 2020 18:49:34 +0200
+Subject: Re: Coverity: mmal_setup_video_component(): Code maintainability
+ issues
+To:     coverity-bot <keescook@chromium.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>
+Cc:     Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+References: <202004140833.632892C8@keescook>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=stefan.wahren@i2se.com; keydata=
+ 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 AQ==
+Message-ID: <dad3abd9-c890-eb7b-efa5-f662b096f78e@i2se.com>
+Date:   Tue, 14 Apr 2020 18:49:33 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20041416-0016-0000-0000-0000030474C9
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20041416-0017-0000-0000-000033686D4D
-Message-Id: <20200414180300.52640444@p-imbrenda>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-14_07:2020-04-14,2020-04-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=360 phishscore=0
- suspectscore=0 adultscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 spamscore=0 clxscore=1011 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
- definitions=main-2004140127
+In-Reply-To: <202004140833.632892C8@keescook>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
+Content-Language: en-US
+X-Provags-ID: V03:K1:0R6cj7E77qaLq3IS89zuWUpF+BMG+rH2swtRXyYfhgEaOPBqEk4
+ NDt91UO0D9+p3hUEZqcUdo1vFIdYnOIFK3p2IGXuoo+ftAlffmapM63q0D/eV6qz4Cmj4Xd
+ 8gFHVyIdHUorbQy9mZjWiSDmQCCa4Xw5MnHJ3oT7m7ke/0ExRZmU4bF4JV8asFE+YJm3Mp8
+ Bvg8uzuNPu7itPUvnJ/Pg==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ysgSiAHHfAQ=:lZ/miOxQ7OBS0vo50SZOhp
+ IR2Srir6xCIQ5yCXIaSnnDCGqLgec8mL8GuLDWLtms9aFRD7gTyBPtwJxP1zAI14Iu6UCMW6m
+ sJEZcOULKtqkcrQKK/aRSKObB5vo4y4720eTl29okUqvnq5XDktVI9FdIhvr/NvBVcRidWYbw
+ nnQk1gUE+yWpPsOcnPNq2ieFkk1vS3RNTw+4aa9ilMx4fv9x9tVTvYizCwzz5SW2N+vx+qWLD
+ ScWVqVs+Qmljva0KS98FRbtM2fnyu+a8tII5lEjJRjuzEzJMyVxOlz5k/+bnhvSuE0UTtjntd
+ emWpyuMV/H47G/M/XUsYBLmev9EF52Lg8rW4xbIN3RBY3RKWtkRXTfdQshSd45KIy4APki3oi
+ 89hZVX9VmKXrVaEtWwBvl38Qaa5+dsvEnW+S8DsUVd0OKWUeTWFRNdOS1mNX7rFNn18ZNfDvF
+ B6dtmqMktb1y4/b/p78l6EhaEkjNelJryU+0YMautok9//6lFJEbp8/vr2FXqiTo2TsdhiUBl
+ eUtjtxCttq8TUPKob0luUvhallYrKY4kiq7B1j6ALDic83srHQfIdMdeT6UX6+6Keh/VtmF2T
+ nKBJyEZxaUutEpwAZP80i9/jZaVwxeQqEgQDyL86netl0KaSfc/XeC6CgPSNyXIi+blGLe9ec
+ HCV6NykmXmaVy8/kyaxfAeRwjdrnKw+9XVAewKkmrmL69R4hfFl5+4UTYfMDWfOGPUMzm+j/i
+ HFnxJg4cDecrneEFJYrfw/Q7gt25oj3rby4lRi3BPWghKEFiVvQj5U+97VRfzxcpLe742NlBz
+ 7FDJMCahcID8/RyoAONxOnbQhe+PgZeKAHJCzZPSpquYeHyhMgSzr+8tAd1rTBj0rS+xNxB
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 13 Apr 2020 13:22:24 -0700
-Dave Hansen <dave.hansen@intel.com> wrote:
+Hi,
 
-> On 3/6/20 5:25 AM, Claudio Imbrenda wrote:
-> > On s390x the function is not supposed to fail, so it is ok to use a
-> > WARN_ON on failure. If we ever need some more finegrained handling
-> > we can tackle this when we know the details.  
-> 
-> Could you explain a bit why the function can't fail?
+Am 14.04.20 um 17:33 schrieb coverity-bot:
+> Hello!
+>
+> This is an experimental semi-automated report about issues detected by
+> Coverity from a scan of next-20200414 as part of the linux-next scan project:
+> https://scan.coverity.com/projects/linux-next-weekly-scan
+>
+> You're getting this email because you were associated with the identified
+> lines of code (noted below) that were touched by commits:
+>
+>   Sun Mar 29 14:44:58 2020 +0200
+>     1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
+>
+> Coverity reported the following:
+>
+> *** CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
+> /drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c: 1014 in mmal_setup_video_component()
+> 1008     	if (overlay_enabled) {
+> 1009     		/* Need to disable the overlay before we can update
+> 1010     		 * the resolution
+> 1011     		 */
+> 1012     		ret = vchiq_mmal_port_disable(dev->instance, preview_port);
+> 1013     		if (!ret) {
+> vvv     CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
+> vvv     Assigning value from "vchiq_mmal_port_connect_tunnel(dev->instance, preview_port, NULL)" to "ret" here, but that stored value is overwritten before it can be used.
+> 1014     			ret = vchiq_mmal_port_connect_tunnel(dev->instance,
+> 1015     							     preview_port,
+> 1016     							     NULL);
+> 1017     		}
+> 1018     	}
+> 1019     	preview_port->es.video.width = f->fmt.pix.width;
+>
+> If this is a false positive, please let us know so we can mark it as
+> such, or teach the Coverity rules to be smarter. If not, please make
+> sure fixes get into linux-next. :) For patches fixing this, please
+> include these lines (but double-check the "Fixes" first):
 
-the concept of "making accessible" is only to make sure that accessing
-the page will not trigger faults or I/O or DMA errors. in general it
-does not mean freely accessing the content of the page in cleartext. 
+thanks for the report. The finding is correct, but the issue already
+exists before. The intention of my patch was to increase readibility,
+not to change the behavior.
 
-on s390x, protected guest pages can be shared. the guest has to
-actively share its pages, and in that case those pages are both part of
-the protected VM and freely accessible by the host.
+My problem is that i'm not aware how to handle the error case here.
 
-pages that are not shared cannot be accessed by the host.
+@Dave Should we bail out or ignore the error?
 
-in our case "making the page accessible" means:
- - if the page was shared, make sure it stays shared
- - if the page was not shared, first encrypt it and then make it
-   accessible to the host (both operations performed securely and
-   atomically by the hardware)
+Best regards
+Stefan
 
-then the page can be swapped out, or used for direct I/O (obviously if
-you do I/O on a page that was not shared, you cannot expect good
-things to happen, since you basically corrupt the memory of the guest).
-
-on s390x performing I/O directly on protected pages results in (in
-practice) unrecoverable I/O errors, so we want to avoid it at all costs.
-
-accessing protected pages from the CPU triggers an exception that can
-be handled (and we do handle it, in fact)
-
-now imagine a buggy or malicious qemu process crashing the whole machine
-just because it did I/O to/from a protected page. we clearly don't want
-that.
-
-> If the guest has secret data in the page, then it *can* and does fail.
-
-no, that's the whole point of this mechanism. in fact, most of the
-guest pages will be "secret data", only the few pages used for guest I/O
-bounce buffers will be shared with the host
-
-> It won't fail, though, if the host and guest agree on whether the page
-> is protected.
-> 
-> Right?
-> 
-> > @@ -2807,6 +2807,13 @@ int __test_set_page_writeback(struct page
-> > *page, bool keep_write) inc_zone_page_state(page,
-> > NR_ZONE_WRITE_PENDING); }
-> >  	unlock_page_memcg(page);
-> > +	access_ret = arch_make_page_accessible(page);
-> > +	/*
-> > +	 * If writeback has been triggered on a page that cannot
-> > be made
-> > +	 * accessible, it is too late to recover here.
-> > +	 */
-> > +	VM_BUG_ON_PAGE(access_ret != 0, page);
-> > +
-> >  	return ret;
-> >  
-> >  }  
-> 
-> This seems like a really odd place to do this.  Writeback is specific
-> to block I/O.  I would have thought there were other kinds of devices
-> that matter, not just block devices.
-
-well, yes and no. for writeback (block I/O and swap) this is the right
-place. at this point we know that the page is present and nobody else
-has started doing I/O yet, and I/O will happen soon-ish. so we make the
-page accessible. there is no turning back here, unlike pinning. we
-are not allowed to fail, we can't 
-
-regarding the other kinds of devices: yes, they will use pinning, which
-is covered by the rest of the patch. the semantics of get page and pin
-page (if the documentation has not changed meanwhile) is that the
-traditional get_page is used for when the page is needed but not its
-content, and pin_page is used when the content of the page is accessed.
-since the only issue here is accessing the content of the page, we
-don't need to make it accessible for get_page, but only for pin_page.
-
-get_page and pin_page are allowed to fail, so in this case we return an
-error code, so other architectures can potentially abort the pinning if
-needed. on s390x we will never fail, for the same reasons written
-above.
-
-> Also, this patch seems odd that it only does the
-> arch_make_page_accessible() half.  Where's the other half where the
-> page is made inaccessible?
-
-that is very arch-specific. for s390x, you can look at this patch and
-the ones immediately before/after: 214d9bbcd3a67230b932f6ce
-
-> I assume it's OK to "leak" things like this, it's just not clear to me
-> _why_ it's OK.
-
-nothing is being leaked :)
-
-
-
-I hope I clarified a little how this works on s390x :)
-feel free to poke me again if some things are still unclear
-
-
-best regards,
-
-
-Claudio Imbrenda
+>
+> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> Addresses-Coverity-ID: 1492591 ("Code maintainability issues")
+> Fixes: 1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
+>
+> Thanks for your attention!
+>
 

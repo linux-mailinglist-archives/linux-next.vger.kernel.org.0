@@ -2,126 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9183C1A905F
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 03:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0D191A906B
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 03:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392519AbgDOBYh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 21:24:37 -0400
-Received: from mail.kernel.org ([198.145.29.99]:55006 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387762AbgDOBYd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Apr 2020 21:24:33 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2387782AbgDOB35 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 21:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S2387762AbgDOB3z (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Apr 2020 21:29:55 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9AC061A0C;
+        Tue, 14 Apr 2020 18:29:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id CC0E320784;
-        Wed, 15 Apr 2020 01:24:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586913871;
-        bh=Jttip+q2gFr6gM6I9moyxzeHwN0fQYq8HT40g3rs6lY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JZfORDVrzKDLJirpGb9+s3ZEwYKVe+1aQi9jJl2B4EpQVaHqvSofy1OkreFy5zrFl
-         RCxeBGgCWqZFUHLEM0eGRWY/W9G0TMmU5gAJWZ6tiYxOQUeBw7pp/0bYOUsSQpOxzD
-         G3UkU16EORnqkD1GE3SmIGEbCJt+D/foJ5zsK4hw=
-Date:   Tue, 14 Apr 2020 18:24:30 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, Hugh Dickins <hughd@google.com>
-Subject: Re: linux-next: Tree for Apr 14 (mm/shmem.c)
-Message-Id: <20200414182430.c5af29ddb1735f5fd0083983@linux-foundation.org>
-In-Reply-To: <200c608a-8159-18ce-b44e-cad2022e23e2@infradead.org>
-References: <20200414123900.4f97a83f@canb.auug.org.au>
-        <200c608a-8159-18ce-b44e-cad2022e23e2@infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4924Xb3fBQz9sSX;
+        Wed, 15 Apr 2020 11:29:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1586914191;
+        bh=omhW4zB3sxql8kZzIQwJeeaiRkbdk2G13+ZpkM3mT3Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q0U3Iqa7R2Her0iMgffAZccP3SLf05k7Al5aqMXIjoSD+CduUn5KeHCVkQ+MKmdoP
+         lfamB2H+SOn6TKVOy3NBLUrruug/2Mq2DMHpdkmohl8c4rFkBn4jxAeb3a5KaH2nev
+         MC8yXmDLoC5sOZlk/TBq4h/tJmwFcJ8PGY2YN7mGuCa88Ts1C98TebQ55M5mu+nKet
+         75e1clACPhGyO8n3c9is6L/0zZltwTEjG0v+/BqyXmFn+iNkuN5PXjD/TmsV8KsxNN
+         e9Q8zMe7KuQAlCTs8UgjyCx2dIvfNKxUWQzzSCDvRU173EuxE8+IteJTTyxJ23Fc+5
+         qUxHYFhZWwhvQ==
+Date:   Wed, 15 Apr 2020 11:29:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build warning after merge of the v4l-dvb tree
+Message-ID: <20200415112949.2dbb0bab@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/tjprqdaFY=/5=VZWsmvA/hD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 14 Apr 2020 07:18:01 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+--Sig_/tjprqdaFY=/5=VZWsmvA/hD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 4/13/20 7:39 PM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200413:
-> > 
-> > New tree: mhi
-> > 
-> > My fixes tree contains:
-> > 
-> >   6b038bdcd3d1 sh: mm: Fix build error
-> > 
-> > Non-merge commits (relative to Linus' tree): 1154
-> >  1160 files changed, 31764 insertions(+), 13498 deletions(-)
-> > 
-> > ----------------------------------------------------------------------------
-> 
-> on x86_64:
-> # CONFIG_TRANSPARENT_HUGEPAGE is not set
+Hi all,
 
-Thanks.  hm, this took a long time to be discovered.
+After merging the v4l-dvb tree, today's linux-next build (arm
+multi_v7_defconfig) produced this warning:
 
-> In file included from ../include/linux/export.h:43:0,
->                  from ../include/linux/linkage.h:7,
->                  from ../include/linux/fs.h:5,
->                  from ../mm/shmem.c:24:
-> ../mm/shmem.c: In function ‘shmem_undo_range’:
-> ../include/linux/compiler.h:394:38: error: call to ‘__compiletime_assert_110’ declared with attribute error: BUILD_BUG failed
->   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->                                       ^
-> ../include/linux/compiler.h:69:3: note: in definition of macro ‘__trace_if_value’
->   (cond) ?     \
->    ^~~~
-> ../include/linux/compiler.h:56:28: note: in expansion of macro ‘__trace_if_var’
->  #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
->                             ^~~~~~~~~~~~~~
-> ../mm/shmem.c:960:6: note: in expansion of macro ‘if’
->       if (index <
->       ^~
-> ../include/linux/kernel.h:71:36: note: in expansion of macro ‘__round_mask’
->  #define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
->                                     ^~~~~~~~~~~~
-> ../mm/shmem.c:961:10: note: in expansion of macro ‘round_up’
->           round_up(start, HPAGE_PMD_NR))
->           ^~~~~~~~
-> ../include/linux/compiler.h:382:2: note: in expansion of macro ‘__compiletime_assert’
->   __compiletime_assert(condition, msg, prefix, suffix)
->   ^~~~~~~~~~~~~~~~~~~~
-> ../include/linux/compiler.h:394:2: note: in expansion of macro ‘_compiletime_assert’
->   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->   ^~~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
->  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->                                      ^~~~~~~~~~~~~~~~~~
-> ../include/linux/build_bug.h:59:21: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
->  #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
->                      ^~~~~~~~~~~~~~~~
-> ../include/linux/huge_mm.h:319:28: note: in expansion of macro ‘BUILD_BUG’
->  #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
->                             ^~~~~~~~~
-> ../include/linux/huge_mm.h:115:26: note: in expansion of macro ‘HPAGE_PMD_SHIFT’
->  #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
->                           ^~~~~~~~~~~~~~~
-> ../include/linux/huge_mm.h:116:26: note: in expansion of macro ‘HPAGE_PMD_ORDER’
->  #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
->                           ^~~~~~~~~~~~~~~
-> ../mm/shmem.c:961:26: note: in expansion of macro ‘HPAGE_PMD_NR’
->           round_up(start, HPAGE_PMD_NR))
->                           ^~~~~~~~~~~~
-> 
+WARNING: unmet direct dependencies detected for CEC_CORE
+  Depends on [m]: MEDIA_SUPPORT [=3Dm]
+  Selected by [y]:
+  - DRM_TEGRA [=3Dy] && HAS_IOMEM [=3Dy] && (ARCH_TEGRA [=3Dy] || ARM [=3Dy=
+] && COMPILE_TEST [=3Dn]) && COMMON_CLK [=3Dy] && DRM [=3Dy] && OF [=3Dy] &=
+& CEC_NOTIFIER [=3Dy]
+  Selected by [m]:
+  - VIDEO_SAMSUNG_S5P_CEC [=3Dm] && MEDIA_SUPPORT [=3Dm] && MEDIA_PLATFORM_=
+SUPPORT [=3Dy] && CEC_PLATFORM_DRIVERS [=3Dy] && (ARCH_EXYNOS [=3Dy] || COM=
+PILE_TEST [=3Dn])
+  - DRM_EXYNOS_HDMI [=3Dy] && HAS_IOMEM [=3Dy] && DRM_EXYNOS [=3Dm] && (DRM=
+_EXYNOS_MIXER [=3Dy] || DRM_EXYNOS5433_DECON [=3Dn]) && CEC_NOTIFIER [=3Dy]
+  - DRM_I2C_ADV7511_CEC [=3Dy] && HAS_IOMEM [=3Dy] && DRM [=3Dy] && DRM_BRI=
+DGE [=3Dy] && DRM_I2C_ADV7511 [=3Dm]
+  - DRM_DW_HDMI [=3Dm] && HAS_IOMEM [=3Dy] && DRM [=3Dy] && DRM_BRIDGE [=3D=
+y] && CEC_NOTIFIER [=3Dy]
 
-That's
+There have been so many Kconfig changes today that I cannot figure out
+what caused this, sorry.
 
-					if (index <
-					    round_up(start, HPAGE_PMD_NR))
-						start = index + 1;
+--=20
+Cheers,
+Stephen Rothwell
 
-from Hugh's 71725ed10c40696 ("mm: huge tmpfs: try to split_huge_page()
-when punching hole").
+--Sig_/tjprqdaFY=/5=VZWsmvA/hD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6WY40ACgkQAVBC80lX
+0GyUnAf/YAxleygqwxPfTDVhKZzg6hEpSOGjRCgpP1Ivdby9YEazQSuzk3eG3I2n
+yR40lk3o6nJ0CSpVvWRsXygK3ddMVLunty3izjz9HrE7itUsCYUu8tSUI5pZBiGT
+1fFbIMJaL4uDeEoNkxPXpdvhsGB8decsiNfmT1XnFyY/05hS6QFZVnURg3USUCzo
+9MgYyLraN8aj+G83z3xyHEsPjYjnB+AhPnGzF5oNM7gVMBUgxYYQd/WD6vYqrRos
+kafDR1tMJ3+R9Oz7eKB6Ge6nk0sG7NGRb/yh2aIrewMBKxrrYqlPf2uNaNg/mnX4
+oVFWvIuQ3aJRHYJ+6Zrrqcmd/9sRuA==
+=08rm
+-----END PGP SIGNATURE-----
+
+--Sig_/tjprqdaFY=/5=VZWsmvA/hD--

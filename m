@@ -2,55 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E39DB1A8F6F
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 02:04:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4FF61A8FB2
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 02:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504009AbgDOAEA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 20:04:00 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34460 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726517AbgDOAD7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Apr 2020 20:03:59 -0400
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S2634590AbgDOAZo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 20:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2634579AbgDOAZl (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Apr 2020 20:25:41 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E571C061A0C;
+        Tue, 14 Apr 2020 17:25:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 5D3A62076B;
-        Wed, 15 Apr 2020 00:03:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1586909039;
-        bh=CxveRDxChEsZ3DATDUdDFICKjU4dpeGXHDzMXqWjub4=;
-        h=From:Date:Subject:To:Cc:From;
-        b=MMQ6ZP1NvuZOPVf062SlpWLaSJJIJEug4YdLWE3BSn3lrmDX0M7Hrwli3+L9CqePF
-         tsbZM/peIWT0hBBs3hzftNAIbPAuuYnJnxdPEyNOsy18oEuXZlBBEEKGnVlfX/Yi7r
-         FNPMkcdhyo4xRIkLEeSGE5iCI6E8lifQBAbqvQ8Q=
-Received: by mail-ot1-f47.google.com with SMTP id b13so1661974oti.3;
-        Tue, 14 Apr 2020 17:03:59 -0700 (PDT)
-X-Gm-Message-State: AGi0PubYYw3d+syUEFcsGODlS6Zm6mp0YjPbJauTUkYz96zW7iBLPphY
-        odd/bYU36LbOl7UeQvLU8mRzEPN+ZC3lqyE54x0=
-X-Google-Smtp-Source: APiQypJgSB3aLxrmHPYHxXBc8JL6Jl2IrAaS334+PyIQmhLpm+RQQZeeKIrgk3KxIkG5ymimn2GhNK0KeJpZlqC7PHo=
-X-Received: by 2002:a05:6830:1b7a:: with SMTP id d26mr10319486ote.120.1586909038711;
- Tue, 14 Apr 2020 17:03:58 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49236T6ZnHz9sSb;
+        Wed, 15 Apr 2020 10:25:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1586910338;
+        bh=qhFWqW1CR0ePWpwKboDaoh7JgvndLEK5GfBFo3TMwxw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=rHL8J35GgNmkjjDLq/oyYjJPXUPGeVNuLZY5kUNBiTPWaou6zlOS1zsJOksjZWAo4
+         7Wl+NNY6GQm0WoNGrr9NOTISvwMQgAq+R3YWE30ZsE2Y6kwRVjX/vVCaF9R176lsVT
+         AdUAcXEoaeZJLEhPpQXdCBiPFhhkIg5DEoxj/JwuJ+lrEzc8hlo96ltqwtNFd7o6IR
+         VHQX/srZLRZ/V2FO93gGUAHKKn2p3nyW6wttCp2xIiV3lG3vVTn5YPJYWja//pob6T
+         sgSyBcnRWfmF/As/N6HPJ9UDmfgpg2kOOc58bj5vxOD4z0Qm44IemuzmtxhSYHiFke
+         FI+f7Pzmn3yDg==
+Date:   Wed, 15 Apr 2020 10:25:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: linux-next: build warning after merge of the qcom tree
+Message-ID: <20200415102534.6d22a377@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:ac9:5744:0:0:0:0:0 with HTTP; Tue, 14 Apr 2020 17:03:58
- -0700 (PDT)
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Wed, 15 Apr 2020 09:03:58 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd9O4F3Y11zAV5MGxhsTgCQNTL-9suKR0AZi08=bXDT5AA@mail.gmail.com>
-Message-ID: <CAKYAXd9O4F3Y11zAV5MGxhsTgCQNTL-9suKR0AZi08=bXDT5AA@mail.gmail.com>
-Subject: linux-next inclusion request : exfat filesystem
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/yZV4m0qmvjCiGoHcQRP==75";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/yZV4m0qmvjCiGoHcQRP==75
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Could you please add exfat -dev tree to linux-next ?
+Hi all,
 
-git://git.kernel.org/pub/scm/linux/kernel/git/linkinjeon/exfat.git dev
+After merging the qcom tree, today's linux-next build (x86_64
+allmodconfig) produced this warning:
 
-Thanks a lot!
+drivers/soc/qcom/cmd-db.c: In function 'cmd_db_debugfs_dump':
+drivers/soc/qcom/cmd-db.c:281:30: warning: field width specifier '*' expect=
+s argument of type 'int', but argument 4 has type 'long unsigned int' [-Wfo=
+rmat=3D]
+  281 |    seq_printf(seq, "0x%08x: %*pEp", le32_to_cpu(ent->addr),
+      |                             ~^~
+      |                              |
+      |                              int
+  282 |        sizeof(ent->id), ent->id);
+      |        ~~~~~~~~~~~~~~~       =20
+      |        |
+      |        long unsigned int
+
+Introduced by commit
+
+  d6815c5c43d4 ("soc: qcom: cmd-db: Add debugfs dumping file")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yZV4m0qmvjCiGoHcQRP==75
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6WVH4ACgkQAVBC80lX
+0GypXAf+NNmRAj3H9F2gfKHML5Ldwz+yZfFBLqS++APFcdZ9/MOvf07r7iic0mrF
+h1J4L/v33SfjkAMohh7Em549NoiaznK6hWculX57LdsP5+y7Xf14xXlV+0qWf70v
+nVdAwbvg1WpuJUtZvIBKAcChVfWDe9QqWtavOcucKv7lJkyAPwGsO7SPUr5rwkTY
+oTyBv9IL0/Aqt7c+MVialaO3THPKsfgsKXh2sm2J4k8QMOU0/JpVTnHCXy/YFMt0
+PjUDKADKiu0W2NN3uWAmKBRFVkuGUb6vYJ3bZCx9HQJq04sxDkNVrtQcMBoFTovQ
+4KSB6ormOHo6iVtlw5GPxx8L3aR8Qw==
+=NanG
+-----END PGP SIGNATURE-----
+
+--Sig_/yZV4m0qmvjCiGoHcQRP==75--

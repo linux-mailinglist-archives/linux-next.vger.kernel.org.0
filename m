@@ -2,93 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7263C1A8FCB
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 02:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E00F1A9017
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 03:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733064AbgDOAl7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 20:41:59 -0400
-Received: from ozlabs.org ([203.11.71.1]:57177 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2407875AbgDOAl5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Apr 2020 20:41:57 -0400
+        id S1733306AbgDOBG4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 21:06:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1733242AbgDOBGy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Apr 2020 21:06:54 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7D7C061A0C;
+        Tue, 14 Apr 2020 18:06:53 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4923TH2cB1z9sSY;
-        Wed, 15 Apr 2020 10:41:55 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4924240ZcPz9sSm;
+        Wed, 15 Apr 2020 11:06:52 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1586911315;
-        bh=YCQs4D/1ffbtCfeQTC2X8n7ede9jqhp8QvNGcZGM7sY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=oQme/iRvULpKR6Iv+nqc4b3O6NkgIFjo1W8CD0J5I1blYbGGHM4RZKy8z0oNz+WpD
-         jUP+aQM9lQnuEc9ZAFwT1jBP1hbmgylXkGwUMH9Hg/8sdbklUqI+y5ao9/B99b1xLx
-         eXyYLjlXJZnOVxvvA+U262vwRdTaxCCGZfACGu+kxk9fBgUHoqTNwdeYchWRV7ezqY
-         3FdRh9Kan9r8ZHSfXn4SyAYxjAg4UdL0ZRx+A1RuIf41WZJMbcjWK153vvTqDu6D7d
-         YbnFl+YN7Toj7IHcw2Pb76mdEuCewhwzYDQAoiZyxO6usyRJMR1F5RSyHVK/3VDiPg
-         oEg2T8V6CndQQ==
-Date:   Wed, 15 Apr 2020 10:41:52 +1000
+        s=201702; t=1586912812;
+        bh=N93VbRgWkP+7p9le9DrxWLyxRR0fhGdzDtwKbqMiNXY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tr5GK7dA3Qd+dTHalq3ZKHlsSI0/jteCi1bIsq87S5PF8Dm0QoVPe9CUDu7XlTbj7
+         C0XR8lMeE/3+WIKJSs2gDtKpJal4iYRX3YWLkrotbT6lLMMrXMLBRgsEynmIFkXhFQ
+         tV/qKdRNwktH3Z6uAIgIDLgiAkcx7fK12o1Hd9NHfuMUIOu/o82El+Ob8aZSiQ4h6R
+         ylbxNErCgRQWYOkGhQfZzdUFgrSCXZ9l3Khuz+i+A+lGrU4IJ5YgMSgw+aC/jIKRoN
+         vUVxm40nfhO9Iwpkxw80q6QQxPKolZvZiCTN3izuS+C7taekh6M5DUP43JzbYhaQjl
+         O7JOH+t2H+CZg==
+Date:   Wed, 15 Apr 2020 11:06:49 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        John Stultz <john.stultz@linaro.org>
-Subject: linux-next: build failure after merge of the qcom tree
-Message-ID: <20200415104152.4d770116@canb.auug.org.au>
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Fixes tag needs some work in the
+ wireless-drivers-next tree
+Message-ID: <20200415110649.39e26be3@canb.auug.org.au>
+In-Reply-To: <5b17fefe-f99d-2e4c-ded2-93fd3554687c@lwfinger.net>
+References: <20200415080827.30c2c9c1@canb.auug.org.au>
+        <5b17fefe-f99d-2e4c-ded2-93fd3554687c@lwfinger.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UZ9OH947PRX/GBK88ze_euv";
+Content-Type: multipart/signed; boundary="Sig_/EtE4TBJ0sj/5b6yW=ZpHMT3";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UZ9OH947PRX/GBK88ze_euv
+--Sig_/EtE4TBJ0sj/5b6yW=ZpHMT3
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Larry,
 
-After merging the qcom tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+On Tue, 14 Apr 2020 19:36:28 -0500 Larry Finger <Larry.Finger@lwfinger.net>=
+ wrote:
+>
+> On 4/14/20 5:08 PM, Stephen Rothwell wrote:
+> >=20
+> > In commit
+> >=20
+> >    ec4d3e3a0545 ("b43legacy: Fix case where channel status is corrupted=
+")
+> >=20
+> > Fixes tag
+> >=20
+> >    Fixes: 75388acd0cd8 ("add mac80211-based driver for legacy BCM43xx d=
+evices")
+> >=20
+> > has these problem(s):
+> >=20
+> >    - Subject does not match target commit subject
+> >      Just use
+> > 	git log -1 --format=3D'Fixes: %h ("%s")'
+>=20
+> I do not understand what you want here. The subject describes what was fi=
+xed.=20
+> The error has been in the driver since it was merged. The Fixes: line is =
+a=20
+> description of the commit that introduced the driver file with the error.
 
-drivers/soc/qcom/rpmh-rsc.c: In function '__tcs_buffer_write':
-drivers/soc/qcom/rpmh-rsc.c:484:3: error: implicit declaration of function =
-'trace_rpmh_send_msg_rcuidle'; did you mean 'trace_rpmh_send_msg_enabled'? =
-[-Werror=3Dimplicit-function-declaration]
-  484 |   trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |   trace_rpmh_send_msg_enabled
-cc1: some warnings being treated as errors
+The subject I was referring to is the subject quoted in the Fixes tag,
+not the subject of the fixing commit.  So:
 
-I don't know why this error only started happening today.  However
-reverting commit
+Fixes: 75388acd0cd8 ("[B43LEGACY]: add mac80211-based driver for legacy BCM=
+43xx devices")
 
-  1d3c6f86fd3f ("soc: qcom: rpmh: Allow RPMH driver to be loaded as a modul=
-e")
-
-fixes the build, so I have done that for today.
-
+Its not very important, just a consistency thing - I wouldn't bother
+rebasing just to fix this, just for the future ...
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UZ9OH947PRX/GBK88ze_euv
+--Sig_/EtE4TBJ0sj/5b6yW=ZpHMT3
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6WWFAACgkQAVBC80lX
-0GyX1Af/fmI7b/x9bvJ+29FVgeWTU5CeyFt0vCCc1Tp1YcjsrXHGykbzP24X4q/w
-+kv3U9xEmX/n958gT5tegEvSH9ZPioCm2Pv+RfEN/TyrqSHYUseNMX5Dfa4AUP9X
-5+E38t2MUSby7q+n/S0udhQIpxRZ7/6MR4cfh3NhOPX6+oYY+gYxU/ebiSiNuai9
-0b46LVhna9IzTe9vP7Fzzf72jHq2XelQEy5iMMJHKLpal19G7jNKRD0Hc1qBuGeV
-nwIxF0I5vUKOZCbPPHP5KuJUmSOVCoqpAg+ObUxkcj2nFz97oeE1NuAGU8/BKa/V
-1UBPakmo6VwN9sQ+qwo0jkZGEJ19Tw==
-=H4El
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6WXikACgkQAVBC80lX
+0Gyk3wf9FQAMSjeEO5pTA/utCKN7T+qLef2SQ1Z9wmAh+MfY93X1DdOOwTYe+ekp
+HWr+mpM6g2W6nPnyJ/rVyg2FPldXwQ/KWQ5Nk28K9ic9E2i7fLKX9lP9Hg9gs7uf
+cPlfulp5/M5YCQ8MChuEnf1zPOJl2mmq4JP7BCzNi9eTKhY3L9mt0R22/kVWkYVx
+v+9MID8ZD1vrYmz9pzQTufWxyKLpRJZGlIdjZvfEnWsM1FTWUX9fdmfo1vzrdMRJ
+cTh6WwCQDa5GSYxHhcFfUEqK22NrWa9gG2ZRre2LIObdodrBaZ+GgtgvRdc5x8yV
+5RhCDelxcFPT99iUbfJvbdIzUbLu2Q==
+=ospa
 -----END PGP SIGNATURE-----
 
---Sig_/UZ9OH947PRX/GBK88ze_euv--
+--Sig_/EtE4TBJ0sj/5b6yW=ZpHMT3--

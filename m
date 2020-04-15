@@ -2,92 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E26941A904C
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 03:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9183C1A905F
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 03:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2392453AbgDOBS1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Apr 2020 21:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2392449AbgDOBSY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Apr 2020 21:18:24 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B898C061A0C
-        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 18:18:23 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id i22so1746835otp.12
-        for <linux-next@vger.kernel.org>; Tue, 14 Apr 2020 18:18:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=U1l2/pt2vcXJs4JHOfaqDncBBzdHatpYCeFPNCdgXmY=;
-        b=B+V2QJhLQsBm/e5lZ06FfL9w72jKW1Ok92LzH6+jMc/K7B3adM/3jfrxAccX7mEHh/
-         viSNMwIytJNitnDOPAGcYsDZ6hg1F1B2KRhSZad2SqUfaZAKtNSEHMr/KqZntR31eW9b
-         mnqU+JLn3CH43CYPUI/cvfgs7CxJv9F/MIgF7y/BSBRwSs+gOOq6SNbqr2GveCzOkz5p
-         CUScmSV7n51+5Onkqn/h6yrEICD/toxBejyWTEtaTdAfPvPPnMW8YO5SMzRY12wbQNpq
-         qrdse3QF/S6pP6v4PWXI6zy50Cg+YLM4nPIGu9iSofBzsZtwerlh6l/kv037LJENL7pz
-         wYYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=U1l2/pt2vcXJs4JHOfaqDncBBzdHatpYCeFPNCdgXmY=;
-        b=dGeFtJtR486hQFo4kFZC4L8qA26f3W4o12LH0p50zucD/eaO9f7Ke8ieT51xI6urtf
-         jYAeiMaHJ0cidW1wO3Olj7stut3A3+sYRPvsofieBMV4iiUc0rkdQkPansQsI4jeVM1k
-         bBsLfJscQl+pkn3lLBUnEIVgiusVspWF5XWxj5Odg8JdvKjaLFgElFD7+LuPCL0a2s3E
-         /Bcd23W+q7FdKqx7Oc9bxWdOLZaUYPGK6G72dDMtQoW+2i5DCo4nq0QanxCL6lUYoies
-         pAOfh3xK+32AjoHkI/KHc29n1COmXDFGNz9e13v0B8B5d2/2un0xtlslr32b2HgfjPxX
-         FY7w==
-X-Gm-Message-State: AGi0PubV+iBN8B02zuv0X/z3b9CT6Mk9vGtJ7bvRaDSZXguEF9DGxH+b
-        MdjUNscwke0SdHE0CVIFHvRr+Vd//j+k5Nfmnt7VrQ==
-X-Google-Smtp-Source: APiQypK9nKDX/Fv38V2E+Fpv1Q1bTceAzMb90oayw7n7ZzkqoIHvTjqwdd5FRXUJe5CujZpV+QwZrLgaUvSjidfYTdQ=
-X-Received: by 2002:a9d:3988:: with SMTP id y8mr11026479otb.352.1586913502446;
- Tue, 14 Apr 2020 18:18:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200415104152.4d770116@canb.auug.org.au>
-In-Reply-To: <20200415104152.4d770116@canb.auug.org.au>
-From:   John Stultz <john.stultz@linaro.org>
-Date:   Tue, 14 Apr 2020 18:18:11 -0700
-Message-ID: <CALAqxLVN_MZ7XWsg99dhy1=Vde_XSCHey78mrxRuu7a_THxYYw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the qcom tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andy Gross <agross@kernel.org>,
+        id S2392519AbgDOBYh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Apr 2020 21:24:37 -0400
+Received: from mail.kernel.org ([198.145.29.99]:55006 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387762AbgDOBYd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Apr 2020 21:24:33 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC0E320784;
+        Wed, 15 Apr 2020 01:24:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1586913871;
+        bh=Jttip+q2gFr6gM6I9moyxzeHwN0fQYq8HT40g3rs6lY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JZfORDVrzKDLJirpGb9+s3ZEwYKVe+1aQi9jJl2B4EpQVaHqvSofy1OkreFy5zrFl
+         RCxeBGgCWqZFUHLEM0eGRWY/W9G0TMmU5gAJWZ6tiYxOQUeBw7pp/0bYOUsSQpOxzD
+         G3UkU16EORnqkD1GE3SmIGEbCJt+D/foJ5zsK4hw=
+Date:   Tue, 14 Apr 2020 18:24:30 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux MM <linux-mm@kvack.org>, Hugh Dickins <hughd@google.com>
+Subject: Re: linux-next: Tree for Apr 14 (mm/shmem.c)
+Message-Id: <20200414182430.c5af29ddb1735f5fd0083983@linux-foundation.org>
+In-Reply-To: <200c608a-8159-18ce-b44e-cad2022e23e2@infradead.org>
+References: <20200414123900.4f97a83f@canb.auug.org.au>
+        <200c608a-8159-18ce-b44e-cad2022e23e2@infradead.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 14, 2020 at 5:41 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the qcom tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> drivers/soc/qcom/rpmh-rsc.c: In function '__tcs_buffer_write':
-> drivers/soc/qcom/rpmh-rsc.c:484:3: error: implicit declaration of function 'trace_rpmh_send_msg_rcuidle'; did you mean 'trace_rpmh_send_msg_enabled'? [-Werror=implicit-function-declaration]
->   484 |   trace_rpmh_send_msg_rcuidle(drv, tcs_id, j, msgid, cmd);
->       |   ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |   trace_rpmh_send_msg_enabled
-> cc1: some warnings being treated as errors
->
-> I don't know why this error only started happening today.  However
-> reverting commit
->
->   1d3c6f86fd3f ("soc: qcom: rpmh: Allow RPMH driver to be loaded as a module")
->
-> fixes the build, so I have done that for today.
+On Tue, 14 Apr 2020 07:18:01 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
 
+> On 4/13/20 7:39 PM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200413:
+> > 
+> > New tree: mhi
+> > 
+> > My fixes tree contains:
+> > 
+> >   6b038bdcd3d1 sh: mm: Fix build error
+> > 
+> > Non-merge commits (relative to Linus' tree): 1154
+> >  1160 files changed, 31764 insertions(+), 13498 deletions(-)
+> > 
+> > ----------------------------------------------------------------------------
+> 
+> on x86_64:
+> # CONFIG_TRANSPARENT_HUGEPAGE is not set
 
-Ah. I'm guessing the newly added rpmh-rsc code depends on rpmh being built in.
+Thanks.  hm, this took a long time to be discovered.
 
-I'll take a look at it.
+> In file included from ../include/linux/export.h:43:0,
+>                  from ../include/linux/linkage.h:7,
+>                  from ../include/linux/fs.h:5,
+>                  from ../mm/shmem.c:24:
+> ../mm/shmem.c: In function ‘shmem_undo_range’:
+> ../include/linux/compiler.h:394:38: error: call to ‘__compiletime_assert_110’ declared with attribute error: BUILD_BUG failed
+>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>                                       ^
+> ../include/linux/compiler.h:69:3: note: in definition of macro ‘__trace_if_value’
+>   (cond) ?     \
+>    ^~~~
+> ../include/linux/compiler.h:56:28: note: in expansion of macro ‘__trace_if_var’
+>  #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+>                             ^~~~~~~~~~~~~~
+> ../mm/shmem.c:960:6: note: in expansion of macro ‘if’
+>       if (index <
+>       ^~
+> ../include/linux/kernel.h:71:36: note: in expansion of macro ‘__round_mask’
+>  #define round_up(x, y) ((((x)-1) | __round_mask(x, y))+1)
+>                                     ^~~~~~~~~~~~
+> ../mm/shmem.c:961:10: note: in expansion of macro ‘round_up’
+>           round_up(start, HPAGE_PMD_NR))
+>           ^~~~~~~~
+> ../include/linux/compiler.h:382:2: note: in expansion of macro ‘__compiletime_assert’
+>   __compiletime_assert(condition, msg, prefix, suffix)
+>   ^~~~~~~~~~~~~~~~~~~~
+> ../include/linux/compiler.h:394:2: note: in expansion of macro ‘_compiletime_assert’
+>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>   ^~~~~~~~~~~~~~~~~~~
+> ../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+>  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+>                                      ^~~~~~~~~~~~~~~~~~
+> ../include/linux/build_bug.h:59:21: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+>  #define BUILD_BUG() BUILD_BUG_ON_MSG(1, "BUILD_BUG failed")
+>                      ^~~~~~~~~~~~~~~~
+> ../include/linux/huge_mm.h:319:28: note: in expansion of macro ‘BUILD_BUG’
+>  #define HPAGE_PMD_SHIFT ({ BUILD_BUG(); 0; })
+>                             ^~~~~~~~~
+> ../include/linux/huge_mm.h:115:26: note: in expansion of macro ‘HPAGE_PMD_SHIFT’
+>  #define HPAGE_PMD_ORDER (HPAGE_PMD_SHIFT-PAGE_SHIFT)
+>                           ^~~~~~~~~~~~~~~
+> ../include/linux/huge_mm.h:116:26: note: in expansion of macro ‘HPAGE_PMD_ORDER’
+>  #define HPAGE_PMD_NR (1<<HPAGE_PMD_ORDER)
+>                           ^~~~~~~~~~~~~~~
+> ../mm/shmem.c:961:26: note: in expansion of macro ‘HPAGE_PMD_NR’
+>           round_up(start, HPAGE_PMD_NR))
+>                           ^~~~~~~~~~~~
+> 
 
-thanks
--john
+That's
+
+					if (index <
+					    round_up(start, HPAGE_PMD_NR))
+						start = index + 1;
+
+from Hugh's 71725ed10c40696 ("mm: huge tmpfs: try to split_huge_page()
+when punching hole").
+

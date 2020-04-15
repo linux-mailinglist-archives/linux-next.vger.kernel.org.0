@@ -2,204 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA441AA037
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 14:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705021AABF8
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 17:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S369095AbgDOMXp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Apr 2020 08:23:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S369144AbgDOMXL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Apr 2020 08:23:11 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E05C061A0C
-        for <linux-next@vger.kernel.org>; Wed, 15 Apr 2020 05:23:10 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id m21so1415573pff.13
-        for <linux-next@vger.kernel.org>; Wed, 15 Apr 2020 05:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=3Ow++0AGrKlr+ZAnYGyAkm0ec4546B6aSiXHgM1j3zc=;
-        b=tYylK10+fNP/1eqsXLANgmDMcJ38kEOUCwYS9+8r2K88ytKFOAXezi83FYBMu8v28V
-         YK6VMbV3DscwO7gHMAF7MkjsAk02PWdyFar98xq/SmoJYstTg3UlFmnJVmh4H7pK78FG
-         XeF/fus4I/2gD8LJCqgyRSk4qPmYivXJVzivBvS1lgxl+MEfzapmXABSNq/LER26XDS3
-         DGiwvaKvyBP+PwXbdQ8YnFP9pkvsusmFbbxqeKU5fopr7zUryi+skfw9NeZe6op8RorI
-         JBN2LyYNllDUIN/pY6rSNCc0i596eTZ7Iht5n/IlaB4j4iku04JCyBaEfeur/om0ovCn
-         blQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=3Ow++0AGrKlr+ZAnYGyAkm0ec4546B6aSiXHgM1j3zc=;
-        b=Bzgz03BCJXD62VfCC4IxTcTcZfxbnxpTgbgPBhjPouYMTGmR9mtJgx8vS9s5vqvWPu
-         i7ByNSXnmtl+cBFT7QUo4VBHf1Ejas4vlinViITloWogueTV3Ei4we8wX0xB0i30776g
-         TSZUkSPrNW96IRN0v/hBcHGEGK1YgEuzuiPxOb3LoI52yED1tYto7HqgMFQZ11p3rNQu
-         GkVa19RCnrMP17p7QSYyAuMOrvPYfWahnmyPIi9exjvt1vXMqt0yiVYy4Np806fV8sRt
-         Ug80+dkJYJv08gxDpxWr0JdfFgaaEL36gWYXizIhweYPrSRM0z545JyeTs5ObmjiedNJ
-         zX3g==
-X-Gm-Message-State: AGi0PuauZwq2Vw+LnxeKFvV0/is9jBheFut9Z6/NJHnGEMkH6pcSSYqa
-        c2nNv5HH7Ro95+FH9eGxcGN2TWxVsjs=
-X-Google-Smtp-Source: APiQypLFxIs8mgx/r8UfuO/xZB5ThTsqJww3kVpXsF7ukAOeAwlu43A9HD0BadO1wAZI1h5iruHI3w==
-X-Received: by 2002:a63:6f45:: with SMTP id k66mr27420421pgc.246.1586953389868;
-        Wed, 15 Apr 2020 05:23:09 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ie14sm2145458pjb.34.2020.04.15.05.23.08
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Apr 2020 05:23:08 -0700 (PDT)
-Message-ID: <5e96fcac.1c69fb81.b56d3.71c8@mx.google.com>
-Date:   Wed, 15 Apr 2020 05:23:08 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1414715AbgDOPeb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Apr 2020 11:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1731298AbgDOPe3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Apr 2020 11:34:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA20C061A0C;
+        Wed, 15 Apr 2020 08:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=k93jWTHKWpFEN4F9SAvfEChcPWYMd81tShHsmAijNZM=; b=nDe1C43qgxEOthZ67P6sU4NyQv
+        zE92U1Iyh0Rp3KjlFj5uRvTGHFP9dO/SsV4ELkffAtS7uHTfK4LXyyNBrdDAeSjPgUCPahiDm7wKn
+        WjfthkaM/NbPOS04qn47WarfifXSDfKorWU4Ze1oE0qPrHn5Mm9dbgc/1PJgoxZTxHDNZRu7oKnED
+        mthpJ086zvdIrp9FzDSJoQYOAfswJgQ9WEJXWPXXCxFlRB7NGRE/FdVevvVqMlf+WSoMu7hqmw2cN
+        K84Vewnr1SqfXYr1kV28cHEqNCstQwQCjvpIOLfOGEyWotcBHuyCtbj/wSXtXox/qbZKzwUw88LQG
+        rKvA8fGg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jOk3X-0002Tz-VE; Wed, 15 Apr 2020 15:34:28 +0000
+Subject: Re: linux-next: Tree for Apr 14 (mm/shmem.c)
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM <linux-mm@kvack.org>
+References: <20200414123900.4f97a83f@canb.auug.org.au>
+ <200c608a-8159-18ce-b44e-cad2022e23e2@infradead.org>
+ <20200414182430.c5af29ddb1735f5fd0083983@linux-foundation.org>
+ <alpine.LSU.2.11.2004142339170.10035@eggly.anvils>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <c1ea321f-b0f3-5ec3-3af8-8bf545a6462c@infradead.org>
+Date:   Wed, 15 Apr 2020 08:34:27 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200415
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 279 boots: 6 failed, 261 passed with 5 offline,
- 6 untried/unknown, 1 conflict (next-20200415)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <alpine.LSU.2.11.2004142339170.10035@eggly.anvils>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 279 boots: 6 failed, 261 passed with 5 offline, 6 untried=
-/unknown, 1 conflict (next-20200415)
+On 4/14/20 11:54 PM, Hugh Dickins wrote:
+> On Tue, 14 Apr 2020, Andrew Morton wrote:
+>> On Tue, 14 Apr 2020 07:18:01 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+>>> On 4/13/20 7:39 PM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20200413:
+>>>>
+>>>> New tree: mhi
+>>>>
+>>>> My fixes tree contains:
+>>>>
+>>>>   6b038bdcd3d1 sh: mm: Fix build error
+>>>>
+>>>> Non-merge commits (relative to Linus' tree): 1154
+>>>>  1160 files changed, 31764 insertions(+), 13498 deletions(-)
+>>>>
+>>>> ----------------------------------------------------------------------------
+>>>
+>>> on x86_64:
+>>> # CONFIG_TRANSPARENT_HUGEPAGE is not set
+>>
+>> Thanks.  hm, this took a long time to be discovered.
+>>
+>>> In file included from ../include/linux/export.h:43:0,
+>>>                  from ../include/linux/linkage.h:7,
+>>>                  from ../include/linux/fs.h:5,
+>>>                  from ../mm/shmem.c:24:
+>>> ../mm/shmem.c: In function ‘shmem_undo_range’:
+> ...
+>>> ../mm/shmem.c:961:26: note: in expansion of macro ‘HPAGE_PMD_NR’
+>>>           round_up(start, HPAGE_PMD_NR))
+>>>                           ^~~~~~~~~~~~
+>>
+>> That's
+>> 					if (index <
+>> 					    round_up(start, HPAGE_PMD_NR))
+>> 						start = index + 1;
+>>
+>> from Hugh's 71725ed10c40696 ("mm: huge tmpfs: try to split_huge_page()
+>> when punching hole").
+> 
+> Sorry about that.  Yes, odd that it should only hit now: the false
+> PageTransCompound in shmem_punch_compound() has always been good
+> enough to handle it for me, but maybe Randy is trying a less able
+> compiler, or maybe unrelated changes in linux-next have just made
+> it harder for the compiler to see the optimization.
+> 
+> I hope the patch below fixes it?
+> 
+> [PATCH] mm/shmem: fix build without THP
+> 
+> Some optimizers don't notice that shmem_punch_compound() is always true
+> (PageTransCompound() being false) without CONFIG_TRANSPARENT_HUGEPAGE=y:
+> use IS_ENABLED to help them to avoid the BUILD_BUG inside HPAGE_PMD_NR.
+> 
+> Fixes: 71725ed10c40 ("mm: huge tmpfs: try to split_huge_page() when punching hole")
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Hugh Dickins <hughd@google.com>
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200415/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200415/
+Works for me, using gcc 7.5.0.
 
-Tree: next
-Branch: master
-Git Describe: next-20200415
-Git Commit: ac935d22736659be734251247dcc6f444fb98972
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 107 unique boards, 25 SoC families, 30 builds out of 228
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-Boot Regressions Detected:
+Thanks.
 
-arm:
+> ---
+> 
+>  mm/shmem.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- 5.7-rc1/mm/shmem.c	2020-04-11 12:58:26.415524805 -0700
+> +++ linux/mm/shmem.c	2020-04-14 23:20:25.517656174 -0700
+> @@ -952,7 +952,7 @@ static void shmem_undo_range(struct inod
+>  				VM_BUG_ON_PAGE(PageWriteback(page), page);
+>  				if (shmem_punch_compound(page, start, end))
+>  					truncate_inode_page(mapping, page);
+> -				else {
+> +				else if (IS_ENABLED(CONFIG_TRANSPARENT_HUGEPAGE)) {
+>  					/* Wipe the page and don't get stuck */
+>  					clear_highpage(page);
+>  					flush_dcache_page(page);
+> 
 
-    multi_v7_defconfig:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: next-20200414)
 
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: next-20200414)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 57 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200414)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: failing since 13 days (last pass: next-20200330 - =
-first fail: next-20200401)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200414)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200414)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200414)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200414)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 18 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-x86_64:
-
-    x86_64_defconfig+kselftest:
-        gcc-8:
-          qemu_x86_64:
-              lab-baylibre: new failure (last pass: next-20200414)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-x86_64:
-    x86_64_defconfig+kselftest:
-        qemu_x86_64:
-            lab-collabora: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+-- 
+~Randy

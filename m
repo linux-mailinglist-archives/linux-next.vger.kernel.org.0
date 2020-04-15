@@ -2,88 +2,193 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 783721AB1AA
-	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 21:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB241AB389
+	for <lists+linux-next@lfdr.de>; Wed, 15 Apr 2020 23:58:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436494AbgDOT3G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Apr 2020 15:29:06 -0400
-Received: from mail.kernel.org ([198.145.29.99]:53658 "EHLO mail.kernel.org"
+        id S1728767AbgDOVxJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Apr 2020 17:53:09 -0400
+Received: from mga01.intel.com ([192.55.52.88]:6892 "EHLO mga01.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2411884AbgDOT26 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Apr 2020 15:28:58 -0400
-Received: from gandalf.local.home (cpe-66-24-58-225.stny.res.rr.com [66.24.58.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8A73120771;
-        Wed, 15 Apr 2020 19:28:56 +0000 (UTC)
-Date:   Wed, 15 Apr 2020 15:28:54 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Subject: Re: linux-next: Tree for Apr 10 (lib/test_printf.ko)
-Message-ID: <20200415152854.625075ab@gandalf.local.home>
-In-Reply-To: <26e0f0dd-4ea2-14e7-fae5-81a5a1451272@infradead.org>
-References: <20200410132706.170811b7@canb.auug.org.au>
-        <27c212c4-b522-561d-411c-e74dc0ff0b74@infradead.org>
-        <CAHk-=wjhsM-n_NzSh=cSdpThX+62-x3EmyKjhMqGHFYEyG0nPg@mail.gmail.com>
-        <2b0f5d2e-3fe5-10c9-2a9a-9a0b341a52d5@infradead.org>
-        <CAHk-=wjXZSPPWzPs=KBDsLZWuq8qO=9qWfiKHw=yV10fFrDv9Q@mail.gmail.com>
-        <bfbcaa67-9656-3a80-fc66-c937297c8be0@infradead.org>
-        <CAHk-=whpvCqcCYvy=_v_F6NTtBSeQbXZ0iLr_smV2NJLT+XACw@mail.gmail.com>
-        <CA+G9fYu47hpXjYtAr32p9yJ97KZqTry+ioAY1S2TqtiKztCYRg@mail.gmail.com>
-        <f90fc906-395b-79be-8f44-3807586766f7@infradead.org>
-        <CAFd5g46ZaEVoMb2hO94A41Z=YH6ntTdXstZUhHu67mwOKY+QsA@mail.gmail.com>
-        <20200415185545.GA1632@home.goodmis.org>
-        <26e0f0dd-4ea2-14e7-fae5-81a5a1451272@infradead.org>
-X-Mailer: Claws Mail 3.17.3 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        id S1731290AbgDOVwe (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 15 Apr 2020 17:52:34 -0400
+IronPort-SDR: In9E5fXNBkqglo8TxAmOrOnqYtljVAReTOl3eqoQNTeQ7o0WMihZOgf4M3RCrrPtIn3SPSQl72
+ 6OJZqCoVmpoA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2020 14:52:33 -0700
+IronPort-SDR: UPlWAnNWjmdiTb9DDxhqHXmstlOrh1L3Erh+angx0aJl64LhAn9MON4WHlutCCWIyruoZTCjVS
+ FW3Hy6EPKnLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,388,1580803200"; 
+   d="scan'208";a="256993381"
+Received: from jsfenner-mobl1.amr.corp.intel.com (HELO [10.252.129.141]) ([10.252.129.141])
+  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2020 14:52:31 -0700
+Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
+ pages
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        linux-next@vger.kernel.org, akpm@linux-foundation.org,
+        jack@suse.cz, kirill@shutemov.name,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
+        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Will Deacon <will@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+ <20200306132537.783769-3-imbrenda@linux.ibm.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <3ae46945-0c7b-03cd-700a-a6fe8003c6ab@intel.com>
+Date:   Wed, 15 Apr 2020 14:52:31 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200306132537.783769-3-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 15 Apr 2020 12:16:49 -0700
-Randy Dunlap <rdunlap@infradead.org> wrote:
+On 3/6/20 5:25 AM, Claudio Imbrenda wrote:
+> +	/*
+> +	 * We need to make the page accessible if and only if we are going
+> +	 * to access its content (the FOLL_PIN case).  Please see
+> +	 * Documentation/core-api/pin_user_pages.rst for details.
+> +	 */
+> +	if (flags & FOLL_PIN) {
+> +		ret = arch_make_page_accessible(page);
+> +		if (ret) {
+> +			unpin_user_page(page);
+> +			page = ERR_PTR(ret);
+> +			goto out;
+> +		}
+> +	}
 
+Thanks, Claudio, for a really thorough refresher on this in private mail.
 
-> > My test suite just tripped over this bug. Is this the patch that you think
-> > fixes it?
-> > 
-> > https://lore.kernel.org/linux-kselftest/20200414081513.GD2828150@kuha.fi.intel.com  
-> 
-> Yes, it is, but GregKH and Rafael Wysocki don't seem to like that patch
-> and are suggesting some changes in lib/kobject.c (only pseudocode,
-> no patch yet).
-> 
-> > I'll add it to see if I can continue my testing.  
-> 
-> See the thread
-> [PATCH v1] kobject: make sure parent is not released before children
-> 
-> Here is Rafael's suggestion:
-> https://lore.kernel.org/linux-kselftest/CAJZ5v0hNemTDVa_S-FfVMbrKjM-RWYoHh88asnUvTNxZinY2cw@mail.gmail.com/
-> 
+But, I think this mechanism probably hooks into the wrong place.  I
+don't doubt that it *functions* on s390, but I think these calls are
+misplaced.  I think the end result is that no other architecture will
+have a chance to use the same hooks.  They're far too s390-specific even
+for a concept that's not limited to s390.
 
-Thanks for the update.
+get_user_pages(FOLL_PIN) does *not* mean "the kernel will access this
+page's contents".  The kmap() family is really what we use for that.
+kmap()s are often *preceded* by get_user_pages(), which is probably why
+this works for you, though.
 
-If the first patch prevents the crash from happening, then I'll keep it for
-the time being. I have a list of patch "fixes" that get applied to the
-kernel I'm testing, such that I can run the tests without them failing for
-something that I'm not testing. Otherwise, I'd never get to test my code :-)
+Yes, the docs do say that FOLL_PIN is for accessing the pages.  But,
+there's a crucial thing that it leaves out: *WHO* will be accessing the
+pages.  For Direct IO, for instance, the CPU isn't touching the page at
+all.  It's always a device.  Also, crucially, the page contents are
+*not* accessible from the CPU's perspective after a gup.  They're not
+accessible until a kmap().  They're also not even accessible for
+*devices* after a gup.  There's a _separate_ mapping process that's
+requires to make them accessible to the CPU.
 
-Some of theses patches just remove "WARN_ON" because those will cause my
-tests to fail. I really don't care if i915 triggers WARN_ON() as my code
-shouldn't be affecting it.
+> --- a/mm/page-writeback.c
+> +++ b/mm/page-writeback.c
+> @@ -2764,7 +2764,7 @@ int test_clear_page_writeback(struct page *page)
+>  int __test_set_page_writeback(struct page *page, bool keep_write)
+>  {
+>  	struct address_space *mapping = page_mapping(page);
+> -	int ret;
+> +	int ret, access_ret;
+>  
+>  	lock_page_memcg(page);
+>  	if (mapping && mapping_use_writeback_tags(mapping)) {
+> @@ -2807,6 +2807,13 @@ int __test_set_page_writeback(struct page *page, bool keep_write)
+>  		inc_zone_page_state(page, NR_ZONE_WRITE_PENDING);
+>  	}
+>  	unlock_page_memcg(page);
+> +	access_ret = arch_make_page_accessible(page);
+> +	/*
+> +	 * If writeback has been triggered on a page that cannot be made
+> +	 * accessible, it is too late to recover here.
+> +	 */
+> +	VM_BUG_ON_PAGE(access_ret != 0, page);
+> +
+>  	return ret;
+>  
+>  }
 
--- Steve
+I think this one really shows the cracks in the approach.  Pages being
+swapped *don't* have get_user_pages() done on them since we've already
+got the physical page at the time writeback and aren't looking at PTEs.
+
+They're read by I/O devices sending them out to storage, but also by the
+CPU if you're doing something like zswap.  But, again, critically,
+accessing page contents won't be done until kmap().
+
+I suspect you saw crashes underneath __swap_writepage()->submit_bio()
+and looked a few lines up to the set_page_writeback() and decided to
+hook in there.  I think a better spot, again, is to hook into kmap()
+which is called in the block layer.
+
+Why do I care?
+
+I was looking at AMD's SEV (Secure Encrypted Virtualization) code which
+is in the kernel which shares some implementation details with the
+not-in-the-tree Intel MKTME.  SEV currently has a concept of guest pages
+being encrypted and being gibberish to the host, plus a handshake to
+share guest-selected pages.  Some of the side-effects of exposing the
+gibberish to the host aren't great (I think it can break cache coherency
+if a stray write occurs) and it would be nice to get better behavior.
+
+But, to get better behavior, the host kernel might need to remove pages
+from its direct map, making them inaccessible.  I was hoping to reuse
+arch_make_page_accessible() for obvious reasons.  But, get_user_pages()
+is not the right spot to map pages because they might not *ever* be
+accessed by the CPU, only devices.
+
+Anyway, I know it's late feedback, but I'd hate to have core code like
+this that has no hope of ever getting reused.

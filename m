@@ -2,176 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D6CF1AC1CF
-	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 14:52:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8F7B1ACE08
+	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 18:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2636036AbgDPMw0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Apr 2020 08:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50160 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S2636287AbgDPMwV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Apr 2020 08:52:21 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA3EC061A0C
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 05:52:20 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id nu11so1334241pjb.1
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 05:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=kQRaYFPe4g5wDSsedYWlO3CCokR4+ViiRMNDjTt0Yrc=;
-        b=rj6gu+664gjPr/KgpjW72b4p8PCgKu0rKuEv2ND5/8jpwe3AJwVE9zCd5yDBjDphDu
-         UQNHdZqRsco0CcHpnRtehGJ6noIwtvDgR1LyOzHXKkXESyGt3glIp8+T7UTs/zAPIn4P
-         9UBA7pKao0204+IBK374FErsrC3n277ESqsn11JPDnHwXxQPAircDicRXQo0B81F8hcg
-         Go55gltE/qmdT9aNVrsKlYiLE1kMoLFpe15ejUQunJxc77+8B41xctVDucOlHxtPjmBW
-         HsL9BL5f4EUYFuZPLWJFRwob3n0k4CCZQNrI7D1HCQjaHcMD5qosyxxkhd1spq6vNi5E
-         GdXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=kQRaYFPe4g5wDSsedYWlO3CCokR4+ViiRMNDjTt0Yrc=;
-        b=psi5GSyz0WHXXcaKfiL14xcOdY2fRqfsoZaeWx9l1f6xGtBWr7hNfr+lCr6t/2Zz6g
-         CA5a7GOCHUzHcLnBx0RCAt5+yyjnhJeWO1dO0C2NcEet7jO17TNf9nZIqdAuo+R4D1NU
-         zFjA/ZWnK0jl+YBBDldjl3MnkzgmEkJIrq5HAyWlewCeoqTTGFW1pg/usaiHJkwON6OK
-         5k34fcy4yAnWhz/+a3/1rKfp8nntt1bwn4Y6WCN5ZoFuonXbLrfsMpIF5XwB2gF9+Sz5
-         +H4cvc41RRx1oIZGIYltbCbJhG8n85hds82rsoMgFfbJIaAOgO5YYNAuqY/IZnvd1gti
-         0KPw==
-X-Gm-Message-State: AGi0PuaJa3vF6LwREK3TFnADblyS9VHlUVCu9WPu94s/RJihhT8ck93M
-        wIqGtzXKc7C6mxrVkHmCiLnKhJc5SQ4=
-X-Google-Smtp-Source: APiQypJL5YlLYl8IdxLJHYb+na89U9+/ZZD+6EcN0zas23IixsaAfEuTMQlWYgJCUVbtwNd44ke67g==
-X-Received: by 2002:a17:90b:3014:: with SMTP id hg20mr5101963pjb.56.1587041539480;
-        Thu, 16 Apr 2020 05:52:19 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id kb18sm2800355pjb.14.2020.04.16.05.52.18
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 05:52:18 -0700 (PDT)
-Message-ID: <5e985502.1c69fb81.d4452.9399@mx.google.com>
-Date:   Thu, 16 Apr 2020 05:52:18 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728026AbgDPQvX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Apr 2020 12:51:23 -0400
+Received: from mga07.intel.com ([134.134.136.100]:5528 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727910AbgDPQvU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Apr 2020 12:51:20 -0400
+IronPort-SDR: R2IdWx56wEWraMyrXGXBFY3//qj3eFCKBlmSA7nHI9BVEcpNsGuQpIOdHFnaVlAf3/4q/wUJCN
+ kZ4dfxX0uV8g==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2020 09:51:18 -0700
+IronPort-SDR: ak+3S0j6sDqOFGFT/3cgjGIRLkm2WdcJEc+2FtgpItsOgDIUFmG93ls1QG9XOaLL5EvmqOvril
+ h6opWpXGFb8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,391,1580803200"; 
+   d="scan'208";a="278060192"
+Received: from ernestom-mobl.amr.corp.intel.com (HELO [10.251.128.102]) ([10.251.128.102])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Apr 2020 09:51:17 -0700
+Subject: Re: linux-next: Fixes tags needs some work in the sound-asoc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Daniel Baluta <daniel.baluta@nxp.com>
+References: <20200416094111.3f37623f@canb.auug.org.au>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-ID: <14195fe3-14b2-eb80-3409-f7ca817b95f5@linux.intel.com>
+Date:   Thu, 16 Apr 2020 07:55:20 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200416
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master boot: 280 boots: 6 failed, 266 passed with 3 offline,
- 5 untried/unknown (next-20200416)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200416094111.3f37623f@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 280 boots: 6 failed, 266 passed with 3 offline, 5 untried=
-/unknown (next-20200416)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200416/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200416/
 
-Tree: next
-Branch: master
-Git Describe: next-20200416
-Git Commit: a3ca59b9af21e68069555ffff1ad89bd2a7c40fc
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 108 unique boards, 25 SoC families, 30 builds out of 228
+On 4/15/20 6:41 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>    101001652ee7 ("ASoC: SOF: topology: fix: handle DAI widget connections properly with multiple CPU DAI's")
+> 
+> Fixes tag
+> 
+>    Fixes: 4a7e26a4d833 ("ASoC: SOF: topology: connect dai widget to all
+> 
+> has these problem(s):
+> 
+>    - Target SHA1 does not exist
+> 
+> Maybe you meant
+> 
+> Fixes: c59aca98c912 ("ASoC: SOF: topology: connect dai widget to all cpu-dais")
+> 
+> Also, please do not split Fixes tags over more than one line and keep
+> all the commit message tags together at the end of the commit message.
 
-Boot Regressions Detected:
+Sorry about that. I always run checkpatch.pl and didn't see an error
 
-arm:
+../patches/20200415/0001-ASoC-SOF-topology-fix-handle-DAI-widget-connections-.patch
+-----------------------------------------------------------------------------------
+total: 0 errors, 0 warnings, 0 checks, 49 lines checked
 
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 58 days (last pass: next-20200214=
- - first fail: next-20200217)
+My theory is that the SHA1 check is fooled by our use of worktrees. This 
+SHA1 does exist but on another SOF development branch. Is there a way to 
+restrict the checks only to the base upstream branch, e.g. Mark's 
+for-5.8 branch?
 
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200415)
+If not, we probably need to make sure we have a separate directory just 
+for upstreaming, to avoid any pollution from SOF branches?
 
-arm64:
-
-    defconfig:
-        clang-9:
-          apq8096-db820c:
-              lab-bjorn: failing since 2 days (last pass: next-20200412 - f=
-irst fail: next-20200414)
-        gcc-8:
-          meson-g12b-odroid-n2:
-              lab-baylibre: new failure (last pass: next-20200415)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200415)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200414)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200415)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200415)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 19 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s805x-p241: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            meson-g12b-odroid-n2: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+Thanks
+-Pierre

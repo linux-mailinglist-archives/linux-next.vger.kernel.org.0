@@ -2,129 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3A031ACDE0
-	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 18:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112A41ACE92
+	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 19:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727917AbgDPQjo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Apr 2020 12:39:44 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:55970 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1727843AbgDPQjn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 16 Apr 2020 12:39:43 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03GGXfH3029346
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 12:39:43 -0400
-Received: from e06smtp01.uk.ibm.com (e06smtp01.uk.ibm.com [195.75.94.97])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 30ettd0ehs-1
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 12:39:43 -0400
-Received: from localhost
-        by e06smtp01.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
-        for <linux-next@vger.kernel.org> from <imbrenda@linux.ibm.com>;
-        Thu, 16 Apr 2020 17:34:03 +0100
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (9.149.109.195)
-        by e06smtp01.uk.ibm.com (192.168.101.131) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
-        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
-        Thu, 16 Apr 2020 17:33:58 +0100
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03GGYYwl55312546
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 16 Apr 2020 16:34:34 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1048752054;
-        Thu, 16 Apr 2020 16:34:34 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.0.99])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 300F452050;
-        Thu, 16 Apr 2020 16:34:33 +0000 (GMT)
-Date:   Thu, 16 Apr 2020 18:34:31 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, linux-next@vger.kernel.org,
-        akpm@linux-foundation.org, jack@suse.cz, kirill@shutemov.name,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>,
-        borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
-        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
-        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, Will Deacon <will@kernel.org>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
- pages
-In-Reply-To: <a6b8728d-7382-9316-412d-dd48b5e7c41a@intel.com>
-References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
-        <20200306132537.783769-3-imbrenda@linux.ibm.com>
-        <3ae46945-0c7b-03cd-700a-a6fe8003c6ab@intel.com>
-        <20200415221754.GM2483@worktop.programming.kicks-ass.net>
-        <a7c2eb84-94c2-a608-4b04-a740fa9a389d@intel.com>
-        <20200416141547.29be5ea0@p-imbrenda>
-        <de56aa8e-9035-4b68-33cb-15682d073e26@intel.com>
-        <20200416165900.68bd4dba@p-imbrenda>
-        <a6b8728d-7382-9316-412d-dd48b5e7c41a@intel.com>
-Organization: IBM
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-redhat-linux-gnu)
+        id S1730767AbgDPRWY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Apr 2020 13:22:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:40818 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729373AbgDPRWY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 16 Apr 2020 13:22:24 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 4A9C12076D;
+        Thu, 16 Apr 2020 17:22:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1587057743;
+        bh=t7y5LQKxiCKr8DRWNT37PQt/NonhVq+IuIpLAI7CGNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Wpp+zpP6mhxhMOmcPCPPYkGqhwpQA/5yIVAiB3hrZWBduZauZdmRQul0Waov+B7ub
+         BgdHyB364tqIRAH8myC7Bw2wehHDyzXRNFI8y2hDySwVrkAvV3CcRX4L+htZWbsM3z
+         sNBirLgOuXsEd0Rohk7aoOde/9DzVNNH4MvfGJGk=
+Date:   Thu, 16 Apr 2020 18:22:19 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hui Wang <hui.wang@canonical.com>,
+        Rander Wang <rander.wang@linux.intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bard liao <yung-chuan.liao@linux.intel.com>
+Subject: Re: linux-next: build failures after merge of the sound-asoc tree
+Message-ID: <20200416172219.GO5354@sirena.org.uk>
+References: <20200415121521.3e40b591@canb.auug.org.au>
+ <f73485eb-c0c8-c557-7491-5daabce4d3de@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-x-cbid: 20041616-4275-0000-0000-000003C10776
-X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
-x-cbparentid: 20041616-4276-0000-0000-000038D6824A
-Message-Id: <20200416183431.7216e1d1@p-imbrenda>
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
- definitions=2020-04-16_06:2020-04-14,2020-04-16 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- malwarescore=0 priorityscore=1501 impostorscore=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 phishscore=0 mlxlogscore=669 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2003020000 definitions=main-2004160113
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1bhFRg6vL9BT9osV"
+Content-Disposition: inline
+In-Reply-To: <f73485eb-c0c8-c557-7491-5daabce4d3de@linux.intel.com>
+X-Cookie: Tempt me with a spoon!
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 16 Apr 2020 08:36:50 -0700
-Dave Hansen <dave.hansen@intel.com> wrote:
 
-> On 4/16/20 7:59 AM, Claudio Imbrenda wrote:
-> > On Thu, 16 Apr 2020 07:20:48 -0700
-> > Dave Hansen <dave.hansen@intel.com> wrote:  
-> >> On 4/16/20 5:15 AM, Claudio Imbrenda wrote:  
-> >>>> I assumed that this was all anonymous-only so it's always dirty
-> >>>> before writeback starts.    
-> >>> it could also be mmapped    
-> >>
-> >> Let's say you have a mmap()'d ramfs file.  Another process calls
-> >> which doesn't have it mapped calls sys_write() and writes to the
-> >> file.  
-> ...
-> >> Where is the arch_make_page_accessible() in this case on the ramfs
-> >> page?  
-> > 
-> > it's in the fault handler for the exception the CPU will get when
-> > attempting to write the data to the protected page  
-> 
-> Ahh, so this is *just* intended to precede I/O done on the page, when
-> a non-host entity is touching the memory?
+--1bhFRg6vL9BT9osV
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-yep
+On Tue, Apr 14, 2020 at 10:28:10PM -0500, Pierre-Louis Bossart wrote:
+> On 4/14/20 9:15 PM, Stephen Rothwell wrote:
 
-> That seems inconsistent with the process_vm_readv/writev() paths which
-> set FOLL_PIN on their pin_remote_user_pages() requests, but don't do
-> I/O to the memory.
+> > drivers/soundwire/intel.c:676:8: error: 'struct snd_soc_pcm_runtime' has no member named 'codec_dais'
+> >    676 |     rtd->codec_dais[i]->name);
 
-FOLL_PIN simply indicates potential access to the content of the page,
-not just for I/O.
+> Bard, can you take care of the SoundWire change - this needs to change to
+> asoc_rtd_to_codec(rtd, i)
 
-so yes, we are overdoing arch_make_page_accessible() in some cases,
-because we can't tell when a page will be used for I/O and when not.
+Bard?
 
-In most cases this will boil down to checking a flag and doing nothing,
-for example in case the page was already accessible.
+--1bhFRg6vL9BT9osV
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Also note that making the page accessible because of a FOLL_PIN in
-absence of I/O will probably later on spare us from triggering and
-handling the exception that would have caused us to make the page
-accessible anyway.
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6YlEoACgkQJNaLcl1U
+h9ASpwf/YKfh8U5CWkgqK8mGVOeRPjf4UcTyV1hxcI3CylFyvakIeaXm6aavw032
+LIZ/HFTZo/wz1agTpb3dQRHE0wFr9EctnaQ6EpYguyKovvHXP058YmAMi0nxCwap
+O4Yf1vXpHOKAHNQhPNf54kQykd7wxiwLEEfFLNZdWPYKWKsC3R75pKEskA/ehWZ6
+HRQsKS5UYhLnRQAQzxkm9YJ72Mr8H9vtFhAzjF9crlFs7yxKogk06pIUYnQPPPg1
+BWjsTFLoamtbHYQQPftd4riX2w1/omBSIfvVCzmyHAJCJqUfFpdhtqq0QBepgQRP
+nJ3SeFpBKaM3lXw/vgJS42QILOOUUw==
+=fr8X
+-----END PGP SIGNATURE-----
+
+--1bhFRg6vL9BT9osV--

@@ -2,114 +2,248 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AE1831AB45B
-	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 01:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6099C1AB574
+	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 03:26:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgDOXlV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 15 Apr 2020 19:41:21 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52023 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726054AbgDOXlS (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 15 Apr 2020 19:41:18 -0400
+        id S1731606AbgDPBZ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 15 Apr 2020 21:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730596AbgDPBZ2 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 15 Apr 2020 21:25:28 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A925C061A0C;
+        Wed, 15 Apr 2020 18:25:28 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 492f4n3gRtz9sR4;
-        Thu, 16 Apr 2020 09:41:13 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 492hNz2ng9z9sR4;
+        Thu, 16 Apr 2020 11:25:22 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1586994074;
-        bh=oeZ9gMG1RZkj/Ml/LW78VGxuOlGHcfmS1Gzdw5qrXBw=;
+        s=201702; t=1587000326;
+        bh=x3lpdVUepnNgZQf7tZXXTh4P8pqMEPhXHfvV9QGBu1U=;
         h=Date:From:To:Cc:Subject:From;
-        b=dhvdhRBNRzE0ih0zosUwQoTwKkM/wM0tPVXNPX5rtZIDNmgaZKVkDPRmarvltjfaF
-         j1HXSKRYaEVMl8cNZ8G9flyrJDzRxzT8dp2dSG4a2Xbe00pZFNzk6MkTE07Wav8pT/
-         kJM4fynz1XoDQYGQ+UYtu58P03aTAV5rXo047OopmkFdkn+r7Qd7UKO61/RVfZbeyv
-         nVyGgnLYnSjAl/FGbCM1FUZ56131tmcyxDHipgtagXB4QaN7LoLJhl7pr19QsuexH8
-         cw5FLgHb7i6zJoOtMlzsoNQ7rlXklgWpIwK6BY/BSgdwONtUF/7WDzcIXEXQWfVl35
-         bEAKZhWOL7aNg==
-Date:   Thu, 16 Apr 2020 09:41:11 +1000
+        b=adEKi4mPSl/DAn2aUbOCZMdSE75cWBVRHEAU51KWKVgEG1SUS72HmOhiZC3QTreNL
+         qmrRl+1bzt/zWkI8XD9bawy4JMtDEl0t5FaQhRszwGe2oljGGJuX38qLJJpa8uY00f
+         H6lv8aUrKkKCmEFUIigNqU3V9shsiPxFoKKbWMD+/B0aYtAdsTPK7taD0gcGEnHtLH
+         i9GTQAPJzzoiLSJNxNCv1Z+wQpKNGpvFalFbQqQNl2LlcZkJFj9LChegocfuaFalDo
+         81g40isLTiPIu/idFHaXeZv4Dk3xmPacjtt3/+s2GrTWkbOP8Aa3yDmk1MBcgqb1KA
+         xHRKx9ZKXBizw==
+Date:   Thu, 16 Apr 2020 11:25:19 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>
-Subject: linux-next: Fixes tags needs some work in the sound-asoc tree
-Message-ID: <20200416094111.3f37623f@canb.auug.org.au>
+        Sam Ravnborg <sam@ravnborg.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Joe Perches <joe@perches.com>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20200416112519.7a1fdd8b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/exYr7II/YnkQw91A8LUO2bA";
+Content-Type: multipart/signed; boundary="Sig_/9prFsjk7hua=0QSd8qYIwww";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/exYr7II/YnkQw91A8LUO2bA
-Content-Type: text/plain; charset=US-ASCII
+--Sig_/9prFsjk7hua=0QSd8qYIwww
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-  101001652ee7 ("ASoC: SOF: topology: fix: handle DAI widget connections pr=
-operly with multiple CPU DAI's")
+  MAINTAINERS
 
-Fixes tag
+between commits:
 
-  Fixes: 4a7e26a4d833 ("ASoC: SOF: topology: connect dai widget to all
+  4400b7d68f6e ("MAINTAINERS: sort entries by entry name")
+  3b50142d8528 ("MAINTAINERS: sort field names for all entries")
 
-has these problem(s):
+from Linus' tree and commits:
 
-  - Target SHA1 does not exist
+  5304058b1526 ("dt-bindings: display: convert arm,versatile-tft-panel to D=
+T Schema")
+  c1eb28405d3a ("dt-bindings: display: convert boe,himax8279d to DT Schema")
+  1aa3bf853cb4 ("dt-bindings: display: convert raydium,rm67191 to DT Schema=
+")
+  8b9e7ace123d ("dt-bindings: display: convert olimex,lcd-olinuxino to DT S=
+chema")
 
-Maybe you meant
+from the drm-misc tree.
 
-Fixes: c59aca98c912 ("ASoC: SOF: topology: connect dai widget to all cpu-da=
-is")
-
-Also, please do not split Fixes tags over more than one line and keep
-all the commit message tags together at the end of the commit message.
-
-In commit
-
-  cb0312f61c3e ("ASoC: SOF: imx: fix undefined reference issue")
-
-Fixes tag
-
-  Fixes: f9ad75468453 ("ASoC: SOF: imx: fix reverse CONFIG_SND_SOC_SOF_OF
-
-has these problem(s):
-
-  - Subject has leading but no trailing parentheses
-  - Subject has leading but no trailing quotes
-
-Please do not split Fixes tags over more than one line.
-
-Mark, since you don't seem to rebase your branches, please start pushing
-back on these before they are committed to your tree (especially the
-non existent SHA1s).
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/exYr7II/YnkQw91A8LUO2bA
+diff --cc MAINTAINERS
+index a7f3c96eb61e,ccd0ccfce4eb..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -5037,14 -5019,32 +5037,14 @@@ M:	Sumit Semwal <sumit.semwal@linaro.or
+  L:	linux-media@vger.kernel.org
+  L:	dri-devel@lists.freedesktop.org
+  L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+ +S:	Maintained
+ +T:	git git://anongit.freedesktop.org/drm/drm-misc
+ +F:	Documentation/driver-api/dma-buf.rst
+  F:	drivers/dma-buf/
+ +F:	include/linux/*fence.h
+  F:	include/linux/dma-buf*
+  F:	include/linux/dma-resv.h
+- K:	dma_(buf|fence|resv)
+ -F:	include/linux/*fence.h
+ -F:	Documentation/driver-api/dma-buf.rst
++ K:	\bdma_(?:buf|fence|resv)\b
+ -T:	git git://anongit.freedesktop.org/drm/drm-misc
+ -
+ -DMA-BUF HEAPS FRAMEWORK
+ -M:	Sumit Semwal <sumit.semwal@linaro.org>
+ -R:	Andrew F. Davis <afd@ti.com>
+ -R:	Benjamin Gaignard <benjamin.gaignard@linaro.org>
+ -R:	Liam Mark <lmark@codeaurora.org>
+ -R:	Laura Abbott <labbott@redhat.com>
+ -R:	Brian Starkey <Brian.Starkey@arm.com>
+ -R:	John Stultz <john.stultz@linaro.org>
+ -S:	Maintained
+ -L:	linux-media@vger.kernel.org
+ -L:	dri-devel@lists.freedesktop.org
+ -L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
+ -F:	include/uapi/linux/dma-heap.h
+ -F:	include/linux/dma-heap.h
+ -F:	drivers/dma-buf/dma-heap.c
+ -F:	drivers/dma-buf/heaps/*
+ -T:	git git://anongit.freedesktop.org/drm/drm-misc
+ =20
+  DMA GENERIC OFFLOAD ENGINE SUBSYSTEM
+  M:	Vinod Koul <vkoul@kernel.org>
+@@@ -5255,10 -5226,15 +5255,10 @@@ F:	drivers/gpu/drm/pl111
+ =20
+  DRM DRIVER FOR ARM VERSATILE TFT PANELS
+  M:	Linus Walleij <linus.walleij@linaro.org>
+ -T:	git git://anongit.freedesktop.org/drm/drm-misc
+  S:	Maintained
+ -F:	drivers/gpu/drm/panel/panel-arm-versatile.c
+ +T:	git git://anongit.freedesktop.org/drm/drm-misc
+- F:	Documentation/devicetree/bindings/display/panel/arm,versatile-tft-pane=
+l.txt
++ F:	Documentation/devicetree/bindings/display/panel/arm,versatile-tft-pane=
+l.yaml
+ -
+ -DRM DRIVER FOR AST SERVER GRAPHICS CHIPS
+ -M:	Dave Airlie <airlied@redhat.com>
+ -S:	Odd Fixes
+ -F:	drivers/gpu/drm/ast/
+ +F:	drivers/gpu/drm/panel/panel-arm-versatile.c
+ =20
+  DRM DRIVER FOR ASPEED BMC GFX
+  M:	Joel Stanley <joel@jms.id.au>
+@@@ -5283,8 -5254,8 +5283,8 @@@ F:	drivers/gpu/drm/bochs
+  DRM DRIVER FOR BOE HIMAX8279D PANELS
+  M:	Jerry Han <hanxu5@huaqin.corp-partner.google.com>
+  S:	Maintained
+- F:	Documentation/devicetree/bindings/display/panel/boe,himax8279d.txt
+ -F:	drivers/gpu/drm/panel/panel-boe-himax8279d.c
++ F:	Documentation/devicetree/bindings/display/panel/boe,himax8279d.yaml
+ +F:	drivers/gpu/drm/panel/panel-boe-himax8279d.c
+ =20
+  DRM DRIVER FOR FARADAY TVE200 TV ENCODER
+  M:	Linus Walleij <linus.walleij@linaro.org>
+@@@ -5301,8 -5272,8 +5301,8 @@@ F:	drivers/gpu/drm/panel/panel-feixin-k
+  DRM DRIVER FOR FEIYANG FY07024DI26A30-D MIPI-DSI LCD PANELS
+  M:	Jagan Teki <jagan@amarulasolutions.com>
+  S:	Maintained
+- F:	Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30=
+d.txt
+ -F:	drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
++ F:	Documentation/devicetree/bindings/display/panel/feiyang,fy07024di26a30=
+d.yaml
+ +F:	drivers/gpu/drm/panel/panel-feiyang-fy07024di26a30d.c
+ =20
+  DRM DRIVER FOR GRAIN MEDIA GM12U320 PROJECTORS
+  M:	Hans de Goede <hdegoede@redhat.com>
+@@@ -5384,8 -5355,8 +5384,8 @@@ F:	include/uapi/drm/nouveau_drm.
+  DRM DRIVER FOR OLIMEX LCD-OLINUXINO PANELS
+  M:	Stefan Mavrodiev <stefan@olimex.com>
+  S:	Maintained
+- F:	Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.t=
+xt
+ -F:	drivers/gpu/drm/panel/panel-olimex-lcd-olinuxino.c
++ F:	Documentation/devicetree/bindings/display/panel/olimex,lcd-olinuxino.y=
+aml
+ +F:	drivers/gpu/drm/panel/panel-olimex-lcd-olinuxino.c
+ =20
+  DRM DRIVER FOR PERVASIVE DISPLAYS REPAPER PANELS
+  M:	Noralf Tr=C3=B8nnes <noralf@tronnes.org>
+@@@ -5418,12 -5395,6 +5418,12 @@@ S:	Orphan / Obsolet
+  F:	drivers/gpu/drm/r128/
+  F:	include/uapi/drm/r128_drm.h
+ =20
+ +DRM DRIVER FOR RAYDIUM RM67191 PANELS
+ +M:	Robert Chiras <robert.chiras@nxp.com>
+ +S:	Maintained
+- F:	Documentation/devicetree/bindings/display/panel/raydium,rm67191.txt
+++F:	Documentation/devicetree/bindings/display/panel/raydium,rm67191.yaml
+ +F:	drivers/gpu/drm/panel/panel-raydium-rm67191.c
+ +
+  DRM DRIVER FOR ROCKTECH JH057N00900 PANELS
+  M:	Guido G=C3=BCnther <agx@sigxcpu.org>
+  R:	Purism Kernel Team <kernel@puri.sm>
+@@@ -5441,18 -5412,18 +5441,18 @@@ S:	Orphan / Obsolet
+  F:	drivers/gpu/drm/sis/
+  F:	include/uapi/drm/sis_drm.h
+ =20
+ -DRM DRIVER FOR SITRONIX ST7701 PANELS
+ -M:	Jagan Teki <jagan@amarulasolutions.com>
+ -S:	Maintained
+ -F:	drivers/gpu/drm/panel/panel-sitronix-st7701.c
+ -F:	Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
+ -
+  DRM DRIVER FOR SITRONIX ST7586 PANELS
+  M:	David Lechner <david@lechnology.com>
+ -T:	git git://anongit.freedesktop.org/drm/drm-misc
+  S:	Maintained
+ -F:	drivers/gpu/drm/tiny/st7586.c
+ +T:	git git://anongit.freedesktop.org/drm/drm-misc
+  F:	Documentation/devicetree/bindings/display/sitronix,st7586.txt
+ +F:	drivers/gpu/drm/tiny/st7586.c
+ +
+ +DRM DRIVER FOR SITRONIX ST7701 PANELS
+ +M:	Jagan Teki <jagan@amarulasolutions.com>
+ +S:	Maintained
+- F:	Documentation/devicetree/bindings/display/panel/sitronix,st7701.txt
+++F:	Documentation/devicetree/bindings/display/panel/sitronix,st7701.yaml
+ +F:	drivers/gpu/drm/panel/panel-sitronix-st7701.c
+ =20
+  DRM DRIVER FOR SITRONIX ST7735R PANELS
+  M:	David Lechner <david@lechnology.com>
+
+--Sig_/9prFsjk7hua=0QSd8qYIwww
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6Xm5cACgkQAVBC80lX
-0GyqdAgAhzEdqL4qnFxi3YnKTTnTI0YthCBQisbj0vAHHIRkGL0I5+OM4OfjAWNP
-1jgL8/MyM7nLeHOorUrD1OlfXEdTQu5YmWPvkIhOtZ/06V9CnPxQcq1MCFcTXzI3
-hV3i4UKoHnE8msFQ0NQHlpO7YVaPbDWRuQmJmuvvP3XA8N6sG7lvDmGLqZEDt2iv
-d+WAsqCBguSmgkeUiphNW7tHKPI4ymbGVSBrdDJqUDljtlRlJ5dxSic/XeF47lxw
-d8IL8K8StiPRjzwpzF8YlnF3s/KiCcr4NyG9UgDn6W731zlD+JqLvtWrOFQjTHjG
-Pq7jeZNxihX4KOcxmgPinA108fBFug==
-=gKqn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6Xs/8ACgkQAVBC80lX
+0Gwacwf/W45yTeyMp54HAyhilFqoLAVJta3sJ7yPhY0ihcAiZaB9wOwmjPuLG4bW
+yum5ONzupXmrY8InFS+OLYZ7ScnW09guLLcBzfvyeDGK9+EglZ1XQEzWsCAH7PsH
+hFYt9/A/2enl49aZywuNscOkcvLAH1Mcxq1kGHyT1yq6rj9q9pDfUU4T6Le7dDgH
+Y9jMf4GBjQ0sVGyvKA4yVs4sOOJBi0as3lXdHR2sNkgURw1sG2XkK2YQhOx6yi1o
+Yj4WYZP8QAWNcqLiSzb5klM79fcZFXEoBzjwMo6nXN7GYNLs9O1gNC4ip6LKnpUz
+pp1qy98NsmihCl7rJmWiU1YBhA2Ufg==
+=aNN5
 -----END PGP SIGNATURE-----
 
---Sig_/exYr7II/YnkQw91A8LUO2bA--
+--Sig_/9prFsjk7hua=0QSd8qYIwww--

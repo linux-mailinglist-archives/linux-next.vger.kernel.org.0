@@ -2,148 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 91A571ABA8E
-	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 09:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01201ABB7E
+	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 10:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2440233AbgDPH54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Apr 2020 03:57:56 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:60048 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2440881AbgDPH5X (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Apr 2020 03:57:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587023842;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=payC5JiVreqHkU2B+K9UiLU+mY+GY4f5CPsBYBzyoLA=;
-        b=GjTJXd4mzA2ISq4r3dZkf15+bwSangu3mJWzkolir83A9Wq72cMeiIvnyYREKkPsth+/zB
-        VGA6Z4bgpKsqjibxdoTDcRhaIus0LEFdLJ/lAK7qoJhFimFdfeVRO0mPWGM9c83kdwvulh
-        r8Rj76Xce9acMm7CJELrqoOWrKsIRAs=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-179-A3DgaoqiOKqhn-19x2antg-1; Thu, 16 Apr 2020 03:57:18 -0400
-X-MC-Unique: A3DgaoqiOKqhn-19x2antg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S2502249AbgDPIkr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Apr 2020 04:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2441458AbgDPIjv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Apr 2020 04:39:51 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70E2C03C1A8;
+        Thu, 16 Apr 2020 01:27:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 461FF107ACC9;
-        Thu, 16 Apr 2020 07:57:17 +0000 (UTC)
-Received: from eperezma.remote.csb (ovpn-112-194.ams2.redhat.com [10.36.112.194])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E34AD7E7C0;
-        Thu, 16 Apr 2020 07:57:14 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 8/8] tools/virtio: Use tools/include/list.h instead of stubs
-Date:   Thu, 16 Apr 2020 09:56:43 +0200
-Message-Id: <20200416075643.27330-9-eperezma@redhat.com>
-In-Reply-To: <20200416075643.27330-1-eperezma@redhat.com>
-References: <20200416075643.27330-1-eperezma@redhat.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 492smK4CFPz9sP7;
+        Thu, 16 Apr 2020 18:27:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1587025666;
+        bh=/ecLQujCj7PCtPflbT7k6//wSNSBSiYzqTmN62g5shA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=npT8sRBiGiJ1JZe4wcevWxdTxWyoV/sJ4YgNL7XQCaSOr07D1J4i52sRmx5t1KzwX
+         dMBUpzPJGS0vkQL4fRwcZ0eKX+1SGTxiaJhp+FRlLzm86eNcU293/FmlB4VTtt2ZxK
+         koQoSpUoLFR81AM2lYG6Hi/5ljt9wl+XtkEF6yRYTSjujNRoWJGbOANL0LBVqZubVg
+         hMDTFiK4zvivThmSjd+EsGTFgcl3j7ru9O8HZwdnoTgP9GZAgYSpYS/W/0EPq9K0Nf
+         RRTDU6cScj6N13ut0v7LSOYuwp6CRiG+FLGLN7bfPYuPntrLAQbQygq9fKGzDjmqOr
+         X9Mb/ZIpC7iLA==
+Date:   Thu, 16 Apr 2020 18:27:44 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+Subject: linux-next: build failure after merge of the v4l-dvb tree
+Message-ID: <20200416182744.12d69766@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; boundary="Sig_/MbzpMfz80_1fnMH_TAOt4=s";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-It should not make any significant difference but reduce stub code.
+--Sig_/MbzpMfz80_1fnMH_TAOt4=s
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
----
- tools/virtio/linux/kernel.h | 7 +------
- tools/virtio/linux/virtio.h | 5 ++---
- tools/virtio/virtio_test.c  | 1 +
- tools/virtio/vringh_test.c  | 2 ++
- 4 files changed, 6 insertions(+), 9 deletions(-)
+Hi all,
 
-diff --git a/tools/virtio/linux/kernel.h b/tools/virtio/linux/kernel.h
-index 6683b4a70b05..caab980211a6 100644
---- a/tools/virtio/linux/kernel.h
-+++ b/tools/virtio/linux/kernel.h
-@@ -11,6 +11,7 @@
-=20
- #include <linux/compiler.h>
- #include <linux/types.h>
-+#include <linux/list.h>
- #include <linux/printk.h>
- #include <linux/bug.h>
- #include <errno.h>
-@@ -135,10 +136,4 @@ static inline void free_page(unsigned long addr)
- 	(void) (&_min1 =3D=3D &_min2);		\
- 	_min1 < _min2 ? _min1 : _min2; })
-=20
--/* TODO: empty stubs for now. Broken but enough for virtio_ring.c */
--#define list_add_tail(a, b) do {} while (0)
--#define list_del(a) do {} while (0)
--#define list_for_each_entry(a, b, c) while (0)
--/* end of stubs */
--
- #endif /* KERNEL_H */
-diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
-index b751350d4ce8..5d90254ddae4 100644
---- a/tools/virtio/linux/virtio.h
-+++ b/tools/virtio/linux/virtio.h
-@@ -11,12 +11,11 @@ struct device {
- struct virtio_device {
- 	struct device dev;
- 	u64 features;
-+	struct list_head vqs;
- };
-=20
- struct virtqueue {
--	/* TODO: commented as list macros are empty stubs for now.
--	 * Broken but enough for virtio_ring.c
--	 * struct list_head list; */
-+	struct list_head list;
- 	void (*callback)(struct virtqueue *vq);
- 	const char *name;
- 	struct virtio_device *vdev;
-diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-index dca64d36a882..c0b924b41a1d 100644
---- a/tools/virtio/virtio_test.c
-+++ b/tools/virtio/virtio_test.c
-@@ -129,6 +129,7 @@ static void vdev_info_init(struct vdev_info* dev, uns=
-igned long long features)
- 	int r;
- 	memset(dev, 0, sizeof *dev);
- 	dev->vdev.features =3D features;
-+	INIT_LIST_HEAD(&dev->vdev.vqs);
- 	dev->buf_size =3D 1024;
- 	dev->buf =3D malloc(dev->buf_size);
- 	assert(dev->buf);
-diff --git a/tools/virtio/vringh_test.c b/tools/virtio/vringh_test.c
-index 8ee2c9a6ad46..b88b0337fcfd 100644
---- a/tools/virtio/vringh_test.c
-+++ b/tools/virtio/vringh_test.c
-@@ -307,6 +307,7 @@ static int parallel_test(u64 features,
- 		close(to_host[0]);
-=20
- 		gvdev.vdev.features =3D features;
-+		INIT_LIST_HEAD(&gvdev.vdev.vqs);
- 		gvdev.to_host_fd =3D to_host[1];
- 		gvdev.notifies =3D 0;
-=20
-@@ -453,6 +454,7 @@ int main(int argc, char *argv[])
-=20
- 	getrange =3D getrange_iov;
- 	vdev.features =3D 0;
-+	INIT_LIST_HEAD(&vdev.vqs);
-=20
- 	while (argv[1]) {
- 		if (strcmp(argv[1], "--indirect") =3D=3D 0)
+After merging the v4l-dvb tree, today's linux-next build (s390 defconfig
+and other s390 configs) failed like this:
+
+drivers/pci/Kconfig:16:error: recursive dependency detected!
+drivers/pci/Kconfig:16:	symbol PCI is selected by CEC_SECO
+drivers/media/cec/platform/Kconfig:100:	symbol CEC_SECO depends on MEDIA_CE=
+C_SUPPORT
+drivers/media/cec/Kconfig:27:	symbol MEDIA_CEC_SUPPORT default is visible d=
+epending on MEDIA_SUPPORT_FILTER
+drivers/media/Kconfig:25:	symbol MEDIA_SUPPORT_FILTER depends on MEDIA_SUPP=
+ORT
+drivers/media/Kconfig:12:	symbol MEDIA_SUPPORT depends on HAS_IOMEM
+arch/s390/Kconfig:722:	symbol HAS_IOMEM default value contains PCI
+For a resolution refer to Documentation/kbuild/kconfig-language.rst
+subsection "Kconfig recursive dependency limitations"
+
+Not really sure which commit caused this.
+
 --=20
-2.18.1
+Cheers,
+Stephen Rothwell
 
+--Sig_/MbzpMfz80_1fnMH_TAOt4=s
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6YFwAACgkQAVBC80lX
+0Gxtxwf8C3jwl907GDofFWk1dgBfETM9z9Jra1Ir1b8VtootQDdpDcmylA4HwiFN
+GKFXLR4f49A6vjMGaI8XLloA3o6lkHEfLpPvGl25l3jfpdp2bdD8o0mSRuSadSoA
+IxLeFClM6Sa+uE0uQZntZdaLLD1SWAVNJIooRn35TFRxGBG8DLOv12L7WD++u8kd
+Wa0fmz38IDl0pQs6o/cI402SZ9lhtsyS/Y785seqJIhbC4ZVG9+0NylMaeygojJS
+udN7GiKYkIDA45i2BweR8fu6YZh4fsMmtzEoayOwuyjYQYix7gMaqhxMFSxQzlr9
+Y/uloHLPlyJjndglUpAlSqotQW2DzA==
+=a5ZY
+-----END PGP SIGNATURE-----
+
+--Sig_/MbzpMfz80_1fnMH_TAOt4=s--

@@ -2,214 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B51721ABDA4
-	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 12:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78BE51ABDC1
+	for <lists+linux-next@lfdr.de>; Thu, 16 Apr 2020 12:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2504467AbgDPKJ6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 16 Apr 2020 06:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S2504752AbgDPKSu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 16 Apr 2020 06:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2504441AbgDPKJw (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Apr 2020 06:09:52 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40C9C061A0C
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 03:09:48 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id d17so1439727pgo.0
-        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 03:09:48 -0700 (PDT)
+        with ESMTP id S2504723AbgDPKSi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 16 Apr 2020 06:18:38 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF10C061A0C
+        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 03:18:37 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id x18so4201777wrq.2
+        for <linux-next@vger.kernel.org>; Thu, 16 Apr 2020 03:18:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=VqRckhGxye+fPnC0OM91D+aCGtnwcdmQcIA42GPz92A=;
-        b=ozmTesSX+MbOSC+V9HaQWSGNzx0RyvzgDpiw7M6pH2QmKAXhQIKSV8ODK1yeJcg9k4
-         p3e37UrOJUo3t/R58BT6+dkuWdxwDFRBLbA2CVVgcRTUNu3Nzg2mRDYthzNIwaEMuTwI
-         kfRnPM/T/y1N7xk5Ek0AU630eLvEnLcZsUCvkL+Ifkknh6xZwU9sUPdcDi6mH91TYDcq
-         0xdYT60g6wZ5SRJHNB0eK+DNiC08lz5cU//EF+QucQV4neucJ2+waKAmi/XxyuGUNe2B
-         8OERAGxy+1mj+JSdiEnzoW63GGIm8YSbWL9wKVgYwt6EoKtagEPSbVOHawq6Yit0otpI
-         +Ykg==
+        d=raspberrypi.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bUgfZ1bVCEadOZTn6f1WciIfWFiFPg/98WcfAuR2O9Y=;
+        b=neHbmbx5sAGir0PnAQ/D0CdHbHTYy41SFD1mfLHdYTdWZWXaf9HrZKS6E3TDFXLcjB
+         iouvCxXn/CurBtMicgunwGwxGstfsW04hgoChvZS+ynuJAK3pwU4qeRJYNbEkXwgomaW
+         cCEZ5jS0r8+mawov09ywm/xrFqxvFPH2JMzc+IfZpR+BMn0dJPOKh5hoit4bPs/Sugus
+         b5x0y63Q5V2+oDmwcBTtpe/XKHY6imwAsXwYTXyeWjm1FsgkosvSOmFdkzRuJpd/6ayS
+         HSjj/7oaEbBjpmJoMfeogug+l1hSkio/jdTmzwIogqi6ANdKBmYKriFLX5CYpCACquDD
+         Vrvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=VqRckhGxye+fPnC0OM91D+aCGtnwcdmQcIA42GPz92A=;
-        b=E4PBrbn7uuofR/MtZJpwJjNTfPKqGhRFF2UhB4AZmMLAnLWlg3OwRXMZAYULZ3G14w
-         nqh8mNyJ7CLoOKP3J4+L6OW5pKvVNBlxKO3EJUrTUS7luGNT79mzoz1efMFkW9b2qj6L
-         ErYietQtU25sdoIXsacdTIoZDAXavC76WZgh7P3D1MS4Aj9CH04QWn70MlHxqqWeRMg9
-         cpZ1Lelqk2IorODwPZp7TYV7hSYzplvaZu4ewFuqD6Hh7XbitWBSSIusbyg30ujEi7rx
-         796/48IXNi9TJOhi1y1fcJVoinrG7BpYmbO/sJ7p6YfNM0BY8ATGsjjCHniO/05Ii0yS
-         /ulQ==
-X-Gm-Message-State: AGi0PuZE5MQVe6/x9DJj44kTIqemqW+waHtNF0dswYjGOf9sm/S0fO59
-        NbOQTj2a/XpmE7EBN9qBInpZBS+I/iw=
-X-Google-Smtp-Source: APiQypKv/0dr29QMTamMSSc7LKnLYooAeEI9u8gh7IsBTEvvFZZqDdKbOwMJTor1TzsTN9Z/HELiOA==
-X-Received: by 2002:a63:ea4e:: with SMTP id l14mr30783794pgk.431.1587031787947;
-        Thu, 16 Apr 2020 03:09:47 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id k63sm2145261pjb.6.2020.04.16.03.09.46
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Apr 2020 03:09:47 -0700 (PDT)
-Message-ID: <5e982eeb.1c69fb81.9fa71.66e9@mx.google.com>
-Date:   Thu, 16 Apr 2020 03:09:47 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bUgfZ1bVCEadOZTn6f1WciIfWFiFPg/98WcfAuR2O9Y=;
+        b=kQ+sKfumUpk/ZTj7DLGJzNEeAS4w/SqvisGSraCzOmSiW7vq67KVE09V7c2ZaicNto
+         uO0vxhb74pQmdsBrO1Tw24jyriC5kxU8GNuaWgcGKITrJMuzofB37h8pIozH//UEpkue
+         JuhkPEpfI1nRar8LWdfHNogYGJNh1J6DJtsx1AlOb9EvvvzYhFOK9tYRbrhmcuAuqe0u
+         0pbZWSGFhdYFWXmI0nPBkcLG6tHL/aHyVpL/taoSUzVJvGfTWtQ0A27epHSDK1/sBImp
+         OgJm0m8j6/Iy15XbmMhxj0OscP6MkyrwPK41fBTn375UgZZ4oeHNJ5f2t87kNV/mCp1y
+         uQIw==
+X-Gm-Message-State: AGi0PuadhFPe2E0hXSsSWMh6zKlJ51Ti1JagAw/BkygOTLxY9oNcZbLO
+        jakiB6eAzIzuNV+c+YXItagRiLTopD4bd+6t3UB9/Q==
+X-Google-Smtp-Source: APiQypIUpDnaOLHlAzMeJ5S8ccmu3GZXIYg78W8x4VUdLtn7ttxLAovX/kG1WJ9eOD0opjIOCDNjG6IVLuW8JkaHe8Y=
+X-Received: by 2002:a5d:53c4:: with SMTP id a4mr32561971wrw.47.1587032316508;
+ Thu, 16 Apr 2020 03:18:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.7-rc1-279-gd450baa50f41
-X-Kernelci-Report-Type: boot
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 276 boots: 6 failed,
- 255 passed with 8 offline, 6 untried/unknown,
- 1 conflict (v5.7-rc1-279-gd450baa50f41)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <202004140833.632892C8@keescook> <dad3abd9-c890-eb7b-efa5-f662b096f78e@i2se.com>
+In-Reply-To: <dad3abd9-c890-eb7b-efa5-f662b096f78e@i2se.com>
+From:   Dave Stevenson <dave.stevenson@raspberrypi.com>
+Date:   Thu, 16 Apr 2020 11:18:18 +0100
+Message-ID: <CAPY8ntDa6HOUjTjOOLPd76d5q4fQUg0C25NtQDrsrpJ4pPtp=Q@mail.gmail.com>
+Subject: Re: Coverity: mmal_setup_video_component(): Code maintainability issues
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     coverity-bot <keescook@chromium.org>,
+        Nicolas Saenz Julienne <nsaenzjulienne@suse.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 276 boots: 6 failed, 255 passed with 8 offline, 6 =
-untried/unknown, 1 conflict (v5.7-rc1-279-gd450baa50f41)
+Hi Stefan
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc1-279-gd450baa50f41/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc1-279-gd450baa50f41/
+On Tue, 14 Apr 2020 at 17:49, Stefan Wahren <stefan.wahren@i2se.com> wrote:
+>
+> Hi,
+>
+> Am 14.04.20 um 17:33 schrieb coverity-bot:
+> > Hello!
+> >
+> > This is an experimental semi-automated report about issues detected by
+> > Coverity from a scan of next-20200414 as part of the linux-next scan project:
+> > https://scan.coverity.com/projects/linux-next-weekly-scan
+> >
+> > You're getting this email because you were associated with the identified
+> > lines of code (noted below) that were touched by commits:
+> >
+> >   Sun Mar 29 14:44:58 2020 +0200
+> >     1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
+> >
+> > Coverity reported the following:
+> >
+> > *** CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
+> > /drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c: 1014 in mmal_setup_video_component()
+> > 1008          if (overlay_enabled) {
+> > 1009                  /* Need to disable the overlay before we can update
+> > 1010                   * the resolution
+> > 1011                   */
+> > 1012                  ret = vchiq_mmal_port_disable(dev->instance, preview_port);
+> > 1013                  if (!ret) {
+> > vvv     CID 1492591:  Code maintainability issues  (UNUSED_VALUE)
+> > vvv     Assigning value from "vchiq_mmal_port_connect_tunnel(dev->instance, preview_port, NULL)" to "ret" here, but that stored value is overwritten before it can be used.
+> > 1014                          ret = vchiq_mmal_port_connect_tunnel(dev->instance,
+> > 1015                                                               preview_port,
+> > 1016                                                               NULL);
+> > 1017                  }
+> > 1018          }
+> > 1019          preview_port->es.video.width = f->fmt.pix.width;
+> >
+> > If this is a false positive, please let us know so we can mark it as
+> > such, or teach the Coverity rules to be smarter. If not, please make
+> > sure fixes get into linux-next. :) For patches fixing this, please
+> > include these lines (but double-check the "Fixes" first):
+>
+> thanks for the report. The finding is correct, but the issue already
+> exists before. The intention of my patch was to increase readibility,
+> not to change the behavior.
+>
+> My problem is that i'm not aware how to handle the error case here.
+>
+> @Dave Should we bail out or ignore the error?
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc1-279-gd450baa50f41
-Git Commit: d450baa50f41235ebfb3248de33d448c999b8bab
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 107 unique boards, 24 SoC families, 30 builds out of 217
+Neither vchiq_mmal_port_disable nor
+vchiq_mmal_port_connect_tunnel(inst, src, NULL) should fail - that
+would imply something seriously wrong within the firmware.
+I'd suggest ignore the error - if something is seriously wrong then
+it'll fail and bail later on.
 
-Boot Regressions Detected:
+Looking at vchiq_mmal_port_connect_tunnel, if dst is NULL (as in this
+case) then the first thing it does is call port_disable, same as
+vchiq_mmal_port_disable. The call to vchiq_mmal_port_disable can
+therefore be removed. Same in vidioc_overlay.
 
-arm:
+  Dave
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 61 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          am335x-boneblack:
-              lab-baylibre: new failure (last pass: v5.7-rc1-227-g598f941cf=
-1a8)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.7-rc1-227-g598f941c=
-f1a8)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: failing since 2 days (last pass: v5.6-3095-g771732=
-386d6d - first fail: v5.6-12726-gcb0447b07277)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc1-227-g5=
-98f941cf1a8)
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.7-rc1-227-g598f941cf=
-1a8)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc1-227-g5=
-98f941cf1a8)
-          meson-gxm-q200:
-              lab-baylibre: new failure (last pass: v5.7-rc1-227-g598f941cf=
-1a8)
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: v5.7-rc1-227-g598f941cf1a=
-8)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc1-227-g5=
-98f941cf1a8)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 5 days (last pass: v5.6-1=
-2182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxm-q200: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxbb-p200: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-Conflicting Boot Failure Detected: (These likely are not failures as other =
-labs are reporting PASS. Needs review.)
-
-x86_64:
-    x86_64_defconfig:
-        qemu_x86_64:
-            lab-collabora: PASS (gcc-8)
-            lab-baylibre: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+> Best regards
+> Stefan
+>
+> >
+> > Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+> > Addresses-Coverity-ID: 1492591 ("Code maintainability issues")
+> > Fixes: 1a59532382a6 ("staging: bcm2835-camera: Move video component setup in its own function")
+> >
+> > Thanks for your attention!
+> >
+>

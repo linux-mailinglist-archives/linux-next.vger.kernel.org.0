@@ -2,73 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BD71AD58B
-	for <lists+linux-next@lfdr.de>; Fri, 17 Apr 2020 07:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C9381AD5F5
+	for <lists+linux-next@lfdr.de>; Fri, 17 Apr 2020 08:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726644AbgDQFN7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Apr 2020 01:13:59 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:47440 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726026AbgDQFN6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Apr 2020 01:13:58 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: ezequiel)
-        with ESMTPSA id 69C2E2A009E
-Message-ID: <7faaec92dc9b5870b33c6dbb440de0698b5a70e7.camel@collabora.com>
-Subject: Re: linux-next: build warning after merge of the v4l-dvb tree
-From:   Ezequiel Garcia <ezequiel@collabora.com>
+        id S1726779AbgDQGQW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Apr 2020 02:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726710AbgDQGQW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Apr 2020 02:16:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A387C061A0C;
+        Thu, 16 Apr 2020 23:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=mE/dOyjqqJ9UifL3Sk+D0V7qq7bhB7t90DrI6tsIv9E=; b=N/0lT/tsDvJ/dX88bNUzPMtL3Z
+        p1EXWZ4Vc/DtWTm9H9X05+yrqEFN8Nu2V/dPA1pqLtPnkYf4MCw/glE3oQOQdtbVT0riA0oIGBXf9
+        rAWt2loIuoL0NgO0MIYmKhcp/+/p/nVfXFIQQEn6NomgL10oGmMw/Q9dHh32twFe564xFag5Ahs4W
+        EdKdvbncyMl83MZU6tWvCjr/YJFjgzE0vlMTGGKTevzU/TftBTLyuYib18C+3x9svXgnZqifTOT2e
+        XA/hzVPY5zDHWcnr5KAx+ED54T4pslv2r7FltTKxE2+491ZbSsWML+QGSuM71GqMcXnEHRE9mv4pL
+        ertWKfQQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jPKIU-0002vF-Uf; Fri, 17 Apr 2020 06:16:19 +0000
+Subject: Re: linux-next: Tree for Apr 17 (pinctrl-mcp23s08)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media@vger.kernel.org, Hans Verkuil <hverkuil@xs4all.nl>
-Date:   Fri, 17 Apr 2020 02:13:47 -0300
-In-Reply-To: <20200417102226.11d54815@canb.auug.org.au>
-References: <20200417102226.11d54815@canb.auug.org.au>
-Organization: Collabora
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.0-1 
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+References: <20200417145017.3932443d@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <0f828695-71cc-ab94-e0f0-ae63a192b283@infradead.org>
+Date:   Thu, 16 Apr 2020 23:16:13 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
+In-Reply-To: <20200417145017.3932443d@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
-
-On Fri, 2020-04-17 at 10:22 +1000, Stephen Rothwell wrote:
+On 4/16/20 9:50 PM, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the v4l-dvb tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
-> 
-> WARNING: unmet direct dependencies detected for MEDIA_CONTROLLER_REQUEST_API
->   Depends on [n]: MEDIA_SUPPORT [=m] && MEDIA_CONTROLLER [=y] && STAGING_MEDIA [=n]
->   Selected by [m]:
->   - VIDEO_VIVID [=m] && MEDIA_SUPPORT [=m] && MEDIA_TEST_SUPPORT [=y] && V4L_TEST_DRIVERS [=y] && VIDEO_DEV [=m] && VIDEO_V4L2 [=m] && !SPARC32 &&
-> !SPARC64 && FB [=y] && HAS_DMA [=y]
+> Changes since 20200416:
 > 
 
-Ugh, my bad. MEDIA_CONTROLLER_REQUEST_API can't
-depend on staging, after this recently merged commit:
+on i386:
 
-"media: Kconfig: Don't expose the Request API option"
+WARNING: modpost: missing MODULE_LICENSE() in drivers/pinctrl/pinctrl-mcp23s08.o
 
-So, we should fix that with:
-
-diff --git a/drivers/media/mc/Kconfig b/drivers/media/mc/Kconfig
-index 7c9628f37196..4815b9dde9af 100644
---- a/drivers/media/mc/Kconfig
-+++ b/drivers/media/mc/Kconfig
-@@ -14,7 +14,7 @@ config MEDIA_CONTROLLER_DVB
  
- config MEDIA_CONTROLLER_REQUEST_API
-        bool
--       depends on MEDIA_CONTROLLER && STAGING_MEDIA
-+       depends on MEDIA_CONTROLLER
-        help
-          DO NOT ENABLE THIS OPTION UNLESS YOU KNOW WHAT YOU'RE DOING.
- 
-Mauro what do you think?
-
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

@@ -2,206 +2,204 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B14541AD6CF
-	for <lists+linux-next@lfdr.de>; Fri, 17 Apr 2020 09:04:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B8B1AD74A
+	for <lists+linux-next@lfdr.de>; Fri, 17 Apr 2020 09:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726625AbgDQHEq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Apr 2020 03:04:46 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51513 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1728338AbgDQHEp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 17 Apr 2020 03:04:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587107083;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9GSTWfCb5EE/NSDaeZnWXhb9iMAdwIiOPhmKGByClik=;
-        b=SfsHOjbVcJzTEbVVQm/MO4DdlBs74a01tu2h6Q1MQ+iY7NECF3IJqr9wUXHxHETbP/PBk1
-        xVfPfKLMCYdvAlWB+rhy3xnolXrqqOoB1B8eCcFVhPW2qz826ZEKXTlACLjOzKo+fA5z0h
-        1/FrQZwYnC2KE+Jfg/j09QsaOXy36iY=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-332-jcDkeuxkPRK5ix0JM5Gq4w-1; Fri, 17 Apr 2020 03:04:41 -0400
-X-MC-Unique: jcDkeuxkPRK5ix0JM5Gq4w-1
-Received: by mail-qv1-f70.google.com with SMTP id dh19so1377054qvb.23
-        for <linux-next@vger.kernel.org>; Fri, 17 Apr 2020 00:04:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=9GSTWfCb5EE/NSDaeZnWXhb9iMAdwIiOPhmKGByClik=;
-        b=N/DtFq3rzn6RKciOOzgKQ7sZORrPU1v3ghBW/i4G2WGj6xochBGdilDuiAkxj8HPd9
-         kmUE0SKNj2xpt3fnIzBfhUOmYbkcKbiNKZk+s7QBHlWcwNAxs9N7931qK1TA3Ye64qnE
-         RQFqmb72u7kIKgT2gHw1TQo8lCuiZxbt9oGULShkai77fg6UaI4VEHWPSV8rn+viIikF
-         iAPqwfLpQt2c2DscH877Ke7DGMV+9fu5wSyZbr4HYGVpTS3qeSYlTUNn+zIYiJTPUsSG
-         nSVLG+XfYAqCmLHe4yIDamTKqgy70eeCLkLmXyXYDdhEAg6mE2y4ZNpUUIVHzE2FMm7m
-         M6QQ==
-X-Gm-Message-State: AGi0PuZ9LggDtUScBbK7GcY/u+boBJiYfNzbOXUqUygDwQIBYIhr3ye5
-        oHBmslJun353IE3C2CeS4tOykUstGhnVJj4WrPuQgjantr4/6Kk62859+tSXBDMg5baqJHyY7TZ
-        oHKLCKvLA2ln3ZGkYax5kel5kBzceCS6QLuloEQ==
-X-Received: by 2002:a05:6214:4ec:: with SMTP id cl12mr1273096qvb.8.1587107081148;
-        Fri, 17 Apr 2020 00:04:41 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLG71hCSTWvUMfQMlDUtmUbHRC1VvkaUnEyqlX9ZNigexKVijGSiZkW+L51xi4Sx5Zi3ClZJ3yc09ey6KTQgRs=
-X-Received: by 2002:a05:6214:4ec:: with SMTP id cl12mr1273073qvb.8.1587107080876;
- Fri, 17 Apr 2020 00:04:40 -0700 (PDT)
+        id S1728808AbgDQHUI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 17 Apr 2020 03:20:08 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:40184 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728419AbgDQHUH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 17 Apr 2020 03:20:07 -0400
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03H78NwF119657
+        for <linux-next@vger.kernel.org>; Fri, 17 Apr 2020 03:20:05 -0400
+Received: from e06smtp02.uk.ibm.com (e06smtp02.uk.ibm.com [195.75.94.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30f77k941w-1
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-next@vger.kernel.org>; Fri, 17 Apr 2020 03:20:05 -0400
+Received: from localhost
+        by e06smtp02.uk.ibm.com with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted
+        for <linux-next@vger.kernel.org> from <borntraeger@de.ibm.com>;
+        Fri, 17 Apr 2020 08:19:34 +0100
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (9.149.109.197)
+        by e06smtp02.uk.ibm.com (192.168.101.132) with IBM ESMTP SMTP Gateway: Authorized Use Only! Violators will be prosecuted;
+        (version=TLSv1/SSLv3 cipher=AES256-GCM-SHA384 bits=256/256)
+        Fri, 17 Apr 2020 08:19:30 +0100
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03H7JxmA55967756
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 17 Apr 2020 07:19:59 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 72BA74C04E;
+        Fri, 17 Apr 2020 07:19:59 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 26B634C050;
+        Fri, 17 Apr 2020 07:19:59 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.89.214])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 17 Apr 2020 07:19:59 +0000 (GMT)
+Subject: Re: linux-next: Tree for Apr 17
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-s390 <linux-s390@vger.kernel.org>
+References: <20200417145017.3932443d@canb.auug.org.au>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Date:   Fri, 17 Apr 2020 09:19:58 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-References: <20200416075643.27330-1-eperezma@redhat.com> <20200416075643.27330-8-eperezma@redhat.com>
- <20200416183324-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20200416183324-mutt-send-email-mst@kernel.org>
-From:   Eugenio Perez Martin <eperezma@redhat.com>
-Date:   Fri, 17 Apr 2020 09:04:04 +0200
-Message-ID: <CAJaqyWcBTnXvkzaqfSOWODK=+jddeVpee-4ZuqfWc+zj0UsZLA@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] tools/virtio: Reset index in virtio_test --reset.
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        kvm list <kvm@vger.kernel.org>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200417145017.3932443d@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+x-cbid: 20041707-0008-0000-0000-000003723259
+X-IBM-AV-DETECTION: SAVI=unused REMOTE=unused XFE=unused
+x-cbparentid: 20041707-0009-0000-0000-00004A93ECC6
+Message-Id: <aeedbf33-2dc1-0577-301d-535f49ba287e@de.ibm.com>
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-17_02:2020-04-14,2020-04-17 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 spamscore=0 clxscore=1015 priorityscore=1501
+ mlxlogscore=999 suspectscore=0 phishscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004170048
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Apr 17, 2020 at 12:34 AM Michael S. Tsirkin <mst@redhat.com> wrote:
->
-> On Thu, Apr 16, 2020 at 09:56:42AM +0200, Eugenio P=C3=A9rez wrote:
-> > This way behavior for vhost is more like a VM.
-> >
-> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
->
-> I dropped --reset from 5.7 since Linus felt it's unappropriate.
-> I guess I should squash this in with --reset?
->
 
-Yes please.
 
-If you prefer I can do it using the base you want, so all commits
-messages are right.
+On 17.04.20 06:50, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200416:
+> 
+> My fixes tree contains:
+> 
+>   6b038bdcd3d1 sh: mm: Fix build error
+> 
+> The qcom tree still had its build failure for which I reverted a commit.
+> 
+> The sound-asoc tree still has its failures so I used the version from
+> next-20200414.
+> 
+> The crypto tree gained a build failure for which I reverted 5 commits.
+> 
+> Non-merge commits (relative to Linus' tree): 2255
+>  3007 files changed, 64848 insertions(+), 29193 deletions(-)
+> 
 
-Thanks!
 
-> > ---
-> >  tools/virtio/virtio_test.c | 33 ++++++++++++++++++++++++++-------
-> >  1 file changed, 26 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/tools/virtio/virtio_test.c b/tools/virtio/virtio_test.c
-> > index 18d5347003eb..dca64d36a882 100644
-> > --- a/tools/virtio/virtio_test.c
-> > +++ b/tools/virtio/virtio_test.c
-> > @@ -20,7 +20,6 @@
-> >  #include "../../drivers/vhost/test.h"
-> >
-> >  #define RANDOM_BATCH -1
-> > -#define RANDOM_RESET -1
-> >
-> >  /* Unused */
-> >  void *__kmalloc_fake, *__kfree_ignore_start, *__kfree_ignore_end;
-> > @@ -49,6 +48,7 @@ struct vdev_info {
-> >
-> >  static const struct vhost_vring_file no_backend =3D { .fd =3D -1 },
-> >                                    backend =3D { .fd =3D 1 };
-> > +static const struct vhost_vring_state null_state =3D {};
-> >
-> >  bool vq_notify(struct virtqueue *vq)
-> >  {
-> > @@ -174,14 +174,19 @@ static void run_test(struct vdev_info *dev, struc=
-t vq_info *vq,
-> >       unsigned len;
-> >       long long spurious =3D 0;
-> >       const bool random_batch =3D batch =3D=3D RANDOM_BATCH;
-> > +
-> >       r =3D ioctl(dev->control, VHOST_TEST_RUN, &test);
-> >       assert(r >=3D 0);
-> > +     if (!reset_n) {
-> > +             next_reset =3D INT_MAX;
-> > +     }
-> > +
-> >       for (;;) {
-> >               virtqueue_disable_cb(vq->vq);
-> >               completed_before =3D completed;
-> >               started_before =3D started;
-> >               do {
-> > -                     const bool reset =3D reset_n && completed > next_=
-reset;
-> > +                     const bool reset =3D completed > next_reset;
-> >                       if (random_batch)
-> >                               batch =3D (random() % vq->vring.num) + 1;
-> >
-> > @@ -224,10 +229,24 @@ static void run_test(struct vdev_info *dev, struc=
-t vq_info *vq,
-> >                       }
-> >
-> >                       if (reset) {
-> > +                             struct vhost_vring_state s =3D { .index =
-=3D 0 };
-> > +
-> > +                             vq_reset(vq, vq->vring.num, &dev->vdev);
-> > +
-> > +                             r =3D ioctl(dev->control, VHOST_GET_VRING=
-_BASE,
-> > +                                       &s);
-> > +                             assert(!r);
-> > +
-> > +                             s.num =3D 0;
-> > +                             r =3D ioctl(dev->control, VHOST_SET_VRING=
-_BASE,
-> > +                                       &null_state);
-> > +                             assert(!r);
-> > +
-> >                               r =3D ioctl(dev->control, VHOST_TEST_SET_=
-BACKEND,
-> >                                         &backend);
-> >                               assert(!r);
-> >
-> > +                             started =3D completed;
-> >                               while (completed > next_reset)
-> >                                       next_reset +=3D completed;
-> >                       }
-> > @@ -249,7 +268,9 @@ static void run_test(struct vdev_info *dev, struct =
-vq_info *vq,
-> >       test =3D 0;
-> >       r =3D ioctl(dev->control, VHOST_TEST_RUN, &test);
-> >       assert(r >=3D 0);
-> > -     fprintf(stderr, "spurious wakeups: 0x%llx\n", spurious);
-> > +     fprintf(stderr,
-> > +             "spurious wakeups: 0x%llx started=3D0x%lx completed=3D0x%=
-lx\n",
-> > +             spurious, started, completed);
-> >  }
-> >
-> >  const char optstring[] =3D "h";
-> > @@ -312,7 +333,7 @@ static void help(void)
-> >               " [--no-virtio-1]"
-> >               " [--delayed-interrupt]"
-> >               " [--batch=3Drandom/N]"
-> > -             " [--reset=3Drandom/N]"
-> > +             " [--reset=3DN]"
-> >               "\n");
-> >  }
-> >
-> > @@ -360,11 +381,9 @@ int main(int argc, char **argv)
-> >               case 'r':
-> >                       if (!optarg) {
-> >                               reset =3D 1;
-> > -                     } else if (0 =3D=3D strcmp(optarg, "random")) {
-> > -                             reset =3D RANDOM_RESET;
-> >                       } else {
-> >                               reset =3D strtol(optarg, NULL, 10);
-> > -                             assert(reset >=3D 0);
-> > +                             assert(reset > 0);
-> >                               assert(reset < (long)INT_MAX + 1);
-> >                       }
-> >                       break;
-> > --
-> > 2.18.1
->
+This fails for s390 already in kconfig
+
+$ make defconfig
+*** Default configuration is based on 'defconfig'
+drivers/pci/Kconfig:16:error: recursive dependency detected!
+drivers/pci/Kconfig:16:	symbol PCI is selected by CEC_SECO
+drivers/media/cec/platform/Kconfig:100:	symbol CEC_SECO depends on MEDIA_CEC_SUPPORT
+drivers/media/cec/Kconfig:27:	symbol MEDIA_CEC_SUPPORT default is visible depending on MEDIA_SUPPORT_FILTER
+drivers/media/Kconfig:25:	symbol MEDIA_SUPPORT_FILTER depends on MEDIA_SUPPORT
+drivers/media/Kconfig:12:	symbol MEDIA_SUPPORT depends on HAS_IOMEM
+arch/s390/Kconfig:722:	symbol HAS_IOMEM default value contains PCI
+For a resolution refer to Documentation/kbuild/kconfig-language.rst
+subsection "Kconfig recursive dependency limitations"
+
+
+bisect points to
+
+commit 4be5e8648b0c287aefc6ac3f3a0b12c696054f43
+Author: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Date:   Wed Apr 15 11:03:40 2020 +0200
+
+    media: move CEC platform drivers to a separate directory
+
+
+
+> ----------------------------------------------------------------------------
+> 
+> I have created today's linux-next tree at
+> git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> (patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
+> are tracking the linux-next tree using git, you should not use "git pull"
+> to do so as that will try to merge the new linux-next release with the
+> old one.  You should use "git fetch" and checkout or reset to the new
+> master.
+> 
+> You can see which trees have been included by looking in the Next/Trees
+> file in the source.  There are also quilt-import.log and merge.log
+> files in the Next directory.  Between each merge, the tree was built
+> with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
+> multi_v7_defconfig for arm and a native build of tools/perf. After
+> the final fixups (if any), I do an x86_64 modules_install followed by
+> builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
+> ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
+> and sparc64 defconfig and htmldocs. And finally, a simple boot test
+> of the powerpc pseries_le_defconfig kernel in qemu (with and without
+> kvm enabled).
+> 
+> Below is a summary of the state of the merge.
+> 
+> I am currently merging 318 trees (counting Linus' and 78 trees of bug
+> fix patches pending for the current merge release).
+> 
+> Stats about the size of the tree over time can be seen at
+> http://neuling.org/linux-next-size.html .
+> 
+> Status of my local build tests will be at
+> http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
+> advice about cross compilers/configs that work, we are always open to add
+> more builds.
+> 
+> Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
+> Gortmaker for triage and bug fixes.
+> 
 

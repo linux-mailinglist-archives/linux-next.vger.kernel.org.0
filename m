@@ -2,98 +2,184 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 455201AE9B5
-	for <lists+linux-next@lfdr.de>; Sat, 18 Apr 2020 05:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0791AEA64
+	for <lists+linux-next@lfdr.de>; Sat, 18 Apr 2020 09:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725782AbgDRDyg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 17 Apr 2020 23:54:36 -0400
-Received: from szxga08-in.huawei.com ([45.249.212.255]:56968 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725320AbgDRDyg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 17 Apr 2020 23:54:36 -0400
-Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.53])
-        by Forcepoint Email with ESMTP id A07EC6AC594D7362E8A3;
-        Sat, 18 Apr 2020 11:54:34 +0800 (CST)
-Received: from dggeme762-chm.china.huawei.com (10.3.19.108) by
- DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
- id 14.3.487.0; Sat, 18 Apr 2020 11:54:34 +0800
-Received: from [10.65.91.233] (10.65.91.233) by dggeme762-chm.china.huawei.com
- (10.3.19.108) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1713.5; Sat, 18
- Apr 2020 11:54:34 +0800
-Subject: Re: Coverity: qm_vf_q_assign(): Error handling issues
-To:     coverity-bot <keescook@chromium.org>
-CC:     Zaibo Xu <xuzaibo@huawei.com>, Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        <linux-next@vger.kernel.org>
-References: <202004171458.44E8EB82@keescook>
-From:   Shukun Tan <tanshukun1@huawei.com>
-Message-ID: <878432f5-f7d7-9a3c-c0cc-40bcc6ccc463@huawei.com>
-Date:   Sat, 18 Apr 2020 11:54:32 +0800
-User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.6.0
+        id S1725856AbgDRHCy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Apr 2020 03:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725843AbgDRHCx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Apr 2020 03:02:53 -0400
+Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C2C061A0F
+        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:02:53 -0700 (PDT)
+Received: by mail-qt1-x844.google.com with SMTP id o10so4020267qtr.6
+        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:02:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=TjXmWmuINQagYGOhB0mh8AmFnIMZ72LlgvA/kNKwdwQ=;
+        b=eneHelWvQA1o2xZd7COnbAkMg2VijPrSKWln3C1KPWsKzKaxkBchi9lH3mm6z0mchu
+         bs0JjsONZdn1EW5Pa5rkEnyVwrcm1Xes/rbgpL6bD1OKq7M9E+4rryt6Zw8Vo7c14dm/
+         85kHXX1ylyxSOjBeELkVJa1w6RhDAf58NGAoh0pMlB6JwQWsGpHv7xZfT3vsG5wcU8PO
+         PO4Rx84G3YCeWDVr81SGT2C0srVpxwfHmc3kp1owb9mgCLLBYC0Y6VOoawwzTCKp4JmH
+         iZL2vDgA7Ta2F2bdfEt3J5CsDJ+Hco3D3DWELetZrFN+Ldj5y5ib+FWK5fd+pxaSWQJg
+         ew1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=TjXmWmuINQagYGOhB0mh8AmFnIMZ72LlgvA/kNKwdwQ=;
+        b=EZJ1+IdXKZx6qM9FKHdFScrYYvd4xBxyij73bxoDeF5KviHF4Da8V0ZxCYzcehqLPx
+         AOrdtMlatp6HXhHb/UFYeM5u8+44Xaq7Zs3mLgBCJpv3typJgp66pNhot/0yrWyxYUyy
+         RDBL/93cZw5bsRm7ea/+BzVgLKW7GX712VBoir53jPrUHUVOqN6+eL8owEb6bJspPplc
+         bF/W+4z3NFhLkafCltcqpAVpqyq1vndflixBtP/i0lY4hvcJ/E/rvEy+Nfhek8ulYKq1
+         36Q/r4Ct+5wHSNR6SrBvSmRkUJYiXUJTFy3WYYAqvIDYJV+CVTv9QXqQgXJUCJr43mRA
+         SKNw==
+X-Gm-Message-State: AGi0PubzBFWf5qxVDjNvI2JNX8zaHFhu+5Mk9K8kJHdRONUQ4eKKkt+5
+        v03xTd9Aqbp773c/gnS6WHuyB7C/7UtCrFOBtpl/ng==
+X-Google-Smtp-Source: APiQypLsCDn+7Nx+XS+vfQdJLSgMyJ6cAip9eoqxwKIcZG7bcNNfpWA3QWLCOsdYajOXxXkuacs3h/Laq/BJ+KxyQO4=
+X-Received: by 2002:ac8:1b6a:: with SMTP id p39mr6720360qtk.158.1587193372377;
+ Sat, 18 Apr 2020 00:02:52 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <202004171458.44E8EB82@keescook>
-Content-Type: text/plain; charset="gbk"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.65.91.233]
-X-ClientProxiedBy: dggeme714-chm.china.huawei.com (10.1.199.110) To
- dggeme762-chm.china.huawei.com (10.3.19.108)
-X-CFilter-Loop: Reflected
+References: <000000000000e642a905a0cbee6e@google.com>
+In-Reply-To: <000000000000e642a905a0cbee6e@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Sat, 18 Apr 2020 09:02:41 +0200
+Message-ID: <CACT4Y+YR5Y8OQ4MCdCA2eoQM=GdBXN39O4HahWtL0sdqwsB=mg@mail.gmail.com>
+Subject: Re: linux-next test error: WARNING: suspicious RCU usage in ovs_ct_exit
+To:     syzbot <syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>, dev@openvswitch.org,
+        kuba@kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Pravin B Shelar <pshelar@ovn.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Sat, Mar 14, 2020 at 8:57 AM syzbot
+<syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following crash on:
+>
+> HEAD commit:    2e602db7 Add linux-next specific files for 20200313
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=16669919e00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=cf2879fc1055b886
+> dashboard link: https://syzkaller.appspot.com/bug?extid=7ef50afd3a211f879112
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+>
+> Unfortunately, I don't have any reproducer for this crash yet.
+>
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com
 
++linux-next, Stephen for currently open linux-next build/boot failure
 
-On 2020/4/18 5:58, coverity-bot wrote:
-> Hello!
-> 
-> This is an experimental semi-automated report about issues detected by
-> Coverity from a scan of next-20200417 as part of the linux-next scan project:
-> https://scan.coverity.com/projects/linux-next-weekly-scan
-> 
-> You're getting this email because you were associated with the identified
-> lines of code (noted below) that were touched by commits:
-> 
->   Thu Apr 2 14:53:02 2020 +0800
->     cd1b7ae3435c ("crypto: hisilicon - unify SR-IOV related codes into QM")
-> 
-> Coverity reported the following:
-> 
-> *** CID 1492651:  Error handling issues  (CHECKED_RETURN)
-> /drivers/crypto/hisilicon/qm.c: 2317 in qm_vf_q_assign()
-> 2311     	for (i = 1; i <= num_vfs; i++) {
-> 2312     		if (i == num_vfs)
-> 2313     			q_num += remain_q_num % num_vfs;
-> 2314     		ret = hisi_qm_set_vft(qm, i, q_base, q_num);
-> 2315     		if (ret) {
-> 2316     			for (j = i; j > 0; j--)
-> vvv     CID 1492651:  Error handling issues  (CHECKED_RETURN)
-> vvv     Calling "hisi_qm_set_vft" without checking return value (as is done elsewhere 4 out of 5 times).
-> 2317     				hisi_qm_set_vft(qm, j, 0, 0);
-
-This is the rollback of previous hisi_qm_set_vft failure, We will not check the retrun again.
-
-Thanks,
-Shukun
-
-> 2318     			return ret;
-> 2319     		}
-> 2320     		q_base += q_num;
-> 2321     	}
-> 2322
-> 
-> If this is a false positive, please let us know so we can mark it as
-> such, or teach the Coverity rules to be smarter. If not, please make
-> sure fixes get into linux-next. :) For patches fixing this, please
-> include these lines (but double-check the "Fixes" first):
-> 
-> Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-> Addresses-Coverity-ID: 1492651 ("Error handling issues")
-> Fixes: cd1b7ae3435c ("crypto: hisilicon - unify SR-IOV related codes into QM")
-> 
-> Thanks for your attention!
-> 
+> =============================
+> WARNING: suspicious RCU usage
+> 5.6.0-rc5-next-20200313-syzkaller #0 Not tainted
+> -----------------------------
+> net/openvswitch/conntrack.c:1898 RCU-list traversed in non-reader section!!
+>
+> other info that might help us debug this:
+>
+>
+> rcu_scheduler_active = 2, debug_locks = 1
+> 3 locks held by kworker/u4:3/127:
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: __write_once_size include/linux/compiler.h:250 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_data kernel/workqueue.c:615 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: process_one_work+0x82a/0x1690 kernel/workqueue.c:2237
+>  #1: ffffc900013a7dd0 (net_cleanup_work){+.+.}, at: process_one_work+0x85e/0x1690 kernel/workqueue.c:2241
+>  #2: ffffffff8a54df08 (pernet_ops_rwsem){++++}, at: cleanup_net+0x9b/0xa50 net/core/net_namespace.c:551
+>
+> stack backtrace:
+> CPU: 0 PID: 127 Comm: kworker/u4:3 Not tainted 5.6.0-rc5-next-20200313-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: netns cleanup_net
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x188/0x20d lib/dump_stack.c:118
+>  ovs_ct_limit_exit net/openvswitch/conntrack.c:1898 [inline]
+>  ovs_ct_exit+0x3db/0x558 net/openvswitch/conntrack.c:2295
+>  ovs_exit_net+0x1df/0xba0 net/openvswitch/datapath.c:2469
+>  ops_exit_list.isra.0+0xa8/0x150 net/core/net_namespace.c:172
+>  cleanup_net+0x511/0xa50 net/core/net_namespace.c:589
+>  process_one_work+0x94b/0x1690 kernel/workqueue.c:2266
+>  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+>  kthread+0x357/0x430 kernel/kthread.c:255
+>  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+> tipc: TX() has been purged, node left!
+>
+> =============================
+> WARNING: suspicious RCU usage
+> 5.6.0-rc5-next-20200313-syzkaller #0 Not tainted
+> -----------------------------
+> net/ipv4/ipmr.c:1757 RCU-list traversed in non-reader section!!
+>
+> other info that might help us debug this:
+>
+>
+> rcu_scheduler_active = 2, debug_locks = 1
+> 4 locks held by kworker/u4:3/127:
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: __write_once_size include/linux/compiler.h:250 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_data kernel/workqueue.c:615 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
+>  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: process_one_work+0x82a/0x1690 kernel/workqueue.c:2237
+>  #1: ffffc900013a7dd0 (net_cleanup_work){+.+.}, at: process_one_work+0x85e/0x1690 kernel/workqueue.c:2241
+>  #2: ffffffff8a54df08 (pernet_ops_rwsem){++++}, at: cleanup_net+0x9b/0xa50 net/core/net_namespace.c:551
+>  #3: ffffffff8a559c80 (rtnl_mutex){+.+.}, at: ip6gre_exit_batch_net+0x88/0x700 net/ipv6/ip6_gre.c:1602
+>
+> stack backtrace:
+> CPU: 1 PID: 127 Comm: kworker/u4:3 Not tainted 5.6.0-rc5-next-20200313-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: netns cleanup_net
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x188/0x20d lib/dump_stack.c:118
+>  ipmr_device_event+0x240/0x2b0 net/ipv4/ipmr.c:1757
+>  notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
+>  call_netdevice_notifiers_info net/core/dev.c:1948 [inline]
+>  call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1933
+>  call_netdevice_notifiers_extack net/core/dev.c:1960 [inline]
+>  call_netdevice_notifiers net/core/dev.c:1974 [inline]
+>  rollback_registered_many+0x75c/0xe70 net/core/dev.c:8810
+>  unregister_netdevice_many.part.0+0x16/0x1e0 net/core/dev.c:9966
+>  unregister_netdevice_many+0x36/0x50 net/core/dev.c:9965
+>  ip6gre_exit_batch_net+0x4e8/0x700 net/ipv6/ip6_gre.c:1605
+>  ops_exit_list.isra.0+0x103/0x150 net/core/net_namespace.c:175
+>  cleanup_net+0x511/0xa50 net/core/net_namespace.c:589
+>  process_one_work+0x94b/0x1690 kernel/workqueue.c:2266
+>  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
+>  kthread+0x357/0x430 kernel/kthread.c:255
+>  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
+>
+>
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000e642a905a0cbee6e%40google.com.

@@ -2,184 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0791AEA64
-	for <lists+linux-next@lfdr.de>; Sat, 18 Apr 2020 09:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF52E1AEA67
+	for <lists+linux-next@lfdr.de>; Sat, 18 Apr 2020 09:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725856AbgDRHCy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 18 Apr 2020 03:02:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47508 "EHLO
+        id S1725949AbgDRHEv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 18 Apr 2020 03:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725843AbgDRHCx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Apr 2020 03:02:53 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C2C061A0F
-        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:02:53 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id o10so4020267qtr.6
-        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:02:53 -0700 (PDT)
+        with ESMTP id S1725856AbgDRHEv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 18 Apr 2020 03:04:51 -0400
+Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033F3C061A0F
+        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:04:50 -0700 (PDT)
+Received: by mail-qt1-x841.google.com with SMTP id z90so3998744qtd.10
+        for <linux-next@vger.kernel.org>; Sat, 18 Apr 2020 00:04:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=TjXmWmuINQagYGOhB0mh8AmFnIMZ72LlgvA/kNKwdwQ=;
-        b=eneHelWvQA1o2xZd7COnbAkMg2VijPrSKWln3C1KPWsKzKaxkBchi9lH3mm6z0mchu
-         bs0JjsONZdn1EW5Pa5rkEnyVwrcm1Xes/rbgpL6bD1OKq7M9E+4rryt6Zw8Vo7c14dm/
-         85kHXX1ylyxSOjBeELkVJa1w6RhDAf58NGAoh0pMlB6JwQWsGpHv7xZfT3vsG5wcU8PO
-         PO4Rx84G3YCeWDVr81SGT2C0srVpxwfHmc3kp1owb9mgCLLBYC0Y6VOoawwzTCKp4JmH
-         iZL2vDgA7Ta2F2bdfEt3J5CsDJ+Hco3D3DWELetZrFN+Ldj5y5ib+FWK5fd+pxaSWQJg
-         ew1g==
+         :cc:content-transfer-encoding;
+        bh=frcRIzvUu/qQayHA5R2SRcLWyTjvWi33DiBNKj+vA2I=;
+        b=LcLkUN501e4hh2Vf9DuLPtGQ/JpLMVGYDMR/tyElPI6RiZmLO6U26K0NH2SIUbCdwD
+         UVcu1R6soOOc5voW8OC+ZA8WuFhGNjO6IPA0x/m05518n0j2VPVmIXJtEe7E+fZqMwWE
+         fx4YB9PiLDHhEJERBLUGTsnnQSdaGzrWo0BBI1LjMg+anW6xdG0gAA9uJJ/Z9Fk4dosS
+         mEY9vonmuIvTvndoy8hMKvBA3tzalWOQ+hwdXxX04hABIIonSd14gDSpgC66CHOXeZHa
+         R/JRHWU/AmxWLqBjJUYwxf5ccY8uzDNJe9qum4Kx3xhTiaBszPVs02Kn2OLMScr+9MqQ
+         ru8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=TjXmWmuINQagYGOhB0mh8AmFnIMZ72LlgvA/kNKwdwQ=;
-        b=EZJ1+IdXKZx6qM9FKHdFScrYYvd4xBxyij73bxoDeF5KviHF4Da8V0ZxCYzcehqLPx
-         AOrdtMlatp6HXhHb/UFYeM5u8+44Xaq7Zs3mLgBCJpv3typJgp66pNhot/0yrWyxYUyy
-         RDBL/93cZw5bsRm7ea/+BzVgLKW7GX712VBoir53jPrUHUVOqN6+eL8owEb6bJspPplc
-         bF/W+4z3NFhLkafCltcqpAVpqyq1vndflixBtP/i0lY4hvcJ/E/rvEy+Nfhek8ulYKq1
-         36Q/r4Ct+5wHSNR6SrBvSmRkUJYiXUJTFy3WYYAqvIDYJV+CVTv9QXqQgXJUCJr43mRA
-         SKNw==
-X-Gm-Message-State: AGi0PubzBFWf5qxVDjNvI2JNX8zaHFhu+5Mk9K8kJHdRONUQ4eKKkt+5
-        v03xTd9Aqbp773c/gnS6WHuyB7C/7UtCrFOBtpl/ng==
-X-Google-Smtp-Source: APiQypLsCDn+7Nx+XS+vfQdJLSgMyJ6cAip9eoqxwKIcZG7bcNNfpWA3QWLCOsdYajOXxXkuacs3h/Laq/BJ+KxyQO4=
-X-Received: by 2002:ac8:1b6a:: with SMTP id p39mr6720360qtk.158.1587193372377;
- Sat, 18 Apr 2020 00:02:52 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=frcRIzvUu/qQayHA5R2SRcLWyTjvWi33DiBNKj+vA2I=;
+        b=mbPIPtyCgU7lTxlqPF3H7mP6xBBlV6N5T5TtA+ahnaC9rm+zT06pdigv6wdXP6+YZ2
+         LlfYDoAe/7vNr0slzZrQXHsKZuQOGSjteyec8E8fEOCegkSBNDq9mHS/TOSrDTMacpNl
+         7LebJ3XkPuMVwkL6hvPiTlo8nP1PNkUBLRpdoVFxJ1tLo7Ntk6t+v73wxYWbpkvxQhw4
+         uRUyXMdY4ac+9bVW85aR3ZnwlR2X8YHBLw8BZ+YIe0Qo69z/sW+7MeGxL490X8NAD0XL
+         2yeEj5EBXgHxUegU4Q6CXI5WzRgRuDX2ZIiQIBk/oK7YK7z6dBM7X7QJIGzKugAnInaM
+         31Ew==
+X-Gm-Message-State: AGi0PuaEpHwOYuXGgdNhlV/p7uo20MBpUQC5xFGH/dheLmyMc9znm2vN
+        z6FVed1YnJsdUTxFD9UvGv9ZIECesQJNunLIeUyarxG5jHg=
+X-Google-Smtp-Source: APiQypINDBkJDFArA1lpSkec1Z+GgV2eVqSt4z5L1ETOlwWtYWFglYmzQVtAF1J+CXbGHT+VoKbsR7tT4/0sIFn1G+4=
+X-Received: by 2002:ac8:370c:: with SMTP id o12mr6795321qtb.380.1587193489821;
+ Sat, 18 Apr 2020 00:04:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000e642a905a0cbee6e@google.com>
-In-Reply-To: <000000000000e642a905a0cbee6e@google.com>
+References: <00000000000022640205a04a20d8@google.com> <20200309092423.2ww3aw6yfyce7yty@box>
+ <5b1196be-09ce-51f7-f5e7-63f2e597f91e@linux.alibaba.com> <d3fb0593-e483-3b69-bf2c-99ad6cd03567@linux.alibaba.com>
+In-Reply-To: <d3fb0593-e483-3b69-bf2c-99ad6cd03567@linux.alibaba.com>
 From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Sat, 18 Apr 2020 09:02:41 +0200
-Message-ID: <CACT4Y+YR5Y8OQ4MCdCA2eoQM=GdBXN39O4HahWtL0sdqwsB=mg@mail.gmail.com>
-Subject: Re: linux-next test error: WARNING: suspicious RCU usage in ovs_ct_exit
-To:     syzbot <syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com>,
+Date:   Sat, 18 Apr 2020 09:04:38 +0200
+Message-ID: <CACT4Y+Zfcs2MxD9-zR748UbkEpsV4BYjFgw1XgSqX4X8z=92CA@mail.gmail.com>
+Subject: Re: linux-next test error: BUG: using __this_cpu_read() in
+ preemptible code in __mod_memcg_state
+To:     Alex Shi <alex.shi@linux.alibaba.com>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>, dev@openvswitch.org,
-        kuba@kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Pravin B Shelar <pshelar@ovn.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Cc:     "Kirill A. Shutemov" <kirill@shutemov.name>,
+        syzbot <syzbot+826543256ed3b8c37f62@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>, Michal Hocko <mhocko@kernel.org>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Mar 14, 2020 at 8:57 AM syzbot
-<syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com> wrote:
+On Mon, Mar 9, 2020 at 2:27 PM Alex Shi <alex.shi@linux.alibaba.com> wrote:
+> =E5=9C=A8 2020/3/9 =E4=B8=8B=E5=8D=885:56, Alex Shi =E5=86=99=E9=81=93:
+> >
+> >
+> > =E5=9C=A8 2020/3/9 =E4=B8=8B=E5=8D=885:24, Kirill A. Shutemov =E5=86=99=
+=E9=81=93:
+> >>> check_preemption_disabled: 3 callbacks suppressed
+> >>> BUG: using __this_cpu_read() in preemptible [00000000] code: syz-fuzz=
+er/9432
+> >>> caller is __mod_memcg_state+0x27/0x1a0 mm/memcontrol.c:689
+> >>> CPU: 1 PID: 9432 Comm: syz-fuzzer Not tainted 5.6.0-rc4-next-20200306=
+-syzkaller #0
+> >>> Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS Google 01/01/2011
+> >>> Call Trace:
+> >>>  __dump_stack lib/dump_stack.c:77 [inline]
+> >>>  dump_stack+0x188/0x20d lib/dump_stack.c:118
+> >>>  check_preemption_disabled lib/smp_processor_id.c:47 [inline]
+> >>>  __this_cpu_preempt_check.cold+0x84/0x90 lib/smp_processor_id.c:64
+> >>>  __mod_memcg_state+0x27/0x1a0 mm/memcontrol.c:689
+> >>>  __split_huge_page mm/huge_memory.c:2575 [inline]
+> >>>  split_huge_page_to_list+0x124b/0x3380 mm/huge_memory.c:2862
+> >>>  split_huge_page include/linux/huge_mm.h:167 [inline]
+> >> It looks like a regression due to c8cba0cc2a80 ("mm/thp: narrow lru
+> >> locking").
+> >
+> > yes, I guess so.
 >
-> Hello,
+> Yes, it is a stupid mistake to pull out lock for __mod_memcg_state which
+> should be in a lock.
 >
-> syzbot found the following crash on:
+> revert this patch should be all fine, since ClearPageCompound and page_re=
+f_inc
+> later may related with lru_list valid issue in release_pges.
 >
-> HEAD commit:    2e602db7 Add linux-next specific files for 20200313
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=16669919e00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cf2879fc1055b886
-> dashboard link: https://syzkaller.appspot.com/bug?extid=7ef50afd3a211f879112
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 >
-> Unfortunately, I don't have any reproducer for this crash yet.
+> Sorry for the disaster!
 >
-> IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> Reported-by: syzbot+7ef50afd3a211f879112@syzkaller.appspotmail.com
+> Alex
 
 +linux-next, Stephen for currently open linux-next build/boot failure
 
-> =============================
-> WARNING: suspicious RCU usage
-> 5.6.0-rc5-next-20200313-syzkaller #0 Not tainted
-> -----------------------------
-> net/openvswitch/conntrack.c:1898 RCU-list traversed in non-reader section!!
->
-> other info that might help us debug this:
->
->
-> rcu_scheduler_active = 2, debug_locks = 1
-> 3 locks held by kworker/u4:3/127:
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: __write_once_size include/linux/compiler.h:250 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_data kernel/workqueue.c:615 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: process_one_work+0x82a/0x1690 kernel/workqueue.c:2237
->  #1: ffffc900013a7dd0 (net_cleanup_work){+.+.}, at: process_one_work+0x85e/0x1690 kernel/workqueue.c:2241
->  #2: ffffffff8a54df08 (pernet_ops_rwsem){++++}, at: cleanup_net+0x9b/0xa50 net/core/net_namespace.c:551
->
-> stack backtrace:
-> CPU: 0 PID: 127 Comm: kworker/u4:3 Not tainted 5.6.0-rc5-next-20200313-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: netns cleanup_net
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x188/0x20d lib/dump_stack.c:118
->  ovs_ct_limit_exit net/openvswitch/conntrack.c:1898 [inline]
->  ovs_ct_exit+0x3db/0x558 net/openvswitch/conntrack.c:2295
->  ovs_exit_net+0x1df/0xba0 net/openvswitch/datapath.c:2469
->  ops_exit_list.isra.0+0xa8/0x150 net/core/net_namespace.c:172
->  cleanup_net+0x511/0xa50 net/core/net_namespace.c:589
->  process_one_work+0x94b/0x1690 kernel/workqueue.c:2266
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
->  kthread+0x357/0x430 kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
-> tipc: TX() has been purged, node left!
->
-> =============================
-> WARNING: suspicious RCU usage
-> 5.6.0-rc5-next-20200313-syzkaller #0 Not tainted
-> -----------------------------
-> net/ipv4/ipmr.c:1757 RCU-list traversed in non-reader section!!
->
-> other info that might help us debug this:
->
->
-> rcu_scheduler_active = 2, debug_locks = 1
-> 4 locks held by kworker/u4:3/127:
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: __write_once_size include/linux/compiler.h:250 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic64_set include/asm-generic/atomic-instrumented.h:856 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: atomic_long_set include/asm-generic/atomic-long.h:41 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_data kernel/workqueue.c:615 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: set_work_pool_and_clear_pending kernel/workqueue.c:642 [inline]
->  #0: ffff8880a9771d28 ((wq_completion)netns){+.+.}, at: process_one_work+0x82a/0x1690 kernel/workqueue.c:2237
->  #1: ffffc900013a7dd0 (net_cleanup_work){+.+.}, at: process_one_work+0x85e/0x1690 kernel/workqueue.c:2241
->  #2: ffffffff8a54df08 (pernet_ops_rwsem){++++}, at: cleanup_net+0x9b/0xa50 net/core/net_namespace.c:551
->  #3: ffffffff8a559c80 (rtnl_mutex){+.+.}, at: ip6gre_exit_batch_net+0x88/0x700 net/ipv6/ip6_gre.c:1602
->
-> stack backtrace:
-> CPU: 1 PID: 127 Comm: kworker/u4:3 Not tainted 5.6.0-rc5-next-20200313-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Workqueue: netns cleanup_net
-> Call Trace:
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x188/0x20d lib/dump_stack.c:118
->  ipmr_device_event+0x240/0x2b0 net/ipv4/ipmr.c:1757
->  notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
->  call_netdevice_notifiers_info net/core/dev.c:1948 [inline]
->  call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:1933
->  call_netdevice_notifiers_extack net/core/dev.c:1960 [inline]
->  call_netdevice_notifiers net/core/dev.c:1974 [inline]
->  rollback_registered_many+0x75c/0xe70 net/core/dev.c:8810
->  unregister_netdevice_many.part.0+0x16/0x1e0 net/core/dev.c:9966
->  unregister_netdevice_many+0x36/0x50 net/core/dev.c:9965
->  ip6gre_exit_batch_net+0x4e8/0x700 net/ipv6/ip6_gre.c:1605
->  ops_exit_list.isra.0+0x103/0x150 net/core/net_namespace.c:175
->  cleanup_net+0x511/0xa50 net/core/net_namespace.c:589
->  process_one_work+0x94b/0x1690 kernel/workqueue.c:2266
->  worker_thread+0x96/0xe20 kernel/workqueue.c:2412
->  kthread+0x357/0x430 kernel/kthread.c:255
->  ret_from_fork+0x24/0x30 arch/x86/entry/entry_64.S:352
->
->
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/000000000000e642a905a0cbee6e%40google.com.
+Hi Alex,
+
+What's the status of this? Was the guilty patch reverted? If so,
+please mark it as invalid for syzbot, otherwise it still shows up as
+open bug.

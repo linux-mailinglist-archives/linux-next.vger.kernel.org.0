@@ -2,113 +2,78 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 381931AF97C
-	for <lists+linux-next@lfdr.de>; Sun, 19 Apr 2020 12:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AB081AFE86
+	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 00:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725991AbgDSK4k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 19 Apr 2020 06:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49388 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725783AbgDSK4j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Sun, 19 Apr 2020 06:56:39 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 629E4C061A0C;
-        Sun, 19 Apr 2020 03:56:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=87JQq/8fy/ba6TI5H7xOE4LoomBBm7ajqmEAFHP33Z8=; b=klZsaJBdjtnccxPkMYcYmx36Jg
-        2gxnROzkfj2g39w+iLyTtkAfTd+l79DKHZ+TUrLOPYgGk1uTdHZeb0bOwFCZZfOhp/rI5+T5CNIr0
-        QNTkudE1/FvokTmh10qQY7QabuyClkMR4fxn/yekdS8oyDk0qaBqzeM5ZT8NMPdS4+IRD3lsDZhDJ
-        JDk5DcwYCG/+WtwEAk4MOezsrd8TOlP5MluJicOHCz41Ct/PoTyIJ99gRxkUPiyIlqfF76H95hmZN
-        Y5XJaYufNd6eFtyalfDUmnGmeUxNqDiEVAO2A9a4i8s2bFHajB4yfYw1y/zdbyO0rOrwRqbOwWIjY
-        BgvVcSZw==;
-Received: from willy by bombadil.infradead.org with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQ7cn-0006SZ-JM; Sun, 19 Apr 2020 10:56:33 +0000
-Date:   Sun, 19 Apr 2020 03:56:33 -0700
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        squashfs-devel@lists.sourceforge.net,
-        Philippe Liard <pliard@google.com>
-Subject: Re: mmotm 2020-04-17-20-35 uploaded (squashfs)
-Message-ID: <20200419105633.GX5820@bombadil.infradead.org>
-References: <20200418033629.oozqt8YrL%akpm@linux-foundation.org>
- <319997c2-5fc8-f889-2ea3-d913308a7c1f@infradead.org>
- <20200418124728.51632dbebc8b5dbc864cc34f@linux-foundation.org>
+        id S1725891AbgDSWME (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 19 Apr 2020 18:12:04 -0400
+Received: from ozlabs.org ([203.11.71.1]:57099 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725848AbgDSWME (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 19 Apr 2020 18:12:04 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4953w04FmTz9s71;
+        Mon, 20 Apr 2020 08:12:00 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1587334322;
+        bh=KvhFCJYfDZoBnVP8jcXi4CgpSpt8Lzp3DJo0iaxWN80=;
+        h=Date:From:To:Cc:Subject:From;
+        b=siLGayARt+MBKjkZ5Jmgyh9l2pWtUdWUTmFz5zo+8AV/ep7KIfy06zHFdXc5TcBGj
+         9n20Pv5h4sXX+Z4qz0YhUUjqmzBhtBcC7LM90oPcTU76Z8SrBsmmOqWvGjjzePVP+0
+         eG5NZvAxB76vynmtIbJK7njfY+pkBdfZknfAT1+hkpENaOqBdyZNjSHa3mmYvL9bn7
+         54bSABkCfi3cN5zqffatHJNJeZvB3gbQAa+NsS6BiKDW5sMJaR+aOJ1n9ty39b76bg
+         wCBr/zmLSUoD5Al8YpnwSH0NccmmXSGxqdyi/9I7OmXhS1Gjrxa5uWi/dIiV4g4YE5
+         NBNe61EmlgJhw==
+Date:   Mon, 20 Apr 2020 08:11:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Subject: linux-next: Signed-off-by missing for commit in the arm-soc tree
+Message-ID: <20200420081154.597ffa59@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200418124728.51632dbebc8b5dbc864cc34f@linux-foundation.org>
+Content-Type: multipart/signed; boundary="Sig_/sspffptTDF_lIfEfrtjUcUs";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Apr 18, 2020 at 12:47:28PM -0700, Andrew Morton wrote:
-> On Sat, 18 Apr 2020 08:56:31 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
-> > On 4/17/20 8:36 PM, akpm@linux-foundation.org wrote:
-> > > The mm-of-the-moment snapshot 2020-04-17-20-35 has been uploaded to
-> > > 
-> > >    http://www.ozlabs.org/~akpm/mmotm/
-> > > 
-> > > mmotm-readme.txt says
-> > > 
-> > > README for mm-of-the-moment:
-> > > 
-> > > http://www.ozlabs.org/~akpm/mmotm/
-> > > 
-> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > more than once a week.
-> > > 
-> > > You will need quilt to apply these patches to the latest Linus release (5.x
-> > > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > > http://ozlabs.org/~akpm/mmotm/series
-> > > 
-> > > The file broken-out.tar.gz contains two datestamp files: .DATE and
-> > > .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> > > followed by the base kernel version against which this patch series is to
-> > > be applied.
-> > 
-> > on x86_64:
-> > 
-> >   CC      fs/squashfs/decompressor_multi_percpu.o
-> > ../fs/squashfs/decompressor_multi_percpu.c:75:5: error: conflicting types for ‘squashfs_decompress’
-> >  int squashfs_decompress(struct squashfs_sb_info *msblk, struct buffer_head **bh,
-> >      ^~~~~~~~~~~~~~~~~~~
-> 
-> Thanks.  Seems that file was missed.
-> 
-> Also, this code jumps through horrifying hoops in order to initialize
-> locals at their definition site.  But the code looks so much better if
-> we Just Don't Do That!
+--Sig_/sspffptTDF_lIfEfrtjUcUs
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I think the code would look even better if things just Had The Right Type!
+Hi all,
 
-struct squashfs_sb_info {
-...
--       struct squashfs_stream                  *stream;
-+	union {
-+		struct squashfs_stream		*stream;
-+		struct squashfs_stream __percpu	*percpu_stream;
-+	};
+Commit
 
-int squashfs_decompress(struct squashfs_sb_info *msblk, struct bio *bio,
-		int offset, int length, struct squashfs_page_actor *output)
-{
-	struct squashfs_stream *stream = get_cpu_ptr(msblk->percpu_stream);
-	int res = msblk->decompressor->decompress(msblk, stream->stream, bh, b,
-			offset, length, output);
-	...
+  512e8d40f91d ("ARM: dts: OMAP3: disable RNG on N950/N9")
 
-As an aside, that calling convention could do with putting some of the
-arguments into a struct so the CPU spends less time shuffling arguments
-from one register to another.
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/sspffptTDF_lIfEfrtjUcUs
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6czKoACgkQAVBC80lX
+0GyN8Af/Wz3VGXqNgOg4ZhnsiK6AXgTZ64tZDA0j9tfbOM8yeyrzq78ISQv9oJ2d
+RJLzgqVI5jbBAkmBton7lOqeUjCNN9JYbs6OPLMW1YLbWj3f8kZzE5k+NMdYwmrf
+XkSv9bgaiCUbIwOr4ELqQD+sNOOBHbdUGlijHI3K6zMT8fIfstay5NQvOVlJGtGX
+JfTcwtMJISHm15Hr1tTVaKlTtkIt9WpcBHjCPNBjxuipwgxTo4tCm1FrLzH04Ser
+vj0WXz3WT8zZQwTCcBFEWUPT9sminSu6BIB0o30J/YY43AlR+8ArHtuxqryEPgyy
+zjqk8CAWxnwJjiwHdEDz/KxdB5kgfQ==
+=IwOw
+-----END PGP SIGNATURE-----
+
+--Sig_/sspffptTDF_lIfEfrtjUcUs--

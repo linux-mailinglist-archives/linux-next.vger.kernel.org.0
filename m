@@ -2,122 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AF1B1B0698
-	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 12:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4537F1B06F1
+	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 12:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726050AbgDTK26 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Apr 2020 06:28:58 -0400
-Received: from mga18.intel.com ([134.134.136.126]:24690 "EHLO mga18.intel.com"
+        id S1725775AbgDTK6E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Apr 2020 06:58:04 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57063 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725865AbgDTK25 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Apr 2020 06:28:57 -0400
-IronPort-SDR: cxKonAg+3BbLhdUwiJZXNL2JnQ3xGeubqdBCn15JAaD1b8dOIAZejrvffOAlJaEr8trFGDRma/
- CsADFAUIl2qg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Apr 2020 03:28:56 -0700
-IronPort-SDR: iHULl3pxbtqQ1MqumC0TUlV1+InpWyde7JALFkMK93zTjHDxNzzjlKzi+4FW1T4iQh1UI5UnhB
- XnHAlzl8Wzbg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.72,406,1580803200"; 
-   d="scan'208";a="243766286"
-Received: from ahunter-desktop.fi.intel.com (HELO [10.237.72.157]) ([10.237.72.157])
-  by orsmga007.jf.intel.com with ESMTP; 20 Apr 2020 03:28:54 -0700
-Subject: Re: linux-next: Tree for Apr 17 (mmc/host/sdhci-of-at91.c)
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725773AbgDTK6E (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Apr 2020 06:58:04 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 495Nvm68wdz9s71;
+        Mon, 20 Apr 2020 20:57:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1587380281;
+        bh=In7P5lUxwxjq5S0YwYME09XhaindlH+KaUGIeqQBNNY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RlbcNgDkEM7P2Q389cNtiz5qIu5KLpcxu0eLHqNAyjUkRstv4eQvPVoI2LMH3pHqj
+         PIdfOeE+ITNOkgamYOd3OOOdu8txP1oLz1Pr19Uc6OqAhmzF6CJYR+relD0QAnJSzN
+         Y9R3WYys7PgAKktpVIHitd8yrahfNrJbud4XG3VkmVdA4rgmEBOAy1/tc8bYRzAiq0
+         qZZrccb8nDC1tfY0i/IuhP87QrKCM2CWl8dEwW9Jk771RxG/ueyToF8Nv1glBxTGWr
+         b7ebQpk6pkGGTIiz/z7DMcvHX0NELIlIxU6iDqflw572wtW1wTjekqn4vaqJFlFm1U
+         K3o2zcEdrU6Iw==
+Date:   Mon, 20 Apr 2020 20:57:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Steffen Klassert <steffen.klassert@secunet.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ludovic Desroches <ludovic.desroches@atmel.com>,
-        linux-mmc <linux-mmc@vger.kernel.org>
-References: <20200417145017.3932443d@canb.auug.org.au>
- <995a958c-15a1-cb05-e276-065c7f6e57fd@infradead.org>
- <CAPDyKFqE7zfaKSbpBoBbrSCEnx+70dOrWs+=QG_x2G-Fpt6=ng@mail.gmail.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Message-ID: <ce11a0b5-22a6-dd18-f858-5d30f43e1128@intel.com>
-Date:   Mon, 20 Apr 2020 13:28:21 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Antony Antony <antony@phenome.org>
+Subject: linux-next: Fixes tag needs some work in the ipsec tree
+Message-ID: <20200420205754.05be65d1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFqE7zfaKSbpBoBbrSCEnx+70dOrWs+=QG_x2G-Fpt6=ng@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/hmE/pnI8Xp9_Qtkuyl8J+QT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 20/04/20 12:12 pm, Ulf Hansson wrote:
-> + Masahiro Yamada, Adrian Hunter
-> 
-> On Fri, 17 Apr 2020 at 16:48, Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->> On 4/16/20 9:50 PM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20200416:
->>>
->>
->> on i386:
->>
->>   CC      drivers/mmc/host/sdhci-of-at91.o
->> In file included from ../include/linux/build_bug.h:5:0,
->>                  from ../include/linux/bitfield.h:10,
->>                  from ../drivers/mmc/host/sdhci-of-at91.c:9:
->> ../drivers/mmc/host/sdhci-of-at91.c: In function ‘sdhci_at91_set_clks_presets’:
->> ../include/linux/compiler.h:394:38: error: call to ‘__compiletime_assert_63’ declared with attribute error: FIELD_PREP: value too large for the field
->>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->>                                       ^
->> ../include/linux/compiler.h:375:4: note: in definition of macro ‘__compiletime_assert’
->>     prefix ## suffix();    \
->>     ^~~~~~
->> ../include/linux/compiler.h:394:2: note: in expansion of macro ‘_compiletime_assert’
->>   _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
->>   ^~~~~~~~~~~~~~~~~~~
->> ../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
->>  #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
->>                                      ^~~~~~~~~~~~~~~~~~
->> ../include/linux/bitfield.h:49:3: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
->>    BUILD_BUG_ON_MSG(__builtin_constant_p(_val) ?  \
->>    ^~~~~~~~~~~~~~~~
->> ../include/linux/bitfield.h:94:3: note: in expansion of macro ‘__BF_FIELD_CHECK’
->>    __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); \
->>    ^~~~~~~~~~~~~~~~
->> ../drivers/mmc/host/sdhci-of-at91.c:185:11: note: in expansion of macro ‘FIELD_PREP’
->>   caps1 |= FIELD_PREP(SDHCI_CLOCK_MUL_MASK, clk_mul);
+--Sig_/hmE/pnI8Xp9_Qtkuyl8J+QT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-My guess is the compiler has decided clk_mul is constant (probably (unsigned
-int)-1) because there is no CONFIG_COMMON_CLK i.e. clk_get_rate() is 0
+Hi all,
 
-So maybe add to config MMC_SDHCI_OF_AT91
+In commit
 
-	depends on COMMON_CLK
+  29e4276667e2 ("xfrm: fix error in comment")
 
->>            ^~~~~~~~~~
->>
->>
->> Full randconfig file is attached.
->>
->>
->> --
->> ~Randy
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Thanks for reporting! I have looped in the relevant people, let's see
-> how we move forward with this.
-> 
-> I assume the offending commit is this one:
-> Author: Masahiro Yamada <yamada.masahiro@socionext.com>
-> Date:   Wed Apr 8 16:21:05 2020 +0900
-> mmc: sdhci: use FIELD_GET/PREP for capabilities bit masks
-> 
-> Kind regards
-> Uffe
-> 
+Fixes tag
 
+  Fixes: d77e38e612a ("xfrm: Add an IPsec hardware offloading API")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/hmE/pnI8Xp9_Qtkuyl8J+QT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6dgDIACgkQAVBC80lX
+0GxpTggAjL6lcrQOHac96eIrv0JHc2MDzoHbuHIuytmsG0fPdO43U6LDIgBcsj53
+AoSybH/HrFuw927eRIzj34CwetKVTnGcd+CBuDPI6DGZO2zX4OQwMwcGLS5e9Ux+
+is59dtkhbt4Z6J/m6SAUnukMRfj8poYLHGT7YpOauG29XRDxtI2ULdWUsWjVrAgS
+NoqMOfh1Ex91uZHvbJh7qkPIdDW7oEHf0ZTjLojzdwImWSWaOZyYTosImvrtK6yY
+dAweqzyby0wF1OAbgElPEMqZetfQtN9pEs8eAAFCCPKq6xdJVw96iLNuK0J74DLM
+rr2OeV9BYKfoM+xlv9pc8EfgKW2BmQ==
+=IBXf
+-----END PGP SIGNATURE-----
+
+--Sig_/hmE/pnI8Xp9_Qtkuyl8J+QT--

@@ -2,85 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A471B077A
-	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 13:35:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B2D1B07E0
+	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 13:43:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725971AbgDTLfZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Apr 2020 07:35:25 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:43379 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725886AbgDTLfZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Apr 2020 07:35:25 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 495Pkx71S6z9s71;
-        Mon, 20 Apr 2020 21:35:21 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587382523;
-        bh=9HNZXDQ2jku75LULznlIt2gVSDkDGtRUfetclacD8Fs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=A97fOK+EgV9lhMdHp1E6XXc6whR8BDqO9uYniP1LubHFfGS4coHuqBBXJEzZLtiH5
-         y97RMaFReGX8gxplIjHnXe6Uci5eefhKc1qv8fePbubZFotJc1x4LygV6K/+hxQlnj
-         wlj74+EYMEJB0TUE/m6jVcZHIU/k3pZCfcdfVUHQTg+54StDLxWWLPs4VnikGfcAMZ
-         L1IOq38Y76qxX7uOOit3KWSxrs8FQD/+HcipwlsAt6KhvL5zB0NvvshzxTvjv7I5lb
-         mnNv2j0On/AcWWP/MdRtkbChX7Mou82ZS2TPR7Z183PEzBz82Mpw9PXtXcnpeUrbu9
-         cckd72tO4QfOA==
-Date:   Mon, 20 Apr 2020 21:35:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>,
-        Dmitry Safonov <dima@arista.com>
-Subject: linux-next: build failure after merge of Linus' tree
-Message-ID: <20200420213519.3c5ee143@canb.auug.org.au>
+        id S1726703AbgDTLnH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Apr 2020 07:43:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51804 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726699AbgDTLnF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Apr 2020 07:43:05 -0400
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2178BC061A0C
+        for <linux-next@vger.kernel.org>; Mon, 20 Apr 2020 04:43:05 -0700 (PDT)
+Received: by mail-pj1-x1044.google.com with SMTP id t9so2340969pjw.0
+        for <linux-next@vger.kernel.org>; Mon, 20 Apr 2020 04:43:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=7lG0+5q7fSl5YyvtrrGGn2eYRZnu+k/6mS62+fSOkUQ=;
+        b=S4VQpXmzzIEGEGDwmKCodz2uO/XQwlV4tFVI6FSJzaVlKAL6U1+QuhkuVTsvj0dxDU
+         BBExbuQuDDeskJwJZ9Z17zIxh6NRFzpIQ5/V6KjRaJfUTp0GeEzMM/c+3yAceRbPbfZy
+         LY59VQ7jfhqW4JkudFe8DarXxOm/wiUmfR3/cZAFbdSZtejn1HXqg6j1Lycgio3r7tfa
+         n5zwrwuZ/zEl8cWrDarXlEwWfKwpaOzLffk3GFYw0HDlE1MwVfalIuJpdr5AHdhgiaIb
+         h221xkvcMuL0znqkih9n5Zswwv1D43ev/hO3icdIeQRlUPyCAMwZD4rbSaQCX56NoKpc
+         /7/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=7lG0+5q7fSl5YyvtrrGGn2eYRZnu+k/6mS62+fSOkUQ=;
+        b=PynwYWEOw2Nfvu/7q0QVu/fLj5skievjjGs/YIvsw3GVEsaBYOHF4JjsuFgXYmBSqg
+         CTA9D4d+Z26tNAzMtoDUt7kPcgCrniiOYYdfci5UBEJj3Nao08hWpmGgIa+ru/+k80JJ
+         JFhcU6Hfo3zOV+k66hROOtbQRFazbPa4hBcWDyudkh2fEVcDTpHMGo7/+hO1VV7tTtbt
+         n3WAYChZxG7+kvVGAO8voqeTTXIL3vnsWrXwpWErQdLmp4BFYN4SXtjtaFVdFR7rgE+j
+         bzlLSkcwCk1gs7jcRWGrDkkZqukRgnWvZSITvSsTaK2UP5B9Wg4OGyOSnyde2cDEafIF
+         1MdA==
+X-Gm-Message-State: AGi0PuaYspfNAwGKCxHeKS8G6g9Gtbd136WXhI05/C8zCYmhzCbjiZYV
+        tCZhioI4DnZ/uAGSeU6nEY1qLkOegKE=
+X-Google-Smtp-Source: APiQypK5LdEDD74c+WQVl/Rzycu2elH5NzlOr/x3l2zmNS0ydyf/sLp4dRBGIKpHOZI3tgYe03L6Fg==
+X-Received: by 2002:a17:90a:71c2:: with SMTP id m2mr21401729pjs.21.1587382984402;
+        Mon, 20 Apr 2020 04:43:04 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e7sm880081pfh.161.2020.04.20.04.43.03
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Apr 2020 04:43:03 -0700 (PDT)
+Message-ID: <5e9d8ac7.1c69fb81.4504e.2383@mx.google.com>
+Date:   Mon, 20 Apr 2020 04:43:03 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Moytko7.w5QiWdvPaewmWzF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200420
+Subject: next/master boot: 97 boots: 2 failed,
+ 91 passed with 4 offline (next-20200420)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Moytko7.w5QiWdvPaewmWzF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 97 boots: 2 failed, 91 passed with 4 offline (next-202004=
+20)
 
-Hi all,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200420/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200420/
 
-[reported by the kernelci.org bot]
+Tree: next
+Branch: master
+Git Describe: next-20200420
+Git Commit: 6735c84f78e41749fd09e73cca70d3e0779397aa
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 52 unique boards, 18 SoC families, 18 builds out of 230
 
-For some time, building Linus' tree, the linux-next build (mips
-mtx1_defconfig) fails like this:
+Boot Regressions Detected:
 
-ERROR: modpost: "sysrq_toggle_support" [drivers/tty/serial/serial_core.ko] =
-undefined!
-ERROR: modpost: "sysrq_mask" [drivers/tty/serial/serial_core.ko] undefined!
+arm64:
 
-Caused by commit
+    defconfig:
+        gcc-8:
+          apq8096-db820c:
+              lab-bjorn: failing since 18 days (last pass: next-20200330 - =
+first fail: next-20200401)
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200417)
 
-  68af43173d3f ("serial/sysrq: Add MAGIC_SYSRQ_SERIAL_SEQUENCE")
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200417)
 
---=20
-Cheers,
-Stephen Rothwell
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200417)
 
---Sig_/Moytko7.w5QiWdvPaewmWzF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+riscv:
 
------BEGIN PGP SIGNATURE-----
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 23 days (last pass: next-=
+20200326 - first fail: next-20200327)
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6diPcACgkQAVBC80lX
-0Gy9rAf+JuLx+iAw0rACbUfNtGc/eS2bqCVMDbl45AYlVyQCUemSRXZaSfdguncs
-sn+YgJx3SeOoBwbhQp23tZa8k/EUxcgE5ycxnKf4MCtdAubzUwRAtIC18IyVvSS1
-cIdZ2h0kZKOqcqILBUMvjf36YBBROGYWghDzbD/EefQlnfS4/4ASIjJv+t6NSod2
-Byw5Kp5DQ8RbNf83f3XP2GbgfcUHTygVOg4TiH3mQFij0yzOMX6CXE1KmugQfydN
-cd7jf13jpskEpo/t7+Nq+3ELu2Cy0nGg6048koKjzAHE7w9MkKiL47F4E+9TlNMO
-KNIWDXlhVO1rmHkej4SB09i4gE2zMQ==
-=O73D
------END PGP SIGNATURE-----
+Boot Failures Detected:
 
---Sig_/Moytko7.w5QiWdvPaewmWzF--
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+arm64:
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

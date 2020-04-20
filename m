@@ -2,107 +2,60 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E967C1B11A0
-	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 18:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2648D1B12DF
+	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 19:24:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726343AbgDTQdh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Apr 2020 12:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725287AbgDTQdh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 20 Apr 2020 12:33:37 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CF0C025491;
-        Mon, 20 Apr 2020 09:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=CvAAuoxWyufDWEFP6WEdB7uoSrO8WvrXLQoymRvBxWA=; b=goQ2DYjOqDYIjUoE1hbxb7KL5m
-        kAAns3hsxydLwGCF628DLRfJUmcdZuDHht1BPGxhQgMr9Pd1pA8qQ+P5imIC6mULqPqu7u3eYP66c
-        djemYJzRQONbt9Acpf16FDPboAZtKVz5HI1s/aMr09SnTLOjwNGFv52Djy91MpRlJcnrTyXQsKabl
-        JeCcB7I5ysxZDfghDRWsWW/pF9Zt7U/eHdDSj0Rt3kjk8cX+jagkUUckmL+S1SbfvgoACMKIfwf0B
-        2K84eS5Y8zveh/If0gJoMKbCD/QR6boyifR3RWO+oMLT3ZfWLGOkYDrAzVhgQ3uwbGVQvt1aPVsI4
-        8Rs03b9w==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQZMT-00057w-QB; Mon, 20 Apr 2020 16:33:33 +0000
-Subject: Re: linux-next: Tree for Apr 20 (media: usbvision)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
-References: <20200420142610.390e5922@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <02165f8b-f19f-2293-065a-cf9ad4de9689@infradead.org>
-Date:   Mon, 20 Apr 2020 09:33:31 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        id S1725774AbgDTRYt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Apr 2020 13:24:49 -0400
+Received: from verein.lst.de ([213.95.11.211]:42035 "EHLO verein.lst.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725773AbgDTRYt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Apr 2020 13:24:49 -0400
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 4854D68C4E; Mon, 20 Apr 2020 19:24:46 +0200 (CEST)
+Date:   Mon, 20 Apr 2020 19:24:45 +0200
+From:   Christoph Hellwig <hch@lst.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200420172445.GA1372@lst.de>
+References: <20200420200009.54554500@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200420142610.390e5922@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200420200009.54554500@canb.auug.org.au>
+User-Agent: Mutt/1.5.17 (2007-11-01)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/19/20 9:26 PM, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20200417:
-> 
+Andrew,
 
-on i386:
-CONFIG_USB=m
-CONFIG_VIDEO_USBVISION=y
+can you fold in these two fixes into the original patches?
 
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_write_reg_irq':
-usbvision-core.c:(.text+0x8a4): undefined reference to `usb_submit_urb'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_isoc_irq':
-usbvision-core.c:(.text+0x2ee8): undefined reference to `usb_submit_urb'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_read_reg':
-usbvision-core.c:(.text+0x30ad): undefined reference to `usb_control_msg'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_write_reg':
-usbvision-core.c:(.text+0x3178): undefined reference to `usb_control_msg'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_set_output':
-usbvision-core.c:(.text+0x344e): undefined reference to `usb_control_msg'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_set_input':
-usbvision-core.c:(.text+0x3b9b): undefined reference to `usb_control_msg'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_setup':
-usbvision-core.c:(.text+0x4009): undefined reference to `usb_control_msg'
-ld: drivers/staging/media/usbvision/usbvision-core.o:usbvision-core.c:(.text+0x417f): more undefined references to `usb_control_msg' follow
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_set_alternate':
-usbvision-core.c:(.text+0x4518): undefined reference to `usb_set_interface'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_init_isoc':
-usbvision-core.c:(.text+0x4673): undefined reference to `usb_alloc_urb'
-ld: usbvision-core.c:(.text+0x46a5): undefined reference to `usb_alloc_coherent'
-ld: usbvision-core.c:(.text+0x4765): undefined reference to `usb_submit_urb'
-ld: drivers/staging/media/usbvision/usbvision-core.o: in function `usbvision_stop_isoc':
-usbvision-core.c:(.text+0x4837): undefined reference to `usb_kill_urb'
-ld: usbvision-core.c:(.text+0x485f): undefined reference to `usb_free_coherent'
-ld: usbvision-core.c:(.text+0x4874): undefined reference to `usb_free_urb'
-ld: usbvision-core.c:(.text+0x48f1): undefined reference to `usb_set_interface'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_release':
-usbvision-video.c:(.text+0x1a8a): undefined reference to `usb_free_urb'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_disconnect':
-usbvision-video.c:(.text+0x1b74): undefined reference to `usb_put_dev'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_radio_close':
-usbvision-video.c:(.text+0x1c89): undefined reference to `usb_set_interface'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_probe':
-usbvision-video.c:(.text+0x1e4b): undefined reference to `usb_get_dev'
-ld: usbvision-video.c:(.text+0x20e1): undefined reference to `usb_alloc_urb'
-ld: usbvision-video.c:(.text+0x2797): undefined reference to `usb_put_dev'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_exit':
-usbvision-video.c:(.exit.text+0x37): undefined reference to `usb_deregister'
-ld: drivers/staging/media/usbvision/usbvision-video.o: in function `usbvision_init':
-usbvision-video.c:(.init.text+0xf9): undefined reference to `usb_register_driver'
-ld: drivers/staging/media/usbvision/usbvision-i2c.o: in function `usbvision_i2c_write':
-usbvision-i2c.c:(.text+0x2f4): undefined reference to `usb_control_msg'
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+diff --git a/mm/nommu.c b/mm/nommu.c
+index d32ab47b58a9..371697bf372d 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -155,13 +155,13 @@ void *__vmalloc_node_range(unsigned long size, unsigned long align,
+ 		pgprot_t prot, unsigned long vm_flags, int node,
+ 		const void *caller)
+ {
+-	return __vmalloc(size, gfp);
++	return __vmalloc(size, gfp_mask);
+ }
+ 
+ void *__vmalloc_node(unsigned long size, unsigned long align, gfp_t gfp_mask,
+ 		int node, const void *caller)
+ {
+-	return __vmalloc(size, gfp);
++	return __vmalloc(size, gfp_mask);
+ }
+ 
+ static void *__vmalloc_user_flags(unsigned long size, gfp_t flags)

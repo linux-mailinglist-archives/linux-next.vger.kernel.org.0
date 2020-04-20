@@ -2,81 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D1E1B1088
-	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 17:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12E91B10BF
+	for <lists+linux-next@lfdr.de>; Mon, 20 Apr 2020 17:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726458AbgDTPps (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 20 Apr 2020 11:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33174 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728514AbgDTPps (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 20 Apr 2020 11:45:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66A6C061A0C;
-        Mon, 20 Apr 2020 08:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:References:Cc:To:From:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=fkfnAhp5CM6mmeL7Sr7+YSkpNnHA+3cpF10slzhH73s=; b=aaK9QPykvzVz29xusBdJP3YQPK
-        wRz6J5hikf5OXHuNcmcJ0qmJ2ZNJr01VQb0aL/PjypLCX7pN5GehZW1VPLRFbajaJT+pdbGUXfPdR
-        vtWNiyxss75N1xRJ1YrhBshdKfnnZITTcL7+4P7yhNLFp5w5kyR80jRjc/PZEFVcQJjsdfAsG6nR1
-        RuzlIB7RIVdltNGES5FhWrAISyUq3n0chQAoafvc4xK8vFOzYF8eOQAHRNEaNjmJgvum6CT6PCdJg
-        U1KUiTrKeND9VQ1LMNFmaAeZ7eqAT/kaezpRApsGJgNIR691i+7r/MS5gE3BXQDjKqANdo81qpIBR
-        asGo2qPQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jQYcF-0004qG-Da; Mon, 20 Apr 2020 15:45:47 +0000
-Subject: Re: linux-next: Tree for Apr 20 (media Kconfig warning)
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+        id S1729062AbgDTPxk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 20 Apr 2020 11:53:40 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:20128 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728948AbgDTPxk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 20 Apr 2020 11:53:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1587398019;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=RiIH4zglO3RPAXeHMoIlaUTnxrbObtFWcUuFZVIVitc=;
+        b=HnKzPHbiVmk52+Tlqo97aC95EEB3yeL15BVtsm1Pgi2mjg6SiffrTV82C29Iw3JwzNe9/C
+        GABhrBNuUC1FSUPyz+31N69BosK7pPZHtuSWVaiuGeyMKO1mYZBcyjQvifUEeW/P1fyhVi
+        eCR7tsZpR9BgCf9TRCKu/DLFHmCBljo=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-154-8hLN_HPPOQ281RkBFtXdsA-1; Mon, 20 Apr 2020 11:53:35 -0400
+X-MC-Unique: 8hLN_HPPOQ281RkBFtXdsA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 151EE107ACC9;
+        Mon, 20 Apr 2020 15:53:34 +0000 (UTC)
+Received: from treble (ovpn-116-8.rdu2.redhat.com [10.10.116.8])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9AF0B5C1B2;
+        Mon, 20 Apr 2020 15:53:32 +0000 (UTC)
+Date:   Mon, 20 Apr 2020 10:53:30 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for Apr 20 (objtool warning)
+Message-ID: <20200420155330.5uepjeyfsso5l4rm@treble>
 References: <20200420142610.390e5922@canb.auug.org.au>
- <c53a2fa4-1efe-07d5-6cfa-6ebc37b7d013@infradead.org>
-Message-ID: <752826b9-46d2-5fd9-4759-df5d8bfba1d0@infradead.org>
-Date:   Mon, 20 Apr 2020 08:45:45 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+ <30d5a881-95fe-9f98-a899-2c955c5eb2c1@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <c53a2fa4-1efe-07d5-6cfa-6ebc37b7d013@infradead.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <30d5a881-95fe-9f98-a899-2c955c5eb2c1@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 4/20/20 8:21 AM, Randy Dunlap wrote:
+On Mon, Apr 20, 2020 at 08:29:04AM -0700, Randy Dunlap wrote:
 > On 4/19/20 9:26 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20200417:
->>
-> 
+> > Hi all,
+> > 
+> > Changes since 20200417:
+> > 
 > 
 > on x86_64:
 > 
-> WARNING: unmet direct dependencies detected for PHY_ROCKCHIP_DPHY_RX0
->   Depends on [n]: STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=y] && (ARCH_ROCKCHIP || COMPILE_TEST [=y]) && OF [=n]
->   Selected by [y]:
->   - VIDEO_ROCKCHIP_ISP1 [=y] && STAGING [=y] && STAGING_MEDIA [=y] && MEDIA_SUPPORT [=y] && VIDEO_V4L2 [=y] && (ARCH_ROCKCHIP || COMPILE_TEST [=y])
+> arch/x86/kvm/svm/vmenter.o: warning: objtool: __svm_vcpu_run()+0xe4: BP used as a scratch register
 > 
-> 
-> Full randconfig file is attached.
-> 
-> thanks.
-> 
+> Full randconfig file is included.
 
-This kconfig problem also causes this build error:
+Yeah, frame pointers are toast in that function.  We'll need something
+like:
 
-ld: drivers/staging/media/rkisp1/rkisp1-isp.o: in function `rkisp1_mipi_csi2_start.isra.11':
-rkisp1-isp.c:(.text+0x1184): undefined reference to `phy_mipi_dphy_get_default_config'
+diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+index a789759b7261..221e2bd7e76d 100644
+--- a/arch/x86/kvm/Makefile
++++ b/arch/x86/kvm/Makefile
+@@ -3,6 +3,10 @@
+ ccflags-y += -Iarch/x86/kvm
+ ccflags-$(CONFIG_KVM_WERROR) += -Werror
+ 
++ifeq ($(CONFIG_UNWINDER_FRAME_POINTER),y)
++OBJECT_FILES_NON_STANDARD_vmenter.o := y
++endif
++
+ KVM := ../../../virt/kvm
+ 
+ kvm-y			+= $(KVM)/kvm_main.o $(KVM)/coalesced_mmio.o \
 
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>

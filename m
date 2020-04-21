@@ -2,149 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 093451B2D25
-	for <lists+linux-next@lfdr.de>; Tue, 21 Apr 2020 18:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 247AF1B31F6
+	for <lists+linux-next@lfdr.de>; Tue, 21 Apr 2020 23:31:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725870AbgDUQvD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Apr 2020 12:51:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42310 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725963AbgDUQu7 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Apr 2020 12:50:59 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF92FC061A41
-        for <linux-next@vger.kernel.org>; Tue, 21 Apr 2020 09:50:59 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id q18so3473430pgm.11
-        for <linux-next@vger.kernel.org>; Tue, 21 Apr 2020 09:50:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=g/IB8m4zmtjIF3jxnZGr1WAhfm8fIUkEsyg4g+eO0vY=;
-        b=j/rgHm9TPHdVGNswVGH0JmEjaorI3UTbwWBO6l9+IzHgNBkktJCa17XAuIzwkTF3zl
-         Fl+tx2Wa2jcQf9uSniaY4h0hxs+fhpakrPyfktk/Ni/3AYd7x0wNxmHIVv4ajdqNvP7o
-         +kI0fhgybdvR3Q6GwI/SN6Vy2MEmChsZAcc5se2zRJE1/SrXRIfqkocL1fWks3gkeojW
-         dIa/EFcJtz51t+N+SquMmtF1dksONgXh0+sT+CWm36ZD7KioJ6pdF1oLBJ8RSi1TUd6X
-         zXyjR6mr9nlgAGDDmB4F0m92gjoAVkDKMKX/DY9rgjm4lEr0eJZoK0HH9fYJVslRoWk7
-         P4HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=g/IB8m4zmtjIF3jxnZGr1WAhfm8fIUkEsyg4g+eO0vY=;
-        b=lmjAOKtW91Qd16gPmFw6j7NJ9FQelxhtHiuJ4YRSxafoSBHsPUaXegSB5Ez8YblBwv
-         lDEV6WSrv+RTlDngteeenEV7blMLOb87RS/Ap1SKk1YKagxWIMLjUgoQ72ZKjYkG4tpq
-         K6H/nzvyCeZw5gAsw/aeCrvwc6rLdL7HbFzZWMXrelEVO4YjXg2RrbC49gs/W5IgKfMW
-         +yA7FZDfMdqj81nLRZPmnOF4tLSyDtGJFh0r2zdIkgFsQdIAE2YjP4Uzeoz423UGs6zK
-         B/AbtP2sE8spzoAU0X7eB5CrEXtX3aVJAJfjZfCMF4eWF+hkHBeiTXdU+ANOL1Bxpp/M
-         51GA==
-X-Gm-Message-State: AGi0Pua8AaHvy2uc5NR/NRsoAUrGdKvtogKK/7w1VgcJLdA8f6HtjOjI
-        bnJurolTEf0AMwEdYjFYyYn7P+Z7/i8=
-X-Google-Smtp-Source: APiQypJyrTXwH1ZhYXAPqNDQvPufmUBIR4L2hTYpZGP5vfKpQ7lHFl91RKEyzZQpjVDqS/czVu+VeQ==
-X-Received: by 2002:a63:545:: with SMTP id 66mr22242625pgf.66.1587487858884;
-        Tue, 21 Apr 2020 09:50:58 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y6sm2881002pjw.23.2020.04.21.09.50.58
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Apr 2020 09:50:58 -0700 (PDT)
-Message-ID: <5e9f2472.1c69fb81.b13c2.7cd7@mx.google.com>
-Date:   Tue, 21 Apr 2020 09:50:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726405AbgDUVb2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 21 Apr 2020 17:31:28 -0400
+Received: from mga06.intel.com ([134.134.136.31]:6255 "EHLO mga06.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725850AbgDUVb2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 21 Apr 2020 17:31:28 -0400
+IronPort-SDR: yaYxE/S3DvKhjz2VR80Cy2FBsuaKAnsQV95xfv1bh0Pul+L8CFBBcGxUI6vk8+pUcmCYPynZfD
+ TLS7r4NJ6WMA==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Apr 2020 14:31:27 -0700
+IronPort-SDR: yu9wFQzmjUr5k9T4LttPFzX/986E+PU+0a2JvT1wc9VuuuSsTWryGQrFmD97RqGr6r+sipYwfo
+ +NRT7opDs6tA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.72,411,1580803200"; 
+   d="scan'208";a="258849293"
+Received: from rpiazzo-mobl.amr.corp.intel.com (HELO [10.254.108.210]) ([10.254.108.210])
+  by orsmga006.jf.intel.com with ESMTP; 21 Apr 2020 14:31:25 -0700
+Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
+ pages
+From:   Dave Hansen <dave.hansen@intel.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, linux-next@vger.kernel.org,
+        akpm@linux-foundation.org, jack@suse.cz, kirill@shutemov.name,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
+        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Will Deacon <will@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+ <20200306132537.783769-3-imbrenda@linux.ibm.com>
+ <3ae46945-0c7b-03cd-700a-a6fe8003c6ab@intel.com>
+ <20200415221754.GM2483@worktop.programming.kicks-ass.net>
+ <a7c2eb84-94c2-a608-4b04-a740fa9a389d@intel.com>
+ <20200416141547.29be5ea0@p-imbrenda>
+ <de56aa8e-9035-4b68-33cb-15682d073e26@intel.com>
+ <20200416165900.68bd4dba@p-imbrenda>
+ <a6b8728d-7382-9316-412d-dd48b5e7c41a@intel.com>
+ <20200416183431.7216e1d1@p-imbrenda>
+ <396a4ece-ec66-d023-2c7e-f09f84b358bc@intel.com>
+Openpgp: preference=signencrypt
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+Message-ID: <cbaddd28-c5d3-61a2-84d8-c883fb3d6290@intel.com>
+Date:   Tue, 21 Apr 2020 14:31:28 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.9.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200421
-Subject: next/master boot: 154 boots: 6 failed, 144 passed with 1 offline,
- 3 untried/unknown (next-20200421)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <396a4ece-ec66-d023-2c7e-f09f84b358bc@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 154 boots: 6 failed, 144 passed with 1 offline, 3 untried=
-/unknown (next-20200421)
+On 4/16/20 12:02 PM, Dave Hansen wrote:
+> On 4/16/20 9:34 AM, Claudio Imbrenda wrote:
+>>> Ahh, so this is *just* intended to precede I/O done on the page, when
+>>> a non-host entity is touching the memory?
+>> yep
+> OK, so we've got to do an action that precedes *all* I/O to a page.
+> That's not too bad.
+> 
+> I still don't understand how this could work generally, though  There
+> are lots of places where I/O is done to a page without either going
+> through __test_set_page_writeback() or gup() with FOLL_PIN set.
+> 
+> sendfile() is probably the best example of this:
+> 
+> 	fd = open("/normal/ext4/file", O_RDONLY);
+> 	sendfile(socket_fd, fd, &off, count);
+> 
+> There's no gup in sight since the file doesn't have an address and it's
+> not being written to so there's no writeback.
+> 
+> How does sendfile work?
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200421/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200421/
+Did you manage to see if sendfile works (or any other operation that
+DMAs file-backed data without being preceded by a gup)?
 
-Tree: next
-Branch: master
-Git Describe: next-20200421
-Git Commit: 39a314cd1168cbcb05ebcd973098c8f1440a3064
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 72 unique boards, 21 SoC families, 28 builds out of 230
+I suspect it's actually not that hard to fix.  As long as you have a
+dma_ops for the devices in question either via dev->dma_ops or you add
+an s390 get_arch_vm_ops(), you can fix *all* the DMA sites, sendfile()
+included.
 
-Boot Regressions Detected:
-
-arm:
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200417)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 25 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-x86_64:
-
-    x86_64_defconfig:
-        gcc-8:
-          qemu_x86_64:
-              lab-collabora: new failure (last pass: next-20200417)
-
-    x86_64_defconfig+kvm_guest:
-        gcc-8:
-          qemu_x86_64:
-              lab-collabora: new failure (last pass: next-20200417)
-
-Boot Failures Detected:
-
-x86_64:
-    x86_64_defconfig:
-        gcc-8:
-            qemu_x86_64: 1 failed lab
-
-    x86_64_defconfig+kvm_guest:
-        gcc-8:
-            qemu_x86_64: 1 failed lab
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            stih410-b2120: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        clang-10:
-            apq8096-db820c: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+BTW, device drivers do need to know how to use the DMA mapping API.  If
+s390 has drivers that need to be updated, I think that's vastly
+preferable to incomplete hooks in core mm code.

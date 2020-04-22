@@ -2,124 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ED341B35C0
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 05:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BC241B36E6
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 07:41:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726389AbgDVDwS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 21 Apr 2020 23:52:18 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:45171 "EHLO ozlabs.org"
+        id S1725308AbgDVFle (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 01:41:34 -0400
+Received: from ozlabs.org ([203.11.71.1]:45301 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726228AbgDVDwR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 21 Apr 2020 23:52:17 -0400
+        id S1726154AbgDVFld (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 01:41:33 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 496RMf0jKKz9sSg;
-        Wed, 22 Apr 2020 13:52:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 496Tnl4GLsz9sSJ;
+        Wed, 22 Apr 2020 15:41:31 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587527535;
-        bh=Ht2B9g7UeZlkPJ4YAiu9xxmmZjmqQOON7qrTD5NTcWU=;
+        s=201702; t=1587534091;
+        bh=XuWKEeF8BBg+B4qgjVxumjZWdZt7o4zF4w7XnAYEqvY=;
         h=Date:From:To:Cc:Subject:From;
-        b=hjOwoZL8NY5GqqQy3WlTAEVSC6Wg14/fHs9eTRiMvv/1VK+5tc6+n2MtPYDrOTElp
-         CrAPYW15l3geQ8bIUqD/vs6PikvYN7C6TgQTKMgivh8VCyubg+hBHqO8MC8bL+KHbl
-         dM8L/HOpBofi9+GBvhm2xPpLNuxOOPNNrJf+8Z6fywTu8RoQrj0rWeoHPceqwkjfr5
-         qdp310u2SiyKsTrVGOrFv8ORtLZHIGRl40PkdiTDLtZ9xYnpN4qcvMb5QVQuxSC1GN
-         jen18EHpr84ZR0oNljWw/msC6clRakkhff6O2EP9ImF6Ce7ps4GfmSBAUdBrtXjTdA
-         nyB/GwC4ee7ZA==
-Date:   Wed, 22 Apr 2020 13:52:12 +1000
+        b=GX/TBSarEJeMAwcf4HWb8ScGitBqDbw2HICPz61v7L5LT42VWAp5P39EGm8BWWtKr
+         cIOpQkdeXF24yzcWVV/Vy/tpeCvMtqy1k8anIOyjCaLR0JCVlEUa5YEKN7M+MVkebJ
+         UF8OjCp9RMunC55givYe+2a9jCeXOVB8/m/ceFVLg/yzvp/BewBWjzWEFYtvMoadKV
+         TPI0IeOF0uM4k5ZuwABb9fw/aHJoRmx9Tz/UvQA6lf9gLCVf/AuYyqy1GxPJlEIcN1
+         lq2LzlMSKdcKf8DkCcj6tsl8zpSVIDXoqIC2zei8SgJxa86XpSYfmktFnbBIVFYJzq
+         E/u8XCCxOqCUg==
+Date:   Wed, 22 Apr 2020 15:41:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>, Wanpeng Li <wanpengli@tencent.com>
-Subject: linux-next: manual merge of the kvm tree with the rcu tree
-Message-ID: <20200422135212.74d72690@canb.auug.org.au>
+        Haren Myneni <haren@linux.ibm.com>
+Subject: linux-next: build failure after merge of the powerpc tree
+Message-ID: <20200422154129.11f988fd@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/5VSpAfQEKxH/B/sz0WWOHru";
+Content-Type: multipart/signed; boundary="Sig_/ziQZNfCkH=foK2.bCCJ1ChG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/5VSpAfQEKxH/B/sz0WWOHru
+--Sig_/ziQZNfCkH=foK2.bCCJ1ChG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+After merging the powerpc tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-  arch/x86/kvm/svm/svm.c
+In file included from <command-line>:32:
+./usr/include/asm/vas-api.h:15:2: error: unknown type name '__u32'
+   15 |  __u32 version;
+      |  ^~~~~
+./usr/include/asm/vas-api.h:16:2: error: unknown type name '__s16'
+   16 |  __s16 vas_id; /* specific instance of vas or -1 for default */
+      |  ^~~~~
+./usr/include/asm/vas-api.h:17:2: error: unknown type name '__u16'
+   17 |  __u16 reserved1;
+      |  ^~~~~
+./usr/include/asm/vas-api.h:18:2: error: unknown type name '__u64'
+   18 |  __u64 flags; /* Future use */
+      |  ^~~~~
+./usr/include/asm/vas-api.h:19:2: error: unknown type name '__u64'
+   19 |  __u64 reserved2[6];
+      |  ^~~~~
 
-between commit:
+Caused by commit
 
-  c60e60a23f24 ("kvm/svm: Disable KCSAN for svm_vcpu_run()")
+  45f25a79fe50 ("powerpc/vas: Define VAS_TX_WIN_OPEN ioctl API")
 
-from the rcu tree and commit:
+uapi headers should be self contained.  I have added the following patch
+for today:
 
-  a9ab13ff6e84 ("KVM: X86: Improve latency for single target IPI fastpath")
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 22 Apr 2020 15:28:26 +1000
+Subject: [PATCH] powerpc/vas: uapi headers should be self contained
 
-from the kvm tree.
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/powerpc/include/uapi/asm/vas-api.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+diff --git a/arch/powerpc/include/uapi/asm/vas-api.h b/arch/powerpc/include=
+/uapi/asm/vas-api.h
+index fe95d67e3bab..ebd4b2424785 100644
+--- a/arch/powerpc/include/uapi/asm/vas-api.h
++++ b/arch/powerpc/include/uapi/asm/vas-api.h
+@@ -6,6 +6,8 @@
+ #ifndef _UAPI_MISC_VAS_H
+ #define _UAPI_MISC_VAS_H
+=20
++#include <linux/types.h>
++
+ #include <asm/ioctl.h>
+=20
+ #define VAS_MAGIC	'v'
+--=20
+2.25.1
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kvm/svm/svm.c
-index b303ae0803d2,a6f4e1bdb045..000000000000
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@@ -3276,10 -3299,21 +3299,21 @@@ static void svm_cancel_injection(struc
-  	svm_complete_interrupts(svm);
-  }
- =20
-+ static enum exit_fastpath_completion svm_exit_handlers_fastpath(struct kv=
-m_vcpu *vcpu)
-+ {
-+ 	if (!is_guest_mode(vcpu) &&
-+ 	    to_svm(vcpu)->vmcb->control.exit_code =3D=3D SVM_EXIT_MSR &&
-+ 	    to_svm(vcpu)->vmcb->control.exit_info_1)
-+ 		return handle_fastpath_set_msr_irqoff(vcpu);
-+=20
-+ 	return EXIT_FASTPATH_NONE;
-+ }
-+=20
-  void __svm_vcpu_run(unsigned long vmcb_pa, unsigned long *regs);
- =20
-- static __no_kcsan void svm_vcpu_run(struct kvm_vcpu *vcpu)
- -static enum exit_fastpath_completion svm_vcpu_run(struct kvm_vcpu *vcpu)
-++static __no_kcsan enum exit_fastpath_completion svm_vcpu_run(struct kvm_v=
-cpu *vcpu)
-  {
-+ 	enum exit_fastpath_completion exit_fastpath;
-  	struct vcpu_svm *svm =3D to_svm(vcpu);
- =20
-  	svm->vmcb->save.rax =3D vcpu->arch.regs[VCPU_REGS_RAX];
-
---Sig_/5VSpAfQEKxH/B/sz0WWOHru
+--Sig_/ziQZNfCkH=foK2.bCCJ1ChG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6fv2wACgkQAVBC80lX
-0GymtQf/U17yb+yHk4v+1jDTGDNXHyZnQZ2UUycoKCW7etIYYM4PP1XhDKPy5YBK
-VAywDItg71HdFtO33xKb9TkT1uiGFGIu6JTBoxnHsas5MBd0OYc/UyHo/5g8eMBF
-KACqYK0cIcPI/KlLP7pz+J4o4TUwmf5RSx796vNEmG5v7hfM9D8n7+UHmDtUSlno
-c+Uik1TxRJV3pPO/pfVNyovUoV8Og+aJVsRetWB5insLMZBK/GwcFUEFXHNVDkfV
-DkSm791vwVdN1Z6+nL/SfMIb07x5xtSM/ySmt8zpeE6/HlrgC/xwMKfOHq+Y7ppP
-vVUg8yMkH60eBdnoeoQzAVvqfXYuvQ==
-=6Vge
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6f2QkACgkQAVBC80lX
+0GxALAf/TtAfuYHpLwphowcixvxzTN+fVF2vw+ejvc5W27ZTjpPwhLBHkMOQSMlp
+26FtKpWUGvH/AHkovkqD+luZtbkQV4wKSwQMThnRsFbgt/GehhCs4cjMGzhzA/4a
+88wJssIrsxPwWAVrumDF6OJrEogGiA/AJ9vgvYEPJFfwVL7jcnxz6n+E0+ssUe5U
+NTIuy637nTEoxFUBnm+4Up5yq3O06Y5W2XdnV7p5AyrGbI+ojV698U2F9redrhwi
+NHpHNeGRp6ZC3CSae3NhzB02hkhlVgU9RMo8Nft3022pYIavMEjD5i4/ckUKOrb4
+fvVBP1f18q9ytOTDVkmot4hcEGw8eA==
+=4Njs
 -----END PGP SIGNATURE-----
 
---Sig_/5VSpAfQEKxH/B/sz0WWOHru--
+--Sig_/ziQZNfCkH=foK2.bCCJ1ChG--

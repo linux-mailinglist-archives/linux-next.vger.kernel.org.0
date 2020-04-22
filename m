@@ -2,84 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E674C1B42FF
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 13:19:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5071B464A
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 15:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726066AbgDVLTV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 07:19:21 -0400
-Received: from mail.kernel.org ([198.145.29.99]:60886 "EHLO mail.kernel.org"
+        id S1726378AbgDVNeF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 09:34:05 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:58410 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725787AbgDVLTV (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 22 Apr 2020 07:19:21 -0400
-Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 4507020781;
-        Wed, 22 Apr 2020 11:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1587554360;
-        bh=hPyeEWJ1hSOQS0OmoMPXcbl0oGIAJWeVZfJx5MYkO5M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=urRs7yZjuISUMaA8YqNgAU/546T4w18pj4Ire2ZOKdB1LV3g4mIHUgcUP8xlJH+vh
-         4/U83sOnlybwCuwidWd2kPlgzTMs4XZ+YcU6oQTBywyuWXxUDYmb+ZkZo1mOqtrpqB
-         1HMtwUVDXAMiFIdwMBXM6oByukkWrbJ3YA6/B5yw=
-Date:   Wed, 22 Apr 2020 12:19:18 +0100
-From:   Mark Brown <broonie@kernel.org>
+        id S1725839AbgDVNeE (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 09:34:04 -0400
+Received: from gwarestrin.me.apana.org.au ([192.168.0.7] helo=gwarestrin.arnor.me.apana.org.au)
+        by fornost.hmeau.com with smtp (Exim 4.89 #2 (Debian))
+        id 1jRFVf-00015m-IR; Wed, 22 Apr 2020 23:33:52 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 22 Apr 2020 23:33:51 +1000
+Date:   Wed, 22 Apr 2020 23:33:51 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Karol Trzcinski <karolx.trzcinski@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20200422111918.GD4898@sirena.org.uk>
-References: <20200421121130.44423958@canb.auug.org.au>
+        Shukun Tan <tanshukun1@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Zaibo Xu <xuzaibo@huawei.com>
+Subject: Re: linux-next: build failure after merge of the crypto tree
+Message-ID: <20200422133351.GB7640@gondor.apana.org.au>
+References: <20200421151240.4dfc679a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="PHCdUe6m4AxPMzOu"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200421121130.44423958@canb.auug.org.au>
-X-Cookie: A stitch in time saves nine.
+In-Reply-To: <20200421151240.4dfc679a@canb.auug.org.au>
 User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Tue, Apr 21, 2020 at 03:12:40PM +1000, Stephen Rothwell wrote:
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 21 Apr 2020 14:56:49 +1000
+> Subject: [PATCH] crypto: hisilicon/qm add more ACPI dependencies
+> 
+> due to the selects of CRYPTO_DEV_HISI_QM which now depends on ACPI
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/crypto/hisilicon/Kconfig | 3 +++
+>  1 file changed, 3 insertions(+)
 
---PHCdUe6m4AxPMzOu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Apr 21, 2020 at 12:11:30PM +1000, Stephen Rothwell wrote:
-
-> In file included from <command-line>:32:
-> ./usr/include/sound/sof/ext_manifest.h:20:10: fatal error: sound/sof/info.h: No such file or directory
->    20 | #include <sound/sof/info.h>
->       |          ^~~~~~~~~~~~~~~~~~
-
-> Caused by commit
-
->   9e72f13ee541 ("ASoC: SOF: ext_manifest: parse windows")
-
-> I have used the sound-asoc tree from next-20200414 again today.
-
-Thanks for the report, I'm in the process of reverting that and a bunch
-of other commits to fix this.
-
---PHCdUe6m4AxPMzOu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl6gKDUACgkQJNaLcl1U
-h9CTKQf+JcMSIU3aaXkHJ+5+keCc1TZZHMTBC3+Ka0YjjadM40jiPjHGciTQfFe8
-+SO20Sxma+O3LYXvSdEYBkLobd5i+jZL9pv4Dv5ifuM3OjLJFpzvpezoYJK3iG5s
-aGW6klKqE8yTBFDHkK+LlLq+lzCkHC1Fjqv4NlBvQP0sQeewu3RN9u5XFmoNPVqi
-PymCm0t9F9d+SEoX9YlozvZcR9J9u3vWBOXVzA9TMsWgE//3NpTySkluXytz4iET
-eEr7tAHnDffF3SX4qq5tiSOS4zryW4oyjJPspNQtRiRTU4nmUVvY28+Z4zWLgtmH
-KlRPpugTtPGX+KFdk+IuO5BSUhYQmQ==
-=Y01Q
------END PGP SIGNATURE-----
-
---PHCdUe6m4AxPMzOu--
+Patch applied.  Thanks.
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

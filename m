@@ -2,97 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B19471B3711
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 08:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE8D41B378F
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 08:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbgDVGBS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 02:01:18 -0400
-Received: from ozlabs.org ([203.11.71.1]:45657 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725912AbgDVGBQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 22 Apr 2020 02:01:16 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 496VDT05CDz9sSh;
-        Wed, 22 Apr 2020 16:01:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587535274;
-        bh=BD838gVtavOEQyFzLC6EmshuBpJjmuEPd4cFV1Fai4U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=dR5dyy9ytSgBXwcKnSd69BxQpoSTRj3PV8q6gIABfBow0WMCO2vzBkY1tRL/45tic
-         aULRPe925sTytPnHBrGlLVK43Qvh7uu0eh09RGJPcVp4JivnI/5BTC/KgK3WpPSzTr
-         IfFI8Eq+cc9l2lzKX1BTvbbufuOH2hZc+rnRipDmaCBKBkRDmK+klj2x72VxEP2tA6
-         87wHKLJbJyUX/YwmTZ5fdjzWgD0muVc72xxyvgu1j/RRXsljtyqNRRZnGbdz6HdcXB
-         BZZ2ans1+LvQGQDGtr7tMIjeFrrlktC1BiJqZHpe/YYVkLi97kYC16HkfJUUgDizym
-         dpZ9b4mqIu8PQ==
-Date:   Wed, 22 Apr 2020 16:01:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
+        id S1726363AbgDVGfe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 02:35:34 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:25470 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725308AbgDVGfe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 02:35:34 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03M6WWvR069795;
+        Wed, 22 Apr 2020 02:35:24 -0400
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30ghmd27tq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Apr 2020 02:35:24 -0400
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03M6V61Y005021;
+        Wed, 22 Apr 2020 06:35:23 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma03dal.us.ibm.com with ESMTP id 30fs66xxha-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Apr 2020 06:35:23 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03M6ZMnB61342080
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Apr 2020 06:35:22 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 73835BE05D;
+        Wed, 22 Apr 2020 06:35:22 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 58240BE051;
+        Wed, 22 Apr 2020 06:35:21 +0000 (GMT)
+Received: from Harens-MacBook-Pro.local (unknown [9.160.75.2])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 Apr 2020 06:35:21 +0000 (GMT)
+Subject: Re: linux-next: build failure after merge of the powerpc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ricardo =?UTF-8?B?Q2HDsXVl?= =?UTF-8?B?bG8=?= 
-        <ricardo.canuelo@collabora.com>, Orson Zhai <orson.zhai@unisoc.com>
-Subject: linux-next: manual merge of the akpm-current tree with the jc_docs
- tree
-Message-ID: <20200422160111.7ae3f532@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200422154129.11f988fd@canb.auug.org.au>
+From:   Haren Myneni <haren@linux.ibm.com>
+Message-ID: <d88c34d2-9b35-b4f9-be35-754830057b1d@linux.ibm.com>
+Date:   Tue, 21 Apr 2020 23:35:19 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/j8x8N/diik/CMBZ9J=Fp2_s";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200422154129.11f988fd@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-21_10:2020-04-21,2020-04-21 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1011 mlxscore=0 lowpriorityscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2003020000
+ definitions=main-2004220050
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/j8x8N/diik/CMBZ9J=Fp2_s
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen, Sorry missed it. Thanks for fixing it.
 
-Hi all,
+Acked-by: Haren Myneni <haren@linux.ibm.com>
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
-
-  include/linux/printk.h
-
-between commit:
-
-  90c165f0de3a ("docs: pr_*() kerneldocs and basic printk docs")
-
-from the jc_docs tree and commit:
-
-  2023be154f91 ("dynamic_debug: add an option to enable dynamic debug for m=
-odules only")
-
-from the akpm-current tree.
-
-I fixed it up (I just used the latter version - though the comment
-for pr_debug now probably wants expanding) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/j8x8N/diik/CMBZ9J=Fp2_s
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6f3acACgkQAVBC80lX
-0GzCYwf+P/us2iCzd3hh5m5CXbDkHGn9WCKp2Uwx4jWcde/D1sDVyWcQaYQfuc1k
-eRhB5fSE2u38SmhmZQvL3cokX9LIKFNZiaQ841HDsN2jgdTVZYVMd/5fB+K3ez5S
-++/dUAOBEeOQeSTHF1zTsgsfbt1aL8Tr8UvNG9bJvKPfZopO3FrgWeZ6WzdkCSk4
-brTIEaPz9RSELus5Kke6bG0nGmKTW+kGlp8otczAM4HeK83DfUrog3GQ8EP9DjdO
-GHL+oBxyeqyim4IveRkzdmaEQGYb+UR4W4U0iEh87fnrTb/VuxD+yYtJbm5BcW8n
-5gRQaUlbArnT9TzV+fFpJChBvwyqdg==
-=aO3n
------END PGP SIGNATURE-----
-
---Sig_/j8x8N/diik/CMBZ9J=Fp2_s--
+On 4/21/20 10:41 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the powerpc tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+> 
+> In file included from <command-line>:32:
+> ./usr/include/asm/vas-api.h:15:2: error: unknown type name '__u32'
+>    15 |  __u32 version;
+>       |  ^~~~~
+> ./usr/include/asm/vas-api.h:16:2: error: unknown type name '__s16'
+>    16 |  __s16 vas_id; /* specific instance of vas or -1 for default */
+>       |  ^~~~~
+> ./usr/include/asm/vas-api.h:17:2: error: unknown type name '__u16'
+>    17 |  __u16 reserved1;
+>       |  ^~~~~
+> ./usr/include/asm/vas-api.h:18:2: error: unknown type name '__u64'
+>    18 |  __u64 flags; /* Future use */
+>       |  ^~~~~
+> ./usr/include/asm/vas-api.h:19:2: error: unknown type name '__u64'
+>    19 |  __u64 reserved2[6];
+>       |  ^~~~~
+> 
+> Caused by commit
+> 
+>   45f25a79fe50 ("powerpc/vas: Define VAS_TX_WIN_OPEN ioctl API")
+> 
+> uapi headers should be self contained.  I have added the following patch
+> for today:
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 22 Apr 2020 15:28:26 +1000
+> Subject: [PATCH] powerpc/vas: uapi headers should be self contained
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>> ---
+>  arch/powerpc/include/uapi/asm/vas-api.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/powerpc/include/uapi/asm/vas-api.h b/arch/powerpc/include/uapi/asm/vas-api.h
+> index fe95d67e3bab..ebd4b2424785 100644
+> --- a/arch/powerpc/include/uapi/asm/vas-api.h
+> +++ b/arch/powerpc/include/uapi/asm/vas-api.h
+> @@ -6,6 +6,8 @@
+>  #ifndef _UAPI_MISC_VAS_H
+>  #define _UAPI_MISC_VAS_H
+>  
+> +#include <linux/types.h>
+> +
+>  #include <asm/ioctl.h>
+>  
+>  #define VAS_MAGIC	'v'
+> 

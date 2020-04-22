@@ -2,47 +2,47 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F56F1B48BD
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 17:34:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C35951B48C5
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 17:35:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726189AbgDVPex (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 11:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S1726079AbgDVPfe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 11:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726066AbgDVPew (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 11:34:52 -0400
+        with ESMTP id S1725980AbgDVPfe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 11:35:34 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA02C03C1A9;
-        Wed, 22 Apr 2020 08:34:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DCFC03C1A9;
+        Wed, 22 Apr 2020 08:35:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20170209; h=Content-Type:In-Reply-To:MIME-Version
         :Date:Message-ID:From:References:Cc:To:Subject:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7EBgATeRuDNemlDJ1dii1j2EUc7gkP6M4bIvq1a3wcg=; b=YQ8dbkSURIxAqeQ3HU1sFW6cej
-        gSxmscj8jn5TymV7vhL28KgP/OR/rFoFtNfvla6gSTrJf/xruXQIhn3w7altnxFVb9ShbXCpw5EZe
-        6Uefjpq2DvbWTc1Vfr8CFQ8zPhLg1BkLgIitarGJIcDqr+BnTbGt+WzmlpEa61TKRTuVt7MuJJuHV
-        m8hWY+I8QKUGB2mMECZ0K1mQzK4aboqpFaDjWcGa3JEq6SEOz6W3Suv4vhRHh/qI/KV7aapVTDosp
-        XV0q7Dswh+IYsyxUqHEIx9tqMGoRoY9TdVcgAi/Rz31kTlIfvZTE1ug+p5+NrORUd/ukz5oRnl9QW
-        e4hwaHcA==;
+        bh=I6HEafpzIstu9HHjdQ2Ep6U+zsYgdWO5sTVeLttSokY=; b=olSWxQhlFpDpg9BGcmceh9TRRA
+        XsZ59J/aN81ygDKXhtiY5ggRmZu8VJCwWvxOImhEQ4fL8o+HqwcPUnke83PHRXBXS0tSudbIN5qeE
+        RKta+pWBWFikYg1y9S/lPPHn6LcyX5z5kWOXlBFj8ffShoMZfczp0fFqLqXtGZAmo6R5x3QJhD73z
+        1GIOAFBrZ+UIxmpwIqRxD2pnR3OCUKLADuWiccGbx75ijBRd7FVeL0UPC582u1NaBGCRYC5lvTUtM
+        7WrVM8Wwqwxm8cWfgrSntJF7vsLjaL7zrUvE5mHe8qo8X7EBkgZ6yPWhY0fDC6mx/boQPcIdrYNRK
+        K0lXyV+g==;
 Received: from [2601:1c0:6280:3f0::19c2]
         by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jRHOj-0002iu-8B; Wed, 22 Apr 2020 15:34:51 +0000
-Subject: Re: linux-next: Tree for Apr 22 (media/tuners/e4000.c)
+        id 1jRHPO-0005IW-B0; Wed, 22 Apr 2020 15:35:30 +0000
+Subject: Re: linux-next: Tree for Apr 22 (objtool warnings)
 To:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-media <linux-media@vger.kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
 References: <20200422171016.484b031d@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <8aef1e96-4751-5930-b333-61fae113db22@infradead.org>
-Date:   Wed, 22 Apr 2020 08:34:46 -0700
+Message-ID: <2bf0635d-1406-23db-28c7-e55da9a07e05@infradead.org>
+Date:   Wed, 22 Apr 2020 08:35:29 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
 In-Reply-To: <20200422171016.484b031d@canb.auug.org.au>
 Content-Type: multipart/mixed;
- boundary="------------54A5D0E4735201A1E38C3035"
+ boundary="------------30DF9C480C1D4F1E20AF749D"
 Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
@@ -50,7 +50,7 @@ List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
 This is a multi-part message in MIME format.
---------------54A5D0E4735201A1E38C3035
+--------------30DF9C480C1D4F1E20AF749D
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
 
@@ -61,30 +61,9 @@ On 4/22/20 12:10 AM, Stephen Rothwell wrote:
 > 
 
 on x86_64:
-CONFIG_VIDEO_V4L2=m
-CONFIG_MEDIA_TUNER_E4000=y
 
-ld: drivers/media/tuners/e4000.o: in function `e4000_remove':
-e4000.c:(.text+0x34): undefined reference to `v4l2_ctrl_handler_free'
-ld: drivers/media/tuners/e4000.o: in function `e4000_probe':
-e4000.c:(.text+0x16c1): undefined reference to `v4l2_ctrl_handler_init_class'
-ld: e4000.c:(.text+0x16eb): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x1731): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x1762): undefined reference to `v4l2_ctrl_auto_cluster'
-ld: e4000.c:(.text+0x178c): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x17d6): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x1804): undefined reference to `v4l2_ctrl_auto_cluster'
-ld: e4000.c:(.text+0x182e): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x1878): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x18a6): undefined reference to `v4l2_ctrl_auto_cluster'
-ld: e4000.c:(.text+0x18d0): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x191a): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x1948): undefined reference to `v4l2_ctrl_auto_cluster'
-ld: e4000.c:(.text+0x1972): undefined reference to `v4l2_ctrl_new_std'
-ld: e4000.c:(.text+0x19a6): undefined reference to `v4l2_ctrl_handler_free'
-ld: e4000.c:(.text+0x1a2a): undefined reference to `v4l2_i2c_subdev_init'
-
-
+arch/x86/net/bpf_jit_comp.o: warning: objtool: bpf_int_jit_compile()+0x246: unreachable instruction
+drivers/media/i2c/ir-kbd-i2c.o: warning: objtool: ir_probe()+0x745: unreachable instruction
 
 Full randconfig file is attached.
 
@@ -92,7 +71,7 @@ Full randconfig file is attached.
 ~Randy
 Reported-by: Randy Dunlap <rdunlap@infradead.org>
 
---------------54A5D0E4735201A1E38C3035
+--------------30DF9C480C1D4F1E20AF749D
 Content-Type: text/plain; charset=UTF-8;
  name="config-r2265"
 Content-Transfer-Encoding: base64
@@ -2711,4 +2690,4 @@ RV9QQz15CiMgQ09ORklHX0tDT1YgaXMgbm90IHNldAojIENPTkZJR19SVU5USU1FX1RFU1RJ
 TkdfTUVOVSBpcyBub3Qgc2V0CiMgQ09ORklHX01FTVRFU1QgaXMgbm90IHNldAojIGVuZCBv
 ZiBLZXJuZWwgVGVzdGluZyBhbmQgQ292ZXJhZ2UKIyBlbmQgb2YgS2VybmVsIGhhY2tpbmcK
 
---------------54A5D0E4735201A1E38C3035--
+--------------30DF9C480C1D4F1E20AF749D--

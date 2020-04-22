@@ -2,49 +2,53 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 258991B4FD5
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 00:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13DB71B4FF6
+	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 00:16:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726102AbgDVWGa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 18:06:30 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:49263 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725839AbgDVWG3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 22 Apr 2020 18:06:29 -0400
+        id S1725846AbgDVWQj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 18:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725839AbgDVWQj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 18:16:39 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759AFC03C1A9;
+        Wed, 22 Apr 2020 15:16:39 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 496vfB4JL4z9sSX;
-        Thu, 23 Apr 2020 08:06:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 496vsv17yRz9sSY;
+        Thu, 23 Apr 2020 08:16:34 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587593187;
-        bh=TTMSDBNA5O6jYEnVeviUPfJ9u2dsDfKsDa6deGWFYR0=;
+        s=201702; t=1587593795;
+        bh=b3FpIbBdWLCE6rrc0j3weoC6BUfVk+LOtjJLdfX/Jw8=;
         h=Date:From:To:Cc:Subject:From;
-        b=rtbMvXXebPH2tMr/YFqsl7l2zCmNMnInQl7L7KPWJHilOgHNBAcku3CNiKco1OEji
-         Nc6PxrdWSTRCRdHtDS86ulEjJ2aR6F9zShHHyqyXy/+fKtdbC9+0yvA/cib5VPU2mB
-         43nYCAGFWbdiZpNO+iMSRzXJgmEH4QZPl+JIiPkaLot2ODpzIHS6SIlkyLHgdtmdWw
-         wW1Jsbv75QCvsiKJ6gKK57yprBOF7cKOusAGg5GAlOVXIeFjOFkzOWcZaDH3RDwC/U
-         N9C7cCG9QzMbJVFACqlyBAXqJglwQw8ryWjCq/Re8kNF+2AQqnVox3bvV+2RxbtAQt
-         th/TA1DHuji0w==
-Date:   Thu, 23 Apr 2020 08:06:25 +1000
+        b=m1T2jrtKqALUKfvG5oQq52Lf4IKxe3TotkzeAIehzfM48hdeSjy6boOMROdDsGfNY
+         g30OHsa2Ap26boYCBFx4rUR0QEUQm+SLL4UfRfnV0xLC8c6xWIntSmCTBiehL5O0ny
+         xcq+qgmOvvY+FaXVRamcHCuEUid0bu0IPFJG6pCjtzimZKn4KWK0wYntoamJQbCR63
+         6Xo/SSZG7iWu4pGEWAAkAVpeJR+O52nfr0qZ8YxrcfvFBeRnts0z7FOnHkN8tlGVsw
+         1yPaWRcKKtW9nbEMUGJSBO0N9DmlLDkG6KHAECDSAmb3EyhqoF7sJt/deqsgDIcx3s
+         IrcskcUMHu3MA==
+Date:   Thu, 23 Apr 2020 08:16:33 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+        Networking <netdev@vger.kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yuiko Oshino <yuiko.oshino@microchip.com>
-Subject: linux-next: Fixes tag needs some work in the net tree
-Message-ID: <20200423080625.76785b93@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the net-next tree
+Message-ID: <20200423081633.241888b4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/JoqlmvAVm_f6Uo7Ko+H7kbL";
+Content-Type: multipart/signed; boundary="Sig_/jUmrQpVGYDI4bLnMZAYPPUL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/JoqlmvAVm_f6Uo7Ko+H7kbL
+--Sig_/jUmrQpVGYDI4bLnMZAYPPUL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -52,37 +56,44 @@ Hi all,
 
 In commit
 
-  63edbcceef61 ("net: phy: microchip_t1: add lan87xx_phy_init to initialize=
- the lan87xx phy.")
+  7dec902f4fc0 ("net: mscc: ocelot: refine the ocelot_ace_is_problematic_ma=
+c_etype function")
 
 Fixes tag
 
-  Fixes: 3e50d2da5850 ("Add driver for Microchip LAN87XX T1 PHYs")
+  Fixes: d4d0cb741d7b ("net: mscc: ocelot: deal with problematic MAC_ETYPE =
+VCAP IS2 rules")
 
 has these problem(s):
 
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 89f9ffd3eb67 ("net: mscc: ocelot: deal with problematic MAC_ETYPE VC=
+AP IS2 rules")
+
+Dave, since you don't rebase your tree, can you start pushing back on
+these, please?
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/JoqlmvAVm_f6Uo7Ko+H7kbL
+--Sig_/jUmrQpVGYDI4bLnMZAYPPUL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6gv+EACgkQAVBC80lX
-0GxWYAgAm6OibxfSfdLHoyAfb1dF9U6I94T/gSoj5e1gqNdau0pdD7JwBK9YOmDg
-j2f8H64jhlepjxg+xnx2cDnj0coy2AYbVkQ3kfZWVnZmdNOStT/o8OwcDUrV0MtV
-EOoXUgYvKLw92k+Fwls5UcXqFkY8RlKvj+P4odCmqbtPOELxetlMqojHSVqaAq/g
-AcCNY1uXiexNRI8iOxM+9Wdp+FAusK4bJzpyyK6m91I2faTsgnJ1qel60S7N2yTS
-YPHAaIethx1NHXABe0lUiXU9iW/7lZwKE5ul8D5zxtid2S+UgEFt46PUCA35aMrf
-orq9hnVGtcRfAgY1KmzhkzhohP48YA==
-=o+g7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6gwkEACgkQAVBC80lX
+0GzHjgf+OvN/fIzhtSNJgATqEPg+xYYEMCnt5domZgarFplYXOPg8hTWPACM86ax
+IESL1YiAFOSB9c2YDZPXNm/2tLDU/EGjGnkm3D3gdPyqlURzFjuze9rA1klPCn8c
+U4UWqoNTkLO7vqi1c52LOtfRySsLumM9t+mTGtqAjpQo+mYIY8Vt4R/r0fHxc4QT
+spMPno5x2nY5E/8rNnWA4yYTNnKrM7ngWaftY37/h6W7KYVEV9+dVDBR0p+/ROYT
+zZey1QQtOxqo+9P3ZKgrlnO581/q/1gznUF1feuUDBbJ3eo4bxWADidCzdhszU9v
+h8yWcNJfXqbz2p12+nImS7O2JPWtiA==
+=PKvZ
 -----END PGP SIGNATURE-----
 
---Sig_/JoqlmvAVm_f6Uo7Ko+H7kbL--
+--Sig_/jUmrQpVGYDI4bLnMZAYPPUL--

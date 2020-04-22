@@ -2,164 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D5F1B4AC6
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 18:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 058A91B4C83
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 20:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726741AbgDVQoT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 12:44:19 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:38902 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726147AbgDVQoT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 12:44:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1587573857;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=c0nWZoKPKTTJxXUMabK38nbk8dEd9Y8pN0ufpg96O1o=;
-        b=UxLJZKb9MsRkBwiV1hzfSJOLlw3CH1uYFVthQ04Q3uWktLB66xz1PgxEyPzKYRAADwny75
-        I7GZcsNXki14vu377EoIURykev/4LSlUG4dQTsZcq74YU9qAtHZM0woqtHu9ou0NxybMRy
-        LXI3VDY9C+zGidn9KqHPOpoi112VjJo=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-201-9W6c9HByNa2NbULOmEnGpw-1; Wed, 22 Apr 2020 12:44:11 -0400
-X-MC-Unique: 9W6c9HByNa2NbULOmEnGpw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.phx2.redhat.com [10.5.11.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D753418FE860;
-        Wed, 22 Apr 2020 16:44:09 +0000 (UTC)
-Received: from treble (ovpn-117-114.rdu2.redhat.com [10.10.117.114])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 957706084B;
-        Wed, 22 Apr 2020 16:44:08 +0000 (UTC)
-Date:   Wed, 22 Apr 2020 11:44:06 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: linux-next: Tree for Apr 22 (objtool warnings)
-Message-ID: <20200422164406.qhvd2my35wnjlzyg@treble>
-References: <20200422171016.484b031d@canb.auug.org.au>
- <2bf0635d-1406-23db-28c7-e55da9a07e05@infradead.org>
+        id S1726324AbgDVSNe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 14:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726041AbgDVSNd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 14:13:33 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA929C03C1A9
+        for <linux-next@vger.kernel.org>; Wed, 22 Apr 2020 11:13:33 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id w3so1253693plz.5
+        for <linux-next@vger.kernel.org>; Wed, 22 Apr 2020 11:13:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=DgJydwuk4gMph82j7+rjejPf2WRrWrDdHj8HhtrRzQ4=;
+        b=WqePErKmLfh7KBagDLNs2ECFFKUWWBuS/LT9C73G43CCfr0jKZvKIYb3uoriovYgSC
+         GcCA6bjDDcleiNLUD2Ie1lEcsqU9rzOh73+HA/8Bmaoo2nmOMvb/7qKYHDJEU2mJ4K13
+         pQNJM1IgnSTfjuc7tCxndy6NECNoPdx5sbX8g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=DgJydwuk4gMph82j7+rjejPf2WRrWrDdHj8HhtrRzQ4=;
+        b=cWC60jmU4KNzcdPm5v1ITMGPUwRnaZRblse7o/GpHMrq48rOVEYNy0vkqi6G/HEs9B
+         MduvdVi80DgG/lVQVv+US0OCsEvxOvCF3D3bgiXSZZne4ygSKCDQ0iChe6H2LBwjj/im
+         kUpXdPIe8DSFrZ/m00FhsqhJT+a3YzCOaqzfgfLFqevPEzdnYaA+dbn6Dw1AxVHj77/b
+         gRDN+4H4mj70M2QlUJKq83kqwtvdkqa2+kxlis9a3mMHvrbdc/gkRGF/qWw4rOsv6hdU
+         Ek0y1ENjPEUGN7TJ5wKM4AV66i5oZIh3MhtlZR5VLownZjnE0b0nyvPevwrsRwOAD+x6
+         pmWw==
+X-Gm-Message-State: AGi0Pua8fR3ZBpHRpwIqjXXQzt7r5aRLZdoQAmj8XjJYLK3SDEkM1Prq
+        5GHIjkD1/sJM0YtWvUztX3K3oQ==
+X-Google-Smtp-Source: APiQypIF/TOFMVWqsqo9Ji5t23ufkdJTEnR9y/bKsOIqSx5+isvviBIv0rFXsZqqC+mxviI+g5ea1Q==
+X-Received: by 2002:a17:90a:1954:: with SMTP id 20mr6897pjh.106.1587579213077;
+        Wed, 22 Apr 2020 11:13:33 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 18sm6140343pjf.30.2020.04.22.11.13.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Apr 2020 11:13:32 -0700 (PDT)
+From:   coverity-bot <keescook@chromium.org>
+X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
+Date:   Wed, 22 Apr 2020 11:13:31 -0700
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        linux-next@vger.kernel.org
+Subject: Coverity: compat_ksys_shmctl(): Uninitialized variables
+Message-ID: <202004221111.DD985EB@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2bf0635d-1406-23db-28c7-e55da9a07e05@infradead.org>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.13
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Apr 22, 2020 at 08:35:29AM -0700, Randy Dunlap wrote:
-> On 4/22/20 12:10 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200421:
-> > 
-> 
-> on x86_64:
+Hello!
 
-In both cases the unreachable instruction happens immediately after a
-call to a function which is truncated with a UD2 (because of
-UBSAN_TRAP).
+This is an experimental semi-automated report about issues detected by
+Coverity from a scan of next-20200422 as part of the linux-next scan project:
+https://scan.coverity.com/projects/linux-next-weekly-scan
 
-When I remove UBSAN_TRAP, the UD2s are replaced with calls to
-__ubsan_handle_type_mismatch_v1().
+You're getting this email because you were associated with the identified
+lines of code (noted below) that were touched by commits:
 
-Kees, any idea?
+  Sat Jul 8 22:52:47 2017 -0400
+    553f770ef71b ("ipc: move compat shmctl to native")
 
-> arch/x86/net/bpf_jit_comp.o: warning: objtool: bpf_int_jit_compile()+0x246: unreachable instruction
+Coverity reported the following:
 
-00000000000010a1 <do_jit>:
-    10a1:	55                   	push   %rbp
-    10a2:	53                   	push   %rbx
-    10a3:	48 81 ec d0 00 00 00 	sub    $0xd0,%rsp
-    10aa:	48 89 fb             	mov    %rdi,%rbx
-    10ad:	65 48 8b 04 25 28 00 	mov    %gs:0x28,%rax
-    10b4:	00 00 
-    10b6:	48 89 84 24 c8 00 00 	mov    %rax,0xc8(%rsp)
-    10bd:	00 
-    10be:	31 c0                	xor    %eax,%eax
-    10c0:	48 8b bc 24 e0 00 00 	mov    0xe0(%rsp),%rdi
-    10c7:	00 
-    10c8:	e8 00 00 00 00       	callq  10cd <do_jit+0x2c>
-			10c9: R_X86_64_PLT32	__tsan_func_entry-0x4
-    10cd:	f6 c3 07             	test   $0x7,%bl
-    10d0:	75 7f                	jne    1151 <do_jit+0xb0>
-    10d2:	48 8d 7b 0c          	lea    0xc(%rbx),%rdi
-    10d6:	e8 00 00 00 00       	callq  10db <do_jit+0x3a>
-			10d7: R_X86_64_PLT32	__tsan_read4-0x4
-    10db:	48 89 e7             	mov    %rsp,%rdi
-    10de:	e8 00 00 00 00       	callq  10e3 <do_jit+0x42>
-			10df: R_X86_64_PLT32	__tsan_write8-0x4
-    10e3:	48 8d 6c 24 08       	lea    0x8(%rsp),%rbp
-    10e8:	48 89 2c 24          	mov    %rbp,(%rsp)
-    10ec:	48 8d 7b 04          	lea    0x4(%rbx),%rdi
-    10f0:	e8 00 00 00 00       	callq  10f5 <do_jit+0x54>
-			10f1: R_X86_64_PLT32	__tsan_read4-0x4
-    10f5:	48 8d 7b 20          	lea    0x20(%rbx),%rdi
-    10f9:	e8 00 00 00 00       	callq  10fe <do_jit+0x5d>
-			10fa: R_X86_64_PLT32	__tsan_read8-0x4
-    10fe:	48 8b 7b 20          	mov    0x20(%rbx),%rdi
-    1102:	40 f6 c7 07          	test   $0x7,%dil
-    1106:	75 49                	jne    1151 <do_jit+0xb0>
-    1108:	48 83 c7 18          	add    $0x18,%rdi
-    110c:	e8 00 00 00 00       	callq  1111 <do_jit+0x70>
-			110d: R_X86_64_PLT32	__tsan_read4-0x4
-    1111:	48 c7 c7 00 00 00 00 	mov    $0x0,%rdi
-			1114: R_X86_64_32S	ideal_nops
-    1118:	e8 00 00 00 00       	callq  111d <do_jit+0x7c>
-			1119: R_X86_64_PLT32	__tsan_read8-0x4
-    111d:	48 8b 1d 00 00 00 00 	mov    0x0(%rip),%rbx        # 1124 <do_jit+0x83>
-			1120: R_X86_64_PC32	ideal_nops-0x4
-    1124:	48 8d 7b 48          	lea    0x48(%rbx),%rdi
-    1128:	f6 c3 07             	test   $0x7,%bl
-    112b:	75 24                	jne    1151 <do_jit+0xb0>
-    112d:	e8 00 00 00 00       	callq  1132 <do_jit+0x91>
-			112e: R_X86_64_PLT32	__tsan_read8-0x4
-    1132:	48 8b 43 48          	mov    0x48(%rbx),%rax
-    1136:	8b 10                	mov    (%rax),%edx
-    1138:	89 55 00             	mov    %edx,0x0(%rbp)
-    113b:	0f b6 40 04          	movzbl 0x4(%rax),%eax
-    113f:	88 45 04             	mov    %al,0x4(%rbp)
-    1142:	48 8d 7c 24 0d       	lea    0xd(%rsp),%rdi
-    1147:	e8 00 00 00 00       	callq  114c <do_jit+0xab>
-			1148: R_X86_64_PLT32	__tsan_write1-0x4
-    114c:	c6 44 24 0d 55       	movb   $0x55,0xd(%rsp)
-    1151:	0f 0b                	ud2    
+*** CID 1492708:  Uninitialized variables  (UNINIT)
+/ipc/shm.c: 1347 in compat_ksys_shmctl()
+1341     	}
+1342     	case SHM_INFO: {
+1343     		struct shm_info shm_info;
+1344     		err = shmctl_shm_info(ns, &shm_info);
+1345     		if (err < 0)
+1346     			return err;
+vvv     CID 1492708:  Uninitialized variables  (UNINIT)
+vvv     Using uninitialized value "shm_info.swap_successes" when calling "put_compat_shm_info".
+1347     		if (put_compat_shm_info(&shm_info, uptr))
+1348     			err = -EFAULT;
+1349     		return err;
+1350     	}
+1351     	case IPC_STAT:
+1352     	case SHM_STAT_ANY:
 
-> drivers/media/i2c/ir-kbd-i2c.o: warning: objtool: ir_probe()+0x745: unreachable instruction
+If this is a false positive, please let us know so we can mark it as
+such, or teach the Coverity rules to be smarter. If not, please make
+sure fixes get into linux-next. :) For patches fixing this, please
+include these lines (but double-check the "Fixes" first):
 
-000000000000091e <zilog_init>:
-     91e:	55                   	push   %rbp
-     91f:	48 83 ec 70          	sub    $0x70,%rsp
-     923:	65 48 8b 04 25 28 00 	mov    %gs:0x28,%rax
-     92a:	00 00 
-     92c:	48 89 44 24 68       	mov    %rax,0x68(%rsp)
-     931:	31 c0                	xor    %eax,%eax
-     933:	48 8b 7c 24 78       	mov    0x78(%rsp),%rdi
-     938:	e8 00 00 00 00       	callq  93d <zilog_init+0x1f>
-			939: R_X86_64_PLT32	__tsan_func_entry-0x4
-     93d:	48 8d 6c 24 08       	lea    0x8(%rsp),%rbp
-     942:	be 60 00 00 00       	mov    $0x60,%esi
-     947:	48 89 ef             	mov    %rbp,%rdi
-     94a:	e8 00 00 00 00       	callq  94f <zilog_init+0x31>
-			94b: R_X86_64_PLT32	__tsan_write_range-0x4
-     94f:	b9 0c 00 00 00       	mov    $0xc,%ecx
-     954:	31 c0                	xor    %eax,%eax
-     956:	48 89 ef             	mov    %rbp,%rdi
-     959:	f3 48 ab             	rep stos %rax,%es:(%rdi)
-     95c:	48 89 ef             	mov    %rbp,%rdi
-     95f:	e8 00 00 00 00       	callq  964 <zilog_init+0x46>
-			960: R_X86_64_PLT32	__tsan_write1-0x4
-     964:	c6 44 24 08 60       	movb   $0x60,0x8(%rsp)
-     969:	0f 0b                	ud2    
+Human edit:
+This is technically a false-positive, but it's a weird one in that
+everything else in the call graph checks for "err" being "!= 0", but
+line 1345 checks for "< 0". Maybe this deserves a change to "if (err)"
+there just for robustness?
 
+Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
+Addresses-Coverity-ID: 1492708 ("Uninitialized variables")
+Fixes: 553f770ef71b ("ipc: move compat shmctl to native")
+
+Thanks for your attention!
 
 -- 
-Josh
-
+Coverity-bot

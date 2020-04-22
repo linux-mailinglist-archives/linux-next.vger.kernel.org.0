@@ -2,117 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 06DE61B4C93
-	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 20:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328011B4CB2
+	for <lists+linux-next@lfdr.de>; Wed, 22 Apr 2020 20:34:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgDVSVb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 14:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53628 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgDVSVa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 14:21:30 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF3FC03C1A9
-        for <linux-next@vger.kernel.org>; Wed, 22 Apr 2020 11:21:30 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id r4so1507683pgg.4
-        for <linux-next@vger.kernel.org>; Wed, 22 Apr 2020 11:21:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=0dAlAHSIUuf0qPGMLA5qpp+9T11jhaSHZ/cKKTKrM4M=;
-        b=V5bg4mP/xsozi4qHrZsuvHSpaSRTCImgoMbp1/tPmUL6ige/esd1K5ellFdgIY82Wo
-         CY7O+hyoUFbxGIOzzypXLWMqPfzUfwdfnEqIlueHZtHK/Q0GP2vGEz22J9quI7LQ7Mcg
-         ts6d+2IeKIO/9gHi3QVMrJt8D51GiufpMCGnM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=0dAlAHSIUuf0qPGMLA5qpp+9T11jhaSHZ/cKKTKrM4M=;
-        b=qWvBziVk8jdtRTIAxiUSDIM1bpExKNyjBNCkHlT5iotv/hWqlAQmOoS3CxlAlcpMrP
-         Q8Mm9f52467kKmb48Hu0tOSxIFzbJAnI7FrQYBpCeyztoqlyUsVSoPWbcD0BZ6P8UaxD
-         hMhSSaS14m5r3DYXnbQ1ssJd6ZDJlUpD0Uz7wPngUK+UH+ZQGbisGhXLOHnkGQ9uRoY4
-         fZ8Ogc03N5gjwcSvld949FUSwy0gOoVGLpNN9lj2N20bRboFXxIwuXAqnQrv2CJ7DlC/
-         FsaC9snH8kdsy0SyEGw03J3iwou+zFJDNN0pk+itEb11l2EXyKJnO2WcpuyNcRl3jqJ/
-         zCTw==
-X-Gm-Message-State: AGi0PubkolMWyUXw9cDQuQWNM5hzg3DwOCTDIwlEyhgAEbT5EK0cuE+a
-        +Nbw1pzqenT+D0HCpwrRAiQIxg==
-X-Google-Smtp-Source: APiQypLI52OdQQbXPqWA2KHdXBptvuzUkclYgXQK6DmUnV+S7ohktIR8xWQcauXncz6KsisdObEsJA==
-X-Received: by 2002:a63:ea42:: with SMTP id l2mr294345pgk.193.1587579689975;
-        Wed, 22 Apr 2020 11:21:29 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id l63sm5709595pga.83.2020.04.22.11.21.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Apr 2020 11:21:29 -0700 (PDT)
-From:   coverity-bot <keescook@chromium.org>
-X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Wed, 22 Apr 2020 11:21:28 -0700
-To:     Tim Chen <tim.c.chen@linux.intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        linux-next@vger.kernel.org
-Subject: Coverity: scan_swap_map(): Memory - corruptions
-Message-ID: <202004221119.20619A68B@keescook>
+        id S1726384AbgDVSeS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 14:34:18 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:35234 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725648AbgDVSeR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 14:34:17 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 03MIWnnj022893;
+        Wed, 22 Apr 2020 14:34:05 -0400
+Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30gmvjecjy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Apr 2020 14:34:05 -0400
+Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
+        by ppma04wdc.us.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 03MIUNlF018251;
+        Wed, 22 Apr 2020 18:34:04 GMT
+Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
+        by ppma04wdc.us.ibm.com with ESMTP id 30fs66kgra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 22 Apr 2020 18:34:04 +0000
+Received: from b03ledav002.gho.boulder.ibm.com (b03ledav002.gho.boulder.ibm.com [9.17.130.233])
+        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 03MIY37Z27918638
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 22 Apr 2020 18:34:03 GMT
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62507136059;
+        Wed, 22 Apr 2020 18:34:03 +0000 (GMT)
+Received: from b03ledav002.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9A6AF13604F;
+        Wed, 22 Apr 2020 18:34:01 +0000 (GMT)
+Received: from Harens-MacBook-Pro.local (unknown [9.160.75.2])
+        by b03ledav002.gho.boulder.ibm.com (Postfix) with ESMTPS;
+        Wed, 22 Apr 2020 18:34:01 +0000 (GMT)
+Subject: Re: linux-next: build failure after merge of the akpm tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+References: <20200422163935.5aa93ba5@canb.auug.org.au>
+From:   Haren Myneni <haren@linux.ibm.com>
+Message-ID: <abc8fced-8f7a-4dfc-b426-4a0f0ea30ec7@linux.ibm.com>
+Date:   Wed, 22 Apr 2020 11:33:59 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200422163935.5aa93ba5@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-04-22_06:2020-04-22,2020-04-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 malwarescore=0 impostorscore=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 spamscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004220135
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello!
 
-This is an experimental semi-automated report about issues detected by
-Coverity from a scan of next-20200422 as part of the linux-next scan project:
-https://scan.coverity.com/projects/linux-next-weekly-scan
+Thanks for fixing. Tested with this patch and 7fe021a3f1c9 ("kernel: better document the use_mm/unuse_mm API contract"). 
 
-You're getting this email because you were associated with the identified
-lines of code (noted below) that were touched by commits:
+Acked-by: Haren Myneni <haren@linux.ibm.com>
 
-  Wed Feb 22 15:45:33 2017 -0800
-    36005bae205d ("mm/swap: allocate swap slots in batches")
-
-Coverity reported the following:
-
-*** CID 1492705:  Memory - corruptions  (OVERRUN)
-/mm/swapfile.c: 972 in scan_swap_map()
-966     static unsigned long scan_swap_map(struct swap_info_struct *si,
-967     				   unsigned char usage)
-968     {
-969     	swp_entry_t entry;
-970     	int n_ret;
-971
-vvv     CID 1492705:  Memory - corruptions  (OVERRUN)
-vvv     Overrunning struct type swp_entry_t of 8 bytes by passing it to a function which accesses it at byte offset 15.
-972     	n_ret = scan_swap_map_slots(si, usage, 1, &entry);
-973
-974     	if (n_ret)
-975     		return swp_offset(entry);
-976     	else
-977     		return 0;
-
-If this is a false positive, please let us know so we can mark it as
-such, or teach the Coverity rules to be smarter. If not, please make
-sure fixes get into linux-next. :) For patches fixing this, please
-include these lines (but double-check the "Fixes" first):
-
-Human edit:
-I can't tell if this is a false positive. The detailed analysis points
-at:
-
-844        si->cluster_next = offset + 1;
-   	67. index_const: Pointer slots directly indexed by n_ret++ with value 1.
-845        slots[n_ret++] = swp_entry(si->type, offset);
-
-It has an execution path that reaches there, but I don't know if it's
-actually possible...
-
-Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1492705 ("Memory - corruptions")
-Fixes: 36005bae205d ("mm/swap: allocate swap slots in batches")
-
-Thanks for your attention!
-
--- 
-Coverity-bot
+On 4/21/20 11:39 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the akpm tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> arch/powerpc/platforms/powernv/vas-fault.c: In function 'update_csb':
+> arch/powerpc/platforms/powernv/vas-fault.c:130:2: error: implicit declaration of function 'use_mm' [-Werror=implicit-function-declaration]
+>   130 |  use_mm(window->mm);
+>       |  ^~~~~~
+> arch/powerpc/platforms/powernv/vas-fault.c:142:2: error: implicit declaration of function 'unuse_mm' [-Werror=implicit-function-declaration]
+>   142 |  unuse_mm(window->mm);
+>       |  ^~~~~~~~
+> 
+> Caused by commit
+> 
+>   7fe021a3f1c9 ("kernel: better document the use_mm/unuse_mm API contract")
+> 
+> interacting with commit
+> 
+>   c96c4436aba4 ("powerpc/vas: Update CSB and notify process for fault CRBs")
+> 
+> from the powerpc tree.
+> 
+> I added the following patch for today:
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Wed, 22 Apr 2020 16:35:23 +1000
+> Subject: [PATCH] powerpc/vas: fix up for {un}use_mm() rename
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/powerpc/platforms/powernv/vas-fault.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/powerpc/platforms/powernv/vas-fault.c b/arch/powerpc/platforms/powernv/vas-fault.c
+> index 25db70be4c9c..266a6ca5e15e 100644
+> --- a/arch/powerpc/platforms/powernv/vas-fault.c
+> +++ b/arch/powerpc/platforms/powernv/vas-fault.c
+> @@ -127,7 +127,7 @@ static void update_csb(struct vas_window *window,
+>  		return;
+>  	}
+>  
+> -	use_mm(window->mm);
+> +	kthread_use_mm(window->mm);
+>  	rc = copy_to_user(csb_addr, &csb, sizeof(csb));
+>  	/*
+>  	 * User space polls on csb.flags (first byte). So add barrier
+> @@ -139,7 +139,7 @@ static void update_csb(struct vas_window *window,
+>  		smp_mb();
+>  		rc = copy_to_user(csb_addr, &csb, sizeof(u8));
+>  	}
+> -	unuse_mm(window->mm);
+> +	kthread_unuse_mm(window->mm);
+>  	put_task_struct(tsk);
+>  
+>  	/* Success */
+> 

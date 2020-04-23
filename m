@@ -2,98 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3698E1B51D0
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 03:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4D441B5216
+	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 03:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725854AbgDWBbe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 21:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35590 "EHLO
+        id S1726366AbgDWBnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 21:43:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgDWBbd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 21:31:33 -0400
-Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CAC03C1AA;
-        Wed, 22 Apr 2020 18:31:33 -0700 (PDT)
-Received: by mail-yb1-xb43.google.com with SMTP id a9so2266179ybc.8;
-        Wed, 22 Apr 2020 18:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=qTERN+i0HIChPpFfmgcmeaOzlSbySSWPcFYAbeYUgFo=;
-        b=rr+E4ojcCqOtxYzaHP++U+89MxK5MiZjXlb5Qb9nqsg9otkLEszW9zKDREFSW6adY4
-         ihYDJRt2EpNRNRrZxo1hzL9zLecZqgElRxoLRO2UQLyv0t/EJh4fKPNyk+Mc9NwRZZF2
-         oKYvcS3Tb4V3ElMicauImL9A4P7MqJe0mu36ZXTEjhL7HLxrESS6M9pUQ/HO8TU23+Df
-         NHVni4I8FA9QqHq4jZzOyUsgghQlxerauUtojYGDYnJUISHQCgIdLo5LfcbUfBcTMMMV
-         cFJ4B/tO2d+r+idJyo3OVLe9I1A8d4MWzi9JgVgp8Odp8VKr8Odyj2OoCQnk7D1W6/W9
-         Os0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=qTERN+i0HIChPpFfmgcmeaOzlSbySSWPcFYAbeYUgFo=;
-        b=gqxwpjduUFDffkMYeCO//+iTXN4zj11K1bHD1CaXmnPpQom5+dnuxma3Uudv56Pn0b
-         jHH39E/HlnWyWB29w9A8phqfYiZ/AwzB17AvYZWbzBRrtZGgyomEa9BKKFpj2HopBqoH
-         wR9wgve3ZOnyrAGtO3R46sMLLAwQFoENSMSp+oHajGZ+IJdT3zfHytDkWHc241IMEuro
-         Pg2ZKGCiCV7Xa7R9Gpk8wk3NI2rYD1xE2bHSSCrh1c+DI4qFPCKXTU55OCShJuo//ouA
-         jTV0kbLZU/DJ+FMB33pVPhSZVIpPGqD2F2TNH2Hemv7vgGXYApgqXxnlgUsQVCgQOQl5
-         QzUA==
-X-Gm-Message-State: AGi0PuYyVioKZORU8QWl0vftBFx5J0TeWvSy5ij+3+SAHGmCfyujzcQ7
-        jrUyDdy9rOotDQDkTS25UUEso8E1vwew7cYBJis=
-X-Google-Smtp-Source: APiQypKJMu3AyBtHt03zMEEtlNqfRN+lKkkWcS4V5OtidAVtmrzo7IAb6GE/EErIjP0YvJxe7VTaI7uyfOjCnDHmn+w=
-X-Received: by 2002:a25:e907:: with SMTP id n7mr2857011ybd.85.1587605492519;
- Wed, 22 Apr 2020 18:31:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200423103101.0d416eb8@canb.auug.org.au>
-In-Reply-To: <20200423103101.0d416eb8@canb.auug.org.au>
-From:   Steve French <smfrench@gmail.com>
-Date:   Wed, 22 Apr 2020 20:31:21 -0500
-Message-ID: <CAH2r5mvUwDAfW0Eh1cLvSxukBkySYrW7Bf-f35bMdzHu81EG9A@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the cifs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     CIFS <linux-cifs@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S1725828AbgDWBnU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 21:43:20 -0400
+X-Greylist: delayed 12401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Apr 2020 18:43:20 PDT
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8221FC03C1AA;
+        Wed, 22 Apr 2020 18:43:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4970SN6b8Hz9sSd;
+        Thu, 23 Apr 2020 11:43:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1587606197;
+        bh=+Oe8bj8PhMMloiNTEF+tPE9kazN7s8cc/Q+pJLOx2ME=;
+        h=Date:From:To:Cc:Subject:From;
+        b=fwkUXe3fgqT4VNtMtTTWvC5MfPBmuvdGHhAgNSegkyiawbz/QK7t6+gxtBoEnXJP5
+         V/8IhmxIk+pf4BGL7ZB8naFdu157p8RA/NwhNjF1XeU5tHj1+OenAQGpH2WBZ752AU
+         hBUzVcH2IE2/aw2BlSHZSrFDUA90ZN3e0b77ilLpJRry28bZ0SQlqDsjQUSWKuzTBK
+         Mo6nZE6e5+EhW/7DWj5wgZNFEbY2z55D1qNTGwVWUXO+zjDcARoGm5TXQgJBHX+TtP
+         AxIbKk75RlE4OdUTWdmYL5R9XR5PRicob6gt7YxNs9HQaEArnEc+eYtuBt9jt8aaPy
+         Yx0+t7qTBaJMQ==
+Date:   Thu, 23 Apr 2020 11:43:13 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+        Leon Romanovsky <leonro@mellanox.com>
+Subject: linux-next: manual merge of the net-next tree with the
+ kbuild-current tree
+Message-ID: <20200423114313.634bf6cd@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/8BsiIvlLwI3mvWUcKjtJ27C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Fixed.  updated cifs-2.6.git for-next with Paulo's respun version of
-two patches to address the missing #ifdef
+--Sig_/8BsiIvlLwI3mvWUcKjtJ27C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be ok now.
+Hi all,
 
-On Wed, Apr 22, 2020 at 7:31 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> After merging the cifs tree, today's linux-next build (powerpc
-> ppc64_defconfig) failed like this:
->
-> fs/cifs/connect.c: In function 'cifs_find_tcon':
-> fs/cifs/connect.c:3378:45: error: 'struct cifs_tcon' has no member named 'dfs_path'
->  3378 |   if (!match_tcon(tcon, volume_info) || tcon->dfs_path)
->       |                                             ^~
->
-> Caused by commit
->
->   f73409e5babd ("cifs: do not share tcons with DFS")
->
-> # CONFIG_CIFS_DFS_UPCALL is not set
->
-> I have reverted that commit for today.
->
-> --
-> Cheers,
-> Stephen Rothwell
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  include/linux/vermagic.h
 
+between commit:
 
--- 
-Thanks,
+  e3459da6c363 ("arch: split MODULE_ARCH_VERMAGIC definitions out to <asm/v=
+ermagic.h>")
 
-Steve
+from the kbuild-current tree and commit:
+
+  51161bfc66a6 ("kernel/module: Hide vermagic header file from general use")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/vermagic.h
+index dc236577b92f,7768d20ada39..000000000000
+--- a/include/linux/vermagic.h
++++ b/include/linux/vermagic.h
+@@@ -1,9 -1,10 +1,13 @@@
+  /* SPDX-License-Identifier: GPL-2.0 */
+ +#ifndef _LINUX_VERMAGIC_H
+ +#define _LINUX_VERMAGIC_H
+ =20
++ #ifndef INCLUDE_VERMAGIC
++ #error "This header can be included from kernel/module.c or *.mod.c only"
++ #endif
++=20
+  #include <generated/utsrelease.h>
+ +#include <asm/vermagic.h>
+ =20
+  /* Simply sanity version stamp for modules. */
+  #ifdef CONFIG_SMP
+
+--Sig_/8BsiIvlLwI3mvWUcKjtJ27C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6g8rEACgkQAVBC80lX
+0GxBwQf/WI2vcF+eXo4TdZk72JDteMo0bxJRQTxYsF0np8HFDp94a+Z29xzOC9Ue
+7M48lUb59GipOSqbAaEQMCTSLJ1MEnALOiAFq5IrBY36wd5AEdfckhTNBN+tKKap
+aFF4NkoU9qrY7czZzu/1fiENLfqLWGJbTPAZcPQSyJN+heLQBmPc3+tpPrKlnign
+eQCNdTi6gP0pXrITEosOGSqSSaixglXDQaE1bKQMUpr68m6T8rswSDbLEVOyDeLY
+1kU20iLaL/Q14LvQuBqoNrH2uDj/JzMdR68iXKymRC2WjMTLq5IYzGY/j81nIfxT
+qjgGuoGYgWQSUHlKcLEYAiQPTFbYDg==
+=P0PE
+-----END PGP SIGNATURE-----
+
+--Sig_/8BsiIvlLwI3mvWUcKjtJ27C--

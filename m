@@ -2,74 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B4D441B5216
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 03:43:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D709E1B524F
+	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 04:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726366AbgDWBnV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 21:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37418 "EHLO
+        id S1726002AbgDWCNz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 22:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725828AbgDWBnU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 21:43:20 -0400
-X-Greylist: delayed 12401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 22 Apr 2020 18:43:20 PDT
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8221FC03C1AA;
-        Wed, 22 Apr 2020 18:43:20 -0700 (PDT)
+        with ESMTP id S1725781AbgDWCNz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 22 Apr 2020 22:13:55 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1840AC03C1AA;
+        Wed, 22 Apr 2020 19:13:55 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4970SN6b8Hz9sSd;
-        Thu, 23 Apr 2020 11:43:16 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49717g1mmRz9sSd;
+        Thu, 23 Apr 2020 12:13:51 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587606197;
-        bh=+Oe8bj8PhMMloiNTEF+tPE9kazN7s8cc/Q+pJLOx2ME=;
+        s=201702; t=1587608033;
+        bh=xVuTqNfiwREg9OUyvTo3nmF/OVJaGHdlQk6JpY9joko=;
         h=Date:From:To:Cc:Subject:From;
-        b=fwkUXe3fgqT4VNtMtTTWvC5MfPBmuvdGHhAgNSegkyiawbz/QK7t6+gxtBoEnXJP5
-         V/8IhmxIk+pf4BGL7ZB8naFdu157p8RA/NwhNjF1XeU5tHj1+OenAQGpH2WBZ752AU
-         hBUzVcH2IE2/aw2BlSHZSrFDUA90ZN3e0b77ilLpJRry28bZ0SQlqDsjQUSWKuzTBK
-         Mo6nZE6e5+EhW/7DWj5wgZNFEbY2z55D1qNTGwVWUXO+zjDcARoGm5TXQgJBHX+TtP
-         AxIbKk75RlE4OdUTWdmYL5R9XR5PRicob6gt7YxNs9HQaEArnEc+eYtuBt9jt8aaPy
-         Yx0+t7qTBaJMQ==
-Date:   Thu, 23 Apr 2020 11:43:13 +1000
+        b=mExy4KoWKorVGiMLvmJogm4dmaC3orsjrkDTll7uYDL9ExSd4FzUL95NnerdYMOtE
+         YOgfvsKn4+Hjuv4FVF7M2MnSGeGamBXGCcYhRzh5oVRQk0DjmcktND8lgVT7QMYpib
+         g1LNv2zcPmhvkSofRFZjCGpoMFIflrXrRYArAEglieecKwfdqJHF+OtByZQBF0kr/F
+         BxcMre6kPlKIxFvrpI4EfXvmsiMBVrUu9gBrOH8HmGeCsQrvbSNHJwkHltpPPxfE6L
+         upKPJZjul49PjHPRWDmfH+QRjXbgMGHRTFK9nQZWe0s5Ro96q3WEgZqW2AAxJ3ZUyZ
+         czivDrn3coC/w==
+Date:   Thu, 23 Apr 2020 12:13:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
+To:     Alex Deucher <alexdeucher@gmail.com>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Leon Romanovsky <leonro@mellanox.com>
-Subject: linux-next: manual merge of the net-next tree with the
- kbuild-current tree
-Message-ID: <20200423114313.634bf6cd@canb.auug.org.au>
+        Lyude Paul <lyude@redhat.com>
+Subject: linux-next: manual merge of the amdgpu tree with the drm tree
+Message-ID: <20200423121346.42e35467@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8BsiIvlLwI3mvWUcKjtJ27C";
+Content-Type: multipart/signed; boundary="Sig_/+aoijb5RJMBtS7MePMMZmj8";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8BsiIvlLwI3mvWUcKjtJ27C
+--Sig_/+aoijb5RJMBtS7MePMMZmj8
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-  include/linux/vermagic.h
+  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
 
 between commit:
 
-  e3459da6c363 ("arch: split MODULE_ARCH_VERMAGIC definitions out to <asm/v=
-ermagic.h>")
+  09b974e8983a ("drm/amd/amdgpu_dm/mst: Remove ->destroy_connector() callba=
+ck")
 
-from the kbuild-current tree and commit:
+from the drm tree and commit:
 
-  51161bfc66a6 ("kernel/module: Hide vermagic header file from general use")
+  c33f212c0c92 ("drm/amdgpu/display: create fake mst encoders ahead of time=
+")
 
-from the net-next tree.
+from the amdgpu tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -82,39 +81,78 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc include/linux/vermagic.h
-index dc236577b92f,7768d20ada39..000000000000
---- a/include/linux/vermagic.h
-+++ b/include/linux/vermagic.h
-@@@ -1,9 -1,10 +1,13 @@@
-  /* SPDX-License-Identifier: GPL-2.0 */
- +#ifndef _LINUX_VERMAGIC_H
- +#define _LINUX_VERMAGIC_H
+diff --cc drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+index 3db1ec35d2b4,4f0072a9396b..000000000000
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+@@@ -136,23 -93,14 +93,20 @@@ static ssize_t dm_dp_aux_transfer(struc
+  static void
+  dm_dp_mst_connector_destroy(struct drm_connector *connector)
+  {
+ -	struct amdgpu_dm_connector *amdgpu_dm_connector =3D to_amdgpu_dm_connect=
+or(connector);
+ +	struct amdgpu_dm_connector *aconnector =3D
+ +		to_amdgpu_dm_connector(connector);
+- 	struct amdgpu_encoder *amdgpu_encoder =3D aconnector->mst_encoder;
+ +
+ +	if (aconnector->dc_sink) {
+ +		dc_link_remove_remote_sink(aconnector->dc_link,
+ +					   aconnector->dc_sink);
+ +		dc_sink_release(aconnector->dc_sink);
+ +	}
  =20
-+ #ifndef INCLUDE_VERMAGIC
-+ #error "This header can be included from kernel/module.c or *.mod.c only"
-+ #endif
+ -	kfree(amdgpu_dm_connector->edid);
+ -	amdgpu_dm_connector->edid =3D NULL;
+ +	kfree(aconnector->edid);
+ =20
+- 	drm_encoder_cleanup(&amdgpu_encoder->base);
+- 	kfree(amdgpu_encoder);
+  	drm_connector_cleanup(connector);
+ -	drm_dp_mst_put_port_malloc(amdgpu_dm_connector->port);
+ -	kfree(amdgpu_dm_connector);
+ +	drm_dp_mst_put_port_malloc(aconnector->port);
+ +	kfree(aconnector);
+  }
+ =20
+  static int
+@@@ -412,10 -358,11 +364,19 @@@ dm_dp_add_mst_connector(struct drm_dp_m
+  		master->dc_link,
+  		master->connector_id);
+ =20
+- 	aconnector->mst_encoder =3D dm_dp_create_fake_mst_encoder(master);
+- 	drm_connector_attach_encoder(&aconnector->base,
+- 				     &aconnector->mst_encoder->base);
++ 	for (i =3D 0; i < AMDGPU_DM_MAX_CRTC; i++) {
++ 		drm_connector_attach_encoder(&aconnector->base,
++ 					     &aconnector->mst_encoders[i].base);
++ 	}
 +=20
-  #include <generated/utsrelease.h>
- +#include <asm/vermagic.h>
- =20
-  /* Simply sanity version stamp for modules. */
-  #ifdef CONFIG_SMP
+++	connector->max_bpc_property =3D master->base.max_bpc_property;
+++	if (connector->max_bpc_property)
+++		drm_connector_attach_max_bpc_property(connector, 8, 16);
+++
+++	connector->vrr_capable_property =3D master->base.vrr_capable_property;
+++	if (connector->vrr_capable_property)
+++		drm_connector_attach_vrr_capable_property(connector);
+ +
+  	connector->max_bpc_property =3D master->base.max_bpc_property;
+  	if (connector->max_bpc_property)
+  		drm_connector_attach_max_bpc_property(connector, 8, 16);
 
---Sig_/8BsiIvlLwI3mvWUcKjtJ27C
+--Sig_/+aoijb5RJMBtS7MePMMZmj8
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6g8rEACgkQAVBC80lX
-0GxBwQf/WI2vcF+eXo4TdZk72JDteMo0bxJRQTxYsF0np8HFDp94a+Z29xzOC9Ue
-7M48lUb59GipOSqbAaEQMCTSLJ1MEnALOiAFq5IrBY36wd5AEdfckhTNBN+tKKap
-aFF4NkoU9qrY7czZzu/1fiENLfqLWGJbTPAZcPQSyJN+heLQBmPc3+tpPrKlnign
-eQCNdTi6gP0pXrITEosOGSqSSaixglXDQaE1bKQMUpr68m6T8rswSDbLEVOyDeLY
-1kU20iLaL/Q14LvQuBqoNrH2uDj/JzMdR68iXKymRC2WjMTLq5IYzGY/j81nIfxT
-qjgGuoGYgWQSUHlKcLEYAiQPTFbYDg==
-=P0PE
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6g+doACgkQAVBC80lX
+0GzYsgf9HPCUYzxjIj08o53T96k048Rm4Ej9PAukiAH3p53qvOcyKzcQVuZQP8JB
+uxZkddWLjhkzV3JLfdchTyV/e4UWkF+v8GaUfOYzPWwde94LkmMtDGiPtD8uCen0
+61/wCiLg1XbjiuQJtmtRdAEiK3elwI2OKtK/yNvq0Ue9Vau2OpqozKjqeE+pH+xc
+RP4m72sCXJ6ntOKyT14aKyZGpEZ29zBwN+mnoEoyg0DZVfS4SQcnjuzgQSYKBUdT
+Fg9WUq61pUCz7+dpJpeprZA5QsQR2I0xtt4O5F/kFdG7GVPd+4YlT+763rF0G9q0
+lriWtDXPBTtwGwjB3bXmXCghrc5l4A==
+=MkmL
 -----END PGP SIGNATURE-----
 
---Sig_/8BsiIvlLwI3mvWUcKjtJ27C--
+--Sig_/+aoijb5RJMBtS7MePMMZmj8--

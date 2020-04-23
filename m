@@ -2,98 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DB71B4FF6
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 00:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F1A1B514C
+	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 02:31:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725846AbgDVWQj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 22 Apr 2020 18:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725839AbgDVWQj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 22 Apr 2020 18:16:39 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759AFC03C1A9;
-        Wed, 22 Apr 2020 15:16:39 -0700 (PDT)
+        id S1726008AbgDWAbG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 22 Apr 2020 20:31:06 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39547 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725846AbgDWAbG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 22 Apr 2020 20:31:06 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 496vsv17yRz9sSY;
-        Thu, 23 Apr 2020 08:16:34 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 496ys30GbJz9sSc;
+        Thu, 23 Apr 2020 10:31:03 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587593795;
-        bh=b3FpIbBdWLCE6rrc0j3weoC6BUfVk+LOtjJLdfX/Jw8=;
+        s=201702; t=1587601864;
+        bh=UHUv817hjErmI8Kp+Xk31dEJLk6fwvwdT6MslTcRF4s=;
         h=Date:From:To:Cc:Subject:From;
-        b=m1T2jrtKqALUKfvG5oQq52Lf4IKxe3TotkzeAIehzfM48hdeSjy6boOMROdDsGfNY
-         g30OHsa2Ap26boYCBFx4rUR0QEUQm+SLL4UfRfnV0xLC8c6xWIntSmCTBiehL5O0ny
-         xcq+qgmOvvY+FaXVRamcHCuEUid0bu0IPFJG6pCjtzimZKn4KWK0wYntoamJQbCR63
-         6Xo/SSZG7iWu4pGEWAAkAVpeJR+O52nfr0qZ8YxrcfvFBeRnts0z7FOnHkN8tlGVsw
-         1yPaWRcKKtW9nbEMUGJSBO0N9DmlLDkG6KHAECDSAmb3EyhqoF7sJt/deqsgDIcx3s
-         IrcskcUMHu3MA==
-Date:   Thu, 23 Apr 2020 08:16:33 +1000
+        b=fXWumdawnsh6cVY6U5QJXesvD7Csa9T4DFNtDM9Myld4EwmhgPCtpeC97rw5oXp9l
+         LyYYPK3Y3J+hV0aP4jyUwEuHJFGV8t1r5Kn5NkGyvaBSh03T5QqUNPckt3y2VONSay
+         jRrwXYEoHKXnkV3TeesD9tI9qAEc6sXQsybeT/Ikh+kfSIRerxXhQsMNqmrJ+M1nbn
+         Z+78NtwKt7dp+5sc7DW7dDEGpG6JfaHA7Vq+TRRQCiDI7a5UeJlrfflxT5qbLYTVXl
+         c7RrP3KcWx8U8Q66Hq6yD/I1p2CJjx5IAL5svR0njzxXLafD93epWvTeCGfJ5/5Wqq
+         RvLwlYiJbzetw==
+Date:   Thu, 23 Apr 2020 10:31:01 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Steve French <smfrench@gmail.com>,
+        CIFS <linux-cifs@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the net-next tree
-Message-ID: <20200423081633.241888b4@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paulo Alcantara <pc@cjr.nz>, Aurelien Aptel <aaptel@suse.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>
+Subject: linux-next: build failure after merge of the cifs tree
+Message-ID: <20200423103101.0d416eb8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jUmrQpVGYDI4bLnMZAYPPUL";
+Content-Type: multipart/signed; boundary="Sig_/n2uuqLtGjfvdVydf.w_cdJU";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/jUmrQpVGYDI4bLnMZAYPPUL
+--Sig_/n2uuqLtGjfvdVydf.w_cdJU
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+After merging the cifs tree, today's linux-next build (powerpc
+ppc64_defconfig) failed like this:
 
-  7dec902f4fc0 ("net: mscc: ocelot: refine the ocelot_ace_is_problematic_ma=
-c_etype function")
+fs/cifs/connect.c: In function 'cifs_find_tcon':
+fs/cifs/connect.c:3378:45: error: 'struct cifs_tcon' has no member named 'd=
+fs_path'
+ 3378 |   if (!match_tcon(tcon, volume_info) || tcon->dfs_path)
+      |                                             ^~
 
-Fixes tag
+Caused by commit
 
-  Fixes: d4d0cb741d7b ("net: mscc: ocelot: deal with problematic MAC_ETYPE =
-VCAP IS2 rules")
+  f73409e5babd ("cifs: do not share tcons with DFS")
 
-has these problem(s):
+# CONFIG_CIFS_DFS_UPCALL is not set
 
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 89f9ffd3eb67 ("net: mscc: ocelot: deal with problematic MAC_ETYPE VC=
-AP IS2 rules")
-
-Dave, since you don't rebase your tree, can you start pushing back on
-these, please?
+I have reverted that commit for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/jUmrQpVGYDI4bLnMZAYPPUL
+--Sig_/n2uuqLtGjfvdVydf.w_cdJU
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6gwkEACgkQAVBC80lX
-0GzHjgf+OvN/fIzhtSNJgATqEPg+xYYEMCnt5domZgarFplYXOPg8hTWPACM86ax
-IESL1YiAFOSB9c2YDZPXNm/2tLDU/EGjGnkm3D3gdPyqlURzFjuze9rA1klPCn8c
-U4UWqoNTkLO7vqi1c52LOtfRySsLumM9t+mTGtqAjpQo+mYIY8Vt4R/r0fHxc4QT
-spMPno5x2nY5E/8rNnWA4yYTNnKrM7ngWaftY37/h6W7KYVEV9+dVDBR0p+/ROYT
-zZey1QQtOxqo+9P3ZKgrlnO581/q/1gznUF1feuUDBbJ3eo4bxWADidCzdhszU9v
-h8yWcNJfXqbz2p12+nImS7O2JPWtiA==
-=PKvZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6g4cUACgkQAVBC80lX
+0GwrnQgAkzPK+CDasBQ+GgXMr03z4msIJY8uqddNYwZV4O9ISJ6YPJ7fuAdC89Fr
+V05Df13g12U0MZPZp5xeL05Ju303rhKmsFaeh+r9+7ynvZt8wK8wMX24caQXWGAg
+B6NsdELs/6DbccETPBtSemyltP/gN/JuKqBa9LDyf0ArpJz9thsZrEPavKMUFS8p
+cDDuj5L6jzprPfEoHSWxtB/Hdoa2g5EC50rQjdjA4+s6srgcJgeaYeDP1RxNshGd
+RLN40RgDP4aEiuPXSOQG4K1a4lJwt7JTxe7hyNIp76wHZaKsQnYEO0fbul4Joqd9
+ecBPeyx5mp25ckKwnjO21bdOE2NQ0Q==
+=a0M0
 -----END PGP SIGNATURE-----
 
---Sig_/jUmrQpVGYDI4bLnMZAYPPUL--
+--Sig_/n2uuqLtGjfvdVydf.w_cdJU--

@@ -2,75 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D55F1B6547
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 22:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 679511B673E
+	for <lists+linux-next@lfdr.de>; Fri, 24 Apr 2020 00:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725884AbgDWUQp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Apr 2020 16:16:45 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:36034 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725877AbgDWUQp (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Apr 2020 16:16:45 -0400
-Received: by mail-pf1-f195.google.com with SMTP id z1so1846702pfn.3;
-        Thu, 23 Apr 2020 13:16:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gDxhnCkXKhJOqO4U3akxjRKoyln9yVYvcD5bsauPEMA=;
-        b=HKchlR6DNPcYoVvlMHZgt5cpkFAVGzj1fv2GqdYs24tudMr2ChrWJPzyEi6g8RWzYE
-         pfZT59iOodEYYTeM4Je8XurzLkQy9AuM9n+BP+ma0vpuhQ5TYctDMqL3EX5xIj1iusQS
-         SI27fDXiIMCy35K8+XtuHBML+2hcjmn5EMvVaK/FE/T+DymhGTLElzYBbmkoM4gAxYA4
-         LyW1ULVRCUwesv2sd4qKOZYnh/BRRtbFIo7+HrayHj5aYGpEQkZUb2gnLXCxF5vTGCmD
-         BHNweqY31S6tgQg/qMC460C095RbhvUrX0CEEUIaUbUHSN2zXOZDikZj3EoAL+olTk0u
-         MBUg==
-X-Gm-Message-State: AGi0PuaxgzoxjI5joDadfmmL5/YMlnx2YLVZ10UdcgVlAgQsDgP34nYU
-        hx8CFFzw+jN82m4Pbcm5WHk=
-X-Google-Smtp-Source: APiQypKW6L14oiexkS+Ti4cInlGxLtbGC7kOmTR9i7m2y/ehhC2L3qeek56YZu8+n8hFHjuK6Rl0Kg==
-X-Received: by 2002:aa7:808e:: with SMTP id v14mr1452753pff.168.1587673004235;
-        Thu, 23 Apr 2020 13:16:44 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id v94sm3144082pjb.39.2020.04.23.13.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Apr 2020 13:16:42 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id A485C402A1; Thu, 23 Apr 2020 20:16:41 +0000 (UTC)
-Date:   Thu, 23 Apr 2020 20:16:41 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Tree for Apr 23 (firmware_loader)
-Message-ID: <20200423201641.GY11244@42.do-not-panic.com>
-References: <20200423174104.239dffab@canb.auug.org.au>
- <9cb037fe-0a9d-9fda-08f1-87c560069419@infradead.org>
+        id S1726310AbgDWWxV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Apr 2020 18:53:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726057AbgDWWxV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 23 Apr 2020 18:53:21 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D5CC09B042;
+        Thu, 23 Apr 2020 15:53:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 497Xdn53wlz9sPF;
+        Fri, 24 Apr 2020 08:53:17 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1587682398;
+        bh=x0w7oUCCEQQaNXgYFMhfQ6J/k8PNpFEYUJKaAXgD3Ck=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S/5RCSh0gKcPlFD+/v5SoMZcDFqPRxsi0RMvynBWK73tLWRAxtxbIr3fjyXrwMchJ
+         Dxh0wFPBMbswNhjBzkk9VAxcNta6FsDsIwAAI2iq9/4eE5EzW48secdVEXV5YyvkQJ
+         8bH3yZDIEqJy3ZcTUjievuFj1PwV9doC74+Kh6M+JmHW7VFjetI7j4z/gnsS0BEPSA
+         a/+GXLzxeGffhPZPBnHJaGxlRcVn+5jQPbKkGbpt0P21pSNCBnQR+OFS39Qa0+/jXE
+         lEGkiWuq44s27JASLf4QL0Oex1SwuMQtTNtUB7GfTokpct6ELSGZyjHLX5QQ13qYBz
+         f3DFiScJC3RpQ==
+Date:   Fri, 24 Apr 2020 08:53:15 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Archana Patni <archana.patni@intel.com>
+Subject: linux-next: Fixes tag needs some work in the drivers-x86 tree
+Message-ID: <20200424085315.36876e01@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9cb037fe-0a9d-9fda-08f1-87c560069419@infradead.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/P_Cky_yl9Y.1BGXmTncwXAy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Apr 23, 2020 at 07:50:32AM -0700, Randy Dunlap wrote:
-> On 4/23/20 12:41 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200422:
-> > 
-> 
-> on i386:
-> 
-> ERROR: modpost: "fw_fallback_config" [drivers/base/firmware_loader/firmware_class.ko] undefined!
-> 
-> Full randconfig file is attached.
+--Sig_/P_Cky_yl9Y.1BGXmTncwXAy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Christoph's recent patch, fortunately not yet upstream, broke this. I'll
-send a fix as his other un-export was fine.
+Hi all,
 
-  Luis
+In commit
+
+  92f62e696851 ("platform/x86: intel_pmc_core: Change Jasper Lake S0ix debu=
+g reg map back to ICL")
+
+Fixes tag
+
+  Fixes: 16292bed9c ("platform/x86: intel_pmc_core: Add Atom based Jasper L=
+ake (JSL) platform support")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/P_Cky_yl9Y.1BGXmTncwXAy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6iHFsACgkQAVBC80lX
+0GxQOQgAmhsG/ddohFrPJhY6EiKFTFnROBlMxOQUM1VKXoLR5xKlpKyGW/RfDJow
+GTC+dd4iopPlbJHJi0rneZshAhTp3QfVnpGl4x9UdM8RLki3crDamAtgu58tWY13
+7z+2Sk4iXN+XHbdlFmV/gGBX0d28zKfVtuYR7W7O+0XcSjZJCjA4ZP4GgeMF1iCr
+ziDBre48kZmkfs9C+SzcbuxJ60fwKHW3F7XnZ4xdKbrLzH88VBb6cHShTaD2EwzO
+EcOqY9OgkAO1Bmabb6xTNUZ1oMAaepsn7mA/coGw/hCYSNWuC4K7iRb28BTbIuDL
+E6HFhNu0mN3TLHXbbri5JMLOZMTk0w==
+=LDfN
+-----END PGP SIGNATURE-----
+
+--Sig_/P_Cky_yl9Y.1BGXmTncwXAy--

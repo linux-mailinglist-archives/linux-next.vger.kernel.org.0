@@ -2,107 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B90B1B5C12
-	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 15:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACDE1B5CBB
+	for <lists+linux-next@lfdr.de>; Thu, 23 Apr 2020 15:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728308AbgDWNEF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 23 Apr 2020 09:04:05 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:60375 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726685AbgDWNEF (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 23 Apr 2020 09:04:05 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 497HYt01bMz9sRN;
-        Thu, 23 Apr 2020 23:04:01 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1587647043;
-        bh=RsqDktuMMP2UgufhCx84QjzJaJ3BCDZnFMhqrYgH1i8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=T3Q9H+56rirN9jDvJka9cRS5NRtrWdc/QPTAW3cBRZ8CBsf0PD1RHVZOlmS+ufW4m
-         vH43guW8YFopRrfDLPApSP7nuIwdE85NWG9/Es8jsQNJq+wfprxwgi3A80Ay5gyHAn
-         tx42rHpVBUSyENQSZFhqy5mBaag5lx+KDnm79yN91lq5YkYpi9Z8JVY2xsJhEhdOXE
-         0as+13FvAAKy/o7FEEQhS6/aAB9DK77f4+6irtIZ9t1hsTOVBAAzftBVqb5bFSt6s+
-         QEVga1M6QhZnAUPLcT22hE/qr/6E5ZOYlbeKnDbRV/a2dXnU66e2ZP4DlCtk14MLhY
-         fUcOoOMGR6A8w==
-Date:   Thu, 23 Apr 2020 23:04:00 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: Re: linux-next: build failure after merge of the sound-asoc tree
-Message-ID: <20200423230400.2cb1a285@canb.auug.org.au>
-In-Reply-To: <20200423113041.GI4808@sirena.org.uk>
-References: <20200423155539.4492a0cc@canb.auug.org.au>
-        <20200423113041.GI4808@sirena.org.uk>
+        id S1728289AbgDWNkp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 23 Apr 2020 09:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36144 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726361AbgDWNko (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 23 Apr 2020 09:40:44 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F1D6C08E934
+        for <linux-next@vger.kernel.org>; Thu, 23 Apr 2020 06:40:44 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id h69so2899396pgc.8
+        for <linux-next@vger.kernel.org>; Thu, 23 Apr 2020 06:40:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=cDCKDXVE8i3Sd52hcVQCDf94cNPllrNNRK+Pl6m9+WY=;
+        b=Vz23DXj8l8SkjwHt8pdoYYOP7SUNL78pevVxaxg1UTkOMExsKFjRtHrwGC2Jp02bBt
+         hXNZODlgngIUGSQDAlOFsxDqPiXYiWDp69sDVDGhvvVJ5+dtKL5hF4p6xd0/AbASkIuP
+         OhW2uzaB5L451KhratIsqUyHMpvEsRvKFRiMmr9mQd4kgAgF4j/gxisMcgB1g3GJIqE5
+         T+TH68Uei0qzEPIuYYlolnZX4LMU1rJPVZk3C1/sPJMWijqPzmKDZnM1gdsBSEbjOYM7
+         gRNc/7QtVDUO/k4md+4/VnYrDuKO+CefzxLLakqIyO2BwSCITYKgAeZXvnYPVvyoH6w+
+         upfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=cDCKDXVE8i3Sd52hcVQCDf94cNPllrNNRK+Pl6m9+WY=;
+        b=DBfNpic7ZVR0xvYfVrYF/GCIP0ob1TSjMOGIKGL4XSlNKYfXzR6FCX+2oPYKob3Q61
+         B5k4RlzS6blxonMfCOxmxkyZ04nuioPJ/j9JzPv2msZUnsQ6Tj0qAKWrgdoymClurj4B
+         IMmsT3InCmtZrsgw1qJKr2VjSNFpbq45PZZGW81W2fnSueb86Xw4OOGJKp9vbknsVfCE
+         8K77qoNsT+HonVnyboWhBUsWblhURcA2CPyZ3vP2Q4rfhMfs0gEI7qGsCHIgQAo2sQFN
+         4FtdxMlB5fkdeVHa9MRBAOmBcrt71aGySbuOvJ1d9k4r6fiWy+hVvMVec4kf2lVdxRx0
+         VrCA==
+X-Gm-Message-State: AGi0Pub6KHaYJvuWMR0fSccezYmAcu7l5XmxaUzV3E/tEkoJ0DvL+Zlq
+        8OOFuTr77WM3lKv5mXqnKJmVDuYSDOw=
+X-Google-Smtp-Source: APiQypK5hl2uzKVUdgKTFMGTq0Sf2Ub7JVqL55RF3yb+ItUNeNev7KN3a61Mo6uGwLMlCxO8Y7MhGA==
+X-Received: by 2002:a63:b447:: with SMTP id n7mr3924689pgu.278.1587649243786;
+        Thu, 23 Apr 2020 06:40:43 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h193sm2661246pfe.30.2020.04.23.06.40.42
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Apr 2020 06:40:43 -0700 (PDT)
+Message-ID: <5ea19adb.1c69fb81.9b524.a451@mx.google.com>
+Date:   Thu, 23 Apr 2020 06:40:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/me9ky4T/dLNjtXpiU+noB5h";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200422
+Subject: next/master boot: 95 boots: 2 failed,
+ 90 passed with 3 untried/unknown (next-20200422)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/me9ky4T/dLNjtXpiU+noB5h
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master boot: 95 boots: 2 failed, 90 passed with 3 untried/unknown (nex=
+t-20200422)
 
-Hi Mark,
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200422/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200422/
 
-On Thu, 23 Apr 2020 12:30:41 +0100 Mark Brown <broonie@kernel.org> wrote:
->
-> On Thu, Apr 23, 2020 at 03:55:39PM +1000, Stephen Rothwell wrote:
->=20
-> > Presumably caused by (one of) commits =20
->=20
-> >   fe17e6cdc0fe ("ASoC: SOF: imx8: Fix randbuild error")
-> >   cb0312f61c3e ("ASoC: SOF: imx: fix undefined reference issue") =20
->=20
-> > I just removed the COMPILE_TEST from SND_SOC_SOF_IMX_TOPLEVEL for today=
-. =20
->=20
-> It looks like this is triggered by PowerPC not including
-> drivers/firmware - there are missing dependencies but it works for other
-> all*configs since the dependencies all get built in those.  It would be
-> helpful if PowerPC were fixed to include the firmware directory to
-> improve coverage.
+Tree: next
+Branch: master
+Git Describe: next-20200422
+Git Commit: a5840f9618a90ecbe1617f7632482563c0ee307e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 38 unique boards, 10 SoC families, 23 builds out of 231
 
-$ git grep drivers/firmware 'arch/*/*Kconfig*'
-arch/arm/Kconfig:source "drivers/firmware/Kconfig"
-arch/arm64/Kconfig:source "drivers/firmware/Kconfig"
-arch/ia64/Kconfig:source "drivers/firmware/Kconfig"
-arch/mips/Kconfig:source "drivers/firmware/Kconfig"
-arch/x86/Kconfig:source "drivers/firmware/Kconfig"
+Boot Regressions Detected:
 
-so, sure, it works for some architectures.  We would need someone to do
-the work to make sure that adding drivers/firmware to all the others
-does not break other stuff.  Until then, please add the needed
-dependencies.
+arm:
 
-Thanks.
---=20
-Cheers,
-Stephen Rothwell
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: next-20200421)
 
---Sig_/me9ky4T/dLNjtXpiU+noB5h
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          sun7i-a20-cubieboard2:
+              lab-clabbe: new failure (last pass: next-20200421)
 
------BEGIN PGP SIGNATURE-----
+x86_64:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6hkkAACgkQAVBC80lX
-0Gw/vgf/RCdmmZnXRnDInT2vsf1nlf2B3qr9OvydGkxsoxbQepgegAkwiwYAyAy1
-BnL/J0xhUHrH6pR1b+OfSOe/dNPtLbvAdpUE7aHDZ6/NiwCZCtbNc7+8iNwfhEz9
-bTL0j4Pb+BT0zE/dKtDZSZgi5DblRNdKhEPB9VlTLwqDidJza3iAPOK2ze6yuB4r
-dPVY/qT1xxpdLPng7K8zIVMtCiHiRAx8xPK0I2Tcqy/Qs8b9xqczqtYZgeC1KX14
-vwEKXc4+vVvP8lG7Z6nGxpoSPF2z68G31z3IXx0Bk6suHUb6PX61Qcy+s4exSKlf
-sY8twW9/duwIua7Lmygok5k7LtN8yw==
-=w+zl
------END PGP SIGNATURE-----
+    x86_64_defconfig+kvm_guest:
+        gcc-8:
+          qemu_x86_64:
+              lab-collabora: failing since 1 day (last pass: next-20200417 =
+- first fail: next-20200421)
 
---Sig_/me9ky4T/dLNjtXpiU+noB5h--
+Boot Failures Detected:
+
+arm:
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+---
+For more info write to <info@kernelci.org>

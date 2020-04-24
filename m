@@ -2,58 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E81F11B7981
-	for <lists+linux-next@lfdr.de>; Fri, 24 Apr 2020 17:26:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245751B7983
+	for <lists+linux-next@lfdr.de>; Fri, 24 Apr 2020 17:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726998AbgDXP0S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 24 Apr 2020 11:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
+        id S1727059AbgDXP00 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 24 Apr 2020 11:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727063AbgDXP0S (ORCPT
+        by vger.kernel.org with ESMTP id S1727021AbgDXP00 (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Fri, 24 Apr 2020 11:26:18 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35B6C09B045
-        for <linux-next@vger.kernel.org>; Fri, 24 Apr 2020 08:26:16 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id y6so3993907pjc.4
-        for <linux-next@vger.kernel.org>; Fri, 24 Apr 2020 08:26:16 -0700 (PDT)
+        Fri, 24 Apr 2020 11:26:26 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F746C09B045
+        for <linux-next@vger.kernel.org>; Fri, 24 Apr 2020 08:26:26 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id x77so4962196pfc.0
+        for <linux-next@vger.kernel.org>; Fri, 24 Apr 2020 08:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:date:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=pL5amLqlDDtqRSOURf7ddVjxbIj6P2pWANFWK1mRASI=;
-        b=dBjPpXzDCklOGOvWka4qa5HPmviYqBecSvF28zoXjqv3cDo5HCdKtXa0KiLT2g8xty
-         tHGYP/whLNKXBS5rl+MUpXVKp2CWdLmiL+KIzDfQvkdF8lU8JycAMFqUap8wnONWqWdN
-         V2en8uOiQvBni9HCRa3emHdliem1PNttTHEuc=
+        bh=k4Kne5OLSSOY79cwmjGW25y25SNnkfWiVljIHgDeupc=;
+        b=CIdJhI6ntqTPXxG1NTg8sqdKb3SdIwJeb6jwNSnels5/LI2YfK1234Xo8wdAzYAZ6U
+         lmt/Y7CTtqqDBxLEgfr+h4+a9Bnq7d5KnAFv9CbyOuPaKwDSqc7dj0Ymy8wL9eY77dwP
+         JGfZTq4dQRhCWwjqGU23p8yAYMdeTES9/g19Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:from:date:to:cc:subject:message-id:mime-version
          :content-disposition;
-        bh=pL5amLqlDDtqRSOURf7ddVjxbIj6P2pWANFWK1mRASI=;
-        b=it/ywn9Yb4FsFi9ezTVcS+10Qb9UDcJQafTFXSK3avCls3PVojMJ9DcBe/LOiGboZA
-         LAeqq43JM0v192iX3VX4Ri43u00WAAk0eGHFmNAyi8yVrnJpYWQN69ORzBKLVCBrz0VU
-         ON2BFnAOlrH6xMJ+sbNEXATqbU7ycU/JzWePGDGaAZUPLd41X9eW4LJ9fF+SshOi/nb5
-         dR6OGz0CgwhkBgS0Ra1pO192JGT+XFSoaFr5+MEoRf81pGCiIwn791LFAFkVdLp0y5K4
-         Ywqesa5i+TwqSNiGbojVORGDkr/azLg4IQEJ03R1Q1BHmhxllm/ZFUZ8BR6cQZcS8wK/
-         978g==
-X-Gm-Message-State: AGi0PuZl06tuYH4YurbNqA52/j9Hxkqo+gjTH9BP5pwm+aAG9PO8sj0p
-        JaMq6V1Mfokj9NF6EwUgfCnJDA==
-X-Google-Smtp-Source: APiQypK1dnbhlY1c/Z8Ig+u2/rjNyfJd1tXgn+A7OafxyRika9wurInjBz0nJmqYIRLhT2TsLzgVPw==
-X-Received: by 2002:a17:90b:2388:: with SMTP id mr8mr6729481pjb.107.1587741976252;
-        Fri, 24 Apr 2020 08:26:16 -0700 (PDT)
+        bh=k4Kne5OLSSOY79cwmjGW25y25SNnkfWiVljIHgDeupc=;
+        b=BNwlOWrq4sCxe5DscMCyO8+rpL+FrviCTV8w7ltRLQfUBDu4QD8100taNWQFpyNdWJ
+         TZPHIa2sYVLESpbfZrfRW90i+4zKeqIMLXy2J6m8VIQnKHFAWGjQVGCxNMtwhShadqKY
+         3s20jzLBqlXG/0yw+EpsDDmHKHV+z4TXOmYSTECc6r/9bO+f4h4mLx4fgrGMow6F3QP1
+         tc6p4fEA87pYCjIt0gICNjUaFAKy2umOlpScL+BNnmFJW6Kw3tK4dLAqGghNOO6J+SDz
+         H6BdfdXlQXtav0YiugT8NE0rlXDziZTFt5ddrqogVfaIgCepq0Uq255VblEOZxjGdBj3
+         H4pA==
+X-Gm-Message-State: AGi0PubNKaV3jh0iOLwYDEfE1+XKWRtg5EUSinrzpz0UBfo7W4jQcic6
+        gGHQ2hMEZZ9U+fyObPVt7b/xgA==
+X-Google-Smtp-Source: APiQypJvDUc07m5R+XOk3+jShGa+4s5q1FzB1ExUzXkxMKBs3+Lc4TUdZibHoLjbekn/aysAlIb/qg==
+X-Received: by 2002:a63:f0b:: with SMTP id e11mr9423900pgl.155.1587741986031;
+        Fri, 24 Apr 2020 08:26:26 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d2sm6330733pfc.7.2020.04.24.08.26.15
+        by smtp.gmail.com with ESMTPSA id q2sm6144454pfl.174.2020.04.24.08.26.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Apr 2020 08:26:15 -0700 (PDT)
+        Fri, 24 Apr 2020 08:26:25 -0700 (PDT)
 From:   coverity-bot <keescook@chromium.org>
 X-Google-Original-From: coverity-bot <keescook+coverity-bot@chromium.org>
-Date:   Fri, 24 Apr 2020 08:26:14 -0700
-To:     Tzu-En Huang <tehuang@realtek.com>
-Cc:     Yan-Hsuan Chuang <yhchuang@realtek.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
+Date:   Fri, 24 Apr 2020 08:26:24 -0700
+To:     Yintian Tao <yttao@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
         linux-next@vger.kernel.org
-Subject: Coverity: rtw8822c_dpk_cal_coef1(): Error handling issues
-Message-ID: <202004240826.6E2BADAF7@keescook>
+Subject: Coverity: gmc_v10_0_flush_gpu_tlb_pasid(): Program hangs
+Message-ID: <202004240826.F065651@keescook>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -71,27 +71,27 @@ https://scan.coverity.com/projects/linux-next-weekly-scan
 You're getting this email because you were associated with the identified
 lines of code (noted below) that were touched by commits:
 
-  Mon Sep 9 15:16:08 2019 +0800
-    5227c2ee453d ("rtw88: 8822c: add SW DPK support")
+  Thu Apr 23 12:05:54 2020 +0800
+    82478876eaac ("drm/amdgpu: protect ring overrun")
 
 Coverity reported the following:
 
-*** CID 1492716:  Error handling issues  (CHECKED_RETURN)
-/drivers/net/wireless/realtek/rtw88/rtw8822c.c: 3147 in rtw8822c_dpk_cal_coef1()
-3141
-3142     	rtw_write32_mask(rtwdev, REG_NCTL0, BIT_SUBPAGE, 0x0000000c);
-3143     	rtw_write32(rtwdev, REG_RXSRAM_CTL, 0x000000f0);
-3144     	rtw_write32(rtwdev, REG_NCTL0, 0x00001148);
-3145     	rtw_write32(rtwdev, REG_NCTL0, 0x00001149);
-3146
-vvv     CID 1492716:  Error handling issues  (CHECKED_RETURN)
-vvv     Calling "check_hw_ready" without checking return value (as is done elsewhere 20 out of 21 times).
-3147     	check_hw_ready(rtwdev, 0x2d9c, MASKBYTE0, 0x55);
-3148
-3149     	rtw_write8(rtwdev, 0x1b10, 0x0);
-3150     	rtw_write32_mask(rtwdev, REG_NCTL0, BIT_SUBPAGE, 0x0000000c);
-3151
-3152     	for (path = 0; path < rtwdev->hal.rf_path_num; path++) {
+*** CID 1492715:  Program hangs  (LOCK)
+/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c: 434 in gmc_v10_0_flush_gpu_tlb_pasid()
+428     		kiq->pmf->kiq_invalidate_tlbs(ring,
+429     					pasid, flush_type, all_hub);
+430     		r = amdgpu_fence_emit_polling(ring, &seq, MAX_KIQ_REG_WAIT);
+431     		if (r) {
+432     			amdgpu_ring_undo(ring);
+433     			spin_unlock(&kiq->ring_lock);
+vvv     CID 1492715:  Program hangs  (LOCK)
+vvv     Returning without unlocking "adev->gfx.kiq.ring_lock".
+434     			return -ETIME;
+435     		}
+436
+437     		amdgpu_ring_commit(ring);
+438     		spin_unlock(&adev->gfx.kiq.ring_lock);
+439     		r = amdgpu_fence_wait_polling(ring, seq, adev->usec_timeout);
 
 If this is a false positive, please let us know so we can mark it as
 such, or teach the Coverity rules to be smarter. If not, please make
@@ -99,8 +99,8 @@ sure fixes get into linux-next. :) For patches fixing this, please
 include these lines (but double-check the "Fixes" first):
 
 Reported-by: coverity-bot <keescook+coverity-bot@chromium.org>
-Addresses-Coverity-ID: 1492716 ("Error handling issues")
-Fixes: 5227c2ee453d ("rtw88: 8822c: add SW DPK support")
+Addresses-Coverity-ID: 1492715 ("Program hangs")
+Fixes: 82478876eaac ("drm/amdgpu: protect ring overrun")
 
 Thanks for your attention!
 

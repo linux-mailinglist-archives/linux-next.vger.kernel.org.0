@@ -2,123 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 82B0E1BAFC2
-	for <lists+linux-next@lfdr.de>; Mon, 27 Apr 2020 22:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4328B1BB182
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 00:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726826AbgD0Uu4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Apr 2020 16:50:56 -0400
-Received: from mail.kernel.org ([198.145.29.99]:54884 "EHLO mail.kernel.org"
+        id S1726264AbgD0W26 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Apr 2020 18:28:58 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45169 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726825AbgD0Uu4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Apr 2020 16:50:56 -0400
-Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726224AbgD0W26 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 27 Apr 2020 18:28:58 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 790922070B;
-        Mon, 27 Apr 2020 20:50:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1588020654;
-        bh=b3YRJyMbKe7izlxJnUJUG6JvHA8qd5m0P2WdjuVvShg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p0rVVju/c1Zvmjo3N8tWUk8YTpm4HfugQ2PagUwbyF8N9miLcZpw7ThT96un3xYH7
-         LPD1ypHkar7D4beD3Cg36iQfmv7EqFTQBXo/zxHwrfBoB2Ie2OQdef1JQxDKFbxrz7
-         2S+fn1pY3qWnNxGO+FZXtkPTwcphzXfeXLX0Hrdw=
-Date:   Mon, 27 Apr 2020 13:50:53 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Minchan Kim <minchan@kernel.org>
-Subject: Re: mmotm 2020-04-26-00-15 uploaded (mm/madvise.c)
-Message-Id: <20200427135053.a125f84c62e2857e3dcdce4f@linux-foundation.org>
-In-Reply-To: <39bcdbb6-cac8-aa3b-c543-041f9c28c730@infradead.org>
-References: <20200426071602.ZmQ_9C0ql%akpm@linux-foundation.org>
-        <bec3b7bd-0829-b430-be1a-f61da01ac4ac@infradead.org>
-        <39bcdbb6-cac8-aa3b-c543-041f9c28c730@infradead.org>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.31; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 499zvq48wbz9sSM;
+        Tue, 28 Apr 2020 08:28:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1588026536;
+        bh=ivwgNicn18ZBKkBOXTf8jqeZchuVIx86HDJ84nnaL00=;
+        h=Date:From:To:Cc:Subject:From;
+        b=SD1w++tt2lIa1rEo0Hd31P2WICguTLAYTfppr0IYdb3khdIFxJz1varTMBNMS2Htc
+         PNraVlRVHBJVXZSJIAQPU/uw285hWUsSVUS883cQSVIzsmsYaMZXC8G8t8cvhGg4kX
+         4skYuI0BgO691+uNBtxDroyKxaz9YwnjUUxxWL7M6pvCe4WSGXmq5S3mFj49V3ksJ9
+         DuU0VzigPNzyfNTZeJZb9sCuRcLAtMVgyTS2wSHcsJYx2ibyIA5c2LY78bbVImIKUF
+         d6dDZ0SfGLZc8yRAmTe3ZHbZeFz3OsLVtqE2c/9uiJr737f5TYZrXaz2dwKscfAPny
+         xnQLn6kcggBqQ==
+Date:   Tue, 28 Apr 2020 08:28:48 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wolfram Sang <wsa@the-dreams.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Subject: linux-next: Fixes tag needs some work in the i2c tree
+Message-ID: <20200428082848.19d38b67@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ca8nA/3nnw6ThCGx3N/2DV2";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, 26 Apr 2020 15:48:35 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+--Sig_/ca8nA/3nnw6ThCGx3N/2DV2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> On 4/26/20 10:26 AM, Randy Dunlap wrote:
-> > On 4/26/20 12:16 AM, akpm@linux-foundation.org wrote:
-> >> The mm-of-the-moment snapshot 2020-04-26-00-15 has been uploaded to
-> >>
-> >>    http://www.ozlabs.org/~akpm/mmotm/
-> >>
-> >> mmotm-readme.txt says
-> >>
-> >> README for mm-of-the-moment:
-> >>
-> >> http://www.ozlabs.org/~akpm/mmotm/
-> >>
-> >> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> >> more than once a week.
-> >>
-> >> You will need quilt to apply these patches to the latest Linus release (5.x
-> >> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> >> http://ozlabs.org/~akpm/mmotm/series
-> >>
-> >> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> >> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> >> followed by the base kernel version against which this patch series is to
-> >> be applied.
-> > 
-> > Hi,
-> > I'm seeing lots of build failures in mm/madvise.c.
-> > 
-> > Is Minchin's patch only partially applied or is it just missing some pieces?
-> > 
-> > a.  mm/madvise.c needs to #include <linux/uio.h>
-> > 
-> > b.  looks like the sys_process_madvise() prototype in <linux/syscalls.h>
-> > has not been updated:
-> > 
-> > In file included from ../mm/madvise.c:11:0:
-> > ../include/linux/syscalls.h:239:18: error: conflicting types for ‘sys_process_madvise’
-> >   asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__)) \
-> >                   ^
-> > ../include/linux/syscalls.h:225:2: note: in expansion of macro ‘__SYSCALL_DEFINEx’
-> >   __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-> >   ^~~~~~~~~~~~~~~~~
-> > ../include/linux/syscalls.h:219:36: note: in expansion of macro ‘SYSCALL_DEFINEx’
-> >  #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-> >                                     ^~~~~~~~~~~~~~~
-> > ../mm/madvise.c:1295:1: note: in expansion of macro ‘SYSCALL_DEFINE6’
-> >  SYSCALL_DEFINE6(process_madvise, int, which, pid_t, upid,
-> >  ^~~~~~~~~~~~~~~
-> > In file included from ../mm/madvise.c:11:0:
-> > ../include/linux/syscalls.h:880:17: note: previous declaration of ‘sys_process_madvise’ was here
-> >  asmlinkage long sys_process_madvise(int which, pid_t pid, unsigned long start,
-> >                  ^~~~~~~~~~~~~~~~~~~
-> 
-> I had to add 2 small patches to have clean madvise.c builds:
-> 
+Hi all,
 
-hm, not sure why these weren't noticed sooner, thanks.
+In commit
 
-This patchset is looking a bit tired now.
+  a66d0af81726 ("i2c: iproc: generate stop event for slave writes")
 
-Things to be addressed (might be out of date):
+Fixes tag
 
-- http://lkml.kernel.org/r/293bcd25-934f-dd57-3314-bbcf00833e51@redhat.com
+  Fixes:=C2=A0c245d94ed106 ("i2c: iproc: Add multi byte read-write support =
+for slave mode")
 
-- http://lkml.kernel.org/r/2a767d50-4034-da8c-c40c-280e0dda910e@suse.cz
-  (I did this)
+has these problem(s):
 
-- http://lkml.kernel.org/r/20200310222008.GB72963@google.com
+  - No SHA1 recognised
 
-- issues arising from the review of
-  http://lkml.kernel.org/r/20200302193630.68771-8-minchan@kernel.org
+This triggered because the "space" after the ":" is a Unicode non-breaking
+space (U+0x00a0, UTF8 0xc2 0xa0).  I am not sure if this is a problem
+or not.  This is the forst time I have seen this.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/ca8nA/3nnw6ThCGx3N/2DV2
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6nXKEACgkQAVBC80lX
+0GwFXQf7BmqaB+Y57tNBk6XlCNnqPgBUFbh9WY3DDK6y+inV/0cXYFR5Lcapgijh
+KuBEf7Fjzyqu1dGIpWtl8fQsNNJ8O+1ENBITUsrukCB74vNZ16pDg2EYTPVNMU3i
+ZVl/1/E0OqYXs0KpH3UwPHClJnO1a5RieXmxFgR04ovp+/4jH3YwUlOMM1RTl3Qc
+mmtqabocfq2Yrgo/GO8G1NrhS/CGEmKbOpSymZ39aAHNsFxTg2Yo8pLByl8yJSQb
+x3t3NX0xIm8xiu1MKxVGSi2H7emtlhFJbkH5Kmo/RoHPj2Z/8+YFHSle6wDwXsFI
+1RYw3JHxUpf6iZYfIfAul08B/nMAAg==
+=FaKN
+-----END PGP SIGNATURE-----
+
+--Sig_/ca8nA/3nnw6ThCGx3N/2DV2--

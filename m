@@ -2,49 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0F21BB721
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 09:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 275C81BB71D
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 09:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726406AbgD1HBi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 03:01:38 -0400
-Received: from s3.sipsolutions.net ([144.76.43.62]:46164 "EHLO
-        sipsolutions.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725867AbgD1HBi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Apr 2020 03:01:38 -0400
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.93)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1jTKFH-000sfA-60; Tue, 28 Apr 2020 09:01:31 +0200
-Message-ID: <c3922c972277ff627c0308a94dfe3f25ba3b333f.camel@sipsolutions.net>
-Subject: Re: linux-next: build failure after merge of the mac80211-next tree
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Wireless <linux-wireless@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        id S1725917AbgD1HBd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 03:01:33 -0400
+Received: from sauhun.de ([88.99.104.3]:39424 "EHLO pokefinder.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725867AbgD1HBd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Apr 2020 03:01:33 -0400
+Received: from localhost (p5486CA03.dip0.t-ipconnect.de [84.134.202.3])
+        by pokefinder.org (Postfix) with ESMTPSA id 1AB072C0710;
+        Tue, 28 Apr 2020 09:01:31 +0200 (CEST)
 Date:   Tue, 28 Apr 2020 09:01:30 +0200
-In-Reply-To: <20200428122930.51b6a9c2@canb.auug.org.au>
-References: <20200428122930.51b6a9c2@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
+From:   Wolfram Sang <wsa@the-dreams.de>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Rayagonda Kokatanur <rayagonda.kokatanur@broadcom.com>
+Subject: Re: linux-next: Fixes tag needs some work in the i2c tree
+Message-ID: <20200428070130.GA2522@kunai>
+References: <20200428082848.19d38b67@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BXVAT5kNtrzKuDFl"
+Content-Disposition: inline
+In-Reply-To: <20200428082848.19d38b67@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 2020-04-28 at 12:29 +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the mac80211-next tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> Caused by commit
-> 
->   6cd536fe62ef ("cfg80211: change internal management frame registration API")
 
-Yeah. I forgot about staging. I guess I'll throw in a quick fix.
+--BXVAT5kNtrzKuDFl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-johannes
 
+> This triggered because the "space" after the ":" is a Unicode non-breaking
+> space (U+0x00a0, UTF8 0xc2 0xa0).  I am not sure if this is a problem
+> or not.  This is the forst time I have seen this.
+
+Thanks for reporting, I obviously didn't notice. Well, technically,
+commit messages can be UTF8, so not really an error. However, it will
+probably break lots of homebrew scripts, so a checkpatch warning it is,
+then?
+
+I'll fix it nonetheless.
+
+
+--BXVAT5kNtrzKuDFl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAl6n1MYACgkQFA3kzBSg
+KbaBYBAAlqd23QfIGLSE5/GOIVifxr8xx1DXidoqRozdr4ZzAyRYnUDkULHFtqq6
+eUGdKrpNQkee9wfnQNBg6GCCP100mAu+ZY9od7MYwXm2TgkfQIs7sRSxzJduFSbl
+mbTqHok7u7Ai5gb8l+EjH7uujsS5axHjn3yAuY+s4GYngtPUhQOQts4icGWzPW0n
+1TaOKDRMi9N5ibQ9sbaYUNOhua/c5rxtQj8yJo3iH6YQpFuzlOJgulj9Xu1UqaYX
+eovK3YeuBKrqX4JlicQcjGcoF2xTtqdkj3fEbjHq8KCYFuzbI9b4Ml0IMd1m181l
+Zx2fJXeJRSnTMmrZzOFVGzJPBWPAtF7CiMwdoYMVUQvRK4Rrw5z8IvIx2isnL5ZE
+hVWwLDjQlkydD4EOCqx4GGjDAl73be7wBCttcerzGFPal9fXnJ4Z07rL8drLeHea
+XTkY4gR/8A2dvaH+XevPwCp+QM/6Dh0NmXrMnc+SEqzXtYfwIRIDYPB0PnX51NKG
+V9oWaNx+LTp0j3lEv9zhutH1KHVWacHpNqvbb6uxSqfIBZp5z0KeUc0X2G6op0zd
+OUK2IIaCvbLnefGAbMrLiKMxXAVfnRvnERg0NSiEG2bigcXu1PNBA2kJ0wSyKGOH
+USSbOkL2uP2806iQUiPsKIjuw0DXWguP+rqKlfnG/SRsNFcE2oI=
+=2VRM
+-----END PGP SIGNATURE-----
+
+--BXVAT5kNtrzKuDFl--

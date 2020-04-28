@@ -2,90 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 524631BCF48
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 00:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 772D81BCF78
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 00:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726512AbgD1V7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 17:59:45 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34871 "EHLO ozlabs.org"
+        id S1726286AbgD1WJR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 18:09:17 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:43817 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726256AbgD1V7o (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 17:59:44 -0400
+        id S1726272AbgD1WJR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Apr 2020 18:09:17 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49BbCd4CbLz9sRY;
-        Wed, 29 Apr 2020 07:59:41 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49BbQf3cd9z9sRY;
+        Wed, 29 Apr 2020 08:09:13 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588111182;
-        bh=QU/8zKJPQmddMFvI8HlBQNeIiGhgy2L8S+BFjVaC7wM=;
+        s=201702; t=1588111755;
+        bh=TViBikPorOaB5TqqtiAjuNVCMV59yaYrMGN1aLmguKA=;
         h=Date:From:To:Cc:Subject:From;
-        b=ku57Ir88dZ6+CqWHcoP0pVtVQy4B6r8bJIkxOVsTf87dQYcjrVt9qTplrGlFX1Dur
-         nH/ZZcaB7R5d405zAQsJD+6vlcwM2HLIKa72W+nFPgN29xoJaGUwKc8/gp0in/JvUo
-         SdeJWz7ww5PD8+UgxmTaSpxQBEujSTvfSfXi/rLWA6/NGIPFrMWQrtAvtsZuj+Hz1Y
-         J8bwHDgjsIatY7/qNT4XXuv4r3hb+c7CwJBhhGa/oZBHuyBPs79E6HrnRhWYeXw1KY
-         sslI9qtAPydiTDeTROW5HiW1Tk44p2gnhABD3To5Q2iRl2J2gwOF55tSi+ziGHfda9
-         PVC0j3c6IMIXw==
-Date:   Wed, 29 Apr 2020 07:59:30 +1000
+        b=JT5Jd0qbw+fhNJ/j2gknOeWxYBVasxKL6OpY+3P6SaPAyOmZBtkjvh8yjgPiE4+dZ
+         EAMAliZE7yCr33FjBmxZJnT8TjyaF6jd7mNSEXvEy8+tWcmeGC2s64FwzzUpS5/l4W
+         VRSVlzjngPagvKJSZiJXf/qpY6nuKMNsPvIqILQtWKVYCSVRm11fFQatZGhBzvMt50
+         3WelOBzVW+RM3axmjrVfjFFrth3esLcQO97A9MCTXH7b6DFJcRCJugKgEHCIw++r76
+         MlJGD788JC3SnlU8K8DNib/HJyhCfmukidH3lcSzeMxt6MKanPpseHj8JBvbz0eEXM
+         P6xmtCCsOvw1A==
+Date:   Wed, 29 Apr 2020 08:09:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc-fixes tree
-Message-ID: <20200429075930.53910a3e@canb.auug.org.au>
+        Amit K Bag <amit.k.bag@intel.com>,
+        "Tumkur Narayan, Chethan" <chethan.tumkur.narayan@intel.com>,
+        "Hegde, Raghuram" <raghuram.hegde@intel.com>
+Subject: linux-next: Signed-off-by missing for commit in the bluetooth tree
+Message-ID: <20200429080913.7d9239f4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/w1W15NPJCdvpLwjk=OxMPQO";
+Content-Type: multipart/signed; boundary="Sig_/+0ZH1C3_Cvy06NlFZEqLh7z";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/w1W15NPJCdvpLwjk=OxMPQO
+--Sig_/+0ZH1C3_Cvy06NlFZEqLh7z
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commit
 
-  be8499c48f11 ("ASoC: tlv320adcx140: Fix mic gain registers")
+  bf1f79470a62 ("Bluetooth: btusb: Add support for Intel Bluetooth Device T=
+yphoon Peak (8087:0032)")
 
-Fixes tag
-
-  Fixes: 37bde5acf040 ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec dr=
-iver family")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 689c7655b50c ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec driv=
-er family")
+is missing a Signed-off-by from its author.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/w1W15NPJCdvpLwjk=OxMPQO
+--Sig_/+0ZH1C3_Cvy06NlFZEqLh7z
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6op0IACgkQAVBC80lX
-0GzSAQf+On6V4LnL8ulIccC73gO2Br4MLbFSQAdBqv5KcdJCh55gc8ARQM8ispcw
-nUtaFCF0byHx2LVPQfe7ASITBaSnJPyiqxV4LQyQfuqeaZoJ00RKlzknA6iryHYm
-0YwNBYWFQpxSuQOSOsBUkCmfq18GJl3aIvs7+SFVAOImzn4/4PCs/APyagMCeSfJ
-ghlTcjMiARvNtuPzXBKInsf2K3c/CFcxsZDIplKCEJA7gsC1nuWUYW8+oKfisGye
-GQBwyrL4I5Hzo+C53vgHDTEJNFojn10B403XLvVV9GflyHq+1/I0m2AOz64ceHUr
-zr4DfYv+guxZ+nEh9eEg5wXTvZYGAA==
-=bktv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6oqYkACgkQAVBC80lX
+0GxnXgf8CDdKAMZMqk6c18Yy8RtuFFW1mOxfLm2PttVc92+ypOijdYGRlh/0LzU9
+Uji6/9TS4Hd2QVZvQdmjXB/5xNYuF/ioupoWSbD04dCOB9khW92CM0nbWDRHU7VV
+6tqgdm0GBzs5ZJFYvus3cJp4M+TeyA5SzDww2ucmg4yNiphrYQXHATtEdUrm/lK8
+nY5+mEf1LpMSiQuda1G3nWN2tAMAqjb8tLFYQAHdYg9Sg2XZugpO2fKmUlUADbc8
+KXHbJDmV+CYMoR3PXEoQZGjtafB7iUBZFTRJkidf6T3JTgmjX/po4EEcIdqdYM4s
+vPzmVgPWDB0kJjua/H6EZEsuVHs//Q==
+=Qi8l
 -----END PGP SIGNATURE-----
 
---Sig_/w1W15NPJCdvpLwjk=OxMPQO--
+--Sig_/+0ZH1C3_Cvy06NlFZEqLh7z--

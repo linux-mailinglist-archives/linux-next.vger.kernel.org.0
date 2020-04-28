@@ -2,160 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 273481BB21F
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 01:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E38C41BB3FA
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 04:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726380AbgD0XpQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 27 Apr 2020 19:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S1726315AbgD1C3k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 27 Apr 2020 22:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726333AbgD0XpQ (ORCPT
+        by vger.kernel.org with ESMTP id S1726261AbgD1C3j (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Mon, 27 Apr 2020 19:45:16 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818ECC0610D5;
-        Mon, 27 Apr 2020 16:45:16 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id t16so7596885plo.7;
-        Mon, 27 Apr 2020 16:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=rFXLWpL8UxKU55UxWfH5CWuFkfOuWYDSTHntxNLKnuQ=;
-        b=tAQlBRu906bcu+Kn/D0kh+IkH5FBzwAI4N6u4ya8SC229DUUmedHfy5FGH7GoY1qpp
-         Ns/0KadsrEMWhpf6EEvfq7xXkqAERd+TvwugBYhsFuNv/4EJWFBCtpb0Z/CwyTd05BUy
-         dzFn10SjeVBBJytBUA3xRgiKOmEKo7lSh0zvRCdFwOSnIIEbDcSGn9iZtPTIwc4lp6LP
-         sKU+k2S63igNlofeIlZxDg7oAbI1fFmW4Xsmj6cRIG0xvD6+BvS/7dDJrXeJJK4rAwkx
-         hDwVaUc5xCPecHtda+ev6AYjGwQ4mLjcK/Pn3JBDKZ/xRMiRBt+kSaPfLVQDFWTdQ0Ew
-         KCwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition
-         :content-transfer-encoding:in-reply-to;
-        bh=rFXLWpL8UxKU55UxWfH5CWuFkfOuWYDSTHntxNLKnuQ=;
-        b=XxyW9IkuT2GhF9iG4ZdKvm26JyLd0ZxYjvKt/rO2nH/lvKrXzPJFxUWy4yPw3Cc99n
-         E+tVcCtibzl7s+b/Ns0UwvqtCwPl/WOVgOCfknEoLOeQmefioALvlcx+i/HkdUsSX+zT
-         OJyh5TqUYTHxn+PQxXwgwyt8tFUJWCd746UOKGrMXabr26Su/PZtnoKWCxTN76kqGCAz
-         9qBP1q5SeobF4KmcJ7H1SwTNwYTFBAV8T7zLVrnT9ePsPgxykMzY6kpIAhrobl/ZcL22
-         jMIRE/6Q83TwsQfAmI+J5TzT1YMqVoXT5oiX/KB6EW4jx2qUm77dF2oiQZtce5npB9dK
-         IBTQ==
-X-Gm-Message-State: AGi0PuYVOnsjM9pctJOKmh1nLLDKwy2OOZT5UM712b9pRAiVMt3UDhcl
-        wd6yTP50BXsgkkMNAZuBx1U=
-X-Google-Smtp-Source: APiQypLpJP0BVvqzVPXFCCCSvMFE1KRQabPbNnXGyiE5YOxENYjwyTOd3DwoJmizsAWCUTExhC08ig==
-X-Received: by 2002:a17:902:9f8a:: with SMTP id g10mr2878813plq.233.1588031115775;
-        Mon, 27 Apr 2020 16:45:15 -0700 (PDT)
-Received: from google.com ([2620:15c:211:1:3e01:2939:5992:52da])
-        by smtp.gmail.com with ESMTPSA id o40sm358029pjb.18.2020.04.27.16.45.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Apr 2020 16:45:14 -0700 (PDT)
-Date:   Mon, 27 Apr 2020 16:45:12 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>, oleksandr@redhat.com
-Cc:     Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: mmotm 2020-04-26-00-15 uploaded (mm/madvise.c)
-Message-ID: <20200427234512.GD163745@google.com>
-References: <20200426071602.ZmQ_9C0ql%akpm@linux-foundation.org>
- <bec3b7bd-0829-b430-be1a-f61da01ac4ac@infradead.org>
- <39bcdbb6-cac8-aa3b-c543-041f9c28c730@infradead.org>
- <20200427135053.a125f84c62e2857e3dcdce4f@linux-foundation.org>
+        Mon, 27 Apr 2020 22:29:39 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338DFC03C1A8;
+        Mon, 27 Apr 2020 19:29:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49B5FW7173z9sSb;
+        Tue, 28 Apr 2020 12:29:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1588040976;
+        bh=vox0HHPOqBnsOzPyL0zRJVD1w17UiamGv8nIXzsZhu0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=HPB+MhigvYcgrRgUmVUAWSlrcw3t1iwx49cj0yVN0WkI7u72uQrgEtegef1Y3EkBW
+         PXNaPQk/1OfET3ZaLoiO/q2G58Zr+FiBS7vqhHm2yRsJDoVWh+QDRxbk4VPrQ0R2QK
+         hZZRa6Lf7pPYIjrPi8wxaFOTBLilUGjotdK7n3EKYiFoEHDHIHa7UgiZeUTGCBJ13u
+         TzTsr4xugl1Bbq4eJmx3F4AF+pfPqLjZ5NodewP+mVAHTMrNgPh+Zf7qx3H2myltkL
+         N9kLioWxRA0C0BmLFOtz4BpbwdMEhKQw948lOxHKv2+oswmGHxCCEn7Sy+4bymH37q
+         LsDU2sa9ufinQ==
+Date:   Tue, 28 Apr 2020 12:29:30 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the mac80211-next tree
+Message-ID: <20200428122930.51b6a9c2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200427135053.a125f84c62e2857e3dcdce4f@linux-foundation.org>
+Content-Type: multipart/signed; boundary="Sig_/RcmwP9G0Cxk_rW0_E.tyY=o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Andrew,
+--Sig_/RcmwP9G0Cxk_rW0_E.tyY=o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 27, 2020 at 01:50:53PM -0700, Andrew Morton wrote:
-> On Sun, 26 Apr 2020 15:48:35 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> 
-> > On 4/26/20 10:26 AM, Randy Dunlap wrote:
-> > > On 4/26/20 12:16 AM, akpm@linux-foundation.org wrote:
-> > >> The mm-of-the-moment snapshot 2020-04-26-00-15 has been uploaded to
-> > >>
-> > >>    http://www.ozlabs.org/~akpm/mmotm/
-> > >>
-> > >> mmotm-readme.txt says
-> > >>
-> > >> README for mm-of-the-moment:
-> > >>
-> > >> http://www.ozlabs.org/~akpm/mmotm/
-> > >>
-> > >> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > >> more than once a week.
-> > >>
-> > >> You will need quilt to apply these patches to the latest Linus release (5.x
-> > >> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > >> http://ozlabs.org/~akpm/mmotm/series
-> > >>
-> > >> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> > >> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> > >> followed by the base kernel version against which this patch series is to
-> > >> be applied.
-> > > 
-> > > Hi,
-> > > I'm seeing lots of build failures in mm/madvise.c.
-> > > 
-> > > Is Minchin's patch only partially applied or is it just missing some pieces?
-> > > 
-> > > a.  mm/madvise.c needs to #include <linux/uio.h>
-> > > 
-> > > b.  looks like the sys_process_madvise() prototype in <linux/syscalls.h>
-> > > has not been updated:
-> > > 
-> > > In file included from ../mm/madvise.c:11:0:
-> > > ../include/linux/syscalls.h:239:18: error: conflicting types for ‘sys_process_madvise’
-> > >   asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__)) \
-> > >                   ^
-> > > ../include/linux/syscalls.h:225:2: note: in expansion of macro ‘__SYSCALL_DEFINEx’
-> > >   __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-> > >   ^~~~~~~~~~~~~~~~~
-> > > ../include/linux/syscalls.h:219:36: note: in expansion of macro ‘SYSCALL_DEFINEx’
-> > >  #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-> > >                                     ^~~~~~~~~~~~~~~
-> > > ../mm/madvise.c:1295:1: note: in expansion of macro ‘SYSCALL_DEFINE6’
-> > >  SYSCALL_DEFINE6(process_madvise, int, which, pid_t, upid,
-> > >  ^~~~~~~~~~~~~~~
-> > > In file included from ../mm/madvise.c:11:0:
-> > > ../include/linux/syscalls.h:880:17: note: previous declaration of ‘sys_process_madvise’ was here
-> > >  asmlinkage long sys_process_madvise(int which, pid_t pid, unsigned long start,
-> > >                  ^~~~~~~~~~~~~~~~~~~
-> > 
-> > I had to add 2 small patches to have clean madvise.c builds:
-> > 
-> 
-> hm, not sure why these weren't noticed sooner, thanks.
-> 
-> This patchset is looking a bit tired now.
-> 
-> Things to be addressed (might be out of date):
-> 
-> - http://lkml.kernel.org/r/293bcd25-934f-dd57-3314-bbcf00833e51@redhat.com
+Hi all,
 
-It seems to be not related to process_madvise.
+After merging the mac80211-next tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-> 
-> - http://lkml.kernel.org/r/2a767d50-4034-da8c-c40c-280e0dda910e@suse.cz
->   (I did this)
+drivers/staging/wilc1000/cfg80211.c:1668:3: error: 'const struct cfg80211_o=
+ps' has no member named 'mgmt_frame_register'
+ 1668 |  .mgmt_frame_register =3D wilc_mgmt_frame_register,
+      |   ^~~~~~~~~~~~~~~~~~~
+drivers/staging/wilc1000/cfg80211.c:1668:25: error: initialization of 'int =
+(*)(struct wiphy *, struct wireless_dev *, u64)' {aka 'int (*)(struct wiphy=
+ *, struct wireless_dev *, long long unsigned int)'} from incompatible poin=
+ter type 'void (*)(struct wiphy *, struct wireless_dev *, u16,  bool)' {aka=
+ 'void (*)(struct wiphy *, struct wireless_dev *, short unsigned int,  _Boo=
+l)'} [-Werror=3Dincompatible-pointer-types]
+ 1668 |  .mgmt_frame_register =3D wilc_mgmt_frame_register,
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/wilc1000/cfg80211.c:1668:25: note: (near initialization for=
+ 'wilc_cfg80211_ops.mgmt_tx_cancel_wait')
+cc1: some warnings being treated as errors
+drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:3400:3: error: 'struct cf=
+g80211_ops' has no member named 'mgmt_frame_register'
+ 3400 |  .mgmt_frame_register =3D cfg80211_rtw_mgmt_frame_register,
+      |   ^~~~~~~~~~~~~~~~~~~
+drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:3400:25: error: initializ=
+ation of 'int (*)(struct wiphy *, struct wireless_dev *, u64)' {aka 'int (*=
+)(struct wiphy *, struct wireless_dev *, long long unsigned int)'} from inc=
+ompatible pointer type 'void (*)(struct wiphy *, struct wireless_dev *, u16=
+,  bool)' {aka 'void (*)(struct wiphy *, struct wireless_dev *, short unsig=
+ned int,  _Bool)'} [-Werror=3Dincompatible-pointer-types]
+ 3400 |  .mgmt_frame_register =3D cfg80211_rtw_mgmt_frame_register,
+      |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c:3400:25: note: (near init=
+ialization for 'rtw_cfg80211_ops.mgmt_tx_cancel_wait')
 
-Thanks!
+Caused by commit
 
-> 
-> - http://lkml.kernel.org/r/20200310222008.GB72963@google.com
+  6cd536fe62ef ("cfg80211: change internal management frame registration AP=
+I")
 
-I will send foldable patches to handle comments.
+I have used the mac80211-next from next-20200424 for today.
 
-> 
-> - issues arising from the review of
->   http://lkml.kernel.org/r/20200302193630.68771-8-minchan@kernel.org
+--=20
+Cheers,
+Stephen Rothwell
 
-Oleksandr, What's the outcome of this issue?
-Do we still need to change based on the comment?
+--Sig_/RcmwP9G0Cxk_rW0_E.tyY=o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6nlQoACgkQAVBC80lX
+0GyeMQf9G3QjjjZhzmtu4gkijiF++83UYKHWxF6qFp7Zfpm7NMdNhm6q0PQ8ebxj
+pFom4FidAuCre5rBW6D6rK0BlvE6B2Eic93qfDLdfxT9kPngFJGn3gi8kXIdryJc
+6X0nYIkg9yh/o9u8u7nNhadi5uQv+CzhKyZeiWJxm8F5DASnxzE69/7gBgu41RNh
+//qbXDBArOIDdJwWkoCopCiTmjCCDqdiU0nqvdnzRBhnB7UpGXozA4w7gvCPg+Su
+S5ZI7oRk/iTc4r6MMABOWT0BBkgvMC5Tn61R4f2Xl63lvhiGsuiWGpcElPcDCx0U
+FjSfYnGQ5NjvZMwra3GWhN5jo51qRg==
+=k85i
+-----END PGP SIGNATURE-----
+
+--Sig_/RcmwP9G0Cxk_rW0_E.tyY=o--

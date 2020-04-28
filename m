@@ -2,233 +2,198 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 779971BC41D
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 17:52:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1D61BCC09
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 21:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727999AbgD1Pwk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 11:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S1728713AbgD1TFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 15:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727920AbgD1Pwk (ORCPT
+        by vger.kernel.org with ESMTP id S1728539AbgD1TFF (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 11:52:40 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3071EC03C1AB
-        for <linux-next@vger.kernel.org>; Tue, 28 Apr 2020 08:52:40 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id h69so10507652pgc.8
-        for <linux-next@vger.kernel.org>; Tue, 28 Apr 2020 08:52:40 -0700 (PDT)
+        Tue, 28 Apr 2020 15:05:05 -0400
+Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E4FC03C1AB;
+        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
+Received: by mail-ot1-x343.google.com with SMTP id e26so34682167otr.2;
+        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=7XSF2iOV50CF7tjhJlo4K8ikRYzWZ/yOLvp5LP7/3K8=;
-        b=GA7oXw/X8eYYy4d6+QCqmtq5uoNtce2xZQbTeMDA+woZUofwv05VeZ/aUALy+Uw4iJ
-         AocZp9TQfoIFO0mQTWKDll/wVrN9rcrsTW3Rib4mMZZfwSerCDaArvacycyfcB5PR8eE
-         /uBCmKYdiHc8vlnp4CKMUUkbDyIXuXqR7sGO6kZdZ/mlBI1TIeVW301PpHUwGzxhpid2
-         nBH0fUlZFv7f8Wgz7x565sw/WL5AOYuCspS0l1kt4EQJ8nBZalMttorSfiKn4W1ZaQq3
-         MBhPyjL1z2+M8833f6cNtC70rdPe7KltEea/NShqZLdpnxDH77ZXS4PmtOXzs4bFPML6
-         90mQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=9mawD2gvz/eqn5BFKTza4oVQ2SByQxW/24pgvyCMUE8=;
+        b=Fdw7gz7MMVRw9oItUSWDsiTku21evW1zad4hFmvLnJEQYB25msghyg8QPQMeTxErrg
+         xfhyK4xVf2Nw5qnZLBngikg5i99Mzng3gvVBZlhV1MHkx36wpr0N9dsjmcGz7lKtkYlv
+         R1kPrvqAyfQlciybOZJB9mlsDpBAPp/bsb0/KxKz8fJXMmuP0kH6k+oVtaW8qPthLaJe
+         UMHLt5U8/mn9DQ0v843hXBGhWu5esf3JikvFUxMWgx8fZZP6c6O/Wvd8WLb5vpCDCAYp
+         bAT9VNr2S2TozkuextPiUIFVM0/0OV92JrJg+D61BG//01Yt4OdpMgM8SbiwR/dKn0hh
+         3uZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=7XSF2iOV50CF7tjhJlo4K8ikRYzWZ/yOLvp5LP7/3K8=;
-        b=PBjAy+UhhYLi+KgptBaukKBWzypgkHNVJmJ8PPaS/iM36MiM6NOUMHtOZwzxIW3U8O
-         Ay82M2wOdrx+5Fe4RnPZU3hyBwO0KjskFd3/k2GVMQ9sqgnPfB+bjJ9fj1h0fz9tMEey
-         JuG8SbeDDUYSkU+ZFDQBj18mH67tApTwVPGSpOHZUAIv8Ni55aIGUcVLbneJ64mxdLOi
-         MKhWZfsiUhuwyjGIQKwyZVgnL6W4MGgqqcj4nbthm74GNgWRfqBbk1tjhBhKfWaNIGbB
-         TIYiRSadUh9wN8rNAtgCuHv2qwxECJM1Y2VEmC40tQXJ8pyMYtqWTTrjwv8lqNd1lv94
-         hj2A==
-X-Gm-Message-State: AGi0PuYYGHauCB/q0pN49rQrdQSq+bUT1ViMBxm7WmqW0YOWGxETGGe2
-        bauiyYwdndFiaJTFCgFeLRzNB6gRZvI=
-X-Google-Smtp-Source: APiQypInvkunl/d7g9DnJkEa/4ukW3PfFNbAhTSC9RrVUXbO59L1ZFwBj34h0rZxwVjXACz2//FjeA==
-X-Received: by 2002:a63:1a1e:: with SMTP id a30mr27940807pga.368.1588089158763;
-        Tue, 28 Apr 2020 08:52:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 202sm13460507pgf.41.2020.04.28.08.52.37
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=9mawD2gvz/eqn5BFKTza4oVQ2SByQxW/24pgvyCMUE8=;
+        b=aw/XSBb2UdUbRIoALJUzE+PTa4+rSYAcSqr4MQ9UnfZ19Noes4hmxJesYCwxBdX3Ba
+         Chp7PMw1ipxqFB1S4aBE0eWtwTHOKtbGJdUzg9MDn3vf+jyW0hNyiJdIWAWBUch3dXPF
+         4HWITmAG7bpEf6/SsWCDzIwYUaVy6fk80nCF/h78F4L1YS3Ezilcip4YnwPo/VygHGEo
+         M/PLYpom0KFdHmneaKpCDm6/uzpj3cptPVf7kZTj5zXwnCak+w680JzvEO8EJlzq4OIX
+         CaOQa5ys3t4J52R5rzR6/JqjmklfPBnxFYBUXIbwSp9DF8NqHdCmhdZqtcSJzLz4nFF2
+         UPIg==
+X-Gm-Message-State: AGi0PuYnxCjeVodmjPjX0nPddByziWXVhz80Kp5QaaMODDHzsqKmKosP
+        YP5yMiYeLMWGEJzFZDwYgyw=
+X-Google-Smtp-Source: APiQypKQbJq0XD420xh+OdLmBYlmBeL4TIoGxvn2rlBhDIrLX4rpFLBUzLsA6hEWYXqgEBS8v4qsAw==
+X-Received: by 2002:aca:488a:: with SMTP id v132mr4198275oia.166.1588100704232;
+        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
+Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
+        by smtp.gmail.com with ESMTPSA id t10sm5186959oou.38.2020.04.28.12.05.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 08:52:37 -0700 (PDT)
-Message-ID: <5ea85145.1c69fb81.437cc.1dfc@mx.google.com>
-Date:   Tue, 28 Apr 2020 08:52:37 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 28 Apr 2020 12:05:01 -0700 (PDT)
+Date:   Tue, 28 Apr 2020 12:04:59 -0700
+From:   Nathan Chancellor <natechancellor@gmail.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
+        linux-s390@vger.kernel.org
+Subject: Re: linux-next: Tree for Apr 28
+Message-ID: <20200428190459.GA2299615@ubuntu-s3-xlarge-x86>
+References: <20200428181006.06b4e3bc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200428
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 291 boots: 7 failed, 267 passed with 5 offline,
- 8 untried/unknown, 4 conflicts (next-20200428)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200428181006.06b4e3bc@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 291 boots: 7 failed, 267 passed with 5 offline, 8 untried=
-/unknown, 4 conflicts (next-20200428)
+On Tue, Apr 28, 2020 at 06:10:06PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Changes since 20200424:
+> 
+> The qcom tree still had its build failure for which I reverted a commit.
+> 
+> The hwmon-staging tree gained a build failure for which I reverted
+> a commit.
+> 
+> The mac80211-next tree gained a build failure so I used the version
+> from next-20200424.
+> 
+> The drm-misc tree still had its build failure for which I disabled a
+> COMPILE_TEST setting.
+> 
+> The akpm-current tree gained a conflict against the risc-v tree.
+> 
+> The akpm tree lost a patch that turned up elsewhere.
+> 
+> Non-merge commits (relative to Linus' tree): 4451
+>  5474 files changed, 151275 insertions(+), 63274 deletions(-)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200428/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200428/
+I am seeing the following build error on s390 defconfig, caused by
+commit 743f242d65ec ("mm: support compat_sys_process_madvise").
+Apologies if it has already been reported, I did a search of lore and
+found nothing.
 
-Tree: next
-Branch: master
-Git Describe: next-20200428
-Git Commit: 0fd02a5d3eb7020a7e1801f8d7f01891071c85e4
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 110 unique boards, 25 SoC families, 31 builds out of 231
+Cheers,
+Nathan
 
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          sun4i-a10-olinuxino-lime:
-              lab-baylibre: new failure (last pass: next-20200424)
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20200424)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 70 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: next-20200424)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200424)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200424)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200424)
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: next-20200424)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200424)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: failing since 3 days (last pass: next-20200417 =
-- first fail: next-20200424)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: next-20200424)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: next-20200424)
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: next-20200424)
-
-i386:
-
-    i386_defconfig:
-        gcc-8:
-          qemu_i386:
-              lab-collabora: new failure (last pass: next-20200424)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 32 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-            meson-gxl-s805x-p241: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    imx_v6_v7_defconfig:
-        gcc-8:
-            imx7s-warp: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig:
-        qemu_i386:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-x86_64:
-    x86_64_defconfig+kselftest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-    x86_64_defconfig:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-    x86_64_defconfig+kvm_guest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+$ make -j$(nproc) -s ARCH=s390 CROSS_COMPILE=s390x-linux- defconfig all
+...
+mm/madvise.c: In function '__se_compat_sys_process_madvise':
+./include/linux/compiler.h:394:38: error: call to '__compiletime_assert_162' declared with attribute error: BUILD_BUG_ON failed: sizeof(unsigned long) > 4 && !__TYPE_IS_PTR(unsigned long)
+  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                      ^
+./include/linux/compiler.h:375:4: note: in definition of macro '__compiletime_assert'
+  375 |    prefix ## suffix();    \
+      |    ^~~~~~
+./include/linux/compiler.h:394:2: note: in expansion of macro '_compiletime_assert'
+  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |  ^~~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+   50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |  ^~~~~~~~~~~~~~~~
+./arch/s390/include/asm/compat.h:18:2: note: in expansion of macro 'BUILD_BUG_ON'
+   18 |  BUILD_BUG_ON(sizeof(t) > 4 && !__TYPE_IS_PTR(t)); \
+      |  ^~~~~~~~~~~~
+./include/linux/syscalls.h:110:27: note: in expansion of macro '__SC_DELOUSE'
+  110 | #define __MAP3(m,t,a,...) m(t,a), __MAP2(m,__VA_ARGS__)
+      |                           ^
+./include/linux/syscalls.h:111:35: note: in expansion of macro '__MAP3'
+  111 | #define __MAP4(m,t,a,...) m(t,a), __MAP3(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:112:35: note: in expansion of macro '__MAP4'
+  112 | #define __MAP5(m,t,a,...) m(t,a), __MAP4(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:113:35: note: in expansion of macro '__MAP5'
+  113 | #define __MAP6(m,t,a,...) m(t,a), __MAP5(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:114:22: note: in expansion of macro '__MAP6'
+  114 | #define __MAP(n,...) __MAP##n(__VA_ARGS__)
+      |                      ^~~~~
+./arch/s390/include/asm/syscall_wrapper.h:80:36: note: in expansion of macro '__MAP'
+   80 |   long ret = __do_compat_sys##name(__MAP(x,__SC_DELOUSE,__VA_ARGS__));\
+      |                                    ^~~~~
+./include/linux/compat.h:66:2: note: in expansion of macro 'COMPAT_SYSCALL_DEFINEx'
+   66 |  COMPAT_SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
+      |  ^~~~~~~~~~~~~~~~~~~~~~
+mm/madvise.c:1314:1: note: in expansion of macro 'COMPAT_SYSCALL_DEFINE6'
+ 1314 | COMPAT_SYSCALL_DEFINE6(process_madvise, int, which, compat_pid_t, upid,
+      | ^~~~~~~~~~~~~~~~~~~~~~
+./include/linux/compiler.h:394:38: error: call to '__compiletime_assert_164' declared with attribute error: BUILD_BUG_ON failed: sizeof(unsigned long) > 4 && !__TYPE_IS_PTR(unsigned long)
+  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |                                      ^
+./include/linux/compiler.h:375:4: note: in definition of macro '__compiletime_assert'
+  375 |    prefix ## suffix();    \
+      |    ^~~~~~
+./include/linux/compiler.h:394:2: note: in expansion of macro '_compiletime_assert'
+  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+      |  ^~~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
+   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+      |                                     ^~~~~~~~~~~~~~~~~~
+./include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
+   50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+      |  ^~~~~~~~~~~~~~~~
+./arch/s390/include/asm/compat.h:18:2: note: in expansion of macro 'BUILD_BUG_ON'
+   18 |  BUILD_BUG_ON(sizeof(t) > 4 && !__TYPE_IS_PTR(t)); \
+      |  ^~~~~~~~~~~~
+./include/linux/syscalls.h:108:27: note: in expansion of macro '__SC_DELOUSE'
+  108 | #define __MAP1(m,t,a,...) m(t,a)
+      |                           ^
+./include/linux/syscalls.h:109:35: note: in expansion of macro '__MAP1'
+  109 | #define __MAP2(m,t,a,...) m(t,a), __MAP1(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:110:35: note: in expansion of macro '__MAP2'
+  110 | #define __MAP3(m,t,a,...) m(t,a), __MAP2(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:111:35: note: in expansion of macro '__MAP3'
+  111 | #define __MAP4(m,t,a,...) m(t,a), __MAP3(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:112:35: note: in expansion of macro '__MAP4'
+  112 | #define __MAP5(m,t,a,...) m(t,a), __MAP4(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:113:35: note: in expansion of macro '__MAP5'
+  113 | #define __MAP6(m,t,a,...) m(t,a), __MAP5(m,__VA_ARGS__)
+      |                                   ^~~~~~
+./include/linux/syscalls.h:114:22: note: in expansion of macro '__MAP6'
+  114 | #define __MAP(n,...) __MAP##n(__VA_ARGS__)
+      |                      ^~~~~
+./arch/s390/include/asm/syscall_wrapper.h:80:36: note: in expansion of macro '__MAP'
+   80 |   long ret = __do_compat_sys##name(__MAP(x,__SC_DELOUSE,__VA_ARGS__));\
+      |                                    ^~~~~
+./include/linux/compat.h:66:2: note: in expansion of macro 'COMPAT_SYSCALL_DEFINEx'
+   66 |  COMPAT_SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
+      |  ^~~~~~~~~~~~~~~~~~~~~~
+mm/madvise.c:1314:1: note: in expansion of macro 'COMPAT_SYSCALL_DEFINE6'
+ 1314 | COMPAT_SYSCALL_DEFINE6(process_madvise, int, which, compat_pid_t, upid,
+      | ^~~~~~~~~~~~~~~~~~~~~~
+make[2]: *** [scripts/Makefile.build:266: mm/madvise.o] Error 1
+make[2]: *** Waiting for unfinished jobs....
+make[1]: *** [Makefile:1723: mm] Error 2
+make[1]: *** Waiting for unfinished jobs....
+...

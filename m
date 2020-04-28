@@ -2,65 +2,70 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B931BB75D
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 09:21:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332821BB765
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 09:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgD1HVM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 03:21:12 -0400
-Received: from us-smtp-1.mimecast.com ([207.211.31.81]:37212 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726256AbgD1HVM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 03:21:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588058471;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/den9zmKGrpVFBXzjlPglB/ChNlVKR2OXRC/pLbk40k=;
-        b=EdR/bryb8FCmR7vxDN03r1mfYAidwDX/98A5dVVM1EtVPssd0CrcIuQV4sfUyPejIhPP2W
-        idQN8Fcm+Syoi5WNgCei+hC8SWGFOXsYVaYyWg0w/b40tNCLUCy2ZGgI86vmDjwxIFXkIy
-        svUyw9PXhGi6uq4zgPbuZRCEjVQJvRk=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-131-z_oQ0rSwMoi1XlXv-ppzwA-1; Tue, 28 Apr 2020 03:21:09 -0400
-X-MC-Unique: z_oQ0rSwMoi1XlXv-ppzwA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A98071895A28;
-        Tue, 28 Apr 2020 07:21:07 +0000 (UTC)
-Received: from treble (ovpn-112-209.rdu2.redhat.com [10.10.112.209])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id B8883605DD;
-        Tue, 28 Apr 2020 07:21:06 +0000 (UTC)
-Date:   Tue, 28 Apr 2020 02:20:59 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1726259AbgD1HYW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 03:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52100 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725917AbgD1HYW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Apr 2020 03:24:22 -0400
+X-Greylist: delayed 1366 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 28 Apr 2020 00:24:21 PDT
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BB7C03C1A9;
+        Tue, 28 Apr 2020 00:24:21 -0700 (PDT)
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.93)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1jTKbK-000u7A-97; Tue, 28 Apr 2020 09:24:18 +0200
+Message-ID: <baae77876a4b73de83aa6dcc27257da231777c22.camel@sipsolutions.net>
+Subject: Re: linux-next: build failure after merge of the mac80211-next tree
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Sergey Matyukevich <geomatsi@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Wireless <linux-wireless@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/unwind/orc: Move ORC sorting variables under
- CONFIG_MODULE
-Message-ID: <20200428072059.t7cwyiykc23wdvje@treble>
-References: <20200428162910.0dee6f52@canb.auug.org.au>
- <20200428071640.psn5m7eh3zt2in4v@treble>
+Date:   Tue, 28 Apr 2020 09:24:16 +0200
+In-Reply-To: <20200428072543.GA2630@curiosity> (sfid-20200428_092118_600638_E26BE357)
+References: <20200428122930.51b6a9c2@canb.auug.org.au>
+         <c3922c972277ff627c0308a94dfe3f25ba3b333f.camel@sipsolutions.net>
+         <20200428072543.GA2630@curiosity> (sfid-20200428_092118_600638_E26BE357)
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.34.4 (3.34.4-1.fc31) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200428071640.psn5m7eh3zt2in4v@treble>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 02:16:43AM -0500, Josh Poimboeuf wrote:
-> Fix the following warnings seen with !CONFIG_MODULE:
+On Tue, 2020-04-28 at 10:25 +0300, Sergey Matyukevich wrote:
+> On Tue, Apr 28, 2020 at 09:01:30AM +0200, Johannes Berg wrote:
+> > On Tue, 2020-04-28 at 12:29 +1000, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > After merging the mac80211-next tree, today's linux-next build (x86_64
+> > > allmodconfig) failed like this:
+> > > 
+> > > Caused by commit
+> > > 
+> > >   6cd536fe62ef ("cfg80211: change internal management frame registration API")
+> > 
+> > Yeah. I forgot about staging. I guess I'll throw in a quick fix.
+> > 
+> > johannes
+> 
+> Hello Johannes,
+> 
+> Could you please take a look at the following fix for this issue:
+> https://patchwork.kernel.org/patch/11509497/
 
-s/MODULE/MODULES/ here and $SUBJECT.
+Heh. I was just fixing it too, missed your patch. How do you like this
+fix?
 
--- 
-Josh
+https://p.sipsolutions.net/0638ee56c2e48a30.txt
+
+johannes
 

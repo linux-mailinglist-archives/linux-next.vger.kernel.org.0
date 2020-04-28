@@ -2,198 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CD1D61BCC09
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 21:05:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E9A01BCC90
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 21:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728713AbgD1TFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 15:05:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728539AbgD1TFF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 15:05:05 -0400
-Received: from mail-ot1-x343.google.com (mail-ot1-x343.google.com [IPv6:2607:f8b0:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E4FC03C1AB;
-        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
-Received: by mail-ot1-x343.google.com with SMTP id e26so34682167otr.2;
-        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=9mawD2gvz/eqn5BFKTza4oVQ2SByQxW/24pgvyCMUE8=;
-        b=Fdw7gz7MMVRw9oItUSWDsiTku21evW1zad4hFmvLnJEQYB25msghyg8QPQMeTxErrg
-         xfhyK4xVf2Nw5qnZLBngikg5i99Mzng3gvVBZlhV1MHkx36wpr0N9dsjmcGz7lKtkYlv
-         R1kPrvqAyfQlciybOZJB9mlsDpBAPp/bsb0/KxKz8fJXMmuP0kH6k+oVtaW8qPthLaJe
-         UMHLt5U8/mn9DQ0v843hXBGhWu5esf3JikvFUxMWgx8fZZP6c6O/Wvd8WLb5vpCDCAYp
-         bAT9VNr2S2TozkuextPiUIFVM0/0OV92JrJg+D61BG//01Yt4OdpMgM8SbiwR/dKn0hh
-         3uZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=9mawD2gvz/eqn5BFKTza4oVQ2SByQxW/24pgvyCMUE8=;
-        b=aw/XSBb2UdUbRIoALJUzE+PTa4+rSYAcSqr4MQ9UnfZ19Noes4hmxJesYCwxBdX3Ba
-         Chp7PMw1ipxqFB1S4aBE0eWtwTHOKtbGJdUzg9MDn3vf+jyW0hNyiJdIWAWBUch3dXPF
-         4HWITmAG7bpEf6/SsWCDzIwYUaVy6fk80nCF/h78F4L1YS3Ezilcip4YnwPo/VygHGEo
-         M/PLYpom0KFdHmneaKpCDm6/uzpj3cptPVf7kZTj5zXwnCak+w680JzvEO8EJlzq4OIX
-         CaOQa5ys3t4J52R5rzR6/JqjmklfPBnxFYBUXIbwSp9DF8NqHdCmhdZqtcSJzLz4nFF2
-         UPIg==
-X-Gm-Message-State: AGi0PuYnxCjeVodmjPjX0nPddByziWXVhz80Kp5QaaMODDHzsqKmKosP
-        YP5yMiYeLMWGEJzFZDwYgyw=
-X-Google-Smtp-Source: APiQypKQbJq0XD420xh+OdLmBYlmBeL4TIoGxvn2rlBhDIrLX4rpFLBUzLsA6hEWYXqgEBS8v4qsAw==
-X-Received: by 2002:aca:488a:: with SMTP id v132mr4198275oia.166.1588100704232;
-        Tue, 28 Apr 2020 12:05:04 -0700 (PDT)
-Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id t10sm5186959oou.38.2020.04.28.12.05.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 12:05:01 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 12:04:59 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org
-Subject: Re: linux-next: Tree for Apr 28
-Message-ID: <20200428190459.GA2299615@ubuntu-s3-xlarge-x86>
-References: <20200428181006.06b4e3bc@canb.auug.org.au>
+        id S1728874AbgD1Tnr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 15:43:47 -0400
+Received: from mga02.intel.com ([134.134.136.20]:5414 "EHLO mga02.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728392AbgD1Tnq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Apr 2020 15:43:46 -0400
+IronPort-SDR: mT3NNkrtxs+HfuwWpLsJyulLjXijn5QhW9fBfR7iG5VsWja+1CPe5y9Qyt/mNNyA1NFw2eYLBm
+ Vr9LX4ik8MEg==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Apr 2020 12:43:45 -0700
+IronPort-SDR: YNafAoLdvh608aA+tMLQbG9KBS8iBO0+cvQWLK7pt4bINeqXoIhgIIVfqAeNVxCg3jWoi1rV3o
+ taxN4i+mYYvg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,328,1583222400"; 
+   d="scan'208";a="261205442"
+Received: from meis-mobl1.amr.corp.intel.com (HELO [10.255.231.186]) ([10.255.231.186])
+  by orsmga006.jf.intel.com with ESMTP; 28 Apr 2020 12:43:45 -0700
+Subject: Re: [PATCH v4 2/2] mm/gup/writeback: add callbacks for inaccessible
+ pages
+From:   Dave Hansen <dave.hansen@intel.com>
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>, linux-next@vger.kernel.org,
+        akpm@linux-foundation.org, jack@suse.cz, kirill@shutemov.name,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>,
+        borntraeger@de.ibm.com, david@redhat.com, aarcange@redhat.com,
+        linux-mm@kvack.org, frankja@linux.ibm.com, sfr@canb.auug.org.au,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, Will Deacon <will@kernel.org>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <20200306132537.783769-1-imbrenda@linux.ibm.com>
+ <20200306132537.783769-3-imbrenda@linux.ibm.com>
+ <3ae46945-0c7b-03cd-700a-a6fe8003c6ab@intel.com>
+ <20200415221754.GM2483@worktop.programming.kicks-ass.net>
+ <a7c2eb84-94c2-a608-4b04-a740fa9a389d@intel.com>
+ <20200416141547.29be5ea0@p-imbrenda>
+ <de56aa8e-9035-4b68-33cb-15682d073e26@intel.com>
+ <20200416165900.68bd4dba@p-imbrenda>
+ <a6b8728d-7382-9316-412d-dd48b5e7c41a@intel.com>
+ <20200416183431.7216e1d1@p-imbrenda>
+ <396a4ece-ec66-d023-2c7e-f09f84b358bc@intel.com>
+ <cbaddd28-c5d3-61a2-84d8-c883fb3d6290@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+ z5cecg==
+Message-ID: <42fccd01-7e16-b18f-cd81-4040857d80d4@intel.com>
+Date:   Tue, 28 Apr 2020 12:43:45 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428181006.06b4e3bc@canb.auug.org.au>
+In-Reply-To: <cbaddd28-c5d3-61a2-84d8-c883fb3d6290@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Apr 28, 2020 at 06:10:06PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On 4/21/20 2:31 PM, Dave Hansen wrote:
+> On 4/16/20 12:02 PM, Dave Hansen wrote:
+>> On 4/16/20 9:34 AM, Claudio Imbrenda wrote:
+>>>> Ahh, so this is *just* intended to precede I/O done on the page, when
+>>>> a non-host entity is touching the memory?
+>>> yep
+>> OK, so we've got to do an action that precedes *all* I/O to a page.
+>> That's not too bad.
+>>
+>> I still don't understand how this could work generally, though  There
+>> are lots of places where I/O is done to a page without either going
+>> through __test_set_page_writeback() or gup() with FOLL_PIN set.
+>>
+>> sendfile() is probably the best example of this:
+>>
+>> 	fd = open("/normal/ext4/file", O_RDONLY);
+>> 	sendfile(socket_fd, fd, &off, count);
+>>
+>> There's no gup in sight since the file doesn't have an address and it's
+>> not being written to so there's no writeback.
+>>
+>> How does sendfile work?
 > 
-> Changes since 20200424:
-> 
-> The qcom tree still had its build failure for which I reverted a commit.
-> 
-> The hwmon-staging tree gained a build failure for which I reverted
-> a commit.
-> 
-> The mac80211-next tree gained a build failure so I used the version
-> from next-20200424.
-> 
-> The drm-misc tree still had its build failure for which I disabled a
-> COMPILE_TEST setting.
-> 
-> The akpm-current tree gained a conflict against the risc-v tree.
-> 
-> The akpm tree lost a patch that turned up elsewhere.
-> 
-> Non-merge commits (relative to Linus' tree): 4451
->  5474 files changed, 151275 insertions(+), 63274 deletions(-)
+> Did you manage to see if sendfile works (or any other operation that
+> DMAs file-backed data without being preceded by a gup)?
 
-I am seeing the following build error on s390 defconfig, caused by
-commit 743f242d65ec ("mm: support compat_sys_process_madvise").
-Apologies if it has already been reported, I did a search of lore and
-found nothing.
+It's been a couple of weeks with no response on this.
 
-Cheers,
-Nathan
+From where I'm standing, we have a hook in the core VM that can't
+possibly work with some existing kernel functionality and has virtually
+no chance of getting used on a second architecture.
 
-$ make -j$(nproc) -s ARCH=s390 CROSS_COMPILE=s390x-linux- defconfig all
-...
-mm/madvise.c: In function '__se_compat_sys_process_madvise':
-./include/linux/compiler.h:394:38: error: call to '__compiletime_assert_162' declared with attribute error: BUILD_BUG_ON failed: sizeof(unsigned long) > 4 && !__TYPE_IS_PTR(unsigned long)
-  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |                                      ^
-./include/linux/compiler.h:375:4: note: in definition of macro '__compiletime_assert'
-  375 |    prefix ## suffix();    \
-      |    ^~~~~~
-./include/linux/compiler.h:394:2: note: in expansion of macro '_compiletime_assert'
-  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |  ^~~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-      |                                     ^~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-   50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-      |  ^~~~~~~~~~~~~~~~
-./arch/s390/include/asm/compat.h:18:2: note: in expansion of macro 'BUILD_BUG_ON'
-   18 |  BUILD_BUG_ON(sizeof(t) > 4 && !__TYPE_IS_PTR(t)); \
-      |  ^~~~~~~~~~~~
-./include/linux/syscalls.h:110:27: note: in expansion of macro '__SC_DELOUSE'
-  110 | #define __MAP3(m,t,a,...) m(t,a), __MAP2(m,__VA_ARGS__)
-      |                           ^
-./include/linux/syscalls.h:111:35: note: in expansion of macro '__MAP3'
-  111 | #define __MAP4(m,t,a,...) m(t,a), __MAP3(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:112:35: note: in expansion of macro '__MAP4'
-  112 | #define __MAP5(m,t,a,...) m(t,a), __MAP4(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:113:35: note: in expansion of macro '__MAP5'
-  113 | #define __MAP6(m,t,a,...) m(t,a), __MAP5(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:114:22: note: in expansion of macro '__MAP6'
-  114 | #define __MAP(n,...) __MAP##n(__VA_ARGS__)
-      |                      ^~~~~
-./arch/s390/include/asm/syscall_wrapper.h:80:36: note: in expansion of macro '__MAP'
-   80 |   long ret = __do_compat_sys##name(__MAP(x,__SC_DELOUSE,__VA_ARGS__));\
-      |                                    ^~~~~
-./include/linux/compat.h:66:2: note: in expansion of macro 'COMPAT_SYSCALL_DEFINEx'
-   66 |  COMPAT_SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~~~~~~~~
-mm/madvise.c:1314:1: note: in expansion of macro 'COMPAT_SYSCALL_DEFINE6'
- 1314 | COMPAT_SYSCALL_DEFINE6(process_madvise, int, which, compat_pid_t, upid,
-      | ^~~~~~~~~~~~~~~~~~~~~~
-./include/linux/compiler.h:394:38: error: call to '__compiletime_assert_164' declared with attribute error: BUILD_BUG_ON failed: sizeof(unsigned long) > 4 && !__TYPE_IS_PTR(unsigned long)
-  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |                                      ^
-./include/linux/compiler.h:375:4: note: in definition of macro '__compiletime_assert'
-  375 |    prefix ## suffix();    \
-      |    ^~~~~~
-./include/linux/compiler.h:394:2: note: in expansion of macro '_compiletime_assert'
-  394 |  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-      |  ^~~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-   39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-      |                                     ^~~~~~~~~~~~~~~~~~
-./include/linux/build_bug.h:50:2: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-   50 |  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-      |  ^~~~~~~~~~~~~~~~
-./arch/s390/include/asm/compat.h:18:2: note: in expansion of macro 'BUILD_BUG_ON'
-   18 |  BUILD_BUG_ON(sizeof(t) > 4 && !__TYPE_IS_PTR(t)); \
-      |  ^~~~~~~~~~~~
-./include/linux/syscalls.h:108:27: note: in expansion of macro '__SC_DELOUSE'
-  108 | #define __MAP1(m,t,a,...) m(t,a)
-      |                           ^
-./include/linux/syscalls.h:109:35: note: in expansion of macro '__MAP1'
-  109 | #define __MAP2(m,t,a,...) m(t,a), __MAP1(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:110:35: note: in expansion of macro '__MAP2'
-  110 | #define __MAP3(m,t,a,...) m(t,a), __MAP2(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:111:35: note: in expansion of macro '__MAP3'
-  111 | #define __MAP4(m,t,a,...) m(t,a), __MAP3(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:112:35: note: in expansion of macro '__MAP4'
-  112 | #define __MAP5(m,t,a,...) m(t,a), __MAP4(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:113:35: note: in expansion of macro '__MAP5'
-  113 | #define __MAP6(m,t,a,...) m(t,a), __MAP5(m,__VA_ARGS__)
-      |                                   ^~~~~~
-./include/linux/syscalls.h:114:22: note: in expansion of macro '__MAP6'
-  114 | #define __MAP(n,...) __MAP##n(__VA_ARGS__)
-      |                      ^~~~~
-./arch/s390/include/asm/syscall_wrapper.h:80:36: note: in expansion of macro '__MAP'
-   80 |   long ret = __do_compat_sys##name(__MAP(x,__SC_DELOUSE,__VA_ARGS__));\
-      |                                    ^~~~~
-./include/linux/compat.h:66:2: note: in expansion of macro 'COMPAT_SYSCALL_DEFINEx'
-   66 |  COMPAT_SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~~~~~~~~
-mm/madvise.c:1314:1: note: in expansion of macro 'COMPAT_SYSCALL_DEFINE6'
- 1314 | COMPAT_SYSCALL_DEFINE6(process_madvise, int, which, compat_pid_t, upid,
-      | ^~~~~~~~~~~~~~~~~~~~~~
-make[2]: *** [scripts/Makefile.build:266: mm/madvise.o] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [Makefile:1723: mm] Error 2
-make[1]: *** Waiting for unfinished jobs....
-...
+It sounds like there may need to be some additional work here, but
+should these hooks stay in for 5.7?  Or, should we revert this patch and
+try again for 5.8?

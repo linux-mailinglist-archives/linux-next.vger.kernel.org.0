@@ -2,213 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ECAD1BBCC9
-	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 13:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8EB1BBD3D
+	for <lists+linux-next@lfdr.de>; Tue, 28 Apr 2020 14:15:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726524AbgD1LrB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 07:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36842 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726285AbgD1LrA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Apr 2020 07:47:00 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26AFC03C1A9
-        for <linux-next@vger.kernel.org>; Tue, 28 Apr 2020 04:47:00 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id t9so1042109pjw.0
-        for <linux-next@vger.kernel.org>; Tue, 28 Apr 2020 04:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=W/N9LMf9bLtJYNnCJpbc7MJg5E7SiiykJi6oTJ9o+tA=;
-        b=IWWaarXsVC9o/7n84DKMfE3ec5+U3AWw1tlANSm8Eu2B/jfvpH0UWAf446pOp6+Ver
-         bgPSosHGT+q7f2BTr1V/PgVO3p31L8ArliVO5LYyRhtVIGSTionshwrhITk8GiYrLhak
-         GurlMTRQDQJO0g9Lene2URVs3FEPER6DBVhCKJSuzV0OkjeFbb2PNRhZE6o1zmLK7AmY
-         w/VgLA21Dqw5Tnt9OMUfV7qdSkF583LXZcf9ykCYFutHPV1KwwwVCXFVK5xtn027Z5qa
-         2hxuXrIgnc1xlK5owMwSgs9015h8DDYmuCdLtwCuIQJRllFNdlAWKXzIyz5BQCe/pDgO
-         1lPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=W/N9LMf9bLtJYNnCJpbc7MJg5E7SiiykJi6oTJ9o+tA=;
-        b=Gdrn5npBGtgCe+edGt586UI810nq3b7eOaVPbFB0vBhfSP/gumjgoUglMU1RAJqAez
-         QW2LzGA+4wZXehrhYX18hqnX+s6UTVABPfjUA6nwBvpsuN3t/fzp+uHN43NUNyROveh6
-         JPepRVp7mFCEVhrjtLUk4jUfVIWYfYXaf7LTaaupIfYay5uux66ZLv61VxHMwxUjObS9
-         GSSZ5Vk2W/MHEB+e/JmobNX5FgI/PkpKlvBVKdWWKDOcKKrbAh+kqt5x7Zai9yB+Y2yG
-         2ZyODNIQ+Glo89ZVkplirCYZWf1DC6yc+6tO9EHEc0NPSvVdiNCcBO/xXNTHpkAqP7ZS
-         P4aQ==
-X-Gm-Message-State: AGi0PubQbWm8OwdBCEN/Fzn6EPzle2jzl8cLeMbIGeSDPPlWtzVp29lV
-        79Y4Hkvzi+kGvWFm5M7FoDGCDfPlELg=
-X-Google-Smtp-Source: APiQypJdoNyHgUGuAA8kDPfeG+UX7AHSaWJCg4bR9bzBXPkaU/9LNL/thcvWnLgBtweilNn8GKL4tA==
-X-Received: by 2002:a17:902:a40e:: with SMTP id p14mr26684046plq.297.1588074419868;
-        Tue, 28 Apr 2020 04:46:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id q64sm14725309pfc.112.2020.04.28.04.46.58
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 04:46:59 -0700 (PDT)
-Message-ID: <5ea817b3.1c69fb81.a5ea8.97b6@mx.google.com>
-Date:   Tue, 28 Apr 2020 04:46:59 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726544AbgD1MPt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 08:15:49 -0400
+Received: from wout3-smtp.messagingengine.com ([64.147.123.19]:47905 "EHLO
+        wout3-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726361AbgD1MPt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Apr 2020 08:15:49 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 735E05CF;
+        Tue, 28 Apr 2020 08:15:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 28 Apr 2020 08:15:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=MKgnf5oZdY5J/2DP/ygrKEwrYrZ
+        vo+dhsYgP9CuFCh4=; b=ND43hL9jU2568+y6FZM/24NvLgNaPSj76c17+op89yK
+        bsC/nATK0W033RI/eAUVNtCyyX/X5fBlhX79hboHTWvEhHZg8s5MmnkfEKzNGasy
+        bE3w7H3nKG287Z68F/3KoHxPKZBw+oN3QtlAlierfwVdQ3U/ReHNmWYyCbHSzkDt
+        N2NSMz9ahxUABur+ObQm6xQFjnomdxQCSszzK+ih81hXmgq1AyuSMVNSLCpL3v6n
+        TL2mH3IICEHk0VU46ktqsej6NDaQDcmHVRdDWNj3wRy/uILPu9hH0fUnJcHzHjtX
+        NS8yRrkECK6Leq+DDgND6auPfcmT8+Lj7GhghHoGz5g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=MKgnf5
+        oZdY5J/2DP/ygrKEwrYrZvo+dhsYgP9CuFCh4=; b=ZxF3R5eDt2q0cdlKU2bBEw
+        6KB9qzsoPmspl2lEkuu7fd7btb+dGgTRtNTY+d1aA76PaD+8VCfGSMhNmyI+UWOH
+        loAdYLtZjZLj1ww6Bm7V05QKkiF63dSlLnjRgufmSpK1jYUbDFLiYo5Sr2MeIvSD
+        kJSyCCQSh3H/3coimpoM+SvVT6d+ShHkSbqerlxT1RRYJ4k/pVvgTddxphH8eURp
+        yQMwKbLOltHzuOyR3hyFMAztIL3z9Ez10n+Jc1qi72/OyY5DFKhECFk+REWUxV7N
+        2ELH0kzgbk5OrkmloI+Fddaasrb69q/h9BI+yr4oWhCkJaBmEbXQXiiaOupN5AHA
+        ==
+X-ME-Sender: <xms:cx6oXnfq7utcPguBKoQaf-Xj_kj54dHtxQ3tFX6OxhRCKCqZla6XEQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedriedugdeglecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghgucfm
+    jfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecukfhppeekfedrkeeirdekledruddtje
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgv
+    gheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:cx6oXo73uuZWVTsJD-7uGbeLL0ZV1F9sERedckweQjZMgyZvZCfJwg>
+    <xmx:cx6oXs_8YcNFc50n4X_zNl8pZEZUiW7EuOZH4VO2XWhYo-P03po5Pw>
+    <xmx:cx6oXiF2zCb_WqqItrYDSj-IRsYgIZxP-pwL26l6pV7lAcusvdYKQg>
+    <xmx:dB6oXikNVwgN7Nt97UmAd4kp65DRyI69jZqwvtKlHMNojlbLOeJGUQ>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 183AF3280068;
+        Tue, 28 Apr 2020 08:15:46 -0400 (EDT)
+Date:   Tue, 28 Apr 2020 14:15:45 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Malcolm Priestley <tvboxspy@gmail.com>
+Subject: Re: linux-next: manual merge of the staging tree with the
+ staging.current tree
+Message-ID: <20200428121545.GA1234722@kroah.com>
+References: <20200424151546.4dea83cb@canb.auug.org.au>
+ <20200424064555.GA143960@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-rc3-194-g1631e20d9729
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 289 boots: 6 failed,
- 267 passed with 5 offline, 9 untried/unknown,
- 2 conflicts (v5.7-rc3-194-g1631e20d9729)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200424064555.GA143960@kroah.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 289 boots: 6 failed, 267 passed with 5 offline, 9 =
-untried/unknown, 2 conflicts (v5.7-rc3-194-g1631e20d9729)
+On Fri, Apr 24, 2020 at 08:45:55AM +0200, Greg KH wrote:
+> On Fri, Apr 24, 2020 at 03:15:46PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the staging tree got a conflict in:
+> > 
+> >   drivers/staging/vt6656/main_usb.c
+> > 
+> > between commit:
+> > 
+> >   664ba5180234 ("staging: vt6656: Fix calling conditions of vnt_set_bss_mode")
+> > 
+> > from the staging.current tree and commit:
+> > 
+> >   463288b98190 ("staging: vt6556: vnt_rf_setpower convert to use ieee80211_channel.")
+> > 
+> > from the staging tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> > -- 
+> > Cheers,
+> > Stephen Rothwell
+> > 
+> > diff --cc drivers/staging/vt6656/main_usb.c
+> > index 5f78cad3b647,3c76d3cb5bbe..000000000000
+> > --- a/drivers/staging/vt6656/main_usb.c
+> > +++ b/drivers/staging/vt6656/main_usb.c
+> > @@@ -743,13 -740,8 +736,12 @@@ static void vnt_bss_info_changed(struc
+> >   		vnt_update_pre_ed_threshold(priv, false);
+> >   	}
+> >   
+> >  +	if (changed & (BSS_CHANGED_BASIC_RATES | BSS_CHANGED_ERP_PREAMBLE |
+> >  +		       BSS_CHANGED_ERP_SLOT))
+> >  +		vnt_set_bss_mode(priv);
+> >  +
+> > - 	if (changed & BSS_CHANGED_TXPOWER)
+> > - 		vnt_rf_setpower(priv, priv->current_rate,
+> > - 				conf->chandef.chan->hw_value);
+> > + 	if (changed & (BSS_CHANGED_TXPOWER | BSS_CHANGED_BANDWIDTH))
+> > + 		vnt_rf_setpower(priv, conf->chandef.chan);
+> >   
+> >   	if (changed & BSS_CHANGED_BEACON_ENABLED) {
+> >   		dev_dbg(&priv->usb->dev,
+> 
+> 
+> Thanks, that looks correct, I'll handle this when the staging.linus
+> branch goes to Linus in a few days.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc3-194-g1631e20d9729/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc3-194-g1631e20d9729/
+This should now all be resolved in my staging.next branch.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc3-194-g1631e20d9729
-Git Commit: 1631e20d9729917cd40ae7a93ec25e1f6b237802
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 109 unique boards, 25 SoC families, 31 builds out of 217
+thanks,
 
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: new failure (last pass: v5.7-rc1-369-gddfbb9697=
-55d)
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 73 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: v5.7-rc1-369-gddfbb9697=
-55d)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          hip07-d05:
-              lab-collabora: new failure (last pass: v5.7-rc2-530-g15caa57c=
-062a)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc2-530-g1=
-5caa57c062a)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: new failure (last pass: v5.7-rc2-266-g3c7f529d1=
-0ff)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc2-530-g1=
-5caa57c062a)
-          meson-gxl-s905x-khadas-vim:
-              lab-baylibre: new failure (last pass: v5.7-rc1-369-gddfbb9697=
-55d)
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: v5.7-rc2-530-g15caa57c062=
-a)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc2-530-g1=
-5caa57c062a)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.7-rc2-266-g3c7f529d1=
-0ff)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 17 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            sun50i-a64-pine64-plus: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxl-s905x-khadas-vim: 1 failed lab
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle-xm: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig+kselftest:
-        qemu_i386:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-    i386_defconfig:
-        qemu_i386:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+greg k-h

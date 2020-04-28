@@ -2,87 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C31F1BD05F
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 01:06:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A62161BD08C
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 01:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726181AbgD1XGL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 19:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S1726312AbgD1XWB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 19:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726042AbgD1XGL (ORCPT
+        by vger.kernel.org with ESMTP id S1726181AbgD1XWB (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 19:06:11 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1754CC03C1AC;
-        Tue, 28 Apr 2020 16:06:11 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id h69so61955pgc.8;
-        Tue, 28 Apr 2020 16:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Yfsu/HSVVo+whNCvC7+Ad36YiKxlRRbH+oE2CArsBNI=;
-        b=drvtRa/kVGPe/aGSIjXSD9XyPXWVpkKs8v0NGIJRIeq0cfYpCU2nE9RAh5ODw0FmRB
-         xaH1nECe0JgrAtP7wHkgnHewqaSYaN/NYANr71mBUGSIClhZ9RS4Abiq56ewW/9e249U
-         x9dehzR5P6PhL4jFEJ9B7en4B/wJHwUk2CNar9pYYQ5QuBKjO4wmzuM5jHdOZj+DWhsi
-         CynBJCzvHcg6ODi0v4Y++EmJDyTnmozP4PWhb8fHfYciL4ZuT3MmnMyfW4a0jPxn/+kM
-         z1kIQzi7sqVC9wYCHB3oKE8NnFLtp3MjrWsZq37Wn+cGgwGsMxycueJOmxQvyCSTfBhe
-         DvGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Yfsu/HSVVo+whNCvC7+Ad36YiKxlRRbH+oE2CArsBNI=;
-        b=YD4xilVW9tuFWOYyT4jXk5jYHQeZ4x2JaIx8DTu4IsTyPZSnbMyMGd7uv4z5240glD
-         eknBgZMXaxyFj37vVHcwbxaTh1KAAOuAmHXqVEeWOFtdfya6E4ju/RxCU93VhHyI3rX2
-         3OGJKmLeRBD96ClYXG88DzKKxBtMJlBiKEOBJWQkRHMEgMMgyQ6J34oUnUKl1Oup7BaQ
-         A/6lGBxSw6MqyGUpNApVoxkNPJEkATQHk/3jz2QripJbnwSvQYl+JolESg5DS9BtWg86
-         sqZLqckjT3DO2nCedfwDkW0PcMq+7tBTNyLErHxasuDe1bAcOPdF6zFSxrei1ssZGCCZ
-         fhAw==
-X-Gm-Message-State: AGi0PuZZqXSL8nWlmDsRpdmLYgRkkJLoNvCfsS1+3GuAAzrn4olRva8h
-        T822JQeTOTG0E2XwN3gOzsg9cm/7
-X-Google-Smtp-Source: APiQypLOWlhkTwuTmHHzRTzkVYPWGkmTUt5uGv6P0rMwfKPHIy6FzFca7LYYW4VSuMLkyfnl7isIWA==
-X-Received: by 2002:a62:e80e:: with SMTP id c14mr31075459pfi.83.1588115170425;
-        Tue, 28 Apr 2020 16:06:10 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
-        by smtp.gmail.com with ESMTPSA id f70sm15983495pfa.17.2020.04.28.16.06.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Apr 2020 16:06:09 -0700 (PDT)
-Date:   Tue, 28 Apr 2020 16:06:07 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        Tue, 28 Apr 2020 19:22:01 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FACC03C1AC;
+        Tue, 28 Apr 2020 16:22:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Bd2Y3fX2z9sSG;
+        Wed, 29 Apr 2020 09:21:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1588116117;
+        bh=ZBQZ70IVNtIsyM3Fb+ANegyNEK1zfaoFq4NXJJWI390=;
+        h=Date:From:To:Cc:Subject:From;
+        b=m3O9Ac1/jFj0XdDA/ELs+GUMyWetHtnX/LzpdnIAMkU9AgzA56keGwcF9wXEfYlL3
+         fAH/9yoj9kAoXKulHXWjPWpKoK+s9v5pf/Koc7mjS7mEzNJaNl2yy7jtvZ88eHBQN/
+         9Z0+H4EAZhZR4RSpEEnXCvekl52mwNcXjdSUBcW+XaOX/E27YuBGpDs9hUnWW/1KtP
+         Cct2/+0diIdvoLhcVzz+ugoXXuaxRlu7oh7Smv1A/qCh2Q3LbyKdQfUBqKbQ1U0oj9
+         8ww1VpJSsdWfIfMcSp2gvSPwfYno3BQJLOjg94hZKdB5yE6QKow0rEObFx6cGDW98+
+         Ai5z6aVEht4QA==
+Date:   Wed, 29 Apr 2020 09:21:54 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the
- input-current tree
-Message-ID: <20200428230607.GW125362@dtor-ws>
-References: <20200428182441.3deea12a@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tyrel Datwyler <tyreld@linux.ibm.com>
+Subject: linux-next: build warning after merge of the scsi-fixes tree
+Message-ID: <20200429092154.35958687@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200428182441.3deea12a@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/z_24ddm1Dy_+MBU73fB4v_X";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/z_24ddm1Dy_+MBU73fB4v_X
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Apr 28, 2020 at 06:24:41PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   f4dec2d61609 ("Revert "Input: i8042 - add ThinkPad S230u to i8042 nomux list"")
-> 
-> is missing a Signed-off-by from its author and committer.
-> 
-> Reverts are commits as well ...
+Hi all,
 
-Yes, but they lack creative content IMO. In any case, I do not rewind
-for-linus branch, so it will have to stay as it is.
+After merging the scsi-fixes tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-Thanks.
+drivers/scsi/ibmvscsi/ibmvscsi.c: In function 'ibmvscsi_remove':
+drivers/scsi/ibmvscsi/ibmvscsi.c:2323:16: warning: unused variable 'flags' =
+[-Wunused-variable]
+ 2323 |  unsigned long flags;
+      |                ^~~~~
 
--- 
-Dmitry
+Introduced by commit
+
+  5b77d181bee1 ("scsi: ibmvscsi: Fix WARN_ON during event pool release")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/z_24ddm1Dy_+MBU73fB4v_X
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6oupIACgkQAVBC80lX
+0GyjZgf/VPECcQ0svkuvTHGTJslNGOplzTHkkRBXq5RxCfHNxx+DC+pgrSxxcM6S
+GWXY1AOHEygcdYrCFoI9AaLHYmANZFhr23c5d0Owv4wQ3urpbHDG2fN2M3POUZ0m
+qIE4bEKi5QJcZhdH43tjOVFT7IIaPqzVojGFnG2Z8R2omhhqlKr252WqNa0+aBWj
+WUn7lalmRaHrCXTsYz4lrJ/LlFBJJJVglxyVjo9+7XDJXSzTwXQmoCTkWDdYPj/1
+VfvdZtSnsgZN2S5eY7NCujmVEbyWFDGR16WRRYezpMLKyduf12+S1ikodiNzLx1M
+okT62BaoHyXTTLNTq6L+2fJuRo34RQ==
+=zzgx
+-----END PGP SIGNATURE-----
+
+--Sig_/z_24ddm1Dy_+MBU73fB4v_X--

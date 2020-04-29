@@ -2,248 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C99BE1BD7F7
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB9901BDA16
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 12:50:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726423AbgD2JKf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Apr 2020 05:10:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726355AbgD2JKf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 29 Apr 2020 05:10:35 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C0BC03C1AD
-        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 02:10:35 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id s18so730202pgl.12
-        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 02:10:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=5PcnfJdcwvdTPZhKIEZu1VwXYnUSCGnU0hGusn/U5AE=;
-        b=WgaHgXl4M4m2ZQQ+3YL58OBYm7Oy5vfbKKWqV01c6+upbyi4I0z9nURIg99xMCV2uV
-         Emtcj+4pyTW9JStpMQ14QKiJdPALZ2qfY77GxwU+4vx8yUowA14Y6tWV2cR6HT3pUvck
-         wmZOFog9yh3tNUivMx4GnoUmKgR/lgV/lyeWluommT802r8WMyCzlnzSnMnkGIIWB+Hr
-         2PF/Et4dJzpaYdGtemVdY8Jm2svyLw8RLrMlKL1Ge/oun74rKeEoQtJAiQOk0KmXKv7z
-         gLvArKRYmCZQtaXI5o3Zm4TId/voRZev3QT3HNnZ6taJHpa9oKf9QZksjUhi4+MdGk9f
-         D+Aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=5PcnfJdcwvdTPZhKIEZu1VwXYnUSCGnU0hGusn/U5AE=;
-        b=dvOou45MHqIOA76pjms3qEtUnXRo1hRNg6hYECClZdYFNjPBO6tlSEZWxnVCeBAeAG
-         4SS46nNUBL8N+iTjwQywOJ1kNy7S3dLBKgkqyQXdwCCwJKSieNe9keOYEE3pTXYwN9R1
-         1gxUDkQ4XWVDzdAMT66H5N9bFij3FWAHT4L1Tn2Qmfm9Lv8+8joMhzB45qQIGhSkCsix
-         nVJlvdmQq+0DnaO4jsH1B+GfAax+M52v8ScaoruHD/Q2d97VjLahKtpuwwuBPY0zd8e2
-         a91usXLMF4Uemd2JGbhcoPaHIjeuLuQ01Cf+l4JkHFRjSDdnXmnWIu7njz0iSL1cn0HG
-         1zaw==
-X-Gm-Message-State: AGi0Pua61UddMJKaBvNYZYTvdQHoTIbHLvQj6VvVGaJF6SPmq05HtxbM
-        COEpDaHcAyc6zAMEi6k5JEH0cg9dK80=
-X-Google-Smtp-Source: APiQypJrTHZqcpRMq6IlpfSu0/AkwkjoL+31Waz9zeShde3qt/zO+wo0d3talBHAIKTQCcpxa+l5og==
-X-Received: by 2002:a63:82c1:: with SMTP id w184mr26712043pgd.268.1588151434251;
-        Wed, 29 Apr 2020 02:10:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w66sm634534pfw.50.2020.04.29.02.10.33
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 02:10:33 -0700 (PDT)
-Message-ID: <5ea94489.1c69fb81.7d3ed.1c89@mx.google.com>
-Date:   Wed, 29 Apr 2020 02:10:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726523AbgD2Kux (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Apr 2020 06:50:53 -0400
+Received: from mailout1.w1.samsung.com ([210.118.77.11]:59191 "EHLO
+        mailout1.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726426AbgD2Kuw (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Apr 2020 06:50:52 -0400
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20200429105050euoutp01d08482c84dce6228f154df17c623348a~KRMlzNu9E1780217802euoutp01r
+        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 10:50:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20200429105050euoutp01d08482c84dce6228f154df17c623348a~KRMlzNu9E1780217802euoutp01r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1588157450;
+        bh=P3dN9UfZjsE04XLpG+GBXIoph9+0n1rWBNt4DS13DXY=;
+        h=From:Subject:To:Cc:Date:In-Reply-To:References:From;
+        b=Ls1GMVXzcEkVPlhU58bqnrSlx+AgutJ5EMoQnCqCBLgJSWMlXZQ0Jl0v+7uzPLkUt
+         FK3xKsh6Q9vjPPe3xvKc08/bri2mL1FX95JeZpOalZneKBrEKpXSItdvs4Y9y1bwbs
+         1B86C7yu1h9NGJeKoqL5PWNuZGIST/MpqjX/+JEA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20200429105050eucas1p255222f9edd0e6905c93b64b252fbe1a6~KRMlowV7c1748417484eucas1p2X;
+        Wed, 29 Apr 2020 10:50:50 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 40.5E.60698.A0C59AE5; Wed, 29
+        Apr 2020 11:50:50 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20200429105049eucas1p1261bfce217bfceb824655d0e6bf62b24~KRMlMZLPW2632526325eucas1p1T;
+        Wed, 29 Apr 2020 10:50:49 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20200429105049eusmtrp28fb72971645c1040db23a49e5ae2fb3d~KRMlLwOvS2358123581eusmtrp2N;
+        Wed, 29 Apr 2020 10:50:49 +0000 (GMT)
+X-AuditID: cbfec7f5-a0fff7000001ed1a-92-5ea95c0a6130
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 75.5A.08375.90C59AE5; Wed, 29
+        Apr 2020 11:50:49 +0100 (BST)
+Received: from [106.120.51.71] (unknown [106.120.51.71]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20200429105049eusmtip216c467f0823a367b2143dde432932865~KRMk18JgV2417624176eusmtip2N;
+        Wed, 29 Apr 2020 10:50:49 +0000 (GMT)
+From:   Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>
+Subject: Re: linux-next: build failure after merge of the drm-misc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-ID: <cc1dc009-c122-0405-ced5-ede952afe574@samsung.com>
+Date:   Wed, 29 Apr 2020 12:50:49 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+        Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-rc3-228-g76a37a4cf830
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 285 boots: 9 failed,
- 261 passed with 6 offline, 6 untried/unknown,
- 3 conflicts (v5.7-rc3-228-g76a37a4cf830)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <997e83ad-1966-6ebd-13d1-05617b67b7f8@samsung.com>
+Content-Type: text/plain; charset="windows-1252"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrLKsWRmVeSWpSXmKPExsWy7djPc7pcMSvjDI7OEbNY+PAus8WVr+/Z
+        LGZP2MxkcXnXHDaLgwvbGC1W/NzKaLF171V2B3aPxhs32Dz2flvA4nG/+ziTx5JpV9k8Pm+S
+        C2CN4rJJSc3JLEst0rdL4Mp4Pzeh4CNvxcbpl1kaGKdxdzFyckgImEhMXH2VuYuRi0NIYAWj
+        xK/ur6wQzhdGiek9/6EynxklDt78ygjTsujfDXaIxHJGiSOzjrBAOG8ZJc7cbGQFqWITsJKY
+        2L4KrENYwF3i+I9GJhBbRMBHYtOyn2DdzAI/GSW+bzgHluAVsJP4/3QiG4jNIqAq8aZjOjuI
+        LSoQIfHpwWFWiBpBiZMzn7CA2JwC9hL7nhwAq2cWMJA4smgOK4QtLnHryXwmCFteYvvbOWA/
+        SAhsY5foWLEPqJkDyHGR+DC/HOIdYYlXx7ewQ9gyEv93gvSC1K9jlPjb8QKqeTujxPLJ/9gg
+        qqwl7pz7BWU7Sqy8cxhqKJ/EjbeCEIv5JCZtm84MEeaV6GgTgqhWk9iwbAMbzK6unSuZJzAq
+        zULy2iwk78xC8s4sJO8sYGRZxSieWlqcm55abJyXWq5XnJhbXJqXrpecn7uJEZiITv87/nUH
+        474/SYcYBTgYlXh4N/CsiBNiTSwrrsw9xCjBwawkwvsoY1mcEG9KYmVValF+fFFpTmrxIUZp
+        DhYlcV7jRS9jhQTSE0tSs1NTC1KLYLJMHJxSDYzT7VIu/fTPPTaf9erlByH7jj/5Urzy4QnT
+        3XFh1XMFFseoK19aua38nY2J1y6zGbHpS+svMYdfc5V6MoshQPbxquavJ7M/Rq7M3Fxn7P3p
+        6sqTn/hZXico7N3zTiCRm2FJ3JEJtk1/vnt9rjyqtnreqhZ1raw/OwUu/VoobVU9bcM1Nq0o
+        verFSizFGYmGWsxFxYkAvPJ2VUADAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrLIsWRmVeSWpSXmKPExsVy+t/xe7qcMSvjDJafNrNY+PAus8WVr+/Z
+        LGZP2MxkcXnXHDaLgwvbGC1W/NzKaLF171V2B3aPxhs32Dz2flvA4nG/+ziTx5JpV9k8Pm+S
+        C2CN0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7UyMlXSt7NJSc3JLEst0rdL0Mt4
+        Pzeh4CNvxcbpl1kaGKdxdzFyckgImEgs+neDvYuRi0NIYCmjxKy/e4EcDqCEjMTx9WUQNcIS
+        f651sUHUvGaUOLz/BxNIgk3ASmJi+ypGEFtYwF3i+I9GsLiIgI/EpmU/wYYyC/xmlFh/fBJU
+        9xtGiQ1/X7OCVPEK2En8fzqRDcRmEVCVeNMxnR3EFhWIkDi8YxYjRI2gxMmZT1hAbE4Be4l9
+        Tw6A1TML6EnsuP6LFcIWl7j1ZD4ThC0vsf3tHOYJjEKzkLTPQtIyC0nLLCQtCxhZVjGKpJYW
+        56bnFhvqFSfmFpfmpesl5+duYgRG3bZjPzfvYLy0MfgQowAHoxIP7waeFXFCrIllxZW5hxgl
+        OJiVRHgfZSyLE+JNSaysSi3Kjy8qzUktPsRoCvTcRGYp0eR8YELIK4k3NDU0t7A0NDc2Nzaz
+        UBLn7RA4GCMkkJ5YkpqdmlqQWgTTx8TBKdXAmFoQnK+6NkjyTkyDxXxGW9vPolPXZIXs6Lu3
+        hM10Y4On18eOkFtbdj7rLuuzW2f/kfHQ+y2ZFoX7TmbsOhd9gn/Fjkr9b0vcpzyfpft1+WJG
+        U8mvyd0+J56UHch+pHmGa87UZS+0Nwsd3ZlS8PfBW/18366YG5c9YorPGKb6uTGkGrwq0mJz
+        UmIpzkg01GIuKk4EAKqXnJDQAgAA
+X-CMS-MailID: 20200429105049eucas1p1261bfce217bfceb824655d0e6bf62b24
+X-Msg-Generator: CA
+X-RootMTR: 20200428223343eucas1p1ef3e4998b8063ade8b456611e39b7865
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20200428223343eucas1p1ef3e4998b8063ade8b456611e39b7865
+References: <20200420130118.7a866fd5@canb.auug.org.au>
+        <CGME20200428223343eucas1p1ef3e4998b8063ade8b456611e39b7865@eucas1p1.samsung.com>
+        <20200429083329.30ff39a1@canb.auug.org.au>
+        <997e83ad-1966-6ebd-13d1-05617b67b7f8@samsung.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 285 boots: 9 failed, 261 passed with 6 offline, 6 =
-untried/unknown, 3 conflicts (v5.7-rc3-228-g76a37a4cf830)
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc3-228-g76a37a4cf830/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc3-228-g76a37a4cf830/
+On 4/29/20 10:09 AM, Bartlomiej Zolnierkiewicz wrote:
+> 
+> Hi Stephen,
+> 
+> On 4/29/20 12:33 AM, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> On Mon, 20 Apr 2020 13:01:18 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>>>
+>>> After merging the drm-misc tree, today's linux-next build (powerpc
+>>> allyesconfig) failed like this:
+>>>
+>>> drivers/video/fbdev/controlfb.c: In function 'controlfb_mmap':
+>>> drivers/video/fbdev/controlfb.c:756:23: error: implicit declaration of function 'pgprot_cached_wthru'; did you mean 'pgprot_cached'? [-Werror=implicit-function-declaration]
+>>>   756 |   vma->vm_page_prot = pgprot_cached_wthru(vma->vm_page_prot);
+>>>       |                       ^~~~~~~~~~~~~~~~~~~
+>>>       |                       pgprot_cached
+>>> drivers/video/fbdev/controlfb.c:756:23: error: incompatible types when assigning to type 'pgprot_t' {aka 'struct <anonymous>'} from type 'int'
+>>>
+>>> Presumably exposed by commit
+>>>
+>>>   a07a63b0e24d ("video: fbdev: controlfb: add COMPILE_TEST support")
+>>>
+>>> I just turned off COMPILE_TEST again for today.  Please let me know when
+>>> this is fixed.
+>>
+>> This still appears to have not been addressed.
+> 
+> Sorry for the delay, I've just posted a patch (also included below):
+> 
+> "[PATCH] video: fbdev: controlfb: fix build for COMPILE_TEST=y && PPC_PMAC=y && PPC32=n"
+> 
+> which should fix it.
+> 
+> Please verify it, thank you!
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc3-228-g76a37a4cf830
-Git Commit: 76a37a4cf830b1f46e34037426b2f25c29acf8eb
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 108 unique boards, 24 SoC families, 31 builds out of 217
+I have tested it with powerpc allyesconfig now and it adds one dependency too much,
+fixed in v2:
 
-Boot Regressions Detected:
+https://lore.kernel.org/lkml/fe520316-3863-e6c4-9581-5d709f49e906@samsung.com/
 
-arm:
+Sam, could you please review / merge it to drm-misc-next?
 
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
-9729)
+Best regards,
+--
+Bartlomiej Zolnierkiewicz
+Samsung R&D Institute Poland
+Samsung Electronics
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 74 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
-9729)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
-9729)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: new failure (last pass: v5.7-rc3-194-g1631e20d9729)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
-631e20d9729)
-          meson-gxl-s905d-p230:
-              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
-729)
-          sun50i-a64-pine64-plus:
-              lab-baylibre: failing since 1 day (last pass: v5.7-rc2-266-g3=
-c7f529d10ff - first fail: v5.7-rc3-194-g1631e20d9729)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
-631e20d9729)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
-631e20d9729)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
-729)
-
-i386:
-
-    i386_defconfig:
-        gcc-8:
-          qemu_i386:
-              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
-729)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 18 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-x86_64:
-
-    x86_64_defconfig+kvm_guest:
-        gcc-8:
-          qemu_x86_64:
-              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
-9729)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            meson-gxl-s905d-p230: 1 failed lab
-            sun50i-a64-pine64-plus: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig:
-        qemu_i386:
-            lab-baylibre: FAIL (gcc-8)
-            lab-collabora: PASS (gcc-8)
-
-x86_64:
-    x86_64_defconfig:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-    x86_64_defconfig+kvm_guest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>

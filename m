@@ -2,169 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A781BD1EA
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 03:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3E521BD20D
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 04:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726477AbgD2BzB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 21:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56674 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726158AbgD2BzA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Apr 2020 21:55:00 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A81C03C1AC;
-        Tue, 28 Apr 2020 18:55:00 -0700 (PDT)
+        id S1726430AbgD2CGa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 22:06:30 -0400
+Received: from ozlabs.org ([203.11.71.1]:34399 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726158AbgD2CGa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 28 Apr 2020 22:06:30 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49BhR60mNPz9sRf;
-        Wed, 29 Apr 2020 11:54:58 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49BhhN0pBNz9sRf;
+        Wed, 29 Apr 2020 12:06:28 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588125298;
-        bh=/c+EfpOSJR2UL33JintQJhQ1ZBprSxo+oKXBpMbirJk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=cyFtsWgfaeHb4k1+NRFsD/tWgJl2MM/lfKgBQJAoJEfye1qctuFMhDRGA+ngkpMLn
-         R6OsAOG0DUtljvVy2bUU2VaeGJuPf7ncwqkZcsyEmCwp330pzKJBj75CG/oXSC0Z+J
-         KodEoiTlqFyxNU9Nq2ECaAuTvn2Ab+K8iPY3nAfiMcUknJ50WarlWfWMDyYM4lNavr
-         ldXdM9DiQkbckTY4fWu0Nol8e4gCy7zFfGRpL22s2aKeGIMCjPEfT7Cwa3Rqgpenfc
-         041UMp+y60lK3+yzvtFyHjB/1yg6bplUVzE4+DneiDKOskMbjmNe//0Lli4h41AqLm
-         BVgaEEtkzLcIg==
-Date:   Wed, 29 Apr 2020 11:54:56 +1000
+        s=201702; t=1588125989;
+        bh=cEUkvXjQx9FeslMTIdQ9lW/uGQZLBM+zUKoD1BqBe9w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hU7qODst0MpO/MKPnMkBxiNzeYcgLxMi+vQ0PQuj9wAH4JrD9xKuBBXbeTC1FyAq9
+         J0pEGYNwQx97cPRI0vkQnYlxiSa23Jbe7gm+XJgH2865vbu7RYqbrD2487AHxxnY74
+         7mGpeoSy3d9LCjhbbCzalhpyHlZWfN3wh5qtETO0n6gnm9UnkKtLlI+2gwBFtpxqPn
+         j7cC6eBtliVh0+py80k629DbgeGMsrJn6tBJkVPLilWWywBuXlyg520s1HL7LdiqGA
+         Vab5xe7afNs1Y+wTAjebCU63GWY1j3xeKWv0ZIAOGVjyBqlixdkbWYsJFLyQZ/YNjU
+         IZSwbkp3cTIhA==
+Date:   Wed, 29 Apr 2020 12:06:25 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Nathan Chancellor <natechancellor@gmail.com>
-Cc:     Minchan Kim <minchan@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Leon Romanovsky <leon@kernel.org>,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-s390@vger.kernel.org
-Subject: Re: linux-next: Tree for Apr 28
-Message-ID: <20200429115456.34d511a0@canb.auug.org.au>
-In-Reply-To: <20200429013435.GA1133928@ubuntu-s3-xlarge-x86>
-References: <20200428181006.06b4e3bc@canb.auug.org.au>
-        <20200428190459.GA2299615@ubuntu-s3-xlarge-x86>
-        <20200429012421.GA132200@google.com>
-        <20200429013435.GA1133928@ubuntu-s3-xlarge-x86>
+        Huy Nguyen <huyn@mellanox.com>,
+        Saeed Mahameed <saeedm@mellanox.com>,
+        Raed Salem <raeds@mellanox.com>
+Subject: linux-next: manual merge of the mlx5-next tree with the
+ kspp-gustavo tree
+Message-ID: <20200429120625.2b5bb507@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gasmWOgPFOuCsqK9DhGzRnS";
+Content-Type: multipart/signed; boundary="Sig_/kc5ob/m+tWo5k5sswsGpyzC";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gasmWOgPFOuCsqK9DhGzRnS
+--Sig_/kc5ob/m+tWo5k5sswsGpyzC
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 28 Apr 2020 18:34:35 -0700 Nathan Chancellor <natechancellor@gmail.=
-com> wrote:
->
-> On Tue, Apr 28, 2020 at 06:24:21PM -0700, Minchan Kim wrote:
-> >=20
-> > On Tue, Apr 28, 2020 at 12:04:59PM -0700, Nathan Chancellor wrote:=20
-> > >=20
-> > > I am seeing the following build error on s390 defconfig, caused by
-> > > commit 743f242d65ec ("mm: support compat_sys_process_madvise").
-> > > Apologies if it has already been reported, I did a search of lore and
-> > > found nothing.
-> > >=20
-> > > Cheers,
-> > > Nathan
-> > >=20
-> > > $ make -j$(nproc) -s ARCH=3Ds390 CROSS_COMPILE=3Ds390x-linux- defconf=
-ig all
-> > > ...
-> > > mm/madvise.c: In function '__se_compat_sys_process_madvise':
-> > > ./include/linux/compiler.h:394:38: error: call to '__compiletime_asse=
-rt_162' declared with attribute error: BUILD_BUG_ON failed: sizeof(unsigned=
- long) > 4 && !__TYPE_IS_PTR(unsigned long)
-> > >   394 |  _compiletime_assert(condition, msg, __compiletime_assert_, _=
-_COUNTER__)
-> > >       |                                      ^
-> >=20
-> > Could you try this patch? I think it should fix it.
-> >=20
-> > From 3f993353c310a027f138d822a79ce49770fe6e50 Mon Sep 17 00:00:00 2001
-> > From: Minchan Kim <minchan@kernel.org>
-> > Date: Tue, 28 Apr 2020 18:20:24 -0700
-> > Subject: [PATCH] mm: fix s390 compat build error
-> >=20
-> > Nathan reported build error with sys_compat_process_madvise.
-> > This patch should fix it.
-> >=20
-> > Reported-by: Nathan Chancellor <natechancellor@gmail.com>
-> > Signed-off-by: Minchan Kim <minchan@kernel.org> =20
->=20
-> Tested-by: Nathan Chancellor <natechancellor@gmail.com> # build
->=20
-> > ---
-> >  include/linux/compat.h | 5 +++--
-> >  mm/madvise.c           | 9 ++++++---
-> >  2 files changed, 9 insertions(+), 5 deletions(-)
-> >=20
-> > diff --git a/include/linux/compat.h b/include/linux/compat.h
-> > index 1134ba3e61d0..19c524513cbb 100644
-> > --- a/include/linux/compat.h
-> > +++ b/include/linux/compat.h
-> > @@ -820,9 +820,10 @@ asmlinkage long compat_sys_pwritev64v2(unsigned lo=
-ng fd,
-> >  		unsigned long vlen, loff_t pos, rwf_t flags);
-> >  #endif
-> > =20
-> > -asmlinkage ssize_t compat_sys_process_madvise(int which,
-> > +asmlinkage ssize_t compat_sys_process_madvise(compat_int_t which,
-> >  		compat_pid_t upid, const struct compat_iovec __user *vec,
-> > -		unsigned long vlen, int behavior, unsigned long flags);
-> > +		compat_ulong_t vlen, compat_int_t behavior,
-> > +		compat_ulong_t flags);
-> > =20
-> >  /*
-> >   * Deprecated system calls which are still defined in
-> > diff --git a/mm/madvise.c b/mm/madvise.c
-> > index 8fec261457a6..99c06d5f0785 100644
-> > --- a/mm/madvise.c
-> > +++ b/mm/madvise.c
-> > @@ -1311,9 +1311,12 @@ SYSCALL_DEFINE6(process_madvise, int, which, pid=
-_t, upid,
-> >  }
-> > =20
-> >  #ifdef CONFIG_COMPAT
-> > -COMPAT_SYSCALL_DEFINE6(process_madvise, int, which, compat_pid_t, upid,
-> > -		const struct compat_iovec __user *, vec, unsigned long, vlen,
-> > -		int, behavior, unsigned long, flags)
-> > +COMPAT_SYSCALL_DEFINE6(process_madvise, compat_int_t, which,
-> > +			compat_pid_t, upid,
-> > +			const struct compat_iovec __user *, vec,
-> > +			compat_ulong_t, vlen,
-> > +			compat_int_t, behavior,
-> > +			compat_ulong_t, flags)
-> > =20
-> >  {
-> >  	ssize_t ret;
+Today's linux-next merge of the mlx5-next tree got a conflict in:
 
-I have applied that fix to linux-next for today.
+  include/linux/mlx5/mlx5_ifc.h
+
+between commit:
+
+  3ba225b506a2 ("treewide: Replace zero-length array with flexible-array me=
+mber")
+
+from the kspp-gustavo tree and commit:
+
+  d65dbedfd298 ("net/mlx5: Add support for COPY steering action")
+
+from the mlx5-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gasmWOgPFOuCsqK9DhGzRnS
+diff --cc include/linux/mlx5/mlx5_ifc.h
+index 8d30f18dcdee,fb243848132d..000000000000
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@@ -5743,7 -5771,7 +5771,7 @@@ struct mlx5_ifc_alloc_modify_header_con
+  	u8         reserved_at_68[0x10];
+  	u8         num_of_actions[0x8];
+ =20
+- 	union mlx5_ifc_set_action_in_add_action_in_auto_bits actions[];
+ -	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[0];
+++	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[];
+  };
+ =20
+  struct mlx5_ifc_dealloc_modify_header_context_out_bits {
+@@@ -9677,9 -9705,32 +9705,32 @@@ struct mlx5_ifc_mcda_reg_bits=20
+ =20
+  	u8         reserved_at_60[0x20];
+ =20
+ -	u8         data[0][0x20];
+ +	u8         data[][0x20];
+  };
+ =20
++ enum {
++ 	MLX5_MFRL_REG_RESET_TYPE_FULL_CHIP =3D BIT(0),
++ 	MLX5_MFRL_REG_RESET_TYPE_NET_PORT_ALIVE =3D BIT(1),
++ };
++=20
++ enum {
++ 	MLX5_MFRL_REG_RESET_LEVEL0 =3D BIT(0),
++ 	MLX5_MFRL_REG_RESET_LEVEL3 =3D BIT(3),
++ 	MLX5_MFRL_REG_RESET_LEVEL6 =3D BIT(6),
++ };
++=20
++ struct mlx5_ifc_mfrl_reg_bits {
++ 	u8         reserved_at_0[0x20];
++=20
++ 	u8         reserved_at_20[0x2];
++ 	u8         pci_sync_for_fw_update_start[0x1];
++ 	u8         pci_sync_for_fw_update_resp[0x2];
++ 	u8         rst_type_sel[0x3];
++ 	u8         reserved_at_28[0x8];
++ 	u8         reset_type[0x8];
++ 	u8         reset_level[0x8];
++ };
++=20
+  struct mlx5_ifc_mirc_reg_bits {
+  	u8         reserved_at_0[0x18];
+  	u8         status_code[0x8];
+
+--Sig_/kc5ob/m+tWo5k5sswsGpyzC
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6o3nAACgkQAVBC80lX
-0Gz+Igf9Hb8ZlJssg//EROPEfO1qasV0kDfSSXtR6c6fjxlGQTZhCNIsUkVWFAmM
-k48ouvgZPo0b1BNiaKD8O32/d87JpVVhrPOyIFDk0qLu6Om2FSK3oDS2yLyeWJvb
-jmTdDpcy2pgG3tgata6jXc8U7/xTIyNCkb+Y+5vRzCLbsd5wywMXTiy6yOWbAW+k
-O1llVGbkle6+vLbQU9vP966BLIRh01GXX2yE/vtS2r4+Dyjbqt3zJP4NwinkRQgM
-5KBTdFwEYLG2z/W41PdWDfPR6StT0dofRnRmZpc/DJyAlx1NuhnDBf4xww1bhrLj
-d7YXTUbNMJQ63WW6rKrcs2DMjN01Ww==
-=KlNm
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6o4SEACgkQAVBC80lX
+0GyHgwgAlTPOPf3m6Uj531tpGne/zC05ApHMYU06GchdDwxp0xdE3afMcwrcmYma
+chOuKHY3LWn6PTDcWNKi2Zat3+boM5EXJiOvuZn6zJWSSp71NuPtx4toowHWzgaI
+4EHGMDdQbMbdUccJo5dN8cSQvNCuzqEkbr8+Q1nbBDrujX23w03iSl8POfjJHhDP
+IcICISYt9hF3xfW6swY90BN3uq058Cj+iwRgCTRqly+k5lpY27XUtNb3jMaCALQ5
+5o3RJxg2Mz4MoO5AYEdbXrg9KODw+obkR8MHinjKfvk0Y7QXDJJNRC7XYQqC2jxD
+edp7Ei8p0ahJgD3lj8bPdHh1oywEbg==
+=Zify
 -----END PGP SIGNATURE-----
 
---Sig_/gasmWOgPFOuCsqK9DhGzRnS--
+--Sig_/kc5ob/m+tWo5k5sswsGpyzC--

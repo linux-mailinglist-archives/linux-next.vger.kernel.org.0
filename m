@@ -2,146 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B3E521BD20D
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 04:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368681BD2BC
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 05:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726430AbgD2CGa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 28 Apr 2020 22:06:30 -0400
-Received: from ozlabs.org ([203.11.71.1]:34399 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726158AbgD2CGa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 28 Apr 2020 22:06:30 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49BhhN0pBNz9sRf;
-        Wed, 29 Apr 2020 12:06:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588125989;
-        bh=cEUkvXjQx9FeslMTIdQ9lW/uGQZLBM+zUKoD1BqBe9w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=hU7qODst0MpO/MKPnMkBxiNzeYcgLxMi+vQ0PQuj9wAH4JrD9xKuBBXbeTC1FyAq9
-         J0pEGYNwQx97cPRI0vkQnYlxiSa23Jbe7gm+XJgH2865vbu7RYqbrD2487AHxxnY74
-         7mGpeoSy3d9LCjhbbCzalhpyHlZWfN3wh5qtETO0n6gnm9UnkKtLlI+2gwBFtpxqPn
-         j7cC6eBtliVh0+py80k629DbgeGMsrJn6tBJkVPLilWWywBuXlyg520s1HL7LdiqGA
-         Vab5xe7afNs1Y+wTAjebCU63GWY1j3xeKWv0ZIAOGVjyBqlixdkbWYsJFLyQZ/YNjU
-         IZSwbkp3cTIhA==
-Date:   Wed, 29 Apr 2020 12:06:25 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Leon Romanovsky <leon@kernel.org>,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Huy Nguyen <huyn@mellanox.com>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Raed Salem <raeds@mellanox.com>
-Subject: linux-next: manual merge of the mlx5-next tree with the
- kspp-gustavo tree
-Message-ID: <20200429120625.2b5bb507@canb.auug.org.au>
+        id S1726536AbgD2DBB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 28 Apr 2020 23:01:01 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:59106 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726507AbgD2DBB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 28 Apr 2020 23:01:01 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03T2nVBl077258;
+        Wed, 29 Apr 2020 03:00:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
+ from : references : date : in-reply-to : message-id : mime-version :
+ content-type; s=corp-2020-01-29;
+ bh=qUhCjByvOjfzhixiS4FU44bF5YsZ9dETXbiZPeNFf1g=;
+ b=pZgbkwvoHDc1zc7bN7jIuvFaq8ZE+zpOL1DwD1JA5eaK2UghLN2gVYyx7Z4xgN/9Y7XC
+ UNAFdiorNQ17sm34lkVmhtZFni77G9Gn40Fzi/+2Q5Qf9VfUkfQMocXA0uj/Mj/P2Hgy
+ jePYovmhDQzg6CarLmE/Ai+9k0QRW8TU/3pvT7qDNgXXLv8f+RbgamhLE4OcqID+OIlL
+ geIVcs5ecwey7S2kg1otRp2Ftms5okAgQOrCP5JqOtPOAaDoLxDMrvK7dyHK6hDk8AZR
+ St4yzfsfVLzzuVGbOT/8g8F5T+7xyH0zrPnx5GC3NYr5DoUh4vKKu7N+z0yin+HSHT+C Bg== 
+Received: from userp3030.oracle.com (userp3030.oracle.com [156.151.31.80])
+        by aserp2120.oracle.com with ESMTP id 30nucg3anv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Apr 2020 03:00:49 +0000
+Received: from pps.filterd (userp3030.oracle.com [127.0.0.1])
+        by userp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 03T2ggWg071508;
+        Wed, 29 Apr 2020 03:00:48 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3030.oracle.com with ESMTP id 30mxphq36e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 29 Apr 2020 03:00:48 +0000
+Received: from abhmp0009.oracle.com (abhmp0009.oracle.com [141.146.116.15])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 03T30lX9030243;
+        Wed, 29 Apr 2020 03:00:47 GMT
+Received: from ca-mkp.ca.oracle.com (/10.159.214.123)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 28 Apr 2020 20:00:46 -0700
+To:     Tyrel Datwyler <tyreld@linux.ibm.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warning after merge of the scsi-fixes tree
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+Organization: Oracle Corporation
+References: <20200429092154.35958687@canb.auug.org.au>
+        <ba29c840-e327-6f0b-b760-188aec566c6c@linux.ibm.com>
+Date:   Tue, 28 Apr 2020 23:00:43 -0400
+In-Reply-To: <ba29c840-e327-6f0b-b760-188aec566c6c@linux.ibm.com> (Tyrel
+        Datwyler's message of "Tue, 28 Apr 2020 17:27:57 -0700")
+Message-ID: <yq1mu6v8084.fsf@oracle.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1.92 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kc5ob/m+tWo5k5sswsGpyzC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=861 malwarescore=0
+ mlxscore=0 bulkscore=0 adultscore=0 phishscore=0 suspectscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004290020
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9605 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1011 priorityscore=1501
+ mlxlogscore=932 impostorscore=0 suspectscore=0 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 adultscore=0 phishscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2004290020
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kc5ob/m+tWo5k5sswsGpyzC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Tyrel,
 
-Today's linux-next merge of the mlx5-next tree got a conflict in:
+> Do you want me to resend, or can you fixup your tree?
 
-  include/linux/mlx5/mlx5_ifc.h
+I fixed it up.
 
-between commit:
-
-  3ba225b506a2 ("treewide: Replace zero-length array with flexible-array me=
-mber")
-
-from the kspp-gustavo tree and commit:
-
-  d65dbedfd298 ("net/mlx5: Add support for COPY steering action")
-
-from the mlx5-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc include/linux/mlx5/mlx5_ifc.h
-index 8d30f18dcdee,fb243848132d..000000000000
---- a/include/linux/mlx5/mlx5_ifc.h
-+++ b/include/linux/mlx5/mlx5_ifc.h
-@@@ -5743,7 -5771,7 +5771,7 @@@ struct mlx5_ifc_alloc_modify_header_con
-  	u8         reserved_at_68[0x10];
-  	u8         num_of_actions[0x8];
- =20
-- 	union mlx5_ifc_set_action_in_add_action_in_auto_bits actions[];
- -	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[0];
-++	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[];
-  };
- =20
-  struct mlx5_ifc_dealloc_modify_header_context_out_bits {
-@@@ -9677,9 -9705,32 +9705,32 @@@ struct mlx5_ifc_mcda_reg_bits=20
- =20
-  	u8         reserved_at_60[0x20];
- =20
- -	u8         data[0][0x20];
- +	u8         data[][0x20];
-  };
- =20
-+ enum {
-+ 	MLX5_MFRL_REG_RESET_TYPE_FULL_CHIP =3D BIT(0),
-+ 	MLX5_MFRL_REG_RESET_TYPE_NET_PORT_ALIVE =3D BIT(1),
-+ };
-+=20
-+ enum {
-+ 	MLX5_MFRL_REG_RESET_LEVEL0 =3D BIT(0),
-+ 	MLX5_MFRL_REG_RESET_LEVEL3 =3D BIT(3),
-+ 	MLX5_MFRL_REG_RESET_LEVEL6 =3D BIT(6),
-+ };
-+=20
-+ struct mlx5_ifc_mfrl_reg_bits {
-+ 	u8         reserved_at_0[0x20];
-+=20
-+ 	u8         reserved_at_20[0x2];
-+ 	u8         pci_sync_for_fw_update_start[0x1];
-+ 	u8         pci_sync_for_fw_update_resp[0x2];
-+ 	u8         rst_type_sel[0x3];
-+ 	u8         reserved_at_28[0x8];
-+ 	u8         reset_type[0x8];
-+ 	u8         reset_level[0x8];
-+ };
-+=20
-  struct mlx5_ifc_mirc_reg_bits {
-  	u8         reserved_at_0[0x18];
-  	u8         status_code[0x8];
-
---Sig_/kc5ob/m+tWo5k5sswsGpyzC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6o4SEACgkQAVBC80lX
-0GyHgwgAlTPOPf3m6Uj531tpGne/zC05ApHMYU06GchdDwxp0xdE3afMcwrcmYma
-chOuKHY3LWn6PTDcWNKi2Zat3+boM5EXJiOvuZn6zJWSSp71NuPtx4toowHWzgaI
-4EHGMDdQbMbdUccJo5dN8cSQvNCuzqEkbr8+Q1nbBDrujX23w03iSl8POfjJHhDP
-IcICISYt9hF3xfW6swY90BN3uq058Cj+iwRgCTRqly+k5lpY27XUtNb3jMaCALQ5
-5o3RJxg2Mz4MoO5AYEdbXrg9KODw+obkR8MHinjKfvk0Y7QXDJJNRC7XYQqC2jxD
-edp7Ei8p0ahJgD3lj8bPdHh1oywEbg==
-=Zify
------END PGP SIGNATURE-----
-
---Sig_/kc5ob/m+tWo5k5sswsGpyzC--
+-- 
+Martin K. Petersen	Oracle Linux Engineering

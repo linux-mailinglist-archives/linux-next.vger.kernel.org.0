@@ -2,175 +2,248 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 681221BD775
-	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 10:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99BE1BD7F7
+	for <lists+linux-next@lfdr.de>; Wed, 29 Apr 2020 11:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726484AbgD2Ing (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 29 Apr 2020 04:43:36 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48103 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1726426AbgD2Inf (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 29 Apr 2020 04:43:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1588149813;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QcZ6PqElQuIY2I5jkNPEa7pluAGzlonQVidKA7ck390=;
-        b=dAlkn1uwdOR4eD6Hqf+FLmuJcZiWqq/BUbDuB2tH63pYzjk9woPrflXEp1svktYfU/ehSn
-        UwrkXatc/SQy1H50idMrdl1sCnkVuuZJG1d4aymLF+Ke0CY8F4hPlkTV0HuCQeUWKlyVNZ
-        JjE3rYSGUKSV7Ce0EaOzDkY2c/IPke0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-371-x9leZ6R4MxqSscHEcVXJtw-1; Wed, 29 Apr 2020 04:43:21 -0400
-X-MC-Unique: x9leZ6R4MxqSscHEcVXJtw-1
-Received: by mail-wm1-f69.google.com with SMTP id h184so913032wmf.5
-        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 01:43:21 -0700 (PDT)
+        id S1726423AbgD2JKf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 29 Apr 2020 05:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39580 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726355AbgD2JKf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 29 Apr 2020 05:10:35 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C0BC03C1AD
+        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 02:10:35 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id s18so730202pgl.12
+        for <linux-next@vger.kernel.org>; Wed, 29 Apr 2020 02:10:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=5PcnfJdcwvdTPZhKIEZu1VwXYnUSCGnU0hGusn/U5AE=;
+        b=WgaHgXl4M4m2ZQQ+3YL58OBYm7Oy5vfbKKWqV01c6+upbyi4I0z9nURIg99xMCV2uV
+         Emtcj+4pyTW9JStpMQ14QKiJdPALZ2qfY77GxwU+4vx8yUowA14Y6tWV2cR6HT3pUvck
+         wmZOFog9yh3tNUivMx4GnoUmKgR/lgV/lyeWluommT802r8WMyCzlnzSnMnkGIIWB+Hr
+         2PF/Et4dJzpaYdGtemVdY8Jm2svyLw8RLrMlKL1Ge/oun74rKeEoQtJAiQOk0KmXKv7z
+         gLvArKRYmCZQtaXI5o3Zm4TId/voRZev3QT3HNnZ6taJHpa9oKf9QZksjUhi4+MdGk9f
+         D+Aw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=QcZ6PqElQuIY2I5jkNPEa7pluAGzlonQVidKA7ck390=;
-        b=pP4fTbkuy+f0jdGM2HupRF6cdxxXpDRk0U6M5oIJLRD60ZAISgEvxih1GEOZS3hPTP
-         510zZzO8mfWtKPWNnHRXBTJD3KZ6EWlvx1Ihy4n4qwhZA7ysprWFxIQCBQDc1m051CXq
-         S8Y3NGyEWoZrAeHXIoYJpg6djzF562/vD6TvEpv/OgKrEjOsql7q8vBzkNlPfsxANXci
-         pSIvaN8EgvW7TO1eeS1yyis9K0ZeLWJ2+RfczIFaVv+nm/zK2NhsiTryYs+xxzybo/H3
-         bTvLg6b2NZ3Rm+1dUyMYutjITdwPlG5Wjty1ecs04vi0osmTYL1Yt8rPG3HWit4HFmMf
-         7luw==
-X-Gm-Message-State: AGi0PuZiC3UcPhV6AeGBOTSvQqk6sk7WLcgXV6Qyu/5Znp89XFasQZUd
-        ENhdMzntLVpBl2HrBxS0KqQqR+M92GgyewI9FLmAB1H7FaH5eK5l7WfbKhUDDEHoeQ2sQtwogKW
-        sdXB7kPn6HlzvinedzrTk9w==
-X-Received: by 2002:a1c:23d4:: with SMTP id j203mr2121760wmj.49.1588149800194;
-        Wed, 29 Apr 2020 01:43:20 -0700 (PDT)
-X-Google-Smtp-Source: APiQypLcqDVfxUeEvW87fRGWUdN/d4quJBkD2yf6Dic3zqzuiXhubG6tHiMQWsgKcZj9hZwuRxpaoQ==
-X-Received: by 2002:a1c:23d4:: with SMTP id j203mr2121740wmj.49.1588149799911;
-        Wed, 29 Apr 2020 01:43:19 -0700 (PDT)
-Received: from localhost ([2001:470:5b39:28:1273:be38:bc73:5c36])
-        by smtp.gmail.com with ESMTPSA id t20sm6828575wmi.2.2020.04.29.01.43.18
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=5PcnfJdcwvdTPZhKIEZu1VwXYnUSCGnU0hGusn/U5AE=;
+        b=dvOou45MHqIOA76pjms3qEtUnXRo1hRNg6hYECClZdYFNjPBO6tlSEZWxnVCeBAeAG
+         4SS46nNUBL8N+iTjwQywOJ1kNy7S3dLBKgkqyQXdwCCwJKSieNe9keOYEE3pTXYwN9R1
+         1gxUDkQ4XWVDzdAMT66H5N9bFij3FWAHT4L1Tn2Qmfm9Lv8+8joMhzB45qQIGhSkCsix
+         nVJlvdmQq+0DnaO4jsH1B+GfAax+M52v8ScaoruHD/Q2d97VjLahKtpuwwuBPY0zd8e2
+         a91usXLMF4Uemd2JGbhcoPaHIjeuLuQ01Cf+l4JkHFRjSDdnXmnWIu7njz0iSL1cn0HG
+         1zaw==
+X-Gm-Message-State: AGi0Pua61UddMJKaBvNYZYTvdQHoTIbHLvQj6VvVGaJF6SPmq05HtxbM
+        COEpDaHcAyc6zAMEi6k5JEH0cg9dK80=
+X-Google-Smtp-Source: APiQypJrTHZqcpRMq6IlpfSu0/AkwkjoL+31Waz9zeShde3qt/zO+wo0d3talBHAIKTQCcpxa+l5og==
+X-Received: by 2002:a63:82c1:: with SMTP id w184mr26712043pgd.268.1588151434251;
+        Wed, 29 Apr 2020 02:10:34 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w66sm634534pfw.50.2020.04.29.02.10.33
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Apr 2020 01:43:19 -0700 (PDT)
-Date:   Wed, 29 Apr 2020 10:43:18 +0200
-From:   Oleksandr Natalenko <oleksandr@redhat.com>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
-Subject: Re: mmotm 2020-04-26-00-15 uploaded (mm/madvise.c)
-Message-ID: <20200429084318.wh7gjokuk445mr5d@butterfly.localdomain>
-References: <20200426071602.ZmQ_9C0ql%akpm@linux-foundation.org>
- <bec3b7bd-0829-b430-be1a-f61da01ac4ac@infradead.org>
- <39bcdbb6-cac8-aa3b-c543-041f9c28c730@infradead.org>
- <20200427135053.a125f84c62e2857e3dcdce4f@linux-foundation.org>
- <20200427234512.GD163745@google.com>
+        Wed, 29 Apr 2020 02:10:33 -0700 (PDT)
+Message-ID: <5ea94489.1c69fb81.7d3ed.1c89@mx.google.com>
+Date:   Wed, 29 Apr 2020 02:10:33 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200427234512.GD163745@google.com>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.7-rc3-228-g76a37a4cf830
+X-Kernelci-Report-Type: boot
+Subject: next/pending-fixes boot: 285 boots: 9 failed,
+ 261 passed with 6 offline, 6 untried/unknown,
+ 3 conflicts (v5.7-rc3-228-g76a37a4cf830)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Apr 27, 2020 at 04:45:12PM -0700, Minchan Kim wrote:
-> Hi Andrew,
-> 
-> On Mon, Apr 27, 2020 at 01:50:53PM -0700, Andrew Morton wrote:
-> > On Sun, 26 Apr 2020 15:48:35 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
-> > 
-> > > On 4/26/20 10:26 AM, Randy Dunlap wrote:
-> > > > On 4/26/20 12:16 AM, akpm@linux-foundation.org wrote:
-> > > >> The mm-of-the-moment snapshot 2020-04-26-00-15 has been uploaded to
-> > > >>
-> > > >>    http://www.ozlabs.org/~akpm/mmotm/
-> > > >>
-> > > >> mmotm-readme.txt says
-> > > >>
-> > > >> README for mm-of-the-moment:
-> > > >>
-> > > >> http://www.ozlabs.org/~akpm/mmotm/
-> > > >>
-> > > >> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > >> more than once a week.
-> > > >>
-> > > >> You will need quilt to apply these patches to the latest Linus release (5.x
-> > > >> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> > > >> http://ozlabs.org/~akpm/mmotm/series
-> > > >>
-> > > >> The file broken-out.tar.gz contains two datestamp files: .DATE and
-> > > >> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
-> > > >> followed by the base kernel version against which this patch series is to
-> > > >> be applied.
-> > > > 
-> > > > Hi,
-> > > > I'm seeing lots of build failures in mm/madvise.c.
-> > > > 
-> > > > Is Minchin's patch only partially applied or is it just missing some pieces?
-> > > > 
-> > > > a.  mm/madvise.c needs to #include <linux/uio.h>
-> > > > 
-> > > > b.  looks like the sys_process_madvise() prototype in <linux/syscalls.h>
-> > > > has not been updated:
-> > > > 
-> > > > In file included from ../mm/madvise.c:11:0:
-> > > > ../include/linux/syscalls.h:239:18: error: conflicting types for ‘sys_process_madvise’
-> > > >   asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__)) \
-> > > >                   ^
-> > > > ../include/linux/syscalls.h:225:2: note: in expansion of macro ‘__SYSCALL_DEFINEx’
-> > > >   __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-> > > >   ^~~~~~~~~~~~~~~~~
-> > > > ../include/linux/syscalls.h:219:36: note: in expansion of macro ‘SYSCALL_DEFINEx’
-> > > >  #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA_ARGS__)
-> > > >                                     ^~~~~~~~~~~~~~~
-> > > > ../mm/madvise.c:1295:1: note: in expansion of macro ‘SYSCALL_DEFINE6’
-> > > >  SYSCALL_DEFINE6(process_madvise, int, which, pid_t, upid,
-> > > >  ^~~~~~~~~~~~~~~
-> > > > In file included from ../mm/madvise.c:11:0:
-> > > > ../include/linux/syscalls.h:880:17: note: previous declaration of ‘sys_process_madvise’ was here
-> > > >  asmlinkage long sys_process_madvise(int which, pid_t pid, unsigned long start,
-> > > >                  ^~~~~~~~~~~~~~~~~~~
-> > > 
-> > > I had to add 2 small patches to have clean madvise.c builds:
-> > > 
-> > 
-> > hm, not sure why these weren't noticed sooner, thanks.
-> > 
-> > This patchset is looking a bit tired now.
-> > 
-> > Things to be addressed (might be out of date):
-> > 
-> > - http://lkml.kernel.org/r/293bcd25-934f-dd57-3314-bbcf00833e51@redhat.com
-> 
-> It seems to be not related to process_madvise.
-> 
-> > 
-> > - http://lkml.kernel.org/r/2a767d50-4034-da8c-c40c-280e0dda910e@suse.cz
-> >   (I did this)
-> 
-> Thanks!
-> 
-> > 
-> > - http://lkml.kernel.org/r/20200310222008.GB72963@google.com
-> 
-> I will send foldable patches to handle comments.
-> 
-> > 
-> > - issues arising from the review of
-> >   http://lkml.kernel.org/r/20200302193630.68771-8-minchan@kernel.org
-> 
-> Oleksandr, What's the outcome of this issue?
-> Do we still need to change based on the comment?
-> 
+next/pending-fixes boot: 285 boots: 9 failed, 261 passed with 6 offline, 6 =
+untried/unknown, 3 conflicts (v5.7-rc3-228-g76a37a4cf830)
 
-My current understanding is that we do not mess with signals excessively
-in the given code path.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
+xes/kernel/v5.7-rc3-228-g76a37a4cf830/
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.7-rc3-228-g76a37a4cf830/
 
--- 
-  Best regards,
-    Oleksandr Natalenko (post-factum)
-    Principal Software Maintenance Engineer
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.7-rc3-228-g76a37a4cf830
+Git Commit: 76a37a4cf830b1f46e34037426b2f25c29acf8eb
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 108 unique boards, 24 SoC families, 31 builds out of 217
 
+Boot Regressions Detected:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
+9729)
+
+    multi_v7_defconfig:
+        gcc-8:
+          bcm2836-rpi-2-b:
+              lab-collabora: failing since 74 days (last pass: v5.5-8839-g5=
+6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+          exynos5422-odroidxu3:
+              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
+9729)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
+9729)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          apq8096-db820c:
+              lab-bjorn: new failure (last pass: v5.7-rc3-194-g1631e20d9729)
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
+631e20d9729)
+          meson-gxl-s905d-p230:
+              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
+729)
+          sun50i-a64-pine64-plus:
+              lab-baylibre: failing since 1 day (last pass: v5.7-rc2-266-g3=
+c7f529d10ff - first fail: v5.7-rc3-194-g1631e20d9729)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
+631e20d9729)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-194-g1=
+631e20d9729)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
+729)
+
+i386:
+
+    i386_defconfig:
+        gcc-8:
+          qemu_i386:
+              lab-baylibre: new failure (last pass: v5.7-rc3-194-g1631e20d9=
+729)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 18 days (last pass: v5.6-=
+12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
+
+x86_64:
+
+    x86_64_defconfig+kvm_guest:
+        gcc-8:
+          qemu_x86_64:
+              lab-collabora: new failure (last pass: v5.7-rc3-194-g1631e20d=
+9729)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8096-db820c: 1 failed lab
+            meson-gxl-s905d-p230: 1 failed lab
+            sun50i-a64-pine64-plus: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+    exynos_defconfig:
+        gcc-8:
+            exynos5422-odroidxu3: 1 failed lab
+
+Offline Platforms:
+
+arm64:
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+Conflicting Boot Failures Detected: (These likely are not failures as other=
+ labs are reporting PASS. Needs review.)
+
+i386:
+    i386_defconfig:
+        qemu_i386:
+            lab-baylibre: FAIL (gcc-8)
+            lab-collabora: PASS (gcc-8)
+
+x86_64:
+    x86_64_defconfig:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+    x86_64_defconfig+kvm_guest:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

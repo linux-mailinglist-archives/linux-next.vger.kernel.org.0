@@ -2,216 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E0B1C0D1C
-	for <lists+linux-next@lfdr.de>; Fri,  1 May 2020 06:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1833F1C0CC0
+	for <lists+linux-next@lfdr.de>; Fri,  1 May 2020 05:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727889AbgEAEOF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 May 2020 00:14:05 -0400
-Received: from gateway20.websitewelcome.com ([192.185.60.19]:47488 "EHLO
-        gateway20.websitewelcome.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726452AbgEAEOE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 May 2020 00:14:04 -0400
-X-Greylist: delayed 1500 seconds by postgrey-1.27 at vger.kernel.org; Fri, 01 May 2020 00:14:03 EDT
-Received: from cm17.websitewelcome.com (cm17.websitewelcome.com [100.42.49.20])
-        by gateway20.websitewelcome.com (Postfix) with ESMTP id 2456B400C5FA7
-        for <linux-next@vger.kernel.org>; Thu, 30 Apr 2020 21:08:57 -0500 (CDT)
-Received: from gator4166.hostgator.com ([108.167.133.22])
-        by cmsmtp with SMTP
-        id UMJwjqs0AAGTXUMJwj8xY9; Thu, 30 Apr 2020 22:26:36 -0500
-X-Authority-Reason: nr=8
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sLNiod4wWyNf3MxlJD5dqytFHvgWQv3WzDsXbMGio2g=; b=IAI2Ts2h2qtCrTplwOxN/QN5rD
-        RwH2QnSsTQZaxIofKJdpu0T8huasxbDlei/nA4PLib3acmiQOTiNl0onCWa4hUzVxnwLffMyO84HM
-        pJRwQGoGGJd2jmMkG5NRCp058ON1jD1OHFuvfm7SiJGKLES28FDisBS6DxFsjiP/2TLfHNvaqF/gM
-        3rEWgBLJ7bT78Yhc9ARfQMYnANltiU4AwfTn6Qyv2P4ldqJA6aTLi0k2ugEmReMsrsPmqIjsTuVp6
-        F2a8uAvR3tj1S+iOIayfVyqEpaBlZfTGXc5bfLtqOO2dki9gd+Us2iZTgDEqF35UwVwLr82NDvWUP
-        PJPLIwJA==;
-Received: from [189.207.59.248] (port=58366 helo=[192.168.15.9])
-        by gator4166.hostgator.com with esmtpsa (TLSv1.2:ECDHE-RSA-AES128-GCM-SHA256:128)
-        (Exim 4.92)
-        (envelope-from <gustavo@embeddedor.com>)
-        id 1jUMJv-002ZWy-RM; Thu, 30 Apr 2020 22:26:35 -0500
-Subject: Re: linux-next: manual merge of the mlx5-next tree with the
- kspp-gustavo tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Leon Romanovsky <leon@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1728092AbgEADpq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 30 Apr 2020 23:45:46 -0400
+Received: from ozlabs.org ([203.11.71.1]:47965 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728071AbgEADpq (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 30 Apr 2020 23:45:46 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Cynx66VLz9sTP;
+        Fri,  1 May 2020 13:45:41 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1588304743;
+        bh=IIPHFxBcj85QE/JOewCEDMMpIUUBvRoR4Qgg9tLU9ys=;
+        h=Date:From:To:Cc:Subject:From;
+        b=n0/oe4aLBYnd0kU17bBSG/shak8TUpLVzsim9vQzP+Gx6ztXNam/bKTtuzxrV2HKK
+         6FA3u1j+IakNj6a12gt+Mg+FxHtVQS4R+E2T1jxmBQekSIxjjlDzgGqA+j0/V8HSBH
+         oojpNbn3pBGkCEdKE7/Nvnsz4on5WkFq9tc7gLtN52be19NfkQo2Wi4/nHLOAwuomM
+         timJod54omTDV+/j3fwqTGyz4pZH/JhymbHHakAwGuOi1WN1U6UMVZ/1I7scs/9ILe
+         XlHr1A4hVMaWf664Xia/8BTt5BSV0WoTxBGeLi7thqKVGpZ5jWgLVqRzQy45/HFCdG
+         X0IxSalQRXIsA==
+Date:   Fri, 1 May 2020 13:45:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dave Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Huy Nguyen <huyn@mellanox.com>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Raed Salem <raeds@mellanox.com>
-References: <20200429120625.2b5bb507@canb.auug.org.au>
- <20200501131230.58835994@canb.auug.org.au>
-From:   "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Autocrypt: addr=gustavo@embeddedor.com; keydata=
- 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
- VtSixD1uOgytAP7RWS474w==
-Message-ID: <32eb40f0-a17b-5a7f-41e0-0f30a507fc31@embeddedor.com>
-Date:   Thu, 30 Apr 2020 22:30:57 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Randy Dunlap <rdunlap@infradead.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Subject: linux-next: manual merge of the drm tree with the drm-misc-fixes
+ tree
+Message-ID: <20200501134536.12468fa1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200501131230.58835994@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 189.207.59.248
-X-Source-L: No
-X-Exim-ID: 1jUMJv-002ZWy-RM
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.15.9]) [189.207.59.248]:58366
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 5
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
+Content-Type: multipart/signed; boundary="Sig_/rd9/1PLkDNX6mHZWGfNHp2o";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/rd9/1PLkDNX6mHZWGfNHp2o
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 4/30/20 22:12, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Wed, 29 Apr 2020 12:06:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the mlx5-next tree got a conflict in:
->>
->>   include/linux/mlx5/mlx5_ifc.h
->>
->> between commit:
->>
->>   3ba225b506a2 ("treewide: Replace zero-length array with flexible-array member")
->>
->> from the kspp-gustavo tree and commit:
->>
->>   d65dbedfd298 ("net/mlx5: Add support for COPY steering action")
->>
->> from the mlx5-next tree.
->>
->> I fixed it up (see below) and can carry the fix as necessary. This
->> is now fixed as far as linux-next is concerned, but any non trivial
->> conflicts should be mentioned to your upstream maintainer when your tree
->> is submitted for merging.  You may also want to consider cooperating
->> with the maintainer of the conflicting tree to minimise any particularly
->> complex conflicts.
->>
->> -- 
->> Cheers,
->> Stephen Rothwell
->>
->> diff --cc include/linux/mlx5/mlx5_ifc.h
->> index 8d30f18dcdee,fb243848132d..000000000000
->> --- a/include/linux/mlx5/mlx5_ifc.h
->> +++ b/include/linux/mlx5/mlx5_ifc.h
->> @@@ -5743,7 -5771,7 +5771,7 @@@ struct mlx5_ifc_alloc_modify_header_con
->>   	u8         reserved_at_68[0x10];
->>   	u8         num_of_actions[0x8];
->>   
->> - 	union mlx5_ifc_set_action_in_add_action_in_auto_bits actions[];
->>  -	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[0];
->> ++	union mlx5_ifc_set_add_copy_action_in_auto_bits actions[];
->>   };
->>   
->>   struct mlx5_ifc_dealloc_modify_header_context_out_bits {
->> @@@ -9677,9 -9705,32 +9705,32 @@@ struct mlx5_ifc_mcda_reg_bits 
->>   
->>   	u8         reserved_at_60[0x20];
->>   
->>  -	u8         data[0][0x20];
->>  +	u8         data[][0x20];
->>   };
->>   
->> + enum {
->> + 	MLX5_MFRL_REG_RESET_TYPE_FULL_CHIP = BIT(0),
->> + 	MLX5_MFRL_REG_RESET_TYPE_NET_PORT_ALIVE = BIT(1),
->> + };
->> + 
->> + enum {
->> + 	MLX5_MFRL_REG_RESET_LEVEL0 = BIT(0),
->> + 	MLX5_MFRL_REG_RESET_LEVEL3 = BIT(3),
->> + 	MLX5_MFRL_REG_RESET_LEVEL6 = BIT(6),
->> + };
->> + 
->> + struct mlx5_ifc_mfrl_reg_bits {
->> + 	u8         reserved_at_0[0x20];
->> + 
->> + 	u8         reserved_at_20[0x2];
->> + 	u8         pci_sync_for_fw_update_start[0x1];
->> + 	u8         pci_sync_for_fw_update_resp[0x2];
->> + 	u8         rst_type_sel[0x3];
->> + 	u8         reserved_at_28[0x8];
->> + 	u8         reset_type[0x8];
->> + 	u8         reset_level[0x8];
->> + };
->> + 
->>   struct mlx5_ifc_mirc_reg_bits {
->>   	u8         reserved_at_0[0x18];
->>   	u8         status_code[0x8];
-> 
-> This is now a conflict between the net-next and kspp-gustavo trees.
-> 
+Hi all,
 
-Thanks for reporting this. I think the best solution, for now, is to remove the
-changes from my tree. I'll do it right away.
+Today's linux-next merge of the drm tree got a conflict in:
 
-Thanks
---
-Gustavo
+  include/linux/dma-buf.h
 
+between commit:
+
+  6f49c2515e22 ("dma-buf: fix documentation build warnings")
+
+from the drm-misc-fixes tree and commit:
+
+  09606b5446c2 ("dma-buf: add peer2peer flag")
+
+from the drm tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/linux/dma-buf.h
+index 57bcef6f988a,82e0a4a64601..000000000000
+--- a/include/linux/dma-buf.h
++++ b/include/linux/dma-buf.h
+@@@ -333,8 -334,16 +333,16 @@@ struct dma_buf=20
+   * Attachment operations implemented by the importer.
+   */
+  struct dma_buf_attach_ops {
++ 	/**
++ 	 * @allow_peer2peer:
++ 	 *
++ 	 * If this is set to true the importer must be able to handle peer
++ 	 * resources without struct pages.
++ 	 */
++ 	bool allow_peer2peer;
++=20
+  	/**
+ -	 * @move_notify
+ +	 * @move_notify: [optional] notification that the DMA-buf is moving
+  	 *
+  	 * If this callback is provided the framework can avoid pinning the
+  	 * backing store while mappings exists.
+
+--Sig_/rd9/1PLkDNX6mHZWGfNHp2o
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6rm2AACgkQAVBC80lX
+0GxJBwf/coOFFEbY8Z/MwYFICaThvtaMgyS97f1WpYa3Pnj8wCQ7CGfTVQVwKa77
+CNkg/096iwIc/eJVgNbODY+XKh28Q92IA4jVwkJ+rTiFkhcb/JI7A4m4Nvhkrx9X
+RihPQ0BTkoT+oJBUWvzpOoi8lmrHQaxCPmRspjPqk7/7DPFZbRftHGATzziZXHDG
+4Jx+MaFlZj+tygXiJMQoSESiuxRvpPNkG1bBrufr3/4dZ5U/ZcSQPrCfmN288oCV
+pYo3IvWoJLHB4Xd7NTrxgNJYjnCe4Pz+XXSZUji9g0p+jqQU27firEzT2Ot4XDif
+xYpWwAaOARGTWWEUv9uTctLrWv3/cA==
+=84tC
+-----END PGP SIGNATURE-----
+
+--Sig_/rd9/1PLkDNX6mHZWGfNHp2o--

@@ -2,243 +2,322 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 330701C1176
-	for <lists+linux-next@lfdr.de>; Fri,  1 May 2020 13:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4B51C1249
+	for <lists+linux-next@lfdr.de>; Fri,  1 May 2020 14:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728616AbgEALYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 May 2020 07:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
+        id S1728756AbgEAMin (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 May 2020 08:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728581AbgEALYk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 May 2020 07:24:40 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E28C08E859
-        for <linux-next@vger.kernel.org>; Fri,  1 May 2020 04:24:40 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 18so1475076pfx.6
-        for <linux-next@vger.kernel.org>; Fri, 01 May 2020 04:24:40 -0700 (PDT)
+        by vger.kernel.org with ESMTP id S1728682AbgEAMim (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 May 2020 08:38:42 -0400
+Received: from mail-lj1-x243.google.com (mail-lj1-x243.google.com [IPv6:2a00:1450:4864:20::243])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8EEC061A0C
+        for <linux-next@vger.kernel.org>; Fri,  1 May 2020 05:38:42 -0700 (PDT)
+Received: by mail-lj1-x243.google.com with SMTP id g4so2507959ljl.2
+        for <linux-next@vger.kernel.org>; Fri, 01 May 2020 05:38:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=mT1IXj/+llodZwrOhokUF0i5q49QHz8ZGAizuOauuoc=;
-        b=Gz1hNbz1RXFdaXO1RxCBRJGc6luxZPsuGsV3WqoXsn0uP02rcuO6BYtqXzauw1ItvZ
-         6GFA/b3ZMc7p7W1Je+vCf4mzt0c8bUm9TnDz3USXuuXdeGtOVTUjay0pqD9h/1d0ah5z
-         xHuZx2/EHllkb+H2CWyyo9uCb6zDdOtWjnOxVYFnDSrZD4lKZRtXapzyrI8oHePIL6yt
-         IPwNlCHf3L+k9Q3m3Fc7LL9CCAQLIB8xjrXCz4yjz5hlkh6bNL4RDRFwkPNdq82KAv4V
-         fgOJPIgZxORn3KXRQk2ft0866r3XDsV83E0tFZEJ4dIBpYdwtzTMkAE/H7hlUR5lse1p
-         Eu5Q==
+        d=linaro.org; s=google;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=TqI8LEY0eyMyfG41AA+7Dq/qGnmcexDU0BYlK6ALAXY=;
+        b=kINb06rge4Hoo2a3boFUtz6iJsiMwQzukfeNKrspK5nztnLkCus1T8XHoE98GnCFlH
+         jNGQU76sEKXJo/aRy1BeLc0wnQqJuy9Hu7D3YuABNzXbMvgxpYxSYUDlrXgnpklfx185
+         60d/Oz9NtNkAfq6NchRX5efKJo04Jn0jStyQcAgBGBAJU/NORC1KdYKER1xXVE/q5GDx
+         kTIfl38rkPP31aeqitrQIB0nCJux9G575koh6J6hGIgqRIBpwp1hgJL3o9LbhHII+zQ8
+         /3pkgFy16PIDw8rhI+WScTyqpD7MnI+WvMhSFttUoS+syvrr5xrqao3qV3Xx5c5cOU2w
+         +XcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=mT1IXj/+llodZwrOhokUF0i5q49QHz8ZGAizuOauuoc=;
-        b=MKrU58MpwDgwZqsSRR2bKxo9kcnWXjQ4DbknvRmWdtNU23gVqY7aUfONO3I9bBv4BK
-         qc9gQRlX3cdP2EPN8AXZJeSQUM1rps12Oz4T1XQKW+xi+SBX+VhYT7ZE9OrkEOgPKnIV
-         rnSzVFJSHND6/B2pi51JS1LrhvV68eMZrBguWM8+7wvunqs9PL+RGwdgcsyhWM3bVEAy
-         f+ndD8ALhiesfWIPohRhhJ8MPVQQI769ORfySleSTvBkOWG1pNrk6UN48++vy6MN2aDO
-         x2QAow2qjaMebzZJjwCXjvxqx4tnmTKD9niljr8AeHRgGbUie0nSRUYi6UEr/DKLadl5
-         x+cw==
-X-Gm-Message-State: AGi0PubPjfCTNTBcEbc+BdCWTNuhCv0UYmWUrwFqaRBoHT6jD9rLIAfM
-        0isF9OY1kJ2Rkp5BxCMIgmWHPmAtacc=
-X-Google-Smtp-Source: APiQypI8Qxttn4fsueH1DhpMLy+2w9utLsw1Jd50dAJpDggxGrFlRRxy+TFZRz5/ygApOvtvVQttiw==
-X-Received: by 2002:a63:4446:: with SMTP id t6mr3708562pgk.450.1588332278571;
-        Fri, 01 May 2020 04:24:38 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h193sm2099163pfe.30.2020.05.01.04.24.36
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2020 04:24:37 -0700 (PDT)
-Message-ID: <5eac06f5.1c69fb81.f37ee.7d11@mx.google.com>
-Date:   Fri, 01 May 2020 04:24:37 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=TqI8LEY0eyMyfG41AA+7Dq/qGnmcexDU0BYlK6ALAXY=;
+        b=PqyD0o9EdJ/BB1HEavgTipY2Hik95R40tnDXXDrYlRuaVE8Gd58Jr28kaRr0mrRau/
+         sAE7GpmIXQdiybri2f7Yrn5GXSWYe16j/Wg6kluekp2+Gfk5PLOCJNOYtw2GORJ+biR9
+         kal3jiIn2ZFASqG9pLTwtvQEaOjo5thvE67/zESxVDrzSnfQ94I308wvClZOK1kqFbMD
+         58shbygvKBW5P9fHfvo3YLVUNEOgO/U9gG47lisupq6nzO+YCntkofGOwY4gMnVSWziK
+         zfD5/KzGOsTQ2yMfmzGIeqT8Vhd+nXmBe1+gjs95falzC2h8TDqYbytyOqEmRL0aoUDe
+         N+5w==
+X-Gm-Message-State: AGi0PuZoXQxHFpIIaTm7dhJkQojgZBSNoR4upff6dCHDdwaoU56XPRtl
+        GIBegSZVPfh4J8qIB34uDhT7qG7Yk3ghnjNgwSrCUQ==
+X-Google-Smtp-Source: APiQypL43aPuXsQpKFSH646sQHWoZnIymrTx4owk73igNn3Q60iqK6qFY3QSccwQfXwIIb4C1tbs+Vy3n9UvWfr8a6U=
+X-Received: by 2002:a2e:9018:: with SMTP id h24mr2322990ljg.217.1588336720045;
+ Fri, 01 May 2020 05:38:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-rc3-277-ga37f92ef57b2
-X-Kernelci-Report-Type: boot
-Subject: next/pending-fixes boot: 287 boots: 7 failed,
- 262 passed with 7 offline, 8 untried/unknown,
- 3 conflicts (v5.7-rc3-277-ga37f92ef57b2)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 1 May 2020 18:08:28 +0530
+Message-ID: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
+Subject: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-ext4 <linux-ext4@vger.kernel.org>
+Cc:     Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes boot: 287 boots: 7 failed, 262 passed with 7 offline, 8 =
-untried/unknown, 3 conflicts (v5.7-rc3-277-ga37f92ef57b2)
+mkfs -t ext4 invoked oom-killer on i386 kernel running on x86_64 device
+and started happening on linux -next master branch kernel tag next-20200430
+and next-20200501. We did not bisect this problem.
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc3-277-ga37f92ef57b2/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc3-277-ga37f92ef57b2/
+metadata
+  git branch: master
+  git repo: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  git commit: e4a08b64261ab411b15580c369a3b8fbed28bbc1
+  git describe: next-20200430
+  make_kernelversion: 5.7.0-rc3
+  kernel-config:
+https://builds.tuxbuild.com/1YrE_XUQ6odA52tSBM919w/kernel.config
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc3-277-ga37f92ef57b2
-Git Commit: a37f92ef57b279fe62c67b74e17b963d37cef0bf
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 109 unique boards, 25 SoC families, 31 builds out of 217
+Steps to reproduce: (always reproducible)
+---------------------------
+mkfs -t ext4 <external-STORAGE_DEV>
 
-Boot Regressions Detected:
+Test log:
+------------
++ mkfs -t ext4 /dev/disk/by-id/ata-TOSHIBA_MG04ACA100N_Y8RQK14KF6XF
+mke2fs 1.43.8 (1-Jan-2018)
+Creating filesystem with 244190646 4k blocks and 61054976 inodes
+Filesystem UUID: 05e8451c-1dd6-4d94-b030-0f806653e4b4
+Superblock backups stored on blocks:
+32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+102400000, 214990848
+Allocating group tables:    0/7453                           done
+Writing inode tables:    0/7453                           done
+Creating journal (262144 blocks): [   34.739137] mkfs.ext4 invoked
+oom-killer: gfp_mask=0x101cc0(GFP_USER|__GFP_WRITE), order=0,
+oom_score_adj=0
+[   34.748889] CPU: 0 PID: 393 Comm: mkfs.ext4 Not tainted
+5.7.0-rc3-next-20200430 #1
+[   34.756450] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   34.763844] Call Trace:
+[   34.766305]  dump_stack+0x54/0x6e
+[   34.769629]  dump_header+0x3d/0x1c6
+[   34.773126]  ? oom_badness.part.0+0x10/0x120
+[   34.777397]  ? ___ratelimit+0x8f/0xdc
+[   34.781056]  oom_kill_process.cold+0x9/0xe
+[   34.785152]  out_of_memory+0x1ab/0x260
+[   34.788898]  __alloc_pages_nodemask+0xe0e/0xec0
+[   34.793430]  pagecache_get_page+0xae/0x260
+[   34.797521]  grab_cache_page_write_begin+0x1c/0x30
+[   34.802303]  block_write_begin+0x1e/0x90
+[   34.806222]  blkdev_write_begin+0x1e/0x20
+[   34.810225]  ? bdev_evict_inode+0xd0/0xd0
+[   34.814230]  generic_perform_write+0x97/0x180
+[   34.818579]  __generic_file_write_iter+0x140/0x1f0
+[   34.823365]  blkdev_write_iter+0xc0/0x190
+[   34.827376]  __vfs_write+0x132/0x1e0
+[   34.830947]  ? __audit_syscall_entry+0xa8/0xe0
+[   34.835385]  vfs_write+0xa1/0x1a0
+[   34.838696]  ksys_pwrite64+0x50/0x80
+[   34.842267]  __ia32_sys_ia32_pwrite64+0x16/0x20
+[   34.846798]  do_fast_syscall_32+0x6b/0x270
+[   34.850890]  entry_SYSENTER_32+0xa5/0xf8
+[   34.854805] EIP: 0xb7f0d549
+[   34.857596] Code: 03 74 c0 01 10 05 03 74 b8 01 10 06 03 74 b4 01
+10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 51 52 55 89 e5 0f
+34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d 76 00 58 b8 77 00 00 00 cd 80 90
+8d 76
+[   34.876334] EAX: ffffffda EBX: 00000003 ECX: b7801010 EDX: 00400000
+[   34.882591] ESI: 38400000 EDI: 00000074 EBP: 07438400 ESP: bfd266f0
+[   34.888847] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+[   34.895630] Mem-Info:
+[   34.897923] active_anon:5366 inactive_anon:2172 isolated_anon:0
+[   34.897923]  active_file:4151 inactive_file:212494 isolated_file:0
+[   34.897923]  unevictable:0 dirty:16505 writeback:6520 unstable:0
+[   34.897923]  slab_reclaimable:5855 slab_unreclaimable:3531
+[   34.897923]  mapped:6321 shmem:2236 pagetables:178 bounce:0
+[   34.897923]  free:264202 free_pcp:1082 free_cma:0
+[   34.931663] Node 0 active_anon:21464kB inactive_anon:8688kB
+active_file:16604kB inactive_file:849976kB unevictable:0kB
+isolated(anon):0kB isolated(file):0kB mapped:25284kB dirty:58952kB
+writeback:27772kB shmem:8944kB writeback_tmp:0kB unstable:0kB
+all_unreclaimable? yes
+[   34.955523] DMA free:3356kB min:68kB low:84kB high:100kB
+reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+active_file:0kB inactive_file:11964kB unevictable:0kB
+writepending:11980kB present:15964kB managed:15876kB mlocked:0kB
+kernel_stack:0kB pagetables:0kB bounce:0kB free_pcp:0kB local_pcp:0kB
+free_cma:0kB
+[   34.983385] lowmem_reserve[]: 0 825 1947 825
+[   34.987678] Normal free:3948kB min:7732kB low:8640kB high:9548kB
+reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+active_file:1096kB inactive_file:786400kB unevictable:0kB
+writepending:65432kB present:884728kB managed:845576kB mlocked:0kB
+kernel_stack:1112kB pagetables:0kB bounce:0kB free_pcp:2908kB
+local_pcp:500kB free_cma:0kB
+[   35.017427] lowmem_reserve[]: 0 0 8980 0
+[   35.021362] HighMem free:1049496kB min:512kB low:1748kB high:2984kB
+reserved_highatomic:0KB active_anon:21464kB inactive_anon:8688kB
+active_file:15508kB inactive_file:51612kB unevictable:0kB
+writepending:0kB present:1149540kB managed:1149540kB mlocked:0kB
+kernel_stack:0kB pagetables:712kB bounce:0kB free_pcp:1524kB
+local_pcp:292kB free_cma:0kB
+[   35.051717] lowmem_reserve[]: 0 0 0 0
+[   35.055374] DMA: 8*4kB (UE) 1*8kB (E) 1*16kB (E) 0*32kB 0*64kB
+0*128kB 1*256kB (E) 0*512kB 1*1024kB (E) 1*2048kB (E) 0*4096kB =
+3384kB
+[   35.067446] Normal: 27*4kB (U) 23*8kB (U) 12*16kB (UE) 12*32kB (U)
+4*64kB (UE) 2*128kB (U) 2*256kB (UE) 1*512kB (E) 0*1024kB 1*2048kB (U)
+0*4096kB = 4452kB
+[   35.081347] HighMem: 2*4kB (UM) 0*8kB 1*16kB (M) 2*32kB (UM) 1*64kB
+(U) 0*128kB 1*256kB (M) 1*512kB (M) 0*1024kB 0*2048kB 256*4096kB (M) =
+1049496kB
+[   35.094634] Node 0 hugepages_total=0 hugepages_free=0
+hugepages_surp=0 hugepages_size=4096kB
+[   35.103059] 218892 total pagecache pages
+[   35.106985] 0 pages in swap cache
+[   35.110303] Swap cache stats: add 0, delete 0, find 0/0
+[   35.115519] Free swap  = 0kB
+[   35.118396] Total swap = 0kB
+[   35.121274] 512558 pages RAM
+[   35.124151] 287385 pages HighMem/MovableOnly
+[   35.128418] 9810 pages reserved
+[   35.131563] Tasks state (memory values in pages):
+[   35.136260] [  pid  ]   uid  tgid total_vm      rss pgtables_bytes
+swapents oom_score_adj name
+[   35.144866] [    224]     0   224     3425     1273    28672
+0             0 systemd-journal
+[   35.153932] [    241]     0   241     3260      828    20480
+0         -1000 systemd-udevd
+[   35.162797] [    244]   994   244     3929      456    24576
+0             0 systemd-timesyn
+[   35.171837] [    277]   993   277     1569      786    20480
+0             0 systemd-network
+[   35.180891] [    279]   992   279     1729      825    20480
+0             0 systemd-resolve
+[   35.189948] [    283]     0   283     2032     1087    24576
+0             0 haveged
+[   35.198312] [    284]     0   284      810      457    16384
+0             0 crond
+[   35.206485] [    285]   996   285     1175      812    20480
+0          -900 dbus-daemon
+[   35.215177] [    286]     0   286    11786     2558    49152
+0             0 NetworkManager
+[   35.224121] [    287]     0   287      922      174    12288
+0             0 klogd
+[   35.232293] [    288]     0   288     1468     1001    20480
+0             0 systemd-logind
+[   35.241247] [    289]   995   289     1213      791    20480
+0             0 avahi-daemon
+[   35.250026] [    290]     0   290      677      435    16384
+0             0 atd
+[   35.258040] [    302]     0   302      921      420    16384
+0             0 syslogd
+[   35.266380] [    303]     0   303     5638     1558    32768
+0             0 thermald
+[   35.274828] [    305]   995   305     1182       58    20480
+0             0 avahi-daemon
+[   35.283659] [    306]     0   306      594       16    16384
+0             0 acpid
+[   35.291848] [    320]     0   320     1347      334    20480
+0             0 systemd-hostnam
+[   35.300906] [    336] 65534   336      729       32    16384
+0             0 dnsmasq
+[   35.309253] [    337]     0   337      666      443    16384
+0             0 agetty
+[   35.317528] [    338]     0   338      947      710    16384
+0             0 login
+[   35.325693] [    339]     0   339      666      458    16384
+0             0 agetty
+[   35.333994] [    350]   998   350    19521     2816    73728
+0             0 polkitd
+[   35.342330] [    358]     0   358     1892     1149    20480
+0             0 systemd
+[   35.350668] [    359]     0   359     2341      329    20480
+0             0 (sd-pam)
+[   35.359093] [    363]     0   363      971      711    16384
+0             0 sh
+[   35.367023] [    367]     0   367      920      627    20480
+0             0 su
+[   35.374937] [    368]     0   368      971      668    16384
+0             0 sh
+[   35.382864] [    373]     0   373      903      613    16384
+0             0 lava-test-runne
+[   35.391897] [    383]     0   383      903      518    16384
+0             0 lava-test-shell
+[   35.400935] [    384]     0   384      903      612    16384
+0             0 sh
+[   35.408847] [    393]     0   393     1976     1713    20480
+0             0 mkfs.ext4
+[   35.417384] oom-kill:constraint=CONSTRAINT_NONE,nodemask=(null),cpuset=/,mems_allowed=0,global_oom,task_memcg=/,task=polkitd,pid=350,uid=998
+[   35.429982] Out of memory: Killed process 350 (polkitd)
+total-vm:78084kB, anon-rss:2976kB, file-rss:8288kB, shmem-rss:0kB,
+UID:998 pgtables:72kB oom_score_adj:0
+[   35.444646] oom_reaper: reaped process 350 (polkitd), now
+anon-rss:0kB, file-rss:0kB, shmem-rss:0kB
+[   35.444648] mkfs.ext4 invoked oom-killer:
+gfp_mask=0x101cc0(GFP_USER|__GFP_WRITE), order=0, oom_score_adj=0
+[   35.463429] CPU: 0 PID: 393 Comm: mkfs.ext4 Not tainted
+5.7.0-rc3-next-20200430 #1
+[   35.470991] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.2 05/23/2018
+[   35.478377] Call Trace:
+[   35.480822]  dump_stack+0x54/0x6e
+[   35.484139]  dump_header+0x3d/0x1c6
+[   35.487634]  ? oom_badness.part.0+0x10/0x120
+[   35.491922]  ? ___ratelimit+0x8f/0xdc
+[   35.495578]  oom_kill_process.cold+0x9/0xe
+[   35.499669]  out_of_memory+0x1ab/0x260
+[   35.503414]  __alloc_pages_nodemask+0xe0e/0xec0
+[   35.507939]  pagecache_get_page+0xae/0x260
 
-arc:
+Git log from recent changes on fs and mm.
 
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: new failure (last pass: v5.7-rc3-247-gf693cee80=
-1ec)
+# fs$ git log --oneline ext4 | head
+5868dada23f7 ext4: pass the inode to ext4_mpage_readpages
+0c855f1fc999 ext4: convert from readpages to readahead
+ebc0198b60e9 mm: add page_cache_readahead_unbounded
+907ea529fc4c ext4: convert BUG_ON's to WARN_ON's in mballoc.c
+a17a9d935dc4 ext4: increase wait time needed before reuse of deleted
+inode numbers
+648814111af2 ext4: remove set but not used variable 'es' in ext4_jbd2.c
+05ca87c149ae ext4: remove set but not used variable 'es'
+801674f34ecf ext4: do not zeroout extents beyond i_disksize
+9033783c8cfd ext4: fix return-value types in several function comments
+d87f639258a6 ext4: use non-movable memory for superblock readahead
 
-arm:
+# fs/f2fs$ git log --oneline . | head
+a4928e314c45 Merge branch 'akpm-current/current'
+f1c6758147a8 f2fs: pass the inode to f2fs_mpage_readpages
+272e45338126 f2fs: convert from readpages to readahead
+ebc0198b60e9 mm: add page_cache_readahead_unbounded
+435cbab95e39 f2fs: fix quota_sync failure due to f2fs_lock_op
+8b83ac81f428 f2fs: support read iostat
+df4233997575 f2fs: Fix the accounting of dcc->undiscard_blks
+ce4c638cdd52 f2fs: fix to handle error path of f2fs_ra_meta_pages()
+3fa6a8c5b55d f2fs: report the discard cmd errors properly
+141af6ba5216 f2fs: fix long latency due to discard during umount
 
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 76 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-          exynos5422-odroidxu3:
-              lab-collabora: new failure (last pass: v5.7-rc3-247-gf693cee8=
-01ec)
+# fs$ git log --oneline ext4 | head
+5868dada23f7 ext4: pass the inode to ext4_mpage_readpages
+0c855f1fc999 ext4: convert from readpages to readahead
+ebc0198b60e9 mm: add page_cache_readahead_unbounded
+907ea529fc4c ext4: convert BUG_ON's to WARN_ON's in mballoc.c
+a17a9d935dc4 ext4: increase wait time needed before reuse of deleted
+inode numbers
+648814111af2 ext4: remove set but not used variable 'es' in ext4_jbd2.c
+05ca87c149ae ext4: remove set but not used variable 'es'
+801674f34ecf ext4: do not zeroout extents beyond i_disksize
+9033783c8cfd ext4: fix return-value types in several function comments
+d87f639258a6 ext4: use non-movable memory for superblock readahead
 
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: new failure (last pass: v5.7-rc3-247-gf693cee80=
-1ec)
+Test full log link,
+https://lkft.validation.linaro.org/scheduler/job/1406110#L1223
+https://lkft.validation.linaro.org/scheduler/job/1408508#L1250
 
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8096-db820c:
-              lab-bjorn: failing since 2 days (last pass: v5.7-rc3-194-g163=
-1e20d9729 - first fail: v5.7-rc3-228-g76a37a4cf830)
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-247-gf=
-693cee801ec)
-          sm8150-mtp:
-              lab-bjorn: failing since 1 day (last pass: v5.7-rc3-194-g1631=
-e20d9729 - first fail: v5.7-rc3-228-g76a37a4cf830)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-247-gf=
-693cee801ec)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-axg-s400:
-              lab-baylibre-seattle: new failure (last pass: v5.7-rc3-247-gf=
-693cee801ec)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: new failure (last pass: v5.7-rc3-247-gf693cee80=
-1ec)
-
-i386:
-
-    i386_defconfig+kselftest:
-        gcc-8:
-          qemu_i386:
-              lab-collabora: new failure (last pass: v5.7-rc3-247-gf693cee8=
-01ec)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 20 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-x86_64:
-
-    x86_64_defconfig+kselftest:
-        gcc-8:
-          qemu_x86_64:
-              lab-collabora: new failure (last pass: v5.7-rc3-247-gf693cee8=
-01ec)
-
-    x86_64_defconfig+kvm_guest:
-        gcc-8:
-          qemu_x86_64:
-              lab-collabora: new failure (last pass: v5.7-rc3-247-gf693cee8=
-01ec)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8096-db820c: 1 failed lab
-            sm8150-mtp: 1 failed lab
-            sm8250-mtp: 1 failed lab
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-            exynos5422-odroidxu3: 1 failed lab
-
-    multi_v7_defconfig+CONFIG_SMP=3Dn:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-Offline Platforms:
-
-arm64:
-
-    defconfig:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8
-            meson-axg-s400: 1 offline lab
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-Conflicting Boot Failures Detected: (These likely are not failures as other=
- labs are reporting PASS. Needs review.)
-
-i386:
-    i386_defconfig+kselftest:
-        qemu_i386:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-x86_64:
-    x86_64_defconfig+kselftest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
-    x86_64_defconfig+kvm_guest:
-        qemu_x86_64:
-            lab-baylibre: PASS (gcc-8)
-            lab-collabora: FAIL (gcc-8)
-
----
-For more info write to <info@kernelci.org>
+-- 
+Linaro LKFT
+https://lkft.linaro.org

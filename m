@@ -2,127 +2,195 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E64F1C1FD0
-	for <lists+linux-next@lfdr.de>; Fri,  1 May 2020 23:43:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01F8B1C2140
+	for <lists+linux-next@lfdr.de>; Sat,  2 May 2020 01:28:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726599AbgEAVmo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 1 May 2020 17:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbgEAVmo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 1 May 2020 17:42:44 -0400
-Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F169FC061A0C
-        for <linux-next@vger.kernel.org>; Fri,  1 May 2020 14:42:42 -0700 (PDT)
-Received: by mail-pl1-x643.google.com with SMTP id s10so4090089plr.1
-        for <linux-next@vger.kernel.org>; Fri, 01 May 2020 14:42:42 -0700 (PDT)
+        id S1726352AbgEAX2P (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 1 May 2020 19:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60022 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726045AbgEAX2P (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 1 May 2020 19:28:15 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F2BC061A0C
+        for <linux-next@vger.kernel.org>; Fri,  1 May 2020 16:28:15 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id mq3so520996pjb.1
+        for <linux-next@vger.kernel.org>; Fri, 01 May 2020 16:28:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=M2Ic6ijDAIUJ++DLKvrkOIgT8v+NxBiKNWzd47csepc=;
-        b=gP803iqaO4QrnYUjJNgpxvaevB//s2kHiZuiKJmN4lv18yp+untdOWKAkxLA0Aixiz
-         hVDPkpjCbZdOa0NLOrmxPFqo5jCJBPvlYV+iaVIJrhtT77AMIsKMTUzunQ6Lu7/pnjUW
-         oIJ5uQjESQD5VCc1Q+qE3IfOW4IUQUwOwvuzI=
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=zU0p6+7rFhKV4w0trHmO7/rhGCByyJ2dkm1zsGOk8Cw=;
+        b=DCABdxoqL93SwaJmKToAxqU6R245JFL3nmr4icxNiwjZK9xhQLLqitNjb5gzGDGk1h
+         qIOeJl+VcSjET988QDlUH2Q2So8YQ/d0Ne4DG+Eu3vtKT6YXp8HfKmC6SXTRzeOHK2GA
+         VCHw2uqFoIknS29oIN2nSpTpTHhG++H16NBSUPgYafIMY33MVV7q2N4s34SRtxW6NURD
+         FlWgLdPWO7ZvW0q7Oy1Rmt04MDYjocBxGiUnD8FgSMB+O6C62uFbDm99KaLp58VPlSYR
+         eljSh7DdIsEKiRcUR/H/GNWWWOVOQIVZVt4kC3QJh+qzsjFa4P6oQSZ20yIBVhE2J60n
+         1KyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=M2Ic6ijDAIUJ++DLKvrkOIgT8v+NxBiKNWzd47csepc=;
-        b=NmffNuLBOTbR+sBWCmPflfmr23nJ1H/DGp6hdIGj2VAEQcR9Vu+IH4aN8GujvQVNLt
-         XrvWtuAGnm5JKXflKGAxwkLJB6e5ftCwaXPKcKZ02hsIETYTmsinxErsfcjI9qNPaGwE
-         kDIt7uuVGowCUc98mwbt1ti8tMAAMeHUZpgKg7px0Vmpy0tlOPowA4BoqBkDaM2rbgLX
-         lNbcKjvdL5PneMGHxZqgvLDQyO+1oOUgUl4mrwbbvwd8FXSfnF2hHGlnTsW6E7WYevXK
-         W4VjtlvYlaZw4UbSvqdVgitHnO1S7ujw630rVd2524b0OLOQ7H9qohrSOjlRJ5mz2PlK
-         ab+w==
-X-Gm-Message-State: AGi0PuZDPbRvC1zcRtiSx9sWf7KsXlYkWpk4JYTo+X04KcL5ig2PUBJ9
-        F4zU0nDEvf3cKlNxrfD9B5jrBw==
-X-Google-Smtp-Source: APiQypIbxpFjvJzgHZfRO+fTgiu6bpM1PAgt/j/n4oBoWFuIEh57iOk2wWUXn6q+4D4FeQChYzp3sg==
-X-Received: by 2002:a17:902:9306:: with SMTP id bc6mr6348171plb.255.1588369362498;
-        Fri, 01 May 2020 14:42:42 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w69sm3039952pff.168.2020.05.01.14.42.41
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=zU0p6+7rFhKV4w0trHmO7/rhGCByyJ2dkm1zsGOk8Cw=;
+        b=kTOnm9t3uVtvkLmfx7UDgWK/F1TCE/gD6/ie7GNDC8spX7lvUCtbOMWDu/ZtoLzhlb
+         KPQuYxQJbyCrQzIzws/V+EgwltfN4vsNVgRLC15Ico+07xvVeyIbKEE4KEDpClhNlk66
+         7AWmNPwJyFnpEprmmooRgBrUTLaijZy0xDaDh1q5kH1o1P+K/MhgsFIcbZ+KHRPT+GW1
+         yft/YnvbtFKQPMxuROZREIe0nfE/wVEBXDKMth4VftgUk0x+zUPQ4ddMtwQWVj7IskHk
+         /gbQ96mI8dsPKkOYYIDowigOZLxTly1SebZ2sB0ggxG6goy0atl/41gwrFXiEDoNTKc6
+         jsfQ==
+X-Gm-Message-State: AGi0PuZpANSw+SykOsYWFP+oKWWzOTbO4qLJGoQxgr1GK/AZhlOol8Cd
+        hjhLQSd9daHzXGRTHKLEibJoXBNndqc=
+X-Google-Smtp-Source: APiQypKxsXOWXDFSIONv2cq9+OoohRXmI2MpCSlAOiyFwutULF8XogYNDaGDcFldY+8GAggwfRPVYQ==
+X-Received: by 2002:a17:902:c403:: with SMTP id k3mr6915197plk.12.1588375694087;
+        Fri, 01 May 2020 16:28:14 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id u5sm3137709pfu.198.2020.05.01.16.28.12
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 May 2020 14:42:41 -0700 (PDT)
-Date:   Fri, 1 May 2020 14:42:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrey Ryabinin <aryabinin@virtuozzo.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] ubsan: Disable UBSAN_ALIGNMENT under COMPILE_TEST
-Message-ID: <202005011433.C42EA3E2D@keescook>
+        Fri, 01 May 2020 16:28:13 -0700 (PDT)
+Message-ID: <5eacb08d.1c69fb81.2dcc.b9df@mx.google.com>
+Date:   Fri, 01 May 2020 16:28:13 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200501
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 286 boots: 7 failed, 264 passed with 7 offline,
+ 7 untried/unknown, 1 conflict (next-20200501)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The documentation for UBSAN_ALIGNMENT already mentions that it should
-not be used on all*config builds (and for efficient-unaligned-access
-architectures), so just refactor the Kconfig to correctly implement this
-so randconfigs will stop creating insane images that freak out
-objtool under CONFIG_UBSAN_TRAP (due to the false positives producing
-functions that never return, etc).
+next/master boot: 286 boots: 7 failed, 264 passed with 7 offline, 7 untried=
+/unknown, 1 conflict (next-20200501)
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/linux-next/202004231224.D6B3B650@keescook/
-Fixes: 0887a7ebc977 ("ubsan: add trap instrumentation option")
-Signed-off-by: Kees Cook <keescook@chromium.org>
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200501/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200501/
+
+Tree: next
+Branch: master
+Git Describe: next-20200501
+Git Commit: fb9d670f57e3f6478602328bbbf71138be06ca4f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 110 unique boards, 25 SoC families, 31 builds out of 231
+
+Boot Regressions Detected:
+
+arc:
+
+    hsdk_defconfig:
+        gcc-8:
+          hsdk:
+              lab-baylibre: new failure (last pass: next-20200430)
+
+arm:
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 74 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200430)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200430)
+          sun50i-h5-nanopi-neo-plus2:
+              lab-clabbe: new failure (last pass: next-20200430)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-axg-s400:
+              lab-baylibre-seattle: new failure (last pass: next-20200430)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 35 days (last pass: next-=
+20200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+            sm8150-mtp: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    allmodconfig:
+        gcc-8:
+            stm32mp157c-dk2: 1 failed lab
+
+Offline Platforms:
+
+arm64:
+
+    defconfig:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8
+            meson-axg-s400: 1 offline lab
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+Conflicting Boot Failure Detected: (These likely are not failures as other =
+labs are reporting PASS. Needs review.)
+
+i386:
+    i386_defconfig:
+        qemu_i386:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
 ---
- lib/Kconfig.ubsan                                 | 15 ++++++---------
- .../testing/selftests/wireguard/qemu/debug.config |  1 -
- 2 files changed, 6 insertions(+), 10 deletions(-)
-
-diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-index 48469c95d78e..929211039bac 100644
---- a/lib/Kconfig.ubsan
-+++ b/lib/Kconfig.ubsan
-@@ -60,18 +60,15 @@ config UBSAN_SANITIZE_ALL
- 	  Enabling this option will get kernel image size increased
- 	  significantly.
- 
--config UBSAN_NO_ALIGNMENT
--	bool "Disable checking of pointers alignment"
--	default y if HAVE_EFFICIENT_UNALIGNED_ACCESS
-+config UBSAN_ALIGNMENT
-+	bool "Enable checks for pointers alignment"
-+	default !HAVE_EFFICIENT_UNALIGNED_ACCESS
-+	depends on !X86 || !COMPILE_TEST
- 	help
--	  This option disables the check of unaligned memory accesses.
--	  This option should be used when building allmodconfig.
--	  Disabling this option on architectures that support unaligned
-+	  This option enables the check of unaligned memory accesses.
-+	  Enabling this option on architectures that support unaligned
- 	  accesses may produce a lot of false positives.
- 
--config UBSAN_ALIGNMENT
--	def_bool !UBSAN_NO_ALIGNMENT
--
- config TEST_UBSAN
- 	tristate "Module for testing for undefined behavior detection"
- 	depends on m
-diff --git a/tools/testing/selftests/wireguard/qemu/debug.config b/tools/testing/selftests/wireguard/qemu/debug.config
-index 807fa7dc60b8..b50c2085c1ac 100644
---- a/tools/testing/selftests/wireguard/qemu/debug.config
-+++ b/tools/testing/selftests/wireguard/qemu/debug.config
-@@ -25,7 +25,6 @@ CONFIG_KASAN=y
- CONFIG_KASAN_INLINE=y
- CONFIG_UBSAN=y
- CONFIG_UBSAN_SANITIZE_ALL=y
--CONFIG_UBSAN_NO_ALIGNMENT=y
- CONFIG_UBSAN_NULL=y
- CONFIG_DEBUG_KMEMLEAK=y
- CONFIG_DEBUG_KMEMLEAK_EARLY_LOG_SIZE=8192
--- 
-2.20.1
-
-
--- 
-Kees Cook
+For more info write to <info@kernelci.org>

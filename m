@@ -2,116 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 163FD1C3181
-	for <lists+linux-next@lfdr.de>; Mon,  4 May 2020 05:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9FA1C3368
+	for <lists+linux-next@lfdr.de>; Mon,  4 May 2020 09:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726472AbgEDDwz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 3 May 2020 23:52:55 -0400
-Received: from ozlabs.org ([203.11.71.1]:60343 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726404AbgEDDwy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 3 May 2020 23:52:54 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Fppq0Lzgz9sSm;
-        Mon,  4 May 2020 13:52:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588564373;
-        bh=6O/gTKsKfyQgDitWq0l6CCrgWrqbk/bSQq70qnnSe3E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=S7jBsOJWmznqSx1FAqVyzn88QdxQmSP+VBwGijonT5xHux/1CM+6LgjfeTcyjs4Gx
-         ucPBtPjf7QA+eBv1QxLjNOVGGKA+V1Mmv7Ch3azEOQ8X9gM+vsTC+2FE3HgiWRGLHQ
-         9yPrd+QTWw1jyTvELf1ebdia5rwKPha6paRcZbJvrfDlCfqE46a7lrvk4GNtgER+su
-         7zd3Jm/VWxwRFY6BhSt+WM2YfB/HZ4W74tE1NsI6GqiXogksLJFBbV8yMvNhb8cIJS
-         92poDUyaKDlYBaGMKWGgSDPdtzt9zz9DLJROdubmG8Aku4WvcjcH2KXDVSUVMvDWOx
-         WYNefqynvcG6g==
-Date:   Mon, 4 May 2020 13:52:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Herring <robherring2@gmail.com>,
-        Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1727026AbgEDHOH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 May 2020 03:14:07 -0400
+Received: from out2-smtp.messagingengine.com ([66.111.4.26]:58463 "EHLO
+        out2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1726778AbgEDHOH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 May 2020 03:14:07 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 026D35C0046;
+        Mon,  4 May 2020 03:14:06 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Mon, 04 May 2020 03:14:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm3; bh=Wz04dSbXIX4sZLODJIrar6JPrux
+        ATrYocUeUPJKhuvI=; b=ZEOi7IVwVxlKjcnWefNnHkjW966Ly5SpMnTAbvlzRgC
+        BSJd2W92RRoujZmrdTgkPvOWqnuTS897tBsUOrPXHHpOvJ960sMbnf1jdOAAlMj9
+        09KRGx2AYi4B9ouIjXDqRdtYShmMonpo6swVoSXm095+/4kOBZTcqucZFyUy9GwC
+        Bja62u5VMOq9XXyA/16o5ZCEw3/roUZPlcnmY28vqAUKZ29bYbwZ5y1IKkbXJagd
+        SQCbh+LXYbsRm5lhX7ld2fXkyDWwIndG3eqRKd4rYM2aDUmGi2VJik5Fn60Wl86G
+        kvjz2tlr5R5dK6qLqba3omW+xphLCiB+95XZHAyzEiw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; bh=Wz04dS
+        bXIX4sZLODJIrar6JPruxATrYocUeUPJKhuvI=; b=siaK7DlQJbiN7uaslRdnUO
+        w8KazPRzZoiJDsF20CMAxNPSkTa/FATjMhub3bSMlp7IJ00V5NbUhzc/uHxrpJxl
+        rx7/Y1qqSu01kNmEfuLcGuwEtuXcUxj8SkLPb92wPowzTLlRU2vQWPnBPSTtssnJ
+        NvJeYVAhNYZreeGZRc2US5gxEBimxLrjlK8eLfezuvyGykjeL3g/IB0Jgq2VRuQb
+        WH5WcVs7oASluJ5hLci8K+pQLLzRp/N9a0gJC8G4wR5NOcRpsipj9H+476hOs39c
+        NHEx1dxziuvjv8xMIoG1h2wgtZlrlAvfIZH+PloR6bHlL7xpIdIpmURF8u5GU3zQ
+        ==
+X-ME-Sender: <xms:vcCvXoF1JyjEyrq3EZxRbuJCrXkBo7whcOoqazIyUYfx0gmT9BKSaQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrjeefgdduudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefirhgvghcu
+    mffjuceoghhrvghgsehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpedufeefhe
+    dvffdvvedutddtheehieeuhfejleekleehudefteelveetvefgfffgkeenucffohhmrghi
+    nhepkhgvrhhnvghltghirdhorhhgnecukfhppeekfedrkeeirdekledruddtjeenucevlh
+    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehgrhgvgheskhhr
+    ohgrhhdrtghomh
+X-ME-Proxy: <xmx:vcCvXmWLcAMaNIA0ICDG3PK2Y4KN97x9CiRgUI2WVea2CY5tgyuGBg>
+    <xmx:vcCvXjDfsMZX8x_A6J64XUfdaKyNATD8okbZTjHwNgQBErVysTISzw>
+    <xmx:vcCvXv1q0rZpaP27I0t-A0lw-sYudUj6y95ED0DSlvjL-dv-7dFPag>
+    <xmx:vcCvXr-xoWeCgmHy30Erl6NIVYbj-DWV6VK_McJ-1DKH42T05QPDrg>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id DE1ED328005D;
+        Mon,  4 May 2020 03:14:04 -0400 (EDT)
+Date:   Mon, 4 May 2020 09:14:01 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: linux-next: manual merge of the devicetree tree with the drm tree
-Message-ID: <20200504135250.51966c49@canb.auug.org.au>
+        Rajan Vaja <rajan.vaja@xilinx.com>,
+        Jolly Shah <jolly.shah@xilinx.com>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: Re: linux-next: build failure after merge of the char-misc tree
+Message-ID: <20200504071401.GA837740@kroah.com>
+References: <20200504114625.1de2c54d@canb.auug.org.au>
+ <20200504114756.37a4948a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/IU7RdpOOufZBs8ITHvKaWMh";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200504114756.37a4948a@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/IU7RdpOOufZBs8ITHvKaWMh
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 04, 2020 at 11:47:56AM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> [Just adding cc]
+> 
+> On Mon, 4 May 2020 11:46:25 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> > 
+> > After merging the char-misc tree, Friday's linux-next build (arm64
+> > allmodconfig) failed like this:
+> > 
+> > ERROR: modpost: "zynqmp_pm_fpga_get_status" [drivers/fpga/zynqmp-fpga.ko] undefined!
+> > ERROR: modpost: "zynqmp_pm_fpga_load" [drivers/fpga/zynqmp-fpga.ko] undefined!
+> > 
+> > Presumably caused by commit
+> > 
+> >   4db8180ffe7c ("firmware: xilinx: Remove eemi ops for fpga related APIs")
+> > 
+> > Reported-by: "kernelci.org bot" <bot@kernelci.org>
 
-Hi all,
+Nathan sent me a patch for this on Friday, sorry I missed it.  I'll
+queue it up now, thanks.
 
-Today's linux-next merge of the devicetree tree got a conflict in:
-
-  Documentation/devicetree/bindings/display/panel/panel-common.yaml
-
-between commit:
-
-  92e513fb0798 ("dt-bindings: display: grammar fixes in panel/")
-
-from the drm tree and commit:
-
-  3d21a4609335 ("dt-bindings: Remove cases of 'allOf' containing a '$ref'")
-
-from the devicetree tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/devicetree/bindings/display/panel/panel-common.yaml
-index 17b8367f12dd,db3d270a33c6..000000000000
---- a/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/panel-common.yaml
-@@@ -63,11 -61,10 +61,10 @@@ properties
- =20
-    display-timings:
-      description:
- -      Some display panels supports several resolutions with different tim=
-ing.
- +      Some display panels support several resolutions with different timi=
-ngs.
-        The display-timings bindings supports specifying several timings and
- -      optional specify which is the native mode.
- +      optionally specifying which is the native mode.
--     allOf:
--       - $ref: display-timings.yaml#
-+     $ref: display-timings.yaml#
- =20
-    # Connectivity
-    port:
-
---Sig_/IU7RdpOOufZBs8ITHvKaWMh
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6vkZIACgkQAVBC80lX
-0GzgGAf6AnkTS9RySIb8lS8RUC4ksAylmyKYPffMLVU8BUG8Ao7cRfSaPsALfaNf
-W9yr1VA1+jcFqj8CjG0Tjm+O5Gz+Rc/L1GC0Og/7cls5bUkXvYNaNx3Do4ovS+ZM
-5jIf8q2JxhpJod14CX/MskBzqlBVTElg9kAlzzpOkHnInmvbTzXZ2WcSXcPp/M73
-R5+c7zwW4ba3GzUcj6MmnxCxP51mdvB+6uYNlUU7thZ5qeQHt6FucdSNzxH8KdJU
-s4x4lFpIGOE0NHgxWJvmjpZyK/3Do5kQRsVd6GJLGbIFw0eS0UxIHLlGOUVboCcB
-NbPR89aw5DtXdvXpEbimJ6VUyp5crQ==
-=cs8Y
------END PGP SIGNATURE-----
-
---Sig_/IU7RdpOOufZBs8ITHvKaWMh--
+greg k-h

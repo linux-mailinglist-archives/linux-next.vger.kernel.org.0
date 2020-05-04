@@ -2,116 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FF801C3558
-	for <lists+linux-next@lfdr.de>; Mon,  4 May 2020 11:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA0C1C3D8C
+	for <lists+linux-next@lfdr.de>; Mon,  4 May 2020 16:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727801AbgEDJPZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 4 May 2020 05:15:25 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:39595 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727108AbgEDJPZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 4 May 2020 05:15:25 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200504091523euoutp0298e15a0e4cb48a895c997c0caa9b8390~LyHrfX4Ec0689506895euoutp02U
-        for <linux-next@vger.kernel.org>; Mon,  4 May 2020 09:15:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200504091523euoutp0298e15a0e4cb48a895c997c0caa9b8390~LyHrfX4Ec0689506895euoutp02U
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1588583723;
-        bh=CtJ5D+XH+++f+BDG9gPxVNC4UIlkzWo+wffpj9ZE2bI=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=Q6MAxaimysWE37CnQaD7KTCvpfTvy+SD2Xd9Vk//X6EUMlswGejTp0Oy35MeOkTQz
-         6PSWknJi/hzR1G7iRjzVSAic0ufwflAYgWmMGN+1EQNxBnZ7NY0r/sQqIEM82muQeV
-         w/ZIlGrcE+JGj3nt3CagrRsNRFfX1cmxWFQ6j5pw=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20200504091523eucas1p10fee346c7a71491263197f9abb03e307~LyHrP45qd1298212982eucas1p1b;
-        Mon,  4 May 2020 09:15:23 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 3E.F1.60698.B2DDFAE5; Mon,  4
-        May 2020 10:15:23 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200504091523eucas1p1856860f6f7f9ddcd6b8bec87fdbc0447~LyHq9nAor1298612986eucas1p1J;
-        Mon,  4 May 2020 09:15:23 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200504091523eusmtrp226626b15904afb416921dadd37541b70~LyHq9FStq2111921119eusmtrp2D;
-        Mon,  4 May 2020 09:15:23 +0000 (GMT)
-X-AuditID: cbfec7f5-a0fff7000001ed1a-fc-5eafdd2b730b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id C5.07.07950.B2DDFAE5; Mon,  4
-        May 2020 10:15:23 +0100 (BST)
-Received: from [106.210.123.115] (unknown [106.210.123.115]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200504091522eusmtip1da9209630cfaf00707561ac100869ea6~LyHqr0WsY0557905579eusmtip1c;
-        Mon,  4 May 2020 09:15:22 +0000 (GMT)
-Subject: Re: linux-next: error when fetching the clk-samsung tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Sylwester Nawrocki <s.nawrocki@samsung.com>
-Message-ID: <1ab13824-6fcc-e2fa-c2d8-3595bc070f03@samsung.com>
-Date:   Mon, 4 May 2020 11:15:22 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.7.0
+        id S1729195AbgEDOuT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 4 May 2020 10:50:19 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:1167 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727833AbgEDOuS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 4 May 2020 10:50:18 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 044Ehcv7172999;
+        Mon, 4 May 2020 10:50:12 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 30s1svtbn0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 May 2020 10:50:12 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 044EjD7Y019666;
+        Mon, 4 May 2020 14:50:10 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma01fra.de.ibm.com with ESMTP id 30s0g5a1h5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 04 May 2020 14:50:10 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 044Eo7Qo28114948
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 4 May 2020 14:50:07 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B7041AE053;
+        Mon,  4 May 2020 14:50:07 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 198F1AE04D;
+        Mon,  4 May 2020 14:50:07 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.161.129])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon,  4 May 2020 14:50:07 +0000 (GMT)
+Subject: Re: linux-next: Tree for May 4 --> mm: free_area_init: allow defining
+ max_zone_pfn in descending order does increase memory use
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+References: <20200504173547.2cdd83bf@canb.auug.org.au>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Message-ID: <9e9edd1e-6653-a585-0e22-69930a07dce1@de.ibm.com>
+Date:   Mon, 4 May 2020 16:50:06 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-In-Reply-To: <20200504084835.5814c682@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"
+In-Reply-To: <20200504173547.2cdd83bf@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupgleLIzCtJLcpLzFFi42LZduzneV3tu+vjDJo2C1tc3jWHzeLgwjZG
-        i617r7I7MHs03rjB5vF5k1wAUxSXTUpqTmZZapG+XQJXxvLN+5gKGlgqphw7xdbAOJ+5i5GT
-        Q0LAROLcigb2LkYuDiGBFYwS77edYIJwvjBKHF7SDOV8ZpRo6ngB1/L/8TtmiMRyRomve2az
-        Qjgfgfq/bGfsYuTgEBZwlPi6SATEFBHQljjwWwCkl1mgROLT6t2sIDabgKFE79E+RhCbV8BO
-        YvPf42BxFgEViZ93jrKAtIoKxEpMvxYCUSIocXLmExYQm1PAXGL5yRnMECMNJI4smsMKYYtL
-        3HoynwnClpfY/nYO2JkSAv/ZJGa03GeEuN9F4tal6VC/CEu8Or6FHcKWkfi/cz4TREMzo0TP
-        7tvsEM4ERon7xxdAdVtL3Dn3iw3CdpTYsmgDK8ilEgJ8EjfeCkJs5pOYtA1kAUiYV6KjTQii
-        WkXi96rpTBC2lET3k/8sExiVZiH5bRaSf2Yh+WcWkn8WMLKsYhRPLS3OTU8tNs5LLdcrTswt
-        Ls1L10vOz93ECEwfp/8d/7qDcd+fpEOMAhyMSjy8Dz6vixNiTSwrrsw9xCjBwawkwrujZX2c
-        EG9KYmVValF+fFFpTmrxIUZpDhYlcV7jRS9jhQTSE0tSs1NTC1KLYLJMHJxSDYx5ET+sXp8I
-        13xVd2LzQds5fmEO/l/VP1+5emrxv6NSXU4sup86dh68bG+j4Mm4aGO+UsQ1cyl+y8sWmpfz
-        vn/nz+Nlc0v8rfrFba/u8RbR9NY3bZ9PnayPl5DoN53+xvaA7C4Wjm3ZKZnl4lGSAdl7wraI
-        ibZbsPy6fEpFTK/3yCPxSdysRUosxRmJhlrMRcWJALiHLZ4bAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOIsWRmVeSWpSXmKPExsVy+t/xu7rad9fHGcyZxGxxedccNouDC9sY
-        LbbuvcruwOzReOMGm8fnTXIBTFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkam
-        Svp2NimpOZllqUX6dgl6Gcs372MqaGCpmHLsFFsD43zmLkZODgkBE4n/j98B2VwcQgJLGSW+
-        vDrG1MXIAZSQkpjfogRRIyzx51oXG0TNe0aJid2nmEFqhAUcJb4uEgExRQS0JQ78FgApZxYo
-        kZg2YycrRHkXo8Ten+tYQRJsAoYSvUf7GEFsXgE7ic1/j4PFWQRUJH7eOcoCMkdUIFai5aIm
-        RImgxMmZT1hAbE4Bc4nlJ2cwQ8zXk9hx/RcrhC0ucevJfCYIW15i+9s5zBMYhWYhaZ+FpGUW
-        kpZZSFoWMLKsYhRJLS3OTc8tNtIrTswtLs1L10vOz93ECIyUbcd+btnB2PUu+BCjAAejEg/v
-        g8/r4oRYE8uKK3MPMUpwMCuJ8O5oWR8nxJuSWFmVWpQfX1Sak1p8iNEU6LeJzFKiyfnAKM4r
-        iTc0NTS3sDQ0NzY3NrNQEuftEDgYIySQnliSmp2aWpBaBNPHxMEp1cBY6DNzol5w9eOgk14S
-        QpN+a1qLs4goZq893dt1wiBzlpug1AaNdTFv/N41rIqNmmT9+0jGjIr7dqv+arY7OHtkv5Az
-        Pf3oedsUhaPTK/n8wircOCf+50xelHH6BevcEpXDB112+b8+LfyRM+FNDG9zz+b+W3sEkyex
-        1yo2ikybyWh056TrOgMlluKMREMt5qLiRADbpmjmqgIAAA==
-X-CMS-MailID: 20200504091523eucas1p1856860f6f7f9ddcd6b8bec87fdbc0447
-X-Msg-Generator: CA
-X-RootMTR: 20200503224848eucas1p2446520ac65d79c4a59d5665bf915f7e6
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200503224848eucas1p2446520ac65d79c4a59d5665bf915f7e6
-References: <CGME20200503224848eucas1p2446520ac65d79c4a59d5665bf915f7e6@eucas1p2.samsung.com>
-        <20200504084835.5814c682@canb.auug.org.au>
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-05-04_08:2020-05-04,2020-05-04 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 malwarescore=0 phishscore=0 adultscore=0
+ impostorscore=0 mlxlogscore=923 bulkscore=0 clxscore=1015 suspectscore=2
+ mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005040118
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Mike,
+commit 51a2f644fd020d5f090044825c388444d11029d ("mm: free_area_init: allow defining max_zone_pfn in descending order")
+does increase the memory use on s390 (e.g. 700 MB vs.1.8 GB).
 
-On 04.05.2020 00:48, Stephen Rothwell wrote:
-> Fetching the clk-samsung tree
-> (git://git.kernel.org/pub/scm/linux/kernel/git/snawrocki/clk.git#for-next)
-> produces the following error:
-> 
-> fatal: couldn't find remote ref refs/heads/for-next
-> 
-> I am using the last version I fetched (which is empty relative to Linus'
-> tree).
-
-Apologies for an oversight on my side, it should be fixed now (there will 
-be still no new patches comparing to Linus' tree).
-
---
-Regards, 
-Sylwester
+Something is odd in this patch. Any idea?

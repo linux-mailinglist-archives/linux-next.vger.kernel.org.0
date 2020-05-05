@@ -2,135 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AACE81C518E
-	for <lists+linux-next@lfdr.de>; Tue,  5 May 2020 11:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F9BB1C5201
+	for <lists+linux-next@lfdr.de>; Tue,  5 May 2020 11:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728489AbgEEJGe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 5 May 2020 05:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbgEEJGe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 5 May 2020 05:06:34 -0400
-Received: from mail-lf1-x143.google.com (mail-lf1-x143.google.com [IPv6:2a00:1450:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA947C061A0F
-        for <linux-next@vger.kernel.org>; Tue,  5 May 2020 02:06:32 -0700 (PDT)
-Received: by mail-lf1-x143.google.com with SMTP id a4so721352lfh.12
-        for <linux-next@vger.kernel.org>; Tue, 05 May 2020 02:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nO6ukHcZ3A2s0DjR/Sbge6NFlDUm1cYVWdAlZ6rxYbs=;
-        b=yBDN+kJtFtreoIQShuVrrpbfggrRgrQroU1Jlch/wI7siJg8UatQT2wuM2vHyBFrPn
-         VbQYdTFURvS7dwFYRzHHjdOJm7phI0thy7YOmpPj1nMfksJSY16Yo8VvB5q0PClq9D1A
-         njGkmIMyXUqrW7mRf/KA4TkXqvmReVxhHBUoygXMQcQ0i+ZTkQzImmKYA1cLmVvSiq6c
-         2ewTFwIjP0qzbYL48k+CgRtr6Td0/R1n+nzW0hbLi/dYBilMdWvuVqAV1Hve39PlyBcl
-         dxOG19T7mExPkLdSASwhdv0TNaBnDatj2LNGWhmylqN0mSfi7oM57L4P4NBmboEi2iju
-         wBTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nO6ukHcZ3A2s0DjR/Sbge6NFlDUm1cYVWdAlZ6rxYbs=;
-        b=juBLRzW54q+80MajxVVj8WQ4T1mejq6mOL8WPFWpEB7n+1qCPXqEmJIfVXqpksfkyP
-         fKaNSE3l2DAlzCOPpuVpCvDyK5Heq6IVajFp2zwA53Ba04p7H3iMXLBo+aVbahdEvEVb
-         /5KXXhF+D1icV3oCdjH2UBXOJQ9YlCvDvGcD9yYUJq6E5lTRPfBmswUpn8mji2uZpjIt
-         cuvvFnKZonML9Ty3QRuxakewzdNZoVMIFc20p2qiBoD4NkQBANbnTK+l/2TCUDIneDNz
-         49urrNH4GoOHxdsYU9Q6eidkhcuGDR+mXJIuK+tQ9PUgbnIkuWx5/h2cvfGGI4qWbRU+
-         /eGw==
-X-Gm-Message-State: AGi0PuZsk7lAx1Cs38mNmIl3cQdMo3k3JcXFIMoEb/anMEBevs37PeIY
-        0OmekZzU4LhVgV/vsngcwhg6cX4YWeG9G37uQtA2lhjGv2P1Xg==
-X-Google-Smtp-Source: APiQypJwoVCHWmXH/6fevEAsP9bi0U+ixeJ1CzTbJIy0zTggYHWzUCRHaeTFmFZj3tCWKqSLBmW/uhcymDPK2nimKsc=
-X-Received: by 2002:a19:7004:: with SMTP id h4mr966365lfc.148.1588669591097;
- Tue, 05 May 2020 02:06:31 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200505171548.6e1388f4@canb.auug.org.au>
-In-Reply-To: <20200505171548.6e1388f4@canb.auug.org.au>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Tue, 5 May 2020 11:06:20 +0200
-Message-ID: <CADYN=9K90_GQVuc=X-kcryRm0xKDVwfza6RpriNe6ehwsp+-Ew@mail.gmail.com>
-Subject: Re: linux-next: Tree for May 5
-To:     Stephen Rothwell <sfr@canb.auug.org.au>, grygorii.strashko@ti.com,
-        David Miller <davem@davemloft.net>
+        id S1728238AbgEEJg0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 5 May 2020 05:36:26 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:26414 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1725766AbgEEJg0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 5 May 2020 05:36:26 -0400
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04594jYB112617;
+        Tue, 5 May 2020 05:36:21 -0400
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 30s36bu5ex-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 May 2020 05:36:21 -0400
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 0459ZkxI030531;
+        Tue, 5 May 2020 09:36:18 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03ams.nl.ibm.com with ESMTP id 30s0g5pne9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 05 May 2020 09:36:18 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 0459aGuO44040428
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 5 May 2020 09:36:16 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 02D8852050;
+        Tue,  5 May 2020 09:36:16 +0000 (GMT)
+Received: from oc7455500831.ibm.com (unknown [9.145.49.139])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 35F2E52052;
+        Tue,  5 May 2020 09:36:15 +0000 (GMT)
+Subject: Re: linux-next: Tree for May 4 --> mm: free_area_init: allow defining
+ max_zone_pfn in descending order does increase memory use
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mike Rapoport <rppt@linux.ibm.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Hartmayer <mhartmay@linux.ibm.com>,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+References: <20200504173547.2cdd83bf@canb.auug.org.au>
+ <9e9edd1e-6653-a585-0e22-69930a07dce1@de.ibm.com>
+ <20200504154410.GF342687@linux.ibm.com>
+ <20200505070828.20fd21af@canb.auug.org.au>
+From:   Christian Borntraeger <borntraeger@de.ibm.com>
+Autocrypt: addr=borntraeger@de.ibm.com; prefer-encrypt=mutual; keydata=
+ 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
+ nS4h0HDFPrrp1C2EMVYIQrMokWvlFZbCpsdYbBI=
+Message-ID: <1631771e-371b-c233-ec0f-056646694c85@de.ibm.com>
+Date:   Tue, 5 May 2020 11:36:14 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
+MIME-Version: 1.0
+In-Reply-To: <20200505070828.20fd21af@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.138,18.0.676
+ definitions=2020-05-05_05:2020-05-04,2020-05-05 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ bulkscore=0 priorityscore=1501 mlxscore=0 phishscore=0 clxscore=1015
+ malwarescore=0 suspectscore=0 spamscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2003020000 definitions=main-2005050074
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 5 May 2020 at 09:16, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> Changes since 20200504:
->
-> New tree: ti-k3
->
-> My fixes tree contains:
->
->   bbefc924d0ff ("ubsan: disable UBSAN_ALIGNMENT under COMPILE_TEST")
->   7cb1d38f52b1 ("drm/msm: Fix undefined "rd_full" link error")
->
-> The qcom tree still had its build failure for which I reverted a commit.
->
-> Non-merge commits (relative to Linus' tree): 5888
->  6922 files changed, 233385 insertions(+), 91859 deletions(-)
->
-
-I did an arm64 allmodconfig build and got this undefined symbol:
-
-aarch64-linux-gnu-ld: drivers/net/ethernet/ti/am65-cpsw-nuss.o: in
-function `am65_cpsw_init_cpts':
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1685:
-undefined reference to `am65_cpts_create'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1685:(.text+0x2e20):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`am65_cpts_create'
-aarch64-linux-gnu-ld: drivers/net/ethernet/ti/am65-cpsw-nuss.o: in
-function `am65_cpsw_nuss_tx_compl_packets':
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:923:
-undefined reference to `am65_cpts_tx_timestamp'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:923:(.text+0x4cf0):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`am65_cpts_tx_timestamp'
-aarch64-linux-gnu-ld: drivers/net/ethernet/ti/am65-cpsw-nuss.o: in
-function `am65_cpsw_nuss_ndo_slave_xmit':
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1018:
-undefined reference to `am65_cpts_prep_tx_timestamp'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1018:(.text+0x58fc):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`am65_cpts_prep_tx_timestamp'
-aarch64-linux-gnu-ld: drivers/net/ethernet/ti/am65-cpsw-nuss.o: in
-function `am65_cpsw_nuss_hwtstamp_set':
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1265:
-undefined reference to `am65_cpts_rx_enable'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-nuss.c:1265:(.text+0x7564):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`am65_cpts_rx_enable'
-aarch64-linux-gnu-ld: drivers/net/ethernet/ti/am65-cpsw-ethtool.o: in
-function `am65_cpsw_get_ethtool_ts_info':
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-ethtool.c:713:
-undefined reference to `am65_cpts_phc_index'
-aarch64-linux-gnu-ld:
-/srv/src/kernel/next/obj-arm64-next-20200505/../drivers/net/ethernet/ti/am65-cpsw-ethtool.c:713:(.text+0xbe8):
-relocation truncated to fit: R_AARCH64_CALL26 against undefined symbol
-`am65_cpts_phc_index'
-make[1]: *** [/srv/src/kernel/next/Makefile:1114: vmlinux] Error 1
-make[1]: Target 'Image' not remade because of errors.
-make: *** [Makefile:180: sub-make] Error 2
-make: Target 'Image' not remade because of errors.
 
 
-I was able to build if I reverted this patch:
-b1f66a5bee07 ("net: ethernet: ti: am65-cpsw-nuss: enable packet
-timestamping support")
+On 04.05.20 23:08, Stephen Rothwell wrote:
+> Hi Mike,
+> 
+> On Mon, 4 May 2020 18:44:10 +0300 Mike Rapoport <rppt@linux.ibm.com> wrote:
+>>
+>> Ho Christian,
+>>
+>> On Mon, May 04, 2020 at 04:50:06PM +0200, Christian Borntraeger wrote:
+>>> Mike,
+>>> commit 51a2f644fd020d5f090044825c388444d11029d ("mm: free_area_init: allow defining max_zone_pfn in descending order")
+>>> does increase the memory use on s390 (e.g. 700 MB vs.1.8 GB).
+>>>
+>>> Something is odd in this patch. Any idea?  
+>>
+>> Yeah, this patch is buggy. In short, it breaks zone size calculation on
+>> s390 and some other architectures.
+>>
+>> I've just replied at [1] with more details and a fix.
+>>
+>> [1] https://lore.kernel.org/linux-mm/20200504153901.GM14260@kernel.org/
+> 
+> I have added that to linux-next for today.
+> 
 
-
-Cheers,
-Anders
+Ack, 5.7.0-rc4-next-20200505 seems to work fine. 

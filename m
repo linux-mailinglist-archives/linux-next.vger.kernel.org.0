@@ -2,120 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA881C7B61
-	for <lists+linux-next@lfdr.de>; Wed,  6 May 2020 22:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E47F1C7D2B
+	for <lists+linux-next@lfdr.de>; Thu,  7 May 2020 00:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727934AbgEFUf3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 6 May 2020 16:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51086 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726093AbgEFUf3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 6 May 2020 16:35:29 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A30C061A0F;
-        Wed,  6 May 2020 13:35:29 -0700 (PDT)
+        id S1729967AbgEFWTc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 6 May 2020 18:19:32 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:53497 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729114AbgEFWTb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 6 May 2020 18:19:31 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49HSyh6XhJz9sRY;
-        Thu,  7 May 2020 06:35:24 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49HWGk1kvcz9sP7;
+        Thu,  7 May 2020 08:19:26 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588797326;
-        bh=NwcnAUxzQxfI5RiY9l3BwK9CdPv/e/PbCfVJoOYWUoM=;
+        s=201702; t=1588803569;
+        bh=cvnMZTLI2KRIxxSUz/K4Hmuh15cwPhFtGK6dZGCUSU8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=FYshvVMM/U1YFW6ccHtYPqBwXN9gzBFM6KbNPSf8D9LJya7mLJAZO09pReDd/HxBA
-         qC7nPQ/xsYpMdL72AnjM4zLiypLJkB7mjfwRq1NYtTTFKOftI3oiuVr1AK4gMUnzmP
-         lnaL+Nos6LzPqziaj9wE8D6vbZoZTMZm+GOZd7Sjl6knIQX9HnEeHCBKinav4ObBby
-         vjUD/eUfbhTTrWsdwuqV2hnrl3S3uxglxdDglaUajv1qVknQr9Jfr17np26FGH+OY5
-         DyN8h++jD9DsgOlQh3zbklaG4qEkdZEZRx16anIK7RPnJlKMGf85hFxYIWwnFRIgig
-         2TyJAKyoOAJOQ==
-Date:   Thu, 7 May 2020 06:35:24 +1000
+        b=hnOw9cEZq94+CAbYxDvqRzI/w57/afztYTZ+FX1zfjWIdL6dcEIc1v78Vm34ivBLS
+         JCFWI93rNJHn24szr9SSUp3UNkq6w8XXqkyidtzj7h0o8RrehTeEiIxoJoWmbMAXku
+         grM/NSreaRTmeb//r4TKY6fz7iTN2+Zhhl27wTy/O8slmuvEq7jyjJaTq0md6RohG6
+         /mFbWUjqznMutDBADLNpYHrQCI4yHhfPjcaIuwigPnhS+fxSvYQeJftMSWgUeofgFR
+         /90VYp7Lf39sc+vHVezRctIR8LOPIbRN09A3D34xQuXn0qzt4bSyTs4xQ+5kOGe1dd
+         dv127hcYpVniw==
+Date:   Thu, 7 May 2020 08:19:23 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Qian Cai <cai@lca.pw>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Amol Grover <frextrite@gmail.com>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        syzbot <syzbot+1519f497f2f9f08183c6@syzkaller.appspotmail.com>,
-        David Miller <davem@davemloft.net>, kuba@kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        LKML <linux-kernel@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "paul E. McKenney" <paulmck@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: Re: linux-next boot error: WARNING: suspicious RCU usage in
- ipmr_get_table
-Message-ID: <20200507063524.5356b923@canb.auug.org.au>
-In-Reply-To: <1D570330-8E3E-4596-AD9B-21CE6A86F146@lca.pw>
-References: <000000000000df9a9805a455e07b@google.com>
-        <CACT4Y+YnjK+kq0pfb5fe-q1bqe2T1jq_mvKHf--Z80Z3wkyK1Q@mail.gmail.com>
-        <34558B83-103E-4205-8D3D-534978D5A498@lca.pw>
-        <20200507061635.449f9495@canb.auug.org.au>
-        <1D570330-8E3E-4596-AD9B-21CE6A86F146@lca.pw>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: ARM: futex: Address build warning
+Message-ID: <20200507081924.7c77bfc9@canb.auug.org.au>
+In-Reply-To: <87pncao2ph.fsf@nanos.tec.linutronix.de>
+References: <20200330134746.627dcd93@canb.auug.org.au>
+        <20200401085753.617c1636@canb.auug.org.au>
+        <877dyzv6y2.fsf@nanos.tec.linutronix.de>
+        <20200402090051.741905cd@canb.auug.org.au>
+        <874ku2q18k.fsf@nanos.tec.linutronix.de>
+        <20200413100112.2e114e24@canb.auug.org.au>
+        <87pncao2ph.fsf@nanos.tec.linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ucjhpYCb9TG.8NNMwqXguvb";
+Content-Type: multipart/signed; boundary="Sig_/ScnmteIMj_Vg.3wJi0L3LjA";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ucjhpYCb9TG.8NNMwqXguvb
+--Sig_/ScnmteIMj_Vg.3wJi0L3LjA
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Qian,
+Hi all,
 
-On Wed, 6 May 2020 16:21:05 -0400 Qian Cai <cai@lca.pw> wrote:
->
-> > On May 6, 2020, at 4:16 PM, Stephen Rothwell <sfr@canb.auug.org.au> wro=
+On Tue, 14 Apr 2020 11:07:22 +0200 Thomas Gleixner <tglx@linutronix.de> wro=
 te:
-> >=20
-> > Hi Qian,
-> >=20
-> > On Tue, 28 Apr 2020 09:56:59 -0400 Qian Cai <cai@lca.pw> wrote: =20
-> >>  =20
-> >>> On Apr 28, 2020, at 4:57 AM, Dmitry Vyukov <dvyukov@google.com> wrote=
-:   =20
-> >>>> net/ipv4/ipmr.c:136 RCU-list traversed in non-reader section!!   =20
-> >>=20
-> >> https://lore.kernel.org/netdev/20200222063835.14328-2-frextrite@gmail.=
-com/
-> >>=20
-> >> Never been picked up for a few months due to some reasons. You could p=
-robably
-> >> need to convince David, Paul, Steven or Linus to unblock the bot or ca=
-rry patches
-> >> on your own? =20
-> >=20
-> > Did you resubmit the patch series as Dave Miller asked you to (now that
-> > net-next is based on v5.7-rc1+)? =20
+>
+> Stephen reported the following build warning on a ARM multi_v7_defconfig
+> build with GCC 9.2.1:
 >=20
-> Actually, it was Amol not me who submit the patch, so let him to answer t=
-hat.
+> kernel/futex.c: In function 'do_futex':
+> kernel/futex.c:1676:17: warning: 'oldval' may be used uninitialized in th=
+is function [-Wmaybe-uninitialized]
+>  1676 |   return oldval =3D=3D cmparg;
+>       |          ~~~~~~~^~~~~~~~~
+> kernel/futex.c:1652:6: note: 'oldval' was declared here
+>  1652 |  int oldval, ret;
+>       |      ^~~~~~
+>=20
+> introduced by commit a08971e9488d ("futex: arch_futex_atomic_op_inuser()
+> calling conventions change").
+>=20
+> While that change should not make any difference it confuses GCC which
+> fails to work out that oldval is not referenced when the return value is
+> not zero.
+>=20
+> GCC fails to properly analyze arch_futex_atomic_op_inuser(). It's not the
+> early return, the issue is with the assembly macros. GCC fails to detect
+> that those either set 'ret' to 0 and set oldval or set 'ret' to -EFAULT
+> which makes oldval uninteresting. The store to the callsite supplied oldv=
+al
+> pointer is conditional on ret =3D=3D 0.
+>=20
+> The straight forward way to solve this is to make the store unconditional.
+>=20
+> Aside of addressing the build warning this makes sense anyway because it
+> removes the conditional from the fastpath. In the error case the stored
+> value is uninteresting and the extra store does not matter at all.
+>=20
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/r/874ku2q18k.fsf@nanos.tec.linutronix.de
+> ---
+>  arch/arm/include/asm/futex.h |    9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>=20
+> --- a/arch/arm/include/asm/futex.h
+> +++ b/arch/arm/include/asm/futex.h
+> @@ -165,8 +165,13 @@ arch_futex_atomic_op_inuser(int op, int
+>  	preempt_enable();
+>  #endif
+> =20
+> -	if (!ret)
+> -		*oval =3D oldval;
+> +	/*
+> +	 * Store unconditionally. If ret !=3D 0 the extra store is the least
+> +	 * of the worries but GCC cannot figure out that __futex_atomic_op()
+> +	 * is either setting ret to -EFAULT or storing the old value in
+> +	 * oldval which results in a uninitialized warning at the call site.
+> +	 */
+> +	*oval =3D oldval;
+> =20
+>  	return ret;
+>  }
 
-Oops, sorry.
+Any response to this?  I am still getting the warning ...
+
+The warning was introduced by commit
+
+  a08971e9488d ("futex: arch_futex_atomic_op_inuser() calling conventions c=
+hange")
+
+Which has been in Linus' tree since before v5.7-rc1.  Should this go in
+via the tip tree, the arm tree, or will I just send ti to Linus myself?
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ucjhpYCb9TG.8NNMwqXguvb
+--Sig_/ScnmteIMj_Vg.3wJi0L3LjA
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6zH4wACgkQAVBC80lX
-0Gw2Lgf/VFgex0t54wjG2dK6n/EDR0ThAd6SoZHRqdGtVbVRAHps0PhM62aD/GQ5
-D2KAQzZixnpRDBLLATL+ksUDeDCFm0xWDtuMy82wSSJXw4Klvflxu/PgsNmer104
-IrJ8SJ1JYPPmKdA/vdvXr054Hqp9/BRU8PuNV93NjZ/5iSLcYZWUR+WAh3lUrwm1
-b9hq27kuMuY7pKVbDZBHpMz7IXxhPjmnupnx/56TdkcPvyojbUCvkCC89fARxpTi
-5L+qvYr5PSUMYRiV5TcU4gg0Vq8KBIqhCQ2synBC7Phf6mFwrr8tcAhj0Girhtmg
-/KZz18qsGXOpST/GFHMe9qqS23VRqA==
-=P1M5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6zN+wACgkQAVBC80lX
+0GwZmwf/aePLWiH5arcTzhuOXIsMsYUaw6sCxEllNlLA36DHq3f4kC0k8c6NeDIY
+hD91S189DeTo9UBXSebPNQ0s3YnypjcURfRAEfY3tWzxjAJDV9f2WR4z56y6j4ML
+HF26mQ1OvX0So+blF7IUlfkP/f5aAWuyWRMEhXGV0Iios0w219NwLW30hbHbU5F/
+GBeSE31PDPL4P+hxypPhubB6E8pH/H8LkgdFeezbDx4qLIBgQhKR8kGczi6Jbxmn
+1F6HMqPkVLMoeMBy7tTUV2uxLPRLgDHo4jhHurQLQ4LrGvIMdzEgFau25xwStNOL
+4dL7EHIuSvFiYPtAGpjeRFY/HKrpuQ==
+=qjow
 -----END PGP SIGNATURE-----
 
---Sig_/ucjhpYCb9TG.8NNMwqXguvb--
+--Sig_/ScnmteIMj_Vg.3wJi0L3LjA--

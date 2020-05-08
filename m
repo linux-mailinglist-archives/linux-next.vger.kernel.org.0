@@ -2,160 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F33321CA83F
-	for <lists+linux-next@lfdr.de>; Fri,  8 May 2020 12:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A07221CA872
+	for <lists+linux-next@lfdr.de>; Fri,  8 May 2020 12:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726751AbgEHKWY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 8 May 2020 06:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37630 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726750AbgEHKWY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 8 May 2020 06:22:24 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE45C05BD43;
-        Fri,  8 May 2020 03:22:23 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49JRGN5tpbz9sRf;
-        Fri,  8 May 2020 20:22:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1588933341;
-        bh=0eP6U+NWK0xCwg5huvpFDX9P9MaHXUOvW79JeY6HvRY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n/5n/GKGGCsZdI4upKuvZCEou+MpCKkdSqV1mA54dEnbVlIOuyiOs2AX+tcp5exdc
-         401m+LJkSJnKtyYCGWlSIo/KHDG7v/c8JLGreZmYB5u5vVNVdF5ZwKDUao26RGhEZJ
-         /OqrgHyyZyLuXrM8CuQrp9HnjN8UjSi7qFhrVu2QnkyI7hOpvvRwwyvoVMuisTGel7
-         EpY3Kb9ek0KflnY6UvkRjspUgU+ebzSpKm+BuUMjAgqxkA3Zp2zJrHKaWPXm9I1Bw1
-         SryKvC/JcdX/D45TFPwTiUegqxIxuGlrRwoKmfjqRYFcNEiyvK/o3QBKQP+KC6SxFt
-         YDhohpfhqPEUA==
-Date:   Fri, 8 May 2020 20:22:17 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Sandipan Das <sandipan@linux.ibm.com>
-Subject: linux-next: manual merge of the akpm-current tree with the hmm tree
-Message-ID: <20200508202217.4e5b9442@canb.auug.org.au>
+        id S1726797AbgEHKii (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 8 May 2020 06:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725825AbgEHKii (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 8 May 2020 06:38:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48EDBC05BD43;
+        Fri,  8 May 2020 03:38:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oXjqqQJLus+/+zgHpN+/AuMXduVDDwIK2LOdHmK15tc=; b=hqBpaCsScr1CBw9qTMDCEPKHYk
+        Vzdocnr2sYswbK6FaReKGV273kCCaSBnYJ+goewpl5f86l5zKc3ELxwcXXHOcPXNT+1IhWLMOQAan
+        3Fyzbz0rOBuZ4FhxMAwZxDJu5NQ0iAOouBLlfBAzuPPZL72A6YsAsbo9jK8anny1OlP3rvUR3U8SO
+        JZujHiFU4Q/zpdBS2xlIGP7QT4Jw65SrcKR7+LBeAB65219EQGZSnNx9r4BPyKPhutUkjbHrr8oTR
+        EwyIim5iqIrhMYjNXHeGlpqnQ85coMC7RIundnsYavLbxvmRURsitC4WOX+lwFcELfo1VaGEg2A1v
+        vJhfma6w==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jX0On-00020w-8t; Fri, 08 May 2020 10:38:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D77F43010C8;
+        Fri,  8 May 2020 12:38:30 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6D361201C228D; Fri,  8 May 2020 12:38:30 +0200 (CEST)
+Date:   Fri, 8 May 2020 12:38:30 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: mmotm 2020-05-05-15-28 uploaded (objtool warning)
+Message-ID: <20200508103830.GZ5298@hirez.programming.kicks-ass.net>
+References: <20200505222922.jajHT3b4j%akpm@linux-foundation.org>
+ <36dc367a-f647-4ee8-a327-d1c3457a7940@infradead.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/iOmcVrOf7YhC3l4oDlRuo/9";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <36dc367a-f647-4ee8-a327-d1c3457a7940@infradead.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/iOmcVrOf7YhC3l4oDlRuo/9
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 05, 2020 at 10:40:43PM -0700, Randy Dunlap wrote:
+> On 5/5/20 3:29 PM, akpm@linux-foundation.org wrote:
+> > The mm-of-the-moment snapshot 2020-05-05-15-28 has been uploaded to
+> > 
+> >    http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > mmotm-readme.txt says
+> > 
+> > README for mm-of-the-moment:
+> > 
+> > http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> > 
+> 
+> 
+> on x86_64:
+> 
+> arch/x86/hyperv/hv_apic.o: warning: objtool: hv_apic_write()+0x25: alternative modifies stack
 
-Hi all,
+Wheee... this seems to have cured it for me.
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+---
+Subject: objtool: Allow no-op CFI ops in alternatives
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Fri May 8 12:34:33 CEST 2020
 
-  tools/testing/selftests/vm/Makefile
+Randy reported a false-positive: "alternative modifies stack".
 
-between commit:
+What happens is that:
 
-  b0d449922eb8 ("mm/hmm/test: add selftests for HMM")
+	alternative_io("movl %0, %P1", "xchgl %0, %P1", X86_BUG_11AP,
+ 13d:   89 9d 00 d0 7f ff       mov    %ebx,-0x803000(%rbp)
 
-from the hmm tree and commit:
+decodes to an instruction with CFI-ops because it modifies RBP.
+However, due to this being a !frame-pointer build, that should not in
+fact change the CFI state.
 
-  3a07caa68f66 ("selftests: vm: pkeys: fix multilib builds for x86")
+So instead of dis-allowing any CFI-op, verify the op would've actually
+changed the CFI state.
 
-from the akpm-current tree.
+Fixes: 7117f16bf460 ("objtool: Fix ORC vs alternatives")
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ tools/objtool/check.c |   11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/vm/Makefile
-index c6eb5305a0f6,d7eae41be628..000000000000
---- a/tools/testing/selftests/vm/Makefile
-+++ b/tools/testing/selftests/vm/Makefile
-@@@ -34,8 -58,55 +59,57 @@@ TEST_FILES :=3D test_vmalloc.s
-  KSFT_KHDR_INSTALL :=3D 1
-  include ../lib.mk
- =20
-+ ifeq ($(ARCH),x86_64)
-+ BINARIES_32 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_32))
-+ BINARIES_64 :=3D $(patsubst %,$(OUTPUT)/%,$(BINARIES_64))
-+=20
-+ define gen-target-rule-32
-+ $(1) $(1)_32: $(OUTPUT)/$(1)_32
-+ .PHONY: $(1) $(1)_32
-+ endef
-+=20
-+ define gen-target-rule-64
-+ $(1) $(1)_64: $(OUTPUT)/$(1)_64
-+ .PHONY: $(1) $(1)_64
-+ endef
-+=20
-+ ifeq ($(CAN_BUILD_I386),1)
-+ $(BINARIES_32): CFLAGS +=3D -m32
-+ $(BINARIES_32): LDLIBS +=3D -lrt -ldl -lm
-+ $(BINARIES_32): %_32: %.c
-+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+ $(foreach t,$(TARGETS),$(eval $(call gen-target-rule-32,$(t))))
-+ endif
-+=20
-+ ifeq ($(CAN_BUILD_X86_64),1)
-+ $(BINARIES_64): CFLAGS +=3D -m64
-+ $(BINARIES_64): LDLIBS +=3D -lrt -ldl
-+ $(BINARIES_64): %_64: %.c
-+ 	$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+ $(foreach t,$(TARGETS),$(eval $(call gen-target-rule-64,$(t))))
-+ endif
-+=20
-+ # x86_64 users should be encouraged to install 32-bit libraries
-+ ifeq ($(CAN_BUILD_I386)$(CAN_BUILD_X86_64),01)
-+ all: warn_32bit_failure
-+=20
-+ warn_32bit_failure:
-+ 	@echo "Warning: you seem to have a broken 32-bit build" 2>&1;		\
-+ 	echo  "environment. This will reduce test coverage of 64-bit" 2>&1;	\
-+ 	echo  "kernels. If you are using a Debian-like distribution," 2>&1;	\
-+ 	echo  "try:"; 2>&1;							\
-+ 	echo  "";								\
-+ 	echo  "  apt-get install gcc-multilib libc6-i386 libc6-dev-i386";	\
-+ 	echo  "";								\
-+ 	echo  "If you are using a Fedora-like distribution, try:";		\
-+ 	echo  "";								\
-+ 	echo  "  yum install glibc-devel.*i686";				\
-+ 	exit 0;
-+ endif
-+ endif
-+=20
- +$(OUTPUT)/hmm-tests: LDLIBS +=3D -lhugetlbfs -lpthread
- +
-  $(OUTPUT)/userfaultfd: LDLIBS +=3D -lpthread
- =20
-  $(OUTPUT)/mlock-random-test: LDLIBS +=3D -lcap
-
---Sig_/iOmcVrOf7YhC3l4oDlRuo/9
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl61MtkACgkQAVBC80lX
-0Gw3qgf+ORbO3azVXtR8qyfH3XIufSQI+LSOmdlh6sLbHMSrZTaQF/dww/JzxYjt
-2O6dkaT77oYyk0rELeL1H3NG/BRCZqZrbf4MmOn8DjgrBLjEEr/jbBn3d79Xs57z
-PiheQC95xeWrQsW5YwWv/AjSHEJRCUfjZx7YZY01Q1ResrhqVRuiROI9G6zIPg8L
-hgbv4z9A8BDeOlyVqqN18nAA2oT+a9I0GN+8dCqQI+dwobs8u5vozIn2HLEctAlZ
-sVISSdQt8buVd1q50CEFdovstbgVoBC7Jh+IHLOhOQZ7DaiuWwGoU2Y8g/C+q3RD
-wWQkJWZPcX4kVZ2kh1WsYCqkxfGFZA==
-=O108
------END PGP SIGNATURE-----
-
---Sig_/iOmcVrOf7YhC3l4oDlRuo/9--
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -2078,17 +2078,18 @@ static int handle_insn_ops(struct instru
+ 	struct stack_op *op;
+ 
+ 	list_for_each_entry(op, &insn->stack_ops, list) {
++		struct cfi_state old_cfi = state->cfi;
+ 		int res;
+ 
+-		if (insn->alt_group) {
+-			WARN_FUNC("alternative modifies stack", insn->sec, insn->offset);
+-			return -1;
+-		}
+-
+ 		res = update_cfi_state(insn, &state->cfi, op);
+ 		if (res)
+ 			return res;
+ 
++		if (insn->alt_group && memcmp(&state->cfi, &old_cfi, sizeof(struct cfi_state))) {
++			WARN_FUNC("alternative modifies stack", insn->sec, insn->offset);
++			return -1;
++		}
++
+ 		if (op->dest.type == OP_DEST_PUSHF) {
+ 			if (!state->uaccess_stack) {
+ 				state->uaccess_stack = 1;

@@ -2,89 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E17B51CC7AC
-	for <lists+linux-next@lfdr.de>; Sun, 10 May 2020 09:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EE31CCDFD
+	for <lists+linux-next@lfdr.de>; Sun, 10 May 2020 22:49:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725830AbgEJHkE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 May 2020 03:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725810AbgEJHkE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 10 May 2020 03:40:04 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE9C061A0C;
-        Sun, 10 May 2020 00:40:04 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id c18so5469204ile.5;
-        Sun, 10 May 2020 00:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mX8obe5Y6OipJrXkhzZBoUFMFO3dCzXyeTyerYVN23U=;
-        b=TyJjvVE63gFmRfrm8OFUipIF7lrBFXHJ9BQRoE1D4gmlnOwf820qZhXBIxh8nVXnrB
-         KrhuhRPUeR7SIxXxrmA7bNxsC1xppIbUcPRJtJZ2BJjzIy8Mg26sEaYj6ghyw55Hjqi4
-         TG5yorVfjmSkcyFJ2QLz/ILv+eoI980aB7TXywOreEnNfa3Ri4GG25M9TdZ4x0JMTQe/
-         E88pFQyczxpdzYmmqUgdoDB2rJdPY1aptkHE5FEo1w/3YM9Ei49cnVCt+RL9ibvpqGL6
-         U7jP9IZ35J1PpT2t3+B/oaqd8dF1D5tr8h7F4NRYk9bBhWPA+S2eQA5/mYU1K7v/oKJ8
-         dFcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mX8obe5Y6OipJrXkhzZBoUFMFO3dCzXyeTyerYVN23U=;
-        b=Ct7nnOQ5OnWnUoQmxEpSkUqOWz5td8jYbo59F7tecWz3x9dYcgERrBlcxyKEwW/Vq4
-         ap2Qc7xLf/ujSvFFM174LWTrSA+t34/G5LN183aveGLm/knmnyNSB0Iq4MoZplurF2OF
-         2Y22WkHjLhVC1SBNr0NXh1CkAfLo5QxlAI+vu++Qkfc4hdpsU/GHEpHlSvf6vz+M33HX
-         e93Jz2LvckHgc4YkKR0zTnKBJJtd7Y+HPxJ04SREkOkhevACwH2zsK1DtTP/89x8CUcw
-         qpC4cOosigmrc2VqNXoPnfAUrE3ttfbnT2lcDYor5ntWE5VqSAb/mt6hzG8upLVizVUy
-         TcfA==
-X-Gm-Message-State: AGi0PuZ6ZzzoJ7HzFxOsEkBsXHuC+n+9/zbpHPKjZ4/k1PYgy+jXqsBX
-        KWq6qHIQmx6ivCNxcC0b4vxLTzl2ghofmaI+GuXd/yz0
-X-Google-Smtp-Source: APiQypLQ66tcffOC+J0ZOTG8iVHhQoQTFHTZlpuibvLAzE0MpgEfQpRwRzAY+6ba19Ul5oTkBO7XXA1oy+cOomrOoWY=
-X-Received: by 2002:a92:d5cf:: with SMTP id d15mr11149078ilq.131.1589096403781;
- Sun, 10 May 2020 00:40:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200509094515.7082eb92@canb.auug.org.au> <alpine.DEB.2.21.2005090103060.29336@piezo.novalocal>
- <20200509134751.147d747d@canb.auug.org.au>
-In-Reply-To: <20200509134751.147d747d@canb.auug.org.au>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Sun, 10 May 2020 09:40:07 +0200
-Message-ID: <CAOi1vP8JjtBZoy0zAgz7=wwMuHiiRPCvxz7ZKicE9nh-NZXz2Q@mail.gmail.com>
-Subject: Re: linux-next: new contact(s) for the ceph tree?
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Sage Weil <sage@newdream.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729280AbgEJUta (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 May 2020 16:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1729216AbgEJUta (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Sun, 10 May 2020 16:49:30 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 216D3C061A0C;
+        Sun, 10 May 2020 13:49:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Kx51663xz9sSc;
+        Mon, 11 May 2020 06:49:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589143766;
+        bh=mJUvh5jroj1ztaJp3MGTxckhrhGeFpIRDrh7kNWFb/8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iN5hwNVf7jztA841KkPITOpWsf9kBUZEX+L8RWxf8oD64S9FoQbUoaChpwC22KJWz
+         utTYFyOSOyO2T5ezdYdZBAK74RhAP1iqELKNudASMc/0F06AI5vjiFn5rrREJm9ejE
+         ylV9kb4Zk4nwURDSn0oY5k/fUpCBFeSAEIWJa6Gnk2dALxgRII5QtDSFnIaSrJKY0K
+         6RIQQHezrXlcVYua08heTzPO68m9edE6f3AW08hJWUkAgP7JRrHZcNLJdg9dtwgo0B
+         iE5wciu71GnvMDgy4KiQjGr5i+jjfymWshPMwLCUpXu9yfykV3phR6by0hal7wAC9C
+         7rpTnROShd2JA==
+Date:   Mon, 11 May 2020 06:49:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Darrick J. Wong" <darrick.wong@oracle.com>,
+        David Chinner <david@fromorbit.com>, linux-xfs@vger.kernel.org
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jeff Layton <jlayton@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Brian Foster <bfoster@redhat.com>
+Subject: linux-next: Fixes tag needs some work in the xfs tree
+Message-ID: <20200511064919.5cd5dd28@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/+/xVCeJAwV=Cl3X=Ao=Yk2R";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, May 9, 2020 at 5:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Sage,
->
-> On Sat, 9 May 2020 01:03:14 +0000 (UTC) Sage Weil <sage@newdream.net> wrote:
-> >
-> > Jeff Layton <jlayton@kernel.org>
->
-> Done.
-> > On Sat, 9 May 2020, Stephen Rothwell wrote:
-> > >
-> > > I noticed commit
-> > >
-> > >   3a5ccecd9af7 ("MAINTAINERS: remove myself as ceph co-maintainer")
-> > >
-> > > appear recently.  So who should I now list as the contact(s) for the
-> > > ceph tree?
+--Sig_/+/xVCeJAwV=Cl3X=Ao=Yk2R
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Stephen,
+Hi all,
 
-I thought maintainers were on the list automatically.  If there is
-a separate list, please add me as well.
+In commit
 
-Thanks,
+  43dc0aa84ef7 ("xfs: fix unused variable warning in buffer completion on !=
+DEBUG")
 
-                Ilya
+Fixes tag
+
+  Fixes: 7376d745473 ("xfs: random buffer write failure errortag")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/+/xVCeJAwV=Cl3X=Ao=Yk2R
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl64aNAACgkQAVBC80lX
+0GzCkgf9FC1x7wXEAObLtB6g4ioTF0mbUq/Z8iNuPaJjnEHCm3EIEtGx/GTKQsVx
+rhKLGG98kGDx6lT1Y58Cgw8bk2NMNrPm+wLyEWhOAFpi/YWFtmZNqGHiWSX+YA8p
+BoGXbvIbU032y5yeEQfKC5NP2g3DRMPs1Ze5S2Tu2UsPXV/1DIDHMRu+CH3FD0pS
+bWhWscOGeoZrJhrKTRWh39wxUUSzIxHvZ+inX4JHSD2MumU+EG2eyEaxwWCXM09t
+bnTAk0PuEe+BiEcypcuVobMHr8Rex99N9UG0Xs1HndVcsUcIvORcUBCN49iKzKSd
+64R1/c1ukLMHuQJ61LZmnFfyccl0gA==
+=tLlb
+-----END PGP SIGNATURE-----
+
+--Sig_/+/xVCeJAwV=Cl3X=Ao=Yk2R--

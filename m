@@ -2,66 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 350C71CC10B
-	for <lists+linux-next@lfdr.de>; Sat,  9 May 2020 13:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E17B51CC7AC
+	for <lists+linux-next@lfdr.de>; Sun, 10 May 2020 09:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726063AbgEILjG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 9 May 2020 07:39:06 -0400
-Received: from smarthost1.hosting.reg.ru ([31.31.194.33]:43890 "EHLO
-        smarthost1.hosting.reg.ru" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726600AbgEILjF (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 9 May 2020 07:39:05 -0400
-X-Greylist: delayed 10294 seconds by postgrey-1.27 at vger.kernel.org; Sat, 09 May 2020 07:39:04 EDT
-Received: by smarthost1.hosting.reg.ru with esmtps (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        (Exim 4.90_1)
-        (envelope-from <sales@talisman-llc.ru>)
-        id 1jXMjN-0001My-QR; Sat, 09 May 2020 13:29:17 +0300
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=talisman-llc.ru; s=default; h=Message-ID:Subject:To:From:Date:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-         bh=8ixWEX/TTzdlJyAIP5w5LYxKeGgGrYTDf7ndJBJfpXk=; b=lTzA+qjluQNPH+yZs7S3Ip0St
-        OfKq4gQOTWkh8u3rSY96hEemxVwmVvyrmJF500wo9MnIwLVtpLRKipPXd5ImSyG/4UeBlQv0FEq6R
-        rHhpZ5yCaNAQm7qUHhPTze1d7+IzazfN3MLhrBmxchjItrPPNpwcrEkEd7waFWV9DOc5qJQ/cLepU
-        mVPmktkyzivIsdthyVl0fxFBXYuG6RQVWdyFhidqyhzA4OUwp04VIHa5MzGDR5ZthBdfC7+BvgNz2
-        njbHvv2c2vn1rKDXZMwnwHVsSpBW2/vxTVlAV3VkD625aIXxlC96YQZUGEzT29t4ck1Kr05NH5QDV
-        MwUYVyIUQ==;
+        id S1725830AbgEJHkE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 May 2020 03:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725810AbgEJHkE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 10 May 2020 03:40:04 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63CE9C061A0C;
+        Sun, 10 May 2020 00:40:04 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id c18so5469204ile.5;
+        Sun, 10 May 2020 00:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=mX8obe5Y6OipJrXkhzZBoUFMFO3dCzXyeTyerYVN23U=;
+        b=TyJjvVE63gFmRfrm8OFUipIF7lrBFXHJ9BQRoE1D4gmlnOwf820qZhXBIxh8nVXnrB
+         KrhuhRPUeR7SIxXxrmA7bNxsC1xppIbUcPRJtJZ2BJjzIy8Mg26sEaYj6ghyw55Hjqi4
+         TG5yorVfjmSkcyFJ2QLz/ILv+eoI980aB7TXywOreEnNfa3Ri4GG25M9TdZ4x0JMTQe/
+         E88pFQyczxpdzYmmqUgdoDB2rJdPY1aptkHE5FEo1w/3YM9Ei49cnVCt+RL9ibvpqGL6
+         U7jP9IZ35J1PpT2t3+B/oaqd8dF1D5tr8h7F4NRYk9bBhWPA+S2eQA5/mYU1K7v/oKJ8
+         dFcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=mX8obe5Y6OipJrXkhzZBoUFMFO3dCzXyeTyerYVN23U=;
+        b=Ct7nnOQ5OnWnUoQmxEpSkUqOWz5td8jYbo59F7tecWz3x9dYcgERrBlcxyKEwW/Vq4
+         ap2Qc7xLf/ujSvFFM174LWTrSA+t34/G5LN183aveGLm/knmnyNSB0Iq4MoZplurF2OF
+         2Y22WkHjLhVC1SBNr0NXh1CkAfLo5QxlAI+vu++Qkfc4hdpsU/GHEpHlSvf6vz+M33HX
+         e93Jz2LvckHgc4YkKR0zTnKBJJtd7Y+HPxJ04SREkOkhevACwH2zsK1DtTP/89x8CUcw
+         qpC4cOosigmrc2VqNXoPnfAUrE3ttfbnT2lcDYor5ntWE5VqSAb/mt6hzG8upLVizVUy
+         TcfA==
+X-Gm-Message-State: AGi0PuZ6ZzzoJ7HzFxOsEkBsXHuC+n+9/zbpHPKjZ4/k1PYgy+jXqsBX
+        KWq6qHIQmx6ivCNxcC0b4vxLTzl2ghofmaI+GuXd/yz0
+X-Google-Smtp-Source: APiQypLQ66tcffOC+J0ZOTG8iVHhQoQTFHTZlpuibvLAzE0MpgEfQpRwRzAY+6ba19Ul5oTkBO7XXA1oy+cOomrOoWY=
+X-Received: by 2002:a92:d5cf:: with SMTP id d15mr11149078ilq.131.1589096403781;
+ Sun, 10 May 2020 00:40:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Sat, 09 May 2020 11:01:34 +0300
-From:   sales@talisman-llc.ru
-To:     undisclosed-recipients:;
-Subject: LLC TALISMAN
-Message-ID: <323792411f99f9b0e5fe13bf0aec8e40@talisman-llc.ru>
-X-Sender: sales@talisman-llc.ru
-User-Agent: Roundcube Webmail/1.3.8
+References: <20200509094515.7082eb92@canb.auug.org.au> <alpine.DEB.2.21.2005090103060.29336@piezo.novalocal>
+ <20200509134751.147d747d@canb.auug.org.au>
+In-Reply-To: <20200509134751.147d747d@canb.auug.org.au>
+From:   Ilya Dryomov <idryomov@gmail.com>
+Date:   Sun, 10 May 2020 09:40:07 +0200
+Message-ID: <CAOi1vP8JjtBZoy0zAgz7=wwMuHiiRPCvxz7ZKicE9nh-NZXz2Q@mail.gmail.com>
+Subject: Re: linux-next: new contact(s) for the ceph tree?
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Sage Weil <sage@newdream.net>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jeff Layton <jlayton@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Good Day,
+On Sat, May 9, 2020 at 5:47 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Sage,
+>
+> On Sat, 9 May 2020 01:03:14 +0000 (UTC) Sage Weil <sage@newdream.net> wrote:
+> >
+> > Jeff Layton <jlayton@kernel.org>
+>
+> Done.
+> > On Sat, 9 May 2020, Stephen Rothwell wrote:
+> > >
+> > > I noticed commit
+> > >
+> > >   3a5ccecd9af7 ("MAINTAINERS: remove myself as ceph co-maintainer")
+> > >
+> > > appear recently.  So who should I now list as the contact(s) for the
+> > > ceph tree?
 
+Hi Stephen,
 
-We Llc Talisman a well known trading company ,situated in Russia 
-federation ,
-we are direct to reputable refineries for the sales and supply of 
-petroleum, crude oil and gas products, we are a company that has brought 
-indigenous buyers to refineries transacting with a standard 
-specification and international trading procedures.
-At this moment we are glad to inform you that on behalf of our highly 
-esteem refineries we are giving out an allocation presently .
-Kindly revert back if you are interested in purchasing from our refinery 
-to enable us open-up communication between you / buyer and our refinery 
-for mutual
-understanding.
+I thought maintainers were on the list automatically.  If there is
+a separate list, please add me as well.
 
-Best Regards
-Pavel Timunov
-LLC TALISMAN
-Email:sales@talisman-llc.ru
-Skype :sales@talisman-llc
+Thanks,
+
+                Ilya

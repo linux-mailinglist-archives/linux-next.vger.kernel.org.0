@@ -2,99 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF5F1CCF11
-	for <lists+linux-next@lfdr.de>; Mon, 11 May 2020 03:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C741CCF4F
+	for <lists+linux-next@lfdr.de>; Mon, 11 May 2020 03:55:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728381AbgEKBOj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 10 May 2020 21:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727789AbgEKBOj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Sun, 10 May 2020 21:14:39 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9B1C061A0C;
-        Sun, 10 May 2020 18:14:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49L2yz1SVHz9sRf;
-        Mon, 11 May 2020 11:14:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589159677;
-        bh=KHwibB8jYouq/vD17bjr+6oBJR1pwMjnqgFMEWDVR4I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=kJRUU3ihVKgsLV7QfFOXeAv+OzYIl5EnV5lTTOiS7LmfdnDl037Q+1pdXvkXhj2xd
-         p2PFvvHRx7lgQQpWlWX8r5Gn/VlIATaKcTV7eK4DvO9s1gS5ARONWAy6AlvogVeZPg
-         PaLQkb6Vl2KwVKKx9ZJuRJdjgFSDNkQChpKvvcjRTvNz2qh3QUV18oCxw0nvI3H031
-         /yqVW5T1g27z1p1aGUV4VcOtLS2Trznsa7TuuVKfMTcpqgVW8lmDiMilPc1f4kFBPH
-         PrnpLIoOTvNov7VunRdDUGATKdRTQfzzHk5JcVTEOQNQp7PZsQ4dOxcdmuGljHbB4q
-         FZTl6ixkUqcMw==
-Date:   Mon, 11 May 2020 11:14:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        James Hogan <jhogan@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        id S1729195AbgEKBz1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 10 May 2020 21:55:27 -0400
+Received: from szxga07-in.huawei.com ([45.249.212.35]:51308 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1729177AbgEKBz1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 10 May 2020 21:55:27 -0400
+Received: from DGGEMS413-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 36CC5B2F649EB3DADC61;
+        Mon, 11 May 2020 09:55:24 +0800 (CST)
+Received: from [127.0.0.1] (10.67.102.197) by DGGEMS413-HUB.china.huawei.com
+ (10.3.19.213) with Microsoft SMTP Server id 14.3.487.0; Mon, 11 May 2020
+ 09:55:22 +0800
+Subject: Re: linux-next: manual merge of the vfs tree with the parisc-hd tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        Helge Deller <deller@gmx.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        <mcgrof@kernel.org>, <keescook@chromium.org>, <yzaikin@google.com>,
+        <linux-fsdevel@vger.kernel.org>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
         Christoph Hellwig <hch@lst.de>
-Subject: linux-next: manual merge of the vfs tree with the mips tree
-Message-ID: <20200511111434.366de078@canb.auug.org.au>
+References: <20200511111123.68ccbaa3@canb.auug.org.au>
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+Message-ID: <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
+Date:   Mon, 11 May 2020 09:55:16 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/u4gCOZ=P++QUBKRJzqaIDc_";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200511111123.68ccbaa3@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.102.197]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/u4gCOZ=P++QUBKRJzqaIDc_
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2020/5/11 9:11, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the vfs tree got a conflict in:
+> 
+>    kernel/sysctl.c
+> 
+> between commit:
+> 
+>    b6522fa409cf ("parisc: add sysctl file interface panic_on_stackoverflow")
+> 
+> from the parisc-hd tree and commit:
+> 
+>    f461d2dcd511 ("sysctl: avoid forward declarations")
+> 
+> from the vfs tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-Hi all,
 
-Today's linux-next merge of the vfs tree got a conflict in:
+Kernel/sysctl.c contains more than 190 interface files, and there are a 
+large number of config macro controls. When modifying the sysctl 
+interface directly in kernel/sysctl.c , conflicts are very easy to occur.
 
-  arch/mips/lasat/sysctl.c
+At the same time, the register_sysctl_table() provided by the system can 
+easily add the sysctl interface, and there is no conflict of 
+kernel/sysctl.c .
 
-between commit:
+Should we add instructions in the patch guide (coding-style.rst 
+submitting-patches.rst):
+Preferentially use register_sysctl_table() to add a new sysctl 
+interface, centralize feature codes, and avoid directly modifying 
+kernel/sysctl.c ?
 
-  10760dde9be3 ("MIPS: Remove support for LASAT")
+In addition, is it necessary to transfer the architecture-related sysctl 
+interface to arch/xxx/kernel/sysctl.c ?
 
-from the mips tree and commit:
+Thanks
+Xiaoming Ni
 
-  32927393dc1c ("sysctl: pass kernel pointers to ->proc_handler")
-
-from the vfs tree.
-
-I fixed it up (the former removed the file, so I did that) and can
-carry the fix as necessary. This is now fixed as far as linux-next is
-concerned, but any non trivial conflicts should be mentioned to your
-upstream maintainer when your tree is submitted for merging.  You may
-also want to consider cooperating with the maintainer of the conflicting
-tree to minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/u4gCOZ=P++QUBKRJzqaIDc_
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl64pvoACgkQAVBC80lX
-0Gycngf9Gh/JMsqdGjHtI7VirrRrgZu6gdqz5sVjQ4NakL99L2J9S2zmhps7R6N8
-54YriPGHcbRiyP7GXpM6jfgftg+ywW9STGJLMqBT/Dqomkw0dwbfC324lHg7e0kM
-t+hp7T8Oj1/s6sMFrP1vAdDJ/mK3Nm7fVwY5BckKPI2ZB+cVI8Z+Ab7lV8KcO0IS
-ZeiCe2IrbMqEHC2AdbdhPmYQThvW6SUriKUgozINXuizm9ePTWNk1vwsSnFi/MuR
-IgyAyyzy8Kg4bJaEqk4hlVUtOgmvQpztTwMt+ORRr7R2sIffA+pgBohP2pBEI0KB
-/bbQtBeoMaPwYfFR91g92XKwwkAmSg==
-=mfto
------END PGP SIGNATURE-----
-
---Sig_/u4gCOZ=P++QUBKRJzqaIDc_--

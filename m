@@ -2,160 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7FE1CEF41
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 10:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6701CEF93
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 10:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728986AbgELIiG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 04:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725868AbgELIiG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 May 2020 04:38:06 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA9FAC061A0C;
-        Tue, 12 May 2020 01:38:05 -0700 (PDT)
+        id S1729284AbgELIyK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 04:54:10 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57929 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729281AbgELIyJ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 04:54:09 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49LrmC3r0fz9sRY;
-        Tue, 12 May 2020 18:38:03 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Ls6l5JQLz9sRf;
+        Tue, 12 May 2020 18:54:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589272683;
-        bh=01Dm57sLSi8lbJRj3/Hw/92Lf2Rxt5EKU9oW3GM8ll0=;
+        s=201702; t=1589273647;
+        bh=RuA63jA3VaXDJ5ibO1oOo+VHs+JqcJrlEg8P5O5rQfQ=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ExpiKCFgZLu+vwdXR3U+be4OG6CSI35MjEPPOPWwIOGrKWBSaiMKXW+G9nHaSeuIO
-         N8XeOnqb4e2WHvKqypgqHzZ0mgoSq/sle5gFR04aZh5tc+wIuIRSqlbwz1Ty8ehQgB
-         +1ETQT05+4Y+QEJfyw6uFM5SHxUwzdjrCPgyHwBJK9+kg87Xg0NJJRXVJ7dyXbl8M/
-         3UQv6xuuj15a9G+nioILx8sup+pon8CMWH1HJ9ry96sIIGVbR7ILT8n16lzIVsNTid
-         GUUqheGP2yzR6ooQ+XMO30qpwsIExxmn8P06LgEoMxkBTyZQ3gqF5zuHNCFp3ZTTqu
-         RnyMIwXM63fAw==
-Date:   Tue, 12 May 2020 18:38:02 +1000
+        b=LRQGdBBVpG38hA8kjBZ7aeVl0BdcXPa17JngRDF2Gv687YjAROpmIVzIIRxbGbdWx
+         Ns1thA9DiOJzeOPvbfZJ7827r3jsF43/EEXqgtjYNkRy+y7ysnoD5pF0MQPztll+no
+         P9MaAlokwxPG/EocVee/z0WkMRfvhYzfQReIXquA/c6u4+ClsRH6lk9mQCCAdTUuCT
+         1n7nLDwN0rLEspnLoa1jTg4ZnQBSt7HapyUHeD9X7svisx80SF6Ae80qH9oHKwvjkI
+         KPXpWzuymQupQJ7CV6Y5R5FY6+wxBzO4CsIuhfoqEr5lwn2UIxHrlSuxgn6rxmQltR
+         0P4P3UFyvwhjQ==
+Date:   Tue, 12 May 2020 18:54:03 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+To:     David Howells <dhowells@redhat.com>,
+        Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>
-Subject: Re: linux-next: manual merge of the keys tree with Linus' tree
-Message-ID: <20200512183802.1899b1ec@canb.auug.org.au>
-In-Reply-To: <20200511145915.3bef0c16@canb.auug.org.au>
-References: <20200511145915.3bef0c16@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the notifications
+ (was keys) tree
+Message-ID: <20200512185403.15297945@canb.auug.org.au>
+In-Reply-To: <20200504134750.2278a82d@canb.auug.org.au>
+References: <20200504134750.2278a82d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/LsaJLR+.lbUWqRzqVK0SERT";
+Content-Type: multipart/signed; boundary="Sig_/eSzriVy6M3Ng1NR63dfXzbk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/LsaJLR+.lbUWqRzqVK0SERT
+--Sig_/eSzriVy6M3Ng1NR63dfXzbk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Mon, 11 May 2020 14:59:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
+On Mon, 4 May 2020 13:47:50 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> Today's linux-next merge of the keys tree got a conflict in:
+> Hi all,
 >=20
->   fs/splice.c
+> After merging the keys tree, today's linux-next build (x86_64
+> allmodconfig) produced these warnings:
 >=20
-> between commit:
+> scripts/Makefile.lib:8: 'always' is deprecated. Please use 'always-y' ins=
+tead
+> scripts/Makefile.lib:12: 'hostprogs-y' and 'hostprogs-m' are deprecated. =
+Please use 'hostprogs' instead
 >=20
->   90da2e3f25c8 ("splice: move f_mode checks to do_{splice,tee}()")
+> Introduced by commit
 >=20
-> from Linus' tree and commit:
+>   631ec151fd96 ("Add sample notification program")
 >=20
->   549d46d3827d ("pipe: Add general notification queue support")
+> interacting with commit
 >=20
-> from the keys tree.
+>   ee066c3ddf7b ("kbuild: warn if always, hostprogs-y, or hostprogs-m is u=
+sed")
 >=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->=20
-> --=20
-> Cheers,
-> Stephen Rothwell
->=20
-> diff --cc fs/splice.c
-> index fd0a1e7e5959,6e6ea30c72b4..000000000000
-> --- a/fs/splice.c
-> +++ b/fs/splice.c
-> @@@ -1118,12 -1118,8 +1118,12 @@@ long do_splice(struct file *in, loff_t=
-=20
->   	loff_t offset;
->   	long ret;
->  =20
->  +	if (unlikely(!(in->f_mode & FMODE_READ) ||
->  +		     !(out->f_mode & FMODE_WRITE)))
->  +		return -EBADF;
->  +
-> - 	ipipe =3D get_pipe_info(in);
-> - 	opipe =3D get_pipe_info(out);
-> + 	ipipe =3D get_pipe_info(in, true);
-> + 	opipe =3D get_pipe_info(out, true);
->  =20
->   	if (ipipe && opipe) {
->   		if (off_in || off_out)
-> @@@ -1757,14 -1766,10 +1757,17 @@@ static int link_pipe(struct pipe_inode_
->   static long do_tee(struct file *in, struct file *out, size_t len,
->   		   unsigned int flags)
->   {
-> - 	struct pipe_inode_info *ipipe =3D get_pipe_info(in);
-> - 	struct pipe_inode_info *opipe =3D get_pipe_info(out);
->  -	struct pipe_inode_info *ipipe =3D get_pipe_info(in, true);
->  -	struct pipe_inode_info *opipe =3D get_pipe_info(out, true);
-> ++	struct pipe_inode_info *ipipe;
-> ++	struct pipe_inode_info *opipe;
->   	int ret =3D -EINVAL;
->  =20
->  +	if (unlikely(!(in->f_mode & FMODE_READ) ||
->  +		     !(out->f_mode & FMODE_WRITE)))
->  +		return -EBADF;
->  +
-> ++	ipipe =3D get_pipe_info(in, true);
-> ++	opipe =3D get_pipe_info(out, true);
-> ++
->   	/*
->   	 * Duplicate the contents of ipipe to opipe without actually
->   	   90da2e3f25c8 ("splice: move f_mode checks to do_{splice,tee}()")* c=
-opying the data.
+> from the kbuild tree.
 
-This is now a conflict between commit
+This is now Introduced by commit
 
-  90da2e3f25c8 ("splice: move f_mode checks to do_{splice,tee}()")
+  b8c9527a31b0 ("Add sample notification program")
 
-from Linus' tree and commit
+from the notifications tree interacting with commit
 
-  317f078cce34 ("pipe: Add general notification queue support")
+  a2db26b0ba3b ("kbuild: warn if always, hostprogs-y, or hostprogs-m is use=
+d")
 
-from the notifications tree.
+from the kbuild tree.
+
+It only produces these warnings now:
+
+scripts/Makefile.lib:8: 'always' is deprecated. Please use 'always-y' inste=
+ad
+scripts/Makefile.lib:12: 'hostprogs-y' is deprecated. Please use 'hostprogs=
+' instead
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/LsaJLR+.lbUWqRzqVK0SERT
+--Sig_/eSzriVy6M3Ng1NR63dfXzbk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66YGoACgkQAVBC80lX
-0GznwQf/caK3ljsA8WBgXtCfV3e5ophh8e6OQOyIbPGA6XtPTsUcW2bwhOUb/HFd
-GhwG1XzT91DemIM3jz/aVA8UMQ76c32FTk1v3awcM+luzsseHEEdFR7/4+L+iPeR
-CbmJWS8JeDkF5F0MTzZqBgNlzqLOFoGKHlhSE/Kd5ks5x+gmZcyheO8fG4n3TTX0
-TVpehZfcB1Lry413FP0Us8dFNpHgcConm6rSAKN2e6x9r6LRK4jvrAW1EzM2oK5F
-4UY2AIaaw9zJF9f2d5tEg4xbcqKX+JChCjUDttnhLqJWGMKCiyCVD5bVDefvcZXm
-pKs2MLePX21PJq6m18hdyr49Z7/2lg==
-=V/vd
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66ZCsACgkQAVBC80lX
+0GwXDgf9FqgUumXeif9vC8RLdCpFUo7DwDSj5RPH/jJqf3tx9qEOxOk472E7Z463
+S9zw8HgVlrUa7VnGsXreWtOGlOehKaian4AWRlZ4y2hRryyAZtt6tgal+W9t3wU3
+O4qKDMpViDUoBeo1ioHPQ1agK8n9pTHa7RI9WUFHQMnDwSpyjTDcrXIc5NVTjOaw
+CYccEPxEBWrISBpR5l+tdR2Y6G0VH/olMx+ejGFtjhgvfr6GWcO9p3u1LIeYD9iv
+6uE3QTPotJ+vRPW4mtYaGxtrHRGq4IpdeDAd3PPIvfNZoQV0xgH1Vs8cu/w4Oa+k
+BraXoR3uj3MzLO9DO5+l0ScGTFQUYg==
+=t1rf
 -----END PGP SIGNATURE-----
 
---Sig_/LsaJLR+.lbUWqRzqVK0SERT--
+--Sig_/eSzriVy6M3Ng1NR63dfXzbk--

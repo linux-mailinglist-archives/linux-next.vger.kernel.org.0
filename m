@@ -2,139 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 572AA1CF68B
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 16:11:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2AFF1CF6AC
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 16:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730012AbgELOLX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 10:11:23 -0400
-Received: from condef-02.nifty.com ([202.248.20.67]:58149 "EHLO
-        condef-02.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730210AbgELOLW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 May 2020 10:11:22 -0400
-X-Greylist: delayed 329 seconds by postgrey-1.27 at vger.kernel.org; Tue, 12 May 2020 10:11:21 EDT
-Received: from conssluserg-05.nifty.com ([10.126.8.84])by condef-02.nifty.com with ESMTP id 04CE17fS029053
-        for <linux-next@vger.kernel.org>; Tue, 12 May 2020 23:01:07 +0900
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com [209.85.217.43]) (authenticated)
-        by conssluserg-05.nifty.com with ESMTP id 04CE0off022097;
-        Tue, 12 May 2020 23:00:51 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-05.nifty.com 04CE0off022097
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1589292051;
-        bh=LSYtSnqE2loIysnLi9PlyYmgllRh5Q8uKVWak+A+U5g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jGkAdtHAcADhEIXU4tQ5Jl5cfsDaZTHiYyE8lRmFpGfAhZ1lyxGChMXy3NEp+SUF0
-         rolFoBUsYSmMWtV9ckbJpTTziF3c/vhnBKMHvRbovlaT6Rp7LMNArYdqW7hX34B6Iw
-         PE22TdTUr33JzD+N2zR0qIE8HA4WXnn5RuWWya54qsVfXraIQVvS5B03dxnUo7oH88
-         b0B/dC/gTJ5Id1ul49WWxs9ZFot4vKJuK6z5PCUDzEUktAlYQmYHNJu0a/o8uCjd3h
-         0MVkKKDNleca1PKphFnG2NrQPm5ut/523aBUV/ksfF/jV/AUHbzxou60uYuU9u5XAu
-         SzPQscQRySXIA==
-X-Nifty-SrcIP: [209.85.217.43]
-Received: by mail-vs1-f43.google.com with SMTP id x6so7909788vso.1;
-        Tue, 12 May 2020 07:00:51 -0700 (PDT)
-X-Gm-Message-State: AGi0PuazPbw557PFeaDE78gd1y62p1PoTo3XP3fUmZsr7OgcZxC8t1FE
-        3hKXmMzF5GVbooo3xeWMpUU3NE10/bwhVzuTSAI=
-X-Google-Smtp-Source: APiQypLlSu7obGufgeyKGM208Jk0P/54bCxkjvodFG+fIfo2MG9URlZjMz3fDLbxNXoVrUj35b/spnQpLfcGDp8jqQI=
-X-Received: by 2002:a67:db0d:: with SMTP id z13mr15766817vsj.155.1589292049868;
- Tue, 12 May 2020 07:00:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200512195712.690f02bb@canb.auug.org.au>
-In-Reply-To: <20200512195712.690f02bb@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 12 May 2020 23:00:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQ-=A0nDZK0FTzgJ6oJ-VbV33F1rVjvBAWgybSsUXaPVA@mail.gmail.com>
-Message-ID: <CAK7LNAQ-=A0nDZK0FTzgJ6oJ-VbV33F1rVjvBAWgybSsUXaPVA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the fsinfo tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1730195AbgELOOQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 10:14:16 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:60201 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729756AbgELOOQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 10:14:16 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49M0D64dCtz9sSg;
+        Wed, 13 May 2020 00:14:14 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589292854;
+        bh=1cWnbL5AnU1SFC0c6TK6Gmn0CFWs8l55Kduttq/IPBc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H6BELK16xMJ2pPpr+UvXaiBbKGmOhUn7bxK76Gg57Dkar9kEWyLwnyW/P1b2MQAqh
+         yNkxrWhpzf3ryB5QqKNp0h3xLHb0PT9A1xbi79LQ6HQCjJ04doU9MZH/dyrTx7v729
+         FOJsspgpTqgCvUud/mLNhM0leHidjocdVxqTrssRI4ERTOVlYi+0lf3nJbE+TPt72w
+         /VEVe+wgNKvMDeHJ020KnVEOtDX+uMu7hxmm5h5UhyHZh6D2G8Z4nLBhDdYVvmGnyw
+         kOOkvLnF9QJiOwym262pZMHjGHCH1SXjaejvx2Q4Zd8j0DdU1ZDnhk2VapNsF0V0uA
+         rudi+ySeklhZQ==
+Date:   Wed, 13 May 2020 00:14:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     David Howells <dhowells@redhat.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next: build failure after merge of the fsinfo tree
+Message-ID: <20200513001412.12598111@canb.auug.org.au>
+In-Reply-To: <CAK7LNAQ-=A0nDZK0FTzgJ6oJ-VbV33F1rVjvBAWgybSsUXaPVA@mail.gmail.com>
+References: <20200512195712.690f02bb@canb.auug.org.au>
+        <CAK7LNAQ-=A0nDZK0FTzgJ6oJ-VbV33F1rVjvBAWgybSsUXaPVA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/_l.XWYgKS2wyJTKroYQkitq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 12, 2020 at 6:57 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/_l.XWYgKS2wyJTKroYQkitq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Masahiro,
+
+On Tue, 12 May 2020 23:00:13 +0900 Masahiro Yamada <masahiroy@kernel.org> w=
+rote:
 >
-> Hi all,
->
-> After merging the fsinfo tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
->
-> /usr/lib/gcc-cross/x86_64-linux-gnu/9/../../../../x86_64-linux-gnu/bin/ld: cannot find /usr/lib/x86_64-linux-gnu/libm-2.30.a
-> /usr/lib/gcc-cross/x86_64-linux-gnu/9/../../../../x86_64-linux-gnu/bin/ld: cannot find /usr/lib/x86_64-linux-gnu/libmvec.a
->
-> I don't know if this is a quirk of the build system or Debian's cross
-> compiler setup.  Both those files exist in /usr/x86_64-linux-gnu/lib/.
->
-> Masahiro, any thoughts?
->
-> I have disabled the building of test_fsinfo for now:
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 12 May 2020 19:49:33 +1000
-> Subject: [PATCH] disable building fo test-fsinfo for now
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  samples/vfs/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
+> I also failed to build it, but the error message
+> was different.
+>=20
+> The following worked for me at least.
+> (Ubuntu 20.04).
+>=20
 > diff --git a/samples/vfs/Makefile b/samples/vfs/Makefile
-> index f5bc5dfdf045..97e54c8be358 100644
+> index 97e54c8be358..539fb3a56af3 100644
 > --- a/samples/vfs/Makefile
 > +++ b/samples/vfs/Makefile
-> @@ -1,5 +1,5 @@
+> @@ -1,7 +1,8 @@
 >  # SPDX-License-Identifier: GPL-2.0-only
-> -userprogs := test-fsinfo test-fsmount test-mntinfo test-statx
-> +userprogs := test-fsmount test-mntinfo test-statx
->  always-y := $(userprogs)
->
->  userccflags += -I usr/include
-> --
-> 2.26.2
->
-> --
-> Cheers,
-> Stephen Rothwell
+> -userprogs :=3D test-fsmount test-mntinfo test-statx
+> +userprogs :=3D test-fsinfo test-fsmount test-mntinfo test-statx
+>  always-y :=3D $(userprogs)
+>=20
+>  userccflags +=3D -I usr/include
+>=20
+> -test-fsinfo-userldflags +=3D -static -lm
+> +test-fsinfo-userldflags :=3D -static
+> +test-fsinfo-userldlibs :=3D -lm
 
+Thanks, I will change the merge resolution to that.
+--=20
+Cheers,
+Stephen Rothwell
 
-I also failed to build it, but the error message
-was different.
+--Sig_/_l.XWYgKS2wyJTKroYQkitq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66rzQACgkQAVBC80lX
+0GzpAwf8CjORtl+idsPwU7zqDqXLTgf4EKM4io4mY2wFnrtp3L7Xvg8ZqI5K2HkK
+J3WUhxRvEwWHnSjBf1UW5rM45oNBsBzA848Ju8Ei0kv/GM1jWtsYrAvK0vPh8gI9
+zo6M/ACAq+rDvyb8ZCSherYUkbtgwV9jBhNp2xb3iTNQkto1WiEc3NcOPI9ojysd
+a+01MC2QeYLhmVbcMQwXC98D9iGgtwWEjJtCGSAKR9+I/iIFJvoORlG77azABIZv
+EHWtgosIsp4OhmWujsFlpJHm+cd9TL0A+imgu+wazPpLrdNIBUuAes5141LOXKbd
+aZAwLQk+kQtExSy8z1dkfi50hDoDHg==
+=5fez
+-----END PGP SIGNATURE-----
 
-The following worked for me at least.
-(Ubuntu 20.04).
-
-
-
-diff --git a/samples/vfs/Makefile b/samples/vfs/Makefile
-index 97e54c8be358..539fb3a56af3 100644
---- a/samples/vfs/Makefile
-+++ b/samples/vfs/Makefile
-@@ -1,7 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0-only
--userprogs := test-fsmount test-mntinfo test-statx
-+userprogs := test-fsinfo test-fsmount test-mntinfo test-statx
- always-y := $(userprogs)
-
- userccflags += -I usr/include
-
--test-fsinfo-userldflags += -static -lm
-+test-fsinfo-userldflags := -static
-+test-fsinfo-userldlibs := -lm
-
-
-
-
-David,
-
-BTW, why is '-static' needed here?
-
-
-
-
---
-Best Regards
-Masahiro Yamada
+--Sig_/_l.XWYgKS2wyJTKroYQkitq--

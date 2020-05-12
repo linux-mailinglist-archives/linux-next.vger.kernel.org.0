@@ -2,78 +2,307 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8840C1CE9AF
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 02:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B301CE9B1
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 02:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727892AbgELAcy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 11 May 2020 20:32:54 -0400
-Received: from ozlabs.org ([203.11.71.1]:47289 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725881AbgELAcy (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 11 May 2020 20:32:54 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Lf0N3XMjz9sPF;
-        Tue, 12 May 2020 10:32:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589243572;
-        bh=CfIzPuOiXbybOvfSqceGWMDoLXl65+ov+p4Y8Cw6fJ0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LRYP5s/2oaJ6Khbqcgfc7zh8mE9iubbMH6Qa/q3NFIN6EdviAvZV9qnGE3qMZcDBz
-         1Qd0mJWgLVu2+xoK7lrO1WrxTK3gxqdjMoxaza/9epQktlqGQJ7dQFUD3Lmr5nAHSQ
-         sbnaua/xDlG5BfOubYWjo+SxZHECpISeiUoruLnj6PgIAIqQ7yS/AWqz+ZFkTs5bmL
-         Yvm3D3Gi0NCcpHMMwZ6RK9qGME6VL8oklpr/GIFD3KbgAhgkrNgVC7XoD7IlzgO3w2
-         6aaP/7ppoBw6QB/3kmnMuPL57rqMp6+YaVOnfNHZ6Geic43HGVcKzv/XjAld3PKBdo
-         61LrXzQq1V+eA==
-Date:   Tue, 12 May 2020 10:32:45 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commits in the fsinfo tree
-Message-ID: <20200512103245.4ae66dce@canb.auug.org.au>
+        id S1728228AbgELAdJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 11 May 2020 20:33:09 -0400
+Received: from mail-pf1-f194.google.com ([209.85.210.194]:33560 "EHLO
+        mail-pf1-f194.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725881AbgELAdI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 11 May 2020 20:33:08 -0400
+Received: by mail-pf1-f194.google.com with SMTP id x77so5531871pfc.0;
+        Mon, 11 May 2020 17:33:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=wh0CPafLzUjJXBYGRq3dJLjsezbs2TE2R6kL31I0Dq4=;
+        b=OTzEQowhYaafRDjdr5m1lAG+6+vQ15Pt+AYaQq3NO4zIFKtJjUEgy5zoBIkuAASQBE
+         UdF5qa7YC2ssCgUhsWL/f8KH1DBsHKVLI/0WYbmnpiiSXYk5mlt0YNmwLWgKTfoYM1Dx
+         Z7JBHLeMnBL6NCRa5jNMzvyDBbxiYtXn6C9T73M45yWxzMPGXjluWoaCs5qUMidOn1vB
+         WF3S9WmouMrXKieTmktOWeNReNm4F8ARb6Mpo4TWbvjztyfoIto7ReUsimipreVJwEdp
+         T8f/I+LIAI1TJVqrsPB/D5HRY4jJbqwZXKOoWdompMYOhpq14ERlnhSyGFR2yW8o0hFC
+         SkYw==
+X-Gm-Message-State: AGi0PuZGczjSbYXl4bYDpRbMJvDN8j9r6vZ9NgAQAIHYn9Cf0bKQ8Y+S
+        dfk7dHCOW9JYxQYHUP21kso=
+X-Google-Smtp-Source: APiQypKrIZ+6lWZ0LRBsHClUvKvaZokME9Kogdc1eBPHE9IUGqxSwIAAfco6pNFpA2RjoNap9cbZpw==
+X-Received: by 2002:aa7:8091:: with SMTP id v17mr18942705pff.93.1589243587566;
+        Mon, 11 May 2020 17:33:07 -0700 (PDT)
+Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
+        by smtp.gmail.com with ESMTPSA id r21sm11034364pjo.2.2020.05.11.17.33.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 May 2020 17:33:06 -0700 (PDT)
+Received: by 42.do-not-panic.com (Postfix, from userid 1000)
+        id E3C8540E88; Tue, 12 May 2020 00:33:05 +0000 (UTC)
+Date:   Tue, 12 May 2020 00:33:05 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     Xiaoming Ni <nixiaoming@huawei.com>,
+        Al Viro <viro@ZenIV.linux.org.uk>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Helge Deller <deller@gmx.de>,
+        Parisc List <linux-parisc@vger.kernel.org>,
+        keescook@chromium.org, yzaikin@google.com,
+        linux-fsdevel@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: linux-next: manual merge of the vfs tree with the parisc-hd tree
+Message-ID: <20200512003305.GX11244@42.do-not-panic.com>
+References: <20200511111123.68ccbaa3@canb.auug.org.au>
+ <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VZz.h2chlpVPZl3LgM/gF23";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VZz.h2chlpVPZl3LgM/gF23
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, May 11, 2020 at 09:55:16AM +0800, Xiaoming Ni wrote:
+> On 2020/5/11 9:11, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Today's linux-next merge of the vfs tree got a conflict in:
+> > 
+> >    kernel/sysctl.c
+> > 
+> > between commit:
+> > 
+> >    b6522fa409cf ("parisc: add sysctl file interface panic_on_stackoverflow")
+> > 
+> > from the parisc-hd tree and commit:
+> > 
+> >    f461d2dcd511 ("sysctl: avoid forward declarations")
+> > 
+> > from the vfs tree.
+> > 
+> > I fixed it up (see below) and can carry the fix as necessary. This
+> > is now fixed as far as linux-next is concerned, but any non trivial
+> > conflicts should be mentioned to your upstream maintainer when your tree
+> > is submitted for merging.  You may also want to consider cooperating
+> > with the maintainer of the conflicting tree to minimise any particularly
+> > complex conflicts.
+> > 
+> 
+> 
+> Kernel/sysctl.c contains more than 190 interface files, and there are a
+> large number of config macro controls. When modifying the sysctl interface
+> directly in kernel/sysctl.c , conflicts are very easy to occur.
+> 
+> At the same time, the register_sysctl_table() provided by the system can
+> easily add the sysctl interface, and there is no conflict of kernel/sysctl.c
+> .
+> 
+> Should we add instructions in the patch guide (coding-style.rst
+> submitting-patches.rst):
+> Preferentially use register_sysctl_table() to add a new sysctl interface,
+> centralize feature codes, and avoid directly modifying kernel/sysctl.c ?
 
-Hi all,
+Yes, however I don't think folks know how to do this well. So I think we
+just have to do at least start ourselves, and then reflect some of this
+in the docs.  The reason that this can be not easy is that we need to
+ensure that at an init level we haven't busted dependencies on setting
+this. We also just don't have docs on how to do this well.
 
-Commits
+> In addition, is it necessary to transfer the architecture-related sysctl
+> interface to arch/xxx/kernel/sysctl.c ?
 
-  ee8ad8190cb1 ("vfs, fsinfo: Add an RCU safe per-ns mount list")
-  a627d57b0248 ("fsinfo: Add an attribute that lists all the visible mounts=
- in a namespace")
+Well here's an initial attempt to start with fs stuff in a very
+conservative way. What do folks think?
 
-are missing a Signed-off-by from their author and committer.
+ fs/proc/Makefile          |  1 +
+ fs/proc/fs_sysctl_table.c | 97 +++++++++++++++++++++++++++++++++++++++
+ kernel/sysctl.c           | 48 -------------------
+ 3 files changed, 98 insertions(+), 48 deletions(-)
+ create mode 100644 fs/proc/fs_sysctl_table.c
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/fs/proc/Makefile b/fs/proc/Makefile
+index bd08616ed8ba..8bf419b2ac7d 100644
+--- a/fs/proc/Makefile
++++ b/fs/proc/Makefile
+@@ -28,6 +28,7 @@ proc-y	+= namespaces.o
+ proc-y	+= self.o
+ proc-y	+= thread_self.o
+ proc-$(CONFIG_PROC_SYSCTL)	+= proc_sysctl.o
++proc-$(CONFIG_SYSCTL)		+= fs_sysctl_table.o
+ proc-$(CONFIG_NET)		+= proc_net.o
+ proc-$(CONFIG_PROC_KCORE)	+= kcore.o
+ proc-$(CONFIG_PROC_VMCORE)	+= vmcore.o
+diff --git a/fs/proc/fs_sysctl_table.c b/fs/proc/fs_sysctl_table.c
+new file mode 100644
+index 000000000000..f56a49989872
+--- /dev/null
++++ b/fs/proc/fs_sysctl_table.c
+@@ -0,0 +1,97 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * /proc/sys/fs sysctl table
++ */
++#include <linux/init.h>
++#include <linux/sysctl.h>
++#include <linux/poll.h>
++#include <linux/proc_fs.h>
++#include <linux/printk.h>
++#include <linux/security.h>
++#include <linux/sched.h>
++#include <linux/cred.h>
++#include <linux/namei.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/bpf-cgroup.h>
++#include <linux/mount.h>
++#include <linux/dnotify.h>
++#include <linux/pipe_fs_i.h>
++#include <linux/aio.h>
++#include <linux/inotify.h>
++#include <linux/kmemleak.h>
++#include <linux/binfmts.h>
++
++static unsigned long zero_ul;
++static unsigned long long_max = LONG_MAX;
++
++static struct ctl_table fs_table[] = {
++	{
++		.procname	= "inode-nr",
++		.data		= &inodes_stat,
++		.maxlen		= 2*sizeof(long),
++		.mode		= 0444,
++		.proc_handler	= proc_nr_inodes,
++	},
++	{
++		.procname	= "inode-state",
++		.data		= &inodes_stat,
++		.maxlen		= 7*sizeof(long),
++		.mode		= 0444,
++		.proc_handler	= proc_nr_inodes,
++	},
++	{
++		.procname	= "file-nr",
++		.data		= &files_stat,
++		.maxlen		= sizeof(files_stat),
++		.mode		= 0444,
++		.proc_handler	= proc_nr_files,
++	},
++	{
++		.procname	= "file-max",
++		.data		= &files_stat.max_files,
++		.maxlen		= sizeof(files_stat.max_files),
++		.mode		= 0644,
++		.proc_handler	= proc_doulongvec_minmax,
++		.extra1		= &zero_ul,
++		.extra2		= &long_max,
++	},
++	{
++		.procname	= "nr_open",
++		.data		= &sysctl_nr_open,
++		.maxlen		= sizeof(unsigned int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec_minmax,
++		.extra1		= &sysctl_nr_open_min,
++		.extra2		= &sysctl_nr_open_max,
++	},
++	{
++		.procname	= "dentry-state",
++		.data		= &dentry_stat,
++		.maxlen		= 6*sizeof(long),
++		.mode		= 0444,
++		.proc_handler	= proc_nr_dentry,
++	},
++	{ }
++};
++
++static struct ctl_table fs_base_table[] = {
++	{
++		.procname	= "fs",
++		.mode		= 0555,
++		.child		= fs_table,
++	},
++	{ }
++};
++
++static int __init fs_procsys_init(void)
++{
++	struct ctl_table_header *hdr;
++
++	hdr = register_sysctl_table(fs_base_table);
++	kmemleak_not_leak(hdr);
++
++	return 0;
++}
++
++early_initcall(fs_procsys_init);
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index 3b0cecf57e79..6669d6118974 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -114,9 +114,7 @@ static int sixty = 60;
+ static int __maybe_unused neg_one = -1;
+ static int __maybe_unused two = 2;
+ static int __maybe_unused four = 4;
+-static unsigned long zero_ul;
+ static unsigned long one_ul = 1;
+-static unsigned long long_max = LONG_MAX;
+ static int one_hundred = 100;
+ static int one_thousand = 1000;
+ #ifdef CONFIG_PRINTK
+@@ -3087,52 +3085,6 @@ static struct ctl_table vm_table[] = {
+ };
+ 
+ static struct ctl_table fs_table[] = {
+-	{
+-		.procname	= "inode-nr",
+-		.data		= &inodes_stat,
+-		.maxlen		= 2*sizeof(long),
+-		.mode		= 0444,
+-		.proc_handler	= proc_nr_inodes,
+-	},
+-	{
+-		.procname	= "inode-state",
+-		.data		= &inodes_stat,
+-		.maxlen		= 7*sizeof(long),
+-		.mode		= 0444,
+-		.proc_handler	= proc_nr_inodes,
+-	},
+-	{
+-		.procname	= "file-nr",
+-		.data		= &files_stat,
+-		.maxlen		= sizeof(files_stat),
+-		.mode		= 0444,
+-		.proc_handler	= proc_nr_files,
+-	},
+-	{
+-		.procname	= "file-max",
+-		.data		= &files_stat.max_files,
+-		.maxlen		= sizeof(files_stat.max_files),
+-		.mode		= 0644,
+-		.proc_handler	= proc_doulongvec_minmax,
+-		.extra1		= &zero_ul,
+-		.extra2		= &long_max,
+-	},
+-	{
+-		.procname	= "nr_open",
+-		.data		= &sysctl_nr_open,
+-		.maxlen		= sizeof(unsigned int),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec_minmax,
+-		.extra1		= &sysctl_nr_open_min,
+-		.extra2		= &sysctl_nr_open_max,
+-	},
+-	{
+-		.procname	= "dentry-state",
+-		.data		= &dentry_stat,
+-		.maxlen		= 6*sizeof(long),
+-		.mode		= 0444,
+-		.proc_handler	= proc_nr_dentry,
+-	},
+ 	{
+ 		.procname	= "overflowuid",
+ 		.data		= &fs_overflowuid,
+-- 
+2.26.2
 
---Sig_/VZz.h2chlpVPZl3LgM/gF23
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl657q0ACgkQAVBC80lX
-0GzlSAf7BEdVmK+UaDuQw/Ou/vQVPzmgNFiTOj/RpNlEMEVBEqklC8Jo+JQ9kMQI
-v6KHKeXMPQdSqbPNAoxJW4ILNxw0qynrFwrGIV/I3WV+LCv27iYdb6klQsay6Oj5
-bKFxjnof7gUuPwXWckp4WuYWt1402whpB3UMkp1twZq25Ln7ZhhyIAGW05jLk+sM
-RjV5qhDDAINuSmA21wilTRU3ymdhABQoLSOOZUx+59JtQjLhV/lvJSm/MSWvB7Ih
-Ud/lqw5KI12+8FqRzRRqpyf9uZoNYYNHkuGUQ02UX31IGfCi2fxxtcFDYfBvYFKK
-uCZpInfY2WqdcrYM5l7WwUrFJ66kyQ==
-=YzpU
------END PGP SIGNATURE-----
-
---Sig_/VZz.h2chlpVPZl3LgM/gF23--

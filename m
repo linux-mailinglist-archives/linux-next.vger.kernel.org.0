@@ -2,131 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E861CF2CB
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 12:47:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED8F01CF2E8
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 12:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728371AbgELKrK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 06:47:10 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:52231 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726187AbgELKrK (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 May 2020 06:47:10 -0400
+        id S1728371AbgELKxi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 06:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727859AbgELKxi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 06:53:38 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731AAC061A0C;
+        Tue, 12 May 2020 03:53:38 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Lvd66LgGz9sRf;
-        Tue, 12 May 2020 20:47:06 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Lvmb3mLsz9sSg;
+        Tue, 12 May 2020 20:53:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589280427;
-        bh=a59r5BxwtziJh8t/KuCtJ2Kz3/S9ORY64+a/Ze34qoo=;
+        s=201702; t=1589280816;
+        bh=bIy8uBq3y/Wu/2YykH70JeSclHrTB2b071QiJhS3muA=;
         h=Date:From:To:Cc:Subject:From;
-        b=mjIsdmplgAMgUyL9pzEC5e3YQHQCBGErxcOdq2HVU/zdaIr/WnmlmDL+7DiNVjGlr
-         LPj5dSY0WhfswLBf60kAhJocktv9cqTs7DGkz8K28nAX57KS9wOD/tDwHvP8cNHw0a
-         8MgcZ+1V77BWNXdoELxNq5yvb1H0XPTt5z/xPvwHexRf3KMwlbx3VBUx+KcwZuXZGN
-         AvkRKsvVvHiQlqB3I21ZBd9FWelWhh0GvTVLwlJeO9/RBurp7QQDp/T1X3wy3ugVMK
-         VU33MQ/vHW/gzsGx07nmf/+5Gc91gEuYFTsQJAdQHRlm+BJDGik3nu1qp31UAh+Af/
-         lYCufhH6fYHWg==
-Date:   Tue, 12 May 2020 20:47:05 +1000
+        b=DQ705lHOxNB/nDGtDO2EX28brQg1tiHZtV5kXSukX8zVzBd1qI6U5XTIXy2P/tMts
+         Z6T0PmAdBYon5pwDiaajARbZ7UswEHVPSkelBWheMZ7Yi+ZC5K13Jb82jIOfCB8xt4
+         ttL/UuqKSpenBtfU0J8kK3ng2GZEreL7hloneTGPII/jlAI+BbXkm8r8V+aNN1Q9Yn
+         C/7+xA/6r2JngyNs1t5wIM9OI4DFnD9NtMroqrFeRfJ2mFRLg5VcL9JEPAlwM6j39S
+         D+/hZ7as36GNv4Z4fli11szow7JbnnHxjmYf+Aq2+I79d6ScZgqPgHI8HHDzx/0xuw
+         f13Cq7Z9He06w==
+Date:   Tue, 12 May 2020 20:53:33 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the fsinfo tree
-Message-ID: <20200512204705.28cee8c8@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: linux-next: manual merge of the akpm-current tree with the userns
+ tree
+Message-ID: <20200512205333.21bcd7f4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/gcDJ8+uHruA8dE_dsAk/qP_";
+Content-Type: multipart/signed; boundary="Sig_//JwsautAs_8SD41GUF6=ikD";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/gcDJ8+uHruA8dE_dsAk/qP_
+--Sig_//JwsautAs_8SD41GUF6=ikD
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the fsinfo tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-In file included from fs/fsinfo.c:7:
-include/linux/syscalls.h:240:18: error: conflicting types for 'sys_fsinfo'
-  240 |  asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__)) \
-      |                  ^~~
-include/linux/syscalls.h:226:2: note: in expansion of macro '__SYSCALL_DEFI=
-NEx'
-  226 |  __SYSCALL_DEFINEx(x, sname, __VA_ARGS__)
-      |  ^~~~~~~~~~~~~~~~~
-include/linux/syscalls.h:220:36: note: in expansion of macro 'SYSCALL_DEFIN=
-Ex'
-  220 | #define SYSCALL_DEFINE6(name, ...) SYSCALL_DEFINEx(6, _##name, __VA=
-_ARGS__)
-      |                                    ^~~~~~~~~~~~~~~
-fs/fsinfo.c:655:1: note: in expansion of macro 'SYSCALL_DEFINE6'
-  655 | SYSCALL_DEFINE6(fsinfo,
-      | ^~~~~~~~~~~~~~~
-In file included from fs/fsinfo.c:7:
-include/linux/syscalls.h:1011:17: note: previous declaration of 'sys_fsinfo=
-' was here
- 1011 | asmlinkage long sys_fsinfo(int dfd, const char __user *pathname,
-      |                 ^~~~~~~~~~
+  include/linux/binfmts.h
 
-Caused by commit
+between commit:
 
-  51d01aee410b ("fsinfo: Add fsinfo() syscall to query filesystem informati=
-on")
+  96ecee29b0b5 ("exec: Merge install_exec_creds into setup_new_exec")
 
-I have added the following patch for today.
+from the userns tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 12 May 2020 20:31:22 +1000
-Subject: [PATCH] fix up sys_fsinfo decalaration
+  4bdbcefd2bd8 ("exec: simplify the copy_strings_kernel calling convention")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/syscalls.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+from the akpm-current tree.
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 76064c0807e5..fa1ecee891c9 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1009,8 +1009,9 @@ asmlinkage long sys_watch_mount(int dfd, const char _=
-_user *path,
- asmlinkage long sys_watch_sb(int dfd, const char __user *path,
- 			     unsigned int at_flags, int watch_fd, int watch_id);
- asmlinkage long sys_fsinfo(int dfd, const char __user *pathname,
--			   struct fsinfo_params __user *params, size_t params_size,
--			   void __user *result_buffer, size_t result_buf_size);
-+			   const struct fsinfo_params __user *params,
-+			   size_t params_size, void __user *result_buffer,
-+			   size_t result_buf_size);
-=20
- /*
-  * Architecture-specific system calls
---=20
-2.26.2
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/gcDJ8+uHruA8dE_dsAk/qP_
+diff --cc include/linux/binfmts.h
+index 1b48e2154766,3d3afe094c97..000000000000
+--- a/include/linux/binfmts.h
++++ b/include/linux/binfmts.h
+@@@ -143,8 -144,8 +143,7 @@@ extern int setup_arg_pages(struct linux
+  extern int transfer_args_to_stack(struct linux_binprm *bprm,
+  				  unsigned long *sp_location);
+  extern int bprm_change_interp(const char *interp, struct linux_binprm *bp=
+rm);
+- extern int copy_strings_kernel(int argc, const char *const *argv,
+- 			       struct linux_binprm *bprm);
++ int copy_string_kernel(const char *arg, struct linux_binprm *bprm);
+ -extern void install_exec_creds(struct linux_binprm *bprm);
+  extern void set_binfmt(struct linux_binfmt *new);
+  extern ssize_t read_code(struct file *, unsigned long, loff_t, size_t);
+ =20
+
+--Sig_//JwsautAs_8SD41GUF6=ikD
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66fqkACgkQAVBC80lX
-0Gw5QAf+MOZHoBUJtWxzm/Hza7fgk5LGBQWDTbKZRLcmyMwd83Y9VOTHt4b+REun
-KhxAck9dzFnBdOSqllxoAGOIyVuTwdlwoXPqOkmBzjqYjuRH8fxYqBOg3xgVrXAV
-jjoMvqizqMHViTPdvdOYPVrIEsRr+Xz6gRE7rN8rTJawc51G7diT2e83y8RD2ByJ
-2hrl3anu/gk+7Ckkr7OMcDI5+wabFWlTrRTPNYA1f9FSP1PMmw/NO8+F1UqRCDwY
-gh/rJuAPGuHD4gFgUrFhW93Kia5k4gHEMF1p0c+Tn18z/EwVHPKS4auboY7sZ9gJ
-IZ5WIM3KEfFJe28rbDHSa570K5Zb6w==
-=IfJa
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66gC0ACgkQAVBC80lX
+0GwFTwf/fgxys6r7HXBshJ770Jj2sSDI7ik7yBFmGg85LkbdNd8nQO4F81sk8E+t
+GryYhFNeThKgf1/Sc6GN6c2JFIJdDQCtYcpeckcAGdXaDsLiB2oTjDv0V6/QWrbf
+bxE2svJ0tQig8c495zmBvvDidPVGh4ieg6vGYTT4hLdMDPMtgC+KA2HS3+xjI+ke
+u0OS8KjDonJWuosgqhoUdnP1pqst5eZsMlO2GwGR923pBHDv33ay2uh3JfK52v2B
+B9BKIUEHaoqXg9u+icygOVUL3GB+uHao/0Vzej15DxvbNZSVq6TFhiB+9u8JXnQv
+VQaUfiV69JTpqJQQJdV9aiuQHjSi4w==
+=/NAz
 -----END PGP SIGNATURE-----
 
---Sig_/gcDJ8+uHruA8dE_dsAk/qP_--
+--Sig_//JwsautAs_8SD41GUF6=ikD--

@@ -2,103 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C131D018C
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 00:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80CFE1D02F2
+	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 01:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731460AbgELWDp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 18:03:45 -0400
-Received: from mail-pj1-f65.google.com ([209.85.216.65]:53276 "EHLO
-        mail-pj1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728313AbgELWDo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 May 2020 18:03:44 -0400
-Received: by mail-pj1-f65.google.com with SMTP id hi11so10202018pjb.3;
-        Tue, 12 May 2020 15:03:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=jPas3FVTQ077tq4XLx1f6zCjNgfjXBxht/KPP+7OEug=;
-        b=az4dz60fUx0TGGjY0OrzgvIn5nL20WbvyWATzslSo72V9Xh97IG4zxDBaUFWstzD83
-         1cJAssqckTzhAJrErel+8Jy5DyzW1W+EHs6SWD/zvCpQmYoe43upNVCoRYFlUXxu/laS
-         Is4FhS9BzLfVBg5gKkA+WS/y8VQHD2eEITkyk9CVaPatEyRsmHwBluvFJsqxGaKIRKor
-         UVPiDusOgvr3IQXwqYS9QqdfNlhVYE6/LZy0l1zRgjL1Qge5g5UnmNltUJcOj2EIadNx
-         aYnCPDUqT3COouxtUA8A631HOJExzblSCrybWmvJalZnexGSuifiJhfImrPJhtJUBKLQ
-         fCdA==
-X-Gm-Message-State: AGi0PuaTP6oVnQzFYJJlsyhQWfZc2pCYQSdyDWzr3/1eW/7jJ4QieZ/r
-        UGk++10ynz+ne2w/ovCeJRU=
-X-Google-Smtp-Source: APiQypLRR8P3Hy27Aan2ceEueeRcL0xTQS/0wfLdqo/lGe83BBK2NFiFKG1bubvoAzbVD2Yk3HpUbQ==
-X-Received: by 2002:a17:902:c281:: with SMTP id i1mr21719181pld.85.1589321023383;
-        Tue, 12 May 2020 15:03:43 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id o27sm681142pgd.18.2020.05.12.15.03.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 May 2020 15:03:42 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 76A134063E; Tue, 12 May 2020 22:03:41 +0000 (UTC)
-Date:   Tue, 12 May 2020 22:03:41 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Xiaoming Ni <nixiaoming@huawei.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>, yzaikin@google.com,
-        linux-fsdevel@vger.kernel.org,
+        id S1731569AbgELXSi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 19:18:38 -0400
+Received: from us-smtp-1.mimecast.com ([205.139.110.61]:48576 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725938AbgELXSh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 19:18:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1589325516;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SB1ltR+AradzYbYjso1Rce1uKrAs+DdcyR7ihkqOZBY=;
+        b=MA7/crSopzdKGcjHqQMHIo/M2TWBRL15hPyJBfpDFJ662wiRVEmVt/m7CVuJltqceXML6e
+        IMZfmsyPZip9INxTWhs2hjE0Z9IB4nXr7Izk/DYrb2JOpAqLsCeceXxyyHTbZdZ9X1vRBr
+        G8Dg/r2VNbznFA1gxSo/WpLxmdEdddg=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-76-rDzyLe2PNruNFeShQa81qw-1; Tue, 12 May 2020 19:18:32 -0400
+X-MC-Unique: rDzyLe2PNruNFeShQa81qw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.phx2.redhat.com [10.5.11.14])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 8AA3F107ACCD;
+        Tue, 12 May 2020 23:18:31 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-112-59.rdu2.redhat.com [10.10.112.59])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 67B105D9DD;
+        Tue, 12 May 2020 23:18:30 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20200512195712.690f02bb@canb.auug.org.au>
+References: <20200512195712.690f02bb@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     dhowells@redhat.com,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: manual merge of the vfs tree with the parisc-hd tree
-Message-ID: <20200512220341.GE11244@42.do-not-panic.com>
-References: <20200511111123.68ccbaa3@canb.auug.org.au>
- <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
- <20200512003305.GX11244@42.do-not-panic.com>
- <87y2pxs73w.fsf@x220.int.ebiederm.org>
- <20200512172413.GC11244@42.do-not-panic.com>
- <87k11hrqzc.fsf@x220.int.ebiederm.org>
+        Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: linux-next: build failure after merge of the fsinfo tree
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87k11hrqzc.fsf@x220.int.ebiederm.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2959204.1589325509.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 13 May 2020 00:18:29 +0100
+Message-ID: <2959205.1589325509@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.14
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 12, 2020 at 12:40:55PM -0500, Eric W. Biederman wrote:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
-> 
-> > On Tue, May 12, 2020 at 06:52:35AM -0500, Eric W. Biederman wrote:
-> >> Luis Chamberlain <mcgrof@kernel.org> writes:
-> >> 
-> >> > +static struct ctl_table fs_base_table[] = {
-> >> > +	{
-> >> > +		.procname	= "fs",
-> >> > +		.mode		= 0555,
-> >> > +		.child		= fs_table,
-> >> > +	},
-> >> > +	{ }
-> >> > +};
-> >>   ^^^^^^^^^^^^^^^^^^^^^^^^ You don't need this at all.
-> >> > > +static int __init fs_procsys_init(void)
-> >> > +{
-> >> > +	struct ctl_table_header *hdr;
-> >> > +
-> >> > +	hdr = register_sysctl_table(fs_base_table);
-> >>               ^^^^^^^^^^^^^^^^^^^^^ Please use register_sysctl instead.
-> >> 	AKA
-> >>         hdr = register_sysctl("fs", fs_table);
-> >
-> > Ah, much cleaner thanks!
-> 
-> It is my hope you we can get rid of register_sysctl_table one of these
-> days.  It was the original interface but today it is just a
-> compatibility wrapper.
-> 
-> I unfortunately ran out of steam last time before I finished converting
-> everything over.
+Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 
-Let's give it one more go. I'll start with the fs stuff.
+> /usr/lib/gcc-cross/x86_64-linux-gnu/9/../../../../x86_64-linux-gnu/bin/l=
+d: cannot find /usr/lib/x86_64-linux-gnu/libm-2.30.a
+> /usr/lib/gcc-cross/x86_64-linux-gnu/9/../../../../x86_64-linux-gnu/bin/l=
+d: cannot find /usr/lib/x86_64-linux-gnu/libmvec.a
 
-  Luis
+I'll remove my use of the pow() function to calculate the timestamp
+granularities and just print the raw mantissa and exponent.  That way I do=
+n't
+need -lm at all.
+
+David
+

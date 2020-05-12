@@ -2,92 +2,259 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 27B5E1CFF46
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 22:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 301071CFFD4
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 22:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726324AbgELUbs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 16:31:48 -0400
-Received: from mout.kundenserver.de ([217.72.192.73]:44327 "EHLO
-        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725987AbgELUbr (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 May 2020 16:31:47 -0400
-Received: from mail-qk1-f176.google.com ([209.85.222.176]) by
- mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
- id 1Mr9Jw-1imwKd1034-00oBq5; Tue, 12 May 2020 22:31:45 +0200
-Received: by mail-qk1-f176.google.com with SMTP id b6so14003341qkh.11;
-        Tue, 12 May 2020 13:31:44 -0700 (PDT)
-X-Gm-Message-State: AGi0PuYyxWOJrZuTfJ0dn4e/8vq/2feu86nzh6vZHk/Ypi+il7F2e/U6
-        dY81jpYiNcxCtVQ8feCcnRK71UGrj8SIyarvDgk=
-X-Google-Smtp-Source: APiQypIKCdaOu3b8S6gkZ0qkFU4jDbgQtG+5bVY9dwPACknqdZumuyRrjNjyLTc7jX4YOm7JuUqqed4oej1b5IUnPE8=
-X-Received: by 2002:a37:aa82:: with SMTP id t124mr21737354qke.3.1589315503943;
- Tue, 12 May 2020 13:31:43 -0700 (PDT)
+        id S1727971AbgELUvN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 16:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41078 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725938AbgELUvM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 16:51:12 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB098C061A0C
+        for <linux-next@vger.kernel.org>; Tue, 12 May 2020 13:51:12 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id 18so6957026pfv.8
+        for <linux-next@vger.kernel.org>; Tue, 12 May 2020 13:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=+kGQ0QEK+rNidtzUYtR2mGqOPB9LrRoMVcoToEu5hBA=;
+        b=uYmaw/CDQH26IiET1tbZeLUl/rs3B50HBgGNVYPhF+no+mvEwolKKjNkP4V7YRqz4u
+         /JNkUaVm1vWT7Z9UW9bFUW/WjDs7S79t1u8R7NH4USKCAFTUmlq8oGr60o6t8vtKmUq2
+         X9fgCIFuISt3pqY+Xe6mKcRowsvfPORphEjFM4a7tfkX2OxgTrZdrGrmgxtMhQU6NrG3
+         IaNklB03pXCTuAhpiDI1SIgN8Vyg9kk6r9fv5lJcmF8qgkYB3w03JsIXNDPTOc4OzMLI
+         5lDwJheaGQwgPCu9+JZwOr+hXGmHC6Osto8XkOq1AtxWFZsg0iABlNV/Fj8QWRxvR9p6
+         34+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=+kGQ0QEK+rNidtzUYtR2mGqOPB9LrRoMVcoToEu5hBA=;
+        b=IdxiJb3JQnG+vkL4PKu3KrFziu1/AMl+9Zr9FP2+PHsXHigeDrNWTgoxu0KZ9bYik9
+         iRQJN2pJAMgXMioeEoaFsavaIfjCz34xFShrIjcf2sWOGVX1BPafFqbBYM3NtdCXdskm
+         iNiQywPsyaopwyHiCAqe6n5xh57bKV3DaF4YAdUSmG1dDbYdoxWefp1hzEAPM9Hx8fu3
+         xEc9R8oTCmTFTUy7woH39i/2ZqCP30eOdO9a+nETcYsAS5Zl4OImVklxvezSngDmlByv
+         kUwl3FAZ7jsuRyrk2eytpLch9KSPWTSzpmzFJhL68/S1W+5SKzrknswgtoOfq6Qww4ZQ
+         XO7w==
+X-Gm-Message-State: AOAM53384MDBxRdvtAbyHAA4SXFXIu3n7Eyn3B3elh8U8YgdJTGOJrb6
+        3l/rxSoNuf7FXI81adjXC4+Wz0cOnVU=
+X-Google-Smtp-Source: ABdhPJyOleEhirRQ6qZNcI32rgt0O/AdJ4b/mmBYpb1vUnDF6yHm8tR55/oujd3Ly+D2qIusMKzIIw==
+X-Received: by 2002:a65:6854:: with SMTP id q20mr7782389pgt.448.1589316671998;
+        Tue, 12 May 2020 13:51:11 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x19sm13332914pjq.54.2020.05.12.13.51.09
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 May 2020 13:51:10 -0700 (PDT)
+Message-ID: <5ebb0c3e.1c69fb81.31107.0727@mx.google.com>
+Date:   Tue, 12 May 2020 13:51:10 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20200512144949.4f933eca@canb.auug.org.au> <20200512162205.GI5110@sirena.org.uk>
- <20200512163632.GA916@sol.localdomain> <20200512170801.GK5110@sirena.org.uk> <20200512200805.GA175421@gmail.com>
-In-Reply-To: <20200512200805.GA175421@gmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 12 May 2020 22:31:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2C-91vCNv8NV6ut8GDu2z9Yt6VwX+P2WggWnuCcMjcvg@mail.gmail.com>
-Message-ID: <CAK8P3a2C-91vCNv8NV6ut8GDu2z9Yt6VwX+P2WggWnuCcMjcvg@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the sound-asoc tree with the crypto tree
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:Xo+MHz6hfyQZNbY1lyAhMEsaP9SY2L1bfFoJ4u+BE17weqcjyKP
- zVAB06kwTkaeHE+JMmUB1Gr9Z0AM/neUjR/rldED9X8b6mSGmDTqbiTUvCbe0x/BzT2ksgF
- fAfsBs1SdyU6WRx5xsw9YVtdHOQ0iSBQuAmy50gQeWCFvDZep59GOEac8qyWqxBFbLsTc6v
- YOMtmRpaCh1VW6rdf+Xtw==
-X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:Eb2/49Fu2C0=:g19ZN4RbD8yATAxsYw5hBr
- QP1xMoW0s6m2DjnFO8I9dx99StVIfwQoX/gkJYLnptW+D9xJa3rb5BUJoPjsbDlQKNrAuhnjo
- tLv9aQ7qgiOgFIx5d1zNaU6TsuKnsVOL6F6pAjSmmeLAlSOVoVhm/tv5k+uPov+RucznNeiTh
- dEIRymZjiUpwKH8ssbebTJvjkUdbJl7M0pdPoeNsyfPid+gT/Ol5R4+ZxOdlOEpPJHZ+5cLz1
- yQXgIUZ1FQj4tqAySjxe+jsU2kHiyKCz/byrL0Y3quGTOHFHYU2bTJYT/q665QbgqHR3nFA6x
- fAwsH2N/+xjmhTey13L4wp9p2M1zBsaeN71unY365T3EV2ojEyiH9hpFVGNngaDQMyMzo1hgD
- EzRjHjfooISHJLEypxRb+GReUNswuaRNznwrJCzvb9BkQg42UFHM1T1qLUDHzkG8J+rlyuqUw
- ukOxceIjudICcOg1TyeUOvaIjjegTNaL5tW2qdAB1IqK2V/F7/B1Ij5HurEcaC+p1w59MTxJn
- Z1FbqQ6gwmCK8PyktDGSdzKseEOu77EH1SgdepfL5CKVfjJXvwBDLv3YteV8temrsPgvHv6WQ
- D4EV05Xfb82eCICkRUNuPadUsi973mVffFsH9nzgbsOhvO8kRfU3UPGPAjoVNFgq5u2DORyuG
- /7cBLZ8EZBeADDgAs5i/1BuEWzdNkQO0L6EWGfyRCR5oLUYPb384V00wspjCJ9E4XQKSnNiEM
- TMF9WmuP9ELEqxBZc3mUj66qIwhE9vWTsO3SyZSBD6J5wteiVxsqO/bI9J75sD1OxvvOdV0ug
- 4kpmi8NKxVKCy1DLFk1pG4EXuTmlRZXv8uNq563Boru7es4Qzg=
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200512
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 281 boots: 23 failed, 243 passed with 5 offline,
+ 7 untried/unknown, 3 conflicts (next-20200512)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 12, 2020 at 10:08 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> On Tue, May 12, 2020 at 06:08:01PM +0100, Mark Brown wrote:
->
-> For later: if SHASH_DESC_ON_STACK is causing problems, we really ought to find a
-> better solution, since lots of users are using this macro.  A version of
-> crypto_shash_tfm_digest() that falls back to heap allocation if the descsize is
-> too large would be possible, but that wouldn't fully solve the problem since
-> some users do incremental hashing.
+next/master boot: 281 boots: 23 failed, 243 passed with 5 offline, 7 untrie=
+d/unknown, 3 conflicts (next-20200512)
 
-It's hard to know how many of the users of SHASH_DESC_ON_STACK() are
-likely to cause problems, as multiple factors are involved:
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200512/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200512/
 
-- this one triggered the warning because it was on the stack of a function
-  that got inlined into another that has other large variables. Whether it
-  got inlined makes little difference to the stack usage, but does make a
-  difference to warning about it.
+Tree: next
+Branch: master
+Git Describe: next-20200512
+Git Commit: e098d7762d602be640c53565ceca342f81e55ad2
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 111 unique boards, 25 SoC families, 30 builds out of 228
 
-- generally the structure is larger than we like it, especially on architectures
-  with 128 byte CRYPTO_MINALIGN like ARM. This actually got worse
-  because of b68a7ec1e9a3 ("crypto: hash - Remove VLA usage"), as
-  the stack usage is now always the maximum of all hashes where it used
-  to be specific to the hash that was actually used and could be smaller
+Boot Regressions Detected:
 
-- the specific instance in calculate_sha256() feels a bit silly, as this
-  function allocates a tfm and a descriptor, runs the digest and then
-  frees both again. I don't know how common this pattern is, but
-  it seems a higher-level abstraction might be helpful anyway.
+arm:
 
-      Arnd
+    multi_v7_defconfig:
+        gcc-8:
+          sun8i-r40-bananapi-m2-ultra:
+              lab-clabbe: new failure (last pass: next-20191004)
+          tegra124-jetson-tk1:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+          tegra124-nyan-big:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+          tegra124-jetson-tk1:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+          tegra124-nyan-big:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+          tegra124-jetson-tk1:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+          tegra124-nyan-big:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 84 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+    sunxi_defconfig:
+        gcc-8:
+          sun7i-a20-cubietruck:
+              lab-baylibre: new failure (last pass: next-20200511)
+
+    tegra_defconfig:
+        gcc-8:
+          tegra124-jetson-tk1:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+          tegra124-nyan-big:
+              lab-collabora: failing since 5 days (last pass: next-20200505=
+ - first fail: next-20200507)
+          tegra30-beaver:
+              lab-baylibre-seattle: failing since 5 days (last pass: next-2=
+0200505 - first fail: next-20200507)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          apq8016-sbc:
+              lab-bjorn: new failure (last pass: next-20200501)
+          hip07-d05:
+              lab-collabora: new failure (last pass: next-20200507)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-gxl-s805x-p241:
+              lab-baylibre: new failure (last pass: next-20200511)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 46 days (last pass: next-=
+20200326 - first fail: next-20200327)
+
+x86_64:
+
+    x86_64_defconfig+kvm_guest:
+        gcc-8:
+          qemu_x86_64:
+              lab-collabora: new failure (last pass: next-20200511)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8016-sbc: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            sm8150-mtp: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+            sun8i-r40-bananapi-m2-ultra: 1 failed lab
+            tegra124-jetson-tk1: 2 failed labs
+            tegra124-nyan-big: 1 failed lab
+            tegra30-beaver: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+            tegra124-nyan-big: 1 failed lab
+
+    multi_v7_defconfig+CONFIG_SMP=3Dn:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+            tegra124-nyan-big: 1 failed lab
+
+    davinci_all_defconfig:
+        gcc-8:
+            da850-evm: 1 failed lab
+
+    tegra_defconfig:
+        gcc-8:
+            tegra124-jetson-tk1: 2 failed labs
+            tegra124-nyan-big: 1 failed lab
+            tegra30-beaver: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+Conflicting Boot Failures Detected: (These likely are not failures as other=
+ labs are reporting PASS. Needs review.)
+
+i386:
+    i386_defconfig:
+        qemu_i386:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+x86_64:
+    x86_64_defconfig:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+    x86_64_defconfig+kvm_guest:
+        qemu_x86_64:
+            lab-baylibre: PASS (gcc-8)
+            lab-collabora: FAIL (gcc-8)
+
+---
+For more info write to <info@kernelci.org>

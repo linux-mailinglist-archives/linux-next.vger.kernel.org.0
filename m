@@ -2,95 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 526F71CF23E
-	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 12:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC49B1CF259
+	for <lists+linux-next@lfdr.de>; Tue, 12 May 2020 12:28:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726891AbgELKWc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 06:22:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56068 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726193AbgELKWb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 12 May 2020 06:22:31 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD572C061A0C;
-        Tue, 12 May 2020 03:22:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Lv4g2Rthz9sRR;
-        Tue, 12 May 2020 20:22:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589278947;
-        bh=/GZZFyB+aFFlCyjr23L7LSS3yMR1k47VEqh349nkQIw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UJftmxFjAA8GPsiYmaObEBrJoaar3UudCrxhh5N+KX96sz8W7Rfo1jNbIXpOImao0
-         yfTh1KW0ovaznt65LzJTwK/IfW02lK2p/zwbrtzMAPg5KjweXysOJBLqLadiFYi8tX
-         F6yeEhWZE2cw10bHo6ubPMGajmILB75Xw2AwAkRhUlqR411rBR9Q8JZ2UIpliJrkyq
-         cgnw0oYdaFFy61GMg8j2gPAl+FwYXKZY45ZWRlJdY0xYzX1rZ67BRVqF10iLq25FCW
-         xuTx0Z+30lkGmrYyt7DcNadpolcsBOoZORLn+tA3D/L5urfG9e26I+svRwaVBre6uf
-         VRYZL7MTUp1Dw==
-Date:   Tue, 12 May 2020 20:22:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1729247AbgELK2x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 06:28:53 -0400
+Received: from youngberry.canonical.com ([91.189.89.112]:57276 "EHLO
+        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727783AbgELK2t (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 12 May 2020 06:28:49 -0400
+Received: from ip5f5af183.dynamic.kabel-deutschland.de ([95.90.241.131] helo=wittgenstein)
+        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        (Exim 4.86_2)
+        (envelope-from <christian.brauner@ubuntu.com>)
+        id 1jYS9X-0006TO-0M; Tue, 12 May 2020 10:28:47 +0000
+Date:   Tue, 12 May 2020 12:28:46 +0200
+From:   Christian Brauner <christian.brauner@ubuntu.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the fsinfo tree
-Message-ID: <20200512202226.79191a47@canb.auug.org.au>
+Subject: Re: linux-next: build failure after merge of the pidfd tree
+Message-ID: <20200512102846.alrmccyzou5rymnq@wittgenstein>
+References: <20200512201811.12480da0@canb.auug.org.au>
+ <20200512102024.f7sycax5qzvxay7t@wittgenstein>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DpkWlS5_5lCn=ntsZD6cdKc";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20200512102024.f7sycax5qzvxay7t@wittgenstein>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DpkWlS5_5lCn=ntsZD6cdKc
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 12, 2020 at 12:20:24PM +0200, Christian Brauner wrote:
+> On Tue, May 12, 2020 at 08:18:11PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the pidfd tree, today's linux-next build (x86_64
+> > allnoconfig) failed like this:
+> > 
+> > fs/nsfs.c:232:6: error: redefinition of 'proc_ns_file'
+> >   232 | bool proc_ns_file(const struct file *file)
+> >       |      ^~~~~~~~~~~~
+> > In file included from fs/nsfs.c:6:
+> > include/linux/proc_fs.h:194:20: note: previous definition of 'proc_ns_file' was here
+> >   194 | static inline bool proc_ns_file(const struct file *file)
+> >       |                    ^~~~~~~~~~~~
+> > 
+> > Caused by commit
+> > 
+> >   1e76b8ad203a ("nsproxy: attach to namespaces via pidfds")
+> > 
+> > I have applied the following hack for today:
+> 
+> Thanks for spotting this. I'll fix this now.
 
-Hi all,
+diff --git a/include/linux/proc_fs.h b/include/linux/proc_fs.h
+index acfd5012db4e..592a6e47b235 100644
+--- a/include/linux/proc_fs.h
++++ b/include/linux/proc_fs.h
+@@ -70,7 +70,7 @@ struct proc_dir_entry *proc_create_single_data(const char *name, umode_t mode,
+                int (*show)(struct seq_file *, void *), void *data);
+ #define proc_create_single(name, mode, parent, show) \
+        proc_create_single_data(name, mode, parent, show, NULL)
+-
++
+ extern struct proc_dir_entry *proc_create_data(const char *, umode_t,
+                                               struct proc_dir_entry *,
+                                               const struct proc_ops *,
+@@ -104,7 +104,6 @@ struct proc_dir_entry *proc_create_net_single_write(const char *name, umode_t mo
+                                                    proc_write_t write,
+                                                    void *data);
+ extern struct pid *tgid_pidfd_to_pid(const struct file *file);
+-extern bool proc_ns_file(const struct file *file);
 
-After merging the fsinfo tree, today's linux-next build (powerpc
-allyesconfig) produced this warning:
+ #ifdef CONFIG_PROC_PID_ARCH_STATUS
+ /*
+@@ -160,11 +159,6 @@ static inline struct pid *tgid_pidfd_to_pid(const struct file *file)
+        return ERR_PTR(-EBADF);
+ }
 
-samples/watch_queue/watch_test.c: In function 'saw_super_change':
-samples/watch_queue/watch_test.c:107:21: warning: format '%llx' expects arg=
-ument of type 'long long unsigned int', but argument 2 has type '__u64' {ak=
-a 'long unsigned int'} [-Wformat=3D]
-  107 |  printf("SUPER %08llx change=3D%u[%s]\n",
-      |                ~~~~~^
-      |                     |
-      |                     long long unsigned int
-      |                %08lx
-  108 |         s->sb_id, n->subtype, super_subtypes[n->subtype]);
-      |         ~~~~~~~~    =20
-      |          |
-      |          __u64 {aka long unsigned int}
+-static inline bool proc_ns_file(const struct file *file)
+-{
+-       return false;
+-}
+-
+ #endif /* CONFIG_PROC_FS */
 
-Introduced by commit
+ struct net;
+@@ -185,4 +179,6 @@ static inline struct pid_namespace *proc_pid_ns(const struct inode *inode)
+        return inode->i_sb->s_fs_info;
+ }
 
-  6e1617461ab8 ("watch_queue: sample: Display superblock notifications")
++bool proc_ns_file(const struct file *file);
++
+ #endif /* _LINUX_PROC_FS_H */
 
---=20
-Cheers,
-Stephen Rothwell
+should fix it cleanly.
 
---Sig_/DpkWlS5_5lCn=ntsZD6cdKc
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Thanks, I've added an allnoconfig to my local tests now!
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl66eOIACgkQAVBC80lX
-0GyOowf+JHW7zSsZKLVrh5V+7ItvkpGU/ylg4IJgJrtX//MkAJ7wE1ejNvzQZF2P
-Q96MJq21YHd/y3e/y9AIHmrpJBVrtN8MjgfnZmFju4BV7AfaCgOi4ZStUNacq9LV
-N1cxiG/cypwmNYVqqlSAhj/4YJc7XbUfvP77f1VUvmQsCwJO5iBh8e7uBwGyFneu
-V1FA8efmzSlM6efLNmeU9mAzO530qTU2UrokzT8vSha7mDu0LAEtiA9PyLL1DuCw
-Lk1UhX7kJfREFUmqk2akP9r9VwZaylcG5V3PxZx1dhm5Finodc6zjTmBEvLAvDYv
-Eor2Vo/YSN0WSkUhvCGFlBUV9NYQ+Q==
-=2if9
------END PGP SIGNATURE-----
-
---Sig_/DpkWlS5_5lCn=ntsZD6cdKc--
+Christian

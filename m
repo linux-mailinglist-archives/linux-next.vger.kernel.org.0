@@ -2,98 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BBE71D2113
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 23:30:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB0C41D21D3
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 00:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728861AbgEMVaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 17:30:07 -0400
-Received: from fllv0016.ext.ti.com ([198.47.19.142]:34746 "EHLO
-        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728718AbgEMVaH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 17:30:07 -0400
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTwxY105606;
-        Wed, 13 May 2020 16:29:58 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1589405398;
-        bh=vcbFgmT3TN+BiEX3L7ygJ+nCexSav6b9m490239DnXM=;
-        h=Subject:To:CC:References:From:Date:In-Reply-To;
-        b=UpYjjIAsWnRrMfzaoMrZjg1Tieg9gnCR9eYKoPDAnfr9xneKiwvmVfy1vOJgEISd8
-         52eO8MowSK7nBtarM7M6Wlbh119cwHLrh7nGTPt2Di6+GmAop7KbjnowNFDnndbrYL
-         GEL0LAfWtlpAp4BHMrZ8mDbTJC/BZ0kG0ttSZplg=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTwUD105576;
-        Wed, 13 May 2020 16:29:58 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
- May 2020 16:29:57 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
- Frontend Transport; Wed, 13 May 2020 16:29:57 -0500
-Received: from [10.250.52.63] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTvI6019290;
-        Wed, 13 May 2020 16:29:57 -0500
-Subject: Re: linux-next: Fixes tag needs some work in the sound-asoc-fixes
- tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20200514071257.5b1582ca@canb.auug.org.au>
-From:   Dan Murphy <dmurphy@ti.com>
-Message-ID: <f828c953-07b2-6a6b-881a-bf10f20a719d@ti.com>
-Date:   Wed, 13 May 2020 16:20:32 -0500
+        id S1730532AbgEMWQT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 18:16:19 -0400
+Received: from bhuna.collabora.co.uk ([46.235.227.227]:53186 "EHLO
+        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730276AbgEMWQT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 18:16:19 -0400
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: gtucker)
+        with ESMTPSA id A221C2A285C
+Subject: Re: next/master bisection: baseline.login on jetson-tk1
+To:     Joerg Roedel <jroedel@suse.de>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+References: <5eb9fab4.1c69fb81.a1f1c.0e95@mx.google.com>
+ <a868fa70-9039-f72a-39c6-5464a9d06db2@collabora.com>
+ <20200512151600.GD8135@suse.de>
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+Message-ID: <c9745450-a6d0-1944-a9af-ef9ce18fed12@collabora.com>
+Date:   Wed, 13 May 2020 23:16:14 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <20200514071257.5b1582ca@canb.auug.org.au>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20200512151600.GD8135@suse.de>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen
+On 12/05/2020 16:16, Joerg Roedel wrote:
+> Hi Guillaume,
+> 
+> thanks for the report!
+> 
+> On Tue, May 12, 2020 at 07:05:13AM +0100, Guillaume Tucker wrote:
+>>> Summary:
+>>>   Start:      4b20e7462caa6 Add linux-next specific files for 20200511
+>>>   Plain log:  https://storage.kernelci.org/next/master/next-20200511/arm/tegra_defconfig/gcc-8/lab-collabora/baseline-tegra124-jetson-tk1.txt
+>>>   HTML log:   https://storage.kernelci.org/next/master/next-20200511/arm/tegra_defconfig/gcc-8/lab-collabora/baseline-tegra124-jetson-tk1.html
+>>>   Result:     3eeeb45c6d044 iommu: Remove add_device()/remove_device() code-paths
+> 
+> Okay, so it faults at
+> 
+> 	PC is at __iommu_probe_device+0x20/0x1b8
+> 
+> Can you translate that for me into a code-line, please? That would help
+> finding the issue.
 
-On 5/13/20 4:12 PM, Stephen Rothwell wrote:
-> Hi all,
->
-> In commit
->
->    0e36f32f6b6c ("ASoC: tlv320adcx140: Fix bias config values")
->
-> Fixes tag
->
->    Fixes: 37bde5acf040 ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec
->
-> has these problem(s):
->
->    - Target SHA1 does not exist
->
-> Mabe you meant
->
-> Fixes: 689c7655b50c ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec driver family")
+Sure, sorry for the delay.  I've built my own image as vmlinux is
+not stored by kernelci and reproduced the problem:
 
-Yes this is what it is supposed to be
+  https://lava.collabora.co.uk/scheduler/job/2403076#L544
 
-Mark
+which this time gave me:
 
-Did you want me to re-submit the patch with the corrected commit or are 
-you going to update it?
+<4>[    2.540558] PC is at iommu_probe_device+0x1c/0x15c
+<4>[    2.545606] LR is at of_iommu_configure+0x15c/0x1c4
+<4>[    2.550736] pc : [<c092e0e4>]    lr : [<c0932c0c>]    psr: a0000013
 
-I also noticed code was spelled wrong in the commit message
+which in turn brings us to:
 
-s/conde/code
-
-Dan
+(gdb) l *0xc092e0e4
+0xc092e0e4 is in iommu_probe_device (drivers/iommu/iommu.c:232).
+227		int ret;
+228	
+229		if (!dev_iommu_get(dev))
+230			return -ENOMEM;
+231	
+232		if (!try_module_get(ops->owner)) {
+233			ret = -EINVAL;
+234			goto err_out;
+235		}
+236	
 
 
-> Also, it looks like the Fixes tag had been split over more than one line
-> (and then the latter part moved above the rest).
->
+Hope this helps.
+
+Guillaume

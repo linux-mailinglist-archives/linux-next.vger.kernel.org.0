@@ -2,138 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E98DC1D188E
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 17:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8F81D18D0
+	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 17:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389061AbgEMPC0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 11:02:26 -0400
-Received: from mail-pl1-f193.google.com ([209.85.214.193]:37249 "EHLO
-        mail-pl1-f193.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388039AbgEMPC0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 11:02:26 -0400
-Received: by mail-pl1-f193.google.com with SMTP id x10so6925109plr.4;
-        Wed, 13 May 2020 08:02:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=MT118aZMRZUFyZNYM/mGEw6BOShbBFfm71Ixm+ag1Wk=;
-        b=cVIFMuVnuPs7PgQTPIo1QazG+t0er1quF9fQ7qhDhobKz8hMN23xAH5+oHk6o5CjtS
-         UDZmbUuXecLs9AnPr0NFKHB4Gcr0klmaAwRfFBkGcOw1tpavFaH0or7jpYJMDnLrfUj9
-         YF7Ltz+KbOLUq7GXkcGhcWOa9ArVCXLwgnQMAp9mOZSQTFKrAsdsEYgKf8CFITzszOTM
-         QmJ2ej+zSFiWCPaiwPqPPrQA3VIxJ1fgWAsHqZrEY0cSLR9wDxEnTy89/OC1V90Y+7OL
-         fNTICzNHLvaDdU4bQmtwCVeuzrjCEqaUr/Ct4LqS127gDX8bozGEW57N0M/Q+0TeM3/v
-         Tzaw==
-X-Gm-Message-State: AGi0Pub2/mRccT3gjZSzv9ByWYcEZGxgS3T9pNCnFNxu3WYyR4Dv1wga
-        FFKS7Hw/dQGg4uyg6lOr/qw=
-X-Google-Smtp-Source: APiQypK/sufcq0cPAVcSuD3w73WdinHwTgnomrdyOeuh+IFkYrhqG3MPdpqAxWm6ywWZBeKsT2aoCA==
-X-Received: by 2002:a17:90a:8c9:: with SMTP id 9mr35596299pjn.183.1589382143917;
-        Wed, 13 May 2020 08:02:23 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id c124sm14605811pfb.187.2020.05.13.08.02.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 08:02:22 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 8E5C34063E; Wed, 13 May 2020 15:02:21 +0000 (UTC)
-Date:   Wed, 13 May 2020 15:02:21 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>, yzaikin@google.com,
-        linux-fsdevel@vger.kernel.org,
+        id S1729250AbgEMPLU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 11:11:20 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:43318 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727778AbgEMPLU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 11:11:20 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04DF7DEC014596;
+        Wed, 13 May 2020 15:11:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : mime-version : content-type : in-reply-to;
+ s=corp-2020-01-29; bh=M7tgw7hQmZDZ9d1ChBVFlk09jVIDx3jqCjHhRB1m9TI=;
+ b=EvBKpFq8qD5mFfdo2m2ZU2l0N/Odm/zYRYiOXvH4Mi68c0/r77mgxYyfigdqTaqrnOK2
+ 5kcFD6WBlr2MAeP9KYE1U+DFV/FftUk2yCGAM8StyV2iuaXaSMgfkdQERhXDPsRFU+rc
+ O4Pwssz8GVW507lJDxLJvb95eyBlvPMGSXfIvtyzC15CqWX4Eg5FTohF0NC6CbUwkkO4
+ 82LCIhMJFmOwKh0TFzRn56LqPyg9BdEcUgclS/k5ueFuUGgpb3vhoH2qhla9000xEWab
+ XXqFw40B2sy6aqc1CGLP7iBdyQmZrpxarfPsZHDeiR0OMK99BSRQC7qIPrqq3Pkcc9yl nA== 
+Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
+        by aserp2120.oracle.com with ESMTP id 3100xwct6b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 13 May 2020 15:11:07 +0000
+Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
+        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04DF8afw009989;
+        Wed, 13 May 2020 15:09:06 GMT
+Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
+        by userp3020.oracle.com with ESMTP id 3100ym8m3h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 13 May 2020 15:09:06 +0000
+Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
+        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04DF938P005780;
+        Wed, 13 May 2020 15:09:04 GMT
+Received: from kadam (/41.57.98.10)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Wed, 13 May 2020 08:09:03 -0700
+Date:   Wed, 13 May 2020 18:08:55 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Amir Goldstein <amir73il@gmail.com>
+Cc:     linux-unionfs@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: manual merge of the vfs tree with the parisc-hd tree
-Message-ID: <20200513150221.GQ11244@42.do-not-panic.com>
-References: <20200511111123.68ccbaa3@canb.auug.org.au>
- <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
- <20200512003305.GX11244@42.do-not-panic.com>
- <87y2pxs73w.fsf@x220.int.ebiederm.org>
- <20200512172413.GC11244@42.do-not-panic.com>
- <87k11hrqzc.fsf@x220.int.ebiederm.org>
- <20200512220341.GE11244@42.do-not-panic.com>
- <87d078oss9.fsf@x220.int.ebiederm.org>
- <20200513141421.GP11244@42.do-not-panic.com>
- <87tv0jopwn.fsf@x220.int.ebiederm.org>
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: [PATCH v3] ovl: potential crash in ovl_fid_to_fh()
+Message-ID: <20200513150855.GD3041@kadam>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87tv0jopwn.fsf@x220.int.ebiederm.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200513102346.6c04d912@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9620 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2005130136
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9620 signatures=668687
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 lowpriorityscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1011 cotscore=-2147483648
+ mlxscore=0 phishscore=0 adultscore=0 impostorscore=0 bulkscore=0
+ malwarescore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2005130136
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 13, 2020 at 09:44:40AM -0500, Eric W. Biederman wrote:
-> Luis Chamberlain <mcgrof@kernel.org> writes:
-> 
-> > On Wed, May 13, 2020 at 08:42:30AM -0500, Eric W. Biederman wrote:
-> >> Luis Chamberlain <mcgrof@kernel.org> writes:
-> >> 
-> >> > On Tue, May 12, 2020 at 12:40:55PM -0500, Eric W. Biederman wrote:
-> >> >> Luis Chamberlain <mcgrof@kernel.org> writes:
-> >> >> 
-> >> >> > On Tue, May 12, 2020 at 06:52:35AM -0500, Eric W. Biederman wrote:
-> >> >> >> Luis Chamberlain <mcgrof@kernel.org> writes:
-> >> >> >> 
-> >> >> >> > +static struct ctl_table fs_base_table[] = {
-> >> >> >> > +	{
-> >> >> >> > +		.procname	= "fs",
-> >> >> >> > +		.mode		= 0555,
-> >> >> >> > +		.child		= fs_table,
-> >> >> >> > +	},
-> >> >> >> > +	{ }
-> >> >> >> > +};
-> >> >> >>   ^^^^^^^^^^^^^^^^^^^^^^^^ You don't need this at all.
-> >> >> >> > > +static int __init fs_procsys_init(void)
-> >> >> >> > +{
-> >> >> >> > +	struct ctl_table_header *hdr;
-> >> >> >> > +
-> >> >> >> > +	hdr = register_sysctl_table(fs_base_table);
-> >> >> >>               ^^^^^^^^^^^^^^^^^^^^^ Please use register_sysctl instead.
-> >> >> >> 	AKA
-> >> >> >>         hdr = register_sysctl("fs", fs_table);
-> >> >> >
-> >> >> > Ah, much cleaner thanks!
-> >> >> 
-> >> >> It is my hope you we can get rid of register_sysctl_table one of these
-> >> >> days.  It was the original interface but today it is just a
-> >> >> compatibility wrapper.
-> >> >> 
-> >> >> I unfortunately ran out of steam last time before I finished converting
-> >> >> everything over.
-> >> >
-> >> > Let's give it one more go. I'll start with the fs stuff.
-> >> 
-> >> Just to be clear moving the tables out of kernel/sysctl.c is a related
-> >> but slightly different problem.
-> >
-> > Sure, but also before we go on this crusade, how about we add a few
-> > helpers:
-> >
-> > register_sysctl_kernel()
-> > register_sysctl_vm()
-> > register_sysctl_fs()
-> > register_sysctl_debug()
-> > register_sysctl_dev()
-> 
-> Hmm.
-> 
->   register_sysctl("kernel")
-> 
-> > That should make it easier to look for these, and shorter. We *know*
-> > this is a common path, given the size of the existing table.
-> 
-> I don't really care but one character shorter doesn't look like it
-> really helps.  Not really for grepping and not maintenance as we get a
-> bunch of trivial one line implementations.
+The "buflen" value comes from the user and there is a potential that it
+could be zero.  In do_handle_to_path() we know that "handle->handle_bytes"
+is non-zero and we do:
 
-Alright, let's skip the helpers for now.
+	handle_dwords = handle->handle_bytes >> 2;
 
-  Luis
+So values 1-3 become zero.  Then in ovl_fh_to_dentry() we do:
+
+	int len = fh_len << 2;
+
+So now len is in the "0,4-128" range and a multiple of 4.  But if
+"buflen" is zero it will try to copy negative bytes when we do the
+memcpy in ovl_fid_to_fh().
+
+	memcpy(&fh->fb, fid, buflen - OVL_FH_WIRE_OFFSET);
+
+And that will lead to a crash.  Thanks to Amir Goldstein for his help
+with this patch.
+
+Fixes: cbe7fba8edfc ("ovl: make sure that real fid is 32bit aligned in memory")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+---
+v2: Move the check after the other checks
+v3: Fix Fixes tag
+
+ fs/overlayfs/export.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
+index 475c61f53f0fe..ed5c1078919cc 100644
+--- a/fs/overlayfs/export.c
++++ b/fs/overlayfs/export.c
+@@ -783,6 +783,9 @@ static struct ovl_fh *ovl_fid_to_fh(struct fid *fid, int buflen, int fh_type)
+ 	if (fh_type != OVL_FILEID_V0)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (buflen <= OVL_FH_WIRE_OFFSET)
++		return ERR_PTR(-EINVAL);
++
+ 	fh = kzalloc(buflen, GFP_KERNEL);
+ 	if (!fh)
+ 		return ERR_PTR(-ENOMEM);
+-- 
+2.26.2

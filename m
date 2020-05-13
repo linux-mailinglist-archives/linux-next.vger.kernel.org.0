@@ -2,80 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D611D039F
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 02:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E97291D048B
+	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 03:51:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729646AbgEMAaj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 12 May 2020 20:30:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728313AbgEMAai (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 12 May 2020 20:30:38 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB74C061A0C;
-        Tue, 12 May 2020 17:30:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49MFvH3Y6yz9sSF;
-        Wed, 13 May 2020 10:30:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589329837;
-        bh=xyBXaReo38HKhKDXoOOGZ6HWaVAnBSJC1GZgIaG3nIk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Zrlqo02w7WjZzdlh8WCnmF7JIFsPWtdHuS7toau6D0kYOxOKbPPLderD9At5A2z79
-         moGZnIjxTmtWXa9NhZuaWoRoXPiJq9AXAKAcDfISY0kHczAJTKB/iSdbIg5t7Pyihu
-         GTGfk/QTzdKD1gBLd2A8latJnXXgJ/P7zNSunikyhEWpvZWxJh+u7uYl4XZXL1mzly
-         1+t9vU1kjgVKljpdpV2fKMtlJ+vpvzqkjcALU91hozIk2DUDR16Vd3VMrmzb7s0Egk
-         ReUWY4H7aHCcZejS7Ki7gDHVlFiqmKM8AdRy7tb/nQ+UwLQ20D0/MaC0FzC7UmzhPm
-         yPNhpFf1W0WiQ==
-Date:   Wed, 13 May 2020 10:30:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>
-Subject: linux-next: Signed-off-by missing for commit in the ipmi tree
-Message-ID: <20200513103034.4de3c630@canb.auug.org.au>
+        id S1731653AbgEMBvm (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 12 May 2020 21:51:42 -0400
+Received: from szxga08-in.huawei.com ([45.249.212.255]:36068 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726028AbgEMBvl (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 12 May 2020 21:51:41 -0400
+Received: from DGGEMM406-HUB.china.huawei.com (unknown [172.30.72.55])
+        by Forcepoint Email with ESMTP id D2758F3EE58754A4C876;
+        Wed, 13 May 2020 09:51:39 +0800 (CST)
+Received: from dggeme758-chm.china.huawei.com (10.3.19.104) by
+ DGGEMM406-HUB.china.huawei.com (10.3.20.214) with Microsoft SMTP Server (TLS)
+ id 14.3.487.0; Wed, 13 May 2020 09:51:39 +0800
+Received: from [10.173.219.71] (10.173.219.71) by
+ dggeme758-chm.china.huawei.com (10.3.19.104) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.1913.5; Wed, 13 May 2020 09:51:39 +0800
+Subject: Re: linux-next: manual merge of the net-next tree with the net tree
+To:     Jakub Kicinski <kuba@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+CC:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+References: <20200512133051.7d740613@canb.auug.org.au>
+ <20200512094731.346c0d8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+From:   "luobin (L)" <luobin9@huawei.com>
+Message-ID: <c49a4d39-9f83-a68a-fa0d-ef5fd3bc4acc@huawei.com>
+Date:   Wed, 13 May 2020 09:51:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.1.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XBt90n+5nvkCRgE12Hjv8S7";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200512094731.346c0d8f@kicinski-fedora-pc1c0hjn.dhcp.thefacebook.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.173.219.71]
+X-ClientProxiedBy: dggeme719-chm.china.huawei.com (10.1.199.115) To
+ dggeme758-chm.china.huawei.com (10.3.19.104)
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/XBt90n+5nvkCRgE12Hjv8S7
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2020/5/13 0:47, Jakub Kicinski wrote:
 
-Hi all,
+> On Tue, 12 May 2020 13:30:51 +1000 Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Today's linux-next merge of the net-next tree got conflicts in:
+>>
+>>    drivers/net/ethernet/huawei/hinic/hinic_hw_mgmt.c
+>>    drivers/net/ethernet/huawei/hinic/hinic_main.c
+>>
+>> between commit:
+>>
+>>    e8a1b0efd632 ("hinic: fix a bug of ndo_stop")
+>>
+>> from the net tree and commit:
+>>
+>>    7dd29ee12865 ("hinic: add sriov feature support")
+>>
+>> from the net-next tree.
+>>
+>> I fixed it up (I think, see below) and can carry the fix as necessary. This
+>> is now fixed as far as linux-next is concerned, but any non trivial
+>> conflicts should be mentioned to your upstream maintainer when your tree
+>> is submitted for merging.  You may also want to consider cooperating
+>> with the maintainer of the conflicting tree to minimise any particularly
+>> complex conflicts.
+> I had a feeling this was gonna happen :(
+>
+> Resolution looks correct, thank you!
+>
+> Luo bin, if you want to adjust the timeouts (you had slightly different
+> ones depending on the command in the first version of the fix) - you can
+> follow up with a patch to net-next once Dave merges net into net-next
+> (usually happens every two weeks).
 
-Commit
-
-  73d0824e48eb ("char: ipmi: convert to use i2c_new_client_device()")
-
-is missing a Signed-off-by from its author.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XBt90n+5nvkCRgE12Hjv8S7
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl67P6oACgkQAVBC80lX
-0GyeHAf+Jby9ZCJVMSaHJazTCvbNpiQZBZqdMKlrc8vnjAqkoSnUdmeQKCEfDn60
-CNfVr0x5XSateSx24j1JhCWN+tZNu/wkDD0RxYGhjzoObiJjGYeXfh6BCJZFnsSR
-eQrKP6wsLceFhqHZvcPjcOWY9d4P4NxcsO0J5o4JJcq4nKuJIlq6mruFh94ij6Ms
-l2cyUIpwAqkcz1P7kfzZZcZjg9A0ZLkZxbTeCJCojS9D8DahedcAYR2QCC0+g/jy
-wUUE+Z+Nq2WlLKRFe0uRQodC1o1MaVAWQWqGafBvG2Wpe/uLXGTQk7/Gh/ZtmaAv
-wTfzt9v855gD8tM5OBYSCKXw7QVQCg==
-=k95z
------END PGP SIGNATURE-----
-
---Sig_/XBt90n+5nvkCRgE12Hjv8S7--
+> OK. Thanks.
+> .

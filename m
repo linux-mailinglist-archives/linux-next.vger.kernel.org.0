@@ -2,95 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EEEA1D20B1
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 23:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BBE71D2113
+	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 23:30:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726098AbgEMVND (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 17:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725943AbgEMVND (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 17:13:03 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3A4C061A0C;
-        Wed, 13 May 2020 14:13:02 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49MnSq1P8pz9sPF;
-        Thu, 14 May 2020 07:12:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589404379;
-        bh=MENIddwpkco4KNLi9ujSul+fqmhfNKZHVurKbRzWGeI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=l+3MKSCv7N1fyiMaQb97iG7s8ZBBHOybm5RJ456o+rNyMwDI1lw8Z0KHpx9y3prKx
-         Ee8pnOHZBOF/QYYNAVj3op211Lu7sPJ6wM+9tX/wRd0X56X3qW3l5M4eCeN72CtMHQ
-         oXSLnCsnG2R9MKWjy7L2ng7GzztgyVzgdyFukpCttndTZjrTXJF3W4xddnRGPlH/4V
-         sEVXUI35JqOGUp1Czvc3rBu/gv3CbnovstMlRMNUXWZOrbo/YjAMYHFJJT4jFm4Ui+
-         p/XYM+T6G8i/9bjZT+nULnA13IZX3O3xiM7ubFbfJz+dNDvHA1xGEe51idu7GBVX3l
-         EUalvF/ytzIoQ==
-Date:   Thu, 14 May 2020 07:12:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mark Brown <broonie@kernel.org>,
+        id S1728861AbgEMVaH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 17:30:07 -0400
+Received: from fllv0016.ext.ti.com ([198.47.19.142]:34746 "EHLO
+        fllv0016.ext.ti.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728718AbgEMVaH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 17:30:07 -0400
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTwxY105606;
+        Wed, 13 May 2020 16:29:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1589405398;
+        bh=vcbFgmT3TN+BiEX3L7ygJ+nCexSav6b9m490239DnXM=;
+        h=Subject:To:CC:References:From:Date:In-Reply-To;
+        b=UpYjjIAsWnRrMfzaoMrZjg1Tieg9gnCR9eYKoPDAnfr9xneKiwvmVfy1vOJgEISd8
+         52eO8MowSK7nBtarM7M6Wlbh119cwHLrh7nGTPt2Di6+GmAop7KbjnowNFDnndbrYL
+         GEL0LAfWtlpAp4BHMrZ8mDbTJC/BZ0kG0ttSZplg=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTwUD105576;
+        Wed, 13 May 2020 16:29:58 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3; Wed, 13
+ May 2020 16:29:57 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.1979.3 via
+ Frontend Transport; Wed, 13 May 2020 16:29:57 -0500
+Received: from [10.250.52.63] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 04DLTvI6019290;
+        Wed, 13 May 2020 16:29:57 -0500
+Subject: Re: linux-next: Fixes tag needs some work in the sound-asoc-fixes
+ tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mark Brown <broonie@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Murphy <dmurphy@ti.com>
-Subject: linux-next: Fixes tag needs some work in the sound-asoc-fixes tree
-Message-ID: <20200514071257.5b1582ca@canb.auug.org.au>
+CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200514071257.5b1582ca@canb.auug.org.au>
+From:   Dan Murphy <dmurphy@ti.com>
+Message-ID: <f828c953-07b2-6a6b-881a-bf10f20a719d@ti.com>
+Date:   Wed, 13 May 2020 16:20:32 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UvmppJlvnmiOmCWEeNGvZhA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200514071257.5b1582ca@canb.auug.org.au>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UvmppJlvnmiOmCWEeNGvZhA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Stephen
 
-Hi all,
+On 5/13/20 4:12 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> In commit
+>
+>    0e36f32f6b6c ("ASoC: tlv320adcx140: Fix bias config values")
+>
+> Fixes tag
+>
+>    Fixes: 37bde5acf040 ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec
+>
+> has these problem(s):
+>
+>    - Target SHA1 does not exist
+>
+> Mabe you meant
+>
+> Fixes: 689c7655b50c ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec driver family")
 
-In commit
+Yes this is what it is supposed to be
 
-  0e36f32f6b6c ("ASoC: tlv320adcx140: Fix bias config values")
+Mark
 
-Fixes tag
+Did you want me to re-submit the patch with the corrected commit or are 
+you going to update it?
 
-  Fixes: 37bde5acf040 ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec
+I also noticed code was spelled wrong in the commit message
 
-has these problem(s):
+s/conde/code
 
-  - Target SHA1 does not exist
+Dan
 
-Mabe you meant
 
-Fixes: 689c7655b50c ("ASoC: tlv320adcx140: Add the tlv320adcx140 codec driv=
-er family")
-
-Also, it looks like the Fixes tag had been split over more than one line
-(and then the latter part moved above the rest).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UvmppJlvnmiOmCWEeNGvZhA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68YtkACgkQAVBC80lX
-0GxBkggAn1ckEem3QzkPI+kLEPOqTyFksksL1MFYf4CUIVw9sKce88wVf3uQ3mJR
-GZIIqhFcAEVC54p9sdGUE5501+w/sBls2CUohh4UtE9rww3wyyAy3SC+13BmeQx3
-9ZSMv4KY9vUf8GuHtfB33guyN+A3u35QNm5NuDkgz3QM/k72h74w6jkEcoMWf/dh
-J93SIafFl4AwVRo4D9iNwdrwe705hwHlAdHH8cF9kLv+3pc7asMlT5VVaKI2JWzc
-bmwpvt5JCAQsr2tviFX5lkZF97OAFosuAWuHyZZTJS20PCFqbsoDgmrL1fMSjwJs
-3TxMccnunqQQfYUjnUFgiRsDaWbb4A==
-=Es6e
------END PGP SIGNATURE-----
-
---Sig_/UvmppJlvnmiOmCWEeNGvZhA--
+> Also, it looks like the Fixes tag had been split over more than one line
+> (and then the latter part moved above the rest).
+>

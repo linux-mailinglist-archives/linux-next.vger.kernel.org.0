@@ -2,116 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F8F81D18D0
-	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 17:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F55D1D18EF
+	for <lists+linux-next@lfdr.de>; Wed, 13 May 2020 17:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729250AbgEMPLU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 11:11:20 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:43318 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727778AbgEMPLU (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 11:11:20 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04DF7DEC014596;
-        Wed, 13 May 2020 15:11:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : mime-version : content-type : in-reply-to;
- s=corp-2020-01-29; bh=M7tgw7hQmZDZ9d1ChBVFlk09jVIDx3jqCjHhRB1m9TI=;
- b=EvBKpFq8qD5mFfdo2m2ZU2l0N/Odm/zYRYiOXvH4Mi68c0/r77mgxYyfigdqTaqrnOK2
- 5kcFD6WBlr2MAeP9KYE1U+DFV/FftUk2yCGAM8StyV2iuaXaSMgfkdQERhXDPsRFU+rc
- O4Pwssz8GVW507lJDxLJvb95eyBlvPMGSXfIvtyzC15CqWX4Eg5FTohF0NC6CbUwkkO4
- 82LCIhMJFmOwKh0TFzRn56LqPyg9BdEcUgclS/k5ueFuUGgpb3vhoH2qhla9000xEWab
- XXqFw40B2sy6aqc1CGLP7iBdyQmZrpxarfPsZHDeiR0OMK99BSRQC7qIPrqq3Pkcc9yl nA== 
-Received: from userp3020.oracle.com (userp3020.oracle.com [156.151.31.79])
-        by aserp2120.oracle.com with ESMTP id 3100xwct6b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 13 May 2020 15:11:07 +0000
-Received: from pps.filterd (userp3020.oracle.com [127.0.0.1])
-        by userp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 04DF8afw009989;
-        Wed, 13 May 2020 15:09:06 GMT
-Received: from userv0122.oracle.com (userv0122.oracle.com [156.151.31.75])
-        by userp3020.oracle.com with ESMTP id 3100ym8m3h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 May 2020 15:09:06 +0000
-Received: from abhmp0003.oracle.com (abhmp0003.oracle.com [141.146.116.9])
-        by userv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 04DF938P005780;
-        Wed, 13 May 2020 15:09:04 GMT
-Received: from kadam (/41.57.98.10)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Wed, 13 May 2020 08:09:03 -0700
-Date:   Wed, 13 May 2020 18:08:55 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Amir Goldstein <amir73il@gmail.com>
-Cc:     linux-unionfs@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH v3] ovl: potential crash in ovl_fid_to_fh()
-Message-ID: <20200513150855.GD3041@kadam>
+        id S1728881AbgEMPSX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 11:18:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728692AbgEMPSW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 11:18:22 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7653CC061A0C;
+        Wed, 13 May 2020 08:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=1tZgH8MNeghSPyWNWnOBlGuYAdG9LL5O6RnEdePT1vE=; b=gb6ABaw7RHKKCr1HU766fZDB8U
+        SB3h6fppxsH05Z02CrRcbdER5PcWclAq30iLWhi9toAcrYx2gDTi2f6Ygq2i3bRxwrtVW7K2alru7
+        a+2SkgnNRPyVTAjzPq9QrRPgZ7yeMbl2gC2E2b3QQ6seYdYrig544U3QgoVJPrQB+7RDAvAdQJ/Ts
+        rgvKSg3kEfaXw9mw1je4fbu3TRJcZ2Q1tpcfypeCRLm5C/8RRahy35PNCo2iPB5R/H6RIa+gUJkkA
+        hH9pzFXBD+vbbm+BjX1GgxPVCk5WVYTD1l6LYY8oGm33ACtlpFIvBju6/vnq9aBVH05Hr06pZP8zD
+        9sSHwAHw==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jYt9J-0005kF-21; Wed, 13 May 2020 15:18:21 +0000
+Subject: Re: mmotm 2020-05-11-15-43 uploaded (ethernet/ti/ti_cpsw)
+To:     Grygorii Strashko <grygorii.strashko@ti.com>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        linux-omap@vger.kernel.org
+References: <20200511224430.HDJjRC68z%akpm@linux-foundation.org>
+ <9ba4bac8-d4ec-c2d2-373f-3a631523cb2f@infradead.org>
+ <a6e2a4ff-1ec5-4d86-4d00-ce62fbf1813f@ti.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <86830472-e970-cf07-49ae-2970fd99c25e@infradead.org>
+Date:   Wed, 13 May 2020 08:18:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200513102346.6c04d912@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9620 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- phishscore=0 bulkscore=0 spamscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2005130136
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9620 signatures=668687
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 lowpriorityscore=0
- suspectscore=0 mlxlogscore=999 clxscore=1011 cotscore=-2147483648
- mlxscore=0 phishscore=0 adultscore=0 impostorscore=0 bulkscore=0
- malwarescore=0 priorityscore=1501 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2004280000 definitions=main-2005130136
+In-Reply-To: <a6e2a4ff-1ec5-4d86-4d00-ce62fbf1813f@ti.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-The "buflen" value comes from the user and there is a potential that it
-could be zero.  In do_handle_to_path() we know that "handle->handle_bytes"
-is non-zero and we do:
+On 5/13/20 2:20 AM, Grygorii Strashko wrote:
+> 
+> 
+> On 12/05/2020 05:12, Randy Dunlap wrote:
+>> On 5/11/20 3:44 PM, Andrew Morton wrote:
+>>> The mm-of-the-moment snapshot 2020-05-11-15-43 has been uploaded to
+>>>
+>>>     http://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> mmotm-readme.txt says
+>>>
+>>> README for mm-of-the-moment:
+>>>
+>>> http://www.ozlabs.org/~akpm/mmotm/
+>>>
+>>> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+>>> more than once a week.
+>>>
+>>> You will need quilt to apply these patches to the latest Linus release (5.x
+>>> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+>>> http://ozlabs.org/~akpm/mmotm/series
+>>>
+>>> The file broken-out.tar.gz contains two datestamp files: .DATE and
+>>> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+>>> followed by the base kernel version against which this patch series is to
+>>> be applied.
+>>>
+>>> This tree is partially included in linux-next.  To see which patches are
+>>> included in linux-next, consult the `series' file.  Only the patches
+>>> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+>>> linux-next.
+>>>
+>>>
+>>> A full copy of the full kernel tree with the linux-next and mmotm patches
+>>> already applied is available through git within an hour of the mmotm
+>>> release.  Individual mmotm releases are tagged.  The master branch always
+>>> points to the latest release, so it's constantly rebasing.
+>>>
+>>>     https://github.com/hnaz/linux-mm
+>>>
+>>> The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+>>> contains daily snapshots of the -mm tree.  It is updated more frequently
+>>> than mmotm, and is untested.
+>>>
+>>> A git copy of this tree is also available at
+>>>
+>>>     https://github.com/hnaz/linux-mm
+>>
+>> on i386:
+>>
+>> ERROR: modpost: "cpts_register" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_unregister" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_tx_timestamp" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_create" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_misc_interrupt" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_release" [drivers/net/ethernet/ti/ti_cpsw_new.ko] undefined!
+>> ERROR: modpost: "cpts_tx_timestamp" [drivers/net/ethernet/ti/ti_cpsw.ko] undefined!
+>> ERROR: modpost: "cpts_create" [drivers/net/ethernet/ti/ti_cpsw.ko] undefined!
+>> ERROR: modpost: "cpts_misc_interrupt" [drivers/net/ethernet/ti/ti_cpsw.ko] undefined!
+>> ERROR: modpost: "cpts_release" [drivers/net/ethernet/ti/ti_cpsw.ko] undefined!
+>>
+>>
+>> Full randconfig file is attached.
+>>
+> 
+> It's expected to be fixed by
+> https://lkml.org/lkml/2020/5/12/333
 
-	handle_dwords = handle->handle_bytes >> 2;
+Works for me. Thanks.
 
-So values 1-3 become zero.  Then in ovl_fh_to_dentry() we do:
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-	int len = fh_len << 2;
-
-So now len is in the "0,4-128" range and a multiple of 4.  But if
-"buflen" is zero it will try to copy negative bytes when we do the
-memcpy in ovl_fid_to_fh().
-
-	memcpy(&fh->fb, fid, buflen - OVL_FH_WIRE_OFFSET);
-
-And that will lead to a crash.  Thanks to Amir Goldstein for his help
-with this patch.
-
-Fixes: cbe7fba8edfc ("ovl: make sure that real fid is 32bit aligned in memory")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
----
-v2: Move the check after the other checks
-v3: Fix Fixes tag
-
- fs/overlayfs/export.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
-index 475c61f53f0fe..ed5c1078919cc 100644
---- a/fs/overlayfs/export.c
-+++ b/fs/overlayfs/export.c
-@@ -783,6 +783,9 @@ static struct ovl_fh *ovl_fid_to_fh(struct fid *fid, int buflen, int fh_type)
- 	if (fh_type != OVL_FILEID_V0)
- 		return ERR_PTR(-EINVAL);
- 
-+	if (buflen <= OVL_FH_WIRE_OFFSET)
-+		return ERR_PTR(-EINVAL);
-+
- 	fh = kzalloc(buflen, GFP_KERNEL);
- 	if (!fh)
- 		return ERR_PTR(-ENOMEM);
 -- 
-2.26.2
+~Randy

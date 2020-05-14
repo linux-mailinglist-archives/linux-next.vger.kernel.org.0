@@ -2,147 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AE7F1D38ED
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 20:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A592B1D40FF
+	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 00:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726161AbgENSNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 14:13:07 -0400
-Received: from mail.kernel.org ([198.145.29.99]:59236 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726075AbgENSNH (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 14:13:07 -0400
-Received: from paulmck-ThinkPad-P72.home (unknown [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1728489AbgENW3l (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 18:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728482AbgENW3l (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 18:29:41 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC56EC061A0C;
+        Thu, 14 May 2020 15:29:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 852782065D;
-        Thu, 14 May 2020 18:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589479986;
-        bh=K6NKA083JKcvBkEFVEjRKQHwmmMVK7aiJCAoZ7eOmPc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=d1aPOCTNwyHeaHG+iWHrF7E5IEnHDZ9yqNqPDhmaywtwCiK6dUsAeOL88r96MJ8Kf
-         QjTMsb6UqmRbcmSQpStcJhOkJ2UY9WXErwxnMEnW27qbq1+xF64ZrvkP6V12VM07f5
-         E/26dgoExPmjEz/8fAYOseLEnfQ8QuUWfEg1O5Bw=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id A9E2835229C8; Thu, 14 May 2020 11:13:05 -0700 (PDT)
-Date:   Thu, 14 May 2020 11:13:05 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qian Cai <cai@lca.pw>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49NR6n70DLz9sTD;
+        Fri, 15 May 2020 08:29:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589495378;
+        bh=JeunvOBzj/nn3DzNyB3xTBnP1+Ir5YCeDPCehLP/7j0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jJHv4dknuh4xybfYrlLlbHfRKcaTvQAfjiPv9EcobAtPFMcviu14hy8kNAscycqQc
+         WFIQaNbFbO/PVx8d5HpEwWV2hLjOun9bySAOLaA9enmuqrA5kLuVsN8+aFs0fJvse0
+         SvfN2MdxFAyVdivQLBOHsLefWftQlUHgHgduSBhYOMmCvEz8E59pQ2KsEb3GW2AQwD
+         3TXo+7v/MGYFsJkyDn/3FJoAe3I7BP/6LZuCcS3QdFc+IYh+jW6U1MaT5qkeU5Y60q
+         sJX8h1jzvUceS1lo47EuShPGzSjfY65EnXdcY5g23WlzNjbKpewxz9awef6UHhJx7c
+         9cwfs8CEKI8bQ==
+Date:   Fri, 15 May 2020 08:29:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        Amol Grover <frextrite@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>
-Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
-Message-ID: <20200514181305.GT2869@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200514222535.259cb69e@canb.auug.org.au>
- <ADC503BE-32C0-46BB-A65E-59FFEC30ED57@lca.pw>
- <20200514133328.GG2869@paulmck-ThinkPad-P72>
- <ADE40EB3-1B1C-4CCF-9B8A-1F2BC585BCFB@lca.pw>
- <20200514135402.GI2869@paulmck-ThinkPad-P72>
- <CC392959-36FD-459F-BD13-8F50C22FC615@lca.pw>
- <20200514153400.GJ2869@paulmck-ThinkPad-P72>
- <6089C62B-52AA-47CB-BCA0-9096B3482509@lca.pw>
+        Dan Carpenter <dan.carpenter@oracle.com>
+Subject: linux-next: Fixes tag needs some work in the integrity-fixes tree
+Message-ID: <20200515082934.7a8ebec5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6089C62B-52AA-47CB-BCA0-9096B3482509@lca.pw>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/gjVtG1tEKHExZV1K3=CuFBa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 14, 2020 at 11:46:23AM -0400, Qian Cai wrote:
-> 
-> 
-> > On May 14, 2020, at 11:34 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> > 
-> > On Thu, May 14, 2020 at 10:03:21AM -0400, Qian Cai wrote:
-> >> 
-> >> 
-> >>> On May 14, 2020, at 9:54 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>> 
-> >>> On Thu, May 14, 2020 at 09:44:28AM -0400, Qian Cai wrote:
-> >>>> 
-> >>>> 
-> >>>>> On May 14, 2020, at 9:33 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
-> >>>>> 
-> >>>>> On Thu, May 14, 2020 at 08:31:13AM -0400, Qian Cai wrote:
-> >>>>>> 
-> >>>>>> 
-> >>>>>>> On May 14, 2020, at 8:25 AM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >>>>>>> 
-> >>>>>>> Hi Paul,
-> >>>>>>> 
-> >>>>>>> This patch in the rcu tree
-> >>>>>>> 
-> >>>>>>> d13fee049fa8 ("Default enable RCU list lockdep debugging with PROVE_RCU")
-> >>>>>>> 
-> >>>>>>> is causing whack-a-mole in the syzbot testing of linux-next.  Because
-> >>>>>>> they always do a debug build of linux-next, no testing is getting done. :-(
-> >>>>>>> 
-> >>>>>>> Can we find another way to find all the bugs that are being discovered
-> >>>>>>> (very slowly)?
-> >>>>>> 
-> >>>>>> Alternatively, could syzbot to use PROVE_RCU=n temporarily because it can’t keep up with it? I personally found PROVE_RCU_LIST=y is still useful for my linux-next testing, and don’t want to lose that coverage overnight.
-> >>>>> 
-> >>>>> The problem is that PROVE_RCU is exactly PROVE_LOCKING, and asking people
-> >>>>> to test without PROVE_LOCKING is a no-go in my opinion.  But of course
-> >>>>> on the other hand if there is no testing of RCU list lockdep debugging,
-> >>>>> those issues will never be found, let alone fixed.
-> >>>>> 
-> >>>>> One approach would be to do as Stephen asks (either remove d13fee049fa8
-> >>>>> or pull it out of -next) and have testers force-enable the RCU list
-> >>>>> lockdep debugging.
-> >>>>> 
-> >>>>> Would that work for you?
-> >>>> 
-> >>>> Alternatively, how about having
-> >>>> 
-> >>>> PROVE_RCU_LIST=n if DEBUG_AID_FOR_SYZBOT
-> >>>> 
-> >>>> since it is only syzbot can’t keep up with it?
-> >>> 
-> >>> Sound good to me, assuming that this works for the syzkaller guys.
-> >>> Or could there be a "select PROVE_RCU_LIST" for the people who would
-> >>> like to test it.
-> >>> 
-> >>> Alternatively, if we revert d13fee049fa8 from -next, I could provide
-> >>> you a script that updates your .config to set both RCU_EXPERT and
-> >>> PROVE_RCU_LIST.
-> >>> 
-> >>> There are a lot of ways to appraoch this.
-> >>> 
-> >>> So what would work best for everyone?
-> >> 
-> >> 
-> >> If PROVE_RCU_LIST=n if DEBUG_AID_FOR_SYZBOT works for syzbot guys, that would be great, so other testing agents could still report/fix those RCU-list bugs and then pave a way for syzbot to return back once all those false positives had been sorted out.
-> > 
-> > On that, I must defer to the syzbot guys.
-> > 
-> >> Otherwise,  “select PROVE_RCU_LIST” *might* be better than buried into RCU_EXPERT where we will probably never saw those false positives been addressed since my configs does not cover a wide range of subsystems and probably not many other bots would enable RCU_EXPERT.
-> > 
-> > Yet another option would be to edit your local kernel/rcu/Kconfig.debug
-> > and change the code to the following:
-> > 
-> > 	config PROVE_RCU_LIST
-> > 		def_bool y
-> > 		help
-> > 		  Enable RCU lockdep checking for list usages. It is default
-> > 		  enabled with CONFIG_PROVE_RCU.
-> > 
-> > Removing the RCU_EXPERT dependency would not go over at all well with
-> > some people whose opinions are difficult to ignore.  ;-)
-> 
-> I am trying to not getting into a game of carrying any custom patch myself.
-> 
-> Let’s see what syzbot guys will say, and then I’ll enable RCU_EXPERT myself if needed, but again we probably never see PROVE_RCU_LIST to be used again in syzbot for this path. I surely have no cycles to expand the testing coverage for more subsystems at the moment.
+--Sig_/gjVtG1tEKHExZV1K3=CuFBa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fair enough!  And yes, the Linux kernel is quite large, so I certainly am
-not asking you to test the whole thing yourself.
+Hi all,
 
-								Thanx, Paul
+In commit
+
+  f438e9598695 ("evm: Fix a small race in init_desc()")
+
+Fixes tag
+
+  Fixes: 53de3b080d5e: "evm: Check also if *tfm is an error pointer in init=
+_desc()"
+
+has these problem(s):
+
+  - missing space between the SHA1 and the subject
+    Just use
+	git log -1 --format=3D'Fixes: %h ("%s")'
+
+So
+
+Fixes: 53de3b080d5e ("evm: Check also if *tfm is an error pointer in init_d=
+esc()")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/gjVtG1tEKHExZV1K3=CuFBa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69xk4ACgkQAVBC80lX
+0Gz8gQf/XSXD6YMSUC4GVhv8Myotbghpumgq0plm4JphQ41inYUn1ZJUi10Uq+93
+p5twZ4HGoldEr1TMUKykK2cyZ2F4H0TqrYv1lFdGR5M3h6UNWNF7Tvx8kAjj5zvK
+fsX4cVNn1pLPOBFaSNdd6kG7Qxop2lZDayZxhdzFwmqAB6geqlFs9uSknMF+eCsU
+qSEMSmqhG79f8b5fcu7iI8uFkngAztixcesl7qZ4cO9xMRUKxv2iVr1p+A8V+FTK
+EP/TY1S2sUvLY8CG1VgrMh8c2jV0rmR/ug3jwNTxW5sCOGk41VwjOGcrf40V5/TD
+W3tEI3c1UMqRUaSsG8bueMu1PeeswQ==
+=Y8ol
+-----END PGP SIGNATURE-----
+
+--Sig_/gjVtG1tEKHExZV1K3=CuFBa--

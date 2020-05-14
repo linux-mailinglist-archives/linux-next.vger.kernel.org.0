@@ -2,87 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AB0C41D21D3
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 00:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356421D239E
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 02:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730532AbgEMWQT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 18:16:19 -0400
-Received: from bhuna.collabora.co.uk ([46.235.227.227]:53186 "EHLO
-        bhuna.collabora.co.uk" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730276AbgEMWQT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 13 May 2020 18:16:19 -0400
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: gtucker)
-        with ESMTPSA id A221C2A285C
-Subject: Re: next/master bisection: baseline.login on jetson-tk1
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux-foundation.org, Joerg Roedel <joro@8bytes.org>,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
-References: <5eb9fab4.1c69fb81.a1f1c.0e95@mx.google.com>
- <a868fa70-9039-f72a-39c6-5464a9d06db2@collabora.com>
- <20200512151600.GD8135@suse.de>
-From:   Guillaume Tucker <guillaume.tucker@collabora.com>
-Message-ID: <c9745450-a6d0-1944-a9af-ef9ce18fed12@collabora.com>
-Date:   Wed, 13 May 2020 23:16:14 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <20200512151600.GD8135@suse.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1733088AbgENA21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 20:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1733038AbgENA21 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 May 2020 20:28:27 -0400
+Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D766EC061A0E
+        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 17:28:26 -0700 (PDT)
+Received: by mail-pf1-x441.google.com with SMTP id w65so483430pfc.12
+        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 17:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/OgFWQcl6GqLh70sxVH11v5JkzFPDxSBTU/nOH/MDE0=;
+        b=BHnzOpZ4aPuXZ4y4SiBIhfTt3B49rsvbpJmsylMOyVg9evwgE/8f6zVeYX4Kfy13ju
+         Z3KIUPf0JfMxqUSjKIhCrBDludl9XLA7mfefFHVi1ntb/1+3bJoLlTal76guWAnUSqGt
+         HE3SSLoxxSOEHXpbtNSYoB8HNFxD7IxnBRRE+s2DaEWYSA2kJxnrd+ZJIBq14VYlBYFH
+         OPSQ7X/61B7QPjJZQ2H31IYpM1t54Ro4SCLjRYOJZt/ZVJys4E83Y7rONE8/JWsdiNg2
+         uFnk9WBknjkS/eF+vfC2yu9hVMSRYadUA4+LsYq52JrPmFSxZFYIXEES5r9P+tddTIV8
+         szRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=/OgFWQcl6GqLh70sxVH11v5JkzFPDxSBTU/nOH/MDE0=;
+        b=FHz2jYZXqORI6urO1M41H3aEF55hmhFIbIz7Rqq71IImst6q5Qg8+7Lb7IdUhvt2YH
+         DY9er9whRiOG/LTwUXN6eERGBuPSPxchqeR/b/TMwI5/s3VOHRaucwxeXFnlC6Qu8LoQ
+         /74pKOlh15Rfbr08EU088Dy2m39JHEUlBkIkvM4n+XB4QIW6dyuAUKLu36K454gUurUN
+         3ObzA/8iXQg3UyqWCYkb309BZ9gMcZIi0bye/3shYZvCSrM8sXcZBm6R74oWcBwAgmKi
+         1u9Y2EnUI0PAyh0PN/Rx5JVmZjUoC0HDJ21rURNlzGiRYkB6EeGkDDeOc9+YKEt9yYTE
+         ruPQ==
+X-Gm-Message-State: AOAM533s2ce5EpPAs8Zve4p0uK2hsKyToK2kOrmEV26zTHllDKUQ/v1d
+        XOzV6QhrlYX4/XkQ8BgF1Yue1w==
+X-Google-Smtp-Source: ABdhPJyfQiKngEQA41ugpWVwsMyP0DyUIcBpI9LEiTAFMNFmhOt/49ftEYNWPohSlNJYLaFWt3g3rg==
+X-Received: by 2002:a65:480c:: with SMTP id h12mr1824385pgs.106.1589416106079;
+        Wed, 13 May 2020 17:28:26 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id g43sm16612227pje.22.2020.05.13.17.28.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 May 2020 17:28:25 -0700 (PDT)
+Date:   Wed, 13 May 2020 17:28:25 -0700 (PDT)
+X-Google-Original-Date: Wed, 13 May 2020 17:13:28 PDT (-0700)
+Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v-fixes tree
+In-Reply-To: <20200513211925.030deeec@canb.auug.org.au>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Message-ID: <mhng-ae684228-c7f9-48a1-aa4d-8fe166efe5ab@palmerdabbelt-glaptop1>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 12/05/2020 16:16, Joerg Roedel wrote:
-> Hi Guillaume,
-> 
-> thanks for the report!
-> 
-> On Tue, May 12, 2020 at 07:05:13AM +0100, Guillaume Tucker wrote:
->>> Summary:
->>>   Start:      4b20e7462caa6 Add linux-next specific files for 20200511
->>>   Plain log:  https://storage.kernelci.org/next/master/next-20200511/arm/tegra_defconfig/gcc-8/lab-collabora/baseline-tegra124-jetson-tk1.txt
->>>   HTML log:   https://storage.kernelci.org/next/master/next-20200511/arm/tegra_defconfig/gcc-8/lab-collabora/baseline-tegra124-jetson-tk1.html
->>>   Result:     3eeeb45c6d044 iommu: Remove add_device()/remove_device() code-paths
-> 
-> Okay, so it faults at
-> 
-> 	PC is at __iommu_probe_device+0x20/0x1b8
-> 
-> Can you translate that for me into a code-line, please? That would help
-> finding the issue.
+On Wed, 13 May 2020 04:19:25 PDT (-0700), Stephen Rothwell wrote:
+> Hi all,
+>
+> Commit
+>
+>   e2d8d84b18c3 ("riscv: pgtable: Fix __kernel_map_pages build error if NOMMU")
+>
+> is missing a Signed-off-by from its committer.
 
-Sure, sorry for the delay.  I've built my own image as vmlinux is
-not stored by kernelci and reproduced the problem:
-
-  https://lava.collabora.co.uk/scheduler/job/2403076#L544
-
-which this time gave me:
-
-<4>[    2.540558] PC is at iommu_probe_device+0x1c/0x15c
-<4>[    2.545606] LR is at of_iommu_configure+0x15c/0x1c4
-<4>[    2.550736] pc : [<c092e0e4>]    lr : [<c0932c0c>]    psr: a0000013
-
-which in turn brings us to:
-
-(gdb) l *0xc092e0e4
-0xc092e0e4 is in iommu_probe_device (drivers/iommu/iommu.c:232).
-227		int ret;
-228	
-229		if (!dev_iommu_get(dev))
-230			return -ENOMEM;
-231	
-232		if (!try_module_get(ops->owner)) {
-233			ret = -EINVAL;
-234			goto err_out;
-235		}
-236	
-
-
-Hope this helps.
-
-Guillaume
+Thanks.  I had to manually apply this and must have forgotten -s, it's fixed now.

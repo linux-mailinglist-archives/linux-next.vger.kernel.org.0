@@ -2,95 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0DF1D24FE
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 03:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC9D1D253F
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 04:59:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726061AbgENB6S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 21:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725925AbgENB6S (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 May 2020 21:58:18 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF50C061A0C;
-        Wed, 13 May 2020 18:58:18 -0700 (PDT)
+        id S1725931AbgENC71 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 22:59:27 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:57739 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725895AbgENC71 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 May 2020 22:59:27 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Mvny4Mzyz9sSd;
-        Thu, 14 May 2020 11:58:14 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Mx8X1xhWz9sPF;
+        Thu, 14 May 2020 12:59:24 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589421494;
-        bh=TfnS8yU77VuJwwO61vQmNZF4HFAvsYRLgC0J2A5bv3I=;
+        s=201702; t=1589425165;
+        bh=4WuPgc9fJhVsh+4GTvA9+YWK+vpgizwYqNRkMBN9ABo=;
         h=Date:From:To:Cc:Subject:From;
-        b=dkNab214vSh3R+Azer2Zt1RX3k5Y0DI7Q/8EiFaGsRI3IdOsZhGD29KRfVWTcNkUO
-         Y/M9evz0WcQsAJigtXZ/ajVCBjGb8nQcR5ugL4hzXGBebQXardpwV1W/ghEwemQfVE
-         1e/Vz61whixvvHI9+O++PYYx+YlFH5tUGtHYjgYwpIjR8XhOq76LTAEztkNajvLGiz
-         nPm+LAgGTCCi6CeSkF6Ah5xcbhCy2ywn8VRaYI2lHela4YAeAW6DbBn4I3/x64eLDV
-         hJ6HMsPGgqERuKWX/YyM0AWHvJwJXsXnaLQ2kCD9zEwW6IyJdahw2XCxa+LtGW/xyo
-         xX969L6fVeD8Q==
-Date:   Thu, 14 May 2020 11:58:11 +1000
+        b=rNyJ/WeEkw4Q+RFMyDMmuq5rB7LICPmjbSGHBNS1F6qE2nfWKIkDGwkV/USDWUP4B
+         R5eCAwVHaLW3wX+UVDgTkn5dfjt7ZRnaq3/+qlEhkxo4Rsn5UMqixZIb0Mbvz/q7DM
+         KX7Q52LjQCcp0etf5jrHFBY1sk5ZSHT12cUTPasBRLMNwTgmLq/uqGaUjp2iFBdruj
+         bFtJQuSf8hmxrsNklt+mISVHWnqC4Z0yZ4dUDy50mWoybhhRskyncCmgJ+BUsBWHa0
+         iGRSNpelqYa/9IhuVTpzAsk7VVaZlejRvMayrI9B5Ou5az1edPcfWf2+BqyybISMsq
+         Bj//orsLQh4Ug==
+Date:   Thu, 14 May 2020 12:59:20 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
+To:     Leon Romanovsky <leon@kernel.org>,
+        Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Georgi Djakov <georgi.djakov@linaro.org>
-Subject: linux-next: build failure after merge of the opp tree
-Message-ID: <20200514115811.1c6192b5@canb.auug.org.au>
+        Maor Gottlieb <maorg@mellanox.com>
+Subject: linux-next: manual merge of the mlx5-next tree with the rdma tree
+Message-ID: <20200514125920.2c9a6509@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8su9.eJmUL2l_yik_A3lOfP";
+Content-Type: multipart/signed; boundary="Sig_/PoQvFm=B8iNC3=_rH+dNRLn";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/8su9.eJmUL2l_yik_A3lOfP
+--Sig_/PoQvFm=B8iNC3=_rH+dNRLn
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the opp tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the mlx5-next tree got a conflict in:
 
-x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_put_opp_ta=
-ble':
-(.text+0x76e): undefined reference to `icc_put'
-x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_set_rate':
-(.text+0x2c59): undefined reference to `icc_set_bw'
-x86_64-linux-gnu-ld: drivers/opp/of.o: in function `dev_pm_opp_of_find_icc_=
-paths':
-(.text+0x3ca): undefined reference to `of_icc_get_by_index'
-x86_64-linux-gnu-ld: (.text+0x441): undefined reference to `icc_set_tag'
-x86_64-linux-gnu-ld: (.text+0x542): undefined reference to `icc_put'
+  drivers/infiniband/hw/mlx5/main.c
 
-Caused by commit
+between commit:
 
-  12fa389dcf86 ("OPP: Add support for parsing interconnect bandwidth")
+  2be08c308f10 ("RDMA/mlx5: Delete create QP flags obfuscation")
 
-I have used the opp tree from next-20200512 for today.
+from the rdma tree and commit:
+
+  14c129e30152 ("{IB/net}/mlx5: Simplify don't trap code")
+
+from the mlx5-next tree.
+
+I fixed it up (the latter change included the former) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/8su9.eJmUL2l_yik_A3lOfP
+--Sig_/PoQvFm=B8iNC3=_rH+dNRLn
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68pbMACgkQAVBC80lX
-0GxG1wgAjCwV62ddqNYeydnRDib1ozmtknbMVsadgAYWK7kIfqYft5p257Ga/IlK
-AXBwAiQFtKCoQw1qsYuUAJ7MIHkco2C/j5gYuG2r21lODWckzc+3zG0OyogZ/wn9
-j+VdJUE1tGqLYmms3QInE69gMKHZ3HuPNL9JAbsYcd3lQTj4fh3k7dpdjAoQolmC
-yWHJXL8XjS4bPPjakPYkGC8XxlAB6C3Zt7ICY4s1ej6lBJOUzTwJLYi+GmUc+hEx
-IwUF0iu2NxyDTu/RJ/CIOgs1+fyqBZLibXeXhWwdDuq3tAO6Bn3wE1boqUnzoE5J
-FtHZHTrAl58L9cwAYI57KU3f2E9i2Q==
-=2Lu5
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68tAgACgkQAVBC80lX
+0GxDOwf+MfOL7wQlzRohcYEqSIJva64w+WElB9HnDoPmMqXP6IpZj8ytk2T1A0ig
+JqZiLRaZm9dNbQ5mQBsUCSBKphpkLDSoqso5VHGafmw6crajFUQ/nIi8hQelH0b5
+nmBkZ7nc+A87coRFwNTKBeJNkLwFNcr/Uo09Cuinkft6QP0jD/BBXpXizYYcG0QK
+LJMKabDZaZgvB4CcPR/w0ogTnJBoYVocHQ4h2KvUo18SxZSrh/Vertyylo5/xhMo
+06+WjXv0BjfCC92MiRIbA8urc8yI13KaHjo3JYKSoMXENydm/RBBp5RrJosIopxL
+yQkFopymDLisYItRPheTKs1PYFLGAA==
+=QV/o
 -----END PGP SIGNATURE-----
 
---Sig_/8su9.eJmUL2l_yik_A3lOfP--
+--Sig_/PoQvFm=B8iNC3=_rH+dNRLn--

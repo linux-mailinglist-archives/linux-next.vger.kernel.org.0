@@ -2,181 +2,166 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 567A41D389E
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 19:47:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62CF51D38E5
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 20:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726141AbgENRrF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 13:47:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S1726528AbgENSIl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 14:08:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725965AbgENRrF (ORCPT
+        by vger.kernel.org with ESMTP id S1726073AbgENSIl (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 13:47:05 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71CEC061A0C
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 10:47:03 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id x2so1622086pfx.7
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 10:47:03 -0700 (PDT)
+        Thu, 14 May 2020 14:08:41 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65782C061A0C;
+        Thu, 14 May 2020 11:08:41 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id z1so1670209pfn.3;
+        Thu, 14 May 2020 11:08:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=hufuY47pvf71evQjsCrqDw4CuxKxHjfuAY4T7lUs+ks=;
-        b=h0BMNOyd6cpQBdlss+PJF6oNrbCpifg8f15HN4y/JbVdVQnD49g9oMnILzPqxq0aJs
-         LzCC5CsnBw0Ia6Nr3HlN9YWjS/OAP1XSEFeUQbfyB11wX3kl9LbpH5QEi0YUa7OZ4Oy4
-         P1kXoQ34VVnk9hYMlx0nMzMgc0/MqStnBrJIlHkM3snq2bYwDoyQ8Hbr7AODK+SPe9tL
-         +JfQ5lCdFWIljCpf7HW6N42To2Ct/MkV5677uNBXMijBnd0vhenKv9FL5rEjUf9YO3Y9
-         zDysteuT5JwygmPTDw3YUOc2h0em9WLWWy8qgXt77U60JNO6NmQCE07tgeK2FBXDeh5B
-         u6PQ==
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=2d5fVy+d6deYSpZC8S3wee5KklHYM0y0bBICCB6+zyc=;
+        b=pWirkS2gDFyVdTR/01nN/VqD5RYntOM0VMhu4r1TSebXHPpqIVg2YH5CDgejdac+46
+         BNcjMBWXGvOgbmJaOJEeJ9I5u1NDXn05Jf5X1DrY9dsUaDhuQySLjq7dZD2caNky+Axy
+         R6VZVzq3+5w+n9OwDsL2apNYy/46mUq7RJDZyW/3V1FFRLhWcts8A+QitmC0De63mrc6
+         YqNkxu9SNB/VBih5yQfuojAQH37wh835YtO+fISuyGEACkQ8fYJtKD0kssYvuNNk2LAS
+         wmB+cPSjMMJU87KWK04tNMEXy+CT82hYkCMrvO2Nt1HSVzat/CsD3PtoRCF8ao8ilIqy
+         D23A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=hufuY47pvf71evQjsCrqDw4CuxKxHjfuAY4T7lUs+ks=;
-        b=hIEBc3wGHGRNfxY9hWI9I9vDREW1NZ+mEi0Czx/0UWC0c9whixmEvEpC1Y41VSKLSf
-         CDWhob6XfGVaCSDiqFlZxjMywKs5JVRdTs/0m+fh5JedE0Im4H27PEMS0lXPH5obFaWF
-         3bWBQKF5UC2DmGhdPN31MeBJcH7kFOCcpbzacWZaqBpg6GPoUkUWqQZzyY/XQI9xZxjy
-         wsroAPDFnXMpHBH17ex/QivWRExbMBnv9du52+q/l20N/TfS4AMAp9fl3+Tzsqma57vh
-         af6RBJa9Dw4fIJj4/xGkXgXKKeq0KbDzQzWVbIvZC9moNPt4+04wVMC1nG/vcm3pQXxj
-         VjLA==
-X-Gm-Message-State: AOAM531go0zVFsYGwXKOA3sRKAlsIwwkghmloZ/j5qZ4TtmFMpl84nnL
-        hLWVtBJKq2GfXRKHA6NGi6g8DXXBvu8=
-X-Google-Smtp-Source: ABdhPJy064hTMVr/7F+3zqDc7l0d2hQ6JGCj1uBOnkcBW6jMfQuPmggVDUQZwrrppC7NgvJkEBcvMw==
-X-Received: by 2002:aa7:9297:: with SMTP id j23mr5434531pfa.15.1589478423032;
-        Thu, 14 May 2020 10:47:03 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id g1sm18650789pjt.25.2020.05.14.10.47.01
-        for <linux-next@vger.kernel.org>
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=2d5fVy+d6deYSpZC8S3wee5KklHYM0y0bBICCB6+zyc=;
+        b=LX3Bq2Gpi+DhKMcjCtxE3LagBSY5uCeoqkU00tqOLEwqY2l4BbFTS7YT4/ywK84vKy
+         tEldQ2V9D0eLMJmSkG4hlyUFPBbF48O8eoKnuJZGJve+XRNn4ljDTt+7TzVJTKRsRxUU
+         6hn/l4sjXAsUqXB2K2eDxBVVQtrRfjSCQ8IDj0/yt8w90y60ozBkA3MKm7ZLSM3xIKh7
+         DywCpksltCpzOz+Wjesvb8T3MiCPhtusX1IIPyMvXCkFFtxYQ+lliX7mOdm355WjEjaH
+         Dv21gZC5aGA1cfIyuFgqjkJe7WQuWqqSN1YCFdstde6hcmQiq3L1X2F8JjH874wBpY35
+         u6Pw==
+X-Gm-Message-State: AOAM531b0LYedC7d1GyHyAyghT6NjpJhK0Y85iODH2X7XRV9xrjaamaG
+        OteFU1/zzumNIV0Nvk0lFJE=
+X-Google-Smtp-Source: ABdhPJySHGz9/Kj++2O4bWlbSQCkK8iKcI7+dZOkwL52bQgFlf3FpsIqmaflG+w6PkxkVYObPktJNg==
+X-Received: by 2002:a63:24a:: with SMTP id 71mr5372276pgc.184.1589479720804;
+        Thu, 14 May 2020 11:08:40 -0700 (PDT)
+Received: from workstation-kernel-dev ([103.87.56.31])
+        by smtp.gmail.com with ESMTPSA id m9sm2493264pgd.1.2020.05.14.11.08.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 10:47:01 -0700 (PDT)
-Message-ID: <5ebd8415.1c69fb81.5e362.0b44@mx.google.com>
-Date:   Thu, 14 May 2020 10:47:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 14 May 2020 11:08:40 -0700 (PDT)
+Date:   Thu, 14 May 2020 23:38:31 +0530
+From:   Amol Grover <frextrite@gmail.com>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, allison@lohutok.net,
+        ap420073@gmail.com, David Miller <davem@davemloft.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com>
+Subject: Re: linux-next boot error: WARNING: suspicious RCU usage in
+ bpq_device_event
+Message-ID: <20200514180831.GA6087@workstation-kernel-dev>
+References: <000000000000785a6905a59a1e4a@google.com>
+ <A19DAE77-5DCD-460A-88E5-437450CBD50B@lca.pw>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200514
-X-Kernelci-Report-Type: boot
-Subject: next/master boot: 227 boots: 10 failed, 207 passed with 5 offline,
- 5 untried/unknown (next-20200514)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <A19DAE77-5DCD-460A-88E5-437450CBD50B@lca.pw>
+User-Agent: Mutt/1.12.2 (2019-09-21)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master boot: 227 boots: 10 failed, 207 passed with 5 offline, 5 untrie=
-d/unknown (next-20200514)
+On Thu, May 14, 2020 at 08:24:54AM -0400, Qian Cai wrote:
+> 
+> 
+> > On May 14, 2020, at 7:37 AM, syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com> wrote:
+> > 
+> > Hello,
+> > 
+> > syzbot found the following crash on:
+> > 
+> > HEAD commit:    c9529331 Add linux-next specific files for 20200514
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=17119f48100000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=404a80e135048067
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=bb82cafc737c002d11ca
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> > 
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com
+> > 
+> > =============================
+> > WARNING: suspicious RCU usage
+> > 5.7.0-rc5-next-20200514-syzkaller #0 Not tainted
+> > -----------------------------
+> > drivers/net/hamradio/bpqether.c:149 RCU-list traversed in non-reader section!!
+> 
+> How about teaching the bot to always CC Madhuparna and Amol for those RCU-list bug reports?
+> 
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200514/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200514/
+Sounds good to me if this indeed is possible.
 
-Tree: next
-Branch: master
-Git Describe: next-20200514
-Git Commit: c9529331c7a22b8eb7eb03e1e0e221d0f58b43de
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 100 unique boards, 24 SoC families, 31 builds out of 228
-
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          sun8i-r40-bananapi-m2-ultra:
-              lab-clabbe: failing since 1 day (last pass: next-20191004 - f=
-irst fail: next-20200512)
-
-    omap2plus_defconfig:
-        gcc-8:
-          omap3-beagle:
-              lab-baylibre-seattle: new failure (last pass: next-20200501)
-          omap3-beagle-xm:
-              lab-baylibre: new failure (last pass: next-20200501)
-          omap4-panda:
-              lab-baylibre: new failure (last pass: next-20200501)
-              lab-baylibre-seattle: new failure (last pass: next-20200501)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 86 days (last pass: next-20200214=
- - first fail: next-20200217)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          apq8016-sbc:
-              lab-bjorn: failing since 1 day (last pass: next-20200501 - fi=
-rst fail: next-20200512)
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: next-20200512)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: next-20200512)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 48 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            apq8016-sbc: 1 failed lab
-            mt7622-rfb1: 1 failed lab
-            sm8150-mtp: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-arm:
-    omap2plus_defconfig:
-        gcc-8:
-            omap3-beagle: 1 failed lab
-            omap3-beagle-xm: 1 failed lab
-            omap4-panda: 2 failed labs
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+> > 
+> > other info that might help us debug this:
+> > 
+> > 
+> > rcu_scheduler_active = 2, debug_locks = 1
+> > 1 lock held by ip/3967:
+> > #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
+> > #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3f9/0xad0 net/core/rtnetlink.c:5458
+> > 
+> > stack backtrace:
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> > Call Trace:
+> > __dump_stack lib/dump_stack.c:77 [inline]
+> > dump_stack+0x18f/0x20d lib/dump_stack.c:118
+> > bpq_get_ax25_dev drivers/net/hamradio/bpqether.c:149 [inline]
+> > bpq_device_event+0x796/0x8ee drivers/net/hamradio/bpqether.c:538
+> > notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
+> > call_netdevice_notifiers_info net/core/dev.c:2016 [inline]
+> > call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:2001
+> > call_netdevice_notifiers_extack net/core/dev.c:2028 [inline]
+> > call_netdevice_notifiers net/core/dev.c:2042 [inline]
+> > __dev_notify_flags+0x121/0x2c0 net/core/dev.c:8279
+> > dev_change_flags+0x100/0x160 net/core/dev.c:8317
+> > do_setlink+0xa1c/0x35d0 net/core/rtnetlink.c:2605
+> > __rtnl_newlink+0xad0/0x1590 net/core/rtnetlink.c:3273
+> > rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3398
+> > rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5461
+> > netlink_rcv_skb+0x15a/0x430 net/netlink/af_netlink.c:2469
+> > netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
+> > netlink_unicast+0x537/0x740 net/netlink/af_netlink.c:1329
+> > netlink_sendmsg+0x882/0xe10 net/netlink/af_netlink.c:1918
+> > sock_sendmsg_nosec net/socket.c:652 [inline]
+> > sock_sendmsg+0xcf/0x120 net/socket.c:672
+> > ____sys_sendmsg+0x6e6/0x810 net/socket.c:2352
+> > ___sys_sendmsg+0x100/0x170 net/socket.c:2406
+> > __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
+> > do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
+> > entry_SYSCALL_64_after_hwframe+0x49/0xb3
+> > RIP: 0033:0x7f76dcdfcdc7
+> > Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb cd 66 0f 1f 44 00 00 8b 05 4a 49 2b 00 85 c0 75 2e 48 63 ff 48 63 d2 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 a1 f0 2a 00 f7 d8 64 89 02 48
+> > RSP: 002b:00007ffd45eccf28 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+> > RAX: ffffffffffffffda RBX: 000000005ebd27cd RCX: 00007f76dcdfcdc7
+> > RDX: 0000000000000000 RSI: 00007ffd45eccf70 RDI: 0000000000000003
+> > RBP: 00007ffd45eccf70 R08: 0000000000001000 R09: fefefeff77686d74
+> > R10: 00000000000005e9 R11: 0000000000000246 R12: 00007ffd45eccfb0
+> > R13: 0000561a2ddea3c0 R14: 00007ffd45ed5030 R15: 0000000000000000
+> > ip (3967) used greatest stack depth: 23144 bytes left
+> > 
+> > 
+> > ---
+> > This bug is generated by a bot. It may contain errors.
+> > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > 
+> > syzbot will keep track of this bug report. See:
+> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 

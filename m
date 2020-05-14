@@ -2,93 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DCCD1D411D
-	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 00:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DDA1D4135
+	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 00:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728668AbgENWdR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 18:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54742 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728662AbgENWdQ (ORCPT
+        id S1728421AbgENWim (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 18:38:42 -0400
+Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12886 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728313AbgENWim (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 18:33:16 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6172C061A0C;
-        Thu, 14 May 2020 15:33:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49NRBz12stz9sTD;
-        Fri, 15 May 2020 08:33:15 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589495595;
-        bh=9ljetqOT3gzLUa3iB3zxx9ekxV1W553qAgBlDt6WpxU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=IGPh/KCQIXEjTD5o4hs9pv1VepHB3q9mHPJY78sTSetOeXmVS7mobygDgk03k4MvJ
-         V8T9R3B+QUJMVK/lIpDt4NHeQiC8HVx7JB+RnCc5OcZzUtTO5A6+G2pnTe7dQIiywZ
-         RbPaK1mtdDqzEZZ7tc39Fh5+VCIn80H5dO4pPfu9nMp+ov+wQoUV4WHz4ypyzGvMYd
-         /GaBNOjkDU8qQKzXmDZLU/UHMZj0kJmWylWDwopYp0ODN1expmsa3qoaumyGF6Iy92
-         uG9gzJIUP2E3HrYTp2FLbEX/lILUirZDGowtmpP/WrELqRUC2PY6rXfcJlzjGBkfze
-         ryy0c4RXyMZhQ==
-Date:   Fri, 15 May 2020 08:33:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Trond Myklebust <trondmy@gmail.com>
+        Thu, 14 May 2020 18:38:42 -0400
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EMXH20083574;
+        Thu, 14 May 2020 18:38:36 -0400
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 310tjpnwfw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 May 2020 18:38:35 -0400
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04EMXQbO084382;
+        Thu, 14 May 2020 18:38:35 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 310tjpnwf9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 May 2020 18:38:35 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04EMcX8A007042;
+        Thu, 14 May 2020 22:38:33 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma01fra.de.ibm.com with ESMTP id 3100ubhtkb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 May 2020 22:38:33 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04EMcUqM58589342
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 May 2020 22:38:30 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B895842075;
+        Thu, 14 May 2020 22:38:30 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5EC342067;
+        Thu, 14 May 2020 22:38:29 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.85.153.130])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 May 2020 22:38:29 +0000 (GMT)
+Message-ID: <1589495909.5111.40.camel@linux.ibm.com>
+Subject: Re: linux-next: Fixes tag needs some work in the integrity-fixes
+ tree
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Mimi Zohar <zohar@linux.vnet.ibm.com>,
+        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Olga Kornievskaia <olga.kornievskaia@gmail.com>
-Subject: linux-next: Fixes tag needs some work in the nfs tree
-Message-ID: <20200515083314.19b8ce17@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CSM5oeRrnhsWXrdg_dNIZNr";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        Dan Carpenter <dan.carpenter@oracle.com>
+Date:   Thu, 14 May 2020 18:38:29 -0400
+In-Reply-To: <20200515082934.7a8ebec5@canb.auug.org.au>
+References: <20200515082934.7a8ebec5@canb.auug.org.au>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
+ definitions=2020-05-14_07:2020-05-14,2020-05-14 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
+ suspectscore=0 phishscore=0 adultscore=0 priorityscore=1501
+ cotscore=-2147483648 malwarescore=0 mlxscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2005140196
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/CSM5oeRrnhsWXrdg_dNIZNr
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Stephen,
 
-Hi all,
+On Fri, 2020-05-15 at 08:29 +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> In commit
+> 
+>   f438e9598695 ("evm: Fix a small race in init_desc()")
+> 
+> Fixes tag
+> 
+>   Fixes: 53de3b080d5e: "evm: Check also if *tfm is an error pointer in init_desc()"
+> 
+> has these problem(s):
+> 
+>   - missing space between the SHA1 and the subject
+>     Just use
+> 	git log -1 --format='Fixes: %h ("%s")'
+> 
+> So
+> 
+> Fixes: 53de3b080d5e ("evm: Check also if *tfm is an error pointer in init_desc()")
 
-In commit
+Yes, I missed that.  Thank you.
 
-  1ce8dbb6a593 ("NFSv3: fix rpc receive buffer size for MOUNT call")
-
-Fixes tag
-
-  Fixes: e3d3ab64dd66 ("SUNRPC: Use au_rslack when computing reply buffer s=
-ize")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 2c94b8eca1a2 ("SUNRPC: Use au_rslack when computing reply buffer siz=
-e")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CSM5oeRrnhsWXrdg_dNIZNr
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69xyoACgkQAVBC80lX
-0GznKAf9EOJiF3zL8xx7wFVSGVyvp5Dc9NeoAJcKjrDpm3Ku9LDrwyiu6AvpJTsv
-WhR4O6wgddP4uklffvYhWxxypMM32dGSFUMz0hCP2NicLxzgasVTpSujfxFt6cC2
-BRJimyK672lbNN6AASlY871heAvjCpmHPgk1Nu997PiMiZ0aLvrgLu3S1izbjSz7
-9btKUKhLSFvDCKzq5wlJxiu4wf7h8cCSRhC9DQLQuEUu760mc+Wbhu2v7SiM8ZuT
-V/2R/XkTphUV68zSKUPjl4G4OC+ENnbvwyfJpyoZl/m4UdiU1gSl/I3KtyI3rKW3
-Tt3fdNwEBgpTHhCiWoWvlCybJDIH4w==
-=fYEB
------END PGP SIGNATURE-----
-
---Sig_/CSM5oeRrnhsWXrdg_dNIZNr--
+Mimi

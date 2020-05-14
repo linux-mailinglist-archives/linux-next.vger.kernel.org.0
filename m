@@ -2,166 +2,147 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CF51D38E5
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 20:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AE7F1D38ED
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 20:13:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726528AbgENSIl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 14:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726073AbgENSIl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 14:08:41 -0400
-Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65782C061A0C;
-        Thu, 14 May 2020 11:08:41 -0700 (PDT)
-Received: by mail-pf1-x442.google.com with SMTP id z1so1670209pfn.3;
-        Thu, 14 May 2020 11:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=2d5fVy+d6deYSpZC8S3wee5KklHYM0y0bBICCB6+zyc=;
-        b=pWirkS2gDFyVdTR/01nN/VqD5RYntOM0VMhu4r1TSebXHPpqIVg2YH5CDgejdac+46
-         BNcjMBWXGvOgbmJaOJEeJ9I5u1NDXn05Jf5X1DrY9dsUaDhuQySLjq7dZD2caNky+Axy
-         R6VZVzq3+5w+n9OwDsL2apNYy/46mUq7RJDZyW/3V1FFRLhWcts8A+QitmC0De63mrc6
-         YqNkxu9SNB/VBih5yQfuojAQH37wh835YtO+fISuyGEACkQ8fYJtKD0kssYvuNNk2LAS
-         wmB+cPSjMMJU87KWK04tNMEXy+CT82hYkCMrvO2Nt1HSVzat/CsD3PtoRCF8ao8ilIqy
-         D23A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=2d5fVy+d6deYSpZC8S3wee5KklHYM0y0bBICCB6+zyc=;
-        b=LX3Bq2Gpi+DhKMcjCtxE3LagBSY5uCeoqkU00tqOLEwqY2l4BbFTS7YT4/ywK84vKy
-         tEldQ2V9D0eLMJmSkG4hlyUFPBbF48O8eoKnuJZGJve+XRNn4ljDTt+7TzVJTKRsRxUU
-         6hn/l4sjXAsUqXB2K2eDxBVVQtrRfjSCQ8IDj0/yt8w90y60ozBkA3MKm7ZLSM3xIKh7
-         DywCpksltCpzOz+Wjesvb8T3MiCPhtusX1IIPyMvXCkFFtxYQ+lliX7mOdm355WjEjaH
-         Dv21gZC5aGA1cfIyuFgqjkJe7WQuWqqSN1YCFdstde6hcmQiq3L1X2F8JjH874wBpY35
-         u6Pw==
-X-Gm-Message-State: AOAM531b0LYedC7d1GyHyAyghT6NjpJhK0Y85iODH2X7XRV9xrjaamaG
-        OteFU1/zzumNIV0Nvk0lFJE=
-X-Google-Smtp-Source: ABdhPJySHGz9/Kj++2O4bWlbSQCkK8iKcI7+dZOkwL52bQgFlf3FpsIqmaflG+w6PkxkVYObPktJNg==
-X-Received: by 2002:a63:24a:: with SMTP id 71mr5372276pgc.184.1589479720804;
-        Thu, 14 May 2020 11:08:40 -0700 (PDT)
-Received: from workstation-kernel-dev ([103.87.56.31])
-        by smtp.gmail.com with ESMTPSA id m9sm2493264pgd.1.2020.05.14.11.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 May 2020 11:08:40 -0700 (PDT)
-Date:   Thu, 14 May 2020 23:38:31 +0530
-From:   Amol Grover <frextrite@gmail.com>
+        id S1726161AbgENSNH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 14:13:07 -0400
+Received: from mail.kernel.org ([198.145.29.99]:59236 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726075AbgENSNH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 14:13:07 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 852782065D;
+        Thu, 14 May 2020 18:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589479986;
+        bh=K6NKA083JKcvBkEFVEjRKQHwmmMVK7aiJCAoZ7eOmPc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=d1aPOCTNwyHeaHG+iWHrF7E5IEnHDZ9yqNqPDhmaywtwCiK6dUsAeOL88r96MJ8Kf
+         QjTMsb6UqmRbcmSQpStcJhOkJ2UY9WXErwxnMEnW27qbq1+xF64ZrvkP6V12VM07f5
+         E/26dgoExPmjEz/8fAYOseLEnfQ8QuUWfEg1O5Bw=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id A9E2835229C8; Thu, 14 May 2020 11:13:05 -0700 (PDT)
+Date:   Thu, 14 May 2020 11:13:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Qian Cai <cai@lca.pw>
-Cc:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, allison@lohutok.net,
-        ap420073@gmail.com, David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com>
-Subject: Re: linux-next boot error: WARNING: suspicious RCU usage in
- bpq_device_event
-Message-ID: <20200514180831.GA6087@workstation-kernel-dev>
-References: <000000000000785a6905a59a1e4a@google.com>
- <A19DAE77-5DCD-460A-88E5-437450CBD50B@lca.pw>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Amol Grover <frextrite@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
+Message-ID: <20200514181305.GT2869@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200514222535.259cb69e@canb.auug.org.au>
+ <ADC503BE-32C0-46BB-A65E-59FFEC30ED57@lca.pw>
+ <20200514133328.GG2869@paulmck-ThinkPad-P72>
+ <ADE40EB3-1B1C-4CCF-9B8A-1F2BC585BCFB@lca.pw>
+ <20200514135402.GI2869@paulmck-ThinkPad-P72>
+ <CC392959-36FD-459F-BD13-8F50C22FC615@lca.pw>
+ <20200514153400.GJ2869@paulmck-ThinkPad-P72>
+ <6089C62B-52AA-47CB-BCA0-9096B3482509@lca.pw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <A19DAE77-5DCD-460A-88E5-437450CBD50B@lca.pw>
-User-Agent: Mutt/1.12.2 (2019-09-21)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6089C62B-52AA-47CB-BCA0-9096B3482509@lca.pw>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 14, 2020 at 08:24:54AM -0400, Qian Cai wrote:
+On Thu, May 14, 2020 at 11:46:23AM -0400, Qian Cai wrote:
 > 
 > 
-> > On May 14, 2020, at 7:37 AM, syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com> wrote:
+> > On May 14, 2020, at 11:34 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
 > > 
-> > Hello,
+> > On Thu, May 14, 2020 at 10:03:21AM -0400, Qian Cai wrote:
+> >> 
+> >> 
+> >>> On May 14, 2020, at 9:54 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> >>> 
+> >>> On Thu, May 14, 2020 at 09:44:28AM -0400, Qian Cai wrote:
+> >>>> 
+> >>>> 
+> >>>>> On May 14, 2020, at 9:33 AM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> >>>>> 
+> >>>>> On Thu, May 14, 2020 at 08:31:13AM -0400, Qian Cai wrote:
+> >>>>>> 
+> >>>>>> 
+> >>>>>>> On May 14, 2020, at 8:25 AM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >>>>>>> 
+> >>>>>>> Hi Paul,
+> >>>>>>> 
+> >>>>>>> This patch in the rcu tree
+> >>>>>>> 
+> >>>>>>> d13fee049fa8 ("Default enable RCU list lockdep debugging with PROVE_RCU")
+> >>>>>>> 
+> >>>>>>> is causing whack-a-mole in the syzbot testing of linux-next.  Because
+> >>>>>>> they always do a debug build of linux-next, no testing is getting done. :-(
+> >>>>>>> 
+> >>>>>>> Can we find another way to find all the bugs that are being discovered
+> >>>>>>> (very slowly)?
+> >>>>>> 
+> >>>>>> Alternatively, could syzbot to use PROVE_RCU=n temporarily because it can’t keep up with it? I personally found PROVE_RCU_LIST=y is still useful for my linux-next testing, and don’t want to lose that coverage overnight.
+> >>>>> 
+> >>>>> The problem is that PROVE_RCU is exactly PROVE_LOCKING, and asking people
+> >>>>> to test without PROVE_LOCKING is a no-go in my opinion.  But of course
+> >>>>> on the other hand if there is no testing of RCU list lockdep debugging,
+> >>>>> those issues will never be found, let alone fixed.
+> >>>>> 
+> >>>>> One approach would be to do as Stephen asks (either remove d13fee049fa8
+> >>>>> or pull it out of -next) and have testers force-enable the RCU list
+> >>>>> lockdep debugging.
+> >>>>> 
+> >>>>> Would that work for you?
+> >>>> 
+> >>>> Alternatively, how about having
+> >>>> 
+> >>>> PROVE_RCU_LIST=n if DEBUG_AID_FOR_SYZBOT
+> >>>> 
+> >>>> since it is only syzbot can’t keep up with it?
+> >>> 
+> >>> Sound good to me, assuming that this works for the syzkaller guys.
+> >>> Or could there be a "select PROVE_RCU_LIST" for the people who would
+> >>> like to test it.
+> >>> 
+> >>> Alternatively, if we revert d13fee049fa8 from -next, I could provide
+> >>> you a script that updates your .config to set both RCU_EXPERT and
+> >>> PROVE_RCU_LIST.
+> >>> 
+> >>> There are a lot of ways to appraoch this.
+> >>> 
+> >>> So what would work best for everyone?
+> >> 
+> >> 
+> >> If PROVE_RCU_LIST=n if DEBUG_AID_FOR_SYZBOT works for syzbot guys, that would be great, so other testing agents could still report/fix those RCU-list bugs and then pave a way for syzbot to return back once all those false positives had been sorted out.
 > > 
-> > syzbot found the following crash on:
+> > On that, I must defer to the syzbot guys.
 > > 
-> > HEAD commit:    c9529331 Add linux-next specific files for 20200514
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=17119f48100000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=404a80e135048067
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=bb82cafc737c002d11ca
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >> Otherwise,  “select PROVE_RCU_LIST” *might* be better than buried into RCU_EXPERT where we will probably never saw those false positives been addressed since my configs does not cover a wide range of subsystems and probably not many other bots would enable RCU_EXPERT.
 > > 
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com
+> > Yet another option would be to edit your local kernel/rcu/Kconfig.debug
+> > and change the code to the following:
 > > 
-> > =============================
-> > WARNING: suspicious RCU usage
-> > 5.7.0-rc5-next-20200514-syzkaller #0 Not tainted
-> > -----------------------------
-> > drivers/net/hamradio/bpqether.c:149 RCU-list traversed in non-reader section!!
+> > 	config PROVE_RCU_LIST
+> > 		def_bool y
+> > 		help
+> > 		  Enable RCU lockdep checking for list usages. It is default
+> > 		  enabled with CONFIG_PROVE_RCU.
+> > 
+> > Removing the RCU_EXPERT dependency would not go over at all well with
+> > some people whose opinions are difficult to ignore.  ;-)
 > 
-> How about teaching the bot to always CC Madhuparna and Amol for those RCU-list bug reports?
+> I am trying to not getting into a game of carrying any custom patch myself.
 > 
+> Let’s see what syzbot guys will say, and then I’ll enable RCU_EXPERT myself if needed, but again we probably never see PROVE_RCU_LIST to be used again in syzbot for this path. I surely have no cycles to expand the testing coverage for more subsystems at the moment.
 
-Sounds good to me if this indeed is possible.
+Fair enough!  And yes, the Linux kernel is quite large, so I certainly am
+not asking you to test the whole thing yourself.
 
-> > 
-> > other info that might help us debug this:
-> > 
-> > 
-> > rcu_scheduler_active = 2, debug_locks = 1
-> > 1 lock held by ip/3967:
-> > #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
-> > #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3f9/0xad0 net/core/rtnetlink.c:5458
-> > 
-> > stack backtrace:
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> > Call Trace:
-> > __dump_stack lib/dump_stack.c:77 [inline]
-> > dump_stack+0x18f/0x20d lib/dump_stack.c:118
-> > bpq_get_ax25_dev drivers/net/hamradio/bpqether.c:149 [inline]
-> > bpq_device_event+0x796/0x8ee drivers/net/hamradio/bpqether.c:538
-> > notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
-> > call_netdevice_notifiers_info net/core/dev.c:2016 [inline]
-> > call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:2001
-> > call_netdevice_notifiers_extack net/core/dev.c:2028 [inline]
-> > call_netdevice_notifiers net/core/dev.c:2042 [inline]
-> > __dev_notify_flags+0x121/0x2c0 net/core/dev.c:8279
-> > dev_change_flags+0x100/0x160 net/core/dev.c:8317
-> > do_setlink+0xa1c/0x35d0 net/core/rtnetlink.c:2605
-> > __rtnl_newlink+0xad0/0x1590 net/core/rtnetlink.c:3273
-> > rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3398
-> > rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5461
-> > netlink_rcv_skb+0x15a/0x430 net/netlink/af_netlink.c:2469
-> > netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
-> > netlink_unicast+0x537/0x740 net/netlink/af_netlink.c:1329
-> > netlink_sendmsg+0x882/0xe10 net/netlink/af_netlink.c:1918
-> > sock_sendmsg_nosec net/socket.c:652 [inline]
-> > sock_sendmsg+0xcf/0x120 net/socket.c:672
-> > ____sys_sendmsg+0x6e6/0x810 net/socket.c:2352
-> > ___sys_sendmsg+0x100/0x170 net/socket.c:2406
-> > __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
-> > do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
-> > entry_SYSCALL_64_after_hwframe+0x49/0xb3
-> > RIP: 0033:0x7f76dcdfcdc7
-> > Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb cd 66 0f 1f 44 00 00 8b 05 4a 49 2b 00 85 c0 75 2e 48 63 ff 48 63 d2 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 a1 f0 2a 00 f7 d8 64 89 02 48
-> > RSP: 002b:00007ffd45eccf28 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> > RAX: ffffffffffffffda RBX: 000000005ebd27cd RCX: 00007f76dcdfcdc7
-> > RDX: 0000000000000000 RSI: 00007ffd45eccf70 RDI: 0000000000000003
-> > RBP: 00007ffd45eccf70 R08: 0000000000001000 R09: fefefeff77686d74
-> > R10: 00000000000005e9 R11: 0000000000000246 R12: 00007ffd45eccfb0
-> > R13: 0000561a2ddea3c0 R14: 00007ffd45ed5030 R15: 0000000000000000
-> > ip (3967) used greatest stack depth: 23144 bytes left
-> > 
-> > 
-> > ---
-> > This bug is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this bug report. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
+								Thanx, Paul

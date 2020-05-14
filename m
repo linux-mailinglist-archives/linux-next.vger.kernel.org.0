@@ -2,76 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 356421D239E
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 02:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F06351D246C
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 03:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1733088AbgENA21 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 20:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1733038AbgENA21 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 May 2020 20:28:27 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D766EC061A0E
-        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 17:28:26 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id w65so483430pfc.12
-        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 17:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20150623.gappssmtp.com; s=20150623;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=/OgFWQcl6GqLh70sxVH11v5JkzFPDxSBTU/nOH/MDE0=;
-        b=BHnzOpZ4aPuXZ4y4SiBIhfTt3B49rsvbpJmsylMOyVg9evwgE/8f6zVeYX4Kfy13ju
-         Z3KIUPf0JfMxqUSjKIhCrBDludl9XLA7mfefFHVi1ntb/1+3bJoLlTal76guWAnUSqGt
-         HE3SSLoxxSOEHXpbtNSYoB8HNFxD7IxnBRRE+s2DaEWYSA2kJxnrd+ZJIBq14VYlBYFH
-         OPSQ7X/61B7QPjJZQ2H31IYpM1t54Ro4SCLjRYOJZt/ZVJys4E83Y7rONE8/JWsdiNg2
-         uFnk9WBknjkS/eF+vfC2yu9hVMSRYadUA4+LsYq52JrPmFSxZFYIXEES5r9P+tddTIV8
-         szRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=/OgFWQcl6GqLh70sxVH11v5JkzFPDxSBTU/nOH/MDE0=;
-        b=FHz2jYZXqORI6urO1M41H3aEF55hmhFIbIz7Rqq71IImst6q5Qg8+7Lb7IdUhvt2YH
-         DY9er9whRiOG/LTwUXN6eERGBuPSPxchqeR/b/TMwI5/s3VOHRaucwxeXFnlC6Qu8LoQ
-         /74pKOlh15Rfbr08EU088Dy2m39JHEUlBkIkvM4n+XB4QIW6dyuAUKLu36K454gUurUN
-         3ObzA/8iXQg3UyqWCYkb309BZ9gMcZIi0bye/3shYZvCSrM8sXcZBm6R74oWcBwAgmKi
-         1u9Y2EnUI0PAyh0PN/Rx5JVmZjUoC0HDJ21rURNlzGiRYkB6EeGkDDeOc9+YKEt9yYTE
-         ruPQ==
-X-Gm-Message-State: AOAM533s2ce5EpPAs8Zve4p0uK2hsKyToK2kOrmEV26zTHllDKUQ/v1d
-        XOzV6QhrlYX4/XkQ8BgF1Yue1w==
-X-Google-Smtp-Source: ABdhPJyfQiKngEQA41ugpWVwsMyP0DyUIcBpI9LEiTAFMNFmhOt/49ftEYNWPohSlNJYLaFWt3g3rg==
-X-Received: by 2002:a65:480c:: with SMTP id h12mr1824385pgs.106.1589416106079;
-        Wed, 13 May 2020 17:28:26 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id g43sm16612227pje.22.2020.05.13.17.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 May 2020 17:28:25 -0700 (PDT)
-Date:   Wed, 13 May 2020 17:28:25 -0700 (PDT)
-X-Google-Original-Date: Wed, 13 May 2020 17:13:28 PDT (-0700)
-Subject:     Re: linux-next: Signed-off-by missing for commit in the risc-v-fixes tree
-In-Reply-To: <20200513211925.030deeec@canb.auug.org.au>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-next@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Message-ID: <mhng-ae684228-c7f9-48a1-aa4d-8fe166efe5ab@palmerdabbelt-glaptop1>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        id S1726070AbgENBCd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 21:02:33 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38179 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726061AbgENBCd (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 May 2020 21:02:33 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49MtYf748zz9sSf;
+        Thu, 14 May 2020 11:02:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589418151;
+        bh=SYHlSh6/z5acDrKOTCmTNV/WDbLLOcAYzHiL81DN2UQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=h8tVOSPD18w9lV6yo7yrVV1oOFdxWg12RQomk9WL4SUChULTdniI2vd5ZdwNyiXG0
+         Yw8/4PNyOZlMdZW3wK0OrUMOQyixIHBRplgqPthnXcgrGPU2Apck9tXka1iG+XKdcJ
+         dL+2eA/zKaFTaYpX7hM0OV+0FtE4iTqgmZ/982lASxbgg6+O+gLgaLWJ1JIJn75DY6
+         7V86oOV3osZ1l2wYPGn3owMvve4+fR8J0HBulQRdottdTFymrrUK+G4olLJE45hNQT
+         21b5jVa8PzF4w6+sf600Gliy5SDd9QyTt/YEvpJIjMUltb+ll2AdgjtbHLICKK3fME
+         O29bqRq1gpEEg==
+Date:   Thu, 14 May 2020 11:02:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Subject: linux-next: manual merge of the pci tree with Linus' tree
+Message-ID: <20200514110223.4d7a650d@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/4_7=.=APp2=ZtDH25ON__Rk";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 13 May 2020 04:19:25 PDT (-0700), Stephen Rothwell wrote:
-> Hi all,
->
-> Commit
->
->   e2d8d84b18c3 ("riscv: pgtable: Fix __kernel_map_pages build error if NOMMU")
->
-> is missing a Signed-off-by from its committer.
+--Sig_/4_7=.=APp2=ZtDH25ON__Rk
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.  I had to manually apply this and must have forgotten -s, it's fixed now.
+Hi all,
+
+Today's linux-next merge of the pci tree got a conflict in:
+
+  drivers/pci/quirks.c
+
+between commit:
+
+  0a8f41023e8a ("PCI: Move Apex Edge TPU class quirk to fix BAR assignment")
+
+from Linus' tree and commit:
+
+  68f5fc4ea9dd ("PCI: Avoid Pericom USB controller OHCI/EHCI PME# defect")
+
+from the pci tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/pci/quirks.c
+index ca9ed5774eb1,7b4a98d0f0fd..000000000000
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@@ -5568,9 -5568,15 +5568,22 @@@ static void pci_fixup_no_d0_pme(struct=20
+  }
+  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ASMEDIA, 0x2142, pci_fixup_no_d0_pm=
+e);
+ =20
+ +static void apex_pci_fixup_class(struct pci_dev *pdev)
+ +{
+ +	pdev->class =3D (PCI_CLASS_SYSTEM_OTHER << 8) | pdev->class;
+ +}
+ +DECLARE_PCI_FIXUP_CLASS_HEADER(0x1ac1, 0x089a,
+ +			       PCI_CLASS_NOT_DEFINED, 8, apex_pci_fixup_class);
+++
++ /*
++  * Device [12d8:0x400e] and [12d8:0x400f]
++  * These devices advertise PME# support in all power states but don't
++  * reliably assert it.
++  */
++ static void pci_fixup_no_pme(struct pci_dev *dev)
++ {
++ 	pci_info(dev, "PME# is unreliable, disabling it\n");
++ 	dev->pme_support =3D 0;
++ }
++ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_pme);
++ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_pme);
+
+--Sig_/4_7=.=APp2=ZtDH25ON__Rk
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68mJ8ACgkQAVBC80lX
+0GzVRAgAiCuF/XJvZSuf0mLKm7rBnRqdTrWrPrJyIWsuitoXeNRnauH4Favinj+W
+R/YKpDYOFKI09tDY6CcCo9xS11KfrvLAefnHouVUeN0ROr4vQXaLSIKf/VJXO29U
+RW2Pj6fH91rfnibDlosRArxKVaX83MTRBeNSvlOlqMBTqpJHfBV4wvjWrGKnUBvi
+AxvXRgh6iXKkkYs3m/Bqma4y+PkEp/HDvFqDzkHA7nZJrzwexqElwgxOJAwvwXCB
+E3rxZoxIqqFFcAwFUOjmYXlVj0EoX4YrPah6q+V04fjuPcNk/OR38vQIzehNFStm
+ZXC01LsltoAuhIUj94jzXvXtbpS2Mg==
+=5Vlv
+-----END PGP SIGNATURE-----
+
+--Sig_/4_7=.=APp2=ZtDH25ON__Rk--

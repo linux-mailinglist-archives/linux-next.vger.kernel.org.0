@@ -2,104 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D5DDA1D4135
-	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 00:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB2121D413F
+	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 00:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728421AbgENWim (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 18:38:42 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:12886 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728313AbgENWim (ORCPT
+        id S1728313AbgENWnU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 18:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728229AbgENWnU (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 18:38:42 -0400
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 04EMXH20083574;
-        Thu, 14 May 2020 18:38:36 -0400
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 310tjpnwfw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 18:38:35 -0400
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.36/8.16.0.36) with SMTP id 04EMXQbO084382;
-        Thu, 14 May 2020 18:38:35 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 310tjpnwf9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 18:38:35 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.27/8.16.0.27) with SMTP id 04EMcX8A007042;
-        Thu, 14 May 2020 22:38:33 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma01fra.de.ibm.com with ESMTP id 3100ubhtkb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 14 May 2020 22:38:33 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 04EMcUqM58589342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 14 May 2020 22:38:30 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B895842075;
-        Thu, 14 May 2020 22:38:30 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E5EC342067;
-        Thu, 14 May 2020 22:38:29 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.85.153.130])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu, 14 May 2020 22:38:29 +0000 (GMT)
-Message-ID: <1589495909.5111.40.camel@linux.ibm.com>
-Subject: Re: linux-next: Fixes tag needs some work in the integrity-fixes
- tree
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Mimi Zohar <zohar@linux.vnet.ibm.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>
+        Thu, 14 May 2020 18:43:20 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688B3C061A0C;
+        Thu, 14 May 2020 15:43:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49NRQZ5bMbz9sTD;
+        Fri, 15 May 2020 08:43:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589496199;
+        bh=aAaREl4wtg8m5bBBhlWrMHr+r5xP6gQjE/JEICeZG3E=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RZ4s9HiGzxEgAqvB5xZBrLAwG2138vTNReky3++q8UxUblS81Q/9jEgkdGpXNmLTr
+         jVNJmbaBbPM+NAOdgNAX7hxlEtJOhvWuhKqGutN0C9g3eXKhLcHYywB9EYcLDCPchc
+         xuTg36JRQ03Qa47NoAqBWxHPFpfzbU+etvb+xo6CiofvlAZVqL+o+g4zdsAAJUhV4E
+         8nQtf9m/fjbfHRN7HmDDI2N7YSVqNF2Bzpc5i8jAtGes2HWKv2Ym69vKQxYJ33eDAU
+         C+Y22ASqVs+jNoT8ULIb5iffQ6aqkmy32HLhBuvK6uEITBkAYNKdN3IFgFqTZca55s
+         kL5Z2PNdUTn6g==
+Date:   Fri, 15 May 2020 08:43:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-Date:   Thu, 14 May 2020 18:38:29 -0400
-In-Reply-To: <20200515082934.7a8ebec5@canb.auug.org.au>
-References: <20200515082934.7a8ebec5@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.20.5 (3.20.5-1.fc24) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.676
- definitions=2020-05-14_07:2020-05-14,2020-05-14 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 mlxlogscore=999 spamscore=0 clxscore=1015
- suspectscore=0 phishscore=0 adultscore=0 priorityscore=1501
- cotscore=-2147483648 malwarescore=0 mlxscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2005140196
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the rcu tree
+Message-ID: <20200515084317.7deae61a@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/mcZlU9e8Bi.SUIOyAez9_CP";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/mcZlU9e8Bi.SUIOyAez9_CP
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2020-05-15 at 08:29 +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> In commit
-> 
->   f438e9598695 ("evm: Fix a small race in init_desc()")
-> 
-> Fixes tag
-> 
->   Fixes: 53de3b080d5e: "evm: Check also if *tfm is an error pointer in init_desc()"
-> 
-> has these problem(s):
-> 
->   - missing space between the SHA1 and the subject
->     Just use
-> 	git log -1 --format='Fixes: %h ("%s")'
-> 
-> So
-> 
-> Fixes: 53de3b080d5e ("evm: Check also if *tfm is an error pointer in init_desc()")
+Hi all,
+Commits
 
-Yes, I missed that.  Thank you.
+  b2998782ded4 ("Documentation/litmus-tests: Clarify about the RCU pre-init=
+ialization test")
+  663f9202eb8a ("Documentation/litmus-tests: Merge atomic's README into top=
+-level one")
+  f5eff20366f6 ("tools/memory-model: Fix reference to litmus test in recipe=
+s.txt")
 
-Mimi
+are missing a Signed-off-by from their committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/mcZlU9e8Bi.SUIOyAez9_CP
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69yYUACgkQAVBC80lX
+0GwOGAf+IkvkuLZuGvdy1FqMcRh1VgWgSvXseITJvxc2NBISGHpDS8L9YO9Ltv9H
+2z0yHN7CAXe/nfKdVeUd6tmclx1cBIJiriEzzcCcPXa3+bZ2O4i4D5uvjTUwYY0i
+Bc2KvgD/D9tjouJ7rQ4TyK7jJz8hx9cHDGG0uPj1ve4FF4dUntE1LaJ0satevSAU
+6JNfnu50R/0TTD1/2ZX211Gnt6cR5ukKTO7pniUf6wILiXg5VX/LHcpzHVlf19p3
+oBapgYZqxycSsTnnodJMgP4I91Rv3xmLw0bYr7K1oK5nzEC3ZOm7aAj+912Y72rF
+v7TTI8Rr3fYF8yGd7hzWBGSCIKzFxA==
+=vHT/
+-----END PGP SIGNATURE-----
+
+--Sig_/mcZlU9e8Bi.SUIOyAez9_CP--

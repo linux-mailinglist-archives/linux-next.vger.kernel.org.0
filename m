@@ -2,94 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FA6D1D3125
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 15:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E641D3159
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 15:33:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726146AbgENNV0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 09:21:26 -0400
-Received: from mail.kernel.org ([198.145.29.99]:34914 "EHLO mail.kernel.org"
+        id S1726073AbgENNda (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 09:33:30 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39028 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726011AbgENNVZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 09:21:25 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1726056AbgENNd3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 09:33:29 -0400
+Received: from paulmck-ThinkPad-P72.home (unknown [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 8D98620748;
-        Thu, 14 May 2020 13:21:24 +0000 (UTC)
+        by mail.kernel.org (Postfix) with ESMTPSA id CFEF02065D;
+        Thu, 14 May 2020 13:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1589462484;
-        bh=NPCFOYKBuixpacg9mBP6x+YT3849Zm5W+6nvvtaInns=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=g1Qbodw5lhgSs16AFT0cVg5vXT6fIrJRAhu2YrXY/Cix3tICjAi7/YnJqTajr6Yb4
-         0L+Rwluit5yJFJMBE9ndA1T8rlcy7qSJ9o9kAnkd+oMv5qJNxk71ll7xg3FAP//zKT
-         KaCLtJNqFAkC5+1hLgeLOgl9fhQOfr/AsCoXj2ps=
-Received: by mail-io1-f47.google.com with SMTP id k18so285774ion.0;
-        Thu, 14 May 2020 06:21:24 -0700 (PDT)
-X-Gm-Message-State: AOAM531mGbTzfU44Izqz2XAoJa05YRyQmcxCw4U/8zT2gR4CKEdhmmv1
-        nk+RAdQ/9oi7khE+yqQKqQfNlmCZtHiys6L+CWI=
-X-Google-Smtp-Source: ABdhPJyiu+K63MGl+EPSA7G+DKJxZn+mdZxhqUbhlq+A7hkIT3xsdbxmzRZbYfhilFS9AiVcsRLm9N42O9sHzLvzjW0=
-X-Received: by 2002:a5e:8705:: with SMTP id y5mr4092694ioj.142.1589462483836;
- Thu, 14 May 2020 06:21:23 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200512144949.4f933eca@canb.auug.org.au> <20200512162205.GI5110@sirena.org.uk>
- <20200512163632.GA916@sol.localdomain> <20200512170801.GK5110@sirena.org.uk>
- <20200512200805.GA175421@gmail.com> <CAK8P3a2C-91vCNv8NV6ut8GDu2z9Yt6VwX+P2WggWnuCcMjcvg@mail.gmail.com>
-In-Reply-To: <CAK8P3a2C-91vCNv8NV6ut8GDu2z9Yt6VwX+P2WggWnuCcMjcvg@mail.gmail.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Thu, 14 May 2020 15:21:12 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXHjWiXRU=-vHECF5FMDNiW-CRADP6RMLBAoMJUgZczWDQ@mail.gmail.com>
-Message-ID: <CAMj1kXHjWiXRU=-vHECF5FMDNiW-CRADP6RMLBAoMJUgZczWDQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the sound-asoc tree with the crypto tree
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>,
+        s=default; t=1589463208;
+        bh=fCSUwMf7Ao1rkoQxej32piTB4hAp14IcBswN1PhYQ8E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ay0oyqYKLgSp6hVXVo2r22o8XMbY1zIy/VJmtbHr5lrHw5qWwzVZsmlaKMEQc8N0N
+         26+LBgiiUECDRJuopBcT2loxPskxHPTZ8pcfKiZOHAOKnXDpHTs+xcWmx+GzJNLxFK
+         DrYI7/LeRUGKWZmMqwEP8i96/sB+msaTyI9BbpQA=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 4E69035206A2; Thu, 14 May 2020 06:33:28 -0700 (PDT)
+Date:   Thu, 14 May 2020 06:33:28 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Qian Cai <cai@lca.pw>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Amol Grover <frextrite@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>
+Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
+Message-ID: <20200514133328.GG2869@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200514222535.259cb69e@canb.auug.org.au>
+ <ADC503BE-32C0-46BB-A65E-59FFEC30ED57@lca.pw>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ADC503BE-32C0-46BB-A65E-59FFEC30ED57@lca.pw>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 12 May 2020 at 22:31, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Tue, May 12, 2020 at 10:08 PM Eric Biggers <ebiggers@kernel.org> wrote:
-> > On Tue, May 12, 2020 at 06:08:01PM +0100, Mark Brown wrote:
-> >
-> > For later: if SHASH_DESC_ON_STACK is causing problems, we really ought to find a
-> > better solution, since lots of users are using this macro.  A version of
-> > crypto_shash_tfm_digest() that falls back to heap allocation if the descsize is
-> > too large would be possible, but that wouldn't fully solve the problem since
-> > some users do incremental hashing.
->
-> It's hard to know how many of the users of SHASH_DESC_ON_STACK() are
-> likely to cause problems, as multiple factors are involved:
->
-> - this one triggered the warning because it was on the stack of a function
->   that got inlined into another that has other large variables. Whether it
->   got inlined makes little difference to the stack usage, but does make a
->   difference to warning about it.
->
-> - generally the structure is larger than we like it, especially on architectures
->   with 128 byte CRYPTO_MINALIGN like ARM. This actually got worse
->   because of b68a7ec1e9a3 ("crypto: hash - Remove VLA usage"), as
->   the stack usage is now always the maximum of all hashes where it used
->   to be specific to the hash that was actually used and could be smaller
->
-> - the specific instance in calculate_sha256() feels a bit silly, as this
->   function allocates a tfm and a descriptor, runs the digest and then
->   frees both again. I don't know how common this pattern is, but
->   it seems a higher-level abstraction might be helpful anyway.
->
+On Thu, May 14, 2020 at 08:31:13AM -0400, Qian Cai wrote:
+> 
+> 
+> > On May 14, 2020, at 8:25 AM, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > 
+> > Hi Paul,
+> > 
+> > This patch in the rcu tree
+> > 
+> >  d13fee049fa8 ("Default enable RCU list lockdep debugging with PROVE_RCU")
+> > 
+> > is causing whack-a-mole in the syzbot testing of linux-next.  Because
+> > they always do a debug build of linux-next, no testing is getting done. :-(
+> > 
+> > Can we find another way to find all the bugs that are being discovered
+> > (very slowly)?
+> 
+> Alternatively, could syzbot to use PROVE_RCU=n temporarily because it can’t keep up with it? I personally found PROVE_RCU_LIST=y is still useful for my linux-next testing, and don’t want to lose that coverage overnight.
 
-We are trying to move to crypto library interfaces for non-performance
-critical uses of hashes where the algorithm is known at compile time,
-and this is a good example of that pattern.
+The problem is that PROVE_RCU is exactly PROVE_LOCKING, and asking people
+to test without PROVE_LOCKING is a no-go in my opinion.  But of course
+on the other hand if there is no testing of RCU list lockdep debugging,
+those issues will never be found, let alone fixed.
 
-IOW, this code should just call the sha256_init/update/final routines directly.
+One approach would be to do as Stephen asks (either remove d13fee049fa8
+or pull it out of -next) and have testers force-enable the RCU list
+lockdep debugging.
 
-I'll send out a patch.
+Would that work for you?
+
+							Thanx, Paul

@@ -2,176 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DE911D2F9A
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 14:25:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6F01D2F9E
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 14:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726813AbgENMY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 08:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44126 "EHLO
+        id S1726345AbgENMZn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 08:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726610AbgENMY5 (ORCPT
+        by vger.kernel.org with ESMTP id S1726225AbgENMZn (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 08:24:57 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A068C061A0E
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 05:24:57 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id l1so2623297qtp.6
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 05:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=MDY/jqEtMAaYkrjcBwZZMUT5NqpDPZcVLijHWxBZHSY=;
-        b=lbnbOpBUQPKdKhj2u3py/03HGz9QAQfhsW70J/4zygpGvFtl8OOJJ/KJMlEjyfPGt2
-         F1AOQyEoDJP1HwOoxItNFlGL+F7fif5limeDvIbQhilhARhvXa8x2BQIPXXdICR4afIf
-         q4uZKeUukSEG42qu1q4bLsFwaG2LnilC09lm3bCUVAxgn5NW8N6sgf/EsEIMQNqpQN2x
-         FeWZcyN3qoeOCh6acZqay6yCytynnk9CvZ1tYWIh/PAYT5xW3555VdLmBMrRLJpxI9yG
-         U+ZqFBmyOpCTX1TrvZGvtwPAu0KWE3BUw7Gim4BgahsMoOuqGSnpR+oSw/SbkiQTtNz0
-         PFyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=MDY/jqEtMAaYkrjcBwZZMUT5NqpDPZcVLijHWxBZHSY=;
-        b=C3U9Ag6bGzBhh5q9uV+B+Zb8wQ8XfS6KdQTY4xNj4zsmVZ5xuNkpoJcSwBpyKD9CiA
-         fwrL+sxJxecFou0hlnUHsBIpnIG3BziFRQh2MniXYrad3NZF1Lekj8zFdPPw+dwYesi3
-         Jf+2LS5beRICs4/mSDUFVQlEhj1QuN0U1fIGTtchH7LaP9M3UHfs36dD1zAI2E/teLWY
-         SSVUo81b8uKx8cf/HE/6BvEk4UB3aywZBR3BsYL/rxWeRv3EViVknA0cfwAarsWhqIai
-         iWiqXe9bhy1KUZxizSOvlsqoJc+iGep4e+I5I3ZjB08W+glZ1Mz4doo1oxNGhu21QPob
-         c1TQ==
-X-Gm-Message-State: AOAM530G2pYCjBqVEu60M2wxfzEAPhJRMtDpumNtP0Nzx/tEofLkXSq5
-        3TtL5olx00xyLnVN2RAjcUQa3w==
-X-Google-Smtp-Source: ABdhPJy6ecg3eHEDh7Mm+mkG7MxI7G9M2y1I86Os1RTwzez2Z9Qi/SSJwX7yVhb0PPWXQudP4Pm94w==
-X-Received: by 2002:ac8:1418:: with SMTP id k24mr4182324qtj.344.1589459096400;
-        Thu, 14 May 2020 05:24:56 -0700 (PDT)
-Received: from [192.168.1.153] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id i59sm2439299qtb.58.2020.05.14.05.24.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 May 2020 05:24:55 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
-Subject: Re: linux-next boot error: WARNING: suspicious RCU usage in
- bpq_device_event
-From:   Qian Cai <cai@lca.pw>
-In-Reply-To: <000000000000785a6905a59a1e4a@google.com>
-Date:   Thu, 14 May 2020 08:24:54 -0400
-Cc:     allison@lohutok.net, ap420073@gmail.com,
-        David Miller <davem@davemloft.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <A19DAE77-5DCD-460A-88E5-437450CBD50B@lca.pw>
-References: <000000000000785a6905a59a1e4a@google.com>
-To:     Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Thu, 14 May 2020 08:25:43 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D63A5C061A0C;
+        Thu, 14 May 2020 05:25:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49N9jv4YD4z9sRK;
+        Thu, 14 May 2020 22:25:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1589459139;
+        bh=SNaosvZmQLb74ht8CoeiZr5UoAYQoZmsadhzR6qPBPE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=OsggZylFxJKtKR6ijHuL73pkYmulpMoHp7uFf7lBoItNThq2WBaNAw9cnN+hHXZs7
+         5TNND1xvBvRrcSj6Bt044YaRXDOLeP5JWpvpASGSl3/cKhrDkL7k+iTsBs9GumfwpO
+         x6l3XOMRny1hgK90gxhQcNXQfVfRk6ovs1edA4C09MhgWfmSQLA/xY6lPbqofLvVxa
+         laHY5xAAIs3mcgx2s6/whaKeEGGkQQ3eRiJJbJOyl7V7HsL908lm/PWzXysk1rvAd4
+         /AmOJpQNIcg9bfFj7wrkWRRUcZZ/YZHG6iiI41HgVUzIXXN87Riyvn4U5uJMG0ZLX5
+         vhSL2zxLDqPTQ==
+Date:   Thu, 14 May 2020 22:25:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
         Amol Grover <frextrite@gmail.com>,
         Dmitry Vyukov <dvyukov@google.com>
-X-Mailer: Apple Mail (2.3608.80.23.2.2)
+Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
+Message-ID: <20200514222535.259cb69e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/yxmulef2UZ=5ydp6gFs=GrA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/yxmulef2UZ=5ydp6gFs=GrA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi Paul,
 
-> On May 14, 2020, at 7:37 AM, syzbot =
-<syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com> wrote:
->=20
-> Hello,
->=20
-> syzbot found the following crash on:
->=20
-> HEAD commit:    c9529331 Add linux-next specific files for 20200514
-> git tree:       linux-next
-> console output: =
-https://syzkaller.appspot.com/x/log.txt?x=3D17119f48100000
-> kernel config:  =
-https://syzkaller.appspot.com/x/.config?x=3D404a80e135048067
-> dashboard link: =
-https://syzkaller.appspot.com/bug?extid=3Dbb82cafc737c002d11ca
-> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
->=20
-> IMPORTANT: if you fix the bug, please add the following tag to the =
-commit:
-> Reported-by: syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com
->=20
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-> WARNING: suspicious RCU usage
-> 5.7.0-rc5-next-20200514-syzkaller #0 Not tainted
-> -----------------------------
-> drivers/net/hamradio/bpqether.c:149 RCU-list traversed in non-reader =
-section!!
+This patch in the rcu tree
 
-How about teaching the bot to always CC Madhuparna and Amol for those =
-RCU-list bug reports?
+  d13fee049fa8 ("Default enable RCU list lockdep debugging with PROVE_RCU")
 
->=20
-> other info that might help us debug this:
->=20
->=20
-> rcu_scheduler_active =3D 2, debug_locks =3D 1
-> 1 lock held by ip/3967:
-> #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock =
-net/core/rtnetlink.c:72 [inline]
-> #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: =
-rtnetlink_rcv_msg+0x3f9/0xad0 net/core/rtnetlink.c:5458
->=20
-> stack backtrace:
-> Hardware name: Google Google Compute Engine/Google Compute Engine, =
-BIOS Google 01/01/2011
-> Call Trace:
-> __dump_stack lib/dump_stack.c:77 [inline]
-> dump_stack+0x18f/0x20d lib/dump_stack.c:118
-> bpq_get_ax25_dev drivers/net/hamradio/bpqether.c:149 [inline]
-> bpq_device_event+0x796/0x8ee drivers/net/hamradio/bpqether.c:538
-> notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
-> call_netdevice_notifiers_info net/core/dev.c:2016 [inline]
-> call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:2001
-> call_netdevice_notifiers_extack net/core/dev.c:2028 [inline]
-> call_netdevice_notifiers net/core/dev.c:2042 [inline]
-> __dev_notify_flags+0x121/0x2c0 net/core/dev.c:8279
-> dev_change_flags+0x100/0x160 net/core/dev.c:8317
-> do_setlink+0xa1c/0x35d0 net/core/rtnetlink.c:2605
-> __rtnl_newlink+0xad0/0x1590 net/core/rtnetlink.c:3273
-> rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3398
-> rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5461
-> netlink_rcv_skb+0x15a/0x430 net/netlink/af_netlink.c:2469
-> netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
-> netlink_unicast+0x537/0x740 net/netlink/af_netlink.c:1329
-> netlink_sendmsg+0x882/0xe10 net/netlink/af_netlink.c:1918
-> sock_sendmsg_nosec net/socket.c:652 [inline]
-> sock_sendmsg+0xcf/0x120 net/socket.c:672
-> ____sys_sendmsg+0x6e6/0x810 net/socket.c:2352
-> ___sys_sendmsg+0x100/0x170 net/socket.c:2406
-> __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
-> do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
-> entry_SYSCALL_64_after_hwframe+0x49/0xb3
-> RIP: 0033:0x7f76dcdfcdc7
-> Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb cd 66 0f 1f 44 00 00 8b 05 =
-4a 49 2b 00 85 c0 75 2e 48 63 ff 48 63 d2 b8 2e 00 00 00 0f 05 <48> 3d =
-00 f0 ff ff 77 01 c3 48 8b 15 a1 f0 2a 00 f7 d8 64 89 02 48
-> RSP: 002b:00007ffd45eccf28 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-> RAX: ffffffffffffffda RBX: 000000005ebd27cd RCX: 00007f76dcdfcdc7
-> RDX: 0000000000000000 RSI: 00007ffd45eccf70 RDI: 0000000000000003
-> RBP: 00007ffd45eccf70 R08: 0000000000001000 R09: fefefeff77686d74
-> R10: 00000000000005e9 R11: 0000000000000246 R12: 00007ffd45eccfb0
-> R13: 0000561a2ddea3c0 R14: 00007ffd45ed5030 R15: 0000000000000000
-> ip (3967) used greatest stack depth: 23144 bytes left
->=20
->=20
-> ---
-> This bug is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
->=20
-> syzbot will keep track of this bug report. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+is causing whack-a-mole in the syzbot testing of linux-next.  Because
+they always do a debug build of linux-next, no testing is getting done. :-(
 
+Can we find another way to find all the bugs that are being discovered
+(very slowly)?
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yxmulef2UZ=5ydp6gFs=GrA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69OL8ACgkQAVBC80lX
+0GylJwgAgal2EKER5HrmQVX1icexlogtPTFqKU4NbQrB//PuIMbF+c8g+bGC+wzd
+LlYNDZCwRX7UcgVmxIluFCezF0STF2b+9K4hF6wo8kGf6Wbu1jCI2N1rd981RUrx
+UFRPoTqtJh7fS6B0fJT1L0bOoh7jdxiW44FaTofkV0NJwuLvNYa8Ea5Xzy/2Y9fh
+wMKgMpwgG+tWrm/dxsMfgEzEl54roe28rGqOQIjW1SWLDZrCWqBgxm8YX/DtvnFt
+OmG6r0alA+odm24UHwVfryEpHo1RoNLMberziyKpGHORv0QVLNsxQHdjW56SfISQ
+lJo435n2ElHkYEUp5COjMERxBLZFIw==
+=RVHt
+-----END PGP SIGNATURE-----
+
+--Sig_/yxmulef2UZ=5ydp6gFs=GrA--

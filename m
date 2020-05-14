@@ -2,250 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D10781D2702
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 08:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFA631D27F6
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 08:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725878AbgENGGB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 02:06:01 -0400
-Received: from szxga07-in.huawei.com ([45.249.212.35]:52460 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725806AbgENGGB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 02:06:01 -0400
-Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.58])
-        by Forcepoint Email with ESMTP id 2E97D1DBC8B9AFDD098D;
-        Thu, 14 May 2020 14:05:57 +0800 (CST)
-Received: from [127.0.0.1] (10.67.102.197) by DGGEMS405-HUB.china.huawei.com
- (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Thu, 14 May 2020
- 14:05:53 +0800
-Subject: Re: linux-next: manual merge of the vfs tree with the parisc-hd tree
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     "Eric W. Biederman" <ebiederm@xmission.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Kees Cook <keescook@chromium.org>,
-        "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        Helge Deller <deller@gmx.de>,
-        Parisc List <linux-parisc@vger.kernel.org>,
-        <yzaikin@google.com>, <linux-fsdevel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1725864AbgENGiz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 02:38:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725831AbgENGiy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 02:38:54 -0400
+Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19A6C061A0E
+        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 23:38:54 -0700 (PDT)
+Received: by mail-pf1-x444.google.com with SMTP id b190so889594pfg.6
+        for <linux-next@vger.kernel.org>; Wed, 13 May 2020 23:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to:user-agent;
+        bh=trpCHC2rLO1MlJDoRWUVG8LcEP1hcZOfyLGO5G0f2rQ=;
+        b=zZLliR++wDgRRitEX5/Q9ylF5d6B3oUNfdX3DFBcMpOGNH9uem9dfdhEl6CsbQIcl1
+         RKxBNQ31tZfpVBcaQetcEmtZNGkBFyeNIQcwh+MdhtT5Pq/FnoyT+RiuQzXk4IHcEqSa
+         uCvO0ewqL9e7wS1no4p8LF4r4y9m4UZV9Qnb73BodRNqEEuxTbU4sdxj0I2Zi4oRXd52
+         ojFZoC/xcKc1ge95zTh+LRFW+AKazDEsx155A/4vxRHnQv4E+RwUAsiKT94hkIGwk3Wu
+         zeEZXNZ8Hefywm3T16bvIwr3ouD3CqnoRCyBTLajdNVcO07siTiWXYRNNC+H+i8TD7MZ
+         aGDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=trpCHC2rLO1MlJDoRWUVG8LcEP1hcZOfyLGO5G0f2rQ=;
+        b=pxvujyqhgE4zCvl38Y9zMluktCDZZUtqZIh1ZnUH1Ux18beE5WIzr+wjANPGH1f7ok
+         N5DPV1nt2wrBJs/HPnKOsb6iFlHL/M91sAC9xGPpwIAwZ09wks0qk5mHmdFEOPfLFaeE
+         ngr9rnCoHw0mOF5NuWd5uA5abdSJ4aOlbwWCjIlMz3tlJB9/2CP+jYrdvb2Vm8M8RB9F
+         N48DZ3lw5C/pLtSBcLm3yhTC4e0TwP9DJOGXRRj3+jHvV3ugg9LAufEG3wZg2BVsoumc
+         534VI0RoYSlztvjIObksiY5wkxL7q7/13GXiS+auJCfFOnRmoBsXTJVWUKiagxutf0oW
+         E+Nw==
+X-Gm-Message-State: AOAM533hjx3mQu45Dgfwxn36mjRLAX4yRTMiBCflumTaoKco4am8w98E
+        bcgCVDnq+E6EwsGLAy5TtaJP1Q==
+X-Google-Smtp-Source: ABdhPJznm23JfEqj5UmVgS4Swq3v1SnUWfjL55likkes1GYDPsbFDk1FcQ1ZXkwDTG5Sj5Lzzxi6lw==
+X-Received: by 2002:a62:f24e:: with SMTP id y14mr2913204pfl.116.1589438334034;
+        Wed, 13 May 2020 23:38:54 -0700 (PDT)
+Received: from localhost ([122.167.130.103])
+        by smtp.gmail.com with ESMTPSA id j26sm1351855pfr.215.2020.05.13.23.38.52
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 13 May 2020 23:38:53 -0700 (PDT)
+Date:   Thu, 14 May 2020 12:08:51 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>, <gregkh@linuxfoundation.org>
-References: <20200511111123.68ccbaa3@canb.auug.org.au>
- <99095805-8cbe-d140-e2f1-0c5a3e84d7e7@huawei.com>
- <20200512003305.GX11244@42.do-not-panic.com>
- <87y2pxs73w.fsf@x220.int.ebiederm.org>
- <20200512172413.GC11244@42.do-not-panic.com>
- <87k11hrqzc.fsf@x220.int.ebiederm.org>
- <20200512220341.GE11244@42.do-not-panic.com>
- <3ccd08a5-cac6-3ca1-ed33-3cb62c982443@huawei.com>
- <20200513125057.GM11244@42.do-not-panic.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <2f8363b3-781e-b065-82f4-f84e6e787fad@huawei.com>
-Date:   Thu, 14 May 2020 14:05:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: Re: linux-next: build failure after merge of the opp tree
+Message-ID: <20200514063851.4yrixgabncsgtqii@vireshk-i7>
+References: <20200514115811.1c6192b5@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200513125057.GM11244@42.do-not-panic.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.197]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514115811.1c6192b5@canb.auug.org.au>
+User-Agent: NeoMutt/20180716-391-311a52
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020/5/13 20:50, Luis Chamberlain wrote:
-> On Wed, May 13, 2020 at 12:04:02PM +0800, Xiaoming Ni wrote:
->> On 2020/5/13 6:03, Luis Chamberlain wrote:
->>> On Tue, May 12, 2020 at 12:40:55PM -0500, Eric W. Biederman wrote:
->>>> Luis Chamberlain <mcgrof@kernel.org> writes:
->>>>
->>>>> On Tue, May 12, 2020 at 06:52:35AM -0500, Eric W. Biederman wrote:
->>>>>> Luis Chamberlain <mcgrof@kernel.org> writes:
->>>>>>
->>>>>>> +static struct ctl_table fs_base_table[] = {
->>>>>>> +	{
->>>>>>> +		.procname	= "fs",
->>>>>>> +		.mode		= 0555,
->>>>>>> +		.child		= fs_table,
->>>>>>> +	},
->>>>>>> +	{ }
->>>>>>> +};
->>>>>>     ^^^^^^^^^^^^^^^^^^^^^^^^ You don't need this at all.
->>>>>>>> +static int __init fs_procsys_init(void)
->>>>>>> +{
->>>>>>> +	struct ctl_table_header *hdr;
->>>>>>> +
->>>>>>> +	hdr = register_sysctl_table(fs_base_table);
->>>>>>                 ^^^^^^^^^^^^^^^^^^^^^ Please use register_sysctl instead.
->>>>>> 	AKA
->>>>>>           hdr = register_sysctl("fs", fs_table);
->>>>>
->>>>> Ah, much cleaner thanks!
->>>>
->>>> It is my hope you we can get rid of register_sysctl_table one of these
->>>> days.  It was the original interface but today it is just a
->>>> compatibility wrapper.
->>>>
->>>> I unfortunately ran out of steam last time before I finished converting
->>>> everything over.
->>>
->>> Let's give it one more go. I'll start with the fs stuff.
->>>
->>>     Luis
->>>
->>> .
->>>
->>
->> If we register each feature in its own feature code file using register() to
->> register the sysctl interface. To avoid merge conflicts when different
->> features modify sysctl.c at the same time.
->> that is, try to Avoid mixing code with multiple features in the same code
->> file.
->>
->> For example, the multiple file interfaces defined in sysctl.c by the
->> hung_task feature can  be moved to hung_task.c.
->>
->> Perhaps later, without centralized sysctl.c ?
->> Is this better?
->>
->> Thanks
->> Xiaoming Ni
->>
->> ---
->>   include/linux/sched/sysctl.h |  8 +----
->>   kernel/hung_task.c           | 78
->> +++++++++++++++++++++++++++++++++++++++++++-
->>   kernel/sysctl.c              | 50 ----------------------------
->>   3 files changed, 78 insertions(+), 58 deletions(-)
->>
->> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
->> index d4f6215..bb4e0d3 100644
->> --- a/include/linux/sched/sysctl.h
->> +++ b/include/linux/sched/sysctl.h
->> @@ -7,14 +7,8 @@
->>   struct ctl_table;
->>
->>   #ifdef CONFIG_DETECT_HUNG_TASK
->> -extern int	     sysctl_hung_task_check_count;
->> -extern unsigned int  sysctl_hung_task_panic;
->> +/* used for block/ */
->>   extern unsigned long sysctl_hung_task_timeout_secs;
->> -extern unsigned long sysctl_hung_task_check_interval_secs;
->> -extern int sysctl_hung_task_warnings;
->> -extern int proc_dohung_task_timeout_secs(struct ctl_table *table, int
->> write,
->> -					 void __user *buffer,
->> -					 size_t *lenp, loff_t *ppos);
->>   #else
->>   /* Avoid need for ifdefs elsewhere in the code */
->>   enum { sysctl_hung_task_timeout_secs = 0 };
->> diff --git a/kernel/hung_task.c b/kernel/hung_task.c
->> index 14a625c..53589f2 100644
->> --- a/kernel/hung_task.c
->> +++ b/kernel/hung_task.c
->> @@ -20,10 +20,10 @@
->>   #include <linux/utsname.h>
->>   #include <linux/sched/signal.h>
->>   #include <linux/sched/debug.h>
->> +#include <linux/kmemleak.h>
->>   #include <linux/sched/sysctl.h>
->>
->>   #include <trace/events/sched.h>
->> -
->>   /*
->>    * The number of tasks checked:
->>    */
->> @@ -296,8 +296,84 @@ static int watchdog(void *dummy)
->>   	return 0;
->>   }
->>
->> +/*
->> + * This is needed for proc_doulongvec_minmax of
->> sysctl_hung_task_timeout_secs
->> + * and hung_task_check_interval_secs
->> + */
->> +static unsigned long hung_task_timeout_max = (LONG_MAX / HZ);
+On 14-05-20, 11:58, Stephen Rothwell wrote:
+> Hi all,
 > 
-> This is not generic so it can stay in this file.
+> After merging the opp tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
 > 
->> +static int __maybe_unused neg_one = -1;
+> x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_put_opp_table':
+> (.text+0x76e): undefined reference to `icc_put'
+> x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_set_rate':
+> (.text+0x2c59): undefined reference to `icc_set_bw'
+> x86_64-linux-gnu-ld: drivers/opp/of.o: in function `dev_pm_opp_of_find_icc_paths':
+> (.text+0x3ca): undefined reference to `of_icc_get_by_index'
+> x86_64-linux-gnu-ld: (.text+0x441): undefined reference to `icc_set_tag'
+> x86_64-linux-gnu-ld: (.text+0x542): undefined reference to `icc_put'
 > 
-> This is generic so we can share it, I suggest we just rename this
-> for now to sysctl_neg_one, export it to a symbol namespace,
-> EXPORT_SYMBOL_NS_GPL(sysctl_neg_one, SYSCTL) and then import it with
-> MODULE_IMPORT_NS(SYSCTL)
+> Caused by commit
 > 
+>   12fa389dcf86 ("OPP: Add support for parsing interconnect bandwidth")
 > 
->> +static struct ctl_table hung_task_sysctls[] = {
-> 
-> We want to wrap this around with CONFIG_SYSCTL, so a cleaner solution
-> is something like this:
-> 
-> diff --git a/kernel/Makefile b/kernel/Makefile
-> index a42ac3a58994..689718351754 100644
-> --- a/kernel/Makefile
-> +++ b/kernel/Makefile
-> @@ -88,7 +88,9 @@ obj-$(CONFIG_KCOV) += kcov.o
->   obj-$(CONFIG_KPROBES) += kprobes.o
->   obj-$(CONFIG_FAIL_FUNCTION) += fail_function.o
->   obj-$(CONFIG_KGDB) += debug/
-> -obj-$(CONFIG_DETECT_HUNG_TASK) += hung_task.o
-> +obj-$(CONFIG_DETECT_HUNG_TASK) += hung_tasks.o
-> +hung_tasks-y := hung_task.o
-> +hung_tasks-$(CONFIG_SYSCTL) += hung_task_sysctl.o
->   obj-$(CONFIG_LOCKUP_DETECTOR) += watchdog.o
->   obj-$(CONFIG_HARDLOCKUP_DETECTOR_PERF) += watchdog_hld.o
->   obj-$(CONFIG_SECCOMP) += seccomp.o
-> 
->> +/* get /proc/sys/kernel root */
->> +static struct ctl_table sysctls_root[] = {
->> +	{
->> +		.procname       = "kernel",
->> +		.mode           = 0555,
->> +		.child          = hung_task_sysctls,
->> +	},
->> +	{}
->> +};
->> +
-> 
-> And as per Eric, this is not needed, we can simplify this more, as noted
-> below.
-> 
->> +static int __init hung_task_sysctl_init(void)
->> +{
->> +	struct ctl_table_header *srt = register_sysctl_table(sysctls_root);
-> 
-> You want instead something like::
-> 
->          struct ctl_table_header *srt;
-> 
-> 	srt = register_sysctl("kernel", hung_task_sysctls);
->> +
->> +	if (!srt)
->> +		return -ENOMEM;
->> +	kmemleak_not_leak(srt);
->> +	return 0;
->> +}
->> +
-> 
->>   static int __init hung_task_init(void)
->>   {
->> +	int ret = hung_task_sysctl_init();
->> +
->> +	if (ret != 0)
->> +		return ret;
->> +
-> 
-> And just #ifdef this around CONFIG_SYSCTL.
-> 
->    Luis
-> 
-> .
-> 
+> I have used the opp tree from next-20200512 for today.
 
-Thank you for your guidance, I will send the patch later
+There is some issue with Kconfig dependencies, we are working on it
+and until then I have removed the patches from linux-next branch.
 
-Xiaoming Ni
-
-
+-- 
+viresh

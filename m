@@ -2,66 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC0B1D2E29
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 13:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9940B1D2E75
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 13:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726011AbgENLXW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 07:23:22 -0400
-Received: from 8bytes.org ([81.169.241.247]:42820 "EHLO theia.8bytes.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725925AbgENLXW (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 07:23:22 -0400
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id 490C9379; Thu, 14 May 2020 13:23:20 +0200 (CEST)
-Date:   Thu, 14 May 2020 13:23:17 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Joerg Roedel <jroedel@suse.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: Re: next/master bisection: baseline.login on jetson-tk1
-Message-ID: <20200514112317.GH18353@8bytes.org>
-References: <5eb9fab4.1c69fb81.a1f1c.0e95@mx.google.com>
- <a868fa70-9039-f72a-39c6-5464a9d06db2@collabora.com>
- <20200512151600.GD8135@suse.de>
- <c9745450-a6d0-1944-a9af-ef9ce18fed12@collabora.com>
+        id S1725925AbgENLhT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 07:37:19 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:44479 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726011AbgENLhT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 14 May 2020 07:37:19 -0400
+Received: by mail-il1-f198.google.com with SMTP id b8so2874758ilr.11
+        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 04:37:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4Mof+U9cD9u9+KN0Yeu8IB5SFQ1hpQEdck5Z1RIH1b8=;
+        b=Vr3nY9kl73dr1uSUWgolaIcXjdzb8rCPF27O3mCruqST9cgk8S7msRpKIJUjR1bb7t
+         0j8ROmcUbaaVqIkKe1d82MfAQ4uZnQBYpalQUvRjbIux9FhPowLpEJJVv017KaO/JLY+
+         eKNzrK62mb5R6Lg9geLcxOxPqwIdkB/eUTApv7Xu4Z2TC3HlJ67VjSE7kBK+8CyjLnUR
+         OMJLXqnktyvxlSKsK8zCwvshga43QvbNB9CSsGRgUhg9u9ErsiAGFdZdzSA9xG//dFK8
+         FdaLKDMzw7lGxH0BXOaenCbYC8Hb+w8tejKRNuZclXxcf8BhdfGy19sbq1R5dqpsadEB
+         jJ5Q==
+X-Gm-Message-State: AGi0PuaYMsjfQ/uLN4yUxRM9kM74qELrTGatSELka887YOQCO2lRDQPX
+        dn4DmvRbzD01TuTj7l3rE9uzPCnAcebxxS1p1LwdZzrbSwF3
+X-Google-Smtp-Source: APiQypLuqE7mcXIlYj421PfwWvs20jce8sEeawo0C4lsAdsiUQeSoUMxGO9mNZ6AJQivuPzseLDRxcH6iG3Vm1TYrDrybJ/muj2D
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9745450-a6d0-1944-a9af-ef9ce18fed12@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a02:b88e:: with SMTP id p14mr3883256jam.36.1589456238302;
+ Thu, 14 May 2020 04:37:18 -0700 (PDT)
+Date:   Thu, 14 May 2020 04:37:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000785a6905a59a1e4a@google.com>
+Subject: linux-next boot error: WARNING: suspicious RCU usage in bpq_device_event
+From:   syzbot <syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com>
+To:     allison@lohutok.net, ap420073@gmail.com, davem@davemloft.net,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, netdev@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 13, 2020 at 11:16:14PM +0100, Guillaume Tucker wrote:
-> which this time gave me:
-> 
-> <4>[    2.540558] PC is at iommu_probe_device+0x1c/0x15c
-> <4>[    2.545606] LR is at of_iommu_configure+0x15c/0x1c4
-> <4>[    2.550736] pc : [<c092e0e4>]    lr : [<c0932c0c>]    psr: a0000013
-> 
-> which in turn brings us to:
-> 
-> (gdb) l *0xc092e0e4
-> 0xc092e0e4 is in iommu_probe_device (drivers/iommu/iommu.c:232).
-> 227		int ret;
-> 228	
-> 229		if (!dev_iommu_get(dev))
-> 230			return -ENOMEM;
-> 231	
-> 232		if (!try_module_get(ops->owner)) {
-> 233			ret = -EINVAL;
-> 234			goto err_out;
-> 235		}
-> 236
+Hello,
 
-Okay, so ops is NULL. I queued a fix for that in the iommu-tree. If you
-test the latest master branch the problem should be gone.
+syzbot found the following crash on:
 
-Thanks for the report,
+HEAD commit:    c9529331 Add linux-next specific files for 20200514
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17119f48100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=404a80e135048067
+dashboard link: https://syzkaller.appspot.com/bug?extid=bb82cafc737c002d11ca
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+bb82cafc737c002d11ca@syzkaller.appspotmail.com
+
+=============================
+WARNING: suspicious RCU usage
+5.7.0-rc5-next-20200514-syzkaller #0 Not tainted
+-----------------------------
+drivers/net/hamradio/bpqether.c:149 RCU-list traversed in non-reader section!!
+
+other info that might help us debug this:
 
 
-       Joerg
+rcu_scheduler_active = 2, debug_locks = 1
+1 lock held by ip/3967:
+ #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:72 [inline]
+ #0: ffffffff8a7bad88 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3f9/0xad0 net/core/rtnetlink.c:5458
+
+stack backtrace:
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ bpq_get_ax25_dev drivers/net/hamradio/bpqether.c:149 [inline]
+ bpq_device_event+0x796/0x8ee drivers/net/hamradio/bpqether.c:538
+ notifier_call_chain+0xc0/0x230 kernel/notifier.c:83
+ call_netdevice_notifiers_info net/core/dev.c:2016 [inline]
+ call_netdevice_notifiers_info+0xb5/0x130 net/core/dev.c:2001
+ call_netdevice_notifiers_extack net/core/dev.c:2028 [inline]
+ call_netdevice_notifiers net/core/dev.c:2042 [inline]
+ __dev_notify_flags+0x121/0x2c0 net/core/dev.c:8279
+ dev_change_flags+0x100/0x160 net/core/dev.c:8317
+ do_setlink+0xa1c/0x35d0 net/core/rtnetlink.c:2605
+ __rtnl_newlink+0xad0/0x1590 net/core/rtnetlink.c:3273
+ rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3398
+ rtnetlink_rcv_msg+0x44e/0xad0 net/core/rtnetlink.c:5461
+ netlink_rcv_skb+0x15a/0x430 net/netlink/af_netlink.c:2469
+ netlink_unicast_kernel net/netlink/af_netlink.c:1303 [inline]
+ netlink_unicast+0x537/0x740 net/netlink/af_netlink.c:1329
+ netlink_sendmsg+0x882/0xe10 net/netlink/af_netlink.c:1918
+ sock_sendmsg_nosec net/socket.c:652 [inline]
+ sock_sendmsg+0xcf/0x120 net/socket.c:672
+ ____sys_sendmsg+0x6e6/0x810 net/socket.c:2352
+ ___sys_sendmsg+0x100/0x170 net/socket.c:2406
+ __sys_sendmsg+0xe5/0x1b0 net/socket.c:2439
+ do_syscall_64+0xf6/0x7d0 arch/x86/entry/common.c:295
+ entry_SYSCALL_64_after_hwframe+0x49/0xb3
+RIP: 0033:0x7f76dcdfcdc7
+Code: d8 64 89 02 48 c7 c0 ff ff ff ff eb cd 66 0f 1f 44 00 00 8b 05 4a 49 2b 00 85 c0 75 2e 48 63 ff 48 63 d2 b8 2e 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 01 c3 48 8b 15 a1 f0 2a 00 f7 d8 64 89 02 48
+RSP: 002b:00007ffd45eccf28 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 000000005ebd27cd RCX: 00007f76dcdfcdc7
+RDX: 0000000000000000 RSI: 00007ffd45eccf70 RDI: 0000000000000003
+RBP: 00007ffd45eccf70 R08: 0000000000001000 R09: fefefeff77686d74
+R10: 00000000000005e9 R11: 0000000000000246 R12: 00007ffd45eccfb0
+R13: 0000561a2ddea3c0 R14: 00007ffd45ed5030 R15: 0000000000000000
+ip (3967) used greatest stack depth: 23144 bytes left
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

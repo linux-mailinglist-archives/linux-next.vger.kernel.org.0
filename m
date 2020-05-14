@@ -2,59 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D521D317C
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 15:39:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB371D3193
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 15:44:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727834AbgENNjs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 09:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S1727082AbgENNoa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 09:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1727802AbgENNjr (ORCPT
+        by vger.kernel.org with ESMTP id S1726316AbgENNoa (ORCPT
         <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 09:39:47 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58102C061A0E
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 06:39:47 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id i68so2828325qtb.5
-        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 06:39:47 -0700 (PDT)
+        Thu, 14 May 2020 09:44:30 -0400
+Received: from mail-qv1-xf44.google.com (mail-qv1-xf44.google.com [IPv6:2607:f8b0:4864:20::f44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48223C061A0C
+        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 06:44:30 -0700 (PDT)
+Received: by mail-qv1-xf44.google.com with SMTP id g20so1658658qvb.9
+        for <linux-next@vger.kernel.org>; Thu, 14 May 2020 06:44:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=lca.pw; s=google;
         h=mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=PtDz09LOkzjvvCoePxmt7faUO189OcHyAGB4NVnPo5w=;
-        b=gORtbmNVZ0Y3FHE3lSOmGqP8TsAqKnlxgjygjNH7i2lySpuRefvl1jHY9s4YyfWrxC
-         RC0G+/jSxogr6BYMwylaHcIVQ9jy5LwaIyrJdjVKuBAeqkUbFz+3jsRgPZDzDIyEEPs6
-         cwmXNypii2MfKzOiHOz+kNLlojd2Br3HySJpion7+mGsxcpHEd/Yk0UXksIwr0W2FjfA
-         zuvSxT+a6xvbOXFmIzqiGaFhpSKu1+dOsEvjcO8lQCSQkgiVzYd2TyBVmATC1wICbOEI
-         g1MVR9XXV+A3j9EXu75u01JDvL75HnhZOLn+HtdnD0dL45zBwNHxfsP665gGuSUsPRQr
-         FMfQ==
+        bh=dlxN/PpfiP8tIFd7R5Dc8269kTO8d9dd96s9WzU8Rj0=;
+        b=CEMXm9EHcJiHDy6bUXbSgkvcdeUGIBFMcAhgbN0gvwFozLEeMRaIWTBnPVzq+UBqhP
+         pEAhEngd2ZcPWgH2HPVvFro4FVpzu88vhP3xmUyIqpBjrHf4Hfz3MOeIT5BiEbXspOm6
+         COekWoEQCZtSfhl1nThKzxHbPtcCy6Sj8QNNvXn+kLfwmQPn7ItrupSRebYxOgkYViR4
+         WIQbS4ksrmnmmQUvRtVP/qvQyJzDrsqgXbP37YDy8hx+7wm+msyxx73Sm2dr+HfabrTE
+         TvRZdYZkssbXIbWBJBJAYEcw91Eh9dck5d0ZZ6bs0VhkwBA88tSLxiQ3BD1CxMz9SoNT
+         C4eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
          :content-transfer-encoding:message-id:references:to;
-        bh=PtDz09LOkzjvvCoePxmt7faUO189OcHyAGB4NVnPo5w=;
-        b=TlTlFRUh0Ja8O34+l/GrbxdtCjF/wYquOd2MT9txy13S8JGalnapa6XKHGdCr2lf0j
-         oksEwNC0Inb22JDgQrFVvofvWr+0h/AioGmH3pcMSbnnojRPnq7ImhSM92SzuG38MS3f
-         3BhShQzadp38D0tVAb75xMC3Xh0V3th6358hrGk4/HELfR676PNrGItsUri4QYVJXInr
-         5OdYKkMjoEC4qNX7lJsXwZFGV/s1AeqTSHePEigMSq6O8YM2OEhAIBc3Jshobc7yIeSZ
-         7Gol6B/Jvl9xbOpcyA9pQxGNZq+PTivTsXOiOZovhXZrmYU5BmgeSMUWn381xclPHAmT
-         dh3w==
-X-Gm-Message-State: AOAM533YFHCo3qE4Lq0ZPnz34BdFvpKJFo6QNYX6c7d73c5j5K6/RMWm
-        J3b0airuju0vvWGQ0Arj76aMDg==
-X-Google-Smtp-Source: ABdhPJx7yVlRhp+tedZEgwXP0IGx4ag09z1dk2lWXiNjPqX+eufFanUNRCkK22YEmEyXevqtpSezwQ==
-X-Received: by 2002:aed:308e:: with SMTP id 14mr4532096qtf.146.1589463586413;
-        Thu, 14 May 2020 06:39:46 -0700 (PDT)
+        bh=dlxN/PpfiP8tIFd7R5Dc8269kTO8d9dd96s9WzU8Rj0=;
+        b=sCOEMtwEsUyVVHov7tQTk/FCQ0aESomlC393yDyaloj9hvRqhhhjmhezr3WkssNaoZ
+         soxmgzHvsWldUp0vJiJcLsZKC9tKOsgprHfYHpT65SY+DGpNom8VduCme/biLDVOZXbP
+         FzUY0ZUTUMb3dfbmhdyJucv7Qx1Zt2LrB0lDsJOVok72ILc6QY/+QCXDEHJOHEf72IKc
+         0dVv/a2ewVaZjlRT7TDGzFE8CO4cQMraL/Yi8OliW/zx/EBKfrxQ+nrhXe0KsUp6Rnw3
+         CKHkc9m6XcRTjAPZhvRXRQRp45foPgEIdcjzq65cVcQND5/CJo2GS9EKjqe3MBaDPCXu
+         S0Eg==
+X-Gm-Message-State: AOAM5308l/I+yRGcMjIukUnqA2kPq82UsAvEMz0DhDcLsu9iGhtTTe1q
+        DWz+m4cYJASpVlMVQyyK1ULUrQ==
+X-Google-Smtp-Source: ABdhPJwokfC2Pg3Cb5HGTztkwAl/QLsAKO/vh2sOCqcbjXxLaJxBzmqDWu/H3l2e5NnNOdgrmSqLoQ==
+X-Received: by 2002:ad4:42a5:: with SMTP id e5mr4912474qvr.234.1589463869478;
+        Thu, 14 May 2020 06:44:29 -0700 (PDT)
 Received: from [192.168.1.153] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id i5sm2497041qtp.66.2020.05.14.06.39.45
+        by smtp.gmail.com with ESMTPSA id m59sm2603015qtd.46.2020.05.14.06.44.28
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 14 May 2020 06:39:45 -0700 (PDT)
+        Thu, 14 May 2020 06:44:28 -0700 (PDT)
 Content-Type: text/plain;
         charset=utf-8
 Mime-Version: 1.0 (Mac OS X Mail 13.4 \(3608.80.23.2.2\))
 Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
 From:   Qian Cai <cai@lca.pw>
 In-Reply-To: <20200514133328.GG2869@paulmck-ThinkPad-P72>
-Date:   Thu, 14 May 2020 09:39:45 -0400
+Date:   Thu, 14 May 2020 09:44:28 -0400
 Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
@@ -62,7 +62,7 @@ Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Amol Grover <frextrite@gmail.com>,
         Dmitry Vyukov <dvyukov@google.com>
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <F4D24E8F-091D-4E89-993B-B8B2E68D6E2B@lca.pw>
+Message-Id: <ADE40EB3-1B1C-4CCF-9B8A-1F2BC585BCFB@lca.pw>
 References: <20200514222535.259cb69e@canb.auug.org.au>
  <ADC503BE-32C0-46BB-A65E-59FFEC30ED57@lca.pw>
  <20200514133328.GG2869@paulmck-ThinkPad-P72>
@@ -119,6 +119,8 @@ d13fee049fa8
 >=20
 > Would that work for you?
 
-Yes, if there is a way to enable PROVE_RCU_LIST=3Dy manually, that is =
-fine. I think we would want to make it easier to enable it. Currently, =
-it is buried into RCU_EXPERT?=
+Alternatively, how about having
+
+PROVE_RCU_LIST=3Dn if DEBUG_AID_FOR_SYZBOT
+
+since it is only syzbot can=E2=80=99t keep up with it?=

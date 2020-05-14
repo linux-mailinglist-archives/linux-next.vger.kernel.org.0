@@ -2,102 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B9E1D2AFD
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 11:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26861D2B44
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 11:23:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgENJKn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 05:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42148 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725925AbgENJKn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 14 May 2020 05:10:43 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A9FC061A0C;
-        Thu, 14 May 2020 02:10:43 -0700 (PDT)
+        id S1725974AbgENJXu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 05:23:50 -0400
+Received: from ozlabs.org ([203.11.71.1]:55557 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725878AbgENJXt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 05:23:49 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49N5Nw2w9Pz9sVF;
-        Thu, 14 May 2020 19:10:40 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49N5h26KMPz9sVB;
+        Thu, 14 May 2020 19:23:46 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589447440;
-        bh=NhjL9VlUyN/XIGusht/E5VqlC4r+pNqaBxOXnG5nP0A=;
+        s=201702; t=1589448227;
+        bh=1Zo7Diupk/PIVC/QMT49ak19AAoXlnvRE1lK5anTsOc=;
         h=Date:From:To:Cc:Subject:From;
-        b=BtrEL7QPo8BtTvUMRtFQUTiqrZXQxXep/mIX9LMcHEHeURAw7O5k5mcYzSIbPHd2i
-         iVrLjmmRLIK4m1MuoOMru1uPGRKn88SjY8cro0r7CDjvG9RfIwn0u48hUploD+OTgi
-         cEfPYNDuciTPo2Ow56ACba5kLr6str5S9D1uYHdW0cGW/hgRkod+h1ZlhOXmESc2ic
-         VP5VXyVNzLT7MtbJliTWrczoECNyN+q35zNc35zXMNNMFMqjpBkQPj6kQrfkkU4LJW
-         U+YcrAzBoLpNtlb5yx+wFGuwUlCPbpg01vst28PTJs/okoMNw7m2UX42ICQf5yDX9n
-         cO9MLT1x0b0nQ==
-Date:   Thu, 14 May 2020 19:10:36 +1000
+        b=QO5smZSDtp6CV4oIX+Ig1gGG+fgkf8oAsby7EYM0+JWPwEtRELWXmAXfl1pX3KSMq
+         zHBk4m4EDMY25qEfY10M1xztxxIfpOPTZovLNXTKVS6m2QDNCx10Ba8Ga1IoDJ5ouT
+         oF7Mf/Vl9Lm8VTtmm8u2nu7xFSXAxPuA03nq6QnLCkmuDqHWZabKMw0eNCQ+Crmwxq
+         3tqzh5zxAufhxEO3ZMmMIxFiCCv/h8UyM6QFTHuzj969xTbQn6Mkiu2F0P1Pwm36KL
+         BYAfBfN+fqC+0ZEbxCcwNjvLRqoqN8gOCDP6YWuvOA44zXEuUOtXiDEtMpXnZSNIXk
+         iP10kEOp93dSA==
+Date:   Thu, 14 May 2020 19:23:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Christoffer Dall <cdall@cs.columbia.edu>,
+        Marc Zyngier <maz@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the fsinfo tree
-Message-ID: <20200514191036.0e7bdcc8@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Jiang Yi <giangyi@amazon.com>
+Subject: linux-next: manual merge of the akpm-current tree with the kvm-arm
+ tree
+Message-ID: <20200514192346.6e53e0a1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RTHD1.WwJ4n/3j_t4bSOot5";
+Content-Type: multipart/signed; boundary="Sig_/fpFwL9sMUX+QGe.CjqPl4Yt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RTHD1.WwJ4n/3j_t4bSOot5
+--Sig_/fpFwL9sMUX+QGe.CjqPl4Yt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the fsinfo tree, today's linux-next build (powerpc
-allyesconfig) produced this warning:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-samples/vfs/test-fsinfo.c: In function 'dump_fsinfo_generic_statfs':
-samples/vfs/test-fsinfo.c:135:30: warning: format '%llu' expects argument o=
-f type 'long long unsigned int', but argument 2 has type '__u64' {aka 'long=
- unsigned int'} [-Wformat=3D]
-  135 |  printf("\tbsize        : %llu\n", f->f_bsize);
-      |                           ~~~^     ~~~~~~~~~~
-      |                              |      |
-      |                              |      __u64 {aka long unsigned int}
-      |                              long long unsigned int
-      |                           %lu
-samples/vfs/test-fsinfo.c:136:30: warning: format '%llu' expects argument o=
-f type 'long long unsigned int', but argument 2 has type '__u64' {aka 'long=
- unsigned int'} [-Wformat=3D]
-  136 |  printf("\tfrsize       : %llu\n", f->f_frsize);
-      |                           ~~~^     ~~~~~~~~~~~
-      |                              |      |
-      |                              |      __u64 {aka long unsigned int}
-      |                              long long unsigned int
-      |                           %lu
+  arch/arm64/kvm/mmu.c
 
-Introduced by commit
+between commit:
 
-  1b3979fc0f0c ("fsinfo: Add fsinfo() syscall to query filesystem informati=
-on")
+  70fb2fa12176 ("KVM: arm/arm64: Release kvm->mmu_lock in loop to prevent s=
+tarvation")
+
+from the kvm-arm tree and commit:
+
+  72ff958aa971 ("arm64: add support for folded p4d page tables")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/RTHD1.WwJ4n/3j_t4bSOot5
+diff --cc arch/arm64/kvm/mmu.c
+index ddf85bf21897,534d9798c3cb..000000000000
+--- a/arch/arm64/kvm/mmu.c
++++ b/arch/arm64/kvm/mmu.c
+@@@ -421,10 -469,7 +469,10 @@@ static void stage2_flush_memslot(struc
+  	do {
+  		next =3D stage2_pgd_addr_end(kvm, addr, end);
+  		if (!stage2_pgd_none(kvm, *pgd))
+- 			stage2_flush_puds(kvm, pgd, addr, next);
++ 			stage2_flush_p4ds(kvm, pgd, addr, next);
+ +
+ +		if (next !=3D end)
+ +			cond_resched_lock(&kvm->mmu_lock);
+  	} while (pgd++, addr =3D next, addr !=3D end);
+  }
+ =20
+
+--Sig_/fpFwL9sMUX+QGe.CjqPl4Yt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69CwwACgkQAVBC80lX
-0GyxJAf/bciRnNmkFu5WWPBUbEc8AmrhTxymcewblXtjCjMWbjvt0pf80yMy+4nJ
-oH/MHojjO94ivY/xLxUJ4f5UZlLS5uKlewHPSDeyGNq7iWprANgZP/sSoJbVMPMY
-Khs8pWKn+Lbpqa6zE23RFtQOrW/y+5Fu1qJhXoN1/e5/kCqUtuBsDP1nRtl318t8
-bLjzcc70cxlrJB3LD9V/U9DDJIBjjHzZcYOJW+x/11Azb0eTKbjQiUTcIvJASlVm
-zhNASvywmYE9ObfTEUwrK1PYlIR9J0f8U7EZEP1XRoYvQy8Hf2JJpO24ODM/CswV
-GzT23JvVWRDtmsEMzvneI7BmKTgNzA==
-=Rh7R
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl69DiIACgkQAVBC80lX
+0GwCMAf+McdULBYhNNYDv5u4GRbw3RhvqMgN0BPUCKy62XeYXx1YLpbx925Z+wTs
+RLbt7tSUlBJDjo963+UivUuxfjG4ysqrSBLNjCeS/BnOfpVzLaDjHHg1zHzh52xR
+B35Jhu2Kw9KtNDiGbN3ldMO43J9dQkqf06Oram1BnvReiBAN/MEfcebGGnNzPxB4
+8RH5P9w6+hB4IdrYKYKVfBxldVerRVwT94Zh/2GDtUkG5dzw6hJQDqZHmNtfRX8E
+oyzg94LVskShTrOEalThXFnZ+OKpdJQJody66UO8vxlSrCvSYfSSrBMUW1VXnlo7
+sukFbK+GYdl5vbviUyeqXzhQsbogBw==
+=dMJ9
 -----END PGP SIGNATURE-----
 
---Sig_/RTHD1.WwJ4n/3j_t4bSOot5--
+--Sig_/fpFwL9sMUX+QGe.CjqPl4Yt--

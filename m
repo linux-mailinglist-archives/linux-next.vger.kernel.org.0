@@ -2,121 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F06351D246C
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 03:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0DF1D24FE
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 03:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726070AbgENBCd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 13 May 2020 21:02:33 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38179 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726061AbgENBCd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 13 May 2020 21:02:33 -0400
+        id S1726061AbgENB6S (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 13 May 2020 21:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59500 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725925AbgENB6S (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Wed, 13 May 2020 21:58:18 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF50C061A0C;
+        Wed, 13 May 2020 18:58:18 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49MtYf748zz9sSf;
-        Thu, 14 May 2020 11:02:30 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Mvny4Mzyz9sSd;
+        Thu, 14 May 2020 11:58:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589418151;
-        bh=SYHlSh6/z5acDrKOTCmTNV/WDbLLOcAYzHiL81DN2UQ=;
+        s=201702; t=1589421494;
+        bh=TfnS8yU77VuJwwO61vQmNZF4HFAvsYRLgC0J2A5bv3I=;
         h=Date:From:To:Cc:Subject:From;
-        b=h8tVOSPD18w9lV6yo7yrVV1oOFdxWg12RQomk9WL4SUChULTdniI2vd5ZdwNyiXG0
-         Yw8/4PNyOZlMdZW3wK0OrUMOQyixIHBRplgqPthnXcgrGPU2Apck9tXka1iG+XKdcJ
-         dL+2eA/zKaFTaYpX7hM0OV+0FtE4iTqgmZ/982lASxbgg6+O+gLgaLWJ1JIJn75DY6
-         7V86oOV3osZ1l2wYPGn3owMvve4+fR8J0HBulQRdottdTFymrrUK+G4olLJE45hNQT
-         21b5jVa8PzF4w6+sf600Gliy5SDd9QyTt/YEvpJIjMUltb+ll2AdgjtbHLICKK3fME
-         O29bqRq1gpEEg==
-Date:   Thu, 14 May 2020 11:02:23 +1000
+        b=dkNab214vSh3R+Azer2Zt1RX3k5Y0DI7Q/8EiFaGsRI3IdOsZhGD29KRfVWTcNkUO
+         Y/M9evz0WcQsAJigtXZ/ajVCBjGb8nQcR5ugL4hzXGBebQXardpwV1W/ghEwemQfVE
+         1e/Vz61whixvvHI9+O++PYYx+YlFH5tUGtHYjgYwpIjR8XhOq76LTAEztkNajvLGiz
+         nPm+LAgGTCCi6CeSkF6Ah5xcbhCy2ywn8VRaYI2lHela4YAeAW6DbBn4I3/x64eLDV
+         hJ6HMsPGgqERuKWX/YyM0AWHvJwJXsXnaLQ2kCD9zEwW6IyJdahw2XCxa+LtGW/xyo
+         xX969L6fVeD8Q==
+Date:   Thu, 14 May 2020 11:58:11 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Bjorn Helgaas <bhelgaas@google.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: linux-next: manual merge of the pci tree with Linus' tree
-Message-ID: <20200514110223.4d7a650d@canb.auug.org.au>
+        Georgi Djakov <georgi.djakov@linaro.org>
+Subject: linux-next: build failure after merge of the opp tree
+Message-ID: <20200514115811.1c6192b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4_7=.=APp2=ZtDH25ON__Rk";
+Content-Type: multipart/signed; boundary="Sig_/8su9.eJmUL2l_yik_A3lOfP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4_7=.=APp2=ZtDH25ON__Rk
+--Sig_/8su9.eJmUL2l_yik_A3lOfP
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the pci tree got a conflict in:
+After merging the opp tree, today's linux-next build (x86_64 allmodconfig)
+failed like this:
 
-  drivers/pci/quirks.c
+x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_put_opp_ta=
+ble':
+(.text+0x76e): undefined reference to `icc_put'
+x86_64-linux-gnu-ld: drivers/opp/core.o: in function `dev_pm_opp_set_rate':
+(.text+0x2c59): undefined reference to `icc_set_bw'
+x86_64-linux-gnu-ld: drivers/opp/of.o: in function `dev_pm_opp_of_find_icc_=
+paths':
+(.text+0x3ca): undefined reference to `of_icc_get_by_index'
+x86_64-linux-gnu-ld: (.text+0x441): undefined reference to `icc_set_tag'
+x86_64-linux-gnu-ld: (.text+0x542): undefined reference to `icc_put'
 
-between commit:
+Caused by commit
 
-  0a8f41023e8a ("PCI: Move Apex Edge TPU class quirk to fix BAR assignment")
+  12fa389dcf86 ("OPP: Add support for parsing interconnect bandwidth")
 
-from Linus' tree and commit:
-
-  68f5fc4ea9dd ("PCI: Avoid Pericom USB controller OHCI/EHCI PME# defect")
-
-from the pci tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I have used the opp tree from next-20200512 for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/pci/quirks.c
-index ca9ed5774eb1,7b4a98d0f0fd..000000000000
---- a/drivers/pci/quirks.c
-+++ b/drivers/pci/quirks.c
-@@@ -5568,9 -5568,15 +5568,22 @@@ static void pci_fixup_no_d0_pme(struct=20
-  }
-  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_ASMEDIA, 0x2142, pci_fixup_no_d0_pm=
-e);
- =20
- +static void apex_pci_fixup_class(struct pci_dev *pdev)
- +{
- +	pdev->class =3D (PCI_CLASS_SYSTEM_OTHER << 8) | pdev->class;
- +}
- +DECLARE_PCI_FIXUP_CLASS_HEADER(0x1ac1, 0x089a,
- +			       PCI_CLASS_NOT_DEFINED, 8, apex_pci_fixup_class);
-++
-+ /*
-+  * Device [12d8:0x400e] and [12d8:0x400f]
-+  * These devices advertise PME# support in all power states but don't
-+  * reliably assert it.
-+  */
-+ static void pci_fixup_no_pme(struct pci_dev *dev)
-+ {
-+ 	pci_info(dev, "PME# is unreliable, disabling it\n");
-+ 	dev->pme_support =3D 0;
-+ }
-+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400e, pci_fixup_no_pme);
-+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_PERICOM, 0x400f, pci_fixup_no_pme);
-
---Sig_/4_7=.=APp2=ZtDH25ON__Rk
+--Sig_/8su9.eJmUL2l_yik_A3lOfP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68mJ8ACgkQAVBC80lX
-0GzVRAgAiCuF/XJvZSuf0mLKm7rBnRqdTrWrPrJyIWsuitoXeNRnauH4Favinj+W
-R/YKpDYOFKI09tDY6CcCo9xS11KfrvLAefnHouVUeN0ROr4vQXaLSIKf/VJXO29U
-RW2Pj6fH91rfnibDlosRArxKVaX83MTRBeNSvlOlqMBTqpJHfBV4wvjWrGKnUBvi
-AxvXRgh6iXKkkYs3m/Bqma4y+PkEp/HDvFqDzkHA7nZJrzwexqElwgxOJAwvwXCB
-E3rxZoxIqqFFcAwFUOjmYXlVj0EoX4YrPah6q+V04fjuPcNk/OR38vQIzehNFStm
-ZXC01LsltoAuhIUj94jzXvXtbpS2Mg==
-=5Vlv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68pbMACgkQAVBC80lX
+0GxG1wgAjCwV62ddqNYeydnRDib1ozmtknbMVsadgAYWK7kIfqYft5p257Ga/IlK
+AXBwAiQFtKCoQw1qsYuUAJ7MIHkco2C/j5gYuG2r21lODWckzc+3zG0OyogZ/wn9
+j+VdJUE1tGqLYmms3QInE69gMKHZ3HuPNL9JAbsYcd3lQTj4fh3k7dpdjAoQolmC
+yWHJXL8XjS4bPPjakPYkGC8XxlAB6C3Zt7ICY4s1ej6lBJOUzTwJLYi+GmUc+hEx
+IwUF0iu2NxyDTu/RJ/CIOgs1+fyqBZLibXeXhWwdDuq3tAO6Bn3wE1boqUnzoE5J
+FtHZHTrAl58L9cwAYI57KU3f2E9i2Q==
+=2Lu5
 -----END PGP SIGNATURE-----
 
---Sig_/4_7=.=APp2=ZtDH25ON__Rk--
+--Sig_/8su9.eJmUL2l_yik_A3lOfP--

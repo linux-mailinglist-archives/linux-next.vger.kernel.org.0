@@ -2,196 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6931D25E2
-	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 06:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D061D25F3
+	for <lists+linux-next@lfdr.de>; Thu, 14 May 2020 06:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725794AbgENEbL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 14 May 2020 00:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54914 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725788AbgENEbL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 14 May 2020 00:31:11 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6FAC061A0C;
-        Wed, 13 May 2020 21:31:10 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49MzBL6yVMz9sRK;
-        Thu, 14 May 2020 14:31:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589430667;
-        bh=udlQud55+EREZRifKVqsf2KSUhnehd+L7nElntYn2Cg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FK3LNXuM5dbe9U0YFUHs4fFIWsPVIVhm4dHZJdJCDi3Kii6/9HN6MZTKaGk+HAinU
-         PTUFBLA/i/MJNa+a3zG8ai6FWUNNomzXn70NCWV7W7jh6Sw4HOEBJyNHqxlRSG9Mir
-         OimLXsIha71VlVxYK8+Ro50o5/mAb6r97E32meQ5w9nPukpV1HMwUrQeDXNBpnYJg5
-         rRWHvAbhYon8CdTrT90JOJDkROYLHfCmUnSx+n471JgZUZvLIZNn6ZWURfFsoH7gZA
-         0IdrZBJTOxDyzIQrTiPQSpTsLEBMe5oMLLy6wYQbOZY8HWw+F0tUL2tkbLBKQaDjBc
-         9wZjIkqLXHUCg==
-Date:   Thu, 14 May 2020 14:30:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: linux-next: build failure after merge of the keys tree
-Message-ID: <20200514143055.1f71ba68@canb.auug.org.au>
+        id S1725806AbgENEq1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 14 May 2020 00:46:27 -0400
+Received: from mail.zx2c4.com ([192.95.5.64]:49915 "EHLO mail.zx2c4.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725794AbgENEq1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 14 May 2020 00:46:27 -0400
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTP id df5ef381;
+        Thu, 14 May 2020 04:32:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed; d=zx2c4.com; h=mime-version
+        :references:in-reply-to:from:date:message-id:subject:to:cc
+        :content-type; s=mail; bh=PE/H4CXhRSEB5FLtI6sjan2fvtw=; b=aXHhlQ
+        hKJtBkhKRi3+NVcJxy56rF0b2tvMKYtpoztaGUxEhvLh3uqZCszusTiI7hLd3C4Y
+        Xza9ft3Y3Wgt/fYO5JucAJiTgt7iBx0syh079sv5piCKPOc9galz4NGbWDDfWGCG
+        li1WiYLrp3bONFwZxulPGGLJUy2mjhE5f7TyrAdVnMfQzJGinMdNQ3LYrmLrihfu
+        uC3DNwUonXxsrn/lMravOitp8Ho5Lt+COJ7smOiocU2FlxT9v8wM736UusYSxwWJ
+        CIrDxUpb9qwqP4YEc3zo7sj3MHFqc1+oEGk9C9+Zx/w2Qs/8Ftf5YQkFwYF7NTCJ
+        7uIqY3aQiBq0o/Ew==
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8dda2136 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 14 May 2020 04:32:43 +0000 (UTC)
+Received: by mail-io1-f44.google.com with SMTP id w11so1554310iov.8;
+        Wed, 13 May 2020 21:46:23 -0700 (PDT)
+X-Gm-Message-State: AOAM531h6slkEd0yszYrbH19bj1gaQ/d0LTt1pvW2M4fdkzW61CCFSXd
+        MaO87JaOJQzvoZWHNB8niAewyN4OXqKforZSmJI=
+X-Google-Smtp-Source: ABdhPJzcRk9Jn3eB0ogJHIaCvKD8L+gK1sQoOyT1l6QXWin+UGkYbgOmCEAe8Zk7jAtYZdHuq/XAjRD/6SiFwyOSn7A=
+X-Received: by 2002:a6b:b486:: with SMTP id d128mr2406785iof.79.1589431582612;
+ Wed, 13 May 2020 21:46:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/skWfLstk8P+vqG8NQ9SdDj2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200514143055.1f71ba68@canb.auug.org.au>
+In-Reply-To: <20200514143055.1f71ba68@canb.auug.org.au>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Wed, 13 May 2020 22:46:10 -0600
+X-Gmail-Original-Message-ID: <CAHmME9osYhwzFEyGUELqSSNexgK56NJrOrWTi3vnyDft8tv-hw@mail.gmail.com>
+Message-ID: <CAHmME9osYhwzFEyGUELqSSNexgK56NJrOrWTi3vnyDft8tv-hw@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the keys tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/skWfLstk8P+vqG8NQ9SdDj2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hey Masahiro,
 
-Hi all,
+Your touch might be helpful here. CRYPTO_LIB_CHACHA20POLY1305 is a
+tristate and depends on as well as selects other things that are
+tristates.
 
-After merging the keys tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Meanwhile BIG_KEYS is a bool, which needs to select
+CRYPTO_LIB_CHACHA20POLY1305. However, it gets antsy if the the symbol
+its selecting has =m items in its hierarchy.
 
-WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
-  Depends on [m]: CRYPTO [=3Dy] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm] || !=
-CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm=
-] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm])
-  Selected by [y]:
-  - BIG_KEYS [=3Dy] && KEYS [=3Dy] && TMPFS [=3Dy]
-  Selected by [m]:
-  - WIREGUARD [=3Dm] && NETDEVICES [=3Dy] && NET_CORE [=3Dy] && NET [=3Dy] =
-&& INET [=3Dy] && (IPV6 [=3Dy] || !IPV6 [=3Dy])
+Any suggestions? The ideal thing to happen would be that the select of
+CRYPTO_LIB_CHACHA20POLY1305 in BIG_KEYS causes all of the descendants
+to become =y too.
 
-WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
-  Depends on [m]: CRYPTO [=3Dy] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm] || !=
-CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm=
-] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm])
-  Selected by [y]:
-  - BIG_KEYS [=3Dy] && KEYS [=3Dy] && TMPFS [=3Dy]
-  Selected by [m]:
-  - WIREGUARD [=3Dm] && NETDEVICES [=3Dy] && NET_CORE [=3Dy] && NET [=3Dy] =
-&& INET [=3Dy] && (IPV6 [=3Dy] || !IPV6 [=3Dy])
+Jason
 
-WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
-  Depends on [m]: CRYPTO [=3Dy] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm] || !=
-CRYPTO_ARCH_HAVE_LIB_CHACHA [=3Dm]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm=
-] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=3Dm])
-  Selected by [y]:
-  - BIG_KEYS [=3Dy] && KEYS [=3Dy] && TMPFS [=3Dy]
-  Selected by [m]:
-  - WIREGUARD [=3Dm] && NETDEVICES [=3Dy] && NET_CORE [=3Dy] && NET [=3Dy] =
-&& INET [=3Dy] && (IPV6 [=3Dy] || !IPV6 [=3Dy])
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `xchacha_in=
-it':
-chacha20poly1305.c:(.text+0x12d): undefined reference to `chacha_init_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x13d): undefined reference =
-to `hchacha_block_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14b): undefined reference =
-to `chacha_init_arch'
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `__chacha20=
-poly1305_encrypt':
-chacha20poly1305.c:(.text+0x2ab): undefined reference to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x2bd): undefined reference =
-to `poly1305_init_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x2d6): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x317): undefined reference =
-to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x32d): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x379): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x385): undefined reference =
-to `poly1305_final_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x413): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x434): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20po=
-ly1305_encrypt':
-(.text+0x59d): undefined reference to `chacha_init_arch'
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `__chacha20=
-poly1305_decrypt':
-chacha20poly1305.c:(.text+0x847): undefined reference to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x859): undefined reference =
-to `poly1305_init_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x86d): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8a7): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8f1): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8fc): undefined reference =
-to `poly1305_final_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x94f): undefined reference =
-to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x9d9): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x9f9): undefined reference =
-to `poly1305_update_arch'
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20po=
-ly1305_decrypt':
-(.text+0xb78): undefined reference to `chacha_init_arch'
-x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20po=
-ly1305_crypt_sg_inplace':
-chacha20poly1305.c:(.text+0xf16): undefined reference to `chacha_init_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0xf3b): undefined reference =
-to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0xf50): undefined reference =
-to `poly1305_init_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1094): undefined reference=
- to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1155): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x117b): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x11da): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1223): undefined reference=
- to `poly1305_final_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1321): undefined reference=
- to `chacha_crypt_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1401): undefined reference=
- to `poly1305_final_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14a3): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14d6): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1507): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1573): undefined reference=
- to `poly1305_update_arch'
-x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x15aa): undefined reference=
- to `poly1305_final_arch'
 
-Caused by commit
-
-  f22998a0de8a ("security/keys: rewrite big_key crypto to use library inter=
-face")
-
-I have used the keys tree from next-20200512 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/skWfLstk8P+vqG8NQ9SdDj2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl68yX8ACgkQAVBC80lX
-0GwxWAf+NXtBflePGhMJNG8iznYUzDET+ugAPDjD919GRHjcvB2SifNwsWT++ojf
-N9bEg/fQrOOJ13282YrB/S+HtmkVPtOt3vmRL0zx8DxyAgswpJ6FOV6yIRQLyMKy
-XnoXJEmZjcEnu/J9Z30BJef2HR3QnwK3ncVjX3skdFdgXKDlOncHLIhHGJeQ3FY0
-s4zILSc06sivW+N42vGjIxA4GzlCRh2ngr1jP3alMxSAmd6m1YmvsEZrywSR8h6+
-MXCNwCCZsS3YxopexXM58eRIF2WmX9lEu55bPtokG1m063Q5ElxhatRscW9J2ghH
-dG5A5HOKj/aQTlMFMVlUe4ZkKYVM/w==
-=GKIp
------END PGP SIGNATURE-----
-
---Sig_/skWfLstk8P+vqG8NQ9SdDj2--
+On Wed, May 13, 2020 at 10:31 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the keys tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
+>   Depends on [m]: CRYPTO [=y] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=m] || !CRYPTO_ARCH_HAVE_LIB_CHACHA [=m]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m])
+>   Selected by [y]:
+>   - BIG_KEYS [=y] && KEYS [=y] && TMPFS [=y]
+>   Selected by [m]:
+>   - WIREGUARD [=m] && NETDEVICES [=y] && NET_CORE [=y] && NET [=y] && INET [=y] && (IPV6 [=y] || !IPV6 [=y])
+>
+> WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
+>   Depends on [m]: CRYPTO [=y] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=m] || !CRYPTO_ARCH_HAVE_LIB_CHACHA [=m]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m])
+>   Selected by [y]:
+>   - BIG_KEYS [=y] && KEYS [=y] && TMPFS [=y]
+>   Selected by [m]:
+>   - WIREGUARD [=m] && NETDEVICES [=y] && NET_CORE [=y] && NET [=y] && INET [=y] && (IPV6 [=y] || !IPV6 [=y])
+>
+> WARNING: unmet direct dependencies detected for CRYPTO_LIB_CHACHA20POLY1305
+>   Depends on [m]: CRYPTO [=y] && (CRYPTO_ARCH_HAVE_LIB_CHACHA [=m] || !CRYPTO_ARCH_HAVE_LIB_CHACHA [=m]) && (CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m] || !CRYPTO_ARCH_HAVE_LIB_POLY1305 [=m])
+>   Selected by [y]:
+>   - BIG_KEYS [=y] && KEYS [=y] && TMPFS [=y]
+>   Selected by [m]:
+>   - WIREGUARD [=m] && NETDEVICES [=y] && NET_CORE [=y] && NET [=y] && INET [=y] && (IPV6 [=y] || !IPV6 [=y])
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `xchacha_init':
+> chacha20poly1305.c:(.text+0x12d): undefined reference to `chacha_init_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x13d): undefined reference to `hchacha_block_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14b): undefined reference to `chacha_init_arch'
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `__chacha20poly1305_encrypt':
+> chacha20poly1305.c:(.text+0x2ab): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x2bd): undefined reference to `poly1305_init_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x2d6): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x317): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x32d): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x379): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x385): undefined reference to `poly1305_final_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x413): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x434): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20poly1305_encrypt':
+> (.text+0x59d): undefined reference to `chacha_init_arch'
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `__chacha20poly1305_decrypt':
+> chacha20poly1305.c:(.text+0x847): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x859): undefined reference to `poly1305_init_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x86d): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8a7): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8f1): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x8fc): undefined reference to `poly1305_final_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x94f): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x9d9): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x9f9): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20poly1305_decrypt':
+> (.text+0xb78): undefined reference to `chacha_init_arch'
+> x86_64-linux-gnu-ld: lib/crypto/chacha20poly1305.o: in function `chacha20poly1305_crypt_sg_inplace':
+> chacha20poly1305.c:(.text+0xf16): undefined reference to `chacha_init_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0xf3b): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0xf50): undefined reference to `poly1305_init_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1094): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1155): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x117b): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x11da): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1223): undefined reference to `poly1305_final_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1321): undefined reference to `chacha_crypt_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1401): undefined reference to `poly1305_final_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14a3): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x14d6): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1507): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x1573): undefined reference to `poly1305_update_arch'
+> x86_64-linux-gnu-ld: chacha20poly1305.c:(.text+0x15aa): undefined reference to `poly1305_final_arch'
+>
+> Caused by commit
+>
+>   f22998a0de8a ("security/keys: rewrite big_key crypto to use library interface")
+>
+> I have used the keys tree from next-20200512 for today.
+>
+> --
+> Cheers,
+> Stephen Rothwell

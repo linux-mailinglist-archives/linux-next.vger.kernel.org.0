@@ -2,111 +2,205 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D0ABA1D5B07
-	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 22:56:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1756B1D5BCC
+	for <lists+linux-next@lfdr.de>; Fri, 15 May 2020 23:47:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726290AbgEOU4m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 15 May 2020 16:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39002 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726179AbgEOU4m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 15 May 2020 16:56:42 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D092AC061A0C;
-        Fri, 15 May 2020 13:56:41 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jZhNV-009Hh7-7g; Fri, 15 May 2020 20:56:21 +0000
-Date:   Fri, 15 May 2020 21:56:21 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Olga Kornievskaia <kolga@netapp.com>
-Cc:     Alexey Gladkov <gladkov.alexey@gmail.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        syzbot <syzbot+c1af344512918c61362c@syzkaller.appspotmail.com>,
-        jmorris@namei.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, linux-security-module@vger.kernel.org,
-        serge@hallyn.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        ".Tetsuo Handa" <penguin-kernel@i-love.sakura.ne.jp>
-Subject: Re: linux-next boot error: general protection fault in
- tomoyo_get_local_path
-Message-ID: <20200515205621.GH23230@ZenIV.linux.org.uk>
-References: <0000000000002f0c7505a5b0e04c@google.com>
- <c3461e26-1407-2262-c709-dac0df3da2d0@i-love.sakura.ne.jp>
- <72cb7aea-92bd-d71b-2f8a-63881a35fad8@i-love.sakura.ne.jp>
- <20200515201357.GG23230@ZenIV.linux.org.uk>
+        id S1727873AbgEOVrb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 15 May 2020 17:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1727814AbgEOVra (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 15 May 2020 17:47:30 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03F1C061A0C
+        for <linux-next@vger.kernel.org>; Fri, 15 May 2020 14:47:30 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id q9so1583719pjm.2
+        for <linux-next@vger.kernel.org>; Fri, 15 May 2020 14:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=fIJIreMh03uniH7MHOHRg+y64/mDyKjFomMP765keZ4=;
+        b=WAB44CPO2ojxAGdsV9KIOVE8rAfCVZ/dSg2o/jIm2KxeEuNwC6nyNzOun53MH8Q2JH
+         PYDA7AJ6M9zrNfv7ceRDifbfsryHa2E5iXV1rd2h410uR75gu9mD+NQLIV/us0VAAJmx
+         pOtD2xpqEnin2tyxY2ox1rzQ8zgldbY3v6BpaDPMleolJYg8eXZyzJWytDY2RR4UjgiX
+         ICfSRB4QCIvVWqqkCbjjRdd8g4z2Ez1kauMIGZJ2KP3+3l2EtZKQ4AjwuoQxhDUKm4Hk
+         kVT/TTdWcNgRFlX98UbeUSD80X+xp92noXceSY54WRdU1neV64chSHIvxsK6oBUzyEdX
+         ZcCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=fIJIreMh03uniH7MHOHRg+y64/mDyKjFomMP765keZ4=;
+        b=kB74e32za0pbUt2k28qekYjR2dYqqyAKdyG4RPUBCixxD1iVL/DKtEei5vvaM4Blpp
+         JkcFxecrn9ni9N32KtSUZM4YUZjPKJWQlAqaPLW3lEfHwUs9ntIOYE732Yx7P6aIpwRh
+         FCxFNFI69BBuVpWXKWn4OMmXB8oCZng4NRqZVx4kiA+pne1mDD+XCzk+zTv9ygYsjiHe
+         WvtfpeHAxab3j0ixt0bkISI821mgaEvfzRZ0xW7lU+mBxhhBaAzQ/aTo48zlsZ2X3PCH
+         fRYN3Jf71wrOCnGTX4e6DtWUQKQlzBFpskAl2r9gSRtNbQJrhHGZ0FfweK1QA8DnEpWv
+         b9KQ==
+X-Gm-Message-State: AOAM530ltMlvu4z5MterjuJSneQ6g0JLnirXBkzjAQQY2FaNy/TeVkpi
+        QpkExI3lS0v64KtpDORNW1TaB2VEsP4=
+X-Google-Smtp-Source: ABdhPJxfdjJCsS/Txmt4NBRIBqWszTiVTSF2g09KS+K8LOHQbfJMQxJLIy8S0BB46WJ9dN41KWD1IQ==
+X-Received: by 2002:a17:902:9b8e:: with SMTP id y14mr5540956plp.109.1589579249729;
+        Fri, 15 May 2020 14:47:29 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id p10sm2640574pff.210.2020.05.15.14.47.28
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 May 2020 14:47:29 -0700 (PDT)
+Message-ID: <5ebf0df1.1c69fb81.1bd4a.8a88@mx.google.com>
+Date:   Fri, 15 May 2020 14:47:29 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200515201357.GG23230@ZenIV.linux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200515
+X-Kernelci-Report-Type: boot
+Subject: next/master boot: 289 boots: 16 failed, 262 passed with 5 offline,
+ 6 untried/unknown (next-20200515)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 15, 2020 at 09:13:57PM +0100, Al Viro wrote:
-> On Sat, May 16, 2020 at 12:36:28AM +0900, Tetsuo Handa wrote:
-> > On 2020/05/16 0:18, Tetsuo Handa wrote:
-[snip]
-> > A similar bug (racing inode destruction with open() on proc filesystem) was fixed as
-> > commit 6f7c41374b62fd80 ("tomoyo: Don't use nifty names on sockets."). Then, it might
-> > not be safe to replace dentry->d_sb->s_fs_info with dentry->d_inode->i_sb->s_fs_info .
-> 
-> Could you explain why do you want to bother with d_inode() anyway?  Anything that
-> does dentry->d_inode->i_sb can bloody well use dentry->d_sb.  And that's never
-> changed over the struct dentry lifetime - ->d_sb is set on allocation and never
-> modified afterwards.
+next/master boot: 289 boots: 16 failed, 262 passed with 5 offline, 6 untrie=
+d/unknown (next-20200515)
 
-Incidentally, this
-        r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, &fattr,
-                        NULL);
-(in nfs42_ssc_open()) is just plain weird.
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200515/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200515/
 
-	1) d->d_inode->i_sb is equal to d->d_sb
-	2) m->mnt_root->d_sb is equal to m->mnt_sb
-IOW, the whole thing should be 
-        r_ino = nfs_fhget(ss_mnt->mnt_sb, src_fh, &fattr, NULL);
+Tree: next
+Branch: master
+Git Describe: next-20200515
+Git Commit: bdecf38f228bcca73b31ada98b5b7ba1215eb9c9
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 111 unique boards, 26 SoC families, 32 builds out of 228
 
-Moreover,
-	server = NFS_SERVER(ss_mnt->mnt_root->d_inode);
-in the same function is again too convoluted for no good reason, seeing that
-NFS_SERVER(inode) is NFS_SB(inode->i_sb).
+Boot Regressions Detected:
 
-Something along the lines of
+arm:
 
-nfs: don't obfuscate ->mnt_sb as ->mnt_root->d_inode->i_sb
+    bcm2835_defconfig:
+        gcc-8:
+          bcm2837-rpi-3-b:
+              lab-baylibre: new failure (last pass: next-20200514)
 
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+    omap2plus_defconfig:
+        gcc-8:
+          omap3-beagle:
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+200501 - first fail: next-20200514)
+          omap3-beagle-xm:
+              lab-baylibre: failing since 1 day (last pass: next-20200501 -=
+ first fail: next-20200514)
+          omap4-panda:
+              lab-baylibre: failing since 1 day (last pass: next-20200501 -=
+ first fail: next-20200514)
+              lab-baylibre-seattle: failing since 1 day (last pass: next-20=
+200501 - first fail: next-20200514)
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 87 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200514)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          apq8016-sbc:
+              lab-bjorn: failing since 2 days (last pass: next-20200501 - f=
+irst fail: next-20200512)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: new failure (last pass: next-20200514)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-gxm-q200:
+              lab-baylibre: new failure (last pass: next-20200514)
+          sun50i-a64-pine64-plus:
+              lab-baylibre: new failure (last pass: next-20200514)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 49 days (last pass: next-=
+20200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm64:
+    defconfig:
+        gcc-8:
+            apq8016-sbc: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            sm8150-mtp: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-gxm-q200: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            sun50i-a64-pine64-plus: 1 failed lab
+
+arm:
+    omap2plus_defconfig:
+        gcc-8:
+            omap3-beagle: 1 failed lab
+            omap3-beagle-xm: 1 failed lab
+            omap4-panda: 3 failed labs
+
+    bcm2835_defconfig:
+        gcc-8:
+            bcm2837-rpi-3-b: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+    allmodconfig:
+        gcc-8:
+            stm32mp157c-dk2: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
 ---
-diff --git a/fs/nfs/nfs4file.c b/fs/nfs/nfs4file.c
-index 8e5d6223ddd3..1e8ca45bc806 100644
---- a/fs/nfs/nfs4file.c
-+++ b/fs/nfs/nfs4file.c
-@@ -317,15 +317,14 @@ nfs42_ssc_open(struct vfsmount *ss_mnt, struct nfs_fh *src_fh,
- {
- 	struct nfs_fattr fattr;
- 	struct file *filep, *res;
--	struct nfs_server *server;
-+	struct super_block *sb = ss_mnt->mnt_sb;
-+	struct nfs_server *server = NFS_SB(sb);
- 	struct inode *r_ino = NULL;
- 	struct nfs_open_context *ctx;
- 	struct nfs4_state_owner *sp;
- 	char *read_name = NULL;
- 	int len, status = 0;
- 
--	server = NFS_SERVER(ss_mnt->mnt_root->d_inode);
--
- 	nfs_fattr_init(&fattr);
- 
- 	status = nfs4_proc_getattr(server, src_fh, &fattr, NULL, NULL);
-@@ -341,8 +340,7 @@ nfs42_ssc_open(struct vfsmount *ss_mnt, struct nfs_fh *src_fh,
- 		goto out;
- 	snprintf(read_name, len, SSC_READ_NAME_BODY, read_name_gen++);
- 
--	r_ino = nfs_fhget(ss_mnt->mnt_root->d_inode->i_sb, src_fh, &fattr,
--			NULL);
-+	r_ino = nfs_fhget(sb, src_fh, &fattr, NULL);
- 	if (IS_ERR(r_ino)) {
- 		res = ERR_CAST(r_ino);
- 		goto out_free_name;
+For more info write to <info@kernelci.org>

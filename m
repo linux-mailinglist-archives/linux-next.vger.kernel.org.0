@@ -2,113 +2,65 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BE51D5EF3
-	for <lists+linux-next@lfdr.de>; Sat, 16 May 2020 07:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45D851D62DE
+	for <lists+linux-next@lfdr.de>; Sat, 16 May 2020 19:05:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726373AbgEPFyD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 16 May 2020 01:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-FAIL-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725803AbgEPFyD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Sat, 16 May 2020 01:54:03 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A70C061A0C;
-        Fri, 15 May 2020 22:54:03 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1726292AbgEPRFF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 16 May 2020 13:05:05 -0400
+Received: from mail.kernel.org ([198.145.29.99]:42366 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726280AbgEPRFF (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 16 May 2020 13:05:05 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49PDx33qpWz9sTD;
-        Sat, 16 May 2020 15:53:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589608440;
-        bh=/Xv1K0V8e5x1o5N7rHUJncIKDE5SDukl2Jj+ad1XTxE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HDFvJlXGRRNvzpM6wxWhGBzTVl8geEicWIbeExTC5eFN5NGn7rBit0s+Tbij65QFg
-         LObZcmOuXxSuaAjLQY3ZY0o7XBDQCyRgdLgS24CtPn53Sako9ozuQwpsbEqtyQYBXR
-         G5CXdnsO2B/qn9rqMXoYOKzBRsj+AHiKZZym+VXw5+YVFCVr3xXRrb8IDvkdgq5XRq
-         Y8jTiIgBsNVkDA1OLnYK1JqKwWr5FuaRKfR51oyyrbk1DY4+2vi7+NbIz7oqwNI8pI
-         tUaRIg40Gg/1IuAbYVPK36seNIVDFbAqFQMPBLIhWo8r3ieR+BOqr34SNB51oVG1cd
-         3NkanHIL2WgIg==
-Date:   Sat, 16 May 2020 15:53:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org
-Subject: Re: mmotm 2020-05-15-16-29 uploaded
-Message-ID: <20200516155358.3683f11e@canb.auug.org.au>
-In-Reply-To: <20200515233018.ScdtkUJMA%akpm@linux-foundation.org>
-References: <20200513175005.1f4839360c18c0238df292d1@linux-foundation.org>
-        <20200515233018.ScdtkUJMA%akpm@linux-foundation.org>
+        by mail.kernel.org (Postfix) with ESMTPSA id 2EE9F20756;
+        Sat, 16 May 2020 17:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589648705;
+        bh=vC5toP+V7UyuME4fDTVFXO5cgjtOJtf6fNOG7Ro76Pg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=CJq0mYxgdtptOGLgyOymIC0FrwAW+ScD8Pwx94lJ5GK3YgMtlyQNkADyZYPA2cmNy
+         b1a5B9gUoeYQUlxnaunvTlYUuzTZjabz2/R7TXqHTp61HxJud15M8V1O0P07vu3OUN
+         CmDIkPdJrXrdhVy+3uGryyyqBHUHQeoPGb9Qg25g=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 15DE23522CED; Sat, 16 May 2020 10:05:05 -0700 (PDT)
+Date:   Sat, 16 May 2020 10:05:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in the rcu tree
+Message-ID: <20200516170505.GB2639@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200515084317.7deae61a@canb.auug.org.au>
+ <20200514230148.GB2869@paulmck-ThinkPad-P72>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6.ECiSJ2jczuaYFAUa6=kZA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200514230148.GB2869@paulmck-ThinkPad-P72>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6.ECiSJ2jczuaYFAUa6=kZA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, May 14, 2020 at 04:01:48PM -0700, Paul E. McKenney wrote:
+> On Fri, May 15, 2020 at 08:43:17AM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > Commits
+> > 
+> >   b2998782ded4 ("Documentation/litmus-tests: Clarify about the RCU pre-initialization test")
+> >   663f9202eb8a ("Documentation/litmus-tests: Merge atomic's README into top-level one")
+> >   f5eff20366f6 ("tools/memory-model: Fix reference to litmus test in recipes.txt")
+> > 
+> > are missing a Signed-off-by from their committer.
+> 
+> I knew I was forgetting something...  Will fix, and thank you!!!
 
-Hi Andrew,
+And fixed.  But I didn't want you to be too bored, so I have also merged
+with the noinstr-rcu-nmi-2020-05-15 branch of Thomas's and Peter's series.  ;-)
 
-On Fri, 15 May 2020 16:30:18 -0700 Andrew Morton <akpm@linux-foundation.org=
-> wrote:
->
-> * mm-introduce-external-memory-hinting-api.patch
+https://lore.kernel.org/lkml/20200515234547.710474468@linutronix.de/
 
-The above patch should have
-
-#define __NR_process_madvise 443
-
-not 442, in arch/arm64/include/asm/unistd32.h
-
-and
-
- 442    common  fsinfo                          sys_fsinfo
-+443    common  process_madvise                 sys_process_madvise
-
-in arch/microblaze/kernel/syscalls/syscall.tbl
-
-> * mm-introduce-external-memory-hinting-api-fix.patch
-
-The above patch should have
-
-#define __NR_process_madvise 443
-
-not 442
-
-> * mm-support-vector-address-ranges-for-process_madvise-fix.patch
-
-The above patch should have
-
-#define __NR_process_madvise 443
-
-not 442 in arch/arm64/include/asm/unistd32.h
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6.ECiSJ2jczuaYFAUa6=kZA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl6/f/YACgkQAVBC80lX
-0Gx1Jwf/eRWBhmLSqpgnXUM0UQDqPab5/Kay6/R+98MSWQmlkhm/0d5z8Dw/GSDc
-LcETLKrcnCbZ/TGJuICVH3AkMm/wMWS4WD0IQbcUaPfCMzhyJWj7LXG8pTuWQY9v
-yl096HQroXUQvXj8OzXPuSnnFj1nmD8LitksoGkcUu+G4q3pkNwExtQP4q6OKlXF
-STkz92gDLQYUozFVg5z+eAgj+P2ViQFeUNlB2DBuwN6mYszScul6jnPMJS4Sl36J
-YFDTOgakQBI3xzWlWmnhHLUL6K/jF6iQfVbF3nFU14WKU2xcGJG7oT3kheQ7/Rs6
-/npruo5vlN0mwIXTf8qwo1g3eDV8og==
-=lUKJ
------END PGP SIGNATURE-----
-
---Sig_/6.ECiSJ2jczuaYFAUa6=kZA--
+							Thanx, Paul

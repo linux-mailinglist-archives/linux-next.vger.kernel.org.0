@@ -2,87 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DF24C1D7001
-	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 06:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271D11D702F
+	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 07:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726127AbgERE5c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 May 2020 00:57:32 -0400
-Received: from ozlabs.org ([203.11.71.1]:49903 "EHLO ozlabs.org"
+        id S1726358AbgERFKh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 May 2020 01:10:37 -0400
+Received: from ozlabs.org ([203.11.71.1]:49029 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726040AbgERE5c (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 May 2020 00:57:32 -0400
+        id S1726357AbgERFKh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 May 2020 01:10:37 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QRZx25K6z9sTC;
-        Mon, 18 May 2020 14:57:29 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QRt13xznz9sT8;
+        Mon, 18 May 2020 15:10:33 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589777849;
-        bh=A9TP6SkzWB6mnGqZDwuUYCknjhNrzX7gjqo6C0dGIgE=;
+        s=201702; t=1589778635;
+        bh=0h3w57Pp77i8mUOcndIQfvFacVXTqrNwKoWe4NKKQxg=;
         h=Date:From:To:Cc:Subject:From;
-        b=kF8z6XvUM/uCiXzH/lSg1yITetXZrhciIDMgwnh9qCFG+ZkX1Zgx7rND4cX5QUd4w
-         ta/dBfIkNEsuPz99+CBDSFVSfYOlGtrBa36WcFCU/agBQqmwj3k1B1D/cWdkeoXXJF
-         6UCS/6A5Q8OrCwIRXnwbQ5GSY0X+joWYeJuWYWGAPQXBahR72KZZ3M7kqqdpOIbHD9
-         9pncmuOYa/wU/lyvIppURZ7n+IHOu40DpCOIw9Qu++80AF9ANZ4682mJHrBXQZm8js
-         oM69ci0iFVt/RqLaPeeUV/kdWUONBhI0ZsEA8Xd9omN/gUiW0+ovpvkLJT1j1R+rs0
-         lPmchQ2VxBaMw==
-Date:   Mon, 18 May 2020 14:57:23 +1000
+        b=sJ3rWW/L/UbX2cR1Cz6ACQeAoIIItDnpRoqpJqixD0RxZ3PcP4gxcmCma3ZODQNYe
+         S1X/yEdNPYkr56hFzhP925HpJCDx02XVce1TgXZfjjCTgp3CuTRg9Z2JRmYNim4dZp
+         JQIY87Il+00+OMYEGcFdpq856MZjgSc3YTngYYWamhJFV5v/MZk+alqdZ8uskQIf8x
+         P07U4+3UsKKLdSElcinLAdfZNcTPQUZCui1+YIdyl244i7UFGod+6zsYnN3YFzw+eB
+         phnCswHaYlfMYhaa/MuGb2ai0YYgNWfge9i9LXiyDRdMdi3tiqi8AxVJ5evBP4xkgJ
+         VAMdfj99IUtTA==
+Date:   Mon, 18 May 2020 15:10:32 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: linux-next: build failure after merge of the keys tree
-Message-ID: <20200518145723.65b89375@canb.auug.org.au>
+        Borislav Petkov <bp@suse.de>
+Subject: linux-next: manual merge of the tip tree with Linus' tree
+Message-ID: <20200518151032.57d57052@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DhvUael2DQj4sScjtbcHV3K";
+Content-Type: multipart/signed; boundary="Sig_/H7u=8lRjpqON5EppSwhwCen";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/DhvUael2DQj4sScjtbcHV3K
+--Sig_/H7u=8lRjpqON5EppSwhwCen
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the keys tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Today's linux-next merge of the tip tree got a conflict in:
 
-x86_64-linux-gnu-ld: security/keys/big_key.o: in function `big_key_read':
-big_key.c:(.text+0x562): undefined reference to `chacha20poly1305_decrypt'
-x86_64-linux-gnu-ld: security/keys/big_key.o: in function `big_key_preparse=
-':
-big_key.c:(.text+0x825): undefined reference to `chacha20poly1305_encrypt'
+  include/linux/compiler.h
 
-Caused by commit
+between commit:
 
-  e0a715753a88 ("security/keys: rewrite big_key crypto to use library inter=
-face")
+  a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
 
-I have used the version from next-20200512 again tdoay.
+from Linus' tree and commit:
+
+  f670269a42bf ("x86: Fix early boot crash on gcc-10, next try")
+
+from the tip tree.
+
+I fixed it up (I just used Linus' tree version) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/DhvUael2DQj4sScjtbcHV3K
+--Sig_/H7u=8lRjpqON5EppSwhwCen
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7CFbMACgkQAVBC80lX
-0GwuCQf9GT+rRzPUAp15yGy52wKkp5Qpak6jTUwlChRI7Y5XB4FKKM27OMc5rrNh
-CYD332Vm6KlPOWXIP2Ykq4rrE1paxPh8zqRrG3fMgkKoQ4ItZKsFiUyghO0nypYi
-dvInU6xSGv/Tyn9vYv1BSrmxGnSfPp5YL9BWDM0jvKoBj21mbGhp8fJq4ZaqYZpO
-b14tx5jqAzbBs6B9MgWg8sX6DUBEc/NH1bfruVjWE4Ez1uiPUsG4Dx70cJFKmCMs
-ico8keHBeUJMGDz3WrviCk0HHQRD3dTrJ82oVVMu3Ldk87bRttl5Z/97muVOWz5f
-9vxezso4CwLmyGmzqYkj5DBB95zF7A==
-=TeEi
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7CGMgACgkQAVBC80lX
+0GzKywf/VUidhSnH61/iRzImozeV98/N0g6tdRRNMjHXAePrZsJkeJCu6XZ+RiFG
+WQzlL3xpo60BbtU1EfVo1GC3pXy1ubie9M5ofSa+iZJOCIpQHZBehpY+XfucL7AH
+KljNfBGYaJMoAHkGcabEahHxJSCgVRjlQvkdYI8oAQcHzUEV1sY0Mr+G3TZUYE5f
+sN7bcrI7mJwiBF2UyJw3LmTSosZ+xUxUQPZjoQaTKVFEcEHQLuT6dPANlc37z3Uo
+ph4fUp0t655i+Fvn4FR+RmSVz5n9dMdc0e6jyIKf4tGMrzKP9xQYzOI/BpjYZc1D
+V9XBmga7po16CVWqhgluJmIup25dJQ==
+=A0LR
 -----END PGP SIGNATURE-----
 
---Sig_/DhvUael2DQj4sScjtbcHV3K--
+--Sig_/H7u=8lRjpqON5EppSwhwCen--

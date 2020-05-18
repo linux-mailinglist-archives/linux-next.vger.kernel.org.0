@@ -2,79 +2,114 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD79D1D8AF2
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 00:30:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276C41D8B89
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 01:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728408AbgERWam (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 May 2020 18:30:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48538 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726959AbgERWam (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 18 May 2020 18:30:42 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A05AC061A0C;
-        Mon, 18 May 2020 15:30:42 -0700 (PDT)
+        id S1726732AbgERXPu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 May 2020 19:15:50 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44625 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726481AbgERXPu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 May 2020 19:15:50 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Qty74L52z9sRK;
-        Tue, 19 May 2020 08:30:38 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QvyC16t4z9sPF;
+        Tue, 19 May 2020 09:15:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589841039;
-        bh=bigoxCg1iXX5sCstqeE44NNN/1nfzI5CL5y/EfgzvU0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XqqnFt+cA6yTP0rR1HoWtcCXzWBQhc8g7W/oVKTm0SH6b949btij96UdHBOt6rflq
-         jBsYbY4oSe6YjLxXA8qGY9N/w84oRj1/MHrU+H6Qd5vckC+rGQGg8QoqG0WV574ngm
-         7EOSmVzP2pNJaccFWnwyF6aDrbu+tl5qTogTHemY5QIt3H1VxmeVeorjTPdoXDmInj
-         oQ41d/Vx+WAuMxJSOXEe76dLb9wsGWNU15MR47Ab5LsPB0DCMelW563w+XgUGhncvf
-         jwbPc5g25Vkr30WvXYEW+MSNUhcz7y1vWe78La20EIX2mjxvRgIVgVJUOG3FOyynko
-         7tYtcp0NmZIWA==
-Date:   Tue, 19 May 2020 08:30:37 +1000
+        s=201702; t=1589843748;
+        bh=Yr6CwYHiLwBFpM58o+pP6uQFb+BzpavnPqWxARGMspk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=i0lP0ArHYOopLpo/ulIzUZV0Eyz56WR+lHqqzeLmXw05m3Anvhox79Cnjg1087o0C
+         CeQco0K7wIx3tKUZpQ+5mCAi3CTznXI7hbu6PAvJefS/WXRec8ErSCqWkh0pbpKFvw
+         XB4rMIC8qFaMVqw7vBbMfgxNkL9ltRe9KquDO4B/lNn1vwwOCl3wwfApCkMSaryqt0
+         l/De8Mle/0FVN0535lJKQJJiBMsktAuui4OE0DB6zHW4auR02VsV7EYGolatGHNIPW
+         8Xqz0oiTYAWbKoh5quL/2vflhUHAeRv10Lp3zOwEf51sRCkW1pD6eioX66RanNHZES
+         bqhChVdIPtjOQ==
+Date:   Tue, 19 May 2020 09:15:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the keys tree
-Message-ID: <20200519083037.39fbdd36@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org
+Subject: Re: mmotm 2020-05-15-16-29 uploaded
+Message-ID: <20200519091546.3a46bc9a@canb.auug.org.au>
+In-Reply-To: <20200516155358.3683f11e@canb.auug.org.au>
+References: <20200513175005.1f4839360c18c0238df292d1@linux-foundation.org>
+        <20200515233018.ScdtkUJMA%akpm@linux-foundation.org>
+        <20200516155358.3683f11e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1XO=K56dui0GKESkAaCqnTR";
+Content-Type: multipart/signed; boundary="Sig_/NX+9Qji75+ZpECdglkZfFOu";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1XO=K56dui0GKESkAaCqnTR
+--Sig_/NX+9Qji75+ZpECdglkZfFOu
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Andrew,
 
-Commit
+On Sat, 16 May 2020 15:53:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Fri, 15 May 2020 16:30:18 -0700 Andrew Morton <akpm@linux-foundation.o=
+rg> wrote:
+> >
+> > * mm-introduce-external-memory-hinting-api.patch =20
+>=20
+> The above patch should have
+>=20
+> #define __NR_process_madvise 443
+>=20
+> not 442, in arch/arm64/include/asm/unistd32.h
+>=20
+> and
+>=20
+>  442    common  fsinfo                          sys_fsinfo
+> +443    common  process_madvise                 sys_process_madvise
+>=20
+> in arch/microblaze/kernel/syscalls/syscall.tbl
+>=20
+> > * mm-introduce-external-memory-hinting-api-fix.patch =20
+>=20
+> The above patch should have
+>=20
+> #define __NR_process_madvise 443
+>=20
+> not 442
+>=20
+> > * mm-support-vector-address-ranges-for-process_madvise-fix.patch =20
+>=20
+> The above patch should have
+>=20
+> #define __NR_process_madvise 443
+>=20
+> not 442 in arch/arm64/include/asm/unistd32.h
 
-  2a1dbdae70b5 ("Documentation: security: core.rst: add missing argument")
-
-is missing a Signed-off-by from its committer.
-
+I fixed those up in yesterday's linux-next.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/1XO=K56dui0GKESkAaCqnTR
+--Sig_/NX+9Qji75+ZpECdglkZfFOu
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DDI0ACgkQAVBC80lX
-0Gxklwf/WWxgRpiD46SBuf0Pm1DZkV/+oADDRo0wavY0GxQecY1tZww9gDE/Q63W
-Qnb5wM1oYYK5tvqqU9E5LBz5ymsT/bAXB77xD+sun2/hGQ5NTior2hyW64EhL6eV
-h8IXA6ZuPDITa7clxBS+LGMQVYepKtD8C42dusswssiQt5Hk4m8HpThiUwQr8RMF
-Ice2keRXkjumJaMIkxtlPM3CebWglNlAhFm+nM5l2Eibg7WJuC2c51/bPzGj1t3I
-R+lCgqYH6zfJkhNLLrljXjDl3smK6ub2mi5wMoHC7YIQk2XNomEb1SubfJXqQyJj
-xSBaejBlOR0OVe0IMd3BYv97zrYuuQ==
-=Jq3t
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DFyIACgkQAVBC80lX
+0Gyv5wf/bFZWdRWdC4qRrizPtE6GYb9OWZSjQllEKYi+bG5mPwhKpdrYEmD7DIoj
+6am/5l1Apt0m2G81GvJIfDGr6jDAuNRYMEu5PqAInKtNKVH9ZaqJPbtaL0DxB0IV
+rW6QvgSs7Lyg8K4ne38w5rRCTnRhpE5EzgfSmYaoo1q2roVYtjBHPN7cYAGVSKjy
+jT9bUUGJnR8U0QvbiGSJzkKCsnBDmCgq9w4Sirin4VCiPVU8nQpOqSqQwBMZ2W4t
+htIFSsF/oBmRc+RLB33Ugy34q+p5GaI+HT7vRbcYH07Jf2IgSuwySMwn0TiwFLSt
+m3RyI3PIYidLBRo/WuPj14FpcVxMIg==
+=GhoY
 -----END PGP SIGNATURE-----
 
---Sig_/1XO=K56dui0GKESkAaCqnTR--
+--Sig_/NX+9Qji75+ZpECdglkZfFOu--

@@ -2,1907 +2,1819 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DAED51D6EE0
-	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 04:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7378C1D6F1D
+	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 04:52:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726696AbgERCa1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 17 May 2020 22:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
+        id S1726675AbgERCwP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 17 May 2020 22:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726639AbgERCa1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 17 May 2020 22:30:27 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB2C061A0C;
-        Sun, 17 May 2020 19:30:26 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QNK60lvQz9sT8;
-        Mon, 18 May 2020 12:30:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589769023;
-        bh=VNF8MUY1A+mRnNQRheZgMdT0y3GUB3A4mVqvFMTmGW8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=UCF2KdH7SqBia8gOGZz9tdlwqNRqUqkOBl+VVhZC+BXpirgoKZSwZBtEMJOP2Zx+X
-         uVoPqpbWxn+hsk7xmb7/+pQkzgDrqW7gr74oG10CtQFh+lEctwof5vxccCXPygomLa
-         8fnVm6AJfB8IPAAl98onxQZ+jkhpd7Kou61ZxlBVP1jQ/bX1JiJLk+TlA9Aw19VM4x
-         XSME1KvnrkRf7lbc58pWHWM0pDl+GAGImdYjwYqCiMh92/L4UxajSkUHD9ZDl2cw0g
-         omq0kauro4jVReHuEzPzHH9pJAXXoXZiuhfb4Tqe+d/sBn4z4ZkECJvWuBe7lqIuw0
-         ux1xA+sewAnxQ==
-Date:   Mon, 18 May 2020 12:30:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stephen Kitt <steve@sk2.org>, Christoph Hellwig <hch@lst.de>
-Subject: linux-next: manual merge of the jc_docs tree with the vfs and
- net-next trees
-Message-ID: <20200518123013.6e4cb3cc@canb.auug.org.au>
+        with ESMTP id S1726639AbgERCwP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 17 May 2020 22:52:15 -0400
+Received: from mail-pf1-x442.google.com (mail-pf1-x442.google.com [IPv6:2607:f8b0:4864:20::442])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC45C061A0C
+        for <linux-next@vger.kernel.org>; Sun, 17 May 2020 19:52:14 -0700 (PDT)
+Received: by mail-pf1-x442.google.com with SMTP id y198so2700511pfb.4
+        for <linux-next@vger.kernel.org>; Sun, 17 May 2020 19:52:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=iL7IS6arDa6f1/W3tMwlCnOoJtTNl+S/66o5Ni1ypTA=;
+        b=PCe2QgHzq5dVCJhwZGcRtIjGJo4qntrEqxkh/wwJhP34NLsVjQk+jWo1mIfO7OWYGC
+         0l5Y1Jt+Ubc9rzHxP9WNE7kwo3vmZrleeAm/5KloJG71ddKBpSEtmwNL6u12aytzIBsL
+         JDbfqJgskDbb+5nkCCPqhUnCmA9QtIqnGRtzKtjBaugBF/kBfWKzTMh8N06nhNdPPd5v
+         qHqhBe63Q0w28vS+H9SPK8a4UMGnyFasRCbrRnDqpaDWPvvCHRyUnX2qsVIMJUNHFcRn
+         8D5Ewa8jGLt0WJWx0CgxM8FTPAqDdEK/P3pTL3cPNH8BUu40gqynCi2Nx170Hvo9wwoh
+         8Wzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=iL7IS6arDa6f1/W3tMwlCnOoJtTNl+S/66o5Ni1ypTA=;
+        b=gQDe0XjBmZuIUZGnOMKX5suO2z+n8UavUSFnnW+abIZlTmTAT0xwL6X/dIZlwg3vOE
+         Vn1+8bDxupQk49l6cCMwQfVcxYI4qf+gX+Bfer4t+wjaXfjHHkxG57h+S3gWU2+T/j/W
+         Ja/fDhQdbLjE5nHy+my5PQFpKx/YESU2egIc+GNTCinW7dVE63/EY+d9gfJu5yoxCPQ+
+         NU4T9EvHpUJM5R2Q9BG6OEfi6fYydCuSP0wl9S7YRUHi83Bk6RpmzM/hvpcutTeDRtn0
+         kVSu0GDy8mk+k7D0ltYkqtJVOr2ra8UVJ0dw1nH57/QDHe2RiNaVSfJ3bvMSuPShOxlw
+         Gv/g==
+X-Gm-Message-State: AOAM5323rAWp6h1CkCutSi0aLL10PqHPkid+iGe2ERgonISWiTNefUZ4
+        Hyvh3CxHaIQDCGEuiwPEHk8cAdjp8ng=
+X-Google-Smtp-Source: ABdhPJzobZfnHCmJGnRtgw+VH/4cEZMthZ635WPUuw+Sj3mgvumfsikHnV0oKrW2iXht74CnjkAAQA==
+X-Received: by 2002:aa7:8426:: with SMTP id q6mr14175851pfn.177.1589770332635;
+        Sun, 17 May 2020 19:52:12 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id 19sm1081011pgh.21.2020.05.17.19.52.10
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 May 2020 19:52:11 -0700 (PDT)
+Message-ID: <5ec1f85b.1c69fb81.fbba4.7eb9@mx.google.com>
+Date:   Sun, 17 May 2020 19:52:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s61WjPWjF1XPRfYAmS4LhF1";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.7-rc5-557-gf7a4ee5329e2
+X-Kernelci-Report-Type: build
+Subject: next/pending-fixes build: 217 builds: 0 failed, 217 passed,
+ 162 warnings (v5.7-rc5-557-gf7a4ee5329e2)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/s61WjPWjF1XPRfYAmS4LhF1
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 217 builds: 0 failed, 217 passed, 162 warnings (v=
+5.7-rc5-557-gf7a4ee5329e2)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.7-rc5-557-gf7a4ee5329e2/
 
-Today's linux-next merge of the jc_docs tree got a conflict in:
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.7-rc5-557-gf7a4ee5329e2
+Git Commit: f7a4ee5329e2ea5cbbe17eaa8fff8d4e29b9bd7f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-  kernel/sysctl.c
+Warnings Detected:
 
-between commit:
+arc:
 
-  f461d2dcd511 ("sysctl: avoid forward declarations")
+arm64:
+    allmodconfig (gcc-8): 24 warnings
+    defconfig (gcc-8): 24 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 24 warnings
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-8): 24 warnings
+    defconfig+kselftest (gcc-8): 24 warnings
 
-from the vfs tree and commit:
+arm:
+    allmodconfig (gcc-8): 16 warnings
+    cm_x300_defconfig (gcc-8): 2 warnings
+    em_x270_defconfig (gcc-8): 2 warnings
+    eseries_pxa_defconfig (gcc-8): 2 warnings
+    multi_v7_defconfig+kselftest (gcc-8): 1 warning
+    pxa_defconfig (gcc-8): 6 warnings
 
-  2f4c33063ad7 ("docs: sysctl/kernel: document ngroups_max")
+i386:
 
-from the jc_docs tree.
+mips:
+    ci20_defconfig (gcc-8): 1 warning
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+    rm200_defconfig (gcc-8): 1 warning
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+riscv:
+    rv32_defconfig (gcc-8): 6 warnings
 
---=20
-Cheers,
-Stephen Rothwell
+x86_64:
+    tinyconfig (gcc-8): 1 warning
+    x86_64_defconfig+kselftest (gcc-8): 3 warnings
 
-diff --cc kernel/sysctl.c
-index 7858930d843f,2ba9f449d273..000000000000
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@@ -1576,1734 -3358,83 +1576,1734 @@@ int proc_do_large_bitmap(struct ctl_=
-tab
-  	return -ENOSYS;
-  }
- =20
- -int proc_douintvec_minmax(struct ctl_table *table, int write,
- -			  void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +#endif /* CONFIG_PROC_SYSCTL */
- +
- +#if defined(CONFIG_SYSCTL)
- +int proc_do_static_key(struct ctl_table *table, int write,
- +		       void *buffer, size_t *lenp, loff_t *ppos)
- +{
- +	struct static_key *key =3D (struct static_key *)table->data;
- +	static DEFINE_MUTEX(static_key_mutex);
- +	int val, ret;
- +	struct ctl_table tmp =3D {
- +		.data   =3D &val,
- +		.maxlen =3D sizeof(val),
- +		.mode   =3D table->mode,
- +		.extra1 =3D SYSCTL_ZERO,
- +		.extra2 =3D SYSCTL_ONE,
- +	};
- +
- +	if (write && !capable(CAP_SYS_ADMIN))
- +		return -EPERM;
- +
- +	mutex_lock(&static_key_mutex);
- +	val =3D static_key_enabled(key);
- +	ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
- +	if (write && !ret) {
- +		if (val)
- +			static_key_enable(key);
- +		else
- +			static_key_disable(key);
- +	}
- +	mutex_unlock(&static_key_mutex);
- +	return ret;
- +}
- +
- +static struct ctl_table kern_table[] =3D {
- +	{
- +		.procname	=3D "sched_child_runs_first",
- +		.data		=3D &sysctl_sched_child_runs_first,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#ifdef CONFIG_SCHED_DEBUG
- +	{
- +		.procname	=3D "sched_min_granularity_ns",
- +		.data		=3D &sysctl_sched_min_granularity,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_proc_update_handler,
- +		.extra1		=3D &min_sched_granularity_ns,
- +		.extra2		=3D &max_sched_granularity_ns,
- +	},
- +	{
- +		.procname	=3D "sched_latency_ns",
- +		.data		=3D &sysctl_sched_latency,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_proc_update_handler,
- +		.extra1		=3D &min_sched_granularity_ns,
- +		.extra2		=3D &max_sched_granularity_ns,
- +	},
- +	{
- +		.procname	=3D "sched_wakeup_granularity_ns",
- +		.data		=3D &sysctl_sched_wakeup_granularity,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_proc_update_handler,
- +		.extra1		=3D &min_wakeup_granularity_ns,
- +		.extra2		=3D &max_wakeup_granularity_ns,
- +	},
- +#ifdef CONFIG_SMP
- +	{
- +		.procname	=3D "sched_tunable_scaling",
- +		.data		=3D &sysctl_sched_tunable_scaling,
- +		.maxlen		=3D sizeof(enum sched_tunable_scaling),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_proc_update_handler,
- +		.extra1		=3D &min_sched_tunable_scaling,
- +		.extra2		=3D &max_sched_tunable_scaling,
- +	},
- +	{
- +		.procname	=3D "sched_migration_cost_ns",
- +		.data		=3D &sysctl_sched_migration_cost,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "sched_nr_migrate",
- +		.data		=3D &sysctl_sched_nr_migrate,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#ifdef CONFIG_SCHEDSTATS
- +	{
- +		.procname	=3D "sched_schedstats",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_schedstats,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif /* CONFIG_SCHEDSTATS */
- +#endif /* CONFIG_SMP */
- +#ifdef CONFIG_NUMA_BALANCING
- +	{
- +		.procname	=3D "numa_balancing_scan_delay_ms",
- +		.data		=3D &sysctl_numa_balancing_scan_delay,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "numa_balancing_scan_period_min_ms",
- +		.data		=3D &sysctl_numa_balancing_scan_period_min,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "numa_balancing_scan_period_max_ms",
- +		.data		=3D &sysctl_numa_balancing_scan_period_max,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "numa_balancing_scan_size_mb",
- +		.data		=3D &sysctl_numa_balancing_scan_size,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "numa_balancing",
- +		.data		=3D NULL, /* filled in by handler */
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_numa_balancing,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif /* CONFIG_NUMA_BALANCING */
- +#endif /* CONFIG_SCHED_DEBUG */
- +	{
- +		.procname	=3D "sched_rt_period_us",
- +		.data		=3D &sysctl_sched_rt_period,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_rt_handler,
- +	},
- +	{
- +		.procname	=3D "sched_rt_runtime_us",
- +		.data		=3D &sysctl_sched_rt_runtime,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_rt_handler,
- +	},
- +	{
- +		.procname	=3D "sched_rr_timeslice_ms",
- +		.data		=3D &sysctl_sched_rr_timeslice,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_rr_handler,
- +	},
- +#ifdef CONFIG_UCLAMP_TASK
- +	{
- +		.procname	=3D "sched_util_clamp_min",
- +		.data		=3D &sysctl_sched_uclamp_util_min,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_sched_uclamp_handler,
- +	},
- +	{
- +		.procname	=3D "sched_util_clamp_max",
- +		.data		=3D &sysctl_sched_uclamp_util_max,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_sched_uclamp_handler,
- +	},
- +#endif
- +#ifdef CONFIG_SCHED_AUTOGROUP
- +	{
- +		.procname	=3D "sched_autogroup_enabled",
- +		.data		=3D &sysctl_sched_autogroup_enabled,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_CFS_BANDWIDTH
- +	{
- +		.procname	=3D "sched_cfs_bandwidth_slice_us",
- +		.data		=3D &sysctl_sched_cfs_bandwidth_slice,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
- +	{
- +		.procname	=3D "sched_energy_aware",
- +		.data		=3D &sysctl_sched_energy_aware,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sched_energy_aware_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_PROVE_LOCKING
- +	{
- +		.procname	=3D "prove_locking",
- +		.data		=3D &prove_locking,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_LOCK_STAT
- +	{
- +		.procname	=3D "lock_stat",
- +		.data		=3D &lock_stat,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +	{
- +		.procname	=3D "panic",
- +		.data		=3D &panic_timeout,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#ifdef CONFIG_COREDUMP
- +	{
- +		.procname	=3D "core_uses_pid",
- +		.data		=3D &core_uses_pid,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "core_pattern",
- +		.data		=3D core_pattern,
- +		.maxlen		=3D CORENAME_MAX_SIZE,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dostring_coredump,
- +	},
- +	{
- +		.procname	=3D "core_pipe_limit",
- +		.data		=3D &core_pipe_limit,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_PROC_SYSCTL
- +	{
- +		.procname	=3D "tainted",
- +		.maxlen 	=3D sizeof(long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_taint,
- +	},
- +	{
- +		.procname	=3D "sysctl_writes_strict",
- +		.data		=3D &sysctl_writes_strict,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &neg_one,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_LATENCYTOP
- +	{
- +		.procname	=3D "latencytop",
- +		.data		=3D &latencytop_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_latencytop,
- +	},
- +#endif
- +#ifdef CONFIG_BLK_DEV_INITRD
- +	{
- +		.procname	=3D "real-root-dev",
- +		.data		=3D &real_root_dev,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +	{
- +		.procname	=3D "print-fatal-signals",
- +		.data		=3D &print_fatal_signals,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#ifdef CONFIG_SPARC
- +	{
- +		.procname	=3D "reboot-cmd",
- +		.data		=3D reboot_command,
- +		.maxlen		=3D 256,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dostring,
- +	},
- +	{
- +		.procname	=3D "stop-a",
- +		.data		=3D &stop_a_enabled,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "scons-poweroff",
- +		.data		=3D &scons_pwroff,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_SPARC64
- +	{
- +		.procname	=3D "tsb-ratio",
- +		.data		=3D &sysctl_tsb_ratio,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_PARISC
- +	{
- +		.procname	=3D "soft-power",
- +		.data		=3D &pwrsw_enabled,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_ALLOW
- +	{
- +		.procname	=3D "unaligned-trap",
- +		.data		=3D &unaligned_enabled,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +	{
- +		.procname	=3D "ctrl-alt-del",
- +		.data		=3D &C_A_D,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#ifdef CONFIG_FUNCTION_TRACER
- +	{
- +		.procname	=3D "ftrace_enabled",
- +		.data		=3D &ftrace_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D ftrace_enable_sysctl,
- +	},
- +#endif
- +#ifdef CONFIG_STACK_TRACER
- +	{
- +		.procname	=3D "stack_tracer_enabled",
- +		.data		=3D &stack_tracer_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D stack_trace_sysctl,
- +	},
- +#endif
- +#ifdef CONFIG_TRACING
- +	{
- +		.procname	=3D "ftrace_dump_on_oops",
- +		.data		=3D &ftrace_dump_on_oops,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "traceoff_on_warning",
- +		.data		=3D &__disable_trace_on_warning,
- +		.maxlen		=3D sizeof(__disable_trace_on_warning),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "tracepoint_printk",
- +		.data		=3D &tracepoint_printk,
- +		.maxlen		=3D sizeof(tracepoint_printk),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D tracepoint_printk_sysctl,
- +	},
- +#endif
- +#ifdef CONFIG_KEXEC_CORE
- +	{
- +		.procname	=3D "kexec_load_disabled",
- +		.data		=3D &kexec_load_disabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		/* only handle a transition from default "0" to "1" */
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_MODULES
- +	{
- +		.procname	=3D "modprobe",
- +		.data		=3D &modprobe_path,
- +		.maxlen		=3D KMOD_PATH_LEN,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dostring,
- +	},
- +	{
- +		.procname	=3D "modules_disabled",
- +		.data		=3D &modules_disabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		/* only handle a transition from default "0" to "1" */
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_UEVENT_HELPER
- +	{
- +		.procname	=3D "hotplug",
- +		.data		=3D &uevent_helper,
- +		.maxlen		=3D UEVENT_HELPER_PATH_LEN,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dostring,
- +	},
- +#endif
- +#ifdef CONFIG_CHR_DEV_SG
- +	{
- +		.procname	=3D "sg-big-buff",
- +		.data		=3D &sg_big_buff,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_BSD_PROCESS_ACCT
- +	{
- +		.procname	=3D "acct",
- +		.data		=3D &acct_parm,
- +		.maxlen		=3D 3*sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_MAGIC_SYSRQ
- +	{
- +		.procname	=3D "sysrq",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysrq_sysctl_handler,
- +	},
- +#endif
- +#ifdef CONFIG_PROC_SYSCTL
- +	{
- +		.procname	=3D "cad_pid",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_do_cad_pid,
- +	},
- +#endif
- +	{
- +		.procname	=3D "threads-max",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_max_threads,
- +	},
- +	{
- +		.procname	=3D "random",
- +		.mode		=3D 0555,
- +		.child		=3D random_table,
- +	},
- +	{
- +		.procname	=3D "usermodehelper",
- +		.mode		=3D 0555,
- +		.child		=3D usermodehelper_table,
- +	},
- +#ifdef CONFIG_FW_LOADER_USER_HELPER
- +	{
- +		.procname	=3D "firmware_config",
- +		.mode		=3D 0555,
- +		.child		=3D firmware_config_table,
- +	},
- +#endif
- +	{
- +		.procname	=3D "overflowuid",
- +		.data		=3D &overflowuid,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &minolduid,
- +		.extra2		=3D &maxolduid,
- +	},
- +	{
- +		.procname	=3D "overflowgid",
- +		.data		=3D &overflowgid,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &minolduid,
- +		.extra2		=3D &maxolduid,
- +	},
- +#ifdef CONFIG_S390
- +	{
- +		.procname	=3D "userprocess_debug",
- +		.data		=3D &show_unhandled_signals,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +	{
- +		.procname	=3D "pid_max",
- +		.data		=3D &pid_max,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &pid_max_min,
- +		.extra2		=3D &pid_max_max,
- +	},
- +	{
- +		.procname	=3D "panic_on_oops",
- +		.data		=3D &panic_on_oops,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "panic_print",
- +		.data		=3D &panic_print,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +#if defined CONFIG_PRINTK
- +	{
- +		.procname	=3D "printk",
- +		.data		=3D &console_loglevel,
- +		.maxlen		=3D 4*sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "printk_ratelimit",
- +		.data		=3D &printk_ratelimit_state.interval,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_jiffies,
- +	},
- +	{
- +		.procname	=3D "printk_ratelimit_burst",
- +		.data		=3D &printk_ratelimit_state.burst,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "printk_delay",
- +		.data		=3D &printk_delay_msec,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &ten_thousand,
- +	},
- +	{
- +		.procname	=3D "printk_devkmsg",
- +		.data		=3D devkmsg_log_str,
- +		.maxlen		=3D DEVKMSG_STR_MAX_SIZE,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D devkmsg_sysctl_set_loglvl,
- +	},
- +	{
- +		.procname	=3D "dmesg_restrict",
- +		.data		=3D &dmesg_restrict,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax_sysadmin,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "kptr_restrict",
- +		.data		=3D &kptr_restrict,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax_sysadmin,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +#endif
- +	{
- +		.procname	=3D "ngroups_max",
-- 		.data		=3D &ngroups_max,
-++		.data		=3D (void *)&ngroups_max,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "cap_last_cap",
- +		.data		=3D (void *)&cap_last_cap,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#if defined(CONFIG_LOCKUP_DETECTOR)
- +	{
- +		.procname       =3D "watchdog",
- +		.data		=3D &watchdog_user_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler   =3D proc_watchdog,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "watchdog_thresh",
- +		.data		=3D &watchdog_thresh,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_watchdog_thresh,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &sixty,
- +	},
- +	{
- +		.procname       =3D "nmi_watchdog",
- +		.data		=3D &nmi_watchdog_user_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D NMI_WATCHDOG_SYSCTL_PERM,
- +		.proc_handler   =3D proc_nmi_watchdog,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "watchdog_cpumask",
- +		.data		=3D &watchdog_cpumask_bits,
- +		.maxlen		=3D NR_CPUS,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_watchdog_cpumask,
- +	},
- +#ifdef CONFIG_SOFTLOCKUP_DETECTOR
- +	{
- +		.procname       =3D "soft_watchdog",
- +		.data		=3D &soft_watchdog_user_enabled,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler   =3D proc_soft_watchdog,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "softlockup_panic",
- +		.data		=3D &softlockup_panic,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#ifdef CONFIG_SMP
- +	{
- +		.procname	=3D "softlockup_all_cpu_backtrace",
- +		.data		=3D &sysctl_softlockup_all_cpu_backtrace,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif /* CONFIG_SMP */
- +#endif
- +#ifdef CONFIG_HARDLOCKUP_DETECTOR
- +	{
- +		.procname	=3D "hardlockup_panic",
- +		.data		=3D &hardlockup_panic,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#ifdef CONFIG_SMP
- +	{
- +		.procname	=3D "hardlockup_all_cpu_backtrace",
- +		.data		=3D &sysctl_hardlockup_all_cpu_backtrace,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif /* CONFIG_SMP */
- +#endif
- +#endif
- +
- +#if defined(CONFIG_X86_LOCAL_APIC) && defined(CONFIG_X86)
- +	{
- +		.procname       =3D "unknown_nmi_panic",
- +		.data           =3D &unknown_nmi_panic,
- +		.maxlen         =3D sizeof (int),
- +		.mode           =3D 0644,
- +		.proc_handler   =3D proc_dointvec,
- +	},
- +#endif
- =20
- -int proc_dointvec_jiffies(struct ctl_table *table, int write,
- -		    void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +#if (defined(CONFIG_X86_32) || defined(CONFIG_PARISC)) && \
- +	defined(CONFIG_DEBUG_STACKOVERFLOW)
- +	{
- +		.procname	=3D "panic_on_stackoverflow",
- +		.data		=3D &sysctl_panic_on_stackoverflow,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#if defined(CONFIG_X86)
- +	{
- +		.procname	=3D "panic_on_unrecovered_nmi",
- +		.data		=3D &panic_on_unrecovered_nmi,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "panic_on_io_nmi",
- +		.data		=3D &panic_on_io_nmi,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "bootloader_type",
- +		.data		=3D &bootloader_type,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "bootloader_version",
- +		.data		=3D &bootloader_version,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "io_delay_type",
- +		.data		=3D &io_delay_type,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#if defined(CONFIG_MMU)
- +	{
- +		.procname	=3D "randomize_va_space",
- +		.data		=3D &randomize_va_space,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#if defined(CONFIG_S390) && defined(CONFIG_SMP)
- +	{
- +		.procname	=3D "spin_retry",
- +		.data		=3D &spin_retry,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#if	defined(CONFIG_ACPI_SLEEP) && defined(CONFIG_X86)
- +	{
- +		.procname	=3D "acpi_video_flags",
- +		.data		=3D &acpi_realmode_flags,
- +		.maxlen		=3D sizeof (unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +#endif
- +#ifdef CONFIG_SYSCTL_ARCH_UNALIGN_NO_WARN
- +	{
- +		.procname	=3D "ignore-unaligned-usertrap",
- +		.data		=3D &no_unaligned_warning,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_IA64
- +	{
- +		.procname	=3D "unaligned-dump-stack",
- +		.data		=3D &unaligned_dump_stack,
- +		.maxlen		=3D sizeof (int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_DETECT_HUNG_TASK
- +	{
- +		.procname	=3D "hung_task_panic",
- +		.data		=3D &sysctl_hung_task_panic,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "hung_task_check_count",
- +		.data		=3D &sysctl_hung_task_check_count,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "hung_task_timeout_secs",
- +		.data		=3D &sysctl_hung_task_timeout_secs,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dohung_task_timeout_secs,
- +		.extra2		=3D &hung_task_timeout_max,
- +	},
- +	{
- +		.procname	=3D "hung_task_check_interval_secs",
- +		.data		=3D &sysctl_hung_task_check_interval_secs,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dohung_task_timeout_secs,
- +		.extra2		=3D &hung_task_timeout_max,
- +	},
- +	{
- +		.procname	=3D "hung_task_warnings",
- +		.data		=3D &sysctl_hung_task_warnings,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &neg_one,
- +	},
- +#endif
- +#ifdef CONFIG_RT_MUTEXES
- +	{
- +		.procname	=3D "max_lock_depth",
- +		.data		=3D &max_lock_depth,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +	{
- +		.procname	=3D "poweroff_cmd",
- +		.data		=3D &poweroff_cmd,
- +		.maxlen		=3D POWEROFF_CMD_PATH_LEN,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dostring,
- +	},
- +#ifdef CONFIG_KEYS
- +	{
- +		.procname	=3D "keys",
- +		.mode		=3D 0555,
- +		.child		=3D key_sysctls,
- +	},
- +#endif
- +#ifdef CONFIG_PERF_EVENTS
- +	/*
- +	 * User-space scripts rely on the existence of this file
- +	 * as a feature check for perf_events being enabled.
- +	 *
- +	 * So it's an ABI, do not remove!
- +	 */
- +	{
- +		.procname	=3D "perf_event_paranoid",
- +		.data		=3D &sysctl_perf_event_paranoid,
- +		.maxlen		=3D sizeof(sysctl_perf_event_paranoid),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "perf_event_mlock_kb",
- +		.data		=3D &sysctl_perf_event_mlock,
- +		.maxlen		=3D sizeof(sysctl_perf_event_mlock),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "perf_event_max_sample_rate",
- +		.data		=3D &sysctl_perf_event_sample_rate,
- +		.maxlen		=3D sizeof(sysctl_perf_event_sample_rate),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D perf_proc_update_handler,
- +		.extra1		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "perf_cpu_time_max_percent",
- +		.data		=3D &sysctl_perf_cpu_time_max_percent,
- +		.maxlen		=3D sizeof(sysctl_perf_cpu_time_max_percent),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D perf_cpu_time_max_percent_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +	{
- +		.procname	=3D "perf_event_max_stack",
- +		.data		=3D &sysctl_perf_event_max_stack,
- +		.maxlen		=3D sizeof(sysctl_perf_event_max_stack),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D perf_event_max_stack_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &six_hundred_forty_kb,
- +	},
- +	{
- +		.procname	=3D "perf_event_max_contexts_per_stack",
- +		.data		=3D &sysctl_perf_event_max_contexts_per_stack,
- +		.maxlen		=3D sizeof(sysctl_perf_event_max_contexts_per_stack),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D perf_event_max_stack_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_thousand,
- +	},
- +#endif
- +	{
- +		.procname	=3D "panic_on_warn",
- +		.data		=3D &panic_on_warn,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
- +	{
- +		.procname	=3D "timer_migration",
- +		.data		=3D &sysctl_timer_migration,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D timer_migration_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_BPF_SYSCALL
- +	{
- +		.procname	=3D "unprivileged_bpf_disabled",
- +		.data		=3D &sysctl_unprivileged_bpf_disabled,
- +		.maxlen		=3D sizeof(sysctl_unprivileged_bpf_disabled),
- +		.mode		=3D 0644,
- +		/* only handle a transition from default "0" to "1" */
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "bpf_stats_enabled",
- +		.data		=3D &bpf_stats_enabled_key.key,
- +		.maxlen		=3D sizeof(bpf_stats_enabled_key),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_do_static_key,
- +	},
- +#endif
- +#if defined(CONFIG_TREE_RCU)
- +	{
- +		.procname	=3D "panic_on_rcu_stall",
- +		.data		=3D &sysctl_panic_on_rcu_stall,
- +		.maxlen		=3D sizeof(sysctl_panic_on_rcu_stall),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_STACKLEAK_RUNTIME_DISABLE
- +	{
- +		.procname	=3D "stack_erasing",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D stack_erasing_sysctl,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +	{ }
- +};
- =20
- -int proc_dointvec_userhz_jiffies(struct ctl_table *table, int write,
- -		    void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +static struct ctl_table vm_table[] =3D {
- +	{
- +		.procname	=3D "overcommit_memory",
- +		.data		=3D &sysctl_overcommit_memory,
- +		.maxlen		=3D sizeof(sysctl_overcommit_memory),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +	{
- +		.procname	=3D "panic_on_oom",
- +		.data		=3D &sysctl_panic_on_oom,
- +		.maxlen		=3D sizeof(sysctl_panic_on_oom),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +	{
- +		.procname	=3D "oom_kill_allocating_task",
- +		.data		=3D &sysctl_oom_kill_allocating_task,
- +		.maxlen		=3D sizeof(sysctl_oom_kill_allocating_task),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "oom_dump_tasks",
- +		.data		=3D &sysctl_oom_dump_tasks,
- +		.maxlen		=3D sizeof(sysctl_oom_dump_tasks),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +	{
- +		.procname	=3D "overcommit_ratio",
- +		.data		=3D &sysctl_overcommit_ratio,
- +		.maxlen		=3D sizeof(sysctl_overcommit_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D overcommit_ratio_handler,
- +	},
- +	{
- +		.procname	=3D "overcommit_kbytes",
- +		.data		=3D &sysctl_overcommit_kbytes,
- +		.maxlen		=3D sizeof(sysctl_overcommit_kbytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D overcommit_kbytes_handler,
- +	},
- +	{
- +		.procname	=3D "page-cluster",
- +		.data		=3D &page_cluster,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "dirty_background_ratio",
- +		.data		=3D &dirty_background_ratio,
- +		.maxlen		=3D sizeof(dirty_background_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirty_background_ratio_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +	{
- +		.procname	=3D "dirty_background_bytes",
- +		.data		=3D &dirty_background_bytes,
- +		.maxlen		=3D sizeof(dirty_background_bytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirty_background_bytes_handler,
- +		.extra1		=3D &one_ul,
- +	},
- +	{
- +		.procname	=3D "dirty_ratio",
- +		.data		=3D &vm_dirty_ratio,
- +		.maxlen		=3D sizeof(vm_dirty_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirty_ratio_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +	{
- +		.procname	=3D "dirty_bytes",
- +		.data		=3D &vm_dirty_bytes,
- +		.maxlen		=3D sizeof(vm_dirty_bytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirty_bytes_handler,
- +		.extra1		=3D &dirty_bytes_min,
- +	},
- +	{
- +		.procname	=3D "dirty_writeback_centisecs",
- +		.data		=3D &dirty_writeback_interval,
- +		.maxlen		=3D sizeof(dirty_writeback_interval),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirty_writeback_centisecs_handler,
- +	},
- +	{
- +		.procname	=3D "dirty_expire_centisecs",
- +		.data		=3D &dirty_expire_interval,
- +		.maxlen		=3D sizeof(dirty_expire_interval),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "dirtytime_expire_seconds",
- +		.data		=3D &dirtytime_expire_interval,
- +		.maxlen		=3D sizeof(dirtytime_expire_interval),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D dirtytime_interval_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "swappiness",
- +		.data		=3D &vm_swappiness,
- +		.maxlen		=3D sizeof(vm_swappiness),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +#ifdef CONFIG_HUGETLB_PAGE
- +	{
- +		.procname	=3D "nr_hugepages",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D hugetlb_sysctl_handler,
- +	},
- +#ifdef CONFIG_NUMA
- +	{
- +		.procname       =3D "nr_hugepages_mempolicy",
- +		.data           =3D NULL,
- +		.maxlen         =3D sizeof(unsigned long),
- +		.mode           =3D 0644,
- +		.proc_handler   =3D &hugetlb_mempolicy_sysctl_handler,
- +	},
- +	{
- +		.procname		=3D "numa_stat",
- +		.data			=3D &sysctl_vm_numa_stat,
- +		.maxlen			=3D sizeof(int),
- +		.mode			=3D 0644,
- +		.proc_handler	=3D sysctl_vm_numa_stat_handler,
- +		.extra1			=3D SYSCTL_ZERO,
- +		.extra2			=3D SYSCTL_ONE,
- +	},
- +#endif
- +	 {
- +		.procname	=3D "hugetlb_shm_group",
- +		.data		=3D &sysctl_hugetlb_shm_group,
- +		.maxlen		=3D sizeof(gid_t),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	 },
- +	{
- +		.procname	=3D "nr_overcommit_hugepages",
- +		.data		=3D NULL,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D hugetlb_overcommit_handler,
- +	},
- +#endif
- +	{
- +		.procname	=3D "lowmem_reserve_ratio",
- +		.data		=3D &sysctl_lowmem_reserve_ratio,
- +		.maxlen		=3D sizeof(sysctl_lowmem_reserve_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D lowmem_reserve_ratio_sysctl_handler,
- +	},
- +	{
- +		.procname	=3D "drop_caches",
- +		.data		=3D &sysctl_drop_caches,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0200,
- +		.proc_handler	=3D drop_caches_sysctl_handler,
- +		.extra1		=3D SYSCTL_ONE,
- +		.extra2		=3D &four,
- +	},
- +#ifdef CONFIG_COMPACTION
- +	{
- +		.procname	=3D "compact_memory",
- +		.data		=3D &sysctl_compact_memory,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0200,
- +		.proc_handler	=3D sysctl_compaction_handler,
- +	},
- +	{
- +		.procname	=3D "extfrag_threshold",
- +		.data		=3D &sysctl_extfrag_threshold,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &min_extfrag_threshold,
- +		.extra2		=3D &max_extfrag_threshold,
- +	},
- +	{
- +		.procname	=3D "compact_unevictable_allowed",
- +		.data		=3D &sysctl_compact_unevictable_allowed,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax_warn_RT_change,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- =20
- -int proc_dointvec_ms_jiffies(struct ctl_table *table, int write,
- -			     void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +#endif /* CONFIG_COMPACTION */
- +	{
- +		.procname	=3D "min_free_kbytes",
- +		.data		=3D &min_free_kbytes,
- +		.maxlen		=3D sizeof(min_free_kbytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D min_free_kbytes_sysctl_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "watermark_boost_factor",
- +		.data		=3D &watermark_boost_factor,
- +		.maxlen		=3D sizeof(watermark_boost_factor),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "watermark_scale_factor",
- +		.data		=3D &watermark_scale_factor,
- +		.maxlen		=3D sizeof(watermark_scale_factor),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D watermark_scale_factor_sysctl_handler,
- +		.extra1		=3D SYSCTL_ONE,
- +		.extra2		=3D &one_thousand,
- +	},
- +	{
- +		.procname	=3D "percpu_pagelist_fraction",
- +		.data		=3D &percpu_pagelist_fraction,
- +		.maxlen		=3D sizeof(percpu_pagelist_fraction),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D percpu_pagelist_fraction_sysctl_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#ifdef CONFIG_MMU
- +	{
- +		.procname	=3D "max_map_count",
- +		.data		=3D &sysctl_max_map_count,
- +		.maxlen		=3D sizeof(sysctl_max_map_count),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#else
- +	{
- +		.procname	=3D "nr_trim_pages",
- +		.data		=3D &sysctl_nr_trim_pages,
- +		.maxlen		=3D sizeof(sysctl_nr_trim_pages),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#endif
- +	{
- +		.procname	=3D "laptop_mode",
- +		.data		=3D &laptop_mode,
- +		.maxlen		=3D sizeof(laptop_mode),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_jiffies,
- +	},
- +	{
- +		.procname	=3D "block_dump",
- +		.data		=3D &block_dump,
- +		.maxlen		=3D sizeof(block_dump),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "vfs_cache_pressure",
- +		.data		=3D &sysctl_vfs_cache_pressure,
- +		.maxlen		=3D sizeof(sysctl_vfs_cache_pressure),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#if defined(HAVE_ARCH_PICK_MMAP_LAYOUT) || \
- +    defined(CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT)
- +	{
- +		.procname	=3D "legacy_va_layout",
- +		.data		=3D &sysctl_legacy_va_layout,
- +		.maxlen		=3D sizeof(sysctl_legacy_va_layout),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#endif
- +#ifdef CONFIG_NUMA
- +	{
- +		.procname	=3D "zone_reclaim_mode",
- +		.data		=3D &node_reclaim_mode,
- +		.maxlen		=3D sizeof(node_reclaim_mode),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +	{
- +		.procname	=3D "min_unmapped_ratio",
- +		.data		=3D &sysctl_min_unmapped_ratio,
- +		.maxlen		=3D sizeof(sysctl_min_unmapped_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_min_unmapped_ratio_sysctl_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +	{
- +		.procname	=3D "min_slab_ratio",
- +		.data		=3D &sysctl_min_slab_ratio,
- +		.maxlen		=3D sizeof(sysctl_min_slab_ratio),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D sysctl_min_slab_ratio_sysctl_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &one_hundred,
- +	},
- +#endif
- +#ifdef CONFIG_SMP
- +	{
- +		.procname	=3D "stat_interval",
- +		.data		=3D &sysctl_stat_interval,
- +		.maxlen		=3D sizeof(sysctl_stat_interval),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_jiffies,
- +	},
- +	{
- +		.procname	=3D "stat_refresh",
- +		.data		=3D NULL,
- +		.maxlen		=3D 0,
- +		.mode		=3D 0600,
- +		.proc_handler	=3D vmstat_refresh,
- +	},
- +#endif
- +#ifdef CONFIG_MMU
- +	{
- +		.procname	=3D "mmap_min_addr",
- +		.data		=3D &dac_mmap_min_addr,
- +		.maxlen		=3D sizeof(unsigned long),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D mmap_min_addr_handler,
- +	},
- +#endif
- +#ifdef CONFIG_NUMA
- +	{
- +		.procname	=3D "numa_zonelist_order",
- +		.data		=3D &numa_zonelist_order,
- +		.maxlen		=3D NUMA_ZONELIST_ORDER_LEN,
- +		.mode		=3D 0644,
- +		.proc_handler	=3D numa_zonelist_order_handler,
- +	},
- +#endif
- +#if (defined(CONFIG_X86_32) && !defined(CONFIG_UML))|| \
- +   (defined(CONFIG_SUPERH) && defined(CONFIG_VSYSCALL))
- +	{
- +		.procname	=3D "vdso_enabled",
- +#ifdef CONFIG_X86_32
- +		.data		=3D &vdso32_enabled,
- +		.maxlen		=3D sizeof(vdso32_enabled),
- +#else
- +		.data		=3D &vdso_enabled,
- +		.maxlen		=3D sizeof(vdso_enabled),
- +#endif
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +		.extra1		=3D SYSCTL_ZERO,
- +	},
- +#endif
- +#ifdef CONFIG_HIGHMEM
- +	{
- +		.procname	=3D "highmem_is_dirtyable",
- +		.data		=3D &vm_highmem_is_dirtyable,
- +		.maxlen		=3D sizeof(vm_highmem_is_dirtyable),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +#ifdef CONFIG_MEMORY_FAILURE
- +	{
- +		.procname	=3D "memory_failure_early_kill",
- +		.data		=3D &sysctl_memory_failure_early_kill,
- +		.maxlen		=3D sizeof(sysctl_memory_failure_early_kill),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "memory_failure_recovery",
- +		.data		=3D &sysctl_memory_failure_recovery,
- +		.maxlen		=3D sizeof(sysctl_memory_failure_recovery),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +	{
- +		.procname	=3D "user_reserve_kbytes",
- +		.data		=3D &sysctl_user_reserve_kbytes,
- +		.maxlen		=3D sizeof(sysctl_user_reserve_kbytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +	{
- +		.procname	=3D "admin_reserve_kbytes",
- +		.data		=3D &sysctl_admin_reserve_kbytes,
- +		.maxlen		=3D sizeof(sysctl_admin_reserve_kbytes),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +#ifdef CONFIG_HAVE_ARCH_MMAP_RND_BITS
- +	{
- +		.procname	=3D "mmap_rnd_bits",
- +		.data		=3D &mmap_rnd_bits,
- +		.maxlen		=3D sizeof(mmap_rnd_bits),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D (void *)&mmap_rnd_bits_min,
- +		.extra2		=3D (void *)&mmap_rnd_bits_max,
- +	},
- +#endif
- +#ifdef CONFIG_HAVE_ARCH_MMAP_RND_COMPAT_BITS
- +	{
- +		.procname	=3D "mmap_rnd_compat_bits",
- +		.data		=3D &mmap_rnd_compat_bits,
- +		.maxlen		=3D sizeof(mmap_rnd_compat_bits),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D (void *)&mmap_rnd_compat_bits_min,
- +		.extra2		=3D (void *)&mmap_rnd_compat_bits_max,
- +	},
- +#endif
- +#ifdef CONFIG_USERFAULTFD
- +	{
- +		.procname	=3D "unprivileged_userfaultfd",
- +		.data		=3D &sysctl_unprivileged_userfaultfd,
- +		.maxlen		=3D sizeof(sysctl_unprivileged_userfaultfd),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +	{ }
- +};
- =20
- -int proc_doulongvec_minmax(struct ctl_table *table, int write,
- -		    void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +static struct ctl_table fs_table[] =3D {
- +	{
- +		.procname	=3D "inode-nr",
- +		.data		=3D &inodes_stat,
- +		.maxlen		=3D 2*sizeof(long),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_nr_inodes,
- +	},
- +	{
- +		.procname	=3D "inode-state",
- +		.data		=3D &inodes_stat,
- +		.maxlen		=3D 7*sizeof(long),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_nr_inodes,
- +	},
- +	{
- +		.procname	=3D "file-nr",
- +		.data		=3D &files_stat,
- +		.maxlen		=3D sizeof(files_stat),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_nr_files,
- +	},
- +	{
- +		.procname	=3D "file-max",
- +		.data		=3D &files_stat.max_files,
- +		.maxlen		=3D sizeof(files_stat.max_files),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +		.extra1		=3D &zero_ul,
- +		.extra2		=3D &long_max,
- +	},
- +	{
- +		.procname	=3D "nr_open",
- +		.data		=3D &sysctl_nr_open,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &sysctl_nr_open_min,
- +		.extra2		=3D &sysctl_nr_open_max,
- +	},
- +	{
- +		.procname	=3D "dentry-state",
- +		.data		=3D &dentry_stat,
- +		.maxlen		=3D 6*sizeof(long),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_nr_dentry,
- +	},
- +	{
- +		.procname	=3D "overflowuid",
- +		.data		=3D &fs_overflowuid,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &minolduid,
- +		.extra2		=3D &maxolduid,
- +	},
- +	{
- +		.procname	=3D "overflowgid",
- +		.data		=3D &fs_overflowgid,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D &minolduid,
- +		.extra2		=3D &maxolduid,
- +	},
- +#ifdef CONFIG_FILE_LOCKING
- +	{
- +		.procname	=3D "leases-enable",
- +		.data		=3D &leases_enable,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_DNOTIFY
- +	{
- +		.procname	=3D "dir-notify-enable",
- +		.data		=3D &dir_notify_enable,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_MMU
- +#ifdef CONFIG_FILE_LOCKING
- +	{
- +		.procname	=3D "lease-break-time",
- +		.data		=3D &lease_break_time,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec,
- +	},
- +#endif
- +#ifdef CONFIG_AIO
- +	{
- +		.procname	=3D "aio-nr",
- +		.data		=3D &aio_nr,
- +		.maxlen		=3D sizeof(aio_nr),
- +		.mode		=3D 0444,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +	{
- +		.procname	=3D "aio-max-nr",
- +		.data		=3D &aio_max_nr,
- +		.maxlen		=3D sizeof(aio_max_nr),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +#endif /* CONFIG_AIO */
- +#ifdef CONFIG_INOTIFY_USER
- +	{
- +		.procname	=3D "inotify",
- +		.mode		=3D 0555,
- +		.child		=3D inotify_table,
- +	},
- +#endif=09
- +#ifdef CONFIG_EPOLL
- +	{
- +		.procname	=3D "epoll",
- +		.mode		=3D 0555,
- +		.child		=3D epoll_table,
- +	},
- +#endif
- +#endif
- +	{
- +		.procname	=3D "protected_symlinks",
- +		.data		=3D &sysctl_protected_symlinks,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "protected_hardlinks",
- +		.data		=3D &sysctl_protected_hardlinks,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +	{
- +		.procname	=3D "protected_fifos",
- +		.data		=3D &sysctl_protected_fifos,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +	{
- +		.procname	=3D "protected_regular",
- +		.data		=3D &sysctl_protected_regular,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0600,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +	{
- +		.procname	=3D "suid_dumpable",
- +		.data		=3D &suid_dumpable,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax_coredump,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D &two,
- +	},
- +#if defined(CONFIG_BINFMT_MISC) || defined(CONFIG_BINFMT_MISC_MODULE)
- +	{
- +		.procname	=3D "binfmt_misc",
- +		.mode		=3D 0555,
- +		.child		=3D sysctl_mount_point,
- +	},
- +#endif
- +	{
- +		.procname	=3D "pipe-max-size",
- +		.data		=3D &pipe_max_size,
- +		.maxlen		=3D sizeof(pipe_max_size),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dopipe_max_size,
- +	},
- +	{
- +		.procname	=3D "pipe-user-pages-hard",
- +		.data		=3D &pipe_user_pages_hard,
- +		.maxlen		=3D sizeof(pipe_user_pages_hard),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +	{
- +		.procname	=3D "pipe-user-pages-soft",
- +		.data		=3D &pipe_user_pages_soft,
- +		.maxlen		=3D sizeof(pipe_user_pages_soft),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_doulongvec_minmax,
- +	},
- +	{
- +		.procname	=3D "mount-max",
- +		.data		=3D &sysctl_mount_max,
- +		.maxlen		=3D sizeof(unsigned int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec_minmax,
- +		.extra1		=3D SYSCTL_ONE,
- +	},
- +	{ }
- +};
- =20
- -int proc_doulongvec_ms_jiffies_minmax(struct ctl_table *table, int write,
- -				      void __user *buffer,
- -				      size_t *lenp, loff_t *ppos)
- -{
- -    return -ENOSYS;
- -}
- +static struct ctl_table debug_table[] =3D {
- +#ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
- +	{
- +		.procname	=3D "exception-trace",
- +		.data		=3D &show_unhandled_signals,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_dointvec
- +	},
- +#endif
- +#if defined(CONFIG_OPTPROBES)
- +	{
- +		.procname	=3D "kprobes-optimization",
- +		.data		=3D &sysctl_kprobes_optimization,
- +		.maxlen		=3D sizeof(int),
- +		.mode		=3D 0644,
- +		.proc_handler	=3D proc_kprobes_optimization_handler,
- +		.extra1		=3D SYSCTL_ZERO,
- +		.extra2		=3D SYSCTL_ONE,
- +	},
- +#endif
- +	{ }
- +};
- =20
- -int proc_do_large_bitmap(struct ctl_table *table, int write,
- -			 void __user *buffer, size_t *lenp, loff_t *ppos)
- -{
- -	return -ENOSYS;
- -}
- +static struct ctl_table dev_table[] =3D {
- +	{ }
- +};
- =20
- -#endif /* CONFIG_PROC_SYSCTL */
- +static struct ctl_table sysctl_base_table[] =3D {
- +	{
- +		.procname	=3D "kernel",
- +		.mode		=3D 0555,
- +		.child		=3D kern_table,
- +	},
- +	{
- +		.procname	=3D "vm",
- +		.mode		=3D 0555,
- +		.child		=3D vm_table,
- +	},
- +	{
- +		.procname	=3D "fs",
- +		.mode		=3D 0555,
- +		.child		=3D fs_table,
- +	},
- +	{
- +		.procname	=3D "debug",
- +		.mode		=3D 0555,
- +		.child		=3D debug_table,
- +	},
- +	{
- +		.procname	=3D "dev",
- +		.mode		=3D 0555,
- +		.child		=3D dev_table,
- +	},
- +	{ }
- +};
- =20
- -#if defined(CONFIG_SYSCTL)
- -int proc_do_static_key(struct ctl_table *table, int write,
- -		       void __user *buffer, size_t *lenp,
- -		       loff_t *ppos)
- +int __init sysctl_init(void)
-  {
- -	struct static_key *key =3D (struct static_key *)table->data;
- -	static DEFINE_MUTEX(static_key_mutex);
- -	int val, ret;
- -	struct ctl_table tmp =3D {
- -		.data   =3D &val,
- -		.maxlen =3D sizeof(val),
- -		.mode   =3D table->mode,
- -		.extra1 =3D SYSCTL_ZERO,
- -		.extra2 =3D SYSCTL_ONE,
- -	};
- -
- -	if (write && !capable(CAP_SYS_ADMIN))
- -		return -EPERM;
- +	struct ctl_table_header *hdr;
- =20
- -	mutex_lock(&static_key_mutex);
- -	val =3D static_key_enabled(key);
- -	ret =3D proc_dointvec_minmax(&tmp, write, buffer, lenp, ppos);
- -	if (write && !ret) {
- -		if (val)
- -			static_key_enable(key);
- -		else
- -			static_key_disable(key);
- -	}
- -	mutex_unlock(&static_key_mutex);
- -	return ret;
- +	hdr =3D register_sysctl_table(sysctl_base_table);
- +	kmemleak_not_leak(hdr);
- +	return 0;
-  }
- -#endif
- +#endif /* CONFIG_SYSCTL */
-  /*
-   * No sense putting this after each symbol definition, twice,
-   * exception granted :-)
 
---Sig_/s61WjPWjF1XPRfYAmS4LhF1
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+Warnings summary:
 
------BEGIN PGP SIGNATURE-----
+    80   arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (=
+dma_ranges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" p=
+roperty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, chil=
+d #address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    8    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    2    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [=
+-Wcpp]
+    2    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    2    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemente=
+d [-Wcpp]
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    samples/ftrace/ftrace-direct.o: warning: objtool: .text+0x0: unrea=
+chable instruction
+    1    samples/ftrace/ftrace-direct-too.o: warning: objtool: .text+0x0: u=
+nreachable instruction
+    1    samples/ftrace/ftrace-direct-modify.o: warning: objtool: .text+0x0=
+: unreachable instruction
+    1    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 byte=
+s is larger than 1024 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    arch/mips/configs/ci20_defconfig:178:warning: override: reassignin=
+g to symbol LEDS_TRIGGER_ONESHOT
+    1    /tmp/ccdORrj5.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/ccdORrj5.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1161:warning: override: UNWINDER_GUESS changes choice state
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7B8zUACgkQAVBC80lX
-0GwblAgAnq0qyBwY+1GuDdI10+3l/eVm7ANJQulmoFoXmhyucgwP4ZX2mnxPXs5O
-j8GHp7Uxqo8n5ZqkSqKQWQEWVowFO8Ed7PsbkOTUiQ5nNQI079ht7sjQjrbgM69j
-k5DeIvNPsN+uppPZOiHAfD1EhLzRJKJokA6Oi/bTsMLqwZFChXHGeQ2pV0Xfjjb7
-Ygky0acRLGDD9uspxFfgt2ulW5RTcjEsyd4vysOHLFqC2JT8tW6Tg0subU+Ux1mc
-SktHRY8hZ0UcnJL/R9+OKx+P5aPmQ06JE4SOE8+6GhOvUurO5uXnsWM7WDFzIu97
-1pP30RqfuP8ePVRrvthUMEdLvoSNWw==
-=vPlv
------END PGP SIGNATURE-----
+Section mismatches summary:
 
---Sig_/s61WjPWjF1XPRfYAmS4LhF1--
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a44): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2830): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 section =
+mismatches
+
+Warnings:
+    /tmp/ccdORrj5.s:18119: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/ccdORrj5.s:18191: Warning: using r15 results in unpredictable beha=
+viour
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
+er of different size [-Wpointer-to-int-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath79_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axs103_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm47xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_be_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cavium_octeon_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ci20_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section=
+ mismatches
+
+Warnings:
+    arch/mips/configs/ci20_defconfig:178:warning: override: reassigning to =
+symbol LEDS_TRIGGER_ONESHOT
+
+---------------------------------------------------------------------------=
+-----
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x2xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+cns3420vb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+db1xxx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_64_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a44): Section mismatch in=
+ reference from the function pmax_setup_memory_region() to the function .in=
+it.text:add_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2830): Section mismatch in=
+ reference from the function pmax_setup_memory_region() to the function .in=
+it.text:add_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 section m=
+ismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 24 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 24 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+dove_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+e55_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+ebsa110_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+ep93xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+exynos_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ezx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+footbridge_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h3600_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig+kselftest (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 wa=
+rnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+imote2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v4_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+integrator_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+iop32x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+jornada720_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+lasat_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lemote2f_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1c_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc18xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+lubbock_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mainstone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    {standard input}:141: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_xpa_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mips_paravirt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+msp71xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v4t_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_EFI=3Dy+CONFIG_ARM_LPAE=3Dy (arm, gcc-8) =E2=80=
+=94 PASS, 0 errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_SMP=3Dn (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 =
+warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 bytes is =
+larger than 1024 bytes [-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+neponset_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+netwinder_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nsimosci_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap1_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+omega2p_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pcm027_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pistachio_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+prima2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa255-idp_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section =
+mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rv32_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 secti=
+on mismatches
+
+Warnings:
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    <stdin>:830:2: warning: #warning syscall fstat64 not implemented [-Wcpp]
+    <stdin>:1127:2: warning: #warning syscall fstatat64 not implemented [-W=
+cpp]
+    <stdin>:1511:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s5pv210_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shannon_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+simpad_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sunxi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0219_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tegra_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    .config:1161:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+versatile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vocore2_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vt8500_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 3 warn=
+ings, 0 section mismatches
+
+Warnings:
+    samples/ftrace/ftrace-direct.o: warning: objtool: .text+0x0: unreachabl=
+e instruction
+    samples/ftrace/ftrace-direct-too.o: warning: objtool: .text+0x0: unreac=
+hable instruction
+    samples/ftrace/ftrace-direct-modify.o: warning: objtool: .text+0x0: unr=
+eachable instruction
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kvm_guest (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+zeus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+zx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---
+For more info write to <info@kernelci.org>

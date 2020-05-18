@@ -2,65 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE731D718C
-	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 09:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BF51D7225
+	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 09:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726676AbgERHMo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 May 2020 03:12:44 -0400
-Received: from mx2.suse.de ([195.135.220.15]:51962 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726127AbgERHMo (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 May 2020 03:12:44 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 81EEEAC52;
-        Mon, 18 May 2020 07:12:45 +0000 (UTC)
-Date:   Mon, 18 May 2020 09:12:34 +0200
-From:   Borislav Petkov <bp@suse.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1727098AbgERHpZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Mon, 18 May 2020 03:45:25 -0400
+Received: from relay10.mail.gandi.net ([217.70.178.230]:46295 "EHLO
+        relay10.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727017AbgERHpZ (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 18 May 2020 03:45:25 -0400
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay10.mail.gandi.net (Postfix) with ESMTPSA id 5BEE524001A;
+        Mon, 18 May 2020 07:45:21 +0000 (UTC)
+Date:   Mon, 18 May 2020 09:45:19 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Richard Weinberger <richard.weinberger@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the tip tree with Linus' tree
-Message-ID: <20200518071234.GA24692@zn.tnic>
-References: <20200518151032.57d57052@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Richard Weinberger <richard@nod.at>
+Subject: Re: linux-next: build failure after merge of the mtd-fixes tree
+Message-ID: <20200518094519.1e15d108@xps13>
+In-Reply-To: <CAFLxGvy-MytQLhrju0cBaC5rz-80XA29R4EU_eh9LC670h2H5w@mail.gmail.com>
+References: <20200518084021.64cbf411@canb.auug.org.au>
+        <CAFLxGvy-MytQLhrju0cBaC5rz-80XA29R4EU_eh9LC670h2H5w@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20200518151032.57d57052@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 18, 2020 at 03:10:32PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the tip tree got a conflict in:
-> 
->   include/linux/compiler.h
-> 
-> between commit:
-> 
->   a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
-> 
-> from Linus' tree and commit:
-> 
->   f670269a42bf ("x86: Fix early boot crash on gcc-10, next try")
-> 
-> from the tip tree.
+Hi Richard,
 
-That commit is gone in the meantime so you won't have the merge conflict
-anymore once tip/master is regenerated.
+Richard Weinberger <richard.weinberger@gmail.com> wrote on Mon, 18 May
+2020 01:02:54 +0200:
 
-Thx.
+> On Mon, May 18, 2020 at 12:41 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the mtd-fixes tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > /home/sfr/next/next/drivers/mtd/nand/spi/core.c: In function 'spinand_init':
+> > /home/sfr/next/next/drivers/mtd/nand/spi/core.c:1093:26: error: 'struct nand_device' has no member named 'ecc'
+> >  1093 |  mtd->ecc_strength = nand->ecc.ctx.conf.strength;
+> >       |                          ^~
+> > /home/sfr/next/next/drivers/mtd/nand/spi/core.c:1094:27: error: 'struct nand_device' has no member named 'ecc'
+> >  1094 |  mtd->ecc_step_size = nand->ecc.ctx.conf.step_size;
+> >       |                           ^~
+> >
+> > Caused by commit
+> >
+> >   d5baa0ec83de ("mtd: spinand: Propagate ECC information to the MTD structure")
+> >
+> > "This fix depends on recent changes and should not be backported as-is." ?  
+> 
+> Urgh, yes.
+> This patch slipped in.
+> 
+> Anyway, Miquel, the ready-to-backport diff would be this?
+> 
+> diff --git a/drivers/mtd/nand/spi/core.c b/drivers/mtd/nand/spi/core.c
+> index 248c4d7a0cf4..e2c382ffc5b6 100644
+> --- a/drivers/mtd/nand/spi/core.c
+> +++ b/drivers/mtd/nand/spi/core.c
+> @@ -1090,8 +1090,8 @@ static int spinand_init(struct spinand_device *spinand)
+>         mtd->oobavail = ret;
+> 
+>         /* Propagate ECC information to mtd_info */
+> -       mtd->ecc_strength = nand->ecc.ctx.conf.strength;
+> -       mtd->ecc_step_size = nand->ecc.ctx.conf.step_size;
+> +       mtd->ecc_strength = nand->eccreq.strength;
+> +       mtd->ecc_step_size = nand->eccreq.step_size;
 
--- 
-Regards/Gruss,
-    Boris.
+Indeed, sorry for the confusion, this is fine.
 
-SUSE Software Solutions Germany GmbH, GF: Felix Imendörffer, HRB 36809, AG Nürnberg
+Thanks,
+Miquèl

@@ -2,131 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ADBA1D707A
-	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 07:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D6471D7087
+	for <lists+linux-next@lfdr.de>; Mon, 18 May 2020 07:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgERFqt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 May 2020 01:46:49 -0400
-Received: from ozlabs.org ([203.11.71.1]:43497 "EHLO ozlabs.org"
+        id S1726499AbgERFyg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 May 2020 01:54:36 -0400
+Received: from mga18.intel.com ([134.134.136.126]:30951 "EHLO mga18.intel.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726040AbgERFqt (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 May 2020 01:46:49 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QSgp2X8Dz9sPK;
-        Mon, 18 May 2020 15:46:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589780806;
-        bh=camaI/CUsYpafRr4ZNug59q6ikP4R0PDtFMjRrbZOhk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pYMWqZhbeB49L6XUAq/AUp2sa1Jx6y/j134OlfBWprHeY0s5vcqpVF2TSQNjWeiiL
-         YkBf/dVqe6cAoF/Mv+FTT4+zYz/l+ArNpgd+u9Lnfkcq8WFY6yURUykD9owB0jA5hw
-         RiAofTofHpPIt4Mkt04t9WBgMC4a129C3W7pgTe1Zy2vPsGOT2PRYZ5HnOlnZR3Mb4
-         OM0csLlTo/kIkMF2h1pnzzFbWnLtye8k1KIzF96Abn5HZ6TmOdalFdcm5btc64EwLi
-         2MYbppyyUHkDvpWHUykHKHn3j8ZS5tixL392xi+eaEITNSbvYhPNJUypkVFUniE5ZP
-         Rt3MC1YzKNLgw==
-Date:   Mon, 18 May 2020 15:46:45 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726040AbgERFyg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 May 2020 01:54:36 -0400
+IronPort-SDR: dtH13p3NVYAhuj2dYUIND2xANb5a0hb8SIl+nCt3NAZKcr4B/+6XDu9OhXSOeuQoxdPKEkU8lP
+ EqpPHAL66VlQ==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2020 22:54:35 -0700
+IronPort-SDR: ejyi4xJ0RNdgmh84jww5CqsEMq5fUCfoxTz3lNpMxC1Z+wSMv8Lxxx0+cNAnfwotYb8g5GBUNn
+ lH9LD2vjHavA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,406,1583222400"; 
+   d="scan'208";a="263843818"
+Received: from shao2-debian.sh.intel.com (HELO [10.239.13.3]) ([10.239.13.3])
+  by orsmga003.jf.intel.com with ESMTP; 17 May 2020 22:54:32 -0700
+Subject: Re: Default enable RCU list lockdep debugging with PROVE_RCU
+To:     paulmck@kernel.org, Qian Cai <cai@lca.pw>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Qian Cai <cai@lca.pw>, Wanpeng Li <wanpengli@tencent.com>
-Subject: Re: linux-next: manual merge of the kvm tree with the rcu tree
-Message-ID: <20200518154645.1b85a1c4@canb.auug.org.au>
-In-Reply-To: <20200518154240.777ca18e@canb.auug.org.au>
-References: <20200518154240.777ca18e@canb.auug.org.au>
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        Amol Grover <frextrite@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, philip.li@intel.com,
+        lkp@intel.com, fengguang.wu@intel.com
+References: <20200514181305.GT2869@paulmck-ThinkPad-P72>
+ <CA610F47-290E-4826-B1D9-7CE09D7CEA6D@lca.pw>
+ <20200517214716.GT2869@paulmck-ThinkPad-P72>
+From:   Rong Chen <rong.a.chen@intel.com>
+Message-ID: <659206f4-d326-4fd6-3091-085c7eabf280@intel.com>
+Date:   Mon, 18 May 2020 13:54:13 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/YO/8f+_NysuHb44fRCtBNr2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200517214716.GT2869@paulmck-ThinkPad-P72>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/YO/8f+_NysuHb44fRCtBNr2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-On Mon, 18 May 2020 15:42:40 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->=20
-> Today's linux-next merge of the kvm tree got a conflict in:
->=20
->   arch/x86/kvm/svm/svm.c
->=20
-> between commit:
->=20
->   9f24847d8fdb ("kvm/svm: Disable KCSAN for svm_vcpu_run()")
->=20
-> from the rcu tree and commits:
->=20
->   a9ab13ff6e84 ("KVM: X86: Improve latency for single target IPI fastpath=
-")
->   404d5d7bff0d ("KVM: X86: Introduce more exit_fastpath_completion enum v=
-alues")
->=20
-> from the kvm tree.
->=20
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On 5/18/20 5:47 AM, Paul E. McKenney wrote:
+> On Fri, May 15, 2020 at 02:36:26PM -0400, Qian Cai wrote:
+>>
+>>> On May 14, 2020, at 2:13 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+>>>
+>>> Fair enough!  And yes, the Linux kernel is quite large, so I certainly am
+>>> not asking you to test the whole thing yourself.
+>> Ok, I saw 0day bot also started to report those which is good. For example,
+>>
+>> lkml.org/lkml/2020/5/12/1358
+>>
+>> which so far is nit blocking 0day on linux-next since it does not use panic_on_warn yet (while syzbot does).
+>>
+>> Thus, I am more convinced that we should not revert the commit just for syzbot until someone could also convince 0day to select RCU_EXPERT and then DEBUG_RCU_LIST?
+> Let's ask the 0day people, now CCed, if they would be willing to
+> build with CONFIG_RCU_EXPERT=y and CONFIG_DEBUG_RCU_LIST=y on some
+> fraction of their testing.  ;-)
+>
+> 							Thanx, Paul
 
---=20
-Cheers,
-Stephen Rothwell
+Hi,
 
-diff --cc arch/x86/kvm/svm/svm.c
-index dca2bdbe34a7,4e9cd2a73ad0..000000000000
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@@ -3279,10 -3315,21 +3315,21 @@@ static void svm_cancel_injection(struc
-        svm_complete_interrupts(svm);
-  }
+Thanks for your advice, we'll support it in the near future.
 
-+ static fastpath_t svm_exit_handlers_fastpath(struct kvm_vcpu *vcpu)
-+ {
-+       if (!is_guest_mode(vcpu) &&
-+           to_svm(vcpu)->vmcb->control.exit_code =3D=3D SVM_EXIT_MSR &&
-+           to_svm(vcpu)->vmcb->control.exit_info_1)
-+               return handle_fastpath_set_msr_irqoff(vcpu);
-+
-+       return EXIT_FASTPATH_NONE;
-+ }
-+
-  void __svm_vcpu_run(unsigned long vmcb_pa, unsigned long *regs);
-
-- static __no_kcsan void svm_vcpu_run(struct kvm_vcpu *vcpu)
- -static fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
-++static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
-  {
-+       fastpath_t exit_fastpath;
-        struct vcpu_svm *svm =3D to_svm(vcpu);
-
-        svm->vmcb->save.rax =3D vcpu->arch.regs[VCPU_REGS_RAX];
-s
-
---Sig_/YO/8f+_NysuHb44fRCtBNr2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7CIUUACgkQAVBC80lX
-0GzpqwgAjl8NVo9R0myWOP1T9NnrAue46nQwyyzOO9AOz9JJWtAi4V7Bhhw9scBm
-3JSCVuONL6W/k0XUYe+ipF7k2Cxbq4deYIgbfwBgXLYQ+y+Ba8LatABScEAdFKW5
-i8ePrODqNASHyyx1Sy6GRQw8XRgRsMlujKg8zIqOtOWmo1n57U/sz26SBrS11yFH
-D9hTVx5+KcqLK3pWW8oh1gafNp7PIxpbCyMNq6jKalLPMSrG/1918tEH+Lwjw2v1
-81eg/Cb+OHIZ0L/C9UTQjMbvwxWI3SrlqOfIKbuvRpt8oPBTvCHSBBDwliQ4+oDd
-NFv4fgAaOg36UCh0CU6n5Rs40YUImg==
-=+K9t
------END PGP SIGNATURE-----
-
---Sig_/YO/8f+_NysuHb44fRCtBNr2--
+Best Regards,
+Rong Chen

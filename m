@@ -2,84 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 522921D9A9F
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 17:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E8C1D9B7E
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 17:42:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728894AbgESPEO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33896 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727910AbgESPEN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 11:04:13 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8EC08C5C0;
-        Tue, 19 May 2020 08:04:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=klHY5uJiJ1ZMv4sROnMdMEUYgzDxI9wNLeNXBZIY+rI=; b=XYll6qzfRprQhwNNyOqxJpYMmg
-        6Xqg/zQ6PlnvA3j7E1UEd4IHqyrnczfpL//+QAouvCoGhmyR83pOg5HIfhZBIMMu2uNr4gPtGDsGE
-        HKeFcEhZ9Kezr3XXxJqQYuryKOj9+1psnJRSKo2bUoeCHlC41Z+E+Ju+yliydg8KvHXrhRg/70vTf
-        ugZIP/pubXS54CzX0CEWbUgmfnPBjW0TFqf0kuJzpsDT+kMz1R7i7SHYClRcW3RhLHawGd9cXYLTK
-        o0din+R8ceLHoursAwJjpHrNx6MLYvspuI/c3JC9h3zK+PRtUov/aAuozsFFQ+1dYxp/WmlbrY243
-        gNjlsVBA==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jb3mp-00020X-GT; Tue, 19 May 2020 15:04:07 +0000
-Subject: Re: [PATCH v2] rnbd/rtrs: pass max segment size from blk user to the
- rdma library
-To:     Danil Kipnis <danil.kipnis@cloud.ionos.com>,
-        linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-next@vger.kernel.org, axboe@kernel.dk, dledford@redhat.com,
-        jgg@ziepe.ca
-Cc:     bvanassche@acm.org, leon@kernel.org, jinpu.wang@cloud.ionos.com
-References: <20200519084812.GP188135@unreal>
- <20200519111419.924170-1-danil.kipnis@cloud.ionos.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <63d61bce-afe4-5af7-d181-7380db9a701d@infradead.org>
-Date:   Tue, 19 May 2020 08:04:05 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1729157AbgESPmQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 11:42:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47536 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728633AbgESPmQ (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 19 May 2020 11:42:16 -0400
+Received: from localhost (unknown [213.57.247.131])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id CC70720657;
+        Tue, 19 May 2020 15:42:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1589902935;
+        bh=SAUtnHbhRUvNQHA6UXyEPH+tMYYQxg6u5DOJzEquLKI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gYhLcLMwyQL8Olf6gN9Egx1f9rCvTAa3We8KZNbNicrG7ysAiKgk56HhizrOtc6SD
+         HBHDxlAb7et8c9pTj0C+b+JXRNUZ9iFyFdG/Kdn6NhKUBs5W2kfo19l6BtILfuD7eU
+         MvT7vBCzYLzY1AFuO27CyZGKCYgRWDyi0P2t8brg=
+Date:   Tue, 19 May 2020 18:42:11 +0300
+From:   Leon Romanovsky <leon@kernel.org>
+To:     Danil Kipnis <danil.kipnis@cloud.ionos.com>
+Cc:     linux-rdma@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Subject: Re: [PATCH 1/1] rnbd/rtrs: pass max segment size from blk user to
+ the rdma library
+Message-ID: <20200519154211.GS188135@unreal>
+References: <e132ee19-ff55-c017-732c-284a3b20daf7@infradead.org>
+ <20200519080136.885628-1-danil.kipnis@cloud.ionos.com>
+ <20200519080136.885628-2-danil.kipnis@cloud.ionos.com>
+ <20200519084812.GP188135@unreal>
+ <CAHg0Huw9HiNz1jYcypiirbB6encMcBOuGMLDE+9m0wGp0B6VfA@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20200519111419.924170-1-danil.kipnis@cloud.ionos.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHg0Huw9HiNz1jYcypiirbB6encMcBOuGMLDE+9m0wGp0B6VfA@mail.gmail.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/19/20 4:14 AM, Danil Kipnis wrote:
-> When Block Device Layer is disabled, BLK_MAX_SEGMENT_SIZE is undefined.
-> The rtrs is a transport library and should compile independently of the
-> block layer. The desired max segment size should be passed down by the
-> user.
-> 
-> Introduce max_segment_size parameter for the rtrs_clt_open() call.
-> 
-> Fixes: f7a7a5c228d4 ("block/rnbd: client: main functionality")
-> Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
-> Fixes: cb80329c9434 ("RDMA/rtrs: client: private header with client structs and functions")
-> Fixes: b5c27cdb094e ("RDMA/rtrs: public interface header to establish RDMA connections")
-> 
-> Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+On Tue, May 19, 2020 at 11:14:26AM +0200, Danil Kipnis wrote:
+> Hi Leon
+>
+> On Tue, May 19, 2020 at 10:48 AM Leon Romanovsky <leon@kernel.org> wrote:
+> >
+> > On Tue, May 19, 2020 at 10:01:36AM +0200, Danil Kipnis wrote:
+> > > When Block Device Layer is disabled, BLK_MAX_SEGMENT_SIZE is undefined.
+> > > The rtrs is a transport library and should compile independently of the
+> > > block layer. The desired max segment size should be passed down by the
+> > > user.
+> > >
+> > > Introduce max_segment_size parameter for the rtrs_clt_open() call.
+> > >
+> > > Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
+> > > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > > ---
+> >
+> > Please, add fixes line.
+> I'm new to this for-next fix up procedure. What tree the commit I
+> should reference with the fixes line should come from? Should I split
+> this commit so that I can reference the commits which add separate
+> files in the original patchset here
+> https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git/log/?h=for-next
+> ? And also if I have to fix yet another issue - how do I then
+> reference the commit this patch creates if applied?
+> Thank you!
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+NP,
 
-Thanks.
+You need to configure your email client to properly honor replies,
+e.g. add extra blank line between your reply and the email body.
+It will make your replies more clear.
 
-> ---
-> v1->v2 Add Fixes lines.
-> 
->  drivers/block/rnbd/rnbd-clt.c          |  1 +
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 17 +++++++++++------
->  drivers/infiniband/ulp/rtrs/rtrs-clt.h |  1 +
->  drivers/infiniband/ulp/rtrs/rtrs.h     |  1 +
->  4 files changed, 14 insertions(+), 6 deletions(-)
+Regarding fixes:
+1. There should not blank line between Fixes line and SOBs.
+2. You can use one Fixes line (use latest).
+3. Patches are usually divided for logical units.
 
+Thanks
 
--- 
-~Randy
+>
+> >
+> > Thanks

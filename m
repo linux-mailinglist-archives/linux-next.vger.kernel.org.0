@@ -2,53 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DDA7B1D9F84
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 20:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A489C1D9F94
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 20:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgESSag (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 14:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
+        id S1726447AbgESSgf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 14:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726161AbgESSag (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 14:30:36 -0400
+        with ESMTP id S1726059AbgESSge (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 14:36:34 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A954C08C5C0;
-        Tue, 19 May 2020 11:30:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E001C08C5C0;
+        Tue, 19 May 2020 11:36:34 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49RPZf5VLHz9sRK;
-        Wed, 20 May 2020 04:30:34 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49RPjX0pyjz9sTH;
+        Wed, 20 May 2020 04:36:31 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589913034;
-        bh=SFuRTS9+gsJOEt25G5xbN66octtTZc5pVmdnC8JSOYY=;
+        s=201702; t=1589913393;
+        bh=uHf/n/3lhq80d/20JbDIKvnFDtOjqWPxZBs/eern4Tc=;
         h=Date:From:To:Cc:Subject:From;
-        b=QEpthBRFmd43iIY8p0vuV5Mp3WB2/0eKTluuZ/LZTP8xRONH579DjzRhcHk6SV1oS
-         XO/4z+N+KYk6urcgUBwfjSnx9j1pKYz4WfR/g4AJlXkfyalVHwmmVjEkF546FUtu5X
-         UGAtG7hBJH4w/AJ1KuKmOEuWHZCLAKR9y4WCqD6nhcfr9EqZ6Ml3S/8fV8LOfzpaKd
-         71uEIDujTkcFnYkAmOBVSZSpofByN78wqMs603Ro98A0/uxu5bosOVN+P1+YvLpQHF
-         5l4LmKinHsU/FgTsyg/aGaXSPyD3diNmck9anKsdGqr9zuY1HuJMUQtKvj21tf5lex
-         YmBgOX291z/dg==
-Date:   Wed, 20 May 2020 04:30:33 +1000
+        b=nchV7XJFXHz/dOTOpSi/rBos5yGTV09NBskEw0f3KCv61/NCpPGVL0/OC6GRGPNta
+         zcRGVBs/sq6LjR0LsLra8DmcqXOLawjInD6R7lMssWwUz5OKICVbOrgovVeEnYeuai
+         AtZjFc3uhTaaVUoKPZLr4O1sLdPM5OK3VdsPxp3bFpubDPIAt6wg7jTQT8YgPSFOMK
+         fb3fa25NpJrAM6fXIbuZG7ihcKDtU7F2/vmDPx+qHEbblINgx90K1P9Jv68SwvsIYU
+         1bnTZivcJ+dwJLMsrvzWzlOu1XVmld6fnabFdVk2p95N9+uzoP9QVrtkwiz+6O8REM
+         wAToACIaqONWA==
+Date:   Wed, 20 May 2020 04:36:31 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
+To:     Joerg Roedel <joro@8bytes.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Olga Kornievskaia <olga.kornievskaia@gmail.com>
-Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
-Message-ID: <20200520043033.036c78ac@canb.auug.org.au>
+        Lu Baolu <baolu.lu@linux.intel.com>
+Subject: linux-next: Fixes tag needs some work in the iommu tree
+Message-ID: <20200520043631.41a150d2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wf5Y6selKu=mRUD6OJSU6pF";
+Content-Type: multipart/signed; boundary="Sig_/QZtWuWWQjElsZXikxlRXNfy";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wf5Y6selKu=mRUD6OJSU6pF
+--Sig_/QZtWuWWQjElsZXikxlRXNfy
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -56,38 +54,48 @@ Hi all,
 
 In commit
 
-  049a9d8a9117 ("NFSv4.1 fix rpc_call_done assignment for BIND_CONN_TO_SESS=
-ION")
+  ef0865631ae3 ("iommu/vt-d: Fix pointer cast warnings on 32 bit")
 
 Fixes tag
 
-  Fixes: 02a95dee8 ("NFS add callback_ops to nfs4_proc_bind_conn_to_session=
-_callback")
+  Fixes: d64d47f4f5678 ("iommu/vt-d: Add nested translation helper function=
+")
 
 has these problem(s):
 
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+  - Target SHA1 does not exist
+
+Fixes tag
+
+  Fixes: a3bea1a35c083 ("iommu/vt-d: Add bind guest PASID support")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: b0d1f8741b81 ("iommu/vt-d: Add nested translation helper function")
+Fixes: 56722a4398a3 ("iommu/vt-d: Add bind guest PASID support")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/wf5Y6selKu=mRUD6OJSU6pF
+--Sig_/QZtWuWWQjElsZXikxlRXNfy
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7EJckACgkQAVBC80lX
-0Gw40AgAgKe6CQ2f2H1eOxpBpI+V2ulc+2ivYjOW8s5WxndVEN3VN+F+o836/JO6
-TS/WUmcnwXf6pAFULbMCmhOBWPTpIdKIHWgmOKBZiVIaZvtBN0mt2Sq02avbXecN
-itK7/uhvE2Oz8uEmT1eAlkw8Olu+i22PvrXWY9unv0pqaTkEWCd0EceLTWk2sKRx
-5xULqXHpO/5S1VS7E4Ne7Y3hHkZ6rOeeHzD1nqn0gYH/GYDL0HnZZZ1RWqEfM2WT
-qEqeG2g8MzTTvah4RFP00g1/TJ+k8DZO4ok6O3We/Phrf00bIEnuuNxvBj+n8J5v
-/+p9w78wgOzXVdAF4/lxUOtlCsXkYA==
-=heuu
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7EJy8ACgkQAVBC80lX
+0GyfpAf8D2Cq6o0ggkCuC3xkUXuOF2h3mbMy0b72PY/Wvls23FJGiQVRjUQ2d0Xu
+Xea683UQqLvpSwgOdmIWnUVQKzp4I28o6fO9vXmYuZv9BM1d24j5yonhm8MsDnQn
+Uu1gYTI20Z1hy0qmYut1X3GBCKOdQtShVCEf0Tq//LIy0DJPRgYmHsiFN9nqCKZL
+0FNskQZUMY9jAqtmyzP+qx5x3bhIajK+hcyBw+e+ePGqMGSoW13zhko1/yMm8Yze
+WE1qHu8CQGb9fupZnKDLQs8/CmY8I0BLRjz7GFC3WJMwtx0c40aqUKGJzNbqk0jj
+S1CPjc8Kb6JyzuvC18RNmePstVmShA==
+=qyWc
 -----END PGP SIGNATURE-----
 
---Sig_/wf5Y6selKu=mRUD6OJSU6pF--
+--Sig_/QZtWuWWQjElsZXikxlRXNfy--

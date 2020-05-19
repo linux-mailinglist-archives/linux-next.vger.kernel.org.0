@@ -2,199 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C002B1D8F0D
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 07:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EB91D8FDC
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 08:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726626AbgESFKB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 01:10:01 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44179 "EHLO ozlabs.org"
+        id S1726859AbgESGQ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 02:16:56 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:56737 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726272AbgESFKB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 19 May 2020 01:10:01 -0400
+        id S1726841AbgESGQ4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 19 May 2020 02:16:56 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49R3ps4mscz9sTC;
-        Tue, 19 May 2020 15:09:57 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49R5J15Zn0z9sPK;
+        Tue, 19 May 2020 16:16:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589864997;
-        bh=NPbDWL278efReNk+B+hfFv0HZoNl443h6DkFc96/Pt0=;
+        s=201702; t=1589869014;
+        bh=91pVM7ziWiSyFU0HhHOGx9PvU8o39xIEsU9i8jU4B4s=;
         h=Date:From:To:Cc:Subject:From;
-        b=KAT0G/mhMR8HMRxdLhMu6dFLVeOAmoomShA4vCQVHro5GJHm8B+3Qz2x9jwWxA4Rc
-         iq46I7Mq/rcaEdoD2HSdSecXQogWnuqJ+aVuuszPLXciP/+sfN1mf61HNvr4Ro3adJ
-         /3ZXV4bxo26dzN0gEOYVTcUpX/ni8+54DmzBXn8ef3WkVd42ZERk/Iz5Zz5PQL26Oa
-         KyHi8qXe/7K/hP8ofy+3aeYC0RU3pgvOh6HXow5jAo2vL/0uVXbhcsW1uqghGqg5qj
-         RWpC58gDfZtjegrRb8mh/eYvFIGeeZWAl2c3FzDS8JE5jGSIQIJJNdU6tb3tLTpBDk
-         CgWyTB3Lf0n1g==
-Date:   Tue, 19 May 2020 15:09:55 +1000
+        b=X4a41nCSUEyOV2+ZJV7ZROH0mdXJToC2tSvTXSAAUSMoFPKr/lT9UacAhvjx5Gsxf
+         Rnu/Xr4JQcWmJRLo1C30BIUXoUMDHwsw+XjyQ6uhRU5bRrsv2ZleZt3FZb47raMl+/
+         m4jvkDuo0QAAWHTajPj6+XOHWouI2m3Ezoe/Waib+e5UOSxcPYHFN5pqB7ZsnFO0Za
+         zVocR1JpZv0vvNOd5muXttarzLnCvstiDeKrBKECZoCoE4syFJask+GonNj3fzCMoQ
+         s53nXtRiqlxE7JvGS3gALUw2Y9/gi+AtdcI2224iKcP3D8kO1QzenhOlpyJS6y17XV
+         VOwK21R/g0C5g==
+Date:   Tue, 19 May 2020 16:16:47 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kalyan Thota <kalyan_t@codeaurora.org>
-Subject: inux-next: build failure after merge of the drm-msm tree
-Message-ID: <20200519150955.1667566a@canb.auug.org.au>
+        Chris Wilson <chris@chris-wilson.co.uk>,
+        Dave Airlie <airlied@linux.ie>,
+        DRI <dri-devel@lists.freedesktop.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: linux-next: manual merge of the tip tree with the drm-misc tree
+Message-ID: <20200519161647.32403208@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Kln4oS5T8VA/o/8ORVebug.";
+Content-Type: multipart/signed; boundary="Sig_/Z9NU_G605JuTD9ChLDt=.5E";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Kln4oS5T8VA/o/8ORVebug.
+--Sig_/Z9NU_G605JuTD9ChLDt=.5E
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-msm tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Today's linux-next merge of the tip tree got a conflict in:
 
-ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/msm/msm.ko] undefined!
-ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/msm/msm.ko] undefined!
+  drivers/gpu/drm/drm_dp_mst_topology.c
 
-Caused by commit
+between commit:
 
-  04d9044f6c57 ("drm/msm/dpu: add support for clk and bw scaling for displa=
-y")
+  a4292e52106b ("drm: Match drm_dp_send_clear_payload_id_table definition t=
+o declaration")
 
-I applied the following patch for today (this is mechanical, there may
-be a better way):
+from the drm-misc tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 19 May 2020 14:12:39 +1000
-Subject: [PATCH] drm/msm/dpu: fix up u64/u32 division for 32 bit architectu=
-res
+  53965dbe5396 ("drm: Make drm_dp_mst_dsc_aux_for_port() safe for old compi=
+lers")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c | 23 ++++++++++++++-----
- drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     | 15 ++++++++----
- 2 files changed, 28 insertions(+), 10 deletions(-)
+from the tip tree.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c b/drivers/gpu/dr=
-m/msm/disp/dpu1/dpu_core_perf.c
-index 9697abcbec3f..85c2a4190840 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-@@ -10,6 +10,7 @@
- #include <linux/sort.h>
- #include <linux/clk.h>
- #include <linux/bitmap.h>
-+#include <asm/div64.h>
-=20
- #include "dpu_kms.h"
- #include "dpu_trace.h"
-@@ -53,8 +54,11 @@ static u64 _dpu_core_perf_calc_bw(struct dpu_kms *kms,
- 	}
-=20
- 	bw_factor =3D kms->catalog->perf.bw_inefficiency_factor;
--	if (bw_factor)
--		crtc_plane_bw =3D mult_frac(crtc_plane_bw, bw_factor, 100);
-+	if (bw_factor) {
-+		u64 quot =3D crtc_plane_bw;
-+		u32 rem =3D do_div(quot, 100);
-+		crtc_plane_bw =3D (quot * bw_factor) + ((rem * bw_factor) / 100);
-+	}
-=20
- 	return crtc_plane_bw;
- }
-@@ -89,8 +93,11 @@ static u64 _dpu_core_perf_calc_clk(struct dpu_kms *kms,
- 	}
-=20
- 	clk_factor =3D kms->catalog->perf.clk_inefficiency_factor;
--	if (clk_factor)
--		crtc_clk =3D mult_frac(crtc_clk, clk_factor, 100);
-+	if (clk_factor) {
-+		u64 quot =3D crtc_clk;
-+		u32 rem =3D do_div(quot, 100);
-+		crtc_clk =3D (quot * clk_factor) + ((rem * clk_factor) / 100);
-+	}
-=20
- 	return crtc_clk;
- }
-@@ -234,8 +241,12 @@ static int _dpu_core_perf_crtc_update_bus(struct dpu_k=
-ms *kms,
- 		}
- 	}
-=20
--	avg_bw =3D kms->num_paths ?
--			perf.bw_ctl / kms->num_paths : 0;
-+	if (kms->num_paths) {
-+		avg_bw =3D perf.bw_ctl;
-+		do_div(avg_bw, kms->num_paths);
-+	} else {
-+		avg_bw =3D 0;
-+	}
-=20
- 	for (i =3D 0; i < kms->num_paths; i++)
- 		icc_set_bw(kms->path[i],
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/ms=
-m/disp/dpu1/dpu_plane.c
-index c2a6e3dacd68..ad95f32eac13 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-@@ -9,6 +9,7 @@
-=20
- #include <linux/debugfs.h>
- #include <linux/dma-buf.h>
-+#include <asm/div64.h>
-=20
- #include <drm/drm_atomic_uapi.h>
- #include <drm/drm_damage_helper.h>
-@@ -174,7 +175,11 @@ static void _dpu_plane_calc_bw(struct drm_plane *plane,
- 	plane_prefill_bw =3D
- 		src_width * hw_latency_lines * fps * fmt->bpp * scale_factor;
-=20
--	plane_prefill_bw =3D mult_frac(plane_prefill_bw, mode->vtotal, (vbp+vpw));
-+	{
-+		u64 quot =3D plane_prefill_bw;
-+		u32 rem =3D do_div(plane_prefill_bw, vbp + vpw);
-+		plane_prefill_bw =3D quot * mode->vtotal + rem * mode->vtotal / (vbp + v=
-pw);
-+	}
-=20
- 	pstate->plane_fetch_bw =3D max(plane_bw, plane_prefill_bw);
- }
-@@ -204,9 +209,11 @@ static void _dpu_plane_calc_clk(struct drm_plane *plan=
-e)
- 	pstate->plane_clk =3D
- 		dst_width * mode->vtotal * fps;
-=20
--	if (src_height > dst_height)
--		pstate->plane_clk =3D mult_frac(pstate->plane_clk,
--					src_height, dst_height);
-+	if (src_height > dst_height) {
-+		u64 quot =3D pstate->plane_clk;
-+		u32 rem =3D do_div(quot, dst_height);
-+		pstate->plane_clk =3D quot * src_height + rem * src_height / dst_height;
-+	}
- }
-=20
- /**
---=20
-2.26.2
+I fixed it up (I used the former) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/Kln4oS5T8VA/o/8ORVebug.
+--Sig_/Z9NU_G605JuTD9ChLDt=.5E
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DaiMACgkQAVBC80lX
-0Gzi+AgAlDu8Xb4j4U4PuDi4PqfLmOOLXJxk9m6ObqW2ISePVocFLRJ2irj6pRMd
-vxPREGoqNvOZxIBLRxiOXUQtyGGFJ8u5eSm/fLA8ebuAqa7tlZ0kM0f4KTx8E0lD
-XJHQAKKrS93Tp3IS+bZSks3w9EX/4dNOoFJWnb3SIBRuP0+nhJYkWivmGsZ5rOU6
-roU+m7yIXEMK1WU5fArK6eskfFpErvt68d1IpyRmdUu4kAVvVQPlitEEQBttAKEj
-Ons82z0rXwTHehzJDhpQwEJ0NsiWen1QpiQhDsAHYskMLheYagg7vR6y4Lo/fxHQ
-Ap7Mc/v/AbDQzSIQ61nN+GTYatPirQ==
-=3dJO
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Dec8ACgkQAVBC80lX
+0GzY8Qf9GmoyBCxWOB7HGwwV5JAnLgPlznojx78MaSq1M0n+D7gclsWyHlWQkusY
+Br1BuPhoAlha3EmCqLVAKJp7mQD1dnzFj7Z2hZqcoHSsxxN7YIqgES/VjqY5gs4i
+0q9oqhJ2tS0XVYgEHY3MeIZTZRteW/1FllBeyyXNvruCcltNt+QK0PcOoUIGGtu7
+WXEqHwK1FSUXmI+TAx6Nr5GiIY1h0sRyWhOuYTvj9oDxIAc8H1cD4q3Y/EwzlWCm
+UzuX+NL1NOP5fYVcEwRuG9uHbIMelMh9tvwgVYEwSxgFVK2ImBnE0TzfdR+913p4
+JZcJBWdYzrppFPofG3IiGaChBYDcPw==
+=myR2
 -----END PGP SIGNATURE-----
 
---Sig_/Kln4oS5T8VA/o/8ORVebug.--
+--Sig_/Z9NU_G605JuTD9ChLDt=.5E--

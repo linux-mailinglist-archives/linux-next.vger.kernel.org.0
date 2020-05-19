@@ -2,114 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276C41D8B89
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 01:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED2331D8E32
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 05:28:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726732AbgERXPu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 18 May 2020 19:15:50 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:44625 "EHLO ozlabs.org"
+        id S1726302AbgESD2D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 18 May 2020 23:28:03 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:45489 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726481AbgERXPu (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 18 May 2020 19:15:50 -0400
+        id S1726293AbgESD2D (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 18 May 2020 23:28:03 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49QvyC16t4z9sPF;
-        Tue, 19 May 2020 09:15:47 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49R1YD0kt3z9sTC;
+        Tue, 19 May 2020 13:27:59 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589843748;
-        bh=Yr6CwYHiLwBFpM58o+pP6uQFb+BzpavnPqWxARGMspk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i0lP0ArHYOopLpo/ulIzUZV0Eyz56WR+lHqqzeLmXw05m3Anvhox79Cnjg1087o0C
-         CeQco0K7wIx3tKUZpQ+5mCAi3CTznXI7hbu6PAvJefS/WXRec8ErSCqWkh0pbpKFvw
-         XB4rMIC8qFaMVqw7vBbMfgxNkL9ltRe9KquDO4B/lNn1vwwOCl3wwfApCkMSaryqt0
-         l/De8Mle/0FVN0535lJKQJJiBMsktAuui4OE0DB6zHW4auR02VsV7EYGolatGHNIPW
-         8Xqz0oiTYAWbKoh5quL/2vflhUHAeRv10Lp3zOwEf51sRCkW1pD6eioX66RanNHZES
-         bqhChVdIPtjOQ==
-Date:   Tue, 19 May 2020 09:15:46 +1000
+        s=201702; t=1589858881;
+        bh=cZmRISKrI+RYRn17j7r5WAvmlVlJYEo6WE9o3Prs4qY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RYZE/KvSSLbpmyc5P88oI+NdYktrTk+GX1g00WdrEmpT/bgKMs0YDUaek/5Xt6r7y
+         tMPPnHBtFoeZUcCwneMlmqNVBxZagXRLYeDXdOZe8a5z3Jh+XEM7sBUK8DeT+syunc
+         pZT8TDuR0PQyx6pMK0NHaIkM3b/7ygvGvZwhUgXU8x/YtVSQ3l8zuP9PQskyO6AR9/
+         RhJPQ98ZgixDf9e5HKjyeyehYHJFBPjA2/Zpkvrfqx8gPW8a8KC68Wg0YU5Ci4kgcp
+         iRNbVjGyL96Yxp9D0c5R+Quni4lM75tbfliTA9c+1GdRvNE3TtPuiPEBh+pWdniNlX
+         15FUzTM26oAIA==
+Date:   Tue, 19 May 2020 13:27:58 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org
-Subject: Re: mmotm 2020-05-15-16-29 uploaded
-Message-ID: <20200519091546.3a46bc9a@canb.auug.org.au>
-In-Reply-To: <20200516155358.3683f11e@canb.auug.org.au>
-References: <20200513175005.1f4839360c18c0238df292d1@linux-foundation.org>
-        <20200515233018.ScdtkUJMA%akpm@linux-foundation.org>
-        <20200516155358.3683f11e@canb.auug.org.au>
+To:     Steffen Klassert <steffen.klassert@secunet.com>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sabrina Dubroca <sd@queasysnail.net>
+Subject: linux-next: manual merge of the ipsec-next tree with the net-next
+ tree
+Message-ID: <20200519132758.56a187a2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NX+9Qji75+ZpECdglkZfFOu";
+Content-Type: multipart/signed; boundary="Sig_/liktNAd7tVSiXK0VUsJftfo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/NX+9Qji75+ZpECdglkZfFOu
+--Sig_/liktNAd7tVSiXK0VUsJftfo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Andrew,
+Hi all,
 
-On Sat, 16 May 2020 15:53:58 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> On Fri, 15 May 2020 16:30:18 -0700 Andrew Morton <akpm@linux-foundation.o=
-rg> wrote:
-> >
-> > * mm-introduce-external-memory-hinting-api.patch =20
->=20
-> The above patch should have
->=20
-> #define __NR_process_madvise 443
->=20
-> not 442, in arch/arm64/include/asm/unistd32.h
->=20
-> and
->=20
->  442    common  fsinfo                          sys_fsinfo
-> +443    common  process_madvise                 sys_process_madvise
->=20
-> in arch/microblaze/kernel/syscalls/syscall.tbl
->=20
-> > * mm-introduce-external-memory-hinting-api-fix.patch =20
->=20
-> The above patch should have
->=20
-> #define __NR_process_madvise 443
->=20
-> not 442
->=20
-> > * mm-support-vector-address-ranges-for-process_madvise-fix.patch =20
->=20
-> The above patch should have
->=20
-> #define __NR_process_madvise 443
->=20
-> not 442 in arch/arm64/include/asm/unistd32.h
+Today's linux-next merge of the ipsec-next tree got a conflict in:
 
-I fixed those up in yesterday's linux-next.
+  net/ipv6/af_inet6.c
+
+between commit:
+
+  3986912f6a9a ("ipv6: move SIOCADDRT and SIOCDELRT handling into ->compat_=
+ioctl")
+
+from the net-next tree and commit:
+
+  0146dca70b87 ("xfrm: add support for UDPv6 encapsulation of ESP")
+
+from the ipsec-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/NX+9Qji75+ZpECdglkZfFOu
+diff --cc net/ipv6/af_inet6.c
+index b69496eaf922,aa4882929fd0..000000000000
+--- a/net/ipv6/af_inet6.c
++++ b/net/ipv6/af_inet6.c
+@@@ -60,7 -60,7 +60,8 @@@
+  #include <net/calipso.h>
+  #include <net/seg6.h>
+  #include <net/rpl.h>
+ +#include <net/compat.h>
++ #include <net/xfrm.h>
+ =20
+  #include <linux/uaccess.h>
+  #include <linux/mroute6.h>
+
+--Sig_/liktNAd7tVSiXK0VUsJftfo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DFyIACgkQAVBC80lX
-0Gyv5wf/bFZWdRWdC4qRrizPtE6GYb9OWZSjQllEKYi+bG5mPwhKpdrYEmD7DIoj
-6am/5l1Apt0m2G81GvJIfDGr6jDAuNRYMEu5PqAInKtNKVH9ZaqJPbtaL0DxB0IV
-rW6QvgSs7Lyg8K4ne38w5rRCTnRhpE5EzgfSmYaoo1q2roVYtjBHPN7cYAGVSKjy
-jT9bUUGJnR8U0QvbiGSJzkKCsnBDmCgq9w4Sirin4VCiPVU8nQpOqSqQwBMZ2W4t
-htIFSsF/oBmRc+RLB33Ugy34q+p5GaI+HT7vRbcYH07Jf2IgSuwySMwn0TiwFLSt
-m3RyI3PIYidLBRo/WuPj14FpcVxMIg==
-=GhoY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DUj4ACgkQAVBC80lX
+0GxoSAgApEQQagmIGKqn8Qa5Nm3riSF5J8LlYFILdlec/nxuKS2pL3Vn72YAS0Ln
+pJc+wZde8Ha7ywbllIzq08xaDnXrH5EIlF1Kmo/RYKnSzAyOZUBMsLEi6rcN2RIg
+3UJcSF85x79NksGwd7PeCM/NJcwHLjMyrFZZKPxu+W98C58KyeECTTRmZe2l5zZ4
+8JBX0szMTUbQafRfRRSuRrRhx30Wc2SSII0Z6+T9jLwIXK6zAZLxWpzjHyNGpSMY
+tnluq4jqxWoYyyj7Am2VVD4AzTMK3a69iz8qdgwXgDGhhUz1nzuf9sNRngU69nvN
+ncs8u/ETIB+JBo+MIASyCxcBeRr7+Q==
+=mIB0
 -----END PGP SIGNATURE-----
 
---Sig_/NX+9Qji75+ZpECdglkZfFOu--
+--Sig_/liktNAd7tVSiXK0VUsJftfo--

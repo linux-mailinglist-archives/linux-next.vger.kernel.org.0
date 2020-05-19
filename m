@@ -2,100 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D78DF1D916B
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 09:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82A11D9190
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 10:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728641AbgESHwU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 03:52:20 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:39573 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728629AbgESHwT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 03:52:19 -0400
-Received: by mail-wm1-f66.google.com with SMTP id w64so2277900wmg.4;
-        Tue, 19 May 2020 00:52:17 -0700 (PDT)
+        id S1728237AbgESICy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 04:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52792 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726943AbgESICy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 04:02:54 -0400
+Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D68C061A0C
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 01:02:54 -0700 (PDT)
+Received: by mail-wm1-x341.google.com with SMTP id n5so2357825wmd.0
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 01:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=GAvzowp8ctEQm7gDEd4YN2NPgCDtGpVSkCRU+hDllI4=;
+        b=O2Wky9A8duWFoGp+rYjpSC7TU3//cc4PxKnhXm14syvXkMGjtoAZx5r+2dD9EEjaw8
+         mEjRZPJBmzBNhma59aN5Hn3C6nd2TR9J+CBC4p2sgK9Yy1l2XGy/66MGx9e58sDdPTuD
+         O76M7mN3bjI3KdGef5qiAx2H1Bwf1gVoAdA3c9ooYIRKaNqdHtYzhkPz9lW39isn17Oe
+         tgO+sof0JCQ9xaIJGskoM5okQDc9mPD0nVoFlYFLWwgR2ZdajvyQztYkbkNxmfMcEgYs
+         Y55qnN7SLKWV2DnFMItkhtRM6LgoUIWDE6PJwq9opSFr0n7TsWaZ6XjXKvFWI5sFoCkn
+         lkCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=q9ehllzv4GXD6PHjLq8rxZ0NEvwuAG+BryL3jyLoW3I=;
-        b=chvmaXWeCwO9URC7bdzrRLP5/Vu52UyX28eW8PAQ8pbRq1UGeAotyEqrbEJ5HKJluP
-         JQbPbdGkf7gj+aNSJb89lfoo4XXHAdWXYTvNUSuNatsg+BIEF50WECDfNHY6xDQXv5H1
-         ieS1Zf/uYr+pcYxnf6d9Np+y6t5sLVxZo+xs9rJkZ1k4ehaBCjotIfBeyU0os1J4I9Ku
-         fAorVWvtyMLjsFaE0QB3OkKkL0yWjBPA1Gy1BPO11yMi1vAH7Y9F3DyQ1EedO7+9Jzme
-         ixvhXBvAD+Ofj1QHAGhI6dHtPmbcnuhpvQdsVdJcHLldBX1jvjAOKDyc2MYjVmYp5Zkz
-         clWQ==
-X-Gm-Message-State: AOAM532PkB5sFKSGodo0LPZuB6od53JDXNPlJYpj8Ss22JzSvlyD+tvL
-        3nZQOhYgiIu2A0YpThE8mHY=
-X-Google-Smtp-Source: ABdhPJzhMPJJ+bOTnb0XzxprTwcOOTMoZpRkuCsUFILfWTJFhfoKhfdBOE3Io5xf2x700pgQq1fN2w==
-X-Received: by 2002:a1c:1902:: with SMTP id 2mr3881648wmz.178.1589874736792;
-        Tue, 19 May 2020 00:52:16 -0700 (PDT)
-Received: from localhost (ip-37-188-176-234.eurotel.cz. [37.188.176.234])
-        by smtp.gmail.com with ESMTPSA id q2sm19274851wrx.60.2020.05.19.00.52.15
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=GAvzowp8ctEQm7gDEd4YN2NPgCDtGpVSkCRU+hDllI4=;
+        b=i7OKa76CtyyitaAzZCz6OwR9xPbVARNpdlV8B/xm7BF4fKXI3buGa4Al8ShFcjIU6u
+         3Q7DovQ4Z0uLA/p11sOlXBi9OPjsVCelipRi9zatwX9D6Cg0clMHEdYURSTM9yGCLZpy
+         I6qjuEg6SwEqfYuveAdZtWG+Fp7KsMIkGwp5ri/FoZD5OBnsBX7Mbuprg4C+wcE6Njh+
+         z18xUJ4tuB7pjI1c0iBmv9m7xa+dgTjcIvEX2u0SMkdG2BEzHPSbLb7gmu1mLS8Xwlld
+         uvAJK/DSImmKc/VO8s3bEHlSlLhFgIjDU5pcs0RRHUjAXkZhwx+SBO8zrwwmaUL+iFII
+         E+rA==
+X-Gm-Message-State: AOAM532AlCLteL8PYUh/fgBDAZkBlwp5+/imgkj2lRy1UKdE1J1xVg5O
+        R8wDA/umKvUGc9if4srrTja7
+X-Google-Smtp-Source: ABdhPJyYv429uc6XmHCaQKhGJrU9gXQ+XOl2Zv+wDcE8FrVLNhN172EIHdiBjZibiPINaTcoaegb2Q==
+X-Received: by 2002:a05:600c:2197:: with SMTP id e23mr3983307wme.162.1589875371784;
+        Tue, 19 May 2020 01:02:51 -0700 (PDT)
+Received: from dkxps.fkb.profitbricks.net (dslb-002-204-227-207.002.204.pools.vodafone-ip.de. [2.204.227.207])
+        by smtp.gmail.com with ESMTPSA id g10sm18915386wrx.4.2020.05.19.01.02.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 00:52:15 -0700 (PDT)
-Date:   Tue, 19 May 2020 09:52:13 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-Message-ID: <20200519075213.GF32497@dhcp22.suse.cz>
-References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
- <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
- <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
+        Tue, 19 May 2020 01:02:51 -0700 (PDT)
+From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
+To:     linux-rdma@vger.kernel.org, jgg@ziepe.ca,
+        linux-next@vger.kernel.org
+Cc:     jinpu.wang@cloud.ionos.com, dledford@redhat.com, axboe@kernel.dk,
+        linux-block@vger.kernel.org, bvanassche@acm.org,
+        rdunlap@infradead.org, leon@kernel.org,
+        Danil Kipnis <danil.kipnis@cloud.ionos.com>
+Subject: [PATCH 0/1] Fix RTRS compilation with block layer disabled
+Date:   Tue, 19 May 2020 10:01:35 +0200
+Message-Id: <20200519080136.885628-1-danil.kipnis@cloud.ionos.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <e132ee19-ff55-c017-732c-284a3b20daf7@infradead.org>
+References: <e132ee19-ff55-c017-732c-284a3b20daf7@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon 18-05-20 19:40:55, Naresh Kamboju wrote:
-> Thanks for looking into this problem.
-> 
-> On Sat, 2 May 2020 at 02:28, Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Fri, 1 May 2020 18:08:28 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > > mkfs -t ext4 invoked oom-killer on i386 kernel running on x86_64 device
-> > > and started happening on linux -next master branch kernel tag next-20200430
-> > > and next-20200501. We did not bisect this problem.
-[...]
-> Creating journal (131072 blocks): [   31.251333] mkfs.ext4 invoked
-> oom-killer: gfp_mask=0x101cc0(GFP_USER|__GFP_WRITE), order=0,
-> oom_score_adj=0
-[...]
-> [   31.500943] DMA free:187396kB min:22528kB low:28160kB high:33792kB
-> reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
-> active_file:4736kB inactive_file:431688kB unevictable:0kB
-> writepending:62020kB present:783360kB managed:668264kB mlocked:0kB
-> kernel_stack:888kB pagetables:0kB bounce:0kB free_pcp:880kB
-> local_pcp:216kB free_cma:163840kB
+Hi Jason, Hi All,
 
-This is really unexpected. You are saying this is a regular i386 and DMA
-should be bottom 16MB while yours is 780MB and the rest of the low mem
-is in the Normal zone which is completely missing here. How have you got
-to that configuration? I have to say I haven't seen anything like that
-on i386.
+this fixes the compilation problem reported by Randy Dunlap for RTRS on
+rdma for-next.
 
-The failing request is GFP_USER so highmem is not really allowed but
-free pages are way above watermarks so the allocation should have just
-succeeded.
+Jason, am I even doing the right thing sending the fixes for the issues
+reported for the for-next for RTRS/RNBD to here?
+
+Danil Kipnis (1):
+  rnbd/rtrs: pass max segment size from blk user to the rdma library
+
+ drivers/block/rnbd/rnbd-clt.c          |  1 +
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 17 +++++++++++------
+ drivers/infiniband/ulp/rtrs/rtrs-clt.h |  1 +
+ drivers/infiniband/ulp/rtrs/rtrs.h     |  1 +
+ 4 files changed, 14 insertions(+), 6 deletions(-)
 
 -- 
-Michal Hocko
-SUSE Labs
+2.25.1
+

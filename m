@@ -2,215 +2,145 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0C01D9194
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 10:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE46C1D91CA
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 10:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727987AbgESIDP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 04:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726943AbgESIDP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 04:03:15 -0400
-Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9143C061A0C
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 01:03:14 -0700 (PDT)
-Received: by mail-wr1-x443.google.com with SMTP id e16so14738022wra.7
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 01:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloud.ionos.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=BId8hISg7s9csDflvenBQTsQbDpnhw42cMQmmFngrIs=;
-        b=XuwqGHUL19VqxJ9B+AAIsOwkfu1MxpyMU7DTse6WI2hyV6dOMkZ1D9CAp1jqAfYTn6
-         RSAnVkEO7vsW6gRRuWh7TKGUgAS7BJ/ERkvrSa8tSFFO9c2jFfKbiWC7d8yuuu5/+Ss7
-         nhfYyurt2U/O4/e6hxQc57hGhEYsscocKoosOVgHxng9agrUGMmY/IV9Bz5yMXu3ChTz
-         n8OWC0X0xXb1J1nbKbUUiTComdOAcSIRjqw42/Xxo034D6IxqVDARvPcxSER5s3XiuMC
-         +57Ja5sJIxQHKyIYWNM0nINxNsvdz4rrnQ4Kfx2uGbSa/E6DilTfYdLHiaf5QiukH66Y
-         0iPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=BId8hISg7s9csDflvenBQTsQbDpnhw42cMQmmFngrIs=;
-        b=M7JUd84ERJixgl03iBZf5IRZmRDE20Qmgei2jefPTr7pipSEkF+YXGenhOFvMwl0OO
-         U6fzPQkTq3E4FIWbX2z1ccDNuIRmUXyT5K+TeAKTYL1kwvYN6i2MeWOiy0IvKOjyPrnD
-         I0E2EgijfssTkwV8qF8kzHQvcLVUlcC4kFp4F9XDY+Cjzlq0whx8vy+CdjZkI0lK+9Oy
-         DAJnR7TWAemRCtFbkFAAz2Va4kY7OTmfMsFwyrBoIco/ZAA3bWCGNXnVnIVB3IZo7hSx
-         V9TH1h5KojaTvx3JCzCrekXolDW0LdqBVc2DHZgUUcKcoG1F40yLHmNbMI9tRhVIDRLW
-         1FIw==
-X-Gm-Message-State: AOAM530fDl9TnPX7Dv4rWY9LvXAb3OaJXReqVUpvw6NPyrksRxBPFWWT
-        OHES5Xi6rwHMsWGp8zxUUeUd
-X-Google-Smtp-Source: ABdhPJwUAYicBzIAHIFMocrzhz5ZQRCD5UiUd/x1Dap5/S3HkeiVnjuHFfnDJbKyOeLJNQUhBY4q+Q==
-X-Received: by 2002:adf:e5cd:: with SMTP id a13mr24757706wrn.266.1589875393543;
-        Tue, 19 May 2020 01:03:13 -0700 (PDT)
-Received: from dkxps.fkb.profitbricks.net (dslb-002-204-227-207.002.204.pools.vodafone-ip.de. [2.204.227.207])
-        by smtp.gmail.com with ESMTPSA id g10sm18915386wrx.4.2020.05.19.01.03.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 01:03:12 -0700 (PDT)
-From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
-To:     linux-rdma@vger.kernel.org, jgg@ziepe.ca,
-        linux-next@vger.kernel.org
-Cc:     jinpu.wang@cloud.ionos.com, dledford@redhat.com, axboe@kernel.dk,
-        linux-block@vger.kernel.org, bvanassche@acm.org,
-        rdunlap@infradead.org, leon@kernel.org,
-        Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Subject: [PATCH 1/1] rnbd/rtrs: pass max segment size from blk user to the rdma library
-Date:   Tue, 19 May 2020 10:01:36 +0200
-Message-Id: <20200519080136.885628-2-danil.kipnis@cloud.ionos.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20200519080136.885628-1-danil.kipnis@cloud.ionos.com>
-References: <e132ee19-ff55-c017-732c-284a3b20daf7@infradead.org>
- <20200519080136.885628-1-danil.kipnis@cloud.ionos.com>
+        id S1726369AbgESILt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 04:11:49 -0400
+Received: from mout.kundenserver.de ([212.227.126.130]:32807 "EHLO
+        mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726318AbgESILs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 04:11:48 -0400
+Received: from mail-qk1-f180.google.com ([209.85.222.180]) by
+ mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
+ id 1MMG6Y-1jJyQo3ZBe-00JIG7; Tue, 19 May 2020 10:11:45 +0200
+Received: by mail-qk1-f180.google.com with SMTP id g185so13774114qke.7;
+        Tue, 19 May 2020 01:11:44 -0700 (PDT)
+X-Gm-Message-State: AOAM530DaOx6VGD4hAtL1MtDchRPiAqc8ofyewQS4diTO0MnWW+lLrUg
+        4oN4bcjyKAHfcf+Wz1vur9k4+YZZBgETN85Y6iQ=
+X-Google-Smtp-Source: ABdhPJx6XgbSzoT+qvNjdY9pWlEyJs3vEhdbk/bed0qIGoM1ay/d49G6y8ZoK1QmCZ9OPzgrrkMiO8yQSdyKoKqOetU=
+X-Received: by 2002:a37:aa82:: with SMTP id t124mr18447360qke.3.1589875903344;
+ Tue, 19 May 2020 01:11:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
+ <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
+ <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com> <20200519075213.GF32497@dhcp22.suse.cz>
+In-Reply-To: <20200519075213.GF32497@dhcp22.suse.cz>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 May 2020 10:11:25 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
+Message-ID: <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:2/mAmEdLTn1HGgMYfMHYI+jtPMkkNSk61dkTTHTMQH78jKNjHU0
+ /MgCf92uJ27qRjxKmEqcmyBuW+bQhtuYlH4oo+3kZVwSbR9mwCoXoDGR9yg5IiFN02jdIf+
+ MW7go5jPQhVxGK34JppEJKAwvA3tJhq55I3YPzfRPY9AHeVt1GJel0JEkN/uBcFXRtHvEco
+ ab9CQEc7l/7/7HkRM9OWA==
+X-Spam-Flag: NO
+X-UI-Out-Filterresults: notjunk:1;V03:K0:6KykcjFhjmQ=:LLXV0qw1dXrPKBJyO7uXLI
+ S7ohXmM68ZCBLiT1sDMs0CPPwQRzxCCPtR8DzAJizCdb/qwlOFkjz6GUN74SObx0g6xGgmM+a
+ x3xjIMoAAs9Ec8LvidgLlDzvronTa/nKK9TKZDCcVYnbIJrKd1NORcRfG0BLKfFb1hJMnykH1
+ a+ilOJpLl99n7nH3klZJL3NppTKLUJJAvEc+sO+BzRxe3pIpIkzrfGZFT8kGUhO6SMwRB9TIH
+ miiuWcNCBUwJ7nsoL7IhQzrZrVoEipUHOsGpNGx8UzMaZkM1Xnbhq4iPazBu0hBuy09i8VogG
+ Jc04uj9CcVfJJqRJ1N+bCV8xuZo9M6thWI8hl1NPE+EU71PsNCdkqEXhFNZDv1UXqU9Vrfry5
+ O8tWru8gdILfzQBi7OdHEOrFeUeQEIfZ2lI6vczGDRNbgmCXKJ4+UH5zJcheDuWoRqRuiP4J1
+ M6bI7uqJiZbsLk71SpW2XJFtKqh9P3kmZcwUZq6YxQBxxPm2fq9xKAu4PYI60SsdLUiNp82ea
+ yhWlGasyUUTAO7k1Jb73KuoL0Aumoj75/mxfrkO6fFEA30+oSNEDB7c5ZGnW4iogqi8/1vlt9
+ XwIjSBExYqCIj7PqUj2ue6SDJbfjUwrUQclmDfomglAJ0j8JeowbDbhLKuAxPP6pyl7oLUZUq
+ UCdaxwDKOGx6EZIb8Fu2vw13sgG/Rsjs5m44IqCCBsxvLjQUYo/FfIjAHPE4plVh41VHpFJpT
+ GAhWuw+qNbtM4q6w/rlx3DsWI7oospXsSTkOsASShFRdsG0SiNBv1ueb29mn4UKwunXUpwQD0
+ HMhCgPFcf3IaVVGWzRM8lee5MUz1ThcGaCRjrCdOZ3RAgjx+U4=
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-When Block Device Layer is disabled, BLK_MAX_SEGMENT_SIZE is undefined.
-The rtrs is a transport library and should compile independently of the
-block layer. The desired max segment size should be passed down by the
-user.
+On Tue, May 19, 2020 at 9:52 AM Michal Hocko <mhocko@kernel.org> wrote:
+>
+> On Mon 18-05-20 19:40:55, Naresh Kamboju wrote:
+> > Thanks for looking into this problem.
+> >
+> > On Sat, 2 May 2020 at 02:28, Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Fri, 1 May 2020 18:08:28 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > > mkfs -t ext4 invoked oom-killer on i386 kernel running on x86_64 device
+> > > > and started happening on linux -next master branch kernel tag next-20200430
+> > > > and next-20200501. We did not bisect this problem.
+> [...]
+> > Creating journal (131072 blocks): [   31.251333] mkfs.ext4 invoked
+> > oom-killer: gfp_mask=0x101cc0(GFP_USER|__GFP_WRITE), order=0,
+> > oom_score_adj=0
+> [...]
+> > [   31.500943] DMA free:187396kB min:22528kB low:28160kB high:33792kB
+> > reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+> > active_file:4736kB inactive_file:431688kB unevictable:0kB
+> > writepending:62020kB present:783360kB managed:668264kB mlocked:0kB
+> > kernel_stack:888kB pagetables:0kB bounce:0kB free_pcp:880kB
+> > local_pcp:216kB free_cma:163840kB
+>
+> This is really unexpected. You are saying this is a regular i386 and DMA
+> should be bottom 16MB while yours is 780MB and the rest of the low mem
+> is in the Normal zone which is completely missing here. How have you got
+> to that configuration? I have to say I haven't seen anything like that
+> on i386.
 
-Introduce max_segment_size parameter for the rtrs_clt_open() call.
+I think that line comes from an ARM32 beaglebone-X15 machine showing
+the same symptom. The i386 line from the log file that Naresh linked to at
+https://lkft.validation.linaro.org/scheduler/job/1406110#L1223  is less
+unusual:
 
-Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
----
- drivers/block/rnbd/rnbd-clt.c          |  1 +
- drivers/infiniband/ulp/rtrs/rtrs-clt.c | 17 +++++++++++------
- drivers/infiniband/ulp/rtrs/rtrs-clt.h |  1 +
- drivers/infiniband/ulp/rtrs/rtrs.h     |  1 +
- 4 files changed, 14 insertions(+), 6 deletions(-)
+[   34.931663] Node 0 active_anon:21464kB inactive_anon:8688kB
+active_file:16604kB inactive_file:849976kB unevictable:0kB
+isolated(anon):0kB isolated(file):0kB mapped:25284kB dirty:58952kB
+writeback:27772kB shmem:8944kB writeback_tmp:0kB unstable:0kB
+all_unreclaimable? yes
+[   34.955523] DMA free:3356kB min:68kB low:84kB high:100kB
+reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+active_file:0kB inactive_file:11964kB unevictable:0kB
+writepending:11980kB present:15964kB managed:15876kB mlocked:0kB
+kernel_stack:0kB pagetables:0kB bounce:0kB free_pcp:0kB local_pcp:0kB
+free_cma:0kB
+[   34.983385] lowmem_reserve[]: 0 825 1947 825
+[   34.987678] Normal free:3948kB min:7732kB low:8640kB high:9548kB
+reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+active_file:1096kB inactive_file:786400kB unevictable:0kB
+writepending:65432kB present:884728kB managed:845576kB mlocked:0kB
+kernel_stack:1112kB pagetables:0kB bounce:0kB free_pcp:2908kB
+local_pcp:500kB free_cma:0kB
+[   35.017427] lowmem_reserve[]: 0 0 8980 0
+[   35.021362] HighMem free:1049496kB min:512kB low:1748kB high:2984kB
+reserved_highatomic:0KB active_anon:21464kB inactive_anon:8688kB
+active_file:15508kB inactive_file:51612kB unevictable:0kB
+writepending:0kB present:1149540kB managed:1149540kB mlocked:0kB
+kernel_stack:0kB pagetables:712kB bounce:0kB free_pcp:1524kB
+local_pcp:292kB free_cma:0kB
+[   35.051717] lowmem_reserve[]: 0 0 0 0
+[   35.055374] DMA: 8*4kB (UE) 1*8kB (E) 1*16kB (E) 0*32kB 0*64kB
+0*128kB 1*256kB (E) 0*512kB 1*1024kB (E) 1*2048kB (E) 0*4096kB =
+3384kB
+[   35.067446] Normal: 27*4kB (U) 23*8kB (U) 12*16kB (UE) 12*32kB (U)
+4*64kB (UE) 2*128kB (U) 2*256kB (UE) 1*512kB (E) 0*1024kB 1*2048kB (U)
+0*4096kB = 4452kB
+[   35.081347] HighMem: 2*4kB (UM) 0*8kB 1*16kB (M) 2*32kB (UM) 1*64kB
+(U) 0*128kB 1*256kB (M) 1*512kB (M) 0*1024kB 0*2048kB 256*4096kB (M) =
+1049496kB
 
-diff --git a/drivers/block/rnbd/rnbd-clt.c b/drivers/block/rnbd/rnbd-clt.c
-index 55bff3b1be71..450a571e6a1e 100644
---- a/drivers/block/rnbd/rnbd-clt.c
-+++ b/drivers/block/rnbd/rnbd-clt.c
-@@ -1216,6 +1216,7 @@ find_and_get_or_create_sess(const char *sessname,
- 				   paths, path_cnt, port_nr,
- 				   sizeof(struct rnbd_iu),
- 				   RECONNECT_DELAY, BMAX_SEGMENTS,
-+				   BLK_MAX_SEGMENT_SIZE,
- 				   MAX_RECONNECTS);
- 	if (IS_ERR(sess->rtrs)) {
- 		err = PTR_ERR(sess->rtrs);
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-index 0fa3a229d90e..59a36831927b 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-+++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-@@ -12,7 +12,6 @@
- 
- #include <linux/module.h>
- #include <linux/rculist.h>
--#include <linux/blkdev.h> /* for BLK_MAX_SEGMENT_SIZE */
- 
- #include "rtrs-clt.h"
- #include "rtrs-log.h"
-@@ -1408,7 +1407,8 @@ static void rtrs_clt_close_work(struct work_struct *work);
- 
- static struct rtrs_clt_sess *alloc_sess(struct rtrs_clt *clt,
- 					 const struct rtrs_addr *path,
--					 size_t con_num, u16 max_segments)
-+					 size_t con_num, u16 max_segments,
-+					 size_t max_segment_size)
- {
- 	struct rtrs_clt_sess *sess;
- 	int err = -ENOMEM;
-@@ -1445,7 +1445,7 @@ static struct rtrs_clt_sess *alloc_sess(struct rtrs_clt *clt,
- 	strlcpy(sess->s.sessname, clt->sessname, sizeof(sess->s.sessname));
- 	sess->s.con_num = con_num;
- 	sess->clt = clt;
--	sess->max_pages_per_mr = max_segments * BLK_MAX_SEGMENT_SIZE >> 12;
-+	sess->max_pages_per_mr = max_segments * max_segment_size >> 12;
- 	init_waitqueue_head(&sess->state_wq);
- 	sess->state = RTRS_CLT_CONNECTING;
- 	atomic_set(&sess->connected_cnt, 0);
-@@ -2531,6 +2531,7 @@ static struct rtrs_clt *alloc_clt(const char *sessname, size_t paths_num,
- 				  void	(*link_ev)(void *priv,
- 						   enum rtrs_clt_link_ev ev),
- 				  unsigned int max_segments,
-+				  size_t max_segment_size,
- 				  unsigned int reconnect_delay_sec,
- 				  unsigned int max_reconnect_attempts)
- {
-@@ -2560,6 +2561,7 @@ static struct rtrs_clt *alloc_clt(const char *sessname, size_t paths_num,
- 	clt->port = port;
- 	clt->pdu_sz = pdu_sz;
- 	clt->max_segments = max_segments;
-+	clt->max_segment_size = max_segment_size;
- 	clt->reconnect_delay_sec = reconnect_delay_sec;
- 	clt->max_reconnect_attempts = max_reconnect_attempts;
- 	clt->priv = priv;
-@@ -2641,6 +2643,7 @@ static void free_clt(struct rtrs_clt *clt)
-  * @pdu_sz: Size of extra payload which can be accessed after permit allocation.
-  * @reconnect_delay_sec: time between reconnect tries
-  * @max_segments: Max. number of segments per IO request
-+ * @max_segment_size: Max. size of one segment
-  * @max_reconnect_attempts: Number of times to reconnect on error before giving
-  *			    up, 0 for * disabled, -1 for forever
-  *
-@@ -2655,6 +2658,7 @@ struct rtrs_clt *rtrs_clt_open(struct rtrs_clt_ops *ops,
- 				 size_t paths_num, u16 port,
- 				 size_t pdu_sz, u8 reconnect_delay_sec,
- 				 u16 max_segments,
-+				 size_t max_segment_size,
- 				 s16 max_reconnect_attempts)
- {
- 	struct rtrs_clt_sess *sess, *tmp;
-@@ -2663,7 +2667,7 @@ struct rtrs_clt *rtrs_clt_open(struct rtrs_clt_ops *ops,
- 
- 	clt = alloc_clt(sessname, paths_num, port, pdu_sz, ops->priv,
- 			ops->link_ev,
--			max_segments, reconnect_delay_sec,
-+			max_segments, max_segment_size, reconnect_delay_sec,
- 			max_reconnect_attempts);
- 	if (IS_ERR(clt)) {
- 		err = PTR_ERR(clt);
-@@ -2673,7 +2677,7 @@ struct rtrs_clt *rtrs_clt_open(struct rtrs_clt_ops *ops,
- 		struct rtrs_clt_sess *sess;
- 
- 		sess = alloc_sess(clt, &paths[i], nr_cpu_ids,
--				  max_segments);
-+				  max_segments, max_segment_size);
- 		if (IS_ERR(sess)) {
- 			err = PTR_ERR(sess);
- 			goto close_all_sess;
-@@ -2923,7 +2927,8 @@ int rtrs_clt_create_path_from_sysfs(struct rtrs_clt *clt,
- 	struct rtrs_clt_sess *sess;
- 	int err;
- 
--	sess = alloc_sess(clt, addr, nr_cpu_ids, clt->max_segments);
-+	sess = alloc_sess(clt, addr, nr_cpu_ids, clt->max_segments,
-+			  clt->max_segment_size);
- 	if (IS_ERR(sess))
- 		return PTR_ERR(sess);
- 
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.h b/drivers/infiniband/ulp/rtrs/rtrs-clt.h
-index 039a2ebba2f9..167acd3c90fc 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs-clt.h
-+++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.h
-@@ -164,6 +164,7 @@ struct rtrs_clt {
- 	unsigned int		max_reconnect_attempts;
- 	unsigned int		reconnect_delay_sec;
- 	unsigned int		max_segments;
-+	size_t			max_segment_size;
- 	void			*permits;
- 	unsigned long		*permits_map;
- 	size_t			queue_depth;
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs.h b/drivers/infiniband/ulp/rtrs/rtrs.h
-index 9879d40467b6..9af750f4d783 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs.h
-+++ b/drivers/infiniband/ulp/rtrs/rtrs.h
-@@ -58,6 +58,7 @@ struct rtrs_clt *rtrs_clt_open(struct rtrs_clt_ops *ops,
- 				 size_t path_cnt, u16 port,
- 				 size_t pdu_sz, u8 reconnect_delay_sec,
- 				 u16 max_segments,
-+				 size_t max_segment_size,
- 				 s16 max_reconnect_attempts);
- 
- void rtrs_clt_close(struct rtrs_clt *sess);
--- 
-2.25.1
-
+        Arnd

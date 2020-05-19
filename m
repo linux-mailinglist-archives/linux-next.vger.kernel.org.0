@@ -2,100 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 329B11D90ED
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 09:23:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78DF1D916B
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 09:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727057AbgESHXT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 03:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726881AbgESHXT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 03:23:19 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C096C05BD09;
-        Tue, 19 May 2020 00:23:19 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49R6mj2b5Wz9sPF;
-        Tue, 19 May 2020 17:23:17 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1589872997;
-        bh=fm3/tATrAoXqTVvMa/B2iTLxXsnYu0FCK43ABfBVGtw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZljnTLzvF6ZMfdTUqkBzlUIaUlr6dR/xMzFEkPpomW2Qcdwhbj41e1SP+ewCK631i
-         GVqB7J9dGKw/QMwgIuXl9yDNXG6rsj0eHLP+WLejaHc3IxNxjfENg3WzqgflXlCE+V
-         AT5ATUzF5euh4NXfg7cbsWha97yQrZXSGvyZvCJyzTl4nfLkPMZXVcKSiTPlB/HdBf
-         R6FBe+A8aj2oQUWPks87QtrcrW+ZUtcPF1R168rFZKMv5KfPsHLatBmdjmOODXYdKl
-         3kxtI9M6QSjTI1ZTBxbwQT5waTlBF8GfdRg4Vsn8vbrFMU5HRiHXzTVXH23IMfsS8w
-         +aJOsPpZu2CwQ==
-Date:   Tue, 19 May 2020 17:23:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: linux-next: manual merge of the rcu tree with the powerpc tree
-Message-ID: <20200519172316.3b37cbae@canb.auug.org.au>
+        id S1728641AbgESHwU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 03:52:20 -0400
+Received: from mail-wm1-f66.google.com ([209.85.128.66]:39573 "EHLO
+        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728629AbgESHwT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 03:52:19 -0400
+Received: by mail-wm1-f66.google.com with SMTP id w64so2277900wmg.4;
+        Tue, 19 May 2020 00:52:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=q9ehllzv4GXD6PHjLq8rxZ0NEvwuAG+BryL3jyLoW3I=;
+        b=chvmaXWeCwO9URC7bdzrRLP5/Vu52UyX28eW8PAQ8pbRq1UGeAotyEqrbEJ5HKJluP
+         JQbPbdGkf7gj+aNSJb89lfoo4XXHAdWXYTvNUSuNatsg+BIEF50WECDfNHY6xDQXv5H1
+         ieS1Zf/uYr+pcYxnf6d9Np+y6t5sLVxZo+xs9rJkZ1k4ehaBCjotIfBeyU0os1J4I9Ku
+         fAorVWvtyMLjsFaE0QB3OkKkL0yWjBPA1Gy1BPO11yMi1vAH7Y9F3DyQ1EedO7+9Jzme
+         ixvhXBvAD+Ofj1QHAGhI6dHtPmbcnuhpvQdsVdJcHLldBX1jvjAOKDyc2MYjVmYp5Zkz
+         clWQ==
+X-Gm-Message-State: AOAM532PkB5sFKSGodo0LPZuB6od53JDXNPlJYpj8Ss22JzSvlyD+tvL
+        3nZQOhYgiIu2A0YpThE8mHY=
+X-Google-Smtp-Source: ABdhPJzhMPJJ+bOTnb0XzxprTwcOOTMoZpRkuCsUFILfWTJFhfoKhfdBOE3Io5xf2x700pgQq1fN2w==
+X-Received: by 2002:a1c:1902:: with SMTP id 2mr3881648wmz.178.1589874736792;
+        Tue, 19 May 2020 00:52:16 -0700 (PDT)
+Received: from localhost (ip-37-188-176-234.eurotel.cz. [37.188.176.234])
+        by smtp.gmail.com with ESMTPSA id q2sm19274851wrx.60.2020.05.19.00.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 May 2020 00:52:15 -0700 (PDT)
+Date:   Tue, 19 May 2020 09:52:13 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+Message-ID: <20200519075213.GF32497@dhcp22.suse.cz>
+References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
+ <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
+ <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/RyBJk_rS_Gx3yS0K5/j43lV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/RyBJk_rS_Gx3yS0K5/j43lV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon 18-05-20 19:40:55, Naresh Kamboju wrote:
+> Thanks for looking into this problem.
+> 
+> On Sat, 2 May 2020 at 02:28, Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Fri, 1 May 2020 18:08:28 +0530 Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+> >
+> > > mkfs -t ext4 invoked oom-killer on i386 kernel running on x86_64 device
+> > > and started happening on linux -next master branch kernel tag next-20200430
+> > > and next-20200501. We did not bisect this problem.
+[...]
+> Creating journal (131072 blocks): [   31.251333] mkfs.ext4 invoked
+> oom-killer: gfp_mask=0x101cc0(GFP_USER|__GFP_WRITE), order=0,
+> oom_score_adj=0
+[...]
+> [   31.500943] DMA free:187396kB min:22528kB low:28160kB high:33792kB
+> reserved_highatomic:0KB active_anon:0kB inactive_anon:0kB
+> active_file:4736kB inactive_file:431688kB unevictable:0kB
+> writepending:62020kB present:783360kB managed:668264kB mlocked:0kB
+> kernel_stack:888kB pagetables:0kB bounce:0kB free_pcp:880kB
+> local_pcp:216kB free_cma:163840kB
 
-Hi all,
+This is really unexpected. You are saying this is a regular i386 and DMA
+should be bottom 16MB while yours is 780MB and the rest of the low mem
+is in the Normal zone which is completely missing here. How have you got
+to that configuration? I have to say I haven't seen anything like that
+on i386.
 
-Today's linux-next merge of the rcu tree got a conflict in:
+The failing request is GFP_USER so highmem is not really allowed but
+free pages are way above watermarks so the allocation should have just
+succeeded.
 
-  arch/powerpc/kernel/traps.c
-
-between commit:
-
-  116ac378bb3f ("powerpc/64s: machine check interrupt update NMI accounting=
-")
-
-from the powerpc tree and commit:
-
-  187416eeb388 ("hardirq/nmi: Allow nested nmi_enter()")
-
-from the rcu tree.
-
-I fixed it up (I used the powerpc tree version for now) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/RyBJk_rS_Gx3yS0K5/j43lV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7DiWQACgkQAVBC80lX
-0GwZPAf/cPBhPN6cLwgUjG2OMKLg7D/X4Ay9qr9KUqtvaj0bCQ0Qw/KkU+8/RDGA
-X1SaRWnlNGEhz+nKyuNePBGLohcoWnta7yXvjxJSfdAX6/EJYd7Sak5HNwTcZE/e
-kyD9Ur+RgvsbqUGmYF1etEcYnZL3/KLuGHPF/SikKdDxVdQCIRmL1SlEMi8gfOjc
-PaVl+38fsi8JFlO1pAigmiNo0pCzijp8NTvrYlTLRwBFjk6MXSOoBU5DrYg3pYHF
-VCOGgkyTj/NATiy30exWNbk+O+OYTuGcwFCmTi6hArq1fJBoRC1B3B9vSdPJJVkC
-I5YibpxQ9No7zGGlc2bfBqyIrAZUSg==
-=IY1W
------END PGP SIGNATURE-----
-
---Sig_/RyBJk_rS_Gx3yS0K5/j43lV--
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,150 +2,142 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 666BB1D9BA2
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 17:48:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3081D9BBB
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 17:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729124AbgESPsr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 11:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S1729230AbgESPw5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 11:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728633AbgESPsq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 11:48:46 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBE6C08C5C0
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 08:48:46 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id y198so89908pfb.4
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 08:48:46 -0700 (PDT)
+        with ESMTP id S1728994AbgESPw5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 11:52:57 -0400
+Received: from mail-vs1-xe42.google.com (mail-vs1-xe42.google.com [IPv6:2607:f8b0:4864:20::e42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49264C08C5C1
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 08:52:57 -0700 (PDT)
+Received: by mail-vs1-xe42.google.com with SMTP id e7so6152983vsm.6
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 08:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=npj6nyuWQ54ZRzukHs7PaMjCvPNDE9Mt94DLOgYmdAM=;
-        b=P0+mae6a84cR5xUqIaEO+Q0bl2fCnvLeySFo+ugO3JyjssDIgkmsmpUbWGMOo30eLp
-         4la4jakE5roQ8jjlKA1FzIi2twmGQr7jNmyR4G/fELC21PiyyV8enb6i9lBDEIrIB2rV
-         AVTHOA5HszSMzkwJ81gPBz5iiLnARXbKwKDDs=
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=0DRJUhLfm37xkTsnSB7pw/O4/cZk8AUSxbUDEEDguJA=;
+        b=QMjKkPPnnalcEuuPmzHdrdSAibU5SjOBDQPGm7VvbDmQUrw4Da7nrjVBFcqqlfoo5K
+         TRu4iVW6Yxw1M0ntcMkjJGWvQ4ZjC3W5jjJ3YoJCC06bih2S5XojKPeiTYy5k5AHVFYJ
+         dImPokJR1g/WrLwRq5wL6mHVbufED8u+nADhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=npj6nyuWQ54ZRzukHs7PaMjCvPNDE9Mt94DLOgYmdAM=;
-        b=p5dvEHyEsXLO3z9GRb2be5MgQNtwZLicEOi5dtPAutRxk5jmG6Byd3AKFDdZ83feCh
-         jyZ4ped3YyRPr4rgF9KIWf23kJHug/U+YOkgK4Z00RoqV4mLjjbwvwr8adloXaIxet6a
-         gq9oQcz01MehD3XLUC9T14XZYRRVvFteFB/Ad6y064q+NyTE98Wxhj2TIOdpym/KeIK0
-         x0EUH0yVUbTYfacAWeFzqUt4VunCaLzJz8KafkrhcQ/7BM8K6KNYjxey59BUvwsv/N5p
-         hF53VgDLQwqzag0QgJFGyfIPLxBYPCXyq6peHLfg0SU1C07sJdozLAqNKZod67BvOg13
-         vfrw==
-X-Gm-Message-State: AOAM532YB1ir8ltQZFMeGNqVlhg/Y7MRk0kJrZUFRtWOl+kdZT/ZaMvK
-        sshjnqT1G/rGs/qtImnGpf89Jg==
-X-Google-Smtp-Source: ABdhPJz5avKKNTtvKZvm8lzBMm3rjxfvXiD2QxxVE3dZa7xUCBH4RpcsiIOy1AoeYJ/nBEZkwHHoAw==
-X-Received: by 2002:aa7:9aa8:: with SMTP id x8mr11608662pfi.182.1589903326036;
-        Tue, 19 May 2020 08:48:46 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:1:24fa:e766:52c9:e3b2])
-        by smtp.gmail.com with ESMTPSA id c2sm9506pjg.51.2020.05.19.08.48.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 May 2020 08:48:45 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jason Wessel <jason.wessel@windriver.com>
-Cc:     linux-next@vger.kernel.org, sumit.garg@linaro.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jslaby@suse.com>,
-        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH] kgdboc: Disable all the early code when kgdboc is a module
-Date:   Tue, 19 May 2020 08:44:02 -0700
-Message-Id: <20200519084345.1.I91670accc8a5ddabab227eb63bb4ad3e2e9d2b58@changeid>
-X-Mailer: git-send-email 2.26.2.761.g0e0b3e54be-goog
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=0DRJUhLfm37xkTsnSB7pw/O4/cZk8AUSxbUDEEDguJA=;
+        b=CTG/Lod/RjnX5FTwBLBakESBFgHPH4QCCi30r09Xfb6HRqJn+EIcdKRUItK4PpgQ/M
+         qYpDKRvc+Zc/MFJw/MmNNFcjyucCVvJS488VFVZJVh94Idh1ws5RS6B+BmQv3Nqcg1sX
+         NrGcUsWWqyz96JBrRT5Mfxw17z2WB5ssvhzGMihBK6iBl62kCFPsFHnXSDVWg4FnfoyP
+         keq5YCTF3aXgdmeXTFaGVi+xEHMPU0RS6heZ3kYpyzo0Z3fRX+AUKwmgTwYKAB3BDmWS
+         BquTbpy0Ecld/0RZr10eoxYlkX2lL6ym04Sytf7vgrKKuh9ES3dKuyErMj4nme3y0dJ6
+         X8gg==
+X-Gm-Message-State: AOAM533E6+viJIuXGEPL7tRncDkZDMchpk43MNAxP+AB84GDrAFoL2nE
+        1jzssbEZ/PTtH3dk/IUxaMIehoVThoQ=
+X-Google-Smtp-Source: ABdhPJwONjmA0Q/8v6MGQ0dGQqAOadzJpohATIyDOoNycxF40j3b+NaL4qKO0fEg+bMh1vaBP+T9bQ==
+X-Received: by 2002:a05:6102:300f:: with SMTP id s15mr14137484vsa.199.1589903576215;
+        Tue, 19 May 2020 08:52:56 -0700 (PDT)
+Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
+        by smtp.gmail.com with ESMTPSA id s7sm3610678vsj.20.2020.05.19.08.52.55
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 May 2020 08:52:55 -0700 (PDT)
+Received: by mail-ua1-f44.google.com with SMTP id c17so46489uaq.13
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 08:52:55 -0700 (PDT)
+X-Received: by 2002:a9f:2804:: with SMTP id c4mr18652uac.8.1589903574983; Tue,
+ 19 May 2020 08:52:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20200520000524.69af8a86@canb.auug.org.au> <CAD=FV=WuXEO0KCoRnundQxVMJyre9UBdw2NDUSsWxJwADjCR9A@mail.gmail.com>
+In-Reply-To: <CAD=FV=WuXEO0KCoRnundQxVMJyre9UBdw2NDUSsWxJwADjCR9A@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 19 May 2020 08:52:42 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=ViDa64P4xM_DH3bFkkSO0wjDjOBmBz3hELCoJLcRbCNA@mail.gmail.com>
+Message-ID: <CAD=FV=ViDa64P4xM_DH3bFkkSO0wjDjOBmBz3hELCoJLcRbCNA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kgdb tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-When kgdboc is compiled as a module all of the "ekgdboc" and
-"kgdb_earlycon" code isn't useful and, in fact, breaks compilation.
-This is because early_param() isn't defined for modules and that's how
-this code gets configured.
+Hi,
 
-It turns out that this was broken by commit eae3e19ca930 ("kgdboc:
-Remove useless #ifdef CONFIG_KGDB_SERIAL_CONSOLE in kgdboc") and then
-made worse by commit 220995622da5 ("kgdboc: Add kgdboc_earlycon to
-support early kgdb using boot consoles").  I guess the #ifdef wasn't
-so useless, even if it wasn't obvious why it was useful.  When kgdboc
-was compiled as a module only "CONFIG_KGDB_SERIAL_CONSOLE_MODULE" was
-defined, not "CONFIG_KGDB_SERIAL_CONSOLE".  That meant that the old
-module.
+On Tue, May 19, 2020 at 7:58 AM Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Tue, May 19, 2020 at 7:05 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > After merging the kgdb tree, today's linux-next build (x86_64
+> > allmodconfig) failed like this:
+> >
+> > drivers/tty/serial/kgdboc.c:418:13: error: expected declaration specifiers or '...' before string constant
+> >   418 | early_param("ekgdboc", kgdboc_early_init);
+> >       |             ^~~~~~~~~
+> > drivers/tty/serial/kgdboc.c:418:24: error: expected declaration specifiers or '...' before 'kgdboc_early_init'
+> >   418 | early_param("ekgdboc", kgdboc_early_init);
+> >       |                        ^~~~~~~~~~~~~~~~~
+> > drivers/tty/serial/kgdboc.c:546:13: error: expected declaration specifiers or '...' before string constant
+> >   546 | early_param("kgdboc_earlycon", kgdboc_earlycon_init);
+> >       |             ^~~~~~~~~~~~~~~~~
+> > drivers/tty/serial/kgdboc.c:546:32: error: expected declaration specifiers or '...' before 'kgdboc_earlycon_init'
+> >   546 | early_param("kgdboc_earlycon", kgdboc_earlycon_init);
+> >       |                                ^~~~~~~~~~~~~~~~~~~~
+> > drivers/tty/serial/kgdboc.c:505:19: warning: 'kgdboc_earlycon_init' defined but not used [-Wunused-function]
+> >   505 | static int __init kgdboc_earlycon_init(char *opt)
+> >       |                   ^~~~~~~~~~~~~~~~~~~~
+> > drivers/tty/serial/kgdboc.c:411:19: warning: 'kgdboc_early_init' defined but not used [-Wunused-function]
+> >   411 | static int __init kgdboc_early_init(char *opt)
+> >       |                   ^~~~~~~~~~~~~~~~~
+> >
+> > Caused by commit
+> >
+> >   220995622da5 ("kgdboc: Add kgdboc_earlycon to support early kgdb using boot consoles")
+> >
+> > I have used the kgdb tree from next-20200518 for today.
+>
+> Ugh.  Actually, I think the commit to blame is:
+>
+> eae3e19ca930 ("kgdboc: Remove useless #ifdef
+> CONFIG_KGDB_SERIAL_CONSOLE in kgdboc")
+>
+> The next commit just made it worse.  Apparently the #ifdef wasn't so
+> useless after all.  It was just subtly keeping the code from compiling
+> when kgdboc was used as a module.  That's because when it's a module
+> we instead get this defined:
+>
+> #define CONFIG_KGDB_SERIAL_CONSOLE_MODULE 1
+>
+> Apparently I didn't re-test as a module after I made this change in
+> one of the later spins.  :(
+>
+> I think I can whip up a quick patch that uses "IS_BUILTIN(option)".
+> Basically this should go back to how the code was in one of the
+> earlier patchsets where I tested this.
 
-Let's basically do the same thing that the old code (pre-removal of
-the #ifdef) did but use "IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE)" to
-make it more obvious what the point of the check is.  We'll fix
-kgdboc_earlycon in a similar way.
+Fix posted at:
 
-Fixes: 220995622da5 ("kgdboc: Add kgdboc_earlycon to support early kgdb using boot consoles")
-Fixes: eae3e19ca930 ("kgdboc: Remove useless #ifdef CONFIG_KGDB_SERIAL_CONSOLE in kgdboc")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+https://lore.kernel.org/r/20200519084345.1.I91670accc8a5ddabab227eb63bb4ad3e2e9d2b58@changeid
 
- drivers/tty/serial/kgdboc.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+I have confirmed:
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 34b5e91dd245..fa6f7a3e73b9 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -43,9 +43,11 @@ static int			kgdb_tty_line;
- 
- static struct platform_device *kgdboc_pdev;
- 
-+#if IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE)
- static struct kgdb_io		kgdboc_earlycon_io_ops;
- static struct console		*earlycon;
- static int                      (*earlycon_orig_exit)(struct console *con);
-+#endif /* IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE) */
- 
- #ifdef CONFIG_KDB_KEYBOARD
- static int kgdboc_reset_connect(struct input_handler *handler,
-@@ -140,10 +142,19 @@ static void kgdboc_unregister_kbd(void)
- #define kgdboc_restore_input()
- #endif /* ! CONFIG_KDB_KEYBOARD */
- 
--static void cleanup_kgdboc(void)
-+#if IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE)
-+static void cleanup_earlycon(void)
- {
- 	if (earlycon)
- 		kgdb_unregister_io_module(&kgdboc_earlycon_io_ops);
-+}
-+#else /* !IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE) */
-+static inline void cleanup_earlycon(void) { }
-+#endif /* !IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE) */
-+
-+static void cleanup_kgdboc(void)
-+{
-+	cleanup_earlycon();
- 
- 	if (configured != 1)
- 		return;
-@@ -388,6 +399,7 @@ static struct kgdb_io kgdboc_io_ops = {
- 	.post_exception		= kgdboc_post_exp_handler,
- };
- 
-+#if IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE)
- static int kgdboc_option_setup(char *opt)
- {
- 	if (!opt) {
-@@ -544,6 +556,7 @@ static int __init kgdboc_earlycon_init(char *opt)
- }
- 
- early_param("kgdboc_earlycon", kgdboc_earlycon_init);
-+#endif /* IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE) */
- 
- module_init(init_kgdboc);
- module_exit(exit_kgdboc);
--- 
-2.26.2.761.g0e0b3e54be-goog
+* x86_64 allmodconfig atop the kgdb tree compiles.
 
+* Building and using kgdboc as a module works with this patch on my
+local 5.4-based tree.  Loaded the module both with module parameters
+and via echoing to sysfs.  Unloaded the module and confirmed it works.
+
+* Building and using kgdboc builtin allows me to do kgdb_earlycon on
+my local 5.4-based tree.
+
+
+-Doug

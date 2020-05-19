@@ -2,78 +2,96 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 17F731D9293
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 10:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3EDD1D930C
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 11:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728292AbgESIwq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 04:52:46 -0400
-Received: from mail26.static.mailgun.info ([104.130.122.26]:37683 "EHLO
-        mail26.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726466AbgESIwq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 19 May 2020 04:52:46 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1589878365; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=Z/E0ZmgxBQcE9X4XQLy1um81tXBq5a1MLjRGgd52grY=; b=XGFMKMtjMH1lGJBX7ZC/23vDF+rZhA5vu18z+7Okhn06qmjXjUwI9HXW5pw2J4gAw6ZJAHOh
- yCrNGX0e/lY/yBp5LirdipUUpjO5lfKoRE8mQ04fOxcue5W/d+QNZfTG8tGn6E8YZz84hoyG
- zvjW+EVbLZz3cx/kWBGFWRx25YQ=
-X-Mailgun-Sending-Ip: 104.130.122.26
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n03.prod.us-east-1.postgun.com with SMTP id
- 5ec39e5661db07dc42de97b5 (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 19 May 2020 08:52:38
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 29AF5C432C2; Tue, 19 May 2020 08:52:38 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id 65DC9C433D2;
-        Tue, 19 May 2020 08:52:35 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 65DC9C433D2
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Wireless <linux-wireless@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Felix Fietkau <nbd@nbd.name>
-Subject: Re: linux-next: Signed-off-by missing for commit in the wireless-drivers-next tree
-References: <20200518230311.08df60cc@canb.auug.org.au>
-Date:   Tue, 19 May 2020 11:52:32 +0300
-In-Reply-To: <20200518230311.08df60cc@canb.auug.org.au> (Stephen Rothwell's
-        message of "Mon, 18 May 2020 23:03:11 +1000")
-Message-ID: <874kscfgrz.fsf@kamboji.qca.qualcomm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1728490AbgESJOk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 05:14:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35778 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728475AbgESJOk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 05:14:40 -0400
+Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B140BC05BD09
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 02:14:38 -0700 (PDT)
+Received: by mail-wm1-x342.google.com with SMTP id h4so2245243wmb.4
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 02:14:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=P0FCRf+dTi24ioQ6++WoKkPel78TMMaMNtTZJxFedYM=;
+        b=JBeDOUVJfKjg7U2LLMc02GY5YYWKYyQdU+bXVcwdKGAN7MkkoGTWVymmpJcC274eul
+         5tAw3a0i3JsksqpDcPYux77IV0YSeu2c4EkpG6ABWAbLPrnGDkKNHbwnm1fGn7fVc509
+         ox9J746CMxG3WSr8aYfE2UIvRi/DeHzB2H7CuXMaUEooiinpupI7nM4/koDAcRWUlrgE
+         9NIZ05/g4lWW3Gaqw2Tl2iGyJt/t3Br1//3CHkiEBA9F5TUaXGH9FZPs/Sx5vdtEhx37
+         V4sExMi3n5L1PXLrPVBML+4hUHZOt5nXynlAh8MtBtnS5T/u0bWTQl+ig0ZkPWecD/KN
+         QFxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=P0FCRf+dTi24ioQ6++WoKkPel78TMMaMNtTZJxFedYM=;
+        b=mwR2hMv5cWgxmKdagyOSpltVVAHltKVNTToSzD+n05UJUg22z/HQYxDybfo+pDbyIv
+         oRSBfG+dt61dAHGF6SlmDUIvlQkcxEb3H6iCQ2K1nYGeaBThRUfVxNXQWICIOh4S4eSK
+         Jr36mWaUtcYfzK2aWqfVA/+STJkwRnaUhv0P0gfDQhCnkYSdrtP1Znk6DXgPmBDMU+v0
+         aWCqQHiUcAXQbKD+rNSOWZswPVubg9SoSw0umZt6FQ9yZ0x8ktzWI2W3pTnA2E97YHi+
+         9DQwPHWpnDKReqHoSD/LROeSIl6KMWKaifRri7yd0GHgYeAbUiGga72vI9hBWAH0uOSO
+         1PfQ==
+X-Gm-Message-State: AOAM53159iSdMQYoGJEvGCMjmUzHsZYENBMMHBnukMvP22kCpVj6gYz+
+        MJOSxgTfMSRYD1JCF9dJP6hfu1kiMfLy1ttLFFMl
+X-Google-Smtp-Source: ABdhPJxt33H5r+9EPh/ct/Nqr2KLJ99l+vxPSm+tzYDY5aP1Zl3ChyyW0lQX55W6h/Lz1Picbq395Wj70Cthjbj3NHg=
+X-Received: by 2002:a1c:5402:: with SMTP id i2mr4567374wmb.185.1589879677255;
+ Tue, 19 May 2020 02:14:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <e132ee19-ff55-c017-732c-284a3b20daf7@infradead.org>
+ <20200519080136.885628-1-danil.kipnis@cloud.ionos.com> <20200519080136.885628-2-danil.kipnis@cloud.ionos.com>
+ <20200519084812.GP188135@unreal>
+In-Reply-To: <20200519084812.GP188135@unreal>
+From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
+Date:   Tue, 19 May 2020 11:14:26 +0200
+Message-ID: <CAHg0Huw9HiNz1jYcypiirbB6encMcBOuGMLDE+9m0wGp0B6VfA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] rnbd/rtrs: pass max segment size from blk user to the
+ rdma library
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     linux-rdma@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>,
+        Doug Ledford <dledford@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Bart Van Assche <bvanassche@acm.org>,
+        Randy Dunlap <rdunlap@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+Hi Leon
 
-> Commits
+On Tue, May 19, 2020 at 10:48 AM Leon Romanovsky <leon@kernel.org> wrote:
 >
->   89829c9e65ab ("mt76: mt7663: fix DMA unmap length")
->   c0f8055b3986 ("mt76: mt7622: fix DMA unmap length")
+> On Tue, May 19, 2020 at 10:01:36AM +0200, Danil Kipnis wrote:
+> > When Block Device Layer is disabled, BLK_MAX_SEGMENT_SIZE is undefined.
+> > The rtrs is a transport library and should compile independently of the
+> > block layer. The desired max segment size should be passed down by the
+> > user.
+> >
+> > Introduce max_segment_size parameter for the rtrs_clt_open() call.
+> >
+> > Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
+> > Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > ---
 >
-> are missing a Signed-off-by from their committer.
+> Please, add fixes line.
+I'm new to this for-next fix up procedure. What tree the commit I
+should reference with the fixes line should come from? Should I split
+this commit so that I can reference the commits which add separate
+files in the original patchset here
+https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git/log/?h=for-next
+? And also if I have to fix yet another issue - how do I then
+reference the commit this patch creates if applied?
+Thank you!
 
-Darn, missed that. It's quite difficult to fix this one (there's a
-signed tag etc) so I'll leave it be. But I definitely need to add some
-automatic checking also for s-o-b.
-
--- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+>
+> Thanks

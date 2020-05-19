@@ -2,211 +2,122 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 676661D99B2
-	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 16:30:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8071D9A84
+	for <lists+linux-next@lfdr.de>; Tue, 19 May 2020 16:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728847AbgESO3T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 10:29:19 -0400
-Received: from mail-pj1-f67.google.com ([209.85.216.67]:38292 "EHLO
-        mail-pj1-f67.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728737AbgESO3T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 10:29:19 -0400
-Received: by mail-pj1-f67.google.com with SMTP id t40so1497254pjb.3;
-        Tue, 19 May 2020 07:29:18 -0700 (PDT)
+        id S1728832AbgESO7G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 10:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728725AbgESO7G (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 10:59:06 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6FC08C5C0
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 07:59:06 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id o26so8013615vsr.10
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 07:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=cAwM4xUN+JXfgmnpSakIzQBFryyxT4xbvQKyptF8HfU=;
+        b=g7UesDSwco++E9tvDmaeYZHTUzwg0n+acwSdyySMURap5qFLIynLhGq5AUrj1fYMJ0
+         sw/JLqS9GpKjA2q16tUiCfnRqLnJvDl/gct6mgVedTlmvLGW1Pf+VGOmT8FCq4ufSVfc
+         35euMAF2IOS7EKW54E0VcyplYL+ZhWm0tlpcI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:autocrypt
-         :message-id:date:user-agent:mime-version:in-reply-to
-         :content-language:content-transfer-encoding;
-        bh=6t0EC/dgujfakdDpEmbdYC57HT1wMjhWS1oZoZRUl8g=;
-        b=NuUSKbwGilr9J1fWURnxHwmLfT42tzRyYJVWwtGhqMiBKH/pVRdL3FeizGubofl8dK
-         71ArvvSb83cnDt/DhVZ9Y5UJNGldsf+rfexUqxb8aMJkj5ZnxtyDb4Rm6C7o69/7bNaG
-         EkqMvbX0oLZPAFBddfZO1s9KCORV55FSqRcSRiirC1Gm08FBQ+hj2xQsMCIBbMp9tI8M
-         DPeKc/Oa9vv1xqJUcx6Vdzm57f6Yq6ZipsL8cN2b+KHuCSDG5HydmsCRmXE3znAHw2DB
-         X5sdih5nSrEHWjL5qUJxG9FsRSm9LkCpe/zdR21YgNSQkIrSrb+TwdyacxZRPHF2rlRF
-         +QKg==
-X-Gm-Message-State: AOAM533qe02w1UYvH6JwOjzLaHP/AvovDb3XI/zsV6WThLGJOzx7bmQK
-        kesOs5eSFw0MFt4zAzsae8E=
-X-Google-Smtp-Source: ABdhPJyA4dqPecvRxlsDtRwKMEmAnwGpLddE0PXNqBxkJtP3aUUP+WQl0w8kMeFTz991nhx6FXM9ig==
-X-Received: by 2002:a17:90a:e990:: with SMTP id v16mr5039963pjy.62.1589898557625;
-        Tue, 19 May 2020 07:29:17 -0700 (PDT)
-Received: from ?IPv6:2601:647:4000:d7:a402:5dc4:a04b:e81f? ([2601:647:4000:d7:a402:5dc4:a04b:e81f])
-        by smtp.gmail.com with ESMTPSA id w190sm11063875pfw.35.2020.05.19.07.29.16
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=cAwM4xUN+JXfgmnpSakIzQBFryyxT4xbvQKyptF8HfU=;
+        b=SxdCq6kBTdoQ6utDLO8PanDNnc3JYbrldt+joipBuvgnuh/DSMYM9oflE1gU592Wiw
+         myEUF3QQJb/t2BoVRdVW+KvVExd43GUHWjWSuFI/NZZLAoalsBYQlMGr9NwuGiZEMb9V
+         qw9nhS0vs/+vs0FRsmr1Gg2daGesP69DwnSUaMFAiyOO0cckMcD64kNgth0tVv/Sem4I
+         bgLXQApP3n+S6LIAGP/KseGmkZ7Rt3o45jT98BZGxlxO0N9z0jP9l8TOzqx806Qpa5qz
+         DnpuRgDuSBdQhDQx6KUfu4Jxqjf+ZcUpAfIYcSvfecV9EFTTKAmg0n1m7PxF5MvWWBA6
+         ZlhQ==
+X-Gm-Message-State: AOAM5318SMhI7XInsNiloKMaxLlhiZk9EjCr9hKXpPMzNmOWdSiIE9DE
+        ACqtEmQGjowVikU2sczg1rFmObY0fH8=
+X-Google-Smtp-Source: ABdhPJyS2aLXAnAYiCiq6SAw5Da6eDD6QHS3U+tyLPgB7MLWjwI9J6vuoX0+nas89+uOV325bUdA5A==
+X-Received: by 2002:a67:1502:: with SMTP id 2mr15811177vsv.80.1589900345302;
+        Tue, 19 May 2020 07:59:05 -0700 (PDT)
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com. [209.85.222.46])
+        by smtp.gmail.com with ESMTPSA id j85sm3671149vsd.14.2020.05.19.07.59.03
+        for <linux-next@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 May 2020 07:29:16 -0700 (PDT)
-Subject: Re: [PATCH v2] rtrs-clt: silence kbuild test inconsistent intenting
- smatch warning
-To:     Danil Kipnis <danil.kipnis@cloud.ionos.com>,
-        linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-next@vger.kernel.org, axboe@kernel.dk, dledford@redhat.com,
-        jgg@ziepe.ca
-Cc:     leon@kernel.org, jinpu.wang@cloud.ionos.com,
-        kbuild test robot <lkp@intel.com>
-References: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-Autocrypt: addr=bvanassche@acm.org; prefer-encrypt=mutual; keydata=
- mQENBFSOu4oBCADcRWxVUvkkvRmmwTwIjIJvZOu6wNm+dz5AF4z0FHW2KNZL3oheO3P8UZWr
- LQOrCfRcK8e/sIs2Y2D3Lg/SL7qqbMehGEYcJptu6mKkywBfoYbtBkVoJ/jQsi2H0vBiiCOy
- fmxMHIPcYxaJdXxrOG2UO4B60Y/BzE6OrPDT44w4cZA9DH5xialliWU447Bts8TJNa3lZKS1
- AvW1ZklbvJfAJJAwzDih35LxU2fcWbmhPa7EO2DCv/LM1B10GBB/oQB5kvlq4aA2PSIWkqz4
- 3SI5kCPSsygD6wKnbRsvNn2mIACva6VHdm62A7xel5dJRfpQjXj2snd1F/YNoNc66UUTABEB
- AAG0JEJhcnQgVmFuIEFzc2NoZSA8YnZhbmFzc2NoZUBhY20ub3JnPokBOQQTAQIAIwUCVI67
- igIbAwcLCQgHAwIBBhUIAgkKCwQWAgMBAh4BAheAAAoJEHFcPTXFzhAJ8QkH/1AdXblKL65M
- Y1Zk1bYKnkAb4a98LxCPm/pJBilvci6boefwlBDZ2NZuuYWYgyrehMB5H+q+Kq4P0IBbTqTa
- jTPAANn62A6jwJ0FnCn6YaM9TZQjM1F7LoDX3v+oAkaoXuq0dQ4hnxQNu792bi6QyVdZUvKc
- macVFVgfK9n04mL7RzjO3f+X4midKt/s+G+IPr4DGlrq+WH27eDbpUR3aYRk8EgbgGKvQFdD
- CEBFJi+5ZKOArmJVBSk21RHDpqyz6Vit3rjep7c1SN8s7NhVi9cjkKmMDM7KYhXkWc10lKx2
- RTkFI30rkDm4U+JpdAd2+tP3tjGf9AyGGinpzE2XY1K5AQ0EVI67igEIAKiSyd0nECrgz+H5
- PcFDGYQpGDMTl8MOPCKw/F3diXPuj2eql4xSbAdbUCJzk2ETif5s3twT2ER8cUTEVOaCEUY3
- eOiaFgQ+nGLx4BXqqGewikPJCe+UBjFnH1m2/IFn4T9jPZkV8xlkKmDUqMK5EV9n3eQLkn5g
- lco+FepTtmbkSCCjd91EfThVbNYpVQ5ZjdBCXN66CKyJDMJ85HVr5rmXG/nqriTh6cv1l1Js
- T7AFvvPjUPknS6d+BETMhTkbGzoyS+sywEsQAgA+BMCxBH4LvUmHYhpS+W6CiZ3ZMxjO8Hgc
- ++w1mLeRUvda3i4/U8wDT3SWuHcB3DWlcppECLkAEQEAAYkBHwQYAQIACQUCVI67igIbDAAK
- CRBxXD01xc4QCZ4dB/0QrnEasxjM0PGeXK5hcZMT9Eo998alUfn5XU0RQDYdwp6/kMEXMdmT
- oH0F0xB3SQ8WVSXA9rrc4EBvZruWQ+5/zjVrhhfUAx12CzL4oQ9Ro2k45daYaonKTANYG22y
- //x8dLe2Fv1By4SKGhmzwH87uXxbTJAUxiWIi1np0z3/RDnoVyfmfbbL1DY7zf2hYXLLzsJR
- mSsED/1nlJ9Oq5fALdNEPgDyPUerqHxcmIub+pF0AzJoYHK5punqpqfGmqPbjxrJLPJfHVKy
- goMj5DlBMoYqEgpbwdUYkH6QdizJJCur4icy8GUNbisFYABeoJ91pnD4IGei3MTdvINSZI5e
-Message-ID: <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org>
-Date:   Tue, 19 May 2020 07:29:15 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Tue, 19 May 2020 07:59:04 -0700 (PDT)
+Received: by mail-ua1-f46.google.com with SMTP id o35so694793uao.4
+        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 07:59:03 -0700 (PDT)
+X-Received: by 2002:ab0:6806:: with SMTP id z6mr15603649uar.0.1589900343396;
+ Tue, 19 May 2020 07:59:03 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200520000524.69af8a86@canb.auug.org.au>
+In-Reply-To: <20200520000524.69af8a86@canb.auug.org.au>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 19 May 2020 07:58:52 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WuXEO0KCoRnundQxVMJyre9UBdw2NDUSsWxJwADjCR9A@mail.gmail.com>
+Message-ID: <CAD=FV=WuXEO0KCoRnundQxVMJyre9UBdw2NDUSsWxJwADjCR9A@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the kgdb tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 2020-05-19 04:29, Danil Kipnis wrote:
-> Kbuild test robot reports a smatch warning:
-> drivers/infiniband/ulp/rtrs/rtrs-clt.c:1196 rtrs_clt_failover_req() warn: inconsistent indenting
-> drivers/infiniband/ulp/rtrs/rtrs-clt.c:2890 rtrs_clt_request() warn: inconsistent indenting
-> 
-> To get rid of the warning, move the while_each_path() macro to a newline.
-> Rename the macro to end_each_path() to avoid the "while should follow close
-> brace '}'" checkpatch error.
-> 
-> Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
-> 
-> Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
-> Reported-by: kbuild test robot <lkp@intel.com>
-> ---
->  v1->v2 Add fixes line
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> index 468fdd0d8713..0fa3a229d90e 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -734,7 +734,7 @@ struct path_it {
->  			  (it)->i < (it)->clt->paths_num;		\
->  	     (it)->i++)
->  
-> -#define while_each_path(it)						\
-> +#define end_each_path(it)						\
->  	path_it_deinit(it);						\
->  	rcu_read_unlock();						\
->  	}
-> @@ -1193,7 +1193,8 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
->  		/* Success path */
->  		rtrs_clt_inc_failover_cnt(alive_sess->stats);
->  		break;
-> -	} while_each_path(&it);
-> +	}
-> +	end_each_path(&it);
->  
->  	return err;
->  }
-> @@ -2887,7 +2888,8 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
->  		}
->  		/* Success path */
->  		break;
-> -	} while_each_path(&it);
-> +	}
-> +	end_each_path(&it);
->  
->  	return err;
->  }
+Hi,
 
-I don't like the do_each_path() and end_each_path() macros because these do not
-follow the pattern that is used elsewhere in the kernel to use a single macro
-to iterate over a custom container. Has it been considered to combine these two
-macros into a single macro, e.g. something like the following (untested) patch?
+On Tue, May 19, 2020 at 7:05 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the kgdb tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>
+> drivers/tty/serial/kgdboc.c:418:13: error: expected declaration specifiers or '...' before string constant
+>   418 | early_param("ekgdboc", kgdboc_early_init);
+>       |             ^~~~~~~~~
+> drivers/tty/serial/kgdboc.c:418:24: error: expected declaration specifiers or '...' before 'kgdboc_early_init'
+>   418 | early_param("ekgdboc", kgdboc_early_init);
+>       |                        ^~~~~~~~~~~~~~~~~
+> drivers/tty/serial/kgdboc.c:546:13: error: expected declaration specifiers or '...' before string constant
+>   546 | early_param("kgdboc_earlycon", kgdboc_earlycon_init);
+>       |             ^~~~~~~~~~~~~~~~~
+> drivers/tty/serial/kgdboc.c:546:32: error: expected declaration specifiers or '...' before 'kgdboc_earlycon_init'
+>   546 | early_param("kgdboc_earlycon", kgdboc_earlycon_init);
+>       |                                ^~~~~~~~~~~~~~~~~~~~
+> drivers/tty/serial/kgdboc.c:505:19: warning: 'kgdboc_earlycon_init' defined but not used [-Wunused-function]
+>   505 | static int __init kgdboc_earlycon_init(char *opt)
+>       |                   ^~~~~~~~~~~~~~~~~~~~
+> drivers/tty/serial/kgdboc.c:411:19: warning: 'kgdboc_early_init' defined but not used [-Wunused-function]
+>   411 | static int __init kgdboc_early_init(char *opt)
+>       |                   ^~~~~~~~~~~~~~~~~
+>
+> Caused by commit
+>
+>   220995622da5 ("kgdboc: Add kgdboc_earlycon to support early kgdb using boot consoles")
+>
+> I have used the kgdb tree from next-20200518 for today.
 
+Ugh.  Actually, I think the commit to blame is:
 
-Subject: [PATCH] Combine while_each_path() and do_each_path() into
- for_each_path()
+eae3e19ca930 ("kgdboc: Remove useless #ifdef
+CONFIG_KGDB_SERIAL_CONSOLE in kgdboc")
 
----
- drivers/infiniband/ulp/rtrs/rtrs-clt.c | 23 +++++++++--------------
- 1 file changed, 9 insertions(+), 14 deletions(-)
+The next commit just made it worse.  Apparently the #ifdef wasn't so
+useless after all.  It was just subtly keeping the code from compiling
+when kgdboc was used as a module.  That's because when it's a module
+we instead get this defined:
 
-diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-index 468fdd0d8713..8dfa56dc32bc 100644
---- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-+++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-@@ -727,18 +727,13 @@ struct path_it {
- 	struct rtrs_clt_sess *(*next_path)(struct path_it *it);
- };
+#define CONFIG_KGDB_SERIAL_CONSOLE_MODULE 1
 
--#define do_each_path(path, clt, it) {					\
--	path_it_init(it, clt);						\
--	rcu_read_lock();						\
--	for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&		\
--			  (it)->i < (it)->clt->paths_num;		\
-+#define for_each_path(path, clt, it)					\
-+	for (path_it_init((it), (clt)), rcu_read_lock(), (it)->i = 0;	\
-+	     (((path) = ((it)->next_path)(it)) &&			\
-+	      (it)->i < (it)->clt->paths_num) ||			\
-+		     (path_it_deinit(it), rcu_read_unlock(), 0);	\
- 	     (it)->i++)
+Apparently I didn't re-test as a module after I made this change in
+one of the later spins.  :(
 
--#define while_each_path(it)						\
--	path_it_deinit(it);						\
--	rcu_read_unlock();						\
--	}
--
- /**
-  * list_next_or_null_rr_rcu - get next list element in round-robin fashion.
-  * @head:	the head for the list.
-@@ -1177,7 +1172,7 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
- 	int err = -ECONNABORTED;
- 	struct path_it it;
+I think I can whip up a quick patch that uses "IS_BUILTIN(option)".
+Basically this should go back to how the code was in one of the
+earlier patchsets where I tested this.
 
--	do_each_path(alive_sess, clt, &it) {
-+	for_each_path(alive_sess, clt, &it) {
- 		if (unlikely(READ_ONCE(alive_sess->state) !=
- 			     RTRS_CLT_CONNECTED))
- 			continue;
-@@ -1193,7 +1188,7 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
- 		/* Success path */
- 		rtrs_clt_inc_failover_cnt(alive_sess->stats);
- 		break;
--	} while_each_path(&it);
-+	}
-
- 	return err;
- }
-@@ -2862,7 +2857,7 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
- 		dma_dir = DMA_TO_DEVICE;
- 	}
-
--	do_each_path(sess, clt, &it) {
-+	for_each_path(sess, clt, &it) {
- 		if (unlikely(READ_ONCE(sess->state) != RTRS_CLT_CONNECTED))
- 			continue;
-
-@@ -2887,7 +2882,7 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
- 		}
- 		/* Success path */
- 		break;
--	} while_each_path(&it);
-+	}
-
- 	return err;
- }
+-Doug

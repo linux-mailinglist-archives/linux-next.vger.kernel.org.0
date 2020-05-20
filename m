@@ -2,61 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D761DAF99
-	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 12:02:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C6291DAF9E
+	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 12:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726697AbgETKC5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 May 2020 06:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S1726596AbgETKEk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 May 2020 06:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726224AbgETKC5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 06:02:57 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D17C05BD43
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:02:56 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id r3so604562wrn.11
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:02:56 -0700 (PDT)
+        with ESMTP id S1726435AbgETKEk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 06:04:40 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E0AC061A0F
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:04:40 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id e1so2516676wrt.5
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloud.ionos.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=1qCv6LnZLkc+ZmnPCOEPg4bD3VkMCgmCeeQUPB4C/I0=;
-        b=hfXYeUnhWNOwtlHWt2eKleoasP0dym5XUmGjSaHg/Z2K2jtArTTO3x4y7a8dMlhxrH
-         DKf8goaYCAnj15G4odOw4+GL3Q3IK0aQiqBWCU7HVEzlxB3kmk5nub3JQ+dbai6EzHdJ
-         nmJtlNgeKOuizOeGCNeFrABerhb8D++0aSmV+upWFflavoglLIZ7JilhwQu8VIhXio9+
-         81VxZS6UdudVmCiRTY2uAcq4mGIJEQEKwTRiaZdCAbbrZzghAuMstaBBmjMFc/s6lhwl
-         14UBCjUVO45XOvxYnN3oV0pdXea4bw9ZMFF/fu9ATRkyGnmHe0s3YaGxDfFzgWSmangT
-         v2tA==
+        bh=inIn2ONjibCnSjCghxYnKq2rJ8+ESmy4DRNsddh+5yQ=;
+        b=hsxRs5C5YKYa0yGhhIMT8XTt4BoSeJuvqv1ep1IHg83tnHnWPY4qC0Ary05LJN/ytf
+         MK+6DkmMTO9O0cs/6rjB0kxORhU0VilWrccz3QYeTs8o6uBYGgvisL5HVrzJNsF0M0Cm
+         khtyZ8qYv/5VG54vdTkCJbphGw5c5EMeKbH8Ro+648vM+QF8RiY0AgPDyr7AgfxuCYYJ
+         iNFQpZnN2WnqBrOWTtdai6yvUPzCjS+38ty6JN2Nw/wWgvgVcVxN43DCqKbos6f6w2Un
+         EHqpC/elSDJHwrCkFAHHxsWWXCKf/owGUskeqyzFrGaTxyYkV1bHxnKz/elmGJiVfDEj
+         DjfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=1qCv6LnZLkc+ZmnPCOEPg4bD3VkMCgmCeeQUPB4C/I0=;
-        b=bYtcGdgMPq98dvgSC/E8mJe9NI2mwjro/HHcaQWxBxnORObaJiZUvR9eKc1uaKeR46
-         xf6XVUEYLgVo3HODZN5BKhOUBAmfm3fIRxGoJBbhtBZ+GI3ZjRY2cBBo8yQqgCjhHZnw
-         v51hWyUQIKbuiP8D8hUCF86aoOdp6D8QmtiFsrVRmaMnJxbkYr97h1IzxczRZOYANgb4
-         /ZydsNFz6cwPdV5JmUMBgrEDvIzWn8mFJ1qh7l9cqsnVDcOawBh9K/HwYtN2PyAZVKMZ
-         2DbphX/IJfxvZz1N8WXLD8UMEH2X81WXcSXDnSl0mOERn0j5PRu0Rkf54FfLmWKjcXaB
-         3iEg==
-X-Gm-Message-State: AOAM531dEcxG85ChnZHoQo2RO9vw0MD4IMKKAEnlWQvqFi4o4tU3wkKU
-        ox/magHPPPed61pgKcLO1Q1lKR5eD2nMgPr4ITCo
-X-Google-Smtp-Source: ABdhPJyWKGgPEm8MEJcYvTt+gmwLU4TczJEEN4qYstbU9TkGgHS9VHqcYV+9vOtYxAfoKxCq2ii/INHntBZtNxUsmTY=
-X-Received: by 2002:a5d:6705:: with SMTP id o5mr3601013wru.426.1589968975165;
- Wed, 20 May 2020 03:02:55 -0700 (PDT)
+        bh=inIn2ONjibCnSjCghxYnKq2rJ8+ESmy4DRNsddh+5yQ=;
+        b=FgB2rFr+xPxEIj1pMbH9NzUaH/ryKfhsrFA/YvdQ50UPie9zm7SRPXcoAGwt0t0GQf
+         gfkd+mzqIueUZklj2E/NSfJZZuNRqpTIJjBhBX1Kpg2cnChxzEL9YjYDKEhDgI4RMs2K
+         fAyyYOG6d3pezV+L2I2XqRlb9moEr0sKhTVmFhsAfX1g0S4KseHmYqpFzXT621k1ljFf
+         3AEA7zOZNh9eFilDYP4ES9Gjz8uxTGp5tVEyy7e25pXtrN7R1rNiyDX3O23CuXz2038q
+         g1vVGxBkzIonDu1kcWNIhH5+sjUG5mz7YjeRcOEg/wBddX3dsNhwT7nSNI9XKosWOAeX
+         bG2w==
+X-Gm-Message-State: AOAM531dWAJg4e3xfq9MQBHGqnSDnCVRm29Emq/BTU5IsCSuB3x3f1jM
+        bwyj3sXRHdgSl39IZGz2Z54Hqn7urkpZuRkjAVQd
+X-Google-Smtp-Source: ABdhPJwVhiOqJ6pZXZNbYxT2v3Gmlpbge7+a6xMaVWYDFGQk3afXhXJbIz+s1l5P0HUngJK5K88CcaSWqMTubKH3ZVc=
+X-Received: by 2002:a5d:6705:: with SMTP id o5mr3608109wru.426.1589969078863;
+ Wed, 20 May 2020 03:04:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com> <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org>
-In-Reply-To: <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org>
+References: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com>
+ <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org> <20200519233847.GC12656@ziepe.ca>
+In-Reply-To: <20200519233847.GC12656@ziepe.ca>
 From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Date:   Wed, 20 May 2020 12:02:44 +0200
-Message-ID: <CAHg0HuwzuTAaaq6uuCD0sJJ2NwyATZRtMj_H1B8r8308EieKwA@mail.gmail.com>
+Date:   Wed, 20 May 2020 12:04:28 +0200
+Message-ID: <CAHg0Huy3JmK=iFSrEFhbv==KFJusNr6Z+=H7Xwf+fHEZU2pYmQ@mail.gmail.com>
 Subject: Re: [PATCH v2] rtrs-clt: silence kbuild test inconsistent intenting
  smatch warning
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Jens Axboe <axboe@kernel.dk>,
         Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
         Leon Romanovsky <leon@kernel.org>,
         Jinpu Wang <jinpu.wang@cloud.ionos.com>,
         kbuild test robot <lkp@intel.com>
@@ -66,138 +67,30 @@ Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Bart,
-
-On Tue, May 19, 2020 at 4:29 PM Bart Van Assche <bvanassche@acm.org> wrote:
+On Wed, May 20, 2020 at 1:38 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
 >
-> On 2020-05-19 04:29, Danil Kipnis wrote:
-> > Kbuild test robot reports a smatch warning:
-> > drivers/infiniband/ulp/rtrs/rtrs-clt.c:1196 rtrs_clt_failover_req() warn: inconsistent indenting
-> > drivers/infiniband/ulp/rtrs/rtrs-clt.c:2890 rtrs_clt_request() warn: inconsistent indenting
-> >
-> > To get rid of the warning, move the while_each_path() macro to a newline.
-> > Rename the macro to end_each_path() to avoid the "while should follow close
-> > brace '}'" checkpatch error.
-> >
-> > Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
-> >
-> > Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
-> > Reported-by: kbuild test robot <lkp@intel.com>
-> > ---
-> >  v1->v2 Add fixes line
-> >  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> >
+> On Tue, May 19, 2020 at 07:29:15AM -0700, Bart Van Assche wrote:
 > > diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> > index 468fdd0d8713..0fa3a229d90e 100644
-> > --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> > index 468fdd0d8713..8dfa56dc32bc 100644
 > > +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> > @@ -734,7 +734,7 @@ struct path_it {
-> >                         (it)->i < (it)->clt->paths_num;               \
+> > @@ -727,18 +727,13 @@ struct path_it {
+> >       struct rtrs_clt_sess *(*next_path)(struct path_it *it);
+> >  };
+> >
+> > -#define do_each_path(path, clt, it) {                                        \
+> > -     path_it_init(it, clt);                                          \
+> > -     rcu_read_lock();                                                \
+> > -     for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&           \
+> > -                       (it)->i < (it)->clt->paths_num;               \
+> > +#define for_each_path(path, clt, it)                                 \
+> > +     for (path_it_init((it), (clt)), rcu_read_lock(), (it)->i = 0;   \
+> > +          (((path) = ((it)->next_path)(it)) &&                       \
+> > +           (it)->i < (it)->clt->paths_num) ||                        \
+> > +                  (path_it_deinit(it), rcu_read_unlock(), 0);        \
 > >            (it)->i++)
-> >
-> > -#define while_each_path(it)                                          \
-> > +#define end_each_path(it)                                            \
-> >       path_it_deinit(it);                                             \
-> >       rcu_read_unlock();                                              \
-> >       }
-> > @@ -1193,7 +1193,8 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
-> >               /* Success path */
-> >               rtrs_clt_inc_failover_cnt(alive_sess->stats);
-> >               break;
-> > -     } while_each_path(&it);
-> > +     }
-> > +     end_each_path(&it);
-> >
-> >       return err;
-> >  }
-> > @@ -2887,7 +2888,8 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
-> >               }
-> >               /* Success path */
-> >               break;
-> > -     } while_each_path(&it);
-> > +     }
-> > +     end_each_path(&it);
-> >
-> >       return err;
-> >  }
 >
-> I don't like the do_each_path() and end_each_path() macros because these do not
-> follow the pattern that is used elsewhere in the kernel to use a single macro
-> to iterate over a custom container. Has it been considered to combine these two
-> macros into a single macro, e.g. something like the following (untested) patch?
->
->
-> Subject: [PATCH] Combine while_each_path() and do_each_path() into
->  for_each_path()
->
-> ---
->  drivers/infiniband/ulp/rtrs/rtrs-clt.c | 23 +++++++++--------------
->  1 file changed, 9 insertions(+), 14 deletions(-)
->
-> diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> index 468fdd0d8713..8dfa56dc32bc 100644
-> --- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> @@ -727,18 +727,13 @@ struct path_it {
->         struct rtrs_clt_sess *(*next_path)(struct path_it *it);
->  };
->
-> -#define do_each_path(path, clt, it) {                                  \
-> -       path_it_init(it, clt);                                          \
-> -       rcu_read_lock();                                                \
-> -       for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&           \
-> -                         (it)->i < (it)->clt->paths_num;               \
-> +#define for_each_path(path, clt, it)                                   \
-> +       for (path_it_init((it), (clt)), rcu_read_lock(), (it)->i = 0;   \
-> +            (((path) = ((it)->next_path)(it)) &&                       \
-> +             (it)->i < (it)->clt->paths_num) ||                        \
-> +                    (path_it_deinit(it), rcu_read_unlock(), 0);        \
->              (it)->i++)
->
-> -#define while_each_path(it)                                            \
-> -       path_it_deinit(it);                                             \
-> -       rcu_read_unlock();                                              \
-> -       }
-> -
->  /**
->   * list_next_or_null_rr_rcu - get next list element in round-robin fashion.
->   * @head:      the head for the list.
-> @@ -1177,7 +1172,7 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
->         int err = -ECONNABORTED;
->         struct path_it it;
->
-> -       do_each_path(alive_sess, clt, &it) {
-> +       for_each_path(alive_sess, clt, &it) {
->                 if (unlikely(READ_ONCE(alive_sess->state) !=
->                              RTRS_CLT_CONNECTED))
->                         continue;
-> @@ -1193,7 +1188,7 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
->                 /* Success path */
->                 rtrs_clt_inc_failover_cnt(alive_sess->stats);
->                 break;
-> -       } while_each_path(&it);
-> +       }
->
->         return err;
->  }
-> @@ -2862,7 +2857,7 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
->                 dma_dir = DMA_TO_DEVICE;
->         }
->
-> -       do_each_path(sess, clt, &it) {
-> +       for_each_path(sess, clt, &it) {
->                 if (unlikely(READ_ONCE(sess->state) != RTRS_CLT_CONNECTED))
->                         continue;
->
-> @@ -2887,7 +2882,7 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
->                 }
->                 /* Success path */
->                 break;
-> -       } while_each_path(&it);
-> +       }
->
->         return err;
->  }
+> That is nicer, even better to write it with some inlines..
 
-This does look better. Will run it through tests.
+You mean pass a callback to an inline function that would iterate?
+>
+> Jason

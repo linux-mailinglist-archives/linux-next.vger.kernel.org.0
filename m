@@ -2,95 +2,68 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 811011DA5C1
-	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 01:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D49C1DA675
+	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 02:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726344AbgESXoq (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 19 May 2020 19:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59380 "EHLO
+        id S1728329AbgETAYj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 19 May 2020 20:24:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725998AbgESXop (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 19:44:45 -0400
-Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606EBC061A0F
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 16:44:45 -0700 (PDT)
-Received: by mail-qk1-x742.google.com with SMTP id f83so1771998qke.13
-        for <linux-next@vger.kernel.org>; Tue, 19 May 2020 16:44:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=l2sL1SuOB0Bwoh3rp7+GqKpOELWuc6ZuQ7vSlzcsMBE=;
-        b=iFlqm/M9J3nwY7cxchj42OacLXK5ohOEesABtw0fSf/vL6HReI8WyMrmSPTL0oy8ym
-         kFk7GBJbKToh6jrpED9mgjFNQmjPzETw3m4OErn2Bt6xBOrN+BT/ffVcXM/RnT4tRPkS
-         0/R0svtdCM/PkwDcxBLVz3D/nY89Tda4pdHmbZscMfN0dJrhblTVlSfn/jHQsvT/Uri4
-         ozuyF8ejM+2gyKgnoHToo5W57H3LdY85+LBEtGmuGSgWqf8KpOm9hdLjG/5bMXhxWlZb
-         Ltsc9NYiw/gtoWktRxBUOwMAiBypmXMO7/Iw7YUYu4ULAqHMS/I0ELNnrL9BFkFPX1W/
-         O+vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=l2sL1SuOB0Bwoh3rp7+GqKpOELWuc6ZuQ7vSlzcsMBE=;
-        b=jQmhFREAwJcLnPvLYycGez69/4q4dCaLa1qdgvMKnlLtSfjiJC/TnUeowY9F1si1wX
-         RPqpFtMVEMWhGyoghp38RsJaT4sD3e5dHG5ka7LTJD2+Sjr7IvYlQxYKjwuf7iT/TkyV
-         VBX2LqlmFTZ6nrqzOl/1LVUTXHntQOv3dkQHarqLIlg7BZGa8twK5Meux229sQjmPF7U
-         hSY9bvZX9Bxl5mO6eL0/JhAz56u7a6/0yAlNWR+9N6nu1L9kjgXXJh3YZ9EI8XTjGsGm
-         TuobEnYxlw4IrP2vXJwJjjOZjscxyLYnIpq6NpIX/gZPiyR57gOqtA9taDD8wEsFBLGa
-         D81Q==
-X-Gm-Message-State: AOAM5321+yd0xjSHVxt1cn9O2ZkP+D5VrcNeKl+Nan/n5g/SqHnJNn0d
-        hyHfzlK1VXQYzEU5yZnscNwzCw==
-X-Google-Smtp-Source: ABdhPJyqzRlLG6w3O2K4GgGWlPTq0J5WCXLjnydkSlHtNZdebPL9AT7MR4Vtxwwj1z4lp/8Kd5h4kw==
-X-Received: by 2002:a37:506:: with SMTP id 6mr1965568qkf.159.1589931884672;
-        Tue, 19 May 2020 16:44:44 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
-        by smtp.gmail.com with ESMTPSA id n206sm914132qke.20.2020.05.19.16.44.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Tue, 19 May 2020 16:44:44 -0700 (PDT)
-Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1jbBud-0007yh-PW; Tue, 19 May 2020 20:44:43 -0300
-Date:   Tue, 19 May 2020 20:44:43 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Cc:     linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
-        linux-next@vger.kernel.org, axboe@kernel.dk, dledford@redhat.com,
-        bvanassche@acm.org, leon@kernel.org, jinpu.wang@cloud.ionos.com,
-        rdunlap@infradead.org
-Subject: Re: [PATCH v2] rnbd/rtrs: pass max segment size from blk user to the
- rdma library
-Message-ID: <20200519234443.GB30609@ziepe.ca>
-References: <20200519084812.GP188135@unreal>
- <20200519111419.924170-1-danil.kipnis@cloud.ionos.com>
+        with ESMTP id S1728324AbgETAYi (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 19 May 2020 20:24:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B346DC061A0F;
+        Tue, 19 May 2020 17:24:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=f4mJIO76w3QNaVC39x+y/UuJaWunNeSQRrsRFVGwnCc=; b=A+JO/ShT4rx5nGLcIntg3t/nkd
+        UqfwxWaPUdvCDWPbfEywDHPQUyqt5TvhhSSMknnfUclaFZtgQYGrZsUQ0RB2qfXHrTaaq302i0azs
+        zX8i7oH/g61MVbXwvXLcER/qfvE+F2avdB7lBKcWp/O5eUOyG3YufWCfPghw/24kTNflJWfvT8zZ5
+        35k/TuN9/uVZVVtu7GcOhIytSHmpB6O9R6KmIo86rUa92byN0QQZC8hKDYpOiFdVK7Eya5ONXESuY
+        mS3Fj9cdcW49NEKpACdcPfd/Us0Ka2JsB//Otr5GyTGPAbJkRHtC8rv9QNtjB+bhPmZ119lKuPC4f
+        FalGFePQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jbCXB-00059Y-6v; Wed, 20 May 2020 00:24:33 +0000
+Subject: Re: linux-next: Tree for May 19 (i2c/busses/i2c-mt65xx.o)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        wsa@kernel.org,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        Qii Wang <qii.wang@mediatek.com>
+References: <20200520040354.3e619918@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <e7aa1258-6c54-03bd-3252-20cefe88b87d@infradead.org>
+Date:   Tue, 19 May 2020 17:24:30 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200519111419.924170-1-danil.kipnis@cloud.ionos.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200520040354.3e619918@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 19, 2020 at 01:14:19PM +0200, Danil Kipnis wrote:
-> When Block Device Layer is disabled, BLK_MAX_SEGMENT_SIZE is undefined.
-> The rtrs is a transport library and should compile independently of the
-> block layer. The desired max segment size should be passed down by the
-> user.
+On 5/19/20 11:03 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> Introduce max_segment_size parameter for the rtrs_clt_open() call.
+> News: there will be no linux-next release tomorrow.
 > 
-> Fixes: f7a7a5c228d4 ("block/rnbd: client: main functionality")
-> Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
-> Fixes: cb80329c9434 ("RDMA/rtrs: client: private header with client structs and functions")
-> Fixes: b5c27cdb094e ("RDMA/rtrs: public interface header to establish RDMA connections")
+> Changes since 20200518:
 > 
-> Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> ---
-> v1->v2 Add Fixes lines.
 
-Applied to for-next, thanks
+on i386:
 
-Jason
+ERROR: modpost: "__udivdi3" [drivers/i2c/busses/i2c-mt65xx.ko] undefined!
+ERROR: modpost: "__divdi3" [drivers/i2c/busses/i2c-mt65xx.ko] undefined!
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

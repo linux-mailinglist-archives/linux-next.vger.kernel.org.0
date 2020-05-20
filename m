@@ -2,120 +2,110 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC5C1DBDA5
-	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 21:09:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 370651DBDAC
+	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 21:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726548AbgETTJN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 May 2020 15:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S1726818AbgETTLI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 May 2020 15:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726691AbgETTJK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 15:09:10 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF50C05BD43
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 12:09:10 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id l5so4348160edn.7
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 12:09:10 -0700 (PDT)
+        with ESMTP id S1726804AbgETTLI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 15:11:08 -0400
+Received: from mail-qk1-x742.google.com (mail-qk1-x742.google.com [IPv6:2607:f8b0:4864:20::742])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C50BFC05BD43
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 12:11:07 -0700 (PDT)
+Received: by mail-qk1-x742.google.com with SMTP id b6so4698178qkh.11
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 12:11:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
+        d=ziepe.ca; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=tl5hNSaq9jwtAfQ3H4b6ZmG+ScLEKqnmbeQTtX38GBs=;
-        b=ejWrZ/jfJqN1W3XBa5rEh8Lk4R2pGtjUsAfERal12GI7QfCZfWLDd9UtMrTSYE1/tI
-         FovDCSwIGfbaaHj8cZJ1IKJDULyXaqYHAyGtIE65kUKbthWtIjz/KQGrx+y85v2kRRQb
-         81QOjyfbBp6VHvsSe4y3k88jU+q/CRx/ohQyM=
+         :content-disposition:in-reply-to:user-agent;
+        bh=/sqdOB9lKM/Nc1w+qHw4m9hGCxNbAzYfvQuKdseO/n0=;
+        b=MXzSeHFzDSTIUNevgBXiTwS2J8RMBqWhoRVcMCYchJt0y1HV/laFtIROWFVcfD/K1b
+         LnkE25JxoqwdPOWgB2qlM1XXobwj9hNviNrt3f6yIgFVpCBPoiELvyLvmaIdSUl1gQDi
+         KQT7VUKbDnDJ2Fom8u2VmHFGrptcmWOZoKkVONr0FttCIc+5evdf1c/7lDefhrDfKuOW
+         rrJM3JMIfnwvbOubnUMLVPTfyYn1bjLluEdpCLrSY9I+1PI6OISPeUVYGb66NP5Aa9pe
+         tNmJA0rYffmDYMXTfvnpfJtQub+v1UErP5zmwAs7qGCccW5R/UEeApUx9Yjv8RP9WMXa
+         poLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=tl5hNSaq9jwtAfQ3H4b6ZmG+ScLEKqnmbeQTtX38GBs=;
-        b=jTc6/X5lFK+updYwFtgSP8CIQh8pNOQ+PioOqHRR3HFXV1jeWEBEFpjzFyR45mNivH
-         yhoQdjDDj0VCXbNXZ20dJW/jSd/R076qof3gKN/9puAlVFglVaos2yttSXeNL1MazH7a
-         Z/9hT6ZFh1zRoQqPUOcRxgKLEcXayYwusiXj8NJQ8r5mxW9JpmT6EHFdJYm7Z6nYufye
-         MgXh+UWKNUJM8o6JxfFApY2vnidRoZOZgHJHCWufZ4mVAFHpZ+/2Y79z8l02Y9aaChOA
-         K3FQM9tZ99bzmW4esG3qSrVaK+jt+xH8fAFqW/2QHCb/VDnbtwNXcUuwgvqvWSgYBlSP
-         /7Ug==
-X-Gm-Message-State: AOAM530pXoetXI/nbCSmHF1hTK5xq6NcHDY0esxzxHdmq6GSal+a1wcj
-        AZtNKJ/mgk2hjmoRsht5pqyO6A==
-X-Google-Smtp-Source: ABdhPJweTP3W62AzAZrqweXxsUYkSWvtaZ1Wr8JxuA7F/wzgya+W3/hBf6pFGJ7YDBt9fmp3P99NeQ==
-X-Received: by 2002:a50:9312:: with SMTP id m18mr4674386eda.252.1590001748698;
-        Wed, 20 May 2020 12:09:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c093:400::5:758d])
-        by smtp.gmail.com with ESMTPSA id g21sm2514869edw.9.2020.05.20.12.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 May 2020 12:09:08 -0700 (PDT)
-Date:   Wed, 20 May 2020 20:09:06 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, cgroups@vger.kernel.org
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-Message-ID: <20200520190906.GA558281@chrisdown.name>
-References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
- <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
- <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
- <20200519075213.GF32497@dhcp22.suse.cz>
- <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
- <20200519084535.GG32497@dhcp22.suse.cz>
- <CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com>
- <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=/sqdOB9lKM/Nc1w+qHw4m9hGCxNbAzYfvQuKdseO/n0=;
+        b=ZQrPYUzaQvqC6clERw/75wPzE0ilKhKpCrCiyV7k5hBxAa7ajonTb4t5hdr28OSS74
+         HPNXslWNb8KBrR+0ZAOYIgrQXAMEiNCFi5JbPJqJzx6e3HfbTp0/eLaZiX/ixU6ShqTm
+         JffKWNVa2ox2nBCXYEag4A749KSKv1VB+mPusbi0Juz/eeuH2BDdRVbVbk4fbdRvIMJJ
+         hFRHdmmRh/NPZfmS3O4gcfUD3uLTrIjj83UGnwmyCsWDSE01sPGSf8ZHD/brobCfw8Mh
+         dAjXwsWvTDI7sJv/D5kZN8KhJYA3LhsVuYssiQ/gVFzQ6xf2v8eXjRz9NA3pTc0693Vl
+         wv9A==
+X-Gm-Message-State: AOAM531zH4vZtCVjWMFuibYtvwFvhRMs+2BzSI88E7ZYgSq+Ygj5UTb4
+        YzbG3ynFLZXr+vBEdU9V+dy3Mw==
+X-Google-Smtp-Source: ABdhPJyOF+2fMEBgEzVU6xGikKPNqjG1sfefK3EBa5NTChgyalt0B9uSUcNs4jEq3JrDrQSD/jU4nQ==
+X-Received: by 2002:a05:620a:12f2:: with SMTP id f18mr5796160qkl.78.1590001866946;
+        Wed, 20 May 2020 12:11:06 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-156-34-48-30.dhcp-dynamic.fibreop.ns.bellaliant.net. [156.34.48.30])
+        by smtp.gmail.com with ESMTPSA id j45sm3383258qtk.14.2020.05.20.12.11.06
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Wed, 20 May 2020 12:11:06 -0700 (PDT)
+Received: from jgg by mlx.ziepe.ca with local (Exim 4.90_1)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1jbU7N-0002LO-RA; Wed, 20 May 2020 16:11:05 -0300
+Date:   Wed, 20 May 2020 16:11:05 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Danil Kipnis <danil.kipnis@cloud.ionos.com>
+Cc:     Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
+        linux-rdma@vger.kernel.org,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Doug Ledford <dledford@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Jinpu Wang <jinpu.wang@cloud.ionos.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: Re: [PATCH v2] rtrs-clt: silence kbuild test inconsistent intenting
+ smatch warning
+Message-ID: <20200520191105.GK31189@ziepe.ca>
+References: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com>
+ <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org>
+ <20200519233847.GC12656@ziepe.ca>
+ <CAHg0Huy3JmK=iFSrEFhbv==KFJusNr6Z+=H7Xwf+fHEZU2pYmQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
+In-Reply-To: <CAHg0Huy3JmK=iFSrEFhbv==KFJusNr6Z+=H7Xwf+fHEZU2pYmQ@mail.gmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Naresh,
+On Wed, May 20, 2020 at 12:04:28PM +0200, Danil Kipnis wrote:
+> On Wed, May 20, 2020 at 1:38 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> >
+> > On Tue, May 19, 2020 at 07:29:15AM -0700, Bart Van Assche wrote:
+> > > diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> > > index 468fdd0d8713..8dfa56dc32bc 100644
+> > > +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+> > > @@ -727,18 +727,13 @@ struct path_it {
+> > >       struct rtrs_clt_sess *(*next_path)(struct path_it *it);
+> > >  };
+> > >
+> > > -#define do_each_path(path, clt, it) {                                        \
+> > > -     path_it_init(it, clt);                                          \
+> > > -     rcu_read_lock();                                                \
+> > > -     for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&           \
+> > > -                       (it)->i < (it)->clt->paths_num;               \
+> > > +#define for_each_path(path, clt, it)                                 \
+> > > +     for (path_it_init((it), (clt)), rcu_read_lock(), (it)->i = 0;   \
+> > > +          (((path) = ((it)->next_path)(it)) &&                       \
+> > > +           (it)->i < (it)->clt->paths_num) ||                        \
+> > > +                  (path_it_deinit(it), rcu_read_unlock(), 0);        \
+> > >            (it)->i++)
+> >
+> > That is nicer, even better to write it with some inlines..
+> 
+> You mean pass a callback to an inline function that would iterate?
 
-Naresh Kamboju writes:
->As a part of investigation on this issue LKFT teammate Anders Roxell
->git bisected the problem and found bad commit(s) which caused this problem.
->
->The following two patches have been reverted on next-20200519 and retested the
->reproducible steps and confirmed the test case mkfs -t ext4 got PASS.
->( invoked oom-killer is gone now)
->
->Revert "mm, memcg: avoid stale protection values when cgroup is above
->protection"
->    This reverts commit 23a53e1c02006120f89383270d46cbd040a70bc6.
->
->Revert "mm, memcg: decouple e{low,min} state mutations from protection
->checks"
->    This reverts commit 7b88906ab7399b58bb088c28befe50bcce076d82.
+no, just wrap some of that logic embedded in the for statement in some
+inlines, not sure
 
-Thanks Anders and Naresh for tracking this down and reverting.
-
-I'll take a look tomorrow. I don't see anything immediately obviously wrong in 
-either of those commits from a (very) cursory glance, but they should only be 
-taking effect if protections are set.
-
-Since you have i386 hardware available, and I don't, could you please apply 
-only "avoid stale protection" again and check if it only happens with that 
-commit, or requires both? That would help narrow down the suspects.
-
-Do you use any memcg protections in these tests?
-
-Thank you!
-
-Chris
+Jason

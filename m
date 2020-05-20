@@ -2,95 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C6291DAF9E
-	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 12:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F49D1DAFC1
+	for <lists+linux-next@lfdr.de>; Wed, 20 May 2020 12:12:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726596AbgETKEk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 May 2020 06:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42936 "EHLO
+        id S1726785AbgETKMV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 20 May 2020 06:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726435AbgETKEk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 06:04:40 -0400
-Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E0AC061A0F
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:04:40 -0700 (PDT)
-Received: by mail-wr1-x441.google.com with SMTP id e1so2516676wrt.5
-        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:04:40 -0700 (PDT)
+        with ESMTP id S1726754AbgETKMV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 06:12:21 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6EC05BD43
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:12:19 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id r3so633640wrn.11
+        for <linux-next@vger.kernel.org>; Wed, 20 May 2020 03:12:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=cloud.ionos.com; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=inIn2ONjibCnSjCghxYnKq2rJ8+ESmy4DRNsddh+5yQ=;
-        b=hsxRs5C5YKYa0yGhhIMT8XTt4BoSeJuvqv1ep1IHg83tnHnWPY4qC0Ary05LJN/ytf
-         MK+6DkmMTO9O0cs/6rjB0kxORhU0VilWrccz3QYeTs8o6uBYGgvisL5HVrzJNsF0M0Cm
-         khtyZ8qYv/5VG54vdTkCJbphGw5c5EMeKbH8Ro+648vM+QF8RiY0AgPDyr7AgfxuCYYJ
-         iNFQpZnN2WnqBrOWTtdai6yvUPzCjS+38ty6JN2Nw/wWgvgVcVxN43DCqKbos6f6w2Un
-         EHqpC/elSDJHwrCkFAHHxsWWXCKf/owGUskeqyzFrGaTxyYkV1bHxnKz/elmGJiVfDEj
-         DjfQ==
+        bh=iBcqQ8zxIDDNjlNpFLw9XT6VQWod6ur15qrla/UFJIM=;
+        b=GcyRcfEjdfbUfF8SYp6YXFCUiSmHxZEnby3pNjehHWcDBnLM95xiIR946clqhMIo8v
+         q+v5u3uDiDhe8BwtjxlihKWI+8U1pWzeM5cAq/iINiMV6zxZz02aD80JLlLBqtdpOr6i
+         wADkaP6IfmQ9s+UGfWXE0NcUcb45UtiO5o1CH2/VfQs3ReRWTB16/pQ8rSpnVwBHlAHS
+         u7oV2A5AJ6a62eVFO4EYeZjkfGG4F2rfUpPXPh7KKl/I8GnbAZyKp3mlRc5DePAyoJ6s
+         uGDQT5aedJV3pbX0QlcaREnlFnSIG4Dm0ONnZ4ppugikoVr/9w451geilvvnMm3tREOk
+         0PPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=inIn2ONjibCnSjCghxYnKq2rJ8+ESmy4DRNsddh+5yQ=;
-        b=FgB2rFr+xPxEIj1pMbH9NzUaH/ryKfhsrFA/YvdQ50UPie9zm7SRPXcoAGwt0t0GQf
-         gfkd+mzqIueUZklj2E/NSfJZZuNRqpTIJjBhBX1Kpg2cnChxzEL9YjYDKEhDgI4RMs2K
-         fAyyYOG6d3pezV+L2I2XqRlb9moEr0sKhTVmFhsAfX1g0S4KseHmYqpFzXT621k1ljFf
-         3AEA7zOZNh9eFilDYP4ES9Gjz8uxTGp5tVEyy7e25pXtrN7R1rNiyDX3O23CuXz2038q
-         g1vVGxBkzIonDu1kcWNIhH5+sjUG5mz7YjeRcOEg/wBddX3dsNhwT7nSNI9XKosWOAeX
-         bG2w==
-X-Gm-Message-State: AOAM531dWAJg4e3xfq9MQBHGqnSDnCVRm29Emq/BTU5IsCSuB3x3f1jM
-        bwyj3sXRHdgSl39IZGz2Z54Hqn7urkpZuRkjAVQd
-X-Google-Smtp-Source: ABdhPJwVhiOqJ6pZXZNbYxT2v3Gmlpbge7+a6xMaVWYDFGQk3afXhXJbIz+s1l5P0HUngJK5K88CcaSWqMTubKH3ZVc=
-X-Received: by 2002:a5d:6705:: with SMTP id o5mr3608109wru.426.1589969078863;
- Wed, 20 May 2020 03:04:38 -0700 (PDT)
+        bh=iBcqQ8zxIDDNjlNpFLw9XT6VQWod6ur15qrla/UFJIM=;
+        b=b3Qp0o6zWRzbM9BiiJY0rzxmKo7NWoXf3eEbv5TyIPI/wC35UqmKLeaQFszRNRSbfw
+         oaQvAkEjJ6mNjS3bPiqCBamcxHhjU10ngeKEs3boOjsuIEm6VKR0s8iEyyP4eraWO3rj
+         kYR3ZXARP1DSC0s5iRlLljuO1oJj4cl42YXZAwnqt6BOQMxEl+8J0uqsqLJpeURBTeQd
+         kszr7pm/nIbgL+o2+GVgRUDRcqFRw0zrXwewpc0TGt6iDcXvZa6DB19/vqJpJZnDj7BF
+         x+eTHYi3LHIj0jRIPA5Z7VDsf6MPNGteQBySTit3jpqDS4yFZH6QaxD+AQE98RtmV2Y6
+         vQ5Q==
+X-Gm-Message-State: AOAM533BzQ1cW5BRnjUsquayfC0nCl1Qf1ish6wYCOCyzNCgC27kTPzZ
+        aC0DY0d0mL/ny8oIVcNGizwKJYMyrJ4/ZiuLl5Dh
+X-Google-Smtp-Source: ABdhPJypgX0CYZ1BPyRbnRWRWfBgtSJZTe/P5PsSECo15WsGXB6uu7WRt6MROF7Juxl784icOyfURtWML4iF6b7GMoM=
+X-Received: by 2002:adf:cc81:: with SMTP id p1mr3338025wrj.192.1589969538224;
+ Wed, 20 May 2020 03:12:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200519112936.928185-1-danil.kipnis@cloud.ionos.com>
- <76b6b987-4f63-2487-7fbe-a1d9c2f06b76@acm.org> <20200519233847.GC12656@ziepe.ca>
-In-Reply-To: <20200519233847.GC12656@ziepe.ca>
+References: <20200520040354.3e619918@canb.auug.org.au> <86962843-e786-4a3f-0b85-1e06fbdbd76a@infradead.org>
+In-Reply-To: <86962843-e786-4a3f-0b85-1e06fbdbd76a@infradead.org>
 From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
-Date:   Wed, 20 May 2020 12:04:28 +0200
-Message-ID: <CAHg0Huy3JmK=iFSrEFhbv==KFJusNr6Z+=H7Xwf+fHEZU2pYmQ@mail.gmail.com>
-Subject: Re: [PATCH v2] rtrs-clt: silence kbuild test inconsistent intenting
- smatch warning
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-Cc:     Bart Van Assche <bvanassche@acm.org>, linux-block@vger.kernel.org,
-        linux-rdma@vger.kernel.org,
+Date:   Wed, 20 May 2020 12:12:07 +0200
+Message-ID: <CAHg0Huww=oyj0DSuLSKOrJp5vtG_2xLLqM27MAHWNJdLWNeB3A@mail.gmail.com>
+Subject: Re: linux-next: Tree for May 19 (block/rnbd/)
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Doug Ledford <dledford@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Jinpu Wang <jinpu.wang@cloud.ionos.com>,
-        kbuild test robot <lkp@intel.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        Jack Wang <jinpu.wang@cloud.ionos.com>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 20, 2020 at 1:38 AM Jason Gunthorpe <jgg@ziepe.ca> wrote:
->
-> On Tue, May 19, 2020 at 07:29:15AM -0700, Bart Van Assche wrote:
-> > diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> > index 468fdd0d8713..8dfa56dc32bc 100644
-> > +++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
-> > @@ -727,18 +727,13 @@ struct path_it {
-> >       struct rtrs_clt_sess *(*next_path)(struct path_it *it);
-> >  };
-> >
-> > -#define do_each_path(path, clt, it) {                                        \
-> > -     path_it_init(it, clt);                                          \
-> > -     rcu_read_lock();                                                \
-> > -     for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&           \
-> > -                       (it)->i < (it)->clt->paths_num;               \
-> > +#define for_each_path(path, clt, it)                                 \
-> > +     for (path_it_init((it), (clt)), rcu_read_lock(), (it)->i = 0;   \
-> > +          (((path) = ((it)->next_path)(it)) &&                       \
-> > +           (it)->i < (it)->clt->paths_num) ||                        \
-> > +                  (path_it_deinit(it), rcu_read_unlock(), 0);        \
-> >            (it)->i++)
->
-> That is nicer, even better to write it with some inlines..
+Hi Randy,
 
-You mean pass a callback to an inline function that would iterate?
+On Tue, May 19, 2020 at 8:59 PM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> Jason
+> On 5/19/20 11:03 AM, Stephen Rothwell wrote:
+> > Hi all,
+> >
+> > News: there will be no linux-next release tomorrow.
+> >
+> > Changes since 20200518:
+> >
+>
+> seen on i386:
+>
+> when CONFIG_MODULES is not set/enabled:
+>
+> ../drivers/block/rnbd/rnbd-clt-sysfs.c: In function 'rnbd_clt_remove_dev_symlink':
+> ../drivers/block/rnbd/rnbd-clt-sysfs.c:435:39: error: implicit declaration of function 'module_is_live'; did you mean 'module_driver'? [-Werror=implicit-function-declaration]
+>   if (strlen(dev->blk_symlink_name) && module_is_live(THIS_MODULE))
+>                                        ^~~~~~~~~~~~~~
+>                                        module_driver
+>
+>
+> --
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+Looking into this, thank you

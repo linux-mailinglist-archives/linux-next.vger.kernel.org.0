@@ -2,224 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DD26A1DC54B
-	for <lists+linux-next@lfdr.de>; Thu, 21 May 2020 04:40:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07D8D1DC661
+	for <lists+linux-next@lfdr.de>; Thu, 21 May 2020 06:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728004AbgEUCkE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 20 May 2020 22:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S1726968AbgEUEvi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 May 2020 00:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727798AbgEUCkD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 20 May 2020 22:40:03 -0400
-Received: from mail-il1-x143.google.com (mail-il1-x143.google.com [IPv6:2607:f8b0:4864:20::143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CCBC061A0E;
-        Wed, 20 May 2020 19:40:02 -0700 (PDT)
-Received: by mail-il1-x143.google.com with SMTP id y17so3336509ilg.0;
-        Wed, 20 May 2020 19:40:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=/RCzazjPJQ1zcfvr5ivU8gZ2oW1vvouNHyaX2fPjs5o=;
-        b=JIZNHQnmERaJeRhfnEjjac0W+vknvOwLXY/d6ercTVMilrrz524WChiYGwFGcaHgFJ
-         K8JZk1i5INW6EyIXuYOyX2v32bfw6qRfgzQTQHHULRWMhQsYMBm89glhPbVBx2I6bwxs
-         j20/Yum6NRQKLWYNIxFRjPx0QViHZTbPlmI1fZzO6exUlTKfLwEVLiDwpVb7Qfp6TgJ/
-         snhs+KlBeHyRitCTHyRBIFjZ454fFCb9qrYuro47/SQk4QgBQgus3sRPgPYvG8W/Vui1
-         AknW2UXV00QW+opr5rDKKkCPY+BNrd0MlLO7V3cFfkCwusagGNkXGNtRMJgA5pK9QeWA
-         IAFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=/RCzazjPJQ1zcfvr5ivU8gZ2oW1vvouNHyaX2fPjs5o=;
-        b=TWTHK1Mul5Ro/PhNgWzqWNYPt0nJuLsbNFOVNMtrDHKeUNy5e3Wh4KgXabrwfejQa4
-         feGQUIrWta/+x1iWMMKkF95BTmX22rdt+eaMHB2HnUkoBYGSK/Hu9KHbjv+BmPIoH6+n
-         MxAmTa8gLVNgzNGUEm32kaHaJYGHO8DYUO4jiB7cEoJwQyVAuC8rLYdbpC6arSWPo3K6
-         Bgqcm/kcW5i+XRLJd6gjF3FiPga6q49LJs2Mgj6IFDBPg7QaPPNEhs8PSWHouj3hSFKC
-         IVcPeYPuZJwkrw4dqoILxGW0DGCfBC0jvyl98CnOG3p+/AhoxnPTh8l9IaZhrNuYJihJ
-         r98g==
-X-Gm-Message-State: AOAM53084UvGaeHRrgPwSB/V1GuYkpGv69xr+89HIfFpfscv5Ue+oW+Z
-        KgqQtQd3+FqBTBWZX8nQAlxvdPiSsKFL7f9z2FM=
-X-Google-Smtp-Source: ABdhPJyv/UYZjPy/DPwJRsYbSaKbImcwHJUxF5BT675dGaD56oiGCZioxLSjEnZKhN7916a+tUgfDxQbE7d+nnFanoQ=
-X-Received: by 2002:a92:9e11:: with SMTP id q17mr6952459ili.137.1590028801270;
- Wed, 20 May 2020 19:40:01 -0700 (PDT)
+        with ESMTP id S1726506AbgEUEvh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 May 2020 00:51:37 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76185C061A0E;
+        Wed, 20 May 2020 21:51:37 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49SHJg6pG4z9sRK;
+        Thu, 21 May 2020 14:51:31 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590036695;
+        bh=Vvjbw6Q5rxtxSmTSpphFOU/PwAYYBFFB40vqqXq++1c=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A/WHOQ4Gh5Q6ACmyswDHgE6Cva2c1JIxTmXl24lnY5DMA/IDX8TAE4q+75ZHcD8Bp
+         KyrX856ksyYk6lEeNko/P3s2ox5fx4QKtHRrbMqEMr63nlvn7jOGMMJsxaAbsVRHXR
+         rXM4BdfdN4Z8QeDyiS3jWr9q0RFO6IX7RSYsQcyPXM5rbRpKcZ3nyB27AuRxiintBf
+         7AGWw1YgDhKwQ/f6yMcnMkNVDabwBJAxmiHhRxX7307OsWrah5sSxCFwYukRGp/Hrf
+         qvdODddKGdEfINH9SX2gRo8PthC2AYkzYkvTlOIXK4+exk6VML7oZBvch/aR2yn4+z
+         JqyiZm/uQhvfQ==
+Date:   Thu, 21 May 2020 14:51:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: linux-next: manual merge of the rcu tree with the powerpc tree
+Message-ID: <20200521145124.48ae408b@canb.auug.org.au>
+In-Reply-To: <20200519172316.3b37cbae@canb.auug.org.au>
+References: <20200519172316.3b37cbae@canb.auug.org.au>
 MIME-Version: 1.0
-References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
- <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
- <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
- <20200519075213.GF32497@dhcp22.suse.cz> <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
- <20200519084535.GG32497@dhcp22.suse.cz> <CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com>
- <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 21 May 2020 10:39:25 +0800
-Message-ID: <CALOAHbDMrHkNHTxeBWP22iTjJd+HfqfFhAfmC_m0jsVkhu5vEA@mail.gmail.com>
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Chris Down <chris@chrisdown.name>,
-        Michal Hocko <mhocko@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/CQMfjLSTVZpJuWvNZ/.x1qE";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, May 21, 2020 at 2:00 AM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
+--Sig_/CQMfjLSTVZpJuWvNZ/.x1qE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Tue, 19 May 2020 17:23:16 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> On Wed, 20 May 2020 at 17:26, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> >
-> > This issue is specific on 32-bit architectures i386 and arm on linux-next tree.
-> > As per the test results history this problem started happening from
-> > Bad : next-20200430
-> > Good : next-20200429
-> >
-> > steps to reproduce:
-> > dd if=/dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190504A00573
-> > of=/dev/null bs=1M count=2048
-> > or
-> > mkfs -t ext4 /dev/disk/by-id/ata-SanDisk_SSD_PLUS_120GB_190804A00BE5
-> >
-> >
-> > Problem:
-> > [   38.802375] dd invoked oom-killer: gfp_mask=0x100cc0(GFP_USER),
-> > order=0, oom_score_adj=0
->
-> As a part of investigation on this issue LKFT teammate Anders Roxell
-> git bisected the problem and found bad commit(s) which caused this problem.
->
-> The following two patches have been reverted on next-20200519 and retested the
-> reproducible steps and confirmed the test case mkfs -t ext4 got PASS.
-> ( invoked oom-killer is gone now)
->
-> Revert "mm, memcg: avoid stale protection values when cgroup is above
-> protection"
->     This reverts commit 23a53e1c02006120f89383270d46cbd040a70bc6.
->
-> Revert "mm, memcg: decouple e{low,min} state mutations from protection
-> checks"
->     This reverts commit 7b88906ab7399b58bb088c28befe50bcce076d82.
->
+> Today's linux-next merge of the rcu tree got a conflict in:
+>=20
+>   arch/powerpc/kernel/traps.c
+>=20
+> between commit:
+>=20
+>   116ac378bb3f ("powerpc/64s: machine check interrupt update NMI accounti=
+ng")
+>=20
+> from the powerpc tree and commit:
+>=20
+>   187416eeb388 ("hardirq/nmi: Allow nested nmi_enter()")
+>=20
+> from the rcu tree.
+>=20
+> I fixed it up (I used the powerpc tree version for now) and can carry the
+> fix as necessary. This is now fixed as far as linux-next is concerned,
+> but any non trivial conflicts should be mentioned to your upstream
+> maintainer when your tree is submitted for merging.  You may also want
+> to consider cooperating with the maintainer of the conflicting tree to
+> minimise any particularly complex conflicts.
 
-My guess is that we made the same mistake in commit "mm, memcg:
-decouple e{low,min} state mutations from protection
-checks" that it read a stale memcg protection in
-mem_cgroup_below_low() and mem_cgroup_below_min().
+This is now a conflict between the powerpc commit and commit
 
-Bellow is a possble fix,
+  69ea03b56ed2 ("hardirq/nmi: Allow nested nmi_enter()")
 
-diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
-index 7a2c56fc..6591b71 100644
---- a/include/linux/memcontrol.h
-+++ b/include/linux/memcontrol.h
-@@ -391,20 +391,28 @@ static inline unsigned long
-mem_cgroup_protection(struct mem_cgroup *root,
- void mem_cgroup_calculate_protection(struct mem_cgroup *root,
-                                     struct mem_cgroup *memcg);
+from the tip tree.  I assume that the rcu and tip trees are sharing
+some patches (but not commits) :-(
 
--static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_low(struct mem_cgroup *root,
-+                                       struct mem_cgroup *memcg)
- {
-        if (mem_cgroup_disabled())
-                return false;
+--=20
+Cheers,
+Stephen Rothwell
 
-+       if (root == memcg)
-+               return false;
-+
-        return READ_ONCE(memcg->memory.elow) >=
-                page_counter_read(&memcg->memory);
- }
+--Sig_/CQMfjLSTVZpJuWvNZ/.x1qE
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_min(struct mem_cgroup *root,
-+                                       struct mem_cgroup *memcg)
- {
-        if (mem_cgroup_disabled())
-                return false;
+-----BEGIN PGP SIGNATURE-----
 
-+       if (root == memcg)
-+               return false;
-+
-        return READ_ONCE(memcg->memory.emin) >=
-                page_counter_read(&memcg->memory);
- }
-@@ -896,12 +904,14 @@ static inline void
-mem_cgroup_calculate_protection(struct mem_cgroup *root,
- {
- }
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7GCMwACgkQAVBC80lX
+0GxDgAgAjBhkbXjQw6c4H9zUJ/eMzz46ZhGjxATiSVcRL9djbp+Vc/KpQO1tkjif
+bJ0tP19uatDYyD/6eEzPotCk+htDR/rVSJv1kEQlOILCXxWxR6EmccmJryRyIeAc
+ARG/q+iSSPQrCzT8bPRK20ToK6FQEoX0wAE+c9eScTlI2OO6x6LbeYwKPphzLvZj
+FjNiUZffxnOJrCc/ru7++ga/YIhNn8YVXKjdk9dNzlS0G5LH87wz4syI8f4T8Pks
+CK0aH65PfcV+F923TsGDB3+r+GQD5zAZDxhsY2T1moDbVloNx9Cab3EHj1/djDQ6
+Y/EBDv6+GEF5EV/D49ExqoET5sa0XQ==
+=wTU9
+-----END PGP SIGNATURE-----
 
--static inline bool mem_cgroup_below_low(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_low(struct mem_cgroup *root,
-+                                       struct mem_cgroup *memcg)
- {
-        return false;
- }
-
--static inline bool mem_cgroup_below_min(struct mem_cgroup *memcg)
-+static inline bool mem_cgroup_below_min(struct mem_cgroup *root,
-+                                       struct mem_cgroup *memcg)
- {
-        return false;
- }
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index c71660e..fdcdd88 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -2637,13 +2637,13 @@ static void shrink_node_memcgs(pg_data_t
-*pgdat, struct scan_control *sc)
-
-                mem_cgroup_calculate_protection(target_memcg, memcg);
-
--               if (mem_cgroup_below_min(memcg)) {
-+               if (mem_cgroup_below_min(target_memcg, memcg)) {
-                        /*
-                         * Hard protection.
-                         * If there is no reclaimable memory, OOM.
-                         */
-                        continue;
--               } else if (mem_cgroup_below_low(memcg)) {
-+               } else if (mem_cgroup_below_low(target_memcg, memcg)) {
-                        /*
-                         * Soft protection.
-                         * Respect the protection only as long as
-
-
-
-
-
-> i386 test log shows mkfs -t ext4 pass
-> https://lkft.validation.linaro.org/scheduler/job/1443405#L1200
->
-> ref:
-> https://lore.kernel.org/linux-mm/cover.1588092152.git.chris@chrisdown.name/
-> https://lore.kernel.org/linux-mm/CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com/T/#t
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-
-
-
---
-Thanks
-Yafang
+--Sig_/CQMfjLSTVZpJuWvNZ/.x1qE--

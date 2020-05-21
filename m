@@ -2,124 +2,97 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A19E81DC709
-	for <lists+linux-next@lfdr.de>; Thu, 21 May 2020 08:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8401F1DC77B
+	for <lists+linux-next@lfdr.de>; Thu, 21 May 2020 09:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728172AbgEUG26 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 May 2020 02:28:58 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:51501 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726938AbgEUG26 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 21 May 2020 02:28:58 -0400
+        id S1727948AbgEUHVf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 May 2020 03:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727003AbgEUHVf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 21 May 2020 03:21:35 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0348C061A0E;
+        Thu, 21 May 2020 00:21:34 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49SKT31jHSz9sT8;
-        Thu, 21 May 2020 16:28:54 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49SLdm1F00z9sTK;
+        Thu, 21 May 2020 17:21:31 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590042536;
-        bh=4aGvZd/60yfG45VzmIh3YI/neYvcqholgfnSpAb2LPc=;
+        s=201702; t=1590045693;
+        bh=q1vx8A9kbDCtXgqiGX1gPAlTnB8R5RmVzfh8wbU2lZA=;
         h=Date:From:To:Cc:Subject:From;
-        b=YQmRuFQ23F6R6pGXi6pJElvnF4hMRgCR9CD0IPF2A4giCXnuAN0gmNAtXQi5QeLaU
-         JdHA0NnBj5x3Q7KadBmGZkjN60ldZHkx/1hYhvPBeQgp9Z0VjhGxB+uOt34c4ozA1A
-         XYsa/8WyjSn42P9GFOncUOz+/NHk1EDQix8A1NL9MwfzSp5rdRvXLC8XwMdybqj9ez
-         0f/hEWif2nXvv/tidiY4FhnJedkTar6A1MOsomLbjS6HuVf6VizMox83ohlJ9sL8cx
-         tZoIOjjwoOZyQ5TDKDK4xcO895s+u7EWJxZicPqs7zEwtJQGlCmOtSBdVGuBXJ/iA+
-         mTMPGSLctdJ+Q==
-Date:   Thu, 21 May 2020 16:28:54 +1000
+        b=JRCcNUj8EUVtqXKEQWALdDBQmELP1qMzGTU0dY4bQpg+hBbuXiah+1F/LOI60BzLw
+         2bJIQ5YkxRHz5Xb6zib26TQqpUho+IKN/f/05ZucajHCosAO0U0J5b4m8ocT39M8EW
+         toVO6YsgNYuDSxeCtmK4NpUnu5dYZs/buJG6ZQKMbXSB9Q+mepwPGR7+YLkJuyRMYN
+         L+dK+sI2LG+GBWTzN9YEEIZnMK4Fl7DCzKqww1cZPMED8N2NUqvWcaKcfm5wUuj1/b
+         rgjTRSRefL5iKQjuBbd2e1EhQNs9BdVAawcGbW5bFn2WB1oW75PPMS+jZHN/qquA12
+         qudfijkJBvWWg==
+Date:   Thu, 21 May 2020 17:21:30 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Felipe Balbi <balbi@kernel.org>, Greg KH <greg@kroah.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>
-Subject: linux-next: build failure after merge of the kvm tree
-Message-ID: <20200521162854.70995699@canb.auug.org.au>
+        Jason Yan <yanaijie@huawei.com>,
+        kbuild test robot <lkp@intel.com>
+Subject: linux-next: manual merge of the usb-gadget tree with the usb tree
+Message-ID: <20200521172130.52aaa1d6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/kRUYmA7Ax=s.v5n_hXDTMi5";
+Content-Type: multipart/signed; boundary="Sig_/APdJPlwHsfhfWz=HCHfmtMc";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/kRUYmA7Ax=s.v5n_hXDTMi5
+--Sig_/APdJPlwHsfhfWz=HCHfmtMc
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the kvm tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
+Today's linux-next merge of the usb-gadget tree got a conflict in:
 
-arch/x86/kvm/svm/svm.c: In function 'kvm_machine_check':
-arch/x86/kvm/svm/svm.c:1834:2: error: too many arguments to function 'do_ma=
-chine_check'
- 1834 |  do_machine_check(&regs, 0);
-      |  ^~~~~~~~~~~~~~~~
-In file included from arch/x86/kvm/svm/svm.c:36:
-arch/x86/include/asm/mce.h:254:6: note: declared here
-  254 | void do_machine_check(struct pt_regs *pt_regs);
-      |      ^~~~~~~~~~~~~~~~
+  drivers/usb/cdns3/gadget.c
 
-Caused by commit
+between commit:
 
-  1c164cb3ffd0 ("KVM: SVM: Use do_machine_check to pass MCE to the host")
+  e9010320f2d9 ("usb: cdns3: gadget: make a bunch of functions static")
 
-interacting with commit
+from the usb tree and commit:
 
-  aaa4947defff ("x86/entry: Convert Machine Check to IDTENTRY_IST")
+  e2e77a94078b ("usb: cdns3: mark local functions static")
 
-from the tip tree.
+from the usb-gadget tree.
 
-I added the following merge fix patch.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Thu, 21 May 2020 16:24:59 +1000
-Subject: [PATCH] KVM: SVM: fix up for do_machine_check() API change
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/x86/kvm/svm/svm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index ae287980c027..7488c8abe825 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1831,7 +1831,7 @@ static void kvm_machine_check(void)
- 		.flags =3D X86_EFLAGS_IF,
- 	};
-=20
--	do_machine_check(&regs, 0);
-+	do_machine_check(&regs);
- #endif
- }
-=20
---=20
-2.26.2
+I fixed it up (the difference was the indentation of contiuation lines -
+I juts used the latter) and can carry the fix as necessary. This is now
+fixed as far as linux-next is concerned, but any non trivial conflicts
+should be mentioned to your upstream maintainer when your tree is
+submitted for merging.  You may also want to consider cooperating with
+the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/kRUYmA7Ax=s.v5n_hXDTMi5
+--Sig_/APdJPlwHsfhfWz=HCHfmtMc
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7GH6YACgkQAVBC80lX
-0GyKEwf/QaFM0a89iomF2hN2IEy0NIKFRVhaO2uhFSmTsgbtQOH8ViuzREPlWjUI
-8BTtFJ28yru5hTLNb7nqVprEZCY7t6iOqVRWd5MTNqVqLffn7nCmcsBhKBaEyCWS
-Q4dzRJ3UMe0Ll8zA9qikZMevuDLXDEad8asXUIP5ofo5u9ouQOcU0XGC/eNY8WxK
-rGne3B3mSUNCCSZv9oMgVfi12/xLLujtEVeVj42i814KAtMYDM20uTmDQTPjGyLQ
-KcRFHBim1QX0WiA6QN+HhoutvJpRMwrZhSm7W5RCNTI1tWK1cdir6FtRKmucjP+r
-9v/xiu8T9afsY0n0g18SFMRdGjj/cA==
-=0/Xc
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7GK/oACgkQAVBC80lX
+0GzGOgf9Fmbg59Ul1SWI1nAfe2gnjjOPB9NuPrI4Ra82K+75hnEVyZaD8T/x/UZh
+MSo/BMciiXpybshpJCX9ASP7a7FfJniAGh/9GH68gNHrxkXRVMmH3m89eVZ3Q6dW
++XNkU/PeF/XC+nndsF3rwt0vgYSN77XvGQoKxvccfip7XvOrjCAKfQ2evVBCCLqS
+0Dq0toe8h9NdlaiCH8pP0eMzBsmpi5WHLV9QOnjrNh9xPMV7Pp0bYW2Jl3UzG8q1
+CdQ/hq9bCVuDLkjGzDEbTtA92FPnoxw9Bc+8TaJNhcYg9M/FEKjWZbFMEkVUm72Y
+2y0L0SV2Y/A/tDIYSctgnlkDY8wXEA==
+=roe2
 -----END PGP SIGNATURE-----
 
---Sig_/kRUYmA7Ax=s.v5n_hXDTMi5--
+--Sig_/APdJPlwHsfhfWz=HCHfmtMc--

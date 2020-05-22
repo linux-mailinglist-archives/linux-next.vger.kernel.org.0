@@ -2,83 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F8F1DEFDF
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 21:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87CEF1DF02D
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 21:48:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731004AbgEVTRo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 15:17:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42364 "EHLO
+        id S1730948AbgEVTsz (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 15:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731000AbgEVTRo (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 15:17:44 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2381C061A0E;
-        Fri, 22 May 2020 12:17:43 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id j145so10250182oib.5;
-        Fri, 22 May 2020 12:17:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=8FXe1gKRRAtqdzdgqSYRUue1n+MxbAKrARpETxEvke4=;
-        b=hLhv31zaLwJbsDWkqcR+uUquyLZA4eqx4k2ILKPopdfqawOpaA4THoSNV7ClFXRkby
-         M9kM65oBO5h2A4k7zNA4hxGHFOHHs4XR6N/+0mlMtCP4Ga+h8gUUUmrNCcREz7fhZ/aP
-         bUMuUtnDUZbwC5HrGnN6DLUFbdbMhJVZiEVpJoHJe/VYxgo9BBv6jLFCQJRtO9lWoB81
-         1oxMIII0r84TM5bZ857K8BXQf/YW7A7YrSL55Y4aiHZdbahjv684X4MctKJLdtjUkemg
-         kCHfOy66xiM/+NyzOMybSNGz2TnAprh/nLZblqaOaFmREn46+Tux6uqyDHHvN8aiYtcO
-         QgkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=8FXe1gKRRAtqdzdgqSYRUue1n+MxbAKrARpETxEvke4=;
-        b=V4huV7Hew4Q7OKHRr9DgL+WMlQ9wuMbD0T/YWgVJa5IBe52Q+ZCn1sbTnmBOLZ3uxG
-         xWYVencoMWiiP/F5sk9GekB9OkAxM5M+aifkHYpLtcpP+V2ke5WLF3s/vbGoFs70nJ5B
-         0uNVnivNDV6Kc6Rbv1drA6I8wOYv8+ipH1Gst7npNoX+/CacN2rRR2javzNM8YcrduVL
-         1VegsziGsrWs9ZOz77KYmKsuwqgEYNj8ySb8EzdRsZRswvIFwkz1ZwOgKdmZBFmbXPB5
-         pJ+n1nYfuVZyNTT1Tsingvqiw74IJw+5VuKAjsc3EjmSoWV0n96gpsJedoYadlBZpz14
-         3WHA==
-X-Gm-Message-State: AOAM532H1L5+VWM9yDJwZ7LQoQJIW5hUHWVWzpW0x6/p1dbzgLMpJa46
-        HiyRrvlerQUwauDZYiFNlqApHlle5Mma1pJb9e0=
-X-Google-Smtp-Source: ABdhPJxLsbBs1BIQiwf3yrEMRyglXcvTSvInXbYBQaH8pUHTHImNSKUEoMYhqqR/qfnZBTqtJ8So7qCNEEfKFcshj68=
-X-Received: by 2002:aca:d496:: with SMTP id l144mr3832091oig.72.1590175063323;
- Fri, 22 May 2020 12:17:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <3c51bea5-b7f5-f64d-eaf2-b4dcba82ce16@infradead.org>
-In-Reply-To: <3c51bea5-b7f5-f64d-eaf2-b4dcba82ce16@infradead.org>
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-Date:   Fri, 22 May 2020 12:17:32 -0700
-Message-ID: <CAM_iQpV62Vt2yXS9oYrkP-_e1wViYRQ05ASEu4hnB0BsLxEp4w@mail.gmail.com>
+        with ESMTP id S1730689AbgEVTsz (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 15:48:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02383C061A0E;
+        Fri, 22 May 2020 12:48:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Z6TL3xB3sEMCJ9LTRXR3MO+IKHZXgyi31lHXd2yxQts=; b=fQ7//IUJHaDwbkjSiM04uebhl1
+        aNqXz9brV3nB9Y6jaTPGwb9ctnHw2ICGtN1UbNqZmBgZ5SAHTA6C+YPATxBrFOVJZ75j33qGBTHgS
+        X0MLThoWkskD34zSn/RqpyIL3jwUzGFb15tz+fNFeN5GehXmVnvU+YqI+RTv/e/gk5VlWLQXK9rCo
+        yZgByZbUN3vbFyYrEBJ9b5UKaQE2PLMSVTXaYCKhodFv0O6x4mcoLwJXopLNkN1oiNReWfxiD2cHS
+        w/zTCdGLsRASI1eyEou841FEpAeIcNES8KUODpJ228XjrX4An0E1RE6nf2pFk6K/k4MgGUdv+yo9q
+        e5KFF/LQ==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jcDf1-0006wR-3N; Fri, 22 May 2020 19:48:51 +0000
 Subject: Re: [PATCH -net-next] net: psample: depends on INET
-To:     Randy Dunlap <rdunlap@infradead.org>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
 Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         David Miller <davem@davemloft.net>,
         LKML <linux-kernel@vger.kernel.org>,
         "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
         Yotam Gigi <yotam.gi@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+References: <3c51bea5-b7f5-f64d-eaf2-b4dcba82ce16@infradead.org>
+ <CAM_iQpV62Vt2yXS9oYrkP-_e1wViYRQ05ASEu4hnB0BsLxEp4w@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <6c1c6fec-a3fa-f368-ae40-189a8f062068@infradead.org>
+Date:   Fri, 22 May 2020 12:48:49 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
+MIME-Version: 1.0
+In-Reply-To: <CAM_iQpV62Vt2yXS9oYrkP-_e1wViYRQ05ASEu4hnB0BsLxEp4w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 22, 2020 at 12:03 PM Randy Dunlap <rdunlap@infradead.org> wrote=
-:
->
-> From: Randy Dunlap <rdunlap@infradead.org>
->
-> Fix psample build error when CONFIG_INET is not set/enabled.
-> PSAMPLE should depend on INET instead of NET since
-> ip_tunnel_info_opts() is only present for CONFIG_INET.
->
-> ../net/psample/psample.c: In function =E2=80=98__psample_ip_tun_to_nlattr=
-=E2=80=99:
-> ../net/psample/psample.c:216:25: error: implicit declaration of function =
-=E2=80=98ip_tunnel_info_opts=E2=80=99; did you mean =E2=80=98ip_tunnel_info=
-_opts_set=E2=80=99? [-Werror=3Dimplicit-function-declaration]
+On 5/22/20 12:17 PM, Cong Wang wrote:
+> On Fri, May 22, 2020 at 12:03 PM Randy Dunlap <rdunlap@infradead.org> wrote:
+>>
+>> From: Randy Dunlap <rdunlap@infradead.org>
+>>
+>> Fix psample build error when CONFIG_INET is not set/enabled.
+>> PSAMPLE should depend on INET instead of NET since
+>> ip_tunnel_info_opts() is only present for CONFIG_INET.
+>>
+>> ../net/psample/psample.c: In function ‘__psample_ip_tun_to_nlattr’:
+>> ../net/psample/psample.c:216:25: error: implicit declaration of function ‘ip_tunnel_info_opts’; did you mean ‘ip_tunnel_info_opts_set’? [-Werror=implicit-function-declaration]
+> 
+> Or just make this tunnel support optional. psample does not
+> require it to function correctly.
 
-Or just make this tunnel support optional. psample does not
-require it to function correctly.
+Sure, I thought of that, but it's not clear to me which bits of it
+to make optional, so I'll leave it for its maintainer to handle.
 
-Thanks.
+thanks.
+-- 
+~Randy
+

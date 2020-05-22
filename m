@@ -2,91 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F1461DE18B
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 10:08:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 104421DE193
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 10:10:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728977AbgEVIIe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 04:08:34 -0400
-Received: from mout.kundenserver.de ([212.227.126.133]:55977 "EHLO
+        id S1728468AbgEVIKR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 04:10:17 -0400
+Received: from mout.kundenserver.de ([212.227.17.10]:58579 "EHLO
         mout.kundenserver.de" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728152AbgEVIIe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 04:08:34 -0400
-Received: from mail-qk1-f170.google.com ([209.85.222.170]) by
- mrelayeu.kundenserver.de (mreue010 [212.227.15.129]) with ESMTPSA (Nemesis)
- id 1MMoKq-1jJPul2jRM-00IkLg; Fri, 22 May 2020 10:08:31 +0200
-Received: by mail-qk1-f170.google.com with SMTP id 190so9991908qki.1;
-        Fri, 22 May 2020 01:08:31 -0700 (PDT)
-X-Gm-Message-State: AOAM531TopgningbtZJAEr0sfJj/fg7FtsqwtwZp3vnpmtV7vBLt3SEi
-        46vpnZTRc5m2PLc2vMlCHehnlwBsu6lgJgujkd0=
-X-Google-Smtp-Source: ABdhPJxvCN5ckqOsRHgJtAQbB9IOx9DfaplnfBWTHN4WldKZGpHGw1jQyX3CgSCcu6TNJ4bB5ueanJiINGKzx+D9eUA=
-X-Received: by 2002:a37:434b:: with SMTP id q72mr14547426qka.352.1590134910369;
- Fri, 22 May 2020 01:08:30 -0700 (PDT)
+        with ESMTP id S1728152AbgEVIKR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 04:10:17 -0400
+Received: from mail-qv1-f54.google.com ([209.85.219.54]) by
+ mrelayeu.kundenserver.de (mreue108 [212.227.15.145]) with ESMTPSA (Nemesis)
+ id 1MTiLj-1jUAVW0KPF-00U2kz; Fri, 22 May 2020 10:10:15 +0200
+Received: by mail-qv1-f54.google.com with SMTP id v15so4341049qvr.8;
+        Fri, 22 May 2020 01:10:14 -0700 (PDT)
+X-Gm-Message-State: AOAM532g2V8P+O9KB6SfaKuDAYwk+PdD1FKazJlLI8gMf7wbn62h19pD
+        Jcv4Vqb7V9GyXoY9jkOiUe6R9BL3DxqccMTME0s=
+X-Google-Smtp-Source: ABdhPJxoz0VBY0P9VSs5lNsQ3oTYwi3r5Iu1g8xwCJPQrJXyNwWk1Nipm7AlAFVx6Sc0ECmHPTYYnfW2UzAGL8m69xI=
+X-Received: by 2002:a05:6214:3f0:: with SMTP id cf16mr2678071qvb.4.1590135013931;
+ Fri, 22 May 2020 01:10:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20200522160313.09cb2b7e@canb.auug.org.au>
-In-Reply-To: <20200522160313.09cb2b7e@canb.auug.org.au>
+References: <20200522082433.4f536de1@canb.auug.org.au> <CAK7LNATU18vKsSV_pugSRw4e3bQBUAQ670ac34GbO2YNHXgLPw@mail.gmail.com>
+In-Reply-To: <CAK7LNATU18vKsSV_pugSRw4e3bQBUAQ670ac34GbO2YNHXgLPw@mail.gmail.com>
 From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Fri, 22 May 2020 10:08:14 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a1H43KuLbQ0mPNjSCoWbqT2P_kx93zsdYtQXv2nw2WdvQ@mail.gmail.com>
-Message-ID: <CAK8P3a1H43KuLbQ0mPNjSCoWbqT2P_kx93zsdYtQXv2nw2WdvQ@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the devicetree tree with the arm-soc tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Herring <robherring2@gmail.com>,
+Date:   Fri, 22 May 2020 10:09:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a2LbuhGVJ2jv3YvZhbTjuBoR3F_1ejVEdWwapHsb9YBvQ@mail.gmail.com>
+Message-ID: <CAK8P3a2LbuhGVJ2jv3YvZhbTjuBoR3F_1ejVEdWwapHsb9YBvQ@mail.gmail.com>
+Subject: Re: linux-next: Signed-off-by missing for commit in the arm-soc tree
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Olof Johansson <olof@lixom.net>,
         ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Masami Hiramatsu <masami.hiramatsu@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:dShZ1qXd4jHuP4xFgkiv2xNaEHWhAnlm0xjGh5Z7VY7bZ3ip9BK
- megMSIPIHKIp/OhHs3XXHxcDX8UZhPxIW5NvZnIMHKUBylHwp2fIPgRMM3dc0JxLNdyKN9y
- DF725uGY89GcQpmoC1URNqwUhhWT3ktgD1fs7FaGu5Q92N4RZTnZcEJebVFeLuDyMcMN/RE
- 8r18XDC2Nlm6kZiJJCLRw==
+X-Provags-ID: V03:K1:HkmkdglTF1Sh0OYVQ9Fr5+RT5e+Ke51gXUQcdgIjBA6abqGi5Ej
+ 46ocH4RXw7W5ZUcihPhky2lLj1R5LaMXJHm6TOpUFwGjro+2wxRPtoMwa9C6M1MOQTrogde
+ kTEUTh/GxKWRDfSArQFK/hEeBZfSl6gliatjakBiVR/xgsFTFFqrpFr4MJaIR/xAH6pNLpN
+ vJQtXBhRIrc69EAanFtwg==
 X-Spam-Flag: NO
-X-UI-Out-Filterresults: notjunk:1;V03:K0:QHiGbz+iv2U=:DchdaCXz9WiGoUcniA4zfa
- Gdgq4NjVmRZ0ZN1SV8iusKvRHnF4PCFMrhcagkmDvZ6Z+r0ftqS/ShoDx2eJ2qphL30SxXxPY
- V4o+lkMKxDBDHg+NhjTW9HebPwZIbaRImODup5ZsF5AVShf+SblD8ykYjA0IxEBkqncYEmlFM
- 1zmC1QtXMTpNaNzdvap+cbYE9EWml+vNV217s+zuTHPcp8bblPo4OcDVTMbC8eCFpTFO4RqMm
- djko3POKzhYJ0b0RIuEz6TyrmksCkbODvrAIxLukKyavXLx+hlaLFhN3oLTe9lSGDgfbkooII
- iM2/F0mCY1+dAL4DFeHq5pnJ/mifsgq6ML9yZVSU+eb5GSnl98CrDsPCE8uGe0cVZ9PrO6tg9
- OEGiuIb2sImx7igOrikW4VE4G7cEBNy0+ieLqIm4AkE8JgZt5Kpb/5FNDpa6+3njiS0nLa0VU
- Ziq5uQHsuR0IPVOO6qwlnThu8nN1bbjiUzTS2hsnQ3nWqurebpuMrNmg14fW2AhKz4P5vgiT6
- Zbgqdd2PVKa/rCYUvwO3ixXR4QYmCjCRpzYZeiIwxqLhLOqBgAy0kKNZVNmo7UF5oxzSgt9L4
- 828njk0Kqxdzqjb0oborIZkghlL4YZWOLWsqAJDEIskYq7ljinuRVczBe/+zz+7W8+phkqtd+
- lIXqnIW1c0uLmyVnXgd6HDbym4QdJwPGMq06+Gz5unuZk7SM13fvdYi3l701V5zmBAuiZ+eGl
- g9Ozk7AohtgD7MeaAh/wY8FCWUYhdweiBtrkMSoLM6qQa/tGJoTRyDroXKvN+JQtWAj962bpB
- BiCwzFLjr8O5PXam3nKrnypgfvMmphwDZCQ52kke30WLnvjRHE=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:15hVWtxlQv4=:arXeV0rfxmystZzVxn9xFr
+ QkWDOHE/98NnPTW/sMyivHREKytQolcSE7lOrZ5qGV3PiBVFv5Ucl8cg2AuAWUaw2VC52w7aA
+ fKv3b0QltGioVNco/omnCU6JwbAYEtEmdEJ1f4G1hYW7pFsagKO+5hg7mW8leo7rNTHuCe0Bm
+ YBpY2+E7HzCxnR42sr6/Mh2srcxMEHM8Z0m2+ddm935DcUboY8qHJ2XPYKMwpS3p3axq9zbyu
+ YwY/r+VzY1XBh/4zhy48ozQ9PdINAu43PX7rGElZsz6FrWSaXe7GTn+GnDNUeUKwiUU/GB67f
+ kruwHnpE0xGXliTJVv3AS3EduobfgcHGBw/AXJoY5RCDkStXYff1BwN1pgUYK9Bks+KLQqC6k
+ TlwNgQlL5vNJERBo3L7/5EMEzxHZSNhrZ9Cv9XchFcET1X5RReJsk19jK1JNjpdW+sSt3D9WS
+ Kfb4aj7dIdK5xWaOq9CT18laQDMNg3UzvFTAUoLuX6PxSFPJ5w8GiphjTLHI5blyVNL8FZrno
+ eLGBfGuOm3mSo3liwPhWFs99/1vz4TlvJwNlCuGwayQGMHL6HJH/VgImDqxTcvIXYqHtjO1Hq
+ ZKpkt6kC8pD3K5uH755JWpRTfOhv2AAIZBUrzbOOCrT7rqeD08aWpAzUMx89HBcrnat10mQBC
+ Esk2x5DMEWy6ysh1GWkt4dskxwRUVubc6elLJPhXqYYisZ0LeK/IH67pIo45Rt36T5aV0LZ1R
+ 3yHpipJiWHY6M2v7pypJp5d9lEdLuOduWCFdz6cnt9vsACULARpp81BHL0JTX8A4yT2mQHMeb
+ iUhW5QnpdHFGJXT7kVdFYp16mMmnYTfmpBzfzDOXXrZjg7ge3U=
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 22, 2020 at 8:03 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
+On Fri, May 22, 2020 at 3:28 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
 >
-> diff --cc Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-> index 10a7f0752281,113f93b9ae55..000000000000
-> --- a/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-> +++ b/Documentation/devicetree/bindings/arm/socionext/uniphier.yaml
-> @@@ -51,9 -51,8 +51,9 @@@ properties
->         - description: LD20 SoC boards
->           items:
->             - enum:
-> -             - socionext,uniphier-ld20-akebi96
-> -             - socionext,uniphier-ld20-global
-> -             - socionext,uniphier-ld20-ref
-> ++              - socionext,uniphier-ld20-akebi96
-> +               - socionext,uniphier-ld20-global
-> +               - socionext,uniphier-ld20-ref
->             - const: socionext,uniphier-ld20
->         - description: PXs3 SoC boards
->           items:
+> On Fri, May 22, 2020 at 7:24 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > Hi all,
+> >
+> > Commit
+> >
+> >   82ab9b6705bd ("dt-bindings: arm: Add Akebi96 board support")
+> >
+> > is missing a Signed-off-by from its committer.
+>
+>
+> Sorry, I missed to add it.
+>
+> Olof, Arnd,
+> If you want me to resend the pull-request,
+> please let me know.
+> (but, probably it is too late, I guess...)
 
-Ok, thanks! I think can let Linus handle this in the merge window.
+Yes, I think it's too late, I did a lot of merges yesterday and would
+rather not rebase them.
 
-      Arnd
+       Arnd

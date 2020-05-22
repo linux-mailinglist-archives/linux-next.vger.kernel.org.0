@@ -2,138 +2,158 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A88B61DDF2D
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 07:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D62FB1DDF73
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 07:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727944AbgEVFRt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 01:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52560 "EHLO
+        id S1727954AbgEVFjn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 01:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726338AbgEVFRt (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 01:17:49 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6CCC061A0E;
-        Thu, 21 May 2020 22:17:49 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49SvrT31pgz9sRW;
-        Fri, 22 May 2020 15:17:44 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590124666;
-        bh=faS4nLFZfFTVQGtxXn47idEsA6wHtJuwJj8xWrJUg3I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=OPrHO9frmWfmFnL+UBxKH5VtTeChrP+LRXfXSccXX92h772IlR9psx3PpSDmCYJFI
-         hT97stn/o8H/EYHmVT5jC8D0E2P1p+oof++k9QLug0kjKCf5dof5j24cEaMXi2PQnC
-         ixkoNMpJQM7XFj6b+mNZr4F89g2tn4AsKxCKSfZI4O+iJjvw+q74ro8OACcxpMvwBB
-         ZCY8zbW6PPw6iMkMhscE01RITYiZy2qI3c1iaqs/YAhyHMQyfCUrwd508ZKkjupjtn
-         BSjCFz7Z22RMOhedV4KHlvQGubiEiMqUasl90H5EFAZBhrPpHC7//phVWG/v7LLgr3
-         XOLM7ADcunjnQ==
-Date:   Fri, 22 May 2020 15:17:43 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>, Jens Axboe <axboe@kernel.dk>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>
-Subject: linux-next: manual merge of the device-mapper tree with the block
- tree
-Message-ID: <20200522151743.5c3cdbbf@canb.auug.org.au>
+        with ESMTP id S1727924AbgEVFjm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 01:39:42 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7B1C05BD43
+        for <linux-next@vger.kernel.org>; Thu, 21 May 2020 22:39:41 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id s3so11600005eji.6
+        for <linux-next@vger.kernel.org>; Thu, 21 May 2020 22:39:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloud.ionos.com; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=CqYPjIYXrmaZh1pcb7Hru9zoJQGqnxH9Aw5pMpXidZM=;
+        b=aYQyOOGYpTK506neKROafbVlLAM6zZWflTaTxbOTlno9UdTylN2QDKgpzPOPDyFfTF
+         CmoRZ3VWFKuQDI3sZpQxxvEu5MwUfJJBUICT+V+2wdAdlKF3lc7d24impuPgDdfpG629
+         9FJ66bkZBb1gIsL+gwnVw2mxksHPRgd8DMOPM4qJL+6Gvg+DuZvIViNVocpSWoAVgEUW
+         fYoUahjTtCl23DzT7h4Dp66pnB1b+WNdClhsLoi6ADDMhqoZ/nbAdRq+eYAEkAn7vWLe
+         VeROqDTviZ/nzpcySbHjbAaHzDSW+oDsOjK3CL0RAPtnplFbF67tvK0iOQtGxuYgB9/P
+         T1VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=CqYPjIYXrmaZh1pcb7Hru9zoJQGqnxH9Aw5pMpXidZM=;
+        b=pTddU2o23HczvaD0MzU+kpjVjtQ2It4le97L2hsubGg8lQcTANflXS0Dh4QUwO1JcM
+         T8R+OU9oBay/MB962XUiwAlDyGgpsV1Luxkj37zDBd+m9XbOyVVxjEPrak2tQCmBk+ZN
+         anU70UiSzWJt/yQ+47srIMfe4jDo6n6IgHFXld9r4YnK+HNZW7Pfoe+qAdrwEOlLUk6A
+         3FluB3aPaKVHHQYUd58ii25QFWH3yg8x5b7LnK3nwY5KUtkHbtrAyhCJanysWFdJyizI
+         3rJMidXVfxFXWmfHQNTNBEiBUkiXjn/5893tIOj13LJUtPQsFN+0qLmfyAFJCIw3HOq8
+         WAlA==
+X-Gm-Message-State: AOAM531zewRqB5W+bWD+PmPHNoUc1FOmVLupmQyqSu1JyieQEDZTDG/s
+        3nHbEYO/CqZ5HakbIr/60sN8
+X-Google-Smtp-Source: ABdhPJy9uq8m2rKxx7uq0I34Kzy/WwnDjRO8dUM+LKlxkdxUSne7RB9jAb8jIaXI2nuz36i0IY94QQ==
+X-Received: by 2002:a17:906:e2d2:: with SMTP id gr18mr6423821ejb.312.1590125979781;
+        Thu, 21 May 2020 22:39:39 -0700 (PDT)
+Received: from dkxps.local (dslb-002-204-227-207.002.204.pools.vodafone-ip.de. [2.204.227.207])
+        by smtp.gmail.com with ESMTPSA id c12sm6845358ejm.36.2020.05.21.22.39.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 May 2020 22:39:39 -0700 (PDT)
+From:   Danil Kipnis <danil.kipnis@cloud.ionos.com>
+To:     linux-block@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-next@vger.kernel.org, bvanassche@acm.org,
+        dledford@redhat.com, jgg@ziepe.ca
+Cc:     axboe@kernel.dk, danil.kipnis@cloud.ionos.com, lkp@intel.com,
+        jinpu.wang@cloud.ionos.com
+Subject: [PATCH] RDMA/rtrs: get rid of the do_next_path while_next_path macros
+Date:   Fri, 22 May 2020 07:39:24 +0200
+Message-Id: <20200522053924.528980-1-danil.kipnis@cloud.ionos.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20200520191105.GK31189@ziepe.ca>
+References: <20200520191105.GK31189@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/F=h_zdAYkN/C=9r=7aVTu2e";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/F=h_zdAYkN/C=9r=7aVTu2e
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The macros do_each_path/while_each_path lead to a smatch warning:
+drivers/infiniband/ulp/rtrs/rtrs-clt.c:1196 rtrs_clt_failover_req() warn: inconsistent indenting
+drivers/infiniband/ulp/rtrs/rtrs-clt.c:2890 rtrs_clt_request() warn: inconsistent indenting
 
-Hi all,
+Also checkpatch complains:
+ERROR: Macros with multiple statements should be enclosed in a do - while loop
 
-Today's linux-next merge of the device-mapper tree got a conflict in:
+The macros are used only in two places: for a normal IO path and for the
+failover path triggered after errors.
 
-  drivers/md/dm-zoned-metadata.c
+Get rid of the macros and just use a for loop iterating over the list
+of paths in both places. It is easier to read and also less lines of code.
 
-between commit:
+Fixes: 6a98d71daea1 ("RDMA/rtrs: client: main functionality")
+Reported-by: kbuild test robot <lkp@intel.com>
+Signed-off-by: Danil Kipnis <danil.kipnis@cloud.ionos.com>
+---
+ drivers/infiniband/ulp/rtrs/rtrs-clt.c | 29 ++++++++++++--------------
+ 1 file changed, 13 insertions(+), 16 deletions(-)
 
-  c64644ce363b ("block: remove the error_sector argument to blkdev_issue_fl=
-ush")
+diff --git a/drivers/infiniband/ulp/rtrs/rtrs-clt.c b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+index 468fdd0d8713..45ea5aa5f406 100644
+--- a/drivers/infiniband/ulp/rtrs/rtrs-clt.c
++++ b/drivers/infiniband/ulp/rtrs/rtrs-clt.c
+@@ -727,18 +727,6 @@ struct path_it {
+ 	struct rtrs_clt_sess *(*next_path)(struct path_it *it);
+ };
+ 
+-#define do_each_path(path, clt, it) {					\
+-	path_it_init(it, clt);						\
+-	rcu_read_lock();						\
+-	for ((it)->i = 0; ((path) = ((it)->next_path)(it)) &&		\
+-			  (it)->i < (it)->clt->paths_num;		\
+-	     (it)->i++)
+-
+-#define while_each_path(it)						\
+-	path_it_deinit(it);						\
+-	rcu_read_unlock();						\
+-	}
+-
+ /**
+  * list_next_or_null_rr_rcu - get next list element in round-robin fashion.
+  * @head:	the head for the list.
+@@ -1177,7 +1165,10 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
+ 	int err = -ECONNABORTED;
+ 	struct path_it it;
+ 
+-	do_each_path(alive_sess, clt, &it) {
++	rcu_read_lock();
++	for (path_it_init(&it, clt);
++	     (alive_sess = it.next_path(&it)) && it.i < it.clt->paths_num;
++	     it.i++) {
+ 		if (unlikely(READ_ONCE(alive_sess->state) !=
+ 			     RTRS_CLT_CONNECTED))
+ 			continue;
+@@ -1193,7 +1184,9 @@ static int rtrs_clt_failover_req(struct rtrs_clt *clt,
+ 		/* Success path */
+ 		rtrs_clt_inc_failover_cnt(alive_sess->stats);
+ 		break;
+-	} while_each_path(&it);
++	}
++	path_it_deinit(&it);
++	rcu_read_unlock();
+ 
+ 	return err;
+ }
+@@ -2862,7 +2855,9 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
+ 		dma_dir = DMA_TO_DEVICE;
+ 	}
+ 
+-	do_each_path(sess, clt, &it) {
++	rcu_read_lock();
++	for (path_it_init(&it, clt);
++	     (sess = it.next_path(&it)) && it.i < it.clt->paths_num; it.i++) {
+ 		if (unlikely(READ_ONCE(sess->state) != RTRS_CLT_CONNECTED))
+ 			continue;
+ 
+@@ -2887,7 +2882,9 @@ int rtrs_clt_request(int dir, struct rtrs_clt_req_ops *ops,
+ 		}
+ 		/* Success path */
+ 		break;
+-	} while_each_path(&it);
++	}
++	path_it_deinit(&it);
++	rcu_read_unlock();
+ 
+ 	return err;
+ }
+-- 
+2.25.1
 
-from the block tree and commit:
-
-  bf28a3ba0986 ("dm zoned: store device in struct dmz_sb")
-
-from the device-mapper tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/md/dm-zoned-metadata.c
-index bf2245370305,db0dc2b5d44d..000000000000
---- a/drivers/md/dm-zoned-metadata.c
-+++ b/drivers/md/dm-zoned-metadata.c
-@@@ -659,9 -816,10 +816,10 @@@ static int dmz_write_sb(struct dmz_meta
-  	sb->crc =3D 0;
-  	sb->crc =3D cpu_to_le32(crc32_le(sb_gen, (unsigned char *)sb, DMZ_BLOCK_=
-SIZE));
- =20
-- 	ret =3D dmz_rdwr_block(zmd, REQ_OP_WRITE, block, mblk->page);
-+ 	ret =3D dmz_rdwr_block(dev, REQ_OP_WRITE, zmd->sb[set].block,
-+ 			     mblk->page);
-  	if (ret =3D=3D 0)
-- 		ret =3D blkdev_issue_flush(zmd->dev->bdev, GFP_NOIO);
- -		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO, NULL);
-++		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO);
- =20
-  	return ret;
-  }
-@@@ -703,7 -862,7 +862,7 @@@ static int dmz_write_dirty_mblocks(stru
- =20
-  	/* Flush drive cache (this will also sync data) */
-  	if (ret =3D=3D 0)
-- 		ret =3D blkdev_issue_flush(zmd->dev->bdev, GFP_NOIO);
- -		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO, NULL);
-++		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO);
- =20
-  	return ret;
-  }
-@@@ -772,7 -933,7 +933,7 @@@ int dmz_flush_metadata(struct dmz_metad
- =20
-  	/* If there are no dirty metadata blocks, just flush the device cache */
-  	if (list_empty(&write_list)) {
-- 		ret =3D blkdev_issue_flush(zmd->dev->bdev, GFP_NOIO);
- -		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO, NULL);
-++		ret =3D blkdev_issue_flush(dev->bdev, GFP_NOIO);
-  		goto err;
-  	}
- =20
-
---Sig_/F=h_zdAYkN/C=9r=7aVTu2e
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7HYHcACgkQAVBC80lX
-0GzQYAf/RA0QQH9qR/2M7JY9NJfYSPnDdqBa44exCQbx/k9vSlKK0Wvuuyt2dsmF
-kC3E29mNGb67PfA4ZAQ75F98BYjf07xafRgkVIrCogYcMhwx3/EeMdfri8RCgYhq
-9jQq0NkVTCFViqFff8Ae/VFUmFQsoGtCS9LZHp+XgM1XJdHusii7bzyPqkRmg1uQ
-I/CbCDitdq0nAKaSRcq84eRNvh+8XJa9e3G8RI5B9nvUt7gQteOmdy4QLh0ODKcd
-z3ubh3bgFBuO8hr6DJFw30lVzAUQ0iffWGzhOiG/E7AyGbdpz9wvaC2NxQVb3jBE
-gDPRPtomd0LtAMYsHnBZFEeHBf7UiQ==
-=HgIy
------END PGP SIGNATURE-----
-
---Sig_/F=h_zdAYkN/C=9r=7aVTu2e--

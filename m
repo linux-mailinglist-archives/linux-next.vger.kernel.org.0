@@ -2,189 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A93B1DE254
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 10:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4120C1DE565
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 13:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729161AbgEVIkh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 04:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56028 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729115AbgEVIkg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 04:40:36 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDB5C061A0E
-        for <linux-next@vger.kernel.org>; Fri, 22 May 2020 01:40:35 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id y18so4902174pfl.9
-        for <linux-next@vger.kernel.org>; Fri, 22 May 2020 01:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=xLA8Ib3vHCYxFstkbUsDHrPwgRFl94w5LmosJwDWgIo=;
-        b=vlqMeMrlA/3MYpNJh34LkQBuhs/lAqFZN7wCty+nlxe4W/EHvYNAL7hg1sxK65wprf
-         deiTeUOmQ6f8/j2RkQM/BY8xAzzkvRA6b+QENzXTw8mHtLf281ZX/t2b3qp5LWLo5etH
-         YGwr5k7CfGSj4Vphf9Dh0gn/GdEE8zlG5ElH0b68jYDGtSRbk5s2HdhGTKHhHyDYIrG1
-         UsTcYir0ERYNpE62R2lUgQXeg3ATS173gsD+Ny6Diy225jZ4rGyyuL5xj2ZVQSIGyeS+
-         3+rLdIDQ89J72EF19JZQlX6FUjvrRMRp1ew+ZcnS201WkHR/ErfTV9J921AaSee0etnZ
-         86BA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=xLA8Ib3vHCYxFstkbUsDHrPwgRFl94w5LmosJwDWgIo=;
-        b=VttIFAEhxrOITCC9lv5KQeF+sL5zsInEq3MQM4NXw+ASZzgI0nS3GEMYIDI7KCbWcu
-         wOcyHRQWRnnYFm4ROT0HQknow0HPflBNYhi4tHV7eBjb/znU4+WUYMiuUeIcS33iT/EW
-         SPi3U014VjS8O1Qye30cKt4wMtHQexcJlpYGIPcdIUgqM05sq5LZi3s8O4HeDENqeNgm
-         Pt9d/UdAAUpt+sHWWZIahn4oF/K059JkyOxkwR8wzMWwuOJU3bPNOHtr3KadlOJK22d4
-         R4c+EkhcPbsrXMh3XIQ68VL/cESnynNiNhTXe4vvRlY69fLL1YOhLbsD+LgoOrRUPj75
-         pFzA==
-X-Gm-Message-State: AOAM531qg9l46+vYdYHNWWm5oTw+6nyh4S5qHaLOPu7XWOITUEKAl6Gi
-        yVklar6YxSYto3matmJ+R/OdSIPNcFg=
-X-Google-Smtp-Source: ABdhPJzI9kqSi49TwPd1YO6GR5ORUTiVCWv/Jn7uhpO6UJAX4f8ofp/IZURmH8VIdnNPhs1YY3PCLQ==
-X-Received: by 2002:a65:51c7:: with SMTP id i7mr12803384pgq.382.1590136834415;
-        Fri, 22 May 2020 01:40:34 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id l6sm6243331pfl.128.2020.05.22.01.40.33
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 01:40:33 -0700 (PDT)
-Message-ID: <5ec79001.1c69fb81.cb5da.eef3@mx.google.com>
-Date:   Fri, 22 May 2020 01:40:33 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1729409AbgEVLcH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 07:32:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:43707 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728281AbgEVLcH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 22 May 2020 07:32:07 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49T48N6qQhz9sSW;
+        Fri, 22 May 2020 21:32:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590147125;
+        bh=urgcefr/YlkmkNAFUGmo68RW1ttwHwPL72RDkV/bRug=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UELXjqvxyjEzBQEmziHCTCjvFZZXw3i1dyiYfnwYTU7HH0c+SjOWJxFKvAthJAIRR
+         sDRhEy+YQ+7+01HOZb8wvlKoWxN7BdV7tR/hTZ102qbSTzMO9xvKL/kKoBFY/y6ObH
+         J64pNUcsOsz8y0tGvCUpwZiql4kXz0x5O8fTFBa32qTpmHkM3cdO+l85CvmigQRTop
+         VYOgfrjKW3qDBBeKAbfN521oG9U0s1wa1NVjj2CcFC3giyyrTZyAjtQj9iGLHfzU0I
+         Pz2PAv+PJYMKhT0QC/qIUhmWx6ungZxtPiZwImGYIlCOu3UJ+JvjsOkNiEgL6D+q8M
+         Yhqxv1qoP4muw==
+Date:   Fri, 22 May 2020 21:32:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: linux-next: build failure after merge of the block tree
+Message-ID: <20200522213202.38ebe825@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-rc6-275-gdbacbfd47d67
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 239 boots: 7 failed,
- 225 passed with 4 offline, 3 untried/unknown (v5.7-rc6-275-gdbacbfd47d67)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/UtxBkTtJCi6+=X/EUuCRSf3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+--Sig_/UtxBkTtJCi6+=X/EUuCRSf3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+Hi all,
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+After merging the block tree, today's linux-next build (x86_64
+allnoconfig) failed like this:
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/pending-fixes/kernel/v5.7-rc6-275=
--gdbacbfd47d67/plan/baseline/
+fs/libfs.c: In function 'generic_file_fsync':
+fs/libfs.c:1116:9: error: too few arguments to function 'blkdev_issue_flush'
+ 1116 |  return blkdev_issue_flush(inode->i_sb->s_bdev, GFP_KERNEL);
+      |         ^~~~~~~~~~~~~~~~~~
+In file included from fs/libfs.c:7:
+include/linux/blkdev.h:1875:19: note: declared here
+ 1875 | static inline int blkdev_issue_flush(struct block_device *bdev, gfp=
+_t gfp_mask,
+      |                   ^~~~~~~~~~~~~~~~~~
 
----------------------------------------------------------------------------=
-----
+Caused by commit
 
-next/pending-fixes boot: 239 boots: 7 failed, 225 passed with 4 offline, 3 =
-untried/unknown (v5.7-rc6-275-gdbacbfd47d67)
+  c64644ce363b ("block: remove the error_sector argument to blkdev_issue_fl=
+ush")
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc6-275-gdbacbfd47d67/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc6-275-gdbacbfd47d67/
+I have applied the following patch.
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc6-275-gdbacbfd47d67
-Git Commit: dbacbfd47d67736d5ebd724391a8d0d82f36d30f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 100 unique boards, 24 SoC families, 30 builds out of 217
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Fri, 22 May 2020 21:21:54 +1000
+Subject: [PATCH] block: fix for "remove the error_sector argument to
+ blkdev_issue_flush"
 
-Boot Regressions Detected:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 97 days (last pass: v5.5-8839-g5=
-6c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 16 days (last pass: v5.7-rc3-277-=
-ga37f92ef57b2 - first fail: v5.7-rc4-211-g6d4315023bc9)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          sm8150-mtp:
-              lab-bjorn: failing since 21 days (last pass: v5.7-rc3-194-g16=
-31e20d9729 - first fail: v5.7-rc3-228-g76a37a4cf830)
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-sm1-khadas-vim3l:
-              lab-baylibre: new failure (last pass: v5.7-rc6-239-gc0a2bce73=
-a89)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 41 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    allmodconfig:
-        gcc-8:
-            stm32mp157c-dk2: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            sm8150-mtp: 1 failed lab
-            sm8250-mtp: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ include/linux/blkdev.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 95f1e6db31e2..7d10f4e63232 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1872,8 +1872,7 @@ static inline bool blk_needs_flush_plug(struct task_s=
+truct *tsk)
+ 	return false;
+ }
+=20
+-static inline int blkdev_issue_flush(struct block_device *bdev, gfp_t gfp_=
+mask,
+-				     sector_t *error_sector)
++static inline int blkdev_issue_flush(struct block_device *bdev, gfp_t gfp_=
+mask)
+ {
+ 	return 0;
+ }
+--=20
+2.26.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/UtxBkTtJCi6+=X/EUuCRSf3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7HuDMACgkQAVBC80lX
+0GytSwf/alxMhLVCRbD9KdpHpaYkX6KYezj3KR2eLqmgHHoSwhzMcORdLy6C8HHE
+kDCggkIeBNgKN4AFUUFg5k6koY/CPEoQVV0hWwrb6hrkLjYnEFuXXq1lVTLbAWzE
+0mBRhxS6EIZffZ+JdRQrGz32b3asxOLQXMObLSm4y0qAGYZOWeCRMSUceUj3ZL6p
+nEMprJflPODk6jA1KmEcuwN3fnkphi5EOhsoscZhlP0cvQokC2Ug9us+Udkkbzj/
+dq/sE1Hx7mk3bKm6Vbyi9PbveEFo1Fzy8j3bPCsNYLd2kRoTI+z3Wny/I3rc3ZV6
+DgyMoFSPbCU4XxCZunKHW0yzWTFjBw==
+=E/X4
+-----END PGP SIGNATURE-----
+
+--Sig_/UtxBkTtJCi6+=X/EUuCRSf3--

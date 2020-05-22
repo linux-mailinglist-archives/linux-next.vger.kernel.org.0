@@ -2,120 +2,161 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BC91DF055
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 22:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACFCD1DF174
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 23:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730968AbgEVUFb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 16:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49790 "EHLO
+        id S1731148AbgEVVtk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 17:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730963AbgEVUFa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 16:05:30 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975C4C061A0E;
-        Fri, 22 May 2020 13:05:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Date:Message-ID:Subject:From:To:Sender:Reply-To:Cc:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=EfYPlaAM0tVJqWDjM23M348UGPgcOmSUMDNAnYQU29U=; b=HciuDFp8SowQPIaUS2biMqz/X/
-        8SHMGvdi6h9nWzfOfxTu00QeHcKY9nmKjJfoYJIppM+ZHVRlx44AUGCwTzHu8srIBta4xPzlKPT9Y
-        gY0/Q0XfAIw9LL8Hu57fYFH6ZPY8xruyxLiZnEYoG7bWydIiqvWX4fYq9rqJuS8he4TBvtrnxgdz5
-        UhbCg1ocxGXB5aBGTBLsT3PcH9/4IfKIZST9pQASCVIEu6PKIEsGVZyMQDWHmodCTAXp4sKGwK+gl
-        CHyC2xAk0vrs/agqi5KMruBuE3zH34zLvtwxxdqyGeDf6cFyXK/o/yQobbKq2rGX8j0Y+eLUTGZhl
-        dtP02Nuw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jcDv5-0001ki-Ud; Fri, 22 May 2020 20:05:27 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Yotam Gigi <yotam.gi@gmail.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH net-next v2] net: psample: fix build error when CONFIG_INET is
- not enabled
-Message-ID: <ca2be940-4514-4027-13f9-4e6bd99152ab@infradead.org>
-Date:   Fri, 22 May 2020 13:05:26 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        with ESMTP id S1731029AbgEVVtj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 17:49:39 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716FAC061A0E;
+        Fri, 22 May 2020 14:49:39 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id t11so5628311pgg.2;
+        Fri, 22 May 2020 14:49:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=S0Uzq9mqq+tWip8RdyrRyyQ3hbA1jkIS41+a492a2tI=;
+        b=hYsWwZiSOVrzwJzZ6pAQA1DAFHSzHL7s/is5UbjgAkoFRFIENvPLD9VIUoR1TWfkAz
+         e7IomIOkQTMPvOjIY0uTt1bWEIwC3kCcVDQ22T+wmO48ZmOHGPHyAP35fbG8vffqxKmq
+         +z52yL20CA0QMjjNwb1ZNtlP194amp7Q/RJ61WGZxS8K2Vm633RgI9Y+rAVJT4nw1GDg
+         rcaek0qLyI2fVBkUL3w2LwsxswbfTKkvtzmF3iPROmE9Du51m95U8SYo2E1+0uDiBp6D
+         saYyoU37RkqzYsfB51YMk66v5hchaOrqELx85M/NySL7eIbrpW9igqLrOTPU4wNdmDC/
+         Ts+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=S0Uzq9mqq+tWip8RdyrRyyQ3hbA1jkIS41+a492a2tI=;
+        b=CikFcosuhcqyhrVt8RQTKHfnCK9R1I6gXjkps3xw8xOE+BhUPoalYTtH/w1ZANJAmV
+         Zj9ENfTC7WrMQVUa2QwU4eMr873lQGuvciOT226FUjnCwfPO9+zIk1/I4Ag4Wt3b561Z
+         QiP1MfhkIdEG73rRm8HO1a3CTDUUSock1Uym8zfP1KC+d256KkY7NfpH3iczmtgbNhpL
+         DdAdbVg+9+eGyspBl5eKcGV5gLggr4NfB9WYpHxFQJIGC3SFKKokgY1d8HThyabibCd/
+         mk8pBHKDDNvUhSThZarKIA3u6aqnf9w/a18bqmtFxJZLRC3SKgO0Z/QN7eiDs3LfYibI
+         MXIA==
+X-Gm-Message-State: AOAM530r4kDQJhl2c0uFpWpTcMgDsdk4KbbEdMdbY4gshNszu3jc09JK
+        yzBoVVvVoXd+UeNmN5qGco4=
+X-Google-Smtp-Source: ABdhPJxhMx5CxUULMsQDx3J4AHclpvzQl++Sk3lrZR3l1vQoCgTwCVPRcEDKgI9iHrLM9d+BelDMig==
+X-Received: by 2002:a63:1c50:: with SMTP id c16mr15230321pgm.255.1590184178621;
+        Fri, 22 May 2020 14:49:38 -0700 (PDT)
+Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
+        by smtp.gmail.com with ESMTPSA id m13sm7652299pff.9.2020.05.22.14.49.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 May 2020 14:49:38 -0700 (PDT)
+Date:   Fri, 22 May 2020 14:49:35 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jeff LaBundy <jeff@labundy.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: linux-next: Tree for May 18 (input/misc/iqs269a.c & regmap)
+Message-ID: <20200522214935.GB89269@dtor-ws>
+References: <20200518205725.72eb3148@canb.auug.org.au>
+ <60dadc36-daec-2c48-a317-843ce52ae4f5@infradead.org>
+ <20200518162058.GA18713@labundy.com>
+ <e6a56505-b99c-6b22-c35a-3596857fa421@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e6a56505-b99c-6b22-c35a-3596857fa421@infradead.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+On Fri, May 22, 2020 at 11:22:39AM -0700, Randy Dunlap wrote:
+> On 5/18/20 9:20 AM, Jeff LaBundy wrote:
+> > Hi Randy et al,
+> > 
+> > On Mon, May 18, 2020 at 08:42:43AM -0700, Randy Dunlap wrote:
+> >> On 5/18/20 3:57 AM, Stephen Rothwell wrote:
+> >>> Hi all,
+> >>>
+> >>> Changes since 20200515:
+> >>>
+> >>
+> >> on i386:
+> >>
+> >>
+> >> CONFIG_REGMAP_I2C=y
+> >> CONFIG_I2C=m
+> >>
+> >> WARNING: unmet direct dependencies detected for REGMAP_I2C
+> >>   Depends on [m]: I2C [=m]
+> >>   Selected by [y]:
+> >>   - INPUT_IQS269A [=y] && !UML && INPUT [=y] && INPUT_MISC [=y]
+> >>
+> >>
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_byte_reg_read':
+> >> regmap-i2c.c:(.text+0x192): undefined reference to `i2c_smbus_read_byte_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_byte_reg_write':
+> >> regmap-i2c.c:(.text+0x1d7): undefined reference to `i2c_smbus_write_byte_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_reg_read':
+> >> regmap-i2c.c:(.text+0x202): undefined reference to `i2c_smbus_read_word_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_read_swapped':
+> >> regmap-i2c.c:(.text+0x242): undefined reference to `i2c_smbus_read_word_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_write_swapped':
+> >> regmap-i2c.c:(.text+0x2a1): undefined reference to `i2c_smbus_write_word_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_reg_write':
+> >> regmap-i2c.c:(.text+0x2d7): undefined reference to `i2c_smbus_write_word_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_read_reg16':
+> >> regmap-i2c.c:(.text+0x310): undefined reference to `i2c_smbus_write_byte_data'
+> >> ld: regmap-i2c.c:(.text+0x323): undefined reference to `i2c_smbus_read_byte'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_write_reg16':
+> >> regmap-i2c.c:(.text+0x39c): undefined reference to `i2c_smbus_write_i2c_block_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_write':
+> >> regmap-i2c.c:(.text+0x3db): undefined reference to `i2c_smbus_write_i2c_block_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_read':
+> >> regmap-i2c.c:(.text+0x427): undefined reference to `i2c_smbus_read_i2c_block_data'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_read':
+> >> regmap-i2c.c:(.text+0x49f): undefined reference to `i2c_transfer'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_gather_write':
+> >> regmap-i2c.c:(.text+0x524): undefined reference to `i2c_transfer'
+> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_write':
+> >> regmap-i2c.c:(.text+0x56c): undefined reference to `i2c_transfer_buffer_flags'
+> >> ld: drivers/input/misc/iqs269a.o: in function `iqs269_i2c_driver_init':
+> >> iqs269a.c:(.init.text+0xb): undefined reference to `i2c_register_driver'
+> >> ld: drivers/input/misc/iqs269a.o: in function `iqs269_i2c_driver_exit':
+> >> iqs269a.c:(.exit.text+0x9): undefined reference to `i2c_del_driver'
+> >>
+> >>
+> >>
+> >> Full randconfig file is attached.
+> > 
+> > A complete oversight on my part; during my testing I did not realize
+> > another module was selecting I2C for me. Valuable lesson learned :)
+> > 
+> > The kbuild test robot set off the alarm bells earlier today and I've
+> > sent a patch [1] already. Many apologies for all of the noise.
+> > 
+> >>
+> >> -- 
+> >> ~Randy
+> >> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> > 
+> > [1] https://patchwork.kernel.org/patch/11555469/
+> > 
+> > Kind regards,
+> > Jeff LaBundy
+> 
+> 
+> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+> 
+> 
+> This build error still happens in linux-next 20200522.
+> Perhaps we can have this patch merged & pushed out so that
+> linux-next can pick it up, please?
 
-Fix psample build error when CONFIG_INET is not set/enabled by
-bracketing the tunnel code in #ifdef CONFIG_NET / #endif.
+Sorry, I applied it when Jeff posted it, but forgot to push out.
 
-../net/psample/psample.c: In function ‘__psample_ip_tun_to_nlattr’:
-../net/psample/psample.c:216:25: error: implicit declaration of function ‘ip_tunnel_info_opts’; did you mean ‘ip_tunnel_info_opts_set’? [-Werror=implicit-function-declaration]
+Thanks.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Yotam Gigi <yotam.gi@gmail.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
----
-v2: Just bracket the new tunnel support code inside ifdef/endif (Cong Wang).
-
- net/psample/psample.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
-
---- linux-next-20200522.orig/net/psample/psample.c
-+++ linux-next-20200522/net/psample/psample.c
-@@ -209,6 +209,7 @@ void psample_group_put(struct psample_gr
- }
- EXPORT_SYMBOL_GPL(psample_group_put);
- 
-+#ifdef CONFIG_INET
- static int __psample_ip_tun_to_nlattr(struct sk_buff *skb,
- 			      struct ip_tunnel_info *tun_info)
- {
-@@ -352,12 +353,15 @@ static int psample_tunnel_meta_len(struc
- 
- 	return sum;
- }
-+#endif
- 
- void psample_sample_packet(struct psample_group *group, struct sk_buff *skb,
- 			   u32 trunc_size, int in_ifindex, int out_ifindex,
- 			   u32 sample_rate)
- {
-+#ifdef CONFIG_INET
- 	struct ip_tunnel_info *tun_info;
-+#endif
- 	struct sk_buff *nl_skb;
- 	int data_len;
- 	int meta_len;
-@@ -371,9 +375,11 @@ void psample_sample_packet(struct psampl
- 		   nla_total_size(sizeof(u32)) +	/* group_num */
- 		   nla_total_size(sizeof(u32));		/* seq */
- 
-+#ifdef CONFIG_INET
- 	tun_info = skb_tunnel_info(skb);
- 	if (tun_info)
- 		meta_len += psample_tunnel_meta_len(tun_info);
-+#endif
- 
- 	data_len = min(skb->len, trunc_size);
- 	if (meta_len + nla_total_size(data_len) > PSAMPLE_MAX_PACKET_SIZE)
-@@ -429,11 +435,13 @@ void psample_sample_packet(struct psampl
- 			goto error;
- 	}
- 
-+#ifdef CONFIG_INET
- 	if (tun_info) {
- 		ret = psample_ip_tun_to_nlattr(nl_skb, tun_info);
- 		if (unlikely(ret < 0))
- 			goto error;
- 	}
-+#endif
- 
- 	genlmsg_end(nl_skb, data);
- 	genlmsg_multicast_netns(&psample_nl_family, group->net, nl_skb, 0,
-
+-- 
+Dmitry

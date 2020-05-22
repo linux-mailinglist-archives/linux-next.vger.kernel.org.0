@@ -2,121 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4120C1DE565
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 13:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5BF1DE5EF
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 13:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729409AbgEVLcH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 07:32:07 -0400
-Received: from ozlabs.org ([203.11.71.1]:43707 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728281AbgEVLcH (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 22 May 2020 07:32:07 -0400
+        id S1728413AbgEVLz3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 07:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728409AbgEVLz3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 07:55:29 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B20C061A0E;
+        Fri, 22 May 2020 04:55:28 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49T48N6qQhz9sSW;
-        Fri, 22 May 2020 21:32:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49T4gJ3t4fz9sPK;
+        Fri, 22 May 2020 21:55:24 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590147125;
-        bh=urgcefr/YlkmkNAFUGmo68RW1ttwHwPL72RDkV/bRug=;
+        s=201702; t=1590148525;
+        bh=69rczOgogyh6sfiXEO8yNDt+ClD5m3GoNda6QblSqXs=;
         h=Date:From:To:Cc:Subject:From;
-        b=UELXjqvxyjEzBQEmziHCTCjvFZZXw3i1dyiYfnwYTU7HH0c+SjOWJxFKvAthJAIRR
-         sDRhEy+YQ+7+01HOZb8wvlKoWxN7BdV7tR/hTZ102qbSTzMO9xvKL/kKoBFY/y6ObH
-         J64pNUcsOsz8y0tGvCUpwZiql4kXz0x5O8fTFBa32qTpmHkM3cdO+l85CvmigQRTop
-         VYOgfrjKW3qDBBeKAbfN521oG9U0s1wa1NVjj2CcFC3giyyrTZyAjtQj9iGLHfzU0I
-         Pz2PAv+PJYMKhT0QC/qIUhmWx6ungZxtPiZwImGYIlCOu3UJ+JvjsOkNiEgL6D+q8M
-         Yhqxv1qoP4muw==
-Date:   Fri, 22 May 2020 21:32:02 +1000
+        b=BOclQh3kCP2dhXE0MpuUWMT1/JLWo4S7BJEqqBkKFv5FfE4mUauHbuLldiRWvLT/H
+         SXPNWbnWOz+xfzynLevukV2EAbFFQsifOxppath4iN8tNyTURvdU1KGxk0he5Q6647
+         MvqmqGOVIprmSqgMLbSRnennkqey5I/W0x69w8J6/4vT+0M/W1voqpqUof4u3MklYQ
+         NmVLB7E+diJ/p2nJjLOGA0l0+jdcXBsUQHQ8bIQ8vDkB5F4LAC/Og0bPdqZlXSXENk
+         5mJGViu2xRndB7o1lt8Yn6P/7xWaCItUuwpJ13NudW8D0SBurr7wjhruRZHOLj8FXt
+         ZAzKntvkCKByQ==
+Date:   Fri, 22 May 2020 21:55:22 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Christoph Hellwig <hch@lst.de>
-Subject: linux-next: build failure after merge of the block tree
-Message-ID: <20200522213202.38ebe825@canb.auug.org.au>
+Subject: linux-next: manual merge of the akpm-current tree with the userns
+ tree
+Message-ID: <20200522215522.2e448b3e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UtxBkTtJCi6+=X/EUuCRSf3";
+Content-Type: multipart/signed; boundary="Sig_/dLbKeFQca2jmBRt+C=c7IZ_";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/UtxBkTtJCi6+=X/EUuCRSf3
+--Sig_/dLbKeFQca2jmBRt+C=c7IZ_
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the block tree, today's linux-next build (x86_64
-allnoconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-fs/libfs.c: In function 'generic_file_fsync':
-fs/libfs.c:1116:9: error: too few arguments to function 'blkdev_issue_flush'
- 1116 |  return blkdev_issue_flush(inode->i_sb->s_bdev, GFP_KERNEL);
-      |         ^~~~~~~~~~~~~~~~~~
-In file included from fs/libfs.c:7:
-include/linux/blkdev.h:1875:19: note: declared here
- 1875 | static inline int blkdev_issue_flush(struct block_device *bdev, gfp=
-_t gfp_mask,
-      |                   ^~~~~~~~~~~~~~~~~~
+  fs/binfmt_script.c
 
-Caused by commit
+between commit:
 
-  c64644ce363b ("block: remove the error_sector argument to blkdev_issue_fl=
-ush")
+  ccbb18b67323 ("exec/binfmt_script: Don't modify bprm->buf and then return=
+ -ENOEXEC")
 
-I have applied the following patch.
+from the userns tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Fri, 22 May 2020 21:21:54 +1000
-Subject: [PATCH] block: fix for "remove the error_sector argument to
- blkdev_issue_flush"
+  e20ecf0e2723 ("exec: simplify the copy_strings_kernel calling convention")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- include/linux/blkdev.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+from the akpm-current tree.
 
-diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-index 95f1e6db31e2..7d10f4e63232 100644
---- a/include/linux/blkdev.h
-+++ b/include/linux/blkdev.h
-@@ -1872,8 +1872,7 @@ static inline bool blk_needs_flush_plug(struct task_s=
-truct *tsk)
- 	return false;
- }
-=20
--static inline int blkdev_issue_flush(struct block_device *bdev, gfp_t gfp_=
-mask,
--				     sector_t *error_sector)
-+static inline int blkdev_issue_flush(struct block_device *bdev, gfp_t gfp_=
-mask)
- {
- 	return 0;
- }
---=20
-2.26.2
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/UtxBkTtJCi6+=X/EUuCRSf3
+diff --cc fs/binfmt_script.c
+index 0e8b953d12cf,c4fb7f52a46e..000000000000
+--- a/fs/binfmt_script.c
++++ b/fs/binfmt_script.c
+@@@ -110,10 -121,8 +110,10 @@@ static int load_script(struct linux_bin
+  	if (retval < 0)
+  		return retval;
+  	bprm->argc++;
+ +	*((char *)i_end) =3D '\0';
+  	if (i_arg) {
+ +		*((char *)i_sep) =3D '\0';
+- 		retval =3D copy_strings_kernel(1, &i_arg, bprm);
++ 		retval =3D copy_string_kernel(i_arg, bprm);
+  		if (retval < 0)
+  			return retval;
+  		bprm->argc++;
+
+--Sig_/dLbKeFQca2jmBRt+C=c7IZ_
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7HuDMACgkQAVBC80lX
-0GytSwf/alxMhLVCRbD9KdpHpaYkX6KYezj3KR2eLqmgHHoSwhzMcORdLy6C8HHE
-kDCggkIeBNgKN4AFUUFg5k6koY/CPEoQVV0hWwrb6hrkLjYnEFuXXq1lVTLbAWzE
-0mBRhxS6EIZffZ+JdRQrGz32b3asxOLQXMObLSm4y0qAGYZOWeCRMSUceUj3ZL6p
-nEMprJflPODk6jA1KmEcuwN3fnkphi5EOhsoscZhlP0cvQokC2Ug9us+Udkkbzj/
-dq/sE1Hx7mk3bKm6Vbyi9PbveEFo1Fzy8j3bPCsNYLd2kRoTI+z3Wny/I3rc3ZV6
-DgyMoFSPbCU4XxCZunKHW0yzWTFjBw==
-=E/X4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7HvaoACgkQAVBC80lX
+0GwnQAf/UxvyX7h4LoxgQbZ4ysBN8FX/G7vSAzh5GedpxcFfVinniKO3mQDVrn+a
+J4t1rFv9mh3Zwj8D8Nr83RSbgnZn0uPAiCbl84ylab9iVWvWm2JVhSfwjif+iS52
+h2m/sr4aACe/9uONJ0ocry1YVSouGNo71CF1UGp+2Fpgi60v1qfxHBmjm6iFTM9V
+4WMU4F5yYLeGTGmCfxShszDC9CTwifVSf15aimZI8J4/7cOMI8chvExBcatHKpmU
+qwYpQnCPp2nSjXhXIsZ+ggfJZhzS8EL43YGqIq7AVcdqzhBnsRQl6FbliMe9QJml
+N/YsYH9spfrXaBHrgG8XMUF1TPVA8Q==
+=jnQ2
 -----END PGP SIGNATURE-----
 
---Sig_/UtxBkTtJCi6+=X/EUuCRSf3--
+--Sig_/dLbKeFQca2jmBRt+C=c7IZ_--

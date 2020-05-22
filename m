@@ -2,221 +2,157 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6576D1DDB12
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 01:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A95A1DDC03
+	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 02:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729325AbgEUXgB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 21 May 2020 19:36:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56030 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728706AbgEUXgA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 21 May 2020 19:36:00 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC722C05BD43
-        for <linux-next@vger.kernel.org>; Thu, 21 May 2020 16:36:00 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id d7so6913645ote.6
-        for <linux-next@vger.kernel.org>; Thu, 21 May 2020 16:36:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=date:from:to:cc:subject:in-reply-to:message-id:references
-         :user-agent:mime-version;
-        bh=kuLdeOsDjtq4btndvocDjcU9xa/QKpm/ZAFygkLZQD0=;
-        b=rUoh0EqLHveWp3JmAv8austkXIK10h/ZbmP/iO2jGai2j9kfjNn19FlOu1A+s7cUi9
-         WKX4MQfU1iBAXfYYg33aC5VonsRXKpCAEqIynepaFwo9iSQjpBKZMlz4YDXmr801D3Cw
-         vyKrq7OhTWEPJUUu0gHafme14RPu6t2Cg7dhm2fldoChmvPt2iqzahr+o2f2vIsCYXWU
-         7D16d20kDrhdyMA/altx7HLHOJ5YBOa6oOvNBQ6C4DMYVNuW3+WsAnBqnvLeXajBggif
-         +vBJKox3zID8l9wuDMyr6f/2s3P38a+CAl6iZNwFPER1EaXyOjOWR0caKiFzOSEBoLpX
-         xJsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:in-reply-to:message-id
-         :references:user-agent:mime-version;
-        bh=kuLdeOsDjtq4btndvocDjcU9xa/QKpm/ZAFygkLZQD0=;
-        b=ZZOX47vFsZP0PutZ74NW3iDPDWD9KAfvZBPI667TeRTtZFXnvElLkxHVXo01+exUwA
-         h5vdpog6N1GAzVfjvyDvnk41Lr5MaD2M2JBNNNJDcY3d9LsN7B29lNRDCUeSn0B53k9M
-         XMlzTjV1HdxDmPG1r5lmnSG9ziZ00K1CJ6C3xEcLQSqMpXs5yf77vaEirzaEgpWPMzNj
-         irB5x3+HxSM2vxgIqL8GS94ckakPl9zaWAaztfZGt19Lvz4GXAtkRswkdIB8KaFVWayn
-         oo4dzO6KSv4hkPv45IDxu2UJvSuFHN6nHpoE6ZKhm3j0ZXHKezVXnTTyy0Oh9TYmCIGY
-         DVYw==
-X-Gm-Message-State: AOAM531KDSmMcafKLiOFs3JsY1agYtEPooAJoF0IqHmloBRwQlknHj+a
-        8xvdJDsWSE5vXsOOnNZjCMeFUw==
-X-Google-Smtp-Source: ABdhPJxq9NYSUNqGk3KZgFuE6+bBS3i85hFHEJHqR05vwv+zm2qIzHoixf/P7AvUsZ/S1HLdwY2rYA==
-X-Received: by 2002:a9d:4902:: with SMTP id e2mr8835571otf.86.1590104159617;
-        Thu, 21 May 2020 16:35:59 -0700 (PDT)
-Received: from eggly.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id l26sm2077279oos.43.2020.05.21.16.35.56
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Thu, 21 May 2020 16:35:58 -0700 (PDT)
-Date:   Thu, 21 May 2020 16:35:42 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@eggly.anvils
-To:     Johannes Weiner <hannes@cmpxchg.org>
-cc:     Hugh Dickins <hughd@google.com>, Michal Hocko <mhocko@kernel.org>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Chris Down <chris@chrisdown.name>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-In-Reply-To: <20200521215855.GB815153@cmpxchg.org>
-Message-ID: <alpine.LSU.2.11.2005211614320.1102@eggly.anvils>
-References: <CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com> <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com> <20200520190906.GA558281@chrisdown.name> <20200521095515.GK6462@dhcp22.suse.cz>
- <CA+G9fYvAB9F+Xo0vUsSveKnExkv3cV9-oOG9gBqGEcXsO95m0w@mail.gmail.com> <20200521105801.GL6462@dhcp22.suse.cz> <alpine.LSU.2.11.2005210504110.1185@eggly.anvils> <20200521124444.GP6462@dhcp22.suse.cz> <20200521191746.GB815980@cmpxchg.org>
- <alpine.LSU.2.11.2005211250130.1158@eggly.anvils> <20200521215855.GB815153@cmpxchg.org>
-User-Agent: Alpine 2.11 (LSU 23 2013-08-11)
+        id S1727922AbgEVAQo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 21 May 2020 20:16:44 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:34685 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726903AbgEVAQn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 21 May 2020 20:16:43 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Sn936fsnz9sSc;
+        Fri, 22 May 2020 10:16:39 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590106600;
+        bh=l28u3l9eD1XulIm/Ob3VyL9n6/znFRgaPoWiwdYuchM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T+kZWPqIDh1yLruVXvjSA0aAcEUeQfBa9mbmwsY0cTnpt9QxbzPW+V+DOjjJj8W9w
+         QnGbExnmF6+8LPuS01E2FhHCTK1b4OEucxX9CSCGYg0mvRNytU8MYPlDOYFusIr1i6
+         b9G8tAwipE+fVmbYdzsgOpnRz1ZE99N/oHq1QJ9aGZgnYzWbADH+4YGVdboZKV2d6p
+         sc/OUgjH0EROstM6Xk4lKImI6oyqADzhQS2bzIA0mXSyp2xhzas/TH/EIX9aAsaVEi
+         kuOKleNXpeB/NrzyKWi/+O15u85EwuMb6il1PpdBawFdBZcEz6IzDY+xnpBHVKUdPc
+         hV3bv0maYoTMg==
+Date:   Fri, 22 May 2020 10:16:38 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Joel Stanley <joel@jms.id.au>, Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        devicetree <devicetree@vger.kernel.org>,
+        Devicetree Compiler <devicetree-compiler@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Manikandan Elumalai <manikandan.hcl.ers.epl@gmail.com>,
+        Andrew Jeffery <andrew@aj.id.au>, Vijay Khemka <vkhemka@fb.com>
+Subject: Re: linux-next: build warning after merge of the aspeed tree
+Message-ID: <20200522101638.052bd0a2@canb.auug.org.au>
+In-Reply-To: <CACPK8Xd4651vtBTbBoGk0G7daunmF2CCOsDZ-ceto7Yu6A5z5g@mail.gmail.com>
+References: <20200507091008.1bd38185@canb.auug.org.au>
+        <CACPK8XfOJqj=E4JwQsZWvAsp7cv=bjqj2twZk0=MR+ZJQP1nqQ@mail.gmail.com>
+        <CACPK8XcUydETZvJEkWPvLnLXatAg3D-MfA1yeDzE0epc-hisJQ@mail.gmail.com>
+        <CAL_JsqJWXH4JMZgRQa9r_aPLW6Muz6BRtf_NmeqJv21Aefji1A@mail.gmail.com>
+        <CACPK8Xd4651vtBTbBoGk0G7daunmF2CCOsDZ-ceto7Yu6A5z5g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: TEXT/PLAIN; charset=US-ASCII
+Content-Type: multipart/signed; boundary="Sig_/DcFF.Emc/VDOSRZyZQaAlh_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 21 May 2020, Johannes Weiner wrote:
-> On Thu, May 21, 2020 at 01:06:28PM -0700, Hugh Dickins wrote:
-> > On Thu, 21 May 2020, Johannes Weiner wrote:
-> > > do_memsw_account() used to be automatically false when the cgroup
-> > > controller was disabled. Now that it's replaced by
-> > > cgroup_memory_noswap, for which this isn't true, make the
-> > > mem_cgroup_disabled() checks explicit in the swap control API.
-> > > 
-> > > [hannes@cmpxchg.org: use mem_cgroup_disabled() in all API functions]
-> > > Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> > > Debugged-by: Hugh Dickins <hughd@google.com>
-> > > Debugged-by: Michal Hocko <mhocko@kernel.org>
-> > > Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
-> > > ---
-> > >  mm/memcontrol.c | 47 +++++++++++++++++++++++++++++++++++++++++------
-> > >  1 file changed, 41 insertions(+), 6 deletions(-)
-> > 
-> > I'm certainly not against a mem_cgroup_disabled() check in the only
-> > place that's been observed to need it, as a fixup to merge into your
-> > original patch; but this seems rather an over-reaction - and I'm a
-> > little surprised that setting mem_cgroup_disabled() doesn't just
-> > force cgroup_memory_noswap, saving repetitious checks elsewhere
-> > (perhaps there's a difficulty in that, I haven't looked).
-> 
-> Fair enough, I changed it to set the flag at initialization time if
-> mem_cgroup_disabled(). I was never a fan of the old flags, where it
-> was never clear what was commandline, and what was internal runtime
-> state - do_swap_account? really_do_swap_account? But I think it's
-> straight-forward in this case now.
-> 
-> > Historically, I think we've added mem_cgroup_disabled() checks
-> > (accessing a cacheline we'd rather avoid) where they're necessary,
-> > rather than at every "interface".
-> 
-> To me that always seemed like bugs waiting to happen. Like this one!
-> 
-> It's a jump label nowadays, so I've been liberal with these to avoid
-> subtle bugs.
-> 
-> > And you seem to be in a very "goto out" mood today - we all have
-> > our "goto out" days, alternating with our "return 0" days :)
-> 
-> :-)
-> 
-> But I agree, best to keep this fixup self-contained and defer anything
-> else to separate cleanup patches.
-> 
-> How about the below? It survives a swaptest with cgroup_disable=memory
-> for me.
+--Sig_/DcFF.Emc/VDOSRZyZQaAlh_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I like this version *a lot*, thank you. I got worried for a bit by
-the "#define cgroup_memory_noswap 1" when #ifndef CONFIG_MEMCG_SWAP,
-but now realize that fits perfectly.
+Hi all,
 
-> 
-> Hugh, I started with your patch, which is why I kept you as the
-> author, but as the patch now (and arguably the previous one) is
-> sufficiently different, I dropped that now. I hope that's okay.
+On Wed, 20 May 2020 07:56:36 +0000 Joel Stanley <joel@jms.id.au> wrote:
+>
+> On Mon, 11 May 2020 at 15:19, Rob Herring <robh+dt@kernel.org> wrote:
+> >
+> > On Fri, May 8, 2020 at 1:40 AM Joel Stanley <joel@jms.id.au> wrote: =20
+> > >
+> > > On Wed, 6 May 2020 at 23:13, Joel Stanley <joel@jms.id.au> wrote: =20
+> > > >
+> > > > Hi Rob,
+> > > >
+> > > > On Wed, 6 May 2020 at 23:10, Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote: =20
+> > > > >
+> > > > > After merging the aspeed tree, today's linux-next build (arm
+> > > > > multi_v7_defconfig) produced this warning: =20
+> > > >
+> > > > Thanks Stephen.
+> > > > =20
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:126.11-130.4=
+: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10: I2C bus=
+ unit address format error, expected "40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:128.3-30: Wa=
+rning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@80/ipmb1@10:reg: I2C add=
+ress must be less than 10-bits, got "0x40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:137.11-141.4=
+: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10: I2C bu=
+s unit address format error, expected "40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:139.3-30: Wa=
+rning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@100/ipmb3@10:reg: I2C ad=
+dress must be less than 10-bits, got "0x40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:148.11-152.4=
+: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10: I2C bu=
+s unit address format error, expected "40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:150.3-30: Wa=
+rning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@180/ipmb5@10:reg: I2C ad=
+dress must be less than 10-bits, got "0x40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:159.11-163.4=
+: Warning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10: I2C bu=
+s unit address format error, expected "40000010"
+> > > > > arch/arm/boot/dts/aspeed-bmc-facebook-yosemitev2.dts:161.3-30: Wa=
+rning (i2c_bus_reg): /ahb/apb/bus@1e78a000/i2c-bus@300/ipmb7@10:reg: I2C ad=
+dress must be less than 10-bits, got "0x40000010" =20
+> > > >
+> > > > These are IPMB nodes with the SLAVE_ADDRESS bit set:
+> > > >
+> > > > +&i2c5 {
+> > > > +       //Host3 IPMB bus
+> > > > +       status =3D "okay";
+> > > > +       multi-master;
+> > > > +       ipmb5@10 {
+> > > > +               compatible =3D "ipmb-dev";
+> > > > +               reg =3D <(0x10 | I2C_OWN_SLAVE_ADDRESS)>;
+> > > > +               i2c-protocol;
+> > > > +       };
+> > > >
+> > > > This is a correct entry, so dtc should not warn about it. =20
+> > >
+> > > I sent a patch for dtc here:
+> > > https://lore.kernel.org/lkml/20200508063904.60162-1-joel@jms.id.au/ =
+=20
+> >
+> > Patches for dtc need to be against upstream dtc. There's already a
+> > similar patch posted for it which I commented on and never saw a
+> > respin. =20
+>=20
+> Can I suggest some instructions in scsripts/dtc explaining that you
+> don't take patches in the kernel tree for this code?
+>=20
+> I've sent the patch so it applies to the dtc tree. It would be good to
+> see that change propagate over to -next as others have reported this
+> warning.
 
-Absolutely okay, these are yours: I was a little uncomfortable to
-see me on the From line before, but it also seemed just too petty
-to insist that my name be removed.
+These warnings now appear in the arm-soc tree.
 
-(By the way, off-topic for this particular issue, but advance warning
-that I hope to post a couple of patches to __read_swap_cache_async()
-before the end of the day, first being fixup to some of your mods -
-I suspect you got it working well enough, and intended to come back
-to check a few details later, but never quite got around to that.)
+--=20
+Cheers,
+Stephen Rothwell
 
-> 
-> ---
-> From d9e7ed15d1c9248a3fd99e35e82437549154dac7 Mon Sep 17 00:00:00 2001
-> From: Johannes Weiner <hannes@cmpxchg.org>
-> Date: Thu, 21 May 2020 17:44:25 -0400
-> Subject: [PATCH] mm: memcontrol: prepare swap controller setup for integration
->  fix
-> 
-> Fix crash with cgroup_disable=memory:
-> 
-> > > > > + mkfs -t ext4 /dev/disk/by-id/ata-TOSHIBA_MG04ACA100N_Y8NRK0BPF6XF
-> > > > > mke2fs 1.43.8 (1-Jan-2018)
-> > > > > Creating filesystem with 244190646 4k blocks and 61054976 inodes
-> > > > > Filesystem UUID: 3bb1a285-2cb4-44b4-b6e8-62548f3ac620
-> > > > > Superblock backups stored on blocks:
-> > > > > 32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
-> > > > > 4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
-> > > > > 102400000, 214990848
-> > > > > Allocating group tables:    0/7453                           done
-> > > > > Writing inode tables:    0/7453                           done
-> > > > > Creating journal (262144 blocks): [   35.502102] BUG: kernel NULL
-> > > > > pointer dereference, address: 000000c8
-> > > > > [   35.508372] #PF: supervisor read access in kernel mode
-> > > > > [   35.513506] #PF: error_code(0x0000) - not-present page
-> > > > > [   35.518638] *pde = 00000000
-> > > > > [   35.521514] Oops: 0000 [#1] SMP
-> > > > > [   35.524652] CPU: 0 PID: 145 Comm: kswapd0 Not tainted
-> > > > > 5.7.0-rc6-next-20200519+ #1
-> > > > > [   35.532121] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > > > > 2.2 05/23/2018
-> > > > > [   35.539507] EIP: mem_cgroup_get_nr_swap_pages+0x28/0x60
-> 
-> Swap accounting used to be implied-disabled when the cgroup controller
-> was disabled. Restore that for the new cgroup_memory_noswap, so that
-> we bail out of this function instead of dereferencing a NULL memcg.
-> 
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Debugged-by: Hugh Dickins <hughd@google.com>
-> Debugged-by: Michal Hocko <mhocko@kernel.org>
-> Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+--Sig_/DcFF.Emc/VDOSRZyZQaAlh_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Acked-by: Hugh Dickins <hughd@google.com>
+-----BEGIN PGP SIGNATURE-----
 
-> ---
->  mm/memcontrol.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 3e000a316b59..e3b785d6e771 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -7075,7 +7075,11 @@ static struct cftype memsw_files[] = {
->  
->  static int __init mem_cgroup_swap_init(void)
->  {
-> -	if (mem_cgroup_disabled() || cgroup_memory_noswap)
-> +	/* No memory control -> no swap control */
-> +	if (mem_cgroup_disabled())
-> +		cgroup_memory_noswap = true;
-> +
-> +	if (cgroup_memory_noswap)
->  		return 0;
->  
->  	WARN_ON(cgroup_add_dfl_cftypes(&memory_cgrp_subsys, swap_files));
-> -- 
-> 2.26.2
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7HGeYACgkQAVBC80lX
+0Gwm/gf/UiP3XqMc4FaiRIxc5sp/aEjFR3Yms5szHXC52VDyyQAv8DBKcjV6wFbC
+6tANr+Lqsuu7loczGa7pvqcY7VdBlgk7dLKMDpQdVkgT0qcjiXYLp4w6hDJQO8vk
++9ajzo1pJTIzTRV+b2AOOguhqsZyD/KzRqvkIU7EJW7WwKRFzPpQ9es70thQmSbG
+dMNZovADYWZEFGo/hpfnKlEmcdo0X3B5yzB4atAqrlaI4Y9JPDSaUiPney+V8uTP
+8bjHyyk9Q9COdJOLqb5NPbK1WUWpXPWnqwTQI1fO7hRqaBx8Zopw8rc1DdW1NDbQ
+dmsqJlupAoog2jtPrusX7Ok7b7s8bA==
+=Gt6l
+-----END PGP SIGNATURE-----
+
+--Sig_/DcFF.Emc/VDOSRZyZQaAlh_--

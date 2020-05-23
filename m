@@ -2,161 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id ACFCD1DF174
-	for <lists+linux-next@lfdr.de>; Fri, 22 May 2020 23:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D7AE1DF367
+	for <lists+linux-next@lfdr.de>; Sat, 23 May 2020 02:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731148AbgEVVtk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 22 May 2020 17:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37698 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731029AbgEVVtj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 22 May 2020 17:49:39 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716FAC061A0E;
-        Fri, 22 May 2020 14:49:39 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id t11so5628311pgg.2;
-        Fri, 22 May 2020 14:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=S0Uzq9mqq+tWip8RdyrRyyQ3hbA1jkIS41+a492a2tI=;
-        b=hYsWwZiSOVrzwJzZ6pAQA1DAFHSzHL7s/is5UbjgAkoFRFIENvPLD9VIUoR1TWfkAz
-         e7IomIOkQTMPvOjIY0uTt1bWEIwC3kCcVDQ22T+wmO48ZmOHGPHyAP35fbG8vffqxKmq
-         +z52yL20CA0QMjjNwb1ZNtlP194amp7Q/RJ61WGZxS8K2Vm633RgI9Y+rAVJT4nw1GDg
-         rcaek0qLyI2fVBkUL3w2LwsxswbfTKkvtzmF3iPROmE9Du51m95U8SYo2E1+0uDiBp6D
-         saYyoU37RkqzYsfB51YMk66v5hchaOrqELx85M/NySL7eIbrpW9igqLrOTPU4wNdmDC/
-         Ts+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=S0Uzq9mqq+tWip8RdyrRyyQ3hbA1jkIS41+a492a2tI=;
-        b=CikFcosuhcqyhrVt8RQTKHfnCK9R1I6gXjkps3xw8xOE+BhUPoalYTtH/w1ZANJAmV
-         Zj9ENfTC7WrMQVUa2QwU4eMr873lQGuvciOT226FUjnCwfPO9+zIk1/I4Ag4Wt3b561Z
-         QiP1MfhkIdEG73rRm8HO1a3CTDUUSock1Uym8zfP1KC+d256KkY7NfpH3iczmtgbNhpL
-         DdAdbVg+9+eGyspBl5eKcGV5gLggr4NfB9WYpHxFQJIGC3SFKKokgY1d8HThyabibCd/
-         mk8pBHKDDNvUhSThZarKIA3u6aqnf9w/a18bqmtFxJZLRC3SKgO0Z/QN7eiDs3LfYibI
-         MXIA==
-X-Gm-Message-State: AOAM530r4kDQJhl2c0uFpWpTcMgDsdk4KbbEdMdbY4gshNszu3jc09JK
-        yzBoVVvVoXd+UeNmN5qGco4=
-X-Google-Smtp-Source: ABdhPJxhMx5CxUULMsQDx3J4AHclpvzQl++Sk3lrZR3l1vQoCgTwCVPRcEDKgI9iHrLM9d+BelDMig==
-X-Received: by 2002:a63:1c50:: with SMTP id c16mr15230321pgm.255.1590184178621;
-        Fri, 22 May 2020 14:49:38 -0700 (PDT)
-Received: from dtor-ws ([2620:15c:202:201:3c2a:73a9:c2cf:7f45])
-        by smtp.gmail.com with ESMTPSA id m13sm7652299pff.9.2020.05.22.14.49.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 May 2020 14:49:38 -0700 (PDT)
-Date:   Fri, 22 May 2020 14:49:35 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jeff LaBundy <jeff@labundy.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1731182AbgEWAMY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 22 May 2020 20:12:24 -0400
+Received: from mail.kernel.org ([198.145.29.99]:36598 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731169AbgEWAMY (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 22 May 2020 20:12:24 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id EFBD2206B6;
+        Sat, 23 May 2020 00:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1590192744;
+        bh=i2mVo27EQF4lNBS9IayQbm5SwyNaYxnGrl/yPkcM4iY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=nTcstaV27D3miCiaUjMLPYQNjsOV2zjv9IVJEjCxOvFHc+7X0m5O7zN8t8W+JIABN
+         B8SaMwegapCgvtM+btv3jc9iY4SqC5Lp51+XjWN9/vbN62LJbOIfl0U+hl9gIaSr+O
+         3a7KjDpOAIVOYbjPt5t/Sk3o8W2OTu+t9w4y2njw=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id D57973521294; Fri, 22 May 2020 17:12:23 -0700 (PDT)
+Date:   Fri, 22 May 2020 17:12:23 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Will Deacon <will@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: linux-next: Tree for May 18 (input/misc/iqs269a.c & regmap)
-Message-ID: <20200522214935.GB89269@dtor-ws>
-References: <20200518205725.72eb3148@canb.auug.org.au>
- <60dadc36-daec-2c48-a317-843ce52ae4f5@infradead.org>
- <20200518162058.GA18713@labundy.com>
- <e6a56505-b99c-6b22-c35a-3596857fa421@infradead.org>
+        elver@google.com, bp@alien8.de
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20200523001223.GA23921@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200522033119.1bbd99c5@canb.auug.org.au>
+ <20200521173520.GL6608@willie-the-truck>
+ <20200522171708.5f392fde@canb.auug.org.au>
+ <20200522174944.1a1732fa@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e6a56505-b99c-6b22-c35a-3596857fa421@infradead.org>
+In-Reply-To: <20200522174944.1a1732fa@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 22, 2020 at 11:22:39AM -0700, Randy Dunlap wrote:
-> On 5/18/20 9:20 AM, Jeff LaBundy wrote:
-> > Hi Randy et al,
-> > 
-> > On Mon, May 18, 2020 at 08:42:43AM -0700, Randy Dunlap wrote:
-> >> On 5/18/20 3:57 AM, Stephen Rothwell wrote:
-> >>> Hi all,
-> >>>
-> >>> Changes since 20200515:
-> >>>
-> >>
-> >> on i386:
-> >>
-> >>
-> >> CONFIG_REGMAP_I2C=y
-> >> CONFIG_I2C=m
-> >>
-> >> WARNING: unmet direct dependencies detected for REGMAP_I2C
-> >>   Depends on [m]: I2C [=m]
-> >>   Selected by [y]:
-> >>   - INPUT_IQS269A [=y] && !UML && INPUT [=y] && INPUT_MISC [=y]
-> >>
-> >>
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_byte_reg_read':
-> >> regmap-i2c.c:(.text+0x192): undefined reference to `i2c_smbus_read_byte_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_byte_reg_write':
-> >> regmap-i2c.c:(.text+0x1d7): undefined reference to `i2c_smbus_write_byte_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_reg_read':
-> >> regmap-i2c.c:(.text+0x202): undefined reference to `i2c_smbus_read_word_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_read_swapped':
-> >> regmap-i2c.c:(.text+0x242): undefined reference to `i2c_smbus_read_word_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_write_swapped':
-> >> regmap-i2c.c:(.text+0x2a1): undefined reference to `i2c_smbus_write_word_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_smbus_word_reg_write':
-> >> regmap-i2c.c:(.text+0x2d7): undefined reference to `i2c_smbus_write_word_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_read_reg16':
-> >> regmap-i2c.c:(.text+0x310): undefined reference to `i2c_smbus_write_byte_data'
-> >> ld: regmap-i2c.c:(.text+0x323): undefined reference to `i2c_smbus_read_byte'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_write_reg16':
-> >> regmap-i2c.c:(.text+0x39c): undefined reference to `i2c_smbus_write_i2c_block_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_write':
-> >> regmap-i2c.c:(.text+0x3db): undefined reference to `i2c_smbus_write_i2c_block_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_smbus_i2c_read':
-> >> regmap-i2c.c:(.text+0x427): undefined reference to `i2c_smbus_read_i2c_block_data'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_read':
-> >> regmap-i2c.c:(.text+0x49f): undefined reference to `i2c_transfer'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_gather_write':
-> >> regmap-i2c.c:(.text+0x524): undefined reference to `i2c_transfer'
-> >> ld: drivers/base/regmap/regmap-i2c.o: in function `regmap_i2c_write':
-> >> regmap-i2c.c:(.text+0x56c): undefined reference to `i2c_transfer_buffer_flags'
-> >> ld: drivers/input/misc/iqs269a.o: in function `iqs269_i2c_driver_init':
-> >> iqs269a.c:(.init.text+0xb): undefined reference to `i2c_register_driver'
-> >> ld: drivers/input/misc/iqs269a.o: in function `iqs269_i2c_driver_exit':
-> >> iqs269a.c:(.exit.text+0x9): undefined reference to `i2c_del_driver'
-> >>
-> >>
-> >>
-> >> Full randconfig file is attached.
-> > 
-> > A complete oversight on my part; during my testing I did not realize
-> > another module was selecting I2C for me. Valuable lesson learned :)
-> > 
-> > The kbuild test robot set off the alarm bells earlier today and I've
-> > sent a patch [1] already. Many apologies for all of the noise.
-> > 
-> >>
-> >> -- 
-> >> ~Randy
-> >> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> > 
-> > [1] https://patchwork.kernel.org/patch/11555469/
-> > 
-> > Kind regards,
-> > Jeff LaBundy
+On Fri, May 22, 2020 at 05:49:44PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
+> On Fri, 22 May 2020 17:17:08 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> >
+> > On Thu, 21 May 2020 18:35:22 +0100 Will Deacon <will@kernel.org> wrote:
+> > >
+> > > [+Marco and Boris]
+> > > 
+> > > On Fri, May 22, 2020 at 03:31:19AM +1000, Stephen Rothwell wrote:  
+> > > > After merging the tip tree, all my linux-next builds took signficantly
+> > > > longer and used much more memory.  In some cases, builds would seg fault
+> > > > due to running out of memory :-(
+> > > > 
+> > > > I have eventaully bisected it to commit
+> > > > 
+> > > >   cdd28ad2d811 ("READ_ONCE: Use data_race() to avoid KCSAN instrumentation")
+> > > > 
+> > > > For my (e.g.) x86_64 allmodconfig builds (cross compiled on PowerPC le,
+> > > > -j80) the elapsed time went from around 9 minutes to over 17 minutes
+> > > > and the maximum resident size (as reported by /usr/bin/time) from around
+> > > > 500M to around 2G (I saw lots of cc1 processes over 2G in size).
+> > > > 
+> > > > For tomorrow's linux-next (well, later today :-() I will revert that
+> > > > commit (and its child) when I merge the tip tree.    
+> > > 
+> > > Sorry about that, seems we can't avoid running into compiler problems with
+> > > this lot. The good news is that there's a series to fix this here:
+> > > 
+> > > https://lore.kernel.org/r/20200521142047.169334-1-elver@google.com
+> > > 
+> > > so hopefully this be fixed in -tip soon (but I agree that reverting the
+> > > thing in -next in the meantime makes sense).  
+> > 
+> > Unfortunately, the revert didn't work, so instead I have used the tip
+> > tree from next-20200518 for today (hopefully this will all be sorted
+> > out by Monday).
 > 
-> Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-> 
-> 
-> This build error still happens in linux-next 20200522.
-> Perhaps we can have this patch merged & pushed out so that
-> linux-next can pick it up, please?
+> And the rcu tree has merged part of the tip tree that contains the
+> offending commits, so I have used the version fo the rcu tree from
+> next-20200519 for today.
 
-Sorry, I applied it when Jeff posted it, but forgot to push out.
+Please accept my apologies for my part of this problem!  I don't see
+the slowdowns on my normal test system (possibly due to gcc 4.8.5),
+but I do see them on my laptop.
 
-Thanks.
+Marco, Thomas, is there any better setup I can provide Stephen?  Or
+is the next-20200519 -rcu tree the best we have right now?
 
--- 
-Dmitry
+							Thanx, Paul

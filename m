@@ -2,78 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE3F1DF7E4
-	for <lists+linux-next@lfdr.de>; Sat, 23 May 2020 17:06:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535661DF7E8
+	for <lists+linux-next@lfdr.de>; Sat, 23 May 2020 17:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387888AbgEWPGP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 May 2020 11:06:15 -0400
-Received: from mail.kernel.org ([198.145.29.99]:44942 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387815AbgEWPGO (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 23 May 2020 11:06:14 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 31B5920759;
-        Sat, 23 May 2020 15:06:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590246374;
-        bh=fNU94PIFqW/vrhKGVesQWvCcqNVIkxzhGnzfchbKHFk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=Ow3u7zzJgRGiMF1R/LzhoBimrLtRj1vveQ1nljZhIT7khki3bjfek2hEJvicz+FNR
-         h4m3gDvK5pITtbQ0oNeEPs1XVmPPQIGu2XSWOyUW2hMNzURC/IS4fU2Kfm5+7otyLB
-         3iUjnVQD4EZLxo6g30qdlEsztFCPTmNeF6O6ZlZQ=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 1600B352267C; Sat, 23 May 2020 08:06:14 -0700 (PDT)
-Date:   Sat, 23 May 2020 08:06:14 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        elver@google.com
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200523150614.GP2869@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200522033119.1bbd99c5@canb.auug.org.au>
- <20200521173520.GL6608@willie-the-truck>
- <20200522171708.5f392fde@canb.auug.org.au>
- <20200522174944.1a1732fa@canb.auug.org.au>
- <20200523001223.GA23921@paulmck-ThinkPad-P72>
- <20200523064643.GA27431@zn.tnic>
- <87a71zq8ml.fsf@nanos.tec.linutronix.de>
+        id S2387932AbgEWPIp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 23 May 2020 11:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2387815AbgEWPIp (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 23 May 2020 11:08:45 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA2FC061A0E;
+        Sat, 23 May 2020 08:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:
+        Subject:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=+L1qyjeYez4naHDlqKEQbGA3dUqIQLDkuxoqpeTg+yU=; b=mkEKmCtliH+55rZa+ipwPcNydW
+        KUDIjF1IVH5CRKZVarYUmqPVt1DebfFDImGBfPnLWgtiULFkkWwqPtCf9nH6LrAv5jgzcFsMnTpga
+        BANYf6hhvxkAXJBCf+5QGmwEAWGZfMce6wNj95EtRmfQXS5S4XnRpY2Ifl33zSS0yqmDFWrjzgJ14
+        QAhpTu+NaoQiHrjqtGAVv+jSNJ8x7D0yzW0MZeSCEYECHAAfcvomHoX4YQ6Y/ODowCbLsUrph7Qdi
+        1/JYPHAM+4TpXTdf3cfjuJPWAQ4Mi/ND1/krdbgbl7pzNxUjYu7f0EWbr9Yn4KcLnKyJuGRubzJjB
+        IBTFUwvA==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jcVlM-0004y7-QT; Sat, 23 May 2020 15:08:36 +0000
+Subject: Re: mmotm 2020-05-22-20-35 uploaded (phy/intel/phy-intel-combo.c)
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>
+References: <20200523033645.-uo7X483o%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <9960b5aa-4a8e-15a4-6e0b-63561f760d3a@infradead.org>
+Date:   Sat, 23 May 2020 08:08:33 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87a71zq8ml.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+In-Reply-To: <20200523033645.-uo7X483o%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, May 23, 2020 at 11:54:26AM +0200, Thomas Gleixner wrote:
-> Borislav Petkov <bp@alien8.de> writes:
+On 5/22/20 8:36 PM, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2020-05-22-20-35 has been uploaded to
 > 
-> > On Fri, May 22, 2020 at 05:12:23PM -0700, Paul E. McKenney wrote:
-> >> Marco, Thomas, is there any better setup I can provide Stephen?  Or
-> >> is the next-20200519 -rcu tree the best we have right now?
-> >
-> > I've queued the fixes yesterday into tip:locking/kcsan and tglx said
-> > something about you having to rebase anyway. I guess you can find him on
-> > IRC at some point later. :)
+>    http://www.ozlabs.org/~akpm/mmotm/
 > 
-> locking/kcsan is not the problem (it just has more fixes on top)
+> mmotm-readme.txt says
 > 
-> core/rcu is the one which diverged and caused the merge conflict with
-> PPC to happen twice. So Paul needs to remove the stale core/rcu bits and
-> rebase on the current version (which is not going to change again).
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
+> 
+> The file broken-out.tar.gz contains two datestamp files: .DATE and
+> .DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+> followed by the base kernel version against which this patch series is to
+> be applied.
+> 
+> This tree is partially included in linux-next.  To see which patches are
+> included in linux-next, consult the `series' file.  Only the patches
+> within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+> linux-next.
+> 
+> 
 
-So there will be another noinstr-rcu-* tag, and I will rebase on top
-of that, correct?  If so, fair enough!
+on i386:
 
-							Thanx, Paul
+  CC      drivers/phy/intel/phy-intel-combo.o
+In file included from ../include/linux/build_bug.h:5:0,
+                 from ../include/linux/bitfield.h:10,
+                 from ../drivers/phy/intel/phy-intel-combo.c:8:
+../drivers/phy/intel/phy-intel-combo.c: In function ‘combo_phy_w32_off_mask’:
+../include/linux/compiler.h:447:38: error: call to ‘__compiletime_assert_39’ declared with attribute error: FIELD_PREP: mask is not constant
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                      ^
+../include/linux/compiler.h:428:4: note: in definition of macro ‘__compiletime_assert’
+    prefix ## suffix();    \
+    ^~~~~~
+../include/linux/compiler.h:447:2: note: in expansion of macro ‘_compiletime_assert’
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+  ^~~~~~~~~~~~~~~~~~~
+../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+ #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                     ^~~~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:46:3: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+   BUILD_BUG_ON_MSG(!__builtin_constant_p(_mask),  \
+   ^~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:94:3: note: in expansion of macro ‘__BF_FIELD_CHECK’
+   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); \
+   ^~~~~~~~~~~~~~~~
+../drivers/phy/intel/phy-intel-combo.c:137:13: note: in expansion of macro ‘FIELD_PREP’
+  reg_val |= FIELD_PREP(mask, val);
+             ^~~~~~~~~~
+../include/linux/compiler.h:447:38: error: call to ‘__compiletime_assert_43’ declared with attribute error: BUILD_BUG_ON failed: (((mask) + (1ULL << (__builtin_ffsll(mask) - 1))) & (((mask) + (1ULL << (__builtin_ffsll(mask) - 1))) - 1)) != 0
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+                                      ^
+../include/linux/compiler.h:428:4: note: in definition of macro ‘__compiletime_assert’
+    prefix ## suffix();    \
+    ^~~~~~
+../include/linux/compiler.h:447:2: note: in expansion of macro ‘_compiletime_assert’
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+  ^~~~~~~~~~~~~~~~~~~
+../include/linux/build_bug.h:39:37: note: in expansion of macro ‘compiletime_assert’
+ #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+                                     ^~~~~~~~~~~~~~~~~~
+../include/linux/build_bug.h:50:2: note: in expansion of macro ‘BUILD_BUG_ON_MSG’
+  BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+  ^~~~~~~~~~~~~~~~
+../include/linux/build_bug.h:21:2: note: in expansion of macro ‘BUILD_BUG_ON’
+  BUILD_BUG_ON(((n) & ((n) - 1)) != 0)
+  ^~~~~~~~~~~~
+../include/linux/bitfield.h:54:3: note: in expansion of macro ‘__BUILD_BUG_ON_NOT_POWER_OF_2’
+   __BUILD_BUG_ON_NOT_POWER_OF_2((_mask) +   \
+   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../include/linux/bitfield.h:94:3: note: in expansion of macro ‘__BF_FIELD_CHECK’
+   __BF_FIELD_CHECK(_mask, 0ULL, _val, "FIELD_PREP: "); \
+   ^~~~~~~~~~~~~~~~
+../drivers/phy/intel/phy-intel-combo.c:137:13: note: in expansion of macro ‘FIELD_PREP’
+  reg_val |= FIELD_PREP(mask, val);
+             ^~~~~~~~~~
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

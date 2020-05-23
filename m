@@ -2,81 +2,56 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C8FA81DFB23
-	for <lists+linux-next@lfdr.de>; Sat, 23 May 2020 23:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 658FC1DFBED
+	for <lists+linux-next@lfdr.de>; Sun, 24 May 2020 01:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387998AbgEWVXr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 23 May 2020 17:23:47 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39178 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387586AbgEWVXq (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sat, 23 May 2020 17:23:46 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id 1D9DF2072C;
-        Sat, 23 May 2020 21:23:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590269026;
-        bh=FJ+we7Wp4RFWgIBg7miQSN2ilxbswIuR7F8eVxZGfFI=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=yBiF/OlYvCJArLxROuca1TrD8GCNWEhz92e30hI6iQ/+qVjNSZDoqNqAtwAwkD0ck
-         3vnj3ImHJclxCwe96zKD43kUIfJKRmK8G9en4QyIpO7AJb/lEhV25yrgv8N07B6+xk
-         yZjfCEl/XVnz6ENsyqOvVBCkD8knqmYiyN5UmgZY=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id F1BE23522A2B; Sat, 23 May 2020 14:23:45 -0700 (PDT)
-Date:   Sat, 23 May 2020 14:23:45 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        elver@google.com
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200523212345.GR2869@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200522033119.1bbd99c5@canb.auug.org.au>
- <20200521173520.GL6608@willie-the-truck>
- <20200522171708.5f392fde@canb.auug.org.au>
- <20200522174944.1a1732fa@canb.auug.org.au>
- <20200523001223.GA23921@paulmck-ThinkPad-P72>
- <20200523064643.GA27431@zn.tnic>
- <87a71zq8ml.fsf@nanos.tec.linutronix.de>
- <20200523150614.GP2869@paulmck-ThinkPad-P72>
- <871rnaqxor.fsf@nanos.tec.linutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <871rnaqxor.fsf@nanos.tec.linutronix.de>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+        id S2388115AbgEWXgY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 23 May 2020 19:36:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388106AbgEWXgX (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 23 May 2020 19:36:23 -0400
+Received: from shards.monkeyblade.net (shards.monkeyblade.net [IPv6:2620:137:e000::1:9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7290C061A0E;
+        Sat, 23 May 2020 16:36:23 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:601:9f00:477::3d5])
+        (using TLSv1 with cipher AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        (Authenticated sender: davem-davemloft)
+        by shards.monkeyblade.net (Postfix) with ESMTPSA id 67D841286F3B3;
+        Sat, 23 May 2020 16:36:23 -0700 (PDT)
+Date:   Sat, 23 May 2020 16:36:22 -0700 (PDT)
+Message-Id: <20200523.163622.615775239274039260.davem@davemloft.net>
+To:     rdunlap@infradead.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-next@vger.kernel.org, yotam.gi@gmail.com,
+        xiyou.wangcong@gmail.com
+Subject: Re: [PATCH net-next v2] net: psample: fix build error when
+ CONFIG_INET is not enabled
+From:   David Miller <davem@davemloft.net>
+In-Reply-To: <ca2be940-4514-4027-13f9-4e6bd99152ab@infradead.org>
+References: <ca2be940-4514-4027-13f9-4e6bd99152ab@infradead.org>
+X-Mailer: Mew version 6.8 on Emacs 26.3
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-7
+Content-Transfer-Encoding: base64
+X-Greylist: Sender succeeded SMTP AUTH, not delayed by milter-greylist-4.5.12 (shards.monkeyblade.net [149.20.54.216]); Sat, 23 May 2020 16:36:23 -0700 (PDT)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, May 23, 2020 at 09:05:24PM +0200, Thomas Gleixner wrote:
-> "Paul E. McKenney" <paulmck@kernel.org> writes:
-> > On Sat, May 23, 2020 at 11:54:26AM +0200, Thomas Gleixner wrote:
-> >> core/rcu is the one which diverged and caused the merge conflict with
-> >> PPC to happen twice. So Paul needs to remove the stale core/rcu bits and
-> >> rebase on the current version (which is not going to change again).
-> >
-> > So there will be another noinstr-rcu-* tag, and I will rebase on top
-> > of that, correct?  If so, fair enough!
-> 
-> Here you go: noinstr-rcu-220-05-23
-> 
-> I wanted this to be 2020 and not 220 but I noticed after pushing it
-> out. I guess it still does the job :)
-
-Now -that- is what I call an old-school tag name!!!  ;-)
-
-I remerged, rebased, and pushed to -rcu branch "dev".
-
-If it survives testing, I will reset -rcu branch "rcu/next" as well.
-
-							Thanx, Paul
+RnJvbTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5vcmc+DQpEYXRlOiBGcmksIDIy
+IE1heSAyMDIwIDEzOjA1OjI2IC0wNzAwDQoNCj4gRnJvbTogUmFuZHkgRHVubGFwIDxyZHVubGFw
+QGluZnJhZGVhZC5vcmc+DQo+IA0KPiBGaXggcHNhbXBsZSBidWlsZCBlcnJvciB3aGVuIENPTkZJ
+R19JTkVUIGlzIG5vdCBzZXQvZW5hYmxlZCBieQ0KPiBicmFja2V0aW5nIHRoZSB0dW5uZWwgY29k
+ZSBpbiAjaWZkZWYgQ09ORklHX05FVCAvICNlbmRpZi4NCj4gDQo+IC4uL25ldC9wc2FtcGxlL3Bz
+YW1wbGUuYzogSW4gZnVuY3Rpb24goV9fcHNhbXBsZV9pcF90dW5fdG9fbmxhdHRyojoNCj4gLi4v
+bmV0L3BzYW1wbGUvcHNhbXBsZS5jOjIxNjoyNTogZXJyb3I6IGltcGxpY2l0IGRlY2xhcmF0aW9u
+IG9mIGZ1bmN0aW9uIKFpcF90dW5uZWxfaW5mb19vcHRzojsgZGlkIHlvdSBtZWFuIKFpcF90dW5u
+ZWxfaW5mb19vcHRzX3NldKI/IFstV2Vycm9yPWltcGxpY2l0LWZ1bmN0aW9uLWRlY2xhcmF0aW9u
+XQ0KPiANCj4gU2lnbmVkLW9mZi1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFwQGluZnJhZGVhZC5v
+cmc+DQo+IENjOiBZb3RhbSBHaWdpIDx5b3RhbS5naUBnbWFpbC5jb20+DQo+IENjOiBDb25nIFdh
+bmcgPHhpeW91Lndhbmdjb25nQGdtYWlsLmNvbT4NCj4gLS0tDQo+IHYyOiBKdXN0IGJyYWNrZXQg
+dGhlIG5ldyB0dW5uZWwgc3VwcG9ydCBjb2RlIGluc2lkZSBpZmRlZi9lbmRpZiAoQ29uZyBXYW5n
+KS4NCg0KQXBwbGllZCwgdGhhbmtzIFJhbmR5Lg0K

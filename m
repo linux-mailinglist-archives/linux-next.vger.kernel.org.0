@@ -2,141 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E74A1E0B72
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 12:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74BF1E0C11
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 12:45:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389398AbgEYKKg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 06:10:36 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42446 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389356AbgEYKKg (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 25 May 2020 06:10:36 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 3A29DAA35;
-        Mon, 25 May 2020 10:10:37 +0000 (UTC)
-Date:   Mon, 25 May 2020 12:10:33 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Randy Dunlap <rdunlap@infradead.org>
-cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: linux-next: Tree for May 21 (objtool warnings)
-In-Reply-To: <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
-Message-ID: <alpine.LSU.2.21.2005251101030.24984@pobox.suse.cz>
-References: <20200522001209.07c19400@canb.auug.org.au> <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        id S2389522AbgEYKpk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 May 2020 06:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389484AbgEYKpk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 06:45:40 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE004C061A0E;
+        Mon, 25 May 2020 03:45:39 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49VtzP0yzHz9sSg;
+        Mon, 25 May 2020 20:45:37 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590403537;
+        bh=6Q7JXlwF2Rcy26HZZvGUKpQSB/dFk+mz8rLmYPUDsq8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=S1w8YoBl4a/LvKGndnClVAUxDFa7K4P0Viucd/BPReV+BIV9/aD2LIKkOknTKGqtn
+         +xnMco+B8iBR7Irvv2SUB9dyg74CZOb8M5q9LU+r25XIG9IOsH/Kscf7d+boscoZV4
+         TNts9Cl3yD4ucAlnh6yYJvEFXjff+hb3zybMjdZnlC86YGuz8Snb0ZmB/jPb2k+k2V
+         WFu7SPsloaCaO0gXCgiZzBK+XXe1B1S3tcucJttpaWy+YKXT9HiWj3tSGY2xRqYW/N
+         CT1YQdgSe85HHNqotSn5iYUWpm7Mgjvq5zwVyIP7kyiqzVzoC2bXhpKUKlNUrxR1QR
+         giiHiJOY13N8w==
+Date:   Mon, 25 May 2020 20:45:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: build failure after merge of the nand tree
+Message-ID: <20200525204535.18e243d7@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; boundary="Sig_/3geVHwl1tYIx_S6vKZI_F3q";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 21 May 2020, Randy Dunlap wrote:
+--Sig_/3geVHwl1tYIx_S6vKZI_F3q
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 5/21/20 7:12 AM, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20200519:
-> > 
+Hi all,
 
-These are indeed caused by -flive-patching
- 
-> on x86_64:
-> 
-> fs/open.o: warning: objtool: chmod_common()+0x104: unreachable instruction
-> fs/namei.o: warning: objtool: do_renameat2()+0x482: unreachable instruction
+After merging the nand tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
 
-Two "funny" ones. When CONFIG_FILE_LOCKING is not set, break_deleg_wait() 
-is just BUG(). GCC decides to isra optimize it to break_deleg_wait.isra.0 
-and call it in chmod_common() and do_renameat2() instead of just inline 
-it.
+drivers/mtd/nand/raw/pasemi_nand.c: In function 'pasemi_nand_probe':
+drivers/mtd/nand/raw/pasemi_nand.c:157:1: warning: label 'out_cleanup' defi=
+ned but not used [-Wunused-label]
+  157 | out_cleanup:
+      | ^~~~~~~~~~~
+drivers/mtd/nand/raw/pasemi_nand.c:149:3: error: label 'out_cleanup_nand' u=
+sed but not defined
+  149 |   goto out_cleanup_nand;
+      |   ^~~~
 
-chmod_common() with -flive-patching:
+Caused by commit
 
-     981:       e8 f7 fe ff ff          callq  87d <break_deleg_wait.isra.0>
-     986:       41 89 c4                mov    %eax,%r12d
-     989:       85 c0                   test   %eax,%eax
-     98b:       0f 84 76 ff ff ff       je     907 <chmod_common+0x7b>
-     991:       48 89 df                mov    %rbx,%rdi
-     994:       e8 00 00 00 00          callq  999 <chmod_common+0x10d>
-                        995: R_X86_64_PLT32     __tsan_read8-0x4
+  d6a2207d79e3 ("mtd: rawnand: pasemi: Fix the probe error path")
 
-without:
+I have applied the following patch for today.
 
-     985:       e8 f3 fe ff ff          callq  87d <break_deleg_wait.isra.0>
-     98a:       48 89 df                mov    %rbx,%rdi
-     98d:       e8 00 00 00 00          callq  992 <chmod_common+0x106>
-                        98e: R_X86_64_PLT32     __tsan_read8-0x4
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 25 May 2020 20:41:22 +1000
+Subject: [PATCH] mtd: rawnand: pasemi: fix up label spelling
 
-The error checking of break_deleg_wait() is correctly compiled out, 
-because it is unreachable.
-
-I wondered how come objtool (correctly) says the instructions are 
-unreachable. It means it knows that break_deleg_wait.isra.0 is a dead end
-(dead_end_function() returns true while checking INSN_CALL). And of course
-"return 0;" in break_deleg_wait() is compiled out.
-
-000000000000087d <break_deleg_wait.isra.0>:
-     87d:       55                      push   %rbp
-     87e:       48 89 e5                mov    %rsp,%rbp
-     881:       48 8b 7d 08             mov    0x8(%rbp),%rdi
-     885:       e8 00 00 00 00          callq  88a <break_deleg_wait.isra.0+0xd>
-                        886: R_X86_64_PLT32     __tsan_func_entry-0x4
-     88a:       0f 0b                   ud2    
-
-One way to fix it is to mark break_deleg_wait() as __always_inline. Then 
-it all works.
-
-Note: there are more functions calling break_deleg_wait() with this 
-pattern.
-
-I'll try to find out which optimization does this, because it is a 
-slightly different scenario than hiding __noreturn from the callees. 
-Probably -fno-ipa-pure-const again.
-
-> kernel/exit.o: warning: objtool: __ia32_sys_exit_group()+0x2e: unreachable instruction
-
-Easy one. do_group_exit() is noreturn and should be marked as such.
-
-> Full randconfig file is attached.
-> 
-> 
-> -- 
-> ~Randy
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks for reporting, Randy.
-
-Miroslav
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index ac8bd95b5fe8..2b79932e924d 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2546,7 +2546,7 @@ static inline int try_break_deleg(struct inode *inode, struct inode **delegated_
+ drivers/mtd/nand/raw/pasemi_nand.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/raw/pasemi_nand.c b/drivers/mtd/nand/raw/pase=
+mi_nand.c
+index 37570f0c3a36..d8eca8c3fdcd 100644
+--- a/drivers/mtd/nand/raw/pasemi_nand.c
++++ b/drivers/mtd/nand/raw/pasemi_nand.c
+@@ -154,7 +154,7 @@ static int pasemi_nand_probe(struct platform_device *of=
+dev)
+=20
  	return 0;
- }
- 
--static inline int break_deleg_wait(struct inode **delegated_inode)
-+static __always_inline int break_deleg_wait(struct inode **delegated_inode)
- {
- 	BUG();
- 	return 0;
-diff --git a/kernel/exit.c b/kernel/exit.c
-index ed56917d50e3..9437c1ca37c5 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -876,7 +876,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
-  * Take down every thread in the group.  This is called by fatal signals
-  * as well as by sys_exit_group (below).
-  */
--void
-+void __noreturn
- do_group_exit(int exit_code)
- {
- 	struct signal_struct *sig = current->signal;
+=20
+-out_cleanup:
++ out_cleanup_nand:
+ 	nand_cleanup(chip);
+  out_lpc:
+ 	release_region(lpcctl, 4);
+--=20
+2.26.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/3geVHwl1tYIx_S6vKZI_F3q
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Loc8ACgkQAVBC80lX
+0Gz/dgf/VsOmeJkK9N/mBkx+mpOQz4tCKEQRK0IH2391WEd0cupp7flpnLD+YIz3
+C7Om40haQRSkphj3iCGQbKYe/dZDKw341yH0072tjnFkgCIQmT3KYuGjvtq1CnkV
+XJ6QSWpOdjXOJyyOONldKgvw3ax/kPFELhKA/vrMDIk2iOnTPfg6lr9tF63crkdR
+ZnDG3mY28Eoe4DI0FJU3bM3+f+xFbBWs9tY1kDypeAx1/x/FIDZfZcgjCsJoZJrx
+7XOnVnonB92NKpVO0EAaxW3iueY/diM2Vq58BWXgvf3HtMFnQhGJd7ouFYJG9L2Z
+RMDDkih/glJGM9mCjpvVB/bMyPUdqg==
+=/5Pw
+-----END PGP SIGNATURE-----
+
+--Sig_/3geVHwl1tYIx_S6vKZI_F3q--

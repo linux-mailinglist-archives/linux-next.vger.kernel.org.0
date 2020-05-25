@@ -2,61 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E275D1E0DCA
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 13:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CF9C1E0DE8
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 13:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390196AbgEYLv2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 07:51:28 -0400
-Received: from mx2.suse.de ([195.135.220.15]:44394 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390401AbgEYLv1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 25 May 2020 07:51:27 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.220.254])
-        by mx2.suse.de (Postfix) with ESMTP id 16104AD88;
-        Mon, 25 May 2020 11:51:28 +0000 (UTC)
-Date:   Mon, 25 May 2020 13:51:23 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
-        Joerg Roedel <joro@8bytes.org>, linux-next@vger.kernel.org
-Subject: Re: next/master bisection: baseline.login on panda
-Message-ID: <20200525115123.GF5075@suse.de>
-References: <5ec4eb8e.1c69fb81.19b63.0b07@mx.google.com>
- <d30e5ea4-85ae-75c2-2334-f9f951026afd@collabora.com>
+        id S2390384AbgEYLyb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Mon, 25 May 2020 07:54:31 -0400
+Received: from relay1-d.mail.gandi.net ([217.70.183.193]:18725 "EHLO
+        relay1-d.mail.gandi.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2390281AbgEYLya (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 07:54:30 -0400
+X-Originating-IP: 91.224.148.103
+Received: from xps13 (unknown [91.224.148.103])
+        (Authenticated sender: miquel.raynal@bootlin.com)
+        by relay1-d.mail.gandi.net (Postfix) with ESMTPSA id 24CCF240008;
+        Mon, 25 May 2020 11:54:26 +0000 (UTC)
+Date:   Mon, 25 May 2020 13:54:24 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Boris Brezillon <boris.brezillon@collabora.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the nand tree
+Message-ID: <20200525135424.1fbc33bf@xps13>
+In-Reply-To: <20200525204535.18e243d7@canb.auug.org.au>
+References: <20200525204535.18e243d7@canb.auug.org.au>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.4 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d30e5ea4-85ae-75c2-2334-f9f951026afd@collabora.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Guillaume,
+Hi Stephen,
 
-On Wed, May 20, 2020 at 10:54:44AM +0100, Guillaume Tucker wrote:
-> Please see the bisection report below about a boot failure.
+Stephen Rothwell <sfr@canb.auug.org.au> wrote on Mon, 25 May 2020
+20:45:35 +1000:
+
+> Hi all,
 > 
-> Reports aren't automatically sent to the public while we're
-> trialing new bisection features on kernelci.org but this one
-> looks valid.
+> After merging the nand tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
 > 
-> Unfortunately there isn't anything in the kernel log, it's
-> probably crashing very early on.  The bisection was run on
-> omap4-panda, and there seems to be the same issue on
-> omap3-beagle-xm as it's also failing to boot.
+> drivers/mtd/nand/raw/pasemi_nand.c: In function 'pasemi_nand_probe':
+> drivers/mtd/nand/raw/pasemi_nand.c:157:1: warning: label 'out_cleanup' defined but not used [-Wunused-label]
+>   157 | out_cleanup:
+>       | ^~~~~~~~~~~
+> drivers/mtd/nand/raw/pasemi_nand.c:149:3: error: label 'out_cleanup_nand' used but not defined
+>   149 |   goto out_cleanup_nand;
+>       |   ^~~~
+> 
+> Caused by commit
+> 
+>   d6a2207d79e3 ("mtd: rawnand: pasemi: Fix the probe error path")
+> 
+> I have applied the following patch for today.
+> 
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Mon, 25 May 2020 20:41:22 +1000
+> Subject: [PATCH] mtd: rawnand: pasemi: fix up label spelling
+> 
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  drivers/mtd/nand/raw/pasemi_nand.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/pasemi_nand.c b/drivers/mtd/nand/raw/pasemi_nand.c
+> index 37570f0c3a36..d8eca8c3fdcd 100644
+> --- a/drivers/mtd/nand/raw/pasemi_nand.c
+> +++ b/drivers/mtd/nand/raw/pasemi_nand.c
+> @@ -154,7 +154,7 @@ static int pasemi_nand_probe(struct platform_device *ofdev)
+>  
+>  	return 0;
+>  
+> -out_cleanup:
+> + out_cleanup_nand:
+>  	nand_cleanup(chip);
+>   out_lpc:
+>  	release_region(lpcctl, 4);
 
-The issue is likely a deadlock fixed by:
+Damn it, I always screw up with !COMPILE_TEST drivers...
 
-	https://lore.kernel.org/r/20200519132824.15163-1-joro@8bytes.org
+That's the right fix, I updated nand/next for tomorrow.
 
-The patch is already in the iommu-tree and should show up in linux-next
-soon.
-
-Regards,
-
-	Joerg
-
+Thanks a lot,
+Miquèl

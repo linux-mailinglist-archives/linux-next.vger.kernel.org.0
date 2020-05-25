@@ -2,111 +2,61 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E439F1E0C90
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 13:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E275D1E0DCA
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 13:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390070AbgEYLLc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 07:11:32 -0400
-Received: from ozlabs.org ([203.11.71.1]:59413 "EHLO ozlabs.org"
+        id S2390196AbgEYLv2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 May 2020 07:51:28 -0400
+Received: from mx2.suse.de ([195.135.220.15]:44394 "EHLO mx2.suse.de"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2390058AbgEYLLb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 25 May 2020 07:11:31 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49VvYF3g2qz9sSg;
-        Mon, 25 May 2020 21:11:29 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590405089;
-        bh=wvEWTF6elJP2cqo3dUF3BtVU8fc2TyVlOPYQCctcvhE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=SZavkh96wNibefCD2pjdqWDJoJXGS442rSxprHiEC0UD7gJpEgqQ1LfXXa1earLIW
-         pYWZaPt15BijdLonxHffW9xeaT5e00/t8UFm+KbAAAd7AW4cy83x469uI7YdmZE/cd
-         Vs8rFFUPdCelVgheYAOi8EBAkn8hP8u+zv5YDjUBZt45dMam95pe/IeXgrSLiqZNUa
-         hcZWFJs6lzEhpMMW7ozezUc3/coXOKwLy90VWicwZSPY8m3tU+rImh7mRaPrPxVmm8
-         1hYrpHmSL38KAnvZyPTWNzfKfNwiv7kx44UN5AwXjRb/dT6Gqj31P6AYeAQwzDh0u0
-         tReJnYNsZQHsQ==
-Date:   Mon, 25 May 2020 21:11:28 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        David Sterba <dsterba@suse.cz>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>
-Subject: linux-next: manual merge of the akpm-current tree with the btrfs
- tree
-Message-ID: <20200525211128.1cc8c00d@canb.auug.org.au>
+        id S2390401AbgEYLv1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 May 2020 07:51:27 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 16104AD88;
+        Mon, 25 May 2020 11:51:28 +0000 (UTC)
+Date:   Mon, 25 May 2020 13:51:23 +0200
+From:   Joerg Roedel <jroedel@suse.de>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org,
+        Joerg Roedel <joro@8bytes.org>, linux-next@vger.kernel.org
+Subject: Re: next/master bisection: baseline.login on panda
+Message-ID: <20200525115123.GF5075@suse.de>
+References: <5ec4eb8e.1c69fb81.19b63.0b07@mx.google.com>
+ <d30e5ea4-85ae-75c2-2334-f9f951026afd@collabora.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7Za/i_MQAl4YAVvL+=+0IdY";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d30e5ea4-85ae-75c2-2334-f9f951026afd@collabora.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7Za/i_MQAl4YAVvL+=+0IdY
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi Guillaume,
 
-Hi all,
+On Wed, May 20, 2020 at 10:54:44AM +0100, Guillaume Tucker wrote:
+> Please see the bisection report below about a boot failure.
+> 
+> Reports aren't automatically sent to the public while we're
+> trialing new bisection features on kernelci.org but this one
+> looks valid.
+> 
+> Unfortunately there isn't anything in the kernel log, it's
+> probably crashing very early on.  The bisection was run on
+> omap4-panda, and there seems to be the same issue on
+> omap3-beagle-xm as it's also failing to boot.
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+The issue is likely a deadlock fixed by:
 
-  fs/btrfs/inode.c
+	https://lore.kernel.org/r/20200519132824.15163-1-joro@8bytes.org
 
-between commit:
+The patch is already in the iommu-tree and should show up in linux-next
+soon.
 
-  f31e5f70919f ("btrfs: switch to iomap_dio_rw() for dio")
+Regards,
 
-from the btrfs tree and commit:
+	Joerg
 
-  2167c1133b8b ("btrfs: convert from readpages to readahead")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc fs/btrfs/inode.c
-index fb95efeb63ed,8b3489f229c7..000000000000
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@@ -10075,8 -10538,8 +10060,8 @@@ static const struct address_space_opera
-  	.readpage	=3D btrfs_readpage,
-  	.writepage	=3D btrfs_writepage,
-  	.writepages	=3D btrfs_writepages,
-- 	.readpages	=3D btrfs_readpages,
-+ 	.readahead	=3D btrfs_readahead,
- -	.direct_IO	=3D btrfs_direct_IO,
- +	.direct_IO	=3D noop_direct_IO,
-  	.invalidatepage =3D btrfs_invalidatepage,
-  	.releasepage	=3D btrfs_releasepage,
-  #ifdef CONFIG_MIGRATION
-
---Sig_/7Za/i_MQAl4YAVvL+=+0IdY
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Lp+AACgkQAVBC80lX
-0Gy4VggAoS6kyvXTGf1ijdfe7FIz4r0QHe0ib8ddY7OGdjH8w/lbRGfaPuJr/VoF
-IeGgRTgR5ZSqEYQiqho8AAF53PNBMJqiQOKygWPoaMycIQGjMfukKNyk26kqZzqu
-Yc146W3sdiimxpq4bTTR2974yLoNaIipHDcqPgofsuSINitl2uJ0NB0eluowVAQF
-a0PY2XjoqWerMpOAAUubP9s8h+MEBQiVg3OLBlPSFsR5gKp71eqhqFcNmj66zcM7
-dqXq0aAJZh39IaJZuENQn4r/yuSmT6KtC4GmCVvm5Ooe363OtJce1yOFMPuQaArg
-mX0XfQr3t8iKyh3IsYapeWnVr+8+Rg==
-=8yoH
------END PGP SIGNATURE-----
-
---Sig_/7Za/i_MQAl4YAVvL+=+0IdY--

@@ -2,169 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E3F1E06AD
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 08:10:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A801E08A5
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 10:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729920AbgEYGKv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 02:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52504 "EHLO
+        id S1731391AbgEYIUr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 May 2020 04:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728324AbgEYGKv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 02:10:51 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C9CC061A0E
-        for <linux-next@vger.kernel.org>; Sun, 24 May 2020 23:10:51 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id t7so7129025plr.0
-        for <linux-next@vger.kernel.org>; Sun, 24 May 2020 23:10:51 -0700 (PDT)
+        with ESMTP id S1725849AbgEYIUo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 04:20:44 -0400
+Received: from mail-oi1-x241.google.com (mail-oi1-x241.google.com [IPv6:2607:f8b0:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3482C05BD43
+        for <linux-next@vger.kernel.org>; Mon, 25 May 2020 01:20:42 -0700 (PDT)
+Received: by mail-oi1-x241.google.com with SMTP id o24so15457991oic.0
+        for <linux-next@vger.kernel.org>; Mon, 25 May 2020 01:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=8mKA0+BS+KJFLZwQIj+qY82lM41q4ImVQn+GqQ94hDc=;
-        b=ARgG0RgkhKXOZS458/W+P/HnDSMS1kkv6kQ9B4cuBw6cFg3nbv8/GOelUyNrCaJio/
-         VslBAm5TaWpa6HA4HcqYm2L9kM1WdcMUQdK6zwyqaFD1IaFPqVEg07pAtuV7ZO2x+xn6
-         m7nLbYbmGqaX7DeSwGLWfRkZxrW99jr1BApcFkmj/a98Fw00scyfRzo+exGJn/RCnfFf
-         f3MCWijaiuI2svQkqn5LN7tBa3rSGJtKD5t5qcvLTMS97RnCj4eEZrJVHuKvdtgv/e9a
-         tY9C1kqUrP2EpZjuXyHqT7zFuoRdVsgtFTXvjlvZb+JhUcRjFAAQo0XJzq4H4kMAhqc5
-         kOGQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Azh7Qf5VqGk1C5GHmcLCjaOZm5RvD53r5M4Q66y5N4E=;
+        b=G1bvHWQvaSzoekxw3mZ7s4c83ovTLXsKLzv3enF9zYsC9+tgS2i9AW2iOGqlowFhri
+         k3mmhKEAGjbvtDNLBBW/BRGvs2DlJTdM/dD0lpKbvlHbUxo79Kxm+tn9tsp4R6wT9i1m
+         Sfa1KVv6reJKwKFn9um4GzRQps/Atzo6MTEzmzLE8GDBznrbiP/L4IyPmL7OOVDrFUcI
+         P9KG7fskRERGdWqROan1hpxepyqr/pEh1t37fif2YcbKYS4aFtmWkEmjcyNRHsjLxPg+
+         S8QumjJdluVOXzH+A7bUuxxUdRKmjJQaKv/KzyH7owfz3PuF4U9wT+0u4+YSwupJ3ZTJ
+         eS2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=8mKA0+BS+KJFLZwQIj+qY82lM41q4ImVQn+GqQ94hDc=;
-        b=rdNMIKuNag+YLWQ7Kp4p99LM1ZuudTSPl5AZdNRgbvO3J7QiPEQ18ShtFVg8P98rLP
-         cxK6zT5EcEOJ6W2qB94CWoUmZWkOExOYov0Wlo8usYW+AgO6dahi9toDVnZ9oXDQT9Zq
-         AzaWtZvlrbokyFxHlpTR+f+VdA3dRNsEy+ZbL06RhF9ArZ0TcX/Cgefhmdo9FEhvkEAd
-         kx9/HOaD50hXrAK4LJ7OgMDmIs9PRkTcJGr6lcdF2crQsB1155IVQFnh7QLKG7B0UOc7
-         rb2omK8ccR017/n3pD+de2+6xG1WX8iUb626wC48E+gW090sLfNE9kUER4tIKOThq8zo
-         bc4A==
-X-Gm-Message-State: AOAM533D7yu1PSEC9ZY4rL0LC9LBUMhC5ZPr4H3NjvFodd8vo4mlJ9BC
-        B8yk47WOG84KgCZH03BQ2G8SgU6vFec=
-X-Google-Smtp-Source: ABdhPJzc4241qAv1PIBwpbCAe5JFMYRJSTY0I3BOdag7oWgtEQG/Zq1JGS8avsHgBZg/Pxoqa2uMxg==
-X-Received: by 2002:a17:902:301:: with SMTP id 1mr26010462pld.65.1590387050481;
-        Sun, 24 May 2020 23:10:50 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d8sm10947733pgb.42.2020.05.24.23.10.49
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 24 May 2020 23:10:49 -0700 (PDT)
-Message-ID: <5ecb6169.1c69fb81.84e07.97d7@mx.google.com>
-Date:   Sun, 24 May 2020 23:10:49 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Azh7Qf5VqGk1C5GHmcLCjaOZm5RvD53r5M4Q66y5N4E=;
+        b=H3LIqBM571yv3NpmQlrjRGUtcD2wOzw/qAfzrQqILlRl7gcYrXe9iJIJncjX4oYoMn
+         HZCzgzpZTA+8UFlyEMNiyaIk7M0JJQEWWReW8b6BTFljqTxXpuY8cA1HG/p6cHKWBnQm
+         ujEfKs6pSDiYc0vEHnIr8NepmOF16mRWlsfaIlSSX87NAQQHd6ckKWY4KqxoZN2SAR46
+         T781VXGlLZ9ZiOJQlsROWjLaKpnMTBvmy26vIuELBThxnKi4wzVHOfk1l1EZQ8izcDvn
+         FboUwSbVmvW79576DjXR8tNmKqhRUfg/uewzHPn0g8h4Kf8rwdaHxd0o6+u7IZu1AlCJ
+         X3kw==
+X-Gm-Message-State: AOAM532e0hoZxuqQ1D8I6M44pzNyxwA5soBakh/S0mm30Hfj7uGJH90A
+        iScPHDGaMn6bGoV9QNS8bNFR4rfUquVOuCCp0+5mCEJUbSA=
+X-Google-Smtp-Source: ABdhPJzPfGvkXoAEO6zWx5fGwS/RRPJEryJvMFIXf0ksHObwHtbFS1z8Vgxvdql1XeVzo3PZPlnI/SPaIp2bNYA9MjI=
+X-Received: by 2002:aca:d0d:: with SMTP id 13mr2336227oin.172.1590394841810;
+ Mon, 25 May 2020 01:20:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-rc6-387-ge8afbc5782a5
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes boot: 177 boots: 5 failed,
- 168 passed with 4 offline (v5.7-rc6-387-ge8afbc5782a5)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <20200522033119.1bbd99c5@canb.auug.org.au> <20200521173520.GL6608@willie-the-truck>
+ <20200522171708.5f392fde@canb.auug.org.au> <20200522174944.1a1732fa@canb.auug.org.au>
+ <20200523001223.GA23921@paulmck-ThinkPad-P72> <20200523064643.GA27431@zn.tnic>
+ <87a71zq8ml.fsf@nanos.tec.linutronix.de> <20200523150614.GP2869@paulmck-ThinkPad-P72>
+ <871rnaqxor.fsf@nanos.tec.linutronix.de> <20200523212345.GR2869@paulmck-ThinkPad-P72>
+ <20200525003706.GA13789@paulmck-ThinkPad-P72>
+In-Reply-To: <20200525003706.GA13789@paulmck-ThinkPad-P72>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 25 May 2020 10:20:29 +0200
+Message-ID: <CANpmjNMjvJqVFiY+xSUK=oePP9TsDzZHVh6XKM77ar5fh_fdFQ@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the tip tree
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Will Deacon <will@kernel.org>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+On Mon, 25 May 2020 at 02:37, Paul E. McKenney <paulmck@kernel.org> wrote:
+>
+> On Sat, May 23, 2020 at 02:23:45PM -0700, Paul E. McKenney wrote:
+> > On Sat, May 23, 2020 at 09:05:24PM +0200, Thomas Gleixner wrote:
+> > > "Paul E. McKenney" <paulmck@kernel.org> writes:
+> > > > On Sat, May 23, 2020 at 11:54:26AM +0200, Thomas Gleixner wrote:
+> > > >> core/rcu is the one which diverged and caused the merge conflict with
+> > > >> PPC to happen twice. So Paul needs to remove the stale core/rcu bits and
+> > > >> rebase on the current version (which is not going to change again).
+> > > >
+> > > > So there will be another noinstr-rcu-* tag, and I will rebase on top
+> > > > of that, correct?  If so, fair enough!
+> > >
+> > > Here you go: noinstr-rcu-220-05-23
+> > >
+> > > I wanted this to be 2020 and not 220 but I noticed after pushing it
+> > > out. I guess it still does the job :)
+> >
+> > Now -that- is what I call an old-school tag name!!!  ;-)
+> >
+> > I remerged, rebased, and pushed to -rcu branch "dev".
+> >
+> > If it survives testing, I will reset -rcu branch "rcu/next" as well.
+>
+> And passed!  The compile times are back to their old selves on my
+> laptop as well.
+>
+> Thank you for setting this up, Thomas!!!
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+I just noticed that -rcu and -tip both still have their own version of
+"ubsan, kcsan: Don't combine sanitizer with kcov on clang". For there
+to not be any conflicts in -next, "ubsan, kcsan: Don't combine
+sanitizer with kcov on clang" could be dropped from -rcu.
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
-
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/pending-fixes/kernel/v5.7-rc6-387=
--ge8afbc5782a5/plan/baseline/
-
----------------------------------------------------------------------------=
-----
-
-next/pending-fixes boot: 177 boots: 5 failed, 168 passed with 4 offline (v5=
-.7-rc6-387-ge8afbc5782a5)
-
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-rc6-387-ge8afbc5782a5/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-rc6-387-ge8afbc5782a5/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-rc6-387-ge8afbc5782a5
-Git Commit: e8afbc5782a57ab2d1f9b899fd813503f772ea7b
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 80 unique boards, 22 SoC families, 21 builds out of 217
-
-Boot Regressions Detected:
-
-arm:
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 19 days (last pass: v5.7-rc3-277-=
-ga37f92ef57b2 - first fail: v5.7-rc4-211-g6d4315023bc9)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          sm8150-mtp:
-              lab-bjorn: failing since 24 days (last pass: v5.7-rc3-194-g16=
-31e20d9729 - first fail: v5.7-rc3-228-g76a37a4cf830)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 44 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-    allmodconfig:
-        gcc-8:
-            stm32mp157c-dk2: 1 failed lab
-
-arm64:
-    defconfig:
-        gcc-8:
-            sm8150-mtp: 1 failed lab
-            sm8250-mtp: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+Thanks,
+-- Marco

@@ -2,147 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A6E1E0B25
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 11:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E74A1E0B72
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 12:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389425AbgEYJ6T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 05:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60186 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389407AbgEYJ6T (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 05:58:19 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41A88C061A0E;
-        Mon, 25 May 2020 02:58:19 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Vswm5fnrz9sRK;
-        Mon, 25 May 2020 19:58:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590400697;
-        bh=C5bGOXdSwpoXj/ZvUi/2ELa8jGqYdbWahmElM6nSh5A=;
-        h=Date:From:To:Cc:Subject:From;
-        b=djMQu8Ht/SaWlEGZDqarXlwGVKijTdoIi9u1SogHphHBVshrLdg3KQDPDmtI18m6b
-         q4sjobZ1I06pSB7tNChmLck12mIucN1gMVX9oXMxkkBjZn/yvAy/hlGml6L5P45wMC
-         +FcBa/z/q+eoWuqGYLqRhmaTQZsGd0KZWLJ6yyMuIz6+kWx7ZjCZU/yWiQlFeyQl0L
-         sQPkIgqRIa2IQZ1rog//40UEBNMG+fEBp7keMwMG6Ci74BVPtnNaTV8GcFbcNPzxht
-         IuP6QNpcvXwmT4Wrn4SYU8aS9UcQKm5XAeNhgju5D7SqQP5VNegwJRlq0XzltPNVLw
-         8rVTQ7GZzrD8w==
-Date:   Mon, 25 May 2020 19:58:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S2389398AbgEYKKg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 May 2020 06:10:36 -0400
+Received: from mx2.suse.de ([195.135.220.15]:42446 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389356AbgEYKKg (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 May 2020 06:10:36 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id 3A29DAA35;
+        Mon, 25 May 2020 10:10:37 +0000 (UTC)
+Date:   Mon, 25 May 2020 12:10:33 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Randy Dunlap <rdunlap@infradead.org>
+cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: linux-next: build failure after merge of the notifications tree
-Message-ID: <20200525195813.0e76ac56@canb.auug.org.au>
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for May 21 (objtool warnings)
+In-Reply-To: <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
+Message-ID: <alpine.LSU.2.21.2005251101030.24984@pobox.suse.cz>
+References: <20200522001209.07c19400@canb.auug.org.au> <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ZC=WHHLA_w6i+JSvgWkA_Gd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ZC=WHHLA_w6i+JSvgWkA_Gd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 21 May 2020, Randy Dunlap wrote:
 
-Hi all,
+> On 5/21/20 7:12 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200519:
+> > 
 
-After merging the notifications tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+These are indeed caused by -flive-patching
+ 
+> on x86_64:
+> 
+> fs/open.o: warning: objtool: chmod_common()+0x104: unreachable instruction
+> fs/namei.o: warning: objtool: do_renameat2()+0x482: unreachable instruction
 
-kernel/watch_queue.c:67:13: error: 'generic_pipe_buf_confirm' undeclared he=
-re (not in a function); did you mean 'generic_pipe_buf_release'?
-   67 |  .confirm =3D generic_pipe_buf_confirm,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-      |             generic_pipe_buf_release
-kernel/watch_queue.c:69:3: error: 'const struct pipe_buf_operations' has no=
- member named 'steal'
-   69 |  .steal  =3D watch_queue_pipe_buf_steal,
-      |   ^~~~~
-kernel/watch_queue.c:69:12: error: initialization of 'bool (*)(struct pipe_=
-inode_info *, struct pipe_buffer *)' {aka '_Bool (*)(struct pipe_inode_info=
- *, struct pipe_buffer *)'} from incompatible pointer type 'int (*)(struct =
-pipe_inode_info *, struct pipe_buffer *)' [-Werror=3Dincompatible-pointer-t=
-ypes]
-   69 |  .steal  =3D watch_queue_pipe_buf_steal,
-      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~
-kernel/watch_queue.c:69:12: note: (near initialization for 'watch_queue_pip=
-e_buf_ops.try_steal')
+Two "funny" ones. When CONFIG_FILE_LOCKING is not set, break_deleg_wait() 
+is just BUG(). GCC decides to isra optimize it to break_deleg_wait.isra.0 
+and call it in chmod_common() and do_renameat2() instead of just inline 
+it.
 
-Caused by commit
+chmod_common() with -flive-patching:
 
-  c73be61cede5 ("pipe: Add general notification queue support")
+     981:       e8 f7 fe ff ff          callq  87d <break_deleg_wait.isra.0>
+     986:       41 89 c4                mov    %eax,%r12d
+     989:       85 c0                   test   %eax,%eax
+     98b:       0f 84 76 ff ff ff       je     907 <chmod_common+0x7b>
+     991:       48 89 df                mov    %rbx,%rdi
+     994:       e8 00 00 00 00          callq  999 <chmod_common+0x10d>
+                        995: R_X86_64_PLT32     __tsan_read8-0x4
 
-from the notifications tree interacting with commits
+without:
 
-  76887c256744 ("fs: make the pipe_buf_operations ->steal operation optiona=
-l")
-  b8d9e7f2411b ("fs: make the pipe_buf_operations ->confirm operation optio=
-nal")
+     985:       e8 f3 fe ff ff          callq  87d <break_deleg_wait.isra.0>
+     98a:       48 89 df                mov    %rbx,%rdi
+     98d:       e8 00 00 00 00          callq  992 <chmod_common+0x106>
+                        98e: R_X86_64_PLT32     __tsan_read8-0x4
 
-from the vfs tree.
+The error checking of break_deleg_wait() is correctly compiled out, 
+because it is unreachable.
 
-I have applied the following merge fix patch.
+I wondered how come objtool (correctly) says the instructions are 
+unreachable. It means it knows that break_deleg_wait.isra.0 is a dead end
+(dead_end_function() returns true while checking INSN_CALL). And of course
+"return 0;" in break_deleg_wait() is compiled out.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 25 May 2020 19:53:40 +1000
-Subject: [PATCH] pipe: update for pipe_buf_operations changes
+000000000000087d <break_deleg_wait.isra.0>:
+     87d:       55                      push   %rbp
+     87e:       48 89 e5                mov    %rsp,%rbp
+     881:       48 8b 7d 08             mov    0x8(%rbp),%rdi
+     885:       e8 00 00 00 00          callq  88a <break_deleg_wait.isra.0+0xd>
+                        886: R_X86_64_PLT32     __tsan_func_entry-0x4
+     88a:       0f 0b                   ud2    
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+One way to fix it is to mark break_deleg_wait() as __always_inline. Then 
+it all works.
+
+Note: there are more functions calling break_deleg_wait() with this 
+pattern.
+
+I'll try to find out which optimization does this, because it is a 
+slightly different scenario than hiding __noreturn from the callees. 
+Probably -fno-ipa-pure-const again.
+
+> kernel/exit.o: warning: objtool: __ia32_sys_exit_group()+0x2e: unreachable instruction
+
+Easy one. do_group_exit() is noreturn and should be marked as such.
+
+> Full randconfig file is attached.
+> 
+> 
+> -- 
+> ~Randy
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+
+Thanks for reporting, Randy.
+
+Miroslav
+
 ---
- kernel/watch_queue.c | 8 --------
- 1 file changed, 8 deletions(-)
-
-diff --git a/kernel/watch_queue.c b/kernel/watch_queue.c
-index 9a9699c06709..d7a369eab613 100644
---- a/kernel/watch_queue.c
-+++ b/kernel/watch_queue.c
-@@ -56,17 +56,9 @@ static void watch_queue_pipe_buf_release(struct pipe_ino=
-de_info *pipe,
- 	set_bit(bit, wqueue->notes_bitmap);
+diff --git a/include/linux/fs.h b/include/linux/fs.h
+index ac8bd95b5fe8..2b79932e924d 100644
+--- a/include/linux/fs.h
++++ b/include/linux/fs.h
+@@ -2546,7 +2546,7 @@ static inline int try_break_deleg(struct inode *inode, struct inode **delegated_
+ 	return 0;
  }
-=20
--static int watch_queue_pipe_buf_steal(struct pipe_inode_info *pipe,
--				      struct pipe_buffer *buf)
--{
--	return -1; /* No. */
--}
--
- /* New data written to a pipe may be appended to a buffer with this type. =
-*/
- static const struct pipe_buf_operations watch_queue_pipe_buf_ops =3D {
--	.confirm	=3D generic_pipe_buf_confirm,
- 	.release	=3D watch_queue_pipe_buf_release,
--	.steal		=3D watch_queue_pipe_buf_steal,
- 	.get		=3D generic_pipe_buf_get,
- };
-=20
---=20
-2.26.2
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ZC=WHHLA_w6i+JSvgWkA_Gd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7LlrUACgkQAVBC80lX
-0GzuDAf+LZceR3VHP4/7LUemV6cqzQTSlUzb+50eSRfyI/Kv7XfEq/ZQNaTKYYS5
-ONh+C1OID0KqRuXrJGpMpScwl4ZM21ys8nPGi3fmwPWhGq1pPSikWdU3KAxZPawH
-uFVaEQtRCwaE8bqiieN6elL4mTM1wi8zGfKgiakvrpmah77pCHGrfojXqKnwQDur
-1KVpJLVMT0cLPoXGWVN572VGEMrQ29HZqi3YOH5p/ZFa63Z0dCC8j1zrPIGzcPgi
-H6t2jbv1Hdjo9XXNqJruL9nBE2kKt8XeGZwssXf6ZYENm9QlmvRHynnsOl2efrEQ
-w7CxYO9F3fHZdIyOkejNHcDQ7Ybsrg==
-=+kXf
------END PGP SIGNATURE-----
-
---Sig_/ZC=WHHLA_w6i+JSvgWkA_Gd--
+ 
+-static inline int break_deleg_wait(struct inode **delegated_inode)
++static __always_inline int break_deleg_wait(struct inode **delegated_inode)
+ {
+ 	BUG();
+ 	return 0;
+diff --git a/kernel/exit.c b/kernel/exit.c
+index ed56917d50e3..9437c1ca37c5 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -876,7 +876,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
+  * Take down every thread in the group.  This is called by fatal signals
+  * as well as by sys_exit_group (below).
+  */
+-void
++void __noreturn
+ do_group_exit(int exit_code)
+ {
+ 	struct signal_struct *sig = current->signal;

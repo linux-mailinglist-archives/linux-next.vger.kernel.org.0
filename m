@@ -2,120 +2,182 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C74BF1E0C11
-	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 12:45:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874CD1E0C6A
+	for <lists+linux-next@lfdr.de>; Mon, 25 May 2020 13:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389522AbgEYKpk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 25 May 2020 06:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39290 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389484AbgEYKpk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 25 May 2020 06:45:40 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE004C061A0E;
-        Mon, 25 May 2020 03:45:39 -0700 (PDT)
+        id S2390010AbgEYLE4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 25 May 2020 07:04:56 -0400
+Received: from ozlabs.org ([203.11.71.1]:55005 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389930AbgEYLEy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 25 May 2020 07:04:54 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49VtzP0yzHz9sSg;
-        Mon, 25 May 2020 20:45:37 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49VvPY1N1tz9sPF;
+        Mon, 25 May 2020 21:04:49 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590403537;
-        bh=6Q7JXlwF2Rcy26HZZvGUKpQSB/dFk+mz8rLmYPUDsq8=;
+        s=201702; t=1590404691;
+        bh=vqJW3U9Kr/VnRD5n+k5na38ywhEDWSc9rmtReGEIdTw=;
         h=Date:From:To:Cc:Subject:From;
-        b=S1w8YoBl4a/LvKGndnClVAUxDFa7K4P0Viucd/BPReV+BIV9/aD2LIKkOknTKGqtn
-         +xnMco+B8iBR7Irvv2SUB9dyg74CZOb8M5q9LU+r25XIG9IOsH/Kscf7d+boscoZV4
-         TNts9Cl3yD4ucAlnh6yYJvEFXjff+hb3zybMjdZnlC86YGuz8Snb0ZmB/jPb2k+k2V
-         WFu7SPsloaCaO0gXCgiZzBK+XXe1B1S3tcucJttpaWy+YKXT9HiWj3tSGY2xRqYW/N
-         CT1YQdgSe85HHNqotSn5iYUWpm7Mgjvq5zwVyIP7kyiqzVzoC2bXhpKUKlNUrxR1QR
-         giiHiJOY13N8w==
-Date:   Mon, 25 May 2020 20:45:35 +1000
+        b=IHXf24/VYwanOckLfO5AZIy2GjxwyQRt+feoBs2JNfPMhhd3PxdSsC9BI1cSokK9H
+         ddrSGEDlLsXh2RD2EFJeHX9GVkgQbmPBLxvbhk3Jp/kI8QWFrWqNXscJbwmxtNviRT
+         Twb4uyJOTxFZhsksTt6wbCXGfm946HoZ2HJTGX+BUgmqV07nwPTScRqRKIuPAaN7TV
+         Ds7OEXZJapYepehzT0I/WrrHptglhiwdmPUK8aHbFJCyawehe/EkRBwQOwRmS1HrL+
+         g5novGMGhqT/N9Cvw03115O5IhrvLYiak3SH6HzzIj1Lej4Noz8ezbugbInUUfNRz+
+         0tgV4Hq+yMbrg==
+Date:   Mon, 25 May 2020 21:04:43 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the nand tree
-Message-ID: <20200525204535.18e243d7@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Balbir Singh <sblbir@amazon.com>
+Subject: linux-next: manual merge of the akpm-current tree with the tip tree
+Message-ID: <20200525210443.0904d583@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/3geVHwl1tYIx_S6vKZI_F3q";
+Content-Type: multipart/signed; boundary="Sig_/hl.C9T28t6O0frUX+OSEIhN";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/3geVHwl1tYIx_S6vKZI_F3q
+--Sig_/hl.C9T28t6O0frUX+OSEIhN
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the nand tree, today's linux-next build (powerpc
-allyesconfig) failed like this:
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-drivers/mtd/nand/raw/pasemi_nand.c: In function 'pasemi_nand_probe':
-drivers/mtd/nand/raw/pasemi_nand.c:157:1: warning: label 'out_cleanup' defi=
-ned but not used [-Wunused-label]
-  157 | out_cleanup:
-      | ^~~~~~~~~~~
-drivers/mtd/nand/raw/pasemi_nand.c:149:3: error: label 'out_cleanup_nand' u=
-sed but not defined
-  149 |   goto out_cleanup_nand;
-      |   ^~~~
+  arch/x86/mm/tlb.c
 
-Caused by commit
+between commit:
 
-  d6a2207d79e3 ("mtd: rawnand: pasemi: Fix the probe error path")
+  83ce56f712af ("x86/mm: Refactor cond_ibpb() to support other use cases")
 
-I have applied the following patch for today.
+from the tip tree and commit:
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 25 May 2020 20:41:22 +1000
-Subject: [PATCH] mtd: rawnand: pasemi: fix up label spelling
+  36c8e34d03a1 ("x86/mm: remove vmalloc faulting")
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/mtd/nand/raw/pasemi_nand.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+from the akpm-current tree.
 
-diff --git a/drivers/mtd/nand/raw/pasemi_nand.c b/drivers/mtd/nand/raw/pase=
-mi_nand.c
-index 37570f0c3a36..d8eca8c3fdcd 100644
---- a/drivers/mtd/nand/raw/pasemi_nand.c
-+++ b/drivers/mtd/nand/raw/pasemi_nand.c
-@@ -154,7 +154,7 @@ static int pasemi_nand_probe(struct platform_device *of=
-dev)
-=20
- 	return 0;
-=20
--out_cleanup:
-+ out_cleanup_nand:
- 	nand_cleanup(chip);
-  out_lpc:
- 	release_region(lpcctl, 4);
---=20
-2.26.2
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/3geVHwl1tYIx_S6vKZI_F3q
+diff --cc arch/x86/mm/tlb.c
+index c8524c506ab0,f3fe261e5936..000000000000
+--- a/arch/x86/mm/tlb.c
++++ b/arch/x86/mm/tlb.c
+@@@ -345,48 -161,16 +345,20 @@@ void switch_mm(struct mm_struct *prev,=20
+  	local_irq_restore(flags);
+  }
+ =20
+- static void sync_current_stack_to_mm(struct mm_struct *mm)
+- {
+- 	unsigned long sp =3D current_stack_pointer;
+- 	pgd_t *pgd =3D pgd_offset(mm, sp);
+-=20
+- 	if (pgtable_l5_enabled()) {
+- 		if (unlikely(pgd_none(*pgd))) {
+- 			pgd_t *pgd_ref =3D pgd_offset_k(sp);
+-=20
+- 			set_pgd(pgd, *pgd_ref);
+- 		}
+- 	} else {
+- 		/*
+- 		 * "pgd" is faked.  The top level entries are "p4d"s, so sync
+- 		 * the p4d.  This compiles to approximately the same code as
+- 		 * the 5-level case.
+- 		 */
+- 		p4d_t *p4d =3D p4d_offset(pgd, sp);
+-=20
+- 		if (unlikely(p4d_none(*p4d))) {
+- 			pgd_t *pgd_ref =3D pgd_offset_k(sp);
+- 			p4d_t *p4d_ref =3D p4d_offset(pgd_ref, sp);
+-=20
+- 			set_p4d(p4d, *p4d_ref);
+- 		}
+- 	}
+- }
+-=20
+ -static inline unsigned long mm_mangle_tif_spec_ib(struct task_struct *nex=
+t)
+ +static inline unsigned long mm_mangle_tif_spec_bits(struct task_struct *n=
+ext)
+  {
+  	unsigned long next_tif =3D task_thread_info(next)->flags;
+ -	unsigned long ibpb =3D (next_tif >> TIF_SPEC_IB) & LAST_USER_MM_IBPB;
+ +	unsigned long spec_bits =3D (next_tif >> TIF_SPEC_IB) & LAST_USER_MM_SPE=
+C_MASK;
+ =20
+ -	return (unsigned long)next->mm | ibpb;
+ +	BUILD_BUG_ON(TIF_SPEC_L1D_FLUSH !=3D TIF_SPEC_IB + 1);
+ +
+ +	return (unsigned long)next->mm | spec_bits;
+  }
+ =20
+ -static void cond_ibpb(struct task_struct *next)
+ +static void cond_mitigation(struct task_struct *next)
+  {
+ +	unsigned long prev_mm, next_mm;
+ +
+  	if (!next || !next->mm)
+  		return;
+ =20
+@@@ -587,20 -343,12 +559,11 @@@ void switch_mm_irqs_off(struct mm_struc
+  		need_flush =3D true;
+  	} else {
+  		/*
+ -		 * Avoid user/user BTB poisoning by flushing the branch
+ -		 * predictor when switching between processes. This stops
+ -		 * one process from doing Spectre-v2 attacks on another.
+ +		 * Apply process to process speculation vulnerability
+ +		 * mitigations if applicable.
+  		 */
+ -		cond_ibpb(tsk);
+ +		cond_mitigation(tsk);
+ =20
+- 		if (IS_ENABLED(CONFIG_VMAP_STACK)) {
+- 			/*
+- 			 * If our current stack is in vmalloc space and isn't
+- 			 * mapped in the new pgd, we'll double-fault.  Forcibly
+- 			 * map it.
+- 			 */
+- 			sync_current_stack_to_mm(next);
+- 		}
+-=20
+  		/*
+  		 * Stop remote flushes for the previous mm.
+  		 * Skip kernel threads; we never send init_mm TLB flushing IPIs,
+
+--Sig_/hl.C9T28t6O0frUX+OSEIhN
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Loc8ACgkQAVBC80lX
-0Gz/dgf/VsOmeJkK9N/mBkx+mpOQz4tCKEQRK0IH2391WEd0cupp7flpnLD+YIz3
-C7Om40haQRSkphj3iCGQbKYe/dZDKw341yH0072tjnFkgCIQmT3KYuGjvtq1CnkV
-XJ6QSWpOdjXOJyyOONldKgvw3ax/kPFELhKA/vrMDIk2iOnTPfg6lr9tF63crkdR
-ZnDG3mY28Eoe4DI0FJU3bM3+f+xFbBWs9tY1kDypeAx1/x/FIDZfZcgjCsJoZJrx
-7XOnVnonB92NKpVO0EAaxW3iueY/diM2Vq58BWXgvf3HtMFnQhGJd7ouFYJG9L2Z
-RMDDkih/glJGM9mCjpvVB/bMyPUdqg==
-=/5Pw
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7LpksACgkQAVBC80lX
+0GyNkAf9GICn1Mww2MmQEZQxmyyal+SdgjHa10MPbAYeaJFPPVJoPnFdn47rWrg/
+c/z9fxZuXiv2bL2yjOJEcF0/JT1BJXaYZzJid6RiI1ooXLcw+9RsSZHBZAnTn1Sg
+aKufTGdRA8skpFCalDJ4q1zaYd6EiniI2cgLpJtVQK4ktnjDRcKNSUx/5MMFqUCP
+5PXLpNXqpsoJSx2bY3db6kBLbFBoCEt1LBYZGXW8UI2rYzi34PiF6kh8m2XBWPSV
+PoObe9QQML1LqUSd79xmtMSZqw6McNI+RCq2aM25g8XKtNGN8RkxraSO8+kYX6rr
+cQbmeIJXKdWRQnV91ZbzzseI1ut9UA==
+=Whvo
 -----END PGP SIGNATURE-----
 
---Sig_/3geVHwl1tYIx_S6vKZI_F3q--
+--Sig_/hl.C9T28t6O0frUX+OSEIhN--

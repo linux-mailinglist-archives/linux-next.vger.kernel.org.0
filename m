@@ -2,71 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 307DD1E237E
-	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 16:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BDBB1E23A2
+	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 16:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730078AbgEZOBo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 May 2020 10:01:44 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45033 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1729443AbgEZOBn (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 10:01:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590501702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hveuu+8b66hoKHpea4C8zYmfpzsl4PpKh2ng2WT4OsY=;
-        b=BKn1MHZSFGySaMdjjTz5TXGO9nFETHL37/M8xl+CSa+J27KGGOIC61JAady90cKPNl+7ab
-        if4Q7CThMEhrMmA3I7pbzOsFhvNrDjdmS7lqusbea+JcXaAO4Yz764a5SpkNdaxGaXk3qu
-        lPMgr2ctZ7qI5HomFSDgojO5JE1NjSE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-388-ahoiBctAPFqCjy_Sue4xcw-1; Tue, 26 May 2020 10:01:37 -0400
-X-MC-Unique: ahoiBctAPFqCjy_Sue4xcw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5430460;
-        Tue, 26 May 2020 14:01:16 +0000 (UTC)
-Received: from treble (ovpn-112-77.rdu2.redhat.com [10.10.112.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8259B10013D2;
-        Tue, 26 May 2020 14:01:15 +0000 (UTC)
-Date:   Tue, 26 May 2020 09:01:13 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Miroslav Benes <mbenes@suse.cz>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: linux-next: Tree for May 21 (objtool warnings)
-Message-ID: <20200526140113.ppjywpx7uir3vrlj@treble>
-References: <20200522001209.07c19400@canb.auug.org.au>
- <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
- <alpine.LSU.2.21.2005251101030.24984@pobox.suse.cz>
- <alpine.LSU.2.21.2005251303430.24984@pobox.suse.cz>
+        id S1731373AbgEZOFL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 May 2020 10:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728164AbgEZOFL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 10:05:11 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CEC03E96E
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 07:05:10 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id f18so3850178qkh.1
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 07:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=yVjyi+Dl6Ib7TNyktRRMybIZ1GTiUc0tAA7MlMwFug8=;
+        b=OJZd2Nb9wNyTqA+eszkT33KVjwhkGG25BdWGQKikwIXwP6/shvDSz0RyAh1KxF6xfm
+         zSGJSwDd7lf+2oMEHbg9JO1cWC1MqtGTX1faZKt2PVUyRfpRYEDaUr/+P8H8SNdhZ2rF
+         2vUPXMHWkvbLLxG63hezArK8qZfcJC+/pD68s8B/v8JVmCb/vjLq3Lp/tJsGxnCA4U7T
+         1PpOdUyhJG7m0zAou8hod7lYXO2b2HpMPEVD31AtSu8qVg9hY7KLMSXDgjIfTJT9vOdf
+         YUBdop2CEaGOw4krV3RYF92wIUPsTb54qJVtGLTPL4ldxnhj+4xM6kauhxYRtZgqaM7A
+         7Xfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=yVjyi+Dl6Ib7TNyktRRMybIZ1GTiUc0tAA7MlMwFug8=;
+        b=Jr/1TkWHguuUubUGW1NzQXR0KuTPEuBOLHan9rwIARY5EtAEGBQXD2Ty37GZ5Xd5su
+         IzpBT0N3ErBqTr6cOHAaZJ41rqwuugt/B7XYyvCfOsmxV1+zGZHWZiWTbPwFeHqvFJs5
+         Aw2D6jI5OF3s9NkCzB4E3M8uWoJfUFl8AzEMu6u+OThlyDserOTXNTLZBp4HUUc96Lb0
+         SbvHXPWiUUEyB7fap69U+9SAtWuRFcrQEebr8HCpOlCG5ygBQYNpppX8pxJ9389wAb45
+         BUxrahmDqvFGyr8szjUAEudqOiQJtmxTKabGLRSfGUAhRnGBzzp/eCBCu+/KUMezoRoh
+         48tw==
+X-Gm-Message-State: AOAM530FfI1dYskrc6dGpwmwgsI5JbUrzRr3e2xiA8rentq2Rbw6sHsQ
+        WmyIDV/WG5YsK2hTcrZoOEBQ406DcGjTJeMSRCfrdw==
+X-Google-Smtp-Source: ABdhPJyNOBghCAy1UQZ5SG1gDGZ/H3KJTiOy4I+BXdU7SoNyZY48bzYNsiGIkxIfk9vk+iR+vJ+oAIzwNNaittDaeJs=
+X-Received: by 2002:a05:620a:c89:: with SMTP id q9mr1439769qki.256.1590501909751;
+ Tue, 26 May 2020 07:05:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.LSU.2.21.2005251303430.24984@pobox.suse.cz>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
+References: <CACT4Y+azkizw6QA0VCr0wv93oSkgaYCPc4txy9M=ivgBot1+zg@mail.gmail.com>
+ <37C9957E-40A6-4C29-95FC-D982BABD26F6@lca.pw> <CACT4Y+audgm3QWaVW5uPZF08VXhhNZvtXcW+1cTww53gmWCsKA@mail.gmail.com>
+ <20200526134953.GA991@lca.pw>
+In-Reply-To: <20200526134953.GA991@lca.pw>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Tue, 26 May 2020 16:04:57 +0200
+Message-ID: <CACT4Y+aMQ5HABw85W3gO2wdPeT2pZEamN9t=0Mo0ONiA=kxn8A@mail.gmail.com>
+Subject: Re: linux-next build error (8)
+To:     Qian Cai <cai@lca.pw>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, May 25, 2020 at 01:07:27PM +0200, Miroslav Benes wrote:
-> > I'll try to find out which optimization does this, because it is a 
-> > slightly different scenario than hiding __noreturn from the callees. 
-> > Probably -fno-ipa-pure-const again.
-> 
-> And it is indeed -fno-ipa-pure-const again.
+On Tue, May 26, 2020 at 3:50 PM Qian Cai <cai@lca.pw> wrote:
+> > > > On May 26, 2020, at 8:28 AM, Dmitry Vyukov <dvyukov@google.com> wro=
+te:
+> > > >
+> > > > Crashes (4):
+> > > > Manager Time Kernel Commit Syzkaller Config Log Report Syz repro C =
+repro
+> > > > ci-upstream-linux-next-kasan-gce-root 2020/05/22 01:23 linux-next
+> > > > e8f32747 5afa2ddd .config log report
+> > > > ci-upstream-linux-next-kasan-gce-root 2020/05/21 15:01 linux-next
+> > > > e8f32747 1f30020f .config log report
+> > > > ci-upstream-linux-next-kasan-gce-root 2020/05/19 18:24 linux-next
+> > > > fb57b1fa 6d882fd2 .config log report
+> > > > ci-upstream-linux-next-kasan-gce-root 2020/03/18 16:19 linux-next
+> > > > 47780d78 0a96a13c .config log report
+> > >
+> > > You=E2=80=99ll probably need to use an known good kernel version. For
+> > > example, a stock kernel or any of a mainline -rc / GA kernel to
+> > > compile next-20200526 and then test from there.
+> >
+> > People also argued for the opposite -- finding bugs only on rc's is
+> > too late. I think Linus also did not want bugs from entering the
+> > mainline tree.
+> >
+> > Ideally, all kernel patches tested on CI for simpler bugs before
+> > entering any tree. And then fuzzing finds only harder to hit bugs.
+> > syzbot is a really poor CI and it wasn't built to be a one.
+>
+> I had only suggested it as a way to workaround/confirm this bug which
+> will cause abormal memory usage for compilation workloads. Once you get
+> a working next-0526 kernel, you should be able to use that to compile
+> future -next trees.
+>
+> I would also agree that our maintainers should make the quality bar
+> higher for linux-next commits, so I could get some vacations.
 
-It still seems odd to me that GCC's dead end detection seems to break
-with -fno-ipa-pure-const.  Do you know if these issues can be fixed on
-the GCC side?
-
--- 
-Josh
-
+:)
+true

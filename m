@@ -2,92 +2,221 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ACB71E283D
-	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 19:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC8461E2A34
+	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 20:38:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388396AbgEZRRW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 May 2020 13:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S1728945AbgEZSil (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 May 2020 14:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388295AbgEZRRW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 13:17:22 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E228CC03E96D;
-        Tue, 26 May 2020 10:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=hzmwvPMV6qsKH3Fjv+ABmvoHXc3ghBrylUwoJMaGHgM=; b=Bff9uUKrKdt5Bqjzg02mc4s5XU
-        DSgEcQzMKFTtWSifsOGqAUYXG9D9dBJLm+Zkcu8A9q3g8M0cWhHEW25cvZyitUWNR9EFhxb4biDEV
-        7uyKVottL/G0vXG1Yjx2IPKXL2b3sv6zXy8vXRwzcss76BGKeCPF5xJDhWFFDxvPxurQcGQWHC1fG
-        oCrUdjNdeN7jMR4w1vWOlfe3do1askEoA5qNWLCvaV4uESRQsXN8pzIv062D4VThk9kNXiSwQIJak
-        BEKvUR0GKPobN5/Td+V5b6fA2O213+4WA/L3cs5TJwMqmvrE8RV60P3ddDhvXptRslm/u70WTUfN2
-        OTpzg9WQ==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jddCX-0004Th-HS; Tue, 26 May 2020 17:17:17 +0000
-Subject: Re: linux-next: Tree for May 26 (hwmon/amd_energy.c)
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Naveen Krishna Chatradhi <nchatrad@amd.com>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>
-References: <20200526203932.732df7c6@canb.auug.org.au>
- <f050c447-18fa-50d0-dbdd-b60820dc7ba1@infradead.org>
- <c31504dc-9646-81f9-c262-88890556ece9@roeck-us.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <4e0c840d-3a2a-6aeb-8c3e-894f6ba47fda@infradead.org>
-Date:   Tue, 26 May 2020 10:17:16 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        with ESMTP id S1728113AbgEZSil (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 14:38:41 -0400
+Received: from mail-pl1-x643.google.com (mail-pl1-x643.google.com [IPv6:2607:f8b0:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048B2C03E96D
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 11:38:41 -0700 (PDT)
+Received: by mail-pl1-x643.google.com with SMTP id t7so9021049plr.0
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 11:38:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=/65MkUZmbKMnGyB6EwCqbdu21WodJRSjt9Jm3dCk1CE=;
+        b=mglnmb/Iw/1jaJGqSmIAX137pyWHRJ4fjP5oVvlrLNK0VjAy9T9iBkKICrsiO76Off
+         Yz/VIcKqhGplG/DjhqTaIkyjk0FGxsVCcNPQ2QUcgiLFfBH8npJkhTwToL2UrT9w5Q7m
+         NCdUOIqG86DPulUTn/rOvm8X6Gu4a6elFJMdEgazev7UDEXWjUGyntI8w389h5UIjzSV
+         Fo2AbDloTTvjDV287ZIZg4dlCbYKmN+Xu/j61wNJBCWCf/IGLaIlMlUzPx/+VVOCyKgD
+         1+YS1/rDBPEKiYgnqDLWCH74tSJktgW4fbmEWwBAy0gA1VFMum2FAkZn3YeFIhqcaJQs
+         McMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=/65MkUZmbKMnGyB6EwCqbdu21WodJRSjt9Jm3dCk1CE=;
+        b=KAiZr6JD54Og8wKcLd2R/fhqzBspWYV5bKfan2IujLmf1qcCjRz3V64+HaCnvnJcSI
+         OPQda0NscBTI6YqYhNFhbhPtHGBndPMv/eBsK20ncO9juh668MpYSNCdFUkQ6WCepVdp
+         dM05RaqHrZC+5RDSwXJ3KmdUxyzGF+1vPkSqepxnRYRkGjQDNfzpgir7ereIL8XscKTR
+         3qVMsig+XDSkbFQrcn6OdnUB2Bap89xgaZf+x5728f+niAbG4WRGYd9FI9/GBUe1FZ44
+         BXDF1pBqcbQ5mQ7QsyJed+qg1WxrU3sTKLumMMmpht3jl8NhcM/7Mf/lltK9pwVZX/+u
+         6Cqg==
+X-Gm-Message-State: AOAM531JCwuIpWP2NjxoQz2m3H63HTddOYv8QlPZj8rkxJWTFQxSCQKO
+        a2wr4XLhmY9lOuLDk82m39D6pRF7UwQ=
+X-Google-Smtp-Source: ABdhPJwuR7gQHxz1n9Ox72cPMBHA0MJ5/DL5U0bUeRVrIdQ4MsW5nTfTNx0cbSmzVXZ9A9if15lD1A==
+X-Received: by 2002:a17:902:7083:: with SMTP id z3mr2161072plk.143.1590518320000;
+        Tue, 26 May 2020 11:38:40 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c14sm221217pfp.122.2020.05.26.11.38.38
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 May 2020 11:38:39 -0700 (PDT)
+Message-ID: <5ecd622f.1c69fb81.c6cde.0d60@mx.google.com>
+Date:   Tue, 26 May 2020 11:38:39 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <c31504dc-9646-81f9-c262-88890556ece9@roeck-us.net>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200526
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+Subject: next/master boot: 263 boots: 17 failed, 235 passed with 4 offline,
+ 7 untried/unknown (next-20200526)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/26/20 10:14 AM, Guenter Roeck wrote:
-> On 5/26/20 9:24 AM, Randy Dunlap wrote:
->> On 5/26/20 3:39 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> News: there will be no linux-next release tomorrow.
->>>
->>> Changes since 20200525:
->>>
->>
->> Hi,
->>
->> All of my drivers/hwmon/amd_energy.c builds are failing (on i386 or x86_64).
->>
-> I don't see that, neither in my hwmon-next branch (on top of v5.7-rc6)
-> nor with next-20200526.
-> 
-> Ah yes, you must have NUMA and NEED_MULTIPLE_NODES disabled.
-> With that (allnoconfig+HWMON+SENSORS_AMD_ENERGY), I see the error as well.
-> The problem is:
-> 
-> 	#define cpumask_of_node(node)       ((void)node, cpu_online_mask)
-> 
-> The caller passes node as "channel - data->nr_cpus", which I would argue
-> is perfectly valid. This is converted to
-> 
-> 	#define cpumask_of_node(node)       ((void)channel - data->nr_cpus, cpu_online_mask)
-> 
-> which doesn't look that good and results in the error. The problem
-> is the missing ( ) around node, not the amd_energy driver.
-> 
-> Do you want to submit a patch, or do you want me to do it ?
+******************************************
+* WARNING: Boot tests are now deprecated *
+******************************************
 
-You go ahead, please.
+As kernelci.org is expanding its functional testing capabilities, the conce=
+pt
+of boot testing is now deprecated.  Boot results are scheduled to be droppe=
+d on
+*5th June 2020*.  The full schedule for boot tests deprecation is available=
+ on
+this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
 
-thanks.
--- 
-~Randy
+The new equivalent is the *baseline* test suite which also runs sanity chec=
+ks
+using dmesg and bootrr: https://github.com/kernelci/bootrr
 
+See the *baseline results for this kernel revision* on this page:
+https://kernelci.org/test/job/next/branch/master/kernel/next-20200526/plan/=
+baseline/
+
+---------------------------------------------------------------------------=
+----
+
+next/master boot: 263 boots: 17 failed, 235 passed with 4 offline, 7 untrie=
+d/unknown (next-20200526)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200526/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200526/
+
+Tree: next
+Branch: master
+Git Describe: next-20200526
+Git Commit: b0523c7b1c9d0edcd6c0fe6d2cb558a9ad5c60a8
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 102 unique boards, 26 SoC families, 30 builds out of 226
+
+Boot Regressions Detected:
+
+arc:
+
+    hsdk_defconfig:
+        gcc-8:
+          hsdk:
+              lab-baylibre: new failure (last pass: next-20200521)
+
+arm:
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 98 days (last pass: next-20200214=
+ - first fail: next-20200217)
+
+    versatile_defconfig:
+        gcc-8:
+          versatile-pb:
+              lab-collabora: new failure (last pass: next-20200525)
+
+arm64:
+
+    defconfig:
+        gcc-8:
+          meson-g12a-u200:
+              lab-baylibre: failing since 4 days (last pass: next-20200519 =
+- first fail: next-20200521)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: failing since 4 days (last pass: next-20200519 =
+- first fail: next-20200521)
+          meson-sm1-sei610:
+              lab-baylibre: failing since 4 days (last pass: next-20200519 =
+- first fail: next-20200521)
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-gxl-s905d-p230:
+              lab-baylibre: new failure (last pass: next-20200525)
+          sun50i-h6-orangepi-3:
+              lab-clabbe: new failure (last pass: next-20200525)
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+          meson-g12a-u200:
+              lab-baylibre: failing since 4 days (last pass: next-20200519 =
+- first fail: next-20200521)
+          meson-g12b-a311d-khadas-vim3:
+              lab-baylibre: failing since 4 days (last pass: next-20200519 =
+- first fail: next-20200521)
+
+riscv:
+
+    defconfig:
+        gcc-8:
+          sifive_fu540:
+              lab-baylibre-seattle: failing since 60 days (last pass: next-=
+20200326 - first fail: next-20200327)
+
+Boot Failures Detected:
+
+riscv:
+    defconfig:
+        gcc-8:
+            sifive_fu540: 1 failed lab
+
+arm:
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+    multi_v7_defconfig:
+        gcc-8:
+            bcm2836-rpi-2-b: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            meson-g12a-u200: 1 failed lab
+            meson-g12a-x96-max: 1 failed lab
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+            meson-g12b-odroid-n2: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            meson-g12a-u200: 1 failed lab
+            meson-g12a-x96-max: 1 failed lab
+            meson-g12b-a311d-khadas-vim3: 1 failed lab
+            meson-g12b-odroid-n2: 1 failed lab
+            meson-sm1-sei610: 1 failed lab
+            mt7622-rfb1: 1 failed lab
+            sm8150-mtp: 1 failed lab
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxl-s905d-p230: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    multi_v7_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+            qcom-apq8064-cm-qs600: 1 offline lab
+            stih410-b2120: 1 offline lab
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

@@ -2,119 +2,71 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 076741E236C
-	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 15:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307DD1E237E
+	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 16:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729085AbgEZNxh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 May 2020 09:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728283AbgEZNxh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 09:53:37 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FC7C03E96E
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 06:53:37 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id a13so8719969pls.8
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 06:53:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uMNgaG6xJWfxbhj/av+CAUmXsi69iufIz9696TQYiKc=;
-        b=uWQHN09LppWoFpxMndAZIfR7haL72VD3ldLDHtqItNHm8e3D2dphntouLS+B4WonTK
-         MiABkJicdNbsTfvcIuG+/m1tqjP8dJnp3Q46OCsHLzKD7xYKg/i76wDy045kdcnMaeDf
-         YnVgCeRMf6ML38RhjEyeJK/4/sHk1WfPeJTVHZuPDr8XAB4Jloab/aee1KKgTcVxemnV
-         GI3pPVNS1U4Uqd+ApGQoq5U1towXyetLmNY2OPBHIIzzl6HomNiNUI+G3ilSFUHVxtzM
-         1IvbCeYmLPjOemFVFSuVAe4z3aqTMGjR5zyYghh9jnp2Fr9ob7kK63VKy354ugUPepI0
-         zK/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uMNgaG6xJWfxbhj/av+CAUmXsi69iufIz9696TQYiKc=;
-        b=WW/R+zpmn+G4Iag+KG5dy+h4TQYr5aj+Of2bJu0g78IZEekYyDheXNwJCQguoaKN4G
-         kKigEAYe1MkDixqMYo0vCIsQQfvF7Dk8CwdjukKjFHFSanyzQfUXBQchWbtXA85eQNEH
-         h+fRgj+lqE7f8mVwm2h6lPbk/N4H5C1rwQ0cGNuH1B6lB8iACIpeMAALgH+Fpi7J+Oz8
-         xqiuXqw1D2MgWvzPr9irSIxK1z3xXFIv0w38zuS1InUKt0rV+SRazCy2OLGZfiut/jVd
-         ca5+9qtZ6IR1X7bQ76kvJz1KnJxa6JRaB/jwWbKb4udlYFLnNtZP8Jhc1mMqcJdtx+Ym
-         h13Q==
-X-Gm-Message-State: AOAM531HEN9hKTDC11gxShZereoOHnJhvhWlhgSXDfnpSsPk6rMBgNr0
-        V2gNvMvfeOD0dypAKOy2gj0+9TDK4Wd0/w==
-X-Google-Smtp-Source: ABdhPJxh34GNEboejhY3krw53dAsQQkEXHaHUfhIgeQl3e+VNf16EWSQ3J7RwvcUhsTlRNuNIeslWw==
-X-Received: by 2002:a17:90a:ad08:: with SMTP id r8mr27366554pjq.154.1590501217028;
-        Tue, 26 May 2020 06:53:37 -0700 (PDT)
-Received: from ?IPv6:2605:e000:100e:8c61:a9e6:df54:e55e:4c47? ([2605:e000:100e:8c61:a9e6:df54:e55e:4c47])
-        by smtp.gmail.com with ESMTPSA id b4sm12253334pfo.140.2020.05.26.06.53.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 May 2020 06:53:36 -0700 (PDT)
-Subject: Re: linux-next: build failure after merge of the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Sterba <dsterba@suse.cz>,
+        id S1730078AbgEZOBo (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 May 2020 10:01:44 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:45033 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1729443AbgEZOBn (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 10:01:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590501702;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=hveuu+8b66hoKHpea4C8zYmfpzsl4PpKh2ng2WT4OsY=;
+        b=BKn1MHZSFGySaMdjjTz5TXGO9nFETHL37/M8xl+CSa+J27KGGOIC61JAady90cKPNl+7ab
+        if4Q7CThMEhrMmA3I7pbzOsFhvNrDjdmS7lqusbea+JcXaAO4Yz764a5SpkNdaxGaXk3qu
+        lPMgr2ctZ7qI5HomFSDgojO5JE1NjSE=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-388-ahoiBctAPFqCjy_Sue4xcw-1; Tue, 26 May 2020 10:01:37 -0400
+X-MC-Unique: ahoiBctAPFqCjy_Sue4xcw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.phx2.redhat.com [10.5.11.22])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C5430460;
+        Tue, 26 May 2020 14:01:16 +0000 (UTC)
+Received: from treble (ovpn-112-77.rdu2.redhat.com [10.10.112.77])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8259B10013D2;
+        Tue, 26 May 2020 14:01:15 +0000 (UTC)
+Date:   Tue, 26 May 2020 09:01:13 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>,
-        Johannes Thumshirn <jthumshirn@suse.de>,
-        Christoph Hellwig <hch@lst.de>
-References: <20200525150837.54fe6977@canb.auug.org.au>
- <c0e6af76-46d8-ccf0-3874-0751f7622caf@kernel.dk>
- <20200526143630.7e7fbc79@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <b2418ce5-839d-43d4-e5ea-416be9f63b1a@kernel.dk>
-Date:   Tue, 26 May 2020 07:53:34 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: Tree for May 21 (objtool warnings)
+Message-ID: <20200526140113.ppjywpx7uir3vrlj@treble>
+References: <20200522001209.07c19400@canb.auug.org.au>
+ <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org>
+ <alpine.LSU.2.21.2005251101030.24984@pobox.suse.cz>
+ <alpine.LSU.2.21.2005251303430.24984@pobox.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20200526143630.7e7fbc79@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2005251303430.24984@pobox.suse.cz>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.22
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/25/20 10:36 PM, Stephen Rothwell wrote:
-> Hi all,
+On Mon, May 25, 2020 at 01:07:27PM +0200, Miroslav Benes wrote:
+> > I'll try to find out which optimization does this, because it is a 
+> > slightly different scenario than hiding __noreturn from the callees. 
+> > Probably -fno-ipa-pure-const again.
 > 
-> On Mon, 25 May 2020 13:03:44 -0600 Jens Axboe <axboe@kernel.dk> wrote:
->>
->> On 5/24/20 11:08 PM, Stephen Rothwell wrote:
->>>
->>> After merging the block tree, today's linux-next build (arm
->>> multi_v7_defconfig) failed like this:
->>>
->>> mm/filemap.c: In function 'generic_file_buffered_read':
->>> mm/filemap.c:2075:9: error: 'written' undeclared (first use in this function); did you mean 'writeb'?
->>>  2075 |     if (written) {
->>>       |         ^~~~~~~
->>>       |         writeb
->>>
->>> Caused by commit
->>>
->>>   23d513106fd8 ("mm: support async buffered reads in generic_file_buffered_read()")
->>>
->>> from the block tree interacting with commit
->>>
->>>   6e66f10f2cac ("fs: export generic_file_buffered_read()")
->>>
->>> from the btrfs tree.
->>>
->>> [Aside: that btrfs tree commit talks about "correct the comments and variable
->>>     names", but changes "written" to "copied" in the function definition
->>>     but to "already_read" in the header file declaration ...]
->>>
->>> I ave applied the following merge fix patch:  
->>
->> Looks like a frivolous change... Thanks for fixing this up Stephen.
-> 
-> The variable name change has been removed from the btrfs tree.
+> And it is indeed -fno-ipa-pure-const again.
 
-Thanks - I'd encourage that name changing late in the merge window
-instead. The change is obviously fine, but a) it should not be done in
-an unrelated change, and b) it can be done without risking causing silly
-merge issues.
+It still seems odd to me that GCC's dead end detection seems to break
+with -fno-ipa-pure-const.  Do you know if these issues can be fixed on
+the GCC side?
 
 -- 
-Jens Axboe
+Josh
 

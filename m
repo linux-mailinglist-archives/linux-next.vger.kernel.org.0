@@ -2,139 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B84941E21A6
-	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 14:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94511E21B9
+	for <lists+linux-next@lfdr.de>; Tue, 26 May 2020 14:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731555AbgEZMJl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 26 May 2020 08:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53090 "EHLO
+        id S1732061AbgEZMTl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 26 May 2020 08:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731228AbgEZMJl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 08:09:41 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08C1BC03E96E
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 05:09:41 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id q8so3761089qkm.12
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 05:09:40 -0700 (PDT)
+        with ESMTP id S1731015AbgEZMTk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 26 May 2020 08:19:40 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3928CC03E96E
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 05:19:40 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id ee19so9271941qvb.11
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 05:19:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=e6YtTvK/ZkraZkVpQc+O243orncscgzmiFeAjuKAVjA=;
-        b=qHT048Z3WGkPCRefNIIcIDwJjmQlhTY8c9EeTLw5a43YyH+lHWtsTOaWn21gJMdemk
-         JarYZGtq6z295qrIopzEFf6o6zJOHXAUl7uSXmT4vIzr2rCQbrc01X9q7CTzgvGrWFw3
-         cbs5rqItEX7djl4zXhPnMA2PX12sPBW+xJ4TdZ7Hv71fUIlwfhvat7ydvtHNl2GooR0Q
-         /Wdm/OaFoCNR+kEKKR5Uc/UqMZ7I2kp6jbzNz6Tmk0gPlR4yOaQZRnAJYqlsbFjqqUl7
-         CL3yHUCAjQj2Cj6wCSGmOSNHm7AMt/TONzFlTog9rzNrFnWkqBi7kurJVoxL5lADZbT4
-         oRew==
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=iI5GDEByfzcccPx1CZ2MVqJrL75WIQY8kZJMrTcic2c=;
+        b=XKz/N1CJdpPS5Nuwifs/FAEfvz2/svW5lvuwMPNXGAtQIt9sk7CXm0zyRkWG+EWPOU
+         olb8CaQSNmONmsbfmD7vOoTiQIqjpjGg2v9eXxDv+v83c7L34LaNOjA8H+vzJpgvKhZi
+         iDl/il8b/+odTfCmtXxeHpIcGlqp8JPdUCI3Fs3haXghjpHvEFt93ve1uqW0TP3LYFz1
+         fCO0LX0nspV1nyWc9n9/pUqG+eqEQAL11uMHX3Pajg2A87ZsyCSIOntflKcjPCkt7F5D
+         saMmicGNSA+QBdRMGEXNRYHcPytDH/7eYDwVsSJHKdDjndPS/VJ9otnKQk2g7KcNWqeW
+         b2FA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e6YtTvK/ZkraZkVpQc+O243orncscgzmiFeAjuKAVjA=;
-        b=ZpV+iIIgaLfDeC8D6YSX2GH6hBm81NhZVPnPrzbPcS96CMMqbn8jIOzSgIFRVSzsOR
-         3MevJbAe9ZFj5tSVY4RbKLm1p3fiICZB/SNKKu5Q9FzlrtUB229alCb7tYoHpPE/gQFH
-         rfQQtkvSAXS3mm5QSpXe8U+X49EEpuyGnyqA28o5SfMX1d5FyIgPrCqvPzHVLzbRfqt6
-         b+KTj4LwOTlkBQf8hmvgN8r983RDwKFFlP/C1aI0QirqmgsH1SJK+hnJjn/0ELTddug3
-         3CxxcGI23R67SJ6H9S9ieNFz+TeVggn3wdo6qfp48DjCoUssc1gbELMA6PCSVL4QLT97
-         GQGw==
-X-Gm-Message-State: AOAM532Aw83cq+dQaFlMVzLIisyZhGQCekv18kqM5Za0icb9/9ug9X//
-        XHbnw9DqvbF3qzwiuTmrCFA9IfYxoJEQ9saJaHl33g==
-X-Google-Smtp-Source: ABdhPJzYERXCmCtYzsOfAOd3xrK+gJoFyAsp+Tq5tCHHrxxPRZvZPbOobKpBO2vqJ8mq7lOlGq5aEbU1RW3R7yOnDWI=
-X-Received: by 2002:a05:620a:c89:: with SMTP id q9mr893376qki.256.1590494979960;
- Tue, 26 May 2020 05:09:39 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000ae2ab305a123f146@google.com> <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
-In-Reply-To: <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 26 May 2020 14:09:28 +0200
-Message-ID: <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=iI5GDEByfzcccPx1CZ2MVqJrL75WIQY8kZJMrTcic2c=;
+        b=caP1Q6NPzeqjQCOJWBVYNVxm55iqhAv2xKsQVdAMfaEoLc/Xb1VOr29fxKHEIrRKXF
+         2zU4SoMbkJzCv6zsIN4lY9TpSN5F154pRyFf2zsd1t28v/u1LlXm3qcEraqRt3OLRLlt
+         hzqiDg1x/533U1jK4HBksDoh33IrQIKGE3/bOEN7AnBqkyybyRMUvjGY37G7Tdn/8HnE
+         LPX0R+5ODCuJQHm741QdPQRwbn2wCl3ANG+2FpP826+NDDtiF6oV6WrD9M/eWGuwoxVk
+         rmrbm3i6iW0XRzZP/s+zgv3oBTzKohJ3gTQFNYoIjNF53ib56DX2DjZE0ss1PIY5hVFw
+         msJQ==
+X-Gm-Message-State: AOAM5307IlKl9C7fIxS8W8lc30jPBka59llTUeyQ01v8CfsPBqFe9P72
+        6sxzk6qE2+agkufo1YL5xaTqUg==
+X-Google-Smtp-Source: ABdhPJye811qnLvWAYcUoCMlGqcgjL24JcOcT0bLGsmMe8kRGfVClWw0Tuj+9yIno2lvDhgWgvi3mA==
+X-Received: by 2002:a0c:fe03:: with SMTP id x3mr19231630qvr.18.1590495579276;
+        Tue, 26 May 2020 05:19:39 -0700 (PDT)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id n85sm13817468qkn.31.2020.05.26.05.19.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 May 2020 05:19:38 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
 Subject: Re: linux-next build error (8)
-To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+Date:   Tue, 26 May 2020 08:19:37 -0400
+Message-Id: <3979FAE7-0119-4F82-A933-FC175781865C@lca.pw>
+References: <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-xfs <linux-xfs@vger.kernel.org>
-Cc:     syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+X-Mailer: iPhone Mail (17E262)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 22, 2020 at 6:29 AM Tetsuo Handa
-<penguin-kernel@i-love.sakura.ne.jp> wrote:
->
-> Hello.
->
-> This report is already reporting next problem. Since the location seems to be
-> different, this might be caused by OOM due to too much parallel compilation.
-> Maybe syzbot can detect "gcc: fatal error: Killed signal terminated program cc1"
-> sequence and retry with reduced "make -j$NUM" settings.
->
->   gcc: fatal error: Killed signal terminated program cc1
->   compilation terminated.
->   scripts/Makefile.build:272: recipe for target 'fs/xfs/libxfs/xfs_btree.o' failed
->   make[2]: *** [fs/xfs/libxfs/xfs_btree.o] Error 1
->   make[2]: *** Waiting for unfinished jobs....
 
-+linux-next and XFS maintainers
 
-Interesting. This seems to repeat reliably and this machine is not
-known for any misbehavior and it always happens on all XFS files.
-Did XFS get something that crashes gcc's?
+> On May 26, 2020, at 8:09 AM, Dmitry Vyukov <dvyukov@google.com> wrote:
+>=20
+> +linux-next and XFS maintainers
+>=20
+> Interesting. This seems to repeat reliably and this machine is not
+> known for any misbehavior and it always happens on all XFS files.
+> Did XFS get something that crashes gcc's?
 
-  CC      drivers/hid/hid-uclogic-rdesc.o
-  CC      drivers/hid/hid-uclogic-params.o
-  CC      drivers/hid/hid-led.o
-  CC      drivers/hid/hid-zpff.o
-  CC      drivers/hid/hid-zydacron.o
-  CC      drivers/hid/wacom_wac.o
-  CC      drivers/hid/wacom_sys.o
-  CC      drivers/hid/hid-waltop.o
-  CC      drivers/hid/hid-wiimote-core.o
-  CC      drivers/hid/hid-wiimote-debug.o
-  CC      drivers/hid/hid-wiimote-modules.o
-  CC      drivers/hid/usbhid/hid-core.o
-  CC      drivers/hid/usbhid/hid-pidff.o
-  CC      drivers/hid/usbhid/hiddev.o
-  AR      drivers/gpu/drm/i915/built-in.a
-  AR      drivers/gpu/drm/built-in.a
-  AR      drivers/gpu/built-in.a
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_file.o' failed
-make[2]: *** [fs/xfs/xfs_file.o] Error 1
-  AR      drivers/hid/usbhid/built-in.a
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_fsmap.o' failed
-make[2]: *** [fs/xfs/xfs_fsmap.o] Error 1
-  AR      drivers/hid/built-in.a
-  AR      drivers/built-in.a
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_filestream.o' failed
-make[2]: *** [fs/xfs/xfs_filestream.o] Error 1
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_icache.o' failed
-make[2]: *** [fs/xfs/xfs_icache.o] Error 1
-  AR      fs/ocfs2/built-in.a
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_iops.o' failed
-make[2]: *** [fs/xfs/xfs_iops.o] Error 1
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_mount.o' failed
-make[2]: *** [fs/xfs/xfs_mount.o] Error 1
-gcc: fatal error: Killed signal terminated program cc1
-compilation terminated.
-scripts/Makefile.build:272: recipe for target 'fs/xfs/xfs_inode.o' failed
-make[2]: *** [fs/xfs/xfs_inode.o] Error 1
-scripts/Makefile.build:494: recipe for target 'fs/xfs' failed
-make[1]: *** [fs/xfs] Error 2
-Makefile:1736: recipe for target 'fs' failed
-make: *** [fs] Error 2
+Are you still seeing this in today=E2=80=99s linux-next? There was an issue h=
+ad already been sorted out.=

@@ -2,92 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F328F1E3968
-	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 08:38:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D770B1E3CC7
+	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 10:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726337AbgE0GiS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 May 2020 02:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726025AbgE0GiS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 02:38:18 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B5C03E96F
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 23:38:17 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id fb16so10705516qvb.5
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 23:38:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=16SLl+3mPilnYr8f6o5VXeVQ8uh1Mbw9QHnodW3r70s=;
-        b=Aw/sDQj1vVMv0wyH8eCtGTduHyZN4tgv0bqomMKfqi6GPrrT+NCkLyKQljYU6e0FE2
-         0EJntjXR9gCCK0366trw5Ghbt30v5qJZfgd6skxPVhcR3bkinYVr6JliUT15bIeaYR/N
-         9EsIJTrWenjHVewN/8fGykP1IHNIQKJv7hH7wH9biAja/DGoxyWIuT39B6ZWaMX3rpHO
-         dF4xcAx/8rO5H1MbqP9HloyWKBqzqOSaQ95gOrDlVxcctXZ+4rbyP5tPlpsNWqQoOrPo
-         D/2URQ7ZfhWvCya6SBFSlCcVxg6mJRW8+auz/Jv9/y1pZh+aVX2hH3g4E7j49J3hZ7TI
-         di9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=16SLl+3mPilnYr8f6o5VXeVQ8uh1Mbw9QHnodW3r70s=;
-        b=imOwxU/2YIYaMRLwSQJ0i62b2NhpdxCdJWm1BjIfni2mrkuhL50H2bUgRm3hkCsUn0
-         6O5BkjPx/EEt0wJG3CwaNCrteln6LC/NwBPyOcrtYGild+LPCzSJZHPBiuoiXr9XyH7M
-         J8GPsZXTkquiXjaLeqBu7RdTnSd62P+6jAafCzhXV8jcXfytZBLxrZB+xLmAGy+uQ1aD
-         8dIbhYfmgyXU10KuQPCrrbpAGg5pALWvRT3DbbWmh8TZhUtxTPqVLTn2OKsO6Tc7HdNU
-         GC5PQTgXKG9xm3ycDy61tHda6CaFdH9GqhxymKG6cFrVCnMWOyiyZ0/VAy4gjhCXzc2U
-         Q6bQ==
-X-Gm-Message-State: AOAM532LQTO7cayEGSXyCE7q2fouHDNoASJ/DpKUUJz978rFaxnbwY5L
-        FQJpp6hMQC8WTqnSvHfMzeBLXEnB3Qz29jfWT+4gkacd
-X-Google-Smtp-Source: ABdhPJzYwC1oOMNNyTL+AfbTq1fgeSCmKoistChYfxA78aIT3AkLA9NsDYQKFISHizbMvdC2nAXednxUZWgjJ1PvFWc=
-X-Received: by 2002:a05:6214:15ce:: with SMTP id p14mr23954418qvz.159.1590561496904;
- Tue, 26 May 2020 23:38:16 -0700 (PDT)
+        id S1728339AbgE0I54 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 May 2020 04:57:56 -0400
+Received: from mx2.suse.de ([195.135.220.15]:60922 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728152AbgE0I54 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 27 May 2020 04:57:56 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.220.254])
+        by mx2.suse.de (Postfix) with ESMTP id AEECFAEA6;
+        Wed, 27 May 2020 08:57:56 +0000 (UTC)
+From:   Martin Jambor <mjambor@suse.cz>
+To:     Miroslav Benes <mbenes@suse.cz>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, mliska@suse.cz,
+        pmladek@suse.cz, live-patching@vger.kernel.org,
+        Jan Hubicka <hubicka@ucw.cz>
+Subject: Re: linux-next: Tree for May 21 (objtool warnings)
+In-Reply-To: <alpine.LSU.2.21.2005261809480.22611@pobox.suse.cz>
+References: <20200522001209.07c19400@canb.auug.org.au> <22332d9b-5e9f-5474-adac-9b3e39861aee@infradead.org> <alpine.LSU.2.21.2005251101030.24984@pobox.suse.cz> <alpine.LSU.2.21.2005251303430.24984@pobox.suse.cz> <20200526140113.ppjywpx7uir3vrlj@treble> <alpine.LSU.2.21.2005261809480.22611@pobox.suse.cz>
+User-Agent: Notmuch/0.29.3 (https://notmuchmail.org) Emacs/26.3 (x86_64-suse-linux-gnu)
+Date:   Wed, 27 May 2020 10:57:53 +0200
+Message-ID: <ri65zch21ri.fsf@suse.cz>
 MIME-Version: 1.0
-References: <000000000000ae2ab305a123f146@google.com> <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
- <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
- <20200527093302.16539593@canb.auug.org.au> <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
- <20200527162514.404ae1da@canb.auug.org.au>
-In-Reply-To: <20200527162514.404ae1da@canb.auug.org.au>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 27 May 2020 08:38:05 +0200
-Message-ID: <CACT4Y+arjpDv1tbGEJ8yMO8XOik4EEpV8CU93VJOzhKbNs8kfA@mail.gmail.com>
-Subject: Re: linux-next build error (8)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        "Darrick J. Wong" <darrick.wong@oracle.com>,
-        linux-xfs <linux-xfs@vger.kernel.org>,
-        syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 27, 2020 at 8:25 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi Dmitry,
->
-> On Wed, 27 May 2020 07:41:15 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
-> >
-> > On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> > >
-> > > What version of linux-next is this?  There was a problem last week with
-> > > some changes in the tip tree that caused large memory usage.
-> >
-> > Hi Stephen,
-> >
-> > Detailed info about each syzbot crash is always available over the
-> > dashboard link:
->
-> Thanks.  As others have said, this has been taken care of - the
-> problematic commits were dropped from next-2020522 and the fixes
-> appeared in next-20200525.
+Hi,
 
-OK, let's close this then, otherwise this is open since March, new
-failures are piling up, we are not getting notifications about new
-ones, and it turns into an unuseful mess.
+On Tue, May 26 2020, Miroslav Benes wrote:
+> On Tue, 26 May 2020, Josh Poimboeuf wrote:
+>
+>> On Mon, May 25, 2020 at 01:07:27PM +0200, Miroslav Benes wrote:
+>> > > I'll try to find out which optimization does this, because it is a 
+>> > > slightly different scenario than hiding __noreturn from the callees. 
+>> > > Probably -fno-ipa-pure-const again.
+>> > 
+>> > And it is indeed -fno-ipa-pure-const again.
+>> 
+>> It still seems odd to me that GCC's dead end detection seems to break
+>> with -fno-ipa-pure-const.  Do you know if these issues can be fixed on
+>> the GCC side?
+>
+> It is odd. I asked Martin and Martin about that yesterday (CCed). It could 
+> be possible to enable just noreturn propagation for -flive-patching if I 
+> understood correctly. The attribute would need to be preserved in a 
+> patched function then, but that should be manageable.
+>
+> Marking functions as __noreturn is one thing (I think it is useful on its 
+> own as mentioned in the older thread about -flive-patching), but 
+> __always_inline solution in this case is really arbitrary.
 
-#syz invalid
+Noreturn functions generally tend to be very cold ones and so you do not
+really want to inline them.
+
+> I don't like 
+> this neverending "battle" with compilers much, so it would be nice to have 
+> some kind of generic solution (and I currently have no idea about that). 
+> Of course, declaring -flive-patching a failed experiment is an option if 
+> there is not a better way to deal with a dead end detection either in GCC 
+> or in objtool. I would not like it, but you're right that if there are 
+> more and more problems like this appearing, we'll have to deal with 
+> maintainers all over the place and ask them to maintain odd fixes just for 
+> the sake of -flive-patching. I don't know what the current numbers are 
+> though. We'd have to approach the problem of GCC optimizations from a 
+> different angle. Petr CCed (we talked about it yesterday as well).
+>
+> But first, let's try to find a way with -flive-patching.
+>
+> Reduced test case follows (courtesty of Martin Liska):
+>
+> $ cat open.i
+> int global;
+>
+> void
+> break_deleg_wait()
+> {
+>   asm(".byte 15, 0x0b");
+>   __builtin_unreachable();
+> }
+>
+> void chmod_common_delegated_inode(int arg)
+> {
+> retry_deleg:
+>   if (arg)
+>     break_deleg_wait(global);
+>   else
+>     return;
+>   goto retry_deleg;
+> }
+>
+> $ gcc open.i -c -Os -fno-omit-frame-pointer -fno-ipa-pure-const && ./tools/objtool/objtool check open.o
+> open.o: warning: objtool: chmod_common_delegated_inode()+0x18: unreachable instruction
+>
+> $ gcc open.i -c -Os -fno-omit-frame-pointer && ./tools/objtool/objtool check open.o
+> [OK]
+> ---
+>
+> So it is a similar problem. There is no noreturn attribute anywhere 
+> (nothing to propagate from a caller to a callee). Here, the information 
+> about an unreachable code is not propagated to the caller 
+> (chmod_common_delegated_inode()).
+>
+> Martins, would it be possible to extend -flive-patching to deal with
+> this?
+
+I think we could allow -fipa-pure-const with -flive-patching but make it
+dump all the attributes it has assigned to all functions in some format
+similar to what it does for all the internal clones GCC creates.  You
+would then need to explicitely annotate functions in live patches with
+these attributes - and of course make sure you do not violate them.
+
+If this is too difficult for the full set of attributes, we can restrict
+the pass to just propagate the noreturn attribute, but I think it's not
+going to be necessary.
+
+Martin

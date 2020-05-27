@@ -2,224 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 213DE1E36FC
-	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 06:16:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6201E3866
+	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 07:41:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728723AbgE0EQY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 May 2020 00:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S1725265AbgE0Fla (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 May 2020 01:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726961AbgE0EQW (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 00:16:22 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B13CC061A0F;
-        Tue, 26 May 2020 21:16:22 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id 185so2969231pgb.10;
-        Tue, 26 May 2020 21:16:22 -0700 (PDT)
+        with ESMTP id S1725267AbgE0Fl3 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 01:41:29 -0400
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3CC03E96E
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 22:41:28 -0700 (PDT)
+Received: by mail-qv1-xf41.google.com with SMTP id dh1so10621480qvb.13
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 22:41:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=YfVWxH/7ZrDB7heiLk3dCwVODao1Wqqpt1cV8H+cg68=;
-        b=FaUijIara42lM4nDTnWX3sphBCaHCAuoZdlC+HaJ1cKbufQCs6Gk/cd1fQDgYKpT5D
-         cWVglCWpr3Ot5OGBbSLeuZWSK8EAbMAp7cY+tiVaMO922pqVlzA/WJJnCWq25WaqhWle
-         1AK753xcvP3UL+Y1yYZNzo1pg2BbWOlEOoTJK8DCWmjIKUgjciPiNB4VPYaWsT8mVE+x
-         gengREQJ6aSKmX5yZFDm7T3isDqJIpxDtJqMPYAWHYBhgyc92G2PxOJ37uKZiNv+HO5s
-         3JTK88JwjB5zw4OENueKFBZx+VpFot+hxlp2NGZKH9nVGFd3xg81WyV8RZIlUCws8xGa
-         /uaQ==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=M2aTT5Nv3FXEPFh2JJe44aTAOxSMdCv80afdguaqIkY=;
+        b=qaCZhtsZNlXPQG00DYSrt6n++VDFnN3EVSVymSzI82aPVz2l9biXUXQurA9qpUqBjR
+         VEOfTaG+/ZGDLBEtMGU9WoNuI5ki+TLaOa+Wdy6xgHhp+OmvUwMu0p4KFz0uJ52Brxk5
+         sq1A66ns/Hdq4mQDWzKYsPakSkZzr6gYXQyktCjBeItfs48XW5uMgjcOIT/03wFM1JLq
+         7RL2U4+r7J2X1L0zZwGqnZLyLQaH0hkTDfcosMmA5/462rpPP2YZ89w+KCXs2aiqQuqJ
+         KGjPQyLkKjU7vlk96VydliV/lncYpK28fCKJOevIgFOVCV0iT4qV1qSZDp4o1zQgswiz
+         3eaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=YfVWxH/7ZrDB7heiLk3dCwVODao1Wqqpt1cV8H+cg68=;
-        b=ApytGhboVFpt3qCh1HAn6azf/ESmInn5HEsgGmQXlXAnXP4UzbrPji7cju+8R2LO+B
-         Xb0XPZVlwAQBpdiEqwYQYnV9nLSZhZScUqirfscLfxPHIVv6E2JxPfS28j9G97VqcayW
-         9TpxOAMvy6RrwhuKEpGOZzXm2fapMrUShZ34zRajCuDoNs6VPL7iFx/9sXPBrdJHPUOR
-         cU1J3qrzn+h4TYnMaIpZY0QIjuOdfe2xOXYbjMIgrfnfaU8C1QSYUwppPmNbRkIFetoa
-         8+OIjoyLdvhavQeQ2rEb3oEyVUrjM3TFq/CJ2oqgCEFER9UbsiMV0hgb+c91JHF/gK0E
-         pxCA==
-X-Gm-Message-State: AOAM531VKGUiZHP92p8lHwoeovUBM2IrWAPwHyGC6OIM/KLqbnvR3RrN
-        bviw61F3dZUJoe+GVSyTrgA=
-X-Google-Smtp-Source: ABdhPJyR1l7RF+R12srzMpwvTN2eJyeK+/iJkmuz7eNbPO1J8aWbJygIKQjN5rOgaS3Tycz/J9wn3Q==
-X-Received: by 2002:a62:1b8f:: with SMTP id b137mr1997121pfb.119.1590552981392;
-        Tue, 26 May 2020 21:16:21 -0700 (PDT)
-Received: from ubuntu-s3-xlarge-x86 ([2604:1380:4111:8b00::1])
-        by smtp.gmail.com with ESMTPSA id l9sm877902pfd.5.2020.05.26.21.16.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 May 2020 21:16:20 -0700 (PDT)
-Date:   Tue, 26 May 2020 21:16:18 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kalyan Thota <kalyan_t@codeaurora.org>
-Subject: Re: inux-next: build failure after merge of the drm-msm tree
-Message-ID: <20200527041618.GA3137030@ubuntu-s3-xlarge-x86>
-References: <20200519150955.1667566a@canb.auug.org.au>
- <20200526140841.0a1d5c7b@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=M2aTT5Nv3FXEPFh2JJe44aTAOxSMdCv80afdguaqIkY=;
+        b=FvXkV8h+D6So1QYbvmpwD5Ds9UDXYI5j+o1D1t5NAT3/GKpv92FtkHFxC9Sun5zody
+         9WR87qY5TNhUt/XeP764c2q66t8gIDEhsQQMGBheIdAZmurUy+sCDN3Bl459p1NZ3KR6
+         PMBsZiJQpemoPl0yJmO+J9hvF+2wchLLLczpJMYDtrFjx9EUxGVxuD5Fsak1lNioLvjy
+         5MUqucMlcUcWT/6y5E78LyhYEd/T55UckZp7m5f+r5ygoasQ9egr4RiFNSabdduq+Ovt
+         algCERibWG+MnPekrE5j+LFKiYY04g0l2FS8AAy8bWp8zBjEdOY7gQ0/LdW9a9hotFbd
+         OIWA==
+X-Gm-Message-State: AOAM530jpZ4Opze4QAnUPXaUIUTpBp/TfXeu1GCQqv16HwQmWpLE3SpO
+        cGqQPRD/bY7VTs+w8ZJnyE6NPyOD6KbkT4yE+gLNTjwzguk=
+X-Google-Smtp-Source: ABdhPJyCEcEPeu3HP9nplLc1370wyVcPvqhhlVs66nEWfSNz3q8Xf1g4QCnVgutaFM/FSiBWYPco1wNV9K4mdH6hZwA=
+X-Received: by 2002:a05:6214:15ce:: with SMTP id p14mr23802697qvz.159.1590558087273;
+ Tue, 26 May 2020 22:41:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200526140841.0a1d5c7b@canb.auug.org.au>
+References: <000000000000ae2ab305a123f146@google.com> <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
+ <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com> <20200527093302.16539593@canb.auug.org.au>
+In-Reply-To: <20200527093302.16539593@canb.auug.org.au>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 27 May 2020 07:41:15 +0200
+Message-ID: <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
+Subject: Re: linux-next build error (8)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        "Darrick J. Wong" <darrick.wong@oracle.com>,
+        linux-xfs <linux-xfs@vger.kernel.org>,
+        syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, May 26, 2020 at 02:08:41PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Tue, 19 May 2020 15:09:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi Dmitry,
+>
+> On Tue, 26 May 2020 14:09:28 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
 > >
-> > Hi all,
-> > 
-> > After merging the drm-msm tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> > 
-> > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/msm/msm.ko] undefined!
-> > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/msm/msm.ko] undefined!
-> > 
-> > Caused by commit
-> > 
-> >   04d9044f6c57 ("drm/msm/dpu: add support for clk and bw scaling for display")
-> > 
-> > I applied the following patch for today (this is mechanical, there may
-> > be a better way):
-> > 
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 19 May 2020 14:12:39 +1000
-> > Subject: [PATCH] drm/msm/dpu: fix up u64/u32 division for 32 bit architectures
-> > 
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c | 23 ++++++++++++++-----
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     | 15 ++++++++----
-> >  2 files changed, 28 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-> > index 9697abcbec3f..85c2a4190840 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/sort.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/bitmap.h>
-> > +#include <asm/div64.h>
-> >  
-> >  #include "dpu_kms.h"
-> >  #include "dpu_trace.h"
-> > @@ -53,8 +54,11 @@ static u64 _dpu_core_perf_calc_bw(struct dpu_kms *kms,
-> >  	}
-> >  
-> >  	bw_factor = kms->catalog->perf.bw_inefficiency_factor;
-> > -	if (bw_factor)
-> > -		crtc_plane_bw = mult_frac(crtc_plane_bw, bw_factor, 100);
-> > +	if (bw_factor) {
-> > +		u64 quot = crtc_plane_bw;
-> > +		u32 rem = do_div(quot, 100);
-> > +		crtc_plane_bw = (quot * bw_factor) + ((rem * bw_factor) / 100);
-> > +	}
-> >  
-> >  	return crtc_plane_bw;
-> >  }
-> > @@ -89,8 +93,11 @@ static u64 _dpu_core_perf_calc_clk(struct dpu_kms *kms,
-> >  	}
-> >  
-> >  	clk_factor = kms->catalog->perf.clk_inefficiency_factor;
-> > -	if (clk_factor)
-> > -		crtc_clk = mult_frac(crtc_clk, clk_factor, 100);
-> > +	if (clk_factor) {
-> > +		u64 quot = crtc_clk;
-> > +		u32 rem = do_div(quot, 100);
-> > +		crtc_clk = (quot * clk_factor) + ((rem * clk_factor) / 100);
-> > +	}
-> >  
-> >  	return crtc_clk;
-> >  }
-> > @@ -234,8 +241,12 @@ static int _dpu_core_perf_crtc_update_bus(struct dpu_kms *kms,
-> >  		}
-> >  	}
-> >  
-> > -	avg_bw = kms->num_paths ?
-> > -			perf.bw_ctl / kms->num_paths : 0;
-> > +	if (kms->num_paths) {
-> > +		avg_bw = perf.bw_ctl;
-> > +		do_div(avg_bw, kms->num_paths);
-> > +	} else {
-> > +		avg_bw = 0;
-> > +	}
-> >  
-> >  	for (i = 0; i < kms->num_paths; i++)
-> >  		icc_set_bw(kms->path[i],
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > index c2a6e3dacd68..ad95f32eac13 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > @@ -9,6 +9,7 @@
-> >  
-> >  #include <linux/debugfs.h>
-> >  #include <linux/dma-buf.h>
-> > +#include <asm/div64.h>
-> >  
-> >  #include <drm/drm_atomic_uapi.h>
-> >  #include <drm/drm_damage_helper.h>
-> > @@ -174,7 +175,11 @@ static void _dpu_plane_calc_bw(struct drm_plane *plane,
-> >  	plane_prefill_bw =
-> >  		src_width * hw_latency_lines * fps * fmt->bpp * scale_factor;
-> >  
-> > -	plane_prefill_bw = mult_frac(plane_prefill_bw, mode->vtotal, (vbp+vpw));
-> > +	{
-> > +		u64 quot = plane_prefill_bw;
-> > +		u32 rem = do_div(plane_prefill_bw, vbp + vpw);
-> > +		plane_prefill_bw = quot * mode->vtotal + rem * mode->vtotal / (vbp + vpw);
-> > +	}
-> >  
-> >  	pstate->plane_fetch_bw = max(plane_bw, plane_prefill_bw);
-> >  }
-> > @@ -204,9 +209,11 @@ static void _dpu_plane_calc_clk(struct drm_plane *plane)
-> >  	pstate->plane_clk =
-> >  		dst_width * mode->vtotal * fps;
-> >  
-> > -	if (src_height > dst_height)
-> > -		pstate->plane_clk = mult_frac(pstate->plane_clk,
-> > -					src_height, dst_height);
-> > +	if (src_height > dst_height) {
-> > +		u64 quot = pstate->plane_clk;
-> > +		u32 rem = do_div(quot, dst_height);
-> > +		pstate->plane_clk = quot * src_height + rem * src_height / dst_height;
-> > +	}
-> >  }
-> >  
-> >  /**
-> > -- 
-> > 2.26.2
-> 
-> I am still applying the above ...
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+> > On Fri, May 22, 2020 at 6:29 AM Tetsuo Handa
+> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
+> > >
+> > > Hello.
+> > >
+> > > This report is already reporting next problem. Since the location seems to be
+> > > different, this might be caused by OOM due to too much parallel compilation.
+> > > Maybe syzbot can detect "gcc: fatal error: Killed signal terminated program cc1"
+> > > sequence and retry with reduced "make -j$NUM" settings.
+> > >
+> > >   gcc: fatal error: Killed signal terminated program cc1
+> > >   compilation terminated.
+> > >   scripts/Makefile.build:272: recipe for target 'fs/xfs/libxfs/xfs_btree.o' failed
+> > >   make[2]: *** [fs/xfs/libxfs/xfs_btree.o] Error 1
+> > >   make[2]: *** Waiting for unfinished jobs....
+> >
+> > +linux-next and XFS maintainers
+>
+> What version of linux-next is this?  There was a problem last week with
+> some changes in the tip tree that caused large memory usage.
 
-Additionally, I see a failure with clang due to the use of Bps_to_icc,
-which does a straight division by 1000, which is treated as an integer
-literal, with avg_bw as the dividend, which is a u64.
+Hi Stephen,
 
-Below is the "hack" in my tree.
+Detailed info about each syzbot crash is always available over the
+dashboard link:
 
-Cheers,
-Nathan
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-index 85c2a4190840..5ea725d8da6c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-@@ -250,7 +250,7 @@ static int _dpu_core_perf_crtc_update_bus(struct dpu_kms *kms,
- 
- 	for (i = 0; i < kms->num_paths; i++)
- 		icc_set_bw(kms->path[i],
--			Bps_to_icc(avg_bw), (perf.max_per_pipe_ib));
-+			div_u64(avg_bw, 1000), (perf.max_per_pipe_ib));
- 
- 	return ret;
- }
+https://syzkaller.appspot.com/bug?extid=792dec47d693ccdc05a0
+Crashes (4):
+Manager Time Kernel Commit Syzkaller Config Log Report Syz repro C repro
+ci-upstream-linux-next-kasan-gce-root 2020/05/22 01:23 linux-next
+e8f32747 5afa2ddd .config log report
+ci-upstream-linux-next-kasan-gce-root 2020/05/21 15:01 linux-next
+e8f32747 1f30020f .config log report
+ci-upstream-linux-next-kasan-gce-root 2020/05/19 18:24 linux-next
+fb57b1fa 6d882fd2 .config log report
+ci-upstream-linux-next-kasan-gce-root 2020/03/18 16:19 linux-next
+47780d78 0a96a13c .config log report

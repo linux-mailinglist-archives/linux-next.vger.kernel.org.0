@@ -2,100 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B951E3917
-	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 08:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F328F1E3968
+	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 08:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728013AbgE0GZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 May 2020 02:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
+        id S1726337AbgE0GiS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 May 2020 02:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728007AbgE0GZV (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 02:25:21 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B96C061A0F;
-        Tue, 26 May 2020 23:25:21 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49X1641W3sz9sRW;
-        Wed, 27 May 2020 16:25:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590560717;
-        bh=CdUsS2K/IPQiDVrykPnjzfm8UmUE6yiFxKN08iKhnbc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Rfk83HhhjITs8B+MhYNXmlo+Zb6meazvmGYhkcWepSqGmNZyznRjujMgBxlkLzMqK
-         s0OKgLdYOxb50Qc/+ENGFRrIOYmb7ccG8Sv+Cj8JF+fiUx47kyQoDn9+8rqjdHdB5Q
-         rchbfT6kazdPw09aNryozv0BndMKN8pDkMN780AI38WCz8xYgcrnQ8FirTHPT1ukS9
-         vLuQh7h828rUm/h41K7I8tXjYzfrIKRcfrcQCJEeQhpj8w3Ihvw9j313ZLW06Gf9/p
-         1BP8XvRWHZ4FTg2fnUvJtaZyXkMx9tMRleYQVf8HcHaa3MHWgRNZNHe5nv9OqCJr0i
-         SozyR03xhHqRQ==
-Date:   Wed, 27 May 2020 16:25:14 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dmitry Vyukov <dvyukov@google.com>
+        with ESMTP id S1726025AbgE0GiS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 02:38:18 -0400
+Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016B5C03E96F
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 23:38:17 -0700 (PDT)
+Received: by mail-qv1-xf42.google.com with SMTP id fb16so10705516qvb.5
+        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 23:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=16SLl+3mPilnYr8f6o5VXeVQ8uh1Mbw9QHnodW3r70s=;
+        b=Aw/sDQj1vVMv0wyH8eCtGTduHyZN4tgv0bqomMKfqi6GPrrT+NCkLyKQljYU6e0FE2
+         0EJntjXR9gCCK0366trw5Ghbt30v5qJZfgd6skxPVhcR3bkinYVr6JliUT15bIeaYR/N
+         9EsIJTrWenjHVewN/8fGykP1IHNIQKJv7hH7wH9biAja/DGoxyWIuT39B6ZWaMX3rpHO
+         dF4xcAx/8rO5H1MbqP9HloyWKBqzqOSaQ95gOrDlVxcctXZ+4rbyP5tPlpsNWqQoOrPo
+         D/2URQ7ZfhWvCya6SBFSlCcVxg6mJRW8+auz/Jv9/y1pZh+aVX2hH3g4E7j49J3hZ7TI
+         di9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=16SLl+3mPilnYr8f6o5VXeVQ8uh1Mbw9QHnodW3r70s=;
+        b=imOwxU/2YIYaMRLwSQJ0i62b2NhpdxCdJWm1BjIfni2mrkuhL50H2bUgRm3hkCsUn0
+         6O5BkjPx/EEt0wJG3CwaNCrteln6LC/NwBPyOcrtYGild+LPCzSJZHPBiuoiXr9XyH7M
+         J8GPsZXTkquiXjaLeqBu7RdTnSd62P+6jAafCzhXV8jcXfytZBLxrZB+xLmAGy+uQ1aD
+         8dIbhYfmgyXU10KuQPCrrbpAGg5pALWvRT3DbbWmh8TZhUtxTPqVLTn2OKsO6Tc7HdNU
+         GC5PQTgXKG9xm3ycDy61tHda6CaFdH9GqhxymKG6cFrVCnMWOyiyZ0/VAy4gjhCXzc2U
+         Q6bQ==
+X-Gm-Message-State: AOAM532LQTO7cayEGSXyCE7q2fouHDNoASJ/DpKUUJz978rFaxnbwY5L
+        FQJpp6hMQC8WTqnSvHfMzeBLXEnB3Qz29jfWT+4gkacd
+X-Google-Smtp-Source: ABdhPJzYwC1oOMNNyTL+AfbTq1fgeSCmKoistChYfxA78aIT3AkLA9NsDYQKFISHizbMvdC2nAXednxUZWgjJ1PvFWc=
+X-Received: by 2002:a05:6214:15ce:: with SMTP id p14mr23954418qvz.159.1590561496904;
+ Tue, 26 May 2020 23:38:16 -0700 (PDT)
+MIME-Version: 1.0
+References: <000000000000ae2ab305a123f146@google.com> <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
+ <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
+ <20200527093302.16539593@canb.auug.org.au> <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
+ <20200527162514.404ae1da@canb.auug.org.au>
+In-Reply-To: <20200527162514.404ae1da@canb.auug.org.au>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Wed, 27 May 2020 08:38:05 +0200
+Message-ID: <CACT4Y+arjpDv1tbGEJ8yMO8XOik4EEpV8CU93VJOzhKbNs8kfA@mail.gmail.com>
+Subject: Re: linux-next build error (8)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "Darrick J. Wong" <darrick.wong@oracle.com>,
         linux-xfs <linux-xfs@vger.kernel.org>,
         syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Subject: Re: linux-next build error (8)
-Message-ID: <20200527162514.404ae1da@canb.auug.org.au>
-In-Reply-To: <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
-References: <000000000000ae2ab305a123f146@google.com>
-        <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
-        <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
-        <20200527093302.16539593@canb.auug.org.au>
-        <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ha=RT5VzzjoM_cuSOs3yIHt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ha=RT5VzzjoM_cuSOs3yIHt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi Dmitry,
-
-On Wed, 27 May 2020 07:41:15 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
+On Wed, May 27, 2020 at 8:25 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 >
-> On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
-rote:
+> Hi Dmitry,
+>
+> On Wed, 27 May 2020 07:41:15 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
 > >
-> > What version of linux-next is this?  There was a problem last week with
-> > some changes in the tip tree that caused large memory usage. =20
->=20
-> Hi Stephen,
->=20
-> Detailed info about each syzbot crash is always available over the
-> dashboard link:
+> > On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+> > >
+> > > What version of linux-next is this?  There was a problem last week with
+> > > some changes in the tip tree that caused large memory usage.
+> >
+> > Hi Stephen,
+> >
+> > Detailed info about each syzbot crash is always available over the
+> > dashboard link:
+>
+> Thanks.  As others have said, this has been taken care of - the
+> problematic commits were dropped from next-2020522 and the fixes
+> appeared in next-20200525.
 
-Thanks.  As others have said, this has been taken care of - the
-problematic commits were dropped from next-2020522 and the fixes
-appeared in next-20200525.
+OK, let's close this then, otherwise this is open since March, new
+failures are piling up, we are not getting notifications about new
+ones, and it turns into an unuseful mess.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ha=RT5VzzjoM_cuSOs3yIHt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7OB8oACgkQAVBC80lX
-0GxsUgf/edUJyANj0eA2w/JoWb1NWg7zb7QKwf8XfGv0dVVtr8K1vvLy6o4Lrby4
-WujyCRdxWZ++DUCN9HLL0kjOKOPv/ixLMkAepjDjL8OzfeR2JNPwE5zng5W68SZK
-guBuIRzmUCqYlc9BHFecVDLyCIYrJL+m3Cb/hNRzRMVKmfLOm6j7oBswWHb2zzqO
-8xNqTEeimvZlcQ2k1SlNRNynTpUEQM82HXcFk4jY9y7/qGBibBaeKmkK1wHSaBYR
-TjyYXwn+4T2d7Bxcyj64NjYoktTnpFiRsi+Ml7NlxBRC2Wd8FqNvplxUfDFnHgmf
-60B+1CkcNIq0m/rHqwPs/rxVQeTWbw==
-=zzTY
------END PGP SIGNATURE-----
-
---Sig_/ha=RT5VzzjoM_cuSOs3yIHt--
+#syz invalid

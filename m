@@ -2,108 +2,100 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA6201E3866
-	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 07:41:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61B951E3917
+	for <lists+linux-next@lfdr.de>; Wed, 27 May 2020 08:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725265AbgE0Fla (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 27 May 2020 01:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47244 "EHLO
+        id S1728013AbgE0GZV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 27 May 2020 02:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725267AbgE0Fl3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 01:41:29 -0400
-Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C3CC03E96E
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 22:41:28 -0700 (PDT)
-Received: by mail-qv1-xf41.google.com with SMTP id dh1so10621480qvb.13
-        for <linux-next@vger.kernel.org>; Tue, 26 May 2020 22:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=M2aTT5Nv3FXEPFh2JJe44aTAOxSMdCv80afdguaqIkY=;
-        b=qaCZhtsZNlXPQG00DYSrt6n++VDFnN3EVSVymSzI82aPVz2l9biXUXQurA9qpUqBjR
-         VEOfTaG+/ZGDLBEtMGU9WoNuI5ki+TLaOa+Wdy6xgHhp+OmvUwMu0p4KFz0uJ52Brxk5
-         sq1A66ns/Hdq4mQDWzKYsPakSkZzr6gYXQyktCjBeItfs48XW5uMgjcOIT/03wFM1JLq
-         7RL2U4+r7J2X1L0zZwGqnZLyLQaH0hkTDfcosMmA5/462rpPP2YZ89w+KCXs2aiqQuqJ
-         KGjPQyLkKjU7vlk96VydliV/lncYpK28fCKJOevIgFOVCV0iT4qV1qSZDp4o1zQgswiz
-         3eaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=M2aTT5Nv3FXEPFh2JJe44aTAOxSMdCv80afdguaqIkY=;
-        b=FvXkV8h+D6So1QYbvmpwD5Ds9UDXYI5j+o1D1t5NAT3/GKpv92FtkHFxC9Sun5zody
-         9WR87qY5TNhUt/XeP764c2q66t8gIDEhsQQMGBheIdAZmurUy+sCDN3Bl459p1NZ3KR6
-         PMBsZiJQpemoPl0yJmO+J9hvF+2wchLLLczpJMYDtrFjx9EUxGVxuD5Fsak1lNioLvjy
-         5MUqucMlcUcWT/6y5E78LyhYEd/T55UckZp7m5f+r5ygoasQ9egr4RiFNSabdduq+Ovt
-         algCERibWG+MnPekrE5j+LFKiYY04g0l2FS8AAy8bWp8zBjEdOY7gQ0/LdW9a9hotFbd
-         OIWA==
-X-Gm-Message-State: AOAM530jpZ4Opze4QAnUPXaUIUTpBp/TfXeu1GCQqv16HwQmWpLE3SpO
-        cGqQPRD/bY7VTs+w8ZJnyE6NPyOD6KbkT4yE+gLNTjwzguk=
-X-Google-Smtp-Source: ABdhPJyCEcEPeu3HP9nplLc1370wyVcPvqhhlVs66nEWfSNz3q8Xf1g4QCnVgutaFM/FSiBWYPco1wNV9K4mdH6hZwA=
-X-Received: by 2002:a05:6214:15ce:: with SMTP id p14mr23802697qvz.159.1590558087273;
- Tue, 26 May 2020 22:41:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000ae2ab305a123f146@google.com> <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
- <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com> <20200527093302.16539593@canb.auug.org.au>
-In-Reply-To: <20200527093302.16539593@canb.auug.org.au>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Wed, 27 May 2020 07:41:15 +0200
-Message-ID: <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
-Subject: Re: linux-next build error (8)
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        with ESMTP id S1728007AbgE0GZV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 27 May 2020 02:25:21 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B96C061A0F;
+        Tue, 26 May 2020 23:25:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49X1641W3sz9sRW;
+        Wed, 27 May 2020 16:25:16 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590560717;
+        bh=CdUsS2K/IPQiDVrykPnjzfm8UmUE6yiFxKN08iKhnbc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Rfk83HhhjITs8B+MhYNXmlo+Zb6meazvmGYhkcWepSqGmNZyznRjujMgBxlkLzMqK
+         s0OKgLdYOxb50Qc/+ENGFRrIOYmb7ccG8Sv+Cj8JF+fiUx47kyQoDn9+8rqjdHdB5Q
+         rchbfT6kazdPw09aNryozv0BndMKN8pDkMN780AI38WCz8xYgcrnQ8FirTHPT1ukS9
+         vLuQh7h828rUm/h41K7I8tXjYzfrIKRcfrcQCJEeQhpj8w3Ihvw9j313ZLW06Gf9/p
+         1BP8XvRWHZ4FTg2fnUvJtaZyXkMx9tMRleYQVf8HcHaa3MHWgRNZNHe5nv9OqCJr0i
+         SozyR03xhHqRQ==
+Date:   Wed, 27 May 2020 16:25:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Dmitry Vyukov <dvyukov@google.com>
 Cc:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
         Linux-Next Mailing List <linux-next@vger.kernel.org>,
         "Darrick J. Wong" <darrick.wong@oracle.com>,
         linux-xfs <linux-xfs@vger.kernel.org>,
         syzbot <syzbot+792dec47d693ccdc05a0@syzkaller.appspotmail.com>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: linux-next build error (8)
+Message-ID: <20200527162514.404ae1da@canb.auug.org.au>
+In-Reply-To: <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
+References: <000000000000ae2ab305a123f146@google.com>
+        <3e1a0d59-4959-6250-9f81-3d6f75687c73@I-love.SAKURA.ne.jp>
+        <CACT4Y+ap21MXTjR3wF+3NhxEtgnKSm09tMsUnbKy2_EKEgh0kg@mail.gmail.com>
+        <20200527093302.16539593@canb.auug.org.au>
+        <CACT4Y+ZFsQq65jZDRKA1rQs-GM9cyFu9Cn6y=kbx21mCryBqqA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/ha=RT5VzzjoM_cuSOs3yIHt";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+--Sig_/ha=RT5VzzjoM_cuSOs3yIHt
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi Dmitry,
+
+On Wed, 27 May 2020 07:41:15 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
 >
-> Hi Dmitry,
->
-> On Tue, 26 May 2020 14:09:28 +0200 Dmitry Vyukov <dvyukov@google.com> wrote:
+> On Wed, May 27, 2020 at 1:33 AM Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 > >
-> > On Fri, May 22, 2020 at 6:29 AM Tetsuo Handa
-> > <penguin-kernel@i-love.sakura.ne.jp> wrote:
-> > >
-> > > Hello.
-> > >
-> > > This report is already reporting next problem. Since the location seems to be
-> > > different, this might be caused by OOM due to too much parallel compilation.
-> > > Maybe syzbot can detect "gcc: fatal error: Killed signal terminated program cc1"
-> > > sequence and retry with reduced "make -j$NUM" settings.
-> > >
-> > >   gcc: fatal error: Killed signal terminated program cc1
-> > >   compilation terminated.
-> > >   scripts/Makefile.build:272: recipe for target 'fs/xfs/libxfs/xfs_btree.o' failed
-> > >   make[2]: *** [fs/xfs/libxfs/xfs_btree.o] Error 1
-> > >   make[2]: *** Waiting for unfinished jobs....
-> >
-> > +linux-next and XFS maintainers
->
-> What version of linux-next is this?  There was a problem last week with
-> some changes in the tip tree that caused large memory usage.
+> > What version of linux-next is this?  There was a problem last week with
+> > some changes in the tip tree that caused large memory usage. =20
+>=20
+> Hi Stephen,
+>=20
+> Detailed info about each syzbot crash is always available over the
+> dashboard link:
 
-Hi Stephen,
+Thanks.  As others have said, this has been taken care of - the
+problematic commits were dropped from next-2020522 and the fixes
+appeared in next-20200525.
 
-Detailed info about each syzbot crash is always available over the
-dashboard link:
+--=20
+Cheers,
+Stephen Rothwell
 
-https://syzkaller.appspot.com/bug?extid=792dec47d693ccdc05a0
-Crashes (4):
-Manager Time Kernel Commit Syzkaller Config Log Report Syz repro C repro
-ci-upstream-linux-next-kasan-gce-root 2020/05/22 01:23 linux-next
-e8f32747 5afa2ddd .config log report
-ci-upstream-linux-next-kasan-gce-root 2020/05/21 15:01 linux-next
-e8f32747 1f30020f .config log report
-ci-upstream-linux-next-kasan-gce-root 2020/05/19 18:24 linux-next
-fb57b1fa 6d882fd2 .config log report
-ci-upstream-linux-next-kasan-gce-root 2020/03/18 16:19 linux-next
-47780d78 0a96a13c .config log report
+--Sig_/ha=RT5VzzjoM_cuSOs3yIHt
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7OB8oACgkQAVBC80lX
+0GxsUgf/edUJyANj0eA2w/JoWb1NWg7zb7QKwf8XfGv0dVVtr8K1vvLy6o4Lrby4
+WujyCRdxWZ++DUCN9HLL0kjOKOPv/ixLMkAepjDjL8OzfeR2JNPwE5zng5W68SZK
+guBuIRzmUCqYlc9BHFecVDLyCIYrJL+m3Cb/hNRzRMVKmfLOm6j7oBswWHb2zzqO
+8xNqTEeimvZlcQ2k1SlNRNynTpUEQM82HXcFk4jY9y7/qGBibBaeKmkK1wHSaBYR
+TjyYXwn+4T2d7Bxcyj64NjYoktTnpFiRsi+Ml7NlxBRC2Wd8FqNvplxUfDFnHgmf
+60B+1CkcNIq0m/rHqwPs/rxVQeTWbw==
+=zzTY
+-----END PGP SIGNATURE-----
+
+--Sig_/ha=RT5VzzjoM_cuSOs3yIHt--

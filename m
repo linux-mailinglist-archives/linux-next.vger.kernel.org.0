@@ -2,89 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9131A1E6D46
-	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 23:10:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16E8B1E6D97
+	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 23:27:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2407569AbgE1VKH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 May 2020 17:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S2436575AbgE1V1K (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 May 2020 17:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2407542AbgE1VKE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 17:10:04 -0400
+        with ESMTP id S2436560AbgE1V1J (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 17:27:09 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D3B1C08C5C6;
-        Thu, 28 May 2020 14:10:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18D9BC08C5C6;
+        Thu, 28 May 2020 14:27:09 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Y0hT4bl4z9sSm;
-        Fri, 29 May 2020 07:10:01 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Y14C43qlz9sRK;
+        Fri, 29 May 2020 07:27:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590700202;
-        bh=JzM4I28iG/nJS9MnKKrqGozKC7jkipuHb2OZKTiOoEo=;
+        s=201702; t=1590701227;
+        bh=vS3YZdXAUEa+9cvSj2VMaZPN9sl9lH/jFUiEJ0ngGp4=;
         h=Date:From:To:Cc:Subject:From;
-        b=ag9Myu/WNngplbrzlJ3t00ti2yBDQsMPKmXsPryOwbKQOWh81G5duVCNoPaM54ybC
-         4SVmZV5AeSxMjjNb2TVDRzMeoKzOUfOTv/ybQ1NbrGg97zPU3dXQu59SxHY6WWOUbG
-         onWqEwFhC4K+3PXBSL3+ZAnliT0lE9tCxD5Xe85Vv5BnHOvae+TUp1hPpe2tXUEkUB
-         W272LXuPXXwWmf3Y2k3UXwvKYN2Mq3wBe+NTWif56m16lsoMQ/OFAgwrdnPHYmr6jz
-         26Q00SbXD8CIz1VARHaGwBfPh0hzldhizoCTBehOeMOTCV7Z0phncD7HrQmNuXCpfR
-         MvnsGpzxb2h8A==
-Date:   Fri, 29 May 2020 07:10:00 +1000
+        b=LvnohYx17l7ipQ76snveIRelqcYWd5FVifQ8RS2usY9yvm9hr560n3Mit46VNw++H
+         yOw0vhpb1dS3TS6PE5BcNp/ZGRmV7+hdLfkJyifY988ur+ryIa+zN5f/2wYcrCenic
+         Afplpy9gzV9VyU2xOZ4SevUHooRcxpQGiyoKvUA97gKbCUVWm5vMlp4rmg2g0m7DFW
+         Z8LxRMIEfXnJ2rVibWDU5oD97Je7IPWsFmwWAhluuensqfQVSjWVkW0I/hAVu7KxPg
+         1Ouwb6UX5dE0+nIKlzVgWbqgOU6oPImeXc3UGnJEYUyfWbowW0ekAQ6yisbS/JKo3i
+         Nvv7td+K+eMZw==
+Date:   Fri, 29 May 2020 07:27:06 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christoph Hellwig <hch@lst.de>
-Subject: linux-next: Fixes tag needs some work in the block tree
-Message-ID: <20200529071000.4e88377c@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commits in the coresight tree
+Message-ID: <20200529072706.4d59e066@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rQhmSrKMvflAngcVmOo4rDo";
+Content-Type: multipart/signed; boundary="Sig_/eUxOSGqerFcXOX5ZR7ofCiS";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/rQhmSrKMvflAngcVmOo4rDo
+--Sig_/eUxOSGqerFcXOX5ZR7ofCiS
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-In commit
+Commits
 
-  dc35ada4251f ("block: fix a warning when blkdev.h is included for !CONFIG=
-_BLOCK builds")
+  bbea49e0ac80 ("dt-bindings: arm: coresight: Add optional property to repl=
+icators")
+  5b79308d90b9 ("dt-bindings: arm: coresight: Add support to skip trace uni=
+t power up")
 
-Fixes tag
-
-  Fixes: 956d510ee78 ("block: add disk/bio-based accounting helpers")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
-    or later) just making sure it is not set (or set to "auto").
+are missing a Signed-off-by from their committer.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/rQhmSrKMvflAngcVmOo4rDo
+--Sig_/eUxOSGqerFcXOX5ZR7ofCiS
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7QKKgACgkQAVBC80lX
-0GwULQf/e6Kkt+NMgOAYILOfwijkqF8aShOEJkHE2X8gvf4tCK/bxUNurbv89twn
-ulUIfBxOQV7T5jhLc+ufa2nxuFrvpXbd7TCEskWDyw07mJnSZVcXSDSlV5UQQCyh
-uDDbuPwJp18P4fzNPSNQjQOJIDbzL3tJQA5MtnmxfGxLCstwMr0wa7MifUjh0wcq
-LTj3QMfbKbIfEf6oMyC0rCMfyz8fI3pyRZxJCbMRz2neNz+fOATjawhI8bGe31fx
-Bz+CzpIp6uu2ax/6++xI65sxJpIVXW60gvTj+Eau7Cs6ahS61gG4GSjrjAEje2ds
-E0Nvd8lhyy3METeTsrf8SWeAuuuigA==
-=ibCT
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7QLKoACgkQAVBC80lX
+0GxuEAf/QDiFxuJ9y0ZwLkoLgxfOivSQI2UE67tNoiFNXNT8zTebjH/KTQhb6wzq
+5kMtLBelqubGgLiwtfAZ1GBXYszjhiVfRN+HY0q9i+SsTAHsbwPXBKW1esHGUO5j
+oIm0v7zY9A+WB/Acami16z+aMBhgSkXVf+ChtoaDsukDlq27tFTiGlSFWqS2fmga
+ksInjDvf1aQdoQz2TFUt93QaMalYlmPfm5tCI6X/L8H7rcrh0XDtrBPcN4ilrFLJ
+dAHV48VT3K5F99xNuPg5/4pocSNmKIYdEUOJ1SVNSXwNis6hs/26/+J+xsUlW9/R
+4PJtbdScpAV9xQJirAIjWG2JAOz3og==
+=Q4bI
 -----END PGP SIGNATURE-----
 
---Sig_/rQhmSrKMvflAngcVmOo4rDo--
+--Sig_/eUxOSGqerFcXOX5ZR7ofCiS--

@@ -2,90 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 132F81E6B6C
-	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 21:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2673E1E6D06
+	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 23:01:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728456AbgE1Tom (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 May 2020 15:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34842 "EHLO
+        id S2407393AbgE1VA7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 May 2020 17:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728622AbgE1Tok (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 15:44:40 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E606BC08C5C7
-        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 12:44:38 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id y198so14088418pfb.4
-        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 12:44:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:references:from:message-id:date:user-agent:mime-version
-         :in-reply-to:content-language:content-transfer-encoding;
-        bh=ib/FHwgaIOdIUIJ7nCiAVwkn44DXgxvEAL/KIsGPktg=;
-        b=IZC/B70CaBM17tiwjaASXWaq3p1H5KmrmkfylzojgEvAQlJ+Y2ljEL9eqnbgXRWXGh
-         nd4QXppBun3LwTQGBG+yX7USHmP1+y0DAbZ5hmfVlIzMcN/gQMs0klo1DYBBRtZyMEhD
-         rCLF32H0H4eJGsdFTodijrGcYwWLCVFdydaPjxEBab0eAXeqAZf1NQak/eJOjMAOwhcX
-         WIjIBSEohCYvodjjwj1W6NyDxBREpTlhylFywm7lVQNDQR4okJ2rTwto7lslQ/7Ww/Uw
-         oh+RTb25OgoMX1rHbS6Hg6+GYQIPwaxQBOKXDrZRa2c/6GPSDaoHnTrCqQTwSk7LHX0q
-         42Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=ib/FHwgaIOdIUIJ7nCiAVwkn44DXgxvEAL/KIsGPktg=;
-        b=AVT01ZW/BSgWdGJtmgCmKNcoX8818ocp19kE+OtdE/9qz6cSaIn7REha22bPefxXiE
-         z5CjsncmjUM+B6cIMf1N4e/OnLfnjQUlz/uX/NCVHRfGSUYziZWDwC0Y6UXFkmCJ+6QT
-         LFVKnutZ9bFjmkPclK6Rill9HMfMAuf5ig7Wkwjk3Kkj6EAA67lLONvU24zcdEyAyckE
-         j5d/HEybcOIKChT6e+fEi431v5FBtLkfJN+WZSQ1SocRgEsTInzjAML/Iu9ynnePPKv/
-         NTqxfNnyT2hK8n/mr6C/AQ7xrzMYfpjdL9Xzm+LZS5TnyZgJ++uXGkYNX96TmVRtBama
-         WI5w==
-X-Gm-Message-State: AOAM533eqSkzyVBxzYH2YjTL8SXAZz1pAN/sRa+gOao7iu+I8SW4kQ4c
-        pYJmWeZUUTTTgitJk+AiFw8HqMDacA5V+Q==
-X-Google-Smtp-Source: ABdhPJxLCqYWjMiwubKEzX6kGygF5TG67qqXu02lJxE3KeGC6VmXsQv6RzRQm2eIk0fpB5AQVlFzcA==
-X-Received: by 2002:a63:d547:: with SMTP id v7mr4537973pgi.413.1590695078382;
-        Thu, 28 May 2020 12:44:38 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id y5sm6607079pjp.27.2020.05.28.12.44.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 May 2020 12:44:37 -0700 (PDT)
-Subject: Re: [PATCH -next] block: add another struct gendisk to
- <linux/blkdev.h>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-References: <9a8676b1-c79e-9963-3ffc-c113b11d988d@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <c2c78d99-272f-eec3-993e-ef6684792d8e@kernel.dk>
-Date:   Thu, 28 May 2020 13:44:36 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        with ESMTP id S2407395AbgE1VA4 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 17:00:56 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7FAC08C5C6;
+        Thu, 28 May 2020 14:00:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Y0Tx4jpCz9sSn;
+        Fri, 29 May 2020 07:00:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590699654;
+        bh=wLYHzL/mcZeb8818+XIZiJAx0cHJCqrE8aFQSWPnBgA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Yb3ihQC6DmxJ9V/ZY5NfHiOnqZRMowr6290IF6aMk5k0T74nMCVh/HFRod15qKxWw
+         5kHbS035yfCXJpqJ5QCKB45uCJgcNRF2XZXRl1ccU9Atql5egWvCzyQ6f3UE3kHvEC
+         70C+jrwrq2euyvzV+tHoNDLX8YNGjrhV58XgthienCPEpvpeohTZVEizsawLWKlHGu
+         0lg7APeBY3dNf7DEdelBul4DmaFJNHCJnPSTXtcJdyD0MNGGjTjM7NbVV3/Gqlm+RB
+         hhwdq8/4jcXLcgw0hF53CZFTZJyEL/yHK5CbD4MrxLbtC+0H16R1MkbbKLOB5uxCXl
+         tydt7HhJnqYxQ==
+Date:   Fri, 29 May 2020 07:00:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Saeed Mahameed <saeedm@mellanox.com>
+Subject: linux-next: Signed-off-by missing for commit in the net-next tree
+Message-ID: <20200529070052.2c171fd3@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <9a8676b1-c79e-9963-3ffc-c113b11d988d@infradead.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/yV9Kli2BjNSFa9uZ1NGtJGa";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/28/20 11:21 AM, Randy Dunlap wrote:
-> From: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Add a forward declaration for struct gendisk when CONFIG_BLOCK is
-> not set/enabled to prevent multiple (30 - 50) build warnings.
-> 
-> In file included from ../kernel/sched/sched.h:39:0,
->                  from ../kernel/sched/core.c:9:
-> ../include/linux/blkdev.h:1895:41: warning: 'struct gendisk' declared inside parameter list will not be visible outside of this definition or declaration
->  unsigned long disk_start_io_acct(struct gendisk *disk, unsigned int sectors,
+--Sig_/yV9Kli2BjNSFa9uZ1NGtJGa
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Should be fixed already:
+Hi all,
 
-https://git.kernel.dk/cgit/linux-block/commit/?h=for-5.8/block&id=dc35ada4251f183137ee3a524543c9329d7a4fa2
+Commit
 
--- 
-Jens Axboe
+  07bab9502641 ("net/mlx5: E-Switch, Refactor eswitch ingress acl codes")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/yV9Kli2BjNSFa9uZ1NGtJGa
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7QJoQACgkQAVBC80lX
+0Gzb/wf+IQy0vyjWMHkRQTtl7Yd75nQbRY30Y5Z1fIA5S0t8r2NxXDjkcZzd13Zo
+wRLm6Ne7Pby5kuxRyVe9xfXkCzOACloLiAaocPyPKFP2n4O67bAdPZUaBYyDbYhu
+FWNqJnhZwNw0YiMxC0czhlxq3iX0ef+8Grl5FDDqU58YOddZKyy6iTVaobBW+b46
+JMdWZg9j4asx4d3DNm1OyFma4vw2iKpvwVAiDi/ftHFj7PvaZkrpu3qEKRngiiBc
+DU5TD183U4lrYgrGIHwvfhcJB26XKrOU0JT3+idYZvcz434bbzty7svXuobbpBmp
+g1lSdcCP2WvojhIvSvcuFCeedk2Zvg==
+=fbfH
+-----END PGP SIGNATURE-----
+
+--Sig_/yV9Kli2BjNSFa9uZ1NGtJGa--

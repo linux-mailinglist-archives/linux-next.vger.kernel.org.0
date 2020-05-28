@@ -2,100 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CFEC1E6557
-	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 17:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A42571E6678
+	for <lists+linux-next@lfdr.de>; Thu, 28 May 2020 17:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2403917AbgE1PDS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 May 2020 11:03:18 -0400
-Received: from mail-wm1-f66.google.com ([209.85.128.66]:35115 "EHLO
-        mail-wm1-f66.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2403912AbgE1PDQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 11:03:16 -0400
-Received: by mail-wm1-f66.google.com with SMTP id n5so3561883wmd.0;
-        Thu, 28 May 2020 08:03:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=evz1lutsdd2Eqt9o4+KgC57g/gR26qB8cQ2KV6NODWs=;
-        b=VJx/HwbXl5o/d18rL9jXFWIru48CRcbu6zMa/nbL8uHL5RkpLFzluxqMPSHkiUACnq
-         8fpdo/KWej952ZGVeM52GUKte5NExvG3LpYfxGglSAuy0TBPmQxlIIK82X7RgOLgJmXB
-         +pjpUIOL/bVQorU96JoWT/ysuQZBRxRchyXcPh4B01yzJEnbYuNZSzg4Di2PgdvnQw22
-         ksF9CdT4clBfpm1g7Phqf34d9bI09L/NOjel519iuryPdW9UVpqHeITg1pNWQgwAcNU0
-         V4UJuQwu9Zb4g6+2NLS3L5y+wF758rtkI/+FjSh/df4TUBaKBHx9YBdCX2ufGjpBOo78
-         eMbg==
-X-Gm-Message-State: AOAM5335KeIBGypNdrt0JATwyrPXP/uVxG66RygJwBLuKrIswRUKlp8s
-        U+85bywfUrHGjRi+1zXV9K4=
-X-Google-Smtp-Source: ABdhPJzniI6Aw1b/FqGaEPNB/a6M/vRt8hKQ5Zx5UYlLdgljMoGjhh+KSxCloB6yCJzH8NHlfHrceg==
-X-Received: by 2002:a1c:b0c8:: with SMTP id z191mr3947280wme.165.1590678193035;
-        Thu, 28 May 2020 08:03:13 -0700 (PDT)
-Received: from localhost (ip-37-188-185-40.eurotel.cz. [37.188.185.40])
-        by smtp.gmail.com with ESMTPSA id k14sm6163539wrq.97.2020.05.28.08.03.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 08:03:11 -0700 (PDT)
-Date:   Thu, 28 May 2020 17:03:10 +0200
-From:   Michal Hocko <mhocko@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Yafang Shao <laoar.shao@gmail.com>,
-        Chris Down <chris@chrisdown.name>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-Message-ID: <20200528150310.GG27484@dhcp22.suse.cz>
-References: <20200519075213.GF32497@dhcp22.suse.cz>
- <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
- <20200519084535.GG32497@dhcp22.suse.cz>
- <CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com>
- <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
- <20200520190906.GA558281@chrisdown.name>
- <20200521095515.GK6462@dhcp22.suse.cz>
- <20200521163450.GV6462@dhcp22.suse.cz>
- <CA+G9fYuDWGZx50UpD+WcsDeHX9vi3hpksvBAWbMgRZadb0Pkww@mail.gmail.com>
- <CA+G9fYs2jg-j_5fdb0OW0G-JzDjN7b8d9qnX7uuk9p4c7mVSig@mail.gmail.com>
+        id S2404436AbgE1PoY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 May 2020 11:44:24 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:41550 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S2404499AbgE1PoY (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 11:44:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590680662;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=w7CshrItXz8vvevX1N6Q7Vo4dM7itnMloFYSakyyKRo=;
+        b=Ht1YZFsdUpss9kCb+aOE7ut7Vx1rIIU5xO3ln8g1SrinLpjiJkMwkWpbF87BWRlkeCZyAB
+        xDiMetn2pvZZw+K89eWMj/yjq4q9zWeIwzqE8zexUy+EnL4hvrtsX6bMvqK7YIwFHDTbHe
+        mxAVik8bV69KPvQgRWBC33JP5U4OQ8U=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-133-r6aIwrs2O8OkeoNKBHkEfg-1; Thu, 28 May 2020 11:44:20 -0400
+X-MC-Unique: r6aIwrs2O8OkeoNKBHkEfg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 3E13F1855A26;
+        Thu, 28 May 2020 15:44:07 +0000 (UTC)
+Received: from treble (ovpn-117-65.rdu2.redhat.com [10.10.117.65])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F0BFA5C1B0;
+        Thu, 28 May 2020 15:44:05 +0000 (UTC)
+Date:   Thu, 28 May 2020 10:44:04 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: linux-next: Tree for May 14 (objtool 2/2)
+Message-ID: <20200528154404.74sjv4bdj3myacn6@treble>
+References: <20200514210716.30b416ee@canb.auug.org.au>
+ <742521db-1e8c-0d7a-1ed4-a908894fb497@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYs2jg-j_5fdb0OW0G-JzDjN7b8d9qnX7uuk9p4c7mVSig@mail.gmail.com>
+In-Reply-To: <742521db-1e8c-0d7a-1ed4-a908894fb497@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri 22-05-20 02:23:09, Naresh Kamboju wrote:
-> My apology !
-> As per the test results history this problem started happening from
-> Bad : next-20200430 (still reproducible on next-20200519)
-> Good : next-20200429
+On Thu, May 14, 2020 at 09:04:36AM -0700, Randy Dunlap wrote:
+> On 5/14/20 4:07 AM, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > Changes since 20200512:
+> > 
 > 
-> The git tree / tag used for testing is from linux next-20200430 tag and reverted
-> following three patches and oom-killer problem fixed.
+> on x86_64:
 > 
-> Revert "mm, memcg: avoid stale protection values when cgroup is above
-> protection"
-> Revert "mm, memcg: decouple e{low,min} state mutations from protectinn checks"
-> Revert "mm-memcg-decouple-elowmin-state-mutations-from-protection-checks-fix"
+> drivers/ide/ide-tape.o: warning: objtool: ide_tape_discard_merge_buffer.constprop.7()+0x4e: unreachable instruction
+> drivers/scsi/sd.o: warning: objtool: sd_pr_clear()+0x1e: unreachable instruction
+> drivers/scsi/sd_zbc.o: warning: objtool: sd_zbc_update_wp_offset_workfn()+0xec: unreachable instruction
+> drivers/target/target_core_xcopy.o: warning: objtool: target_xcopy_do_work()+0xdd6: unreachable instruction
+> 
+> 
+> randconfig file is attached.
 
-The discussion has fragmented and I got lost TBH.
-In http://lkml.kernel.org/r/CA+G9fYuDWGZx50UpD+WcsDeHX9vi3hpksvBAWbMgRZadb0Pkww@mail.gmail.com
-you have said that none of the added tracing output has triggered. Does
-this still hold? Because I still have a hard time to understand how
-those three patches could have the observed effects.
+Kees,
+
+More UBSAN_TRAP fun.  This randconfig has:
+
+CONFIG_UBSAN_TRAP=y
+CONFIG_UBSAN_ALIGNMENT=y
+# CONFIG_COMPILE_TEST is not set
+
 -- 
-Michal Hocko
-SUSE Labs
+Josh
+

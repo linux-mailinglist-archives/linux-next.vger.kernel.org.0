@@ -2,144 +2,149 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00DF41E7FEB
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2122D1E801F
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:24:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726864AbgE2OPD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 10:15:03 -0400
-Received: from mail.kernel.org ([198.145.29.99]:50214 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726829AbgE2OPC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 May 2020 10:15:02 -0400
-Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A643720707;
-        Fri, 29 May 2020 14:15:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1590761701;
-        bh=TQHX+O8aYeD0xfqbprAV/cwe/gW4dGK+6DFKyZ/i18E=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=KtJI71mk1KMuxrzeUv4ItbG8ZMLLwF7rTuxrfRCshMp7Mgyap7k074+4ZDcB4LLtu
-         86Xr1PG8JzJuGRu4U0IVtdxHWdVuZY8gGQ3nba6StIC3tPLJrN0iyUscxTu1MvBgen
-         74hKG93O+/jTIrJsR2lXX0tob8a28h4RkH9c0Zpo=
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 8A3F43522683; Fri, 29 May 2020 07:15:01 -0700 (PDT)
-Date:   Fri, 29 May 2020 07:15:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        id S1726882AbgE2OY2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 10:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726874AbgE2OY1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 10:24:27 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7169FC03E969;
+        Fri, 29 May 2020 07:24:27 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id z18so2789646lji.12;
+        Fri, 29 May 2020 07:24:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
+         :mime-version;
+        bh=FvrC0WJ0KivD8f2HPnZsHQw+LYkbnC1cHlTkqmakpMQ=;
+        b=UNJs6vx6Ubru0lfykjx60teWsgEV39/ePSrS+evXyXhVbfd+6P34XfmP0QO5v6YhYw
+         HFXKq0orBz5jyuH0SXiLs2Awc1esFipFpPN85COyLodNTGQNd3mAVKSnOMr3zX+c+E4u
+         FoEoaYkphfbBdU0XIC3QOoXsShsl4kq6HZe7RNNjyHcQMoX34psTWauvsof/JDLlmxDC
+         3VGp7R7HlQH2pnONVCdyHy5NWNbzx18vX4vmC+CS4x0qrFgas5pSNiOqpDQU9u9I8aO2
+         oEO18fpKzPrWEly96xlRebt34cwFKBWjzwwCuodxEmmMcnyJjv2hX+kA7T2nh2jQpf8n
+         8i3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
+         :date:message-id:mime-version;
+        bh=FvrC0WJ0KivD8f2HPnZsHQw+LYkbnC1cHlTkqmakpMQ=;
+        b=SCp8pX3vUtD8hkiYUpNhrJwOERTvYbueRjt3Lilt1AZTFBFIloUsz4XRutxB3fkS1q
+         9Wpj1Yneo9XjerjCgBTy3sqeHAdGKZdo8ti/G05ucd8NG2OIf+RcNziEkou2Ar6S12/9
+         uR8/w3CIbJCBmYfSyRb7fWx1G1xsZtYHbDGRivUFspl5j6J4wDIs+NS6YHMyr/FEC3PQ
+         VbsMJ8W3JlN1pHH0CP1D80BHRTFZpQmuYpdeGp0Oo70teMgTYGSV+GSg7f5CBlIBIrg4
+         9R/X1yi4FAXOlxoxue8k+sLOeiBfBBzHiChrvD4nI2fKteVbEWkHIiz6trwJbb6ZEOAE
+         n+Qw==
+X-Gm-Message-State: AOAM533ffPQR3dXd8ordhaxHBLRXVEe7qGK7h3EdrisibCOcCyqdvhjd
+        qlFXIs3HTURW0ELSWiaY5V7ItM9C
+X-Google-Smtp-Source: ABdhPJz2X1ZSXOB383b5MkWLSdaoWu4P1J9aGICYrCZQnp16FpD+7+Xt8D4OL+qHdVTlH8D9JNk/0g==
+X-Received: by 2002:a2e:8682:: with SMTP id l2mr4414296lji.179.1590762265815;
+        Fri, 29 May 2020 07:24:25 -0700 (PDT)
+Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
+        by smtp.gmail.com with ESMTPSA id v28sm2303124lfd.35.2020.05.29.07.24.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Fri, 29 May 2020 07:24:24 -0700 (PDT)
+From:   Felipe Balbi <balbi@kernel.org>
+To:     Rob Herring <robherring2@gmail.com>
+Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: Re: linux-next: manual merge of the rcu tree with the tip tree
-Message-ID: <20200529141501.GC2869@paulmck-ThinkPad-P72>
-Reply-To: paulmck@kernel.org
-References: <20200529162234.4f1c3d58@canb.auug.org.au>
- <20200529164132.6fb46471@canb.auug.org.au>
+        Sandeep Maheswaram <sanm@codeaurora.org>
+Subject: Re: linux-next: manual merge of the usb tree with the devicetree tree
+In-Reply-To: <CAL_Jsq+cKXO71U_HVG0nZzbQ_B4GwrmcyzkECSTJUAuBzQgcZw@mail.gmail.com>
+References: <20200528162215.3a9aa663@canb.auug.org.au> <20200528104916.GD3115014@kroah.com> <CAL_JsqKYUOPFS=0rWuUL2HLNz1DdKbYULckAWnCq-0v96-1S4g@mail.gmail.com> <20200529082641.GB847132@kroah.com> <20200529082840.GC847132@kroah.com> <87pnan1677.fsf@kernel.org> <CAL_Jsq+cKXO71U_HVG0nZzbQ_B4GwrmcyzkECSTJUAuBzQgcZw@mail.gmail.com>
+Date:   Fri, 29 May 2020 17:24:20 +0300
+Message-ID: <87mu5q250r.fsf@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529164132.6fb46471@canb.auug.org.au>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="=-=-=";
+        micalg=pgp-sha256; protocol="application/pgp-signature"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 29, 2020 at 04:41:32PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> On Fri, 29 May 2020 16:22:34 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> > 
-> > Today's linux-next merge of the rcu tree got a conflict in:
-> > 
-> >   kernel/rcu/tree.c
-> > 
-> > between commits:
-> > 
-> >   806f04e9fd2c ("rcu: Allow for smp_call_function() running callbacks from idle")
-> >   aaf2bc50df1f ("rcu: Abstract out rcu_irq_enter_check_tick() from rcu_nmi_enter()")
-> > 
-> > from the tip tree and commit:
-> > 
-> >   c0601bb42994 ("rcu/tree: Clean up dynticks counter usage")
-> >   3f3baaf3ac07 ("rcu/tree: Remove dynticks_nmi_nesting counter")
-> > 
-> > from the rcu tree.
-> > 
-> > I fixed it up (I punted and took some from the former and some from the
-> > latter) and can carry the fix as necessary. This is now fixed as far as
-> > linux-next is concerned, but any non trivial conflicts should be mentioned
-> > to your upstream maintainer when your tree is submitted for merging.
-> > You may also want to consider cooperating with the maintainer of the
-> > conflicting tree to minimise any particularly complex conflicts.
-> 
-> I redid this and the resolution is below, but you should look at the
-> final file when I do the release.
-
-Given that the merge window might be opening in a couple days, my thought
-is to defer these -rcu commits to my v5.9 pile, and then I resolve this
-conflict in the -rcu tree when v5.8-rc1 comes out.  I just now adjusted
-the -rcu tree's rcu/next branch accordingly.
-
-Seem reasonable?
-
-							Thanx, Paul
-
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc kernel/rcu/tree.c
-> index c716eadc7617,78125749638f..1426b968eec1
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@@ -427,14 -385,8 +386,12 @@@ EXPORT_SYMBOL_GPL(rcu_momentary_dyntick
->    */
->   static int rcu_is_cpu_rrupt_from_idle(void)
->   {
-> - 	long nesting;
-> - 
->  -	/* Called only from within the scheduling-clock interrupt */
->  -	lockdep_assert_in_irq();
->  +	/*
->  +	 * Usually called from the tick; but also used from smp_function_call()
->  +	 * for expedited grace periods. This latter can result in running from
->  +	 * the idle task, instead of an actual IPI.
->  +	 */
->  +	lockdep_assert_irqs_disabled();
->   
->   	/* Check for counter underflows */
->   	RCU_LOCKDEP_WARN(__this_cpu_read(rcu_data.dynticks_nesting) < 0,
-> @@@ -778,24 -718,6 +723,21 @@@ void rcu_irq_exit_preempt(void
->   			 "RCU in extended quiescent state!");
->   }
->   
->  +#ifdef CONFIG_PROVE_RCU
->  +/**
->  + * rcu_irq_exit_check_preempt - Validate that scheduling is possible
->  + */
->  +void rcu_irq_exit_check_preempt(void)
->  +{
->  +	lockdep_assert_irqs_disabled();
->  +
->  +	RCU_LOCKDEP_WARN(__this_cpu_read(rcu_data.dynticks_nesting) <= 0,
->  +			 "RCU dynticks_nesting counter underflow/zero!");
-> - 	RCU_LOCKDEP_WARN(__this_cpu_read(rcu_data.dynticks_nmi_nesting) !=
-> - 			 DYNTICK_IRQ_NONIDLE,
-> - 			 "Bad RCU  dynticks_nmi_nesting counter\n");
->  +	RCU_LOCKDEP_WARN(rcu_dynticks_curr_cpu_in_eqs(),
->  +			 "RCU in extended quiescent state!");
->  +}
->  +#endif /* #ifdef CONFIG_PROVE_RCU */
->  +
->   /*
->    * Wrapper for rcu_irq_exit() where interrupts are enabled.
->    *
+--=-=-=
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
 
 
+Hi,
+
+Rob Herring <robherring2@gmail.com> writes:
+
+>> >> > > > Today's linux-next merge of the usb tree got a conflict in:
+>> >> > > >
+>> >> > > >   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
+>> >> > > >
+>> >> > > > between commit:
+>> >> > > >
+>> >> > > >   3828026c9ec8 ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 =
+bindings")
+>> >> > > >
+>> >> > > > from the devicetree tree and commits:
+>> >> > > >
+>> >> > > >   cd4b54e2ae1f ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 =
+bindings")
+>> >> > > >
+>> >> > > > from the usb tree.
+>> >> > > >
+>> >> > > > I fixed it up (I guessed, taking most changes from the former) =
+and can
+>> >> > > > carry the fix as necessary. This is now fixed as far as linux-n=
+ext is
+>> >> > > > concerned, but any non trivial conflicts should be mentioned to=
+ your
+>> >> > > > upstream maintainer when your tree is submitted for merging.  Y=
+ou may
+>> >> > > > also want to consider cooperating with the maintainer of the
+>> >> > > > conflicting tree to minimise any particularly complex conflicts.
+>> >> >
+>> >> > Ugg, I fixed up a warning on my side...
+>> >> >
+>> >> > >
+>> >> > > Sounds good,t hanks.
+>> >> >
+>> >> > Greg, can you revert your copy and we can get rid of the conflict.
+>>
+>> Did things change recently? I always got the message from DT folks that
+>> DT changes should go via the driver tree. Has that changed? I can stop
+>> taking DT patches, no problem.
+>
+> Not really. Mainly, I've been taking some schema conversions as they
+> tend to be standalone patches and to make sure they validate (this one
+> had a warning which I fixed up and that caused the conflict). Most
+> bindings don't see multiple updates in a cycle, but this one has
+> obviously become a mess.
+>
+> If it has my Reviewed/Acked-by, then I'm not taking it. If I applied,
+> then I've replied saying I did.
+
+fair enough, I may have missed your reply and ended up taking the patch
+together with a bigger series.
+
+=2D-=20
+balbi
+
+--=-=-=
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7RGxQACgkQzL64meEa
+mQb5DxAAmFm3e7ynkdXSt/X9FVThbhvh3HcbR1VJ9BymE4Q+1cymsBKTdgG8ZqBe
+PMpE35+5pqVO2eBnyD7QdrvgljWMC/DiXWf8a82QlZ1gdRlFQwQvcBUxsrDKPvaR
++MlG/mUfXEMEJuFmmJ4bFsmKoJoO+A5S4WOtZuKDfjnp3U+hb3VhTHjiVIS1irbd
+AUlNnfBKOtRr4EqMM6OTQUvCG0aaKoV7lRNM4rQXq9pX3NNiBmHpvSXwMAIvliKQ
+4jjf6a9yHdSuwstJ81yiIBqXFXeR3EUBgZ3UDXn+3CIIMzqv7xn8kzZSHDoVVrRb
+BAwmfyJwMVSNUWiVkqJUQ26rzAQyt0u0Ax8hCFzYWcCeXeM7Iu42SL4jGK86oPO4
+MHqZEpFfmgbO+huLq9FaEzfaGRkS1UUG2u8qiICmkIihnGLlpRAFmeVD4XfQoFow
+NP8lzzn+Ej+4nYGAoiLuNpzxsIMlIEpKrCd1phgUxFfhUk5qsaZuttTsds4jczKO
+O+6InQX7Oi6XAE8oQoMd1JQ13USJGlSZLdPpjW17ZIrUnzP9CoN6YwaWnEI/T31B
+ex1HP4u4qKRH+UW1UHoYAqD7OezcoyO6TFtKSLBl+OiJOY3d/Cvye0ke3WD97O5U
+iysbWSq4iUE8qEgNp6wcaqtCjxgikju/ktfxRmZA1NubW3PQ5yg=
+=53ps
+-----END PGP SIGNATURE-----
+--=-=-=--

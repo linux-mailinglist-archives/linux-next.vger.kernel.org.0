@@ -2,104 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA6551E802F
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:27:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FE031E8055
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726900AbgE2O1Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 10:27:25 -0400
-Received: from mga07.intel.com ([134.134.136.100]:62851 "EHLO mga07.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726923AbgE2O1Y (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 May 2020 10:27:24 -0400
-IronPort-SDR: Ubgwm4P5bPNqt3DNWrTkbDnrzTtlAjw7ao+XhDWez962qdten9uC8r0jX2g17jF39n0c/lmgHN
- bo4EGxdOWnSw==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 07:27:24 -0700
-IronPort-SDR: Vd4cHwdCSD41QVmBPRnZxtiMMBOnR5zGAB92AwuMWJs+3yOBSYDFY22XhV4JY0RXDb9aXYOgHm
- CTj6GJBRAPRw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
-   d="scan'208";a="257346991"
-Received: from glmisa-mobl1.amr.corp.intel.com (HELO [10.251.9.114]) ([10.251.9.114])
-  by fmsmga008.fm.intel.com with ESMTP; 29 May 2020 07:27:23 -0700
-Subject: Re: linux-next: build warning after merge of the sound-asoc tree
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-To:     Mark Brown <broonie@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-References: <20200528135717.3e2d5169@canb.auug.org.au>
- <20200529133054.GN4610@sirena.org.uk>
- <51d951b7-f31a-35e4-589b-a538e3a030ba@linux.intel.com>
-Message-ID: <7ce2c17e-f3b1-fb09-f809-57ecde8664f1@linux.intel.com>
-Date:   Fri, 29 May 2020 09:27:22 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726901AbgE2OgH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 10:36:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726838AbgE2OgG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 10:36:06 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2DBEC03E969;
+        Fri, 29 May 2020 07:36:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3OBSAvJ90qHPxRF94+gf1522d7T4xfleronq0nrrLQ8=; b=IjGAFeTFMnfigc25pFNWxLqxDQ
+        5O6YpIhpgdPJQtH/qxEtKR3PhIrGvEYlFbXcF7mFI+hkBSyD5NBypzpfMybrKfuMGyH+ivUL12xjG
+        k433VgsJmHnfPxrlZ0TTg3UgKcUe0g0I8/nI6DZF3h19IPDcwQxudCoG7QFs3VGDW5fBd4gil5ZuP
+        Wzb2HkgBAi4/vnwPNWLWSDYKyI+IrlVGKJBanmXBRcUETzNfXIYbtOoI+V8h1LtH2eWS1zJL4uvC5
+        xwX7Q0/OcY9YM5ViFfIKW/ppid9mKvy+dS61NP3B64YOI2QeLE6VjtjxfEFlBqRq7xzD3JJSiTtZd
+        OopsVc4g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jeg75-0003Us-Vv; Fri, 29 May 2020 14:36:00 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0CA723012C3;
+        Fri, 29 May 2020 16:35:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6E7B020185BC5; Fri, 29 May 2020 16:35:56 +0200 (CEST)
+Date:   Fri, 29 May 2020 16:35:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        viro@ZenIV.linux.org.uk, x86@kernel.org
+Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
+Message-ID: <20200529143556.GE706478@hirez.programming.kicks-ass.net>
+References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
+ <611fa14d-8d31-796f-b909-686d9ebf84a9@infradead.org>
+ <20200528172005.GP2483@worktop.programming.kicks-ass.net>
+ <20200529135750.GA1580@lst.de>
 MIME-Version: 1.0
-In-Reply-To: <51d951b7-f31a-35e4-589b-a538e3a030ba@linux.intel.com>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529135750.GA1580@lst.de>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Fri, May 29, 2020 at 03:57:51PM +0200, Christoph Hellwig wrote:
+> On Thu, May 28, 2020 at 07:20:05PM +0200, Peter Zijlstra wrote:
+> > > on x86_64:
+> > > 
+> > > arch/x86/lib/csum-wrappers_64.o: warning: objtool: csum_and_copy_from_user()+0x2a4: call to memset() with UACCESS enabled
+> > > arch/x86/lib/csum-wrappers_64.o: warning: objtool: csum_and_copy_to_user()+0x243: return with UACCESS enabled
+> > 
+> > Urgh, that's horrible code. That's got plain stac()/clac() calls on
+> > instead of the regular uaccess APIs.
+> 
+> Does it?  If this is from the code in linux-next, then the code does a
+> user_access_begin/end in csum_and_copy_{from,to}_user, then uses
+> unsafe_{get,put}_user inside those function itself.  But then they call
+> csum_partial_copy_generic with the __user casted away, but without any
+> comment on why this is safe.
 
+Bah, clearly I was looking at the wrong tree. You're right, Al cleaned
+it all up.
 
-On 5/29/20 8:55 AM, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 5/29/20 8:30 AM, Mark Brown wrote:
->> On Thu, May 28, 2020 at 01:57:17PM +1000, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> After merging the sound-asoc tree, today's linux-next build (x86_64
->>> allmodconfig) produced this warning:
->>>
->>> sound/soc/sof/intel/byt.c:464:12: warning: 'byt_remove' defined but 
->>> not used [-Wunused-function]
->>>    464 | static int byt_remove(struct snd_sof_dev *sdev)
->>>        |            ^~~~~~~~~~
->>> sound/soc/sof/intel/byt.c:454:12: warning: 'byt_resume' defined but 
->>> not used [-Wunused-function]
->>>    454 | static int byt_resume(struct snd_sof_dev *sdev)
->>>        |            ^~~~~~~~~~
->>> sound/soc/sof/intel/byt.c:447:12: warning: 'byt_suspend' defined but 
->>> not used [-Wunused-function]
->>>    447 | static int byt_suspend(struct snd_sof_dev *sdev, u32 
->>> target_state)
->>>        |            ^~~~~~~~~~~
->>>
->>> Introduced by commits
->>>
->>>    ddcccd543f5d ("ASoC: SOF: Intel: byt: Add PM callbacks")
->>>    c691f0c6e267 ("ASoC: SOF: Intel: BYT: add .remove op")
->>
->> Ranjani, Pierre?
-> 
-> Humm, I am not sure what happened here or why kbuild didn't report this 
-> earlier. This was added in
-> 
-> ddcccd543f5dbd ('ASoC: SOF: Intel: byt: Add PM callbacks')
-> 
-> And I do see them used in the code:
-> 
-> sound/soc/sof/intel/byt.c
-> 
->      /* PM */
->      .suspend = byt_suspend,
->      .resume = byt_resume,
-> 
-> Will run a check and fix ASAP, my guess it's a Kconfig issue or the 
-> functions not protected by the usual SND_SOC_SOF_BAYTRAIL.
-
-it's both. allmodconfig disables SND_SOC_SOF_BAYTRAIL due to mutual 
-exclusion with the legacy driver, but enables SND_SOC_SOF_MERRIFIELD 
-(this should be fixed in a separate patch) and in this case we haven't 
-tested suspend/resume on merrifield so didn't use this code. Will send a 
-patch shortly.
+Let me try and figure out why objtool is unhappy with it.

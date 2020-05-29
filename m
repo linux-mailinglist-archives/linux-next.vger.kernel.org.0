@@ -2,108 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 442401E80E2
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EA61E80FC
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:53:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727045AbgE2Oua (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 10:50:30 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:51098 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1727024AbgE2Ou3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 10:50:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590763828;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9WlVsdWU/ye2osgRTOkw0sfktljZUBDt8IESFs68H3c=;
-        b=FHD2fT6GJgX8q+zHcvniLfl/OmQhu4kl5rh9r/t0x8T2+yHZk7M8Gypkr+TbkPFimMcu4Y
-        6dJfRWZJOypqcgddYoJpzlX4m2ir/WAFkyhzbcNbxahQ3M0e1IAtUwenGQRGmNkoBNrwWh
-        PaTwGR+8v7ya5WZoJfU4No2d6pe/8us=
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com
- [209.85.216.71]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-10-x12gy5XSM7iQKA6IVNa_2g-1; Fri, 29 May 2020 10:50:26 -0400
-X-MC-Unique: x12gy5XSM7iQKA6IVNa_2g-1
-Received: by mail-pj1-f71.google.com with SMTP id mt16so1943402pjb.5
-        for <linux-next@vger.kernel.org>; Fri, 29 May 2020 07:50:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=9WlVsdWU/ye2osgRTOkw0sfktljZUBDt8IESFs68H3c=;
-        b=aj1l4WvjgOa/eqA3Kg/XVGfpzlglXf4dDWIjeosW7y6EfhzWHhVf59EyWwTT72uqlE
-         IRgfpiq7OStGtGKc27VkPqkcZNTeziDg2ZC0+ccQGoOlI8dd1leS498XTH5D3y6Jlwy/
-         b29PNkFYVT7kSoRk8ZUmdYFe2j5zKdNYUYYRzwGFzXAkyE1qTz30515PQ131yJk8oshn
-         OTIBMMaKXro45T8y2y3jjKGc14AphoO5gyoBvhpH86ZDzzsYMSOdZpsIi5uieJEmXomT
-         hTqZNeWRr7/CqUFTmOpJCfzLiJgtM1IWeanBlYCM0yS47iTJUbefdaVKeaMMIUndEk2f
-         TCTQ==
-X-Gm-Message-State: AOAM532hFEn8gzEDzRFMKj3VNxFdPOlc6uxv1fZibaJJaxY9FxraK4e5
-        vUE3cjmbPDksSglUZ57Uhts5RsPFsoUYaSRgSCMeulv342Ezd0wLv8GNFOq3H0J+srP6oFYXoe7
-        QQEhudIczKWxIIFnStfq7Fw==
-X-Received: by 2002:a63:348b:: with SMTP id b133mr8439232pga.319.1590763825014;
-        Fri, 29 May 2020 07:50:25 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJySqJRkgTPKtzGK/4jLrXMKYSnDDUt2nMIvXlgLkNKE8VG2SS2t+96tchxwhvt2Cgv3MJJY+g==
-X-Received: by 2002:a63:348b:: with SMTP id b133mr8439219pga.319.1590763824766;
-        Fri, 29 May 2020 07:50:24 -0700 (PDT)
-Received: from xiangao.remote.csb ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id r1sm7054983pgb.37.2020.05.29.07.50.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 07:50:24 -0700 (PDT)
-Date:   Fri, 29 May 2020 22:50:13 +0800
-From:   Gao Xiang <hsiangkao@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Gao Xiang <xiang@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chengguang Xu <cgxu519@mykernel.net>,
-        Chao Yu <yuchao0@huawei.com>
-Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
-Message-ID: <20200529145013.GA22698@xiangao.remote.csb>
-References: <20200529114501.3e2ecc14@canb.auug.org.au>
- <20200529015111.GA23230@ZenIV.linux.org.uk>
- <20200529034007.GA12648@xiangao.remote.csb>
- <20200529143613.GE23230@ZenIV.linux.org.uk>
+        id S1726962AbgE2Oxk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 10:53:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgE2Oxk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 10:53:40 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C8E0C03E969;
+        Fri, 29 May 2020 07:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Bscdkat8wbOQ224oN96JSsIfkRZJsilufq7V5AwStvs=; b=CQIp3F2YX5AGGiVlwKRt0JXRj3
+        p317YbXtQQeP1j0ecSJalUYu7C/e+qqE6WGZeSSbetQN1hMLcszfK0cCa3urVnB2uRzYgu7wt6tcQ
+        yxQ33Z/pryEtr4hRx4o1CjhSKH6i+8Nena/26tpxv+AzkQA6iF6qzWoVJ6UlG0uEmft4OxGavVhUb
+        S1EbHH/pktU1L5Ucu73OAcSU4xX3LO462CokHX2rgAIA9+0d7lWJ5WT9woISpL8yQlgXmGOGD0xNZ
+        2AOO2Xq7Sy4geJqLlXh33CNojoe4xo2Jyt6LS9nBqN7U+L8DNzJtrclw25v7RW/ZdNocxhOpRtuFG
+        i9uEgp6g==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jegO0-00061q-Fn; Fri, 29 May 2020 14:53:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B934030047A;
+        Fri, 29 May 2020 16:53:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 30B8820185BD9; Fri, 29 May 2020 16:53:25 +0200 (CEST)
+Date:   Fri, 29 May 2020 16:53:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        viro@ZenIV.linux.org.uk, x86@kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
+Message-ID: <20200529145325.GB706518@hirez.programming.kicks-ass.net>
+References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
+ <611fa14d-8d31-796f-b909-686d9ebf84a9@infradead.org>
+ <20200528172005.GP2483@worktop.programming.kicks-ass.net>
+ <20200529135750.GA1580@lst.de>
+ <20200529143556.GE706478@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529143613.GE23230@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+In-Reply-To: <20200529143556.GE706478@hirez.programming.kicks-ass.net>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 29, 2020 at 03:36:13PM +0100, Al Viro wrote:
-> On Fri, May 29, 2020 at 11:40:07AM +0800, Gao Xiang wrote:
+On Fri, May 29, 2020 at 04:35:56PM +0200, Peter Zijlstra wrote:
+> On Fri, May 29, 2020 at 03:57:51PM +0200, Christoph Hellwig wrote:
+> > On Thu, May 28, 2020 at 07:20:05PM +0200, Peter Zijlstra wrote:
+> > > > on x86_64:
+> > > > 
+> > > > arch/x86/lib/csum-wrappers_64.o: warning: objtool: csum_and_copy_from_user()+0x2a4: call to memset() with UACCESS enabled
+> > > > arch/x86/lib/csum-wrappers_64.o: warning: objtool: csum_and_copy_to_user()+0x243: return with UACCESS enabled
+> > > 
+> > > Urgh, that's horrible code. That's got plain stac()/clac() calls on
+> > > instead of the regular uaccess APIs.
+> > 
+> > Does it?  If this is from the code in linux-next, then the code does a
+> > user_access_begin/end in csum_and_copy_{from,to}_user, then uses
+> > unsafe_{get,put}_user inside those function itself.  But then they call
+> > csum_partial_copy_generic with the __user casted away, but without any
+> > comment on why this is safe.
 > 
-> > I'm fine with that, although I think it's mainly with vfs changes
-> > so could be better though with vfs tree. I will add this patch
-> > tomorrow anyway... Thanks for reminder!
+> Bah, clearly I was looking at the wrong tree. You're right, Al cleaned
+> it all up.
 > 
-> FWIW, my reasoning here is
-> 	* erofs tree exists and
-> 	* the patch is erofs-specific, affects nothing outside and
-> has no dependencies with anything currently done in VFS or in other
-> filesystems and
-> 	* it does have (trivial) conflicts with the stuff in
-> erofs tree
-> 
-> So putting it into erofs tree would seem to be an obvious approach -
-> minimizes the amount of cross-tree dependencies and headache for
-> everyone involved...
+> Let me try and figure out why objtool is unhappy with it.
 
-That is reasonable. btw, our initial thought was that relates to new
-mount apis and we weren't very confident if it really went the
-filesystem itself...
+*groan*, this is one of those CONFIG_PROFILE_ALL_BRANCHES builds. If I
+disable that it goes away.
 
-> 
-> I'm dropping it from #work.misc and #for-next now.
-
-I will push out for next cycle. Thanks for detailed explanation.
-
-Thanks,
-Gao Xiang
-
-> 
-
+Still trying to untangle the mess it generated, but on first go it
+looks like objtool is right, but I'm not sure what went wrong.

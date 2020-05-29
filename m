@@ -2,99 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EEF1E835E
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 957181E8381
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:21:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727050AbgE2QPb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 12:15:31 -0400
-Received: from merlin.infradead.org ([205.233.59.134]:58682 "EHLO
-        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725901AbgE2QPb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 12:15:31 -0400
+        id S1726616AbgE2QVB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 12:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725839AbgE2QVB (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 12:21:01 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EAEC03E969;
+        Fri, 29 May 2020 09:21:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xKE4iU4tL+hNaGx/FSTJV5asiZmclaundn7b5eVYaJA=; b=V2vJfvPFWaLSd/C8i8efXx0Oae
-        8eabsyjI/uaqb/8MWLPjD2t7RHs6xqCboxmyOZvHENqIOnPQ9SITwT+8+nrq+etzD4SDYffWmv9uG
-        RBw6KKbt6WdM9PofbYUY1/XPERVENziT80bPAeONAW7O/EnmRvpDPjiQ0N9K/LkHWaQnn2EkfkLeF
-        VhGKawKxETn6Bk0ZOXhohHvuang7C6oCETIY7kIELtmWZh2HZhrYMeHn5c6OawEHV9NvFn8CjEnWP
-        1SnJlGWzCwlGglVUV/kJtIkWGnwmOQt8yOfx2qAvuP3zREApQz9oZm/lYFW7TMbJws6Bio4+zLwME
-        bIrqxtjg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jehct-0000rm-3K; Fri, 29 May 2020 16:12:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7A7AC30047A;
-        Fri, 29 May 2020 18:12:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 418422BABEA78; Fri, 29 May 2020 18:12:53 +0200 (CEST)
-Date:   Fri, 29 May 2020 18:12:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        viro@zeniv.linux.org.uk, x86@kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
-Message-ID: <20200529161253.GD706460@hirez.programming.kicks-ass.net>
-References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
- <611fa14d-8d31-796f-b909-686d9ebf84a9@infradead.org>
- <20200528172005.GP2483@worktop.programming.kicks-ass.net>
- <20200529135750.GA1580@lst.de>
- <20200529143556.GE706478@hirez.programming.kicks-ass.net>
- <20200529145325.GB706518@hirez.programming.kicks-ass.net>
- <20200529153336.GC706518@hirez.programming.kicks-ass.net>
- <20200529160514.cyaytn33thphb3tz@treble>
+        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
+        Subject:Sender:Reply-To:Content-ID:Content-Description;
+        bh=vtMTWZdV9tWXEMRPXCgiVbI13lSkgosNjsgh2PbbuvI=; b=sjXdEt+Fp6fx3P5mwwJeQlcfW+
+        9NqIEpf4A4epvYWa+afRPBHRbbdp8TNbbdKnMUFhLtG/pvbWLVK7oxo3+9nRCc3So1jMiHawbVWp9
+        +vew4HqvRp7upQviIC1/A+Vlaf3+RjA/stPsfA52H8+BfUEGtI1O8adPvFTAzKUgT3+m3Bjx637KA
+        kNLc6zHSWONDrWsTGRAAfSK/LWkMH1TR4pijkitkrfpRJQLQNgdxqfx9GXIiiLZbecyfegMtF5ahd
+        OKZzLwfCC+z0CxqBii5qVTHw0qvd75SbwPnUlhsJR5aR78CC4kyv4A+7oRIu5/AMEIkbMbNZgtFRO
+        tQswXVeg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jehkf-00061U-26; Fri, 29 May 2020 16:20:57 +0000
+Subject: Re: linux-next: Tree for May 14 (objtool 2/2)
+To:     Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20200514210716.30b416ee@canb.auug.org.au>
+ <742521db-1e8c-0d7a-1ed4-a908894fb497@infradead.org>
+ <20200528154404.74sjv4bdj3myacn6@treble> <202005282258.94570AF@keescook>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <70a6f89e-ec5a-52e8-8692-34e34364c36c@infradead.org>
+Date:   Fri, 29 May 2020 09:20:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529160514.cyaytn33thphb3tz@treble>
+In-Reply-To: <202005282258.94570AF@keescook>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 29, 2020 at 11:05:14AM -0500, Josh Poimboeuf wrote:
+On 5/28/20 11:06 PM, Kees Cook wrote:
+> On Thu, May 28, 2020 at 10:44:04AM -0500, Josh Poimboeuf wrote:
+>> On Thu, May 14, 2020 at 09:04:36AM -0700, Randy Dunlap wrote:
+>>> On 5/14/20 4:07 AM, Stephen Rothwell wrote:
+>>>> Hi all,
+>>>>
+>>>> Changes since 20200512:
+>>>>
+>>>
+>>> on x86_64:
+>>>
+>>> drivers/ide/ide-tape.o: warning: objtool: ide_tape_discard_merge_buffer.constprop.7()+0x4e: unreachable instruction
+>>> drivers/scsi/sd.o: warning: objtool: sd_pr_clear()+0x1e: unreachable instruction
+>>> drivers/scsi/sd_zbc.o: warning: objtool: sd_zbc_update_wp_offset_workfn()+0xec: unreachable instruction
+>>> drivers/target/target_core_xcopy.o: warning: objtool: target_xcopy_do_work()+0xdd6: unreachable instruction
+>>>
+>>>
+>>> randconfig file is attached.
+>>
+>> Kees,
+>>
+>> More UBSAN_TRAP fun.  This randconfig has:
+>>
+>> CONFIG_UBSAN_TRAP=y
+>> CONFIG_UBSAN_ALIGNMENT=y
+>> # CONFIG_COMPILE_TEST is not set
+> 
+> Ugh, I thought CONFIG_COMPILE_TEST always gets set for randconfig and
+> the all*config choices, but now I see that CONFIG_COMPILE_TEST is
+> enabled due to the "all" part of the all*config choices. Okay. Big
+> hammer:
+> 
+> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
+> index 929211039bac..27bcc2568c95 100644
+> --- a/lib/Kconfig.ubsan
+> +++ b/lib/Kconfig.ubsan
+> @@ -63,7 +63,7 @@ config UBSAN_SANITIZE_ALL
+>  config UBSAN_ALIGNMENT
+>         bool "Enable checks for pointers alignment"
+>         default !HAVE_EFFICIENT_UNALIGNED_ACCESS
+> -       depends on !X86 || !COMPILE_TEST
+> +       depends on !UBSAN_TRAP
+>         help
+>           This option enables the check of unaligned memory accesses.
+>           Enabling this option on architectures that support unaligned
+> 
+> How about that?
+> 
 
-> It looks to me like GCC is doing the right thing.  That likely()
-> translates to:
-> 
-> #  define likely(x)	(__branch_check__(x, 1, __builtin_constant_p(x)))
-> 
-> which becomes:
-> 
-> #define __branch_check__(x, expect, is_constant) ({			\
-> 			long ______r;					\
-> 			static struct ftrace_likely_data		\
-> 				__aligned(4)				\
-> 				__section(_ftrace_annotated_branch)	\
-> 				______f = {				\
-> 				.data.func = __func__,			\
-> 				.data.file = __FILE__,			\
-> 				.data.line = __LINE__,			\
-> 			};						\
-> 			______r = __builtin_expect(!!(x), expect);	\
-> 			ftrace_likely_update(&______f, ______r,		\
-> 					     expect, is_constant);	\
-> 			______r;					\
-> 		})
-> 
-> Here 'x' is the call to user_access_begin().  It evaluates 'x' -- and
-> thus calls user_access_begin() -- before the call to
-> ftrace_likely_update().
-> 
-> So it's working as designed, right?  The likely() just needs to be
-> changed to likely_notrace().
+Sure, that works. Thanks.
 
-But if !x (ie we fail user_access_begin()), we should not pass STAC() on
-the way to out_err. OTOH if x, we should not be jumping to out_err.
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-I'm most confused... must not stare at asm for a while.
+-- 
+~Randy

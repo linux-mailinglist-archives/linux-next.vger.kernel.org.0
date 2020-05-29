@@ -2,141 +2,224 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE7BF1E73BB
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 05:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A151E745A
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 06:11:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2436719AbgE2DkZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 May 2020 23:40:25 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:23052 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S2436751AbgE2DkY (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 23:40:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590723622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LckFzfKpAYEdTFxchZpw4kb5NHTX4jw9/QaNtcrDL8Y=;
-        b=Y5bcbiTdeobRtLIqyihRRr/0dwpCzlbHKIybjQ2egxlw2o/yuOyP7B5NUef03++aCZYC8Y
-        8oNd6e9Uzza+aE6WBdCNq7aBzxjOuyubz/zeatrM2Ge7ipGwYMDsA6r3Q5ZtVUfKDMyuPL
-        NpuWo6lbSqhufByVz6qUgw/WGvwoogs=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-101-Tav_lSO2Nl6d9VXxS4T35Q-1; Thu, 28 May 2020 23:40:20 -0400
-X-MC-Unique: Tav_lSO2Nl6d9VXxS4T35Q-1
-Received: by mail-pj1-f72.google.com with SMTP id gk8so694813pjb.8
-        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 20:40:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=LckFzfKpAYEdTFxchZpw4kb5NHTX4jw9/QaNtcrDL8Y=;
-        b=U/zrOqISX/po9/z7H8o1/l6zAVHUncetlNiJWwY2GHE2bu6ElXO6n5nKVQ/WNdYH06
-         MZlKyfRu/h7+CDW6mxUotJ7FBgBUyeo33/io3SWRwPcgZA0up+XJzND2Y+XH6VrSUHYF
-         cXz4xz0LwFotcldD0kEHxbMYq7KdpKJOolI/kgI9KmlgwFzczXfrQEPKgAsHaoEpzT7E
-         G5aRnc7K/ARwb5w6c/xUbphRqvDubt6TPX+YV3miRUKGocT2Uh6eMZe3/sSVV4Piw4x4
-         zUqzQtyG81VhTp5NSj+DfzMvu4U2XbM2ST0UINYgE/uH+Em/VXVHBpwrBuQOkbIOh9P1
-         C05w==
-X-Gm-Message-State: AOAM530uwzzRpZjpUi/+K51+MAo3bl11zryUzrRi8aDOKl3Rpm+KOhPy
-        vPTVFZNOWdAZfFiCqS4kXIS1gogoqOMICCQhcBf4hxbT2Q9qw7IoYqIp+aqOUOS2y6jC3MCV3Ai
-        0g1Y320YvjYIG6uUhdAq9WQ==
-X-Received: by 2002:a17:90a:ce17:: with SMTP id f23mr7691954pju.51.1590723619359;
-        Thu, 28 May 2020 20:40:19 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx3IqpxYfBR2MgUo03XNoATGGGr0gmcEv4dZim1Qi47Q05fk1p6AaoZkla7LLY0mrteGxh8cA==
-X-Received: by 2002:a17:90a:ce17:: with SMTP id f23mr7691933pju.51.1590723619100;
-        Thu, 28 May 2020 20:40:19 -0700 (PDT)
-Received: from xiangao.remote.csb ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id g65sm1947761pfb.61.2020.05.28.20.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 20:40:18 -0700 (PDT)
-Date:   Fri, 29 May 2020 11:40:07 +0800
-From:   Gao Xiang <hsiangkao@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Gao Xiang <xiang@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726054AbgE2ELB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 00:11:01 -0400
+Received: from ozlabs.org ([203.11.71.1]:36511 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725936AbgE2ELB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 29 May 2020 00:11:01 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49YB295DpQz9sSm;
+        Fri, 29 May 2020 14:10:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590725458;
+        bh=MvpExw+kJlNIs4OW+iB1XEUz15syI6U7hZfNtJIbGQQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aRxk05nJsPY5NTsjlEzowXfRCYmKxrJ5BsffyUDehUYpB8Gy7jIxaofSp2l3LGQD3
+         9b0F/KXu35uI4YM4PTcO8qCIp8rt30UOv2ptIBmw5mLqNTa2P767SkLgRbfUnABn6P
+         8OYFN+8q8ftN34KEYRAso5xbty1zdhvnDlWh3kdwynGXha3flJnm1flUbb9jbUUUzU
+         mkRNK5nAOU58uoeZ5tBOphTTudsvB0NZ6JfHVSW7inx8Wv4fTiaTiuY2CRjmwQ5RDA
+         C4BTgkbp9f4J73eZLaa0sQmQCP9L+LzKSOpvePaQX1kPLtuO1cus2DibT6AEsF3qyu
+         6qCBmxHLeXyKg==
+Date:   Fri, 29 May 2020 14:10:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chengguang Xu <cgxu519@mykernel.net>,
-        Chao Yu <yuchao0@huawei.com>
-Subject: Re: linux-next: manual merge of the vfs tree with the erofs tree
-Message-ID: <20200529034007.GA12648@xiangao.remote.csb>
-References: <20200529114501.3e2ecc14@canb.auug.org.au>
- <20200529015111.GA23230@ZenIV.linux.org.uk>
+        Kalyan Thota <kalyan_t@codeaurora.org>
+Subject: Re: inux-next: build failure after merge of the drm-msm tree
+Message-ID: <20200529141056.000f78ba@canb.auug.org.au>
+In-Reply-To: <20200526140841.0a1d5c7b@canb.auug.org.au>
+References: <20200519150955.1667566a@canb.auug.org.au>
+        <20200526140841.0a1d5c7b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200529015111.GA23230@ZenIV.linux.org.uk>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/0s2XPM_4kygMGPSAs87Bbrq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Al,
+--Sig_/0s2XPM_4kygMGPSAs87Bbrq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, May 29, 2020 at 02:51:11AM +0100, Al Viro wrote:
-> On Fri, May 29, 2020 at 11:45:01AM +1000, Stephen Rothwell wrote:
+Hi all,
+
+On Tue, 26 May 2020 14:08:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Hi all,
+>=20
+> On Tue, 19 May 2020 15:09:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
+> wrote:
+> >
 > > Hi all,
-> > 
-> > Today's linux-next merge of the vfs tree got a conflict in:
-> > 
-> >   fs/erofs/super.c
-> > 
-> > between commit:
-> > 
-> >   e7cda1ee94f4 ("erofs: code cleanup by removing ifdef macro surrounding")
-> > 
-> > from the erofs tree and commit:
-> > 
-> >   91a7c5e1d30e ("erofs: convert to use the new mount fs_context api")
-> > 
-> > from the vfs tree.
-> > 
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> > 
-> > -- 
-> > Cheers,
-> > Stephen Rothwell
-> > 
-> > diff --cc fs/erofs/super.c
-> > index 8e46d204a0c2,2c0bad903fa6..000000000000
-> > --- a/fs/erofs/super.c
-> > +++ b/fs/erofs/super.c
-> > @@@ -408,16 -365,12 +365,9 @@@ static int erofs_fc_fill_super(struct s
-> >   	sb->s_time_gran = 1;
-> >   
-> >   	sb->s_op = &erofs_sops;
-> >  -
-> >  -#ifdef CONFIG_EROFS_FS_XATTR
-> >   	sb->s_xattr = erofs_xattr_handlers;
-> >  -#endif
-> >   
-> > - 	/* set erofs default mount options */
-> > - 	erofs_default_options(sbi);
-> > - 
-> > - 	err = erofs_parse_options(sb, data);
-> > - 	if (err)
-> > - 		return err;
-> > - 
-> > - 	if (test_opt(sbi, POSIX_ACL))
-> > + 	if (test_opt(ctx, POSIX_ACL))
-> >   		sb->s_flags |= SB_POSIXACL;
-> >   	else
-> >   		sb->s_flags &= ~SB_POSIXACL;
-> 
-> FWIW, I would be glad to have that old erofs commit moved over to
-> erofs tree...  Folks?
+> >=20
+> > After merging the drm-msm tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >=20
+> > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/msm/msm.ko] undefine=
+d!
+> > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/msm/msm.ko] undefin=
+ed!
+> >=20
+> > Caused by commit
+> >=20
+> >   04d9044f6c57 ("drm/msm/dpu: add support for clk and bw scaling for di=
+splay")
+> >=20
+> > I applied the following patch for today (this is mechanical, there may
+> > be a better way):
+> >=20
+> > From: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Date: Tue, 19 May 2020 14:12:39 +1000
+> > Subject: [PATCH] drm/msm/dpu: fix up u64/u32 division for 32 bit archit=
+ectures
+> >=20
+> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> > ---
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c | 23 ++++++++++++++-----
+> >  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     | 15 ++++++++----
+> >  2 files changed, 28 insertions(+), 10 deletions(-)
+> >=20
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c b/drivers/gp=
+u/drm/msm/disp/dpu1/dpu_core_perf.c
+> > index 9697abcbec3f..85c2a4190840 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
+> > @@ -10,6 +10,7 @@
+> >  #include <linux/sort.h>
+> >  #include <linux/clk.h>
+> >  #include <linux/bitmap.h>
+> > +#include <asm/div64.h>
+> > =20
+> >  #include "dpu_kms.h"
+> >  #include "dpu_trace.h"
+> > @@ -53,8 +54,11 @@ static u64 _dpu_core_perf_calc_bw(struct dpu_kms *km=
+s,
+> >  	}
+> > =20
+> >  	bw_factor =3D kms->catalog->perf.bw_inefficiency_factor;
+> > -	if (bw_factor)
+> > -		crtc_plane_bw =3D mult_frac(crtc_plane_bw, bw_factor, 100);
+> > +	if (bw_factor) {
+> > +		u64 quot =3D crtc_plane_bw;
+> > +		u32 rem =3D do_div(quot, 100);
+> > +		crtc_plane_bw =3D (quot * bw_factor) + ((rem * bw_factor) / 100);
+> > +	}
+> > =20
+> >  	return crtc_plane_bw;
+> >  }
+> > @@ -89,8 +93,11 @@ static u64 _dpu_core_perf_calc_clk(struct dpu_kms *k=
+ms,
+> >  	}
+> > =20
+> >  	clk_factor =3D kms->catalog->perf.clk_inefficiency_factor;
+> > -	if (clk_factor)
+> > -		crtc_clk =3D mult_frac(crtc_clk, clk_factor, 100);
+> > +	if (clk_factor) {
+> > +		u64 quot =3D crtc_clk;
+> > +		u32 rem =3D do_div(quot, 100);
+> > +		crtc_clk =3D (quot * clk_factor) + ((rem * clk_factor) / 100);
+> > +	}
+> > =20
+> >  	return crtc_clk;
+> >  }
+> > @@ -234,8 +241,12 @@ static int _dpu_core_perf_crtc_update_bus(struct d=
+pu_kms *kms,
+> >  		}
+> >  	}
+> > =20
+> > -	avg_bw =3D kms->num_paths ?
+> > -			perf.bw_ctl / kms->num_paths : 0;
+> > +	if (kms->num_paths) {
+> > +		avg_bw =3D perf.bw_ctl;
+> > +		do_div(avg_bw, kms->num_paths);
+> > +	} else {
+> > +		avg_bw =3D 0;
+> > +	}
+> > =20
+> >  	for (i =3D 0; i < kms->num_paths; i++)
+> >  		icc_set_bw(kms->path[i],
+> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
+m/msm/disp/dpu1/dpu_plane.c
+> > index c2a6e3dacd68..ad95f32eac13 100644
+> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+> > @@ -9,6 +9,7 @@
+> > =20
+> >  #include <linux/debugfs.h>
+> >  #include <linux/dma-buf.h>
+> > +#include <asm/div64.h>
+> > =20
+> >  #include <drm/drm_atomic_uapi.h>
+> >  #include <drm/drm_damage_helper.h>
+> > @@ -174,7 +175,11 @@ static void _dpu_plane_calc_bw(struct drm_plane *p=
+lane,
+> >  	plane_prefill_bw =3D
+> >  		src_width * hw_latency_lines * fps * fmt->bpp * scale_factor;
+> > =20
+> > -	plane_prefill_bw =3D mult_frac(plane_prefill_bw, mode->vtotal, (vbp+v=
+pw));
+> > +	{
+> > +		u64 quot =3D plane_prefill_bw;
+> > +		u32 rem =3D do_div(plane_prefill_bw, vbp + vpw);
+> > +		plane_prefill_bw =3D quot * mode->vtotal + rem * mode->vtotal / (vbp=
+ + vpw);
+> > +	}
+> > =20
+> >  	pstate->plane_fetch_bw =3D max(plane_bw, plane_prefill_bw);
+> >  }
+> > @@ -204,9 +209,11 @@ static void _dpu_plane_calc_clk(struct drm_plane *=
+plane)
+> >  	pstate->plane_clk =3D
+> >  		dst_width * mode->vtotal * fps;
+> > =20
+> > -	if (src_height > dst_height)
+> > -		pstate->plane_clk =3D mult_frac(pstate->plane_clk,
+> > -					src_height, dst_height);
+> > +	if (src_height > dst_height) {
+> > +		u64 quot =3D pstate->plane_clk;
+> > +		u32 rem =3D do_div(quot, dst_height);
+> > +		pstate->plane_clk =3D quot * src_height + rem * src_height / dst_hei=
+ght;
+> > +	}
+> >  }
+> > =20
+> >  /**
+> > --=20
+> > 2.26.2 =20
+>=20
+> I am still applying the above ...
 
-I'm fine with that, although I think it's mainly with vfs changes
-so could be better though with vfs tree. I will add this patch
-tomorrow anyway... Thanks for reminder!
+Still applying.
 
-Thanks,
-Gao Xiang
+Any comment even?
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/0s2XPM_4kygMGPSAs87Bbrq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Qi1EACgkQAVBC80lX
+0Gx0zgf/X659iSWvO2inqpuJ5Lw0ff+VXrOwRqFtXe9XvCVJhzgn8hftFc5OmQD7
+I+ggS+f7HGbnU8UeUaXUXtDzrkkXAUaraFFKtKLKMy1vL7AVcw4JpgJuC2IWG10I
+Se1tLsjOgUSiD1QkEiJ7dSeTSNslTWwnadnF0VPnOvaThySnEIf2rBySacafpoTc
+4xKPt5od2iUe18UTEwzl1tulNQChvv/xwTUGpzp4iAmdQiAz+8eh5TIRYzY91Gba
+7vHH+mEuEid7EXZ6+9wwm8+43Ls4EHOWVyQ0sIMBMglO8a784CMY+6Mu0tzYkr2d
+trsvETdbQUvWMFZ8xcCBYh0lH6cR8w==
+=dEIo
+-----END PGP SIGNATURE-----
+
+--Sig_/0s2XPM_4kygMGPSAs87Bbrq--

@@ -2,149 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2122D1E801F
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA6551E802F
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 16:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726882AbgE2OY2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 10:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726874AbgE2OY1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 10:24:27 -0400
-Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7169FC03E969;
-        Fri, 29 May 2020 07:24:27 -0700 (PDT)
-Received: by mail-lj1-x244.google.com with SMTP id z18so2789646lji.12;
-        Fri, 29 May 2020 07:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=FvrC0WJ0KivD8f2HPnZsHQw+LYkbnC1cHlTkqmakpMQ=;
-        b=UNJs6vx6Ubru0lfykjx60teWsgEV39/ePSrS+evXyXhVbfd+6P34XfmP0QO5v6YhYw
-         HFXKq0orBz5jyuH0SXiLs2Awc1esFipFpPN85COyLodNTGQNd3mAVKSnOMr3zX+c+E4u
-         FoEoaYkphfbBdU0XIC3QOoXsShsl4kq6HZe7RNNjyHcQMoX34psTWauvsof/JDLlmxDC
-         3VGp7R7HlQH2pnONVCdyHy5NWNbzx18vX4vmC+CS4x0qrFgas5pSNiOqpDQU9u9I8aO2
-         oEO18fpKzPrWEly96xlRebt34cwFKBWjzwwCuodxEmmMcnyJjv2hX+kA7T2nh2jQpf8n
-         8i3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=FvrC0WJ0KivD8f2HPnZsHQw+LYkbnC1cHlTkqmakpMQ=;
-        b=SCp8pX3vUtD8hkiYUpNhrJwOERTvYbueRjt3Lilt1AZTFBFIloUsz4XRutxB3fkS1q
-         9Wpj1Yneo9XjerjCgBTy3sqeHAdGKZdo8ti/G05ucd8NG2OIf+RcNziEkou2Ar6S12/9
-         uR8/w3CIbJCBmYfSyRb7fWx1G1xsZtYHbDGRivUFspl5j6J4wDIs+NS6YHMyr/FEC3PQ
-         VbsMJ8W3JlN1pHH0CP1D80BHRTFZpQmuYpdeGp0Oo70teMgTYGSV+GSg7f5CBlIBIrg4
-         9R/X1yi4FAXOlxoxue8k+sLOeiBfBBzHiChrvD4nI2fKteVbEWkHIiz6trwJbb6ZEOAE
-         n+Qw==
-X-Gm-Message-State: AOAM533ffPQR3dXd8ordhaxHBLRXVEe7qGK7h3EdrisibCOcCyqdvhjd
-        qlFXIs3HTURW0ELSWiaY5V7ItM9C
-X-Google-Smtp-Source: ABdhPJz2X1ZSXOB383b5MkWLSdaoWu4P1J9aGICYrCZQnp16FpD+7+Xt8D4OL+qHdVTlH8D9JNk/0g==
-X-Received: by 2002:a2e:8682:: with SMTP id l2mr4414296lji.179.1590762265815;
-        Fri, 29 May 2020 07:24:25 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id v28sm2303124lfd.35.2020.05.29.07.24.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 07:24:24 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Rob Herring <robherring2@gmail.com>
-Cc:     Greg KH <greg@kroah.com>, Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S1726900AbgE2O1Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 10:27:25 -0400
+Received: from mga07.intel.com ([134.134.136.100]:62851 "EHLO mga07.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726923AbgE2O1Y (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 29 May 2020 10:27:24 -0400
+IronPort-SDR: Ubgwm4P5bPNqt3DNWrTkbDnrzTtlAjw7ao+XhDWez962qdten9uC8r0jX2g17jF39n0c/lmgHN
+ bo4EGxdOWnSw==
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 May 2020 07:27:24 -0700
+IronPort-SDR: Vd4cHwdCSD41QVmBPRnZxtiMMBOnR5zGAB92AwuMWJs+3yOBSYDFY22XhV4JY0RXDb9aXYOgHm
+ CTj6GJBRAPRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.73,448,1583222400"; 
+   d="scan'208";a="257346991"
+Received: from glmisa-mobl1.amr.corp.intel.com (HELO [10.251.9.114]) ([10.251.9.114])
+  by fmsmga008.fm.intel.com with ESMTP; 29 May 2020 07:27:23 -0700
+Subject: Re: linux-next: build warning after merge of the sound-asoc tree
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: Re: linux-next: manual merge of the usb tree with the devicetree tree
-In-Reply-To: <CAL_Jsq+cKXO71U_HVG0nZzbQ_B4GwrmcyzkECSTJUAuBzQgcZw@mail.gmail.com>
-References: <20200528162215.3a9aa663@canb.auug.org.au> <20200528104916.GD3115014@kroah.com> <CAL_JsqKYUOPFS=0rWuUL2HLNz1DdKbYULckAWnCq-0v96-1S4g@mail.gmail.com> <20200529082641.GB847132@kroah.com> <20200529082840.GC847132@kroah.com> <87pnan1677.fsf@kernel.org> <CAL_Jsq+cKXO71U_HVG0nZzbQ_B4GwrmcyzkECSTJUAuBzQgcZw@mail.gmail.com>
-Date:   Fri, 29 May 2020 17:24:20 +0300
-Message-ID: <87mu5q250r.fsf@kernel.org>
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+References: <20200528135717.3e2d5169@canb.auug.org.au>
+ <20200529133054.GN4610@sirena.org.uk>
+ <51d951b7-f31a-35e4-589b-a538e3a030ba@linux.intel.com>
+Message-ID: <7ce2c17e-f3b1-fb09-f809-57ecde8664f1@linux.intel.com>
+Date:   Fri, 29 May 2020 09:27:22 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+In-Reply-To: <51d951b7-f31a-35e4-589b-a538e3a030ba@linux.intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
 
 
-Hi,
-
-Rob Herring <robherring2@gmail.com> writes:
-
->> >> > > > Today's linux-next merge of the usb tree got a conflict in:
->> >> > > >
->> >> > > >   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> >> > > >
->> >> > > > between commit:
->> >> > > >
->> >> > > >   3828026c9ec8 ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 =
-bindings")
->> >> > > >
->> >> > > > from the devicetree tree and commits:
->> >> > > >
->> >> > > >   cd4b54e2ae1f ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 =
-bindings")
->> >> > > >
->> >> > > > from the usb tree.
->> >> > > >
->> >> > > > I fixed it up (I guessed, taking most changes from the former) =
-and can
->> >> > > > carry the fix as necessary. This is now fixed as far as linux-n=
-ext is
->> >> > > > concerned, but any non trivial conflicts should be mentioned to=
- your
->> >> > > > upstream maintainer when your tree is submitted for merging.  Y=
-ou may
->> >> > > > also want to consider cooperating with the maintainer of the
->> >> > > > conflicting tree to minimise any particularly complex conflicts.
->> >> >
->> >> > Ugg, I fixed up a warning on my side...
->> >> >
->> >> > >
->> >> > > Sounds good,t hanks.
->> >> >
->> >> > Greg, can you revert your copy and we can get rid of the conflict.
+On 5/29/20 8:55 AM, Pierre-Louis Bossart wrote:
+> 
+> 
+> On 5/29/20 8:30 AM, Mark Brown wrote:
+>> On Thu, May 28, 2020 at 01:57:17PM +1000, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> After merging the sound-asoc tree, today's linux-next build (x86_64
+>>> allmodconfig) produced this warning:
+>>>
+>>> sound/soc/sof/intel/byt.c:464:12: warning: 'byt_remove' defined but 
+>>> not used [-Wunused-function]
+>>>    464 | static int byt_remove(struct snd_sof_dev *sdev)
+>>>        |            ^~~~~~~~~~
+>>> sound/soc/sof/intel/byt.c:454:12: warning: 'byt_resume' defined but 
+>>> not used [-Wunused-function]
+>>>    454 | static int byt_resume(struct snd_sof_dev *sdev)
+>>>        |            ^~~~~~~~~~
+>>> sound/soc/sof/intel/byt.c:447:12: warning: 'byt_suspend' defined but 
+>>> not used [-Wunused-function]
+>>>    447 | static int byt_suspend(struct snd_sof_dev *sdev, u32 
+>>> target_state)
+>>>        |            ^~~~~~~~~~~
+>>>
+>>> Introduced by commits
+>>>
+>>>    ddcccd543f5d ("ASoC: SOF: Intel: byt: Add PM callbacks")
+>>>    c691f0c6e267 ("ASoC: SOF: Intel: BYT: add .remove op")
 >>
->> Did things change recently? I always got the message from DT folks that
->> DT changes should go via the driver tree. Has that changed? I can stop
->> taking DT patches, no problem.
->
-> Not really. Mainly, I've been taking some schema conversions as they
-> tend to be standalone patches and to make sure they validate (this one
-> had a warning which I fixed up and that caused the conflict). Most
-> bindings don't see multiple updates in a cycle, but this one has
-> obviously become a mess.
->
-> If it has my Reviewed/Acked-by, then I'm not taking it. If I applied,
-> then I've replied saying I did.
+>> Ranjani, Pierre?
+> 
+> Humm, I am not sure what happened here or why kbuild didn't report this 
+> earlier. This was added in
+> 
+> ddcccd543f5dbd ('ASoC: SOF: Intel: byt: Add PM callbacks')
+> 
+> And I do see them used in the code:
+> 
+> sound/soc/sof/intel/byt.c
+> 
+>      /* PM */
+>      .suspend = byt_suspend,
+>      .resume = byt_resume,
+> 
+> Will run a check and fix ASAP, my guess it's a Kconfig issue or the 
+> functions not protected by the usual SND_SOC_SOF_BAYTRAIL.
 
-fair enough, I may have missed your reply and ended up taking the patch
-together with a bigger series.
-
-=2D-=20
-balbi
-
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7RGxQACgkQzL64meEa
-mQb5DxAAmFm3e7ynkdXSt/X9FVThbhvh3HcbR1VJ9BymE4Q+1cymsBKTdgG8ZqBe
-PMpE35+5pqVO2eBnyD7QdrvgljWMC/DiXWf8a82QlZ1gdRlFQwQvcBUxsrDKPvaR
-+MlG/mUfXEMEJuFmmJ4bFsmKoJoO+A5S4WOtZuKDfjnp3U+hb3VhTHjiVIS1irbd
-AUlNnfBKOtRr4EqMM6OTQUvCG0aaKoV7lRNM4rQXq9pX3NNiBmHpvSXwMAIvliKQ
-4jjf6a9yHdSuwstJ81yiIBqXFXeR3EUBgZ3UDXn+3CIIMzqv7xn8kzZSHDoVVrRb
-BAwmfyJwMVSNUWiVkqJUQ26rzAQyt0u0Ax8hCFzYWcCeXeM7Iu42SL4jGK86oPO4
-MHqZEpFfmgbO+huLq9FaEzfaGRkS1UUG2u8qiICmkIihnGLlpRAFmeVD4XfQoFow
-NP8lzzn+Ej+4nYGAoiLuNpzxsIMlIEpKrCd1phgUxFfhUk5qsaZuttTsds4jczKO
-O+6InQX7Oi6XAE8oQoMd1JQ13USJGlSZLdPpjW17ZIrUnzP9CoN6YwaWnEI/T31B
-ex1HP4u4qKRH+UW1UHoYAqD7OezcoyO6TFtKSLBl+OiJOY3d/Cvye0ke3WD97O5U
-iysbWSq4iUE8qEgNp6wcaqtCjxgikju/ktfxRmZA1NubW3PQ5yg=
-=53ps
------END PGP SIGNATURE-----
---=-=-=--
+it's both. allmodconfig disables SND_SOC_SOF_BAYTRAIL due to mutual 
+exclusion with the legacy driver, but enables SND_SOC_SOF_MERRIFIELD 
+(this should be fixed in a separate patch) and in this case we haven't 
+tested suspend/resume on merrifield so didn't use this code. Will send a 
+patch shortly.

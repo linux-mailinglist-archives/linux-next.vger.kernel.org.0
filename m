@@ -2,108 +2,141 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 957181E8381
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:21:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F5661E83FC
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:50:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726616AbgE2QVB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 12:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58090 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725839AbgE2QVB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 12:21:01 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EAEC03E969;
-        Fri, 29 May 2020 09:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:
-        Subject:Sender:Reply-To:Content-ID:Content-Description;
-        bh=vtMTWZdV9tWXEMRPXCgiVbI13lSkgosNjsgh2PbbuvI=; b=sjXdEt+Fp6fx3P5mwwJeQlcfW+
-        9NqIEpf4A4epvYWa+afRPBHRbbdp8TNbbdKnMUFhLtG/pvbWLVK7oxo3+9nRCc3So1jMiHawbVWp9
-        +vew4HqvRp7upQviIC1/A+Vlaf3+RjA/stPsfA52H8+BfUEGtI1O8adPvFTAzKUgT3+m3Bjx637KA
-        kNLc6zHSWONDrWsTGRAAfSK/LWkMH1TR4pijkitkrfpRJQLQNgdxqfx9GXIiiLZbecyfegMtF5ahd
-        OKZzLwfCC+z0CxqBii5qVTHw0qvd75SbwPnUlhsJR5aR78CC4kyv4A+7oRIu5/AMEIkbMbNZgtFRO
-        tQswXVeg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jehkf-00061U-26; Fri, 29 May 2020 16:20:57 +0000
-Subject: Re: linux-next: Tree for May 14 (objtool 2/2)
-To:     Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20200514210716.30b416ee@canb.auug.org.au>
- <742521db-1e8c-0d7a-1ed4-a908894fb497@infradead.org>
- <20200528154404.74sjv4bdj3myacn6@treble> <202005282258.94570AF@keescook>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <70a6f89e-ec5a-52e8-8692-34e34364c36c@infradead.org>
-Date:   Fri, 29 May 2020 09:20:54 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1725901AbgE2QuW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 12:50:22 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:48619 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725601AbgE2QuV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 12:50:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590771020;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fGEzJ36hbKxeSGWZBn5eRmcF//8WjQ4N68JYgXcKlx8=;
+        b=KWkktgaEjRkv6LYJGa5IalfcyfT0yKMQ4GvvufXpQVBLMcRAKhcu63uaXsBEsU0XK3hucO
+        l/7Jk3vBRwLVFz1+CLtaTtwGAFLCCZp47Lvt5e9bVx63VWF7nqtJhRBTq7qZEZ20/1/ktL
+        iB8MEmhoTAiZuIBQwGbRh/ixX6EVsfU=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-109-KlRJ6diHOj6G8t5SSxfcLg-1; Fri, 29 May 2020 12:50:18 -0400
+X-MC-Unique: KlRJ6diHOj6G8t5SSxfcLg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 97E45474;
+        Fri, 29 May 2020 16:50:15 +0000 (UTC)
+Received: from treble (ovpn-116-170.rdu2.redhat.com [10.10.116.170])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6DA847A8D2;
+        Fri, 29 May 2020 16:50:13 +0000 (UTC)
+Date:   Fri, 29 May 2020 11:50:11 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        viro@zeniv.linux.org.uk, x86@kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
+Message-ID: <20200529165011.o7vvhn4wcj6zjxux@treble>
+References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
+ <611fa14d-8d31-796f-b909-686d9ebf84a9@infradead.org>
+ <20200528172005.GP2483@worktop.programming.kicks-ass.net>
+ <20200529135750.GA1580@lst.de>
+ <20200529143556.GE706478@hirez.programming.kicks-ass.net>
+ <20200529145325.GB706518@hirez.programming.kicks-ass.net>
+ <20200529153336.GC706518@hirez.programming.kicks-ass.net>
+ <20200529160514.cyaytn33thphb3tz@treble>
+ <20200529161253.GD706460@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <202005282258.94570AF@keescook>
 Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20200529161253.GD706460@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 5/28/20 11:06 PM, Kees Cook wrote:
-> On Thu, May 28, 2020 at 10:44:04AM -0500, Josh Poimboeuf wrote:
->> On Thu, May 14, 2020 at 09:04:36AM -0700, Randy Dunlap wrote:
->>> On 5/14/20 4:07 AM, Stephen Rothwell wrote:
->>>> Hi all,
->>>>
->>>> Changes since 20200512:
->>>>
->>>
->>> on x86_64:
->>>
->>> drivers/ide/ide-tape.o: warning: objtool: ide_tape_discard_merge_buffer.constprop.7()+0x4e: unreachable instruction
->>> drivers/scsi/sd.o: warning: objtool: sd_pr_clear()+0x1e: unreachable instruction
->>> drivers/scsi/sd_zbc.o: warning: objtool: sd_zbc_update_wp_offset_workfn()+0xec: unreachable instruction
->>> drivers/target/target_core_xcopy.o: warning: objtool: target_xcopy_do_work()+0xdd6: unreachable instruction
->>>
->>>
->>> randconfig file is attached.
->>
->> Kees,
->>
->> More UBSAN_TRAP fun.  This randconfig has:
->>
->> CONFIG_UBSAN_TRAP=y
->> CONFIG_UBSAN_ALIGNMENT=y
->> # CONFIG_COMPILE_TEST is not set
+On Fri, May 29, 2020 at 06:12:53PM +0200, Peter Zijlstra wrote:
+> On Fri, May 29, 2020 at 11:05:14AM -0500, Josh Poimboeuf wrote:
 > 
-> Ugh, I thought CONFIG_COMPILE_TEST always gets set for randconfig and
-> the all*config choices, but now I see that CONFIG_COMPILE_TEST is
-> enabled due to the "all" part of the all*config choices. Okay. Big
-> hammer:
+> > It looks to me like GCC is doing the right thing.  That likely()
+> > translates to:
+> > 
+> > #  define likely(x)	(__branch_check__(x, 1, __builtin_constant_p(x)))
+> > 
+> > which becomes:
+> > 
+> > #define __branch_check__(x, expect, is_constant) ({			\
+> > 			long ______r;					\
+> > 			static struct ftrace_likely_data		\
+> > 				__aligned(4)				\
+> > 				__section(_ftrace_annotated_branch)	\
+> > 				______f = {				\
+> > 				.data.func = __func__,			\
+> > 				.data.file = __FILE__,			\
+> > 				.data.line = __LINE__,			\
+> > 			};						\
+> > 			______r = __builtin_expect(!!(x), expect);	\
+> > 			ftrace_likely_update(&______f, ______r,		\
+> > 					     expect, is_constant);	\
+> > 			______r;					\
+> > 		})
+> > 
+> > Here 'x' is the call to user_access_begin().  It evaluates 'x' -- and
+> > thus calls user_access_begin() -- before the call to
+> > ftrace_likely_update().
+> > 
+> > So it's working as designed, right?  The likely() just needs to be
+> > changed to likely_notrace().
 > 
-> diff --git a/lib/Kconfig.ubsan b/lib/Kconfig.ubsan
-> index 929211039bac..27bcc2568c95 100644
-> --- a/lib/Kconfig.ubsan
-> +++ b/lib/Kconfig.ubsan
-> @@ -63,7 +63,7 @@ config UBSAN_SANITIZE_ALL
->  config UBSAN_ALIGNMENT
->         bool "Enable checks for pointers alignment"
->         default !HAVE_EFFICIENT_UNALIGNED_ACCESS
-> -       depends on !X86 || !COMPILE_TEST
-> +       depends on !UBSAN_TRAP
->         help
->           This option enables the check of unaligned memory accesses.
->           Enabling this option on architectures that support unaligned
+> But if !x (ie we fail user_access_begin()), we should not pass STAC() on
+> the way to out_err. OTOH if x, we should not be jumping to out_err.
 > 
-> How about that?
-> 
+> I'm most confused... must not stare at asm for a while.
 
-Sure, that works. Thanks.
+Yeah, I saw that call to ftrace_likely_update() and got distracted.  I
+forgot it's on the uaccess safe list.
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+From staring at the asm I think the generated code is correct, it's just
+that the nested likelys with ftrace profiling cause GCC to converge the
+error/success paths.  But objtool doesn't do register value tracking so
+it's not smart enough to know that it's safe.
 
--- 
-~Randy
+The nested likelys seem like overkill anyway -- user_access_begin() is
+__always_inline and it already has unlikely(), which should be
+propagated.
+
+So just remove the outer likelys?
+
+diff --git a/arch/x86/lib/csum-wrappers_64.c b/arch/x86/lib/csum-wrappers_64.c
+index a12b8629206d..ee63d7576fd2 100644
+--- a/arch/x86/lib/csum-wrappers_64.c
++++ b/arch/x86/lib/csum-wrappers_64.c
+@@ -27,7 +27,7 @@ csum_and_copy_from_user(const void __user *src, void *dst,
+ 	might_sleep();
+ 	*errp = 0;
+ 
+-	if (!likely(user_access_begin(src, len)))
++	if (!user_access_begin(src, len))
+ 		goto out_err;
+ 
+ 	/*
+@@ -89,7 +89,7 @@ csum_and_copy_to_user(const void *src, void __user *dst,
+ 
+ 	might_sleep();
+ 
+-	if (unlikely(!user_access_begin(dst, len))) {
++	if (!user_access_begin(dst, len)) {
+ 		*errp = -EFAULT;
+ 		return 0;
+ 	}
+

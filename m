@@ -2,40 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3416A1E8312
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EEF1E835E
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 18:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728056AbgE2QFc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 12:05:32 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:37690 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1726555AbgE2QF2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 May 2020 12:05:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1590768327;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=u7jCISGZbxSmJilyCDgnakzVWWHis8T5aaEOojdPPxw=;
-        b=LCvEXeNbLooChWiTRANO1R5rNHQ6oXg165C6dkitGBekda7LehVxoVZNh70UdIlCP+41lQ
-        B3wbCkhxGyQRzZE3XsT3PRALnYhOWDMTFDC2A/+iY6OTUhTr62x0JJfwWBXpFS7tA4L5sD
-        6lVmzcrjJFOiZGOoeZhu1+n6outffYE=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-56-gT3lMQgbO6CEz4SuLJ-bbg-1; Fri, 29 May 2020 12:05:21 -0400
-X-MC-Unique: gT3lMQgbO6CEz4SuLJ-bbg-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id B0DDD107ACF2;
-        Fri, 29 May 2020 16:05:18 +0000 (UTC)
-Received: from treble (ovpn-116-170.rdu2.redhat.com [10.10.116.170])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 86B287A8D3;
-        Fri, 29 May 2020 16:05:16 +0000 (UTC)
-Date:   Fri, 29 May 2020 11:05:14 -0500
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
+        id S1727050AbgE2QPb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 12:15:31 -0400
+Received: from merlin.infradead.org ([205.233.59.134]:58682 "EHLO
+        merlin.infradead.org" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725901AbgE2QPb (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 12:15:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=xKE4iU4tL+hNaGx/FSTJV5asiZmclaundn7b5eVYaJA=; b=V2vJfvPFWaLSd/C8i8efXx0Oae
+        8eabsyjI/uaqb/8MWLPjD2t7RHs6xqCboxmyOZvHENqIOnPQ9SITwT+8+nrq+etzD4SDYffWmv9uG
+        RBw6KKbt6WdM9PofbYUY1/XPERVENziT80bPAeONAW7O/EnmRvpDPjiQ0N9K/LkHWaQnn2EkfkLeF
+        VhGKawKxETn6Bk0ZOXhohHvuang7C6oCETIY7kIELtmWZh2HZhrYMeHn5c6OawEHV9NvFn8CjEnWP
+        1SnJlGWzCwlGglVUV/kJtIkWGnwmOQt8yOfx2qAvuP3zREApQz9oZm/lYFW7TMbJws6Bio4+zLwME
+        bIrqxtjg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jehct-0000rm-3K; Fri, 29 May 2020 16:12:55 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7A7AC30047A;
+        Fri, 29 May 2020 18:12:53 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 418422BABEA78; Fri, 29 May 2020 18:12:53 +0200 (CEST)
+Date:   Fri, 29 May 2020 18:12:53 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
 Cc:     Christoph Hellwig <hch@lst.de>,
         Randy Dunlap <rdunlap@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
@@ -46,7 +44,7 @@ Cc:     Christoph Hellwig <hch@lst.de>,
         viro@zeniv.linux.org.uk, x86@kernel.org,
         Steven Rostedt <rostedt@goodmis.org>
 Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
-Message-ID: <20200529160514.cyaytn33thphb3tz@treble>
+Message-ID: <20200529161253.GD706460@hirez.programming.kicks-ass.net>
 References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
  <611fa14d-8d31-796f-b909-686d9ebf84a9@infradead.org>
  <20200528172005.GP2483@worktop.programming.kicks-ass.net>
@@ -54,79 +52,49 @@ References: <20200514033104.kRFL_ctMQ%akpm@linux-foundation.org>
  <20200529143556.GE706478@hirez.programming.kicks-ass.net>
  <20200529145325.GB706518@hirez.programming.kicks-ass.net>
  <20200529153336.GC706518@hirez.programming.kicks-ass.net>
+ <20200529160514.cyaytn33thphb3tz@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200529153336.GC706518@hirez.programming.kicks-ass.net>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+In-Reply-To: <20200529160514.cyaytn33thphb3tz@treble>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 29, 2020 at 05:33:36PM +0200, Peter Zijlstra wrote:
-> On Fri, May 29, 2020 at 04:53:25PM +0200, Peter Zijlstra wrote:
-> > On Fri, May 29, 2020 at 04:35:56PM +0200, Peter Zijlstra wrote:
+On Fri, May 29, 2020 at 11:05:14AM -0500, Josh Poimboeuf wrote:
+
+> It looks to me like GCC is doing the right thing.  That likely()
+> translates to:
 > 
-> > *groan*, this is one of those CONFIG_PROFILE_ALL_BRANCHES builds. If I
-> > disable that it goes away.
-> > 
-> > Still trying to untangle the mess it generated, but on first go it
-> > looks like objtool is right, but I'm not sure what went wrong.
+> #  define likely(x)	(__branch_check__(x, 1, __builtin_constant_p(x)))
 > 
-> $ tools/objtool/objtool check -fab arch/x86/lib/csum-wrappers_64.o
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool: csum_and_copy_from_user()+0x29f: call to memset() with UACCESS enabled
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0x283: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0x113: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   .altinstr_replacement+0xffffffffffffffff: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0xea: (alt)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   .altinstr_replacement+0xffffffffffffffff: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0xe7: (alt)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0xd2: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0x7e: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0x43: (branch)
-> arch/x86/lib/csum-wrappers_64.o: warning: objtool:   csum_and_copy_from_user()+0x0: <=== (sym)
+> which becomes:
 > 
-> The problem is with the +0x113 branch, which is at 0x1d1.
+> #define __branch_check__(x, expect, is_constant) ({			\
+> 			long ______r;					\
+> 			static struct ftrace_likely_data		\
+> 				__aligned(4)				\
+> 				__section(_ftrace_annotated_branch)	\
+> 				______f = {				\
+> 				.data.func = __func__,			\
+> 				.data.file = __FILE__,			\
+> 				.data.line = __LINE__,			\
+> 			};						\
+> 			______r = __builtin_expect(!!(x), expect);	\
+> 			ftrace_likely_update(&______f, ______r,		\
+> 					     expect, is_constant);	\
+> 			______r;					\
+> 		})
 > 
-> That looks to be:
+> Here 'x' is the call to user_access_begin().  It evaluates 'x' -- and
+> thus calls user_access_begin() -- before the call to
+> ftrace_likely_update().
 > 
-> 	if (!likely(user_access_begin(src, len)))
-> 		goto out_err;
-> 
-> Except that the brach profiling stuff confused GCC enough to leak STAC
-> into the error path or something.
+> So it's working as designed, right?  The likely() just needs to be
+> changed to likely_notrace().
 
-It looks to me like GCC is doing the right thing.  That likely()
-translates to:
+But if !x (ie we fail user_access_begin()), we should not pass STAC() on
+the way to out_err. OTOH if x, we should not be jumping to out_err.
 
-#  define likely(x)	(__branch_check__(x, 1, __builtin_constant_p(x)))
-
-which becomes:
-
-#define __branch_check__(x, expect, is_constant) ({			\
-			long ______r;					\
-			static struct ftrace_likely_data		\
-				__aligned(4)				\
-				__section(_ftrace_annotated_branch)	\
-				______f = {				\
-				.data.func = __func__,			\
-				.data.file = __FILE__,			\
-				.data.line = __LINE__,			\
-			};						\
-			______r = __builtin_expect(!!(x), expect);	\
-			ftrace_likely_update(&______f, ______r,		\
-					     expect, is_constant);	\
-			______r;					\
-		})
-
-Here 'x' is the call to user_access_begin().  It evaluates 'x' -- and
-thus calls user_access_begin() -- before the call to
-ftrace_likely_update().
-
-So it's working as designed, right?  The likely() just needs to be
-changed to likely_notrace().
-
--- 
-Josh
-
+I'm most confused... must not stare at asm for a while.

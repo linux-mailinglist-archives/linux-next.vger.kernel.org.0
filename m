@@ -2,221 +2,119 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E1B641E7AD7
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 12:44:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91A9A1E7AE8
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 12:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725821AbgE2Kou (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 06:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725562AbgE2Kot (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 06:44:49 -0400
-Received: from mail-pf1-x444.google.com (mail-pf1-x444.google.com [IPv6:2607:f8b0:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99113C03E969
-        for <linux-next@vger.kernel.org>; Fri, 29 May 2020 03:44:49 -0700 (PDT)
-Received: by mail-pf1-x444.google.com with SMTP id a4so42956pfo.4
-        for <linux-next@vger.kernel.org>; Fri, 29 May 2020 03:44:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6IQb15prbtzlTugeDjCxZNoniKwiQbctam0rDgRVXlk=;
-        b=STbOtRD0CTxOG5okAPwo6XL8s/NrdyS32OcUlEdaFkiXkeBeUOW6+u31POxehGnLve
-         pkJzZbWMQwwBwJiqlIOhf2tf6NGwnsKiuhR/R0dERmb/SJb9UEJsWfXyIb37SSoeo61V
-         HpboK2sEtwcnL6vLVJ0Nim0uMEc2yDkLjh3HKH1/B7dPDpUDoapel3hfYcqBB4CN10LQ
-         U0zXxuVbdiuSmHpxiHermNfJVc4bz7LXDfqCN3QLEkp5YNk9g4XPHirzPPSaOtL5txl/
-         6iDHA3ehkgrixkAm+YGVuwqQNSbzmRh5tmLB510oDX40wNR3qJ2QoMCTvoFL8jkn5ePm
-         d6CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6IQb15prbtzlTugeDjCxZNoniKwiQbctam0rDgRVXlk=;
-        b=SX6K1SAKSs4ZtenxYjeuyyIa6DJ8BGoQ0Sk94qJad2wPbkeSFp4LJ+VaotBteGnAFY
-         AmUMNPGI93hpSPWEdcAX1fmYbgwD/aSCh7vyjT7tGMBQcO3kM2dQh/vR8qNFJ5QwmQEt
-         FSK6DsALWhPzWCFfhc6G6uXEj+uMvVUsGa8nfLAiog1Y03KZPEBbKpRAfQnCXVyQGxWY
-         oCusOyO/HLJ7ur7vaC0k7GXy9KpmvLuQbRirAS+vHcjPom8bqmee/Yl8KlVbmlMbuxAN
-         wk4zmpPV0wuVjnABc+s8oqxDQJ7vSXh54wgBzl4rTZtLjZvNfTQuzAG4RQm8kO5gBpQz
-         uUvw==
-X-Gm-Message-State: AOAM533hDcuK3l9By+GiCAfJUxOrBlhgVTXqLmAN+OWYDdPKk2Z8Ypv9
-        9s57jVGneKMQ8l0UdHlfTuJ+7R/WKC0=
-X-Google-Smtp-Source: ABdhPJxoGpYK8mi0M3ITNLD1rVPq1GhE4SlZrr2OeSGwPNUzxcJf6DBSlahj2deEIXho8fiDrIHlhw==
-X-Received: by 2002:a62:8344:: with SMTP id h65mr7960395pfe.207.1590749088541;
-        Fri, 29 May 2020 03:44:48 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z5sm7064524pfj.29.2020.05.29.03.44.47
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 29 May 2020 03:44:47 -0700 (PDT)
-Message-ID: <5ed0e79f.1c69fb81.e439a.6b65@mx.google.com>
-Date:   Fri, 29 May 2020 03:44:47 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726467AbgE2Ktr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 06:49:47 -0400
+Received: from ozlabs.org ([203.11.71.1]:57411 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725562AbgE2Ktr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 29 May 2020 06:49:47 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49YLtH6lLNz9sSp;
+        Fri, 29 May 2020 20:49:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590749385;
+        bh=jsv/liaUrR517PU6UZH68DhnNcK32p5YqRZISEQvKy4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=cTlsuYrT6DmdVkLjeHoAZ3ZHt1W2odpilsuV0h2baE5t+seFN4XOBpLl3ELxvuJtJ
+         9nf+xf4WMw+xCKRp3rLLEqMxO5iAFuOse/r1cwEJf9Y0pbe5t3y1lcX5nU9H1TZfeP
+         xMOHEdWZpCBAxkB9/pRh5Ey8/vNK+TLCgCEd616PMhAUQUBfzYN76+N/vaDUxOkQga
+         HjvyHvMxSIMWwMwPt77qR7Cw1bOcKMcozBKAt/loH1RA/MKBcDyco0fB2xiCptxM2T
+         jCpe94RqiTKd0AB8HKu5T17RzUpWjk/9jIORdKhZ7hyo6ce55k9dGFlw24D2tmfFJz
+         1oTvYW9kD9e+g==
+Date:   Fri, 29 May 2020 20:49:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Qian Cai <cai@lca.pw>
+Subject: linux-next: manual merge of the akpm tree with the tip tree
+Message-ID: <20200529204942.0edf6cf6@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Report-Type: boot
-X-Kernelci-Kernel: next-20200528
-Subject: next/master boot: 186 boots: 17 failed, 163 passed with 3 offline,
- 3 untried/unknown (next-20200528)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/3fs8AHix+/YNeajC7eNy448";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+--Sig_/3fs8AHix+/YNeajC7eNy448
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+Hi all,
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+Today's linux-next merge of the akpm tree got a conflict in:
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/master/kernel/next-20200528/plan/=
-baseline/
+  mm/swap.c
 
----------------------------------------------------------------------------=
-----
+between commit:
 
-next/master boot: 186 boots: 17 failed, 163 passed with 3 offline, 3 untrie=
-d/unknown (next-20200528)
+  b01b21419999 ("mm/swap: Use local_lock for protection")
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200528/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200528/
+from the tip tree and patch:
 
-Tree: next
-Branch: master
-Git Describe: next-20200528
-Git Commit: ff387fc20c697cdc887b2abf7ef494e853795a2f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 89 unique boards, 22 SoC families, 24 builds out of 160
+  "mm/swap.c: annotate data races for lru_rotate_pvecs"
 
-Boot Regressions Detected:
+from the akpm tree.
 
-arc:
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: failing since 2 days (last pass: next-20200521 =
-- first fail: next-20200526)
+--=20
+Cheers,
+Stephen Rothwell
 
-arm:
+diff --git a/mm/swap.c b/mm/swap.c
+index a8442ed0bb16..936d6b545217 100644
+--- a/mm/swap.c
++++ b/mm/swap.c
+@@ -620,7 +620,8 @@ void lru_add_drain_cpu(int cpu)
+ 		__pagevec_lru_add(pvec);
+=20
+ 	pvec =3D &per_cpu(lru_rotate.pvec, cpu);
+-	if (pagevec_count(pvec)) {
++	/* Disabling interrupts below acts as a compiler barrier. */
++	if (data_race(pagevec_count(pvec))) {
+ 		unsigned long flags;
+=20
+ 		/* No harm done if a racing interrupt already did this */
+@@ -781,7 +782,7 @@ void lru_add_drain_all(void)
+ 		struct work_struct *work =3D &per_cpu(lru_add_drain_work, cpu);
+=20
+ 		if (pagevec_count(&per_cpu(lru_pvecs.lru_add, cpu)) ||
+-		    pagevec_count(&per_cpu(lru_rotate.pvec, cpu)) ||
++		    data_race(pagevec_count(&per_cpu(lru_rotate.pvec, cpu))) ||
+ 		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate_file, cpu)) ||
+ 		    pagevec_count(&per_cpu(lru_pvecs.lru_deactivate, cpu)) ||
+ 		    pagevec_count(&per_cpu(lru_pvecs.lru_lazyfree, cpu)) ||
 
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 101 days (last pass: next-2020021=
-4 - first fail: next-20200217)
+--Sig_/3fs8AHix+/YNeajC7eNy448
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-arm64:
+-----BEGIN PGP SIGNATURE-----
 
-    defconfig:
-        gcc-8:
-          meson-g12a-u200:
-              lab-baylibre: failing since 6 days (last pass: next-20200519 =
-- first fail: next-20200521)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: failing since 6 days (last pass: next-20200519 =
-- first fail: next-20200521)
-          meson-sm1-khadas-vim3l:
-              lab-baylibre: failing since 6 days (last pass: next-20200515 =
-- first fail: next-20200521)
-          meson-sm1-sei610:
-              lab-baylibre: failing since 6 days (last pass: next-20200519 =
-- first fail: next-20200521)
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Q6MYACgkQAVBC80lX
+0Gxf7Qf9GafonTBYFJ1TBhbZjKcBo4bG+VYP8KT+pvxJKu/MK0VcAjhwxeyUo3sU
+ng9ag/S2EI9mhuwmbcr6zUPh30Mm8Ps55bVGBPf5yYFhSO8t430pWAe5tdeHRgbV
+d+t6alDhCdBf+GHnmYpRXRSIhKU7QhM69i3UREtK9DbVG03g5mwP7BOTaIKX0HTQ
+CJfHNj0Y97a+Mhngn8yPYl/b9RSpD2CCTNxxq4SsQ8getcoh3tWKxvPPF2V4FN+M
+bpLvHRXZxxppGACxa88mQ4Bws/69JEJCxt4RGtg5cCI3Saq5JM1xO6LoSOhLg7wM
+63b2ZSp/36L52k6DZ+C8Cpfzbh+8Hg==
+=ZGY/
+-----END PGP SIGNATURE-----
 
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-sm1-khadas-vim3l:
-              lab-baylibre: failing since 6 days (last pass: next-20200515 =
-- first fail: next-20200521)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-g12a-u200:
-              lab-baylibre: failing since 6 days (last pass: next-20200519 =
-- first fail: next-20200521)
-          meson-g12b-a311d-khadas-vim3:
-              lab-baylibre: failing since 6 days (last pass: next-20200519 =
-- first fail: next-20200521)
-          meson-sm1-khadas-vim3l:
-              lab-baylibre: failing since 6 days (last pass: next-20200515 =
-- first fail: next-20200521)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 62 days (last pass: next-=
-20200326 - first fail: next-20200327)
-
-Boot Failures Detected:
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            meson-g12a-u200: 1 failed lab
-            meson-g12a-x96-max: 1 failed lab
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-            meson-g12b-odroid-n2: 1 failed lab
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-            mt7622-rfb1: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            meson-g12a-u200: 1 failed lab
-            meson-g12a-x96-max: 1 failed lab
-            meson-g12b-a311d-khadas-vim3: 1 failed lab
-            meson-g12b-odroid-n2: 1 failed lab
-            meson-sm1-khadas-vim3l: 1 failed lab
-            meson-sm1-sei610: 1 failed lab
-            mt7622-rfb1: 1 failed lab
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-sm1-khadas-vim3l: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/3fs8AHix+/YNeajC7eNy448--

@@ -2,90 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E759F1E79BA
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 11:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966C01E79CE
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 11:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726529AbgE2JsP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 05:48:15 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54561 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725306AbgE2JsP (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 May 2020 05:48:15 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49YKWJ6b9Rz9sPF;
-        Fri, 29 May 2020 19:48:12 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590745693;
-        bh=ktw3nh2gIT33gvukGIjyyOBFVdKQqNlyao6Hb2ZtprI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=O56Kja8ja5OE30cR792hm65fQLQjmOym9sI6D2gPqLDvilPPUnCSWlchGk+nDCU4Y
-         +BCezWfCUN7nF1+6Itd5UlwL8O/eF5paQi4EQX3eaeeyRwYrC9RuT/Zgsr9x/tF3am
-         vqv/zayQCC+A3wkavQ6fM4uM/3hzX9L+mPJWgL5tjgF4o65YZ+lKdCgnJFE2tSGZU0
-         iC6zIpeZISjLSrLxEN3fZmYpiq/uXGoOd8LFSMmphCC1FYf9ZQlFRUKW9RSLuqSadG
-         DoKVF+Vg/dYAcb4l8GclWoTlZqhMFRDmSC6Ueu+YnE0yyCc8jCfLiqk3cm5mHzczPV
-         V6wxvOU2Y02EA==
-Date:   Fri, 29 May 2020 19:48:11 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     <Tudor.Ambarus@microchip.com>
-Cc:     <vigneshr@ti.com>, <linux-next@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <sergei.shtylyov@cogentembedded.com>
-Subject: Re: linux-next: Fixes tag needs some work in the spi-nor tree
-Message-ID: <20200529194811.45f0f5b4@canb.auug.org.au>
-In-Reply-To: <132770930.czcBmXCZeL@192.168.0.120>
-References: <20200529070647.5946fe06@canb.auug.org.au>
-        <132770930.czcBmXCZeL@192.168.0.120>
+        id S1725790AbgE2JtX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 05:49:23 -0400
+Received: from mail-wr1-f65.google.com ([209.85.221.65]:38563 "EHLO
+        mail-wr1-f65.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbgE2JtW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 05:49:22 -0400
+Received: by mail-wr1-f65.google.com with SMTP id e1so2804030wrt.5;
+        Fri, 29 May 2020 02:49:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=4SLMrx0MWc8j4vJRn7Kgzb3DUyQWlx2ZLRbxHmKbcbE=;
+        b=Ffo8IQE++6k+frzciH7ED5GMNv607o7tgzOMgs1l+TpeHRJXG3eXOUNr7/LwzY4RkD
+         PgADuitQPfprFo2OdNyXJKZpRT0a+5rWOowb5oFllzkM757hs7ia+jBnhaOgxMG/KBic
+         3IjxMv+NTvlerppX3wn2Tb8gHduqqxxgkxGmneN97HRbv36JwL4iHDni6NgAfMcM3E+0
+         dgEeUqtNbuEvWOyuPIZijNvyIAfUnbeGUXBDdq9ayEpy9QgTzb543MXJe27gGYAbb73B
+         3ULgH6nrR4qTuM56Sa4MCsBHMetJ5uGsloJgkk42ZrJhoWvL/mapbyzSOdJ/evRKTne2
+         WAWQ==
+X-Gm-Message-State: AOAM532Olg01nDQb4vFu/oik4+0BT/DJXCM6MLCo6rsp16qubFQ0VlAh
+        OX3qc5dyHJtdbLvO8dUDZ68=
+X-Google-Smtp-Source: ABdhPJynJWn/appsj5zHjc6kja0kVDlwDRUmuKllOuUorUMxNbkdmaKubkMD/idzdl3klO6z62m4Rg==
+X-Received: by 2002:adf:f58b:: with SMTP id f11mr7947420wro.155.1590745760055;
+        Fri, 29 May 2020 02:49:20 -0700 (PDT)
+Received: from localhost (ip-37-188-150-59.eurotel.cz. [37.188.150.59])
+        by smtp.gmail.com with ESMTPSA id 5sm9907553wmd.19.2020.05.29.02.49.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 29 May 2020 02:49:18 -0700 (PDT)
+Date:   Fri, 29 May 2020 11:49:10 +0200
+From:   Michal Hocko <mhocko@kernel.org>
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Yafang Shao <laoar.shao@gmail.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+Message-ID: <20200529094910.GH4406@dhcp22.suse.cz>
+References: <20200520190906.GA558281@chrisdown.name>
+ <20200521095515.GK6462@dhcp22.suse.cz>
+ <20200521163450.GV6462@dhcp22.suse.cz>
+ <CA+G9fYuDWGZx50UpD+WcsDeHX9vi3hpksvBAWbMgRZadb0Pkww@mail.gmail.com>
+ <CA+G9fYs2jg-j_5fdb0OW0G-JzDjN7b8d9qnX7uuk9p4c7mVSig@mail.gmail.com>
+ <20200528150310.GG27484@dhcp22.suse.cz>
+ <CA+G9fYvDXiZ9E9EfU6h0gsJ+xaXY77mRu9Jg+J7C=X4gJ3qvLg@mail.gmail.com>
+ <20200528164121.GA839178@chrisdown.name>
+ <CALOAHbAHGOsAUUM7qn=9L1u8kAf6Gztqt=SyHSmZ9XuYZWcKmg@mail.gmail.com>
+ <20200529015644.GA84588@chrisdown.name>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2uqSY3LHn4n/YhD2k6PYi6+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200529015644.GA84588@chrisdown.name>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2uqSY3LHn4n/YhD2k6PYi6+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri 29-05-20 02:56:44, Chris Down wrote:
+> Yafang Shao writes:
+> > Look at this patch[1] carefully you will find that it introduces the
+> > same issue that I tried to fix in another patch [2]. Even more sad is
+> > these two patches are in the same patchset. Although this issue isn't
+> > related with the issue found by Naresh, we have to ask ourselves why
+> > we always make the same mistake ?
+> > One possible answer is that we always forget the lifecyle of
+> > memory.emin before we read it. memory.emin doesn't have the same
+> > lifecycle with the memcg, while it really has the same lifecyle with
+> > the reclaimer. IOW, once a reclaimer begins the protetion value should
+> > be set to 0, and after we traversal the memcg tree we calculate a
+> > protection value for this reclaimer, finnaly it disapears after the
+> > reclaimer stops. That is why I highly suggest to add an new protection
+> > member in scan_control before.
+> 
+> I agree with you that the e{min,low} lifecycle is confusing for everyone --
+> the only thing I've not seen confirmation of is any confirmed correlation
+> with the i386 oom killer issue. If you've validated that, I'd like to see
+> the data :-)
 
-Hi,
-
-On Fri, 29 May 2020 07:31:47 +0000 <Tudor.Ambarus@microchip.com> wrote:
->
-> Right. Maybe it is worth to add this kind of check in checkpatch.pl. One =
-can=20
-> generate the Fixes tag by adding an alias in .gitconfig:
->=20
-> [alias]
->         fixes =3D show --format=3D'Fixes: %h (\"%s\")' -s
-
-I usually suggest
-
-	git log -1 --format=3D'Fixes: %h ("%s")' <SHA>
-
-but pretty much the same.  The trick is to make sure you have a new
-enough version of git and make sure that core.abbrev is not set (or set
-to "auto").
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/2uqSY3LHn4n/YhD2k6PYi6+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Q2lsACgkQAVBC80lX
-0Gy6WAf/aX1f0RIPUs36aQ6YHLZEONpxgxIyK/FmSN6HLMBCxCG5ao7tGU7SMSHy
-e+IPIg2gn0PfLt3EN9JGreaxdq+mmj+yNeTBWSQcDngc0zLfci20TEQN+uYsp3GZ
-KL/MI7WbY4TfKnoJr52yOdNAm1tuS/ly/DCJDKpRqYCGuWZlk+gVdrWc4GdVCYzg
-GYOOg2HjY+eLqI5lMWRFCYPKonqN0FfQsW8irQoNs7fXBU4FG+zxKyjYE9yMyQp9
-hzNK0kcUhOfrTRXRo4erkHU0w98fe2UiU3OwL72nLyVMRlb7Fs1SE+TtxIwmSf4+
-Y8MlzeyOOaGcWTAJ3uf7x7R2DHuHNA==
-=zS4O
------END PGP SIGNATURE-----
-
---Sig_/2uqSY3LHn4n/YhD2k6PYi6+--
+Agreed. Even if e{low,min} might still have some rough edges I am
+completely puzzled how we could end up oom if none of the protection
+path triggers which the additional debugging should confirm. Maybe my
+debugging patch is incomplete or used incorrectly (maybe it would be
+esier to use printk rather than trace_printk?).
+-- 
+Michal Hocko
+SUSE Labs

@@ -2,143 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C471E7894
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 10:44:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E759F1E79BA
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 11:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725768AbgE2IoU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 04:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43232 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725710AbgE2IoT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 04:44:19 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6A5C03E969;
-        Fri, 29 May 2020 01:44:19 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id c11so1626500ljn.2;
-        Fri, 29 May 2020 01:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=sender:from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=aA1DbZqMrb3nuAm8eHUzidlpJW1ByXtDv2mm8YjKryo=;
-        b=SAWv3wnXqsv7Y3pxgZWlvzZalgFPFTzVTKEK6ypzZzqE/6V0NX0MPfwM03cFu/W2kE
-         N3YLgGyMAbhxySjsnmLmjd2i6wxFQ7C0U42EXwA/G/porjhiKc4qKkymrYwPSN6ZqNP4
-         tc1X8MmUdNLlM7yzdPPfpjoaY7uFdkKKf6TpEx1voFgestpEhTk3DTL+1zx0sLyIOFA/
-         ukdBNIaaSYFMqXKSV9mef3HDQlTAfGGotmkUap/u7pbXutbER0lmPXU5eKsJiYjzUVde
-         9zzZfUkKjYc3m7Gg+BrWfxnXTW/7j7jZra7yvrreeWBFNU28GkRX3whSKDJ7VGOogH2i
-         5sVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:sender:from:to:cc:subject:in-reply-to:references
-         :date:message-id:mime-version;
-        bh=aA1DbZqMrb3nuAm8eHUzidlpJW1ByXtDv2mm8YjKryo=;
-        b=kflF7K5qfglIodmPImi9zwdo8mdIHAsNSMoiKt65o0T6WR9cKtzSLHGyFredXrV/t2
-         IUfChtHHxnLOdvl11sLoK+LTAsaNsBQn4l/sF07VpK5Fttw8Hl71z5OsvcZbIbLXzqUi
-         CwZHR7E+mcWTCLa52fySfCOeVJ7MWdQ0kwG7n1+w/0vWqJPWs7mS5P5FwZB6Q+LEkLav
-         GwshS16ZW6zArQTUVQJ8WsQR4g2bv/r2lZ3DqrhtWvX6so+cQlECpwjN2Ig+NkPhJnhS
-         3c0kGOut/yyOHga+HA5p6O8c1AFryQ0CGxiDqxlv2winolrgdkTy4ScI7zE//C29N0ds
-         2mZA==
-X-Gm-Message-State: AOAM533VpHLQbZuNApIx1UbcIKTPnkGXeYA8V3ZN4UT0TmQkR82nMHlZ
-        zkteiq3vEhwjBU5PPk7qKGPh1A0v
-X-Google-Smtp-Source: ABdhPJzGCU72MSBj9IQVIVRc+PXVKZjyZJ4IbA0VDU5Ujkh1u46648TqcnuTc6rbJIhPBY732CSxyw==
-X-Received: by 2002:a2e:8645:: with SMTP id i5mr3818749ljj.284.1590741857801;
-        Fri, 29 May 2020 01:44:17 -0700 (PDT)
-Received: from saruman (91-155-214-58.elisa-laajakaista.fi. [91.155.214.58])
-        by smtp.gmail.com with ESMTPSA id e19sm1875166lja.19.2020.05.29.01.44.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Fri, 29 May 2020 01:44:16 -0700 (PDT)
-From:   Felipe Balbi <balbi@kernel.org>
-To:     Greg KH <greg@kroah.com>, Rob Herring <robherring2@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sandeep Maheswaram <sanm@codeaurora.org>
-Subject: Re: linux-next: manual merge of the usb tree with the devicetree tree
-In-Reply-To: <20200529082840.GC847132@kroah.com>
-References: <20200528162215.3a9aa663@canb.auug.org.au> <20200528104916.GD3115014@kroah.com> <CAL_JsqKYUOPFS=0rWuUL2HLNz1DdKbYULckAWnCq-0v96-1S4g@mail.gmail.com> <20200529082641.GB847132@kroah.com> <20200529082840.GC847132@kroah.com>
-Date:   Fri, 29 May 2020 11:44:12 +0300
-Message-ID: <87pnan1677.fsf@kernel.org>
+        id S1726529AbgE2JsP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 05:48:15 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:54561 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725306AbgE2JsP (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 29 May 2020 05:48:15 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49YKWJ6b9Rz9sPF;
+        Fri, 29 May 2020 19:48:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590745693;
+        bh=ktw3nh2gIT33gvukGIjyyOBFVdKQqNlyao6Hb2ZtprI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=O56Kja8ja5OE30cR792hm65fQLQjmOym9sI6D2gPqLDvilPPUnCSWlchGk+nDCU4Y
+         +BCezWfCUN7nF1+6Itd5UlwL8O/eF5paQi4EQX3eaeeyRwYrC9RuT/Zgsr9x/tF3am
+         vqv/zayQCC+A3wkavQ6fM4uM/3hzX9L+mPJWgL5tjgF4o65YZ+lKdCgnJFE2tSGZU0
+         iC6zIpeZISjLSrLxEN3fZmYpiq/uXGoOd8LFSMmphCC1FYf9ZQlFRUKW9RSLuqSadG
+         DoKVF+Vg/dYAcb4l8GclWoTlZqhMFRDmSC6Ueu+YnE0yyCc8jCfLiqk3cm5mHzczPV
+         V6wxvOU2Y02EA==
+Date:   Fri, 29 May 2020 19:48:11 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     <Tudor.Ambarus@microchip.com>
+Cc:     <vigneshr@ti.com>, <linux-next@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <sergei.shtylyov@cogentembedded.com>
+Subject: Re: linux-next: Fixes tag needs some work in the spi-nor tree
+Message-ID: <20200529194811.45f0f5b4@canb.auug.org.au>
+In-Reply-To: <132770930.czcBmXCZeL@192.168.0.120>
+References: <20200529070647.5946fe06@canb.auug.org.au>
+        <132770930.czcBmXCZeL@192.168.0.120>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="=-=-=";
-        micalg=pgp-sha256; protocol="application/pgp-signature"
+Content-Type: multipart/signed; boundary="Sig_/2uqSY3LHn4n/YhD2k6PYi6+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---=-=-=
-Content-Type: text/plain
+--Sig_/2uqSY3LHn4n/YhD2k6PYi6+
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
-
 
 Hi,
 
-Greg KH <greg@kroah.com> writes:
-> On Fri, May 29, 2020 at 10:26:41AM +0200, Greg KH wrote:
->> On Thu, May 28, 2020 at 08:14:36AM -0600, Rob Herring wrote:
->> > On Thu, May 28, 2020 at 4:49 AM Greg KH <greg@kroah.com> wrote:
->> > >
->> > > On Thu, May 28, 2020 at 04:22:15PM +1000, Stephen Rothwell wrote:
->> > > > Hi all,
->> > > >
->> > > > Today's linux-next merge of the usb tree got a conflict in:
->> > > >
->> > > >   Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
->> > > >
->> > > > between commit:
->> > > >
->> > > >   3828026c9ec8 ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 bin=
-dings")
->> > > >
->> > > > from the devicetree tree and commits:
->> > > >
->> > > >   cd4b54e2ae1f ("dt-bindings: usb: qcom,dwc3: Convert USB DWC3 bin=
-dings")
->> > > >
->> > > > from the usb tree.
->> > > >
->> > > > I fixed it up (I guessed, taking most changes from the former) and=
- can
->> > > > carry the fix as necessary. This is now fixed as far as linux-next=
- is
->> > > > concerned, but any non trivial conflicts should be mentioned to yo=
-ur
->> > > > upstream maintainer when your tree is submitted for merging.  You =
-may
->> > > > also want to consider cooperating with the maintainer of the
->> > > > conflicting tree to minimise any particularly complex conflicts.
->> >=20
->> > Ugg, I fixed up a warning on my side...
->> >=20
->> > >
->> > > Sounds good,t hanks.
->> >=20
->> > Greg, can you revert your copy and we can get rid of the conflict.
+On Fri, 29 May 2020 07:31:47 +0000 <Tudor.Ambarus@microchip.com> wrote:
+>
+> Right. Maybe it is worth to add this kind of check in checkpatch.pl. One =
+can=20
+> generate the Fixes tag by adding an alias in .gitconfig:
+>=20
+> [alias]
+>         fixes =3D show --format=3D'Fixes: %h (\"%s\")' -s
 
-Did things change recently? I always got the message from DT folks that
-DT changes should go via the driver tree. Has that changed? I can stop
-taking DT patches, no problem.
+I usually suggest
 
-=2D-=20
-balbi
+	git log -1 --format=3D'Fixes: %h ("%s")' <SHA>
 
---=-=-=
-Content-Type: application/pgp-signature; name="signature.asc"
+but pretty much the same.  The trick is to make sure you have a new
+enough version of git and make sure that core.abbrev is not set (or set
+to "auto").
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2uqSY3LHn4n/YhD2k6PYi6+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEElLzh7wn96CXwjh2IzL64meEamQYFAl7Qy1wACgkQzL64meEa
-mQaEAQ//ebGPFJPFZCDBmR/81gfFtkrWLbe5ffGQ5IqZETfC8bUijVp5Ge94fxJv
-9m9BcA73PHxiIzTs18CzMiQ0FQ39We5J2VL3jpbgBBbdWJu57v5D1ioAm7HDWCp/
-8l+Zoy8FvsxmrwiT6FDXtHrp+DZZdfEmN8owWlmu00MorON0e4X6GVwYiaOqRB/7
-6Wozo2LhaqghD67TgT3cTMvxWWSL4ebqU+0EWnmZ3WkkHGE+gVaN8RIG6MFSDvsu
-+5IvUmHdi40bqtwsFW111bZvb0shNVl5R62cmK7qGASX1+yDT9rncRxAgrR79d7H
-v3av0iT4xpu0zpzW8QnbbehAZYkek1lColNwHuopJSo9HyhzVHIvv7KBRYqI8unX
-yXOFMraqhVb8mEvtJ3E1OwO5e0tZOPpASd4flOWo/XQO4cHmabtpaet0YNm0XQWQ
-HfsuItku6K0Jw9216YSWeehnZ2RDXA6AN34MrfhQLWGSk/+uQ7LCGC+5LkXUWimY
-0/asEj3ZCnrNpB+bkyr+X9npdPRDbJgXjQ9r//0vhSDKOF5tRQdkvTs8pMG3OUaB
-ewJ8AnzTpzQVzGzQzmfDanPtiiUBM5558nOWwafMHEqPWBIigMg5Pe9Q1WrtuP9p
-vK8dDLgz7bcNN1K/7RagQkElMowE6M9+ZKdE6Wxpu+40HBhTZeI=
-=cfKX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Q2lsACgkQAVBC80lX
+0Gy6WAf/aX1f0RIPUs36aQ6YHLZEONpxgxIyK/FmSN6HLMBCxCG5ao7tGU7SMSHy
+e+IPIg2gn0PfLt3EN9JGreaxdq+mmj+yNeTBWSQcDngc0zLfci20TEQN+uYsp3GZ
+KL/MI7WbY4TfKnoJr52yOdNAm1tuS/ly/DCJDKpRqYCGuWZlk+gVdrWc4GdVCYzg
+GYOOg2HjY+eLqI5lMWRFCYPKonqN0FfQsW8irQoNs7fXBU4FG+zxKyjYE9yMyQp9
+hzNK0kcUhOfrTRXRo4erkHU0w98fe2UiU3OwL72nLyVMRlb7Fs1SE+TtxIwmSf4+
+Y8MlzeyOOaGcWTAJ3uf7x7R2DHuHNA==
+=zS4O
 -----END PGP SIGNATURE-----
---=-=-=--
+
+--Sig_/2uqSY3LHn4n/YhD2k6PYi6+--

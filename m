@@ -2,108 +2,118 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C161E724A
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 03:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A34E31E7387
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 05:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2404355AbgE2B4x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 28 May 2020 21:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S2391765AbgE2DUD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 28 May 2020 23:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2390018AbgE2B4v (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 21:56:51 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E6EC08C5C8
-        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 18:56:47 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id f5so1427543wmh.2
-        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 18:56:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chrisdown.name; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=GN9DgkPdwejhyEVH1kmP5gS0KBOAcxSeuTuQOx2XI9o=;
-        b=lkBaXTV2ZUB6ZO5yX3Ng0K/CASCbc9oNlaDIc8KLZ8e4v2cb+z5+AxOSC0HUqdLw42
-         pPHQXKJiXMf7fSmverIul8xSND7c0ygaABLVaG0hqIXTL8OJ4e0fS8l8+kZ0LHaXgNsT
-         f3Y+1qQWXh34SIawtNNfPuqOwbkRTPMzu6he4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=GN9DgkPdwejhyEVH1kmP5gS0KBOAcxSeuTuQOx2XI9o=;
-        b=nSPzJTCwe/lhYX1pAqS5QjfpTJN+jeO/UtbBYqstRje8ShmJYrdqnTavc6zsJehTMR
-         5mgppPNqK9aUBH7vbMe6/3IZjNfGpL51VBI8vGd4JydeeLEslAD2osW4XB3FBkjsxejF
-         u2vbDiQTtdO3XZFMJosAmBdeE0VQWcSu+Jad0oEqWLw+jJNyB9tjGzcvhTmB6SO3bS3b
-         bpnatZk3qQzFho4pvDfohHPekCRep+MPT0xoUNKWZEyUaQRcW7cPquwAi8rJYntv1USb
-         G5lPDn+seKPhPJqethssJQeM1oGHP/4106aSIImUPy12uPSClGe5GuwMKEOvaXUCevO8
-         RLmg==
-X-Gm-Message-State: AOAM530Nn2Cjztfww0qKPr/d6fXD0I2gn40TMJe3ZJOsI6FfXA8Z3nwm
-        Zzl8So0D2NmWfio2cShknp1BpQ==
-X-Google-Smtp-Source: ABdhPJx1kaceNrBzDvGLjsUvi/4uBliHtVGdHPjh2oD497Ebo468RL7eFjpFK3j2MrZfogR+PRA4Bg==
-X-Received: by 2002:a7b:c096:: with SMTP id r22mr6033969wmh.92.1590717405871;
-        Thu, 28 May 2020 18:56:45 -0700 (PDT)
-Received: from localhost ([2a01:4b00:8432:8a00:56e1:adff:fe3f:49ed])
-        by smtp.gmail.com with ESMTPSA id q11sm1858042wrv.67.2020.05.28.18.56.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 May 2020 18:56:45 -0700 (PDT)
-Date:   Fri, 29 May 2020 02:56:44 +0100
-From:   Chris Down <chris@chrisdown.name>
-To:     Yafang Shao <laoar.shao@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Theodore Ts'o <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-Message-ID: <20200529015644.GA84588@chrisdown.name>
-References: <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
- <20200520190906.GA558281@chrisdown.name>
- <20200521095515.GK6462@dhcp22.suse.cz>
- <20200521163450.GV6462@dhcp22.suse.cz>
- <CA+G9fYuDWGZx50UpD+WcsDeHX9vi3hpksvBAWbMgRZadb0Pkww@mail.gmail.com>
- <CA+G9fYs2jg-j_5fdb0OW0G-JzDjN7b8d9qnX7uuk9p4c7mVSig@mail.gmail.com>
- <20200528150310.GG27484@dhcp22.suse.cz>
- <CA+G9fYvDXiZ9E9EfU6h0gsJ+xaXY77mRu9Jg+J7C=X4gJ3qvLg@mail.gmail.com>
- <20200528164121.GA839178@chrisdown.name>
- <CALOAHbAHGOsAUUM7qn=9L1u8kAf6Gztqt=SyHSmZ9XuYZWcKmg@mail.gmail.com>
+        with ESMTP id S2390172AbgE2DUD (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 28 May 2020 23:20:03 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA57EC08C5C6;
+        Thu, 28 May 2020 20:20:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Y8vL26C2z9sSp;
+        Fri, 29 May 2020 13:19:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1590722399;
+        bh=t+nJ7CMigvRhcZW8yph8cJ4B5U3R5RJSnHI/9BkCc4A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Rd469Ew21SoYjH9RkIdIDMK+dN4xxXZTVn75OBawfoJaxOM0mg8/FYTW/hNG8NySh
+         444t3WVVkfr8MsTP+o2EaY2Uf37fWjyj+lVMiM3wNJEd/M8fADiCha1HAnC4SO/k8V
+         ArJIhh5LbZRbD/6Oi/r5jml5bOhKoQD9170LyNpwq+rSbjuP/74IznjLT7tNCrnCkq
+         /gUUxUbCm15QNlguck0FsDq6+1CVeoJiBH+Sra6V+ffScj8t5+nX+u3BOIrwg0tDqa
+         KLpfMirbAPFwfIPxy0SINc+/MzSbaZ7YYdtg+qkmVTRXIjT5m1qbH4ENJ7clkdTN6r
+         cfy9wSq8JfHsQ==
+Date:   Fri, 29 May 2020 13:19:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: linux-next: manual merge of the net-next tree with the nfsd tree
+Message-ID: <20200529131955.26c421db@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CALOAHbAHGOsAUUM7qn=9L1u8kAf6Gztqt=SyHSmZ9XuYZWcKmg@mail.gmail.com>
-User-Agent: Mutt/1.14.2 (2020-05-25)
+Content-Type: multipart/signed; boundary="Sig_/76C7r4V_+sloSbzv=9G8_3H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Yafang Shao writes:
->Look at this patch[1] carefully you will find that it introduces the
->same issue that I tried to fix in another patch [2]. Even more sad is
->these two patches are in the same patchset. Although this issue isn't
->related with the issue found by Naresh, we have to ask ourselves why
->we always make the same mistake ?
->One possible answer is that we always forget the lifecyle of
->memory.emin before we read it. memory.emin doesn't have the same
->lifecycle with the memcg, while it really has the same lifecyle with
->the reclaimer. IOW, once a reclaimer begins the protetion value should
->be set to 0, and after we traversal the memcg tree we calculate a
->protection value for this reclaimer, finnaly it disapears after the
->reclaimer stops. That is why I highly suggest to add an new protection
->member in scan_control before.
+--Sig_/76C7r4V_+sloSbzv=9G8_3H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I agree with you that the e{min,low} lifecycle is confusing for everyone -- the 
-only thing I've not seen confirmation of is any confirmed correlation with the 
-i386 oom killer issue. If you've validated that, I'd like to see the data :-)
+Hi all,
+
+Today's linux-next merge of the net-next tree got a conflict in:
+
+  net/sunrpc/svcsock.c
+
+between commits:
+
+  11bbb0f76e99 ("SUNRPC: Trace a few more generic svc_xprt events")
+  998024dee197 ("SUNRPC: Add more svcsock tracepoints")
+
+from the nfsd tree and commits:
+
+  9b115749acb2 ("ipv6: add ip6_sock_set_v6only")
+  7d7207c2d570 ("ipv6: add ip6_sock_set_recvpktinfo")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc net/sunrpc/svcsock.c
+index 97d2b6f8c791,e7a0037d9b56..000000000000
+--- a/net/sunrpc/svcsock.c
++++ b/net/sunrpc/svcsock.c
+@@@ -1357,7 -1322,11 +1343,6 @@@ static struct svc_xprt *svc_create_sock
+  	struct sockaddr *newsin =3D (struct sockaddr *)&addr;
+  	int		newlen;
+  	int		family;
+- 	int		val;
+ -	RPC_IFDEBUG(char buf[RPC_MAX_ADDRBUFLEN]);
+ -
+ -	dprintk("svc: svc_create_socket(%s, %d, %s)\n",
+ -			serv->sv_program->pg_name, protocol,
+ -			__svc_print_addr(sin, buf, sizeof(buf)));
+ =20
+  	if (protocol !=3D IPPROTO_UDP && protocol !=3D IPPROTO_TCP) {
+  		printk(KERN_WARNING "svc: only UDP and TCP "
+
+--Sig_/76C7r4V_+sloSbzv=9G8_3H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Qf1sACgkQAVBC80lX
+0Gz+0Qf/RNSrsI4JD2GYL6Gm4mJ4jWAe/qOnknPZ9V2AYfKl76IInasqq4tqm5b6
+Gtpd6Ni4DH7JTAVRK3qSXcYcJkrYcXtybwz/eGaPyKgt0CVG/P7/fpSdDNNdFW6N
+uEdz4AAYmXkMQqzm3t0oQQh7Z9mVhWf0W7BUBkjpvsJB417qQWY3+mKt+XCbm/6e
+8OEAZz90iH0Z7ooyLCOc2wlpGWTJ558+SkClaepiVQ37QZ7/bs29iHSGsVg3wwHp
+w+EouS7W4EQZgL1CfYcZigW4o90ra+cwVDFK7qZgLZCQIcU8y/F30TMbT+ZWxY6m
+ipjoJRSzSGPJT0MvCsH4RWaCy9NYyA==
+=K4c4
+-----END PGP SIGNATURE-----
+
+--Sig_/76C7r4V_+sloSbzv=9G8_3H--

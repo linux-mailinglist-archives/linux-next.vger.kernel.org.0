@@ -2,78 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5721E88B5
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 22:14:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531451E88E9
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 22:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727951AbgE2UOn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 16:14:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726866AbgE2UOm (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 16:14:42 -0400
-Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967ADC03E969;
-        Fri, 29 May 2020 13:14:42 -0700 (PDT)
-Received: from viro by ZenIV.linux.org.uk with local (Exim 4.93 #3 (Red Hat Linux))
-        id 1jelOk-000794-SV; Fri, 29 May 2020 20:14:34 +0000
-Date:   Fri, 29 May 2020 21:14:34 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
+        id S1728213AbgE2UbU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 16:31:20 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:46269 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728206AbgE2UbU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 29 May 2020 16:31:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1590784279;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DELp0njxEcWNpbww3vjjRkIi4xfUazdSHq+PORFCme4=;
+        b=HZ+o7JMsjxhOi9gloMiMvGUEYfjE4N1CwQz2LszILkbxq1KsDPgBxuY2L1UrA3exYB93w7
+        TzwO1xnNRF6mYAcyhBI6JKH7KMN8Qj/ksj85LfgvsCwmecEuPTCYv4ozbtGheu8bsOQAmr
+        7ZEL1TIt2xUagdpoOC4Ob1KoiXXOGG4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-313-6DQQQKTMM-mx4ge5kiyJpg-1; Fri, 29 May 2020 16:31:15 -0400
+X-MC-Unique: 6DQQQKTMM-mx4ge5kiyJpg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.phx2.redhat.com [10.5.11.15])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 38A92800688;
+        Fri, 29 May 2020 20:31:14 +0000 (UTC)
+Received: from treble (ovpn-116-170.rdu2.redhat.com [10.10.116.170])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id ECFB76ED97;
+        Fri, 29 May 2020 20:31:11 +0000 (UTC)
+Date:   Fri, 29 May 2020 15:31:10 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michal Hocko <mhocko@suse.cz>, mm-commits@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        the arch/x86 maintainers <x86@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: mmotm 2020-05-13-20-30 uploaded (objtool warnings)
-Message-ID: <20200529201434.GH23230@ZenIV.linux.org.uk>
-References: <20200528172005.GP2483@worktop.programming.kicks-ass.net>
- <20200529135750.GA1580@lst.de>
- <20200529143556.GE706478@hirez.programming.kicks-ass.net>
- <20200529145325.GB706518@hirez.programming.kicks-ass.net>
- <20200529153336.GC706518@hirez.programming.kicks-ass.net>
- <20200529160514.cyaytn33thphb3tz@treble>
- <20200529161253.GD706460@hirez.programming.kicks-ass.net>
- <20200529165011.o7vvhn4wcj6zjxux@treble>
- <CAHk-=wi7xda+zM=iRGXWbU9i8S7kbNaSfPhXVXR-vK6uEFNx_w@mail.gmail.com>
- <20200529200856.GG23230@ZenIV.linux.org.uk>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: linux-next: Tree for May 29 (objtool warnings)
+Message-ID: <20200529203110.fex73r7lh6slzamq@treble>
+References: <20200529215624.5e52c341@canb.auug.org.au>
+ <27c0f44b-f61f-a545-25b0-747f1a6dd7e9@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20200529200856.GG23230@ZenIV.linux.org.uk>
+In-Reply-To: <27c0f44b-f61f-a545-25b0-747f1a6dd7e9@infradead.org>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.15
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, May 29, 2020 at 09:08:56PM +0100, Al Viro wrote:
-> On Fri, May 29, 2020 at 12:31:04PM -0700, Linus Torvalds wrote:
-> > On Fri, May 29, 2020 at 9:50 AM Josh Poimboeuf <jpoimboe@redhat.com> wrote:
-> > >
-> > > From staring at the asm I think the generated code is correct, it's just
-> > > that the nested likelys with ftrace profiling cause GCC to converge the
-> > > error/success paths.  But objtool doesn't do register value tracking so
-> > > it's not smart enough to know that it's safe.
+On Fri, May 29, 2020 at 12:43:59PM -0700, Randy Dunlap wrote:
+> On 5/29/20 4:56 AM, Stephen Rothwell wrote:
+> > Hi all,
 > > 
-> > I'm surprised that gcc doesn't end up doing the obvious CSE and then
-> > branch following and folding it all away in the end, but your patch is
-> > obviously the right thing to do regardless, so ack on that.
+> > News: there will be no linux-next release on Monday.
 > > 
-> > Al - I think this had best go into your uaccess cleanup branch with
-> > that csum-wrapper update, to avoid any unnecessary conflicts or
-> > dependencies.
+> > Changes since 20200528:
+> > 
 > 
-> Sure, just let me verify that other branches don't introduce anything
-> of that sort...
+> 
+> on x86_64:
+> 
+> crypto/drbg.o: warning: objtool: drbg_hash_update()+0x2a6: unreachable instruction
+> drivers/clk/clk-si5341.o: warning: objtool: si5341_synth_clk_set_rate()+0x129: unreachable instruction
 
-... they don't.
+More UBSAN_TRAP, this should be fixed by Kees' new patch.
 
-OK, folded, rebuild #for-next, pushed both out...
+-- 
+Josh
+

@@ -2,224 +2,1435 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A151E745A
-	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 06:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216A21E74E2
+	for <lists+linux-next@lfdr.de>; Fri, 29 May 2020 06:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726054AbgE2ELB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 29 May 2020 00:11:01 -0400
-Received: from ozlabs.org ([203.11.71.1]:36511 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725936AbgE2ELB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 29 May 2020 00:11:01 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49YB295DpQz9sSm;
-        Fri, 29 May 2020 14:10:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590725458;
-        bh=MvpExw+kJlNIs4OW+iB1XEUz15syI6U7hZfNtJIbGQQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aRxk05nJsPY5NTsjlEzowXfRCYmKxrJ5BsffyUDehUYpB8Gy7jIxaofSp2l3LGQD3
-         9b0F/KXu35uI4YM4PTcO8qCIp8rt30UOv2ptIBmw5mLqNTa2P767SkLgRbfUnABn6P
-         8OYFN+8q8ftN34KEYRAso5xbty1zdhvnDlWh3kdwynGXha3flJnm1flUbb9jbUUUzU
-         mkRNK5nAOU58uoeZ5tBOphTTudsvB0NZ6JfHVSW7inx8Wv4fTiaTiuY2CRjmwQ5RDA
-         C4BTgkbp9f4J73eZLaa0sQmQCP9L+LzKSOpvePaQX1kPLtuO1cus2DibT6AEsF3qyu
-         6qCBmxHLeXyKg==
-Date:   Fri, 29 May 2020 14:10:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Rob Clark <robdclark@gmail.com>, Sean Paul <seanpaul@chromium.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Kalyan Thota <kalyan_t@codeaurora.org>
-Subject: Re: inux-next: build failure after merge of the drm-msm tree
-Message-ID: <20200529141056.000f78ba@canb.auug.org.au>
-In-Reply-To: <20200526140841.0a1d5c7b@canb.auug.org.au>
-References: <20200519150955.1667566a@canb.auug.org.au>
-        <20200526140841.0a1d5c7b@canb.auug.org.au>
+        id S1725768AbgE2EbG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 29 May 2020 00:31:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60456 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725681AbgE2EbF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 29 May 2020 00:31:05 -0400
+Received: from mail-pj1-x1042.google.com (mail-pj1-x1042.google.com [IPv6:2607:f8b0:4864:20::1042])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43E45C08C5C6
+        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 21:31:04 -0700 (PDT)
+Received: by mail-pj1-x1042.google.com with SMTP id q9so612321pjm.2
+        for <linux-next@vger.kernel.org>; Thu, 28 May 2020 21:31:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=wuTwn6KMQzNHvTS0haindYNjOXr57rMs5CQ8Cclk254=;
+        b=Fi+1mJtpleeUG9tsHaY8zC1X5/fAp2ttcGNPyjab9gjiGouxsq6HJ+6PUOKAWXWedO
+         /hKZSlQEp4oGalgcuwcJHY96kMC1if+EEWwEbyDihL3ig+32AsYPxiCelvbipiZ21yDL
+         24tDhcXzYmLLRkBJgQa55LgOTTt3TMOJLsjuJovfufqGy2TJLSugNw59GmCOTSeEBMxo
+         OR5rDf7QiA+23kGwivxijeGafbZG78mQGQ5tJC1fJjZX0WBnFJldJ6NUXQ5TNcF13kxe
+         2G2qL+YxNYdcWPUrb/WBxalpJExmjO8YeroYeOcJJdPAte9Pp8CA3O2fV7WVdKSnpMF8
+         XNEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=wuTwn6KMQzNHvTS0haindYNjOXr57rMs5CQ8Cclk254=;
+        b=FAZ0PDFfjlDqf7QyDsJOGrdSbYPHJWB+2BDe73btMz28iAPT9aVAgFpSwYce/F7BoK
+         Vwl/ZaPBo/85it2FfdDuUSCL816VwGCv174FUT/G6V03T5/GBNEm9VZI33kmlWqqvSFu
+         ef2+E/pzhVd6puTfvu5ZaaoALKNG10T54yu+5Pfp79H7J9FtjuFvmQJwb4DEZ1aWjMPT
+         OfNso0gEXMvkuPMhGVv/HBOuT3zivCvCK8CJ5HvDSS/zxKQ7SNvbfVYUWdygMCvISJU7
+         kIAD+Dmh8mR5K/oeBA7cs7mYVlS3UBfCLHANMPMCYRCypSrpBfywZUYWApoBXtVXUlko
+         iGJA==
+X-Gm-Message-State: AOAM5316kOa+tM/9KDHQIkTH9Xt+6bBXfLzYem3sgOlZ2WZG4wtFf8Iu
+        D0SB24yVjerIkeA7aRZ9WjybXRMP43M=
+X-Google-Smtp-Source: ABdhPJzRPbiK+Rj7+5QH7dmP7uKQoEITpwvRnqXa9dvZjI36lEfxEzKFvwEIsUl4VVhzdTcvkluviA==
+X-Received: by 2002:a17:902:b594:: with SMTP id a20mr6718267pls.187.1590726662146;
+        Thu, 28 May 2020 21:31:02 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c24sm6005978pfp.186.2020.05.28.21.31.00
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 May 2020 21:31:01 -0700 (PDT)
+Message-ID: <5ed09005.1c69fb81.c9f40.3601@mx.google.com>
+Date:   Thu, 28 May 2020 21:31:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0s2XPM_4kygMGPSAs87Bbrq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v5.7-rc7-238-g59fcbde6ab90
+Subject: next/pending-fixes build: 145 builds: 2 failed, 143 passed, 1 error,
+ 152 warnings (v5.7-rc7-238-g59fcbde6ab90)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/0s2XPM_4kygMGPSAs87Bbrq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes build: 145 builds: 2 failed, 143 passed, 1 error, 152 wa=
+rnings (v5.7-rc7-238-g59fcbde6ab90)
 
-Hi all,
+Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
+rnel/v5.7-rc7-238-g59fcbde6ab90/
 
-On Tue, 26 May 2020 14:08:41 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> Hi all,
->=20
-> On Tue, 19 May 2020 15:09:55 +1000 Stephen Rothwell <sfr@canb.auug.org.au=
-> wrote:
-> >
-> > Hi all,
-> >=20
-> > After merging the drm-msm tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > ERROR: modpost: "__aeabi_ldivmod" [drivers/gpu/drm/msm/msm.ko] undefine=
-d!
-> > ERROR: modpost: "__aeabi_uldivmod" [drivers/gpu/drm/msm/msm.ko] undefin=
-ed!
-> >=20
-> > Caused by commit
-> >=20
-> >   04d9044f6c57 ("drm/msm/dpu: add support for clk and bw scaling for di=
-splay")
-> >=20
-> > I applied the following patch for today (this is mechanical, there may
-> > be a better way):
-> >=20
-> > From: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Date: Tue, 19 May 2020 14:12:39 +1000
-> > Subject: [PATCH] drm/msm/dpu: fix up u64/u32 division for 32 bit archit=
-ectures
-> >=20
-> > Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > ---
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c | 23 ++++++++++++++-----
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c     | 15 ++++++++----
-> >  2 files changed, 28 insertions(+), 10 deletions(-)
-> >=20
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c b/drivers/gp=
-u/drm/msm/disp/dpu1/dpu_core_perf.c
-> > index 9697abcbec3f..85c2a4190840 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_core_perf.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/sort.h>
-> >  #include <linux/clk.h>
-> >  #include <linux/bitmap.h>
-> > +#include <asm/div64.h>
-> > =20
-> >  #include "dpu_kms.h"
-> >  #include "dpu_trace.h"
-> > @@ -53,8 +54,11 @@ static u64 _dpu_core_perf_calc_bw(struct dpu_kms *km=
-s,
-> >  	}
-> > =20
-> >  	bw_factor =3D kms->catalog->perf.bw_inefficiency_factor;
-> > -	if (bw_factor)
-> > -		crtc_plane_bw =3D mult_frac(crtc_plane_bw, bw_factor, 100);
-> > +	if (bw_factor) {
-> > +		u64 quot =3D crtc_plane_bw;
-> > +		u32 rem =3D do_div(quot, 100);
-> > +		crtc_plane_bw =3D (quot * bw_factor) + ((rem * bw_factor) / 100);
-> > +	}
-> > =20
-> >  	return crtc_plane_bw;
-> >  }
-> > @@ -89,8 +93,11 @@ static u64 _dpu_core_perf_calc_clk(struct dpu_kms *k=
-ms,
-> >  	}
-> > =20
-> >  	clk_factor =3D kms->catalog->perf.clk_inefficiency_factor;
-> > -	if (clk_factor)
-> > -		crtc_clk =3D mult_frac(crtc_clk, clk_factor, 100);
-> > +	if (clk_factor) {
-> > +		u64 quot =3D crtc_clk;
-> > +		u32 rem =3D do_div(quot, 100);
-> > +		crtc_clk =3D (quot * clk_factor) + ((rem * clk_factor) / 100);
-> > +	}
-> > =20
-> >  	return crtc_clk;
-> >  }
-> > @@ -234,8 +241,12 @@ static int _dpu_core_perf_crtc_update_bus(struct d=
-pu_kms *kms,
-> >  		}
-> >  	}
-> > =20
-> > -	avg_bw =3D kms->num_paths ?
-> > -			perf.bw_ctl / kms->num_paths : 0;
-> > +	if (kms->num_paths) {
-> > +		avg_bw =3D perf.bw_ctl;
-> > +		do_div(avg_bw, kms->num_paths);
-> > +	} else {
-> > +		avg_bw =3D 0;
-> > +	}
-> > =20
-> >  	for (i =3D 0; i < kms->num_paths; i++)
-> >  		icc_set_bw(kms->path[i],
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c b/drivers/gpu/dr=
-m/msm/disp/dpu1/dpu_plane.c
-> > index c2a6e3dacd68..ad95f32eac13 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
-> > @@ -9,6 +9,7 @@
-> > =20
-> >  #include <linux/debugfs.h>
-> >  #include <linux/dma-buf.h>
-> > +#include <asm/div64.h>
-> > =20
-> >  #include <drm/drm_atomic_uapi.h>
-> >  #include <drm/drm_damage_helper.h>
-> > @@ -174,7 +175,11 @@ static void _dpu_plane_calc_bw(struct drm_plane *p=
-lane,
-> >  	plane_prefill_bw =3D
-> >  		src_width * hw_latency_lines * fps * fmt->bpp * scale_factor;
-> > =20
-> > -	plane_prefill_bw =3D mult_frac(plane_prefill_bw, mode->vtotal, (vbp+v=
-pw));
-> > +	{
-> > +		u64 quot =3D plane_prefill_bw;
-> > +		u32 rem =3D do_div(plane_prefill_bw, vbp + vpw);
-> > +		plane_prefill_bw =3D quot * mode->vtotal + rem * mode->vtotal / (vbp=
- + vpw);
-> > +	}
-> > =20
-> >  	pstate->plane_fetch_bw =3D max(plane_bw, plane_prefill_bw);
-> >  }
-> > @@ -204,9 +209,11 @@ static void _dpu_plane_calc_clk(struct drm_plane *=
-plane)
-> >  	pstate->plane_clk =3D
-> >  		dst_width * mode->vtotal * fps;
-> > =20
-> > -	if (src_height > dst_height)
-> > -		pstate->plane_clk =3D mult_frac(pstate->plane_clk,
-> > -					src_height, dst_height);
-> > +	if (src_height > dst_height) {
-> > +		u64 quot =3D pstate->plane_clk;
-> > +		u32 rem =3D do_div(quot, dst_height);
-> > +		pstate->plane_clk =3D quot * src_height + rem * src_height / dst_hei=
-ght;
-> > +	}
-> >  }
-> > =20
-> >  /**
-> > --=20
-> > 2.26.2 =20
->=20
-> I am still applying the above ...
+Tree: next
+Branch: pending-fixes
+Git Describe: v5.7-rc7-238-g59fcbde6ab90
+Git Commit: 59fcbde6ab90da87fa0bd1f51ceed3c14d0f845e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Built: 7 unique architectures
 
-Still applying.
+Build Failures Detected:
 
-Any comment even?
---=20
-Cheers,
-Stephen Rothwell
+arc:
+    hsdk_defconfig: (gcc-8) FAIL
 
---Sig_/0s2XPM_4kygMGPSAs87Bbrq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+arm:
+    qcom_defconfig: (gcc-8) FAIL
 
------BEGIN PGP SIGNATURE-----
+Errors and Warnings Detected:
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Qi1EACgkQAVBC80lX
-0Gx0zgf/X659iSWvO2inqpuJ5Lw0ff+VXrOwRqFtXe9XvCVJhzgn8hftFc5OmQD7
-I+ggS+f7HGbnU8UeUaXUXtDzrkkXAUaraFFKtKLKMy1vL7AVcw4JpgJuC2IWG10I
-Se1tLsjOgUSiD1QkEiJ7dSeTSNslTWwnadnF0VPnOvaThySnEIf2rBySacafpoTc
-4xKPt5od2iUe18UTEwzl1tulNQChvv/xwTUGpzp4iAmdQiAz+8eh5TIRYzY91Gba
-7vHH+mEuEid7EXZ6+9wwm8+43Ls4EHOWVyQ0sIMBMglO8a784CMY+6Mu0tzYkr2d
-trsvETdbQUvWMFZ8xcCBYh0lH6cR8w==
-=dEIo
------END PGP SIGNATURE-----
+arc:
 
---Sig_/0s2XPM_4kygMGPSAs87Bbrq--
+arm64:
+    allmodconfig (gcc-8): 24 warnings
+    defconfig (gcc-8): 24 warnings
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (gcc-8): 24 warnings
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy (gcc-8): 24 warnings
+    defconfig+kselftest (gcc-8): 24 warnings
+
+arm:
+    allmodconfig (gcc-8): 16 warnings
+    cm_x300_defconfig (gcc-8): 2 warnings
+    em_x270_defconfig (gcc-8): 2 warnings
+    eseries_pxa_defconfig (gcc-8): 2 warnings
+    multi_v7_defconfig+kselftest (gcc-8): 1 warning
+    pxa_defconfig (gcc-8): 6 warnings
+    qcom_defconfig (gcc-8): 1 error
+
+i386:
+
+mips:
+    malta_qemu_32r6_defconfig (gcc-8): 1 warning
+    rm200_defconfig (gcc-8): 1 warning
+
+riscv:
+
+x86_64:
+    tinyconfig (gcc-8): 1 warning
+
+Errors summary:
+
+    1    ERROR: modpost: "rd_full" [drivers/gpu/drm/msm/msm.ko] undefined!
+
+Warnings summary:
+
+    80   arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (=
+dma_ranges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" p=
+roperty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, chil=
+d #address-cells =3D=3D 2, #size-cells =3D=3D 1)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #size-cells (1) differs from / (2)
+    15   arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Wa=
+rning (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but=
+ its #address-cells (1) differs from / (2)
+    9    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    8    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells=
+ (1) differs from / (2)
+    5    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_range=
+s_format): /soc:dma-ranges: empty "dma-ranges" property but its #address-ce=
+lls (1) differs from / (2)
+    4    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer fro=
+m integer of different size [-Wint-to-pointer-cast]
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+    2    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    1    {standard input}:141: Warning: macro instruction expanded into mul=
+tiple instructions
+    1    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 byte=
+s is larger than 1024 bytes [-Wframe-larger-than=3D]
+    1    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to =
+integer of different size [-Wpointer-to-int-cast]
+    1    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+    1    /tmp/cco1vrNP.s:18191: Warning: using r15 results in unpredictable=
+ behaviour
+    1    /tmp/cco1vrNP.s:18119: Warning: using r15 results in unpredictable=
+ behaviour
+    1    .config:1161:warning: override: UNWINDER_GUESS changes choice state
+
+Section mismatches summary:
+
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a44): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+    1    WARNING: modpost: vmlinux.o(.text.unlikely+0x2830): Section mismat=
+ch in reference from the function pmax_setup_memory_region() to the functio=
+n .init.text:add_memory_region()
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig+kselftest (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnin=
+gs, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 sectio=
+n mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 16 warnings, 0 section =
+mismatches
+
+Warnings:
+    /tmp/cco1vrNP.s:18119: Warning: using r15 results in unpredictable beha=
+viour
+    /tmp/cco1vrNP.s:18191: Warning: using r15 results in unpredictable beha=
+viour
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:114:37: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-octeon.c:48:3: warning: cast from pointer to integ=
+er of different size [-Wpointer-to-int-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+    drivers/net/phy/mdio-cavium.h:113:48: warning: cast to pointer from int=
+eger of different size [-Wint-to-pointer-cast]
+
+---------------------------------------------------------------------------=
+-----
+allmodconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+allnoconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+am200epdkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+ar7_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+aspeed_g4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+assabet_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+at91_dt_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+ath25_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+axm55xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+badge4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm2835_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bcm63xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bigsur_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+bmips_stb_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+capcella_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+cerfcube_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+clps711x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+cm_x300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+cobalt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+colibri_pxa300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+collie_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+corgi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+cu1000-neo_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+davinci_all_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+decstation_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2a44): Section mismatch in=
+ reference from the function pmax_setup_memory_region() to the function .in=
+it.text:add_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+decstation_r4k_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+Section mismatches:
+    WARNING: modpost: vmlinux.o(.text.unlikely+0x2830): Section mismatch in=
+ reference from the function pmax_setup_memory_region() to the function .in=
+it.text:add_memory_region()
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0 section m=
+ismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 24 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+CONFIG_RANDOMIZE_BASE=3Dy (arm64, gcc-8) =E2=80=94 PASS, 0 errors=
+, 24 warnings, 0 section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 24 warnings, 0=
+ section mismatches
+
+Warnings:
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi:1068.4-52: Warning (dma_r=
+anges_format): /soc/dram-controller@1c62000:dma-ranges: "dma-ranges" proper=
+ty has invalid length (12 bytes) (parent #address-cells =3D=3D 1, child #ad=
+dress-cells =3D=3D 2, #size-cells =3D=3D 1)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#address-cells (1) differs from / (2)
+    arch/arm64/boot/dts/broadcom/stingray/stingray-usb.dtsi:7.3-14: Warning=
+ (dma_ranges_format): /usb:dma-ranges: empty "dma-ranges" property but its =
+#size-cells (1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #address-cells (=
+1) differs from / (2)
+    arch/arm64/boot/dts/qcom/ipq6018.dtsi:127.3-14: Warning (dma_ranges_for=
+mat): /soc:dma-ranges: empty "dma-ranges" property but its #size-cells (1) =
+differs from / (2)
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+efm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+em_x270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 sect=
+ion mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+eseries_pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 2 warnings, 0 =
+section mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+
+---------------------------------------------------------------------------=
+-----
+fuloong2e_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+gcw0_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+gemini_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+gpr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+h5000_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+hackkit_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+hisi_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+hsdk_defconfig (arc, gcc-8) =E2=80=94 FAIL, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+imx_v6_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip22_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip27_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip28_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ip32_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+ixp4xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+jazz_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+jmr3927_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+keystone_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson1b_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 =
+section mismatches
+
+---------------------------------------------------------------------------=
+-----
+loongson3_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpc32xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+lpd270_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+magician_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_kvm_guest_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+malta_qemu_32r6_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning=
+, 0 section mismatches
+
+Warnings:
+    {standard input}:141: Warning: macro instruction expanded into multiple=
+ instructions
+
+---------------------------------------------------------------------------=
+-----
+maltaaprp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltasmvp_eva_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+maltaup_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+markeins_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+milbeaut_m10v_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mini2440_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mips_paravirt_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings,=
+ 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+mmp2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+moxart_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+mpc30x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mps2_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+mtx1_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy (arm, gcc-8) =E2=80=94 PASS, 0=
+ errors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-8) =E2=80=94 PASS, 0 errors, 1 warni=
+ng, 0 section mismatches
+
+Warnings:
+    net/sched/cls_flower.c:331:1: warning: the frame size of 1032 bytes is =
+larger than 1024 bytes [-Wframe-larger-than=3D]
+
+---------------------------------------------------------------------------=
+-----
+mv78xx0_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mvebu_v7_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+mxs_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+nhk8815_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlp_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nlm_xlr_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_k210_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+nommu_virt_defconfig (riscv, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+omap2plus_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+orion5x_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+oxnas_v6_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+palmz72_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+pic32mzda_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+pleb_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+pnx8335_stb225_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings=
+, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa168_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa3xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa910_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+pxa_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 6 warnings, 0 section =
+mismatches
+
+Warnings:
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9705
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9712
+    WARNING: unmet direct dependencies detected for SND_SOC_WM9713
+
+---------------------------------------------------------------------------=
+-----
+qcom_defconfig (arm, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
+mismatches
+
+Errors:
+    ERROR: modpost: "rd_full" [drivers/gpu/drm/msm/msm.ko] undefined!
+
+---------------------------------------------------------------------------=
+-----
+qi_lb60_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rb532_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+rbtx49xx_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+realview_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+rm200_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 sectio=
+n mismatches
+
+Warnings:
+    drivers/block/paride/bpck.c:32: warning: "PC" redefined
+
+---------------------------------------------------------------------------=
+-----
+rpc_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section =
+mismatches
+
+---------------------------------------------------------------------------=
+-----
+rt305x_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c2410_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+s3c6400_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+sama5_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+sb1250_swarm_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, =
+0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+shmobile_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+socfpga_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear13xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+spear6xx_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+spitz_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+stm32_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+tango4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0226_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tb0287_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+tct_hammer_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (i386, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mi=
+smatches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section mis=
+matches
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 1 warning, 0 section m=
+ismatches
+
+Warnings:
+    .config:1161:warning: override: UNWINDER_GUESS changes choice state
+
+---------------------------------------------------------------------------=
+-----
+tinyconfig (arm64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+trizeps4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+u300_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+u8500_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vdk_hs38_smp_defconfig (arc, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+vexpress_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+vf610m4_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sect=
+ion mismatches
+
+---------------------------------------------------------------------------=
+-----
+viper_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---------------------------------------------------------------------------=
+-----
+workpad_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sec=
+tion mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+xcep_defconfig (arm, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section=
+ mismatches
+
+---------------------------------------------------------------------------=
+-----
+xway_defconfig (mips, gcc-8) =E2=80=94 PASS, 0 errors, 0 warnings, 0 sectio=
+n mismatches
+
+---
+For more info write to <info@kernelci.org>

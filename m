@@ -2,80 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CC5471E8DE1
-	for <lists+linux-next@lfdr.de>; Sat, 30 May 2020 06:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F181E8FD2
+	for <lists+linux-next@lfdr.de>; Sat, 30 May 2020 10:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725814AbgE3E4a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 30 May 2020 00:56:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S1728797AbgE3IlN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 30 May 2020 04:41:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725813AbgE3E4a (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 30 May 2020 00:56:30 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E8BC08C5C9;
-        Fri, 29 May 2020 21:56:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49Yq094BFRz9sPK;
-        Sat, 30 May 2020 14:56:25 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590814585;
-        bh=VIZ+Q4shNV+I/Z2StHSif1/UkkXNINi+dqJpBbI/yWs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=LmswShr1WaZV0Oc6KeXrwDGPr359TXLXYfpdJVNYKgeQpxnHwZDqZqGb2/55DDDvr
-         3wpCC3ERwjgJ0NqROuZxlN+yHyaJ+rnbAMfUigBftXk23l46Egm40mOG1hpxpwFAsA
-         DTX2z2RUU2x24xxxOaTVkpZMUq5jPfQA6fGg4adaGuoLFAcQnsG7YBHFKPB2JjEiQ6
-         WkmQ3O6sCa93cjFtE8dQfVhObfr5FmHC3HuiHl/DG7NDp6monbX+Y96NveXUFKh5jC
-         DWH4I+F/ZQNuYs7iUSXE6OFnijpQjeAAFBVn0RXHWvc8qeF2lYZkPmAEnq5Xup2XNw
-         pi65SAc95PIOw==
-Date:   Sat, 30 May 2020 14:56:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the clk tree
-Message-ID: <20200530145624.30d0e400@canb.auug.org.au>
+        with ESMTP id S1728724AbgE3IlN (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 30 May 2020 04:41:13 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:3201:214:fdff:fe10:1be6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4838C03E969;
+        Sat, 30 May 2020 01:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+         bh=6Mz06hLtHQ7gyIv6eqzJQoUBLcQZgBtdo3f5HYMi0u4=; b=DeukvLsJHGGg7/XedzT2fVdcQ
+        rxWhYv2ZYubLxOgnuzkPTtEkRYIbYSnOLGwaiIg4BMOkLbWIavd+U4Vc3uX9nJKoN8ifTba0oCEUS
+        z4EEqx6LXKIq9GvmSdp0NHCNlq0IWVCfH0bE5gXRVMcBnXbiYyjFDkB0pHKpRzUi2d43FC2BjlHhd
+        omLonNHXAJeGtdO2xZQc/i4PoAkOESXK1qF0olsHt77fDVDvdfKJai1nKVxcK5UAnV/AKfSKJnWIN
+        7KqB2lcizZusQjpmVxhkWZC52DAdHCwXPCZ80vtt8OY0biNIAzfWg0fOf1NOk09AehvJscmZ36bEp
+        bBDdC4mbQ==;
+Received: from shell.armlinux.org.uk ([2001:4d48:ad52:3201:5054:ff:fe00:4ec]:46952)
+        by pandora.armlinux.org.uk with esmtpsa (TLSv1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1jex3B-0001mb-MJ; Sat, 30 May 2020 09:41:05 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.92)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1jex39-0000vl-Ji; Sat, 30 May 2020 09:41:03 +0100
+Date:   Sat, 30 May 2020 09:41:03 +0100
+From:   Russell King - ARM Linux admin <linux@armlinux.org.uk>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ingo Molnar <mingo@kernel.org>
+Subject: Re: linux-next: manual merge of the arm tree with Linus' tree
+Message-ID: <20200530084103.GC1551@shell.armlinux.org.uk>
+References: <20200528090941.341ad93a@canb.auug.org.au>
+ <20200527232257.GS1551@shell.armlinux.org.uk>
+ <CAMj1kXHRi3zUq-j30ptqUifOs+sn_h8i4ic+8xT9q1SrC+rjsw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/I.yNAvAjXABd+W8WWkOIGBS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXHRi3zUq-j30ptqUifOs+sn_h8i4ic+8xT9q1SrC+rjsw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/I.yNAvAjXABd+W8WWkOIGBS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, May 28, 2020 at 09:01:55AM +0200, Ard Biesheuvel wrote:
+> On Thu, 28 May 2020 at 01:23, Russell King - ARM Linux admin
+> <linux@armlinux.org.uk> wrote:
+> >
+> > Ard,
+> >
+> > Please take a look.  Obviously, whatever the resolution is going to be
+> > needed when Linus opens the merge window.
+> >
+> 
+> Sorry for that.
+> 
+> I have pushed the signed tag below to resolve it. Those changes were
+> already in v5.7-rc2, so I wouldn't expect this to cause more trouble.
+> If you prefer, you could merge v5.7-rc2 into your tree directly
+> instead.
 
-Hi all,
+In light of Stephen's report of a different conflict on the 29th, I
+haven't pulled this.  I don't know if that's a side effect of this
+change having been picked up by -next or not.
 
-Commit
-
-  5f2feacb7639 ("clk: vc5: Add support for IDT VersaClock 5P49V6965")
-
-is missing a Signed-off-by from its committer.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/I.yNAvAjXABd+W8WWkOIGBS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7R53gACgkQAVBC80lX
-0GwM7Qf/WX/RKZ0IvOT56G31IFNnei6FoRmxEKqP4A3UrekTrpoFanmJpE0K+b7u
-7wB1LTnNwB2sL78x5jbYoot8scnEVprlcR1ulq/nRjql+X4/xqCEEjd9G9rfOKrE
-77Q5KrMFdCZzQVhyRwJ0dGWeYAOtQRK/04t74ao4SRXngKZQPlA1N9IewgGqx3bv
-UcuTej64cXDStWFAVTG8W2h8PDeufF403rxYfWvWdXLcu7zYixadEb5PW6a/3qW0
-G/n9zJBy+g44vY4pv1FV1SXRM9saCiYKxs7ooONFWrh7QVWwO8xyl/GMXzFlGjNh
-0cDKIgTsa0cgdthgKrR4MsZk6hQqXg==
-=vifM
------END PGP SIGNATURE-----
-
---Sig_/I.yNAvAjXABd+W8WWkOIGBS--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTC for 0.8m (est. 1762m) line in suburbia: sync at 13.1Mbps down 424kbps up

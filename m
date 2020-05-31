@@ -2,80 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 201731E99B6
-	for <lists+linux-next@lfdr.de>; Sun, 31 May 2020 19:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4CC1E99C5
+	for <lists+linux-next@lfdr.de>; Sun, 31 May 2020 20:06:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728012AbgEaR6E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 31 May 2020 13:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39122 "EHLO
+        id S1728241AbgEaSGS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 31 May 2020 14:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727994AbgEaR6D (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 31 May 2020 13:58:03 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C108C061A0E;
-        Sun, 31 May 2020 10:58:03 -0700 (PDT)
+        with ESMTP id S1728166AbgEaSGS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 31 May 2020 14:06:18 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD3BC061A0E;
+        Sun, 31 May 2020 11:06:17 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49ZmHW6SmGz9sSJ;
-        Mon,  1 Jun 2020 03:57:59 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49ZmT40wRpz9sPK;
+        Mon,  1 Jun 2020 04:06:15 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1590947880;
-        bh=dXArXWaqSpik6S2cclpveq9exEP8xHQe6YZaTGds8d4=;
+        s=201702; t=1590948376;
+        bh=B9vweJj02hybxmeJPgZz++LIDHIcQC3lnqaWDp/+a1E=;
         h=Date:From:To:Cc:Subject:From;
-        b=M8n7QXupyemQrRtMwv0RsASHsgnxDiWsbRe89Nz0UkoI+VPTpovDomDNKnnMv/nre
-         XZLhj6bhUHyv0oJyC1tN9plvhTQ1y/2Hn0IrBz3w5WqUwBhf1G5w6CH3ny2jy64AUr
-         bBxOizk2jhUsyFcidn8Z9yPqRvD8k4lndrroLY/Ckrt/phT32b2E3PAioVaEuH767l
-         vcpviRVxLwbZ1BsJB2iclM9IUwBNsZHwizwXVIy3x54OuOdnN2HJ76M95150ixYdMo
-         OdbswIMBAH3+2MXYJEJTacQZYKRc5zb39snMsSafwqz3Aedy4YzbD9T/uh1s4G9+kE
-         ptcbqftN7xHYQ==
-Date:   Mon, 1 Jun 2020 03:57:57 +1000
+        b=O4m6tGKGNfRyPgNQJr8WhsGRQKNVcLY4PlJenX1Go8406WoR5DKD06qPwfS6Kb7Y4
+         fuPINvpv3qovWoaE0WRcd0KlTROZO2UwGNsU1FnqE82ZSQbiLkdwot8QBmTPQe0j+S
+         gBVo6wlbaOdmYpzQdw87IiCJyXgif0UlzR+XAlJONRATvHmUO97QYE1qaYL3CzLJni
+         YAeA0aLdSWsrKxzxfM/PN1dx941wrpUoY8TgqfkzMcgJccvHhwzWO4LxxOQeF3pATZ
+         X/0qXKlC5/vbwb/JkrTQrZzBPAtBkClZmhxgX8GvjabMFERNoS3gu8BGu7efJ/bFjP
+         RNEEjOuaOEv+A==
+Date:   Mon, 1 Jun 2020 04:06:15 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the net tree
-Message-ID: <20200601035757.272ee91e@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Subject: linux-next: Fixes tag needs some work in the irqchip tree
+Message-ID: <20200601040615.34394a6a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ixG0bGy+jF4kBroPqt5zbCS";
+Content-Type: multipart/signed; boundary="Sig_/TX70PQ63dji.RjFHgoRWKUm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/ixG0bGy+jF4kBroPqt5zbCS
+--Sig_/TX70PQ63dji.RjFHgoRWKUm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Commit
+In commit
 
-  02c71b144c81 ("l2tp: do not use inet_hash()/inet_unhash()")
+  8abfb9b77d87 ("irqchip/loongson-pci-msi: Fix a typo in Kconfig")
 
-is missing a Signed-off-by from its committer.
+Fixes tag
+
+  Fixes: cca8fbff2585 ("irqchip: Add Loongson PCH MSI controller")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: 632dcc2c75ef ("irqchip: Add Loongson PCH MSI controller")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/ixG0bGy+jF4kBroPqt5zbCS
+--Sig_/TX70PQ63dji.RjFHgoRWKUm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7T8CUACgkQAVBC80lX
-0Gwa2Af/YOMn18ZMxkiYZV4T3cEWFBf2uxDXg9ABnsGvQinz4SCbF6bfE2qgsnmG
-x9jGcXwqD2+Eq+msw/qdnA+KhcKwyArgsXs28kTKcZSXKcoKG3hZiY0NbzHHLcrf
-/qf1DFQwf8tcfdVMnd8YNo5UMktTNQVRt476WpXJ/h4JNf52K9xr4iTYZataaZxz
-HtFWL7y8xq0SmqYKRuAjW0lBTzwpiTPI6dKLCTGV065mquhGb+R2ZNhZcxI+nsv9
-g5k4kURe0+tQN1pL8hsRTRctSuRgqSFgClAgHqxwXv9mpGC+ZRgTIMw3FEhciqAh
-79p4R2XKIHw/ZjfmiWoYmQ7kXgA49A==
-=NCg7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7T8hcACgkQAVBC80lX
+0GwzZAf8CSdA6PG60eVsW/icODKRD/t1iSEiLJUxdeBnqdbUk6wZmwyzuITgkans
+xe9kYHzycjWX8gfX5PLSwQhf2t7x1fsKt3AQbPUCb5mFJ1ZI89sv5wWgy8UxJApu
+NhNfedkPjnTbpTYz8CaXjvNKRGWSz53yZRavtwffYArAXDm2UwWZ/eUxYqAWlV84
+UI3RMiLPa+18lIO4Su5On3d+vg8BGDzGz/cq7dLej6hCjFd19KJeC2wHi+D2VcGU
+dEwm3+Ou8oAH5ih7+fzgqhh6PJWnymGETfGEg8lYvLy39RrjBsY9o07J0VbcaZck
+eZBwz1yRcZGGV/eNPh+ZFxtZOcxJMg==
+=EAh2
 -----END PGP SIGNATURE-----
 
---Sig_/ixG0bGy+jF4kBroPqt5zbCS--
+--Sig_/TX70PQ63dji.RjFHgoRWKUm--

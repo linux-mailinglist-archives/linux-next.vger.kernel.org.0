@@ -2,138 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3BF1EB4BD
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 06:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DB11EB4CF
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 07:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726215AbgFBEyC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 00:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54796 "EHLO
+        id S1726213AbgFBFAn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 01:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725890AbgFBEyC (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 00:54:02 -0400
+        with ESMTP id S1725787AbgFBFAm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 01:00:42 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2E01C061A0E;
-        Mon,  1 Jun 2020 21:54:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D52C061A0E;
+        Mon,  1 Jun 2020 22:00:42 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bfnz4bsxz9sSf;
-        Tue,  2 Jun 2020 14:53:59 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bfxh5c8Pz9sSc;
+        Tue,  2 Jun 2020 15:00:40 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591073640;
-        bh=rDyuOagNKw3935ar6u61XTbrq3VfmYxSPPFZvkTS/a4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=REQ1AbSt8qb5RDz/3aD4wUoufWsmXCOg7kUvF6OzjOBK3U9XDYbI+aj1Vf+hduvZ7
-         4VqC6R/nVcaoE32PxKpllqbrgVySqHjli1eA78utQN8r3/fptosamcymYGZfZC61N5
-         /VrVWSxzArGm5fLr8CU21RiwwyYSBLf4EFrMsq7z+AvfV3j77oy88slU6OFDidD0EC
-         r5aR82dVzi40drsLlzWt3hq2JESSFYzr7a2FA5qpdd4CvmosV7B8mrE9OhWQpnTgOL
-         IAnFTQ0DeJD8S9if4nHL3gmoJlQwE7JRcPEbb6w0G9v3BAhbVt541MYKEom5oRdubF
-         jR6Dy0cQZghdA==
-Date:   Tue, 2 Jun 2020 14:53:58 +1000
+        s=201702; t=1591074041;
+        bh=kLo8D05nwjnkeeDgzqHh8FHUQMdvTn0azD2tCjFkAxI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=tykouUWwxeeeXmYSea5wtQPX4Zrdymi7sBY5ptulqrLH0IzO11ZUKx7Dxmj7buT7k
+         HjkpOLr8XKhbvbbTxvKoZHAW6PzHnX1L1RT0CdCqpxWMf+YR6SlHXrfqxn+vnWGlx0
+         1nqCWA2nK66vgW7B6kh1833hmOzbu9VNJos5TeEcrDGYe1rUyhtU8FQYClNofmonAT
+         tmdVSJqoUh7p8DJhxu0jtwljqaNk70lgbdhrcDM1PKkqvyBZBqHVR7pXGx01BaZfeb
+         6WifNbgMx9MsGKdQ/2RMNIchbMcBC9rj5djdl2gN7jcOJIkagrz/lmnwn9i/CrDEnp
+         glNxF4o+Ui8Ag==
+Date:   Tue, 2 Jun 2020 15:00:39 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
+To:     Rich Felker <dalias@libc.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Subject: linux-next: manual merge of the kvm tree with the tip tree
-Message-ID: <20200602145358.0a70f077@canb.auug.org.au>
+        Linux-sh list <linux-sh@vger.kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: Re: linux-sh for-next reactivation
+Message-ID: <20200602150039.780a0ac0@canb.auug.org.au>
+In-Reply-To: <20200602031123.GA1079@brightrain.aerifal.cx>
+References: <20200602031123.GA1079@brightrain.aerifal.cx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/_Pdduu78QZE.yAxEGtjndqF";
+Content-Type: multipart/signed; boundary="Sig_/gsE_2=m7QKGJH_vSBhfk+y.";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/_Pdduu78QZE.yAxEGtjndqF
+--Sig_/gsE_2=m7QKGJH_vSBhfk+y.
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Rich,
 
-Today's linux-next merge of the kvm tree got a conflict in:
+On Mon, 1 Jun 2020 23:11:39 -0400 Rich Felker <dalias@libc.org> wrote:
+>
+> Could you reactivate linux-next pull from my arch/sh for-next branch?
+> It's where it was before, at:
+>=20
+>     git://git.libc.org/linux-sh for-next
+>=20
+> and has newly accepted patches ready.
 
-  arch/x86/kernel/kvm.c
+I already have an SH tree from
+git://git.sourceforge.jp/gitroot/uclinux-h8/linux.git#sh-next .  Should
+I do anything with that one?
 
-between commit:
+It currently contains:
 
-  a707ae1a9bbb ("x86/entry: Switch page fault exception to IDTENTRY_RAW")
-
-from the tip tree and commit:
-
-  68fd66f100d1 ("KVM: x86: extend struct kvm_vcpu_pv_apf_data with token in=
-fo")
-
-from the kvm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+$ git log --oneline origin/master..sh/sh-next=20
+a193018e5290 (sh/sh-next) sh: add missing EXPORT_SYMBOL() for __delay
+1d5fd6c33b04 sh: add missing DECLARE_EXPORT() for __ashiftrt_r4_xx
+d70f1e3d5dbd Merge remote-tracking branch 'origin/master' into sh-next
+baf58858e8b6 sh: prefer __section from compiler_attributes.h
+8619b5a9035a sh: Drop -Werror from kernel Makefile
+3a3a78124693 sh: kernel: disassemble: Mark expected switch fall-throughs
+fb8f77490f55 sh: kernel: hw_breakpoint: Fix missing break in switch stateme=
+nt
+cd10afbc932d sh: remove unneeded uapi asm-generic wrappers
+cbfc6edb6a4a sh: use __builtin_constant_p() directly instead of IS_IMMEDIAT=
+E()
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/x86/kernel/kvm.c
-index 07dc47359c4f,d6f22a3a1f7d..000000000000
---- a/arch/x86/kernel/kvm.c
-+++ b/arch/x86/kernel/kvm.c
-@@@ -217,23 -218,23 +217,23 @@@ again
-  }
-  EXPORT_SYMBOL_GPL(kvm_async_pf_task_wake);
- =20
-- u32 noinstr kvm_read_and_reset_pf_reason(void)
- -u32 kvm_read_and_reset_apf_flags(void)
-++u32 noinstr kvm_read_and_reset_apf_flags(void)
-  {
-- 	u32 reason =3D 0;
-+ 	u32 flags =3D 0;
- =20
-  	if (__this_cpu_read(apf_reason.enabled)) {
-- 		reason =3D __this_cpu_read(apf_reason.reason);
-- 		__this_cpu_write(apf_reason.reason, 0);
-+ 		flags =3D __this_cpu_read(apf_reason.flags);
-+ 		__this_cpu_write(apf_reason.flags, 0);
-  	}
- =20
-- 	return reason;
-+ 	return flags;
-  }
-- EXPORT_SYMBOL_GPL(kvm_read_and_reset_pf_reason);
-+ EXPORT_SYMBOL_GPL(kvm_read_and_reset_apf_flags);
- -NOKPROBE_SYMBOL(kvm_read_and_reset_apf_flags);
- =20
- -bool __kvm_handle_async_pf(struct pt_regs *regs, u32 token)
- +noinstr bool __kvm_handle_async_pf(struct pt_regs *regs, u32 token)
-  {
-- 	u32 reason =3D kvm_read_and_reset_pf_reason();
-+ 	u32 reason =3D kvm_read_and_reset_apf_flags();
- +	bool rcu_exit;
- =20
-  	switch (reason) {
-  	case KVM_PV_REASON_PAGE_NOT_PRESENT:
-
---Sig_/_Pdduu78QZE.yAxEGtjndqF
+--Sig_/gsE_2=m7QKGJH_vSBhfk+y.
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7V22YACgkQAVBC80lX
-0GzKngf/YIiFSUSZ7q/0wgcyOnZZxTpPf3pxnp3f/3JRJN/qc4uJnQ+6V3U0Nm11
-LfmXlEvZ7xXr3P5FG2+SeiuqkveRXGfAtpxTyRqG2sfvpHMp+sGca3wUosKN+XTQ
-go9OVGwxeB3fh12uj4ZOI+iB7ZvQp1+SZIlcUqBmtZY6bz5qBaktTu0dU3RcJ3TF
-EYwWY3llMqX19zAVR8ZEOri7W5ZUMkZ2wEXjek0tVK9kqyaGlLOnEkbzJC+PJjao
-jhJS7EDRgte3eTUEVg0ygPwj2DTdHreMV0r0UcZH81hXCRMSUv7V03CWy9tQyfqh
-CxaBNq+YfJWeA0DeJ+s96r0MB7MBYg==
-=3tsv
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7V3PcACgkQAVBC80lX
+0GyoGAf+PUHFAeyT0a8axcC/6t3R6JTTGr4Dx8bRfuVNwMviPCLt9STH6rNfTuCc
+12si3wDrMOxdGC6PQ9CTkiHHYd6uGkRrepV859eZiXhr9da6iBfBtazjDgrbA73L
+bPuYDvjbj4VppSTh7gBn2XBV0yTRkpdH4b4CBDe5CN1bLvDnmrwVen6gtPnZHJ+V
+2ho2argum7J/j5XkvpQaZIpBXtfNwoQRpbJugfUtuUu3m4zmV9vJNFs/47AUJXEF
+gVcl6YqhbKORbrEuAk7qS1TMndbCzJhEitnDFYHmyDaW6gWTuB+36bBFHqcpnStD
+alFkOAFx1Ae2VkFfn3e+ImoL3vr8mQ==
+=btR0
 -----END PGP SIGNATURE-----
 
---Sig_/_Pdduu78QZE.yAxEGtjndqF--
+--Sig_/gsE_2=m7QKGJH_vSBhfk+y.--

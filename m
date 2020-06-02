@@ -2,126 +2,178 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A79C41EC469
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 23:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 270081EC487
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 23:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728218AbgFBVhb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 17:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40946 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726589AbgFBVha (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 17:37:30 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615C9C08C5C0
-        for <linux-next@vger.kernel.org>; Tue,  2 Jun 2020 14:37:29 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id g5so50793pfm.10
-        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 14:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=Q8mIpUceG3IU13jFQrqLEZP0EOCPw5rR96To9YPoKTg=;
-        b=SIu4dD1QHQ27sGAP9y1QBliOAmuK1m+HZxCaVpXluU06+NHPHnpe5Xlgm5Db5WYrz2
-         4+AerqSWpnGtAu2uIa0Lz9YOsPP8SaGqS+5m4tuGbWjTPT2E61rXMvch0Cl5KTb5bBqu
-         DpKtMxbO7XbCeWiCLw18qax9YYZ+b+8XioxeyTRaJxIe3p1iHQNgZbc9hsroHF2ALsSM
-         nkHxJDnG4lyIhFiYlPC4hr9ibI7u68O/D0kLFNWSF2Rdmto+iTLBJapds+PaGRSQpHXd
-         ax7J9/8iNF5KSxmqQYLKEdQ3ODEjY8k7iNgiuDfM+MihaPg3MEWFThHuuCaEJZ7rG/m0
-         qgaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=Q8mIpUceG3IU13jFQrqLEZP0EOCPw5rR96To9YPoKTg=;
-        b=bjLoI8a3pyr/HPUoSiK0ywjdv+TlyxohQPuWZQg+DmK9XWMVhcjf2Qwp38h7UAaith
-         U37eZDlEPra+B2//KJTLFH1fdS30R8KbmtY3iTTCOwQqlkyZW5DLxmc7jrdr6ys0Mqdk
-         jNR4r8dosodWmPeQpSXRpLgbi4uWUC/pIVT7Lt8i6dlJQG7m+MuZVEwMmQy5VlAITqAI
-         y296fbeWYRv7Fs0CWPpEzAwyPUvmifZUo7zr+oPO0fPI9oyl/MxwPUBx/cqRsXVp4hwc
-         Ps/bejTyqn30woeiTBFwYwreUfJXZwddhRxlSDacAb6BAeRz6e1EcMPV+5k9oKVAQ/9c
-         v2Pw==
-X-Gm-Message-State: AOAM53172QcLpbiRxblqPhcs4zjwMJ9UsBthV5CdpNEp353CN8It7aBo
-        RWIogAxl3rISknvOM8qbrxudEg==
-X-Google-Smtp-Source: ABdhPJz15GquJLTb+Jgef1vIp7putk9rLYRioZ2burTfngkJh0qPK8dQrQV+phgS3MCQw6BWjN8Z/Q==
-X-Received: by 2002:a17:90a:65c4:: with SMTP id i4mr1284486pjs.5.1591133848797;
-        Tue, 02 Jun 2020 14:37:28 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id y138sm88823pfb.33.2020.06.02.14.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jun 2020 14:37:27 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the block tree with the rdma tree
-To:     Jason Gunthorpe <jgg@mellanox.com>
-Cc:     Max Gurtovoy <maxg@mellanox.com>,
+        id S1728304AbgFBVsA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 17:48:00 -0400
+Received: from aserp2120.oracle.com ([141.146.126.78]:45912 "EHLO
+        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728263AbgFBVr7 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 17:47:59 -0400
+Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
+        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052LgRum145391;
+        Tue, 2 Jun 2020 21:47:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=subject : to : cc :
+ references : from : message-id : date : mime-version : in-reply-to :
+ content-type : content-transfer-encoding; s=corp-2020-01-29;
+ bh=K5xWiXEDtKWHBbuo8e/WKOZpij8IqUU1XYWXVjvX2AA=;
+ b=puzwLelWQrgoipacbfkPgNqieZ3mObbXyTqR1PT0vxic7QZMlXOggNmZc3tmuWMPzunJ
+ OCGRiPJ/bllCTk9ViDBrSY5hK3ow7U04Cps/8fAfPUDXOzE1J6/do5q0o2J1oijU7xxO
+ +yU5uc5JYBPxy4k1d+bpu04PUUb44KzgExX/0qTQrTBeG8uhPU774vv5rtaKP6WDFLmJ
+ Ot0f0A1iFuGyAe1w4VLaUAWmku9U6p04y4z4VHoAccsMMUUnG7uYuJ3nLvCXWWUlTVPr
+ Tg4gZyLwwafHLKeZePCNiZo53HJk0Zzrq98KqjWawcLoIzyEP04aHSIVPzOGyyCXQC3B +g== 
+Received: from aserp3030.oracle.com (aserp3030.oracle.com [141.146.126.71])
+        by aserp2120.oracle.com with ESMTP id 31bfem65x7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 02 Jun 2020 21:47:26 +0000
+Received: from pps.filterd (aserp3030.oracle.com [127.0.0.1])
+        by aserp3030.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 052LlPSG014448;
+        Tue, 2 Jun 2020 21:47:25 GMT
+Received: from aserv0122.oracle.com (aserv0122.oracle.com [141.146.126.236])
+        by aserp3030.oracle.com with ESMTP id 31c12pvufr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 02 Jun 2020 21:47:25 +0000
+Received: from abhmp0019.oracle.com (abhmp0019.oracle.com [141.146.116.25])
+        by aserv0122.oracle.com (8.14.4/8.14.4) with ESMTP id 052LlM0Q007551;
+        Tue, 2 Jun 2020 21:47:22 GMT
+Received: from [10.39.241.85] (/10.39.241.85)
+        by default (Oracle Beehive Gateway v4.0)
+        with ESMTP ; Tue, 02 Jun 2020 14:47:22 -0700
+Subject: Re: linux-next: Tree for Jun 2 (x86/xen)
+To:     Randy Dunlap <rdunlap@infradead.org>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Doug Ledford <dledford@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yamin Friedman <yaminf@mellanox.com>,
-        Israel Rukshin <israelr@mellanox.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20200602125647.5f5ed151@canb.auug.org.au>
- <3717aca8-9d75-33f1-ea8c-044af767ab5c@mellanox.com>
- <20200602190153.GA65026@mellanox.com>
- <8be03d71-9c72-bf88-7fd7-76ec7700474a@kernel.dk>
- <20200602190945.GC65026@mellanox.com>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <b8ad79a0-57cc-e823-6b99-47d59ce5dc7d@kernel.dk>
-Date:   Tue, 2 Jun 2020 15:37:26 -0600
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <20200602203737.6eec243f@canb.auug.org.au>
+ <8bc4e983-7563-20f2-2c15-3cea055ae264@infradead.org>
+From:   Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Autocrypt: addr=boris.ostrovsky@oracle.com; keydata=
+ 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
+ Jg6OxFYd01z+a+oL
+Message-ID: <4e5e87cb-daa9-fc75-bf12-401a912bb3dd@oracle.com>
+Date:   Tue, 2 Jun 2020 17:47:19 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.8.0
 MIME-Version: 1.0
-In-Reply-To: <20200602190945.GC65026@mellanox.com>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <8bc4e983-7563-20f2-2c15-3cea055ae264@infradead.org>
+Content-Type: text/plain; charset=windows-1252
+Content-Transfer-Encoding: 8bit
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 spamscore=0 bulkscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006020154
+X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9640 signatures=668686
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 priorityscore=1501 bulkscore=0 phishscore=0 clxscore=1011
+ impostorscore=0 adultscore=0 spamscore=0 mlxscore=0 lowpriorityscore=0
+ cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2004280000 definitions=main-2006020153
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/2/20 1:09 PM, Jason Gunthorpe wrote:
-> On Tue, Jun 02, 2020 at 01:02:55PM -0600, Jens Axboe wrote:
->> On 6/2/20 1:01 PM, Jason Gunthorpe wrote:
->>> On Tue, Jun 02, 2020 at 11:37:26AM +0300, Max Gurtovoy wrote:
->>>>
->>>> On 6/2/2020 5:56 AM, Stephen Rothwell wrote:
->>>>> Hi all,
->>>>
->>>> Hi,
->>>>
->>>> This looks good to me.
->>>>
->>>> Can you share a pointer to the tree so we'll test it in our labs ?
->>>>
->>>> need to re-test:
->>>>
->>>> 1. srq per core
->>>>
->>>> 2. srq per core + T10-PI
->>>>
->>>> And both will run with shared CQ.
->>>
->>> Max, this is too much conflict to send to Linus between your own
->>> patches. I am going to drop the nvme part of this from RDMA.
->>>
->>> Normally I don't like applying partial series, but due to this tree
->>> split, you can send the rebased nvme part through the nvme/block tree
->>> at rc1 in two weeks..
+On 6/2/20 11:18 AM, Randy Dunlap wrote:
+> On 6/2/20 3:37 AM, Stephen Rothwell wrote:
+>> Hi all,
 >>
->> Was going to comment that this is probably how it should have been
->> done to begin with. If we have multiple conflicts like that between
->> two trees, someone is doing something wrong...
-> 
-> Well, on the other hand having people add APIs in one tree and then
-> (promised) consumers in another tree later on has proven problematic
-> in the past. It is best to try to avoid that, but in this case I don't
-> think Max will have any delay to get the API consumer into nvme in two
-> weeks.
+>> News: The merge window has opened, so please do *not* add v5.9 material
+>> to your linux-next included branches until after v5.8-rc1 has been
+>> released.
+>>
+>> Changes since 20200529:
+>>
+> on x86_64:
+>
+>   CC      arch/x86/xen/suspend_hvm.o
+> In file included from ../include/xen/interface/hvm/params.h:24:0,
+>                  from ../include/xen/hvm.h:6,
+>                  from ../arch/x86/xen/suspend_hvm.c:5:
+> ../include/xen/interface/hvm/hvm_op.h:29:5: error: unknown type name ‘domid_t’
 
-Having conflicting trees is a problem. If there's a dependency for
-two trees for some new work, then just have a separate branch that's
-built on those two. For NVMe core work, then it should include the
-pending NVMe changes.
 
--- 
-Jens Axboe
+(+Thomas)
+
+
+This has been addressed by
+https://lore.kernel.org/lkml/159101612916.17951.7492360776296750785.tip-bot2@tip-bot2/
+
+
+-boris
+
+
+
+>      domid_t  domid;    /* IN */
+>      ^~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:33:1: warning: data definition has no type or storage class
+>  DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_param);
+>  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:33:1: error: type defaults to ‘int’ in declaration of ‘DEFINE_GUEST_HANDLE_STRUCT’ [-Werror=implicit-int]
+> ../include/xen/interface/hvm/hvm_op.h:33:1: warning: parameter names (without types) in function declaration
+> ../include/xen/interface/hvm/hvm_op.h:39:5: error: unknown type name ‘domid_t’
+>      domid_t  domid;
+>      ^~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:44:1: warning: data definition has no type or storage class
+>  DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_pagetable_dying_t);
+>  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:44:1: error: type defaults to ‘int’ in declaration of ‘DEFINE_GUEST_HANDLE_STRUCT’ [-Werror=implicit-int]
+> ../include/xen/interface/hvm/hvm_op.h:56:5: error: unknown type name ‘domid_t’
+>      domid_t domid;
+>      ^~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:63:1: warning: data definition has no type or storage class
+>  DEFINE_GUEST_HANDLE_STRUCT(xen_hvm_get_mem_type);
+>  ^~~~~~~~~~~~~~~~~~~~~~~~~~
+> ../include/xen/interface/hvm/hvm_op.h:63:1: error: type defaults to ‘int’ in declaration of ‘DEFINE_GUEST_HANDLE_STRUCT’ [-Werror=implicit-int]
+> ../include/xen/interface/hvm/hvm_op.h:63:1: warning: parameter names (without types) in function declaration
+>
+>
+> Full randconfig file is attached.
+>
 

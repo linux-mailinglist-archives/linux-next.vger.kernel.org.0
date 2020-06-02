@@ -2,96 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6298F1EB9C0
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 12:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171FB1EBA43
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 13:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726408AbgFBKn7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 06:43:59 -0400
-Received: from ozlabs.org ([203.11.71.1]:41951 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725958AbgFBKn7 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 2 Jun 2020 06:43:59 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bpYm0WBpz9sSg;
-        Tue,  2 Jun 2020 20:43:56 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591094637;
-        bh=oCZcV2xkPgXGtfLS8LiMCGtpvLn30ooD4U0COUOX/b4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WqwHYZKYBGP5kZDObHwPkHf0NRZsodarotdxs067xV/EvqItasvREu3qd9jKV8jXB
-         PIESJgR4Z6PAdb9ZAC89vouejPTTKzuDeOfEm44aH9gwqgrU16L5Tx4zd+6KTRh8e/
-         3+BnAd5unZ4shAxf731bGpfcRl7r+RgMNen3LHHNEa7QNrkAgrfqpQrTGhW7PTBOLl
-         GpQKgybhSZBzBfAyOeEHXFH89p2XqlJEbrl7LTFUUzdbnlSU49D51OiHcv7suuP6bg
-         NqjbwRcYZCH74bGFtSpQuCSMpSVpZ1FU5v/6qKgrRJLDrFwgJYmMq3XHBzamXCR9Vs
-         RiLGYgpLW36jg==
-Date:   Tue, 2 Jun 2020 20:43:54 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Max Gurtovoy <maxg@mellanox.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Doug Ledford <dledford@redhat.com>,
-        Jason Gunthorpe <jgg@mellanox.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yamin Friedman <yaminf@mellanox.com>,
-        Israel Rukshin <israelr@mellanox.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: linux-next: manual merge of the block tree with the rdma tree
-Message-ID: <20200602204354.39727fdd@canb.auug.org.au>
-In-Reply-To: <3717aca8-9d75-33f1-ea8c-044af767ab5c@mellanox.com>
-References: <20200602125647.5f5ed151@canb.auug.org.au>
-        <3717aca8-9d75-33f1-ea8c-044af767ab5c@mellanox.com>
+        id S1725958AbgFBLUh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 07:20:37 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:55942 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725900AbgFBLUS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 07:20:18 -0400
+Received: by mail-il1-f197.google.com with SMTP id x20so11397165ilj.22
+        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 04:20:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=By/yreSs9OawvTt2wVwQ1TPEtrrHeBTj3KKjcSSBhe4=;
+        b=gxrBawTl/ipBvbgSOo5Th8Sqn3lSCc2N4z0j6d9nfHSoQDovwSsTryxXW3+V9O8xK7
+         Rbyq4do4UaomSA6cVP2o4PL4t0QrGn9JZ5yygszUWljkOAT8Z6VEdA47cxhFv0BsX45l
+         6ao5EVbk/GLXF74C42QAHuF83+OZSWqRreCQzm6Zypb1I2FMNrXcO7LE1kSbwDBJL77z
+         fST4Nu+Dy2oRl49Sno5r3KX2IeHleg4MIoOqwyHhsKaOJ+RRFn/jrxsGtjxp1mBu+nAT
+         coKDKO0+UW/swyy9M9g+sS0BGwGMe45OekeNnF5NqlHL+nROuitD0l7zlYVZKVYdBoSs
+         QIhQ==
+X-Gm-Message-State: AOAM533x+/J7p6fyhRflD2o3mV7vyWxMkUd5AFJroCWNtDhGSEpMG6qi
+        0IeVQpHRMXISohB6gsFHSN5xXK/3Z/R7izy5Qizx1LlnnRl4
+X-Google-Smtp-Source: ABdhPJxdjR1/A/OQRWFqkFOdbGjxot/+llfg+gW20CifX8hdRi7XJ9VktHEtCbIgum9wtVH3pDT0wuX5bHZmgnyov8lEbUPqWAxi
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/x+8EnL2NCLRCz5R=VQZuLEU";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Received: by 2002:a92:c048:: with SMTP id o8mr1367326ilf.202.1591096816969;
+ Tue, 02 Jun 2020 04:20:16 -0700 (PDT)
+Date:   Tue, 02 Jun 2020 04:20:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000094436005a7181833@google.com>
+Subject: linux-next test error: BUG: using smp_processor_id() in preemptible
+ [ADDR] code: kworker/u4:LINE/46
+From:   syzbot <syzbot+4d28f1825b8fb92fa383@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/x+8EnL2NCLRCz5R=VQZuLEU
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi Max,
+syzbot found the following crash on:
 
-On Tue, 2 Jun 2020 11:37:26 +0300 Max Gurtovoy <maxg@mellanox.com> wrote:
->
-> On 6/2/2020 5:56 AM, Stephen Rothwell wrote:
->=20
-> This looks good to me.
->=20
-> Can you share a pointer to the tree so we'll test it in our labs ?
+HEAD commit:    0e21d462 Add linux-next specific files for 20200602
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17fee516100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ecc1aef35f550ee3
+dashboard link: https://syzkaller.appspot.com/bug?extid=4d28f1825b8fb92fa383
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+4d28f1825b8fb92fa383@syzkaller.appspotmail.com
 
-you want tag next-20200602
+BUG: using smp_processor_id() in preemptible [00000000] code: kworker/u4:3/46
+caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 5.7.0-next-20200602-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: writeback wb_workfn (flush-8:0)
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
+ ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+ ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
+ ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
+ mpage_map_one_extent fs/ext4/inode.c:2377 [inline]
+ mpage_map_and_submit_extent fs/ext4/inode.c:2430 [inline]
+ ext4_writepages+0x1ab5/0x3400 fs/ext4/inode.c:2782
+ do_writepages+0xfa/0x2a0 mm/page-writeback.c:2338
+ __writeback_single_inode+0x12a/0x13d0 fs/fs-writeback.c:1453
+ writeback_sb_inodes+0x515/0xdc0 fs/fs-writeback.c:1717
+ __writeback_inodes_wb+0xc3/0x250 fs/fs-writeback.c:1786
+ wb_writeback+0x8db/0xd50 fs/fs-writeback.c:1895
+ wb_check_old_data_flush fs/fs-writeback.c:1997 [inline]
+ wb_do_writeback fs/fs-writeback.c:2050 [inline]
+ wb_workfn+0xab3/0x1090 fs/fs-writeback.c:2079
+ process_one_work+0x965/0x1690 kernel/workqueue.c:2269
+ worker_thread+0x96/0xe10 kernel/workqueue.c:2415
+ kthread+0x3b5/0x4a0 kernel/kthread.c:291
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
+tipc: TX() has been purged, node left!
 
-or if you just want that trees that conflicted, then
 
-block: git://git.kernel.dk/linux-block.git branch for-next
-rdma: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git branch fo=
-r-next
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/x+8EnL2NCLRCz5R=VQZuLEU
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7WLWsACgkQAVBC80lX
-0Gxtpwf+MjJxsHWVelBpn/KVJRHjupGaIcGL2U0kojSsWBZqInmRjF5ELqKU0os/
-DfCMysJ9J1sSXv6DyFuZ77fJjNQWQtj4ti0MBRZ6uqUgaV49dULnUAV0gZUPAhOK
-ZlsKjSC2G2MsQkpYthiy8/CfzF6QdrJa3+01u9Ey5viDbnMKk2C1KECGLMweRoO5
-f/GX0eA3taImkwbPuAO2dFUs2omqZ9tIxAEApwki4PaV/e/IHBAv9NNNK+wINnCr
-ZQoge5hJJ4Jvn20S7tNBHbLJXuvwUArZqfTSHnLyrs6mPIJlvyNMXBVV4rbHF8yz
-58/UhmBdab2mvOJpMjCO/XqirMeNXw==
-=CUqi
------END PGP SIGNATURE-----
-
---Sig_/x+8EnL2NCLRCz5R=VQZuLEU--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

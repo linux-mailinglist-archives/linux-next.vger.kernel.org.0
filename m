@@ -2,134 +2,101 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A08B51EB3DD
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 05:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03EDE1EB4A8
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 06:42:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725872AbgFBDoG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Jun 2020 23:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43986 "EHLO
+        id S1725793AbgFBEmk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 00:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725850AbgFBDoG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Jun 2020 23:44:06 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40208C061A0E;
-        Mon,  1 Jun 2020 20:44:06 -0700 (PDT)
+        with ESMTP id S1725616AbgFBEmj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 00:42:39 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8392EC061A0E;
+        Mon,  1 Jun 2020 21:42:39 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bdFG5hnFz9sSd;
-        Tue,  2 Jun 2020 13:44:02 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bfXq52Ldz9sSf;
+        Tue,  2 Jun 2020 14:42:35 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591069444;
-        bh=IkHBSWOk4xtC0dkcZ7o1RZslpqdZBMj0Kw2jYCO1qUY=;
+        s=201702; t=1591072956;
+        bh=fKtvbAaS+Iil51RJnv0uiF7U53xY3VQx/jibttG+xiE=;
         h=Date:From:To:Cc:Subject:From;
-        b=jV4XNwn4hXf7JpW1qLzUOSoj5vr2KfFwGy6Oe3cyz1LJC6NTZ/yR7fbZ/pWZCZQ+7
-         bOCV56ih0dnjkkZt2dueTgHHocPa4k/KrC9ifuWJiHOOJekWuLkNaMcuJDi03RC7Ej
-         t1GU+1T+xmcCxlxRs24N5maYbIRjpBwKvIbcpLZxnPnmNoL177JwaJMYIhJL0kBx0z
-         inaF9GtdQm7SrWp54bH0HTJddnheXB9emXcljRbje2zC2MBx8dG/58oxGbNXtRi5Tv
-         jaZwaQs9K8EIO2MVLuwSNSjIszHOcfyFhkdnQQSupyZgrcvJ9ka3xCs6/a2eTP/1nX
-         hv6zLwGpTpEkg==
-Date:   Tue, 2 Jun 2020 13:44:02 +1000
+        b=DrfY3qkpRL7ZcxRWrybul3SbgCW3aXgKF4d7nZ5EEqOxF9P8nZe6JJguOB6KS7UsP
+         QZgyPYp2x3qK4YCtlxzNT5xmQvqd1tZLuMuVAPZArEPS2Pf2vPFWWsPQu6vVZRhaZT
+         kDIl8HhZJFZPrFXWS/UT7Dz34vazxGCfDqaSrLzPMboJqUQKjnUVDNULccXY8MP3Y/
+         V8rlq/FtbXaAeszhhUPLzyEFwIX6SUuSeEoj7RyXjgYkZa6iI4urYBCE84VdWITuo5
+         jiZvH9oRi2R1o1e2ZHAqrCc0xLeDq/qf/vCqniEBjVRK+DSWM7B7hq5IOllVrYcxO5
+         FaYdJ607s1Fpg==
+Date:   Tue, 2 Jun 2020 14:42:34 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
+To:     Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Wright Feng <wright.feng@cypress.com>,
-        Chi-hsien Lin <chi-hsien.lin@cypress.com>,
-        Kalle Valo <kvalo@codeaurora.org>
-Subject: linux-next: build failure after merge of the mmc tree
-Message-ID: <20200602134402.24c19488@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the irqchip tree with the tip tree
+Message-ID: <20200602144234.70ffb673@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6oBASpyjlxKneHsRjZJ2Yie";
+Content-Type: multipart/signed; boundary="Sig_/StZ/XqOp4++UmMl0345z/yL";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6oBASpyjlxKneHsRjZJ2Yie
+--Sig_/StZ/XqOp4++UmMl0345z/yL
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the mmc tree, today's linux-next build (arm
-multi_v7_defconfig) failed like this:
+Today's linux-next merge of the irqchip tree got a conflict in:
 
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c: In function 'brc=
-mf_sdiod_probe':
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: error: 'SD=
-IO_DEVICE_ID_CYPRESS_4373' undeclared (first use in this function); did you=
- mean 'SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373'?
-  915 |  case SDIO_DEVICE_ID_CYPRESS_4373:
-      |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |       SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373
-drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: note: each=
- undeclared identifier is reported only once for each function it appears in
+  drivers/irqchip/Kconfig
 
-Caused by commit
+between commit:
 
-  1eb911258805 ("mmc: sdio: Fix Cypress SDIO IDs macros in common include f=
-ile")
+  d77aeb5d403d ("irqchip: Fix "Loongson HyperTransport Vector support" driv=
+er build on all non-MIPS platforms")
 
-interacting with commit
+from the tip tree and commit:
 
-  2a7621ded321 ("brcmfmac: set F2 blocksize for 4373")
+  4a786cc36028 ("irqchip/loongson-htvec: Don't compile when COMPILE_TEST is=
+ selected")
 
-from the net-next tree.
+from the irqchip tree.
 
-I have applied the following merge fix patch.
+I fixed it up (I just used the latter) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Tue, 2 Jun 2020 13:41:04 +1000
-Subject: [PATCH] mmc: sdio: merge fix for "brcmfmac: set F2 blocksize for
- 4373"
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/dr=
-ivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-index e718bd466830..46346cb3bc84 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-@@ -912,7 +912,7 @@ static int brcmf_sdiod_probe(struct brcmf_sdio_dev *sdi=
-odev)
- 		goto out;
- 	}
- 	switch (sdiodev->func2->device) {
--	case SDIO_DEVICE_ID_CYPRESS_4373:
-+	case SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373:
- 		f2_blksz =3D SDIO_4373_FUNC2_BLOCKSIZE;
- 		break;
- 	case SDIO_DEVICE_ID_BROADCOM_4359:
---=20
-2.26.2
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/6oBASpyjlxKneHsRjZJ2Yie
+--Sig_/StZ/XqOp4++UmMl0345z/yL
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7VywIACgkQAVBC80lX
-0Gx1jQf4h3jixfTBJdfoXrWTH62gOFe/BoWtLIWdHCyfMtA7Sf1zbF17/OLvqYVF
-h4bLdXofoSq3oo73r0hX+9H8yTHS/2pv+AtdRsVfEHIA83y90c9LV/5pcwBvKK2P
-pSlogXUr3ci6q6a03PmbPxTalftLoJJsImp+FRIKJWaYS1nBTVfHx0Ncv6T80Fk9
-mMICIPOt7HFMQ+quaQcSul0u/fAh3RF5VQ2hbMO/BRddnOh3dUv9b/sU7bhut+ki
-Pxh0KGjw4Zsfct1VvyOiZtfM2kOTD0cBA8bQXZzNxMIQovKB650m2X9viVu0r26A
-otvqF2cwQf/H4whVvSZe5f+7tV0+
-=C2bh
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7V2LoACgkQAVBC80lX
+0Gw2+ggAiZf7uKyfH8F1E/K5adbXhqSMaqTtpP0B6qRVd5HaFLxyDE5AfPOSEMit
+R9SYV8pIgSTAEU+Jt1+ZaZkGp2Ho788ibDHlD+P77l/JQNPVc3eqk0fha/b1+oJV
+DeA6Qd4E1acQPVjVy3YHpit7DMGeCXLVWPTGn5nxtN/C8XDCSHVgZ2CqifQ1sUFl
+ZvTcrD6mNQheAxQNeZVXZ34mvMcAneXepzaLZTTmKi3U+ZfKVBwJJrofrHqKlf4v
+dfgFOIPSVYAv0qAI/uXrWRQdMeC+N/ZYDhMAo3qrJHCKB6rtKsxN2dWhkNLYEcu5
+RBO1QFzLMAGaH8B6VXCclNrH8kvvtg==
+=WNWp
 -----END PGP SIGNATURE-----
 
---Sig_/6oBASpyjlxKneHsRjZJ2Yie--
+--Sig_/StZ/XqOp4++UmMl0345z/yL--

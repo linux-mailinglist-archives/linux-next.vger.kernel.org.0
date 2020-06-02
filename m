@@ -2,98 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5EF1EBA42
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 13:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5051EBB30
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 14:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726012AbgFBLUg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 07:20:36 -0400
-Received: from mail-il1-f198.google.com ([209.85.166.198]:55944 "EHLO
-        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725958AbgFBLUS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 07:20:18 -0400
-Received: by mail-il1-f198.google.com with SMTP id x20so11397173ilj.22
-        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 04:20:17 -0700 (PDT)
+        id S1726962AbgFBMGU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 08:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726937AbgFBMGS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 08:06:18 -0400
+Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C179FC08C5C1
+        for <linux-next@vger.kernel.org>; Tue,  2 Jun 2020 05:06:17 -0700 (PDT)
+Received: by mail-vs1-xe44.google.com with SMTP id k13so1841729vsm.13
+        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 05:06:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=X8TLwbbwpigYbLnnsmu2/tqlSQ4fjBU1I+APno1oETk=;
+        b=rAuOnM4pnXKCbe7wrzaoRdTKnyJBeTd0qTlYB470WMcq3DPvaQWUPhFzMfBkCpt5VZ
+         eqX0bC/o4hoV08wZE2N3bjOaORbaid/b50ftvLPKRzHvqtl3ZWD+0cqyurIAB+8rxgg9
+         FLe+HWZGMaaoWYbpzC52HrGXjBJaRJT22su4XEsrUFmIlBSdpNQJRm8EB9ECCYGrQS/c
+         gsM2UIRsj39DnQ0mEFwFHCykOFhoWolqR3jk7Q1id5fDp9/o+8D31UpPdbEiqQYX2+WQ
+         iJlFk6Df2wlvnhfBOihX+7DHWobBPr1bpvJFHIRKi7BDNoYG1cN5d/+HJbUUj8viqZJQ
+         uuew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=yu1KKc0BU5akfdxfaI2hIWvisKQp/McaEhJQQbUDA+4=;
-        b=W4t7bCtOMvqh2FPGrqxQVIXx2zV5F9vQDjP9FTDOwVtgKKlqQfKxqiLv4Dz7zCZYtT
-         ShebnDAJKjLUAmkoSG8tPIC6X/faz+iaVX3K5Vek0gRrdyhShBXGq0bGXT0pLa0ankO+
-         5VpM5L4d3qriggDaXDeoaD6r8JdOZJD/e67v1K2ZxzbLYQ8MhNuEiBT2f5/odiZEqFYo
-         nmNP2FR++VA2FBunTOHCsFpusNiqQtzoR5+nFkHMlJgYwJJLRAqqV2GY6ZUSUHOVltPQ
-         awnuxVbyDOe7o2VHOXf2Mm2g0BAR5G7IDpjn8hDsOy6NZejg52FJ5bBIMz8FVDKwULnx
-         l53Q==
-X-Gm-Message-State: AOAM533/3XVEtk7pySj9UyDi0U6j1Lf9xoq5tThpqdmyKn86B8bhCDBD
-        Dh2BSOGmHzICnPo76jITdt9K5hCEsADQjmIvmn8geSQJ0XCe
-X-Google-Smtp-Source: ABdhPJzQSGUTHvHlLxgaNL4xZR4ewHa0VVZNxqruxHy49J8yux77imieX0DMg7jWRx05z9UcbyYK/4hCmMHc+sqFSCaBTqqKfdnc
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=X8TLwbbwpigYbLnnsmu2/tqlSQ4fjBU1I+APno1oETk=;
+        b=FoVh6pIs6x5lTVkSFaEqBBGNE4nrHb93Py7CLtPjeuiubTEC4yGTypfbWChQfL2UvU
+         fe5oM0B69scITY8mKMxE3oA42Mn346zNdaKAT37Qp9f+7wuKJbcUxjOjUEU+txSW+V3g
+         UprUkNpD2Vyu2Z5Pl2LGizHzi8IJX2Xk9d1SYJfsWfnI73fk9m+XeQBtrSBGRobCcleV
+         5L1Zh1OVfTx9BoqfkeEigqcca2twIX1dDoKgW6TsLEHMJQc4mhZ0G0ZUnF/HiFOUU4K9
+         1Bfhg+JUd9Axq9bEU2qwC12FRvcIHxo06lWveAnqrMpy6K087pYdel+FIm1dZ6x6UE1E
+         iyjg==
+X-Gm-Message-State: AOAM532iqvw+LCEyKIFSi3x6l85RWD/dPmCwRM598gFD09+HIhdAPkY3
+        DBVTPp3v0oxViwowgNG+s7xFPiDjqI2e1zoushQvTA==
+X-Google-Smtp-Source: ABdhPJyYvO6EGUQzrkJXaKKQ2X1NWP8QbEKUI3/Bv4Zylahw5KDfo6vhcEr8o85kUFivcskLi7AfeWGuKQUXa0BPBk4=
+X-Received: by 2002:a67:8983:: with SMTP id l125mr7213160vsd.34.1591099576761;
+ Tue, 02 Jun 2020 05:06:16 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:1616:: with SMTP id x22mr23201287iow.70.1591096817282;
- Tue, 02 Jun 2020 04:20:17 -0700 (PDT)
-Date:   Tue, 02 Jun 2020 04:20:17 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000098f29705a7181812@google.com>
-Subject: linux-next test error: BUG: using smp_processor_id() in preemptible
- [ADDR] code: syz-fuzzer/6927
-From:   syzbot <syzbot+cd8a20b91d68ef113b45@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
-        tytso@mit.edu
+References: <20200602134402.24c19488@canb.auug.org.au>
+In-Reply-To: <20200602134402.24c19488@canb.auug.org.au>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 2 Jun 2020 14:05:39 +0200
+Message-ID: <CAPDyKFqjm3Egbv9nj8wR_q5onpJT=jSh-MvKn+VuJGX_ifG9TA@mail.gmail.com>
+Subject: Re: linux-next: build failure after merge of the mmc tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Wright Feng <wright.feng@cypress.com>,
+        Chi-hsien Lin <chi-hsien.lin@cypress.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        Linus <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hello,
++ Linus
 
-syzbot found the following crash on:
+On Tue, 2 Jun 2020 at 05:44, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the mmc tree, today's linux-next build (arm
+> multi_v7_defconfig) failed like this:
+>
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c: In function 'brcmf_sdiod_probe':
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: error: 'SDIO_DEVICE_ID_CYPRESS_4373' undeclared (first use in this function); did you mean 'SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373'?
+>   915 |  case SDIO_DEVICE_ID_CYPRESS_4373:
+>       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |       SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: note: each undeclared identifier is reported only once for each function it appears in
+>
+> Caused by commit
+>
+>   1eb911258805 ("mmc: sdio: Fix Cypress SDIO IDs macros in common include file")
+>
+> interacting with commit
+>
+>   2a7621ded321 ("brcmfmac: set F2 blocksize for 4373")
+>
+> from the net-next tree.
+>
+> I have applied the following merge fix patch.
+>
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 2 Jun 2020 13:41:04 +1000
+> Subject: [PATCH] mmc: sdio: merge fix for "brcmfmac: set F2 blocksize for
+>  4373"
+>
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-HEAD commit:    0e21d462 Add linux-next specific files for 20200602
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1597f2fe100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ecc1aef35f550ee3
-dashboard link: https://syzkaller.appspot.com/bug?extid=cd8a20b91d68ef113b45
-compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+Thanks Stephen for fixing and reporting about this!
 
-IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+cd8a20b91d68ef113b45@syzkaller.appspotmail.com
+Looks like the fix is rather trivial, so I assume Linus can
+cherry-pick your patch, while merging my pull request for mmc for
+v5.8. In any case, I will monitor the process and send a fix on top,
+if needed.
 
-BUG: using smp_processor_id() in preemptible [00000000] code: syz-fuzzer/6927
-caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
-CPU: 1 PID: 6927 Comm: syz-fuzzer Not tainted 5.7.0-next-20200602-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x18f/0x20d lib/dump_stack.c:118
- check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
- ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
- ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
- ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
- ext4_getblk+0xad/0x520 fs/ext4/inode.c:833
- ext4_bread+0x7c/0x380 fs/ext4/inode.c:883
- ext4_append+0x153/0x360 fs/ext4/namei.c:67
- ext4_init_new_dir fs/ext4/namei.c:2757 [inline]
- ext4_mkdir+0x5e0/0xdf0 fs/ext4/namei.c:2802
- vfs_mkdir+0x419/0x690 fs/namei.c:3632
- do_mkdirat+0x21e/0x280 fs/namei.c:3655
- do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x4b02a0
-Code: Bad RIP value.
-RSP: 002b:000000c0000cf4b8 EFLAGS: 00000212 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 000000c00002c000 RCX: 00000000004b02a0
-RDX: 00000000000001c0 RSI: 000000c000116be0 RDI: ffffffffffffff9c
-RBP: 000000c0000cf510 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000212 R12: ffffffffffffffff
-R13: 0000000000000060 R14: 000000000000005f R15: 0000000000000100
+Kind regards
+Uffe
 
-
----
-This bug is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this bug report. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> ---
+>  drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+> index e718bd466830..46346cb3bc84 100644
+> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
+> @@ -912,7 +912,7 @@ static int brcmf_sdiod_probe(struct brcmf_sdio_dev *sdiodev)
+>                 goto out;
+>         }
+>         switch (sdiodev->func2->device) {
+> -       case SDIO_DEVICE_ID_CYPRESS_4373:
+> +       case SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373:
+>                 f2_blksz = SDIO_4373_FUNC2_BLOCKSIZE;
+>                 break;
+>         case SDIO_DEVICE_ID_BROADCOM_4359:
+> --
+> 2.26.2
+>
+> --
+> Cheers,
+> Stephen Rothwell

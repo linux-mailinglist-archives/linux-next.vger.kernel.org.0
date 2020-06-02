@@ -2,100 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FB11EBB5D
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 14:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FC21EBB74
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 14:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726217AbgFBMPN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 08:15:13 -0400
-Received: from m43-7.mailgun.net ([69.72.43.7]:47772 "EHLO m43-7.mailgun.net"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725921AbgFBMPM (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 2 Jun 2020 08:15:12 -0400
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
- s=smtp; t=1591100112; h=Content-Type: MIME-Version: Message-ID:
- In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
- bh=6aoCLmbhav5CL/lS7P/VV6KjhJoQcYui0Q86IrjJk7c=; b=jUuOXCUiK38oFS9fIdaHtBIzH7HBVyCcHOcp15Zhz4DHXM3WwGkZKVvr3SD4+3Katbzw+k34
- OW2DhRalrrOzui2mHkgSJZdV5xGR9UnoUMmyWyYXim+I/bS3R/Xzyo4uIrY+ALqnEJkpqpoP
- w1eu1RPaHROLXb22htfKXRTUc6k=
-X-Mailgun-Sending-Ip: 69.72.43.7
-X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
-Received: from smtp.codeaurora.org
- (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
- smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
- 5ed642cd76fccbb4c8a4c15c (version=TLS1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 02 Jun 2020 12:15:09
- GMT
-Received: by smtp.codeaurora.org (Postfix, from userid 1001)
-        id 65AC9C433CA; Tue,  2 Jun 2020 12:15:08 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
-        aws-us-west-2-caf-mail-1.web.codeaurora.org
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
-Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: kvalo)
-        by smtp.codeaurora.org (Postfix) with ESMTPSA id DBDBDC433C9;
-        Tue,  2 Jun 2020 12:15:05 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DBDBDC433C9
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
-Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
-From:   Kalle Valo <kvalo@codeaurora.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
-        Wright Feng <wright.feng@cypress.com>,
-        Chi-hsien Lin <chi-hsien.lin@cypress.com>
-Subject: Re: linux-next: build failure after merge of the mmc tree
-References: <20200602134402.24c19488@canb.auug.org.au>
-Date:   Tue, 02 Jun 2020 15:15:03 +0300
-In-Reply-To: <20200602134402.24c19488@canb.auug.org.au> (Stephen Rothwell's
-        message of "Tue, 2 Jun 2020 13:44:02 +1000")
-Message-ID: <87a71lll4o.fsf@codeaurora.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+        id S1726130AbgFBMTT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 08:19:19 -0400
+Received: from mail-io1-f70.google.com ([209.85.166.70]:35493 "EHLO
+        mail-io1-f70.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726450AbgFBMTR (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 08:19:17 -0400
+Received: by mail-io1-f70.google.com with SMTP id c5so356876ioh.2
+        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 05:19:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=eQ2+uYvpfAMYJ+IwE3wLZvLyu6j8DAIHHoUAmzbWd50=;
+        b=Azv1VrbEltyIRM1SQ9aRfs7186QzSiJINbZOVvzpRg7FCUlGv89/13+iOUZZCQSlKI
+         Zu10i1GOoduzCct8E9q7XfB/2yj03oAa11roqfNOjQxW92cdUsdp+l3l+YyP3VPZcgia
+         9CMOCUp0kqgD9oqOt5sUAitsar6XLK/nl5ijUmMQsuQDWcD5Z7y4wt+1BlL0xSRLkunQ
+         8W7b7mE7ucbwkQoHJdhuTkgk3JCYdEvJb6NexNAONMAHUDtrRBMJdBK8vf/ltaQFCeiv
+         sqWnVVvfHmL0zVt8L7zQf5acgC7KgKpk27399e1yfAs3VvtCoERFKtc2V/fiiTY6CUD7
+         lvwg==
+X-Gm-Message-State: AOAM531NEh5WZIIo/pkQ5S8fk888bTzrX/pBitET/+hvaKx+28Hk39KU
+        Zmj0YD1da+fT1QhEvxdDQHVS2Rdc0rjQloup1AGvPfEEnFwN
+X-Google-Smtp-Source: ABdhPJxmKTK/UAXXjZL8VRvMo0EoxHrGPExnzY2LKSCcg1QSFM5Ki8O4ugpOBdbifOw263wAxAkZhtMIkUvZ2LZ5Ij/SJ1KQq9jH
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Received: by 2002:a92:730b:: with SMTP id o11mr21739529ilc.153.1591100356951;
+ Tue, 02 Jun 2020 05:19:16 -0700 (PDT)
+Date:   Tue, 02 Jun 2020 05:19:16 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009406b205a718eb10@google.com>
+Subject: linux-next test error: BUG: using smp_processor_id() in preemptible
+ [ADDR] code: systemd-rfkill/6726
+From:   syzbot <syzbot+94f7894cc5600cc07094@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Stephen Rothwell <sfr@canb.auug.org.au> writes:
+Hello,
 
-> Hi all,
->
-> After merging the mmc tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
->
-> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c: In function
-> 'brcmf_sdiod_probe':
-> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7:
-> error: 'SDIO_DEVICE_ID_CYPRESS_4373' undeclared (first use in this
-> function); did you mean 'SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373'?
->   915 |  case SDIO_DEVICE_ID_CYPRESS_4373:
->       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
->       |       SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373
-> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: note: each undeclared identifier is reported only once for each function it appears in
->
-> Caused by commit
->
->   1eb911258805 ("mmc: sdio: Fix Cypress SDIO IDs macros in common include file")
->
-> interacting with commit
->
->   2a7621ded321 ("brcmfmac: set F2 blocksize for 4373")
->
-> from the net-next tree.
->
-> I have applied the following merge fix patch.
+syzbot found the following crash on:
 
-Looks good to me, thanks. Ulf, I guess you will notify Linus about the
-conflict in your pull request?
+HEAD commit:    0e21d462 Add linux-next specific files for 20200602
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=13a7ffe2100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ecc1aef35f550ee3
+dashboard link: https://syzkaller.appspot.com/bug?extid=94f7894cc5600cc07094
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
--- 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+94f7894cc5600cc07094@syzkaller.appspotmail.com
+
+BUG: using smp_processor_id() in preemptible [00000000] code: systemd-rfkill/6726
+caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+CPU: 0 PID: 6726 Comm: systemd-rfkill Not tainted 5.7.0-next-20200602-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
+ ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+ ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
+ ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
+ ext4_getblk+0xad/0x520 fs/ext4/inode.c:833
+ ext4_bread+0x7c/0x380 fs/ext4/inode.c:883
+ ext4_append+0x153/0x360 fs/ext4/namei.c:67
+ ext4_init_new_dir fs/ext4/namei.c:2757 [inline]
+ ext4_mkdir+0x5e0/0xdf0 fs/ext4/namei.c:2802
+ vfs_mkdir+0x419/0x690 fs/namei.c:3632
+ do_mkdirat+0x21e/0x280 fs/namei.c:3655
+ do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7fa49b78d687
+Code: Bad RIP value.
+RSP: 002b:00007ffde44382d8 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+RAX: ffffffffffffffda RBX: 00005647ba692985 RCX: 00007fa49b78d687
+RDX: 00007ffde44381a0 RSI: 00000000000001ed RDI: 00005647ba692985
+RBP: 00007fa49b78d680 R08: 0000000000000100 R09: 0000000000000000
+R10: 00005647ba692980 R11: 0000000000000246 R12: 00000000000001ed
+R13: 00007ffde4438460 R14: 0000000000000000 R15: 0000000000000000
+
+
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

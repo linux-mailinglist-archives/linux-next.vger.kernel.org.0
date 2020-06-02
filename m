@@ -2,81 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CA5051EBB30
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 14:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85FB11EBB5D
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 14:15:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726962AbgFBMGU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 08:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36922 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726937AbgFBMGS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 08:06:18 -0400
-Received: from mail-vs1-xe44.google.com (mail-vs1-xe44.google.com [IPv6:2607:f8b0:4864:20::e44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C179FC08C5C1
-        for <linux-next@vger.kernel.org>; Tue,  2 Jun 2020 05:06:17 -0700 (PDT)
-Received: by mail-vs1-xe44.google.com with SMTP id k13so1841729vsm.13
-        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 05:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=X8TLwbbwpigYbLnnsmu2/tqlSQ4fjBU1I+APno1oETk=;
-        b=rAuOnM4pnXKCbe7wrzaoRdTKnyJBeTd0qTlYB470WMcq3DPvaQWUPhFzMfBkCpt5VZ
-         eqX0bC/o4hoV08wZE2N3bjOaORbaid/b50ftvLPKRzHvqtl3ZWD+0cqyurIAB+8rxgg9
-         FLe+HWZGMaaoWYbpzC52HrGXjBJaRJT22su4XEsrUFmIlBSdpNQJRm8EB9ECCYGrQS/c
-         gsM2UIRsj39DnQ0mEFwFHCykOFhoWolqR3jk7Q1id5fDp9/o+8D31UpPdbEiqQYX2+WQ
-         iJlFk6Df2wlvnhfBOihX+7DHWobBPr1bpvJFHIRKi7BDNoYG1cN5d/+HJbUUj8viqZJQ
-         uuew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=X8TLwbbwpigYbLnnsmu2/tqlSQ4fjBU1I+APno1oETk=;
-        b=FoVh6pIs6x5lTVkSFaEqBBGNE4nrHb93Py7CLtPjeuiubTEC4yGTypfbWChQfL2UvU
-         fe5oM0B69scITY8mKMxE3oA42Mn346zNdaKAT37Qp9f+7wuKJbcUxjOjUEU+txSW+V3g
-         UprUkNpD2Vyu2Z5Pl2LGizHzi8IJX2Xk9d1SYJfsWfnI73fk9m+XeQBtrSBGRobCcleV
-         5L1Zh1OVfTx9BoqfkeEigqcca2twIX1dDoKgW6TsLEHMJQc4mhZ0G0ZUnF/HiFOUU4K9
-         1Bfhg+JUd9Axq9bEU2qwC12FRvcIHxo06lWveAnqrMpy6K087pYdel+FIm1dZ6x6UE1E
-         iyjg==
-X-Gm-Message-State: AOAM532iqvw+LCEyKIFSi3x6l85RWD/dPmCwRM598gFD09+HIhdAPkY3
-        DBVTPp3v0oxViwowgNG+s7xFPiDjqI2e1zoushQvTA==
-X-Google-Smtp-Source: ABdhPJyYvO6EGUQzrkJXaKKQ2X1NWP8QbEKUI3/Bv4Zylahw5KDfo6vhcEr8o85kUFivcskLi7AfeWGuKQUXa0BPBk4=
-X-Received: by 2002:a67:8983:: with SMTP id l125mr7213160vsd.34.1591099576761;
- Tue, 02 Jun 2020 05:06:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200602134402.24c19488@canb.auug.org.au>
-In-Reply-To: <20200602134402.24c19488@canb.auug.org.au>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 2 Jun 2020 14:05:39 +0200
-Message-ID: <CAPDyKFqjm3Egbv9nj8wR_q5onpJT=jSh-MvKn+VuJGX_ifG9TA@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the mmc tree
+        id S1726217AbgFBMPN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 08:15:13 -0400
+Received: from m43-7.mailgun.net ([69.72.43.7]:47772 "EHLO m43-7.mailgun.net"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725921AbgFBMPM (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 2 Jun 2020 08:15:12 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1591100112; h=Content-Type: MIME-Version: Message-ID:
+ In-Reply-To: Date: References: Subject: Cc: To: From: Sender;
+ bh=6aoCLmbhav5CL/lS7P/VV6KjhJoQcYui0Q86IrjJk7c=; b=jUuOXCUiK38oFS9fIdaHtBIzH7HBVyCcHOcp15Zhz4DHXM3WwGkZKVvr3SD4+3Katbzw+k34
+ OW2DhRalrrOzui2mHkgSJZdV5xGR9UnoUMmyWyYXim+I/bS3R/Xzyo4uIrY+ALqnEJkpqpoP
+ w1eu1RPaHROLXb22htfKXRTUc6k=
+X-Mailgun-Sending-Ip: 69.72.43.7
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n06.prod.us-east-1.postgun.com with SMTP id
+ 5ed642cd76fccbb4c8a4c15c (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 02 Jun 2020 12:15:09
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 65AC9C433CA; Tue,  2 Jun 2020 12:15:08 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from potku.adurom.net (88-114-240-156.elisa-laajakaista.fi [88.114.240.156])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: kvalo)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id DBDBDC433C9;
+        Tue,  2 Jun 2020 12:15:05 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org DBDBDC433C9
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=kvalo@codeaurora.org
+From:   Kalle Valo <kvalo@codeaurora.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     David Miller <davem@davemloft.net>,
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        David Miller <davem@davemloft.net>,
         Networking <netdev@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+        Pali =?utf-8?Q?Roh=C3=A1r?= <pali@kernel.org>,
         Wright Feng <wright.feng@cypress.com>,
-        Chi-hsien Lin <chi-hsien.lin@cypress.com>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        Linus <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+        Chi-hsien Lin <chi-hsien.lin@cypress.com>
+Subject: Re: linux-next: build failure after merge of the mmc tree
+References: <20200602134402.24c19488@canb.auug.org.au>
+Date:   Tue, 02 Jun 2020 15:15:03 +0300
+In-Reply-To: <20200602134402.24c19488@canb.auug.org.au> (Stephen Rothwell's
+        message of "Tue, 2 Jun 2020 13:44:02 +1000")
+Message-ID: <87a71lll4o.fsf@codeaurora.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/24.5 (gnu/linux)
+MIME-Version: 1.0
+Content-Type: text/plain
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+ Linus
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
 
-On Tue, 2 Jun 2020 at 05:44, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
 > Hi all,
 >
 > After merging the mmc tree, today's linux-next build (arm
 > multi_v7_defconfig) failed like this:
 >
-> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c: In function 'brcmf_sdiod_probe':
-> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7: error: 'SDIO_DEVICE_ID_CYPRESS_4373' undeclared (first use in this function); did you mean 'SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373'?
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c: In function
+> 'brcmf_sdiod_probe':
+> drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c:915:7:
+> error: 'SDIO_DEVICE_ID_CYPRESS_4373' undeclared (first use in this
+> function); did you mean 'SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373'?
 >   915 |  case SDIO_DEVICE_ID_CYPRESS_4373:
 >       |       ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 >       |       SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373
@@ -93,44 +93,9 @@ On Tue, 2 Jun 2020 at 05:44, Stephen Rothwell <sfr@canb.auug.org.au> wrote:
 > from the net-next tree.
 >
 > I have applied the following merge fix patch.
->
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 2 Jun 2020 13:41:04 +1000
-> Subject: [PATCH] mmc: sdio: merge fix for "brcmfmac: set F2 blocksize for
->  4373"
->
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 
-Thanks Stephen for fixing and reporting about this!
+Looks good to me, thanks. Ulf, I guess you will notify Linus about the
+conflict in your pull request?
 
-Looks like the fix is rather trivial, so I assume Linus can
-cherry-pick your patch, while merging my pull request for mmc for
-v5.8. In any case, I will monitor the process and send a fix on top,
-if needed.
-
-Kind regards
-Uffe
-
-> ---
->  drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> index e718bd466830..46346cb3bc84 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/bcmsdh.c
-> @@ -912,7 +912,7 @@ static int brcmf_sdiod_probe(struct brcmf_sdio_dev *sdiodev)
->                 goto out;
->         }
->         switch (sdiodev->func2->device) {
-> -       case SDIO_DEVICE_ID_CYPRESS_4373:
-> +       case SDIO_DEVICE_ID_BROADCOM_CYPRESS_4373:
->                 f2_blksz = SDIO_4373_FUNC2_BLOCKSIZE;
->                 break;
->         case SDIO_DEVICE_ID_BROADCOM_4359:
-> --
-> 2.26.2
->
-> --
-> Cheers,
-> Stephen Rothwell
+-- 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches

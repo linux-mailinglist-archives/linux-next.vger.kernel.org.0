@@ -2,66 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0441EB68F
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 09:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 849481EB69B
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 09:36:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726177AbgFBH32 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 03:29:28 -0400
-Received: from stargate.chelsio.com ([12.32.117.8]:65091 "EHLO
-        stargate.chelsio.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgFBH32 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 03:29:28 -0400
-Received: from [10.193.177.142] (arunbr.asicdesigners.com [10.193.177.142] (may be forged))
-        by stargate.chelsio.com (8.13.8/8.13.8) with ESMTP id 0527TG6D030367;
-        Tue, 2 Jun 2020 00:29:17 -0700
-Cc:     ayush.sawal@asicdesigners.com,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the net-next tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-References: <20200602091249.66601c4c@canb.auug.org.au>
-From:   Ayush Sawal <ayush.sawal@chelsio.com>
-Message-ID: <8a8bc5f4-2dc3-5e2c-3013-51954004594c@chelsio.com>
-Date:   Tue, 2 Jun 2020 13:01:09 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        id S1726130AbgFBHgA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 03:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51550 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725900AbgFBHgA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 03:36:00 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25A1C061A0E;
+        Tue,  2 Jun 2020 00:35:59 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bkNs6kccz9sSd;
+        Tue,  2 Jun 2020 17:35:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591083358;
+        bh=zFDmif9p+c0zlYbN9eHIw7rrK7P9YAqGApbV6VPU26I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=W8s81OSJH/5ai9Sq5ElIvSOdUzp53RKl9FI3Y8i1P5m6NJvGqM3eQCDpmAqib/CFL
+         0L/QGUqaIHe2swzXMJikoFP8Syw2GuXmqU1r0wLjw9Nhl9fY+S1gZHxj6WlMoSbKKf
+         5VPFxedbFzsYrR0YeoaU9HfNbYcVPQ5BWj0bCwkkFNXn+B++3upKB3d2zsPjpOAAmz
+         JMCJwqBml3VdhUA2RxageViW3G0zooM1CpitViLzaNCKiBC7dEkh9szrEhhcGweNGO
+         kqWNsJEugFl2v0e3leby+imwYS1dYPWRB8XQqHaIL0nTK2ga777C6FH0rLBEI4DvFS
+         UxZg4v+q21Z8Q==
+Date:   Tue, 2 Jun 2020 17:35:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Liu <wei.liu@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Jon Doron <arilou@gmail.com>
+Subject: linux-next: build failure after merge of the hyperv tree
+Message-ID: <20200602173556.17ad06a1@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200602091249.66601c4c@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
+Content-Type: multipart/signed; boundary="Sig_/ZbijDR41+1JCnTRd+vsxF7e";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen & David,
+--Sig_/ZbijDR41+1JCnTRd+vsxF7e
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 6/2/2020 4:42 AM, Stephen Rothwell wrote:
-> Hi all,
->
-> In commit
->
->    055be6865dea ("Crypto/chcr: Fixes a coccinile check error")
->
-> Fixes tag
->
->    Fixes: 567be3a5d227 ("crypto:
->
-> has these problem(s):
->
->    - Subject has leading but no trailing parentheses
->    - Subject has leading but no trailing quotes
->
-> Please do not split Fixes tags over more than one line.
+Hi all,
 
-I am so sorry for this mistake.
-Is there a way to fix this?
+After merging the hyperv tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-Thanks,
-Ayush
+arch/x86/kvm/hyperv.c: In function 'kvm_vcpu_ioctl_get_hv_cpuid':
+arch/x86/kvm/hyperv.c:2020:16: error: 'HV_X64_DEBUGGING' undeclared (first =
+use in this function); did you mean 'HV_DEBUGGING'?
+ 2020 |    ent->ebx |=3D HV_X64_DEBUGGING;
+      |                ^~~~~~~~~~~~~~~~
+      |                HV_DEBUGGING
+arch/x86/kvm/hyperv.c:2020:16: note: each undeclared identifier is reported=
+ only once for each function it appears in
 
+Caused by commit
 
+  c55a844f46f9 ("x86/hyperv: Split hyperv-tlfs.h into arch dependent and in=
+dependent files")
 
+interacting with commit
+
+  f97f5a56f597 ("x86/kvm/hyper-v: Add support for synthetic debugger interf=
+ace")
+
+from the kvm tree.
+
+I have applied this patch for today:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 2 Jun 2020 17:31:06 +1000
+Subject: [PATCH] x86/hyperv: merge fix for HV_X64_DEBUGGING name change
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/x86/kvm/hyperv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index abde638548e0..af9cdb426dd2 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -2017,7 +2017,7 @@ int kvm_vcpu_ioctl_get_hv_cpuid(struct kvm_vcpu *vcpu=
+, struct kvm_cpuid2 *cpuid,
+ 			ent->edx |=3D HV_FEATURE_FREQUENCY_MSRS_AVAILABLE;
+ 			ent->edx |=3D HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE;
+=20
+-			ent->ebx |=3D HV_X64_DEBUGGING;
++			ent->ebx |=3D HV_DEBUGGING;
+ 			ent->edx |=3D HV_X64_GUEST_DEBUGGING_AVAILABLE;
+ 			ent->edx |=3D HV_FEATURE_DEBUG_MSRS_AVAILABLE;
+=20
+--=20
+2.26.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/ZbijDR41+1JCnTRd+vsxF7e
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7WAVwACgkQAVBC80lX
+0GxCggf9En24WCN3nmQmuFLamIsxS87H+KQ6KGMvErhDqyDeyrNsdbB/S2kSVKm1
+DPW6gOhnFpwfRcVnJRg31rNz7FGppwtQQTVmwK2ZrRXy1+pFyVwE8Fvb7dqsOH57
+Q3cBH3O1k1ZBKu/WVZojHuv0sUl0+c+IEZUiR0fvzvG9SXS1WxKuaHqUKdtOPgRu
+FFWUG8B+yEPGCrImwayf1T0CnDZ9PjtShh8EoxGitsWJxyB4Dkv03yc6m3MkvZnG
+cPDIDgt/020dZttZ8Opu6xAeojF5Lzt1GJwUHaT8ltyYj4wac9/RqOy5EIh4FuNX
+iVpDzgG2fOR8Cb5mWjaTGsCzUiCw1g==
+=eTIo
+-----END PGP SIGNATURE-----
+
+--Sig_/ZbijDR41+1JCnTRd+vsxF7e--

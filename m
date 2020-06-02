@@ -2,191 +2,133 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C28D71EB60D
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 08:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449861EB67D
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 09:18:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725835AbgFBG65 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 02:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45830 "EHLO
+        id S1725995AbgFBHSH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 03:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725616AbgFBG64 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 02:58:56 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF77C061A0E
-        for <linux-next@vger.kernel.org>; Mon,  1 Jun 2020 23:58:56 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id n9so982948plk.1
-        for <linux-next@vger.kernel.org>; Mon, 01 Jun 2020 23:58:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=gZc0uJcdpZbwavMJJXGIg/MQUeCh9M6aPrhlKFlYTQ4=;
-        b=tHy3T98KG2XL3M8+OuHiKGORwCrxXKfNCDr3H74BNusxQUmUy/s5OuQXyjOQtc/YCR
-         GR6dc09XEHStd9zp99BZIpROBteO5IqIObOc1RZnKTLFXhi1VDlyM3+FjpmhKcqJX8Oi
-         Dz9cUvl1b4lZFx3h5mboxiOvaQ6CFFe66dGO+H1Q+jO1qICTuNWQejVBurwYWtH4/3uS
-         j5KcX90W+thRvvbRhh97M7Bklf0FOR5WnpJu6hezMvPjqQUsBGyGF+ua/S1XxSkWCoBU
-         na15WhRy2t8bi3LOZHSGGV4whap1+8WlKD1Y/cz2yF1tVkzD/mS043QlzpQr91nvv72R
-         ONAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=gZc0uJcdpZbwavMJJXGIg/MQUeCh9M6aPrhlKFlYTQ4=;
-        b=I8V7QHhZlWxHE343kj4nuQbYhOtMSHrtoMKQzfiUUoEoy0qiPKXwFK2vjh4tr2SRqm
-         IxdXoLCZJleO67K5SSPdhE+kSwgV+e5IxyXNyiaxdGOpf38sUrvNzxVhEcXPS69g3KBw
-         rETU1HbqecxC9YX8+rovr1FNfTzBhYgI/6OX2VduXJd9868eP/k1xD4uyX1qmfFKyzAv
-         4Tny7DpTmmeiuVsafwGHtnaYdIchqipW0YUSGU5IpmUfAYAE/ZmDUdcZ8yJtjrbusUlU
-         2jjb+a5CWmQHuMYKN3mPesxWmG+G+kTyyoPNP90IvQ4aoh1+5i+IeCL1XPutyffzohLm
-         J2yg==
-X-Gm-Message-State: AOAM532XjKcMQ69T0yntMyFBOnbd2GXeYsd88QL8laFl9I+9QY9n5ZmG
-        RGGa/SSHueLVJuOMQ/A5sVpa32jgtBU=
-X-Google-Smtp-Source: ABdhPJxaFC8NmiHfFaMsmxJe+UR/9fEksEDUlgRe0OW0+yI/z3r2Yt+jA3BWOpx0laFF0tfWcy830g==
-X-Received: by 2002:a17:902:8546:: with SMTP id d6mr22292516plo.164.1591081135908;
-        Mon, 01 Jun 2020 23:58:55 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c2sm1341362pfi.71.2020.06.01.23.58.54
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 01 Jun 2020 23:58:54 -0700 (PDT)
-Message-ID: <5ed5f8ae.1c69fb81.ca1f.5231@mx.google.com>
-Date:   Mon, 01 Jun 2020 23:58:54 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1725907AbgFBHSH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 03:18:07 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1EE9C061A0E;
+        Tue,  2 Jun 2020 00:18:06 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bk0C2qSpz9sSc;
+        Tue,  2 Jun 2020 17:18:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591082283;
+        bh=MrJSykbWLAXwqJ9lxap8vVIzf19HCg++CsqikCUsi20=;
+        h=Date:From:To:Cc:Subject:From;
+        b=N8KtvWTZh5CwZEffJ51n/KOsacImwvPLrK9AW+eNpmYa1ENeYZBT5SeJEwXtbJVA5
+         EHWrEMfEK6b3jqAL61+SxRAIZ1sNd0dFZHP3LksnZ4qGeLrlr4e6R8PGzq8QTBmRVg
+         5+FBURqeV9tPWIP7+cAYDobKTC1jOnmojkB1kjTRYolnnvU1mIY2am4EeWxj8IDUFN
+         h822MWaolaMXW025AKc4iTmG+OBr722pu97qlzexKF6Gd5xEM1cfU3AE2zsmkwIh/t
+         IuEhMhJJc20rCtDnOWBNGlh0Ik7dgRXMFd4WnFwWMBQhZ15dArF5Fx0y7hbt1GJ8l+
+         BnWSa0ygtakiA==
+Date:   Tue, 2 Jun 2020 17:18:02 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Wei Liu <wei.liu@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        KVM <kvm@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jon Doron <arilou@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: linux-next: manual merge of the hyperv tree with the kvm tree
+Message-ID: <20200602171802.560d07bc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.7-930-g3a1d4c3e458b
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 244 boots: 5 failed,
- 229 passed with 4 offline, 6 untried/unknown (v5.7-930-g3a1d4c3e458b)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/igm3LKsDwFb7/wFVMwSaniT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+--Sig_/igm3LKsDwFb7/wFVMwSaniT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+Hi all,
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+Today's linux-next merge of the hyperv tree got a conflict in:
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/pending-fixes/kernel/v5.7-930-g3a=
-1d4c3e458b/plan/baseline/
+  arch/x86/include/asm/hyperv-tlfs.h
 
----------------------------------------------------------------------------=
-----
+between commit:
 
-next/pending-fixes boot: 244 boots: 5 failed, 229 passed with 4 offline, 6 =
-untried/unknown (v5.7-930-g3a1d4c3e458b)
+  22ad0026d097 ("x86/hyper-v: Add synthetic debugger definitions")
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-930-g3a1d4c3e458b/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-930-g3a1d4c3e458b/
+from the kvm tree and commit:
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-930-g3a1d4c3e458b
-Git Commit: 3a1d4c3e458b0755adc3e3f97254bf8e565ce801
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 95 unique boards, 24 SoC families, 26 builds out of 162
+  c55a844f46f9 ("x86/hyperv: Split hyperv-tlfs.h into arch dependent and in=
+dependent files")
 
-Boot Regressions Detected:
+from the hyperv tree.
 
-arc:
+I fixed it up (I removed the conficting bits from that file and added
+the following patch) and can carry the fix as necessary. This is now fixed
+as far as linux-next is concerned, but any non trivial conflicts should
+be mentioned to your upstream maintainer when your tree is submitted for
+merging.  You may also want to consider cooperating with the maintainer
+of the conflicting tree to minimise any particularly complex conflicts.
 
-    hsdk_defconfig:
-        gcc-8:
-          hsdk:
-              lab-baylibre: new failure (last pass: v5.7-rc6-175-gcf2c23313=
-0ca)
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 2 Jun 2020 17:15:49 +1000
+Subject: [PATCH] x86/hyperv: merge fix for hyperv-tlfs.h split
 
-arm:
-
-    exynos_defconfig:
-        gcc-8:
-          exynos5422-odroidxu3:
-              lab-collabora: failing since 6 days (last pass: v5.7-rc6-275-=
-gdbacbfd47d67 - first fail: v5.7-rc7-144-g6edb22d07477)
-
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 108 days (last pass: v5.5-8839-g=
-56c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: new failure (last pass: v5.7-rc7-238-g59fcbde6a=
-b90)
-
-arm64:
-
-    defconfig:
-        gcc-8:
-          meson-gxl-s805x-p241:
-              lab-baylibre: new failure (last pass: v5.7-rc7-238-g59fcbde6a=
-b90)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 52 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-arm:
-    exynos_defconfig:
-        gcc-8:
-            exynos5422-odroidxu3: 1 failed lab
-
-    allmodconfig:
-        gcc-8:
-            stm32mp157c-dk2: 1 failed lab
-
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
-For more info write to <info@kernelci.org>
+ include/asm-generic/hyperv-tlfs.h | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv=
+-tlfs.h
+index 262fae9526b1..e73a11850055 100644
+--- a/include/asm-generic/hyperv-tlfs.h
++++ b/include/asm-generic/hyperv-tlfs.h
+@@ -145,6 +145,9 @@ struct ms_hyperv_tsc_page {
+ #define HVCALL_SET_VP_REGISTERS			0x0051
+ #define HVCALL_POST_MESSAGE			0x005c
+ #define HVCALL_SIGNAL_EVENT			0x005d
++#define HVCALL_POST_DEBUG_DATA			0x0069
++#define HVCALL_RETRIEVE_DEBUG_DATA		0x006a
++#define HVCALL_RESET_DEBUG_SESSION		0x006b
+ #define HVCALL_RETARGET_INTERRUPT		0x007e
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+ #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+@@ -177,6 +180,7 @@ enum HV_GENERIC_SET_FORMAT {
+ #define HV_STATUS_INVALID_HYPERCALL_INPUT	3
+ #define HV_STATUS_INVALID_ALIGNMENT		4
+ #define HV_STATUS_INVALID_PARAMETER		5
++#define HV_STATUS_OPERATION_DENIED		8
+ #define HV_STATUS_INSUFFICIENT_MEMORY		11
+ #define HV_STATUS_INVALID_PORT_ID		17
+ #define HV_STATUS_INVALID_CONNECTION_ID		18
+--=20
+2.26.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/igm3LKsDwFb7/wFVMwSaniT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7V/SoACgkQAVBC80lX
+0GxF2ggAomHYqBN3y2XJWtABsTskD12lp1J0U55o7KbIZoj4+rvuEjicl6/E6Bk9
+x/RVJAuiR7RAknBnzd1pbzxddVz0i88/iPYPEutMq3dCba/092C6VVHp8ZYN4MAh
+WVmqdS+ADXllcMGfpiVcOLSyUu6WvhAUb4tyootkfFu1o6IQ4a5log9kMEdtXS6G
+uLG6lMFGk40MZGJXtBRKxWOd2RD3ZASrqaHbzUZMibFBuMsZAD9cZ1Z8+aKvHNNz
+jozd+M/0N8zWg2DMnGcFd4mWxxYfvKBr+jn4Nb3FwE39rJqieSlgIZPpUa14parS
+Up1NAZfWOHzFOJOr7CSUic4SUR1usA==
+=Venw
+-----END PGP SIGNATURE-----
+
+--Sig_/igm3LKsDwFb7/wFVMwSaniT--

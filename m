@@ -2,137 +2,173 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9C11EB357
-	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 04:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9841EB37D
+	for <lists+linux-next@lfdr.de>; Tue,  2 Jun 2020 04:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725832AbgFBCai (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 1 Jun 2020 22:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725801AbgFBCai (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 1 Jun 2020 22:30:38 -0400
-Received: from mail-oo1-xc41.google.com (mail-oo1-xc41.google.com [IPv6:2607:f8b0:4864:20::c41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E8AC061A0E;
-        Mon,  1 Jun 2020 19:30:38 -0700 (PDT)
-Received: by mail-oo1-xc41.google.com with SMTP id v3so1868397oot.1;
-        Mon, 01 Jun 2020 19:30:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=5nwUE9Z8i6E2ejW0zfsdVtBwTJzkvaP+HsdfQdzhUFo=;
-        b=GoTa0tvNcyVfHQoiRS1IavtEIBBsPQtb4VAB4lG7A1cl6uARLf+98te7A/wRqv2TLU
-         UJjJBl6Nrv35pbaBTDxWrjIXTCGbP1PYuYDqRPk8mX4YAukIQHZK1aY2yMActouZLBRP
-         w7bWe46McqbksRy0g38MlccKoA/QzfL/pmlazwM0BTbkDlVFusRiT8jduir7oOJWYt/G
-         uvP5rM72DSBh5fa8f931flZFZr2exQS+dnjUEwDtl+Zls2sv73fvwSFS/lfferMjM9lv
-         ZOsMLfgizawljvUpHvRYfr5zApXF2bScNZWNU8i+eiiEqJ+5oo5UCULOPGCRsZ287VJ5
-         vaaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=5nwUE9Z8i6E2ejW0zfsdVtBwTJzkvaP+HsdfQdzhUFo=;
-        b=c0vSv+u4elDS47thrNcvZf1y+WtTr8uZGnpuFHnwZNaIbToHS3zrIG6yhaHLf7fnYy
-         dG5VPNDZSTgS3P9qXRnr8a//o4+EpF2XibYClHLyYfC4IlFeYGhJBKuqr7QMiUHjlamg
-         eVE5yWSukcvbiMDdjuu77V8rD87PcxkzCGD38Fv4E4qP38R7CVPzqLo6KkBZB3ALdfPw
-         4cnvv/NOTbgIf0Y+a1oKsHwD8RAzIiEUJSeNlQ4O0nE7EdGInCi0X7slraD7POUkYLIM
-         JcRFV675J3JsTetSTceuDpAzVBl2W2FRQi3MYepXWeYkbdVqUa0t71U3jGaKp3aNlAiW
-         RgHg==
-X-Gm-Message-State: AOAM531sAtwEyFIBkicOn5lXVbaJVMhO1kGubU5F0DXXUTwCP8up3+uJ
-        jqge1Z7F+zCWvCqTzDFl/bQ=
-X-Google-Smtp-Source: ABdhPJxjkfLufkllmen9AVOYRsTPY7/tG9ZHPwpB8poIXA5emCmlqCUcx2P8X6jgML5lsZ2WNRWvMw==
-X-Received: by 2002:a4a:3c1a:: with SMTP id d26mr1497905ooa.38.1591065036412;
-        Mon, 01 Jun 2020 19:30:36 -0700 (PDT)
-Received: from ?IPv6:2601:282:803:7700:c9ef:b9c4:cdc1:2f07? ([2601:282:803:7700:c9ef:b9c4:cdc1:2f07])
-        by smtp.googlemail.com with ESMTPSA id y16sm365019oot.11.2020.06.01.19.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Jun 2020 19:30:35 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726404AbgFBCs3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 1 Jun 2020 22:48:29 -0400
+Received: from ozlabs.org ([203.11.71.1]:56857 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725956AbgFBCs2 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 1 Jun 2020 22:48:28 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49bc162dMLz9sSc;
+        Tue,  2 Jun 2020 12:48:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591066106;
+        bh=zDFy0h6+y15Uqzi+4IitwLquzt23JMwBoKe9trjj3ow=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VK6ymbgva8Op87k/pw/YqtHCUIkyCiaj2B/vic+RG73S1DDkgDCcl7ks8GEIy6DVW
+         XDhMBXRv3NC+XQ8YSGu//hlvwrE6VUruYfLdC2CKVlLqxkITR9Uf+XQABW8RpBvaOE
+         S+oMG17PWIe+0hLZlUiVjBuvfZAa+HNAxa8azEHhgKumbM/XE3SB1FEUV9YGMMiJOt
+         xxFJFIj4Azi8lesSf0R4DpPrN9nYyC0KKoKefVVIHwcV7aADHMWKoycophNyikUQdu
+         HkdpIex1G7FS0C1tgjLUc34pmyCeebN7UhfBQgmnpmxCCvdNV+u3LMRS/2C44Rc8Mn
+         6mMPq24e4kxzg==
+Date:   Tue, 2 Jun 2020 12:48:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>, Doug Ledford <dledford@redhat.com>,
+        Jason Gunthorpe <jgg@mellanox.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-References: <20200511130015.37103884@canb.auug.org.au>
- <20200602092040.5ef52300@canb.auug.org.au>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
-Date:   Mon, 1 Jun 2020 20:30:34 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.1
+        Yamin Friedman <yaminf@mellanox.com>,
+        Max Gurtovoy <maxg@mellanox.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: linux-next: manual merge of the block tree with the rdma tree
+Message-ID: <20200602124824.4293d0dc@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200602092040.5ef52300@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/XZZ1zvS5mB2NTqR0Xfz3Acb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/1/20 5:20 PM, Stephen Rothwell wrote:
-> Hi Dave,
-> 
-> On Mon, 11 May 2020 13:00:15 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->>
->> Today's linux-next merge of the ipsec-next tree got conflicts in:
->>
->>   net/ipv4/xfrm4_output.c
->>   net/ipv6/xfrm6_output.c
->>
->> between commit:
->>
->>   0c922a4850eb ("xfrm: Always set XFRM_TRANSFORMED in xfrm{4,6}_output_finish")
->>
->> from Linus' tree and commit:
->>
->>   2ab6096db2f1 ("xfrm: remove output_finish indirection from xfrm_state_afinfo")
->>
->> from the ipsec-next tree.
->>
->> I fixed it up (I used the latter versions of these files and then added
->> the following patch) and can carry the fix as necessary. This is now fixed
->> as far as linux-next is concerned, but any non trivial conflicts should
->> be mentioned to your upstream maintainer when your tree is submitted for
->> merging.  You may also want to consider cooperating with the maintainer
->> of the conflicting tree to minimise any particularly complex conflicts.
->>
->> From: Stephen Rothwell <sfr@canb.auug.org.au>
->> Date: Mon, 11 May 2020 12:57:24 +1000
->> Subject: [PATCH] xfrm: merge fixup for "remove output_finish indirection from xfrm_state_afinfo"
->>
->> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
->> ---
->>  net/xfrm/xfrm_output.c | 4 ----
->>  1 file changed, 4 deletions(-)
->>
->> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
->> index 886a9b284b3a..0f4b3a5e02ba 100644
->> --- a/net/xfrm/xfrm_output.c
->> +++ b/net/xfrm/xfrm_output.c
->> @@ -574,16 +574,12 @@ int xfrm_output(struct sock *sk, struct sk_buff *skb)
->>  	switch (x->outer_mode.family) {
->>  	case AF_INET:
->>  		memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
->> -#ifdef CONFIG_NETFILTER
->>  		IPCB(skb)->flags |= IPSKB_XFRM_TRANSFORMED;
->> -#endif
->>  		break;
->>  	case AF_INET6:
->>  		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
->>  
->> -#ifdef CONFIG_NETFILTER
->>  		IP6CB(skb)->flags |= IP6SKB_XFRM_TRANSFORMED;
->> -#endif
->>  		break;
->>  	}
->>  
-> 
-> It looks like this merge resolution fix up was missed when the
-> ipsec-next tree was merged into the net-next tree.
-> 
+--Sig_/XZZ1zvS5mB2NTqR0Xfz3Acb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for catching that, Stephen. Important fix in 0c922a4850eb.
+Hi all,
 
+Today's linux-next merge of the block tree got a conflict in:
+
+  drivers/nvme/host/rdma.c
+
+between commit:
+
+  583f69304b91 ("nvme-rdma: use new shared CQ mechanism")
+
+from the rdma tree and commit:
+
+  5ec5d3bddc6b ("nvme-rdma: add metadata/T10-PI support")
+
+from the block tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/nvme/host/rdma.c
+index 83d5f292c937,f8f856dc0c67..000000000000
+--- a/drivers/nvme/host/rdma.c
++++ b/drivers/nvme/host/rdma.c
+@@@ -85,7 -95,7 +95,8 @@@ struct nvme_rdma_queue=20
+  	struct rdma_cm_id	*cm_id;
+  	int			cm_error;
+  	struct completion	cm_done;
+ +	int			cq_size;
++ 	bool			pi_support;
+  };
+ =20
+  struct nvme_rdma_ctrl {
+@@@ -262,7 -272,8 +273,9 @@@ static int nvme_rdma_create_qp(struct n
+  	init_attr.qp_type =3D IB_QPT_RC;
+  	init_attr.send_cq =3D queue->ib_cq;
+  	init_attr.recv_cq =3D queue->ib_cq;
+ +	init_attr.qp_context =3D queue;
++ 	if (queue->pi_support)
++ 		init_attr.create_flags |=3D IB_QP_CREATE_INTEGRITY_EN;
+ =20
+  	ret =3D rdma_create_qp(queue->cm_id, dev->pd, &init_attr);
+ =20
+@@@ -426,43 -437,18 +447,49 @@@ static void nvme_rdma_destroy_queue_ib(
+  	nvme_rdma_dev_put(dev);
+  }
+ =20
+- static int nvme_rdma_get_max_fr_pages(struct ib_device *ibdev)
++ static int nvme_rdma_get_max_fr_pages(struct ib_device *ibdev, bool pi_su=
+pport)
+  {
+- 	return min_t(u32, NVME_RDMA_MAX_SEGMENTS,
+- 		     ibdev->attrs.max_fast_reg_page_list_len - 1);
++ 	u32 max_page_list_len;
++=20
++ 	if (pi_support)
++ 		max_page_list_len =3D ibdev->attrs.max_pi_fast_reg_page_list_len;
++ 	else
++ 		max_page_list_len =3D ibdev->attrs.max_fast_reg_page_list_len;
++=20
++ 	return min_t(u32, NVME_RDMA_MAX_SEGMENTS, max_page_list_len - 1);
+  }
+ =20
+ +static int nvme_rdma_create_cq(struct ib_device *ibdev,
+ +				struct nvme_rdma_queue *queue)
+ +{
+ +	int ret, comp_vector, idx =3D nvme_rdma_queue_idx(queue);
+ +	enum ib_poll_context poll_ctx;
+ +
+ +	/*
+ +	 * Spread I/O queues completion vectors according their queue index.
+ +	 * Admin queues can always go on completion vector 0.
+ +	 */
+ +	comp_vector =3D idx =3D=3D 0 ? idx : idx - 1;
+ +
+ +	/* Polling queues need direct cq polling context */
+ +	if (nvme_rdma_poll_queue(queue)) {
+ +		poll_ctx =3D IB_POLL_DIRECT;
+ +		queue->ib_cq =3D ib_alloc_cq(ibdev, queue, queue->cq_size,
+ +					   comp_vector, poll_ctx);
+ +	} else {
+ +		poll_ctx =3D IB_POLL_SOFTIRQ;
+ +		queue->ib_cq =3D ib_cq_pool_get(ibdev, queue->cq_size,
+ +					      comp_vector, poll_ctx);
+ +	}
+ +
+ +	if (IS_ERR(queue->ib_cq)) {
+ +		ret =3D PTR_ERR(queue->ib_cq);
+ +		return ret;
+ +	}
+ +
+ +	return 0;
+ +}
+ +
+  static int nvme_rdma_create_queue_ib(struct nvme_rdma_queue *queue)
+  {
+  	struct ib_device *ibdev;
+
+--Sig_/XZZ1zvS5mB2NTqR0Xfz3Acb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7VvfgACgkQAVBC80lX
+0Gxupgf/XeOuArn2aAZlo6Kdw/gUNLYNVTwun0a5HGEPPvCExK81Mc0Ror3OHyUE
+7e7fPVFOIbpI4oWrkPwHl/Z/SOhWnAvS/c6mDnIYquzk7luP7/aVjbLIz7obzAc9
+S9PUv5tALhAALrEHR1QxfKBsG1AmpmLKwV3xmD4XeU0L9S+iCOxL06XjcdKhYw5W
+BH/ydbZIdTHE+mRQ6+9Jsud55qlZFDkqAP3ZY5U2OYpqFw+lNcOjwRP+IVDFhnXS
+eQd/xM4z/HrjoTYfe1kFxNCE4qyPXVh70/xJ0oD7x/P9NVgOIg3lOuQgbv0+T6mo
+Wo3983eiQHgWfr1E+OcvnTgUzqjitA==
+=D8dd
+-----END PGP SIGNATURE-----
+
+--Sig_/XZZ1zvS5mB2NTqR0Xfz3Acb--

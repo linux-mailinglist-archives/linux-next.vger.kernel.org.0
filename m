@@ -2,105 +2,121 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D8271EC708
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 04:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A27F1EC717
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 04:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725863AbgFCCCU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 2 Jun 2020 22:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53512 "EHLO
+        id S1725910AbgFCCHy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 2 Jun 2020 22:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725777AbgFCCCT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 22:02:19 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4CAC08C5C0;
-        Tue,  2 Jun 2020 19:02:19 -0700 (PDT)
+        with ESMTP id S1725789AbgFCCHy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 2 Jun 2020 22:07:54 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E602C08C5C0;
+        Tue,  2 Jun 2020 19:07:54 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cBxM6yJFz9sRR;
-        Wed,  3 Jun 2020 12:02:15 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cC3r1V72z9sSc;
+        Wed,  3 Jun 2020 12:07:52 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591149736;
-        bh=vhVIoWfRSqSXFrzE3g6qmYx7HtBU/h0jRCqrvADViUo=;
+        s=201702; t=1591150072;
+        bh=xuJUjo7+YelOU3llC+D80IQp+Ob0+zeNH9Y00+TBzq8=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ax87zDA2OMU9bhGi7CX2giGqfJNRR4ffm4/mCm+/r4zM4WTK4ZIlQQVm4drgGDQV+
-         KbJKZ47lVS/axmNhj/9uGtK+wp3RTDRY/YjZ+wpMgWVm8votFb3NqT4HooByZ82Qhv
-         72aJfQc7Ste0xwseybcO/7Xrh1/l8Nm6KOeq0j6CzD4CLs3a1jHOUaI2UJtga6Jwdk
-         z7d6kSY/KndFdKNmOIauZI2wC6qSYT09z/rew8HKknjKs0HcbV/9pav0Es5Us8lDUm
-         92dHV8oQgaM0Ii3zbCld6TmJDPHF16/6BtLs3nMXpYcfsA7KeU5D7PvgNbRMi0K8CZ
-         dt6PFgEQd2NLg==
-Date:   Wed, 3 Jun 2020 12:02:15 +1000
+        b=DBucrm9e9f6+ABOFi0eeIagnW9RiJMsh9GXYtLGZtCYal2MteBR1Y0LXeOfa0b2pA
+         LTNByuMyskgkxMZMPkZDmqkPJF/ubABjlqAiOCC+CsG0QESWukygyh1789Nl6NwV7w
+         q7oQIrKX6Y/nn+++rfZXmyPHTiuVX6YU0XFpxxYP7Q8ZP3Zav+kQpDadV1wCg+ecRi
+         h6MIkymt5dPnWnz11BcXx4urD2W05BSuHgOnrkmK/Xp4Z+n28TihUr3inQ2MbD/V7H
+         JIf7IP7wOSs7qA0Zdq2er+3nLGtV+Nmj33YTIMBdx+mVBurlDNlloJHnAYnS2WL/qr
+         9CWPJIpnN+wyw==
+Date:   Wed, 3 Jun 2020 12:07:51 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: linux-next: manual merge of the rcu tree with the powerpc tree
-Message-ID: <20200603120215.758ec1f0@canb.auug.org.au>
-In-Reply-To: <20200519172316.3b37cbae@canb.auug.org.au>
-References: <20200519172316.3b37cbae@canb.auug.org.au>
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Goldwyn Rodrigues <rgoldwyn@suse.com>
+Subject: Re: linux-next: manual merge of the akpm-current tree with the
+ btrfs tree
+Message-ID: <20200603120751.5cc12744@canb.auug.org.au>
+In-Reply-To: <20200525211128.1cc8c00d@canb.auug.org.au>
+References: <20200525211128.1cc8c00d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/re/4mt4BnHhc__uwjuL5lI1";
+Content-Type: multipart/signed; boundary="Sig_/cT2T2oAM0oRDooaP4vznsSt";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/re/4mt4BnHhc__uwjuL5lI1
+--Sig_/cT2T2oAM0oRDooaP4vznsSt
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Tue, 19 May 2020 17:23:16 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+On Mon, 25 May 2020 21:11:28 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
 wrote:
 >
-> Hi all,
+> Today's linux-next merge of the akpm-current tree got a conflict in:
 >=20
-> Today's linux-next merge of the rcu tree got a conflict in:
->=20
->   arch/powerpc/kernel/traps.c
+>   fs/btrfs/inode.c
 >=20
 > between commit:
 >=20
->   116ac378bb3f ("powerpc/64s: machine check interrupt update NMI accounti=
-ng")
+>   f31e5f70919f ("btrfs: switch to iomap_dio_rw() for dio")
 >=20
-> from the powerpc tree and commit:
+> from the btrfs tree and commit:
 >=20
->   187416eeb388 ("hardirq/nmi: Allow nested nmi_enter()")
+>   2167c1133b8b ("btrfs: convert from readpages to readahead")
 >=20
-> from the rcu tree.
+> from the akpm-current tree.
+>=20
+> diff --cc fs/btrfs/inode.c
+> index fb95efeb63ed,8b3489f229c7..000000000000
+> --- a/fs/btrfs/inode.c
+> +++ b/fs/btrfs/inode.c
+> @@@ -10075,8 -10538,8 +10060,8 @@@ static const struct address_space_opera
+>   	.readpage	=3D btrfs_readpage,
+>   	.writepage	=3D btrfs_writepage,
+>   	.writepages	=3D btrfs_writepages,
+> - 	.readpages	=3D btrfs_readpages,
+> + 	.readahead	=3D btrfs_readahead,
+>  -	.direct_IO	=3D btrfs_direct_IO,
+>  +	.direct_IO	=3D noop_direct_IO,
+>   	.invalidatepage =3D btrfs_invalidatepage,
+>   	.releasepage	=3D btrfs_releasepage,
+>   #ifdef CONFIG_MIGRATION
 
 This is now a conflict between commit
 
-  69ea03b56ed2 ("hardirq/nmi: Allow nested nmi_enter()")
+  ba206a026ff4 ("btrfs: convert from readpages to readahead")
 
-=46rom Linus tree and the above powerpc tree commit.
+from Linus' tree and commit
+
+  a43a67a2d715 ("btrfs: switch to iomap_dio_rw() for dio")
+
+from the btrfs tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/re/4mt4BnHhc__uwjuL5lI1
+--Sig_/cT2T2oAM0oRDooaP4vznsSt
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7XBKcACgkQAVBC80lX
-0Gz/Wgf+L+rFqD4u+L0Kv5bqDMacIs7hXXsLQI+vN7E4C2cx1LcZiI9aWrRDpUTK
-uUO5eVIwczW5tvq91C04sT7F6jrApts2PS2hbCwqPM+ZjWTI4SNO5yHopOrWKzUW
-RfV7+lCLfE+SwDlA+ZbzJotktvIL6gpUEBRpiMcSe7ka3iAiarcywWzgo/vhQ4J9
-I3oQUZiMblqFr653oSSYxwb7omI2TU3aAgV8Aheh8OmZktW90UfyYhJjoh6DYulQ
-r+qCwBkQ+MpYcRTOklfrOt9N96sJy1WuNP6bCw34/jd8L/d44loxB4YLO18igyAE
-biuCnndxOIm1utVMy+mR6g83z8twsA==
-=sOc/
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7XBfcACgkQAVBC80lX
+0GwXpgf7BWVbLYzCGUc0tiK9692M42gzHZXfa//AnE/kyeHMFchJ/7Is1We+MLBg
+0O0fewPAvbOXbkSapFskQ6XSRfQelXykpO24o7ja93BbOXPVobRVSDPRaTg9uVbO
++B6viJkN0z8T9tZRMOOcu9ZvkbVSNE2tdT18PwLioFV8o2Sv/B/ZswBQnxm2JI1S
+E7rCzIZ1w5nVk4IPytvQDhKPShahtb/36RGI2r1A3ZYFmnnmH7+yRElnUbC7Y498
+6KWKWwS9sAO6tDyhbmj+urowN85ZyVTiQ11Phkti19goFGU9SCMCUk5QEp7YCYqi
+zxIALg2EAjI8Uc0SlbCP8LgbuB0+Kg==
+=5L+u
 -----END PGP SIGNATURE-----
 
---Sig_/re/4mt4BnHhc__uwjuL5lI1--
+--Sig_/cT2T2oAM0oRDooaP4vznsSt--

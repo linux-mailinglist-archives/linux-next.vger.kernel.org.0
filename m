@@ -2,172 +2,126 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8671EC8BC
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 07:26:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EE9E1EC93F
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 08:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725792AbgFCF0F (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 01:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725275AbgFCF0F (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 01:26:05 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 222B0C05BD43
-        for <linux-next@vger.kernel.org>; Tue,  2 Jun 2020 22:26:03 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id g5so812046pfm.10
-        for <linux-next@vger.kernel.org>; Tue, 02 Jun 2020 22:26:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=ExW2iN4cT43BShINNTCYsC8z2xayKIE4BuxUtHqp9I0=;
-        b=Kr/hlyayrSnpRyKu3d1TOFzXGtgPqzB4Xg+XuEicHcyItDTqdGNDq8I4Nb99+u78CN
-         bWluTuDEvDVcNpUOsB3HQX8BHb1wOOBhOxKyul1UykOC56eIbPc2K/6kdBdpkE1G6Sq3
-         wb+h+D/QO9rD+v6btly2PyzFk4H1LZxlMAJF512aezSv2dgCwJBu9F3kyEJ/OIuJ50Ce
-         QfSwJDxeWXCO0u3xAJgpfNSyMyvVsEzKwfB3vb7Zndghj2fQtsA2bMCChhADzwCDMuRN
-         9Or6Dz1VTY3bdaRCxAnaJU3sWUmkEGsK1ivVNjeyQCv/x2xn3nFzCmqykkxN82xcixkk
-         adWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=ExW2iN4cT43BShINNTCYsC8z2xayKIE4BuxUtHqp9I0=;
-        b=EuzKMzYsq1uY0rtv+5K685TxiAVA5OPTDwhtfPkdaDzDvwTNnhrMveSnEQgtfLRFGV
-         +L/5+k2VLHybPE/9GaNjPwiTwyDovj7UmTS2zTtoLHZl3AGkadKEGIOFQniWsZ/eC3rY
-         LbEZV9EnLltRtzARcOY4gZnlQ/UXzqrq8W37XUcDcUzckJI3gDD12ZxmGI/Kr8iaCI6M
-         We2V4qvzOVlsY9Z/Wel9xCBT7VhraKCOpPF84KmmAMsdOlQNvi8hDzT2e7Hk17u6oon0
-         ByqR8N5W6qZQVqEyfEYKZJm649Gz+HgmdRNIvKMRdtAd2yeNd6nWSB8lgh2QpbTv9YOs
-         NwqQ==
-X-Gm-Message-State: AOAM531B6T8/H7pIpIIGRaDk0eH1KOsjbULu6+6DxVKz3LFqPCEsTnKW
-        pGylrn6peRGbVyzp65wa8n9cOkgofmg=
-X-Google-Smtp-Source: ABdhPJyeDvSOBXd5ZVaybzhmRN8RUKgAqFczR7kS40PP1ddIjp4DjWsonMC15LrztFIz4fsh9SoU1A==
-X-Received: by 2002:a17:90a:7645:: with SMTP id s5mr3527086pjl.50.1591161962120;
-        Tue, 02 Jun 2020 22:26:02 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id gd1sm816792pjb.14.2020.06.02.22.26.01
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 02 Jun 2020 22:26:01 -0700 (PDT)
-Message-ID: <5ed73469.1c69fb81.74d6.31e8@mx.google.com>
-Date:   Tue, 02 Jun 2020 22:26:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.7-3707-g4973fabb59f6
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 214 boots: 4 failed,
- 202 passed with 4 offline, 4 untried/unknown (v5.7-3707-g4973fabb59f6)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+        id S1725810AbgFCGEu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 02:04:50 -0400
+Received: from mail02.asahi-net.or.jp ([202.224.55.14]:41832 "EHLO
+        mail02.asahi-net.or.jp" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725792AbgFCGEt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 02:04:49 -0400
+X-Greylist: delayed 432 seconds by postgrey-1.27 at vger.kernel.org; Wed, 03 Jun 2020 02:04:47 EDT
+Received: from sakura.ysato.name (ik1-413-38519.vs.sakura.ne.jp [153.127.30.23])
+        (Authenticated sender: PQ4Y-STU)
+        by mail02.asahi-net.or.jp (Postfix) with ESMTPA id DEA73EE429;
+        Wed,  3 Jun 2020 14:57:33 +0900 (JST)
+Received: from yo-satoh-debian.ysato.ml (z215094.dynamic.ppp.asahi-net.or.jp [110.4.215.94])
+        by sakura.ysato.name (Postfix) with ESMTPSA id 182B31C06C6;
+        Wed,  3 Jun 2020 14:57:33 +0900 (JST)
+Date:   Wed, 03 Jun 2020 14:57:32 +0900
+Message-ID: <87y2p4n12r.wl-ysato@users.sourceforge.jp>
+From:   Yoshinori Sato <ysato@users.sourceforge.jp>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Rich Felker <dalias@libc.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux-sh list <linux-sh@vger.kernel.org>
+Subject: Re: linux-sh for-next reactivation
+In-Reply-To: <20200603084105.47bd62c5@canb.auug.org.au>
+References: <20200602031123.GA1079@brightrain.aerifal.cx>
+        <20200602150039.780a0ac0@canb.auug.org.au>
+        <20200602202832.GA3776@brightrain.aerifal.cx>
+        <20200603084105.47bd62c5@canb.auug.org.au>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL/10.8 EasyPG/1.0.0 Emacs/26
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+On Wed, 03 Jun 2020 07:41:05 +0900,
+Stephen Rothwell wrote:
+> 
+> [1  <text/plain; US-ASCII (quoted-printable)>]
+> Hi Rich,
+> 
+> On Tue, 2 Jun 2020 16:28:33 -0400 Rich Felker <dalias@libc.org> wrote:
+> >
+> > On Tue, Jun 02, 2020 at 03:00:39PM +1000, Stephen Rothwell wrote:
+> > > Hi Rich,
+> > > 
+> > > On Mon, 1 Jun 2020 23:11:39 -0400 Rich Felker <dalias@libc.org> wrote:  
+> > > >
+> > > > Could you reactivate linux-next pull from my arch/sh for-next branch?
+> > > > It's where it was before, at:
+> > > > 
+> > > >     git://git.libc.org/linux-sh for-next
+> > > > 
+> > > > and has newly accepted patches ready.  
+> > > 
+> > > I already have an SH tree from
+> > > git://git.sourceforge.jp/gitroot/uclinux-h8/linux.git#sh-next .  Should
+> > > I do anything with that one?
+> > > 
+> > > It currently contains:
+> > > 
+> > > $ git log --oneline origin/master..sh/sh-next 
+> > > a193018e5290 (sh/sh-next) sh: add missing EXPORT_SYMBOL() for __delay
+> > > 1d5fd6c33b04 sh: add missing DECLARE_EXPORT() for __ashiftrt_r4_xx
+> > > d70f1e3d5dbd Merge remote-tracking branch 'origin/master' into sh-next
+> > > baf58858e8b6 sh: prefer __section from compiler_attributes.h
+> > > 8619b5a9035a sh: Drop -Werror from kernel Makefile
+> > > 3a3a78124693 sh: kernel: disassemble: Mark expected switch fall-throughs
+> > > fb8f77490f55 sh: kernel: hw_breakpoint: Fix missing break in switch statement
+> > > cd10afbc932d sh: remove unneeded uapi asm-generic wrappers
+> > > cbfc6edb6a4a sh: use __builtin_constant_p() directly instead of IS_IMMEDIATE()  
+> > 
+> > Hi Stephen,
+> > 
+> > I completely forgot that you had the tree from our other co-maintainer
+> > Yoshinori Sato on the list linux-next is pulling from. Would it be
+> > okay to keep both? That would help with quickly identifying and
+> > resolving any conflicting commits and make things go more smoothly
+> > with two maintainers trying to be active.
+> > 
+> > Let me know if this doesn't work for you and we'll figure out
+> > alternative arrangements.
+> 
+> Added from today (I called it "sh-rf" - if you want a different name,
+> please let me know).
+> 
+> Thanks for adding your subsystem tree as a participant of linux-next.  As
+> you may know, this is not a judgement of your code.  The purpose of
+> linux-next is for integration testing and to lower the impact of
+> conflicts between subsystems in the next merge window. 
+> 
+> You will need to ensure that the patches/commits in your tree/series have
+> been:
+>      * submitted under GPL v2 (or later) and include the Contributor's
+>         Signed-off-by,
+>      * posted to the relevant mailing list,
+>      * reviewed by you (or another maintainer of your subsystem tree),
+>      * successfully unit tested, and 
+>      * destined for the current or next Linux merge window.
+> 
+> Basically, this should be just what you would send to Linus (or ask him
+> to fetch).  It is allowed to be rebased if you deem it necessary.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell 
+> sfr@canb.auug.org.au
+> [2 OpenPGP digital signature <application/pgp-signature (7bit)>]
+> No public key for 015042F34957D06C created at 2020-06-03T07:41:05+0900 using RSA
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+I only provided it temporarily.
+Plase remove git://git.sourceforge.jp/gitroot/uclinux-h8/linux.git#sh-next
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+Thanks.
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/pending-fixes/kernel/v5.7-3707-g4=
-973fabb59f6/plan/baseline/
-
----------------------------------------------------------------------------=
-----
-
-next/pending-fixes boot: 214 boots: 4 failed, 202 passed with 4 offline, 4 =
-untried/unknown (v5.7-3707-g4973fabb59f6)
-
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-3707-g4973fabb59f6/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-3707-g4973fabb59f6/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-3707-g4973fabb59f6
-Git Commit: 4973fabb59f61553da8b677333357e016550eeef
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 91 unique boards, 23 SoC families, 27 builds out of 171
-
-Boot Regressions Detected:
-
-arm:
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 1 day (last pass: v5.7-rc7-238-g5=
-9fcbde6ab90 - first fail: v5.7-930-g3a1d4c3e458b)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          sun50i-h6-orangepi-3:
-              lab-clabbe: new failure (last pass: v5.7-930-g3a1d4c3e458b)
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.7-930-g3a1d4c3e458b)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 53 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-arm:
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+-- 
+Yosinori Sato

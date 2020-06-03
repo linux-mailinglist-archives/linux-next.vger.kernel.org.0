@@ -2,169 +2,232 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF911ECD73
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 12:24:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 632C81ECD83
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 12:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726899AbgFCKY1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 06:24:27 -0400
-Received: from mailout2.w1.samsung.com ([210.118.77.12]:59422 "EHLO
-        mailout2.w1.samsung.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726893AbgFCKYZ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 06:24:25 -0400
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20200603102423euoutp022f747d9a659964c8174c951e8b13f2c9~VAafAPvOQ3215632156euoutp02f
-        for <linux-next@vger.kernel.org>; Wed,  3 Jun 2020 10:24:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20200603102423euoutp022f747d9a659964c8174c951e8b13f2c9~VAafAPvOQ3215632156euoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1591179863;
-        bh=eDICBmLdfSReJ0IIZgbXl0S9aPELmh5Oc+cKhvrkRBQ=;
-        h=Subject:To:Cc:From:Date:In-Reply-To:References:From;
-        b=itpaM7U5QNM5cGBgSqU/gKdBa2wyNR9qSujdfoGuya2nSv8hhgZOUelUsfkVNwyXB
-         SuuGRBFjR1fyt2l1Udj9G0BpgNKu1h2XfS1kedBXu8fIrVy5ybICBdQGmWOy34sMsE
-         jD6VCm5KwZYs3a+sXGcsS/wGZyOt+xFdsywp9OU0=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20200603102423eucas1p2627b59b24daa069df127ed05ee3e4ece~VAaeuqMXm0341003410eucas1p2E;
-        Wed,  3 Jun 2020 10:24:23 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id FB.DD.61286.65A77DE5; Wed,  3
-        Jun 2020 11:24:23 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700~VAaeUAeQt0910609106eucas1p1I;
-        Wed,  3 Jun 2020 10:24:22 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20200603102422eusmtrp2ac3eef239fd6542e93825d5cf2456da4~VAaeTWRr-1914019140eusmtrp2e;
-        Wed,  3 Jun 2020 10:24:22 +0000 (GMT)
-X-AuditID: cbfec7f2-ef1ff7000001ef66-4c-5ed77a561226
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 42.81.07950.65A77DE5; Wed,  3
-        Jun 2020 11:24:22 +0100 (BST)
-Received: from [106.210.88.143] (unknown [106.210.88.143]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20200603102421eusmtip1497219aabad721a8fb33142e00b9ba1e~VAadqRY3x3044930449eusmtip11;
-        Wed,  3 Jun 2020 10:24:21 +0000 (GMT)
-Subject: Re: [PATCHv5 1/1] ext4: mballoc: Use raw_cpu_ptr instead of
- this_cpu_ptr
-To:     Ritesh Harjani <riteshh@linux.ibm.com>, linux-ext4@vger.kernel.org
-Cc:     linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        tytso@mit.edu, linux-kernel@vger.kernel.org,
-        adilger.kernel@dilger.ca, sfr@canb.auug.org.au,
-        linux-next@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        syzbot+82f324bb69744c5f6969@syzkaller.appspotmail.com
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-Message-ID: <ca794804-7d99-9837-2490-366a2eb97a94@samsung.com>
-Date:   Wed, 3 Jun 2020 12:24:22 +0200
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
-        Thunderbird/68.8.1
+        id S1726268AbgFCK1D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 06:27:03 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58921 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725854AbgFCK1C (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 3 Jun 2020 06:27:02 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cQ7j5Qqqz9sPF;
+        Wed,  3 Jun 2020 20:26:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591180017;
+        bh=zD33Wup488scavQp90fj5kXT/hdVydyJgVvHiJB0IH8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QyulPPnqdk+2gvx4+zfS4Px8oEZizNMo6GDz/S0s99oCd93OgnlHvTd2o8ObLt77t
+         tlba7wzT+2z0sEMjGS3oKQ2oktL1PL2XQxWCfmd+3zA543rFGQUZb/B4lZYBPnoFkY
+         SSUK9XeHXps4fkagekD9OjKaDwOOha+l9UvdVJOeLNMjht0SYMftt+rNxz/p9D4f8w
+         3ezSWhZ9Dc2zLUtIaStVwxWsvEZaOASAJ/PlRmitLo3UoMkxFVZc8V0c4057QRbpVB
+         rRZxeRzzgUSJckdKLZJOOAZzApvv/UgBYi8AO+2h9TDqbQveG345WrpTl5gIoT03Ue
+         MhXMe3FPnC48g==
+Date:   Wed, 3 Jun 2020 20:26:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Subject: linux-next: fix ups for clashes between akpm and powerpc trees
+Message-ID: <20200603202655.0ad0eacc@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200602134721.18211-1-riteshh@linux.ibm.com>
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfSxVYRzuvec491DXXjfNb5RyF5saUWlnY5aPctZayxLTuHXlDPOR3eMj
-        xiZk3NnCWnJTvmaUpCGirGixO7orUjdruUZTdPPd0kLdeyj/Pc/v9zzv8z7vXpqQDpjZ0jEJ
-        SZwyQREnoyzItt5lrUtI+nu52/RVxCwt5pPMZF0NYsrufKSYp10akhnqLKeY7qo8xEyNj4iZ
-        R13DYmY6t5FkdK23CeZq4bL46Fb2ik5HsbktqezTYg3FFlU/R2z2wEuCbWodJtkygxO70Gx/
-        mj5n4RXJxcWkcMoD3hcsoufrXosTi6wvd7+Zo7LQClYhcxrwYWifzDVTIQtaiusRlNTMiwSy
-        iGCgdmSdLCBYXSwmVYg2Wdb0J41uKa5DoHpBCpoZBN/b34qMi+34DPwcWyCM2Bofh/tdA6aD
-        CHxdBFMNnSYRhd1BZVBRRizB3tD2ZdRkIPFe0DZ0mDQ7cDgUjk4RgsYKNGUTpBGbY0+omhk3
-        aQi8G9oN5YSAbWBkosIUBtggBm35EyQU9YdSfaVIwNthqq9VLOCdsNaxYchBMKZtFAukEMFQ
-        9s11tyd81P6ijP0J7AxNnQeEsQ90/L6BhGexBJ3BSriEJZS0lRLCWAL5eVJB7QTqvgf/Yrtf
-        DxJFSKbeVE29qY56Ux31/9xKRN5DNlwyHx/F8e4JXKorr4jnkxOiXC9eim9Gf/9Y/2rf/GO0
-        NBjRgzCNZNskbu7v5FIzRQqfFt+DgCZk1hLfV/1yqSRSkZbOKS+dVybHcXwPsqNJmY3kUPXX
-        cCmOUiRxsRyXyCk3tiLa3DYL2VZ987tW74BbQgPGB9mayAy3dr/G0QIvl+CwQ6F1/vLg7Fqd
-        ql4zzVH6iA+ZzmWOZwtFmuV0X4dP0go+yCrnhN+tYkdt4P4+Ty8727sHWzx6M2ID9ZMegVvs
-        93wOs1+JqT+lz1LuCjg2OevT0NSbF/Ls4Jy89GFB8I9Mr6DZI7Uyko9WuO8jlLziDzqBQ0tf
-        AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrLIsWRmVeSWpSXmKPExsVy+t/xu7phVdfjDH7+ULT4+qWDxeL58sWM
-        FjPn3WGz2LP3JIvF5V1z2CwOLmxjtHj1+Ba7xda9V9ktXresZbG4sWUus0Vrz092B26Pxhs3
-        2DxaNpd77Jl4ks1jwqIDjB5NZ44ye6zfcpXFY+ZbNY/Pm+QCOKL0bIryS0tSFTLyi0tslaIN
-        LYz0DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0Mj4tv8BeMEGk4uDFj2wNjH8Fuhg5
-        OCQETCT+P/DpYuTiEBJYyihx9dlNxi5GTqC4jMTJaQ2sELawxJ9rXWwQRW8ZJT797WcHSQgL
-        BEv8ePiZGcQWEXCTWLP3DBNIEbPAFCaJGTu2sYNsEBKwkri0Xhqkhk3AUKLrLcggTg5eATuJ
-        bS/ug/WyCKhInFu9kwnEFhWIlehe/IMdokZQ4uTMJywgNqeAtcTC94/BapgFzCTmbX7IDGHL
-        S2x/OwfKFpe49WQ+0wRGoVlI2mchaZmFpGUWkpYFjCyrGEVSS4tz03OLjfSKE3OLS/PS9ZLz
-        czcxAqN227GfW3Ywdr0LPsQowMGoxMNrYHgtTog1say4MvcQowQHs5IIr9PZ03FCvCmJlVWp
-        RfnxRaU5qcWHGE2BnpvILCWanA9MKHkl8YamhuYWlobmxubGZhZK4rwdAgdjhATSE0tSs1NT
-        C1KLYPqYODilGhjn/rHcF/jTl8FX0p8ruPBhkGSSrcXEz88t87lTlvbtrmRbwtmZI6l5xmvv
-        /8TY0A29isxnvklLmxVL3d98UpeLJ3nL91sqGkV16uGCa5a+2Ky075Hl6YexMic19RO/8hyb
-        6i7IXr9r1U67cJH0C+un1KRniM+yfZzx+r+BZOv2i7d/yYRvPqDEUpyRaKjFXFScCAA94j+O
-        8AIAAA==
-X-CMS-MailID: 20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700
-References: <20200602134721.18211-1-riteshh@linux.ibm.com>
-        <CGME20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700@eucas1p1.samsung.com>
+Content-Type: multipart/signed; boundary="Sig_/T+O9YzBbXMkBzqWEdGuULUD";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Ritesh,
+--Sig_/T+O9YzBbXMkBzqWEdGuULUD
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On 02.06.2020 15:47, Ritesh Harjani wrote:
-> It doesn't really matter in ext4_mb_new_blocks() about whether the code
-> is rescheduled on any other cpu due to preemption. Because we care
-> about discard_pa_seq only when the block allocation fails and then too
-> we add the seq counter of all the cpus against the initial sampled one
-> to check if anyone has freed any blocks while we were doing allocation.
->
-> So just use raw_cpu_ptr instead of this_cpu_ptr to avoid this BUG.
->
-> BUG: using smp_processor_id() in preemptible [00000000] code: syz-fuzzer/6927
-> caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
-> CPU: 1 PID: 6927 Comm: syz-fuzzer Not tainted 5.7.0-next-20200602-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-> Call Trace:
->   __dump_stack lib/dump_stack.c:77 [inline]
->   dump_stack+0x18f/0x20d lib/dump_stack.c:118
->   check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
->   ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
->   ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
->   ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
->   ext4_getblk+0xad/0x520 fs/ext4/inode.c:833
->   ext4_bread+0x7c/0x380 fs/ext4/inode.c:883
->   ext4_append+0x153/0x360 fs/ext4/namei.c:67
->   ext4_init_new_dir fs/ext4/namei.c:2757 [inline]
->   ext4_mkdir+0x5e0/0xdf0 fs/ext4/namei.c:2802
->   vfs_mkdir+0x419/0x690 fs/namei.c:3632
->   do_mkdirat+0x21e/0x280 fs/namei.c:3655
->   do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
->   entry_SYSCALL_64_after_hwframe+0x44/0xa9
->
-> Signed-off-by: Ritesh Harjani <riteshh@linux.ibm.com>
-> Reported-by: syzbot+82f324bb69744c5f6969@syzkaller.appspotmail.com
+Hi all,
 
-This fixes the warning observed on various Samsung Exynos SoC based 
-boards with linux-next 20200602.
+Some things turned up in the powerpc tree today that required some changes
+to patches in the akpm tree and also the following fixup patch provided
+(mostly) by Michael. I have applied this as a single patch today, but
+parts of it should probably go in some other patches.
 
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Wed, 3 Jun 2020 20:03:49 +1000
+Subject: [PATCH] powerpc fixes for changes clashing with akpm tree changes
 
-> ---
->   fs/ext4/mballoc.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index a9083113a8c0..b79b32dbe3ea 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -4708,7 +4708,7 @@ ext4_fsblk_t ext4_mb_new_blocks(handle_t *handle,
->   	}
->   
->   	ac->ac_op = EXT4_MB_HISTORY_PREALLOC;
-> -	seq = *this_cpu_ptr(&discard_pa_seq);
-> +	seq = *raw_cpu_ptr(&discard_pa_seq);
->   	if (!ext4_mb_use_preallocated(ac)) {
->   		ac->ac_op = EXT4_MB_HISTORY_ALLOC;
->   		ext4_mb_normalize_request(ac, ar);
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/powerpc/include/asm/book3s/64/pgtable.h |  6 ++++++
+ arch/powerpc/include/asm/nohash/32/pgtable.h | 10 +++++-----
+ arch/powerpc/mm/kasan/8xx.c                  |  4 ++--
+ arch/powerpc/mm/kasan/book3s_32.c            |  2 +-
+ arch/powerpc/mm/nohash/8xx.c                 |  2 +-
+ arch/powerpc/mm/pgtable.c                    |  2 +-
+ arch/powerpc/mm/pgtable_32.c                 |  2 +-
+ 7 files changed, 17 insertions(+), 11 deletions(-)
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/in=
+clude/asm/book3s/64/pgtable.h
+index 25c3cb8272c0..a6799723cd98 100644
+--- a/arch/powerpc/include/asm/book3s/64/pgtable.h
++++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
+@@ -1008,6 +1008,12 @@ extern struct page *p4d_page(p4d_t p4d);
+ #define pud_page_vaddr(pud)	__va(pud_val(pud) & ~PUD_MASKED_BITS)
+ #define p4d_page_vaddr(p4d)	__va(p4d_val(p4d) & ~P4D_MASKED_BITS)
+=20
++static inline unsigned long pgd_index(unsigned long address)
++{
++	return (address >> PGDIR_SHIFT) & (PTRS_PER_PGD - 1);
++}
++#define pgd_index pgd_index
++
+ #define pte_ERROR(e) \
+ 	pr_err("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
+ #define pmd_ERROR(e) \
+diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/in=
+clude/asm/nohash/32/pgtable.h
+index c188a6f64bcd..1927e1b653f2 100644
+--- a/arch/powerpc/include/asm/nohash/32/pgtable.h
++++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
+@@ -205,10 +205,6 @@ static inline void pmd_clear(pmd_t *pmdp)
+ 	*pmdp =3D __pmd(0);
+ }
+=20
+-
+-/* to find an entry in a kernel page-table-directory */
+-#define pgd_offset_k(address) pgd_offset(&init_mm, address)
+-
+ /* to find an entry in a page-table-directory */
+ #define pgd_index(address)	 ((address) >> PGDIR_SHIFT)
+ #define pgd_offset(mm, address)	 ((mm)->pgd + pgd_index(address))
+@@ -241,7 +237,7 @@ static inline pte_basic_t pte_update(struct mm_struct *=
+mm, unsigned long addr, p
+ 	pte_basic_t old =3D pte_val(*p);
+ 	pte_basic_t new =3D (old & ~(pte_basic_t)clr) | set;
+ 	int num, i;
+-	pmd_t *pmd =3D pmd_offset(pud_offset(pgd_offset(mm, addr), addr), addr);
++	pmd_t *pmd =3D pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, addr), add=
+r), addr), addr);
+=20
+ 	if (!huge)
+ 		num =3D PAGE_SIZE / SZ_4K;
+@@ -341,6 +337,10 @@ static inline int pte_young(pte_t pte)
+ 	pfn_to_page((__pa(pmd_val(pmd)) >> PAGE_SHIFT))
+ #endif
+=20
++#define pte_offset_kernel(dir, addr)	\
++	(pmd_bad(*(dir)) ? NULL : (pte_t *)pmd_page_vaddr(*(dir)) + \
++				  pte_index(addr))
++
+ /*
+  * Encode and decode a swap entry.
+  * Note that the bits we use in a PTE for representing a swap entry
+diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
+index db4ef44af22f..569d98a41881 100644
+--- a/arch/powerpc/mm/kasan/8xx.c
++++ b/arch/powerpc/mm/kasan/8xx.c
+@@ -10,7 +10,7 @@
+ static int __init
+ kasan_init_shadow_8M(unsigned long k_start, unsigned long k_end, void *blo=
+ck)
+ {
+-	pmd_t *pmd =3D pmd_ptr_k(k_start);
++	pmd_t *pmd =3D pmd_off_k(k_start);
+ 	unsigned long k_cur, k_next;
+=20
+ 	for (k_cur =3D k_start; k_cur !=3D k_end; k_cur =3D k_next, pmd +=3D 2, b=
+lock +=3D SZ_8M) {
+@@ -59,7 +59,7 @@ int __init kasan_init_region(void *start, size_t size)
+ 		return ret;
+=20
+ 	for (; k_cur < k_end; k_cur +=3D PAGE_SIZE) {
+-		pmd_t *pmd =3D pmd_ptr_k(k_cur);
++		pmd_t *pmd =3D pmd_off_k(k_cur);
+ 		void *va =3D block + k_cur - k_start;
+ 		pte_t pte =3D pfn_pte(PHYS_PFN(__pa(va)), PAGE_KERNEL);
+=20
+diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book=
+3s_32.c
+index 4bc491a4a1fd..a32b4640b9de 100644
+--- a/arch/powerpc/mm/kasan/book3s_32.c
++++ b/arch/powerpc/mm/kasan/book3s_32.c
+@@ -46,7 +46,7 @@ int __init kasan_init_region(void *start, size_t size)
+ 	kasan_update_early_region(k_start, k_cur, __pte(0));
+=20
+ 	for (; k_cur < k_end; k_cur +=3D PAGE_SIZE) {
+-		pmd_t *pmd =3D pmd_ptr_k(k_cur);
++		pmd_t *pmd =3D pmd_off_k(k_cur);
+ 		void *va =3D block + k_cur - k_start;
+ 		pte_t pte =3D pfn_pte(PHYS_PFN(__pa(va)), PAGE_KERNEL);
+=20
+diff --git a/arch/powerpc/mm/nohash/8xx.c b/arch/powerpc/mm/nohash/8xx.c
+index 286441bbbe49..92e8929cbe3e 100644
+--- a/arch/powerpc/mm/nohash/8xx.c
++++ b/arch/powerpc/mm/nohash/8xx.c
+@@ -74,7 +74,7 @@ static pte_t __init *early_hugepd_alloc_kernel(hugepd_t *=
+pmdp, unsigned long va)
+ static int __ref __early_map_kernel_hugepage(unsigned long va, phys_addr_t=
+ pa,
+ 					     pgprot_t prot, int psize, bool new)
+ {
+-	pmd_t *pmdp =3D pmd_ptr_k(va);
++	pmd_t *pmdp =3D pmd_off_k(va);
+ 	pte_t *ptep;
+=20
+ 	if (WARN_ON(psize !=3D MMU_PAGE_512K && psize !=3D MMU_PAGE_8M))
+diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
+index 45a0556089e8..1136257c3a99 100644
+--- a/arch/powerpc/mm/pgtable.c
++++ b/arch/powerpc/mm/pgtable.c
+@@ -264,7 +264,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *v=
+ma,
+ #if defined(CONFIG_PPC_8xx)
+ void set_huge_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep=
+, pte_t pte)
+ {
+-	pmd_t *pmd =3D pmd_ptr(mm, addr);
++	pmd_t *pmd =3D pmd_off(mm, addr);
+ 	pte_basic_t val;
+ 	pte_basic_t *entry =3D &ptep->pte;
+ 	int num =3D is_hugepd(*((hugepd_t *)pmd)) ? 1 : SZ_512K / SZ_4K;
+diff --git a/arch/powerpc/mm/pgtable_32.c b/arch/powerpc/mm/pgtable_32.c
+index e2d054c9575e..6eb4eab79385 100644
+--- a/arch/powerpc/mm/pgtable_32.c
++++ b/arch/powerpc/mm/pgtable_32.c
+@@ -40,7 +40,7 @@ notrace void __init early_ioremap_init(void)
+ {
+ 	unsigned long addr =3D ALIGN_DOWN(FIXADDR_START, PGDIR_SIZE);
+ 	pte_t *ptep =3D (pte_t *)early_fixmap_pagetable;
+-	pmd_t *pmdp =3D pmd_ptr_k(addr);
++	pmd_t *pmdp =3D pmd_off_k(addr);
+=20
+ 	for (; (s32)(FIXADDR_TOP - addr) > 0;
+ 	     addr +=3D PGDIR_SIZE, ptep +=3D PTRS_PER_PTE, pmdp++)
+--=20
+2.26.2
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/T+O9YzBbXMkBzqWEdGuULUD
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Xeu8ACgkQAVBC80lX
+0Gzfhgf/cPFp2dlvYny+4RY4PCVkyWhX1RA5GNl9ysvabCodQrz+8pncZtOeb4MF
+eY4AJ83+Zz7E/4N1eN7mBGLnpBLcA3oLBc8auDIw6KzK26CMX7c5aSB4Q0EWOdCA
+VjKOS4St84Hv/BHlPTvEtCiir53gvLlaoWYH0byul1nTIfxSoTdJVHY0rE1FwF7M
+RmfMKVuYKhy+cmTW2rfVkYvUhDSwAq92TV7leq8EKvpZEHffOh+05sGozqty+N4g
+dUnFEe8oAOg42tKyByzpBjf1Ww6HMywpSVTH55SCIWjQJr34n9sOHvc0lIf/GvMX
+C91jjfQi7ZTZHDKK58sahYOxWvm6Fg==
+=EU0e
+-----END PGP SIGNATURE-----
+
+--Sig_/T+O9YzBbXMkBzqWEdGuULUD--

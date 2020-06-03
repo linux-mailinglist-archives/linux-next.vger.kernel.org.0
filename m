@@ -2,155 +2,213 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A971ED1BA
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 16:09:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876FD1ED258
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725890AbgFCOJx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 10:09:53 -0400
-Received: from lhrrgout.huawei.com ([185.176.76.210]:2271 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725833AbgFCOJx (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 3 Jun 2020 10:09:53 -0400
-Received: from lhreml724-chm.china.huawei.com (unknown [172.18.7.107])
-        by Forcepoint Email with ESMTP id 33AC13A63DD522D2A079;
-        Wed,  3 Jun 2020 15:09:51 +0100 (IST)
-Received: from [127.0.0.1] (10.47.0.59) by lhreml724-chm.china.huawei.com
- (10.201.108.75) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1913.5; Wed, 3 Jun 2020
- 15:09:48 +0100
-Subject: Re: arm64 build issue and mainline crash (was Re: linux-next: Tree
- for Jun 3)
-To:     Ard Biesheuvel <ardb@kernel.org>,
+        id S1726076AbgFCOsX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 10:48:23 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:16500 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725834AbgFCOsW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 10:48:22 -0400
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 053EWOBx017053;
+        Wed, 3 Jun 2020 10:47:36 -0400
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31ec64m5h5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Jun 2020 10:47:35 -0400
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 053EhHxG016719;
+        Wed, 3 Jun 2020 14:47:34 GMT
+Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
+        by ppma01fra.de.ibm.com with ESMTP id 31bf47uc8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Jun 2020 14:47:33 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 053ElVWG55968044
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Jun 2020 14:47:31 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 827CEA405C;
+        Wed,  3 Jun 2020 14:47:31 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2D76CA4054;
+        Wed,  3 Jun 2020 14:47:28 +0000 (GMT)
+Received: from sathnaga86 (unknown [9.85.87.122])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  3 Jun 2020 14:47:27 +0000 (GMT)
+Date:   Wed, 3 Jun 2020 20:17:25 +0530
+From:   Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>
+To:     Joerg Roedel <jroedel@suse.de>
+Cc:     Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        sachinp <sachinp@linux.vnet.ibm.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
-        Masahiro Yamada <masahiroy@kernel.org>
-CC:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>
-References: <20200603210603.1fcf63ed@canb.auug.org.au>
- <ba1f622a-6866-2a58-706b-045e8a0d9012@huawei.com>
- <20200603221341.0705a2f9@canb.auug.org.au>
- <20200603222026.4cf661e0@canb.auug.org.au>
- <CAMj1kXFes_Q2r8o-7bNYoYzz0OLSy+h70fBd6-Vse=3syJDptg@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-Message-ID: <9f5863f0-9352-92df-8009-60dcc5a34ab9@huawei.com>
-Date:   Wed, 3 Jun 2020 15:08:37 +0100
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.1.2
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        manvanth <manvanth@linux.vnet.ibm.com>,
+        linux-next <linux-next@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "aneesh.kumar" <aneesh.kumar@linux.vnet.ibm.com>,
+        akpm@linux-foundation.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, hch <hch@lst.de>
+Subject: Re: [mainline][Oops][bisected 2ba3e6 ] 5.7.0 boot fails with kernel
+ panic on powerpc
+Message-ID: <20200603144725.GA221279@sathnaga86>
+Reply-To: Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>
+References: <1591181457.9020.13.camel@abdul>
+ <20200603133257.GL6857@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <CAMj1kXFes_Q2r8o-7bNYoYzz0OLSy+h70fBd6-Vse=3syJDptg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.47.0.59]
-X-ClientProxiedBy: lhreml735-chm.china.huawei.com (10.201.108.86) To
- lhreml724-chm.china.huawei.com (10.201.108.75)
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200603133257.GL6857@suse.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-03_12:2020-06-02,2020-06-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 clxscore=1011
+ suspectscore=1 adultscore=0 malwarescore=0 cotscore=-2147483648
+ spamscore=0 mlxlogscore=999 lowpriorityscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006030112
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
->>>> In addition, the reason I was testing this was because Linus' master
->>>> (d6f9469a03d8 Merge tag 'erofs-for-5.8-rc1' of
->>>> git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs) was crashing:
->>>>
->>>> [ 5.368948] loop: module loaded
->>>> [ 5.372113] Unable to handle kernel paging request at virtual address
->>>> fffff9ffcfec4000
->>>> [ 5.380067] Mem abort info:
->>>> [ 5.382865]ESR = 0x96000044
->>>> [ 5.385927]EC = 0x25: DABT (current EL), IL = 32 bits
->>>> [ 5.391260]SET = 0, FnV = 0
->>>> [ 5.394319]EA = 0, S1PTW = 0
->>>> [ 5.397467] Data abort info:
->>>> [ 5.400354]ISV = 0, ISS = 0x00000044
->>>> [ 5.404203]CM = 0, WnR = 1
->>>> [ 5.407178] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000002f3f1000
->>>> [ 5.413909] [fffff9ffcfec4000] pgd=0000000000000000
->>>> [ 5.418807] Internal error: Oops: 96000044 [#1] PREEMPT SMP
->>>> [ 5.424399] Modules linked in:
->>>> [ 5.427462] CPU: 11 PID: 1 Comm: swapper/0 Not tainted
->>>> 5.7.0-05047-gd6f9469a03d8 #388
->>>> [ 5.435325] Hardware name: Huawei Taishan 2280 /D05, BIOS Hisilicon D05
->>>> IT21 Nemo 2.0 RC0 04/18/2018
->>>> [ 5.444499] pstate: 40000005 (nZcv daif -PAN -UAO BTYPE=--)
->>>> [ 5.450098] pc : __memset+0x16c/0x1c0
->>>> [ 5.453770] lr : pcpu_alloc+0x1a0/0x668
->>>> [ 5.457615] sp : ffff800011d3bbd0
->>>> [ 5.460936] x29: ffff800011d3bbd0 x28: ffff001fb5495180
->>>> [ 5.466267] x27: 0000000000000001 x26: 0000000000000100
->>>> [ 5.471597] x25: 0000000000000001 x24: 0000000000000001
->>>> [ 5.476928] x23: ffff80001135e9a0 x22: ffff80001196a200
->>>> [ 5.482259] x21: ffff80001196a360 x20: 0000000000000000
->>>> [ 5.487590] x19: 0000000000000000 x18: fffffe107e6fdb08
->>>> [ 5.492920] x17: 000000000000003f x16: 0000000000000000
->>>> [ 5.498251] x15: ffff001ffbffee00 x14: 0000000000000002
->>>> [ 5.503581] x13: 0000000000000000 x12: 000000000000003f
->>>> [ 5.508912] x11: 0000000000000040 x10: 0000000000000040
->>>> [ 5.514243] x9 : 0000000000000000 x8 : fffff9ffcfec4000
->>>> [ 5.519573] x7 : 0000000000000000 x6 : 000000000000003f
->>>> [ 5.524904] x5 : 0000000000000040 x4 : 0000000000000000
->>>> [ 5.530234] x3 : 0000000000000004 x2 : 00000000000000c0
->>>> [ 5.535565] x1 : 0000000000000000 x0 : fffff9ffcfec4000
->>>> [ 5.540896] Call trace:
->>>> [ 5.543344]  __memset+0x16c/0x1c0
->>>> [ 5.546666]  __alloc_percpu+0x14/0x1c
->>>> [ 5.550338]  alloc_workqueue+0x164/0x42c
->>>> [ 5.554273]  init+0x24/0xa4
->>>> [ 5.557071]  do_one_initcall+0x50/0x194
->>>> [ 5.560917]  kernel_init_freeable+0x1e4/0x250
->>>> [ 5.565288]  kernel_init+0x10/0x104
->>>> [ 5.568785]  ret_from_fork+0x10/0x18
->>>> [ 5.572372] Code: 91010108 54ffff4a 8b040108 cb050042 (d50b7428)
->>>> [ 5.578568] ---[ end trace 63c299bbe9b8ea9e ]---
->>>> [ 5.583205] Kernel panic - not syncing: Attempted to kill init!
->>>> exitcode=0x0000000b
->>>> [ 5.590903] SMP: stopping secondary CPUs
->>>> [ 5.594846] Kernel Offset: 0xf0000 from 0xffff800010000000
->>>> [ 5.600350] PHYS_OFFSET: 0x0
->>>> [ 5.603235] CPU features: 0x240022,20806008
->>>> [ 5.607430] Memory Limit: none
->>>> [ 5.610500] ---[ end Kernel panic - not syncing: Attempted to kill init!
->>>> exitcode=0x0000000b ]---
->>>>
->>>> I'll check that when I get a chance. Maybe all just transient.
->>>
->>> Yeah, I forgot to add a patch to make arm64 build again (it will be in
->>> linux-next tomorrow).  If you want to apply it to your tree, here is
->>> what I was given:
->>>
->>> diff --git a/Makefile b/Makefile
->>> index f80c4ff93ec9..fbb4b95ae648 100644
->>> --- a/Makefile
->>> +++ b/Makefile
->>> @@ -1074,7 +1074,7 @@ build-dirs        := $(vmlinux-dirs)
->>>   clean-dirs     := $(vmlinux-alldirs)
->>>
->>>   # Externally visible symbols (used by link-vmlinux.sh)
->>> -KBUILD_VMLINUX_OBJS := $(head-y) $(addsuffix built-in.a, $(core-y))
->>> +KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
->>>   KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
->>>   ifdef CONFIG_MODULES
->>>   KBUILD_VMLINUX_OBJS += $(patsubst %/, %/lib.a, $(filter %/, $(libs-y)))
->>
+On Wed, Jun 03, 2020 at 03:32:57PM +0200, Joerg Roedel wrote:
+> On Wed, Jun 03, 2020 at 04:20:57PM +0530, Abdul Haleem wrote:
+> > @Joerg, Could you please have a look?
+> 
+> Can you please try the attached patch?
 
-thanks, that works. And, for anyone interested, no crash, like mainline, 
-above.
+Hi Joerg,
 
-John
+I did hit the similar boot failue on a Power9 baremetal box(mentioned in Note) and 
+your below patch helped solving that for my environment and 
+am able to boot the system fine.
+
+...
+Fedora 31 (Thirty One)
+Kernel 5.7.0-gd6f9469a0-dirty on an ppc64le (hvc0)
+
+ login:
+
+
+Tested-by: Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>
+
+Note: for the record, here is the boot failure call trace.
+
+[    0.023555] mempolicy: Enabling automatic NUMA balancing. Configure with numa_balancing= or the kernel.numa_balancing sysctl
+[    0.023582] pid_max: default: 163840 minimum: 1280
+[    0.035014] BUG: Unable to handle kernel data access on read at 0xc000006000000000
+[    0.035058] Faulting instruction address: 0xc000000000382304
+[    0.035074] Oops: Kernel access of bad area, sig: 11 [#1]
+[    0.035097] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA PowerNV
+[    0.035113] Modules linked in:
+[    0.035136] CPU: 24 PID: 0 Comm: swapper/24 Not tainted 5.7.0-gd6f9469a0 #1
+[    0.035161] NIP:  c000000000382304 LR: c00000000038407c CTR: 0000000000000000
+[    0.035197] REGS: c00000000167f930 TRAP: 0300   Not tainted  (5.7.0-gd6f9469a0)
+[    0.035241] MSR:  9000000002009033 <SF,HV,VEC,EE,ME,IR,DR,RI,LE>  CR: 42022422  XER: 00000000
+[    0.035294] CFAR: c0000000003822fc DAR: c000006000000000 DSISR: 40000000 IRQMASK: 0 
+[    0.035294] GPR00: c00000000038407c c00000000167fbc0 c00000000168090[  150.252645597,5] OPAL: Reboot request...
+[  150.252928266,5] RESET: Initiating fast reboot 1...
+0 c008000000000000 
+[    0.035294] GPR04: ffffffffffffffff 00000000000001ff c0080000001fffff 0000000000000060 
+[    0.035294] GPR08: 0000000060000000 0000000000000005 c000006000000000 c008000000200000 
+[    0.035294] GPR12: 0000000022022422 c000000001870000 c000000000000000 c008000000000000 
+[    0.035294] GPR16: c008000007ffffff c008000000200000 0000000000000000 c000006000000000 
+[    0.035294] GPR20: c008000008000000 c008000008000000 c008000007ffffff c008000007ffffff 
+[    0.035294] GPR24: c00000000163f7c8 c00000000172d0c0 0000000000000001 0000000000000001 
+[    0.035294] GPR28: c000000001708000 c00000000172d0c8 0000000000000000 c008000008000000 
+[    0.035622] NIP [c000000000382304] map_kernel_range_noflush+0x274/0x510
+[    0.035657] LR [c00000000038407c] __vmalloc_node_range+0x2ec/0x3a0
+[    0.035690] Call Trace:
+[    0.035709] [c00000000167fbc0] [c00000000038d848] __alloc_pages_nodemask+0x158/0x3f0 (unreliable)
+[    0.035750] [c00000000167fc90] [c00000000038407c] __vmalloc_node_range+0x2ec/0x3a0
+[    0.035787] [c00000000167fd40] [c000000000384268] __vmalloc+0x58/0x70
+[    0.035823] [c00000000167fdb0] [c000000001056db8] alloc_large_system_hash+0x204/0x304
+[    0.035870] [c00000000167fe60] [c00000000105c1f0] vfs_caches_init+0xd8/0x138
+[    0.035916] [c00000000167fee0] [c0000000010242a0] start_kernel+0x644/0x6ec
+[    0.035960] [c00000000167ff90] [c00000000000ca9c] start_here_common+0x1c/0x400
+[    0.036004] Instruction dump:
+[    0.036016] 3af4ffff 60000000 60000000 38c90010 7f663036 7d667a14 7cc600d0 7d713038 
+[    0.036038] 38d1ffff 7c373040 41810008 7e91a378 <e8b30000> 2c250000 418201b4 7f464830 
+[    0.036083] ---[ end trace c7e72029dfacc217 ]---
+[    0.036114] 
+[    1.036223] Kernel panic - not syncing: Attempted to kill the idle task!
+[    1.036858] Rebooting in 10 seconds..
+
+
+Regards,
+-Satheesh.
 
 > 
+> diff --git a/include/asm-generic/5level-fixup.h b/include/asm-generic/5level-fixup.h
+> index 58046ddc08d0..afbab31fbd7e 100644
+> --- a/include/asm-generic/5level-fixup.h
+> +++ b/include/asm-generic/5level-fixup.h
+> @@ -17,6 +17,11 @@
+>  	((unlikely(pgd_none(*(p4d))) && __pud_alloc(mm, p4d, address)) ? \
+>  		NULL : pud_offset(p4d, address))
 > 
-> 9203be13ef5bfd1fcf39f7b7fe94597d2d2a0eb4 is the first bad commit
-> commit 9203be13ef5bfd1fcf39f7b7fe94597d2d2a0eb4
-> Author: Masahiro Yamada <masahiroy@kernel.org>
-> Date:   Mon Jun 1 14:56:59 2020 +0900
+> +#define pud_alloc_track(mm, p4d, address, mask)					\
+> +	((unlikely(pgd_none(*(p4d))) &&						\
+> +	  (__pud_alloc(mm, p4d, address) || ({*(mask)|=PGTBL_P4D_MODIFIED;0;})))?	\
+> +	  NULL : pud_offset(p4d, address))
+> +
+>  #define p4d_alloc(mm, pgd, address)		(pgd)
+>  #define p4d_alloc_track(mm, pgd, address, mask)	(pgd)
+>  #define p4d_offset(pgd, start)			(pgd)
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 7e07f4f490cb..d46bf03b804f 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2088,35 +2088,35 @@ static inline pud_t *pud_alloc(struct mm_struct *mm, p4d_t *p4d,
+>  		NULL : pud_offset(p4d, address);
+>  }
 > 
->      kbuild: refactor KBUILD_VMLINUX_{OBJS,LIBS} calculation
+> -static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
+> +static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
+>  				     unsigned long address,
+>  				     pgtbl_mod_mask *mod_mask)
+> -
+>  {
+> -	if (unlikely(pgd_none(*pgd))) {
+> -		if (__p4d_alloc(mm, pgd, address))
+> +	if (unlikely(p4d_none(*p4d))) {
+> +		if (__pud_alloc(mm, p4d, address))
+>  			return NULL;
+> -		*mod_mask |= PGTBL_PGD_MODIFIED;
+> +		*mod_mask |= PGTBL_P4D_MODIFIED;
+>  	}
 > 
->      Do not overwrite core-y or drivers-y. Remove libs-y1 and libs-y2.
+> -	return p4d_offset(pgd, address);
+> +	return pud_offset(p4d, address);
+>  }
 > 
->      Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> .
+> -#endif /* !__ARCH_HAS_5LEVEL_HACK */
+> -
+> -static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
+> +static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
+>  				     unsigned long address,
+>  				     pgtbl_mod_mask *mod_mask)
+> +
+>  {
+> -	if (unlikely(p4d_none(*p4d))) {
+> -		if (__pud_alloc(mm, p4d, address))
+> +	if (unlikely(pgd_none(*pgd))) {
+> +		if (__p4d_alloc(mm, pgd, address))
+>  			return NULL;
+> -		*mod_mask |= PGTBL_P4D_MODIFIED;
+> +		*mod_mask |= PGTBL_PGD_MODIFIED;
+>  	}
 > 
-
+> -	return pud_offset(p4d, address);
+> +	return p4d_offset(pgd, address);
+>  }
+> 
+> +#endif /* !__ARCH_HAS_5LEVEL_HACK */
+> +
+>  static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
+>  {
+>  	return (unlikely(pud_none(*pud)) && __pmd_alloc(mm, pud, address))?

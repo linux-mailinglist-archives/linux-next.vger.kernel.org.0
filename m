@@ -2,232 +2,89 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 632C81ECD83
-	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 12:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D2C1ECDA6
+	for <lists+linux-next@lfdr.de>; Wed,  3 Jun 2020 12:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726268AbgFCK1D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 06:27:03 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:58921 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725854AbgFCK1C (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 3 Jun 2020 06:27:02 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cQ7j5Qqqz9sPF;
-        Wed,  3 Jun 2020 20:26:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591180017;
-        bh=zD33Wup488scavQp90fj5kXT/hdVydyJgVvHiJB0IH8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QyulPPnqdk+2gvx4+zfS4Px8oEZizNMo6GDz/S0s99oCd93OgnlHvTd2o8ObLt77t
-         tlba7wzT+2z0sEMjGS3oKQ2oktL1PL2XQxWCfmd+3zA543rFGQUZb/B4lZYBPnoFkY
-         SSUK9XeHXps4fkagekD9OjKaDwOOha+l9UvdVJOeLNMjht0SYMftt+rNxz/p9D4f8w
-         3ezSWhZ9Dc2zLUtIaStVwxWsvEZaOASAJ/PlRmitLo3UoMkxFVZc8V0c4057QRbpVB
-         rRZxeRzzgUSJckdKLZJOOAZzApvv/UgBYi8AO+2h9TDqbQveG345WrpTl5gIoT03Ue
-         MhXMe3FPnC48g==
-Date:   Wed, 3 Jun 2020 20:26:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: linux-next: fix ups for clashes between akpm and powerpc trees
-Message-ID: <20200603202655.0ad0eacc@canb.auug.org.au>
+        id S1725981AbgFCKfH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 06:35:07 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:24526 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725854AbgFCKfH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 06:35:07 -0400
+Received: from pps.filterd (m0098414.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 053AYp5V075359;
+        Wed, 3 Jun 2020 06:34:53 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31dp431mau-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Jun 2020 06:34:52 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 053AUan1008800;
+        Wed, 3 Jun 2020 10:31:52 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma02fra.de.ibm.com with ESMTP id 31bf47u6x3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 03 Jun 2020 10:31:52 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 053AVnsT25165956
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 3 Jun 2020 10:31:49 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C96F852050;
+        Wed,  3 Jun 2020 10:31:49 +0000 (GMT)
+Received: from localhost.localdomain (unknown [9.199.36.151])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C42D65204F;
+        Wed,  3 Jun 2020 10:31:46 +0000 (GMT)
+Subject: Re: [PATCHv5 1/1] ext4: mballoc: Use raw_cpu_ptr instead of
+ this_cpu_ptr
+To:     Marek Szyprowski <m.szyprowski@samsung.com>,
+        linux-ext4@vger.kernel.org, tytso@mit.edu
+Cc:     linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
+        linux-kernel@vger.kernel.org, adilger.kernel@dilger.ca,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        syzbot+82f324bb69744c5f6969@syzkaller.appspotmail.com
+References: <20200602134721.18211-1-riteshh@linux.ibm.com>
+ <CGME20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700@eucas1p1.samsung.com>
+ <ca794804-7d99-9837-2490-366a2eb97a94@samsung.com>
+From:   Ritesh Harjani <riteshh@linux.ibm.com>
+Date:   Wed, 3 Jun 2020 16:01:45 +0530
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/T+O9YzBbXMkBzqWEdGuULUD";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <ca794804-7d99-9837-2490-366a2eb97a94@samsung.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+Message-Id: <20200603103146.C42D65204F@d06av21.portsmouth.uk.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-03_11:2020-06-02,2020-06-03 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ lowpriorityscore=0 phishscore=0 clxscore=1011 cotscore=-2147483648
+ adultscore=0 suspectscore=0 spamscore=0 bulkscore=0 impostorscore=0
+ mlxscore=0 mlxlogscore=799 priorityscore=1501 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2004280000
+ definitions=main-2006030083
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/T+O9YzBbXMkBzqWEdGuULUD
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+> This fixes the warning observed on various Samsung Exynos SoC based
+> boards with linux-next 20200602.
+> 
+> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+> 
 
-Hi all,
+Thanks Marek,
 
-Some things turned up in the powerpc tree today that required some changes
-to patches in the akpm tree and also the following fixup patch provided
-(mostly) by Michael. I have applied this as a single patch today, but
-parts of it should probably go in some other patches.
+Hello Ted,
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 3 Jun 2020 20:03:49 +1000
-Subject: [PATCH] powerpc fixes for changes clashing with akpm tree changes
+Please pick up below change which I just sent with an added "Fixes" by
+tag. Changes wise it is the same which Marek tested.
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- arch/powerpc/include/asm/book3s/64/pgtable.h |  6 ++++++
- arch/powerpc/include/asm/nohash/32/pgtable.h | 10 +++++-----
- arch/powerpc/mm/kasan/8xx.c                  |  4 ++--
- arch/powerpc/mm/kasan/book3s_32.c            |  2 +-
- arch/powerpc/mm/nohash/8xx.c                 |  2 +-
- arch/powerpc/mm/pgtable.c                    |  2 +-
- arch/powerpc/mm/pgtable_32.c                 |  2 +-
- 7 files changed, 17 insertions(+), 11 deletions(-)
+https://patchwork.ozlabs.org/project/linux-ext4/patch/20200603101827.2824-1-riteshh@linux.ibm.com/
 
-diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/in=
-clude/asm/book3s/64/pgtable.h
-index 25c3cb8272c0..a6799723cd98 100644
---- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-+++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-@@ -1008,6 +1008,12 @@ extern struct page *p4d_page(p4d_t p4d);
- #define pud_page_vaddr(pud)	__va(pud_val(pud) & ~PUD_MASKED_BITS)
- #define p4d_page_vaddr(p4d)	__va(p4d_val(p4d) & ~P4D_MASKED_BITS)
-=20
-+static inline unsigned long pgd_index(unsigned long address)
-+{
-+	return (address >> PGDIR_SHIFT) & (PTRS_PER_PGD - 1);
-+}
-+#define pgd_index pgd_index
-+
- #define pte_ERROR(e) \
- 	pr_err("%s:%d: bad pte %08lx.\n", __FILE__, __LINE__, pte_val(e))
- #define pmd_ERROR(e) \
-diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/in=
-clude/asm/nohash/32/pgtable.h
-index c188a6f64bcd..1927e1b653f2 100644
---- a/arch/powerpc/include/asm/nohash/32/pgtable.h
-+++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
-@@ -205,10 +205,6 @@ static inline void pmd_clear(pmd_t *pmdp)
- 	*pmdp =3D __pmd(0);
- }
-=20
--
--/* to find an entry in a kernel page-table-directory */
--#define pgd_offset_k(address) pgd_offset(&init_mm, address)
--
- /* to find an entry in a page-table-directory */
- #define pgd_index(address)	 ((address) >> PGDIR_SHIFT)
- #define pgd_offset(mm, address)	 ((mm)->pgd + pgd_index(address))
-@@ -241,7 +237,7 @@ static inline pte_basic_t pte_update(struct mm_struct *=
-mm, unsigned long addr, p
- 	pte_basic_t old =3D pte_val(*p);
- 	pte_basic_t new =3D (old & ~(pte_basic_t)clr) | set;
- 	int num, i;
--	pmd_t *pmd =3D pmd_offset(pud_offset(pgd_offset(mm, addr), addr), addr);
-+	pmd_t *pmd =3D pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, addr), add=
-r), addr), addr);
-=20
- 	if (!huge)
- 		num =3D PAGE_SIZE / SZ_4K;
-@@ -341,6 +337,10 @@ static inline int pte_young(pte_t pte)
- 	pfn_to_page((__pa(pmd_val(pmd)) >> PAGE_SHIFT))
- #endif
-=20
-+#define pte_offset_kernel(dir, addr)	\
-+	(pmd_bad(*(dir)) ? NULL : (pte_t *)pmd_page_vaddr(*(dir)) + \
-+				  pte_index(addr))
-+
- /*
-  * Encode and decode a swap entry.
-  * Note that the bits we use in a PTE for representing a swap entry
-diff --git a/arch/powerpc/mm/kasan/8xx.c b/arch/powerpc/mm/kasan/8xx.c
-index db4ef44af22f..569d98a41881 100644
---- a/arch/powerpc/mm/kasan/8xx.c
-+++ b/arch/powerpc/mm/kasan/8xx.c
-@@ -10,7 +10,7 @@
- static int __init
- kasan_init_shadow_8M(unsigned long k_start, unsigned long k_end, void *blo=
-ck)
- {
--	pmd_t *pmd =3D pmd_ptr_k(k_start);
-+	pmd_t *pmd =3D pmd_off_k(k_start);
- 	unsigned long k_cur, k_next;
-=20
- 	for (k_cur =3D k_start; k_cur !=3D k_end; k_cur =3D k_next, pmd +=3D 2, b=
-lock +=3D SZ_8M) {
-@@ -59,7 +59,7 @@ int __init kasan_init_region(void *start, size_t size)
- 		return ret;
-=20
- 	for (; k_cur < k_end; k_cur +=3D PAGE_SIZE) {
--		pmd_t *pmd =3D pmd_ptr_k(k_cur);
-+		pmd_t *pmd =3D pmd_off_k(k_cur);
- 		void *va =3D block + k_cur - k_start;
- 		pte_t pte =3D pfn_pte(PHYS_PFN(__pa(va)), PAGE_KERNEL);
-=20
-diff --git a/arch/powerpc/mm/kasan/book3s_32.c b/arch/powerpc/mm/kasan/book=
-3s_32.c
-index 4bc491a4a1fd..a32b4640b9de 100644
---- a/arch/powerpc/mm/kasan/book3s_32.c
-+++ b/arch/powerpc/mm/kasan/book3s_32.c
-@@ -46,7 +46,7 @@ int __init kasan_init_region(void *start, size_t size)
- 	kasan_update_early_region(k_start, k_cur, __pte(0));
-=20
- 	for (; k_cur < k_end; k_cur +=3D PAGE_SIZE) {
--		pmd_t *pmd =3D pmd_ptr_k(k_cur);
-+		pmd_t *pmd =3D pmd_off_k(k_cur);
- 		void *va =3D block + k_cur - k_start;
- 		pte_t pte =3D pfn_pte(PHYS_PFN(__pa(va)), PAGE_KERNEL);
-=20
-diff --git a/arch/powerpc/mm/nohash/8xx.c b/arch/powerpc/mm/nohash/8xx.c
-index 286441bbbe49..92e8929cbe3e 100644
---- a/arch/powerpc/mm/nohash/8xx.c
-+++ b/arch/powerpc/mm/nohash/8xx.c
-@@ -74,7 +74,7 @@ static pte_t __init *early_hugepd_alloc_kernel(hugepd_t *=
-pmdp, unsigned long va)
- static int __ref __early_map_kernel_hugepage(unsigned long va, phys_addr_t=
- pa,
- 					     pgprot_t prot, int psize, bool new)
- {
--	pmd_t *pmdp =3D pmd_ptr_k(va);
-+	pmd_t *pmdp =3D pmd_off_k(va);
- 	pte_t *ptep;
-=20
- 	if (WARN_ON(psize !=3D MMU_PAGE_512K && psize !=3D MMU_PAGE_8M))
-diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
-index 45a0556089e8..1136257c3a99 100644
---- a/arch/powerpc/mm/pgtable.c
-+++ b/arch/powerpc/mm/pgtable.c
-@@ -264,7 +264,7 @@ int huge_ptep_set_access_flags(struct vm_area_struct *v=
-ma,
- #if defined(CONFIG_PPC_8xx)
- void set_huge_pte_at(struct mm_struct *mm, unsigned long addr, pte_t *ptep=
-, pte_t pte)
- {
--	pmd_t *pmd =3D pmd_ptr(mm, addr);
-+	pmd_t *pmd =3D pmd_off(mm, addr);
- 	pte_basic_t val;
- 	pte_basic_t *entry =3D &ptep->pte;
- 	int num =3D is_hugepd(*((hugepd_t *)pmd)) ? 1 : SZ_512K / SZ_4K;
-diff --git a/arch/powerpc/mm/pgtable_32.c b/arch/powerpc/mm/pgtable_32.c
-index e2d054c9575e..6eb4eab79385 100644
---- a/arch/powerpc/mm/pgtable_32.c
-+++ b/arch/powerpc/mm/pgtable_32.c
-@@ -40,7 +40,7 @@ notrace void __init early_ioremap_init(void)
- {
- 	unsigned long addr =3D ALIGN_DOWN(FIXADDR_START, PGDIR_SIZE);
- 	pte_t *ptep =3D (pte_t *)early_fixmap_pagetable;
--	pmd_t *pmdp =3D pmd_ptr_k(addr);
-+	pmd_t *pmdp =3D pmd_off_k(addr);
-=20
- 	for (; (s32)(FIXADDR_TOP - addr) > 0;
- 	     addr +=3D PGDIR_SIZE, ptep +=3D PTRS_PER_PTE, pmdp++)
---=20
-2.26.2
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/T+O9YzBbXMkBzqWEdGuULUD
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Xeu8ACgkQAVBC80lX
-0Gzfhgf/cPFp2dlvYny+4RY4PCVkyWhX1RA5GNl9ysvabCodQrz+8pncZtOeb4MF
-eY4AJ83+Zz7E/4N1eN7mBGLnpBLcA3oLBc8auDIw6KzK26CMX7c5aSB4Q0EWOdCA
-VjKOS4St84Hv/BHlPTvEtCiir53gvLlaoWYH0byul1nTIfxSoTdJVHY0rE1FwF7M
-RmfMKVuYKhy+cmTW2rfVkYvUhDSwAq92TV7leq8EKvpZEHffOh+05sGozqty+N4g
-dUnFEe8oAOg42tKyByzpBjf1Ww6HMywpSVTH55SCIWjQJr34n9sOHvc0lIf/GvMX
-C91jjfQi7ZTZHDKK58sahYOxWvm6Fg==
-=EU0e
------END PGP SIGNATURE-----
-
---Sig_/T+O9YzBbXMkBzqWEdGuULUD--
+-ritesh

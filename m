@@ -2,134 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E43771EDB70
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 04:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF75E1EDB71
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 04:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726247AbgFDCyj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 22:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58608 "EHLO
+        id S1726946AbgFDCzH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 22:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725946AbgFDCyi (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 22:54:38 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EF2C03E96D;
-        Wed,  3 Jun 2020 19:54:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cr3J3ylFz9sSc;
-        Thu,  4 Jun 2020 12:54:36 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591239277;
-        bh=VDSt+L9FTNZd1aTV4qG1+DRbMcoJ1bNPOKptE+HomBY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=exrcuh0ttF7VJs9YQR6mYlPsHSfPRAC4Y9Dp5roMJp0XlK6w8Oj1Zt+ln/l/Nzwm/
-         9a4UbLVRumMN3s7v9MttjxsIU7nmoC33YR4wJDQCYslWb+hpfKIW3pwE7Pcv5TZdv4
-         R6NvMeB6+I0ZsOs9azDDsX9flqjWQfUaiT+dG9JTXJptgtAtWdVFer5vjvjfgW/SQ7
-         v0hlFTsj2iMqGRIjDWrbQLKk1p3bgF3fk0RZDHqI5JOGqp+UfBLSFOjOuj2orcCiEN
-         h1lvJyKxBuWVg+EYeLyF6jYs7dzUCVtvOzEFv9crFx6lYhMM4x7x98ME/1Mk+k3ykT
-         ncKy1lm76VRsQ==
-Date:   Thu, 4 Jun 2020 12:54:35 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Paolo Bonzini <pbonzini@redhat.com>, KVM <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S1725946AbgFDCzH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 22:55:07 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AEA5C03E96D;
+        Wed,  3 Jun 2020 19:55:06 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id dp10so2242509qvb.10;
+        Wed, 03 Jun 2020 19:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+1jRoXPXgHZDeP30eSxZAHFvGE75NHGQIpkr64zYlkM=;
+        b=R1lVXrMrRkN5dJ9c9Gf4SVMey4upZtT7TTmyU8YbdCr3ys/MRnbFTcU59mS/kYCvwe
+         teBRlNniR4dXRyEZ8hEjsl/wnTHquMaJ8kG041pZqE0bPrOWjMWdp6+oC8cAISiVPSs7
+         +3XSzvMnk+pdchMn5kGSWcUZPwAquB042joawQEJLEnuQlnqD9S2d3yBzPW3SoQw7bR/
+         fsbDEdk8lkCom2p6I/ybc+AYHcM5yWCX1nSg6fMGd0jcAXJgbvEk2oSzkgMQ1blrpOdN
+         hczyhbdRfcExp1arcxkHqZ3Sa2Z4qFruyUsKu8dWOVFmO1wrCIOtIwVB2U+/4oOaYRpo
+         1/qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=+1jRoXPXgHZDeP30eSxZAHFvGE75NHGQIpkr64zYlkM=;
+        b=aDPCvKH/WiuYzu5ZMYEOqXZbcFYFLYhbP1uXiYNrUsYFwfD6N3/RMrRv1IsFNxvp6r
+         Y6MWCLd/+jLFDDwg1lSr2YuS/gUojkVvnsVn4Ie76RvO/o5im+5j3BxMU8fWM74QEson
+         +WsH2O/DZZDFnjWS7srFqNLXUAmOZGixKkxziLqW53ynoN/iD+PQAz9kN3+9QMiTY0XW
+         6Y3v8I/3btuhvzL5NMPnPiVWV+p6gB6SWbqz6x4Galz+4XQuZ1AXWlBxuT9sIJbJk/F4
+         A3yngglh1k1fbsiA/2ixNLBkKXrNXlt1wB2WzZ1pYUzu1wNn3FeY33w5aQQrhL6h+7gd
+         /qKg==
+X-Gm-Message-State: AOAM532Z3U+fEY4+Pvv2uLqLCPinAJY9iaTbh6SbJ6pb29A/Zm9iP31R
+        Cqrlpm3WdR6mknd2MY1zje4M1hNz
+X-Google-Smtp-Source: ABdhPJyIDAXNVCLtGLiCOQRfgeDTiTBFb5hpg3eBjY/sEby1L01RBGH3tpC45346bLXn17yZF7D3oA==
+X-Received: by 2002:ad4:4f23:: with SMTP id fc3mr2912897qvb.25.1591239305499;
+        Wed, 03 Jun 2020 19:55:05 -0700 (PDT)
+Received: from ?IPv6:2601:282:803:7700:1172:51aa:9d42:fe87? ([2601:282:803:7700:1172:51aa:9d42:fe87])
+        by smtp.googlemail.com with ESMTPSA id h50sm3907956qte.25.2020.06.03.19.55.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jun 2020 19:55:04 -0700 (PDT)
+Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus' tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Uros Bizjak <ubizjak@gmail.com>
-Subject: Re: linux-next: build failure after merge of the kvm tree
-Message-ID: <20200604125435.6505fe96@canb.auug.org.au>
-In-Reply-To: <20200521162854.70995699@canb.auug.org.au>
-References: <20200521162854.70995699@canb.auug.org.au>
+        Florian Westphal <fw@strlen.de>
+References: <20200511130015.37103884@canb.auug.org.au>
+ <20200602092040.5ef52300@canb.auug.org.au>
+ <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
+ <20200604112606.25ffde35@canb.auug.org.au>
+From:   David Ahern <dsahern@gmail.com>
+Message-ID: <8d943a28-2e9f-9c61-9cff-899e907d6b86@gmail.com>
+Date:   Wed, 3 Jun 2020 20:55:01 -0600
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
+ Gecko/20100101 Thunderbird/68.8.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4sekqo98_Ne_x5b5whad_WZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200604112606.25ffde35@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4sekqo98_Ne_x5b5whad_WZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/3/20 7:26 PM, Stephen Rothwell wrote:
+> 
+> And now the net-next tree has been merged into Linus' tree without this fix :-(
+> 
 
-Hi all,
-
-On Thu, 21 May 2020 16:28:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the kvm tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->=20
-> arch/x86/kvm/svm/svm.c: In function 'kvm_machine_check':
-> arch/x86/kvm/svm/svm.c:1834:2: error: too many arguments to function 'do_=
-machine_check'
->  1834 |  do_machine_check(&regs, 0);
->       |  ^~~~~~~~~~~~~~~~
-> In file included from arch/x86/kvm/svm/svm.c:36:
-> arch/x86/include/asm/mce.h:254:6: note: declared here
->   254 | void do_machine_check(struct pt_regs *pt_regs);
->       |      ^~~~~~~~~~~~~~~~
->=20
-> Caused by commit
->=20
->   1c164cb3ffd0 ("KVM: SVM: Use do_machine_check to pass MCE to the host")
->=20
-> interacting with commit
->=20
->   aaa4947defff ("x86/entry: Convert Machine Check to IDTENTRY_IST")
->=20
-> from the tip tree.
->=20
-> I added the following merge fix patch.
->=20
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Thu, 21 May 2020 16:24:59 +1000
-> Subject: [PATCH] KVM: SVM: fix up for do_machine_check() API change
->=20
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> ---
->  arch/x86/kvm/svm/svm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-> index ae287980c027..7488c8abe825 100644
-> --- a/arch/x86/kvm/svm/svm.c
-> +++ b/arch/x86/kvm/svm/svm.c
-> @@ -1831,7 +1831,7 @@ static void kvm_machine_check(void)
->  		.flags =3D X86_EFLAGS_IF,
->  	};
-> =20
-> -	do_machine_check(&regs, 0);
-> +	do_machine_check(&regs);
->  #endif
->  }
-> =20
-> --=20
-> 2.26.2
-
-This fix is now needed whe the tip tree merges with Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4sekqo98_Ne_x5b5whad_WZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7YYmsACgkQAVBC80lX
-0GyIhgf+JAqQ3tXuwT3gUG/OkbE8w50IQxkFHo2P1Akk+CVddd94/rxeTcf7YA6b
-gdb0pFI90QVtL5XHoLrvnm25Q8bq7iuiIVi9dWQsSgMomwYy0lF9/IF2IHViknkt
-dEreUw1dfBW19rwwHrnAQy3INAXQgD8tHLe/SAzpH6zDcocWzEASzBAujLMyrMzX
-nZ0yJAs6ehvI/E8OO8R2Zn1uMhEJ0ehSAT53mvJWH7tBwhub4Sw6ACdepJjprIYm
-ewqi4Z+IJRQL3CREureMSqpZ+c/X1B9C4SRLHwWZvckIc4DjKliGBd9BMyf9SVcw
-iRIKoqpxTTNGT5+qw/P7PjI2IPNi8g==
-=TkYW
------END PGP SIGNATURE-----
-
---Sig_/4sekqo98_Ne_x5b5whad_WZ--
+I took a look earlier and I think it is fine. Some code was moved around
+in ipsec-next and I think the merge is good. I'll run the test cases
+later this week and double check. Thanks for the reminder

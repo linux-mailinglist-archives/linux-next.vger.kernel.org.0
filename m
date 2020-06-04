@@ -2,77 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED9B1EDD55
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 08:41:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03A6F1EDD6B
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 08:44:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727015AbgFDGlw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 02:41:52 -0400
-Received: from a.mx.secunet.com ([62.96.220.36]:45168 "EHLO a.mx.secunet.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726248AbgFDGlw (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Jun 2020 02:41:52 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 89DE520533;
-        Thu,  4 Jun 2020 08:41:50 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 3abts2OExfgK; Thu,  4 Jun 2020 08:41:50 +0200 (CEST)
-Received: from cas-essen-01.secunet.de (201.40.53.10.in-addr.arpa [10.53.40.201])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        id S1727054AbgFDGop (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Jun 2020 02:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726835AbgFDGop (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 02:44:45 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE9BC05BD1E;
+        Wed,  3 Jun 2020 23:44:45 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 2744E200AC;
-        Thu,  4 Jun 2020 08:41:50 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.1979.3; Thu, 4 Jun 2020 08:41:50 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Thu, 4 Jun 2020
- 08:41:49 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)
-        id 8596231801D7; Thu,  4 Jun 2020 08:41:49 +0200 (CEST)
-Date:   Thu, 4 Jun 2020 08:41:49 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     David Ahern <dsahern@gmail.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cx8q31m8z9sV7;
+        Thu,  4 Jun 2020 16:44:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591253083;
+        bh=JDsqhQUeDemGyzzsWYj0ptApwtGBWAVIHeBYPS6C8lM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TD4un/PbOeigPQCdtGpzGOCBe2AYuN6w54chL1FJNFhlyE5Bbrm68/3fajHUNt+ax
+         wVm/Dj/5CM4tTZ1wF/qNoR69dTkT4rTLA/pTO/zILYVqNqVfnK+/UbnboJusS/R83s
+         OMW06lqcpWAyOMbNSB38rOk4enby8mJYCZOHbj2ETmdeO1l262eNgNUnGvGGXbxRC2
+         3BCOEsBUJJPHR0gcjVHoUI+2uBIdPh8U8l9JvASjGWXsSSSvn90FQpNjSrXjAQfw+L
+         U4vrmXUUEKh7TC8hsfi3/1YJNS+0o3AJVSYl2AM9hGZUGWHHh00/BUlIamq0izuoE0
+         0HkPIRW4febcw==
+Date:   Thu, 4 Jun 2020 16:44:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus' tree
-Message-ID: <20200604064149.GT19286@gauss3.secunet.de>
-References: <20200511130015.37103884@canb.auug.org.au>
- <20200602092040.5ef52300@canb.auug.org.au>
- <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
- <20200604112606.25ffde35@canb.auug.org.au>
- <8d943a28-2e9f-9c61-9cff-899e907d6b86@gmail.com>
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: linux-next: build failure after merge of the akpm tree
+Message-ID: <20200604164442.5101cf27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <8d943a28-2e9f-9c61-9cff-899e907d6b86@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: multipart/signed; boundary="Sig_/nli84aVRfTBFTkkk9AEKAl6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 03, 2020 at 08:55:01PM -0600, David Ahern wrote:
-> On 6/3/20 7:26 PM, Stephen Rothwell wrote:
-> > 
-> > And now the net-next tree has been merged into Linus' tree without this fix :-(
-> > 
-> 
-> I took a look earlier and I think it is fine. Some code was moved around
-> in ipsec-next and I think the merge is good. I'll run the test cases
-> later this week and double check. Thanks for the reminder
+--Sig_/nli84aVRfTBFTkkk9AEKAl6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The setting of XFRM_TRANSFORMED moved to xfrm_output() and depends
-on CONFIG_NETFILTER. So I think the fix is needed. After the merge
-of the net tree today, I have both conflicting patches patches in
-the ipsec tree. I'd apply the fix from Stephen unless you say
-it is not needed.
+Hi all,
+
+After merging the akpm tree, today's linux-next build (powerpc
+allyesconfig) failed like this:
+
+arch/powerpc/mm/ptdump/ptdump.c: In function 'walk_pagetables':
+arch/powerpc/mm/ptdump/ptdump.c:337:25: error: implicit declaration of func=
+tion 'pgd_is_leaf'; did you mean 'p4d_is_leaf'? [-Werror=3Dimplicit-functio=
+n-declaration]
+  337 |   if (pgd_none(*pgd) || pgd_is_leaf(*pgd))
+      |                         ^~~~~~~~~~~
+      |                         p4d_is_leaf
+
+Caused by commit
+
+   "powerpc: add support for folded p4d page tables"
+
+I applied the following fix up patch.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Thu, 4 Jun 2020 16:33:01 +1000
+Subject: [PATCH] fixup for powerpc ptdump.c
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ arch/powerpc/mm/ptdump/ptdump.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/mm/ptdump/ptdump.c b/arch/powerpc/mm/ptdump/ptdum=
+p.c
+index 9b1c89b05622..de6e05ef871c 100644
+--- a/arch/powerpc/mm/ptdump/ptdump.c
++++ b/arch/powerpc/mm/ptdump/ptdump.c
+@@ -334,12 +334,12 @@ static void walk_pagetables(struct pg_state *st)
+ 	for (i =3D pgd_index(addr); i < PTRS_PER_PGD; i++, pgd++, addr +=3D PGDIR=
+_SIZE) {
+ 		p4d_t *p4d =3D p4d_offset(pgd, 0);
+=20
+-		if (pgd_none(*pgd) || pgd_is_leaf(*pgd))
++		if (p4d_none(*p4d) || p4d_is_leaf(*p4d))
+ 			note_page(st, addr, 1, p4d_val(*p4d), PGDIR_SIZE);
+ 		else if (is_hugepd(__hugepd(p4d_val(*p4d))))
+-			walk_hugepd(st, (hugepd_t *)pgd, addr, PGDIR_SHIFT, 1);
++			walk_hugepd(st, (hugepd_t *)p4d, addr, PGDIR_SHIFT, 1);
+ 		else
+-			/* pgd exists */
++			/* p4d exists */
+ 			walk_pud(st, p4d, addr);
+ 	}
+ }
+--=20
+2.26.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/nli84aVRfTBFTkkk9AEKAl6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7YmFoACgkQAVBC80lX
+0GwNjgf6A6IiGqej01ytuMTE8MXcHy4sljfzPy612hAnV1PIXpU9p2AUDCIk/amc
+aeN6/r10Ao2cvBHDzSsNlsnkq72msp3vvE56kGF9vZyZRYrBMpD5OCxOBsBjYImH
+L1a6JUqk7n9vjYHZLR+1INP5oHPBcJLOVNFkecItrtdZkIIoHQ0vrldugD4OnLs0
+zrjq29GabVmgOi03k33LF63bd1PpJ6yhSW5dlx+rf+rWL0KT6tgPoI6CfP9N4xdf
+jMmtUgQPAjxObEKo04TyWhKffuAiuAPtANZI6ZXmU4WV2kd9Ow9VUz3JxhLJbzIF
+Mb8B47fS0r0zjWaOMW/MvvjnqsR7fg==
+=9hip
+-----END PGP SIGNATURE-----
+
+--Sig_/nli84aVRfTBFTkkk9AEKAl6--

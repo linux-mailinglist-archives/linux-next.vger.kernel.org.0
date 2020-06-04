@@ -2,163 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D57BB1EE592
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 15:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 168FF1EE62E
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 15:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728496AbgFDNpf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 09:45:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726415AbgFDNpe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 09:45:34 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE42C08C5C0
-        for <linux-next@vger.kernel.org>; Thu,  4 Jun 2020 06:45:33 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id e9so3455574pgo.9
-        for <linux-next@vger.kernel.org>; Thu, 04 Jun 2020 06:45:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=D+fZrjLixI2/LkLfpiRFU/0reoa69VxOqZOocc9S5MA=;
-        b=hyYWRC/vQ7DCk//PyAWuLyetMnOBImNKx2AvInmOAUHhP3wt/Rh0Gu/8cYiXpOcCyz
-         pUolmrrHO6unIffhFApi4DTNCPEMOS3Fq4JqpfNlHUOklV8tKy9XV5t6RireFDLwIbDz
-         VUd7l2ZCgZIllnlqVhbHga2hs67Ga5QMDc78dgPue8fBdOSN4eYNffhUEgYrZcdW/IR8
-         yZAiXOfonrjEEq/M/26Z85QK8xZC2YM9+d2bCDfcB5x301FPdxvF0+//cvMQX//fB7XZ
-         0jOdmMsz3LUZEJGiaFlWBPhzFS9Mqv14ev1pd0pUtyHrrWSnME1ZWBZyzj43/QTEyaBy
-         1L8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=D+fZrjLixI2/LkLfpiRFU/0reoa69VxOqZOocc9S5MA=;
-        b=iiqqFywlFns1QI+3ikBoC4zHga0sml3sbdcXW+s/RRASo+cp45acqXIHw4Dki64bGB
-         9CdXy7qUwGWrgY8eRGW41B+LNjQA9rxGiPTaFiqt5jG4h/5FkVPAZ91GIzP1aFZbmldL
-         00U391FDItbtANfnv4FvHFI7aqYqwpLtFHV72WdotEU53qivEM6MASMX7RRw1jUbi6kg
-         8bgZpK1gDvE6o6yQMoeIPZAVmOn/9t87ygwfeYH9RY9gmCIkOYapwcjFLbKQxs9w5BGV
-         07HhHRQY1uGOGSR7s08be3tYtAFS1wCNVKi4V9dG+pdD6fcM8AAUpPbtU6f5mBomy/da
-         CoeQ==
-X-Gm-Message-State: AOAM532PbIHmrezoUX4jVP1It6GfslEu0vDDCVLnOrBdBDP7IznIq1Iw
-        FJjOgCek8VmBhA3xn7ZOjddn0NkMUjg=
-X-Google-Smtp-Source: ABdhPJzNqXB/eVUzSEbc5HbozfrE7OOtm1Sq3uH6hsJFi64gxpDeoBVJ3MVuFD8IPyEBTDFYH0pETQ==
-X-Received: by 2002:aa7:9252:: with SMTP id 18mr4464492pfp.17.1591278332102;
-        Thu, 04 Jun 2020 06:45:32 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id n38sm4257006pgm.1.2020.06.04.06.45.29
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 06:45:30 -0700 (PDT)
-Message-ID: <5ed8fafa.1c69fb81.1a404.b689@mx.google.com>
-Date:   Thu, 04 Jun 2020 06:45:30 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728706AbgFDN7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Jun 2020 09:59:45 -0400
+Received: from pegase1.c-s.fr ([93.17.236.30]:1504 "EHLO pegase1.c-s.fr"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728604AbgFDN7p (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 4 Jun 2020 09:59:45 -0400
+Received: from localhost (mailhub1-int [192.168.12.234])
+        by localhost (Postfix) with ESMTP id 49d6pf2rwCzB09Zt;
+        Thu,  4 Jun 2020 15:59:38 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [192.168.12.234]) (amavisd-new, port 10024)
+        with ESMTP id xNYjkAss7B_l; Thu,  4 Jun 2020 15:59:38 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 49d6pf1vcCzB09Zq;
+        Thu,  4 Jun 2020 15:59:38 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 30FE18B8C6;
+        Thu,  4 Jun 2020 15:59:40 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id 7rmDmWjkLUfq; Thu,  4 Jun 2020 15:59:40 +0200 (CEST)
+Received: from pc16570vm.idsi0.si.c-s.fr (po15451.idsi0.si.c-s.fr [10.25.210.22])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id B7C278B8C4;
+        Thu,  4 Jun 2020 15:59:39 +0200 (CEST)
+Subject: Re: linux-next: build failure on powerpc 8xx with 16k pages
+To:     Will Deacon <will@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        peterz@infradead.org
+References: <dc2b16e1-b719-5500-508d-ae97bf50c4a6@csgroup.eu>
+ <20200604111723.GA1267@willie-the-truck>
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+Message-ID: <96fdc23c-ca08-6b6a-ebdd-23cedfada77d@csgroup.eu>
+Date:   Thu, 4 Jun 2020 13:55:45 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:52.0) Gecko/20100101
+ Thunderbird/52.7.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200604
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-Subject: next/master boot: 144 boots: 6 failed, 134 passed with 2 offline,
- 2 untried/unknown (next-20200604)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+In-Reply-To: <20200604111723.GA1267@willie-the-truck>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+On 06/04/2020 11:17 AM, Will Deacon wrote:
+> Hi, [+Peter]
+> 
+> On Thu, Jun 04, 2020 at 10:48:03AM +0000, Christophe Leroy wrote:
+>> Using mpc885_ads_defconfig with CONFIG_PPC_16K_PAGES instead of
+>> CONFIG_PPC_4K_PAGES, getting the following build failure:
+>>
+>>    CC      mm/gup.o
+>> In file included from ./include/linux/kernel.h:11:0,
+>>                   from mm/gup.c:2:
+>> In function 'gup_hugepte.constprop',
+>>      inlined from 'gup_huge_pd.isra.78' at mm/gup.c:2465:8:
+>> ./include/linux/compiler.h:392:38: error: call to '__compiletime_assert_257'
+>> declared with attribute error: Unsupported access size for
+>> {READ,WRITE}_ONCE().
+>>    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>                                        ^
+>> ./include/linux/compiler.h:373:4: note: in definition of macro
+>> '__compiletime_assert'
+>>      prefix ## suffix();    \
+>>      ^
+>> ./include/linux/compiler.h:392:2: note: in expansion of macro
+>> '_compiletime_assert'
+>>    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+>>    ^
+>> ./include/linux/compiler.h:405:2: note: in expansion of macro
+>> 'compiletime_assert'
+>>    compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long), \
+>>    ^
+>> ./include/linux/compiler.h:291:2: note: in expansion of macro
+>> 'compiletime_assert_rwonce_type'
+>>    compiletime_assert_rwonce_type(x);    \
+>>    ^
+>> mm/gup.c:2428:8: note: in expansion of macro 'READ_ONCE'
+>>    pte = READ_ONCE(*ptep);
+>>          ^
+>> In function 'gup_get_pte',
+>>      inlined from 'gup_pte_range' at mm/gup.c:2228:9,
+>>      inlined from 'gup_pmd_range' at mm/gup.c:2613:15,
+>>      inlined from 'gup_pud_range' at mm/gup.c:2641:15,
+>>      inlined from 'gup_p4d_range' at mm/gup.c:2666:15,
+>>      inlined from 'gup_pgd_range' at mm/gup.c:2694:15,
+>>      inlined from 'internal_get_user_pages_fast' at mm/gup.c:2785:3:
+> 
+> At first glance, this looks like a real bug in the 16k page code -- you're
+> loading the pte non-atomically on the fast GUP path and so you're prone to
+> tearing, which probably isn't what you want. For a short-term hack, I'd
+> suggest having CONFIG_HAVE_FAST_GUP depend on !CONFIG_PPC_16K_PAGES, but if
+> you want to support this them you'll need to rework your pte_t so that it
+> can be loaded atomically.
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/master/kernel/next-20200604/plan/=
-baseline/
+What do you mean by *rework* pte_t ?
+pte are 32 bits words in size and are spread every 4 words in memory. 
+Therefore pte_t has to be 128 bits because unlike huge_pte handling 
+which always use huge_pte_offset() in loops, many many places in the 
+kernel do pte++, so we need the pte type to be the size of the interval 
+from one pte to the next one.
 
----------------------------------------------------------------------------=
-----
-
-next/master boot: 144 boots: 6 failed, 134 passed with 2 offline, 2 untried=
-/unknown (next-20200604)
-
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
-nel/next-20200604/
-Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
-xt-20200604/
-
-Tree: next
-Branch: master
-Git Describe: next-20200604
-Git Commit: d4899e5542c15062cc55cac0ca99025bb64edc61
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 81 unique boards, 19 SoC families, 23 builds out of 166
-
-Boot Regressions Detected:
-
-arm:
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 107 days (last pass: next-2020021=
-4 - first fail: next-20200217)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: next-20200603)
-          meson-gxl-s805x-libretech-ac:
-              lab-baylibre: new failure (last pass: next-20200603)
-
-Boot Failures Detected:
-
-arm:
-    imx_v6_v7_defconfig:
-        gcc-8:
-            imx7s-warp: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-            meson-gxl-s805x-libretech-ac: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    qcom_defconfig:
-        gcc-8
-            qcom-apq8064-cm-qs600: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+Christophe

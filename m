@@ -2,164 +2,134 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C684A1EDED9
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 09:49:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CD261EDFB6
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 10:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgFDHta (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 03:49:30 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:54549 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725950AbgFDHt3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Jun 2020 03:49:29 -0400
+        id S1726837AbgFDIYk (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Jun 2020 04:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726802AbgFDIYk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 04:24:40 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2C0C05BD1E;
+        Thu,  4 Jun 2020 01:24:40 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cybV3gm4z9sSc;
-        Thu,  4 Jun 2020 17:49:26 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49czN505RNz9sSf;
+        Thu,  4 Jun 2020 18:24:36 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591256967;
-        bh=o+OWDom/fYwGhP1oWFmSJHDLHpi/7YbUUe8i95I5KR0=;
+        s=201702; t=1591259077;
+        bh=9zDAoR8ptxp4KD7+uEd43pqApDpbDt86eJ9jKZIT9UM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=TF4Zj3IZINV5x8p+m/3ufAgGFCfpde+kvrjCdi7a9hAReoumikHofSYWtlZvv/CM8
-         p6UWPKJ250sAVk1Tj0CM9phkTfWQhL6xSBCOHAXoNqM9jFU5Q+oVsymD47GuHpUFoI
-         jjNjk8dYl0vWJJaSV4yGeiBNyT4xvcHTFBZWUcKS0AR4wDAO3mSlqoEsZI8MIKSZ/6
-         w0WLpA3ji7n0Wf3OWozpi0wZNzXc4ZjOMFjVsxvF/M987a6Za8Xm8txrJN2CHM7HUq
-         sZto9Nk5rqfI37+iZdiqnhEMPvmOS3qq/nio7xHgR/OHsqgX6DWNbUoDdaOCphuJoH
-         lPt5/v+2aJuyg==
-Date:   Thu, 4 Jun 2020 17:49:25 +1000
+        b=HUTmsVktEn0OwAE/VmnDinss5EY5AFNMs0gjrKMmSk7GpiEl5w69Kgy78l08REa9Z
+         JYYU39t0b63rTsq2pM/sjsj/4plP/42uKSFRtUuIOFVgxsG+hhoiKeCA3lILwdRW8x
+         Xsorl/74X5wBmGvEDcpA1CYEQl3WlAIk2pV3Sn8OUsj1+tdsZmgBUpTnPzkxOs4I7y
+         9Dl5g0NwcgoiwXE4exTqHscVvFFkaEVpJGG8HPu8b+qK2LDHevr3TfJXyv8nzv6H6y
+         0jlar1F52q9ksQ/WGFqu7sMhcRHhKNKcGYAS00YB8F/OgWawpQJy2+CE7BE7t3yrjv
+         UkKiNRkcJOwJg==
+Date:   Thu, 4 Jun 2020 18:24:36 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>
-Subject: Re: linux-next: fix ups for clashes between akpm and powerpc trees
-Message-ID: <20200604174925.3610fdd1@canb.auug.org.au>
-In-Reply-To: <20200604165246.436f02ba@canb.auug.org.au>
-References: <20200603202655.0ad0eacc@canb.auug.org.au>
-        <20200604165246.436f02ba@canb.auug.org.au>
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: linux-next: build failure after merge of the akpm tree
+Message-ID: <20200604182436.5c8fe72b@canb.auug.org.au>
+In-Reply-To: <20200604164442.5101cf27@canb.auug.org.au>
+References: <20200604164442.5101cf27@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/69NJy6MsPMSFE8YRasJztRC";
+Content-Type: multipart/signed; boundary="Sig_/9GBF595DCEP7TWu_0KDlzbm";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/69NJy6MsPMSFE8YRasJztRC
+--Sig_/9GBF595DCEP7TWu_0KDlzbm
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Thu, 4 Jun 2020 16:52:46 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+On Thu, 4 Jun 2020 16:44:42 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
 rote:
 >
-> diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/=
-include/asm/nohash/32/pgtable.h
-> index c188a6f64bcd..1927e1b653f2 100644
-> --- a/arch/powerpc/include/asm/nohash/32/pgtable.h
-> +++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
-> @@ -205,10 +205,6 @@ static inline void pmd_clear(pmd_t *pmdp)
->  	*pmdp =3D __pmd(0);
+> Hi all,
+>=20
+> After merging the akpm tree, today's linux-next build (powerpc
+> allyesconfig) failed like this:
+>=20
+> arch/powerpc/mm/ptdump/ptdump.c: In function 'walk_pagetables':
+> arch/powerpc/mm/ptdump/ptdump.c:337:25: error: implicit declaration of fu=
+nction 'pgd_is_leaf'; did you mean 'p4d_is_leaf'? [-Werror=3Dimplicit-funct=
+ion-declaration]
+>   337 |   if (pgd_none(*pgd) || pgd_is_leaf(*pgd))
+>       |                         ^~~~~~~~~~~
+>       |                         p4d_is_leaf
+>=20
+> Caused by commit
+>=20
+>    "powerpc: add support for folded p4d page tables"
+>=20
+> I applied the following fix up patch.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Thu, 4 Jun 2020 16:33:01 +1000
+> Subject: [PATCH] fixup for powerpc ptdump.c
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  arch/powerpc/mm/ptdump/ptdump.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/arch/powerpc/mm/ptdump/ptdump.c b/arch/powerpc/mm/ptdump/ptd=
+ump.c
+> index 9b1c89b05622..de6e05ef871c 100644
+> --- a/arch/powerpc/mm/ptdump/ptdump.c
+> +++ b/arch/powerpc/mm/ptdump/ptdump.c
+> @@ -334,12 +334,12 @@ static void walk_pagetables(struct pg_state *st)
+>  	for (i =3D pgd_index(addr); i < PTRS_PER_PGD; i++, pgd++, addr +=3D PGD=
+IR_SIZE) {
+>  		p4d_t *p4d =3D p4d_offset(pgd, 0);
+> =20
+> -		if (pgd_none(*pgd) || pgd_is_leaf(*pgd))
+> +		if (p4d_none(*p4d) || p4d_is_leaf(*p4d))
+>  			note_page(st, addr, 1, p4d_val(*p4d), PGDIR_SIZE);
+>  		else if (is_hugepd(__hugepd(p4d_val(*p4d))))
+> -			walk_hugepd(st, (hugepd_t *)pgd, addr, PGDIR_SHIFT, 1);
+> +			walk_hugepd(st, (hugepd_t *)p4d, addr, PGDIR_SHIFT, 1);
+>  		else
+> -			/* pgd exists */
+> +			/* p4d exists */
+>  			walk_pud(st, p4d, addr);
+>  	}
 >  }
-> =20
-> -
-> -/* to find an entry in a kernel page-table-directory */
-> -#define pgd_offset_k(address) pgd_offset(&init_mm, address)
-> -
->  /* to find an entry in a page-table-directory */
->  #define pgd_index(address)	 ((address) >> PGDIR_SHIFT)
->  #define pgd_offset(mm, address)	 ((mm)->pgd + pgd_index(address))
-> @@ -241,7 +237,7 @@ static inline pte_basic_t pte_update(struct mm_struct=
- *mm, unsigned long addr, p
->  	pte_basic_t old =3D pte_val(*p);
->  	pte_basic_t new =3D (old & ~(pte_basic_t)clr) | set;
->  	int num, i;
-> -	pmd_t *pmd =3D pmd_offset(pud_offset(pgd_offset(mm, addr), addr), addr);
-> +	pmd_t *pmd =3D pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, addr), a=
-ddr), addr), addr);
-> =20
->  	if (!huge)
->  		num =3D PAGE_SIZE / SZ_4K;
-> @@ -341,6 +337,10 @@ static inline int pte_young(pte_t pte)
->  	pfn_to_page((__pa(pmd_val(pmd)) >> PAGE_SHIFT))
->  #endif
-> =20
-> +#define pte_offset_kernel(dir, addr)	\
-> +	(pmd_bad(*(dir)) ? NULL : (pte_t *)pmd_page_vaddr(*(dir)) + \
-> +				  pte_index(addr))
-> +
->  /*
->   * Encode and decode a swap entry.
->   * Note that the bits we use in a PTE for representing a swap entry
+>
 
-Sorry, that ended up:
-
-diff --cc arch/powerpc/include/asm/nohash/32/pgtable.h
-index 639f3b3713ec,eb8538c85077..1927e1b653f2
---- a/arch/powerpc/include/asm/nohash/32/pgtable.h
-+++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
-@@@ -204,13 -205,6 +205,9 @@@ static inline void pmd_clear(pmd_t *pmd
-  	*pmdp =3D __pmd(0);
-  }
- =20
--=20
-- /* to find an entry in a kernel page-table-directory */
-- #define pgd_offset_k(address) pgd_offset(&init_mm, address)
--=20
- +/* to find an entry in a page-table-directory */
- +#define pgd_index(address)	 ((address) >> PGDIR_SHIFT)
- +#define pgd_offset(mm, address)	 ((mm)->pgd + pgd_index(address))
- =20
-  /*
-   * PTE updates. This function is called whenever an existing
-@@@ -240,7 -234,7 +237,7 @@@ static inline pte_basic_t pte_update(st
-  	pte_basic_t old =3D pte_val(*p);
-  	pte_basic_t new =3D (old & ~(pte_basic_t)clr) | set;
-  	int num, i;
---	pmd_t *pmd =3D pmd_offset(pud_offset(pgd_offset(mm, addr), addr), addr);
-++	pmd_t *pmd =3D pmd_offset(pud_offset(p4d_offset(pgd_offset(mm, addr), ad=
-dr), addr), addr);
- =20
-  	if (!huge)
-  		num =3D PAGE_SIZE / SZ_4K;
-@@@ -342,15 -334,6 +337,10 @@@ static inline int pte_young(pte_t pte
-  	pfn_to_page((__pa(pmd_val(pmd)) >> PAGE_SHIFT))
-  #endif
- =20
-- /* Find an entry in the third-level page table.. */
-- #define pte_index(address)		\
-- 	(((address) >> PAGE_SHIFT) & (PTRS_PER_PTE - 1))
- +#define pte_offset_kernel(dir, addr)	\
- +	(pmd_bad(*(dir)) ? NULL : (pte_t *)pmd_page_vaddr(*(dir)) + \
- +				  pte_index(addr))
-- #define pte_offset_map(dir, addr)	pte_offset_kernel((dir), (addr))
-- static inline void pte_unmap(pte_t *pte) { }
- +
-  /*
-   * Encode and decode a swap entry.
-   * Note that the bits we use in a PTE for representing a swap entry
+I have put that in linux-next (for tomorrow) as a fix up for
+powerpc-add-support-for-folded-p4d-page-tables.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/69NJy6MsPMSFE8YRasJztRC
+--Sig_/9GBF595DCEP7TWu_0KDlzbm
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Yp4UACgkQAVBC80lX
-0GyHnQf/QfJYu4Zm/K1coGpmfqJ0CrINNBc+VTkdq8SquTaz0YjZM4zwrZl6SHGi
-u6QCmXtEKNHepvQ0SXcqjmVvH5LziPld+oarfG8xtAOn2dGj4nti79BfBga/7XCR
-zBbZgzBGO3OqFUOoXbKMNxnnpKZQZcZiJXgKzhASpgWJeuEfAproDvdu+yO1m8T2
-YiknvWQ3K//h6mjlN/Ik15LY8B5vAok7irW74ALL0BaEEwpltjWtQStyTx/HMqhH
-4oi4F2dUzBJkn7wm61q8TElLd1lMn3q90cB5MLsOwYkaZHRqz8smvQXXrTZzk52c
-TqyGTGobcOw7NOxiZnx0Z+CdPsAGlg==
-=IJ7k
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Yr8QACgkQAVBC80lX
+0GwX6Qf8DuCMnioAOVgkvBD6oYTA+iAICkgnQ4MKxBsj07ufgAnufIgpO12beI9B
+x2QRbAOuEP0vjKdxsIlNFgdVqtZtYGkVqm5UxKKvXaYIfU+zCwJcRrJ4cFEiOLnA
+6cGRtmYVLhkgjK1zSy9DVW1YOcxisvLUnQsJQU2axbF0on6oL0zGocFdZuex6nLe
+kNc6ZD30U9w7sXZvB8SSAZxPgsdvR4oMQK95yvLnIapKbxoWFqt8piBtU/eDnrEz
+xJBjs/hwxcQc1CsCrO5aslRYm5Ip9n+w3d52IGV0fZ3Jsk/7X4051KUYUn7+IAS7
+iEt2gNhqJjks4NfwoXNNipH18LBVaQ==
+=s26x
 -----END PGP SIGNATURE-----
 
---Sig_/69NJy6MsPMSFE8YRasJztRC--
+--Sig_/9GBF595DCEP7TWu_0KDlzbm--

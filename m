@@ -2,155 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5185A1EDA6B
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 03:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D881EDA70
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 03:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725946AbgFDB0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 3 Jun 2020 21:26:12 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:43677 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726519AbgFDB0L (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 3 Jun 2020 21:26:11 -0400
+        id S1726519AbgFDB3o (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 3 Jun 2020 21:29:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45470 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725983AbgFDB3o (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 3 Jun 2020 21:29:44 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14680C03E96D;
+        Wed,  3 Jun 2020 18:29:44 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cp5C0ZNKz9sRN;
-        Thu,  4 Jun 2020 11:26:07 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49cp9K3xn0z9sRN;
+        Thu,  4 Jun 2020 11:29:41 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591233969;
-        bh=VIP1nuNK7nGcpajAs4ak9+w77pPUCQpV3oytFQaYUJk=;
+        s=201702; t=1591234182;
+        bh=2KHuzZQ+RXbR0wHAx6Mzf1ntNTqMB1evvaLV+unE6SM=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=r5Xt1VZck13b0Ygibc5YlFXvwXceSAQFtxC7nGmq2vvz3fHoX7RBB2WzqyZVjUeA+
-         RqBROVechh9Z/hggwrbumrD6GPQViGOdhQWxM5m0wqnJBzDIxL+e0MqbLRuriT2HmF
-         H7WyeviowbM88uWjCCenG68wows4laBY4IQ4lpJISk1Q8q2OqlDDluc82BdlmFFK07
-         oeiUlSctf/p0njWAewfyn/PuCS1MDMpyQmtwbRb4M66VNlCbRDlTS73sRyZBUlFS+e
-         lCgEBjw5gHEjAUIdYfUypS8vK9E+S5gCMh2nlFpA62shq8rHu42gllPo5UwsSsZPim
-         n9/SQrRc6vjEg==
-Date:   Thu, 4 Jun 2020 11:26:06 +1000
+        b=jInMOd/bs3ql88HiEtcxMyYGci1n6EP7ak52X5WJuc344KUNT+yIXWESxV9YGuUBL
+         aSOm5Pif+/q8OnkPV/A2iQxuob9cqpF+OoQBHfsWgLglWyM62xyzLyuSjva2HZ1b1n
+         WeOFGacVn5TifZHHq2SD7135PwKju7o23dCdehUjUSLbr6GWOlvBTMurY8DkoNE8nz
+         v7wKyM7Ub/p4LX1pMTtWdeFjDhczLwAQS/tbqA7jgpId1DddsGHu/PCWRq1pZkv5P/
+         +t5xiSYCmnJj72VZxPUqPZEd52dcm42J/pNBJN9w/4EX3JkUU9IkjA9QtlZR8+Otr1
+         lk1QLSm7TGnCg==
+Date:   Thu, 4 Jun 2020 11:29:40 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "David S. Miller" <davem@davemloft.net>
-Cc:     David Ahern <dsahern@gmail.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
+To:     Mike Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus'
- tree
-Message-ID: <20200604112606.25ffde35@canb.auug.org.au>
-In-Reply-To: <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
-References: <20200511130015.37103884@canb.auug.org.au>
-        <20200602092040.5ef52300@canb.auug.org.au>
-        <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
+        Macpaul Lin <macpaul.lin@mediatek.com>,
+        Bartosz Golaszewski <bgolaszewski@baylibre.com>
+Subject: Re: linux-next: manual merge of the net-next tree with the clk tree
+Message-ID: <20200604112940.560978f3@canb.auug.org.au>
+In-Reply-To: <20200602120957.1351bda0@canb.auug.org.au>
+References: <20200602120957.1351bda0@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/D7tpbDpAi+qF/qgFD4IZ1/8";
+Content-Type: multipart/signed; boundary="Sig_/G52KOylxla=mZaaf.Z88kBx";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/D7tpbDpAi+qF/qgFD4IZ1/8
+--Sig_/G52KOylxla=mZaaf.Z88kBx
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi David,
+Hi all,
 
-On Mon, 1 Jun 2020 20:30:34 -0600 David Ahern <dsahern@gmail.com> wrote:
+On Tue, 2 Jun 2020 12:09:57 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
 >
-> On 6/1/20 5:20 PM, Stephen Rothwell wrote:
-> > Hi Dave,
-> >=20
-> > On Mon, 11 May 2020 13:00:15 +1000 Stephen Rothwell <sfr@canb.auug.org.=
-au> wrote: =20
-> >>
-> >> Today's linux-next merge of the ipsec-next tree got conflicts in:
-> >>
-> >>   net/ipv4/xfrm4_output.c
-> >>   net/ipv6/xfrm6_output.c
-> >>
-> >> between commit:
-> >>
-> >>   0c922a4850eb ("xfrm: Always set XFRM_TRANSFORMED in xfrm{4,6}_output=
-_finish")
-> >>
-> >> from Linus' tree and commit:
-> >>
-> >>   2ab6096db2f1 ("xfrm: remove output_finish indirection from xfrm_stat=
-e_afinfo")
-> >>
-> >> from the ipsec-next tree.
-> >>
-> >> I fixed it up (I used the latter versions of these files and then added
-> >> the following patch) and can carry the fix as necessary. This is now f=
-ixed
-> >> as far as linux-next is concerned, but any non trivial conflicts should
-> >> be mentioned to your upstream maintainer when your tree is submitted f=
-or
-> >> merging.  You may also want to consider cooperating with the maintainer
-> >> of the conflicting tree to minimise any particularly complex conflicts.
-> >>
-> >> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> >> Date: Mon, 11 May 2020 12:57:24 +1000
-> >> Subject: [PATCH] xfrm: merge fixup for "remove output_finish indirecti=
-on from xfrm_state_afinfo"
-> >>
-> >> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> >> ---
-> >>  net/xfrm/xfrm_output.c | 4 ----
-> >>  1 file changed, 4 deletions(-)
-> >>
-> >> diff --git a/net/xfrm/xfrm_output.c b/net/xfrm/xfrm_output.c
-> >> index 886a9b284b3a..0f4b3a5e02ba 100644
-> >> --- a/net/xfrm/xfrm_output.c
-> >> +++ b/net/xfrm/xfrm_output.c
-> >> @@ -574,16 +574,12 @@ int xfrm_output(struct sock *sk, struct sk_buff =
-*skb)
-> >>  	switch (x->outer_mode.family) {
-> >>  	case AF_INET:
-> >>  		memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
-> >> -#ifdef CONFIG_NETFILTER
-> >>  		IPCB(skb)->flags |=3D IPSKB_XFRM_TRANSFORMED;
-> >> -#endif
-> >>  		break;
-> >>  	case AF_INET6:
-> >>  		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-> >> =20
-> >> -#ifdef CONFIG_NETFILTER
-> >>  		IP6CB(skb)->flags |=3D IP6SKB_XFRM_TRANSFORMED;
-> >> -#endif
-> >>  		break;
-> >>  	}
-> >>   =20
-> >=20
-> > It looks like this merge resolution fix up was missed when the
-> > ipsec-next tree was merged into the net-next tree.
-> >  =20
+> Hi all,
 >=20
-> Thanks for catching that, Stephen. Important fix in 0c922a4850eb.
+> Today's linux-next merge of the net-next tree got a conflict in:
 >=20
+>   Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.txt
+>=20
+> between commit:
+>=20
+>   7b9e111a5216 ("dt-bindings: clock: mediatek: document clk bindings for =
+Mediatek MT6765 SoC")
+>=20
+> from the clk tree and commit:
+>=20
+>   9f9d1e63dc55 ("dt-bindings: convert the binding document for mediatek P=
+ERICFG to yaml")
+>=20
+> from the net-next tree.
+>=20
+> I fixed it up (I deleted the file and added the following patch) and
+> can carry the fix as necessary. This is now fixed as far as linux-next
+> is concerned, but any non trivial conflicts should be mentioned to your
+> upstream maintainer when your tree is submitted for merging.  You may
+> also want to consider cooperating with the maintainer of the conflicting
+> tree to minimise any particularly complex conflicts.
+>=20
+> From: Stephen Rothwell <sfr@canb.auug.org.au>
+> Date: Tue, 2 Jun 2020 12:07:03 +1000
+> Subject: [PATCH] dt-bindings: fix up for "dt-bindings: clock: mediatek:
+>  document clk bindings for Mediatek MT6765 SoC"
+>=20
+> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> ---
+>  .../devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml       | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,peri=
+cfg.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.=
+yaml
+> index 55209a2baedc..e271c4682ebc 100644
+> --- a/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,pericfg.yaml
+> @@ -20,6 +20,7 @@ properties:
+>          - enum:
+>            - mediatek,mt2701-pericfg
+>            - mediatek,mt2712-pericfg
+> +          - mediatek,mt6765-pericfg
+>            - mediatek,mt7622-pericfg
+>            - mediatek,mt7629-pericfg
+>            - mediatek,mt8135-pericfg
+> --=20
+> 2.26.2
 
-And now the net-next tree has been merged into Linus' tree without this fix=
- :-(
+This merge resolution patch is now needed when the clk tree merges with
+Linus' tree
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/D7tpbDpAi+qF/qgFD4IZ1/8
+--Sig_/G52KOylxla=mZaaf.Z88kBx
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7YTa4ACgkQAVBC80lX
-0Gy0Jwf+LLZf5xta8sHu9u4cDZVpwUKA57dz+7JnE+Qux/fwvmDdVjRRk9/HsEzB
-5A0F6frHh9SkvmHdt55iYSmEoS6g7oWZzSVHnVZROBBOxR3B7wZ/E5mvUDh033oy
-dHlUNi/x5FoaMmGHSpjnjzqJMOKR2dwiijsMEafDHqSm6G0X825xEq+6Q/CYjeLE
-//4D1E1N8qZqGQcNUYuGjXeV62Kd8y6VdSWYJoAilM/u5CK3w6m5aL95Rw1CFdrS
-sAM4BE8W78X/wEftsQ9XjyOKxmh9mPnTAsTSmITydy6V6Qz7/+v2oPEBLw8Cik9F
-Lth7ALtNgc4Ubn8rkYUHWOCelb8EAg==
-=gNoZ
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7YToQACgkQAVBC80lX
+0Gxv/Af+K9A0Q6zKBH6ugExa7GwKENxQJT/iToQ98ZH8PoinDOXsdp1Cqo1scS+l
+RmUg1EHf1c5OgbB0w5YK722d9rXtI9CW83Si97cJIUoqjVJjT05i+F78c2x0i5dk
+dmfsCxW2k36av9D4ecWJL8isD9qF0DLTs3cueEuzx/0dH1vvgNEOoXS7d3ESEDtm
+3vHjWh0uYNIQG33VBJ5YBNGHfAj4Cgg0wat7eailhEuDLODnemCLQj4c6IxLV7rN
+5taHLd7I8m8nVVda80GoHePv44CsQ5qC6zFHmGgp0uyyfsRWptyivmOkTxBYHX9T
+UNdzwMD2rAFPAii7fNomWZ83ukawIg==
+=iPus
 -----END PGP SIGNATURE-----
 
---Sig_/D7tpbDpAi+qF/qgFD4IZ1/8--
+--Sig_/G52KOylxla=mZaaf.Z88kBx--

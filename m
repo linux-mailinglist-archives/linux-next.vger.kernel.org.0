@@ -2,97 +2,163 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A5571EE4B1
-	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 14:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D57BB1EE592
+	for <lists+linux-next@lfdr.de>; Thu,  4 Jun 2020 15:45:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726533AbgFDMoO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 08:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S1728496AbgFDNpf (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Jun 2020 09:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726003AbgFDMoN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 08:44:13 -0400
-Received: from mail-qv1-xf42.google.com (mail-qv1-xf42.google.com [IPv6:2607:f8b0:4864:20::f42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BC0C08C5C0;
-        Thu,  4 Jun 2020 05:44:13 -0700 (PDT)
-Received: by mail-qv1-xf42.google.com with SMTP id dp10so2795805qvb.10;
-        Thu, 04 Jun 2020 05:44:13 -0700 (PDT)
+        with ESMTP id S1726415AbgFDNpe (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 09:45:34 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE42C08C5C0
+        for <linux-next@vger.kernel.org>; Thu,  4 Jun 2020 06:45:33 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id e9so3455574pgo.9
+        for <linux-next@vger.kernel.org>; Thu, 04 Jun 2020 06:45:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=SjLnQZ46lUbHvc3PkUxiHDXKl5I0zjvuEJ2uPwsxzI8=;
-        b=pgR/6JaOszrzbplONJz2cHfFaCUGS0thtHFez6ULWs8Iosj/kMc4w+SGq+CzSVwxgj
-         n/8hUyIny/XflYy1ZN0HjwftKbam5yhism9DK3FilsGSqlpAEmlZ5+SeOEtKVKY1ofEx
-         9FNLoWnJq/8biZCB/1FE4C1rHzhKMp++V0/l4fIKaCaod7ZMHVYjDS2EsHCv2p95PVmz
-         1xS16UWAD6YAcR7WGtMJFjfjtRM4fYx1OXKQOeuymN66xeLMHGdBI+guTLYFvBXlF1rH
-         bYpYriPRDvRWVyMA5FQpk8XHGZrfEGXQ1lc4aKBtUjJCUiOVtdmA6fPu0poJHP7gJaqk
-         X7Bw==
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=D+fZrjLixI2/LkLfpiRFU/0reoa69VxOqZOocc9S5MA=;
+        b=hyYWRC/vQ7DCk//PyAWuLyetMnOBImNKx2AvInmOAUHhP3wt/Rh0Gu/8cYiXpOcCyz
+         pUolmrrHO6unIffhFApi4DTNCPEMOS3Fq4JqpfNlHUOklV8tKy9XV5t6RireFDLwIbDz
+         VUd7l2ZCgZIllnlqVhbHga2hs67Ga5QMDc78dgPue8fBdOSN4eYNffhUEgYrZcdW/IR8
+         yZAiXOfonrjEEq/M/26Z85QK8xZC2YM9+d2bCDfcB5x301FPdxvF0+//cvMQX//fB7XZ
+         0jOdmMsz3LUZEJGiaFlWBPhzFS9Mqv14ev1pd0pUtyHrrWSnME1ZWBZyzj43/QTEyaBy
+         1L8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=SjLnQZ46lUbHvc3PkUxiHDXKl5I0zjvuEJ2uPwsxzI8=;
-        b=Y5FmMBBj+BzF4aclC3zUjOuy1TrzhWEqjFqMlzFt1nmMRkv8N6ohcJ+PGkHhNgICUT
-         KrLuZglZ5CKU7rpxscD+05uyDFeR+IXVK2ZX58NR9CPwWBW0wRmBcaJZV8ZBom/lpA9u
-         Kz5jm3pAmP+NngWD7/qBRlqP0XhaxQlB4o5X6g40BtAE005JZhOocft1cZU4GofsHVyL
-         15FvNtcw9y0AGe/1Ep9CftYxgNSMnZ9nVpk2yyzoWSnE06CpWDDtkbJkkakh8YaMuT6i
-         lobENuu5BUj1XC3b/zUtmVHuv2G29oQN8+tKAdMGvmhDqKNWLNdMqA5DErjSCWhOMAuh
-         SrWg==
-X-Gm-Message-State: AOAM533MYN+t9T5X9CQPo30nwEz7wnxQghXRTTqepqZkzwu/2V6WUo71
-        /C+/Xz2H+hjObPY2+GM3RW6JzTXe
-X-Google-Smtp-Source: ABdhPJwk9NDtjNNxuy+/sFNOoOaj07rkvuAtcSdE6Ozd3bA8dTGYOjcG4WiRbf2pwSalhdjb1NJmYg==
-X-Received: by 2002:ad4:5512:: with SMTP id az18mr4537708qvb.51.1591274652710;
-        Thu, 04 Jun 2020 05:44:12 -0700 (PDT)
-Received: from ?IPv6:2601:282:803:7700:1172:51aa:9d42:fe87? ([2601:282:803:7700:1172:51aa:9d42:fe87])
-        by smtp.googlemail.com with ESMTPSA id o3sm4806783qkj.97.2020.06.04.05.44.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jun 2020 05:44:11 -0700 (PDT)
-Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus' tree
-To:     Steffen Klassert <steffen.klassert@secunet.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-References: <20200511130015.37103884@canb.auug.org.au>
- <20200602092040.5ef52300@canb.auug.org.au>
- <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
- <20200604112606.25ffde35@canb.auug.org.au>
- <8d943a28-2e9f-9c61-9cff-899e907d6b86@gmail.com>
- <20200604064149.GT19286@gauss3.secunet.de>
-From:   David Ahern <dsahern@gmail.com>
-Message-ID: <9b338449-e342-96ab-0ba1-a73058fac037@gmail.com>
-Date:   Thu, 4 Jun 2020 06:44:10 -0600
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:68.0)
- Gecko/20100101 Thunderbird/68.8.1
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=D+fZrjLixI2/LkLfpiRFU/0reoa69VxOqZOocc9S5MA=;
+        b=iiqqFywlFns1QI+3ikBoC4zHga0sml3sbdcXW+s/RRASo+cp45acqXIHw4Dki64bGB
+         9CdXy7qUwGWrgY8eRGW41B+LNjQA9rxGiPTaFiqt5jG4h/5FkVPAZ91GIzP1aFZbmldL
+         00U391FDItbtANfnv4FvHFI7aqYqwpLtFHV72WdotEU53qivEM6MASMX7RRw1jUbi6kg
+         8bgZpK1gDvE6o6yQMoeIPZAVmOn/9t87ygwfeYH9RY9gmCIkOYapwcjFLbKQxs9w5BGV
+         07HhHRQY1uGOGSR7s08be3tYtAFS1wCNVKi4V9dG+pdD6fcM8AAUpPbtU6f5mBomy/da
+         CoeQ==
+X-Gm-Message-State: AOAM532PbIHmrezoUX4jVP1It6GfslEu0vDDCVLnOrBdBDP7IznIq1Iw
+        FJjOgCek8VmBhA3xn7ZOjddn0NkMUjg=
+X-Google-Smtp-Source: ABdhPJzNqXB/eVUzSEbc5HbozfrE7OOtm1Sq3uH6hsJFi64gxpDeoBVJ3MVuFD8IPyEBTDFYH0pETQ==
+X-Received: by 2002:aa7:9252:: with SMTP id 18mr4464492pfp.17.1591278332102;
+        Thu, 04 Jun 2020 06:45:32 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id n38sm4257006pgm.1.2020.06.04.06.45.29
+        for <linux-next@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 04 Jun 2020 06:45:30 -0700 (PDT)
+Message-ID: <5ed8fafa.1c69fb81.1a404.b689@mx.google.com>
+Date:   Thu, 04 Jun 2020 06:45:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-In-Reply-To: <20200604064149.GT19286@gauss3.secunet.de>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200604
+X-Kernelci-Report-Type: boot
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+Subject: next/master boot: 144 boots: 6 failed, 134 passed with 2 offline,
+ 2 untried/unknown (next-20200604)
+To:     linux-next@vger.kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/4/20 12:41 AM, Steffen Klassert wrote:
-> On Wed, Jun 03, 2020 at 08:55:01PM -0600, David Ahern wrote:
->> On 6/3/20 7:26 PM, Stephen Rothwell wrote:
->>>
->>> And now the net-next tree has been merged into Linus' tree without this fix :-(
->>>
->>
->> I took a look earlier and I think it is fine. Some code was moved around
->> in ipsec-next and I think the merge is good. I'll run the test cases
->> later this week and double check. Thanks for the reminder
-> 
-> The setting of XFRM_TRANSFORMED moved to xfrm_output() and depends
-> on CONFIG_NETFILTER. So I think the fix is needed. After the merge
-> of the net tree today, I have both conflicting patches patches in
-> the ipsec tree. I'd apply the fix from Stephen unless you say
-> it is not needed.
-> 
+******************************************
+* WARNING: Boot tests are now deprecated *
+******************************************
 
-Indeed. I must have been looking at -net. Both -net and -net-next have
-it conditional, so yes a fixup patch is needed.
+As kernelci.org is expanding its functional testing capabilities, the conce=
+pt
+of boot testing is now deprecated.  Boot results are scheduled to be droppe=
+d on
+*5th June 2020*.  The full schedule for boot tests deprecation is available=
+ on
+this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+
+The new equivalent is the *baseline* test suite which also runs sanity chec=
+ks
+using dmesg and bootrr: https://github.com/kernelci/bootrr
+
+See the *baseline results for this kernel revision* on this page:
+https://kernelci.org/test/job/next/branch/master/kernel/next-20200604/plan/=
+baseline/
+
+---------------------------------------------------------------------------=
+----
+
+next/master boot: 144 boots: 6 failed, 134 passed with 2 offline, 2 untried=
+/unknown (next-20200604)
+
+Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/master/ker=
+nel/next-20200604/
+Full Build Summary: https://kernelci.org/build/next/branch/master/kernel/ne=
+xt-20200604/
+
+Tree: next
+Branch: master
+Git Describe: next-20200604
+Git Commit: d4899e5542c15062cc55cac0ca99025bb64edc61
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+Tested: 81 unique boards, 19 SoC families, 23 builds out of 166
+
+Boot Regressions Detected:
+
+arm:
+
+    sama5_defconfig:
+        gcc-8:
+          at91-sama5d4_xplained:
+              lab-baylibre: failing since 107 days (last pass: next-2020021=
+4 - first fail: next-20200217)
+
+arm64:
+
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+          meson-gxbb-p200:
+              lab-baylibre: new failure (last pass: next-20200603)
+          meson-gxl-s805x-libretech-ac:
+              lab-baylibre: new failure (last pass: next-20200603)
+
+Boot Failures Detected:
+
+arm:
+    imx_v6_v7_defconfig:
+        gcc-8:
+            imx7s-warp: 1 failed lab
+
+    sama5_defconfig:
+        gcc-8:
+            at91-sama5d4_xplained: 1 failed lab
+
+arm64:
+    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
+        gcc-8:
+            meson-gxbb-p200: 1 failed lab
+            meson-gxl-s805x-libretech-ac: 1 failed lab
+
+    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+    defconfig:
+        gcc-8:
+            mt7622-rfb1: 1 failed lab
+
+Offline Platforms:
+
+arm:
+
+    exynos_defconfig:
+        gcc-8
+            exynos5800-peach-pi: 1 offline lab
+
+    qcom_defconfig:
+        gcc-8
+            qcom-apq8064-cm-qs600: 1 offline lab
+
+---
+For more info write to <info@kernelci.org>

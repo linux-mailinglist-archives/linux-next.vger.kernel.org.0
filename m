@@ -2,64 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C0451EEF64
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 04:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102761EF025
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 06:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725601AbgFECSe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 22:18:34 -0400
-Received: from mailgw01.mediatek.com ([210.61.82.183]:38327 "EHLO
-        mailgw01.mediatek.com" rhost-flags-OK-FAIL-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725497AbgFECSe (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 22:18:34 -0400
-X-UUID: 9d188a1cb38342b5905f6a4dbdc13962-20200605
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=lpy8EnZ6wUWyr0sPLWYCdBeo3+Sir5kSAhPwv1xe/Ls=;
-        b=V2CWKQwrCl90ERhCFVSY8Z3+QDkWvLIs8BfvyGx9L/B4BSJGrNH8j+FB7BZcu0Bk4atIrO02HqOgcdjYwUyi/ezlXKIw6aHfjj+bkkAOdAL82tpCSVG29lOpLYa3A+IXaOR66z33C9lZE1274gJa4DhQfTRHQlytX01cXzkwAzc=;
-X-UUID: 9d188a1cb38342b5905f6a4dbdc13962-20200605
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <macpaul.lin@mediatek.com>)
-        (Cellopoint E-mail Firewall v4.1.10 Build 0809 with TLS)
-        with ESMTP id 2091216620; Fri, 05 Jun 2020 10:18:31 +0800
-Received: from mtkcas07.mediatek.inc (172.21.101.84) by
- mtkmbs08n2.mediatek.inc (172.21.101.56) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Fri, 5 Jun 2020 10:18:30 +0800
-Received: from [172.21.77.33] (172.21.77.33) by mtkcas07.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 5 Jun 2020 10:18:28 +0800
-Message-ID: <1591323509.7223.2.camel@mtkswgap22>
-Subject: Re: linux-next: build failure after merge of the sound-current tree
-From:   Macpaul Lin <macpaul.lin@mediatek.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     Takashi Iwai <tiwai@suse.de>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Date:   Fri, 5 Jun 2020 10:18:29 +0800
-In-Reply-To: <20200605084307.47d31882@canb.auug.org.au>
-References: <20200605084307.47d31882@canb.auug.org.au>
-Content-Type: text/plain; charset="ISO-8859-1"
-X-Mailer: Evolution 3.2.3-0ubuntu6 
+        id S1726085AbgFEECW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 00:02:22 -0400
+Received: from mail.kernel.org ([198.145.29.99]:48022 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726022AbgFEECW (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 5 Jun 2020 00:02:22 -0400
+Received: from sol.localdomain (c-107-3-166-239.hsd1.ca.comcast.net [107.3.166.239])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 87FA92074B;
+        Fri,  5 Jun 2020 04:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591329741;
+        bh=4YetJeTqSigg++jHP96/KxPyeD0VjSHYYjyn6+68qRE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jLOg6HijZZfOwWduH1fPcVNnijybbnBoZxdb9yJnV54wBU1RPZ+Wd1y0JHHX9TvBl
+         0y7I2k1yhVwJ0ObFKmWSU9LvEtlQJH/+10Cm4uSctE85rN+4+Anr7yJ/cxtZT5eWVh
+         nuZ0/ZCzz9rkzPtfJxxa8Il799erdbSthHyFj9jc=
+Date:   Thu, 4 Jun 2020 21:02:20 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Ritesh Harjani <riteshh@linux.ibm.com>
+Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu,
+        syzbot <syzbot+aed048f49c59eb997737@syzkaller.appspotmail.com>
+Subject: Re: linux-next test error: BUG: using smp_processor_id() in
+ preemptible [ADDR] code: systemd-rfkill/6728
+Message-ID: <20200605040220.GB2667@sol.localdomain>
+References: <000000000000a7be4a05a74ca69a@google.com>
 MIME-Version: 1.0
-X-TM-SNTS-SMTP: 6EEC0A4E971896C348324CFA9779EA8B98CCFDC9C9561AEEDC292991E6ED77A62000:8
-X-MTK:  N
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000a7be4a05a74ca69a@google.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-T24gRnJpLCAyMDIwLTA2LTA1IGF0IDA4OjQzICsxMDAwLCBTdGVwaGVuIFJvdGh3ZWxsIHdyb3Rl
-Og0KPiBIaSBhbGwsDQo+IA0KPiBBZnRlciBtZXJnaW5nIHRoZSBzb3VuZC1jdXJyZW50IHRyZWUs
-IHRvZGF5J3MgbGludXgtbmV4dCBidWlsZCAoYXJtDQo+IG11bHRpX3Y3X2RlZmNvbmZpZykgZmFp
-bGVkIGxpa2UgdGhpczoNCj4gDQo+IC9ob21lL3Nmci9uZXh0L25leHQvc291bmQvdXNiL2NhcmQu
-YzogSW4gZnVuY3Rpb24gJ3NuZF91c2JfYXV0b3Jlc3VtZSc6DQo+IC9ob21lL3Nmci9uZXh0L25l
-eHQvc291bmQvdXNiL2NhcmQuYzo4NDE6Mjk6IGVycm9yOiBleHBlY3RlZCAnOycgYmVmb3JlICcp
-JyB0b2tlbg0KPiAgIDg0MSB8ICAgIGF0b21pY19kZWMoJmNoaXAtPmFjdGl2ZSkpDQo+ICAgICAg
-IHwgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4NCj4gICAgICAgfCAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgOw0KPiANCj4gQ2F1c2VkIGJ5IGNvbW1pdA0KPiANCj4gICAzMzk4ZTVj
-N2IwMzggKCJBTFNBOiB1c2ItYXVkaW86IE1hbmFnZSBhdXRvLXBtIG9mIGFsbCBidW5kbGVkIGlu
-dGVyZmFjZXMiKQ0KPiANCj4gSSBoYXZlIHJldmVydGVkIHRoYXQgY29tbWl0IGZvciB0b2RheS4N
-Cj4gDQoNClNvcnJ5IEkndmUgdGVzdGVkIGl0cyBmdW5jdGlvbiBieSAicGF0Y2ggYmFjayIgdG8g
-b2xkZXIga2VybmVsIHZlcnNpb24NCjQuMTQuDQpBZnRlciBjaGVja2luZyB0aGUgbGF0ZXN0IHBh
-dGNoIGFnYWluLCB0aGVyZSBpcyBpbmRlZWQgYSB0eXBvIGhlcmUuDQoNClRoYW5rcw0KTWFjcGF1
-bCBMaW4NCg==
+Introduced by:
 
+commit 42f56b7a4a7db127a9d281da584152dc3d525d25
+Author: Ritesh Harjani <riteshh@linux.ibm.com>
+Date:   Wed May 20 12:10:34 2020 +0530
+
+    ext4: mballoc: introduce pcpu seqcnt for freeing PA to improve ENOSPC handling
+
+On Thu, Jun 04, 2020 at 07:02:18PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    0e21d462 Add linux-next specific files for 20200602
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=10461661100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=ecc1aef35f550ee3
+> dashboard link: https://syzkaller.appspot.com/bug?extid=aed048f49c59eb997737
+> compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+aed048f49c59eb997737@syzkaller.appspotmail.com
+> 
+> BUG: using smp_processor_id() in preemptible [00000000] code: systemd-rfkill/6728
+> caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+> CPU: 1 PID: 6728 Comm: systemd-rfkill Not tainted 5.7.0-next-20200602-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x18f/0x20d lib/dump_stack.c:118
+>  check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
+>  ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+>  ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
+>  ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
+>  ext4_getblk+0xad/0x520 fs/ext4/inode.c:833
+>  ext4_bread+0x7c/0x380 fs/ext4/inode.c:883
+>  ext4_append+0x153/0x360 fs/ext4/namei.c:67
+>  ext4_init_new_dir fs/ext4/namei.c:2757 [inline]
+>  ext4_mkdir+0x5e0/0xdf0 fs/ext4/namei.c:2802
+>  vfs_mkdir+0x419/0x690 fs/namei.c:3632
+>  do_mkdirat+0x21e/0x280 fs/namei.c:3655
+>  do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7f9ffaa79687
+> Code: Bad RIP value.
+> RSP: 002b:00007ffeb3197c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+> RAX: ffffffffffffffda RBX: 000055c2e6155985 RCX: 00007f9ffaa79687
+> RDX: 00007ffeb3197b00 RSI: 00000000000001ed RDI: 000055c2e6155985
+> RBP: 00007f9ffaa79680 R08: 0000000000000100 R09: 0000000000000000
+> R10: 000055c2e6155980 R11: 0000000000000246 R12: 00000000000001ed
+> R13: 00007ffeb3197dc0 R14: 0000000000000000 R15: 0000000000000000
+> 
+> 
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> 

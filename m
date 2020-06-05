@@ -2,86 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 746721EF3DE
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 11:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A45E1EF498
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 11:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726188AbgFEJSa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Jun 2020 05:18:30 -0400
-Received: from a.mx.secunet.com ([62.96.220.36]:45324 "EHLO a.mx.secunet.com"
+        id S1726276AbgFEJsv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 05:48:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39086 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726184AbgFEJSa (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 5 Jun 2020 05:18:30 -0400
-Received: from localhost (localhost [127.0.0.1])
-        by a.mx.secunet.com (Postfix) with ESMTP id 7DC472051F;
-        Fri,  5 Jun 2020 11:18:28 +0200 (CEST)
-X-Virus-Scanned: by secunet
-Received: from a.mx.secunet.com ([127.0.0.1])
-        by localhost (a.mx.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id QbH6BSzxoDwq; Fri,  5 Jun 2020 11:18:28 +0200 (CEST)
-Received: from mail-essen-01.secunet.de (mail-essen-01.secunet.de [10.53.40.204])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        id S1726253AbgFEJsu (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 5 Jun 2020 05:48:50 -0400
+Received: from linux-8ccs (p57a23121.dip0.t-ipconnect.de [87.162.49.33])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by a.mx.secunet.com (Postfix) with ESMTPS id 174382052E;
-        Fri,  5 Jun 2020 11:18:28 +0200 (CEST)
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- mail-essen-01.secunet.de (10.53.40.204) with Microsoft SMTP Server (TLS) id
- 14.3.487.0; Fri, 5 Jun 2020 11:18:27 +0200
-Received: from gauss2.secunet.de (10.182.7.193) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.1979.3; Fri, 5 Jun 2020
- 11:18:27 +0200
-Received: by gauss2.secunet.de (Postfix, from userid 1000)      id 21A1531801FA;
- Fri,  5 Jun 2020 11:18:27 +0200 (CEST)
-Date:   Fri, 5 Jun 2020 11:18:27 +0200
-From:   Steffen Klassert <steffen.klassert@secunet.com>
-To:     David Ahern <dsahern@gmail.com>
-CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
+        by mail.kernel.org (Postfix) with ESMTPSA id C834D206A2;
+        Fri,  5 Jun 2020 09:48:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1591350530;
+        bh=7VfmUbTNfgHA8phpYfCqhYWcZsAaPsLsQoqo+K9rgpA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HALIUzIARJO3m52oj9SlPwbge4MTdKsjO+gUs+ViVI9J9qA83rV8SEdBk860eSUAX
+         rk0QrB+sdnKGwhW2f6ZoWJn4yxdx2a9czWZkqUTk5JMjELyYH8OPXqJkMDMi4vhAuM
+         Wfh+c7IM8ZUsCHJBFKfYkQ2uA8A/CJUgesQHIrPA=
+Date:   Fri, 5 Jun 2020 11:48:46 +0200
+From:   Jessica Yu <jeyu@kernel.org>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Florian Westphal <fw@strlen.de>
-Subject: Re: linux-next: manual merge of the ipsec-next tree with Linus' tree
-Message-ID: <20200605091827.GD19286@gauss3.secunet.de>
-References: <20200511130015.37103884@canb.auug.org.au>
- <20200602092040.5ef52300@canb.auug.org.au>
- <6092c5eb-6e50-97bc-90db-4f7a0ca29c6e@gmail.com>
- <20200604112606.25ffde35@canb.auug.org.au>
- <8d943a28-2e9f-9c61-9cff-899e907d6b86@gmail.com>
- <20200604064149.GT19286@gauss3.secunet.de>
- <9b338449-e342-96ab-0ba1-a73058fac037@gmail.com>
+        Jiri Kosina <jikos@kernel.org>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: build failure after merge of the origin tree
+Message-ID: <20200605094845.GA24474@linux-8ccs>
+References: <20200605083715.1a6c29ce@canb.auug.org.au>
+ <20200605000439.v75kbagqcxvctqam@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <9b338449-e342-96ab-0ba1-a73058fac037@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+In-Reply-To: <20200605000439.v75kbagqcxvctqam@treble>
+X-OS:   Linux linux-8ccs 4.12.14-lp150.12.61-default x86_64
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 04, 2020 at 06:44:10AM -0600, David Ahern wrote:
-> On 6/4/20 12:41 AM, Steffen Klassert wrote:
-> > On Wed, Jun 03, 2020 at 08:55:01PM -0600, David Ahern wrote:
-> >> On 6/3/20 7:26 PM, Stephen Rothwell wrote:
-> >>>
-> >>> And now the net-next tree has been merged into Linus' tree without this fix :-(
-> >>>
-> >>
-> >> I took a look earlier and I think it is fine. Some code was moved around
-> >> in ipsec-next and I think the merge is good. I'll run the test cases
-> >> later this week and double check. Thanks for the reminder
-> > 
-> > The setting of XFRM_TRANSFORMED moved to xfrm_output() and depends
-> > on CONFIG_NETFILTER. So I think the fix is needed. After the merge
-> > of the net tree today, I have both conflicting patches patches in
-> > the ipsec tree. I'd apply the fix from Stephen unless you say
-> > it is not needed.
-> > 
-> 
-> Indeed. I must have been looking at -net. Both -net and -net-next have
-> it conditional, so yes a fixup patch is needed.
++++ Josh Poimboeuf [04/06/20 19:04 -0500]:
+>On Fri, Jun 05, 2020 at 08:37:15AM +1000, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the origin tree, today's linux-next build (powerpc
+>> ppc64_defconfig) failed like this:
+>>
+>> kernel/module.c: In function 'do_init_module':
+>> kernel/module.c:3593:2: error: implicit declaration of function 'module_enable_ro'; did you mean 'module_enable_x'? [-Werror=implicit-function-declaration]
+>>  3593 |  module_enable_ro(mod, true);
+>>       |  ^~~~~~~~~~~~~~~~
+>>       |  module_enable_x
+>>
+>> Caused by commit
+>>
+>>   e6eff4376e28 ("module: Make module_enable_ro() static again")
+>>
+>> This config has neither CONFIG_ARCH_HAS_STRICT_MODULE_RWX or
+>> CONFIG_ARCH_HAS_STRICT_MODULE_RWX set.  This failure was hidden in
+>> linux-next due to commit
+>>
+>>   db991af02f11 ("module: break nested ARCH_HAS_STRICT_MODULE_RWX and STRICT_MODULE_RWX #ifdefs")
+>>
+>> from the modules tree. I have cherry-picked that commit for today.
+>
+>Sorry, I guessed we missed that dependency between the live-patching and
+>module trees.
+>
+>Jessica, are you planning on sending a pull request?
 
-The fixup patch from Stephen is now applied to the ipsec tree.
+Yep, just sent. So hopefully this gets resolved in the next day or two.
+

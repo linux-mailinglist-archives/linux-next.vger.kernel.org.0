@@ -2,35 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A501EF119
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 08:02:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC2A1EF121
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 08:04:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725986AbgFEGCw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Jun 2020 02:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S1726062AbgFEGEp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 02:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725962AbgFEGCv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 02:02:51 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB14C08C5C2;
-        Thu,  4 Jun 2020 23:02:51 -0700 (PDT)
+        with ESMTP id S1725962AbgFEGEo (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 02:04:44 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB22C08C5C2;
+        Thu,  4 Jun 2020 23:04:44 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dXB161NMz9sT8;
-        Fri,  5 Jun 2020 16:02:49 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dXDC033mz9sT6;
+        Fri,  5 Jun 2020 16:04:42 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591336970;
-        bh=anx3z5h2d0G8sMfBUTI50AEh/Ayr6FHMV9G9yOXzx/A=;
+        s=201702; t=1591337083;
+        bh=IxD/KjQzmugqC1Lw/ByIZnoKJ1TYssHUN74KIWjvUZc=;
         h=Date:From:To:Cc:Subject:From;
-        b=CrEYqaqJqxrv8ApLzbEdYXdVbpnMXjAKSBxFxrPh7GEPTQrCLQ0iqH/qWLVBSLGlA
-         Q9Z6pRUzgwT1O0+OYEaQPqyjXOwCvcBYO5dwpYk7NMLur9bZVfMqkDP3W9+e+Z5hzZ
-         c1BaGtJ73wTH6B5z0GimpKwu5UIuTOv0oF6HQK3TTQzxXprASq+FCE2V1xb5uVjFBb
-         eHgs5PuWlF/40DfH14atScUQfW5yWzEz/jjRXDGbKZ2iFqBZtwEZMvD8xbTTeXe4TD
-         C3FThUwL1jK8kNlTiyAr+YVLLILeiCUDWI4A/q/4zb1Uposlr5StNKEd+drMUiGUOq
-         dCPHN4Mu+cHMQ==
-Date:   Fri, 5 Jun 2020 16:02:49 +1000
+        b=o1R3fweAic9kApIHyRHlzUTOHqjD49iUrXJZBGPQbrsuJA7eqEPRw5Gvm6tsYUkH8
+         dVWV3vCHuBHaGgbzRVbLgMnM12hKKXSQyY2oMOUHBc9jeye534MmU9E5vY4KWsr5+Y
+         WiMOSMcJLEb5YmAM47fV/oZ0lPRfUN7hb/g5zlYpw9/NL5YiZWuX8jhuoivpDcmxK2
+         ho8DhZJKI3OMQSgUkFBv/1ccZh0+bXwJvDXxU1rlkENsfWacK8hYFKE94Bf9kY/kvI
+         FMVdhX9XRVXamYw//JkZFYTqr6FRRUjGkKaCFJF0sKiwosN1QchbiWinsswvdscqM2
+         BywlYt6+ItsOQ==
+Date:   Fri, 5 Jun 2020 16:04:42 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Rich Felker <dalias@libc.org>
@@ -39,16 +39,16 @@ Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Mike Rapoport <rppt@linux.ibm.com>
 Subject: linux-next: manual merge of the akpm tree with the sh tree
-Message-ID: <20200605160249.0db09812@canb.auug.org.au>
+Message-ID: <20200605160442.3f358bfe@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2mVmru75hDPIlkzZdTfVif0";
+Content-Type: multipart/signed; boundary="Sig_/0aow0+FpCJEkOykuULhok=j";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2mVmru75hDPIlkzZdTfVif0
+--Sig_/0aow0+FpCJEkOykuULhok=j
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -79,20 +79,20 @@ tree to minimise any particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
---Sig_/2mVmru75hDPIlkzZdTfVif0
+--Sig_/0aow0+FpCJEkOykuULhok=j
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Z4AkACgkQAVBC80lX
-0GwETwf+LnNmFjrlvR5UvjnsmjgsSa81vKXjzYY3gfgfSQnYtoijToHqHJ97NM7m
-LZxI+49QMAtd2F8xb5kRd+uola2qHMaNo30P5tIgG0gzMKO4rpoeKkFBIE5t+FS5
-fkh4WsfSdCc5itvLZFADMPuMXvUFvY8pXzve4XCh1dY/r53FVpjlyprbQ4uSoYNb
-U/l4LZzQUxZ3D+nqXxPn+2PelSSbBRZ7mk+AxXSR2GI+jMHnbroKlJX+12MxM3Uz
-OqxRxD9xLACRYKf97j5DBFLacosRC9uPfqt61aXWqwnrzc3Dk3kD7mpBM1Dy+Yui
-6G/USLwYKYisUJ3VsAbbeo3bxenMnA==
-=UMoY
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Z4HoACgkQAVBC80lX
+0GwvYgf9EJNxdHQQHiyLgk0UpP8XEQW54nPi98kEhlMsCA6brjPItlC7T3PbsG97
+0IuHkQPR8bOAFJCQNOY2NY6IFXiJoCBxvJjF6gGMNrGik35ArygvDm+5tGM9mEd3
+0szRioSus46wCalchLodWXa0NbQLfAbUYb0gUU3KLdnzaWQXB+C6kqMkBRxTYPFR
+glub8/0bEG800zjZZaB3CCHkvPdxBEXhpHVrWwkm6ZupSduDz32To5crhrXdLieh
+sN2QuLU2SDVDhPHb6x1IaF9KlzrC4y7G9/pLBoEFOg1gxCKVsBZn5aGY+n1W7FSK
+2bJPp3VseuU7zbHyHsi1AQ6nib7F7A==
+=FKt+
 -----END PGP SIGNATURE-----
 
---Sig_/2mVmru75hDPIlkzZdTfVif0--
+--Sig_/0aow0+FpCJEkOykuULhok=j--

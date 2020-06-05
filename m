@@ -2,32 +2,35 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B651EF103
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 07:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD0141EF10C
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 07:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725962AbgFEF5x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Jun 2020 01:57:53 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:47673 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725280AbgFEF5x (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 5 Jun 2020 01:57:53 -0400
+        id S1725962AbgFEF7r (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 01:59:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55758 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725280AbgFEF7r (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 01:59:47 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24766C08C5C2;
+        Thu,  4 Jun 2020 22:59:47 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dX4H29xpz9sT6;
-        Fri,  5 Jun 2020 15:57:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dX6S51Bkz9sT6;
+        Fri,  5 Jun 2020 15:59:44 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591336671;
-        bh=JgC7ao72YUYUs9MwlarCOBb9HzV7cUc2p+0sPD/Gpis=;
+        s=201702; t=1591336785;
+        bh=jrSarrFkaLqRVlO7fpe3eJP+9MxgBrcvr8Z/DafsGs0=;
         h=Date:From:To:Cc:Subject:From;
-        b=ut/yKQ82OsfY+QpA1giDnDt80l+zq0aSeG4COfo/LpEKdMcZXPRco18agq9jFlRuf
-         /Qzj6SXIdAfM5NC2KpPlvZp7S1X1dSoQ4vgAfA6gorgs78JjUrkF/uFl5QsrIqEZbF
-         swOxtVEBUGf0LlRL42TEC17HUgjQYyvfP9mEArxppVRHqpvdjLp52fpcnT9ORvKAGN
-         du8w6y1epwcagSY+SUCRHmlfhl45/KHJ098RU6FxrcnPcwZc23045qaoVm+TQUPL6L
-         Y+AsmUJ1WCT6g/u3eOYiCmjSG5SJyAfx1kLirau3aYIP27evkxCkEE3MQdwYKQ+3CL
-         nNIFbVS0A24BA==
-Date:   Fri, 5 Jun 2020 15:57:50 +1000
+        b=b2bHcJxTA4CgJVzNlX/m05K433GD520Q8NqWU5GHvhv45GAFM3u+M0cPlTQ/ONpEv
+         /cY5DQ4U9PBCSoT+1pFTaqbCTQr8DwAfphbFLq5jDi7HVPR+UsdgzSWPC2aRw3DiSd
+         1tSCClprcU78LJXH5OGH88AEY4//MuSkFD6KDkjhllo/B2Zi0HdvTByz75XMXIQyh0
+         211rMfrHPyJuO/VVCsE1cr+dg64kiI/4q2DQoAsrkf1gcFt8R7PUxlFjl4AaHLdotP
+         21fqHW2jCeguBquQ0J63pzC7nBCLMDTJotz8zg0FvJSL5q4D+LfSH524MlEqsBD9/+
+         Yayq1bLvlLlnQ==
+Date:   Fri, 5 Jun 2020 15:59:43 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>,
         Rich Felker <dalias@libc.org>
@@ -36,16 +39,16 @@ Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Mike Rapoport <rppt@linux.ibm.com>
 Subject: linux-next: manual merge of the akpm tree with the sh tree
-Message-ID: <20200605155750.3241776c@canb.auug.org.au>
+Message-ID: <20200605155943.2eb372a2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/wX7ZcsSm_Cx5E=acndPcYnm";
+Content-Type: multipart/signed; boundary="Sig_/qjwOQKHeMv1U447Ql9iqATJ";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/wX7ZcsSm_Cx5E=acndPcYnm
+--Sig_/qjwOQKHeMv1U447Ql9iqATJ
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -61,7 +64,7 @@ between commit:
 
 from the sh tree and patch:
 
-  "mm: consolidate pte_index() and pte_offset_*() definitions"
+  "mm: consolidate pmd_index() and pmd_offset() definitions"
 
 from the akpm tree.
 
@@ -76,20 +79,20 @@ tree to minimise any particularly complex conflicts.
 Cheers,
 Stephen Rothwell
 
---Sig_/wX7ZcsSm_Cx5E=acndPcYnm
+--Sig_/qjwOQKHeMv1U447Ql9iqATJ
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Z3t4ACgkQAVBC80lX
-0GxV1wgAkfC/NEkW4Jabhx4L05N+1s3wthHMEaKK/sZn1mH/co20psdpu8MMho7k
-Q1OYaWto8GNDEDVFWaBL0VQ6/k0xtDMEFQDOfeteY6Hi3FHUzDgkkI4ZH2y+nHUO
-QgIjQHdgKJbhrAA8NfkFMpBYmlm4CE0jFX7G5V/atTIkZRYST1dLi8T/qTm7pAXE
-IugE6VXFoMlHAE7tfrIEpeiTKPn+stbKlJHEQmw/lvYyRf6ilR0JVWNEN9ysydH5
-dq9h5WV9KS/zV9/rLF3LZQOe966izaj26vNmKaJKTVnKR4jfZEB4bMlRfRPXwJsY
-6ZK2ivcx5oo1zIGl5gY54nJISe0IVg==
-=+nxp
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7Z308ACgkQAVBC80lX
+0GyTjwf/eZlal0iFtCHDCg+OXFNYmFw3cMpAzuZrdUxHLp7cx4/uJkxHjDLqpWS2
+iQrJ7z75ElzA8qPDR+CdP2s9RIuNy2tspJltV2T3iNcYRpf5yVM+7hznWj0NXLK/
+YbteStMXwJ/p0MX8x7KARXkSH3VRwsM8ExG4+vQfc1/gJRvxA4AIzvC9bRZVWn2Y
+PsX5FTsbux+6/PKZA0rfUPYPT/IpKzFK4Dd1Vm2g4h5cQPdgWIQjh+f3Pp0Ad+2x
+7FqfNuvNrmUmaPysIBvCKNcyOLQLqR7witW+ov0GA2aVTQkwPJ+MvtFl4Wqk+4RP
+pmiEhn2tcMzcHkeUAD8+l/zHRzEl0Q==
+=fD//
 -----END PGP SIGNATURE-----
 
---Sig_/wX7ZcsSm_Cx5E=acndPcYnm--
+--Sig_/qjwOQKHeMv1U447Ql9iqATJ--

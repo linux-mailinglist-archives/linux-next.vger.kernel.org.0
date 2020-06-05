@@ -2,201 +2,146 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD781EF0A4
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 06:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 855B11EF0A5
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 06:46:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725968AbgFEEpA (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Jun 2020 00:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44352 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725280AbgFEEpA (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 00:45:00 -0400
-Received: from mail-pf1-x441.google.com (mail-pf1-x441.google.com [IPv6:2607:f8b0:4864:20::441])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314DFC08C5C1
-        for <linux-next@vger.kernel.org>; Thu,  4 Jun 2020 21:45:00 -0700 (PDT)
-Received: by mail-pf1-x441.google.com with SMTP id f3so4329674pfd.11
-        for <linux-next@vger.kernel.org>; Thu, 04 Jun 2020 21:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=JG+i5puIWfM+TrlS4zgcL33g62t1D3IgauJ0dPSOLkM=;
-        b=OZjoEUvKJlbY7mPIo514oDnyKudqtmRD36sSI7VxX6kRbZZyOqGijjPELYolT0ooBQ
-         gqaGVuxTxWrcNBuuoUyVL/LckQ64WQ9MNTL/l2XQvi5IDdQXTUsI3t5ox7Wj8ReLoiqe
-         wdg3/4Ji+LbNIu5xy5SYK52CEh/sYqbguvpBiWucYztqYEM7vZ6saD0Kshcku8HEFpkn
-         iuvwF4pimafLuH8nEyUMQ9T6kmW+FmKg9lo9Y985sy3Cp3DohoZqzAxE5oGLiyOFjWJz
-         UvdwQY7zU6lSBCw+AUX5Bvsn4FskcoF/HYDrEN4JzFCPqi7YjQVGJk8NIutmGtWOVtKN
-         vvXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=JG+i5puIWfM+TrlS4zgcL33g62t1D3IgauJ0dPSOLkM=;
-        b=X6gu9x8Kepw0Zhvz3bjjL/igBnVYLzhyh21Jsky7kIATCYibd9F5OSJKKXvQ/DyaYm
-         ZzLhy7NjmYuBx0QCzLGqrCHmlE9NrE9aRsnIzgFg87kRlCzIfZE2fRMfH45bDMAtj5G5
-         y2glrF7J5OEoonLQJfXDgdOC5jMg0lzo1di56aG0+QYtJ7jmTiePIG8vyTWlydltvp4u
-         oJRW0inClPZK9drzUEhP0SD7WDHL42Lqhaf7E6vc9q4252bGQ9YIaR58dtzgZ1i57Chs
-         SyQJrOZl+t0FKre56ihx59Bas1YCYdv2lQdOVgnP5LWMlz3JQg4pogYc6mA5roUBw1iR
-         5YkQ==
-X-Gm-Message-State: AOAM5317Ua6klYFfDwnOW0MIW2YPRMlhNAtdjHTRqT8FvWxzevjZx/eU
-        sBeRWwzOREmlyudkvLkeggAWpEDgNAk=
-X-Google-Smtp-Source: ABdhPJyTpveLSWTZB83CjW5HDv9xx6bdf7wKHNTHhqK7bd7EhliQTLoxiqLYe2cfxunACS9/2xhj2w==
-X-Received: by 2002:aa7:96ef:: with SMTP id i15mr7637291pfq.312.1591332299115;
-        Thu, 04 Jun 2020 21:44:59 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id u1sm5183190pgf.28.2020.06.04.21.44.57
-        for <linux-next@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 04 Jun 2020 21:44:58 -0700 (PDT)
-Message-ID: <5ed9cdca.1c69fb81.c187e.2fe1@mx.google.com>
-Date:   Thu, 04 Jun 2020 21:44:58 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726021AbgFEEqC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 00:46:02 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37955 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725280AbgFEEqC (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 5 Jun 2020 00:46:02 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dVTL4BySz9sRW;
+        Fri,  5 Jun 2020 14:45:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591332359;
+        bh=ZcM7AWpNFJA6wNBV0a6RdISgWbNaFlam6gFvQJ4z4cA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=oCFcBZY2JWLAKbvoqOO3eRFZjJAyje5yMs/pPJswvyGOGmfHm1OLU5QKD+M6ZP6pE
+         NV6DArGNEZGbjosl7Xq0+iTzDjwjOtNK8c8zsPADTnFGLdzR+9Y3NZqPjE684WWjP0
+         sKcsH19WqIq2jKfGhhAHNdQ7sL3yqBRmru0gjkSz6yVtsZsWI/JAZMLJLK2GOWWA0c
+         fHdsBxTrZqRSFyJtw7JfaynOXf2CEAcoMWQNvantjrQ/NFEVqc20JemCT9CdvZi/Jg
+         mpyDzFpixUcWKpxc4ULKgXDV++RX6VB2XG86MO+6c3uJbaWqpSqH3yVVsvkBtSitlm
+         uPfOUNp2+oljw==
+Date:   Fri, 5 Jun 2020 14:45:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        Jessica Yu <jeyu@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: linux-next: manual merge of the livepatching tree with the
+ modules tree
+Message-ID: <20200605144557.4f8e2a42@canb.auug.org.au>
+In-Reply-To: <20200508180524.6995b07e@canb.auug.org.au>
+References: <20200508180524.6995b07e@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.7-8671-g086779e58c68
-X-Kernelci-Report-Type: boot
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-Subject: next/pending-fixes boot: 257 boots: 6 failed,
- 240 passed with 6 offline, 5 untried/unknown (v5.7-8671-g086779e58c68)
-To:     linux-next@vger.kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/Ki+HJigfDf3FQu7CJlPQYR_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-******************************************
-* WARNING: Boot tests are now deprecated *
-******************************************
+--Sig_/Ki+HJigfDf3FQu7CJlPQYR_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As kernelci.org is expanding its functional testing capabilities, the conce=
-pt
-of boot testing is now deprecated.  Boot results are scheduled to be droppe=
-d on
-*5th June 2020*.  The full schedule for boot tests deprecation is available=
- on
-this GitHub issue: https://github.com/kernelci/kernelci-backend/issues/238
+Hi all,
 
-The new equivalent is the *baseline* test suite which also runs sanity chec=
-ks
-using dmesg and bootrr: https://github.com/kernelci/bootrr
+On Fri, 8 May 2020 18:05:24 +1000 Stephen Rothwell <sfr@canb.auug.org.au> w=
+rote:
+>
+> Today's linux-next merge of the livepatching tree got a conflict in:
+>=20
+>   kernel/module.c
+>=20
+> between commits:
+>=20
+>   db991af02f11 ("module: break nested ARCH_HAS_STRICT_MODULE_RWX and STRI=
+CT_MODULE_RWX #ifdefs")
+>   5c3a7db0c7ec ("module: Harden STRICT_MODULE_RWX")
+>=20
+> from the modules tree and commit:
+>=20
+>   e6eff4376e28 ("module: Make module_enable_ro() static again")
+>=20
+> from the livepatching tree.
+>=20
+> diff --cc kernel/module.c
+> index c69291362676,a26343ea4d50..000000000000
+> --- a/kernel/module.c
+> +++ b/kernel/module.c
+> @@@ -2055,29 -2023,20 +2042,30 @@@ static void module_enable_nx(const stru
+>   	frob_writable_data(&mod->init_layout, set_memory_nx);
+>   }
+>  =20
+>  +static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+>  +				       char *secstrings, struct module *mod)
+>  +{
+>  +	const unsigned long shf_wx =3D SHF_WRITE|SHF_EXECINSTR;
+>  +	int i;
+>  +
+>  +	for (i =3D 0; i < hdr->e_shnum; i++) {
+>  +		if ((sechdrs[i].sh_flags & shf_wx) =3D=3D shf_wx)
+>  +			return -ENOEXEC;
+>  +	}
+>  +
+>  +	return 0;
+>  +}
+>  +
+>   #else /* !CONFIG_STRICT_MODULE_RWX */
+>  +/* module_{enable,disable}_ro() stubs are in module.h */
+>   static void module_enable_nx(const struct module *mod) { }
+> + static void module_enable_ro(const struct module *mod, bool after_init)=
+ {}
+>  -#endif /*  CONFIG_STRICT_MODULE_RWX */
+>  -static void module_enable_x(const struct module *mod)
+>  +static int module_enforce_rwx_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
+>  +				       char *secstrings, struct module *mod)
+>   {
+>  -	frob_text(&mod->core_layout, set_memory_x);
+>  -	frob_text(&mod->init_layout, set_memory_x);
+>  +	return 0;
+>   }
+>  -#else /* !CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+>  -static void module_enable_nx(const struct module *mod) { }
+>  -static void module_enable_x(const struct module *mod) { }
+>  -#endif /* CONFIG_ARCH_HAS_STRICT_MODULE_RWX */
+>  -
+>  +#endif /*  CONFIG_STRICT_MODULE_RWX */
+>  =20
+>   #ifdef CONFIG_LIVEPATCH
+>   /*
 
-See the *baseline results for this kernel revision* on this page:
-https://kernelci.org/test/job/next/branch/pending-fixes/kernel/v5.7-8671-g0=
-86779e58c68/plan/baseline/
+This is now a conflict between the modules tree and Linus' tree.
 
----------------------------------------------------------------------------=
-----
+--=20
+Cheers,
+Stephen Rothwell
 
-next/pending-fixes boot: 257 boots: 6 failed, 240 passed with 6 offline, 5 =
-untried/unknown (v5.7-8671-g086779e58c68)
+--Sig_/Ki+HJigfDf3FQu7CJlPQYR_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Full Boot Summary: https://kernelci.org/boot/all/job/next/branch/pending-fi=
-xes/kernel/v5.7-8671-g086779e58c68/
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-8671-g086779e58c68/
+-----BEGIN PGP SIGNATURE-----
 
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-8671-g086779e58c68
-Git Commit: 086779e58c6867c3f8488d6729e267094a0cd826
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Tested: 102 unique boards, 24 SoC families, 27 builds out of 162
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7ZzgUACgkQAVBC80lX
+0GwcqAf/QIlttDKRob8ZnDsXQS280EQk0rIsvqevrOASTJD6kxlyNTUDXpH4hFx0
+ahupmyHP5OmAhz15X6qBGyi5zzQQpwk1on2aACpfz5XkR4Hyi2K++D+NDkcWQsdA
+sMuYgi55tq6+/RV/oGq0zdAR2J2SJ2XQRhYnIKzJtwJ6dIiUt55Bj5QwT/GFGfF4
+kabUXo7Pkys5S1kEI1PtopwGiCoeYH4h6ffV7honwbANhsFdZiagmezPP/+itce9
+uAjDEuHWL/zsDWlGBujkMgoySKAq7jFnFrtj1Fb9quQubKKGmtcebte79VkdwihN
+6DR+spBIi+HZh2iGV+b0m/Y+cd1xgA==
+=Mlxo
+-----END PGP SIGNATURE-----
 
-Boot Regressions Detected:
-
-arm:
-
-    davinci_all_defconfig:
-        gcc-8:
-          da850-evm:
-              lab-baylibre-seattle: new failure (last pass: v5.7-4607-g4ce9=
-138f1bd4)
-          dm365evm,legacy:
-              lab-baylibre-seattle: new failure (last pass: v5.7-4607-g4ce9=
-138f1bd4)
-
-    multi_v7_defconfig:
-        gcc-8:
-          bcm2836-rpi-2-b:
-              lab-collabora: failing since 111 days (last pass: v5.5-8839-g=
-56c8845edd39 - first fail: v5.6-rc1-311-ge58961fba99f)
-
-    sama5_defconfig:
-        gcc-8:
-          at91-sama5d4_xplained:
-              lab-baylibre: failing since 2 days (last pass: v5.7-rc7-238-g=
-59fcbde6ab90 - first fail: v5.7-930-g3a1d4c3e458b)
-
-    versatile_defconfig:
-        gcc-8:
-          versatile-pb:
-              lab-collabora: new failure (last pass: v5.7-4607-g4ce9138f1bd=
-4)
-
-arm64:
-
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-          meson-gxbb-p200:
-              lab-baylibre: new failure (last pass: v5.7-4607-g4ce9138f1bd4)
-
-riscv:
-
-    defconfig:
-        gcc-8:
-          sifive_fu540:
-              lab-baylibre-seattle: failing since 55 days (last pass: v5.6-=
-12182-g8614d419a4d6 - first fail: v5.6-12503-g3a0f8793ae13)
-
-Boot Failures Detected:
-
-arm:
-    multi_v7_defconfig:
-        gcc-8:
-            bcm2836-rpi-2-b: 1 failed lab
-
-    sama5_defconfig:
-        gcc-8:
-            at91-sama5d4_xplained: 1 failed lab
-
-arm64:
-    defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy:
-        gcc-8:
-            meson-gxbb-p200: 1 failed lab
-
-    defconfig+CONFIG_RANDOMIZE_BASE=3Dy:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-    defconfig:
-        gcc-8:
-            mt7622-rfb1: 1 failed lab
-
-riscv:
-    defconfig:
-        gcc-8:
-            sifive_fu540: 1 failed lab
-
-Offline Platforms:
-
-arm:
-
-    exynos_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-
-    davinci_all_defconfig:
-        gcc-8
-            da850-evm: 1 offline lab
-            dm365evm,legacy: 1 offline lab
-
-    multi_v7_defconfig:
-        gcc-8
-            exynos5800-peach-pi: 1 offline lab
-            qcom-apq8064-cm-qs600: 1 offline lab
-            stih410-b2120: 1 offline lab
-
----
-For more info write to <info@kernelci.org>
+--Sig_/Ki+HJigfDf3FQu7CJlPQYR_--

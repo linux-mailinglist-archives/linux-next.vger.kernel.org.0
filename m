@@ -2,153 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E5321EEF3E
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 03:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8441EEF47
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 04:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726024AbgFEBwR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 4 Jun 2020 21:52:17 -0400
-Received: from ozlabs.org ([203.11.71.1]:47951 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725934AbgFEBwR (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 4 Jun 2020 21:52:17 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49dQct3sgkz9sRW;
-        Fri,  5 Jun 2020 11:52:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591321934;
-        bh=IoC3hVM6HoUPGF4Rp/Ruoth3bwkN8kK+7Z0gVeZ9BBs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=CC3GDhpWSSvgPcWpzs6FCb+lATZ2XB0y1OcnZSUM7MQZtUNDcZF+HJkJOr223Sxwo
-         IXJzvKaM9BgBDPfiEqgw+7V1g53F1LO3/7wF18aGxMOCkwNgasXXYHU5lX/uJZrLaE
-         1hYr3iMAyyhTceryCzCMeC+fUdrq1pW8Roma8N7LdN0QPOLvEmNvd1CYjizTo7Jn7C
-         SZEXteFt0bU06Vnjxn7K0ZrC3Os8QY5nzX8asyQAEH3l70zkhb0NZ8QCawAmcjt5Jw
-         L05JTweSunNmSVbBlHaZSuXTGSeDRANvBHNe+l9NwEw4sEFu3f6HBzXy05O8ZmholJ
-         FKOs29jKRa+eg==
-Date:   Fri, 5 Jun 2020 11:52:13 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>, linux-next@vger.kernel.org
-Subject: Fw: next/pending-fixes build: 162 builds: 2 failed, 160 passed, 2
- errors, 109 warnings (v5.7-8671-g086779e58c68)
-Message-ID: <20200605115213.2836fccf@canb.auug.org.au>
+        id S1726068AbgFECCV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 4 Jun 2020 22:02:21 -0400
+Received: from mail-il1-f198.google.com ([209.85.166.198]:56249 "EHLO
+        mail-il1-f198.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725497AbgFECCV (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 4 Jun 2020 22:02:21 -0400
+Received: by mail-il1-f198.google.com with SMTP id l20so4902623ilk.22
+        for <linux-next@vger.kernel.org>; Thu, 04 Jun 2020 19:02:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=4rcueDE6zN7DRRKwO+S7Sh4oUwAm56CiDtVj9788tc0=;
+        b=BBkeWUEylO1rBktu6iWJjxqITQDMUSATam7EqDDPFj1Upr0oV8TXZ7zJhUOU/iaHyh
+         ojVj/57KxaJEhHZ7RTU5Zwfe4MiBg4RVAdcFkV9FhulyQoglY/QFrqQY1ICz9QUhwC+W
+         StGC1RxLYvdP5g+5XONp54x9/La1adVt3tbkNEXhVHBux5hVkbO90nc2p11ku5FEPqQ7
+         GYOtMqPdxe8jgUg+55pGegAJYA9u5PsJ8Uvzi5DhCDc61b35UXTqxYP0VBdG0FEUiu2H
+         JK6QdZbEeagui8PPyVqzsBMxATgfTdZJCW2DshjDcOxCJrGw3wmwPRxivE7upbVFvwer
+         2KZg==
+X-Gm-Message-State: AOAM5324aFBjtBwzksq4aja/vQq5KHnlqk4dUZosjwAUn3eYvc7Dy3pS
+        f8AU2OMzD9Jg3QhTlkCbwreqi2H+Vwu3sKLZGiCJe776oI2E
+X-Google-Smtp-Source: ABdhPJwn6iMhHcIMJ4Cst6v/CJSQLfOI0lmzwZsatfmQ5asx8AtEQcplJ+OCDFRmExBxWwU+vH6o0TkPdU7g27IJoghKIzVu4vmb
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Yj.1370tiAIRga282WuqIWE";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Received: by 2002:a02:908b:: with SMTP id x11mr6533785jaf.41.1591322538916;
+ Thu, 04 Jun 2020 19:02:18 -0700 (PDT)
+Date:   Thu, 04 Jun 2020 19:02:18 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a7be4a05a74ca69a@google.com>
+Subject: linux-next test error: BUG: using smp_processor_id() in preemptible
+ [ADDR] code: systemd-rfkill/6728
+From:   syzbot <syzbot+aed048f49c59eb997737@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/Yj.1370tiAIRga282WuqIWE
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Commit
+syzbot found the following crash on:
 
-  a148866489fb ("sched: Replace rq::wake_list")
+HEAD commit:    0e21d462 Add linux-next specific files for 20200602
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10461661100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ecc1aef35f550ee3
+dashboard link: https://syzkaller.appspot.com/bug?extid=aed048f49c59eb997737
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-added
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+aed048f49c59eb997737@syzkaller.appspotmail.com
 
-BUILD_BUG_ON(offsetof(struct task_struct, wake_entry_type) - offsetof(struc=
-t task_struct, wake_entry) !=3D
-		     offsetof(struct __call_single_data, flags) - offsetof(struct __call_=
-single_data, llist));
+BUG: using smp_processor_id() in preemptible [00000000] code: systemd-rfkill/6728
+caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+CPU: 1 PID: 6728 Comm: systemd-rfkill Not tainted 5.7.0-next-20200602-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ check_preemption_disabled+0x20d/0x220 lib/smp_processor_id.c:48
+ ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
+ ext4_ext_map_blocks+0x201b/0x33e0 fs/ext4/extents.c:4244
+ ext4_map_blocks+0x4cb/0x1640 fs/ext4/inode.c:626
+ ext4_getblk+0xad/0x520 fs/ext4/inode.c:833
+ ext4_bread+0x7c/0x380 fs/ext4/inode.c:883
+ ext4_append+0x153/0x360 fs/ext4/namei.c:67
+ ext4_init_new_dir fs/ext4/namei.c:2757 [inline]
+ ext4_mkdir+0x5e0/0xdf0 fs/ext4/namei.c:2802
+ vfs_mkdir+0x419/0x690 fs/namei.c:3632
+ do_mkdirat+0x21e/0x280 fs/namei.c:3655
+ do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x7f9ffaa79687
+Code: Bad RIP value.
+RSP: 002b:00007ffeb3197c38 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+RAX: ffffffffffffffda RBX: 000055c2e6155985 RCX: 00007f9ffaa79687
+RDX: 00007ffeb3197b00 RSI: 00000000000001ed RDI: 000055c2e6155985
+RBP: 00007f9ffaa79680 R08: 0000000000000100 R09: 0000000000000000
+R10: 000055c2e6155980 R11: 0000000000000246 R12: 00000000000001ed
+R13: 00007ffeb3197dc0 R14: 0000000000000000 R15: 0000000000000000
 
-in kernel/smp.c.  This seems to be failing - at least for gcc-8 (I
-haven't seen any failures in my linux-next testing).
 
-The pending-fixes branch in linux-next isjust Linus' tree plus the
-branches of fixes for Linus' tree.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Begin forwarded message:
-
-Date: Thu, 04 Jun 2020 18:15:15 -0700 (PDT)
-From: "kernelci.org bot" <bot@kernelci.org>
-To: linux-next@vger.kernel.org
-Subject: next/pending-fixes build: 162 builds: 2 failed, 160 passed, 2 erro=
-rs, 109 warnings (v5.7-8671-g086779e58c68)
-
-
-next/pending-fixes build: 162 builds: 2 failed, 160 passed, 2 errors, 109 w=
-arnings (v5.7-8671-g086779e58c68)
-
-Full Build Summary: https://kernelci.org/build/next/branch/pending-fixes/ke=
-rnel/v5.7-8671-g086779e58c68/
-
-Tree: next
-Branch: pending-fixes
-Git Describe: v5.7-8671-g086779e58c68
-Git Commit: 086779e58c6867c3f8488d6729e267094a0cd826
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-Built: 7 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    allmodconfig: (gcc-8) FAIL
-
-x86_64:
-    allmodconfig: (gcc-8) FAIL
-
-Errors summary:
-
-    1    include/linux/compiler.h:403:38: error: call to =E2=80=98__compile=
-time_assert_399=E2=80=99 declared with attribute error: BUILD_BUG_ON failed=
-: offsetof(struct task_struct, wake_entry_type) - offsetof(struct task_stru=
-ct, wake_entry) !=3D offsetof(struct __call_single_data, flags) - offsetof(=
-struct __call_single_data, llist)
-    1    include/linux/compiler.h:403:38: error: call to =E2=80=98__compile=
-time_assert_134=E2=80=99 declared with attribute error: BUILD_BUG_ON failed=
-: offsetof(struct task_struct, wake_entry_type) - offsetof(struct task_stru=
-ct, wake_entry) !=3D offsetof(struct __call_single_data, flags) - offsetof(=
-struct __call_single_data, llist)
-
----------------------------------------------------------------------------=
------
-allmodconfig (arm64, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section =
-mismatches
-
-Errors:
-    include/linux/compiler.h:403:38: error: call to =E2=80=98__compiletime_=
-assert_134=E2=80=99 declared with attribute error: BUILD_BUG_ON failed: off=
-setof(struct task_struct, wake_entry_type) - offsetof(struct task_struct, w=
-ake_entry) !=3D offsetof(struct __call_single_data, flags) - offsetof(struc=
-t __call_single_data, llist)
-
----------------------------------------------------------------------------=
------
-allmodconfig (x86_64, gcc-8) =E2=80=94 FAIL, 1 error, 0 warnings, 0 section=
- mismatches
-
-Errors:
-    include/linux/compiler.h:403:38: error: call to =E2=80=98__compiletime_=
-assert_399=E2=80=99 declared with attribute error: BUILD_BUG_ON failed: off=
-setof(struct task_struct, wake_entry_type) - offsetof(struct task_struct, w=
-ake_entry) !=3D offsetof(struct __call_single_data, flags) - offsetof(struc=
-t __call_single_data, llist)
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Yj.1370tiAIRga282WuqIWE
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7ZpU0ACgkQAVBC80lX
-0Gzrdgf9G8nqebECgkYP0tWiBM00N9nAI1e2DkTzUHGvRrshxwbvoRu5/rBBn60e
-+LJXISmuFHTlvX2AbqkZbSBwJtR4+jF6QnoOmb7UslULMHu4r7XBk4UMW6kb/cma
-ZWnSqVVCpVGkToBcJhOSw8AnFjj/GCJlYaiD1POjYydd+xFJS9LMugPtelcTxKH1
-HJpJQoxnnAA8b9vTg4MHG2MNELlKXxxGy4KEoB9cimrFW/CRf/LPtSyaJDXYpOas
-KtjtxN2ekEUIwxfEVnfALbIsb4hhZmrIkO4m6JmXTNdqO7LiXsCDNdmuHV1uS0Hl
-cvvZGQjldSsN5IeXvf65RrvViUnijw==
-=hBAK
------END PGP SIGNATURE-----
-
---Sig_/Yj.1370tiAIRga282WuqIWE--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

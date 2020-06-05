@@ -2,86 +2,75 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DBD61EFBC9
-	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 16:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31E41EFD6E
+	for <lists+linux-next@lfdr.de>; Fri,  5 Jun 2020 18:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727101AbgFEOsF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 5 Jun 2020 10:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53682 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728180AbgFEOsE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 10:48:04 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D5FC08C5C3
-        for <linux-next@vger.kernel.org>; Fri,  5 Jun 2020 07:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20170209; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hpjN+dCqjd7JlhxdTjYdm5wzduowVVIDE+7t2H7LGHc=; b=Hj69LtCl52galcAU2GlvlFen1Y
-        n+nyuN4l1PIrA9wS7DPHxduFMqeikaE5UXNNn5yto9428Wh0hs3uilwCnJlLYhS7W3cYOjxZlsfg6
-        RPmW80NthJz/Aafklg3vqOKXI2wxltdPwqQcm19xxWuEToMfp0HjGVyCNWv7PyGb4AsK7M7Uu/HNS
-        iitod6g3duVaCJn7VOnhuq6NzMO2afJHHLwx1baFOZm/3QajpVA4zuC9B5ljm7C5ni2Z1vTSJP+E1
-        WQatglJwcXZLK9Qxmfk8q29GpVCBUzb+UFJyi5vGkgbbV0pzDPXWkFpvApcg0+nWRhW2itlI68gvg
-        r2AdqOjg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by bombadil.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jhDdZ-0006VQ-BL; Fri, 05 Jun 2020 14:48:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CEC92301DFC;
-        Fri,  5 Jun 2020 16:47:59 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 8DD6621A74B42; Fri,  5 Jun 2020 16:47:59 +0200 (CEST)
-Date:   Fri, 5 Jun 2020 16:47:59 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Ingo Molnar <mingo@kernel.org>,
-        "kernelci.org bot" <bot@kernelci.org>, linux-next@vger.kernel.org
-Subject: Re: Fw: next/pending-fixes build: 162 builds: 2 failed, 160 passed,
- 2 errors, 109 warnings (v5.7-8671-g086779e58c68)
-Message-ID: <20200605144759.GG4117@hirez.programming.kicks-ass.net>
-References: <20200605115213.2836fccf@canb.auug.org.au>
- <20200605083855.GH3976@hirez.programming.kicks-ass.net>
- <202006050734.97C4AB35CF@keescook>
+        id S1726039AbgFEQUQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 5 Jun 2020 12:20:16 -0400
+Received: from linux.microsoft.com ([13.77.154.182]:49276 "EHLO
+        linux.microsoft.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726026AbgFEQUP (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 5 Jun 2020 12:20:15 -0400
+Received: from [192.168.1.14] (unknown [76.104.235.235])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 25ED220B7185;
+        Fri,  5 Jun 2020 09:20:15 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 25ED220B7185
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1591374015;
+        bh=oWQZJZplEJZBqXpZYEbF9oPcUbFjFfMJkc7TjwSg4XE=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=gRDL6HY3EUJxZLKIcBN0Mxyl58qHMz5tXHSb7XJcVwXco2sX3FtiyUVi8SGtCCeYw
+         FPLnx+VzxBGPp6mNMP8lPQWXKUYC4NQjMhaiTtoMRGO1fLcIV7Dmm54YoHsVZsFHJM
+         uRFLT+g5ILUaQWtVK+QnKRT5zKrmXX7NgLcADZhw=
+Subject: Re: [PATCH] software node: recursively unregister child swnodes
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org
+References: <20200604193623.16946-1-jorhand@linux.microsoft.com>
+ <20200604201523.GA1308830@kroah.com>
+ <c6150824-60d3-11ad-ba1a-e75d6a7a916e@linux.microsoft.com>
+ <20200605075459.GB2209311@kroah.com>
+From:   Jordan Hand <jorhand@linux.microsoft.com>
+Message-ID: <d8552b13-dbbb-7e4b-9e56-3264435d9225@linux.microsoft.com>
+Date:   Fri, 5 Jun 2020 09:20:06 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202006050734.97C4AB35CF@keescook>
+In-Reply-To: <20200605075459.GB2209311@kroah.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 05, 2020 at 07:36:02AM -0700, Kees Cook wrote:
-> On Fri, Jun 05, 2020 at 10:38:55AM +0200, Peter Zijlstra wrote:
-> > On Fri, Jun 05, 2020 at 11:52:13AM +1000, Stephen Rothwell wrote:
-> > > Commit
-> > > 
-> > >   a148866489fb ("sched: Replace rq::wake_list")
-> > > 
-> > > added
-> > > 
-> > > BUILD_BUG_ON(offsetof(struct task_struct, wake_entry_type) - offsetof(struct task_struct, wake_entry) !=
-> > > 		     offsetof(struct __call_single_data, flags) - offsetof(struct __call_single_data, llist));
-> > > 
-> > > in kernel/smp.c.  This seems to be failing - at least for gcc-8 (I
-> > > haven't seen any failures in my linux-next testing).
-> > 
-> > CONFIG_GCC_PLUGIN_RANDSTRUCT=y
+
+
+On 6/5/20 12:54 AM, Greg Kroah-Hartman wrote:
+> Right now, the way the driver model and sysfs/kobjects work is that all
+> objects must be removed in child-first order.  The problem of your
+> change where you want to try to remove the devices in parent-first order
+> is that you do not really know if you still have a reference to a child
+> device somewhere else, which would prevent this all from happening
+> correctly, right?
 > 
-> (FWIW, the plugins will only be enabled if the gcc plugins-dev package is
-> installed)
-
-Which I hadn't, which is why I'd never seen it. I have now.
-
-> > working on it.
+> So if you "know" it is safe to drop a child, that's great, and expected.
+> Don't work to make  this one tiny user of the kobjects (which I'm still
+> not quite sure why they are kobjects and not devices), do things in a
+> different way from the rest of the kernel without a strong reason to do
+> so.
 > 
-> Either of these solutions should fix it. I'm not sure which is
-> preferred.
+> thanks,
+> 
+> greg k-h
+> 
 
-I posted in another thread that had earlier raised the issue:
+I see, thanks for taking the time to explain, the reason for the 
+existing behavior is more clear to me now. I agree it is better to have 
+the caller remove the nodes in the correct order rather than having the 
+swnode infrastructure try to have some special behavior.
 
-https://lkml.kernel.org/r/20200605093704.GB2948@hirez.programming.kicks-ass.net
+Thanks,
+Jordan

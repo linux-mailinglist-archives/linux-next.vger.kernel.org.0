@@ -2,40 +2,40 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FEC51F0AE6
-	for <lists+linux-next@lfdr.de>; Sun,  7 Jun 2020 13:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07721F0B0B
+	for <lists+linux-next@lfdr.de>; Sun,  7 Jun 2020 14:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726544AbgFGLNV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 7 Jun 2020 07:13:21 -0400
-Received: from mail-il1-f200.google.com ([209.85.166.200]:55775 "EHLO
-        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726507AbgFGLNP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 7 Jun 2020 07:13:15 -0400
-Received: by mail-il1-f200.google.com with SMTP id l20so9491865ilk.22
-        for <linux-next@vger.kernel.org>; Sun, 07 Jun 2020 04:13:13 -0700 (PDT)
+        id S1726554AbgFGMDT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 7 Jun 2020 08:03:19 -0400
+Received: from mail-il1-f197.google.com ([209.85.166.197]:37148 "EHLO
+        mail-il1-f197.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725886AbgFGMDT (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 7 Jun 2020 08:03:19 -0400
+Received: by mail-il1-f197.google.com with SMTP id n2so9978857ilq.4
+        for <linux-next@vger.kernel.org>; Sun, 07 Jun 2020 05:03:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=W1Rg6cRe7b/N6uSt4UPD2jGQ5CGoT9dlXj8hlmAKSYs=;
-        b=ZWe1qs+egYg+PXMdi/5uYNJA3OvdOoGtw86edkuAUKAcGp/tO7P0+A6pkIE01Goxc5
-         BYUNY6Hep4f5Dz1ygLmYleMN12q7HDm8cT8dSETW6e2zjEOlC6bpLOfpa1Azzw/INuLT
-         UL8pzkEx6lII/JTrayxeqFS+P5O5+qTW4ko2oOG1HTx/Ci2xBQ8IJQ2fAPEPfmZZ4aVF
-         EYkOaN8g6gTFGoe+nV/f8ymNzjhEZxM4qeAmUj+74nF73px2thI8/rkRBTHX9f1MXsvA
-         ZN/XnY4y0Dj+hjd83fEiDNmOJo8HdMpwL5/M7+4X4yX8pcx1VEbsy4c7yZbEJNqg8hkG
-         GoIQ==
-X-Gm-Message-State: AOAM533Qp2sKQyPrD++nH7GoM82AnvoVD/pvwOkhTSJbo3Q2+2sxxmN9
-        sW5CLxFF6ELgjPr8n9rm8kBe+0GP8ir/VGUqHjd6WxD0WJxZ
-X-Google-Smtp-Source: ABdhPJzzsk4M1SaDCyyuCP8qH1WADQT+dguvupEBiykLFaRHd7dCPmivZyOvpG9rapZLEmbc3p0IlXcIk+WJTKcmQUCwbKker/ry
+        bh=LwmS02Wlb0NnV55+lsR7tpUbRWv1SSOP95Em+xpAvzA=;
+        b=f2kvSqu9Vd2Z5OTCp3/KEGzPATq+7v6+YsukCDS3z5zZJ4IvPM1bebNniyb3k8/ffH
+         xerFZ47N31B2ieUMugW+a0eRdTEtOQnYbyDzlH0VtLyCQ22GdY+Pgg7agdq0cVlXIeAF
+         hzaYESUQJWbiEYwNv0hJPUWeoUheq3PsM8pd+sfeckamDF6xGr9lxqk1MNctQ8XDBowJ
+         S/5xsCaai9M5/fRjPQG34jbnY1qn7Nrge3/6DS3FMy9LqKUgKn9S6ngJG5opYGQN1nA6
+         6+HWmEpsQ2Y0T7o9k0eG3AP5+h9Y8jT/OcOq+ftnrjtbbThOHMEb7Kv7NdFZZjCzm0ko
+         90lA==
+X-Gm-Message-State: AOAM530HVkfsfkqSHYBnqmsDnsko4JnM8WxTTkvvl0DxdTmdE4jfQqYd
+        h/c8SwbTy6ZiYdUyTSZ9rENx595JyuB+UwWIz8o0doaPiWLX
+X-Google-Smtp-Source: ABdhPJzdfQagu9v+gJh2CU+shree7b3tGfL8R5L38284jwzSuTtx4MFro8jyubjE/vdTypbMfpkE/kdpWWh/JN4VQNRwIdZK2mwN
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1067:: with SMTP id q7mr13709118ilj.71.1591528393221;
- Sun, 07 Jun 2020 04:13:13 -0700 (PDT)
-Date:   Sun, 07 Jun 2020 04:13:13 -0700
+X-Received: by 2002:a02:952f:: with SMTP id y44mr17257602jah.128.1591531398058;
+ Sun, 07 Jun 2020 05:03:18 -0700 (PDT)
+Date:   Sun, 07 Jun 2020 05:03:18 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000872ad205a77c947c@google.com>
+Message-ID: <000000000000a1595c05a77d47c4@google.com>
 Subject: linux-next test error: BUG: using smp_processor_id() in preemptible
- [ADDR] code: syz-fuzzer/6793
-From:   syzbot <syzbot+878f276b4892a4438f95@syzkaller.appspotmail.com>
+ code in ext4_mb_new_blocks
+From:   syzbot <syzbot+f72682b02970a74a7858@syzkaller.appspotmail.com>
 To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
         sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
@@ -50,19 +50,19 @@ Hello,
 
 syzbot found the following crash on:
 
-HEAD commit:    48f99181 Add linux-next specific files for 20200603
+HEAD commit:    af30725c Add linux-next specific files for 20200605
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1006bca6100000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=365f706273eaf502
-dashboard link: https://syzkaller.appspot.com/bug?extid=878f276b4892a4438f95
+console output: https://syzkaller.appspot.com/x/log.txt?x=126f99a6100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=579d800cf0c74ef
+dashboard link: https://syzkaller.appspot.com/bug?extid=f72682b02970a74a7858
 compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
 IMPORTANT: if you fix the bug, please add the following tag to the commit:
-Reported-by: syzbot+878f276b4892a4438f95@syzkaller.appspotmail.com
+Reported-by: syzbot+f72682b02970a74a7858@syzkaller.appspotmail.com
 
-BUG: using smp_processor_id() in preemptible [00000000] code: syz-fuzzer/6793
+BUG: using smp_processor_id() in preemptible [00000000] code: systemd-rfkill/6769
 caller is ext4_mb_new_blocks+0xa4d/0x3b70 fs/ext4/mballoc.c:4711
-CPU: 1 PID: 6793 Comm: syz-fuzzer Not tainted 5.7.0-next-20200603-syzkaller #0
+CPU: 1 PID: 6769 Comm: systemd-rfkill Not tainted 5.7.0-next-20200605-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
 Call Trace:
  __dump_stack lib/dump_stack.c:77 [inline]
@@ -80,14 +80,14 @@ Call Trace:
  do_mkdirat+0x21e/0x280 fs/namei.c:3655
  do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
  entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x4b02a0
+RIP: 0033:0x7f6d60012687
 Code: Bad RIP value.
-RSP: 002b:000000c00004f4b8 EFLAGS: 00000212 ORIG_RAX: 0000000000000102
-RAX: ffffffffffffffda RBX: 000000c00002c000 RCX: 00000000004b02a0
-RDX: 00000000000001c0 RSI: 000000c000026960 RDI: ffffffffffffff9c
-RBP: 000000c00004f510 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000212 R12: ffffffffffffffff
-R13: 000000000000004c R14: 000000000000004b R15: 0000000000000100
+RSP: 002b:00007ffd286d9ca8 EFLAGS: 00000246 ORIG_RAX: 0000000000000053
+RAX: ffffffffffffffda RBX: 000055f82bd8d985 RCX: 00007f6d60012687
+RDX: 00007ffd286d9b70 RSI: 00000000000001ed RDI: 000055f82bd8d985
+RBP: 00007f6d60012680 R08: 0000000000000100 R09: 0000000000000000
+R10: 000055f82bd8d980 R11: 0000000000000246 R12: 00000000000001ed
+R13: 00007ffd286d9e30 R14: 0000000000000000 R15: 0000000000000000
 
 
 ---

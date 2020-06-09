@@ -2,204 +2,132 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B82221F3A5E
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jun 2020 14:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9481F3ACC
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jun 2020 14:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728051AbgFIMFw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Jun 2020 08:05:52 -0400
-Received: from 8bytes.org ([81.169.241.247]:46770 "EHLO theia.8bytes.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729227AbgFIMFs (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 9 Jun 2020 08:05:48 -0400
-Received: by theia.8bytes.org (Postfix, from userid 1000)
-        id F011E2C3; Tue,  9 Jun 2020 14:05:39 +0200 (CEST)
-From:   Joerg Roedel <joro@8bytes.org>
+        id S1728328AbgFIMm6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Jun 2020 08:42:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726848AbgFIMm6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Jun 2020 08:42:58 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142A1C05BD1E;
+        Tue,  9 Jun 2020 05:42:57 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49h8sp1pwkz9sRW;
+        Tue,  9 Jun 2020 22:42:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1591706574;
+        bh=WE3JXySLmYgNjlUWsxltg1c+ac2THfPexOS2wHJxEt8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nmiFa7N9mZld4e4sxIX3tQHR9yDquCpEPfiwEqmhDcixnEM7XZdN3rtVdRIYi31IP
+         dikB+gWm3gFmDeFcNYOki6AacT3GSZRYTzc/AI3/MzWbssjxsCtvONjvi4XtsG4By8
+         dfSueqT/maVXJnWe6NblUx1Fp8p5P1WlQ4LiZ+TjAMqhmu2yfsV+7efois71k1IHFX
+         i7fXwSBxFqanNTHD6bWcJ6MU7KP+aRdYehsS/qZ1XtdqF90y9sNwG7sbAp2eEj9qO4
+         /fki3U1+WrmDUN8Jeb5X9Bn0wnLqKEK7XBZox5KFcLJXHgJpCtUsqZC+4ILAJC4MYv
+         bctBAOD4RbtIg==
+Date:   Tue, 9 Jun 2020 22:42:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     peterz@infradead.org, jroedel@suse.de,
-        Andy Lutomirski <luto@kernel.org>,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        manvanth@linux.vnet.ibm.com, linux-next@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, hch@lst.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm: Move p?d_alloc_track to separate header file
-Date:   Tue,  9 Jun 2020 14:05:33 +0200
-Message-Id: <20200609120533.25867-1-joro@8bytes.org>
-X-Mailer: git-send-email 2.17.1
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200609224252.1704eff3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/20osjNj6dzcJHlq1F.yGC.c";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Joerg Roedel <jroedel@suse.de>
+--Sig_/20osjNj6dzcJHlq1F.yGC.c
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The functions are only used in two source files, so there is no need
-for them to be in the global <linux/mm.h> header. Move them to the new
-<linux/pgalloc-track.h> header and include it only where needed.
+Hi all,
 
-Signed-off-by: Joerg Roedel <jroedel@suse.de>
+After merging the akpm-current tree, today's linux-next build (sparc
+defconfig) failed like this:
+
+In file included from include/linux/mm.h:32:0,
+                 from include/linux/memblock.h:13,
+                 from arch/sparc/mm/srmmu.c:14:
+include/linux/pgtable.h:74:27: error: redefinition of 'pte_offset_kernel'
+ #define pte_offset_kernel pte_offset_kernel
+                           ^
+arch/sparc/mm/srmmu.c:144:8: note: in expansion of macro 'pte_offset_kernel'
+ pte_t *pte_offset_kernel(pmd_t *dir, unsigned long address)
+        ^~~~~~~~~~~~~~~~~
+include/linux/pgtable.h:70:22: note: previous definition of 'pte_offset_ker=
+nel' was here
+ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
+                      ^~~~~~~~~~~~~~~~~
+
+Caused by commit
+
+  292aa65ed13a ("mm: consolidate pte_index() and pte_offset_*() definitions=
+")
+
+I used the (missing part of the) patch from next-20200608:
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 9 Jun 2020 22:36:14 +1000
+Subject: [PATCH] update sparc32 for "mm: consolidate pte_index() and
+ pte_offset_*() definitions"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- include/linux/mm.h            | 45 -------------------------------
- include/linux/pgalloc-track.h | 51 +++++++++++++++++++++++++++++++++++
- lib/ioremap.c                 |  1 +
- mm/vmalloc.c                  |  1 +
- 4 files changed, 53 insertions(+), 45 deletions(-)
- create mode 100644 include/linux/pgalloc-track.h
+ arch/sparc/mm/srmmu.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 9d6042178ca7..22d8b2a2c9bc 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -2092,51 +2092,11 @@ static inline pud_t *pud_alloc(struct mm_struct *mm, p4d_t *p4d,
- 		NULL : pud_offset(p4d, address);
+diff --git a/arch/sparc/mm/srmmu.c b/arch/sparc/mm/srmmu.c
+index 989da22ba8e9..0070f8b9a753 100644
+--- a/arch/sparc/mm/srmmu.c
++++ b/arch/sparc/mm/srmmu.c
+@@ -140,16 +140,6 @@ void pmd_set(pmd_t *pmdp, pte_t *ptep)
+ 	set_pte((pte_t *)&pmd_val(*pmdp), __pte(SRMMU_ET_PTD | ptp));
  }
- 
--static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--
+=20
+-/* Find an entry in the third-level page table.. */
+-pte_t *pte_offset_kernel(pmd_t *dir, unsigned long address)
 -{
--	if (unlikely(pgd_none(*pgd))) {
--		if (__p4d_alloc(mm, pgd, address))
--			return NULL;
--		*mod_mask |= PGTBL_PGD_MODIFIED;
--	}
+-	void *pte;
 -
--	return p4d_offset(pgd, address);
+-	pte =3D __nocache_va((pmd_val(*dir) & SRMMU_PTD_PMASK) << 4);
+-	return (pte_t *) pte +
+-	    ((address >> PAGE_SHIFT) & (PTRS_PER_PTE - 1));
 -}
 -
--static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--{
--	if (unlikely(p4d_none(*p4d))) {
--		if (__pud_alloc(mm, p4d, address))
--			return NULL;
--		*mod_mask |= PGTBL_P4D_MODIFIED;
--	}
--
--	return pud_offset(p4d, address);
--}
--
- static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
- {
- 	return (unlikely(pud_none(*pud)) && __pmd_alloc(mm, pud, address))?
- 		NULL: pmd_offset(pud, address);
- }
--
--static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
--				     unsigned long address,
--				     pgtbl_mod_mask *mod_mask)
--{
--	if (unlikely(pud_none(*pud))) {
--		if (__pmd_alloc(mm, pud, address))
--			return NULL;
--		*mod_mask |= PGTBL_PUD_MODIFIED;
--	}
--
--	return pmd_offset(pud, address);
--}
- #endif /* CONFIG_MMU */
- 
- #if USE_SPLIT_PTE_PTLOCKS
-@@ -2252,11 +2212,6 @@ static inline void pgtable_pte_page_dtor(struct page *page)
- 	((unlikely(pmd_none(*(pmd))) && __pte_alloc_kernel(pmd))? \
- 		NULL: pte_offset_kernel(pmd, address))
- 
--#define pte_alloc_kernel_track(pmd, address, mask)			\
--	((unlikely(pmd_none(*(pmd))) &&					\
--	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
--		NULL: pte_offset_kernel(pmd, address))
--
- #if USE_SPLIT_PMD_PTLOCKS
- 
- static struct page *pmd_to_page(pmd_t *pmd)
-diff --git a/include/linux/pgalloc-track.h b/include/linux/pgalloc-track.h
-new file mode 100644
-index 000000000000..1dcc865029a2
---- /dev/null
-+++ b/include/linux/pgalloc-track.h
-@@ -0,0 +1,51 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_PGALLLC_TRACK_H
-+#define _LINUX_PGALLLC_TRACK_H
-+
-+#if defined(CONFIG_MMU)
-+static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(pgd_none(*pgd))) {
-+		if (__p4d_alloc(mm, pgd, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PGD_MODIFIED;
-+	}
-+
-+	return p4d_offset(pgd, address);
-+}
-+
-+static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(p4d_none(*p4d))) {
-+		if (__pud_alloc(mm, p4d, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_P4D_MODIFIED;
-+	}
-+
-+	return pud_offset(p4d, address);
-+}
-+
-+static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
-+				     unsigned long address,
-+				     pgtbl_mod_mask *mod_mask)
-+{
-+	if (unlikely(pud_none(*pud))) {
-+		if (__pmd_alloc(mm, pud, address))
-+			return NULL;
-+		*mod_mask |= PGTBL_PUD_MODIFIED;
-+	}
-+
-+	return pmd_offset(pud, address);
-+}
-+#endif /* CONFIG_MMU */
-+
-+#define pte_alloc_kernel_track(pmd, address, mask)			\
-+	((unlikely(pmd_none(*(pmd))) &&					\
-+	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
-+		NULL: pte_offset_kernel(pmd, address))
-+
-+#endif /* _LINUX_PGALLLC_TRACK_H */
-diff --git a/lib/ioremap.c b/lib/ioremap.c
-index ad485f08173b..608fcccd21c8 100644
---- a/lib/ioremap.c
-+++ b/lib/ioremap.c
-@@ -11,6 +11,7 @@
- #include <linux/sched.h>
- #include <linux/io.h>
- #include <linux/export.h>
-+#include <linux/pgalloc-track.h>
- #include <asm/cacheflush.h>
- #include <asm/pgtable.h>
- 
-diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-index 3091c2ca60df..edc43f003165 100644
---- a/mm/vmalloc.c
-+++ b/mm/vmalloc.c
-@@ -35,6 +35,7 @@
- #include <linux/bitops.h>
- #include <linux/rbtree_augmented.h>
- #include <linux/overflow.h>
-+#include <linux/pgalloc-track.h>
- 
- #include <linux/uaccess.h>
- #include <asm/tlbflush.h>
--- 
+ /*
+  * size: bytes to allocate in the nocache area.
+  * align: bytes, number to align at.
+--=20
 2.26.2
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/20osjNj6dzcJHlq1F.yGC.c
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7fg8wACgkQAVBC80lX
+0GwVzQf+Mb6/pKs6w583Gf2Qh3JtbaZgw858sw8TmENiKIDjm+sQdAhJwZTXfNP6
+vYEO5ibieSF8PEIzFJyr0hryPvO6mXoAUG5/7vnIs/h60odPnNqPzjDMVmpbKVcX
++B2s3DO7gTwMgV6C/k61mzrF2NvXh38k2xJIxw7in2hP3l7c1kKPM/opgQls73VT
+g8JHhq3PjG/JA+jTkQXF3BWRgOTkFChLLb1cXL/bOKbsdLSiYHzZTXzDV1pYuG4M
+73bgt6pSSS5xabdtclCEFtTXU9SBEyN+drUhIrYVcapVF5n5KQ3JLUE6PtWPjnU/
+9RgvRNeGT6MPqSHB5K3VtiK3OJD32g==
+=w6m3
+-----END PGP SIGNATURE-----
+
+--Sig_/20osjNj6dzcJHlq1F.yGC.c--

@@ -2,79 +2,204 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F03251F38D4
-	for <lists+linux-next@lfdr.de>; Tue,  9 Jun 2020 12:57:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B82221F3A5E
+	for <lists+linux-next@lfdr.de>; Tue,  9 Jun 2020 14:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727775AbgFIK5k (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 9 Jun 2020 06:57:40 -0400
-Received: from mx0a-001b2d01.pphosted.com ([148.163.156.1]:6742 "EHLO
-        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725996AbgFIK5j (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 9 Jun 2020 06:57:39 -0400
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 059AXC6B107616;
-        Tue, 9 Jun 2020 06:57:28 -0400
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31j59u82y1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 06:57:27 -0400
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 059AfCqs026468;
-        Tue, 9 Jun 2020 10:57:23 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma01fra.de.ibm.com with ESMTP id 31g2s7tc3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Jun 2020 10:57:23 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 059AvLxU23199958
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 9 Jun 2020 10:57:21 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 754F6AE057;
-        Tue,  9 Jun 2020 10:57:21 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 83455AE051;
-        Tue,  9 Jun 2020 10:57:19 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.199.37.89])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue,  9 Jun 2020 10:57:19 +0000 (GMT)
-Subject: Re: [PATCHv5 1/1] ext4: mballoc: Use raw_cpu_ptr instead of
- this_cpu_ptr
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-ext4@vger.kernel.org, tytso@mit.edu
-Cc:     linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.com>,
-        linux-kernel@vger.kernel.org, adilger.kernel@dilger.ca,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot+82f324bb69744c5f6969@syzkaller.appspotmail.com
-References: <20200602134721.18211-1-riteshh@linux.ibm.com>
- <CGME20200603102422eucas1p109e0d0140e8fc61dc3e57957f2ccf700@eucas1p1.samsung.com>
- <ca794804-7d99-9837-2490-366a2eb97a94@samsung.com>
- <20200603103146.C42D65204F@d06av21.portsmouth.uk.ibm.com>
-From:   Ritesh Harjani <riteshh@linux.ibm.com>
-Date:   Tue, 9 Jun 2020 16:27:18 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200603103146.C42D65204F@d06av21.portsmouth.uk.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-Message-Id: <20200609105719.83455AE051@d06av26.portsmouth.uk.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-09_03:2020-06-09,2020-06-09 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 spamscore=0 impostorscore=0 priorityscore=1501
- malwarescore=0 adultscore=0 mlxscore=0 cotscore=-2147483648 phishscore=0
- mlxlogscore=678 bulkscore=0 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006090081
+        id S1728051AbgFIMFw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 9 Jun 2020 08:05:52 -0400
+Received: from 8bytes.org ([81.169.241.247]:46770 "EHLO theia.8bytes.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729227AbgFIMFs (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 9 Jun 2020 08:05:48 -0400
+Received: by theia.8bytes.org (Postfix, from userid 1000)
+        id F011E2C3; Tue,  9 Jun 2020 14:05:39 +0200 (CEST)
+From:   Joerg Roedel <joro@8bytes.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     peterz@infradead.org, jroedel@suse.de,
+        Andy Lutomirski <luto@kernel.org>,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        manvanth@linux.vnet.ibm.com, linux-next@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linuxppc-dev@lists.ozlabs.org, hch@lst.de,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm: Move p?d_alloc_track to separate header file
+Date:   Tue,  9 Jun 2020 14:05:33 +0200
+Message-Id: <20200609120533.25867-1-joro@8bytes.org>
+X-Mailer: git-send-email 2.17.1
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-This patch is superseded by
+From: Joerg Roedel <jroedel@suse.de>
 
-https://patchwork.ozlabs.org/project/linux-ext4/patch/534f275016296996f54ecf65168bb3392b6f653d.1591699601.git.riteshh@linux.ibm.com/
+The functions are only used in two source files, so there is no need
+for them to be in the global <linux/mm.h> header. Move them to the new
+<linux/pgalloc-track.h> header and include it only where needed.
+
+Signed-off-by: Joerg Roedel <jroedel@suse.de>
+---
+ include/linux/mm.h            | 45 -------------------------------
+ include/linux/pgalloc-track.h | 51 +++++++++++++++++++++++++++++++++++
+ lib/ioremap.c                 |  1 +
+ mm/vmalloc.c                  |  1 +
+ 4 files changed, 53 insertions(+), 45 deletions(-)
+ create mode 100644 include/linux/pgalloc-track.h
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 9d6042178ca7..22d8b2a2c9bc 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2092,51 +2092,11 @@ static inline pud_t *pud_alloc(struct mm_struct *mm, p4d_t *p4d,
+ 		NULL : pud_offset(p4d, address);
+ }
+ 
+-static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
+-				     unsigned long address,
+-				     pgtbl_mod_mask *mod_mask)
+-
+-{
+-	if (unlikely(pgd_none(*pgd))) {
+-		if (__p4d_alloc(mm, pgd, address))
+-			return NULL;
+-		*mod_mask |= PGTBL_PGD_MODIFIED;
+-	}
+-
+-	return p4d_offset(pgd, address);
+-}
+-
+-static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
+-				     unsigned long address,
+-				     pgtbl_mod_mask *mod_mask)
+-{
+-	if (unlikely(p4d_none(*p4d))) {
+-		if (__pud_alloc(mm, p4d, address))
+-			return NULL;
+-		*mod_mask |= PGTBL_P4D_MODIFIED;
+-	}
+-
+-	return pud_offset(p4d, address);
+-}
+-
+ static inline pmd_t *pmd_alloc(struct mm_struct *mm, pud_t *pud, unsigned long address)
+ {
+ 	return (unlikely(pud_none(*pud)) && __pmd_alloc(mm, pud, address))?
+ 		NULL: pmd_offset(pud, address);
+ }
+-
+-static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
+-				     unsigned long address,
+-				     pgtbl_mod_mask *mod_mask)
+-{
+-	if (unlikely(pud_none(*pud))) {
+-		if (__pmd_alloc(mm, pud, address))
+-			return NULL;
+-		*mod_mask |= PGTBL_PUD_MODIFIED;
+-	}
+-
+-	return pmd_offset(pud, address);
+-}
+ #endif /* CONFIG_MMU */
+ 
+ #if USE_SPLIT_PTE_PTLOCKS
+@@ -2252,11 +2212,6 @@ static inline void pgtable_pte_page_dtor(struct page *page)
+ 	((unlikely(pmd_none(*(pmd))) && __pte_alloc_kernel(pmd))? \
+ 		NULL: pte_offset_kernel(pmd, address))
+ 
+-#define pte_alloc_kernel_track(pmd, address, mask)			\
+-	((unlikely(pmd_none(*(pmd))) &&					\
+-	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
+-		NULL: pte_offset_kernel(pmd, address))
+-
+ #if USE_SPLIT_PMD_PTLOCKS
+ 
+ static struct page *pmd_to_page(pmd_t *pmd)
+diff --git a/include/linux/pgalloc-track.h b/include/linux/pgalloc-track.h
+new file mode 100644
+index 000000000000..1dcc865029a2
+--- /dev/null
++++ b/include/linux/pgalloc-track.h
+@@ -0,0 +1,51 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _LINUX_PGALLLC_TRACK_H
++#define _LINUX_PGALLLC_TRACK_H
++
++#if defined(CONFIG_MMU)
++static inline p4d_t *p4d_alloc_track(struct mm_struct *mm, pgd_t *pgd,
++				     unsigned long address,
++				     pgtbl_mod_mask *mod_mask)
++{
++	if (unlikely(pgd_none(*pgd))) {
++		if (__p4d_alloc(mm, pgd, address))
++			return NULL;
++		*mod_mask |= PGTBL_PGD_MODIFIED;
++	}
++
++	return p4d_offset(pgd, address);
++}
++
++static inline pud_t *pud_alloc_track(struct mm_struct *mm, p4d_t *p4d,
++				     unsigned long address,
++				     pgtbl_mod_mask *mod_mask)
++{
++	if (unlikely(p4d_none(*p4d))) {
++		if (__pud_alloc(mm, p4d, address))
++			return NULL;
++		*mod_mask |= PGTBL_P4D_MODIFIED;
++	}
++
++	return pud_offset(p4d, address);
++}
++
++static inline pmd_t *pmd_alloc_track(struct mm_struct *mm, pud_t *pud,
++				     unsigned long address,
++				     pgtbl_mod_mask *mod_mask)
++{
++	if (unlikely(pud_none(*pud))) {
++		if (__pmd_alloc(mm, pud, address))
++			return NULL;
++		*mod_mask |= PGTBL_PUD_MODIFIED;
++	}
++
++	return pmd_offset(pud, address);
++}
++#endif /* CONFIG_MMU */
++
++#define pte_alloc_kernel_track(pmd, address, mask)			\
++	((unlikely(pmd_none(*(pmd))) &&					\
++	  (__pte_alloc_kernel(pmd) || ({*(mask)|=PGTBL_PMD_MODIFIED;0;})))?\
++		NULL: pte_offset_kernel(pmd, address))
++
++#endif /* _LINUX_PGALLLC_TRACK_H */
+diff --git a/lib/ioremap.c b/lib/ioremap.c
+index ad485f08173b..608fcccd21c8 100644
+--- a/lib/ioremap.c
++++ b/lib/ioremap.c
+@@ -11,6 +11,7 @@
+ #include <linux/sched.h>
+ #include <linux/io.h>
+ #include <linux/export.h>
++#include <linux/pgalloc-track.h>
+ #include <asm/cacheflush.h>
+ #include <asm/pgtable.h>
+ 
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 3091c2ca60df..edc43f003165 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -35,6 +35,7 @@
+ #include <linux/bitops.h>
+ #include <linux/rbtree_augmented.h>
+ #include <linux/overflow.h>
++#include <linux/pgalloc-track.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/tlbflush.h>
+-- 
+2.26.2
+

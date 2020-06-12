@@ -2,91 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 766341F75C6
-	for <lists+linux-next@lfdr.de>; Fri, 12 Jun 2020 11:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69C2F1F7626
+	for <lists+linux-next@lfdr.de>; Fri, 12 Jun 2020 11:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726367AbgFLJOS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 12 Jun 2020 05:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S1726039AbgFLJng (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 12 Jun 2020 05:43:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726319AbgFLJOS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Jun 2020 05:14:18 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA77C03E96F;
-        Fri, 12 Jun 2020 02:14:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49jw5f1gZPz9s1x;
-        Fri, 12 Jun 2020 19:14:14 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1591953254;
-        bh=OFe7pSR6WejLTC2rUGx9oPF64ZtQ8I2djy9fI8KRR2w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=L2YlPGmskFQOFyyoBqts+Tola9r/aMW9PUZdiAtYOCyKJRaYBAdWV3Nw3HXc6jfxg
-         k3H+MjjQYZudh7BaiuOAiievbnnJCXfbqcu4Gy/0CqlOwFUWadS2OG+IZbc4wPPo5c
-         GqC/BkJXvtctvPcQK5BaqV07IVChvAO9wGjPhTA8x/59vGs4r2/d4+KuLiHsKudh+g
-         NZSjeneytZlTlVHTYRFrUEzmHFSKh2QDGNjD09lsrQJXxjF6mcun8AuRxAYVFmoDZo
-         X2OSRt9O2eVuDsGm/KUz8lVDKz521yiUSan0qFL0n8k5Jw2OtwRNcw5p2BVqfXFx0K
-         DpCRKo/IH2G/g==
-Date:   Fri, 12 Jun 2020 19:14:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the crypto-current tree
-Message-ID: <20200612191412.543f8fd2@canb.auug.org.au>
+        with ESMTP id S1725886AbgFLJng (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 12 Jun 2020 05:43:36 -0400
+Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BB5C03E96F
+        for <linux-next@vger.kernel.org>; Fri, 12 Jun 2020 02:43:35 -0700 (PDT)
+Received: by mail-lj1-x242.google.com with SMTP id e4so10368335ljn.4
+        for <linux-next@vger.kernel.org>; Fri, 12 Jun 2020 02:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=aIjum0OdXj+v8gBuVrC8N67GclMwnVqsebwDSnxt9vM=;
+        b=B5zzUnrxMZIR1cvpNNJdn3LFoosy6pPU4isLVSWgJ9nP8PUuaqb/X7mACFUtN4Zz0e
+         je1pJ6/7L30IUd9miR1oO0pReCGX2bidQmzsxFyBH7tKSWWLqW6VQz10wJTlfMKj9rrB
+         WBE/JK4Uw5jGqY0GBMDdgRP4v094YfQNIFITKncq2chQL2ULqFL5HZsbtycVUANMKQ4q
+         Ff22Q8bj6f9otWxYKNEcAsUS4YOjCGydg0FG7aELVJHksT7x7qdY2jHFHD/khmaddwqh
+         5gNJVS3WCEasOzyYFedHV6DyZL/RyohzMUHwWpOSbVYfzQc6KihVidQjyi/EVoZE4LYe
+         XpFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=aIjum0OdXj+v8gBuVrC8N67GclMwnVqsebwDSnxt9vM=;
+        b=FjQlLUS3qF8izIBP1SPb+MandCAAgSuKNgRXkeTnap1ePAsYTbLgt7ScWAzLM7dP72
+         fhqQfw7m5a8F42/iYbll0MhbsRJjkPQh1XygINDq0FzzS8fUfdEn9LraRrZIQ6ejRT78
+         mqE8k/+R5iRqg/KoRo8UgkSp9YvJJu4IZVKLrTaQBkjuuRDMFkyZT6P+8xeAKPnuuGHX
+         zOsaLNj6VVWqFgLkzu37dgrCHz6qT5AW79wIczqFwUn6q/+Q6VK7et6UgfbhoboAi9fK
+         FPskwlYoLWoOS5guovOO+DvmE9GgmhAORxA5qkL944xINPXIp4exyozPJLaIKBql0A6I
+         cOcw==
+X-Gm-Message-State: AOAM531TbPTgTCM5nlivE04E7nXrMSFRu/6I+6dbqv5mLHCzxXOnOLI2
+        9ue7Uqni0FEUbH8QQVkBWc4HJw5v87Hg21liSCvfBQ==
+X-Google-Smtp-Source: ABdhPJw5tmdt3Qb2oH83ueGFSlyEX7PXjd2r9+J99+ZU7hJQo8IwOlnJ7848er/3tfXq8Sq1AS7XMX8/8Aq5t7u2d+4=
+X-Received: by 2002:a2e:984b:: with SMTP id e11mr6079071ljj.358.1591955014129;
+ Fri, 12 Jun 2020 02:43:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/n4TX5Oe76boiL6uYs0gCcxP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200521095515.GK6462@dhcp22.suse.cz> <20200521163450.GV6462@dhcp22.suse.cz>
+ <CA+G9fYuDWGZx50UpD+WcsDeHX9vi3hpksvBAWbMgRZadb0Pkww@mail.gmail.com>
+ <CA+G9fYs2jg-j_5fdb0OW0G-JzDjN7b8d9qnX7uuk9p4c7mVSig@mail.gmail.com>
+ <20200528150310.GG27484@dhcp22.suse.cz> <CA+G9fYvDXiZ9E9EfU6h0gsJ+xaXY77mRu9Jg+J7C=X4gJ3qvLg@mail.gmail.com>
+ <20200528164121.GA839178@chrisdown.name> <CALOAHbAHGOsAUUM7qn=9L1u8kAf6Gztqt=SyHSmZ9XuYZWcKmg@mail.gmail.com>
+ <20200529015644.GA84588@chrisdown.name> <20200529094910.GH4406@dhcp22.suse.cz>
+ <20200611095514.GD20450@dhcp22.suse.cz>
+In-Reply-To: <20200611095514.GD20450@dhcp22.suse.cz>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 12 Jun 2020 15:13:22 +0530
+Message-ID: <CA+G9fYsjH8vOTkSKGa5vgC=0fEXuC5UnGsZOirHxH9nOJSHPdA@mail.gmail.com>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     Michal Hocko <mhocko@kernel.org>
+Cc:     Chris Down <chris@chrisdown.name>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/n4TX5Oe76boiL6uYs0gCcxP
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Thu, 11 Jun 2020 at 15:25, Michal Hocko <mhocko@kernel.org> wrote:
+>
+> On Fri 29-05-20 11:49:20, Michal Hocko wrote:
+> > On Fri 29-05-20 02:56:44, Chris Down wrote:
+> > > Yafang Shao writes:
+> > Agreed. Even if e{low,min} might still have some rough edges I am
+> > completely puzzled how we could end up oom if none of the protection
+> > path triggers which the additional debugging should confirm. Maybe my
+> > debugging patch is incomplete or used incorrectly (maybe it would be
+> > esier to use printk rather than trace_printk?).
+>
+> It would be really great if we could move forward. While the fix (which
+> has been dropped from mmotm) is not super urgent I would really like to
+> understand how it could hit the observed behavior. Can we double check
+> that the debugging patch really doesn't trigger (e.g.
+> s@trace_printk@printk in the first step)?
 
-Hi all,
+Please suggest to me the way to get more debug information
+by providing kernel debug patches and extra kernel configs.
 
-In commit
+I have applied your debug patch and tested on top on linux next 20200612
+but did not find any printk output while running mkfs -t ext4 /drive test case.
 
-  dc03ab101464 ("crypto: ccp - Fix sparse warnings in sev-dev")
 
-Fixes tag
+> I have checked it again but
+> do not see any potential code path which would be affected by the patch
+> yet not trigger any output. But another pair of eyes would be really
+> great.
 
-  Fixes: 76a2b524a4b1 ("crypto: ccp - introduce SEV_GET_ID2 command")
 
-has these problem(s):
+---
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index b6d84326bdf2..d13ce7b02de4 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -2375,6 +2375,8 @@ static void get_scan_count(struct lruvec
+*lruvec, struct scan_control *sc,
+  * sc->priority further than desirable.
+  */
+  scan = max(scan, SWAP_CLUSTER_MAX);
++
++ trace_printk("scan:%lu protection:%lu\n", scan, protection);
+  } else {
+  scan = lruvec_size;
+  }
+@@ -2618,6 +2620,7 @@ static void shrink_node_memcgs(pg_data_t *pgdat,
+struct scan_control *sc)
 
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+  switch (mem_cgroup_protected(target_memcg, memcg)) {
+  case MEMCG_PROT_MIN:
++ trace_printk("under min:%lu emin:%lu\n", memcg->memory.min,
+memcg->memory.emin);
+  /*
+  * Hard protection.
+  * If there is no reclaimable memory, OOM.
+@@ -2630,6 +2633,7 @@ static void shrink_node_memcgs(pg_data_t *pgdat,
+struct scan_control *sc)
+  * there is an unprotected supply
+  * of reclaimable memory from other cgroups.
+  */
++ trace_printk("under low:%lu elow:%lu\n", memcg->memory.low,
+memcg->memory.elow);
+  if (!sc->memcg_low_reclaim) {
+  sc->memcg_low_skipped = 1;
+  continue;
+-- 
+2.23.0
 
-Fixes: 76a2b524a4b1 ("crypto: ccp: Implement SEV_PDH_CERT_EXPORT ioctl comm=
-and")
+ref:
+test output:
+https://lkft.validation.linaro.org/scheduler/job/1489767#L1388
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/n4TX5Oe76boiL6uYs0gCcxP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7jR2QACgkQAVBC80lX
-0Gx0MQf+KFPNAo2pTzotO6AypmjvmUZltCZcCAC4pWEhklog7ZrdCxJaWmpY90ZV
-pysPYMHMk346NH12zudQtNHSJTuBEOyk3BT5PlZ8J01DV7YuG4FZi4L8hBGKFFUr
-Rn77v43QVRU03K8Gqprf2vYZM/YQ2jZHY7dJI4qxEPIFVtImilbfOf6IiiVlsuwU
-IzU2rYWj2iMdPo3QrbBtYRf3DbuzLK0mdlfCZObZAzdJBljWO8LT+KETWoVFgC8a
-3p96Cw2zpcz5npm/qM1u3/wFz20zpOqAvnwMkoJpgfPoxyeeL7pFt/vXKZZU3dRJ
-awDsFWUH87EvUl7I+GF/XdOit81myg==
-=5eIb
------END PGP SIGNATURE-----
-
---Sig_/n4TX5Oe76boiL6uYs0gCcxP--
+Test artifacts link (kernel / modules):
+https://builds.tuxbuild.com/5rRNgQqF_wHsSRptdj4A1A/
+- Naresh

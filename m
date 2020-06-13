@@ -2,191 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 495B11F8173
-	for <lists+linux-next@lfdr.de>; Sat, 13 Jun 2020 09:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523971F81F0
+	for <lists+linux-next@lfdr.de>; Sat, 13 Jun 2020 10:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725783AbgFMHAW (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 13 Jun 2020 03:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725272AbgFMHAP (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 13 Jun 2020 03:00:15 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D91C03E96F
-        for <linux-next@vger.kernel.org>; Sat, 13 Jun 2020 00:00:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id h95so4803829pje.4
-        for <linux-next@vger.kernel.org>; Sat, 13 Jun 2020 00:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=IaFbUufDasaVfTNn/sN4pMoL/jUeqeTPE4GBO0iKsDQ=;
-        b=rAq7wRbetdM7Egq9dvY6sbgKGsdbC+0voqVaLUZb3Lwtb7K4Vs5Ul8yuAV7SvKcR7k
-         4p8EipptbiXV7h4ul1cX4l3YTZ7LiaDKXMJA3mvdcPdwNUmt4uMMdClL/0te639ST6vj
-         ZZiGBxRAsow42ywa4OTH6zmOEf15i+rp2ArNO64y5CgkzqnR8+BPw05j3E7vWWDnr2nT
-         GGhbRPwZbRZOZvSrYiLFbVdSjI/01vrXHgvg1GQ2iTSorGwPXSJhVdDAU4Ronnydhh1N
-         tsDFjUCUY5qA1cN38GkNhgTvZPg1U17q2iqmPIp/cCUqMUkYoopTIX8DCeVA18jfmnvX
-         fzRQ==
+        id S1726327AbgFMIeP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 13 Jun 2020 04:34:15 -0400
+Received: from mail-il1-f200.google.com ([209.85.166.200]:52768 "EHLO
+        mail-il1-f200.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725783AbgFMIeO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 13 Jun 2020 04:34:14 -0400
+Received: by mail-il1-f200.google.com with SMTP id v14so8139895ilo.19
+        for <linux-next@vger.kernel.org>; Sat, 13 Jun 2020 01:34:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=IaFbUufDasaVfTNn/sN4pMoL/jUeqeTPE4GBO0iKsDQ=;
-        b=G68ItR/iGZFsW0oLQR9PCzIJ3phFGDwSmgfisCI0jVktAHqSThWm9tme6KxcWouaji
-         TDTLMMFPRiWHspu4I9JZFHOnzo/0PJ7wi2A6Y+erT0IJHgSTj8NMS2RnweUiu1hjuHI5
-         VCHBCBW5FPKaDVPeoEwexMPUknApq606CQyMO/+B6zH6fd6Sn/twM+Wsj28jkm6Osr7N
-         zQq/k5YKHLSSHKp4zPys0liGWjrqgoeQSECSnTE2clwujB+ULy9RCQKXk/pT7bby4nWm
-         ZXP2srPaZZRFlZ15hWvsMv+KdJTv83I0q78Xson8lg+vMLSb7IBie8ZBO0jx2FroN2Al
-         0OxA==
-X-Gm-Message-State: AOAM531OgVJB+yFaqMTgpDAT2jBpKjKlBUqanwdyYl5pkWN1RCyTi7CS
-        PBzV86qHnNY+jDfXdN90EhzPzwgk0bY=
-X-Google-Smtp-Source: ABdhPJySWo/FGnoygMAO3Fkw2fTK6lF1gzuCIMVOya28HwsHeYX5rt+PXfV878dS10ZoG8jpokwjEw==
-X-Received: by 2002:a17:90a:ae11:: with SMTP id t17mr2524945pjq.157.1592031611477;
-        Sat, 13 Jun 2020 00:00:11 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z1sm2191218pfn.178.2020.06.13.00.00.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Jun 2020 00:00:10 -0700 (PDT)
-Message-ID: <5ee4797a.1c69fb81.58e81.93db@mx.google.com>
-Date:   Sat, 13 Jun 2020 00:00:10 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=Ph+OwEjEJzYatlIQCViewOkPKJpFqnqNz++RpjWPN/s=;
+        b=b5D2N75anjivyvPk0o2IfPOSchR/JqoKZQNv+hmQbS0T0y2b1MpYSHbPUO/ptPmnvf
+         n6WgjkSxTSJK0EIM2wI+Fe8KB9qN9w+BEdB8RJHo1Xe2igVabzdSJh/Yr15sa9yJ/jin
+         XHxGBpFjDEcgC/ryzxv0d2jrUiHAPvjnhvl1mGDP+cNqh6itk01IAAXgrr9IK+1IAqMs
+         0a+YWVreyd9SrGDE1QjgWQVQYw4yMb64mnyLHlDkX0kWEHYeLpBjEX725VSw7JEBbHCh
+         QCvuEY+Sl3eV6B6/3Tc/UPhLJWrIO8ke7+rNEoPyZWzGFkV8z9tdj1unmHGKrfY3/9Of
+         lbBA==
+X-Gm-Message-State: AOAM531ZFrzeNWyOC+d/nBBZm+zoSzWfGIKprcXSiO0kaUJ52RzsypjZ
+        hiS3Q4Qi0z9a8o4xFks2JaDdyvuncVEQ7n31M/hq4raytPVo
+X-Google-Smtp-Source: ABdhPJwPAuKh/Pbxi+QNw1EME4mMMNXGBXFc9OsVn8kZD917fa0Pf2f0DRpNPi37PgPcPyWna/kdbmAfkV61ow4XzRTOhzZR7m5h
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: pending-fixes
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: v5.7-14706-g24b012885d29
-Subject: next/pending-fixes baseline: 167 runs,
- 3 regressions (v5.7-14706-g24b012885d29)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+X-Received: by 2002:a05:6638:512:: with SMTP id i18mr12132718jar.74.1592037253350;
+ Sat, 13 Jun 2020 01:34:13 -0700 (PDT)
+Date:   Sat, 13 Jun 2020 01:34:13 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f48bc805a7f30e6c@google.com>
+Subject: linux-next test error: KASAN: use-after-free Write in afs_wake_up_async_call
+From:   syzbot <syzbot+ada89e25a220b3befb36@syzkaller.appspotmail.com>
+To:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 167 runs, 3 regressions (v5.7-14706-g24b012885=
-d29)
+Hello,
 
-Regressions Summary
--------------------
+syzbot found the following crash on:
 
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-at91-sama5d4_xplained        | arm   | lab-baylibre | gcc-8    | multi_v7_d=
-efconfig           | 0/1    =
+HEAD commit:    64302eab Add linux-next specific files for 20200613
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=17bc9eda100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a4b041729071d963
+dashboard link: https://syzkaller.appspot.com/bug?extid=ada89e25a220b3befb36
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+ada89e25a220b3befb36@syzkaller.appspotmail.com
 
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...BIG_ENDIAN=3Dy | 4/5    =
+tipc: TX() has been purged, node left!
+==================================================================
+BUG: KASAN: use-after-free in afs_wake_up_async_call+0x6aa/0x770 fs/afs/rxrpc.c:707
+Write of size 1 at addr ffff8880940ca9e4 by task kworker/u4:7/6779
 
+CPU: 0 PID: 6779 Comm: kworker/u4:7 Not tainted 5.7.0-next-20200613-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Workqueue: netns cleanup_net
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ print_address_description.constprop.0.cold+0xd3/0x413 mm/kasan/report.c:383
+ __kasan_report mm/kasan/report.c:513 [inline]
+ kasan_report.cold+0x1f/0x37 mm/kasan/report.c:530
+ afs_wake_up_async_call+0x6aa/0x770 fs/afs/rxrpc.c:707
+ rxrpc_notify_socket+0x1db/0x5d0 net/rxrpc/recvmsg.c:40
+ __rxrpc_set_call_completion.part.0+0x172/0x410 net/rxrpc/recvmsg.c:76
+ __rxrpc_call_completed net/rxrpc/recvmsg.c:112 [inline]
+ rxrpc_call_completed+0xca/0xf0 net/rxrpc/recvmsg.c:111
+ rxrpc_discard_prealloc+0x781/0xab0 net/rxrpc/call_accept.c:233
+ rxrpc_listen+0x147/0x360 net/rxrpc/af_rxrpc.c:245
+ afs_close_socket+0x95/0x320 fs/afs/rxrpc.c:110
+ afs_net_exit+0x1bc/0x310 fs/afs/main.c:155
+ ops_exit_list.isra.0+0xa8/0x150 net/core/net_namespace.c:186
+ cleanup_net+0x511/0xa50 net/core/net_namespace.c:603
+ process_one_work+0x965/0x1690 kernel/workqueue.c:2269
+ worker_thread+0x96/0xe10 kernel/workqueue.c:2415
+ kthread+0x3b5/0x4a0 kernel/kthread.c:291
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.7-14706-g24b012885d29/plan/baseline/
+Allocated by task 6836:
+ save_stack+0x1b/0x40 mm/kasan/common.c:48
+ set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc mm/kasan/common.c:494 [inline]
+ __kasan_kmalloc.constprop.0+0xbf/0xd0 mm/kasan/common.c:467
+ kmem_cache_alloc_trace+0x153/0x7d0 mm/slab.c:3551
+ kmalloc include/linux/slab.h:555 [inline]
+ kzalloc include/linux/slab.h:669 [inline]
+ afs_alloc_call+0x55/0x630 fs/afs/rxrpc.c:141
+ afs_charge_preallocation+0xe9/0x2d0 fs/afs/rxrpc.c:757
+ afs_open_socket+0x292/0x360 fs/afs/rxrpc.c:92
+ afs_net_init+0xa6c/0xe30 fs/afs/main.c:125
+ ops_init+0xaf/0x420 net/core/net_namespace.c:151
+ setup_net+0x2de/0x860 net/core/net_namespace.c:341
+ copy_net_ns+0x293/0x590 net/core/net_namespace.c:482
+ create_new_namespaces+0x3fb/0xb30 kernel/nsproxy.c:110
+ unshare_nsproxy_namespaces+0xbd/0x1f0 kernel/nsproxy.c:231
+ ksys_unshare+0x43d/0x8e0 kernel/fork.c:2983
+ __do_sys_unshare kernel/fork.c:3051 [inline]
+ __se_sys_unshare kernel/fork.c:3049 [inline]
+ __x64_sys_unshare+0x2d/0x40 kernel/fork.c:3049
+ do_syscall_64+0x60/0xe0 arch/x86/entry/common.c:359
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.7-14706-g24b012885d29
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      24b012885d29e4417cbbe62ebc2f4675099bb362 =
+Freed by task 6779:
+ save_stack+0x1b/0x40 mm/kasan/common.c:48
+ set_track mm/kasan/common.c:56 [inline]
+ kasan_set_free_info mm/kasan/common.c:316 [inline]
+ __kasan_slab_free+0xf7/0x140 mm/kasan/common.c:455
+ __cache_free mm/slab.c:3426 [inline]
+ kfree+0x109/0x2b0 mm/slab.c:3757
+ afs_put_call+0x585/0xa40 fs/afs/rxrpc.c:190
+ rxrpc_discard_prealloc+0x764/0xab0 net/rxrpc/call_accept.c:230
+ rxrpc_listen+0x147/0x360 net/rxrpc/af_rxrpc.c:245
+ afs_close_socket+0x95/0x320 fs/afs/rxrpc.c:110
+ afs_net_exit+0x1bc/0x310 fs/afs/main.c:155
+ ops_exit_list.isra.0+0xa8/0x150 net/core/net_namespace.c:186
+ cleanup_net+0x511/0xa50 net/core/net_namespace.c:603
+ process_one_work+0x965/0x1690 kernel/workqueue.c:2269
+ worker_thread+0x96/0xe10 kernel/workqueue.c:2415
+ kthread+0x3b5/0x4a0 kernel/kthread.c:291
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:293
 
+The buggy address belongs to the object at ffff8880940ca800
+ which belongs to the cache kmalloc-1k of size 1024
+The buggy address is located 484 bytes inside of
+ 1024-byte region [ffff8880940ca800, ffff8880940cac00)
+The buggy address belongs to the page:
+page:ffffea0002503280 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0
+flags: 0xfffe0000000200(slab)
+raw: 00fffe0000000200 ffffea0002507e08 ffffea00029a7988 ffff8880aa000c40
+raw: 0000000000000000 ffff8880940ca000 0000000100000002 0000000000000000
+page dumped because: kasan: bad access detected
 
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-at91-sama5d4_xplained        | arm   | lab-baylibre | gcc-8    | multi_v7_d=
-efconfig           | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee4450ed02dabf00697bf09
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm/multi_v7_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5=
-d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ee4450ed02dabf00697b=
-f0a
-      new failure (last pass: v5.7-14137-g60392f4b277d) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee444421e8757a64a97bf10
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
-baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/=
-baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ee444421e8757a6=
-4a97bf13
-      new failure (last pass: v5.7-14413-gf19136b39e47)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...BIG_ENDIAN=3Dy | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee446719d20c100c197bf60
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
-baseline-meson-gxl-s805x-libretech-ac.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.7-14706-=
-g24b012885d29/arm64/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/=
-baseline-meson-gxl-s805x-libretech-ac.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64be/baseline/rootfs.cpio.gz =
+Memory state around the buggy address:
+ ffff8880940ca880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880940ca900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8880940ca980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                       ^
+ ffff8880940caa00: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880940caa80: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5ee446719d20c10=
-0c197bf65
-      new failure (last pass: v5.7-14413-gf19136b39e47)
-      2 lines =20
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

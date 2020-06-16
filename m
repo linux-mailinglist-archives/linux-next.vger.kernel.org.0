@@ -2,107 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6672C1FA473
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jun 2020 01:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DED1FA4FF
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jun 2020 02:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726665AbgFOXjT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 15 Jun 2020 19:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38348 "EHLO
+        id S1726552AbgFPAVt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 15 Jun 2020 20:21:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726600AbgFOXjT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Jun 2020 19:39:19 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DC2C061A0E;
-        Mon, 15 Jun 2020 16:39:18 -0700 (PDT)
+        with ESMTP id S1725960AbgFPAVt (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 15 Jun 2020 20:21:49 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050C9C061A0E;
+        Mon, 15 Jun 2020 17:21:48 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49m78K70Nrz9sRN;
-        Tue, 16 Jun 2020 09:39:13 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49m85P4GkHz9s1x;
+        Tue, 16 Jun 2020 10:21:44 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592264356;
-        bh=/2A6z48xWuHqvszn1H0AJZqQAd7pEFgoSo04turATSc=;
+        s=201702; t=1592266905;
+        bh=8dDLOgyEC7GgskVCrXp+M92UrgQnty9Ym1LyTH3JOKs=;
         h=Date:From:To:Cc:Subject:From;
-        b=K7oldSE2ZDHvdCbwaDMfYbKenAmPTRSVWZVx//syq+vgZG7M11J13QkFd9h7HjWK7
-         KFToE9vpoQwBPvjmyYQ6zjbpoBBLQwWsrfGaXqgB6EJc4XsRwlVkM/T7K7In5eKj5E
-         4iILnfifSZWQC0MjC9AyvFuTPpr9oOOc3uqK7gjs+oHWK93YrNMywhNITet5tEhLQK
-         k7XfeTLJC/Em2YmRGx1MqrirWFIt17J9sxqQbs2ZKhpFw858APT5JwCqyf/TRS9bbo
-         EaJYYwmE1r5IvN3q5uaI2htxTlQLsViW0z7WtZW8XYinXjOajPCJT/QUn429eWYUXE
-         j0zhIJgk3a0aA==
-Date:   Tue, 16 Jun 2020 09:39:12 +1000
+        b=omRl2NiWjGGwgoSLsi89qr7QjSh6oHUoIXBZ6ya/fK8Ruzqv97+wYhR465efCgGwE
+         ljvEiWEFn2PlJrU6cm4ow7jrKov2YCs09gkAM1T4rASjhaP0Ax4aaEu48gluGDx1A/
+         81TR1EqjWtxpJ8ASFiAmj1uHgWQwAZTNC6lHbYavosHdg1XxysCgRiZb96ktgTt0sd
+         R84ku8trBW7A3NYGluxARRTem9R3+KzoHumOlYklGjbQGHJ+krEveQXz2AajU0E3iJ
+         W1j79zb+XfNP5v3FzO8iFPrIXLlhDO22W9nj6+NYJZ9jGwCkV+kv9xNKMn35uxTIsJ
+         0mVheuNNN3C7Q==
+Date:   Tue, 16 Jun 2020 10:21:44 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+To:     Al Viro <viro@ZenIV.linux.org.uk>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Subject: linux-next: build failure after merge of the drm-intel-fixes tree
-Message-ID: <20200616093912.4dffcc71@canb.auug.org.au>
+        Herbert Xu <herbert@gondor.apana.org.au>
+Subject: linux-next: build warning after merge of the vfs tree
+Message-ID: <20200616102144.48daa1bc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VqOrpk6RlFdSODzu2+ucuzS";
+Content-Type: multipart/signed; boundary="Sig_/ZfwXJuG1..8g=GsiiSJPOF6";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VqOrpk6RlFdSODzu2+ucuzS
+--Sig_/ZfwXJuG1..8g=GsiiSJPOF6
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the drm-intel-fixes tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+After merging the vfs tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-In file included from drivers/gpu/drm/i915/gt/intel_lrc.c:5972:
-drivers/gpu/drm/i915/gt/selftest_lrc.c: In function 'live_timeslice_nopreem=
-pt':
-drivers/gpu/drm/i915/gt/selftest_lrc.c:1333:3: error: too few arguments to =
-function 'engine_heartbeat_disable'
- 1333 |   engine_heartbeat_disable(engine);
-      |   ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/i915/gt/selftest_lrc.c:54:13: note: declared here
-   54 | static void engine_heartbeat_disable(struct intel_engine_cs *engine,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/i915/gt/selftest_lrc.c:1402:3: error: too few arguments to =
-function 'engine_heartbeat_enable'
- 1402 |   engine_heartbeat_enable(engine);
-      |   ^~~~~~~~~~~~~~~~~~~~~~~
-drivers/gpu/drm/i915/gt/selftest_lrc.c:64:13: note: declared here
-   64 | static void engine_heartbeat_enable(struct intel_engine_cs *engine,
-      |             ^~~~~~~~~~~~~~~~~~~~~~~
+In file included from include/linux/compat.h:15,
+                 from arch/powerpc/kernel/asm-offsets.c:14:
+include/linux/socket.h:419:38: warning: 'struct file' declared inside param=
+eter list will not be visible outside of this definition or declaration
+  419 | extern int __sys_accept4_file(struct file *file, unsigned file_flag=
+s,
+      |                                      ^~~~
+include/linux/socket.h:427:38: warning: 'struct file' declared inside param=
+eter list will not be visible outside of this definition or declaration
+  427 | extern int __sys_connect_file(struct file *file, struct sockaddr_st=
+orage *addr,
+      |                                      ^~~~
 
-Caused by commit
+And many more :-(
 
-  04dc41776145 ("drm/i915/gt: Prevent timeslicing into unpreemptable reques=
-ts")
+Introduced by commit
 
-I have reverted that commit for today.
+  f0187db056dc ("iov_iter: Move unnecessary inclusion of crypto/hash.h")
+
+Tidying up include files is tricky :-(
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VqOrpk6RlFdSODzu2+ucuzS
+--Sig_/ZfwXJuG1..8g=GsiiSJPOF6
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7oBqAACgkQAVBC80lX
-0Gw+Lwf4qvvDaLMvZoEQxhLYV1+YWuVMXu+VSykGjyiIyzfTj9vVEcvQy3EzhpRy
-lGaUSO6Yaap7GG0QUWl2gipYeZDhU9YRJ1HbHP/rizw9u51VC4O7Qmrcaqh4OV8W
-/kVPXrR1mIV3xzlayJIGXWITpi9XgfzyhCoyRqU2E+ltRlyWCWISzn6FRJBbYi7P
-6bArjdpsCZrvZhVRKwcuVo5nd/Yg086ft3/PLDEMIUG5DkdDYdANXgq7NI1JPE+J
-dV1aK7jHnTfcLaRZ4Q4uJDxXBXSFpBiudqrrcGTLMvnGwGqz9rm69zgQLIOKZe5M
-vlPbgovyFtUFwTKcO0Ym6A//ImZT
-=iqaX
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7oEJgACgkQAVBC80lX
+0GwvZAf/fkKP5rzR85VmjLp/Neb5b938qDGuyFAlCqO/6Al/QFviVT/NXEcGWe1+
+8Y2w0nZLO6LWYNff34ImKhk/4FN1xEATQsm44M/lzkuIhB8kcEckBXn5l20mSdNi
+6hQRBoVctfuRqso7qle9CSI2UKhdPK8M1n5KKDBE2IM4HBkqi5jhLq2UhzPL2A8l
+s/dPSEiEZUL88i4v/qo92gXVY8a6pSTX36WmiJ0Uv9GLbYlpvMShbIhRBivAhTnW
+t1taqQr8UTWk0BOWcuG6lznmO/wttN43GLj1lDSuS0BkVg3kwRbafhjy0xHMAWfQ
+edH1Vtot+NTJwH3z6WvVpuOmhhNiuw==
+=zOIb
 -----END PGP SIGNATURE-----
 
---Sig_/VqOrpk6RlFdSODzu2+ucuzS--
+--Sig_/ZfwXJuG1..8g=GsiiSJPOF6--

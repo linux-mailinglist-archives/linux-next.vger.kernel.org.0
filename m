@@ -2,86 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0568E1FAC4D
-	for <lists+linux-next@lfdr.de>; Tue, 16 Jun 2020 11:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3094B1FAEEC
+	for <lists+linux-next@lfdr.de>; Tue, 16 Jun 2020 13:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728043AbgFPJWn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-next@lfdr.de>); Tue, 16 Jun 2020 05:22:43 -0400
-Received: from mga04.intel.com ([192.55.52.120]:56734 "EHLO mga04.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725911AbgFPJWm (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 16 Jun 2020 05:22:42 -0400
-IronPort-SDR: XCKym7EzRp63osPBzxA4JzRCX9Dg48YGyKPECGc1XJrV0jtuPFunRmWSO0jgxo5vu8ZWYPSDAX
- i4lUbd/jcMVg==
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 02:22:42 -0700
-IronPort-SDR: eA0x/VqDskuTKgeLmngYdGcDDDgAJQjFs934NzqW4ZS6C6/H5Wt318GMQheZZoPShHoGfAz0Xh
- ohx8FnggmGhg==
-X-IronPort-AV: E=Sophos;i="5.73,518,1583222400"; 
-   d="scan'208";a="449736538"
-Received: from jlahtine-desk.ger.corp.intel.com (HELO localhost) ([10.251.94.207])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2020 02:22:39 -0700
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-In-Reply-To: <20200616093912.4dffcc71@canb.auug.org.au>
-References: <20200616093912.4dffcc71@canb.auug.org.au>
-Subject: Re: linux-next: build failure after merge of the drm-intel-fixes tree
-From:   Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+        id S1725901AbgFPLMX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Jun 2020 07:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60068 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725775AbgFPLMW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 16 Jun 2020 07:12:22 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974DDC08C5C2;
+        Tue, 16 Jun 2020 04:12:21 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49mQWz2PnSz9sRh;
+        Tue, 16 Jun 2020 21:12:15 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592305935;
+        bh=b9eG2tUE4G7fi9ZaZp0aDNPVYyHflnyR8H4ODG/joUY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QeDiWTpD9zeCHbLctaXjvMASke1Z7FDEPUPaDJcdr+rah6m6iYB/A0jbWOgxkxSwJ
+         WPZxc1jPLffKMr93HPGXx3xNvmgshejTZPj/iJ3RG9l6iZG3F8I54l9DZ1GFr88su0
+         rjCtkP/Wjh7bfvTsLj/iKa0viWkYMP7VDjDXKkBxYxqFXrkjrwgI7qisF2/Fi4RNIA
+         8ETB/T8Fn6qu+lRBd5B7d/5Y8eQ0HZMWjwacoKCjgi1V1x1131+WiLHslXN6lAri1P
+         7FuRxzSBSSc1xAWhEkepXpLP6wZaYp+uiKuf06PUwC/LxlcSx7Tt6Z961ksFrFIsoC
+         nJ972wLHRcZLw==
+Date:   Tue, 16 Jun 2020 21:12:14 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-To:     DRI <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-Date:   Tue, 16 Jun 2020 12:22:36 +0300
-Message-ID: <159229935689.7727.9085291204498542933@jlahtine-desk.ger.corp.intel.com>
-User-Agent: alot/0.8.1
+        Sivaprakash Murugesan <sivaprak@codeaurora.org>
+Subject: linux-next: Fixes tag needs some work in the pinctrl tree
+Message-ID: <20200616211214.7cc1f1a6@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/OmNvIodYFDfK1Brr=xEpr=6";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Quoting Stephen Rothwell (2020-06-16 02:39:12)
-> Hi all,
-> 
-> After merging the drm-intel-fixes tree, today's linux-next build (x86_64
-> allmodconfig) failed like this:
-> 
-> In file included from drivers/gpu/drm/i915/gt/intel_lrc.c:5972:
-> drivers/gpu/drm/i915/gt/selftest_lrc.c: In function 'live_timeslice_nopreempt':
-> drivers/gpu/drm/i915/gt/selftest_lrc.c:1333:3: error: too few arguments to function 'engine_heartbeat_disable'
->  1333 |   engine_heartbeat_disable(engine);
->       |   ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gt/selftest_lrc.c:54:13: note: declared here
->    54 | static void engine_heartbeat_disable(struct intel_engine_cs *engine,
->       |             ^~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gt/selftest_lrc.c:1402:3: error: too few arguments to function 'engine_heartbeat_enable'
->  1402 |   engine_heartbeat_enable(engine);
->       |   ^~~~~~~~~~~~~~~~~~~~~~~
-> drivers/gpu/drm/i915/gt/selftest_lrc.c:64:13: note: declared here
->    64 | static void engine_heartbeat_enable(struct intel_engine_cs *engine,
->       |             ^~~~~~~~~~~~~~~~~~~~~~~
-> 
-> Caused by commit
-> 
->   04dc41776145 ("drm/i915/gt: Prevent timeslicing into unpreemptable requests")
-> 
-> I have reverted that commit for today.
+--Sig_/OmNvIodYFDfK1Brr=xEpr=6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks for reporting. I had my drm-intel-fixes build tree configured
-without selftests. I've now corrected that and added a missing dependency
-patch.
+Hi all,
 
-Regards, Joonas
+In commit
 
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+  912f25eca000 ("pinctrl: qcom: ipq6018 Add missing pins in qpic pin group")
+
+Fixes tag
+
+  Fixes: ef1ea54 (pinctrl: qcom: Add ipq6018 pinctrl driver)
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OmNvIodYFDfK1Brr=xEpr=6
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7oqQ4ACgkQAVBC80lX
+0Gx6xQf+JQd9qhBjpm5Oqz1AxRcBLRS7t7Ac9x2OMBmYQfQ61REEbh0l2gncK90i
+Pqn6+yLJr7EVTWmN3DgLuVwTFEcQ6TPOwF87lC2pmjslL5n0icdeZJNk6Avgw4hb
+nAThM+DGbqkdwNmhSzRuCwdF1h7BKHxKa/9O2fyv+2X3PIeszmB2D1EFF7qdCBa0
+Cf67uAeLKHbWgX4PQyhYTKu1xLaaZunAicHwW/6Uu7lzbLMeG4ZA1moE4eRH/uAP
+7NUFHlyzIsmrDKcub86QThoN6kpbZZCvlt3McuQR8XxLkrRVT34wdwI7TikvgaIl
+rB/uSkUeK7BXMblay8ZwryuffDzIXg==
+=P/05
+-----END PGP SIGNATURE-----
+
+--Sig_/OmNvIodYFDfK1Brr=xEpr=6--

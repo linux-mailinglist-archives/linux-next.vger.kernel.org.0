@@ -2,125 +2,160 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BFD1FC31C
-	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 03:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D4F1FC4F5
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 06:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726275AbgFQA7e (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Jun 2020 20:59:34 -0400
-Received: from ozlabs.org ([203.11.71.1]:54721 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726270AbgFQA7d (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 16 Jun 2020 20:59:33 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49mmtW0xJVz9sSd;
-        Wed, 17 Jun 2020 10:59:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592355571;
-        bh=GFBSasXQo+uKQuNXeDI+CzG7gcS5dADb2nU/NU1RmL4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tisa0g4ZLJgX+QiU36LhpZcJNT42ogc/PRfwTOAqnU0LEQIAD9jWxS43n72ir6KvS
-         1eDE+I9Kbk8fAmWfDTYRTyG7AYY7/sZyGh+iU5+gthhJUZ+N8+j4gop48If+Nc8j2M
-         Ckq+E4xAozMEQPssnMtaBDt+QvM9haHCfUF6LG6Da0ApJ8KW3XCZbUpDFL349oKOfu
-         m+zStYxj16NDNpgAVAhsB5gJ24ZeJK61/gu/3Km/gf7LBu96GsYhlePcOliazbz3NE
-         AcB67UNcRk7+5fpGof/j979y9Oj44Zw9Ey2aCkft2X7/+DrHheXAcs8FNZjNv7X61v
-         Fc9XiKlbmR0Hw==
-Date:   Wed, 17 Jun 2020 10:59:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Emil Velikov <emil.velikov@collabora.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20200617105929.534edd34@canb.auug.org.au>
+        id S1726940AbgFQEBB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Jun 2020 00:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726930AbgFQEBA (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Jun 2020 00:01:00 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52EE2C061573
+        for <linux-next@vger.kernel.org>; Tue, 16 Jun 2020 21:01:00 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id s135so628165pgs.2
+        for <linux-next@vger.kernel.org>; Tue, 16 Jun 2020 21:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=SQ6lUYDCUa/yNyUqLL8tKG2wtQ5B6YPkATH9FhnXUK0=;
+        b=F/tLPoKwBHtb9/mhcQ7Afr6/coBTckkI7rHZdM52ndWcyM71eBgTp3w9bXgqelrxJ4
+         VlgyQbMKsCHz6XZOw4uFMqIbly6pAaqY6cLv7u+dIQjF926d0A8SKvNV1EZf9206MvDi
+         Xz+YAytrPr0+xhOxJsNu9CYg1AfLZEzliXDNtv/mKb0pidpmLzwIQkegSkH+CSEv1KGm
+         VYP8YSVtH8mbFv3iFzMJp591vFHQuwD3rvO/moMjWK0i0tJzR1ndbRHX7XVefF1payeo
+         nhQTjraoqc2w0Hbrr7zP8LfE3wJfyCU5RBAel7FqJPmWobVjvHDvSWwmr3kEtXX3wWd8
+         Kqtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=SQ6lUYDCUa/yNyUqLL8tKG2wtQ5B6YPkATH9FhnXUK0=;
+        b=uIQWrPKY/+n3sgMfxzyj+OculK0ayP6lUDo9EkzlRuj5zhbNxrUODv2P3IuZ1yP+1c
+         y6UeapMARw3QBDSQuiKpYdg9Crh2+/qMWNyXmcVT5zYSu3koY+rApYZgsN+1UV2s4tQi
+         S/3kjK4liecWks/5EcXPCXMz820z4gSCpG2TPh6FIvRJp2MvllVmXJF9xafSFYskE0AL
+         nOY1l865QljzpLnGna+OEDZejOEMR2SU0tjqU6bsZwja++hCTo9ur4F3Mv0I/C+OqVVs
+         api3c1mK3rb7L66Ybfp2akpvajhXhMGlK2nkfvQz6QN/U5pHD8MAf5t+qqzYwW8QeZFr
+         T0mQ==
+X-Gm-Message-State: AOAM533FR51XCEbDhylejrQlJXbsox6Bt75812g6jMDUUlM9WglmPid5
+        tcUP6uowXdUNWIQY8lXEUcvciXy/w0M=
+X-Google-Smtp-Source: ABdhPJw5LpWjAM8JzX4+WpaPAIP1RYxjchn0xFbXsJ7coEArm2R12h8COooSZ7RJJHrpI1pvZtOV9Q==
+X-Received: by 2002:a63:214e:: with SMTP id s14mr4614861pgm.20.1592366458378;
+        Tue, 16 Jun 2020 21:00:58 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id b1sm3910573pjc.33.2020.06.16.21.00.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 16 Jun 2020 21:00:57 -0700 (PDT)
+Message-ID: <5ee99579.1c69fb81.d5e14.b771@mx.google.com>
+Date:   Tue, 16 Jun 2020 21:00:57 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/MxT6_+HvYX.kK/4n6ZLF/AO";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.8-rc1-231-gbf332658aac2
+Subject: next/pending-fixes baseline: 95 runs,
+ 2 regressions (v5.8-rc1-231-gbf332658aac2)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/MxT6_+HvYX.kK/4n6ZLF/AO
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 95 runs, 2 regressions (v5.8-rc1-231-gbf332658=
+aac2)
 
-Hi all,
+Regressions Summary
+-------------------
 
-After merging the drm-misc tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
+ 0/1    =
 
-drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c: In function 'amdgpu_amdkf=
-d_gpuvm_free_memory_of_gpu':
-drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c:1357:2: error: implicit de=
-claration of function 'drm_gem_object_put_unlocked'; did you mean 'drm_gem_=
-object_put_locked'? [-Werror=3Dimplicit-function-declaration]
- 1357 |  drm_gem_object_put_unlocked(&mem->bo->tbo.base);
-      |  ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |  drm_gem_object_put_locked
+bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
+ 4/5    =
 
-Caused by commit
 
-  ab15d56e27be ("drm: remove transient drm_gem_object_put_unlocked()")
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc1-231-gbf332658aac2/plan/baseline/
 
-interacting with commit
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc1-231-gbf332658aac2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      bf332658aac21c73969216e8858c7b647be1b208 =
 
-  fd9a9f8801de ("drm/amdgpu: Use GEM obj reference for KFD BOs")
 
-from Linus' tree.
 
-I have applied the following merge fix up patch for today.
+Test Regressions
+---------------- =
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 17 Jun 2020 10:55:32 +1000
-Subject: [PATCH] drm/amdgpu: remove stray drm_gem_object_put_unlocked
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c b/drivers/gpu=
-/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-index b91b5171270f..9015c7b76d60 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c
-@@ -1354,7 +1354,7 @@ int amdgpu_amdkfd_gpuvm_free_memory_of_gpu(
- 	}
-=20
- 	/* Free the BO*/
--	drm_gem_object_put_unlocked(&mem->bo->tbo.base);
-+	drm_gem_object_put(&mem->bo->tbo.base);
- 	mutex_destroy(&mem->lock);
- 	kfree(mem);
-=20
---=20
-2.26.2
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
+ 0/1    =
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/MxT6_+HvYX.kK/4n6ZLF/AO
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+  Details:     https://kernelci.org/test/plan/id/5ee95fdadc350964f597bf10
 
------BEGIN PGP SIGNATURE-----
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc1-23=
+1-gbf332658aac2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc1-23=
+1-gbf332658aac2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7pavEACgkQAVBC80lX
-0GzgoAf+Nw2Z91LEhAIuWthscZ3FUv247hC1EDpWFk0MKhUpIcihVubiiShVF9Kb
-7MssDXDyYaXRPkeMRHdP359SDpcoixOJtTUjKt0PF8PlReWTD/DludpGSQzPVBvc
-rUHMaW4yvzEOhCpaBr2/JhiTCldajXoyukUZhF7tm13aYvlJGtJLGcW0nvr5vT6z
-tLIVFM2B4SFyM08qf3vEJY/CRsBxpNWHGXnsPYDoGtQDrFygpqhJVa0oY0geCSoi
-FyAn3flNWJPP4H6RUYKPoHw20pQ38FOHX2L5eews5Zq+uZWMLV4AlnjFPVZ92p+A
-I4UosxsUfqXshjy3wsa1EHxO+ptreg==
-=zGIh
------END PGP SIGNATURE-----
 
---Sig_/MxT6_+HvYX.kK/4n6ZLF/AO--
+  * baseline.login: https://kernelci.org/test/case/id/5ee95fdadc350964f597b=
+f11
+      failing since 42 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first f=
+ail: v5.7-rc4-211-g6d4315023bc9) =
+
+
+
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
+ 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ee96105139db7511497bf0c
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc1-23=
+1-gbf332658aac2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc1-23=
+1-gbf332658aac2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ee96105139db751=
+1497bf0f
+      failing since 0 day (last pass: v5.8-rc1-88-ga69361f43850, first fail=
+: v5.8-rc1-168-gd1a574997c4e)
+      1 lines =20

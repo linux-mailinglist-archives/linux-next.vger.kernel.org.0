@@ -2,89 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A4161FC7A4
-	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 09:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA99D1FC844
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 10:06:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726952AbgFQHjD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Jun 2020 03:39:03 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:56894 "EHLO fornost.hmeau.com"
+        id S1725941AbgFQIGU (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Jun 2020 04:06:20 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:47889 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726915AbgFQHjC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 17 Jun 2020 03:39:02 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1jlSej-00040u-CZ; Wed, 17 Jun 2020 17:38:46 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 17 Jun 2020 17:38:45 +1000
-Date:   Wed, 17 Jun 2020 17:38:45 +1000
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1725846AbgFQIGU (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 17 Jun 2020 04:06:20 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49myLy0ZB8z9sRh;
+        Wed, 17 Jun 2020 18:06:18 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592381178;
+        bh=7cdmiAE9EG/i09Attx7Op+wfkId2lPt1WP3cvD+UbR4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ahiJhq8YWhdLlolVgIgr2bVuINbtdrU0meaOgbW+HWe4UhMGWK3uwoYo7xqFU/rsO
+         MRwG301TIXr8o3NmRkv+57aOMcPzgP2tKwyGGVz/t05ygTTJEmf0N1nL74A4rhCCG5
+         2740u1PBAi5uJuVGATq60CpxE5H3VfI0/xjwcklJ0unVThD7hhaGkrRzUS8v2BNV6G
+         FdtF73jcm6e6/UdxrpadiWLiVIaKJ6bNvEsUxtcb4sw2NyDHyJ9OLO30Jr66XSaMdD
+         NGHH8SVlNuyV74qERPOA/vCM6UCRTAY/qHPvx+PZ3ZJA/e3jznPO9GJJkTW/ziiXQH
+         rtBThJiMkSVOQ==
+Date:   Wed, 17 Jun 2020 18:06:17 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         netdev@vger.kernel.org
 Subject: Re: linux-next: build failures after merge of the vfs tree
-Message-ID: <20200617073845.GA20077@gondor.apana.org.au>
+Message-ID: <20200617180617.59e61438@canb.auug.org.au>
+In-Reply-To: <20200617070316.GA30348@gondor.apana.org.au>
 References: <20200616103330.2df51a58@canb.auug.org.au>
- <20200616103440.35a80b4b@canb.auug.org.au>
- <20200616010502.GA28834@gondor.apana.org.au>
- <20200616033849.GL23230@ZenIV.linux.org.uk>
- <20200616143807.GA1359@gondor.apana.org.au>
- <20200617165715.577aa76d@canb.auug.org.au>
- <20200617070316.GA30348@gondor.apana.org.au>
- <20200617173102.2b91c32d@canb.auug.org.au>
+        <20200616103440.35a80b4b@canb.auug.org.au>
+        <20200616010502.GA28834@gondor.apana.org.au>
+        <20200616033849.GL23230@ZenIV.linux.org.uk>
+        <20200616143807.GA1359@gondor.apana.org.au>
+        <20200617165715.577aa76d@canb.auug.org.au>
+        <20200617070316.GA30348@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617173102.2b91c32d@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/rzaLdUCb00LybZJ4xG9HvTL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 05:31:02PM +1000, Stephen Rothwell wrote:
-> > > 
-> > > Presumably another include needed:
-> > > 
-> > > arch/s390/lib/test_unwind.c:49:2: error: implicit declaration of function 'kmalloc' [-Werror=implicit-function-declaration]
-> > > arch/s390/lib/test_unwind.c:99:2: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]  
-> 
-> And more (these are coming from other's builds):
-> 
->   drivers/remoteproc/qcom_q6v5_mss.c:772:3: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
->   drivers/remoteproc/qcom_q6v5_mss.c:808:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
->   drivers/remoteproc/qcom_q6v5_mss.c:1195:2: error: implicit declaration of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-> 
-> They may have other causes as they are full linux-next builds (not just
-> after the merge of the vfs tree), but the timing is suspicious.
+--Sig_/rzaLdUCb00LybZJ4xG9HvTL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-OK, here's a patch for both of these together:
+Hi Herbert,
 
-diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-index 32b7a30b2485..eb382ceaa116 100644
---- a/arch/s390/lib/test_unwind.c
-+++ b/arch/s390/lib/test_unwind.c
-@@ -9,6 +9,7 @@
- #include <linux/kallsyms.h>
- #include <linux/kthread.h>
- #include <linux/module.h>
-+#include <linux/slab.h>
- #include <linux/string.h>
- #include <linux/kprobes.h>
- #include <linux/wait.h>
-diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-index feb70283b6a2..903b2bb97e12 100644
---- a/drivers/remoteproc/qcom_q6v5_mss.c
-+++ b/drivers/remoteproc/qcom_q6v5_mss.c
-@@ -26,6 +26,7 @@
- #include <linux/reset.h>
- #include <linux/soc/qcom/mdt_loader.h>
- #include <linux/iopoll.h>
-+#include <linux/slab.h>
- 
- #include "remoteproc_internal.h"
- #include "qcom_common.h"
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+On Wed, 17 Jun 2020 17:03:17 +1000 Herbert Xu <herbert@gondor.apana.org.au>=
+ wrote:
+>
+> On Wed, Jun 17, 2020 at 04:57:15PM +1000, Stephen Rothwell wrote:
+> >=20
+> > Presumably another include needed:
+> >=20
+> > arch/s390/lib/test_unwind.c:49:2: error: implicit declaration of functi=
+on 'kmalloc' [-Werror=3Dimplicit-function-declaration]
+> > arch/s390/lib/test_unwind.c:99:2: error: implicit declaration of functi=
+on 'kfree' [-Werror=3Dimplicit-function-declaration] =20
+>=20
+> Hi Stephen:
+>=20
+> It's not clear how this file manages to include linux/uio.h but
+
+arch/s390/lib/test_unwind.c
+arch/s390/include/asm/unwind.h
+include/linux/ftrace.h
+include/linux/kallsyms.h
+include/linux/module.h
+include/linux/elf.h
+arch/s390/include/asm/elf.h
+include/linux/compat.h
+include/linux/socket.h
+include/linux/uio.h
+
+:-(
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rzaLdUCb00LybZJ4xG9HvTL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7pzvkACgkQAVBC80lX
+0Gydsgf8C0QacF7ALL4x+Jgm45jOWTwR+kv83Hhyu8gOqoGOEhEAbtHtBJ9lwHIf
+mh7QdEzBLNAsomRZQox3GBUu4d4T9dhvHpftivmpprK7vWQl4whn9vZROwR1hOBA
+8t5I/5OkZCpbiqNhlptZc2JfqBcV148Obv3qDFz+PqaKmgwoIkP+0RTgkeIKVGRN
+cC/sswumVFgn4FcngB1HQFTtOPhj+UUshR5Qbm1FW4urzcyFNEQW+mY4OlvYtwoL
+l74akTRZ7cbZUJ2wFl8On8ecUf5IoSRvBxeKufth9psiMCKmnk04+pmB3rS+X1W8
+MVtSPS/ePn8r7F2mOchhptDGcgo2bA==
+=ZeYJ
+-----END PGP SIGNATURE-----
+
+--Sig_/rzaLdUCb00LybZJ4xG9HvTL--

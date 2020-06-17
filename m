@@ -2,113 +2,88 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3851FC169
-	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 00:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD101FC2A5
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 02:26:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725967AbgFPWGX (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 16 Jun 2020 18:06:23 -0400
-Received: from out1-smtp.messagingengine.com ([66.111.4.25]:59285 "EHLO
-        out1-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1725941AbgFPWGX (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 16 Jun 2020 18:06:23 -0400
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id F1EFE5C00E1;
-        Tue, 16 Jun 2020 18:06:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute7.internal (MEProxy); Tue, 16 Jun 2020 18:06:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tobin.cc; h=date
-        :from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=z4kbQiA7fXENz+uZ3GRIQm70e5a
-        yJQmVi7soJQmblS4=; b=jjazcBnAGDUnOov5LjcFA98QDaCxEg6mCDvlkh+0FSR
-        rCur5LrrhmympWEZyCGhqWamzptP1IY5p83vnG19dXds4jkw5YEDxZ6/4qScJDv/
-        pdHJebk6vhRs4bCQAtOPcSfVvy3RD7/P6duGH8ueubZvM6irUgovhZbVg5s91FKc
-        L0+iMsjnOZnqGic+FXzvUPp08x247VpXdUsqUHL/WvjTiTjOr32jAy8ZGQpaAJkq
-        ibC/RcQsfKAzkUjcPyFWkATHi5/CS/fcYL2xb8aruLzwboJHuvwzlCJ0KLi3mNE5
-        b1dlXcHDD3Z/8Qm0QSqpd2jBn8xo3xgsEANKmzZ9l3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=z4kbQi
-        A7fXENz+uZ3GRIQm70e5ayJQmVi7soJQmblS4=; b=If9QaZWcO7Epc3XUEDb7Y0
-        AviwdUFnMKi5DeaoWbDq8TKlwyO0D4S8Eal2/pmeINtKBtfMdKdLVS6vbobJ9Bzg
-        8mnDCzVaHK0G/ShowHLl+z6JghleAhQ7QCK6GblR0U7k27Vxlax8GnS7UdOmVM4T
-        XSs7jyxmL7Fi1u1w4GnTd+8a8+/nrXmwJR49aK0QNf75f3RTz+W0hfjjYRcN+P0+
-        ZukCkGSM0ru9AjIUTwMzmLVvbJ7gQFU49NO7/yKgs7xEpKZAerNTO0Ig2HTGJ4o5
-        Ev3iHweED+Z2rCXCqgsMUdQsIPQfcEAO/dIYaun1MA4qiHWMndT02IkI/umeKSAQ
-        ==
-X-ME-Sender: <xms:XULpXgoVnyhEMBsZ3Dw_jQLjC3N3_TuKBvJoZnCKOyuPkdlps0CRIA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudejuddgtdegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdludehmdenucfjughrpeffhffvuffkfhggtggujgfofgesghdtreer
-    ofervdenucfhrhhomhepfdfvohgsihhnucevrdcujfgrrhguihhnghdfuceomhgvsehtoh
-    gsihhnrdgttgeqnecuggftrfgrthhtvghrnhephfeiuefhtdefudetteelgfffheekffdu
-    feelteekleehhfdtieevkeegfeekgeehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
-    enucfkphepvddvtddrvdefhedrudegrdefgeenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehmvgesthhosghinhdrtggt
-X-ME-Proxy: <xmx:XULpXmoN0ZFng3HlxLyhbgH8vonwucUv9dG6smJ8wbEkrQGPKBG4vg>
-    <xmx:XULpXlNKKCkYmOaKh5SQ7426baJ99TOfd0K9h7m4hTIeGFURiVj2cw>
-    <xmx:XULpXn6jVXwl1DBQ8Sr9rU9JduwRldY24qwEkHFt28O-f63lVm6hgQ>
-    <xmx:XULpXoXDXdnvzqBEHTqDg9QXD85mNgAlBNZ31lq3DHmq2v-yL8Tyxg>
-Received: from localhost (220-235-14-34.dyn.iinet.net.au [220.235.14.34])
-        by mail.messagingengine.com (Postfix) with ESMTPA id A756A3280068;
-        Tue, 16 Jun 2020 18:06:20 -0400 (EDT)
-Date:   Wed, 17 Jun 2020 08:06:17 +1000
-From:   "Tobin C. Harding" <me@tobin.cc>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1725964AbgFQA0g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 16 Jun 2020 20:26:36 -0400
+Received: from ozlabs.org ([203.11.71.1]:49349 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725894AbgFQA0g (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 16 Jun 2020 20:26:36 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49mm8T3s1vz9sR4;
+        Wed, 17 Jun 2020 10:26:33 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592353594;
+        bh=7929sf0Q6b0KFfPiRdQySR72V3aR4DJe8b2tX4csIeE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=LCi6bg6/IT4pv+LY4xI5t6AHRotho9c8Jk2LFlxTKz2NChXx7vmBcY7YAadhRFYPf
+         WChXqzwaqTJt3qpOR0cOeAStB7PeITuTB5+1Ts4ZAy8VnBqhJkI0BYt+WCmhElygR9
+         OCa+blt1piL4UIVDbgMQYzeLBVrbSmAZLt26hEfN1D+Boi8xWPH3vKRYnnHag94xwc
+         jx7Eu2P8bfPtg4rUUC6eSuxwoFPCvg481oQgu+BJj1PNElyw+IDet0XxRGzAER9FKd
+         RZHwZIY+3TgDUJaeG26N7UiHG0QPJg3mv0V39DU1Raq8udm1DLrLYtHsBxg5tbQkrh
+         42JmS1e69obww==
+Date:   Wed, 17 Jun 2020 10:26:31 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: removal of the leaks tree
-Message-ID: <20200616220617.GA25096@ares>
-References: <20200616145333.40ddbce5@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lewis Huang <Lewis.Huang@amd.com>, Aric Cyr <Aric.Cyr@amd.com>,
+        Qingqing Zhuo <qingqing.zhuo@amd.com>
+Subject: linux-next: build failure after merge of the amdgpu tree
+Message-ID: <20200617102631.2e47c92a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wRRV7LY7NUeQGEoC"
-Content-Disposition: inline
-In-Reply-To: <20200616145333.40ddbce5@canb.auug.org.au>
-X-Mailer: Mutt 1.9.4 (2018-02-28)
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: multipart/signed; boundary="Sig_/t=slCX5rlVqvHsyZWgpB1+1";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+--Sig_/t=slCX5rlVqvHsyZWgpB1+1
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---wRRV7LY7NUeQGEoC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
-On Tue, Jun 16, 2020 at 02:53:33PM +1000, Stephen Rothwell wrote:
-> Hi,
->
-> I have removed the leaks tree
-> (https://git.kernel.org/pub/scm/linux/kernel/git/tobin/leaks.git#leaks-next)
-> from linux-next because it has not been updated in more than a year.
-> If you would like it reinstated, please just reply and let me know.
+After merging the amdgpu tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-No worries Steven, thanks for letting me know.
+ERROR: modpost: "mod_color_is_table_init" [drivers/gpu/drm/amd/amdgpu/amdgp=
+u.ko] undefined!
+ERROR: modpost: "mod_color_get_table" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko=
+] undefined!
+ERROR: modpost: "mod_color_set_table_init_state" [drivers/gpu/drm/amd/amdgp=
+u/amdgpu.ko] undefined!
 
+Caused by commit
 
-        Tobin
---wRRV7LY7NUeQGEoC
-Content-Type: application/pgp-signature; name="signature.asc"
+  4a9025f397c6 ("drm/amd/display: change global buffer to local buffer")
+
+I have used the amdgpu tree from next-20200616 for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/t=slCX5rlVqvHsyZWgpB1+1
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEEc/+jpUAIMPwyplf8QL+eTCadZgcFAl7pQlQACgkQQL+eTCad
-Zgcv3BAAgGIXSOHMmnitua54lQLw1uhkgeS5IvqBkZn9+fSKpGpaRPYxC4bugpgZ
-LMtt+uhaKaXu3PTgzBBnzEuYy5/FCs15fWdXJIiMQG4wOs490n3V8K4aGh2Wqx7x
-pE26E65oFBQp8GROZhbecKDLI77ng0xDCKutRrGXf9JnKotNgGY2dRUe8leVe5cE
-OoDKpTuGro4iGf9stJ5TCyKPZNsNqRSzXCjTrrPyj7lDbKRfesVIUeQ7qfYSsgR3
-+iWH5enSK+PKr2PtgNfJsSmH7UMLKwzmxqkP5O8T3t2blJ2CdP9lfvAaC83xxHyQ
-+7nrPs+oxoe6eiteg0CJE5k1m86p445FXDE95asBSfdR29mF3iqwmwiNrANWtzgC
-mmHxqUQ34Rcd8IIaLScO27BFJx9lL7nR2kyMVdhx/isYso1wJr7g0kyOjU81SO9o
-3vc8eAif+JBn+goaUH50opmgW0cQg6Zb7SXTZNpCFDI6wsZwQvkfx1rU15fE0O4r
-M/Y7wzIIRH5Ef8R5YIHXVEiZ9py0jN0vHYiYeT/8Ns388fdEk/fAnmQwr864qQAd
-ECTKEHKkyTm0EQxuYHV5I1d5weOLmUDJ8EmOHTz349fDXRbLA5QCUToHp4XLrY2m
-IKOX3guBL28Q81/fnvb1mCocxeHSDLYKsDOikl17tLkNp3SOR8k=
-=CJCr
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7pYzcACgkQAVBC80lX
+0GxAgggAmSzuaXGP8+1oRpb+5coEs6HwVWwer0IYOAEMoOyIVmArNJ0h0m1N8Ukv
+a5lvfwPACU6pCrHXoj39EEdpCVJhzkItqGLTmbPru/i1Gg11ovec0ssdmOJOHAb0
++quk1z531QQ7L3+JgDKpwh7pT8u0teF/vHVwzojR0PHh9sDs7HmcedDe0zj3bC6B
+3dU3hIlsowDql7HJkf/5EnAwjDsT8kaybP9Q5ZNfTsFnU06oWSQUuYbmkZFj7+fA
+u7Kb5HWdPEjUkq3uhpVj/gLiwcfQo8hG7hwQnVOyGY0Fo+au2cVzE77J9GRLbkBg
+7UJJwqUmoiiN/HwSHY86f9TYU4nmmw==
+=VM/S
 -----END PGP SIGNATURE-----
 
---wRRV7LY7NUeQGEoC--
+--Sig_/t=slCX5rlVqvHsyZWgpB1+1--

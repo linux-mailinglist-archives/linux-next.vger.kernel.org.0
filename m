@@ -2,252 +2,176 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 846DD1FCB3F
-	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 12:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345791FCEAF
+	for <lists+linux-next@lfdr.de>; Wed, 17 Jun 2020 15:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725860AbgFQKsu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Jun 2020 06:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S1727811AbgFQNhg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Jun 2020 09:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725554AbgFQKss (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Jun 2020 06:48:48 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3AFFC061573
-        for <linux-next@vger.kernel.org>; Wed, 17 Jun 2020 03:48:48 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id i12so798187pju.3
-        for <linux-next@vger.kernel.org>; Wed, 17 Jun 2020 03:48:48 -0700 (PDT)
+        with ESMTP id S1727804AbgFQNhf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Jun 2020 09:37:35 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06175C0613EE
+        for <linux-next@vger.kernel.org>; Wed, 17 Jun 2020 06:37:35 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id s1so2937259ljo.0
+        for <linux-next@vger.kernel.org>; Wed, 17 Jun 2020 06:37:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=2QhlW0D5HQR6JOG41L9TDanbwncqIYXlQNRULGb/YPE=;
-        b=YwbaE0QEV973/VKaViX637FMigVrDhNqAo+nnGkmjcsmPrO31QWoiaZ+X8f/WsWFgK
-         m1+sg+LHvIrDycsFe5dyxTZVnjvjZ2whlrrIPbFamkRKKxFO/DWvDnRVZmKQKWMLcVGH
-         KrKsyUFJFfI9FXdgGP1zPwB5WNGzOWlbCpytUmKRxz5dm1fbcDBcCETXvRIaKD5mX/O3
-         hCt1gvzhtEqaC96EOJEdJqcNekwkLxjhcOCGMto32pWIdWjZdqqQe/WeoCs754KUFWh3
-         3s4kn8ePra7Decds5oWsC8JEjuPI78nprr+NUt7nR2cFrHaslKC92sNkQxuStJAEAjjA
-         f1AA==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=fqR44w8izx/KE5EkQ1Ws5ETNchnRTHELluIzCKgLjZQ=;
+        b=AQDHF9j1wumEdOF8jW/1ZD+wMd/8SpKXUSrLOHAhi0A44X1JaVVNvxPIvK23AWFQl1
+         lcfd2qLeHyI1mOR56hQwvpPqFkxdvrqlLEDd85my4N1iUDfAlgcF8AzsgKWBK3zrgNCe
+         FfcZd/NGkaf2Mw5/0Wi7/NN8GlYj/dE1H3Y2K/UdByyIhfAVRQSJIdp1UXJN3EirQcCx
+         gGhwwgc+eOdRDRZohnKU4obNcVnQwSt7TB0Y31V6blCHXIgexA++Mbo6gO8D5gHDGqpn
+         e08UA7hYCS3YGjFr+hICEEExE+bXh2EV+2ZuVFnYmW334FTROJKMWUws6mNfrG1VlVfC
+         NXPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=2QhlW0D5HQR6JOG41L9TDanbwncqIYXlQNRULGb/YPE=;
-        b=rUXMMeEbAmQzHTPzDkZiIgDgznNvwSxmHZuPWJY1UCDo1YH5F5vHd/Atmk7ijNvtBW
-         KpDntm0T+NoE1Ohc5CXTTJI9jyKl7m3ZqzQ9uJyCfvy2IJpvkgII59l93xueyWpIBEIh
-         jheSlHlHhzLo6peJjeAYuazCo8JEHu2EuZjeIEmZnba5yAzLDuoWRX5M7jZ5nwkq8QQw
-         /2aiUO7Rg+u/NnwWBpImKjaxnC9XFe6m3gKHgnA855g7Y0YM55CC8H+peALCaxIZsSUQ
-         oyLZMyVFr8JeVMgmOOwb5nHGWrSmtxpD39FGq3FUOUCCkXEYmbCcbp58eK1aQjIt3pUS
-         TaGA==
-X-Gm-Message-State: AOAM533DUn6QwDiQzmMtQz8V+lCd2enIn9j7EHtUvGXhwvyPwVSVPNR/
-        S6tN8GM3fXQB2bEwG831yO6HBcMtdHg=
-X-Google-Smtp-Source: ABdhPJxuA1q1oYkMl1OtEi2HaM1Rr4Wa2dsztERFyCds3ylx0eC6tMw1Eauup35AUTf+7UBC/TQIGw==
-X-Received: by 2002:a17:90a:aa83:: with SMTP id l3mr7155099pjq.73.1592390927841;
-        Wed, 17 Jun 2020 03:48:47 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id y3sm19411413pff.37.2020.06.17.03.48.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2020 03:48:47 -0700 (PDT)
-Message-ID: <5ee9f50f.1c69fb81.aa5d2.de18@mx.google.com>
-Date:   Wed, 17 Jun 2020 03:48:47 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=fqR44w8izx/KE5EkQ1Ws5ETNchnRTHELluIzCKgLjZQ=;
+        b=ONNR8t92UVgiaSjL+jbPRA7ZjMAsdtwNpEPmigTnPHxTMCXch+eEtv6fokjtKabWhP
+         6BuS5jEUlqGwYNuVdtB4w1HB6pvdX06LgNcgypLcAn/fTzkEtSRvotpWvqdi0Yt6SDCI
+         i5vUYMHDbvNeLzO+ETYpskUu9rYKTQpA1q6ixPBtkzSWygzefWT+FSvG5H49i7HDLLGF
+         IYM9rZ+VZ+qsENTDgWagim3fr3D3ziHhVZaxl4L9dsemKk0+VisW86ju4xLaxSNNIbxN
+         ICqg29HzELmGQ4pJHuT+kciwTTW4rOR0cUJjU0YMteG9fWX8rGsqpC5jzj2Aw4Q2K95M
+         62QQ==
+X-Gm-Message-State: AOAM531S4Od+fXFkzM8K4447+88yHTvLOU/loYic+vwHIpxb7o1sJcmD
+        PUR4sFTQPUpD8g2gFCPMBQeL91u6Dtyu61zginY+6A==
+X-Google-Smtp-Source: ABdhPJwA6fF2gcH8wQw09CP/KfWtNPcawF+FUlNNP2wgH6FMgwt35Wa0rYTio1e8v/dCRtNDcHsmii7KXDmm4uILcaA=
+X-Received: by 2002:a2e:911:: with SMTP id 17mr4347007ljj.411.1592401052747;
+ Wed, 17 Jun 2020 06:37:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200617
-Subject: next/master baseline: 59 runs, 5 regressions (next-20200617)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <CA+G9fYu2ruH-8uxBHE0pdE6RgRTSx4QuQPAN=Nv3BCdRd2ouYA@mail.gmail.com>
+ <20200501135806.4eebf0b92f84ab60bba3e1e7@linux-foundation.org>
+ <CA+G9fYsiZ81pmawUY62K30B6ue+RXYod854RS91R2+F8ZO7Xvw@mail.gmail.com>
+ <20200519075213.GF32497@dhcp22.suse.cz> <CAK8P3a2T_j-Ynvhsqe_FCqS2-ZdLbo0oMbHhHChzMbryE0izAQ@mail.gmail.com>
+ <20200519084535.GG32497@dhcp22.suse.cz> <CA+G9fYvzLm7n1BE7AJXd8_49fOgPgWWTiQ7sXkVre_zoERjQKg@mail.gmail.com>
+ <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
+ <20200520190906.GA558281@chrisdown.name> <20200521095515.GK6462@dhcp22.suse.cz>
+ <20200521163450.GV6462@dhcp22.suse.cz>
+In-Reply-To: <20200521163450.GV6462@dhcp22.suse.cz>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 17 Jun 2020 19:07:20 +0530
+Message-ID: <CA+G9fYsdsgRmwLtSKJSzB1eWcUQ1z-_aaU+BNcQpker34XT6_w@mail.gmail.com>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     Michal Hocko <mhocko@kernel.org>,
+        Chris Down <chris@chrisdown.name>,
+        Yafang Shao <laoar.shao@gmail.com>
+Cc:     Anders Roxell <anders.roxell@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 59 runs, 5 regressions (next-20200617)
+On Thu, 21 May 2020 at 22:04, Michal Hocko <mhocko@kernel.org> wrote:
+>
+> On Thu 21-05-20 11:55:16, Michal Hocko wrote:
+> > On Wed 20-05-20 20:09:06, Chris Down wrote:
+> > > Hi Naresh,
+> > >
+> > > Naresh Kamboju writes:
+> > > > As a part of investigation on this issue LKFT teammate Anders Roxell
+> > > > git bisected the problem and found bad commit(s) which caused this problem.
+> > > >
+> > > > The following two patches have been reverted on next-20200519 and retested the
+> > > > reproducible steps and confirmed the test case mkfs -t ext4 got PASS.
+> > > > ( invoked oom-killer is gone now)
+> > > >
+> > > > Revert "mm, memcg: avoid stale protection values when cgroup is above
+> > > > protection"
+> > > >    This reverts commit 23a53e1c02006120f89383270d46cbd040a70bc6.
+> > > >
+> > > > Revert "mm, memcg: decouple e{low,min} state mutations from protection
+> > > > checks"
+> > > >    This reverts commit 7b88906ab7399b58bb088c28befe50bcce076d82.
+> > >
+> > > Thanks Anders and Naresh for tracking this down and reverting.
+> > >
+> > > I'll take a look tomorrow. I don't see anything immediately obviously wrong
+> > > in either of those commits from a (very) cursory glance, but they should
+> > > only be taking effect if protections are set.
+> >
+> > Agreed. If memory.{low,min} is not used then the patch should be
+> > effectively a nop.
+>
+> I was staring into the code and do not see anything.  Could you give the
+> following debugging patch a try and see whether it triggers?
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index cc555903a332..df2e8df0eb71 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2404,6 +2404,8 @@ static void get_scan_count(struct lruvec *lruvec, struct scan_control *sc,
+>                          * sc->priority further than desirable.
+>                          */
+>                         scan = max(scan, SWAP_CLUSTER_MAX);
+> +
+> +                       trace_printk("scan:%lu protection:%lu\n", scan, protection);
+>                 } else {
+>                         scan = lruvec_size;
+>                 }
+> @@ -2648,6 +2650,7 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+>                 mem_cgroup_calculate_protection(target_memcg, memcg);
+>
+>                 if (mem_cgroup_below_min(memcg)) {
+> +                       trace_printk("under min:%lu emin:%lu\n", memcg->memory.min, memcg->memory.emin);
+>                         /*
+>                          * Hard protection.
+>                          * If there is no reclaimable memory, OOM.
+> @@ -2660,6 +2663,7 @@ static void shrink_node_memcgs(pg_data_t *pgdat, struct scan_control *sc)
+>                          * there is an unprotected supply
+>                          * of reclaimable memory from other cgroups.
+>                          */
+> +                       trace_printk("under low:%lu elow:%lu\n", memcg->memory.low, memcg->memory.elow);
+>                         if (!sc->memcg_low_reclaim) {
+>                                 sc->memcg_low_skipped = 1;
+>                                 continue;
 
-Regressions Summary
--------------------
+As per your suggestions on debugging this problem,
+trace_printk is replaced with printk and applied to your patch on top of the
+problematic kernel and here is the test output and link.
 
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-at91-sama5d4_xplained        | arm  | lab-baylibre    | gcc-8    | sama5_de=
-fconfig       | 0/1    =
+mkfs -t ext4 /dev/disk/by-id/ata-TOSHIBA_MG04ACA100N_Y8RQK14KF6XF
+mke2fs 1.43.8 (1-Jan-2018)
+Creating filesystem with 244190646 4k blocks and 61054976 inodes
+Filesystem UUID: 7c380766-0ed8-41ba-a0de-3c08e78f1891
+Superblock backups stored on blocks:
+32768, 98304, 163840, 229376, 294912, 819200, 884736, 1605632, 2654208,
+4096000, 7962624, 11239424, 20480000, 23887872, 71663616, 78675968,
+102400000, 214990848
+Allocating group tables:    0/7453 done
+Writing inode tables:    0/7453 done
+Creating journal (262144 blocks): [   51.544525] under min:0 emin:0
+[   51.845304] under min:0 emin:0
+[   51.848738] under min:0 emin:0
+[   51.858147] under min:0 emin:0
+[   51.861333] under min:0 emin:0
+[   51.862034] under min:0 emin:0
+[   51.862442] under min:0 emin:0
+[   51.862763] under min:0 emin:0
 
-da850-lcdk                   | arm  | lab-baylibre    | gcc-8    | davinci_=
-all_defconfig | 3/5    =
+Full test log link,
+https://lkft.validation.linaro.org/scheduler/job/1497412#L1451
 
-imx27-phytec-phycard-s-rdk   | arm  | lab-pengutronix | gcc-8    | imx_v4_v=
-5_defconfig   | 0/1    =
-
-ox820-clouden...lug-series-3 | arm  | lab-baylibre    | gcc-8    | oxnas_v6=
-_defconfig    | 0/1    =
-
-vexpress-v2p-ca15-tc1        | arm  | lab-baylibre    | gcc-8    | vexpress=
-_defconfig    | 3/5    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-200617/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20200617
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5fcb9628fd1227a5f11d87171cb1b8b5c414d9d9 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-at91-sama5d4_xplained        | arm  | lab-baylibre    | gcc-8    | sama5_de=
-fconfig       | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee9bf36319c9e1fa897bf10
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200617/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200617/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ee9bf36319c9e1fa897b=
-f11
-      failing since 49 days (last pass: next-20200424, first fail: next-202=
-00428) =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-da850-lcdk                   | arm  | lab-baylibre    | gcc-8    | davinci_=
-all_defconfig | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee9b9b4b911334e0b97bf09
-
-  Results:     3 PASS, 2 FAIL, 0 SKIP
-  Full config: davinci_all_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200617/arm/=
-davinci_all_defconfig/gcc-8/lab-baylibre/baseline-da850-lcdk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200617/arm/=
-davinci_all_defconfig/gcc-8/lab-baylibre/baseline-da850-lcdk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5ee9b9b4b911334=
-e0b97bf0e
-      failing since 0 day (last pass: next-20200614, first fail: next-20200=
-616)
-      33 lines =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-imx27-phytec-phycard-s-rdk   | arm  | lab-pengutronix | gcc-8    | imx_v4_v=
-5_defconfig   | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee9bea4d1060a02b697bf25
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: imx_v4_v5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200617/arm/=
-imx_v4_v5_defconfig/gcc-8/lab-pengutronix/baseline-imx27-phytec-phycard-s-r=
-dk.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200617/arm/=
-imx_v4_v5_defconfig/gcc-8/lab-pengutronix/baseline-imx27-phytec-phycard-s-r=
-dk.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ee9bea4d1060a02b697b=
-f26
-      failing since 0 day (last pass: next-20200615, first fail: next-20200=
-616) =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-ox820-clouden...lug-series-3 | arm  | lab-baylibre    | gcc-8    | oxnas_v6=
-_defconfig    | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee9be0c2163a97f4c97bf22
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: oxnas_v6_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200617/arm/=
-oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
-series-3.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200617/arm/=
-oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
-series-3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ee9be0c2163a97f4c97b=
-f23
-      failing since 0 day (last pass: next-20200615, first fail: next-20200=
-616) =
-
-
-
-platform                     | arch | lab             | compiler | defconfi=
-g             | results
------------------------------+------+-----------------+----------+---------=
---------------+--------
-vexpress-v2p-ca15-tc1        | arm  | lab-baylibre    | gcc-8    | vexpress=
-_defconfig    | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ee9c0944841aa613097bf09
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200617/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200617/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ee9c0944841aa61=
-3097bf0c
-      failing since 11 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =20
+- Naresh

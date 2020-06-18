@@ -2,99 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AC51FF4FC
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 16:42:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C2011FF5F8
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 17:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730905AbgFROmE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Jun 2020 10:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57022 "EHLO
+        id S1728355AbgFRPAJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Jun 2020 11:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727933AbgFROmD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 10:42:03 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB823C06174E
-        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 07:42:02 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d8so2510386plo.12
-        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 07:42:02 -0700 (PDT)
+        with ESMTP id S1726193AbgFRPAI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 11:00:08 -0400
+Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3CFC06174E;
+        Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
+Received: by mail-io1-xd43.google.com with SMTP id m81so7406487ioa.1;
+        Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=+CwHsxmZO7al02eIsWAPOcThZHp6rfmpE6RrFb8EcPw=;
-        b=fH2BztqrIj/VG/8Fx6R4BMU6mIp3/E6CMLGmQU/uhMq9bushUQaKRmtjc2Jv6li16i
-         ai2HkjDikjqrO929y3PfF8UAJgLIPhzNlFOtssQW1rvMm27YMQIRPEjfv/iEY3kB2kzu
-         qE0MLbvqx4DYL1d6BUSoWEsI+fMbJAN0T+bF1N79Kokc4YlMcqM/UdkpuTK4BXbq8cvD
-         8qIhpehLRYycZhOttdFGbGvvWzHx4HsWXUbEQIkyYUqhJIncv3PyFS4eoVQF7sdRrr1N
-         NhxbZ4sOAxaYxAuZuhrIk7Pv2J4+CnmmlNQLkN8hb9Y/+bQR0hGFz+7NquTfx2vNaPKa
-         Wg7Q==
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=NtwtfirPIaj3hQKqt5NnTqLzfoXadlYH6xaXhH3mB+s=;
+        b=kYwPKZdp0pHLg9nzSkXLUjXIWhhGSDK+lUsX3kvZKhpx/abFTtNYjkojW4sVVt7bHm
+         qZGTxARuFd3WI6EfU1eBN6+4gj/yCc7G3VU2n21gea6aS3fkUz/uMmbZ6zjhs6dF/ctG
+         mtQLDzrh6EKtHb9OSOEmMjo3N7fWi8hwmYyXXXcwlEWheXzJEY46FsRDyYJ/YXapbZEL
+         GAjWeoKd6sh4vm2KkDp99cfVll6l6Xz1jcMVSif5RsT91SxuUdRKKCZShkXiMxJfDPO2
+         mEQ03gbiIGbBmN1vxaEfCsHPJle351uahP3BtuY+Amj/uplhgSOrlPpU1WHGNLMkS4iC
+         lVIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=+CwHsxmZO7al02eIsWAPOcThZHp6rfmpE6RrFb8EcPw=;
-        b=Scd2NxKFyCwufCNPhhFWacElY14JEW2w5nogrla7nVw2wk0wI7QiC76TCqRl4MU782
-         YpF9iMcgugEgOsCmeqwSJKmaevXrSZoP6yUA3J/SHJVBxME7ts7tDQgjGKpshc0s17eU
-         AgMslx5/SwfI11VlyjfumPwjximgp9W3fsBij66Qp6eMSXsNfA7Yi5k0RntcGgVpkz9s
-         PAz1EYudIW17VlsKEAH+BV1P/9qhxeoEgKCWWffEPFBjh9etc1C8zzzOkra75iApFaXR
-         4kvWnmkZu4l7y0lUXmnCE/oc2YTbcdMB4TudDQ0yOU02/b4BdR7IDal6MHnkCqmcIHv+
-         O2Kw==
-X-Gm-Message-State: AOAM530vkQRr5AqGrlA7h6MVbwbxcWNKrYElQcTvu3cVaExyi8hTSavC
-        lxycBUlG6fpzSjFGYbOVJ5rEmA==
-X-Google-Smtp-Source: ABdhPJycmaH/Sq6ALxmP55R4OyQZwQBY9HYoAjxXJCFGcMDHXq30eGLpBKlGwC81JM1FheQuhhv4eg==
-X-Received: by 2002:a17:902:7881:: with SMTP id q1mr3907257pll.159.1592491321424;
-        Thu, 18 Jun 2020 07:42:01 -0700 (PDT)
-Received: from [192.168.1.159] ([65.144.74.34])
-        by smtp.gmail.com with ESMTPSA id u74sm2786453pgc.58.2020.06.18.07.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 Jun 2020 07:42:00 -0700 (PDT)
-Subject: Re: linux-next: Tree for Jun 18 (fs/io_uring)
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-References: <20200618141530.0ca9897d@canb.auug.org.au>
- <25b48bfa-07ef-c6c8-c4c9-61c213e22f66@infradead.org>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <52b64a82-34c2-268f-7aa3-4cb4f7a14e23@kernel.dk>
-Date:   Thu, 18 Jun 2020 08:42:00 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=NtwtfirPIaj3hQKqt5NnTqLzfoXadlYH6xaXhH3mB+s=;
+        b=E9oYBpHSZYmC7FLuwZtM18HBTCZPtsRMxCzP0mIHBegoGebObr7eH9A7y4vuzcy66h
+         Kd3F62IdMGfD/Q8vLsxuqYRk5AhEPIBg55HPyVBb0PGzoXl0igvA0SIPhQLYundiIMx+
+         tcgJqFJOaqh9yEL5uSqY55GT+USlIRYZVF/VfS9kNr13eJ53fAIBYIBO47RDw9NCtDJx
+         yhJfYZTsJH7BAFHsYN1ySSDYNAWrsh5qRnguXjI7Nx5PypdyoEyfXovnVqwprgoFdeZx
+         0vHgfWRD82wxHZsrQ8boAvZ7JBHCLsK2Y/qXb1qZH4ZkXPcZs3sXiK4s9cDt8Jl3NJdC
+         Apdw==
+X-Gm-Message-State: AOAM531PZUpGh13VrmFL1AJBCGva+2B1zX1VYE6NkKS9TH70KddBrTFW
+        sDtIVOtYHe2ZjdVKqjAWQ1PnUYsWmMEG/bDDECQ=
+X-Google-Smtp-Source: ABdhPJyxduBF4FPnbsePTb+IJMrnaO574t87lgH7MXGDrxKnm7Fm0uPL20a9JpNnhO5AEW9mefqTwucGCC8avIECgKo=
+X-Received: by 2002:a05:6602:2dd4:: with SMTP id l20mr5412675iow.13.1592492407237;
+ Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <25b48bfa-07ef-c6c8-c4c9-61c213e22f66@infradead.org>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+References: <20200521095515.GK6462@dhcp22.suse.cz> <20200521163450.GV6462@dhcp22.suse.cz>
+ <CA+G9fYsdsgRmwLtSKJSzB1eWcUQ1z-_aaU+BNcQpker34XT6_w@mail.gmail.com>
+ <20200617135758.GA548179@chrisdown.name> <20200617141155.GQ9499@dhcp22.suse.cz>
+ <CA+G9fYu+FB1PE0AMmE-9MrHpayE9kChwTyc3zfM6V83uQ0zcQA@mail.gmail.com>
+ <20200617160624.GS9499@dhcp22.suse.cz> <CA+G9fYtCXrVGVtRTwxiqgfFNDDf_H4aNH=VpWLhsV4n_mCTLGg@mail.gmail.com>
+ <20200617210935.GA578452@chrisdown.name> <CALOAHbBp7Ytd-Hta9NH-_HJtVTAsR5Pw2RYrVScp7PPezCEv2w@mail.gmail.com>
+ <20200618123743.GA694719@chrisdown.name>
+In-Reply-To: <20200618123743.GA694719@chrisdown.name>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 18 Jun 2020 22:59:28 +0800
+Message-ID: <CALOAHbCPd407z45e809VE5c8vP6ewqwkDkY9nrMP5TyP5cjG+A@mail.gmail.com>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/17/20 11:38 PM, Randy Dunlap wrote:
-> On 6/17/20 9:15 PM, Stephen Rothwell wrote:
->> Hi all,
->>
->> News: there will be no linux-next release tomorrow.
->>
->> Changes since 20200617:
->>
-> 
-> when CONFIG_BLOCK is not set/enabled:
-> 
-> ../fs/io_uring.c: In function 'io_async_task_func':
-> ../fs/io_uring.c:4559:7: error: implicit declaration of function 'io_sq_thread_acquire_mm'; did you mean 'atomic_read_acquire'? [-Werror=implicit-function-declaration]
->    if (io_sq_thread_acquire_mm(ctx, req)) {
->        ^~~~~~~~~~~~~~~~~~~~~~~
->        atomic_read_acquire
-> ../fs/io_uring.c: In function 'io_sq_thread':
-> ../fs/io_uring.c:6268:4: error: implicit declaration of function 'io_sq_thread_drop_mm'; did you mean 'io_sq_thread'? [-Werror=implicit-function-declaration]
->     io_sq_thread_drop_mm(ctx);
->     ^~~~~~~~~~~~~~~~~~~~
->     io_sq_thread
+On Thu, Jun 18, 2020 at 8:37 PM Chris Down <chris@chrisdown.name> wrote:
+>
+> Yafang Shao writes:
+> >On Thu, Jun 18, 2020 at 5:09 AM Chris Down <chris@chrisdown.name> wrote:
+> >>
+> >> Naresh Kamboju writes:
+> >> >After this patch applied the reported issue got fixed.
+> >>
+> >> Great! Thank you Naresh and Michal for helping to get to the bottom of this :-)
+> >>
+> >> I'll send out a new version tomorrow with the fixes applied and both of you
+> >> credited in the changelog for the detection and fix.
+> >
+> >As we have already found that the usage around memory.{emin, elow} has
+> >many limitations, I think memory.{emin, elow} should be used for
+> >memcg-tree internally only, that means they can only be used to
+> >calculate the protection of a memcg in a specified memcg-tree but
+> >should not be exposed to other MM parts.
+>
+> I agree that the current semantics are mentally taxing and we should generally
+> avoid exposing the implementation details outside of memcg where possible. Do
+> you have a suggested rework? :-)
 
-Fixed it up, thanks.
+Keeping the mem_cgroup_protected() as-is is my suggestion. Anyway I
+think it is bad to put memory.{emin, elow} here and there.
+If we don't have any better idea by now, just putting all the
+references of memory.{emin, elow}  into one
+wrapper(mem_cgroup_protected()) is the reasonable solution.
 
 -- 
-Jens Axboe
-
+Thanks
+Yafang

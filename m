@@ -2,139 +2,103 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E841FDA0D
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 02:08:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E351FDFD3
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 03:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726848AbgFRAI5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 17 Jun 2020 20:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35874 "EHLO
+        id S1732865AbgFRBnp (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 17 Jun 2020 21:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726833AbgFRAI5 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Jun 2020 20:08:57 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6D9C06174E;
-        Wed, 17 Jun 2020 17:08:57 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49nMjc6DYcz9sRR;
-        Thu, 18 Jun 2020 10:08:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592438934;
-        bh=1uuGnZJh9DL8LYySnaRbYolRbTQoDPuj4QyDuhe+DxA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ltif/x24QiqFQhtCnA0NodWnY8k8zhSvU39bGkr0utN4TIKPpFMrVdP4MonA7attJ
-         abefy7eloSqahdMhbrciVRpsZvHpYIocesQuAk49VPheiZr2facjz0jLy09C01o11o
-         pt0GUW6CJelGIOhB/fX1G4Cq8maO/d4KhiojzT5YKISLad4mKSuCXxVmne1yTtrCQH
-         K4D9wQ43sG/2gjYgVKdLM1LyFNkBpgFbAnM9KmrSNH0RVv0EIba61W5WcsvLsVpU6v
-         1EwtNz4SR7rfwHACgoTsjism5RK9b4HLRiN7kUapVlQclwNe1rsLc9229c8nN9S86v
-         crrP7k5r9WZzQ==
-Date:   Thu, 18 Jun 2020 10:08:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org
-Subject: Re: linux-next: build failures after merge of the vfs tree
-Message-ID: <20200618100851.0f77ed52@canb.auug.org.au>
-In-Reply-To: <20200617073845.GA20077@gondor.apana.org.au>
-References: <20200616103330.2df51a58@canb.auug.org.au>
-        <20200616103440.35a80b4b@canb.auug.org.au>
-        <20200616010502.GA28834@gondor.apana.org.au>
-        <20200616033849.GL23230@ZenIV.linux.org.uk>
-        <20200616143807.GA1359@gondor.apana.org.au>
-        <20200617165715.577aa76d@canb.auug.org.au>
-        <20200617070316.GA30348@gondor.apana.org.au>
-        <20200617173102.2b91c32d@canb.auug.org.au>
-        <20200617073845.GA20077@gondor.apana.org.au>
+        with ESMTP id S1729997AbgFRBnm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 17 Jun 2020 21:43:42 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92D2C06174E;
+        Wed, 17 Jun 2020 18:43:41 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id j19so4243037ilk.9;
+        Wed, 17 Jun 2020 18:43:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/NV0zNhM4fAGBEvR6pS4jubz62WIXqxLs8Qbcn4M8G8=;
+        b=dDcozoF3gjERlnIYD/aopfiDz8+Xk7wB85tQ+JG+fS/wcxWZRWOO9ndR3j6DlLjase
+         pakWhsVPQ1s1RE4tdxVgckkmbgQQmy7KzyUVIgo8XiewLQf5iDAQQHzmV55SqyA3ni0l
+         UhO1lJ4tnxN9yr+l1R5SlEBFs6N7bGO1IezGVFxCOKnzKhYGlAd0C60gF1lzq5zPgtZ5
+         9JgAPTH5CwMDcYYdYBRFRY59OOo2Ufb2xXI6CZ33SNJk34h80UPpZg/jdNoIWaOmSADF
+         HprtPmsk/lgc7E5A+WM5WfU02YavO+ic/3qkx+0n65e7+GL5yWyxbhFZWUcj97Z490uK
+         AJxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/NV0zNhM4fAGBEvR6pS4jubz62WIXqxLs8Qbcn4M8G8=;
+        b=rIZaeZTMyB+E9IELLbPTjBPoCCaBgD3xQt1ws8BU4h9XstxN3oZN8RRILpTQ4uXQmv
+         cXVnyuNmNjOsK9YJzEz/33jmCbeqZXOHypH4Zqr6izzZXuj0AtnuKmdNXfuxHbYRF2H6
+         j3eoZTp+6Rsa/iTM6VuJPmhM7cbez1oFBZ4FsG0xI2WpGUSKFKpMt26GsmJ8YRhiRgd1
+         JF7A9z+tUxOQaJ3YJusjuZmowsqkbr8kNn6dsC8UdxUiCTTeFRnXDw3bL3VRTJNzZAJz
+         Qd2ngfmMwYX6ZcerUAuNG5bGYZn83XSt4PEPFvemdEu48FNflsj37H2WGLfe+nnZT5Mk
+         QtOg==
+X-Gm-Message-State: AOAM532Bac1QzSwCth3YFWtbUrdp2SmwUmrp6GQ3dBHgcArhsOSGaf50
+        lIOM/P6Ix+OA6HFX3w6m06pzkFXlG1Jfpy7sikM=
+X-Google-Smtp-Source: ABdhPJy/FeQxzQszfiH33uOWaccj4JEo3pvq0ekiMOC1+TiGVdTADnFmscwMk0igU9qcjJHn9X3GpIIhMlgC28sEOaI=
+X-Received: by 2002:a05:6e02:542:: with SMTP id i2mr1867971ils.203.1592444621188;
+ Wed, 17 Jun 2020 18:43:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4elSaFtvS3bf8v7iB29dHx2";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <CA+G9fYsXnwyGetj-vztAKPt8=jXrkY8QWe74u5EEA3XPW7aikQ@mail.gmail.com>
+ <20200520190906.GA558281@chrisdown.name> <20200521095515.GK6462@dhcp22.suse.cz>
+ <20200521163450.GV6462@dhcp22.suse.cz> <CA+G9fYsdsgRmwLtSKJSzB1eWcUQ1z-_aaU+BNcQpker34XT6_w@mail.gmail.com>
+ <20200617135758.GA548179@chrisdown.name> <20200617141155.GQ9499@dhcp22.suse.cz>
+ <CA+G9fYu+FB1PE0AMmE-9MrHpayE9kChwTyc3zfM6V83uQ0zcQA@mail.gmail.com>
+ <20200617160624.GS9499@dhcp22.suse.cz> <CA+G9fYtCXrVGVtRTwxiqgfFNDDf_H4aNH=VpWLhsV4n_mCTLGg@mail.gmail.com>
+ <20200617210935.GA578452@chrisdown.name>
+In-Reply-To: <20200617210935.GA578452@chrisdown.name>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Thu, 18 Jun 2020 09:43:05 +0800
+Message-ID: <CALOAHbBp7Ytd-Hta9NH-_HJtVTAsR5Pw2RYrVScp7PPezCEv2w@mail.gmail.com>
+Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
+To:     Chris Down <chris@chrisdown.name>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Linux F2FS DEV, Mailing List" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        linux-ext4 <linux-ext4@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
+        Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4elSaFtvS3bf8v7iB29dHx2
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-
-Hi all,
-
-On Wed, 17 Jun 2020 17:38:45 +1000 Herbert Xu <herbert@gondor.apana.org.au>=
- wrote:
+On Thu, Jun 18, 2020 at 5:09 AM Chris Down <chris@chrisdown.name> wrote:
 >
-> On Wed, Jun 17, 2020 at 05:31:02PM +1000, Stephen Rothwell wrote:
-> > > >=20
-> > > > Presumably another include needed:
-> > > >=20
-> > > > arch/s390/lib/test_unwind.c:49:2: error: implicit declaration of fu=
-nction 'kmalloc' [-Werror=3Dimplicit-function-declaration]
-> > > > arch/s390/lib/test_unwind.c:99:2: error: implicit declaration of fu=
-nction 'kfree' [-Werror=3Dimplicit-function-declaration]   =20
-> >=20
-> > And more (these are coming from other's builds):
-> >=20
-> >   drivers/remoteproc/qcom_q6v5_mss.c:772:3: error: implicit declaration=
- of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-> >   drivers/remoteproc/qcom_q6v5_mss.c:808:2: error: implicit declaration=
- of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-> >   drivers/remoteproc/qcom_q6v5_mss.c:1195:2: error: implicit declaratio=
-n of function 'kfree' [-Werror,-Wimplicit-function-declaration]
-> >=20
-> > They may have other causes as they are full linux-next builds (not just
-> > after the merge of the vfs tree), but the timing is suspicious. =20
->=20
-> OK, here's a patch for both of these together:
->=20
-> diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-> index 32b7a30b2485..eb382ceaa116 100644
-> --- a/arch/s390/lib/test_unwind.c
-> +++ b/arch/s390/lib/test_unwind.c
-> @@ -9,6 +9,7 @@
->  #include <linux/kallsyms.h>
->  #include <linux/kthread.h>
->  #include <linux/module.h>
-> +#include <linux/slab.h>
->  #include <linux/string.h>
->  #include <linux/kprobes.h>
->  #include <linux/wait.h>
-> diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom=
-_q6v5_mss.c
-> index feb70283b6a2..903b2bb97e12 100644
-> --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> @@ -26,6 +26,7 @@
->  #include <linux/reset.h>
->  #include <linux/soc/qcom/mdt_loader.h>
->  #include <linux/iopoll.h>
-> +#include <linux/slab.h>
-> =20
->  #include "remoteproc_internal.h"
->  #include "qcom_common.h"
+> Naresh Kamboju writes:
+> >After this patch applied the reported issue got fixed.
+>
+> Great! Thank you Naresh and Michal for helping to get to the bottom of this :-)
+>
+> I'll send out a new version tomorrow with the fixes applied and both of you
+> credited in the changelog for the detection and fix.
 
-I have applied those 2 by hand for today.
+As we have already found that the usage around memory.{emin, elow} has
+many limitations, I think memory.{emin, elow} should be used for
+memcg-tree internally only, that means they can only be used to
+calculate the protection of a memcg in a specified memcg-tree but
+should not be exposed to other MM parts.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/4elSaFtvS3bf8v7iB29dHx2
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7qsJMACgkQAVBC80lX
-0GzZogf/YlCcqyBNZhz6hGdAjes2O3a3PDAoIK01bHwa/VGSSz9i3tJoe/Axuvvp
-4Zq/E+/CMHAgnv1a9cD2aqUC2zfDZtAFrwjMlbsHFxNKm1K4eEWhfjXwL+lgFZuA
-7jZTN9ObipaBR/0YJdo47a1VraD3uOuw+L9/zcUedDeKZvOmspTxlf2cra1dNXvt
-jWrWzerZJnuCZsNP93AlMq1gEUf3sqRH4039JI/KW1Sh2BzZVBsisCfH4PtQvK+t
-PKE/qpg62DPWvnQ1nmswpDosICXXgzxe9/Y2POnQwI7Yhq6/UlvjFYFgxq8qSO6f
-Q+GjeEwe5eL+3QJkAEe8dXVmiGyvqQ==
-=TIUL
------END PGP SIGNATURE-----
-
---Sig_/4elSaFtvS3bf8v7iB29dHx2--
+-- 
+Thanks
+Yafang

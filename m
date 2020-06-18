@@ -2,112 +2,254 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E4B1E1FEE73
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 11:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7471FEF96
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 12:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728484AbgFRJS4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Jun 2020 05:18:56 -0400
-Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:60154 "EHLO
-        mx0b-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728343AbgFRJSz (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Thu, 18 Jun 2020 05:18:55 -0400
-Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05I91mwZ096451;
-        Thu, 18 Jun 2020 05:18:09 -0400
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 31r589gj0q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Jun 2020 05:18:09 -0400
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05I99upg003755;
-        Thu, 18 Jun 2020 09:18:07 GMT
-Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
-        by ppma04fra.de.ibm.com with ESMTP id 31r18v04vt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 Jun 2020 09:18:07 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05I9I4LN61735124
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 Jun 2020 09:18:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3360EAE053;
-        Thu, 18 Jun 2020 09:18:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id B2B08AE04D;
-        Thu, 18 Jun 2020 09:18:01 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.148.204.36])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Thu, 18 Jun 2020 09:18:01 +0000 (GMT)
-Date:   Thu, 18 Jun 2020 12:17:59 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Joerg Roedel <joro@8bytes.org>, peterz@infradead.org,
-        jroedel@suse.de, Andy Lutomirski <luto@kernel.org>,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        Satheesh Rajendran <sathnaga@linux.vnet.ibm.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        manvanth@linux.vnet.ibm.com, linux-next@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linuxppc-dev@lists.ozlabs.org, hch@lst.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH] mm: Move p?d_alloc_track to separate header file
-Message-ID: <20200618091759.GH6493@linux.ibm.com>
-References: <20200609120533.25867-1-joro@8bytes.org>
- <20200617181226.ab213ea1531b5dd6eca1b0b6@linux-foundation.org>
+        id S1728348AbgFRKW7 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Jun 2020 06:22:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728048AbgFRKWv (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 06:22:51 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F86C06174E
+        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 03:22:51 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id x11so2254148plo.7
+        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 03:22:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=yJ5sMCxeqS/DnIqL98PjP0UgB7lgDDoNjw/c/IiJiHU=;
+        b=c0jHwu29sCSAd9qo+nopxv8IKxmnWKW+KraCZwkHdBbYJyP1FX5ALSOLIBhQewVavK
+         WScUIK3OQXPAUuL5InKN1veqqfQUbLOI/Ue0rhcUcQzqMFibaFm0CZKZOUatfdzR9Uu7
+         cr9h9vZuiqcIBpvtIH+WYkr8tXyKYqCoMzrt67bS26bIcx+7jR00og/O2OWEVa/33TAr
+         wg5z7CcEgX5JlDXQ5UIhQAlEsSjRJwwopovwVT1t7nsosfDcQTnrTCvHBmNYYYb7tVE3
+         oVm6Er3n4ILUBG12Uoo4fockBpdBiyqx6OHwcK5/DEdLdsELeZsp0Eh6BTiyRVhWwPAq
+         glZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=yJ5sMCxeqS/DnIqL98PjP0UgB7lgDDoNjw/c/IiJiHU=;
+        b=qZoTS6tF2v+bfv85DIKgsNQT2JnOaIJqBubsVs77FGcAASH1d9xz0/+syfhc3ZwEHY
+         0iKwXFPm/mCzIQrNt6d0bO/q6HwQmZHtV2FgJ2WFG3d+sCMq/T9/BOdFqpsCIZ5zn97g
+         FAj7MVlLdoGZZfnUOB9yi5O7sxgX4xco55JGT3cdhINIEkPDouneuag59VadEDc2Emh6
+         4cSMWeqh3Pa+Q82Q+Z+h6FSnBW70zsJ2hLm5Dc502w7WNI9j6heZZjA5XCxIO+UYUd2w
+         jwcoKVCTUwdWfBCmhkhh4I2KDWoTd4LnbWF5jCMAjHO9maZOwrf4WG09VL3D64+E7nLt
+         XZvg==
+X-Gm-Message-State: AOAM533Cl90PxYf4NShRJRTrq4tXvOII5NOXmCgDWdstfBALGaFnoNA9
+        sQ1Zfy7WAGiREBd2IDvq+iyFX7LUq+w=
+X-Google-Smtp-Source: ABdhPJzoICD8cUxsFIWMKTkj3fQ/6VF2IGShmdf/sSMaN9Kw0b8cl1OoafDjsoiLJjONkrhR5XtohQ==
+X-Received: by 2002:a17:902:c30c:: with SMTP id k12mr3266708plx.130.1592475769458;
+        Thu, 18 Jun 2020 03:22:49 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id y7sm2076856pjy.21.2020.06.18.03.22.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 03:22:48 -0700 (PDT)
+Message-ID: <5eeb4078.1c69fb81.d10df.69c8@mx.google.com>
+Date:   Thu, 18 Jun 2020 03:22:48 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200617181226.ab213ea1531b5dd6eca1b0b6@linux-foundation.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
- definitions=2020-06-18_04:2020-06-17,2020-06-18 signatures=0
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 cotscore=-2147483648 mlxscore=0 clxscore=1015
- suspectscore=1 mlxlogscore=666 malwarescore=0 bulkscore=0 adultscore=0
- spamscore=0 impostorscore=0 phishscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2004280000
- definitions=main-2006180065
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200618
+Subject: next/master baseline: 151 runs, 5 regressions (next-20200618)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, Jun 17, 2020 at 06:12:26PM -0700, Andrew Morton wrote:
-> On Tue,  9 Jun 2020 14:05:33 +0200 Joerg Roedel <joro@8bytes.org> wrote:
-> 
-> > From: Joerg Roedel <jroedel@suse.de>
-> > 
-> > The functions are only used in two source files, so there is no need
-> > for them to be in the global <linux/mm.h> header. Move them to the new
-> > <linux/pgalloc-track.h> header and include it only where needed.
-> > 
-> > ...
-> >
-> > new file mode 100644
-> > index 000000000000..1dcc865029a2
-> > --- /dev/null
-> > +++ b/include/linux/pgalloc-track.h
-> > @@ -0,0 +1,51 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +#ifndef _LINUX_PGALLLC_TRACK_H
-> > +#define _LINUX_PGALLLC_TRACK_H
-> 
-> hm, no #includes.  I guess this is OK, given the limited use.
-> 
-> But it does make one wonder whether ioremap.c should be moved from lib/
-> to mm/ and this file should be moved from include/linux/ to mm/.
+next/master baseline: 151 runs, 5 regressions (next-20200618)
 
-It makes sense, but I am anyway planning consolidation of pgalloc.h, so
-most probably pgalloc-track will not survive until 5.9-rc1 :)
+Regressions Summary
+-------------------
 
-If you think that it worth moving ioremap.c to mm/ regardless of chrun,
-I can send a patch for that.
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-8    | sama5_d=
+efconfig              | 0/1    =
 
-> Oh well.
+da850-lcdk                   | arm   | lab-baylibre    | gcc-8    | davinci=
+_all_defconfig        | 3/5    =
 
--- 
-Sincerely yours,
-Mike.
+imx27-phytec-phycard-s-rdk   | arm   | lab-pengutronix | gcc-8    | imx_v4_=
+v5_defconfig          | 0/1    =
+
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre    | gcc-8    | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 4/5    =
+
+ox820-clouden...lug-series-3 | arm   | lab-baylibre    | gcc-8    | oxnas_v=
+6_defconfig           | 0/1    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200618/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200618
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      ce2cc8efd7a40cbd17841add878cb691d0ce0bba =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+at91-sama5d4_xplained        | arm   | lab-baylibre    | gcc-8    | sama5_d=
+efconfig              | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eeb07b7d71dff260497bf2e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200618/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200618/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5eeb07b7d71dff260497b=
+f2f
+      failing since 50 days (last pass: next-20200424, first fail: next-202=
+00428) =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+da850-lcdk                   | arm   | lab-baylibre    | gcc-8    | davinci=
+_all_defconfig        | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eeb00a667ed2b0cc397bf10
+
+  Results:     3 PASS, 2 FAIL, 0 SKIP
+  Full config: davinci_all_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200618/arm/=
+davinci_all_defconfig/gcc-8/lab-baylibre/baseline-da850-lcdk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200618/arm/=
+davinci_all_defconfig/gcc-8/lab-baylibre/baseline-da850-lcdk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5eeb00a667ed2b0=
+cc397bf15
+      failing since 1 day (last pass: next-20200614, first fail: next-20200=
+616)
+      33 lines =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+imx27-phytec-phycard-s-rdk   | arm   | lab-pengutronix | gcc-8    | imx_v4_=
+v5_defconfig          | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eeb06c3612b81b3b997bf10
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: imx_v4_v5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200618/arm/=
+imx_v4_v5_defconfig/gcc-8/lab-pengutronix/baseline-imx27-phytec-phycard-s-r=
+dk.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200618/arm/=
+imx_v4_v5_defconfig/gcc-8/lab-pengutronix/baseline-imx27-phytec-phycard-s-r=
+dk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5eeb06c3612b81b3b997b=
+f11
+      failing since 1 day (last pass: next-20200615, first fail: next-20200=
+616) =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre    | gcc-8    | defconf=
+ig+CON...BIG_ENDIAN=3Dy | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eeb0a9b0a11c2454997bf27
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200618/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
+-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200618/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
+-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64be/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5eeb0a9b0a11c24=
+54997bf2c
+      failing since 3 days (last pass: next-20200614, first fail: next-2020=
+0615)
+      2 lines =
+
+
+
+platform                     | arch  | lab             | compiler | defconf=
+ig                    | results
+-----------------------------+-------+-----------------+----------+--------=
+----------------------+--------
+ox820-clouden...lug-series-3 | arm   | lab-baylibre    | gcc-8    | oxnas_v=
+6_defconfig           | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eeb0009c68f4e9ba797bf10
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: oxnas_v6_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200618/arm/=
+oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
+series-3.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200618/arm/=
+oxnas_v6_defconfig/gcc-8/lab-baylibre/baseline-ox820-cloudengines-pogoplug-=
+series-3.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5eeb0009c68f4e9ba797b=
+f11
+      failing since 1 day (last pass: next-20200615, first fail: next-20200=
+616) =20

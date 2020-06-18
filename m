@@ -2,116 +2,72 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C2011FF5F8
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 17:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B341FFD07
+	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 23:00:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728355AbgFRPAJ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Jun 2020 11:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59912 "EHLO
+        id S1727900AbgFRVAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 18 Jun 2020 17:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726193AbgFRPAI (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 11:00:08 -0400
-Received: from mail-io1-xd43.google.com (mail-io1-xd43.google.com [IPv6:2607:f8b0:4864:20::d43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC3CFC06174E;
-        Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
-Received: by mail-io1-xd43.google.com with SMTP id m81so7406487ioa.1;
-        Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
+        with ESMTP id S1726478AbgFRVAq (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 17:00:46 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF24C06174E
+        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id bh7so2965282plb.11
+        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=NtwtfirPIaj3hQKqt5NnTqLzfoXadlYH6xaXhH3mB+s=;
-        b=kYwPKZdp0pHLg9nzSkXLUjXIWhhGSDK+lUsX3kvZKhpx/abFTtNYjkojW4sVVt7bHm
-         qZGTxARuFd3WI6EfU1eBN6+4gj/yCc7G3VU2n21gea6aS3fkUz/uMmbZ6zjhs6dF/ctG
-         mtQLDzrh6EKtHb9OSOEmMjo3N7fWi8hwmYyXXXcwlEWheXzJEY46FsRDyYJ/YXapbZEL
-         GAjWeoKd6sh4vm2KkDp99cfVll6l6Xz1jcMVSif5RsT91SxuUdRKKCZShkXiMxJfDPO2
-         mEQ03gbiIGbBmN1vxaEfCsHPJle351uahP3BtuY+Amj/uplhgSOrlPpU1WHGNLMkS4iC
-         lVIw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
+        bh=eLnt/HJPru2ioN9LrlmerX/tWnXfT6zJTwacnuJbp/I=;
+        b=NMM+gg6NFvyMDWF0fvM4JgtzVcqprjPeAXT/bqmOZXoU2JfC5LSvmiSo2xM+b0KBs0
+         cmr4aMqP3ARYM+EOIoWOnfC1ZQCB8427lYm4zpIpqxyoQJNTD1wkFwSAbj1MclhyecFj
+         zNwDSjC5aGFkj5fOq2vdGpBKHGAcBB9Jy6uOQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=NtwtfirPIaj3hQKqt5NnTqLzfoXadlYH6xaXhH3mB+s=;
-        b=E9oYBpHSZYmC7FLuwZtM18HBTCZPtsRMxCzP0mIHBegoGebObr7eH9A7y4vuzcy66h
-         Kd3F62IdMGfD/Q8vLsxuqYRk5AhEPIBg55HPyVBb0PGzoXl0igvA0SIPhQLYundiIMx+
-         tcgJqFJOaqh9yEL5uSqY55GT+USlIRYZVF/VfS9kNr13eJ53fAIBYIBO47RDw9NCtDJx
-         yhJfYZTsJH7BAFHsYN1ySSDYNAWrsh5qRnguXjI7Nx5PypdyoEyfXovnVqwprgoFdeZx
-         0vHgfWRD82wxHZsrQ8boAvZ7JBHCLsK2Y/qXb1qZH4ZkXPcZs3sXiK4s9cDt8Jl3NJdC
-         Apdw==
-X-Gm-Message-State: AOAM531PZUpGh13VrmFL1AJBCGva+2B1zX1VYE6NkKS9TH70KddBrTFW
-        sDtIVOtYHe2ZjdVKqjAWQ1PnUYsWmMEG/bDDECQ=
-X-Google-Smtp-Source: ABdhPJyxduBF4FPnbsePTb+IJMrnaO574t87lgH7MXGDrxKnm7Fm0uPL20a9JpNnhO5AEW9mefqTwucGCC8avIECgKo=
-X-Received: by 2002:a05:6602:2dd4:: with SMTP id l20mr5412675iow.13.1592492407237;
- Thu, 18 Jun 2020 08:00:07 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
+         :content-disposition;
+        bh=eLnt/HJPru2ioN9LrlmerX/tWnXfT6zJTwacnuJbp/I=;
+        b=JcxVDidSHVzqrVlvEOcX8bK9Gd5Nltkz+xmIQx4DDkx1MsFj0fKXSQNnI0TYwIefhL
+         2jf8ya/dJT28ooaqDUu8dCJOp780sCRhZqOlX0WBFjmgFo+6kvPJwiBwgMdJPAQ3+avy
+         YEPcP6h6wUc33e7/l/3Rb1lIj7JFYkh5lFKRu5TpKbs7MAy74JVArBzvfAuUMpZHpDxb
+         Jgw2bXsKcvmbdnLTm97dxqrbapDyt4WDo0Clu9ZrOqgZAZdcDclIPSTyaS62r6BgD6mn
+         sJxltWrBmI4+xWRidP1T1Cb64kzZuSEIqLEBHmgd8stWFZfLz8BFhHD0S0SGRNjlCiiN
+         sQ7A==
+X-Gm-Message-State: AOAM532aje6N4bQyATmqfyuV9xVvt+hKI0QBYXWxajPg3iXeng+vC3Qi
+        Yk6HL8UCvYCE90xZdqdLzBnHioBn7xw=
+X-Google-Smtp-Source: ABdhPJzKu7RcfdYEnSmaoKvzl++90HL9QR1UvqpkQEYRRH2S5vhA2o4l3IjDX3AK/NAOqdsgxUQPxw==
+X-Received: by 2002:a17:902:fe90:: with SMTP id x16mr5234873plm.290.1592514046175;
+        Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 85sm3698249pfz.145.2020.06.18.14.00.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2020 14:00:45 -0700 (PDT)
+Date:   Thu, 18 Jun 2020 14:00:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: please add for-next/seccomp
+Message-ID: <202006181357.5664DBCD4D@keescook>
 MIME-Version: 1.0
-References: <20200521095515.GK6462@dhcp22.suse.cz> <20200521163450.GV6462@dhcp22.suse.cz>
- <CA+G9fYsdsgRmwLtSKJSzB1eWcUQ1z-_aaU+BNcQpker34XT6_w@mail.gmail.com>
- <20200617135758.GA548179@chrisdown.name> <20200617141155.GQ9499@dhcp22.suse.cz>
- <CA+G9fYu+FB1PE0AMmE-9MrHpayE9kChwTyc3zfM6V83uQ0zcQA@mail.gmail.com>
- <20200617160624.GS9499@dhcp22.suse.cz> <CA+G9fYtCXrVGVtRTwxiqgfFNDDf_H4aNH=VpWLhsV4n_mCTLGg@mail.gmail.com>
- <20200617210935.GA578452@chrisdown.name> <CALOAHbBp7Ytd-Hta9NH-_HJtVTAsR5Pw2RYrVScp7PPezCEv2w@mail.gmail.com>
- <20200618123743.GA694719@chrisdown.name>
-In-Reply-To: <20200618123743.GA694719@chrisdown.name>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Thu, 18 Jun 2020 22:59:28 +0800
-Message-ID: <CALOAHbCPd407z45e809VE5c8vP6ewqwkDkY9nrMP5TyP5cjG+A@mail.gmail.com>
-Subject: Re: mm: mkfs.ext4 invoked oom-killer on i386 - pagecache_get_page
-To:     Chris Down <chris@chrisdown.name>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Linux F2FS DEV, Mailing List" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        linux-ext4 <linux-ext4@vger.kernel.org>,
-        linux-block <linux-block@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>, Arnd Bergmann <arnd@arndb.de>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        "Theodore Ts'o" <tytso@mit.edu>, Chao Yu <chao@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Chao Yu <yuchao0@huawei.com>, lkft-triage@lists.linaro.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <guro@fb.com>, Cgroups <cgroups@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 8:37 PM Chris Down <chris@chrisdown.name> wrote:
->
-> Yafang Shao writes:
-> >On Thu, Jun 18, 2020 at 5:09 AM Chris Down <chris@chrisdown.name> wrote:
-> >>
-> >> Naresh Kamboju writes:
-> >> >After this patch applied the reported issue got fixed.
-> >>
-> >> Great! Thank you Naresh and Michal for helping to get to the bottom of this :-)
-> >>
-> >> I'll send out a new version tomorrow with the fixes applied and both of you
-> >> credited in the changelog for the detection and fix.
-> >
-> >As we have already found that the usage around memory.{emin, elow} has
-> >many limitations, I think memory.{emin, elow} should be used for
-> >memcg-tree internally only, that means they can only be used to
-> >calculate the protection of a memcg in a specified memcg-tree but
-> >should not be exposed to other MM parts.
->
-> I agree that the current semantics are mentally taxing and we should generally
-> avoid exposing the implementation details outside of memcg where possible. Do
-> you have a suggested rework? :-)
+Hi Stephen,
 
-Keeping the mem_cgroup_protected() as-is is my suggestion. Anyway I
-think it is bad to put memory.{emin, elow} here and there.
-If we don't have any better idea by now, just putting all the
-references of memory.{emin, elow}  into one
-wrapper(mem_cgroup_protected()) is the reasonable solution.
+Can you please add my "for-next/seccomp" tree to linux-next? I've been
+including it in the already added "for-next/kspp" tree, but I'd rather
+have it be its own tree for linux-next, as it is ultimately its own topic.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=for-next/seccomp
+
+Thanks!
+
+-Kees
 
 -- 
-Thanks
-Yafang
+Kees Cook

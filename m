@@ -2,72 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B341FFD07
-	for <lists+linux-next@lfdr.de>; Thu, 18 Jun 2020 23:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F812200143
+	for <lists+linux-next@lfdr.de>; Fri, 19 Jun 2020 06:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727900AbgFRVAs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 18 Jun 2020 17:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59212 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726478AbgFRVAq (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 18 Jun 2020 17:00:46 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF24C06174E
-        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id bh7so2965282plb.11
-        for <linux-next@vger.kernel.org>; Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=eLnt/HJPru2ioN9LrlmerX/tWnXfT6zJTwacnuJbp/I=;
-        b=NMM+gg6NFvyMDWF0fvM4JgtzVcqprjPeAXT/bqmOZXoU2JfC5LSvmiSo2xM+b0KBs0
-         cmr4aMqP3ARYM+EOIoWOnfC1ZQCB8427lYm4zpIpqxyoQJNTD1wkFwSAbj1MclhyecFj
-         zNwDSjC5aGFkj5fOq2vdGpBKHGAcBB9Jy6uOQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=eLnt/HJPru2ioN9LrlmerX/tWnXfT6zJTwacnuJbp/I=;
-        b=JcxVDidSHVzqrVlvEOcX8bK9Gd5Nltkz+xmIQx4DDkx1MsFj0fKXSQNnI0TYwIefhL
-         2jf8ya/dJT28ooaqDUu8dCJOp780sCRhZqOlX0WBFjmgFo+6kvPJwiBwgMdJPAQ3+avy
-         YEPcP6h6wUc33e7/l/3Rb1lIj7JFYkh5lFKRu5TpKbs7MAy74JVArBzvfAuUMpZHpDxb
-         Jgw2bXsKcvmbdnLTm97dxqrbapDyt4WDo0Clu9ZrOqgZAZdcDclIPSTyaS62r6BgD6mn
-         sJxltWrBmI4+xWRidP1T1Cb64kzZuSEIqLEBHmgd8stWFZfLz8BFhHD0S0SGRNjlCiiN
-         sQ7A==
-X-Gm-Message-State: AOAM532aje6N4bQyATmqfyuV9xVvt+hKI0QBYXWxajPg3iXeng+vC3Qi
-        Yk6HL8UCvYCE90xZdqdLzBnHioBn7xw=
-X-Google-Smtp-Source: ABdhPJzKu7RcfdYEnSmaoKvzl++90HL9QR1UvqpkQEYRRH2S5vhA2o4l3IjDX3AK/NAOqdsgxUQPxw==
-X-Received: by 2002:a17:902:fe90:: with SMTP id x16mr5234873plm.290.1592514046175;
-        Thu, 18 Jun 2020 14:00:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 85sm3698249pfz.145.2020.06.18.14.00.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 Jun 2020 14:00:45 -0700 (PDT)
-Date:   Thu, 18 Jun 2020 14:00:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: please add for-next/seccomp
-Message-ID: <202006181357.5664DBCD4D@keescook>
+        id S1728871AbgFSEdY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Jun 2020 00:33:24 -0400
+Received: from mail29.static.mailgun.info ([104.130.122.29]:58094 "EHLO
+        mail29.static.mailgun.info" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728855AbgFSEdW (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 19 Jun 2020 00:33:22 -0400
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mg.codeaurora.org; q=dns/txt;
+ s=smtp; t=1592541202; h=Content-Transfer-Encoding: Content-Type:
+ In-Reply-To: MIME-Version: Date: Message-ID: From: References: Cc: To:
+ Subject: Sender; bh=xL8WRZW5X1FjpBOjpJn9kEbJZJS8WhjJ0iTqxhL7V7A=; b=r6DEtPGblJmzWkCHRBnKgTNvZw/B1vQ7CJh7li70Z3A+JZDo82veQhP4gv0FeSeirnTcEqx8
+ t9lMy47n1VW323ZMd657Y7P/PlFsPBU+lA+su26VdZ0OuaeGKaHvo8MEiU0BA0IlVe8RLrut
+ 871SsMpCHO25EMncmJz5OyWcXz8=
+X-Mailgun-Sending-Ip: 104.130.122.29
+X-Mailgun-Sid: WyJmNGRkZiIsICJsaW51eC1uZXh0QHZnZXIua2VybmVsLm9yZyIsICJiZTllNGEiXQ==
+Received: from smtp.codeaurora.org
+ (ec2-35-166-182-171.us-west-2.compute.amazonaws.com [35.166.182.171]) by
+ smtp-out-n03.prod.us-west-2.postgun.com with SMTP id
+ 5eec4006e144dd5115a8f501 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Fri, 19 Jun 2020 04:33:10
+ GMT
+Received: by smtp.codeaurora.org (Postfix, from userid 1001)
+        id 10506C433C8; Fri, 19 Jun 2020 04:33:10 +0000 (UTC)
+X-Spam-Checker-Version: SpamAssassin 3.4.0 (2014-02-07) on
+        aws-us-west-2-caf-mail-1.web.codeaurora.org
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.0 required=2.0 tests=ALL_TRUSTED,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.0
+Received: from [192.168.0.101] (unknown [49.207.137.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: sivaprak)
+        by smtp.codeaurora.org (Postfix) with ESMTPSA id 7538CC433CA;
+        Fri, 19 Jun 2020 04:33:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.3.2 smtp.codeaurora.org 7538CC433CA
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; dmarc=none (p=none dis=none) header.from=codeaurora.org
+Authentication-Results: aws-us-west-2-caf-mail-1.web.codeaurora.org; spf=none smtp.mailfrom=sivaprak@codeaurora.org
+Subject: Re: linux-next: Fixes tag needs some work in the pinctrl tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200616211214.7cc1f1a6@canb.auug.org.au>
+From:   Sivaprakash Murugesan <sivaprak@codeaurora.org>
+Message-ID: <9fdfd0fc-5bc9-1e7d-3955-a95535b32995@codeaurora.org>
+Date:   Fri, 19 Jun 2020 10:03:04 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+In-Reply-To: <20200616211214.7cc1f1a6@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+Hi Linus,
 
-Can you please add my "for-next/seccomp" tree to linux-next? I've been
-including it in the already added "for-next/kspp" tree, but I'd rather
-have it be its own tree for linux-next, as it is ultimately its own topic.
+I just sent version2 of this patch with correct fixes tag. please pick 
+it up.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=for-next/seccomp
+Thanks,
 
-Thanks!
+Siva
 
--Kees
-
--- 
-Kees Cook
+On 6/16/2020 4:42 PM, Stephen Rothwell wrote:
+> Hi all,
+>
+> In commit
+>
+>    912f25eca000 ("pinctrl: qcom: ipq6018 Add missing pins in qpic pin group")
+>
+> Fixes tag
+>
+>    Fixes: ef1ea54 (pinctrl: qcom: Add ipq6018 pinctrl driver)
+>
+> has these problem(s):
+>
+>    - SHA1 should be at least 12 digits long
+>      Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+>      or later) just making sure it is not set (or set to "auto").
+>

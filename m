@@ -2,82 +2,62 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83015200ADC
-	for <lists+linux-next@lfdr.de>; Fri, 19 Jun 2020 16:02:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 883C4201DC4
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jun 2020 00:07:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732663AbgFSOC1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Jun 2020 10:02:27 -0400
-Received: from youngberry.canonical.com ([91.189.89.112]:37119 "EHLO
-        youngberry.canonical.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725806AbgFSOC1 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 19 Jun 2020 10:02:27 -0400
-Received: from ip-109-41-0-196.web.vodafone.de ([109.41.0.196] helo=wittgenstein)
-        by youngberry.canonical.com with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.86_2)
-        (envelope-from <christian.brauner@ubuntu.com>)
-        id 1jmHau-0002Hs-LG; Fri, 19 Jun 2020 14:02:15 +0000
-Date:   Fri, 19 Jun 2020 16:01:48 +0200
-From:   Christian Brauner <christian.brauner@ubuntu.com>
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Christian Brauner <christian@brauner.io>,
-        PowerPC <linuxppc-dev@lists.ozlabs.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the pidfd tree with the
- powerpc-fixes tree
-Message-ID: <20200619140148.4ytme4wsvtw2oyrg@wittgenstein>
-References: <20200618121131.4ad29150@canb.auug.org.au>
- <878sgjcnjp.fsf@mpe.ellerman.id.au>
+        id S1728925AbgFSWHF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 19 Jun 2020 18:07:05 -0400
+Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21512 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1728921AbgFSWHE (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Fri, 19 Jun 2020 18:07:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1592604424;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=I79nPb0pXt8/3dgBW2qv/EZDlPMjoeNKQYFohhTmzfU=;
+        b=cK3eR09sW07j/+aDynDF0VQ5AFFUHARJEXxNQc3rPzCsjOB0VWE1t1ZVPOkbefh/lAWiAY
+        G13/a5QWM0jRlUdfWhaEl1SXGgOfQf4pdc51sdsrQBc3kx3qOiYBAFWUuX3NrSI6BpdOZe
+        N+iWWbY1248xtXQ+aHBiv6x6C/r1itw=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-310-5Xn1D812ODuWIhY6fMNPMA-1; Fri, 19 Jun 2020 18:07:02 -0400
+X-MC-Unique: 5Xn1D812ODuWIhY6fMNPMA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3566464;
+        Fri, 19 Jun 2020 22:07:00 +0000 (UTC)
+Received: from warthog.procyon.org.uk (ovpn-114-66.rdu2.redhat.com [10.10.114.66])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7211271661;
+        Fri, 19 Jun 2020 22:06:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <000000000000f48bc805a7f30e6c@google.com>
+References: <000000000000f48bc805a7f30e6c@google.com>
+To:     syzbot <syzbot+ada89e25a220b3befb36@syzkaller.appspotmail.com>
+Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Subject: Re: linux-next test error: KASAN: use-after-free Write in afs_wake_up_async_call
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <878sgjcnjp.fsf@mpe.ellerman.id.au>
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2213594.1592604418.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Fri, 19 Jun 2020 23:06:58 +0100
+Message-ID: <2213595.1592604418@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 19, 2020 at 09:17:30PM +1000, Michael Ellerman wrote:
-> Stephen Rothwell <sfr@canb.auug.org.au> writes:
-> > Hi all,
-> >
-> > Today's linux-next merge of the pidfd tree got a conflict in:
-> >
-> >   arch/powerpc/kernel/syscalls/syscall.tbl
-> >
-> > between commit:
-> >
-> >   35e32a6cb5f6 ("powerpc/syscalls: Split SPU-ness out of ABI")
-> >
-> > from the powerpc-fixes tree and commit:
-> >
-> >   9b4feb630e8e ("arch: wire-up close_range()")
-> >
-> > from the pidfd tree.
-> >
-> > I fixed it up (see below) and can carry the fix as necessary. This
-> > is now fixed as far as linux-next is concerned, but any non trivial
-> > conflicts should be mentioned to your upstream maintainer when your tree
-> > is submitted for merging.  You may also want to consider cooperating
-> > with the maintainer of the conflicting tree to minimise any particularly
-> > complex conflicts.
-> 
-> Thanks.
-> 
-> I thought the week between rc1 and rc2 would be a safe time to do that
-> conversion of the syscall table, but I guess I was wrong :)
+#syz dup: net-next test error: KASAN: use-after-free Write in afs_wake_up_=
+async_call
 
-:)
-
-> 
-> I'm planning to send those changes to Linus for rc2, so the conflict
-> will then be vs mainline. But I guess it's pretty trivial so it doesn't
-> really matter.
-
-close_range() is targeted for the v5.9 merge window. I always do
-test-merges with mainline at the time I'm creating a pr and I'll just
-mention to Linus that there's conflict with ppc. :)
-
-Thanks!
-Christian

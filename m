@@ -2,62 +2,87 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 883C4201DC4
-	for <lists+linux-next@lfdr.de>; Sat, 20 Jun 2020 00:07:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 775562026F2
+	for <lists+linux-next@lfdr.de>; Sat, 20 Jun 2020 23:46:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728925AbgFSWHF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 19 Jun 2020 18:07:05 -0400
-Received: from us-smtp-2.mimecast.com ([205.139.110.61]:21512 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1728921AbgFSWHE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Fri, 19 Jun 2020 18:07:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1592604424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I79nPb0pXt8/3dgBW2qv/EZDlPMjoeNKQYFohhTmzfU=;
-        b=cK3eR09sW07j/+aDynDF0VQ5AFFUHARJEXxNQc3rPzCsjOB0VWE1t1ZVPOkbefh/lAWiAY
-        G13/a5QWM0jRlUdfWhaEl1SXGgOfQf4pdc51sdsrQBc3kx3qOiYBAFWUuX3NrSI6BpdOZe
-        N+iWWbY1248xtXQ+aHBiv6x6C/r1itw=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-310-5Xn1D812ODuWIhY6fMNPMA-1; Fri, 19 Jun 2020 18:07:02 -0400
-X-MC-Unique: 5Xn1D812ODuWIhY6fMNPMA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        id S1729036AbgFTVqO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 20 Jun 2020 17:46:14 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46357 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729032AbgFTVqN (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 20 Jun 2020 17:46:13 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id D3566464;
-        Fri, 19 Jun 2020 22:07:00 +0000 (UTC)
-Received: from warthog.procyon.org.uk (ovpn-114-66.rdu2.redhat.com [10.10.114.66])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7211271661;
-        Fri, 19 Jun 2020 22:06:59 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000f48bc805a7f30e6c@google.com>
-References: <000000000000f48bc805a7f30e6c@google.com>
-To:     syzbot <syzbot+ada89e25a220b3befb36@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, linux-afs@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
-Subject: Re: linux-next test error: KASAN: use-after-free Write in afs_wake_up_async_call
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49q8PX0Qkdz9sPF;
+        Sun, 21 Jun 2020 07:46:08 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592689568;
+        bh=X/taPUHeWLJVM/kaYKd+Q++rYLyDJOF4tONvDzXN5fk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=YcNarYwdcyjziu4II/2Dj6TWcZ5IrcyjBvFHT3Y6tM7a2yH+Y2hHqUI0gaiQLsck9
+         EnbQvAS1vrYH7tmE6hUMowJgO6OFSSWKpK6Op924ej+uL6vxmgMt4LJgmnf2FHFiW/
+         o4xvDEi4FvD+966h0/Dv/ETpmHf/SAP/LMvm/Av3toEwn86C3HOoPrh0Tos7k1HURG
+         Xy/aTfFs42Hcsgk8bE5HzAAEVIo4fPU2Lvw2a4/uQ3kTBtKlq92PtZUiEfoKOq8RKY
+         aoYLh9Hj6zw5BuUk9LAAT2KhisvyA8oIxbHv7UGcciQJSenupTL9zBBipJIa25/haJ
+         9q+Ym5CSP4GVA==
+Date:   Sun, 21 Jun 2020 07:46:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        David Rientjes <rientjes@google.com>
+Subject: linux-next: Fixes tag needs some work in the dma-mapping tree
+Message-ID: <20200621074607.4a2fcc68@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2213594.1592604418.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Fri, 19 Jun 2020 23:06:58 +0100
-Message-ID: <2213595.1592604418@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Type: multipart/signed; boundary="Sig_/vXlAKtn2aFCi6ysqN7e4Kio";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-#syz dup: net-next test error: KASAN: use-after-free Write in afs_wake_up_=
-async_call
+--Sig_/vXlAKtn2aFCi6ysqN7e4Kio
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
+
+In commit
+
+  8cbe23e1c79f ("dma-direct: add missing set_memory_decrypted() for coheren=
+t mapping")
+
+Fixes tag
+
+  Fixes: 3acac065508f ("dma-mapping: merge the generic remapping helpers
+
+has these problem(s):
+
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
+
+Please do not split Fixes tags over more than one line.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/vXlAKtn2aFCi6ysqN7e4Kio
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7ug58ACgkQAVBC80lX
+0GweDgf/RLXq9iRoBRoavQWVjsVpnAxVyzIlOxkluZOpPwOnTdq8SDcfz3iZDBAZ
+iKxelWXGtmUBKJeLHRl2Pdfx4n8kW6acI9egrty/vtZOGVcitU7ScAigYakoIVwf
+8migMrOg2YpewNV9xxwrpSHVo8MuZQtsI927bdnWJq9u865Fjmb66tiSodE5G6nf
+L+x24W1jgV/APp4G79NHkriAt4EbWdvhNxikaZwHiOYro1CmKvJLHY/9rDo2rt0m
+/Ys2YT16TQRQPW3/cN1kZHo3qsIMtn9cSy9JmnH1DY+o2OJHF2aFjBn1R/+TrwGG
+ARG7HA7Od0U8/bbroz9ZD7PC8YcY3g==
+=YpX2
+-----END PGP SIGNATURE-----
+
+--Sig_/vXlAKtn2aFCi6ysqN7e4Kio--

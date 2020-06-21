@@ -2,105 +2,216 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 22897202CF1
-	for <lists+linux-next@lfdr.de>; Sun, 21 Jun 2020 23:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC138202D75
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 00:44:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728317AbgFUV1M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Jun 2020 17:27:12 -0400
-Received: from ozlabs.org ([203.11.71.1]:53873 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726393AbgFUV1M (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 21 Jun 2020 17:27:12 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49qlxB4w3Dz9sRN;
-        Mon, 22 Jun 2020 07:27:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592774830;
-        bh=3XD2MhlP1mkKmfonTzi0O/6MbdfZB5AxA0lj2BsC+7k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=tIjvHkAfQCXaernYiCaljpIb2QTPW/C5sumSNwAguOynGopbsoBiWtmaqPvlheMFR
-         LWLdJRJ2WeQQg6tD2U8l5nkL8NX6/PCcHa1/w7qa4DI01wlPSYBOjA7B6lhGPud5eX
-         bCjHbXlq3KTza/b+qKm1qdnkfRG0z6CWQrVKRRnQm3AKddRuzZTbaMQqWVz2kimsWJ
-         wPS1bffb0wEtK6lspbxa0IILzJXm8EnLsTPiErQ0VfWpwM3Bb3VH8+cgbNyiZTVc/Z
-         xRYoyl/83KRYG9F8j4zoke0Z0Bx6mRJLWyf1hre3eWqxAu+NXaKEXu+yZvWh8x6oqm
-         zqOdRoD5UIqtg==
-Date:   Mon, 22 Jun 2020 07:27:08 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: please add for-next/seccomp
-Message-ID: <20200622072708.14742b70@canb.auug.org.au>
-In-Reply-To: <202006181357.5664DBCD4D@keescook>
-References: <202006181357.5664DBCD4D@keescook>
+        id S1726386AbgFUWo5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Jun 2020 18:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726380AbgFUWo5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Jun 2020 18:44:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3CDC061794
+        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 15:44:57 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id u8so7186562pje.4
+        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 15:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=emqvAGLaas9Ep3cJbFxqrqzLWsbpT7QehlzpFH+JvHY=;
+        b=PmNFE1GB97chNQl1CaW1Y/9RmxNq3lhdQa/CpoBU6WlV/9SpOUTvoRk9kcTY+BZXKX
+         ArB3PlnR1NfZV6aTaS1ZMvX/zzqVHyUPLggwA3mOvGy1ELLm6TEfif7M19Nxu5+sY5OM
+         U7wlFwGAhTODftijGKPRtK6rdmSjyef5g1NJyjVtMkcD+7KnXaqRar2t5qjI5poXRvLh
+         WSTj/oZ2yNdE1Vum9ojrRv9tlcoYubLM0foQE9ffQNtEI5eo7ynLp5NxJlsOA8i7m2mt
+         sZ5E6Dav43kJEXegV8S4ZMb/v4GMO91+f0uR4YOI+PwurArgYF74IhYhN1LEk+CWrRoe
+         V9Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=emqvAGLaas9Ep3cJbFxqrqzLWsbpT7QehlzpFH+JvHY=;
+        b=XzaequPNuJE/3u1fd2K2Mk9oqiM9547djrhK2qnkXltS+U311GgGO9PCwHTb1sFaHi
+         GibAJvo1ZJ6TqII89CBdFQfO5jGL8vZByXsaB9OwN00LaQgp/Q87fHyFRJNMHHmODgL+
+         HKq5KjAcrN0DIQYsY8tqsMinIQ6T9A8PkXBjlpJXYJuJJO494AougwUDKSyaHnmWKyki
+         y1IYpdX8kRZj/te+11ory9/BdeHvRKmsSPkAXPz7vuE7ZWk3tXkjREtg3fgmTCO7qah5
+         rs17az+VsJYffJUIiBRBKh8Oa03TQcDk+VvG0X1BuqRucvadE3Yaqc5gh8Af4QMcb81q
+         FURg==
+X-Gm-Message-State: AOAM532WQxx8LS4nMLiod+alKtUXkAzWsn+P+P7BHfeuL+9HhAMDGuAR
+        R7j/zJuDdw9Mob6G/w7aEJBCetFBiYM=
+X-Google-Smtp-Source: ABdhPJyGDQ5Kt1Ii1T+f1Azp1O7bWB1UpT9sM22aj6Oa1C1QVpzAYgdvMSVJV6svL0Axj6Aw15HWJQ==
+X-Received: by 2002:a17:90a:630b:: with SMTP id e11mr1168542pjj.236.1592779495039;
+        Sun, 21 Jun 2020 15:44:55 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m129sm10646970pfm.206.2020.06.21.15.44.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 Jun 2020 15:44:54 -0700 (PDT)
+Message-ID: <5eefe2e6.1c69fb81.bd830.0653@mx.google.com>
+Date:   Sun, 21 Jun 2020 15:44:54 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tplnXB9NEiVe0orua_WsR4E";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200621
+Subject: next/master baseline: 97 runs, 4 regressions (next-20200621)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/tplnXB9NEiVe0orua_WsR4E
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/master baseline: 97 runs, 4 regressions (next-20200621)
 
-Hi Kees,
+Regressions Summary
+-------------------
 
-On Thu, 18 Jun 2020 14:00:44 -0700 Kees Cook <keescook@chromium.org> wrote:
->
-> Can you please add my "for-next/seccomp" tree to linux-next? I've been
-> including it in the already added "for-next/kspp" tree, but I'd rather
-> have it be its own tree for linux-next, as it is ultimately its own topic.
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=3Df=
-or-next/seccomp
+platform                     | arch  | lab          | compiler | defconfig =
+                   | results
+-----------------------------+-------+--------------+----------+-----------=
+-------------------+--------
+at91-sama5d4_xplained        | arm   | lab-baylibre | gcc-8    | sama5_defc=
+onfig              | 0/1    =
 
-I have added
+bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
+                   | 4/5    =
 
-git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git branch for-nex=
-t/seccomp
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+                   | 4/5    =
 
-from today.
+meson-gxm-q200               | arm64 | lab-baylibre | gcc-8    | defconfig+=
+CON...BIG_ENDIAN=3Dy | 0/1    =
 
-Thanks for adding your subsystem tree as a participant of linux-next.  As
-you may know, this is not a judgement of your code.  The purpose of
-linux-next is for integration testing and to lower the impact of
-conflicts between subsystems in the next merge window.=20
 
-You will need to ensure that the patches/commits in your tree/series have
-been:
-     * submitted under GPL v2 (or later) and include the Contributor's
-        Signed-off-by,
-     * posted to the relevant mailing list,
-     * reviewed by you (or another maintainer of your subsystem tree),
-     * successfully unit tested, and=20
-     * destined for the current or next Linux merge window.
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200621/plan/baseline/
 
-Basically, this should be just what you would send to Linus (or ask him
-to fetch).  It is allowed to be rebased if you deem it necessary.
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200621
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      5a94f5bc041ea9e4d17c93b11ea6f6a2e5ad361b =
 
---=20
-Cheers,
-Stephen Rothwell=20
-sfr@canb.auug.org.au
 
---Sig_/tplnXB9NEiVe0orua_WsR4E
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+Test Regressions
+---------------- =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7v0KwACgkQAVBC80lX
-0GxXowf/WybiFgz22Ty3x/EeQEHvfAKbEnsxRRvZwSZev8S00UrliuI2s/6b4V4Y
-kIAcAZVYa57dbwz1uuPBglKBFlF8y6uTlSZLOeDgg6cFnlPsAaEfm/HYVmMcEb45
-qKWwR12ZgWjKb1voRhZySoGGVT9S8EOjS1g7hEMfP/AlqIwH2QSuvtuVsaPgiDoK
-OG7C97vvZWxcKx8iIetn+HoWFocrnUtx8J+uuttqRBhHD3ok+gcJ0o5VxmSTK8FV
-hWZClGb5S7ShAfKxx471KQ1D4//Uy9rxP/WolqeU9vaUU7VaoBOGmbjOCv/1b1Eo
-9b6Kol9rMQAUvegz/lDXTtg1cHsskg==
-=XwmM
------END PGP SIGNATURE-----
 
---Sig_/tplnXB9NEiVe0orua_WsR4E--
+
+platform                     | arch  | lab          | compiler | defconfig =
+                   | results
+-----------------------------+-------+--------------+----------+-----------=
+-------------------+--------
+at91-sama5d4_xplained        | arm   | lab-baylibre | gcc-8    | sama5_defc=
+onfig              | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eefa83fb1bad0b6a197bf17
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200621/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200621/arm/=
+sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5eefa83fb1bad0b6a197b=
+f18
+      failing since 54 days (last pass: next-20200424, first fail: next-202=
+00428) =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+                   | results
+-----------------------------+-------+--------------+----------+-----------=
+-------------------+--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
+                   | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eefae7c03beeb36b797bf1b
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5eefae7c03beeb36=
+b797bf1e
+      new failure (last pass: next-20200618)
+      2 lines =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+                   | results
+-----------------------------+-------+--------------+----------+-----------=
+-------------------+--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig =
+                   | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eefaeb51d75ac285b97bf0b
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5eefaeb51d75ac2=
+85b97bf10
+      new failure (last pass: next-20200618)
+      2 lines =
+
+
+
+platform                     | arch  | lab          | compiler | defconfig =
+                   | results
+-----------------------------+-------+--------------+----------+-----------=
+-------------------+--------
+meson-gxm-q200               | arm64 | lab-baylibre | gcc-8    | defconfig+=
+CON...BIG_ENDIAN=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eefaab77115622ce997bf11
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/baseline-meson-gxm=
+-q200.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200621/arm6=
+4/defconfig+CONFIG_CPU_BIG_ENDIAN=3Dy/gcc-8/lab-baylibre/baseline-meson-gxm=
+-q200.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64be/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5eefaab77115622ce997b=
+f12
+      new failure (last pass: next-20200618) =20

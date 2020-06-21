@@ -2,81 +2,58 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D67202B66
-	for <lists+linux-next@lfdr.de>; Sun, 21 Jun 2020 17:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29572202B79
+	for <lists+linux-next@lfdr.de>; Sun, 21 Jun 2020 17:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730320AbgFUPgl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Jun 2020 11:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730295AbgFUPgl (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Jun 2020 11:36:41 -0400
-Received: from mail-pl1-x644.google.com (mail-pl1-x644.google.com [IPv6:2607:f8b0:4864:20::644])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA02CC061794
-        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 08:36:40 -0700 (PDT)
-Received: by mail-pl1-x644.google.com with SMTP id n2so6366048pld.13
-        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 08:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gRP16u1hGpLUV3yyXDqoC8CE4YUA8ZpoMcUkBaKy1z0=;
-        b=PKro4SUneqYE3bvs/1xZhKR519MFxNvu2l21K3NWg9zeWKlc1VHRaKXtWuUsaJ/fjW
-         QeD3veZTQyVPEOMLMz3za2xKDPa7r53bN0FnNyf/ERHXsYbyqyZn91tkHqvls7basJnH
-         Qsa+8L+FOYXo8Zk8mniRb1S2uaZEFZtnVAIDA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gRP16u1hGpLUV3yyXDqoC8CE4YUA8ZpoMcUkBaKy1z0=;
-        b=KVKtTmT/vfeEb6ncrenJOheM5eK/BOCsXC5sO0EOdSEXVeOyJYVr4nyr7ub4Bo9Oot
-         UXoS1h2KlQoZH7F422VESt1eOZh/xaiMeH/hY8zjX4Zwq9lKG6RdtqAlO1wCUuD3GV9k
-         oOISA0eRvqI5Rpjax9dlub33so5WV2AFQ4fbEYOM7ybciPJftfXVQTVdOxBsoGKWX4U4
-         QZS3rl1+FANpGk0OLgyZN/TQZP98/a+jfBObEMr/h+I30wlYDTVB6yjap4JpYNKj0je/
-         SzL2P8iFoycUJkm5bhD+mpD0EET9aDFzcLMUZBYoTSyhAIsJ6/cT5RkRpp9lhvruxUwO
-         UAHA==
-X-Gm-Message-State: AOAM531b64pkWr0Lq+DEmO6CODXCjl137CIDpqrr3v8Y1isir4if5040
-        ilnAGGvWRfwexHBtm22YSztU7miIB7o=
-X-Google-Smtp-Source: ABdhPJwKoiOm2N5IhzFQsoZM9U+ei319pSVs6AopcRngDYPXYQIA9nW38cCMcJgv95kKauGw7wk+Jg==
-X-Received: by 2002:a17:90a:e7cf:: with SMTP id kb15mr14422643pjb.86.1592753800496;
-        Sun, 21 Jun 2020 08:36:40 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id o1sm11141702pjf.17.2020.06.21.08.36.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 Jun 2020 08:36:39 -0700 (PDT)
-Date:   Sun, 21 Jun 2020 08:36:38 -0700
-From:   Kees Cook <keescook@chromium.org>
+        id S1730380AbgFUPx6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Jun 2020 11:53:58 -0400
+Received: from mail.kernel.org ([198.145.29.99]:37808 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729210AbgFUPx5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 21 Jun 2020 11:53:57 -0400
+Received: from paulmck-ThinkPad-P72.home (50-39-105-78.bvtn.or.frontiernet.net [50.39.105.78])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 8BEFB2491E;
+        Sun, 21 Jun 2020 15:53:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592754837;
+        bh=wwri0GkSmRmBfUj/zzz6KpMT0eTwDFQ/mkSieKNNp2E=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=eHaOHaGmJoAW74iu13Q4q2vrRVQSYxorSbBxmkH/yjQnVeTjfUMLNQZ0RulZWH7A+
+         BrEHeyeV3zJq664geF5YBe4/Ur5GeEOg9geifZFOwNLbQwW7D1l7DGuHYdUKhQEmiT
+         GWNCJyjLzBsb8WKCbBQP0EsnFMtYdGZT4CSeFhFs=
+Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
+        id 6B2703522659; Sun, 21 Jun 2020 08:53:57 -0700 (PDT)
+Date:   Sun, 21 Jun 2020 08:53:57 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sargun Dhillon <sargun@sargun.me>
-Subject: Re: linux-next: build failure after merge of the kspp tree
-Message-ID: <202006210828.6AC290C4@keescook>
-References: <20200621234851.64cf82c7@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: Signed-off-by missing for commits in the rcu tree
+Message-ID: <20200621155357.GD9247@paulmck-ThinkPad-P72>
+Reply-To: paulmck@kernel.org
+References: <20200621080632.0819a404@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200621234851.64cf82c7@canb.auug.org.au>
+In-Reply-To: <20200621080632.0819a404@canb.auug.org.au>
+User-Agent: Mutt/1.9.4 (2018-02-28)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sun, Jun 21, 2020 at 11:48:51PM +1000, Stephen Rothwell wrote:
+On Sun, Jun 21, 2020 at 08:06:32AM +1000, Stephen Rothwell wrote:
 > Hi all,
 > 
-> After merging the kspp tree, today's linux-next build (x86_64 allnoconfig)
-> failed like this:
+> Commits
 > 
-> x86_64-linux-gnu-ld: fs/file.o: in function `__fd_install_received':
-> file.c:(.text+0x1010): undefined reference to `sock_from_file'
-> x86_64-linux-gnu-ld: file.c:(.text+0x104a): undefined reference to `sock_from_file'
+>   aa56127d9ac5 ("rcu/trace: Use gp_seq_req in acceleration's rcu_grace_period tracepoint")
+>   63222f379b92 ("rcu/trace: Print negative GP numbers correctly")
+> 
+> are missing a Signed-off-by from their committer.
 
-Oh fun. Okay, that's the first use of sock_from_file() in core kernel
-code. I will fix linux/net.h to include a NULL-returning static inline
-for the CONFIG_NET=n case.
+Ah, fixed, thank you!
 
-And I will add "allnoconfig" to my test workflow. :)
-
--- 
-Kees Cook
+							Thanx, Paul

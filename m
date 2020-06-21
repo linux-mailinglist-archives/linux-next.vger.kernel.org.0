@@ -2,176 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8B5202A28
-	for <lists+linux-next@lfdr.de>; Sun, 21 Jun 2020 12:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072FD202A85
+	for <lists+linux-next@lfdr.de>; Sun, 21 Jun 2020 14:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729819AbgFUKyD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 21 Jun 2020 06:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+        id S1730008AbgFUMn2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 21 Jun 2020 08:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729732AbgFUKyD (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Jun 2020 06:54:03 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4A4C061794;
-        Sun, 21 Jun 2020 03:54:02 -0700 (PDT)
-Received: from zn.tnic (p200300ec2f310b00859d3e21c21ab34f.dip0.t-ipconnect.de [IPv6:2003:ec:2f31:b00:859d:3e21:c21a:b34f])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S1730002AbgFUMn1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 21 Jun 2020 08:43:27 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8856BC061794;
+        Sun, 21 Jun 2020 05:43:27 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0F2951EC031B;
-        Sun, 21 Jun 2020 12:54:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1592736840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=vv+IfG9aH1AU0X0L2j56vDE+dQoFKlAmWLzo93fGcYM=;
-        b=BXwgouOzeqfF/5TDxkIQkEO0FeiiCQOWQAD1DX3yM7fPXmkrevufcCv6sYahBYZ1f2+jZV
-        HdjsUyKxt+iTUJdqQy6f+XaTMSaMtyVdl7dTKIjJUOc73IH+gNGYF2Wo+s1kiPG5nn+Wrn
-        e9UFyoh44vj+H2qozU/CSczd1Hjdn88=
-Date:   Sun, 21 Jun 2020 12:53:50 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-Subject: Re: linux-next: build failure after merge of the tip tree
-Message-ID: <20200621105350.GA28206@zn.tnic>
-References: <20200621163323.14e8533f@canb.auug.org.au>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49qXJr41Hwz9sSJ;
+        Sun, 21 Jun 2020 22:43:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592743405;
+        bh=/Y/a9qNV3HIhNZm3vmufHp8jcmmMM6utoXB4S/oj4jI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=PSKiObgVmbqG/CXgzmw4DOkurAwgaW6FKWp9eKydmLYF3JhoD12gc3d0nG4h3gx1a
+         zwDZUzuP+ZjatW+Lt0Ag82Awcbh2YaiI0lGY6dRO3qELyRoAGKV1gy3rm5r/JM5Wjg
+         yGs2FEKO35po0sl2d+A4p4alBbW/n/r3AKADVlomb7i9hagNfSURPjX5dodhPk0+Zd
+         ZNTTtO7ze6ynFH42MWTE78nCjD2YvM2rr3PG8X38kReeROww/dOO7ZXmkD9IkY4Xcf
+         DqCc6dYG96TANPumnpnbygaGJYTJRbY6nmc/MfC1yzFCxNdsAl2mrf6SDhP5xTqi6Z
+         UNrGgDLfElIiA==
+Date:   Sun, 21 Jun 2020 22:43:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian@brauner.io>,
+        Kees Cook <keescook@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the pidfd tree with the kspp tree
+Message-ID: <20200621224322.4e90f1a2@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20200621163323.14e8533f@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/j=4p44Urs=Ny+=DV2bLQgMW";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-+ acme for an FYI.
+--Sig_/j=4p44Urs=Ny+=DV2bLQgMW
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jun 21, 2020 at 04:33:23PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the tip tree, today's linux-next build (perf) failed
-> like this:
-> 
-> In file included from trace/beauty/tracepoints/x86_msr.c:10:
-> perf/trace/beauty/generated/x86_arch_MSRs_array.c:292:45: error: initialized field overwritten [-Werror=override-init]
->   292 |  [0xc0010280 - x86_AMD_V_KVM_MSRs_offset] = "F15H_PTSC",
->       |                                             ^~~~~~~~~~~
-> perf/trace/beauty/generated/x86_arch_MSRs_array.c:292:45: note: (near initialization for 'x86_AMD_V_KVM_MSRs[640]')
-> 
-> Caused by commit
-> 
->   1068ed4547ad ("x86/msr: Lift AMD family 0x15 power-specific MSRs")
-> 
-> I have used the tip tree from next-20200618 for tooday.
+Hi all,
 
-Thanks, I saw that once but then got distracted to something of higher
-prio. :-\
+Today's linux-next merge of the pidfd tree got a conflict in:
 
-I'll apply this after testing it a bit:
+  fs/file.c
 
----
-From: Borislav Petkov <bp@suse.de>
-Date: Sun, 21 Jun 2020 12:41:53 +0200
-Subject: [PATCH] x86/msr: Move the F15h MSRs where they belong
+between commit:
 
-1068ed4547ad ("x86/msr: Lift AMD family 0x15 power-specific MSRs")
+  d3868eea5cbc ("fs: Move __scm_install_fd() to __fd_install_received()")
 
-moved the three F15h power MSRs to the architectural list but that was
-wrong as they belong in the family 0x15 list. That also caused:
+from the kspp tree and commit:
 
-  In file included from trace/beauty/tracepoints/x86_msr.c:10:
-  perf/trace/beauty/generated/x86_arch_MSRs_array.c:292:45: error: initialized field overwritten [-Werror=override-init]
-    292 |  [0xc0010280 - x86_AMD_V_KVM_MSRs_offset] = "F15H_PTSC",
-        |                                             ^~~~~~~~~~~
-  perf/trace/beauty/generated/x86_arch_MSRs_array.c:292:45: note: (near initialization for 'x86_AMD_V_KVM_MSRs[640]')
+  60997c3d45d9 ("close_range: add CLOSE_RANGE_UNSHARE")
 
-due to MSR_F15H_PTSC ending up being defined twice. Move them where they
-belong and drop the duplicate.
+from the pidfd tree.
 
-While at it, update the msr-index.h copy to pick up the changes from
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
-  7e5b3c267d25 ("x86/speculation: Add Special Register Buffer Data Sampling (SRBDS) mitigation")
+--=20
+Cheers,
+Stephen Rothwell
 
-Fixes: 1068ed4547ad ("x86/msr: Lift AMD family 0x15 power-specific MSRs")
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Borislav Petkov <bp@suse.de>
----
- arch/x86/include/asm/msr-index.h       | 5 ++---
- tools/arch/x86/include/asm/msr-index.h | 9 ++++++---
- 2 files changed, 8 insertions(+), 6 deletions(-)
+diff --cc fs/file.c
+index 9568bcfd1f44,340bc9569f9d..000000000000
+--- a/fs/file.c
++++ b/fs/file.c
+@@@ -10,8 -10,8 +10,9 @@@
+  #include <linux/syscalls.h>
+  #include <linux/export.h>
+  #include <linux/fs.h>
++ #include <linux/kernel.h>
+  #include <linux/mm.h>
+ +#include <linux/net.h>
+  #include <linux/sched/signal.h>
+  #include <linux/slab.h>
+  #include <linux/file.h>
+@@@ -19,8 -19,7 +20,9 @@@
+  #include <linux/bitops.h>
+  #include <linux/spinlock.h>
+  #include <linux/rcupdate.h>
+ +#include <net/cls_cgroup.h>
+ +#include <net/netprio_cgroup.h>
++ #include <linux/close_range.h>
+ =20
+  unsigned int sysctl_nr_open __read_mostly =3D 1024*1024;
+  unsigned int sysctl_nr_open_min =3D BITS_PER_LONG;
 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index eb9537254920..63ed8fe35738 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -422,11 +422,8 @@
- #define MSR_AMD_PERF_CTL		0xc0010062
- #define MSR_AMD_PERF_STATUS		0xc0010063
- #define MSR_AMD_PSTATE_DEF_BASE		0xc0010064
--#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
--#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
- #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
- #define MSR_AMD64_OSVW_STATUS		0xc0010141
--#define MSR_F15H_PTSC			0xc0010280
- #define MSR_AMD_PPIN_CTL		0xc00102f0
- #define MSR_AMD_PPIN			0xc00102f1
- #define MSR_AMD64_CPUID_FN_1		0xc0011004
-@@ -469,6 +466,8 @@
- #define MSR_F16H_DR0_ADDR_MASK		0xc0011027
- 
- /* Fam 15h MSRs */
-+#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
-+#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
- #define MSR_F15H_PERF_CTL		0xc0010200
- #define MSR_F15H_PERF_CTL0		MSR_F15H_PERF_CTL
- #define MSR_F15H_PERF_CTL1		(MSR_F15H_PERF_CTL + 2)
-diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
-index 7dfd45bb6cdb..63ed8fe35738 100644
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -128,6 +128,10 @@
- #define TSX_CTRL_RTM_DISABLE		BIT(0)	/* Disable RTM feature */
- #define TSX_CTRL_CPUID_CLEAR		BIT(1)	/* Disable TSX enumeration */
- 
-+/* SRBDS support */
-+#define MSR_IA32_MCU_OPT_CTRL		0x00000123
-+#define RNGDS_MITG_DIS			BIT(0)
-+
- #define MSR_IA32_SYSENTER_CS		0x00000174
- #define MSR_IA32_SYSENTER_ESP		0x00000175
- #define MSR_IA32_SYSENTER_EIP		0x00000176
-@@ -418,11 +422,8 @@
- #define MSR_AMD_PERF_CTL		0xc0010062
- #define MSR_AMD_PERF_STATUS		0xc0010063
- #define MSR_AMD_PSTATE_DEF_BASE		0xc0010064
--#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
--#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
- #define MSR_AMD64_OSVW_ID_LENGTH	0xc0010140
- #define MSR_AMD64_OSVW_STATUS		0xc0010141
--#define MSR_F15H_PTSC			0xc0010280
- #define MSR_AMD_PPIN_CTL		0xc00102f0
- #define MSR_AMD_PPIN			0xc00102f1
- #define MSR_AMD64_CPUID_FN_1		0xc0011004
-@@ -465,6 +466,8 @@
- #define MSR_F16H_DR0_ADDR_MASK		0xc0011027
- 
- /* Fam 15h MSRs */
-+#define MSR_F15H_CU_PWR_ACCUMULATOR     0xc001007a
-+#define MSR_F15H_CU_MAX_PWR_ACCUMULATOR 0xc001007b
- #define MSR_F15H_PERF_CTL		0xc0010200
- #define MSR_F15H_PERF_CTL0		MSR_F15H_PERF_CTL
- #define MSR_F15H_PERF_CTL1		(MSR_F15H_PERF_CTL + 2)
--- 
-2.21.0
+--Sig_/j=4p44Urs=Ny+=DV2bLQgMW
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
--- 
-Regards/Gruss,
-    Boris.
+-----BEGIN PGP SIGNATURE-----
 
-https://people.kernel.org/tglx/notes-about-netiquette
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7vVeoACgkQAVBC80lX
+0GzfWwf/TMjzSKKpbNH081RLpqLwJbkLDUdY6NyezJvuElG5oJDiDo8i6SBtMVPv
+YEOjmuR3e87O0Ji5Dzpa/3xWwBztahh1mHAeEI/7tc5ZepIhp4ImWwdG27QAmv+e
+CSoHKtVOsFhWibg61DPf/UlVmDRHO3Sv7FFu0qDqR2xIbT9ZxvejroNOuJkHAvTX
+xA+HRUrkbZLUDSPyzQmCfOdWKjvxWmtnbYovy8Uw9MzwVTxlNzey3m4A5OLUhK52
+aQT1XqX5Pnsxo1Yr9MOjI2q6bq/+73ESzeiByH6uT74nyMom3kBzENjCfWs/Rn9r
+41ahIrCg4dEgO81gtPTaf50+Upx9KA==
+=shze
+-----END PGP SIGNATURE-----
+
+--Sig_/j=4p44Urs=Ny+=DV2bLQgMW--

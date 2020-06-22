@@ -2,109 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 382AB203552
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 13:06:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 277562036AC
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 14:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727846AbgFVLGh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 07:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727810AbgFVLGg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 07:06:36 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA06C061795
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 04:06:35 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id d4so12717706otk.2
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 04:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bVCGBNAMVVzJBUyEH8AYaaJuZeDFv/AQspAXfpR7QWs=;
-        b=H0nc56373dVnFC0+ikr2sQCUW3pSnEIy19Lc57N1R1+mlC6lUNu5QQPGytZhsXgC7f
-         c6Uk3RG80/AsxrGiNe5k//VGeexfUJ264jlYjVOoIG+NxTKBE+lhBVgR/a/XpjmBh1vO
-         /mvEhZTrcZNBlPOdxsj6hPKS4fIuxWRF29fs9M4eYDgc6TEbmTSITFQdJnLM770QuTdR
-         c91KXzpGjPgaX/ZJo6uxQ4z2MAjuHjSKvZcjDOS9bP3f198zaE1eW0140/qQiNCNazUn
-         RJomDJKecJdfe65g/1abkUo1Zl7W+quhWj4+4IwZaYIUHiOxcTzLlE1Af+Uvco54MLIA
-         dQrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bVCGBNAMVVzJBUyEH8AYaaJuZeDFv/AQspAXfpR7QWs=;
-        b=bloEUMp9/47BFs/GghL0Q1QdfBQm3KW1R64qOCoyHVRFMaRiac372wrKywB6HDSlfI
-         mNgJD4oRQZnWqTSqxqTNOu1mZoDSzOtL4OMc+Gc7WwFwSE7txieiNV7fzq+IIeBs0nVV
-         XifwF6GBYnNpIgU6/+uZ6mpRtgi+B4wqPHIo40bEk3fH/lQiDc92haCJM4b9b4q7R+I6
-         qAS2ZU+o57NG7QlnNCo9QYlosPdcEGTRuI3ttG9zUF2rD9HcY7GUjvr9KQa6fFvQTr3T
-         Tu8rAs9cB82TWeUIXTfji52SxzKAQMoJ5+HGNXl0W3DG1dkLoWv+jI5LYYC+knk3pX3a
-         9HqQ==
-X-Gm-Message-State: AOAM532mWoEHEqO50Jq0rQ8mkQry3UFknHs+MJwzawbFSOZaSGl/WeeQ
-        VC34cmweXVEwb8fuzJkXKapzKXEO/PMHtuuTHXWt6w==
-X-Google-Smtp-Source: ABdhPJxAl2Be/hK5NnkGkpXO2GQ9KziacpATXhsXKpvvVg2BuS4BDxq29uLM52C/E3EyVpoHnBW9WWKjtAa5gKfsGeQ=
-X-Received: by 2002:a9d:638c:: with SMTP id w12mr10791348otk.251.1592823994787;
- Mon, 22 Jun 2020 04:06:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000c25ce105a8a8fcd9@google.com> <20200622094923.GP576888@hirez.programming.kicks-ass.net>
-In-Reply-To: <20200622094923.GP576888@hirez.programming.kicks-ass.net>
-From:   Marco Elver <elver@google.com>
-Date:   Mon, 22 Jun 2020 13:06:23 +0200
-Message-ID: <CANpmjNMJL2euWekeJ-pRcW7-BQaDCmfCSr=8Z3Mfnz-ugtUX4g@mail.gmail.com>
-Subject: Re: linux-next build error (9)
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     syzbot <syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com>,
-        Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, jmattson@google.com,
-        joro@8bytes.org, kvm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        sean.j.christopherson@intel.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        Thomas Gleixner <tglx@linutronix.de>, vkuznets@redhat.com,
-        wanpengli@tencent.com, "the arch/x86 maintainers" <x86@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        id S1728034AbgFVMZy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Mon, 22 Jun 2020 08:25:54 -0400
+Received: from mx0b-001b2d01.pphosted.com ([148.163.158.5]:52890 "EHLO
+        mx0a-001b2d01.pphosted.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726889AbgFVMZy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 22 Jun 2020 08:25:54 -0400
+Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.16.0.42/8.16.0.42) with SMTP id 05MC34uS034199;
+        Mon, 22 Jun 2020 08:25:35 -0400
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0b-001b2d01.pphosted.com with ESMTP id 31sqs04a0t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Jun 2020 08:25:35 -0400
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.0.42/8.16.0.42) with SMTP id 05MCLvhn019384;
+        Mon, 22 Jun 2020 12:25:33 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma02fra.de.ibm.com with ESMTP id 31sa381amm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 Jun 2020 12:25:33 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 05MCPVkj42139800
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 Jun 2020 12:25:31 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4A1C111C052;
+        Mon, 22 Jun 2020 12:25:31 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6442011C064;
+        Mon, 22 Jun 2020 12:25:30 +0000 (GMT)
+Received: from [9.85.95.171] (unknown [9.85.95.171])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 22 Jun 2020 12:25:30 +0000 (GMT)
+From:   Sachin Sant <sachinp@linux.vnet.ibm.com>
+Content-Type: text/plain;
+        charset=us-ascii
+Content-Transfer-Encoding: 8BIT
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.14\))
+Subject: [next-20200621] LTP tests af_alg02/05 failure on POWER9 PowerVM LPAR
+Message-Id: <DF21C7B5-3824-4A6E-B59C-78B67E247383@linux.vnet.ibm.com>
+Date:   Mon, 22 Jun 2020 17:55:29 +0530
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linuxppc-dev@lists.ozlabs.org
+To:     herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org
+X-Mailer: Apple Mail (2.3445.104.14)
+X-TM-AS-GCONF: 00
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.216,18.0.687
+ definitions=2020-06-22_04:2020-06-22,2020-06-22 signatures=0
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 cotscore=-2147483648
+ priorityscore=1501 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ bulkscore=0 mlxscore=0 spamscore=0 adultscore=0 clxscore=1011 phishscore=0
+ mlxlogscore=930 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2004280000 definitions=main-2006220087
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 22 Jun 2020 at 11:49, Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Mon, Jun 22, 2020 at 02:37:12AM -0700, syzbot wrote:
-> > Hello,
-> >
-> > syzbot found the following crash on:
-> >
-> > HEAD commit:    27f11fea Add linux-next specific files for 20200622
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=138dc743100000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=41c659db5cada6f4
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=dbf8cf3717c8ef4a90a0
-> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
-> >
-> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
-> > Reported-by: syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com
-> >
-> > ./arch/x86/include/asm/kvm_para.h:99:29: error: inlining failed in call to always_inline 'kvm_handle_async_pf': function attribute mismatch
-> > ./arch/x86/include/asm/processor.h:824:29: error: inlining failed in call to always_inline 'prefetchw': function attribute mismatch
-> > ./arch/x86/include/asm/current.h:13:44: error: inlining failed in call to always_inline 'get_current': function attribute mismatch
-> > arch/x86/mm/fault.c:1353:1: error: inlining failed in call to always_inline 'handle_page_fault': function attribute mismatch
-> > ./arch/x86/include/asm/processor.h:576:29: error: inlining failed in call to always_inline 'native_swapgs': function attribute mismatch
-> > ./arch/x86/include/asm/fsgsbase.h:33:38: error: inlining failed in call to always_inline 'rdgsbase': function attribute mismatch
-> > ./arch/x86/include/asm/irq_stack.h:40:29: error: inlining failed in call to always_inline 'run_on_irqstack_cond': function attribute mismatch
-> > ./include/linux/debug_locks.h:15:28: error: inlining failed in call to always_inline '__debug_locks_off': function attribute mismatch
-> > ./include/asm-generic/atomic-instrumented.h:70:1: error: inlining failed in call to always_inline 'atomic_add_return': function attribute mismatch
-> > kernel/locking/lockdep.c:396:29: error: inlining failed in call to always_inline 'lockdep_recursion_finish': function attribute mismatch
-> > kernel/locking/lockdep.c:4725:5: error: inlining failed in call to always_inline '__lock_is_held': function attribute mismatch
->
-> Hurmph, I though that was cured in GCC >= 8. Marco?
+With recent next(next-20200621) af_alg02/05 tests fail while running on POWER9
+PowerVM LPAR.
 
-Yeah, time to upgrade syzbot's compiler. This experimental gcc 9.0.0
-still has the bug, but stable gcc 9 doesn't. For now, I think this
-requires no fixes on the kernel side.
+Results from  5.8.0-rc1-next-20200622
+# ./af_alg02
+tst_test.c:1096: INFO: Timeout per run is 0h 00m 20s
+af_alg02.c:52: BROK: Timed out while reading from request socket.
+#
 
-Thanks,
--- Marco
+5.8.0-rc1-next-20200618 was good. The test case ran fine.
+
+Root cause analysis point to following commit:
+
+commit f3c802a1f30013f8f723b62d7fa49eb9e991da23
+    crypto: algif_aead - Only wake up when ctx->more is zero
+
+Reverting this commit allows the test to PASS.
+
+Results after reverting the mentioned commit:
+
+# uname -r
+5.8.0-rc1-next-20200622-dirty
+# ./af_alg02 
+tst_test.c:1096: INFO: Timeout per run is 0h 00m 20s
+af_alg02.c:33: PASS: Successfully "encrypted" an empty message
+#
+# ./af_alg05
+tst_test.c:1096: INFO: Timeout per run is 0h 05m 00s
+af_alg05.c:34: PASS: read() expectedly failed with EINVAL
+# 
+
+Thanks
+-Sachin

@@ -2,55 +2,59 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 276E8202FE7
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 08:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C66912030A7
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 09:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726718AbgFVGm0 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 02:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S1731413AbgFVH2N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 03:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726712AbgFVGm0 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 02:42:26 -0400
-Received: from mail-qt1-x841.google.com (mail-qt1-x841.google.com [IPv6:2607:f8b0:4864:20::841])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E094DC061796
-        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 23:42:25 -0700 (PDT)
-Received: by mail-qt1-x841.google.com with SMTP id g13so1499093qtv.8
-        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 23:42:25 -0700 (PDT)
+        with ESMTP id S1731407AbgFVH2N (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 03:28:13 -0400
+Received: from mail-qt1-x843.google.com (mail-qt1-x843.google.com [IPv6:2607:f8b0:4864:20::843])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768C3C061794
+        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 00:28:11 -0700 (PDT)
+Received: by mail-qt1-x843.google.com with SMTP id o38so3249397qtf.6
+        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 00:28:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=UhciZLVdGKEJk7KHTw+RU8JWs5dQKAECyz5UjSzBrP0=;
-        b=EyF5FuUsWQitHjx7BN4lfK2XcWY7vlK1Elm2C5+czbIrJnmhqFTAkpW5dNchOjMYQa
-         m2TLVe5resLpBBx6d16MAKG8YbkEM7gSyEr0VRWn6GoH7+uEoEW090OfViix7wAoT/6E
-         vP8jz4YaO+TAiSfGRcxcZLnf94KukhpdZugyRYd9Cr/xOsWN93pQOg4ZrSpwwQPypW3y
-         Xc/FL4aARuZ3E6Aoh8B/DXUBsDQxJ6n0Ey9MzbMssaMalGxbbiW+y4MMWDiQ8/y80Mhj
-         SOLke1Gc4AIHcB/xAxa07KjuW2Gin3VRjJaRkMucEqOZeq60mtVn2HfRwq97kVDrfsgb
-         jZ7Q==
+        d=lca.pw; s=google;
+        h=content-transfer-encoding:from:mime-version:subject:date:message-id
+         :references:cc:in-reply-to:to;
+        bh=+Uan9/0g2Kyk0+JFE+Gg6CPXTL0iWc6TM1qX4k9tCCI=;
+        b=CEIoTrFcH9/ZEoLTpd6fmSkXQV5kJx6SiBea4C6+IwoO8z+Z1TfY40M/x2iObM6GCX
+         Jy0tips3m8ok7iClqxkfuII3htkyFo2IDfNlN9BJlPhADjGd4YdrnLMXw4ktOca61LUM
+         RgCJBX3fDwyzBWJfd0ozcaqZ6YmVWeYWWSAO3lq1tlxxaoTRw/zU38Dp0DN404aTxwyv
+         2/LqaODnfkrI2Swvw8Goi9ZK+IAOUU1I/ISmwsOvUqZHpiTgD1Sh3Ynja398PQfCSD8T
+         x/QO1WjXLd1y8S85tUcQSR8LZeMki8SEWYs+lZdo7Dp8DrHB218NllVMmIRo8KfQ7AwQ
+         oOKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=UhciZLVdGKEJk7KHTw+RU8JWs5dQKAECyz5UjSzBrP0=;
-        b=D0iebjPyvMiGoMcQwmNodwQL1x1mHm2LaMMOz/fWcrnbMmlCGAbw7e0NCDXtj1VgBX
-         5TuXFjb66Cl+Lz2dIS/kRg+O8FsOYfCRwd4xIRlGazAG34qUiKsyffWNGywVelbXz+qS
-         UFEcYuMV77uqfXhzkun/OmzBalKFR/BFDqyTSxxHLkO/du6DgXKKXpv6HokwRqSs4lp4
-         BCfCesvzser/2Wo/nInFZHBfcsBiRsT8cGaQJy6QQbqmoLD+OK83fxaGAviGrCozF6yx
-         oZKkNsN7JjUYUznwSb0CV+w+l9vwRAXQUvqTHznFFGW1J3ZYbzfLBqiK4HOa0VnDTymn
-         c0rA==
-X-Gm-Message-State: AOAM533ovW+Gh8KHGxKwaa/FmT0xwkx4aMmAO+N5sek2G9wCogWwKtKe
-        gouODfp8TWpq9/rnE6cgGWr+v9OuTm1De5/cU33Siw==
-X-Google-Smtp-Source: ABdhPJxrXaR2MRdiPAJU6NZZSqPOj09boIx0YXa64M3CfHeEi2VvHVT8MYtt4nmImQOknEhCv3I16YGiBoKqk30+teY=
-X-Received: by 2002:ac8:36c2:: with SMTP id b2mr15006149qtc.257.1592808144668;
- Sun, 21 Jun 2020 23:42:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <000000000000617f9d05a8a5a2c4@google.com> <4A35E92B-9DEF-4833-81DD-0C6FA50EB174@lca.pw>
-In-Reply-To: <4A35E92B-9DEF-4833-81DD-0C6FA50EB174@lca.pw>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Mon, 22 Jun 2020 08:42:13 +0200
-Message-ID: <CACT4Y+ZcbA=9L2XPC_rRG-FdwOoH6XteOoGHg7jfvd+1CH2M+w@mail.gmail.com>
+        h=x-gm-message-state:content-transfer-encoding:from:mime-version
+         :subject:date:message-id:references:cc:in-reply-to:to;
+        bh=+Uan9/0g2Kyk0+JFE+Gg6CPXTL0iWc6TM1qX4k9tCCI=;
+        b=RCMyyXMhKopYFYBRtNu/m5j+1zFOzqIqTA3jrck+AGbMqmggbwYbVKfMHX/hFvJWR+
+         ff64/gDuO9ksHkUDplhJ2BIA1Gyvystck6dtMrI4KO/guG4awTUkpKv0q0sQ9b7gOiC1
+         pVSrYsX1j6fF10ijyLEP7CS+PdoopSy6oRi+As4m9i1O9RMrK9ZmsrPE+GQPBT1AkBuc
+         Ns+q2n3D7X5ZKJKr5QHRehzKpOw4q63Y7hmuDz68GkyFjMWdhfWe41L0XSCBQDJY0GF2
+         UGAhjlBIm2VWxHLLUyclyPdQbPZ86He92JX22f8CTpjbYKLuEQwn/eiOl2DPaFfOk8kN
+         jAbg==
+X-Gm-Message-State: AOAM531kUjWn8Jdkw0lw5xWNZAVbP8VPGWRPzS156XbqTueb9lKpIg/H
+        U4r9p7wH43M2gpVpQvpe4Jvranon/KAr6Q==
+X-Google-Smtp-Source: ABdhPJyWb4e97Z2/IMIqh2GpP+NVHRpesI9AkxGHkQn4/h3yxibqRZAvS1qnEvwYKJTYlHnAvtsp5w==
+X-Received: by 2002:ac8:5307:: with SMTP id t7mr15073070qtn.229.1592810890652;
+        Mon, 22 Jun 2020 00:28:10 -0700 (PDT)
+Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id k20sm14406128qtu.16.2020.06.22.00.28.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 Jun 2020 00:28:10 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Qian Cai <cai@lca.pw>
+Mime-Version: 1.0 (1.0)
 Subject: Re: linux-next boot error: WARNING in kmem_cache_free
-To:     Qian Cai <cai@lca.pw>
+Date:   Mon, 22 Jun 2020 03:28:09 -0400
+Message-Id: <121C0D57-C9E6-406B-A280-A67E773EA9D0@lca.pw>
+References: <CACT4Y+ZcbA=9L2XPC_rRG-FdwOoH6XteOoGHg7jfvd+1CH2M+w@mail.gmail.com>
 Cc:     syzbot <syzbot+95bccd805a4aa06a4b0d@syzkaller.appspotmail.com>,
         linux-fsdevel <linux-fsdevel@vger.kernel.org>,
         LKML <linux-kernel@vger.kernel.org>,
@@ -58,36 +62,37 @@ Cc:     syzbot <syzbot+95bccd805a4aa06a4b0d@syzkaller.appspotmail.com>,
         Stephen Rothwell <sfr@canb.auug.org.au>,
         syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
         Al Viro <viro@zeniv.linux.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CACT4Y+ZcbA=9L2XPC_rRG-FdwOoH6XteOoGHg7jfvd+1CH2M+w@mail.gmail.com>
+To:     Dmitry Vyukov <dvyukov@google.com>
+X-Mailer: iPhone Mail (17F80)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 8:29 AM Qian Cai <cai@lca.pw> wrote:
-> > On Jun 22, 2020, at 1:37 AM, syzbot <syzbot+95bccd805a4aa06a4b0d@syzkal=
-ler.appspotmail.com> wrote:
-> >
-> > WARNING: CPU: 0 PID: 0 at mm/slab.h:232 kmem_cache_free+0x0/0x200 mm/sl=
-ab.c:2262
->
-> Is there any particular reason to use CONFIG_SLAB rather than CONFIG_SLUB=
-?
-
-There is a reason, it's still important for us.
-But also it's not our strategy to deal with bugs by not testing
-configurations and closing eyes on bugs, right? If it's an official
-config in the kernel, it needs to be tested. If SLAB is in the state
-that we don't care about any bugs in it, then we need to drop it. It
-will automatically remove it from all testing systems out there. Or at
-least make it "depends on BROKEN" to slowly phase it out during
-several releases.
 
 
-> You are really asking for trouble to test something that almost nobody is=
- exercising that code path very well nowadays.
->
-> Anyway, there is a patchset in -mm that might well introduce this regress=
-ion that we could go to confirm it, but I kind of don=E2=80=99t want to spe=
-nd too much time on SLAB that suppose to be obsolete eventually.
+> On Jun 22, 2020, at 2:42 AM, Dmitry Vyukov <dvyukov@google.com> wrote:
+>=20
+> There is a reason, it's still important for us.
+> But also it's not our strategy to deal with bugs by not testing
+> configurations and closing eyes on bugs, right? If it's an official
+> config in the kernel, it needs to be tested. If SLAB is in the state
+> that we don't care about any bugs in it, then we need to drop it. It
+> will automatically remove it from all testing systems out there. Or at
+> least make it "depends on BROKEN" to slowly phase it out during
+> several releases.
+
+Do you mind sharing what=E2=80=99s your use cases with CONFIG_SLAB? The only=
+ thing prevents it from being purged early is that it might perform better w=
+ith a certain type of networking workloads where syzbot should have nothing t=
+o gain from it.
+
+I am more of thinking about the testing coverage that we could use for syzbo=
+t to test SLUB instead of SLAB. Also, I have no objection for syzbot to test=
+ SLAB, but then from my experience, you are probably on your own to debug fu=
+rther with those testing failures. Until you are able to figure out the bugg=
+y patch or patchset introduced the regression, I am afraid not many people w=
+ould be able to spend much time on SLAB. The developers are pretty much alre=
+ady half-hearted on it by only fixing SLAB here and there without runtime te=
+sting it.=

@@ -2,155 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B33F203506
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 12:45:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382AB203552
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 13:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727867AbgFVKpK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 06:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
+        id S1727846AbgFVLGh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 07:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727860AbgFVKpK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 06:45:10 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6845FC061794
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 03:45:10 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id ne5so7970856pjb.5
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 03:45:10 -0700 (PDT)
+        with ESMTP id S1727810AbgFVLGg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 07:06:36 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBA06C061795
+        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 04:06:35 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id d4so12717706otk.2
+        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 04:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=nSoCi6RoEztgLDg1nv1/8IRtbbz4H+0OsNSoV+eugxY=;
-        b=iPnKz6a6OEZLTRysdRiCfPOhm6GZ8/g57NvvJ1QvnB29gvWn5Mi10cm+bk9a4O7Rxu
-         tsIXrDDaGYL/gabxK5MS1b7fO3zW4N+bqEKuqjjy+rZ32x+x7dL0bGihsqYLl2qCW/VS
-         4rjHXZcgm1b7N8K4Rh2pIhYc1yiv+5HHX76q880lnjQtWVGNF04zdxLxPDkoTSfwuWbI
-         U0i5ZY8/CCrJs5x5waVmNyz+aEpBkFai+NTwZC1Lyakwsr6+lHMYAGho/xSHKDzdoq9y
-         0pDSNTtR3gR/BMcHtNGJ4mW/YABvPDhFPKFLVZpgCQmvTjWeLCcyUT261gy0yRCKRsp8
-         TQFw==
+        d=google.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=bVCGBNAMVVzJBUyEH8AYaaJuZeDFv/AQspAXfpR7QWs=;
+        b=H0nc56373dVnFC0+ikr2sQCUW3pSnEIy19Lc57N1R1+mlC6lUNu5QQPGytZhsXgC7f
+         c6Uk3RG80/AsxrGiNe5k//VGeexfUJ264jlYjVOoIG+NxTKBE+lhBVgR/a/XpjmBh1vO
+         /mvEhZTrcZNBlPOdxsj6hPKS4fIuxWRF29fs9M4eYDgc6TEbmTSITFQdJnLM770QuTdR
+         c91KXzpGjPgaX/ZJo6uxQ4z2MAjuHjSKvZcjDOS9bP3f198zaE1eW0140/qQiNCNazUn
+         RJomDJKecJdfe65g/1abkUo1Zl7W+quhWj4+4IwZaYIUHiOxcTzLlE1Af+Uvco54MLIA
+         dQrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=nSoCi6RoEztgLDg1nv1/8IRtbbz4H+0OsNSoV+eugxY=;
-        b=Sxz1c/yuS3FsBwg9j3fiifFQsl+6GsBXUjKDPrC/E7FlNEHwZw/WPXiYIPh0KYMlmC
-         92T96DaSoJSqeFqqTrp4upqhJxNWZyB36xj4IK3bo9XH3VStSvMHyXgitvxrkQIlmdhN
-         CIPtnZadcFqqILCHJjCisAltoDID6ASTC/qd+smMt7nP8J+XrKhT5DdaEt6zrAPCvfRS
-         rEWlv8QYNMn6nkHrILA+iZF/OL02i0MzxcmOCKntNOJf/qfgtHdvyX+eTZCpPIH2ZiXr
-         OlhiH1k54mqJoyzCj5q93+VNp45EQbueCQihWXehe+FwlVIpVGOAqoPeKHyKPBBVLdoo
-         tnjA==
-X-Gm-Message-State: AOAM533GOEzVwswQ1UA+aAL6uvaC7LcCl47KO+3lDOiceLLROU+lQXoM
-        pZURgzLXnFx6bSyu4pS7ssdaaFD+cX0=
-X-Google-Smtp-Source: ABdhPJzTuTR4ol+20YeKDXGh8BNaQDwyTriJrPXiiS+jxgDUPSpJw6dBUV8zbiFSIHpa0efTRNQ7vg==
-X-Received: by 2002:a17:90a:7446:: with SMTP id o6mr18102287pjk.217.1592822709567;
-        Mon, 22 Jun 2020 03:45:09 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ca6sm13987313pjb.46.2020.06.22.03.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 03:45:08 -0700 (PDT)
-Message-ID: <5ef08bb4.1c69fb81.75301.9d3f@mx.google.com>
-Date:   Mon, 22 Jun 2020 03:45:08 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=bVCGBNAMVVzJBUyEH8AYaaJuZeDFv/AQspAXfpR7QWs=;
+        b=bloEUMp9/47BFs/GghL0Q1QdfBQm3KW1R64qOCoyHVRFMaRiac372wrKywB6HDSlfI
+         mNgJD4oRQZnWqTSqxqTNOu1mZoDSzOtL4OMc+Gc7WwFwSE7txieiNV7fzq+IIeBs0nVV
+         XifwF6GBYnNpIgU6/+uZ6mpRtgi+B4wqPHIo40bEk3fH/lQiDc92haCJM4b9b4q7R+I6
+         qAS2ZU+o57NG7QlnNCo9QYlosPdcEGTRuI3ttG9zUF2rD9HcY7GUjvr9KQa6fFvQTr3T
+         Tu8rAs9cB82TWeUIXTfji52SxzKAQMoJ5+HGNXl0W3DG1dkLoWv+jI5LYYC+knk3pX3a
+         9HqQ==
+X-Gm-Message-State: AOAM532mWoEHEqO50Jq0rQ8mkQry3UFknHs+MJwzawbFSOZaSGl/WeeQ
+        VC34cmweXVEwb8fuzJkXKapzKXEO/PMHtuuTHXWt6w==
+X-Google-Smtp-Source: ABdhPJxAl2Be/hK5NnkGkpXO2GQ9KziacpATXhsXKpvvVg2BuS4BDxq29uLM52C/E3EyVpoHnBW9WWKjtAa5gKfsGeQ=
+X-Received: by 2002:a9d:638c:: with SMTP id w12mr10791348otk.251.1592823994787;
+ Mon, 22 Jun 2020 04:06:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Branch: master
-X-Kernelci-Tree: next
-X-Kernelci-Kernel: next-20200622
-Subject: next/master baseline: 114 runs, 2 regressions (next-20200622)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+References: <000000000000c25ce105a8a8fcd9@google.com> <20200622094923.GP576888@hirez.programming.kicks-ass.net>
+In-Reply-To: <20200622094923.GP576888@hirez.programming.kicks-ass.net>
+From:   Marco Elver <elver@google.com>
+Date:   Mon, 22 Jun 2020 13:06:23 +0200
+Message-ID: <CANpmjNMJL2euWekeJ-pRcW7-BQaDCmfCSr=8Z3Mfnz-ugtUX4g@mail.gmail.com>
+Subject: Re: linux-next build error (9)
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     syzbot <syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, jmattson@google.com,
+        joro@8bytes.org, kvm@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        sean.j.christopherson@intel.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
+        Thomas Gleixner <tglx@linutronix.de>, vkuznets@redhat.com,
+        wanpengli@tencent.com, "the arch/x86 maintainers" <x86@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 114 runs, 2 regressions (next-20200622)
+On Mon, 22 Jun 2020 at 11:49, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Mon, Jun 22, 2020 at 02:37:12AM -0700, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following crash on:
+> >
+> > HEAD commit:    27f11fea Add linux-next specific files for 20200622
+> > git tree:       linux-next
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=138dc743100000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=41c659db5cada6f4
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=dbf8cf3717c8ef4a90a0
+> > compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
+> >
+> > IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> > Reported-by: syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com
+> >
+> > ./arch/x86/include/asm/kvm_para.h:99:29: error: inlining failed in call to always_inline 'kvm_handle_async_pf': function attribute mismatch
+> > ./arch/x86/include/asm/processor.h:824:29: error: inlining failed in call to always_inline 'prefetchw': function attribute mismatch
+> > ./arch/x86/include/asm/current.h:13:44: error: inlining failed in call to always_inline 'get_current': function attribute mismatch
+> > arch/x86/mm/fault.c:1353:1: error: inlining failed in call to always_inline 'handle_page_fault': function attribute mismatch
+> > ./arch/x86/include/asm/processor.h:576:29: error: inlining failed in call to always_inline 'native_swapgs': function attribute mismatch
+> > ./arch/x86/include/asm/fsgsbase.h:33:38: error: inlining failed in call to always_inline 'rdgsbase': function attribute mismatch
+> > ./arch/x86/include/asm/irq_stack.h:40:29: error: inlining failed in call to always_inline 'run_on_irqstack_cond': function attribute mismatch
+> > ./include/linux/debug_locks.h:15:28: error: inlining failed in call to always_inline '__debug_locks_off': function attribute mismatch
+> > ./include/asm-generic/atomic-instrumented.h:70:1: error: inlining failed in call to always_inline 'atomic_add_return': function attribute mismatch
+> > kernel/locking/lockdep.c:396:29: error: inlining failed in call to always_inline 'lockdep_recursion_finish': function attribute mismatch
+> > kernel/locking/lockdep.c:4725:5: error: inlining failed in call to always_inline '__lock_is_held': function attribute mismatch
+>
+> Hurmph, I though that was cured in GCC >= 8. Marco?
 
-Regressions Summary
--------------------
+Yeah, time to upgrade syzbot's compiler. This experimental gcc 9.0.0
+still has the bug, but stable gcc 9 doesn't. For now, I think this
+requires no fixes on the kernel side.
 
-platform              | arch  | lab          | compiler | defconfig        =
-  | results
-----------------------+-------+--------------+----------+------------------=
---+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig        =
-  | 4/5    =
-
-vexpress-v2p-ca15-tc1 | arm   | lab-baylibre | gcc-8    | vexpress_defconfi=
-g | 3/5    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-200622/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20200622
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      27f11fea33608cbd321a97cbecfa2ef97dcc1821 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab          | compiler | defconfig        =
-  | results
-----------------------+-------+--------------+----------+------------------=
---+--------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig        =
-  | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef051fdbe355d5fd397bf31
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200622/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200622/arm6=
-4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef051fdbe355d5f=
-d397bf34
-      failing since 0 day (last pass: next-20200618, first fail: next-20200=
-621)
-      1 lines =
-
-
-
-platform              | arch  | lab          | compiler | defconfig        =
-  | results
-----------------------+-------+--------------+----------+------------------=
---+--------
-vexpress-v2p-ca15-tc1 | arm   | lab-baylibre | gcc-8    | vexpress_defconfi=
-g | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef05036a8a2efcdc497bf1a
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200622/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200622/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef05036a8a2efcd=
-c497bf1d
-      failing since 16 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =20
+Thanks,
+-- Marco

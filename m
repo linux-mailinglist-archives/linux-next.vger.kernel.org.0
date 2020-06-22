@@ -2,148 +2,81 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7C8203127
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 09:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040F020338F
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 11:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727062AbgFVH7G (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 03:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726005AbgFVH7G (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 03:59:06 -0400
-Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5993C061795
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 00:59:05 -0700 (PDT)
-Received: by mail-lf1-x142.google.com with SMTP id o4so9037990lfi.7
-        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 00:59:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=elastisys.com; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=+72HVS79yQlhaAUpl1BQ92pBtKAe/k4uQc7WSaUvr00=;
-        b=jCqge3D6KoP/sIdIThN/DHv8XTHSxY/xJDbvFROYkEp5HxGRHew4puiSQD3ry7G87b
-         UBY2DmEKrJ4dMkhtTOw0UHjZPbvGmjtxO+QYkUgo4vfw2gKXanYztqq5J6XcoNbgvj5+
-         dy/jhBx9k1/RltLhcE02EVQJfMZiSdKukXWio=
+        id S1727041AbgFVJhO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 05:37:14 -0400
+Received: from mail-il1-f199.google.com ([209.85.166.199]:54104 "EHLO
+        mail-il1-f199.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727030AbgFVJhO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 05:37:14 -0400
+Received: by mail-il1-f199.google.com with SMTP id r4so2024913ilq.20
+        for <linux-next@vger.kernel.org>; Mon, 22 Jun 2020 02:37:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=+72HVS79yQlhaAUpl1BQ92pBtKAe/k4uQc7WSaUvr00=;
-        b=jWH3lvLoYZjK5yKDLcaXGRdDMsJKVaKd5En2INazNqsLDK2WQPdqG9JmQfc3ESbLh1
-         jrzgZR0nE/AKJ25OIfxom6/cbRLdZgdly2zNNi92jK4h6etjkAexb7guWsNzzyby7xfy
-         7GsZalEJZz/UfpVn1OENrAy/JQpcJhZFgvvD+ficZmp6iKW4xu2QZWxMxZweeIyDuo8l
-         ioRFYn5WGmaRldE1hYpew1YWVI3nzRpd9exG45Hqm9GSagDTAuKUc2NKyrWdPdUu6raq
-         RtxJYh8ESe6yo31b0czidBThW7DhR1l+GMFLadgOlValtCgiF3sLCFlSKbrY8jud0uyh
-         09DA==
-X-Gm-Message-State: AOAM532pUFRG1nQGteYCBz3ifmXBHq5yT/KHP3IzePQk76QcbP64mPPt
-        9Ex5D3jJuUJeMNyuKUIslTSIMw==
-X-Google-Smtp-Source: ABdhPJzIyS6pITV9AXVhsR6vURj//yrc+F7c8fH4PfDJ/YlnbkX/r3We1eWExkMnSuxvybu5Nsx6gw==
-X-Received: by 2002:ac2:5e6c:: with SMTP id a12mr9124696lfr.35.1592812744344;
-        Mon, 22 Jun 2020 00:59:04 -0700 (PDT)
-Received: from minitrue (90-224-48-115-no56.tbcn.telia.com. [90.224.48.115])
-        by smtp.gmail.com with ESMTPSA id v23sm2568173ljg.122.2020.06.22.00.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 Jun 2020 00:59:03 -0700 (PDT)
-Date:   Mon, 22 Jun 2020 09:59:02 +0200
-From:   Cristian Klein <cristian.klein@elastisys.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Signed-off-by missing for commit in the hid tree
-Message-ID: <20200622075902.GA24615@minitrue>
-References: <20200621075124.206aeeea@canb.auug.org.au>
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=NCIhNzemyaHeV1URQe9l6ctBEp+a/h06zCpmFD6sWu8=;
+        b=IqmqnknXZZi81OP2MK+HZqINmsJ5bpyaN72hlc3BCpgw7ayZNhVKq30fWaIrRKzhP/
+         x3VnRwXwMuZgqVra9yon4pZ43JGgSP76YylSj5eBOB/nf5Bf0lAn1Cn9jIKdZFe4Ju75
+         uxXQ7IkC2m80RK4s04vqSEKZAB4s+uFKCN4e4ikzemrd3Fw6w+Kg+SHot32NEu+VFH0+
+         pCkoMabVSI7gDVWtc24lER8KR5h4/eEdmL30V370daFx/oME1YC1wMlMfhSx1mdDCcRQ
+         V9/6unNjChPpSNsp+TX6GxVDHitCpTIRZcopGY03bJUY6FwLjI4QYkHvXMOUkzGP1m3K
+         31PQ==
+X-Gm-Message-State: AOAM530GKAHEZ27VxkyZBuOYnNkOxSYlYP7gpCzAWVxyIVUMOFmP0y+c
+        8zZjl+vVhOfjBmrn+u3q0XnTmSETe2EPEXFctiZo60sjve6i
+X-Google-Smtp-Source: ABdhPJya4TlXHk3sbbO0u6TW75Uj7uiXd6K8Q9hxTZjJt3xKDqXjWbWh/cInD1e9U3Z1gyM+ARL1XjZlxcsBVU2ArxN+/EdJ27gE
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="K8nIJk4ghYZn606h"
-Content-Disposition: inline
-In-Reply-To: <20200621075124.206aeeea@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Received: by 2002:a92:d3cd:: with SMTP id c13mr16652193ilh.101.1592818632119;
+ Mon, 22 Jun 2020 02:37:12 -0700 (PDT)
+Date:   Mon, 22 Jun 2020 02:37:12 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c25ce105a8a8fcd9@google.com>
+Subject: linux-next build error (9)
+From:   syzbot <syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com>
+To:     bp@alien8.de, hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
+        sean.j.christopherson@intel.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vkuznets@redhat.com, wanpengli@tencent.com, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hello,
 
---K8nIJk4ghYZn606h
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+syzbot found the following crash on:
 
-On Sun, Jun 21, 2020 at 07:51:24AM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Commit
-> 
->   470376737e88 ("HID: allow building hid.ko as an external module")
-> 
-> is missing a Signed-off-by from its author.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+HEAD commit:    27f11fea Add linux-next specific files for 20200622
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=138dc743100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=41c659db5cada6f4
+dashboard link: https://syzkaller.appspot.com/bug?extid=dbf8cf3717c8ef4a90a0
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-Hi,
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com
 
-My bad. Please find attached the corrected patch.
+./arch/x86/include/asm/kvm_para.h:99:29: error: inlining failed in call to always_inline 'kvm_handle_async_pf': function attribute mismatch
+./arch/x86/include/asm/processor.h:824:29: error: inlining failed in call to always_inline 'prefetchw': function attribute mismatch
+./arch/x86/include/asm/current.h:13:44: error: inlining failed in call to always_inline 'get_current': function attribute mismatch
+arch/x86/mm/fault.c:1353:1: error: inlining failed in call to always_inline 'handle_page_fault': function attribute mismatch
+./arch/x86/include/asm/processor.h:576:29: error: inlining failed in call to always_inline 'native_swapgs': function attribute mismatch
+./arch/x86/include/asm/fsgsbase.h:33:38: error: inlining failed in call to always_inline 'rdgsbase': function attribute mismatch
+./arch/x86/include/asm/irq_stack.h:40:29: error: inlining failed in call to always_inline 'run_on_irqstack_cond': function attribute mismatch
+./include/linux/debug_locks.h:15:28: error: inlining failed in call to always_inline '__debug_locks_off': function attribute mismatch
+./include/asm-generic/atomic-instrumented.h:70:1: error: inlining failed in call to always_inline 'atomic_add_return': function attribute mismatch
+kernel/locking/lockdep.c:396:29: error: inlining failed in call to always_inline 'lockdep_recursion_finish': function attribute mismatch
+kernel/locking/lockdep.c:4725:5: error: inlining failed in call to always_inline '__lock_is_held': function attribute mismatch
 
-Cheers,
-Cristian
-
---K8nIJk4ghYZn606h
-Content-Type: text/x-diff; charset=us-ascii
-Content-Disposition: attachment; filename="0001-Allow-building-hid.ko-as-an-external-module.patch"
-
-From 8005724373d8cecb241c013d16b2242c7c1fb39e Mon Sep 17 00:00:00 2001
-From: Cristian Klein <cristian.klein@elastisys.com>
-Date: Mon, 22 Jun 2020 08:47:58 +0200
-Subject: [PATCH] Allow building hid.ko as an "external" module
-
-For quickly testing USB HID quirks with a larger community, it is useful
-to be able to build hid.ko as an external module, e.g., against the
-source code of the running kernel.
-
-Before this patch this failed as follows:
-```
-$ make -C /lib/modules/$(uname -r)/build M=$PWD/drivers/hid
-make: Entering directory '/usr/src/linux-headers-5.3.0-51-generic'
-  CC [M]  /home/cklein/linux/drivers/hid/i2c-hid/i2c-hid-core.o
-  CC [M]  /home/cklein/linux/drivers/hid/i2c-hid/i2c-hid-dmi-quirks.o
-  LD [M]  /home/cklein/linux/drivers/hid/i2c-hid/i2c-hid.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/init.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/hbm.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/client.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/bus.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/dma-if.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ishtp/client-buffers.o
-  LD [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/intel-ishtp.o
-  CC [M]  /home/cklein/linux/drivers/hid/intel-ish-hid/ipc/ipc.o
-/home/cklein/linux/drivers/hid/intel-ish-hid/ipc/ipc.c:12:10: fatal error: client.h: No such file or directory
-   12 | #include "client.h"
-      |          ^~~~~~~~~~
-compilation terminated.
-make[2]: *** [scripts/Makefile.build:290: /home/cklein/linux/drivers/hid/intel-ish-hid/ipc/ipc.o] Error 1
-make[1]: *** [scripts/Makefile.build:519: /home/cklein/linux/drivers/hid/intel-ish-hid] Error 2
-make: *** [Makefile:1656: _module_/home/cklein/linux/drivers/hid] Error 2
-make: Leaving directory '/usr/src/linux-headers-5.3.0-51-generic'
-```
-
-Signed-off-by: Cristian Klein <cristian.klein@elastisys.com>
 ---
- drivers/hid/intel-ish-hid/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/hid/intel-ish-hid/Makefile b/drivers/hid/intel-ish-hid/Makefile
-index f0a82b1c7..db4974c43 100644
---- a/drivers/hid/intel-ish-hid/Makefile
-+++ b/drivers/hid/intel-ish-hid/Makefile
-@@ -23,4 +23,4 @@ intel-ishtp-hid-objs += ishtp-hid-client.o
- obj-$(CONFIG_INTEL_ISH_FIRMWARE_DOWNLOADER) += intel-ishtp-loader.o
- intel-ishtp-loader-objs += ishtp-fw-loader.o
- 
--ccflags-y += -I $(srctree)/$(src)/ishtp
-+ccflags-y += -I $(src)/ishtp
--- 
-2.20.1
-
-
---K8nIJk4ghYZn606h--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

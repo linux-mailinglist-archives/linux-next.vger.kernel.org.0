@@ -2,723 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA672202F6A
-	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 07:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C0B202F8C
+	for <lists+linux-next@lfdr.de>; Mon, 22 Jun 2020 07:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728337AbgFVFRZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 01:17:25 -0400
-Received: from ozlabs.org ([203.11.71.1]:56027 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725934AbgFVFRZ (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 22 Jun 2020 01:17:25 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49qyMg2fjmz9s6w;
-        Mon, 22 Jun 2020 15:17:19 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592803039;
-        bh=7qPqVgLRKpx5W9wSgBgfFlij9TG/KL4Ro9AxwlmTvh0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XWqY9YlucEugL0xUn9Vt7Uymr2UEnSrtcs3rmUF8dKW2ZwWI8VoF/paoso50jqbk+
-         Fkn30x5cv0adtW9FiKryRhf2tXH9LaHpQH1dH3WvoDu9+kW4ltKDRmZXe25WruSS1v
-         8kV0dEyxHnVwdCriwa3Xw2q6dTSuzI6+Gv7zcfEq31X9iojUjKueLAYJUd94/oquS+
-         ChSXKyFNpNXqprT8wm0qdeg2VMWnj6ue/R9R4HyK5y6UBy7gkSRQ94DD9f5iFwF8Ai
-         JvdKlbGazfDeOwmdatUXd97ivJSMtwMKjjEdz/uCFL52FrKkz+/DUWr8Ag7M8qK5JG
-         cfPuUBrUblpmQ==
-Date:   Mon, 22 Jun 2020 15:17:18 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: Tree for Jun 22
-Message-ID: <20200622151718.43154e91@canb.auug.org.au>
+        id S1731142AbgFVFhM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 01:37:12 -0400
+Received: from mail-io1-f69.google.com ([209.85.166.69]:33593 "EHLO
+        mail-io1-f69.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1729856AbgFVFhM (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 01:37:12 -0400
+Received: by mail-io1-f69.google.com with SMTP id x2so11774982iof.0
+        for <linux-next@vger.kernel.org>; Sun, 21 Jun 2020 22:37:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=cpaY6T13Mb4bMtkiV6CeoIG4AgtudaG0i+Oecz1sBW8=;
+        b=W9DH4Hqp4spzk9Yuo2i0mkF2GikbIrtSLb0pC00vfVlBIpnVFYX1xk+Fim8Mgnb3iC
+         mLl5OYJdvewDwprigRJ8LvkT44iF1laZ7wgYhS41wAa9RCeBbvpO5XLjsH1rjBPHHuSp
+         MAPqvXhrByimLH/pmAJQv0OCFwDFIsA0Pd4vqco/HUxcq+S2tq+ymvciIVTlXGWtR76P
+         WLKo8asYWCSb/DLuBmq+KXvU0Ko35GirFahNNrzcaReNWrM+AZY7bVhpd7FR26sRwdSO
+         LHW/kLMPGy+k7kn0rrJy0fCMjgdX5T2JJ9Gqxo2DcQsdMXLGGnKK602M4D9QQPEI79U6
+         Ja+A==
+X-Gm-Message-State: AOAM531Zw+z8yr+/BdbukRb0Xh/z30xoPc5K6iFadg5eWTvCH3hnwZ/I
+        GUfitfaeXqY6m7RkZw+WqX0sOVwaC+U+whCcwzhcMjIAD8uc
+X-Google-Smtp-Source: ABdhPJyZLXokxLSD62AaShOk6YnHbK4l4xUIwUqGVGw24FGSnh45gqfFH91qp3WY4cc67bOKz9smqYwH45hdWHtQ1SELa8GcJ3We
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xSDDqmtLNk=qiDh=wbAHMVS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Received: by 2002:a6b:b984:: with SMTP id j126mr17321213iof.114.1592804230920;
+ Sun, 21 Jun 2020 22:37:10 -0700 (PDT)
+Date:   Sun, 21 Jun 2020 22:37:10 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000617f9d05a8a5a2c4@google.com>
+Subject: linux-next boot error: WARNING in kmem_cache_free
+From:   syzbot <syzbot+95bccd805a4aa06a4b0d@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xSDDqmtLNk=qiDh=wbAHMVS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+syzbot found the following crash on:
 
-Changes since 20200621:
+HEAD commit:    5a94f5bc Add linux-next specific files for 20200621
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=12a02c76100000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e1788c418b2ddc66
+dashboard link: https://syzkaller.appspot.com/bug?extid=95bccd805a4aa06a4b0d
+compiler:       gcc (GCC) 9.0.0 20181231 (experimental)
 
-New tree: seccomp
+IMPORTANT: if you fix the bug, please add the following tag to the commit:
+Reported-by: syzbot+95bccd805a4aa06a4b0d@syzkaller.appspotmail.com
 
-My fixes tree contains:
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 0 at mm/slab.h:232 kmem_cache_free+0x0/0x200 mm/slab.c:2262
+Kernel panic - not syncing: panic_on_warn set ...
+CPU: 0 PID: 0 Comm: swapper/0 Not tainted 5.8.0-rc1-next-20200621-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x18f/0x20d lib/dump_stack.c:118
+ panic+0x2e3/0x75c kernel/panic.c:231
+ __warn.cold+0x2f/0x3a kernel/panic.c:600
+ report_bug+0x271/0x2f0 lib/bug.c:198
+ exc_invalid_op+0x1b9/0x370 arch/x86/kernel/traps.c:235
+ asm_exc_invalid_op+0x12/0x20 arch/x86/include/asm/idtentry.h:563
+RIP: 0010:kmem_cache_debug_flags mm/slab.h:232 [inline]
+RIP: 0010:cache_from_obj mm/slab.h:459 [inline]
+RIP: 0010:kmem_cache_free+0x0/0x200 mm/slab.c:3678
+Code: ff 49 c7 84 24 90 00 00 00 00 00 00 00 83 c3 01 39 1d 2c ec fb 08 77 af 5b 5d 41 5c 41 5d c3 90 66 2e 0f 1f 84 00 00 00 00 00 <0f> 0b 48 85 ff 0f 84 a9 01 00 00 48 83 3d 15 6b 02 08 00 0f 84 9c
+RSP: 0000:ffffffff89a07a58 EFLAGS: 00010293
+RAX: ffffffff89a86580 RBX: ffff8880aa01f0e8 RCX: ffffffff81a84573
+RDX: 0000000000000000 RSI: ffff8880aa01f480 RDI: ffff8880aa00fe00
+RBP: ffff8880aa01f4a8 R08: ffffffff89a86580 R09: fffffbfff1340f3f
+R10: 0000000000000003 R11: fffffbfff1340f3e R12: ffff8880aa01f4b0
+R13: ffff8880aa01f688 R14: ffff8880aa01f480 R15: ffffc90000000000
+ adjust_va_to_fit_type mm/vmalloc.c:980 [inline]
+ __alloc_vmap_area mm/vmalloc.c:1096 [inline]
+ alloc_vmap_area+0x1494/0x1df0 mm/vmalloc.c:1196
+ __get_vm_area_node+0x178/0x3b0 mm/vmalloc.c:2060
+ __vmalloc_node_range+0x12c/0x910 mm/vmalloc.c:2484
+ __vmalloc_node mm/vmalloc.c:2532 [inline]
+ __vmalloc_area_node mm/vmalloc.c:2404 [inline]
+ __vmalloc_node_range+0x76c/0x910 mm/vmalloc.c:2489
+ __vmalloc_node mm/vmalloc.c:2532 [inline]
+ __vmalloc+0x69/0x80 mm/vmalloc.c:2546
+ alloc_large_system_hash+0x1c9/0x2e2 mm/page_alloc.c:8181
+ inode_init+0xab/0xbc fs/inode.c:2099
+ vfs_caches_init+0x104/0x11e fs/dcache.c:3231
+ start_kernel+0x978/0x9fb init/main.c:1025
+ secondary_startup_64+0xa4/0xb0 arch/x86/kernel/head_64.S:243
 
-  466d58f824f1 ("device_cgroup: Fix RCU list debugging warning")
-  9bd7b7c45d71 ("sched: Fix RANDSTRUCT build fail")
 
-The printk tree still had its build failure so I used the version from
-next-20200618.
+---
+This bug is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-The hid tree still had its build failure so I used the version from
-next-20200618.
-
-The amdgpu tree still had its build failure so I used the version from
-next-20200616.
-
-The tip tree still had its build failure for which I applied a supplied
-patch, but also gained another for which I reverted a commit.
-
-The kspp tree lost its build failure.
-
-Non-merge commits (relative to Linus' tree): 2314
- 2634 files changed, 277652 insertions(+), 35554 deletions(-)
-
-----------------------------------------------------------------------------
-
-I have created today's linux-next tree at
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
-(patches at http://www.kernel.org/pub/linux/kernel/next/ ).  If you
-are tracking the linux-next tree using git, you should not use "git pull"
-to do so as that will try to merge the new linux-next release with the
-old one.  You should use "git fetch" and checkout or reset to the new
-master.
-
-You can see which trees have been included by looking in the Next/Trees
-file in the source.  There are also quilt-import.log and merge.log
-files in the Next directory.  Between each merge, the tree was built
-with a ppc64_defconfig for powerpc, an allmodconfig for x86_64, a
-multi_v7_defconfig for arm and a native build of tools/perf. After
-the final fixups (if any), I do an x86_64 modules_install followed by
-builds for x86_64 allnoconfig, powerpc allnoconfig (32 and 64 bit),
-ppc44x_defconfig, allyesconfig and pseries_le_defconfig and i386, sparc
-and sparc64 defconfig and htmldocs. And finally, a simple boot test
-of the powerpc pseries_le_defconfig kernel in qemu (with and without
-kvm enabled).
-
-Below is a summary of the state of the merge.
-
-I am currently merging 321 trees (counting Linus' and 82 trees of bug
-fix patches pending for the current merge release).
-
-Stats about the size of the tree over time can be seen at
-http://neuling.org/linux-next-size.html .
-
-Status of my local build tests will be at
-http://kisskb.ellerman.id.au/linux-next .  If maintainers want to give
-advice about cross compilers/configs that work, we are always open to add
-more builds.
-
-Thanks to Randy Dunlap for doing many randconfig builds.  And to Paul
-Gortmaker for triage and bug fixes.
-
---=20
-Cheers,
-Stephen Rothwell
-
-$ git checkout master
-$ git reset --hard stable
-Merging origin/master (16f4aa9b7c23 Merge tag 'pinctrl-v5.8-2' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl)
-Merging fixes/master (9bd7b7c45d71 sched: Fix RANDSTRUCT build fail)
-Merging kbuild-current/fixes (214377e9b7e3 samples: watch_queue: build samp=
-le program for target architecture)
-Merging arc-current/for-curr (10011f7d95de ARCv2: support loop buffer (LPB)=
- disabling)
-Merging arm-current/fixes (3866f217aaa8 ARM: 8977/1: ptrace: Fix mask for t=
-humb breakpoint hook)
-Merging arm-soc-fixes/arm/fixes (99706d62fb50 Merge tag 'omap-for-v5.7/cpsw=
--fixes-signed' of git://git.kernel.org/pub/scm/linux/kernel/git/tmlind/linu=
-x-omap into arm/fixes)
-Merging uniphier-fixes/fixes (0e698dfa2822 Linux 5.7-rc4)
-Merging arm64-fixes/for-next/fixes (24ebec25fb27 arm64: hw_breakpoint: Don'=
-t invoke overflow handler on uaccess watchpoints)
-Merging m68k-current/for-linus (3381df095419 m68k: tools: Replace zero-leng=
-th array with flexible-array member)
-Merging powerpc-fixes/fixes (c0e1c8c22beb powerpc/8xx: Provide ptep_get() w=
-ith 16k pages)
-Merging s390-fixes/fixes (b3583fca5fb6 s390: fix syscall_get_error for comp=
-at processes)
-Merging sparc/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging fscrypt-current/for-stable (2b4eae95c736 fscrypt: don't evict dirty=
- inodes after removing key)
-Merging net/master (67c20de35a3c net: Add MODULE_DESCRIPTION entries to net=
-work modules)
-Merging bpf/master (ef7232da6bcd ionic: export features for vlans to use)
-Merging ipsec/master (be01369859b8 esp, ah: modernize the crypto algorithm =
-selections)
-Merging netfilter/master (c92cbaea3cc0 net: dsa: sja1105: fix PTP timestamp=
-ing with large tc-taprio cycles)
-Merging ipvs/master (bdc48fa11e46 checkpatch/coding-style: deprecate 80-col=
-umn warning)
-Merging wireless-drivers/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging mac80211/master (59d4bfc1e2c0 net: fix wiki website url mac80211 an=
-d wireless files)
-Merging rdma-fixes/for-rc (9e0dc7b9e1cb RDMA/mlx5: Fix integrity enabled QP=
- creation)
-Merging sound-current/for-linus (d50313a5a0d8 ALSA: hda: Intel: add missing=
- PCI IDs for ICL-H, TGL-H and EKL)
-Merging sound-asoc-fixes/for-linus (f66aada04ccf Merge remote-tracking bran=
-ch 'asoc/for-5.8' into asoc-linus)
-Merging regmap-fixes/for-linus (82228364de4a Merge remote-tracking branch '=
-regmap/for-5.8' into regmap-linus)
-Merging regulator-fixes/for-linus (1b3bcca20858 regulator: mt6358: Remove B=
-ROKEN dependency)
-Merging spi-fixes/for-linus (0c5e6b29f27a Merge remote-tracking branch 'spi=
-/for-5.8' into spi-linus)
-Merging pci-current/for-linus (b3a9e3b9622a Linux 5.8-rc1)
-Merging driver-core.current/driver-core-linus (b3a9e3b9622a Linux 5.8-rc1)
-Merging tty.current/tty-linus (b3a9e3b9622a Linux 5.8-rc1)
-Merging usb.current/usb-linus (302c570bf36e usb: typec: tcpci_rt1711h: avoi=
-d screaming irq causing boot hangs)
-Merging usb-gadget-fixes/fixes (172b14b48ca1 usb: cdns3: gadget: make a bun=
-ch of functions static)
-Merging usb-serial-fixes/usb-linus (399ad9477c52 USB: serial: option: add T=
-elit LE910C1-EUX compositions)
-Merging usb-chipidea-fixes/ci-for-usb-stable (b3f3736ac305 usb: chipidea: m=
-sm: Ensure proper controller reset using role switch API)
-Merging phy/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging staging.current/staging-linus (b65a2d8c8614 Staging: rtl8723bs: pre=
-vent buffer overflow in update_sta_support_rate())
-Merging char-misc.current/char-misc-linus (b3a9e3b9622a Linux 5.8-rc1)
-Merging soundwire-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging thunderbolt-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging input-current/for-linus (751ad34fbad7 Input: adi - work around modu=
-le name confict)
-Merging crypto-current/master (e04ec0de61c1 padata: upgrade smp_mb__after_a=
-tomic to smp_mb in padata_do_serial)
-Merging ide/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging vfio-fixes/for-linus (5c5866c593bb vfio/pci: Clear error and reques=
-t eventfd ctx after releasing)
-Merging kselftest-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging modules-fixes/modules-linus (57baec7b1b04 scripts/nsdeps: make sure=
- to pass all module source files to spatch)
-Merging slave-dma-fixes/fixes (b5b0180c2f76 dmaengine: ti: k3-udma: Fix the=
- running channel handling in alloc_chan_resources)
-Merging backlight-fixes/for-backlight-fixes (219d54332a09 Linux 5.4)
-Merging mtd-fixes/mtd/fixes (630e8d5507d9 mtd: set master partition panic w=
-rite flag)
-Merging mfd-fixes/for-mfd-fixes (603d9299da32 mfd: mt6397: Fix probe after =
-changing mt6397-core)
-Merging v4l-dvb-fixes/fixes (8f3d9f354286 Linux 5.7-rc1)
-Merging reset-fixes/reset/fixes (b460e0a9e240 reset: intel: add unspecified=
- HAS_IOMEM dependency)
-Merging mips-fixes/mips-fixes (03e62fd67d3a MIPS: lantiq: xway: sysctrl: fi=
-x the GPHY clock alias names)
-Merging at91-fixes/at91-fixes (54ecb8f7028c Linux 5.4-rc1)
-Merging omap-fixes/fixes (a352fe371053 Merge branch 'omap-for-v5.8/fixes-rc=
-1' into fixes)
-Merging kvm-fixes/master (49b3deaad345 Merge tag 'kvmarm-fixes-5.8-1' of gi=
-t://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvms390-fixes/master (774911290c58 KVM: s390: reduce number of IO p=
-ins to 1)
-Merging hwmon-fixes/hwmon (09aa62c08b99 hwmon: (bt1-pvt) Mark is_visible fu=
-nctions static)
-Merging nvdimm-fixes/libnvdimm-fixes (543094e19c82 nvdimm/region: always sh=
-ow the 'align' attribute)
-Merging btrfs-fixes/next-fixes (4f28062adf92 Merge branch 'misc-5.7' into n=
-ext-fixes)
-Merging vfs-fixes/fixes (9e4636545933 copy_xstate_to_kernel(): don't leave =
-parts of destination uninitialized)
-Merging dma-mapping-fixes/for-linus (9c24eaf81cc4 iommu/vt-d: Return the co=
-rrect dma mask when we are bypassing the IOMMU)
-Merging i3c-fixes/master (6fbc7275c7a9 Linux 5.2-rc7)
-Merging drivers-x86-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging samsung-krzk-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging pinctrl-samsung-fixes/pinctrl-fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging devicetree-fixes/dt/linus (8c31055758bc doc: devicetree: bindings: =
-fix spelling mistake)
-Merging scsi-fixes/fixes (b8f1d1e05817 scsi: Wire up ata_scsi_dma_need_drai=
-n for SAS HBA drivers)
-Merging drm-fixes/drm-fixes (8a7a3d1d0dcf Merge tag 'amd-drm-fixes-5.8-2020=
--06-17' of git://people.freedesktop.org/~agd5f/linux into drm-fixes)
-Merging amdgpu-fixes/drm-fixes (2c409ba81be2 drm/radeon: fix si_enable_smc_=
-cac() failed issue)
-Merging drm-intel-fixes/for-linux-next-fixes (8e68c6340d58 drm/i915/display=
-: Fix the encoder type check)
-Merging mmc-fixes/fixes (27a5e7d36d38 mmc: meson-gx: limit segments to 1 wh=
-en dram-access-quirk is needed)
-Merging rtc-fixes/rtc-fixes (8f3d9f354286 Linux 5.7-rc1)
-Merging gnss-fixes/gnss-linus (2ef96a5bb12b Linux 5.7-rc5)
-Merging hyperv-fixes/hyperv-fixes (38dce4195f0d x86/hyperv: Properly suspen=
-d/resume reenlightenment notifications)
-Merging soc-fsl-fixes/fix (fe8fe7723a3a soc: fsl: dpio: register dpio irq h=
-andlers after dpio create)
-Merging risc-v-fixes/fixes (0e2c09011d4d RISC-V: Acquire mmap lock before i=
-nvoking walk_page_range)
-Merging pidfd-fixes/fixes (86f56395feb2 tests: test for setns() EINVAL regr=
-ession)
-Merging fpga-fixes/fixes (6a47d6efc693 fpga: zynqmp: fix modular build)
-Merging spdx/spdx-linus (3d77e6a8804a Linux 5.7)
-Merging gpio-intel-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging pinctrl-intel-fixes/fixes (b3a9e3b9622a Linux 5.8-rc1)
-Merging erofs-fixes/fixes (a8dfdba8de7e erofs: fix partially uninitialized =
-misuse in z_erofs_onlinepage_fixup)
-Merging integrity-fixes/fixes (843385694721 evm: Fix a small race in init_d=
-esc())
-Merging drm-misc-fixes/for-linux-next-fixes (7f757cb6b2fc video: fbdev: uve=
-safb: fix "noblank" option handling)
-Merging kspp-gustavo/for-next/kspp (76fafbfffb44 w1: Replace zero-length ar=
-ray with flexible-array)
-Merging kbuild/for-next (b170290c2836 Merge tag 'kconfig-v5.8' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild)
-Merging compiler-attributes/compiler-attributes (98d54f81e36b Linux 5.6-rc4)
-Merging dma-mapping/for-next (ba9e8a1a2c3e dma-mapping: DMA_COHERENT_POOL s=
-hould select GENERIC_ALLOCATOR)
-Merging asm-generic/master (060dc911501f nds32: fix build failure caused by=
- page table folding updates)
-Merging arc/for-next (def9d2780727 Linux 5.5-rc7)
-Merging arm/for-next (03c7f5f0b844 Merge branches 'fixes' and 'misc' into f=
-or-next)
-Merging arm64/for-next/core (dd4bc6076587 arm64: warn on incorrect placemen=
-t of the kernel by the bootloader)
-Merging arm-perf/for-next/perf (10f6cd2af21b pmu/smmuv3: Clear IRQ affinity=
- hint on device removal)
-Merging arm-soc/for-next (28107944fb70 soc: document merges)
-Merging amlogic/for-next (9233c526bc0e Merge branch 'v5.8/defconfig' into t=
-mp/aml-rebuild)
-Merging aspeed/for-next (33f466eef906 ARM: dts: aspeed: mihawk: Add 8 tmp40=
-1 thermal sensors)
-Merging at91/at91-next (ec539e70d882 Merge branches 'at91-soc', 'at91-dt' a=
-nd 'at91-defconfig' into at91-next)
-Merging imx-mxs/for-next (3d0c88d3776b Merge branch 'imx/dt64' into for-nex=
-t)
-Merging keystone/next (a158c2b7ec23 Merge branch 'for_5.8/driver-soc' into =
-next)
-Merging mediatek/for-next (64ee939736e7 Merge branch 'v5.7-next/soc' into f=
-or-next)
-Merging mvebu/for-next (869da228bd45 Merge branch 'mvebu/dt64' into mvebu/f=
-or-next)
-Merging omap/for-next (712c602893d7 Merge branch 'fixes' into for-next)
-Merging qcom/for-next (2db45abf5ac7 Merge branches 'arm64-defconfig-for-5.9=
-', 'arm64-for-5.9' and 'dts-for-5.9' into for-next)
-Merging raspberrypi/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging realtek/for-next (486f29df6941 Merge branch 'v5.8/dt' into next)
-Merging renesas/next (a3fa35e19650 Merge branch 'renesas-arm-dt-for-v5.9' i=
-nto renesas-next)
-Merging reset/reset/next (3b9164c0f173 dt-bindings: reset: Convert i.MX7 re=
-set to json-schema)
-Merging rockchip/for-next (99bcf38dd05b Merge branch 'v5.9-clk/next' into f=
-or-next)
-Merging samsung-krzk/for-next (b0953d8b7cdb Merge branch 'next/drivers' int=
-o for-next)
-Merging scmi/for-linux-next (24077bf8f9e6 Merge tag 'juno-fix-5.8' of git:/=
-/git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux into for-linux-=
-next)
-Merging sunxi/sunxi/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging tegra/for-next (fc87d5985a7c Merge branch for-5.9/memory into for-n=
-ext)
-Merging ti-k3/ti-k3-next (cae809434da1 arm64: dts: ti: k3-j721e-main: Add m=
-ain domain watchdog entries)
-Merging uniphier/for-next (0e698dfa2822 Linux 5.7-rc4)
-Merging clk/clk-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging clk-samsung/for-next (3d77e6a8804a Linux 5.7)
-Merging csky/linux-next (f36e0aab6f1f csky: Fixup CONFIG_DEBUG_RSEQ)
-Merging h8300/h8300-next (9d48776fc609 Merge remote-tracking branch 'origin=
-/master' into h8300-next)
-Merging ia64/next (172e7890406d tty/serial: cleanup after ioc*_serial drive=
-r removal)
-Merging m68k/for-next (3381df095419 m68k: tools: Replace zero-length array =
-with flexible-array member)
-Merging m68knommu/for-next (59f7d71f35c1 m68k: mcfmmu: remove stale part of=
- comment about steal_context)
-Merging microblaze/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging mips/mips-next (9909bc43a2e2 dt-bindings: MIPS: Document Ingenic So=
-Cs binding.)
-Merging nds32/next (3d77e6a8804a Linux 5.7)
-Merging nios2/for-next (6b57fa4d374b nios2: signal: Mark expected switch fa=
-ll-through)
-Merging openrisc/for-next (6bd140e14d9a openrisc: Fix issue with argument c=
-lobbering for clone/fork)
-Merging parisc-hd/for-next (fb775a8805ed parisc: Whitespace cleanups in ato=
-mic.h)
-Merging powerpc/next (5b14671be58d Merge tag 'fuse-update-5.8' of git://git=
-.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse)
-Merging fsl/next (a76bea0287ce powerpc/kmcent2: add ranges to the pci bridg=
-es)
-Merging soc-fsl/next (e9e4ef9116b1 soc: fsl: dpio: Remove unused inline fun=
-ction qbman_write_eqcr_am_rt_register)
-Merging risc-v/for-next (bac61e37848b riscv: Select ARCH_SUPPORTS_ATOMIC_RM=
-W by default)
-Merging s390/features (b3a9e3b9622a Linux 5.8-rc1)
-Merging sh/for-next (37744feebc08 sh: remove sh5 support)
-Merging sparc-next/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging uml/linux-next (f6e8c474390b um: virtio: Replace zero-length array =
-with flexible-array)
-Merging xtensa/xtensa-for-next (f04758d5aea9 xtensa: fix __sync_fetch_and_{=
-and,or}_4 declarations)
-Merging fscrypt/master (e3b1078bedd3 fscrypt: add support for IV_INO_LBLK_3=
-2 policies)
-Merging afs/afs-next (8409f67b6437 afs: Adjust the fileserver rotation algo=
-rithm to reprobe/retry more quickly)
-Merging btrfs/for-next (8113246479a5 Merge branch 'for-next-next-v5.7-20200=
-528' into for-next-20200528)
-Merging ceph/master (7ed286f3e061 libceph: don't omit used_replica in targe=
-t_copy())
-Merging cifs/for-next (a0892b413f6b cifs: misc: Use array_size() in if-stat=
-ement controlling expression)
-Merging configfs/for-next (8aebfffacfa3 configfs: fix config_item refcnt le=
-ak in configfs_rmdir())
-Merging ecryptfs/next (8b614cb8f1dc Merge tag '5.6-rc4-smb3-fixes' of git:/=
-/git.samba.org/sfrench/cifs-2.6)
-Merging erofs/dev (b3a9e3b9622a Linux 5.8-rc1)
-Merging exfat/dev (83cf239fa6d5 exfat: move setting VOL_DIRTY over exfat_re=
-move_entries())
-Merging ext3/for_next (a68f93d90fbb Pull writeback fixes from me.)
-Merging ext4/dev (7b97d868b7ab ext4, jbd2: ensure panic by fix a race betwe=
-en jbd2 abort and ext4 error handlers)
-Merging f2fs/dev (b29482fde649 Merge branch 'work.epoll' of git://git.kerne=
-l.org/pub/scm/linux/kernel/git/viro/vfs)
-Merging fsverity/fsverity (9cd6b593cfc9 fs-verity: remove unnecessary exter=
-n keywords)
-Merging fuse/for-next (9b46418c40fe fuse: copy_file_range should truncate c=
-ache)
-Merging jfs/jfs-next (7aba5dcc2346 jfs: Replace zero-length array with flex=
-ible-array member)
-Merging nfs/linux-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging nfs-anna/linux-next (ba838a75e73f NFS: Fix direct WRITE throughput =
-regression)
-Merging nfsd/nfsd-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging orangefs/for-next (0df556457748 orangefs: convert get_user_pages() =
---> pin_user_pages())
-Merging overlayfs/overlayfs-next (2068cf7dfbc6 ovl: remove unnecessary lock=
- check)
-Merging ubifs/linux-next (4b68bf9a69d2 ubi: Select fastmap anchor PEBs cons=
-idering wear level rules)
-Merging v9fs/9p-next (36f9967531da 9p/xen: increase XEN_9PFS_RING_ORDER)
-Merging xfs/for-next (8cc007246972 xfs: Add the missed xfs_perag_put() for =
-xfs_ifree_cluster())
-Merging zonefs/for-next (568776f992c4 zonefs: Replace uuid_copy() with impo=
-rt_uuid())
-Merging iomap/iomap-for-next (d4ff3b2ef901 iomap: Fix unsharing of an exten=
-t >2GB on a 32-bit machine)
-Merging djw-vfs/vfs-for-next (e4f9ba20d3b8 fs/xfs: Update xfs_ioctl_setattr=
-_dax_invalidate())
-Merging file-locks/locks-next (5ef159681309 locks: add locks_move_blocks in=
- posix_lock_inode)
-Merging vfs/for-next (159acfa8df28 iov_iter: Move unnecessary inclusion of =
-crypto/hash.h)
-Applying: further fixes for "iov_iter: Move unnecessary inclusion of crypto=
-/hash.h"
-Merging printk/for-next (f8d10ecd0f83 Merge branch 'for-5.9' into for-next)
-$ git reset --hard HEAD^
-Merging next-20200618 version of printk
-Merging pci/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging pstore/for-next/pstore (b3a9e3b9622a Linux 5.8-rc1)
-Merging hid/for-next (f064b98aa777 Merge branch 'for-5.9/wiimote' into for-=
-next)
-$ git reset --hard HEAD^
-Merging next-20200618 version of hid
-Merging i2c/i2c/for-next (28f9f8fb4f40 MAINTAINERS: Add robert and myself a=
-s qcom i2c cci maintainers)
-Merging i3c/i3c/next (b4203ce05563 i3c master: GETMRL's 3rd byte is optiona=
-l even with BCR_IBI_PAYLOAD)
-Merging dmi/master (d9d8efd3241b firmware/dmi: Report DMI Bios & EC firmwar=
-e release)
-Merging hwmon-staging/hwmon-next (5093411241c5 hwmon: (nct6683) Replace con=
-tainer_of() with  kobj_to_dev())
-Merging jc_docs/docs-next (b103c607654e docs: staging: don't use literalinc=
-lude)
-Merging v4l-dvb/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging v4l-dvb-next/master (2630e1bb0948 media: rkvdec: Fix H264 scaling l=
-ist order)
-Merging fbdev/fbdev-for-next (732146a3f1dc video: fbdev: imxfb: fix a typo =
-in imxfb_probe())
-Merging pm/linux-next (30bbd465a449 Merge branches 'pm-acpi', 'pm-sleep' an=
-d 'pm-cpufreq' into linux-next)
-Merging cpufreq-arm/cpufreq/arm/linux-next (fa647413b761 cpufreq: brcmstb-a=
-vs-cpufreq: send S2_ENTER / S2_EXIT commands to AVS)
-Merging cpupower/cpupower (b3a9e3b9622a Linux 5.8-rc1)
-Merging opp/opp/linux-next (b466542f331e OPP: Add and export helper to set =
-bandwidth)
-Merging thermal/thermal/linux-next (64488908b523 thermal/int340x_thermal: D=
-on't require IDSP to exist)
-Merging thermal-rzhang/next (54ecb8f7028c Linux 5.4-rc1)
-Merging thermal-soc/next (6c375eccded4 thermal: db8500: Rewrite to be a pur=
-e OF sensor)
-Merging ieee1394/for-next (67f8e65e4fc1 firewire: net: remove set but not u=
-sed variable 'guid')
-Merging dlm/next (fe204591cc94 dlm: remove BUG() before panic())
-Merging swiotlb/linux-next (4cdfb27ba80d xen/swiotlb: remember having calle=
-d xen_create_contiguous_region())
-Merging rdma/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging net-next/master (29a720c1042f Merge branch 'Marvell-mvpp2-improveme=
-nts')
-Merging bpf-next/master (bb8dc2695a7d tools/bpftool: Relicense bpftool's BP=
-F profiler prog as dual-license GPL/BSD)
-Merging ipsec-next/master (69119673bd50 Merge git://git.kernel.org/pub/scm/=
-linux/kernel/git/netdev/net)
-Merging mlx5-next/mlx5-next (6b646a7e4af6 net/mlx5: Add ability to read and=
- write ECE options)
-Merging netfilter-next/master (69119673bd50 Merge git://git.kernel.org/pub/=
-scm/linux/kernel/git/netdev/net)
-Merging ipvs-next/master (9a25c1df24a6 Merge git://git.kernel.org/pub/scm/l=
-inux/kernel/git/bpf/bpf-next)
-Merging wireless-drivers-next/master (a15a20acc980 Merge tag 'iwlwifi-next-=
-for-kalle-2020-06-11' of git://git.kernel.org/pub/scm/linux/kernel/git/iwlw=
-ifi/iwlwifi-next)
-Merging bluetooth/master (46605a271114 Bluetooth: mgmt: Use command complet=
-e on success for set system config)
-Merging mac80211-next/master (cb8e59cc8720 Merge git://git.kernel.org/pub/s=
-cm/linux/kernel/git/netdev/net-next)
-Merging gfs2/for-next (8a9e58a9bb7a gfs2: Add some flags missing from glock=
- output)
-Merging mtd/mtd/next (5788ccf3c84f mtd: clear cache_state to avoid writing =
-to bad blocks repeatedly)
-Merging nand/nand/next (8c8cee0fea9d mtd: parsers: bcm63xx: simplify CFE de=
-tection)
-Merging spi-nor/spi-nor/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging crypto/master (a05b1c150f5b crypto: octeontx - Fix sparse warnings)
-Merging drm/drm-next (66057dd1d1cf Merge tag 'drm-misc-next-fixes-2020-06-1=
-1' of git://anongit.freedesktop.org/drm/drm-misc into drm-next)
-Merging amdgpu/drm-next (f59073f6df9b drm/amdgpu: add another raven1 gfxoff=
- quirk)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/amd/display/dc/dsc/rc=
-_calc.c
-Applying: drm/amdkfd: fix up for {un}use_mm() rename
-$ git reset --hard HEAD^
-Merging next-20200616 version of amdgpu
-Applying: drm/amdkfd: fix up for {un}use_mm() rename
-[master a2408cecb44a] next-20200616/amdgpu
-Merging drm-intel/for-linux-next (cf46143fe2c9 drm/i915/gt: Replace manual =
-kmap_atomic() with pin_map for renderstate)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_request.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/i915_params.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/selftest_time=
-line.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/selftest_rps.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/selftest_lrc.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/gt/selftest_hang=
-check.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/i915/display/intel_dd=
-i.c
-Merging drm-tegra/drm/tegra/for-next (fce3a51d9b31 drm/tegra: Add zpos prop=
-erty for cursor planes)
-Merging drm-misc/for-linux-next (b3bfcdf8a3b6 drm/panel: simple: add Tianma=
- TM070JVHG33)
-CONFLICT (content): Merge conflict in drivers/gpu/drm/nouveau/nouveau_displ=
-ay.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/drm_vblank.c
-CONFLICT (content): Merge conflict in drivers/gpu/drm/drm_dp_mst_topology.c
-Applying: drm/amdgpu: remove stray drm_gem_object_put_unlocked
-Merging drm-msm/msm-next (078e8f8ce8ad drm/msm: Fix setup of a6xx create_ad=
-dress_space.)
-Merging mali-dp/for-upstream/mali-dp (f634c6a80287 dt/bindings: display: Ad=
-d optional property node define for Mali DP500)
-Merging imx-drm/imx-drm/next (2c76b324c794 drm/imx: parallel-display: Adjus=
-t bus_flags handling)
-Merging etnaviv/etnaviv/next (6a5ef3b224c6 drm/etnaviv: Simplify clock enab=
-le/disable)
-Merging regmap/for-next (e6ad256a03ef Merge remote-tracking branch 'regmap/=
-for-5.9' into regmap-next)
-Merging sound/for-next (c7440acc8597 Merge branch 'topic/hda-micmute-led' i=
-nto for-next)
-Merging sound-asoc/for-next (f2e02f2c84b3 Merge remote-tracking branch 'aso=
-c/for-5.9' into asoc-next)
-Merging modules/modules-next (5c3a7db0c7ec module: Harden STRICT_MODULE_RWX)
-Merging input/next (d0ac7079d5fc Input: iqs269a - add missing I2C dependenc=
-y)
-Merging block/for-next (35e6ecf1bc49 Merge branch 'for-5.9/block' into for-=
-next)
-Merging device-mapper/for-next (4e670f43081c dm rq: don't call blk_mq_queue=
-_stopped() in dm_stop_queue())
-Merging pcmcia/pcmcia-next (46d079790663 pcmcia: make pccard_loop_tuple() s=
-tatic)
-Merging mmc/next (49377432943d Merge branch 'fixes' into next)
-Merging mfd/for-mfd-next (098c4adf249c mfd: mt6360: Remove duplicate REGMAP=
-_IRQ_REG_LINE() entry)
-Merging backlight/for-backlight-next (479da1f538a2 backlight: Add backlight=
-_device_get_by_name())
-Merging battery/for-next (5d809cb28056 power: supply: max8998_charger: Corr=
-ect ONLINE and add STATUS props)
-Merging regulator/for-next (187dc605d288 Merge remote-tracking branch 'regu=
-lator/for-5.9' into regulator-next)
-Merging security/next-testing (56f2e3b7d819 capabilities: add description f=
-or CAP_SETFCAP)
-Merging apparmor/apparmor-next (e37986097ba6 apparmor: Use true and false f=
-or bool variable)
-Merging integrity/next-integrity (4235b1a4efe1 ima: fix mprotect checking)
-Merging keys/keys-next (b6f61c314649 keys: Implement update for the big_key=
- type)
-Merging safesetid/safesetid-next (4d63f7c2e382 security: Add LSM hooks to s=
-et*gid syscalls)
-Merging selinux/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging smack/next (ef26650a201f Smack: Remove unused inline function smk_a=
-d_setfield_u_fs_path_mnt)
-Merging tomoyo/master (b3a9e3b9622a Linux 5.8-rc1)
-Merging tpmdd/next (8270cafb505e tpm/st33zp24: fix spelling mistake "drescr=
-iption" -> "description")
-Merging watchdog/master (072cb8b628d3 watchdog: m54xx: Add missing include)
-Merging iommu/next (672cf6df9b8a iommu/vt-d: Move Intel IOMMU driver into s=
-ubdirectory)
-Merging vfio/next (4f085ca2f5a8 Merge branch 'v5.8/vfio/kirti-migration-fix=
-es' into v5.8/vfio/next)
-Merging audit/next (bbccc11bc884 audit: Use struct_size() helper in alloc_c=
-hunk)
-Merging devicetree/for-next (bb278b149df9 of: property: Improve cycle detec=
-tion when one of the devices is never added)
-Merging mailbox/mailbox-for-next (e9f901dc05c0 mailbox: qcom: Add ipq6018 a=
-pcs compatible)
-Merging spi/for-next (1a6b879c8582 Merge remote-tracking branch 'spi/for-5.=
-9' into spi-next)
-Merging tip/auto-latest (03e5e9954269 Merge branch 'locking/core')
-Applying: x86/msr: Move the F15h MSRs where they belong
-Applying: Revert "sched: Remove sched_setscheduler*() EXPORTs"
-Merging clockevents/timers/drivers/next (809eb4e9bf9d dt-bindings: timer: A=
-dd renesas,em-sti bindings)
-Merging edac/edac-for-next (17ed808ad243 EDAC: Fix reference count leaks)
-Merging irqchip/irq/irqchip-next (005c34ae4b44 irqchip/gic: Atomically upda=
-te affinity)
-Merging ftrace/for-next (026bb845b0ff ftrace: Fix maybe-uninitialized compi=
-ler warning)
-Merging rcu/rcu/next (d831090dafcc kcsan: Disable branch tracing in core ru=
-ntime)
-Merging kvm/linux-next (49b3deaad345 Merge tag 'kvmarm-fixes-5.8-1' of git:=
-//git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD)
-Merging kvm-arm/next (15c99816ed93 Merge branch 'kvm-arm64/ptrauth-fixes' i=
-nto kvmarm-master/next)
-Merging kvm-ppc/kvm-ppc-next (11362b1befea KVM: PPC: Book3S HV: Close race =
-with page faults around memslot flushes)
-Merging kvms390/next (0b545fd17f84 KVM: s390: remove unneeded semicolon in =
-gisa_vcpu_kicker())
-Merging xen-tip/linux-next (a952f64d14e5 MAINTAINERS: Update PARAVIRT_OPS_I=
-NTERFACE and VMWARE_HYPERVISOR_INTERFACE)
-Merging percpu/for-next (dedac37ea96b Merge branch 'for-5.7' into for-next)
-Merging workqueues/for-next (10cdb1575954 workqueue: use BUILD_BUG_ON() for=
- compile time test instead of WARN_ON())
-Merging drivers-x86/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging chrome-platform/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging hsi/for-next (bb6d3fb354c5 Linux 5.6-rc1)
-Merging leds/for-next (59ea3c9faf32 leds: add aw2013 driver)
-Merging ipmi/for-next (a5dc8300df75 scripts/decode_stacktrace: warn when mo=
-dpath is needed but is unset)
-Merging driver-core/driver-core-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging usb/usb-next (f8f02d5c671f USB: OTG: rename product list of devices)
-Merging usb-gadget/next (1c11e74e9079 usb: dwc3: keystone: Turn on USB3 PHY=
- before controller)
-Merging usb-serial/usb-next (c432df155919 USB: serial: ch341: fix lockup of=
- devices with limited prescaler)
-Merging usb-chipidea-next/ci-for-usb-next (c71d13f9a868 Documentation: ABI:=
- usb: chipidea: Update Li Jun's e-mail)
-Merging phy-next/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging tty/tty-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging char-misc/char-misc-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging extcon/extcon-next (b2e5575a8d04 extcon: arizona: Fix runtime PM im=
-balance on error)
-Merging soundwire/next (b3a9e3b9622a Linux 5.8-rc1)
-Merging thunderbolt/next (b7c408a5e5e6 thunderbolt: Improve USB4 config sym=
-bol help text)
-Merging staging/staging-next (9bea6eb3f59c staging:rtl8712: avoid skb_clone=
- after skb allocation fail)
-Merging mux/for-next (05f19f7f8944 mux: adgs1408: Add mod_devicetable.h and=
- remove of_match_ptr)
-Merging icc/icc-next (65461e26b1fe interconnect: Allow inter-provider pairs=
- to be configured)
-Merging slave-dma/next (c09a7ce668a6 dmaengine: mmp_tdma: share the IRQ lin=
-e)
-Merging cgroup/for-next (936f2a70f207 cgroup: add cpu.stat file to root cgr=
-oup)
-Merging scsi/for-next (112ceff79e89 Merge branch 'misc' into for-next)
-Merging scsi-mkp/for-next (3145550a7f8b scsi: target: tcmu: Fix crash in tc=
-mu_flush_dcache_range on ARM)
-Merging vhost/linux-next (a20daaa6c4d6 tools/virtio: Use tools/include/list=
-.h instead of stubs)
-Merging rpmsg/for-next (71f56fef13d4 Merge branches 'hwspinlock-next', 'rpm=
-sg-next' and 'rproc-next' into for-next)
-Merging gpio/for-next (42ba326cdeff Merge branch 'devel' into for-next)
-Merging gpio-brgl/gpio/for-next (3ba3ff5c0966 gpio: pca953x: Add support fo=
-r the PCAL9535)
-Merging gpio-intel/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging pinctrl/for-next (44fc2d79b547 Merge branch 'devel' into for-next)
-Merging pinctrl-intel/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging pinctrl-samsung/for-next (7efece8a057f pinctrl: samsung: Use bank n=
-ame as irqchip name)
-Merging pwm/for-next (b8fb642afa02 pwm: iqs620a: Use lowercase hexadecimal =
-literals for consistency)
-Merging userns/for-next (d35bec8a5788 Merge proc-next and exec-next for tes=
-ting in linux-next)
-Merging ktest/for-next (1091c8fce8aa ktest: Fix typos in ktest.pl)
-Merging random/dev (ab9a7e27044b random: avoid warnings for !CONFIG_NUMA bu=
-ilds)
-Merging kselftest/next (1b8eec510ba6 selftests/ftrace: Support ":README" su=
-ffix for requires)
-Merging y2038/y2038 (c4e71212a245 Revert "drm/etnaviv: reject timeouts with=
- tv_nsec >=3D NSEC_PER_SEC")
-Merging livepatching/for-next (b950460b2486 Merge branch 'for-5.9/selftests=
--cleanup' into for-next)
-Merging coresight/next (6e5446ac46dd coresight: Fix comment in main header =
-file)
-Merging rtc/rtc-next (4601e24a6fb8 rtc: pcf2127: watchdog: handle nowayout =
-feature)
-Merging nvdimm/libnvdimm-for-next (b86153077d5c Merge branch 'for-5.8/papr_=
-scm' into libnvdimm-for-next)
-Merging at24/at24/for-next (8f3d9f354286 Linux 5.7-rc1)
-Merging ntb/ntb-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging seccomp/for-next/seccomp (dfbf4ad2ec6c selftests/seccomp: Test SECC=
-OMP_IOCTL_NOTIF_ADDFD)
-Merging kspp/for-next/kspp (5276926f1926 Merge branch 'for-next/seccomp' in=
-to for-next/kspp)
-Merging gnss/gnss-next (9b5816b56af6 gnss: replace zero-length array with f=
-lexible-array)
-Merging fsi/next (2c01397b71c5 fsi: aspeed: Fix OPB0 byte order register va=
-lues)
-CONFLICT (content): Merge conflict in drivers/fsi/Kconfig
-Merging slimbus/for-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging nvmem/for-next (b1f9f1162c5c nvmem: sc27xx: add sc2730 efuse suppor=
-t)
-Merging xarray/xarray (27586ca786a7 XArray: Handle retry entries within xas=
-_find_marked)
-Merging hyperv/hyperv-next (775f43facfe8 Drivers: hv: vmbus: Remove the loc=
-k field from the vmbus_channel struct)
-Merging auxdisplay/auxdisplay (3f03b6498172 auxdisplay: charlcd: Reuse hex_=
-to_bin() instead of custom code)
-Merging kgdb/kgdb/for-next (c893de12e1ef kdb: Remove the misfeature 'KDBFLA=
-GS')
-Merging pidfd/for-next (a5161eeef97c tests: add CLOSE_RANGE_UNSHARE tests)
-CONFLICT (content): Merge conflict in fs/file.c
-Merging devfreq/devfreq-next (8fc0e48e0fae PM / devfreq: Use lockdep assert=
-s instead of manual checks for locked mutex)
-Merging hmm/hmm (b3a9e3b9622a Linux 5.8-rc1)
-Merging fpga/for-next (d3fbd739fc8a fpga: Fix dead store in fpga-bridge.c)
-Merging kunit/test (b3a9e3b9622a Linux 5.8-rc1)
-Merging cel/cel-next (0a8e7b7d0846 SUNRPC: Revert 241b1f419f0e ("SUNRPC: Re=
-move xdr_buf_trim()"))
-Merging generic-ioremap/for-next (4bdc0d676a64 remove ioremap_nocache and d=
-evm_ioremap_nocache)
-Merging cfi/cfi/next (11399346ac39 mtd: Replace zero-length array with flex=
-ible-array)
-Merging kunit-next/kunit (7bf200b3a4ac kunit: add support for named resourc=
-es)
-Merging trivial/for-next (c1a371cf80fb printk: fix global comment)
-Merging zx2c4/for-next (16fbf79b0f83 Linux 5.6-rc7)
-Merging mhi/mhi-next (b3a9e3b9622a Linux 5.8-rc1)
-Merging notifications/notifications-pipe-core (54e552c96d30 watch_queue: Ad=
-d superblock notifications)
-Merging fsinfo/fsinfo-core (dbc87e74d022 vfs, fsinfo: Add an RCU safe per-n=
-s mount list)
-Applying: extra syscall updates
-Merging akpm-current/current (276d96312693 kcov: unconditionally add -fno-s=
-tack-protector to compiler options)
-Applying: Revert "drivers/tty/serial/sh-sci.c: suppress uninitialized var w=
-arning"
-$ git checkout -b akpm remotes/origin/akpm/master
-$ git rebase --onto master remotes/origin/akpm/master-base
-Merging akpm/master (eb8ffe9e5c16 sh: add missing EXPORT_SYMBOL() for __del=
-ay)
-
---Sig_/xSDDqmtLNk=qiDh=wbAHMVS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7wPt4ACgkQAVBC80lX
-0GwWnwf+KgDScLmj0vZSbtgsuTr2Z1/s2/rkBGLLDyRKe3a/6G1SJStoxnvJ6+n5
-N45dP9JVdojbTPrjMW0zoWqjcSdmaMzQa0F5sz4JgfXG1qDykVg3DP+w9/DCuN8R
-2VMBngy1KVnDQNFx0D/mEhPk0Xdl4oj5O8Qrd+XmI9W+q5I9vu/kLBSwdArr1hkn
-Gnz2sN2H8Ys4TOeQ57AkJ/yP+LZOrzO5aNbXjtoNTDI3S6XZcX6CUkz+epDWdYiF
-fTLMFkJglQPSlLQZwK4rohU8GZoJ+cLldA8FoImm7DWe9DHRx84+18VzpEfgYUOu
-H7OtgLjLUys+YO+0bSBUHRbk+alckA==
-=tF+u
------END PGP SIGNATURE-----
-
---Sig_/xSDDqmtLNk=qiDh=wbAHMVS--
+syzbot will keep track of this bug report. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

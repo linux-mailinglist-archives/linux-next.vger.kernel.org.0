@@ -2,107 +2,156 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A762045CB
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 02:37:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2394A204679
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 03:03:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731656AbgFWAhj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 20:37:39 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56403 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1731561AbgFWAhj (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 22 Jun 2020 20:37:39 -0400
+        id S1732144AbgFWBDh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 21:03:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42978 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731716AbgFWBDh (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 21:03:37 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC8CC061573;
+        Mon, 22 Jun 2020 18:03:36 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49rS6T0qbfz9sSt;
-        Tue, 23 Jun 2020 10:37:36 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49rShP2xR3z9sSJ;
+        Tue, 23 Jun 2020 11:03:32 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592872657;
-        bh=NZqT5bS2Rh6HY0CP0buqQsJbSrojqYPVMmdLrrrsScU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=gjWQI/elsOZdMHXyz52dnNsBmx51USIVGMHGeGxcyszyHPzn2kSqBd9CBZfsTlrBZ
-         6L3Ucbv+pZt4xwDpaMVc8K5VjqN+F8WH1rbYMAWOXqav0JUdz9HYbfthUhEQQMab/Q
-         /gg3tEgLBWOuEzzG8JNXudVU8WMXsDWKf0xMJeufrRh4mHKVyCOAESiUm12TVSeU10
-         qCoyxVzkFZRTUYYdP9occweENytPToynmGZd8Gyp96sMtIMcUakndKfUy7PJ+htDCx
-         k3JZ+ItYDIiClUppwWALLq+uySt/QottphhrSNHyfiv6pICSiLG7hKl+xKVw+dltae
-         +CqFUAGXwdcQQ==
-Date:   Tue, 23 Jun 2020 10:37:36 +1000
+        s=201702; t=1592874214;
+        bh=nPtFPnBowS+xlR1gfPlLfOzlnplxG1MPkj4X8y+hHnY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=j6EwxJ5+LPwsRyljSgLkIGySR1H1743pRgnXqciAMudjbpyrSuGiLLMpGwg+Bu0M9
+         0qgPIUc3yT3H5cpQdNn+m/ze4IJmc+NRzB4UXGwoFSU2KYm34QUgKwrptows1It3iJ
+         WrhyGho6yoXzPj3dvGZDZC/nyqautxMeJvr/00Mc0wbktXp0ccQGz8ZR8T+dOsf5K3
+         fAflkeKdi19NGZ7eB9jPWUfDjxZmYLWQCs1pg9Ycla2Me9Y7df4a+F6Q90oc/nYSPk
+         wIegWy+SEX9Eqi5cm+LKuYevSRyJblrZzZc/FkVHoJllu0nsrrB3WSJwIHhYlHwQTz
+         uonkgFdvCKxXQ==
+Date:   Tue, 23 Jun 2020 11:03:31 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failures after merge of the hid tree
-Message-ID: <20200623103736.25f67de5@canb.auug.org.au>
-In-Reply-To: <20200621140421.7f4552df@canb.auug.org.au>
-References: <20200621140421.7f4552df@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Huy Nguyen <huyn@mellanox.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Jarod Wilson <jarod@redhat.com>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20200623110331.3f6349e1@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r0BhmJh8XwjSmoAN4kUieic";
+Content-Type: multipart/signed; boundary="Sig_/O/wuqT+Xgl=.=MhUIjImgu9";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/r0BhmJh8XwjSmoAN4kUieic
+--Sig_/O/wuqT+Xgl=.=MhUIjImgu9
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Sun, 21 Jun 2020 14:04:21 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the hid tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
->=20
-> drivers/hid/intel-ish-hid/ipc/ipc.c:12:10: fatal error: client.h: No such=
- file or directory
->    12 | #include "client.h"
->       |          ^~~~~~~~~~
-> drivers/hid/intel-ish-hid/ipc/pci-ish.c:22:10: fatal error: ishtp-dev.h: =
-No such file or directory
->    22 | #include "ishtp-dev.h"
->       |          ^~~~~~~~~~~~~
->=20
-> I don't know what caused it, but commit
->=20
->   470376737e88 ("HID: allow building hid.ko as an external module")
->=20
-> did not fix it.  BTW, I build with "make O=3D...".
->=20
-> I have used the hid tree from next-20200618 for today.
->=20
-> BTW, the hid tree really needs cleaning up, it contains merge commits dat=
-ing
-> back to April 2018 :-(
->=20
-> $ git rev-list --count origin/master..hid/for-next
-> 301
-> $ git rev-list --no-merges --count origin/master..hid/for-next
-> 12
+Today's linux-next merge of the net-next tree got a conflict in:
 
-I am still getting this failure.
+  net/xfrm/xfrm_device.c
+
+between commit:
+
+  94579ac3f6d0 ("xfrm: Fix double ESP trailer insertion in IPsec crypto off=
+load.")
+
+from the net tree and commit:
+
+  272c2330adc9 ("xfrm: bail early on slave pass over skb")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/r0BhmJh8XwjSmoAN4kUieic
+diff --cc net/xfrm/xfrm_device.c
+index 626096bd0d29,b8918fc5248b..000000000000
+--- a/net/xfrm/xfrm_device.c
++++ b/net/xfrm/xfrm_device.c
+@@@ -106,9 -106,10 +106,10 @@@ struct sk_buff *validate_xmit_xfrm(stru
+  	struct sk_buff *skb2, *nskb, *pskb =3D NULL;
+  	netdev_features_t esp_features =3D features;
+  	struct xfrm_offload *xo =3D xfrm_offload(skb);
++ 	struct net_device *dev =3D skb->dev;
+  	struct sec_path *sp;
+ =20
+ -	if (!xo)
+ +	if (!xo || (xo->flags & XFRM_XMIT))
+  		return skb;
+ =20
+  	if (!(features & NETIF_F_HW_ESP))
+@@@ -129,27 -134,20 +134,22 @@@
+  		return skb;
+  	}
+ =20
+ +	xo->flags |=3D XFRM_XMIT;
+ +
+- 	if (skb_is_gso(skb)) {
+- 		struct net_device *dev =3D skb->dev;
+-=20
+- 		if (unlikely(x->xso.dev !=3D dev)) {
+- 			struct sk_buff *segs;
++ 	if (skb_is_gso(skb) && unlikely(x->xso.dev !=3D dev)) {
++ 		struct sk_buff *segs;
+ =20
+- 			/* Packet got rerouted, fixup features and segment it. */
+- 			esp_features =3D esp_features & ~(NETIF_F_HW_ESP
+- 							| NETIF_F_GSO_ESP);
++ 		/* Packet got rerouted, fixup features and segment it. */
++ 		esp_features =3D esp_features & ~(NETIF_F_HW_ESP | NETIF_F_GSO_ESP);
+ =20
+- 			segs =3D skb_gso_segment(skb, esp_features);
+- 			if (IS_ERR(segs)) {
+- 				kfree_skb(skb);
+- 				atomic_long_inc(&dev->tx_dropped);
+- 				return NULL;
+- 			} else {
+- 				consume_skb(skb);
+- 				skb =3D segs;
+- 			}
++ 		segs =3D skb_gso_segment(skb, esp_features);
++ 		if (IS_ERR(segs)) {
++ 			kfree_skb(skb);
++ 			atomic_long_inc(&dev->tx_dropped);
++ 			return NULL;
++ 		} else {
++ 			consume_skb(skb);
++ 			skb =3D segs;
+  		}
+  	}
+ =20
+
+--Sig_/O/wuqT+Xgl=.=MhUIjImgu9
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7xTtAACgkQAVBC80lX
-0Gx9NQf9HttFKOyGy4QqOOa7kopotlmlyjk9LD8gJTmMnWMAg5iyTQbOqM0bRCwp
-ia3LydeeeO+M9bP6/+4O1qfLX4iqc+ETS8m/Av+kXePEE9abyTGzn1sxnCKuHK+P
-+xgkAyxiTPgOPVYerFDwIaDKqgJ5WWO813wCIZk3z6ymik+iPBEnbJvolT3dVLJl
-1DeNYc2YhBaXW8ppzkz5IGpuYrb7CAF2QdaoTdLImPgow3exw4rCp595awDzk/i1
-+jETcnzQZYkDtvCI7KwF/HjQS4S/NYUzadhHAI10dNHMJOVmHgzleR6qMWR5ULBO
-lJAIpiQrObSMx8zyoqOjGVHaNimoMg==
-=uACl
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7xVOMACgkQAVBC80lX
+0GzM2gf8CpokgrCrdKSqihUmzzY4UWIHPsfI01o19cfy3KgOOjS3k3YdyAQiEQ8W
+QTDYXHJoNTZFnlOkqtQSBNDiCzwofxGWTL1foxXRR2KlGTgnHBFcJlRJXrIPDBC6
+k5oaphiyYpCMKvQPELYf6lD8RmaY4YZfjCIckEhSxiBwJI6h8BC8JODfMSLFzwuQ
+A7ySiV4uNlLQfAWiygW3ond/jmg9jqApGU47iCjBENpv4HmA9Ym9MpEyQswcpVaT
+JhY7VjNYWZaeZEcFmTgJZ2xpvHmA41/8RrvUNHlG7bsTPsAyLXEtNKrl9gDGNcTY
+NW2uPmNMmYn7huMeOD8hL0j5oMhqdg==
+=28VM
 -----END PGP SIGNATURE-----
 
---Sig_/r0BhmJh8XwjSmoAN4kUieic--
+--Sig_/O/wuqT+Xgl=.=MhUIjImgu9--

@@ -2,84 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1072066EE
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 00:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3321F206709
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 00:15:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388033AbgFWWJ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Jun 2020 18:09:56 -0400
-Received: from ozlabs.org ([203.11.71.1]:59913 "EHLO ozlabs.org"
+        id S2387701AbgFWWOC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Jun 2020 18:14:02 -0400
+Received: from mail.kernel.org ([198.145.29.99]:47806 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2387840AbgFWWJ4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 23 Jun 2020 18:09:56 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S2387609AbgFWWOB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 23 Jun 2020 18:14:01 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49s0nY6J7jz9sRR;
-        Wed, 24 Jun 2020 08:09:53 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592950194;
-        bh=lTqWkWzEvGsClGboMxdSrWRtqoctWYdl9TPvvCqLfZw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PEuhjXR+BLyxsOpbpi1jHeAEjgIGK5UW4QlHzslsJUBAbEdkAVAeHkydwwVYvS+MQ
-         ks5gMEC6LbTfk7hZCGOLJmYsNBn5/s8BX0+InrhhRpmren39BOY11lc4DawJQSMRGK
-         aid4bm4fJE4VEd3C2Mg6oeGLUzwr5eCk89yzM4BxmHYRMoYVI5Uux+gSKW/7MY0jlG
-         9pkQY0qt/Id1OBfXovQF2N3COSqAO3P/1pjHLV3qJnqSmoMlf8B4jxQmK9/yg9D+BQ
-         K/4N97/uBux4tnl1yW+9kIs7GxdnD6wMOht/4x4qPkW3f/kOXOo460aqRq2Ny++hQL
-         wPDTCHlDehH4Q==
-Date:   Wed, 24 Jun 2020 08:09:52 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Switching dmaengine tree to kernel.org
-Message-ID: <20200624080952.093d562c@canb.auug.org.au>
-In-Reply-To: <20200623144313.GS2324254@vkoul-mobl>
-References: <20200623144313.GS2324254@vkoul-mobl>
+        by mail.kernel.org (Postfix) with ESMTPSA id A17D420724;
+        Tue, 23 Jun 2020 22:13:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592950441;
+        bh=i4JI7Wlg1bRXKCVQ70zwdpyCQhPCsjcBPSKZS7v3IWY=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=g5GRLEgnX5RuHYiIAAHJ6VpF3ogoy853hF421Cx+cQgz/pXWZFIZH1CtC+B84295Y
+         CNuKhhNNjrMQM9B2sRZxhAAd4gxM+Cpww9KuiSxk7fWmRvE7cNA4z+06q7CD1p89yX
+         Z/GT/1ck/+Kpwmf5VxbKY9yDkv1VfuhFAoUpUYPo=
+Date:   Wed, 24 Jun 2020 00:13:57 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Cristian Klein <cristian.klein@elastisys.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: linux-next: build failures after merge of the hid tree
+In-Reply-To: <20200623103736.25f67de5@canb.auug.org.au>
+Message-ID: <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
+References: <20200621140421.7f4552df@canb.auug.org.au> <20200623103736.25f67de5@canb.auug.org.au>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s3=nkInVYc8lAAGNaBnOH5C";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/s3=nkInVYc8lAAGNaBnOH5C
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 23 Jun 2020, Stephen Rothwell wrote:
 
-Hi Vinod,
+> > I don't know what caused it, but commit
+> > 
+> >   470376737e88 ("HID: allow building hid.ko as an external module")
+> > 
+> > did not fix it.  BTW, I build with "make O=...".
 
-On Tue, 23 Jun 2020 20:13:13 +0530 Vinod Koul <vkoul@kernel.org> wrote:
->
-> I have switched dmaengine tree to kernel.org [1], please update your
-> database to new tree which can be found at [2]
->=20
-> [1]: https://lore.kernel.org/dmaengine/20200623143729.781403-1-vkoul@kern=
-el.org/
-> [2]: git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git
+That's actually the patch that almost certainly broke it.
 
-OK, done.  I also renamed them from slave-dma{,-fixes} to dmaengine{,-fixes=
-).
+CCing Cristian (author of that patch) and Nathan, who apparently sent a 
+fixup patch for this, but I haven't seen it, as our corporate mailserver 
+had severe issues yesterday.
 
---=20
-Cheers,
-Stephen Rothwell
+If there is no resolution by tomorrow, we'll just drop it.
 
---Sig_/s3=nkInVYc8lAAGNaBnOH5C
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- 
+Jiri Kosina
+SUSE Labs
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7yfbAACgkQAVBC80lX
-0GweNggAjshCfmtDZPPGM+Z8Wh0XV8CClZNIq7i66hCNt/GaF9Chl5qnJ0P9nnKv
-KS504Abh9S0fGsHFnj+P6GgHxXU/g5x2VCzribtxTIhBqZ138SIb2PIRGU9hWeJ0
-xBhKaGuG9iandO0ZV/MTSbCEFXkgu9k4WjK1hW2SdyotbXzGKccV6T/x/Z8rbEm0
-wqG1g1xAJwgBmLmXxqYO6Ug8xKWz+EOr4zfOFctal6pYQDoK9JXaMKb83lRopQLs
-NgFT2eaDC4rz5UM3TGp9/wiHVpKCzrtHLXCeIlOG0r2YJAYDfON7PTuLl7gzez6g
-1bTRPGeWuZl7Sn7blHZ9/TDcE3niRg==
-=GZe2
------END PGP SIGNATURE-----
-
---Sig_/s3=nkInVYc8lAAGNaBnOH5C--

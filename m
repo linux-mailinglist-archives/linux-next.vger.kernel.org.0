@@ -2,115 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A2352204330
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 00:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B50204548
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 02:27:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730863AbgFVWAw (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 22 Jun 2020 18:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730764AbgFVWAv (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 22 Jun 2020 18:00:51 -0400
-Received: from mail-qt1-x844.google.com (mail-qt1-x844.google.com [IPv6:2607:f8b0:4864:20::844])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20745C061573;
-        Mon, 22 Jun 2020 15:00:51 -0700 (PDT)
-Received: by mail-qt1-x844.google.com with SMTP id j10so5338761qtq.11;
-        Mon, 22 Jun 2020 15:00:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Rbwmv8Z/FP9ApAgbdwjt0jN7D1r57JUmODU4nLA9Mcw=;
-        b=nKrUDlJ7NDzZ8GaINJaqizcT2hUYM1B1AOlOLE5hLf2MkYHTa+JsOUWbm9L6OKsRO6
-         BAq2ynKZpJKaTqMDiZOyAsJXS8n8XbyM00GCctUp8qkzaHZETysYgvhuQt+8x9J/OMDQ
-         NDa1SlTFEPPbJhY5rE4Dq09q/fIFj+83HTEat5Gz5lU4LYvx6OmHDEggXu/2if8NR8vi
-         QzNYHmrG0xCS6HMsmMAIqEdAk0UMIqieoCUakd+ddd4S1GERmhDeQno+fVC1YEzDkG8f
-         J5Jy+QRr8KhtDf7K029eNhajQyRVq4rAHT5wHjQ246Pyrmpl7dvHNxcYAQgI9A4AleDX
-         UQZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Rbwmv8Z/FP9ApAgbdwjt0jN7D1r57JUmODU4nLA9Mcw=;
-        b=W7JWDUtjGIzGx5dUp5yu7O8L0lzpMm2t3snKDOSGpAlWS9LWHs4IoxJVNy+ltiIcOO
-         9Nxex/qG5PbsZO7g86/oNswhXeDwcfL5OO6OdKUFqlS8+deJjGcTtGJIXhKP7b+/TUOJ
-         h5iqdPj4EJGQheXqUwQwmPQ8hEYrOXKObXbixDMEMYSB/RSUKTX2icUybqRzaJTcjs2d
-         7C5TfaPK3WpWpLp9Yi8RfXpJKIXpeupztJ3Annt3ca/iccoAWpiDc2FqNTveG/Xjtwvi
-         eBmn9ANFVTV9NfeyRRAR85xLbt61ohzUl86WEiiRpkYru9p6d0JTov1cBIZ6u/qAtztT
-         2wWw==
-X-Gm-Message-State: AOAM530WZDRVptGbcXEVfTXD+nww5wXgQOCQY7H4UKlajAq7fO6n2fwA
-        YHFVNXmPe1UP88PO4CcOPehHObaapVNaef3cADs=
-X-Google-Smtp-Source: ABdhPJyQpreJkF/hhbWDo7VT/jh/R4iAx7O6bLCYL2yAbMWc51SRvtco/EIZHB+pJK+3kFoGtNuigG9tWLHVONVsNCE=
-X-Received: by 2002:ac8:5188:: with SMTP id c8mr18989475qtn.1.1592863250268;
- Mon, 22 Jun 2020 15:00:50 -0700 (PDT)
+        id S1731295AbgFWA1C (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 22 Jun 2020 20:27:02 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:35755 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1731260AbgFWA1B (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 22 Jun 2020 20:27:01 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49rRt92hbCz9sRW;
+        Tue, 23 Jun 2020 10:26:57 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592872018;
+        bh=0sW7p/PkHLD+Tq1rXycj2cNzH1JjCQUzen32bfXLSfw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Nh8irsotGUlmrfdjUXXLGA5ZdCT10gGCxnSQpYkv3HLVqPbDwbYsPfAsfEOaG0T7j
+         DWttd5z4pMAEb5HXtIv0vw7gb+O8w1eYofbEqd/51QMKO3ibRVhNptVhFfgNEdvKcY
+         t6ERU6UKa03May6dSjljwO0lv9mT2/GXPwvbYkZR2X2+ENbKp1jyaeXLueTYth2L9b
+         prof9aFzJu9/YPxiaELu5qo35ABhGmdYiL25LRXFf/duuAjMzIUDgeuhuB3s3dPiDI
+         crMmW+Ne7GKy/HweKR1Lqy+H0I6DAccet2VhymDkp6tYAcUe5A0gbtt+aqjLXkSWTI
+         W92L8d6gUKDzw==
+Date:   Tue, 23 Jun 2020 10:26:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>
+Subject: Re: linux-next: build failure after merge of the printk tree
+Message-ID: <20200623102655.6d16e610@canb.auug.org.au>
+In-Reply-To: <20200621131554.5a662afe@canb.auug.org.au>
+References: <20200621131554.5a662afe@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20200621043737.pb6JV%akpm@linux-foundation.org>
- <20a39fd4-622d-693c-c8d6-1fbab12af62a@gmail.com> <202006221445.36E03CCBE9@keescook>
-In-Reply-To: <202006221445.36E03CCBE9@keescook>
-From:   Richard Weinberger <richard.weinberger@gmail.com>
-Date:   Tue, 23 Jun 2020 00:00:39 +0200
-Message-ID: <CAFLxGvw4NeBw3tDEnvL4USxgp--=vT1iXc6-tzAd_NkWCmUNFA@mail.gmail.com>
-Subject: Re: mmotm 2020-06-20-21-36 uploaded (lkdtm/bugs.c)
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Randy Dunlap <rd.dunlab@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>, Michal Hocko <mhocko@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
-        mm-commits@vger.kernel.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-um <linux-um@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/WGn5_jueQ4BieacC0LW1yUM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jun 22, 2020 at 11:51 PM Kees Cook <keescook@chromium.org> wrote:
->
-> On Mon, Jun 22, 2020 at 08:37:17AM -0700, Randy Dunlap wrote:
-> > On 6/20/20 9:37 PM, akpm@linux-foundation.org wrote:
-> > > The mm-of-the-moment snapshot 2020-06-20-21-36 has been uploaded to
-> > >
-> > >    http://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > mmotm-readme.txt says
-> > >
-> > > README for mm-of-the-moment:
-> > >
-> > > http://www.ozlabs.org/~akpm/mmotm/
-> > >
-> > > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> > > more than once a week.
-> >
-> > drivers/misc/lkdtm/bugs.c has build errors when building UML for i386
-> > (allmodconfig or allyesconfig):
-> >
-> >
-> > In file included from ../drivers/misc/lkdtm/bugs.c:17:0:
-> > ../arch/x86/um/asm/desc.h:7:0: warning: "LDT_empty" redefined
-> >  #define LDT_empty(info) (\
-> >
-> > In file included from ../arch/um/include/asm/mmu.h:10:0,
-> >                  from ../include/linux/mm_types.h:18,
-> >                  from ../include/linux/sched/signal.h:13,
-> >                  from ../drivers/misc/lkdtm/bugs.c:11:
-> > ../arch/x86/um/asm/mm_context.h:65:0: note: this is the location of the previous definition
-> >  #define LDT_empty(info) (_LDT_empty(info))
->
-> The LKDTM test landed a while ago:
-> b09511c253e5 ("lkdtm: Add a DOUBLE_FAULT crash type on x86")
->
-> and nothing has touched arch/x86/um/asm/desc.h nor
-> arch/x86/um/asm/mm_context.h in a while either.
->
-> Regardless, it seems arch/x86/um/asm/desc.h is not needed any more?
+--Sig_/WGn5_jueQ4BieacC0LW1yUM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-True that, we can rip the file.
+Hi Stephen,
 
--- 
-Thanks,
-//richard
+On Sun, 21 Jun 2020 13:15:54 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> Hi all,
+>=20
+> After merging the printk tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+>=20
+> In file included from include/linux/printk.h:10,
+>                  from include/linux/kernel.h:15,
+>                  from include/linux/list.h:9,
+>                  from include/linux/lockdep.h:43,
+>                  from include/linux/spinlock_types.h:18,
+>                  from include/linux/genalloc.h:32,
+>                  from drivers/soc/fsl/qe/qe_common.c:16:
+> include/linux/ratelimit_types.h:16:2: error: unknown type name 'raw_spinl=
+ock_t'
+>    16 |  raw_spinlock_t lock;  /* protect the state */
+>       |  ^~~~~~~~~~~~~~
+> In file included from include/linux/wait.h:9,
+>                  from include/linux/pid.h:6,
+>                  from include/linux/sched.h:14,
+>                  from include/linux/ratelimit.h:6,
+>                  from include/linux/dev_printk.h:16,
+>                  from include/linux/device.h:15,
+>                  from include/linux/node.h:18,
+>                  from include/linux/cpu.h:17,
+>                  from include/linux/of_device.h:5,
+>                  from drivers/soc/fsl/qe/qe_common.c:19:
+> include/linux/ratelimit.h: In function 'ratelimit_state_init':
+> include/linux/ratelimit.h:14:21: error: passing argument 1 of '__raw_spin=
+_lock_init' from incompatible pointer type [-Werror=3Dincompatible-pointer-=
+types]
+>    14 |  raw_spin_lock_init(&rs->lock);
+> include/linux/spinlock.h:102:24: note: in definition of macro 'raw_spin_l=
+ock_init'
+>   102 |  __raw_spin_lock_init((lock), #lock, &__key, LD_WAIT_SPIN); \
+>       |                        ^~~~
+> include/linux/spinlock.h:95:52: note: expected 'raw_spinlock_t *' {aka 's=
+truct raw_spinlock *'} but argument is of type 'int *'
+>    95 |   extern void __raw_spin_lock_init(raw_spinlock_t *lock, const ch=
+ar *name,
+>       |                                    ~~~~~~~~~~~~~~~~^~~~
+>=20
+> Caused by commit
+>=20
+>   494c8512c90e ("printk: Make linux/printk.h self-contained")
+>=20
+> changing include files is hadrer than it loooks :-(
+>=20
+> I have used the printk tree from next-20200618 for today.
+
+I am still getting this failure.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/WGn5_jueQ4BieacC0LW1yUM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7xTE8ACgkQAVBC80lX
+0GzsBwgAhX0sN9CnTf7I0SIhFxhRB+0gjymfs/nFJYXY716WvN5LT9ThOHTqAXas
+g2fs5a4EjpG/mPWiSp77kVNLjfBMoTJR1ie1/IMNyE2xKM3qmb14eHwj9jiF5Nsl
+AaMjpmCJVOlB1Afnps+JNQH+D3dMGmiGucOZE2FWcQzouf5TRaCqN0qOJ4qjQtdj
+YCKViErDN6Ek9VCxjjSCVjGc24aWmNUMpsdYaxbvPnJYRLMXAhp/eqkN9Zvf9QjW
+JTGZ/ogZyGyK9ELSQU9wKMPye9H53MyLRYJo5533nWZp7Jm3PPUmHpTrwIMQCK4S
+UmG8ZlPacOXxVtcSkztvAGCnF1xU/A==
+=UgPw
+-----END PGP SIGNATURE-----
+
+--Sig_/WGn5_jueQ4BieacC0LW1yUM--

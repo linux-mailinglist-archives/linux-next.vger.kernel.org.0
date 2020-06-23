@@ -2,90 +2,148 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B38C206770
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 00:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24B062067C3
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 01:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388186AbgFWWpH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Jun 2020 18:45:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
+        id S2387727AbgFWXAg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Jun 2020 19:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387815AbgFWWpH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 18:45:07 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D748C0619C1;
-        Tue, 23 Jun 2020 15:45:06 -0700 (PDT)
+        with ESMTP id S2387606AbgFWXAf (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 19:00:35 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AE2C061573;
+        Tue, 23 Jun 2020 16:00:35 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49s1Z81khxz9sRR;
-        Wed, 24 Jun 2020 08:45:04 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49s1vy3D5Wz9s1x;
+        Wed, 24 Jun 2020 09:00:30 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592952305;
-        bh=tChZ5ngJ34qizWuYEBwfwH6ZaiLJwxDvT/lkEo4q9x0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=f7sfvr3LzTag9fmHGMc5JFPtOXxlJ8MOgiSBTmEOdXqUVNgWxVqnpszgWVGBk9g74
-         vsXEqfS+4VrzeLyuLSQrdUEXMD/pDnTNwHHSLzTRSnNIff7zaJ7Ze9u9kHiH36/BwV
-         n2HWwTyPeZhYE3p4e/ItoVIghaPbsVm6ZwyW80lb95EUW4znMO0Xr10Is0uV0Q1ksL
-         /vDfG+UZ0dqi0TGSlrFDdab0tDkR/p8E9mCsm4bSSGe2GtaQVmlGMDUhKZQURR59NL
-         Q8ZryN885BG0k2V+YVKWzt1kUiNciW4i1+iW8HCWE/Rm2foLOT/59m2RQKla4sMjzg
-         +mjecWu6h3Fbg==
-Date:   Wed, 24 Jun 2020 08:45:03 +1000
+        s=201702; t=1592953233;
+        bh=KPI3aAUIMWOgw1b5tXl9B51uLxeA81au0UgltAmeN6U=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EkIXFub/WzsMZ+H1Ralc3gj/qmMIfcAtcnviBfxlxctDYfwGaiNZnImNIIO63lYY5
+         Dr1FQGblvHue0YFe8kEV6C/vmiPDk6ZhxybbP5QqsPKjAAY7VToPXAmJUHWxv//ne7
+         iyKvfBpH1KAZev3MfY6XqZLv5Us2toeZ8vZaVYLDuuaE+3LVaFjKKQ1axbEyRKO5Bn
+         SpTbpmTuK23m+NQVA6Cx6byInmz0Ovxg76eVYqEOf5hrN1UvO/LFAE9TLcYmL3SpF1
+         t8p5Cvuh6aSWAPmMdWY7mkJUUzQkK9qNMYFJZWmTV9vQAxxTr1Fj0S9CIRTv2WWtn2
+         9Mg8HrmvY4f8Q==
+Date:   Wed, 24 Jun 2020 09:00:29 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chen Tao <chentao107@huawei.com>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20200624084503.42c9d5b8@canb.auug.org.au>
+To:     Marco Elver <elver@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        syzbot <syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com>,
+        bp@alien8.de, hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
+        sean.j.christopherson@intel.com, syzkaller-bugs@googlegroups.com,
+        tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
+        x86@kernel.org
+Subject: Re: linux-next build error (9)
+Message-ID: <20200624090029.5fa2dc1f@canb.auug.org.au>
+In-Reply-To: <20200623112448.GA208112@elver.google.com>
+References: <000000000000c25ce105a8a8fcd9@google.com>
+        <20200622094923.GP576888@hirez.programming.kicks-ass.net>
+        <20200623124413.08b2bd65@canb.auug.org.au>
+        <20200623093230.GD4781@hirez.programming.kicks-ass.net>
+        <20200623201730.6c085687@canb.auug.org.au>
+        <20200623112448.GA208112@elver.google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/X9YwbIPP/p9BLWtR10GVZ6S";
+Content-Type: multipart/signed; boundary="Sig_/vx20BsoZP5nc+1hY2szmS6d";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/X9YwbIPP/p9BLWtR10GVZ6S
+--Sig_/vx20BsoZP5nc+1hY2szmS6d
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi all,
+Hi Marco,
 
-In commit
+On Tue, 23 Jun 2020 13:24:48 +0200 Marco Elver <elver@google.com> wrote:
+>
+> On Tue, Jun 23, 2020 at 08:17PM +1000, Stephen Rothwell wrote:
+> > Hi Peter,
+> >=20
+> > On Tue, 23 Jun 2020 11:32:30 +0200 Peter Zijlstra <peterz@infradead.org=
+> wrote: =20
+> > >
+> > > I suppose the next quest is finding a s390 compiler version that works
+> > > and then bumping the version test in the aforementioned commit. =20
+> >=20
+> > Not a lot of help, but my Debian cross compiler seems to work:
+> >=20
+> > $ s390x-linux-gnu-gcc --version
+> > s390x-linux-gnu-gcc (Debian 9.3.0-13) 9.3.0 =20
+>=20
+> Rummaging through changelogs led me to 8.3.0 as the first good GCC. Also
+> confirmed by building that version and compiling a file that breaks with
+> older versions. It seems the first major version to fix it was 9, but
+> backported to 8.3. This is for all architectures.
+>=20
+> Suggested patch below.
+>=20
+> Thanks,
+> -- Marco
+>=20
+> ------ >8 ------ =20
+>=20
+> From: Marco Elver <elver@google.com>
+> Date: Tue, 23 Jun 2020 12:57:42 +0200
+> Subject: [PATCH] kasan: Fix required compiler version
+>=20
+> The first working GCC version to satisfy
+> CC_HAS_WORKING_NOSANITIZE_ADDRESS is GCC 8.3.0.
+>=20
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D89124
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Signed-off-by: Marco Elver <elver@google.com>
+> ---
+>  lib/Kconfig.kasan | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+> index 7a496b885f46..19fba15e99c6 100644
+> --- a/lib/Kconfig.kasan
+> +++ b/lib/Kconfig.kasan
+> @@ -16,7 +16,7 @@ config CC_HAS_KASAN_SW_TAGS
+>  	def_bool $(cc-option, -fsanitize=3Dkernel-hwaddress)
+> =20
+>  config CC_HAS_WORKING_NOSANITIZE_ADDRESS
+> -	def_bool !CC_IS_GCC || GCC_VERSION >=3D 80000
+> +	def_bool !CC_IS_GCC || GCC_VERSION >=3D 80300
+> =20
+>  config KASAN
+>  	bool "KASAN: runtime memory debugger"
+> --=20
+> 2.27.0.111.gc72c7da667-goog
+>=20
 
-  82d6b9745744 ("drm/amdgpu/debugfs: fix memory leak when amdgpu_virt_enabl=
-e_access_debugfs failed")
-
-Fixes tag
-
-  Fixes: 95a2f917387a2 ("drm/amdgpu: restrict debugfs register accessunder =
-SR-IOV")
-
-has these problem(s):
-
-  - Subject does not match target commit subject
-    Just use
-	git log -1 --format=3D'Fixes: %h ("%s")'
+Thanks for tracking that down.  I will add that patch to the tip tree
+merge for today.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/X9YwbIPP/p9BLWtR10GVZ6S
+--Sig_/vx20BsoZP5nc+1hY2szmS6d
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7yhe8ACgkQAVBC80lX
-0Gwt/AgAi7T9upqEqmwTL5Jo1e40mKR4uHvaSn/MPR/zjFHapH86Q4B+9ipQ6Xtm
-yMDA2MqLFRVHYCfpb0pEnsZOdty4ik9BYzm8g4//z+TKoiADsoKznEKZMQmWgqM2
-5ti5R0hqVtA+PC4vGs9z3ffr7QKnKLxG1K9HnjNoBp+jCcyihaL81IaMolkInKkd
-Oh4UMj4H6nhQWnrCrXRWbyr0JSq2IUPfFfYi/QL0LGH65gsWvkIBI1oweJpUx23t
-zYdaqTZyLRuOWzsstRKKcXIzmbcnIOn/yZ0i+bjI53j1vQ/2vw0BMo4kwZLHF+iI
-XUcaXMIVs1Gd6/N1WnbpA6AWXT6KnQ==
-=v9ii
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7yiY0ACgkQAVBC80lX
+0Gytxwf/XSrFXKqHN67FRDF9pjKF802HQJnp4w+90WqMxbbxwr3+eodMzrTQMOBG
+5qW60CEHccXVmT3ErY7S4fqBV/4a/gUzSZIqWIuckfSBJDWM8SD3480SWTtWKTTc
+sR3Bk1jKyd+NSsA3b2gVgzWyzDKwQqFofPVZVWyNrsPq7wlOQdx/gYG0PvXXxmpo
+poRcjeAOeLL5CDAZysCTA0mwptdkiYBYZqZ0Hh8Uq9t4aVzaq/8DUCrkN6CdTh0T
+Epm0SVi+CrXDBKIskh9MLBRGimc9g7w9BnxYZlA0ek+PBDZTHfBTpY+LFvUbMbDE
+c25DPzSkr4ftsJMLqsiFHvs27ETbKA==
+=jf2S
 -----END PGP SIGNATURE-----
 
---Sig_/X9YwbIPP/p9BLWtR10GVZ6S--
+--Sig_/vx20BsoZP5nc+1hY2szmS6d--

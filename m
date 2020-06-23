@@ -2,69 +2,84 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F5D2055A7
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 17:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1072066EE
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 00:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732902AbgFWPSM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Jun 2020 11:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33858 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1732881AbgFWPSL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 11:18:11 -0400
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76B1C061573;
-        Tue, 23 Jun 2020 08:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZFLuUOUiK4sCeVKGNEPdBiHWizlWFU7GA58A4jGEFH8=; b=mb0Rgrh+cJgG5mNsBNyw2psk2O
-        8FAY9rg4VfIIwTVRLUD6whsJjONmi5l1C7H+7rixTyk97C0HLMgdDHZBtBpWuRlGjzZZsElFzI7St
-        FogUfdToQeP2BKKTZMYqM9JSpx7Jdm9N9ph6x+kRdFaCEc8jmu+sG1JagKTGgZiUzw2mUCLMQeuIq
-        SgtFgCyD/0oxYc7ABUT+0/hWmIFRpv0+uZ0uW2DLgKJX+23hxgY031q+0B1ojpp6GFvnIC1H6vdlT
-        Z07cgPnjUp1WSHH0G4ZNHO8t2oOSuqTpnkIbUiW+sSHMyJzuqo5/pz2M/sxhZQMHeq5lXSKTk8B09
-        lqwi6EvQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jnkg8-0007Ak-Ut; Tue, 23 Jun 2020 15:17:41 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8E6AE30477A;
-        Tue, 23 Jun 2020 17:17:38 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 77256234EBA51; Tue, 23 Jun 2020 17:17:38 +0200 (CEST)
-Date:   Tue, 23 Jun 2020 17:17:38 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>
-Subject: Re: linux-next: build failure after merge of the printk tree
-Message-ID: <20200623151738.GK4817@hirez.programming.kicks-ass.net>
-References: <20200621131554.5a662afe@canb.auug.org.au>
- <20200623102655.6d16e610@canb.auug.org.au>
- <20200623121637.GA8444@alley>
- <20200623121937.GA9671@gondor.apana.org.au>
- <20200623142858.GB8444@alley>
+        id S2388033AbgFWWJ4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Jun 2020 18:09:56 -0400
+Received: from ozlabs.org ([203.11.71.1]:59913 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387840AbgFWWJ4 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 23 Jun 2020 18:09:56 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49s0nY6J7jz9sRR;
+        Wed, 24 Jun 2020 08:09:53 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592950194;
+        bh=lTqWkWzEvGsClGboMxdSrWRtqoctWYdl9TPvvCqLfZw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PEuhjXR+BLyxsOpbpi1jHeAEjgIGK5UW4QlHzslsJUBAbEdkAVAeHkydwwVYvS+MQ
+         ks5gMEC6LbTfk7hZCGOLJmYsNBn5/s8BX0+InrhhRpmren39BOY11lc4DawJQSMRGK
+         aid4bm4fJE4VEd3C2Mg6oeGLUzwr5eCk89yzM4BxmHYRMoYVI5Uux+gSKW/7MY0jlG
+         9pkQY0qt/Id1OBfXovQF2N3COSqAO3P/1pjHLV3qJnqSmoMlf8B4jxQmK9/yg9D+BQ
+         K/4N97/uBux4tnl1yW+9kIs7GxdnD6wMOht/4x4qPkW3f/kOXOo460aqRq2Ny++hQL
+         wPDTCHlDehH4Q==
+Date:   Wed, 24 Jun 2020 08:09:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Switching dmaengine tree to kernel.org
+Message-ID: <20200624080952.093d562c@canb.auug.org.au>
+In-Reply-To: <20200623144313.GS2324254@vkoul-mobl>
+References: <20200623144313.GS2324254@vkoul-mobl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623142858.GB8444@alley>
+Content-Type: multipart/signed; boundary="Sig_/s3=nkInVYc8lAAGNaBnOH5C";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 04:28:58PM +0200, Petr Mladek wrote:
+--Sig_/s3=nkInVYc8lAAGNaBnOH5C
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> PS: And yes, it makes sense to push both patches via a single tree to
-> make sure that the lockdep.h split is done first.
+Hi Vinod,
 
-That's what I got you tip/locking/header for, pull that topic branch
-into your tree.
+On Tue, 23 Jun 2020 20:13:13 +0530 Vinod Koul <vkoul@kernel.org> wrote:
+>
+> I have switched dmaengine tree to kernel.org [1], please update your
+> database to new tree which can be found at [2]
+>=20
+> [1]: https://lore.kernel.org/dmaengine/20200623143729.781403-1-vkoul@kern=
+el.org/
+> [2]: git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git
+
+OK, done.  I also renamed them from slave-dma{,-fixes} to dmaengine{,-fixes=
+).
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/s3=nkInVYc8lAAGNaBnOH5C
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7yfbAACgkQAVBC80lX
+0GweNggAjshCfmtDZPPGM+Z8Wh0XV8CClZNIq7i66hCNt/GaF9Chl5qnJ0P9nnKv
+KS504Abh9S0fGsHFnj+P6GgHxXU/g5x2VCzribtxTIhBqZ138SIb2PIRGU9hWeJ0
+xBhKaGuG9iandO0ZV/MTSbCEFXkgu9k4WjK1hW2SdyotbXzGKccV6T/x/Z8rbEm0
+wqG1g1xAJwgBmLmXxqYO6Ug8xKWz+EOr4zfOFctal6pYQDoK9JXaMKb83lRopQLs
+NgFT2eaDC4rz5UM3TGp9/wiHVpKCzrtHLXCeIlOG0r2YJAYDfON7PTuLl7gzez6g
+1bTRPGeWuZl7Sn7blHZ9/TDcE3niRg==
+=GZe2
+-----END PGP SIGNATURE-----
+
+--Sig_/s3=nkInVYc8lAAGNaBnOH5C--

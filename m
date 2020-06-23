@@ -2,94 +2,135 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A131204EE8
-	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 12:17:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A21205096
+	for <lists+linux-next@lfdr.de>; Tue, 23 Jun 2020 13:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732130AbgFWKRy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Jun 2020 06:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S1732256AbgFWLY5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Jun 2020 07:24:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731158AbgFWKRy (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 06:17:54 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6EFC061573;
-        Tue, 23 Jun 2020 03:17:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49rhzt60Frz9sRf;
-        Tue, 23 Jun 2020 20:17:46 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592907471;
-        bh=51NGv3klwUMIQque9QEeRxsT484NcqIVmv5bJ8240n0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h2qXYk8D8AXp8AKqLEsgL8Tm33Eca1Nh3+P+VR3T04djzj3AQFvRip0Ceijke8/Pk
-         mUtvfdSAlrD2cGa0cURTIoK3Gl75Ti0hO7Xpv0J+DF/lgJ4nDlPaQyPLyVPhTt/yGI
-         Q8Omp6hWB2WOsXwBg/GhtpQr6cPhK/qX0uOV2D7nR7yTUf2YsCIHx6wq8jVV69j3QN
-         3WwYVhspCaytT5BwWIcUaa2DxGrmKbu2J3OuCBNWc5afgqIZBY2LvTf/TPrmW+E42w
-         Ub0qTF1UQ7mWTi36ugn1vxWcHwCOKuLYlDU+aL/lMQr6xHcaqISxKgoprGxS9AsxMx
-         x2wXfaBpuvaOQ==
-Date:   Tue, 23 Jun 2020 20:17:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>
+        with ESMTP id S1732191AbgFWLY5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 07:24:57 -0400
+Received: from mail-wr1-x441.google.com (mail-wr1-x441.google.com [IPv6:2a00:1450:4864:20::441])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4218C061755
+        for <linux-next@vger.kernel.org>; Tue, 23 Jun 2020 04:24:56 -0700 (PDT)
+Received: by mail-wr1-x441.google.com with SMTP id s10so164191wrw.12
+        for <linux-next@vger.kernel.org>; Tue, 23 Jun 2020 04:24:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20161025;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to
+         :user-agent;
+        bh=LISOo0uegZi3am5M7TOWf7OzM2rHxLFNz15tOWhpgHY=;
+        b=OYr9flTkc67fJMXrndR42JOdtI/v8Gh6pi/3xD5WK4OjwlkH2dyWXZKS2UHVvxdPDg
+         JotNaQttXi2ukOKmAWJlT8e4pRgnQhbjJvJmklJTAQuhS5QuT9f8pUug3+WKjXges8Ab
+         gHQQQOMJxaFVRFQ3bs8NUd+gl4TxHdglSpzvmKs6BoPaOKAi+9AlmnQCx3P9f2qEA+g6
+         VardcbztghtjzkqwQjJZ71VOGA+aIkfvPWnCyiey7hPNBW6sc/qyWTDL7o4/XMLO6tHI
+         WrGJ78xYaksF2YPzb/IHalGIOKQG/vN0Z82hf9wmv3XvLJNetKqSAvYI2Z7GA/9ehSUf
+         Va6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to:user-agent;
+        bh=LISOo0uegZi3am5M7TOWf7OzM2rHxLFNz15tOWhpgHY=;
+        b=JUjQN4QtchWyt6CaCTnAFXnfm0IbVNERHdQfItqthzZcuBX4vO7YTtWK/8e4u2cyhJ
+         7ZMaNNZXdUXby9wa1EXtM1dM5XZyKmDrHOdrKTv/iBsQOy0nEKaCt6+d/3VlefVjXTAD
+         lCFYVu1RKVjny/VxChtJ3FJgSWmkLRCFQvn3IBlvQbyia0FCxnF3MRAQmRu/+qBF5jKF
+         l02Myp3RYfwAnXQ3GbR7stkhaHJ1AuJAd4hgSUMMODpHiPTEWwy3yebxwln+56dNWGhp
+         QYgFTs2xtBvE9/P2MuP/5xon1MOTqgc+ehF0gV5u2o0eMrVz4xUN84EuaoUSvknXep3f
+         V7wA==
+X-Gm-Message-State: AOAM530VasL+yu3Q6OT/o2XXuhx+F4k3G/3nLk5rXqnuPnVtshXJT8Fx
+        enOA0Sk0AHRegLseSxPJ9fzYTQ==
+X-Google-Smtp-Source: ABdhPJytDIeaxmPu6ekWJ4tCMSlDCsjdYYX0RSg8oGW12mCaAKj/1NHCrq4BCADMHZL/uI1G/DCbDw==
+X-Received: by 2002:a5d:40cb:: with SMTP id b11mr12984601wrq.263.1592911495061;
+        Tue, 23 Jun 2020 04:24:55 -0700 (PDT)
+Received: from elver.google.com ([100.105.32.75])
+        by smtp.gmail.com with ESMTPSA id v20sm22540379wrb.51.2020.06.23.04.24.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 23 Jun 2020 04:24:54 -0700 (PDT)
+Date:   Tue, 23 Jun 2020 13:24:48 +0200
+From:   Marco Elver <elver@google.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>
 Cc:     syzbot <syzbot+dbf8cf3717c8ef4a90a0@syzkaller.appspotmail.com>,
         bp@alien8.de, hpa@zytor.com, jmattson@google.com, joro@8bytes.org,
         kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-next@vger.kernel.org, mingo@redhat.com, pbonzini@redhat.com,
         sean.j.christopherson@intel.com, syzkaller-bugs@googlegroups.com,
         tglx@linutronix.de, vkuznets@redhat.com, wanpengli@tencent.com,
-        x86@kernel.org, elver@google.com
+        x86@kernel.org
 Subject: Re: linux-next build error (9)
-Message-ID: <20200623201730.6c085687@canb.auug.org.au>
-In-Reply-To: <20200623093230.GD4781@hirez.programming.kicks-ass.net>
+Message-ID: <20200623112448.GA208112@elver.google.com>
 References: <000000000000c25ce105a8a8fcd9@google.com>
-        <20200622094923.GP576888@hirez.programming.kicks-ass.net>
-        <20200623124413.08b2bd65@canb.auug.org.au>
-        <20200623093230.GD4781@hirez.programming.kicks-ass.net>
+ <20200622094923.GP576888@hirez.programming.kicks-ass.net>
+ <20200623124413.08b2bd65@canb.auug.org.au>
+ <20200623093230.GD4781@hirez.programming.kicks-ass.net>
+ <20200623201730.6c085687@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/.jBQgqJbruxCXR9TGfnbpGd";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20200623201730.6c085687@canb.auug.org.au>
+User-Agent: Mutt/1.13.2 (2019-12-18)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/.jBQgqJbruxCXR9TGfnbpGd
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 23, 2020 at 08:17PM +1000, Stephen Rothwell wrote:
+> Hi Peter,
+>=20
+> On Tue, 23 Jun 2020 11:32:30 +0200 Peter Zijlstra <peterz@infradead.org> =
+wrote:
+> >
+> > I suppose the next quest is finding a s390 compiler version that works
+> > and then bumping the version test in the aforementioned commit.
+>=20
+> Not a lot of help, but my Debian cross compiler seems to work:
+>=20
+> $ s390x-linux-gnu-gcc --version
+> s390x-linux-gnu-gcc (Debian 9.3.0-13) 9.3.0
 
-Hi Peter,
+Rummaging through changelogs led me to 8.3.0 as the first good GCC. Also
+confirmed by building that version and compiling a file that breaks with
+older versions. It seems the first major version to fix it was 9, but
+backported to 8.3. This is for all architectures.
 
-On Tue, 23 Jun 2020 11:32:30 +0200 Peter Zijlstra <peterz@infradead.org> wr=
-ote:
->
-> I suppose the next quest is finding a s390 compiler version that works
-> and then bumping the version test in the aforementioned commit.
+Suggested patch below.
 
-Not a lot of help, but my Debian cross compiler seems to work:
+Thanks,
+-- Marco
 
-$ s390x-linux-gnu-gcc --version
-s390x-linux-gnu-gcc (Debian 9.3.0-13) 9.3.0
+------ >8 ------
 
+=46rom: Marco Elver <elver@google.com>
+Date: Tue, 23 Jun 2020 12:57:42 +0200
+Subject: [PATCH] kasan: Fix required compiler version
+
+The first working GCC version to satisfy
+CC_HAS_WORKING_NOSANITIZE_ADDRESS is GCC 8.3.0.
+
+Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=3D89124
+Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ lib/Kconfig.kasan | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/lib/Kconfig.kasan b/lib/Kconfig.kasan
+index 7a496b885f46..19fba15e99c6 100644
+--- a/lib/Kconfig.kasan
++++ b/lib/Kconfig.kasan
+@@ -16,7 +16,7 @@ config CC_HAS_KASAN_SW_TAGS
+ 	def_bool $(cc-option, -fsanitize=3Dkernel-hwaddress)
+=20
+ config CC_HAS_WORKING_NOSANITIZE_ADDRESS
+-	def_bool !CC_IS_GCC || GCC_VERSION >=3D 80000
++	def_bool !CC_IS_GCC || GCC_VERSION >=3D 80300
+=20
+ config KASAN
+ 	bool "KASAN: runtime memory debugger"
 --=20
-Cheers,
-Stephen Rothwell
+2.27.0.111.gc72c7da667-goog
 
---Sig_/.jBQgqJbruxCXR9TGfnbpGd
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7x1roACgkQAVBC80lX
-0GxY8Af/XGxeY48bC9/qnGUVZknEFGDIcTw3WU0xZvWFtUuMEcsOXzZMovrrnc+2
-/LVoAnCwwgV6dA5oamCw7XT64/RY3Hs2re1FLKj7vANGeehucftZscVlfQ7qU5ax
-sxBRASh2KK+gr4a2kBHit8gZwFVvWJnjlqRq/JmSYoSdC2Mxrg1I0sm7pE2ekBn3
-z5mhtG2kRdk4u0tVrwjt3JtkQNDaNnUnQpfvlfLJCsSZZPcAswhCDQF5LS34hyfx
-Yh5qlDmMG0s4oWCkSNlrGNBkMAuDc3+4KJ/22RZO5AebA4Jssu4CrcKmiUtqk8Mg
-pIFf6KjU/OvbbWdw51jo36QXk99QKg==
-=cTbJ
------END PGP SIGNATURE-----
-
---Sig_/.jBQgqJbruxCXR9TGfnbpGd--

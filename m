@@ -2,86 +2,64 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CFE99206D88
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C16C6206DC5
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389661AbgFXHXd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Jun 2020 03:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389748AbgFXHXa (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:23:30 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1742AC061573;
-        Wed, 24 Jun 2020 00:23:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S2389893AbgFXHa2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Jun 2020 03:30:28 -0400
+Received: from mail.kernel.org ([198.145.29.99]:39756 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389885AbgFXHa1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 24 Jun 2020 03:30:27 -0400
+Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49sF4J2x6hz9sQt;
-        Wed, 24 Jun 2020 17:23:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592983408;
-        bh=vYlm9bUberKGeS5FHiBGn/ijfDTjheo3Sv1jYaFA1j4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GTdY+26CCjt20q6J20pfaYfzrW9mXZuGVMOxPFJAvu14Vtrd8W+M5sUGgPNCt06ZM
-         dh4YsAopp4v21xuzxKQQvyZ5aEidgJs4XRTOIU70NS6rqIq6IA2d6ieQ9xBvXg36VG
-         ZQ7iuOC3pLf0qBCa/n0Xp1fCIqFBQsIGE7xK1b2/Lzm73mMptXa+oeW2t+ZmMCJaE/
-         l/rHbEhn0RW5Lr6dW1V3uY/TRHvYyn7YYCAKgsgrTOTi0wdmIyI8zsWaC1zT+/amGA
-         szoJ88diuN8B2pKdskyZmrrUEJAkb1vCfSUrGuFV5Gws86IpmEPu8JdXn5aaiQxckx
-         H2p6KxGiPIAZQ==
-Date:   Wed, 24 Jun 2020 17:23:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     SeongJae Park <sjpark@amazon.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
+        by mail.kernel.org (Postfix) with ESMTPSA id A0E932073E;
+        Wed, 24 Jun 2020 07:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1592983826;
+        bh=GuZe+zK7j+ouZgBdJXHXau5NYviadWE9eNN2okyuJoM=;
+        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+        b=Qml1ZXj0bJ1yIEBaqejbzqfrcHKQXBLXP6ECXmCUM3nuKE/xkBgPzpPDwDidXNUc3
+         Naf2MEVChCBQHGVo3Rud4jPJDnHa0utTBNRNQEXV1EjvpzVWlaXRMxe4R+7jHLu8LD
+         0IcvjF11NGmG9gxz1CmV7d6ylDeaw/xLK19tIUto=
+Date:   Wed, 24 Jun 2020 09:30:23 +0200 (CEST)
+From:   Jiri Kosina <jikos@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        SeongJae Park <sjpark@amazon.de>
-Subject: Re: linux-next: Fixes tag needs some work in the scsi-fixes tree
-Message-ID: <20200624172326.43723eca@canb.auug.org.au>
-In-Reply-To: <20200624071447.19529-1-sjpark@amazon.com>
-References: <20200624170742.4e9e9c96@canb.auug.org.au>
-        <20200624071447.19529-1-sjpark@amazon.com>
+        Cristian Klein <cristian.klein@elastisys.com>,
+        Nathan Chancellor <natechancellor@gmail.com>
+Subject: Re: linux-next: build failures after merge of the hid tree
+In-Reply-To: <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
+Message-ID: <nycvar.YFH.7.76.2006240930110.13242@cbobk.fhfr.pm>
+References: <20200621140421.7f4552df@canb.auug.org.au> <20200623103736.25f67de5@canb.auug.org.au> <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/r3ma.Ks12w9qo/NK48UlZeq";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/r3ma.Ks12w9qo/NK48UlZeq
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Wed, 24 Jun 2020, Jiri Kosina wrote:
 
-Hi SeongJae,
+> > > I don't know what caused it, but commit
+> > > 
+> > >   470376737e88 ("HID: allow building hid.ko as an external module")
+> > > 
+> > > did not fix it.  BTW, I build with "make O=...".
+> 
+> That's actually the patch that almost certainly broke it.
+> 
+> CCing Cristian (author of that patch) and Nathan, who apparently sent a 
+> fixup patch for this, but I haven't seen it, as our corporate mailserver 
+> had severe issues yesterday.
 
-On Wed, 24 Jun 2020 09:14:47 +0200 SeongJae Park <sjpark@amazon.com> wrote:
->
-> Oops, sorry for the mistake.  I will send the fixed version in reply to t=
-his.
+I've now dropped the patch from hid.git
 
-Unless Martin says otherwise, I am not sure it is worth fixing.  Just
-remember for next time.
+-- 
+Jiri Kosina
+SUSE Labs
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/r3ma.Ks12w9qo/NK48UlZeq
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7y/24ACgkQAVBC80lX
-0GwsXwf+LF4HisbD5RKi5kKqR5j0GActj79hJrpgmBHvJn8oizLLApHOHJVRqZNz
-B2FPCoYpeW0V+ZvDuzbGcAKvlOem1t4LjQ0bHSe4mRqxGp2zwb8rkEhbI5FdUNm8
-RPc4E4oXwYToeIr7mxbL1CvbXzNLwg5j4COustNqglNCZrwabocyAO6Tt4aRTQq3
-IkHGqfRzcEwh0R3q/kUtRfUrJVJCsvuEECdaJFiuvilm5FfV0ewa2hexxP+G1e5l
-ziQtZrUSPC/R6MgpC//E/iXrnOJaGZp87DabFgpngYHSU/Jwux8nPfOrWi6GNJdO
-tmQmkIOUsVJvpUdgxUm1hOlcEVGEdg==
-=MMzA
------END PGP SIGNATURE-----
-
---Sig_/r3ma.Ks12w9qo/NK48UlZeq--

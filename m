@@ -2,97 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3614020734C
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 14:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D196B207393
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 14:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389033AbgFXM3E (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Jun 2020 08:29:04 -0400
-Received: from hqnvemgate24.nvidia.com ([216.228.121.143]:12376 "EHLO
-        hqnvemgate24.nvidia.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388296AbgFXM3E (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 08:29:04 -0400
-Received: from hqpgpgate101.nvidia.com (Not Verified[216.228.121.13]) by hqnvemgate24.nvidia.com (using TLS: TLSv1.2, DES-CBC3-SHA)
-        id <B5ef346b30000>; Wed, 24 Jun 2020 05:27:31 -0700
-Received: from hqmail.nvidia.com ([172.20.161.6])
-  by hqpgpgate101.nvidia.com (PGP Universal service);
-  Wed, 24 Jun 2020 05:29:04 -0700
-X-PGP-Universal: processed;
-        by hqpgpgate101.nvidia.com on Wed, 24 Jun 2020 05:29:04 -0700
-Received: from [10.26.73.205] (10.124.1.5) by HQMAIL107.nvidia.com
- (172.20.187.13) with Microsoft SMTP Server (TLS) id 15.0.1473.3; Wed, 24 Jun
- 2020 12:29:02 +0000
-Subject: Re: linux-next: Tree for Jun 24 [build failure on arm64]
-To:     Will Deacon <will@kernel.org>
-CC:     Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
+        id S2389633AbgFXMmn (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Jun 2020 08:42:43 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:48474 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2389197AbgFXMmn (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 24 Jun 2020 08:42:43 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1jo4jE-0001yO-Ix; Wed, 24 Jun 2020 22:42:13 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 24 Jun 2020 22:42:12 +1000
+Date:   Wed, 24 Jun 2020 22:42:12 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-tegra <linux-tegra@vger.kernel.org>
-References: <20200624165323.3dffcde5@canb.auug.org.au>
- <7a7e31a8-9a7b-2428-ad83-2264f20bdc2d@hisilicon.com>
- <20200624105528.GB6134@willie-the-truck>
- <b561e663-a9aa-d600-e23b-09793199141e@nvidia.com>
- <20200624122242.GA6270@willie-the-truck>
-From:   Jon Hunter <jonathanh@nvidia.com>
-Message-ID: <a7ebe7c1-49ae-5bc9-9c4f-fcc693ca3834@nvidia.com>
-Date:   Wed, 24 Jun 2020 13:29:00 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH] lockdep: Move list.h inclusion into lockdep.h
+Message-ID: <20200624124212.GA17350@gondor.apana.org.au>
+References: <20200621131554.5a662afe@canb.auug.org.au>
+ <20200623102655.6d16e610@canb.auug.org.au>
+ <20200623121637.GA8444@alley>
+ <20200623121937.GA9671@gondor.apana.org.au>
+ <20200623142858.GB8444@alley>
 MIME-Version: 1.0
-In-Reply-To: <20200624122242.GA6270@willie-the-truck>
-X-Originating-IP: [10.124.1.5]
-X-ClientProxiedBy: HQMAIL101.nvidia.com (172.20.187.10) To
- HQMAIL107.nvidia.com (172.20.187.13)
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nvidia.com; s=n1;
-        t=1593001651; bh=mhqQyRnIhUnnHze33p7MtHXb3BfkZ0S9zF5m7Y8of3k=;
-        h=X-PGP-Universal:Subject:To:CC:References:From:Message-ID:Date:
-         User-Agent:MIME-Version:In-Reply-To:X-Originating-IP:
-         X-ClientProxiedBy:Content-Type:Content-Language:
-         Content-Transfer-Encoding;
-        b=QC2Xr9k/f3TIk+or9phPd1Z6auiCULuSyRQFjtM0J64EntiPSZbznvuNgvP9h9hMp
-         HpgnisYAIWKSMUOXGd/NxiiUrejBaE4RDnUpPEsBWP9/RfIRkB5l0FPuDYYXf6C8+v
-         O24CQMPO7cGhb9iLk8D4bQjQvNTt4YhJrSogayG52zBR019FAQ9VeSntW1P/TuiCi4
-         yQbBfkipzCmJg0GuzXxzR/hekMOyAW/PyHJr4dB7Vp4hqVwghvfgKMs5uYE3qdD95j
-         YLQ56iq2USVYg4mgmimMsPw4OOAObJcapenBTns40GjC4FDjtnyZB31fF1jXCCqJi8
-         D4QF/2AGTXNYg==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200623142858.GB8444@alley>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-
-On 24/06/2020 13:22, Will Deacon wrote:
-> On Wed, Jun 24, 2020 at 12:57:23PM +0100, Jon Hunter wrote:
->> On 24/06/2020 11:55, Will Deacon wrote:
->>> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
->>> index 1e5a940532da..97d3d3632093 100644
->>> --- a/arch/arm64/kernel/vdso/Makefile
->>> +++ b/arch/arm64/kernel/vdso/Makefile
->>> @@ -23,8 +23,9 @@ btildflags-$(CONFIG_ARM64_BTI_KERNEL) += -z force-bti
->>>  # potential future proofing if we end up with internal calls to the exported
->>>  # routines, as x86 does (see 6f121e548f83 ("x86, vdso: Reimplement vdso.so
->>>  # preparation in build-time C")).
->>> -ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv \
->>> -               -Bsymbolic --no-eh-frame-hdr --build-id -n $(btildflags-y) -T
->>> +ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv       \
->>> +            -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id -n      \
->>> +            $(btildflags-y) -T
->>>  
->>>  ccflags-y := -fno-common -fno-builtin -fno-stack-protector -ffixed-x18
->>>  ccflags-y += -DDISABLE_BRANCH_PROFILING
->>>
->>
->>
->> I am seeing the same build failure and the above does fix it for me.
+On Tue, Jun 23, 2020 at 04:28:58PM +0200, Petr Mladek wrote:
+>
+> My "allmodconfig" build has successfully finished with the following extra
+>  fix on top of the two patches:
 > 
-> Cheers, Jon. I'll get this into -next with your Tested-by.
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index aff44d34f4e4..6d606c4036ce 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -6,7 +6,7 @@
+>  #include <linux/stddef.h>
+>  #include <linux/poison.h>
+>  #include <linux/const.h>
+> -#include <linux/kernel.h>
+> +#include <linux/compiler.h>
 
-Thanks, that will be great.
+Unfortunately this doesn't work because list.h actually does need
+kernel.h for container_of.
 
-Jon
+However, we can easily fix the loop another way by removing list.h
+from lockdep.h as it doesn't actually use any list macros/functions
+but only the list type which is now in linux/types.h.
 
+We could either fold this into the lockdep_types patch, or fold it
+into the printk patch, or just leave it as a standalone patch.
+What do you guys think?
+
+---8<---
+Currently lockdep_types.h includes list.h without actually using any
+of its macros or functions.  All it needs are the type definitions
+which were moved into types.h long ago.  This potentially causes
+inclusion loops because both are included by many core header
+files.
+
+This patch moves the list.h inclusion into lockdep.h.  Note that
+we could probably remove it completely but that could potentially
+result in compile failures should any end users not include list.h
+directly and also be unlucky enough to not get list.h via some other
+header file.
+
+Reported-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 3b73cf84f77d..b1ad5c045353 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -21,6 +21,7 @@ extern int lock_stat;
+ #ifdef CONFIG_LOCKDEP
+ 
+ #include <linux/linkage.h>
++#include <linux/list.h>
+ #include <linux/debug_locks.h>
+ #include <linux/stacktrace.h>
+ 
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index 7b9350624577..bb35b449f533 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -32,8 +32,6 @@ enum lockdep_wait_type {
+ 
+ #ifdef CONFIG_LOCKDEP
+ 
+-#include <linux/list.h>
+-
+ /*
+  * We'd rather not expose kernel/lockdep_states.h this wide, but we do need
+  * the total number of states... :-(
 -- 
-nvpublic
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

@@ -2,93 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 33360206D5D
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:16:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C08B206D65
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388381AbgFXHQ3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Jun 2020 03:16:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40330 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2388004AbgFXHQ3 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:16:29 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61875C061573;
-        Wed, 24 Jun 2020 00:16:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49sDw86bxfz9sQt;
-        Wed, 24 Jun 2020 17:16:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1592982987;
-        bh=a0AtYjVpf2EtorpXtR4hjU70CprKPBAdVDu1x8znnvY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=WZ4Cc8DjJInEWszhfWlmHQPiAn5X7g4nwCWrVIYOm++6j1+szwyFdqvB9BZg1x6Wh
-         n5QEXYpESJLT8AdwkSHFldiaAjyusSlodPr6F+75wFEhejYfBy8+NdJTc1/j8Ptu3A
-         YuC3Y8OCloiE8f4dgzSxhpZvut/b5IzvmQUfO7wa5PZzjy0XV1GnlbtMywCZ7ZAkgs
-         0iDKnfASCaFXkb0j+0sPx8SiNSBf2YrqP+IpJpksgrNfHXbW0DyZuLml72gvxXXLbp
-         4seurs6zaGbqWfVKd5bCQAAfmktV1YaliKnmOfc1fgEX9YX43SEd4xLy2zA2E7/PcF
-         T8cEYfbAQkGGA==
-Date:   Wed, 24 Jun 2020 17:16:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@gmail.com>
-Cc:     Dave Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        DRI <dri-devel@lists.freedesktop.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Emil Velikov <emil.velikov@collabora.com>
-Subject: Re: linux-next: build failure after merge of the drm-misc tree
-Message-ID: <20200624171624.0762edf5@canb.auug.org.au>
-In-Reply-To: <CAPM=9tx5b1RaN5R4awqQ-BFpDrEZL1z05ZFv2MnGGS2t3mpBhQ@mail.gmail.com>
-References: <20200617105929.534edd34@canb.auug.org.au>
-        <20200624113452.54b72fcc@canb.auug.org.au>
-        <CAPM=9tx5b1RaN5R4awqQ-BFpDrEZL1z05ZFv2MnGGS2t3mpBhQ@mail.gmail.com>
+        id S2388246AbgFXHRx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Jun 2020 03:17:53 -0400
+Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:19320 "EHLO
+        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728360AbgFXHRx (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:17:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1592983072; x=1624519072;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version;
+  bh=T/RrPEOuZL0V8yVDfilBQLhHwRf2AVG5WsrPELty+0I=;
+  b=TjhvBKvDhOwWnJl82T+m1TyWW06YkeBgQeHvy2n9vyuVmgHF59QBLp1j
+   xqyZk5bsDoqMA3hB3Tt4WPtlFxK66tgrYScN2n0fYBfD4bSWpHiDulPR5
+   jym9scerHLFH3mMOpuhtYNujpZfIOOFy0KrHUg4wwNbMD+iydVvpd7two
+   g=;
+IronPort-SDR: iMaIzfj6jPUVra8XiwdW7DyCYPXmIV7gxqkQgarHk/ZGbURi2LzKfFhfWMMVt/DurLztiJj/ZR
+ X/rnfPwRMEjQ==
+X-IronPort-AV: E=Sophos;i="5.75,274,1589241600"; 
+   d="scan'208";a="46485639"
+Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-17c49630.us-east-1.amazon.com) ([10.47.23.38])
+  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 24 Jun 2020 07:17:35 +0000
+Received: from EX13MTAUEA002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
+        by email-inbound-relay-1e-17c49630.us-east-1.amazon.com (Postfix) with ESMTPS id 72A9AA0561;
+        Wed, 24 Jun 2020 07:17:33 +0000 (UTC)
+Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
+ EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 24 Jun 2020 07:17:32 +0000
+Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.180) by
+ EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.2; Wed, 24 Jun 2020 07:17:29 +0000
+From:   SeongJae Park <sjpark@amazon.com>
+To:     <sfr@canb.auug.org.au>
+CC:     <martin.petersen@oracle.com>, <linux-next@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, SeongJae Park <sjpark@amazon.de>
+Subject: [PATCH v2] scsi: lpfc: Avoid another null dereference in lpfc_sli4_hba_unset()
+Date:   Wed, 24 Jun 2020 09:17:04 +0200
+Message-ID: <20200624071704.20408-1-sjpark@amazon.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20200624071447.19529-1-sjpark@amazon.com>
+References: <20200624071447.19529-1-sjpark@amazon.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/xETYpMB356nDIYf/Upbevgk";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.180]
+X-ClientProxiedBy: EX13D07UWA001.ant.amazon.com (10.43.160.145) To
+ EX13D31EUA001.ant.amazon.com (10.43.165.15)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/xETYpMB356nDIYf/Upbevgk
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: SeongJae Park <sjpark@amazon.de>
 
-Hi Dave,
+Commit cdb42becdd40 ("scsi: lpfc: Replace io_channels for nvme and fcp
+with general hdw_queues per cpu") has introduced static checker warnings
+for potential null dereferences in 'lpfc_sli4_hba_unset()' and
+commit 1ffdd2c0440d ("scsi: lpfc: resolve static checker warning in
+lpfc_sli4_hba_unset") has tried to fix it.  However, yet another
+potential null dereference is remaining.  This commit fixes it.
 
-On Wed, 24 Jun 2020 15:47:49 +1000 Dave Airlie <airlied@gmail.com> wrote:
->
-> My bad, my local builds passed, as I had made the change but forgot
-> the commit --amend
->=20
-> Pushed out a new head with it in it now.
+This bug was discovered and resolved using Coverity Static Analysis
+Security Testing (SAST) by Synopsys, Inc.
 
-Excellent, thanks.
+Fixes: 1ffdd2c0440d ("scsi: lpfc: resolve static checker warning in lpfc_sli4_hba_unset")
+Fixes: cdb42becdd40 ("scsi: lpfc: Replace io_channels for nvme and fcp with general hdw_queues per cpu")
+Signed-off-by: SeongJae Park <sjpark@amazon.de>
+---
+ drivers/scsi/lpfc/lpfc_init.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---=20
-Cheers,
-Stephen Rothwell
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 69a5249e007a..6637f84a3d1b 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -11878,7 +11878,8 @@ lpfc_sli4_hba_unset(struct lpfc_hba *phba)
+ 	lpfc_sli4_xri_exchange_busy_wait(phba);
+ 
+ 	/* per-phba callback de-registration for hotplug event */
+-	lpfc_cpuhp_remove(phba);
++	if (phba->pport)
++		lpfc_cpuhp_remove(phba);
+ 
+ 	/* Disable PCI subsystem interrupt */
+ 	lpfc_sli4_disable_intr(phba);
+-- 
+2.17.1
 
---Sig_/xETYpMB356nDIYf/Upbevgk
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7y/cgACgkQAVBC80lX
-0Gx2gwf7BUN/Z2HBMf+rZigkOqMDI+1NSbly4uC5QA+lQl/Ho3raWvRnlyyUNWWd
-gaiLuKu0qFggDKDCygNKkpbmzRW8NxB1Xm6UDHN9ppjS/sN6+KdX5SRArJfpK/EA
-awpI37mDAaTkPI/V+NZ091Hq0mTcMblwwzWmK4inR6qq1660xr+1yDXD4KozcCrE
-vDUvhLA4spUWFrfQY+HxU+NzHXIWqSPKY+uj2ZxeNhSvTxxtLKr90gvqqMNdcbnc
-x4Ey8qpfrtUud5oM320Y82tbFkOk2kXfBMJmmmEm/VMtb+JDNrocmS4uLOwwpAKC
-YYd85duaRzXo8Z4sA+GEsJQePIkmLg==
-=v8Eh
------END PGP SIGNATURE-----
-
---Sig_/xETYpMB356nDIYf/Upbevgk--

@@ -2,64 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C16C6206DC5
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C69206E3E
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389893AbgFXHa2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Jun 2020 03:30:28 -0400
-Received: from mail.kernel.org ([198.145.29.99]:39756 "EHLO mail.kernel.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389885AbgFXHa1 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 24 Jun 2020 03:30:27 -0400
-Received: from pobox.suse.cz (nat1.prg.suse.com [195.250.132.148])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S2389985AbgFXHwv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Jun 2020 03:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2388375AbgFXHwu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:52:50 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8400BC061573;
+        Wed, 24 Jun 2020 00:52:50 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id A0E932073E;
-        Wed, 24 Jun 2020 07:30:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=default; t=1592983826;
-        bh=GuZe+zK7j+ouZgBdJXHXau5NYviadWE9eNN2okyuJoM=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=Qml1ZXj0bJ1yIEBaqejbzqfrcHKQXBLXP6ECXmCUM3nuKE/xkBgPzpPDwDidXNUc3
-         Naf2MEVChCBQHGVo3Rud4jPJDnHa0utTBNRNQEXV1EjvpzVWlaXRMxe4R+7jHLu8LD
-         0IcvjF11NGmG9gxz1CmV7d6ylDeaw/xLK19tIUto=
-Date:   Wed, 24 Jun 2020 09:30:23 +0200 (CEST)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cristian Klein <cristian.klein@elastisys.com>,
-        Nathan Chancellor <natechancellor@gmail.com>
-Subject: Re: linux-next: build failures after merge of the hid tree
-In-Reply-To: <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
-Message-ID: <nycvar.YFH.7.76.2006240930110.13242@cbobk.fhfr.pm>
-References: <20200621140421.7f4552df@canb.auug.org.au> <20200623103736.25f67de5@canb.auug.org.au> <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49sFk75ZQfz9sQt;
+        Wed, 24 Jun 2020 17:52:47 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592985167;
+        bh=xCH880zgT3hKqcB0q0Z3S8ZlDJ84/lVH77geTxzFYj4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=VFb87wIA6/14yZdpIUvjL4ciNlNn3JnPGCyBmMqYUlz9RHJDJTzeM0z3+NlRL/yAH
+         yYtvNSnYjj4kAL9Bji9wf62wqhXCz0Fn/qrH02F9G4QMm2caAw6OdZ+q1D36rykNA1
+         Pa82FHDXruZ9xDunUdU4aBlEI2w71pat3uY+MHPRsXG9CmrkmKaHYN90XRZmTuzHDk
+         NH0d7EWxwFlGmzZ4nVovusmE8XP+66XM8qogkNIcb//FPOZePGRByG8tr8SjaNTf83
+         pFaOkQOCEerBa6LD7CaWNwGdRdKUA0/nmTTGfOONLOkh9WtgWRXXVBn9g8mkOzPYXF
+         md6iR50yGcZbg==
+Date:   Wed, 24 Jun 2020 17:52:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the hid tree
+Message-ID: <20200624175247.6c7427c8@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; boundary="Sig_/SzF0bAERJ8=XtW3uroRN=ZO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed, 24 Jun 2020, Jiri Kosina wrote:
+--Sig_/SzF0bAERJ8=XtW3uroRN=ZO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> > > I don't know what caused it, but commit
-> > > 
-> > >   470376737e88 ("HID: allow building hid.ko as an external module")
-> > > 
-> > > did not fix it.  BTW, I build with "make O=...".
-> 
-> That's actually the patch that almost certainly broke it.
-> 
-> CCing Cristian (author of that patch) and Nathan, who apparently sent a 
-> fixup patch for this, but I haven't seen it, as our corporate mailserver 
-> had severe issues yesterday.
+Hi all,
 
-I've now dropped the patch from hid.git
+Commit
 
--- 
-Jiri Kosina
-SUSE Labs
+  6d7ccae2e093 ("Revert "HID: allow building hid.ko as an external module"")
 
+is missing a Signed-off-by from its author and committer.
+
+Reverts are commits as well and need SOB tags and (preferably) an
+explanatory commit message.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/SzF0bAERJ8=XtW3uroRN=ZO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7zBk8ACgkQAVBC80lX
+0GzE2wf/cg9ICH85Jo9U5JdbTuzFvwYEN+5fsHIPcQW3dOGO16gxQ8Ni6XZZQQaQ
+gNG8g8KxzYL96OPU+JdYhwXucwXoYJ4d1Kfnab5TxqudW9Fy5HP+/wbQd+eDm1i/
+mVuLUSVln/kbJ7JAOvt7Hhgj7FM7fgQnlPFkXdg8Qd8NGnQQx7sf9b7irY88rUNZ
+JOhMbbhCFmjvSiwrcZlgDL7OQNot95ImZRPueH3L9oWENLbaVgVpmo8kBBHSGr8D
+/lIOeITQ09TK5cs4bstIIvYhX0YZzuqsOdhkpHmjqf39o5WYyf71mje8FOeqQZf1
+FzR2F0BqVn//pJK2HRgsLquOVp10Jw==
+=RdtY
+-----END PGP SIGNATURE-----
+
+--Sig_/SzF0bAERJ8=XtW3uroRN=ZO--

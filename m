@@ -2,93 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C08B206D65
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:17:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98D34206D7F
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 09:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2388246AbgFXHRx (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 24 Jun 2020 03:17:53 -0400
-Received: from smtp-fw-9101.amazon.com ([207.171.184.25]:19320 "EHLO
-        smtp-fw-9101.amazon.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728360AbgFXHRx (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:17:53 -0400
+        id S2389686AbgFXHW4 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 24 Jun 2020 03:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2389724AbgFXHWy (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 24 Jun 2020 03:22:54 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62120C061573
+        for <linux-next@vger.kernel.org>; Wed, 24 Jun 2020 00:22:53 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id k6so694995pll.9
+        for <linux-next@vger.kernel.org>; Wed, 24 Jun 2020 00:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1592983072; x=1624519072;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version;
-  bh=T/RrPEOuZL0V8yVDfilBQLhHwRf2AVG5WsrPELty+0I=;
-  b=TjhvBKvDhOwWnJl82T+m1TyWW06YkeBgQeHvy2n9vyuVmgHF59QBLp1j
-   xqyZk5bsDoqMA3hB3Tt4WPtlFxK66tgrYScN2n0fYBfD4bSWpHiDulPR5
-   jym9scerHLFH3mMOpuhtYNujpZfIOOFy0KrHUg4wwNbMD+iydVvpd7two
-   g=;
-IronPort-SDR: iMaIzfj6jPUVra8XiwdW7DyCYPXmIV7gxqkQgarHk/ZGbURi2LzKfFhfWMMVt/DurLztiJj/ZR
- X/rnfPwRMEjQ==
-X-IronPort-AV: E=Sophos;i="5.75,274,1589241600"; 
-   d="scan'208";a="46485639"
-Received: from sea32-co-svc-lb4-vlan3.sea.corp.amazon.com (HELO email-inbound-relay-1e-17c49630.us-east-1.amazon.com) ([10.47.23.38])
-  by smtp-border-fw-out-9101.sea19.amazon.com with ESMTP; 24 Jun 2020 07:17:35 +0000
-Received: from EX13MTAUEA002.ant.amazon.com (iad55-ws-svc-p15-lb9-vlan3.iad.amazon.com [10.40.159.166])
-        by email-inbound-relay-1e-17c49630.us-east-1.amazon.com (Postfix) with ESMTPS id 72A9AA0561;
-        Wed, 24 Jun 2020 07:17:33 +0000 (UTC)
-Received: from EX13D31EUA001.ant.amazon.com (10.43.165.15) by
- EX13MTAUEA002.ant.amazon.com (10.43.61.77) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 24 Jun 2020 07:17:32 +0000
-Received: from u886c93fd17d25d.ant.amazon.com (10.43.160.180) by
- EX13D31EUA001.ant.amazon.com (10.43.165.15) with Microsoft SMTP Server (TLS)
- id 15.0.1497.2; Wed, 24 Jun 2020 07:17:29 +0000
-From:   SeongJae Park <sjpark@amazon.com>
-To:     <sfr@canb.auug.org.au>
-CC:     <martin.petersen@oracle.com>, <linux-next@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, SeongJae Park <sjpark@amazon.de>
-Subject: [PATCH v2] scsi: lpfc: Avoid another null dereference in lpfc_sli4_hba_unset()
-Date:   Wed, 24 Jun 2020 09:17:04 +0200
-Message-ID: <20200624071704.20408-1-sjpark@amazon.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20200624071447.19529-1-sjpark@amazon.com>
-References: <20200624071447.19529-1-sjpark@amazon.com>
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=PFrOoGmcJnQKyk6KLk0emIflGVCGPTEAW2b+O89fC+w=;
+        b=wtUR40S6SOKojMKmaDbnz6i73uJ1aWHiAIbHyKqUCrdGr2H2eLgix3lwkdc7k3m2VK
+         ErPvriSu7fZDsamZ6gU0chkmWJuXTWaiII0UYe6YvVQ4RVtPKPGQWiCPWQKPAM7sf2XX
+         DYvdKYBQDndpDpUxZYinhIZ9H/ZZFYrxex2oN+4ABPMjAwwUy00nnd5iDJgGiAjfpood
+         PPffxDU31wXSVQZ42dqokx94iGRLclXGHRvw2yE5TfRG5RJTYDiRtm43TljJt3JPlhQ2
+         SCx1W9GYgfzZk55LvEtIm1XqyNRVOOZ1dsOBGPwtgyxeoQoPcMOz4Ie+WL58LGBDjfdN
+         wFog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=PFrOoGmcJnQKyk6KLk0emIflGVCGPTEAW2b+O89fC+w=;
+        b=Is97l3vNeGWSt5716bvBu9MtDzVoko6pR4TheuXRySSRYEDjz+5BDiemi87aPzul9e
+         FCN+rv/bCUrhfm5pNxWR2iSnfjHH6yBLRCjd3iLy7uwtYOWRGx7wJdQJz+EfZVps1tKj
+         g638tahkN6ojuofIg2T5GLTlCej4Lgg7Kq2tuvc9N7b9hybMXO5J2TwWr2UUWPPz8ZOK
+         wUvwQqsnKaEwkEO5pa5C1ealGEYqcQb4y595KTIfrnlZFQTW4QpH+EJy41RNdWlVduwr
+         LfsHSKKzhwt5+SbtasHr8O/UfRZehTiWctERSLuEShSHIz2+jCrYVMG1a+CdQSzkIA12
+         ZKNQ==
+X-Gm-Message-State: AOAM531I7zlVZfz/cImd9uiA4iFph9CKsFAEEZEPX3hn4xCK9WSDwcrv
+        7wDYAjyR/Lv5pU9r+FHpigQofanqEVQ=
+X-Google-Smtp-Source: ABdhPJx4vIy/8HzpXEIS4PlV+yI9lRXJF3jW+X4g6eQJi32PoI0Ah6fHf5mpgD+lRhG9ELTtHbCOHw==
+X-Received: by 2002:a17:902:44:: with SMTP id 62mr27287836pla.104.1592983372512;
+        Wed, 24 Jun 2020 00:22:52 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id s197sm19042442pfc.188.2020.06.24.00.22.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 24 Jun 2020 00:22:51 -0700 (PDT)
+Message-ID: <5ef2ff4b.1c69fb81.4f69b.bac9@mx.google.com>
+Date:   Wed, 24 Jun 2020 00:22:51 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.180]
-X-ClientProxiedBy: EX13D07UWA001.ant.amazon.com (10.43.160.145) To
- EX13D31EUA001.ant.amazon.com (10.43.165.15)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: pending-fixes
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: v5.8-rc2-376-g1c7e639860a8
+Subject: next/pending-fixes baseline: 159 runs,
+ 1 regressions (v5.8-rc2-376-g1c7e639860a8)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: SeongJae Park <sjpark@amazon.de>
+next/pending-fixes baseline: 159 runs, 1 regressions (v5.8-rc2-376-g1c7e639=
+860a8)
 
-Commit cdb42becdd40 ("scsi: lpfc: Replace io_channels for nvme and fcp
-with general hdw_queues per cpu") has introduced static checker warnings
-for potential null dereferences in 'lpfc_sli4_hba_unset()' and
-commit 1ffdd2c0440d ("scsi: lpfc: resolve static checker warning in
-lpfc_sli4_hba_unset") has tried to fix it.  However, yet another
-potential null dereference is remaining.  This commit fixes it.
+Regressions Summary
+-------------------
 
-This bug was discovered and resolved using Coverity Static Analysis
-Security Testing (SAST) by Synopsys, Inc.
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
 
-Fixes: 1ffdd2c0440d ("scsi: lpfc: resolve static checker warning in lpfc_sli4_hba_unset")
-Fixes: cdb42becdd40 ("scsi: lpfc: Replace io_channels for nvme and fcp with general hdw_queues per cpu")
-Signed-off-by: SeongJae Park <sjpark@amazon.de>
----
- drivers/scsi/lpfc/lpfc_init.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
-index 69a5249e007a..6637f84a3d1b 100644
---- a/drivers/scsi/lpfc/lpfc_init.c
-+++ b/drivers/scsi/lpfc/lpfc_init.c
-@@ -11878,7 +11878,8 @@ lpfc_sli4_hba_unset(struct lpfc_hba *phba)
- 	lpfc_sli4_xri_exchange_busy_wait(phba);
- 
- 	/* per-phba callback de-registration for hotplug event */
--	lpfc_cpuhp_remove(phba);
-+	if (phba->pport)
-+		lpfc_cpuhp_remove(phba);
- 
- 	/* Disable PCI subsystem interrupt */
- 	lpfc_sli4_disable_intr(phba);
--- 
-2.17.1
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc2-376-g1c7e639860a8/plan/baseline/
 
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc2-376-g1c7e639860a8
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      1c7e639860a8c025e73c4e18ab7b6b8116175659 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform        | arch  | lab          | compiler | defconfig | results
+----------------+-------+--------------+----------+-----------+--------
+bcm2837-rpi-3-b | arm64 | lab-baylibre | gcc-8    | defconfig | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef2c2fd93032302cd97bf09
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc2-37=
+6-g1c7e639860a8/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc2-37=
+6-g1c7e639860a8/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef2c2fd93032302=
+cd97bf0c
+      new failure (last pass: v5.8-rc2-295-g0780e0d6abd0)
+      1 lines =20

@@ -2,101 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C00206A21
-	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 04:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC748206A63
+	for <lists+linux-next@lfdr.de>; Wed, 24 Jun 2020 05:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2387794AbgFXC1n (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 23 Jun 2020 22:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2387719AbgFXC1n (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 23 Jun 2020 22:27:43 -0400
-Received: from mail-ot1-x341.google.com (mail-ot1-x341.google.com [IPv6:2607:f8b0:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327B2C061573;
-        Tue, 23 Jun 2020 19:27:43 -0700 (PDT)
-Received: by mail-ot1-x341.google.com with SMTP id 18so497803otv.6;
-        Tue, 23 Jun 2020 19:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=gZQnvXpknW+rN20YHdcJ+Ylfzfin7eHSMN5K0zI8wKM=;
-        b=Lu853MjaeLGiuwcz+/VJ4vCOPidwiJ0QXUFF8p8giMtX6IQJi95CCn7a/nGfNLYt9P
-         RGpDPgW9qHlT+ZzC4HhwKfD0aRUqkmDMpxrYzUHgwQhJE7eOgk5Cp1CY/osP5xpWJsFg
-         2+htiESAWiebk1C57ehAJijBgA3LWDr8P+4GvuzefWIFFV7aBMP79mw+S1ahFDC1+HJC
-         fwIqjRRp6yS/W+YhNrKhViHvacTr/WOmUFCpeyeuiXMx7xov/Z0ER8VsVtYI5QbvJODX
-         MH6SIyz4GXWAOoO4UND2zJo+B4kWYD/cF2TqVkI+2qU41IHWEbzLO85Wo3O09ow1E19x
-         lVGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=gZQnvXpknW+rN20YHdcJ+Ylfzfin7eHSMN5K0zI8wKM=;
-        b=HU/+quPlPAC/XdxTxCDw/yCPcyW/mOCQiUrWvsvgS53iSsAe+awv9J/MayfgOki0Mu
-         mKn0C6WmGeJ3rePJieGlJfvyYbI5pCFNE7O1NIgi9Y6g+O1RAKERY9+8jg/BQmx+s+1L
-         oFAp0Z5eT7Br8hds4o2j/eO8g6789nUf6K2cFtny/UKpdygF3EhroTlDnPQukeQdAX3b
-         CvC+OW14UwV6tq2/Dx5iVYFtalzXxF5hyJnRd0jh4M4uf9tLkZNw2o6Mbz/81RzHJJFL
-         9Pdr+/A+NYavDBc43uPvIdoOHLNebpTDRSyamwknWXUcSP7mDWl437DdCKiI7CeOI0v3
-         gXBQ==
-X-Gm-Message-State: AOAM5303tonGdSOxl2Q307ab2SSuQgF0JBgh1V3LaxenXmW/gObmOiij
-        Z4/mAiSL6yVM5WRfiukIC2A=
-X-Google-Smtp-Source: ABdhPJySA6GoUbHOYfx6fZOfJBu0OnsW+/ao6svZyzlL6ta5ow0SJTi5nhpXZ+Dsav1Qep4vroZROw==
-X-Received: by 2002:a9d:38a:: with SMTP id f10mr22049923otf.230.1592965662408;
-        Tue, 23 Jun 2020 19:27:42 -0700 (PDT)
-Received: from ubuntu-n2-xlarge-x86 ([2604:1380:4111:8b00::3])
-        by smtp.gmail.com with ESMTPSA id b2sm4740084ooe.13.2020.06.23.19.27.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 23 Jun 2020 19:27:41 -0700 (PDT)
-Date:   Tue, 23 Jun 2020 19:27:40 -0700
-From:   Nathan Chancellor <natechancellor@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Cristian Klein <cristian.klein@elastisys.com>
-Subject: Re: linux-next: build failures after merge of the hid tree
-Message-ID: <20200624022740.GA199301@ubuntu-n2-xlarge-x86>
-References: <20200621140421.7f4552df@canb.auug.org.au>
- <20200623103736.25f67de5@canb.auug.org.au>
- <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
+        id S2388324AbgFXDEy (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 23 Jun 2020 23:04:54 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:37349 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S2387985AbgFXDEy (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 23 Jun 2020 23:04:54 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49s7Kv1wN0z9sRR;
+        Wed, 24 Jun 2020 13:04:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1592967892;
+        bh=sM4GqGCncPD697+XCz69OxgcoCzkpAdKeMXLuP39ro8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=uLAm5irCe/VWo/2qUJOnIr7QkbwTjQo4hMd2YJ3GenCgcOBllqbI6CTve0LqdpFd0
+         V43F9umUKOi73/pQdCAHLEVKSw1kisIvmjidYx1YjrG+JovQAoZmxS6FwrBiLnKMsB
+         3v+L+Vkp7ROnWzkjzQFVOLwVgXmXG4vsbGuwWc+9n0qNpRjkI2NYrxQkn+5TTd4WPu
+         0O7T1Y5vb4XQE59brWFePDZui3/sWdYbkFBAwyLvh1z5Uhqlvs1MDUOSxkGLMjYYOE
+         9EZlsl9KuBSLiw3prDhtzgSAKiLs87pvBVAUqhtYtUXE+ukva5IY8Hz4gX2t8d4pzA
+         bf8iI/c/AjBow==
+Date:   Wed, 24 Jun 2020 13:04:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@elte.hu>, "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the rcu tree with the tip tree
+Message-ID: <20200624130450.57e793f9@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <nycvar.YFH.7.76.2006240012170.13242@cbobk.fhfr.pm>
+Content-Type: multipart/signed; boundary="Sig_/UkWkjBSiyyWNWXOBbKJfnYy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Jiri and Cristian,
+--Sig_/UkWkjBSiyyWNWXOBbKJfnYy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jun 24, 2020 at 12:13:57AM +0200, Jiri Kosina wrote:
-> On Tue, 23 Jun 2020, Stephen Rothwell wrote:
-> 
-> > > I don't know what caused it, but commit
-> > > 
-> > >   470376737e88 ("HID: allow building hid.ko as an external module")
-> > > 
-> > > did not fix it.  BTW, I build with "make O=...".
-> 
-> That's actually the patch that almost certainly broke it.
-> 
-> CCing Cristian (author of that patch) and Nathan, who apparently sent a 
-> fixup patch for this, but I haven't seen it, as our corporate mailserver 
-> had severe issues yesterday.
-> 
-> If there is no resolution by tomorrow, we'll just drop it.
-> 
-> -- 
-> Jiri Kosina
-> SUSE Labs
-> 
+Hi all,
 
-Sorry, I was not clear in my message about what I was "fixing", which
-was the fact that Cristian's initial reply was top posted, which I moved
-to the bottom. I thought that would have been apparent in a mail client,
-my bad :( I have not sent a fix for this issue.
+Today's linux-next merge of the rcu tree got a conflict in:
 
+  kernel/sched/core.c
+
+between commit:
+
+  964ed98b0752 ("sched/core: Fix ttwu() race")
+
+from the tip tree and commit:
+
+  3c88d09bfb1b ("EXP sched: Alleged fix for v5.8 merge-window scheduler iss=
+ue")
+
+from the rcu tree.
+
+I fixed it up (I used the version from the tip tree) and can carry the
+fix as necessary. This is now fixed as far as linux-next is concerned,
+but any non trivial conflicts should be mentioned to your upstream
+maintainer when your tree is submitted for merging.  You may also want
+to consider cooperating with the maintainer of the conflicting tree to
+minimise any particularly complex conflicts.
+
+--=20
 Cheers,
-Nathan
+Stephen Rothwell
+
+--Sig_/UkWkjBSiyyWNWXOBbKJfnYy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7ywtIACgkQAVBC80lX
+0GxkuQf9EYGha9AFqSapMc9Dqzo3aKPXxbSKUtd5IJXh3NX0/EioH4RdwyP2kApA
+9mpOwlICzHQQYdAO49/zntVDujA6Z0CJrO6daMA6X3dT+5iD6nQzij41PJNOXho6
+Xm9Gd1eZ4NNC9/X9s021v4d0NOGhgyDWH6z4cb37O3yjgC5j+kV3P+u7fYqhj0xJ
+yi8npVKdt2Zkn16gERTEC/dsmJWtzS6YFjXzLevOwwXiuI8P/GFARA7iwnrT1EBP
+yNpUjuYfKvNehfmkP+8TDrv8d1K5YVnL58L4UVLiFl4RVJIp+vwyvvBcz23IVhIU
+JR7kcfQpMCh8XNVgzYytieG1TbYzzw==
+=bBo9
+-----END PGP SIGNATURE-----
+
+--Sig_/UkWkjBSiyyWNWXOBbKJfnYy--

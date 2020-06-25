@@ -2,138 +2,250 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C47209C8A
-	for <lists+linux-next@lfdr.de>; Thu, 25 Jun 2020 12:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7934620A08C
+	for <lists+linux-next@lfdr.de>; Thu, 25 Jun 2020 16:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2390386AbgFYKLZ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Jun 2020 06:11:25 -0400
-Received: from mx2.suse.de ([195.135.220.15]:42784 "EHLO mx2.suse.de"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S2389777AbgFYKLY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 25 Jun 2020 06:11:24 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id EE18AB020;
-        Thu, 25 Jun 2020 10:11:21 +0000 (UTC)
-Date:   Thu, 25 Jun 2020 12:11:19 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] lockdep: Move list.h inclusion into lockdep.h
-Message-ID: <20200625101119.GG8444@alley>
-References: <20200621131554.5a662afe@canb.auug.org.au>
- <20200623102655.6d16e610@canb.auug.org.au>
- <20200623121637.GA8444@alley>
- <20200623121937.GA9671@gondor.apana.org.au>
- <20200623142858.GB8444@alley>
- <20200624124212.GA17350@gondor.apana.org.au>
+        id S2405335AbgFYODC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Jun 2020 10:03:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S2405200AbgFYODC (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 25 Jun 2020 10:03:02 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79026C08C5C1
+        for <linux-next@vger.kernel.org>; Thu, 25 Jun 2020 07:03:02 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id u185so1029350pfu.1
+        for <linux-next@vger.kernel.org>; Thu, 25 Jun 2020 07:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=jGYwXRep0N444QzDaN2DeGARpOHTuaT9+By2bdw+Gbo=;
+        b=Cx9yqTmvw01huF3iMznmJ5auqRddIQjAgTWJXSCHT34FlwLtgjFm0wZe/qiAd/Y/ki
+         lkLigZ5aC6VPgN/Tdv6Ajb5onZ7MAEeeM8f2LkYDfL+GSXtfyBeqtqyGJajwDcdsz7uV
+         MZlxGulc4M09T3u1HzZ5OE1jdkXP3RJ6EZ6RiPUC0Pmp0B6ZZMXJsGHhXBlL+QQp8i3/
+         Z6xAWdRee1OpHGqtM8du+Zrb+NJtH+U0SJPZFnn2pb2A90TTmq6B2dPhhFbalPVeu7Qw
+         h0z2O+WN/jpwP5rYdHOKY/reD5kBxMZQR64ApqrKjf1Pn/wbzJe9R5SjN1wef7YC5CLb
+         wasw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=jGYwXRep0N444QzDaN2DeGARpOHTuaT9+By2bdw+Gbo=;
+        b=kJ2zURraVvfCkfh4k7oDXg3fizfQ0qxTeTc6FeQk4raoxpbu95sMBby+163KrRorSQ
+         bmNy0W/wIFUhbTMLRr21SlQ+2abvVtyoOIN0ltQ6hua7iK4wipWbO9yJYEHIsjPrPp7d
+         W/2PzUev4jELz/2Re/74h0EAwZIDGb6b7v2Vd/Lf9KWPJKxb/xqJv7VteHscbA3ZxkRT
+         eEl3PhAi0SnTN7vv7Djs8wIHRiWhchAPhjxEl6+wuEvX/50FFnmuM5S3nOhUp7IDWog0
+         bIBHvpfFw9v13VS9ze+W6agm1o56FjlM11hyl012KERBUXCt61GyAIYjL1E4vKrSGJUP
+         Xj+A==
+X-Gm-Message-State: AOAM530jAK/wAauzHaOmTIFf7NRCFBt5HXQR3qfzTGqpsNkmGFFE0REH
+        Nwf/w4p2zVTELuTWupdDSGWvd4VQ9hU=
+X-Google-Smtp-Source: ABdhPJxh+/LHRF07etQgczf1miCO9RB/6Q9J99Rvp36IADgFK0RCpfrYnsxDTl4/D5GcL3H44DgDSg==
+X-Received: by 2002:a62:1d8e:: with SMTP id d136mr34051311pfd.323.1593093781339;
+        Thu, 25 Jun 2020 07:03:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w15sm8650672pjb.44.2020.06.25.07.03.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Jun 2020 07:03:00 -0700 (PDT)
+Message-ID: <5ef4ae94.1c69fb81.4bbaf.8cf8@mx.google.com>
+Date:   Thu, 25 Jun 2020 07:03:00 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200624124212.GA17350@gondor.apana.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Branch: master
+X-Kernelci-Tree: next
+X-Kernelci-Kernel: next-20200625
+Subject: next/master baseline: 106 runs, 5 regressions (next-20200625)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Wed 2020-06-24 22:42:12, Herbert Xu wrote:
-> On Tue, Jun 23, 2020 at 04:28:58PM +0200, Petr Mladek wrote:
-> >
-> > My "allmodconfig" build has successfully finished with the following extra
-> >  fix on top of the two patches:
-> > 
-> > diff --git a/include/linux/list.h b/include/linux/list.h
-> > index aff44d34f4e4..6d606c4036ce 100644
-> > --- a/include/linux/list.h
-> > +++ b/include/linux/list.h
-> > @@ -6,7 +6,7 @@
-> >  #include <linux/stddef.h>
-> >  #include <linux/poison.h>
-> >  #include <linux/const.h>
-> > -#include <linux/kernel.h>
-> > +#include <linux/compiler.h>
-> 
-> Unfortunately this doesn't work because list.h actually does need
-> kernel.h for container_of.
+next/master baseline: 106 runs, 5 regressions (next-20200625)
 
-Ah, I see.
+Regressions Summary
+-------------------
 
-> However, we can easily fix the loop another way by removing list.h
-> from lockdep.h as it doesn't actually use any list macros/functions
-> but only the list type which is now in linux/types.h.
-> 
-> We could either fold this into the lockdep_types patch, or fold it
-> into the printk patch, or just leave it as a standalone patch.
-> What do you guys think?
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre  | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 4/5    =
 
-It logically belongs to the lockdep_types area.
+bcm2837-rpi-3-b              | arm64 | lab-baylibre  | gcc-8    | defconfig=
+                    | 4/5    =
 
-I think that separate patch is the best solution so that Peter does
-not need to rebase tip/locking/header.
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre  | gcc-8    | defconfig=
+                    | 0/1    =
 
-> 
-> ---8<---
-> Currently lockdep_types.h includes list.h without actually using any
-> of its macros or functions.  All it needs are the type definitions
-> which were moved into types.h long ago.  This potentially causes
-> inclusion loops because both are included by many core header
-> files.
-> 
-> This patch moves the list.h inclusion into lockdep.h.  Note that
-> we could probably remove it completely but that could potentially
-> result in compile failures should any end users not include list.h
-> directly and also be unlucky enough to not get list.h via some other
-> header file.
-> 
-> Reported-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+vexpress-v2p-ca15-tc1        | arm   | lab-baylibre  | gcc-8    | vexpress_=
+defconfig           | 3/5    =
 
-It works with allmodconfig here, so feel free to use:
+vexpress-v2p-ca15-tc1        | arm   | lab-collabora | gcc-8    | vexpress_=
+defconfig           | 3/5    =
 
-Tested-by: Petr Mladek <pmladek@suse.com>
 
-Of course, it does not have much value. There might still be another
-configuration or architecture that does not work but I would leave
-this for test bots.
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200625/plan/baseline/
 
-Best Regards,
-Petr
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200625
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      3f9437c6234d95d96967f1b438a4fb71b6be254d =
 
-> 
-> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> index 3b73cf84f77d..b1ad5c045353 100644
-> --- a/include/linux/lockdep.h
-> +++ b/include/linux/lockdep.h
-> @@ -21,6 +21,7 @@ extern int lock_stat;
->  #ifdef CONFIG_LOCKDEP
->  
->  #include <linux/linkage.h>
-> +#include <linux/list.h>
->  #include <linux/debug_locks.h>
->  #include <linux/stacktrace.h>
->  
-> diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
-> index 7b9350624577..bb35b449f533 100644
-> --- a/include/linux/lockdep_types.h
-> +++ b/include/linux/lockdep_types.h
-> @@ -32,8 +32,6 @@ enum lockdep_wait_type {
->  
->  #ifdef CONFIG_LOCKDEP
->  
-> -#include <linux/list.h>
-> -
->  /*
->   * We'd rather not expose kernel/lockdep_states.h this wide, but we do need
->   * the total number of states... :-(
-> -- 
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre  | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef472084ed47a129997bf7f
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
+pi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
+pi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef472084ed47a12=
+9997bf82
+      failing since 0 day (last pass: next-20200623, first fail: next-20200=
+624)
+      2 lines =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+bcm2837-rpi-3-b              | arm64 | lab-baylibre  | gcc-8    | defconfig=
+                    | 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef473d81707c621eb97bf49
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef473d81707c621=
+eb97bf4c
+      new failure (last pass: next-20200624)
+      1 lines =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre  | gcc-8    | defconfig=
+                    | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef474b5b3800686e897c003
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200625/arm6=
+4/defconfig/gcc-8/lab-baylibre/baseline-meson-gxl-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ef474b5b3800686e897c=
+004
+      new failure (last pass: next-20200624) =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+vexpress-v2p-ca15-tc1        | arm   | lab-baylibre  | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef47124aa6a32d30797bf21
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200625/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200625/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef47124aa6a32d3=
+0797bf24
+      failing since 19 days (last pass: next-20200604, first fail: next-202=
+00605)
+      2 lines =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+vexpress-v2p-ca15-tc1        | arm   | lab-collabora | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef4715ebbd9bb41e997bf17
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200625/arm/=
+vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200625/arm/=
+vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef4715ebbd9bb41=
+e997bf1a
+      failing since 19 days (last pass: next-20200604, first fail: next-202=
+00605)
+      2 lines =20

@@ -2,91 +2,85 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C2A20BAF1
-	for <lists+linux-next@lfdr.de>; Fri, 26 Jun 2020 23:08:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D25720BC2D
+	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 00:09:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725934AbgFZVII (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Jun 2020 17:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S1725838AbgFZWJg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Jun 2020 18:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725823AbgFZVIH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 17:08:07 -0400
-Received: from mail-pg1-x543.google.com (mail-pg1-x543.google.com [IPv6:2607:f8b0:4864:20::543])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D0C03E979
-        for <linux-next@vger.kernel.org>; Fri, 26 Jun 2020 14:08:07 -0700 (PDT)
-Received: by mail-pg1-x543.google.com with SMTP id g67so4566310pgc.8
-        for <linux-next@vger.kernel.org>; Fri, 26 Jun 2020 14:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5QZafrBOHReSAigLeQLaB8dHFcFb66791XFnIdiUaS4=;
-        b=HykgGlBZz5r44Jrelk4LBTxug9hBtN340JGZEKohdio9yzd7feI5yweIlsuQ1vtm47
-         jNWofa2w5mVPzhJnl0AS8ccR3gk1vRVSNzrA3/UmNzuV67NDtOGzhJ1OIiNBbbyDhN/9
-         q9yZsDBk+04uuDc3GYEzPyMIirFlthojK6kjA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5QZafrBOHReSAigLeQLaB8dHFcFb66791XFnIdiUaS4=;
-        b=TBnTaK4zEmf8lX31Tyjo56iGtc48r3ec2a4C1RUmP0bdMyPT2SP3014laIVA1iTD9k
-         zqg75qBkQUEpgK5bufZXuAfdc4svInbMv+Nkv/NLF6SuT1O7p7/St3GYHuj89AJULcUO
-         vPF+yWy/dClv9FN81F0g16DqB71w5Mkaa3BXzROZxMaRsX5JMTkMRMq80n3RiZb4MuyO
-         gIGPDzKX9SmZMqgDsoxCrrRgXpROrRFSZ64OJPFOwibavFHUUmg8AHk/yo20w1NkqNsX
-         KpURrSoPA8brNXqdub5ik2IhaIYrFLCIYHPrFRGSanR5sb3sPmZJ3KribT4+6g++vbBP
-         N40A==
-X-Gm-Message-State: AOAM533jDTmmQ/ecIvI41SV7ddfQ/GCnTnzb5UacP3EEoe+iUZgg/M8T
-        kkVmtMt4lANx/XV+pKRwyTq2tTbHYLI=
-X-Google-Smtp-Source: ABdhPJzFsFB/Cbqr/aK6fGHvmGyKXEaW+XrPiL4vutbiKFHT7jNkqp2PGPWXmLlHaJpxIotgSqEOhg==
-X-Received: by 2002:a65:664a:: with SMTP id z10mr580379pgv.352.1593205686932;
-        Fri, 26 Jun 2020 14:08:06 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i191sm27542104pfe.99.2020.06.26.14.08.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jun 2020 14:08:06 -0700 (PDT)
-Date:   Fri, 26 Jun 2020 14:08:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the akpm-current tree
-Message-ID: <202006261406.4C2ABC2E06@keescook>
-References: <20200626170514.13f9cd5a@canb.auug.org.au>
+        with ESMTP id S1725803AbgFZWJg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 18:09:36 -0400
+Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AF3C03E979;
+        Fri, 26 Jun 2020 15:09:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=7ItslY+2tZnH34AnvCzD4Nhf2IFkOH4VABumb9nnzMY=; b=SzqF7WY4VAjL+0alZFowiV+qcm
+        7czxSpcJw4zxoxv7fTg+JJQcdru+suTLjcqhuQrVhYmDSRzl0d5Xif2s9g+AcR69pGGMKDuMGPkWU
+        sAhYnwzzaKbri/0T22CP684gLPZICM63L1qmwF0Iexg26oWJ71f1UQgDqNCFbmar22df+L3NcuflU
+        RZ3giORw/uMQJugFrkRb3y0HGjpAd43ztQLiCiYrVAcIsRP3qlvSahWbmgeiukYOLdvyF3OU5B7o9
+        oAq3FAh3lhSsuNNsJtslo8Z0dDqt0rAJrmT+cCmn6Gqm/id3XV8TfR30U+DkVPQv9mXk+Jhkdw9i0
+        s2DH3uFg==;
+Received: from [2601:1c0:6280:3f0::19c2]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jowX3-0005QC-Gg; Fri, 26 Jun 2020 22:09:15 +0000
+Subject: Re: mmotm 2020-06-25-20-36 uploaded (mm/memory-failure.c)
+To:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        Oscar Salvador <osalvador@suse.de>
+References: <20200626033744.URfGO%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <700cf5c7-6e8c-4c09-5ab6-5f946689b012@infradead.org>
+Date:   Fri, 26 Jun 2020 15:09:08 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200626170514.13f9cd5a@canb.auug.org.au>
+In-Reply-To: <20200626033744.URfGO%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 05:06:03PM +1000, Stephen Rothwell wrote:
-> Hi all,
+On 6/25/20 8:37 PM, akpm@linux-foundation.org wrote:
+> The mm-of-the-moment snapshot 2020-06-25-20-36 has been uploaded to
 > 
-> After merging the akpm-current tree, today's linux-next build (sparc
-> defconfig) failed like this:
+>    http://www.ozlabs.org/~akpm/mmotm/
 > 
-> mm/slab.c: In function '___cache_free':
-> mm/slab.c:3471:2: error: implicit declaration of function '__free_one'; did you mean '__free_page'? [-Werror=implicit-function-declaration]
->   __free_one(ac, objp);
->   ^~~~~~~~~~
->   __free_page
+> mmotm-readme.txt says
 > 
+> README for mm-of-the-moment:
 > 
-> Caused by commit
+> http://www.ozlabs.org/~akpm/mmotm/
 > 
->   1420b22124be ("mm/slab: add naive detection of double free")
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
 > 
-> __free_one() is ony defined when CONFIG_NUMA is set but used more
-> generally.
+> You will need quilt to apply these patches to the latest Linus release (5.x
+> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> http://ozlabs.org/~akpm/mmotm/series
 > 
-> I have reverted that commit for today.
 
-Thanks! Just to close the loop here, Randy also pointed this out and
-I've sent a fix:
-https://lore.kernel.org/lkml/1de6b098-a759-dd96-df5d-9a282b2a991b@infradead.org/
+when CONFIG_MIGRATION is not set/enabled:
+
+../mm/memory-failure.c: In function ‘new_page’:
+../mm/memory-failure.c:1692:9: error: implicit declaration of function ‘alloc_migration_target’; did you mean ‘alloc_migrate_target’? [-Werror=implicit-function-declaration]
+  return alloc_migration_target(p, (unsigned long)&mtc);
+         ^~~~~~~~~~~~~~~~~~~~~~
+         alloc_migrate_target
+../mm/memory-failure.c:1692:9: warning: return makes pointer from integer without a cast [-Wint-conversion]
+  return alloc_migration_target(p, (unsigned long)&mtc);
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 
 -- 
-Kees Cook
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

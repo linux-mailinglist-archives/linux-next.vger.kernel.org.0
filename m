@@ -2,53 +2,50 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E717620BCF9
-	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 01:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF5B020BCFC
+	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 01:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725955AbgFZXCF (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Jun 2020 19:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37970 "EHLO
+        id S1726125AbgFZXDV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Jun 2020 19:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725951AbgFZXCE (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 19:02:04 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A75FFC03E979;
-        Fri, 26 Jun 2020 16:02:04 -0700 (PDT)
+        with ESMTP id S1725971AbgFZXDU (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 19:03:20 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D2BC03E979;
+        Fri, 26 Jun 2020 16:03:20 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tspJ3d0bz9sSS;
-        Sat, 27 Jun 2020 09:02:00 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tsqq0gvSz9sQx;
+        Sat, 27 Jun 2020 09:03:18 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593212521;
-        bh=ErD3hVx16ib62e9yBwr2mA7G54pnVW1RLR3R14k82q8=;
+        s=201702; t=1593212599;
+        bh=rZSf3w6JT+xysNhj8MvFvNcipjz8LIPX1+9eaC7CCuU=;
         h=Date:From:To:Cc:Subject:From;
-        b=afknylHD6+QhqS/UHqZNl4BVm+UJT0+WXyvezDX3JtXlzZi3q2cVfeUH5LL65Y1JI
-         H098+7xBvnFM2ZwmopGOV/zgVhqIGDq0M4KfAnDmY3AFyT6ZSP6nvovDBS02n2CFNp
-         YidRh089N/l97c2AUrxglTxfcsrEJ4XpL6M7sOugwuIobmal71QI8Wyxfe6WVTFFP8
-         VWq26twIP0LOIrtskoBs+Tr5zaIUzZwDhNbyia77/Uxw6eIyWUwhZw/taSs49NpHYL
-         7iiLGKBA1dWxodsZb/z0DBJk6LHnKuL5of+bO5Vcjd5heQ3F8PJi1cfJki/YV6JuWu
-         9xJLfk/FTetyw==
-Date:   Sat, 27 Jun 2020 09:01:59 +1000
+        b=E2GBjGCfqmg9TmpuUZvosu3dPNfLSUHHdLbyV0P6ImGdOsvGfhHWh551EuaJCaIOY
+         AzADMVUVDVz9A33IkpGdj9SAQ20b1HlyhKEzZVM6Oi3/Nr1YMVDOFUJUzY/86Wgj+f
+         rZJbEW0PHVhiZB0QVM5/PdYHAeItDoGxfV923qE9WvsKN1L/OHFH/7mdmZIX3Ng2Em
+         OOoegCZ6Q2HsP6uocWyyR1uAehCeCDVzpCzM7mpbop7YSkLlSHzi9equrpDSgO5LuH
+         yW+orp9IDC3LElJIRtREIZjlAK5onB41PBnVyOkJpX4axFZEvJ2cJHjRiiMqS5+8BR
+         7aVg2j/i2DFnQ==
+Date:   Sat, 27 Jun 2020 09:03:17 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Anna Schumaker <Anna.Schumaker@Netapp.com>,
-        Trond Myklebust <trondmy@gmail.com>,
-        NFS Mailing List <linux-nfs@vger.kernel.org>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vasily Averin <vvs@virtuozzo.com>
-Subject: linux-next: Fixes tag needs some work in the nfs-anna tree
-Message-ID: <20200627090159.1ca4bacc@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the nfsd tree
+Message-ID: <20200627090317.48bf2578@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/shGYtj5aMBh12FUWd6BduR3";
+Content-Type: multipart/signed; boundary="Sig_/1HrH8D_SDS_8B0_U52tWP6S";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/shGYtj5aMBh12FUWd6BduR3
+--Sig_/1HrH8D_SDS_8B0_U52tWP6S
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -56,35 +53,36 @@ Hi all,
 
 In commit
 
-  b7ade38165ca ("sunrpc: fixed rollback in rpc_gssd_dummy_populate()")
+  886c4fe8bdff ("nfsd4: fix nfsdfs reference count loop")
 
 Fixes tag
 
-  Fixes: commit 4b9a445e3eeb ("sunrpc: create a new dummy pipe for gssd to =
-hold open")
+  Fixes: 2c830dd720 ("nfsd: persist nfsd filesystem across mounts")
 
 has these problem(s):
 
-  - leading word 'commit' unexpected
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/shGYtj5aMBh12FUWd6BduR3
+--Sig_/1HrH8D_SDS_8B0_U52tWP6S
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl72fmcACgkQAVBC80lX
-0GyiUwf+J7VmBx3wbzlCdrSYY7dXFd0wyLIpsm1r6ZMhRf8HpWhhgStneVzVTHNE
-oLbmWDkAGXT0eotXYffQJMd6eS130kVrBBBzqgeLII94WjNQPjq6bmEH0joIqWoB
-A6+m1PR7pyHskXGTTwWEi993uSMmI/1QYxkhDEDT1vPblIZVI6WS+0/E1rKGasur
-5eAZISj8xeyVH1lyZOdr4wibYqY2hC4TVpCdvNgtqAP7KjayrJv5hVctsR2eaXud
-lpdHs2KcdVLkV7jfGiiupu8G/stK+0+SSGgtoTA2pCRTL5ObeqLL9+GgvaD7ZeXd
-Crx61+QkcD4peY0orciAtdm0NCqFug==
-=uA1S
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl72frYACgkQAVBC80lX
+0Gz3FwgAn+mKB3XE+MbOCNqjbACH5GPRvlmaOtwMLDlifR/aC+zoky9NcBEyXuMA
+4TEtOIG/VsGFqUSqOqEZgI5KnfnR96cy5bOwrlM6fd+2x9aGLiM6+Rm7VO2ZC2Vv
+ojOCFsUbj3i/9EAreQ99kE0ZnOjSDfTV1+NfDECYoDifhol1TC7bG0WB3NR1O4Zq
+hrIpgCe+dWO4sFHQ2B7b7K3EbOU1VKMDllJED5RJKsY3MSykTLxz6VCFL7PdP/vW
+QZKPEyk+TuKWfL0Fv9rcoyTHKbUwfvsUnBV3frB7ea0luvCDoOVYFtMGyfcMwiTB
+3IQr2QJr3t4DRZrH7nEUlPPl8tLswA==
+=3my7
 -----END PGP SIGNATURE-----
 
---Sig_/shGYtj5aMBh12FUWd6BduR3--
+--Sig_/1HrH8D_SDS_8B0_U52tWP6S--

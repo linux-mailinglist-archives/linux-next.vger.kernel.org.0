@@ -2,71 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0876820A982
-	for <lists+linux-next@lfdr.de>; Fri, 26 Jun 2020 02:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3286E20AA3A
+	for <lists+linux-next@lfdr.de>; Fri, 26 Jun 2020 03:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725793AbgFZAFd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 25 Jun 2020 20:05:33 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:56115 "EHLO ozlabs.org"
+        id S1727925AbgFZBne (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 25 Jun 2020 21:43:34 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:38199 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725767AbgFZAFd (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 25 Jun 2020 20:05:33 -0400
+        id S1727876AbgFZBne (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Thu, 25 Jun 2020 21:43:34 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tHG21Khhz9sQt;
-        Fri, 26 Jun 2020 10:05:29 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tKR64GvLz9sQx;
+        Fri, 26 Jun 2020 11:43:29 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593129931;
-        bh=1/NpNWSRYiuRWHY1OaZc1T1Yqf2ZVowm/dB1HXxkKjc=;
+        s=201702; t=1593135812;
+        bh=eQESNewGabImUpWknhGtlDqUX7u13gKZdpajK88V8Oc=;
         h=Date:From:To:Cc:Subject:From;
-        b=J5yt0phjrDQhLtXHDFTgmRLJ1RWOhMw2rjH8Ggtn5bNqEx+omYjBKxFKNUzq/Ksp8
-         xZQV4Qu9j+lc4IrmrjVidJv3E+z/RpSLooEDoKKMKdpxJWlKhx04wJoIjXss7Ilfig
-         flA0X7KUabWPehZjAWB49ClBXi65maql1Tlr8BEO5MRNQbCThrj6uaKRe4qCll5XCD
-         DNbC4J2RAhVsB7yxA+dbNrQzdtmGp6KwuBLbGdVpyKpCtNagGBMVdup5JLBkctQsVC
-         +NOZkM5Rht2Wr+3CAhO4yNgSWhUjx6lWma+oOCyiBIM7LI8Aj9GXZaJXTWgC832xdI
-         SbjailGCKR3Nw==
-Date:   Fri, 26 Jun 2020 10:05:27 +1000
+        b=r3wAAoWynW5ofY6RB24a7e7af76CCzxYSz/3hdzPSfdS+Q5jCfAFiBFGjsJlgihHz
+         vtXiF4a8VZdVSynnc5fWgRkrpvAUQbF6xer84Uc3a5p3a2KVn8Vpv89H3jDBcqI4pp
+         rl2xlVl4wHlRoEtSD1SVJ/4rhryOyBOTJKPk+RYxC06lkgYa5dBUX/64mOiPchwy3X
+         qqnJPtFGkqmJ+O69ih0d5Bcu21MPl+TV9MVaal3apLrZT0r24WwkpxHKZGbQhEV+mu
+         zIzVAM19iZjes9p9YijPWrb8I2q1P4r4fPCjjHawZJrbbLimnNKmNUiXzxTkxrttM7
+         z6hPbmOhSb0DQ==
+Date:   Fri, 26 Jun 2020 11:43:28 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Yonghong Song <yhs@fb.com>, Andrii Nakryiko <andriin@fb.com>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <20200626100527.4dad8695@canb.auug.org.au>
+        Nirmoy Das <nirmoy.aiemd@gmail.com>,
+        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20200626114328.71ae6193@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/WG=8.S1mSbgElhtsPHXXGa2";
+Content-Type: multipart/signed; boundary="Sig_/SQrTN=RMELoppdikG/Zdzo0";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/WG=8.S1mSbgElhtsPHXXGa2
+--Sig_/SQrTN=RMELoppdikG/Zdzo0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-  tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+  drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
 
-between commits:
+between commit:
 
-  9c82a63cf370 ("libbpf: Fix CO-RE relocs against .text section")
-  647b502e3d54 ("selftests/bpf: Refactor some net macros to bpf_tracing_net=
-.h")
+  eaad0c3aa978 ("drm/amdgpu: rename direct to immediate for VM updates")
 
-from the bpf tree and commit:
+from the Linus' and commit:
 
-  84544f5637ff ("selftests/bpf: Move newer bpf_iter_* type redefining to a =
-new header file")
+  b1a8ef952a25 ("drm/amdgpu: move ttm bo->offset to amdgpu_bo")
 
-from the bpf-next tree.
+from the drm-misc tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -79,49 +77,47 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-index 75ecf956a2df,cec82a419800..000000000000
---- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-@@@ -11,21 -7,7 +7,7 @@@
+diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+index 28bdfb3ac33d,2a7a6f62d627..000000000000
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm_sdma.c
+@@@ -144,8 -141,8 +144,8 @@@ static void amdgpu_vm_sdma_copy_ptes(st
  =20
-  char _license[] SEC("license") =3D "GPL";
+  	src +=3D p->num_dw_left * 4;
  =20
-- #define sk_rmem_alloc	sk_backlog.rmem_alloc
-- #define sk_refcnt	__sk_common.skc_refcnt
--=20
-- struct bpf_iter_meta {
-- 	struct seq_file *seq;
-- 	__u64 session_id;
-- 	__u64 seq_num;
-- } __attribute__((preserve_access_index));
--=20
-- struct bpf_iter__netlink {
-- 	struct bpf_iter_meta *meta;
-- 	struct netlink_sock *sk;
-- } __attribute__((preserve_access_index));
--=20
- -static inline struct inode *SOCK_INODE(struct socket *socket)
- +static __attribute__((noinline)) struct inode *SOCK_INODE(struct socket *=
-socket)
-  {
-  	return &container_of(socket, struct socket_alloc, socket)->vfs_inode;
+- 	pe +=3D amdgpu_gmc_sign_extend(bo->tbo.offset);
++ 	pe +=3D amdgpu_bo_gpu_offset_no_check(bo);
+ -	trace_amdgpu_vm_copy_ptes(pe, src, count, p->direct);
+ +	trace_amdgpu_vm_copy_ptes(pe, src, count, p->immediate);
+ =20
+  	amdgpu_vm_copy_pte(p->adev, ib, pe, src, count);
   }
+@@@ -171,8 -168,8 +171,8 @@@ static void amdgpu_vm_sdma_set_ptes(str
+  {
+  	struct amdgpu_ib *ib =3D p->job->ibs;
+ =20
+- 	pe +=3D amdgpu_gmc_sign_extend(bo->tbo.offset);
++ 	pe +=3D amdgpu_bo_gpu_offset_no_check(bo);
+ -	trace_amdgpu_vm_set_ptes(pe, addr, count, incr, flags, p->direct);
+ +	trace_amdgpu_vm_set_ptes(pe, addr, count, incr, flags, p->immediate);
+  	if (count < 3) {
+  		amdgpu_vm_write_pte(p->adev, ib, pe, addr | flags,
+  				    count, incr);
 
---Sig_/WG=8.S1mSbgElhtsPHXXGa2
+--Sig_/SQrTN=RMELoppdikG/Zdzo0
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl71O8cACgkQAVBC80lX
-0GzFHgf9GX71ZbtDGNbranQUQJZc/0K9s1lhhuoezD/QXpocFtHTWi9car8A5AjJ
-nJaRR1B4SkzrRnca/dOsxzhMEGhK9hvkipIR9mxKARGcE5Zd8Pa6ng1pxHasiJSp
-kAAbg3UcCfZ0wwbWskSROHvc7UHHXnIeL20hLy92Dl+9YqaivpElhEnb3UO7KUTi
-mhAa3tss/aW4mXWe+u88S0Capv/No9OCP2kLlvADq2GVidpO74vzBE6lTcHMnVJ+
-BFokVFwIL5k3f1oeu4KQayqnynj8y9kkA+4ZeJ/ELW14oLeH5KT1+RFA54jfK2Ey
-C/5QO/iVPc99U2hgssUA6MzRbCYWog==
-=LMGA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl71UsAACgkQAVBC80lX
+0GyshQf/UnKvDsr4a32M1T4MZmRytJslGTYMmhzZWQbg6MPDHbbBQ2kgA9vE8ngN
+ICbfjJLPISBHaPhUkB7M5s/vCIDfYokSkL7SSoZzTlSBxq34e6WBF38T8Z4IjOIQ
+C7TmliGkh51hE1Pk4D0ylTjURIO04r0OzGFNK9Pp/W5ZLp/l1Bi3asmg5zebRFHi
+eaz0ONQjJcku5m1boIATljAB6xIY0NZxm77qWDlSykZ5CwvRyK+33ETDUBbb8V/7
+TgoGxfN41FObP2qKLqE3LR9PV673OGttXTtuqb6aYBF6VHIFm+U6AmZJPMGSczKT
+RTpdOzrCezHI9uIMRypvP2/apR1/Ng==
+=UgZP
 -----END PGP SIGNATURE-----
 
---Sig_/WG=8.S1mSbgElhtsPHXXGa2--
+--Sig_/SQrTN=RMELoppdikG/Zdzo0--

@@ -2,85 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D25720BC2D
-	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 00:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C2220BC9A
+	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 00:35:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725838AbgFZWJg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Jun 2020 18:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725803AbgFZWJg (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 18:09:36 -0400
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8AF3C03E979;
-        Fri, 26 Jun 2020 15:09:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=7ItslY+2tZnH34AnvCzD4Nhf2IFkOH4VABumb9nnzMY=; b=SzqF7WY4VAjL+0alZFowiV+qcm
-        7czxSpcJw4zxoxv7fTg+JJQcdru+suTLjcqhuQrVhYmDSRzl0d5Xif2s9g+AcR69pGGMKDuMGPkWU
-        sAhYnwzzaKbri/0T22CP684gLPZICM63L1qmwF0Iexg26oWJ71f1UQgDqNCFbmar22df+L3NcuflU
-        RZ3giORw/uMQJugFrkRb3y0HGjpAd43ztQLiCiYrVAcIsRP3qlvSahWbmgeiukYOLdvyF3OU5B7o9
-        oAq3FAh3lhSsuNNsJtslo8Z0dDqt0rAJrmT+cCmn6Gqm/id3XV8TfR30U+DkVPQv9mXk+Jhkdw9i0
-        s2DH3uFg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jowX3-0005QC-Gg; Fri, 26 Jun 2020 22:09:15 +0000
-Subject: Re: mmotm 2020-06-25-20-36 uploaded (mm/memory-failure.c)
-To:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Oscar Salvador <osalvador@suse.de>
-References: <20200626033744.URfGO%akpm@linux-foundation.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <700cf5c7-6e8c-4c09-5ab6-5f946689b012@infradead.org>
-Date:   Fri, 26 Jun 2020 15:09:08 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1725922AbgFZWfj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Jun 2020 18:35:39 -0400
+Received: from ozlabs.org ([203.11.71.1]:37803 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725833AbgFZWfj (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 26 Jun 2020 18:35:39 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tsCr4Wg4z9sQx;
+        Sat, 27 Jun 2020 08:35:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593210936;
+        bh=VsPonw6HrvtILuUmVg8NGus9ev/th2BftRC+hjhjcW4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ayYazI4KGOSlfob/Mi09ZOrku1US27VF+kz9govPFCfBJrfkSTKBJPJMFr7kd65EW
+         1iUFaXB8poPoh1cKHhSWn8kzMUm+vRFxDOGgvu5gjoUJVvawfgejGokWrJ9Eh8Cro+
+         FH0uQ96qhQOJOWzATGThV3ZhRD+ZTI+1dR0kDb2rRs365bTw9UuJKLJ0Q0LGPkaB5o
+         RDjXmUpziYUMO5uJ1uJAdoN5mClTN0tttMkoOnHbN70K3PiJiHWBZiPUYdIQpH8nz0
+         XcP9UUgRLYUmhSNjiNqhT31px3ZTXHJ9cm/wDz8uHv5mITtz+Vok36ZPrnjMBl3IQl
+         WZnEZFnSpty3w==
+Date:   Sat, 27 Jun 2020 08:35:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>
+Subject: Re: Request to add linux-kselftest kunit-fixes branch to linux-next
+Message-ID: <20200627083535.0723ddfb@canb.auug.org.au>
+In-Reply-To: <35ddf39c-1ffb-3099-139f-391193ae3526@linuxfoundation.org>
+References: <35ddf39c-1ffb-3099-139f-391193ae3526@linuxfoundation.org>
 MIME-Version: 1.0
-In-Reply-To: <20200626033744.URfGO%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; boundary="Sig_/SSLLzUWyxOIKJB_La6y.KX3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/25/20 8:37 PM, akpm@linux-foundation.org wrote:
-> The mm-of-the-moment snapshot 2020-06-25-20-36 has been uploaded to
-> 
->    http://www.ozlabs.org/~akpm/mmotm/
-> 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
+--Sig_/SSLLzUWyxOIKJB_La6y.KX3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-when CONFIG_MIGRATION is not set/enabled:
+Hi Shuah,
 
-../mm/memory-failure.c: In function ‘new_page’:
-../mm/memory-failure.c:1692:9: error: implicit declaration of function ‘alloc_migration_target’; did you mean ‘alloc_migrate_target’? [-Werror=implicit-function-declaration]
-  return alloc_migration_target(p, (unsigned long)&mtc);
-         ^~~~~~~~~~~~~~~~~~~~~~
-         alloc_migrate_target
-../mm/memory-failure.c:1692:9: warning: return makes pointer from integer without a cast [-Wint-conversion]
-  return alloc_migration_target(p, (unsigned long)&mtc);
-         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On Fri, 26 Jun 2020 14:50:25 -0600 Shuah Khan <skhan@linuxfoundation.org> w=
+rote:
+>
+> Please add kunit-fixes branch to linux-next.
+>=20
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git=
+/log/?h=3Dkunit-fixes
+>=20
+>=20
+> Contacts:
+>=20
+> Shuah Khan
+> Brendan Higgins
 
+Added from Monday.
 
+Thanks for adding your subsystem tree as a participant of linux-next.  As
+you may know, this is not a judgement of your code.  The purpose of
+linux-next is for integration testing and to lower the impact of
+conflicts between subsystems in the next merge window.=20
 
--- 
-~Randy
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
+You will need to ensure that the patches/commits in your tree/series have
+been:
+     * submitted under GPL v2 (or later) and include the Contributor's
+        Signed-off-by,
+     * posted to the relevant mailing list,
+     * reviewed by you (or another maintainer of your subsystem tree),
+     * successfully unit tested, and=20
+     * destined for the current or next Linux merge window.
+
+Basically, this should be just what you would send to Linus (or ask him
+to fetch).  It is allowed to be rebased if you deem it necessary.
+
+--=20
+Cheers,
+Stephen Rothwell=20
+sfr@canb.auug.org.au
+
+--Sig_/SSLLzUWyxOIKJB_La6y.KX3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl72eDcACgkQAVBC80lX
+0GwjrQf+PqRVfovciX7hwP2yb4lju38hEqFgTnPIQxp6L5ueVtrQ4deF9aSku0sM
+Ei1MD2dHX5fpyM/S3e2X2Kj7wHqCGnRVgXeaJsdNFzdiBml5U1dL5tuzcGh1o8gC
+uMFcR6YS681eI9xzUXnpFh6wqVOBdm6v4EQbvuas1KepJGUIAECHcBjXeu2JlKit
+KllmTHa7dXThhnbJcZEviAuBX10jorgD0EorSUtiQP1ipxZ+yOFv5n2RJcUjjTOW
+yYUmG7daFuluVcIh8BUapvVkcINSRNEXzBq68uDvWfne+vtihnIziirEgt2+TtW+
+7jMdQu/M3PdijsnFni+1hJIv+xArrQ==
+=22p6
+-----END PGP SIGNATURE-----
+
+--Sig_/SSLLzUWyxOIKJB_La6y.KX3--

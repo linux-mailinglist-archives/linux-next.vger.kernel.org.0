@@ -2,176 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A77AD20AC61
-	for <lists+linux-next@lfdr.de>; Fri, 26 Jun 2020 08:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C9120ACC0
+	for <lists+linux-next@lfdr.de>; Fri, 26 Jun 2020 09:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728416AbgFZGad (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Jun 2020 02:30:33 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:51990 "EHLO fornost.hmeau.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727876AbgFZGac (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 26 Jun 2020 02:30:32 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1johrw-0004mR-T7; Fri, 26 Jun 2020 16:29:50 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 26 Jun 2020 16:29:48 +1000
-Date:   Fri, 26 Jun 2020 16:29:48 +1000
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        lkft-triage@lists.linaro.org, linux-crypto@vger.kernel.org,
-        Jan Stancek <jstancek@redhat.com>, chrubis <chrubis@suse.cz>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] crypto: af_alg - Fix regression on empty requests
-Message-ID: <20200626062948.GA25285@gondor.apana.org.au>
-References: <CA+G9fYvHFs5Yx8TnT6VavtfjMN8QLPuXg6us-dXVJqUUt68adA@mail.gmail.com>
- <20200622224920.GA4332@42.do-not-panic.com>
- <CA+G9fYsXDZUspc5OyfqrGZn=k=2uRiGzWY_aPePK2C_kZ+dYGQ@mail.gmail.com>
- <20200623064056.GA8121@gondor.apana.org.au>
- <20200623170217.GB150582@gmail.com>
+        id S1726671AbgFZHGI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Jun 2020 03:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725801AbgFZHGI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 03:06:08 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55494C08C5C1;
+        Fri, 26 Jun 2020 00:06:08 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49tSbJ0rP5z9sSc;
+        Fri, 26 Jun 2020 17:06:04 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593155164;
+        bh=eRDOwPExQiE2slh2fdRAHhUhk9gs5zzV6oKLmDMdRdg=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IZ3gNXB4CeaA/8aRoZegg6KOPd/PsCM0MsmM1ckPpaPCR5sdhqFP7s4U1+AI/ZKLH
+         qtdmizC+Zg7loM2TV2iJTX8gepTObKXWdAeKrh/hRhuvzOFHFcaJBHhahc4JifwW3J
+         Lvm2HzE36qfzzeWAE/MAROXGu5X+zQTLuB3hgixH3rQRh0MklRva5HU3h0zeMMhmvr
+         7fYE27BbVjVt/sJTTDXChOVgO9joNO3tgw7N/17NxNplCJ2ts3qaZfP7ENupuCgVuV
+         BvZpXqRAZ0T+sJNqCJpIkBe8ED/5TwFI6uKmSkn5P0VHeLKplOn+HUomgjllpnWRv8
+         9t/5H0+NdrIQg==
+Date:   Fri, 26 Jun 2020 17:06:03 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>
+Subject: linux-next: build failure after merge of the akpm-current tree
+Message-ID: <20200626170514.13f9cd5a@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200623170217.GB150582@gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/bVNEA5XtAs6VDNnUJdj/xDe";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 23, 2020 at 10:02:17AM -0700, Eric Biggers wrote:
->
-> The source code for the two failing AF_ALG tests is here:
-> 
-> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg02.c
-> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg05.c
-> 
-> They use read() and write(), not send() and recv().
-> 
-> af_alg02 uses read() to read from a "salsa20" request socket without writing
-> anything to it.  It is expected that this returns 0, i.e. that behaves like
-> encrypting an empty message.
-> 
-> af_alg05 uses write() to write 15 bytes to a "cbc(aes-generic)" request socket,
-> then read() to read 15 bytes.  It is expected that this fails with EINVAL, since
-> the length is not aligned to the AES block size (16 bytes).
+--Sig_/bVNEA5XtAs6VDNnUJdj/xDe
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-This patch should fix the regression:
+Hi all,
 
----8<---
-Some user-space programs rely on crypto requests that have no
-control metadata.  This broke when a check was added to require
-the presence of control metadata with the ctx->init flag.
+After merging the akpm-current tree, today's linux-next build (sparc
+defconfig) failed like this:
 
-This patch fixes the regression by removing the ctx->init flag.
+mm/slab.c: In function '___cache_free':
+mm/slab.c:3471:2: error: implicit declaration of function '__free_one'; did=
+ you mean '__free_page'? [-Werror=3Dimplicit-function-declaration]
+  __free_one(ac, objp);
+  ^~~~~~~~~~
+  __free_page
 
-This means that we do not distinguish the case of no metadata
-as opposed to an empty request.  IOW it is always assumed that
-if you call recv(2) before sending metadata that you are working
-with an empty request.
 
-Reported-by: Sachin Sant <sachinp@linux.vnet.ibm.com>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-Fixes: f3c802a1f300 ("crypto: algif_aead - Only wake up when...")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Caused by commit
 
-diff --git a/crypto/af_alg.c b/crypto/af_alg.c
-index 9fcb91ea10c4..2d391117c020 100644
---- a/crypto/af_alg.c
-+++ b/crypto/af_alg.c
-@@ -635,7 +635,6 @@ void af_alg_pull_tsgl(struct sock *sk, size_t used, struct scatterlist *dst,
- 
- 	if (!ctx->used)
- 		ctx->merge = 0;
--	ctx->init = ctx->more;
- }
- EXPORT_SYMBOL_GPL(af_alg_pull_tsgl);
- 
-@@ -757,8 +756,7 @@ int af_alg_wait_for_data(struct sock *sk, unsigned flags, unsigned min)
- 			break;
- 		timeout = MAX_SCHEDULE_TIMEOUT;
- 		if (sk_wait_event(sk, &timeout,
--				  ctx->init && (!ctx->more ||
--						(min && ctx->used >= min)),
-+				  !ctx->more || (min && ctx->used >= min),
- 				  &wait)) {
- 			err = 0;
- 			break;
-@@ -847,7 +845,7 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 	}
- 
- 	lock_sock(sk);
--	if (ctx->init && (init || !ctx->more)) {
-+	if (!ctx->more && ctx->used) {
- 		err = -EINVAL;
- 		goto unlock;
- 	}
-@@ -858,7 +856,6 @@ int af_alg_sendmsg(struct socket *sock, struct msghdr *msg, size_t size,
- 			memcpy(ctx->iv, con.iv->iv, ivsize);
- 
- 		ctx->aead_assoclen = con.aead_assoclen;
--		ctx->init = true;
- 	}
- 
- 	while (size) {
-diff --git a/crypto/algif_aead.c b/crypto/algif_aead.c
-index d48d2156e621..749fe42315be 100644
---- a/crypto/algif_aead.c
-+++ b/crypto/algif_aead.c
-@@ -106,7 +106,7 @@ static int _aead_recvmsg(struct socket *sock, struct msghdr *msg,
- 	size_t usedpages = 0;		/* [in]  RX bufs to be used from user */
- 	size_t processed = 0;		/* [in]  TX bufs to be consumed */
- 
--	if (!ctx->init || ctx->more) {
-+	if (ctx->more) {
- 		err = af_alg_wait_for_data(sk, flags, 0);
- 		if (err)
- 			return err;
-diff --git a/crypto/algif_skcipher.c b/crypto/algif_skcipher.c
-index a51ba22fef58..5b6fa5e8c00d 100644
---- a/crypto/algif_skcipher.c
-+++ b/crypto/algif_skcipher.c
-@@ -61,7 +61,7 @@ static int _skcipher_recvmsg(struct socket *sock, struct msghdr *msg,
- 	int err = 0;
- 	size_t len = 0;
- 
--	if (!ctx->init || (ctx->more && ctx->used < bs)) {
-+	if (ctx->more && ctx->used < bs) {
- 		err = af_alg_wait_for_data(sk, flags, bs);
- 		if (err)
- 			return err;
-diff --git a/include/crypto/if_alg.h b/include/crypto/if_alg.h
-index ee6412314f8f..08c087cc89d6 100644
---- a/include/crypto/if_alg.h
-+++ b/include/crypto/if_alg.h
-@@ -135,7 +135,6 @@ struct af_alg_async_req {
-  *			SG?
-  * @enc:		Cryptographic operation to be performed when
-  *			recvmsg is invoked.
-- * @init:		True if metadata has been sent.
-  * @len:		Length of memory allocated for this data structure.
-  */
- struct af_alg_ctx {
-@@ -152,7 +151,6 @@ struct af_alg_ctx {
- 	bool more;
- 	bool merge;
- 	bool enc;
--	bool init;
- 
- 	unsigned int len;
- };
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+  1420b22124be ("mm/slab: add naive detection of double free")
+
+__free_one() is ony defined when CONFIG_NUMA is set but used more
+generally.
+
+I have reverted that commit for today.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/bVNEA5XtAs6VDNnUJdj/xDe
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl71nlsACgkQAVBC80lX
+0GxzkQgAksmAJGvNuBYIYn3oGomOnfix01nchVS0LWO6gRLjT7Lsnfj1K6GN8KBS
+xRObMOiCIaZqGFgsDW79PpXy5n4XaIySjtc3shwhe3DLEsGCPdQruBJfeVC/sV5y
+pcm2UTlJ+cxn4vfhlzik4yE2pIgUzG5bLmYNAiV1SkoC5seLZqLw1+2Iiqz/WRKr
+o2F5aThEiSGK72qn4Hc60VyYGNJMsUfmgDsRibZsf1KabnoBUw5fyT+unZb+qFaT
+QlA99EXr1zbsaXubZSnek/kcbFex8opH3v/M8MSqR0gFWb0AczKPL4FOo0l7uR97
+kshfUN1WrFd/j2YN6sGF1xezRwRjmA==
+=iWgp
+-----END PGP SIGNATURE-----
+
+--Sig_/bVNEA5XtAs6VDNnUJdj/xDe--

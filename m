@@ -2,126 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E3D020BDB8
-	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 04:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1C820BDF9
+	for <lists+linux-next@lfdr.de>; Sat, 27 Jun 2020 05:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726537AbgF0CZh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 26 Jun 2020 22:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726315AbgF0CZh (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 26 Jun 2020 22:25:37 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A45C03E97A
-        for <linux-next@vger.kernel.org>; Fri, 26 Jun 2020 19:25:34 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id t11so582823pfq.11
-        for <linux-next@vger.kernel.org>; Fri, 26 Jun 2020 19:25:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=nhkZLuZObi8zavAGC6FM3sZjX28XBVMWrEcExx5l178=;
-        b=LAoVozESfeYoIEIRrxzaIfG7DHejZkoeqXCdPXMX2td7HeSTTubdnaSztqfkoP3+2H
-         SHVE2oT/tajrNXYaDUhHQuAG1d7L1sqeVBeZ0nQuN5qhBbajVXXdWVF8+B39LTQYCO8D
-         VfqgynPbkRKXBa0GWyz9HwVmp/f/p0XwxhgsgTqHZQS4V3lL1f+JUDGpyDhZVhZCY6/8
-         1jo1MoB86ug91uVHOGln/MD9jSxDTWOHXbmSLYY7vPBlF1g/RaLLBT5XFGNMn63B768K
-         wYYTtLmcgrKN0V9VPnJE6wRoro38EmcjaY3lybBeHbKEAGuRLIwXeS0GdXHN+zvi8PTc
-         HRKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=nhkZLuZObi8zavAGC6FM3sZjX28XBVMWrEcExx5l178=;
-        b=N+FYM+pIzQwvS8nOyzssHxp1gZgGUeiJgY08H0HCdtQp/whKnVMdFaR3MgzthnBMjR
-         roVfqI8AmV0fhWdb+PCeN1NqHhgMyp/XYHlS3hMS64mitb3flXgquL6mXw4yBpbwCjNL
-         voYFZbQS1wLHcqO8bUzAKVrvv/L6eZZePeF3k9mWdhNQx4VV1Wm2egSNVuvFC+GhYRlr
-         tdAGtN2laBecLrgmk8u6F633ptOPRD6VmE3ZC/kv6mAGxJzHPR+JxAhs2BhoW1+OzLnO
-         u5gTAuR6ZswklVdovuB8G5SF3c8qVhUSDJIQX27ehX5b7uobyaTNPWsAoAvRD9ma2uTW
-         o1QQ==
-X-Gm-Message-State: AOAM530D+GCMmFj4NzfY3FFr46fCvp6Kj1Y1kWuYE3BZ7LWO8EaTnCo2
-        0M24S4KiblQfVHzSVmtiqCB7pg==
-X-Google-Smtp-Source: ABdhPJwGRIIjy5Q6jCNsVauhqNGYF/RFyiqmf+/zsyyVaY2vG6+wnwHD/CVeLw0bq/S0fnIof5y99A==
-X-Received: by 2002:a63:3c2:: with SMTP id 185mr1554777pgd.46.1593224733279;
-        Fri, 26 Jun 2020 19:25:33 -0700 (PDT)
-Received: from [192.168.1.182] ([66.219.217.173])
-        by smtp.gmail.com with ESMTPSA id u19sm28762225pfk.98.2020.06.26.19.25.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jun 2020 19:25:32 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <20200627090740.683308fd@canb.auug.org.au>
- <6920f023-5909-6ebf-606c-dbf467a31c7c@kernel.dk>
- <20200627015605.goc2btyq6z3wwb5z@chatter.i7.local>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <425cdd05-4123-c1ec-ad82-990eceae0b5a@kernel.dk>
-Date:   Fri, 26 Jun 2020 20:25:31 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
-MIME-Version: 1.0
-In-Reply-To: <20200627015605.goc2btyq6z3wwb5z@chatter.i7.local>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+        id S1725904AbgF0Dlv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 26 Jun 2020 23:41:51 -0400
+Received: from mail.kernel.org ([198.145.29.99]:46520 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725828AbgF0Dlv (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 26 Jun 2020 23:41:51 -0400
+Received: from X1 (nat-ab2241.sltdut.senawave.net [162.218.216.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id 679D520857;
+        Sat, 27 Jun 2020 03:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1593229310;
+        bh=Ali5IZNLTIW8llvxQDSSeqrZ636VTDReJzcRNiixCTI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aYgiC1Cmppmj+lWV8ausXHZpLkIb+IgodES53DwyIvVVnwsgutwPqyuqj1OU0f6Av
+         Ft7CT76o3C9myEmF/idXHzZk0aN9LpIc+UD86qfFy32f5YEnrjx30YBIoE8Iw3nEb0
+         /FEvX8jGyVucATfpIHWtMsBVvO9AhBEurlojSejM=
+Date:   Fri, 26 Jun 2020 20:41:48 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     broonie@kernel.org, mhocko@suse.cz, sfr@canb.auug.org.au,
+        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>
+Subject: Re: mmotm 2020-06-25-20-36 uploaded (mm/memory-failure.c)
+Message-Id: <20200626204148.6c8c3c359e8baa310ecb744f@linux-foundation.org>
+In-Reply-To: <700cf5c7-6e8c-4c09-5ab6-5f946689b012@infradead.org>
+References: <20200626033744.URfGO%akpm@linux-foundation.org>
+        <700cf5c7-6e8c-4c09-5ab6-5f946689b012@infradead.org>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/26/20 7:56 PM, Konstantin Ryabitsev wrote:
-> On Fri, Jun 26, 2020 at 07:32:15PM -0600, Jens Axboe wrote:
->> On 6/26/20 5:07 PM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> In commit
->>>
->>>   cd664b0e35cb ("io_uring: fix hanging iopoll in case of -EAGAIN")
->>>
->>> Fixes tag
->>>
->>>   Fixes: bbde017a32b3 ("io_uring: add memory barrier to synchronize
->>>
->>> has these problem(s):
->>>
->>>   - Subject has leading but no trailing parentheses
->>>   - Subject has leading but no trailing quotes
->>>
->>> Please do not split Fixes tags over more than one line.
->>
->> Gah, that's b4 messing it up. I've actually seen this before, but
->> I caught it. If you look at the actual commit, this is what the b4
->> output ends up being for the fixes line:
->>
->> [snip]
->> io_kiocb's result and iopoll_completed")
->>
->> Fixes: bbde017a32b3 ("io_uring: add memory barrier to synchronize
->>
->> even though it's correct in the email. I'm guessing some issue having to
->> do with the longer line?
+On Fri, 26 Jun 2020 15:09:08 -0700 Randy Dunlap <rdunlap@infradead.org> wrote:
+
+> On 6/25/20 8:37 PM, akpm@linux-foundation.org wrote:
+> > The mm-of-the-moment snapshot 2020-06-25-20-36 has been uploaded to
+> > 
+> >    http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > mmotm-readme.txt says
+> > 
+> > README for mm-of-the-moment:
+> > 
+> > http://www.ozlabs.org/~akpm/mmotm/
+> > 
+> > This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> > more than once a week.
+> > 
+> > You will need quilt to apply these patches to the latest Linus release (5.x
+> > or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+> > http://ozlabs.org/~akpm/mmotm/series
+> > 
 > 
-> Yeah, I'll try to see if there's something I can do here, but it's going 
-> to be largely guesswork. Here's the original email:
+> when CONFIG_MIGRATION is not set/enabled:
 > 
-> https://lore.kernel.org/lkml/22111b29e298f5f606130fcf4307bda99dbec089.1593077359.git.asml.silence@gmail.com/raw
-> 
-> The Fixes: footer really does get split into two. It's not that hard to 
-> add logic just for the Fixes tag (since it conveniently follows a set 
-> pattern), but finding a universal fix for split footers will be more 
-> difficult.
+> ../mm/memory-failure.c: In function ‘new_page’:
+> ../mm/memory-failure.c:1692:9: error: implicit declaration of function ‘alloc_migration_target’; did you mean ‘alloc_migrate_target’? [-Werror=implicit-function-declaration]
+>   return alloc_migration_target(p, (unsigned long)&mtc);
+>          ^~~~~~~~~~~~~~~~~~~~~~
+>          alloc_migrate_target
+> ../mm/memory-failure.c:1692:9: warning: return makes pointer from integer without a cast [-Wint-conversion]
+>   return alloc_migration_target(p, (unsigned long)&mtc);
+>          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Right, but that's what git format-patch does when the line is long. Do
-we have other tags where that's a concern? If not, then the fix should
-be solid I think.
+Thanks.
 
-> I'll see what I can do.
-
-Thanks!
-
--- 
-Jens Axboe
+Appears to be due to Joonsoo Kim's "mm/migrate: make a standard
+migration target allocation function".
 

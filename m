@@ -2,89 +2,107 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2649320C507
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jun 2020 02:49:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BA520C50E
+	for <lists+linux-next@lfdr.de>; Sun, 28 Jun 2020 02:54:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726101AbgF1Atd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 27 Jun 2020 20:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47868 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725940AbgF1Atd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 27 Jun 2020 20:49:33 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D823CC061794
-        for <linux-next@vger.kernel.org>; Sat, 27 Jun 2020 17:49:32 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id c30so8439689qka.10
-        for <linux-next@vger.kernel.org>; Sat, 27 Jun 2020 17:49:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=lca.pw; s=google;
-        h=content-transfer-encoding:from:mime-version:subject:date:message-id
-         :references:cc:in-reply-to:to;
-        bh=aIUCFtVbjmz2UWddn6XMMzJcn+xFSa+jncR/lAH4nxU=;
-        b=TResSNgQGlitgQRbkTDrv9Ab6BRSFbwkNZDckP6UkDi9vvRf0fUUJS6B2GDrAteQRP
-         Ur/0NUJXvRWb4fa8S1ErSBZv3sZCh0jN/Z46n28Y3W82xHaHGswxdCZrN1G/xO0HKlI8
-         OujANN9R83aQ7JODaCEraWp6YVLHpQBjvb0jusEyqQlCyvktn3ZyYOA1/cmE5Qf6orbA
-         Ipmbg2RGJBARNbM8j4kNV9V05vahyrw/u2uWEhgjdJNYFjMxRLlm8MYtUgV6L9pbrv6U
-         a2aEDxYc43xc40mKRw1g/Uh7OU+Bi2mCCOGut6tWqU4KTuVBxXI43sRo7ZA8H8fjA1pm
-         VP4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:content-transfer-encoding:from:mime-version
-         :subject:date:message-id:references:cc:in-reply-to:to;
-        bh=aIUCFtVbjmz2UWddn6XMMzJcn+xFSa+jncR/lAH4nxU=;
-        b=a1522w4WzFCsE+N4qtTcW5dvX8YJ+3wJ8QkOvEDkfS/tXNk4Px8fUAj9JDrQMYNi23
-         ciqwzbKizSMedcP7qxi+VG9SGQIHdpXyu8fbRwcl11k5IoAFLpFRh/gtEpipjtEctrNs
-         /sng0FJEgX9O6kwfT9U+WJohmE/r7EKM9KTF1H92dB3PUOqrrdbnkngkCTKEsLiqf+r1
-         OOHXW+CUbcprvPOFq0CgRLnFsGWfVRsBL7wiXEjxYIX4qjjiE6kUqgdvZ8LqEG4UNRLj
-         kgkjY0RNFNxEAvboejsLkovmHMxivXm2NRXeMVVJuzaSUrf8tjfrEaCedez3bi5tvDiY
-         zeFA==
-X-Gm-Message-State: AOAM530d2pQwNQYvvHel0/ovC6gwN1cB8jYI4bhpi//BY/A9b/fAUb8z
-        sZxkHN7OqbKW38vnoG9khL4lFg==
-X-Google-Smtp-Source: ABdhPJwE6ef11vX0eS7F8SGmPGFDsOo+ruwTfPdFcFjy+UhMX5OBuU8fvN0wtss6T7AkymR/I1drUw==
-X-Received: by 2002:a37:4acc:: with SMTP id x195mr9558401qka.454.1593305371968;
-        Sat, 27 Jun 2020 17:49:31 -0700 (PDT)
-Received: from [192.168.1.183] (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
-        by smtp.gmail.com with ESMTPSA id 72sm10855463qkh.136.2020.06.27.17.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 27 Jun 2020 17:49:31 -0700 (PDT)
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: quoted-printable
-From:   Qian Cai <cai@lca.pw>
-Mime-Version: 1.0 (1.0)
-Subject: Re: linux-next boot error: WARNING in kmem_cache_free
-Date:   Sat, 27 Jun 2020 20:49:30 -0400
-Message-Id: <CE087189-8054-4D2F-AAB1-2D75CF1BFC15@lca.pw>
-References: <20200627231013.GM7065@sol.localdomain>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        syzbot <syzbot+95bccd805a4aa06a4b0d@syzkaller.appspotmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>,
-        linux-mm@kvack.org
-In-Reply-To: <20200627231013.GM7065@sol.localdomain>
-To:     Eric Biggers <ebiggers@kernel.org>
-X-Mailer: iPhone Mail (17F80)
+        id S1726378AbgF1Ay3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 27 Jun 2020 20:54:29 -0400
+Received: from szxga04-in.huawei.com ([45.249.212.190]:6839 "EHLO huawei.com"
+        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
+        id S1726101AbgF1Ay3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sat, 27 Jun 2020 20:54:29 -0400
+Received: from DGGEMS405-HUB.china.huawei.com (unknown [172.30.72.59])
+        by Forcepoint Email with ESMTP id 976348C2E1FA1402C814;
+        Sun, 28 Jun 2020 08:54:25 +0800 (CST)
+Received: from [127.0.0.1] (10.67.76.251) by DGGEMS405-HUB.china.huawei.com
+ (10.3.19.205) with Microsoft SMTP Server id 14.3.487.0; Sun, 28 Jun 2020
+ 08:54:24 +0800
+Subject: Re: linux-next: Tree for Jun 24 [build failure on arm64]
+To:     Will Deacon <will@kernel.org>
+CC:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200624165323.3dffcde5@canb.auug.org.au>
+ <7a7e31a8-9a7b-2428-ad83-2264f20bdc2d@hisilicon.com>
+ <20200624105528.GB6134@willie-the-truck>
+From:   Shaokun Zhang <zhangshaokun@hisilicon.com>
+Message-ID: <6f5dd89a-17f3-8907-4494-da125823c3e2@hisilicon.com>
+Date:   Sun, 28 Jun 2020 08:54:24 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.1
+MIME-Version: 1.0
+In-Reply-To: <20200624105528.GB6134@willie-the-truck>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.76.251]
+X-CFilter-Loop: Reflected
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+Hi Will£¬
 
+My apologies for reply later because of a short holiday in China.
 
-> On Jun 27, 2020, at 7:10 PM, Eric Biggers <ebiggers@kernel.org> wrote:
->=20
-> This bug also got reported 2 days later by the kernel test robot
-> (lore.kernel.org/lkml/20200623090213.GW5535@shao2-debian/).
-> Then it was fixed by commit 437edcaafbe3, so telling syzbot:
->=20
-> #syz fix: mm, slab/slub: improve error reporting and overhead of cache_fro=
-m_obj()-fix
->=20
-> If CONFIG_SLAB is no longer useful and supported then it needs to be remov=
-ed
-> from the kernel.  Otherwise, it needs to be tested just like all other opt=
-ions.
+ÔÚ 2020/6/24 18:55, Will Deacon Ð´µÀ:
+> On Wed, Jun 24, 2020 at 05:08:56PM +0800, Shaokun Zhang wrote:
+>> +Will Deacon,
+>>
+>> Hi Will,
+>>
+>> There's a build failure on arm64:
+>>
+>>   CALL    scripts/atomic/check-atomics.sh
+>>   CALL    scripts/checksyscalls.sh
+>>   LD      arch/arm64/kernel/vdso/vdso.so.dbg
+>> ld: unrecognized option '--no-eh-frame-hdr'
+>> ld: use the --help option for usage information
+>> arch/arm64/kernel/vdso/Makefile:64: recipe for target
+>> 'arch/arm64/kernel/vdso/vdso.so.dbg' failed
+>> make[1]: *** [arch/arm64/kernel/vdso/vdso.so.dbg] Error 1
+>> arch/arm64/Makefile:175: recipe for target 'vdso_prepare' failed
+>> make: *** [vdso_prepare] Error 2
+>>
+>> GCC version is followed:
+>> gcc (Ubuntu/Linaro 5.4.0-6ubuntu1~16.04.12) 5.4.0 20160609
+>>
+>> It seems caused by
+>> 87676cfca141 arm64: vdso: Disable dwarf unwinding through the sigreturn
+>> trampoline
+> 
+> Urgh, binutils quality strikes again. If you're able to reproduce locally,
+> can you try the diff below, please? All the linkers I have kicking around
 
-It is awesome that kernel test robot was able to bisect it which is especial=
-ly useful for testing legacy options like SLAB.=
+It works, I saw Jon has already tested it.
+Thanks your quick reply.
+
+Shaokun
+
+> seem to support --no-eh-frame-hdr.
+> 
+> Will
+> 
+> --->8
+> 
+> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+> index 1e5a940532da..97d3d3632093 100644
+> --- a/arch/arm64/kernel/vdso/Makefile
+> +++ b/arch/arm64/kernel/vdso/Makefile
+> @@ -23,8 +23,9 @@ btildflags-$(CONFIG_ARM64_BTI_KERNEL) += -z force-bti
+>  # potential future proofing if we end up with internal calls to the exported
+>  # routines, as x86 does (see 6f121e548f83 ("x86, vdso: Reimplement vdso.so
+>  # preparation in build-time C")).
+> -ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv \
+> -               -Bsymbolic --no-eh-frame-hdr --build-id -n $(btildflags-y) -T
+> +ldflags-y := -shared -nostdlib -soname=linux-vdso.so.1 --hash-style=sysv       \
+> +            -Bsymbolic $(call ld-option, --no-eh-frame-hdr) --build-id -n      \
+> +            $(btildflags-y) -T
+>  
+>  ccflags-y := -fno-common -fno-builtin -fno-stack-protector -ffixed-x18
+>  ccflags-y += -DDISABLE_BRANCH_PROFILING
+> 
+> 
+> .
+> 
+

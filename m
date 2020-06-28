@@ -2,90 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3394420C95A
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jun 2020 19:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF5620CAE1
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 00:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726638AbgF1Rq1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Jun 2020 13:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726640AbgF1RqS (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Jun 2020 13:46:18 -0400
-Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A40C08C5E0
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 10:46:17 -0700 (PDT)
-Received: by mail-ot1-x344.google.com with SMTP id w17so5547627otl.4
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 10:46:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
-        b=YUBq+VgNMjlk38u14axPL08DzqARV0dHwd7VsntceEuDODm7tXtyIQiPnBEqwTqorM
-         FLgKk/WWEbN669NPAWBs5Q5Gn/Gw86s5KbgPWdKneNmtH17uT3bYx80xwgMEDbop8BVT
-         4AlOoyISrzqCwJLvSN+nVH9lFdx700mtRrJmEbhJzdpPADkw25XlX9qIwrm0L5lPQrGt
-         sHpMYC76UUuOqEIhiYHo/SrZyArNzUc5xWQzQJVjCCoL1o6dPw+1muYQhIpwYqVaKQyH
-         7il99UsBp0LEis5jgVygo+cs3PrEwvki/U9tgVDWLPcHxPjGhom7KOAMAeqfYI2Bq0H2
-         dL/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
-        b=X6nU1t9GGhsUaK01eYhWttlaLU9HBhnE+JKKV9EkQAOWYBi4HF2P8pZvbSzgTGeKJe
-         2UbDdu1dC+ha+6P5iyGrSfkEsRG4KGuE+RpO16fTEEx24S7AxxfyveZZqdq5XBU5dJtY
-         lJpaY/6vfUllQh0ycj9CkRVHx425Abut4+lcUkQnYtGXP4G7Upubop3dJpGxVjSke+bK
-         8FixDfBWYCDGeY5Rp36cGzWIb9UghGUKH74l8f0LpSdmFW32NK6awyXBfBSoqp+UtT+f
-         O5rJKFOqzzt1PK3TQMTY+G3JyGKaDy8yrLroRUHMlreiXyFHz77IPejd0XC8GqHDYqE8
-         SFCA==
-X-Gm-Message-State: AOAM531ypKRO882i572rHkedbOuCc8FI+qTgrD+/74pEE0kPAxxjS7ui
-        bLIPzAbUEK1g4PoOPLk/xZ4MoOjYwCQQf3JtxYA=
-X-Google-Smtp-Source: ABdhPJy3Gj0bD4+GZ16fIU6y/MzUrvVfW0UiVZl9y/IjQee69OJiPuEA8c3wMHv+p8mmb1g6c9ot9wDO/UA+LL3ZfeY=
-X-Received: by 2002:a05:6830:610:: with SMTP id w16mr10586414oti.165.1593366376804;
- Sun, 28 Jun 2020 10:46:16 -0700 (PDT)
+        id S1726711AbgF1WFh (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Jun 2020 18:05:37 -0400
+Received: from ozlabs.org ([203.11.71.1]:56959 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726686AbgF1WFh (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Sun, 28 Jun 2020 18:05:37 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49w4SG6MLJz9sQx;
+        Mon, 29 Jun 2020 08:05:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593381935;
+        bh=6LZe2nZr8VoOLYVYiktOniguFuItwnZTcURW7KKJ8/M=;
+        h=Date:From:To:Cc:Subject:From;
+        b=upfEa64gQuGNZFrAs30I/7WXOfJ80j5LJ2cl2jZm0mVHk7Ab8u04K+t1vwul2ZKk0
+         QsMsSH1MMFrEfmbV5qxxKksAzwZdXLm+dKJ4DePsFq6AuPjpHWerKGbn0BsjxLH7lT
+         wNmKFq3hYvVtqcvsCHkXLXFCIIT3lG6ubgZ+7lqcj6Q/BK0aLE957krCKBAyV9lBoc
+         +LBTmwFbmDdUX2UWffSfA4vT1PVCU/1XeFnzwLQHr2LMnS+Yvim1mHYPhQCQKPQFLj
+         b6PpKE/sNybKlzGspjmcrrQ7MCRLZIPpiuU0LnHwZSkL+m/ZiWX2qNdbbN4QNZnb1S
+         ikpFlJ/i4X7vg==
+Date:   Mon, 29 Jun 2020 08:05:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: linux-next: Fixes tag needs some work in the block tree
+Message-ID: <20200629080533.5f44d445@canb.auug.org.au>
 MIME-Version: 1.0
-Received: by 2002:ac9:27ee:0:0:0:0:0 with HTTP; Sun, 28 Jun 2020 10:46:15
- -0700 (PDT)
-Reply-To: mrjohnscottyounger35@gmail.com
-From:   John Scott Younger <mrszahraalkami@gmail.com>
-Date:   Sun, 28 Jun 2020 18:46:15 +0100
-Message-ID: <CALQpPg30nAHHtUyi_G5mCvJ6ntraDa3A=oR7H3f5LumSg+StqA@mail.gmail.com>
-Subject: Your attention to this news update.
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; boundary="Sig_/Ai6xo+jK2O9QUvmRdMJ=rEB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
--- 
-Your attention to this news update.
+--Sig_/Ai6xo+jK2O9QUvmRdMJ=rEB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-The report / analysis received from our correspondence shows that you
-have NOT received your PAYMENT, due to administrative injustice from
-unpatriotic and uncivil payment officials. Following the resolution of
-the U.S Department of State, you are mandated to kindly reinstate your
-fund acquisition details for accreditation.
+Hi all,
 
-Sequel to the joint /collaborative effort by United Nations and US
-Department of State, to review, nullify and release all STOP ORDER on
-beneficiary transferred sum and consignment HELD at custom port
-authorities. At this juncture, you are advised to forward information
-of agencies that has put a HOLD on your consignment or STOP ORDER on
-your transferred sum.
+In commit
 
-This office is commission to investigate/rectify ISSUES affecting
-beneficiaries whose payment is HELD/STOP unjustly with the intent of
-demanding un-official fees/levies. Be informed that all administrative
-injustice imposed on beneficiaries by some dubious person(s) has come
-to the knowledge of oversight committee of United Nations and US
-Department of State.
+  8c9cb6cd9a46 ("io_uring: fix refs underflow in io_iopoll_queue()")
 
-Thus our objective is to resolve all challenges facing release of your
-payment. Therefore get back to my office with the required information
-for assessment.
+Fixes tag
 
-Our in service,
+  Fixes: a1d7c393c47 ("io_uring: enable READ/WRITE to use deferred completi=
+ons")
 
-John Scott Younger
-Human Right Activist
-Tel:- + 44 770 002 8251
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Ai6xo+jK2O9QUvmRdMJ=rEB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl75FC0ACgkQAVBC80lX
+0Gzgpwf5AecpB1tPaVWggRq0JAou9FL0nEms4soAcbhL2VLLeKwjDT7gRTbw48ge
+t4UV1Qow1JdWVBKyp7ZiPg+fLXJNFYG1BXxXLd9mZOleV3ZTXNSB8BpPL+9AKibG
+rpBU1cXM8WrXWtlIPEUYOl4I24Em7G4fiQCqrutK8ek4Ja1CYvyURs5tdCxBXrwE
+WpYiFItNxumOYaVPFsznKxL03NpBjCuW5ecp4BTKz+zytS9D7QjUmQ5TF9eKx4kQ
+42Efo5TMfbCD53AgwQkAkqkB0GS8brfycppy7GvzEt0+8nF/8PSiW6n6iNX+ISBv
+VsYvmcnlX2z6nJKmRa9sikRcEOP9Rw==
+=RwBk
+-----END PGP SIGNATURE-----
+
+--Sig_/Ai6xo+jK2O9QUvmRdMJ=rEB--

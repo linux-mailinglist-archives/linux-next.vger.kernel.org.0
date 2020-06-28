@@ -2,91 +2,90 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A74120C83E
-	for <lists+linux-next@lfdr.de>; Sun, 28 Jun 2020 15:38:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3394420C95A
+	for <lists+linux-next@lfdr.de>; Sun, 28 Jun 2020 19:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726427AbgF1Nis (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Jun 2020 09:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52018 "EHLO
+        id S1726638AbgF1Rq1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sun, 28 Jun 2020 13:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726344AbgF1Nis (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Jun 2020 09:38:48 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1969CC061794
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 06:38:48 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id k71so3426625pje.0
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 06:38:48 -0700 (PDT)
+        with ESMTP id S1726640AbgF1RqS (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Jun 2020 13:46:18 -0400
+Received: from mail-ot1-x344.google.com (mail-ot1-x344.google.com [IPv6:2607:f8b0:4864:20::344])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0A40C08C5E0
+        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 10:46:17 -0700 (PDT)
+Received: by mail-ot1-x344.google.com with SMTP id w17so5547627otl.4
+        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 10:46:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20150623.gappssmtp.com; s=20150623;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=zZdrGGRNVEUyYpyE4XpRtKEKUsPRvdzWcXaxhLTH4S0=;
-        b=qbBv1+mz3Hgv6YC6Zsc3njlYD4hxw++5rZYcJXU5wWzCdFrKHf6WsZQarA0hj2YuG9
-         PozKqSXUxd/GHGY5d+McnfWxFjkRkUyxbPVr7H9h49Ocb0QKQDcXd+pnZN7sFEvOFqUt
-         ganJ0mp5NOYjvp68c2D37QVGKgsLRgWFFgV9tW92wUdKEQE8hBhTPW4MfVOMHvhybhrZ
-         /++Mqh5kZfAsGY91o3M55SOW0fKLgeBp6c67jtbG138kqHfI+EJF8g7fjcgu3ajZq7H3
-         MbSxDqG8kR5v0seQxMiTQeGmULvhXxRIb2VmDyP7dKeg2Lzmw1RkewEmkarh1m7qDZJk
-         0SWA==
+        d=gmail.com; s=20161025;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
+        b=YUBq+VgNMjlk38u14axPL08DzqARV0dHwd7VsntceEuDODm7tXtyIQiPnBEqwTqorM
+         FLgKk/WWEbN669NPAWBs5Q5Gn/Gw86s5KbgPWdKneNmtH17uT3bYx80xwgMEDbop8BVT
+         4AlOoyISrzqCwJLvSN+nVH9lFdx700mtRrJmEbhJzdpPADkw25XlX9qIwrm0L5lPQrGt
+         sHpMYC76UUuOqEIhiYHo/SrZyArNzUc5xWQzQJVjCCoL1o6dPw+1muYQhIpwYqVaKQyH
+         7il99UsBp0LEis5jgVygo+cs3PrEwvki/U9tgVDWLPcHxPjGhom7KOAMAeqfYI2Bq0H2
+         dL/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=zZdrGGRNVEUyYpyE4XpRtKEKUsPRvdzWcXaxhLTH4S0=;
-        b=buzreypiGRm4lPSFozmPLidXI8PxA6c7CAgw8Aixo/kBhZcyTeFUpKs8VrrFDQXSPm
-         tFPlaurKa/Un+O+POBe9xc+Fv71w8G3VaPdvvITTimcYo2TDTgz34sRGJHoqoY4lVK8n
-         pS+l38jdrMGQT1ecLEGL9av7J0YKQryhb3k6c2XcKB0tbQ3t8BN5UGBppYFRsEYggN8g
-         PpvP7rUGWovolGKTVwAnSa1wM8yKCYdcBYP9mvFr+SSI+9g2S6lorvtWNrOAqf2Pl7a+
-         kCd69DHiL85CHnyjQ28GlMvrok/14Q3zJARf13u4dYWNoJ6vwcrDDqQNBnPECtWmcsX0
-         rRKQ==
-X-Gm-Message-State: AOAM533DiJyDA+Ffe4df5n2d0owfnWD9zbKKfjkU+lfnUp6L2zJZuB+E
-        0isqEz/8l5feh6qMBTiEzJiX5w==
-X-Google-Smtp-Source: ABdhPJy17YzsoxEm0RSV+7ui4Hr5W5kyqP1uAIoSfg/NrL6etyCSe8XD2tq/Q6etV8glm4iwEPu6qQ==
-X-Received: by 2002:a17:902:a606:: with SMTP id u6mr9735698plq.94.1593351527599;
-        Sun, 28 Jun 2020 06:38:47 -0700 (PDT)
-Received: from [192.168.86.197] (cpe-75-85-219-51.dc.res.rr.com. [75.85.219.51])
-        by smtp.gmail.com with ESMTPSA id o23sm1050905pfd.126.2020.06.28.06.38.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 28 Jun 2020 06:38:47 -0700 (PDT)
-Subject: Re: linux-next: Fixes tag needs some work in the block tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Pavel Begunkov <asml.silence@gmail.com>
-References: <20200627090740.683308fd@canb.auug.org.au>
- <6920f023-5909-6ebf-606c-dbf467a31c7c@kernel.dk>
- <20200627015605.goc2btyq6z3wwb5z@chatter.i7.local>
- <425cdd05-4123-c1ec-ad82-990eceae0b5a@kernel.dk>
- <20200627151237.72b68e8b@canb.auug.org.au>
-From:   Jens Axboe <axboe@kernel.dk>
-Message-ID: <4ae1dc26-dd5d-5f9d-ca81-8fb3550a0faf@kernel.dk>
-Date:   Sun, 28 Jun 2020 07:38:45 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.8.0
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=/bJJuAbxLOI8ZB5kWrg6GnM3H9CKnk3zJ1in7nW69lY=;
+        b=X6nU1t9GGhsUaK01eYhWttlaLU9HBhnE+JKKV9EkQAOWYBi4HF2P8pZvbSzgTGeKJe
+         2UbDdu1dC+ha+6P5iyGrSfkEsRG4KGuE+RpO16fTEEx24S7AxxfyveZZqdq5XBU5dJtY
+         lJpaY/6vfUllQh0ycj9CkRVHx425Abut4+lcUkQnYtGXP4G7Upubop3dJpGxVjSke+bK
+         8FixDfBWYCDGeY5Rp36cGzWIb9UghGUKH74l8f0LpSdmFW32NK6awyXBfBSoqp+UtT+f
+         O5rJKFOqzzt1PK3TQMTY+G3JyGKaDy8yrLroRUHMlreiXyFHz77IPejd0XC8GqHDYqE8
+         SFCA==
+X-Gm-Message-State: AOAM531ypKRO882i572rHkedbOuCc8FI+qTgrD+/74pEE0kPAxxjS7ui
+        bLIPzAbUEK1g4PoOPLk/xZ4MoOjYwCQQf3JtxYA=
+X-Google-Smtp-Source: ABdhPJy3Gj0bD4+GZ16fIU6y/MzUrvVfW0UiVZl9y/IjQee69OJiPuEA8c3wMHv+p8mmb1g6c9ot9wDO/UA+LL3ZfeY=
+X-Received: by 2002:a05:6830:610:: with SMTP id w16mr10586414oti.165.1593366376804;
+ Sun, 28 Jun 2020 10:46:16 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20200627151237.72b68e8b@canb.auug.org.au>
-Content-Type: text/plain; charset=windows-1252
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Received: by 2002:ac9:27ee:0:0:0:0:0 with HTTP; Sun, 28 Jun 2020 10:46:15
+ -0700 (PDT)
+Reply-To: mrjohnscottyounger35@gmail.com
+From:   John Scott Younger <mrszahraalkami@gmail.com>
+Date:   Sun, 28 Jun 2020 18:46:15 +0100
+Message-ID: <CALQpPg30nAHHtUyi_G5mCvJ6ntraDa3A=oR7H3f5LumSg+StqA@mail.gmail.com>
+Subject: Your attention to this news update.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/26/20 11:12 PM, Stephen Rothwell wrote:
-> Hi Jens,
-> 
-> On Fri, 26 Jun 2020 20:25:31 -0600 Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Right, but that's what git format-patch does when the line is long.
-> 
-> I just tested, and "git format-patch" (for me) does *not* split those lines.
-
-Huh, I could have sworn it's done that for me in the past, just like it
-splits the Subject: line into multiple lines as well (that I just did
-verify that it still does).
-
 -- 
-Jens Axboe
+Your attention to this news update.
 
+The report / analysis received from our correspondence shows that you
+have NOT received your PAYMENT, due to administrative injustice from
+unpatriotic and uncivil payment officials. Following the resolution of
+the U.S Department of State, you are mandated to kindly reinstate your
+fund acquisition details for accreditation.
+
+Sequel to the joint /collaborative effort by United Nations and US
+Department of State, to review, nullify and release all STOP ORDER on
+beneficiary transferred sum and consignment HELD at custom port
+authorities. At this juncture, you are advised to forward information
+of agencies that has put a HOLD on your consignment or STOP ORDER on
+your transferred sum.
+
+This office is commission to investigate/rectify ISSUES affecting
+beneficiaries whose payment is HELD/STOP unjustly with the intent of
+demanding un-official fees/levies. Be informed that all administrative
+injustice imposed on beneficiaries by some dubious person(s) has come
+to the knowledge of oversight committee of United Nations and US
+Department of State.
+
+Thus our objective is to resolve all challenges facing release of your
+payment. Therefore get back to my office with the required information
+for assessment.
+
+Our in service,
+
+John Scott Younger
+Human Right Activist
+Tel:- + 44 770 002 8251

@@ -2,65 +2,66 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F9620D2F1
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 21:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259C120D662
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 22:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728964AbgF2SyD (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 14:54:03 -0400
-Received: from fieldses.org ([173.255.197.46]:50392 "EHLO fieldses.org"
+        id S1731054AbgF2TTb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 15:19:31 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:59760 "EHLO fornost.hmeau.com"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1729205AbgF2SyC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:54:02 -0400
-Received: by fieldses.org (Postfix, from userid 2815)
-        id 6DA097AEF; Mon, 29 Jun 2020 14:53:59 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 fieldses.org 6DA097AEF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fieldses.org;
-        s=default; t=1593456839;
-        bh=9XJ9VxQWwlxsT+F/M9dETph4iM5G18Tn6CLcQzWV/sU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=e7yyWnk6AGhuKFpEIuAurEOCqZNusp5gYB9AIsu4DL3I7Rql9Tir1QZZuwzvRbm8F
-         +4fWJlEq38nHSusrh0u7hWmT3E8dfqfTl/kbcuFTuOKitlAH8NBOTMUS98F+nqKCqH
-         XOefB6ESQxFknvJeOvT266EnForDSORL8GFDkFaU=
-Date:   Mon, 29 Jun 2020 14:53:59 -0400
-From:   "J. Bruce Fields" <bfields@fieldses.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: Fixes tag needs some work in the nfsd tree
-Message-ID: <20200629185359.GC2056@fieldses.org>
-References: <20200627090317.48bf2578@canb.auug.org.au>
+        id S1730700AbgF2TT3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Jun 2020 15:19:29 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1jpoHV-0003h7-On; Mon, 29 Jun 2020 17:32:46 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Mon, 29 Jun 2020 17:32:45 +1000
+Date:   Mon, 29 Jun 2020 17:32:45 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        "Steven Rostedt (VMware)" <rostedt@goodmis.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] lockdep: Move list.h inclusion into lockdep.h
+Message-ID: <20200629073245.GA30001@gondor.apana.org.au>
+References: <20200621131554.5a662afe@canb.auug.org.au>
+ <20200623102655.6d16e610@canb.auug.org.au>
+ <20200623121637.GA8444@alley>
+ <20200623121937.GA9671@gondor.apana.org.au>
+ <20200623142858.GB8444@alley>
+ <20200624124212.GA17350@gondor.apana.org.au>
+ <20200625101119.GG8444@alley>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200627090317.48bf2578@canb.auug.org.au>
-User-Agent: Mutt/1.5.21 (2010-09-15)
+In-Reply-To: <20200625101119.GG8444@alley>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Sat, Jun 27, 2020 at 09:03:17AM +1000, Stephen Rothwell wrote:
-> Hi all,
+On Thu, Jun 25, 2020 at 12:11:19PM +0200, Petr Mladek wrote:
+>
+> It works with allmodconfig here, so feel free to use:
 > 
-> In commit
+> Tested-by: Petr Mladek <pmladek@suse.com>
 > 
->   886c4fe8bdff ("nfsd4: fix nfsdfs reference count loop")
-> 
-> Fixes tag
-> 
->   Fixes: 2c830dd720 ("nfsd: persist nfsd filesystem across mounts")
-> 
-> has these problem(s):
-> 
->   - SHA1 should be at least 12 digits long
+> Of course, it does not have much value. There might still be another
+> configuration or architecture that does not work but I would leave
+> this for test bots.
 
-OK, should be fixed.--b.
+Thanks Petr!
 
->     Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
->     or later) just making sure it is not set (or set to "auto").
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
+Peter Z, could you please apply this patch on top of the existing
+one in tip/locking/header?
 
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

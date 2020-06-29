@@ -2,267 +2,127 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6422C20CB5F
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 03:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E94720D18F
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 20:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726395AbgF2BPI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 28 Jun 2020 21:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726229AbgF2BPH (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 28 Jun 2020 21:15:07 -0400
-Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1B4C03E979;
-        Sun, 28 Jun 2020 18:15:07 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49w8fs1NVHz9sSF;
-        Mon, 29 Jun 2020 11:15:00 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593393303;
-        bh=/FVAuqzG/l6SWBWuDRhHdwt3AqyH08kGrMNSCgu01RM=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Eojb8Pg7o/JUJ9APyHj7hP9Vmp+wA+XjBCKebmMJFNHwbXAKqDTgi0yUmN4xaoUzM
-         dCQPS37de1yODf6DGMExgiI1NBDGZS46OdU/XcFNr4273TjjWAoYPQx4h7aZEFlAnm
-         q0jWg5wpR8ajQcz3f9lef2WVyx3ca2XwHrW6I9ZQQLMK4OQjW+kmRKANd8lBHYHK+M
-         6c0r9OtlkM5DMeEludWjszIbJLXsUvYIFM55YA4WQmJBuFFh21sbKsQWOT1HFfAc5F
-         PVe/sjR7kcfJqLjXcU6wyAmY+ccupyX+LOy7A8qrVkfkGGRSJ0tvswziMYVCkb4xTM
-         dAs6G9vG2ZXLQ==
-Date:   Mon, 29 Jun 2020 11:14:58 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+        id S1729001AbgF2SmL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 14:42:11 -0400
+Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:56949 "EHLO
+        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
+        by vger.kernel.org with ESMTP id S1728020AbgF2SmK (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Jun 2020 14:42:10 -0400
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 34EB0B40;
+        Mon, 29 Jun 2020 02:23:45 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 29 Jun 2020 02:23:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=fm1; bh=62elEdlP6x2ddcxnJcAEZnSvZ9H
+        SDNzcszxZZAT5pX4=; b=qJAG6HdHGWfCTzYDdMelv5U2v6p5Kcn4/vgR8L5/Yq6
+        4qAXeCitm6wCl5ThMVa4CCT3RKMIxa7O76xkLKesiLGvyaaGJgxhHqbNcrvxlRj6
+        KLDVakdV8H7OJWFdR/nRTk1O8MwYWsNhV+GBtmzDnAn+qcJuC6LYEnf5CWFZ9WTj
+        py6z6h0CaOp1wYUOUAO7nXJ9poJziWmUKRMpXo9tBGQ7nTTIBEf16dTWRxaE9+zM
+        eTLUluJq53Q5reaOnzK2Tuq9LTAIQlU82CCiGw67fDdWKzrCek11L0YoSUHzJY3o
+        CQQe7eMSN+Jhh47NDkVhdCg5f7U9/mS2CLSueGiZoNA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:content-type:date:from:in-reply-to
+        :message-id:mime-version:references:subject:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=62elEd
+        lP6x2ddcxnJcAEZnSvZ9HSDNzcszxZZAT5pX4=; b=s/Dnl0lEXb6qTuQBzdKkhN
+        +SpNL8nuLs6ePUuNnpcgngK3KIM5dQVkOQg79k1BjzTfe1/TPQstYMoqc03WxX0A
+        DLqJHikNS5o0xBkFJuoTTCr0HzOtcauTWXYbqQsLUQafmBNereP8ruQeWiKgAqxX
+        ilEg5JoJmM4n0Q4/Huty+J/9lCCLKxxTmkrMatwG3yTtUk4hjI3+WNr9AmM6nZch
+        afNg2v8ARGLOFuh9oCY/TDT/9AkpodyrlDfdeT3IjeSBECLI0ssNXIrpYwcXj0Aq
+        NVkqXws5hBSx8/TAMRkJ+FWDQiATvsq3DGC4lxJrGFhuvpAjwelLozWlxknVVUow
+        ==
+X-ME-Sender: <xms:8Ij5XgqS8VjhlYXoagASF8q1oM12XCVA90BptRe5Urj0NWA_JbGNNw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudeljedguddutdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
+    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
+    fedrkeeirdekledruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:8Ij5XmpGPn0hdLuQ9mmeGGVhmCGBFyFhYNUFwlaWma8oitWFcQ7PFw>
+    <xmx:8Ij5XlOP3xP4NRVNB3K315rHsG-ECyNagkqTiGycebKepFlK5MuJug>
+    <xmx:8Ij5Xn4EXLDqTxzfwPuTHxx_1AG-3LmIw0Lk-ZOeCl_Yjx1B8fykwA>
+    <xmx:8Ij5XsgjItYgHuMOcCRTBo2Cbn40xwk_HBsRBwZ0yZR5O_3Byo3abw>
+Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
+        by mail.messagingengine.com (Postfix) with ESMTPA id 048683067C47;
+        Mon, 29 Jun 2020 02:23:43 -0400 (EDT)
+Date:   Mon, 29 Jun 2020 08:23:33 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nirmoy Das <nirmoy.aiemd@gmail.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Dave Airlie <airlied@linux.ie>,
-        James Jones <jajones@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
-Message-ID: <20200629111458.1661446b@canb.auug.org.au>
+        Peter Chen <peter.chen@nxp.com>
+Subject: Re: linux-next: manual merge of the usb tree with the usb.current
+ tree
+Message-ID: <20200629062333.GA223877@kroah.com>
+References: <20200626132910.73031f1f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KXcAxX3IKFywdKDZi_I8H8E";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200626132910.73031f1f@canb.auug.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/KXcAxX3IKFywdKDZi_I8H8E
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Jun 26, 2020 at 01:29:10PM +1000, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the usb tree got a conflict in:
+> 
+>   drivers/usb/cdns3/ep0.c
+> 
+> between commit:
+> 
+>   c0e2a0341cd8 ("usb: cdns3: ep0: fix the test mode set incorrectly")
+> 
+> from the usb.current tree and commit:
+> 
+>   62fb45d317c5 ("USB: ch9: add "USB_" prefix in front of TEST defines")
+> 
+> from the usb tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
+> -- 
+> Cheers,
+> Stephen Rothwell
+> 
+> diff --cc drivers/usb/cdns3/ep0.c
+> index 61ec5bb2b0ca,04a522f5ae58..000000000000
+> --- a/drivers/usb/cdns3/ep0.c
+> +++ b/drivers/usb/cdns3/ep0.c
+> @@@ -327,12 -327,11 +327,12 @@@ static int cdns3_ep0_feature_handle_dev
+>   		if (!set || (tmode & 0xff) != 0)
+>   			return -EINVAL;
+>   
+>  -		switch (tmode >> 8) {
+>  +		tmode >>= 8;
+>  +		switch (tmode) {
+> - 		case TEST_J:
+> - 		case TEST_K:
+> - 		case TEST_SE0_NAK:
+> - 		case TEST_PACKET:
+> + 		case USB_TEST_J:
+> + 		case USB_TEST_K:
+> + 		case USB_TEST_SE0_NAK:
+> + 		case USB_TEST_PACKET:
+>   			cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
+>   					       USB_CMD_STMODE |
+>   					       USB_STS_TMODE_SEL(tmode - 1));
 
-Hi all,
+This is now resolved in my tree, thanks!
 
-Today's linux-next merge of the drm-misc tree got conflicts in:
-
-  drivers/gpu/drm/nouveau/dispnv04/crtc.c
-  drivers/gpu/drm/nouveau/dispnv04/overlay.c
-  drivers/gpu/drm/nouveau/dispnv50/base507c.c
-  drivers/gpu/drm/nouveau/dispnv50/wndw.c
-  drivers/gpu/drm/nouveau/nouveau_dmem.c
-  drivers/gpu/drm/nouveau/nouveau_fbcon.c
-
-between commits:
-
-  183405879255 ("drm/nouveau/kms: Remove field nvbo from struct nouveau_fra=
-mebuffer")
-  c586f30bf74c ("drm/nouveau/kms: Add format mod prop to base/ovly/nvdisp")
-  1d7f940c3a16 ("drm/nouveau/nouveau/hmm: fix nouveau_dmem_chunk allocation=
-s")
-
-from Linus' tree and commit:
-
-  0dc9b286b8d2 ("drm/nouveau: don't use ttm bo->offset v3")
-
-from the drm-misc tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/nouveau/dispnv04/crtc.c
-index 640738f3196c,cc6ab3c2eec7..000000000000
---- a/drivers/gpu/drm/nouveau/dispnv04/crtc.c
-+++ b/drivers/gpu/drm/nouveau/dispnv04/crtc.c
-@@@ -840,12 -839,13 +840,12 @@@ nv04_crtc_do_mode_set_base(struct drm_c
-  	 */
-  	if (atomic) {
-  		drm_fb =3D passed_fb;
- -		fb =3D nouveau_framebuffer(passed_fb);
-  	} else {
-  		drm_fb =3D crtc->primary->fb;
- -		fb =3D nouveau_framebuffer(crtc->primary->fb);
-  	}
- =20
- -	nv_crtc->fb.offset =3D fb->nvbo->offset;
- +	nvbo =3D nouveau_gem_object(drm_fb->obj[0]);
-- 	nv_crtc->fb.offset =3D nvbo->bo.offset;
-++	nv_crtc->fb.offset =3D nvbo->offset;
- =20
-  	if (nv_crtc->lut.depth !=3D drm_fb->format->depth) {
-  		nv_crtc->lut.depth =3D drm_fb->format->depth;
-diff --cc drivers/gpu/drm/nouveau/dispnv04/overlay.c
-index 6248fd1dbc6d,9529bd9053e7..000000000000
---- a/drivers/gpu/drm/nouveau/dispnv04/overlay.c
-+++ b/drivers/gpu/drm/nouveau/dispnv04/overlay.c
-@@@ -152,7 -150,7 +152,7 @@@ nv10_update_plane(struct drm_plane *pla
-  	nvif_mask(dev, NV_PCRTC_ENGINE_CTRL + soff2, NV_CRTC_FSEL_OVERLAY, 0);
- =20
-  	nvif_wr32(dev, NV_PVIDEO_BASE(flip), 0);
-- 	nvif_wr32(dev, NV_PVIDEO_OFFSET_BUFF(flip), nvbo->bo.offset);
- -	nvif_wr32(dev, NV_PVIDEO_OFFSET_BUFF(flip), nv_fb->nvbo->offset);
-++	nvif_wr32(dev, NV_PVIDEO_OFFSET_BUFF(flip), nvbo->offset);
-  	nvif_wr32(dev, NV_PVIDEO_SIZE_IN(flip), src_h << 16 | src_w);
-  	nvif_wr32(dev, NV_PVIDEO_POINT_IN(flip), src_y << 16 | src_x);
-  	nvif_wr32(dev, NV_PVIDEO_DS_DX(flip), (src_w << 20) / crtc_w);
-@@@ -174,7 -172,7 +174,7 @@@
-  	if (format & NV_PVIDEO_FORMAT_PLANAR) {
-  		nvif_wr32(dev, NV_PVIDEO_UVPLANE_BASE(flip), 0);
-  		nvif_wr32(dev, NV_PVIDEO_UVPLANE_OFFSET_BUFF(flip),
-- 			nvbo->bo.offset + fb->offsets[1]);
- -			nv_fb->nvbo->offset + fb->offsets[1]);
-++			nvbo->offset + fb->offsets[1]);
-  	}
-  	nvif_wr32(dev, NV_PVIDEO_FORMAT(flip), format | fb->pitches[0]);
-  	nvif_wr32(dev, NV_PVIDEO_STOP, 0);
-@@@ -399,7 -396,7 +399,7 @@@ nv04_update_plane(struct drm_plane *pla
- =20
-  	for (i =3D 0; i < 2; i++) {
-  		nvif_wr32(dev, NV_PVIDEO_BUFF0_START_ADDRESS + 4 * i,
-- 			  nvbo->bo.offset);
- -			  nv_fb->nvbo->offset);
-++			  nvbo->offset);
-  		nvif_wr32(dev, NV_PVIDEO_BUFF0_PITCH_LENGTH + 4 * i,
-  			  fb->pitches[0]);
-  		nvif_wr32(dev, NV_PVIDEO_BUFF0_OFFSET + 4 * i, 0);
-diff --cc drivers/gpu/drm/nouveau/dispnv50/base507c.c
-index 511258bfbcbc,b60aa987d7b4..000000000000
---- a/drivers/gpu/drm/nouveau/dispnv50/base507c.c
-+++ b/drivers/gpu/drm/nouveau/dispnv50/base507c.c
-@@@ -274,9 -273,9 +274,9 @@@ base507c_new_(const struct nv50_wndw_fu
-  	if (*pwndw =3D wndw, ret)
-  		return ret;
- =20
- -	ret =3D nv50_dmac_create(&drm->client.device, &disp->disp->object,
- +	ret =3D nv50_dmac_create(&drm->client.device, &disp->disp.object,
-  			       &oclass, head, &args, sizeof(args),
-- 			       disp50->sync->bo.offset, &wndw->wndw);
- -			       disp->sync->offset, &wndw->wndw);
-++			       disp50->sync->offset, &wndw->wndw);
-  	if (ret) {
-  		NV_ERROR(drm, "base%04x allocation failed: %d\n", oclass, ret);
-  		return ret;
-diff --cc drivers/gpu/drm/nouveau/dispnv50/wndw.c
-index 99b9b681736d,ee0fd817185e..000000000000
---- a/drivers/gpu/drm/nouveau/dispnv50/wndw.c
-+++ b/drivers/gpu/drm/nouveau/dispnv50/wndw.c
-@@@ -521,12 -507,11 +521,12 @@@ nv50_wndw_prepare_fb(struct drm_plane *
-  			return PTR_ERR(ctxdma);
-  		}
- =20
- -		asyw->image.handle[0] =3D ctxdma->object.handle;
- +		if (asyw->visible)
- +			asyw->image.handle[0] =3D ctxdma->object.handle;
-  	}
- =20
- -	asyw->state.fence =3D dma_resv_get_excl_rcu(fb->nvbo->bo.base.resv);
- -	asyw->image.offset[0] =3D fb->nvbo->offset;
- +	asyw->state.fence =3D dma_resv_get_excl_rcu(nvbo->bo.base.resv);
-- 	asyw->image.offset[0] =3D nvbo->bo.offset;
-++	asyw->image.offset[0] =3D nvbo->offset;
- =20
-  	if (wndw->func->prepare) {
-  		asyh =3D nv50_head_atom_get(asyw->state.state, asyw->state.crtc);
-diff --cc drivers/gpu/drm/nouveau/nouveau_dmem.c
-index e5c230d9ae24,f13086a32f0f..000000000000
---- a/drivers/gpu/drm/nouveau/nouveau_dmem.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_dmem.c
-@@@ -75,32 -72,25 +75,32 @@@ struct nouveau_dmem_migrate=20
- =20
-  struct nouveau_dmem {
-  	struct nouveau_drm *drm;
- -	struct dev_pagemap pagemap;
-  	struct nouveau_dmem_migrate migrate;
- -	struct list_head chunk_free;
- -	struct list_head chunk_full;
- -	struct list_head chunk_empty;
- +	struct list_head chunks;
-  	struct mutex mutex;
- +	struct page *free_pages;
- +	spinlock_t lock;
-  };
- =20
- -static inline struct nouveau_dmem *page_to_dmem(struct page *page)
- +static struct nouveau_dmem_chunk *nouveau_page_to_chunk(struct page *page)
-  {
- -	return container_of(page->pgmap, struct nouveau_dmem, pagemap);
- +	return container_of(page->pgmap, struct nouveau_dmem_chunk, pagemap);
- +}
- +
- +static struct nouveau_drm *page_to_drm(struct page *page)
- +{
- +	struct nouveau_dmem_chunk *chunk =3D nouveau_page_to_chunk(page);
- +
- +	return chunk->drm;
-  }
- =20
- -static unsigned long nouveau_dmem_page_addr(struct page *page)
- +unsigned long nouveau_dmem_page_addr(struct page *page)
-  {
- -	struct nouveau_dmem_chunk *chunk =3D page->zone_device_data;
- -	unsigned long idx =3D page_to_pfn(page) - chunk->pfn_first;
- +	struct nouveau_dmem_chunk *chunk =3D nouveau_page_to_chunk(page);
- +	unsigned long off =3D (page_to_pfn(page) << PAGE_SHIFT) -
- +				chunk->pagemap.res.start;
- =20
-- 	return chunk->bo->bo.offset + off;
- -	return (idx << PAGE_SHIFT) + chunk->bo->offset;
-++	return chunk->bo->offset + off;
-  }
- =20
-  static void nouveau_dmem_page_free(struct page *page)
-diff --cc drivers/gpu/drm/nouveau/nouveau_fbcon.c
-index 3d11b84d4cf9,1341c6fca3ed..000000000000
---- a/drivers/gpu/drm/nouveau/nouveau_fbcon.c
-+++ b/drivers/gpu/drm/nouveau/nouveau_fbcon.c
-@@@ -393,7 -393,7 +393,7 @@@ nouveau_fbcon_create(struct drm_fb_help
- =20
-  	/* To allow resizeing without swapping buffers */
-  	NV_INFO(drm, "allocated %dx%d fb: 0x%llx, bo %p\n",
-- 		fb->width, fb->height, nvbo->bo.offset, nvbo);
- -		fb->base.width, fb->base.height, fb->nvbo->offset, nvbo);
-++		fb->width, fb->height, nvbo->offset, nvbo);
- =20
-  	vga_switcheroo_client_fb_set(dev->pdev, info);
-  	return 0;
-
---Sig_/KXcAxX3IKFywdKDZi_I8H8E
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl75QJIACgkQAVBC80lX
-0GyMmQgAk3dOardj5yND6O40hzhbuNxH3G5gY8vnejO7dT8B4WWN+nPdlj38sRqd
-Mw0ZZjJTl7EqNAbQIiq2HBVk2EmF7NfdGSzztiDtsPtQZqQDdbEKJ7h4zI4l1J+a
-HA5YQETJ2ArPHmSrvpceTGoUnC4DcNfRmUMFX+ZkE/ynYrG3Y7SvzRw9ArL1fQZJ
-dqv1C6Fhk7nDW821rqV8wumG4Q+FyrwVc94xVFi6LFgq9hmGQy3SpWrM9KEHCY8y
-zOgG27GSyqgJM19pDKkoF0xGDvmo8E5vHXif+dBnAgZhWiJAyVppkw5u3aByGj0o
-TQd8uDSUneldSr+DbO6VrqTYg2lEzg==
-=eFwK
------END PGP SIGNATURE-----
-
---Sig_/KXcAxX3IKFywdKDZi_I8H8E--
+greg k-h

@@ -2,257 +2,94 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9C820E0FD
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 23:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A72820DFB7
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 23:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730871AbgF2Uvb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 16:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43360 "EHLO
+        id S2389560AbgF2UjM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 16:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731395AbgF2TN2 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 15:13:28 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4030BC08C5DE
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 21:06:24 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id l63so7681318pge.12
-        for <linux-next@vger.kernel.org>; Sun, 28 Jun 2020 21:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=6gd2HdyPBHO72RsHYRYzMwAbLO2ejuHKnye5qmnNW78=;
-        b=wbNvX3u+nmIrUitgvQ1V8fJNmdwSAYBeNfQpLyAmMjVX2bCRGyx7pxWTohKvXlNJZm
-         GnoEfF7eNVa69c0AmKxyjgFQRzTc8MedK60Amxwgww3QsG+gmdmOLZ6fxGmSAk5IgBP/
-         qhIxtWB7Sfy0KsqvZsWHHIrt79CTkAiba7TxuEKh+82PMcd0pZ3d2/ezBVCAK08SSdBn
-         P6bX0zxuV2GFYj0i2jWGDKCxWulGX5LD/NZmbwS1FuLfX7Sh2HhKwhMFfZuw0B/mi/Hm
-         9v/k9tVcvw9TySODbKaQo9ubldcvhmEXREY0kMaNYLeowfDxpZbbVIzkKsbxIm3n5HdM
-         YQiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=6gd2HdyPBHO72RsHYRYzMwAbLO2ejuHKnye5qmnNW78=;
-        b=dahi1JngPOrrO++oi6idgyhYUYK/3Z7hT9vWZJHWyZd5sJqqSVbWFhZpQNpDXKkDOf
-         2SSjNzFncrvJ3aL7aEgn7XX240pG0xNHAXvI/ooc618z62hjQPgnaCAuqty0UHVCUhMu
-         2/CkQRK6fAm2noUW3cwT18logSyCGBQ5I6+Xa1bTcOzab+IMvDr6ecp1sSlqXSdtIPQ5
-         uH8Av649SVLdG6JhjoMhIis/qg02CYrvIY9pTFSnGQuUB7b4m8csSKvwkexfHAw/BzJw
-         3AFq2GHhxFP0mDsUL9ruq6auOAnfSR4I0XfBSkET8rUxGf5K2GYXI/sGA2c8Cquw9GZP
-         UYUA==
-X-Gm-Message-State: AOAM532LzJOfzoFJQnGudOQ5L31VUgOyr+WxXOciH7f0Axi18Jw2qapz
-        W8ti4Hagx3jeD18r4Bq4bAc4YF5BS3Y=
-X-Google-Smtp-Source: ABdhPJwXpQLgv0yg2uP6Z3gkTsUdeuKqKe1M66wKgE3gUPgHgDwhw7Eda+3gbBaV6bOeUbXL4JpRPw==
-X-Received: by 2002:a63:1c65:: with SMTP id c37mr8629191pgm.118.1593403582853;
-        Sun, 28 Jun 2020 21:06:22 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d16sm500277pfo.156.2020.06.28.21.06.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2020 21:06:22 -0700 (PDT)
-Message-ID: <5ef968be.1c69fb81.cc481.22e3@mx.google.com>
-Date:   Sun, 28 Jun 2020 21:06:22 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S1731719AbgF2TOO (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 15:14:14 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182D1C0A54DA;
+        Mon, 29 Jun 2020 00:22:55 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wJqD1vfGz9s6w;
+        Mon, 29 Jun 2020 17:22:48 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593415372;
+        bh=Y8lWOEK/53C9I4Sfg1srm4rd+6FuXVd7suMPKS3K/AE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u2ONsXPwzuhbHLEdon8zpWLoAEe+drArcpjk8AR4yg1ziHp6a5etLr4VjPHOX3x+b
+         vemvXPX4kTVELNrx6AKxgTNFZySr5nUyMsi/i5T8ozdakZnV84G2CnkqrSQCt6r12C
+         7Cbk3Qf6ymjb5xSVoJOhDztl/4LWQ4pM2b3BVU1K32DFnwqL7IVxHsU3g5GtiTMoFZ
+         dNkME/W4WIWcY6kAN7bv0s25Q/S2yhjxR7n/q99W4x/gGVmXlrSgHQoQjM2AO2apOE
+         8Z2fiHszm1zp0GZyzXlRNb+1nsAzEY7REVzD6jmjaGOU7wer5YJ4cFcc/qqJ8CUqcH
+         KrNFWZDmQXjFw==
+Date:   Mon, 29 Jun 2020 17:22:40 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Naoya Horiguchi <nao.horiguchi@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, cai@lca.pw,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm <linux-mm@kvack.org>, Michal Hocko <mhocko@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>, osalvador@suse.de,
+        Tony Luck <tony.luck@intel.com>, david@redhat.com,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        zeil@yandex-team.ru, naoya.horiguchi@nec.com,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: [PATCH v3 13/15] mm,hwpoison: Refactor soft_offline_huge_page
+ and __soft_offline_page
+Message-ID: <20200629172240.0d01e161@canb.auug.org.au>
+In-Reply-To: <20200628065409.GA546944@u2004>
+References: <20200624150137.7052-1-nao.horiguchi@gmail.com>
+        <20200624150137.7052-14-nao.horiguchi@gmail.com>
+        <CA+G9fYvopXWr+Y34xz2NVv17yeFs7fuKnJO_iUMnfCwaDNRXYg@mail.gmail.com>
+        <20200628065409.GA546944@u2004>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc3-164-g155c91ddae03
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 185 runs,
- 5 regressions (v5.8-rc3-164-g155c91ddae03)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/BfS5bgw7heJ6LcYTXdfMhhS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 185 runs, 5 regressions (v5.8-rc3-164-g155c91d=
-dae03)
+--Sig_/BfS5bgw7heJ6LcYTXdfMhhS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi Naoya,
 
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
-         | 4/5    =
+On Sun, 28 Jun 2020 15:54:09 +0900 Naoya Horiguchi <nao.horiguchi@gmail.com=
+> wrote:
+>
+> Andrew, could you append this diff on top of this series on mmotm?
 
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-baylibre | gcc-8    | defconfig =
-         | 0/1    =
+I have added that patch to linux-next today.
 
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig =
-         | 0/1    =
+--=20
+Cheers,
+Stephen Rothwell
 
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig | 3/5    =
+--Sig_/BfS5bgw7heJ6LcYTXdfMhhS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig | 3/5    =
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl75lsAACgkQAVBC80lX
+0GwqeggApOE4cVjf13CqeP/+MOp6uv0Ady+E4kdUraJ3c9PRp/PpwaZIztKVFB+1
+vFBhuZgj7isRK2jdVPjSACm4bNhkxYMTk9pDcdbyMLdsHP2saXrgllXhqUlQPIut
+Ee89TYrL7zLfrEoRgw435hplAq2qzpLoGGgO9Xfpbuu4oFqz7sLunwfoTtVlS58c
+nrVO6cr50tNkZRhcWpMiAlNlLZyNSY595NxMFayksucylS9eBAdPmGPHEsdlOYmx
+fsA7jwDB32shM7cngHnVr3xGp2p2kBN1rrxyE9QV4ykupil0I/zi3Fo5UKgSUqcV
+Z9f+NW5y3GIQg2WrcaI2y4UU7nhyqA==
+=TmpX
+-----END PGP SIGNATURE-----
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.8-rc3-164-g155c91ddae03/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.8-rc3-164-g155c91ddae03
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      155c91ddae0336dc69226ccf78e46fba0fa19cc3 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
-         | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef936f476bf03099085bb4a
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef936f476bf0309=
-9085bb4d
-      failing since 4 days (last pass: v5.8-rc2-295-g0780e0d6abd0, first fa=
-il: v5.8-rc2-376-g1c7e639860a8)
-      1 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-meson-g12b-a311d-khadas-vim3 | arm64 | lab-baylibre | gcc-8    | defconfig =
-         | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef9378165014b67ed85bb55
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-a311=
-d-khadas-vim3.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-baylibre/baseline-meson-g12b-a311=
-d-khadas-vim3.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ef9378165014b67ed85b=
-b56
-      new failure (last pass: v5.8-rc2-535-g3ea20606a997) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig =
-         | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef9379e482434bef985bb18
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
-pi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
-pi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5ef9379e482434bef985b=
-b19
-      new failure (last pass: v5.8-rc1-339-g3b15f0074015) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef92dac379a46b7c485bb2a
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
--v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
--v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef92dac379a46b7=
-c485bb2d
-      new failure (last pass: v5.8-rc2-453-gf59148f15013)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | results
------------------------------+-------+--------------+----------+-----------=
----------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5ef92d96379a46b7c485bb19
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-16=
-4-g155c91ddae03/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef92d96379a46b7=
-c485bb1c
-      new failure (last pass: v5.8-rc2-453-gf59148f15013)
-      2 lines =20
+--Sig_/BfS5bgw7heJ6LcYTXdfMhhS--

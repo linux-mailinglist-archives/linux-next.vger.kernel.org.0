@@ -2,86 +2,111 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C1020E155
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 23:58:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6AE20E27E
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 00:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1730812AbgF2Uyb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 16:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S1731086AbgF2VGE (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 17:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1731313AbgF2TNT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 15:13:19 -0400
-Received: from casper.infradead.org (unknown [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3DBC030F2B;
-        Mon, 29 Jun 2020 09:44:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Date:Message-ID:Subject:From:Cc:To:Sender:Reply-To:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=oWEN2HrEZzshPalh9h22/5jMAlzNjCxPZcOlTdfCeRk=; b=FTyujLINoEFwJfBDDiZffiOYsS
-        BOZP0lNNqNQYgm81MQzrN1dTB2zSgzMXpMKBMzAKqBNSUZjhWXDFzD5ix5SK/nr78EDMCww3KCtYB
-        FVZUrBmG/cFO4/WkHupIYCl2+9csBo+VKzxgGjSUHP5Hl7/tiAh/Rt6pXem1fYakk7QoB7Y5Lr0Bt
-        0f3Aip0bm2DWmWmW+X3rbSponeDdqXM8GfhOQVcue2706h9IT/uj1yo/G4cNfkKlcYRcA9KnQnkvB
-        ++WwoWBDi12ybggpNRY2O1AVJGlouzsl1v5yyiS/nOpk7i4e6bQDZlDQN+onRwDuINNv4lY0WR85S
-        c8vgyHMw==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jpwsu-00016O-1q; Mon, 29 Jun 2020 16:43:56 +0000
-To:     LKML <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-From:   Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH -next] <linux/of.h>: add stub for of_get_next_parent() to fix
- qcom build error
-Message-ID: <ce0d7561-ff93-d267-b57a-6505014c728c@infradead.org>
-Date:   Mon, 29 Jun 2020 09:43:52 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        with ESMTP id S1731080AbgF2TMm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 15:12:42 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5190C08E9A9;
+        Sun, 28 Jun 2020 22:43:10 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wGcD0QQCz9sQt;
+        Mon, 29 Jun 2020 15:43:07 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593409388;
+        bh=0gQlwqc7+1RNpQwLvCTErzn5lDh79VUZyyhucRciNrU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bFsvxMeG1BWfYgKBPbuEgrIA6YfnfKaD/ACoD8szYUP0+A1CmwmtCeSUuPkvUxw72
+         8rnEOa2Y3PzEidUb6FTp0qTmwopesnY3cNsIVNrsk6CCMTUq72SqBEd07FmQdHnCa0
+         361bn09FBtf7nXmlOw9ridBYllRrCdgLf5ua1t0vAd6JVLViSPHU4sfOKQoIdsCs3o
+         Lp8qAKoLr+WbIbvHhu9sPrAGE2doU0ZQe61QJ+GRIvA5yLYE/h2DurQF4LbMxxuIcj
+         WtN0qAUjec9fPcwOCQPhViozll9Fi+ZngwFJCYl05kCJwYIxZxI1ZQZpJgiL6HtFhH
+         K+LuXz/7Ed9vQ==
+Date:   Mon, 29 Jun 2020 15:43:05 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@google.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>
+Subject: linux-next: manual merge of the kspp tree with Linus' tree
+Message-ID: <20200629154305.0067d113@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/O=BM_rb4ZsTj+JaxRLGGYJ/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+--Sig_/O=BM_rb4ZsTj+JaxRLGGYJ/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fix a (COMPILE_TEST) build error when CONFIG_OF is not set/enabled
-by adding a stub for of_get_next_parent().
+Hi all,
 
-../drivers/soc/qcom/qcom-geni-se.c:819:11: error: implicit declaration of function 'of_get_next_parent'; did you mean 'of_get_parent'? [-Werror=implicit-function-declaration]
-../drivers/soc/qcom/qcom-geni-se.c:819:9: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+Today's linux-next merge of the kspp tree got a conflict in:
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Frank Rowand <frowand.list@gmail.com>
-Cc: devicetree@vger.kernel.org
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
----
- include/linux/of.h |    5 +++++
- 1 file changed, 5 insertions(+)
+  kernel/debug/kdb/kdb_io.c
 
---- linux-next-20200629.orig/include/linux/of.h
-+++ linux-next-20200629/include/linux/of.h
-@@ -630,6 +630,11 @@ static inline struct device_node *of_get
- 	return NULL;
- }
- 
-+static inline struct device_node *of_get_next_parent(struct device_node *node)
-+{
-+	return NULL;
-+}
-+
- static inline struct device_node *of_get_next_child(
- 	const struct device_node *node, struct device_node *prev)
- {
+between commit:
 
+  9d71b344f86f ("kdb: Re-factor kdb_printf() message write code")
 
+from Linus' tree and commit:
+
+  80b89ab785a4 ("treewide: Remove uninitialized_var() usage")
+
+from the kspp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc kernel/debug/kdb/kdb_io.c
+index 683a799618ad,af0a26a521eb..000000000000
+--- a/kernel/debug/kdb/kdb_io.c
++++ b/kernel/debug/kdb/kdb_io.c
+@@@ -591,7 -553,8 +591,7 @@@ int vkdb_printf(enum kdb_msgsrc src, co
+  	int this_cpu, old_cpu;
+  	char *cp, *cp2, *cphold =3D NULL, replaced_byte =3D ' ';
+  	char *moreprompt =3D "more> ";
+- 	unsigned long uninitialized_var(flags);
+ -	struct console *c;
++ 	unsigned long flags;
+ =20
+  	/* Serialize kdb_printf if multiple cpus try to write at once.
+  	 * But if any cpu goes recursive in kdb, just print the output,
+
+--Sig_/O=BM_rb4ZsTj+JaxRLGGYJ/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl75f2kACgkQAVBC80lX
+0Gzxpgf/ZeyGgu656e8xymIJkSQH5NvdjOL5cGTthZNwnQIhAuuVTYosa5pMSR/U
+pVjJJuxeBoJZyavka0ac9RCwg/FphoRF1FryhY+Y+UolTxqK+LGqxc9fjGeJCcFj
+NGPaiotQJxOsZdhXTz+8Kno/xq0f2fAYM04j192q0daE+3XEDUWx+CgmDGsKqTGV
+13Xb3bAtHeAiHDqcs8nHOfhkWJ8E+a0z3ORNDKKOVQx2Ui+rg5nEDngUch3QNg17
+jMONoW2KmEAlxwp7m5XJDGtYYt80A0KQ1q/057epW+8CJJDb9K3Uro1NhrSEzPDA
+oW3eV2QCFKAnFDagmlr/hRjAazMELQ==
+=zXMH
+-----END PGP SIGNATURE-----
+
+--Sig_/O=BM_rb4ZsTj+JaxRLGGYJ/--

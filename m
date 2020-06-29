@@ -2,127 +2,219 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E94720D18F
-	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 20:42:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94D1A20D47A
+	for <lists+linux-next@lfdr.de>; Mon, 29 Jun 2020 21:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729001AbgF2SmL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 14:42:11 -0400
-Received: from wout2-smtp.messagingengine.com ([64.147.123.25]:56949 "EHLO
-        wout2-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1728020AbgF2SmK (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Mon, 29 Jun 2020 14:42:10 -0400
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 34EB0B40;
-        Mon, 29 Jun 2020 02:23:45 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 29 Jun 2020 02:23:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm1; bh=62elEdlP6x2ddcxnJcAEZnSvZ9H
-        SDNzcszxZZAT5pX4=; b=qJAG6HdHGWfCTzYDdMelv5U2v6p5Kcn4/vgR8L5/Yq6
-        4qAXeCitm6wCl5ThMVa4CCT3RKMIxa7O76xkLKesiLGvyaaGJgxhHqbNcrvxlRj6
-        KLDVakdV8H7OJWFdR/nRTk1O8MwYWsNhV+GBtmzDnAn+qcJuC6LYEnf5CWFZ9WTj
-        py6z6h0CaOp1wYUOUAO7nXJ9poJziWmUKRMpXo9tBGQ7nTTIBEf16dTWRxaE9+zM
-        eTLUluJq53Q5reaOnzK2Tuq9LTAIQlU82CCiGw67fDdWKzrCek11L0YoSUHzJY3o
-        CQQe7eMSN+Jhh47NDkVhdCg5f7U9/mS2CLSueGiZoNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=62elEd
-        lP6x2ddcxnJcAEZnSvZ9HSDNzcszxZZAT5pX4=; b=s/Dnl0lEXb6qTuQBzdKkhN
-        +SpNL8nuLs6ePUuNnpcgngK3KIM5dQVkOQg79k1BjzTfe1/TPQstYMoqc03WxX0A
-        DLqJHikNS5o0xBkFJuoTTCr0HzOtcauTWXYbqQsLUQafmBNereP8ruQeWiKgAqxX
-        ilEg5JoJmM4n0Q4/Huty+J/9lCCLKxxTmkrMatwG3yTtUk4hjI3+WNr9AmM6nZch
-        afNg2v8ARGLOFuh9oCY/TDT/9AkpodyrlDfdeT3IjeSBECLI0ssNXIrpYwcXj0Aq
-        NVkqXws5hBSx8/TAMRkJ+FWDQiATvsq3DGC4lxJrGFhuvpAjwelLozWlxknVVUow
-        ==
-X-ME-Sender: <xms:8Ij5XgqS8VjhlYXoagASF8q1oM12XCVA90BptRe5Urj0NWA_JbGNNw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrudeljedguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepveeuhe
-    ejgfffgfeivddukedvkedtleelleeghfeljeeiueeggeevueduudekvdetnecukfhppeek
-    fedrkeeirdekledruddtjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:8Ij5XmpGPn0hdLuQ9mmeGGVhmCGBFyFhYNUFwlaWma8oitWFcQ7PFw>
-    <xmx:8Ij5XlOP3xP4NRVNB3K315rHsG-ECyNagkqTiGycebKepFlK5MuJug>
-    <xmx:8Ij5Xn4EXLDqTxzfwPuTHxx_1AG-3LmIw0Lk-ZOeCl_Yjx1B8fykwA>
-    <xmx:8Ij5XsgjItYgHuMOcCRTBo2Cbn40xwk_HBsRBwZ0yZR5O_3Byo3abw>
-Received: from localhost (83-86-89-107.cable.dynamic.v4.ziggo.nl [83.86.89.107])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 048683067C47;
-        Mon, 29 Jun 2020 02:23:43 -0400 (EDT)
-Date:   Mon, 29 Jun 2020 08:23:33 +0200
-From:   Greg KH <greg@kroah.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Chen <peter.chen@nxp.com>
-Subject: Re: linux-next: manual merge of the usb tree with the usb.current
- tree
-Message-ID: <20200629062333.GA223877@kroah.com>
-References: <20200626132910.73031f1f@canb.auug.org.au>
+        id S1730018AbgF2TIs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 15:08:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1730514AbgF2TCm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 15:02:42 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98ED7C030F26
+        for <linux-next@vger.kernel.org>; Mon, 29 Jun 2020 09:37:32 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id f2so7299571plr.8
+        for <linux-next@vger.kernel.org>; Mon, 29 Jun 2020 09:37:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=mPCZqkXpl/N5YSg1KZoyWv5XjwrxyARIg2fRs30tzSk=;
+        b=yJ+GlwJ/nsop5jVMsYLuQk8asioYwMbpLE9UWTcu9R5wORVQnwu2zs/8pnQSyfH23N
+         30FFM3dmM2Dkt5o4EfyQjWB0DK4x3wKaK+tA1IoMo0eCRZObcIUlPe8F0BO6AoFVHc+V
+         eE7Fh+qPAr9RAfz3Y5HgaZmiTZq/FIM5QFWV5m8JPFK0cM1fZChgwxl2vsLBViTsxF4T
+         avJ1MdoyGTqs3tJzxwe6VpSAHcho1zQjxzuvyhp2s7v71/yNhLetiX9NN+AIxu85RKQx
+         Gh7ksc5NzSxBAYyXUKKUwTJRll+c8Bp57MvgNwyxAaE9Mr09dpi+5SQqj7Bv3D7pcI7R
+         vo5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=mPCZqkXpl/N5YSg1KZoyWv5XjwrxyARIg2fRs30tzSk=;
+        b=Y4ydKlZSy0xAgQx2j1Ja4xvX6UKcPQ7nfMyTZJdfFe47MkUe8ylT1SQDCAIlzNpqZS
+         e0/Jkg8qGPg9E6Mi7/yKnisxwdTOiybnmRz2Q1Rf60H3pAH6PP79LrC5yoUbx0VkG72I
+         b5kWaozzyNKfy2HAG5VSlWika4ac3DvJXq2By7Z4757cluueZC1f3mtNIVkfBHw6fN7A
+         hre2C9DuCvmQBThlvzmWq7WlJ1jLnqiRiKNkiD8fshkN9IzB8kbhdHWM4lRYTj8joikH
+         bEdKLvyP8Zcittt4P6nEHvKkcMK667Zy6na81+noc38xEgX2uTU+VTD5VwaWHwCRFOLY
+         p6Gw==
+X-Gm-Message-State: AOAM533Nig/sdIpskxgMu/2jFCKpruNitRvHivgm8WTSiC/NtOyWwnDZ
+        ZBNuqYU5Lj6ZL5tj0A6PuUI5iLXGOk8=
+X-Google-Smtp-Source: ABdhPJwkrtY0O4mI+mAak3WkK6hf877KeC2phCy21KVNEah65R4HINKUf9Lfsot9SX2+UpW+4asyQQ==
+X-Received: by 2002:a17:90a:9606:: with SMTP id v6mr15765777pjo.110.1593448651755;
+        Mon, 29 Jun 2020 09:37:31 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m14sm259957pgn.83.2020.06.29.09.37.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2020 09:37:30 -0700 (PDT)
+Message-ID: <5efa18ca.1c69fb81.621a6.0ad8@mx.google.com>
+Date:   Mon, 29 Jun 2020 09:37:30 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200626132910.73031f1f@canb.auug.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200629
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master baseline: 195 runs, 4 regressions (next-20200629)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jun 26, 2020 at 01:29:10PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the usb tree got a conflict in:
-> 
->   drivers/usb/cdns3/ep0.c
-> 
-> between commit:
-> 
->   c0e2a0341cd8 ("usb: cdns3: ep0: fix the test mode set incorrectly")
-> 
-> from the usb.current tree and commit:
-> 
->   62fb45d317c5 ("USB: ch9: add "USB_" prefix in front of TEST defines")
-> 
-> from the usb tree.
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc drivers/usb/cdns3/ep0.c
-> index 61ec5bb2b0ca,04a522f5ae58..000000000000
-> --- a/drivers/usb/cdns3/ep0.c
-> +++ b/drivers/usb/cdns3/ep0.c
-> @@@ -327,12 -327,11 +327,12 @@@ static int cdns3_ep0_feature_handle_dev
->   		if (!set || (tmode & 0xff) != 0)
->   			return -EINVAL;
->   
->  -		switch (tmode >> 8) {
->  +		tmode >>= 8;
->  +		switch (tmode) {
-> - 		case TEST_J:
-> - 		case TEST_K:
-> - 		case TEST_SE0_NAK:
-> - 		case TEST_PACKET:
-> + 		case USB_TEST_J:
-> + 		case USB_TEST_K:
-> + 		case USB_TEST_SE0_NAK:
-> + 		case USB_TEST_PACKET:
->   			cdns3_set_register_bit(&priv_dev->regs->usb_cmd,
->   					       USB_CMD_STMODE |
->   					       USB_STS_TMODE_SEL(tmode - 1));
+next/master baseline: 195 runs, 4 regressions (next-20200629)
 
-This is now resolved in my tree, thanks!
+Regressions Summary
+-------------------
 
-greg k-h
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre  | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 0/1    =
+
+vexpress-v2p-ca15-tc1        | arm   | lab-baylibre  | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+vexpress-v2p-ca15-tc1        | arm   | lab-cip       | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+vexpress-v2p-ca15-tc1        | arm   | lab-collabora | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200629/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200629
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      c28e58ee9dadc99f79cf16ca805221feddd432ad =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre  | gcc-8    | defconfig=
++CON...OMIZE_BASE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef9e0f9db13548df085bb4e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200629/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
+-s805x-libretech-ac.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200629/arm6=
+4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
+-s805x-libretech-ac.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5ef9e0f9db13548df085b=
+b4f
+      new failure (last pass: next-20200625) =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+vexpress-v2p-ca15-tc1        | arm   | lab-baylibre  | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef9dd1ad7639d30ae85bb18
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef9dd1ad7639d30=
+ae85bb1b
+      failing since 14 days (last pass: next-20200603, first fail: next-202=
+00615)
+      2 lines =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+vexpress-v2p-ca15-tc1        | arm   | lab-cip       | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef9dd1b574da2c24085bb28
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef9dd1b574da2c2=
+4085bb2b
+      failing since 14 days (last pass: next-20200603, first fail: next-202=
+00615)
+      2 lines =
+
+
+
+platform                     | arch  | lab           | compiler | defconfig=
+                    | results
+-----------------------------+-------+---------------+----------+----------=
+--------------------+--------
+vexpress-v2p-ca15-tc1        | arm   | lab-collabora | gcc-8    | vexpress_=
+defconfig           | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5ef9dd15574da2c24085bb18
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200629/arm/=
+vexpress_defconfig/gcc-8/lab-collabora/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5ef9dd15574da2c2=
+4085bb1b
+      failing since 14 days (last pass: next-20200603, first fail: next-202=
+00615)
+      2 lines =20

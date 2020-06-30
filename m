@@ -2,87 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE5620EB58
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 04:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8FA20EBAA
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 04:55:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726288AbgF3COT (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 22:14:19 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:60500 "EHLO fornost.hmeau.com"
+        id S1728469AbgF3CzH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 22:55:07 -0400
+Received: from ozlabs.org ([203.11.71.1]:58251 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725988AbgF3COT (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 29 Jun 2020 22:14:19 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1jq5mb-0006gx-9Q; Tue, 30 Jun 2020 12:14:02 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 30 Jun 2020 12:14:01 +1000
-Date:   Tue, 30 Jun 2020 12:14:01 +1000
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        netdev@vger.kernel.org
-Subject: Re: linux-next: build failures after merge of the vfs tree
-Message-ID: <20200630021401.GA20427@gondor.apana.org.au>
-References: <20200616103440.35a80b4b@canb.auug.org.au>
- <20200616010502.GA28834@gondor.apana.org.au>
- <20200616033849.GL23230@ZenIV.linux.org.uk>
- <20200616143807.GA1359@gondor.apana.org.au>
- <20200617165715.577aa76d@canb.auug.org.au>
- <20200617070316.GA30348@gondor.apana.org.au>
- <20200617173102.2b91c32d@canb.auug.org.au>
- <20200617073845.GA20077@gondor.apana.org.au>
- <20200618100851.0f77ed52@canb.auug.org.au>
- <20200630115857.48eab55d@canb.auug.org.au>
+        id S1726746AbgF3CzH (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Jun 2020 22:55:07 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wpqp5z3jz9sPF;
+        Tue, 30 Jun 2020 12:55:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593485704;
+        bh=LSc0m14+uE0FHKSn3cgUGk7QPY2Q8jWda01z1ga2bHA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=UiP+q8BQtImrItRHJUUdQCvJXIM/XcggLgBmfRhtZO237wvvzHrj/p4F2xSRa3kiS
+         GxwY2tWscV42oGRcKnx59779vCSnzHaJUKdrNLOqpepX5BT1AV17tL7mYfSO2Enq3y
+         fn46ZTn5Ek9RVMkrYO/0XpndlhfjhK+M6/SoPs71iNYysIxLkYQ8T8gpu6+WZZ4wwf
+         kkJme792ndrYzIM38O8+1Tg1PdMg9Be+/a2jSevBt2Lswbv7vO+iDLisoJHWBMcoNI
+         gvXa8JBxoi/UuDEZS1qkDk92OEZTd8RoN6T9XR4u2Blq7iHAS67fMu2BczEGyhLsE3
+         AMvMlIsGQsEWg==
+Date:   Tue, 30 Jun 2020 12:54:59 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the tip tree
+Message-ID: <20200630125459.0ca67c38@canb.auug.org.au>
+In-Reply-To: <20200622113700.3dd74527@canb.auug.org.au>
+References: <20200622113700.3dd74527@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200630115857.48eab55d@canb.auug.org.au>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/cZrPDT8Vmc0nezM7l6j/.aq";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 11:58:57AM +1000, Stephen Rothwell wrote:
+--Sig_/cZrPDT8Vmc0nezM7l6j/.aq
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+On Mon, 22 Jun 2020 11:37:00 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
 >
-> > > OK, here's a patch for both of these together:
-> > > 
-> > > diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
-> > > index 32b7a30b2485..eb382ceaa116 100644
-> > > --- a/arch/s390/lib/test_unwind.c
-> > > +++ b/arch/s390/lib/test_unwind.c
-> > > @@ -9,6 +9,7 @@
-> > >  #include <linux/kallsyms.h>
-> > >  #include <linux/kthread.h>
-> > >  #include <linux/module.h>
-> > > +#include <linux/slab.h>
-> > >  #include <linux/string.h>
-> > >  #include <linux/kprobes.h>
-> > >  #include <linux/wait.h>
-> > > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
-> > > index feb70283b6a2..903b2bb97e12 100644
-> > > --- a/drivers/remoteproc/qcom_q6v5_mss.c
-> > > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
-> > > @@ -26,6 +26,7 @@
-> > >  #include <linux/reset.h>
-> > >  #include <linux/soc/qcom/mdt_loader.h>
-> > >  #include <linux/iopoll.h>
-> > > +#include <linux/slab.h>
-> > >  
-> > >  #include "remoteproc_internal.h"
-> > >  #include "qcom_common.h"  
-> > 
-> > I have applied those 2 by hand for today.
-> 
-> I am still applying the above patch.
+> After merging the tip tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+>=20
+> ERROR: modpost: "sched_setscheduler" [kernel/trace/ring_buffer_benchmark.=
+ko] undefined!
+>=20
+> Caused by commit
+>=20
+>   616d91b68cd5 ("sched: Remove sched_setscheduler*() EXPORTs")
+>=20
+> Missed one :-)
+>=20
+> I have reverted that commit for today.
 
-Hi Al:
+I am still reverting that commit.
+--=20
+Cheers,
+Stephen Rothwell
 
-Could you please fold these changes into your tree?
+--Sig_/cZrPDT8Vmc0nezM7l6j/.aq
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl76qYMACgkQAVBC80lX
+0Gwsngf7BxVSpJ/Vw11nIBFLrdXdezBnXkpSEPA7m78+vdKaK3BUjlU2qEKDlaqy
+Vx8V2a174/WRnUGkUc53d6cfSpskmmmlln0aQLKYlSVOn0Ae40FQqZx/20yp1b6q
+OpsP1ElLXtvzuHPPYw+0x2F5VaCIAu2w4GOZXlfsapv6ZwZekuSLe9Bt0Q2MTDhA
+kMWD7RRr9IUD8MUZDY41hDntP77BoSWKOubeZ6dcm+Nm+rZ7WL4csKGSHZzOHQkH
+ijV6MycifaMTfFuurDU1p1a6ECGGxif9qSeP8QIW6yWk+Y7JykfEkp7P1lje2ub5
+ky9OMBNvo+CqpX8h5aKJHZK5R4XYHw==
+=DPsp
+-----END PGP SIGNATURE-----
+
+--Sig_/cZrPDT8Vmc0nezM7l6j/.aq--

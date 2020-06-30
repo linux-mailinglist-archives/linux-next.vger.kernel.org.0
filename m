@@ -2,114 +2,109 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B9C20F030
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 10:11:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31EFE20F0D5
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 10:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728749AbgF3ILV (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Jun 2020 04:11:21 -0400
-Received: from wout5-smtp.messagingengine.com ([64.147.123.21]:49653 "EHLO
-        wout5-smtp.messagingengine.com" rhost-flags-OK-OK-OK-OK)
-        by vger.kernel.org with ESMTP id S1726994AbgF3ILT (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 30 Jun 2020 04:11:19 -0400
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 003E31D8;
-        Tue, 30 Jun 2020 04:11:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Tue, 30 Jun 2020 04:11:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=fm3; bh=yukiWG4+/ly7JtCnXK6DCjbY4VA
-        w3gMXnpgtsQjFZVg=; b=SELh7P0sMski6k9gGuDVi07e2pPeTwTkTRtGbtSKupn
-        0wAd5s3wdCgqAhOle7g7CvLC/zz8TWRi4s1373wh4Kp/i5DCson+HRexHqbcBwDe
-        3vDIoGmmj7L29DQqIj3FgZBjxoqA1YxfcYgoJ7Ht9TBvFJiPoclmi6GmDTPSHzvh
-        fN+L4CF8Y2iuN2EtjaJa/lWk7ZmcRayYcx8wKvEylwwF4c2OUOeYPh4q1353xq1t
-        BXxyWqXicGCNJF+siFIZz7KFhGpIseWhwNW1r9jOa3+U7YpeA/Aoqtjr5XWH+TfE
-        M2AkZHXbjcrMtiqlQp/YK05Bv92b01omamTftjgFXBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:content-type:date:from:in-reply-to
-        :message-id:mime-version:references:subject:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; bh=yukiWG
-        4+/ly7JtCnXK6DCjbY4VAw3gMXnpgtsQjFZVg=; b=EJYXh7SdJk/uN/3seSbz7w
-        O9WwKY5Yc8GC2JiwiR+7NTNCQovhukV5YeNVAdMa0tJBEG98Lvp2zNVKJ0llSjJd
-        CDplzhpuRrfpOa1fAJC3/D3PusDqc6wxwLgeCKNQrlBM1w6wb9Mh7IxtKl2/nxHo
-        vh7aV1YDPbkNnoV6kyAbRHtWZvpJ5osXxwTKYEufUj679Vj10i4qpVcXqyJjYG+X
-        Y5MOyRtaYQp8AOa1WanTIDTcqbJz/8O/nzDjOnFBdXZy4GDnplylt2qIb2jv63Dd
-        m4QPrXg9jkjRHgmm9eWoCOs98DwoGcs94YGYFJZo1qzQiSq/oiTYcfW2iZWuCqcw
-        ==
-X-ME-Sender: <xms:pfP6XrSfyHAbUMOMDhRJGEEHdhhqw00ITL8qexFNXGIdvKHynlQZKw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeduhedrvddtudcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvuffkfhggtggujgesghdtreertddtvdenucfhrhhomhepofgrgihimhgvucft
-    ihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtthgvrh
-    hnpeevveefffduveeitdegtefhhfetueffteefffdvheevvdehteethedvleffgfejvden
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeeltddrkeelrdeikedrjeeine
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihi
-    mhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:pfP6XszTzd6zhaIlKjnLgvYLgaD13449nHvW7NzpisI3nGBfebg5rg>
-    <xmx:pfP6Xg3OXOlaW964t4d-BF9qN8xnMZ9FVnVMOmH7AoMyDIfYfyP5rw>
-    <xmx:pfP6XrDVgjzHKFHroOvF6TY2N_P-1YTlKJhUPilwYwgbn5jMCv_odQ>
-    <xmx:pvP6XgbnXF1yQw2e82FLSjxHKcLMquy9JZdbSSdsRSx5U1ZG1y9GYQ>
-Received: from localhost (lfbn-tou-1-1502-76.w90-89.abo.wanadoo.fr [90.89.68.76])
-        by mail.messagingengine.com (Postfix) with ESMTPA id 4674A3280063;
-        Tue, 30 Jun 2020 04:11:17 -0400 (EDT)
-Date:   Tue, 30 Jun 2020 10:11:15 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Mike Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the clk tree
-Message-ID: <20200630081115.mmqdsm3vlnj4yagu@gilmour.lan>
-References: <20200630095341.0f4ae8ed@canb.auug.org.au>
+        id S1731731AbgF3Is2 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Jun 2020 04:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1731732AbgF3Is1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Jun 2020 04:48:27 -0400
+Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81A3C03E979
+        for <linux-next@vger.kernel.org>; Tue, 30 Jun 2020 01:48:24 -0700 (PDT)
+Received: by mail-lj1-x241.google.com with SMTP id 9so21508029ljc.8
+        for <linux-next@vger.kernel.org>; Tue, 30 Jun 2020 01:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=6fsC+acqOWGmffLGOO9jUUTQnpmWJlfaJA/k6/maTXQ=;
+        b=jwhzWOYTDIWkGYCjUjnh/hwQSfIQFakAv6CQUjqEt4lGOfycy+SXqpkauASE8Uv9mR
+         HQv/CFC25aFyJGL1zaWOskY9nxqomD8anB5SgT41JK2+NAhLoVv/V7kapQtj1LprizUz
+         9NWgdrg5DV/8QYEDqTeEoQBll6ZNiEtOUu9LIYIqDwuaV90Hauso9TljSKrWlRjz1xmS
+         5k/P3sBGk/fhl23Y3JhxJup+qF6wPjQBiJmZFPfu+b47V4hlKIbXN9MJiKdk/p4O6ugh
+         FfkzZelWVMWID7VeVmDc58BAsTKDDi1fjv0yA5t2BtW/F2wHXOgM/ab7n3m4BpJJL7ol
+         t/LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=6fsC+acqOWGmffLGOO9jUUTQnpmWJlfaJA/k6/maTXQ=;
+        b=bvUj4p/WGm9CvnDMSHsVpreLf7H7yA9mBZo/EII9VCQSfWhXG9GcMsFqOs+dM8LM35
+         W2n5hB09qKA8kNxlcDG611QiUVSOdzAmHZa8slNEipwHcGpjbZaSOwVhKyGBzP4PATS4
+         LZni7hISC5HEqDH6soYSSlWsgaghyczc5lZddQMahMMMDQa1IG/qtb0kgViw1gu9kT5H
+         Iz2o4qvEmNBOU/dMUQQBzmdMQGMGjt+fgmEahI0vV5QBA28xgeq4uXuHN2c2cgPbehOB
+         a7dSqaHHlDvzbeCuE9nylzQx1JhcSF0SJh5p3HvDloyFEFVHFA97FHu/uvdGC19QCkDl
+         YE8A==
+X-Gm-Message-State: AOAM530iW4Qnj+ZY1dKEDacF7rslJrPO2/rfU86Hj4q/igyQ8CGon7QJ
+        6CTCEJqIWsA+vJ/GVnDgPA0zL5aTACoLuDjI/EMHdw==
+X-Google-Smtp-Source: ABdhPJwX4BRg7XNjPqa+bGRmf7a5TT5LE3ptad/uzUQ2PEfbNV+nz2O7wy3pdPl3lEJ0PbZmgV66tY8SYz/nHrGnDlw=
+X-Received: by 2002:a2e:9ed0:: with SMTP id h16mr10660397ljk.366.1593506903171;
+ Tue, 30 Jun 2020 01:48:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2qobstjoeo2rlygl"
-Content-Disposition: inline
-In-Reply-To: <20200630095341.0f4ae8ed@canb.auug.org.au>
+References: <CA+G9fYvHFs5Yx8TnT6VavtfjMN8QLPuXg6us-dXVJqUUt68adA@mail.gmail.com>
+ <20200622224920.GA4332@42.do-not-panic.com> <CA+G9fYsXDZUspc5OyfqrGZn=k=2uRiGzWY_aPePK2C_kZ+dYGQ@mail.gmail.com>
+ <20200623064056.GA8121@gondor.apana.org.au> <20200623170217.GB150582@gmail.com>
+ <20200626062948.GA25285@gondor.apana.org.au>
+In-Reply-To: <20200626062948.GA25285@gondor.apana.org.au>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 30 Jun 2020 14:18:11 +0530
+Message-ID: <CA+G9fYutuU55iL_6Qrk3oG3iq-37PaxvtA4KnEQHuLH9YpH-QA@mail.gmail.com>
+Subject: Re: [PATCH] crypto: af_alg - Fix regression on empty requests
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     Luis Chamberlain <mcgrof@kernel.org>,
+        LTP List <ltp@lists.linux.it>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
+        lkft-triage@lists.linaro.org,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Jan Stancek <jstancek@redhat.com>, chrubis <chrubis@suse.cz>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        James Morris <jmorris@namei.org>,
+        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
+        David Howells <dhowells@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sachin Sant <sachinp@linux.vnet.ibm.com>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        linux- stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
+On Fri, 26 Jun 2020 at 12:00, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Tue, Jun 23, 2020 at 10:02:17AM -0700, Eric Biggers wrote:
+> >
+> > The source code for the two failing AF_ALG tests is here:
+> >
+> > https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg02.c
+> > https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/crypto/af_alg05.c
+> >
+> > They use read() and write(), not send() and recv().
+> >
+> > af_alg02 uses read() to read from a "salsa20" request socket without writing
+> > anything to it.  It is expected that this returns 0, i.e. that behaves like
+> > encrypting an empty message.
 
---2qobstjoeo2rlygl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since we are on this subject,
+LTP af_alg02  test case fails on stable 4.9 and stable 4.4
+This is not a regression because the test case has been failing from
+the beginning.
 
-Hi,
+Is this test case expected to fail on stable 4.9 and 4.4 ?
+or any chance to fix this on these older branches ?
 
-On Tue, Jun 30, 2020 at 09:53:41AM +1000, Stephen Rothwell wrote:
-> After merging the clk tree, today's linux-next build (x86_64 allmodconfig)
-> produced this warning:
->=20
-> WARNING: modpost: missing MODULE_LICENSE() in drivers/clk/bcm/clk-bcm2711=
--dvp.o
->=20
-> Introduced by commit
->=20
->   1bc95972715a ("clk: bcm: Add BCM2711 DVP driver")
+Test output:
+af_alg02.c:52: BROK: Timed out while reading from request socket.
 
-I've posted a patch solving this already:
-https://lore.kernel.org/linux-clk/20200626112513.90816-1-maxime@cerno.tech/
+ref:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-4.9-oe/build/v4.9.228-191-g082e807235d7/testrun/2884917/suite/ltp-crypto-tests/test/af_alg02/history/
+https://qa-reports.linaro.org/lkft/linux-stable-rc-4.9-oe/build/v4.9.228-191-g082e807235d7/testrun/2884606/suite/ltp-crypto-tests/test/af_alg02/log
 
-And it's supposed to be in clk-next since friday, but it looks like
-stephen didn't push his branch?
-
-Maxime
-
---2qobstjoeo2rlygl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCXvrzowAKCRDj7w1vZxhR
-xeGBAQCBlmtRQFo0TEShz973jA5R+qD6nWnG4ozE0jy88VYdzwEAsF8rPI7SLF3X
-9GY7xxDiGC2adoek7GNNdVg97IA4hgY=
-=N11O
------END PGP SIGNATURE-----
-
---2qobstjoeo2rlygl--
+- Naresh

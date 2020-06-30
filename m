@@ -2,101 +2,86 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A4A20F844
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 17:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8285C20FE61
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 23:01:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S2389392AbgF3P3X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Jun 2020 11:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S2389312AbgF3P3W (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Jun 2020 11:29:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD61C061755;
-        Tue, 30 Jun 2020 08:29:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=9buXox3enmJCMZeUtLja7eQwSxRejj91pcuCW8qu+hs=; b=Fcu53YrfMI0lQDRjFxd3Ji0bPY
-        53asY+ahsbPRyOQruFE/MYn3DY1yzYodFpWHAlCFI3PET3DtHU3DfJUp+BCZaJqu/WeRdpDfUMNYI
-        TricySoyQVzeFxlCmZQRyG9/xw0Gcuy7RSmUm1OOf4LNqq268Tsq9WHwNpeCGwtq5O+bYpMOjry3n
-        4fHkCrLqPHihyu1EYS+rBIAwt5SlyHrLx8zKA2ncGKZobi/BkJVh7hpM/cxFcA1pj33/HJ0/zS492
-        b/unNNwhaGnL25JAukyT8v2Jb0ugGRExZ1ZVGFSRIq4NwGg46QzDbHGhEQzLz7zioEda0L3SMle0q
-        j77Z92Jg==;
-Received: from [2601:1c0:6280:3f0::19c2]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jqICC-0006Wy-4v; Tue, 30 Jun 2020 15:29:16 +0000
-Subject: Re: mmotm 2020-06-25-20-36 uploaded (objtool warning)
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
-        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
-        Josh Poimboeuf <jpoimboe@redhat.com>, viro@zeniv.linux.org.uk
-References: <20200626033744.URfGO%akpm@linux-foundation.org>
- <ec31a586-92d0-8b91-bd61-03e53a5bab34@infradead.org>
- <20200630095920.GU4817@hirez.programming.kicks-ass.net>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <ddd1bd1c-6a22-84d0-caf0-ce71c732f71b@infradead.org>
-Date:   Tue, 30 Jun 2020 08:29:11 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        id S1727815AbgF3VB6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Jun 2020 17:01:58 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:39833 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726739AbgF3VB6 (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 30 Jun 2020 17:01:58 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49xGxt3zgYz9sTT;
+        Wed,  1 Jul 2020 07:01:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1593550916;
+        bh=hvAwvRDMhAwRRPC7R2/pFhoi1UNVdOxRyZPB8GwgEAw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GTRluhyXExlrX3l7xTX6lHaqT/hthK61CEMtSJG/RYXtXlxtEr286LNf7tx+LgSiY
+         +vM7TWjsW/FotlmZlM5lsU+JBNCwoeU8vedcIJLO/aA9OUAoawaPLfeCIrImBDr05g
+         eFYRrHmr9MQ/T2EaNmQWT5gsvHFpTA18vPNMsEtiHnJJ6arQk+FzGkxvAi4lsRbaZb
+         iHgIGDF0NREItMjO67ygRJSfT/8MFV6rRrJ7z5WIcADR2lKtVscIpwndcoZcmjuW/0
+         G9mNw+qMAKjRBahGqZVUS3MG5EfClNKSFzdWMtp1XAwKDJhTtLkzQDFceUBruEl2y1
+         1xSdVOrZ+6yTQ==
+Date:   Wed, 1 Jul 2020 07:01:52 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Paul Menzel <pmenzel@molgen.mpg.de>
+Subject: linux-next: Fixes tag needs some work in the iommu tree
+Message-ID: <20200701070152.743020ca@canb.auug.org.au>
 MIME-Version: 1.0
-In-Reply-To: <20200630095920.GU4817@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/J8Zc_zyiT4Ta4vmr=ar3yiA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 6/30/20 2:59 AM, Peter Zijlstra wrote:
-> On Fri, Jun 26, 2020 at 04:35:08PM -0700, Randy Dunlap wrote:
->> arch/x86/kernel/sys_ia32.o: warning: objtool: cp_stat64()+0x57: call to new_encode_dev() with UACCESS enabled
-> 
-> That's c120f3b81ede ("x86: switch cp_stat64() to unsafe_put_user()").
-> 
-> Where __put_user() made sure evaluate 'x' before doing
-> __uaccess_begin(), the new code has no such choice.
-> 
-> The simplest fix is probably something like this.
-> 
+--Sig_/J8Zc_zyiT4Ta4vmr=ar3yiA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Hi all,
 
-Thanks.
+In commit
 
-> ---
->  include/linux/kdev_t.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/kdev_t.h b/include/linux/kdev_t.h
-> index 85b5151911cf..a840ffef7c19 100644
-> --- a/include/linux/kdev_t.h
-> +++ b/include/linux/kdev_t.h
-> @@ -36,7 +36,7 @@ static inline dev_t old_decode_dev(u16 val)
->  	return MKDEV((val >> 8) & 255, val & 255);
->  }
->  
-> -static inline u32 new_encode_dev(dev_t dev)
-> +static __always_inline u32 new_encode_dev(dev_t dev)
->  {
->  	unsigned major = MAJOR(dev);
->  	unsigned minor = MINOR(dev);
-> @@ -50,7 +50,7 @@ static inline dev_t new_decode_dev(u32 dev)
->  	return MKDEV(major, minor);
->  }
->  
-> -static inline u64 huge_encode_dev(dev_t dev)
-> +static __always_inline u64 huge_encode_dev(dev_t dev)
->  {
->  	return new_encode_dev(dev);
->  }
-> 
+  9a295ff0ffc9 ("iommu/amd: Print extended features in one line to fix dive=
+rgent log levels")
 
+Fixes tag
 
--- 
-~Randy
+  Fixes: 3928aa3f57 ("iommu/amd: Detect and enable guest vAPIC support")
 
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    Can be fixed by setting core.abbrev to 12 (or more) or (for git v2.11
+    or later) just making sure it is not set (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/J8Zc_zyiT4Ta4vmr=ar3yiA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl77qEAACgkQAVBC80lX
+0GwJ4Qf7Beg37jh+Q1x/Gn6Vo4Ah510+tjsUmoZ/8sJbJ7jd1LdqKIpL0dFWwuYb
+2+3a6sEcUQI9kEjvbYdXD379wmnPY+c+9zNExbt7MK4LUoSH3t6ST1rN0h2VpuaC
+M2GPzGDqvcmmMJb6eej3TOjQz95AZtUdCdiU6Tz56SX58CCrWzzHYsNPmNzfBf5P
+wldWC2xs42yGi9oJhtPX06MBnPqwp0sEqEIzbY0JRG263qR0IDEAQlPNUNv8o0Y6
+v9ifmt4sWwp/ooPNIYIQYIJIYM6Ey+5ka1sIcJhgmOtPKOhBNu3Ru1d1qXbXIZD8
+V/C9132wtHKVABNcUO7mXw8kGxRH1Q==
+=L4bY
+-----END PGP SIGNATURE-----
+
+--Sig_/J8Zc_zyiT4Ta4vmr=ar3yiA--

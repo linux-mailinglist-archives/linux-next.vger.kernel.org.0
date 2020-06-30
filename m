@@ -2,111 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 924EF20F18E
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 11:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732EC20F203
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 11:59:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1731944AbgF3J1c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Jun 2020 05:27:32 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:57166 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1730256AbgF3J1c (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Jun 2020 05:27:32 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05U9IGnX141742;
-        Tue, 30 Jun 2020 09:27:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : in-reply-to : message-id : references : mime-version :
- content-type; s=corp-2020-01-29;
- bh=p7l5BOkY6l6Gt/C4GiSucUE677LFprJkxNVuzkjGD1M=;
- b=pTL/0O8rggakV3TIE3i0fWZxXLn7dijdgqll9Y49Mk93Zb78rFFvye3P37dHGy4avBzU
- l+ZzzJVb9HFH+RxB7YqI2rQM7T/bACsj8hPmafRzQcoQvhXKqAUCqPugju+MKtC0jWf8
- xzw8PnP/3MPrvXaiBJhLL04nsISYwF6//4nw2FBwXpzQsNMv1dsugyr0uoj3QkU8TtiV
- jcm4GhLJkgESfudAYcKcDkaYJU2Iag/ymzkR9ShslfyIgxfFxhGCEMMlHjFe6/MEZivC
- zk+ZXr9EXlGfjQkZvhvVYaDoEf0/XVRylcIOKdzxxnwADEkrtqx6t79wZf2bZ2AXlM9R tw== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 31xx1dr7cg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Jun 2020 09:27:19 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 05U9IeBo196590;
-        Tue, 30 Jun 2020 09:27:19 GMT
-Received: from aserv0121.oracle.com (aserv0121.oracle.com [141.146.126.235])
-        by aserp3020.oracle.com with ESMTP id 31xg12ujmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Jun 2020 09:27:19 +0000
-Received: from abhmp0008.oracle.com (abhmp0008.oracle.com [141.146.116.14])
-        by aserv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 05U9RIfQ020087;
-        Tue, 30 Jun 2020 09:27:18 GMT
-Received: from dhcp-10-175-202-192.vpn.oracle.com (/10.175.202.192)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 30 Jun 2020 09:27:17 +0000
-Date:   Tue, 30 Jun 2020 10:27:12 +0100 (IST)
-From:   Alan Maguire <alan.maguire@oracle.com>
-X-X-Sender: alan@localhost
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: linux-next: build failure after merge of the thunderbolt tree
-In-Reply-To: <20200630160346.696f6419@canb.auug.org.au>
-Message-ID: <alpine.LRH.2.21.2006301021590.13740@localhost>
-References: <20200630160346.696f6419@canb.auug.org.au>
-User-Agent: Alpine 2.21 (LRH 202 2017-01-01)
+        id S1728419AbgF3J7f (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Jun 2020 05:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40238 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727084AbgF3J7f (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Jun 2020 05:59:35 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F52C061755;
+        Tue, 30 Jun 2020 02:59:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Za5Hzb5OyUUVNW5GfXZ3A73U/lLcFexOctNrPwh6ICc=; b=fhdlz+XaNzQGh/692amZWsNd5J
+        dqUN0J8wiuIvx1p3/nSlYUwmZkWW75cTrTEtQRES+MZkJkkJx0RT4XYT2iWjZdwNogcFQG4URUjRW
+        osID6+Eybu9JbD+uhy9Inn7fYX/J92hBJ5EMbdCrneaHtv3q7uiN7yKFlINgwCWxrT2wPxYletSrb
+        w5I5s/31dNR4WCbNJ4vekrDOFAet/drCGl6MMSrAgbHQNsRxoZ5Cl7d3jl7ArWR1+V6gtM8EW+JWH
+        ywMHcyMpQxJiiXQOtIaPHuXqhRE7trw5jJ2UCZQGXFOU5vbhUhypWVU4usk4y1GmvKZSi1czwxvta
+        pneVCrkw==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jqD2x-0005Cw-84; Tue, 30 Jun 2020 09:59:23 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ACA7A3013E5;
+        Tue, 30 Jun 2020 11:59:20 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 219B4203A617B; Tue, 30 Jun 2020 11:59:20 +0200 (CEST)
+Date:   Tue, 30 Jun 2020 11:59:20 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
+        sfr@canb.auug.org.au, linux-next@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mm-commits@vger.kernel.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>, viro@zeniv.linux.org.uk
+Subject: Re: mmotm 2020-06-25-20-36 uploaded (objtool warning)
+Message-ID: <20200630095920.GU4817@hirez.programming.kicks-ass.net>
+References: <20200626033744.URfGO%akpm@linux-foundation.org>
+ <ec31a586-92d0-8b91-bd61-03e53a5bab34@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9667 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0
- mlxlogscore=999 suspectscore=3 bulkscore=0 mlxscore=0 adultscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006300068
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9667 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 clxscore=1011 adultscore=0
- suspectscore=3 mlxlogscore=999 cotscore=-2147483648 lowpriorityscore=0
- malwarescore=0 phishscore=0 impostorscore=0 mlxscore=0 spamscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2006300068
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec31a586-92d0-8b91-bd61-03e53a5bab34@infradead.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, 30 Jun 2020, Stephen Rothwell wrote:
+On Fri, Jun 26, 2020 at 04:35:08PM -0700, Randy Dunlap wrote:
+> arch/x86/kernel/sys_ia32.o: warning: objtool: cp_stat64()+0x57: call to new_encode_dev() with UACCESS enabled
 
-> Hi all,
-> 
-> After merging the thunderbolt tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
-> 
-> Caused by commit
-> 
->   54509f5005ca ("thunderbolt: Add KUnit tests for path walking")
-> 
-> interacting with commit
-> 
->   d4cdd146d0db ("kunit: generalize kunit_resource API beyond allocated resources")
-> 
-> from the kunit-next tree.
-> 
-> I have applied the following merge fix patch.
-> 
-> From: Stephen Rothwell <sfr@canb.auug.org.au>
-> Date: Tue, 30 Jun 2020 15:51:50 +1000
-> Subject: [PATCH] thunderbolt: merge fix for kunix_resource changes
-> 
-> Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+That's c120f3b81ede ("x86: switch cp_stat64() to unsafe_put_user()").
 
-Thanks Stephen, resolution looks good to me! If you need it
+Where __put_user() made sure evaluate 'x' before doing
+__uaccess_begin(), the new code has no such choice.
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
+The simplest fix is probably something like this.
 
-Once the kunit and thunderbolt trees are merged there may
-be some additional things we can do to simplify kunit
-resource utilization in the thuderbolt tests using the new
-kunit resource APIs; no hurry with that though. Nice to
-see the kunit resources code being used!
+---
+ include/linux/kdev_t.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Alan
+diff --git a/include/linux/kdev_t.h b/include/linux/kdev_t.h
+index 85b5151911cf..a840ffef7c19 100644
+--- a/include/linux/kdev_t.h
++++ b/include/linux/kdev_t.h
+@@ -36,7 +36,7 @@ static inline dev_t old_decode_dev(u16 val)
+ 	return MKDEV((val >> 8) & 255, val & 255);
+ }
+ 
+-static inline u32 new_encode_dev(dev_t dev)
++static __always_inline u32 new_encode_dev(dev_t dev)
+ {
+ 	unsigned major = MAJOR(dev);
+ 	unsigned minor = MINOR(dev);
+@@ -50,7 +50,7 @@ static inline dev_t new_decode_dev(u32 dev)
+ 	return MKDEV(major, minor);
+ }
+ 
+-static inline u64 huge_encode_dev(dev_t dev)
++static __always_inline u64 huge_encode_dev(dev_t dev)
+ {
+ 	return new_encode_dev(dev);
+ }

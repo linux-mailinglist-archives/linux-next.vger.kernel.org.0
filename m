@@ -2,68 +2,51 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id A886620F39B
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 13:33:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F5D20F5D6
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 15:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1732977AbgF3LdG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 30 Jun 2020 07:33:06 -0400
-Received: from mga01.intel.com ([192.55.52.88]:30221 "EHLO mga01.intel.com"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727108AbgF3LdG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 30 Jun 2020 07:33:06 -0400
-IronPort-SDR: rdXz7iYOXTsipjXjUnBRIQiqe358SH9/Vh56gJHxPuFuVIO9Uv2+JIXQ15n+o/72QcA9tJPTMh
- iz0oDL3FY/3Q==
-X-IronPort-AV: E=McAfee;i="6000,8403,9666"; a="164219008"
-X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="164219008"
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2020 04:33:06 -0700
-IronPort-SDR: w7yQ3gWRsctn1BGOyh0j4W/JlmWGa928NJyWb7Ts5tgdrQb5y38KYaaxztAue2pRU14snvT3hK
- itCfvspf1+/w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.75,297,1589266800"; 
-   d="scan'208";a="386672327"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.163])
-  by fmsmga001.fm.intel.com with SMTP; 30 Jun 2020 04:33:03 -0700
-Received: by lahna (sSMTP sendmail emulation); Tue, 30 Jun 2020 14:33:02 +0300
-Date:   Tue, 30 Jun 2020 14:33:02 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
+        id S1731327AbgF3Ng1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 30 Jun 2020 09:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726033AbgF3Ng0 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 30 Jun 2020 09:36:26 -0400
+Received: from ZenIV.linux.org.uk (zeniv.linux.org.uk [IPv6:2002:c35c:fd02::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54525C061755;
+        Tue, 30 Jun 2020 06:36:26 -0700 (PDT)
+Received: from viro by ZenIV.linux.org.uk with local (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jqGQr-002oZE-KJ; Tue, 30 Jun 2020 13:36:17 +0000
+Date:   Tue, 30 Jun 2020 14:36:17 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: Re: linux-next: build failure after merge of the thunderbolt tree
-Message-ID: <20200630113302.GN5180@lahna.fi.intel.com>
-References: <20200630160346.696f6419@canb.auug.org.au>
+        netdev@vger.kernel.org
+Subject: Re: linux-next: build failures after merge of the vfs tree
+Message-ID: <20200630133617.GG2786714@ZenIV.linux.org.uk>
+References: <20200616010502.GA28834@gondor.apana.org.au>
+ <20200616033849.GL23230@ZenIV.linux.org.uk>
+ <20200616143807.GA1359@gondor.apana.org.au>
+ <20200617165715.577aa76d@canb.auug.org.au>
+ <20200617070316.GA30348@gondor.apana.org.au>
+ <20200617173102.2b91c32d@canb.auug.org.au>
+ <20200617073845.GA20077@gondor.apana.org.au>
+ <20200618100851.0f77ed52@canb.auug.org.au>
+ <20200630115857.48eab55d@canb.auug.org.au>
+ <20200630021401.GA20427@gondor.apana.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200630160346.696f6419@canb.auug.org.au>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <20200630021401.GA20427@gondor.apana.org.au>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jun 30, 2020 at 04:03:46PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the thunderbolt tree, today's linux-next build (powerpc
-> allyesconfig) failed like this:
-> 
-> 
-> Caused by commit
-> 
->   54509f5005ca ("thunderbolt: Add KUnit tests for path walking")
-> 
-> interacting with commit
-> 
->   d4cdd146d0db ("kunit: generalize kunit_resource API beyond allocated resources")
-> 
-> from the kunit-next tree.
+On Tue, Jun 30, 2020 at 12:14:01PM +1000, Herbert Xu wrote:
 
-Thanks for reporting and fixing. The fix looks good to me.
+> Could you please fold these changes into your tree?
+
+Done and pushed.  Sorry, had been buried in the regset mess
+lately... ;-/

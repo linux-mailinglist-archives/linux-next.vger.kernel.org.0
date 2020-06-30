@@ -2,122 +2,143 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B602220EB17
-	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 03:52:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD0920EB2D
+	for <lists+linux-next@lfdr.de>; Tue, 30 Jun 2020 03:59:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726163AbgF3BwO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 29 Jun 2020 21:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726003AbgF3BwO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 29 Jun 2020 21:52:14 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E9EC061755;
-        Mon, 29 Jun 2020 18:52:14 -0700 (PDT)
+        id S1726612AbgF3B7D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 29 Jun 2020 21:59:03 -0400
+Received: from ozlabs.org ([203.11.71.1]:53729 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725988AbgF3B7C (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 29 Jun 2020 21:59:02 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wnR86K8Nz9sDX;
-        Tue, 30 Jun 2020 11:52:03 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49wnb64C6Xz9sDX;
+        Tue, 30 Jun 2020 11:58:58 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593481930;
-        bh=haJsUCTl3HXOuqQW+RwIUPwO3u5ZbxUOYuPPlYz2MkY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Fm8s6BH4ANPG1t7ms3hWULh21qdZu2xbZ5RHbUmbonZe7c+S7kuPYBBpGuqW3E9de
-         R2RvxspH7pqkmVwAFrplgYuAoFaFZKHbWFA7uahGEOtTCi9glUvC6vpGd1Ks5WdtMO
-         8Z1QiikuaOjAO3sQFailjKePovZSpgOIv5NKM/A1kt0F9mTBOXHwQTKe963wNOPMxR
-         wxY7zLp5W5T3Kx/XCzayaNuwURIvAynjPpOQWfNot42qJqZ+7Di2QwZTmhgqF9f3z8
-         PEXxdEyfWUaNc8MvDlylYM2GAV0psJrFz0KpWLzdJ4cpY7Ast7dvNJKexm58kCIwHm
-         urNbzzKGheFgw==
-Date:   Tue, 30 Jun 2020 11:52:02 +1000
+        s=201702; t=1593482340;
+        bh=5cPu6wsgH/MuuN6WquTB5OoBViBaqpyzg6+ERh6fgFE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e/vudEKGo+PonMu/StaXpztVkrHZTgpNNCOQdpuRl+K0wWRVC5BhqogqLWsZx2mrb
+         C7r2dLyhWo6GIOBlS8LK7z5R6Qn3LUuJuQ0hnW8xS3Tdq/4RWzfJ6UA1p1m5gXt0+J
+         zcscJDAXN4nK4LKPLNunInxFkogcybp1KfSsFxAODCTWELQpTI3Ml6Mmvf2TNG/H9x
+         TEIIydptycgC0LuPGh4O7iIcWhFgTZqVG3jE9Ux2Hax1XXHkKq3kICLvOaw4mtXK4e
+         kA0lak9ejHWHnHmlxFXx/zmJh/4Qm2frNJy6CZMJ1XcGi1IH0c/HikegiCswzALfQZ
+         qSQfhGMHAVSKg==
+Date:   Tue, 30 Jun 2020 11:58:57 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Colin Xu <colin.xu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Dave Airlie <airlied@linux.ie>
-Subject: linux-next: manual merge of the drm-intel tree with the
- drm-intel-fixes tree
-Message-ID: <20200630115202.04c39f9b@canb.auug.org.au>
+        netdev@vger.kernel.org
+Subject: Re: linux-next: build failures after merge of the vfs tree
+Message-ID: <20200630115857.48eab55d@canb.auug.org.au>
+In-Reply-To: <20200618100851.0f77ed52@canb.auug.org.au>
+References: <20200616103330.2df51a58@canb.auug.org.au>
+        <20200616103440.35a80b4b@canb.auug.org.au>
+        <20200616010502.GA28834@gondor.apana.org.au>
+        <20200616033849.GL23230@ZenIV.linux.org.uk>
+        <20200616143807.GA1359@gondor.apana.org.au>
+        <20200617165715.577aa76d@canb.auug.org.au>
+        <20200617070316.GA30348@gondor.apana.org.au>
+        <20200617173102.2b91c32d@canb.auug.org.au>
+        <20200617073845.GA20077@gondor.apana.org.au>
+        <20200618100851.0f77ed52@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/4fPofAu7Md8T4NHp79C0oXC";
+Content-Type: multipart/signed; boundary="Sig_/_0FRHZJ7r_fvKJCjf8vCyNz";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/4fPofAu7Md8T4NHp79C0oXC
+--Sig_/_0FRHZJ7r_fvKJCjf8vCyNz
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the drm-intel tree got a conflict in:
+On Thu, 18 Jun 2020 10:08:51 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> On Wed, 17 Jun 2020 17:38:45 +1000 Herbert Xu <herbert@gondor.apana.org.a=
+u> wrote:
+> >
+> > On Wed, Jun 17, 2020 at 05:31:02PM +1000, Stephen Rothwell wrote: =20
+> > > > >=20
+> > > > > Presumably another include needed:
+> > > > >=20
+> > > > > arch/s390/lib/test_unwind.c:49:2: error: implicit declaration of =
+function 'kmalloc' [-Werror=3Dimplicit-function-declaration]
+> > > > > arch/s390/lib/test_unwind.c:99:2: error: implicit declaration of =
+function 'kfree' [-Werror=3Dimplicit-function-declaration]     =20
+> > >=20
+> > > And more (these are coming from other's builds):
+> > >=20
+> > >   drivers/remoteproc/qcom_q6v5_mss.c:772:3: error: implicit declarati=
+on of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+> > >   drivers/remoteproc/qcom_q6v5_mss.c:808:2: error: implicit declarati=
+on of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+> > >   drivers/remoteproc/qcom_q6v5_mss.c:1195:2: error: implicit declarat=
+ion of function 'kfree' [-Werror,-Wimplicit-function-declaration]
+> > >=20
+> > > They may have other causes as they are full linux-next builds (not ju=
+st
+> > > after the merge of the vfs tree), but the timing is suspicious.   =20
+> >=20
+> > OK, here's a patch for both of these together:
+> >=20
+> > diff --git a/arch/s390/lib/test_unwind.c b/arch/s390/lib/test_unwind.c
+> > index 32b7a30b2485..eb382ceaa116 100644
+> > --- a/arch/s390/lib/test_unwind.c
+> > +++ b/arch/s390/lib/test_unwind.c
+> > @@ -9,6 +9,7 @@
+> >  #include <linux/kallsyms.h>
+> >  #include <linux/kthread.h>
+> >  #include <linux/module.h>
+> > +#include <linux/slab.h>
+> >  #include <linux/string.h>
+> >  #include <linux/kprobes.h>
+> >  #include <linux/wait.h>
+> > diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qc=
+om_q6v5_mss.c
+> > index feb70283b6a2..903b2bb97e12 100644
+> > --- a/drivers/remoteproc/qcom_q6v5_mss.c
+> > +++ b/drivers/remoteproc/qcom_q6v5_mss.c
+> > @@ -26,6 +26,7 @@
+> >  #include <linux/reset.h>
+> >  #include <linux/soc/qcom/mdt_loader.h>
+> >  #include <linux/iopoll.h>
+> > +#include <linux/slab.h>
+> > =20
+> >  #include "remoteproc_internal.h"
+> >  #include "qcom_common.h" =20
+>=20
+> I have applied those 2 by hand for today.
 
-  drivers/gpu/drm/i915/gvt/handlers.c
-
-between commit:
-
-  fc1e3aa0337c ("drm/i915/gvt: Fix incorrect check of enabled bits in mask =
-registers")
-
-from the drm-intel-fixes tree and commit:
-
-  5f4ae2704d59 ("drm/i915: Identify Cometlake platform")
-
-from the drm-intel tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+I am still applying the above patch.
 
 --=20
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/gpu/drm/i915/gvt/handlers.c
-index fadd2adb8030,26cae4846c82..000000000000
---- a/drivers/gpu/drm/i915/gvt/handlers.c
-+++ b/drivers/gpu/drm/i915/gvt/handlers.c
-@@@ -1731,8 -1734,9 +1734,9 @@@ static int ring_mode_mmio_write(struct=20
-  		return 0;
-  	}
- =20
-- 	if (IS_COFFEELAKE(vgpu->gvt->gt->i915) &&
-+ 	if ((IS_COFFEELAKE(vgpu->gvt->gt->i915) ||
-+ 	     IS_COMETLAKE(vgpu->gvt->gt->i915)) &&
- -	    data & _MASKED_BIT_ENABLE(2)) {
- +	    IS_MASKED_BITS_ENABLED(data, 2)) {
-  		enter_failsafe_mode(vgpu, GVT_FAILSAFE_UNSUPPORTED_GUEST);
-  		return 0;
-  	}
-
---Sig_/4fPofAu7Md8T4NHp79C0oXC
+--Sig_/_0FRHZJ7r_fvKJCjf8vCyNz
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl76msIACgkQAVBC80lX
-0GxjXAf+PDgs9BZ4I0/T1J1Jwnp4cQHq+tdnzow+RsWfWh57G8b6de2+iWwGoOZ5
-AtAIEWvlxl8NLPqpislhRpx9hBk3Aob/SLYAuQL94xD3stAqm5HnpprFxtKNLC6X
-30oiw0K12JvOfTZ7KqzCCh1LrbERmhgx4+DJBqv/hy3L3Okg6MPfoMEX3p0kHn01
-udqw1vlTf9ruOwMVIX69mLAr3E2Q3iMXbbwhXPiQPxby1ZkmGfGtGUfLesYxKp13
-umLi0qe7AQxO27lAtDLxL0yvWEP94iH1VuhQtWG9XhMO1gU7+hvrBmjRmzxJF0Xq
-GxkdgTRtqBENst7A35lvATu1OzdhmA==
-=GyE7
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl76nGEACgkQAVBC80lX
+0GwBRggAgNcS26D8ioFjQ+eNTgaE+rGhw30ZcyikBkrj04MMls4rzmaAWMeVp/Qe
+DH+A2nj0Zra8LQMNH8ZmhIa+HgluH2acwYvWvZ3a4oTDpVQ5riaszprgkXqiDEwT
+x/L4gIt7ixHcqNwN4MO8unnR0jeV+vNprU+R1vAW6/il67qyo1TiSRvmngk+YyYX
+H8sNoU12xjCGPvRvPOZWiSJ5svT8yncbmDtDJipDfwutsADfpkd6PFHwsf/wYo/H
+Ljesigk7smwLbFZ74e0vVMQOS8ID4Q4WtACI961uzQEIaniuIY97MbG1IwZDLD3M
+kW4NQ3htlcdGMWGgaVshjCxs/hwNgA==
+=ROmu
 -----END PGP SIGNATURE-----
 
---Sig_/4fPofAu7Md8T4NHp79C0oXC--
+--Sig_/_0FRHZJ7r_fvKJCjf8vCyNz--

@@ -2,315 +2,164 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id F3EFA2124C1
-	for <lists+linux-next@lfdr.de>; Thu,  2 Jul 2020 15:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0122F2125E0
+	for <lists+linux-next@lfdr.de>; Thu,  2 Jul 2020 16:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729263AbgGBNdb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 2 Jul 2020 09:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S1729796AbgGBOOv (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 2 Jul 2020 10:14:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1729115AbgGBNdb (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Jul 2020 09:33:31 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D52C08C5C1
-        for <linux-next@vger.kernel.org>; Thu,  2 Jul 2020 06:33:31 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id m9so2294896pfh.0
-        for <linux-next@vger.kernel.org>; Thu, 02 Jul 2020 06:33:31 -0700 (PDT)
+        with ESMTP id S1729793AbgGBOOu (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 2 Jul 2020 10:14:50 -0400
+Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1257C08C5DD
+        for <linux-next@vger.kernel.org>; Thu,  2 Jul 2020 07:14:49 -0700 (PDT)
+Received: by mail-qk1-x744.google.com with SMTP id k18so25723453qke.4
+        for <linux-next@vger.kernel.org>; Thu, 02 Jul 2020 07:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=BFXn01d/CiH7S6dc5zUKalvq6hpuKlrNJRM2o9v6vHc=;
-        b=gmUECSGFUhUxZ/4SF1QkTHXZuoQqtNZg6xTa+wDLLbCR0JgkBJo93T5kTa3pxBG6Cr
-         VqZhjKVSC8ygyAmUt/VeVO9lVmCwnWjDGDb4sEDLxvNbAbO4+UkAdycfph4/Vad5kKxw
-         vJKdOBxse3ButfyQwtImVIXbHlK8WI2ekIh3BC+Fmbu/JtTo2wpDi6BbWMb9y1z0nDjN
-         i0Zgzo12CRWarMO9WYMVZiFQDm4pTzN/2oGqgWeVYmo1JzPWJTgWZhXF/H1TTldMSElE
-         DW7LH4cIT562Zg77M7YTpg02YGgKpgKoZIQTqfnUInw8r8yHP0vXsXuaahoYH+e7sQen
-         rvhQ==
+        d=lca.pw; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=RzUm9VxzKzkIyvUG74YkClh+nm0piu2thkPG5KLlZEQ=;
+        b=Ova5dqxpfnBaFgc4ydCLeIXoIr2iQY4e2CQEU/16yply0i1tuSiMVsJnRmHmQk2vLb
+         B3ynzsnj+3K7gWz9NTLsyaCtF5fOY9X3zpjyrsL3bYmxf/+ggZR+IkdSOtouWsJ1KzCF
+         p2EMYvJwm19KH5XHMd1CbvkLHi4aEJrr/x8UAUioRnbiZ318SAPsLPlZRLHNWoXprOF1
+         sdyerZrfpBvqntATvILWadp4vrpvVdZVexhi59pLJ2fYt7IO6BcM1YHn2262s1TT72sG
+         xZwDKtKXXCQTDquIv1Q/xJaNezOgEMxVNV4f/kXOsyIXx41olLDJXWCw8x2zsKb9KMZb
+         5B3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=BFXn01d/CiH7S6dc5zUKalvq6hpuKlrNJRM2o9v6vHc=;
-        b=geFO5wF0oHxmjiJJ8ajWo55qi6B9MeDUsZ6kVlazf62aDwdtuC53EP8mBxtqKGzJTh
-         YV5S457DcHnC7/MQBSudtK4VbgLjKs5Vcm94bv/JKchFfB3qlyncr+CjBIlOuwCW4daq
-         h9C0qsjS2tXp99aZFPHBnigTKwk4nhN18F0w5V4zjk0LpxVuhfEM5Ocmn8QHWabl0siH
-         98JpGYwqH8j0STajULNDZgkq3hiG/HFLdGe7hdJT67eX4EixZq0aWYo2Tzw4ttCGWKrz
-         tvH+yN6yXm0A8nkv30S6mGP3AIePMoGotcnb8vpluHqz5kQ0ck02EfZ9j//dAcJsIQrj
-         sDHQ==
-X-Gm-Message-State: AOAM530wNASXOj2VEdsiQ8iPe4uudfbWb3XD30KWaQNOk8/63FpaMtKP
-        FVt1R58JeDcCPiR1lDbzx36OR7FpJ0M=
-X-Google-Smtp-Source: ABdhPJwe+yB/VojpXH/Fk15HmIuUFaToH7SsTLNaa1H6+iONHjjOQt8wu82t+NghEnEkK/JXNbhcIQ==
-X-Received: by 2002:a65:4488:: with SMTP id l8mr10354318pgq.443.1593696809657;
-        Thu, 02 Jul 2020 06:33:29 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o1sm9768633pfu.70.2020.07.02.06.33.28
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=RzUm9VxzKzkIyvUG74YkClh+nm0piu2thkPG5KLlZEQ=;
+        b=lGzG/LGcz/U6dH0lrmeqfQ3yeUcQjPYQ+tW1ekf0DGA/ZQ+2REg3Zi5vLAdP73l9nI
+         bW+Rvg8XpH7iEbY+qO0gAeMFA2WguvgxgfHsWSvFELH2E2jcfJiV7BvLfRIqQE7Y4T9h
+         Wq6/ZkROroCggDYB/RqDcMzCzAg+yL90R6F24TBsdPYx0/vlQ38yxUxxDockuVSGnywN
+         t+zlJ7bjCHUQVxvDFtch9wjezP/PlcWGxcXv9oDHosFtR+bk8At4kPxC22l3R+rPVjBe
+         k2w9b798pvM7ajXI82E2o1VbZE1JZdV0ir0scFOc7yY64lQ9BW6VaOuIe0RTtyWruALX
+         cR4A==
+X-Gm-Message-State: AOAM533aC3r9iDutjGord8TqPqnmdsvsCdVY6ikqdc9CKheim0sO/cNJ
+        9ymY/PwX8kvu5MZRsgNZwyMIKw==
+X-Google-Smtp-Source: ABdhPJxyfLrupSaU78RF5M1IjPeTSU911dUpEP27iP/ObDC4UnJ0McTslyCZcGDuU/8JiL2gHmGXiQ==
+X-Received: by 2002:a05:620a:81c:: with SMTP id s28mr28901165qks.133.1593699288771;
+        Thu, 02 Jul 2020 07:14:48 -0700 (PDT)
+Received: from lca.pw (pool-71-184-117-43.bstnma.fios.verizon.net. [71.184.117.43])
+        by smtp.gmail.com with ESMTPSA id y40sm9042248qtc.29.2020.07.02.07.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jul 2020 06:33:29 -0700 (PDT)
-Message-ID: <5efde229.1c69fb81.ebb1.8af0@mx.google.com>
-Date:   Thu, 02 Jul 2020 06:33:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 02 Jul 2020 07:14:48 -0700 (PDT)
+Date:   Thu, 2 Jul 2020 10:14:37 -0400
+From:   Qian Cai <cai@lca.pw>
+To:     syzbot <syzbot+bf04628c1f6179269b0b@syzkaller.appspotmail.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com
+Subject: Re: linux-next test error: KASAN: stack-out-of-bounds Read in
+ bio_alloc_bioset
+Message-ID: <20200702141437.GA4240@lca.pw>
+References: <000000000000bcdeaa05a97280e4@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200702
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 181 runs, 7 regressions (next-20200702)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000bcdeaa05a97280e4@google.com>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 181 runs, 7 regressions (next-20200702)
-
-Regressions Summary
--------------------
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm   | lab-baylibre | gcc-8    | bcm2835_de=
-fconfig            | 0/1    =
-
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 0/1    =
-
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig =
-                   | 0/1    =
-
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-200702/plan/baseline/
-
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20200702
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      d37d57041350dff35dd17cbdf9aef4011acada38 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm   | lab-baylibre | gcc-8    | bcm2835_de=
-fconfig            | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efda85fe4d5aff43985bb18
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: bcm2835_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm/=
-bcm2835_defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5efda85fe4d5aff43985b=
-b19
-      new failure (last pass: next-20200624) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdac34fb12e8f95985bb37
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-bcm2837-r=
-pi-3-b.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efdac34fb12e8f9=
-5985bb3a
-      failing since 1 day (last pass: next-20200629, first fail: next-20200=
-630)
-      1 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdac72bb3b3e76e685bb2d
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
--s805x-libretech-ac.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibre/baseline-meson-gxl=
--s805x-libretech-ac.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5efdac72bb3b3e7=
-6e685bb32
-      failing since 0 day (last pass: next-20200630, first fail: next-20200=
-701)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdacdca1ef2b375685bb2c
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/baseline-sun50i-a64-=
-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/baseline-sun50i-a64-=
-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5efdacdca1ef2b375685b=
-b2d
-      new failure (last pass: next-20200618) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-sun50i-a64-bananapi-m64      | arm64 | lab-clabbe   | gcc-8    | defconfig =
-                   | 0/1    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdb2209983fab68e85bb31
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananapi-m64.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm6=
-4/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-bananapi-m64.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5efdb2209983fab68e85b=
-b32
-      new failure (last pass: next-20200618) =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdaa468b1d5ebd0a85bb22
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efdaa468b1d5ebd=
-0a85bb25
-      failing since 26 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5efdaa335fd4457f4085bb20
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200702/arm/=
-vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200702/arm/=
-vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efdaa335fd4457f=
-4085bb23
-      failing since 26 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =20
+On Thu, Jul 02, 2020 at 03:02:14AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following crash on:
+> 
+> HEAD commit:    d37d5704 Add linux-next specific files for 20200702
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1549d0a3100000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a0a0972a399422ff
+> dashboard link: https://syzkaller.appspot.com/bug?extid=bf04628c1f6179269b0b
+> compiler:       gcc (GCC) 10.1.0-syz 20200507
+> 
+> IMPORTANT: if you fix the bug, please add the following tag to the commit:
+> Reported-by: syzbot+bf04628c1f6179269b0b@syzkaller.appspotmail.com
+> 
+> ==================================================================
+> BUG: KASAN: stack-out-of-bounds in bio_list_empty include/linux/bio.h:561 [inline]
+> BUG: KASAN: stack-out-of-bounds in bio_alloc_bioset+0x5b2/0x5d0 block/bio.c:482
+> Read of size 8 at addr ffffc90000fc7150 by task kworker/u4:4/169
+
+I can also reproduce this. It needs to revert 3 commits,
+
+https://lore.kernel.org/lkml/20200702141001.GA3834@lca.pw/
+
+> 
+> CPU: 0 PID: 169 Comm: kworker/u4:4 Not tainted 5.8.0-rc3-next-20200702-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+> Workqueue: writeback wb_workfn (flush-8:0)
+> Call Trace:
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x18f/0x20d lib/dump_stack.c:118
+>  print_address_description.constprop.0.cold+0x5/0x436 mm/kasan/report.c:383
+>  __kasan_report mm/kasan/report.c:513 [inline]
+>  kasan_report.cold+0x1f/0x37 mm/kasan/report.c:530
+>  bio_list_empty include/linux/bio.h:561 [inline]
+>  bio_alloc_bioset+0x5b2/0x5d0 block/bio.c:482
+>  bio_clone_fast+0x21/0x1b0 block/bio.c:710
+>  bio_split+0xc7/0x2c0 block/bio.c:1477
+>  blk_bio_segment_split block/blk-merge.c:281 [inline]
+>  __blk_queue_split+0x10e2/0x1650 block/blk-merge.c:331
+>  blk_mq_submit_bio+0x1b0/0x1760 block/blk-mq.c:2169
+>  __submit_bio_noacct_mq block/blk-core.c:1181 [inline]
+>  submit_bio_noacct+0xc9e/0x12d0 block/blk-core.c:1214
+>  submit_bio+0x263/0x5b0 block/blk-core.c:1284
+>  ext4_io_submit fs/ext4/page-io.c:382 [inline]
+>  io_submit_add_bh fs/ext4/page-io.c:423 [inline]
+>  ext4_bio_write_page+0x9a8/0x1c27 fs/ext4/page-io.c:550
+>  mpage_submit_page+0x140/0x2c0 fs/ext4/inode.c:2082
+>  mpage_map_and_submit_buffers fs/ext4/inode.c:2330 [inline]
+>  mpage_map_and_submit_extent fs/ext4/inode.c:2469 [inline]
+>  ext4_writepages+0x237e/0x3960 fs/ext4/inode.c:2782
+>  do_writepages+0xec/0x290 mm/page-writeback.c:2352
+>  __writeback_single_inode+0x125/0x1400 fs/fs-writeback.c:1461
+>  writeback_sb_inodes+0x53d/0xf40 fs/fs-writeback.c:1721
+>  __writeback_inodes_wb+0xc6/0x280 fs/fs-writeback.c:1790
+>  wb_writeback+0x8bb/0xd40 fs/fs-writeback.c:1896
+>  wb_check_background_flush fs/fs-writeback.c:1964 [inline]
+>  wb_do_writeback fs/fs-writeback.c:2052 [inline]
+>  wb_workfn+0xb20/0x13e0 fs/fs-writeback.c:2080
+>  process_one_work+0x94c/0x1670 kernel/workqueue.c:2269
+>  worker_thread+0x64c/0x1120 kernel/workqueue.c:2415
+>  kthread+0x3b5/0x4a0 kernel/kthread.c:292
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:294
+> 
+> 
+> addr ffffc90000fc7150 is located in stack of task kworker/u4:4/169 at offset 80 in frame:
+>  arch_atomic64_read arch/x86/include/asm/atomic64_64.h:22 [inline]
+>  arch_atomic64_fetch_add_unless include/linux/atomic-arch-fallback.h:2195 [inline]
+>  arch_atomic64_add_unless include/linux/atomic-arch-fallback.h:2220 [inline]
+>  arch_atomic64_inc_not_zero include/linux/atomic-arch-fallback.h:2236 [inline]
+>  atomic64_inc_not_zero include/asm-generic/atomic-instrumented.h:1609 [inline]
+>  atomic_long_inc_not_zero include/asm-generic/atomic-long.h:497 [inline]
+>  percpu_ref_tryget_live include/linux/percpu-refcount.h:282 [inline]
+>  submit_bio_noacct+0x0/0x12d0 block/blk-core.c:433
+> 
+> this frame has 3 objects:
+>  [32, 40) 'bio'
+>  [64, 80) 'bio_list'
+>  [96, 128) 'bio_list_on_stack'
+> 
+> Memory state around the buggy address:
+>  ffffc90000fc7000: 00 00 00 f2 f2 f2 00 00 00 00 00 f3 f3 f3 f3 f3
+>  ffffc90000fc7080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+> >ffffc90000fc7100: f1 f1 f1 f1 00 f2 f2 f2 00 00 f2 f2 00 00 00 00
+>                                                  ^
+>  ffffc90000fc7180: f3 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+>  ffffc90000fc7200: 00 00 00 f1 f1 f1 f1 00 f2 f2 f2 00 00 00 00 f3
+> ==================================================================
+> 
+> 
+> ---
+> This bug is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this bug report. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

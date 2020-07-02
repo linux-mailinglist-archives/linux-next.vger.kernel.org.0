@@ -2,111 +2,83 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C1B21162A
-	for <lists+linux-next@lfdr.de>; Thu,  2 Jul 2020 00:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 776AE2117A1
+	for <lists+linux-next@lfdr.de>; Thu,  2 Jul 2020 03:21:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725817AbgGAWij (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 1 Jul 2020 18:38:39 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:34051 "EHLO ozlabs.org"
+        id S1727805AbgGBBVS (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 1 Jul 2020 21:21:18 -0400
+Received: from ozlabs.org ([203.11.71.1]:49953 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726114AbgGAWij (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Wed, 1 Jul 2020 18:38:39 -0400
+        id S1726038AbgGBBVS (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Wed, 1 Jul 2020 21:21:18 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49xx2z1zgrz9sR4;
-        Thu,  2 Jul 2020 08:38:33 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 49y0fg5NgRz9sRN;
+        Thu,  2 Jul 2020 11:21:15 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593643117;
-        bh=56kkZWfTbbU44VtbMKX6G3us6NnUdwyya0+ubSH0zvM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EwL7oan4ciMK5fL2OM4dxkApV9lHHZ6Os/huvXrCSK6Orlv10cHBYZcJl/6AO1o52
-         6EIkH4c7/1gdNDFzgS+hB+N/wbUbu4+yDb1d3MiRf6150cf6rfzCJ73hq/K85X4G1I
-         3AmNu1m06v5crQ62SNWDjt0oFqr5RTLNiEM1TKV07e3A5pk9U2JD67lO3v7R+L57oI
-         NAl5CDiSGtlavrhH54VhA5BMphH8bVFqaxQ+bm5huHTqX/fsBo4dT3Jytd1d1lvLvy
-         g7HXc1umYWRPc5/qTYe7J5vXImwcA8N6VnoWNzkTveJJyhm9+kZI+mnWr4QBe48D8t
-         I0RJZ2XZKdGLw==
-Date:   Thu, 2 Jul 2020 08:38:33 +1000
+        s=201702; t=1593652875;
+        bh=SNDM3Ebesqm1/WP0xmTozgFdT1xUcQvv4Uv50jRwNK0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=d0d8UCbIDdHJNx3His5M9ih2D03iEW/iwIHK/FtTqNNyJ003Vm3ArnVbeviAOVEeh
+         ZUhCQga4t6I+55iWWiE7H/Tf8yCGqgyoc5CcYSZbhSmKu8O9SD7cTdvpNlDJh9rUPE
+         +I3Srhe73I2eOzcErU+8Jd4H0bzEuxwKZOpVr0v5hP7lvSURtyEQMaTCK6y9u4rZfs
+         9zdcXioMNDUb4u+ljd4cEMlM5gNEMkHBa1PhOYePeBSbRLZzAlJIYI6pdrVHST7a0n
+         u2K599FDa0SSr1jdgpxH5GRxkEpK+CEipO/yfCO4Hpnh9VUycxu2ATSRSE7LwvorNN
+         469P6VMukVANw==
+Date:   Thu, 2 Jul 2020 11:21:12 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     akpm@linux-foundation.org, broonie@kernel.org, mhocko@suse.cz,
-        linux-next@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org, Oscar Salvador <osalvador@suse.de>
-Subject: Re: [PATCH -mmotm] mm/memory-failure: remove stub function
-Message-ID: <20200702083833.1f71c272@canb.auug.org.au>
-In-Reply-To: <adb60490-484f-a154-e163-725e35a821dc@infradead.org>
-References: <20200701045312.af2lR%akpm@linux-foundation.org>
-        <adb60490-484f-a154-e163-725e35a821dc@infradead.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Christoph Hellwig <hch@lst.de>
+Subject: linux-next: build warning after merge of the block tree
+Message-ID: <20200702112112.04d3f992@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VR5G_wXkj+V7Hl9wfElARea";
+Content-Type: multipart/signed; boundary="Sig_/m7.HGDHfzDuDAf_vqraKDJP";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VR5G_wXkj+V7Hl9wfElARea
-Content-Type: text/plain; charset=UTF-8
+--Sig_/m7.HGDHfzDuDAf_vqraKDJP
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
-Hi Randy,
+Hi all,
 
-On Wed, 1 Jul 2020 08:47:30 -0700 Randy Dunlap <rdunlap@infradead.org> wrot=
-e:
->
-> From: Randy Dunlap <rdunlap@infradead.org>
->=20
-> This stub is no longer needed since the function is no longer
-> inside an #ifdef/#endif block.
->=20
-> Fixes this build error:
->=20
-> ../mm/memory-failure.c:180:13: error: redefinition of =E2=80=98page_handl=
-e_poison=E2=80=99
->=20
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> ---
->  mm/memory-failure.c |    4 ----
->  1 file changed, 4 deletions(-)
->=20
-> --- mmotm-2020-0630-2152.orig/mm/memory-failure.c
-> +++ mmotm-2020-0630-2152/mm/memory-failure.c
-> @@ -169,10 +169,6 @@ int hwpoison_filter(struct page *p)
->  	return 0;
->  }
-> =20
-> -static bool page_handle_poison(struct page *page, bool hugepage_or_freep=
-age, bool release)
-> -{
-> -	return true;
-> -}
->  #endif
-> =20
->  EXPORT_SYMBOL_GPL(hwpoison_filter);
+After merging the block tree, today's linux-next build (powerpc
+ppc64_defconfig) produced this warning:
 
-Added to linux-next today.
+drivers/md/dm.c: In function '__map_bio':
+drivers/md/dm.c:1296:24: warning: unused variable 'md' [-Wunused-variable]
+ 1296 |  struct mapped_device *md =3D io->md;
+      |                        ^~
+
+Introduced by commit
+
+  5a6c35f9af41 ("block: remove direct_make_request")
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/VR5G_wXkj+V7Hl9wfElARea
+--Sig_/m7.HGDHfzDuDAf_vqraKDJP
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl79EGkACgkQAVBC80lX
-0Gyltwf+INFvxklNVE+y18MHcQE7vPpPq9Q6Gxojn0PoSy80x0j2hHHxT74mfg3L
-t5yN0fshRh4JfvFBrigvRn2NxS5dKTuo3TrBOmjAWwc4bZx6KkpqfPU5sMrkMgeN
-A8HEDWExOXl75U/tICF4esOVG7lVXFvDuBF8tMczysKZlqUA4fNqgkH3rJ7n+lSG
-GKbTSjFCEdI1pbICuyohp4ttUAJqSL6APL6qMjtuYlTB5oWgRGe7vBv3uZZ8o1Qq
-WHvG/lIR3X9kvGLAYhhYi2ii1il/WDZJSp7o3Ftj0UTw+3NoxaKdpucOGk/8nJfu
-49xC19PqDfK4OFG9EjFoPgEnvrDP1A==
-=239s
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl79NogACgkQAVBC80lX
+0Gws4wgAoSLcCudGe+r3OTLt9GR83BQ8imeImAWsb2xj1gav/efyaRNEiYj6F80V
+n/6KbJmzpkXg4p6u6bQsY1yRsR8w+iGy5YTFJ6lPlO+qXNkxfvAZndfw0XDCB6S8
+mSElNYSbmkD5g11s85dZtz+NdSq4yzSQHwpYruIYzNlNjxM9FOOBepGVzv7dKcsc
+sTwNzvMH/mPz+udQEsvyx4wmV96uvfGrDKMfRt1B0klgdEq8oXiDqkBqtd5TnvV1
+HHDcor2UgGtwwGMqgMfYQQd158/Xh3Dtl9Z7mox8gaXAmKlGv5cltOk5ogQ+bd/E
+RgiEiGlaSoGhu64C9In3X10+HOkvVQ==
+=yZnc
 -----END PGP SIGNATURE-----
 
---Sig_/VR5G_wXkj+V7Hl9wfElARea--
+--Sig_/m7.HGDHfzDuDAf_vqraKDJP--

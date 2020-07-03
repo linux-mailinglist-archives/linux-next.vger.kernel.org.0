@@ -2,110 +2,191 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 267672132E8
-	for <lists+linux-next@lfdr.de>; Fri,  3 Jul 2020 06:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9471521349C
+	for <lists+linux-next@lfdr.de>; Fri,  3 Jul 2020 09:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725786AbgGCEf5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Jul 2020 00:35:57 -0400
-Received: from ozlabs.org ([203.11.71.1]:51967 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725648AbgGCEf5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 3 Jul 2020 00:35:57 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 49yhwm58Pbz9sRW;
-        Fri,  3 Jul 2020 14:35:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593750955;
-        bh=ibd9L0XmOt6IaGjV+2/7iZmdiFZ8mtSY4WOPsHdRM6I=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fya6Za8IdB3lWxub0l97ECbk9jRSGHbfFG4sjhpSrzd0MJdpDV6bSAzzStfTJe8pX
-         Jp8iAsJ9plYll4F+edK5tlW1bkbtDDZOcqEuoNN0zmbhCWfePj81W8dopT9ydEus+K
-         +edwz/b0c07P8RAKiY7LHmswrje5vO5Gd7cFsj3njsWaow3Dc8lxlN46BBqc4HVeLx
-         whQclSGnt7G/XD8Bqu2cNb3iUCbBTvcqqAQ9HKJco0OzZkB8xcZzBEIxIcNW3vR+A+
-         EhHTZ+1izNeS9BykhUG9Fvecqi1NJnL5qQBAacfY0fngVZ7wceRIqHzSNct6GcejAP
-         iC1Jb1fm21YPA==
-Date:   Fri, 3 Jul 2020 14:35:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Kees Cook <keescook@chromium.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Suraj Upadhyay <usuraj35@gmail.com>
-Subject: linux-next: manual merge of the kspp tree with the drm-misc tree
-Message-ID: <20200703143550.7ebbe771@canb.auug.org.au>
+        id S1726035AbgGCHEj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Jul 2020 03:04:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725891AbgGCHEj (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Jul 2020 03:04:39 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50422C08C5C1
+        for <linux-next@vger.kernel.org>; Fri,  3 Jul 2020 00:04:39 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id o1so5732723plk.1
+        for <linux-next@vger.kernel.org>; Fri, 03 Jul 2020 00:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=V3ORJQP0XtZ1DbcjdWVuDN08bD4pVRVOSd8LLJyMseU=;
+        b=Uy7hZRhe9ukOzCjl+g2pz5ylUQr3QGttXMZzkeNtln3HMT/EaFSXfjI7jkmn42+IOj
+         BeRYofezRYRa9yrmOxRZbBIGGp841gh/qQlUd33f+HFolOVbDol2SMlAiu2dGZeWO94k
+         xhSnaJsOZ4/QsJU3t7AwpsAvMcs+ALs800plPdf005AySEFpmnH/KoeNEz3j5xH3fAlg
+         uzKzce1LaeOq3BOWJxUiArGmIi7Fc4APndTlV42z5ti0nsH/o1B/elEDMNfWB6Zi3NzH
+         7VVb/QSQK48p4X49yZlAjyrTUplbK5drN6RR2MTrktN2lQBYh2rhfNFJicmNxAV6IX00
+         VEJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=V3ORJQP0XtZ1DbcjdWVuDN08bD4pVRVOSd8LLJyMseU=;
+        b=Ru2JdUCRABPYHVWulsNEqJEo69F8LU2A2RrJOXhSdh66xPloBsNZupu9TGpifJh6om
+         6KqkeuB10+qCuCLtdvmKpNljcM7h2czCuLPesDin5eYwCAQfieLKTcek+cQA0PZRaUYR
+         N8ecRI3A6EAigw7W9JXdmzeNIAyVEtV+lrV90hsfcIZzL38kD00Ce8CXU3gWpDOaYHRn
+         kPuiNAUqdyfwO52nb41SuuYPPb+EIAqZ4jgLRBbGmbVVlYsMHLqpL7UojVr0Q+WF/0bq
+         sA2IMoo1ag2yxl9rLz0lAMSW1wOvp1Pr1yC0eghtKM3oYD7H5mEEJGU43vN3go54iQSB
+         a8JA==
+X-Gm-Message-State: AOAM532qugWHQPG1WG3kcPN+lTFBChx0aeEGkLcAqkrHDSrMQhRTZh+i
+        KMpyeR5pVGwtwP9mWwMrdw5suVOenug=
+X-Google-Smtp-Source: ABdhPJwRUdpr61852y4v9zubCUL590VLH9tyhB09js+AIppGttDim9U8yA9IzBiru+UoZJ0lJILqoA==
+X-Received: by 2002:a17:90a:12c7:: with SMTP id b7mr27847965pjg.137.1593759878218;
+        Fri, 03 Jul 2020 00:04:38 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id my9sm10106838pjb.44.2020.07.03.00.04.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jul 2020 00:04:37 -0700 (PDT)
+Message-ID: <5efed885.1c69fb81.69691.a42b@mx.google.com>
+Date:   Fri, 03 Jul 2020 00:04:37 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6ALruJwvnfOPNuGd51_frTa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc3-345-g29dbc0a7c3d1
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 206 runs,
+ 3 regressions (v5.8-rc3-345-g29dbc0a7c3d1)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/6ALruJwvnfOPNuGd51_frTa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+next/pending-fixes baseline: 206 runs, 3 regressions (v5.8-rc3-345-g29dbc0a=
+7c3d1)
 
-Hi all,
+Regressions Summary
+-------------------
 
-Today's linux-next merge of the kspp tree got a conflict in:
+platform                | arch  | lab          | compiler | defconfig      =
+              | results
+------------------------+-------+--------------+----------+----------------=
+--------------+--------
+bcm2837-rpi-3-b         | arm64 | lab-baylibre | gcc-8    | defconfig      =
+              | 4/5    =
 
-  drivers/gpu/drm/drm_edid.c
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig      =
+              | 0/1    =
 
-between commit:
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig+CON..=
+.OMIZE_BASE=3Dy | 0/1    =
 
-  948de84233d3 ("drm : Insert blank lines after declarations.")
 
-from the drm-misc tree and commit:
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc3-345-g29dbc0a7c3d1/plan/baseline/
 
-  80b89ab785a4 ("treewide: Remove uninitialized_var() usage")
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc3-345-g29dbc0a7c3d1
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      29dbc0a7c3d1bbca1424f6d85c204ae71b9f10a1 =
 
-from the kspp tree.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+Test Regressions
+---------------- =
 
-diff --cc drivers/gpu/drm/drm_edid.c
-index 252e89cb54a3,b98fa573e706..000000000000
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@@ -3095,8 -3051,7 +3095,8 @@@ static int drm_cvt_modes(struct drm_con
-  	const u8 empty[3] =3D { 0, 0, 0 };
- =20
-  	for (i =3D 0; i < 4; i++) {
-- 		int uninitialized_var(width), height;
-+ 		int width, height;
- +
-  		cvt =3D &(timing->data.other_data.data.cvt[i]);
- =20
-  		if (!memcmp(cvt->code, empty, 3))
 
---Sig_/6ALruJwvnfOPNuGd51_frTa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
+platform                | arch  | lab          | compiler | defconfig      =
+              | results
+------------------------+-------+--------------+----------+----------------=
+--------------+--------
+bcm2837-rpi-3-b         | arm64 | lab-baylibre | gcc-8    | defconfig      =
+              | 4/5    =
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl7+taYACgkQAVBC80lX
-0GwruQf+PtOhCwWIbZGmf6YtZW+vnwSeuRFthaEpVcnZOwasGQQQlsxvRU15ar3z
-zRboi1nYhdk95Z5p+W9I72pP28nRumPdkWqJu1Q8yN6a9UMOTqanhm70yOWfC+1y
-RyMBaJ8u4BY9eHZeUmevxPEixTSP/zNihJc0Zn3AlZnLcYJQgH4rXWwRM5yput7f
-za2cb/yjfAz1H+JP/MYt6uMhRhdSOr0M3mFoxuxkVNACMlp15CogmVddi8O+aT5e
-Qmk6W399iJBVMWJRhZqvSYmcbFHsFaW5rTIYQUdJDM/H1Tu49ZgSziPgmbNou4+y
-FWeOJR5+J3wPO+YqE+hPyyHqta4iUQ==
-=8iun
------END PGP SIGNATURE-----
 
---Sig_/6ALruJwvnfOPNuGd51_frTa--
+  Details:     https://kernelci.org/test/plan/id/5efea444a563a8bedc85bb2f
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5efea444a563a8be=
+dc85bb32
+      new failure (last pass: v5.8-rc3-311-g478674402fa5)
+      2 lines =
+
+
+
+platform                | arch  | lab          | compiler | defconfig      =
+              | results
+------------------------+-------+--------------+----------+----------------=
+--------------+--------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig      =
+              | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5efea5054addcc5bdd85bb18
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
+pi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig/gcc-8/lab-clabbe/baseline-sun50i-a64-banana=
+pi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5efea5054addcc5bdd85b=
+b19
+      new failure (last pass: v5.8-rc3-311-g478674402fa5) =
+
+
+
+platform                | arch  | lab          | compiler | defconfig      =
+              | results
+------------------------+-------+--------------+----------+----------------=
+--------------+--------
+sun50i-a64-bananapi-m64 | arm64 | lab-clabbe   | gcc-8    | defconfig+CON..=
+.OMIZE_BASE=3Dy | 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5efea885dc04b1c45e85bb18
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-34=
+5-g29dbc0a7c3d1/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-clabbe/=
+baseline-sun50i-a64-bananapi-m64.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5efea885dc04b1c45e85b=
+b19
+      failing since 1 day (last pass: v5.8-rc3-164-g155c91ddae03, first fai=
+l: v5.8-rc3-311-g478674402fa5) =20

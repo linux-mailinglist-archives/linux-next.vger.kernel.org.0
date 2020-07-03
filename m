@@ -2,102 +2,155 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DFD213B16
-	for <lists+linux-next@lfdr.de>; Fri,  3 Jul 2020 15:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 510F7213BEA
+	for <lists+linux-next@lfdr.de>; Fri,  3 Jul 2020 16:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726148AbgGCNgB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 3 Jul 2020 09:36:01 -0400
-Received: from mail-pf1-f195.google.com ([209.85.210.195]:43894 "EHLO
-        mail-pf1-f195.google.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726035AbgGCNgB (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Jul 2020 09:36:01 -0400
-Received: by mail-pf1-f195.google.com with SMTP id j12so13997842pfn.10;
-        Fri, 03 Jul 2020 06:36:00 -0700 (PDT)
+        id S1726108AbgGCOi1 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 3 Jul 2020 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44444 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726035AbgGCOi1 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 3 Jul 2020 10:38:27 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07CD7C08C5C1
+        for <linux-next@vger.kernel.org>; Fri,  3 Jul 2020 07:38:27 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id a9so3569619pjh.5
+        for <linux-next@vger.kernel.org>; Fri, 03 Jul 2020 07:38:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=2kGx0cWHa7QIqYO1dKWa5YiDcU8UjCNEkaL8LzhV8Lw=;
+        b=wnXkLCTBpsvRODtIjmh5pvI75xYesyDi091Z6+asEAUnWgS7YJuXHsZOIjZqVxUUuU
+         HaZ8MShvPqzlyfYdnR/0B5Gmbk+amTgmbzv5AdLc7gWDkUMFXKUWo52qQ8mCL8nusyhL
+         2fjx4QmQlWW7nR7aUzzA2QgFaBgRkZnm1CM0RY6aXIMklWUSSVl2ezZ8jFHzy8+cTuQ/
+         twZdJPrNCJrY1qvkXyooR4zslwXSiWlqIbzleubvxwAvyNMyT2MpLMtpqFirYuZok30D
+         z7p+6dc181q3QX8ZN/pmYmBAUwdToDUeW2EV/cxfWNlyhppRgD5EDAToLbCJdD0pKZRJ
+         bfyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=T5rcVRIkgD/btpU3eP+kPgBcl/ql3dV8wsHC9ym85fc=;
-        b=dpoBSKt9u7PzGcULVVkb3BVVTC2SRONI/mFO7qKPCcsTKF4bMSB5wwEDanojpsXGUm
-         kwK2J5sW/qcLuKkg7HXJxYyiPTFgMIxbMBQ+qwzZzAGZiC64jo6gJKE9hkQjrT2ecJ8S
-         5RRKQHCIYvdyFK6p8pLC2sC1H6ozGDeuAu3brBCsqouH3ULIFK/O+oX+/om3n+zQjJdT
-         i4BI8TyxD1kr2/OzeliwlkLweUtmbWBKe/mTeTKXuzLWANMOcwJ90W02jjPdIV88+vZ1
-         rvusjmydEGS3A9de9HSIXr5ID45xehpaqNyh7fFMxO40qh2iTESR9gJnLQA82lYLFVNn
-         Gdzw==
-X-Gm-Message-State: AOAM533w9VkVaasqHDJDD2CoI2ePDu2dMzKUglzB3MmTWtQmnrjBmNQW
-        BA3i4NaqP2LGNvo4+SkpaYk=
-X-Google-Smtp-Source: ABdhPJzpEuquvHuz9dy6BTpylDSjUJQBr0XwgRqlpSIxXVt6avNzJ3DHhTKXkfB0Cil4QhB/QzoeTw==
-X-Received: by 2002:a65:640c:: with SMTP id a12mr28887324pgv.88.1593783360171;
-        Fri, 03 Jul 2020 06:36:00 -0700 (PDT)
-Received: from 42.do-not-panic.com (42.do-not-panic.com. [157.230.128.187])
-        by smtp.gmail.com with ESMTPSA id m16sm12805082pfd.101.2020.07.03.06.35.58
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=2kGx0cWHa7QIqYO1dKWa5YiDcU8UjCNEkaL8LzhV8Lw=;
+        b=adBi7lr6KPlkkY0sZ1sZMrt5W1yaR8ghuMZatoF3CXj/KLKfZL8digd7RaQuwMDv93
+         UkIm4ghqN5mVByXxmd08V/Qx6H4riIbtwj18Tt3q3gUmWjOObwCSCS4hxHuO3Jq7xy5r
+         NfEUhtq69NmBYI+BMr5El8S3+HNFob0Lu3a17aaOZEkpdySlu3Qyq8uljpCPlr/3U5Ze
+         wcJR4gQWtFiei4WvRBXk/BPfnPT/S5I16/8Qi+8csvgA6QF30MSG4iLtZTET2sHINn4o
+         rNJwSPPN+mMoZcKMdnDU3ZrZIpM/yYwqJg47LiA9H7tQoep6jOBkFyEPTtVG18P0im/f
+         K0uQ==
+X-Gm-Message-State: AOAM530nDxIVWIeQUSK2kf1GbAAl60upn/fDANKznDiDS+TC3ETHpFlM
+        pDvRuWUIQSKBlmuzLXLVboaB/hvWD1E=
+X-Google-Smtp-Source: ABdhPJwsxsdNiOVlWw3d4rwMbge1zynfbR40vkZXg0vrUZuuN7A97darY7VX0xSertiqQnvoLqy3IQ==
+X-Received: by 2002:a17:902:9a81:: with SMTP id w1mr29618183plp.50.1593787106188;
+        Fri, 03 Jul 2020 07:38:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k4sm10781613pjt.16.2020.07.03.07.38.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 03 Jul 2020 06:35:58 -0700 (PDT)
-Received: by 42.do-not-panic.com (Postfix, from userid 1000)
-        id 1885F40945; Fri,  3 Jul 2020 13:35:58 +0000 (UTC)
-Date:   Fri, 3 Jul 2020 13:35:58 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        LTP List <ltp@lists.linux.it>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-security-module@vger.kernel.org, keyrings@vger.kernel.org,
-        lkft-triage@lists.linaro.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Jan Stancek <jstancek@redhat.com>, chrubis <chrubis@suse.cz>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        James Morris <jmorris@namei.org>,
-        Jarkko Sakkinen <jarkko.sakkinen@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sachin Sant <sachinp@linux.vnet.ibm.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux- stable <stable@vger.kernel.org>
-Subject: Re: [v2 PATCH] crypto: af_alg - Fix regression on empty requests
-Message-ID: <20200703133558.GX4332@42.do-not-panic.com>
-References: <CA+G9fYvHFs5Yx8TnT6VavtfjMN8QLPuXg6us-dXVJqUUt68adA@mail.gmail.com>
- <20200622224920.GA4332@42.do-not-panic.com>
- <CA+G9fYsXDZUspc5OyfqrGZn=k=2uRiGzWY_aPePK2C_kZ+dYGQ@mail.gmail.com>
- <20200623064056.GA8121@gondor.apana.org.au>
- <20200623170217.GB150582@gmail.com>
- <20200626062948.GA25285@gondor.apana.org.au>
- <CA+G9fYutuU55iL_6Qrk3oG3iq-37PaxvtA4KnEQHuLH9YpH-QA@mail.gmail.com>
- <20200702033221.GA19367@gondor.apana.org.au>
+        Fri, 03 Jul 2020 07:38:25 -0700 (PDT)
+Message-ID: <5eff42e1.1c69fb81.49b2.c16a@mx.google.com>
+Date:   Fri, 03 Jul 2020 07:38:25 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200702033221.GA19367@gondor.apana.org.au>
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: next-20200703
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: master
+Subject: next/master baseline: 160 runs, 2 regressions (next-20200703)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jul 02, 2020 at 01:32:21PM +1000, Herbert Xu wrote:
-> On Tue, Jun 30, 2020 at 02:18:11PM +0530, Naresh Kamboju wrote:
-> > 
-> > Since we are on this subject,
-> > LTP af_alg02  test case fails on stable 4.9 and stable 4.4
-> > This is not a regression because the test case has been failing from
-> > the beginning.
-> > 
-> > Is this test case expected to fail on stable 4.9 and 4.4 ?
-> > or any chance to fix this on these older branches ?
-> > 
-> > Test output:
-> > af_alg02.c:52: BROK: Timed out while reading from request socket.
-> > 
-> > ref:
-> > https://qa-reports.linaro.org/lkft/linux-stable-rc-4.9-oe/build/v4.9.228-191-g082e807235d7/testrun/2884917/suite/ltp-crypto-tests/test/af_alg02/history/
-> > https://qa-reports.linaro.org/lkft/linux-stable-rc-4.9-oe/build/v4.9.228-191-g082e807235d7/testrun/2884606/suite/ltp-crypto-tests/test/af_alg02/log
-> 
-> Actually this test really is broken.
+next/master baseline: 160 runs, 2 regressions (next-20200703)
 
-FWIW the patch "umh: fix processed error when UMH_WAIT_PROC is used" was
-dropped from linux-next for now as it was missing checking for signals.
-I'll be open coding iall checks for each UMH_WAIT_PROC callers next. Its
-not clear if this was the issue with this test case, but figured I'd let
-you know.
+Regressions Summary
+-------------------
 
-  Luis
+platform              | arch | lab          | compiler | defconfig         =
+ | results
+----------------------+------+--------------+----------+-------------------=
+-+--------
+vexpress-v2p-ca15-tc1 | arm  | lab-baylibre | gcc-8    | vexpress_defconfig=
+ | 3/5    =
+
+vexpress-v2p-ca15-tc1 | arm  | lab-cip      | gcc-8    | vexpress_defconfig=
+ | 3/5    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
+200703/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   master
+  Describe: next-20200703
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      9e50b94b3eb0d859a2586b5a40d7fd6e5afd9210 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch | lab          | compiler | defconfig         =
+ | results
+----------------------+------+--------------+----------+-------------------=
+-+--------
+vexpress-v2p-ca15-tc1 | arm  | lab-baylibre | gcc-8    | vexpress_defconfig=
+ | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eff0b80bdeb9c7b1a85bb3d
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200703/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200703/arm/=
+vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5eff0b80bdeb9c7b=
+1a85bb40
+      failing since 27 days (last pass: next-20200604, first fail: next-202=
+00605)
+      2 lines =
+
+
+
+platform              | arch | lab          | compiler | defconfig         =
+ | results
+----------------------+------+--------------+----------+-------------------=
+-+--------
+vexpress-v2p-ca15-tc1 | arm  | lab-cip      | gcc-8    | vexpress_defconfig=
+ | 3/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5eff0b66d3be76b73585bb1f
+
+  Results:     3 PASS, 1 FAIL, 1 SKIP
+  Full config: vexpress_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/master/next-20200703/arm/=
+vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.txt
+  HTML log:    https://storage.kernelci.org//next/master/next-20200703/arm/=
+vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
+.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5eff0b66d3be76b7=
+3585bb22
+      failing since 27 days (last pass: next-20200604, first fail: next-202=
+00605)
+      2 lines =20

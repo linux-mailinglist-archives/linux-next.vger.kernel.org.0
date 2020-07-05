@@ -2,109 +2,76 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FEF21508E
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 02:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE37D2150BC
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 03:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728149AbgGFAeb (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Jul 2020 20:34:31 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:38253 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728141AbgGFAeb (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Sun, 5 Jul 2020 20:34:31 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B0RQr2G3Kz9s1x;
-        Mon,  6 Jul 2020 10:34:27 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1593995669;
-        bh=r/SuHCqQ9ReBOmjLyP5++Sq17qcsjIrCCepj9P4e96Y=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ofkTYQYRvukecFK1LtNWm4PEB142ExEwn2aPGe/OvwDRWCr2W2bb7l06s0CwU+Lhk
-         +ZMfcQNwJ9YeCq1wkdwHyC6/BpAWNQI8rU159kvcVK/vOaRrzVcicf3SOy1vnpuCoS
-         uAfu8KFYege5mAv1B6KCw2AXMp1llRfbVRMBQvaEmNc67caSp7NIc1QlkWph7lpn5I
-         K6d/N8LOnv3slN29LTBg5EuCb+IUHsERWC51p9FMErUKPeUrNuihKV77hNkhx9mc3c
-         j+2whxSE1858GulqDOBzu8InYBlkGdJfm/LNvhpaJXvVdK5mHGLTv+zHDMNOIP4h+H
-         41uniY3o108Xw==
-Date:   Mon, 6 Jul 2020 10:34:27 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Subject: linux-next: manual merge of the jc_docs tree with the arm64 tree
-Message-ID: <20200706103427.16470171@canb.auug.org.au>
+        id S1728280AbgGFBEm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-next@lfdr.de>); Sun, 5 Jul 2020 21:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45224 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1728275AbgGFBEm (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Jul 2020 21:04:42 -0400
+X-Greylist: delayed 438 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 05 Jul 2020 18:04:41 PDT
+Received: from out1.virusfree.cz (out1.virusfree.cz [IPv6:2001:67c:15a0:4000::e1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7C6C061794
+        for <linux-next@vger.kernel.org>; Sun,  5 Jul 2020 18:04:41 -0700 (PDT)
+Received: (qmail 16167 invoked from network); 6 Jul 2020 02:57:17 +0200
+Received: from out1.virusfree.cz by out1.virusfree.cz
+ (VF-Scanner: Clear:RC:0(82.99.166.11):;
+ processed in 0.0 s); 06 Jul 2020 00:57:16 +0000
+X-VF-Scanner-Mail-From: facebookinc556@gmail.com
+X-VF-Scanner-Rcpt-To: linux-next@vger.kernel.org
+X-VF-Scanner-ID: 20200706005716.040838.16024.out1.virusfree.cz.41
+Received: from zimbra01.npu.cz (HELO posta.npu.cz) (82.99.166.11)
+  by out1.virusfree.cz with ESMTPS (TLSv1.2, ECDHE-RSA-AES256-GCM-SHA384); 6 Jul 2020 02:57:16 +0200
+Received: from localhost (localhost [127.0.0.1])
+        by posta.npu.cz (Postfix) with ESMTP id 9E8301840C66;
+        Mon,  6 Jul 2020 00:16:10 +0200 (CEST)
+Received: from posta.npu.cz ([127.0.0.1])
+        by localhost (dtmail01.npudt.local [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id VPBWXeLCoOXR; Mon,  6 Jul 2020 00:16:10 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by posta.npu.cz (Postfix) with ESMTP id B249E1841895;
+        Mon,  6 Jul 2020 00:16:03 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at npu.cz
+Received: from posta.npu.cz ([127.0.0.1])
+        by localhost (dtmail01.npudt.local [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id zkmJg5rfRBrG; Mon,  6 Jul 2020 00:16:03 +0200 (CEST)
+Received: from [192.168.43.74] (unknown [197.210.52.108])
+        by posta.npu.cz (Postfix) with ESMTPSA id 425E718415A9;
+        Mon,  6 Jul 2020 00:15:49 +0200 (CEST)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/oWPor8azsUeWgecAz8Ah8Kb";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Aufmerksamkeit.
+To:     "facebookinc556@gmail.com" <facebookinc556@gmail.com>
+From:   "World Health Organization" <facebookinc556@gmail.com>
+Date:   Sun, 05 Jul 2020 15:15:46 -0700
+Reply-To: trustfundhealth@gmail.com
+Message-Id: <20200705221549.425E718415A9@posta.npu.cz>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/oWPor8azsUeWgecAz8Ah8Kb
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Dies soll Ihnen mitteilen, dass Ihnen ein außergewöhnlicher COVID-19-Sozialhilfezuschuss in Höhe von 500.000,00 USD von der Weltgesundheitsorganisation gewährt wurde.
 
-Hi all,
+Es wird daher empfohlen, die folgenden Informationen an den W.H.O Trust Fund zu senden, um Ihre Forderung zu bearbeiten [trustfundhealth@gmail.com]
 
-Today's linux-next merge of the jc_docs tree got a conflict in:
+Vollständiger Name:
+Land:
+Geschlecht:
+Kontaktadresse:
+Handynummer:
+Beruf:
+Familienstand:
+Alter:
+Wohnsitzland:
 
-  Documentation/arm64/index.rst
+senden Sie die folgenden Informationen an den W.H.O Trust Fund, um Ihre Forderung zu bearbeiten [trustfundhealth@gmail.com]
 
-between commit:
+COVID-19 ist real, Bitte folgen Sie W.H.O Anweisung und alle Regierung und Gesundheitsbehörde Beratung. Gemeinsam können wir der Welt helfen, diese Pandemie zu bekämpfen und die Welt für uns alle sicherer zu machen...
 
-  5c5a8ac9b27b ("arm64: mte: Add Memory Tagging Extension documentation")
-
-from the arm64 tree and commit:
-
-  86de78d2c5f4 ("docs: arm64: convert perf.txt to ReST format")
-
-from the jc_docs tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/arm64/index.rst
-index 4cd0e696f064,d9665d83c53a..000000000000
---- a/Documentation/arm64/index.rst
-+++ b/Documentation/arm64/index.rst
-@@@ -14,7 -14,7 +14,8 @@@ ARM64 Architectur
-      hugetlbpage
-      legacy_instructions
-      memory
- +    memory-tagging-extension
-+     perf
-      pointer-authentication
-      silicon-errata
-      sve
-
---Sig_/oWPor8azsUeWgecAz8Ah8Kb
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8CcZMACgkQAVBC80lX
-0Gw2WAf+KSUsvNqgo13T+d0ItcRCPuOR4HuCDxna3lzPAT6zlpCuSFvf+XGuCxgj
-6ExO5vAAQFUR66BbxqRHPJ57HjnkJnp8W4R+TE9wTeEFzfQYfaku5WlTJcWcUsBX
-9jOxVdPw/11Q25b4iCn85SytV1vPEn32uATrGOh2mYl1kaIZFdqP42hsmwp5D/Gy
-FQE7kzRZ4JIJ7qvAwa+KI77Pkpj3sD6qHBBVsBlSeauR2nXNETMtV5fSxE0rLXjR
-1z4G/0o7CtDqF4Gb+VvytceRt0eiN3+hkB3VS0VdEgT3RsJWkjbcSyLDoFU/imrL
-ku0ab6aySvGOKHfnziu117qSUOr5iw==
-=kqCm
------END PGP SIGNATURE-----
-
---Sig_/oWPor8azsUeWgecAz8Ah8Kb--
+Jones Amigo
+Weltgesundheitsorganisation.

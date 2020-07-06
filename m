@@ -2,48 +2,49 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0242151F6
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 07:03:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADD3215206
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 07:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728555AbgGFFDB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jul 2020 01:03:01 -0400
-Received: from ozlabs.org ([203.11.71.1]:34969 "EHLO ozlabs.org"
+        id S1728768AbgGFFGR (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jul 2020 01:06:17 -0400
+Received: from ozlabs.org ([203.11.71.1]:37569 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1728362AbgGFFDB (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Jul 2020 01:03:01 -0400
+        id S1726879AbgGFFGR (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 6 Jul 2020 01:06:17 -0400
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B0YNd2rG6z9sRK;
-        Mon,  6 Jul 2020 15:02:56 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B0YSQ4LJzz9sSd;
+        Mon,  6 Jul 2020 15:06:14 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594011779;
-        bh=fwmVguoDWnwTbxc4sPqxiDoblGFReTc+/EW2B2YycXY=;
+        s=201702; t=1594011975;
+        bh=+P6CzuzagNLqnv7bkCxZZnaYcN+J8CZvRoDRy8miNUA=;
         h=Date:From:To:Cc:Subject:From;
-        b=qu+GbHtfAqq7fs5HpFx+2ZEEIHqCCNM7U/HFweLvp5u9seYzlcBTjGmfLtgK6WgaB
-         rqj6UbsRwyfCCQmO4hwmy3xSpePpKpZiYQCHC6QwJWWT7yKrrZ0T4T3/9bprfgD0Jg
-         1gcvah9Zmd26Bewi23qrB6D9rmk+9vl/keyNARavcEwfKJ2xScpXHZZv9V/6IhYZtC
-         9H+mBduFXADo3WXu4Lpt6OyJ/CcRj9gG65kYU3Jmqapr1N2jSDpWrXi/j5BLPN1Pi8
-         AOsGItaSZn/6EiiTNR4ZqNblOsmHigd3Xgm+rq31U/gtydOIpnQYi92ShEPhgSwQHN
-         YcgLQXZpFjWtg==
-Date:   Mon, 6 Jul 2020 15:02:56 +1000
+        b=lNHFZmTqt1OopzeyNrlOzxRqrrWxt9cv0fStzB2ZN0fAbs6lI6aYULZz5IuTirO9/
+         NtFy8iDFnNX4w+lPSbD6qNwDM+QtiHr1GTZeqe8tvplpq6H3X+RFLRptj5slYD9aMo
+         /6AG0dx4ElzjXO4567EdfbMbQhi8iE2IpdI6741GEM8okLvco3mflXpRdGUVwBBkEE
+         11fxNiYc3GaXwxxtQFbUwL9AFTHkvxs7XLbJDDXBsZRuxx+bvz00LR7M45q5XclZ1w
+         C3JTmnjudZD0OTEArxbiM+1vGMzLylqA+8YMuM2uAcbVqNLo0g5HGes6APeXie4L6P
+         vKqblhOu+CNUw==
+Date:   Mon, 6 Jul 2020 15:06:13 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
 To:     Christian Brauner <christian@brauner.io>,
         Guo Ren <ren_guo@c-sky.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tobias Klauser <tklauser@distanz.ch>
 Subject: linux-next: manual merge of the pidfd tree with the csky tree
-Message-ID: <20200706150256.5bd2ff66@canb.auug.org.au>
+Message-ID: <20200706150613.738d3c7c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/VgejV5CQ1M8kSCOAmq82TRb";
+Content-Type: multipart/signed; boundary="Sig_/yQJgGAujdHmtY33QuZaSUCH";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/VgejV5CQ1M8kSCOAmq82TRb
+--Sig_/yQJgGAujdHmtY33QuZaSUCH
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
@@ -51,15 +52,16 @@ Hi all,
 
 Today's linux-next merge of the pidfd tree got a conflict in:
 
-  arch/csky/Kconfig
+  arch/csky/kernel/process.c
 
 between commit:
 
-  f4dd2edafba0 ("csky: add support for SECCOMP and SECCOMP_FILTER")
+  29adb883aa77 ("csky: remove unusued thread_saved_pc and *_segments functi=
+ons/macros")
 
 from the csky tree and commit:
 
-  140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
+  714acdbd1c94 ("arch: rename copy_thread_tls() back to copy_thread()")
 
 from the pidfd tree.
 
@@ -74,34 +76,44 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc arch/csky/Kconfig
-index 822362d0598e,902f1142d550..000000000000
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@@ -38,8 -38,6 +38,7 @@@ config CSK
-  	select GX6605S_TIMER if CPU_CK610
-  	select HAVE_ARCH_TRACEHOOK
-  	select HAVE_ARCH_AUDITSYSCALL
- +	select HAVE_ARCH_SECCOMP_FILTER
-- 	select HAVE_COPY_THREAD_TLS
-  	select HAVE_DEBUG_BUGVERBOSE
-  	select HAVE_DYNAMIC_FTRACE
-  	select HAVE_DYNAMIC_FTRACE_WITH_REGS
+diff --cc arch/csky/kernel/process.c
+index 3da63cf0bfde,28cfeaaf902a..000000000000
+--- a/arch/csky/kernel/process.c
++++ b/arch/csky/kernel/process.c
+@@@ -30,7 -30,17 +30,7 @@@ asmlinkage void ret_from_kernel_thread(
+   */
+  void flush_thread(void){}
+ =20
+- int copy_thread_tls(unsigned long clone_flags,
+ -/*
+ - * Return saved PC from a blocked thread
+ - */
+ -unsigned long thread_saved_pc(struct task_struct *tsk)
+ -{
+ -	struct switch_stack *sw =3D (struct switch_stack *)tsk->thread.sp;
+ -
+ -	return sw->r15;
+ -}
+ -
++ int copy_thread(unsigned long clone_flags,
+  		unsigned long usp,
+  		unsigned long kthread_arg,
+  		struct task_struct *p,
 
---Sig_/VgejV5CQ1M8kSCOAmq82TRb
+--Sig_/yQJgGAujdHmtY33QuZaSUCH
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8CsIAACgkQAVBC80lX
-0GxLIwf9FRyHVS7UjbGIP4SuKcPTv76XUQ5DbSEwai3KzAU6NWyTk41XQ2wNOBAY
-J8D7NOQSR0332Hn7m3zdQXG1m47JA3XpjA0QjyuVb4+pYrUrr6rVimxv5lzwENXg
-dQrNYxBIK3GzV5sdxE01Yape+7Mm+7IkpLq6SwpyPreaIRBuhrBbIE838odW2Xqa
-+ggO0yYsCr9cNoRlgbI4bwP1vqUnSylctYF+kKCns5FSDbq2oiHtsQfBgBTCDCqt
-OjivCoUhJgZ9Q0J/E+m7OKTINMvMg7pfjhNDIO61mJ8RuL3qckmqqSQuNiJULOvm
-bskEE7aGnye2qDpDDnwSB6JhmdI4RQ==
-=M/S4
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8CsUUACgkQAVBC80lX
+0GxOaAf/XoXZSfFBUeg59SzT1cshCipuYfdhFSdRXa8/VwKc1gTT1gXyvA9/Rj+D
+xFC+Zo5n0QamAHvDOQirTefZVE0OPvajBHw2vT/BIuQXFXqSOGsH80PAFdqZLCAH
+7NaIEToal8TJS1PtBBWMoUWeiAnm7qRrUZL0xdF+ZDE/X9htd9uwYojKgwnt/ofW
+Ftofd54/Uzt+vWmF92miTZkeSRgmeZWUJzCatXQ1rSTX6zqgEpeOEmvlE2k5ftyR
+GbpA6XApn/7P6vv2rnkzsMrvPexZIIuqBMcdCamaj3H9WiigMlOFRVNbjJ6v+DBp
+DUkXj+/t/S3ull6Nz/Guw9vhTKj8Qg==
+=05yj
 -----END PGP SIGNATURE-----
 
---Sig_/VgejV5CQ1M8kSCOAmq82TRb--
+--Sig_/yQJgGAujdHmtY33QuZaSUCH--

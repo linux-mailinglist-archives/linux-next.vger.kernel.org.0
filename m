@@ -2,116 +2,105 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E265215166
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 05:56:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F355215171
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 06:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728723AbgGFD4Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sun, 5 Jul 2020 23:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43120 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728703AbgGFD4Z (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sun, 5 Jul 2020 23:56:25 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E59D5C061794;
-        Sun,  5 Jul 2020 20:56:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B0Wvp3BNhz9sDX;
-        Mon,  6 Jul 2020 13:56:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594007783;
-        bh=/GNJJfWsDedN7nVwHZr6z5cQt0v1HcsF+F3L1Pwaz90=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MrXZoUTyNi7bONm8l2xVKk21phHM1bS15MV7wvzBU3o5dXbkYWE1NR16W42ZJuvRR
-         9BTBCNSPY2zoNr9XrxnnCm3bbVwQd18e09o//S0TaXboE0SOHfMQMIr8dk2EWemZDK
-         Yhh3Ct5yic5LevCa3XTEi2dfGnUjzPTU6nWz5PQM78ij9LROb6fr6mRPSJTT8ECDli
-         6zvkY0S2bOv9ksdP2IYaofA2L4Q+bAkl/2ZuosIz9dIHiKOsJjBd2PEfmjq/vBWNhr
-         eRsdt8YrWBsjAD/SBhYXxrv0ljHdKzEXh6g9R5X7CrISJ9cDaQASquIvoKjzVm6LHw
-         yAPsdinAaRo1g==
-Date:   Mon, 6 Jul 2020 13:56:21 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Dave Jiang <dave.jiang@intel.com>
-Subject: linux-next: manual merge of the dmaengine tree with the
+        id S1725895AbgGFEXr (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jul 2020 00:23:47 -0400
+Received: from mga09.intel.com ([134.134.136.24]:14327 "EHLO mga09.intel.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725892AbgGFEXr (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 6 Jul 2020 00:23:47 -0400
+IronPort-SDR: M3husfosArJSR74Dpewz4iv2pwsK16SqKkxbC5loZzUVkzO+UC31RTauqHxe1mVKNtkM72+0ry
+ IoovO5I7hxbQ==
+X-IronPort-AV: E=McAfee;i="6000,8403,9673"; a="148857222"
+X-IronPort-AV: E=Sophos;i="5.75,318,1589266800"; 
+   d="scan'208";a="148857222"
+X-Amp-Result: SKIPPED(no attachment in message)
+X-Amp-File-Uploaded: False
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2020 21:23:46 -0700
+IronPort-SDR: o3Ovk4M9ZsxPZotyGoamY580+UDgz97geWpfFlgeJARMB+rU7zaUe2orhkFljBq7nhq/NZWHCz
+ QqwkIdOvr8hQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.75,318,1589266800"; 
+   d="scan'208";a="426965058"
+Received: from djiang5-mobl1.amr.corp.intel.com (HELO [10.209.117.178]) ([10.209.117.178])
+  by orsmga004.jf.intel.com with ESMTP; 05 Jul 2020 21:23:46 -0700
+Subject: Re: linux-next: manual merge of the dmaengine tree with the
  dmaengine-fixes tree
-Message-ID: <20200706135621.0113ebf9@canb.auug.org.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200706135621.0113ebf9@canb.auug.org.au>
+From:   Dave Jiang <dave.jiang@intel.com>
+Message-ID: <d3af0beb-1548-7ad3-fb30-f768303b8701@intel.com>
+Date:   Sun, 5 Jul 2020 21:23:46 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/O_.bJSqbvpcSYxxIO4hO7HV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200706135621.0113ebf9@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/O_.bJSqbvpcSYxxIO4hO7HV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the dmaengine tree got a conflict in:
+On 7/5/2020 8:56 PM, Stephen Rothwell wrote:
+> Hi all,
+> 
+> Today's linux-next merge of the dmaengine tree got a conflict in:
+> 
+>    drivers/dma/idxd/sysfs.c
+> 
+> between commit:
+> 
+>    da32b28c95a7 ("dmaengine: idxd: cleanup workqueue config after disabling")
+> 
+> from the dmaengine-fixes tree and commit:
+> 
+>    f50b150e315e ("dmaengine: idxd: add work queue drain support")
+> 
+> from the dmaengine tree.
+> 
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+> 
 
-  drivers/dma/idxd/sysfs.c
-
-between commit:
-
-  da32b28c95a7 ("dmaengine: idxd: cleanup workqueue config after disabling")
-
-from the dmaengine-fixes tree and commit:
-
-  f50b150e315e ("dmaengine: idxd: add work queue drain support")
-
-from the dmaengine tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
+Hi Stephen. Thanks for the fixup. I think there are two more bits that are 
+needed from f50b150e315e if you don't mind adding:
 
 diff --cc drivers/dma/idxd/sysfs.c
 index 2e2c5082f322,6f0711a822a1..000000000000
 --- a/drivers/dma/idxd/sysfs.c
 +++ b/drivers/dma/idxd/sysfs.c
 @@@ -313,14 -303,7 +303,12 @@@ static int idxd_config_bus_remove(struc
-  		}
- =20
-  		idxd_unregister_dma_device(idxd);
+   		}
+
+   		idxd_unregister_dma_device(idxd);
 - 		spin_lock_irqsave(&idxd->dev_lock, flags);
-  		rc =3D idxd_device_disable(idxd);
- +		for (i =3D 0; i < idxd->max_wqs; i++) {
- +			struct idxd_wq *wq =3D &idxd->wqs[i];
- +
- +			idxd_wq_disable_cleanup(wq);
- +		}
+   		rc = idxd_device_disable(idxd);
+  +		for (i = 0; i < idxd->max_wqs; i++) {
+  +			struct idxd_wq *wq = &idxd->wqs[i];
+  +
+
+ >			mutex_lock(&wq->wq_lock);
+
+  +			idxd_wq_disable_cleanup(wq);
+
+ >			mutex_unlock(&wq->wq_lock);
+
+  +		}
 - 		spin_unlock_irqrestore(&idxd->dev_lock, flags);
-  		module_put(THIS_MODULE);
-  		if (rc < 0)
-  			dev_warn(dev, "Device disable failed\n");
-
---Sig_/O_.bJSqbvpcSYxxIO4hO7HV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8CoOUACgkQAVBC80lX
-0Gxepgf9Exf0v/hgKm9nThGRVGpJkNO8LnCNxkLEHsBLHIRnm/QfrC58JJ6UHfEh
-egt9UBDiuuiyok+aMPt4G3hYvspuoaeweBxoVQTLIymcnme5CEfTaPBR/WvSNTuq
-xdY/dJR7Bv1kRx3ZLapFEAboQg3J/E+UECB3+PTpi7rhCWurFf8PNspRXcFcWcQC
-oU4i1eN0c+A+LxnG7cExx1sgf56WfV4wjdMzUKyT+ME4MY24MWlmfJXYHBHoegrC
-RW2BcDC31KnIagCzLKLKrynuZGwuCqM+cEaiidZzk4akR3/ir3SGzW5Ze7xU1+Rw
-8cL+X6Di9jrkuXggD+T99u8yAo4UIg==
-=9vKe
------END PGP SIGNATURE-----
-
---Sig_/O_.bJSqbvpcSYxxIO4hO7HV--
+   		module_put(THIS_MODULE);
+   		if (rc < 0)
+   			dev_warn(dev, "Device disable failed\n");

@@ -2,228 +2,106 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0C72151D5
-	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 06:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0242151F6
+	for <lists+linux-next@lfdr.de>; Mon,  6 Jul 2020 07:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726879AbgGFEoO (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jul 2020 00:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50382 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726001AbgGFEoO (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jul 2020 00:44:14 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A967C061794
-        for <linux-next@vger.kernel.org>; Sun,  5 Jul 2020 21:44:14 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id k71so12761336pje.0
-        for <linux-next@vger.kernel.org>; Sun, 05 Jul 2020 21:44:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=9/+jLbYqHGmhJNgbdbH++5i2atiALUedq84yqOw76DM=;
-        b=Um/p2TJHe8a4f3qXpUpsORsKJX5t7cK0YtZnek+R3alkkIcslzmqXGN5hIaEXDOMN5
-         ustlGuUHP+mBbQINHixa4vaEGIAD+CC/JCgbwqM7OHsegDKocpQzMArKFqAej5CUW19J
-         6xjdGES1JQI+hmMItok1j07vQ1sXVEV1gjYFXQoWF0zb+IvJ9wD9YD6Uushmnb2m8IaN
-         ALX4TLa9ik7RVJ45G2pvLLoClT9FfG2TEy6wXFhN6XXf5OgmJtBON96voPEo0lTt7uoq
-         3MZGCMQRbQCif3LVphZExe0OnIa6Own/1ahYXqvn9A1k8zYq8UAexTLcRDa4FMIDaQ+D
-         7RvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=9/+jLbYqHGmhJNgbdbH++5i2atiALUedq84yqOw76DM=;
-        b=hK1oDJpJUwHx8UbfQ5PWEo5RNE6tcVxScjVdKv4n+Asv64dy7yZ0JycRTFnBZFziwo
-         h4VUYvckKNhi1W4FUfpJDfuk5O/6T1TgbIHCN34RLEl/rUHNYqZF0MYU291ja0I7HdVC
-         U8H9sqSI3i16vq6tRw3mllK+2OQYxdrecoHcmACXZdWCu2AepWcpvFSfJpfoL32M6ySE
-         U9392ZYsZVWpotInQd+is0kv6i1wXiqCFhcAoEbA34oQEF3/IbrGbIsWs60ksYLFtKRT
-         uI9mi/ICmCM8hFogxLs6uROlgRo99t8KBFQlWorTjugbB6yFxs1zUcLVg+ds/IQNgR1+
-         fw5w==
-X-Gm-Message-State: AOAM530PkpNeYLVaAZv/StaLkfHrGG6i1iXWuv//eQ6+tbGLBYz910II
-        lFQ+Nc/xd60UBgd8rOTijYuNww0snAM=
-X-Google-Smtp-Source: ABdhPJyRZxufB7pdbdZ4lUIIRD3tFvgBH+IVGSXfYsUPL+loefoy1muCmqTUWS/c9SGcbN7HF76VdQ==
-X-Received: by 2002:a17:90a:3489:: with SMTP id p9mr50294469pjb.56.1594010652730;
-        Sun, 05 Jul 2020 21:44:12 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id j11sm2889289pfn.38.2020.07.05.21.44.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jul 2020 21:44:12 -0700 (PDT)
-Message-ID: <5f02ac1c.1c69fb81.33ba0.91f3@mx.google.com>
-Date:   Sun, 05 Jul 2020 21:44:12 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1728555AbgGFFDB (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jul 2020 01:03:01 -0400
+Received: from ozlabs.org ([203.11.71.1]:34969 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1728362AbgGFFDB (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 6 Jul 2020 01:03:01 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B0YNd2rG6z9sRK;
+        Mon,  6 Jul 2020 15:02:56 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594011779;
+        bh=fwmVguoDWnwTbxc4sPqxiDoblGFReTc+/EW2B2YycXY=;
+        h=Date:From:To:Cc:Subject:From;
+        b=qu+GbHtfAqq7fs5HpFx+2ZEEIHqCCNM7U/HFweLvp5u9seYzlcBTjGmfLtgK6WgaB
+         rqj6UbsRwyfCCQmO4hwmy3xSpePpKpZiYQCHC6QwJWWT7yKrrZ0T4T3/9bprfgD0Jg
+         1gcvah9Zmd26Bewi23qrB6D9rmk+9vl/keyNARavcEwfKJ2xScpXHZZv9V/6IhYZtC
+         9H+mBduFXADo3WXu4Lpt6OyJ/CcRj9gG65kYU3Jmqapr1N2jSDpWrXi/j5BLPN1Pi8
+         AOsGItaSZn/6EiiTNR4ZqNblOsmHigd3Xgm+rq31U/gtydOIpnQYi92ShEPhgSwQHN
+         YcgLQXZpFjWtg==
+Date:   Mon, 6 Jul 2020 15:02:56 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christian Brauner <christian@brauner.io>,
+        Guo Ren <ren_guo@c-sky.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the pidfd tree with the csky tree
+Message-ID: <20200706150256.5bd2ff66@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc3-473-g661b0ff064b6
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 164 runs,
- 4 regressions (v5.8-rc3-473-g661b0ff064b6)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/VgejV5CQ1M8kSCOAmq82TRb";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 164 runs, 4 regressions (v5.8-rc3-473-g661b0ff=
-064b6)
+--Sig_/VgejV5CQ1M8kSCOAmq82TRb
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
-                   | 4/5    =
+Today's linux-next merge of the pidfd tree got a conflict in:
 
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
+  arch/csky/Kconfig
 
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
+between commit:
 
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
+  f4dd2edafba0 ("csky: add support for SECCOMP and SECCOMP_FILTER")
 
+from the csky tree and commit:
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.8-rc3-473-g661b0ff064b6/plan/baseline/
+  140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.8-rc3-473-g661b0ff064b6
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      661b0ff064b6304266aada06d6e6489392410f86 =
+from the pidfd tree.
 
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
 
-Test Regressions
----------------- =
+diff --cc arch/csky/Kconfig
+index 822362d0598e,902f1142d550..000000000000
+--- a/arch/csky/Kconfig
++++ b/arch/csky/Kconfig
+@@@ -38,8 -38,6 +38,7 @@@ config CSK
+  	select GX6605S_TIMER if CPU_CK610
+  	select HAVE_ARCH_TRACEHOOK
+  	select HAVE_ARCH_AUDITSYSCALL
+ +	select HAVE_ARCH_SECCOMP_FILTER
+- 	select HAVE_COPY_THREAD_TLS
+  	select HAVE_DEBUG_BUGVERBOSE
+  	select HAVE_DYNAMIC_FTRACE
+  	select HAVE_DYNAMIC_FTRACE_WITH_REGS
 
+--Sig_/VgejV5CQ1M8kSCOAmq82TRb
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-bcm2837-rpi-3-b              | arm64 | lab-baylibre | gcc-8    | defconfig =
-                   | 4/5    =
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8CsIAACgkQAVBC80lX
+0GxLIwf9FRyHVS7UjbGIP4SuKcPTv76XUQ5DbSEwai3KzAU6NWyTk41XQ2wNOBAY
+J8D7NOQSR0332Hn7m3zdQXG1m47JA3XpjA0QjyuVb4+pYrUrr6rVimxv5lzwENXg
+dQrNYxBIK3GzV5sdxE01Yape+7Mm+7IkpLq6SwpyPreaIRBuhrBbIE838odW2Xqa
++ggO0yYsCr9cNoRlgbI4bwP1vqUnSylctYF+kKCns5FSDbq2oiHtsQfBgBTCDCqt
+OjivCoUhJgZ9Q0J/E+m7OKTINMvMg7pfjhNDIO61mJ8RuL3qckmqqSQuNiJULOvm
+bskEE7aGnye2qDpDDnwSB6JhmdI4RQ==
+=M/S4
+-----END PGP SIGNATURE-----
 
-
-  Details:     https://kernelci.org/test/plan/id/5f027b691f6579e0c585bb2b
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f027b691f6579e0=
-c585bb2e
-      failing since 2 days (last pass: v5.8-rc3-311-g478674402fa5, first fa=
-il: v5.8-rc3-345-g29dbc0a7c3d1)
-      1 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-meson-gxl-s805x-libretech-ac | arm64 | lab-baylibre | gcc-8    | defconfig+=
-CON...OMIZE_BASE=3Dy | 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f0271334687f7766785bb22
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+CONFIG_RANDOMIZE_BASE=3Dy
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
-e/baseline-meson-gxl-s805x-libretech-ac.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm64/defconfig+CONFIG_RANDOMIZE_BASE=3Dy/gcc-8/lab-baylibr=
-e/baseline-meson-gxl-s805x-libretech-ac.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.emerg: https://kernelci.org/test/case/id/5f0271334687f77=
-66785bb27
-      new failure (last pass: v5.8-rc3-345-g29dbc0a7c3d1)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-baylibre | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f02771397c41aa57885bb2c
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
--v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm/vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress=
--v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f02771397c41aa5=
-7885bb2f
-      failing since 7 days (last pass: v5.8-rc2-453-gf59148f15013, first fa=
-il: v5.8-rc3-164-g155c91ddae03)
-      2 lines =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-                   | results
------------------------------+-------+--------------+----------+-----------=
--------------------+--------
-vexpress-v2p-ca15-tc1        | arm   | lab-cip      | gcc-8    | vexpress_d=
-efconfig           | 3/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f0276fb97c41aa57885bb18
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc3-47=
-3-g661b0ff064b6/arm/vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-=
-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2019=
-.02-11-g17e793fa4728/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0276fb97c41aa5=
-7885bb1b
-      failing since 7 days (last pass: v5.8-rc2-453-gf59148f15013, first fa=
-il: v5.8-rc3-164-g155c91ddae03)
-      2 lines =20
+--Sig_/VgejV5CQ1M8kSCOAmq82TRb--

@@ -2,104 +2,115 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EB28F2164CA
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 05:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F602165AB
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 06:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728012AbgGGDnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jul 2020 23:43:06 -0400
-Received: from helcar.hmeau.com ([216.24.177.18]:55898 "EHLO fornost.hmeau.com"
+        id S1726961AbgGGE5Z (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jul 2020 00:57:25 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:44161 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727077AbgGGDnG (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Jul 2020 23:43:06 -0400
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
-        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
-        id 1jseUe-0002DJ-Bz; Tue, 07 Jul 2020 13:42:05 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 07 Jul 2020 13:42:04 +1000
-Date:   Tue, 7 Jul 2020 13:42:04 +1000
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        id S1726805AbgGGE5Z (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 7 Jul 2020 00:57:25 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B19Cl1Lg2z9sRR;
+        Tue,  7 Jul 2020 14:57:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594097843;
+        bh=PXZrWRQu7Fx5r6jH4Gwab58PRQth89ogsPlFJ+RCfow=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RJ1jFO4BrS8/RQgKmRkbBZKB7TSH8vLS5ttfoOW+u1wzbcKleMtoNSFOaULMvm/uu
+         gamlCp4pjcugioyaWKtXu4HvVAnGmrlrdI1BjdXjXXcgBarnt6J+Wtp71ZEAYK3lr2
+         2/1zYKkSJ+RwZvOD+nlnOokIcXI33s+YRvs8uph3iwAvvgo8zcIyYgYgWUVhuERIfY
+         fyF5nDxy0IDeOIBT8KC+pWSGFwMUtImznsIqgrK1HFzapln7QJZmyZK9P/imjB132T
+         Y6Y7j/VJQU6ERgAULhfomECViI6OnSa1C5CirYaMXEGm7p38aGjUa1B0g3PgC6Fl4B
+         NrpgPH3jCRIlQ==
+Date:   Tue, 7 Jul 2020 14:57:20 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Heiko Carstens <heiko.carstens@de.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@de.ibm.com>,
-        linux-s390@vger.kernel.org,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH RESEND] lockdep: Move list.h inclusion into lockdep.h
-Message-ID: <20200707034204.GA13225@gondor.apana.org.au>
-References: <20200617071524.GA3055@gondor.apana.org.au>
- <E1jlSJz-0003hE-8g@fornost.hmeau.com>
- <20200617082459.GC2531@hirez.programming.kicks-ass.net>
- <20200617122449.GX31238@alley>
- <20200618143735.GJ576905@hirez.programming.kicks-ass.net>
+        Christian Brauner <christian.brauner@ubuntu.com>
+Subject: linux-next: manual merge of the seccomp tree with the kselftest
+ tree
+Message-ID: <20200707145720.02636577@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200618143735.GJ576905@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Type: multipart/signed; boundary="Sig_/N43/7_g7q.lVuaPL70W8sHL";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, Jun 18, 2020 at 04:37:35PM +0200, Peter Zijlstra wrote:
->
-> OK, done. tip/locking/header should contain just this patch, and that
-> branch also got merged into tip/locking/core.
+--Sig_/N43/7_g7q.lVuaPL70W8sHL
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Hi Peter:
+Hi all,
 
-Could you please apply this patch on top as there is still a header
-loop otherwise? Thanks!
+Today's linux-next merge of the seccomp tree got a conflict in:
 
----8<---
-Currently lockdep_types.h includes list.h without actually using any
-of its macros or functions.  All it needs are the type definitions
-which were moved into types.h long ago.  This potentially causes
-inclusion loops because both are included by many core header
-files.
+  tools/testing/selftests/seccomp/seccomp_bpf.c
 
-This patch moves the list.h inclusion into lockdep.h.  Note that
-we could probably remove it completely but that could potentially
-result in compile failures should any end users not include list.h
-directly and also be unlucky enough to not get list.h via some other
-header file.
+between commit:
 
-Reported-by: Petr Mladek <pmladek@suse.com>
-Tested-by: Petr Mladek <pmladek@suse.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+  9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
 
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 3b73cf84f77d..b1ad5c045353 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -21,6 +21,7 @@ extern int lock_stat;
- #ifdef CONFIG_LOCKDEP
- 
- #include <linux/linkage.h>
-+#include <linux/list.h>
- #include <linux/debug_locks.h>
- #include <linux/stacktrace.h>
- 
-diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
-index 7b9350624577..bb35b449f533 100644
---- a/include/linux/lockdep_types.h
-+++ b/include/linux/lockdep_types.h
-@@ -32,8 +32,6 @@ enum lockdep_wait_type {
- 
- #ifdef CONFIG_LOCKDEP
- 
--#include <linux/list.h>
--
- /*
-  * We'd rather not expose kernel/lockdep_states.h this wide, but we do need
-  * the total number of states... :-(
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+from the kselftest tree and commits:
+
+  aae7d264d68b ("selftests/seccomp: Check for EPOLLHUP for user_notif")
+  11b4beaa0d31 ("selftests/seccomp: Make kcmp() less required")
+  ef332c970dfa ("selftests/seccomp: Rename user_trap_syscall() to user_noti=
+f_syscall()")
+
+from the seccomp tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/seccomp/seccomp_bpf.c
+index b878e8379966,b854a6c5bf49..000000000000
+--- a/tools/testing/selftests/seccomp/seccomp_bpf.c
++++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
+@@@ -3079,10 -3043,8 +3055,10 @@@ TEST(get_metadata
+  	long ret;
+ =20
+  	/* Only real root can get metadata. */
+ -	if (geteuid())
+ -		XFAIL(return, "get_metadata test requires real root");
+ +	if (geteuid()) {
+- 		SKIP(return, "get_metadata requires real root");
+++		SKIP(return, "get_metadata test requires real root");
+ +		return;
+ +	}
+ =20
+  	ASSERT_EQ(0, pipe(pipefd));
+ =20
+
+--Sig_/N43/7_g7q.lVuaPL70W8sHL
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8EALAACgkQAVBC80lX
+0GxLNQf/d0sTQ86x4GF6X2S0U23owvOkEk9Z+c20iHAOVoup9kwAzz9c3duC/YtL
+E4i/YFJA9cRMqdvJuhgmOCs0pfM+fAPMB++QCChPFs6LCaNBWC+7io5Xq6R2sbxo
+Mz81mQRhRPdKVmD0z0j6FupNBYV0iJMPeCFlbQgN6G0b4JmaP7d7rD3zEgemty1V
+xO8rFuXKcGfN2SscJZIdsgEt6FMN7kAGfGfa38/pNvDzviy0KYEBsLECZPLbCz94
+dZ8GaYT/iIldV1ebLfdmWGD/Xp4sqFx/9r/vWJrYeeMGwBNp5RMdgV9HFj1Vd4gz
+VAJwp/IRcm7YsDVsSAwftErywC75Ng==
+=Ih0n
+-----END PGP SIGNATURE-----
+
+--Sig_/N43/7_g7q.lVuaPL70W8sHL--

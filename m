@@ -2,128 +2,104 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EEA321642A
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 04:52:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB28F2164CA
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 05:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726802AbgGGCw6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jul 2020 22:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726434AbgGGCw6 (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jul 2020 22:52:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CD1C061755;
-        Mon,  6 Jul 2020 19:52:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=JYHLauFPnWtT+mhbK3luKWopm/oGT2fxXYiZQWZB2cY=; b=s9a3G/NG0zUAZVwjTQwOLUO0LO
-        ++sfl2mBc4bxaft+PLjx9DQep8vUP73F8t5X9XkVumXZ0v1WflITxYhAnkAu+ttf6vhL/Ap6QRKUO
-        U+vzmgSDVscLoPb+pvFB/zLL2W7do0EGuQorKSFUvYkcBrBRLfDZNbmqUDKPuZ7wSuIFGawxV6kHr
-        QV/a63xeXPG90CgVU+y9Lm50AAFnz4H+bJcNNv4ffYN4dfcGHs7T14p8K+rKdOl/xlsfKYC0aFir5
-        ATL7bDhGacBoJMVcjhKMt9BUvhjezGPFi/fp4HyLKUTAHp+ZeogcoNKVPND1iyJlRPpAYP4960jpH
-        XgKqdNMQ==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jsdj4-0001qH-Ch; Tue, 07 Jul 2020 02:52:55 +0000
-Subject: Re: linux-next: Tree for Jul 6 (mm/memory_failure.c)
-To:     Joonsoo Kim <js1304@gmail.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1728012AbgGGDnG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jul 2020 23:43:06 -0400
+Received: from helcar.hmeau.com ([216.24.177.18]:55898 "EHLO fornost.hmeau.com"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1727077AbgGGDnG (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 6 Jul 2020 23:43:06 -0400
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.0.7])
+        by fornost.hmeau.com with smtp (Exim 4.92 #5 (Debian))
+        id 1jseUe-0002DJ-Bz; Tue, 07 Jul 2020 13:42:05 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 07 Jul 2020 13:42:04 +1000
+Date:   Tue, 7 Jul 2020 13:42:04 +1000
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <sergey.senozhatsky@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20200706174001.2d316826@canb.auug.org.au>
- <d458c18d-9c5e-9c45-0d65-e317571b6d56@infradead.org>
- <20200707003500.GA27886@js1304-desktop>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <207e6a52-7ca0-250d-de89-7297285d9d13@infradead.org>
-Date:   Mon, 6 Jul 2020 19:52:50 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Heiko Carstens <heiko.carstens@de.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>
+Subject: [PATCH RESEND] lockdep: Move list.h inclusion into lockdep.h
+Message-ID: <20200707034204.GA13225@gondor.apana.org.au>
+References: <20200617071524.GA3055@gondor.apana.org.au>
+ <E1jlSJz-0003hE-8g@fornost.hmeau.com>
+ <20200617082459.GC2531@hirez.programming.kicks-ass.net>
+ <20200617122449.GX31238@alley>
+ <20200618143735.GJ576905@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-In-Reply-To: <20200707003500.GA27886@js1304-desktop>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200618143735.GJ576905@hirez.programming.kicks-ass.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/6/20 5:35 PM, Joonsoo Kim wrote:
-> On Mon, Jul 06, 2020 at 09:59:06AM -0700, Randy Dunlap wrote:
->> On 7/6/20 12:40 AM, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20200703:
->>>
->>
->> on i386:
->>
->> when CONFIG_MIGRATION is not set/enabled:
->>
->> ../mm/memory-failure.c: In function ‘new_page’:
->> ../mm/memory-failure.c:1688:9: error: implicit declaration of function ‘alloc_migration_target’; did you mean ‘alloc_migrate_target’? [-Werror=implicit-function-declaration]
->>   return alloc_migration_target(p, (unsigned long)&mtc);
->>          ^~~~~~~~~~~~~~~~~~~~~~
->>
->>
->> -- 
->> ~Randy
->> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> Hello,
-> 
-> Thanks for reporting.
-> 
-> Below is the fix for this error.
-> Andrew, Could you squash this fix into the patch,
-> "mm-migrate-make-a-standard-target-allocation-function.patch"?
-> 
-> Thanks.
-> 
-> 
-> ------------------->8-------------------
-> From 5fac269125dfb2d03e38a75319305e0e70b23a4b Mon Sep 17 00:00:00 2001
-> From: Joonsoo Kim <iamjoonsoo.kim@lge.com>
-> Date: Tue, 7 Jul 2020 09:16:58 +0900
-> Subject: [PATCH] mm/migrate: fix for
->  mm-migrate-make-a-standard-target-allocation-function.patch in mm tree
-> 
-> new_page_nodemask() is renamed to alloc_migration_target in
-> mm-migrate-make-a-standard-target-allocation-function.patch, but,
-> one declaration for !CONFIG_MIGRATION case is missed. This patch fixes it.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+On Thu, Jun 18, 2020 at 04:37:35PM +0200, Peter Zijlstra wrote:
+>
+> OK, done. tip/locking/header should contain just this patch, and that
+> branch also got merged into tip/locking/core.
 
-Works for me. Thanks.
+Hi Peter:
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Could you please apply this patch on top as there is still a header
+loop otherwise? Thanks!
 
+---8<---
+Currently lockdep_types.h includes list.h without actually using any
+of its macros or functions.  All it needs are the type definitions
+which were moved into types.h long ago.  This potentially causes
+inclusion loops because both are included by many core header
+files.
 
-> ---
->  include/linux/migrate.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-> index 5e9c866..cc56f0d 100644
-> --- a/include/linux/migrate.h
-> +++ b/include/linux/migrate.h
-> @@ -60,8 +60,8 @@ static inline int migrate_pages(struct list_head *l, new_page_t new,
->  		free_page_t free, unsigned long private, enum migrate_mode mode,
->  		int reason)
->  	{ return -ENOSYS; }
-> -static inline struct page *new_page_nodemask(struct page *page,
-> -		int preferred_nid, nodemask_t *nodemask)
-> +static inline struct page *alloc_migration_target(struct page *page,
-> +		unsigned long private)
->  	{ return NULL; }
->  static inline int isolate_movable_page(struct page *page, isolate_mode_t mode)
->  	{ return -EBUSY; }
-> 
+This patch moves the list.h inclusion into lockdep.h.  Note that
+we could probably remove it completely but that could potentially
+result in compile failures should any end users not include list.h
+directly and also be unlucky enough to not get list.h via some other
+header file.
 
+Reported-by: Petr Mladek <pmladek@suse.com>
+Tested-by: Petr Mladek <pmladek@suse.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
+diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+index 3b73cf84f77d..b1ad5c045353 100644
+--- a/include/linux/lockdep.h
++++ b/include/linux/lockdep.h
+@@ -21,6 +21,7 @@ extern int lock_stat;
+ #ifdef CONFIG_LOCKDEP
+ 
+ #include <linux/linkage.h>
++#include <linux/list.h>
+ #include <linux/debug_locks.h>
+ #include <linux/stacktrace.h>
+ 
+diff --git a/include/linux/lockdep_types.h b/include/linux/lockdep_types.h
+index 7b9350624577..bb35b449f533 100644
+--- a/include/linux/lockdep_types.h
++++ b/include/linux/lockdep_types.h
+@@ -32,8 +32,6 @@ enum lockdep_wait_type {
+ 
+ #ifdef CONFIG_LOCKDEP
+ 
+-#include <linux/list.h>
+-
+ /*
+  * We'd rather not expose kernel/lockdep_states.h this wide, but we do need
+  * the total number of states... :-(
 -- 
-~Randy
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

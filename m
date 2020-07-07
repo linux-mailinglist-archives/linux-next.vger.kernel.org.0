@@ -2,122 +2,82 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D75E5216851
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 10:26:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79BC7216863
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 10:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726478AbgGGI0N (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jul 2020 04:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S1726757AbgGGIai (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jul 2020 04:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725944AbgGGI0N (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 04:26:13 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A896C08C5DB
-        for <linux-next@vger.kernel.org>; Tue,  7 Jul 2020 01:26:13 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id ch3so3010411pjb.5
-        for <linux-next@vger.kernel.org>; Tue, 07 Jul 2020 01:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=fgBIZf6Ou6ZCSQC003d8zpy8H4E/NqNG8qaxNJbkaL8=;
-        b=A6nYUDqHUKTXBW7Pk1P9cL/T4itjOBAzbhA96iehBZV//QPjGHpg9eNxJQEG/VM9BU
-         IVTsNsdxCGQgTIKnoSfkELHb3ndL+8gD/TgAQo/WJzQ0qaN/8Q83HIhJ58+cW1icXw3D
-         Hgm/RgYlRgGnJv19R8ao/wfQ8Wv3vrCWEgVsE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=fgBIZf6Ou6ZCSQC003d8zpy8H4E/NqNG8qaxNJbkaL8=;
-        b=a1N6l23szVLC7BHAQ17hDIxJaNYPNz4TY4kH+nz7eOsXwZ6EXadQIypEyVSDN4k4PE
-         Ujfb709N1si+dUSBSQdU3PFIbrK8g8W1gJuP2D9lHge5V9GX+W+5d5GIQY1TFVUEHTyH
-         MVTBEB5NbeEHVGZSwLKmKIzwFIVZd0zRKZuIXTPXh0qibH4iFm/R8XwLZ3jtIq2ssiJ5
-         ZzStNuCOTjk9WXsaBZeCHacVAq016EdPK+dCWH4wHXfaRukVF60ulw+j0Gynd8ZrmIoA
-         aQ/WbCNsRh6endVMQlBZYYpFOTG981mj9jGRwi/Nkp7NZEB/i38xeDJyrv1o4vDza8Uv
-         PFag==
-X-Gm-Message-State: AOAM532UwixPAFyR+DiviwV1ErCwbBMOaFeBf1VwSyu2LII0CsIMm4zZ
-        FAx4AgFBfjBGjx27uEnMwNKkzGI2WZM=
-X-Google-Smtp-Source: ABdhPJxubdYJ+zA9s+j14s1peRxm9eOct8g9idUMim5bT+kkXQ+qoIFmxJYd5/+Qc/0bt77zbGH8fw==
-X-Received: by 2002:a17:90b:1b44:: with SMTP id nv4mr3016781pjb.24.1594110372613;
-        Tue, 07 Jul 2020 01:26:12 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z8sm194212pgz.7.2020.07.07.01.26.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2020 01:26:11 -0700 (PDT)
-Date:   Tue, 7 Jul 2020 01:26:10 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>
-Subject: Re: linux-next: manual merge of the seccomp tree with the kselftest
+        with ESMTP id S1725941AbgGGIai (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 04:30:38 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B9FC061755;
+        Tue,  7 Jul 2020 01:30:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B1Fxm0NQNz9sRK;
+        Tue,  7 Jul 2020 18:30:36 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594110636;
+        bh=fCjZaQjF2DxSFXlTiSYwEUj677TAaVg9hEm0Lk481fI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Zh2oJhSHOASkW1j2gB8hrojuQJm9mNJlbr4Ax1Gqs6iEQMxJNt190BG7zV0vXjysZ
+         vTNG1ISpwervJOlD9GjTevRrXEcTMRYefXGcICa8sssDXHo/FfAJFsnQRiALtRooxT
+         pDS8zZLG65BNuuGQJ34+0hQKCmpOmoqK/AQu00XxB/MYaqK5JveM8BzFVYcbN0lhUL
+         C5gkBK/JLO5atvzMEy6XB+Ug/MmjrWmQAPJkIwnUacVmlLSI+eTh3ngRmLul/dzoSE
+         EhgOKlmhM18bMyPVxGLzD36S1dwKeoQ/y4Jhz0U0PA8YujT/6SX1yQKg1N6mdibxGl
+         HbcN+AA91/pjQ==
+Date:   Tue, 7 Jul 2020 18:30:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the generic-ioremap
  tree
-Message-ID: <202007070125.ECBAB9E7C3@keescook>
-References: <20200707145720.02636577@canb.auug.org.au>
+Message-ID: <20200707183035.56420aaa@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200707145720.02636577@canb.auug.org.au>
+Content-Type: multipart/signed; boundary="Sig_/BC7tsvFrhUsQLOb6SrFHxf3";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 02:57:20PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Today's linux-next merge of the seccomp tree got a conflict in:
-> 
->   tools/testing/selftests/seccomp/seccomp_bpf.c
-> 
-> between commit:
-> 
->   9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
-> 
-> from the kselftest tree and commits:
-> 
->   aae7d264d68b ("selftests/seccomp: Check for EPOLLHUP for user_notif")
->   11b4beaa0d31 ("selftests/seccomp: Make kcmp() less required")
->   ef332c970dfa ("selftests/seccomp: Rename user_trap_syscall() to user_notif_syscall()")
-> 
-> from the seccomp tree.
+--Sig_/BC7tsvFrhUsQLOb6SrFHxf3
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Har har -- a collision of my own creation. Yay lots of trees. ;) I'll
-make this go away; the cause is a harmless cleanup.
+Hi all,
 
-> 
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
-> 
-> -- 
-> Cheers,
-> Stephen Rothwell
-> 
-> diff --cc tools/testing/selftests/seccomp/seccomp_bpf.c
-> index b878e8379966,b854a6c5bf49..000000000000
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@@ -3079,10 -3043,8 +3055,10 @@@ TEST(get_metadata
->   	long ret;
->   
->   	/* Only real root can get metadata. */
->  -	if (geteuid())
->  -		XFAIL(return, "get_metadata test requires real root");
->  +	if (geteuid()) {
-> - 		SKIP(return, "get_metadata requires real root");
-> ++		SKIP(return, "get_metadata test requires real root");
->  +		return;
->  +	}
->   
->   	ASSERT_EQ(0, pipe(pipefd));
->   
+Commit
 
+  2ee080ecf668 ("wip")
 
+is missing a Signed-off-by from its author and comitter.
 
--- 
-Kees Cook
+Not much of a commit message either :-)
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/BC7tsvFrhUsQLOb6SrFHxf3
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8EMqsACgkQAVBC80lX
+0Gw0HAf+KC307/TZ1SyMwIQJzrQexw65PzfsBbkKz551WOMD3yVK1Re4riSrValj
+WxmEcKlyPRdJFZCZKfBVKtgwU2nCBAMkUftSEA6QmeAKL8GwZ2CPgm3mQm2el28B
+gLQBCOz7OTEoKmalcHcsCD/iXj3D7RfgH9Sj2o/TQD0sSlLYiXNHm0YR7h28zUkR
+33cvUQz3S8TO2aAAPXm9B8c2sjcKIh95q1AnVLYo+ohidWA4UyP4SK5GbXzEo4vq
+Ri1qCdPa3yW1SoFjsW1453UsEgx+1aRDU8GPbpZk49raQrcyzxpTEUnuuOD53X/Y
+5jfp47/axYVkBgWiTa2NSyc9qPs0WQ==
+=gD6z
+-----END PGP SIGNATURE-----
+
+--Sig_/BC7tsvFrhUsQLOb6SrFHxf3--

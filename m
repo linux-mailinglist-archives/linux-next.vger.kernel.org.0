@@ -2,85 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 42272216706
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 09:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B92B216747
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 09:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726661AbgGGHHY (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jul 2020 03:07:24 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:50353 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725766AbgGGHHY (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 7 Jul 2020 03:07:24 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B1D5k1mTRz9sDX;
-        Tue,  7 Jul 2020 17:07:22 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594105642;
-        bh=YFll0k+1Vt7bPXu2cNXZ83E+LRuqAG/yRXn3e723MEI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GlLSCLYcozrY0F52Ew8GmekzuQmfgauvcuagF0U36zavUvT/7qe2Yidm8x0V4b+G+
-         kG69rNoDBqEUeIzj9lmOs1mvcufF4z7detJWBm2LKOiXt0iZcZwuOPaowLoyQ/6oKa
-         ySfzOBS+J9u98ZS5g00UnI4YxOlyMC/VVazoM0uJnmD9FsDDbny5uRzQMzwClS5lRu
-         0M3St5twZzOL5OcLKTW0uosQIRxX47BjpKKnxPlioGp21atBUtMwkqVz2jPnFxjMlr
-         LIFAEJfx4q0hRzsxwerVJQuLBAfmE4WwTR+95M5OeAdEWFNUJt/lzzYbXmwbyR+dNd
-         p+T20FrJ1TTFg==
-Date:   Tue, 7 Jul 2020 17:07:20 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build failure after merge of the kbuild tree
-Message-ID: <20200707170720.55be721f@canb.auug.org.au>
+        id S1728260AbgGGHXg (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jul 2020 03:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42862 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725825AbgGGHXg (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 03:23:36 -0400
+Received: from mail-vk1-xa44.google.com (mail-vk1-xa44.google.com [IPv6:2607:f8b0:4864:20::a44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199CEC061755;
+        Tue,  7 Jul 2020 00:23:36 -0700 (PDT)
+Received: by mail-vk1-xa44.google.com with SMTP id h1so9091732vkn.12;
+        Tue, 07 Jul 2020 00:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20161025;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=eTRuakPnfWXbOPA0YuwVEGPF6BELfW2YGI8FV22a3D8=;
+        b=DX1im+xZt1K0FqBnN82RJezZvsKYs0Ot3lUUcTTGBlMKlp+7o+X/rD0/E+KA+LvbOs
+         0LK4bY9K2Rx2nQL1KZy5N1IPbLnTB8RgRjZK+Zg2QmdfbTR//xPfQKb8gV66Y0vcP+2s
+         bE7AQYkBA2ACbzQiJnBDUsEp3MWpblmDAKIlcn56SW1XK9qy6L3YZni32LMm8YRYFoNk
+         MVAQo7SSFj2C9T5mSDI5zr+BzgQJQWDBnKkFJWV3v7uBZqNRLLe5tHqGh5Z15/xXGsyv
+         tCAVvPqYQ/ZKp+7hqT/2Zqax3U9WMNyWw+M1keUkQ7vkrG3TVmRv44A0aci2goBrlK5Y
+         YCAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=eTRuakPnfWXbOPA0YuwVEGPF6BELfW2YGI8FV22a3D8=;
+        b=tyihyG+CT/fSaC2UF2JJGwB0qNnKD0Mn2gj3zyDqPpPi/vY0cjNPb2wzWaGI1mkFcV
+         mlqiYJqC3WPYb/HvqLOlQN3n+XmbC4l6fFcMWswd5Ghjj5/T0/KdU86f94wqSYBVmhDp
+         nYpCu2epzw3aCnNAh3RHBAfyEQgYhjH/V2InZi0k6OFuk0eO+c76f741KC36643qgPB1
+         2UBNK0IbKEAVeKQ7Ik/b4oyuiXXOu57SD5iSk4SHDX9k4KIvXFgcnMjPrBj/rjZaU6E+
+         0fVrwxolf26KRVRd8Ohj4uc/IVFQdlmNwR4NtPSx8vkM0eJvPx2KvPA0TON3QqtPM7Nm
+         0FNw==
+X-Gm-Message-State: AOAM5313kbmd74mODc3yF9vHqD/8MOtzm4QqTPgBGXZvKJMXIQp599iU
+        iAfwLOO+ZVzpGLx84dQZnsDEekIKbLz//DDTQtyP7j6MpDY=
+X-Google-Smtp-Source: ABdhPJwDoGUthv+zTNF0YQ+DIJ6TUQ/UQkySAGd4cH60E4xW8nEVh/n1Kk8o+49qubrZkhgotuQDWZVp2wGV2w1BEpY=
+X-Received: by 2002:a1f:2409:: with SMTP id k9mr8926758vkk.80.1594106615240;
+ Tue, 07 Jul 2020 00:23:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/1_x2AQfpHF.Hf30awvJdm2A";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+References: <20200707170650.692c98f0@canb.auug.org.au>
+In-Reply-To: <20200707170650.692c98f0@canb.auug.org.au>
+From:   Vaibhav Gupta <vaibhavgupta40@gmail.com>
+Date:   Tue, 7 Jul 2020 12:51:53 +0530
+Message-ID: <CAP+cEOOUoD6f6DByqC-YF3WN1nO2BMUh5t39Ud6Vz6JEge7oKg@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/1_x2AQfpHF.Hf30awvJdm2A
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 7, 2020 at 12:36 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
+>
+> Hi all,
+>
+> After merging the net-next tree, today's linux-next build (sparc64
+> defconfig) produced this warning:
+>
+> drivers/net/ethernet/sun/niu.c:9903:12: warning: 'niu_resume' defined but not used [-Wunused-function]
+>  static int niu_resume(struct device *dev_d)
+>             ^~~~~~~~~~
+> drivers/net/ethernet/sun/niu.c:9876:12: warning: 'niu_suspend' defined but not used [-Wunused-function]
+>  static int niu_suspend(struct device *dev_d)
+>             ^~~~~~~~~~~
+>
+> Introduced by commit
+>
+>   b0db0cc2f695 ("sun/niu: use generic power management")
+This warning should not have come as the earlier definition of.suspend() and
+.resume(), they were not inside "#ifdef CONFIG_PM" container. Or any other
+container. Hence I thought adding the "__maybe_unused" attribute to them
+would be unnecessary.
 
-Hi all,
+I am sending a patch to do the same.
 
-After merging the kbuild tree, today's linux-next build (powerpc
-ppc44x_defconfig) failed like this:
-
-cc1: fatal error: opening output file arch/powerpc/boot/dts/.ebony.dtb.dts.=
-tmp: No such file or directory
-
-and directory arch/powerpc/boot/dts/ does, indeed, not exist in the
-separate object directory.
-
-Caused by commit
-
-  ea4679253288 ("kbuild: always create directories of targets")
-
-at least, reverting that commit makes the build work again.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/1_x2AQfpHF.Hf30awvJdm2A
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8EHygACgkQAVBC80lX
-0GwfuQf/Tv3Jg6172Jf23qpw/eFgrBRTlU9r27xFlxn0fGUd8yiJd5UGxa4Qj9GV
-CGG+Ztb4OBN7fN509qlZZlkEkvX1Shb6BDKPl7/ut7rXyMhQDk2TRAw2hAPNNyTg
-ti73/EgYeOI0Tcj0N6TlDFKz7Qr/Ei8Vrnp93Y/JZabdMW/D/cL1hFK/VWCeLfdZ
-mqDYTqEjCq6p9My/XY7AOEaYCsEBQeQMBe7q0xUlBkFjAvgJoZAAd9vlwNQIoTlL
-UCGbZW/7euyR4h126XVuo3RrP9jkHnw9Uizpa2ROap9HjTsmbUfUHpBgyQhnOG/D
-uqNTwS7mr7KwbD2aUUrvOJs5SlmTlA==
-=TKlc
------END PGP SIGNATURE-----
-
---Sig_/1_x2AQfpHF.Hf30awvJdm2A--
+-- Vaibhav Gupta
+>
+> --
+> Cheers,
+> Stephen Rothwell

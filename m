@@ -2,139 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 60CAE216E24
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 15:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15FB2174C4
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 19:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727777AbgGGN5m (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jul 2020 09:57:42 -0400
-Received: from aserp2120.oracle.com ([141.146.126.78]:55622 "EHLO
-        aserp2120.oracle.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726805AbgGGN5m (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 09:57:42 -0400
-Received: from pps.filterd (aserp2120.oracle.com [127.0.0.1])
-        by aserp2120.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 067DuY8J117402;
-        Tue, 7 Jul 2020 13:57:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=corp-2020-01-29;
- bh=MjwWplxfK1RilGvrN/7KblwD+GglAte1BvP/6SXwa8E=;
- b=Z+DO7BJQMWMwVm/ursUier07EJ5QalHzkRkpCUf+9KfipyUjnGCL/ukgzr56ZVWsahZJ
- NSpjoI/IIl6vLvgxVxG8d/5adyUynUttBMS8qL33v3W7ct2oqQQQ4Kt8UpCwfyFLM5YE
- tr62UlE6GHo7wcZBVX/8sFxASyPi7NudVtarm9uDIFJ8eueqCgGhjNl/rGthBDMO6/L/
- lmM2z4TtHTUpk8+4E3BvDpgxLXbhfNrX2zbswM4EpRgfTK/vy2Uybu/P2y3BwfgPJY3C
- JarMsxhmPMZ8jfdaIlBYvgicC/3i3AsEbsoLE/iahNgrtJc1vlHG2U9PApfOCf0Eo464 9w== 
-Received: from aserp3020.oracle.com (aserp3020.oracle.com [141.146.126.70])
-        by aserp2120.oracle.com with ESMTP id 322kv6cee6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 07 Jul 2020 13:57:29 +0000
-Received: from pps.filterd (aserp3020.oracle.com [127.0.0.1])
-        by aserp3020.oracle.com (8.16.0.42/8.16.0.42) with SMTP id 067Dd8uu068538;
-        Tue, 7 Jul 2020 13:57:29 GMT
-Received: from userv0121.oracle.com (userv0121.oracle.com [156.151.31.72])
-        by aserp3020.oracle.com with ESMTP id 3233p2q4a0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 07 Jul 2020 13:57:29 +0000
-Received: from abhmp0002.oracle.com (abhmp0002.oracle.com [141.146.116.8])
-        by userv0121.oracle.com (8.14.4/8.13.8) with ESMTP id 067DvRUg004792;
-        Tue, 7 Jul 2020 13:57:27 GMT
-Received: from localhost (/67.169.218.210)
-        by default (Oracle Beehive Gateway v4.0)
-        with ESMTP ; Tue, 07 Jul 2020 06:57:27 -0700
-Date:   Tue, 7 Jul 2020 06:57:25 -0700
-From:   "Darrick J. Wong" <darrick.wong@oracle.com>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>, linux-xfs@vger.kernel.org,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Brian Foster <bfoster@redhat.com>
-Subject: Re: [PATCH] xfs: fix non-quota build breakage
-Message-ID: <20200707135725.GI7606@magnolia>
-References: <20200707102754.65254f1e@canb.auug.org.au>
- <20200707022825.GL2005@dread.disaster.area>
+        id S1728305AbgGGRJs (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jul 2020 13:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727975AbgGGRJs (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 13:09:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3CAC061755;
+        Tue,  7 Jul 2020 10:09:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=VtiHUiyb//SGj+Knq/KKD/eti2VKeoJokjedgU/YeUg=; b=grkkg2ykASxwgIiR9hCOu8VyVB
+        luCeI/4DGM7lP9G1rzIe56CVDGNsPbKQRQHpTZKpWWU2qcrqxyIo/Q+9oftiHMxLefGbwwJ9BPP2T
+        qWgIJoM8FAUPh3yEzK3dFS9CYkdqkttmeAeX/7fg2peF4hP7i7r4Hk79r8OzaOePp6/wriR1hV50Z
+        6fD9IVf8M4RYyJQ2+OKU5N8Csl1fWshvLyOBxVs4NSKWR7subyzR1oMzd/Jz9xlf11L6a7MMG8szu
+        rcJop5hpipPC7ujHyI8UZy9c+/hEMu8vgXFnpHIkKj/I5bBalu4fscdSPpFi2wEabQBFcqMPNgD1y
+        KLuuf7NA==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jsr6G-0001M1-T6; Tue, 07 Jul 2020 17:09:45 +0000
+Subject: Re: linux-next: Tree for Jul 7 (scsi/lpfc/lpfc_init.c)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        James Smart <james.smart@broadcom.com>,
+        dick kennedy <dick.kennedy@broadcom.com>
+References: <20200707180800.549b561b@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <2f85f3c4-a58b-f225-a533-86e209a4651c@infradead.org>
+Date:   Tue, 7 Jul 2020 10:09:41 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200707022825.GL2005@dread.disaster.area>
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9674 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=1 mlxlogscore=999
- mlxscore=0 spamscore=0 bulkscore=0 malwarescore=0 phishscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007070103
-X-Proofpoint-Virus-Version: vendor=nai engine=6000 definitions=9674 signatures=668680
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 lowpriorityscore=0 bulkscore=0
- malwarescore=0 suspectscore=1 mlxlogscore=999 phishscore=0 spamscore=0
- priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0 adultscore=0
- cotscore=-2147483648 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2004280000 definitions=main-2007070104
+In-Reply-To: <20200707180800.549b561b@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 07, 2020 at 12:28:25PM +1000, Dave Chinner wrote:
+On 7/7/20 1:08 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
-> From: Dave Chinner <dchinner@redhat.com>
+> Changes since 20200706:
 > 
-> Oops, I forgot that you can config out quotas because nobody
-> ever does that when they build XFS anymore.
-> 
-> Fixes: 018dc1667913 ("xfs: use direct calls for dquot IO completion")
-> 
-> Signed-off-by: Dave Chinner <dchinner@redhat.com>
 
-Looks ok,
-Reviewed-by: Darrick J. Wong <darrick.wong@oracle.com>
+on i386:
 
---D
+when CONFIG_ACPI is not set/enabled:
 
-> ---
->  fs/xfs/xfs_dquot.h | 1 -
->  fs/xfs/xfs_quota.h | 9 +++++++++
->  2 files changed, 9 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/xfs/xfs_dquot.h b/fs/xfs/xfs_dquot.h
-> index fe9cc3e08ed6..71e36c85e20b 100644
-> --- a/fs/xfs/xfs_dquot.h
-> +++ b/fs/xfs/xfs_dquot.h
-> @@ -174,7 +174,6 @@ void		xfs_qm_dqput(struct xfs_dquot *dqp);
->  void		xfs_dqlock2(struct xfs_dquot *, struct xfs_dquot *);
->  
->  void		xfs_dquot_set_prealloc_limits(struct xfs_dquot *);
-> -void		xfs_dquot_done(struct xfs_buf *);
->  
->  static inline struct xfs_dquot *xfs_qm_dqhold(struct xfs_dquot *dqp)
->  {
-> diff --git a/fs/xfs/xfs_quota.h b/fs/xfs/xfs_quota.h
-> index aa8fc1f55fbd..c92ae5e02ce8 100644
-> --- a/fs/xfs/xfs_quota.h
-> +++ b/fs/xfs/xfs_quota.h
-> @@ -13,6 +13,7 @@
->   */
->  
->  struct xfs_trans;
-> +struct xfs_buf;
->  
->  /*
->   * This check is done typically without holding the inode lock;
-> @@ -107,6 +108,8 @@ extern void xfs_qm_mount_quotas(struct xfs_mount *);
->  extern void xfs_qm_unmount(struct xfs_mount *);
->  extern void xfs_qm_unmount_quotas(struct xfs_mount *);
->  
-> +void		xfs_dquot_done(struct xfs_buf *);
-> +
->  #else
->  static inline int
->  xfs_qm_vop_dqalloc(struct xfs_inode *ip, kuid_t kuid, kgid_t kgid,
-> @@ -148,6 +151,12 @@ static inline int xfs_trans_reserve_quota_bydquots(struct xfs_trans *tp,
->  #define xfs_qm_mount_quotas(mp)
->  #define xfs_qm_unmount(mp)
->  #define xfs_qm_unmount_quotas(mp)
-> +
-> +static inline void xfs_dquot_done(struct xfs_buf *bp)
-> +{
-> +	return;
-> +}
-> +
->  #endif /* CONFIG_XFS_QUOTA */
->  
->  #define xfs_trans_unreserve_quota_nblks(tp, ip, nblks, ninos, flags) \
+
+../drivers/scsi/lpfc/lpfc_init.c:1265:15: error: implicit declaration of function 'get_cpu_idle_time'; did you mean 'get_cpu_device'? [-Werror=implicit-function-declaration]
+
+
+The cpufreq people want justification for using
+get_cpu_idle_time().  Please see
+https://lore.kernel.org/linux-scsi/20200707030943.xkocccy6qy2c3hrx@vireshk-i7/
+
+
+
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

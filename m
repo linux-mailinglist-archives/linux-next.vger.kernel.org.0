@@ -2,83 +2,128 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 89BA921641D
-	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 04:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEA321642A
+	for <lists+linux-next@lfdr.de>; Tue,  7 Jul 2020 04:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726915AbgGGCof (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 6 Jul 2020 22:44:35 -0400
-Received: from ozlabs.org ([203.11.71.1]:56395 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726434AbgGGCof (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Mon, 6 Jul 2020 22:44:35 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B16GS4VjSz9sRR;
-        Tue,  7 Jul 2020 12:44:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594089872;
-        bh=HP+pO41oFoQSlyD8UWUtPdpmn6fAVCYBd6fmrUXd82w=;
-        h=Date:From:To:Cc:Subject:From;
-        b=O3TpP6f74YD9R7g4wzVkCIS8RlyRL9sIyduZ0yGmckRI0YatglZCuXuT9PDpUBE/X
-         p75HQ03zlwBAMlDrclX9gDEg4SV4/Z8IMx4wAiOG3Nalbw0ASyj4gDFpYtf6dbSj7D
-         NtZi86nOUmzw0S4fKi3/D3XqT65hQekPO9DpUKz7A1CyDNN44vZhm9Rr7fjaCUZ8Ao
-         RULer9aFav8cCgbvJETlwyivea+bEwKwSUkW2w3CcTWW0FE/qb8HzItaBP8A9Rgbd4
-         804QpSPZ3uT02+A8InbAr360fMOEkErFMCkdocfNeE4t4x+3akWDVSkvubehZworsL
-         eHUcXXU1Se3JQ==
-Date:   Tue, 7 Jul 2020 12:44:31 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: build warning after merge of the mfd tree
-Message-ID: <20200707124431.450bb0da@canb.auug.org.au>
+        id S1726802AbgGGCw6 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 6 Jul 2020 22:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57850 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726434AbgGGCw6 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 6 Jul 2020 22:52:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CD1C061755;
+        Mon,  6 Jul 2020 19:52:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=JYHLauFPnWtT+mhbK3luKWopm/oGT2fxXYiZQWZB2cY=; b=s9a3G/NG0zUAZVwjTQwOLUO0LO
+        ++sfl2mBc4bxaft+PLjx9DQep8vUP73F8t5X9XkVumXZ0v1WflITxYhAnkAu+ttf6vhL/Ap6QRKUO
+        U+vzmgSDVscLoPb+pvFB/zLL2W7do0EGuQorKSFUvYkcBrBRLfDZNbmqUDKPuZ7wSuIFGawxV6kHr
+        QV/a63xeXPG90CgVU+y9Lm50AAFnz4H+bJcNNv4ffYN4dfcGHs7T14p8K+rKdOl/xlsfKYC0aFir5
+        ATL7bDhGacBoJMVcjhKMt9BUvhjezGPFi/fp4HyLKUTAHp+ZeogcoNKVPND1iyJlRPpAYP4960jpH
+        XgKqdNMQ==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jsdj4-0001qH-Ch; Tue, 07 Jul 2020 02:52:55 +0000
+Subject: Re: linux-next: Tree for Jul 6 (mm/memory_failure.c)
+To:     Joonsoo Kim <js1304@gmail.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20200706174001.2d316826@canb.auug.org.au>
+ <d458c18d-9c5e-9c45-0d65-e317571b6d56@infradead.org>
+ <20200707003500.GA27886@js1304-desktop>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <207e6a52-7ca0-250d-de89-7297285d9d13@infradead.org>
+Date:   Mon, 6 Jul 2020 19:52:50 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/TvkVtWjdCBZFDArLLAFpwQZ";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200707003500.GA27886@js1304-desktop>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/TvkVtWjdCBZFDArLLAFpwQZ
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 7/6/20 5:35 PM, Joonsoo Kim wrote:
+> On Mon, Jul 06, 2020 at 09:59:06AM -0700, Randy Dunlap wrote:
+>> On 7/6/20 12:40 AM, Stephen Rothwell wrote:
+>>> Hi all,
+>>>
+>>> Changes since 20200703:
+>>>
+>>
+>> on i386:
+>>
+>> when CONFIG_MIGRATION is not set/enabled:
+>>
+>> ../mm/memory-failure.c: In function ‘new_page’:
+>> ../mm/memory-failure.c:1688:9: error: implicit declaration of function ‘alloc_migration_target’; did you mean ‘alloc_migrate_target’? [-Werror=implicit-function-declaration]
+>>   return alloc_migration_target(p, (unsigned long)&mtc);
+>>          ^~~~~~~~~~~~~~~~~~~~~~
+>>
+>>
+>> -- 
+>> ~Randy
+>> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> 
+> Hello,
+> 
+> Thanks for reporting.
+> 
+> Below is the fix for this error.
+> Andrew, Could you squash this fix into the patch,
+> "mm-migrate-make-a-standard-target-allocation-function.patch"?
+> 
+> Thanks.
+> 
+> 
+> ------------------->8-------------------
+> From 5fac269125dfb2d03e38a75319305e0e70b23a4b Mon Sep 17 00:00:00 2001
+> From: Joonsoo Kim <iamjoonsoo.kim@lge.com>
+> Date: Tue, 7 Jul 2020 09:16:58 +0900
+> Subject: [PATCH] mm/migrate: fix for
+>  mm-migrate-make-a-standard-target-allocation-function.patch in mm tree
+> 
+> new_page_nodemask() is renamed to alloc_migration_target in
+> mm-migrate-make-a-standard-target-allocation-function.patch, but,
+> one declaration for !CONFIG_MIGRATION case is missed. This patch fixes it.
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Joonsoo Kim <iamjoonsoo.kim@lge.com>
 
-Hi all,
+Works for me. Thanks.
 
-After merging the mfd tree, today's linux-next build (arm
-multi_v7_defconfig) produced this warning:
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
 
-drivers/mfd/axp20x-i2c.c:82:5: warning: "CONFIG_ACPI" is not defined, evalu=
-ates to 0 [-Wundef]
-   82 | #if CONFIG_ACPI
-      |     ^~~~~~~~~~~
 
-Introduced by commit
+> ---
+>  include/linux/migrate.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+> index 5e9c866..cc56f0d 100644
+> --- a/include/linux/migrate.h
+> +++ b/include/linux/migrate.h
+> @@ -60,8 +60,8 @@ static inline int migrate_pages(struct list_head *l, new_page_t new,
+>  		free_page_t free, unsigned long private, enum migrate_mode mode,
+>  		int reason)
+>  	{ return -ENOSYS; }
+> -static inline struct page *new_page_nodemask(struct page *page,
+> -		int preferred_nid, nodemask_t *nodemask)
+> +static inline struct page *alloc_migration_target(struct page *page,
+> +		unsigned long private)
+>  	{ return NULL; }
+>  static inline int isolate_movable_page(struct page *page, isolate_mode_t mode)
+>  	{ return -EBUSY; }
+> 
 
-  20f359cb236b ("mfd: axp20x-i2c: Do not define 'struct acpi_device_id' whe=
-n !CONFIG_ACPI")
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/TvkVtWjdCBZFDArLLAFpwQZ
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8D4Y8ACgkQAVBC80lX
-0GyvrQf+K+Qjf4neIlMo2JtfdDGyKKNJR6RpAcC/JWhC4IF3BrotP2cSbpZHkE2B
-yLXyrnsIM5O/DLXUTfJFUPQxC4laW2k0hszr36hTxBAiZipMOCqeBmwN+atJkZ5D
-UoYc0SzWQ6zZ/X/BT4ydLJ2g6uJyhnePn4tUlSwJUfd06oOCO2nGTCnH7YtKiAbJ
-Eu/t4VDZcmYyPzpsY3FUavJSfWVBYsoJUf1hPWLogeh7DP0wjHJ775+nVR3mEj6Y
-yIafruTIJzILqaUXMwdaVo4vqSOn/MPqqgvz5vLdTqrVd9RwTKKEISKZ0h6p2oAf
-3A7Q3FrZoeed477buZSeIPVZql7YiA==
-=/lgx
------END PGP SIGNATURE-----
-
---Sig_/TvkVtWjdCBZFDArLLAFpwQZ--
+-- 
+~Randy

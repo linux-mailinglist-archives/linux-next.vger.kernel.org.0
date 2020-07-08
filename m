@@ -2,111 +2,125 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D173217D23
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jul 2020 04:46:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAC3217D6A
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jul 2020 05:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728642AbgGHCqN (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 7 Jul 2020 22:46:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
+        id S1728298AbgGHDNI (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 7 Jul 2020 23:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1728479AbgGHCqM (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 22:46:12 -0400
-Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6907BC061755;
-        Tue,  7 Jul 2020 19:46:12 -0700 (PDT)
-Received: by mail-ej1-x642.google.com with SMTP id w6so48797671ejq.6;
-        Tue, 07 Jul 2020 19:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=XuQXgKfjhRPfHlI6CUS9W8MpPRXyJFXM/VMcVD9TWSg=;
-        b=ZHppF9kI4mXLPuSLMpLIZJIATEcKJyXFvjR+sgZlNQVkPpRF7/UQTAW3e3oCFUefSZ
-         ZmtO5jwWdkEuY4gEkjAHdOR4nOrFhs2xLcPFyZCLFl4FibCkmmUv8TDU8of1bN2lFET5
-         UQT2mnqTzsQT5mVhSfwfs9uABpRRfYSopCH49SVJSDJXmKfshxVWJTGJZXvGz2Pd8sLB
-         rhbK/BSxfB86gfl/7qnIBnoUPUoIne9egWs1BbscFuF5I+cw9YspYJC1hS5gmPS+Okta
-         xkw2i3TcD18rjgrEPvg5UkGbReMo+p6CcJ6p+/R0AzTYz2ZINiEmkfhBe3gvP2p2B7UY
-         HGDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=XuQXgKfjhRPfHlI6CUS9W8MpPRXyJFXM/VMcVD9TWSg=;
-        b=WPaDhUZ24TrpNuuQwQkWR49zBfBOhd4ChoFZOti9woh/g+3f6owQSjDiFYKME2tQfg
-         bBl8pjRrzl+NsBHw5hmAMaeladKqO+7tj3M8QpAPvBKt99p23PgSiaRAMCxl7jXs9a9V
-         oXUp8rd+ii8b0XYfO/wLVaQ1p8HcDInuOCm2wJBmSH2fan/C88AAMNxZWPCXQdOJI6OQ
-         bNY/LwvWFsWSiBGMpMBfHlfFEuMKrU/Kf3yZgS71n774EiUnrJ+TO+l23JUoMcAL9xFy
-         44MOzTmY+aF6j2uFackowPxpnW0Hhdr7M2AI0saB04DAnANYzVNITcKyLtiSCRr4rFBO
-         vRxQ==
-X-Gm-Message-State: AOAM531xfvo2jx2pcC7T/rc4E51lUlQPhfGq6hf/ejapg/GNMzv+6sfo
-        KJVIF0Hh75N0l1yJHzHRQSV4V8NVBvq49pKt1Oc=
-X-Google-Smtp-Source: ABdhPJxYdhLRcy744oW+MNtiCcL1RmFwk3vsdiHmDMArMFLyhT1qlrWXymL9oHuKbRVyql22v0GBVdidoxnHGMqGO+0=
-X-Received: by 2002:a17:906:31c8:: with SMTP id f8mr38085963ejf.269.1594176371013;
- Tue, 07 Jul 2020 19:46:11 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707180800.549b561b@canb.auug.org.au> <2f85f3c4-a58b-f225-a533-86e209a4651c@infradead.org>
- <7ae1c7e3-ce8d-836b-1ae7-d4d00bd8f95c@broadcom.com>
-In-Reply-To: <7ae1c7e3-ce8d-836b-1ae7-d4d00bd8f95c@broadcom.com>
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Wed, 8 Jul 2020 08:16:00 +0530
-Message-ID: <CAOh2x=nGvuzicr77y-X5u8FWP7_G_UGosvdmtns01VCgtM_s=g@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 7 (scsi/lpfc/lpfc_init.c)
-To:     James Smart <james.smart@broadcom.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        with ESMTP id S1728294AbgGHDNI (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 7 Jul 2020 23:13:08 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09C3C061755;
+        Tue,  7 Jul 2020 20:13:07 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B1krw16lMz9sSJ;
+        Wed,  8 Jul 2020 13:13:03 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594177984;
+        bh=l+bxzGYWMcNd3rl1Uz5C1PGATDAm1DMxpOeCPiA0fAI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=QJGu3CLbfvxcU7Rs5HLTw0RMTbYkGZbmuEK0WlaUbHc41TxQ/zyKNJB8Ll6G9Slls
+         mBnvPKmTixbh55VNwPSEjhI+JkkSdPC1qgFafcKBDt9ZauKmB64Eg2rdkbc51WGLfR
+         QoFAjKExiXfBuraA4Cn/O3bHIp0Depcx7e8dNHGtgtA9dw6gX5Zuh5lPQ4e89poawW
+         wvwKfHmKoiVOQmYgJveCF1vOlQ6a/Y1cMreBReBC0MYoOjcb0BqBVO7eLMoePlU9nd
+         UuamQn1EYCwrcdYNt2gH9XxoofxAIepjXJGwnPmO7BxMEzdWbDxSzxHVMaXYcy48OP
+         ZohdlL/txatbA==
+Date:   Wed, 8 Jul 2020 13:13:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Steven Whitehouse <swhiteho@redhat.com>,
+        Bob Peterson <rpeterso@redhat.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        dick kennedy <dick.kennedy@broadcom.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Content-Type: text/plain; charset="UTF-8"
+        Andreas Gruenbacher <agruenba@redhat.com>
+Subject: linux-next: manual merge of the block tree with the gfs2 tree
+Message-ID: <20200708131300.2bc5585b@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Y_/gem6CuL6FuSahpUv+EJY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi James,
+--Sig_/Y_/gem6CuL6FuSahpUv+EJY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 7, 2020 at 11:43 PM James Smart <james.smart@broadcom.com> wrote:
->
-> On 7/7/2020 10:09 AM, Randy Dunlap wrote:
-> > On 7/7/20 1:08 AM, Stephen Rothwell wrote:
-> >> Hi all,
-> >>
-> >> Changes since 20200706:
-> >>
-> > on i386:
-> >
-> > when CONFIG_ACPI is not set/enabled:
-> >
-> >
-> > ../drivers/scsi/lpfc/lpfc_init.c:1265:15: error: implicit declaration of function 'get_cpu_idle_time'; did you mean 'get_cpu_device'? [-Werror=implicit-function-declaration]
-> >
-> >
-> > The cpufreq people want justification for using
+Hi all,
 
-I am one of cpufreq people :)
+Today's linux-next merge of the block tree got a conflict in:
 
-> > get_cpu_idle_time().  Please see
-> > https://lore.kernel.org/linux-scsi/20200707030943.xkocccy6qy2c3hrx@vireshk-i7/
-> >
->
-> The driver is using cpu utilization in order to choose between softirq
-> or work queues in handling an interrupt. Less-utilized, softirq is used.
-> higher utilized, work queue is used.  The utilization is checked
-> periodically via a heartbeat.
+  mm/filemap.c
 
-I understand that you need to use this functionality, what I was
-rather asking was
-why do you need to use a routine that is for cpufreq related stuff only.
+between commit:
 
-I also see that drivers/macintosh/rack-meter.c has its own
-implementation for this.
+  f0091f595dee ("fs: Add IOCB_NOIO flag for generic_file_read_iter")
 
-What I would suggest is that, if required, we should add/move a
-generic implementation
-of this to another file (which is available to all) and then let
-everyone use it.
+from the gfs2 tree and commits:
 
---
-viresh
+  2e85abf053b9 ("mm: allow read-ahead with IOCB_NOWAIT set")
+  dd3e6d5039de ("mm: add support for async page locking")
+
+from the block tree.
+
+The gfs2 tree commit has changed from the previous report.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/filemap.c
+index 6a6ed95e33a2,a5b1fa8f7ce4..000000000000
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@@ -2028,8 -2044,6 +2044,8 @@@ find_page
+ =20
+  		page =3D find_get_page(mapping, index);
+  		if (!page) {
+- 			if (iocb->ki_flags & (IOCB_NOWAIT | IOCB_NOIO))
+++			if (iocb->ki_flags & IOCB_NOIO)
+ +				goto would_block;
+  			page_cache_sync_readahead(mapping,
+  					ra, filp,
+  					index, last_index - index);
+@@@ -2164,7 -2185,7 +2191,7 @@@ page_not_up_to_date_locked
+  		}
+ =20
+  readpage:
+- 		if (iocb->ki_flags & IOCB_NOIO) {
+ -		if (iocb->ki_flags & IOCB_NOWAIT) {
+++		if (iocb->ki_flags & (IOCB_NOWAIT |IOCB_NOIO)) {
+  			unlock_page(page);
+  			put_page(page);
+  			goto would_block;
+
+--Sig_/Y_/gem6CuL6FuSahpUv+EJY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8FObwACgkQAVBC80lX
+0Gxjtwf+OGinXBr/kjjonhis8Ru+rYd+eKn23cmrqZhib794Nvwup9QLoAqxtOWs
+t/ktzEB6kJY9dgJY95QuaE3qSYPYvTdnYkL/D5mCo1tcJptbgVl8ZMIbPsVgicd+
+5LoKNKJWpZ1BkjL6zbYhewKPhin3fCA9mSb61Co+Q+TV4Fe/IBQKM3pQ9l5Zw6bK
+LCYeOpCdW1L9RDCFsHlnRlRw9GGuSXOc8UmA4PGi6C8ggb7zLv98JZYnpjsabWuK
+NXCyd1wrpuaqGS/pDZBb0kkvcSP5nztmb+Plx2QmX/eFlKRH9WxPfclzX/nYjFbY
+IlwSJZ0GniiF3MgRYN28sfLFsl3Dpw==
+=E/jX
+-----END PGP SIGNATURE-----
+
+--Sig_/Y_/gem6CuL6FuSahpUv+EJY--

@@ -2,141 +2,144 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FBA217DD2
-	for <lists+linux-next@lfdr.de>; Wed,  8 Jul 2020 06:00:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40CB1217E70
+	for <lists+linux-next@lfdr.de>; Wed,  8 Jul 2020 06:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725320AbgGHEAj (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jul 2020 00:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S1728979AbgGHEiH (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jul 2020 00:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725298AbgGHEAj (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jul 2020 00:00:39 -0400
+        with ESMTP id S1726185AbgGHEiH (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jul 2020 00:38:07 -0400
 Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8F3C061755;
-        Tue,  7 Jul 2020 21:00:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4EB5C061755;
+        Tue,  7 Jul 2020 21:38:06 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B1lvm5swFz9sDX;
-        Wed,  8 Jul 2020 14:00:35 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B1mkx3glbz9sDX;
+        Wed,  8 Jul 2020 14:38:01 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594180837;
-        bh=957lItIZvTN4WdtL2grsL+l3U2VsYqTD4EPR4QpH2Mg=;
+        s=201702; t=1594183083;
+        bh=ZsMcG70EzyVoGxShgO4kLHS/DyIAqpINTFPJBiPhCWU=;
         h=Date:From:To:Cc:Subject:From;
-        b=L7IQNKIEuIpbayFYboM++tHCPO2ZH+n1F+FS482LCNgEw9snMXqRkkJRXTgeZIwFW
-         f1cduBTQI/Gt+HhcE5L9IWDk/pZvQ6h5A3tPmhrXgthcHttuFqpPyH0Tod3f5bslK/
-         i8ZH1tlWMdJZqTlC4ylqpVT0MxgyFVEKQWWpXLPFycEX+TdsaWcLI/0Si4TJgU0E0P
-         u9nITqWV2Hqf+ZtF/rFGOt8Whmu0yRstTDwYYYzgriFA09/JwpAL5wmj9BsO39fMpJ
-         H+UmkOktQvorEfIuMPhGr0DAmjBb39OmV3Am8aTWM7XUSjOuB2BLIICHKMZ8CQPOuX
-         GpFNFsS2OjkoA==
-Date:   Wed, 8 Jul 2020 14:00:34 +1000
+        b=IT2uQZXV3/7XQNOLkkYoasFrMKQLzR4jB3xm7wNtSFUhxgGcZWfjwcwZ1zzpoZ4wE
+         iXaFlujqV4ZoGC4eSVX0frW/TRpB5BGo0MicIUHHPJZIBZpN1jaRxzAc7FqKO/BdKs
+         ztKtwOcBDIEeHrw7g9SlUitpPjfjcKkwKlpZnSIJSJjaSlTEfzmEa0yhkUV/sdSG5L
+         vUpfsPGhgHCdcVLpUotau2j/j9UH0H7nxCy2lYpMCnTIyty2QzMaT/rfiXn7LvT/wX
+         AV/XSJX9mnVGgQHpo2pv1NQiSb+rjfHPJHebvf175skl1aTbnh5DEjXWDDGRgP12SN
+         +SdaMfVps7Zeg==
+Date:   Wed, 8 Jul 2020 14:37:59 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     James Morris <jmorris@namei.org>
+To:     Mark Brown <broonie@kernel.org>,
+        Richard Weinberger <richard.weinberger@gmail.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Daniel Colascione <dancol@google.com>
-Subject: linux-next: build failure after merge of the security tree
-Message-ID: <20200708140034.546298ff@canb.auug.org.au>
+        Christophe Kerello <christophe.kerello@st.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
+Subject: linux-next: manual merge of the spi tree with the mtd tree
+Message-ID: <20200708143759.50246487@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zDb+9f7ZhEmpt+otwEEbNfE";
+Content-Type: multipart/signed; boundary="Sig_/oy0nep/YG9.oD.7jA5usSxT";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/zDb+9f7ZhEmpt+otwEEbNfE
+--Sig_/oy0nep/YG9.oD.7jA5usSxT
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-After merging the security tree, today's linux-next build (powerpc
-ppc64_defconfig) failed like this:
+Today's linux-next merge of the spi tree got conflicts in:
 
-fs/anon_inodes.c: In function 'anon_inode_make_secure_inode':
-fs/anon_inodes.c:70:10: error: implicit declaration of function 'security_i=
-node_init_security_anon'; did you mean 'security_inode_init_security'? [-We=
-rror=3Dimplicit-function-declaration]
-   70 |  error =3D security_inode_init_security_anon(
-      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |          security_inode_init_security
+  drivers/memory/Kconfig
+  drivers/memory/Makefile
 
-Caused by commit
+between commit:
 
-  2749d3f84a70 ("Add a new LSM-supporting anonymous inode interface")
+  66b8173a197f ("memory: stm32-fmc2-ebi: add STM32 FMC2 EBI controller driv=
+er")
 
-# CONFIG_SECURITY is not set
+from the mtd tree and commit:
 
-Also, the explicit include of linux/security.h is missing ...
+  ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
 
-I have added the following patch for today.
+from the spi tree.
 
-=46rom b2bae25c9b715e06f7e802ec7b51cfbfec046e6c Mon Sep 17 00:00:00 2001
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 8 Jul 2020 13:43:01 +1000
-Subject: [PATCH] fix up for "Add a new LSM-supporting anonymous inode inter=
-face"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- fs/anon_inodes.c         | 1 +
- include/linux/security.h | 7 +++++++
- 2 files changed, 8 insertions(+)
-
-diff --git a/fs/anon_inodes.c b/fs/anon_inodes.c
-index f87f221167cf..25d92c64411e 100644
---- a/fs/anon_inodes.c
-+++ b/fs/anon_inodes.c
-@@ -21,6 +21,7 @@
- #include <linux/magic.h>
- #include <linux/anon_inodes.h>
- #include <linux/pseudo_fs.h>
-+#include <linux/security.h>
-=20
- #include <linux/uaccess.h>
-=20
-diff --git a/include/linux/security.h b/include/linux/security.h
-index 95c133a8f8bb..7c6b3dcf4721 100644
---- a/include/linux/security.h
-+++ b/include/linux/security.h
-@@ -735,6 +735,13 @@ static inline int security_inode_init_security(struct =
-inode *inode,
- 	return 0;
- }
-=20
-+static inline int security_inode_init_security_anon(struct inode *inode,
-+						    const struct qstr *name,
-+						    const struct inode *context_inode)
-+{
-+	return 0;
-+}
-+
- static inline int security_old_inode_init_security(struct inode *inode,
- 						   struct inode *dir,
- 						   const struct qstr *qstr,
---=20
-2.27.0
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/zDb+9f7ZhEmpt+otwEEbNfE
+diff --cc drivers/memory/Kconfig
+index be69c07b8941,e438d79857da..000000000000
+--- a/drivers/memory/Kconfig
++++ b/drivers/memory/Kconfig
+@@@ -174,16 -174,15 +174,25 @@@ config PL353_SM
+  	  This driver is for the ARM PL351/PL353 Static Memory
+  	  Controller(SMC) module.
+ =20
++ config RENESAS_RPCIF
++ 	tristate "Renesas RPC-IF driver"
++ 	depends on ARCH_RENESAS
++ 	select REGMAP_MMIO
++ 	help
++ 	  This supports Renesas R-Car Gen3 RPC-IF which provides either SPI
++ 	  host or HyperFlash. You'll have to select individual components
++ 	  under the corresponding menu.
++=20
+ +config STM32_FMC2_EBI
+ +	tristate "Support for FMC2 External Bus Interface on STM32MP SoCs"
+ +	depends on MACH_STM32MP157 || COMPILE_TEST
+ +	select MFD_SYSCON
+ +	help
+ +	  Select this option to enable the STM32 FMC2 External Bus Interface
+ +	  controller. This driver configures the transactions with external
+ +	  devices (like SRAM, ethernet adapters, FPGAs, LCD displays, ...) on
+ +	  SOCs containing the FMC2 External Bus Interface.
+ +
+  source "drivers/memory/samsung/Kconfig"
+  source "drivers/memory/tegra/Kconfig"
+ =20
+diff --cc drivers/memory/Makefile
+index d3d8d6ced342,d105f8ebe8b8..000000000000
+--- a/drivers/memory/Makefile
++++ b/drivers/memory/Makefile
+@@@ -22,7 -22,7 +22,8 @@@ obj-$(CONFIG_JZ4780_NEMC)	+=3D jz4780-nem
+  obj-$(CONFIG_MTK_SMI)		+=3D mtk-smi.o
+  obj-$(CONFIG_DA8XX_DDRCTL)	+=3D da8xx-ddrctl.o
+  obj-$(CONFIG_PL353_SMC)		+=3D pl353-smc.o
++ obj-$(CONFIG_RENESAS_RPCIF)	+=3D renesas-rpc-if.o
+ +obj-$(CONFIG_STM32_FMC2_EBI)	+=3D stm32-fmc2-ebi.o
+ =20
+  obj-$(CONFIG_SAMSUNG_MC)	+=3D samsung/
+  obj-$(CONFIG_TEGRA_MC)		+=3D tegra/
+
+--Sig_/oy0nep/YG9.oD.7jA5usSxT
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8FROMACgkQAVBC80lX
-0Gzv5AgAgWD26XxBoAT0UcACCiPs+D1K3oaksBZ78PvNYac49YTdSSTGvXMRjBht
-ruIfQQSxuI9AF8i90iVPY6FFyi9mDTsW1d24ejFdTsGGPxHc06/oojnVISN7nSOp
-F2WUoHEveRFRW0Z3iFhkBcizA1qg/oZxI3kggyUridfEpZxrAnl1v6N3M1oA+nrg
-LxEgcWj9AUfUKq4Yj9rbRzQNcmiF5YPMcTOJDy+WV2DM5J9940CW0fMtodW18xi5
-lFx2MSwQtkE9j+CQ8c4ckbt+MBq2LPjq0ei1pyzz14948E4U3ghOk9S/AjPzyBhS
-lltPMqNPkVJ1nQOClBST0BYMdi6lzw==
-=6fi3
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8FTacACgkQAVBC80lX
+0GxCUQf+IA49MSifIWTN1d90F+RjckUEh8j/Ovj98n29ZkzaWB9z7jVu4TUwEPS5
+AiqCVV4WBruEusSVwoW3+Hxxn34v2ZZ0VEs0dex68F1qf4MO60FfIjARPsq74U0u
+8LU3GJ73P7L9f4bqIhUZH4iwu34oYgSIqH+yASNSnZuIybzbaNyUV0nXcjqp40ZF
+Pe0OZ+d36RYukuRNfCdfoKoThScBZT4PwgnsO1u/KwF4LlLyruy/izAIbmrKPYtA
+WkPnjzS6zgjk7rXcdBHE7m4s8zJ8rv7aoKae+9HH69Mij3PT5hfErXbte/3ylpbf
+UyNDC6L2//e0KLEI7WsuV5wLRDQBAw==
+=m89a
 -----END PGP SIGNATURE-----
 
---Sig_/zDb+9f7ZhEmpt+otwEEbNfE--
+--Sig_/oy0nep/YG9.oD.7jA5usSxT--

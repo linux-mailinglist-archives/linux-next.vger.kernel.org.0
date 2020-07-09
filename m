@@ -2,62 +2,98 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E75E219A35
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jul 2020 09:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BDA2219A4C
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jul 2020 09:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726270AbgGIHux (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jul 2020 03:50:53 -0400
-Received: from mail.loongson.cn ([114.242.206.163]:34582 "EHLO loongson.cn"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1726187AbgGIHux (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 9 Jul 2020 03:50:53 -0400
-Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Thu, 9 Jul 2020
- 15:50:47 +0800 (GMT+08:00)
-X-Originating-IP: [113.200.148.30]
-Date:   Thu, 9 Jul 2020 15:50:47 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   "Peng Fan" <fanpeng@loongson.cn>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>
-Cc:     "Mark Brown" <broonie@kernel.org>,
-        "Linux Next Mailing List" <linux-next@vger.kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: Re: linux-next: build warning after merge of the spi tree
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
- Copyright (c) 2002-2020 www.mailtech.cn .loongson.cn
-In-Reply-To: <31ee871f.3cd.173320cfdfe.Coremail.fanpeng@loongson.cn>
-References: <20200709141054.1b65be9d@canb.auug.org.au>
- <31ee871f.3cd.173320cfdfe.Coremail.fanpeng@loongson.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        id S1726122AbgGIH55 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Thu, 9 Jul 2020 03:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1726118AbgGIH55 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Thu, 9 Jul 2020 03:57:57 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E5B6C061A0B;
+        Thu,  9 Jul 2020 00:57:56 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2T741Vpfz9sRR;
+        Thu,  9 Jul 2020 17:57:52 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594281473;
+        bh=kOvYc2LeXb9BZAgB32ZKJVYF6rg6jt4+jFAyTi3BIQQ=;
+        h=Date:From:To:Cc:Subject:From;
+        b=AkMK/z633ans5oWh7KZzlTuK22qgvOduC6a/OPyOnVZAem1SY2LIgBn6cw5cN4ERB
+         K7Xy2uNwd8pGw2Kln/owT1nUibeA0jsYCBRTUYEbmcu8bArLwfwYo2e/qOaiz0kyI6
+         L+9FZqMwHigWbi0aYqnQAVMI05bHXMyIJnnsvyzDBq5JDGUxG4rA5OURn9fpaE6Aom
+         1PMpKmY7vk6AAiMOqWMZ3G2ocsv7TxdFEoeRF7+UleRoBw+Sx7GSf/ULbHH/RPVd9E
+         Z5myjEqwqzAKVmRNX3pmvJGe70NfJhFiLM9Kaw3ZRp4UPUWiZ6w4ZnMaSiV1tez4/j
+         0iekmppakgEAg==
+Date:   Thu, 9 Jul 2020 17:57:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Subject: linux-next: manual merge of the akpm-current tree with the userns
+ tree
+Message-ID: <20200709175751.7adc70b0@canb.auug.org.au>
 MIME-Version: 1.0
-Message-ID: <7376c15b.48e.173328e36ab.Coremail.fanpeng@loongson.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: AQAAf9DxTx9YzAZf5asAAA--.158W
-X-CM-SenderInfo: xidq1vtqj6z05rqj20fqof0/1tbiAQAMEl3QvL5MuwABsm
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
+Content-Type: multipart/signed; boundary="Sig_/L//Og=ab1.FTuOJW8uku_PQ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-SGksIEJyb3dtLCBTdGVwaGVuCiAgICBGaXJzdGx5LCBmZWVsIHNvcnJ5IGZvciB0aGUgcHJvYmxl
-bSBpbnRyb2R1Y2VkIGJ5IG1lLiBJIHRoaW5rIEkgbXVzdCBtb2RpZnkgbXkgYmFkLGJ1dCBzaG91
-bGQgSSBzZW5kIGFub3RoZXIgcGF0Y2ggdG8gZGVsZXRlIHRoZSBsYWJlbCAib3V0X2ZyZWUiIG9y
-IApyZS1zZW5kIHBhdGNoIG9mIHYyKHdoaWNoIG1heWJlIG5lZWQgdG8gZ28gYmFjayk/CiAgICBD
-b3VsZCB5b3UgZ2l2ZSBtZSBzb21lIGFkdmljZXM/IFNvcnJ5IGFnYWluLgoKVGhhbmtzCgomcXVv
-dDtQZW5nIEZhbiZxdW90OyAmbHQ7ZmFucGVuZ0Bsb29uZ3Nvbi5jbiZndDt3cm90ZToKPiBWZXJ5
-IHNvcnJ5IGZvciB0aGF0LCBJIHdpbGwgcmUtc2VuZCB2MiBsYXRlci4NCj4gDQo+ICZxdW90O1N0
-ZXBoZW4gUm90aHdlbGwmcXVvdDsgJmx0O3NmckBjYW5iLmF1dWcub3JnLmF1Jmd0O3dyb3RlOg0K
-PiA+IEhpIGFsbCwNCj4gPiANCj4gPiBBZnRlciBtZXJnaW5nIHRoZSBzcGkgdHJlZSwgdG9kYXkn
-cyBsaW51eC1uZXh0IGJ1aWxkIChhcm0NCj4gPiBtdWx0aV92N19kZWZjb25maWcpIHByb2R1Y2Vk
-IHRoaXMgd2FybmluZzoNCj4gPiANCj4gPiBkcml2ZXJzL3NwaS9zcGktYXRtZWwuYzogSW4gZnVu
-Y3Rpb24gJ2F0bWVsX3NwaV9wcm9iZSc6DQo+ID4gZHJpdmVycy9zcGkvc3BpLWF0bWVsLmM6MTY4
-MDoxOiB3YXJuaW5nOiBsYWJlbCAnb3V0X2ZyZWUnIGRlZmluZWQgYnV0IG5vdCB1c2VkIFstV3Vu
-dXNlZC1sYWJlbF0NCj4gPiAgMTY4MCB8IG91dF9mcmVlOg0KPiA+ICAgICAgIHwgXn5+fn5+fn4N
-Cj4gPiANCj4gPiBJbnRyb2R1Y2VkIGJ5IGNvbW1pdA0KPiA+IA0KPiA+ICAgMmQ5YTc0NDY4NWJj
-ICgic3BpOiBhdG1lbDogTm8gbmVlZCB0byBjYWxsIHNwaV9tYXN0ZXJfcHV0KCkgaWYgc3BpX2Fs
-bG9jX21hc3RlcigpIGZhaWxlZCIpDQo+ID4gDQo+ID4gLS0gDQo+ID4gQ2hlZXJzLA0KPiA+IFN0
-ZXBoZW4gUm90aHdlbGwNCg==
+--Sig_/L//Og=ab1.FTuOJW8uku_PQ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+
+Hi all,
+
+Today's linux-next merge of the akpm-current tree got a conflict in:
+
+  fs/exec.c
+
+between commit:
+
+  25cf336de51b ("exec: Remove do_execve_file")
+
+from the userns tree and commit:
+
+  538d50d50815 ("umh: fix refcount underflow in fork_usermode_blob().")
+
+from the akpm-current tree.
+
+I fixed it up (I effectively dropped the akpm-current tree patch since
+the former commit means that "file" is no longer passed the affected
+function) and can carry the fix as necessary. This is now fixed as far as
+linux-next is concerned, but any non trivial conflicts should be mentioned
+to your upstream maintainer when your tree is submitted for merging.
+You may also want to consider cooperating with the maintainer of the
+conflicting tree to minimise any particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/L//Og=ab1.FTuOJW8uku_PQ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8Gzf8ACgkQAVBC80lX
+0Gz+/wf7BI1bJe53UmhesGd1EFMOxchvxcsjDU4Q8YcIhYlxJqWWcHSGZWKiTdIV
+mDtk82SiyZtbjWXQQZcHVhL/PCsQsnOCb7WOEMxUNGEx1ZIconN/u29CLW0Udotk
+DmZ0fAKFGJqkc+JEqX3eVLiBTJuvhsOl99aWm6fQYms/rGrAcuwa+lCc2/pRQvPY
+YKkR2tcAGC6McQzKXJwf+ZEYElKxILHvhxFiiZRA61wNIqFbcK1r0P1JGAQWodxh
+/AhBnuVAAAkvkiPEnp4SKzI5kTgLjG06vNIv0uvSYwY3GsgjDhFHn8VEHr1uqYu/
+nCWH1q1c1lG1Yjmr5ZWu+KZWKbT27A==
+=uPH8
+-----END PGP SIGNATURE-----
+
+--Sig_/L//Og=ab1.FTuOJW8uku_PQ--

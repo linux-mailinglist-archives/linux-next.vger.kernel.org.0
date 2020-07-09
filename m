@@ -2,93 +2,92 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 031DA219697
-	for <lists+linux-next@lfdr.de>; Thu,  9 Jul 2020 05:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E74F42196D8
+	for <lists+linux-next@lfdr.de>; Thu,  9 Jul 2020 05:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726162AbgGID0M (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Wed, 8 Jul 2020 23:26:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S1726183AbgGIDsG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Wed, 8 Jul 2020 23:48:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726107AbgGID0M (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jul 2020 23:26:12 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CD0C061A0B;
-        Wed,  8 Jul 2020 20:26:12 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2M5Z0Lwzz9sSt;
-        Thu,  9 Jul 2020 13:26:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594265170;
-        bh=tm1bGSz8/JmV/fIUWmoWyLspKmHrMYty1alsUC6nMLw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eQndleMjMh07sIb5oj11x2nRFiOvRIL+CGA9upbQBnXBbB068FPrsH4JGMC+v+7xE
-         RFtjN6rcunVE4LsdzClf/rT1D9Vzm7CVIoAJu1hioA7pTm6VvLoAoEScyVwgaOjH9c
-         roTs/G29q637dTKUpGf8UnaKoVn6La7ssPcIsNVTMLPDAQav8KDVJFHvGPsIL1kDAx
-         TTL30k7VZGpcH4tpakpnWfrGLoFAmDQ8Co5Ur0Dtowhzc2qvLZl9sso+wtCovkC3jL
-         jJGwrV8MQHK+6ANVRgdXIY6dqT5JBd8tD+OkYErM8rIkwcIrB2C94LdhWFqh93ucRs
-         7aXfuZKiDEAjQ==
-Date:   Thu, 9 Jul 2020 13:26:09 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alasdair G Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@redhat.com>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        yangerkun <yangerkun@huawei.com>,
-        Bryan Gurney <bgurney@redhat.com>
-Subject: linux-next: build warning after merge of the device-mapper tree
-Message-ID: <20200709132609.6de53604@canb.auug.org.au>
+        with ESMTP id S1726119AbgGIDsG (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Wed, 8 Jul 2020 23:48:06 -0400
+Received: from merlin.infradead.org (merlin.infradead.org [IPv6:2001:8b0:10b:1231::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE246C061A0B;
+        Wed,  8 Jul 2020 20:48:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=merlin.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
+        Reply-To:Cc:Content-ID:Content-Description;
+        bh=flvZ17SdeYCgDzmst9WBe5pC+viP+SaP3isapAJ36bo=; b=U6G9E2dwPL6X9AOKHmbN8D1Ana
+        Xg4JPwui72nhP0L/iVdT9FV8yrai+np3QJiR1EefKNKeylnJ36zU8f8YMzFP0dysE/2CFgv+sPx+e
+        YFYA9vVhGsJ4AafRLTno/BB0Rt/TvDIIyYCxZ12e6lrNtYceBcDqvH9J1jDPNYPYJCgEIcsrlGmpm
+        uZkfN87QsShxX+JkdLS81p44LK5k5+dHI5qQTvr169inaiUHcNNL4EQmowt3my5j044gs0lMnkbmO
+        YTV/bEg8BdAFiS/t+QsC5k/PrAiYKfGejCFTccRcKWtn+Ve6uNKK6Ag3tgrBJ+OEI/y4pyr5Bf47+
+        jh9z+j5g==;
+Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
+        by merlin.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
+        id 1jtNXU-000463-7T; Thu, 09 Jul 2020 03:48:00 +0000
+Subject: Re: mmotm 2020-07-08-19-28 uploaded (mm/migrate.c)
+To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+References: <20200709022901.FTEvQ122j%akpm@linux-foundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+Message-ID: <11c5e928-1227-286d-ef7d-6d6e554747db@infradead.org>
+Date:   Wed, 8 Jul 2020 20:47:54 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.9.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2KJrdZRJdMWdjnllffNu.7+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200709022901.FTEvQ122j%akpm@linux-foundation.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/2KJrdZRJdMWdjnllffNu.7+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 7/8/20 7:29 PM, Andrew Morton wrote:
+> The mm-of-the-moment snapshot 2020-07-08-19-28 has been uploaded to
+> 
+>    http://www.ozlabs.org/~akpm/mmotm/
+> 
+> mmotm-readme.txt says
+> 
+> README for mm-of-the-moment:
+> 
+> http://www.ozlabs.org/~akpm/mmotm/
+> 
+> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+> more than once a week.
+> 
 
-Hi all,
+on i386:
 
-After merging the device-mapper tree, today's linux-next build (x86_64
-allmodconfig) produced this warning:
+CONFIG_MIGRATION=y
+# CONFIG_TRANSPARENT_HUGEPAGE is not set
 
-In file included from drivers/md/dm-dust.c:11:
-drivers/md/dm-dust.c: In function 'dust_list_badblocks':
-drivers/md/dm-dust.c:307:10: warning: zero-length gnu_printf format string =
-[-Wformat-zero-length]
-  307 |   DMEMIT("");
-      |          ^~
-include/linux/device-mapper.h:555:46: note: in definition of macro 'DMEMIT'
-  555 |      0 : scnprintf(result + sz, maxlen - sz, x))
-      |                                              ^
+../mm/migrate.c: In function ‘migrate_pages’:
+../mm/migrate.c:1528:19: error: ‘THP_MIGRATION_SUCCESS’ undeclared (first use in this function); did you mean ‘PGMIGRATE_SUCCESS’?
+   count_vm_events(THP_MIGRATION_SUCCESS, nr_thp_succeeded);
+                   ^~~~~~~~~~~~~~~~~~~~~
+                   PGMIGRATE_SUCCESS
+../mm/migrate.c:1528:19: note: each undeclared identifier is reported only once for each function it appears in
+../mm/migrate.c:1530:19: error: ‘THP_MIGRATION_FAILURE’ undeclared (first use in this function); did you mean ‘THP_MIGRATION_SUCCESS’?
+   count_vm_events(THP_MIGRATION_FAILURE, nr_thp_failed);
+                   ^~~~~~~~~~~~~~~~~~~~~
+                   THP_MIGRATION_SUCCESS
+../mm/migrate.c:1532:19: error: ‘THP_MIGRATION_SPLIT’ undeclared (first use in this function); did you mean ‘THP_MIGRATION_FAILURE’?
+   count_vm_events(THP_MIGRATION_SPLIT, nr_thp_split);
+                   ^~~~~~~~~~~~~~~~~~~
+                   THP_MIGRATION_FAILURE
 
-Introduced by commit
 
-  20f93ea74f9c ("dm dust: add interface to list all badblocks")
+from: mm-vmstat-add-events-for-thp-migration-without-split.patch
 
---=20
-Cheers,
-Stephen Rothwell
 
---Sig_/2KJrdZRJdMWdjnllffNu.7+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8GjlEACgkQAVBC80lX
-0GyQBwgApg7Xvf3KGHULY/CvKqalr1itIeRYKVan3DtLLKDInDQMktdM80Kj89Ve
-Y8YkBfkpaT/pw71CQW9wfQYu4u40lilaab+gkCNx84NG+okhqG0ZSzPG4qzGvgQu
-ADbv6O953lnpNbwCO0SiTtmzWfz9oVdM2zCQ1S9EgwgJUvaEqK7YOQFDDwLuwFZL
-1k/9JIc3gmi8Vkoe+CwdFXPZiE8N1y0xIeG0YG+V7uIpGX+e7s/MSeQPRl3B4EZ1
-vbze4mp2KshveqppitA2xwdY8IvHHZluyx5k57ruQgJ0Vt6m5I9PVVp8xBfR5OJL
-AoqfJneb/1Yu7iNFFN2lNbIt3oQ/jA==
-=uDpm
------END PGP SIGNATURE-----
-
---Sig_/2KJrdZRJdMWdjnllffNu.7+--
+-- 
+~Randy
+Reported-by: Randy Dunlap <rdunlap@infradead.org>

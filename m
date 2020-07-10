@@ -2,127 +2,387 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D4A21AD0A
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 04:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 315D921ADC2
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 06:00:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726509AbgGJC2a (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Thu, 9 Jul 2020 22:28:30 -0400
-Received: from ozlabs.org ([203.11.71.1]:57797 "EHLO ozlabs.org"
+        id S1725919AbgGJEAt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jul 2020 00:00:49 -0400
+Received: from mail.kernel.org ([198.145.29.99]:60588 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726496AbgGJC2a (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Thu, 9 Jul 2020 22:28:30 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725616AbgGJEAt (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jul 2020 00:00:49 -0400
+Received: from localhost.localdomain (c-73-231-172-41.hsd1.ca.comcast.net [73.231.172.41])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B2xmV71xPz9sT6;
-        Fri, 10 Jul 2020 12:28:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594348108;
-        bh=3UhviLMUqD9vkJnzTQoViNLx2PeG7wMUIHUZ6W92kz4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=fNBpOMlqVvVei7QiZfgZbCobi7jQNQp0YVejBN+Qo/7shqN1tkIHok6AoobT160w3
-         UldU1/qC88VzKixAXIoca0pOpQ0Q4a1x1PHXucDMH12kd7PhP18gtooi0ZuOy1T9l3
-         coP15P5zrGjxgb2eiOwHLzr+6Q6hwKS3swEHVB46lRwczxxGU9N4PmI0gkkcPEBA2p
-         YKOqcqLbVmNhdQiE+YIlOaM9Ne9EpE6hopk3DJv+JNUxn93lRF2K7v5oR1wm/yJNFS
-         XVd/Fm4k0NmCPUj8GXU4C042h247KQhfb7kr70Gu9VPVjMWL9GrZVqatKMVndRgWbu
-         ZoME1IzD92xbg==
-Date:   Fri, 10 Jul 2020 12:28:24 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@linux.ie>,
-        DRI <dri-devel@lists.freedesktop.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Huang Rui <ray.huang@amd.com>, Emily Deng <Emily.Deng@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: linux-next: manual merge of the drm tree with the drm-fixes tree
-Message-ID: <20200710122824.3fe55d0c@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/C0Nb2/ZIyty39cOe0lCugE.";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+        by mail.kernel.org (Postfix) with ESMTPSA id EBFEE20720;
+        Fri, 10 Jul 2020 04:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594353648;
+        bh=Dq7O6ZkW5iZqo5/JE9+z59ZBATAGfwJwl4VQZUebI1c=;
+        h=Date:From:To:Subject:In-Reply-To:From;
+        b=ly2GqFVpUVRMpSUtupQQHjTf8+/jcS4zTgBvmOtUSdxdx1yjmxoBAuF6JMRujOCfb
+         rCiVhavFVZqFxnMRRwK/kbTyLF5yunpEb1Wi2itSJ/KjTtR6my3Wbiz7iQo4pQzex+
+         5zxAzrhj/17e8XdlFREEcrBsyCQGrIi2uFxp0XxA=
+Date:   Thu, 09 Jul 2020 21:00:47 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     broonie@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, mhocko@suse.cz,
+        mm-commits@vger.kernel.org, sfr@canb.auug.org.au
+Subject:  mmotm 2020-07-09-21-00 uploaded
+Message-ID: <20200710040047.md-jEb0TK%akpm@linux-foundation.org>
+In-Reply-To: <20200703151445.b6a0cfee402c7c5c4651f1b1@linux-foundation.org>
+User-Agent: s-nail v14.8.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/C0Nb2/ZIyty39cOe0lCugE.
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+The mm-of-the-moment snapshot 2020-07-09-21-00 has been uploaded to
 
-Hi all,
+   http://www.ozlabs.org/~akpm/mmotm/
 
-Today's linux-next merge of the drm tree got a conflict in:
+mmotm-readme.txt says
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
+README for mm-of-the-moment:
 
-between commit:
+http://www.ozlabs.org/~akpm/mmotm/
 
-  c564b8601ae9 ("drm/amdgpu: add TMR destory function for psp")
+This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
+more than once a week.
 
-from the drm-fixes tree and commit:
+You will need quilt to apply these patches to the latest Linus release (5.x
+or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
+http://ozlabs.org/~akpm/mmotm/series
 
-  3bda8acd974e ("drm/amdgpu/sriov: Add clear vf fw support")
+The file broken-out.tar.gz contains two datestamp files: .DATE and
+.DATE-yyyy-mm-dd-hh-mm-ss.  Both contain the string yyyy-mm-dd-hh-mm-ss,
+followed by the base kernel version against which this patch series is to
+be applied.
 
-from the drm tree.
+This tree is partially included in linux-next.  To see which patches are
+included in linux-next, consult the `series' file.  Only the patches
+within the #NEXT_PATCHES_START/#NEXT_PATCHES_END markers are included in
+linux-next.
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
 
---=20
-Cheers,
-Stephen Rothwell
+A full copy of the full kernel tree with the linux-next and mmotm patches
+already applied is available through git within an hour of the mmotm
+release.  Individual mmotm releases are tagged.  The master branch always
+points to the latest release, so it's constantly rebasing.
 
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-index ef3269c43d4f,9342a9e8cadf..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c
-@@@ -1825,6 -1866,9 +1912,7 @@@ static int psp_hw_fini(void *handle
-  {
-  	struct amdgpu_device *adev =3D (struct amdgpu_device *)handle;
-  	struct psp_context *psp =3D &adev->psp;
- -	void *tmr_buf;
- -	void **pptr;
-+ 	int ret;
- =20
-  	if (psp->adev->psp.ta_fw) {
-  		psp_ras_terminate(psp);
-@@@ -1833,10 -1877,16 +1921,15 @@@
-  	}
- =20
-  	psp_asd_unload(psp);
-+ 	ret =3D psp_clear_vf_fw(psp);
-+ 	if (ret) {
-+ 		DRM_ERROR("PSP clear vf fw!\n");
-+ 		return ret;
-+ 	}
- =20
- +	psp_tmr_terminate(psp);
-  	psp_ring_destroy(psp, PSP_RING_TYPE__KM);
- =20
- -	pptr =3D amdgpu_sriov_vf(psp->adev) ? &tmr_buf : NULL;
- -	amdgpu_bo_free_kernel(&psp->tmr_bo, &psp->tmr_mc_addr, pptr);
-  	amdgpu_bo_free_kernel(&psp->fw_pri_bo,
-  			      &psp->fw_pri_mc_addr, &psp->fw_pri_buf);
-  	amdgpu_bo_free_kernel(&psp->fence_buf_bo,
+	https://github.com/hnaz/linux-mm
 
---Sig_/C0Nb2/ZIyty39cOe0lCugE.
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+The directory http://www.ozlabs.org/~akpm/mmots/ (mm-of-the-second)
+contains daily snapshots of the -mm tree.  It is updated more frequently
+than mmotm, and is untested.
 
------BEGIN PGP SIGNATURE-----
+A git copy of this tree is also available at
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8H0kgACgkQAVBC80lX
-0GziFgf/cZ3jHfAxtm69nBK92mdd+xv+aTRVOenQo+j4VyZw3RWEemvVG5FQBl/b
-FyJ5ZC0zlBZ9lknvf2PGB0ibK7r1RDGHrPf6hu/zzNu+Lu4pGsQw9GKQ9Y7yA1Md
-qmG11mKoI6fC82UqvvlEELbTNcJWV2YdlOyqRhCQsKf+JOkjjjSumQ6oOai6laUG
-CCrdgab3hZCCi8aBe9SPIISUHA+TZqt9Y4i7+ZOPqmM1SbEEGI7/DsEHQDnSQ6xt
-7AYWe6n0bALfwUaV11luAl9Qsb5aItB7EcsOHadzgNUbTupkecmfyNhHF6UUZFio
-ZyC2oKv2Iq/gIUfv47L+cxoPCX9STQ==
-=jkn0
------END PGP SIGNATURE-----
+	https://github.com/hnaz/linux-mm
 
---Sig_/C0Nb2/ZIyty39cOe0lCugE.--
+
+
+This mmotm tree contains the following patches against 5.8-rc4:
+(patches marked "*" will be included in linux-next)
+
+  origin.patch
+* mm-shuffle-dont-move-pages-between-zones-and-dont-read-garbage-memmaps.patch
+* mm-avoid-access-flag-update-tlb-flush-for-retried-page-fault.patch
+* mm-close-race-between-munmap-and-expand_upwards-downwards.patch
+* mm-close-race-between-munmap-and-expand_upwards-downwards-fix.patch
+* vfs-xattr-mm-shmem-kernfs-release-simple-xattr-entry-in-a-right-way.patch
+* mm-initialize-return-of-vm_insert_pages.patch
+* mm-memcontrol-fix-oops-inside-mem_cgroup_get_nr_swap_pages.patch
+* proc-kpageflags-prevent-an-integer-overflow-in-stable_page_flags.patch
+* proc-kpageflags-do-not-use-uninitialized-struct-pages.patch
+* mm-memcg-fix-refcount-error-while-moving-and-swapping.patch
+* mm-hugetlb-avoid-hardcoding-while-checking-if-cma-is-enable.patch
+* mailmap-add-entry-for-mike-rapoport.patch
+* checkpatch-test-git_dir-changes.patch
+* kthread-remove-incorrect-comment-in-kthread_create_on_cpu.patch
+* kbuild-move-wtype-limits-to-w=2.patch
+* scripts-tagssh-collect-compiled-source-precisely.patch
+* scripts-tagssh-collect-compiled-source-precisely-v2.patch
+* bloat-o-meter-support-comparing-library-archives.patch
+* scripts-decode_stacktrace-skip-missing-symbols.patch
+* scripts-decode_stacktrace-guess-basepath-if-not-specified.patch
+* scripts-decode_stacktrace-guess-path-to-modules.patch
+* scripts-decode_stacktrace-guess-path-to-vmlinux-by-release-name.patch
+* ocfs2-clear-links-count-in-ocfs2_mknod-if-an-error-occurs.patch
+* ocfs2-fix-ocfs2-corrupt-when-iputting-an-inode.patch
+* ocfs2-change-slot-number-type-s16-to-u16.patch
+* ramfs-support-o_tmpfile.patch
+* kernel-watchdog-flush-all-printk-nmi-buffers-when-hardlockup-detected.patch
+  mm.patch
+* mm-treewide-rename-kzfree-to-kfree_sensitive.patch
+* mm-ksize-should-silently-accept-a-null-pointer.patch
+* mm-expand-config_slab_freelist_hardened-to-include-slab.patch
+* slab-add-naive-detection-of-double-free.patch
+* slab-add-naive-detection-of-double-free-fix.patch
+* mm-slab-check-gfp_slab_bug_mask-before-alloc_pages-in-kmalloc_order.patch
+* mm-slub-extend-slub_debug-syntax-for-multiple-blocks.patch
+* mm-slub-extend-slub_debug-syntax-for-multiple-blocks-fix.patch
+* mm-slub-make-some-slub_debug-related-attributes-read-only.patch
+* mm-slub-remove-runtime-allocation-order-changes.patch
+* mm-slub-make-remaining-slub_debug-related-attributes-read-only.patch
+* mm-slub-make-reclaim_account-attribute-read-only.patch
+* mm-slub-introduce-static-key-for-slub_debug.patch
+* mm-slub-introduce-kmem_cache_debug_flags.patch
+* mm-slub-introduce-kmem_cache_debug_flags-fix.patch
+* mm-slub-extend-checks-guarded-by-slub_debug-static-key.patch
+* mm-slab-slub-move-and-improve-cache_from_obj.patch
+* mm-slab-slub-improve-error-reporting-and-overhead-of-cache_from_obj.patch
+* mm-slab-slub-improve-error-reporting-and-overhead-of-cache_from_obj-fix.patch
+* slub-drop-lockdep_assert_held-from-put_map.patch
+* mm-kcsan-instrument-slab-slub-free-with-assert_exclusive_access.patch
+* mm-debug_vm_pgtable-add-tests-validating-arch-helpers-for-core-mm-features.patch
+* mm-debug_vm_pgtable-add-tests-validating-advanced-arch-page-table-helpers.patch
+* mm-debug_vm_pgtable-add-debug-prints-for-individual-tests.patch
+* documentation-mm-add-descriptions-for-arch-page-table-helpers.patch
+* mm-handle-page-mapping-better-in-dump_page.patch
+* mm-dump-compound-page-information-on-a-second-line.patch
+* mm-print-head-flags-in-dump_page.patch
+* mm-switch-dump_page-to-get_kernel_nofault.patch
+* mm-print-the-inode-number-in-dump_page.patch
+* mm-print-hashed-address-of-struct-page.patch
+* mm-filemap-clear-idle-flag-for-writes.patch
+* mm-filemap-add-missing-fgp_-flags-in-kerneldoc-comment-for-pagecache_get_page.patch
+* mm-swap-simplify-alloc_swap_slot_cache.patch
+* mm-swap-simplify-enable_swap_slots_cache.patch
+* mm-swap-remove-redundant-check-for-swap_slot_cache_initialized.patch
+* mm-kmem-make-memcg_kmem_enabled-irreversible.patch
+* mm-memcg-factor-out-memcg-and-lruvec-level-changes-out-of-__mod_lruvec_state.patch
+* mm-memcg-prepare-for-byte-sized-vmstat-items.patch
+* mm-memcg-convert-vmstat-slab-counters-to-bytes.patch
+* mm-slub-implement-slub-version-of-obj_to_index.patch
+* mm-memcontrol-decouple-reference-counting-from-page-accounting.patch
+* mm-memcg-slab-obj_cgroup-api.patch
+* mm-memcg-slab-allocate-obj_cgroups-for-non-root-slab-pages.patch
+* mm-memcg-slab-save-obj_cgroup-for-non-root-slab-objects.patch
+* mm-memcg-slab-charge-individual-slab-objects-instead-of-pages.patch
+* mm-memcg-slab-deprecate-memorykmemslabinfo.patch
+* mm-memcg-slab-move-memcg_kmem_bypass-to-memcontrolh.patch
+* mm-memcg-slab-use-a-single-set-of-kmem_caches-for-all-accounted-allocations.patch
+* mm-memcg-slab-simplify-memcg-cache-creation.patch
+* mm-memcg-slab-remove-memcg_kmem_get_cache.patch
+* mm-memcg-slab-deprecate-slab_root_caches.patch
+* mm-memcg-slab-remove-redundant-check-in-memcg_accumulate_slabinfo.patch
+* mm-memcg-slab-use-a-single-set-of-kmem_caches-for-all-allocations.patch
+* kselftests-cgroup-add-kernel-memory-accounting-tests.patch
+* tools-cgroup-add-memcg_slabinfopy-tool.patch
+* percpu-return-number-of-released-bytes-from-pcpu_free_area.patch
+* mm-memcg-percpu-account-percpu-memory-to-memory-cgroups.patch
+* mm-memcg-percpu-account-percpu-memory-to-memory-cgroups-fix.patch
+* mm-memcg-percpu-account-percpu-memory-to-memory-cgroups-fix-fix.patch
+* mm-memcg-percpu-per-memcg-percpu-memory-statistics.patch
+* mm-memcg-percpu-per-memcg-percpu-memory-statistics-v3.patch
+* mm-memcg-charge-memcg-percpu-memory-to-the-parent-cgroup.patch
+* kselftests-cgroup-add-perpcu-memory-accounting-test.patch
+* mm-memcontrol-account-kernel-stack-per-node.patch
+* mm-memcg-slab-remove-unused-argument-by-charge_slab_page.patch
+* mm-slab-rename-uncharge_slab_page-to-unaccount_slab_page.patch
+* mm-kmem-switch-to-static_branch_likely-in-memcg_kmem_enabled.patch
+* mm-memcontrol-avoid-workload-stalls-when-lowering-memoryhigh.patch
+* mm-remove-redundant-check-non_swap_entry.patch
+* mm-memoryc-make-remap_pfn_range-reject-unaligned-addr.patch
+* mm-remove-unneeded-includes-of-asm-pgalloch.patch
+* mm-remove-unneeded-includes-of-asm-pgalloch-fix.patch
+* opeinrisc-switch-to-generic-version-of-pte-allocation.patch
+* xtensa-switch-to-generic-version-of-pte-allocation.patch
+* asm-generic-pgalloc-provide-generic-pmd_alloc_one-and-pmd_free_one.patch
+* asm-generic-pgalloc-provide-generic-pud_alloc_one-and-pud_free_one.patch
+* asm-generic-pgalloc-provide-generic-pgd_free.patch
+* mm-move-lib-ioremapc-to-mm.patch
+* mm-move-pd_alloc_track-to-separate-header-file.patch
+* mm-mmap-fix-the-adjusted-length-error.patch
+* mm-mmap-optimize-a-branch-judgment-in-ksys_mmap_pgoff.patch
+* mm-do-page-fault-accounting-in-handle_mm_fault.patch
+* mm-alpha-use-general-page-fault-accounting.patch
+* mm-arc-use-general-page-fault-accounting.patch
+* mm-arm-use-general-page-fault-accounting.patch
+* mm-arm64-use-general-page-fault-accounting.patch
+* mm-csky-use-general-page-fault-accounting.patch
+* mm-hexagon-use-general-page-fault-accounting.patch
+* mm-ia64-use-general-page-fault-accounting.patch
+* mm-m68k-use-general-page-fault-accounting.patch
+* mm-microblaze-use-general-page-fault-accounting.patch
+* mm-mips-use-general-page-fault-accounting.patch
+* mm-nds32-use-general-page-fault-accounting.patch
+* mm-nios2-use-general-page-fault-accounting.patch
+* mm-openrisc-use-general-page-fault-accounting.patch
+* mm-parisc-use-general-page-fault-accounting.patch
+* mm-powerpc-use-general-page-fault-accounting.patch
+* mm-riscv-use-general-page-fault-accounting.patch
+* mm-s390-use-general-page-fault-accounting.patch
+* mm-sh-use-general-page-fault-accounting.patch
+* mm-sparc32-use-general-page-fault-accounting.patch
+* mm-sparc64-use-general-page-fault-accounting.patch
+* mm-x86-use-general-page-fault-accounting.patch
+* mm-xtensa-use-general-page-fault-accounting.patch
+* mm-clean-up-the-last-pieces-of-page-fault-accountings.patch
+* mm-gup-remove-task_struct-pointer-for-all-gup-code.patch
+* mm-sparse-never-partially-remove-memmap-for-early-section.patch
+* mm-sparse-only-sub-section-aligned-range-would-be-populated.patch
+* vmalloc-convert-to-xarray.patch
+* mm-vmalloc-simplify-merge_or_add_vmap_area-func.patch
+* mm-vmalloc-simplify-augment_tree_propagate_check-func.patch
+* mm-vmalloc-switch-to-propagate-callback.patch
+* mm-vmalloc-update-the-header-about-kva-rework.patch
+* mm-vmalloc-remove-redundant-asignmnet-in-unmap_kernel_range_noflush.patch
+* kasan-improve-and-simplify-kconfigkasan.patch
+* kasan-update-required-compiler-versions-in-documentation.patch
+* rcu-kasan-record-and-print-call_rcu-call-stack.patch
+* kasan-record-and-print-the-free-track.patch
+* kasan-add-tests-for-call_rcu-stack-recording.patch
+* kasan-update-documentation-for-generic-kasan.patch
+* kasan-remove-kasan_unpoison_stack_above_sp_to.patch
+* kasan-fix-kasan-unit-tests-for-tag-based-kasan.patch
+* kasan-fix-kasan-unit-tests-for-tag-based-kasan-v4.patch
+* mm-page_alloc-use-unlikely-in-task_capc.patch
+* page_alloc-consider-highatomic-reserve-in-watermark-fast.patch
+* page_alloc-consider-highatomic-reserve-in-watermark-fast-v5.patch
+* mm-page_alloc-skip-waternark_boost-for-atomic-order-0-allocations.patch
+* mm-page_alloc-skip-watermark_boost-for-atomic-order-0-allocations-fix.patch
+* mm-drop-vm_total_pages.patch
+* mm-page_alloc-drop-nr_free_pagecache_pages.patch
+* mm-memory_hotplug-document-why-shuffle_zone-is-relevant.patch
+* mm-shuffle-remove-dynamic-reconfiguration.patch
+* powerpc-numa-set-numa_node-for-all-possible-cpus.patch
+* powerpc-numa-prefer-node-id-queried-from-vphn.patch
+* mm-page_alloc-keep-memoryless-cpuless-node-0-offline.patch
+* mm-page_allocc-replace-the-definition-of-nr_migratetype_bits-with-pb_migratetype_bits.patch
+* mm-page_allocc-extract-the-common-part-in-pfn_to_bitidx.patch
+* mm-page_allocc-simplify-pageblock-bitmap-access.patch
+* mm-page_allocc-remove-unnecessary-end_bitidx-for-_pfnblock_flags_mask.patch
+* mm-page_alloc-silence-a-kasan-false-positive.patch
+* mm-page_alloc-fallbacks-at-most-has-3-elements.patch
+* mm-page_alloc-skip-setting-nodemask-when-we-are-in-interrupt.patch
+* mm-huge_memoryc-update-tlb-entry-if-pmd-is-changed.patch
+* mips-do-not-call-flush_tlb_all-when-setting-pmd-entry.patch
+* mm-vmscanc-fixed-typo.patch
+* mm-proactive-compaction.patch
+* mm-proactive-compaction-fix.patch
+* mm-use-unsigned-types-for-fragmentation-score.patch
+* mm-oom-make-the-calculation-of-oom-badness-more-accurate.patch
+* doc-mm-sync-up-oom_score_adj-documentation.patch
+* doc-mm-clarify-proc-pid-oom_score-value-range.patch
+* hugetlbfs-prevent-filesystem-stacking-of-hugetlbfs.patch
+* mm-migrate-optimize-migrate_vma_setup-for-holes.patch
+* mm-migrate-add-migrate-shared-test-for-migrate_vma_.patch
+* mm-thp-remove-debug_cow-switch.patch
+* mm-store-compound_nr-as-well-as-compound_order.patch
+* mm-move-page-flags-include-to-top-of-file.patch
+* mm-add-thp_order.patch
+* mm-add-thp_size.patch
+* mm-replace-hpage_nr_pages-with-thp_nr_pages.patch
+* mm-add-thp_head.patch
+* mm-introduce-offset_in_thp.patch
+* mm-vmstat-add-events-for-thp-migration-without-split.patch
+* mm-vmstat-add-events-for-thp-migration-without-split-fix.patch
+* mm-vmstat-add-events-for-thp-migration-without-split-fix-2.patch
+* mm-cma-fix-null-pointer-dereference-when-cma-could-not-be-activated.patch
+* mm-cma-fix-the-name-of-cma-areas.patch
+* mm-cma-fix-the-name-of-cma-areas-fix.patch
+* mm-hugetlb-fix-the-name-of-hugetlb-cma.patch
+* mmhwpoison-cleanup-unused-pagehuge-check.patch
+* mm-hwpoison-remove-recalculating-hpage.patch
+* mmmadvise-call-soft_offline_page-without-mf_count_increased.patch
+* mmmadvise-refactor-madvise_inject_error.patch
+* mmhwpoison-inject-dont-pin-for-hwpoison_filter.patch
+* mmhwpoison-un-export-get_hwpoison_page-and-make-it-static.patch
+* mmhwpoison-kill-put_hwpoison_page.patch
+* mmhwpoison-remove-mf_count_increased.patch
+* mmhwpoison-remove-flag-argument-from-soft-offline-functions.patch
+* mmhwpoison-unify-thp-handling-for-hard-and-soft-offline.patch
+* mmhwpoison-rework-soft-offline-for-free-pages.patch
+* mmhwpoison-rework-soft-offline-for-free-pages-fix.patch
+* mmhwpoison-rework-soft-offline-for-in-use-pages.patch
+* mmhwpoison-refactor-soft_offline_huge_page-and-__soft_offline_page.patch
+* mmhwpoison-refactor-soft_offline_huge_page-and-__soft_offline_page-fix.patch
+* mmhwpoison-refactor-soft_offline_huge_page-and-__soft_offline_page-fix-fix.patch
+* mmhwpoison-return-0-if-the-page-is-already-poisoned-in-soft-offline.patch
+* mmhwpoison-introduce-mf_msg_unsplit_thp.patch
+* sched-mm-optimize-current_gfp_context.patch
+* x86-mm-use-max-memory-block-size-on-bare-metal.patch
+* info-task-hung-in-generic_file_write_iter.patch
+* info-task-hung-in-generic_file_write-fix.patch
+* kernel-hung_taskc-monitor-killed-tasks.patch
+* fix-annotation-of-ioreadwrite1632be.patch
+* sparse-group-the-defines-by-functionality.patch
+* bitmap-fix-bitmap_cut-for-partial-overlapping-case.patch
+* bitmap-add-test-for-bitmap_cut.patch
+* lib-generic-radix-treec-remove-unneeded-__rcu.patch
+* lib-test_bitops-do-the-full-test-during-module-init.patch
+* lib-optimize-cpumask_local_spread.patch
+* lib-test_lockupc-make-symbol-test_works-static.patch
+* iomap-constify-ioreadx-iomem-argument-as-in-generic-implementation.patch
+* rtl818x-constify-ioreadx-iomem-argument-as-in-generic-implementation.patch
+* ntb-intel-constify-ioreadx-iomem-argument-as-in-generic-implementation.patch
+* virtio-pci-constify-ioreadx-iomem-argument-as-in-generic-implementation.patch
+* bits-add-tests-of-genmask.patch
+* bits-add-tests-of-genmask-fix.patch
+* bits-add-tests-of-genmask-fix-2.patch
+* checkpatch-add-test-for-possible-misuse-of-is_enabled-without-config_.patch
+* checkpatch-support-deprecated-terms-checking.patch
+* scripts-deprecated_terms-recommend-denylist-allowlist-instead-of-blacklist-whitelist.patch
+* checkpatch-add-fix-option-for-assign_in_if.patch
+* checkpatch-fix-const_struct-when-const_structscheckpatch-is-missing.patch
+* fs-minix-check-return-value-of-sb_getblk.patch
+* fs-minix-dont-allow-getting-deleted-inodes.patch
+* fs-minix-reject-too-large-maximum-file-size.patch
+* fs-minix-set-s_maxbytes-correctly.patch
+* fs-minix-fix-block-limit-check-for-v1-filesystems.patch
+* fs-minix-remove-expected-error-message-in-block_to_path.patch
+* fatfs-switch-write_lock-to-read_lock-in-fat_ioctl_get_attributes.patch
+* vfat-fat-msdos-filesystem-replace-http-links-with-https-ones.patch
+* fs-signalfdc-fix-inconsistent-return-codes-for-signalfd4.patch
+* selftests-kmod-use-variable-name-in-kmod_test_0001.patch
+* kmod-remove-redundant-be-an-in-the-comment.patch
+* test_kmod-avoid-potential-double-free-in-trigger_config_run_type.patch
+* coredump-add-%f-for-executable-filename.patch
+* exec-change-uselib2-is_sreg-failure-to-eacces.patch
+* exec-move-s_isreg-check-earlier.patch
+* exec-move-path_noexec-check-earlier.patch
+* kdump-append-kernel-build-id-string-to-vmcoreinfo.patch
+* rapidio-rio_mport_cdev-use-struct_size-helper.patch
+* rapidio-use-struct_size-helper.patch
+* kernel-panicc-make-oops_may_print-return-bool.patch
+* lib-kconfigdebug-fix-typo-in-the-help-text-of-config_panic_timeout.patch
+* aio-simplify-read_events.patch
+* kcov-unconditionally-add-fno-stack-protector-to-compiler-options.patch
+* kcov-make-some-symbols-static.patch
+  linux-next.patch
+  linux-next-rejects.patch
+* mm-madvise-pass-task-and-mm-to-do_madvise.patch
+* pid-move-pidfd_get_pid-to-pidc.patch
+* mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-api.patch
+* mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-api-fix.patch
+* mm-madvise-introduce-process_madvise-syscall-an-external-memory-hinting-api-fix-2.patch
+* mm-madvise-check-fatal-signal-pending-of-target-process.patch
+* all-arch-remove-system-call-sys_sysctl.patch
+* all-arch-remove-system-call-sys_sysctl-fix.patch
+* mm-kmemleak-silence-kcsan-splats-in-checksum.patch
+* mm-frontswap-mark-various-intentional-data-races.patch
+* mm-page_io-mark-various-intentional-data-races.patch
+* mm-page_io-mark-various-intentional-data-races-v2.patch
+* mm-swap_state-mark-various-intentional-data-races.patch
+* mm-filemap-fix-a-data-race-in-filemap_fault.patch
+* mm-swapfile-fix-and-annotate-various-data-races.patch
+* mm-swapfile-fix-and-annotate-various-data-races-v2.patch
+* mm-page_counter-fix-various-data-races-at-memsw.patch
+* mm-memcontrol-fix-a-data-race-in-scan-count.patch
+* mm-list_lru-fix-a-data-race-in-list_lru_count_one.patch
+* mm-mempool-fix-a-data-race-in-mempool_free.patch
+* mm-rmap-annotate-a-data-race-at-tlb_flush_batched.patch
+* mm-swap-annotate-data-races-for-lru_rotate_pvecs.patch
+* mm-annotate-a-data-race-in-page_zonenum.patch
+* include-asm-generic-vmlinuxldsh-align-ro_after_init.patch
+* sh-clkfwk-remove-r8-r16-r32.patch
+* sh-use-generic-strncpy.patch
+* sh-add-missing-export_symbol-for-__delay.patch
+  make-sure-nobodys-leaking-resources.patch
+  releasing-resources-with-children.patch
+  mutex-subsystem-synchro-test-module.patch
+  kernel-forkc-export-kernel_thread-to-modules.patch
+  workaround-for-a-pci-restoring-bug.patch

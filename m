@@ -2,88 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B47321B95F
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 17:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0423321B978
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 17:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1727091AbgGJPYC (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jul 2020 11:24:02 -0400
-Received: from mail.kernel.org ([198.145.29.99]:49980 "EHLO mail.kernel.org"
+        id S1727826AbgGJP3Q (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jul 2020 11:29:16 -0400
+Received: from mail.kernel.org ([198.145.29.99]:52136 "EHLO mail.kernel.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1727074AbgGJPYC (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 10 Jul 2020 11:24:02 -0400
-Received: from gaia (unknown [95.146.230.158])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        id S1726832AbgGJP3N (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Fri, 10 Jul 2020 11:29:13 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
         (No client certificate requested)
-        by mail.kernel.org (Postfix) with ESMTPSA id B4C3320767;
-        Fri, 10 Jul 2020 15:24:00 +0000 (UTC)
-Date:   Fri, 10 Jul 2020 16:23:58 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Steven Price <steven.price@arm.com>
-Subject: Re: Build failure in -next with get_user_pages_remote() API change
-Message-ID: <20200710152357.GC11839@gaia>
-References: <20200710113201.GC5653@sirena.org.uk>
- <20200710122457.GK199122@xz-x1>
+        by mail.kernel.org (Postfix) with ESMTPSA id 5DABB2078B;
+        Fri, 10 Jul 2020 15:29:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594394952;
+        bh=A+5H0viLCweISXKhZ8vukjCT/YthyI0T6G22a0E9wP0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJsAbAS7bLMR4MIKisf/3VlNypxyehVH+9BwAL4A4vgISOkEiO6mGXdKX087waoJM
+         fyUO+PMEDS/T576yL6+oEmzLMT21Vq1DkfIV7JjxQFNTP3kaUzxAWsgrpi1PQNmyPC
+         jsxswVgDNeMI9i5IR6BIIRWOGeip8p5Yl6Flv5Os=
+Received: by mail-ot1-f49.google.com with SMTP id w17so4484408otl.4;
+        Fri, 10 Jul 2020 08:29:12 -0700 (PDT)
+X-Gm-Message-State: AOAM533Aq/iK9eQH0XZXrhV8qwP7QjNqV2XkdVEMpAeHXBi50pNdC2aV
+        ae/T9hr6SlPvkQans2HoeSRhMxYVu8y3upULtA==
+X-Google-Smtp-Source: ABdhPJxgp0IgRa0RKnSG7bJrUjnRw1wt0F8ZA2+d85ACmCNg+Fh7mRY7d4DZzaL2DFznGG81bchkn3CjCx5gorcXI3Y=
+X-Received: by 2002:a05:6830:3104:: with SMTP id b4mr59510659ots.192.1594394951793;
+ Fri, 10 Jul 2020 08:29:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200710122457.GK199122@xz-x1>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+References: <ce0d7561-ff93-d267-b57a-6505014c728c@infradead.org>
+In-Reply-To: <ce0d7561-ff93-d267-b57a-6505014c728c@infradead.org>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 10 Jul 2020 09:28:59 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
+Message-ID: <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
+Subject: Re: [PATCH -next] <linux/of.h>: add stub for of_get_next_parent() to
+ fix qcom build error
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri, Jul 10, 2020 at 08:24:57AM -0400, Peter Xu wrote:
-> On Fri, Jul 10, 2020 at 12:32:01PM +0100, Mark Brown wrote:
-> > Today's -next fails to build in various arm64 configs with:
-> > 
-> > arch/arm64/kernel/mte.c:225:23: error: too many arguments to function call, expected 7, have 8
-> >                                             &page, &vma, NULL);
-> >                                                          ^~~~
-> > ./include/linux/stddef.h:8:14: note: expanded from macro 'NULL'
-> > #define NULL ((void *)0)
-> >              ^~~~~~~~~~~
-> > ./include/linux/mm.h:1705:6: note: 'get_user_pages_remote' declared here
-> > long get_user_pages_remote(struct mm_struct *mm,
-> >      ^
-> > 1 error generated.
-> > 
-> > caused by b7363b0ab88d66d3c (mm/gup: remove task_struct pointer for all
-> > gup code) which updated the signature of get_user_pages_remote() without
-> > updating the caller in mte.c.
-> 
-> We should need to squash into "mm/gup: remove task_struct pointer for all gup
-> code" with:
-> 
-> diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
-> index 934639ab225d..11e558b02a05 100644
-> --- a/arch/arm64/kernel/mte.c
-> +++ b/arch/arm64/kernel/mte.c
-> @@ -221,7 +221,7 @@ static int __access_remote_tags(struct task_struct *tsk, struct mm_struct *mm,
->                 void *maddr;
->                 struct page *page = NULL;
->  
-> -               ret = get_user_pages_remote(tsk, mm, addr, 1, gup_flags,
-> +               ret = get_user_pages_remote(mm, addr, 1, gup_flags,
->                                             &page, &vma, NULL);
->                 if (ret <= 0)
->                         break;
-> 
-> Seems to be a new caller merged recently, so it got left behind during the
-> rebases...  Sorry for not noticing that.
+On Mon, Jun 29, 2020 at 10:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
+>
+> From: Randy Dunlap <rdunlap@infradead.org>
+>
+> Fix a (COMPILE_TEST) build error when CONFIG_OF is not set/enabled
+> by adding a stub for of_get_next_parent().
+>
+> ../drivers/soc/qcom/qcom-geni-se.c:819:11: error: implicit declaration of function 'of_get_next_parent'; did you mean 'of_get_parent'? [-Werror=implicit-function-declaration]
+> ../drivers/soc/qcom/qcom-geni-se.c:819:9: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
+>
 
-The mte code is only in -next but since it's based on 5.8-rc3, we can't
-change it without breaking it.
+Fixes tag?
 
-Is there a stable branch somewhere with the gup patches? If not, I can
-provisionally drop the affected MTE patches from -next and push them
-upstream closer to the -rc1 (it's the ptrace support from MTE).
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Rob Herring <robh+dt@kernel.org>
+> Cc: Frank Rowand <frowand.list@gmail.com>
+> Cc: devicetree@vger.kernel.org
+> Cc: Andy Gross <agross@kernel.org>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: linux-arm-msm@vger.kernel.org
+> ---
+>  include/linux/of.h |    5 +++++
+>  1 file changed, 5 insertions(+)
 
--- 
-Catalin
+I'm assuming this will be applied to the tree that introduced the problem.
+
+Acked-by: Rob Herring <robh@kernel.org>

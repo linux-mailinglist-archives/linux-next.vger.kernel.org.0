@@ -2,85 +2,74 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 101BA21BC72
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 19:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9252921BCB6
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 20:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728099AbgGJRki (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jul 2020 13:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45290 "EHLO
+        id S1728130AbgGJSC5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jul 2020 14:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727065AbgGJRki (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jul 2020 13:40:38 -0400
+        with ESMTP id S1727851AbgGJSC5 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jul 2020 14:02:57 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B3C08C5DC;
-        Fri, 10 Jul 2020 10:40:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A69C08C5DC;
+        Fri, 10 Jul 2020 11:02:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:To:Subject:Sender:
-        Reply-To:Cc:Content-ID:Content-Description;
-        bh=nzj9xEzg94TiDWiQ2mj7wOcGxexy5FgiHulDtZkhqco=; b=E0sLL2v+dosTWZ483q887n3x/L
-        ongb9Eg5BLuc74OARhk+JyNg+hKdT/4dEJvtxdmYeCiG25LIaUcL06KNdIsf8e7v1123jmPex6Wtc
-        vMoShmm64O2B3f8BixYU08T8GF0h8eXZjHJPhcuXCObxj+AH3tjisMjSDxHM7rkcVwVD87E6rJ3GE
-        nqsaMOp2BrUs0H9u0gLeTYaEhVhTpqhet2OpS4ExVBZvspLqGGClUd1s+QMwgjkEfmF6No41r8Hed
-        TVeEDTDaZpaZ2iiHafIzUEtX0BU+Gx1gKetifX6dcTOXLbiwQDcHb6D39ediV8HpQq4tbCaHAwb3O
-        2tUyTfnA==;
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=DGJlzFFDge1qMvtsN1Pa3grJiZ2vQ1dk0udm/740NIY=; b=f7y6Ff8OYEXsz02C0opjEvjErS
+        cCtaP6cHfmHVeihCqhY3pQ1DsbthbT6dHm9hi8ODQzwlxoXhDsmmqIPo3Z3UtegBrquFJZd0sZ/Hl
+        g20vHOmES9MT1SEx8e6AwwOOnckHLkvoDxXf+LsPvk8JgBRj8UcEVcP9BTvKUEVVjKgNsUuOlEKVp
+        Y9veJC6flRBqKhQ4chWIDqGczNPryLPLfp7x9fe6NZN7+UtkzFe4SZaiO7MW8bcYfQYnOWY7B7V0r
+        ulxCsJblN0jKRuG8lbA7PkSu40XCWOKlECFwiKoNoOoVIT4qDq7eqeO3Zb2PAN+ia5n/HPogcg49z
+        2z4Grghw==;
 Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
         by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1jtx0k-00079r-Uz; Fri, 10 Jul 2020 17:40:35 +0000
-Subject: Re: mmotm 2020-07-09-21-00 uploaded
- (drivers/net/ethernet/mellanox/mlx5/core/en_main.c)
-To:     Andrew Morton <akpm@linux-foundation.org>, broonie@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-next@vger.kernel.org, mhocko@suse.cz,
-        mm-commits@vger.kernel.org, sfr@canb.auug.org.au,
+        id 1jtxMF-0007qE-4O; Fri, 10 Jul 2020 18:02:47 +0000
+Subject: Re: linux-next: Tree for Jul 10 (drivers/net/phy/mdio-thunder &
+ mdio-mvusb)
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        Saeed Mahameed <saeedm@mellanox.com>,
-        Leon Romanovsky <leonro@mellanox.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-References: <20200710040047.md-jEb0TK%akpm@linux-foundation.org>
+        Tobias Waldekranz <tobias@waldekranz.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>
+References: <20200710183318.7b808092@canb.auug.org.au>
 From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <8a6f8902-c36c-b46c-8e6f-05ae612d25ea@infradead.org>
-Date:   Fri, 10 Jul 2020 10:40:29 -0700
+Message-ID: <ce86d8cc-95e8-cb8e-f06e-fcf0975f56e0@infradead.org>
+Date:   Fri, 10 Jul 2020 11:02:42 -0700
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
  Thunderbird/68.9.0
 MIME-Version: 1.0
-In-Reply-To: <20200710040047.md-jEb0TK%akpm@linux-foundation.org>
-Content-Type: text/plain; charset=utf-8
+In-Reply-To: <20200710183318.7b808092@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/9/20 9:00 PM, Andrew Morton wrote:
-> The mm-of-the-moment snapshot 2020-07-09-21-00 has been uploaded to
+On 7/10/20 1:33 AM, Stephen Rothwell wrote:
+> Hi all,
 > 
->    http://www.ozlabs.org/~akpm/mmotm/
+> Changes since 20200709:
 > 
-> mmotm-readme.txt says
-> 
-> README for mm-of-the-moment:
-> 
-> http://www.ozlabs.org/~akpm/mmotm/
-> 
-> This is a snapshot of my -mm patch queue.  Uploaded at random hopefully
-> more than once a week.
-> 
-> You will need quilt to apply these patches to the latest Linus release (5.x
-> or 5.x-rcY).  The series file is in broken-out.tar.gz and is duplicated in
-> http://ozlabs.org/~akpm/mmotm/series
-> 
+
+
+on x86_64:
+
+ld: drivers/net/phy/mdio-thunder.o: in function `thunder_mdiobus_pci_probe':
+mdio-thunder.c:(.text+0x218): undefined reference to `devm_mdiobus_alloc_size'
+
 
 on i386:
 
-In file included from ../drivers/net/ethernet/mellanox/mlx5/core/en_main.c:49:0:
-../drivers/net/ethernet/mellanox/mlx5/core/en_accel/en_accel.h: In function ‘mlx5e_accel_sk_get_rxq’:
-../drivers/net/ethernet/mellanox/mlx5/core/en_accel/en_accel.h:153:12: error: implicit declaration of function ‘sk_rx_queue_get’; did you mean ‘sk_rx_queue_set’? [-Werror=implicit-function-declaration]
-  int rxq = sk_rx_queue_get(sk);
-            ^~~~~~~~~~~~~~~
-            sk_rx_queue_set
-
+ERROR: modpost: "devm_mdiobus_alloc_size" [drivers/net/phy/mdio-mvusb.ko] undefined!
 
 
 -- 

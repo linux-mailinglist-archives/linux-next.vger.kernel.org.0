@@ -2,69 +2,69 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 475C021AE24
-	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 06:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D331C21AF45
+	for <lists+linux-next@lfdr.de>; Fri, 10 Jul 2020 08:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725995AbgGJEn5 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jul 2020 00:43:57 -0400
-Received: from bilbo.ozlabs.org ([203.11.71.1]:47681 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725966AbgGJEn5 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Fri, 10 Jul 2020 00:43:57 -0400
+        id S1727777AbgGJGSM (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jul 2020 02:18:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1727772AbgGJGSL (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jul 2020 02:18:11 -0400
+Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D87C08C5CE;
+        Thu,  9 Jul 2020 23:18:11 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B30mm0JJ9z9sRN;
-        Fri, 10 Jul 2020 14:43:51 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B32sX0CGnz9sRK;
+        Fri, 10 Jul 2020 16:18:07 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594356234;
-        bh=POJ600ZaL0vR6HFdOG+eyDix9lK7DSBclDi3v+T0T5I=;
+        s=201702; t=1594361888;
+        bh=uebh7Nj+FZYez9qaSQRIVhMsqdQtviRjGVGzYgirTWo=;
         h=Date:From:To:Cc:Subject:From;
-        b=CFMG762AlX2r72WFWIk+QPH/sFqbcP+aM1EoydHkr5/sdhIKrveq0WrPp3vP+pv8Q
-         XcAbOwTs5s9la3txT7R20p8BkPTjznZ96hXEToad0IGofcO6/oZy+hciu2hm7YAFxj
-         jvnywcCibQMuqqIjOeFlnZ1Gh29W4u+sOsT+NZwKDQsdSVyE/Rj/LT3qIqrmvgsaNj
-         OWc9K3Dp8lHPWPRDW1c7bjl1MuxfwJ7VJT02ljz4m3ixRQubpkU29zgDMUhLYXzN/+
-         n+G1GGc3Vxyp9ku9eikA993hd1VTXJ+cy80KXaVisBEIldED4joV24NbAHQncozQ6h
-         677aBOO/pt5kw==
-Date:   Fri, 10 Jul 2020 14:43:49 +1000
+        b=XqqlC1qCopY/k+4JUsz77Op4qC/UktVCViUgw0QJ3im+6So+nyWLJ8LS46D+OWLG+
+         MzFukU5KFg1YvrvAjR72AM87GBaqUFbVXBecw8IMWxnXqzTAeMNcQlJpEO4DAkFFbJ
+         oMwQHnHOycBTH0JjVHKvhLLluWVkxaquKBGrsxnnE6GSMt+iD8cYi2+Z72HnDXljPC
+         nBTaY5+T8axvyReUyXc2CQa9LN0z7ZUnOgamn09BAQyTraeeEZR+lXhPB+3SDziCTr
+         29zN8qT1ytAA4xRlb/6zAf8j8Uquq7up19vdOvq7LpmmccBCiqyIOqlxu99Bm49Y4u
+         ujx0b/PwUUOXw==
+Date:   Fri, 10 Jul 2020 16:18:06 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@elte.hu>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Brown <broonie@kernel.org>
+To:     Christian Brauner <christian@brauner.io>,
+        Kees Cook <keescook@chromium.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-Subject: linux-next: manual merge of the tip tree with the spi tree
-Message-ID: <20200710144349.516fdeca@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: manual merge of the pidfd tree with the seccomp tree
+Message-ID: <20200710161806.28d8c856@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yTtRCGx=CJcYTAFCwfz7yY+";
+Content-Type: multipart/signed; boundary="Sig_/BKyrhWxOocKHwTO5Q19txOk";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/yTtRCGx=CJcYTAFCwfz7yY+
+--Sig_/BKyrhWxOocKHwTO5Q19txOk
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+Today's linux-next merge of the pidfd tree got a conflict in:
 
-  drivers/spi/spi.c
+  fs/file.c
 
 between commit:
 
-  60a883d119ab ("spi: use kthread_create_worker() helper")
+  21fec66fd4be ("fs: Move __scm_install_fd() to __receive_fd()")
 
-from the spi tree and commit:
+from the seccomp tree and commit:
 
-  3070da33400c ("sched,spi: Convert to sched_set_fifo*()")
+  60997c3d45d9 ("close_range: add CLOSE_RANGE_UNSHARE")
 
-from the tip tree.
+from the pidfd tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -77,39 +77,34 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/spi/spi.c
-index 1d7bba434225,5a4f0bfce474..000000000000
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@@ -1614,11 -1592,9 +1614,9 @@@ EXPORT_SYMBOL_GPL(spi_take_timestamp_po
-   */
-  static void spi_set_thread_rt(struct spi_controller *ctlr)
-  {
-- 	struct sched_param param =3D { .sched_priority =3D MAX_RT_PRIO / 2 };
--=20
-  	dev_info(&ctlr->dev,
-  		"will run message pump with realtime priority\n");
-- 	sched_setscheduler(ctlr->kworker->task, SCHED_FIFO, &param);
- -	sched_set_fifo(ctlr->kworker_task);
-++	sched_set_fifo(ctlr->kworker->task);
-  }
+diff --cc fs/file.c
+index 4fb111735d1d,340bc9569f9d..000000000000
+--- a/fs/file.c
++++ b/fs/file.c
+@@@ -18,7 -19,7 +19,8 @@@
+  #include <linux/bitops.h>
+  #include <linux/spinlock.h>
+  #include <linux/rcupdate.h>
+ +#include <net/sock.h>
++ #include <linux/close_range.h>
  =20
-  static int spi_init_queue(struct spi_controller *ctlr)
+  unsigned int sysctl_nr_open __read_mostly =3D 1024*1024;
+  unsigned int sysctl_nr_open_min =3D BITS_PER_LONG;
 
---Sig_/yTtRCGx=CJcYTAFCwfz7yY+
+--Sig_/BKyrhWxOocKHwTO5Q19txOk
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8H8gUACgkQAVBC80lX
-0GwkiAgAgGdyaleocCsJP/PXIFVmxv/3Tb+hfYulC2Ldx2ys6S91TGjTXqn9ITiD
-n74S9ztQ9HCcNnReZ5zuqhNjTHmo46kUBIpCtrAavxnbpWXTZVGFBvzcJWK429Fy
-d7xwaud80AyrT6AFZSyIYKHSdovziEs6sJF4Raz5UwXcElAsxCikwOLl9SX1IrzO
-yibjWSEbe2swleUm+y0yBkDqwoQBsHc91d6yEP+ypRWad+vEV8QtImvjSRRokO4+
-E1SaXffHXgzOGJeHFepceAT00MTsXsCfkKfrNINXlSPXXc9JKnlwgclzN+9OmGVV
-Uzd65w6fdK6Iw5sTd/wsEZOnTuZ5tQ==
-=2sl+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8ICB4ACgkQAVBC80lX
+0Gxb3gf/XR6DTlWiYpt8lqJWXNtw298QPZ+oY0HhzoIdMn5fmODYdVrvygpy0Ee0
+hLE3ijXyEXgWvBfY+eiQ9Xj2lGbuXFnay2pfjJJXjA5YvdpE5p4dunEaqbte95Af
+1YtpdFu+JvgPoSg7Xxzw6HIX0FMohG04N7NGZcLqz/w3ZZgEveBeGX0lDBmoff2c
+5FX1ydeh04dnXEEbNDUlr2QsW01z58+6Hgr3x+Ov86F1JG2hA/pHJmYQ+vu2e3sy
+sVAeQtdPH8MKD3FPQor12c+D86BPlIQjwfs+NxbVCWyJuu3bUN+LOW5aXMtY40Td
+FQ0oRLXCYY2QgB/+UZ5JzDuAG/FX3w==
+=aYHZ
 -----END PGP SIGNATURE-----
 
---Sig_/yTtRCGx=CJcYTAFCwfz7yY+--
+--Sig_/BKyrhWxOocKHwTO5Q19txOk--

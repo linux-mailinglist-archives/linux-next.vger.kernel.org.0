@@ -2,96 +2,91 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3E521C0D9
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jul 2020 01:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0FD21C1AF
+	for <lists+linux-next@lfdr.de>; Sat, 11 Jul 2020 03:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726803AbgGJXkL (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Fri, 10 Jul 2020 19:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44568 "EHLO
+        id S1726818AbgGKB7g (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Fri, 10 Jul 2020 21:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726369AbgGJXkL (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jul 2020 19:40:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C25C08C5DC;
-        Fri, 10 Jul 2020 16:40:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=MwgubfgOnn4tw/Gmznvx9EZNqV15HqAt1D08KvU1Mbo=; b=Oi9BadDaKVCkPEKsvgxa02EBq9
-        uWUTkqeBuHzfd5JFKwP/3jAwR513+AqyRq2NQFWJ1qjsDEP7eTsfFYgIZweWrWFBu+MeKaFt4URFO
-        KSVbWTfstvDlGnnjaV+R6OIVTVs6DelpfjcVPY2esIHd+gyeNueAMsqmhOF9yE7o6bFtm/qAxmGOt
-        KzUYVry2wX0w0JNP8baACCbEjM+HIVTEXHpfbPzUXH4ibRQ8bkVrlpC7/EHhgqCkxFqu4djorbTu4
-        jpq8WQ3gDO8JRZoVIrWnWfRsuNbiSGQMK/ZL/A0VgvSEPIyzJUiDOmKOICvxx1ryvchCyW24/S8u5
-        8E7CNF6Q==;
-Received: from [2601:1c0:6280:3f0:897c:6038:c71d:ecac]
-        by casper.infradead.org with esmtpsa (Exim 4.92.3 #3 (Red Hat Linux))
-        id 1ju2ch-0003zF-PC; Fri, 10 Jul 2020 23:40:08 +0000
-Subject: Re: [PATCH -next] <linux/of.h>: add stub for of_get_next_parent() to
- fix qcom build error
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
+        with ESMTP id S1726605AbgGKB7g (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Fri, 10 Jul 2020 21:59:36 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFF7C08C5DC;
+        Fri, 10 Jul 2020 18:59:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B3Y4f3D85z9sQt;
+        Sat, 11 Jul 2020 11:59:30 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594432771;
+        bh=l+rJw1Tu2JK+3XbtUHCAR+kbg7O3EQjKjtKhEmGOaxw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BKPG79MzuNL9TNqi3N8II5wdHquXF+7x0aqRhOiBKLuiCNCVjDaeID7F9G0Y5UX4K
+         4yzwaZe2ho1O2AeLdfFBhvXlkrS5E8XOkU+BLQLdZ7GZGNOK8bhPSkhHaePthx2MVx
+         X89Dl6XJfCGvYXCUz9vCl8UEM1pY9XqJqyJm/AMZ/8Ip3XtL0PDpOdGJFQGU5RiN8e
+         /Tw3aNcAcofngii4nHzECuyduUPL/YmNLNQfqjM6SitzeHb52BUGTllqh5sx+VLpak
+         5NFpne+vzI1f/zXD+wO+N7F+CDFs8O4p1AMnUgfuQR/hRoOgCxmJNPNcmIRMMW7avV
+         uxk67gserqf7g==
+Date:   Sat, 11 Jul 2020 11:59:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
         Frank Rowand <frowand.list@gmail.com>,
         devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         linux-arm-msm <linux-arm-msm@vger.kernel.org>,
         Akash Asthana <akashast@codeaurora.org>
+Subject: Re: [PATCH -next] <linux/of.h>: add stub for of_get_next_parent()
+ to fix qcom build error
+Message-ID: <20200711115929.4636a797@canb.auug.org.au>
+In-Reply-To: <215c3c59-e6f7-1721-76ca-993bbaf91356@infradead.org>
 References: <ce0d7561-ff93-d267-b57a-6505014c728c@infradead.org>
- <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-Message-ID: <215c3c59-e6f7-1721-76ca-993bbaf91356@infradead.org>
-Date:   Fri, 10 Jul 2020 16:40:03 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.9.0
+        <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
+        <215c3c59-e6f7-1721-76ca-993bbaf91356@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; boundary="Sig_/.J4ddMQAHs+RvRstUZxfdIB";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On 7/10/20 8:28 AM, Rob Herring wrote:
-> On Mon, Jun 29, 2020 at 10:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->> From: Randy Dunlap <rdunlap@infradead.org>
->>
->> Fix a (COMPILE_TEST) build error when CONFIG_OF is not set/enabled
->> by adding a stub for of_get_next_parent().
->>
->> ../drivers/soc/qcom/qcom-geni-se.c:819:11: error: implicit declaration of function 'of_get_next_parent'; did you mean 'of_get_parent'? [-Werror=implicit-function-declaration]
->> ../drivers/soc/qcom/qcom-geni-se.c:819:9: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
->>
-> 
-> Fixes tag?
+--Sig_/.J4ddMQAHs+RvRstUZxfdIB
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Are linux-next hashes/tags stable?
+Hi Randy,
 
-Fixes: 048eb908a1f2 ("soc: qcom-geni-se: Add interconnect support to fix earlycon crash")
+On Fri, 10 Jul 2020 16:40:03 -0700 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
+>
+> Are linux-next hashes/tags stable?
 
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Frank Rowand <frowand.list@gmail.com>
->> Cc: devicetree@vger.kernel.org
->> Cc: Andy Gross <agross@kernel.org>
->> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
->> Cc: linux-arm-msm@vger.kernel.org
->> ---
->>  include/linux/of.h |    5 +++++
->>  1 file changed, 5 insertions(+)
-> 
-> I'm assuming this will be applied to the tree that introduced the problem.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> 
+That depends on the maintainer of the tree I fetch ... In this case the
+qcom tree.
+--=20
+Cheers,
+Stephen Rothwell
 
-Hi Akash,
-Can you add this patch to your tree, as Rob indicated above?
+--Sig_/.J4ddMQAHs+RvRstUZxfdIB
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-thanks.
--- 
-~Randy
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8JHQEACgkQAVBC80lX
+0Gx6kgf+ONvw3RpF1fOX3tBI3cbl2ONfD4C/J9u6TLjgyC/vQHIVpTTW2CHgi7Zl
+Ibg8lsS3KeYJTdHJccOi8VVAB+HKHzN3AsdBtHyxb6vyuuv9sIGx/Tg1TcqJ5TMG
+POhrjwZ7xVcdUHjrMB/yG/3vmfgL8l6v49SetFT9RZ8PfZHVVadsTjjZGgpRB98n
+HZR20fbdkEdmjGWy1XgN87lmBIBMm5jZyLyHNyFw+cD4e1QEGBF6R6lOSr/lOfa3
+a4oAbwgK6j5Me01ln8tx9/hrdSC4cbspX9BK+FQnXuPUPWve2qdiRGsftNs27rD8
+fjrv2Fu9CcsKj+nwBTz9WmczPuoYLA==
+=+wh6
+-----END PGP SIGNATURE-----
+
+--Sig_/.J4ddMQAHs+RvRstUZxfdIB--

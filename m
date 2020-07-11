@@ -2,130 +2,79 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A3221C5F9
-	for <lists+linux-next@lfdr.de>; Sat, 11 Jul 2020 21:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8619921C6BE
+	for <lists+linux-next@lfdr.de>; Sun, 12 Jul 2020 01:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726927AbgGKToK (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Sat, 11 Jul 2020 15:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S1727063AbgGKXfa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Sat, 11 Jul 2020 19:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726819AbgGKToJ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jul 2020 15:44:09 -0400
-Received: from mail-pl1-x641.google.com (mail-pl1-x641.google.com [IPv6:2607:f8b0:4864:20::641])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61432C08E6DC
-        for <linux-next@vger.kernel.org>; Sat, 11 Jul 2020 12:44:09 -0700 (PDT)
-Received: by mail-pl1-x641.google.com with SMTP id m16so2426220pls.5
-        for <linux-next@vger.kernel.org>; Sat, 11 Jul 2020 12:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FFScSyqhtEjbSNl30tNfDPx/n2WK+xzVbxi3r8v/eGw=;
-        b=QybfgRe8wNY8XCA8SxET6OXJ2wTy8BFJuOLwWBvbZHdqFw0MyEu987sTMat2tqIB9j
-         xVgBhHRFIV3VJrXnsW+Z/VcE4iZu8NS+HnU8m5PejlWaXOBtfJmySpKrwf8gkxhfVm+z
-         hgnX1q1xAt4ahpr6IiSXPWx2Dho5U9d2H9o5oz/13bq4urIztuU2MvXmwO17381XFQ8T
-         D+iojhaC5CVi/EVvse5mHkac8QhOMknI1UqzBTRCR7GdasWqLoW1c8C3B5lhTaymhZWS
-         EivGqW0bisT1Uq9/TOSZAgqCWbbbfDs+FQoYNFiRnoNOpJFI7OW4SWB9GdAe6kaKGERN
-         3mxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FFScSyqhtEjbSNl30tNfDPx/n2WK+xzVbxi3r8v/eGw=;
-        b=QYXtCnM1FVbhFWx+B934pNI9ZaIElad8HWn3pon1vU33qOnYwRaKVHn29CtYX6PLMF
-         UT9wgTsNONPcz0B2MoYI6qv+fCYXZ4dZDptruUf8lmw+inCyOpJx+NNUtlZND26eMv/I
-         9IaKscINgK8epSWlPls88pqOWE0EsmpQO5zc5cspsSaeYKMZIg1LnuyRVx9Fo/7BFYtJ
-         IXS7H5ipZggA5Ssny/VW/Mg8E9LxgI30iMyzXvSt3TC+IEqZ1fqWAI1/jPAeEmacy9Bz
-         U2iz47i5O5lKgmi42DM2IlYdZhrYUvs5CJC73RRtSCv8Blifx67TQ42TQDyQ+9eLjAaK
-         +WVw==
-X-Gm-Message-State: AOAM533Iwtt7CP8HU3kY4lN4ZYIPa1nD/pep09E41lXqQ6EhGt24OgE6
-        Qhu8LCpcyxEXP01XEHufPC+a4g==
-X-Google-Smtp-Source: ABdhPJx8dvnRbV1dcsvA18UTcbWnEGPbhHvvqkWGlc2JVYQ1ljT023zBQkpIiknuci/9St141NzM+g==
-X-Received: by 2002:a17:902:9b83:: with SMTP id y3mr12860099plp.271.1594496648688;
-        Sat, 11 Jul 2020 12:44:08 -0700 (PDT)
-Received: from builder.lan (104-188-17-28.lightspeed.sndgca.sbcglobal.net. [104.188.17.28])
-        by smtp.gmail.com with ESMTPSA id 129sm10008580pfv.161.2020.07.11.12.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jul 2020 12:44:07 -0700 (PDT)
-Date:   Sat, 11 Jul 2020 12:41:56 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-next@vger.kernel.org" <linux-next@vger.kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        devicetree@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        Akash Asthana <akashast@codeaurora.org>
-Subject: Re: [PATCH -next] <linux/of.h>: add stub for of_get_next_parent() to
- fix qcom build error
-Message-ID: <20200711194156.GA1218486@builder.lan>
-References: <ce0d7561-ff93-d267-b57a-6505014c728c@infradead.org>
- <CAL_Jsq+AWo6xP1vC1NubFcdWzoX4hVvSW4KGry1NhOXUieDrSA@mail.gmail.com>
- <215c3c59-e6f7-1721-76ca-993bbaf91356@infradead.org>
+        with ESMTP id S1726939AbgGKXfa (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Sat, 11 Jul 2020 19:35:30 -0400
+Received: from ozlabs.org (ozlabs.org [IPv6:2401:3900:2:1::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF53C08C5DD;
+        Sat, 11 Jul 2020 16:35:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B45qy5rkSz9sRN;
+        Sun, 12 Jul 2020 09:35:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594510527;
+        bh=fiQmHM987DAmtt5nIvsg2T0RG0TiG4tCM6QP09yl7n0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=T7ZBUk4WeEe90jBWuS6WWiXuUbwmto9DFfS0iEAkn5bbojWgX9I2/Xj+vbNQTWUSG
+         iX2TxsvX6p7H4gyDPbnWcyNmHY0o1W2lePSPrSXI7Jjx+yS9hVBXvPImTMoQ2l6fU+
+         Ahs0Qxsy5PRNGwjP+BMuWKz6OcYKlyZhim0dhWImZ90p3lfkFnZ6pINOT0vR1j0Kz8
+         X+x3GnSvwpeqtFpzD8hkjibXQI9Pzw/cfzGlJ9VFyQ653+6Hzg1jjC7xpMAaW7GB5N
+         E8jloJNuyrce6J5Y97BeckS8n7f1I7celrf/cWyVKlKsIdEh8e4fUNtR3qltvL2GSq
+         ucgyij0Whs20w==
+Date:   Sun, 12 Jul 2020 09:35:19 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul@pwsan.com>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the risc-v tree
+Message-ID: <20200712093519.4a3fd9b5@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <215c3c59-e6f7-1721-76ca-993bbaf91356@infradead.org>
+Content-Type: multipart/signed; boundary="Sig_/qx68+YcImgCM0qMARJRFs=T";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Fri 10 Jul 16:40 PDT 2020, Randy Dunlap wrote:
+--Sig_/qx68+YcImgCM0qMARJRFs=T
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 7/10/20 8:28 AM, Rob Herring wrote:
-> > On Mon, Jun 29, 2020 at 10:43 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> >>
-> >> From: Randy Dunlap <rdunlap@infradead.org>
-> >>
-> >> Fix a (COMPILE_TEST) build error when CONFIG_OF is not set/enabled
-> >> by adding a stub for of_get_next_parent().
-> >>
-> >> ../drivers/soc/qcom/qcom-geni-se.c:819:11: error: implicit declaration of function 'of_get_next_parent'; did you mean 'of_get_parent'? [-Werror=implicit-function-declaration]
-> >> ../drivers/soc/qcom/qcom-geni-se.c:819:9: warning: assignment makes pointer from integer without a cast [-Wint-conversion]
-> >>
-> > 
-> > Fixes tag?
-> 
-> Are linux-next hashes/tags stable?
-> 
+Hi all,
 
-Yes, the hashes of the Qualcomm tree are stable.
+Commit
 
-> Fixes: 048eb908a1f2 ("soc: qcom-geni-se: Add interconnect support to fix earlycon crash")
-> 
+  95ce6c73da3b ("riscv: Enable context tracking")
 
-Thank you, added this to the commit and...
+is missing a Signed-off-by from its committer.
 
-> >> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> >> Cc: Rob Herring <robh+dt@kernel.org>
-> >> Cc: Frank Rowand <frowand.list@gmail.com>
-> >> Cc: devicetree@vger.kernel.org
-> >> Cc: Andy Gross <agross@kernel.org>
-> >> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> >> Cc: linux-arm-msm@vger.kernel.org
-> >> ---
-> >>  include/linux/of.h |    5 +++++
-> >>  1 file changed, 5 insertions(+)
-> > 
-> > I'm assuming this will be applied to the tree that introduced the problem.
-> > 
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > 
-> 
-> Hi Akash,
-> Can you add this patch to your tree, as Rob indicated above?
-> 
+--=20
+Cheers,
+Stephen Rothwell
 
-...applied it to the Qualcomm "drivers" tree for 5.9.
+--Sig_/qx68+YcImgCM0qMARJRFs=T
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Thanks for the patch Randy and thanks for the Ack, Rob.
+-----BEGIN PGP SIGNATURE-----
 
-Regards,
-Bjorn
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8KTLcACgkQAVBC80lX
+0GxmeQf+OS0n/Lh3C1Owt+JgUK/9cj6Q8n3gZ7b5YkdN5g8VHKoPEwHHsPYGYMlG
+owckSQXl4ZvhsX8bAyf+NSDtzLZpYRVbAjN+x3lzx9OHtCvxrWUtnJsrSY0z9ECP
+G3OoB/SyefpWhF9Bulm/yDsYflLkLMCgzJduvRvSiLePWkeN+PG/xfQ6QbeeEUHM
+X1opFem1eVMy3jtOjBR3dQTV0DjcGSjAhML8irRG8IWMDIE3Y0NgMGwrMoDrJgFY
+h/rCi178N5qFv/NyLbtnOJJZUWV51fG5roJnNAH4OwZ1sfwda435Q3I6onSKef9l
+0d/j6QXRcPotCYig5ykLqBwet3BO+g==
+=iG+Q
+-----END PGP SIGNATURE-----
 
-> thanks.
-> -- 
-> ~Randy
-> 
+--Sig_/qx68+YcImgCM0qMARJRFs=T--

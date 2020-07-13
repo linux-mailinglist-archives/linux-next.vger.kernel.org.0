@@ -2,73 +2,73 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1626621CECB
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 07:24:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1C621D021
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 08:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725920AbgGMFYt (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jul 2020 01:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56668 "EHLO
+        id S1728488AbgGMG6x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jul 2020 02:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725767AbgGMFYs (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 01:24:48 -0400
+        with ESMTP id S1726571AbgGMG6w (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 02:58:52 -0400
 Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD59C061794;
-        Sun, 12 Jul 2020 22:24:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6155C061794;
+        Sun, 12 Jul 2020 23:58:52 -0700 (PDT)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B4sXX4fR0z9sDX;
-        Mon, 13 Jul 2020 15:24:44 +1000 (AEST)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B4vd36LH5z9sR4;
+        Mon, 13 Jul 2020 16:58:47 +1000 (AEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594617886;
-        bh=JLMrLsEFZFAdmvA4txh24SkbKNk+Xj+qzEtYAUIFtUc=;
+        s=201702; t=1594623529;
+        bh=luQio5Oo9CYwRultNKJhxs2HHiwp/p2cOZqnLur5m0k=;
         h=Date:From:To:Cc:Subject:From;
-        b=sA0I0YtvSMhmE8SOA7Yh2tCmHmV4g4KpBfqo4rblBVRgNADwvjgCHP4yNibGpBJH+
-         yXOuOqS97P1naQUy56kJvulZOkUG6cpW/AjLsDNDvX4Jvs11IeXRkQWpFVuM2s/XER
-         yNloHjnb9TvY/7bQRxc3BYduxEj2ZTzhpOPLqnrM7Wq2A+j+x2T34TpE+sPIiJNIhG
-         jZbxB2pvqtgO906fwdydFYcGtwr0yRCuotMa2BlrnNXM72VgrMO+JMF2Xw+cYXLCkG
-         CuXrrSxENfm2VBfaV59d6i3I6XrBiSyU+kqdFOAG+S4X/Ksu7iS6V/IXrIW+Ltm6ve
-         RF2Wd+qm2kb3Q==
-Date:   Mon, 13 Jul 2020 15:24:43 +1000
+        b=iG1eowlp6weSZO4gxHVQs24lWYkN+tnjqQtoIEmWTjIOpM+inp7VoZ0aJgVdv7FVM
+         SGMz09lo3EoXiy8qMWkXErIBDwVxziHICpkbpwkxSZMrjUysDotxMTXbsvFq/hBVPu
+         KxxMeyszjurFUQGcWUPoRZHSEf+sd7yy1DoDPHNCuqW1DxbWYbEhs3m3AnlXFykUoN
+         bogr/FhrqclesA2HOfqr66hIbIKoNSIjArVez0Z+BWV6k2Kok6sHakBdmi/596kr+5
+         6ACgkEv7unF4eHCg69v9kJi/dFn1izPZ/o6sf3bNsdqMrUhls5xfYKBIkWvueY070j
+         uw95EOrKpGsCg==
+Date:   Mon, 13 Jul 2020 16:58:46 +1000
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>, Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Intel Graphics <intel-gfx@lists.freedesktop.org>,
-        DRI <dri-devel@lists.freedesktop.org>
+To:     Christian Brauner <christian@brauner.io>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        Jiri Slaby <jslaby@suse.cz>
-Subject: linux-next: manual merge of the tty tree with the drm-misc tree
-Message-ID: <20200713152443.12a5449a@canb.auug.org.au>
+        Greentime Hu <greentime.hu@sifive.com>,
+        Tobias Klauser <tklauser@distanz.ch>
+Subject: linux-next: manual merge of the pidfd tree with the risc-v tree
+Message-ID: <20200713165846.5166ff82@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/haWNAIYhOEWfM4Dw6SlggMf";
+Content-Type: multipart/signed; boundary="Sig_/7DTP4JIE5QhI2h_EU1JNPOo";
  protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/haWNAIYhOEWfM4Dw6SlggMf
+--Sig_/7DTP4JIE5QhI2h_EU1JNPOo
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-Today's linux-next merge of the tty tree got a conflict in:
+Today's linux-next merge of the pidfd tree got a conflict in:
 
-  drivers/video/fbdev/core/fbcon.c
+  arch/riscv/Kconfig
 
 between commit:
 
-  fcf918b96662 ("fbcon: Use array3_size() helper in scr_memcpyw()")
+  95ce6c73da3b ("riscv: Enable context tracking")
+  929f6a183839 ("riscv: Add kmemleak support")
 
-from the drm-misc tree and commit:
+from the risc-v tree and commit:
 
-  28bc24fc46f9 ("vc: separate state")
+  140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
 
-from the tty tree.
+from the pidfd tree.
 
 I fixed it up (see below) and can carry the fix as necessary. This
 is now fixed as far as linux-next is concerned, but any non trivial
@@ -81,36 +81,35 @@ complex conflicts.
 Cheers,
 Stephen Rothwell
 
-diff --cc drivers/video/fbdev/core/fbcon.c
-index af9f5ab96f74,86fe41b1deb8..000000000000
---- a/drivers/video/fbdev/core/fbcon.c
-+++ b/drivers/video/fbdev/core/fbcon.c
-@@@ -676,8 -676,8 +676,8 @@@ static void fbcon_prepare_logo(struct v
-  		q =3D (unsigned short *) (vc->vc_origin +
-  					vc->vc_size_row *
-  					rows);
- -		scr_memcpyw(q, save, logo_lines * new_cols * 2);
- +		scr_memcpyw(q, save, array3_size(logo_lines, new_cols, 2));
-- 		vc->vc_y +=3D logo_lines;
-+ 		vc->state.y +=3D logo_lines;
-  		vc->vc_pos +=3D logo_lines * vc->vc_size_row;
-  		kfree(save);
-  	}
+diff --cc arch/riscv/Kconfig
+index 76a0cfad3367,f6a3a2bea3d8..000000000000
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@@ -57,9 -52,6 +57,8 @@@ config RISC
+  	select HAVE_ARCH_SECCOMP_FILTER
+  	select HAVE_ARCH_TRACEHOOK
+  	select HAVE_ASM_MODVERSIONS
+ +	select HAVE_CONTEXT_TRACKING
+- 	select HAVE_COPY_THREAD_TLS
+ +	select HAVE_DEBUG_KMEMLEAK
+  	select HAVE_DMA_CONTIGUOUS if MMU
+  	select HAVE_EBPF_JIT if MMU
+  	select HAVE_FUTEX_CMPXCHG if FUTEX
 
---Sig_/haWNAIYhOEWfM4Dw6SlggMf
+--Sig_/7DTP4JIE5QhI2h_EU1JNPOo
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8L8BsACgkQAVBC80lX
-0GzyDQgAhscNOpxmGNkv4WeNqnKFiLiF64IREaN7Eq/NRR/Pc7wLupLwkb/WUpID
-yxY1NvgGr16W/J5ovPJEN1PnbOTtm/R0WoVp51tYHWD9BFwowrhtxLyX+ukRlSCN
-NE8yC+wH7BzLQJR8uPdonWKdg4kVKf7Yc7cGtYPajJvCHy/Zru+Z7Bi6djmQTx+M
-/G7/+MlVr3945SyWh3LTv+0/koHi4QflMMnSENQrG4n672S1Pk02NuMI2SmYEVTZ
-O56BcypkSGXuSz+Pl7c4ZPsMusponpNNdVa1EXGL1wHO4EMvKhKR/T9D4OkrUYwS
-5VL9bF24IDfGLEmWpM6pL3DLbISRkg==
-=B9WA
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8MBiYACgkQAVBC80lX
+0GzjyQf/XQpISQlEFenm4EapmmIpxMa5oQF9THQbASEtmpjtjQlP2M/sqw7u4i35
+mZ2XKLc/QchK3hCap87RBSriJPSyNFcc2tMJi4U2O8xly4oeVtm9ceFsCyW0e2Eq
+o1rmVrdCetbsqiPFMLHzTZj7B5r4iytHXDsLXJ+sp9YoTuI6i8amAJTgV4Gu8azM
+pt14tNVD45Z45SzBvnqW+xLMgUkoYvFtsBPJj78fD2WKyQ2nOg4Hqmn+R4Kq1Cu/
+Cfgel/vjQ53jOPxtF0AgWv6RGuRCvC2yUU0XCOy9q9UWDd/o6o2pakCcCy5fIddf
+kWksBTGsPQDTcTMQfLxSzMIwKgh5Kg==
+=zB9c
 -----END PGP SIGNATURE-----
 
---Sig_/haWNAIYhOEWfM4Dw6SlggMf--
+--Sig_/7DTP4JIE5QhI2h_EU1JNPOo--

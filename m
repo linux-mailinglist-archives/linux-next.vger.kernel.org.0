@@ -2,186 +2,131 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 5599421E160
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 22:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0EC21E2B6
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 23:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726506AbgGMU1b (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jul 2020 16:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726321AbgGMU1b (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 16:27:31 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A03C061755
-        for <linux-next@vger.kernel.org>; Mon, 13 Jul 2020 13:27:31 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id a14so6542592pfi.2
-        for <linux-next@vger.kernel.org>; Mon, 13 Jul 2020 13:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=PQj0dGxU8PrlNNyGb6Eq0+VjQ/Q+UlV4qlmgSBNhilU=;
-        b=1CBQxAY0GLCft5ruOzCC4F22MU0ISYOaa5jdLxhrpocPQrua6P1UXLV+ERuOyZfEDq
-         9zcYRqAYLkjkfC+uIFeCteeeiP5wYRKV1Bki4lXp1hONp5X4BvbjFD9bSjSQH4QwfD1s
-         RfbVBRhYtQfgyprsZ6IwIbpnmxz0PXhQHIVxFfdAf4kZQDmaBnz145uJMWO82Vm/B97X
-         zwlwnE1sstFiqFnfGLuwJy8qQFcjkSC8cmu27SKLxrTyXekK/8lSSFkP6Az8/4NiENCW
-         oJlre14OxSx7DX/mBVsBQuDNWzVynhDILqn/A6YRCx0idhQs0SZsUOLbh6w4dusj4Nfi
-         p1pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=PQj0dGxU8PrlNNyGb6Eq0+VjQ/Q+UlV4qlmgSBNhilU=;
-        b=BA4mSLDqUT6y3K9rkD/tvI0yqTeDePsWOKA08OILi/8KgCw8k6oh6qyT4CX5IgCCMl
-         U3DyZ+kRp8GxrplzsUPvqgI6b2MmKIf5tds6ZsMLslWNewFe7g/Z6Hp1AvaPOh3mCFsl
-         Pc8KZV+ws5/ikwP7d2171FYgydOvwORP4F4qUjIAztW3mYCtehy/zeqkaJ6qVIkITCX6
-         tsjtkGm6sXxxgKLV9e/l/UFWksxMbfq/nyqsZ8ojKXtL54SPZcTQ7BXmcJJk5zb2dsFl
-         GTX7Ewd9D8PHp7zWoFKFY1ffIUL0qihi4XdF+AQGB4jcW/b/MZvfh1oMrIWy1az4sFzt
-         8jpQ==
-X-Gm-Message-State: AOAM533ivHelCuLIL1DoAozqxWYmU08G6WXCTFy9aNGh8FPuz3HSElf1
-        zZWXQHhNGums/FMfVOwASDvw6wPFsdc=
-X-Google-Smtp-Source: ABdhPJwhl8S1S34/yswCMBk63sBa0WZsn/D7sJ/59arlryGwtaUezWuE5l61uEJFVOGcFd5D5S6Z1A==
-X-Received: by 2002:a62:be04:: with SMTP id l4mr1331724pff.323.1594672049812;
-        Mon, 13 Jul 2020 13:27:29 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id 73sm15415515pfy.24.2020.07.13.13.27.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2020 13:27:29 -0700 (PDT)
-Message-ID: <5f0cc3b1.1c69fb81.b3ce.4dda@mx.google.com>
-Date:   Mon, 13 Jul 2020 13:27:29 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1726321AbgGMV5c (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jul 2020 17:57:32 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:46559 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726150AbgGMV5c (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jul 2020 17:57:32 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5HZ16f7rz9sRK;
+        Tue, 14 Jul 2020 07:57:29 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594677450;
+        bh=AsUmxseH5BnH3garHqf+P/Tp9k4EnP/BQK2s7sSigaM=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nfJ/VJzZQiSxfLSzyqBxpgmrPVT4faoDz66WsMFnIDrcycdNS2nyps9IsJBYT1WTy
+         HlgZJOaJgY7/8Jt3R/2G6/DQjMIuQyuYBGdeJs++nFWp10kbLAUG/2p/YvP8Rtfp+m
+         xYFDXaMBAR13lirY9X+tV7H7dbpIufl+Tcc6dpnMpbXtna9tRfBgoK4/v/xsl4Pr8G
+         0XcvH2GftdqgDFczFNpZ9/QEWNuUCb5iXct9bmdrsSXFX4mkXBbCIUl7E+kwjE/E/0
+         KkVa3YX1n82fdlE/D+qMwvyAxu8Q5l7P/4ZyH8OtmhmQ8KgPt8T2yJc6723QRFkVWL
+         ix8O+ziDApQGA==
+Date:   Tue, 14 Jul 2020 07:57:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>
+Subject: linux-next: Fixes tags need some work in the arm-soc-fixes tree
+Message-ID: <20200714075729.68b92239@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: next-20200713
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: master
-Subject: next/master baseline: 114 runs, 3 regressions (next-20200713)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/vqTgWJ30.lxte2gY6BSQ4yy";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/master baseline: 114 runs, 3 regressions (next-20200713)
+--Sig_/vqTgWJ30.lxte2gY6BSQ4yy
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform              | arch | lab          | compiler | defconfig         =
- | results
-----------------------+------+--------------+----------+-------------------=
--+--------
-at91-sama5d4_xplained | arm  | lab-baylibre | gcc-8    | sama5_defconfig   =
- | 0/1    =
+In commit
 
-vexpress-v2p-ca15-tc1 | arm  | lab-baylibre | gcc-8    | vexpress_defconfig=
- | 3/5    =
+  3e189a193471 ("ARM: dts: socfpga: Align L2 cache-controller nodename with=
+ dtschema")
 
-vexpress-v2p-ca15-tc1 | arm  | lab-cip      | gcc-8    | vexpress_defconfig=
- | 3/5    =
+Fixes tag
 
+  Fixes: 475dc86d08de ("arm: dts: socfpga: Add a base DTSI for Altera's Arr=
+ia10
 
-  Details:  https://kernelci.org/test/job/next/branch/master/kernel/next-20=
-200713/plan/baseline/
+has these problem(s):
 
-  Test:     baseline
-  Tree:     next
-  Branch:   master
-  Describe: next-20200713
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      be978f8feb1d4678b941a3ccf181eea1039110e2 =
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
+In commit
 
+  8e343e71b092 ("arm64: dts: stratix10: increase QSPI reg address in nand d=
+ts file")
 
-Test Regressions
----------------- =
+Fixes tag
 
+  Fixes: 80f132d73709 ("arm64: dts: increase the QSPI reg address for Strat=
+ix10
 
+has these problem(s):
 
-platform              | arch | lab          | compiler | defconfig         =
- | results
-----------------------+------+--------------+----------+-------------------=
--+--------
-at91-sama5d4_xplained | arm  | lab-baylibre | gcc-8    | sama5_defconfig   =
- | 0/1    =
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
+In commit
 
-  Details:     https://kernelci.org/test/plan/id/5f0c8ad6ad879494ff85bb23
+  c188c8348836 ("arm64: dts: stratix10: add status to qspi dts node")
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200713/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200713/arm/=
-sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
+Fixes tag
 
+  Fixes: 0cb140d07fc75 ("arm64: dts: stratix10: Add QSPI support for
 
-  * baseline.login: https://kernelci.org/test/case/id/5f0c8ad6ad879494ff85b=
-b24
-      failing since 76 days (last pass: next-20200424, first fail: next-202=
-00428) =
+has these problem(s):
 
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
+In commit
 
-platform              | arch | lab          | compiler | defconfig         =
- | results
-----------------------+------+--------------+----------+-------------------=
--+--------
-vexpress-v2p-ca15-tc1 | arm  | lab-baylibre | gcc-8    | vexpress_defconfig=
- | 3/5    =
+  390a90089db5 ("arm64: dts: agilex: add status to qspi dts node")
 
+Fixes tag
 
-  Details:     https://kernelci.org/test/plan/id/5f0c8d0f1bb442d2b085bb21
+  Fixes: c4c8757b2d895 ("arm64: dts: agilex: add QSPI support for Intel
 
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200713/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200713/arm/=
-vexpress_defconfig/gcc-8/lab-baylibre/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
+has these problem(s):
 
+  - Subject has leading but no trailing parentheses
+  - Subject has leading but no trailing quotes
 
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0c8d0f1bb442d2=
-b085bb24
-      failing since 37 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =
+Please do not split Fixes tags over more than one line.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/vqTgWJ30.lxte2gY6BSQ4yy
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-platform              | arch | lab          | compiler | defconfig         =
- | results
-----------------------+------+--------------+----------+-------------------=
--+--------
-vexpress-v2p-ca15-tc1 | arm  | lab-cip      | gcc-8    | vexpress_defconfig=
- | 3/5    =
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8M2MkACgkQAVBC80lX
+0Gzg3Qf8Dl8JMliIWTydxbP+rQP3eJC+jTJomQOaSjLzaLA7B/ttRQ1EPHEtgqAj
+SnITsJl9MxvGP+9ZtIgREUqg3Vt3HM2KV2EENwjqhfHzIYj4GGhEllK7zeJwEiaH
+eXgCNgabYbEI/JTib5r2Sr7o39LT6I48Pzmb/V792ZspcxU70H4tzXInAc7W/x1n
+b4TcysaJFce5DvOBwAnquvqU6bMk1Qw7ISICNZ5fAIh9x/gDvx7aw6F7iYUKggJt
+F0C9sD9yRmCmc76PgDdKIsU/kJiKuh+pZDppkq3Z/U5ug4R7QK3qZj7ZW3dkqFyE
+/bbLqyDxwAWFxcvc2P1PZOBSWpUdgA==
+=JKHq
+-----END PGP SIGNATURE-----
 
-  Details:     https://kernelci.org/test/plan/id/5f0c8c1e78e15ae45c85bb31
-
-  Results:     3 PASS, 1 FAIL, 1 SKIP
-  Full config: vexpress_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/master/next-20200713/arm/=
-vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.txt
-  HTML log:    https://storage.kernelci.org//next/master/next-20200713/arm/=
-vexpress_defconfig/gcc-8/lab-cip/baseline-vexpress-v2p-ca15-tc1.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0c8c1e78e15ae4=
-5c85bb34
-      failing since 37 days (last pass: next-20200604, first fail: next-202=
-00605)
-      2 lines =20
+--Sig_/vqTgWJ30.lxte2gY6BSQ4yy--

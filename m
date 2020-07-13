@@ -2,114 +2,95 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D1C621D021
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 08:58:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69FE621D066
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 09:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728488AbgGMG6x (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jul 2020 02:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42970 "EHLO
+        id S1729049AbgGMH3T (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jul 2020 03:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726571AbgGMG6w (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 02:58:52 -0400
-Received: from ozlabs.org (bilbo.ozlabs.org [IPv6:2401:3900:2:1::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6155C061794;
-        Sun, 12 Jul 2020 23:58:52 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B4vd36LH5z9sR4;
-        Mon, 13 Jul 2020 16:58:47 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594623529;
-        bh=luQio5Oo9CYwRultNKJhxs2HHiwp/p2cOZqnLur5m0k=;
-        h=Date:From:To:Cc:Subject:From;
-        b=iG1eowlp6weSZO4gxHVQs24lWYkN+tnjqQtoIEmWTjIOpM+inp7VoZ0aJgVdv7FVM
-         SGMz09lo3EoXiy8qMWkXErIBDwVxziHICpkbpwkxSZMrjUysDotxMTXbsvFq/hBVPu
-         KxxMeyszjurFUQGcWUPoRZHSEf+sd7yy1DoDPHNCuqW1DxbWYbEhs3m3AnlXFykUoN
-         bogr/FhrqclesA2HOfqr66hIbIKoNSIjArVez0Z+BWV6k2Kok6sHakBdmi/596kr+5
-         6ACgkEv7unF4eHCg69v9kJi/dFn1izPZ/o6sf3bNsdqMrUhls5xfYKBIkWvueY070j
-         uw95EOrKpGsCg==
-Date:   Mon, 13 Jul 2020 16:58:46 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Christian Brauner <christian@brauner.io>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul@pwsan.com>
+        with ESMTP id S1725818AbgGMH3R (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 03:29:17 -0400
+Received: from mail-wr1-x443.google.com (mail-wr1-x443.google.com [IPv6:2a00:1450:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F1CC061794
+        for <linux-next@vger.kernel.org>; Mon, 13 Jul 2020 00:29:16 -0700 (PDT)
+Received: by mail-wr1-x443.google.com with SMTP id j4so14558304wrp.10
+        for <linux-next@vger.kernel.org>; Mon, 13 Jul 2020 00:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cumulusnetworks.com; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=4kU8N5DeedpzZY27vYaHJmaCubANM+yECKFDBgJweY4=;
+        b=D7xh6eu++gbVif5cEAGGKdiDsW9xxIY4MmHaAwDepJv1tFzVb7Zi9vbwXIkAq6OSMC
+         ao2hKH3BT4xs6mO1GFJTVEZ+p1It4SRAP0g9VFFPbOgQBlsZOy0TX3yRmAuQxnyUrrNK
+         mtOZKb8/Zj1Qnf2li7fwOFjgLdjMbc1nTKtBc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=4kU8N5DeedpzZY27vYaHJmaCubANM+yECKFDBgJweY4=;
+        b=drZMnu7uBmf0zK1zCl88huA9lD6+m0C/SCyRxVFUQuWZQoxegTx9LgaOue4AP3rRg5
+         MEdJIHb9smum71AooipE8EskV8gj6DBKFVWy5lFNn1kZJqKJryec/yUN2rYjfMHQ5fhe
+         yO6dNJlNlxhxIJftLkmhTxgZkKBxKeeH3KBp6tmz650GP/ah2v93epz3VVWVIeyQA2EA
+         EO8KJ2ZUdn5nlV9ciBQgwm0SwM334anMjpTdiy7qwpKz3ah3kCHntbQMbvrFaQRnEKiQ
+         xXvLVOBhrMwLsx9WsBEThtvin9VpNvb5N9O2kLwXTDbr03QKxIxA/Kje9c7gAEmZOM9O
+         ES5w==
+X-Gm-Message-State: AOAM53112zQz9OZfw6upOVhsc/ZcePhQxjHg2CYQN6jB41E95JwI7Q0O
+        y9vrbfVBOENuWdbe9KMEvDSJdBXzbzMGIw==
+X-Google-Smtp-Source: ABdhPJyhZaYuvI1VIdHE2m9jwzvJxy3uMEncr3I2/2Fzsq4u4hxVDd97IeUGkvgBxSbMFMvVXofGqA==
+X-Received: by 2002:a5d:43d0:: with SMTP id v16mr82553551wrr.296.1594625355477;
+        Mon, 13 Jul 2020 00:29:15 -0700 (PDT)
+Received: from [192.168.0.109] (84-238-136-197.ip.btc-net.bg. [84.238.136.197])
+        by smtp.gmail.com with ESMTPSA id d13sm21582030wrq.89.2020.07.13.00.29.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jul 2020 00:29:14 -0700 (PDT)
+Subject: Re: linux-next: build failure after merge of the net-next tree
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Tobias Klauser <tklauser@distanz.ch>
-Subject: linux-next: manual merge of the pidfd tree with the risc-v tree
-Message-ID: <20200713165846.5166ff82@canb.auug.org.au>
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20200713115412.28aac287@canb.auug.org.au>
+From:   Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+Message-ID: <e1d2b00a-52d4-e36e-317f-314ac3aecca6@cumulusnetworks.com>
+Date:   Mon, 13 Jul 2020 10:29:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.8.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7DTP4JIE5QhI2h_EU1JNPOo";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+In-Reply-To: <20200713115412.28aac287@canb.auug.org.au>
+Content-Type: text/plain; charset=windows-1252
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/7DTP4JIE5QhI2h_EU1JNPOo
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 13/07/2020 04:54, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the net-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) failed like this:
+> 
+> net/bridge/br_netlink_tunnel.c: In function '__vlan_tunnel_handle_range':
+> net/bridge/br_netlink_tunnel.c:271:26: error: implicit declaration of function 'br_vlan_can_enter_range'; did you mean 'br_vlan_valid_range'? [-Werror=implicit-function-declaration]
+>   271 |  if (v && curr_change && br_vlan_can_enter_range(v, *v_end)) {
+>       |                          ^~~~~~~~~~~~~~~~~~~~~~~
+>       |                          br_vlan_valid_range
+> 
+> Caused by commit
+> 
+>   94339443686b ("net: bridge: notify on vlan tunnel changes done via the old api")
+> 
+> CONFIG_BRIDGE_VLAN_FILTERING is not set for this build.
+> 
+> I have reverted that commit for today.
+> 
 
-Hi all,
+Oops, sorry that's my bad. I mixed br_netlink_tunnel with br_vlan_tunnel, the latter is compiled only
+when bridge vlan filtering is defined.
 
-Today's linux-next merge of the pidfd tree got a conflict in:
+Anyway, I'll post a fix ASAP.
 
-  arch/riscv/Kconfig
-
-between commit:
-
-  95ce6c73da3b ("riscv: Enable context tracking")
-  929f6a183839 ("riscv: Add kmemleak support")
-
-from the risc-v tree and commit:
-
-  140c8180eb7c ("arch: remove HAVE_COPY_THREAD_TLS")
-
-from the pidfd tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc arch/riscv/Kconfig
-index 76a0cfad3367,f6a3a2bea3d8..000000000000
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@@ -57,9 -52,6 +57,8 @@@ config RISC
-  	select HAVE_ARCH_SECCOMP_FILTER
-  	select HAVE_ARCH_TRACEHOOK
-  	select HAVE_ASM_MODVERSIONS
- +	select HAVE_CONTEXT_TRACKING
-- 	select HAVE_COPY_THREAD_TLS
- +	select HAVE_DEBUG_KMEMLEAK
-  	select HAVE_DMA_CONTIGUOUS if MMU
-  	select HAVE_EBPF_JIT if MMU
-  	select HAVE_FUTEX_CMPXCHG if FUTEX
-
---Sig_/7DTP4JIE5QhI2h_EU1JNPOo
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8MBiYACgkQAVBC80lX
-0GzjyQf/XQpISQlEFenm4EapmmIpxMa5oQF9THQbASEtmpjtjQlP2M/sqw7u4i35
-mZ2XKLc/QchK3hCap87RBSriJPSyNFcc2tMJi4U2O8xly4oeVtm9ceFsCyW0e2Eq
-o1rmVrdCetbsqiPFMLHzTZj7B5r4iytHXDsLXJ+sp9YoTuI6i8amAJTgV4Gu8azM
-pt14tNVD45Z45SzBvnqW+xLMgUkoYvFtsBPJj78fD2WKyQ2nOg4Hqmn+R4Kq1Cu/
-Cfgel/vjQ53jOPxtF0AgWv6RGuRCvC2yUU0XCOy9q9UWDd/o6o2pakCcCy5fIddf
-kWksBTGsPQDTcTMQfLxSzMIwKgh5Kg==
-=zB9c
------END PGP SIGNATURE-----
-
---Sig_/7DTP4JIE5QhI2h_EU1JNPOo--
+Thanks.

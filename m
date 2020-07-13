@@ -2,85 +2,123 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id AD06421D0F1
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 09:53:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D5421D192
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 10:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726077AbgGMHxQ (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jul 2020 03:53:16 -0400
-Received: from conssluserg-04.nifty.com ([210.131.2.83]:34990 "EHLO
-        conssluserg-04.nifty.com" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725818AbgGMHxQ (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 03:53:16 -0400
-Received: from mail-vk1-f182.google.com (mail-vk1-f182.google.com [209.85.221.182]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 06D7qprL021691;
-        Mon, 13 Jul 2020 16:52:52 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 06D7qprL021691
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1594626772;
-        bh=QRmgCLz55pGAiYJ6IPSUrsAwdIpDl1h9v5capnjYD6s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RzaEuixqZ4VGYkgY0LqBtba7nieyXeP+KM51Dnu4vjg9EOttoUbJ1NbRZmy5CP/OT
-         4AgXqeMG8mlXGn0NWZ7/TBJslwWX0D/oKfZ0qvxxDYR4zoc7PnCyWpuXzXXAOXhpEk
-         uckL3Ve2i5lFKHo2Hxjw3m1KOQQeYKiLpgQvSWkHHeHnBd6tN5+FJxLiDTp7WFMHN0
-         hd/HSHVm9dNlH4at3hPynk/hFP6caP5xquaZvDfxqV9xzqU65+BQ4XzI9Fd70w9VPg
-         aBhBHL3MejLkkSbjCdkUoKfZbI1/LoxDioq/n0FJliGHN/vNYITtg419qb7xyIZUwd
-         8yjlvNN9myZlA==
-X-Nifty-SrcIP: [209.85.221.182]
-Received: by mail-vk1-f182.google.com with SMTP id g22so2578169vke.9;
-        Mon, 13 Jul 2020 00:52:51 -0700 (PDT)
-X-Gm-Message-State: AOAM531ExoYbhuDxJtQN0X8isVhC98ymp/voz111OH2jt1P9waowaAkP
-        IErvuoJiN2ylhWlOksmu72t+gE0YGolENF8Yuro=
-X-Google-Smtp-Source: ABdhPJxNFyJ8q8WNzZnAYfoUMz6NpZVD2Cwf3rJ/k4h8+eaFQ7YUe7R9b9rSUc8J692BZ2OVzipzRSlmQIBQotaT270=
-X-Received: by 2002:a1f:a616:: with SMTP id p22mr41700565vke.96.1594626770912;
- Mon, 13 Jul 2020 00:52:50 -0700 (PDT)
-MIME-Version: 1.0
-References: <20200707170720.55be721f@canb.auug.org.au> <20200713115618.5e07a783@canb.auug.org.au>
-In-Reply-To: <20200713115618.5e07a783@canb.auug.org.au>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 13 Jul 2020 16:52:14 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARoPNi-QbT=4Odap9LtP9dpMUh9TExtD5gOaaktwdY3Aw@mail.gmail.com>
-Message-ID: <CAK7LNARoPNi-QbT=4Odap9LtP9dpMUh9TExtD5gOaaktwdY3Aw@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the kbuild tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
+        id S1729334AbgGMIUa (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jul 2020 04:20:30 -0400
+Received: from ozlabs.org ([203.11.71.1]:42531 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725818AbgGMIUa (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jul 2020 04:20:30 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B4xRF6KT1z9sDX;
+        Mon, 13 Jul 2020 18:20:25 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594628427;
+        bh=LH4FOtl0Z+kfpRZwAFFiDHlO3qpDI4fH8c6WKE5JlK4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=iZZEY+7xZ4Owu8dkWATmnMr4gMb/dpivDUmtJ7lyVWzea/p5ORoLHse3jdw3hpjyE
+         IoBD9RIB/IXngv2BCsIhlVlOsnZGx9STLcdBLR/SQhaqyFCfFKLHrjkCqXHtG3/X0g
+         WzuEoHcTa+I6NruoM+iBog+hzu35DPsYp/quZZW8YcnrnOsdjTB+6vd+osgXksOyE1
+         j6tXhvP+HYm4cPeYlhCVuRhrVov4Gz8u5yi+gCuDRq06foymER6+5M5Z/7bCoFzQYK
+         RYL58kXANKz39/8G4Ujz46lvQpXDiXRY18p5NlX4c3JCs2wlzpge0GIdAd+R+LO8jV
+         EyH5WWTyyNWwg==
+Date:   Mon, 13 Jul 2020 18:20:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
 Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Barry Song <song.bao.hua@hisilicon.com>
+Subject: linux-next: manual merge of the akpm-current tree with the net-next
+ tree
+Message-ID: <20200713182023.3f08605e@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/2Vp1I5dWzQ=eova.7uLLoky";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Hi Stephen,
+--Sig_/2Vp1I5dWzQ=eova.7uLLoky
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 13, 2020 at 10:56 AM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
->
-> Hi all,
->
-> On Tue, 7 Jul 2020 17:07:20 +1000 Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> >
-> > Hi all,
-> >
-> > After merging the kbuild tree, today's linux-next build (powerpc
-> > ppc44x_defconfig) failed like this:
-> >
-> > cc1: fatal error: opening output file arch/powerpc/boot/dts/.ebony.dtb.dts.tmp: No such file or directory
-> >
-> > and directory arch/powerpc/boot/dts/ does, indeed, not exist in the
-> > separate object directory.
-> >
-> > Caused by commit
-> >
-> >   ea4679253288 ("kbuild: always create directories of targets")
-> >
-> > at least, reverting that commit makes the build work again.
->
-> I am still reverting that commit.
+Hi all,
 
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-Sorry, I missed the previous email.
-I will fix it soon.
+  mm/cma.h
 
+between commit:
 
--- 
-Best Regards
-Masahiro Yamada
+  a2b992c828f7 ("debugfs: make sure we can remove u32_array files cleanly")
+
+from the net-next tree and commit:
+
+  bc7212aceef6 ("mm: cma: fix the name of CMA areas")
+
+from the akpm-current tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc mm/cma.h
+index 6698fa63279b,27d3f0e9f68f..000000000000
+--- a/mm/cma.h
++++ b/mm/cma.h
+@@@ -2,8 -2,8 +2,10 @@@
+  #ifndef __MM_CMA_H__
+  #define __MM_CMA_H__
+ =20
+ +#include <linux/debugfs.h>
+ +
++ #define CMA_MAX_NAME 64
++=20
+  struct cma {
+  	unsigned long   base_pfn;
+  	unsigned long   count;
+@@@ -13,9 -13,8 +15,9 @@@
+  #ifdef CONFIG_CMA_DEBUGFS
+  	struct hlist_head mem_head;
+  	spinlock_t mem_head_lock;
+ +	struct debugfs_u32_array dfs_bitmap;
+  #endif
+- 	const char *name;
++ 	char name[CMA_MAX_NAME];
+  };
+ =20
+  extern struct cma cma_areas[MAX_CMA_AREAS];
+
+--Sig_/2Vp1I5dWzQ=eova.7uLLoky
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8MGUcACgkQAVBC80lX
+0GyeuAf/aFe008ZUac4c96jkCZ7nQnIBL9wZioAPtsMBJM6sDIjWlChbH6qdKJgZ
+DeTYAvLzrcX+Z3RjQuRkQrBHS9ulMOC8VYGIblWc7MNJAdV0FKCJEbzM8JolPLN4
+GUkiqLmZJvh47sGWs5xnEbk2NZRuQRKZo/XC0vj2bsa4WOFdSE5SYrt0aX3SUgdg
+7voHV/9NLuCpQVP4ZrZb7/lpy7BYQZ0Haa7tZdaymJmw6gPnITd/qIVYLIj0AMcv
+x/NOY4rVlPPRDIgVODkY30VPmhclDWNQzuyhxT8Mj0YQu3yxNJWL6Li1GdytLXz6
+U4BBLAtUcmQwVDV762JLZGAngqH7xA==
+=DZqr
+-----END PGP SIGNATURE-----
+
+--Sig_/2Vp1I5dWzQ=eova.7uLLoky--

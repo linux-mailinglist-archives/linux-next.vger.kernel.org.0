@@ -2,79 +2,80 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A7821D42E
-	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 13:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE34121DAB5
+	for <lists+linux-next@lfdr.de>; Mon, 13 Jul 2020 17:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1729027AbgGMLBu (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Mon, 13 Jul 2020 07:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1727035AbgGMLBu (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Mon, 13 Jul 2020 07:01:50 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56377C061755;
-        Mon, 13 Jul 2020 04:01:50 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id e8so5870294pgc.5;
-        Mon, 13 Jul 2020 04:01:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20161025;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=PLDTOUjo+Us4PRzbHAHkncjVeQotYYWeKuV0fTxuxQE=;
-        b=P3a0aMxZX57xTDDVtevvhPbtILAUCdoVYemwr5tYof8eC9gmOilvR8DRwo2TSxiimi
-         2o3mzJYJtaAfcMRFswp6OA/hCdzUdg6y7CHIwZ7qlFIX/BvG43K2wWxroIzpPQ172sVj
-         qSQiGi02tzfySYjmmZWQuHB+0x49TXjbvo9oJNOeyEVx9jj9iF5XrgFkP1xc1lph4lev
-         3z0ZUWJC2xEsUA0/XKy2y6xhnmD00BaOz4ULqB/6E/GzZVzZxAaR2Iz9HRmxKnoyMOUH
-         yUFRLuwCxTvOI4cz0B0IDvIfmvgurWAi5go9mCNtFOmBMlWdP8sQ3COujb3TBUAAXOrK
-         8t3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=PLDTOUjo+Us4PRzbHAHkncjVeQotYYWeKuV0fTxuxQE=;
-        b=pNy8jjEhbExphgs36K3P0QP/SwF7n3MxtrcXUm7KyQWJSX3neeeOhxYsUfZP7Kv6UU
-         3+OYCIoYl5c8/f5UcMjNiyQ5S/FZP9D1SXujmxBGoAg4yjPqi40lkqqMXrSCkwo87PU2
-         iJTixOSn3c43ykFfw6Biv/RbzU9t+my9o4A7pyGy7fXQpDfZqs3wanEVdTsTHUmRpWVB
-         k9TK+y0MJyrbtauXI/pEUQ64CWV01np9lihLcdNxbdWGB7+9fQTOEIGx9oRuJG8Iphz8
-         yoLa7Imv30O923Ox2L4ZrApjYGu58bNtg8vQuyEt3qqyqTpux2vULU4weyK5YTuxYPpR
-         sTaQ==
-X-Gm-Message-State: AOAM530AnlGMgW1HHcSlcFV0byuJ84wPMA/9xwlD0B51cvR9+xlKQFoB
-        JhI5JepxkUMa5v2JotR5zz94lQvzx90aEbalVO4=
-X-Google-Smtp-Source: ABdhPJztjlzZ8I15mA4ZUtzxH6wmgoWCnIb3FoBThQCtQHqaa9n4qxq2ugmElZ2h3BA113XeuRp2rLN8RtucOjJLSZk=
-X-Received: by 2002:a62:7657:: with SMTP id r84mr71646218pfc.130.1594638109708;
- Mon, 13 Jul 2020 04:01:49 -0700 (PDT)
+        id S1730069AbgGMPsc (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Mon, 13 Jul 2020 11:48:32 -0400
+Received: from mail.kernel.org ([198.145.29.99]:43338 "EHLO mail.kernel.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1729492AbgGMPsb (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Mon, 13 Jul 2020 11:48:31 -0400
+Received: from localhost (fw-tnat.cambridge.arm.com [217.140.96.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.kernel.org (Postfix) with ESMTPSA id D4D8A207BC;
+        Mon, 13 Jul 2020 15:48:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=default; t=1594655311;
+        bh=BJRdS8UDSmuQA6iSp4Z2DXAA/LuYlKm8QLzZPV9K8d0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZI2198ArFH0Gd9UaAkcLHTg3HwttIBXrb1KmrmBz4C13L/JI5TYO6c0eJSmphLr62
+         hs8Q0BW0h+vO4cQGU9Zdt3Vw2chCeTVIylVxDhiOYYHc0Balv3ICWC0ZQNx8yi6j0L
+         PK4IkXJ7YIn77vuHYpaa8fk7adnxGna6h47pOUJA=
+Date:   Mon, 13 Jul 2020 16:48:22 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Alex Elder <elder@linaro.org>,
+        Siddharth Gupta <sidgup@codeaurora.org>,
+        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-next@vger.kernel.org
+Subject: Build failures in -next in qcom_common.c
+Message-ID: <20200713154822.GC4420@sirena.org.uk>
 MIME-Version: 1.0
-References: <20200710183318.7b808092@canb.auug.org.au> <20200712155604.GA342822@smile.fi.intel.com>
- <20200713080152.63ee1246@canb.auug.org.au> <e519f1c2-9761-4866-4878-09cc3da23d1f@infradead.org>
- <CAHk-=wib+gfHwo0zADm-rMXuBaHMdosudtBXeUk0qfQEna9Hjw@mail.gmail.com> <f5a764f8-74d9-c11f-c1d7-2b22fc42f6c6@infradead.org>
-In-Reply-To: <f5a764f8-74d9-c11f-c1d7-2b22fc42f6c6@infradead.org>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 13 Jul 2020 14:01:33 +0300
-Message-ID: <CAHp75VeTrktumdYOpyHSdO4kFY=73BTEe2N460oAHWSY+FuWmA@mail.gmail.com>
-Subject: Re: linux-next: Tree for Jul 10
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="adJ1OR3c6QgCpb/j"
+Content-Disposition: inline
+X-Cookie: Fast, cheap, good: pick two.
+User-Agent: Mutt/1.10.1 (2018-07-13)
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, Jul 13, 2020 at 5:37 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> On 7/12/20 7:27 PM, Linus Torvalds wrote:
 
+--adJ1OR3c6QgCpb/j
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Thanks for replying.
->
-> I've already got it built & working.
+Since Friday -next has been failing to build various arm and arm64
+configurations with:
 
-Me too. 0.6.2 works for me.
+drivers/remoteproc/qcom_common.c:210:9: error: implicit declaration of function 'kzalloc' [-Werror,-Wimplicit-function-declaration]
+        info = kzalloc(sizeof(*info), GFP_KERNEL);
+               ^
+drivers/remoteproc/qcom_common.c:210:7: warning: incompatible integer to pointer conversion assigning to 'struct qcom_ssr_subsystem *' from 'int' [-Wint-conversion]
+        info = kzalloc(sizeof(*info), GFP_KERNEL);
+             ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning and 1 error generated.
 
+caused by 5abfe5cf0b8358b8ad0 (remoteproc: qcom: Add per subsystem SSR
+notification) which adds a use of kzalloc() without ensuring that it is
+prototyped.
 
--- 
-With Best Regards,
-Andy Shevchenko
+--adJ1OR3c6QgCpb/j
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAl8MgkUACgkQJNaLcl1U
+h9BH4gf8De7vCWX00YgvyZplg/HHYNr+cszcZZDHXRrmgWpPTBJjNu2SAVV0KVns
+jKNjuaWAQ48x3dP0Ph4EsRGSA0o0Uzpncd2+rVKRTJuIAJpBe77gxhQNaOTqM0br
+4QwNtwhvrFJIAUkyk1xaUR/VRl8WWwhj3XX3s7iVjXx7Qi53X8MCQuCqmpJy9n8C
+4CQ1poAqR+A4Eo7gqAKljtVB9TYU0iNshsWeiaFsqjgXFaiM0pBLj5ARlcvTmZUh
+KWVdjSw48kdZYeoa/wpEJTpg2RIPusHcWcSsgKCThR1eEi/gS3mGkLMI1SF6iyIF
+AaPW+qHI8WcbrEYG8hj9799Df7PBCg==
+=42W5
+-----END PGP SIGNATURE-----
+
+--adJ1OR3c6QgCpb/j--

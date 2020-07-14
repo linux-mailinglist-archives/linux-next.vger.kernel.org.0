@@ -2,98 +2,108 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id EA14821EE47
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 12:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D878B21EE6E
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 12:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726789AbgGNKrP (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 06:47:15 -0400
-Received: from us-smtp-2.mimecast.com ([207.211.31.81]:45957 "EHLO
-        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
-        by vger.kernel.org with ESMTP id S1725884AbgGNKrN (ORCPT
-        <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 06:47:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594723631;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=hFSCGa2faOc4YtJn6Usmp29e4JLiVkSJQ5USz3jN4SM=;
-        b=XYFP3uXvcQpOdfrLrlukq/gqkrJ60YIseMBDXmrlF0f0rd/Tq8X6ltzMPd8wBPLcwFo2Yo
-        9C/yaes0pRwBuQ0a2/lui/Zh+Aa6+H4ts7xCSWon05cRITBgvsZFVc5kFbq2YSPx9XZiSv
-        2zhS1ezRVLySX8islVsYk2gnem7wWZM=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-319-QVsaaGwXMPK9qQ7Nt3uv_Q-1; Tue, 14 Jul 2020 06:47:07 -0400
-X-MC-Unique: QVsaaGwXMPK9qQ7Nt3uv_Q-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id C05441092;
-        Tue, 14 Jul 2020 10:47:05 +0000 (UTC)
-Received: from krava (unknown [10.40.193.14])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 5596E2E020;
-        Tue, 14 Jul 2020 10:47:02 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 12:47:02 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
+        id S1726041AbgGNK4X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 06:56:23 -0400
+Received: from mx2.suse.de ([195.135.220.15]:33508 "EHLO mx2.suse.de"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1726729AbgGNK4X (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jul 2020 06:56:23 -0400
+X-Virus-Scanned: by amavisd-new at test-mx.suse.de
+Received: from relay2.suse.de (unknown [195.135.221.27])
+        by mx2.suse.de (Postfix) with ESMTP id 47770AD1A;
+        Tue, 14 Jul 2020 10:56:24 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 12:56:21 +0200 (CEST)
+From:   Miroslav Benes <mbenes@suse.cz>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        David Miller <davem@davemloft.net>
-Subject: Re: linux-next: build warning after merge of the bpf-next tree
-Message-ID: <20200714104702.GH183694@krava>
-References: <20200714121608.58962d66@canb.auug.org.au>
- <20200714090048.GG183694@krava>
- <20200714203341.4664dda3@canb.auug.org.au>
+        Peter Zijlstra <peterz@infradead.org>, pmladek@suse.cz,
+        live-patching@vger.kernel.org
+Subject: Re: linux-next: Tree for Jun 23 (objtool (2))
+In-Reply-To: <20200702123555.bjioosahrs5vjovu@treble>
+Message-ID: <alpine.LSU.2.21.2007141240540.5393@pobox.suse.cz>
+References: <20200623162820.3f45feae@canb.auug.org.au> <61df2e8f-75e8-d233-9c3c-5b4fa2b7fbdc@infradead.org> <20200702123555.bjioosahrs5vjovu@treble>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714203341.4664dda3@canb.auug.org.au>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+Content-Type: text/plain; charset=US-ASCII
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 08:33:41PM +1000, Stephen Rothwell wrote:
+On Thu, 2 Jul 2020, Josh Poimboeuf wrote:
 
-SNIP
-
-> > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> > index 948378ca73d4..a88cd4426398 100644
-> > --- a/tools/bpf/resolve_btfids/Makefile
-> > +++ b/tools/bpf/resolve_btfids/Makefile
-> > @@ -16,6 +16,20 @@ else
-> >    MAKEFLAGS=--no-print-directory
-> >  endif
-> >  
-> > +# always use the host compiler
-> > +ifneq ($(LLVM),)
-> > +HOSTAR  ?= llvm-ar
-> > +HOSTCC  ?= clang
-> > +HOSTLD  ?= ld.lld
-> > +else
-> > +HOSTAR  ?= ar
-> > +HOSTCC  ?= gcc
-> > +HOSTLD  ?= ld
-> > +endif
-> > +AR       = $(HOSTAR)
-> > +CC       = $(HOSTCC)
-> > +LD       = $(HOSTLD)
-> > +
-> >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
-> >  
-> >  LIBBPF_SRC := $(srctree)/tools/lib/bpf/
+> On Tue, Jun 23, 2020 at 08:06:07AM -0700, Randy Dunlap wrote:
+> > On 6/22/20 11:28 PM, Stephen Rothwell wrote:
+> > > Hi all,
+> > > 
+> > > Changes since 20200622:
+> > > 
 > > 
+> > on x86_64:
+> > 
+> > arch/x86/kernel/cpu/mce/core.o: warning: objtool: mce_timed_out()+0x24: unreachable instruction
+> > kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction
+> > 
+> > Full randconfig file is attached.
 > 
-> Thanks for the quick response.  However, in the mean time the bpf-next
-> tree has been merged into the net-next tree, so these fixes will be
-> needed there ASAP.
+> More livepatch...
 
-I just posted it
+Correct.
 
-jirka
+Both are known and I thought Josh had fixes queued somewhere for both, but 
+my memory fails me quite often. See below.
+
+However, I think it is time to decide how to approach this whole saga. It 
+seems that there are not so many places in the kernel in need of 
+__noreturn annotation in the end and as jikos argued at least some of 
+those should be fixed regardless. Josh, should I prepare proper patches 
+and submit them to relevant maintainers to see where this path is going?
+
+It would be much better to fix it in GCC, but it has been like banging 
+one's head against a wall so far. Josh, you wanted to create a bug 
+for GCC in this respect in the past? Has that happened?
+
+If I remember correctly, we discussed briefly a possibility to cope with 
+that in objtool, but no solution was presented.
+
+Removing -flive-patching is also a possibility. I don't like it much, but 
+we discussed it with Petr M. a couple of months ago and it might be a way 
+too.
+
+Thanks
+Miroslav
+
+---
+
+diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
+index 14e4b4d17ee5..469a71ecea3c 100644
+--- a/arch/x86/kernel/cpu/mce/core.c
++++ b/arch/x86/kernel/cpu/mce/core.c
+@@ -279,7 +279,7 @@ static int fake_panic;
+ static atomic_t mce_fake_panicked;
+ 
+ /* Panic in progress. Enable interrupts and wait for final IPI */
+-static void wait_for_panic(void)
++static void __noreturn wait_for_panic(void)
+ {
+        long timeout = PANIC_TIMEOUT*USEC_PER_SEC;
+ 
+diff --git a/kernel/exit.c b/kernel/exit.c
+index 727150f28103..570649152e7f 100644
+--- a/kernel/exit.c
++++ b/kernel/exit.c
+@@ -877,7 +877,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
+  * as well as by sys_exit_group (below).
+  */
+ void
+-do_group_exit(int exit_code)
++__noreturn do_group_exit(int exit_code)
+ {
+        struct signal_struct *sig = current->signal;
 

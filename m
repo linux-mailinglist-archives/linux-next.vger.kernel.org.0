@@ -2,159 +2,116 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id B8A5921EA22
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 09:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53D3B21EB26
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 10:19:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725997AbgGNHen (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 03:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1725306AbgGNHen (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 03:34:43 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E74C061755
-        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 00:34:43 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s189so2181502pgc.13
-        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 00:34:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
-        h=message-id:date:mime-version:content-transfer-encoding:subject:to
-         :from;
-        bh=TQqdZJV06rYL08oSaYuXqwL6hI5hwGb9/Hu/NgvOmvw=;
-        b=fct+f195rvUnHMIis10WbxGjRoU99Wyo0sJFMtULq3BfHy4/w66gAkXpaArCHfeObe
-         4qZNgHGUH2eM3ps2MyicHwyMxQ9cSPBLjYKrwDuf3FDO/Ou1suDfHkk/JQFR4axsEUNZ
-         UQLS20O1Wl2hT/4NBifDG+z6a+/msQjQ3+zHt6aoaivpzTpg6P8L1BqUljYnPEr3gY36
-         AV8kmd3OLOj1nFPkhVPGFc6Osd78T+QXg+E6Gc1eEx8H8jF2J2l7AtXyv9Uq5IMYiWHx
-         /oa5sMGml9HNidSlCwwMprrKvUlmOqqv6pARXTf00ZoPfYTMxCZd4Bg+MHKScyoO4/au
-         Bagw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20161025;
-        h=x-gm-message-state:message-id:date:mime-version
-         :content-transfer-encoding:subject:to:from;
-        bh=TQqdZJV06rYL08oSaYuXqwL6hI5hwGb9/Hu/NgvOmvw=;
-        b=N1RGzBRgUROx2bSy7yId4o5gMxd1NQzCR3b6AnIebqyhF29+3lcHXeihFnSJbNwaAO
-         urR778J4wAbCof3fdqhi3f+3VamgziOr7vY2pJO4tOcIBrJxASULsUA8gXTywlLHLF8B
-         RX7kFqikzm5aWpGfhc9tMgW+iUoHT8n3/klfdGPKCWKdwpErdm4slnUpO1yh8uFx+nj0
-         qXxtIirH01uFloeAnqav2hmuQjLyk+CI9PMEHjBqTsufjDEwt5UVl1HlQWFpe+ebx1F6
-         r84o8Gu7hPX20mdretUPvjOAFGdIoTUAtA1jVyaQr0fQnxJWhnuCG08tIenPWubsrYUG
-         PquQ==
-X-Gm-Message-State: AOAM5306KQWjYuQHDqutctvy31VJHSLXsSPKgDj/5zKYSct+2uwVC8S/
-        k9tAQHQnnUxf7YUqo/idFazE1ZIazOk=
-X-Google-Smtp-Source: ABdhPJzWFxr3hZ6jIaksLtAS2ONtG/zmRLJACOdHr8ivi6QpOti84B6JecWUKhCTuv2JvZKuNVhi9g==
-X-Received: by 2002:a63:3e09:: with SMTP id l9mr2454567pga.235.1594712082332;
-        Tue, 14 Jul 2020 00:34:42 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id h6sm16547744pfo.123.2020.07.14.00.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2020 00:34:41 -0700 (PDT)
-Message-ID: <5f0d6011.1c69fb81.5d2fc.90c5@mx.google.com>
-Date:   Tue, 14 Jul 2020 00:34:41 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        id S1725833AbgGNITi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 04:19:38 -0400
+Received: from ozlabs.org ([203.11.71.1]:32839 "EHLO ozlabs.org"
+        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
+        id S1725793AbgGNITi (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jul 2020 04:19:38 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5YMq4R6kz9sDX;
+        Tue, 14 Jul 2020 18:19:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594714776;
+        bh=5FTY9IYSNtTjBV9hCkBrN5BM8oS4XK8NEYCYAmC4pho=;
+        h=Date:From:To:Cc:Subject:From;
+        b=XYiTOvRAwF0WInq7fmx9uySQwHS4QU7+5H4wNOXfe5qujQyFqufHzXjv/gV4rAURK
+         7qc7LkQ+72RkF0nxyN9X7vZk2EMHfOAzEt5nPAT0OMJZaFsBucslFNG9TYQ/HI/w9q
+         AT/AihDv9ikR4MY2i3Z+f+GIBHvCd4kHdr+Tbl4BwAepTQRrx1nx89Hr2qtkdDvuXY
+         4WvWTPJi9twzf3GoKZ/Xix7HVyhjUDUOljPnAsC9UAiQxMaQUQVStkFDPD+pWh9Iu1
+         VraZ+nWWt4gCXkr0WyLblK6wV2Q8ZhdgZWwEU3+Ab6T2iKs6DIG/+AAeXHvp1WtUBQ
+         iaNESJaKdNHog==
+Date:   Tue, 14 Jul 2020 18:19:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Michal Hocko <mhocko@suse.com>
+Subject: linux-next: manual merge of the akpm-current tree with the jc_docs
+ tree
+Message-ID: <20200714181934.58fc201c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v5.8-rc5-214-g5ec74c90dca2
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: next
-X-Kernelci-Branch: pending-fixes
-Subject: next/pending-fixes baseline: 199 runs,
- 2 regressions (v5.8-rc5-214-g5ec74c90dca2)
-To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
-        kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+Content-Type: multipart/signed; boundary="Sig_/pWHLCaf7d0uibWm8g.V_EP+";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-next/pending-fixes baseline: 199 runs, 2 regressions (v5.8-rc5-214-g5ec74c9=
-0dca2)
+--Sig_/pWHLCaf7d0uibWm8g.V_EP+
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Regressions Summary
--------------------
+Hi all,
 
-platform              | arch  | lab          | compiler | defconfig       |=
- results
-----------------------+-------+--------------+----------+-----------------+=
---------
-at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
- 0/1    =
+Today's linux-next merge of the akpm-current tree got a conflict in:
 
-bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
- 4/5    =
+  Documentation/filesystems/proc.rst
 
+between commit:
 
-  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
-v5.8-rc5-214-g5ec74c90dca2/plan/baseline/
+  059db4341303 ("Documentation/filesystems/proc.rst: copy-editing cleanup")
 
-  Test:     baseline
-  Tree:     next
-  Branch:   pending-fixes
-  Describe: v5.8-rc5-214-g5ec74c90dca2
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
-.git
-  SHA:      5ec74c90dca24f2d9abaae2527941b801070651c =
+from the jc_docs tree and commit:
 
+  7079aa70a489 ("doc, mm: clarify /proc/<pid>/oom_score value range")
 
+from the akpm-current tree.
 
-Test Regressions
----------------- =
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
 
+--=20
+Cheers,
+Stephen Rothwell
 
+diff --cc Documentation/filesystems/proc.rst
+index e024a9efffd8,78a0dec323a3..000000000000
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@@ -1680,7 -1673,10 +1672,10 @@@ requires CAP_SYS_RESOURCE
+  3.2 /proc/<pid>/oom_score - Display current oom-killer score
+  -------------------------------------------------------------
+ =20
++ Please note that the exported value includes oom_score_adj so it is effec=
+tively
++ in range [0,2000].
++=20
+ -This file can be used to check the current score used by the oom-killer i=
+s for
+ +This file can be used to check the current score used by the oom-killer f=
+or
+  any given <pid>. Use it together with /proc/<pid>/oom_score_adj to tune w=
+hich
+  process should be killed in an out-of-memory situation.
+ =20
 
-platform              | arch  | lab          | compiler | defconfig       |=
- results
-----------------------+-------+--------------+----------+-----------------+=
---------
-at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
- 0/1    =
+--Sig_/pWHLCaf7d0uibWm8g.V_EP+
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
+-----BEGIN PGP SIGNATURE-----
 
-  Details:     https://kernelci.org/test/plan/id/5f0d2c6acf8f76820a85bb18
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8NapYACgkQAVBC80lX
+0GyXuwf/dvy90fXsK1Ge1EvLGc0AaEgeuMrARjFynOSHOEwAUWtmXAo23qd6HvXI
+SzrSC9FH61rjd/XEtJT/qPPBPd1POeK4+vX1aZ452zxNVZJB442N3ksm+BKqgGDv
+kXtWtRjjg8ath8PNCR9d6LXuTKvZ5jmlHrcYcKKXnCS5NLF1EjZW06wdLaVOPnEn
+E4i6riAstKMdHEeN11rXqeRAR06sdhBQ0/gPEpwDQ3L3Btv7tJin0mPMLjrvkXwa
+pO6kNNtKs7vil6aJDqpyQCxoYGe1hXUgzkgKZXcoN7dfxW3IylEGqzYCdMmTLpl9
+KvFibtj9qHs5ReEnBACbGMCyfxFBpw==
+=R6FN
+-----END PGP SIGNATURE-----
 
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: sama5_defconfig
-  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
-4-g5ec74c90dca2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
-4-g5ec74c90dca2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
-4_xplained.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/armel/baseline/rootfs.cpio.gz =
-
-
-  * baseline.login: https://kernelci.org/test/case/id/5f0d2c6acf8f76820a85b=
-b19
-      failing since 69 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first f=
-ail: v5.7-rc4-211-g6d4315023bc9) =
-
-
-
-platform              | arch  | lab          | compiler | defconfig       |=
- results
-----------------------+-------+--------------+----------+-----------------+=
---------
-bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
- 4/5    =
-
-
-  Details:     https://kernelci.org/test/plan/id/5f0d2f5529d21502eb85bb2e
-
-  Results:     4 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
-  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
-4-g5ec74c90dca2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.txt
-  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
-4-g5ec74c90dca2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
-.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
-.05/arm64/baseline/rootfs.cpio.gz =
-
-
-  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0d2f5529d21502=
-eb85bb31
-      new failure (last pass: v5.8-rc4-597-gb8976598d3c1)
-      1 lines =20
+--Sig_/pWHLCaf7d0uibWm8g.V_EP+--

@@ -2,37 +2,38 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 3585A21EB68
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 10:31:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473BA21EBFB
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 11:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725981AbgGNIbl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 04:31:41 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31288 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725793AbgGNIbk (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 04:31:40 -0400
+        id S1726187AbgGNJBG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 05:01:06 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:22402 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1725816AbgGNJBF (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jul 2020 05:01:05 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594715499;
+        s=mimecast20190719; t=1594717264;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=jxagKFMPTlHYLlE9FXu+4jDWBv7YXV1lVPgmdIJdZ48=;
-        b=CsVckzVae5W6TG/iDfWoKLqt1dpoytQwBDwJn7phouZ8hh7ce8X6Td7/XuUTF7z3lj/voi
-        vRcG966dbGvieLhJU9bdHM2W68Mv4E6/r7Ztj+i77z5BFywkroDm5YSnhlfX7phZLT3Vmz
-        WINIKGrYudvuZU2nMmtlrJnWXV7Q+B4=
+        bh=0ed3Xocn2VEJ7JZTYR0y+4DEJWtAkhtN40Gvl92+Xn0=;
+        b=ULC7ZQY0kRtLnp1MZEm2h1sR8P8SpGAv7+AQCF0A51a22JBpylFZB2byFZLMsMNBFTuJU3
+        8OLcepX9Bq/RWq9Mso4RhM6r4HXr/zioIF8Aj5H/+lpIXZIm9OhUIZmfRzzC1F/VvbBr2n
+        cRngrXsMw2I6Wnyi/tZQoSWQ/zysQXo=
 Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
  [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-365-gT-4-w__MF-EnDVmh3g0kw-1; Tue, 14 Jul 2020 04:31:37 -0400
-X-MC-Unique: gT-4-w__MF-EnDVmh3g0kw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+ us-mta-341-eftPBnxdNtuDoNxCfsMStA-1; Tue, 14 Jul 2020 05:01:01 -0400
+X-MC-Unique: eftPBnxdNtuDoNxCfsMStA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.phx2.redhat.com [10.5.11.16])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C175106B244;
-        Tue, 14 Jul 2020 08:31:36 +0000 (UTC)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 0C77D109D;
+        Tue, 14 Jul 2020 09:00:52 +0000 (UTC)
 Received: from krava (unknown [10.40.193.14])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 558B12DE6A;
-        Tue, 14 Jul 2020 08:31:34 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 10:31:33 +0200
+        by smtp.corp.redhat.com (Postfix) with SMTP id 227AD5C679;
+        Tue, 14 Jul 2020 09:00:49 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 11:00:48 +0200
 From:   Jiri Olsa <jolsa@redhat.com>
 To:     Stephen Rothwell <sfr@canb.auug.org.au>
 Cc:     Daniel Borkmann <daniel@iogearbox.net>,
@@ -41,50 +42,63 @@ Cc:     Daniel Borkmann <daniel@iogearbox.net>,
         Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Jiri Olsa <jolsa@kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20200714083133.GF183694@krava>
-References: <20200714122247.797cf01e@canb.auug.org.au>
- <20200714061654.GE183694@krava>
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+Message-ID: <20200714090048.GG183694@krava>
+References: <20200714121608.58962d66@canb.auug.org.au>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20200714061654.GE183694@krava>
-X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
+In-Reply-To: <20200714121608.58962d66@canb.auug.org.au>
+X-Scanned-By: MIMEDefang 2.79 on 10.5.11.16
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 08:16:54AM +0200, Jiri Olsa wrote:
-> On Tue, Jul 14, 2020 at 12:22:47PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > After merging the bpf-next tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> > 
-> > tmp/ccsqpVCY.s: Assembler messages:
-> > tmp/ccsqpVCY.s:78: Error: unrecognized symbol type ""
-> > tmp/ccsqpVCY.s:91: Error: unrecognized symbol type ""
-> > 
-> > I don't know what has caused this (I guess maybe the resolve_btfids
-> > branch).
-> > 
-> > I have used the bpf-next tree from next-20200713 for today.
+On Tue, Jul 14, 2020 at 12:16:08PM +1000, Stephen Rothwell wrote:
+> Hi all,
 > 
-> ok, trying to reproduce
+> After merging the bpf-next tree, today's linux-next build (powerpc
+> ppc64_defconfig) produced this warning:
+> 
+> ld: warning: orphan section `.BTF_ids' from `kernel/trace/bpf_trace.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/btf.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/stackmap.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `net/core/filter.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/trace/bpf_trace.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/btf.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/stackmap.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `net/core/filter.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/trace/bpf_trace.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/btf.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `kernel/bpf/stackmap.o' being placed in section `.BTF_ids'
+> ld: warning: orphan section `.BTF_ids' from `net/core/filter.o' being placed in section `.BTF_ids'
+> 
+> Presumably ntroduced by the merge of the resolve_btfids branch.
 
-damn crossbuilds.. change below fixes it for me,
-will do some more testing and post it today
+missing one more #ifdef.. chage below fixes it for me,
+it's squashed with the fix for the arm build, I'll post 
+both fixes today
 
+thanks,
 jirka
 
 
 ---
 diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index fe019774f8a7..8b9194e22c7c 100644
+index fe019774f8a7..2f9754a4ab2b 100644
 --- a/include/linux/btf_ids.h
 +++ b/include/linux/btf_ids.h
-@@ -21,7 +21,7 @@
+@@ -3,6 +3,8 @@
+ #ifndef _LINUX_BTF_IDS_H
+ #define _LINUX_BTF_IDS_H
+ 
++#ifdef CONFIG_DEBUG_INFO_BTF
++
+ #include <linux/compiler.h> /* for __PASTE */
+ 
+ /*
+@@ -21,7 +23,7 @@
  asm(							\
  ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
  ".local " #symbol " ;                          \n"	\
@@ -93,6 +107,19 @@ index fe019774f8a7..8b9194e22c7c 100644
  ".size  " #symbol ", 4;                        \n"	\
  #symbol ":                                     \n"	\
  ".zero 4                                       \n"	\
+@@ -83,5 +85,12 @@ asm(							\
+ ".zero 4                                       \n"	\
+ ".popsection;                                  \n");
+ 
++#else
++
++#define BTF_ID_LIST(name) u32 name[5];
++#define BTF_ID(prefix, name)
++#define BTF_ID_UNUSED
++
++#endif /* CONFIG_DEBUG_INFO_BTF */
+ 
+ #endif
 diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
 index 948378ca73d4..a88cd4426398 100644
 --- a/tools/bpf/resolve_btfids/Makefile

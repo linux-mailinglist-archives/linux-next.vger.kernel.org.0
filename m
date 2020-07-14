@@ -2,116 +2,120 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 53D3B21EB26
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 10:19:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3585A21EB68
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 10:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725833AbgGNITi (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 04:19:38 -0400
-Received: from ozlabs.org ([203.11.71.1]:32839 "EHLO ozlabs.org"
-        rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1725793AbgGNITi (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 04:19:38 -0400
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        id S1725981AbgGNIbl (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 04:31:41 -0400
+Received: from us-smtp-delivery-1.mimecast.com ([207.211.31.120]:31288 "EHLO
+        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
+        with ESMTP id S1725793AbgGNIbk (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 04:31:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594715499;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jxagKFMPTlHYLlE9FXu+4jDWBv7YXV1lVPgmdIJdZ48=;
+        b=CsVckzVae5W6TG/iDfWoKLqt1dpoytQwBDwJn7phouZ8hh7ce8X6Td7/XuUTF7z3lj/voi
+        vRcG966dbGvieLhJU9bdHM2W68Mv4E6/r7Ztj+i77z5BFywkroDm5YSnhlfX7phZLT3Vmz
+        WINIKGrYudvuZU2nMmtlrJnWXV7Q+B4=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-365-gT-4-w__MF-EnDVmh3g0kw-1; Tue, 14 Jul 2020 04:31:37 -0400
+X-MC-Unique: gT-4-w__MF-EnDVmh3g0kw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5YMq4R6kz9sDX;
-        Tue, 14 Jul 2020 18:19:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
-        s=201702; t=1594714776;
-        bh=5FTY9IYSNtTjBV9hCkBrN5BM8oS4XK8NEYCYAmC4pho=;
-        h=Date:From:To:Cc:Subject:From;
-        b=XYiTOvRAwF0WInq7fmx9uySQwHS4QU7+5H4wNOXfe5qujQyFqufHzXjv/gV4rAURK
-         7qc7LkQ+72RkF0nxyN9X7vZk2EMHfOAzEt5nPAT0OMJZaFsBucslFNG9TYQ/HI/w9q
-         AT/AihDv9ikR4MY2i3Z+f+GIBHvCd4kHdr+Tbl4BwAepTQRrx1nx89Hr2qtkdDvuXY
-         4WvWTPJi9twzf3GoKZ/Xix7HVyhjUDUOljPnAsC9UAiQxMaQUQVStkFDPD+pWh9Iu1
-         VraZ+nWWt4gCXkr0WyLblK6wV2Q8ZhdgZWwEU3+Ab6T2iKs6DIG/+AAeXHvp1WtUBQ
-         iaNESJaKdNHog==
-Date:   Tue, 14 Jul 2020 18:19:34 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 1C175106B244;
+        Tue, 14 Jul 2020 08:31:36 +0000 (UTC)
+Received: from krava (unknown [10.40.193.14])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 558B12DE6A;
+        Tue, 14 Jul 2020 08:31:34 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 10:31:33 +0200
+From:   Jiri Olsa <jolsa@redhat.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Michal Hocko <mhocko@suse.com>
-Subject: linux-next: manual merge of the akpm-current tree with the jc_docs
- tree
-Message-ID: <20200714181934.58fc201c@canb.auug.org.au>
+        Jiri Olsa <jolsa@kernel.org>
+Subject: Re: linux-next: build failure after merge of the bpf-next tree
+Message-ID: <20200714083133.GF183694@krava>
+References: <20200714122247.797cf01e@canb.auug.org.au>
+ <20200714061654.GE183694@krava>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/pWHLCaf7d0uibWm8g.V_EP+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20200714061654.GE183694@krava>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
---Sig_/pWHLCaf7d0uibWm8g.V_EP+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jul 14, 2020 at 08:16:54AM +0200, Jiri Olsa wrote:
+> On Tue, Jul 14, 2020 at 12:22:47PM +1000, Stephen Rothwell wrote:
+> > Hi all,
+> > 
+> > After merging the bpf-next tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> > 
+> > tmp/ccsqpVCY.s: Assembler messages:
+> > tmp/ccsqpVCY.s:78: Error: unrecognized symbol type ""
+> > tmp/ccsqpVCY.s:91: Error: unrecognized symbol type ""
+> > 
+> > I don't know what has caused this (I guess maybe the resolve_btfids
+> > branch).
+> > 
+> > I have used the bpf-next tree from next-20200713 for today.
+> 
+> ok, trying to reproduce
 
-Hi all,
+damn crossbuilds.. change below fixes it for me,
+will do some more testing and post it today
 
-Today's linux-next merge of the akpm-current tree got a conflict in:
+jirka
 
-  Documentation/filesystems/proc.rst
 
-between commit:
+---
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index fe019774f8a7..8b9194e22c7c 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -21,7 +21,7 @@
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+ ".local " #symbol " ;                          \n"	\
+-".type  " #symbol ", @object;                  \n"	\
++".type  " #symbol ", STT_OBJECT;               \n"	\
+ ".size  " #symbol ", 4;                        \n"	\
+ #symbol ":                                     \n"	\
+ ".zero 4                                       \n"	\
+diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+index 948378ca73d4..a88cd4426398 100644
+--- a/tools/bpf/resolve_btfids/Makefile
++++ b/tools/bpf/resolve_btfids/Makefile
+@@ -16,6 +16,20 @@ else
+   MAKEFLAGS=--no-print-directory
+ endif
+ 
++# always use the host compiler
++ifneq ($(LLVM),)
++HOSTAR  ?= llvm-ar
++HOSTCC  ?= clang
++HOSTLD  ?= ld.lld
++else
++HOSTAR  ?= ar
++HOSTCC  ?= gcc
++HOSTLD  ?= ld
++endif
++AR       = $(HOSTAR)
++CC       = $(HOSTCC)
++LD       = $(HOSTLD)
++
+ OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+ 
+ LIBBPF_SRC := $(srctree)/tools/lib/bpf/
 
-  059db4341303 ("Documentation/filesystems/proc.rst: copy-editing cleanup")
-
-from the jc_docs tree and commit:
-
-  7079aa70a489 ("doc, mm: clarify /proc/<pid>/oom_score value range")
-
-from the akpm-current tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc Documentation/filesystems/proc.rst
-index e024a9efffd8,78a0dec323a3..000000000000
---- a/Documentation/filesystems/proc.rst
-+++ b/Documentation/filesystems/proc.rst
-@@@ -1680,7 -1673,10 +1672,10 @@@ requires CAP_SYS_RESOURCE
-  3.2 /proc/<pid>/oom_score - Display current oom-killer score
-  -------------------------------------------------------------
- =20
-+ Please note that the exported value includes oom_score_adj so it is effec=
-tively
-+ in range [0,2000].
-+=20
- -This file can be used to check the current score used by the oom-killer i=
-s for
- +This file can be used to check the current score used by the oom-killer f=
-or
-  any given <pid>. Use it together with /proc/<pid>/oom_score_adj to tune w=
-hich
-  process should be killed in an out-of-memory situation.
- =20
-
---Sig_/pWHLCaf7d0uibWm8g.V_EP+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8NapYACgkQAVBC80lX
-0GyXuwf/dvy90fXsK1Ge1EvLGc0AaEgeuMrARjFynOSHOEwAUWtmXAo23qd6HvXI
-SzrSC9FH61rjd/XEtJT/qPPBPd1POeK4+vX1aZ452zxNVZJB442N3ksm+BKqgGDv
-kXtWtRjjg8ath8PNCR9d6LXuTKvZ5jmlHrcYcKKXnCS5NLF1EjZW06wdLaVOPnEn
-E4i6riAstKMdHEeN11rXqeRAR06sdhBQ0/gPEpwDQ3L3Btv7tJin0mPMLjrvkXwa
-pO6kNNtKs7vil6aJDqpyQCxoYGe1hXUgzkgKZXcoN7dfxW3IylEGqzYCdMmTLpl9
-KvFibtj9qHs5ReEnBACbGMCyfxFBpw==
-=R6FN
------END PGP SIGNATURE-----
-
---Sig_/pWHLCaf7d0uibWm8g.V_EP+--

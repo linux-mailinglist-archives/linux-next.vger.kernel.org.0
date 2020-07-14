@@ -2,119 +2,113 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 336ED21F437
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 16:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2499521F57D
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 16:55:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1728275AbgGNOhe (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 10:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
+        id S1726187AbgGNOyd (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 10:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1726358AbgGNOhd (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 10:37:33 -0400
-Received: from mail-lj1-x242.google.com (mail-lj1-x242.google.com [IPv6:2a00:1450:4864:20::242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9ACFC061794
-        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 07:37:32 -0700 (PDT)
-Received: by mail-lj1-x242.google.com with SMTP id h22so23019987lji.9
-        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 07:37:32 -0700 (PDT)
+        with ESMTP id S1725925AbgGNOyd (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 10:54:33 -0400
+Received: from mail-lj1-x244.google.com (mail-lj1-x244.google.com [IPv6:2a00:1450:4864:20::244])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CC5C061755;
+        Tue, 14 Jul 2020 07:54:32 -0700 (PDT)
+Received: by mail-lj1-x244.google.com with SMTP id h22so23104449lji.9;
+        Tue, 14 Jul 2020 07:54:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20161025;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=lK9a1yh/EhE3qkm1elmL6lwF7ziT/zqKmAG/PHA6ZOA=;
-        b=Z3NSvmGi1zKUsvgeygynh+ITklJceB1KEnpIldaqI5MEUZy2m/tQgDrFqcbvYfh63r
-         j0VcE1IcdAM6R/CBN1UvvaAk6ARqymw753YL/papmNPPisKpDn86xp0k1KyaKLQ8f4V/
-         PEUDjxMF7d7mAuadqlHJjVMniI6vB1hQKh26CHWGzRmuLOh8Oy64AM5AgRaPXcaGKvxL
-         p9ZRzaowPofuPENecCZDZLN0Tyd75Y2MVb/LLI2VRQtyH60caW51NTdVEWHI6Nxdio1w
-         su/OWOJQzUw5OgjUHHHrvMgRg8z19M5VCXPMBfHCAp8Jz+fwZT7vZX7SGozCDimJJ8DJ
-         G5yA==
+        bh=216BVYRg8fMC6Xf6ygu+rllfsyrRcDfyiKujR0K+mPc=;
+        b=kHn32CLzrOuwZLpk9ERwy/KM5lLUSKQtzBVSbwI7cwwIJOwWVWQ1WRnZUupQiaAh+4
+         DXrU78MEiWX5Nn69pfoLFrgGROUtuhMLL+2Yz5waSsAXTlQfuEbJnrZvWGWq4wPK+Luc
+         w/ctvc/JWEMxg6FA2Eu0R+NrQotMjuCB0ZJs4AbZ5JH63g7R4BopCiz7yU0zCjFX8PdK
+         wLZWwaKFQUOgDEIDRgYv/x0XL0XzVz5qwFBDyjdM+rdKuX9/3B4cWpDYDpuAzux0+kDS
+         nSBAZbYwV2tNnW6DGz/aEr4V2jZN5R2ulV9mim3JiACheMgdvSlbwgSLQGJSxWkEf/SY
+         Zcgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20161025;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=lK9a1yh/EhE3qkm1elmL6lwF7ziT/zqKmAG/PHA6ZOA=;
-        b=SsQkIJgonHOvk2bfgtaooCz2EZSf3nTzjQPuG0nkNlgtiVuY3x0wCE8mjL+7KfhMcr
-         23zAjV5m2VHZ+DAanY0JVLweINQYpB56/jtS3xaItvgHZod43wpi0T69b9utkWkT3Bw8
-         Yu7vNHjGahSi3cfXxuoTf0KLNYMrzlPWVWHeuGmYNuNBwQdY/HsutTet8TUipzSUr18/
-         HF5qQFNWqF382wLjUrJHNid36dFDiAFRscYV6VQiQf01Luk/J88AJ7lUEMOBudPBGn0S
-         6/8FdcGd4FeFowgR6ZlyuxFVW5LGgcpiS/sxDlxBXXeEL8ipVkk9pBs9scVASDVIRBZZ
-         rjiw==
-X-Gm-Message-State: AOAM530XXQJUD2TkIoPbOV8g0D5HS92/hSTY6pi7Nh2qB0zy1BMT4rOb
-        ue9wt5nh89xBcWIIVfiayoGsbWrI9yzawtNhjSUMJQ==
-X-Google-Smtp-Source: ABdhPJzX5dpcaBKDxEYLl0vrwhi8F7+YdV8dkC4BCrbt7sSJP+LG5g2U5WSp4XIU7quRW1BEQAv2maCKFgN7vcoO7KY=
-X-Received: by 2002:a2e:9857:: with SMTP id e23mr2609366ljj.411.1594737451191;
- Tue, 14 Jul 2020 07:37:31 -0700 (PDT)
+        bh=216BVYRg8fMC6Xf6ygu+rllfsyrRcDfyiKujR0K+mPc=;
+        b=oSdy0UQAlPpLUOPdsE8fn6cmdSMUvnFfXEQJ6Ja2ngOj9uTjEwTih383+TAcTx81lt
+         5zvx79XG0D+qBgsFY7wWeJqHcGgCz02sQTURUj0w9bYUp1Ni989LL72SekW+XptvLnn5
+         TMN+fKTwleQxzTN6DcJvxNUUDsWKAcjW6erNzxxAyiCT2F+OZs07g9rC7YfD1PnWpDDb
+         4kFuL2ZltNJiKI4mwiPW4kcjQdrJsGAHofWnOijvRsAHpePDdgArB9GzvBD/jq8E/cQZ
+         MN+Ww7NWz4MdHG0Rbh6reRJQOZAiMvMOg9Jz75rzgUkLAwpeUr4LVT0miH7eqh9/sQet
+         pFjQ==
+X-Gm-Message-State: AOAM5335b1Gp7lJnlxiw8DPCV+nQCX8XTrUB05Xcg1PmFPCcuAAij3ss
+        dSfxQiDMwJ7Rsj37WZuxPebkC+cuD1kk5V4j3to=
+X-Google-Smtp-Source: ABdhPJwvDlbXhunIifVYskbFQ4VOYcKsNoELAbvbr9PR3SRQtrnJlZfWV2AxivvpGz7ke4f0LHdCvAWZ3MtxuBvyLNg=
+X-Received: by 2002:a2e:9a4d:: with SMTP id k13mr2633091ljj.283.1594738471100;
+ Tue, 14 Jul 2020 07:54:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <2fa6dda741a8a315405989bf3276d9158f4d92e2.1594036709.git.lucien.xin@gmail.com>
- <e852e03656d09a9e469c3fe9c04af25a0551075c.1594036709.git.lucien.xin@gmail.com>
- <2a8edf158432201b796f13ccc2e80f2fcafbb8d8.1594036709.git.lucien.xin@gmail.com>
- <b588daa77c6304119b8578d31d3e29fbc8959178.1594036709.git.lucien.xin@gmail.com>
- <cover.1594036709.git.lucien.xin@gmail.com> <97bd8d867973d769486f5a9b98fe6e13ba3fa821.1594036709.git.lucien.xin@gmail.com>
- <a0c059b3690e690248cbbe1130e160b96b30d989.1594036709.git.lucien.xin@gmail.com>
-In-Reply-To: <a0c059b3690e690248cbbe1130e160b96b30d989.1594036709.git.lucien.xin@gmail.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 14 Jul 2020 20:07:19 +0530
-Message-ID: <CA+G9fYv1Zx7ptDDs-WAeJ_rhsUX6ZJ1Kx2Nk=BUt_hjKiKhC+A@mail.gmail.com>
-Subject: Re: [PATCHv3 ipsec-next 06/10] ip6_vti: support IP6IP6 tunnel
- processing with .cb_handler
-To:     Xin Long <lucien.xin@gmail.com>
-Cc:     Netdev <netdev@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-        kbuild test robot <lkp@intel.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sabrina Dubroca <sd@queasysnail.net>,
-        lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>
+References: <20200714121608.58962d66@canb.auug.org.au> <20200714090048.GG183694@krava>
+ <20200714203341.4664dda3@canb.auug.org.au> <20200714104702.GH183694@krava> <20200714111545.GI183694@krava>
+In-Reply-To: <20200714111545.GI183694@krava>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 14 Jul 2020 07:54:19 -0700
+Message-ID: <CAADnVQJsh3BTD4D4fBzaJ9_YdmWf0ftHNrj7RM1m3m5QcBU0gw@mail.gmail.com>
+Subject: Re: linux-next: build warning after merge of the bpf-next tree
+To:     Jiri Olsa <jolsa@redhat.com>
+Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Mon, 6 Jul 2020 at 17:32, Xin Long <lucien.xin@gmail.com> wrote:
+On Tue, Jul 14, 2020 at 4:15 AM Jiri Olsa <jolsa@redhat.com> wrote:
 >
-> Similar to IPIP tunnel's processing, this patch is to support
-> IP6IP6 tunnel processing with .cb_handler.
+> On Tue, Jul 14, 2020 at 12:47:02PM +0200, Jiri Olsa wrote:
+> > On Tue, Jul 14, 2020 at 08:33:41PM +1000, Stephen Rothwell wrote:
+> >
+> > SNIP
+> >
+> > > > diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> > > > index 948378ca73d4..a88cd4426398 100644
+> > > > --- a/tools/bpf/resolve_btfids/Makefile
+> > > > +++ b/tools/bpf/resolve_btfids/Makefile
+> > > > @@ -16,6 +16,20 @@ else
+> > > >    MAKEFLAGS=--no-print-directory
+> > > >  endif
+> > > >
+> > > > +# always use the host compiler
+> > > > +ifneq ($(LLVM),)
+> > > > +HOSTAR  ?= llvm-ar
+> > > > +HOSTCC  ?= clang
+> > > > +HOSTLD  ?= ld.lld
+> > > > +else
+> > > > +HOSTAR  ?= ar
+> > > > +HOSTCC  ?= gcc
+> > > > +HOSTLD  ?= ld
+> > > > +endif
+> > > > +AR       = $(HOSTAR)
+> > > > +CC       = $(HOSTCC)
+> > > > +LD       = $(HOSTLD)
+> > > > +
+> > > >  OUTPUT ?= $(srctree)/tools/bpf/resolve_btfids/
+> > > >
+> > > >  LIBBPF_SRC := $(srctree)/tools/lib/bpf/
+> > > >
+> > >
+> > > Thanks for the quick response.  However, in the mean time the bpf-next
+> > > tree has been merged into the net-next tree, so these fixes will be
+> > > needed there ASAP.
+> >
+> > I just posted it
 >
-> v1->v2:
->   - no change.
-> v2-v3:
->   - enable it only when CONFIG_INET6_XFRM_TUNNEL is defined, to fix
->     the build error, reported by kbuild test robot.
+> ugh, you said net-next..
 >
-> Signed-off-by: Xin Long <lucien.xin@gmail.com>
-> ---
->  net/ipv6/ip6_vti.c | 33 +++++++++++++++++++++++++++++++++
->  1 file changed, 33 insertions(+)
->
-> diff --git a/net/ipv6/ip6_vti.c b/net/ipv6/ip6_vti.c
-> index 1147f64..39efe41 100644
-> --- a/net/ipv6/ip6_vti.c
-> +++ b/net/ipv6/ip6_vti.c
-> @@ -1218,6 +1218,26 @@ static struct xfrm6_protocol vti_ipcomp6_protocol __read_mostly = {
->         .priority       =       100,
->  };
->
-> +#if IS_ENABLED(CONFIG_INET6_XFRM_TUNNEL)
-> +static int vti6_rcv_tunnel(struct sk_buff *skb)
-> +{
-> +       const xfrm_address_t *saddr;
-> +       __be32 spi;
-> +
-> +       saddr = (const xfrm_address_t *)&ipv6_hdr(skb)->saddr;
-> +       spi = xfrm6_tunnel_spi_lookup(dev_net(skb->dev), saddr);
+> David, do you need me to repost with net-next tag?
+>   https://lore.kernel.org/bpf/20200714102534.299280-1-jolsa@kernel.org/T/
 
-arm build failed due this error on linux-next 20200713 and  20200713
-15:51:27 | net/ipv6/ip6_vti.o: In function `vti6_rcv_tunnel':
-15:51:27 | ip6_vti.c:(.text+0x1d20): undefined reference to
-`xfrm6_tunnel_spi_lookup'
-
-ref:
-https://ci.linaro.org/view/lkft/job/openembedded-lkft-linux-next/DISTRO=lkft,MACHINE=am57xx-evm,label=docker-lkft/812/consoleText
-
-config link,
-http://snapshots.linaro.org/openembedded/lkft/lkft/sumo/am57xx-evm/lkft/linux-next/811/config
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+NO. The fixes must go into bpf-next first.

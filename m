@@ -2,108 +2,93 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id D878B21EE6E
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 12:56:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B31D121EE83
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 12:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726041AbgGNK4X (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 06:56:23 -0400
-Received: from mx2.suse.de ([195.135.220.15]:33508 "EHLO mx2.suse.de"
+        id S1726729AbgGNK7p (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 06:59:45 -0400
+Received: from bilbo.ozlabs.org ([203.11.71.1]:58017 "EHLO ozlabs.org"
         rhost-flags-OK-OK-OK-OK) by vger.kernel.org with ESMTP
-        id S1726729AbgGNK4X (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 06:56:23 -0400
-X-Virus-Scanned: by amavisd-new at test-mx.suse.de
-Received: from relay2.suse.de (unknown [195.135.221.27])
-        by mx2.suse.de (Postfix) with ESMTP id 47770AD1A;
-        Tue, 14 Jul 2020 10:56:24 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 12:56:21 +0200 (CEST)
-From:   Miroslav Benes <mbenes@suse.cz>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        id S1726041AbgGNK7p (ORCPT <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jul 2020 06:59:45 -0400
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4B5cwb2qV0z9s1x;
+        Tue, 14 Jul 2020 20:59:43 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=canb.auug.org.au;
+        s=201702; t=1594724383;
+        bh=CaU7hMehrwH/u8zCbwdV66QNc3iG4evLpsX9iI3ZC+Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZcQVvzY6KQEMk0CwfGUxxOYjXPcK05VLW5I2bcw0XwQMqWOhqm6jKRXo+4sgLJbOP
+         yM0KlqRrUQkLiyLqm02ksHByF9A5aOtFP+TOsGyOb1Zow5kHOLTLNzvlu3OKSdFi8t
+         tV05dE6Axo7cVmGMe5TqV8n7a6KbN/3dtE/27Upz/8gHWmlcjpKeZaPajR/7hof0JQ
+         DCeOMEDgGKmaogRoBbT/CDPXFhsGAfrj6kj5wtUuOPDqNoC1N0gKLSsqzxNzhyR62U
+         VTUkpWaKFcVb2BuxXj4glqiwmM28ExAdlKO1kDbSvHuH7XGIOHZWe3FDD1hDryslnb
+         XflqvL8ic4caw==
+Date:   Tue, 14 Jul 2020 20:59:42 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Kalle Valo <kvalo@codeaurora.org>,
+        Wireless <linux-wireless@vger.kernel.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, pmladek@suse.cz,
-        live-patching@vger.kernel.org
-Subject: Re: linux-next: Tree for Jun 23 (objtool (2))
-In-Reply-To: <20200702123555.bjioosahrs5vjovu@treble>
-Message-ID: <alpine.LSU.2.21.2007141240540.5393@pobox.suse.cz>
-References: <20200623162820.3f45feae@canb.auug.org.au> <61df2e8f-75e8-d233-9c3c-5b4fa2b7fbdc@infradead.org> <20200702123555.bjioosahrs5vjovu@treble>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Joseph Chuang <joseph.chuang@cypress.com>,
+        Chi-Hsien Lin <chi-hsien.lin@cypress.com>
+Subject: linux-next: Fixes tag needs some work in the wireless-drivers-next
+ tree
+Message-ID: <20200714205942.26248f1c@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: multipart/signed; boundary="Sig_/OiDA8Ai=f6igcds2bDJuwLA";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Thu, 2 Jul 2020, Josh Poimboeuf wrote:
+--Sig_/OiDA8Ai=f6igcds2bDJuwLA
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Tue, Jun 23, 2020 at 08:06:07AM -0700, Randy Dunlap wrote:
-> > On 6/22/20 11:28 PM, Stephen Rothwell wrote:
-> > > Hi all,
-> > > 
-> > > Changes since 20200622:
-> > > 
-> > 
-> > on x86_64:
-> > 
-> > arch/x86/kernel/cpu/mce/core.o: warning: objtool: mce_timed_out()+0x24: unreachable instruction
-> > kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction
-> > 
-> > Full randconfig file is attached.
-> 
-> More livepatch...
+Hi all,
 
-Correct.
+In commit
 
-Both are known and I thought Josh had fixes queued somewhere for both, but 
-my memory fails me quite often. See below.
+  ad96bc27032c ("brcmfmac: initialize the requested dwell time")
 
-However, I think it is time to decide how to approach this whole saga. It 
-seems that there are not so many places in the kernel in need of 
-__noreturn annotation in the end and as jikos argued at least some of 
-those should be fixed regardless. Josh, should I prepare proper patches 
-and submit them to relevant maintainers to see where this path is going?
+Fixes tag
 
-It would be much better to fix it in GCC, but it has been like banging 
-one's head against a wall so far. Josh, you wanted to create a bug 
-for GCC in this respect in the past? Has that happened?
+  Fixes: 4905432b28b7 ("brcmfmac: Fix P2P Group Formation failure via Go-ne=
+g method")
 
-If I remember correctly, we discussed briefly a possibility to cope with 
-that in objtool, but no solution was presented.
+has these problem(s):
 
-Removing -flive-patching is also a possibility. I don't like it much, but 
-we discussed it with Petr M. a couple of months ago and it might be a way 
-too.
+  - Target SHA1 does not exist
 
-Thanks
-Miroslav
 
----
+Maybe you meant
 
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 14e4b4d17ee5..469a71ecea3c 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -279,7 +279,7 @@ static int fake_panic;
- static atomic_t mce_fake_panicked;
- 
- /* Panic in progress. Enable interrupts and wait for final IPI */
--static void wait_for_panic(void)
-+static void __noreturn wait_for_panic(void)
- {
-        long timeout = PANIC_TIMEOUT*USEC_PER_SEC;
- 
-diff --git a/kernel/exit.c b/kernel/exit.c
-index 727150f28103..570649152e7f 100644
---- a/kernel/exit.c
-+++ b/kernel/exit.c
-@@ -877,7 +877,7 @@ SYSCALL_DEFINE1(exit, int, error_code)
-  * as well as by sys_exit_group (below).
-  */
- void
--do_group_exit(int exit_code)
-+__noreturn do_group_exit(int exit_code)
- {
-        struct signal_struct *sig = current->signal;
+Fixes: 9c29da3f4e7e ("brcmfmac: Fix P2P Group Formation failure via Go-neg =
+method")
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/OiDA8Ai=f6igcds2bDJuwLA
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAl8NkB4ACgkQAVBC80lX
+0Gw50Af+LW7WJB3/+r+ZbjDE806XKes7SJGPe6XT5WjrV4ULYecYAKRr0v+IZTJr
+V6GzRRJZzQ2KeIeCHSFjekWjsefCRn/Wdd8woFly/lAqWLGXA+t5ma/q4gAFxVOD
+FnER451dMzVpAYyUVI7hcwaQd+W3S1eGBcWNGPDpQ8RU5f/ECQ8N1ushy2Mj0z+L
+5a0XXn6W8DBJLON87dQYBmSubg+d68UMTz0JWP0pPcaoCLGZ/KrGhoHB+VGsMtEi
+zZdk+kGLwpOnm3VACO2OCLd/rMwYB1kdean/n70wt1cJ2lpxxV152QZLCjbKNzbo
+HS07Kz+w01ZP4GK0b50+dzodOiE0IQ==
+=3u/W
+-----END PGP SIGNATURE-----
+
+--Sig_/OiDA8Ai=f6igcds2bDJuwLA--

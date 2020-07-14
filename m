@@ -2,75 +2,159 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 2331221E7EE
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 08:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8A5921EA22
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 09:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1725853AbgGNGRG (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 02:17:06 -0400
-Received: from us-smtp-delivery-1.mimecast.com ([205.139.110.120]:46575 "EHLO
-        us-smtp-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org
-        with ESMTP id S1725788AbgGNGRG (ORCPT
-        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 02:17:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1594707424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5237IuvMgTeLcciR2WRdBusDhcq3/u6O0nS/R7VQZtk=;
-        b=DG6SCwRhWSBe/Bt7cFTfl8mYiLyJeDGqpgc569GwwszZB15dUhTbP+ziZNrNsxYJWJmAbz
-        1nkx2DDmMX9P3f8pIdUFL8nQmpXJdy1eOHpvayhQdIy0t/8bq8Ysk6jTAglkcmnI1Asz+e
-        QTXHND5zZBKWApbqdMEKgmtLG9Ij+hQ=
-Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
- [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
- us-mta-60-8l_nubbtMx6PjXy50fqnoA-1; Tue, 14 Jul 2020 02:16:59 -0400
-X-MC-Unique: 8l_nubbtMx6PjXy50fqnoA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.phx2.redhat.com [10.5.11.11])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id 76D2F184C5E1;
-        Tue, 14 Jul 2020 06:16:57 +0000 (UTC)
-Received: from krava (unknown [10.40.193.14])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 69B0272E4D;
-        Tue, 14 Jul 2020 06:16:55 +0000 (UTC)
-Date:   Tue, 14 Jul 2020 08:16:54 +0200
-From:   Jiri Olsa <jolsa@redhat.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Subject: Re: linux-next: build failure after merge of the bpf-next tree
-Message-ID: <20200714061654.GE183694@krava>
-References: <20200714122247.797cf01e@canb.auug.org.au>
+        id S1725997AbgGNHen (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 03:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S1725306AbgGNHen (ORCPT
+        <rfc822;linux-next@vger.kernel.org>); Tue, 14 Jul 2020 03:34:43 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E74C061755
+        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 00:34:43 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id s189so2181502pgc.13
+        for <linux-next@vger.kernel.org>; Tue, 14 Jul 2020 00:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20150623.gappssmtp.com; s=20150623;
+        h=message-id:date:mime-version:content-transfer-encoding:subject:to
+         :from;
+        bh=TQqdZJV06rYL08oSaYuXqwL6hI5hwGb9/Hu/NgvOmvw=;
+        b=fct+f195rvUnHMIis10WbxGjRoU99Wyo0sJFMtULq3BfHy4/w66gAkXpaArCHfeObe
+         4qZNgHGUH2eM3ps2MyicHwyMxQ9cSPBLjYKrwDuf3FDO/Ou1suDfHkk/JQFR4axsEUNZ
+         UQLS20O1Wl2hT/4NBifDG+z6a+/msQjQ3+zHt6aoaivpzTpg6P8L1BqUljYnPEr3gY36
+         AV8kmd3OLOj1nFPkhVPGFc6Osd78T+QXg+E6Gc1eEx8H8jF2J2l7AtXyv9Uq5IMYiWHx
+         /oa5sMGml9HNidSlCwwMprrKvUlmOqqv6pARXTf00ZoPfYTMxCZd4Bg+MHKScyoO4/au
+         Bagw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20161025;
+        h=x-gm-message-state:message-id:date:mime-version
+         :content-transfer-encoding:subject:to:from;
+        bh=TQqdZJV06rYL08oSaYuXqwL6hI5hwGb9/Hu/NgvOmvw=;
+        b=N1RGzBRgUROx2bSy7yId4o5gMxd1NQzCR3b6AnIebqyhF29+3lcHXeihFnSJbNwaAO
+         urR778J4wAbCof3fdqhi3f+3VamgziOr7vY2pJO4tOcIBrJxASULsUA8gXTywlLHLF8B
+         RX7kFqikzm5aWpGfhc9tMgW+iUoHT8n3/klfdGPKCWKdwpErdm4slnUpO1yh8uFx+nj0
+         qXxtIirH01uFloeAnqav2hmuQjLyk+CI9PMEHjBqTsufjDEwt5UVl1HlQWFpe+ebx1F6
+         r84o8Gu7hPX20mdretUPvjOAFGdIoTUAtA1jVyaQr0fQnxJWhnuCG08tIenPWubsrYUG
+         PquQ==
+X-Gm-Message-State: AOAM5306KQWjYuQHDqutctvy31VJHSLXsSPKgDj/5zKYSct+2uwVC8S/
+        k9tAQHQnnUxf7YUqo/idFazE1ZIazOk=
+X-Google-Smtp-Source: ABdhPJzWFxr3hZ6jIaksLtAS2ONtG/zmRLJACOdHr8ivi6QpOti84B6JecWUKhCTuv2JvZKuNVhi9g==
+X-Received: by 2002:a63:3e09:: with SMTP id l9mr2454567pga.235.1594712082332;
+        Tue, 14 Jul 2020 00:34:42 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id h6sm16547744pfo.123.2020.07.14.00.34.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2020 00:34:41 -0700 (PDT)
+Message-ID: <5f0d6011.1c69fb81.5d2fc.90c5@mx.google.com>
+Date:   Tue, 14 Jul 2020 00:34:41 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20200714122247.797cf01e@canb.auug.org.au>
-X-Scanned-By: MIMEDefang 2.79 on 10.5.11.11
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v5.8-rc5-214-g5ec74c90dca2
+X-Kernelci-Report-Type: test
+X-Kernelci-Tree: next
+X-Kernelci-Branch: pending-fixes
+Subject: next/pending-fixes baseline: 199 runs,
+ 2 regressions (v5.8-rc5-214-g5ec74c90dca2)
+To:     linux-next@vger.kernel.org, kernel-build-reports@lists.linaro.org,
+        kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-On Tue, Jul 14, 2020 at 12:22:47PM +1000, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the bpf-next tree, today's linux-next build (arm
-> multi_v7_defconfig) failed like this:
-> 
-> tmp/ccsqpVCY.s: Assembler messages:
-> tmp/ccsqpVCY.s:78: Error: unrecognized symbol type ""
-> tmp/ccsqpVCY.s:91: Error: unrecognized symbol type ""
-> 
-> I don't know what has caused this (I guess maybe the resolve_btfids
-> branch).
-> 
-> I have used the bpf-next tree from next-20200713 for today.
+next/pending-fixes baseline: 199 runs, 2 regressions (v5.8-rc5-214-g5ec74c9=
+0dca2)
 
-ok, trying to reproduce
+Regressions Summary
+-------------------
 
-thanks,
-jirka
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
+ 0/1    =
 
+bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
+ 4/5    =
+
+
+  Details:  https://kernelci.org/test/job/next/branch/pending-fixes/kernel/=
+v5.8-rc5-214-g5ec74c90dca2/plan/baseline/
+
+  Test:     baseline
+  Tree:     next
+  Branch:   pending-fixes
+  Describe: v5.8-rc5-214-g5ec74c90dca2
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next=
+.git
+  SHA:      5ec74c90dca24f2d9abaae2527941b801070651c =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+at91-sama5d4_xplained | arm   | lab-baylibre | gcc-8    | sama5_defconfig |=
+ 0/1    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f0d2c6acf8f76820a85bb18
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: sama5_defconfig
+  Compiler:    gcc-8 (arm-linux-gnueabihf-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
+4-g5ec74c90dca2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
+4-g5ec74c90dca2/arm/sama5_defconfig/gcc-8/lab-baylibre/baseline-at91-sama5d=
+4_xplained.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/armel/baseline/rootfs.cpio.gz =
+
+
+  * baseline.login: https://kernelci.org/test/case/id/5f0d2c6acf8f76820a85b=
+b19
+      failing since 69 days (last pass: v5.7-rc3-277-ga37f92ef57b2, first f=
+ail: v5.7-rc4-211-g6d4315023bc9) =
+
+
+
+platform              | arch  | lab          | compiler | defconfig       |=
+ results
+----------------------+-------+--------------+----------+-----------------+=
+--------
+bcm2837-rpi-3-b       | arm64 | lab-baylibre | gcc-8    | defconfig       |=
+ 4/5    =
+
+
+  Details:     https://kernelci.org/test/plan/id/5f0d2f5529d21502eb85bb2e
+
+  Results:     4 PASS, 1 FAIL, 0 SKIP
+  Full config: defconfig
+  Compiler:    gcc-8 (aarch64-linux-gnu-gcc (Debian 8.3.0-2) 8.3.0)
+  Plain log:   https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
+4-g5ec74c90dca2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.txt
+  HTML log:    https://storage.kernelci.org//next/pending-fixes/v5.8-rc5-21=
+4-g5ec74c90dca2/arm64/defconfig/gcc-8/lab-baylibre/baseline-bcm2837-rpi-3-b=
+.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/kci-2020=
+.05/arm64/baseline/rootfs.cpio.gz =
+
+
+  * baseline.dmesg.crit: https://kernelci.org/test/case/id/5f0d2f5529d21502=
+eb85bb31
+      new failure (last pass: v5.8-rc4-597-gb8976598d3c1)
+      1 lines =20

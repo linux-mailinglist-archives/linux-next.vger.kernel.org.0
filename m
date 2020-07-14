@@ -2,111 +2,138 @@ Return-Path: <linux-next-owner@vger.kernel.org>
 X-Original-To: lists+linux-next@lfdr.de
 Delivered-To: lists+linux-next@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 1639C21F2EE
-	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 15:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E391521F34F
+	for <lists+linux-next@lfdr.de>; Tue, 14 Jul 2020 15:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1726450AbgGNNq3 (ORCPT <rfc822;lists+linux-next@lfdr.de>);
-        Tue, 14 Jul 2020 09:46:29 -0400
-Received: from szxga05-in.huawei.com ([45.249.212.191]:7308 "EHLO huawei.com"
-        rhost-flags-OK-OK-OK-FAIL) by vger.kernel.org with ESMTP
-        id S1725906AbgGNNq3 (ORCPT <rfc822;linux-next@vger.kernel.org>);
-        Tue, 14 Jul 2020 09:46:29 -0400
-Received: from DGGEMS402-HUB.china.huawei.com (unknown [172.30.72.60])
-        by Forcepoint Email with ESMTP id EE6B7F7F624EA20164CF;
-        Tue, 14 Jul 2020 21:46:26 +0800 (CST)
-Received: from [127.0.0.1] (10.174.179.238) by DGGEMS402-HUB.china.huawei.com
- (10.3.19.202) with Microsoft SMTP Server id 14.3.487.0; Tue, 14 Jul 2020
- 21:46:19 +0800
-Subject: [PATCH v2] mm/percpu: fix 'defined but not used' warning
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-CC:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>,
-        <john.wanghui@huawei.com>, Roman Gushchin <guro@fb.com>
-References: <20200714134101.80534-1-cuibixuan@huawei.com>
- <20200714225311.7aeffffd@canb.auug.org.au>
-From:   Bixuan Cui <cuibixuan@huawei.com>
-Message-ID: <6f1a8c76-d6d7-1a2c-8b0b-26a4a31f1a19@huawei.com>
-Date:   Tue, 14 Jul 2020 21:46:18 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        id S1728478AbgGNN6D (ORCPT <rfc822;lists+linux-next@lfdr.de>);
+        Tue, 14 Jul 2020 09:58:03 -0400
+Received: from us-smtp-1.mimecast.com ([207.211.31.81]:32365 "EHLO
+        us-smtp-delivery-1.mimecast.com" rhost-flags-OK-OK-OK-FAIL)
+        by vger.kernel.org with ESMTP id S1726450AbgGNN56 (ORCPT
+        <rfc822;linux-next@vger.kernel.org>);
+        Tue, 14 Jul 2020 09:57:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1594735077;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=KsP+Zg2SXxpGWvQphHBj9WDMJC0wpn9ZmfS2E7PsRDA=;
+        b=dY+ZsGS0E23sdgul9DvcPhCf7qXAtm58c6BKQL7bIC78tXoP1F0nO4r670ngF/pWKOm55X
+        G7UsJIX9ND0fup2YC9tbryd4uerIJyjce4btOWr8edYmWFJNwkfkAc0zBDvGt4KUrgZpNs
+        TjE2sPqCh321PIWQi507Pm3xybvuv5c=
+Received: from mimecast-mx01.redhat.com (mimecast-mx01.redhat.com
+ [209.132.183.4]) (Using TLS) by relay.mimecast.com with ESMTP id
+ us-mta-491-VBrKysQKOeejqWQNk3_Q2A-1; Tue, 14 Jul 2020 09:57:53 -0400
+X-MC-Unique: VBrKysQKOeejqWQNk3_Q2A-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.phx2.redhat.com [10.5.11.23])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx01.redhat.com (Postfix) with ESMTPS id A50F1800597;
+        Tue, 14 Jul 2020 13:57:51 +0000 (UTC)
+Received: from treble (unknown [10.10.119.254])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6D5DF2E02A;
+        Tue, 14 Jul 2020 13:57:49 +0000 (UTC)
+Date:   Tue, 14 Jul 2020 08:57:47 -0500
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Miroslav Benes <mbenes@suse.cz>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>, pmladek@suse.cz,
+        live-patching@vger.kernel.org
+Subject: Re: linux-next: Tree for Jun 23 (objtool (2))
+Message-ID: <20200714135747.lcgysd5joguhssas@treble>
+References: <20200623162820.3f45feae@canb.auug.org.au>
+ <61df2e8f-75e8-d233-9c3c-5b4fa2b7fbdc@infradead.org>
+ <20200702123555.bjioosahrs5vjovu@treble>
+ <alpine.LSU.2.21.2007141240540.5393@pobox.suse.cz>
 MIME-Version: 1.0
-In-Reply-To: <20200714225311.7aeffffd@canb.auug.org.au>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.179.238]
-X-CFilter-Loop: Reflected
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2007141240540.5393@pobox.suse.cz>
+X-Scanned-By: MIMEDefang 2.84 on 10.5.11.23
 Sender: linux-next-owner@vger.kernel.org
 Precedence: bulk
 List-ID: <linux-next.vger.kernel.org>
 X-Mailing-List: linux-next@vger.kernel.org
 
-Gcc report the following warning without CONFIG_MEMCG_KMEM:
+On Tue, Jul 14, 2020 at 12:56:21PM +0200, Miroslav Benes wrote:
+> On Thu, 2 Jul 2020, Josh Poimboeuf wrote:
+> 
+> > On Tue, Jun 23, 2020 at 08:06:07AM -0700, Randy Dunlap wrote:
+> > > On 6/22/20 11:28 PM, Stephen Rothwell wrote:
+> > > > Hi all,
+> > > > 
+> > > > Changes since 20200622:
+> > > > 
+> > > 
+> > > on x86_64:
+> > > 
+> > > arch/x86/kernel/cpu/mce/core.o: warning: objtool: mce_timed_out()+0x24: unreachable instruction
+> > > kernel/exit.o: warning: objtool: __x64_sys_exit_group()+0x14: unreachable instruction
+> > > 
+> > > Full randconfig file is attached.
+> > 
+> > More livepatch...
+> 
+> Correct.
+> 
+> Both are known and I thought Josh had fixes queued somewhere for both, but 
+> my memory fails me quite often. See below.
 
-mm/percpu-internal.h:145:29: warning: 'pcpu_chunk_type' defined
-but not used [-Wunused-function]
- static enum pcpu_chunk_type pcpu_chunk_type(struct pcpu_chunk *chunk)
-                             ^~~~~~~~~~~~~~~
+I did have fixes for some of them in a stash somewhere, but I never
+finished them because I decided it's a GCC bug.
 
-Add 'inline' to pcpu_chunk_type(),pcpu_is_memcg_chunk() and
-pcpu_chunk_list() to clear warning.
+> However, I think it is time to decide how to approach this whole saga. It 
+> seems that there are not so many places in the kernel in need of 
+> __noreturn annotation in the end and as jikos argued at least some of 
+> those should be fixed regardless.
 
-Fixes: 26c99879ef01 ("mm: memcg/percpu: account percpu memory to memory cgroups")
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Signed-off-by: Bixuan Cui <cuibixuan@huawei.com>
----
- mm/percpu-internal.h | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+I would agree that global functions like do_group_exit() deserve a
+__noreturn annotation, though it should be in the header file.  But
+static functions shouldn't need it.
 
-diff --git a/mm/percpu-internal.h b/mm/percpu-internal.h
-index 7983455842ff..18b768ac7dca 100644
---- a/mm/percpu-internal.h
-+++ b/mm/percpu-internal.h
-@@ -129,31 +129,31 @@ static inline int pcpu_chunk_map_bits(struct pcpu_chunk *chunk)
- }
+> Josh, should I prepare proper patches and submit them to relevant
+> maintainers to see where this path is going?
 
- #ifdef CONFIG_MEMCG_KMEM
--static enum pcpu_chunk_type pcpu_chunk_type(struct pcpu_chunk *chunk)
-+static inline enum pcpu_chunk_type pcpu_chunk_type(struct pcpu_chunk *chunk)
- {
- 	if (chunk->obj_cgroups)
- 		return PCPU_CHUNK_MEMCG;
- 	return PCPU_CHUNK_ROOT;
- }
+If that's how you want to handle it, ok, but it doesn't seem right to
+me, for the static functions at least.
 
--static bool pcpu_is_memcg_chunk(enum pcpu_chunk_type chunk_type)
-+static inline bool pcpu_is_memcg_chunk(enum pcpu_chunk_type chunk_type)
- {
- 	return chunk_type == PCPU_CHUNK_MEMCG;
- }
+> It would be much better to fix it in GCC, but it has been like banging 
+> one's head against a wall so far. Josh, you wanted to create a bug 
+> for GCC in this respect in the past? Has that happened?
 
- #else
--static enum pcpu_chunk_type pcpu_chunk_type(struct pcpu_chunk *chunk)
-+static inline enum pcpu_chunk_type pcpu_chunk_type(struct pcpu_chunk *chunk)
- {
- 	return PCPU_CHUNK_ROOT;
- }
+I didn't open a bug, but I could, if you think that would help.  I
+haven't had a lot of success with GCC bugs in the past.
 
--static bool pcpu_is_memcg_chunk(enum pcpu_chunk_type chunk_type)
-+static inline bool pcpu_is_memcg_chunk(enum pcpu_chunk_type chunk_type)
- {
- 	return false;
- }
- #endif
+> If I remember correctly, we discussed briefly a possibility to cope with 
+> that in objtool, but no solution was presented.
 
--static struct list_head *pcpu_chunk_list(enum pcpu_chunk_type chunk_type)
-+static inline struct list_head *pcpu_chunk_list(enum pcpu_chunk_type chunk_type)
- {
- 	return &pcpu_chunk_lists[pcpu_nr_slots *
- 				 pcpu_is_memcg_chunk(chunk_type)];
+That would also feel like a GCC workaround and might impede objtool's
+ability to find bugs like this one, and possibly more serious bugs.
+
+> Removing -flive-patching is also a possibility. I don't like it much, but 
+> we discussed it with Petr M. a couple of months ago and it might be a way 
+> too.
+
+-flive-patching has many problems which I outlined before.  None of them
+have been addressed.  I still feel the same way, that it should be
+reverted until it's ready.  Otherwise it's a drain on upstream.
+
+Also, if the GCC developers won't acknowledge this bug then it doesn't
+give me confidence in their ability to keep the feature working as
+optimizations are added or changed.
+
+I still think a potential alternative exists: objtool could be used as a
+simple tree-wide object diff tool by generating a checksum for each
+function.  Then the patch can be applied and built to see exactly which
+functions have changed, based on the changed checksums.  In which case
+this feature would no longer be needed anyway, would you agree?
+
+I also think that could be a first step for converging our patch
+creation processes.
+
 -- 
-2.17.1
-
-
-.
-
-
-
-.
-
+Josh
 
